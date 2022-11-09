@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6C76220DE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 01:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022176220E1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 01:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiKIAg3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Nov 2022 19:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        id S229887AbiKIAgd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Nov 2022 19:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiKIAg2 (ORCPT
+        with ESMTP id S229881AbiKIAgb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 19:36:28 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4068C627D1
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 16:36:28 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id b2-20020a170902d50200b001871a3c51afso12157098plg.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Nov 2022 16:36:28 -0800 (PST)
+        Tue, 8 Nov 2022 19:36:31 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E34163155
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 16:36:30 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-373582569edso149343677b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Nov 2022 16:36:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i16E6SEJ1XE3RexrHSv+UKrQKUgWn1ksElBhVAhWC74=;
-        b=ozndvYKnYfbi79PbuCYdzeMtofBcdWRIc10S48fA0ZiNj/LbcnyA78EeEyHbGlu9n6
-         7J9OUUeOSTjZdMHJ2Jj8jMxpE5/dNiSdsErzggvwEEW2nUjxnCa6+TDqTkoDJz9gOj99
-         WXadIIjgvnxIVJ/DBFiBgHJkkWlKthceyqDaVjg9MiPmZqLDPR9LHxZsOGuMW6BjHu/c
-         3eJf90rCsgm0AwbOvUrB59Y/Jmt+M8z3+xf8wujZCxWlDqOqjDioHBcPrSHS2jcF5xIG
-         mcVvtHsOwHn5TgP74M+8eZTB81t5B4R9Xo69adh1fUPMDntg2alkPx9VTHycCQY1TfJc
-         Zpeg==
+        bh=HRpeAbE4kg4ytKwLuX0U3bbW7BL+7KJFVYe6N59c5wQ=;
+        b=eYBlaZZdnhKMf9c7h7BMTcyzAqd2R7kggGDvkeaEUPZm9F+2bTPLZVUpkrbhMiW/Xq
+         iXqr170uBbJzFPegUMTV9y1VU1XHGTIh6LEi51SR+K+jgTS2iNPW98vZ45iOYXD0xKro
+         nhgpk9XnCn4/XUxICCVwyyriUpEqe4zskFFcPRGPm1ikMgO2VpQjaJkQc6E+2DL6zeV5
+         Cu8/6F2+YcZhvRor9YRKsYU0F45JTi52UyBq+0I5GfmEF1uLSKGiS40VrWyvKfLKBjzm
+         BJzuEYxxTFmpYTFp3UJQUyJg1c8dkuyQ6LnKzdniqttuH3ULLUVdjBNZ7FMNjgTi40/a
+         ejAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i16E6SEJ1XE3RexrHSv+UKrQKUgWn1ksElBhVAhWC74=;
-        b=0U//Am6GzCQRsB6LbKlio1U28u2HVdRaROhAv6XjrTbm04FFeh2TmuyqO8iayslyfx
-         K5o+miG8nAh/5tiSi9F+V2APUN5iRpMUWlna1UM86gyPzw8cXcQI6Ima4e470VoLWUoz
-         uJNr2jfk6STYoHtcuEh8ssAukSEl9P1VqoUXEPDjnJW9UONaFeLdnmqxdiE1hRmANve6
-         jwy8dt5/WA/y+pGHTFrNI2QH+YcptwCLXIf6P6xWBNM2geYYZTdschK4Q92UjOM9KL0/
-         OKhWSEf0tzS8rue9EOzRbtUflyZY8oJwCTkUL9h+xV6et/EVc1aMeWAE6qoKb16x57IU
-         6tFA==
-X-Gm-Message-State: ANoB5pnnC6uOUaQdcWVt4ID2gnRwGKIgHuHVvHJLIsLraw+nu9EnzbxJ
-        D7T2UTB/G0FKdunB8byKfMc6wxYuKQ/Udg==
-X-Google-Smtp-Source: AA0mqf5yfuylOiuYjTt1prubEe1a8GxqxTj996/7IMLwczKZeOoEfPOlOooJtBe4a0OmGrUTg498bwsh10ozXg==
+        bh=HRpeAbE4kg4ytKwLuX0U3bbW7BL+7KJFVYe6N59c5wQ=;
+        b=ywkVX3w/i9ZVaFTfQl68t0wesHBPHm+WTGG2zXMGfji5qI+21UbBF4bjlG3HsVVGvo
+         OPGBwGKpQbd9qEOlE0vbdPeHWyS/70q/KW+KvSr5rZQ7Z1mQ2m+zzWsoRC+PovXATW1W
+         dhKVFG9RucUlCqhI5bZyKT5oT8RPEPGktXiRwUm34Ofln5tsat5Qc7fF8qxPfq09cV2O
+         pNwPj8nnMPWZzeyDFKeNhyI6DoB7pxFsK3rzQ5rSt9gaXBpVpCydBPJ1uL48XLuvcr5O
+         t2y3XliYA1sHf39vF0zjVZ1sJ/PwplHl98ekTTUnRt6ZjWn+5VKX2msxN4xKJr7m/bcM
+         /65Q==
+X-Gm-Message-State: ACrzQf1ewBBzjBS1YFXAmaLmWNqgzW35vvjD08CClDkUs4q8Na97aHt0
+        +Gcr5yDFmM81PdMfRO8n2RLxodLIf679YQ==
+X-Google-Smtp-Source: AMsMyM4JQ/Y9XbqsO2B788tot8DOOsEFozyJAxqBv/P6ojQnZR/H16KWdNWMw4b0fhDXk3NBsyLJdKHIqXfEBA==
 X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:aa7:9ad7:0:b0:56e:d7f4:3c4a with SMTP id
- x23-20020aa79ad7000000b0056ed7f43c4amr657937pfp.76.1667954187657; Tue, 08 Nov
- 2022 16:36:27 -0800 (PST)
-Date:   Tue,  8 Nov 2022 16:36:17 -0800
+ (user=dlatypov job=sendgmr) by 2002:a81:80c3:0:b0:349:8498:a05b with SMTP id
+ q186-20020a8180c3000000b003498498a05bmr55480921ywf.403.1667954189465; Tue, 08
+ Nov 2022 16:36:29 -0800 (PST)
+Date:   Tue,  8 Nov 2022 16:36:18 -0800
 In-Reply-To: <20221109003618.3784591-1-dlatypov@google.com>
 Mime-Version: 1.0
 References: <20221109003618.3784591-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221109003618.3784591-2-dlatypov@google.com>
-Subject: [PATCH v2 2/3] Documentation: KUnit: reword description of assertions
+Message-ID: <20221109003618.3784591-3-dlatypov@google.com>
+Subject: [PATCH v2 3/3] Documentation: kunit: Remove redundant 'tips.rst' page
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
@@ -70,45 +70,239 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The existing wording implies that kunit_kmalloc_array() is "the method
-under test". We're actually testing the sort() function in that example.
-This is because the example was changed in commit 953574390634
-("Documentation: KUnit: Rework writing page to focus on writing tests"),
-but the wording was not.
+From: David Gow <davidgow@google.com>
 
-Also add a `note` telling people they can use the KUNIT_ASSERT_EQ()
-macros from any function. Some users might be coming from a framework
-like gUnit where that'll compile but silently do the wrong thing.
+The contents of 'tips.rst' was mostly included in 'usage.rst' way back in
+commit 953574390634 ("Documentation: KUnit: Rework writing page to focus on writing tests"),
+but the tips page remained behind as well.
 
+The parent patches in this series fill in the gaps, so now 'tips.rst' is
+redundant.
+Therefore, delete 'tips.rst'.
+
+While I regret breaking any links to 'tips' which might exist
+externally, it's confusing to have two subtly different versions of the
+same content around.
+
+Signed-off-by: David Gow <davidgow@google.com>
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- Documentation/dev-tools/kunit/usage.rst | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+v1 -> v2: rebased onto some parent patches to fix the missing sections
+in usage.rst and tweaked the commit message to reflect that.
+---
+ Documentation/dev-tools/kunit/index.rst |   1 -
+ Documentation/dev-tools/kunit/tips.rst  | 190 ------------------------
+ 2 files changed, 191 deletions(-)
+ delete mode 100644 Documentation/dev-tools/kunit/tips.rst
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index b0a6c3bc0eeb..8060114e3aa6 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -112,11 +112,14 @@ terminates the test case if the condition is not satisfied. For example:
- 			KUNIT_EXPECT_LE(test, a[i], a[i + 1]);
- 	}
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+index f5d13f1d37be..d5629817cd72 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -16,7 +16,6 @@ KUnit - Linux Kernel Unit Testing
+ 	api/index
+ 	style
+ 	faq
+-	tips
+ 	running_tips
  
--In this example, the method under test should return pointer to a value. If the
--pointer returns null or an errno, we want to stop the test since the following
--expectation could crash the test case. `ASSERT_NOT_ERR_OR_NULL(...)` allows us
--to bail out of the test case if the appropriate conditions are not satisfied to
--complete the test.
-+In this example, we need to be able to allocate an array to test the ``sort()``
-+function. So we use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()`` to abort the test if
-+we there's an allocation error.
-+
-+.. note::
-+   In other test frameworks, ``ASSERT`` macros are often implemented by calling
-+   ``return`` so they only work from the test function. In KUnit, we stop the
-+   current kthread on failure, so you can call them from anywhere.
- 
- Customizing error messages
- --------------------------
+ This section details the kernel unit testing framework.
+diff --git a/Documentation/dev-tools/kunit/tips.rst b/Documentation/dev-tools/kunit/tips.rst
+deleted file mode 100644
+index 492d2ded2f5a..000000000000
+--- a/Documentation/dev-tools/kunit/tips.rst
++++ /dev/null
+@@ -1,190 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-============================
+-Tips For Writing KUnit Tests
+-============================
+-
+-Exiting early on failed expectations
+-------------------------------------
+-
+-``KUNIT_EXPECT_EQ`` and friends will mark the test as failed and continue
+-execution.  In some cases, it's unsafe to continue and you can use the
+-``KUNIT_ASSERT`` variant to exit on failure.
+-
+-.. code-block:: c
+-
+-	void example_test_user_alloc_function(struct kunit *test)
+-	{
+-		void *object = alloc_some_object_for_me();
+-
+-		/* Make sure we got a valid pointer back. */
+-		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, object);
+-		do_something_with_object(object);
+-	}
+-
+-Allocating memory
+------------------
+-
+-Where you would use ``kzalloc``, you should prefer ``kunit_kzalloc`` instead.
+-KUnit will ensure the memory is freed once the test completes.
+-
+-This is particularly useful since it lets you use the ``KUNIT_ASSERT_EQ``
+-macros to exit early from a test without having to worry about remembering to
+-call ``kfree``.
+-
+-Example:
+-
+-.. code-block:: c
+-
+-	void example_test_allocation(struct kunit *test)
+-	{
+-		char *buffer = kunit_kzalloc(test, 16, GFP_KERNEL);
+-		/* Ensure allocation succeeded. */
+-		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buffer);
+-
+-		KUNIT_ASSERT_STREQ(test, buffer, "");
+-	}
+-
+-
+-Testing static functions
+-------------------------
+-
+-If you don't want to expose functions or variables just for testing, one option
+-is to conditionally ``#include`` the test file at the end of your .c file, e.g.
+-
+-.. code-block:: c
+-
+-	/* In my_file.c */
+-
+-	static int do_interesting_thing();
+-
+-	#ifdef CONFIG_MY_KUNIT_TEST
+-	#include "my_kunit_test.c"
+-	#endif
+-
+-Injecting test-only code
+-------------------------
+-
+-Similarly to the above, it can be useful to add test-specific logic.
+-
+-.. code-block:: c
+-
+-	/* In my_file.h */
+-
+-	#ifdef CONFIG_MY_KUNIT_TEST
+-	/* Defined in my_kunit_test.c */
+-	void test_only_hook(void);
+-	#else
+-	void test_only_hook(void) { }
+-	#endif
+-
+-This test-only code can be made more useful by accessing the current kunit
+-test, see below.
+-
+-Accessing the current test
+---------------------------
+-
+-In some cases, you need to call test-only code from outside the test file, e.g.
+-like in the example above or if you're providing a fake implementation of an
+-ops struct.
+-There is a ``kunit_test`` field in ``task_struct``, so you can access it via
+-``current->kunit_test``.
+-
+-Here's a slightly in-depth example of how one could implement "mocking":
+-
+-.. code-block:: c
+-
+-	#include <linux/sched.h> /* for current */
+-
+-	struct test_data {
+-		int foo_result;
+-		int want_foo_called_with;
+-	};
+-
+-	static int fake_foo(int arg)
+-	{
+-		struct kunit *test = current->kunit_test;
+-		struct test_data *test_data = test->priv;
+-
+-		KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
+-		return test_data->foo_result;
+-	}
+-
+-	static void example_simple_test(struct kunit *test)
+-	{
+-		/* Assume priv is allocated in the suite's .init */
+-		struct test_data *test_data = test->priv;
+-
+-		test_data->foo_result = 42;
+-		test_data->want_foo_called_with = 1;
+-
+-		/* In a real test, we'd probably pass a pointer to fake_foo somewhere
+-		 * like an ops struct, etc. instead of calling it directly. */
+-		KUNIT_EXPECT_EQ(test, fake_foo(1), 42);
+-	}
+-
+-
+-Note: here we're able to get away with using ``test->priv``, but if you wanted
+-something more flexible you could use a named ``kunit_resource``, see
+-Documentation/dev-tools/kunit/api/test.rst.
+-
+-Failing the current test
+-------------------------
+-
+-But sometimes, you might just want to fail the current test. In that case, we
+-have ``kunit_fail_current_test(fmt, args...)`` which is defined in ``<kunit/test-bug.h>`` and
+-doesn't require pulling in ``<kunit/test.h>``.
+-
+-E.g. say we had an option to enable some extra debug checks on some data structure:
+-
+-.. code-block:: c
+-
+-	#include <kunit/test-bug.h>
+-
+-	#ifdef CONFIG_EXTRA_DEBUG_CHECKS
+-	static void validate_my_data(struct data *data)
+-	{
+-		if (is_valid(data))
+-			return;
+-
+-		kunit_fail_current_test("data %p is invalid", data);
+-
+-		/* Normal, non-KUnit, error reporting code here. */
+-	}
+-	#else
+-	static void my_debug_function(void) { }
+-	#endif
+-
+-
+-Customizing error messages
+---------------------------
+-
+-Each of the ``KUNIT_EXPECT`` and ``KUNIT_ASSERT`` macros have a ``_MSG`` variant.
+-These take a format string and arguments to provide additional context to the automatically generated error messages.
+-
+-.. code-block:: c
+-
+-	char some_str[41];
+-	generate_sha1_hex_string(some_str);
+-
+-	/* Before. Not easy to tell why the test failed. */
+-	KUNIT_EXPECT_EQ(test, strlen(some_str), 40);
+-
+-	/* After. Now we see the offending string. */
+-	KUNIT_EXPECT_EQ_MSG(test, strlen(some_str), 40, "some_str='%s'", some_str);
+-
+-Alternatively, one can take full control over the error message by using ``KUNIT_FAIL()``, e.g.
+-
+-.. code-block:: c
+-
+-	/* Before */
+-	KUNIT_EXPECT_EQ(test, some_setup_function(), 0);
+-
+-	/* After: full control over the failure message. */
+-	if (some_setup_function())
+-		KUNIT_FAIL(test, "Failed to setup thing for testing");
+-
+-Next Steps
+-==========
+-*   Optional: see the Documentation/dev-tools/kunit/usage.rst page for a more
+-    in-depth explanation of KUnit.
 -- 
 2.38.1.431.g37b22c650d-goog
 
