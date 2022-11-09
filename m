@@ -2,152 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D056226A5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 10:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 774DD622850
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 11:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiKIJRa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Nov 2022 04:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S229923AbiKIKXn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Nov 2022 05:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiKIJRR (ORCPT
+        with ESMTP id S229877AbiKIKXk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:17:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8627422B1F
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Nov 2022 01:15:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667985323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X02nRL309PhEzx0jCPIZSs9mBHARHTVVyhCWK/3u8/A=;
-        b=SnuCwjmXUU9/Q7Zu72QA9tpT6F2bFrET/dPVyp+wTVlRoQXt91Cvod89UjoGGcQWBe+8gh
-        SsbNAnTsCXWoEIS9CCMnDMmqeTOIoKMT84SoVJIsuqGUtUxg6CapxgPx7JxwI/9oPWmZkR
-        C2K4Zb0hA2Y3kd+7/+FUlO+DnA/5Amc=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-1-8mv0f7FDNT6F5a2NlpcSPw-1; Wed, 09 Nov 2022 04:15:22 -0500
-X-MC-Unique: 8mv0f7FDNT6F5a2NlpcSPw-1
-Received: by mail-qt1-f200.google.com with SMTP id w27-20020a05622a191b00b003a56c0e1cd0so8873658qtc.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Nov 2022 01:15:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X02nRL309PhEzx0jCPIZSs9mBHARHTVVyhCWK/3u8/A=;
-        b=StF18YSbT4urPk3U6Qee7SYhiT2RRCGhgaMFn0ngaAUt/k06FKrpKbrxn8s+qPY+vf
-         NOwelLnI5q+F3YYgEBDEvWh+nACUR8a/Ej9jp6XJn76xmOWZRKQwG3DoRWK5ycSB+S+V
-         Sf+yXzvajEr9KCmSsmG0yQ9ICpiDc6+df4l96X2bt7yloPlnLV4grslk5KfVQhjZ9Qhf
-         l5sLeM5BP+On+TI2yiCxeMAW0BD1pHMgbU3CPZcoIxFgM1N+GuJQlMT6HjSFB+THc7ZV
-         ObE4vEArTmh/3acNKKDvDT6kLT21olzI/ZhEiAKroPcSinr6q9GYuYAKvHH7rYvzlYXl
-         8Ffw==
-X-Gm-Message-State: ACrzQf1jKn3BYS7O4e2K4jWhMxu+9e/R17LPSkASr0YrGyMfH9srtQGh
-        METUsqBfCiq6dPLyHIRZXZaz/ho7GwbVa4vZYPtSABmgtPjbL32Sd2j9OOCuVr/xDhiBpYStSyM
-        aAo+BRxZ40nIe00Smrx4gcIwe7qvE
-X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id o3-20020a05620a22c300b006ec53bbd296mr42354537qki.158.1667985321988;
-        Wed, 09 Nov 2022 01:15:21 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM72DOuuaGj1I+qPxM2t/sXaQdbORDHatD+H9ZRGH21aquAj6PF1iyJoYCs45Nh/suMZZUzzMQ==
-X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id o3-20020a05620a22c300b006ec53bbd296mr42354511qki.158.1667985321736;
-        Wed, 09 Nov 2022 01:15:21 -0800 (PST)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id h12-20020a05620a284c00b006cbc6e1478csm10388193qkp.57.2022.11.09.01.15.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 01:15:21 -0800 (PST)
-Message-ID: <30b8e07970f2cfbba0ebee82aa3b46a047a0f43b.camel@redhat.com>
-Subject: Re: [PATCH v2 9/9] KVM: x86: remove exit_int_info warning in
- svm_handle_exit
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Liam Merwick <liam.merwick@oracle.com>, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Borislav Petkov <bp@alien8.de>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kselftest@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        David Matlack <dmatlack@google.com>, stable@vger.kernel.org
-Date:   Wed, 09 Nov 2022 11:15:16 +0200
-In-Reply-To: <3d25a0b4-6957-d070-db11-69ec9e0132ba@oracle.com>
-References: <20221103141351.50662-1-mlevitsk@redhat.com>
-         <20221103141351.50662-10-mlevitsk@redhat.com>
-         <3d25a0b4-6957-d070-db11-69ec9e0132ba@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Wed, 9 Nov 2022 05:23:40 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A276A2DF6;
+        Wed,  9 Nov 2022 02:23:37 -0800 (PST)
+Received: from localhost.localdomain (unknown [39.45.244.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4AE6B66015E4;
+        Wed,  9 Nov 2022 10:23:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667989416;
+        bh=pQmsJjQQgLkkaK9xqWauJVSaq0M6SYc84CZ8r9QpVKU=;
+        h=From:To:Subject:Date:From;
+        b=jOutevlyQXeD7DYQ8ajv1Oa0PieF3cAfvt83gYNfjbqZq0l9PhIEw5hEVWjsJzCrS
+         s8GCMfDfeLClvSkLj+EfAMTu/RRS2kEngqCjw7j0LoYa6YezZrIPOwlfTTzsxv6f05
+         ia9bJc7dVCyS2J/P27o7FZnhDfbq3brsIpbFego7Jl19ptXvjKPVy3ShRe1B5K7ZXD
+         CYkDrw+hbI9stWeA4PMY1ceC4JlBe7B0LBr29CDAkN+DfCHbZFQ6udyz44ab6S2vdl
+         tt5X9MamoJtHowoGhyOOYgEjHF1x4NgOwycd3RhKL1YzamSHr/BjN2pC0xrCA39xuz
+         KVJR/HHdSzomA==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        Paul Gofman <pgofman@codeweavers.com>
+Subject: [PATCH v6 0/3] Implement IOCTL to get and/or the clear info about PTEs
+Date:   Wed,  9 Nov 2022 15:23:00 +0500
+Message-Id: <20221109102303.851281-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 2022-11-06 at 15:53 +0000, Liam Merwick wrote:
-> On 03/11/2022 14:13, Maxim Levitsky wrote:
-> > It is valid to receive external interrupt and have broken IDT entry,
-> > which will lead to #GP with exit_int_into that will contain the index of
-> > the IDT entry (e.g any value).
-> > 
-> > Other exceptions can happen as well, like #NP or #SS
-> > (if stack switch fails).
-> > 
-> > Thus this warning can be user triggred and has very little value.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >   arch/x86/kvm/svm/svm.c | 9 ---------
-> >   1 file changed, 9 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index e9cec1b692051c..36f651ce842174 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -3428,15 +3428,6 @@ static int svm_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
-> >                 return 0;
-> >         }
-> >   
-> > -       if (is_external_interrupt(svm->vmcb->control.exit_int_info) &&
-> > -           exit_code != SVM_EXIT_EXCP_BASE + PF_VECTOR &&
-> > -           exit_code != SVM_EXIT_NPF && exit_code != SVM_EXIT_TASK_SWITCH &&
-> > -           exit_code != SVM_EXIT_INTR && exit_code != SVM_EXIT_NMI)
-> > -               printk(KERN_ERR "%s: unexpected exit_int_info 0x%x "
-> > -                      "exit_code 0x%x\n",
-> > -                      __func__, svm->vmcb->control.exit_int_info,
-> > -                      exit_code);
-> > -
-> >         if (exit_fastpath != EXIT_FASTPATH_NONE)
-> >                 return 1;
-> >   
-> 
-> This was the only caller of is_external_interrupt() - should the 
-> definition be removed also to avoid a 'defined but not used' warning?
+Changes in v6:
+- Updated the interface and made cosmetic changes
 
-I hate to say it but I have seen a warning about an unused function,
-but I really didn't expect that to come from this patch.
-I somehow thought that its some leftover in kvm/queue.
+Original Cover Letter in v5:
+Hello,
 
-I'll remove the unused function in a next version.
+This patch series implements IOCTL on the pagemap procfs file to get the
+information about the page table entries (PTEs). The following operations
+are supported in this ioctl:
+- Get the information if the pages are soft-dirty, file mapped, present
+  or swapped.
+- Clear the soft-dirty PTE bit of the pages.
+- Get and clear the soft-dirty PTE bit of the pages atomically.
 
-Best regards,
-	Maxim Levitsky
+Soft-dirty PTE bit of the memory pages can be read by using the pagemap
+procfs file. The soft-dirty PTE bit for the whole memory range of the
+process can be cleared by writing to the clear_refs file. There are other
+methods to mimic this information entirely in userspace with poor
+performance:
+- The mprotect syscall and SIGSEGV handler for bookkeeping
+- The userfaultfd syscall with the handler for bookkeeping
+Some benchmarks can be seen here[1]. This series adds features that weren't
+present earlier:
+- There is no atomic get soft-dirty PTE bit status and clear operation
+  possible.
+- The soft-dirty PTE bit of only a part of memory cannot be cleared.
 
-> 
-> Regards,
-> Liam
-> 
+Historically, soft-dirty PTE bit tracking has been used in the CRIU
+project. The procfs interface is enough for finding the soft-dirty bit
+status and clearing the soft-dirty bit of all the pages of a process.
+We have the use case where we need to track the soft-dirty PTE bit for
+only specific pages on demand. We need this tracking and clear mechanism
+of a region of memory while the process is running to emulate the
+getWriteWatch() syscall of Windows. This syscall is used by games to
+keep track of dirty pages to process only the dirty pages.
 
+The information related to pages if the page is file mapped, present and
+swapped is required for the CRIU project[2][3]. The addition of the
+required mask, any mask, excluded mask and return masks are also required
+for the CRIU project[2].
+
+The IOCTL returns the addresses of the pages which match the specific masks.
+The page addresses are returned in struct page_region in a compact form.
+The max_pages is needed to support a use case where user only wants to get
+a specific number of pages. So there is no need to find all the pages of
+interest in the range when max_pages is specified. The IOCTL returns when
+the maximum number of the pages are found. The max_pages is optional. If
+max_pages is specified, it must be equal or greater than the vec_size.
+This restriction is needed to handle worse case when one page_region only
+contains info of one page and it cannot be compacted. This is needed to
+emulate the Windows getWriteWatch() syscall.
+
+Some non-dirty pages get marked as dirty because of the kernel's
+internal activity (such as VMA merging as soft-dirty bit difference isn't
+considered while deciding to merge VMAs). The dirty bit of the pages is
+stored in the VMA flags and in the per page flags. If any of these two bits
+are set, the page is considered to be soft dirty. Suppose you have cleared
+the soft dirty bit of half of VMA which will be done by splitting the VMA
+and clearing soft dirty bit flag in the half VMA and the pages in it. Now
+kernel may decide to merge the VMAs again. So the half VMA becomes dirty
+again. This splitting/merging costs performance. The application receives
+a lot of pages which aren't dirty in reality but marked as dirty.
+Performance is lost again here. Also sometimes user doesn't want the newly
+allocated memory to be marked as dirty. PAGEMAP_NO_REUSED_REGIONS flag
+solves both the problems. It is used to not depend on the soft dirty flag
+in the VMA flags. So VMA splitting and merging doesn't happen. It only
+depends on the soft dirty bit of the individual pages. Thus by using this
+flag, there may be a scenerio such that the new memory regions which are
+just created, doesn't look dirty when seen with the IOCTL, but look dirty
+when seen from procfs. This seems okay as the user of this flag know the
+implication of using it.
+
+[1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+[2] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com/
+[3] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com/
+
+Regards,
+Muhammad Usama Anjum
+
+Muhammad Usama Anjum (3):
+  fs/proc/task_mmu: update functions to clear the soft-dirty PTE bit
+  fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about PTEs
+  selftests: vm: add pagemap ioctl tests
+
+ fs/proc/task_mmu.c                         | 410 +++++++++++-
+ include/uapi/linux/fs.h                    |  56 ++
+ tools/include/uapi/linux/fs.h              |  56 ++
+ tools/testing/selftests/vm/.gitignore      |   1 +
+ tools/testing/selftests/vm/Makefile        |   5 +-
+ tools/testing/selftests/vm/pagemap_ioctl.c | 698 +++++++++++++++++++++
+ 6 files changed, 1193 insertions(+), 33 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
+
+-- 
+2.30.2
 
