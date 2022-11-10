@@ -2,364 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C85D624579
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Nov 2022 16:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD9D62458D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Nov 2022 16:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiKJPT1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Nov 2022 10:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S231349AbiKJPXz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Nov 2022 10:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiKJPSm (ORCPT
+        with ESMTP id S229746AbiKJPXy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:18:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA51F1E729
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Nov 2022 07:17:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668093464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oSEpaeby2II1AK8fDTQVk8CMsHIMPQbB+AtEwa/d2Og=;
-        b=AgRK0+Q7sp9T7G6ka8aHRNWqNbI3f0t9CS9gk06DCXeK2Zxp3NKxpTNP6KfpuH9ekIyVd2
-        sMGIYADrUvWBml7uQ7Fm8GPgkautRLL3Xtsw+JmKnzm0lESAEWF0EbBd/59uIObgJgyFsv
-        Sn76UOzK+5RoDP9/c19pNJ+Wr9A5IxU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-554-DeGwyVFEMoKqLNNqj8aWZg-1; Thu, 10 Nov 2022 10:17:40 -0500
-X-MC-Unique: DeGwyVFEMoKqLNNqj8aWZg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9CA47858F13;
-        Thu, 10 Nov 2022 15:17:39 +0000 (UTC)
-Received: from fedora (unknown [10.22.8.196])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 346522023A16;
-        Thu, 10 Nov 2022 15:17:35 +0000 (UTC)
-Date:   Thu, 10 Nov 2022 12:17:34 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Thu, 10 Nov 2022 10:23:54 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2081.outbound.protection.outlook.com [40.107.101.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE5C10B56;
+        Thu, 10 Nov 2022 07:23:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mNLfAa4gaj8HlcbbPWdD9JJgm52BO9Fvw8ZoDa17dNv/tyfu11xyIvsInfzLenOVSOMoiBTEenRp04HY3EPfqcV2FdgA5C69ZEb7pm3QrfttjYZlCnJmQq2TQR683/fJuoxhPmlxiA2FC851MnXUmKXn9pdPDePdoZaHIJpKYpmvDpa4thUtgJlR22KNKh/laYPNnqQ2PLo/8D5lyvCP4U4XQDRI8ia3nbo/+y25t8xZxGTz7FcN3MXxfdTCLb9mhY4Syksd5CFpuFbOgA0ju0PkdAR9Kb7ndGprTkNhdtP3pkg3bHYKqVHpMTJmrEwG1cAn+0q9j9HXBi6FgCTF4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BuBrsZUGxatMxpECdUFpjHC3F8LSs86dBo/X3c3Dom4=;
+ b=Lbikur7BEeQxisRxW3OUnOYdr0Khg731Fej57KDj5hALPP5B/XMs9RPcAGWVMno9KlTkLvYehGk/+nQStYDahanisW4DJJzPEZ7tO9Z4WHj18+Cy2h5WYLApWejnOnt3hxWpkUJYFF2lFe8MRNy1y+lA7TrIX93VbGg3G96Cc74mujvgU14KwuTmTaMeSAuJcWRNZHbY5V76IxYGAnEv6vS64tvmol44QkwjFFTWPUyu4itpz7WjF/fORhvNzVwwNCVO4ohvZCyhoIOWXy5vrineGHh6l7GpYY5/MLCfcKpe2D3TD1JI0NRa+7IMxoV8HQOTai7zucILEx5kERfqPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BuBrsZUGxatMxpECdUFpjHC3F8LSs86dBo/X3c3Dom4=;
+ b=GV4P5yFXm+Mg0LWVboVyVNXo/evz2nwKs+iOTu7FaVYzKOMCQD7Vdf1WDYETZUPx497naNO1V/1Wimm08y/PgCkscd5LmjxTrZUfCXvxPDkw/RLBYe6otqt6sjCB+2h/d53Ah+smuQ9JnkYMU0fPJq9mTK39XrcZlEMCbFC0lJZMp0jUkMh4ivRAdGqXN7go2yHeFOgvSDePmXT5SlzylKr8ZozrRf4rJDCdQzEWxocyvMYtGHh1N91enO2l8W3z58diiCjrKgR2RrsJFQ+v/GE0EiZfNswxDi61pdHbhX97rLN0W8uXEILngTO6+nNX2IW9IKbQZAHXJymsyFaffw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH8PR12MB6913.namprd12.prod.outlook.com (2603:10b6:510:1ca::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Thu, 10 Nov
+ 2022 15:23:51 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%7]) with mapi id 15.20.5791.027; Thu, 10 Nov 2022
+ 15:23:51 +0000
+Date:   Thu, 10 Nov 2022 11:23:50 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, bpf@vger.kernel.org,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
         Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v17 3/3] selftests: tdx: Test TDX attestation GetReport
- support
-Message-ID: <20221110151734.hpd6ccbfqxmuiqyj@fedora>
-References: <20221104032355.227814-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221104032355.227814-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-MIME-Version: 1.0
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v4 04/17] iommufd: Document overview of iommufd
+Message-ID: <Y20XhjH96k4x7qdx@nvidia.com>
+References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+ <4-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+ <Y2zE0zfnQ7mt740i@debian.me>
+ <87v8nmhnkl.fsf@meer.lwn.net>
+ <Y20QotPsxivvV53l@nvidia.com>
+ <87r0yahmlg.fsf@meer.lwn.net>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104032355.227814-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87r0yahmlg.fsf@meer.lwn.net>
+X-ClientProxiedBy: BL1PR13CA0365.namprd13.prod.outlook.com
+ (2603:10b6:208:2c0::10) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH8PR12MB6913:EE_
+X-MS-Office365-Filtering-Correlation-Id: 97932dc2-e2b4-4a0a-a7ac-08dac32f9276
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d81FpIV7aRbQDOEFI+5KBmaN8gSqkeYE40ln0oIGMfFqA53wryTQP0g0a9XKjCMRvXb2MOsqF4OiygKo9uQ4iTEJn3d2kOnSg0NvrAFHVWHVLvWgvSmzXFKN++zDiEJxToJ/mNtImreMJg+838zpQGkas3WTnzW/sWf1NUS9gW6ASJmew4wdRw9UNPj/kHd6fG8g6XaGb+vr/vLTbV9LEuV+GtGHeAzbCgNkrMYT9X8KO5BamLAuzT+ftA+RV86kzn7pDD7ZX3kAcJ/cEkedTzDcxqIZkWtvNt5/gqCdEmIgRjcmCRFulJFpnEhW6mGvgf/grWoY+NgNCZSBEgN9pR1iWiz8E6Lh4tYhxhlap91Jm/aZoWv3MC7SWczz1DfWvF5FkDdBZhYfcYmq84h6IBc2CAhNkKCcu8bw85pf2LyZX/hxrcRYE3JK0bBzpRablljnnHW9hcfn914YuWY7p3ej6EtVyl6iGfXoLc5+TjSjNh+j9b7imm4Pt4vW8D53kZWQADSGQYsvH//P+xcOuyLv4hbF6fe26hEpSC+LYjaeKi0oU2kupxz/BsSkI0LLe1VWuAEtQo45rzaIXKa9VEXv55K3y6o9gquQBwr3VPTIVQtv5Ybg13RWZsMh/m8tE2HR2HOWOBLVc9Ey3BtRvyScu2o7SVemaaIlTPNCheoxqZ9+JDqgLrD5Jj3X3Yn5rZKbspzoyqhghKz93kCVVYv1uGoqGu3LK5HPXNgnFRrRlYP3XhfP4VabZnaggIEJZk4OY7ywMBjv4UuaMmJZ1JFMHTnDtcAD/XvmS7bhYSo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(136003)(39860400002)(366004)(451199015)(41300700001)(7406005)(5660300002)(26005)(8676002)(6506007)(6512007)(7416002)(66476007)(66556008)(4326008)(2906002)(54906003)(6916009)(8936002)(6486002)(478600001)(66946007)(966005)(36756003)(86362001)(316002)(2616005)(186003)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tax7Ty9un6AFP6cwrqO4OYbxPLYtYWa/yACkWGYix7KmR2yixPJPJy7wHRKk?=
+ =?us-ascii?Q?1ZqXWtHW00mYASfpu4kIkOR0TWY+CS0zYKhosPtll4FaAEPcM0U4af3QAqbX?=
+ =?us-ascii?Q?rEwp5ZfggN/8wR1i+sgssOKTqx6resq6I+3oe9KNw0OJE9Mz3gzeX7tNlfP7?=
+ =?us-ascii?Q?RPECHD8LhDrDktixFJzy2IIuQMuYx6+/pd7cXhvc/RRNXQ6DzAx/qvlwr77g?=
+ =?us-ascii?Q?7bvB9mbWZd00754fiLHq5UqzQw6+XDTFtouQy+2xfihrkd5MRVprwWoBE6Er?=
+ =?us-ascii?Q?M+3FQWOv2FCI9sRYhbSsSCgPjgfwvAZQiN4PYSYQ9gtfDIvP6GDUrtDlo14Q?=
+ =?us-ascii?Q?ywQipLbsX9YjVsyyTAUlaJEauDLI72PR2jyI9lWUeL48yNb3n5hdNtsHsEEb?=
+ =?us-ascii?Q?4J9ROzRkNENi7ydTu/LrhYgUfLhO2hXTpGQLJq0so6laBMEr1g3cEAmzHp/n?=
+ =?us-ascii?Q?OTdt6+RZ7+SGQf2xDFVZF6+A/7pUMzDrU2vV9p2y4T/Pgkw+m03LWv8KznoW?=
+ =?us-ascii?Q?4t3ZuAki8YbXKLfe1jWTZNJeY93GEug1jFSXSYfA5LfnyjtVmPNSAm9DpnD7?=
+ =?us-ascii?Q?dvL4F0bs1Y6JAtQevu1A1BESxihkIFa62pHrqRSJLXMrVSVV8tW4OjcIZn0r?=
+ =?us-ascii?Q?N4M+b5ASPthxY3Lt0Cbw7XJi7lc3laF15DycdkSlAi4WRE5y+lQbnNeNg7OZ?=
+ =?us-ascii?Q?MHXVHuDnRrsmtkCqSkdNlvmgkRxIeWPr7Y2rsn2/BIpwBz5wiKy2AWvYDfol?=
+ =?us-ascii?Q?y8aULTKDZBzYKPrZHeUx8R6gy0oaVdnAcRG/bxVECJ+KmFEHiDPU1Jm4Qool?=
+ =?us-ascii?Q?bjDKGnOpnbUZQwlSET7GbCb8RFggY72xnZWMbkC15p222M1/FdykhNYtWLHZ?=
+ =?us-ascii?Q?gIkrv5xh1iHPJt+DSlB8yombH8y6JBrRYRhGgZOFi7AIk1VDaatiQl3ViRdK?=
+ =?us-ascii?Q?3q+jRdvQ9zIHzcJL4wcX2xL/wxDlHO683AqjRoOO3sVCUUmAdQ5YipQlgdjE?=
+ =?us-ascii?Q?KOJc44njh+aDXmbx70YIHXWC067VbugKNUbr8WUwBaezM5x3IzRedNjILI+H?=
+ =?us-ascii?Q?adTY7y/GXjkCoZmXaxmeKGZwtNCPWsDccFXZn2SsRUlLg+3ELxXP3T/m6/ht?=
+ =?us-ascii?Q?GJx1G8ybGgVYcRnQkNAqWJVVCV59G0cWKNNIMDgLiHHnCk7lN0FtYbKNMgm9?=
+ =?us-ascii?Q?OZFjQ4yMudLfbOmUGUgB8+CCZRvtLc/nq4Vv61C5kc36l3DrmV9YUl5pUiK6?=
+ =?us-ascii?Q?DRHa876jlNeDxOz/+P0/BFWSEnme6laJsW2ta16Tdu5jpfJTVm+vuj5QDm6A?=
+ =?us-ascii?Q?glZJXqRVQk3huRBceRIdYq52m5R4gE/Rq0ldpP2ssvmwn2Dfr1clrFWsZlsn?=
+ =?us-ascii?Q?tdni9SXLOlXBiENeW64FXhHPHwz5pjt/21+atuO/Ou3FQTIeDS53CBYVRn8p?=
+ =?us-ascii?Q?UptZi6cFb9FIO2MG8lcMgbOzHpW0s/iBc6t3YyQib3YNEkzs3vupMrj7qYfe?=
+ =?us-ascii?Q?1xl40M2GQSIRGpLd3DbQ42GbjBBoCdFfEqHyXgSYqa86DmdFM7AwXdHOaiBJ?=
+ =?us-ascii?Q?8KC3yb1q1lYX59Cpx9k=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97932dc2-e2b4-4a0a-a7ac-08dac32f9276
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2022 15:23:51.5725
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FRn2n6r7o2tsaFZu9N/nYUvtgqDhhXOgAI7N5yc6F7/bVh6csGnGTZODZ5qGwRc0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6913
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 08:23:55PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> Attestation is used to verify the trustworthiness of a TDX guest.
-> During the guest bring-up, the Intel TDX module measures and records
-> the initial contents and configuration of the guest, and at runtime,
-> guest software uses runtime measurement registers (RMTRs) to measure
-> and record details related to kernel image, command line params, ACPI
-> tables, initrd, etc. At guest runtime, the attestation process is used
-> to attest to these measurements.
+On Thu, Nov 10, 2022 at 08:10:19AM -0700, Jonathan Corbet wrote:
+> Jason Gunthorpe <jgg@nvidia.com> writes:
 > 
-> The first step in the TDX attestation process is to get the TDREPORT
-> data. It is a fixed size data structure generated by the TDX module
-> which includes the above mentioned measurements data, a MAC ID to
-> protect the integrity of the TDREPORT, and a 64-Byte of user specified
-> data passed during TDREPORT request which can uniquely identify the
-> TDREPORT.
+> > On Thu, Nov 10, 2022 at 07:49:14AM -0700, Jonathan Corbet wrote:
+> >
+> >> The *real* problem, methinks, is that the directives are added in patch 4
+> >> of the series, but the documentation doesn't show up until later.  So
+> >> the real fix would be to simply move this patch down.  Or just not worry
+> >> about it, since it all works out in the end and nobody will be bisecting
+> >> a docs build.
+> >
+> > That is half the problem, the other is this:
+> >
+> > https://lore.kernel.org/r/0-v1-c80e152ce63b+12-kdoc_export_ns_jgg@nvidia.com
+> >
+> > Since even after the whole series the EXPORT_NS functions don't parse
+> > properly. I'm going to put this patch before the doc patch and ignore
+> > the bisection problem.
+> >
+> > I'd like someone to say they are happy with the perl :)
 > 
-> Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
-> enable guest userspace to get the TDREPORT.
+> I'm not happy with *any* perl! :)
 > 
-> Add a kernel self test module to test this ABI and verify the validity
-> of the generated TDREPORT.
-> 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Acked-by: Kai Huang <kai.huang@intel.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> ---
-> 
-> Changes since v16:
->  * Modified the code to adapt to fixed size reportdata and tdeport
->    buffers in struct tdx_report_req.
-> 
-> Changes since v15:
->  * None
-> 
-> Changes since v14:
->  * Fixed format issue in struct comments.
->  * Rebased on top of v6.1-rc1
-> 
-> Changes since v13:
->  * Removed __packed from TDREPORT structs.
->  * Since the guest driver is moved to drivers/virt/coco, removed
->    tools/arch/x86/include header folder usage.
->  * Fixed struct comments to match kernel-doc format.
->  * Fixed commit log as per review comments.
->  * Fixed some format issues in the code.
-> 
-> Changes since v12:
->  * Changed #ifdef DEBUG usage with if (DEBUG).
->  * Initialized reserved entries values to zero.
-> 
-> Changes since v11:
->  * Renamed devname with TDX_GUEST_DEVNAME.
-> 
-> Changes since v10:
->  * Replaced TD/TD Guest usage with guest or TDX guest.
->  * Reworded the subject line.
-> 
-> Changes since v9:
->  * Copied arch/x86/include/uapi/asm/tdx.h to tools/arch/x86/include to
->    decouple header dependency between kernel source and tools dir.
->  * Fixed Makefile to adapt to above change.
->  * Fixed commit log and comments.
->  * Added __packed to hardware structs.
-> 
-> Changes since v8:
->  * Please refer to https://lore.kernel.org/all/ \
->    20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com/
-> 
->  tools/testing/selftests/Makefile             |   1 +
->  tools/testing/selftests/tdx/Makefile         |   7 +
->  tools/testing/selftests/tdx/config           |   1 +
->  tools/testing/selftests/tdx/tdx_guest_test.c | 163 +++++++++++++++++++
->  4 files changed, 172 insertions(+)
->  create mode 100644 tools/testing/selftests/tdx/Makefile
->  create mode 100644 tools/testing/selftests/tdx/config
->  create mode 100644 tools/testing/selftests/tdx/tdx_guest_test.c
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 0464b2c6c1e4..f60e14d16bfd 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -73,6 +73,7 @@ TARGETS += sync
->  TARGETS += syscall_user_dispatch
->  TARGETS += sysctl
->  TARGETS += tc-testing
-> +TARGETS += tdx
->  TARGETS += timens
->  ifneq (1, $(quicktest))
->  TARGETS += timers
-> diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
-> new file mode 100644
-> index 000000000000..8dd43517cd55
-> --- /dev/null
-> +++ b/tools/testing/selftests/tdx/Makefile
-> @@ -0,0 +1,7 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +CFLAGS += -O3 -Wl,-no-as-needed -Wall -static
-> +
-> +TEST_GEN_PROGS := tdx_guest_test
-> +
-> +include ../lib.mk
-> diff --git a/tools/testing/selftests/tdx/config b/tools/testing/selftests/tdx/config
-> new file mode 100644
-> index 000000000000..aa1edc829ab6
-> --- /dev/null
-> +++ b/tools/testing/selftests/tdx/config
-> @@ -0,0 +1 @@
-> +CONFIG_TDX_GUEST_DRIVER=y
-> diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
-> new file mode 100644
-> index 000000000000..6f7ab667b8cc
-> --- /dev/null
-> +++ b/tools/testing/selftests/tdx/tdx_guest_test.c
-> @@ -0,0 +1,163 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Test TDX guest features
-> + *
-> + * Copyright (C) 2022 Intel Corporation.
-> + *
-> + * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> + */
-> +
-> +#include <sys/ioctl.h>
-> +
-> +#include <errno.h>
-> +#include <fcntl.h>
-> +
-> +#include "../kselftest_harness.h"
-> +#include "../../../../include/uapi/linux/tdx-guest.h"
-> +
-> +#define TDX_GUEST_DEVNAME "/dev/tdx_guest"
-> +#define HEX_DUMP_SIZE 8
-> +#define DEBUG 0
-> +
-> +/**
-> + * struct tdreport_type - Type header of TDREPORT_STRUCT.
-> + * @type: Type of the TDREPORT (0 - SGX, 81 - TDX, rest are reserved)
-> + * @sub_type: Subtype of the TDREPORT (Default value is 0).
-> + * @version: TDREPORT version (Default value is 0).
-> + * @reserved: Added for future extension.
-> + *
-> + * More details can be found in TDX v1.0 module specification, sec
-> + * titled "REPORTTYPE".
-> + */
-> +struct tdreport_type {
-> +	__u8 type;
-> +	__u8 sub_type;
-> +	__u8 version;
-> +	__u8 reserved;
-> +};
-> +
-> +/**
-> + * struct reportmac - TDX guest report data, MAC and TEE hashes.
-> + * @type: TDREPORT type header.
-> + * @reserved1: Reserved for future extension.
-> + * @cpu_svn: CPU security version.
-> + * @tee_tcb_info_hash: SHA384 hash of TEE TCB INFO.
-> + * @tee_td_info_hash: SHA384 hash of TDINFO_STRUCT.
-> + * @reportdata: User defined unique data passed in TDG.MR.REPORT request.
-> + * @reserved2: Reserved for future extension.
-> + * @mac: CPU MAC ID.
-> + *
-> + * It is MAC-protected and contains hashes of the remainder of the
-> + * report structure along with user provided report data. More details can
-> + * be found in TDX v1.0 Module specification, sec titled "REPORTMACSTRUCT"
-> + */
-> +struct reportmac {
-> +	struct tdreport_type type;
-> +	__u8 reserved1[12];
-> +	__u8 cpu_svn[16];
-> +	__u8 tee_tcb_info_hash[48];
-> +	__u8 tee_td_info_hash[48];
-> +	__u8 reportdata[64];
-> +	__u8 reserved2[32];
-> +	__u8 mac[32];
-> +};
-> +
-> +/**
-> + * struct td_info - TDX guest measurements and configuration.
-> + * @attr: TDX Guest attributes (like debug, spet_disable, etc).
-> + * @xfam: Extended features allowed mask.
-> + * @mrtd: Build time measurement register.
-> + * @mrconfigid: Software-defined ID for non-owner-defined configuration
-> + *              of the guest - e.g., run-time or OS configuration.
-> + * @mrowner: Software-defined ID for the guest owner.
-> + * @mrownerconfig: Software-defined ID for owner-defined configuration of
-> + *                 the guest - e.g., specific to the workload.
-> + * @rtmr: Run time measurement registers.
-> + * @reserved: Added for future extension.
-> + *
-> + * It contains the measurements and initial configuration of the TDX guest
-> + * that was locked at initialization and a set of measurement registers
-> + * that are run-time extendable. More details can be found in TDX v1.0
-> + * Module specification, sec titled "TDINFO_STRUCT".
-> + */
-> +struct td_info {
-> +	__u8 attr[8];
-> +	__u64 xfam;
-> +	__u64 mrtd[6];
-> +	__u64 mrconfigid[6];
-> +	__u64 mrowner[6];
-> +	__u64 mrownerconfig[6];
-> +	__u64 rtmr[24];
-> +	__u64 reserved[14];
-> +};
-> +
-> +/*
-> + * struct tdreport - Output of TDCALL[TDG.MR.REPORT].
-> + * @reportmac: Mac protected header of size 256 bytes.
-> + * @tee_tcb_info: Additional attestable elements in the TCB are not
-> + *                reflected in the reportmac.
-> + * @reserved: Added for future extension.
-> + * @tdinfo: Measurements and configuration data of size 512 bytes.
-> + *
-> + * More details can be found in TDX v1.0 Module specification, sec
-> + * titled "TDREPORT_STRUCT".
-> + */
-> +struct tdreport {
-> +	struct reportmac reportmac;
-> +	__u8 tee_tcb_info[239];
-> +	__u8 reserved[17];
-> +	struct td_info tdinfo;
-> +};
-> +
-> +static void print_array_hex(const char *title, const char *prefix_str,
-> +			    const void *buf, int len)
-> +{
-> +	int i, j, line_len, rowsize = HEX_DUMP_SIZE;
-> +	const __u8 *ptr = buf;
-> +
-> +	printf("\t\t%s", title);
-> +
-> +	for (j = 0; j < len; j += rowsize) {
-> +		line_len = rowsize < (len - j) ? rowsize : (len - j);
-> +		printf("%s%.8x:", prefix_str, j);
-> +		for (i = 0; i < line_len; i++)
-> +			printf(" %.2x", ptr[j + i]);
-> +		printf("\n");
-> +	}
-> +
-> +	printf("\n");
-> +}
-> +
-> +TEST(verify_report)
-> +{
-> +	struct tdx_report_req req;
-> +	struct tdreport *tdreport;
-> +	int devfd, i;
-> +
-> +	devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
-> +	ASSERT_LT(0, devfd);
-> +
-> +	/* Generate sample report data */
-> +	for (i = 0; i < TDX_REPORTDATA_LEN; i++)
-> +		req.reportdata[i] = i;
-> +
-> +	/* Get TDREPORT */
-> +	ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
-> +
-> +	if (DEBUG) {
-> +		print_array_hex("\n\t\tTDX report data\n", "",
-> +				req.reportdata, sizeof(req.reportdata));
-> +
-> +		print_array_hex("\n\t\tTDX tdreport data\n", "",
-> +				req.tdreport, sizeof(req.tdreport));
-> +	}
-> +
-> +	/* Make sure TDREPORT data includes the REPORTDATA passed */
-> +	tdreport = (struct tdreport *)req.tdreport;
-> +	ASSERT_EQ(0, memcmp(&tdreport->reportmac.reportdata[0],
-> +			    req.reportdata, sizeof(req.reportdata)));
-> +
-> +	ASSERT_EQ(0, close(devfd));
-> +}
-> +
-> +TEST_HARNESS_MAIN
-> -- 
-> 2.34.1
-> 
-> 
+> I've been sitting on that patch because I was under the impression
+> another version was coming - was that wrong?
 
-Acked-by: Wander Lairson Costa <wander@redhat.com>
+I can resend it with the single regex if that is the preference - it
+is not quite as exacting as the first version. I have to test it is
+all.
 
+Jason
