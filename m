@@ -2,72 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07C9624497
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Nov 2022 15:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B94D16244A4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Nov 2022 15:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbiKJOpk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Nov 2022 09:45:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S230498AbiKJOtT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Nov 2022 09:49:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiKJOpj (ORCPT
+        with ESMTP id S230137AbiKJOtS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:45:39 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561A543AF6
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Nov 2022 06:45:36 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id h133-20020a1c218b000000b003cf4d389c41so3569931wmh.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Nov 2022 06:45:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ElDuHUZHiM1bGpzs5ou38zzllblj5DI9IW1M1Yt0P50=;
-        b=OaF5C7rzAKEgktC4eN0TcGzuvj550ImBQVe5qE+aFDCuuJaU6OPiTfHB1f9sEQJW1P
-         a7KRiRplvHcfiGjzC8dHqePkZVHfK6NT59RLIxYCBeRs35MxrWFuZwhEAY3p5gFKMJ0Z
-         Xm/JeWoAh7Qjzcq3GfOfWENu7QrvAQIEep/B31Cf4LdpP775ItTcySZ6IB1pyxBBd/iz
-         HSpL3xaHK8zTDlfRZV9GVvUwxZLDpwcCf2rBhDInNIIA+sIq9E4g6bJDcbHq+TuexHgQ
-         b7WkQ5yoXhYcFwxUAQD4tG9nZ2OFJqkDWtrcOCZSklyjKtlfFZwsk6GO7KbKEujLgpFp
-         icXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ElDuHUZHiM1bGpzs5ou38zzllblj5DI9IW1M1Yt0P50=;
-        b=pyrJFF8J4NlO2WBX4QLYMjWf+1GFOiiWXE8seQOpiEde2CLnGO+f3H+fHvJ4PuCFDj
-         UgqaK313UpFPLYZRUd/rQcyxNjje82Cm37Dw/TnKU1FEMy89wgkFeRjTEU02SaNE+deL
-         ZN2qsrBrmOUxOEBiPoE5e/CuPfFU+ymvbnusT5FM9tP/SQ0To6P5kQFU+MYtIX+1lvy0
-         V4VltfOjhMX36yjbFy3A1cz4YmQKlu6kqJFFjIz3uNYJ3dDly7tXKJgVL1RxbLYzxCom
-         s97s4VhYiRfHnx2DNQxZogpiBnB7Uz/sclDZ/rLVg/FteA89uiDqio3zc+A+jTqdB0zN
-         15LA==
-X-Gm-Message-State: ACrzQf3wZyH1QiT6Ecj3K/KpeR29jeuYeLceouInyYwx6B1J5BQcVmo+
-        BFEzyTj6c5bCaMcPiqFoUV61BFpizocuRLRNwd8=
-X-Google-Smtp-Source: AMsMyM6ZyCI5gRrCxV6Griy0N+86N9+UUa1vir1qlm25yDQNFlgP8KiD1FGW9nWQ1klM1KK+SvkcnA==
-X-Received: by 2002:a05:600c:2053:b0:3cf:9b39:8585 with SMTP id p19-20020a05600c205300b003cf9b398585mr21533827wmg.106.1668091534904;
-        Thu, 10 Nov 2022 06:45:34 -0800 (PST)
-Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05600c3b8f00b003c6c3fb3cf6sm6368356wms.18.2022.11.10.06.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 06:45:34 -0800 (PST)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Punit Agrawal <punit.agrawal@bytedance.com>,
-        akpm@linux-foundation.org, shuah@kernel.org, adobriyan@gmail.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [External] Re: [PATCH v2 1/2] selftests: proc: Fix
- proc-empty-vm build error on non x86_64
-References: <20221109221104.1797802-1-punit.agrawal@bytedance.com>
-        <6b6cd1e2-3ab7-eede-e04b-738bbcbb5760@linuxfoundation.org>
-Date:   Thu, 10 Nov 2022 14:45:33 +0000
-In-Reply-To: <6b6cd1e2-3ab7-eede-e04b-738bbcbb5760@linuxfoundation.org> (Shuah
-        Khan's message of "Wed, 9 Nov 2022 17:20:23 -0700")
-Message-ID: <87tu36zx4i.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 10 Nov 2022 09:49:18 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0856E17063;
+        Thu, 10 Nov 2022 06:49:16 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 1DF6B732;
+        Thu, 10 Nov 2022 14:49:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 1DF6B732
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1668091755; bh=OnvK+2tUvYAfL0KCrr72dtwv0xTn5bAGv19wZNYmwMU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=f+dcELpnMaM1I4cy5d4quAPLBjCS/LGb+m7YcVxJ6Z39qJd41+owPjkcNC3fnzh+0
+         2cVitnOOfzPKSqEzvOo8aJptjL4/EwAfILChx9pe2CeyyS7um7qnkYijGs6By4hsy3
+         JRvNdmD3FXnAmMqbW4YW6otpVoSTjRJOGidR25+yyypyVOzlnKP/h0/lFRRPPUB4j+
+         XTy7Yse+CL3yzh9nxnqHsoC/ooZbTZf/ifnGaRuVNSYQbcWeaXSQOh+dM4UfrttnxT
+         h3iWuKUsFl3UT0CI3U5dx4ffobEydI44ecNfpm3/bxGQi8nqR9b04rIizVN2dFkMpv
+         8BmSo3l60hlPg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     bpf@vger.kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v4 04/17] iommufd: Document overview of iommufd
+In-Reply-To: <Y2zE0zfnQ7mt740i@debian.me>
+References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+ <4-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+ <Y2zE0zfnQ7mt740i@debian.me>
+Date:   Thu, 10 Nov 2022 07:49:14 -0700
+Message-ID: <87v8nmhnkl.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,74 +80,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-Shuah Khan <skhan@linuxfoundation.org> writes:
-
-> On 11/9/22 15:11, Punit Agrawal wrote:
->> The proc-empty-vm test is implemented for x86_64 and fails to build
->> for other architectures. Rather then emitting a compiler error it
->> would be preferable to only build the test on supported architectures.
->> Mark proc-empty-vm as a test for x86_64 and customise the Makefile
->> to
->> build it only when building for this target architecture.
->> Fixes: 5bc73bb3451b ("proc: test how it holds up with mapping'less
->> process")
->> Signed-off-by: Punit Agrawal <punit.agrawal@bytedance.com>
->> ---
->> v1 -> v2
->> * Fixed missing compilation on x86_64
->> Previous version
->> * https://lore.kernel.org/all/20221109110621.1791999-1-punit.agrawal@bytedance.com/
->> tools/testing/selftests/proc/Makefile | 10 ++++++++--
->>   1 file changed, 8 insertions(+), 2 deletions(-)
->> diff --git a/tools/testing/selftests/proc/Makefile
->> b/tools/testing/selftests/proc/Makefile
->> index cd95369254c0..743aaa0cdd52 100644
->> --- a/tools/testing/selftests/proc/Makefile
->> +++ b/tools/testing/selftests/proc/Makefile
->> @@ -1,14 +1,16 @@
->>   # SPDX-License-Identifier: GPL-2.0-only
->> +
->> +# When ARCH not overridden for crosscompiling, lookup machine
->> +ARCH ?= $(shell uname -m 2>/dev/null || echo not)
->> +
->>   CFLAGS += -Wall -O2 -Wno-unused-function
->>   CFLAGS += -D_GNU_SOURCE
->>   LDFLAGS += -pthread
->>   -TEST_GEN_PROGS :=
->>   TEST_GEN_PROGS += fd-001-lookup
->>   TEST_GEN_PROGS += fd-002-posix-eq
->>   TEST_GEN_PROGS += fd-003-kthread
->>   TEST_GEN_PROGS += proc-loadavg-001
->> -TEST_GEN_PROGS += proc-empty-vm
->>   TEST_GEN_PROGS += proc-pid-vm
->>   TEST_GEN_PROGS += proc-self-map-files-001
->>   TEST_GEN_PROGS += proc-self-map-files-002
->> @@ -26,4 +28,8 @@ TEST_GEN_PROGS += thread-self
->>   TEST_GEN_PROGS += proc-multiple-procfs
->>   TEST_GEN_PROGS += proc-fsconfig-hidepid
->>   +TEST_GEN_PROGS_x86_64 += proc-empty-vm
+> On Mon, Nov 07, 2022 at 08:48:57PM -0400, Jason Gunthorpe wrote:
+>> From: Kevin Tian <kevin.tian@intel.com>
+>> 
+>> Add iommufd into the documentation tree, and supply initial documentation.
+>> Much of this is linked from code comments by kdoc.
+>> 
 >
-> Why do you need this? You already have conditional compiles.
-> Conditionally add proc-empty-vm to TEST_GEN_PROGS like other
-> tests do.
-
-I copied this approach from KVM tests. Looks like we've got a few
-different ways of disabling compilation within selftests.
-
-I can respin to conditionally compile as suggested if that is the way
-forward.
-
->> +
->> +TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH))
->> +
->>   include ../lib.mk
+> The patch also exposes htmldocs warnings as Stephen Rothwell has
+> reported on linux-next [1] due to the copyright comments mistaken for
+> kernel-doc comments, so I have applied the fixup:
 >
-> Same question Andrews asked you. What does it take to get this
-> to work on other architectures. proc and vm tests should be
-> arch. agnostic as a rule unless it is absolutely necessary to
-> have them acrh. aware.
+> ---- >8 ----
+>
+> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+> index 536a34d099968d..76b3761a89423e 100644
+> --- a/drivers/iommu/iommufd/device.c
+> +++ b/drivers/iommu/iommufd/device.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+> -/* Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES
+> +/*
+> + * Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES
 
-Please see my reply elsewhere in the thread for an assessment of the
-architecture dependencies.
+Um ... this makes no sense at all.  If kernel-doc thought that was a
+kernel-doc comment, the problem is there, not here.
+
+<looks>
+
+So the report you're referring to is
+
+  https://lore.kernel.org/linux-next/20221110182938.40ce2651@canb.auug.org.au/
+
+?  If so, this change will not fix the problem.  That error:
+
+> drivers/iommu/iommufd/device.c:1: warning: no structured comments found
+> drivers/iommu/iommufd/main.c:1: warning: no structured comments found
+
+is caused by using .. kernel-doc:: directives to extract documentation
+from files where none exists - thus "no structured comments found".
+
+The *real* problem, methinks, is that the directives are added in patch 4
+of the series, but the documentation doesn't show up until later.  So
+the real fix would be to simply move this patch down.  Or just not worry
+about it, since it all works out in the end and nobody will be bisecting
+a docs build.
+
+Bagas, you are *again* misadvising people.  Please stop doing that!
+
+Thanks,
+
+jon
