@@ -2,145 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39514625046
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 03:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD22762510B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 03:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbiKKCeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Nov 2022 21:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
+        id S233147AbiKKCtD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Nov 2022 21:49:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbiKKCeI (ORCPT
+        with ESMTP id S232711AbiKKCsk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Nov 2022 21:34:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C6860EA6;
-        Thu, 10 Nov 2022 18:34:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE17F61E8D;
-        Fri, 11 Nov 2022 02:33:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263ECC433D6;
-        Fri, 11 Nov 2022 02:33:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668134039;
-        bh=GHgdIoT4lw5MoP246IlcpsNkvxqjnGhY9F5ONqN4YCg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E7SXWqaCMVQWPCrfoebeyaCbQCVNKP4zOeM4LRAl7xcvIp5VNRpTguSkEw8Bj9XSv
-         9ZgA9Abeq34Ji02YJDj6OHfRn97WpcF0by1tv31fXxCGivMeRESzWyXJnM3LGgm7WG
-         47k0NQA99x6TAGyAcNLyoMKIWirPD8Yl6Dczch3o4SD2JkrHF9womtP5B1+0G5TVgL
-         x+Vpx4+Ez8LO92p4fMFI5V/GU5MIUp0gjpaai9bCymrDLnznhTYhsewg1MBpIh++1f
-         +JEzyqoZYSNBDkwKgogwy6aVMG6Y44pUmLWNiULOiUOxQD1FyC31K2EemBT7q72PoG
-         Cl2Q/ACyIFKIQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Li Zhijian <lizhijian@fujitsu.com>,
-        Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 09/30] ksefltests: pidfd: Fix wait_states: Test terminated by timeout
-Date:   Thu, 10 Nov 2022 21:33:17 -0500
-Message-Id: <20221111023340.227279-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221111023340.227279-1-sashal@kernel.org>
-References: <20221111023340.227279-1-sashal@kernel.org>
+        Thu, 10 Nov 2022 21:48:40 -0500
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E701E42;
+        Thu, 10 Nov 2022 18:43:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1668134590;
+        bh=BL3Df7T2fda2YYRMS2L+HCFmYgkJzAzwFsLU2JM9Hkw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=op116er2zCaFNKU2gJBwvP6wi2j3j4m/14zzKInq1OhzkFqgUn7nRYvVuKHEUIHpe
+         080wVBrV4wf4Y3iWecSpurBxHBJ0iNEUUuSpN5V7coMkwE/lHka7EiHODm3KtCPBdc
+         rBg70rIolxtvtYf5A2YSYlmjVxEBjBupqsOR+x6w=
+Received: from localhost.localdomain ([111.199.191.46])
+        by newxmesmtplogicsvrsza2-0.qq.com (NewEsmtp) with SMTP
+        id 95619E78; Fri, 11 Nov 2022 10:37:22 +0800
+X-QQ-mid: xmsmtpt1668134242to097gvqf
+Message-ID: <tencent_32CBE47252C5F69571B40751DE6054082D05@qq.com>
+X-QQ-XMAILINFO: NQR8mRxMnur9pmo2KIyz9dprN6UpTtnMoo5DdTsNsP5dbyXhL/Dto/WxKS/eji
+         yPnSz9aKaiLE8FYJd/UyyLYRg8KD7lbY5XwlDrzbMiMCFnXnziV/ouqi56ahVuJPpKDMYivtPHj7
+         hEdOKJu8hyeuPO0TJH1Am3Fyzi5WdqU+vL51uVMogq/cnZwMyqhoH5xeTR5a9Y1wwrCMjeyjYnAO
+         Kn3426Ha/lty+eUNfldE4meYk8g7blNbaGMvkA3SMPfUhayvMa0meed1BZUynFsz3g0Q8S0qaKts
+         mG3g3PZcvTbibyrAwYkUq1gwStRxoygKDFn6buaOLXjKHS0Tgp98MEHrUopCY/XDyxhrbHghf/If
+         E0NGyuFmAVJk89c6sJUEofJ6ffZXzjXXmQ0Wp5No8CxPFpwdmDHzOchxPS0Tf1LW4JkyqjwneM23
+         prUgJTFe5IFekbfM61Mkez1L+e9is4orQr0EDJWQLs1FETG0T7kVCgbIAkRRpKQeEwbZGRAMICd6
+         cO2PfCcGo+g90Sx+bQyGvLmyRHFN4Trt65w7tC87SBtrogIaPZew20LJXFFaRpk0Laf1sG44Ycw/
+         xoQ3Qp/dnjOeOakhdrEOUeCtjBOvLdixMSyB02RD4naS8WW/q9mw35sY9oKeU004o4vGfGG7xfDF
+         //txyYHrQalcHVOQF7G60c76Qou3cw6ulBmX6y3Z/ReGmJx97+ILWOzsP4oybqtA6UiNjm9bIIBk
+         fIZsuCq7SU+2a4WMXx6LuO24Zyl17TrAQnvIabW4zGOxjYpdEbT8VrsNVCbmRkncq8wQ0W7eeIET
+         vHUHsOl3YMe5lAiGdM4TbHRL7VG/xUwYD9NcvgLeSd2UlYB6mD/yFI66ZcMskfsDaEevjZnJBv3E
+         W7bcBMkjoCsNezWV17gi7vqMzqoqfK5IzMGePHJdyl4994IMru+xwppnN7Y0awKFbgPUyn2o1tYf
+         N8xrVY5VUhMHNpyNlQgrKiy7KzEkRIXrkckUDftwNGsJ3ZEkXBqLzOpIuE0CQbM+A4mAmBqHJjIM
+         CMBHVEQw==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     sj@kernel.org
+Cc:     damon@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        rongtao@cestc.cn, rtoax@foxmail.com, shuah@kernel.org,
+        yuanchu@google.com
+Subject: [PATCH] selftests/damon: Fix unnecessary compilation warnings
+Date:   Fri, 11 Nov 2022 10:37:20 +0800
+X-OQ-MSGID: <20221111023720.15408-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221110200939.101886-1-sj@kernel.org>
+References: <20221110200939.101886-1-sj@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Li Zhijian <lizhijian@fujitsu.com>
+From: Rong Tao <rongtao@cestc.cn>
 
-[ Upstream commit 88e1f16ba58665e9edfce437ea487da2fa759af9 ]
+When testing overflow and overread, there is no need to keep unnecessary
+compilation warnings, we should simply ignore them.
 
-0Day/LKP observed that the kselftest blocks forever since one of the
-pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
-the source, we found that it blocks at:
-ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
+How to reproduce the problem:
 
-wait_states has below testing flow:
-  CHILD                 PARENT
-  ---------------+--------------
-1 STOP itself
-2                   WAIT for CHILD STOPPED
-3                   SIGNAL CHILD to CONT
-4 CONT
-5 STOP itself
-5'                  WAIT for CHILD CONT
-6                   WAIT for CHILD STOPPED
+    $ make -C tools/testing/selftests/
+    ...
+    warning: ‘write’ reading 4294967295 bytes from a region of size 1
+    [-Wstringop-overread]
+    warning: ‘read’ writing 4294967295 bytes into a region of size 25
+    overflows the destination [-Wstringop-overflow=]
 
-The problem is that the kernel cannot ensure the order of 5 and 5', once
-5 goes first, the test will fail.
-
-we can reproduce it by:
-$ while true; do make run_tests -C pidfd; done
-
-Introduce a blocking read in child process to make sure the parent can
-check its WCONTINUED.
-
-CC: Philip Li <philip.li@intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- tools/testing/selftests/pidfd/pidfd_wait.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ tools/testing/selftests/damon/huge_count_read_write.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-index 070c1c876df1..c3e2a3041f55 100644
---- a/tools/testing/selftests/pidfd/pidfd_wait.c
-+++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-@@ -95,20 +95,28 @@ TEST(wait_states)
- 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
- 		.exit_signal = SIGCHLD,
- 	};
-+	int pfd[2];
- 	pid_t pid;
- 	siginfo_t info = {
- 		.si_signo = 0,
- 	};
+diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
+index ad7a6b4cf338..8fbe276870e7 100644
+--- a/tools/testing/selftests/damon/huge_count_read_write.c
++++ b/tools/testing/selftests/damon/huge_count_read_write.c
+@@ -8,6 +8,11 @@
+ #include <unistd.h>
+ #include <stdio.h>
  
-+	ASSERT_EQ(pipe(pfd), 0);
- 	pid = sys_clone3(&args);
- 	ASSERT_GE(pid, 0);
- 
- 	if (pid == 0) {
-+		char buf[2];
++#pragma GCC diagnostic push
++/* Ignore read(2) overflow and write(2) overread compile warnings */
++#pragma GCC diagnostic ignored "-Wstringop-overread"
++#pragma GCC diagnostic ignored "-Wstringop-overflow"
 +
-+		close(pfd[1]);
- 		kill(getpid(), SIGSTOP);
-+		ASSERT_EQ(read(pfd[0], buf, 1), 1);
-+		close(pfd[0]);
- 		kill(getpid(), SIGSTOP);
- 		exit(EXIT_SUCCESS);
- 	}
+ void write_read_with_huge_count(char *file)
+ {
+ 	int filedesc = open(file, O_RDWR);
+@@ -27,6 +32,8 @@ void write_read_with_huge_count(char *file)
+ 	close(filedesc);
+ }
  
-+	close(pfd[0]);
- 	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WSTOPPED, NULL), 0);
- 	ASSERT_EQ(info.si_signo, SIGCHLD);
- 	ASSERT_EQ(info.si_code, CLD_STOPPED);
-@@ -117,6 +125,8 @@ TEST(wait_states)
- 	ASSERT_EQ(sys_pidfd_send_signal(pidfd, SIGCONT, NULL, 0), 0);
- 
- 	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
-+	ASSERT_EQ(write(pfd[1], "C", 1), 1);
-+	close(pfd[1]);
- 	ASSERT_EQ(info.si_signo, SIGCHLD);
- 	ASSERT_EQ(info.si_code, CLD_CONTINUED);
- 	ASSERT_EQ(info.si_pid, parent_tid);
++#pragma GCC diagnostic pop
++
+ int main(int argc, char *argv[])
+ {
+ 	if (argc != 2) {
 -- 
-2.35.1
+2.31.1
 
