@@ -2,85 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F12625FF4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 18:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B05626060
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 18:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233824AbiKKRAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Nov 2022 12:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
+        id S233495AbiKKRZY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Nov 2022 12:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbiKKRAs (ORCPT
+        with ESMTP id S232968AbiKKRZX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:00:48 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE358292A
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 09:00:47 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id k15so5393177pfg.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 09:00:47 -0800 (PST)
+        Fri, 11 Nov 2022 12:25:23 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101AD10556
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 09:25:23 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id f189-20020a6238c6000000b0056e3400fdc0so3053827pfa.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 09:25:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uQv9t+cMfRNztb2MDGSgO4oDyG4lJFnP/83dETMShPI=;
-        b=eUXi9U7rhUSr3br6rmgiaIsYp+RsvxivcSImOAntLprwvBzpzxq2snkTdeBA8QRF46
-         RXeLlcRsTKcvZJc3YTbTZylMl6Us+u9gpVr5UwcDJFNmaExFr+vmd22q2xYYFH+dtwx7
-         pLSFUZPZgU10jm+ODpk3evi02MKFS2RUChGxbenRrKzhC74MRZRYnQype4+mANvG7nAe
-         rXTJGaSyuU+BSfy99bzHO4xKYizlQyyustnK8EAYw+E6b/GaGChT8FXr+VKxGtvbNNXy
-         To2ze0rt3SWOsQvWQnRzcTH3JwXjVb09eAxaZfAsEy6avrhdbnhStjtmpg1Z/yBAl145
-         /FzQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=imvO8YpZD2ZcmET02WP0sV4ZEd9lENVaToBwFuzRa9k=;
+        b=pac3wqeY16mNG6biNSvoWZoA1M2mFFakQ1O2/aHt7Lg9ZdYW7R5DwwInFCqa/x9aEg
+         5AxgSlU9fIeA4u/yD5TH728ZdaghJP+K2CBkJ2uFvkU+pc+nC4eip/uILhuD4ijLNyAw
+         gB61YeQRpvaWUJe9189Sju54A6XpF2YQdnrDZPCb4K/86dMeHJCz2ElmtA/oC8OXELE0
+         1CziUg4hBDvc74U7yi6bMlVkJnbUCxTOkmEBGX0imwXn2GdXLFDTEbfvfeuUj/kVMu9+
+         95fRaGLnL6/SRguRJhLXdT9Wwk2bb4DM3fkkZdcmOJ2JawfliBIdmkZKIVD1n0o2nBnB
+         HwqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uQv9t+cMfRNztb2MDGSgO4oDyG4lJFnP/83dETMShPI=;
-        b=NRhSc36zgsnSp2L8A1EpnCQT70EqOFt31JAh8I8uIhh21zxQMDLHUcxraAoJW1jlCQ
-         PBNhdPNM7s0vDquO5sz0YEFc+kmMBBs47z4jFfpD3b3kXJTVxiF6UYlguR06FGJWCLnj
-         jJg1MK5DqWDGHItDUiQYIBlhsVQJSOwVaFPnw2IjZbhD6HcJYQsrLM5/bxCeSoBgkcr6
-         gbyGxt/bIo8oGUzjy+b+YzOwAawDf+b2wCTPXLvga9mkgyOG/I38YGlIUX/BfzuJCSac
-         hM4cdA1xsax52qETwraJoi6W8u9OcDqzRObxaKgyJvGwZEMmnVXhD2PaNch6AEOPVoAi
-         elog==
-X-Gm-Message-State: ANoB5pnyVmjOVQM38XUG1CBPmTvfzaILeSqUIR1Ycvavjsp1wtFLnwgN
-        IjuplejYjoLpaYcAuEuXe4PY3A==
-X-Google-Smtp-Source: AA0mqf4GWxv9k1sfQt7GDw99/UCt6cxg6CadWvuK/9pl2DShLvK1kL9WgKrNokFMXhAV/lhebQXpJA==
-X-Received: by 2002:a63:881:0:b0:46e:c7be:16fc with SMTP id 123-20020a630881000000b0046ec7be16fcmr2366257pgi.462.1668186047086;
-        Fri, 11 Nov 2022 09:00:47 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i8-20020a170902c94800b00187197c4999sm1964530pla.167.2022.11.11.09.00.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 09:00:46 -0800 (PST)
-Date:   Fri, 11 Nov 2022 17:00:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kyle Huey <me@kylehuey.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org
-Subject: Re: [RESEND PATCH v6 1/2] x86/fpu: Allow PKRU to be (once again)
- written by ptrace.
-Message-ID: <Y25/u6IlqJGYkVD/@google.com>
-References: <20221107063807.81774-1-khuey@kylehuey.com>
- <20221107063807.81774-2-khuey@kylehuey.com>
- <64e62ab9-71f6-6d90-24de-402921c244e7@intel.com>
- <CAP045ArEuTmA6DGoVEgeSRd-F+oQCqRaeyzwgdxuCnOP0jgqWA@mail.gmail.com>
- <b41b6a33-7fdc-bd54-8b15-02bf4e713ed7@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b41b6a33-7fdc-bd54-8b15-02bf4e713ed7@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=imvO8YpZD2ZcmET02WP0sV4ZEd9lENVaToBwFuzRa9k=;
+        b=Q/nF3ZP7hh5h4Ha6lT34jvQ1glOuUv8Cpb7p2fKObTvH9Q5CIvwQlDAdcFQNHDWAKX
+         /hN1mqzX/o4i3j55J2s9uyqFisUJ6smuYrmvF1IWlaX3Ym9eKZKS/YBQR7kncyY7vWmD
+         5oBgJzWpiYmU+EDKPH9V87RcH3RIcSAMoefVxARydYSVoRq/bLWrsIsT8wJRv2559230
+         a2iRBwaEcmBLdAPr6ndj3MzCM+7ySHb713R0cIUxq6TSf+g9KrntxL2TQvcZH/YahZvI
+         gY2JJd7dnPOKnUaGbO38DMyYxHk5X4MLIIHyCz+imbQ+iJwWNmY9n5xizOhCpkXkllhk
+         uceg==
+X-Gm-Message-State: ANoB5pnRqwyRFABPLf6kyXgGlWWFyGgm1qxTCSqQVfFXYIFKuFHpl4+J
+        sVC6kLY6OtUO3ltXxWLdTJpUQts=
+X-Google-Smtp-Source: AA0mqf68OCEgtibicr7iW7xRQadmbGfWQUpWk2vQrpkeHPWsixQSs9xTua3NBVVtEOaVUTg2DuzYRUI=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:90a:4503:b0:200:2069:7702 with SMTP id
+ u3-20020a17090a450300b0020020697702mr2956946pjg.239.1668187522509; Fri, 11
+ Nov 2022 09:25:22 -0800 (PST)
+Date:   Fri, 11 Nov 2022 09:25:20 -0800
+In-Reply-To: <tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com>
+Mime-Version: 1.0
+References: <tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com>
+Message-ID: <Y26FgIJLR3nVKjcb@google.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix error undeclared identifier 'NF_NAT_MANIP_SRC'
+From:   sdf@google.com
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     ast@kernel.org, Rong Tao <rongtao@cestc.cn>,
+        kernel test robot <lkp@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
+        <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,93 +83,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 10, 2022, Dave Hansen wrote:
-> On 11/10/22 16:03, Kyle Huey wrote:
-> > On Tue, Nov 8, 2022 at 10:23 AM Dave Hansen <dave.hansen@intel.com> wrote:
-> BTW, I'd love to know if KVM *REALLY* depends on this.
+On 11/11, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
 
-Unlikely, but nearly impossible to know for sure.  Copy+pasting my response[1] to
-an earlier version.
+> commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
+> introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat.h,
+> and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_nat_info
+> kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c. We copy enum
+> nf_nat_manip_type to test_bpf_nf.c fix this error.
 
- : Hrm, the current behavior has been KVM ABI for a very long time.
- : 
- : It's definitely odd because all other components will be initialized due to their
- : bits being cleared in the header during kvm_load_guest_fpu(), and it probably
- : wouldn't cause problems in practice as most VMMs likely do "all or nothing" loads.
- : But, in theory, userspace could save/restore a subset of guest XSTATE and rely on
- : the kernel not overwriting guest PKRU when its bit is cleared in the header.
- : 
- : All that said, I don't see any reason to force KVM to change at this time, it's
- : trivial enough to handle KVM's oddities while providing sane behavior for others.
- : Nullify the pointer in the guest path and then update copy_uabi_to_xstate() to
- : play nice with a NULL pointer, e.g. 
- : 
- : 	/*
- : 	 * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
- : 	 * in the header.  KVM's odd ABI is to leave PKRU untouched in this
- : 	 * case (all other components are eventually re-initialized).
- : 	 */
- : 	if (!(kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU))
- : 		vpkru = NULL;
- : 
- : 	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+> How to reproduce the error:
 
-> It'd be nice to kill if not.
+>      $ make -C tools/testing/selftests/bpf/
+>      ...
+>        CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+>        error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+>              bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+>                                                             ^
+>        error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+>              bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+>                                                             ^
+>      2 errors generated.
 
-I don't disagree, my hesitation is purely that doing so might subtly break
-userspace.
+$ grep  
+NF_NAT_MANIP_SRC ./tools/testing/selftests/bpf/tools/include/vmlinux.h
+         NF_NAT_MANIP_SRC = 0,
 
-That said, I'm 99.9% certain no traditional VMM, e.g. QEMU, is relying on this
-behavior, as doing KVM_SET_XSAVE with anything except the guest's xfeatures mask
-would corrupt guest XSAVE state for everything except PKRU.  I.e. for all intents
-and purposes, a traditional VMM must do KVM_GET_SAVE => KVM_SET_XSAVE without
-touching the xfeatures mask.
+Doesn't look like your kernel config compiles netfilter nat modules?
 
-And for non-traditional usage of KVM, I would be quite surprised if any of those
-use cases utilize PKRU in the guest, let alone play games with KVM_{G,S}SET_XSAVE.
+> Link: https://lore.kernel.org/lkml/202210280447.STsT1gvq-lkp@intel.com/
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+>   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
+>   1 file changed, 5 insertions(+)
 
-So, I'm not completely opposed to "fixing" KVM's ABI, but it should be done as a
-separate patch that is tagged "KVM: x86:" and clearly states that it's changing
-KVM's ABI in a way that could theoretically break userspace.
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c  
+> b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 227e85e85dda..307ca166ff34 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -3,6 +3,11 @@
+>   #include <bpf/bpf_helpers.h>
+>   #include <bpf/bpf_endian.h>
 
-> >> Would something like this be more clear?
-> >>
-> >>         if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
-> >>                 struct pkru_state *xpkru;
-> >>
-> >>                 xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
-> >>                 *pkru = xpkru->pkru;
-> >>         } else {
-> >>                 /*
-> >>                  * KVM may pass a NULL 'pkru' to indicate
-> >>                  * that it does not need PKRU updated.
-> >>                  */
-> >>                 if (pkru)
-> >>                         *pkru = 0;
-> >>         }
-> > 
-> > Yeah, Sean Christopherson suggested this (with the else and if
-> > collapsed into a single level) when I submitted this previously.
-> 
-> I generally agree with Sean, but he's also been guilty of an atrocity or
-> two over the years.  :)
+> +enum nf_nat_manip_type {
+> +	NF_NAT_MANIP_SRC,
+> +	NF_NAT_MANIP_DST
+> +};
+> +
+>   #define EAFNOSUPPORT 97
+>   #define EPROTO 71
+>   #define ENONET 64
+> --
+> 2.31.1
 
-Heh, just one or two?  I'll call that a win.
-
-> While I generally like low levels of indentation I also think my version is
-> much more clear in this case.
-
-I've no objection to a standalone if.  My suggestion[2] was in response to code
-that zeroed @pkru before the XFEATURE_MASK_PKRU check.
-
-      if (pkru)
-              *pkru = 0;
-
-      if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
-              struct pkru_state *xpkru;
-              xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
-              *pkru = xpkru->pkru;
-      }
-
-[1] https://lore.kernel.org/all/Yv6szXuKGv75wWmm@google.com
-[2] https://lore.kernel.org/all/YxDP6jie4cwzZIHp@google.com
