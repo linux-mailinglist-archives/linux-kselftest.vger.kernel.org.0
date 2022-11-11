@@ -2,211 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E8262535A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 07:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02916625445
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 08:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232499AbiKKGIB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Nov 2022 01:08:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
+        id S233195AbiKKHIn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Nov 2022 02:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbiKKGH7 (ORCPT
+        with ESMTP id S233148AbiKKHIk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Nov 2022 01:07:59 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AC05F852;
-        Thu, 10 Nov 2022 22:07:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668146878; x=1699682878;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=d5yZWoMlToNZSX/A8rxAmzkQL5ESf2iWZxC/9H7pVh4=;
-  b=dqywzqrdNxyCm3H15dF5/ShIX5GcFF0NeEtKROYWYgFxdVyGRFpe/fS5
-   b1/fTMJLmbHX5rXLYmabYRHtgcSncs1Cv+lIhMDRr4UNf7Ry2Tf/Ch2gH
-   tVcKnU7d7GstjeW479CVUexPQ+4qAOp9YScMBpd89z0ZUOBN7LDEfUhfG
-   qkJrV/fMjCODMtLHXibCHzcrqGryjPDSeV1v2hpV+e3tAipq2NDzawfv7
-   wnDLl49O/ZkjaAqs6UcZKhrGaEFHAQpKxrjLWg9eS8hQigD+Th6OgWkvt
-   HcHW/1+sb1CB1Ovj8uN9R/eEEDYWy0mPwWkwYm//srbLhcEWar/Ie8HBL
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="375794501"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="375794501"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 22:07:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="668710003"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="668710003"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga008.jf.intel.com with ESMTP; 10 Nov 2022 22:07:57 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 22:07:57 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 10 Nov 2022 22:07:57 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 10 Nov 2022 22:07:56 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rof9BxUJ7CfbT1OfFAGXi0WvigeLskmppK4kYU31ZXZtYX8QKofi+RomvD/hzrgQ5DogFRF470Xd9BFzHAwuaCEhyyl5B8v0irauT6jopf8Z2Qc6TgKomqxekitM/zLjbLTyaYAUR04VrQ3RnwsD6Q//plstLVdxKQ+0hLysFmi7vQlhhM9pX94O2hj/7Rkz5e4UIxrZXqrrUPdhAmmYwwHNAgUR5RbX64ze7Nm+H97FeUBEQgqNa2R6t4UDILyHbRBAh/wHUs7s+OwxguS/eZBPyB7VzflXAh8Y1BYaT+PjGzZeYB5xIZFTdc8qFF47Yzv/SNK0LkCICVPlHzMn/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mq33Sww7ibERyJgr3OJ1IT8S0DZKqTkmVWJ7AqMVCsw=;
- b=LWNqxoBUVxym1Sgqz02abhGODOIS/Wb1oLjwQ6VNiZ+PPkaoWdC10hk8i8MC3wqIM3pNvynu5ttttjYZGj+maoQY5CpOC63wyQyLcAwgymtyf//cG3TDDE+E9wNHAu/TnsDi4t7QFK5hn6AnEeKl2yqrkyP8wpUn/jS1Olb8N7PCqrdfSWWmquduoF1jn9Kd/6L3/Nfwv2OGtWxLSLVGeoAoW5DtILSvmZWX607a2cbEMysEw1qIfkmcymYTRe64DAIEpEqYKYTj5NPGxHodEG0VcngGfNeu4tkvAuQ8Tio7PiS9vg9t8DHR9bMFnf0waH8ACCPeCG0bzEXagHPvmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21)
- by DM8PR11MB5686.namprd11.prod.outlook.com (2603:10b6:8:21::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
- 2022 06:07:46 +0000
-Received: from BL1PR11MB5271.namprd11.prod.outlook.com
- ([fe80::7a7f:9d68:b0ec:1d04]) by BL1PR11MB5271.namprd11.prod.outlook.com
- ([fe80::7a7f:9d68:b0ec:1d04%7]) with mapi id 15.20.5813.013; Fri, 11 Nov 2022
- 06:07:46 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-CC:     Alex Williamson <alex.williamson@redhat.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "Martins, Joao" <joao.m.martins@oracle.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "Shameerali Kolothum Thodi" <shameerali.kolothum.thodi@huawei.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        Keqian Zhu <zhukeqian1@huawei.com>
-Subject: RE: [PATCH v4 05/17] iommufd: File descriptor, context, kconfig and
- makefiles
-Thread-Topic: [PATCH v4 05/17] iommufd: File descriptor, context, kconfig and
- makefiles
-Thread-Index: AQHY8wv2NwaD3LlVDEq28pbGBQQkia45QZ/w
-Date:   Fri, 11 Nov 2022 06:07:46 +0000
-Message-ID: <BL1PR11MB527180BB98A24D6F1BA04BA98C009@BL1PR11MB5271.namprd11.prod.outlook.com>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <5-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
-In-Reply-To: <5-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5271:EE_|DM8PR11MB5686:EE_
-x-ms-office365-filtering-correlation-id: 456ddb1a-88a8-44bb-c309-08dac3ab0dce
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: y6+UagZKNSbtRMiXJtPzqbcV207eAj4wkQe+dAN+R59/eylQdzCB6LlV7KFwb4KG3kQl3sQwQb+x7AxOCw19maP/nDPBb0fIUK+X+OflvMpMtd6CTmia30IXl4kFx0aF5/h0wiPYThS0n7lTED0x+dlVctaPUmRjGJhSJfu5JCeo19FWwCuT5jfPVjFDts0oy7wQV90xr/aa8vIbwy7OdgApx4Cf8dVPLBvk4zLO342JYL+m8CuLu6ZA1QOQ48TvI7iBkdHkq/mRtAqk5MjzBYiCGn1voHfChuDCJAOIyg+gOGPvHFYOmFh3fhCo1DTIcwGIkUOyUD6t7JHPDhcUGjFOD8XQuH2AWezxm+cd/dIqsoHr+UgJSdsqvpuv+ZVbTp2aTzBtbuQhPOhRlnuK7a0ORvcNLBwOm6Kghp+dLFYKB3gTJxs639w+DjkDqLak8F18/z/znDH82RCoxcTSRy2/SEI/KN2fFAcnAiq+rVSgwbat4V5EPsLnuh9NbYM/+vU6V3KIMCy0/AXvc2pXSGWTQDeIJeMEaDysDvv7bWjWPkxjjiIalVKDU9uDCvgLH1eumQW9C1Iyp/4v7Iv+R3RQvEIPEza5cPGSoYSEj/zEAhzvBjlLDVWRvvfHnmonG0dG0vZf90OwQ6Af4nx3spJmzocwenndmVf3lk5UbBsWP4YO9kPnaLn2nckwovvtzIqgXs/ACni6dLmdRZgZCDiFCmZPTyP27o6nYo2loAbpNCjLo3dQq/euE6FgRAok9DeApVluD4GZYj3Q8m9rrHCa17KBUTNn2EcIxZD0DH0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5271.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199015)(86362001)(478600001)(71200400001)(76116006)(316002)(66446008)(66476007)(64756008)(9686003)(7696005)(4326008)(26005)(6506007)(8676002)(4744005)(52536014)(7406005)(5660300002)(41300700001)(186003)(7416002)(110136005)(8936002)(54906003)(122000001)(82960400001)(2906002)(66946007)(55016003)(33656002)(38070700005)(66556008)(921005)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BWxiMQr8LuxduOBi1liiMKBpVJaYGLur+8m1Yyevts1N4n9h0THIz4tB8SDd?=
- =?us-ascii?Q?rPPVvBA8Py1o7do/WcFTQAh9ciPON+baJgQ2jhaB6pPAMattJ6XWsq4Mts1L?=
- =?us-ascii?Q?B0YT7YK5VVmnOdHvZjY53XndD3Ka5zSvfwLe1NkR7gYOli20JXlquZaA0ilj?=
- =?us-ascii?Q?2iq2+Cmc9NYhNNkwCVk+QoPVnXMkhUGqwPfWkPlK7YCZUjxfeBimHr+N6RW+?=
- =?us-ascii?Q?zsMk/SMjQks2nfHmglvxgnvYBYoG6wKXGqwxYcQieBelEngKlJPivCQdDqt7?=
- =?us-ascii?Q?Sw/vXUyx2ARG2fIEtzX/RounAPS9YyrO7nCwcZYtliNvTlr+6CxxInrZ+2iI?=
- =?us-ascii?Q?ba8lAYSDZwgu1VGkZZcVJnlf2IohIg/dh3PXRLrWZjF3OVq2bK9AM4DBKcaD?=
- =?us-ascii?Q?RTIbItUSFbGveAiCpgVatUHnkBS88qq5bzlEMCLj5xFPju1zDlqRr3GxXl/B?=
- =?us-ascii?Q?ILJTGO/4V9PIjPsG/USoqkkHs/p1xFefCiwz5mmJ54B/sBKWHDSbs11/fR7l?=
- =?us-ascii?Q?GTViYW9qQljt4jYz82lZpwxGP0SOkq7VIcm7nfAyHnA/hGOTUmAAT/IImtp+?=
- =?us-ascii?Q?81femCTPY4d4BP5ZsrzkxD08D6jd4y9EjHaT2kWU2TjCM2lSCqgyjrld0siz?=
- =?us-ascii?Q?0yWFTO+NaH7BHUSdjIyutZ1lGI8CTlU4Rg4Ghh1ZnRcw80eAD3OOmEnyY7zx?=
- =?us-ascii?Q?sXRqSq2pjhg4c1nDvVKO9J65H4T/ApmiX6i+TfcVDXLZ5ezOVzMyyNsDBUbg?=
- =?us-ascii?Q?Z38IaMyYuUPEzUm7a25ZgRaqwfcLFZr4lJodqH+9Uwpe1O67oUTCIbaCB2ax?=
- =?us-ascii?Q?91Qm0FeTXOGS9ryYQkAZ6rUTg0sl+1q4x6e/eJq4RHF6zm9/Pjox/dXS0ajg?=
- =?us-ascii?Q?CUtm1LxcYp6QFboyyZr5A9mzEZfGOgqUusplxPCeRApRox2jJvL5JUdeKTxU?=
- =?us-ascii?Q?dUGpYkvSr2DSUOBc1F2KD6QwRsBcA3L0uBWqbRlmFNDnWNHSanR7vf6m/JGM?=
- =?us-ascii?Q?Gncv7yC1XbOB9AvRVOvSuS8TO7miK94/a5icBfNKdi5MqV6HqtBBmZftJAop?=
- =?us-ascii?Q?VTen+jIaeZlRNUkrmABLYwmR0usDY56tTRgSLscVU9coi/zXPXHZD6MpwL6O?=
- =?us-ascii?Q?1SOC30WvmLsNjGMsJc2qaoWqV/YC4PcM4xQbSXM3YbDsxYB+yDezhcayHW1q?=
- =?us-ascii?Q?sJovWVD7+hBUN7bzHytSLrXpY42VPK+k+wFW1WzGMURF74J0TMu3RjK7Ebub?=
- =?us-ascii?Q?VHM7bP3+YEYUNiPMirNgHilrA5yegWnc3mCFSUhsfWILgPHC8b9WaKFXNEuz?=
- =?us-ascii?Q?umwT9yTFjEN0rh1aEurlV2GN2qD+hHerb4ee7sU14K3K8MV4TALQDGCA7Sj0?=
- =?us-ascii?Q?uVhswkEbBErexXnbLiiWE3IXAOdNd+e5dZl2EXUd4J4DnVTlApmXFt3BBcDK?=
- =?us-ascii?Q?U3JrpSnbsztuKhhOQcVdbHfKYLdKUpKpXLcZVSitOxwINuURtD38Tx1wLTuN?=
- =?us-ascii?Q?Dx8EIghmAPPAPylPJzLxQLoDZRMLtxd+sI3u3cQiUCvSEVqWtsenSKJtWoeU?=
- =?us-ascii?Q?V/xTPNXkbTWEvicaGcRPbgf2R+E7rMzzqzLlL4fd?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 11 Nov 2022 02:08:40 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C763BB7E;
+        Thu, 10 Nov 2022 23:08:31 -0800 (PST)
+Received: from [192.168.10.9] (unknown [39.45.244.84])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C770D6602A3B;
+        Fri, 11 Nov 2022 07:08:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668150509;
+        bh=pvIdnfnFRLkb9a2WsNljwiMXvnygDQauyNsDYqh/4sw=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=a5IeFXQ/Otx+hHDjdjJ57JXvMLxKAVXVj3N3JerNDwTqsU8T5dTLmrXNotJ2xfYZO
+         wKftbfi4MhZip2xZRQyPyB/IjFeCCUK8JKkD7GwA+MLxPbGmkuTKGfgR7mzaa0XXyQ
+         RsmrcnRebwcCYC9PGWzJss5rvF//jf/aGUkCN7z+4wBD+yv3JDCf32pdK9G6FyhtxU
+         fihhvb29PlidnvksyvOwaI30yPipxkiu3WQ4mOZzkKSnD4XDRAdjZ4UTE4qhlDLkd4
+         0Zpny0U+8ymMvxAjOys5whOlry/roGm+PK5fyIX4Fm/cf4QDz/xCf1Q4coA45s9P2C
+         uDKeDZvuhNI/A==
+Message-ID: <6fdce544-8d4f-8b3c-9208-735769a9e624@collabora.com>
+Date:   Fri, 11 Nov 2022 12:08:18 +0500
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5271.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 456ddb1a-88a8-44bb-c309-08dac3ab0dce
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2022 06:07:46.4668
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zI1oDXa+5nj0rDwnp94ff9gWsjMj8T7IeLv5OnE5i1NLpoihxYJ+TbY8Fooawn4cxuLkt1u8sRiNc84wpoKroQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5686
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: Re: [PATCH v6 0/3] Implement IOCTL to get and/or the clear info about
+ PTEs
+To:     David Hildenbrand <david@redhat.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Zach O'Keefe <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>
+References: <20221109102303.851281-1-usama.anjum@collabora.com>
+ <9c167d01-ef09-ec4e-b4a1-2fff62bf01fe@redhat.com>
+Content-Language: en-US
+In-Reply-To: <9c167d01-ef09-ec4e-b4a1-2fff62bf01fe@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Tuesday, November 8, 2022 8:49 AM
->=20
-> This is the basic infrastructure of a new miscdevice to hold the iommufd
-> IOCTL API.
->=20
-> It provides:
->  - A miscdevice to create file descriptors to run the IOCTL interface ove=
-r
->=20
->  - A table based ioctl dispatch and centralized extendable pre-validation
->    step
->=20
->  - An xarray mapping userspace ID's to kernel objects. The design has
->    multiple inter-related objects held within in a single IOMMUFD fd
->=20
->  - A simple usage count to build a graph of object relations and protect
->    against hostile userspace racing ioctls
->=20
-> The only IOCTL provided in this patch is the generic 'destroy any object
-> by handle' operation.
->=20
-> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Tested-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+On 11/9/22 3:34 PM, David Hildenbrand wrote:
+> On 09.11.22 11:23, Muhammad Usama Anjum wrote:
+[...]
+>> Some non-dirty pages get marked as dirty because of the kernel's
+>> internal activity (such as VMA merging as soft-dirty bit difference isn't
+>> considered while deciding to merge VMAs). The dirty bit of the pages is
+>> stored in the VMA flags and in the per page flags. If any of these two bits
+>> are set, the page is considered to be soft dirty. Suppose you have cleared
+>> the soft dirty bit of half of VMA which will be done by splitting the VMA
+>> and clearing soft dirty bit flag in the half VMA and the pages in it. Now
+>> kernel may decide to merge the VMAs again. So the half VMA becomes dirty
+>> again. This splitting/merging costs performance. The application receives
+>> a lot of pages which aren't dirty in reality but marked as dirty.
+>> Performance is lost again here. Also sometimes user doesn't want the newly
+>> allocated memory to be marked as dirty. PAGEMAP_NO_REUSED_REGIONS flag
+>> solves both the problems. It is used to not depend on the soft dirty flag
+>> in the VMA flags. So VMA splitting and merging doesn't happen. It only
+>> depends on the soft dirty bit of the individual pages. Thus by using this
+>> flag, there may be a scenerio such that the new memory regions which are
+>> just created, doesn't look dirty when seen with the IOCTL, but look dirty
+>> when seen from procfs. This seems okay as the user of this flag know the
+>> implication of using it.
+The soft-dirtiness is stored in the PTE. VMA is marked dirty to store the
+dirtiness for reused regions. Clearing the soft-dirty status of whole
+process is straight forward. When we want to clear/monitor the
+soft-dirtiness of a part of the virtual memory, there is a lot of internal
+noise. We don't want the non-dirty pages to become dirty because of how the
+soft-dirty feature has been working. Soft-dirty feature wasn't being used
+the way we want to use now. While monitoring a part of memory, it is not
+acceptable to get non-dirty pages as dirty. Non-dirty pages become dirty
+when the two VMAs are merged without considering if they both are dirty or
+not (34228d473efe). To monitor changes over the memory, sometimes VMAs are
+split to clear the soft-dirty bit in the VMA flags. But sometimes kernel
+decide to merge them backup. It is so waste of resources.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+To keep things consistent, the default behavior of the IOCTL is to output
+even the extra non-dirty pages as dirty from the kernel noise. A optional
+PAGEMAP_NO_REUSED_REGIONS flag is added for those use cases which aren't
+tolerant of extra non-dirty pages. This flag can be considered as something
+which is by-passing the already present buggy implementation in the kernel.
+It is not buggy per say as the issue can be solved if we don't allow the
+two VMA which have different soft-dirty bits to get merged. But we are
+allowing that so that the total number of VMAs doesn't increase. This was
+acceptable at the time, but now with the use case of monitoring a part of
+memory for soft-dirty doesn't want this merging. So either we need to
+revert 34228d473efe and PAGEMAP_NO_REUSED_REGIONS flag will not be needed
+or we should allow PAGEMAP_NO_REUSED_REGIONS or similar mechanism to ignore
+the extra dirty pages which aren't dirty in reality.
+
+When PAGEMAP_NO_REUSED_REGIONS flag is used, only the PTEs are checked to
+find if the pages are dirty. So re-used regions cannot be detected. This
+has the only side-effect of not checking the VMAs. So this is limitation of
+using this flag which should be acceptable in the current state of code.
+This limitation is okay for the users as they can clear the soft-dirty bit
+of the VMA before starting to monitor a range of memory for soft-dirtiness.
+
+
+> Please separate that part out from the other changes; I am still not
+> convinced that we want this and what the semantical implications are.
+> 
+> Let's take a look at an example: can_change_pte_writable()
+> 
+>     /* Do we need write faults for softdirty tracking? */
+>     if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
+>         return false;
+> 
+> We care about PTE softdirty tracking, if it is enabled for the VMA.
+> Tracking is enabled if: vma_soft_dirty_enabled()
+> 
+>     /*
+>      * Soft-dirty is kind of special: its tracking is enabled when
+>      * the vma flags not set.
+>      */
+>     return !(vma->vm_flags & VM_SOFTDIRTY);
+> 
+> Consequently, if VM_SOFTDIRTY is set, we are not considering the soft_dirty
+> PTE bits accordingly.
+Sorry, I'm unable to completely grasp the meaning of the example. We have
+followed clear_refs_write() to write the soft-dirty bit clearing code in
+the current patch. Dirtiness of the VMA and the PTE may be set
+independently. Newer allocated memory has dirty bit set in the VMA. When
+something is written the memory, the soft dirty bit is set in the PTEs as
+well regardless if the soft dirty bit is set in the VMA or not.
+
+> 
+> 
+> I'd suggest moving forward without this controversial
+> PAGEMAP_NO_REUSED_REGIONS functionality for now, and preparing it as a
+> clear add-on we can discuss separately.Like I've described above, I've only added this flag to not get the
+non-dirty pages as dirty. Can there be some alternative to adding this
+flag? Please suggest.
+
+
+--
+BR,
+Muhammad Usama Anjum
