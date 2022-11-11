@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FD56263DB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 22:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D36206263DA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 22:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiKKVvd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Nov 2022 16:51:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S233859AbiKKVve (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Nov 2022 16:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233859AbiKKVvZ (ORCPT
+        with ESMTP id S233870AbiKKVv1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Nov 2022 16:51:25 -0500
+        Fri, 11 Nov 2022 16:51:27 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B946B203
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 13:51:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF236B203
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 13:51:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C97C962103
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 21:51:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D9DEC43470;
-        Fri, 11 Nov 2022 21:51:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5641D620FE
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 21:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2832C4347C;
+        Fri, 11 Nov 2022 21:51:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668203483;
-        bh=gqqU9mq6qOVcKT2rPaWnupV2Z7inErUAfg5WJJ3Pu+o=;
+        s=k20201202; t=1668203485;
+        bh=2yXo9o3hNxGIp4LEAKIBC5DAGZ6BWI4M1U6pYwioPZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d2LOHxgFkE9erPxaIf0m/0NMQVXjqv4UNDJEppVBJVCUlyULJ5HwGyxKdr4wCaz7h
-         IkWb8pxz9Ncb1s9g8pNN1NxjyAO1shvMdqKPbImyzjURM9inee+j/iDGtK9tJaYDL8
-         vRnNJM6jKUQDXrJhaj6zoAc+y4IFil74IJn3tUsEfjqESbAu+ldVOZXR6bcdaayAff
-         wn48ABP1wcdCNpzAteZLqbUAbKf0IxvDYOAYu8E5HFpSyjJvW3J2ZCcPSRLFbZz4Ma
-         26Xs8bQHEaC5Je6SSgbTtEbV8VWV+Hpwr1mfxlckhUuzTZ1zLKeAvVam82OnvznezE
-         MSY3zxpnoDfzQ==
+        b=slxKpsliT37GBNPYNdkmYX8OdBeIufnyKQcCH3NhuZqfmNw5cL91U5JdzNpGrxY8k
+         vbwVGpPLPliwWdQ+Ga0/LYTP2it/VqIsprV3LLMLNfk8MHZ7gUfcIvwEadkF0+8GFt
+         8zC1Z+ywqkby4VpkHGQ7S8A+qKcc5BWQWKjZCRJ9gjU2j6LlGVirfQF0JLCkjCxlg6
+         jYiqrdauTi/3V8HWU7i6w+/YTlDCSIwRsP/ScMPH903viFEniXYHnfREekj0XmAdiR
+         ypH3BCW8H/SeTqnEguo4+L8zTE9SgfVsueGocGD75A4++qCF0ViEbfgHixqrkdoO2g
+         4XsqQD/6hab+w==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -42,14 +42,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 11/21] arm64/sme: Implement signal handling for ZT
-Date:   Fri, 11 Nov 2022 21:50:16 +0000
-Message-Id: <20221111215026.813348-12-broonie@kernel.org>
+Subject: [PATCH v3 12/21] arm64/sme: Implement ZT0 ptrace support
+Date:   Fri, 11 Nov 2022 21:50:17 +0000
+Message-Id: <20221111215026.813348-13-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221111215026.813348-1-broonie@kernel.org>
 References: <20221111215026.813348-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7263; i=broonie@kernel.org; h=from:subject; bh=gqqU9mq6qOVcKT2rPaWnupV2Z7inErUAfg5WJJ3Pu+o=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjbsOXBawn7KIyMoylCz7Pt9d+wpnURM7Al75/pdUm ZnSrM+iJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY27DlwAKCRAk1otyXVSH0BbOB/ 94QtAoPR4hPoi/GSQq3CtHV4JggrT62jeoAdQgeUA48fWgDuI7AnCg5y+bRY9F/TEb4pyG4LGTyrqe 6GwRGv8lY8BCNJPwH2fuM86vUS7f2SsxI2M2+Vknbd2nFdgoIcOQvV4NueTfmO11t7+kJyyhNFoKDl 38N/Z7Uf1QJGQRO4/ZobR0qHvAiuMkC/0sZXh8zh2eILDlGsZQZDqo4GqQAjqEJhSVYMu3Gg/jkU+3 YSHPecwjCB44eWVU2vRdyg+H3Kmk5daBEexabhiDadR3OMfc7zOzRg/RPMAGdakLiQLS0p4p1M0ubs y3MMsACnnWiEnw+Y1jW5v2JTYBenha
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3346; i=broonie@kernel.org; h=from:subject; bh=2yXo9o3hNxGIp4LEAKIBC5DAGZ6BWI4M1U6pYwioPZo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjbsOYIHr+4F+T5foHYkSAPnY1aC9MVFsLFgrd/GU7 7tc4ET6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY27DmAAKCRAk1otyXVSH0GBaB/ 0W4HBP+YibvVy0anRKxj1XokeuX/SVtivA5eNM8ae9YF2IWlDpZ+qeqxmPd/wSnWp/TcYG8Pyu00oJ NOc/kFotD0xWqfn37xBycDKTbdiTK+bGJu7vB9sm8GQt3kIshKmvwIiVL2d7flitjq8lLxmvI3Zoqy cpwXDF6wWrkO7TVf+xy7hT8XFBsZS5wk/XtebWYXPuZ1QV4jRkZe7ArAaU+8WtR0vrPHSKXOHa7ZUZ AMIIBhkc9AoM90AR+RiniynjpXoQLJWkoVzkmn3/5EwzNzfmr0MGySW/i8O9zMOrbqKfXoMCLBKnlD tVSSxpkzaV/bMDe/EP/pSeDghD35SQ
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,241 +61,113 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a new signal context type for ZT which is present in the signal frame
-when ZA is enabled and ZT is supported by the system. In order to account
-for the possible addition of further ZT registers in the future we make the
-number of registers variable in the ABI, though currently the only possible
-number is 1. We could just use a bare list head for the context since the
-number of registers can be inferred from the size of the context but for
-usability and future extensibility we define a header with the number of
-registers and some reserved fields in it.
+Implement support for a new note type NT_ARM64_ZT providing access to
+ZT0 when implemented. Since ZT0 is a register with constant size this is
+much simpler than for other SME state.
+
+As ZT0 is only accessible when PSTATE.ZA is set writes to ZT0 cause
+PSTATE.ZA to be set, the main alternative would be to return -EBUSY in
+this case but this seemed more constructive. Practical users are also
+going to be working with ZA anyway and have some understanding of the
+state.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h          |   3 -
- arch/arm64/include/uapi/asm/sigcontext.h |  19 ++++
- arch/arm64/kernel/signal.c               | 105 +++++++++++++++++++++++
- 3 files changed, 124 insertions(+), 3 deletions(-)
+ arch/arm64/kernel/ptrace.c | 54 ++++++++++++++++++++++++++++++++++++++
+ include/uapi/linux/elf.h   |  1 +
+ 2 files changed, 55 insertions(+)
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index 42c019936dfd..5c93cb5337c9 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -352,9 +352,6 @@ extern unsigned int sme_get_vl(void);
- extern int sme_set_current_vl(unsigned long arg);
- extern int sme_get_current_vl(void);
- 
--/* Will move with signal support */
--#define ZT_SIG_REG_SIZE 512
--
- /*
-  * Return how many bytes of memory are required to store the full SME
-  * specific state for task, given task's currently configured vector
-diff --git a/arch/arm64/include/uapi/asm/sigcontext.h b/arch/arm64/include/uapi/asm/sigcontext.h
-index 4aaf31e3bf16..177f16cc96b8 100644
---- a/arch/arm64/include/uapi/asm/sigcontext.h
-+++ b/arch/arm64/include/uapi/asm/sigcontext.h
-@@ -148,6 +148,14 @@ struct za_context {
- 	__u16 __reserved[3];
- };
- 
-+#define ZT_MAGIC	0x5a544e01
-+
-+struct zt_context {
-+	struct _aarch64_ctx head;
-+	__u16 nregs;
-+	__u16 __reserved[3];
-+};
-+
- #endif /* !__ASSEMBLY__ */
- 
- #include <asm/sve_context.h>
-@@ -300,4 +308,15 @@ struct za_context {
- #define ZA_SIG_CONTEXT_SIZE(vq) \
- 		(ZA_SIG_REGS_OFFSET + ZA_SIG_REGS_SIZE(vq))
- 
-+#define ZT_SIG_REG_SIZE 512
-+
-+#define ZT_SIG_REG_BYTES (ZT_SIG_REG_SIZE / 8)
-+
-+#define ZT_SIG_REGS_OFFSET sizeof(struct zt_context)
-+
-+#define ZT_SIG_REGS_SIZE(n) (ZT_SIG_REG_BYTES * n)
-+
-+#define ZT_SIG_CONTEXT_SIZE(n) \
-+	(sizeof(struct zt_context) + ZT_SIG_REGS_SIZE(n))
-+
- #endif /* _UAPI__ASM_SIGCONTEXT_H */
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index 335bc7294b3c..6e20f0b23d73 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -57,6 +57,7 @@ struct rt_sigframe_user_layout {
- 	unsigned long esr_offset;
- 	unsigned long sve_offset;
- 	unsigned long za_offset;
-+	unsigned long zt_offset;
- 	unsigned long extra_offset;
- 	unsigned long end_offset;
- };
-@@ -220,6 +221,7 @@ struct user_ctxs {
- 	struct fpsimd_context __user *fpsimd;
- 	struct sve_context __user *sve;
- 	struct za_context __user *za;
-+	struct zt_context __user *zt;
- };
- 
- #ifdef CONFIG_ARM64_SVE
-@@ -444,11 +446,81 @@ static int restore_za_context(struct user_ctxs *user)
- 
- 	return 0;
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 85105375bea5..a508f3a69d9f 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -1145,6 +1145,51 @@ static int za_set(struct task_struct *target,
+ 	return ret;
  }
-+
-+static int preserve_zt_context(struct zt_context __user *ctx)
+ 
++static int zt_get(struct task_struct *target,
++		  const struct user_regset *regset,
++		  struct membuf to)
 +{
-+	int err = 0;
-+	u16 reserved[ARRAY_SIZE(ctx->__reserved)];
-+
-+	if (WARN_ON(!thread_za_enabled(&current->thread)))
-+		return -EINVAL;
-+
-+	memset(reserved, 0, sizeof(reserved));
-+
-+	__put_user_error(ZT_MAGIC, &ctx->head.magic, err);
-+	__put_user_error(round_up(ZT_SIG_CONTEXT_SIZE(1), 16),
-+			 &ctx->head.size, err);
-+	__put_user_error(1, &ctx->nregs, err);
-+	BUILD_BUG_ON(sizeof(ctx->__reserved) != sizeof(reserved));
-+	err |= __copy_to_user(&ctx->__reserved, reserved, sizeof(reserved));
-+
-+	/*
-+	 * This assumes that the ZT state has already been saved to
-+	 * the task struct by calling the function
-+	 * fpsimd_signal_preserve_current_state().
-+	 */
-+	err |= __copy_to_user((char __user *)ctx + ZT_SIG_REGS_OFFSET,
-+			      thread_zt_state(&current->thread),
-+			      ZT_SIG_REGS_SIZE(1));
-+
-+	return err ? -EFAULT : 0;
-+}
-+
-+static int restore_zt_context(struct user_ctxs *user)
-+{
-+	int err;
-+	struct zt_context zt;
-+
-+	/* ZA must be restored first for this check to be valid */
-+	if (!thread_za_enabled(&current->thread))
-+		return -EINVAL;
-+
-+	if (__copy_from_user(&zt, user->zt, sizeof(zt)))
-+		return -EFAULT;
-+
-+	if (zt.nregs != 1)
-+		return -EINVAL;
-+
-+	if (zt.head.size != ZT_SIG_CONTEXT_SIZE(zt.nregs))
++	if (!system_supports_sme2())
 +		return -EINVAL;
 +
 +	/*
-+	 * Careful: we are about __copy_from_user() directly into
-+	 * thread.zt_state with preemption enabled, so protection is
-+	 * needed to prevent a racing context switch from writing stale
-+	 * registers back over the new data.
++	 * If PSTATE.ZA is not set then ZT will be zeroed when it is
++	 * enabled so report the current register value as zero.
 +	 */
-+
-+	fpsimd_flush_task_state(current);
-+	/* From now, fpsimd_thread_switch() won't touch ZT in thread state */
-+
-+	err = __copy_from_user(thread_zt_state(&current->thread),
-+			       (char __user const *)user->zt +
-+					ZT_SIG_REGS_OFFSET,
-+			       ZT_SIG_REGS_SIZE(1));
-+	if (err)
-+		return -EFAULT;
++	if (thread_za_enabled(&target->thread))
++		membuf_write(&to, thread_zt_state(&target->thread),
++			     ZT_SIG_REG_BYTES);
++	else
++		membuf_zero(&to, ZT_SIG_REG_BYTES);
 +
 +	return 0;
 +}
 +
- #else /* ! CONFIG_ARM64_SME */
- 
- /* Turn any non-optimised out attempts to use these into a link error: */
- extern int preserve_za_context(void __user *ctx);
- extern int restore_za_context(struct user_ctxs *user);
-+extern int preserve_zt_context(void __user *ctx);
-+extern int restore_zt_context(struct user_ctxs *user);
- 
- #endif /* ! CONFIG_ARM64_SME */
- 
-@@ -466,6 +538,7 @@ static int parse_user_sigframe(struct user_ctxs *user,
- 	user->fpsimd = NULL;
- 	user->sve = NULL;
- 	user->za = NULL;
-+	user->zt = NULL;
- 
- 	if (!IS_ALIGNED((unsigned long)base, 16))
- 		goto invalid;
-@@ -544,6 +617,19 @@ static int parse_user_sigframe(struct user_ctxs *user,
- 			user->za = (struct za_context __user *)head;
- 			break;
- 
-+		case ZT_MAGIC:
-+			if (!system_supports_sme2())
-+				goto invalid;
++static int zt_set(struct task_struct *target,
++		  const struct user_regset *regset,
++		  unsigned int pos, unsigned int count,
++		  const void *kbuf, const void __user *ubuf)
++{
++	int ret;
 +
-+			if (user->zt)
-+				goto invalid;
++	if (!system_supports_sme2())
++		return -EINVAL;
 +
-+			if (size < sizeof(*user->zt))
-+				goto invalid;
-+
-+			user->zt = (struct zt_context __user *)head;
-+			break;
-+
- 		case EXTRA_MAGIC:
- 			if (have_extra_context)
- 				goto invalid;
-@@ -666,6 +752,9 @@ static int restore_sigframe(struct pt_regs *regs,
- 	if (err == 0 && system_supports_sme() && user.za)
- 		err = restore_za_context(&user);
- 
-+	if (err == 0 && system_supports_sme2() && user.zt)
-+		err = restore_zt_context(&user);
-+
- 	return err;
- }
- 
-@@ -766,6 +855,15 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
- 			return err;
- 	}
- 
-+	if (system_supports_sme2()) {
-+		if (add_all || thread_za_enabled(&current->thread)) {
-+			err = sigframe_alloc(user, &user->zt_offset,
-+					     ZT_SIG_CONTEXT_SIZE(1));
-+			if (err)
-+				return err;
-+		}
++	if (!thread_za_enabled(&target->thread)) {
++		sme_alloc(target);
++		if (!target->thread.sme_state)
++			return -ENOMEM;
 +	}
 +
- 	return sigframe_alloc_end(user);
- }
- 
-@@ -821,6 +919,13 @@ static int setup_sigframe(struct rt_sigframe_user_layout *user,
- 		err |= preserve_za_context(za_ctx);
- 	}
- 
-+	/* ZT state if present */
-+	if (system_supports_sme2() && err == 0 && user->zt_offset) {
-+		struct zt_context __user *zt_ctx =
-+			apply_user_offset(user, user->zt_offset);
-+		err |= preserve_zt_context(zt_ctx);
-+	}
++	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf,
++				 thread_zt_state(&target->thread),
++				 0, ZT_SIG_REG_BYTES);
++	if (ret == 0)
++		target->thread.svcr |= SVCR_ZA_MASK;
 +
- 	if (err == 0 && user->extra_offset) {
- 		char __user *sfp = (char __user *)user->sigframe;
- 		char __user *userp =
++	return ret;
++}
++
+ #endif /* CONFIG_ARM64_SME */
+ 
+ #ifdef CONFIG_ARM64_PTR_AUTH
+@@ -1367,6 +1412,7 @@ enum aarch64_regset {
+ #ifdef CONFIG_ARM64_SVE
+ 	REGSET_SSVE,
+ 	REGSET_ZA,
++	REGSET_ZT,
+ #endif
+ #ifdef CONFIG_ARM64_PTR_AUTH
+ 	REGSET_PAC_MASK,
+@@ -1474,6 +1520,14 @@ static const struct user_regset aarch64_regsets[] = {
+ 		.regset_get = za_get,
+ 		.set = za_set,
+ 	},
++	[REGSET_ZT] = { /* SME ZA */
++		.core_note_type = NT_ARM_ZT,
++		.n = 1,
++		.size = ZT_SIG_REG_BYTES,
++		.align = sizeof(u64),
++		.regset_get = zt_get,
++		.set = zt_set,
++	},
+ #endif
+ #ifdef CONFIG_ARM64_PTR_AUTH
+ 	[REGSET_PAC_MASK] = {
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index c7b056af9ef0..3a73c853c537 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -434,6 +434,7 @@ typedef struct elf64_shdr {
+ #define NT_ARM_PAC_ENABLED_KEYS	0x40a	/* arm64 ptr auth enabled keys (prctl()) */
+ #define NT_ARM_SSVE	0x40b		/* ARM Streaming SVE registers */
+ #define NT_ARM_ZA	0x40c		/* ARM SME ZA registers */
++#define NT_ARM_ZT	0x40d		/* ARM SME ZT registers */
+ #define NT_ARC_V2	0x600		/* ARCv2 accumulator/extra registers */
+ #define NT_VMCOREDD	0x700		/* Vmcore Device Dump Note */
+ #define NT_MIPS_DSP	0x800		/* MIPS DSP ASE registers */
 -- 
 2.30.2
 
