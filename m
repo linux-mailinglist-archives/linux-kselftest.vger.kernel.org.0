@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C5A6263D9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 22:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4476263D7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Nov 2022 22:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233845AbiKKVvc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S230043AbiKKVvc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Fri, 11 Nov 2022 16:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiKKVvW (ORCPT
+        with ESMTP id S233845AbiKKVvW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 11 Nov 2022 16:51:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D153C73769
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 13:51:20 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85C06B203
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 13:51:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 689EDB827F1
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 21:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DB5C43470;
-        Fri, 11 Nov 2022 21:51:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43B3C62101
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 21:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90511C4347C;
+        Fri, 11 Nov 2022 21:51:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668203478;
-        bh=WtLZskmj0qPo98o2L14apeeTu/h7b96ZNMltJ+zQPHo=;
+        s=k20201202; t=1668203480;
+        bh=mpO5Qxgy63SzKSm0Pa637DSx9B/LwRyQmrBGvfcgjI4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fvuG0ifuald5f4Sk8K5IfrJGJ+cFFJ5i/LZuBRLHBO34HuFZbwVPB8RLk+DtLQWNG
-         nZvuFkbjdzbqOJvB7G4Fpzw7EDSbZX6tEs+DfCirYGvHygNoCN60mXhERo0CFzGkx/
-         N4JT8n60FX9Jyd6IavwPBsoEMNtlxgvbOn2TVmjaCe1/TTfpp2UwA5O2xGqJjTZ2db
-         klwoPK7gIgGtgEQy4jelPzP4Y/RDmWjCDS7iSgcc05XUuXZByzmAJta15HJUjwPEti
-         PXYdDfdDFNkJzRKgAepuYoBBUQneousFT7TKPhoZP2Xy9uJGCRKy/rQEW4eoP+cVLz
-         rEg55cK2bTSGQ==
+        b=pmyoWVWbRv2nrRTMu1D8OJOrAevPfkCUEPJEXOFBvqmMZLbxWtdZoA+NwhQxsel4o
+         aRDGee5U4VOYt0IGtS3H169YeGwVD3ZRTOPuBaIyun1zpNyG6KwFBU/0hGdyRALeSG
+         qz4PTImaIzMSV3F3JG0r9AOg3DMWLvP6RM9Mv+pprxIp8HHkSEmg/XDs/ebCPMsL3P
+         lRSz62rSdOSBLu/jlgdkV+MYolLjUsT6iaIKLcmFnbujUlvgz61eiWGqD46Nx8dyaE
+         3LdX/zstfCfDKWZO6G/9FTgsKl7SE6GWrS2ZIpV5moTZNjPPkhfezRvSNX6E/ZSWl/
+         JpyqDiHP6B4xQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -42,14 +42,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 09/21] arm64/sme: Provide storage for ZT0
-Date:   Fri, 11 Nov 2022 21:50:14 +0000
-Message-Id: <20221111215026.813348-10-broonie@kernel.org>
+Subject: [PATCH v3 10/21] arm64/sme: Implement context switching for ZT0
+Date:   Fri, 11 Nov 2022 21:50:15 +0000
+Message-Id: <20221111215026.813348-11-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221111215026.813348-1-broonie@kernel.org>
 References: <20221111215026.813348-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3004; i=broonie@kernel.org; h=from:subject; bh=WtLZskmj0qPo98o2L14apeeTu/h7b96ZNMltJ+zQPHo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjbsOVQsw2eFc36W6Nj2o/z05lO1c+jtujGyIEcwYm QWn+JCuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY27DlQAKCRAk1otyXVSH0NRgB/ 4qWxwZSr4PIvzYgiP4h1awnVYF4aLxZPPgW5ThBc9c6kCDs91My2C/WiLpU8friuVOPIA8huVT/Qfi 5XXfqE1mXbtaLm/iZ0czvVmNEW5KzOKzGa0QaO9qP8KllfRsyQRkvyXQEysfAbGThVgbTAsKZr5glA 8cd8nb5767/sK8tMxZLHewtGUXbtUxTC15ZjwjerXLVDwzGE9l1mVnY0cmQOqgzVdsQlnolhYvZV/p vMsGEJtSw6flsXO3vFFq4U3aqmFjhswNY0fn12FNh7G8THZ1thjRH0IGns36Wr5mub92mdkO1teXkQ JAFKoxPtKydx6rlKBXjpe+juMEIlEs
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3458; i=broonie@kernel.org; h=from:subject; bh=mpO5Qxgy63SzKSm0Pa637DSx9B/LwRyQmrBGvfcgjI4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjbsOWdc/EIKP8qquj4JHn1sObOtN20Fi7cMiGER7Z YGdTDF+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY27DlgAKCRAk1otyXVSH0OXeB/ 9D2Kxn/5Sei0T3TbbFhzDxv8a0JSD8rDJKYfcj6gpDfpvwFVFakazcYPGA8GycXJqSBUCS3tHFJ1Po 1Mu04rNQTAIHSj1V4rBD9U+G+dNqtGAMfic9yHnYj+9oEE8QiUAtfMBUJ4TV+opf3wpGLA6nLPSc8Z fz67vhF+v8urzTnxgD1P4vrbEF8TPJAgrhl2Bv3EpERbQZSggTj8M07iSW8wEhXatZG3bFyRJayup0 lZXBcbfXIR5GEKsseFmHxBccPp30ZqJKDDFbCXWdqDsJMkyPllCuSj9SoB3ee3OQPeBfRfoUJINnp5 oVauBiraWzT+RxwjOpV5l/h6u5ehdw
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,77 +61,107 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When the system supports SME2 there is an additional register ZT0 which
-we must store when the task is using SME. Since ZT0 is accessible only
-when PSTATE.ZA is set just like ZA we allocate storage for it along with
-ZA, increasing the allocation size for the memory region where we store
-ZA and storing the data for ZT after that for ZA.
+When the system supports SME2 the ZT0 register must be context switched as
+part of the floating point state. This register is stored immediately
+after ZA in memory and is only accessible when PSTATE.ZA is set so we
+handle it in the same functions we use to save and restore ZA.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h | 13 +++++++++++++
- arch/arm64/kernel/process.c     | 10 +++++-----
- 2 files changed, 18 insertions(+), 5 deletions(-)
+ arch/arm64/include/asm/fpsimd.h  |  4 ++--
+ arch/arm64/kernel/entry-fpsimd.S | 30 ++++++++++++++++++++----------
+ arch/arm64/kernel/fpsimd.c       |  6 ++++--
+ 3 files changed, 26 insertions(+), 14 deletions(-)
 
 diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index f2bda963cfe5..2d7a69b49349 100644
+index 2d7a69b49349..42c019936dfd 100644
 --- a/arch/arm64/include/asm/fpsimd.h
 +++ b/arch/arm64/include/asm/fpsimd.h
-@@ -96,6 +96,13 @@ static inline void *sve_pffr(struct thread_struct *thread)
- 	return (char *)thread->sve_state + sve_ffr_offset(vl);
- }
+@@ -110,8 +110,8 @@ extern void sve_flush_live(bool flush_ffr, unsigned long vq_minus_1);
+ extern unsigned int sve_get_vl(void);
+ extern void sve_set_vq(unsigned long vq_minus_1);
+ extern void sme_set_vq(unsigned long vq_minus_1);
+-extern void za_save_state(void *state);
+-extern void za_load_state(void const *state);
++extern void sme_save_state(void *state, int zt);
++extern void sme_load_state(void const *state, int zt);
  
-+static inline void *thread_zt_state(struct thread_struct *thread)
-+{
-+	/* The ZT register state is stored immediately after the ZA state */
-+	unsigned int sme_vq = sve_vq_from_vl(thread_get_sme_vl(thread));
-+	return thread->sme_state + ZA_SIG_REGS_SIZE(sme_vq);
-+}
-+
- extern void sve_save_state(void *state, u32 *pfpsr, int save_ffr);
- extern void sve_load_state(void const *state, u32 const *pfpsr,
- 			   int restore_ffr);
-@@ -345,6 +352,9 @@ extern unsigned int sme_get_vl(void);
- extern int sme_set_current_vl(unsigned long arg);
- extern int sme_get_current_vl(void);
+ struct arm64_cpu_capabilities;
+ extern void sve_kernel_enable(const struct arm64_cpu_capabilities *__unused);
+diff --git a/arch/arm64/kernel/entry-fpsimd.S b/arch/arm64/kernel/entry-fpsimd.S
+index 229436f33df5..6325db1a2179 100644
+--- a/arch/arm64/kernel/entry-fpsimd.S
++++ b/arch/arm64/kernel/entry-fpsimd.S
+@@ -100,25 +100,35 @@ SYM_FUNC_START(sme_set_vq)
+ SYM_FUNC_END(sme_set_vq)
  
-+/* Will move with signal support */
-+#define ZT_SIG_REG_SIZE 512
-+
  /*
-  * Return how many bytes of memory are required to store the full SME
-  * specific state for task, given task's currently configured vector
-@@ -357,6 +367,9 @@ static inline size_t sme_state_size(struct task_struct const *task)
- 
- 	size = ZA_SIG_REGS_SIZE(sve_vq_from_vl(vl));
- 
-+	if (system_supports_sme2())
-+		size += ZT_SIG_REG_SIZE;
+- * Save the SME state
++ * Save the ZA and ZT state
+  *
+  * x0 - pointer to buffer for state
++ * x1 - number of ZT registers to save
+  */
+-SYM_FUNC_START(za_save_state)
+-	_sme_rdsvl	1, 1		// x1 = VL/8
+-	sme_save_za 0, x1, 12
++SYM_FUNC_START(sme_save_state)
++	_sme_rdsvl	2, 1		// x2 = VL/8
++	sme_save_za 0, x2, 12		// Leaves x0 pointing to the end of ZA
 +
- 	return size;
- }
++	cbz	x1, 1f
++	_str_zt 0
++1:
+ 	ret
+-SYM_FUNC_END(za_save_state)
++SYM_FUNC_END(sme_save_state)
  
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 5cfb876c76ee..b7919bf45e2e 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -307,11 +307,11 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
+ /*
+- * Load the SME state
++ * Load the ZA and ZT state
+  *
+  * x0 - pointer to buffer for state
++ * x1 - number of ZT registers to save
+  */
+-SYM_FUNC_START(za_load_state)
+-	_sme_rdsvl	1, 1		// x1 = VL/8
+-	sme_load_za 0, x1, 12
++SYM_FUNC_START(sme_load_state)
++	_sme_rdsvl	2, 1		// x2 = VL/8
++	sme_load_za 0, x2, 12		// Leaves x0 pointing to the end of ZA
++
++	cbz	x1, 1f
++	_ldr_zt 0
++1:
+ 	ret
+-SYM_FUNC_END(za_load_state)
++SYM_FUNC_END(sme_load_state)
  
- 	/*
- 	 * In the unlikely event that we create a new thread with ZA
--	 * enabled we should retain the ZA state so duplicate it here.
--	 * This may be shortly freed if we exec() or if CLONE_SETTLS
--	 * but it's simpler to do it here. To avoid confusing the rest
--	 * of the code ensure that we have a sve_state allocated
--	 * whenever za_state is allocated.
-+	 * enabled we should retain the ZA and ZT state so duplicate
-+	 * it here.  This may be shortly freed if we exec() or if
-+	 * CLONE_SETTLS but it's simpler to do it here. To avoid
-+	 * confusing the rest of the code ensure that we have a
-+	 * sve_state allocated whenever za_state is allocated.
- 	 */
- 	if (thread_za_enabled(&src->thread)) {
- 		dst->thread.sve_state = kzalloc(sve_state_size(src),
+ #endif /* CONFIG_ARM64_SME */
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 73ec8850a402..b7f4eef42f86 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -396,7 +396,8 @@ static void task_fpsimd_load(void)
+ 		write_sysreg_s(current->thread.svcr, SYS_SVCR);
+ 
+ 		if (thread_za_enabled(&current->thread))
+-			za_load_state(current->thread.sme_state);
++			sme_load_state(current->thread.sme_state,
++				       system_supports_sme2());
+ 
+ 		if (thread_sm_enabled(&current->thread)) {
+ 			restore_sve_regs = true;
+@@ -449,7 +450,8 @@ static void fpsimd_save(void)
+ 		*svcr = read_sysreg_s(SYS_SVCR);
+ 
+ 		if (*svcr & SVCR_ZA_MASK)
+-			za_save_state(last->sme_state);
++			sme_save_state(last->sme_state,
++				       system_supports_sme2());
+ 
+ 		/* If we are in streaming mode override regular SVE. */
+ 		if (*svcr & SVCR_SM_MASK) {
 -- 
 2.30.2
 
