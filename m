@@ -2,76 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E595E62657F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Nov 2022 00:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E709E626710
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Nov 2022 06:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbiKKXVH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Nov 2022 18:21:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S230257AbiKLFCc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 12 Nov 2022 00:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbiKKXUa (ORCPT
+        with ESMTP id S229800AbiKLFCb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Nov 2022 18:20:30 -0500
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365DC87145;
-        Fri, 11 Nov 2022 15:20:02 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1668208800;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FmNsJgQsGNOtJgVX1p1TSDR/6XSvxYRuK6DmS7w9sD4=;
-        b=LuT2xS0xvyBb4BuQlbPGxoHJsIzKUW15/41hKrCQAKUp+srlIVOqkf/LIWx5jdkSzgxKui
-        YYbIXxGP7YF8SRl/vTQxq/WZWk7OXe7uYnMCYZ4krwEJH4PpfAfpKtTGmlINsyynuXA14r
-        lMV4KJO7dgSyAJXuA2lMl/d9ZDI4FGM=
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Ricardo Koller <ricarkol@google.com>,
-        David Matlack <dmatlack@google.com>, kvmarm@lists.linux.dev,
-        Oliver Upton <oliver.upton@linux.dev>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] KVM: selftests: Build access_tracking_perf_test for arm64
-Date:   Fri, 11 Nov 2022 23:19:46 +0000
-Message-Id: <20221111231946.944807-3-oliver.upton@linux.dev>
-In-Reply-To: <20221111231946.944807-1-oliver.upton@linux.dev>
-References: <20221111231946.944807-1-oliver.upton@linux.dev>
+        Sat, 12 Nov 2022 00:02:31 -0500
+Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E421EEDD;
+        Fri, 11 Nov 2022 21:02:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1668229346;
+        bh=UKrCkq3xKMj8sSLZqZpNU4Q0Lx+VN8Ps1Ny3URH+YVY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=QmE6AoM+jI44+Oi9YGeGF/G31TjtOxWtVxOKz3GCaCfSZg+40W10fxg+rqDj8CJLb
+         z8NQHFOqwcGKR9AaybqOHkPClgoyKSgiGw9z7pMq2qF0os55MLgZMaRfGia9a1q4Y0
+         C3tolvT9EAgL33Hg2y5Ejh5fcPA32Gd/7jggYlj4=
+Received: from localhost.localdomain ([111.199.191.46])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id 450F4C4; Sat, 12 Nov 2022 13:01:05 +0800
+X-QQ-mid: xmsmtpt1668229265t93w5drhr
+Message-ID: <tencent_5695C257F3D13F4417034BA1FBAC95CB3B07@qq.com>
+X-QQ-XMAILINFO: NKv2G1wnhDBnrr4E/kVfuAaOl1xdaPmH2g5MNcAlnARbTJTbpo2cOTjBhWNPR5
+         uGpsVe1XUsORP3gpZQmITaJAeWOU6WToXQr8yE9Eojcu1DpdAdsk4lE9iwL04PEGNPaxPVol36N5
+         W0zrLApB5zjHdUMxGZ/+0skjluPgfcViwQtw+YRsmmUNnkjOJi2UAMPx7U+l2OmDha5M+BcjDqbn
+         GqJsdbk0WDCIZpdggcJZboR4Rgp9CqT0qa0hFmPz7JxN8U1fpM6Vre5Hd37W16JgIjInFjEbcF+4
+         ru6MbpqBnGDcM47iWxssziI3GKPo+Lr3hLFt815RGapVRRYXCOWnWXWzJDZXBZrb2LQElxGaqaPq
+         MTh/2hCcjZT1QCZNDUHTAzh+aNE6HaSZmVZVPDmLlgh3JKQpdxtTb6pS5SYJDGzRlEy09oU/peAx
+         ZLMQggZFLf6NZo5srGxkIttroOSR0eBnoQLFQtGXhkrDdtWKacevNdRN0MO6shMziVNjXTxYDiMQ
+         BD45EE5UaAxxv4gSr0bT8jY9UYwNUWDRqTYms5YnBsy04IU3kFZffsrCZM1BrX0czsfNLE1JYQYY
+         k/Me8aVOjGwKsIeGD1f/YsauWxhGEKH6ooD69baH8cg3gCe/qNewUYKCpopvZPevBYXfEa+eZOCH
+         uBlho+DLL7EeNRpf7WHrnngiVahhp6VQ2GS861E3gT+YQaEQOkPCRz/oplB33uvJBUYKiqMTigpz
+         CgSvKsXYYHGamRV5UIFlZEAGQMD6FKDSYGUv6YVOQIv7vRtKQXW7w93+FNR6DC4iaLWe/XAZGbaE
+         0iqWMYfpvMtpPqJbygyqkMHkjQwooiTEhx39CgQrXK7p+HD9w34duXzRuka3IrEbEdeHrUyYZ2zo
+         SH0G3NidKkhxaCFcGXEKYLn4mb4AgHUErt4nHzr6FwkYoDd+bJ84E2ktHfjiANIMPa2JWd3N+6oV
+         +J7Ljiap2SQNvqbFfIPAOqYdOg2bxXQMpISlFq5pFZ2lrlZj405A==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     sj@kernel.org
+Cc:     damon@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        rongtao@cestc.cn, rtoax@foxmail.com, shuah@kernel.org,
+        yuanchu@google.com
+Subject: Re: Re: [PATCH] selftests/damon: Fix unnecessary compilation warnings
+Date:   Sat, 12 Nov 2022 13:01:04 +0800
+X-OQ-MSGID: <20221112050104.22783-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221111173855.108360-1-sj@kernel.org>
+References: <20221111173855.108360-1-sj@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Does exactly what it says on the tin.
+Hi, Park, I just search on GCC source code, found GCC support
+"-Wstringop-overread" at least gcc-11.1.0, commit d14c547abd48("Add
+-Wstringop-overread for reading past the end by string functions.").
 
-Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
----
- tools/testing/selftests/kvm/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+AND found a testsuite gcc/gcc/testsuite/gcc.dg/pragma-diag-10.c
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 0172eb6cb6ee..4c0ff91a8964 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -156,6 +156,7 @@ TEST_GEN_PROGS_aarch64 += aarch64/psci_test
- TEST_GEN_PROGS_aarch64 += aarch64/vcpu_width_config
- TEST_GEN_PROGS_aarch64 += aarch64/vgic_init
- TEST_GEN_PROGS_aarch64 += aarch64/vgic_irq
-+TEST_GEN_PROGS_aarch64 += access_tracking_perf_test
- TEST_GEN_PROGS_aarch64 += demand_paging_test
- TEST_GEN_PROGS_aarch64 += dirty_log_test
- TEST_GEN_PROGS_aarch64 += dirty_log_perf_test
--- 
-2.38.1.431.g37b22c650d-goog
+ 10 #pragma GCC diagnostic push
+ 11 #pragma GCC diagnostic ignored "-Wstringop-overflow"
+ 12 #pragma GCC diagnostic ignored "-Wstringop-overread"
+ 13   if (c != 0)
+ 14     return __builtin_memchr (s, c, (unsigned long)-1);
+ 15 #pragma GCC diagnostic pop
 
+it's totally same as this PATCH.
+
+I think the motivation for this patch is to eliminate the compilation
+warning, maybe one day we will compile the kernel with "-Werror -Wall",
+at which point this compilation warning will turn into a compilation
+error, and in case we already know it, we should fix this error in
+advance.
+
+For old gcc, we can add this?
+
+ #pragma GCC diagnostic push
++#if __GNUC__ >= 11 && __GNUC_MINOR__ >= 1
+ /* Ignore read(2) overflow and write(2) overread compile warnings */
+ #pragma GCC diagnostic ignored "-Wstringop-overread"
+ #pragma GCC diagnostic ignored "-Wstringop-overflow"
++#endif
+
+What do you think?
+
+Good day!
+Rong Tao
