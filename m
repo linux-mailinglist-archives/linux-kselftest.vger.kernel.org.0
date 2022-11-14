@@ -2,84 +2,403 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F2E628979
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Nov 2022 20:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C216862897B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Nov 2022 20:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiKNTe7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Nov 2022 14:34:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S236432AbiKNThe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Nov 2022 14:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236612AbiKNTe6 (ORCPT
+        with ESMTP id S231757AbiKNThd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:34:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C376C768;
-        Mon, 14 Nov 2022 11:34:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE0E66140C;
-        Mon, 14 Nov 2022 19:34:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CCDC433D7;
-        Mon, 14 Nov 2022 19:34:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668454493;
-        bh=SpFYlH+o3QAnWwtLQrR764bDWTEAaa3hJerCGhBg1yg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fnwfTjVGGPS5fXOVa7MM1HsoJ4y+zXW8a+Q5ul1huYZdSvU2aqgz+uc6coSLLaOpo
-         TrPjXqcp/chexttTgObNxcpH+OaSOvpJsh5oF+sNTLM3eSO76GAr8C+Oyw1L688HUa
-         HpGLSQ6Za14dla9FNy/UJRlxS2Kd5bFDgs5v/crU4qf7lrwISpNQ1YsVs2UCJdH+ol
-         aU1x5+iLJ4Jd+QTvQPTCU2bM6qsNg/KpWtOpijLeG9Kn1TV67oXfICpyXiAl0nGBOG
-         3Zs75ixBMq42UMSZFQkZU/vlEGdBO/ZCw/rt/e5x+62sUntqukHjGNVfLko2+3N1MY
-         NQgJ35Cbb6bjw==
-From:   Will Deacon <will@kernel.org>
-To:     catalin.marinas@arm.com, shuah@kernel.org, wangkailong@jari.cn
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] kselftest/arm64: fix array_size.cocci warning
-Date:   Mon, 14 Nov 2022 19:34:34 +0000
-Message-Id: <166843703000.2458937.746493234594841296.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <777ce8ba.12e.184705d4211.Coremail.wangkailong@jari.cn>
-References: <777ce8ba.12e.184705d4211.Coremail.wangkailong@jari.cn>
+        Mon, 14 Nov 2022 14:37:33 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780CD19016
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Nov 2022 11:37:31 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j16so20962814lfe.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Nov 2022 11:37:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DxfQQ0FbYO1UVrLEoDyZLSQVKUEHHCrSauGBgdo401E=;
+        b=YmKcG6pGH0XHtKR/C0FfmNAMBTd17iNmWbkg6En3QsGVhAi9ipSacYboj1/US8NkBP
+         agctGu2bzd9ryxbA2rAvPx7wFI90lotF8HCevBtM8HQYi6reSSQQSNSLZpo7vuBpGaot
+         JSYRq/cpDPRwwQV1tWR3IWFZIp2f7/srALqynT5Kpm12op9gpcCFWfa2A7T47FV/8/j4
+         J8NJZ4YmPZD1RT/fkY8AbLmUNVqZcZF+FvMR3NFiC/cMyvKLDmB0QLsFiUhwI7JphocI
+         cMP07dW1n0zi12cmQ0AqfMGQNFm3mXmErlswglgklnjjjz+h4059hjY3gT4yThrFWhRC
+         xp+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DxfQQ0FbYO1UVrLEoDyZLSQVKUEHHCrSauGBgdo401E=;
+        b=WKigAz0js4/HztUAhMXAmgv0HH9QlaB8ucj1DpaY9jEGaLX+wBcvpUWL8xsPC7z01i
+         ggapJOy+zlYZKtbkpOqcze6+imqq3RWxvUs/aZVjQQqgiNgr8hS4OHSBVSL1/VsPvd32
+         juAeMzSE8ue/pog2GQYSKyP4y1sbqsc9VU2jWL9oPc4ZthgwQvCKtPCvksTFWNrnZpPX
+         Dk/2I9YozjB5HELQyF+9Ok3YFvA/BgNEWFP00aa+ei2cmlWpTBKlOmLHtexq9D4rteO1
+         nGvqEQRbHngHZ97jAjsYuVeIFnw8/L3LLacdjpYrfUU+nopcnT1aQsCvLttKGwPs3q+E
+         zMqQ==
+X-Gm-Message-State: ANoB5plACgTKbbO07fAZfqDaWDQjsu+25MQvrIGcoHbcNg6LQ50yCxOE
+        F/h7o/17yRhqmn9Ie/9yH86fdKVtHpCJUpoiGMPN+Q==
+X-Google-Smtp-Source: AA0mqf7HAQqdI4fYnOZjPZjlE1/tQZKSoPVdyIsFVBO3uYhYdSJ4LBoX1ogpfF0ygUDHDNd/E7IrM5duSa/5KAdPGAo=
+X-Received: by 2002:ac2:523c:0:b0:48a:b5ef:c49d with SMTP id
+ i28-20020ac2523c000000b0048ab5efc49dmr5086030lfl.313.1668454649378; Mon, 14
+ Nov 2022 11:37:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221111014244.1714148-1-vannapurve@google.com> <20221111014244.1714148-5-vannapurve@google.com>
+In-Reply-To: <20221111014244.1714148-5-vannapurve@google.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Mon, 14 Nov 2022 12:37:17 -0700
+Message-ID: <CAMkAt6qLC0BosvSN9Ri2XFYK65xH1E5sqJYNe6uAudb8U08rXw@mail.gmail.com>
+Subject: Re: [V1 PATCH 4/6] KVM: selftests: x86: Execute VMs with private memory
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, nikunj@amd.com, seanjc@google.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 13 Nov 2022 17:41:10 +0800 (GMT+08:00), wangkailong@jari.cn wrote:
-> Fix following coccicheck warning:
-> 
-> tools/testing/selftests/arm64/mte/check_mmap_options.c:64:24-25:
-> WARNING: Use ARRAY_SIZE
-> tools/testing/selftests/arm64/mte/check_mmap_options.c:66:20-21:
-> WARNING: Use ARRAY_SIZE
-> tools/testing/selftests/arm64/mte/check_mmap_options.c:135:25-26:
-> WARNING: Use ARRAY_SIZE
-> tools/testing/selftests/arm64/mte/check_mmap_options.c:96:25-26:
-> WARNING: Use ARRAY_SIZE
-> tools/testing/selftests/arm64/mte/check_mmap_options.c:190:24-25:
-> WARNING: Use ARRAY_SIZE
-> 
-> [...]
+On Thu, Nov 10, 2022 at 6:43 PM Vishal Annapurve <vannapurve@google.com> wrote:
+>
+> Introduce a set of APIs to execute VM with private memslots.
+>
+> Host userspace APIs for:
+> 1) Setting up and executing VM having private memslots
+> 2) Backing/unbacking guest private memory
+>
+> Guest APIs for:
+> 1) Changing memory mapping type
+>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile          |   1 +
+>  .../kvm/include/x86_64/private_mem.h          |  37 +++
+>  .../selftests/kvm/lib/x86_64/private_mem.c    | 211 ++++++++++++++++++
+>  3 files changed, 249 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/include/x86_64/private_mem.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/x86_64/private_mem.c
+>
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 0172eb6cb6ee..57385ad58527 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -53,6 +53,7 @@ LIBKVM_STRING += lib/string_override.c
+>  LIBKVM_x86_64 += lib/x86_64/apic.c
+>  LIBKVM_x86_64 += lib/x86_64/handlers.S
+>  LIBKVM_x86_64 += lib/x86_64/perf_test_util.c
+> +LIBKVM_x86_64 += lib/x86_64/private_mem.c
+>  LIBKVM_x86_64 += lib/x86_64/processor.c
+>  LIBKVM_x86_64 += lib/x86_64/svm.c
+>  LIBKVM_x86_64 += lib/x86_64/ucall.c
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/private_mem.h b/tools/testing/selftests/kvm/include/x86_64/private_mem.h
+> new file mode 100644
+> index 000000000000..e556ded971fd
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/include/x86_64/private_mem.h
+> @@ -0,0 +1,37 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2022, Google LLC.
+> + */
+> +
+> +#ifndef SELFTEST_KVM_PRIVATE_MEM_H
+> +#define SELFTEST_KVM_PRIVATE_MEM_H
+> +
+> +#include <stdint.h>
+> +#include <kvm_util.h>
+> +
+> +void kvm_hypercall_map_shared(uint64_t gpa, uint64_t size);
+> +void kvm_hypercall_map_private(uint64_t gpa, uint64_t size);
+> +
+> +void vm_unback_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size);
+> +
+> +void vm_allocate_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size);
+> +
+> +typedef void (*guest_code_fn)(void);
+> +typedef void (*io_exit_handler)(struct kvm_vm *vm, uint32_t uc_arg1);
+> +
+> +struct test_setup_info {
+> +       uint64_t test_area_gpa;
+> +       uint64_t test_area_size;
+> +       uint32_t test_area_slot;
+> +};
+> +
+> +struct vm_setup_info {
+> +       enum vm_mem_backing_src_type test_mem_src;
+> +       struct test_setup_info test_info;
+> +       guest_code_fn guest_fn;
+> +       io_exit_handler ioexit_cb;
+> +};
+> +
+> +void execute_vm_with_private_test_mem(struct vm_setup_info *info);
+> +
+> +#endif /* SELFTEST_KVM_PRIVATE_MEM_H */
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/private_mem.c b/tools/testing/selftests/kvm/lib/x86_64/private_mem.c
+> new file mode 100644
+> index 000000000000..3076cae81804
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/private_mem.c
+> @@ -0,0 +1,211 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * tools/testing/selftests/kvm/lib/kvm_util.c
+> + *
+> + * Copyright (C) 2022, Google LLC.
+> + */
+> +#define _GNU_SOURCE /* for program_invocation_name */
+> +#include <fcntl.h>
+> +#include <limits.h>
+> +#include <sched.h>
+> +#include <signal.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/ioctl.h>
+> +
+> +#include <linux/compiler.h>
+> +#include <linux/kernel.h>
+> +#include <linux/kvm_para.h>
+> +
+> +#include <test_util.h>
+> +#include <kvm_util.h>
+> +#include <private_mem.h>
+> +#include <processor.h>
+> +
+> +static inline uint64_t __kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
+> +       uint64_t flags)
+> +{
+> +       return kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> PAGE_SHIFT, flags, 0);
+> +}
+> +
+> +static inline void kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
+> +       uint64_t flags)
+> +{
+> +       uint64_t ret;
+> +
+> +       GUEST_ASSERT_2(IS_PAGE_ALIGNED(gpa) && IS_PAGE_ALIGNED(size), gpa, size);
+> +
+> +       ret = __kvm_hypercall_map_gpa_range(gpa, size, flags);
+> +       GUEST_ASSERT_1(!ret, ret);
+> +}
+> +
+> +void kvm_hypercall_map_shared(uint64_t gpa, uint64_t size)
+> +{
+> +       kvm_hypercall_map_gpa_range(gpa, size, KVM_MAP_GPA_RANGE_DECRYPTED);
+> +}
+> +
+> +void kvm_hypercall_map_private(uint64_t gpa, uint64_t size)
+> +{
+> +       kvm_hypercall_map_gpa_range(gpa, size, KVM_MAP_GPA_RANGE_ENCRYPTED);
+> +}
+> +
+> +static void vm_update_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size,
+> +       bool unback_mem)
+> +{
+> +       int restricted_fd;
+> +       uint64_t restricted_fd_offset, guest_phys_base, fd_offset;
+> +       struct kvm_enc_region enc_region;
+> +       struct kvm_userspace_memory_region_ext *region_ext;
+> +       struct kvm_userspace_memory_region *region;
+> +       int fallocate_mode = 0;
+> +       int ret;
+> +
+> +       region_ext = kvm_userspace_memory_region_ext_find(vm, gpa, gpa + size);
+> +       TEST_ASSERT(region_ext != NULL, "Region not found");
+> +       region = &region_ext->region;
+> +       TEST_ASSERT(region->flags & KVM_MEM_PRIVATE,
+> +               "Can not update private memfd for non-private memslot\n");
+> +       restricted_fd = region_ext->restricted_fd;
+> +       restricted_fd_offset = region_ext->restricted_offset;
+> +       guest_phys_base = region->guest_phys_addr;
+> +       fd_offset = restricted_fd_offset + (gpa - guest_phys_base);
+> +
+> +       if (unback_mem)
+> +               fallocate_mode = (FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE);
+> +
+> +       printf("restricted_fd %d fallocate_mode 0x%x for offset 0x%lx size 0x%lx\n",
+> +               restricted_fd, fallocate_mode, fd_offset, size);
+> +       ret = fallocate(restricted_fd, fallocate_mode, fd_offset, size);
+> +       TEST_ASSERT(ret == 0, "fallocate failed\n");
+> +       enc_region.addr = gpa;
+> +       enc_region.size = size;
+> +       if (unback_mem) {
+> +               printf("undoing encryption for gpa 0x%lx size 0x%lx\n", gpa, size);
+> +               vm_ioctl(vm, KVM_MEMORY_ENCRYPT_UNREG_REGION, &enc_region);
+> +       } else {
+> +               printf("doing encryption for gpa 0x%lx size 0x%lx\n", gpa, size);
+> +               vm_ioctl(vm, KVM_MEMORY_ENCRYPT_REG_REGION, &enc_region);
+> +       }
+> +}
+> +
+> +void vm_unback_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size)
+> +{
+> +       vm_update_private_mem(vm, gpa, size, true);
+> +}
+> +
+> +void vm_allocate_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size)
+> +{
+> +       vm_update_private_mem(vm, gpa, size, false);
+> +}
+> +
+> +static void handle_vm_exit_map_gpa_hypercall(struct kvm_vm *vm,
+> +                               struct kvm_vcpu *vcpu)
+> +{
+> +       uint64_t gpa, npages, attrs, size;
+> +
+> +       TEST_ASSERT(vcpu->run->hypercall.nr == KVM_HC_MAP_GPA_RANGE,
+> +               "Unhandled Hypercall %lld\n", vcpu->run->hypercall.nr);
+> +       gpa = vcpu->run->hypercall.args[0];
+> +       npages = vcpu->run->hypercall.args[1];
+> +       size = npages << MIN_PAGE_SHIFT;
+> +       attrs = vcpu->run->hypercall.args[2];
+> +       pr_info("Explicit conversion off 0x%lx size 0x%lx to %s\n", gpa, size,
+> +               (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED) ? "private" : "shared");
+> +
+> +       if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
+> +               vm_allocate_private_mem(vm, gpa, size);
+> +       else
+> +               vm_unback_private_mem(vm, gpa, size);
+> +
+> +       vcpu->run->hypercall.ret = 0;
+> +}
+> +
+> +static void vcpu_work(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+> +       struct vm_setup_info *info)
+> +{
+> +       struct ucall uc;
+> +       uint64_t cmd;
+> +
+> +       /*
+> +        * Loop until the guest is done.
+> +        */
+> +
+> +       while (true) {
+> +               vcpu_run(vcpu);
+> +
+> +               if (vcpu->run->exit_reason == KVM_EXIT_IO) {
+> +                       cmd = get_ucall(vcpu, &uc);
+> +                       if (cmd != UCALL_SYNC)
+> +                               break;
+> +
+> +                       TEST_ASSERT(info->ioexit_cb, "ioexit cb not present");
+> +                       info->ioexit_cb(vm, uc.args[1]);
+> +                       continue;
+> +               }
 
-Applied to arm64 (for-next/selftests), thanks!
+Should this be integrated into the ucall library directly somehow?
+That way users of VMs with private memory do not need special
+handling?
 
-[1/1] kselftest/arm64: fix array_size.cocci warning
-      https://git.kernel.org/arm64/c/a75df5be8e7b
+After Sean's series:
+https://lore.kernel.org/linux-arm-kernel/20220825232522.3997340-3-seanjc@google.com/
+we have a common get_ucall() that this check could be integrated into?
 
-Cheers,
--- 
-Will
+> +
+> +               if (vcpu->run->exit_reason == KVM_EXIT_HYPERCALL) {
+> +                       handle_vm_exit_map_gpa_hypercall(vm, vcpu);
+> +                       continue;
+> +               }
+> +
+> +               TEST_FAIL("Unhandled VCPU exit reason %d\n",
+> +                       vcpu->run->exit_reason);
+> +               break;
+> +       }
+> +
+> +       if (vcpu->run->exit_reason == KVM_EXIT_IO && cmd == UCALL_ABORT)
+> +               TEST_FAIL("%s at %s:%ld, val = %lu", (const char *)uc.args[0],
+> +                         __FILE__, uc.args[1], uc.args[2]);
+> +}
+> +
+> +/*
+> + * Execute guest vm with private memory memslots.
+> + *
+> + * Input Args:
+> + *   info - pointer to a structure containing information about setting up a VM
+> + *     with private memslots
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Function called by host userspace logic in selftests to execute guest vm
+> + * logic. It will install test_mem_slot : containing the region of memory that
+> + * would be used to test private/shared memory accesses to a memory backed by
+> + * private memslots
+> + */
+> +void execute_vm_with_private_test_mem(struct vm_setup_info *info)
+> +{
+> +       struct kvm_vm *vm;
+> +       struct kvm_enable_cap cap;
+> +       struct kvm_vcpu *vcpu;
+> +       uint64_t test_area_gpa, test_area_size;
+> +       struct test_setup_info *test_info = &info->test_info;
+> +
+> +       TEST_ASSERT(info->guest_fn, "guest_fn not present");
+> +       vm = vm_create_with_one_vcpu(&vcpu, info->guest_fn);
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+I am a little confused with how this library is going to work for SEV
+VMs that want to have UPM private memory eventually.
+
+Why should users of UPM be forced to use this very specific VM
+creation and vCPU run loop. In the patch
+https://lore.kernel.org/lkml/20220829171021.701198-1-pgonda@google.com/T/#m033ebc32df47a172bc6c46d4398b6c4387b7934d
+SEV VMs need to be created specially vm_sev_create_with_one_vcpu() but
+then callers can run the VM's vCPUs like other selftests.
+
+How do you see this working with SEV VMs?
+
+
+
+> +
+> +       vm_check_cap(vm, KVM_CAP_EXIT_HYPERCALL);
+> +       cap.cap = KVM_CAP_EXIT_HYPERCALL;
+> +       cap.flags = 0;
+> +       cap.args[0] = (1 << KVM_HC_MAP_GPA_RANGE);
+> +       vm_ioctl(vm, KVM_ENABLE_CAP, &cap);
+> +
+> +       TEST_ASSERT(test_info->test_area_size, "Test mem size not present");
+> +
+> +       test_area_size = test_info->test_area_size;
+> +       test_area_gpa = test_info->test_area_gpa;
+> +       vm_userspace_mem_region_add(vm, info->test_mem_src, test_area_gpa,
+> +               test_info->test_area_slot, test_area_size / vm->page_size,
+> +               KVM_MEM_PRIVATE);
+> +       vm_allocate_private_mem(vm, test_area_gpa, test_area_size);
+> +
+> +       pr_info("Mapping test memory pages 0x%zx page_size 0x%x\n",
+> +               test_area_size/vm->page_size, vm->page_size);
+> +       virt_map(vm, test_area_gpa, test_area_gpa, test_area_size/vm->page_size);
+> +
+> +       vcpu_work(vm, vcpu, info);
+> +
+> +       kvm_vm_free(vm);
+> +}
+> --
+> 2.38.1.431.g37b22c650d-goog
+>
