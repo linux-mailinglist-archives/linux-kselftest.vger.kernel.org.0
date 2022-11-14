@@ -2,206 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A38D62844C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Nov 2022 16:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E296285C1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Nov 2022 17:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237199AbiKNPrX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Nov 2022 10:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S237895AbiKNQol (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Nov 2022 11:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236881AbiKNPrV (ORCPT
+        with ESMTP id S237882AbiKNQok (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:47:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDDB13EB9
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Nov 2022 07:46:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668440783;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ia8pcKGDLql5r5FGlzWRSZ1nHmbuVDJ+PIdsdZ53JhI=;
-        b=iiPlSSdFXMqlLG7hQcnjg5fiRmHUZOLyNNyLx8Z939zK1reXO0VFT3i+FxA/2e62PDQAYm
-        YhpTWX165bHnFB+35tDYnlZjc8hb9ScekRTfOkXTK637zgX9IgDXTLN0A2Zdaf+pk8mp1b
-        wny8lPS6d7SyF/axN7DWyEyXb+9OCoA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-49-NTjKM6SiN9awa-PQy9oOhg-1; Mon, 14 Nov 2022 10:46:21 -0500
-X-MC-Unique: NTjKM6SiN9awa-PQy9oOhg-1
-Received: by mail-wm1-f69.google.com with SMTP id u9-20020a05600c00c900b003cfb12839d6so3028600wmm.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Nov 2022 07:46:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ia8pcKGDLql5r5FGlzWRSZ1nHmbuVDJ+PIdsdZ53JhI=;
-        b=N8R1dC1zcnnVGRVt+mhQmAKXBe7UQfduh2W5ArYvFIJqEgmolOGW06UTwd+QdRqISZ
-         f6yRkcBc0iwbAMiESzqS5PvqNZwduoAexaPQ6c2PScvHiD8H++WeRCwwcnDJLNYtE20h
-         Qvtagisak5JFRAV3kOQ1Pni0gsBqbpMAQahlPOuFq6HxehJnP1izIYRrghW3zb9SzR5M
-         i0J3EEX0M8WKrOC/27KhWfd9wK8nDbYIVrYRt4LxPWv2Siqr9STjMm4Gn87b5LvqFxBd
-         D5mfaqQor6q4eECosg2rzhN1Z+gkE85ZktaE/J1XkL1honT4/2u5uWc//+xkuvYxlCxp
-         iwwg==
-X-Gm-Message-State: ANoB5pnwcEV3VjWjgmRb9VHmmG5eK4ga2zwpoLg0EwgCZpM8+/APLv2i
-        T9M2BlceH6gQdKlcepCBYEowJkyVqZ2n8xUldgckluEvAPwU8ZjmD2seE0gtIAOssbMz09yCDpM
-        /VgvNaxlmBoNCc+sBHPxfXTStBm9Z
-X-Received: by 2002:a5d:40c1:0:b0:22e:433a:46ba with SMTP id b1-20020a5d40c1000000b0022e433a46bamr8099929wrq.575.1668440780520;
-        Mon, 14 Nov 2022 07:46:20 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4PNBwy8nTPC78ZKZ/DhAuvz42a+Loa0PqLvkYjbIuLMym1kLWnaraQbN6YaVSr6C1CNmRzgA==
-X-Received: by 2002:a5d:40c1:0:b0:22e:433a:46ba with SMTP id b1-20020a5d40c1000000b0022e433a46bamr8099892wrq.575.1668440780199;
-        Mon, 14 Nov 2022 07:46:20 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:d300:d881:1fd5:bc95:5e2d? (p200300cbc703d300d8811fd5bc955e2d.dip0.t-ipconnect.de. [2003:cb:c703:d300:d881:1fd5:bc95:5e2d])
-        by smtp.gmail.com with ESMTPSA id g13-20020a5d554d000000b002366e3f1497sm10115912wrw.6.2022.11.14.07.46.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 07:46:19 -0800 (PST)
-Message-ID: <a90ee936-67a9-340d-bf2c-2f331617b0da@redhat.com>
-Date:   Mon, 14 Nov 2022 16:46:18 +0100
+        Mon, 14 Nov 2022 11:44:40 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2048.outbound.protection.outlook.com [40.107.237.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3F828E20;
+        Mon, 14 Nov 2022 08:44:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cePhUxr+lSYdfyFXk/QvY8aEaZr8H/iGm5DfQesugcPCF/0ZJUvkMclI/tKkPknqaNvKGyVqGBP/gBvAOAfy3R79HxjwiJV/W3ibnQV8/b0XBxv1myytjWf1LT/PrF1zULcwXMN6n4pfuMQiniSf0L7lDRf3VPP0aUd5FB6T8yJ9O8KC5CGZFwnT+p19LmzKEQgAHb6bLpWqvAwU070BWiYc36OPOOG8GxaOkh3ob08Db814QokFNe81KDjbCjYaBpu3uTzrGr94wBUarGfvRUw0HVHUU5NeaZmYhoEgCQ2PYJ/7rzOjpLIH4RQ+9kAYNcd8RAHYdVjqNVU4tkfDvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vjqoA8Ym8m7zyRvRE5gVdk91bgNJ/QfVOn04Ltf1MzY=;
+ b=BNGfULWYVKemRB4vNM9I/0UVchey/5BnQtMfNP5RMdmkovvcrX3gfk/+8/BC6zgvdhZCQUz0ydrIC09FYe34We7zTI07TegL68GyJ50PEdmjmVuFOMpKQb+tP/TcMIFkyuhsIbhup4JuixDI1S80Q9qlPOPoJHZdmhUCz4hvRRGmdH22GpdfNvE3iXW/GAWvyrXIUNhuRyfcNFmgbt6E896CQkKYnPTzVNfGW5IQ2JPHUAY5GCdLRxDb0hMnrvguQvsCZ73mxzj303gsujeh11KTon+oI3mlAmpLTWHckOtwOAP5deFcCmc3BiPcwDRpMZHzEWNWxw0ookxbfyjS3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vjqoA8Ym8m7zyRvRE5gVdk91bgNJ/QfVOn04Ltf1MzY=;
+ b=Cv4oUEvlpnZKKTZR54TPa7LnpG4TMFGmyhWpCEUdAsgL2hkbxHxERSQZDoiP/ucj71dbpgUVfsvtHpFnW8ZoG2q3M3lqBLixYXxHh3Eiv6Ios9oj6iQxLbwkH/IT39stw8D60WyunWWiHC2ijIkYZjjMDxX5SsVZjxk9sAso74KHsB4vc09ohEDCIjyMzeew07CjedqHHKoPTt+9VZBRf4IXSqqpeMTYTE3df8FWHZy4d+F8zQQeoQ7PZMHaIqU9KbuM9VuQdFWmaXXTXZmge5b+Rg3FhcwrraTui6hZ9egOFg6/H178va6Ed7vO335ynMPI4+gF9kC+wOtkesQfkQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL1PR12MB5061.namprd12.prod.outlook.com (2603:10b6:208:310::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 16:44:37 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 16:44:37 +0000
+Date:   Mon, 14 Nov 2022 12:44:36 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Joerg Roedel <joro@8bytes.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        "Martins, Joao" <joao.m.martins@oracle.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v4 02/17] iommu: Add device-centric DMA ownership
+ interfaces
+Message-ID: <Y3JwdIr/z2hkZmjf@nvidia.com>
+References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+ <2-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+ <BN9PR11MB5276FBFDC7C96C9EFB87D4FF8C009@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276FBFDC7C96C9EFB87D4FF8C009@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BL1PR13CA0375.namprd13.prod.outlook.com
+ (2603:10b6:208:2c0::20) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        "open list : KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>
-References: <20221109102303.851281-1-usama.anjum@collabora.com>
- <9c167d01-ef09-ec4e-b4a1-2fff62bf01fe@redhat.com>
- <6fdce544-8d4f-8b3c-9208-735769a9e624@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v6 0/3] Implement IOCTL to get and/or the clear info about
- PTEs
-In-Reply-To: <6fdce544-8d4f-8b3c-9208-735769a9e624@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5061:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9835c510-80cc-4822-a4b5-08dac65f846c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 238n85YqoW+8d3DjJ43lcBQzJtw2hFJnkp6D4PhronSnlFh+gFkIshMA11pHioR4CdBWI5fz7GovY/SdbezrPdZAhYzgK225N8tpJXABEOSWcrgrmZUVWrbvxlZvXBqb1gguWDTHADPvR2pPXw6zU/agLOsxO4eiMmd3MXFkVtIHlsSRiORRsPkmZgmqMSB575durdwu8wgfh4YOalmwnDBKkwWmmDFEuoONTvA4HFSO/d1aC1HCjlCgFvfjBIh8CaACdx5MryIIiTo6WzW4HiHVvnCfvJs/26/GyoF2gIPu0mdGEd1pPm/H9brwOHLD2yUO73BKta5jF4kHTcepQmLGIXbCkg+l2nNr5xXrzBrkTzNQKpkQz63TvyTLgqi6zjLoW/i4hm2nhAYOGmdsyAIRAuDmilFZBaUuST5AJ0+9Sv2kZRAgI/RTptpi7JLXOqorCnSXnNlsJSHuQjZ1fhSZ7YiT2lAg/uYURBpL3+v7PfnKsdThz0Sz6xMSTzivOKDne2ukA0N3qyGrN0u5aRPk/bKtAxHHDLwWNS9uEtL1VeBv8okR65ZXbMiHdgSJ7AuU+8Knz1p7jEPr1ktjLWVzvWoVPv0Q4Jx+YYhcvN9LX3cHaOuS9K8evT7iwzIEaRdwnz8s0U2DJ9rs8kLlR55AMfZXYlfmeqFdXkKltFxtCxEZ4duFxpXKfGjEW2Np6KqJ5W6K9LT9nzu+rGXTjA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(396003)(136003)(346002)(376002)(451199015)(186003)(6512007)(83380400001)(26005)(2616005)(6506007)(38100700002)(5660300002)(2906002)(7416002)(7406005)(6486002)(478600001)(8676002)(66946007)(8936002)(66556008)(66476007)(4326008)(41300700001)(316002)(6916009)(54906003)(36756003)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LLBaFnZGOGikadQNLan+1asP/tBCMh3tNZ7fbmBdvX4Z5XRRapomH/TOS8q/?=
+ =?us-ascii?Q?410W0oYVLYPdXPyPII2U88Se31IVD6LUMFVF1Z0TQSUMxg4OYpSSZw+nRUPJ?=
+ =?us-ascii?Q?1Dvr0DSYbHKt75AKDAOf4xqab1Tg3sdocTxtR4M/r9HW1WffwsaXNIiRFUI7?=
+ =?us-ascii?Q?fp0D9wAImZnN2qD+jlIwVGg6TJJYgnD/hAeJIvg/9ClwNOcE51dsZMb+0p/N?=
+ =?us-ascii?Q?29jTtCcWWsLAukB1Mm6ZdQOErgiShImonTzm3w2PnkfAuXYRoQXWnt9gtlGd?=
+ =?us-ascii?Q?xTgjELlHU+SisWlpHSSGDdXjVlMcDMpDDxuVkZ8G+A5KLsU24J+sYHGMuTiA?=
+ =?us-ascii?Q?WYFMSFdxDZgvibYV6OXOHz4Q5hHB+K8emTo7HvZwvbcYWtnqSYCfsOvcLceQ?=
+ =?us-ascii?Q?+JW6pit/1ddGWHf6qCD4Su/CP1VFofA2Mq+mvD536GY3/JPHWeRG0f3Vqk1B?=
+ =?us-ascii?Q?LwumZJAo2WHuMLKGD1aApo3BjxIe+VI7AW1SWF4au0rLW4EqF5d5joyK0cmK?=
+ =?us-ascii?Q?b1TY96VN38mFyybitqixJQcrMUCd+gnDRl4LvTIfH7i8xydMj911tVqjdCjq?=
+ =?us-ascii?Q?+xSdIdrWlXOjpfCFg4gPjlUT80hx4/gU9tX3crk0QykVaDbEJmEKIGDtEVC5?=
+ =?us-ascii?Q?VQI0EVOkuJyA/r2B7PoQQnON1PzB9WJJSoU8cxtMx+L1by5ztEzd0x/OyT0W?=
+ =?us-ascii?Q?rWAP3oh5mDhrf4UYUDcWI+s4wsMgy9ZkR7+C4qEDPtEivpKe6DuSLalUG07q?=
+ =?us-ascii?Q?IPKiCFkjkHnhELGXRfoIYqTKcH/Rvu48IySfNGCCiuW2H5vZ9XtmoKBdcclr?=
+ =?us-ascii?Q?XEnQXCEZt9OUHW1UOSyU6DGDVfLtwltHtiXvBjeMIUzTb1WwSggCYfsnHBlh?=
+ =?us-ascii?Q?etzt9MjCYfk8agsSb4Lm0mbVoQ9xJ0Dwo4u9wUiy34opfrCRsFDUBCacbd6C?=
+ =?us-ascii?Q?GZ8EJRqBLzrvzwoU1N9Cnt6bV7rNrB+/d0u7W0YyRtfpxlQLZyit1pGGdoJK?=
+ =?us-ascii?Q?oZxdSgCbzNoIgCaPPrCGKgl5F7d4c9iaGBJFbfFufDa8xX3w/baArtiu1KTW?=
+ =?us-ascii?Q?EZ45CAzhktX6KmZxSXF1LGyNty2MLSvqnhUv/fPJRii7Hv77r/K+90S7sfzO?=
+ =?us-ascii?Q?U9hk0FcqOBS5yrcwTjBfODIm6k5xlkQjGuOOUsmehmBDkN7dNQY4ZY8NA3eC?=
+ =?us-ascii?Q?QncRn4fRhEOO2+V9CWo5m5zZ2u9ICr7DwVqTh+Ik/RpY/085pTF7MWsXiKiP?=
+ =?us-ascii?Q?wy6tN/YAe+aEcmSv4tzuLRWq1q8GdkxRuURpm9Ly+CPVpNEnj4+OPL7ogF35?=
+ =?us-ascii?Q?OcWNmPayKUloukNwgX8KUJ4+naswxxHsq+JJPyDqkfCyMaRayDX2uMvuEFoC?=
+ =?us-ascii?Q?JHwT43p3ZQYy9/qLEsFGhZiqjVXpkGWnhGM7B8er+Y+lP3JpwkhtRea2XJT8?=
+ =?us-ascii?Q?rjw1cxRS8LrP+A0g9mnZEXP6HBM/Xdu9wBMbd6xg2kiYd6FNiva12cnRNaih?=
+ =?us-ascii?Q?Bfl7CVlUenA6sbQ2dEE6En+NLE5dn1irGnNYJt9CPCY4fv81HIHAhHU9JDQt?=
+ =?us-ascii?Q?+04P63tEhb7aeTUVgHg=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9835c510-80cc-4822-a4b5-08dac65f846c
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 16:44:37.5376
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 95URS/zpuxeWzznme6VRDhF9QpzFeTHz8h1waGljMkc0wdQNhiuHB0ymIOzidd0w
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5061
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> The soft-dirtiness is stored in the PTE. VMA is marked dirty to store the
-> dirtiness for reused regions. Clearing the soft-dirty status of whole
-> process is straight forward. When we want to clear/monitor the
-> soft-dirtiness of a part of the virtual memory, there is a lot of internal
-> noise. We don't want the non-dirty pages to become dirty because of how the
-> soft-dirty feature has been working. Soft-dirty feature wasn't being used
-> the way we want to use now. While monitoring a part of memory, it is not
-> acceptable to get non-dirty pages as dirty. Non-dirty pages become dirty
-> when the two VMAs are merged without considering if they both are dirty or
-> not (34228d473efe). To monitor changes over the memory, sometimes VMAs are
-> split to clear the soft-dirty bit in the VMA flags. But sometimes kernel
-> decide to merge them backup. It is so waste of resources.
-
-Maybe you'd want a per-process option to not merge if the VM_SOFTDIRTY 
-property differs. But that might be just one alternative for handling 
-this case.
-
+On Fri, Nov 11, 2022 at 05:37:36AM +0000, Tian, Kevin wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > Sent: Tuesday, November 8, 2022 8:49 AM
+> > +static int __iommu_take_dma_ownership(struct iommu_group *group, void
+> > *owner)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (WARN_ON(!owner))
+> > +		return -EINVAL;
 > 
-> To keep things consistent, the default behavior of the IOCTL is to output
-> even the extra non-dirty pages as dirty from the kernel noise. A optional
-> PAGEMAP_NO_REUSED_REGIONS flag is added for those use cases which aren't
-> tolerant of extra non-dirty pages. This flag can be considered as something
-> which is by-passing the already present buggy implementation in the kernel.
-> It is not buggy per say as the issue can be solved if we don't allow the
-> two VMA which have different soft-dirty bits to get merged. But we are
-> allowing that so that the total number of VMAs doesn't increase. This was
-> acceptable at the time, but now with the use case of monitoring a part of
-> memory for soft-dirty doesn't want this merging. So either we need to
-> revert 34228d473efe and PAGEMAP_NO_REUSED_REGIONS flag will not be needed
-> or we should allow PAGEMAP_NO_REUSED_REGIONS or similar mechanism to ignore
-> the extra dirty pages which aren't dirty in reality.
+> move to iommu_device_claim_dma_owner(). just like how it's checked
+> in the group version.
+
+Ok, like this:
+
+@@ -3112,9 +3112,6 @@ static int __iommu_take_dma_ownership(struct iommu_group *group, void *owner)
+ {
+ 	int ret;
+ 
+-	if (WARN_ON(!owner))
+-		return -EINVAL;
+-
+ 	if ((group->domain && group->domain != group->default_domain) ||
+ 	    !xa_empty(&group->pasid_array))
+ 		return -EBUSY;
+@@ -3177,6 +3174,8 @@ int iommu_device_claim_dma_owner(struct device *dev, void *owner)
+ 
+ 	if (!group)
+ 		return -ENODEV;
++	if (WARN_ON(!owner))
++		return -EINVAL;
+ 
+ 	mutex_lock(&group->mutex);
+ 	if (group->owner_cnt) {
+
+> > +	if ((group->domain && group->domain != group->default_domain) ||
+> > +	    !xa_empty(&group->pasid_array))
+> > +		return -EBUSY;
 > 
-> When PAGEMAP_NO_REUSED_REGIONS flag is used, only the PTEs are checked to
-> find if the pages are dirty. So re-used regions cannot be detected. This
-> has the only side-effect of not checking the VMAs. So this is limitation of
-> using this flag which should be acceptable in the current state of code.
-> This limitation is okay for the users as they can clear the soft-dirty bit
-> of the VMA before starting to monitor a range of memory for soft-dirtiness.
-> 
-> 
->> Please separate that part out from the other changes; I am still not
->> convinced that we want this and what the semantical implications are.
->>
->> Let's take a look at an example: can_change_pte_writable()
->>
->>      /* Do we need write faults for softdirty tracking? */
->>      if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
->>          return false;
->>
->> We care about PTE softdirty tracking, if it is enabled for the VMA.
->> Tracking is enabled if: vma_soft_dirty_enabled()
->>
->>      /*
->>       * Soft-dirty is kind of special: its tracking is enabled when
->>       * the vma flags not set.
->>       */
->>      return !(vma->vm_flags & VM_SOFTDIRTY);
->>
->> Consequently, if VM_SOFTDIRTY is set, we are not considering the soft_dirty
->> PTE bits accordingly.
-> Sorry, I'm unable to completely grasp the meaning of the example. We have
-> followed clear_refs_write() to write the soft-dirty bit clearing code in
-> the current patch. Dirtiness of the VMA and the PTE may be set
-> independently. Newer allocated memory has dirty bit set in the VMA. When
-> something is written the memory, the soft dirty bit is set in the PTEs as
-> well regardless if the soft dirty bit is set in the VMA or not.
-> 
+> the check of pasid_array is a new addition in this version. it's probably
+> worthy a comment here.
 
-Let me try to find a simple explanation:
+It is just the merge resolution with the SVA series, the entire if is
+being copied from someplace else
 
-After clearing a SOFTDIRTY PTE flag inside an area with VM_SOFTDIRTY 
-set, there are ways that PTE could get written to and it could become 
-dirty, without the PTE becoming softdirty.
-
-Essentially, inside a VMA with VM_SOFTDIRTY set, the PTE softdirty 
-values might be stale: there might be entries that are softdirty even 
-though the PTE is *not* marked softdirty.
-
-These are, AFAIU, the current semantics, and I am not sure if we want 
-user space to explicitly work around that.
-
->>
->>
->> I'd suggest moving forward without this controversial
->> PAGEMAP_NO_REUSED_REGIONS functionality for now, and preparing it as a
->> clear add-on we can discuss separately.Like I've described above, I've only added this flag to not get the
-> non-dirty pages as dirty. Can there be some alternative to adding this
-> flag? Please suggest.
-
-Please split it out into a separate patch for now. We can discuss 
-further what the semantics are and if there are better alternatives for 
-that. In the meantime, you could move forward without 
-PAGEMAP_NO_REUSED_REGIONS while we are discussing them further.
-
--- 
 Thanks,
-
-David / dhildenb
-
+Jason
