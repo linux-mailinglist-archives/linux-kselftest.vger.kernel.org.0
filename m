@@ -2,196 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F29362AE75
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Nov 2022 23:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F8662AF2B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 00:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbiKOWlu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Nov 2022 17:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S231603AbiKOXLg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Nov 2022 18:11:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiKOWlS (ORCPT
+        with ESMTP id S238573AbiKOXLc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:41:18 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56443DE90
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 14:41:17 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-381662c78a9so70383497b3.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 14:41:17 -0800 (PST)
+        Tue, 15 Nov 2022 18:11:32 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7592E9D7
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 15:11:31 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso616247pjc.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 15:11:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6PHQLoSpI9ieMb01SGmNV+k3baSXTLXsQJ3u3XtAP4Q=;
-        b=eVMDaIyDnRoiBZbS3qpDVHFwht2msUL46zFdpPNpNUUOI6VJNt9S8COXwpm+D13UgQ
-         SMSUVDTkiQmT8YV/KO65wI4YPvoRUVhAh8uxBJa+N57pOC/+qMUEpK7QZwZBbBLYdlyS
-         gBZUA6x/2d+GIG7NJ39CDWc5fmPWHTyCq2FF7AKVwux1JSWUNSJdgOCLBJQYtryKQ1PP
-         y/wZ42KVK/ffbwstcO7g/qw6nMHWJYjA9apW1XotOiplRgNAgwU6U6VkzTw2dlPuRTXM
-         vEIYRtWQPe0KCHlRepvSqBV6gXGyxZZqhuLsR29XxT+/xEtM7BVuVrdylL1DOy2HXBX9
-         tDQQ==
+        d=kylehuey.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ckjuguz6xE0eRfA8bVi0J3H4nsbDymh+GHZEWw5n08=;
+        b=PLZmDsPzklxZ4b8mgS4haHWQSr/YfYPgxSkCXoTUJP9qno9EQvn69Pn5x1H6Dw0vKS
+         bLf5pNvKrIDk7Rn+zhBCzV1h5xoBm6gkTiPqBUdpduCHFj2FaR3Q6oBZ7I1euKKvVpZF
+         faocSd5vd1p8UELU5k7G4ZB/yEE6Ncr/RS83a9buGDdjsXGfFDzIhol7ziUpjlk3oCzm
+         x8St2XsucdS05oDsXAze+HwZOfX4ApUqsXMni/hD3yOLG/VKmCmec5feMbQswdbedJb2
+         7UxXjGd86kjyTacshQZ5X0ZEbhYzkcbFnFeMBdOANWRm8SopGGm6CKvbz/gzHfW59eqZ
+         16Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6PHQLoSpI9ieMb01SGmNV+k3baSXTLXsQJ3u3XtAP4Q=;
-        b=HTUbML6UCaXCN/3DDFtTUl+7V37DodEn1iu8MTS3zmZIhwIitBQkl1aHBdCp5su/Kn
-         PAeLNzVX89IOCrdZJFJOOtNEx2ooZwfS0DuqnyQk7wnTHPhkhT06SDeDq04Jru+vQTrS
-         DKTUyIul7nD1hD6C5lFMYRFppTIfFp3WhVZ8ukli5bGJcXBHCpMnIcrSKYb55NGp0F1/
-         uOf3jt5SNNv91//Yy+PIdw50+mjmtybvcc302E4JyaQiLHbTk9VXFXSBsTaihWTOA4FB
-         sr6gb+UfRu0H1KpsyXUFt5PdQMobqDjXUEK1P470GXIY/UY9nDwG83TZtNrS3Gg92RTF
-         239Q==
-X-Gm-Message-State: ANoB5pkxwWSwMqnJmwdMLa3hhpRZSU0knotzljXdCQrRqvvUO6U9rERl
-        ZlBoqlG0+kOfiFIjS8kqfZ75+1Rae3Fb/7rNktQrhQ==
-X-Google-Smtp-Source: AA0mqf5t66GapSerW6ciaSUVTlYlP07ofM3pS23X8mgEZHL5nydMPobMYst+uTfw0VFXedMfhtdvplNRpTuCF6i4pMs=
-X-Received: by 2002:a81:52ca:0:b0:388:dd9b:f3ee with SMTP id
- g193-20020a8152ca000000b00388dd9bf3eemr2260245ywb.164.1668552076399; Tue, 15
- Nov 2022 14:41:16 -0800 (PST)
+        bh=4ckjuguz6xE0eRfA8bVi0J3H4nsbDymh+GHZEWw5n08=;
+        b=xgJgyk818spdYS0bgUeAcbjjWysyN9eixk6WEbp3Wq19K1RTanqjeKTFjN3LHtJdp3
+         UbMF4AjhS3ozFkvWV+R/54SDuAQ2+cZx6WqGz4ZX4GmuBJnTwYJxcofqvWXiHW7TdFsh
+         n6uorJl5uuWatnIX9JnpPGybKXplVFyhywOmAAR33JtFu+vkhDmUwnP1g+eRe1BAvGF0
+         irLfBY73s5BmYyhr7F53oYvEyVJzGLuiVURVRo0xj9IqfDzjHMpy7BNPGwJc5iWiJzJI
+         NWc8AC1McYWYX3JuQtA7PGWTIynG1skc5CY8R/Zn2yuNAYMFrRRA8J+4s1B9x5Bj527z
+         35xA==
+X-Gm-Message-State: ANoB5pnJtToGNaqkERHx1WsaZWPEz3211hWRWqPWiaD7yl4MP/SfcUcD
+        Ppnulwal//Wv4tnUGt6GnLY7yg==
+X-Google-Smtp-Source: AA0mqf4loq3vghc/jvj4xbQ6I9i7XWfAYQZ+V+taawPejYNuLVIGVfefp1KPKapqN0ctJtQ4ODggbw==
+X-Received: by 2002:a17:90a:d145:b0:211:7e51:9d65 with SMTP id t5-20020a17090ad14500b002117e519d65mr592266pjw.220.1668553891109;
+        Tue, 15 Nov 2022 15:11:31 -0800 (PST)
+Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
+        by smtp.gmail.com with ESMTPSA id f15-20020a62380f000000b0056c360af4e3sm9308372pfa.9.2022.11.15.15.11.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 15:11:30 -0800 (PST)
+From:   Kyle Huey <me@kylehuey.com>
+X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>
+Subject: [PATCH v7 0/6] x86/fpu: Allow PKRU to be (once again) written by ptrace
+Date:   Tue, 15 Nov 2022 15:09:26 -0800
+Message-Id: <20221115230932.7126-1-khuey@kylehuey.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221104194705.3245738-1-rmoar@google.com> <CABVgOSnUDNvs6mYwVtzXq3+PmO62HG1pP=d_6EQiwOKF_9D6XA@mail.gmail.com>
- <CA+GJov4uUfp_a7FzCEMGivQJx3VGNOx=x+E_eN-9a46EsS2Ygg@mail.gmail.com>
-In-Reply-To: <CA+GJov4uUfp_a7FzCEMGivQJx3VGNOx=x+E_eN-9a46EsS2Ygg@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 15 Nov 2022 14:41:05 -0800
-Message-ID: <CAGS_qxqa6NW5EKA0y3Szp_6rEMfam5urSVRHaGVRZUHgmab8SA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] kunit: improve KTAP compliance of KUnit test output
-To:     Rae Moar <rmoar@google.com>
-Cc:     David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Isabella Basso <isabbasso@riseup.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 12:18 PM Rae Moar <rmoar@google.com> wrote:
-> Yes, I agree. I think it does make more sense to provide KTAP
-> compatibility with the parser before changing the test output. This
-> would also help to solve the issue that Daniel brought up on this
-> patch about the "KTAP version 1" line and test plan being stored
-> in the test.log as random kernel output. I will swap the patches in
-> the v2 of this patch series.
->
-> >
-> > I'd also be curious to see if this is likely to break anyone else's
-> > (K)TAP parsers.
-> >
-> > +Isabella, Anders: do these changes break the IGT or LKFT TAP/KTAP
-> > parsing? From a quick look at [1] and [2], we're probably okay??
-> >
-> > [1]: https://gitlab.freedesktop.org/isinyaaa/igt-gpu-tools/-/commit/1a84306425e975377eb79c031bf1de147bd44e46
-> > [2]: https://github.com/Linaro/test-definitions/blob/master/automated/linux/kunit/kunit.sh
-> >
-> > I also looked into the possibility of moving or removing the Subtest
-> > line, but upon further thought (see below), it's probably best to keep
-> > it as-is here for now. That should be the closest to the current spec,
-> > and we can possibly find a better way to provide the name in KTAPv2.
-> >
-> > Reviewed-by: David Gow <davidgow@google.com>
-> >
-> > Cheers,
-> > -- David
-> >
-> > >  lib/kunit/executor.c | 6 +++---
-> > >  lib/kunit/test.c     | 5 +++--
-> > >  2 files changed, 6 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> > > index 9bbc422c284b..74982b83707c 100644
-> > > --- a/lib/kunit/executor.c
-> > > +++ b/lib/kunit/executor.c
-> > > @@ -166,7 +166,7 @@ static void kunit_exec_run_tests(struct suite_set *suite_set)
-> > >  {
-> > >         size_t num_suites = suite_set->end - suite_set->start;
-> > >
-> > > -       pr_info("TAP version 14\n");
-> > > +       pr_info("KTAP version 1\n");
-> > >         pr_info("1..%zu\n", num_suites);
-> > >
-> > >         __kunit_test_suites_init(suite_set->start, num_suites);
-> > > @@ -177,8 +177,8 @@ static void kunit_exec_list_tests(struct suite_set *suite_set)
-> > >         struct kunit_suite * const *suites;
-> > >         struct kunit_case *test_case;
-> > >
-> > > -       /* Hack: print a tap header so kunit.py can find the start of KUnit output. */
-> > > -       pr_info("TAP version 14\n");
-> > > +       /* Hack: print a ktap header so kunit.py can find the start of KUnit output. */
-> > > +       pr_info("KTAP version 1\n");
-> > >
-> > >         for (suites = suite_set->start; suites < suite_set->end; suites++)
-> > >                 kunit_suite_for_each_test_case((*suites), test_case) {
-> > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > > index 90640a43cf62..b541d59a05c3 100644
-> > > --- a/lib/kunit/test.c
-> > > +++ b/lib/kunit/test.c
-> > > @@ -151,6 +151,7 @@ static void kunit_print_suite_start(struct kunit_suite *suite)
-> > >  {
-> > >         kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
-> > >                   suite->name);
-> > > +       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
-> >
-> > Would it make sense to have the Subtest line _after_ the KTAP line here?
-> >
-> > Given KTAP doesn't specify the "Subtest" line at all, I guess it doesn't matter.
-> >
-> > A part of me feels that the "KTAP version 1" line should be the
-> > _first_ line of the subtest output, but that would introduce a line
-> > between it and the test plan, which goes against the spec.
-> >
-> > We could also just get rid of the "Subtest" line, given it's not
-> > technically required, though having the test name before the results
-> > is really useful.
-> >
-> > Having tried all three options while writing this email, I think it's
-> > probably best to leave this patch as is (with the Subtest line
-> > followed by the KTAP line), and discuss standardising something
-> > similar as part of the KTAP v2 spec.
-> >
->
-> I also struggle to decide how the "Subtest" line should be handled. Since
-> the current KTAP v1 spec does not provide a way to declare the name of
-> a test with subtests prior to the results, I think it is important to continue
-> to include this Subtest line because it provides that functionality.
-> Additionally,
-> the line is not expected to be very disruptive for other parsers because it
-> is read as a diagnostic line.
+Hi.
 
-Yeah, since it's going to be ignored as a diagnostic line, I think
-we're largely free to put it where we want?
+Following last week's discussion I've reorganized this patch. The goal
+remains to restore the pre-5.14 behavior of ptrace(PTRACE_SET_REGSET,
+NT_X86_XSTATE) for the PKRU register (which was equivalent to a hardware
+XRSTOR instruction).
 
-I'm actually leaning towards making things more uniform e.g.
+There are three different kernel APIs that write PKRU:
+1. sigreturn
+2. PTRACE_SET_REGSET with NT_X86_XSTATE
+3. KVM_SET_XSAVE
 
-KTAP version 1
-# Subtest: optionally set for the top-level test!
-1..2
-  KTAP version 1
-  # Subtest: suite1
-  1..1
-  ok 1 - test1
- ok 1 -suite1
- // etc.
+sigreturn restores PKRU from the fpstate and works as expected today.
 
-Then we can simplify the parser by not differentiating (as much)
-between the top-level test and subtests.
-This also simplifies parsing multiple KTAP documents (e.g. for
-supporting modules, etc.)
+PTRACE_SET_REGSET restores PKRU from the thread_struct's pkru member and
+doesn't work at all.
 
-We'll probably talk about this offline soon, but I wanted to put this out there.
+KVM_SET_XSAVE restores PKRU from the vcpu's pkru member and honors
+changes to the PKRU value in the XSAVE region but does not honor clearing
+the PKRU bit in the xfeatures mask. The KVM maintainers do not want to
+change the KVM behavior at the current time, however, so this quirk
+survives after this patch set.
 
-Daniel
+All three APIs ultimately call into copy_uabi_to_xstate(). Part 3 adds
+an argument to that function that is used to pass in a pointer to either
+the thread_struct's pkru or the vcpu's PKRU, for sigreturn/PTRACE_SET_REGSET
+or KVM_SET_XSAVE respectively. While this isn't strictly necessary for
+sigreturn, it makes part 5 easier. Parts 1 and 2 refactor the various
+callers of copy_uabi_to_xstate() to make that possible.
+
+Part 4 moves the existing KVM-specific PKRU handling in
+fpu_copy_uabi_to_guest_fpstate() to copy_uabi_to_xstate() where it is now
+shared amongst all three APIs. This is a no-op for sigreturn (which restores
+PKRU from the fpstate anyways) and KVM but it changes the PTRACE_SET_REGSET
+behavior to match KVM_SET_XSAVE.
+
+Part 5 emulates the hardware XRSTOR behavior where PKRU is reset to the
+hardware init value if the PKRU bit in the xfeatures mask is clear. KVM is
+excluded from this emulation by passing a NULL pkru slot pointer to
+copy_uabi_to_xstate() in this case. Passing in a pointer to the
+thread_struct's PKRU slot for sigreturn (even though sigreturn won't restore
+PKRU from that location) allows distinguishing KVM here. This changes
+the PTRACE_SET_REGSET behavior to fully match sigreturn.
+
+Part 6 is the self test that remains unchanged from v3 of this patchset.
+
+At no point in this patch set is the user-visible behavior of sigreturn
+or KVM_SET_XSAVE changed.
+
+Changelog since v6:
+- v6's part 1/2 is now split into parts 1 through 5.
+- v6's part 2/2 is now part 6.
+- Various style comments addressed.
+
+Changelog since v5:
+- Avoids a second copy from the uabi buffer as suggested.
+- Preserves old KVM_SET_XSAVE behavior where leaving the PKRU bit in the
+  XSTATE header results in PKRU remaining unchanged instead of
+  reinitializing it.
+- Fixed up patch metadata as requested.
+
+Changelog since v4:
+- Selftest additionally checks PKRU readbacks through ptrace.
+- Selftest flips all PKRU bits (except the default key).
+
+Changelog since v3:
+- The v3 patch is now part 1 of 2.
+- Adds a selftest in part 2 of 2.
+
+Changelog since v2:
+- Removed now unused variables in fpu_copy_uabi_to_guest_fpstate
+
+Changelog since v1:
+- Handles the error case of copy_to_buffer().
 
 
->
-> The location of the "Subtest" line before the KTAP version line is potentially
-> not the most optimal but it seems to be the best choice while ensuring
-> compatibility with the current KTAP v1 spec. I recommend that we discuss
-> a standardized replacement for this "Subtest" line in the KTAP v2 spec.
