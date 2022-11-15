@@ -2,197 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665A7629C94
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Nov 2022 15:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09A2629CB5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Nov 2022 15:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiKOOtO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Nov 2022 09:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S229598AbiKOO45 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Nov 2022 09:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiKOOtN (ORCPT
+        with ESMTP id S229723AbiKOO4u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:49:13 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2077.outbound.protection.outlook.com [40.107.223.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4FE10FF2;
-        Tue, 15 Nov 2022 06:49:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W1CajyqRI3hwTH5OTG4V0QR5L2zHOeT0YbJbVraIKr++t6t2hly+oQqRv3SQt8Nk8CA0SCOGEoPrx3ol79ZOv6ItdCDYYYRE+vHzedPGWnc8kZ36wCnbI47Vk8lupyf+2L1WLvXVh6Z6VmzmWZ2W6ucfmAwpQUIYvIG2h0pGYXdBCHeYRK0i3UZqpTeFW4zwiFV6MtqyWLgrstnBlGu4ChHVfLjvt5EU75Nq5dm0Yp3fnkJBg/iL2TagsVfy+P9C2TYq6aM3qaCZHqAjUxnXFTSmbg6f/Ocj16pRYB62Yb5NSRz3Co0maimD8G2L27y3v9q4pNbZRjLbqhautUqlvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6yvfH4zQLQ+BI3FnwlxjOgFeNphjhDMZUMeTQED5QcE=;
- b=Yh0kcJE/KTmtJXd9MZdHqlkw/Eb1BCNpocEH0Hs1G6kPxJ5/lj7rDeufvSMLrCLx14pcMr+J3wjppjT6cJNWvhhvhzaPf+YeahWX1aL+Qq/rzCb69L7p/81X6v0ko9KyKNqGNVgqLIvqY5lMr/fv2/mHzhEuEu8xwN5hjRZm9C4ZrfxV/L/Nw/ybLnh5uWs6lszl2mzRYU26TYTCABnRJ9h0vOKxTUBn8JJkYKWrl3JqKYWs+lfAPRPrdek66aKYvIU6FVc0+1cBg02qMzuDY9t5ckM0vorOb0+3qixjfJET2Pxq1dpDUqqkCtF/wYl0+T/uKVCpUZvK8Al+8xu+9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6yvfH4zQLQ+BI3FnwlxjOgFeNphjhDMZUMeTQED5QcE=;
- b=AVWV6bh6ZpGyENu7uFjR2LsFoEt3yZpDlWjKB4AgDJSSJG36fk0ak9G6VOMLn4BWrYW9K3LJ+zf6sp25SnE3X5QsbOW/jMOyzM2z4M2eyU6WLzT8VoT0Fsx4qNVWxCpwUxOLLbdgYNo+ylqN/YBtWvFQ32sSLAayZ1hbZ9Ok8wi5NIq7FiXqVT57/X7GBQXJOSkU2Voqq5B487xn8rJNcyqFDeBaqQ7dNjBBpXSEIBrHFHi1Mh4IxmMhnna+egLMm8hCmgyDUG+GrQ3GKR9o06VOwDtqWI187FF4PEAlYmfK4AE9a9h8j+ONsS4Y20WS87qmKc1flQJOUNQ8wOMFfg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BN9PR12MB5274.namprd12.prod.outlook.com (2603:10b6:408:11f::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
- 2022 14:49:10 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Tue, 15 Nov 2022
- 14:49:10 +0000
-Date:   Tue, 15 Nov 2022 10:49:09 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
+        Tue, 15 Nov 2022 09:56:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A51CFD23
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 06:55:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668524155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B9HIxue0KMKbjnBL2oQWw8AB6rmAvAfXGoZztesxy7o=;
+        b=epucXR8aYqp4E/HcD0Mb4SKtPxW1OqfH80O3s+8N+6NOQsae6ruKRW+uEA9PArsCGVcxlU
+        Y+FaIjSQC7wFCQyfRR9gTlfYiopARd9KFkm3YdR2iIqdO390N/Lmm0XCuox9iO8/l+GQTX
+        12nJ7OIQ/uQOqH8rWJVUOk+kcsqcMqI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-389-QeeRTiLSMl2nLW_LG1Zh6A-1; Tue, 15 Nov 2022 09:55:54 -0500
+X-MC-Unique: QeeRTiLSMl2nLW_LG1Zh6A-1
+Received: by mail-wr1-f72.google.com with SMTP id m24-20020adfa3d8000000b00236774fd74aso2856601wrb.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 06:55:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B9HIxue0KMKbjnBL2oQWw8AB6rmAvAfXGoZztesxy7o=;
+        b=QzjFPjvv83LbpfYuCXUTn2A9Elf7IHTbXD6eaFFYHVdgvMHy+vAnHKJy94YV6meFsr
+         Ecps5wVv42Nt4M/URrIU2gGdRv7Bw8SRsHN/4xyxrv8EQqKP5BkKDH/uhYXu25YfUBj5
+         xn4Na7Z0ZTF0qOQ75M+QaaSBagUXXlz3sReFTiRSr0aY2NIhCA18wikePlT0q5GBrxog
+         rCqdaVsdMpEPN3TiTlF3Y5Ecf+vNjELd7Utf53NFOs/lTWehsp+oamTsZF4gre2N0dHV
+         JdFw4PUTP9Uu4pOsqPsoAvD0SqAGPflGzSDr5JmCIAuxo11XHw3CYFrPwoIw6ua97waB
+         T+7w==
+X-Gm-Message-State: ANoB5plbnYb47jHC7gWrP2tkLYo/zQlUsW8gpXfvYPj6VOLvptnOfuhD
+        jau6Inyb0SnZEJMLemkMaLySn8V3bWQ8G+mT9hZOdQjgzyAMuM3L8IqEqT/Pu6bQJnPPhDPlmFS
+        gHAdcrDJZ0GAE42nJyNpwuKEgYS8g
+X-Received: by 2002:a5d:48d1:0:b0:236:55dc:b86b with SMTP id p17-20020a5d48d1000000b0023655dcb86bmr10572752wrs.708.1668524153107;
+        Tue, 15 Nov 2022 06:55:53 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7jXzMKLlY7ZGpsnwG1JIhAgG5kUd18FUfxgZ0bakWxcbhfs8wp+SL/jF/OKC68SpSe97FIQw==
+X-Received: by 2002:a5d:48d1:0:b0:236:55dc:b86b with SMTP id p17-20020a5d48d1000000b0023655dcb86bmr10572739wrs.708.1668524152888;
+        Tue, 15 Nov 2022 06:55:52 -0800 (PST)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id w11-20020a5d404b000000b0022ae0965a8asm12643129wrp.24.2022.11.15.06.55.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 06:55:52 -0800 (PST)
+Message-ID: <830bdd664f7b307cc407c93974ef4906c4c9cc3f.camel@redhat.com>
+Subject: Re: [PATCH v2 0/9] nSVM: Security and correctness fixes
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
         Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "Martins, Joao" <joao.m.martins@oracle.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v4 08/17] iommufd: Algorithms for PFN storage
-Message-ID: <Y3Om5Wv2rE4fH9y4@nvidia.com>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <8-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <BN9PR11MB52762E5ACAAE7D7B398730D78C059@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y3KCvnLOZpGXAGhU@nvidia.com>
- <BN9PR11MB5276E1EFCCDBDFA8D6C58FF78C049@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BN9PR11MB5276E1EFCCDBDFA8D6C58FF78C049@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1PR13CA0015.namprd13.prod.outlook.com
- (2603:10b6:208:256::20) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Borislav Petkov <bp@alien8.de>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kselftest@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        David Matlack <dmatlack@google.com>
+Date:   Tue, 15 Nov 2022 16:55:50 +0200
+In-Reply-To: <20221103141351.50662-1-mlevitsk@redhat.com>
+References: <20221103141351.50662-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BN9PR12MB5274:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7d039fb5-51cb-465a-52e6-08dac7188e17
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lnzxflYdm9UGCQVLyp8NXQOVjhsUOJf1Cl2d2QxaRT1/gSuLbJIHT5Ucx2G+cCOnsNFO8611T3r5GbDgR8w1Syv3A1pXYdmGQY91qMFzQaOnMnk5GSv24UL34WeCk33Bl0yTnEV+m77gG56UeASS5B0LMgsayBik/aHkZgbTOT1ogoRNNXnq/guK2uftDblXCg/H6H3XbGtevoSqBxvdSuYIHOKHlvZF2HRzH4N/tSQWkg+eo4x5aG5T+FQf3xlSA4rl0JG/Zz0s13V73+09zoVh8xZEPOTJQZKrzBy53OdntVTFS9O/NkoExmx41+i+RFE9LenB/pkBzB1KA2XX/WboGjiUk0YG0sjEUcaww8v61qNI1txQOoU0G7CJCIqpVCqDSbB+I+XjZiEf0yjX7sNDZOkn5nNGWTxkXT1SMUoPKF7EL1+Fa289ZoMrBlv23rN22t+DxGq0UAVLE8tuXrv5QE6RhC1nFtIwBAhc55GuGLhwsg6OBTL+a8Q6Ma6iDeYB1NjIO5snOmtwhxP2E7T83J/k1ASyW5T2c4uYsniUcBzcTbxdnzooilt9ouEQS8s3qVntmr1eeSHen0xoQNGiDQXMb2Ca1WNJlz2L5cNZk5h3cqh3LcBozp3EFSJjtiLVm26QPs/N8Bwj8XwmSfKJn7xurY0EbZDJdxPzXz2HLRO49S0SNT3TVe4tFphP5L2CtPBNxRKCUycp82r5+Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(376002)(39860400002)(346002)(396003)(451199015)(6486002)(478600001)(54906003)(6916009)(6506007)(4326008)(7416002)(5660300002)(26005)(66556008)(7406005)(66476007)(316002)(66946007)(8676002)(6512007)(186003)(8936002)(41300700001)(36756003)(2616005)(83380400001)(2906002)(38100700002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YjF3ejNwYTg5ZU1BMkt6TjZaVHhIalFLcUNTY3FOOVVwYmtqbHpqdWxScjgw?=
- =?utf-8?B?K0gyVjQzMCtITldnZ0JoYStxd1liOW45NEpvV0J6d2NDWGVpWWFiUXZocCt0?=
- =?utf-8?B?RnFRL08zcy9hblMwOGlFVCsySmVwOVVtSmtlNVNMOWxpVTFtbGdHU3ptNVpk?=
- =?utf-8?B?b2hPM0x6VWppWEtlRm5ENm85Nk5wNGprUVlTcUFOcE4zVG12bm5VVi8wdllD?=
- =?utf-8?B?eFR1bTNqUFFGcWxqTEl3TEZkVUl1ejRjRnA2cXV3QzBCaC9ZM25udXU2WTlj?=
- =?utf-8?B?Qk5iTTFBbEQ0bkVpRThrNXd0a2xxemM1YkZhSTNFS1ZHcUZ1bHJEWGJPZGpC?=
- =?utf-8?B?bUZwNDJDakxoc2VyU0NzRWljb0tyWXNaTzgyd1lHTDN0YnU3bDNuL2JDT1Vq?=
- =?utf-8?B?VkMzMjZWZE9QNUpXbkQ4d0pSa2dJUUVVY0RNYkozYnlsWWpaSDFRaC85Mk9I?=
- =?utf-8?B?UjFsclp0RDZqQ1JhWDRWRDd2R2JsWEpDdnNMVDYvU0pOMTZEbkxlVUNZMXJV?=
- =?utf-8?B?TlV0VFBwME83YWNxOWVzMWpvTmhvWVlVZ0d3b2k1cTBhd2c4Z2tvSnU2Tjhk?=
- =?utf-8?B?UnpQNU5XQVA3b2VXcU5ERkZIcDhkWVRETkE5QUEvcVVuN0h1NVdhYUxsK2dh?=
- =?utf-8?B?T0dtZkRYdkN1TlVRUVhjNTFwOXhwQ0N2OExVeGFxanR2Y2xBV3pZRkI5NEF0?=
- =?utf-8?B?ZnFoQkpYalF0ZEppaU5IUnJvb1FXQytuZ2ZoSTJ5Y3oxNnlVMjQvRG83bkpH?=
- =?utf-8?B?NVQvNTY0Z01ZVmJEWVE0NEoxeG5nN3l2YmtTd0h5cE4rT3ZYSlFWQ0p0L2d2?=
- =?utf-8?B?Yk9oaUJZZmlZRWp6Wkk4dDlZZ2szOVNrTDFpT3I5WWVrT1lYWnhqQlgxdWVw?=
- =?utf-8?B?UVZqRlVTQWxtV1Ezc1ZLOVV5UTJvc0taaXk4SStvWlErUUhPUjBvVlFoYVVG?=
- =?utf-8?B?S3JVVGwzSEFtR1c3SGpJUmVsWmFBeHdNSFJOMDVlTURyWDRxanMwVEZqbXN5?=
- =?utf-8?B?ZkE0aVYrdytJOUxxTkd4MTdiOGRVWkM2N0JiNGpyOXphWTlMTTRrcXpwK1R0?=
- =?utf-8?B?dHFXZkduOUcyeW9OZDMydU9WUXVoQ1FOaDFJeGIyODhYWitOUHcwdit0eXNo?=
- =?utf-8?B?TnIrMCtqL0V0b1lKQkV5THFGZ1RKVkJ6bzZ5cVVSNnRaMTdFM01lcWVVTEtr?=
- =?utf-8?B?eFIwMU5URkQzNzhwQkdoblBPeWZzYkZBYzl4YVZNVEw1SjBLVmwzaFM3Wi9h?=
- =?utf-8?B?azgrQWFtcmF2WnpTTjRBNU1TMjdhZDVLeUFzRnUzdEJ3R3ErL1hwbm9JQkRa?=
- =?utf-8?B?Nm9jOUg2ejZYbno2MHVZZnhPVjJuU2NEemNkdzJHZlUveWVnd1h6UDZYclcr?=
- =?utf-8?B?clk1SHc2K1FHUVZ2ZERvOEdzcHVVc2VpWEpUV2taeERBQ1pZRDk2VStDNGFx?=
- =?utf-8?B?TXB5TnloNXhZd1FaNEFqTjZ3a0pZY0RHSVFnYWV2M3FOSFpRcU9GUnRsZlMy?=
- =?utf-8?B?bS92UDJEaFd5L0xJVElwaXREUDMrMWJvalBhdVQvd0h3VVFBRWF6Zks3VW5a?=
- =?utf-8?B?eXVwTHROOU1xcVFlV292Q2ZkcDBBNC9NTmVWRStKS3hyS1J3WjhtZXYrL3Zx?=
- =?utf-8?B?OW9NTUtBUFNUamxreVJwczhOVXhlOUhxZTc5OHZaRGw2VUZ4bEt3Y1NhdU1p?=
- =?utf-8?B?d1RxMFBMdGNzQjRoWVdxSjJxcDJ3NXUrdTVmTjBwWFpFMjJQbWFIWXg5QnVl?=
- =?utf-8?B?RUxiVUZTMkFWZmhZK1BmU0RHVk1rOE83Ri84QUhGMW9HSHNBMjgybHVERU1M?=
- =?utf-8?B?dTNTcXJ4LzJuQnQwZjNaQi9TSkl4ZnlabnMvcFN4SmpCa3h4UzFzelFhLy83?=
- =?utf-8?B?bDJ4OGMwVDlSSEJKRlp6ZHZKOFoyQWhQMHRVVEVxU0FkK29EOVFKd0h1L0J0?=
- =?utf-8?B?U3A2a2Y2SnB1ejVZRWhJcjFlTkR6T3E5eE1oWnVNT3FjTjIzVnYrRDlDSitG?=
- =?utf-8?B?T0FsTGRvQlB3U0FmSXZIZ20rdFlkZldNanRXWWNCaEpNTEVDelFucTkxdGZ0?=
- =?utf-8?B?T2RkaVpCaXpyeXlZalJ3N3lNUjNLR1RLZ3VrcHUvZkRrdEZaZjRVWmlrQ09M?=
- =?utf-8?Q?5Ubs=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d039fb5-51cb-465a-52e6-08dac7188e17
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 14:49:10.5413
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BzjbWCnghH+s561FdWy6OnhsmnvfDNmB1Cyp+w2cupUzMYInTAaf6F0y1f15TruF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5274
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 03:06:57AM +0000, Tian, Kevin wrote:
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Tuesday, November 15, 2022 2:03 AM
-> > -		mutex_lock(&area->pages->mutex);
-> > -		rc = iopt_pages_add_access(area->pages, index, last_index,
-> > -					   out_pages, flags);
-> > -		if (rc) {
-> > -			mutex_unlock(&area->pages->mutex);
-> > +		rc = iopt_pages_add_access(area, index, last_index,
-> > out_pages,
-> > +					   flags);
-> > +		if (rc)
+On Thu, 2022-11-03 at 16:13 +0200, Maxim Levitsky wrote:
+> Recently while trying to fix some unit tests I found a CVE in SVM nested code.
 > 
-> iopt_area_add_access(), which I suppose you have already fixed when
-> compiling this change. but just in case... 😊
+> In 'shutdown_interception' vmexit handler we call kvm_vcpu_reset.
 > 
-> > @@ -1819,40 +1838,49 @@ iopt_pages_get_exact_access(struct iopt_pages
-> > *pages, unsigned long index,
-> >   *
-> >   * This should be undone through a matching call to
-> > iopt_pages_remove_access()
+> However if running nested and L1 doesn't intercept shutdown, we will still end
+> up running this function and trigger a bug in it.
 > 
-> iopt_area_remove_access()
+> The bug is that this function resets the 'vcpu->arch.hflags' without properly
+> leaving the nested state, which leaves the vCPU in inconsistent state, which
+> later triggers a kernel panic in SVM code.
 > 
-> > @@ -1865,11 +1893,11 @@ int iopt_pages_add_access(struct iopt_pages
-> > *pages, unsigned long start_index,
-> >   * Undo iopt_pages_add_access() and unpin the pages if necessary. The
+> The same bug can likely be triggered by sending INIT via local apic to a vCPU
+> which runs a nested guest.
 > 
-> iopt_area_add_access()
+> On VMX we are lucky that the issue can't happen because VMX always intercepts
+> triple faults, thus triple fault in L2 will always be redirected to L1.
+> Plus the 'handle_triple_fault' of VMX doesn't reset the vCPU.
 > 
-> with above,
+> INIT IPI can't happen on VMX either because INIT events are masked while in
+> VMX mode.
+> 
+> First 4 patches in this series address the above issue, and are
+> already posted on the list with title,
+> ('nSVM: fix L0 crash if L2 has shutdown condtion which L1 doesn't intercept')
+> I addressed the review feedback and also added a unit test to hit this issue.
+> 
+> In addition to these patches I noticed that KVM doesn't honour SHUTDOWN intercept bit
+> of L1 on SVM, and I included a fix to do so - its only for correctness
+> as a normal hypervisor should always intercept SHUTDOWN.
+> A unit test on the other hand might want to not do so.
+> I also extendted the triple_fault_test selftest to hit this issue.
+> 
+> Finaly I found another security issue, I found a way to
+> trigger a kernel non rate limited printk on SVM from the guest, and
+> last patch in the series fixes that.
+> 
+> A unit test I posted to kvm-unit-tests project hits this issue, so
+> no selftest was added.
+> 
+> Best regards,
+>         Maxim Levitsky
+> 
+> Maxim Levitsky (9):
+>   KVM: x86: nSVM: leave nested mode on vCPU free
+>   KVM: x86: nSVM: harden svm_free_nested against freeing vmcb02 while
+>     still in use
+>   KVM: x86: add kvm_leave_nested
+>   KVM: x86: forcibly leave nested mode on vCPU reset
+>   KVM: selftests: move idt_entry to header
+>   kvm: selftests: add svm nested shutdown test
+>   KVM: x86: allow L1 to not intercept triple fault
+>   KVM: selftests: add svm part to triple_fault_test
+>   KVM: x86: remove exit_int_info warning in svm_handle_exit
+> 
+>  arch/x86/kvm/svm/nested.c                     | 12 ++-
+>  arch/x86/kvm/svm/svm.c                        | 10 +--
+>  arch/x86/kvm/vmx/nested.c                     |  4 +-
+>  arch/x86/kvm/x86.c                            | 29 ++++++--
+>  tools/testing/selftests/kvm/.gitignore        |  1 +
+>  tools/testing/selftests/kvm/Makefile          |  1 +
+>  .../selftests/kvm/include/x86_64/processor.h  | 13 ++++
+>  .../selftests/kvm/lib/x86_64/processor.c      | 13 ----
+>  .../kvm/x86_64/svm_nested_shutdown_test.c     | 67 +++++++++++++++++
+>  .../kvm/x86_64/triple_fault_event_test.c      | 73 ++++++++++++++-----
+>  10 files changed, 172 insertions(+), 51 deletions(-)
+>  create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c
+> 
+> -- 
 
-Yep, I got those
+Kind ping on the patch series.
 
-Thanks,
-Jason
+
+Best regards,
+	Maxim Levitsky
+
+> 2.34.3
+> 
+> 
+
+
