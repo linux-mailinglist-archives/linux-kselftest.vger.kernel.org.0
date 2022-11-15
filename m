@@ -2,66 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B8062926B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Nov 2022 08:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1C162926D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Nov 2022 08:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiKOH1y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Nov 2022 02:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
+        id S232312AbiKOH2H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Nov 2022 02:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbiKOH1y (ORCPT
+        with ESMTP id S232302AbiKOH2C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:27:54 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5148A18377
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Nov 2022 23:27:52 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id z189so13840070vsb.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Nov 2022 23:27:52 -0800 (PST)
+        Tue, 15 Nov 2022 02:28:02 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9591B1E1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Nov 2022 23:27:58 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id w2so2737297uap.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Nov 2022 23:27:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aZXg+yeGDjQK1RubHyqI8kAr1GYjT+QHi1f5eO0qBIs=;
-        b=tmT88wW7VYb5ElILiWJT4Rvah//pyULKYNeeKsMihP7w7OHIhPZnPumh1KXq6ml4Op
-         NxMgT3kNW2MVhUI7F8I8bJk7wJxJtJjFq9N6CMrfE7VLUKDw2IYNy+meMYYI2Ljup9Gr
-         6Vn2WDaDRgO2HOAY3aXCECdLZkUACUrDNjCo1Q3mqrTGQFgPLslOVeXF9VLxgU8kfpuz
-         yYeLR3YvzjnH27wKJ+uhuQvRMAGwBmdfDi3+vionTZztn/775AeCBkwAvNHAbDmrYQSF
-         YHw1+L3hwzQ7Gi68ERaSv0J0zAcf7XwPNxJUy+n+0EWPMpvMDoOSYAL/nyNUdUEo0v9D
-         EJ0w==
+        bh=ZX7ePePki+BrAPhZ2eV+ncBSgk624PXA7VJDNChT5N8=;
+        b=qxCAX0E8iq18XrGOLf+dr61/d76I0YcY/oZg9Hw3QV59eeyF+0ZBfuuhhZWWT/Vf2i
+         wiSF8c5hF1RfbY3P26y8+0gSO44GS1T9rDPFr462sDCs5IbDjMxffDpr6840cLlWj7zq
+         etQVIkENm3TGtxGUJhcQMsbNVK3cxw2e2RP+JydB4SHLDaYNA5RJOE8xCJsxLn0Aw386
+         BCqaNCcAoiIRVQqD83C6SR7XXrgTlOfBaaDZZ8DMaZvDxZcEi9TpRAFZhCvGKsJNefho
+         XsA089hjt8WRiWquiEYsjZTCxpd/aAvrtbQWBQAHflQua+5OsK2RMcXmKR9fqr2vltkO
+         MW3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aZXg+yeGDjQK1RubHyqI8kAr1GYjT+QHi1f5eO0qBIs=;
-        b=MJ0iozEzQEUDN2k1nNWuw+RV3gM8i88iE5xpHkxKXBfWT+Q0XwFj292JV6fCD+NjUg
-         2DvB1HmNaW9CrssAwd1lzTnWmD6vppOAe6g2HljUDoHg47YR2pEXgzp33dzMCotmG9aK
-         +utFK7PZBQWs6HQa6njyOZ/w2IRPG9RgWSos/p3suQU64arwmfHpJ+8JnjI0hrm/LBM0
-         jZca9tF2le2GYH3S7Xux66WrgNV9K7jwgnJWJhiGv65lyD8JM/rYVhNmGxIWgQaSEfii
-         i8lDwH3A5+zwVawBcdA738shnJcSQfOopKkUxfWbs1TCLa83Wg79UklXis9Ad8vOMQxR
-         jQqQ==
-X-Gm-Message-State: ANoB5pkNEaFAtnxye0mFR4vMMNX3IyDyv+dqkJiUxkDvthCT4bJNyGqZ
-        SfX0FcYhCTbNJ/BafluFxciqqSKiJw9NYowd2e7eMQ==
-X-Google-Smtp-Source: AA0mqf5YlhZJUhFrBHr6c0gb/ZyLOX8gnHJ9jd7hWmeVLk5qFrxVyG025yC2r/Y7BawyHEYIAbWbfmr24kIOpymnmxc=
-X-Received: by 2002:a67:ee59:0:b0:3aa:172c:340f with SMTP id
- g25-20020a67ee59000000b003aa172c340fmr8390965vsp.71.1668497271278; Mon, 14
- Nov 2022 23:27:51 -0800 (PST)
+        bh=ZX7ePePki+BrAPhZ2eV+ncBSgk624PXA7VJDNChT5N8=;
+        b=tgZXYyjDFNcDAMHfpEeTsPBcue8JsEtBESJfbHryzAx0W2UG34tTkZNRCewtMQvHvC
+         vxAcUlaCI0AuRCodHvALpuOEresU/wkvONn87DDDiDhCi8PHkRZPqB1eupR3zB9wIj6p
+         2xjDVa1XzG/dxsn6LZ4Swof9ODlGnNGjk8b1Gf+2Pw76uJ8bwjTzJ1ovrOvZs9SpSSQf
+         UmAFS1RNkLmQDe1TAvOCW1y5L8xxmQEzSb98OM1WJAs/Y5/SlDqLK/9uu6h2ip+l7j1a
+         5aEm0Ku6Geyf90hUP9cpMFhXYzfDID9+mysKic/sT5Um2dBj6q69qn6V3OnXllwaC78s
+         mpNQ==
+X-Gm-Message-State: ANoB5pm+mD4QhvZ9Y7niBFD/Pn/t/iRVCene5JNdODN3ciSwWzlSJnD6
+        O2y5PHw1zSLA3Olp/NQarQD0tbz3T3YI+Y1If61KzQ==
+X-Google-Smtp-Source: AA0mqf6V1rB9xGXsEmogrGXur/EgDRBUOXvbMw2BlVxn/wS6RDKujzJCRbERtQctSmEY3t2sU+RruJ3/afZGLFMYxxQ=
+X-Received: by 2002:ab0:4ac7:0:b0:411:968:212 with SMTP id t7-20020ab04ac7000000b0041109680212mr9261443uae.107.1668497277053;
+ Mon, 14 Nov 2022 23:27:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20221104194705.3245738-1-rmoar@google.com>
-In-Reply-To: <20221104194705.3245738-1-rmoar@google.com>
+References: <20221104194705.3245738-1-rmoar@google.com> <20221104194705.3245738-2-rmoar@google.com>
+In-Reply-To: <20221104194705.3245738-2-rmoar@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 15 Nov 2022 15:27:39 +0800
-Message-ID: <CABVgOSnUDNvs6mYwVtzXq3+PmO62HG1pP=d_6EQiwOKF_9D6XA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] kunit: improve KTAP compliance of KUnit test output
+Date:   Tue, 15 Nov 2022 15:27:45 +0800
+Message-ID: <CABVgOS=eq0RnnP=MGMb-mZntA7+yZ=pe3U_dOq1gxoTPTeC8Bw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] kunit: tool: parse KTAP compliant test output
 To:     Rae Moar <rmoar@google.com>
 Cc:     brendanhiggins@google.com, dlatypov@google.com,
         skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
         kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Isabella Basso <isabbasso@riseup.net>,
-        Anders Roxell <anders.roxell@linaro.org>
+        linux-kselftest@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002f66b505ed7d4b5f"
+        boundary="00000000000087fd3a05ed7d4b48"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -73,18 +70,20 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000002f66b505ed7d4b5f
+--00000000000087fd3a05ed7d4b48
 Content-Type: text/plain; charset="UTF-8"
 
 On Sat, Nov 5, 2022 at 3:48 AM Rae Moar <rmoar@google.com> wrote:
 >
-> Change KUnit test output to comply with KTAP version 1 specifications
-> found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
-> 1) Use "KTAP version 1" instead of "TAP version 14" as test output header
-> 2) Remove '-' between test number and test name on test result lines
-> 2) Add KTAP version lines to each subtest header as well
+> Change the KUnit parser to be able to parse test output that complies with
+> the KTAP version 1 specification format found here:
+> https://kernel.org/doc/html/latest/dev-tools/ktap.html. Ensure the parser
+> is able to parse tests with the original KUnit test output format as
+> well.
 >
-> Original output:
+> KUnit parser now accepts any of the following test output formats:
+>
+> Original KUnit test output format:
 >
 >  TAP version 14
 >  1..1
@@ -97,7 +96,18 @@ On Sat, Nov 5, 2022 at 3:48 AM Rae Moar <rmoar@google.com> wrote:
 >  # Totals: pass:3 fail:0 skip:0 total:3
 >  ok 1 - kunit-test-suite
 >
-> New output:
+> KTAP version 1 test output format:
+>
+>  KTAP version 1
+>  1..1
+>    KTAP version 1
+>    1..3
+>    ok 1 kunit_test_1
+>    ok 2 kunit_test_2
+>    ok 3 kunit_test_3
+>  ok 1 kunit-test-suite
+>
+> New KUnit test output format (preferred for KUnit tests):
 >
 >  KTAP version 1
 >  1..1
@@ -113,115 +123,243 @@ On Sat, Nov 5, 2022 at 3:48 AM Rae Moar <rmoar@google.com> wrote:
 >
 > Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
+> Note: this patch is based on the linux-kselftest/kunit branch.
+> ---
 
-Thanks very much for doing this. It's always been slightly
-embarrassing that we weren't perfectly following our own spec!
+Looks good to me. Some minor thoughts:
+- As Daniel mentioned, can we think of a better placeholder name for
+tests without Subtest lines? One thought is to just leave it as the
+empty string?
+- Would it make sense to support the case where the "Subtest" line
+sits between the KTAP version line and the test plan as well. While
+that's not necessary (and does violate v1 of the KTAP spec), I suspect
+something similar would be useful in KTAP v2 for, e.g., individual
+module results.
+- As mentioned in patch 1, it'd be nice to swap the ordering of the two patches.
 
-I think this series is good enough, but have a minor suggestion: could
-we swap the order of these two patches?
-I'd rather have the parser changes go in first.
-
-I'd also be curious to see if this is likely to break anyone else's
-(K)TAP parsers.
-
-+Isabella, Anders: do these changes break the IGT or LKFT TAP/KTAP
-parsing? From a quick look at [1] and [2], we're probably okay??
-
-[1]: https://gitlab.freedesktop.org/isinyaaa/igt-gpu-tools/-/commit/1a84306425e975377eb79c031bf1de147bd44e46
-[2]: https://github.com/Linaro/test-definitions/blob/master/automated/linux/kunit/kunit.sh
-
-I also looked into the possibility of moving or removing the Subtest
-line, but upon further thought (see below), it's probably best to keep
-it as-is here for now. That should be the closest to the current spec,
-and we can possibly find a better way to provide the name in KTAPv2.
+None of those are showstoppers, so if you disagree, we can probably
+accept them as-is, but they might make future changes easier.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  lib/kunit/executor.c | 6 +++---
->  lib/kunit/test.c     | 5 +++--
->  2 files changed, 6 insertions(+), 5 deletions(-)
+
+> tools/testing/kunit/kunit_parser.py           | 69 ++++++++++++-------
+>  tools/testing/kunit/kunit_tool_test.py        |  8 +++
+>  .../test_data/test_parse_ktap_output.log      |  8 +++
+>  3 files changed, 60 insertions(+), 25 deletions(-)
+>  create mode 100644 tools/testing/kunit/test_data/test_parse_ktap_output.log
 >
-> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 9bbc422c284b..74982b83707c 100644
-> --- a/lib/kunit/executor.c
-> +++ b/lib/kunit/executor.c
-> @@ -166,7 +166,7 @@ static void kunit_exec_run_tests(struct suite_set *suite_set)
->  {
->         size_t num_suites = suite_set->end - suite_set->start;
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index a56c75a973b5..abb69f898263 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -441,6 +441,7 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+>         - '# Subtest: [test name]'
+>         - '[ok|not ok] [test number] [-] [test name] [optional skip
+>                 directive]'
+> +       - 'KTAP version [version number]'
 >
-> -       pr_info("TAP version 14\n");
-> +       pr_info("KTAP version 1\n");
->         pr_info("1..%zu\n", num_suites);
+>         Parameters:
+>         lines - LineStream of KTAP output to parse
+> @@ -449,8 +450,9 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+>         Log of diagnostic lines
+>         """
+>         log = []  # type: List[str]
+> -       while lines and not TEST_RESULT.match(lines.peek()) and not \
+> -                       TEST_HEADER.match(lines.peek()):
+> +       non_diagnostic_lines = [TEST_RESULT, TEST_HEADER, KTAP_START]
+> +       while lines and not any(re.match(lines.peek())
+> +                       for re in non_diagnostic_lines):
+>                 log.append(lines.pop())
+>         return log
 >
->         __kunit_test_suites_init(suite_set->start, num_suites);
-> @@ -177,8 +177,8 @@ static void kunit_exec_list_tests(struct suite_set *suite_set)
->         struct kunit_suite * const *suites;
->         struct kunit_case *test_case;
+> @@ -496,6 +498,12 @@ def print_test_header(test: Test) -> None:
+>         test - Test object representing current test being printed
+>         """
+>         message = test.name
+> +       if message == "":
+> +               # KUnit tests print a Subtest header line that provides the name
+> +               # of the test suite. But the subtest header line isn't required
+> +               # by the KTAP spec, so use a placeholder name "Test suite" in that
+> +               # case.
+> +               message = "Test suite"
+>         if test.expected_count:
+>                 if test.expected_count == 1:
+>                         message += ' (1 subtest)'
+> @@ -647,13 +655,13 @@ def bubble_up_test_results(test: Test) -> None:
+>         elif test.counts.get_status() == TestStatus.TEST_CRASHED:
+>                 test.status = TestStatus.TEST_CRASHED
 >
-> -       /* Hack: print a tap header so kunit.py can find the start of KUnit output. */
-> -       pr_info("TAP version 14\n");
-> +       /* Hack: print a ktap header so kunit.py can find the start of KUnit output. */
-> +       pr_info("KTAP version 1\n");
+> -def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+> +def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest: bool) -> Test:
+>         """
+>         Finds next test to parse in LineStream, creates new Test object,
+>         parses any subtests of the test, populates Test object with all
+>         information (status, name) about the test and the Test objects for
+>         any subtests, and then returns the Test object. The method accepts
+> -       three formats of tests:
+> +       four formats of tests:
 >
->         for (suites = suite_set->start; suites < suite_set->end; suites++)
->                 kunit_suite_for_each_test_case((*suites), test_case) {
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 90640a43cf62..b541d59a05c3 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -151,6 +151,7 @@ static void kunit_print_suite_start(struct kunit_suite *suite)
->  {
->         kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
->                   suite->name);
-> +       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
-
-Would it make sense to have the Subtest line _after_ the KTAP line here?
-
-Given KTAP doesn't specify the "Subtest" line at all, I guess it doesn't matter.
-
-A part of me feels that the "KTAP version 1" line should be the
-_first_ line of the subtest output, but that would introduce a line
-between it and the test plan, which goes against the spec.
-
-We could also just get rid of the "Subtest" line, given it's not
-technically required, though having the test name before the results
-is really useful.
-
-Having tried all three options while writing this email, I think it's
-probably best to leave this patch as is (with the Subtest line
-followed by the KTAP line), and discuss standardising something
-similar as part of the KTAP v2 spec.
-
-
->         kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "1..%zd",
->                   kunit_suite_num_test_cases(suite));
->  }
-> @@ -175,13 +176,13 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
->          * representation.
->          */
->         if (suite)
-> -               pr_info("%s %zd - %s%s%s\n",
-> +               pr_info("%s %zd %s%s%s\n",
->                         kunit_status_to_ok_not_ok(status),
->                         test_number, description, directive_header,
->                         (status == KUNIT_SKIPPED) ? directive : "");
->         else
->                 kunit_log(KERN_INFO, test,
-> -                         KUNIT_SUBTEST_INDENT "%s %zd - %s%s%s",
-> +                         KUNIT_SUBTEST_INDENT "%s %zd %s%s%s",
->                           kunit_status_to_ok_not_ok(status),
->                           test_number, description, directive_header,
->                           (status == KUNIT_SKIPPED) ? directive : "");
+>         Accepted test formats:
 >
-> base-commit: 6fe1ad4a156095859721fef85073df3ed43081d4
+> @@ -674,6 +682,16 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>         [subtests]
+>         ok 1 name
+>
+> +       - KTAP subtest header (in compliance with KTAP specification)
+> +
+> +       Example:
+> +
+> +    # May include subtest header line here
+> +       KTAP version 1
+> +       1..3
+> +       [subtests]
+> +       ok 1 name
+> +
+>         - Test result line
+>
+>         Example:
+> @@ -685,6 +703,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>         expected_num - expected test number for test to be parsed
+>         log - list of strings containing any preceding diagnostic lines
+>                 corresponding to the current test
+> +       is_subtest - boolean indicating whether test is a subtest
+>
+>         Return:
+>         Test object populated with characteristics and any subtests
+> @@ -692,21 +711,22 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>         test = Test()
+>         test.log.extend(log)
+>         parent_test = False
+> -       main = parse_ktap_header(lines, test)
+> -       if main:
+> -               # If KTAP/TAP header is found, attempt to parse
+> -               # test plan
+> +       if not is_subtest:
+> +               # If parsing the main test, attempt to parse KTAP/TAP header
+> +               # and test plan
+>                 test.name = "main"
+> +               parse_ktap_header(lines, test)
+>                 parse_test_plan(lines, test)
+>                 parent_test = True
+>         else:
+> -               # If KTAP/TAP header is not found, test must be subtest
+> -               # header or test result line so parse attempt to parser
+> -               # subtest header
+> -               parent_test = parse_test_header(lines, test)
+> +               # If test is a subtest, attempt to parse test suite header
+> +               # (either subtest line and/or KTAP/TAP version line)
+> +               subtest_line = parse_test_header(lines, test)
+> +               ktap_line = parse_ktap_header(lines, test)
+> +               parent_test = subtest_line or ktap_line
+>                 if parent_test:
+> -                       # If subtest header is found, attempt to parse
+> -                       # test plan and print header
+> +                       # If subtest header and/or KTAP/version line is found, attempt
+> +                       # to parse test plan and print header
+>                         parse_test_plan(lines, test)
+>                         print_test_header(test)
+>         expected_count = test.expected_count
+> @@ -721,7 +741,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>                 sub_log = parse_diagnostic(lines)
+>                 sub_test = Test()
+>                 if not lines or (peek_test_name_match(lines, test) and
+> -                               not main):
+> +                               is_subtest):
+>                         if expected_count and test_num <= expected_count:
+>                                 # If parser reaches end of test before
+>                                 # parsing expected number of subtests, print
+> @@ -735,20 +755,19 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>                                 test.log.extend(sub_log)
+>                                 break
+>                 else:
+> -                       sub_test = parse_test(lines, test_num, sub_log)
+> +                       sub_test = parse_test(lines, test_num, sub_log, True)
+>                 subtests.append(sub_test)
+>                 test_num += 1
+>         test.subtests = subtests
+> -       if not main:
+> +       if is_subtest:
+>                 # If not main test, look for test result line
+>                 test.log.extend(parse_diagnostic(lines))
+> -               if (parent_test and peek_test_name_match(lines, test)) or \
+> -                               not parent_test:
+> -                       parse_test_result(lines, test, expected_num)
+> -               else:
+> +               if subtest_line and not peek_test_name_match(lines, test):
+>                         test.add_error('missing subtest result line!')
+> +               else:
+> +                       parse_test_result(lines, test, expected_num)
+>
+> -       # Check for there being no tests
+> +       # Check for there being no subtests within parent test
+>         if parent_test and len(subtests) == 0:
+>                 # Don't override a bad status if this test had one reported.
+>                 # Assumption: no subtests means CRASHED is from Test.__init__()
+> @@ -758,11 +777,11 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>
+>         # Add statuses to TestCounts attribute in Test object
+>         bubble_up_test_results(test)
+> -       if parent_test and not main:
+> +       if parent_test and is_subtest:
+>                 # If test has subtests and is not the main test object, print
+>                 # footer.
+>                 print_test_footer(test)
+> -       elif not main:
+> +       elif is_subtest:
+>                 print_test_result(test)
+>         return test
+>
+> @@ -785,7 +804,7 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
+>                 test.add_error('could not find any KTAP output!')
+>                 test.status = TestStatus.FAILURE_TO_PARSE_TESTS
+>         else:
+> -               test = parse_test(lines, 0, [])
+> +               test = parse_test(lines, 0, [], False)
+>                 if test.status != TestStatus.NO_TESTS:
+>                         test.status = test.counts.get_status()
+>         stdout.print_with_timestamp(DIVIDER)
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 90c65b072be9..7c2e2a45f330 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -312,6 +312,14 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(kunit_parser._summarize_failed_tests(result),
+>                         'Failures: all_failed_suite, some_failed_suite.test2')
+>
+> +       def test_ktap_format(self):
+> +               ktap_log = test_data_path('test_parse_ktap_output.log')
+> +               with open(ktap_log) as file:
+> +                       result = kunit_parser.parse_run_tests(file.readlines())
+> +               self.assertEqual(result.counts, kunit_parser.TestCounts(passed=3))
+> +               self.assertEqual('suite', result.subtests[0].name)
+> +               self.assertEqual('case_1', result.subtests[0].subtests[0].name)
+> +               self.assertEqual('case_2', result.subtests[0].subtests[1].name)
+>
+>  def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
+>         return kunit_parser.LineStream(enumerate(strs, start=1))
+> diff --git a/tools/testing/kunit/test_data/test_parse_ktap_output.log b/tools/testing/kunit/test_data/test_parse_ktap_output.log
+> new file mode 100644
+> index 000000000000..ccdf244e5303
+> --- /dev/null
+> +++ b/tools/testing/kunit/test_data/test_parse_ktap_output.log
+> @@ -0,0 +1,8 @@
+> +KTAP version 1
+> +1..1
+> +  KTAP version 1
+> +  1..3
+> +  ok 1 case_1
+> +  ok 2 case_2
+> +  ok 3 case_3
+> +ok 1 suite
 > --
 > 2.38.1.431.g37b22c650d-goog
 >
 
---0000000000002f66b505ed7d4b5f
+--00000000000087fd3a05ed7d4b48
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -288,14 +426,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDV
-f7zIMxHfsdvNvPDEAEkEd9U68PPM6aW+ZmskxUCZHzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMTUwNzI3NTFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCe
+zAL/NpAJcPzGPD0x0X+oy7PT2WIOvXn6cZcmPWPD+jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMTUwNzI3NTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAYK/VEwDUEBPNfQZHSP93
-ObencfKiTJwnNnNqpu+Buz9SX56aMe3nM6EPdYVp7IoZwXGWs+uo+UizvE7tZObWYaKXJFdoUY5r
-KAE7aWTePcCfZHASQKM74IHbwtQ6tqsFRdJghb7g9F08IiVolBTkdd3be4HPasxPy+4F/nGvxYIo
-BTIITKiT8zXJqE8fa8tyIlXvx6KCoMrBMuF01uQv/vwluhwSJrBnf3D/Ka3E/a/wGVCwOs3yQISI
-mI5PReeOmj8O56+2n6aBWxEZu7AS/lAR12el7cRow8sbORYghz5kI7XomEsxdVTL2FHMd/E7qn2q
-m3F3Svhd3Zn2QLX7Gw==
---0000000000002f66b505ed7d4b5f--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEALIyEagOqLfA/DPE4JJI9
+vlGTTFNVrzjaYDmSpFK4DpVIxP4FO7a6ACSfB1Zxf84wDV6El1Ur34QldWOWqnU5QrkDPQNF8LNA
+S7CLNschuTMYZZMVJhIImwDStVBpq2SLefwKGlNLLzmIaI20Viujy0aYSLLbBtNSW5AH/x32KhU1
+a6EzoKScn047r6d17W1MZJKbBFArIh2Iuv1R4u49luawDqkOFuULdE93KnOyEay1Wj0ozZPxS/w5
+hBpMukWfoZ/SwFdPDblevsYqhytxwhymXaQtyyIZTrer97nmUqBhX/p9iPNaZL6EtNF2hknZdCBU
+uZXuuc/50vdWFacqrg==
+--00000000000087fd3a05ed7d4b48--
