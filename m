@@ -2,169 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2395462A272
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Nov 2022 21:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030AD62A28A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Nov 2022 21:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiKOUEg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Nov 2022 15:04:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
+        id S231848AbiKOUKu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Nov 2022 15:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbiKOUEf (ORCPT
+        with ESMTP id S231214AbiKOUKt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:04:35 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D0FD46;
-        Tue, 15 Nov 2022 12:04:33 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0DBD160005;
-        Tue, 15 Nov 2022 20:04:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668542672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ITlVt/jeGn9VZqjZKhktxtIgQCIHZd/QSYTLufVQDT0=;
-        b=QsAi9RGHHVUBbzBfzRQOiMeOlwojujmGBVJFuq3NTuDeg3WVmhvJ8JPW0jbRarKhYvYfkj
-        uRFg0PT1dI7k6dRbcZr2koa16fXMaI5OhTYxY/EdaFmeHpZHxM2I3VtU/+Npl4bn/c2ksh
-        X+r7zLW6BHvvJHo9b/Argq3LpmOv/2ydUi1GppuJwxJmmIXW13P9QfT8Fac2JL9bliuern
-        rdYpcUSa6JCzeQ/s5AOgc589BlWBRvdl1nNaDBbaa5omi3pnffJI8R9sFweXwFTbRLod4x
-        Zb4Ki/ogDJu60LjvClXwPtW9cOfYIUtEsx385H44xNfBO9UZPfiPDhdHBup0UA==
-From:   alexandre.belloni@bootlin.com
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Tue, 15 Nov 2022 15:10:49 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6722872B
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 12:10:47 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id z15so1193683ilp.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 12:10:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rb7jBGXbzGyxffcDNwboMY2DzDKCBnatY7WqspaVRkI=;
+        b=A/6V3WqOc5LiuT2BWj4xJGbmK8TaNUt3i2Uzdh6QY0DvRyDxCX0R6k/xAOzrho0zgc
+         ih7j8ji5WWqxf0DYfUzXUPrF+uvGD8SqkqTQ6S5u9gM4/PuxRJhEDCSbomcaLoHXNLEP
+         OMEtcOhFBHOH7obD+S0hiUNgxoHY2IadZtJks=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rb7jBGXbzGyxffcDNwboMY2DzDKCBnatY7WqspaVRkI=;
+        b=K/POzyC+3fDajkp8CI3/3wcZRYVPzy02b0TLKVUw7txa/kBuHc5e8cpl4cqAYTD7Jc
+         qiyAmbfyAAEOHf7r3GR7udUjjBQFiUH0cXe3ijCK3Q9w+l/IRLxqGVSiEdbesPlI2BoJ
+         bdidAd0V1s/5qX2lzVafpNgG506LCM4s2itbbgLpSfDVJZDNggsvEtbfgl2JOaQL8AcY
+         LoZvf86Slo7A5n1GN36RiLYFpxMz0q0hcarVPR/5jirs8J/yje5E1hDQQlwXDN7gX1ah
+         5n5/y8JpA8WHsUiEaAQsB2DupGABFGtjFfTXslKB9gdbDnasomdLEKZWYC7gXCsB+HPv
+         Kqtw==
+X-Gm-Message-State: ANoB5pkXIbJ5a9vXJTJeV97169ul5pIBKmcJ4IH+62gA6HlYitcLeJgx
+        XCrlWJZytcLphEa9qyIZ6ZQRGg==
+X-Google-Smtp-Source: AA0mqf76lOK+KSl53+gEBcVW/o6FRM+XDnbBp6Wwh7l0FISCD1Nws+PS61elFQDW8Iq/xklmNwtcXw==
+X-Received: by 2002:a92:dd0d:0:b0:302:47e0:e08 with SMTP id n13-20020a92dd0d000000b0030247e00e08mr8376255ilm.83.1668543047194;
+        Tue, 15 Nov 2022 12:10:47 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id i11-20020a02cc4b000000b00375e136bf95sm5053681jaq.127.2022.11.15.12.10.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 12:10:46 -0800 (PST)
+Message-ID: <7b864479-e7c6-cabe-e363-a8268f7ce2f2@linuxfoundation.org>
+Date:   Tue, 15 Nov 2022 13:10:45 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] selftests: rtc: skip when RTC is not present
+Content-Language: en-US
+To:     alexandre.belloni@bootlin.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Shuah Khan <shuah@kernel.org>
 Cc:     Linux Kernel Functional Testing <lkft@linaro.org>,
         Daniel Diaz <daniel.diaz@linaro.org>,
         linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: rtc: skip when RTC is not present
-Date:   Tue, 15 Nov 2022 21:04:22 +0100
-Message-Id: <20221115200422.2306194-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221115200422.2306194-1-alexandre.belloni@bootlin.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221115200422.2306194-1-alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On 11/15/22 13:04, alexandre.belloni@bootlin.com wrote:
+> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> 
+> There is not point in failing the tests when there the RTC is not present,
+> simply skip the test.
+> 
+Could be rephrased to read:
 
-There is not point in failing the tests when there the RTC is not present,
-simply skip the test.
+There is no point in failing the tests when RTC is not present.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Tested-by:  Daniel Diaz <daniel.diaz@linaro.org>
----
- tools/testing/selftests/rtc/rtctest.c | 33 ++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+I can fix them when I apply the patch or send me v2
 
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index 2b9d929a24ed..63ce02d1d5cc 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -31,7 +31,6 @@ FIXTURE(rtc) {
- 
- FIXTURE_SETUP(rtc) {
- 	self->fd = open(rtc_file, O_RDONLY);
--	ASSERT_NE(-1, self->fd);
- }
- 
- FIXTURE_TEARDOWN(rtc) {
-@@ -42,6 +41,10 @@ TEST_F(rtc, date_read) {
- 	int rc;
- 	struct rtc_time rtc_tm;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	/* Read the RTC time/date */
- 	rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
- 	ASSERT_NE(-1, rc);
-@@ -85,6 +88,10 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
- 	struct rtc_time rtc_tm;
- 	time_t start_rtc_read, prev_rtc_read;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	TH_LOG("Continuously reading RTC time for %ds (with %dms breaks after every read).",
- 	       READ_LOOP_DURATION_SEC, READ_LOOP_SLEEP_MS);
- 
-@@ -119,6 +126,10 @@ TEST_F_TIMEOUT(rtc, uie_read, NUM_UIE + 2) {
- 	int i, rc, irq = 0;
- 	unsigned long data;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	/* Turn on update interrupts */
- 	rc = ioctl(self->fd, RTC_UIE_ON, 0);
- 	if (rc == -1) {
-@@ -144,6 +155,10 @@ TEST_F(rtc, uie_select) {
- 	int i, rc, irq = 0;
- 	unsigned long data;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	/* Turn on update interrupts */
- 	rc = ioctl(self->fd, RTC_UIE_ON, 0);
- 	if (rc == -1) {
-@@ -183,6 +198,10 @@ TEST_F(rtc, alarm_alm_set) {
- 	time_t secs, new;
- 	int rc;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
- 	ASSERT_NE(-1, rc);
- 
-@@ -237,6 +256,10 @@ TEST_F(rtc, alarm_wkalm_set) {
- 	time_t secs, new;
- 	int rc;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
- 	ASSERT_NE(-1, rc);
- 
-@@ -285,6 +308,10 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
- 	time_t secs, new;
- 	int rc;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
- 	ASSERT_NE(-1, rc);
- 
-@@ -339,6 +366,10 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
- 	time_t secs, new;
- 	int rc;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
- 	ASSERT_NE(-1, rc);
- 
--- 
-2.38.1
+
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Tested-by:  Daniel Diaz <daniel.diaz@linaro.org>
+> ---
+
+thanks,
+-- Shuah
 
