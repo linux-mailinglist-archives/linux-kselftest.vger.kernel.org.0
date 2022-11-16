@@ -2,163 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA0462C836
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 19:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CFE62C87C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 19:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiKPSwj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Nov 2022 13:52:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S239303AbiKPS4m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 13:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239252AbiKPSvj (ORCPT
+        with ESMTP id S239312AbiKPS4U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 13:51:39 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55583657C5
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 10:49:07 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id k15so18348999pfg.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 10:49:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=pwY7ylK/W9bWYrW6bqtFmToloYfXr8fzRDWmhFBj+kQ=;
-        b=5v0jYIJP0cmTDXBbZBnfqf3fYMu/pCojDYll5QFqeI/81XmdKIIZTfdnd3jEDC8NB5
-         bi6IDlH8G1yys5zTDmC+re9W3tTA6pgWViFsBZ6U7VLqMwT3Tt8opOoZiG/dbFnmo+fj
-         iW+gjvTmeZvtxefoQQ/f967fftlgT0acx2T0t4iC4VzNPz5M3z68Q3HLCkYXFaUdFVkL
-         1EpHWqtjp8qag4qql7P/fjVty59Ya4+ti7G6XsvmXlz1umDpeILec8PLHPwpmMY93U+m
-         t5V5o19WFLx7U6wQHy8yKLQ2wTF3Rfiu4N0YWpP8qvR3BBGKVlVM84D/NbZ9Huw8OEGm
-         lJwQ==
+        Wed, 16 Nov 2022 13:56:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EBF63173
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 10:54:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668624844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XrMOrTfFoolcBWY273BC4KVOqyrI8gbytsgZlItRSSY=;
+        b=e0HLJWQOrV59rnSGTS6YIVqETW+MetNgrpEQbikp3pa0MOp9YQkUcSBKEy34EwX53rBRFD
+        0/8z3cE73sZ2kOYmBtxg+J08kdSPfrx1ndau6dZ1tPvBzgkqWSa2ycA4qZIE6IIlwIjnzj
+        IYmDlr5WO9CbNLhnJleRx34142BoDRo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-532-lHdsVsJDNYesWcouSo6AzA-1; Wed, 16 Nov 2022 13:54:02 -0500
+X-MC-Unique: lHdsVsJDNYesWcouSo6AzA-1
+Received: by mail-wr1-f71.google.com with SMTP id r4-20020adfbb04000000b00236639438e9so4062524wrg.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 10:54:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pwY7ylK/W9bWYrW6bqtFmToloYfXr8fzRDWmhFBj+kQ=;
-        b=dm8SrnuR2xDPKpsZZRLqykGkLoP9THNT4QBSjyXiaQ4cF1yOVqIQGQUg6ZZ64IUut9
-         6qj4NOgC9YiXuR28jE3steUe0MiBX+KCPj0cioUMb6jAh70MhsynDSiEjaxxCQXeuVNN
-         U5tyCyasNqGBhc7p3AxLkT8Q1i+nNOfE1m7jvwJ3+BDbwEUly/OiQepFVoU7MBXcrao/
-         JlR8Zxd91E1FbENeoZLlUxHMVlpGQXytTHPh6Zcj2EfZazcjgdrsZJeigb0v0umSQQ2J
-         yzZ2NU+Yw3WOQlM3U0mRMsxb9quruIECY523Xaha1R5LXWfxp+PpBUbgw1/q/wbe13VZ
-         /nqQ==
-X-Gm-Message-State: ANoB5pnqgqmnPUn2yOT6xr4X767hyM29DQikGIkZfhRzXLitNOPv34MJ
-        1vJ0iTT0T5/dJPNMGGBELjnmlME4YrJ/CyuoQ4w=
-X-Google-Smtp-Source: AA0mqf4dyrnCynqVjks75VF9SpkQjYnKGAJexWLM2V3m3z7XNdG8i4c/P+wZ/kk+fGHtv8tklo/Ceg==
-X-Received: by 2002:a63:580c:0:b0:442:c653:677d with SMTP id m12-20020a63580c000000b00442c653677dmr21697145pgb.43.1668624546924;
-        Wed, 16 Nov 2022 10:49:06 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w5-20020a170902e88500b00177f82f0789sm12721967plg.198.2022.11.16.10.49.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 10:49:06 -0800 (PST)
-Message-ID: <637530a2.170a0220.8e0a3.3df0@mx.google.com>
-Date:   Wed, 16 Nov 2022 10:49:06 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        bh=XrMOrTfFoolcBWY273BC4KVOqyrI8gbytsgZlItRSSY=;
+        b=z8OLhIrELGLgWjmR8d46ais4T4Xk3w1K4uhNIzKU7X8+jlrsOqwMIqdIkJQ5nXt+IX
+         RuoFuRrGpJdC/6QB0Q/V7dyUgK0paZu/mvHuwGR9LA9VSp/J4f5ivo4s3oEnQcrMQ9rY
+         D4gCIIJ18TPma62SQp+5UisqN2VjRehXNuJNwViS23jVcPROYmWC9r6LiQLMqiJYjeWk
+         z5wbZCx5jI0w5QtMV+xzy7dJgdIy4wPnJ0SxgGVqQ2ig1MyIIXkqfFqvcqDegqPv2DAI
+         TwKOT/KH5OC5oCRBcJc6tbKqOupxsX5tBqa4Z+MCRahXjdYxFZJ/EkJlpn9VNnkEmNZO
+         4gZQ==
+X-Gm-Message-State: ANoB5plHdgx59PAE/BeD6n4uua4dCvmKEiwVnHaYGfePAoAPL2+irEQ1
+        iuI8/NA3uMKRWJEGh81SFvqdgTPzATlpmcf+0r5610pjPSMdteqWTtiaSctHePsqwZPLJ/BgCBH
+        6gXySPGpeSKbyUDXxxce2eWMxst+k
+X-Received: by 2002:a05:600c:188a:b0:3cf:8e62:f769 with SMTP id x10-20020a05600c188a00b003cf8e62f769mr3135375wmp.52.1668624841303;
+        Wed, 16 Nov 2022 10:54:01 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5DCp6F6fiXltcSvKkMYb+ZcNvwNu+I48re+Q7o+sjDMiBTT1rVi2cU7FL82kIKKDnPvsKEPw==
+X-Received: by 2002:a05:600c:188a:b0:3cf:8e62:f769 with SMTP id x10-20020a05600c188a00b003cf8e62f769mr3135302wmp.52.1668624841029;
+        Wed, 16 Nov 2022 10:54:01 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:9f00:a98d:4026:7c44:40fd? (p200300cbc7049f00a98d40267c4440fd.dip0.t-ipconnect.de. [2003:cb:c704:9f00:a98d:4026:7c44:40fd])
+        by smtp.gmail.com with ESMTPSA id h16-20020a05600c315000b003cff309807esm3012333wmo.23.2022.11.16.10.53.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Nov 2022 10:54:00 -0800 (PST)
+Message-ID: <caf52607-49cd-3073-ca4a-ddce9509e7c9@redhat.com>
+Date:   Wed, 16 Nov 2022 19:53:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.1-rc1-17-g2dfb010d2aaf
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next build: 8 builds: 0 failed, 8 passed,
- 3 errors (v6.1-rc1-17-g2dfb010d2aaf)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-21-david@redhat.com>
+ <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH mm-unstable v1 20/20] mm: rename FOLL_FORCE to FOLL_PTRACE
+In-Reply-To: <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 8 builds: 0 failed, 8 passed, 3 errors (v6.1-rc1-17-g=
-2dfb010d2aaf)
+On 16.11.22 19:16, Linus Torvalds wrote:
+> On Wed, Nov 16, 2022 at 2:30 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> Let's make it clearer that functionality provided by FOLL_FORCE is
+>> really only for ptrace access.
+> 
+> I'm not super-happy about this one.
+> 
+> I do understand the "let's rename the bit so that no new user shows up".
+> 
+> And it's true that the main traditional use is ptrace.
+> 
+> But from the patch itself it becomes obvious that no, it's not *just*
+> ptrace. At least not yet.
+> 
+> It's used for get_arg_page(), which uses it to basically look up (and
+> install) pages in the newly created VM.
+> 
+> Now, I'm not entirely sure why it even uses FOLL_FORCE, - I think it
+> might be historical, because the target should always be the new stack
+> vma.
+> 
+> Following the history of it is a big of a mess, because there's a
+> number of renamings and re-organizations, but it seems to go back to
+> 2007 and commit b6a2fea39318 ("mm: variable length argument support").
+> 
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.1-rc1-17-g2dfb010d2aaf/
+Right.
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.1-rc1-17-g2dfb010d2aaf
-Git Commit: 2dfb010d2aafceeab23ccd502c77784006adedd7
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+> Before that commit, we kept our own array of "this is the set of pages
+> that I will install in the new VM". That commit basically just inserts
+> the pages directly into the VM instead, getting rid of the array size
+> limitation.
+> 
+> So at a minimum, I think that FOLL_FORCE would need to be removed
+> before any renaming to FOLL_PTRACE, because that's not some kind of
+> small random case.
+> 
+> It *might* be as simple as just removing it, but maybe there's some
+> reason for having it that I don't immediately see.
 
-Errors Detected:
+Right, I have the same feeling. It might just be a copy-and-paste legacy 
+leftover.
 
-arm64:
-    defconfig+kselftest (clang-15): 1 error
-    defconfig+kselftest+arm64-chromebook (clang-15): 1 error
+> 
+> There _are_ also small random cases too, like get_cmdline(). Maybe
+> that counts as ptrace, but the execve() case most definitely does not.
 
-arm:
+I agree. I'd suggest moving forward without this (last) patch for now 
+and figuring out how to further cleanup FOLL_FORCE usage on top.
 
-i386:
+@Andrew, if you intend to put this into mm-unstable, please drop the 
+last patch for now.
 
-x86_64:
-    x86_64_defconfig+kselftest (clang-15): 1 error
+-- 
+Thanks,
 
-Errors summary:
+David / dhildenb
 
-    3    error: write on a pipe with no reader
-
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, clang-15) =E2=80=94 PASS, 1 error, 0 warnings, =
-0 section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, clang-15) =E2=80=94 PASS, 1 er=
-ror, 0 warnings, 0 section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-15) =E2=80=94 PASS, 1 error, 0 wa=
-rnings, 0 section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----
-For more info write to <info@kernelci.org>
