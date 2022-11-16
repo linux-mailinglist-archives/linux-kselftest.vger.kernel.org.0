@@ -2,69 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BCD62B25D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 05:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CBA62B2BE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 06:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiKPEez (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Nov 2022 23:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        id S231343AbiKPF14 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 00:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiKPEex (ORCPT
+        with ESMTP id S229460AbiKPF1z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Nov 2022 23:34:53 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F0A2E68F
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 20:34:52 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id g26so7663051vkm.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Nov 2022 20:34:52 -0800 (PST)
+        Wed, 16 Nov 2022 00:27:55 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895C32CE26;
+        Tue, 15 Nov 2022 21:27:51 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id f7so24976737edc.6;
+        Tue, 15 Nov 2022 21:27:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FmxnDIRF3z4tVcQHy0ykyvRCfKyX9vqd9nq5zuayq/o=;
-        b=EQyJmb5NzuW7Lrmx1UMxwNMSc7k121+UGTlaW+fgEO57T29KUzUO0pmfXzmd8y6CEX
-         Jb3QyrZ9WjcPq86aZ8yqUrw5KQDgEPoG8QhlKNlUADgwOfATxqgKrEr6LqoSYsM6st9F
-         1YVMfFr3J7Rv1hNFVw7rtRRlXDXgV+gO7KxZyMIEDI6sDa0iQZA9CeGZkVRURnldsycn
-         9zWJcqg8TV3Eq/6Y3L/D5LnkBqDr1ilu/BIrAUOpJgd28mtis4ijip0tlVxLeNAe1btT
-         jTuwD3azfLPaYk1AtMV8e2lR0u5IFvrMzqMbVXeMNWV2jztW9hZGf3dGowpd6wgudenl
-         3RWw==
+        bh=EL5Ik77VRAEzD9VF8LQx7sfi7nDg2jelPrsKNJCLL+w=;
+        b=RqhNsWsyWIbumREbXC1ld3MfXuRCA29JmUASFfBcWaqdmwY4y3nFWIuXfVMDhehp2B
+         eJJm41n3HlyLpUUcXR3jVpSNXc6uGx5o4D750nMltZk7c/4FJ9QKvuOndZEiLj+h8HYT
+         Wg/XUJPU+TW9jnp8KtxHjq5VcGPnoBytrGVrB4F8KF+Djc+8NNzv1ADlVu5b2BG8yPh9
+         CbZymV+cUuPPXiiJUFc6s/UgNiutOumdCZNBeQjyWAuRs1uRprVVTzHOdhoUb46d1sfP
+         Gsn4CNBMKVvvNCx+N26Iq9kOx7Cd/u2K3+vwLEhsE/UEBLejWe4bt2guvh7UzYReO8vH
+         ZClg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FmxnDIRF3z4tVcQHy0ykyvRCfKyX9vqd9nq5zuayq/o=;
-        b=mjVnfY84gg1bxYyEFzVMjWSihebNc7LfTQLQ7GFWI/PgefvlU8EulPkImAG5MMGVk+
-         OFumlf0nWRidYcs65qit3zXYoMh3pQm8IB9nrgCDO92XcqweU46zXFROaZPaIABBPFJQ
-         YEoEvmU6suWohWbrQqw11ombjnLKRF3W2PaJ79y9DO3rIzYfbcnmAnrUkjPsvayxOtNK
-         OJFy8ZAt42vWDo3WidDzF63bXyI5hWH5RqCBAh0yf6YOxp7RP0Cqxq6kN/J4MnR2x4jU
-         v0dyBCcX6nam1O0UxihjVxwRNSoxK+lw4DgBDdbtnd4FuRFOI1hwZfAe1S8SREioJ/8Y
-         Xf7w==
-X-Gm-Message-State: ANoB5pkvO9nzmlqVlpi9IaRNRh6oPrg3FO4W6Ad44AiaaQ5IaDd1uCl7
-        5aM1pjocvuzoRVkZct2bvionDDP8iKikckTGC0ZYhg==
-X-Google-Smtp-Source: AA0mqf71S572lwU6nUh1KCBE2iEeZgtF1t/Kg31iPNqx35YME43NQlTnmOzGQHbpzsQxj91vADhe3iC/FCPOG1OhHDc=
-X-Received: by 2002:a05:6122:d06:b0:3bb:d1fb:15f2 with SMTP id
- az6-20020a0561220d0600b003bbd1fb15f2mr11898407vkb.37.1668573291838; Tue, 15
- Nov 2022 20:34:51 -0800 (PST)
+        bh=EL5Ik77VRAEzD9VF8LQx7sfi7nDg2jelPrsKNJCLL+w=;
+        b=Y6T0iffOkPbAQip5BjLc1XIArHnhfREOcMIKxNyFYGPh3J1e4OOh+nSy+XMzh/yXoN
+         o9+CyIjCDiHcPdrA28nkzRDspMt+o1XEvw/x7ICE8Mva2pFKB9IdaJWH4K96OUJRXGZ9
+         t5wmon+ws4lDnOcnecXZIouOQSKn3KHd6Juq0VaeuR7yFHE4x7p19LFERbZ0ZnPOYWgg
+         S+Jg+M4sXkutBJW1xpVgghXBKBKRgQtjVehkTD7O4ofq97sl5muTDBe6Qwqj/Ob02fcQ
+         csn68WG92SK9CErs6y+bPVHfLxYzyNsRnScQDTj4rcRsFTLhh1PttzmqOqhspNPAH7en
+         n2Mg==
+X-Gm-Message-State: ANoB5pl6spW5mdIxofQO7j7VuncXqOFOjr+JIabspAdc/8iOhcwhjQAB
+        08E/Cn9wlp7Hq2LWHv7GQKk8Qux9wC14GoxoW0lDLcG1
+X-Google-Smtp-Source: AA0mqf4NnbypCcm1Gfuhx0RlRyoJFIOGGWYxd3Xbv/kW3haSdw2e66mNiVvPd+5dDm5QhcrTCR79EYdzLbKsOwG09cQ=
+X-Received: by 2002:a05:6402:344f:b0:461:d726:438f with SMTP id
+ l15-20020a056402344f00b00461d726438fmr17796199edc.333.1668576469950; Tue, 15
+ Nov 2022 21:27:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20221106021657.1145519-1-pedro.falcato@gmail.com> <202211061948.46D3F78@keescook>
-In-Reply-To: <202211061948.46D3F78@keescook>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 16 Nov 2022 12:34:40 +0800
-Message-ID: <CABVgOSm9V37KgiP-eHxfYF4tTT+ZDQKVxEAzh8P0SH3WrECM9A@mail.gmail.com>
-Subject: Re: [PATCH] fs/binfmt_elf: Fix memsz > filesz handling
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, sam@gentoo.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-fsdevel@vger.kernel.org, Rich Felker <dalias@libc.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20221114134720.1057939-1-xukuohai@huawei.com> <20221114134720.1057939-2-xukuohai@huawei.com>
+In-Reply-To: <20221114134720.1057939-2-xukuohai@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 15 Nov 2022 21:27:38 -0800
+Message-ID: <CAADnVQLEzrqjuF+qYh2kJz0Q=9G8PySJ6ZwXD2EGoZsBUdwsog@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] bpf: Do not copy spin lock field from user in bpf_selem_alloc
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,51 +79,18 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 11:59 AM Kees Cook <keescook@chromium.org> wrote:
+On Mon, Nov 14, 2022 at 5:31 AM Xu Kuohai <xukuohai@huawei.com> wrote:
 >
-> On Sun, Nov 06, 2022 at 02:16:57AM +0000, Pedro Falcato wrote:
-> David, has there been any work on adding a way to instantiate
-> userspace VMAs in a KUnit test? I tried to write this myself, but I
-> couldn't figure out how to make the userspace memory mappings appear.
-> Here's my fumbling attempt:
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=devel/kunit/usercopy
+> bpf_selem_alloc function is used by inode_storage, sk_storage and
+> task_storage maps to set map value, for these map types, there may
+> be a spin lock in the map value, so if we use memcpy to copy the whole
+> map value from user, the spin lock field may be initialized incorrectly.
 >
-> I really wish KUnit had userspace mapping support -- I have a bunch of
-> unit tests that need to get built up around checking for regressions
-> here, etc.
+> Since the spin lock field is zeroed by kzalloc, call copy_map_value
+> instead of memcpy to skip copying the spin lock field to fix it.
+>
+> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
 
-Hi Kees,
-
-Sorry the the delayed response!
-
-Alas, my attempts to get this to work haven't been much more
-successful than yours. It's definitely something we'd like to support,
-but I confess to not knowing enough about the mm code to know exactly
-what would be involved.
-
-The workaround is to load tests as modules, and use something like
-Vitor's original patch here:
-https://lore.kernel.org/all/20200721174036.71072-1-vitor@massaru.org/
-
-Basically, using the existing mm of the module loader. Adapting those
-changes to your branch (and fixing a couple of back-to-front KUnit
-assertions) does work for me when built as a module, in an x86_64 vm:
-
-root@slicestar:~# modprobe usercopy_kunit
-[   52.986290]     # Subtest: usercopy
-[   52.986701]     1..1
-[   53.246058]     ok 1 - usercopy_test
-[   53.246628] ok 1 - usercopy
-
-But getting it to work with built-in tests hasn't been successful so
-far. I wondered if we could just piggy-back on init_mm or similar, but
-that doesn't seem to work either.
-
-So, in the short-term, this is only possible for modules. If that's
-useful enough, we can get Vitor's support patch (or something similar)
-in, and just mark any tests module-only (or have them skip if there's
-no mm). Because kunit.py only runs built-in tests, though, it's
-definitely less convenient.
-
-Cheers,
--- David
+The tag is wrong. When local storage was introduced it was not
+possible to use spin_locks there.
+Pls resubmit.
