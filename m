@@ -2,182 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9571762BACA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 12:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 431FF62BCF3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 13:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233976AbiKPLFH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Nov 2022 06:05:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S230145AbiKPMEj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 07:04:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbiKPLE0 (ORCPT
+        with ESMTP id S233036AbiKPMEM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 06:04:26 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17C84AF02
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 02:51:01 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id x102so10716575ede.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 02:51:01 -0800 (PST)
+        Wed, 16 Nov 2022 07:04:12 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509B611A33
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 03:55:50 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id b131so19991138yba.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 03:55:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NMt8HjKxItO2J6bIbRsCvEdSlAZpP8uC48lcisou+nI=;
-        b=eLnGvKK+w1XqLxzowLTo19VxBdUCyRC3jZCwBMpKaUWXXlLi4fs0Axmuul/wRN/I3k
-         Ls2daX/AS8NBqlkGiJqqxb0gEFzgn6n0a6+XnpTDtipAc3J5NayuL7HDBO33beS0D75x
-         K2gRZhVXeM0+lA+7zcbmJS/RVo1YdOeZ/sxms=
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=byF2+Tj62wDalcappyVw3we/rO7K0IiOk2124Sv3CF0=;
+        b=r66bTb1RCHST+3zrWTUustJKhgJSaKPg5iVAZPPPbTZ1qyirLfz9Un8+CFUXS/+ArD
+         qm00oiMppTuy0A6LIbb1tifX6qtKsbdtHLGmbrMVb/msE3ZAIg6YHjd6bWX5atxMLHRN
+         8d2aU9UECUvMdS6AO1GIgTjnF3V2C8tqla82XE01VuweMGWIa/r8USkec991DkjHuzFk
+         TVHiD6kgORVG8juLNhZFKszdAzUtZQvWwVuAxMgHMzjJ93P/oVCBTjA0xSVGpcIWH/LP
+         A35zDcnw4/qBAR0xxlXkKSTDrKQLP6nBZk18k+uqS42ZdopKjTi0GEEMXXpIZ73hInHZ
+         AbtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NMt8HjKxItO2J6bIbRsCvEdSlAZpP8uC48lcisou+nI=;
-        b=FDzlOqwNMWLP3/oMrRsBQk095v6gRSD3lLeN9vZfMe96c43wthfljoqGMd15C2kqIT
-         PfeS6HlBNJgff+Qp5Na88AALWbdn2+INGmTgUNQN6rXnLw7VoMn2rk32O141hXnsWKMY
-         N6iEee3rMUmBf4x+Kw+whQt3iSRuWZ73BI44piys3EUq9evFF8HvGFiewQ9aRNS19DnV
-         kjKSxpCUFyP9dJI/f6ZSVENrmwe+A62jnOpyEh9aUKeFDPCmQUW42k/wVM/ZpuRskzMd
-         ZVtTcMunNZOYMMfn0nNlU697+VOGlQfzZNteGc2hKubo7kihRRVECcMnU5dRZr8UKPuT
-         p/PQ==
-X-Gm-Message-State: ANoB5pmQQoFOAob10wnFOcLbu8EKRiv9yKDQ4OPt8XaHh/bWS36WPK/d
-        2y3I7F6S4PK9yq/Z63RkVyYWBw==
-X-Google-Smtp-Source: AA0mqf4Z9KF9DYfdJQdqGvbtRloYOPQXnN3MkKcJxdOs80iDic7Ysg9e6qfGKtqJuC+1emfUPfQ+gw==
-X-Received: by 2002:a50:ff04:0:b0:462:709:9f7b with SMTP id a4-20020a50ff04000000b0046207099f7bmr19331341edu.263.1668595860175;
-        Wed, 16 Nov 2022 02:51:00 -0800 (PST)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id s6-20020a170906bc4600b007aed2057eaesm6056420ejv.161.2022.11.16.02.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:50:59 -0800 (PST)
-Date:   Wed, 16 Nov 2022 11:50:57 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH mm-unstable v1 17/20] drm/exynos: remove FOLL_FORCE usage
-Message-ID: <Y3TAkWy/xXfX1cIv@phenom.ffwll.local>
-Mail-Followup-To: David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>, Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-18-david@redhat.com>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=byF2+Tj62wDalcappyVw3we/rO7K0IiOk2124Sv3CF0=;
+        b=d7t3kiAvQa3UIEasDgvk6LsPcJ7WdZEaT6w6KsZDybPqYABCE3NWF+lnTesHbX62yu
+         wRc1nKICBJpmXADV3KIe2sZs3hDrqX71MhoETY2VdL8dxlxNMdAMNO+F6FRfFKhtCugl
+         ZD6/mwVcYVcV07wr8pNBoQAaxriY8lUhR+DpNeLH3itjr8ue4RT68dCEdLRubx8QDmLa
+         am1p/ky7QuCzZxeEIk1CdUPOZ4YQz1Y6gStJUuv6Jc7z33DbU6UrUn33CeZ0Nx4AYB5F
+         O8aq26bAEJO7L0b4J3uVDp7mQdvyGhneKtE8j/gxLB8DQYzgLdSNe+pnQswG5PHESXap
+         kUZg==
+X-Gm-Message-State: ANoB5pn8l+jtd3Gg8SGdcsS+eUKbsXk9VAH7vG8z1sM6YYeHD3K4Lh7i
+        JSrIBb///hpMS5RvStPCqZCpfA76fqSDZzkOWsov3mzXhQGbOg==
+X-Google-Smtp-Source: AA0mqf57T6ji4QtbiOm7ozKwHq1RNm06sjZlw/ML2pOJl4pPYi14seoPYMw3CVqOZBdAj1BAod6ROMH+MBuFQQsSW2U=
+X-Received: by 2002:a25:bb93:0:b0:6e4:c5c4:a62b with SMTP id
+ y19-20020a25bb93000000b006e4c5c4a62bmr4766854ybg.560.1668599748753; Wed, 16
+ Nov 2022 03:55:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116102659.70287-18-david@redhat.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 16 Nov 2022 17:25:37 +0530
+Message-ID: <CA+G9fYu8grBstgXDsC_g5tmEg0nVwaQ+p0d6vD+mN7UsTvMCSQ@mail.gmail.com>
+Subject: selftests: arm64: sve-ptrace # TIMEOUT 45 seconds
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:26:56AM +0100, David Hildenbrand wrote:
-> FOLL_FORCE is really only for ptrace access. As we unpin the pinned pages
-> using unpin_user_pages_dirty_lock(true), the assumption is that all these
-> pages are writable.
-> 
-> FOLL_FORCE in this case seems to be a legacy leftover. Let's just remove
-> it.
-> 
-> Cc: Inki Dae <inki.dae@samsung.com>
-> Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
-> Cc: Kyungmin Park <kyungmin.park@samsung.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+While doing selftests: arm64 tests validations following test failed
+due to shorter
+timeout value.
 
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Plus ack for merging through the appropriate non-drm tree.
--Daniel
+not ok 28 selftests: arm64: sve-ptrace # TIMEOUT 45 seconds
+not ok 35 selftests: arm64: check_gcr_el1_cswitch # TIMEOUT 45 seconds
+not ok 40 selftests: arm64: check_user_mem # TIMEOUT 45 seconds
 
-> ---
->  drivers/gpu/drm/exynos/exynos_drm_g2d.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-> index 471fd6c8135f..e19c2ceb3759 100644
-> --- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-> +++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
-> @@ -477,7 +477,7 @@ static dma_addr_t *g2d_userptr_get_dma_addr(struct g2d_data *g2d,
->  	}
->  
->  	ret = pin_user_pages_fast(start, npages,
-> -				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-> +				  FOLL_WRITE | FOLL_LONGTERM,
->  				  g2d_userptr->pages);
->  	if (ret != npages) {
->  		DRM_DEV_ERROR(g2d->dev,
-> -- 
-> 2.38.1
-> 
+Test log link,
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.78-131-g0963ae7afcba/testrun/13014345/suite/kselftest-arm64/test/arm64.check_user_mem/log
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+and
+https://lkft.validation.linaro.org/scheduler/job/5847406
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
