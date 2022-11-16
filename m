@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166EE62B948
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 11:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F5262B958
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 11:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237845AbiKPKjx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Nov 2022 05:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S238483AbiKPKkJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 05:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbiKPKi0 (ORCPT
+        with ESMTP id S231794AbiKPKii (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 05:38:26 -0500
+        Wed, 16 Nov 2022 05:38:38 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD912E9FB
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 02:29:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CBF2EF44
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 02:29:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668594562;
+        s=mimecast20190719; t=1668594568;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1lgRYK0+yPuNJDFPZ9ndbDbQCvjtc3Xp7NDAue46xBY=;
-        b=iR9z+DqTp/cgIbZeMtOXPAGbCIRAeQrT3dFeoEtJ92ejk/KBLFq+Awtp0CBd0BLP1lAt2Z
-        sWPKOH3dtOgdzXh2dSa/BfIDKaEWy/PjsESnCSGbFtWa1SmpPzlcFFjZMoPdMjBLwKycYz
-        miC7h/g0eyYhjB3O2WUFrUwJTmG+9Bc=
+        bh=G0FpSSTO1Nfi3hHjZY1vs8kl28xrhbJvR/VmU2bZlrg=;
+        b=TtBkvCz6mGOw9KFeuqQ1k4j0q0REAH3krEtKHg7Hq3r3n8S8LPO1eGFxgacX/isMBgw4xu
+        SX16QmZIqXAMrp9Gb+f1/3NIyZTuMydP9bSaHdEHMcj5c2+1BXkVvIyGbqV16Z0/wgUEAs
+        G2B/sR60ucq9DWcx2Cdy2B42zPUedwE=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-14-svSpfQNhOguMSNDl-MdQSA-1; Wed, 16 Nov 2022 05:29:18 -0500
-X-MC-Unique: svSpfQNhOguMSNDl-MdQSA-1
+ us-mta-652-smSH3VzZPoqE7rq7qnypxQ-1; Wed, 16 Nov 2022 05:29:26 -0500
+X-MC-Unique: smSH3VzZPoqE7rq7qnypxQ-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 724BE86F147;
-        Wed, 16 Nov 2022 10:29:15 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2D136101A528;
+        Wed, 16 Nov 2022 10:29:25 +0000 (UTC)
 Received: from t480s.fritz.box (unknown [10.39.193.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3626A2028E8F;
-        Wed, 16 Nov 2022 10:29:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AF3102024CC8;
+        Wed, 16 Nov 2022 10:29:15 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
@@ -70,11 +70,13 @@ Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
         Christoph Hellwig <hch@infradead.org>,
         Alex Williamson <alex.williamson@redhat.com>,
         David Hildenbrand <david@redhat.com>,
-        Andy Walls <awalls@md.metrocast.net>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH mm-unstable v1 15/20] media: pci/ivtv: remove FOLL_FORCE usage
-Date:   Wed, 16 Nov 2022 11:26:54 +0100
-Message-Id: <20221116102659.70287-16-david@redhat.com>
+Subject: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE usage
+Date:   Wed, 16 Nov 2022 11:26:55 +0100
+Message-Id: <20221116102659.70287-17-david@redhat.com>
 In-Reply-To: <20221116102659.70287-1-david@redhat.com>
 References: <20221116102659.70287-1-david@redhat.com>
 MIME-Version: 1.0
@@ -90,53 +92,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-FOLL_FORCE is really only for ptrace access. R/O pinning a page is
-supposed to fail if the VMA misses proper access permissions (no VM_READ).
+FOLL_FORCE is really only for ptrace access. According to commit
+707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+writable"), get_vaddr_frames() currently pins all pages writable as a
+workaround for issues with read-only buffers.
 
-Let's just remove FOLL_FORCE usage here; there would have to be a pretty
-good reason to allow arbitrary drivers to R/O pin pages in a PROT_NONE
-VMA. Most probably, FOLL_FORCE usage is just some legacy leftover.
+FOLL_FORCE, however, seems to be a legacy leftover as it predates
+commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
+always writable"). Let's just remove it.
 
-Cc: Andy Walls <awalls@md.metrocast.net>
+Once the read-only buffer issue has been resolved, FOLL_WRITE could
+again be set depending on the DMA direction.
+
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Tomasz Figa <tfiga@chromium.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- drivers/media/pci/ivtv/ivtv-udma.c | 2 +-
- drivers/media/pci/ivtv/ivtv-yuv.c  | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ drivers/media/common/videobuf2/frame_vector.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/ivtv/ivtv-udma.c b/drivers/media/pci/ivtv/ivtv-udma.c
-index 210be8290f24..99b9f55ca829 100644
---- a/drivers/media/pci/ivtv/ivtv-udma.c
-+++ b/drivers/media/pci/ivtv/ivtv-udma.c
-@@ -115,7 +115,7 @@ int ivtv_udma_setup(struct ivtv *itv, unsigned long ivtv_dest_addr,
+diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+index 542dde9d2609..062e98148c53 100644
+--- a/drivers/media/common/videobuf2/frame_vector.c
++++ b/drivers/media/common/videobuf2/frame_vector.c
+@@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 	start = untagged_addr(start);
  
- 	/* Pin user pages for DMA Xfer */
- 	err = pin_user_pages_unlocked(user_dma.uaddr, user_dma.page_count,
--			dma->map, FOLL_FORCE);
-+			dma->map, 0);
- 
- 	if (user_dma.page_count != err) {
- 		IVTV_DEBUG_WARN("failed to map user pages, returned %d instead of %d\n",
-diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivtv-yuv.c
-index 4ba10c34a16a..582146f8d70d 100644
---- a/drivers/media/pci/ivtv/ivtv-yuv.c
-+++ b/drivers/media/pci/ivtv/ivtv-yuv.c
-@@ -63,12 +63,11 @@ static int ivtv_yuv_prep_user_dma(struct ivtv *itv, struct ivtv_user_dma *dma,
- 
- 	/* Pin user pages for DMA Xfer */
- 	y_pages = pin_user_pages_unlocked(y_dma.uaddr,
--			y_dma.page_count, &dma->map[0], FOLL_FORCE);
-+			y_dma.page_count, &dma->map[0], 0);
- 	uv_pages = 0; /* silence gcc. value is set and consumed only if: */
- 	if (y_pages == y_dma.page_count) {
- 		uv_pages = pin_user_pages_unlocked(uv_dma.uaddr,
--				uv_dma.page_count, &dma->map[y_pages],
--				FOLL_FORCE);
-+				uv_dma.page_count, &dma->map[y_pages], 0);
- 	}
- 
- 	if (y_pages != y_dma.page_count || uv_pages != uv_dma.page_count) {
+ 	ret = pin_user_pages_fast(start, nr_frames,
+-				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
++				  FOLL_WRITE | FOLL_LONGTERM,
+ 				  (struct page **)(vec->ptrs));
+ 	if (ret > 0) {
+ 		vec->got_ref = true;
 -- 
 2.38.1
 
