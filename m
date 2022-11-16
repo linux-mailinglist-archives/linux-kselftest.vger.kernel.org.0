@@ -2,140 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD4162B344
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 07:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D959F62B499
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 09:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232678AbiKPG0A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Nov 2022 01:26:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S233137AbiKPII0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 03:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232938AbiKPGZx (ORCPT
+        with ESMTP id S238149AbiKPIHx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 01:25:53 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A452C1D0EA;
-        Tue, 15 Nov 2022 22:25:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668579952; x=1700115952;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fB7JiWADb0P2b2t+ebguTg5N8FbI6r37biHOj8DMLS4=;
-  b=eAGBzGmHzssbMdcUjYIAK92rlUAlDUhb9OfIuq8VVlgMSnHQlWojwbsN
-   /l13RAwojlJyqAzAEzkcDLfwTtLhIXBECS9P1UFf9jdKIs3DxnRUVtTmS
-   QUNLhAfJ3F1hgvH3wImdxQCXG3iVeMoTIwWFGk4UgsxI3jrsSRHnUOiJd
-   Zn6/my6nK547++Q652G8diqR7rwsY8jrj7fM33GdvU+wYkl9Hs5LrGNBM
-   kdugl48pY4st2giPyGbkfnkEg1cVH9RfDxlNFLMdZSnJt0aq7p9HkIx3X
-   8AyxHZDcLhdYfw/6N17dppYI31daktXzAQ9qtDeKtR2SEn3htTB88draj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="311170456"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="311170456"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 22:25:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="641508622"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="641508622"
-Received: from gsavithr-mobl.amr.corp.intel.com (HELO [10.209.85.47]) ([10.209.85.47])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 22:25:51 -0800
-Message-ID: <556a2475-f0e1-d1cf-1c46-bbe052e5ef40@linux.intel.com>
-Date:   Tue, 15 Nov 2022 22:25:50 -0800
+        Wed, 16 Nov 2022 03:07:53 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC4BC756;
+        Wed, 16 Nov 2022 00:07:51 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NBwcv58NdzHvqw;
+        Wed, 16 Nov 2022 16:07:11 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 16:07:41 +0800
+Message-ID: <fd1e6d2d-f7a2-21d2-f0ff-3e3d8b2ba9eb@huawei.com>
+Date:   Wed, 16 Nov 2022 16:07:41 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v17 1/3] x86/tdx: Add a wrapper to get TDREPORT from the
- TDX Module
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf 1/2] bpf: Do not copy spin lock field from user in
+ bpf_selem_alloc
 Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221104032355.227814-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221104032355.227814-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <115a87d7-144a-2828-8e4f-9c1f156b73ae@intel.com>
- <8d5f8a74-f864-3cd9-dac2-7650d83a8b90@linux.intel.com>
- <e7147e03-705e-d2a8-9c9c-b4243ed5b451@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <e7147e03-705e-d2a8-9c9c-b4243ed5b451@intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+References: <20221114134720.1057939-1-xukuohai@huawei.com>
+ <20221114134720.1057939-2-xukuohai@huawei.com>
+ <CAADnVQLEzrqjuF+qYh2kJz0Q=9G8PySJ6ZwXD2EGoZsBUdwsog@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <CAADnVQLEzrqjuF+qYh2kJz0Q=9G8PySJ6ZwXD2EGoZsBUdwsog@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dave,
-
-On 11/14/22 4:54 PM, Dave Hansen wrote:
->> In both the commit log and the comments, I can highlight the "subtype 0"
->> information. Will that work for you, or do you prefer that this wrapper
->> take the "subtype" option as argument and we pass 0 for the subtype value
->> from the TDX guest driver?
-> I actually think it's a *lot* more clear if the User<->Kernel ABI just
-> takes the subtype.  But, I also heard Greg's concerns about making the
-> ABI _too_ open-ended.
+On 11/16/2022 1:27 PM, Alexei Starovoitov wrote:
+> On Mon, Nov 14, 2022 at 5:31 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>>
+>> bpf_selem_alloc function is used by inode_storage, sk_storage and
+>> task_storage maps to set map value, for these map types, there may
+>> be a spin lock in the map value, so if we use memcpy to copy the whole
+>> map value from user, the spin lock field may be initialized incorrectly.
+>>
+>> Since the spin lock field is zeroed by kzalloc, call copy_map_value
+>> instead of memcpy to skip copying the spin lock field to fix it.
+>>
+>> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
 > 
-> So, I really don't care.  Just make it clear that, as is, this ABI is
-> not the "TDREPORT ABI".
-> 
+> The tag is wrong. When local storage was introduced it was not
+> possible to use spin_locks there.
+> Pls resubmit.
+> .
 
-Are you fine with the following version?
+No, spin_lock was introduced by d83525ca62cf ("bpf: introduce bpf_spin_lock"),
+before 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage").
 
-+/* TDX Module call error codes */
-+#define TDCALL_RETURN_CODE(a)  ((a) >> 32)
-+#define TDCALL_INVALID_OPERAND 0xc0000100
-+
-+#define TDREPORT_SUBTYPE_0     0
-+ 
-+/**
-+ * tdx_mcall_get_report0() - Wrapper to get TDREPORT0 (a.k.a. TDREPORT
-+ *                           subtype 0) using TDG.MR.REPORT TDCALL.
-+ * @reportdata: Address of the input buffer which contains user-defined
-+ *              REPORTDATA to be included into TDREPORT.
-+ * @tdreport: Address of the output buffer to store TDREPORT.
-+ *
-+ * Refer to section titled "TDG.MR.REPORT leaf" in the TDX Module
-+ * v1.0 specification for more information on TDG.MR.REPORT TDCALL.
-+ * It is used in the TDX guest driver module to get the TDREPORT0.
-+ *
-+ * Return 0 on success, -EINVAL for invalid operands, or -EIO on
-+ * other TDCALL failures.
-+ */
-+int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport)
-+{
-+       u64 ret;
-+
-+       ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
-+                               virt_to_phys(reportdata), TDREPORT_SUBTYPE_0,
-+                               0, NULL);
-+       if (ret) {
-+               if (TDCALL_RETURN_CODE(ret) == TDCALL_INVALID_OPERAND)
-+                       return -EINVAL;
-+               return -EIO;
-+       }
-+
-+       return 0;
-+}
-+EXPORT_SYMBOL_GPL(tdx_mcall_get_report0);
-
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+To confirm this, I built a kernel image on comit 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+and run test case posted in patch 2, a softlockup was triggered. Then I picked
+this patch and tried again, nothing failed.
