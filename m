@@ -2,64 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEAA62CE22
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 23:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2910162CEBA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 00:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbiKPW5Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Nov 2022 17:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S233785AbiKPXbR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 18:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiKPW5Y (ORCPT
+        with ESMTP id S232979AbiKPXbP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 17:57:24 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E1C682B2;
-        Wed, 16 Nov 2022 14:57:23 -0800 (PST)
+        Wed, 16 Nov 2022 18:31:15 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16B75B5AC;
+        Wed, 16 Nov 2022 15:31:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668639443; x=1700175443;
+  t=1668641474; x=1700177474;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=vw2Jf9KAz2tAppAkTOl7aLJxcwQUAiscRykKsAiXlTQ=;
-  b=N9uagWlrl/GqTjiNLWJw+IoOuDNajM/z/XCThJgPdFT1KFY+S5j3wplc
-   5WTgM2b5JQ3j4fulQtU/Ww4wPl/VP0Niai+p92HFs9HwtvMyK7jxcBwnX
-   P5FG+hk0KXrgGPpHDxBw3bRzeLnZLLz2xzRRrZICuuDCbYymK05Ih4Ewg
-   UI1oEQMcJnA257Gqh0Vb9atRjD46QR6KsXjhYUqJzhuTCKsvdNRCdDH8D
-   i6ODu+2bIdM2PQ+8wGcraadk/xsCBXo0AzDjC3fj7JPRpt+cDCGegJXJq
-   8gl4ycUQWPWrNonSiz/OPc8GGVehXKz0+ofrBnLbeVhW1Ft83wwG4bqFr
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="310320072"
+  bh=kcF8I+Kpj7C4lbmuT+ZZZAwyB2mGFnhppufCZemkF+c=;
+  b=gvZv8XLelXJxxTjJcvIU4UuxjNbMxn+cfHxVYEyBY9JbhTFc5rD6YDiy
+   qLrNDMSbGCqK7wc0DfqxPN0JUG2gQjha+wfHzVWWgxhSQFQ9jTJePWNo3
+   em23MrXIk7FHuNxDPeGAouPuvTBRu2Dy3OHa78NwOj2atuI+zHt+jKDfG
+   UwxOdNW94nZhCkMOWk/xXYEBu9ouuu6qa0Q//Qxu5UYxX2JxXyceagzUe
+   fXwMA52CwafRJEce58NPp+6bQX3azO8cjTEYHcWv6OnArny86jZzyu//Z
+   a2wVIj2mSj4F7FNVq7UDSRQMOh6dU/ahIVb+9xcdpbQ7ARESzYaMTbbWk
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="292404012"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="310320072"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 14:57:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="617357897"
+   d="scan'208";a="292404012"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 15:31:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="745267324"
 X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="617357897"
+   d="scan'208";a="745267324"
 Received: from aagbadea-mobl.amr.corp.intel.com (HELO [10.252.138.56]) ([10.252.138.56])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 14:57:23 -0800
-Message-ID: <f8c3da3a-4d19-60c6-66d3-afd0d56ef102@intel.com>
-Date:   Wed, 16 Nov 2022 14:57:22 -0800
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 15:31:13 -0800
+Message-ID: <773a9deb-b017-20e5-cebe-d9c35ac4fd3d@intel.com>
+Date:   Wed, 16 Nov 2022 15:31:12 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [RFC PATCH v3] selftest/x86/meltdown: Add a selftest for meltdown
+Subject: Re: [PATCH v7 0/6] x86/fpu: Allow PKRU to be (once again) written by
+ ptrace
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>, Aaron Lu <aaron.lu@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Y3L2Jx3Kx9q8Dv55@ziqianlu-desk1> <Y3M3sZSARXxLTKao@kroah.com>
+To:     Kyle Huey <me@kylehuey.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>
+References: <20221115230932.7126-1-khuey@kylehuey.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y3M3sZSARXxLTKao@kroah.com>
+In-Reply-To: <20221115230932.7126-1-khuey@kylehuey.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,30 +74,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/14/22 22:54, Greg KH wrote:
-> On Tue, Nov 15, 2022 at 10:15:03AM +0800, Aaron Lu wrote:
->> I came to the conclusion that this work is OK to submit with all of the
->> steps I listed above (copyright notices, license terms and relicensing)
->> by strictly following all of the processes required by my employer.
->>
->> This does not include a Signed-off-by from a corporate attorney.
-> Please get that, as that is what I asked for in order for us to be able
-> to accept this type of change.
+On 11/15/22 15:09, Kyle Huey wrote:
+> Following last week's discussion I've reorganized this patch. The goal
+> remains to restore the pre-5.14 behavior of ptrace(PTRACE_SET_REGSET,
+> NT_X86_XSTATE) for the PKRU register (which was equivalent to a hardware
+> XRSTOR instruction).
 
-Hi Greg,
+The new version looks great.  I've applied it.
 
-Can you share any more of what triggered this new requirement?
+I did remove the stable@ tags for now.  There were a couple reasons for
+that.  First, most of the x86 stuff marked for stable@ goes via our
+tip/urgent branch and this doesn't seem super urgent.  It also touches
+code that's exposed in at least three separate UABIs, so I want a bit
+more soak time than x86/urgent normally provides.
 
-We can, for instance, be flexible on the license that this is submitted
-with (original zlib versus GPLv2).  I've also been in contact with the
-(presumed) original authors of this code in the past.  If there are
-concerns about its provenance, I'd be happy to try to work with them to
-get it in to shape.
-
-But, I feel like I'm poking around in the dark here.  I'm not quite sure
-what triggered this new requirement or quite how to remedy it.
-
-I'm also a _bit_ worried that I as a maintainer was about to do
-something wrong here.  Personally, I'm quite happy with Aaron's due
-diligence here and I was *really* close to merging this code.  Is there
-some documentation that could be improved here?
+I have zero objections if anyone wants to submit it to stable@ after it
+hits Linus's tree.
