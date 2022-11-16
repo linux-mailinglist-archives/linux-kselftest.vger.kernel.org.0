@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4033062CC13
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 22:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E520E62CC18
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Nov 2022 22:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239115AbiKPVDK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Nov 2022 16:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
+        id S239136AbiKPVDN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 16:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239247AbiKPVCH (ORCPT
+        with ESMTP id S238868AbiKPVBy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:02:07 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061.outbound.protection.outlook.com [40.107.94.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC6A6AED7;
-        Wed, 16 Nov 2022 13:01:11 -0800 (PST)
+        Wed, 16 Nov 2022 16:01:54 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C2764D3;
+        Wed, 16 Nov 2022 13:00:58 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U4GWUMJLcO8oGbWCK6rvrh5/Agp5Gzm/0ulKCqZOToXZchLXQwxuxAgNLon6epRpfJjpia0chWCWtTS15CmGe4CI1kqRds00QCketG+exUveqPaYCmXvbmKnhU50jO4LJbxx6F4i5gAG/S2og3aiFW0KqC2/+pEUmdaRy9mnWuXbubSceqYQt9Ad/dFbpE+AAT9km7y8IBMPyiNccPDt0ACOUELuVSC0JIQdhC5kgavTMiXS1JQ5P9pb0ef9bikav+N0uGgLVdOdLF2Npuvy7hRE5GJka4+nCOYJgj87OwHaCiic1W+v0kPY5VBzNXxxWD1BPRHFmYnecGxxcceTsg==
+ b=C/nliwOKzUHBcQdGGL89sZAKhO/VfGoBF5yGLnm9wa0wdJz3jSiUOmIAnlo0rQWkGEebEqK66u6R3UQ+bbmqeR0pr+Xk8jFZF5LV6k05cjIFAM0DOgdX6RU/5bLDUbh8x9CVy4XNEBbRUhYZfdkc1sBQjdpNoyHC7y4I1blwGBZBfpxOJQgBThMRXNsufLrb05kG+1NTbJLp508/64Kf2Rc6K8z0qtIcmuDQ1TxIjyyOYmg3MecBlB2lCGLZ18tvBfE4wusVdh5kJZf1OibhrroyOD4J5R4AQSXGjPU8rn/16Uf8CkVhAJNxH+0i5V1NeXwSgUzTQaRHopPw1KTVIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qmmsmea8Zyev5TPHahprQ5Twc7knH3ZdY/xIgAygGCA=;
- b=HNQc8ffI+s543bYyBuNa4Z7a377aQO4VIJcG1n88kP2gcnR+VZaJ1AIKJ929SZo6AVTbKWh/VZWo2dA/AVsR7sdfcXeclfinuECaTWmIHhyvGZIvM7/my3+IiiXDDwoYV1wu9X4JBGAnzCkVQ30J6bb5B2XbygHvvC+mTMYr5Zxau+ejdU2jjxfLCY5ggSXWK8RZlNncskWnXKz9IZ2qW6rYl+6syaNfyGhjrOGd8N/anNlu1Vm739bANjnUgSJ+1STlJMUgmgwiFxKteDPjBeTUhI7p0w1Z4orV3TyXVjtELfBi2vXUOXhJ5erirv24DaVnu/Pbst6QrWJ66YOWcQ==
+ bh=i/5IoMdzanZlihohIxZq3RVStRxJF7NBwPZO3xVT9Aw=;
+ b=E+RIt2koyx1uIcE1D36njNU4Lg9bXuwwfBgMX9vyeVvjQPymnSZkns47ITr1VJq7QMlsXBIOT6GHtfpexFN5On6nKZcRUYPHUUZBW3n6VRzNimzauNQcWxCZABwHTrxa8iw1pjaNIjIe4bIVgDPlQL142XLiROSKDxuR0oL1X82hdXv2UNFlxdL56FUvThkmcXOtKRZDeekjyTm4aC3TB3IIIHhqu5e4Ov4U/CgOrGvTRRrDOoxuTvTOFAhki7PRtohPtifwyhp3+63qdSXsvPyiQikZANd0mWpRGiA/Um3WbV03ZlNm2/1zzt23WBgW+0Te/OKgYwdHkm/T0mjTiQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qmmsmea8Zyev5TPHahprQ5Twc7knH3ZdY/xIgAygGCA=;
- b=BbedqgCU6ngYgKcMonIVP+sVu9x2CoKKd1Rcu16G0gqA9WusBHU6W/SH7Sa5Ey2fwjW04cHLngUoN2WIWBouA4k3mW6w4ofsgZ2QwzIB6gHQewZS+mctCiZfO6KN6D6jmMl8I16AM5tPsNWaLPH9ykPKNRn59PbNhHtZ5o3q5WkxKgRMxzVp0XLGzFJ3h+XCItssRuSysPsvJHZaHLdk67oTMpW+AIfqj0f4DjUKMyScqpksIzx5w7bgLdcREJj/ISe0E2LJZ0+X9eOzMsM1pz4kAUPIHNv/glmgym+fWGwVxkd0/UtFU2lw2vOWYrzXW2tMJgB4Vr8TtHVO11pGjA==
+ bh=i/5IoMdzanZlihohIxZq3RVStRxJF7NBwPZO3xVT9Aw=;
+ b=J/Xu12puPI4+TtguG1rQOieFSPJ5B/p2XVtHM4h0C71VG7O2qrmOg2rVF3VC2sicJMmauUmsuoyMzQ/upMbyiyzbmROYU0Sil2dU55uIPQUjJpmzE5BClwhDV7lOfCOVzkbpaWkg+4y2+U6RA3sL/imV5yc6rzsOAq3xd33fi0+Zsja7F18d+zrHSAvrjLNkWCxOYcyott1tQDij4rZgkcnNlPnjuCyBQreHEwPr/g2pQhgJ4NsDZ6I2avBxoPeTCR6AtGwI6EGrCwo77LL7osSyfNJ0BkYSnVgSSK2rF0zyblznh85XEa4IyMI4bvhuDFFMHgb7ZyiwAHisayWWFQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH8PR12MB7136.namprd12.prod.outlook.com (2603:10b6:510:22b::5) with
+ by CY8PR12MB7682.namprd12.prod.outlook.com (2603:10b6:930:85::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Wed, 16 Nov
- 2022 21:01:04 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
+ 2022 21:00:57 +0000
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
- 21:01:04 +0000
+ 21:00:56 +0000
 From:   Jason Gunthorpe <jgg@nvidia.com>
 To:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
@@ -77,64 +77,64 @@ Cc:     Anthony Krowiak <akrowiak@linux.ibm.com>,
         Shameerali Kolothum Thodi 
         <shameerali.kolothum.thodi@huawei.com>,
         Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: [PATCH v5 01/19] iommu: Add IOMMU_CAP_ENFORCE_CACHE_COHERENCY
-Date:   Wed, 16 Nov 2022 17:00:37 -0400
-Message-Id: <1-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+Subject: [PATCH v5 02/19] iommu: Add device-centric DMA ownership interfaces
+Date:   Wed, 16 Nov 2022 17:00:38 -0400
+Message-Id: <2-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
 In-Reply-To: <0-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
 References: 
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MN2PR07CA0018.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::28) To LV2PR12MB5869.namprd12.prod.outlook.com
+X-ClientProxiedBy: BL0PR02CA0116.namprd02.prod.outlook.com
+ (2603:10b6:208:35::21) To LV2PR12MB5869.namprd12.prod.outlook.com
  (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH8PR12MB7136:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2f072615-b834-46e2-dd58-08dac815a9da
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY8PR12MB7682:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec1cd239-51bf-4ef1-6590-08dac815a7ed
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LJ5pfMikALZwYO/Ba+2qxrfQCrpPpgfTi81j/x9rRabjLMks2YOcaK6mNSiVIPCIaazsTcNZ8lNaO6mVqsRk7DINLtt7uu57IXTX6RZX4aYJoqSRe4opCEERA2e3fNfMZiHtiJNojLD3aYqkjt7tTuyuWp4W2/FXniKm2cyCeZN4s412R2WzCDCHM1f+Mr2pvOBvldca2+13FLmiCYtqPqnlCQx0TOLTqaGBl5kg9uIcjE6ogmJ6uUHOiLiMxkLivLhw1EQyXFzwWbWg2eiG8aRBJjDCJ+LYhZUAHxm4MeX5z9FvcVb3c7FkkyPXX7kJELkn9xY+q+qvpgyQMuzQ9mxLXAMb8XEbAc3PiHyBQ20DhDlJId4U01lfGFvxCY7YrMY3gg2ZnCWYXEMgxepE/o0kWZIqteY9RZNYWYHy+Ksi/EWOG0fevMHgdaSxfo+otJ7ZqpIzDmgvw+4+vaB5drr95UxJGohIkK4iCkb6oMBBPPkFcuKm4q/QU2hGcEyFnoHrdntKPZyKKzDT9TxfrhUfCvhMPY4RQ1rNoVLL01XIU/ncTWtprYnY/SufNw0mypeaQsuAO5cE8LMSoFzZoae9oXlt1Qvquzr6rHulylqJSyFyilZrHN1cNQMNY/K4hEU9+VPP33O6tapa5nZhpuuaRZOgR/r1uBhZcyjundFi1zRcBQnNN/CTq+Yux9TONNbKmwgHQjfWb6iHBqAsCHqdSaGmjPJFUUa+w8R5Vp5vK337jenwV9aI5mj1CLClH2CMLsSLnMQRaXM8v/kwlw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199015)(36756003)(41300700001)(4326008)(8676002)(66556008)(6486002)(186003)(66476007)(86362001)(66946007)(2616005)(478600001)(26005)(316002)(6666004)(110136005)(54906003)(6506007)(921005)(6512007)(83380400001)(2906002)(7406005)(7416002)(8936002)(5660300002)(38100700002)(4216001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: gqtLpxZckgvsM9KZS0iDDBHLFwvn7ytrIHPxpdOnj0mQ1tUwDR+URItxXpWh1BjYTnC1OrRqO3dhWgOy9Elouhj3yzlfN7u2LJm90fWNZ9jxIRqOHDlJSF8sTWr+cUDXYXEh8jA0Z6jyLYXBLSh80ihev75txP6trbktUXY3Fc7OqO0eZM1jjrJmwrS3C338zVQtZdlWRZ4x5EqsjlKDlmTF06KWfQNnQDMfYv0JwsrMgDXw91YxD0qM7H4Ps7znw15xJnHLBdldIjCgu6TOBaNSFsut7uMDR+zZ+nlFD3mJeI/rIGBM6hHN9AD33mtapKNybs0l+vFPsM+mODIpgWws9hZUHcCytavnnzchSdqd09IzuQH5T8OeJqIFUTzQyVes4BOwQCRAGfcVHt/60NLzxcGoskD4tIYw1/XpbrikyiZoluLHsW4xjufNGs5IiwrkcaUSA5l61jHA9/UUpzP97rbIQ9jTXNWuXDvJ3nFyyVfVhpEA0dlXrDNwwR2/AOl5AO+Clv58eLFm/qNHtEtAAVBGwMxGg+K2P6goFsnzdBQJUP9x8HTnGW8xr24zGt3XvPwoKcIxAIBZDAfEqQvhsxmZyeexgaiWYvued00gi8Vs0JDJtdKZGgZPqAI1eC4Rv84NswxfehOFzO6VBjlrLGBUdZvcdE30CtiiRgMrdD1TelXNJYvAS0IVO95JChGkafpE39q5t2sfj2jUY+p5wawQRmQqTlhQDz7m1B383Udf7I7BqxZHlsPv7Ekm1TDu3LMfqVHKNyx9jvVfhA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199015)(38100700002)(2616005)(86362001)(921005)(110136005)(7406005)(6666004)(478600001)(6486002)(7416002)(8936002)(66476007)(8676002)(4326008)(54906003)(66556008)(66946007)(316002)(41300700001)(83380400001)(2906002)(6506007)(186003)(5660300002)(6512007)(36756003)(26005)(4216001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4lhDlAi+aZ/Q3Avj0eiYxz9Br5gCo0KJGNl+Ny4DZ+jyCxYW09GNSAb6yfkw?=
- =?us-ascii?Q?YrgGKRoJBMNZAOJfmXZ/39cxr1LI7kvJEr4uBgJ1ZCqSdTPZ6o6RPvrUxlT9?=
- =?us-ascii?Q?ePKeq/k3a4XVh6158R7XVEhIcfvTcmnJNuU0hOJr8JsEM4l45VdsKpi9620e?=
- =?us-ascii?Q?5Ec64apRNoPczX/Cax56xmD4OBEXb0cCqEokzun+C3fVRrdgKZhi0em2SAbB?=
- =?us-ascii?Q?5Bnzk/yehD5hKmmnvReg+n3+V2It2DTUhOmXHLAct+MNMNpk0IX58TUfz9G9?=
- =?us-ascii?Q?ezqEAGB7f6Z6ZRVnaV1VXP/21ElaVYR3yVmYmMj7+7+WTYWbSp5GA3GFirpQ?=
- =?us-ascii?Q?LQdKdgEe+H5r7d4IpMz3zjLaiEDAxTQTGmYOzgn+wfFHGgd8PPaoJUd7B+qg?=
- =?us-ascii?Q?xGUHNUzyQX3n3mAdhGXXTCp89xUZ1I4rLMsgnK9UKclDXonKdyMY3+3ZOSww?=
- =?us-ascii?Q?BZTQyBPReSKNl7E8eCbqH7Ynfl9Q+eR+wq4TvGX3pNmZHewTef+ie+Fe1mtT?=
- =?us-ascii?Q?gRhOOYY8WtzI/JBiop+jK04sBs1mMwaDUej/X3OuDmmxLqoynH3CdO5vUHvf?=
- =?us-ascii?Q?XsjYiuoI8rSsjl4sfHe9vVQMBpcUX4l3vnEUnpEb7mIwdTDk3rW21YmwO664?=
- =?us-ascii?Q?s3DSASRlOloXPAMSxdKRBJtGVQxWCMgCL4N+Osj2amOv3fAZisj9S+uc+xe/?=
- =?us-ascii?Q?ndyLLMKrTNpbz0+RNHiB2+eaNq0cPO4UdheWCsvZeSklkLFetEyIzKRFCNYx?=
- =?us-ascii?Q?hfUHbHSLc1l2i41yyKvY0cTlx8hKVknqjt0OgpiaYwI4ZNvU//RJm61gKRLU?=
- =?us-ascii?Q?7Y2t1q4szYu5P1J6DtZHM8YpFivFhQUDYR7UAtG/uIz6hXI7VIUN16q9i5oM?=
- =?us-ascii?Q?cE3yxN3U3O7qD1tuewAtSEGnVB1RUswiqtcUmnLF1O4RfHeGVjFVXoffWKnB?=
- =?us-ascii?Q?SLgLjxroefphMCJ1TLMBXTkpDjDkT6dPKxv5EE0rIE2M/Lj5me8IyZtEK9XI?=
- =?us-ascii?Q?CDNp94TtOdKTjTuzES3cHIGgS/XEaMAhNxKvj+kMhC4m77uu14Gy5XG9eu9+?=
- =?us-ascii?Q?Wtjpce7OYUaNOeVpb7GsIfcxjlS06zTZjZieZ2uis69yTNZfwXM5CKjFDzTk?=
- =?us-ascii?Q?gkVU/MLL/BPvZXIfiIyYs54BaoKvDuVQMhfhXrz3bSyD7nsW9OrCD3LitLsN?=
- =?us-ascii?Q?RaxreIQnmwYKMaOPDJt9KpGNzz2OX7GQBEE3Ju5X4YvZSSqeVF8Pg5bk0XHc?=
- =?us-ascii?Q?VTSyp9LQ/PhxhFbH+BN4P4xUCphM2tyLbtPoiFmfTQE5MixCxuQ3Int05cHG?=
- =?us-ascii?Q?H9BBqaAFTomGgeJ8DSuDGqFC1BVnouDnOMrJ51KL5ZO01qkMzl+4j6yaxZz0?=
- =?us-ascii?Q?vtxNGOR9DMIsL7ePbWwyQLspjwkeKBO1uSR467B8FWF5JL68CnHkBElKicMa?=
- =?us-ascii?Q?uRl+CYHFG86lFRdrZOK2x0c1UYrEv048z9eVEc6bCAB/0UWfUFYyZ4UnNIPC?=
- =?us-ascii?Q?eedLCTeXhfXe542Q9BT2hxfwWA27I2VePLMQlh5rYVx0zFmsPgn+Zjh8DIgF?=
- =?us-ascii?Q?E9UQ4wCfdZqRUsfd/dY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+bfF6etGvMY6tDqd/t6iXbjw7VPCukrjkUNUQjKpNYF3z6te5niHCyCEc7jv?=
+ =?us-ascii?Q?+m+m2mrBA0VCgr5mCF3m9ITgxZsV6Z8cYDwxpshzi6fTtMEGVhBoY/6UZxrT?=
+ =?us-ascii?Q?JBPSeHb21kNT8XSaLql793f2K2wy5VKrriRvNF9doV1EWtPV0vwHw8A4+pzW?=
+ =?us-ascii?Q?6vioNQu7bh26udhmlPBgVaXOLQVKiy9QItvKRAi+A8ZmUD6yE3jTdwvkaWG0?=
+ =?us-ascii?Q?VBR4bAMtx5Z1+N2OgXaEfFwRVZbLTK7h8J3B8ix35rtwjNPbPcC3EzjxCkWj?=
+ =?us-ascii?Q?83oVBOoasFjTo+EN4Ly1zmwdh2CDfZnsbJKAoz/jjjwUK68XRr/CtmWLBT7B?=
+ =?us-ascii?Q?AfrfLup/JcxliIhZqg0vZm1UaoWHfTsDwBriuTfTVGjAceIamavKtbo25+uh?=
+ =?us-ascii?Q?noVyysQxALhNF+ASWHT2O6tK+60X4TMoEcGrpBd9buJOICnPNIZ4r7b4SvOi?=
+ =?us-ascii?Q?uwzHIcuz8VXcK2/UAWuxYs29T7uzqAoLC3bY29wTOGO8Fy007uvvYve7L9+V?=
+ =?us-ascii?Q?yeg2q35dQbvCcvlVX2krqOAb3I6ORP/0ddA/atTY38aNpx2Nnytyil8aKQp2?=
+ =?us-ascii?Q?8VnvSLlOtAMSw8T/GAHfJIw2yKqyYlF4V1Oyh0atqgxDDHV8PNY3alfng67z?=
+ =?us-ascii?Q?3ivMLT10qsOxsYvYHMWwzgouHTzzb6ynVCiAbKyO7enARQTasC1TtPwWbJFu?=
+ =?us-ascii?Q?KriJjsVaveVx/38rXATlHLnX08jilg8utLkzIZGBuXLAHAgSXHiseMrjpqo0?=
+ =?us-ascii?Q?xXjRfHjpRNA2LWV0XSNkpMK/YQcRLtXV5vG9nKpuP7gHF+hZmMQ/7Agwl5y2?=
+ =?us-ascii?Q?eywygOSR31CzUPgpdGTXB5TFGm4Q7rtnCSvtOQNHU0bJJOrWSDwXncE+pQI7?=
+ =?us-ascii?Q?O8CrYxPjRzV0nE/H+xSoMsHSujrnezAdqEi0B+jApaMgxwgXcDDZmidrgGSL?=
+ =?us-ascii?Q?E3gC4fnxa9PxfPuRHGYMd9qT501Oa5CSEMlHVQaRrP8j179USMa7FC/qaaIx?=
+ =?us-ascii?Q?KUG6iOFhJ2Fr1AbSaTW5gXz7SAfrPmJbX9vpHOVv7+S6EWeKUQ2pUdUSZi1o?=
+ =?us-ascii?Q?iH/WlBX0uRGIIgQXRoRWVYHxQENUV5qivD4KKInn2d6jwz190Fmhitc7mrbk?=
+ =?us-ascii?Q?bnm/BkjcZGrrtRAeEWgYpNGPx9UozG5gWMHJwF/DDbYs0O+FaHZuRwIEPklb?=
+ =?us-ascii?Q?Bm4Y0x8KQLEKA9QKTRQIhZ2hhCjJ8CE2NNa26INYn33FrsSsip8dI5+/KOlr?=
+ =?us-ascii?Q?ube799GQiw8dRZLKkobN6FiNi9QS9XcqEFbeqODHHyMtApprMz6gDtnnuFsI?=
+ =?us-ascii?Q?/yjBt604yX39YMMI+HmXZS/VUngeM++oaGEG3Zto5PiiISYrmX8VL0+9azI2?=
+ =?us-ascii?Q?/bW2Qz1xuVRETsle/eaoZLAdL+zWuFG6BEjbC35Sp08FxXxE40ze2jQatuQJ?=
+ =?us-ascii?Q?vZlY6KWy3QwAKOFlj/3zgneH+GDiJDKN1QfcygLGfiYVbNSWDNhbDE6ZitIs?=
+ =?us-ascii?Q?Ey4Y5X3Of5kLXR7TbnMFl8ay+PY0rACl6ChMrkfDdfbHcQaTxfqb40RdRK1Y?=
+ =?us-ascii?Q?2cEpAYr8jypnCn0tlVQ=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f072615-b834-46e2-dd58-08dac815a9da
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec1cd239-51bf-4ef1-6590-08dac815a7ed
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 21:00:59.9500
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 21:00:56.7004
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FcnOxbvzt3HOrZWyBDfqvH6vdeBnjwZDGJ+W3ckvA4TnmIoz9ye9n04hdm8jjhSb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7136
+X-MS-Exchange-CrossTenant-UserPrincipalName: dZh/onY7Q3IyZQxJKknIesshoPTQyiNNpowHXP8agmjDim5vMKSr6EorVl3iQPbn
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7682
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -145,85 +145,229 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This queries if a domain linked to a device should expect to support
-enforce_cache_coherency() so iommufd can negotiate the rules for when a
-domain should be shared or not.
+From: Lu Baolu <baolu.lu@linux.intel.com>
 
-For iommufd a device that declares IOMMU_CAP_ENFORCE_CACHE_COHERENCY will
-not be attached to a domain that does not support it.
+These complement the group interfaces used by VFIO and are for use by
+iommufd. The main difference is that multiple devices in the same group
+can all share the ownership by passing the same ownership pointer.
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Move the common code into shared functions.
+
 Tested-by: Nicolin Chen <nicolinc@nvidia.com>
 Tested-by: Yi Liu <yi.l.liu@intel.com>
 Tested-by: Lixiao Yang <lixiao.yang@intel.com>
 Tested-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- drivers/iommu/amd/iommu.c   |  2 ++
- drivers/iommu/intel/iommu.c | 16 +++++++++++-----
- include/linux/iommu.h       |  5 +++++
- 3 files changed, 18 insertions(+), 5 deletions(-)
+ drivers/iommu/iommu.c | 121 +++++++++++++++++++++++++++++++++---------
+ include/linux/iommu.h |  12 +++++
+ 2 files changed, 107 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 45299eb7e8e306..240c535e317cc7 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -2278,6 +2278,8 @@ static bool amd_iommu_capable(struct device *dev, enum iommu_cap cap)
- 		return false;
- 	case IOMMU_CAP_PRE_BOOT_PROTECTION:
- 		return amdr_ivrs_remap_support;
-+	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
-+		return true;
- 	default:
- 		break;
- 	}
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index f298e51d5aa67a..157c9727411076 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -4450,14 +4450,20 @@ static bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain)
- 
- static bool intel_iommu_capable(struct device *dev, enum iommu_cap cap)
- {
--	if (cap == IOMMU_CAP_CACHE_COHERENCY)
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+
-+	switch (cap) {
-+	case IOMMU_CAP_CACHE_COHERENCY:
- 		return true;
--	if (cap == IOMMU_CAP_INTR_REMAP)
-+	case IOMMU_CAP_INTR_REMAP:
- 		return irq_remapping_enabled == 1;
--	if (cap == IOMMU_CAP_PRE_BOOT_PROTECTION)
-+	case IOMMU_CAP_PRE_BOOT_PROTECTION:
- 		return dmar_platform_optin();
--
--	return false;
-+	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
-+		return ecap_sc_support(info->iommu->ecap);
-+	default:
-+		return false;
-+	}
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 6ca377f4fbf9e9..d69ebba81bebd8 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -3108,41 +3108,49 @@ static int __iommu_group_alloc_blocking_domain(struct iommu_group *group)
+ 	return 0;
  }
  
- static struct iommu_device *intel_iommu_probe_device(struct device *dev)
++static int __iommu_take_dma_ownership(struct iommu_group *group, void *owner)
++{
++	int ret;
++
++	if ((group->domain && group->domain != group->default_domain) ||
++	    !xa_empty(&group->pasid_array))
++		return -EBUSY;
++
++	ret = __iommu_group_alloc_blocking_domain(group);
++	if (ret)
++		return ret;
++	ret = __iommu_group_set_domain(group, group->blocking_domain);
++	if (ret)
++		return ret;
++
++	group->owner = owner;
++	group->owner_cnt++;
++	return 0;
++}
++
+ /**
+  * iommu_group_claim_dma_owner() - Set DMA ownership of a group
+  * @group: The group.
+  * @owner: Caller specified pointer. Used for exclusive ownership.
+  *
+- * This is to support backward compatibility for vfio which manages
+- * the dma ownership in iommu_group level. New invocations on this
+- * interface should be prohibited.
++ * This is to support backward compatibility for vfio which manages the dma
++ * ownership in iommu_group level. New invocations on this interface should be
++ * prohibited. Only a single owner may exist for a group.
+  */
+ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner)
+ {
+ 	int ret = 0;
+ 
++	if (WARN_ON(!owner))
++		return -EINVAL;
++
+ 	mutex_lock(&group->mutex);
+ 	if (group->owner_cnt) {
+ 		ret = -EPERM;
+ 		goto unlock_out;
+-	} else {
+-		if ((group->domain && group->domain != group->default_domain) ||
+-		    !xa_empty(&group->pasid_array)) {
+-			ret = -EBUSY;
+-			goto unlock_out;
+-		}
+-
+-		ret = __iommu_group_alloc_blocking_domain(group);
+-		if (ret)
+-			goto unlock_out;
+-
+-		ret = __iommu_group_set_domain(group, group->blocking_domain);
+-		if (ret)
+-			goto unlock_out;
+-		group->owner = owner;
+ 	}
+ 
+-	group->owner_cnt++;
++	ret = __iommu_take_dma_ownership(group, owner);
+ unlock_out:
+ 	mutex_unlock(&group->mutex);
+ 
+@@ -3151,30 +3159,91 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner)
+ EXPORT_SYMBOL_GPL(iommu_group_claim_dma_owner);
+ 
+ /**
+- * iommu_group_release_dma_owner() - Release DMA ownership of a group
+- * @group: The group.
++ * iommu_device_claim_dma_owner() - Set DMA ownership of a device
++ * @dev: The device.
++ * @owner: Caller specified pointer. Used for exclusive ownership.
+  *
+- * Release the DMA ownership claimed by iommu_group_claim_dma_owner().
++ * Claim the DMA ownership of a device. Multiple devices in the same group may
++ * concurrently claim ownership if they present the same owner value. Returns 0
++ * on success and error code on failure
+  */
+-void iommu_group_release_dma_owner(struct iommu_group *group)
++int iommu_device_claim_dma_owner(struct device *dev, void *owner)
+ {
+-	int ret;
++	struct iommu_group *group = iommu_group_get(dev);
++	int ret = 0;
++
++	if (!group)
++		return -ENODEV;
++	if (WARN_ON(!owner))
++		return -EINVAL;
+ 
+ 	mutex_lock(&group->mutex);
++	if (group->owner_cnt) {
++		if (group->owner != owner) {
++			ret = -EPERM;
++			goto unlock_out;
++		}
++		group->owner_cnt++;
++		goto unlock_out;
++	}
++
++	ret = __iommu_take_dma_ownership(group, owner);
++unlock_out:
++	mutex_unlock(&group->mutex);
++	iommu_group_put(group);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(iommu_device_claim_dma_owner);
++
++static void __iommu_release_dma_ownership(struct iommu_group *group)
++{
++	int ret;
++
+ 	if (WARN_ON(!group->owner_cnt || !group->owner ||
+ 		    !xa_empty(&group->pasid_array)))
+-		goto unlock_out;
++		return;
+ 
+ 	group->owner_cnt = 0;
+ 	group->owner = NULL;
+ 	ret = __iommu_group_set_domain(group, group->default_domain);
+ 	WARN(ret, "iommu driver failed to attach the default domain");
++}
+ 
+-unlock_out:
++/**
++ * iommu_group_release_dma_owner() - Release DMA ownership of a group
++ * @dev: The device
++ *
++ * Release the DMA ownership claimed by iommu_group_claim_dma_owner().
++ */
++void iommu_group_release_dma_owner(struct iommu_group *group)
++{
++	mutex_lock(&group->mutex);
++	__iommu_release_dma_ownership(group);
+ 	mutex_unlock(&group->mutex);
+ }
+ EXPORT_SYMBOL_GPL(iommu_group_release_dma_owner);
+ 
++/**
++ * iommu_device_release_dma_owner() - Release DMA ownership of a device
++ * @group: The device.
++ *
++ * Release the DMA ownership claimed by iommu_device_claim_dma_owner().
++ */
++void iommu_device_release_dma_owner(struct device *dev)
++{
++	struct iommu_group *group = iommu_group_get(dev);
++
++	mutex_lock(&group->mutex);
++	if (group->owner_cnt > 1)
++		group->owner_cnt--;
++	else
++		__iommu_release_dma_ownership(group);
++	mutex_unlock(&group->mutex);
++	iommu_group_put(group);
++}
++EXPORT_SYMBOL_GPL(iommu_device_release_dma_owner);
++
+ /**
+  * iommu_group_dma_owner_claimed() - Query group dma ownership status
+  * @group: The group.
 diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 68d7d304cdb761..a09fd32d8cc273 100644
+index a09fd32d8cc273..1690c334e51631 100644
 --- a/include/linux/iommu.h
 +++ b/include/linux/iommu.h
-@@ -124,6 +124,11 @@ enum iommu_cap {
- 	IOMMU_CAP_NOEXEC,		/* IOMMU_NOEXEC flag */
- 	IOMMU_CAP_PRE_BOOT_PROTECTION,	/* Firmware says it used the IOMMU for
- 					   DMA protection and we should too */
-+	/*
-+	 * Per-device flag indicating if enforce_cache_coherency() will work on
-+	 * this device.
-+	 */
-+	IOMMU_CAP_ENFORCE_CACHE_COHERENCY,
- };
+@@ -707,6 +707,9 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner);
+ void iommu_group_release_dma_owner(struct iommu_group *group);
+ bool iommu_group_dma_owner_claimed(struct iommu_group *group);
  
- /* These are the possible reserved region types */
++int iommu_device_claim_dma_owner(struct device *dev, void *owner);
++void iommu_device_release_dma_owner(struct device *dev);
++
+ struct iommu_domain *iommu_sva_domain_alloc(struct device *dev,
+ 					    struct mm_struct *mm);
+ int iommu_attach_device_pasid(struct iommu_domain *domain,
+@@ -1064,6 +1067,15 @@ static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
+ 	return false;
+ }
+ 
++static inline void iommu_device_release_dma_owner(struct device *dev)
++{
++}
++
++static inline int iommu_device_claim_dma_owner(struct device *dev, void *owner)
++{
++	return -ENODEV;
++}
++
+ static inline struct iommu_domain *
+ iommu_sva_domain_alloc(struct device *dev, struct mm_struct *mm)
+ {
 -- 
 2.38.1
 
