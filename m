@@ -2,86 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF60362CF55
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 01:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AEC62D011
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 01:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbiKQAHs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Nov 2022 19:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
+        id S234178AbiKQArB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 19:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232979AbiKQAHr (ORCPT
+        with ESMTP id S238401AbiKQAq0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:07:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8329F110C
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668643610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZLAErkYkAURoUFblE/LNyl2bM120+OvwzIhnkvyLL0o=;
-        b=ZAgze1dcnaaJPFGoYYWvJOlGrH+iC6TrUNOWWtxKdfUOj6iJ4j2G8NRQeV0FQkMpT2ow4p
-        WzJQT6LZybzj+aHWmEiLxLv4vLItIC8zvmV3bRhbkTflQ4H0bLo9asPouqpiODgR/6srkZ
-        VtMJhyK4Nxg7w1pnnjr9fCRR9Eypzho=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-336-KnUxh2kMNYSddgZkusLsPg-1; Wed, 16 Nov 2022 19:06:46 -0500
-X-MC-Unique: KnUxh2kMNYSddgZkusLsPg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A94E3C01DF4;
-        Thu, 17 Nov 2022 00:06:46 +0000 (UTC)
-Received: from jsavitz-csb.redhat.com (unknown [10.22.18.108])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 26B20140EBF3;
-        Thu, 17 Nov 2022 00:06:45 +0000 (UTC)
-From:   Joel Savitz <jsavitz@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-next@vger.kernel.org,
-        Nico Pache <npache@redhat.com>
-Subject: [PATCH mm-everything] selftests/vm: remove extraneous echo
-Date:   Wed, 16 Nov 2022 20:06:32 -0400
-Message-Id: <20221117000632.254027-1-jsavitz@redhat.com>
+        Wed, 16 Nov 2022 19:46:26 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB23A6B3A3
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:45:24 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id 7so109239ybp.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2JYR5BkunF7jpGC9+e1gHhFjfq2CaWsh+JNLeA4cSow=;
+        b=VP6VReT7Ga2T8TkmdBXePIZp2IMDUoNlaF+CCECrl6DaKXkfgdOHApNymuj286JAmX
+         FF5OamIO5F26h84ltHBlsHynkyTvU3GiIl6z9x+tk7CSMCHkMkdDoe0gMKWlGwOHcjEt
+         CsE9r8zFoKzQT7cE12Gvqp9JTJ5thyGDXjtBqK52CERFLlo6giGIfjM8zwe8JzYI9/7t
+         YiRlNf22tSRkGfXHAe4thK6/CTx9ZYaAofQeO1HUnrTuu5NpyThUbqOFJSqz0SklL87D
+         2mPCoCAPj4ISUYAZzMyHWETvKcvb56p5njBEq7xecXke+GatbzepTA403ePN6qUwmtvW
+         onbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2JYR5BkunF7jpGC9+e1gHhFjfq2CaWsh+JNLeA4cSow=;
+        b=Bpk26RuT65NzpR/prbr9LLiAqYtJdYbIwF6hwOJwceUrnWkeiCjI++gdm+jKtP8QIJ
+         9MEBeVj/LvE0pOKGCyDYHXnXJZdDNwYZnghRVf66zyAytioCuPCNZZcmSrYw5WKtf4HR
+         rhX61RDBXTU3QkfG1Jg0BAFf0ML0GdDLm5Qo0ldwWSODsHD7S1pFlnqyiOoqwNvWJ+ED
+         okYzhVKEu0jD3uHJBw0E7tqYfq3oBwCAXD8bia6U2WTF3rh6qgEiBJcFUb/ME4iilf6+
+         wiFOmoTJ+Ve/KDzC4pDl+0oh4XnVXf20jt0A9HO1xPdPGyDER0Q4VoF2qiXfRQRHXGSl
+         ufgA==
+X-Gm-Message-State: ANoB5pkipgQAMhdEsCzGImKNDpQ9hO6zxAeVlVwucl3dJWEfQWVREvn/
+        E7tvIjzgAl5jqLsvHktHnBbWt6qxWIXZVQ3UV1hhLQ==
+X-Google-Smtp-Source: AA0mqf7BrP7X5qSPJf/drCclU/BXyNzvk2HB+KXaxPpnHS8wgJrAT3kxcJhlabI/OGYuuUGolXEGU///p9v0hEDsSWM=
+X-Received: by 2002:a25:40c4:0:b0:6cc:1a02:c338 with SMTP id
+ n187-20020a2540c4000000b006cc1a02c338mr181599yba.413.1668645923794; Wed, 16
+ Nov 2022 16:45:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221115230932.7126-1-khuey@kylehuey.com> <773a9deb-b017-20e5-cebe-d9c35ac4fd3d@intel.com>
+In-Reply-To: <773a9deb-b017-20e5-cebe-d9c35ac4fd3d@intel.com>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Wed, 16 Nov 2022 16:45:12 -0800
+Message-ID: <CAP045AozQWf8qKuusXy=1p7UynOHas7mNpMospCOHmMmP993=Q@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] x86/fpu: Allow PKRU to be (once again) written by ptrace
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "Robert O'Callahan" <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is an extra echo statement in run_test(). Remove it.
+On Wed, Nov 16, 2022 at 3:31 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 11/15/22 15:09, Kyle Huey wrote:
+> > Following last week's discussion I've reorganized this patch. The goal
+> > remains to restore the pre-5.14 behavior of ptrace(PTRACE_SET_REGSET,
+> > NT_X86_XSTATE) for the PKRU register (which was equivalent to a hardware
+> > XRSTOR instruction).
+>
+> The new version looks great.  I've applied it.
+>
+> I did remove the stable@ tags for now.  There were a couple reasons for
+> that.  First, most of the x86 stuff marked for stable@ goes via our
+> tip/urgent branch and this doesn't seem super urgent.  It also touches
+> code that's exposed in at least three separate UABIs, so I want a bit
+> more soak time than x86/urgent normally provides.
+>
+> I have zero objections if anyone wants to submit it to stable@ after it
+> hits Linus's tree.
 
-Fixes: 98b3add737b4 ("selftests/vm: enable running select groups of tests")
+Works for me, thanks.
 
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
----
- tools/testing/selftests/vm/run_vmtests.sh | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index ce52e4f5ff21..9236010faaaa 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -142,7 +142,6 @@ echo "$ARCH64STR" | grep "$ARCH" &>/dev/null && VADDR64=1
- # Usage: run_test [test binary] [arbitrary test arguments...]
- run_test() {
- 	if test_selected ${CATEGORY}; then
--		echo "running: $1"
- 		local title="running $*"
- 		local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
- 		printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
--- 
-2.38.1
-
-
+- Kyle
