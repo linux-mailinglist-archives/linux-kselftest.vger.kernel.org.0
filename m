@@ -2,80 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D7D62E708
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 22:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D6962E750
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 22:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234960AbiKQVfh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Nov 2022 16:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
+        id S240792AbiKQVw2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Nov 2022 16:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240928AbiKQVfL (ORCPT
+        with ESMTP id S240838AbiKQVw0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Nov 2022 16:35:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796F964571
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 13:33:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668720785;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uDQssBDra2LgVmFEmn0r+1NHqlAxiYwGBKpxHeKgv/A=;
-        b=BcOvuPxpztucI2n7pEHBxDN6tyIS0IUNoFaIkltXiq/AkVc8nI7XEkVAG68W3Sj/UUR/P1
-        l7McSUroGiet/8pyAKBQb+5qtfWyL7qYzV5lYRSKUbRwop1Y4LHXYZUae9gMZYc11QPeqE
-        eOgx9VXM4O+BeG/v/TmpKbV9bQHU52A=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-654-V8ZD54CbP9at5GbUPo87Jg-1; Thu, 17 Nov 2022 16:33:03 -0500
-X-MC-Unique: V8ZD54CbP9at5GbUPo87Jg-1
-Received: by mail-qk1-f200.google.com with SMTP id w13-20020a05620a424d00b006e833c4fb0dso3764025qko.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 13:33:03 -0800 (PST)
+        Thu, 17 Nov 2022 16:52:26 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933EF720B4
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 13:52:24 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id z15so1630411ilp.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 13:52:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZIfCf35I7ypehLBPONCdMybY63wBWvIY0HsYk1HXqDc=;
+        b=FwFpT9rEAOzbFMrQ1oETE5w3UkjxJG2IuYVttzZ2dC1284aFmSpcPVRiNVHQZcU+so
+         RrgucbqQmdEoPE/BmvWYhbHRQHWPyDf5Qvn9dPzT3lMDNGYj+bN+l30DNAsICMaWyM5x
+         6MIRb64hzBHkuexsAifzULV9iwNA+Np52/yB+fWncqJtKV1T9GoFBnDfZTl49lNSsyqg
+         Dvj4i3R0dSnj/Dn3tbYWx3lurf0ku4zt9sqxvU1JqtGth1EBIECzDZ4wBfU3ikufzXv5
+         TlsBiS9URvFZUeHMfzBRvbDUv+LoFCQK/5BMahxU49xLbrsDAYeknF3hWxOgB6gATdkk
+         yqZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uDQssBDra2LgVmFEmn0r+1NHqlAxiYwGBKpxHeKgv/A=;
-        b=UbReDX5nGMh1ponkV9ER1huI418nwwAicUAkqXMWa4z68nLEXnSeNuG0nAnXPmVd2s
-         Nq15sfsFS7H7eg/VNt0xHyiQ6WiaGtuanAu0vl74vnI7FN1ngCDFUdV5SbReFZq+EvgA
-         LiGGbRdONM/k0ziU75qrqWyhyWGOgJSrEw5xCedZQw1XrlUsHogHUU+up6QWTLui6JJP
-         78CUHk2CJS/Ee2vef9FOJYQxuscGS4NTECBWBKe5wBxQJfbjvRxooEbrXaPdeMzqDNfA
-         yOrhp77qknPcYUQ9WnRSc4IQg6hfyZSPxQX41YtYbvSzlxGLvbiYoq86SnwH2kxh1dh7
-         iuLw==
-X-Gm-Message-State: ANoB5pltBXOulq4+uVLbHZjibn51FMjCiZRf3dQtN4ECG0m4NmtuBjAR
-        1ekGqSgonyGreQAZ1lj9zRTpr/WlYwh6yRNTaVYZvEHqbRxX4QqxKpqD0a7xLLZuqPDUBzzY2XG
-        aApKfhCKZmPA8TlTHYF7HLf+I42Ef
-X-Received: by 2002:a05:6214:1e2:b0:4b8:fbc8:594c with SMTP id c2-20020a05621401e200b004b8fbc8594cmr4180087qvu.61.1668720783479;
-        Thu, 17 Nov 2022 13:33:03 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7GUQGzSuRb8meXTFVPjjz0QZ1OIpM/M/Y+skPofDCEJfsYqDG59yxNKsN4fDPGQ0ZyKA7lMw==
-X-Received: by 2002:a05:6214:1e2:b0:4b8:fbc8:594c with SMTP id c2-20020a05621401e200b004b8fbc8594cmr4180070qvu.61.1668720783259;
-        Thu, 17 Nov 2022 13:33:03 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id bs42-20020a05620a472a00b006b61b2cb1d2sm1184021qkb.46.2022.11.17.13.33.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 13:33:02 -0800 (PST)
-Date:   Thu, 17 Nov 2022 16:33:01 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Joel Savitz <jsavitz@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        David Hildenbrand <dhildenb@redhat.com>,
-        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH linux-next] selftests/vm: calculate variables in correct
- order
-Message-ID: <Y3aojfUC2nSwbCzB@x1n>
-References: <20221028132640.2791026-1-jsavitz@redhat.com>
- <20221108163124.a54f932f8f79f9c1d6e63903@linux-foundation.org>
- <CAL1p7m7Ar_DBbpLWuha8dPYKU3FjS6NyAROBa_PO6NKRgfuGxQ@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZIfCf35I7ypehLBPONCdMybY63wBWvIY0HsYk1HXqDc=;
+        b=wb4wOF8UOoAKe+BPshwqIPhuOLqLG0JGiMFCDIoyTx+uSaNEo8gcgoiBFvuGkN0Hvp
+         XecZkTohFYwsjozSioJeySsGvm2tOZEp4O3wuEgRVfIfohXaKE8WJQC1CJMTKRnBq/XK
+         ldZCkN1DPLCKY6HrUCTvCY/yjqAnVBesy8EcEowIvsB5vCSXLxASoJQ8+bc/mnUwn2j9
+         zwsEMwjTe1JUigrp+mBB9V/pvx/So4X3oRzA32O7zuaJKWKA0j7YFTEA59jp2nPiNHO4
+         /H788cmhSBJJS3CKtt4LHKjcAHIpX6TKBEYPJ/nfq6Npa/MkBU7un7GMEyVZ3iTk/ef0
+         W8rg==
+X-Gm-Message-State: ANoB5pnLKmOdOVjfIwantDi+0IktFL+NEls9e9uNBQ+Y/BugJC4mkcwJ
+        OxEb0ekBWn2R0+zxMws5nOD9MF5qGSYNC+1sgVWJgg==
+X-Google-Smtp-Source: AA0mqf4sHBRBgXFO6vYaegWinsM12EWK6jnEiNEoIlD8jNSI1TQdnDv64G2kvFZuIoVD6UdIdnHz3M94FVFnC+Hfo98=
+X-Received: by 2002:a92:c086:0:b0:2ea:ba31:f2ef with SMTP id
+ h6-20020a92c086000000b002eaba31f2efmr2001158ile.159.1668721943842; Thu, 17
+ Nov 2022 13:52:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="+DsSjgx0E9gBsQRT"
-Content-Disposition: inline
-In-Reply-To: <CAL1p7m7Ar_DBbpLWuha8dPYKU3FjS6NyAROBa_PO6NKRgfuGxQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <tencent_E1424259BD97672AD1AF00A3468858065E08@qq.com>
+In-Reply-To: <tencent_E1424259BD97672AD1AF00A3468858065E08@qq.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Thu, 17 Nov 2022 13:52:12 -0800
+Message-ID: <CAKH8qBsAC4qHSQ7TYnkXEMM68rqOz8gxuZJBxVdSkzhpQ8MR-Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix error: undeclared
+ identifier 'NF_NAT_MANIP_SRC'
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, dxu@dxuuu.xyz,
+        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, lkp@intel.com, lorenzo@kernel.org,
+        martin.lau@linux.dev, memxor@gmail.com, mykolal@fb.com,
+        rongtao@cestc.cn, shuah@kernel.org, song@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,109 +74,123 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Nov 17, 2022 at 7:17 AM Rong Tao <rtoax@foxmail.com> wrote:
+>
+> From: Rong Tao <rongtao@cestc.cn>
+>
+> commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
+> introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat.h,
+> and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_nat_info
+> kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c.
+>
+> In bpf kself-test config (tools/testing/selftests/bpf/config) nf_nat
+> is compiled as built-in, this issue occurs just if it is compiled as
+> module. We could use BPF CO-RE and ___suffix rule to avoid this.
+>
+> How to reproduce the error:
+>
+>     $ make -C tools/testing/selftests/bpf/
+>     ...
+>       CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+>       error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+>             bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+>                                                            ^
+>       error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+>             bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+>                                                            ^
+>     2 errors generated.
+>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+> v2: use BPF CO-RE and ___suffix rule to avoid this error.
+> v1: https://lore.kernel.org/lkml/tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com/
+> ---
+>  .../testing/selftests/bpf/progs/test_bpf_nf.c | 30 +++++++++++++++++--
+>  1 file changed, 27 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 227e85e85dda..1706984e1a6a 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -2,6 +2,7 @@
+>  #include <vmlinux.h>
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_endian.h>
+> +#include <bpf/bpf_core_read.h>
+>
+>  #define EAFNOSUPPORT 97
+>  #define EPROTO 71
+> @@ -11,6 +12,11 @@
+>
+>  extern unsigned long CONFIG_HZ __kconfig;
+>
+> +enum nf_nat_manip_type___x {
+> +       NF_NAT_MANIP_SRC___x,
+> +       NF_NAT_MANIP_DST___x,
+> +};
+> +
+>  int test_einval_bpf_tuple = 0;
+>  int test_einval_reserved = 0;
+>  int test_einval_netns_id = 0;
+> @@ -58,7 +64,7 @@ int bpf_ct_change_timeout(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_set_status(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_change_status(struct nf_conn *, u32) __ksym;
+>  int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
+> -                       int port, enum nf_nat_manip_type) __ksym;
+> +                       int port, int type) __ksym;
+>
+>  static __always_inline void
+>  nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+> @@ -151,16 +157,34 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+>                 union nf_inet_addr saddr = {};
+>                 union nf_inet_addr daddr = {};
+>                 struct nf_conn *ct_ins;
+> +               int manip_src;
+> +               int manip_dst;
+> +               enum nf_nat_manip_type___x mapip_type_x;
+> +
+> +               if (!bpf_core_type_exists(enum nf_nat_manip_type)) {
+> +                       bpf_printk("enum nf_nat_manip_type not exist.\n");
+> +                       return;
+> +               }
+> +
+> +               if (bpf_core_enum_value_exists(mapip_type_x, NF_NAT_MANIP_SRC___x))
+> +                       manip_src = bpf_core_enum_value(mapip_type_x, NF_NAT_MANIP_SRC___x);
+> +               else
+> +                       return;
+> +
+> +               if (bpf_core_enum_value_exists(mapip_type_x, NF_NAT_MANIP_DST___x))
+> +                       manip_dst = bpf_core_enum_value(mapip_type_x, NF_NAT_MANIP_DST___x);
+> +               else
+> +                       return;
+>
+>                 bpf_ct_set_timeout(ct, 10000);
+>                 ct->mark = 77;
+>
+>                 /* snat */
+>                 saddr.ip = bpf_get_prandom_u32();
+> -               bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+> +               bpf_ct_set_nat_info(ct, &saddr, sport, manip_src);
 
---+DsSjgx0E9gBsQRT
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+I'm not sure these co-re checks are helpful. Can we just hardcode 1/0
+here and below?
 
-On Wed, Nov 16, 2022 at 08:09:11PM -0400, Joel Savitz wrote:
-> However, I noticed that on the mm-everything branch, the hugepage-mmap test
-> fails:
-> 
-> # ./run_vmtests.sh -t "hugetlb"
-> running: ./hugepage-mmap
-> -----------------------
-> running ./hugepage-mmap
-> -----------------------
-> Open failed: No such file or directory
-> [FAIL]
-> ...
-> 
-> It appears this is due to commit 0796c7b8be84 ("selftests/vm: drop mnt
-> point for hugetlb in run_vmtests.sh")
-> as the test still replies on the ./huge mountpoint removed in that commit.
-> The test passes before that patchset is applied.
+bpf_ct_set_nat_info(ct, &saddr, sport, 0 /*NF_NAT_MANIP_SRC*/);
+bpf_ct_set_nat_info(ct, &daddr, dport, 1 /*NF_NAT_MANIP_DST*/);
 
-Oops, sorry I totally overlooked this hard-coded test case using the
-mntpoint.
-
-Fix is simple though, which is attached.
-
--- 
-Peter Xu
-
---+DsSjgx0E9gBsQRT
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-selftests-vm-use-memfd-for-hugepage-mmap-test.patch"
-
-From 71da2480d4bac0fc598e4d1f05f71aba8b980bc4 Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Thu, 17 Nov 2022 16:29:15 -0500
-Subject: [PATCH] selftests/vm: use memfd for hugepage-mmap test
-Content-type: text/plain
-
-This test was overlooked with a hard-coded mntpoint path in test when we're
-removing the hugetlb mntpoint in commit 0796c7b8be84.  Fix it up so the
-test can keep running.
-
-Reported-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- tools/testing/selftests/vm/hugepage-mmap.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/hugepage-mmap.c b/tools/testing/selftests/vm/hugepage-mmap.c
-index 93f9e7b81331..955ef87f382c 100644
---- a/tools/testing/selftests/vm/hugepage-mmap.c
-+++ b/tools/testing/selftests/vm/hugepage-mmap.c
-@@ -16,14 +16,13 @@
-  * range.
-  * Other architectures, such as ppc64, i386 or x86_64 are not so constrained.
-  */
--
-+#define _GNU_SOURCE
- #include <stdlib.h>
- #include <stdio.h>
- #include <unistd.h>
- #include <sys/mman.h>
- #include <fcntl.h>
- 
--#define FILE_NAME "huge/hugepagefile"
- #define LENGTH (256UL*1024*1024)
- #define PROTECTION (PROT_READ | PROT_WRITE)
- 
-@@ -67,16 +66,16 @@ int main(void)
- 	void *addr;
- 	int fd, ret;
- 
--	fd = open(FILE_NAME, O_CREAT | O_RDWR, 0755);
-+	fd = memfd_create("hugepage-mmap", MFD_HUGETLB);
- 	if (fd < 0) {
--		perror("Open failed");
-+		perror("memfd_create() failed");
- 		exit(1);
- 	}
- 
- 	addr = mmap(ADDR, LENGTH, PROTECTION, FLAGS, fd, 0);
- 	if (addr == MAP_FAILED) {
- 		perror("mmap");
--		unlink(FILE_NAME);
-+		close(fd);
- 		exit(1);
- 	}
- 
-@@ -87,7 +86,6 @@ int main(void)
- 
- 	munmap(addr, LENGTH);
- 	close(fd);
--	unlink(FILE_NAME);
- 
- 	return ret;
- }
--- 
-2.37.3
+But I'm also overall not sure we need to make this test flexible; we
+have a lot of tests that depend on tools/testing/selftests/bpf/config;
+at some point I was trying to make the tests more tolerant to
+different environments, but it went nowhere..
 
 
---+DsSjgx0E9gBsQRT--
-
+>                 /* dnat */
+>                 daddr.ip = bpf_get_prandom_u32();
+> -               bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+> +               bpf_ct_set_nat_info(ct, &daddr, dport, manip_dst);
+>
+>                 ct_ins = bpf_ct_insert_entry(ct);
+>                 if (ct_ins) {
+> --
+> 2.31.1
+>
