@@ -2,95 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DB462D861
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 11:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5EF62D8DE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 12:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbiKQKtn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Nov 2022 05:49:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S231634AbiKQLGh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Nov 2022 06:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233900AbiKQKtm (ORCPT
+        with ESMTP id S239685AbiKQLGB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Nov 2022 05:49:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BFB13F61
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 02:49:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3748BB81FF5
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 10:49:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3561DC433D7;
-        Thu, 17 Nov 2022 10:49:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668682178;
-        bh=qEjfEk+eevrhFHGlVf+wkuhUShqD8MCpIbXhyirJC68=;
-        h=From:To:Cc:Subject:Date:From;
-        b=alX7F0fKNbgp/UiiCUhoxfUJtsRIgF3dp8wJC5uBW16ZQIQyXf17QZSNrbaaWACM9
-         11/oV1Mqsb41X0IVoQ4Ouds/aoin0+ptrpicHu6ADn9zlehW9OxkcLOzXA0r66ZLW4
-         BC+NUdoXsqvRIFk6FtfEImeiT2/pHGf+Na7ZrUjz9/VUsY6VVaYxZYMDdZ3tCuzsZE
-         /Nz3xM1tUmWdc3hlfznV+wFokt7ex2Aicc5c+eHvEfcfNqaoo5YzJFO9xiSPYXEE14
-         IxKfmQXnjSPe1p1ciaFYzfhXkj586HX37I0OYYCcxqPKbScqUd508LF6c/31JLNs4A
-         HfDtYdEMYIfRA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        David Gow <davidgow@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kselftest@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1] Documentation: dev-tools: Clarify requirements for result description
-Date:   Thu, 17 Nov 2022 10:46:36 +0000
-Message-Id: <20221117104636.639889-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 17 Nov 2022 06:06:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F4A286EF
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 03:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668683038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=49gONeuNGJL5O9v8lyWQciucbbb4tR6ylBmMzSawcfo=;
+        b=cPEnNW5QYankRD0MMiRie00p3oENwY4SuuCDFytaCN5fwjDhQmj0ROskRSL4MLbC2xKaaj
+        ggM+j3n8QzLp+3lzfZyC153Divr8v883fI+gQ9AuWbWbTWGDsgf5gID6c+ky/K421Hf/n/
+        N3ETJQ5d8b6xC6sObVhyYu4tgz4BmDI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-58-DUTsw0uePkCfjuOZkNgCJw-1; Thu, 17 Nov 2022 06:03:53 -0500
+X-MC-Unique: DUTsw0uePkCfjuOZkNgCJw-1
+Received: by mail-wr1-f72.google.com with SMTP id j30-20020adfa55e000000b00241b49be1a3so555897wrb.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 03:03:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=49gONeuNGJL5O9v8lyWQciucbbb4tR6ylBmMzSawcfo=;
+        b=WksjveIGzTYpytD4FR9WJkNx9sAa1SS2Qn6FJHy26p5UspcG9tnUmQV5zkj19M9Fyt
+         eLG/YtcZooMqSaw7RA4yu8P7JAce5IWJwQah5zz7FLax/IJfKqueMp8pf72fzYP3ipXf
+         jX+o4vl2kbmO91NiXlcEcyyfOuw1/+yIoAKbvOzTRlwJJB2D6AZOgbv93MmeTFlVTFNX
+         lqLDajLtLL5Cf9iBjlQyVCKTm/R1JQ1vTt5H8oYMss9o61MXGbl13rE18o+zuv375l96
+         5vp+2oiOL2/HH7yqcJuqN4OmzWUBQa+NTidNjo2IojTEpXz6LS02BEZrP6347zSrYx1y
+         rYng==
+X-Gm-Message-State: ANoB5plVhyt+9n8zfjB76wyOIdw1LYv0ScQwFQwuJLwzM9IdyQ48/zsb
+        TKnnsdKiVuRr4nCiqhd9vy1xuvaQqjvGswp52V2tbbAam7uTcETWJKdlTNP+FR8OiFY2QW7zBLM
+        X/ACE8N6AJR+Ocu/fYv3RkT1dr0h4
+X-Received: by 2002:a5d:4ac4:0:b0:22c:f296:1120 with SMTP id y4-20020a5d4ac4000000b0022cf2961120mr1077675wrs.369.1668683032797;
+        Thu, 17 Nov 2022 03:03:52 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6pKgpZWq9qnIPGHXQLt6irt29PsCEpNu3cpSlNHTZ/BAPiXelpzL9B69HNimUlVLS5sxm4kw==
+X-Received: by 2002:a5d:4ac4:0:b0:22c:f296:1120 with SMTP id y4-20020a5d4ac4000000b0022cf2961120mr1077657wrs.369.1668683032567;
+        Thu, 17 Nov 2022 03:03:52 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:5200:39a9:b834:27c1:4ede? (p200300cbc707520039a9b83427c14ede.dip0.t-ipconnect.de. [2003:cb:c707:5200:39a9:b834:27c1:4ede])
+        by smtp.gmail.com with ESMTPSA id bg28-20020a05600c3c9c00b003cfaae07f68sm5862544wmb.17.2022.11.17.03.03.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 03:03:52 -0800 (PST)
+Message-ID: <98ae206d-c132-7529-1b4c-7f51079d7fa9@redhat.com>
+Date:   Thu, 17 Nov 2022 12:03:51 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1770; i=broonie@kernel.org; h=from:subject; bh=qEjfEk+eevrhFHGlVf+wkuhUShqD8MCpIbXhyirJC68=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjdhELLBBYk8IOKoW55b4vpO2LFytCrdgugPagM0Gc i6GD1HeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY3YRCwAKCRAk1otyXVSH0FX+B/ 9INVMOJN4dHzOhG81hCHlyEM5GIlXXvKs85FlU8GRUtBTslxc3CXfV5ICthY+gj0O6nx2VrgbX2VZS 7G6xA/KfqmKGTEl3ogH3v94tQio4ZsywK1Gg30w4WDkmg3MuhWp/rSWpaSj0I0TcYHKOjJTBINh3FR Rix6kpZRd4cdK7kSaUobkvncvly4Pd42Dsqtr3H19JfsztCtnkNNRaO+aXHfthiirPk5xdJx7wixFz fGjHO0j7z+y5l+DzBDgdhXQgs1xftihQVlgBVKS+0bnZeLE1njBliOZ1LQdC7Ko7bN4ygiZU6eLC8j Y2rKuSARKMSkCeBG8zY8XYnW57I9ge
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH linux-next] selftests/vm: add CATEGORY for
+ ksm_functional_tests
+Content-Language: en-US
+To:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+References: <20221027170043.2363797-1-jsavitz@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221027170043.2363797-1-jsavitz@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the KTAP specification says that a test result line is
+On 27.10.22 19:00, Joel Savitz wrote:
+> commit e080ceaa69c1 ("selftests/vm: add KSM unmerge tests") in
+> linux-next adds an entry to run_vmtests.sh. I recently submitted
+> commit b5ba705c2608 ("selftests/vm: enable running select groups of tests")
+> to linux-next which categorizes tests by functionality in order to
+> allow more precise selection of which tests are to be run.
+> 
+> Since this newest test targets ksm and does not require more than one
+> numa node, add 'CATEGORY="ksm"' to the invocation to group this test
+> with the other ksm tests.
+> 
+> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+> ---
+>   tools/testing/selftests/vm/run_vmtests.sh | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+> index af35dd3bc589..fff00bb77086 100755
+> --- a/tools/testing/selftests/vm/run_vmtests.sh
+> +++ b/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -252,7 +252,7 @@ CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 1
+>   # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+>   CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
+>   
+> -run_test ./ksm_functional_tests
+> +CATEGORY="ksm" run_test ./ksm_functional_tests
+>   
+>   # protection_keys tests
+>   if [ -x ./protection_keys_32 ]
 
-  <result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-and the description of a test can be "any sequence of words
-(can't include #)" which specifies that there may be more than
-one word but does not specify anything other than those words
-which might be used to separate the words which probably isn't
-what we want.  Given that practically we have tests using a range
-of separators for words including combinations of spaces and
-combinations of other symbols like underscores or punctuation
-let's just clarify that the description can contain any character
-other than # (marking the start of the directive/diagnostic) or
-newline (marking the end of this test result).
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- Documentation/dev-tools/ktap.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-index d0a9565b0f44..414c105b10a9 100644
---- a/Documentation/dev-tools/ktap.rst
-+++ b/Documentation/dev-tools/ktap.rst
-@@ -80,8 +80,8 @@ have the number 1 and the number then must increase by 1 for each additional
- subtest within the same test at the same nesting level.
- 
- The description is a description of the test, generally the name of
--the test, and can be any string of words (can't include #). The
--description is optional, but recommended.
-+the test, and can be any string of characters other than # or a
-+newline.  The description is optional, but recommended.
- 
- The directive and any diagnostic data is optional. If either are present, they
- must follow a hash sign, "#".
-
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
 -- 
-2.30.2
+Thanks,
+
+David / dhildenb
 
