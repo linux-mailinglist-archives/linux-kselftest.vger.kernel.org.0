@@ -2,119 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6032362D45E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 08:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A6962D54B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 09:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbiKQHtR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Nov 2022 02:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S239677AbiKQIno (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Nov 2022 03:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbiKQHtQ (ORCPT
+        with ESMTP id S239680AbiKQInU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Nov 2022 02:49:16 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CAB52895;
-        Wed, 16 Nov 2022 23:49:15 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id m22so2965364eji.10;
-        Wed, 16 Nov 2022 23:49:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Xk1oEmkTU9H7VPwZGQRzWhMrFXqC/l98G+URF+zUWzQ=;
-        b=p3bqfivjdCBVThsXjPyPdiWmaaJ3KVtlPvlz5ibGTO97w+eHWVfn3ztrpX8+02RK7r
-         /n5JnlCLCI05orLqcPnBRJK4R+bPsH9DYMeal9vY8O/vOzLc4mmwCZsA4wliTfZTD/1k
-         PEe15RfyOHC4LfhRlJjzmgGqh361hWndQ7IlH7s8FKh4uPggrazp48fXqGNPgix4TK4o
-         BDKKQojgrChhZSy7opOWSyzmfD7tDHYpsxqrcg8YAGkZUNJjKsmbIVZ0YHQOXERzAL1O
-         BoAEt7xZmV9I6scFQJ2TzP/tB/Ldx1CfxDktxIjwHv4zP90v4Hi+bevI+uQoZIZDbgWC
-         NPug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xk1oEmkTU9H7VPwZGQRzWhMrFXqC/l98G+URF+zUWzQ=;
-        b=61S9ssEEf9YePCY61t2bBrnZcF/OI4bGZNkMCjRvcPbJ8GQU9ftBdC/h/TQb/9z4wA
-         jAmZOrxd5M7waBrgNarrB6Jg+scLDRkdgKPuV5D/45DFj2aoI9UhikyHDnwXhxJJg1kr
-         5OAg8ZUeb9zhWKqsnSpMN+iHELCBZNTYemtyzkP5Uw0OH2nvwE0ZGtkPg3b6je1ocjl2
-         gnHnKLWDQNg2FhArlO+qejDok80LXD/xGDs6W3/R86Emm/OaGX1AHpS4TJoVXruQGwyO
-         4oYjUDfYF74Jaa1AVXChYwkwK33ICr/OBfGtQotypYW21BGnfkyvAmKtxL/f7N9p2oBe
-         85tQ==
-X-Gm-Message-State: ANoB5pmXl7VTAXUs39f11w5UuwY9KiCGkdmPb9BLG79071YtqePq832B
-        PTfX0WmSMbqC+T9GqAQjA8n9AFNDNTo=
-X-Google-Smtp-Source: AA0mqf6j48PnIuhUBdYjPPrRHGMG9asjsCw4Bqww/C899ryKZXZBQZkhjhSprEaQLgVNwgiNzYA7ag==
-X-Received: by 2002:a17:906:a157:b0:7a5:7e25:5b11 with SMTP id bu23-20020a170906a15700b007a57e255b11mr1120322ejb.254.1668671353636;
-        Wed, 16 Nov 2022 23:49:13 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id bk14-20020a170906b0ce00b007ad69e9d34dsm19988ejb.54.2022.11.16.23.49.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 23:49:13 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 17 Nov 2022 08:49:10 +0100
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-Cc:     bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 1/2] selftests/bpf: Explicitly pass RESOLVE_BTFIDS to
- sub-make
-Message-ID: <Y3XndllQ6kmFbztg@krava>
-References: <20221115182051.582962-1-bjorn@kernel.org>
+        Thu, 17 Nov 2022 03:43:20 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBE8748FA;
+        Thu, 17 Nov 2022 00:43:00 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AH84Fct015795;
+        Thu, 17 Nov 2022 08:42:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : content-transfer-encoding : in-reply-to : references : to :
+ subject : cc : from : message-id : date; s=pp1;
+ bh=kVu+7X+SrSJ0orR2t6fwIpIPKWWxtROvgCwe8G7gS+o=;
+ b=VFga4VflYY1yBrasKX/8V5gWCqTlUk67f8XIqBMqYOFGZbKyYvmmq7R18N5FzBXJyH8o
+ nlZ8UaW1Dpjr8e62+P2BQwgzJb5VZa5dIDsHXcMapxJFWYkcEMDitjQWrM97T42V3077
+ EeLHIDAnO/9Yc/jUqDxHZUrvMrqyKeqwpTA/jeP/khw//HivZZwypvntjnEZmqZpwkT7
+ DOGKKW44sqtrkosElEWPO5TY8kR7UsY4IE85BkOO9fJ2oO5/2tB3AsR/skyghnNJb4Mx
+ 3641KxK4mofDk4COjFn51lo2D3uQIzoh19CzmYY5CFxeAgcixi3nGwAtDYJhkikuyJpV 9g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwh4bs3yp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 08:42:52 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AH84wLd017582;
+        Thu, 17 Nov 2022 08:42:51 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwh4bs3xk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 08:42:51 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AH8Yjpl012734;
+        Thu, 17 Nov 2022 08:42:49 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3kt348y925-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Nov 2022 08:42:48 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AH8hP5751970464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Nov 2022 08:43:25 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0C25A405B;
+        Thu, 17 Nov 2022 08:42:45 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 72CFFA4054;
+        Thu, 17 Nov 2022 08:42:45 +0000 (GMT)
+Received: from t14-nrb (unknown [9.171.65.30])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Nov 2022 08:42:45 +0000 (GMT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221115182051.582962-1-bjorn@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <8708073bdd4c90dbc25ee3711afc59585bc0d740.camel@linux.ibm.com>
+References: <20221012205609.2811294-1-scgl@linux.ibm.com> <20221012205609.2811294-2-scgl@linux.ibm.com> <Y2J61LWSV+HolIeT@osiris> <8708073bdd4c90dbc25ee3711afc59585bc0d740.camel@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Subject: Re: [PATCH v2 1/9] s390/uaccess: Add storage key checked cmpxchg access to user space
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+From:   Nico Boehr <nrb@linux.ibm.com>
+Message-ID: <166867456298.12564.8456237098002804507@t14-nrb.local>
+User-Agent: alot/0.8.1
+Date:   Thu, 17 Nov 2022 09:42:43 +0100
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RRV_ZocSW71LnlEzr-UF6SRK2rAVMgre
+X-Proofpoint-GUID: tV18gdyHXIQG-md5aQOwiuQ2KbDVylNb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_04,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
+ spamscore=0 impostorscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211170064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 07:20:50PM +0100, Björn Töpel wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
-> 
-> When cross-compiling selftests/bpf, the resolve_btfids binary end up
-> in a different directory, than the regular resolve_btfids
-> builds. Populate RESOLVE_BTFIDS for sub-make, so it can find the
-> binary.
-> 
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+Quoting Janis Schoetterl-Glausch (2022-11-16 20:36:46)
+> On Wed, 2022-11-02 at 15:12 +0100, Heiko Carstens wrote:
+> >=20
+> [...]
+>=20
+> > I also did not limit the number of retries for the one and two byte
+> > scenarion. Before doing that we need to have proof that there really is=
+ a
+> > problem. Maybe Nico or you will give this a try.
+>=20
+> I wrote a memop selftest testcase where the main thread uses the one byte=
+ cmpxchg
+> while n vcpus flip adjacent bits. The time the test case runs increases s=
+uperlinearly with n.
+> With 248 vcpus, 1000 one byte cmpxchgs take 25s.
+> I'm not sure how meaningful the test is since the worst case would be if =
+the threads hammering
+> the word would run on a cpu dedicated to them.
+>=20
+> In any case, why not err on the side of caution and limit the iterations?
+> I'll send an rfc patch.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
-
-> ---
->  tools/testing/selftests/bpf/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index e6cf21fad69f..8f8ede30e94e 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -200,7 +200,7 @@ $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
->  $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
->  	$(call msg,MOD,,$@)
->  	$(Q)$(RM) bpf_testmod/bpf_testmod.ko # force re-compilation
-> -	$(Q)$(MAKE) $(submake_extras) -C bpf_testmod
-> +	$(Q)$(MAKE) $(submake_extras) RESOLVE_BTFIDS=$(RESOLVE_BTFIDS) -C bpf_testmod
->  	$(Q)cp bpf_testmod/bpf_testmod.ko $@
->  
->  DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
-> 
-> base-commit: 47df8a2f78bc34ff170d147d05b121f84e252b85
-> -- 
-> 2.37.2
-> 
+I agree, limiting sounds like the safe choice.
