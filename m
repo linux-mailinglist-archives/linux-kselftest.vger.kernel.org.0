@@ -2,127 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0371962D025
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 01:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709BA62D069
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 02:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238998AbiKQAsT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Nov 2022 19:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
+        id S233637AbiKQBLe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 20:11:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239043AbiKQArf (ORCPT
+        with ESMTP id S231634AbiKQBLd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:47:35 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD074716D5
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:46:05 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id v8so212446qkg.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:46:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rT9xjSJmKp4cCvf16bTKl9Dc4YEY7MjOtsK/w44qv+E=;
-        b=VV2cb+pd6jfcSL2tauZE67KBioAHcybPQR+VfU40dKebsvpG7CB3+xd0Uv8h8MKz8R
-         sbSQ7TqeMCU61fYQIjRwQoQBWrCcg8ekkdEQ8V7xYjRGPq0DN+C0Atnpvt0eAux7Zvaz
-         PXr7WI31PYcmErRNWRYdBKljCyptLiKShcOF4gqH5bxcH7c9a48sUWSu+SLW+D60rEcT
-         94q2cJm8yEvdEzbYpl0Vwvwu6uXwvrse0KXhbaR5xd9/LECZYdD6vR+hmUeAJTlxbvcq
-         ueSGRE+vNlUSsDE90kXWUWeAcS6lHSqHDXkbeBbAuFPPnKLrO2HgUtltNTPZxflFTx6j
-         B+8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rT9xjSJmKp4cCvf16bTKl9Dc4YEY7MjOtsK/w44qv+E=;
-        b=zZOLXD27Zy6IzuSWU8oUQOe9hRDKnhyUbm55wK+wj3WSYR4P/lu8ev0m5iypHxQqUs
-         4yf4cjQyVuZhsbxIej4oZg3L/H5DTko52Skg6J+LYD4nnO9YzKc8SK6RwB65cq9BkHis
-         hu+oF+133a2bAP31HKqDlqDJxEJ5ezVv35WoFKSHYNgVNbQqEIjpgz9H1/KzYF0EPuu6
-         skqTdsU+gTncFZKnbuyy+NWxIJCDDxpXE6jnUD0Gv+wVYq+LVirVDbFfAlMQUBBdTHky
-         CvBgSrLuDnXFtgzU5GwxRk3MhAEJLtP4NSAn2p/nUM/8bNcIx/DdyLpTJBjbKyXsWN+Z
-         sSOQ==
-X-Gm-Message-State: ANoB5pkszZAxIfh9Fisy2YDeB8FkhYGCc4ChGVfgO3VqlQMgruykesNI
-        AVg1FlF49aGZ/vxohwXMIFYq+A==
-X-Google-Smtp-Source: AA0mqf607w9C7cuVA1Gk/5OO594s7B3KGBk4c2yq8D1+/1YgY/KvFwESfDj3NEnwxZjz0MAqyk7Deg==
-X-Received: by 2002:a37:424c:0:b0:6fb:a0ec:c5ba with SMTP id p73-20020a37424c000000b006fba0ecc5bamr8177915qka.493.1668645964499;
-        Wed, 16 Nov 2022 16:46:04 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id i18-20020a05620a405200b006fa84082b6dsm11394495qko.128.2022.11.16.16.46.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 16:46:03 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ovT2Z-0066UZ-3n;
-        Wed, 16 Nov 2022 20:46:03 -0400
-Date:   Wed, 16 Nov 2022 20:46:03 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Leon Romanovsky <leon@kernel.org>
-Subject: Re: [PATCH mm-unstable v1 12/20] RDMA/siw: remove FOLL_FORCE usage
-Message-ID: <Y3WES5adl6yyS4ZB@ziepe.ca>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-13-david@redhat.com>
+        Wed, 16 Nov 2022 20:11:33 -0500
+Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275F91DF11;
+        Wed, 16 Nov 2022 17:11:31 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="96213577"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665414000"; 
+   d="scan'208";a="96213577"
+Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
+  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP; 17 Nov 2022 10:11:30 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 49BCB7C06D;
+        Thu, 17 Nov 2022 10:11:29 +0900 (JST)
+Received: from oym-om4.fujitsu.com (oym-om4.o.css.fujitsu.com [10.85.58.164])
+        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 5FD1D1582F;
+        Thu, 17 Nov 2022 10:11:28 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by oym-om4.fujitsu.com (Postfix) with ESMTP id 4B5F640089713;
+        Thu, 17 Nov 2022 10:11:28 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v4 0/5] Some improvements of resctrl selftest
+Date:   Thu, 17 Nov 2022 10:05:36 +0900
+Message-Id: <20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116102659.70287-13-david@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 11:26:51AM +0100, David Hildenbrand wrote:
-> GUP now supports reliable R/O long-term pinning in COW mappings, such
-> that we break COW early. MAP_SHARED VMAs only use the shared zeropage so
-> far in one corner case (DAXFS file with holes), which can be ignored
-> because GUP does not support long-term pinning in fsdax (see
-> check_vma_flags()).
-> 
-> Consequently, FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM is no longer required
-> for reliable R/O long-term pinning: FOLL_LONGTERM is sufficient. So stop
-> using FOLL_FORCE, which is really only for ptrace access.
-> 
-> Cc: Bernard Metzler <bmt@zurich.ibm.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  drivers/infiniband/sw/siw/siw_mem.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+Hello,
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+The aim of this patch series is to improve the resctrl selftest.
+Without these fixes, some unnecessary processing will be executed
+and test results will be confusing. 
+There is no behavior change in test themselves.
 
-Jason
+[patch 1] Make write_schemata() run to set up shemata with 100% allocation
+	  on first run in MBM test.
+[patch 2] The MBA test result message is always output as "ok",
+	  make output message to be "not ok" if MBA check result is failed.
+[patch 3] When a child process is created by fork(), the buffer of the 
+	  parent process is also copied. Flush the buffer before
+	  executing fork().
+[patch 4] Add a signal handler to cleanup properly before exiting the 
+	  parent process if there is an error occurs after creating 
+	  a child process with fork() in the CAT test.
+[patch 5] Before exiting each test CMT/CAT/MBM/MBA, clear test result 
+	  files function cat/cmt/mbm/mba_test_cleanup() are called
+	  twice. Delete once.
+
+This patch series is based on Linux v6.1-rc5
+
+Difference from v3:
+[patch 2] 
+	Rename "failed" to "ret" to avoid confusion.
+[patch 4] 
+	- Use sigaction(2) instead of signal().
+	- Add a description of using global bm_pid in commit message.
+	- Add comments to clarify why let the child continue to its
+	  infinite loop after the write() failed.
+[patch 5] 
+	Ensure to run cat/cmt/mbm/mba_test_cleanup() to clear test result 
+	file before return if an error occurs.
+
+
+Pervious versions of this series:
+[v1] https://lore.kernel.org/lkml/20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com/
+[v2] https://lore.kernel.org/lkml/20221005013933.1486054-1-tan.shaopeng@jp.fujitsu.com/
+[v3] https://lore.kernel.org/lkml/20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com/
+
+Shaopeng Tan (5):
+  selftests/resctrl: Fix set up schemata with 100% allocation on first
+    run in MBM test
+  selftests/resctrl: Return MBA check result and make it to output
+    message
+  selftests/resctrl: Flush stdout file buffer before executing fork()
+  selftests/resctrl: Cleanup properly when an error occurs in CAT test
+  selftests/resctrl: Remove duplicate codes that clear each test result
+    file
+
+ tools/testing/selftests/resctrl/cat_test.c    | 31 +++++++++++++------
+ tools/testing/selftests/resctrl/cmt_test.c    |  7 ++---
+ tools/testing/selftests/resctrl/mba_test.c    | 23 +++++++-------
+ tools/testing/selftests/resctrl/mbm_test.c    | 20 ++++++------
+ .../testing/selftests/resctrl/resctrl_tests.c |  4 ---
+ tools/testing/selftests/resctrl/resctrl_val.c |  1 +
+ tools/testing/selftests/resctrl/resctrlfs.c   |  5 ++-
+ 7 files changed, 50 insertions(+), 41 deletions(-)
+
+-- 
+2.27.0
+
