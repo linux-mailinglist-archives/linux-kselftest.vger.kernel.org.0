@@ -2,71 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2910162CEBA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 00:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF60362CF55
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Nov 2022 01:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiKPXbR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Nov 2022 18:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S233521AbiKQAHs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Nov 2022 19:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232979AbiKPXbP (ORCPT
+        with ESMTP id S232979AbiKQAHr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 18:31:15 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16B75B5AC;
-        Wed, 16 Nov 2022 15:31:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668641474; x=1700177474;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kcF8I+Kpj7C4lbmuT+ZZZAwyB2mGFnhppufCZemkF+c=;
-  b=gvZv8XLelXJxxTjJcvIU4UuxjNbMxn+cfHxVYEyBY9JbhTFc5rD6YDiy
-   qLrNDMSbGCqK7wc0DfqxPN0JUG2gQjha+wfHzVWWgxhSQFQ9jTJePWNo3
-   em23MrXIk7FHuNxDPeGAouPuvTBRu2Dy3OHa78NwOj2atuI+zHt+jKDfG
-   UwxOdNW94nZhCkMOWk/xXYEBu9ouuu6qa0Q//Qxu5UYxX2JxXyceagzUe
-   fXwMA52CwafRJEce58NPp+6bQX3azO8cjTEYHcWv6OnArny86jZzyu//Z
-   a2wVIj2mSj4F7FNVq7UDSRQMOh6dU/ahIVb+9xcdpbQ7ARESzYaMTbbWk
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="292404012"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="292404012"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 15:31:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="745267324"
-X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
-   d="scan'208";a="745267324"
-Received: from aagbadea-mobl.amr.corp.intel.com (HELO [10.252.138.56]) ([10.252.138.56])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 15:31:13 -0800
-Message-ID: <773a9deb-b017-20e5-cebe-d9c35ac4fd3d@intel.com>
-Date:   Wed, 16 Nov 2022 15:31:12 -0800
+        Wed, 16 Nov 2022 19:07:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8329F110C
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:06:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668643610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZLAErkYkAURoUFblE/LNyl2bM120+OvwzIhnkvyLL0o=;
+        b=ZAgze1dcnaaJPFGoYYWvJOlGrH+iC6TrUNOWWtxKdfUOj6iJ4j2G8NRQeV0FQkMpT2ow4p
+        WzJQT6LZybzj+aHWmEiLxLv4vLItIC8zvmV3bRhbkTflQ4H0bLo9asPouqpiODgR/6srkZ
+        VtMJhyK4Nxg7w1pnnjr9fCRR9Eypzho=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-336-KnUxh2kMNYSddgZkusLsPg-1; Wed, 16 Nov 2022 19:06:46 -0500
+X-MC-Unique: KnUxh2kMNYSddgZkusLsPg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A94E3C01DF4;
+        Thu, 17 Nov 2022 00:06:46 +0000 (UTC)
+Received: from jsavitz-csb.redhat.com (unknown [10.22.18.108])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 26B20140EBF3;
+        Thu, 17 Nov 2022 00:06:45 +0000 (UTC)
+From:   Joel Savitz <jsavitz@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-next@vger.kernel.org,
+        Nico Pache <npache@redhat.com>
+Subject: [PATCH mm-everything] selftests/vm: remove extraneous echo
+Date:   Wed, 16 Nov 2022 20:06:32 -0400
+Message-Id: <20221117000632.254027-1-jsavitz@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 0/6] x86/fpu: Allow PKRU to be (once again) written by
- ptrace
-Content-Language: en-US
-To:     Kyle Huey <me@kylehuey.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>
-References: <20221115230932.7126-1-khuey@kylehuey.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221115230932.7126-1-khuey@kylehuey.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,19 +60,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/15/22 15:09, Kyle Huey wrote:
-> Following last week's discussion I've reorganized this patch. The goal
-> remains to restore the pre-5.14 behavior of ptrace(PTRACE_SET_REGSET,
-> NT_X86_XSTATE) for the PKRU register (which was equivalent to a hardware
-> XRSTOR instruction).
+There is an extra echo statement in run_test(). Remove it.
 
-The new version looks great.  I've applied it.
+Fixes: 98b3add737b4 ("selftests/vm: enable running select groups of tests")
 
-I did remove the stable@ tags for now.  There were a couple reasons for
-that.  First, most of the x86 stuff marked for stable@ goes via our
-tip/urgent branch and this doesn't seem super urgent.  It also touches
-code that's exposed in at least three separate UABIs, so I want a bit
-more soak time than x86/urgent normally provides.
+Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+---
+ tools/testing/selftests/vm/run_vmtests.sh | 1 -
+ 1 file changed, 1 deletion(-)
 
-I have zero objections if anyone wants to submit it to stable@ after it
-hits Linus's tree.
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index ce52e4f5ff21..9236010faaaa 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -142,7 +142,6 @@ echo "$ARCH64STR" | grep "$ARCH" &>/dev/null && VADDR64=1
+ # Usage: run_test [test binary] [arbitrary test arguments...]
+ run_test() {
+ 	if test_selected ${CATEGORY}; then
+-		echo "running: $1"
+ 		local title="running $*"
+ 		local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
+ 		printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
+-- 
+2.38.1
+
+
