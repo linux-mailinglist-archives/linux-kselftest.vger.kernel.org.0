@@ -2,64 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3D462EE2A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 08:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 790A362EE53
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 08:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiKRHS7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Nov 2022 02:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S241122AbiKRHaD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Nov 2022 02:30:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241053AbiKRHS6 (ORCPT
+        with ESMTP id S241046AbiKRHaA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Nov 2022 02:18:58 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF51B72991
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 23:18:57 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id w17so989430uam.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 23:18:57 -0800 (PST)
+        Fri, 18 Nov 2022 02:30:00 -0500
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEA77D525
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 23:29:55 -0800 (PST)
+Received: by mail-ua1-x931.google.com with SMTP id w17so996051uam.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 23:29:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7NrL3Cne9Wn2uqPsPb2ZMHsCS7TYaSL425DWUGYQB4A=;
-        b=b3ZlmJb2jm0aSRrHyi2urTSY1JEJvyDc+2SDjhJs/WR5fmJdpfzD10+c8XPGvw+gDJ
-         1s3V5IYAq2EpmiUvkwXZBpVrowSAlF0STGSTDoy8tG4t6jn9y6aGBb7fNUyEsDgwNoFg
-         ij1siU2Bt4qOdUgt2uKui52SXqsK5SGU48bjFcdx1XlnUAYOFNTKGFeugNhSZfU6VZQe
-         6AUGK20EMXBeFerAQWLUfgJFw0+0LM6WuibbO1xTq80wG/usmrRM0eKBvQXYMjul3+uu
-         6m9EW92s1fhG79EphZwmwM/xDIzXrXFqtC1kH2KaqFwo8SyBD5rn+TOo9KTN/0Q5xWFW
-         qnVQ==
+        bh=p54qIR5QLL/GbqEw0yiS4IlYIk9qC5UNyiTDcMkBSn4=;
+        b=Nt5AmFUFLhnfWqydL8qEy+j1PjDIbojFeMUK80/5hEc8Q3Ze78YL7INPuTc4DEnnKM
+         8Hcirav0fsjw8wXalXH73l69XkcuVfYVzspphiEHYUSsIaWTdwPu1PmJtDZFGKNaqv7j
+         pM6fjB6NifJrf1KWp3fn8WuuqCMRQKXIr4yDmBYfbnQtC91Nqdsnzc50/QQWA+A2jjDc
+         H0YP42LIPvtpZuczeB8vLR+5AQsnxH6wQDEEvaAf3Gv87JAv2T7HHjKd3f3hxBXzctBI
+         87X8D2tukpcub6cjz/uig81iomFjFSTZt63ci9b++T4y7TjMLygUgzezKSNIWVxpJDjK
+         cMUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7NrL3Cne9Wn2uqPsPb2ZMHsCS7TYaSL425DWUGYQB4A=;
-        b=PsHOpoMHr1P/pUYVhojxmB5s11I3vdp3cyHk3UrReW4z8eE+7ijY0dv4tqlIzYBGqD
-         9WOGNSAG87E1fpcaacuE/A/YhIeeD/EqHHF9GmLivSXJOFyxFKLrgCtqz/C8MfDu8vVc
-         CIcExGLVtIQk6EruxVBotmSlJJ8eFLouSO53xaKi9HmexVYHbBhSz4wT9//Wt9y/Qnw6
-         rHO2a+MtCXYBb+6NpQGDsg6oIz9BOqK0i3eNfyQJNQ46SF/nF1Bnh7oJzzqa/lPh9Tmu
-         NAboTCik1bzE8PjnvPQCCiqUyIvkxHLw5vY+NCTxXZUPEga2E6O9OYaVn2/TFT/j15g5
-         pqMg==
-X-Gm-Message-State: ANoB5pn0nBgIXE8fiH/3cmOG22WV+JBgHQwYMRuCMxzvpiPp7ndZAOJq
-        KGDoCvtZGgE/QPU93Ya0oc7/oLhc30YfLslAqVQW35XLI5k=
-X-Google-Smtp-Source: AA0mqf789d+MMhtETpGTR1/qBKzbZmHcyE9ctvEf+AfbN0a4bV0tdruh1JZyntn0hY6P0AUK62NbaRGGDec5oCuETSQ=
-X-Received: by 2002:ab0:299a:0:b0:418:ad18:6596 with SMTP id
- u26-20020ab0299a000000b00418ad186596mr3357824uap.104.1668755936708; Thu, 17
- Nov 2022 23:18:56 -0800 (PST)
+        bh=p54qIR5QLL/GbqEw0yiS4IlYIk9qC5UNyiTDcMkBSn4=;
+        b=I3DH2F5NzcAspGf85yahp+/xbBaR/JS9lNrJJDYXitI3CkWJ23RpIJW9FMwUGzYdOz
+         n9R4e8VjquYmJCcJFpeECJlCu6lzP1NMZU61MXUM82FG8M+MFShCSGGq3TtjT+dGSV7/
+         tc3tfD/O3EepTh4o/MXv2Jk/h3w1+rT6sfBmwdQ9Zb/Rn2rMg11jT/bvbSmqpzWgkL/8
+         tjzt6cE1so9PqjdTrYb5DsOriDs374F8Xb8s6IDxudf943F9TLalDS2FVVzzXciFQIM3
+         gzJJSlUc5KUZWCPFagvSBoYizmwFX2IwOdYO8qcjt+X3qF1mfqNZc5+I9vCSUyQlt0h2
+         TqdQ==
+X-Gm-Message-State: ANoB5pkmhs4CAqNnkwTPUQvIm7Xpofiw6U3uTsEYjA9RaZCB0CbWnkrE
+        fc01QCQx4XCP2qCZ8psijdBvX12Daesu8WmQn3oSHg==
+X-Google-Smtp-Source: AA0mqf4KU6A3b6Li3zUpy2Lk4NYsLCO5Vb2lIVcs9rriQ0Q+7mChaGrUEW7i5q9Wla6p3bnPzAWT9xBCYnFvII50m5Y=
+X-Received: by 2002:ab0:238f:0:b0:411:968:212 with SMTP id b15-20020ab0238f000000b0041109680212mr3471849uan.107.1668756594737;
+ Thu, 17 Nov 2022 23:29:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20221117104636.639889-1-broonie@kernel.org>
-In-Reply-To: <20221117104636.639889-1-broonie@kernel.org>
+References: <20221106021657.1145519-1-pedro.falcato@gmail.com>
+ <202211061948.46D3F78@keescook> <CABVgOSm9V37KgiP-eHxfYF4tTT+ZDQKVxEAzh8P0SH3WrECM9A@mail.gmail.com>
+ <202211171402.95121B3FD4@keescook>
+In-Reply-To: <202211171402.95121B3FD4@keescook>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 18 Nov 2022 15:18:45 +0800
-Message-ID: <CABVgOS=TKt6QaJ+YoXhc=bbVMOeXzx9oa7stn98owccBwTFL5w@mail.gmail.com>
-Subject: Re: [PATCH v1] Documentation: dev-tools: Clarify requirements for
- result description
-To:     Mark Brown <broonie@kernel.org>, Rae Moar <rmoar@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org
+Date:   Fri, 18 Nov 2022 15:29:43 +0800
+Message-ID: <CABVgOSkgzo0bE5iHWB5HdMokgyEcbw-R-MrrnvD-QBzsHmz4OQ@mail.gmail.com>
+Subject: Re: Attaching userspace VM to kernel thread (was Re: [PATCH]
+ fs/binfmt_elf: Fix memsz > filesz handling)
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        linux-kernel@vger.kernel.org, sam@gentoo.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, Rich Felker <dalias@libc.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d6e6ee05edb984e3"
+        boundary="00000000000011363005edb9ac99"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,40 +76,88 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000d6e6ee05edb984e3
+--00000000000011363005edb9ac99
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 17, 2022 at 6:49 PM Mark Brown <broonie@kernel.org> wrote:
+On Fri, Nov 18, 2022 at 6:06 AM Kees Cook <keescook@chromium.org> wrote:
 >
-> Currently the KTAP specification says that a test result line is
+> Hi,
 >
->   <result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
+> This has diverged from the original topic a bit, so I've changed the
+> Subject to hopefully gain visibility. :)
 >
-> and the description of a test can be "any sequence of words
-> (can't include #)" which specifies that there may be more than
-> one word but does not specify anything other than those words
-> which might be used to separate the words which probably isn't
-> what we want.  Given that practically we have tests using a range
-> of separators for words including combinations of spaces and
-> combinations of other symbols like underscores or punctuation
-> let's just clarify that the description can contain any character
-> other than # (marking the start of the directive/diagnostic) or
-> newline (marking the end of this test result).
+> For KUnit, it would be REALLY nice to have a way to attach a userspace
+> VM to a kernel thread so we can do userspace memory mapping
+> manipulation, etc. Neither David nor I have been able to figure out the
+> right set of steps to make this happen. What are we missing?
 >
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
+> Details below...
+>
+> On Wed, Nov 16, 2022 at 12:34:40PM +0800, David Gow wrote:
+> > On Mon, Nov 7, 2022 at 11:59 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Sun, Nov 06, 2022 at 02:16:57AM +0000, Pedro Falcato wrote:
+> > > David, has there been any work on adding a way to instantiate
+> > > userspace VMAs in a KUnit test? I tried to write this myself, but I
+> > > couldn't figure out how to make the userspace memory mappings appear.
+> > > Here's my fumbling attempt:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=devel/kunit/usercopy
+> > >
+> > > I really wish KUnit had userspace mapping support -- I have a bunch of
+> > > unit tests that need to get built up around checking for regressions
+> > > here, etc.
+> >
+> > Hi Kees,
+> >
+> > Sorry the the delayed response!
+> >
+> > Alas, my attempts to get this to work haven't been much more
+> > successful than yours. It's definitely something we'd like to support,
+> > but I confess to not knowing enough about the mm code to know exactly
+> > what would be involved.
+> >
+> > The workaround is to load tests as modules, and use something like
+> > Vitor's original patch here:
+> > https://lore.kernel.org/all/20200721174036.71072-1-vitor@massaru.org/
+> >
+> > Basically, using the existing mm of the module loader. Adapting those
+> > changes to your branch (and fixing a couple of back-to-front KUnit
+> > assertions) does work for me when built as a module, in an x86_64 vm:
+> >
+> > root@slicestar:~# modprobe usercopy_kunit
+> > [   52.986290]     # Subtest: usercopy
+> > [   52.986701]     1..1
+> > [   53.246058]     ok 1 - usercopy_test
+> > [   53.246628] ok 1 - usercopy
+> >
+> > But getting it to work with built-in tests hasn't been successful so
+> > far. I wondered if we could just piggy-back on init_mm or similar, but
+> > that doesn't seem to work either.
+> >
+> > So, in the short-term, this is only possible for modules. If that's
+> > useful enough, we can get Vitor's support patch (or something similar)
+> > in, and just mark any tests module-only (or have them skip if there's
+> > no mm). Because kunit.py only runs built-in tests, though, it's
+> > definitely less convenient.
+>
+> Thanks for any pointers! :)
+>
+> -Kees
+>
+> --
+> Kees Cook
 
-Thanks for clarifying this: I totally agree that "sequence of words"
-wasn't a great description, and this is better.
-
-+Rae in case she has any thoughts.
-
-Reviewed-by: David Gow <davidgow@google.com>
+FWIW, I had another quick look at this yesterday, and I suspect that
+(at least one of) the problem(s) is that function pointers like
+mm->get_unmapped_area are only setup as part of exec(), so a
+newly-created mm isn't actually useful. Looking at, e.g.,
+arch_pick_mm_layout(), there's a whole bunch of architecture-dependent
+stuff here to handle, e.g., 32-bit compat.
 
 Cheers,
 -- David
 
---000000000000d6e6ee05edb984e3
+--00000000000011363005edb9ac99
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -171,14 +224,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDH
-8Kx0FHjUfXfD8HfFsJ4mOBKvj+4ny32kfJB1WvBTmTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMTgwNzE4NTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBt
+BnmZClgogfWv5FzalR+xus5U5/TflBIUxCsalBF2gTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMTgwNzI5NTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAKOt/TAZJQR96pc/CK6nu
-OtVMMHBwjRT8h8iaEsO4Pb+E6PwY4uAVEXOP78HQ2YN77pBGVXQnGWMzcOdiQk5Wn2LZ384rapi+
-djred+ZZ4MAcoRxv/rv5jEsKVgSdR+6CwIaQzjVbnGRFGJ/mCNOGcwT6qHbuL2a5aGa+AjiLf8LR
-aXmI0aFLLKsKY4Ir8uTTVtIwWcutHpEXzdJy2DlG68Fpy0d2Zy8FcCbSCGQGNz4m1BKPcq0/UgXE
-MTWgFWpwCO9+wFam5nxDbtLdhu15C4HQis+NVfb1cEWkyO6mgY1lm4PO9II3fQOkrjUJaq0Qxzf4
-8MbLfAytaCYIiG1R8Q==
---000000000000d6e6ee05edb984e3--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAK/pw2+1Xh4BweEn3qq0R
+J4ATnlmGcn4ws/Hj1JsxHiAyKRumkk1WK4ARdsLrYwVgqRRsXJs2GlyHNdqzSV8h+tQh2KMMKmST
+Y6+MQLy74Cxi+suo3pXutuw6/uqmhS6Xlhme6ChdDu3mhBFQgNxuzc879aX4lY466fTuAKYIxLQ6
+ALh84Oe0/kymyE2mi8AdSAxGcVZZqdiWcyFQjb5IqzOg/jieXHc96DXrShGnDopZrpijXU9A/vLb
+qjb61trlm3V26fZkXEodU6LnDhCH4lttx63KCGpY8w2WGBaCGoWkNL1+PjdOqnvErdri+nYA+IW5
+OVm47McgBMMPJt0yfg==
+--00000000000011363005edb9ac99--
