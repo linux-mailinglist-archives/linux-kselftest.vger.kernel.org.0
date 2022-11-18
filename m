@@ -2,329 +2,379 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBD562F064
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 10:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D2C62F081
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 10:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241622AbiKRJDd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Nov 2022 04:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
+        id S241643AbiKRJHr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Nov 2022 04:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241530AbiKRJDd (ORCPT
+        with ESMTP id S231534AbiKRJHp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:03:33 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EC265CE;
-        Fri, 18 Nov 2022 01:03:30 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4ND9mS1jQ9zmW4N;
-        Fri, 18 Nov 2022 17:03:04 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 18 Nov 2022 17:03:28 +0800
-Subject: Re: [PATCH -next v2 3/6] landlock: add chmod and chown support
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
-CC:     <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
-        <shuah@kernel.org>, <corbet@lwn.net>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-References: <20220827111215.131442-1-xiujianfeng@huawei.com>
- <20220827111215.131442-4-xiujianfeng@huawei.com> <Ywpw66EYRDTQIyTx@nuc>
- <de8834b6-0ff2-1a81-f2d3-af33103e9942@huawei.com>
- <de4620d2-3268-b3cc-71dd-acbbd204435e@digikod.net>
- <2f286496-f4f8-76f7-2fb6-cc3dd5ffdeaa@huawei.com>
- <4b69a4ac-28ab-16aa-14b1-04a6f64d5490@digikod.net>
- <9caccd0a-319e-bbc9-084a-65c62d0b1145@huawei.com>
- <abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <1373bbe5-16b1-bf0e-5f92-14c31cb94897@huawei.com>
-Date:   Fri, 18 Nov 2022 17:03:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Fri, 18 Nov 2022 04:07:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827F87C459
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Nov 2022 01:06:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668762405;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hr5QQVNLV+xo6djdb5pphhYxpRsXQdhsRF7Y9pLIjMM=;
+        b=dSieaRrwPlWIBA2fpsL3HSN2uf3n/4XoaXfpOOIBDj6d/tJur/LRoJX9yq/XgxWL76HOu4
+        v1KhXrW0FDYfUR4znbfJsmncgKfbWFuru8gHMmHHykGn6HuVdGj0PzkIhnXiYwLLaP6NHm
+        EgxpO3aSppJVKdhMSjB75GE/urwg1ec=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-665-iZYt9NlYPHKVZsfdshKNYw-1; Fri, 18 Nov 2022 04:06:43 -0500
+X-MC-Unique: iZYt9NlYPHKVZsfdshKNYw-1
+Received: by mail-wm1-f71.google.com with SMTP id e8-20020a05600c218800b003cf634f5280so980628wme.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Nov 2022 01:06:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hr5QQVNLV+xo6djdb5pphhYxpRsXQdhsRF7Y9pLIjMM=;
+        b=iQtt4akpE3buLVwY9k9mbmQkvJv+NLNXXkCcbLqdJ/02Lq1ZbAuLIvHBeNee8qAoOV
+         KG6Jr8W4MZvmqlGaeK0MXESzeuiY1PjJ4Zf7ddaqvuW7EoigBdraElVVe15WBW8CwaMT
+         iTf+LrP8rryGAcGLVtA1SGj6m4Bhg71X+cUb4skcsx66IcGlWaoMqWajOE2Qf4jx569K
+         55dPRC2eSTh0FjyPJsGjT3BvZATUXbBgIxh9zwGXml1Sm8YCRGF+dflG/bkKZ5bLfDK7
+         cJCO+hab/2RYhbrqL/B7qN5fXHqJo7R0fNDYV0kVq3zj9Aw4bGW7VtGaG8Yer7gb56vR
+         +0BQ==
+X-Gm-Message-State: ANoB5pkgLX599LLq3H0RjBGDeqN9mvupkxcwNtJAqkgm5pKKxUhJLyRV
+        nQf/HqqxHWCaYCtM+Q7JeHjsrikA1YJo7CjuHrTHikq97pAY7KT8Rjypc/CELiF6WpCoFiLx+2u
+        s5pja+C/gsjI0ipgPG4OtNrLNpX5X
+X-Received: by 2002:a1c:7504:0:b0:3cf:6b10:ca8d with SMTP id o4-20020a1c7504000000b003cf6b10ca8dmr7991905wmc.44.1668762402655;
+        Fri, 18 Nov 2022 01:06:42 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6B6EnEPNsZRf7I2/qtD7VrCjGl51ZV8jjJP1nI8NNjHgJIqCNkjvZEW/4Sq3PavDJqrHTsnA==
+X-Received: by 2002:a1c:7504:0:b0:3cf:6b10:ca8d with SMTP id o4-20020a1c7504000000b003cf6b10ca8dmr7991864wmc.44.1668762402285;
+        Fri, 18 Nov 2022 01:06:42 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id r5-20020a5d6945000000b00241bfce14e9sm1361829wrw.107.2022.11.18.01.06.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 01:06:41 -0800 (PST)
+Message-ID: <5ba04a92-d2c7-4e5f-2bfc-5cea4a08cea2@redhat.com>
+Date:   Fri, 18 Nov 2022 10:06:38 +0100
 MIME-Version: 1.0
-In-Reply-To: <abc960a1-e66e-792e-6869-cfd201c29dbe@digikod.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v5 05/19] iommufd: Document overview of iommufd
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>, bpf@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Anthony Krowiak <akrowiak@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Lixiao Yang <lixiao.yang@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+References: <5-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <5-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi,
 
+On 11/16/22 22:00, Jason Gunthorpe wrote:
+> From: Kevin Tian <kevin.tian@intel.com>
+>
+> Add iommufd into the documentation tree, and supply initial documentation.
+> Much of this is linked from code comments by kdoc.
+>
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  Documentation/userspace-api/index.rst   |   1 +
+>  Documentation/userspace-api/iommufd.rst | 223 ++++++++++++++++++++++++
+>  2 files changed, 224 insertions(+)
+>  create mode 100644 Documentation/userspace-api/iommufd.rst
+>
+> diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
+> index c78da9ce0ec44e..f16337bdb8520f 100644
+> --- a/Documentation/userspace-api/index.rst
+> +++ b/Documentation/userspace-api/index.rst
+> @@ -25,6 +25,7 @@ place where this information is gathered.
+>     ebpf/index
+>     ioctl/index
+>     iommu
+> +   iommufd
+>     media/index
+>     netlink/index
+>     sysfs-platform_profile
+> diff --git a/Documentation/userspace-api/iommufd.rst b/Documentation/userspace-api/iommufd.rst
+> new file mode 100644
+> index 00000000000000..8b1392fd2e3487
+> --- /dev/null
+> +++ b/Documentation/userspace-api/iommufd.rst
+> @@ -0,0 +1,223 @@
+> +.. SPDX-License-Identifier: GPL-2.0+
+> +
+> +=======
+> +IOMMUFD
+> +=======
+> +
+> +:Author: Jason Gunthorpe
+> +:Author: Kevin Tian
+> +
+> +Overview
+> +========
+> +
+> +IOMMUFD is the user API to control the IOMMU subsystem as it relates to managing
+> +IO page tables from userspace using file descriptors. It intends to be general
+> +and consumable by any driver that wants to expose DMA to userspace. These
+> +drivers are eventually expected to deprecate any internal IOMMU logic
+> +they may already/historically implement (e.g. vfio_iommu_type1.c).
+> +
+> +At minimum iommufd provides universal support of managing I/O address spaces and
+> +I/O page tables for all IOMMUs, with room in the design to add non-generic
+> +features to cater to specific hardware functionality.
+> +
+> +In this context the capital letter (IOMMUFD) refers to the subsystem while the
+> +small letter (iommufd) refers to the file descriptors created via /dev/iommu for
+> +use by userspace.
+> +
+> +Key Concepts
+> +============
+> +
+> +User Visible Objects
+> +--------------------
+> +
+> +Following IOMMUFD objects are exposed to userspace:
+> +
+> +- IOMMUFD_OBJ_IOAS, representing an I/O address space (IOAS), allowing map/unmap
+> +  of user space memory into ranges of I/O Virtual Address (IOVA).
+> +
+> +  The IOAS is a functional replacement for the VFIO container, and like the VFIO
+> +  container it copies an IOVA map to a list of iommu_domains held within it.
+> +
+> +- IOMMUFD_OBJ_DEVICE, representing a device that is bound to iommufd by an
+> +  external driver.
+> +
+> +- IOMMUFD_OBJ_HW_PAGETABLE, representing an actual hardware I/O page table
+> +  (i.e. a single struct iommu_domain) managed by the iommu driver.
+> +
+> +  The IOAS has a list of HW_PAGETABLES that share the same IOVA mapping and
+> +  it will synchronize its mapping with each member HW_PAGETABLE.
+> +
+> +All user-visible objects are destroyed via the IOMMU_DESTROY uAPI.
+> +
+> +The diagram below shows relationship between user-visible objects and kernel
+> +datastructures (external to iommufd), with numbers referred to operations
+> +creating the objects and links::
+> +
+> +  _________________________________________________________
+> + |                         iommufd                         |
+> + |       [1]                                               |
+> + |  _________________                                      |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |        [3]                 [2]      |
+> + | |                 |    ____________         __________  |
+> + | |      IOAS       |<--|            |<------|          | |
+> + | |                 |   |HW_PAGETABLE|       |  DEVICE  | |
+> + | |                 |   |____________|       |__________| |
+> + | |                 |         |                   |       |
+> + | |                 |         |                   |       |
+> + | |                 |         |                   |       |
+> + | |                 |         |                   |       |
+> + | |                 |         |                   |       |
+> + | |_________________|         |                   |       |
+> + |         |                   |                   |       |
+> + |_________|___________________|___________________|_______|
+> +           |                   |                   |
+> +           |              _____v______      _______v_____
+> +           | PFN storage |            |    |             |
+> +           |------------>|iommu_domain|    |struct device|
+> +                         |____________|    |_____________|
+> +
+> +1. IOMMUFD_OBJ_IOAS is created via the IOMMU_IOAS_ALLOC uAPI. An iommufd can
+> +   hold multiple IOAS objects. IOAS is the most generic object and does not
+> +   expose interfaces that are specific to single IOMMU drivers. All operations
+> +   on the IOAS must operate equally on each of the iommu_domains inside of it.
+> +
+> +2. IOMMUFD_OBJ_DEVICE is created when an external driver calls the IOMMUFD kAPI
+> +   to bind a device to an iommufd. The driver is expected to implement a set of
+> +   ioctls to allow userspace to initiate the binding operation. Successful
+> +   completion of this operation establishes the desired DMA ownership over the
+> +   device. The driver must also set the driver_managed_dma flag and must not
+> +   touch the device until this operation succeeds.
+> +
+> +3. IOMMUFD_OBJ_HW_PAGETABLE is created when an external driver calls the IOMMUFD
+> +   kAPI to attach a bound device to an IOAS. Similarly the external driver uAPI
+> +   allows userspace to initiate the attaching operation. If a compatible
+> +   pagetable already exists then it is reused for the attachment. Otherwise a
+> +   new pagetable object and iommu_domain is created. Successful completion of
+> +   this operation sets up the linkages among IOAS, device and iommu_domain. Once
+> +   this completes the device could do DMA.
+> +
+> +   Every iommu_domain inside the IOAS is also represented to userspace as a
+> +   HW_PAGETABLE object.
+> +
+> +   .. note::
+> +
+> +      Future IOMMUFD updates will provide an API to create and manipulate the
+> +      HW_PAGETABLE directly.
+> +
+> +A device can only bind to an iommufd due to DMA ownership claim and attach to at
+> +most one IOAS object (no support of PASID yet).
+> +
+> +Kernel Datastructure
+> +--------------------
+> +
+> +User visible objects are backed by following datastructures:
+> +
+> +- iommufd_ioas for IOMMUFD_OBJ_IOAS.
+> +- iommufd_device for IOMMUFD_OBJ_DEVICE.
+> +- iommufd_hw_pagetable for IOMMUFD_OBJ_HW_PAGETABLE.
+> +
+> +Several terminologies when looking at these datastructures:
+> +
+> +- Automatic domain - refers to an iommu domain created automatically when
+> +  attaching a device to an IOAS object. This is compatible to the semantics of
+> +  VFIO type1.
+> +
+> +- Manual domain - refers to an iommu domain designated by the user as the
+> +  target pagetable to be attached to by a device. Though currently there are
+> +  no uAPIs to directly create such domain, the datastructure and algorithms
+> +  are ready for handling that use case.
+> +
+> +- In-kernel user - refers to something like a VFIO mdev that is using the
+> +  IOMMUFD access interface to access the IOAS. This starts by creating an
+> +  iommufd_access object that is similar to the domain binding a physical device
+> +  would do. The access object will then allow converting IOVA ranges into struct
+> +  page * lists, or doing direct read/write to an IOVA.
+> +
+> +iommufd_ioas serves as the metadata datastructure to manage how IOVA ranges are
+> +mapped to memory pages, composed of:
+> +
+> +- struct io_pagetable holding the IOVA map
+> +- struct iopt_areas representing populated portions of IOVA
+> +- struct iopt_pages representing the storage of PFNs
+> +- struct iommu_domain representing the IO page table in the IOMMU
+> +- struct iopt_pages_access representing in-kernel users of PFNs
+> +- struct xarray pinned_pfns holding a list of pages pinned by in-kernel users
+> +
+> +Each iopt_pages represents a logical linear array of full PFNs. The PFNs are
+> +ultimately derived from userspave VAs via an mm_struct. Once they have been
+> +pinned the PFNs are stored in IOPTEs of an iommu_domain or inside the pinned_pages
+> +xarray if they have been pinned through an iommufd_access.
+> +
+> +PFN have to be copied between all combinations of storage locations, depending
+> +on what domains are present and what kinds of in-kernel "software access" users
+> +exists. The mechanism ensures that a page is pinned only once.
+> +
+> +An io_pagetable is composed of iopt_areas pointing at iopt_pages, along with a
+> +list of iommu_domains that mirror the IOVA to PFN map.
+> +
+> +Multiple io_pagetable-s, through their iopt_area-s, can share a single
+> +iopt_pages which avoids multi-pinning and double accounting of page
+> +consumption.
+> +
+> +iommufd_ioas is sharable between subsystems, e.g. VFIO and VDPA, as long as
+> +devices managed by different subsystems are bound to a same iommufd.
+> +
+> +IOMMUFD User API
+> +================
+> +
+> +.. kernel-doc:: include/uapi/linux/iommufd.h
+> +
+> +IOMMUFD Kernel API
+> +==================
+> +
+> +The IOMMUFD kAPI is device-centric with group-related tricks managed behind the
+> +scene. This allows the external drivers calling such kAPI to implement a simple
+> +device-centric uAPI for connecting its device to an iommufd, instead of
+> +explicitly imposing the group semantics in its uAPI as VFIO does.
+> +
+> +.. kernel-doc:: drivers/iommu/iommufd/device.c
+> +   :export:
+> +
+> +.. kernel-doc:: drivers/iommu/iommufd/main.c
+> +   :export:
+> +
+> +VFIO and IOMMUFD
+> +----------------
+> +
+> +Connecting a VFIO device to iommufd can be done in two ways.
+> +
+> +First is a VFIO compatible way by directly implementing the /dev/vfio/vfio
+> +container IOCTLs by mapping them into io_pagetable operations. Doing so allows
+> +the use of iommufd in legacy VFIO applications by symlinking /dev/vfio/vfio to
+> +/dev/iommufd or extending VFIO to SET_CONTAINER using an iommufd instead of a
+> +container fd.
+> +
+> +The second approach directly extends VFIO to support a new set of device-centric
+> +user API based on aforementioned IOMMUFD kernel API. It requires userspace
+> +change but better matches the IOMMUFD API semantics and easier to support new
+> +iommufd features when comparing it to the first approach.
+> +
+> +Currently both approaches are still work-in-progress.
+> +
+> +There are still a few gaps to be resolved to catch up with VFIO type1, as
+> +documented in iommufd_vfio_check_extension().
+> +
+> +Future TODOs
+> +============
+> +
+> +Currently IOMMUFD supports only kernel-managed I/O page table, similar to VFIO
+> +type1. New features on the radar include:
+> +
+> + - Binding iommu_domain's to PASID/SSID
+> + - Userspace page tables, for ARM, x86 and S390
+> + - Kernel bypass'd invalidation of user page tables
+> + - Re-use of the KVM page table in the IOMMU
+> + - Dirty page tracking in the IOMMU
+> + - Runtime Increase/Decrease of IOPTE size
+> + - PRI support with faults resolved in userspace
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
 
-在 2022/11/14 22:12, Mickaël Salaün 写道:
-> 
-> On 29/10/2022 10:33, xiujianfeng wrote:
->> Hi,
->>
->> 在 2022/9/2 1:34, Mickaël Salaün 写道:
->>> CCing linux-fsdevel@vger.kernel.org
->>>
->>>
->>> On 01/09/2022 15:06, xiujianfeng wrote:
->>>> Hi,
->>>>
->>>> 在 2022/8/30 0:01, Mickaël Salaün 写道:
->>>>>
->>>>> On 29/08/2022 03:17, xiujianfeng wrote:
->>>>>>
->>>>>> Hi,
->>>>>>
->>>>>> 在 2022/8/28 3:30, Günther Noack 写道:
->>>>>>> Hello!
->>>>>>>
->>>>>>> the mapping between Landlock rights to LSM hooks is now as 
->>>>>>> follows in
->>>>>>> your patch set:
->>>>>>>
->>>>>>> * LANDLOCK_ACCESS_FS_CHMOD controls hook_path_chmod
->>>>>>> * LANDLOCK_ACCESS_FS_CHGRP controls hook_path_chown
->>>>>>>       (this hook can restrict both the chown(2) and chgrp(2) 
->>>>>>> syscalls)
->>>>>>>
->>>>>>> Is this the desired mapping?
->>>>>>>
->>>>>>> The previous discussion I found on the topic was in
->>>>>>>
->>>>>>> [1]
->>>>>>> https://lore.kernel.org/all/5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net/ 
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> [2]
->>>>>>> https://lore.kernel.org/all/b1d69dfa-6d93-2034-7854-e2bc4017d20e@schaufler-ca.com/ 
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> [3]
->>>>>>> https://lore.kernel.org/all/c369c45d-5aa8-3e39-c7d6-b08b165495fd@digikod.net/ 
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> In my understanding the main arguments were the ones in [2] and [3].
->>>>>>>
->>>>>>> There were no further responses to [3], so I was under the 
->>>>>>> impression
->>>>>>> that we were gravitating towards an approach where the
->>>>>>> file-metadata-modification operations were grouped more coarsely?
->>>>>>>
->>>>>>> For example with the approach suggested in [3], which would be to
->>>>>>> group the operations coarsely into (a) one Landlock right for
->>>>>>> modifying file metadata that is used in security contexts, and 
->>>>>>> (b) one
->>>>>>> Landlock right for modifying metadata that was used in non-security
->>>>>>> contexts. That would mean that there would be:
->>>>>>>
->>>>>>> (a) LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES to control the
->>>>>>> following operations:
->>>>>>>       * chmod(2)-variants through hook_path_chmod,
->>>>>>>       * chown(2)-variants and chgrp(2)-variants through
->>>>>>> hook_path_chown,
->>>>>>>       * setxattr(2)-variants and removexattr(2)-variants for 
->>>>>>> extended
->>>>>>>         attributes that are not "user extended attributes" as
->>>>>>> described in
->>>>>>>         xattr(7) through hook_inode_setxattr and 
->>>>>>> hook_inode_removexattr
->>>>>>>
->>>>>>> (b) LANDLOCK_ACCESS_FS_MODIFY_NON_SECURITY_ATTRIBUTES to control the
->>>>>>> following operations:
->>>>>>>       * utimes(2) and other operations for setting other 
->>>>>>> non-security
->>>>>>>         sensitive attributes, probably through hook_inode_setattr(?)
->>>>>>>       * xattr modifications like above, but for the "user extended
->>>>>>>         attributes", though hook_inode_setxattr and
->>>>>>> hook_inode_removexattr
->>>>>>>
->>>>>>> In my mind, this would be a sensible grouping, and it would also 
->>>>>>> help
->>>>>>> to decouple the userspace-exposed API from the underlying
->>>>>>> implementation, as Casey suggested to do in [2].
->>>>>>>
->>>>>>> Specifically for this patch set, if you want to use this 
->>>>>>> grouping, you
->>>>>>> would only need to add one new Landlock right
->>>>>>> (LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES) as described above
->>>>>>> under (a) (and maybe we can find a shorter name for it... :))?
->>>>>>>
->>>>>>> Did I miss any operations here that would be necessary to restrict?
->>>>>>>
->>>>>>> Would that make sense to you? Xiu, what is your opinion on how this
->>>>>>> should be grouped? Do you have use cases in mind where a more
->>>>>>> fine-grained grouping would be required?
->>>>>>
->>>>>> I apologize I may missed that discussion when I prepared v2:(
->>>>>>
->>>>>> Yes, agreed, this grouping is more sensible and resonnable. so in 
->>>>>> this
->>>>>> patchset only one right will be added, and I suppose the first commit
->>>>>> which expand access_mask_t to u32 can be droped.
->>>>>>
->>>>>>>
->>>>>>> —Günther
->>>>>>>
->>>>>>> P.S.: Regarding utimes: The hook_inode_setattr hook *also* gets 
->>>>>>> called
->>>>>>> on a variety on attribute changes including file ownership, file 
->>>>>>> size
->>>>>>> and file mode, so it might potentially interact with a bunch of 
->>>>>>> other
->>>>>>> existing Landlock rights. Maybe that is not the right approach. 
->>>>>>> In any
->>>>>>> case, it seems like it might require more thinking and it might be
->>>>>>> sensible to do that in a separate patch set IMHO.
->>>>>>
->>>>>> Thanks for you reminder, that seems it's more complicated to support
->>>>>> utimes, so I think we'd better not support it in this patchset.
->>>>>
->>>>> The issue with this approach is that it makes it impossible to 
->>>>> properly
->>>>> group such access rights. Indeed, to avoid inconsistencies and much 
->>>>> more
->>>>> complexity, we cannot extend a Landlock access right once it is 
->>>>> defined.
->>>>>
->>>>> We also need to consider that file ownership and permissions have a
->>>>> default (e.g. umask), which is also a way to set them. How to
->>>>> consistently manage that? What if the application wants to protect its
->>>>> files with chmod 0400?
->>>>
->>>> what do you mean by this? do you mean that we should have a set of
->>>> default permissions for files created by applications within the
->>>> sandbox, so that it can update metadata of its own file.
->>>
->>> I mean that we need a consistent access control system, and for this we
->>> need to consider all the ways an extended attribute can be set.
->>>
->>> We can either extend the meaning of current access rights (controlled
->>> with a ruleset flag for compatibility reasons), or create new access
->>> rights. I think it would be better to add new dedicated rights to make
->>> it more explicit and flexible.
->>>
->>> I'm not sure about the right approach to properly control file
->>> permission. We need to think about it. Do you have some ideas?
->>>
->>> BTW, utimes can be controlled with the inode_setattr() LSM hook. Being
->>> able to control arbitrary file time modification could be part of the
->>> FS_WRITE_SAFE_METADATA, but modification and access time should always
->>> be updated according to the file operation.
->>>
->>>
->>>>
->>>>>
->>>>> About the naming, I think we can start with:
->>>>> - LANDLOCK_ACCESS_FS_READ_METADATA (read any file/dir metadata);
->>>>> - LANDLOCK_ACCESS_FS_WRITE_SAFE_METADATA: change file times, user 
->>>>> xattr;
->>>>
->>>> do you mean we should have permission controls on metadata level or
->>>> operation level? e.g. should we allow update on user xattr but deny
->>>> update on security xattr? or should we disallow update on any xattr?
->>>>
->>>>> - LANDLOCK_ACCESS_FS_WRITE_UNSAFE_METADATA: interpreted by the kernel
->>>>> (could change non-Landlock DAC or MAC, which could be considered as a
->>>>> policy bypass; or other various xattr that might be interpreted by
->>>>> filesystems), this should be denied most of the time.
->>>>
->>>> do you mean FS_WRITE_UNSAFE_METADATA is security-related? and
->>>> FS_WRITE_SAFE_METADATA is non-security-related?
->>>
->>> Yes, FS_WRITE_UNSAFE_METADATA would be for security related
->>> xattr/chmod/chown, and FS_WRITE_SAFE_METADATA for non-security xattr.
->>> Both are mutually exclusive. This would involve the inode_setattr and
->>> inode_setxattr LSM hooks. Looking at the calling sites, it seems
->>> possible to replace all inode arguments with paths.
-> 
-> I though about differentiating user xattr, atime/mtime, DAC 
-> (chown/chmod, posix ACLs), and other xattr, but it would be too complex 
-> to get a consistent approach because of indirect consequences (e.g. 
-> controlling umask, setegid, settimeofday…). Let's make it simple for now.
-> 
-> Here is an update on my previous proposal:
-> 
-> LANDLOCK_ACCESS_FS_READ_METADATA to read any file/dir metadata (i.e. 
-> inode attr and xattr). In practice, for most use cases, this access 
-> right should be granted whenever LANDLOCK_ACCESS_READ_DIR is allowed.
-> 
-> LANDLOCK_ACCESS_FS_WRITE_METADATA to *explicitly* write any inode attr 
-> or xattr (i.e. chmod, chown, utime, and all xattr). It should be noted 
-> that file modification time and access time should always be updated 
-> according to the file operation (e.g. write, truncate) even when this 
-> access is not explicitly allowed (according to vfs_utimes(), 
-> ATTR_TIMES_SET and ATTR_TOUCH should enable to differentiate from 
-> implicit time changes).
-> 
-Thanks, I analyzed the relevant functions and the use of lsm hooks.
-so I think what to do will be as follows:
+Eric
 
-LANDLOCK_ACCESS_FS_WRITE_METADATA controls the following hooks:
-1.security_path_chmod
-2.security_path_chown
-3.security_inode_setattr
-4.security_inode_setxattr
-5.security_inode_removexattr
-6.security_inode_set_acl
-
-LANDLOCK_ACCESS_FS_READ_METADATA controls the following hooks:
-1.security_inode_getattr
-2.security_inode_get_acl
-3.security_inode_getxattr
-
-and the following 7 hooks are using struct dentry * as parameter, should 
-be changed to struct path *, and also their callers.
-
-security_inode_setattr
-security_inode_setxattr
-security_inode_removexattr
-security_inode_set_acl
-security_inode_getattr
-security_inode_get_acl
-security_inode_getxattr
-
-Looks like it's a big change.
-
-> 
->>
->> Sorry for the late reply, I have problems with this work, for example,
->> before:
->> security_inode_setattr(struct user_namespace *mnt_userns,
->>                                            struct dentry *dentry,
->>                                            struct iattr *attr)
->> after:
->> security_inode_setattr(struct user_namespace *mnt_userns,
->>                                            struct path *path,
->>                                            struct iattr *attr)
->> then I change the second argument in notify_change() from struct *dentry
->> to struct path *, that makes this kind of changes in fs/overlayfs/
->> spread to lots of places because overlayfs basicly uses dentry instead
->> of path, the worst case may be here:
->>
->> ovl_special_inode_operations.set_acl hook calls:
->> -->
->> ovl_set_acl(struct user_namespace *mnt_userns, struct dentry *dentry,
->> struct posix_acl *acl, int type)
->> -->
->> ovl_setattr(struct user_namespace *mnt_userns, struct dentry
->> *dentry,struct iattr *attr)
->> -->
->> ovl_do_notify_change(struct ovl_fs *ofs, struct dentry *upperdentry,
->> struct iattr *attr)
->>
->> from the top of this callchain, I can not find a path to replace dentry,
->> did I miss something? or do you have better idea?
-> 
-> I think this can be solved thanks to the ovl_path_real() helper.
-> .
