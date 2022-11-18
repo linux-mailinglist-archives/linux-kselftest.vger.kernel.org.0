@@ -2,118 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A57E62F158
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 10:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFE262F23B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 11:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241840AbiKRJig (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Nov 2022 04:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S241298AbiKRKMv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Nov 2022 05:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241455AbiKRJif (ORCPT
+        with ESMTP id S235073AbiKRKMu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Nov 2022 04:38:35 -0500
-Received: from out203-205-251-60.mail.qq.com (out203-205-251-60.mail.qq.com [203.205.251.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1FF18B1E;
-        Fri, 18 Nov 2022 01:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1668764310;
-        bh=L9lq49fnBMKkQ6EuS4f8o+JJ8V25XS/8kzp+eL7tIWE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=vomaaK8om7aXuHPG/6QLlnTsOhG2LOfp1MyQo7vXmVCjQEf5+uK677n15LkBFLJ86
-         JFrohXsDRiOD9dIir6LNznuYWhBnFsqnFEzRw4PBylXhPogt8xmrLFBv8ES6NZ+9T5
-         8eEvVtyJulJFq6NiUGgmv1iEV/UnCayVqIDEruUw=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
-        id 99998261; Fri, 18 Nov 2022 17:38:25 +0800
-X-QQ-mid: xmsmtpt1668764305t267nbr74
-Message-ID: <tencent_4C0B445E0305A18FACA04B4A959B57835107@qq.com>
-X-QQ-XMAILINFO: NkHKfw09D6j8PsoUArMVLcQjYBngMKSICsRNPPynwW4aNwXDhozF5Xfxfozh+U
-         7JZcwTINU7QfSW9nR0uSp2nGEKT2hNFqCSzHVwHeBST3deqAH7PoGgkalzNmjPQ4meuiXLXymvIf
-         EvDNGmMtQs+S7Lxl2CIMK6eKf9QJmjYA0e1kq7x9wiI+Ke/2ZqLMSuJIfOqzXysWMQYG4qp07FHZ
-         V4djqscvuk0rw9UKlIFtUYEDZ4TIDmHXGcOjPhq+soHIQJOrViOEtdWylmVy7WC89SF32WFkBolI
-         B5gDwVFUjydKu/MPb7b01hQkjDuTF05FqvyI+sh5LFw+9TDsgGpmH1NKl+MR1hy2s/0+2maNrWx8
-         JpkBuSdLDZVeAZK3MatCkdkm71xMnqhzPv3e4ogGIhvP2mlIC9/3q6G8/pis/RPfm5oe+DlJf6A7
-         tOQWQ8f/dtraLFXfsFIkKt/nNKB9VemQwTvVqhDm3bTjn0Y/JYtb0gDz0mnzEI7pu0fNG+uIPa5t
-         +4cJGZch4Vs6l2QQE/qQUL3QjlIXyUusSSnvJ8etFcjBOBr6ujiKH1GGTuOEHZCJMrYDsy9bR+l/
-         +T+gPSYQb507fRXMR6JG2cKnjRg4u35FSDlxcpxfbILnvoSO3LQQK3wD/3sVW5gFn/we5ekG749N
-         2frzeyJapq1tb2Jwf1bGwRMw4DP7VVehzmYZ3m2LywiGO1HJLcfymIYNQYkJANDLTUx1GWhQjmdL
-         /HkIehXHA6eMX9irFPaq/GsBG2DRLZfHTcnm6H3ZSoKlZhDC6PCgibe8fvXaDUo+hFzlgZGaxzKm
-         rNsrOKf3HefdZOHE6n7fNrKrglfEsKRKp9/qvEyeYDPuj8m/APIGz6KkN5rS4U2LumP20OvNqbrj
-         HB/IaRCUYYnkOqX6pbKPADXfdPikMzyDx/CNDb4TcNxKOzf1Hx0n2SpBV8OMvQdLsgA5lm9B9g4k
-         Iiy+DPVCK07hGVwcV711u9opps53Cd7d0YhgT9ZECH+oMIGP6N+kAI5efpHC2xnrmyXj3+Kc4=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     andrii.nakryiko@gmail.com, sdf@google.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, dxu@dxuuu.xyz, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        lkp@intel.com, lorenzo@kernel.org, martin.lau@linux.dev,
-        memxor@gmail.com, mykolal@fb.com, rongtao@cestc.cn,
-        rtoax@foxmail.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
-Subject: [PATCH bpf-next v2] selftests/bpf: Fix error: undeclared identifier 'NF_NAT_MANIP_SRC'
-Date:   Fri, 18 Nov 2022 17:38:24 +0800
-X-OQ-MSGID: <20221118093824.108797-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <CAEf4BzZE5=OOp6OesB=P8PE=Ps62fkecDSZ9MzwHCD68=+oN0g@mail.gmail.com>
-References: <CAEf4BzZE5=OOp6OesB=P8PE=Ps62fkecDSZ9MzwHCD68=+oN0g@mail.gmail.com>
+        Fri, 18 Nov 2022 05:12:50 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575BF71F31;
+        Fri, 18 Nov 2022 02:12:49 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIA9uvt032749;
+        Fri, 18 Nov 2022 10:12:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=wcl5icUsxpcfuMwhOzo/VTcRuTygEQLTW6vBKpa0/yk=;
+ b=rRz11gRYT3pGhPADwL+j3/z1i4J6b9ujSpJr72msDN8P4dYso7gIpvVxJbwa9+0e85bC
+ tfI1L0brHDI5ul0NdAe1rmFGDjZxluknTt9abEYSizQVyoIrsN88ZbPSPk3gacVqAPmB
+ naCKjE0Yvwyt9m98unhWYuDHZy6D0NLE68+91vgmdA5QCKd+Z58DZrEbXzAuglN0N5Sb
+ RCygMi9ODTeM9lkTOeapW+f3htuAorI0mp3zAK3SaurnUhvM0QbiWqNqSyFbhOPeHxOm
+ 4j2KkQpwyRIk4ts6QAa0j0H/k8tEh2D34TME1BM+KhC9DZ/Xc+uqA04gw0RLfEt5xKVn gQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kx7bc9444-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 10:12:45 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AIAAwul004894;
+        Fri, 18 Nov 2022 10:12:45 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kx7bc9431-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 10:12:45 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AIA9gg0002589;
+        Fri, 18 Nov 2022 10:12:42 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06fra.de.ibm.com with ESMTP id 3kwte4gkaw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Nov 2022 10:12:42 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AIACdxk59310452
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Nov 2022 10:12:39 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4D7415204F;
+        Fri, 18 Nov 2022 10:12:39 +0000 (GMT)
+Received: from osiris (unknown [9.145.17.66])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id B37A95204E;
+        Fri, 18 Nov 2022 10:12:38 +0000 (GMT)
+Date:   Fri, 18 Nov 2022 11:12:37 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v3 1/9] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+Message-ID: <Y3dalbP5yb2gflA9@osiris>
+References: <20221117221758.66326-1-scgl@linux.ibm.com>
+ <20221117221758.66326-2-scgl@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117221758.66326-2-scgl@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _3Ebc4G1HOdvvyKR5KujmpmU-wwQgWgy
+X-Proofpoint-GUID: Pk_qYC5A5nG-ngx3HjismAMs3CDi5Ne-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-17_06,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211180057
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+On Thu, Nov 17, 2022 at 11:17:50PM +0100, Janis Schoetterl-Glausch wrote:
+> User space can use the MEM_OP ioctl to make storage key checked reads
+> and writes to the guest, however, it has no way of performing atomic,
+> key checked, accesses to the guest.
+> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+> mode. For now, support this mode for absolute accesses only.
+> 
+> This mode can be use, for example, to set the device-state-change
+> indicator and the adapter-local-summary indicator atomically.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+>  include/uapi/linux/kvm.h |   5 ++
+>  arch/s390/kvm/gaccess.h  |   3 ++
+>  arch/s390/kvm/gaccess.c  | 101 +++++++++++++++++++++++++++++++++++++++
+>  arch/s390/kvm/kvm-s390.c |  35 +++++++++++++-
+>  4 files changed, 142 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 0d5d4419139a..1f36be5493e6 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -588,6 +588,8 @@ struct kvm_s390_mem_op {
+>  		struct {
+>  			__u8 ar;	/* the access register number */
+>  			__u8 key;	/* access key, ignored if flag unset */
+> +			__u8 pad1[6];	/* ignored */
+> +			__u64 old_p;	/* ignored if flag unset */
 
-commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
-introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat.h,
-and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_nat_info
-kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c.
+Just one comment: the suffix "_p" for pointer is quite unusual within
+the kernel. This also would be the first of its kind within kvm.h.
+Usually there is either no suffix or "_addr".
+So for consistency reasons I would suggest to change this to one of
+the common variants.
 
-In bpf kself-test config (tools/testing/selftests/bpf/config) nf_nat
-is compiled as built-in, this issue occurs just if it is compiled as
-module. we just hardcode 1/0 here.
+The code itself looks good from my point of view, even though for the
+sake of simplicity I would have put the complete sign/zero extended
+128 bit old value into the structure, instead of having a pointer to
+the value. Imho that would simplify the interface. Also alignment, as
+pointed out previously, really doesn't matter for this use case.
 
-How to reproduce the error:
-
-   $ make -C tools/testing/selftests/bpf/
-   ...
-      CLNG-BPF [test_maps] test_bpf_nf.bpf.o
-      error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
-            bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-                                                         ^
-      error: use of undeclared identifier 'NF_NAT_MANIP_DST'
-            bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-                                                         ^
-   2 errors generated.
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/progs/test_bpf_nf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 227e85e85dda..075cd9b31d76 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -157,10 +157,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 
- 		/* snat */
- 		saddr.ip = bpf_get_prandom_u32();
--		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-+		bpf_ct_set_nat_info(ct, &saddr, sport, 0 /*NF_NAT_MANIP_SRC*/);
- 		/* dnat */
- 		daddr.ip = bpf_get_prandom_u32();
--		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-+		bpf_ct_set_nat_info(ct, &daddr, dport, 1 /*NF_NAT_MANIP_DST*/);
- 
- 		ct_ins = bpf_ct_insert_entry(ct);
- 		if (ct_ins) {
--- 
-2.31.1
-
+But you had already something like that previously and changed it, so
+no reason to go back and forth. Not really important.
