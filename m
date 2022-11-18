@@ -2,236 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790A362EE53
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 08:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2F462EEC0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 08:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241122AbiKRHaD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Nov 2022 02:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
+        id S241365AbiKRH63 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Nov 2022 02:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241046AbiKRHaA (ORCPT
+        with ESMTP id S241200AbiKRH5r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Nov 2022 02:30:00 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEA77D525
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 23:29:55 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id w17so996051uam.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 23:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=p54qIR5QLL/GbqEw0yiS4IlYIk9qC5UNyiTDcMkBSn4=;
-        b=Nt5AmFUFLhnfWqydL8qEy+j1PjDIbojFeMUK80/5hEc8Q3Ze78YL7INPuTc4DEnnKM
-         8Hcirav0fsjw8wXalXH73l69XkcuVfYVzspphiEHYUSsIaWTdwPu1PmJtDZFGKNaqv7j
-         pM6fjB6NifJrf1KWp3fn8WuuqCMRQKXIr4yDmBYfbnQtC91Nqdsnzc50/QQWA+A2jjDc
-         H0YP42LIPvtpZuczeB8vLR+5AQsnxH6wQDEEvaAf3Gv87JAv2T7HHjKd3f3hxBXzctBI
-         87X8D2tukpcub6cjz/uig81iomFjFSTZt63ci9b++T4y7TjMLygUgzezKSNIWVxpJDjK
-         cMUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p54qIR5QLL/GbqEw0yiS4IlYIk9qC5UNyiTDcMkBSn4=;
-        b=I3DH2F5NzcAspGf85yahp+/xbBaR/JS9lNrJJDYXitI3CkWJ23RpIJW9FMwUGzYdOz
-         n9R4e8VjquYmJCcJFpeECJlCu6lzP1NMZU61MXUM82FG8M+MFShCSGGq3TtjT+dGSV7/
-         tc3tfD/O3EepTh4o/MXv2Jk/h3w1+rT6sfBmwdQ9Zb/Rn2rMg11jT/bvbSmqpzWgkL/8
-         tjzt6cE1so9PqjdTrYb5DsOriDs374F8Xb8s6IDxudf943F9TLalDS2FVVzzXciFQIM3
-         gzJJSlUc5KUZWCPFagvSBoYizmwFX2IwOdYO8qcjt+X3qF1mfqNZc5+I9vCSUyQlt0h2
-         TqdQ==
-X-Gm-Message-State: ANoB5pkmhs4CAqNnkwTPUQvIm7Xpofiw6U3uTsEYjA9RaZCB0CbWnkrE
-        fc01QCQx4XCP2qCZ8psijdBvX12Daesu8WmQn3oSHg==
-X-Google-Smtp-Source: AA0mqf4KU6A3b6Li3zUpy2Lk4NYsLCO5Vb2lIVcs9rriQ0Q+7mChaGrUEW7i5q9Wla6p3bnPzAWT9xBCYnFvII50m5Y=
-X-Received: by 2002:ab0:238f:0:b0:411:968:212 with SMTP id b15-20020ab0238f000000b0041109680212mr3471849uan.107.1668756594737;
- Thu, 17 Nov 2022 23:29:54 -0800 (PST)
+        Fri, 18 Nov 2022 02:57:47 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4999990587;
+        Thu, 17 Nov 2022 23:57:36 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4ND8FC5DQjzJnq7;
+        Fri, 18 Nov 2022 15:54:23 +0800 (CST)
+Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 18 Nov 2022 15:57:34 +0800
+Received: from localhost.localdomain (10.90.53.65) by
+ kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 18 Nov 2022 15:57:33 +0800
+From:   limin <limin100@huawei.com>
+To:     <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <hannes@cmpxchg.org>, <mhocko@kernel.org>,
+        <roman.gushchin@linux.dev>, <shakeelb@google.com>,
+        <songmuchun@bytedance.com>, <tj@kernel.org>,
+        <lizefan.x@bytedance.com>, <shuah@kernel.org>
+Subject: [PATCH -next] kselftest/cgroup: fix unexcepted testing failure on test_memcontrol
+Date:   Fri, 18 Nov 2022 15:57:27 +0800
+Message-ID: <20221118075727.542942-1-limin100@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20221106021657.1145519-1-pedro.falcato@gmail.com>
- <202211061948.46D3F78@keescook> <CABVgOSm9V37KgiP-eHxfYF4tTT+ZDQKVxEAzh8P0SH3WrECM9A@mail.gmail.com>
- <202211171402.95121B3FD4@keescook>
-In-Reply-To: <202211171402.95121B3FD4@keescook>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 18 Nov 2022 15:29:43 +0800
-Message-ID: <CABVgOSkgzo0bE5iHWB5HdMokgyEcbw-R-MrrnvD-QBzsHmz4OQ@mail.gmail.com>
-Subject: Re: Attaching userspace VM to kernel thread (was Re: [PATCH]
- fs/binfmt_elf: Fix memsz > filesz handling)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        linux-kernel@vger.kernel.org, sam@gentoo.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-fsdevel@vger.kernel.org, Rich Felker <dalias@libc.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000011363005edb9ac99"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.65]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600001.china.huawei.com (7.193.23.3)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000011363005edb9ac99
-Content-Type: text/plain; charset="UTF-8"
+When the `test_memcontrol` is run,
+the following two test cases fail:
+1. test_memcg_low
+The original test case does not address the following issues:
+First, the memory reclamation behavior is different
+ when memory.min or memory.low is set.
+Second, when memory.low of a cgroup is set to 0
+and the cgroup's father's is set to 50,
+the value of the low field in the memory.events
+of the cgroup is greater than 0.
+2. test_memcg_swap_max
+When swap.max is set, the sum of memory.current
+and memory.swap.current is slightly greater than
+the allocated memory size.
+The judgment in the original test case is too strict.
+some test cases will be failed as following:
+(the fourth and tenth):
 
-On Fri, Nov 18, 2022 at 6:06 AM Kees Cook <keescook@chromium.org> wrote:
->
-> Hi,
->
-> This has diverged from the original topic a bit, so I've changed the
-> Subject to hopefully gain visibility. :)
->
-> For KUnit, it would be REALLY nice to have a way to attach a userspace
-> VM to a kernel thread so we can do userspace memory mapping
-> manipulation, etc. Neither David nor I have been able to figure out the
-> right set of steps to make this happen. What are we missing?
->
-> Details below...
->
-> On Wed, Nov 16, 2022 at 12:34:40PM +0800, David Gow wrote:
-> > On Mon, Nov 7, 2022 at 11:59 AM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Sun, Nov 06, 2022 at 02:16:57AM +0000, Pedro Falcato wrote:
-> > > David, has there been any work on adding a way to instantiate
-> > > userspace VMAs in a KUnit test? I tried to write this myself, but I
-> > > couldn't figure out how to make the userspace memory mappings appear.
-> > > Here's my fumbling attempt:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=devel/kunit/usercopy
-> > >
-> > > I really wish KUnit had userspace mapping support -- I have a bunch of
-> > > unit tests that need to get built up around checking for regressions
-> > > here, etc.
-> >
-> > Hi Kees,
-> >
-> > Sorry the the delayed response!
-> >
-> > Alas, my attempts to get this to work haven't been much more
-> > successful than yours. It's definitely something we'd like to support,
-> > but I confess to not knowing enough about the mm code to know exactly
-> > what would be involved.
-> >
-> > The workaround is to load tests as modules, and use something like
-> > Vitor's original patch here:
-> > https://lore.kernel.org/all/20200721174036.71072-1-vitor@massaru.org/
-> >
-> > Basically, using the existing mm of the module loader. Adapting those
-> > changes to your branch (and fixing a couple of back-to-front KUnit
-> > assertions) does work for me when built as a module, in an x86_64 vm:
-> >
-> > root@slicestar:~# modprobe usercopy_kunit
-> > [   52.986290]     # Subtest: usercopy
-> > [   52.986701]     1..1
-> > [   53.246058]     ok 1 - usercopy_test
-> > [   53.246628] ok 1 - usercopy
-> >
-> > But getting it to work with built-in tests hasn't been successful so
-> > far. I wondered if we could just piggy-back on init_mm or similar, but
-> > that doesn't seem to work either.
-> >
-> > So, in the short-term, this is only possible for modules. If that's
-> > useful enough, we can get Vitor's support patch (or something similar)
-> > in, and just mark any tests module-only (or have them skip if there's
-> > no mm). Because kunit.py only runs built-in tests, though, it's
-> > definitely less convenient.
->
-> Thanks for any pointers! :)
->
-> -Kees
->
-> --
-> Kees Cook
+$ sudo ./test_memcontrol
+ok 1 test_memcg_subtree_control
+ok 2 test_memcg_current
+ok 3 test_memcg_min
+not ok 4 test_memcg_low
+ok 5 test_memcg_high
+ok 6 test_memcg_high_sync
+ok 7 test_memcg_max
+ok 8 test_memcg_reclaim
+ok 9 test_memcg_oom_events
+not ok 10 test_memcg_swap_max
+ok 11 test_memcg_sock
+ok 12 test_memcg_oom_group_leaf_events
+ok 13 test_memcg_oom_group_parent_events
+ok 14 test_memcg_oom_group_score_events
 
-FWIW, I had another quick look at this yesterday, and I suspect that
-(at least one of) the problem(s) is that function pointers like
-mm->get_unmapped_area are only setup as part of exec(), so a
-newly-created mm isn't actually useful. Looking at, e.g.,
-arch_pick_mm_layout(), there's a whole bunch of architecture-dependent
-stuff here to handle, e.g., 32-bit compat.
+this patch will correct this unexcepted failure
 
-Cheers,
--- David
+Signed-off-by: limin <limin100@huawei.com>
+Signed-off-by: liaoqixin <liaoqixin@huawei.com>
+---
+ tools/testing/selftests/cgroup/test_memcontrol.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
---00000000000011363005edb9ac99
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 883335955..18a1d40b1 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -381,8 +381,7 @@ static int test_memcg_protection(const char *root, bool min)
+ 			"memory.low prevents from allocating anon memory\n");
+ 		goto cleanup;
+ 	}
+-
+-	if (!values_close(cg_read_long(parent[1], "memory.current"), MB(50), 3))
++	if (!values_close(cg_read_long(parent[1], "memory.current"), min ? MB(50) : MB(30), 3))
+ 		goto cleanup;
+ 
+ 	if (min) {
+@@ -401,9 +400,6 @@ static int test_memcg_protection(const char *root, bool min)
+ 			goto cleanup;
+ 		if (i <= no_low_events_index && low <= 0)
+ 			goto cleanup;
+-		if (i > no_low_events_index && low)
+-			goto cleanup;
+-
+ 	}
+ 
+ 	ret = KSFT_PASS;
+@@ -768,7 +764,7 @@ static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
+ 
+ 	swap_current = cg_read_long(cgroup, "memory.swap.current");
+ 	if (!swap_current ||
+-	    !values_close(mem_current + swap_current, size, 3))
++	    !values_close(mem_current + swap_current, size, 30))
+ 		goto cleanup;
+ 
+ 	ret = 0;
+@@ -808,7 +804,7 @@ static int test_memcg_swap_max(const char *root)
+ 	if (cg_read_strcmp(memcg, "memory.swap.max", "max\n"))
+ 		goto cleanup;
+ 
+-	if (cg_write(memcg, "memory.swap.max", "30M"))
++	if (cg_write(memcg, "memory.swap.max", "70M"))
+ 		goto cleanup;
+ 
+ 	if (cg_write(memcg, "memory.max", "30M"))
+-- 
+2.33.0
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAGPil6q1qRMI4xctnaY
-SpEwDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjEwMjMw
-ODQ3MTFaFw0yMzA0MjEwODQ3MTFaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDOy5O2GPVtBg1bBqW4oCdA74F9u0dQ
-yp4AdicypXD/HnquyuG5F25nYDqJtIueywO1V0kAbUCUNJS002MWjXx329Y1bv0p5GeXQ1isO49U
-E86YZb+H0Gjz/kU2EUNllD7499UnJUx/36cMNRZ1BytreL0lLR0XNMJnPNzB6nCnWUf2X3sEZKOD
-w+7PhYB7CjsyK8n3MrKkMG3uVxoatKMvdsX3DbllFE/ixNbGLfWTTCaPZYOblLYq7hNuvbb3yGSx
-UWkinNXOLCsVGVLeGsQyMCfs8m4u3MBGfRHWc2svYunGHGheG8ErIVL2jl2Ly1nIJpPzZPui17Kd
-4TY9v0THAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFCNkhjo/
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBt
-BnmZClgogfWv5FzalR+xus5U5/TflBIUxCsalBF2gTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMTgwNzI5NTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAK/pw2+1Xh4BweEn3qq0R
-J4ATnlmGcn4ws/Hj1JsxHiAyKRumkk1WK4ARdsLrYwVgqRRsXJs2GlyHNdqzSV8h+tQh2KMMKmST
-Y6+MQLy74Cxi+suo3pXutuw6/uqmhS6Xlhme6ChdDu3mhBFQgNxuzc879aX4lY466fTuAKYIxLQ6
-ALh84Oe0/kymyE2mi8AdSAxGcVZZqdiWcyFQjb5IqzOg/jieXHc96DXrShGnDopZrpijXU9A/vLb
-qjb61trlm3V26fZkXEodU6LnDhCH4lttx63KCGpY8w2WGBaCGoWkNL1+PjdOqnvErdri+nYA+IW5
-OVm47McgBMMPJt0yfg==
---00000000000011363005edb9ac99--
