@@ -2,202 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26BD62E9E8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 00:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47D162EA4C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 01:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbiKQX5U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Nov 2022 18:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
+        id S240621AbiKRAb3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Nov 2022 19:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiKQX5T (ORCPT
+        with ESMTP id S239518AbiKRAb1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Nov 2022 18:57:19 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0601B7ED;
-        Thu, 17 Nov 2022 15:57:18 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id z18so4898562edb.9;
-        Thu, 17 Nov 2022 15:57:18 -0800 (PST)
+        Thu, 17 Nov 2022 19:31:27 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6A16E568
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 16:31:26 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 130so3611129pgc.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Nov 2022 16:31:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yjUoFiBiFtf4ovqXKv3ngDDZlV/4c29oSzioK1ixLWE=;
-        b=UIakpxJhpqIS/PFa5VipGn52ESjp37zIfUkxnby8IV3286QADCd7GA3BQSfX+oVses
-         QGbu/veNeoIXk0Qi/fYNbjghpwOEBsH42NTwSDTz2OSQmOuo2Yrkohq9pknUf34/25dR
-         zoeEv9FZLK7V/aXetruGh1xH7letjBCByyH5o7XNGAzSu12NihN0LLJC6cy7cqo91Pog
-         6Orj7y0IZaHqzw+9jXge15XI0xDSXbJjddRbcIoJleKDtaZRT1/2objshU+nblanyaIL
-         Bx3H1He3wwyOTL+O9myBxmWOrJeoSO5iHQnCDx3XviLkMD9x9QTd4yWRpQY/951cHjf0
-         WguA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SdXW0qNT9EJ55g7ZecMibSPRKy2hZHqw3Yh8nMlwERE=;
+        b=aU25zccRjTs3wP43k0MIJn4DgVbsnZCNuzNnI2CpXWYIZxXulCGxIQevzOUHHZBnNX
+         P9dqjL6CLaVk8Gd/8VV9yHkQnYw6wZLIF25d9n4/Hz+qw11dfo4C3uVe8ugX4akyWpVq
+         2j/LOKCC5xRDK3aE2eqqxuB+wZP/Rdy2IY2yY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yjUoFiBiFtf4ovqXKv3ngDDZlV/4c29oSzioK1ixLWE=;
-        b=Yzc2IKo80vsDbk4rZ36xNUKk/HC69EHl5zdSY4XayLND/C9lj2zmXGKcs51FWUVuv4
-         cEXKRLnVqUstBxSZA5Bp8b/7CdpA/9baM6UQ5XdxnE0p4X7eo+Crg2l6VbL+JJrJJO6r
-         HLvmygVMiWVHBvDC+GHh6s8C6f1UiBiw9J012VFv+mqXY+yrDj4siBOmjrl3M6RaKgQL
-         BzQ0DnfnWfdMaBv7asH/zIlQdG/wXMYDIoQEuqbhGVIvHnLAse6HVgnJXNLnLeQJgABs
-         zG1oZG68wyS1rs3pGADAtqomANZJbOancqar6DShEKK0N6omcfCSBvBzm+QwKx4rJESc
-         rYrQ==
-X-Gm-Message-State: ANoB5pk/n9bK/mzYj7v1MsWT/QgXnNHeqRdj7UXmM4zkr1e4H7HJCR1b
-        FUnOojWQyuZq2HAUdn2AdUJhaxgZzv5mEOf/JJ4=
-X-Google-Smtp-Source: AA0mqf5Yer3RXa/ls1/THY+ZW8wLWvZ0dNgAuBjrBaHCJG/4z0B3yuE913ejWYDULg2nnVULICpzw7HPiDeZwGBChgk=
-X-Received: by 2002:a05:6402:4008:b0:458:dd63:e339 with SMTP id
- d8-20020a056402400800b00458dd63e339mr4014232eda.81.1668729437145; Thu, 17 Nov
- 2022 15:57:17 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SdXW0qNT9EJ55g7ZecMibSPRKy2hZHqw3Yh8nMlwERE=;
+        b=sRoDurUO8mvqgO8sIMudEQaHcC1j4jvrI1XzuX5SXOobTWEBWdXxO5DcdeGVA/M5or
+         /deXyWv2qJK399pqxa5gGAXgctBSYVr3BEINMQMuTxYXuZVlxLky0/Z1iriuaBQCKp9L
+         Aa/sz6QvNLrXvZ0u65GYIrYjrez3UuW2noZeUnFdfX6uno6sb3kR9Nn4pOPw2TJVPU5D
+         wcs6HqfqihocLOBq2wRQGWjxylzXaMYjFYXFl0rYphrTr653pcDJZJQBWW//kOmiWmTC
+         y5phllMP/rQ6b/2dUwDgfg00smXdlUEKcrRheNfmFQ4JKTO8BNpyX2QYfyRCcqbuDKaX
+         ompw==
+X-Gm-Message-State: ANoB5pnrJgpIdKuYf/lcOfEvY6K4i4umTqhu+Hc932MmMUvSzVRHlsdx
+        TdKnMwQcGp7NqrqELmhHWmVQYw==
+X-Google-Smtp-Source: AA0mqf4Eg6efWFkC4PcZKO6M1HjEMRT/hWrF7/OJe6t0KCBzvaZRup/szSwa3Jgy88qqEUfyA5B6Hg==
+X-Received: by 2002:a65:53ca:0:b0:476:dd80:fb29 with SMTP id z10-20020a6553ca000000b00476dd80fb29mr4360083pgr.619.1668731485545;
+        Thu, 17 Nov 2022 16:31:25 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b00186b6bb2f48sm2022328plk.129.2022.11.17.16.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 16:31:25 -0800 (PST)
+Date:   Thu, 17 Nov 2022 16:31:24 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH mm-unstable v1 20/20] mm: rename FOLL_FORCE to FOLL_PTRACE
+Message-ID: <202211171630.8EABF5EDD@keescook>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-21-david@redhat.com>
+ <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
+ <202211171439.CDE720EAD@keescook>
+ <CAHk-=wjykbz-4xVTWF7vkvGJnFoTSXNVeMzfsXaLnGm3CRd8rQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <tencent_E1424259BD97672AD1AF00A3468858065E08@qq.com> <CAKH8qBsAC4qHSQ7TYnkXEMM68rqOz8gxuZJBxVdSkzhpQ8MR-Q@mail.gmail.com>
-In-Reply-To: <CAKH8qBsAC4qHSQ7TYnkXEMM68rqOz8gxuZJBxVdSkzhpQ8MR-Q@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 17 Nov 2022 15:57:05 -0800
-Message-ID: <CAEf4BzZE5=OOp6OesB=P8PE=Ps62fkecDSZ9MzwHCD68=+oN0g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix error: undeclared
- identifier 'NF_NAT_MANIP_SRC'
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Rong Tao <rtoax@foxmail.com>, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, dxu@dxuuu.xyz,
-        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lkp@intel.com, lorenzo@kernel.org,
-        martin.lau@linux.dev, memxor@gmail.com, mykolal@fb.com,
-        rongtao@cestc.cn, shuah@kernel.org, song@kernel.org, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjykbz-4xVTWF7vkvGJnFoTSXNVeMzfsXaLnGm3CRd8rQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 1:52 PM Stanislav Fomichev <sdf@google.com> wrote:
->
-> On Thu, Nov 17, 2022 at 7:17 AM Rong Tao <rtoax@foxmail.com> wrote:
+On Thu, Nov 17, 2022 at 03:20:01PM -0800, Linus Torvalds wrote:
+> On Thu, Nov 17, 2022 at 2:58 PM Kees Cook <keescook@chromium.org> wrote:
 > >
-> > From: Rong Tao <rongtao@cestc.cn>
-> >
-> > commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
-> > introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat.h,
-> > and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_nat_info
-> > kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c.
-> >
-> > In bpf kself-test config (tools/testing/selftests/bpf/config) nf_nat
-> > is compiled as built-in, this issue occurs just if it is compiled as
-> > module. We could use BPF CO-RE and ___suffix rule to avoid this.
-> >
-> > How to reproduce the error:
-> >
-> >     $ make -C tools/testing/selftests/bpf/
-> >     ...
-> >       CLNG-BPF [test_maps] test_bpf_nf.bpf.o
-> >       error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
-> >             bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-> >                                                            ^
-> >       error: use of undeclared identifier 'NF_NAT_MANIP_DST'
-> >             bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-> >                                                            ^
-> >     2 errors generated.
-> >
-> > Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> > ---
-> > v2: use BPF CO-RE and ___suffix rule to avoid this error.
-> > v1: https://lore.kernel.org/lkml/tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com/
-> > ---
-> >  .../testing/selftests/bpf/progs/test_bpf_nf.c | 30 +++++++++++++++++--
-> >  1 file changed, 27 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > index 227e85e85dda..1706984e1a6a 100644
-> > --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > @@ -2,6 +2,7 @@
-> >  #include <vmlinux.h>
-> >  #include <bpf/bpf_helpers.h>
-> >  #include <bpf/bpf_endian.h>
-> > +#include <bpf/bpf_core_read.h>
-> >
-> >  #define EAFNOSUPPORT 97
-> >  #define EPROTO 71
-> > @@ -11,6 +12,11 @@
-> >
-> >  extern unsigned long CONFIG_HZ __kconfig;
-> >
-> > +enum nf_nat_manip_type___x {
-> > +       NF_NAT_MANIP_SRC___x,
-> > +       NF_NAT_MANIP_DST___x,
-> > +};
-> > +
-> >  int test_einval_bpf_tuple = 0;
-> >  int test_einval_reserved = 0;
-> >  int test_einval_netns_id = 0;
-> > @@ -58,7 +64,7 @@ int bpf_ct_change_timeout(struct nf_conn *, u32) __ksym;
-> >  int bpf_ct_set_status(struct nf_conn *, u32) __ksym;
-> >  int bpf_ct_change_status(struct nf_conn *, u32) __ksym;
-> >  int bpf_ct_set_nat_info(struct nf_conn *, union nf_inet_addr *,
-> > -                       int port, enum nf_nat_manip_type) __ksym;
-> > +                       int port, int type) __ksym;
-> >
-> >  static __always_inline void
-> >  nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
-> > @@ -151,16 +157,34 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
-> >                 union nf_inet_addr saddr = {};
-> >                 union nf_inet_addr daddr = {};
-> >                 struct nf_conn *ct_ins;
-> > +               int manip_src;
-> > +               int manip_dst;
-> > +               enum nf_nat_manip_type___x mapip_type_x;
-> > +
-> > +               if (!bpf_core_type_exists(enum nf_nat_manip_type)) {
-> > +                       bpf_printk("enum nf_nat_manip_type not exist.\n");
-> > +                       return;
-> > +               }
-> > +
-> > +               if (bpf_core_enum_value_exists(mapip_type_x, NF_NAT_MANIP_SRC___x))
-> > +                       manip_src = bpf_core_enum_value(mapip_type_x, NF_NAT_MANIP_SRC___x);
-> > +               else
-> > +                       return;
-> > +
-> > +               if (bpf_core_enum_value_exists(mapip_type_x, NF_NAT_MANIP_DST___x))
-> > +                       manip_dst = bpf_core_enum_value(mapip_type_x, NF_NAT_MANIP_DST___x);
-> > +               else
-> > +                       return;
-> >
-> >                 bpf_ct_set_timeout(ct, 10000);
-> >                 ct->mark = 77;
-> >
-> >                 /* snat */
-> >                 saddr.ip = bpf_get_prandom_u32();
-> > -               bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-> > +               bpf_ct_set_nat_info(ct, &saddr, sport, manip_src);
->
-> I'm not sure these co-re checks are helpful. Can we just hardcode 1/0
-> here and below?
->
-> bpf_ct_set_nat_info(ct, &saddr, sport, 0 /*NF_NAT_MANIP_SRC*/);
-> bpf_ct_set_nat_info(ct, &daddr, dport, 1 /*NF_NAT_MANIP_DST*/);
->
-> But I'm also overall not sure we need to make this test flexible; we
-> have a lot of tests that depend on tools/testing/selftests/bpf/config;
-> at some point I was trying to make the tests more tolerant to
-> different environments, but it went nowhere..
+> > Oh, er, why does get_arg_page() even need FOLL_FORCE? This is writing the
+> > new stack contents to the nascent brpm->vma, which was newly allocated
+> > with VM_STACK_FLAGS, which an arch can override, but they all appear to include
+> > VM_WRITE | VM_MAYWRITE.
+> 
+> Yeah, it does seem entirely superfluous.
+> 
+> It's been there since the very beginning (although in that original
+> commit b6a2fea39318 it was there as a '1' to the 'force' argument to
+> get_user_pages()).
+> 
+> I *think* it can be just removed. But as long as it exists, it should
+> most definitely not be renamed to FOLL_PTRACE.
+> 
+> There's a slight worry that it currently hides some other setup issue
+> that makes it matter, since it's been that way so long, but I can't
+> see what it is.
 
-Agreed. bpf_core_enum_value_exists() makes no sense here.
-bpf_core_enum_value(enum nf_nat_manip_type___x, NF_NAT_MANIP_SRC___x)
-would be ok, IMHO. It will compile but fail at runtime if the module
-is not loaded.
+My test system boots happily with it removed. I'll throw it into -next
+and see if anything melts...
 
->
->
-> >                 /* dnat */
-> >                 daddr.ip = bpf_get_prandom_u32();
-> > -               bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-> > +               bpf_ct_set_nat_info(ct, &daddr, dport, manip_dst);
-> >
-> >                 ct_ins = bpf_ct_insert_entry(ct);
-> >                 if (ct_ins) {
-> > --
-> > 2.31.1
-> >
+-- 
+Kees Cook
