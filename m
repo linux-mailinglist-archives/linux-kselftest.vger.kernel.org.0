@@ -2,330 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E378A62FEE0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 21:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7963962FF41
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 22:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiKRUbt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Nov 2022 15:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
+        id S230271AbiKRVP1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Nov 2022 16:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbiKRUbe (ORCPT
+        with ESMTP id S230131AbiKRVP0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Nov 2022 15:31:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD46631A
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Nov 2022 12:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668803430;
+        Fri, 18 Nov 2022 16:15:26 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450D492B52;
+        Fri, 18 Nov 2022 13:15:25 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668806123;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=68o9gsyPQ5CgCEpOe1a5pEBZyWLNNRQQ7qhaCbVlRTg=;
-        b=jG89xf8GurxWh+UehwEuAepvkxTgeKYDMLjv0LXZj8KroDSQFEre42X+eWJBCREZ65jr3H
-        ZhKbaLWM94onwCHHICigmZ6kyM/YoosxSEC89sh5ziWxIsxlf0EtOwjuvE7tQpJFRnn7Mb
-        Ptm2jFyfApo8JNFPvonUlI2oDzgeTsI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-_Ka1sUAdN5OgA_XU1Ky1wA-1; Fri, 18 Nov 2022 15:30:23 -0500
-X-MC-Unique: _Ka1sUAdN5OgA_XU1Ky1wA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D188B85A59D;
-        Fri, 18 Nov 2022 20:30:22 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.10.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7303C492B04;
-        Fri, 18 Nov 2022 20:30:22 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     netdev@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>
-Cc:     Liang Li <liali@redhat.com>, Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 1/2] selftests: bonding: up/down delay w/ slave link flapping
-Date:   Fri, 18 Nov 2022 15:30:12 -0500
-Message-Id: <314990ea9ee4e475cb200cf32efdf9fc37f4a02a.1668800711.git.jtoppins@redhat.com>
-In-Reply-To: <cover.1668800711.git.jtoppins@redhat.com>
-References: <cover.1668800711.git.jtoppins@redhat.com>
+        bh=xCYUGaupX5cvs453r6y2KLObby9QVEfhtajAIprPxEc=;
+        b=Fx49S7ywYMGdFD/E2m89wuPcBkOOaNariIsk6xwrf0cC8m9A1le4R7byvtN8e9Zws+iYs4
+        PFX0XSDRyjA9eUO3YO0WryXgbm9Y/7dQX3OuDzGoihEHDD+vQVGQFlxiokm4Edj+bLtO/k
+        TRm4SvgtwTlNem4WVM9PGCB4mGf+ZC4=
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Sean Christopherson <seanjc@google.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] KVM: selftests: Have perf_test_util signal when to stop vCPUs
+Date:   Fri, 18 Nov 2022 21:15:02 +0000
+Message-Id: <20221118211503.4049023-2-oliver.upton@linux.dev>
+In-Reply-To: <20221118211503.4049023-1-oliver.upton@linux.dev>
+References: <20221118211503.4049023-1-oliver.upton@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Verify when a bond is configured with {up,down}delay and the link state
-of slave members flaps if there are no remaining members up the bond
-should immediately select a member to bring up. (from bonding.txt
-section 13.1 paragraph 4)
+Signal that a test run is complete through perf_test_args instead of
+having tests open code a similar solution. Ensure that the field resets
+to false at the beginning of a test run as the structure is reused
+between test runs, eliminating a couple of bugs:
 
-Suggested-by: Liang Li <liali@redhat.com>
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+access_tracking_perf_test hangs indefinitely on a subsequent test run,
+as 'done' remains true. The bug doesn't amount to much right now, as x86
+supports a single guest mode. However, this is a precondition of
+enabling the test for other architectures with >1 guest mode, like
+arm64.
+
+memslot_modification_stress_test has the exact opposite problem, where
+subsequent test runs complete immediately as 'run_vcpus' remains false.
+
+Co-developed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+[oliver: added commit message, preserve spin_wait_for_next_iteration()]
+Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
 ---
- .../selftests/drivers/net/bonding/Makefile    |   4 +-
- .../selftests/drivers/net/bonding/lag_lib.sh  | 107 ++++++++++++++++++
- .../net/bonding/mode-1-recovery-updelay.sh    |  45 ++++++++
- .../net/bonding/mode-2-recovery-updelay.sh    |  45 ++++++++
- .../selftests/drivers/net/bonding/settings    |   2 +-
- 5 files changed, 201 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay.sh
- create mode 100755 tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay.sh
+ tools/testing/selftests/kvm/access_tracking_perf_test.c   | 8 +-------
+ tools/testing/selftests/kvm/include/perf_test_util.h      | 3 +++
+ tools/testing/selftests/kvm/lib/perf_test_util.c          | 3 +++
+ .../selftests/kvm/memslot_modification_stress_test.c      | 6 +-----
+ 4 files changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-index 6b8d2e2f23c2..0f3921908b07 100644
---- a/tools/testing/selftests/drivers/net/bonding/Makefile
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -5,7 +5,9 @@ TEST_PROGS := \
- 	bond-arp-interval-causes-panic.sh \
- 	bond-break-lacpdu-tx.sh \
- 	bond-lladdr-target.sh \
--	dev_addr_lists.sh
-+	dev_addr_lists.sh \
-+	mode-1-recovery-updelay.sh \
-+	mode-2-recovery-updelay.sh
+diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+index 76c583a07ea2..942370d57392 100644
+--- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
++++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+@@ -58,9 +58,6 @@ static enum {
+ 	ITERATION_MARK_IDLE,
+ } iteration_work;
  
- TEST_FILES := \
- 	lag_lib.sh \
-diff --git a/tools/testing/selftests/drivers/net/bonding/lag_lib.sh b/tools/testing/selftests/drivers/net/bonding/lag_lib.sh
-index 16c7fb858ac1..6dc9af1f2428 100644
---- a/tools/testing/selftests/drivers/net/bonding/lag_lib.sh
-+++ b/tools/testing/selftests/drivers/net/bonding/lag_lib.sh
-@@ -1,6 +1,8 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
+-/* Set to true when vCPU threads should exit. */
+-static bool done;
+-
+ /* The iteration that was last completed by each vCPU. */
+ static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
  
-+NAMESPACES=""
-+
- # Test that a link aggregation device (bonding, team) removes the hardware
- # addresses that it adds on its underlying devices.
- test_LAG_cleanup()
-@@ -59,3 +61,108 @@ test_LAG_cleanup()
+@@ -211,7 +208,7 @@ static bool spin_wait_for_next_iteration(int *current_iteration)
+ 	int last_iteration = *current_iteration;
  
- 	log_test "$driver cleanup mode $mode"
+ 	do {
+-		if (READ_ONCE(done))
++		if (READ_ONCE(perf_test_args.stop_vcpus))
+ 			return false;
+ 
+ 		*current_iteration = READ_ONCE(iteration);
+@@ -321,9 +318,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	mark_memory_idle(vm, nr_vcpus);
+ 	access_memory(vm, nr_vcpus, ACCESS_READ, "Reading from idle memory");
+ 
+-	/* Set done to signal the vCPU threads to exit */
+-	done = true;
+-
+ 	perf_test_join_vcpu_threads(nr_vcpus);
+ 	perf_test_destroy_vm(vm);
  }
+diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
+index eaa88df0555a..536d7c3c3f14 100644
+--- a/tools/testing/selftests/kvm/include/perf_test_util.h
++++ b/tools/testing/selftests/kvm/include/perf_test_util.h
+@@ -40,6 +40,9 @@ struct perf_test_args {
+ 	/* Run vCPUs in L2 instead of L1, if the architecture supports it. */
+ 	bool nested;
+ 
++	/* Test is done, stop running vCPUs. */
++	bool stop_vcpus;
 +
-+# Build a generic 2 node net namespace with 2 connections
-+# between the namespaces
-+#
-+#  +-----------+       +-----------+
-+#  | node1     |       | node2     |
-+#  |           |       |           |
-+#  |           |       |           |
-+#  |      eth0 +-------+ eth0      |
-+#  |           |       |           |
-+#  |      eth1 +-------+ eth1      |
-+#  |           |       |           |
-+#  +-----------+       +-----------+
-+lag_setup2x2()
-+{
-+	local state=${1:-down}
-+	local namespaces="lag_node1 lag_node2"
+ 	struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
+ };
+ 
+diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
+index 9618b37c66f7..ee3f499ccbd2 100644
+--- a/tools/testing/selftests/kvm/lib/perf_test_util.c
++++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
+@@ -267,6 +267,7 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
+ 
+ 	vcpu_thread_fn = vcpu_fn;
+ 	WRITE_ONCE(all_vcpu_threads_running, false);
++	WRITE_ONCE(perf_test_args.stop_vcpus, false);
+ 
+ 	for (i = 0; i < nr_vcpus; i++) {
+ 		struct vcpu_thread *vcpu = &vcpu_threads[i];
+@@ -289,6 +290,8 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
+ {
+ 	int i;
+ 
++	WRITE_ONCE(perf_test_args.stop_vcpus, true);
 +
-+	# create namespaces
-+	for n in ${namespaces}; do
-+		ip netns add ${n}
-+	done
-+
-+	# wire up namespaces
-+	ip link add name lag1 type veth peer name lag1-end
-+	ip link set dev lag1 netns lag_node1 $state name eth0
-+	ip link set dev lag1-end netns lag_node2 $state name eth0
-+
-+	ip link add name lag1 type veth peer name lag1-end
-+	ip link set dev lag1 netns lag_node1 $state name eth1
-+	ip link set dev lag1-end netns lag_node2 $state name eth1
-+
-+	NAMESPACES="${namespaces}"
-+}
-+
-+# cleanup all lag related namespaces and remove the bonding module
-+lag_cleanup()
-+{
-+	for n in ${NAMESPACES}; do
-+		ip netns delete ${n} >/dev/null 2>&1 || true
-+	done
-+	modprobe -r bonding
-+}
-+
-+SWITCH="lag_node1"
-+CLIENT="lag_node2"
-+CLIENTIP="172.20.2.1"
-+SWITCHIP="172.20.2.2"
-+
-+lag_setup_network()
-+{
-+	lag_setup2x2 "down"
-+
-+	# create switch
-+	ip netns exec ${SWITCH} ip link add br0 up type bridge
-+	ip netns exec ${SWITCH} ip link set eth0 master br0 up
-+	ip netns exec ${SWITCH} ip link set eth1 master br0 up
-+	ip netns exec ${SWITCH} ip addr add ${SWITCHIP}/24 dev br0
-+}
-+
-+lag_reset_network()
-+{
-+	ip netns exec ${CLIENT} ip link del bond0
-+	ip netns exec ${SWITCH} ip link set eth0 up
-+	ip netns exec ${SWITCH} ip link set eth1 up
-+}
-+
-+create_bond()
-+{
-+	# create client
-+	ip netns exec ${CLIENT} ip link set eth0 down
-+	ip netns exec ${CLIENT} ip link set eth1 down
-+
-+	ip netns exec ${CLIENT} ip link add bond0 type bond $@
-+	ip netns exec ${CLIENT} ip link set eth0 master bond0
-+	ip netns exec ${CLIENT} ip link set eth1 master bond0
-+	ip netns exec ${CLIENT} ip link set bond0 up
-+	ip netns exec ${CLIENT} ip addr add ${CLIENTIP}/24 dev bond0
-+}
-+
-+test_bond_recovery()
-+{
-+	RET=0
-+
-+	create_bond $@
-+
-+	# verify connectivity
-+	ip netns exec ${CLIENT} ping ${SWITCHIP} -c 5 >/dev/null 2>&1
-+	check_err $? "No connectivity"
-+
-+	# force the links of the bond down
-+	ip netns exec ${SWITCH} ip link set eth0 down
-+	sleep 2
-+	ip netns exec ${SWITCH} ip link set eth0 up
-+	ip netns exec ${SWITCH} ip link set eth1 down
-+
-+	# re-verify connectivity
-+	ip netns exec ${CLIENT} ping ${SWITCHIP} -c 5 >/dev/null 2>&1
-+
-+	local rc=$?
-+	check_err $rc "Bond failed to recover"
-+	log_test "$1 ($2) bond recovery"
-+	lag_reset_network
-+	return 0
-+}
-diff --git a/tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay.sh b/tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay.sh
-new file mode 100755
-index 000000000000..ad4c845a4ac7
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay.sh
-@@ -0,0 +1,45 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Regression Test:
-+#  When the bond is configured with down/updelay and the link state of
-+#  slave members flaps if there are no remaining members up the bond
-+#  should immediately select a member to bring up. (from bonding.txt
-+#  section 13.1 paragraph 4)
-+#
-+#  +-------------+       +-----------+
-+#  | client      |       | switch    |
-+#  |             |       |           |
-+#  |    +--------| link1 |-----+     |
-+#  |    |        +-------+     |     |
-+#  |    |        |       |     |     |
-+#  |    |        +-------+     |     |
-+#  |    | bond   | link2 | Br0 |     |
-+#  +-------------+       +-----------+
-+#     172.20.2.1           172.20.2.2
-+
-+
-+REQUIRE_MZ=no
-+REQUIRE_JQ=no
-+NUM_NETIFS=0
-+lib_dir=$(dirname "$0")
-+source "$lib_dir"/net_forwarding_lib.sh
-+source "$lib_dir"/lag_lib.sh
-+
-+cleanup()
-+{
-+	lag_cleanup
-+}
-+
-+trap cleanup 0 1 2
-+
-+lag_setup_network
-+test_bond_recovery mode 1 miimon 100 updelay 0
-+test_bond_recovery mode 1 miimon 100 updelay 200
-+test_bond_recovery mode 1 miimon 100 updelay 500
-+test_bond_recovery mode 1 miimon 100 updelay 1000
-+test_bond_recovery mode 1 miimon 100 updelay 2000
-+test_bond_recovery mode 1 miimon 100 updelay 5000
-+test_bond_recovery mode 1 miimon 100 updelay 10000
-+
-+exit "$EXIT_STATUS"
-diff --git a/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay.sh b/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay.sh
-new file mode 100755
-index 000000000000..2330d37453f9
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay.sh
-@@ -0,0 +1,45 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Regression Test:
-+#  When the bond is configured with down/updelay and the link state of
-+#  slave members flaps if there are no remaining members up the bond
-+#  should immediately select a member to bring up. (from bonding.txt
-+#  section 13.1 paragraph 4)
-+#
-+#  +-------------+       +-----------+
-+#  | client      |       | switch    |
-+#  |             |       |           |
-+#  |    +--------| link1 |-----+     |
-+#  |    |        +-------+     |     |
-+#  |    |        |       |     |     |
-+#  |    |        +-------+     |     |
-+#  |    | bond   | link2 | Br0 |     |
-+#  +-------------+       +-----------+
-+#     172.20.2.1           172.20.2.2
-+
-+
-+REQUIRE_MZ=no
-+REQUIRE_JQ=no
-+NUM_NETIFS=0
-+lib_dir=$(dirname "$0")
-+source "$lib_dir"/net_forwarding_lib.sh
-+source "$lib_dir"/lag_lib.sh
-+
-+cleanup()
-+{
-+	lag_cleanup
-+}
-+
-+trap cleanup 0 1 2
-+
-+lag_setup_network
-+test_bond_recovery mode 2 miimon 100 updelay 0
-+test_bond_recovery mode 2 miimon 100 updelay 200
-+test_bond_recovery mode 2 miimon 100 updelay 500
-+test_bond_recovery mode 2 miimon 100 updelay 1000
-+test_bond_recovery mode 2 miimon 100 updelay 2000
-+test_bond_recovery mode 2 miimon 100 updelay 5000
-+test_bond_recovery mode 2 miimon 100 updelay 10000
-+
-+exit "$EXIT_STATUS"
-diff --git a/tools/testing/selftests/drivers/net/bonding/settings b/tools/testing/selftests/drivers/net/bonding/settings
-index 867e118223cd..6091b45d226b 100644
---- a/tools/testing/selftests/drivers/net/bonding/settings
-+++ b/tools/testing/selftests/drivers/net/bonding/settings
-@@ -1 +1 @@
--timeout=60
-+timeout=120
+ 	for (i = 0; i < nr_vcpus; i++)
+ 		pthread_join(vcpu_threads[i].thread, NULL);
+ }
+diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+index bb1d17a1171b..3a5e4518307c 100644
+--- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
++++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+@@ -34,8 +34,6 @@
+ static int nr_vcpus = 1;
+ static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
+ 
+-static bool run_vcpus = true;
+-
+ static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
+ {
+ 	struct kvm_vcpu *vcpu = vcpu_args->vcpu;
+@@ -45,7 +43,7 @@ static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
+ 	run = vcpu->run;
+ 
+ 	/* Let the guest access its memory until a stop signal is received */
+-	while (READ_ONCE(run_vcpus)) {
++	while (!READ_ONCE(perf_test_args.stop_vcpus)) {
+ 		ret = _vcpu_run(vcpu);
+ 		TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
+ 
+@@ -110,8 +108,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	add_remove_memslot(vm, p->memslot_modification_delay,
+ 			   p->nr_memslot_modifications);
+ 
+-	run_vcpus = false;
+-
+ 	perf_test_join_vcpu_threads(nr_vcpus);
+ 	pr_info("All vCPU threads joined\n");
+ 
 -- 
-2.31.1
+2.38.1.584.g0f3c55d4c2-goog
 
