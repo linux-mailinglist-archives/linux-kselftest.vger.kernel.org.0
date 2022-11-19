@@ -2,63 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07667630D45
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 09:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D30A630D4E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 09:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbiKSIZE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Nov 2022 03:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S232576AbiKSIcT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Nov 2022 03:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiKSIZD (ORCPT
+        with ESMTP id S230266AbiKSIcR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:25:03 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ED2ACEAD
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:25:02 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id d185so6892631vsd.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:25:02 -0800 (PST)
+        Sat, 19 Nov 2022 03:32:17 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A60B1BB1
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:32:15 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id p1so2469033uak.11
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:32:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FEnk3lOFrjqHhhACgIGD4yMteD6QWFLnJ9Z0EekQw+0=;
-        b=p/fmhPnfkRN3RTLlSZC4o/eFS3zAjErXJk33CMlXY+RU6P69Lf5oj292rpaSCi6XVl
-         7JYcEV0bkGZsnDqnGM4ThBhtmqVZlBfX15yloIwIdsFQiP6n1rdgkG2HJrFhPwOgF9Lt
-         GH0PRJyPqXsb7UyhM7uvVgxGGpgoePcJAZghetjvT3e54PiYh+pCTDx+hy+Rcc3MSl1y
-         cIe0qSpemxpMg63nVfT7gM+bgZc1srFGZ/D3VtjVoZV8I3JN114/NQjtyDtWlyxwZbSm
-         F9Gzd+PrHKX0JLl1uABMVrF2+UwxGzU+MWkK69qvMFcSbIfC/+lxvgX84o4zc2nG3O7Q
-         ijNg==
+        bh=2anjEpl2g1pR4+oCYvGxImYfgW0sy59SCg3VJ6e8+KE=;
+        b=KQ/Ld3e5PHojBFmay1M4xpDCi9Cr6gPVYCKmWdAZWNv9qDWJ6KnoOPAiE9fPoqEJq3
+         VLZeNge8ax/zpjAdLud+pEFMSKWBh8oKKAzTriTxCUtdBttEKCcVcK3Ee3oq6dBP4hsT
+         5G17hkFdJ+WsNt6qtxjB5LK/WD80Xz5fB3J01Zn3CKiRbv+2jbHOXt6Piulqk4El++E5
+         IEzHsy+pwGONrl492d9bn/Af9ndT2e2zZMmuZyeYQBpGfXQYQMm1hvo9b13vlbTfO27M
+         OPuBgjcerc1b5A1AQl4T6KCI+eM41i254AXjcRlOdaHGJteXMbRNVHBF66IRAPq4UM8Q
+         yTJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FEnk3lOFrjqHhhACgIGD4yMteD6QWFLnJ9Z0EekQw+0=;
-        b=t731hCRvAmhPmZzy7oNnqpOKQlAo5ULUZxCAYsnr/AjAus4BEqB7RjDEqIoMCiHFp1
-         0WCofj+UtLkHFJRuh/JZmAS2BxWrO74bCLfPJaWQilVcK59QwUdXIm7hnxSUzfNZdpbQ
-         2wq6m/e7iLb7ZWy+ujcUmv0hTkFXsRI9damRHSQ+uKQdDEn4qV/A89HdvISNA+y2NWGB
-         7/covwZUEqbrpwMjOTve77SmqlS0P490bxgTZwDTpS1fJ3nJs/df90nh+N0OHpCgtsAS
-         pGgZV79I4JT7Azi3yRnoTX/vxuClZbCWxutEI5ktxh5eg1hi6XKKeXPlsbxPqiAsAZ5c
-         LLnA==
-X-Gm-Message-State: ANoB5pku3J872JwpZteJgt2EF1AL9sUP68CSkPvapawm4QJkEnN8H7IN
-        BAKU/KC/7g6Ih050nrqCseFE63B386Y/Zu/6ps997KOQ5b0=
-X-Google-Smtp-Source: AA0mqf49qoOsRCpYMDwP6CcFAB5kKqF06GSVrJmajFn7RtQr/k/AwUkJHIWh2+2rFUBEcLfSMbbsCQ632ckzzYE4RDM=
-X-Received: by 2002:a05:6102:3c82:b0:3aa:17f4:d63d with SMTP id
- c2-20020a0561023c8200b003aa17f4d63dmr6226760vsv.22.1668846301727; Sat, 19 Nov
- 2022 00:25:01 -0800 (PST)
+        bh=2anjEpl2g1pR4+oCYvGxImYfgW0sy59SCg3VJ6e8+KE=;
+        b=Hk3MY00l8NB/2jXN1r9A3BmVHJ8ZMd/mVGDNntNr5FcrUxhgpK741Wb9LbGhKe2Gbm
+         bt6AiFcPpEHEw6rVZEDnWAWvfarnAWKmgwD8B08lXH2qrvOcxMzUStf6F/Ajj8D1PHRm
+         m2HSG51qzD8DExjsYIbLAGvcTlHgUtAFY9j9mcuVaBxAMCAsromwfZaTHXj1PeiKiQkE
+         9/KQHuI2yCMEizAv0Tyi2jvmDzwoUU5sgU5hLIuyboBi/U1ZcgekSkkbGBnIW12ezjV3
+         4CJY+YOK2CnvTMJuz+baNJTMuGpAV4w7ScMW3nkZX5ZD69ylBCpajAXTJ5aaqZXVfZLS
+         QaZA==
+X-Gm-Message-State: ANoB5plauyOV7p1uwBmg07HjHLjs88xakzQ/eMZ9ADGUXjSznF4w4GlE
+        xZJC/ShzAViVHX6v8HJPC2r3eTVCkiBk0W1Q+GgItQ==
+X-Google-Smtp-Source: AA0mqf4to+L5gnkUZClqyxSvKxQsE6HDZJBr2+90z8ErkvAaSScaQ/oODtb/Ufn/8ZwhbHBoNorVhqgLoAKnFQKYO9g=
+X-Received: by 2002:ab0:238f:0:b0:411:968:212 with SMTP id b15-20020ab0238f000000b0041109680212mr6176340uan.107.1668846734518;
+ Sat, 19 Nov 2022 00:32:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20221109212032.123021-1-dlatypov@google.com>
-In-Reply-To: <20221109212032.123021-1-dlatypov@google.com>
+References: <20221111031855.592333-1-dlatypov@google.com>
+In-Reply-To: <20221111031855.592333-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 19 Nov 2022 16:24:50 +0800
-Message-ID: <CABVgOS=inucWN+gSar+fK5py-RDB2vq8pdr0WScMDGGf5oxo8Q@mail.gmail.com>
-Subject: Re: [PATCH] kunit: remove KUNIT_INIT_MEM_ASSERTION macro
+Date:   Sat, 19 Nov 2022 16:32:03 +0800
+Message-ID: <CABVgOSn6CaPfr_ceOzu3RUJ46TajLe7icLYsi-psnJt_knCh0g@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: tweak error message when no KTAP found
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     brendanhiggins@google.com, rmoar@google.com,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000004baa305edce8fba"
+        boundary="000000000000d0e25005edcea86a"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,97 +69,92 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000004baa305edce8fba
+--000000000000d0e25005edcea86a
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 10, 2022 at 5:20 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Fri, Nov 11, 2022 at 11:19 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Commit 870f63b7cd78 ("kunit: eliminate KUNIT_INIT_*_ASSERT_STRUCT
-> macros") removed all the other macros of this type.
+> We currently tell people we "couldn't find any KTAP output" with no
+> indication as to what this might mean.
 >
-> But it raced with commit b8a926bea8b1 ("kunit: Introduce
-> KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros"), which added another
-> instance.
+> After this patch, we get:
 >
-> Remove KUNIT_INIT_MEM_ASSERTION and just use the generic
-> KUNIT_INIT_ASSERT macro instead.
-> Rename the `size` arg to avoid conflicts by appending a "_" (like we did
-> in the previous commit).
+> $ ./tools/testing/kunit/kunit.py parse /dev/null
+> ============================================================
+> [ERROR] Test: <missing>: Could not find any KTAP output. Did any KUnit tests run?
+> ============================================================
+> Testing complete. Ran 0 tests: errors: 1
+>
+> Note: we could try and generate a more verbose message like
+> > Please check .kunit/test.log to see the raw kernel output.
+> or the like, but we'd need to know what the build dir was to know where
+> test.log actually lives.
+>
+> This patch tries to make a more minimal improvement.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
-Thanks for catching this. Looks good and works here.
+I agree that this is clearer.
+
+One minor nitpick is that we still have the (useless) 'Test:
+<missing>:' prefix, which also makes the error much longer than the
+'===' dividers. I think the error would be more aesthetically pleasing
+if we could fix that.
+
+That's a very minor point, though, so regardless:
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  include/kunit/assert.h |  7 -------
->  include/kunit/test.h   | 12 ++++++------
->  2 files changed, 6 insertions(+), 13 deletions(-)
+>  tools/testing/kunit/kunit_parser.py    | 2 +-
+>  tools/testing/kunit/kunit_tool_test.py | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
-> index 43144cfddc19..24c2b9fa61e8 100644
-> --- a/include/kunit/assert.h
-> +++ b/include/kunit/assert.h
-> @@ -192,13 +192,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
->                                     const struct va_format *message,
->                                     struct string_stream *stream);
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index a56c75a973b5..d0ed5dd5cfc4 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -782,7 +782,7 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
+>         test = Test()
+>         if not lines:
+>                 test.name = '<missing>'
+> -               test.add_error('could not find any KTAP output!')
+> +               test.add_error('Could not find any KTAP output. Did any KUnit tests run?')
+>                 test.status = TestStatus.FAILURE_TO_PARSE_TESTS
+>         else:
+>                 test = parse_test(lines, 0, [])
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 90c65b072be9..84a08cf07242 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -207,7 +207,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 with open(crash_log) as file:
+>                         result = kunit_parser.parse_run_tests(
+>                                 kunit_parser.extract_tap_lines(file.readlines()))
+> -               print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
+> +               print_mock.assert_any_call(StrContains('Could not find any KTAP output.'))
+>                 print_mock.stop()
+>                 self.assertEqual(0, len(result.subtests))
+>                 self.assertEqual(result.counts.errors, 1)
+> @@ -588,7 +588,7 @@ class KUnitMainTest(unittest.TestCase):
+>                 self.assertEqual(e.exception.code, 1)
+>                 self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+>                 self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+> -               self.print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
+> +               self.print_mock.assert_any_call(StrContains('Could not find any KTAP output.'))
 >
-> -#define KUNIT_INIT_MEM_ASSERT_STRUCT(text_, left_val, right_val, size_) {      \
-> -       .text = text_,                                                         \
-> -       .left_value = left_val,                                                \
-> -       .right_value = right_val,                                              \
-> -       .size = size_                                                          \
-> -}
-> -
->  /**
->   * struct kunit_mem_assert - An expectation/assertion that compares two
->   *     memory blocks.
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index d7f60e8aab30..4666a4d199ea 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -666,13 +666,13 @@ do {                                                                             \
->                             left,                                              \
->                             op,                                                \
->                             right,                                             \
-> -                           size,                                              \
-> +                           size_,                                             \
->                             fmt,                                               \
->                             ...)                                               \
->  do {                                                                          \
->         const void *__left = (left);                                           \
->         const void *__right = (right);                                         \
-> -       const size_t __size = (size);                                          \
-> +       const size_t __size = (size_);                                         \
->         static const struct kunit_binary_assert_text __text = {                \
->                 .operation = #op,                                              \
->                 .left_text = #left,                                            \
-> @@ -686,10 +686,10 @@ do {                                                                             \
->                       assert_type,                                             \
->                       kunit_mem_assert,                                        \
->                       kunit_mem_assert_format,                                 \
-> -                     KUNIT_INIT_MEM_ASSERT_STRUCT(&__text,                    \
-> -                                                  __left,                     \
-> -                                                  __right,                    \
-> -                                                  __size),                    \
-> +                     KUNIT_INIT_ASSERT(.text = &__text,                       \
-> +                                       .left_value = __left,                  \
-> +                                       .right_value = __right,                \
-> +                                       .size = __size),                       \
->                       fmt,                                                     \
->                       ##__VA_ARGS__);                                          \
->  } while (0)
+>         def test_exec_no_tests(self):
+>                 self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
 >
 > base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
 > --
 > 2.38.1.431.g37b22c650d-goog
 >
 
---00000000000004baa305edce8fba
+--000000000000d0e25005edcea86a
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -227,14 +221,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBC
-riGXpKZPcKIXX2Nnlm0QtYDeF7S1lZsgGB5TxZbQ8TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMTkwODI1MDJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAZ
+h9J0IXeqtlsoMuEDIIlnTTv58OemGp3sTuIyUXVUnzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMTkwODMyMTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAmmg35rN9OImUbiFTq0yB
-SWrxs9PF9GYfP2rsIBuKtWG7e6JCibmPXkwfQ3Nq9NMNrJ24vQ9whjl0J0oDTFV68Fxt6Xk09R16
-bNmjBBr16dZyGTs+TIYobWG9b1Zu3LDgs5QFIgA9B9MZulAaZmo+ElxuBrhjZ7kdyjhSfdQ/Gw4b
-DVxamNiN1BafhYQYYjwyBxFPx0IKmh39zWBzBDH/7CpotUogmJvrCrRvq5GY6y2MBfei62+s45PV
-5r22bh/4wA8TbUo42AZa/KgQyY2ifumaYWhBfDtcJK4RiXmYiHA+M5WwNrYeDJXTnVsnYS7R8C2+
-0cH52/NjOJ683mNSNQ==
---00000000000004baa305edce8fba--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAoldagdXLHnSiCai5PFnk
+BdYTnmWVNeSDsR5xGwjUfyWZlRlTICYQOGA8xuV+JlzcJQToJ7ZQ7eyFpb0uaDHryVF7turIkgDz
+yLjbAhPrq+jtEfxTz34wImqgF/35jP8zr/2/lABB3sfG+4Bn4wUndkRDY1fGsZIMcbNovQ98dcd7
+Ic5RkowIs3bjGPYUNpL91jtSLyMsD/Ckk0vVzfdlvFULSw3Krf/bz+SBf/319hIslnyToJ9ofHrS
+fEc3N+niiOPYJgkOL9P2bAla3M/f7z40jFoCdCpmrD8iJCuQ2K9Pj9Mhwh2a6STcvzWiDtHdfhEa
+TvTXRph/FviLBHDEFw==
+--000000000000d0e25005edcea86a--
