@@ -2,152 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF819630012
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Nov 2022 23:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D298D630944
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 03:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiKRW3G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Nov 2022 17:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S233929AbiKSCMh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Nov 2022 21:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiKRW3F (ORCPT
+        with ESMTP id S233099AbiKSCMF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:29:05 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89256B214
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Nov 2022 14:29:03 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id k7so5761754pll.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Nov 2022 14:29:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UbBsvDU//DL6nEBTfVogOGw4gtrIt5cEgoWU7wg0yqE=;
-        b=An8R27hBelrmHfCbOWIi0CQbpB+FbdUKZd/K74OWA+t1inv8v4494buerQXpAbVoQ/
-         hawXo5IWqwOaOJXIlgQJ62nY4aZ8mzIQL8T0sN5QawgAa8EGZw3klOrzN/KXycM8ohn1
-         PnwiDQNXHvwQENzmlhMaoO6BFIxzwB92hREPE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UbBsvDU//DL6nEBTfVogOGw4gtrIt5cEgoWU7wg0yqE=;
-        b=HRMoNG/jpIq3w7Jp4/cSQrKcY2r3DYKSj12O2O7wCNhDbvozfx8G7fSAbHdwh4uBP8
-         TWitucYBqEYERntCfqaf6p1HTRdf3lzInuCwkVjyZ+G1imw4oG2cKNglAKESRF0/3+Ow
-         eLfsWCKHNk508ep1dEB0uQTn5SZYHrTqqim0/zYCZefetz6ItFKJqgtUVAMMr8kYdbSd
-         7Kw/oLeCCeG33hBLpdrlM38KNW+ZgK4CIsZUx32911G0tRiRLEnD53OgNB9AIi9J7LEZ
-         Ct990P9LtpafXTflQbHJ/7RfiOR5abHiA+D8UB65/l6B999oCPHGUMOX7OCB1xGoXFmz
-         7U3A==
-X-Gm-Message-State: ANoB5pmjH9pleCNxsflMmAWAznOeLcnETbXtbQPquysXzP2lLcfAtCS8
-        9F4XAE0ZxQOfE2gNZeQFMZLLLw==
-X-Google-Smtp-Source: AA0mqf6x3WR1+0wUVWwli47/xk6od69+oUWF0cQjmoupKb1o7R1u9AWIvzDIrLxmCvQfjLJnyEjRtg==
-X-Received: by 2002:a17:902:e009:b0:188:649b:9dbe with SMTP id o9-20020a170902e00900b00188649b9dbemr1414800plo.107.1668810543395;
-        Fri, 18 Nov 2022 14:29:03 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b29-20020aa7951d000000b00561382a5a25sm3714931pfp.26.2022.11.18.14.29.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 14:29:02 -0800 (PST)
-Date:   Fri, 18 Nov 2022 14:29:02 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH mm-unstable v1 20/20] mm: rename FOLL_FORCE to FOLL_PTRACE
-Message-ID: <202211181427.4D1C3132FE@keescook>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-21-david@redhat.com>
- <CAHk-=wgtEwpR-rE_=cXzecHMZ+zgrx5zf9UfvH0w-mKgckn4=Q@mail.gmail.com>
- <Y3dnzgwJpjTQXI9y@hirez.programming.kicks-ass.net>
+        Fri, 18 Nov 2022 21:12:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70D96A6A7;
+        Fri, 18 Nov 2022 18:11:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B17162835;
+        Sat, 19 Nov 2022 02:11:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89221C43470;
+        Sat, 19 Nov 2022 02:11:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668823906;
+        bh=X9pQl7qPJKt05DQwZOx/8QIpcMaJKUUJ9Xb+hErQcoQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Hj7LLNpcKJ8an7aEVDJciMQGbX3G9DWGeHiXmWlI0DXhXrx0Zq8BgZnMzWZMrNL/E
+         c0/P9E4m24l3gvB5Fmu0UL3+2tyJRLpcWJbBPLwotRcVHI7DjzrUWZkVOYkibuL0vn
+         0hqkrjoVNsBb4W2xCr/lr7huvzszcdOmM+TDJIHGzVyRz4IEYu9JW2BKeXz/h7wfYG
+         LNOsQ3xtN+3BqCX3nwF21ghRypMWbFOxdQnhherXcGeBvb07JUskf4r7ZqRnKQFaK4
+         sAGYy0Ihq8kwBljpXLESbNRE+Vt0G4tsAYtAhFvV8Mtd1nfaai/YyyBgfzgHxcpPXd
+         bTR+XJYOcIR9Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 09/44] selftests/net: don't tests batched TCP io_uring zc
+Date:   Fri, 18 Nov 2022 21:10:49 -0500
+Message-Id: <20221119021124.1773699-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221119021124.1773699-1-sashal@kernel.org>
+References: <20221119021124.1773699-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3dnzgwJpjTQXI9y@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 12:09:02PM +0100, Peter Zijlstra wrote:
-> On Wed, Nov 16, 2022 at 10:16:34AM -0800, Linus Torvalds wrote:
-> > Following the history of it is a big of a mess, because there's a
-> > number of renamings and re-organizations, but it seems to go back to
-> > 2007 and commit b6a2fea39318 ("mm: variable length argument support").
-> 
-> I went back and read parts of the discussions with Ollie, and the
-> .force=1 thing just magically appeared one day when we were sending
-> work-in-progress patches back and forth without mention of where it came
-> from :-/
-> 
-> And I certainly can't remember now..
-> 
-> Looking at it now, I have the same reaction as both you and Kees had, it
-> seems entirely superflous. So I'm all for trying to remove it.
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-Thanks for digging through the history! I've pushed the change to -next:
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/execve&id=cd57e443831d8eeb083c7165bce195d886e216d4
+[ Upstream commit 9921d5013a6e51892623bf2f1c5b49eaecda55ac ]
 
+It doesn't make sense batch submitting io_uring requests to a single TCP
+socket without linking or some other kind of ordering. Moreover, it
+causes spurious -EINTR fails due to interaction with task_work. Disable
+it for now and keep queue depth=1.
+
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/b547698d5938b1b1a898af1c260188d8546ded9a.1666700897.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/net/io_uring_zerocopy_tx.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/io_uring_zerocopy_tx.sh b/tools/testing/selftests/net/io_uring_zerocopy_tx.sh
+index 32aa6e9dacc2..9ac4456d48fc 100755
+--- a/tools/testing/selftests/net/io_uring_zerocopy_tx.sh
++++ b/tools/testing/selftests/net/io_uring_zerocopy_tx.sh
+@@ -29,7 +29,7 @@ if [[ "$#" -eq "0" ]]; then
+ 	for IP in "${IPs[@]}"; do
+ 		for mode in $(seq 1 3); do
+ 			$0 "$IP" udp -m "$mode" -t 1 -n 32
+-			$0 "$IP" tcp -m "$mode" -t 1 -n 32
++			$0 "$IP" tcp -m "$mode" -t 1 -n 1
+ 		done
+ 	done
+ 
 -- 
-Kees Cook
+2.35.1
+
