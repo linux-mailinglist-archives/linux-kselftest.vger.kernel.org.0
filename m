@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C282B630A0F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 03:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08D6630A39
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 03:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbiKSCW6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Nov 2022 21:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S234165AbiKSCYV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Nov 2022 21:24:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235658AbiKSCVy (ORCPT
+        with ESMTP id S236136AbiKSCWu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Nov 2022 21:21:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B258F69DFD;
-        Fri, 18 Nov 2022 18:14:52 -0800 (PST)
+        Fri, 18 Nov 2022 21:22:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD421C72C0;
+        Fri, 18 Nov 2022 18:15:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B915B825B7;
-        Sat, 19 Nov 2022 02:14:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1302C433C1;
-        Sat, 19 Nov 2022 02:14:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4EEA6280C;
+        Sat, 19 Nov 2022 02:15:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2EFC433C1;
+        Sat, 19 Nov 2022 02:15:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668824058;
-        bh=oxIeOyDs26nJxQVeeqhMhw4FTnnZDug10URneihCHq4=;
+        s=k20201202; t=1668824119;
+        bh=0Vv/bjt0ASgKc1aA94qBlEONoRr983LHAYKbEloUFU4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kX1jB5yBcWYI1HprP/IUUeR+bl/nDYG15KJlU65cZmfqaoVsKi1jkjslEWTg9jPUs
-         AakwELbnbPpyR55D4zTWQRzq8IoB6MNm7zEyeFecHarFte9uPtMelbtNOXyQfcWX0R
-         o1Eo1q7qsBebTak4YbCLLtaRiJk8Qch/rEpQH5ITEE1UOUQo4u8uDkT++v3kGtpf1d
-         GNeeA5wYUB++PxU+jEAo+fo+tbxCed7Big+ynWvfVCDMlexg8e9CoAzWcEQxl0VUwL
-         oyduXsRUHuCsiDEEPaeo6Fu3FF5OesZXH6ADjz2F04+4jBsMfcTorF9fEjaOLYYkRI
-         WIoUlKgx1g+0A==
+        b=JWHTyN1M4qxt4nqraA1KUNAfPU6XIuzrkuTRyzg//Fk3mwSWBHliLnwXOvuU/XTI0
+         vsg1w44aFCZRfHnFDufUUbntkSAC5rhZmnY+arIsfeO5OUoRvreHoRMHS8/G+c4b5W
+         brPQgE3OBJAjRIUwDZrKuqe1zI6XEWBiVeRRRNCfHFlfycVuq4ZeyZZwIru8xrvpSX
+         LPDL/IARVDL+NYpU7cYBq8CqPrT9r2Uvtf8TXYRMwEazho58DfghYNJAoBSNBo2r7y
+         byF7ZuBTLKw2siEAplDXlnKjp1SYi/4Le41q6c0S2+q7GNagsHb7a67cVuaDuaDEgp
+         f5T65bidm4ZAA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Youlin Li <liulin063@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        andrii@kernel.org, shuah@kernel.org, memxor@gmail.com,
-        mykolal@fb.com, roberto.sassu@huawei.com, bpf@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>, andrii@kernel.org,
+        ast@kernel.org, shuah@kernel.org, memxor@gmail.com,
+        roberto.sassu@huawei.com, mykolal@fb.com, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 11/27] selftests/bpf: Add verifier test for release_reference()
-Date:   Fri, 18 Nov 2022 21:13:36 -0500
-Message-Id: <20221119021352.1774592-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 08/18] selftests/bpf: Add verifier test for release_reference()
+Date:   Fri, 18 Nov 2022 21:14:49 -0500
+Message-Id: <20221119021459.1775052-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221119021352.1774592-1-sashal@kernel.org>
-References: <20221119021352.1774592-1-sashal@kernel.org>
+In-Reply-To: <20221119021459.1775052-1-sashal@kernel.org>
+References: <20221119021459.1775052-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -94,10 +94,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 36 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/verifier/ref_tracking.c b/tools/testing/selftests/bpf/verifier/ref_tracking.c
-index 3b6ee009c00b..4a768b130d61 100644
+index 006b5bd99c08..525d810b10b8 100644
 --- a/tools/testing/selftests/bpf/verifier/ref_tracking.c
 +++ b/tools/testing/selftests/bpf/verifier/ref_tracking.c
-@@ -905,3 +905,39 @@
+@@ -901,3 +901,39 @@
  	.result_unpriv = REJECT,
  	.errstr_unpriv = "unknown func",
  },
