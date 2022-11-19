@@ -2,64 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF816630D3F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 09:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07667630D45
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 09:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbiKSITR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Nov 2022 03:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
+        id S231425AbiKSIZE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Nov 2022 03:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbiKSITP (ORCPT
+        with ESMTP id S230211AbiKSIZD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:19:15 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864038B849
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:19:14 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id m4so6856548vsc.6
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:19:14 -0800 (PST)
+        Sat, 19 Nov 2022 03:25:03 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ED2ACEAD
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:25:02 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id d185so6892631vsd.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:25:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3MGuRE9LJdG78oPfjVKxeZCy8/hShyMPqwnZVrXMZMs=;
-        b=KeYRzoxdXIojMVNMyWzS9HrF/DBL+/SpmKkfHtA6/KFcYCvOTuqRhHGuwPW4w25nsr
-         7MlcNIEaLGJYf9QnIulYA7YrUXWrbyBgdUtaXxFZpu7QJ+u1jZENoPYhjlb7Yi7/HnVs
-         o+csZgpfSIuWFUvqas1fJv0K85uYrbJnPiJI/D9Iw37y2eqjkTGcCz1bZfSgxwnQKkbk
-         N2KSgAnejmqlqqO2QIUEDWZKeVEIvhp3Y1J+DIl+ne27xAy5h5BX0qZZBsLl4eY/ammh
-         3zn5nCEdmtq2qXFmr8G9W4kxkrZJfaLYU0BbULEd+cuKDpsz0GYD4vJ8H7+8NzAB9aP0
-         un4Q==
+        bh=FEnk3lOFrjqHhhACgIGD4yMteD6QWFLnJ9Z0EekQw+0=;
+        b=p/fmhPnfkRN3RTLlSZC4o/eFS3zAjErXJk33CMlXY+RU6P69Lf5oj292rpaSCi6XVl
+         7JYcEV0bkGZsnDqnGM4ThBhtmqVZlBfX15yloIwIdsFQiP6n1rdgkG2HJrFhPwOgF9Lt
+         GH0PRJyPqXsb7UyhM7uvVgxGGpgoePcJAZghetjvT3e54PiYh+pCTDx+hy+Rcc3MSl1y
+         cIe0qSpemxpMg63nVfT7gM+bgZc1srFGZ/D3VtjVoZV8I3JN114/NQjtyDtWlyxwZbSm
+         F9Gzd+PrHKX0JLl1uABMVrF2+UwxGzU+MWkK69qvMFcSbIfC/+lxvgX84o4zc2nG3O7Q
+         ijNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3MGuRE9LJdG78oPfjVKxeZCy8/hShyMPqwnZVrXMZMs=;
-        b=d0mBgBPgK1IgW8a1O3j3GNtjQbiH57A2TY4n2GSEP+SnXG3OOKIOSAruVkMk+ZvH96
-         KE44EUukpZqOR/mjqvWxfTdyHdNxJHsof4LJArYAxFb1wwI+CLQx6b1eafivPTC/QqNu
-         1mff8eUtdRb6ed6cgRadZifxQGkr6PLTJikYJt2SV6rTLjEWgED7yfELPStxWEVCuGYl
-         Hl6e9vYPoWNgMmlC6qvni5GIRI4rpZ/ACJT7rKnI22GmzOVRIxt50jQC0hCqcpaP/xVG
-         Q/YoaHVv5IlcJ8vGNio5TGoj3/oZ8CLX62jh+xqh7/XW0PNHfnLQh0xA6b5DF51xNHf1
-         XGWw==
-X-Gm-Message-State: ANoB5pnhdCvK3xq18E7ZH4f/gJQVr3cAFu43U87qP9vNlons+09WrUji
-        tfZqbTEOzVAM4S3BO2SIYiJdUiBfqL14xl+Zp0d5hF2nQlc=
-X-Google-Smtp-Source: AA0mqf7rBXVosx7q6pT8aPj7hruUwSwblYlzyL9WkKPLwVlBlpa9/4kMFI7LUrpOsAQYG/ySjSt0suzyxAlFFecJkfc=
-X-Received: by 2002:a67:6e47:0:b0:3af:d071:8319 with SMTP id
- j68-20020a676e47000000b003afd0718319mr6562758vsc.71.1668845953556; Sat, 19
- Nov 2022 00:19:13 -0800 (PST)
+        bh=FEnk3lOFrjqHhhACgIGD4yMteD6QWFLnJ9Z0EekQw+0=;
+        b=t731hCRvAmhPmZzy7oNnqpOKQlAo5ULUZxCAYsnr/AjAus4BEqB7RjDEqIoMCiHFp1
+         0WCofj+UtLkHFJRuh/JZmAS2BxWrO74bCLfPJaWQilVcK59QwUdXIm7hnxSUzfNZdpbQ
+         2wq6m/e7iLb7ZWy+ujcUmv0hTkFXsRI9damRHSQ+uKQdDEn4qV/A89HdvISNA+y2NWGB
+         7/covwZUEqbrpwMjOTve77SmqlS0P490bxgTZwDTpS1fJ3nJs/df90nh+N0OHpCgtsAS
+         pGgZV79I4JT7Azi3yRnoTX/vxuClZbCWxutEI5ktxh5eg1hi6XKKeXPlsbxPqiAsAZ5c
+         LLnA==
+X-Gm-Message-State: ANoB5pku3J872JwpZteJgt2EF1AL9sUP68CSkPvapawm4QJkEnN8H7IN
+        BAKU/KC/7g6Ih050nrqCseFE63B386Y/Zu/6ps997KOQ5b0=
+X-Google-Smtp-Source: AA0mqf49qoOsRCpYMDwP6CcFAB5kKqF06GSVrJmajFn7RtQr/k/AwUkJHIWh2+2rFUBEcLfSMbbsCQ632ckzzYE4RDM=
+X-Received: by 2002:a05:6102:3c82:b0:3aa:17f4:d63d with SMTP id
+ c2-20020a0561023c8200b003aa17f4d63dmr6226760vsv.22.1668846301727; Sat, 19 Nov
+ 2022 00:25:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20221111182906.1377191-1-dlatypov@google.com> <20221111182906.1377191-2-dlatypov@google.com>
-In-Reply-To: <20221111182906.1377191-2-dlatypov@google.com>
+References: <20221109212032.123021-1-dlatypov@google.com>
+In-Reply-To: <20221109212032.123021-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 19 Nov 2022 16:19:02 +0800
-Message-ID: <CABVgOSmGV=Aj94zX1wkaknhJFAeZ-ew_YmLdEB+g=wXvk-ki3A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] Documentation: KUnit: reword description of assertions
+Date:   Sat, 19 Nov 2022 16:24:50 +0800
+Message-ID: <CABVgOS=inucWN+gSar+fK5py-RDB2vq8pdr0WScMDGGf5oxo8Q@mail.gmail.com>
+Subject: Re: [PATCH] kunit: remove KUNIT_INIT_MEM_ASSERTION macro
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     brendanhiggins@google.com, rmoar@google.com,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        skhan@linuxfoundation.org, Sadiya Kazi <sadiyakazi@google.com>
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000043f9f105edce7a40"
+        boundary="00000000000004baa305edce8fba"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,64 +70,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000043f9f105edce7a40
+--00000000000004baa305edce8fba
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Nov 12, 2022 at 2:29 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Thu, Nov 10, 2022 at 5:20 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> The existing wording implies that kunit_kmalloc_array() is "the method
-> under test". We're actually testing the sort() function in that example.
-> This is because the example was changed in commit 953574390634
-> ("Documentation: KUnit: Rework writing page to focus on writing tests"),
-> but the wording was not.
+> Commit 870f63b7cd78 ("kunit: eliminate KUNIT_INIT_*_ASSERT_STRUCT
+> macros") removed all the other macros of this type.
 >
-> Also add a `note` telling people they can use the KUNIT_ASSERT_EQ()
-> macros from any function. Some users might be coming from a framework
-> like gUnit where that'll compile but silently do the wrong thing.
+> But it raced with commit b8a926bea8b1 ("kunit: Introduce
+> KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros"), which added another
+> instance.
+>
+> Remove KUNIT_INIT_MEM_ASSERTION and just use the generic
+> KUNIT_INIT_ASSERT macro instead.
+> Rename the `size` arg to avoid conflicts by appending a "_" (like we did
+> in the previous commit).
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: Sadiya Kazi <sadiyakazi@google.com>
 > ---
 
-Looking good!
+Thanks for catching this. Looks good and works here.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  Documentation/dev-tools/kunit/usage.rst | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+>  include/kunit/assert.h |  7 -------
+>  include/kunit/test.h   | 12 ++++++------
+>  2 files changed, 6 insertions(+), 13 deletions(-)
 >
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index b0a6c3bc0eeb..22416ebb94ab 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -112,11 +112,14 @@ terminates the test case if the condition is not satisfied. For example:
->                         KUNIT_EXPECT_LE(test, a[i], a[i + 1]);
->         }
+> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> index 43144cfddc19..24c2b9fa61e8 100644
+> --- a/include/kunit/assert.h
+> +++ b/include/kunit/assert.h
+> @@ -192,13 +192,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+>                                     const struct va_format *message,
+>                                     struct string_stream *stream);
 >
-> -In this example, the method under test should return pointer to a value. If the
-> -pointer returns null or an errno, we want to stop the test since the following
-> -expectation could crash the test case. `ASSERT_NOT_ERR_OR_NULL(...)` allows us
-> -to bail out of the test case if the appropriate conditions are not satisfied to
-> -complete the test.
-> +In this example, we need to be able to allocate an array to test the ``sort()``
-> +function. So we use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()`` to abort the test if
-> +there's an allocation error.
-> +
-> +.. note::
-> +   In other test frameworks, ``ASSERT`` macros are often implemented by calling
-> +   ``return`` so they only work from the test function. In KUnit, we stop the
-> +   current kthread on failure, so you can call them from anywhere.
+> -#define KUNIT_INIT_MEM_ASSERT_STRUCT(text_, left_val, right_val, size_) {      \
+> -       .text = text_,                                                         \
+> -       .left_value = left_val,                                                \
+> -       .right_value = right_val,                                              \
+> -       .size = size_                                                          \
+> -}
+> -
+>  /**
+>   * struct kunit_mem_assert - An expectation/assertion that compares two
+>   *     memory blocks.
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index d7f60e8aab30..4666a4d199ea 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -666,13 +666,13 @@ do {                                                                             \
+>                             left,                                              \
+>                             op,                                                \
+>                             right,                                             \
+> -                           size,                                              \
+> +                           size_,                                             \
+>                             fmt,                                               \
+>                             ...)                                               \
+>  do {                                                                          \
+>         const void *__left = (left);                                           \
+>         const void *__right = (right);                                         \
+> -       const size_t __size = (size);                                          \
+> +       const size_t __size = (size_);                                         \
+>         static const struct kunit_binary_assert_text __text = {                \
+>                 .operation = #op,                                              \
+>                 .left_text = #left,                                            \
+> @@ -686,10 +686,10 @@ do {                                                                             \
+>                       assert_type,                                             \
+>                       kunit_mem_assert,                                        \
+>                       kunit_mem_assert_format,                                 \
+> -                     KUNIT_INIT_MEM_ASSERT_STRUCT(&__text,                    \
+> -                                                  __left,                     \
+> -                                                  __right,                    \
+> -                                                  __size),                    \
+> +                     KUNIT_INIT_ASSERT(.text = &__text,                       \
+> +                                       .left_value = __left,                  \
+> +                                       .right_value = __right,                \
+> +                                       .size = __size),                       \
+>                       fmt,                                                     \
+>                       ##__VA_ARGS__);                                          \
+>  } while (0)
 >
->  Customizing error messages
->  --------------------------
+> base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
 > --
 > 2.38.1.431.g37b22c650d-goog
 >
 
---00000000000043f9f105edce7a40
+--00000000000004baa305edce8fba
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -195,14 +227,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC9
-3Uvm96iqa1q1HGy6/wEX2jhhDAQOjYBakFEn/DSK9zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMTkwODE5MTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBC
+riGXpKZPcKIXX2Nnlm0QtYDeF7S1lZsgGB5TxZbQ8TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMTkwODI1MDJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAMwlq2Jf/7Qq06luaPJ5U
-3aH1XOxAwREaQQHYzfZOAq72pjhsP2BbQv67XXS1Xni5o4NBeqCXYiyFwW0JogI2GI5VGBZGJohH
-sQmqQBofPX9b5TGuwm9RkDc8Uh2NPWDmw/fUH7QPeScnU0j7lt9yJhZjO6M3hfRbMyAYhmNagHr6
-WpW0YbXzDKM4vzpHSCuQvPbXGLk2dxiG+cRHq7wMAaKpJtSIQZcw9ZwnaK8v7Si9Bc/wFbtiAjcH
-Kx3jZOntkKiiGIMtra5u2ULLP+GJvvLj2tqzlobgQd+7LdRmj4m78MewTCqlUZ57bEgpgzI0aMSe
-3tx5YIiG2oK7b3ez4w==
---00000000000043f9f105edce7a40--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAmmg35rN9OImUbiFTq0yB
+SWrxs9PF9GYfP2rsIBuKtWG7e6JCibmPXkwfQ3Nq9NMNrJ24vQ9whjl0J0oDTFV68Fxt6Xk09R16
+bNmjBBr16dZyGTs+TIYobWG9b1Zu3LDgs5QFIgA9B9MZulAaZmo+ElxuBrhjZ7kdyjhSfdQ/Gw4b
+DVxamNiN1BafhYQYYjwyBxFPx0IKmh39zWBzBDH/7CpotUogmJvrCrRvq5GY6y2MBfei62+s45PV
+5r22bh/4wA8TbUo42AZa/KgQyY2ifumaYWhBfDtcJK4RiXmYiHA+M5WwNrYeDJXTnVsnYS7R8C2+
+0cH52/NjOJ683mNSNQ==
+--00000000000004baa305edce8fba--
