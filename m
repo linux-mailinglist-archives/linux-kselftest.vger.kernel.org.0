@@ -2,65 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B823F630D37
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 09:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF816630D3F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 09:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiKSIRL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Nov 2022 03:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S232480AbiKSITR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Nov 2022 03:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiKSIRK (ORCPT
+        with ESMTP id S232478AbiKSITP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Nov 2022 03:17:10 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBA88FFB7
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:17:09 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id l190so6833040vsc.10
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:17:09 -0800 (PST)
+        Sat, 19 Nov 2022 03:19:15 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864038B849
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:19:14 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id m4so6856548vsc.6
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Nov 2022 00:19:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OzBWvQUHDyMVbEAfvkkJtF75VcEXTDKIMsY/ugedrN8=;
-        b=dvh7nu6MRojLTX2RzGIJIEra1h+2WJA8+ZSQSjvwwB8FVJm07OogqM2PbeWoZLUOPY
-         797pXDa6wLSe6k0B7DfCnxJk1thrx/ib/6j09i94DmEGUGY+BKq7aQGBUUb65Kxu44dB
-         gWjDQY10KN+N0D6+Odnx2EaTj/Wk4hr41mCrtxs2hKJTyJr1v61lpNzUpUZAVfX1Wxw/
-         oPh2FciwIZwKVkNI/QWMg4kjAy9ayMs+a05L4e3qbbAc9onkXt+dnBIPjwvtN03WUpLB
-         agx6fK2N01AM/WN0/Akh/Lw3mV53OvPpum8u2ztlZnQNJkaIi7LTYwPZ6/AlaWp7BpQ5
-         SEIA==
+        bh=3MGuRE9LJdG78oPfjVKxeZCy8/hShyMPqwnZVrXMZMs=;
+        b=KeYRzoxdXIojMVNMyWzS9HrF/DBL+/SpmKkfHtA6/KFcYCvOTuqRhHGuwPW4w25nsr
+         7MlcNIEaLGJYf9QnIulYA7YrUXWrbyBgdUtaXxFZpu7QJ+u1jZENoPYhjlb7Yi7/HnVs
+         o+csZgpfSIuWFUvqas1fJv0K85uYrbJnPiJI/D9Iw37y2eqjkTGcCz1bZfSgxwnQKkbk
+         N2KSgAnejmqlqqO2QIUEDWZKeVEIvhp3Y1J+DIl+ne27xAy5h5BX0qZZBsLl4eY/ammh
+         3zn5nCEdmtq2qXFmr8G9W4kxkrZJfaLYU0BbULEd+cuKDpsz0GYD4vJ8H7+8NzAB9aP0
+         un4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OzBWvQUHDyMVbEAfvkkJtF75VcEXTDKIMsY/ugedrN8=;
-        b=PA9qsIkjWkpViWvl/FEhKzRuYeiCBSgXWx4k904hrtkWe03Ezj9aVLlBwJKpCqZdQE
-         XjoDEgsYDio5JdAVWf/he4ho3H1YW2WEQW57Ou9DDTxqERpSabUgHS0B+ZSKRhJyIJg8
-         NNjemYeOvzTn+g1AzcHET3+zA6cfloKgDbCvu9e9qcAIEQxlKYO/N+IpL9DwHYn6X1Bo
-         dnv79+l0KHtOh0+ciXUmahsAMp/U490mCnlTYLG2UtnT0m531H3b3tZISBWFAxOJOKly
-         /4GAMkY9QdE76LvG6S/+Zw43Tb/OgQ+AUE2x3gzDvtEWlXSRszNsUa/VvB6StF9lOgGp
-         3Xdg==
-X-Gm-Message-State: ANoB5pnal8pnimAPpl+sERBozwWIInuOBQrRVpNkCcmOEdcYUiw9/IZa
-        aj85ridKl2F/emTMQtibzkhBFTYGAT21EUbCDloJLg==
-X-Google-Smtp-Source: AA0mqf4WHyNazwFcoPPRjM3TBEt7OKLzq8pEf3GEP7+iXsDS3wnG2VnKIIbzn5A+oU9XHTGSuycAeQxl4MpySYFeunA=
-X-Received: by 2002:a05:6102:c0d:b0:3af:2b1c:9908 with SMTP id
- x13-20020a0561020c0d00b003af2b1c9908mr6600739vss.18.1668845828149; Sat, 19
- Nov 2022 00:17:08 -0800 (PST)
+        bh=3MGuRE9LJdG78oPfjVKxeZCy8/hShyMPqwnZVrXMZMs=;
+        b=d0mBgBPgK1IgW8a1O3j3GNtjQbiH57A2TY4n2GSEP+SnXG3OOKIOSAruVkMk+ZvH96
+         KE44EUukpZqOR/mjqvWxfTdyHdNxJHsof4LJArYAxFb1wwI+CLQx6b1eafivPTC/QqNu
+         1mff8eUtdRb6ed6cgRadZifxQGkr6PLTJikYJt2SV6rTLjEWgED7yfELPStxWEVCuGYl
+         Hl6e9vYPoWNgMmlC6qvni5GIRI4rpZ/ACJT7rKnI22GmzOVRIxt50jQC0hCqcpaP/xVG
+         Q/YoaHVv5IlcJ8vGNio5TGoj3/oZ8CLX62jh+xqh7/XW0PNHfnLQh0xA6b5DF51xNHf1
+         XGWw==
+X-Gm-Message-State: ANoB5pnhdCvK3xq18E7ZH4f/gJQVr3cAFu43U87qP9vNlons+09WrUji
+        tfZqbTEOzVAM4S3BO2SIYiJdUiBfqL14xl+Zp0d5hF2nQlc=
+X-Google-Smtp-Source: AA0mqf7rBXVosx7q6pT8aPj7hruUwSwblYlzyL9WkKPLwVlBlpa9/4kMFI7LUrpOsAQYG/ySjSt0suzyxAlFFecJkfc=
+X-Received: by 2002:a67:6e47:0:b0:3af:d071:8319 with SMTP id
+ j68-20020a676e47000000b003afd0718319mr6562758vsc.71.1668845953556; Sat, 19
+ Nov 2022 00:19:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20221111182906.1377191-1-dlatypov@google.com>
-In-Reply-To: <20221111182906.1377191-1-dlatypov@google.com>
+References: <20221111182906.1377191-1-dlatypov@google.com> <20221111182906.1377191-2-dlatypov@google.com>
+In-Reply-To: <20221111182906.1377191-2-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 19 Nov 2022 16:16:56 +0800
-Message-ID: <CABVgOSmKzmnPbfrHfHmG5uBdBL6xOy7et-uGJCF_8Mi2p30wgQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] Documentation: KUnit: make usage.rst a superset of
- tips.rst, remove duplication
+Date:   Sat, 19 Nov 2022 16:19:02 +0800
+Message-ID: <CABVgOSmGV=Aj94zX1wkaknhJFAeZ-ew_YmLdEB+g=wXvk-ki3A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] Documentation: KUnit: reword description of assertions
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     brendanhiggins@google.com, rmoar@google.com,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         skhan@linuxfoundation.org, Sadiya Kazi <sadiyakazi@google.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ca16e605edce72a3"
+        boundary="00000000000043f9f105edce7a40"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,111 +71,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000ca16e605edce72a3
+--00000000000043f9f105edce7a40
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Nov 12, 2022 at 2:29 AM 'Daniel Latypov' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Sat, Nov 12, 2022 at 2:29 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> usage.rst had most of the content of the tips.rst page copied over.
-> But it's missing https://www.kernel.org/doc/html/v6.0/dev-tools/kunit/tips.html#customizing-error-messages
-> Copy it over so we can retire tips.rst w/o losing content.
+> The existing wording implies that kunit_kmalloc_array() is "the method
+> under test". We're actually testing the sort() function in that example.
+> This is because the example was changed in commit 953574390634
+> ("Documentation: KUnit: Rework writing page to focus on writing tests"),
+> but the wording was not.
 >
-> And in that process, it also gained a duplicate section about how
-> KUNIT_ASSERT_*() exit the test case early. Remove that.
+> Also add a `note` telling people they can use the KUNIT_ASSERT_EQ()
+> macros from any function. Some users might be coming from a framework
+> like gUnit where that'll compile but silently do the wrong thing.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > Reviewed-by: Sadiya Kazi <sadiyakazi@google.com>
 > ---
 
-Looks good to me, thanks!
+Looking good!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  Documentation/dev-tools/kunit/usage.rst | 49 ++++++++++++++++---------
->  1 file changed, 31 insertions(+), 18 deletions(-)
+>  Documentation/dev-tools/kunit/usage.rst | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
 >
 > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 2737863ef365..b0a6c3bc0eeb 100644
+> index b0a6c3bc0eeb..22416ebb94ab 100644
 > --- a/Documentation/dev-tools/kunit/usage.rst
 > +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -118,6 +118,37 @@ expectation could crash the test case. `ASSERT_NOT_ERR_OR_NULL(...)` allows us
->  to bail out of the test case if the appropriate conditions are not satisfied to
->  complete the test.
+> @@ -112,11 +112,14 @@ terminates the test case if the condition is not satisfied. For example:
+>                         KUNIT_EXPECT_LE(test, a[i], a[i + 1]);
+>         }
 >
-> +Customizing error messages
-> +--------------------------
+> -In this example, the method under test should return pointer to a value. If the
+> -pointer returns null or an errno, we want to stop the test since the following
+> -expectation could crash the test case. `ASSERT_NOT_ERR_OR_NULL(...)` allows us
+> -to bail out of the test case if the appropriate conditions are not satisfied to
+> -complete the test.
+> +In this example, we need to be able to allocate an array to test the ``sort()``
+> +function. So we use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()`` to abort the test if
+> +there's an allocation error.
 > +
-> +Each of the ``KUNIT_EXPECT`` and ``KUNIT_ASSERT`` macros have a ``_MSG``
-> +variant.  These take a format string and arguments to provide additional
-> +context to the automatically generated error messages.
-> +
-> +.. code-block:: c
-> +
-> +       char some_str[41];
-> +       generate_sha1_hex_string(some_str);
-> +
-> +       /* Before. Not easy to tell why the test failed. */
-> +       KUNIT_EXPECT_EQ(test, strlen(some_str), 40);
-> +
-> +       /* After. Now we see the offending string. */
-> +       KUNIT_EXPECT_EQ_MSG(test, strlen(some_str), 40, "some_str='%s'", some_str);
-> +
-> +Alternatively, one can take full control over the error message by using
-> +``KUNIT_FAIL()``, e.g.
-> +
-> +.. code-block:: c
-> +
-> +       /* Before */
-> +       KUNIT_EXPECT_EQ(test, some_setup_function(), 0);
-> +
-> +       /* After: full control over the failure message. */
-> +       if (some_setup_function())
-> +               KUNIT_FAIL(test, "Failed to setup thing for testing");
-> +
-> +
->  Test Suites
->  ~~~~~~~~~~~
+> +.. note::
+> +   In other test frameworks, ``ASSERT`` macros are often implemented by calling
+> +   ``return`` so they only work from the test function. In KUnit, we stop the
+> +   current kthread on failure, so you can call them from anywhere.
 >
-> @@ -546,24 +577,6 @@ By reusing the same ``cases`` array from above, we can write the test as a
->                 {}
->         };
->
-> -Exiting Early on Failed Expectations
-> -------------------------------------
-> -
-> -We can use ``KUNIT_EXPECT_EQ`` to mark the test as failed and continue
-> -execution.  In some cases, it is unsafe to continue. We can use the
-> -``KUNIT_ASSERT`` variant to exit on failure.
-> -
-> -.. code-block:: c
-> -
-> -       void example_test_user_alloc_function(struct kunit *test)
-> -       {
-> -               void *object = alloc_some_object_for_me();
-> -
-> -               /* Make sure we got a valid pointer back. */
-> -               KUNIT_ASSERT_NOT_ERR_OR_NULL(test, object);
-> -               do_something_with_object(object);
-> -       }
-> -
->  Allocating Memory
->  -----------------
->
->
-> base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
+>  Customizing error messages
+>  --------------------------
 > --
 > 2.38.1.431.g37b22c650d-goog
 >
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20221111182906.1377191-1-dlatypov%40google.com.
 
---000000000000ca16e605edce72a3
+--00000000000043f9f105edce7a40
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -243,14 +195,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBf
-c3U5bwlAQdJs7z2b028n1ksiezfhaRgFUQHeWmbonDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMTkwODE3MDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC9
+3Uvm96iqa1q1HGy6/wEX2jhhDAQOjYBakFEn/DSK9zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMTkwODE5MTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAzGuQR6UqlZJHcUPVlQlY
-4eSonGJ5z5DlzPwzHHFExHBshxGR3RNe+8h6A4w9GjvlKTzlp1T1KTwSvsyMnoibSIolA+lDevaR
-PQaKtC1UwAP0d4mBd6/4RH/GePObsKwmk48DDUaAGtv6YQnuZOj+oC9Y/pJd7SsZmrLPIJ9Mwndo
-lll0j6lsoa+FsQYHj5bcyJr5LSsE7gEqpWjWqI2cNNZ9M1/TUxG3zG2TnBgzL5KT7zRoyF0fSxMf
-SA0ZP11i3UGCwoh0YZEa32R2/xuN4FcfL76N0cHR0oInKKAZdeDFdVAm5oxqW4OdnC0PSYxvnldU
-v52sZodGTWGCc3OA2Q==
---000000000000ca16e605edce72a3--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAMwlq2Jf/7Qq06luaPJ5U
+3aH1XOxAwREaQQHYzfZOAq72pjhsP2BbQv67XXS1Xni5o4NBeqCXYiyFwW0JogI2GI5VGBZGJohH
+sQmqQBofPX9b5TGuwm9RkDc8Uh2NPWDmw/fUH7QPeScnU0j7lt9yJhZjO6M3hfRbMyAYhmNagHr6
+WpW0YbXzDKM4vzpHSCuQvPbXGLk2dxiG+cRHq7wMAaKpJtSIQZcw9ZwnaK8v7Si9Bc/wFbtiAjcH
+Kx3jZOntkKiiGIMtra5u2ULLP+GJvvLj2tqzlobgQd+7LdRmj4m78MewTCqlUZ57bEgpgzI0aMSe
+3tx5YIiG2oK7b3ez4w==
+--00000000000043f9f105edce7a40--
