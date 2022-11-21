@@ -2,78 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC35632D4A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Nov 2022 20:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8A8632D75
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Nov 2022 20:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbiKUTvI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Nov 2022 14:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
+        id S231649AbiKUTzq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Nov 2022 14:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbiKUTvD (ORCPT
+        with ESMTP id S231717AbiKUTzb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Nov 2022 14:51:03 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897B5D539E;
-        Mon, 21 Nov 2022 11:51:02 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id n21so30927926ejb.9;
-        Mon, 21 Nov 2022 11:51:02 -0800 (PST)
+        Mon, 21 Nov 2022 14:55:31 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8565412766
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 11:55:30 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id o23-20020a17090ac09700b00218afed23f4so1684715pjs.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 11:55:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eWLdJJDPEqVULc2oQdrml30Pa4z33QzeUxbdXRKXWHo=;
-        b=G5hsHwuInQCfQ+JbnGoJ7f7lcIqikXLI78JMoJiw7+DCPUUSZmW8c8MQxyke9z515B
-         ywBlAWDW+YMrzizHnZEX17JVIJiGu1qJ3a9u377dwuEhxdXtQP1y30awITZcqz7bxq1o
-         WKFrNIIjbGjRpjZckSoEayAlh08d3AwvNlZI+yTUzCMUt1G9O9w+9G+sqIDuBhat2t3g
-         mfM5HcpaXeqASYwtUlG2goN6ZOV6zQ26DI/pF12jzKSp8K4vjjP+9qq+26fxfKpp8T9L
-         L8gCwFrzYQG8dNAv+WgTeYFTuhcriZM2oWADtPxDeY+Tc3JygdHIt5S0eMDnQu9R7wW8
-         6/wg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=W02RbsZsl++qiQdJK9RwY8tMReALtesu58tvw95Kdrw=;
+        b=ojjOBWylYfZsKG0qH6zTB7tdNrjOPvXnoS8ljAUKXfLUd/ZMEK0KRbWVPHHYz6+sU/
+         1CW84x9W0DB+oO6KH4pJOuHiD2wvj10vFgVM2ccmepE/Hr96b4xNT4jbUB4EWQM7Zj8y
+         w1qpRsfBCRhmFE0NdZsiNiOpHVXSLZyE8d7PuNDf2z5BYY4tnvuJBaAiLCgqxpqxv5NW
+         1awIF657EY0srq0JCIBRMzmoLk+ScM4eR1CQch8unvggPd+h/2e4jI6PMvMBzShellcI
+         yDhaO5qxiUVlRQJSy54b604EKbXVI5nVA73bufPELrDIQbkNYO0QoG2KV+c5WiVQQDkc
+         P3kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eWLdJJDPEqVULc2oQdrml30Pa4z33QzeUxbdXRKXWHo=;
-        b=gXzLkeolycCFbkyJ98NARrHMboLZ1qFGzNPLC8MzuD1WU3ir1fXlByhZJFlxdP6Yqb
-         RXLTQdwyCrqQz29iFzI0WK3mdmZKPJvuJyQv1RfobN9XZ4C58VK5wmtPvSKMN53mJMv8
-         +4aAeYmHncQ4Qeo0APRd/+W+azsnZNH0PBLjwSriM6xZEWW54MTXWTFO4vwHwISlFrNA
-         B1rigHtNkmcC7OglWNHjQkCh3Ce/0nLy3xrce7pkzbqzAIM92BH+nMHB88xZMAy3Ay1w
-         6sT6q3GjrXcwo7vSaa3A1pimFy9PPXQaljbKjRT/Xi4zcdk8C7C7KatU5TlVCJPcUJ5Z
-         nHvA==
-X-Gm-Message-State: ANoB5pkmPXLZAbfQimB6Dv20kmOalXVBhcExEZ6IZ+K7UGr7H/LpelQx
-        /B1PTF/3ocg+Ki3oKlnsoCd2EQW3NV541vu12LU=
-X-Google-Smtp-Source: AA0mqf41qRpt1ALnZuh6h0zWQOQgAPiWwxZj1dr74tBklG//+TkizWoGq+Dz8s7s59i6bkCTYNu1zQEdi4xwDXDKzFk=
-X-Received: by 2002:a17:906:2ac3:b0:7ad:f2f9:2b49 with SMTP id
- m3-20020a1709062ac300b007adf2f92b49mr5700043eje.94.1669060260708; Mon, 21 Nov
- 2022 11:51:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20221114134720.1057939-1-xukuohai@huawei.com> <20221114134720.1057939-2-xukuohai@huawei.com>
- <CAADnVQLEzrqjuF+qYh2kJz0Q=9G8PySJ6ZwXD2EGoZsBUdwsog@mail.gmail.com>
- <fd1e6d2d-f7a2-21d2-f0ff-3e3d8b2ba9eb@huawei.com> <a6f8b4a4-2c37-740b-af87-c61af51eaab5@huaweicloud.com>
-In-Reply-To: <a6f8b4a4-2c37-740b-af87-c61af51eaab5@huaweicloud.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 21 Nov 2022 11:50:49 -0800
-Message-ID: <CAADnVQLnCeMu7yukHta8GHVPKwdqA=yjPr7DBgmLSU56pVifew@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: Do not copy spin lock field from user in bpf_selem_alloc
-To:     Xu Kuohai <xukuohai@huaweicloud.com>
-Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W02RbsZsl++qiQdJK9RwY8tMReALtesu58tvw95Kdrw=;
+        b=HGafSQiGS68xeySqSN+UIiTrCgmJL4+UPb1YBTdR90kY2FPVn6TYE8P4T6sjqT750q
+         2U3vbAoMyvT/weLg1Sb0eUmn/NNxHrFBFRsKL0XkgsgCueK153XI8GFyPJncEmwMUYsx
+         f3SIOoUais+Ruaww/vD7T7J8DVog3InidBFzVZMWlCcslcKqx/qEKfATOYt3WmedsCt5
+         qWGgGshEP8k/DDSMbIsBTLGyi2ZTa9tOWkn90aGZ4RmjzMLomz+yXr3Qn4ubUyz4WWDM
+         5ZIXvlt5ZUbIL+Pcd2pGiRMA4CvOcbTeMZlHAyBTQIZJOhvzhIa1TWZrE5uVDRJTziba
+         wt2w==
+X-Gm-Message-State: ANoB5pni+gNZEKbXMu3ubmE8z0rIlnaaF/lEktEs643VM37krV1aWWtb
+        8t1GUXQE1EZxbZPGLXMtydcNyo7JK193qg==
+X-Google-Smtp-Source: AA0mqf72Ofv54sxGUf8sRNUPFhJvThaSO3oUCy8wtr7UXy9f0eeiG2/6Tte5rilGQur8S6aX360S3Fy3BAJLnA==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:c298:b0:218:a32f:9612 with SMTP
+ id f24-20020a17090ac29800b00218a32f9612mr10158502pjt.155.1669060530049; Mon,
+ 21 Nov 2022 11:55:30 -0800 (PST)
+Date:   Mon, 21 Nov 2022 11:55:26 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221121195526.425882-1-dlatypov@google.com>
+Subject: [PATCH] kunit: tool: make --json do nothing if --raw_ouput is set
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,36 +67,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 3:30 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->
-> On 11/16/2022 4:07 PM, Xu Kuohai wrote:
-> > On 11/16/2022 1:27 PM, Alexei Starovoitov wrote:
-> >> On Mon, Nov 14, 2022 at 5:31 AM Xu Kuohai <xukuohai@huawei.com> wrote:
-> >>>
-> >>> bpf_selem_alloc function is used by inode_storage, sk_storage and
-> >>> task_storage maps to set map value, for these map types, there may
-> >>> be a spin lock in the map value, so if we use memcpy to copy the whole
-> >>> map value from user, the spin lock field may be initialized incorrectly.
-> >>>
-> >>> Since the spin lock field is zeroed by kzalloc, call copy_map_value
-> >>> instead of memcpy to skip copying the spin lock field to fix it.
-> >>>
-> >>> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
-> >>
-> >> The tag is wrong. When local storage was introduced it was not
-> >> possible to use spin_locks there.
-> >> Pls resubmit.
-> >> .
-> >
-> > No, spin_lock was introduced by d83525ca62cf ("bpf: introduce bpf_spin_lock"),
-> > before 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage").
-> >
-> > To confirm this, I built a kernel image on comit 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
-> > and run test case posted in patch 2, a softlockup was triggered. Then I picked
-> > this patch and tried again, nothing failed.
->
-> Hello, am I right? Or could you please give the correct fix-tag? Thanks.
+When --raw_output is set (to any value), we don't actually parse the
+test results. So asking to print the test results as json doesn't make
+sense.
 
-I see. I was under the impression that bpf_spin_lock was enabled
-in the local storage later.
-Ok. Applied as-is.
+We internally create a fake test with one passing subtest, so --json
+would actually print out something misleading.
+
+This patch:
+* Rewords the flag descriptions so hopefully this is more obvious.
+* Also updates --raw_output's description to note the default behavior
+  is to print out only "KUnit" results (actually any KTAP results)
+* also renames and refactors some related logic for clarity (e.g.
+  test_result => test, it's a kunit_parser.Test object).
+
+Notably, this patch does not make it an error to specify --json and
+--raw_output together. This is an edge case, but I know of at least one
+wrapper around kunit.py that always sets --json. You'd never be able to
+use --raw_output with that wrapper.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit.py | 34 ++++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 4d4663fb578b..e7b6549712d6 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -192,12 +192,11 @@ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
+ 	parse_start = time.time()
+ 
+-	test_result = kunit_parser.Test()
+-
+ 	if request.raw_output:
+ 		# Treat unparsed results as one passing test.
+-		test_result.status = kunit_parser.TestStatus.SUCCESS
+-		test_result.counts.passed = 1
++		fake_test = kunit_parser.Test()
++		fake_test.status = kunit_parser.TestStatus.SUCCESS
++		fake_test.counts.passed = 1
+ 
+ 		output: Iterable[str] = input_data
+ 		if request.raw_output == 'all':
+@@ -206,14 +205,17 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
+ 			output = kunit_parser.extract_tap_lines(output, lstrip=False)
+ 		for line in output:
+ 			print(line.rstrip())
++		parse_time = time.time() - parse_start
++		return KunitResult(KunitStatus.SUCCESS, parse_time), fake_test
+ 
+-	else:
+-		test_result = kunit_parser.parse_run_tests(input_data)
+-	parse_end = time.time()
++
++	# Actually parse the test results.
++	test = kunit_parser.parse_run_tests(input_data)
++	parse_time = time.time() - parse_start
+ 
+ 	if request.json:
+ 		json_str = kunit_json.get_json_result(
+-					test=test_result,
++					test=test,
+ 					metadata=metadata)
+ 		if request.json == 'stdout':
+ 			print(json_str)
+@@ -223,10 +225,10 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
+ 			stdout.print_with_timestamp("Test results stored in %s" %
+ 				os.path.abspath(request.json))
+ 
+-	if test_result.status != kunit_parser.TestStatus.SUCCESS:
+-		return KunitResult(KunitStatus.TEST_FAILURE, parse_end - parse_start), test_result
++	if test.status != kunit_parser.TestStatus.SUCCESS:
++		return KunitResult(KunitStatus.TEST_FAILURE, parse_time), test
+ 
+-	return KunitResult(KunitStatus.SUCCESS, parse_end - parse_start), test_result
++	return KunitResult(KunitStatus.SUCCESS, parse_time), test
+ 
+ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	      request: KunitRequest) -> KunitResult:
+@@ -359,14 +361,14 @@ def add_exec_opts(parser) -> None:
+ 			    choices=['suite', 'test'])
+ 
+ def add_parse_opts(parser) -> None:
+-	parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
+-			    'If set to --raw_output=kunit, filters to just KUnit output.',
++	parser.add_argument('--raw_output', help='If set don\'t parse output from kernel. '
++			    'By default, filters to just KUnit output. Use '
++			    '--raw_output=all to show everything',
+ 			     type=str, nargs='?', const='all', default=None, choices=['all', 'kunit'])
+ 	parser.add_argument('--json',
+ 			    nargs='?',
+-			    help='Stores test results in a JSON, and either '
+-			    'prints to stdout or saves to file if a '
+-			    'filename is specified',
++			    help='Prints parsed test results as JSON to stdout or a file if '
++			    'a filename is specified. Does nothing if --raw_output is set.',
+ 			    type=str, const='stdout', default=None, metavar='FILE')
+ 
+ 
+
+base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
