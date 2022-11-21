@@ -2,141 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD652630FA8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Nov 2022 18:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB7A631C34
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Nov 2022 10:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiKSRTB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Nov 2022 12:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
+        id S229911AbiKUJAA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Nov 2022 04:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiKSRTB (ORCPT
+        with ESMTP id S229446AbiKUI77 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Nov 2022 12:19:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629E711C27;
-        Sat, 19 Nov 2022 09:19:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 21 Nov 2022 03:59:59 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9978CDF95;
+        Mon, 21 Nov 2022 00:59:58 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF0D60A7C;
-        Sat, 19 Nov 2022 17:18:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C9B0C433D6;
-        Sat, 19 Nov 2022 17:18:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668878339;
-        bh=zr4d+rv3Q5Fxe/4kNQPntCAa7p0O3bFqpKvRY49n9/M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=n7i2zdehTGtx4wuqqD+xpBH/OZ26MjDaJOC8O5x7w4SQSwkdbfNato47qMo1R7Qt6
-         0PJZf9KXHTwNpbdPXoQVzU8tmmYskoBAlyVctlhe89vRe9vuWqDoKgcB5N/71ZiMF5
-         aJVqr4KrJ7H7yAf9zNXpCV2/ft0NVpGkEG8Ea6Njn/YcQ6ei3aeF9AZUZrVWtBBShQ
-         k0mbpPIKlq6QhcGE4M0NntSdCy38XsJLmraPGSGVjANdMjCsOASXzokEMQKxLjCp1O
-         n+tcGSKIM+bS2tj/r7QFVmYQ53dGFM8rI5O8KhsMuNgINC3qkKlm+P7Cp8Bq9ox+Hq
-         8xC6BP+y6h0zA==
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Lina Wang <lina.wang@mediatek.com>,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 463F61F897;
+        Mon, 21 Nov 2022 08:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669021197;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v9eI0l3L5J3waSLvW+eC332jj5gD4Rcqx/oy4092T7U=;
+        b=uJNWoBaxwvTkrgcPCkmSH5N8lmksBFO6vBhMcKeC2W7lOUh2gTFKNUCWjI6fbYlxpP4bPc
+        FekS8LKjm1E6B5wm3peAwXuznfWm6rE2l2WmGEaZSqIF05/CrJqQtHQvIhenohiltd0lPR
+        V2J68v0dm4icKuYkLMj6IUjdDe79bbc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669021197;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v9eI0l3L5J3waSLvW+eC332jj5gD4Rcqx/oy4092T7U=;
+        b=mwKTVaxEkEJfXDxmby4hh4uyjgP5plQNW4zg0K0s18PEbBjnSvse2OmeQrilKUMTFtMoFK
+        tjiy0rAVGrz7aCDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0E0D1376E;
+        Mon, 21 Nov 2022 08:59:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BGsKOQw+e2MxXQAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Mon, 21 Nov 2022 08:59:56 +0000
+Date:   Mon, 21 Nov 2022 09:59:55 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Li Wang <liwang@redhat.com>
+Cc:     ltp@lists.linux.it, Jens Axboe <axboe@kernel.dk>,
+        Minchan Kim <minchan@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
         linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH net-next] selftests: net: Add cross-compilation support for BPF programs
-Date:   Sat, 19 Nov 2022 18:18:41 +0100
-Message-Id: <20221119171841.2014936-1-bjorn@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nitin Gupta <ngupta@vflare.org>
+Subject: Re: [LTP] [PATCH 1/1] zram01.sh: Workaround division by 0 on vfat on
+ ppc64le
+Message-ID: <Y3s+Czg8sBsGYO+1@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20221107191136.18048-1-pvorel@suse.cz>
+ <20221107191136.18048-2-pvorel@suse.cz>
+ <CAEemH2fYv_=9UWdWB7VDiFOd8EC89qdCbxnPcTPAtGnkwLOYFg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEemH2fYv_=9UWdWB7VDiFOd8EC89qdCbxnPcTPAtGnkwLOYFg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Björn Töpel <bjorn@rivosinc.com>
+Hi Li,
 
-The selftests/net does not have proper cross-compilation support, and
-does not properly state libbpf as a dependency. Mimic/copy the BPF
-build from selftests/bpf, which has the nice side-effect that libbpf
-is built as well.
+> Hi Petr,
 
-Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
----
-Now that BPF builds are starting to show up in more places
-(selftests/net, and soon selftests/hid), maybe it would be cleaner to
-move parts of the BPF builds to lib.mk?
+> On Tue, Nov 8, 2022 at 3:12 AM Petr Vorel <pvorel@suse.cz> wrote:
 
-Björn
----
- tools/testing/selftests/net/bpf/Makefile | 45 +++++++++++++++++++++---
- 1 file changed, 41 insertions(+), 4 deletions(-)
+> > Repeatedly read /sys/block/zram*/mm_stat for 1 sec. This should fix bug
+> > on ppc64le on stable kernels, where mem_used_total is often 0.
 
-diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
-index 8ccaf8732eb2..a26cb94354f6 100644
---- a/tools/testing/selftests/net/bpf/Makefile
-+++ b/tools/testing/selftests/net/bpf/Makefile
-@@ -1,14 +1,51 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- CLANG ?= clang
-+SCRATCH_DIR := $(OUTPUT)/tools
-+BUILD_DIR := $(SCRATCH_DIR)/build
-+BPFDIR := $(abspath ../../../lib/bpf)
-+APIDIR := $(abspath ../../../include/uapi)
-+
- CCINCLUDE += -I../../bpf
--CCINCLUDE += -I../../../../lib
- CCINCLUDE += -I../../../../../usr/include/
-+CCINCLUDE += -I$(SCRATCH_DIR)/include
-+
-+BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
-+
-+MAKE_DIRS := $(BUILD_DIR)/libbpf
-+$(MAKE_DIRS):
-+	mkdir -p $@
- 
- TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
- all: $(TEST_CUSTOM_PROGS)
- 
--$(OUTPUT)/%.o: %.c
--	$(CLANG) -O2 -target bpf -c $< $(CCINCLUDE) -o $@
-+# Get Clang's default includes on this system, as opposed to those seen by
-+# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-+#
-+# Use '-idirafter': Don't interfere with include mechanics except where the
-+# build would have failed anyways.
-+define get_sys_includes
-+$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
-+	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
-+endef
-+
-+ifneq ($(CROSS_COMPILE),)
-+CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
-+endif
-+
-+CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-+
-+$(TEST_CUSTOM_PROGS): $(BPFOBJ)
-+	$(CLANG) -O2 -target bpf -c $(@:.o=.c) $(CCINCLUDE) $(CLANG_SYS_INCLUDES) -o $@
-+
-+$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
-+	   $(APIDIR)/linux/bpf.h					       \
-+	   | $(BUILD_DIR)/libbpf
-+	$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/     \
-+		    EXTRA_CFLAGS='-g -O0'				       \
-+		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
-+
-+EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR)
- 
--EXTRA_CLEAN := $(TEST_CUSTOM_PROGS)
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > ---
+> >  .../kernel/device-drivers/zram/zram01.sh      | 27 +++++++++++++++++--
+> >  1 file changed, 25 insertions(+), 2 deletions(-)
 
-base-commit: 8bd8dcc5e47f0f9dc40187c3b8b42d992181eee1
--- 
-2.37.2
+> > diff --git a/testcases/kernel/device-drivers/zram/zram01.sh
+> > b/testcases/kernel/device-drivers/zram/zram01.sh
+> > index 58d233f91..76a8ccab4 100755
+> > --- a/testcases/kernel/device-drivers/zram/zram01.sh
+> > +++ b/testcases/kernel/device-drivers/zram/zram01.sh
+> > @@ -105,6 +105,26 @@ zram_mount()
+> >         tst_res TPASS "mount of zram device(s) succeeded"
+> >  }
 
+> > +read_mem_used_total()
+> > +{
+> > +       echo $(awk '{print $3}' $1)
+> > +}
+> > +
+> > +# Reads /sys/block/zram*/mm_stat until mem_used_total is not 0.
+> > +loop_read_mem_used_total()
+
+
+> This is not a looping function to check if mem_used_total is equal to zero,
+> the loop part is by means of the TST_RETRY_FUNC macro.
+Thanks for your review!
+
+> So, I'd suggest renaming it to check_read_mem_used_total().
+Agree. Unfortunately even this didn't help on ppc64le system where I was able to
+reproduce it, thus probably not worth to merge.
+
+Unfortunately later I was not able to reproduce the problem any more, I'll try
+it more this week.
+
+Kind regards,
+Petr
+
+> Reviewed-by: Li Wang <liwang@redhat.com>
+
+
+
+> > +{
+> > +       local file="$1"
+> > +       local mem_used_total
+> > +
+> > +       tst_res TINFO "$file"
+> > +       cat $file >&2
+> > +
+> > +       mem_used_total=$(read_mem_used_total $file)
+> > +       [ "$mem_used_total" -eq 0 ] && return 1
+> > +
+> > +       return 0
+> > +}
+> > +
+> >  zram_fill_fs()
+> >  {
+> >         local mem_used_total
+> > @@ -133,9 +153,12 @@ zram_fill_fs()
+> >                         continue
+> >                 fi
+
+> > -               mem_used_total=`awk '{print $3}'
+> > "/sys/block/zram$i/mm_stat"`
+> > +               TST_RETRY_FUNC "loop_read_mem_used_total
+> > /sys/block/zram$i/mm_stat" 0
+> > +               mem_used_total=$(read_mem_used_total
+> > /sys/block/zram$i/mm_stat)
+> > +               tst_res TINFO "mem_used_total: $mem_used_total"
+> > +
+> >                 v=$((100 * 1024 * $b / $mem_used_total))
+> > -               r=`echo "scale=2; $v / 100 " | bc`
+> > +               r=$(echo "scale=2; $v / 100 " | bc)
+
+> >                 if [ "$v" -lt 100 ]; then
+> >                         tst_res TFAIL "compression ratio: $r:1"
+> > --
+> > 2.38.0
+
+
+> > --
+> > Mailing list info: https://lists.linux.it/listinfo/ltp
