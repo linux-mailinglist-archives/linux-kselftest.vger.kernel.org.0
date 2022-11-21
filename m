@@ -2,182 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5743C631EA8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Nov 2022 11:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC2A6320BC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Nov 2022 12:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiKUKp5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Nov 2022 05:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S230215AbiKULfD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Nov 2022 06:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiKUKpw (ORCPT
+        with ESMTP id S231296AbiKULeq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Nov 2022 05:45:52 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157717C478
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 02:45:46 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id f18so27563579ejz.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 02:45:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PES5KmT8V4mZsBqkcHDpiFZMsMOq6o0C0cxaE+yQVIk=;
-        b=StsBVHJL2WDK8lZEh6PmHV7EvhajZA0QqKgcEwD0aC2QRgAh0InlOefbcdZnUxavyJ
-         mn4x4hCTPIMp/CMckKX4Qizel06lXhpzmeOd9HHgo7qUW+xa/+JUdyhmWCCJdj6dBvnn
-         30qR/A1RiveF7tlib7Dan/JEt5HwEIDjzlXDzOLWdj2tT/MHw1QR+74ZRIjr2uqvbmaA
-         rBI5MCd82rNswtcUCkjYBdCx9sigfRNKXj4Ep40Z2ZH7J//S2/SrpyJlRs8TAoZtXt0G
-         CwejFpkBpSq/vC3h6dBeFW5C4Geb5I3nL2yYE9zhbiIp5fewXRaa07o3eW0WdlRjMHmG
-         x0ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PES5KmT8V4mZsBqkcHDpiFZMsMOq6o0C0cxaE+yQVIk=;
-        b=WZnLdoGKSBnef+YIO3/1PGU8GVzi/XheHokWMtr2viGX19xWCVGU/JNKG++oClSn38
-         hFcwHUqHSTqqJI0cFqQuFI6YkymP6JDMo5H8m8gDJ4TFA23N8fRZIZ1Ztdwnm9JqoWCs
-         I02CKljyMB5a6l4VALenNRc5b30lXU9DqksI6UL7XRqs/EZP1gn59qq6bkl0/CnxLYEL
-         ukRTybi+Vc2qhCAlOU4zzt6Z2H63uzA2V4RrWhJrVN5KfvR1ZM2xcVQUuw2fxhw+po0e
-         5UaUK/usqbi3hhVXAXXiPnnpzMTo0pL9cR34+BQwX2nLuSt2ddE5JTNIc5StFiSnlBbl
-         ymHA==
-X-Gm-Message-State: ANoB5pnHJOfLBzidhNIocDlnNjRZboGTE9SR9FvvWu9F2m+LdwwM7RyH
-        kK1gyvTQPfEEXN+IolsDdVRrImTul62MgtRrg/EbKQ==
-X-Google-Smtp-Source: AA0mqf6XeeMB2kMtmTFiNdRQEPgfXhTJc8JSVqxypcPG71JfSPy7GXnrcg9mIxxmw7zCsPOQVjxOjZ97kfmHtlekXb4=
-X-Received: by 2002:a17:906:77db:b0:7b2:8a6c:162f with SMTP id
- m27-20020a17090677db00b007b28a6c162fmr14465418ejn.693.1669027544577; Mon, 21
- Nov 2022 02:45:44 -0800 (PST)
+        Mon, 21 Nov 2022 06:34:46 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89858B4838;
+        Mon, 21 Nov 2022 03:30:13 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NG4tl3Tynz4f3l2F;
+        Mon, 21 Nov 2022 19:30:07 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+        by APP3 (Coremail) with SMTP id _Ch0CgBXZqJBYXtj6fFRAw--.52286S2;
+        Mon, 21 Nov 2022 19:30:10 +0800 (CST)
+Message-ID: <a6f8b4a4-2c37-740b-af87-c61af51eaab5@huaweicloud.com>
+Date:   Mon, 21 Nov 2022 19:30:09 +0800
 MIME-Version: 1.0
-References: <20221119171841.2014936-1-bjorn@kernel.org>
-In-Reply-To: <20221119171841.2014936-1-bjorn@kernel.org>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Mon, 21 Nov 2022 11:45:33 +0100
-Message-ID: <CADYN=9LxMhccyx6wncjO99am7z+8wNWoMzV3DCSyCdJYktGevg@mail.gmail.com>
-Subject: Re: [PATCH net-next] selftests: net: Add cross-compilation support
- for BPF programs
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Lina Wang <lina.wang@mediatek.com>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf 1/2] bpf: Do not copy spin lock field from user in
+ bpf_selem_alloc
+Content-Language: en-US
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+References: <20221114134720.1057939-1-xukuohai@huawei.com>
+ <20221114134720.1057939-2-xukuohai@huawei.com>
+ <CAADnVQLEzrqjuF+qYh2kJz0Q=9G8PySJ6ZwXD2EGoZsBUdwsog@mail.gmail.com>
+ <fd1e6d2d-f7a2-21d2-f0ff-3e3d8b2ba9eb@huawei.com>
+In-Reply-To: <fd1e6d2d-f7a2-21d2-f0ff-3e3d8b2ba9eb@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: _Ch0CgBXZqJBYXtj6fFRAw--.52286S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Xw15Xw17Ww15GF4fWF15urg_yoW8JrWxpr
+        93Aas8tFW7Xw1rua9Iqr4xAFy09w43G3WDWan8JFWrGrZ3ZF9Igr1Dta1UCa4Syw4aq3Wv
+        vF1Yqas8C34DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UZ18PUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 19 Nov 2022 at 18:19, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrot=
-e:
->
-> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->
-> The selftests/net does not have proper cross-compilation support, and
-> does not properly state libbpf as a dependency. Mimic/copy the BPF
-> build from selftests/bpf, which has the nice side-effect that libbpf
-> is built as well.
->
-> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-> ---
-> Now that BPF builds are starting to show up in more places
-> (selftests/net, and soon selftests/hid), maybe it would be cleaner to
-> move parts of the BPF builds to lib.mk?
+On 11/16/2022 4:07 PM, Xu Kuohai wrote:
+> On 11/16/2022 1:27 PM, Alexei Starovoitov wrote:
+>> On Mon, Nov 14, 2022 at 5:31 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>>>
+>>> bpf_selem_alloc function is used by inode_storage, sk_storage and
+>>> task_storage maps to set map value, for these map types, there may
+>>> be a spin lock in the map value, so if we use memcpy to copy the whole
+>>> map value from user, the spin lock field may be initialized incorrectly.
+>>>
+>>> Since the spin lock field is zeroed by kzalloc, call copy_map_value
+>>> instead of memcpy to skip copying the spin lock field to fix it.
+>>>
+>>> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+>>
+>> The tag is wrong. When local storage was introduced it was not
+>> possible to use spin_locks there.
+>> Pls resubmit.
+>> .
+> 
+> No, spin_lock was introduced by d83525ca62cf ("bpf: introduce bpf_spin_lock"),
+> before 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage").
+> 
+> To confirm this, I built a kernel image on comit 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
+> and run test case posted in patch 2, a softlockup was triggered. Then I picked
+> this patch and tried again, nothing failed.
 
-Yes, since its in tc-testing too.
-Maybe thats what we should do already now?
+Hello, am I right? Or could you please give the correct fix-tag? Thanks.
 
-Cheers,
-Anders
-
->
-> Bj=C3=B6rn
-> ---
->  tools/testing/selftests/net/bpf/Makefile | 45 +++++++++++++++++++++---
->  1 file changed, 41 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/sel=
-ftests/net/bpf/Makefile
-> index 8ccaf8732eb2..a26cb94354f6 100644
-> --- a/tools/testing/selftests/net/bpf/Makefile
-> +++ b/tools/testing/selftests/net/bpf/Makefile
-> @@ -1,14 +1,51 @@
->  # SPDX-License-Identifier: GPL-2.0
->
->  CLANG ?=3D clang
-> +SCRATCH_DIR :=3D $(OUTPUT)/tools
-> +BUILD_DIR :=3D $(SCRATCH_DIR)/build
-> +BPFDIR :=3D $(abspath ../../../lib/bpf)
-> +APIDIR :=3D $(abspath ../../../include/uapi)
-> +
->  CCINCLUDE +=3D -I../../bpf
-> -CCINCLUDE +=3D -I../../../../lib
->  CCINCLUDE +=3D -I../../../../../usr/include/
-> +CCINCLUDE +=3D -I$(SCRATCH_DIR)/include
-> +
-> +BPFOBJ :=3D $(BUILD_DIR)/libbpf/libbpf.a
-> +
-> +MAKE_DIRS :=3D $(BUILD_DIR)/libbpf
-> +$(MAKE_DIRS):
-> +       mkdir -p $@
->
->  TEST_CUSTOM_PROGS =3D $(OUTPUT)/bpf/nat6to4.o
->  all: $(TEST_CUSTOM_PROGS)
->
-> -$(OUTPUT)/%.o: %.c
-> -       $(CLANG) -O2 -target bpf -c $< $(CCINCLUDE) -o $@
-> +# Get Clang's default includes on this system, as opposed to those seen =
-by
-> +# '-target bpf'. This fixes "missing" files on some architectures/distro=
-s,
-> +# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-> +#
-> +# Use '-idirafter': Don't interfere with include mechanics except where =
-the
-> +# build would have failed anyways.
-> +define get_sys_includes
-> +$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
-> +       | sed -n '/<...> search starts here:/,/End of search list./{ s| \=
-(/.*\)|-idirafter \1|p }') \
-> +$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{pri=
-ntf("-D__riscv_xlen=3D%d -D__BITS_PER_LONG=3D%d", $$3, $$3)}')
-> +endef
-> +
-> +ifneq ($(CROSS_COMPILE),)
-> +CLANG_TARGET_ARCH =3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
-> +endif
-> +
-> +CLANG_SYS_INCLUDES =3D $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_A=
-RCH))
-> +
-> +$(TEST_CUSTOM_PROGS): $(BPFOBJ)
-> +       $(CLANG) -O2 -target bpf -c $(@:.o=3D.c) $(CCINCLUDE) $(CLANG_SYS=
-_INCLUDES) -o $@
-> +
-> +$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)              =
-      \
-> +          $(APIDIR)/linux/bpf.h                                         =
-      \
-> +          | $(BUILD_DIR)/libbpf
-> +       $(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=3D$(BUILD_DIR)/libb=
-pf/     \
-> +                   EXTRA_CFLAGS=3D'-g -O0'                              =
-        \
-> +                   DESTDIR=3D$(SCRATCH_DIR) prefix=3D all install_header=
-s
-> +
-> +EXTRA_CLEAN :=3D $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR)
->
-> -EXTRA_CLEAN :=3D $(TEST_CUSTOM_PROGS)
->
-> base-commit: 8bd8dcc5e47f0f9dc40187c3b8b42d992181eee1
-> --
-> 2.37.2
->
