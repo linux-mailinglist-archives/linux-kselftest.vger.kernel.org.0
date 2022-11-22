@@ -2,69 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AD363445D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 20:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA7363451D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 21:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbiKVTKg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 14:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S234498AbiKVUGI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 15:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbiKVTKe (ORCPT
+        with ESMTP id S232491AbiKVUGI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 14:10:34 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59D988FB0
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 11:10:31 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id w4so5790346plp.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 11:10:31 -0800 (PST)
+        Tue, 22 Nov 2022 15:06:08 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEEAA6A3C
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 12:06:06 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id c203so15351784pfc.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 12:06:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=uGHUtHAWGRR/ajwH2L5NwEmousaYIEjpv3fyDpmuNqY=;
-        b=d6+27uddeb3W6hCUrZQF4vcF7TJDQC0YQUqoCXpyPCrqLYZqBl9pCHeFvy1B7DND0c
-         UVDvikQRdBx1iFMV2KFv5jpdBmj61MD82pN3TzKYZRabMQaGZoyZhxbpK109w0J++fOn
-         rXkdAhCx3kzOh3VY7zLdjaH8Zgp/lV4nv5ySf8Xm1QDYD5xbxN4L2QJ92A93ZkTbrED8
-         2aHi8XnaFe8f2cG7Z2VNfeVKs/hd+d6DjViDUvUJda/IVvMlDQTMnkZn1cFdM2PUllWc
-         RdbBED/XtVx66dUZgow3aTTAVBDIhH1XXtt2A7dXXHYQCLJo7wJW83Syv0iTAIMh9oy2
-         iFZw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Io17PfAc29uMBTDjrTmJ5rXTcrZmlMcBL16ZnrS2meo=;
+        b=hHkNHJ/TI/YGsTG53S+HMqoROlVIKOwZsl14RkYHb/axOVov+sxaZzLDJxKTQAicgz
+         DnUvDSz/LYvuwpqDypPY5xuCrTyR3FARTgb2OHlJWNzg8glI59NbKWLKKxwFJ7dUrZM2
+         vDFAW0JguDNs9DJGj+Pw2NVYlMb8+vBMdAkcmw2nHjjEdbb2CwWrYYseqrvO5lutn2Zz
+         phIuOZFEjhKDwiSOkBjbuOu5bXSo2g4QROYSGY6VFLtXuNfp9+hgOSTV3GbDs4xzh/3/
+         Cxb9dc6kWgnbtS+mPiwAQlsDNvuGbgy4+a01De97Oe607lp5StdrJWuhQQrRqqXxvYZ2
+         IE4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uGHUtHAWGRR/ajwH2L5NwEmousaYIEjpv3fyDpmuNqY=;
-        b=0Y/wWhnHb9/08Mfgj5My+kB8l1yrN3zeEFaaFuDs9Y+GpvJtb0KLXzcE1ivy3B14kF
-         iYtY6uAGIRCjfQIyN0iY4qEsciu+GGRF1z4+LBzO/N3eb3h6rFOR0XWFyzxp2mDqGNtw
-         kM0eHlz7d8ORVlLsxSbfOid6mKo0FEgujb73c1VEyZRl+MDtmIoD3DV1qtHxiqfnnsjX
-         5aryeoMaifG/9VVNgafFZRdAtU200P2D8uLCFNb1IDQat4sb2GjVc0wO7PRDgerc6OQn
-         ouD6ripHc1lqhJgo9FzhhlxbNlazlU3X2/TWtQz0bTetI/HWRVHD1GRIpkJCpV6zk2Wu
-         eKdA==
-X-Gm-Message-State: ANoB5pnOdolVqsEbBp7XCSDbNiebWRxMlWAmYTSuVTG+UtpGd7QBAa6W
-        pPh1GcWidaUaka08lc16P1tJzw==
-X-Google-Smtp-Source: AA0mqf69qx3dv7SKizMJz0VWB9v+OHVo/Zo+o7ZVGKWdgd76Dp9MoMbRrrR+xz+UFBj1Wh8h54wAlw==
-X-Received: by 2002:a17:902:e149:b0:186:9295:2012 with SMTP id d9-20020a170902e14900b0018692952012mr10421918pla.19.1669144231315;
-        Tue, 22 Nov 2022 11:10:31 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f7-20020aa79d87000000b00560cdb3784bsm10985644pfq.60.2022.11.22.11.10.29
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Io17PfAc29uMBTDjrTmJ5rXTcrZmlMcBL16ZnrS2meo=;
+        b=BX6UYACntg0cJLVw7aXD9kH8lMMfa4wZz0kxXxmMfhOyFMfyGfRiA4gkmO1aF0zUCg
+         1j6XYFnfMVKyt8NaaggmT/UvfbP04NGpH7FbslNWTk9V1yFSE1mzkEJ9ZhF4Y+bZ89SL
+         /fc/UuRznzVzwGXk4E1NhYrAuWfCB7Q24cHc5SCxvh8y6/dlTw9V26TQnZ+U128SykU8
+         0qtEAeBYxcbqa6GuZapfga6v2xwry99ge1y6xgne4/tIoAqi0BRR7WTU3upuFc+iYCD/
+         1sOC0TULTH24rlb2aESzn0dXLwTs/kVPWrcVJBYW+BVECE3oeZZNIzoQH4B445xnTFfj
+         ev8Q==
+X-Gm-Message-State: ANoB5pkdb5hCQ4hOhEmSo/qU5CVJfdpLFIr4/9k3hizcPhVvSpRgX78J
+        MZ0updV5dgo/dWhZsNBAuID6MQ==
+X-Google-Smtp-Source: AA0mqf6Ev2gBqgfT1KuMwfcbFwlKgouzc+D/Ubel+TnlBZCJDAc0UwpNtCkUO1EgvUDhY/hFnR/QWw==
+X-Received: by 2002:a63:e547:0:b0:473:e2bb:7fc7 with SMTP id z7-20020a63e547000000b00473e2bb7fc7mr4901625pgj.40.1669147565800;
+        Tue, 22 Nov 2022 12:06:05 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i18-20020a056a00005200b0056f0753390csm11376369pfk.96.2022.11.22.12.06.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 11:10:30 -0800 (PST)
-Message-ID: <637d1ea6.a70a0220.775c7.0f96@mx.google.com>
-Date:   Tue, 22 Nov 2022 11:10:30 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 22 Nov 2022 12:06:05 -0800 (PST)
+Date:   Tue, 22 Nov 2022 20:06:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, diviness@google.com,
+        maz@kernel.org, dmatlack@google.com, axelrasmussen@google.com,
+        maciej.szmigiero@oracle.com, mizhang@google.com,
+        bgardon@google.com, ackerleytng@google.com
+Subject: Re: [V1 PATCH 1/6] KVM: x86: Add support for testing private memory
+Message-ID: <Y30rqWwDRbH7nQaQ@google.com>
+References: <20221111014244.1714148-1-vannapurve@google.com>
+ <20221111014244.1714148-2-vannapurve@google.com>
+ <20221122100705.GA619277@chaop.bj.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.1-rc1-18-gc93924267fe6f
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-seccomp: 5 runs,
- 4 regressions (v6.1-rc1-18-gc93924267fe6f)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221122100705.GA619277@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,175 +91,80 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 5 runs, 4 regressions (v6.1-rc1-18-gc9392=
-4267fe6f)
+On Tue, Nov 22, 2022, Chao Peng wrote:
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 10017a9f26ee..b3118d00b284 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -4280,6 +4280,10 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> >  
+> >  	fault->gfn = fault->addr >> PAGE_SHIFT;
+> >  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
+> > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING
+> > +	fault->is_private = kvm_slot_can_be_private(fault->slot) &&
+> > +			kvm_mem_is_private(vcpu->kvm, fault->gfn);
+> > +#endif
+> >  
+> >  	if (page_fault_handle_page_track(vcpu, fault))
+> >  		return RET_PF_EMULATE;
+> > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> > index 5cdff5ca546c..2e759f39c2c5 100644
+> > --- a/arch/x86/kvm/mmu/mmu_internal.h
+> > +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> > @@ -188,7 +188,6 @@ struct kvm_page_fault {
+> >  
+> >  	/* Derived from mmu and global state.  */
+> >  	const bool is_tdp;
+> > -	const bool is_private;
+> >  	const bool nx_huge_page_workaround_enabled;
+> >  
+> >  	/*
+> > @@ -221,6 +220,9 @@ struct kvm_page_fault {
+> >  	/* The memslot containing gfn. May be NULL. */
+> >  	struct kvm_memory_slot *slot;
+> >  
+> > +	/* Derived from encryption bits of the faulting GPA for CVMs. */
+> > +	bool is_private;
+> 
+> Either we can wrap it with the CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING or if
+> it looks ugly I can remove the "const" in my code.
 
-Regressions Summary
--------------------
+Hmm, I think we can keep the const.  Similar to the bug in kvm_faultin_pfn()[*],
+the kvm_slot_can_be_private() is bogus.  A fault should be considered private if
+it's marked as private, whether or not userspace has configured the slot to be
+private is irrelevant.  I.e. the xarray is the single source of truth, memslots
+are just plumbing.
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+Then kvm_mmu_do_page_fault() can do something like:
 
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+index dbaf6755c5a7..456a9daa36e5 100644
+--- a/arch/x86/kvm/mmu/mmu_internal.h
++++ b/arch/x86/kvm/mmu/mmu_internal.h
+@@ -260,6 +260,8 @@ enum {
+ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+                                        u32 err, bool prefetch)
+ {
++       bool is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault);
++
+        struct kvm_page_fault fault = {
+                .addr = cr2_or_gpa,
+                .error_code = err,
+@@ -269,13 +271,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+                .rsvd = err & PFERR_RSVD_MASK,
+                .user = err & PFERR_USER_MASK,
+                .prefetch = prefetch,
+-               .is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
++               .is_tdp = is_tdp,
+                .nx_huge_page_workaround_enabled =
+                        is_nx_huge_page_enabled(vcpu->kvm),
+ 
+                .max_level = KVM_MAX_HUGEPAGE_LEVEL,
+                .req_level = PG_LEVEL_4K,
+                .goal_level = PG_LEVEL_4K,
++               .private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
++                          kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
+        };
+        int r;
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
--rc1-18-gc93924267fe6f/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.1-rc1-18-gc93924267fe6f
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      c93924267fe6f2b44af1849f714ae9cd8117a9cd =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/637d14da1dd2561a012abd19
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.4)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-18-gc9=
-3924267fe6f/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabo=
-ra/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-18-gc9=
-3924267fe6f/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabo=
-ra/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221107.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/637d14da1dd2=
-561a012abd1a
-        failing since 35 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/637d120b4f7f14cb362abd05
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-18-gc9=
-3924267fe6f/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-18-gc9=
-3924267fe6f/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221107.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/637d120b4f7f=
-14cb362abd06
-        failing since 35 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/637d1202ebece51da22abd01
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.4)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-18-gc9=
-3924267fe6f/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabo=
-ra/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-18-gc9=
-3924267fe6f/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabo=
-ra/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221107.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/637d1202ebec=
-e51da22abd02
-        failing since 35 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/637d107cd1d6e739e32abcff
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-18-gc9=
-3924267fe6f/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-18-gc9=
-3924267fe6f/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora=
-/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221107.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/637d107cd1d6=
-e739e32abd00
-        failing since 35 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =20
+[*] https://lore.kernel.org/all/Y3Vgc5KrNRA8r6vh@google.com
