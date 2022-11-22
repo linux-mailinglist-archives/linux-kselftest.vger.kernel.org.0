@@ -2,71 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CCE634247
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 18:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10F2634289
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 18:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiKVRO4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 12:14:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S234504AbiKVReB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 12:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbiKVRO4 (ORCPT
+        with ESMTP id S234515AbiKVRdq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 12:14:56 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0275729BD
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 09:14:54 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3a4c2c83300so54924167b3.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 09:14:54 -0800 (PST)
+        Tue, 22 Nov 2022 12:33:46 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F297CB84
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 09:33:37 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id h7so9960238qvs.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 09:33:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Trw6pRag45zh7xbBzKuk9eUIAumLjV1FB/I5WWUMeXc=;
-        b=AJOsT7QLtuXDOuqy8Nd0IGY7ZchJBpJoPvWh9Vj61PSLn6YqfZr843CbYEjqCXumYy
-         dLBBDwqSL0uccXO8vUb4PtIE2gttVA6O8zx5TTZ9r5LikYoQkKw1la+JO08szC3HK4Yy
-         yFdEUjvlTsyRoNvmp5qFe8kHanUkkAh70rHNjqUaAxmzWHD+89FucUS22ae6nfITrfr6
-         txyfXpjPfdRBwebcTlBBIFyVRQX5VyCw18U9e5nb45jhFYFgljqjpSQHAi6JtUDKlHSJ
-         zU+gIisrqVQ9gVvfPpgdRcwB9vQ9W54orXzvWCm+XK1pw3HC+Qy4GDzWfY9RMX3V2sxg
-         0+5Q==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y0TG7RSDJLBsFmv13T+kVLFnKE/Gs/+y0yFrl/WZR6s=;
+        b=L0dZyDnVDHFIaOItmPGH7qgeLVW0usPCwRH/4nTimj8Xh9l2UXEZKNFm/ei9gDcq24
+         Pk3u7Gq7lJi0kmr8z8NjnWgqP5s/GTGAjlS5nF3Rg8c28BPysVoaAoT/SPX3zkQcRIfE
+         uip9ptnbHvWOX/Zei2bksChNqBhHUUkmXbxVE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Trw6pRag45zh7xbBzKuk9eUIAumLjV1FB/I5WWUMeXc=;
-        b=NL44evswEpsWEgUwexQjZIQwZZfdOcNBa6/9Pcvgv4V1my+GvY6gUGQZO7lJsZQQit
-         NJITUhfBYKP2pacmPvJA4KkBQEXdBuHzFxE7Gp6t8emLvvRhFHmRy86UQjFAiC8jfwkY
-         QSTlfBr9j0Hf/nRbtKsft+Yg5yaU4Yy9gOuYumkU5Z9e45/THywZ22W5/FhLl0oZnZUt
-         +JxYfHN3RpNe0bCgPvP1Us0LSjysRF5tq89fvQGrF7Y3w9dPxuAvDjzqtEfFoGswEMD/
-         sgLCpnfLYlAwLSrNHPlOhW9HN6YIez8zeU/CvFKepNwWZ3FgRFu7wsofbASDVxd+A0Kp
-         AlUA==
-X-Gm-Message-State: ANoB5pl+SKS+ENRMIpwb1ZSnPCek7BSgeemSBy6muDT4XpmhVpl9dRY7
-        145P69Vi1YAlqxWt9XIPfmLY70prAzdHclTZiuYrWQ==
-X-Google-Smtp-Source: AA0mqf6oO1oQ43wqxjCiE8z46ZjJMYHiF0pORLs1DGtEER+w3Lkn9AfI1AOxTLN0CLxS1gKZ3D/+ojACQvYkZgRs7vs=
-X-Received: by 2002:a0d:dc05:0:b0:36a:bc93:587c with SMTP id
- f5-20020a0ddc05000000b0036abc93587cmr23162179ywe.59.1669137293721; Tue, 22
- Nov 2022 09:14:53 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y0TG7RSDJLBsFmv13T+kVLFnKE/Gs/+y0yFrl/WZR6s=;
+        b=Za7dLzb9mQMITiD2fheJDeM9KnbKhm8dmYS2DLHhfEBei3vn5Y9DQ1fKE/H7L1AGaJ
+         qV5jRWGi/wcs6MxruaVX2IY/puUWBgJRs+S0/2mHFTN/VwMP8BvxGdnw01y1YVQRyvcX
+         HOapJyoLVQtwqt31xWzKpk8MiKRKLVUppynKyHRR03rsHUJoEargY4MB6PGpnBQTRLrp
+         YuayCOpkqyCBKrHj/FERhXLoTReyDQ1yQVOGL83cQDB1+z2/gU2phDbKZ98i7dh3lbg2
+         GMltn83jlBlWXaKEZ4SwErPYJYOHx53rySNNvwpYRiTQbjgZ9FrScZKGSiMAXmIt/gzQ
+         eu3g==
+X-Gm-Message-State: ANoB5pl2F/sjJ7wNwX6fcPEwPBLQkxHGeTs8V1DshdeeWXbvhiRO3Cor
+        xsxpwyn3d87jEDbCq25O/2zoZTn82YPF5g==
+X-Google-Smtp-Source: AA0mqf6Gnosc4XbRizCI2uO72Y/cfpCDvpm9WnA3CXBKjVurbd86lrXzQGo+CBeVaR9tFaHOny4IOQ==
+X-Received: by 2002:a0c:ef01:0:b0:4bb:d6bc:be1c with SMTP id t1-20020a0cef01000000b004bbd6bcbe1cmr4759970qvr.82.1669138416033;
+        Tue, 22 Nov 2022 09:33:36 -0800 (PST)
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com. [209.85.222.182])
+        by smtp.gmail.com with ESMTPSA id r13-20020a05620a298d00b006eee3a09ff3sm10611863qkp.69.2022.11.22.09.33.32
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 09:33:33 -0800 (PST)
+Received: by mail-qk1-f182.google.com with SMTP id v8so10747336qkg.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 09:33:32 -0800 (PST)
+X-Received: by 2002:a05:620a:1fa:b0:6ee:24d5:b8fc with SMTP id
+ x26-20020a05620a01fa00b006ee24d5b8fcmr21656006qkn.336.1669138412298; Tue, 22
+ Nov 2022 09:33:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
- <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com>
-In-Reply-To: <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 22 Nov 2022 09:14:42 -0800
-Message-ID: <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-        davidgow@google.com, skhan@linuxfoundation.org,
-        mauro.chehab@linux.intel.com, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        isabbasso@riseup.net
+References: <20221107161740.144456-1-david@redhat.com> <20221107161740.144456-17-david@redhat.com>
+ <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com> <6175d780-3307-854c-448a-8e6c7ad0772c@xs4all.nl>
+In-Reply-To: <6175d780-3307-854c-448a-8e6c7ad0772c@xs4all.nl>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 22 Nov 2022 09:33:16 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh0nuSn=zYB1z9bHXJRPi33mmbpv-Z6z7ARkHQupbQ3fQ@mail.gmail.com>
+Message-ID: <CAHk-=wh0nuSn=zYB1z9bHXJRPi33mmbpv-Z6z7ARkHQupbQ3fQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 16/19] mm/frame-vector: remove FOLL_FORCE usage
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,100 +97,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 1:17 AM Anders Roxell <anders.roxell@linaro.org> wr=
-ote:
+On Tue, Nov 22, 2022 at 4:25 AM Hans Verkuil <hverkuil@xs4all.nl> wrote:
 >
-> On Mon, 21 Nov 2022 at 19:48, Rae Moar <rmoar@google.com> wrote:
-> >
-> > Change KUnit test output to better comply with KTAP v1 specifications
-> > found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
-> > 1) Use "KTAP version 1" instead of "TAP version 14" as test output head=
-er
-> > 2) Remove '-' between test number and test name on test result lines
-> > 2) Add KTAP version lines to each subtest header as well
-> >
-> > Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=
-=80=9D line now
-> > located after the KTAP version line. This does not completely match the
-> > KTAP v1 spec but since it is classified as a diagnostic line, it is not
-> > expected to be disruptive or break any existing parsers. This
-> > =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
-> > (https://testanything.org/tap-version-14-specification.html)
-> > and it is used to define the test name before the results.
-> >
-> > Original output:
-> >
-> >  TAP version 14
-> >  1..1
-> >    # Subtest: kunit-test-suite
-> >    1..3
-> >    ok 1 - kunit_test_1
-> >    ok 2 - kunit_test_2
-> >    ok 3 - kunit_test_3
-> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
-> >  # Totals: pass:3 fail:0 skip:0 total:3
-> >  ok 1 - kunit-test-suite
-> >
-> > New output:
-> >
-> >  KTAP version 1
-> >  1..1
-> >    KTAP version 1
-> >    # Subtest: kunit-test-suite
-> >    1..3
-> >    ok 1 kunit_test_1
-> >    ok 2 kunit_test_2
-> >    ok 3 kunit_test_3
-> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
-> >  # Totals: pass:3 fail:0 skip:0 total:3
-> >  ok 1 kunit-test-suite
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > Reviewed-by: Daniel Latypov <dlatypov@google.com>
-> > Reviewed-by: David Gow <davidgow@google.com>
->
-> I tried this patch, see the full boot log [1] and I can still see some
->  tests that output the "old" format with 'ok 1 - kunit_test_1', for examp=
-le
->
-> ok 1 - 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
->
-> Isn't this something that should be converted too?
+> I tracked the use of 'force' all the way back to the first git commit
+> (2.6.12-rc1) in the very old video-buf.c. So it is very, very old and the
+> reason is lost in the mists of time.
 
-Yes, thanks for catching that.
-That's what I get from only looking over the diff this time since I
-thought I remembered the code...
+Well, not entirely.
 
-We also want this diff to fix a) debugfs, b) subtests.
+For archaeology reasons, I went back to the old BK history, which
+exists as a git conversion in
 
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index 1048ef1b8d6e..de0ee2e03ed6 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file
-*seq, void *v)
-        kunit_suite_for_each_test_case(suite, test_case)
-                debugfs_print_result(seq, suite, test_case);
+    https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/
 
--       seq_printf(seq, "%s %d - %s\n",
-+       seq_printf(seq, "%s %d %s\n",
-                   kunit_status_to_ok_not_ok(success), 1, suite->name);
-        return 0;
- }
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 19344cb501c5..c9d57a1d9524 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -556,7 +556,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+and there you can actually find it.
 
-                                kunit_log(KERN_INFO, &test,
-                                          KUNIT_SUBTEST_INDENT
-KUNIT_SUBTEST_INDENT
--                                         "%s %d - %s",
-+                                         "%s %d %s",
+Not with a lot of explanations, though - it's commit b7649ef789
+("[PATCH] videobuf update"):
 
-kunit_status_to_ok_not_ok(test.status),
-                                          test.param_index + 1, param_desc)=
-;
+    This updates the video-buf.c module (helper module for video buffer
+    management).  Some memory management fixes, also some adaptions to the
+    final v4l2 api.
 
-Daniel
+but it went from
+
+         err = get_user_pages(current,current->mm,
+-                            data, dma->nr_pages,
+-                            rw == READ, 0, /* don't force */
++                            data & PAGE_MASK, dma->nr_pages,
++                            rw == READ, 1, /* force */
+                             dma->pages, NULL);
+
+in that commit.
+
+So it goes back to October 2002.
+
+> Looking at this old LWN article https://lwn.net/Articles/28548/ suggests
+> that it might be related to calling get_user_pages for write buffers
+
+The timing roughly matches.
+
+> I assume that removing FOLL_FORCE from 'FOLL_FORCE|FOLL_WRITE' will still
+> allow drivers to read from the buffer?
+
+The issue with some of the driver hacks has been that
+
+ - they only want to read, and the buffer may be read-only
+
+ - they then used FOLL_WRITE despite that, because they want to break
+COW (due to the issue that David is now fixing with his series)
+
+ - but that means that the VM layer says "nope, you can't write to
+this read-only user mapping"
+
+ - ... and then they use FOLL_FORCE to say "yes, I can".
+
+iOW, the FOLL_FORCE may be entirely due to an (incorrect, but
+historically needed) FOLL_WRITE.
+
+             Linus
