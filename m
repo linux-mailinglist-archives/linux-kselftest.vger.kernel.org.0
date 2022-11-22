@@ -2,111 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517A3633633
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 08:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DB0633638
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 08:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiKVHrQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 02:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
+        id S232535AbiKVHsd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 02:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbiKVHrP (ORCPT
+        with ESMTP id S232312AbiKVHsa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 02:47:15 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E946A31EE5
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 23:47:13 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id s5so19415819edc.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 23:47:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ul05IzRXE61CMlw9KgRAl/R4lzTUkwIwdoW7/jl/bmg=;
-        b=z1p4yL52qJimKHlDFTqIx8/ByXcgJXv5sbBgICTjIH58ocFhfsTim8rmdXBY1bMvNS
-         jX1zGwyAp/zKK8W8Pl4DIAGICAiqwQgGnA/HrrUsRzy8y7Evt1hii84Huz/7IHQAq89T
-         bBogWhFdHWO86kMA2q/MqWn1uzkDwcF+J4DReuRYfzd1Xv1R4wevYMfJGHQBabGwgDdJ
-         3Gl3ULLR1XqjcF1uucCY3PWXtwmwWa2g/RSBhMwO3WEDMHTN3k+EQpixBhDOzvfVcP5s
-         VafZ5xY5kMcVe7J+i/6hq/OQa1qVVt/Wn99pRDE2FdP1lyPJuF1udnAWk41AHoeBKWMS
-         OkPQ==
+        Tue, 22 Nov 2022 02:48:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5250326E0
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 23:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669103243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EOlyqNEjSyWRhu789TgVJBojhnd7QCjs246Hat/OGCs=;
+        b=NDvqtcoxOtHwCgmaQNu4Vy6F5sTGTDQD8pgysZcedFkf6yaOczSN9oDFXDoouaQgdyyGov
+        0BP1mf8NrlajGHmQCt99dPuQH7OkEflijGDE8juFlnRc2RvIjM4t8wnMfXVag8XYVm8Wnx
+        quuvnwG/8S0nCWybtsBNuLYmpnzkXaM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-590-j6Xyyx90NqWvNU0ZwlvZyw-1; Tue, 22 Nov 2022 02:47:21 -0500
+X-MC-Unique: j6Xyyx90NqWvNU0ZwlvZyw-1
+Received: by mail-wm1-f71.google.com with SMTP id h9-20020a1c2109000000b003cfd37aec58so7686829wmh.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 23:47:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ul05IzRXE61CMlw9KgRAl/R4lzTUkwIwdoW7/jl/bmg=;
-        b=5ITQh6cwna2PHr4SnyODd1/ngS2lpiK6KV3WygI6lqq9Us3FIToEY4m+g6Tib+Vzjw
-         6c4KBOPUrn+mjR9IlS6dynQiGpYEv92Lpq6sxRJ+palpcM1utVznAW95rkobaS8acp42
-         kMK2PQlIUYy23wWZDv822t2Mz5IsHuMxcDo2vriy7EzL27v1lIBWK6vjhsD4BDRc3wNW
-         rnGhQcIm0OFXUMl/qhpYe1i4/PzCJTr/96YU8yXUlDFXqkhbBtg125ziHs4bteFcoCYq
-         RNIrOl7e2P5mnBfgY5qKV/COShgSE6I21RIJq+7y+iTog9ZmaZkiv/5jaJ1ATck4CWl+
-         CyCg==
-X-Gm-Message-State: ANoB5pknWx9Y8D6P18vpjq+RcowAkgJarRuxR2Snv+Y1rBPAzxouS7sD
-        DIVWoK7gizod3vGQLg/AM5rwyiH5IP0K69d+dj9qXw==
-X-Google-Smtp-Source: AA0mqf752hh5lxlSa+EctA1AsD03tolBTTp1BxXGpFLiXkmeQTHyJakvrvMeHgnF4Z9nyIQs0T1gg3A0oenRnEDJY1M=
-X-Received: by 2002:aa7:c50b:0:b0:469:d36e:3213 with SMTP id
- o11-20020aa7c50b000000b00469d36e3213mr3660281edq.206.1669103232447; Mon, 21
- Nov 2022 23:47:12 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EOlyqNEjSyWRhu789TgVJBojhnd7QCjs246Hat/OGCs=;
+        b=nglIws9uCO2wk9Df0Gr9hA03tMJczBIQ1c23LPWM9QLcI65JFIFGNCzwjuiQZ4vqde
+         dPSry5iMKh7DmE/MWN2q+ipkVaJ9aVfNSnXfqtuTJkMbVbYvQwE7KHVxZ36r76+GXrOy
+         I1BgBxcn1NDYKFO1uxh5Fee2xYEI42yhzlUPSWxEirU1CDLhc6NeY/jgJkkbtd+A1xYp
+         mj/jpLlFysqyFW+kNaskl+qBoZEoQ6ysYbJw2kAGsz/aNYZrnojSstles59PgEat5IGs
+         826Qt5cGo/P4zYaCefcRKnNKhZnCi9vdNAigoBL65IJyQwwdCguYuihUTHjC03+QyO79
+         Ka1A==
+X-Gm-Message-State: ANoB5plxCLAH91kPYzzu2/S7/4U2e8f7JYi1qhrZWikeaZCIP3jACxl8
+        IznqpxqpA48/8z3llch88KOca8qcx0CkesmXuVQcnm3EtvtIxjKmW7wPVkKGb6BymCd7BDh9QNY
+        Bb/nSmNKnB43Q1i4Eb3BCmq0dxdZn
+X-Received: by 2002:a05:600c:3492:b0:3cf:ad59:1465 with SMTP id a18-20020a05600c349200b003cfad591465mr7757614wmq.12.1669103240155;
+        Mon, 21 Nov 2022 23:47:20 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5qTCZJA4RPHbgTxYLrcLE6vAWROLjIVZidpN6a8sJSfb4cCoT7Ya0f5MC2dVrj3W0Qw/zP0A==
+X-Received: by 2002:a05:600c:3492:b0:3cf:ad59:1465 with SMTP id a18-20020a05600c349200b003cfad591465mr7757600wmq.12.1669103239912;
+        Mon, 21 Nov 2022 23:47:19 -0800 (PST)
+Received: from [192.168.0.5] (ip-109-43-176-72.web.vodafone.de. [109.43.176.72])
+        by smtp.gmail.com with ESMTPSA id 23-20020a05600c229700b003cf75213bb9sm20150358wmf.8.2022.11.21.23.47.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 23:47:19 -0800 (PST)
+Message-ID: <f96b50e2-24ac-4016-d3f1-ffc375516e7c@redhat.com>
+Date:   Tue, 22 Nov 2022 08:47:17 +0100
 MIME-Version: 1.0
-References: <20221119171841.2014936-1-bjorn@kernel.org> <CADYN=9LxMhccyx6wncjO99am7z+8wNWoMzV3DCSyCdJYktGevg@mail.gmail.com>
- <87edtwb6e8.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87edtwb6e8.fsf@all.your.base.are.belong.to.us>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Tue, 22 Nov 2022 08:47:01 +0100
-Message-ID: <CADYN=9JDOBHEgmiWCy_k5sXLizdtRET6-G5_PdZcaOLvSp5vTA@mail.gmail.com>
-Subject: Re: [PATCH net-next] selftests: net: Add cross-compilation support
- for BPF programs
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Lina Wang <lina.wang@mediatek.com>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+References: <20221117221758.66326-1-scgl@linux.ibm.com>
+ <20221117221758.66326-3-scgl@linux.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+Subject: Re: [PATCH v3 2/9] Documentation: KVM: s390: Describe
+ KVM_S390_MEMOP_F_CMPXCHG
+In-Reply-To: <20221117221758.66326-3-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 21 Nov 2022 at 17:48, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrot=
-e:
->
-> Anders Roxell <anders.roxell@linaro.org> writes:
->
-> > On Sat, 19 Nov 2022 at 18:19, Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> =
-wrote:
-> [...]
-> >> Now that BPF builds are starting to show up in more places
-> >> (selftests/net, and soon selftests/hid), maybe it would be cleaner to
-> >> move parts of the BPF builds to lib.mk?
-> >
-> > Yes, since its in tc-testing too.
-> > Maybe thats what we should do already now?
->
-> Ok, so there's three BPF builds, in addition to selftests/bpf. Do you
-> suggest moving (cross-compiled) libbpf builds (for bpf_helpers_defs.h
-> generation) and some kind of clang BPF build-rule to lib.mk?
+On 17/11/2022 23.17, Janis Schoetterl-Glausch wrote:
+> Describe the semantics of the new KVM_S390_MEMOP_F_CMPXCHG flag for
+> absolute vm write memops which allows user space to perform (storage key
+> checked) cmpxchg operations on guest memory.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> ---
+...
+>   Supported flags:
+>     * ``KVM_S390_MEMOP_F_CHECK_ONLY``
+>     * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
+> +  * ``KVM_S390_MEMOP_F_CMPXCHG``
+> +
+> +The semantics of the flags common with logical acesses are as for logical
+> +accesses.
+> +
+> +For write accesses, the KVM_S390_MEMOP_F_CMPXCHG might be supported.
 
-Maybe start with moving the libbpf builds, for build_helpers_defs.h generat=
-ion,
-and 'define get_sys_includes' into the lib.mk ?
+I'd maybe merge this with the last sentence:
 
-> Or would
-> you like more things there, like resolve_btfids?
->
-> I guess this patch could go in regardless, and fix the build *now*, and
-> do a lib.mk thing as a follow-up?
+For write accesses, the KVM_S390_MEMOP_F_CMPXCHG flag is supported if 
+KVM_CAP_S390_MEM_OP_EXTENSION has bit 1 (i.e. bit with value 2) set.
 
-Make sense.
+... and speaking of that, I wonder whether it's maybe a good idea to 
+introduce some #defines for bit 1 / value 2, to avoid the confusion ?
 
-Reviewed-by: Anders Roxell <anders.roxell@linaro.org>
+> +In this case, instead of doing an unconditional write, the access occurs only
+> +if the target location contains the "size" byte long value pointed to by
+> +"old_p". This is performed as an atomic cmpxchg.
 
-Cheers,
-Anders
+I had to read the first sentence twice to understand it ... maybe it's 
+easier to understand if you move the "size" part to the second sentence:
+
+In this case, instead of doing an unconditional write, the access occurs 
+only if the target location contains value pointed to by "old_p". This is 
+performed as an atomic cmpxchg with the length specified by the "size" 
+parameter.
+
+?
+
+> "size" must be a power of two
+> +up to and including 16.
+> +The value at the target location is written to the location "old_p" points to.
+
+IMHO something like this would be better:
+
+The value at the target location is replaced with the value from the 
+location that "old_p" points to.
+
+> +If the exchange did not take place because the target value doesn't match the
+> +old value KVM_S390_MEMOP_R_NO_XCHG is returned.
+> +The KVM_S390_MEMOP_F_CMPXCHG flag is supported if KVM_CAP_S390_MEM_OP_EXTENSION
+> +has bit 1 (i.e. bit with value 2) set.
+
+  Thomas
+
+PS: Please take my suggestions with a grain of salt ... I'm not a native 
+speaker either.
+
