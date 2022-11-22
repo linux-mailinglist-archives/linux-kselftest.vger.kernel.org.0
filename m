@@ -2,66 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C69963335D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 03:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FF26333CB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 04:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbiKVCdo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Nov 2022 21:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
+        id S231500AbiKVDQh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Nov 2022 22:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiKVCdi (ORCPT
+        with ESMTP id S229919AbiKVDQg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Nov 2022 21:33:38 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F5DC6201
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 18:33:35 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id p4so13150848vsa.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 18:33:35 -0800 (PST)
+        Mon, 21 Nov 2022 22:16:36 -0500
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7451FCF0
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 19:16:34 -0800 (PST)
+Received: by mail-vk1-xa2b.google.com with SMTP id v81so6609278vkv.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 19:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rtkq668h4ftwbMxTrB4kyp/qT6Jx6sbbfiXnxcO9+lc=;
-        b=qyB0MfWr2sENR/2PoUdnOVZ5vG3xhBpOSMuW1qE2+9vYL385Z+078XHoZX6eXH6bYj
-         saslb3GQN1NeFmp4USI/iNuMBTrc0TZbr3WpG6ffFWQNjebfvz4N6qqDOLhu73PP/GWO
-         7bdzlXqPq6rPJ1cHOrCxpB1Y57rEpVJnLTF3PxP2L/5YMApok8bKqOghyk2DVosPcph3
-         dCHdlaOZrSlesDDdXAqYUCE8+U/JOFmRub8oMj7gSnTAWDwDhfcypeuuRf3rWh0mpTv1
-         7RR5D/uFfeZwjVwDp8WOwHfCijurUIWXV/DyX41kRYUGSvsaweXl4HN6OrMlJrysd7NX
-         7cww==
+        bh=mdm3PzzRKAM9Eqz/8nQE3adLHrBr0qQUHpfAMLeUVrQ=;
+        b=gXNjLqYyRsOA9aZkvAzXK5hOEBQv7cslnL3WRHMYpDG/GjqZk+V/O+zwzQdWXrH8vP
+         5EhsI5HbfJ2TP5GuecykzptKPUTaIKatCoUIcDUSuPNXgN5+ftZBfswfDfBiUXd1eDmn
+         z5BafhmZ///nm+VVVc78eBneHG5zGHgEbpyUD/Q231H59QczlY45+qOE7qeOglYhh0jP
+         4D3aOzLG9Y8X2PpisAc4sdb8QBzXSmRBvef8pqKkT3CBMTxNmkQbekiO3sHkUDAyA3BK
+         lW2pTWurjtqerzW59z3nNXZiuOk8JCE7NnVcj9yK1T5GMC81F0SCAltBsuOSKpb1qTG6
+         uvHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Rtkq668h4ftwbMxTrB4kyp/qT6Jx6sbbfiXnxcO9+lc=;
-        b=FCWKbYTl2Z2uNevIhQHq1f0lJOG+8ZRnZduZNwrCepcGKSkKROkBOokRHQnFEJ0B4G
-         uLmKnwj5d1BeOt1Wmg3SXZV0QtcGpdGmQupnJLQL2LnRPg/qkrjxHbX3kO8VIb29VwER
-         VcR7nGydp+sp+nn0fkop3f7UR1p0R4Hb+tXWcWioPbH6MlMfHupAPlTn8c8NNNZ5DS5r
-         3d97KUuKY1rBBDUfFX7yU398KmWAdIFK+0JskzeDYvHfq1EJP+Xrn+DhY+2hl9rFEcXK
-         e8FhH0/BBRdLns1SgdViKAr54rEqBAuf8HmqtfntR0baEzON5ol6PBfNPlt37ioXZ8tx
-         +4sQ==
-X-Gm-Message-State: ANoB5plr0XY8IVJr9DQKRr5WqjfJwX940oLABpOlwafqNizu6qvjohwg
-        dQeGIOhVi2NRfNKSK3JBn7je5Fu7j/5sSypEVtZwqQ==
-X-Google-Smtp-Source: AA0mqf5MAfaioZ0EUm0FlE61WLe8ddd8Nf8Kf1FmOcF5K55NOLUo823Awh7r2j31j8xuEXeBuAlOs3MY49XALduv9Tw=
-X-Received: by 2002:a05:6102:2259:b0:3aa:2412:8f8 with SMTP id
- e25-20020a056102225900b003aa241208f8mr2088335vsb.35.1669084414281; Mon, 21
- Nov 2022 18:33:34 -0800 (PST)
+        bh=mdm3PzzRKAM9Eqz/8nQE3adLHrBr0qQUHpfAMLeUVrQ=;
+        b=mHyKb/5RZ2uH/I5jUHuhnxp5tSWBeiFUw1rODhYgmiAtu0hD4NsMdhy9m6fNcNNNdG
+         Egzu1057HkmD/sAyqhF53Sw3bm2+GcCFN1iYDjN/sZwIKl6uYoqZEWu9bK/QP0hjzZjG
+         PqdcVY5/ErQ3VZbrPGtQl/DkQJXz+IkC+Pr8d1kmNtt45521syJ82D1TXetZy8Yz/Uc0
+         CfazXT5PVzv6v8J1Gyi4FLEohbzzPJ1iIIu+lr1csHr1BUFmgRp3Yn4t7yo2LpQEKl8f
+         fty+DhDFQEQXmkJ3r9QR1ZFPmxOu34h47dDUmXRsisdjVKiBhlTsgl3ThIg8Ukze826H
+         Pnhw==
+X-Gm-Message-State: ANoB5pmwuJ4lvA7hRyaIAoYSaGYSb+MGHmpwj7YVWB3jk0+seiL9O1y8
+        GmLYfDBJrsQlNQ9PZ2YXgUwHYKJoijqS+peBicWRew==
+X-Google-Smtp-Source: AA0mqf7i7fdO0g1QCXYVKToJMP19slSxEyxcYGKJ5EuaIYU6dAixRgzNV8uIVMuqe4Oh78YBJNI/VswBMtrr/H75z94=
+X-Received: by 2002:a1f:b247:0:b0:3bb:ea0f:9330 with SMTP id
+ b68-20020a1fb247000000b003bbea0f9330mr1714493vkf.4.1669086993448; Mon, 21 Nov
+ 2022 19:16:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20221119081252.3864249-1-davidgow@google.com> <CAGS_qxqyyH-v4wMJyD1phPP2YA5_6L98C-t4cJtt_SYsSvR3Ag@mail.gmail.com>
-In-Reply-To: <CAGS_qxqyyH-v4wMJyD1phPP2YA5_6L98C-t4cJtt_SYsSvR3Ag@mail.gmail.com>
+References: <20221119081252.3864249-1-davidgow@google.com> <20221119081252.3864249-2-davidgow@google.com>
+ <CAGS_qxqAUiMfKe2ksnqQtyWv0BWYLA4_uGqpu76d=Oh42mAUgQ@mail.gmail.com>
+In-Reply-To: <CAGS_qxqAUiMfKe2ksnqQtyWv0BWYLA4_uGqpu76d=Oh42mAUgQ@mail.gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 22 Nov 2022 10:33:22 +0800
-Message-ID: <CABVgOSnx8s0wL1xYEpwV0+FhyQUhbOVGWWuwpO9rfknSmbhroA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] kunit: Provide a static key to check if KUnit is
- actively running tests
+Date:   Tue, 22 Nov 2022 11:16:21 +0800
+Message-ID: <CABVgOSmfcJLs76efLe1zXgZwrSXrxKCLPAhSyx3P+WEkzZNR3A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kunit: Use the static key when retrieving the
+ current test
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
         Shuah Khan <skhan@linuxfoundation.org>,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sadiya Kazi <sadiyakazi@google.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a1fcf805ee05ff3a"
+        boundary="0000000000005e383a05ee06993c"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -73,59 +76,219 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000a1fcf805ee05ff3a
+--0000000000005e383a05ee06993c
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Nov 22, 2022 at 9:31 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Tue, Nov 22, 2022 at 10:21 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> On Sat, Nov 19, 2022 at 12:13 AM David Gow <davidgow@google.com> wrote:
+> On Sat, Nov 19, 2022 at 12:13 AM 'David Gow' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
 > >
-> > KUnit does a few expensive things when enabled. This hasn't been a
-> > problem because KUnit was only enabled on test kernels, but with a few
-> > people enabling (but not _using_) KUnit on production systems, we need a
-> > runtime way of handling this.
+> > In order to detect if a KUnit test is running, and to access its
+> > context, the 'kunit_test' member of the current task_struct is used.
+> > Usually, this is accessed directly or via the kunit_fail_current_task()
+> > function.
 > >
-> > Provide a 'kunit_running' static key (defaulting to false), which allows
-> > us to hide any KUnit code behind a static branch. This should reduce the
-> > performance impact (on other code) of having KUnit enabled to a single
-> > NOP when no tests are running.
+> > In order to speed up the case where no test is running, add a wrapper,
+> > kunit_get_current_test(), which uses the static key to fail early.
+> > Equally, Speed up kunit_fail_current_test() by using the static key.
 > >
-> > Note that, while it looks unintuitive, tests always run entirely within
-> > __kunit_test_suites_init(), so it's safe to decrement the static key at
-> > the end of this function, rather than in __kunit_test_suites_exit(),
-> > which is only there to clean up results in debugfs.
+> > This should make it convenient for code to call this
+> > unconditionally in fakes or error paths, without worrying that this will
+> > slow the code down significantly.
 > >
+> > If CONFIG_KUNIT=n (or m), this compiles away to nothing. If
+> > CONFIG_KUNIT=y, it will compile down to a NOP (on most architectures) if
+> > no KUnit test is currently running.
+> >
+> > Note that kunit_get_current_test() does not work if KUnit is built as a
+> > module. This mirrors the existing restriction on kunit_fail_current_test().
+> >
+> > Note that the definition of kunit_fail_current_test() still wraps an
+> > empty, inline function if KUnit is not built-in. This is to ensure that
+> > the printf format string __attribute__ will still work.
+> >
+> > Also update the documentation to suggest users use the new
+> > kunit_get_current_test() function, update the example, and to describe
+> > the behaviour when KUnit is disabled better.
+> >
+> > Cc: Jonathan Corbet <corbet@lwn.net>
+> > Cc: Sadiya Kazi <sadiyakazi@google.com>
 > > Signed-off-by: David Gow <davidgow@google.com>
 >
 > Reviewed-by: Daniel Latypov <dlatypov@google.com>
 >
-> I didn't know anything about the static key support in the kernel
-> before this patch.
-> But from what I read and saw of other uses, this looks good to me.
+> Looks good to me, but some small optional nits about the Documentation.
 >
-> One small question/nit about how we declare the key below.
+> I'm a bit sad that the kunit_fail_current_test() macro is now a bit
+> more complicated (has two definitions).
+
+I'm not too happy with it either, but I think it's worth having the
+printf() format string checking, as well as making it possible to
+optimise the call out (without needing LTO), and I can't think of a
+better way of doing that at the moment.
+
+The only other option I can think of would be to have lots of #ifdefs
+for the _contents_ of the functions, and that seemed more ugly to me.
+
+> Optional: perhaps it's long enough now that we should have a comment
+> after the #endif, i.e.
+> #endif   /* IS_BUILTIN(CONFIG_KUNIT) */
 >
+
+Makes sense to me. Will add in v3.
+
 > <snip>
 >
-> > +/* Static key: true if any KUnit tests are currently running */
-> > +extern struct static_key_false kunit_running;
+> >
+> > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+> > index 2737863ef365..e70014b82350 100644
+> > --- a/Documentation/dev-tools/kunit/usage.rst
+> > +++ b/Documentation/dev-tools/kunit/usage.rst
+> > @@ -625,17 +625,21 @@ as shown in next section: *Accessing The Current Test*.
+> >  Accessing The Current Test
+> >  --------------------------
+> >
+> > -In some cases, we need to call test-only code from outside the test file.
+> > -For example, see example in section *Injecting Test-Only Code* or if
+> > -we are providing a fake implementation of an ops struct. Using
+> > -``kunit_test`` field in ``task_struct``, we can access it via
+> > -``current->kunit_test``.
+> > +In some cases, we need to call test-only code from outside the test file,
+> > +for example,  when providing a fake implementation of a function, or to fail
 >
-> Is there any documented preference between this and
->   DECLARE_STATIC_KEY_FALSE(kunit_running);
-> ?
+> nit: there are two spaces after "for example, "
 >
-> I see 89 instances of this macro and 45 of `extern struct static_key_false`.
-> So I'd vote for the macro since it seems like the newer approach and
-> more common.
+> Personal preference: I'd rather keep "For example," as the start of a
+> new sentence.
+>
+> > +any current test from within an error handler.
+
+
+Hmm... I found it a bit ugly to keep "For example" at the start of the
+sentence, as we then have to stick a (possibly duplicated) verb in to
+make it actually a sentence.
+
+How about:
+In some cases, we need to call test-only code from outside the test
+file. For example, this is useful when providing a fake implementation
+of a function, or if we wish to fail the current test from within an
+error handler.
+
+
+> > +We can do this via the ``kunit_test`` field in ``task_struct``, which we can
+> > +access using the ``kunit_get_current_test`` function in ``kunit/test-bug.h``.
+>
+> Personal preference: kunit_get_current_test()
+> IMO that would make it easier to pick up when the reader is quickly
+> scanning over.
 >
 
-Yeah, there was no particular reason I put 'extern struct
-static_key_false'. I'll change it to DECLARE_STATIC_KEY_FALSE in v3.
+Agreed, will fix in v3.
 
-Cheers,
--- David
+> >
+> > -The example below includes how to implement "mocking":
+> > +``kunit_get_current_test`` requires KUnit be built-in to the kernel, i.e.
+> > +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
+> > +or no test is currently running, in which case it will quickly return ``NULL``.
+>
+> I find this sentence a bit confusing.
+>
+> I think it's trying to convey that
+> * it can be called no matter how the kernel is built or what cmdline
+> args are given
+> * but it doesn't work properly for CONFIG_KUNIT=m
+> * for CONFIG_KUNIT=n, it's a static inline func that just returns NULL
+> * when booting with `kunit.enabled=0`, it's fast (thanks to static keys)
+>
 
---000000000000a1fcf805ee05ff3a
+Yeah: that's the goal.
+
+> But the current wording basically says "the func requires
+> CONFIG_KUNIT=y" then says it's safe to call it even if CONFIG_KUNIT=n.
+> It feels a bit whiplashy.
+>
+> Should this be reworded to say the function can be used regardless of
+> whether KUnit is enabled but add a `note` block about how it doesn't
+> properly for CONFIG_KUNIT=m?
+>
+
+How about:
+``kunit_get_current_test()`` is safe to call even if KUnit is not
+enabled. If KUnit is not enabled (or was built as a module), or no
+test is running, it will return NULL.
+
+Or:
+``kunit_get_current_test()`` is always available, but will only return
+a test if KUnit is built-in to the kernel (i.e, CONFIG_KUNIT=y). In
+all other cases, it will return NULL.
+
+We could add a:
+This will compile to either a no-op or a static key, so will have
+negligible performance impact when no test is running.
+
+Thoughts?
+
+Regardless, the plan is to eventually get rid of the restriction with
+modules, so hopefully that part of the awkwardness won't last too
+long.
+
+> > +
+> > +The example below uses this to implement a "mock" implementation of a function, ``foo``:
+> >
+> >  .. code-block:: c
+> >
+> > -       #include <linux/sched.h> /* for current */
+> > +       #include <kunit/test-bug.h> /* for kunit_get_current_test */
+> >
+> >         struct test_data {
+> >                 int foo_result;
+> > @@ -644,7 +648,7 @@ The example below includes how to implement "mocking":
+> >
+> >         static int fake_foo(int arg)
+> >         {
+> > -               struct kunit *test = current->kunit_test;
+> > +               struct kunit *test = kunit_get_current_test();
+> >                 struct test_data *test_data = test->priv;
+> >
+> >                 KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
+> > @@ -675,7 +679,7 @@ Each test can have multiple resources which have string names providing the same
+> >  flexibility as a ``priv`` member, but also, for example, allowing helper
+> >  functions to create resources without conflicting with each other. It is also
+> >  possible to define a clean up function for each resource, making it easy to
+> > -avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/test.rst.
+> > +avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/resource.rst.
+>
+> Oops, thanks for cleaning this up.
+> I guess I forgot to update this when splitting out resource.rst or my
+> change raced with the rewrite of this file.
+>
+> >
+> >  Failing The Current Test
+> >  ------------------------
+> > @@ -703,3 +707,6 @@ structures as shown below:
+> >         static void my_debug_function(void) { }
+> >         #endif
+> >
+> > +Note that ``kunit_fail_current_test`` requires KUnit be built-in to the kernel, i.e.
+> > +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
+> > +or no test is currently running, but will do nothing.
+>
+> This is the same wording as above.
+> I think it's clearer since what it's trying to convey is simpler, so
+> it's probably fine.
+>
+> But if we do end up thinking of a good way to reword the previous bit,
+> we might want to reword it here too.
+
+Yeah: I wrote this one first, then copied it above, so that's why this
+one is a bit simpler. If we come up with something better for the
+first one, we can keep it.
+
+_Maybe_ if we moved things to a .. note block, then we could share
+that between both of these sections, though that has its own issues.
+
+--0000000000005e383a05ee06993c
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -192,14 +355,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC+
-V/umKzg1H9w5g8klSbNB6AdIDLatxCbtpmOmEgN7WTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMjIwMjMzMzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCg
+zPKGUHTJ1x11tMloR3IPm/F719CrRK2Z/NfWWSNe4jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMjIwMzE2MzNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAkp1coe0aJQSC5h/usKny
-1U6iuC+Z2NLK82j+DjWEQ+yIfX2QgtVhP6dr8BAFxMqDKYsw22HnrHy463KDq1o1Lwr4gllvo4GS
-2j8YQ/zaTkm7n44bmWhVI/nC8zyXxLj8xe4aSnuuNLIww3Q4W6LAqQsD70NpzGUwwPQePTSKWNSl
-K/hIgXvjoEmRojhCSHaCjQW8I+zPNJlbIXdJ3tfg9s3jpqqpJqulBk3LoHgoJ1Wo36K18SliXUxY
-78NdiqVbtjr5KoEOiY9W9uiDSnIq/miknyP/Sx1wpSxZI3aIKRQbFTNWe/iZfGZ4GTnlWLw4gin5
-9vkQfritR17Oic2vwQ==
---000000000000a1fcf805ee05ff3a--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAT5da0pA7DGCYtXMzh7s/
+bmJMgfT0UT24Me405XeXMu1qaznpsOgN+ut8NC3K7AIlMWLaqMSktXjdtRBfSSGsFdxp9k+xx1Ke
+8XqjBiED9hLQCVIzuSprw57hSVy5iTnlTlqnuQRFPQvmal2RJ8+mn2R/kD4egBt77qNPvMFSCo28
+/U22wJujzmERc92HjB8c84OVddxtPptfZsIOGsP0vTaZv7vZvkdQxFCu0FIoa61wY5Hm32hi6eSW
+X6aofx5IqmmYk8X7oTSN2S8OlJqv98ZQxBn5uO9637yeZoJM2+3hi1v17lAfvNXTKkYJm4DJ+DoR
+eOghOTzzMXIW2o2v/A==
+--0000000000005e383a05ee06993c--
