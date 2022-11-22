@@ -2,69 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FF26333CB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 04:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE0A6334C9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 06:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiKVDQh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Nov 2022 22:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        id S229750AbiKVFqb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 00:46:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiKVDQg (ORCPT
+        with ESMTP id S229507AbiKVFq2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Nov 2022 22:16:36 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7451FCF0
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 19:16:34 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id v81so6609278vkv.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 19:16:34 -0800 (PST)
+        Tue, 22 Nov 2022 00:46:28 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4201DF2D
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 21:46:26 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id p1so4809750uak.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Nov 2022 21:46:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mdm3PzzRKAM9Eqz/8nQE3adLHrBr0qQUHpfAMLeUVrQ=;
-        b=gXNjLqYyRsOA9aZkvAzXK5hOEBQv7cslnL3WRHMYpDG/GjqZk+V/O+zwzQdWXrH8vP
-         5EhsI5HbfJ2TP5GuecykzptKPUTaIKatCoUIcDUSuPNXgN5+ftZBfswfDfBiUXd1eDmn
-         z5BafhmZ///nm+VVVc78eBneHG5zGHgEbpyUD/Q231H59QczlY45+qOE7qeOglYhh0jP
-         4D3aOzLG9Y8X2PpisAc4sdb8QBzXSmRBvef8pqKkT3CBMTxNmkQbekiO3sHkUDAyA3BK
-         lW2pTWurjtqerzW59z3nNXZiuOk8JCE7NnVcj9yK1T5GMC81F0SCAltBsuOSKpb1qTG6
-         uvHA==
+        bh=yJubHHDT2wIZmk2KamFcNQVUSb8Q68mzgR6kdY9BlRY=;
+        b=Dhi5UfxyzZc9h+PmTAjB+KaqBuZh79lvHPAIQ3TnAqFxVaBjvRU6wA1y+hR3XgTIJb
+         8SpTS+oRXu7mgbItHJovmHmix6eMflHjUKbMLBqk4lEZJ7iNWX9k2pdPpHhQJd7E1jSc
+         DB2QNIDcsh1SAgD9jhs5Acfw7I+l3LuKVJY7VsjPU0vYqCpab1I2RLXPQeDekFtHEEm+
+         HcNoCaFMgUDfh0zYkT2rnYYhFc8tORMgpQk03QozdOdVUHasg1h7JY0VMrFdbawkp6dm
+         WrmNuCMLLUsn//243RcO9pntnQM/wtkomVhjKGARBQPMPJTdd27IxOQABw35wLOYcvZx
+         Atmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mdm3PzzRKAM9Eqz/8nQE3adLHrBr0qQUHpfAMLeUVrQ=;
-        b=mHyKb/5RZ2uH/I5jUHuhnxp5tSWBeiFUw1rODhYgmiAtu0hD4NsMdhy9m6fNcNNNdG
-         Egzu1057HkmD/sAyqhF53Sw3bm2+GcCFN1iYDjN/sZwIKl6uYoqZEWu9bK/QP0hjzZjG
-         PqdcVY5/ErQ3VZbrPGtQl/DkQJXz+IkC+Pr8d1kmNtt45521syJ82D1TXetZy8Yz/Uc0
-         CfazXT5PVzv6v8J1Gyi4FLEohbzzPJ1iIIu+lr1csHr1BUFmgRp3Yn4t7yo2LpQEKl8f
-         fty+DhDFQEQXmkJ3r9QR1ZFPmxOu34h47dDUmXRsisdjVKiBhlTsgl3ThIg8Ukze826H
-         Pnhw==
-X-Gm-Message-State: ANoB5pmwuJ4lvA7hRyaIAoYSaGYSb+MGHmpwj7YVWB3jk0+seiL9O1y8
-        GmLYfDBJrsQlNQ9PZ2YXgUwHYKJoijqS+peBicWRew==
-X-Google-Smtp-Source: AA0mqf7i7fdO0g1QCXYVKToJMP19slSxEyxcYGKJ5EuaIYU6dAixRgzNV8uIVMuqe4Oh78YBJNI/VswBMtrr/H75z94=
-X-Received: by 2002:a1f:b247:0:b0:3bb:ea0f:9330 with SMTP id
- b68-20020a1fb247000000b003bbea0f9330mr1714493vkf.4.1669086993448; Mon, 21 Nov
- 2022 19:16:33 -0800 (PST)
+        bh=yJubHHDT2wIZmk2KamFcNQVUSb8Q68mzgR6kdY9BlRY=;
+        b=CsK/fjBzpNTf1YqGLm16Cm0dnd4/cP3nCi/78KBVASxlRvTQf/ox2803Cr6YMOh91M
+         si138ir/FM82NkG8YvUPwonIC0sBL3uwStr2t3nTlgOtxmYDUaPFekiZpgLluXvTv05C
+         9AOt7ew12cgiXskrBbUq0oiEEyq4QvD/3+4z50F+mI4PTmBnjVcp9UptMOYAoKkEdbF3
+         BGmHeeXaNtwg7AJkgQikACva1Z6aIterL2G69V27WiRdUu1lbLK0h3bkKiqmeZr2/2OP
+         67kCYEatiRsYGfBZO7ernMafEd3JYDHr1GBu3G/bXSmfvOVHCpBS+9Tdnhpq8x/zuP87
+         7JWA==
+X-Gm-Message-State: ANoB5plEQYCoQs1cPyLEnfUW+X1YJ/H3EerfZQ4LvCK6k5emmBfU3nI4
+        CB4/55Cu57YwzDFf+QsDdG1fyi91xsdjvsX5/6YfhA==
+X-Google-Smtp-Source: AA0mqf4hVwUCeIVTvspwEfs5b6ir6LVKvghxEwUux372jf7Pmixuhohc0R2cXLWoOma/Vrkn4J9a9BYb7nLJJ9Npnlk=
+X-Received: by 2002:ab0:1e4a:0:b0:418:ba6a:523e with SMTP id
+ n10-20020ab01e4a000000b00418ba6a523emr6724484uak.26.1669095985922; Mon, 21
+ Nov 2022 21:46:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20221119081252.3864249-1-davidgow@google.com> <20221119081252.3864249-2-davidgow@google.com>
- <CAGS_qxqAUiMfKe2ksnqQtyWv0BWYLA4_uGqpu76d=Oh42mAUgQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxqAUiMfKe2ksnqQtyWv0BWYLA4_uGqpu76d=Oh42mAUgQ@mail.gmail.com>
+References: <20221121195526.425882-1-dlatypov@google.com>
+In-Reply-To: <20221121195526.425882-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 22 Nov 2022 11:16:21 +0800
-Message-ID: <CABVgOSmfcJLs76efLe1zXgZwrSXrxKCLPAhSyx3P+WEkzZNR3A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] kunit: Use the static key when retrieving the
- current test
+Date:   Tue, 22 Nov 2022 13:46:14 +0800
+Message-ID: <CABVgOSmh2x-Bf=Ts3AHiNAuOfHQV=ECiFhm2yFfOyJtidVt5ig@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: make --json do nothing if --raw_ouput is set
 To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sadiya Kazi <sadiyakazi@google.com>
+Cc:     brendanhiggins@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005e383a05ee06993c"
+        boundary="0000000000005b7d1305ee08b17d"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -76,219 +70,133 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000005e383a05ee06993c
+--0000000000005b7d1305ee08b17d
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Nov 22, 2022 at 10:21 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Tue, Nov 22, 2022 at 3:55 AM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> On Sat, Nov 19, 2022 at 12:13 AM 'David Gow' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > In order to detect if a KUnit test is running, and to access its
-> > context, the 'kunit_test' member of the current task_struct is used.
-> > Usually, this is accessed directly or via the kunit_fail_current_task()
-> > function.
-> >
-> > In order to speed up the case where no test is running, add a wrapper,
-> > kunit_get_current_test(), which uses the static key to fail early.
-> > Equally, Speed up kunit_fail_current_test() by using the static key.
-> >
-> > This should make it convenient for code to call this
-> > unconditionally in fakes or error paths, without worrying that this will
-> > slow the code down significantly.
-> >
-> > If CONFIG_KUNIT=n (or m), this compiles away to nothing. If
-> > CONFIG_KUNIT=y, it will compile down to a NOP (on most architectures) if
-> > no KUnit test is currently running.
-> >
-> > Note that kunit_get_current_test() does not work if KUnit is built as a
-> > module. This mirrors the existing restriction on kunit_fail_current_test().
-> >
-> > Note that the definition of kunit_fail_current_test() still wraps an
-> > empty, inline function if KUnit is not built-in. This is to ensure that
-> > the printf format string __attribute__ will still work.
-> >
-> > Also update the documentation to suggest users use the new
-> > kunit_get_current_test() function, update the example, and to describe
-> > the behaviour when KUnit is disabled better.
-> >
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > Cc: Sadiya Kazi <sadiyakazi@google.com>
-> > Signed-off-by: David Gow <davidgow@google.com>
+> When --raw_output is set (to any value), we don't actually parse the
+> test results. So asking to print the test results as json doesn't make
+> sense.
 >
-> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> We internally create a fake test with one passing subtest, so --json
+> would actually print out something misleading.
 >
-> Looks good to me, but some small optional nits about the Documentation.
+> This patch:
+> * Rewords the flag descriptions so hopefully this is more obvious.
+> * Also updates --raw_output's description to note the default behavior
+>   is to print out only "KUnit" results (actually any KTAP results)
+> * also renames and refactors some related logic for clarity (e.g.
+>   test_result => test, it's a kunit_parser.Test object).
 >
-> I'm a bit sad that the kunit_fail_current_test() macro is now a bit
-> more complicated (has two definitions).
-
-I'm not too happy with it either, but I think it's worth having the
-printf() format string checking, as well as making it possible to
-optimise the call out (without needing LTO), and I can't think of a
-better way of doing that at the moment.
-
-The only other option I can think of would be to have lots of #ifdefs
-for the _contents_ of the functions, and that seemed more ugly to me.
-
-> Optional: perhaps it's long enough now that we should have a comment
-> after the #endif, i.e.
-> #endif   /* IS_BUILTIN(CONFIG_KUNIT) */
+> Notably, this patch does not make it an error to specify --json and
+> --raw_output together. This is an edge case, but I know of at least one
+> wrapper around kunit.py that always sets --json. You'd never be able to
+> use --raw_output with that wrapper.
 >
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Makes sense to me. Will add in v3.
+This seems sensible enough to me (and works fine here).
 
-> <snip>
+I really like the new flag descriptions, too.
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  tools/testing/kunit/kunit.py | 34 ++++++++++++++++++----------------
+>  1 file changed, 18 insertions(+), 16 deletions(-)
 >
-> >
-> > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> > index 2737863ef365..e70014b82350 100644
-> > --- a/Documentation/dev-tools/kunit/usage.rst
-> > +++ b/Documentation/dev-tools/kunit/usage.rst
-> > @@ -625,17 +625,21 @@ as shown in next section: *Accessing The Current Test*.
-> >  Accessing The Current Test
-> >  --------------------------
-> >
-> > -In some cases, we need to call test-only code from outside the test file.
-> > -For example, see example in section *Injecting Test-Only Code* or if
-> > -we are providing a fake implementation of an ops struct. Using
-> > -``kunit_test`` field in ``task_struct``, we can access it via
-> > -``current->kunit_test``.
-> > +In some cases, we need to call test-only code from outside the test file,
-> > +for example,  when providing a fake implementation of a function, or to fail
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 4d4663fb578b..e7b6549712d6 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -192,12 +192,11 @@ def _map_to_overall_status(test_status: kunit_parser.TestStatus) -> KunitStatus:
+>  def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input_data: Iterable[str]) -> Tuple[KunitResult, kunit_parser.Test]:
+>         parse_start = time.time()
 >
-> nit: there are two spaces after "for example, "
+> -       test_result = kunit_parser.Test()
+> -
+>         if request.raw_output:
+>                 # Treat unparsed results as one passing test.
+> -               test_result.status = kunit_parser.TestStatus.SUCCESS
+> -               test_result.counts.passed = 1
+> +               fake_test = kunit_parser.Test()
+> +               fake_test.status = kunit_parser.TestStatus.SUCCESS
+> +               fake_test.counts.passed = 1
 >
-> Personal preference: I'd rather keep "For example," as the start of a
-> new sentence.
+>                 output: Iterable[str] = input_data
+>                 if request.raw_output == 'all':
+> @@ -206,14 +205,17 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
+>                         output = kunit_parser.extract_tap_lines(output, lstrip=False)
+>                 for line in output:
+>                         print(line.rstrip())
+> +               parse_time = time.time() - parse_start
+> +               return KunitResult(KunitStatus.SUCCESS, parse_time), fake_test
 >
-> > +any current test from within an error handler.
-
-
-Hmm... I found it a bit ugly to keep "For example" at the start of the
-sentence, as we then have to stick a (possibly duplicated) verb in to
-make it actually a sentence.
-
-How about:
-In some cases, we need to call test-only code from outside the test
-file. For example, this is useful when providing a fake implementation
-of a function, or if we wish to fail the current test from within an
-error handler.
-
-
-> > +We can do this via the ``kunit_test`` field in ``task_struct``, which we can
-> > +access using the ``kunit_get_current_test`` function in ``kunit/test-bug.h``.
+> -       else:
+> -               test_result = kunit_parser.parse_run_tests(input_data)
+> -       parse_end = time.time()
+> +
+> +       # Actually parse the test results.
+> +       test = kunit_parser.parse_run_tests(input_data)
+> +       parse_time = time.time() - parse_start
 >
-> Personal preference: kunit_get_current_test()
-> IMO that would make it easier to pick up when the reader is quickly
-> scanning over.
+>         if request.json:
+>                 json_str = kunit_json.get_json_result(
+> -                                       test=test_result,
+> +                                       test=test,
+>                                         metadata=metadata)
+>                 if request.json == 'stdout':
+>                         print(json_str)
+> @@ -223,10 +225,10 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
+>                         stdout.print_with_timestamp("Test results stored in %s" %
+>                                 os.path.abspath(request.json))
 >
-
-Agreed, will fix in v3.
-
-> >
-> > -The example below includes how to implement "mocking":
-> > +``kunit_get_current_test`` requires KUnit be built-in to the kernel, i.e.
-> > +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
-> > +or no test is currently running, in which case it will quickly return ``NULL``.
+> -       if test_result.status != kunit_parser.TestStatus.SUCCESS:
+> -               return KunitResult(KunitStatus.TEST_FAILURE, parse_end - parse_start), test_result
+> +       if test.status != kunit_parser.TestStatus.SUCCESS:
+> +               return KunitResult(KunitStatus.TEST_FAILURE, parse_time), test
 >
-> I find this sentence a bit confusing.
+> -       return KunitResult(KunitStatus.SUCCESS, parse_end - parse_start), test_result
+> +       return KunitResult(KunitStatus.SUCCESS, parse_time), test
 >
-> I think it's trying to convey that
-> * it can be called no matter how the kernel is built or what cmdline
-> args are given
-> * but it doesn't work properly for CONFIG_KUNIT=m
-> * for CONFIG_KUNIT=n, it's a static inline func that just returns NULL
-> * when booting with `kunit.enabled=0`, it's fast (thanks to static keys)
+>  def run_tests(linux: kunit_kernel.LinuxSourceTree,
+>               request: KunitRequest) -> KunitResult:
+> @@ -359,14 +361,14 @@ def add_exec_opts(parser) -> None:
+>                             choices=['suite', 'test'])
 >
-
-Yeah: that's the goal.
-
-> But the current wording basically says "the func requires
-> CONFIG_KUNIT=y" then says it's safe to call it even if CONFIG_KUNIT=n.
-> It feels a bit whiplashy.
+>  def add_parse_opts(parser) -> None:
+> -       parser.add_argument('--raw_output', help='If set don\'t format output from kernel. '
+> -                           'If set to --raw_output=kunit, filters to just KUnit output.',
+> +       parser.add_argument('--raw_output', help='If set don\'t parse output from kernel. '
+> +                           'By default, filters to just KUnit output. Use '
+> +                           '--raw_output=all to show everything',
+>                              type=str, nargs='?', const='all', default=None, choices=['all', 'kunit'])
+>         parser.add_argument('--json',
+>                             nargs='?',
+> -                           help='Stores test results in a JSON, and either '
+> -                           'prints to stdout or saves to file if a '
+> -                           'filename is specified',
+> +                           help='Prints parsed test results as JSON to stdout or a file if '
+> +                           'a filename is specified. Does nothing if --raw_output is set.',
+>                             type=str, const='stdout', default=None, metavar='FILE')
 >
-> Should this be reworded to say the function can be used regardless of
-> whether KUnit is enabled but add a `note` block about how it doesn't
-> properly for CONFIG_KUNIT=m?
 >
-
-How about:
-``kunit_get_current_test()`` is safe to call even if KUnit is not
-enabled. If KUnit is not enabled (or was built as a module), or no
-test is running, it will return NULL.
-
-Or:
-``kunit_get_current_test()`` is always available, but will only return
-a test if KUnit is built-in to the kernel (i.e, CONFIG_KUNIT=y). In
-all other cases, it will return NULL.
-
-We could add a:
-This will compile to either a no-op or a static key, so will have
-negligible performance impact when no test is running.
-
-Thoughts?
-
-Regardless, the plan is to eventually get rid of the restriction with
-modules, so hopefully that part of the awkwardness won't last too
-long.
-
-> > +
-> > +The example below uses this to implement a "mock" implementation of a function, ``foo``:
-> >
-> >  .. code-block:: c
-> >
-> > -       #include <linux/sched.h> /* for current */
-> > +       #include <kunit/test-bug.h> /* for kunit_get_current_test */
-> >
-> >         struct test_data {
-> >                 int foo_result;
-> > @@ -644,7 +648,7 @@ The example below includes how to implement "mocking":
-> >
-> >         static int fake_foo(int arg)
-> >         {
-> > -               struct kunit *test = current->kunit_test;
-> > +               struct kunit *test = kunit_get_current_test();
-> >                 struct test_data *test_data = test->priv;
-> >
-> >                 KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
-> > @@ -675,7 +679,7 @@ Each test can have multiple resources which have string names providing the same
-> >  flexibility as a ``priv`` member, but also, for example, allowing helper
-> >  functions to create resources without conflicting with each other. It is also
-> >  possible to define a clean up function for each resource, making it easy to
-> > -avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/test.rst.
-> > +avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/resource.rst.
 >
-> Oops, thanks for cleaning this up.
-> I guess I forgot to update this when splitting out resource.rst or my
-> change raced with the rewrite of this file.
+> base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
+> --
+> 2.38.1.584.g0f3c55d4c2-goog
 >
-> >
-> >  Failing The Current Test
-> >  ------------------------
-> > @@ -703,3 +707,6 @@ structures as shown below:
-> >         static void my_debug_function(void) { }
-> >         #endif
-> >
-> > +Note that ``kunit_fail_current_test`` requires KUnit be built-in to the kernel, i.e.
-> > +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
-> > +or no test is currently running, but will do nothing.
->
-> This is the same wording as above.
-> I think it's clearer since what it's trying to convey is simpler, so
-> it's probably fine.
->
-> But if we do end up thinking of a good way to reword the previous bit,
-> we might want to reword it here too.
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20221121195526.425882-1-dlatypov%40google.com.
 
-Yeah: I wrote this one first, then copied it above, so that's why this
-one is a bit simpler. If we come up with something better for the
-first one, we can keep it.
-
-_Maybe_ if we moved things to a .. note block, then we could share
-that between both of these sections, though that has its own issues.
-
---0000000000005e383a05ee06993c
+--0000000000005b7d1305ee08b17d
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -355,14 +263,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCg
-zPKGUHTJ1x11tMloR3IPm/F719CrRK2Z/NfWWSNe4jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMjIwMzE2MzNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCe
++JB4r8IHhB3QmD8h6odOkBYliqHgdRnEu7KKF+SMiDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMjIwNTQ2MjZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAT5da0pA7DGCYtXMzh7s/
-bmJMgfT0UT24Me405XeXMu1qaznpsOgN+ut8NC3K7AIlMWLaqMSktXjdtRBfSSGsFdxp9k+xx1Ke
-8XqjBiED9hLQCVIzuSprw57hSVy5iTnlTlqnuQRFPQvmal2RJ8+mn2R/kD4egBt77qNPvMFSCo28
-/U22wJujzmERc92HjB8c84OVddxtPptfZsIOGsP0vTaZv7vZvkdQxFCu0FIoa61wY5Hm32hi6eSW
-X6aofx5IqmmYk8X7oTSN2S8OlJqv98ZQxBn5uO9637yeZoJM2+3hi1v17lAfvNXTKkYJm4DJ+DoR
-eOghOTzzMXIW2o2v/A==
---0000000000005e383a05ee06993c--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAzhSSf5n46dq+TohFfpQC
+B/zugRz45qMItBHKaJ714SJh+Txd+lTgJWywWdMI8Sd2rUwOAu/rrYlyqqRm0MnNmFNeoAC9xrJD
+ZldW3HoluwHsgMXBC1AQ7jplUm4Ke9FD7gPpt9pKMCMYjuKuyO6eNQWUkdQdfN+/3IYjFj9toYa0
+N+HR59GnO4pANDCGBTiltnTPk09nydOeLmk6nRgKd7yFbUFE1bMmzlyw0pWryzLNvxDkxZshFeVZ
+aqX0mVZAZpExSRQiyZQQqj6owj4yEPHdVi1YWi2+IJTmGAnCCBq+Zq155Et2qKnD3t/QHlEsdOOY
+d+hUeKRzq7LAQhCQNA==
+--0000000000005b7d1305ee08b17d--
