@@ -2,90 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C20633CF6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 13:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79AA0633D01
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 14:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232366AbiKVM4L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 07:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S229728AbiKVNAT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 08:00:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiKVMzs (ORCPT
+        with ESMTP id S232252AbiKVNAS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 07:55:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE1961525
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 04:54:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669121694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PfHnKgkTBDMrBm8PUI8Fl6SbsIzlbvafvKcNrxienW8=;
-        b=cBvj2UgwVhJnFL9lTHCldW0JJeOD0hpaEjJlb0NTfW0w61i8fSLB0aZ0vHmWR+1c3teihS
-        1WriykjgMvZqWFt0cMlBeIOqmkVXmflRjKlIqMT10ICNhJ2UJOtT0MIACyIocS1qgWwiWN
-        yWQoZiST/nuezUduRBqDLF+nmIS8r6k=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-613-4MbiyuvsMVirzXNOmt29ZQ-1; Tue, 22 Nov 2022 07:54:53 -0500
-X-MC-Unique: 4MbiyuvsMVirzXNOmt29ZQ-1
-Received: by mail-qv1-f70.google.com with SMTP id og17-20020a056214429100b004c6ae186493so4701497qvb.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 04:54:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PfHnKgkTBDMrBm8PUI8Fl6SbsIzlbvafvKcNrxienW8=;
-        b=EO99alGt52aNix5budW/WNj6DyCt88lX8JstcKK12JSHfjDwea9mwV7LlZx6n6Cnvt
-         fWySTvXbPe+SdoDt/U6jwO5NlAEek1MGcMgCoDNniqrRwlJ29qs+Ev/G/ACMFdlcgSVz
-         pnMkPPVwDlCKEy/oKhT2RY4BGgiUH21hZruv0xnSrnMxXgMooLMsUJiG6b+2XoJ7q8+q
-         UsV3lXEFMNiuzrQyvEAXAg2I8a0lmrO76nvFlflj4+OcZF45tHGhDM5eNgevBEOg4CbF
-         684obRaLfHKq6ZXqUkoCGiHrtQJzA7t6MlUXR63B/Ih3Txg31qSvMb5O66u+IQuFWkVF
-         WRxA==
-X-Gm-Message-State: ANoB5pkmcDWYxo7hlC5Zak1YYXIb8ov+Rs4dLkrILkJDKixKSfqOS/mK
-        Glb3/HM4iN4/mJVRZdY0qaQyIGPyTZaTSJEIrcB1nCJjBeeqzbTxdORCXvKq0ObzXPvlIDT8HdQ
-        1cvklNHmOYu0QHk083kFlAxpAiWS2
-X-Received: by 2002:ac8:5441:0:b0:3a5:7ba9:704f with SMTP id d1-20020ac85441000000b003a57ba9704fmr21993798qtq.331.1669121692384;
-        Tue, 22 Nov 2022 04:54:52 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6sB1UeXO6TfXaiROwERQDrXihHhPOOYXKOffZOZkVabz1mI2VJFjAK1bEaGqc+z6CdzyzfSQ==
-X-Received: by 2002:ac8:5441:0:b0:3a5:7ba9:704f with SMTP id d1-20020ac85441000000b003a57ba9704fmr21993788qtq.331.1669121692163;
-        Tue, 22 Nov 2022 04:54:52 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id z63-20020a37b042000000b006fafaac72a6sm9896291qke.84.2022.11.22.04.54.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 04:54:51 -0800 (PST)
-Message-ID: <ee1de4c0e20d4af6b65b6c209d1e8df6b13812ab.camel@redhat.com>
-Subject: Re: [PATCH net-next] selftests: net: Add cross-compilation support
- for BPF programs
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Cc:     =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Lina Wang <lina.wang@mediatek.com>,
-        linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Date:   Tue, 22 Nov 2022 13:54:48 +0100
-In-Reply-To: <20221119171841.2014936-1-bjorn@kernel.org>
-References: <20221119171841.2014936-1-bjorn@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 22 Nov 2022 08:00:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E6C6204D;
+        Tue, 22 Nov 2022 05:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE88DB81AE1;
+        Tue, 22 Nov 2022 13:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AF5E8C433D6;
+        Tue, 22 Nov 2022 13:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669122015;
+        bh=z0Fco7E4SfXTPOQY+lSeOyP+mLkBQwCTY7p/eqOFDes=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Krbaz0OWc26ozGEo3RbI1KOyoq2Z/CMVI0f/any9WUg2xzpQwSkxWO4i/TX8tcmZE
+         W55cpnszlzHGTy1kEDmt4eShIUcQTb0seph4PyujRJOS+qOFvzwflPaT95R4Kt7JEy
+         OiZtVYa+mH6KqBcOeArJ1LVUk0AWjBthuFHBUzTOZnPsTFUNnNjHlJZpEHOyJkYgVw
+         pC+QYEMphHEIjj2rdHbE2efnhAvf/ZZfRmvW20s7XvTyGHpkRVVOd07OkUv377x9Jt
+         ND8C0132ySGqS0Dz03NuF5zmQel8tde3gTv21zM2pSMh3Zbo1h6POZtjeJz/cH8qOL
+         PFyk3+Gviuqlw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8273CE29F42;
+        Tue, 22 Nov 2022 13:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next] selftests: net: Add cross-compilation support for
+ BPF programs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166912201552.5123.8530809477540331372.git-patchwork-notify@kernel.org>
+Date:   Tue, 22 Nov 2022 13:00:15 +0000
+References: <20221119171841.2014936-1-bjorn@kernel.org>
+In-Reply-To: <20221119171841.2014936-1-bjorn@kernel.org>
+To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@ci.codeaurora.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, bjorn@rivosinc.com,
+        lina.wang@mediatek.com, linux-kselftest@vger.kernel.org,
+        anders.roxell@linaro.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 2022-11-19 at 18:18 +0100, Björn Töpel wrote:
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Sat, 19 Nov 2022 18:18:41 +0100 you wrote:
 > From: Björn Töpel <bjorn@rivosinc.com>
 > 
 > The selftests/net does not have proper cross-compilation support, and
@@ -93,15 +72,15 @@ On Sat, 2022-11-19 at 18:18 +0100, Björn Töpel wrote:
 > build from selftests/bpf, which has the nice side-effect that libbpf
 > is built as well.
 > 
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
-> ---
-> Now that BPF builds are starting to show up in more places
-> (selftests/net, and soon selftests/hid), maybe it would be cleaner to
-> move parts of the BPF builds to lib.mk?
+> [...]
 
-+1 on such follow-up ;)
+Here is the summary with links:
+  - [net-next] selftests: net: Add cross-compilation support for BPF programs
+    https://git.kernel.org/netdev/net-next/c/837a3d66d698
 
-Thanks!
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Paolo
 
