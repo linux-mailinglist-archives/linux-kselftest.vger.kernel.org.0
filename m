@@ -2,114 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBC4633FDB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 16:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59222634055
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 16:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233972AbiKVPHm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 10:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
+        id S234060AbiKVPgf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 10:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234027AbiKVPHc (ORCPT
+        with ESMTP id S234089AbiKVPgF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:07:32 -0500
+        Tue, 22 Nov 2022 10:36:05 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3097A13CF2;
-        Tue, 22 Nov 2022 07:07:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AFA71F03;
+        Tue, 22 Nov 2022 07:35:54 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C75EC21D3E;
-        Tue, 22 Nov 2022 15:07:28 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8357A22007;
+        Tue, 22 Nov 2022 15:35:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669129648;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        t=1669131353; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p56F2nwME/RWURtSP2TSQAQXPWOVxd9VX0H+uS1eGS0=;
-        b=vuXrQNe9cPzsddLz3LepnRY7WjGBC2hwqmeAZKHW2mROYJ+vEC/3MyEuYK6J+FbxDozZEm
-        3segnSrLYCCTBO93SzOf8Ltn3wF/GcoR3rdoo9VdYNi5IePV3twf3X9QV69NrvRNMQYzbP
-        n1lrJXRS3YN9Glh8ZQGjpKAm6Mi0c6E=
+        bh=xzeEtRVGkBValjf4cAqJIIBnm0WLgHIJrOj2Qpyeryk=;
+        b=hSz8uo53GqZkaSBqbG3aIh16lgMQB2Sw8gZ6Z+fnEjIR6uPvpuBuVkR8TpcuCDJwN2rjjn
+        iqJmydTFhzXH0tY5jw9oJ6zK0Sx7/l0zZrHLYI1mzVvp/woqabMd2RthMdqBUz+tckoXxt
+        gvUiGWpp9yM7xLCq0tNctpGuD1es/pI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669129648;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        s=susede2_ed25519; t=1669131353;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=p56F2nwME/RWURtSP2TSQAQXPWOVxd9VX0H+uS1eGS0=;
-        b=GdC4hcnByfHfq5j9HOMxZvYvdEKAheoNPOxrH4K22oVhTseS4ITfKbDFlWzzX1TK2Cjf+X
-        LZVb/9aXKFcYVcAw==
+        bh=xzeEtRVGkBValjf4cAqJIIBnm0WLgHIJrOj2Qpyeryk=;
+        b=87yFyDfodelF6paPP+3fZVkcbfCamfu6aYJAmnQjTNh2RXFp/RQ8a0uSheJsgsaRl+tSbc
+        rgSpbkEWiLk/2KDQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EAD6613B01;
-        Tue, 22 Nov 2022 15:07:26 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E380913B01;
+        Tue, 22 Nov 2022 15:35:52 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id +6QnMq7lfGM6CwAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Tue, 22 Nov 2022 15:07:26 +0000
-Date:   Tue, 22 Nov 2022 16:07:24 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Martin Doucha <mdoucha@suse.cz>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Minchan Kim <minchan@kernel.org>, ltp@lists.linux.it,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Nitin Gupta <ngupta@vflare.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Yang Xu <xuyang2018.jy@fujitsu.com>
-Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
-Message-ID: <Y3zlrBQ8fgJyNm7G@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20221107191136.18048-1-pvorel@suse.cz>
- <Y2l3vJb1y2Jynf50@google.com>
- <3ac740c0-954b-5e68-b413-0adc7bc5a2b5@suse.cz>
- <Y22b3wWs2QfMjJHi@google.com>
- <9489dd1c-012c-8b5d-b670-a27213da287a@suse.cz>
+        id /ANwNljsfGPGGwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 22 Nov 2022 15:35:52 +0000
+Message-ID: <34835490-57d7-4e26-7474-008b2c4c6b39@suse.cz>
+Date:   Tue, 22 Nov 2022 16:35:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9489dd1c-012c-8b5d-b670-a27213da287a@suse.cz>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH mm-unstable v1 08/20] mm: extend FAULT_FLAG_UNSHARE
+ support to anything in a COW mapping
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-9-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221116102659.70287-9-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On 11. 11. 22 1:48, Sergey Senozhatsky wrote:
-> > On (22/11/10 15:29), Martin Doucha wrote:
-> > > I've tried to debug the issue and collected some interesting data (all
-> > > values come from zram device with 25M size limit and zstd compression
-> > > algorithm):
-> > > - mm_stat values are correct after mkfs.vfat:
-> > > 65536      220    65536 26214400    65536        0        0        0
+On 11/16/22 11:26, David Hildenbrand wrote:
+> Extend FAULT_FLAG_UNSHARE to break COW on anything mapped into a
+> COW (i.e., private writable) mapping and adjust the documentation
+> accordingly.
+> 
+> FAULT_FLAG_UNSHARE will now also break COW when encountering the shared
+> zeropage, a pagecache page, a PFNMAP, ... inside a COW mapping, by
+> properly replacing the mapped page/pfn by a private copy (an exclusive
+> anonymous page).
+> 
+> Note that only do_wp_page() needs care: hugetlb_wp() already handles
+> FAULT_FLAG_UNSHARE correctly. wp_huge_pmd()/wp_huge_pud() also handles it
+> correctly, for example, splitting the huge zeropage on FAULT_FLAG_UNSHARE
+> such that we can handle FAULT_FLAG_UNSHARE on the PTE level.
+> 
+> This change is a requirement for reliable long-term R/O pinning in
+> COW mappings.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-> > > - mm_stat values stay correct after mount:
-> > > 65536      220    65536 26214400    65536        0        0        0
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-> > > - the bug is triggered by filling the filesystem to capacity (using dd):
-> > > 4194304        0        0 26214400   327680       64        0        0
+> ---
+>  include/linux/mm_types.h | 8 ++++----
+>  mm/memory.c              | 4 ----
+>  2 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 5e7f4fac1e78..5e9aaad8c7b2 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -1037,9 +1037,9 @@ typedef struct {
+>   * @FAULT_FLAG_REMOTE: The fault is not for current task/mm.
+>   * @FAULT_FLAG_INSTRUCTION: The fault was during an instruction fetch.
+>   * @FAULT_FLAG_INTERRUPTIBLE: The fault can be interrupted by non-fatal signals.
+> - * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to unshare (and mark
+> - *                      exclusive) a possibly shared anonymous page that is
+> - *                      mapped R/O.
+> + * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to break COW in a
+> + *                      COW mapping, making sure that an exclusive anon page is
+> + *                      mapped after the fault.
+>   * @FAULT_FLAG_ORIG_PTE_VALID: whether the fault has vmf->orig_pte cached.
+>   *                        We should only access orig_pte if this flag set.
+>   *
+> @@ -1064,7 +1064,7 @@ typedef struct {
+>   *
+>   * The combination FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE is illegal.
+>   * FAULT_FLAG_UNSHARE is ignored and treated like an ordinary read fault when
+> - * no existing R/O-mapped anonymous page is encountered.
+> + * applied to mappings that are not COW mappings.
+>   */
+>  enum fault_flag {
+>  	FAULT_FLAG_WRITE =		1 << 0,
+> diff --git a/mm/memory.c b/mm/memory.c
+> index d47ad33c6487..56b21ab1e4d2 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3432,10 +3432,6 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>  		}
+>  		wp_page_reuse(vmf);
+>  		return 0;
+> -	} else if (unshare) {
+> -		/* No anonymous page -> nothing to do. */
+> -		pte_unmap_unlock(vmf->pte, vmf->ptl);
+> -		return 0;
+>  	}
+>  copy:
+>  	/*
 
-> > Can you try using /dev/urandom for dd, not /dev/zero?
-> > Do you still see zeroes in sysfs output or some random values?
-
-> After 50 test runs on a kernel where the issue is confirmed, I could not
-> reproduce the failure while filling the device from /dev/urandom instead of
-> /dev/zero. The test reported compression ratio around 1.8-2.5 which means
-> the memory usage reported by mm_stat was 10-13MB.
-
-Martin, thanks a lot for reruning tests. I wonder problems on /dev/zero is a
-kernel bug or just problem which should be workarounded.
-
-> Note that I had to disable the other filesystems in the test because some of
-> them kept failing with compression ratio <1.
-
-Yes, I noted that as well at least on exfat and btrfs (if I remember correctly).
-It wouldn't be a problem to just use it for vfat if we agreed test should be
-modified.
-
-Kind regards,
-Petr
