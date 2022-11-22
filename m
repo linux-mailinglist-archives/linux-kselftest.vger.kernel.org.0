@@ -2,100 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B7C634812
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 21:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1434863499C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 22:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233984AbiKVU0O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 15:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
+        id S234735AbiKVVto (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 16:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiKVU0N (ORCPT
+        with ESMTP id S234546AbiKVVtk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:26:13 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8448827DFF;
-        Tue, 22 Nov 2022 12:26:12 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so15356593pjl.3;
-        Tue, 22 Nov 2022 12:26:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ql2FYZtChC8kHpVI2e9mEHckclAXpvmwn/fO5tPh578=;
-        b=elh+z0q1qqevOLCYpwBkrBAb6yjmtaCYgataLx2FY3l8CrqJmnwjYJWWkb5XE113YF
-         wt+kf4HIRlorudrICrtnK9/H2DPLaZSXNrbpt8G62NLJIKN8sfcQUFdKwfg06jc0C5+p
-         8Gtx4MymzEdA0l8pyQ1Cf2LPpu2Wp+22iPTyGXFjEnggAQxp1UPsc++daU16duq13EKY
-         a2VTX51iWrP73LKhnvgT0RVcYOFWdyJDccZ5b8xGiTGmp43Ls+jmMr1jHEkDDh3SyE1e
-         x8u9Div/D2HUKk1ec770Bu2vK+iXmlPe3ItbyjMQdRWapEXVc54OAKYChtCcD2e+K3ke
-         q0uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ql2FYZtChC8kHpVI2e9mEHckclAXpvmwn/fO5tPh578=;
-        b=gIYWqxh7EllkvI87XOFlwLSmIeriqzWfpu4BIGUyHEdSNj1JtcAxcqFWZT29iYZvCo
-         j+mHnEpVqub2wSmKr3+UyLKZ3EFMTlM04/wsXHEl9o03hHF4EUX38fqfc5fvvOJwZCSf
-         9yXDXVufuOHnev+ijO7Yr/9SC/7QKshIczxi0ZlM914dIpujX7KNBjuuMfjDPlinV9dQ
-         CgXJsd6Jw+J6VmZEtkTNvIpzgDzPrGvS6e6pqAKNkvAMLvu6eGX9f4ofPQRpE+TjBssZ
-         prECv+5W653qsjJ3Z/88T44zeaRqVQXzlBYz9vfl+DBKRkvthxDiQjetLeSq301ttCXg
-         XpiA==
-X-Gm-Message-State: ANoB5pmEc9g8U0mUYRd+KRe1AEb4MpwT8xYYUEUuDP6KMteOQMJHDqFb
-        NfhGKcmC+DWT8HW3W+9ouFo=
-X-Google-Smtp-Source: AA0mqf5oGIFMVmy9BowMY5qnMQENYrRn8wXpwe2NFMB9qFE6FmgU4Tc323G37NWDBgbwSvOoByvZwg==
-X-Received: by 2002:a17:90a:8a03:b0:218:9f92:d1a0 with SMTP id w3-20020a17090a8a0300b002189f92d1a0mr16072431pjn.53.1669148771369;
-        Tue, 22 Nov 2022 12:26:11 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:bb3])
-        by smtp.gmail.com with ESMTPSA id y10-20020a1709027c8a00b00186cf82717fsm12407693pll.165.2022.11.22.12.26.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 12:26:11 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 22 Nov 2022 10:26:09 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kamalesh Babulal <kamalesh.babulal@oracle.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Tom Hromatka <tom.hromatka@oracle.com>,
-        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/cgroup: Add cleanup() to test_cpuset_prs.sh
-Message-ID: <Y30wYVzuCGK/0Zxp@slm.duckdns.org>
-References: <20221118101330.251332-1-kamalesh.babulal@oracle.com>
+        Tue, 22 Nov 2022 16:49:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F166EBF587;
+        Tue, 22 Nov 2022 13:49:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 872B3618E5;
+        Tue, 22 Nov 2022 21:49:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22137C43470;
+        Tue, 22 Nov 2022 21:49:38 +0000 (UTC)
+Date:   Tue, 22 Nov 2022 16:49:36 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Shuah Khan <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Akanksha J N <akanksha@linux.vnet.ibm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [RESEND PATCH v2 0/2] selftests/ftrace: Capture dependency on
+ external programs
+Message-ID: <20221122164936.1a92f529@gandalf.local.home>
+In-Reply-To: <cover.1666941090.git.naveen.n.rao@linux.vnet.ibm.com>
+References: <cover.1666941090.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221118101330.251332-1-kamalesh.babulal@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 03:43:30PM +0530, Kamalesh Babulal wrote:
-> Install a cleanup function using the trap command for signals EXIT,
-> SIGINT, SIGQUIT and SIGABRT.  The cleanup function will perform:
-> 1. Online the CPUs that were made offline during the test.
-> 2. Removing the cgroups created.
-> 3. Restoring the original /sys/kernel/debug/sched/verbose value,
->    currently it's left turned on, irrespective of the original
->    configuration value.
+On Fri, 28 Oct 2022 12:46:08 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+
+> This is a repost of v2 with the tags collected, and with cc to 
+> linux-kselftest list:
+> https://lore.kernel.org/all/cover.1666101523.git.naveen.n.rao@linux.vnet.ibm.com/
 > 
-> the test performs steps 1 and 2, on the successful runs, but not during
-> all of the failed runs.  With the cleanup(), the system will perform all
-> three steps during failed/passed test runs.
+
+Hi Shuah,
+
+Can you take this (if you haven't already)?
+
+Thanks,
+
+-- Steve
+
+
+> - Naveen
 > 
-> Signed-off-by: Kamalesh Babulal <kamalesh.babulal@oracle.com>
+> 
+> Naveen N. Rao (2):
+>   selftests/ftrace: Add check for ping command for trigger tests
+>   selftests/ftrace: Convert tracer tests to use 'requires' to specify
+>     program dependency
+> 
+>  tools/testing/selftests/ftrace/test.d/functions           | 8 +++++++-
+>  tools/testing/selftests/ftrace/test.d/tracer/wakeup.tc    | 7 +------
+>  tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc | 7 +------
+>  .../trigger/inter-event/trigger-field-variable-support.tc | 2 +-
+>  .../inter-event/trigger-inter-event-combined-hist.tc      | 2 +-
+>  .../trigger/inter-event/trigger-onchange-action-hist.tc   | 2 +-
+>  .../trigger/inter-event/trigger-onmatch-action-hist.tc    | 2 +-
+>  .../inter-event/trigger-onmatch-onmax-action-hist.tc      | 2 +-
+>  .../trigger/inter-event/trigger-onmax-action-hist.tc      | 2 +-
+>  .../trigger/inter-event/trigger-snapshot-action-hist.tc   | 2 +-
+>  .../inter-event/trigger-synthetic-event-dynstring.tc      | 2 +-
+>  .../trigger/inter-event/trigger-trace-action-hist.tc      | 2 +-
+>  12 files changed, 18 insertions(+), 22 deletions(-)
+> 
+> 
+> base-commit: cb05c81ada76a30a25a5f79b249375e33473af33
 
-Applied cgroup/for-6.2.
-
-Thanks.
-
--- 
-tejun
