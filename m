@@ -2,95 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA67633F44
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 15:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22BD633F9A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 15:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbiKVOuL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 09:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
+        id S234147AbiKVO7J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 09:59:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbiKVOuJ (ORCPT
+        with ESMTP id S234144AbiKVO6v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:50:09 -0500
+        Tue, 22 Nov 2022 09:58:51 -0500
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D64663CE;
-        Tue, 22 Nov 2022 06:50:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BFF6EB6C;
+        Tue, 22 Nov 2022 06:56:26 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 683391F85D;
-        Tue, 22 Nov 2022 14:50:07 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8ACF91F85D;
+        Tue, 22 Nov 2022 14:56:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669128607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1669128985; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TuOeD9hS5w47LsnqcPKQtrXy6koctaIzcHPxwbxmwbA=;
-        b=aGZachSXiRVjKPJsrWk8CPop2PpOEMJr7spf/DAJ5bmOd/2f4r4PDMztApEKo2PcSlvmxW
-        kUYly+UTyuJUxKmOQFyKK0uK83vpsu8HLfHf74wJV6xsDgOcFpyyuGww7bQkx1IkhT+zig
-        CKpIYly4TJFynSwnq3h8C8XfDQxdhu4=
+        bh=+loFO6tN5YXsk0bWjK2r+zKhS9ssoaTjODd0fLpHxXw=;
+        b=sfmdqwbLKiTiB7Qi4AyDhjDIvCEMbXR1ZfivjEs/BqcOHbuhw+kprIf2xHCaCTwObQH8a5
+        CKtGZ10w9JYjpD8IToot/jXIPHYlpgW+5ZS0wbEgEuQpU+1AM+/uz+jrOhnvYaznSjFawR
+        lulkdeUJ9jy+oIMCVvY3OEkd0qOvieo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669128607;
+        s=susede2_ed25519; t=1669128985;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TuOeD9hS5w47LsnqcPKQtrXy6koctaIzcHPxwbxmwbA=;
-        b=3O83wprOyy/Za1HsOlbBbN841s6+bHjQppNWEZSAiaC61+01222yq5NJYcQdKsFuOVce+G
-        lcMh2DB+p4IaJ9Ag==
+        bh=+loFO6tN5YXsk0bWjK2r+zKhS9ssoaTjODd0fLpHxXw=;
+        b=y42N2ZaNchVaRcELYmUf0n2LuOWXFda2EadO5JNkazxeFEBiX8E/BXEGx+KtlEgs/tzmrX
+        8ds0XUjamiBkMUDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BDF4713AA1;
-        Tue, 22 Nov 2022 14:50:06 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5594413B01;
+        Tue, 22 Nov 2022 14:56:25 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id xuSnLZ7hfGM/fwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 22 Nov 2022 14:50:06 +0000
-Message-ID: <d40947e4-06c4-8413-9d53-e4926abd9559@suse.cz>
-Date:   Tue, 22 Nov 2022 15:50:06 +0100
+        id e3sDFBnjfGMdBAAAMHmgww
+        (envelope-from <mdoucha@suse.cz>); Tue, 22 Nov 2022 14:56:25 +0000
+Message-ID: <9489dd1c-012c-8b5d-b670-a27213da287a@suse.cz>
+Date:   Tue, 22 Nov 2022 15:56:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH mm-unstable v1 07/20] mm: don't call vm_ops->huge_fault()
- in wp_huge_pmd()/wp_huge_pud() for private mappings
+ Thunderbird/102.2.2
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Minchan Kim <minchan@kernel.org>, Petr Vorel <pvorel@suse.cz>,
+        ltp@lists.linux.it, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Nitin Gupta <ngupta@vflare.org>, Jens Axboe <axboe@kernel.dk>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Yang Xu <xuyang2018.jy@fujitsu.com>
+References: <20221107191136.18048-1-pvorel@suse.cz>
+ <Y2l3vJb1y2Jynf50@google.com> <3ac740c0-954b-5e68-b413-0adc7bc5a2b5@suse.cz>
+ <Y22b3wWs2QfMjJHi@google.com>
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-8-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221116102659.70287-8-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Martin Doucha <mdoucha@suse.cz>
+Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
+In-Reply-To: <Y22b3wWs2QfMjJHi@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
@@ -102,86 +80,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/16/22 11:26, David Hildenbrand wrote:
-> If we already have a PMD/PUD mapped write-protected in a private mapping
-> and we want to break COW either due to FAULT_FLAG_WRITE or
-> FAULT_FLAG_UNSHARE, there is no need to inform the file system just like on
-> the PTE path.
+On 11. 11. 22 1:48, Sergey Senozhatsky wrote:
+> On (22/11/10 15:29), Martin Doucha wrote:
+>> I've tried to debug the issue and collected some interesting data (all
+>> values come from zram device with 25M size limit and zstd compression
+>> algorithm):
+>> - mm_stat values are correct after mkfs.vfat:
+>> 65536      220    65536 26214400    65536        0        0        0
+>>
+>> - mm_stat values stay correct after mount:
+>> 65536      220    65536 26214400    65536        0        0        0
+>>
+>> - the bug is triggered by filling the filesystem to capacity (using dd):
+>> 4194304        0        0 26214400   327680       64        0        0
 > 
-> Let's just split (->zap) + fallback in that case.
-> 
-> This is a preparation for more generic FAULT_FLAG_UNSHARE support in
-> COW mappings.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> Can you try using /dev/urandom for dd, not /dev/zero?
+> Do you still see zeroes in sysfs output or some random values?
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+After 50 test runs on a kernel where the issue is confirmed, I could not 
+reproduce the failure while filling the device from /dev/urandom instead 
+of /dev/zero. The test reported compression ratio around 1.8-2.5 which 
+means the memory usage reported by mm_stat was 10-13MB.
 
-Nits:
+Note that I had to disable the other filesystems in the test because 
+some of them kept failing with compression ratio <1.
 
-> ---
->  mm/memory.c | 24 +++++++++++++++---------
->  1 file changed, 15 insertions(+), 9 deletions(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index c35e6cd32b6a..d47ad33c6487 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4802,6 +4802,7 @@ static inline vm_fault_t create_huge_pmd(struct vm_fault *vmf)
->  static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
->  {
->  	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
-> +	vm_fault_t ret;
->  
->  	if (vma_is_anonymous(vmf->vma)) {
->  		if (likely(!unshare) &&
-> @@ -4809,11 +4810,13 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
->  			return handle_userfault(vmf, VM_UFFD_WP);
->  		return do_huge_pmd_wp_page(vmf);
->  	}
-> -	if (vmf->vma->vm_ops->huge_fault) {
-> -		vm_fault_t ret = vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PMD);
->  
-> -		if (!(ret & VM_FAULT_FALLBACK))
-> -			return ret;
-> +	if (vmf->vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) {
-> +		if (vmf->vma->vm_ops->huge_fault) {
-
-I guess it could have been a single if with && and the reduced identation
-could fit keeping 'ret' declaration inside.
-AFAICS the later patches don't build more on top of this anyway.
-But also fine keeping as is.
-
-(the hunk below same)
-
-> +			ret = vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PMD);
-> +			if (!(ret & VM_FAULT_FALLBACK))
-> +				return ret;
-> +		}
->  	}
->  
->  	/* COW or write-notify handled on pte level: split pmd. */
-> @@ -4839,14 +4842,17 @@ static vm_fault_t wp_huge_pud(struct vm_fault *vmf, pud_t orig_pud)
->  {
->  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) &&			\
->  	defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD)
-> +	vm_fault_t ret;
-> +
->  	/* No support for anonymous transparent PUD pages yet */
->  	if (vma_is_anonymous(vmf->vma))
->  		goto split;
-> -	if (vmf->vma->vm_ops->huge_fault) {
-> -		vm_fault_t ret = vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PUD);
-> -
-> -		if (!(ret & VM_FAULT_FALLBACK))
-> -			return ret;
-> +	if (vmf->vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) {
-> +		if (vmf->vma->vm_ops->huge_fault) {
-> +			ret = vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PUD);
-> +			if (!(ret & VM_FAULT_FALLBACK))
-> +				return ret;
-> +		}
->  	}
->  split:
->  	/* COW or write-notify not handled on PUD level: split pud.*/
+-- 
+Martin Doucha   mdoucha@suse.cz
+QA Engineer for Software Maintenance
+SUSE LINUX, s.r.o.
+CORSO IIa
+Krizikova 148/34
+186 00 Prague 8
+Czech Republic
 
