@@ -2,178 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C8E63417D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 17:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CCE634247
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 18:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbiKVQ3W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 11:29:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S233919AbiKVRO4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 12:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbiKVQ3U (ORCPT
+        with ESMTP id S233204AbiKVRO4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 11:29:20 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE802F037;
-        Tue, 22 Nov 2022 08:29:19 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DF6E31F85D;
-        Tue, 22 Nov 2022 16:29:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669134557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i4/RJcDx5W5MDWxatsZO6Jcd+cYSccjZheprFRMkSho=;
-        b=X60dEluFtp4cLi1JihULzmkzaAA9/k4ioOG0n7SnZjElr35p11yH8f4Bssb8T6zKnqjhw2
-        BDEDmmllzzQfnE37AD6LBoQboXkTfOwklpWC3spbAYDRkpU5ZxaFtM8EabO2lg17w4JmPI
-        FG84E0lRMDGpjDhIqVm+gTJfS8SspQg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669134557;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i4/RJcDx5W5MDWxatsZO6Jcd+cYSccjZheprFRMkSho=;
-        b=tytwOJur3SCnNybSVppd+YvRZnEtonPJqvXEuE1IgRt5Krn2SkTFWXTND8eoiVlqfQBoI0
-        i1KrLu2gVmy/a2Bg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E82B13AA1;
-        Tue, 22 Nov 2022 16:29:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id h9BSEt34fGMmOQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 22 Nov 2022 16:29:17 +0000
-Message-ID: <8bb93984-a2f4-2029-7cec-bea659e77b6c@suse.cz>
-Date:   Tue, 22 Nov 2022 17:29:16 +0100
+        Tue, 22 Nov 2022 12:14:56 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0275729BD
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 09:14:54 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3a4c2c83300so54924167b3.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 09:14:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Trw6pRag45zh7xbBzKuk9eUIAumLjV1FB/I5WWUMeXc=;
+        b=AJOsT7QLtuXDOuqy8Nd0IGY7ZchJBpJoPvWh9Vj61PSLn6YqfZr843CbYEjqCXumYy
+         dLBBDwqSL0uccXO8vUb4PtIE2gttVA6O8zx5TTZ9r5LikYoQkKw1la+JO08szC3HK4Yy
+         yFdEUjvlTsyRoNvmp5qFe8kHanUkkAh70rHNjqUaAxmzWHD+89FucUS22ae6nfITrfr6
+         txyfXpjPfdRBwebcTlBBIFyVRQX5VyCw18U9e5nb45jhFYFgljqjpSQHAi6JtUDKlHSJ
+         zU+gIisrqVQ9gVvfPpgdRcwB9vQ9W54orXzvWCm+XK1pw3HC+Qy4GDzWfY9RMX3V2sxg
+         0+5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Trw6pRag45zh7xbBzKuk9eUIAumLjV1FB/I5WWUMeXc=;
+        b=NL44evswEpsWEgUwexQjZIQwZZfdOcNBa6/9Pcvgv4V1my+GvY6gUGQZO7lJsZQQit
+         NJITUhfBYKP2pacmPvJA4KkBQEXdBuHzFxE7Gp6t8emLvvRhFHmRy86UQjFAiC8jfwkY
+         QSTlfBr9j0Hf/nRbtKsft+Yg5yaU4Yy9gOuYumkU5Z9e45/THywZ22W5/FhLl0oZnZUt
+         +JxYfHN3RpNe0bCgPvP1Us0LSjysRF5tq89fvQGrF7Y3w9dPxuAvDjzqtEfFoGswEMD/
+         sgLCpnfLYlAwLSrNHPlOhW9HN6YIez8zeU/CvFKepNwWZ3FgRFu7wsofbASDVxd+A0Kp
+         AlUA==
+X-Gm-Message-State: ANoB5pl+SKS+ENRMIpwb1ZSnPCek7BSgeemSBy6muDT4XpmhVpl9dRY7
+        145P69Vi1YAlqxWt9XIPfmLY70prAzdHclTZiuYrWQ==
+X-Google-Smtp-Source: AA0mqf6oO1oQ43wqxjCiE8z46ZjJMYHiF0pORLs1DGtEER+w3Lkn9AfI1AOxTLN0CLxS1gKZ3D/+ojACQvYkZgRs7vs=
+X-Received: by 2002:a0d:dc05:0:b0:36a:bc93:587c with SMTP id
+ f5-20020a0ddc05000000b0036abc93587cmr23162179ywe.59.1669137293721; Tue, 22
+ Nov 2022 09:14:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH mm-unstable v1 09/20] mm/gup: reliable R/O long-term
- pinning in COW mappings
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-10-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221116102659.70287-10-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
+ <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com>
+In-Reply-To: <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 22 Nov 2022 09:14:42 -0800
+Message-ID: <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
+        davidgow@google.com, skhan@linuxfoundation.org,
+        mauro.chehab@linux.intel.com, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        isabbasso@riseup.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/16/22 11:26, David Hildenbrand wrote:
-> We already support reliable R/O pinning of anonymous memory. However,
-> assume we end up pinning (R/O long-term) a pagecache page or the shared
-> zeropage inside a writable private ("COW") mapping. The next write access
-> will trigger a write-fault and replace the pinned page by an exclusive
-> anonymous page in the process page tables to break COW: the pinned page no
-> longer corresponds to the page mapped into the process' page table.
-> 
-> Now that FAULT_FLAG_UNSHARE can break COW on anything mapped into a
-> COW mapping, let's properly break COW first before R/O long-term
-> pinning something that's not an exclusive anon page inside a COW
-> mapping. FAULT_FLAG_UNSHARE will break COW and map an exclusive anon page
-> instead that can get pinned safely.
-> 
-> With this change, we can stop using FOLL_FORCE|FOLL_WRITE for reliable
-> R/O long-term pinning in COW mappings.
-> 
-> With this change, the new R/O long-term pinning tests for non-anonymous
-> memory succeed:
->   # [RUN] R/O longterm GUP pin ... with shared zeropage
->   ok 151 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with memfd
->   ok 152 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with tmpfile
->   ok 153 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with huge zeropage
->   ok 154 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with memfd hugetlb (2048 kB)
->   ok 155 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP pin ... with memfd hugetlb (1048576 kB)
->   ok 156 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with shared zeropage
->   ok 157 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with memfd
->   ok 158 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with tmpfile
->   ok 159 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with huge zeropage
->   ok 160 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with memfd hugetlb (2048 kB)
->   ok 161 Longterm R/O pin is reliable
->   # [RUN] R/O longterm GUP-fast pin ... with memfd hugetlb (1048576 kB)
->   ok 162 Longterm R/O pin is reliable
-> 
-> Note 1: We don't care about short-term R/O-pinning, because they have
-> snapshot semantics: they are not supposed to observe modifications that
-> happen after pinning.
-> 
-> As one example, assume we start direct I/O to read from a page and store
-> page content into a file: modifications to page content after starting
-> direct I/O are not guaranteed to end up in the file. So even if we'd pin
-> the shared zeropage, the end result would be as expected -- getting zeroes
-> stored to the file.
-> 
-> Note 2: For shared mappings we'll now always fallback to the slow path to
-> lookup the VMA when R/O long-term pining. While that's the necessary price
-> we have to pay right now, it's actually not that bad in practice: most
-> FOLL_LONGTERM users already specify FOLL_WRITE, for example, along with
-> FOLL_FORCE because they tried dealing with COW mappings correctly ...
-> 
-> Note 3: For users that use FOLL_LONGTERM right now without FOLL_WRITE,
-> such as VFIO, we'd now no longer pin the shared zeropage. Instead, we'd
-> populate exclusive anon pages that we can pin. There was a concern that
-> this could affect the memlock limit of existing setups.
-> 
-> For example, a VM running with VFIO could run into the memlock limit and
-> fail to run. However, we essentially had the same behavior already in
-> commit 17839856fd58 ("gup: document and work around "COW can break either
-> way" issue") which got merged into some enterprise distros, and there were
-> not any such complaints. So most probably, we're fine.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+On Tue, Nov 22, 2022 at 1:17 AM Anders Roxell <anders.roxell@linaro.org> wr=
+ote:
+>
+> On Mon, 21 Nov 2022 at 19:48, Rae Moar <rmoar@google.com> wrote:
+> >
+> > Change KUnit test output to better comply with KTAP v1 specifications
+> > found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
+> > 1) Use "KTAP version 1" instead of "TAP version 14" as test output head=
+er
+> > 2) Remove '-' between test number and test name on test result lines
+> > 2) Add KTAP version lines to each subtest header as well
+> >
+> > Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=
+=80=9D line now
+> > located after the KTAP version line. This does not completely match the
+> > KTAP v1 spec but since it is classified as a diagnostic line, it is not
+> > expected to be disruptive or break any existing parsers. This
+> > =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
+> > (https://testanything.org/tap-version-14-specification.html)
+> > and it is used to define the test name before the results.
+> >
+> > Original output:
+> >
+> >  TAP version 14
+> >  1..1
+> >    # Subtest: kunit-test-suite
+> >    1..3
+> >    ok 1 - kunit_test_1
+> >    ok 2 - kunit_test_2
+> >    ok 3 - kunit_test_3
+> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+> >  # Totals: pass:3 fail:0 skip:0 total:3
+> >  ok 1 - kunit-test-suite
+> >
+> > New output:
+> >
+> >  KTAP version 1
+> >  1..1
+> >    KTAP version 1
+> >    # Subtest: kunit-test-suite
+> >    1..3
+> >    ok 1 kunit_test_1
+> >    ok 2 kunit_test_2
+> >    ok 3 kunit_test_3
+> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+> >  # Totals: pass:3 fail:0 skip:0 total:3
+> >  ok 1 kunit-test-suite
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> > Reviewed-by: David Gow <davidgow@google.com>
+>
+> I tried this patch, see the full boot log [1] and I can still see some
+>  tests that output the "old" format with 'ok 1 - kunit_test_1', for examp=
+le
+>
+> ok 1 - 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
+>
+> Isn't this something that should be converted too?
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Yes, thanks for catching that.
+That's what I get from only looking over the diff this time since I
+thought I remembered the code...
 
+We also want this diff to fix a) debugfs, b) subtests.
+
+diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+index 1048ef1b8d6e..de0ee2e03ed6 100644
+--- a/lib/kunit/debugfs.c
++++ b/lib/kunit/debugfs.c
+@@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file
+*seq, void *v)
+        kunit_suite_for_each_test_case(suite, test_case)
+                debugfs_print_result(seq, suite, test_case);
+
+-       seq_printf(seq, "%s %d - %s\n",
++       seq_printf(seq, "%s %d %s\n",
+                   kunit_status_to_ok_not_ok(success), 1, suite->name);
+        return 0;
+ }
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 19344cb501c5..c9d57a1d9524 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -556,7 +556,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+
+                                kunit_log(KERN_INFO, &test,
+                                          KUNIT_SUBTEST_INDENT
+KUNIT_SUBTEST_INDENT
+-                                         "%s %d - %s",
++                                         "%s %d %s",
+
+kunit_status_to_ok_not_ok(test.status),
+                                          test.param_index + 1, param_desc)=
+;
+
+Daniel
