@@ -2,248 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A717633E5A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 15:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD76633E85
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 15:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233992AbiKVOF1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 09:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
+        id S233202AbiKVOJp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 09:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234014AbiKVOFM (ORCPT
+        with ESMTP id S233725AbiKVOJV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:05:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6191620BFF
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 06:03:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669125799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rYhRWhA1aSMDmEn1uPY3m1Uoc/nxJhjisw6iqoh6KAk=;
-        b=L8Ykf4brRPMonsGs8Oeom3vT1zEGZg/HHZ6kNGE8Kgd4n2jY/POKZ31s+4DETNlv9sjEof
-        CDjQb1AmMiRcIh1SAEKpsPWcHtwgLjgFC/dS5FOxPxC1TrLpWos2LuBwUCcElmgAVdc/3Y
-        UecNpJnADkeickbXstDlqb4x+/veF9o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-4mjhlybcObqbcyDAl7QVdg-1; Tue, 22 Nov 2022 09:03:16 -0500
-X-MC-Unique: 4mjhlybcObqbcyDAl7QVdg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 22 Nov 2022 09:09:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA5713D14;
+        Tue, 22 Nov 2022 06:07:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12028973283;
-        Tue, 22 Nov 2022 14:03:16 +0000 (UTC)
-Received: from RHTPC1VM0NT.redhat.com (unknown [10.22.16.203])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9132A40C6EC6;
-        Tue, 22 Nov 2022 14:03:15 +0000 (UTC)
-From:   Aaron Conole <aconole@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Pravin B Shelar <pshelar@ovn.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Graf <tgraf@suug.ch>, dev@openvswitch.org,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Ilya Maximets <i.maximets@ovn.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [RFC net-next 6/6] selftests: openvswitch: add exclude support for packet commands
-Date:   Tue, 22 Nov 2022 09:03:07 -0500
-Message-Id: <20221122140307.705112-7-aconole@redhat.com>
-In-Reply-To: <20221122140307.705112-1-aconole@redhat.com>
-References: <20221122140307.705112-1-aconole@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8002461724;
+        Tue, 22 Nov 2022 14:07:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B899AC433C1;
+        Tue, 22 Nov 2022 14:07:35 +0000 (UTC)
+Message-ID: <4d3ef082-f7b3-2b6e-6fcf-5f991ffe14e9@xs4all.nl>
+Date:   Tue, 22 Nov 2022 15:07:33 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH RFC 16/19] mm/frame-vector: remove FOLL_FORCE usage
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221107161740.144456-1-david@redhat.com>
+ <20221107161740.144456-17-david@redhat.com>
+ <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com>
+ <6175d780-3307-854c-448a-8e6c7ad0772c@xs4all.nl>
+ <6ace6cd4-3e13-8ec1-4c2a-49e2e14e81a6@redhat.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <6ace6cd4-3e13-8ec1-4c2a-49e2e14e81a6@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce a test case to show that we can exclude flows based
-on specific configurations.
+On 11/22/22 13:38, David Hildenbrand wrote:
+> On 22.11.22 13:25, Hans Verkuil wrote:
+>> Hi Tomasz, David,
+>>
+>> On 11/8/22 05:45, Tomasz Figa wrote:
+>>> Hi David,
+>>>
+>>> On Tue, Nov 8, 2022 at 1:19 AM David Hildenbrand <david@redhat.com> wrote:
+>>>>
+>>>> FOLL_FORCE is really only for debugger access. According to commit
+>>>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+>>>> writable"), the pinned pages are always writable.
+>>>
+>>> Actually that patch is only a workaround to temporarily disable
+>>> support for read-only pages as they seemed to suffer from some
+>>> corruption issues in the retrieved user pages. We expect to support
+>>> read-only pages as hardware input after. That said, FOLL_FORCE doesn't
+>>> sound like the right thing even in that case, but I don't know the
+>>> background behind it being added here in the first place. +Hans
+>>> Verkuil +Marek Szyprowski do you happen to remember anything about it?
+>>
+>> I tracked the use of 'force' all the way back to the first git commit
+>> (2.6.12-rc1) in the very old video-buf.c. So it is very, very old and the
+>> reason is lost in the mists of time.
+>>
+>> I'm not sure if the 'force' argument of get_user_pages() at that time
+>> even meant the same as FOLL_FORCE today. From what I can tell it has just
+>> been faithfully used ever since, but I have my doubt that anyone understands
+>> the reason behind it since it was never explained.
+>>
+>> Looking at this old LWN article https://lwn.net/Articles/28548/ suggests
+>> that it might be related to calling get_user_pages for write buffers
+>> (non-zero write argument) where you also want to be able to read from the
+>> buffer. That is certainly something that some drivers need to do post-capture
+>> fixups.
+>>
+>> But 'force' was also always set for read buffers, and I don't know if that
+>> was something that was actually needed, or just laziness.
+>>
+>> I assume that removing FOLL_FORCE from 'FOLL_FORCE|FOLL_WRITE' will still
+>> allow drivers to read from the buffer?
+> 
+> Yes. The only problematic corner case I can imagine is if someone has a 
+> VMA without write permissions (no PROT_WRITE/VM_WRITE) and wants to pin 
+> user space pages as a read buffer. We'd specify now FOLL_WRITE without 
+> FOLL_FORCE and GUP would reject that: write access without write 
+> permissions is invalid.
 
-Signed-off-by: Aaron Conole <aconole@redhat.com>
----
- .../selftests/net/openvswitch/openvswitch.sh  | 53 +++++++++++++++++--
- .../selftests/net/openvswitch/ovs-dpctl.py    | 34 +++++++++++-
- 2 files changed, 81 insertions(+), 6 deletions(-)
+I do not believe this will be an issue.
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index ce14913150fe..f04f2f748332 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -11,7 +11,8 @@ VERBOSE=0
- TRACING=0
- 
- tests="
--	netlink_checks				ovsnl: validate netlink attrs and settings"
-+	netlink_checks				ovsnl: validate netlink attrs and settings
-+	upcall_interfaces			ovs: test the upcall interfaces"
- 
- info() {
-     [ $VERBOSE = 0 ] || echo $*
-@@ -72,7 +73,15 @@ ovs_add_dp () {
- 
- ovs_add_if () {
- 	info "Adding IF to DP: br:$2 if:$3"
--	ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py add-if "$2" "$3" || return 1
-+	if [ "$4" != "-u" ]; then
-+		ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py add-if "$2" "$3" \
-+		    || return 1
-+	else
-+		python3 $ovs_base/ovs-dpctl.py add-if \
-+		    -u "$2" "$3" >$ovs_dir/$3.out 2>$ovs_dir/$3.err &
-+		pid=$!
-+		on_exit "ovs_sbx $1 kill -TERM $pid 2>/dev/null"
-+	fi
- }
- 
- ovs_del_if () {
-@@ -103,10 +112,16 @@ ovs_add_netns_and_veths () {
- 	ovs_sbx "$1" ip netns exec "$3" ip link set "$5" up || return 1
- 
- 	if [ "$6" != "" ]; then
--		ovs_sbx "$1" ip netns exec "$4" ip addr add "$6" dev "$5" \
-+		ovs_sbx "$1" ip netns exec "$3" ip addr add "$6" dev "$5" \
- 		    || return 1
- 	fi
--	ovs_add_if "$1" "$2" "$4" || return 1
-+
-+	if [ "$7" != "-u" ]; then
-+		ovs_add_if "$1" "$2" "$4" || return 1
-+	else
-+		ovs_add_if "$1" "$2" "$4" -u || return 1
-+	fi
-+
- 	[ $TRACING -eq 1 ] && ovs_netns_spawn_daemon "$1" "$3" \
- 			tcpdump -i any -s 65535 >> ${ovs_dir}/tcpdump_"$3".log
- 
-@@ -158,6 +173,36 @@ test_netlink_checks () {
- 	return 0
- }
- 
-+test_upcall_interfaces() {
-+	sbx_add "test_upcall_interfaces" || return 1
-+
-+	info "setting up new DP"
-+	ovs_add_dp "test_upcall_interfaces" ui0 || return 1
-+
-+	ovs_add_netns_and_veths "test_upcall_interfaces" ui0 upc left0 l0 \
-+	    172.31.110.1/24 -u || return 1
-+
-+	sleep 1
-+	info "sending arping"
-+	ip netns exec upc arping -I l0 172.31.110.20 -c 1 \
-+	    >$ovs_dir/arping.stdout 2>$ovs_dir/arping.stderr
-+
-+	grep -E "MISS upcall\[0/yes\]: .*arp\(sip=172.31.110.1,tip=172.31.110.20,op=1,sha=" $ovs_dir/left0.out >/dev/null 2>&1 || return 1
-+	# now tear down the DP and set it up with the new options
-+	ovs_sbx "test_upcall_interfaces" python3 $ovs_base/ovs-dpctl.py \
-+	    del-dp ui0 || return 1
-+	ovs_sbx "test_upcall_interfaces" python3 $ovs_base/ovs-dpctl.py \
-+	    add-dp -e miss -- ui0 || return 1
-+	ovs_add_if "test_upcall_interfaces" ui0 left0 -u || return 1
-+
-+	sleep 1
-+	info "sending second arping"
-+	ip netns exec upc arping -I l0 172.31.110.20 -c 1 \
-+	    >$ovs_dir/arping.stdout 2>$ovs_dir/arping.stderr
-+	grep -E "MISS upcall\[0/yes\]: \(none\)" $ovs_dir/left0.out >/dev/null 2>&1 || return 1
-+	return 0
-+}
-+
- run_test() {
- 	(
- 	tname="$1"
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 94204af48d28..ba115fb51773 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -111,6 +111,7 @@ class OvsDatapath(GenericNetlinkSocket):
- 
-     OVS_DP_F_VPORT_PIDS = 1 << 1
-     OVS_DP_F_DISPATCH_UPCALL_PER_CPU = 1 << 3
-+    OVS_DP_F_EXCLUDE_UPCALL_FLOW_KEY = 1 << 4
- 
-     class dp_cmd_msg(ovs_dp_msg):
-         """
-@@ -127,6 +128,8 @@ class OvsDatapath(GenericNetlinkSocket):
-             ("OVS_DP_ATTR_PAD", "none"),
-             ("OVS_DP_ATTR_MASKS_CACHE_SIZE", "uint32"),
-             ("OVS_DP_ATTR_PER_CPU_PIDS", "array(uint32)"),
-+            ("OVS_DP_ATTR_IFINDEX", "uint32"),
-+            ("OVS_DP_ATTR_EXCLUDE_CMDS", "uint32"),
-         )
- 
-         class dpstats(nla):
-@@ -171,7 +174,8 @@ class OvsDatapath(GenericNetlinkSocket):
- 
-         return reply
- 
--    def create(self, dpname, shouldUpcall=False, versionStr=None, p=OvsPacket()):
-+    def create(self, dpname, shouldUpcall=False, versionStr=None, p=OvsPacket(),
-+               exclude=[]):
-         msg = OvsDatapath.dp_cmd_msg()
-         msg["cmd"] = OVS_DP_CMD_NEW
-         if versionStr is None:
-@@ -200,6 +204,23 @@ class OvsDatapath(GenericNetlinkSocket):
-             for i in range(1, nproc):
-                 procarray += [int(p.epid)]
-             msg["attrs"].append(["OVS_DP_ATTR_UPCALL_PID", procarray])
-+
-+        excluded = 0
-+        print("exclude", exclude)
-+        if len(exclude) > 0:
-+            for ex in exclude:
-+                if ex == "miss":
-+                    excluded |= 1 << OvsPacket.OVS_PACKET_CMD_MISS
-+                elif ex == "action":
-+                    excluded |= 1 << OvsPacket.OVS_PACKET_CMD_ACTION
-+                elif ex == "execute":
-+                    excluded |= 1 << OvsPacket.OVS_PACKET_CMD_EXECUTE
-+                else:
-+                    print("DP CREATE: Unknown type: '%s'" % ex)
-+            msg["attrs"].append(["OVS_DP_ATTR_EXCLUDE_CMDS", excluded])
-+            if versionStr is None or versionStr.find(":") == -1:
-+                dpfeatures |= OvsDatapath.OVS_DP_F_EXCLUDE_UPCALL_FLOW_KEY
-+
-         msg["attrs"].append(["OVS_DP_ATTR_USER_FEATURES", dpfeatures])
- 
-         try:
-@@ -1240,6 +1261,14 @@ def main(argv):
-         action="store_true",
-         help="Leave open a reader for upcalls",
-     )
-+    adddpcmd.add_argument(
-+        "-e",
-+        "--exclude",
-+        type=str,
-+        default=[],
-+        nargs="+",
-+        help="Exclude flow key from upcall packet commands"
-+    )
-     adddpcmd.add_argument(
-         "-V",
-         "--versioning",
-@@ -1305,7 +1334,8 @@ def main(argv):
-                 msg += ":'%s'" % args.showdp
-             print(msg)
-     elif hasattr(args, "adddp"):
--        rep = ovsdp.create(args.adddp, args.upcall, args.versioning, ovspk)
-+        rep = ovsdp.create(args.adddp, args.upcall, args.versioning, ovspk,
-+                           args.exclude)
-         if rep is None:
-             print("DP '%s' already exists" % args.adddp)
-         else:
--- 
-2.34.3
+> 
+> There would be no way around "fixing" this implementation to not specify 
+> FOLL_WRITE when only reading from user-space pages. Not sure what the 
+> implications are regarding that corruption that was mentioned in 
+> 707947247e95.
 
+Before 707947247e95 the FOLL_WRITE flag was only set for write buffers
+(i.e. video capture, DMA_FROM_DEVICE), not for read buffers (video output,
+DMA_TO_DEVICE). In the video output case there should never be any need
+for drivers to write to the buffer to the best of my knowledge.
+
+But I have had some complaints about that commit that it causes problems
+in some scenarios, and it has been on my todo list for quite some time now
+to dig deeper into this. I probably should prioritize this for this or
+next week.
+
+> 
+> Having said that, I assume such a scenario is unlikely -- but you might 
+> know better how user space usually uses this interface. There would be 
+> three options:
+> 
+> 1) Leave the FOLL_FORCE hack in for now, which I *really* want to avoid.
+> 2) Remove FOLL_FORCE and see if anybody even notices (this patch) and
+>     leave the implementation as is for now.
+> 3) Remove FOLL_FORCE and fixup the implementation to only specify
+>     FOLL_WRITE if the pages will actually get written to.
+> 
+> 3) would most probably ideal, however, I am no expert on that code and 
+> can't do it (707947247e95 confuses me). So naive me would go with 2) first.
+> 
+
+Option 3 would be best. And 707947247e95 confuses me as well, and I actually
+wrote it :-) I am wondering whether it was addressed at the right level, but
+as I said, I need to dig a bit deeper into this.
+
+Regards,
+
+	Hans
