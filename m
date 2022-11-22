@@ -2,171 +2,251 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CD0633970
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 11:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCA8633A9A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 11:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbiKVKMF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 05:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
+        id S232600AbiKVKyl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 05:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232645AbiKVKLr (ORCPT
+        with ESMTP id S232557AbiKVKyk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 05:11:47 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D918954B3C;
-        Tue, 22 Nov 2022 02:11:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669111904; x=1700647904;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=usjdVgC5nTrsMPk+N8fokwP8pD99HC8BUV8bc4gHSuA=;
-  b=HfctUD3QggyPX6zsCVtLICrnp+4l6+zBAxUgUW+joSiPYur6A/8YyUfA
-   LbkyemKdOvF6fezsw1CdCzRm4V4wxqxKEG+o8OxCyPjQXWkvBpUp//CLn
-   tAAe8Yuujo1pXALer2qrYmWbgSNwNzy9prgeigUgNhOxOZ90uExSDWF/0
-   hCYGlxcZmhvy+6T8Q3lgUOEB2jwAyC/NqILlLsfWIE9B/8gEdfQhvBmWW
-   nWlops7Wyoc9NQFW7FiAbgLd1I4rjHBkeLN7tX1Mi2ak6ztGss4bysTof
-   APsf1PZSb4sLGTl9WrXUlrhht7SqDvkchaHna8t0ixC1lOP4vKh3jcfRk
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="400071024"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="400071024"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 02:11:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="704914294"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="704914294"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Nov 2022 02:11:28 -0800
-Date:   Tue, 22 Nov 2022 18:07:05 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com,
-        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
-        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
-        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
-        pgonda@google.com, nikunj@amd.com, seanjc@google.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V1 PATCH 1/6] KVM: x86: Add support for testing private memory
-Message-ID: <20221122100705.GA619277@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221111014244.1714148-1-vannapurve@google.com>
- <20221111014244.1714148-2-vannapurve@google.com>
+        Tue, 22 Nov 2022 05:54:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997AE2AC73
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 02:53:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669114421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FhojcgZQjkVkxO1IPtc27+RD5uOCkquMJUyVv8stBrg=;
+        b=Lx6byxK9GeVqCCdz8oPeRIzDbv12PIc6EIq2QJq/CZ8rgKad1B5M3FR/RJJDoVxebIR3XM
+        L9P6Ijt7i/DQoau/RvO0tG9uaR1+BoWKx/Pv+O0JxEGEBUOK+YrYiCSXo2bH5ZUOYS542f
+        3+jghR0Rf+O77eIxw6HFYNC5fyfXGD4=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-388-n4XS4sQbPtSWX3y1YeHu8w-1; Tue, 22 Nov 2022 05:53:40 -0500
+X-MC-Unique: n4XS4sQbPtSWX3y1YeHu8w-1
+Received: by mail-qk1-f199.google.com with SMTP id bi42-20020a05620a31aa00b006faaa1664b9so18436667qkb.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 02:53:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FhojcgZQjkVkxO1IPtc27+RD5uOCkquMJUyVv8stBrg=;
+        b=sdtRArleO+a2LZqK/LWbKnBzwWeMsgfgCBskBi72YAdUj6KBJODDoRtFsvH1KxQ4wb
+         y3l9XClgJ3vh1f94RP5Z6txtPDBtWanU7ovlT6puWoiR4rYKeSjSF9001907xe1PDR0b
+         cwHr5svOCzKY6jhlrJeSz3nP9bH4WXhguTfRyM5Ht493zKJIzhausykIc3LET5wX3CPP
+         DfiNcZjUadoE8dp8RYUDUHaE3BV8cD3lXFaq7NCMicCz7GiiJe+riLI27lHsNX+T5GE/
+         tzLQLthph7rRbldO6Tjip3WR2epRxVwRp8IjwaYg8oaaEmosw/ew3wIQQlerocIfThAu
+         iPOA==
+X-Gm-Message-State: ANoB5pn3Lnb+MKpBT7en8M+gSjCJOpZMvB4GhbaTW54+3pIbLUdERARD
+        TuRTOJ049BSzLbcRNeEFgMWsYtCE6+nBIhIfHyYwYvdg8CsUHQgqQgvpDfdsAhUiZ5G6Us+RW+m
+        NxQ+g8a45z7LpMRzqbpXTwEul1XYq
+X-Received: by 2002:a05:620a:c95:b0:6fa:91f9:c84d with SMTP id q21-20020a05620a0c9500b006fa91f9c84dmr19769354qki.724.1669114419838;
+        Tue, 22 Nov 2022 02:53:39 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4fjZLayeJGwrYg63tie5JEv6jlPrgp+TO4xKqdUefE2d+RuP2PxLNjvr44FG2kEi4tZsLQOQ==
+X-Received: by 2002:a05:620a:c95:b0:6fa:91f9:c84d with SMTP id q21-20020a05620a0c9500b006fa91f9c84dmr19769340qki.724.1669114419549;
+        Tue, 22 Nov 2022 02:53:39 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
+        by smtp.gmail.com with ESMTPSA id u36-20020a05622a19a400b0039a55f78792sm8163824qtc.89.2022.11.22.02.53.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 02:53:39 -0800 (PST)
+Message-ID: <ffef78317f06db1025855ad3ef999f241dd03178.camel@redhat.com>
+Subject: Re: [PATCH net-next 1/2] selftests: bonding: up/down delay w/ slave
+ link flapping
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jonathan Toppins <jtoppins@redhat.com>, netdev@vger.kernel.org,
+        Jay Vosburgh <j.vosburgh@gmail.com>
+Cc:     Liang Li <liali@redhat.com>, Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Date:   Tue, 22 Nov 2022 11:53:34 +0100
+In-Reply-To: <314990ea9ee4e475cb200cf32efdf9fc37f4a02a.1668800711.git.jtoppins@redhat.com>
+References: <cover.1668800711.git.jtoppins@redhat.com>
+         <314990ea9ee4e475cb200cf32efdf9fc37f4a02a.1668800711.git.jtoppins@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111014244.1714148-2-vannapurve@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 01:42:39AM +0000, Vishal Annapurve wrote:
-> Introduce HAVE_KVM_PRIVATE_MEM_TESTING config to be able to test fd based
-> approach to support private memory with non-confidential selftest VMs.
-> To support this testing few important aspects need to be considered from
-> the perspective of selftests -
-> * KVM needs to know whether the access from guest VM is private or shared.
-> Confidential VMs (SNP/TDX) carry a dedicated bit in gpa that can be used by
-> KVM to deduce the nature of the access.
-> Non-confidential VMs don't have mechanism to carry/convey such an
-> information to KVM. So KVM just relies on what attributes are set by
-> userspace VMM keeping the userspace VMM in the TCB for the testing
-> purposes.
-> * arch_private_mem_supported is updated to allow private memory logic to
-> work with non-confidential vm selftests.
+On Fri, 2022-11-18 at 15:30 -0500, Jonathan Toppins wrote:
+> Verify when a bond is configured with {up,down}delay and the link state
+> of slave members flaps if there are no remaining members up the bond
+> should immediately select a member to bring up. (from bonding.txt
+> section 13.1 paragraph 4)
 > 
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> Suggested-by: Liang Li <liali@redhat.com>
+> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
 > ---
->  arch/x86/kvm/mmu/mmu.c          | 4 ++++
->  arch/x86/kvm/mmu/mmu_internal.h | 4 +++-
->  virt/kvm/Kconfig                | 4 ++++
->  virt/kvm/kvm_main.c             | 2 +-
->  4 files changed, 12 insertions(+), 2 deletions(-)
+>  .../selftests/drivers/net/bonding/Makefile    |   4 +-
+>  .../selftests/drivers/net/bonding/lag_lib.sh  | 107 ++++++++++++++++++
+>  .../net/bonding/mode-1-recovery-updelay.sh    |  45 ++++++++
+>  .../net/bonding/mode-2-recovery-updelay.sh    |  45 ++++++++
+>  .../selftests/drivers/net/bonding/settings    |   2 +-
+>  5 files changed, 201 insertions(+), 2 deletions(-)
+>  create mode 100755 tools/testing/selftests/drivers/net/bonding/mode-1-recovery-updelay.sh
+>  create mode 100755 tools/testing/selftests/drivers/net/bonding/mode-2-recovery-updelay.sh
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 10017a9f26ee..b3118d00b284 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -4280,6 +4280,10 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+> index 6b8d2e2f23c2..0f3921908b07 100644
+> --- a/tools/testing/selftests/drivers/net/bonding/Makefile
+> +++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+> @@ -5,7 +5,9 @@ TEST_PROGS := \
+>  	bond-arp-interval-causes-panic.sh \
+>  	bond-break-lacpdu-tx.sh \
+>  	bond-lladdr-target.sh \
+> -	dev_addr_lists.sh
+> +	dev_addr_lists.sh \
+> +	mode-1-recovery-updelay.sh \
+> +	mode-2-recovery-updelay.sh
 >  
->  	fault->gfn = fault->addr >> PAGE_SHIFT;
->  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
-> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING
-> +	fault->is_private = kvm_slot_can_be_private(fault->slot) &&
-> +			kvm_mem_is_private(vcpu->kvm, fault->gfn);
-> +#endif
+>  TEST_FILES := \
+>  	lag_lib.sh \
+> diff --git a/tools/testing/selftests/drivers/net/bonding/lag_lib.sh b/tools/testing/selftests/drivers/net/bonding/lag_lib.sh
+> index 16c7fb858ac1..6dc9af1f2428 100644
+> --- a/tools/testing/selftests/drivers/net/bonding/lag_lib.sh
+> +++ b/tools/testing/selftests/drivers/net/bonding/lag_lib.sh
+> @@ -1,6 +1,8 @@
+>  #!/bin/bash
+>  # SPDX-License-Identifier: GPL-2.0
 >  
->  	if (page_fault_handle_page_track(vcpu, fault))
->  		return RET_PF_EMULATE;
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index 5cdff5ca546c..2e759f39c2c5 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -188,7 +188,6 @@ struct kvm_page_fault {
->  
->  	/* Derived from mmu and global state.  */
->  	const bool is_tdp;
-> -	const bool is_private;
->  	const bool nx_huge_page_workaround_enabled;
->  
->  	/*
-> @@ -221,6 +220,9 @@ struct kvm_page_fault {
->  	/* The memslot containing gfn. May be NULL. */
->  	struct kvm_memory_slot *slot;
->  
-> +	/* Derived from encryption bits of the faulting GPA for CVMs. */
-> +	bool is_private;
-
-Either we can wrap it with the CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING or if
-it looks ugly I can remove the "const" in my code.
-
-Chao
+> +NAMESPACES=""
 > +
->  	/* Outputs of kvm_faultin_pfn.  */
->  	kvm_pfn_t pfn;
->  	hva_t hva;
-> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-> index 69ca59e82149..300876afb0ca 100644
-> --- a/virt/kvm/Kconfig
-> +++ b/virt/kvm/Kconfig
-> @@ -93,3 +93,7 @@ config HAVE_KVM_RESTRICTED_MEM
->  config KVM_GENERIC_PRIVATE_MEM
->         bool
->         depends on HAVE_KVM_RESTRICTED_MEM
-> +
-> +config HAVE_KVM_PRIVATE_MEM_TESTING
-> +       bool
-> +       depends on KVM_GENERIC_PRIVATE_MEM
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index dae6a2c196ad..54e57b7f1c15 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1750,7 +1750,7 @@ static void kvm_replace_memslot(struct kvm *kvm,
+>  # Test that a link aggregation device (bonding, team) removes the hardware
+>  # addresses that it adds on its underlying devices.
+>  test_LAG_cleanup()
+> @@ -59,3 +61,108 @@ test_LAG_cleanup()
 >  
->  bool __weak kvm_arch_has_private_mem(struct kvm *kvm)
->  {
-> -	return false;
-> +	return IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING);
+>  	log_test "$driver cleanup mode $mode"
 >  }
->  
->  static int check_memory_region_flags(struct kvm *kvm,
-> -- 
-> 2.38.1.431.g37b22c650d-goog
+> +
+> +# Build a generic 2 node net namespace with 2 connections
+> +# between the namespaces
+> +#
+> +#  +-----------+       +-----------+
+> +#  | node1     |       | node2     |
+> +#  |           |       |           |
+> +#  |           |       |           |
+> +#  |      eth0 +-------+ eth0      |
+> +#  |           |       |           |
+> +#  |      eth1 +-------+ eth1      |
+> +#  |           |       |           |
+> +#  +-----------+       +-----------+
+> +lag_setup2x2()
+> +{
+> +	local state=${1:-down}
+> +	local namespaces="lag_node1 lag_node2"
+> +
+> +	# create namespaces
+> +	for n in ${namespaces}; do
+> +		ip netns add ${n}
+> +	done
+> +
+> +	# wire up namespaces
+> +	ip link add name lag1 type veth peer name lag1-end
+> +	ip link set dev lag1 netns lag_node1 $state name eth0
+> +	ip link set dev lag1-end netns lag_node2 $state name eth0
+> +
+> +	ip link add name lag1 type veth peer name lag1-end
+> +	ip link set dev lag1 netns lag_node1 $state name eth1
+> +	ip link set dev lag1-end netns lag_node2 $state name eth1
+> +
+> +	NAMESPACES="${namespaces}"
+> +}
+> +
+> +# cleanup all lag related namespaces and remove the bonding module
+> +lag_cleanup()
+> +{
+> +	for n in ${NAMESPACES}; do
+> +		ip netns delete ${n} >/dev/null 2>&1 || true
+> +	done
+> +	modprobe -r bonding
+> +}
+> +
+> +SWITCH="lag_node1"
+> +CLIENT="lag_node2"
+> +CLIENTIP="172.20.2.1"
+> +SWITCHIP="172.20.2.2"
+> +
+> +lag_setup_network()
+> +{
+> +	lag_setup2x2 "down"
+> +
+> +	# create switch
+> +	ip netns exec ${SWITCH} ip link add br0 up type bridge
+> +	ip netns exec ${SWITCH} ip link set eth0 master br0 up
+> +	ip netns exec ${SWITCH} ip link set eth1 master br0 up
+> +	ip netns exec ${SWITCH} ip addr add ${SWITCHIP}/24 dev br0
+> +}
+> +
+> +lag_reset_network()
+> +{
+> +	ip netns exec ${CLIENT} ip link del bond0
+> +	ip netns exec ${SWITCH} ip link set eth0 up
+> +	ip netns exec ${SWITCH} ip link set eth1 up
+> +}
+> +
+> +create_bond()
+> +{
+> +	# create client
+> +	ip netns exec ${CLIENT} ip link set eth0 down
+> +	ip netns exec ${CLIENT} ip link set eth1 down
+> +
+> +	ip netns exec ${CLIENT} ip link add bond0 type bond $@
+> +	ip netns exec ${CLIENT} ip link set eth0 master bond0
+> +	ip netns exec ${CLIENT} ip link set eth1 master bond0
+> +	ip netns exec ${CLIENT} ip link set bond0 up
+> +	ip netns exec ${CLIENT} ip addr add ${CLIENTIP}/24 dev bond0
+> +}
+> +
+> +test_bond_recovery()
+> +{
+> +	RET=0
+> +
+> +	create_bond $@
+> +
+> +	# verify connectivity
+> +	ip netns exec ${CLIENT} ping ${SWITCHIP} -c 5 >/dev/null 2>&1
+
+Minor nit: here and below you reduce the count number, to shorten
+significantly the tests runtime.
+
+> +	check_err $? "No connectivity"
+> +
+> +	# force the links of the bond down
+> +	ip netns exec ${SWITCH} ip link set eth0 down
+> +	sleep 2
+> +	ip netns exec ${SWITCH} ip link set eth0 up
+> +	ip netns exec ${SWITCH} ip link set eth1 down
+> +
+> +	# re-verify connectivity
+> +	ip netns exec ${CLIENT} ping ${SWITCHIP} -c 5 >/dev/null 2>&1
+> +
+> +	local rc=$?
+> +	check_err $rc "Bond failed to recover"
+> +	log_test "$1 ($2) bond recovery"
+> +	lag_reset_network
+> +	return 0
+
+Minor nit: the return statement is not needed here.
+
+
+Cheers,
+
+Paolo
+
