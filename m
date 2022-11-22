@@ -2,116 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A510C634076
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 16:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C8E63417D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 17:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbiKVPnU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 10:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
+        id S233809AbiKVQ3W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 11:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKVPnT (ORCPT
+        with ESMTP id S233399AbiKVQ3U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:43:19 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134B417068
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 07:43:18 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id q13so1824726ild.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 07:43:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7FyLRcWeEt10Tp6Q2JSqZYM23I/W5i6bt7PkeloOjrY=;
-        b=F/l9sfjehEkVkYFxDLcg0q15uEq2C4J1hCH5nBl+qzVe5+J2mDnJ9mMs7KO018UF9n
-         HcRfwzUPjMXduEd9m9s+gdINS4UCFDrUZm00qGxYFg9CTocqtCMtFJLqMOIrHbXC+4c4
-         TgS3Rn9PriIqzHHhQew7xjyzuTs7GDDiD9y7w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7FyLRcWeEt10Tp6Q2JSqZYM23I/W5i6bt7PkeloOjrY=;
-        b=lc5Nm5qHJAsFmBOAtrn1NYjycT2jljbCis8Me4r6UG/1LDDY95jjFgoysMwncQW3y8
-         V9F5VAzn783FR9KZCPrSevP/BSZqXURPq15HrwwOjydd8G1lunSKWO/RUowg9OmChrF/
-         dB5iWO1yTADAD3HdzK/rAs8PkFI8QS8vq55RB6hdPvyagxDj1A95sqRNEbdpmbSNqgzd
-         6cwLpB2RvS9ehb8ZBTZj+lenkrXPgHjMiTxVAnHZQYtYr2WeHoPHBUuabP/r2e9B3jou
-         /pSRU5dezz5+vBxPEa+7KOQ8PFdOyRBMCJuuLLeLN57feX5L88/RWxWQfUjSzZi+pqUb
-         fAOQ==
-X-Gm-Message-State: ANoB5pkSZkC4PiNQHVVwE5KONpSo/bP0Jg9rF5WqehBsLii62y9MtxYp
-        Z4FfwWO3YZq4Umn0Urz1P5ch3+eo1Wm7GQ==
-X-Google-Smtp-Source: AA0mqf4OcSywAlDHIvJRhueT8aT6BdM5aBQw7Ev2IR9uotgHMoLPe8lMebYFZgoLIm/bvGqAwFB8og==
-X-Received: by 2002:a05:6e02:1054:b0:2f9:4fbf:1f4c with SMTP id p20-20020a056e02105400b002f94fbf1f4cmr2741162ilj.296.1669131796818;
-        Tue, 22 Nov 2022 07:43:16 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id n13-20020a6b590d000000b006ddd85d06c2sm5349298iob.55.2022.11.22.07.43.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 07:43:15 -0800 (PST)
-Message-ID: <42c7effb-691c-c7a1-0d7d-8ba1569c0269@linuxfoundation.org>
-Date:   Tue, 22 Nov 2022 08:43:14 -0700
+        Tue, 22 Nov 2022 11:29:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE802F037;
+        Tue, 22 Nov 2022 08:29:19 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DF6E31F85D;
+        Tue, 22 Nov 2022 16:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669134557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i4/RJcDx5W5MDWxatsZO6Jcd+cYSccjZheprFRMkSho=;
+        b=X60dEluFtp4cLi1JihULzmkzaAA9/k4ioOG0n7SnZjElr35p11yH8f4Bssb8T6zKnqjhw2
+        BDEDmmllzzQfnE37AD6LBoQboXkTfOwklpWC3spbAYDRkpU5ZxaFtM8EabO2lg17w4JmPI
+        FG84E0lRMDGpjDhIqVm+gTJfS8SspQg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669134557;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i4/RJcDx5W5MDWxatsZO6Jcd+cYSccjZheprFRMkSho=;
+        b=tytwOJur3SCnNybSVppd+YvRZnEtonPJqvXEuE1IgRt5Krn2SkTFWXTND8eoiVlqfQBoI0
+        i1KrLu2gVmy/a2Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E82B13AA1;
+        Tue, 22 Nov 2022 16:29:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id h9BSEt34fGMmOQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 22 Nov 2022 16:29:17 +0000
+Message-ID: <8bb93984-a2f4-2029-7cec-bea659e77b6c@suse.cz>
+Date:   Tue, 22 Nov 2022 17:29:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] tools: selftests: Use "grep -E" instead of "egrep"
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1668763704-10408-1-git-send-email-yangtiezhu@loongson.cn>
+ Thunderbird/102.5.0
+Subject: Re: [PATCH mm-unstable v1 09/20] mm/gup: reliable R/O long-term
+ pinning in COW mappings
 Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <1668763704-10408-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-10-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221116102659.70287-10-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/18/22 02:28, Tiezhu Yang wrote:
-> The latest version of grep claims the egrep is now obsolete so the build
-> now contains warnings that look like:
-> 	egrep: warning: egrep is obsolescent; using grep -E
-> fix this up by moving the related file to use "grep -E" instead.
+On 11/16/22 11:26, David Hildenbrand wrote:
+> We already support reliable R/O pinning of anonymous memory. However,
+> assume we end up pinning (R/O long-term) a pagecache page or the shared
+> zeropage inside a writable private ("COW") mapping. The next write access
+> will trigger a write-fault and replace the pinned page by an exclusive
+> anonymous page in the process page tables to break COW: the pinned page no
+> longer corresponds to the page mapped into the process' page table.
 > 
->    sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests`
+> Now that FAULT_FLAG_UNSHARE can break COW on anything mapped into a
+> COW mapping, let's properly break COW first before R/O long-term
+> pinning something that's not an exclusive anon page inside a COW
+> mapping. FAULT_FLAG_UNSHARE will break COW and map an exclusive anon page
+> instead that can get pinned safely.
 > 
-> Here are the steps to install the latest grep:
+> With this change, we can stop using FOLL_FORCE|FOLL_WRITE for reliable
+> R/O long-term pinning in COW mappings.
 > 
->    wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
->    tar xf grep-3.8.tar.gz
->    cd grep-3.8 && ./configure && make
->    sudo make install
->    export PATH=/usr/local/bin:$PATH
+> With this change, the new R/O long-term pinning tests for non-anonymous
+> memory succeed:
+>   # [RUN] R/O longterm GUP pin ... with shared zeropage
+>   ok 151 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP pin ... with memfd
+>   ok 152 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP pin ... with tmpfile
+>   ok 153 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP pin ... with huge zeropage
+>   ok 154 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP pin ... with memfd hugetlb (2048 kB)
+>   ok 155 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP pin ... with memfd hugetlb (1048576 kB)
+>   ok 156 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP-fast pin ... with shared zeropage
+>   ok 157 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP-fast pin ... with memfd
+>   ok 158 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP-fast pin ... with tmpfile
+>   ok 159 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP-fast pin ... with huge zeropage
+>   ok 160 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP-fast pin ... with memfd hugetlb (2048 kB)
+>   ok 161 Longterm R/O pin is reliable
+>   # [RUN] R/O longterm GUP-fast pin ... with memfd hugetlb (1048576 kB)
+>   ok 162 Longterm R/O pin is reliable
 > 
-
-Does this change work without the latest grep? It seems to work on
-grep (GNU grep) 3.7 when I ran quick test on kselftest_deps.sh with
-your change.
-
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->   .../selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc       |  8 ++++----
->   tools/testing/selftests/gpio/gpio-sim.sh                       |  2 +-
->   tools/testing/selftests/kselftest_deps.sh                      |  2 +-
->   tools/testing/selftests/net/toeplitz.sh                        |  2 +-
->   tools/testing/selftests/powerpc/scripts/hmi.sh                 |  2 +-
->   tools/testing/selftests/rcutorture/bin/console-badness.sh      |  2 +-
->   tools/testing/selftests/rcutorture/bin/kvm-build.sh            |  4 ++--
->   tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh      |  4 ++--
->   tools/testing/selftests/rcutorture/bin/kvm.sh                  |  4 ++--
->   tools/testing/selftests/rcutorture/bin/parse-console.sh        | 10 +++++-----
->   10 files changed, 20 insertions(+), 20 deletions(-)
+> Note 1: We don't care about short-term R/O-pinning, because they have
+> snapshot semantics: they are not supposed to observe modifications that
+> happen after pinning.
 > 
+> As one example, assume we start direct I/O to read from a page and store
+> page content into a file: modifications to page content after starting
+> direct I/O are not guaranteed to end up in the file. So even if we'd pin
+> the shared zeropage, the end result would be as expected -- getting zeroes
+> stored to the file.
+> 
+> Note 2: For shared mappings we'll now always fallback to the slow path to
+> lookup the VMA when R/O long-term pining. While that's the necessary price
+> we have to pay right now, it's actually not that bad in practice: most
+> FOLL_LONGTERM users already specify FOLL_WRITE, for example, along with
+> FOLL_FORCE because they tried dealing with COW mappings correctly ...
+> 
+> Note 3: For users that use FOLL_LONGTERM right now without FOLL_WRITE,
+> such as VFIO, we'd now no longer pin the shared zeropage. Instead, we'd
+> populate exclusive anon pages that we can pin. There was a concern that
+> this could affect the memlock limit of existing setups.
+> 
+> For example, a VM running with VFIO could run into the memlock limit and
+> fail to run. However, we essentially had the same behavior already in
+> commit 17839856fd58 ("gup: document and work around "COW can break either
+> way" issue") which got merged into some enterprise distros, and there were
+> not any such complaints. So most probably, we're fine.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Please split these into sepratate 5 patches. All rcu changes in one, net in
-one, powerpc  etc.
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-The change looks good to me.
-
-thanks,
--- Shuah
