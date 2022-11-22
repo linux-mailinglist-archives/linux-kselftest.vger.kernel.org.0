@@ -2,172 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59222634055
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 16:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A510C634076
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Nov 2022 16:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234060AbiKVPgf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 10:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S233807AbiKVPnU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 10:43:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234089AbiKVPgF (ORCPT
+        with ESMTP id S229481AbiKVPnT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 10:36:05 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AFA71F03;
-        Tue, 22 Nov 2022 07:35:54 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8357A22007;
-        Tue, 22 Nov 2022 15:35:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669131353; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xzeEtRVGkBValjf4cAqJIIBnm0WLgHIJrOj2Qpyeryk=;
-        b=hSz8uo53GqZkaSBqbG3aIh16lgMQB2Sw8gZ6Z+fnEjIR6uPvpuBuVkR8TpcuCDJwN2rjjn
-        iqJmydTFhzXH0tY5jw9oJ6zK0Sx7/l0zZrHLYI1mzVvp/woqabMd2RthMdqBUz+tckoXxt
-        gvUiGWpp9yM7xLCq0tNctpGuD1es/pI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669131353;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xzeEtRVGkBValjf4cAqJIIBnm0WLgHIJrOj2Qpyeryk=;
-        b=87yFyDfodelF6paPP+3fZVkcbfCamfu6aYJAmnQjTNh2RXFp/RQ8a0uSheJsgsaRl+tSbc
-        rgSpbkEWiLk/2KDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E380913B01;
-        Tue, 22 Nov 2022 15:35:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /ANwNljsfGPGGwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 22 Nov 2022 15:35:52 +0000
-Message-ID: <34835490-57d7-4e26-7474-008b2c4c6b39@suse.cz>
-Date:   Tue, 22 Nov 2022 16:35:52 +0100
+        Tue, 22 Nov 2022 10:43:19 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134B417068
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 07:43:18 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id q13so1824726ild.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 07:43:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7FyLRcWeEt10Tp6Q2JSqZYM23I/W5i6bt7PkeloOjrY=;
+        b=F/l9sfjehEkVkYFxDLcg0q15uEq2C4J1hCH5nBl+qzVe5+J2mDnJ9mMs7KO018UF9n
+         HcRfwzUPjMXduEd9m9s+gdINS4UCFDrUZm00qGxYFg9CTocqtCMtFJLqMOIrHbXC+4c4
+         TgS3Rn9PriIqzHHhQew7xjyzuTs7GDDiD9y7w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7FyLRcWeEt10Tp6Q2JSqZYM23I/W5i6bt7PkeloOjrY=;
+        b=lc5Nm5qHJAsFmBOAtrn1NYjycT2jljbCis8Me4r6UG/1LDDY95jjFgoysMwncQW3y8
+         V9F5VAzn783FR9KZCPrSevP/BSZqXURPq15HrwwOjydd8G1lunSKWO/RUowg9OmChrF/
+         dB5iWO1yTADAD3HdzK/rAs8PkFI8QS8vq55RB6hdPvyagxDj1A95sqRNEbdpmbSNqgzd
+         6cwLpB2RvS9ehb8ZBTZj+lenkrXPgHjMiTxVAnHZQYtYr2WeHoPHBUuabP/r2e9B3jou
+         /pSRU5dezz5+vBxPEa+7KOQ8PFdOyRBMCJuuLLeLN57feX5L88/RWxWQfUjSzZi+pqUb
+         fAOQ==
+X-Gm-Message-State: ANoB5pkSZkC4PiNQHVVwE5KONpSo/bP0Jg9rF5WqehBsLii62y9MtxYp
+        Z4FfwWO3YZq4Umn0Urz1P5ch3+eo1Wm7GQ==
+X-Google-Smtp-Source: AA0mqf4OcSywAlDHIvJRhueT8aT6BdM5aBQw7Ev2IR9uotgHMoLPe8lMebYFZgoLIm/bvGqAwFB8og==
+X-Received: by 2002:a05:6e02:1054:b0:2f9:4fbf:1f4c with SMTP id p20-20020a056e02105400b002f94fbf1f4cmr2741162ilj.296.1669131796818;
+        Tue, 22 Nov 2022 07:43:16 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id n13-20020a6b590d000000b006ddd85d06c2sm5349298iob.55.2022.11.22.07.43.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 07:43:15 -0800 (PST)
+Message-ID: <42c7effb-691c-c7a1-0d7d-8ba1569c0269@linuxfoundation.org>
+Date:   Tue, 22 Nov 2022 08:43:14 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH mm-unstable v1 08/20] mm: extend FAULT_FLAG_UNSHARE
- support to anything in a COW mapping
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] tools: selftests: Use "grep -E" instead of "egrep"
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <1668763704-10408-1-git-send-email-yangtiezhu@loongson.cn>
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-9-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221116102659.70287-9-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <1668763704-10408-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/16/22 11:26, David Hildenbrand wrote:
-> Extend FAULT_FLAG_UNSHARE to break COW on anything mapped into a
-> COW (i.e., private writable) mapping and adjust the documentation
-> accordingly.
+On 11/18/22 02:28, Tiezhu Yang wrote:
+> The latest version of grep claims the egrep is now obsolete so the build
+> now contains warnings that look like:
+> 	egrep: warning: egrep is obsolescent; using grep -E
+> fix this up by moving the related file to use "grep -E" instead.
 > 
-> FAULT_FLAG_UNSHARE will now also break COW when encountering the shared
-> zeropage, a pagecache page, a PFNMAP, ... inside a COW mapping, by
-> properly replacing the mapped page/pfn by a private copy (an exclusive
-> anonymous page).
+>    sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests`
 > 
-> Note that only do_wp_page() needs care: hugetlb_wp() already handles
-> FAULT_FLAG_UNSHARE correctly. wp_huge_pmd()/wp_huge_pud() also handles it
-> correctly, for example, splitting the huge zeropage on FAULT_FLAG_UNSHARE
-> such that we can handle FAULT_FLAG_UNSHARE on the PTE level.
+> Here are the steps to install the latest grep:
 > 
-> This change is a requirement for reliable long-term R/O pinning in
-> COW mappings.
+>    wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
+>    tar xf grep-3.8.tar.gz
+>    cd grep-3.8 && ./configure && make
+>    sudo make install
+>    export PATH=/usr/local/bin:$PATH
 > 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Does this change work without the latest grep? It seems to work on
+grep (GNU grep) 3.7 when I ran quick test on kselftest_deps.sh with
+your change.
 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
->  include/linux/mm_types.h | 8 ++++----
->  mm/memory.c              | 4 ----
->  2 files changed, 4 insertions(+), 8 deletions(-)
+>   .../selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc       |  8 ++++----
+>   tools/testing/selftests/gpio/gpio-sim.sh                       |  2 +-
+>   tools/testing/selftests/kselftest_deps.sh                      |  2 +-
+>   tools/testing/selftests/net/toeplitz.sh                        |  2 +-
+>   tools/testing/selftests/powerpc/scripts/hmi.sh                 |  2 +-
+>   tools/testing/selftests/rcutorture/bin/console-badness.sh      |  2 +-
+>   tools/testing/selftests/rcutorture/bin/kvm-build.sh            |  4 ++--
+>   tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh      |  4 ++--
+>   tools/testing/selftests/rcutorture/bin/kvm.sh                  |  4 ++--
+>   tools/testing/selftests/rcutorture/bin/parse-console.sh        | 10 +++++-----
+>   10 files changed, 20 insertions(+), 20 deletions(-)
 > 
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 5e7f4fac1e78..5e9aaad8c7b2 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -1037,9 +1037,9 @@ typedef struct {
->   * @FAULT_FLAG_REMOTE: The fault is not for current task/mm.
->   * @FAULT_FLAG_INSTRUCTION: The fault was during an instruction fetch.
->   * @FAULT_FLAG_INTERRUPTIBLE: The fault can be interrupted by non-fatal signals.
-> - * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to unshare (and mark
-> - *                      exclusive) a possibly shared anonymous page that is
-> - *                      mapped R/O.
-> + * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to break COW in a
-> + *                      COW mapping, making sure that an exclusive anon page is
-> + *                      mapped after the fault.
->   * @FAULT_FLAG_ORIG_PTE_VALID: whether the fault has vmf->orig_pte cached.
->   *                        We should only access orig_pte if this flag set.
->   *
-> @@ -1064,7 +1064,7 @@ typedef struct {
->   *
->   * The combination FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE is illegal.
->   * FAULT_FLAG_UNSHARE is ignored and treated like an ordinary read fault when
-> - * no existing R/O-mapped anonymous page is encountered.
-> + * applied to mappings that are not COW mappings.
->   */
->  enum fault_flag {
->  	FAULT_FLAG_WRITE =		1 << 0,
-> diff --git a/mm/memory.c b/mm/memory.c
-> index d47ad33c6487..56b21ab1e4d2 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3432,10 +3432,6 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->  		}
->  		wp_page_reuse(vmf);
->  		return 0;
-> -	} else if (unshare) {
-> -		/* No anonymous page -> nothing to do. */
-> -		pte_unmap_unlock(vmf->pte, vmf->ptl);
-> -		return 0;
->  	}
->  copy:
->  	/*
 
+Please split these into sepratate 5 patches. All rcu changes in one, net in
+one, powerpc  etc.
+
+The change looks good to me.
+
+thanks,
+-- Shuah
