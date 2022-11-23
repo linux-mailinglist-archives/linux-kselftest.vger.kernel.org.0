@@ -2,76 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B6E634DD8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 03:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284E3634EF2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 05:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbiKWC2O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Nov 2022 21:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
+        id S235731AbiKWEc1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Nov 2022 23:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235555AbiKWC2M (ORCPT
+        with ESMTP id S232734AbiKWEcY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 21:28:12 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4734640937;
-        Tue, 22 Nov 2022 18:27:52 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxnusnhX1j1yYAAA--.502S3;
-        Wed, 23 Nov 2022 10:27:51 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxFlcnhX1jXXgYAA--.45574S3;
-        Wed, 23 Nov 2022 10:27:51 +0800 (CST)
-To:     yangtiezhu@loongson.cn
-References: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v2 0/6] selftests: Use "grep -E" instead of "egrep"
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, skhan@linuxfoundation.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <bf9b26b5-2793-204f-ba9c-4d9cd55b08ad@loongson.cn>
-Date:   Wed, 23 Nov 2022 10:27:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 22 Nov 2022 23:32:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BB27DEC4
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 20:31:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669177888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VQl9ff+pm3Bk3aH204X24mZs6zyamDTWXwNuFP1xLlU=;
+        b=ioS4y6udGto6FdbJOCjiDvPuEcBJbFV86tIH60H4nWp0VAyPjYItmegP1pzJkpbvUP4ysv
+        s+t37dIUrYzUTYwNIuvWzMyi3Zus+BI6cUsMpk5GgeRlaLJE56HwvUnxrpSom1G+fpw6go
+        nS9H9fqIYUPF9yeTZWnd5n8hys5teaY=
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
+ [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-50-95gnpcWpOryobwNRzCPohA-1; Tue, 22 Nov 2022 23:31:27 -0500
+X-MC-Unique: 95gnpcWpOryobwNRzCPohA-1
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-14289aba38aso6716713fac.18
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 20:31:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VQl9ff+pm3Bk3aH204X24mZs6zyamDTWXwNuFP1xLlU=;
+        b=BeEv9tXQVwsul7+x/4BtB1yYYhxwAkY/AVk1MfjEc8u4d6UpFscWef9E9unG/W8e9z
+         Ruy43w5AzzO+Jn9TBlAlm5lAikPaAAQ9u/FJ18J3oa4xq55yxTM7BZMcIhAvzxIYH0cM
+         Jk98Qrz0XCac9deEMqbnYBVi2tsPMzuBcqrN4nuK9AWZMjMgH55Q+f+weI4wbrS5LbsO
+         944ANI042UpM0wm3JopHbdxoKmKtWjMz1iYcCeDB5jMW0nLPckTX1ngMR9hOVRfP5qKt
+         Utkm8l286Xy72MA1mLOXodRI+DOg10f1DY2lDfzBwtb/Lsv5KVEwynRC7PMy4chAz1FI
+         YT7Q==
+X-Gm-Message-State: ANoB5pmYUiQIlNXMR/EPQyUQFp3IsrvvNQUaTfbt5x1Tm7Z+GEerr9Vx
+        ATYMKY8aL/orV5XoMtAAQuBNRPeD/aNdygQJE75spNxS1yIflYIe0WUcFQBqLLLgEWHcv6rLXXr
+        cZlzK4BVbFbCc8JzbiaigOEHwpdCP5/5jwGLKwvvvU3u2
+X-Received: by 2002:a4a:94a9:0:b0:480:8f4a:7062 with SMTP id k38-20020a4a94a9000000b004808f4a7062mr3093716ooi.57.1669177886407;
+        Tue, 22 Nov 2022 20:31:26 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5p+2/kgwNtkcV/tZnRU73FzLwSP/0hnFdBUnffLOt1Eb3cLSA1SD07EWvhtzopVZbm5DQMqgdOyOqC6G2YoCA=
+X-Received: by 2002:a4a:94a9:0:b0:480:8f4a:7062 with SMTP id
+ k38-20020a4a94a9000000b004808f4a7062mr3093711ooi.57.1669177886199; Tue, 22
+ Nov 2022 20:31:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8BxFlcnhX1jXXgYAA--.45574S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
-        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
-        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAV
-        WUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY
-        1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7I
-        U83UUUUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <0-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com> <15-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+ <BN9PR11MB5276B0219008568A30F5A4738C099@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Y3ejMSTWvJuELQ7K@nvidia.com> <BN9PR11MB5276939555C1460EFBFD15A68C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+In-Reply-To: <BN9PR11MB5276939555C1460EFBFD15A68C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 23 Nov 2022 12:31:15 +0800
+Message-ID: <CACGkMEumUoHfWE0NkdmNbnx-nmgXrm3ZL6Jrj6x+M=wSXQK32g@mail.gmail.com>
+Subject: Re: [PATCH v5 15/19] iommufd: vfio container FD ioctl compatibility
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Joerg Roedel <joro@8bytes.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+        Anthony Krowiak <akrowiak@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        "Martins, Joao" <joao.m.martins@oracle.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Yang, Lixiao" <lixiao.yang@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        Keqian Zhu <zhukeqian1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It seems that patch #2~#6 has no conflicts with the other related
-git tree, but patch #1 is conflicted with paulmck/linux-rcu.git dev.
+On Wed, Nov 23, 2022 at 9:33 AM Tian, Kevin <kevin.tian@intel.com> wrote:
+>
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > Sent: Friday, November 18, 2022 11:22 PM
+> >
+> > On Fri, Nov 18, 2022 at 02:58:49AM +0000, Tian, Kevin wrote:
+> > > > From: Jason Gunthorpe <jgg@nvidia.com>
+> > > > Sent: Thursday, November 17, 2022 5:01 AM
+> > > > index ca28a135b9675f..2fdff04000b326 100644
+> > > > --- a/drivers/iommu/iommufd/Makefile
+> > > > +++ b/drivers/iommu/iommufd/Makefile
+> > > > @@ -5,6 +5,7 @@ iommufd-y := \
+> > > >   io_pagetable.o \
+> > > >   ioas.o \
+> > > >   main.o \
+> > > > - pages.o
+> > > > + pages.o \
+> > > > + vfio_compat.o
+> > > >
+> > >
+> > > move vfio_compat out of core? it's not required if VFIO
+> > > is not configured.
+> >
+> > We can, but I don't know if we should. Compat ioctls are part of
+> > /dev/iommu, and technically have nothing to do with VFIO. A native
+> > iommufd application using VDPA could use them, if it wanted, for
+> > instance.
+> >
+>
+> I'm not sure whether that requires further VDPA support. Be safe
+> I'd like VDPA to explicitly select vfio_compact when that new
+> mixed scheme is supported.
+>
 
-What should I do?
+This sounds strange. If I don't misunderstand the code, it tries to
+provide ioctl compatibility with the VFIO container. I don't see how
+it can be used for vDPA, the ioctls used by vDPA is not compatible
+with VFIO.
 
-Shuah, could you please apply patch #2~#6 to your linux-kselftest.git 
-next branch and ignore patch #1?
-
-And then let me send a seperate patch #1 rebased on 
-paulmck/linux-rcu.git dev branch to rcu@vger.kernel.org.
-
-Thanks,
-Tiezhu
+Thanks
 
