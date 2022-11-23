@@ -2,206 +2,282 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95026634F5F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 06:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEF86352A7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 09:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbiKWFKj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Nov 2022 00:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S236231AbiKWIaN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Nov 2022 03:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235594AbiKWFKh (ORCPT
+        with ESMTP id S236117AbiKWIaK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Nov 2022 00:10:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA736EA103
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 21:09:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669180180;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mZgnPlNWNq3l/Qs/HWfUXLGHWqkY+nW1pHVMoxofEqg=;
-        b=iKtEy7VJiI/1HdzuVowPKAMO2emlJOqjCABjUMrK675wgASVbQvBcKZtomDfq1vzZx7F3T
-        lsUQzbhrkiVMq8E5HQb8ZKoQRUYFWDq0Z7A33IhioYKvToM59oZGiY3Dqbgc2N3/aLUlpt
-        kTKoTMV9V/3v9kfD5A42zL6wJTGr9o8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-255-Hsj-VEcjNFmFj9zR4UvhZQ-1; Wed, 23 Nov 2022 00:09:35 -0500
-X-MC-Unique: Hsj-VEcjNFmFj9zR4UvhZQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71040101A528;
-        Wed, 23 Nov 2022 05:09:34 +0000 (UTC)
-Received: from [10.64.54.62] (vpn2-54-62.bne.redhat.com [10.64.54.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CCEE1C15E76;
-        Wed, 23 Nov 2022 05:09:29 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2 1/2] KVM: selftests: Have perf_test_util signal when to
- stop vCPUs
-To:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221118211503.4049023-1-oliver.upton@linux.dev>
- <20221118211503.4049023-2-oliver.upton@linux.dev>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <f45ef739-fe22-1f02-a3c0-fcc3eef2db6d@redhat.com>
-Date:   Wed, 23 Nov 2022 13:09:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
-MIME-Version: 1.0
-In-Reply-To: <20221118211503.4049023-2-oliver.upton@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Wed, 23 Nov 2022 03:30:10 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA8923160;
+        Wed, 23 Nov 2022 00:30:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669192208; x=1700728208;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=DjE5/pslN1u524wSHVRPCq4BGpnC8c90AidlOQKvGVw=;
+  b=TBLE7iImFqWcJv0gmh5bpzE/Li0lufIGl6poIKlv7HJZNjthkNmGDq/a
+   qP0GyCKu+dSAFLYp6ahbed3ho2QWAl4Wcu4Ovfffg0D0AunjlilRT3+we
+   tVa27AbiIeywzchZeJWRhKNpwMrdiJyyKd+M7Mj+i+R6ID1Um3CmrYSSE
+   QoTOISaEAJBWLUu1Fy/N9kRRe5ifCwVMBG6xbJFrkVzI5mwieK2A8eOiE
+   dHdwgvP69FaOXbFL3YJD6rkAcT8PFFZv1rsvKR+QA6Cknvud4LC1W/76Y
+   MgawvLUQBIKKiN0nwtVZyD1dugdRoj5dXsYwui2b07y13uLWCLTyCOmC/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="312713374"
+X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
+   d="scan'208";a="312713374"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 00:30:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="766631962"
+X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
+   d="scan'208";a="766631962"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga004.jf.intel.com with ESMTP; 23 Nov 2022 00:30:07 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 00:30:07 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 00:30:06 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 23 Nov 2022 00:30:06 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.107)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 23 Nov 2022 00:30:06 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fzD7ZSqdIs830JN0XdQ8Y9dK0xKlXXsgM2Sm85WaL5lgnLUIwDAWVmPzAZFqC/btYDpbxl6LmW29pAER+UJqwOx/BOQ/o6HxUbZfXZap89aXSPnICQyWQdSsaLKQIltqCMyWvjrYOsE1ZsZ3hmZhSMeT6DAXhQVREtxLWlWKmOEqJcC0OlaMD5twaIo6PqEYuQEtpe+Y8YTIz3KURTBu2OEtmKsI+ydDZ4fFEZPRkBkXPnBOspRkuDqTeMFtT9ZQ5rkNHjvD0hntZ9aNyho6smoHCxNiTIoKGIHuajeYfKX5AS7QzVsziK22n7ZO0OBxME8XCrw04sfvgz6OIvR1Bw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/HTKdX7G3yYq1JHjamVXkOgECqujF4SGrAKrXcFTaAw=;
+ b=kVNzgWpShaipoqk4h6oR3YAVtv0FUOinljUSC/G2FlHLSr6mZd9k0ToBcCallWXLyxhSchu1/xHvZlDJL8qBLwHRQWeQWoyZO8eoxCCtwQ5ooA96dWE2TbQZp/b6eDImTiW7hSskYsrYq8crf4X6xHdD8mp8vgiitygKOHiXueUiMDiLWQueojdolb0NYqBtYlmbd8SBmbHu4I2dtv1AhGabL/3+75P1ig2eE89W2VkbCs8y7RT/XLzjVtgSxeKoHBZbQ9h3Bdhf0YTupdN90z4wZ9+YgGiGo0rKtvJvLBccojUldh5GoH08k4ULMMfzEkQkntX4J+9x3SnU0eOUTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
+ by CO1PR11MB5187.namprd11.prod.outlook.com (2603:10b6:303:94::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 08:29:58 +0000
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::61c3:c221:e785:ce13]) by DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::61c3:c221:e785:ce13%6]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 08:29:57 +0000
+Message-ID: <da5dffaf-3e75-9681-8e0d-4b7402b05b1f@intel.com>
+Date:   Wed, 23 Nov 2022 16:30:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v5 01/19] iommu: Add IOMMU_CAP_ENFORCE_CACHE_COHERENCY
 Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>, <bpf@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, <iommu@lists.linux.dev>,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, <linux-doc@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+CC:     Anthony Krowiak <akrowiak@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        <kvm@vger.kernel.org>, Lixiao Yang <lixiao.yang@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        "Shameerali Kolothum Thodi" <shameerali.kolothum.thodi@huawei.com>,
+        Keqian Zhu <zhukeqian1@huawei.com>
+References: <1-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+From:   Yi Liu <yi.l.liu@intel.com>
+In-Reply-To: <1-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-ClientProxiedBy: SG2PR04CA0160.apcprd04.prod.outlook.com (2603:1096:4::22)
+ To DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|CO1PR11MB5187:EE_
+X-MS-Office365-Filtering-Correlation-Id: de01f7c7-e584-44cc-3f47-08dacd2ce6f4
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Aq8X53UHIyQKeQVOCMT9vKPHKuEo6OWRqNKqyibUQe0iw8uKAE3oTWULAnYe20oQasrOG40Q1L+w+qjjQAY4e9tUBv66106atxf+OmvceCgNCaUtpWKmp55tHwfiPGT9OxHuJSjPlvdoHjp9PwzqJy7i/aKzUf5BNC58L7Rm/KQaYXI6mY37FOQWcdCSw5Gvy+7/TCDwmDM4a8n1UWG60qJ32DT5c21pONVSDfggze1zwMbJmBWzueCROjSTK3xf4FsbI+6xuFnAzG1Mrwro3YQvGumGLzSfYxgQd8haYFaOK9VxVXRXtpBhNkQSTzyTEpUN3wyGECJE5M2LcOvgnOXHSENheJAyfcqM1nkaUJBRON/VhhG2Af4KThPeGzMlw6BZG00KMrkZTi/DFsfQCpz0PFq6OQRF2LVuvTlUiNF8148dw+CyMGdVuPWn+k/H/H9fiElUdLFd2iJYBZpUdDJojQIgJDNhGgv/dpgaO1BjxjhQEDEAKcXup9VdbaL636E6j7PVMN+PiUrWj+9EvkPcIw38UUrRc2rBDtsqtFpZ7SgjgvoAhOdTEHZq4i+lpITgoSd/99GMzwG5mB1ClRlKR7CJ5hQ0Mt54WB4gVmnJk23XwCMWC/mhCEqf0YGCNsfvmlNnRq41nePfrEdM3E+f6Uv4vAaL4IMxM7/+HfhVTm4cFT19bJ1qQf1auhHRMNXQE3moEN05uqi5l0SNXowJfpibpcA+CZWVzgQsQ406gwomVm2sgA1zGA2ZMqOMDqw9wRR7U8XD7GdD+3dHDQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(39860400002)(366004)(376002)(396003)(451199015)(2906002)(31686004)(2616005)(66946007)(53546011)(41300700001)(36756003)(31696002)(86362001)(66556008)(110136005)(921005)(83380400001)(6506007)(54906003)(82960400001)(38100700002)(4326008)(6486002)(8936002)(8676002)(6666004)(5660300002)(66476007)(186003)(6512007)(966005)(45080400002)(7406005)(26005)(7416002)(478600001)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MVdVYU9kbTNVNlRZMTMvQnk2OVpLNzB0dmJSRHltVkhmb0ZLSGc3bGpZV1V2?=
+ =?utf-8?B?RWNNYkRBb1RZaFF2ajVkcDd4SmpPWkdHaENzbXY1R200RzI3aXRvMXNDRFc3?=
+ =?utf-8?B?RktOQmRDYkdBZE9pWVVNK1FmSGNmb0RqREJkbjkwSWdDZWVsOEZCdjh3Ykg5?=
+ =?utf-8?B?RkZpdEEzZVgyK1RNcCtIemU1QXNHMnY0ZHF1alBEaGRtdjNPdDNTS0JzRU1C?=
+ =?utf-8?B?TDU1MldXdEtRNjNFQURObzJqNVpLMW1PMzc2K1dKcmExZldwTVpYTm40MkVB?=
+ =?utf-8?B?RTZZWWxjTDBzcURORGlEd1pXd0pmNXBwUTZCdjAyM0RMeEVrL3NsZm9yclFQ?=
+ =?utf-8?B?WjFpcnoxYUdmRjZPTjhYR1pOMSttNnUvd1dUVlNuemNkTGt1by83bGUwcUt5?=
+ =?utf-8?B?REpzSmh3NlVoVG9OL1FWeWE4RTlIdkl5MXB0SlJuZHhMblQwUmdlQjhqQVhl?=
+ =?utf-8?B?QVkvSUhhMVBZNXBKY2JzR3EvUmJpN3d0K2hxN1JjbkVSb2FHTHJFZHprZEVJ?=
+ =?utf-8?B?NWFxODdSSzJ2MDhNYXlUcS8rUFdaOExvSmZWNStDUmx6b09hblFzbTdIUVlW?=
+ =?utf-8?B?TzNsbCtzREZ0YWtJVHVkOUFrNm93TnFkVlQ4K0NhV3RSeGQ5TmlCSlVDMUNJ?=
+ =?utf-8?B?QUpUS2FhUm9IWndwRm1URXowbGVRekUwOXBoa1JCYTNvM2Q3eG16RDAyYTN6?=
+ =?utf-8?B?aUplWGZ4KzA1VGFGWmQ0S2c1a21NNVZIYWxwejJPdG8zc1lJck5nZ2VYRGxC?=
+ =?utf-8?B?OExBNHovcWF5cklKcERxM3JFZ0lES1VMaTZNd3AxdDlTTDhtMUowRFY3aDJK?=
+ =?utf-8?B?YXZldkp0Wlg4VXgwZGNzQm4wazFpWFZTL25UZ2xlN3N0NkIzdFlubVFHSG9i?=
+ =?utf-8?B?UGdSNGF3RFcyVGRFbjVGUC93dERQV1ViSTkwMG8yaW9qZ2U5cjhQbzVOaVBZ?=
+ =?utf-8?B?V0J2Z1NLMHZmc01BZm8ycHVOR0p0QzZZYjYwdURSRHlDcFFPTHdDVmNRZnlC?=
+ =?utf-8?B?b0ticXl6aC81V3RNUkZQeHZZRkVlVVBROGd6NlpFRnZrRWR3SnhDcWNnOVhs?=
+ =?utf-8?B?Qmh2QjhTQi9uWHQyYXJURytpNWZYZk83dmsxWmdsMEhPODBxb3MxNFJRSkhX?=
+ =?utf-8?B?aHJrdklCRUNQMU5zSk1VMFV3eEY3VUgzc3pUbkZ2QTU5MGNLbEliWVRzdWt5?=
+ =?utf-8?B?bXZObDNoUHVmN3kraTBNRTNrYzVFWVRkYWtVcEJkK3A2cDE1VWo0WWh2WkVl?=
+ =?utf-8?B?Ky9UNHhVYkJkV0k5d0xkclVTOCtBYUVKU3c3RlJDZm1DNDU3bFplNFc2MndR?=
+ =?utf-8?B?djZURldaVGhwMzZSY2VUMWxRbUM4QlhjdDdSZlA4VXdlRE9zNk1GWlhwUHcy?=
+ =?utf-8?B?cDZmYTRMdkFmdkM4cmJaT2U1bkxUb3FnRTlDbkVNYW8wRlpkMEV3amhleVpw?=
+ =?utf-8?B?N2tIa1RsR2VoMDRoZ1l5eVAvaVZEWDFWTGczbnJ4cG5WYnpBbm1jS3FDb1JL?=
+ =?utf-8?B?V0VMZ29ra05paVByU2lxSmg4bVRpc05ndlAya0xmazl0WEdjY01CQTNZVzFw?=
+ =?utf-8?B?b0FHUVFoRC80c1l3RmwyOWU5amEzOXA0R3Z4TDJLT2pXYnFFS21CL0VlT25C?=
+ =?utf-8?B?Vy93OCtZZlhSUXFIbmxyOG1JRDJLY2l2bElOaWFEOE9wUm0yZlV0aTZhZ1JR?=
+ =?utf-8?B?dnNKN2s1RnI5TnlUZHg2RVh0NU52dGQ4aktPditZdks2NkdaUDVtOEU1d3pw?=
+ =?utf-8?B?RTZJenY3amRBbkxIaUxLYkdUVGtPdEM5OXdaMEwxZjZwTmNJVm1MWENPTW45?=
+ =?utf-8?B?dUc5MTBpM29Dc2RnT0MzOW1DZUZwWEJWNDVWZDVaMTBoeUJkZDNnblBHczNx?=
+ =?utf-8?B?RVU0OWt5VVlQdkxqT0Q1UHhBZkRaZ2NsMUJrcnFSZHdWd2YrUHNSSUF5bXZu?=
+ =?utf-8?B?L2NSb25QUXB6a3FSNUZCZmJTWGtNV0ZjbEl3eWtFQWdRRlNrSlNCN1NWckc0?=
+ =?utf-8?B?RTRBa0xZR0FEVGNYRkdZdHZ3dEJObEx1dmgwcG5CZXN0ZDFuWTUzVGNFQzFp?=
+ =?utf-8?B?WEpacU0wam9Cc0orUzl2N0xXc2ZLOEd2S3ZJMjBMNVJmYU1RKzl5S1RMU1dP?=
+ =?utf-8?Q?4H5dsZMIAEyRxuSFDzoz2V9s6?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: de01f7c7-e584-44cc-3f47-08dacd2ce6f4
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 08:29:57.7115
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LJTGtwHYsUi48z/UP1FtNuLnX9XpFjgGxdXBysi8l06gNgDtQAtx5PXbgIuDhlpu3L+1osazq3VD8ceHeX3qiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5187
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/19/22 5:15 AM, Oliver Upton wrote:
-> Signal that a test run is complete through perf_test_args instead of
-> having tests open code a similar solution. Ensure that the field resets
-> to false at the beginning of a test run as the structure is reused
-> between test runs, eliminating a couple of bugs:
+On 2022/11/17 05:00, Jason Gunthorpe wrote:
+> This queries if a domain linked to a device should expect to support
+> enforce_cache_coherency() so iommufd can negotiate the rules for when a
+> domain should be shared or not.
 > 
-> access_tracking_perf_test hangs indefinitely on a subsequent test run,
-> as 'done' remains true. The bug doesn't amount to much right now, as x86
-> supports a single guest mode. However, this is a precondition of
-> enabling the test for other architectures with >1 guest mode, like
-> arm64.
+> For iommufd a device that declares IOMMU_CAP_ENFORCE_CACHE_COHERENCY will
+> not be attached to a domain that does not support it.
 > 
-> memslot_modification_stress_test has the exact opposite problem, where
-> subsequent test runs complete immediately as 'run_vcpus' remains false.
-> 
-> Co-developed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> [oliver: added commit message, preserve spin_wait_for_next_iteration()]
-> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> Tested-by: Nicolin Chen <nicolinc@nvidia.com>
+> Tested-by: Yi Liu <yi.l.liu@intel.com>
+> Tested-by: Lixiao Yang <lixiao.yang@intel.com>
+> Tested-by: Matthew Rosato <mjrosato@linux.ibm.com>
+
+looks like Yu He's test-by was missed. :-) She has given it in below link.
+
+https://lore.kernel.org/kvm/DM6PR11MB268429C4986C7808760CCE72E0049@DM6PR11MB2684.namprd11.prod.outlook.com/
+
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 > ---
->   tools/testing/selftests/kvm/access_tracking_perf_test.c   | 8 +-------
->   tools/testing/selftests/kvm/include/perf_test_util.h      | 3 +++
->   tools/testing/selftests/kvm/lib/perf_test_util.c          | 3 +++
->   .../selftests/kvm/memslot_modification_stress_test.c      | 6 +-----
->   4 files changed, 8 insertions(+), 12 deletions(-)
+>   drivers/iommu/amd/iommu.c   |  2 ++
+>   drivers/iommu/intel/iommu.c | 16 +++++++++++-----
+>   include/linux/iommu.h       |  5 +++++
+>   3 files changed, 18 insertions(+), 5 deletions(-)
 > 
-
-Reviewed-by: Gavin Shan <gshan@redhat.com>
-
-> diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> index 76c583a07ea2..942370d57392 100644
-> --- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> +++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> @@ -58,9 +58,6 @@ static enum {
->   	ITERATION_MARK_IDLE,
->   } iteration_work;
+> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+> index 45299eb7e8e306..240c535e317cc7 100644
+> --- a/drivers/iommu/amd/iommu.c
+> +++ b/drivers/iommu/amd/iommu.c
+> @@ -2278,6 +2278,8 @@ static bool amd_iommu_capable(struct device *dev, enum iommu_cap cap)
+>   		return false;
+>   	case IOMMU_CAP_PRE_BOOT_PROTECTION:
+>   		return amdr_ivrs_remap_support;
+> +	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
+> +		return true;
+>   	default:
+>   		break;
+>   	}
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index f298e51d5aa67a..157c9727411076 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4450,14 +4450,20 @@ static bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain)
 >   
-> -/* Set to true when vCPU threads should exit. */
-> -static bool done;
-> -
->   /* The iteration that was last completed by each vCPU. */
->   static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
->   
-> @@ -211,7 +208,7 @@ static bool spin_wait_for_next_iteration(int *current_iteration)
->   	int last_iteration = *current_iteration;
->   
->   	do {
-> -		if (READ_ONCE(done))
-> +		if (READ_ONCE(perf_test_args.stop_vcpus))
->   			return false;
->   
->   		*current_iteration = READ_ONCE(iteration);
-> @@ -321,9 +318,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->   	mark_memory_idle(vm, nr_vcpus);
->   	access_memory(vm, nr_vcpus, ACCESS_READ, "Reading from idle memory");
->   
-> -	/* Set done to signal the vCPU threads to exit */
-> -	done = true;
-> -
->   	perf_test_join_vcpu_threads(nr_vcpus);
->   	perf_test_destroy_vm(vm);
->   }
-> diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-> index eaa88df0555a..536d7c3c3f14 100644
-> --- a/tools/testing/selftests/kvm/include/perf_test_util.h
-> +++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-> @@ -40,6 +40,9 @@ struct perf_test_args {
->   	/* Run vCPUs in L2 instead of L1, if the architecture supports it. */
->   	bool nested;
->   
-> +	/* Test is done, stop running vCPUs. */
-> +	bool stop_vcpus;
+>   static bool intel_iommu_capable(struct device *dev, enum iommu_cap cap)
+>   {
+> -	if (cap == IOMMU_CAP_CACHE_COHERENCY)
+> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
 > +
->   	struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
+> +	switch (cap) {
+> +	case IOMMU_CAP_CACHE_COHERENCY:
+>   		return true;
+> -	if (cap == IOMMU_CAP_INTR_REMAP)
+> +	case IOMMU_CAP_INTR_REMAP:
+>   		return irq_remapping_enabled == 1;
+> -	if (cap == IOMMU_CAP_PRE_BOOT_PROTECTION)
+> +	case IOMMU_CAP_PRE_BOOT_PROTECTION:
+>   		return dmar_platform_optin();
+> -
+> -	return false;
+> +	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
+> +		return ecap_sc_support(info->iommu->ecap);
+> +	default:
+> +		return false;
+> +	}
+>   }
+>   
+>   static struct iommu_device *intel_iommu_probe_device(struct device *dev)
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 68d7d304cdb761..a09fd32d8cc273 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -124,6 +124,11 @@ enum iommu_cap {
+>   	IOMMU_CAP_NOEXEC,		/* IOMMU_NOEXEC flag */
+>   	IOMMU_CAP_PRE_BOOT_PROTECTION,	/* Firmware says it used the IOMMU for
+>   					   DMA protection and we should too */
+> +	/*
+> +	 * Per-device flag indicating if enforce_cache_coherency() will work on
+> +	 * this device.
+> +	 */
+> +	IOMMU_CAP_ENFORCE_CACHE_COHERENCY,
 >   };
 >   
-> diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> index 9618b37c66f7..ee3f499ccbd2 100644
-> --- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> @@ -267,6 +267,7 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
->   
->   	vcpu_thread_fn = vcpu_fn;
->   	WRITE_ONCE(all_vcpu_threads_running, false);
-> +	WRITE_ONCE(perf_test_args.stop_vcpus, false);
->   
->   	for (i = 0; i < nr_vcpus; i++) {
->   		struct vcpu_thread *vcpu = &vcpu_threads[i];
-> @@ -289,6 +290,8 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
->   {
->   	int i;
->   
-> +	WRITE_ONCE(perf_test_args.stop_vcpus, true);
-> +
->   	for (i = 0; i < nr_vcpus; i++)
->   		pthread_join(vcpu_threads[i].thread, NULL);
->   }
-> diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-> index bb1d17a1171b..3a5e4518307c 100644
-> --- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-> +++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-> @@ -34,8 +34,6 @@
->   static int nr_vcpus = 1;
->   static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
->   
-> -static bool run_vcpus = true;
-> -
->   static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
->   {
->   	struct kvm_vcpu *vcpu = vcpu_args->vcpu;
-> @@ -45,7 +43,7 @@ static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
->   	run = vcpu->run;
->   
->   	/* Let the guest access its memory until a stop signal is received */
-> -	while (READ_ONCE(run_vcpus)) {
-> +	while (!READ_ONCE(perf_test_args.stop_vcpus)) {
->   		ret = _vcpu_run(vcpu);
->   		TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
->   
-> @@ -110,8 +108,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->   	add_remove_memslot(vm, p->memslot_modification_delay,
->   			   p->nr_memslot_modifications);
->   
-> -	run_vcpus = false;
-> -
->   	perf_test_join_vcpu_threads(nr_vcpus);
->   	pr_info("All vCPU threads joined\n");
->   
-> 
+>   /* These are the possible reserved region types */
 
+-- 
+Regards,
+Yi Liu
