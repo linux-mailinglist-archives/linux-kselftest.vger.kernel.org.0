@@ -2,157 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427FE6367A5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 18:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E508E6368B1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 19:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239287AbiKWRu0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Nov 2022 12:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        id S239576AbiKWS0O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Nov 2022 13:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239240AbiKWRuI (ORCPT
+        with ESMTP id S238510AbiKWS0L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:50:08 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6BAC67D3;
-        Wed, 23 Nov 2022 09:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669225804; x=1700761804;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1PiYzprH6SE0atMcGa8tSGQCGJpIxkpvKyTP8pOUHZ4=;
-  b=H3joh4T/RHGEVu/9zGqYN7elzNO3aZTuicafZRFBKjBH+S7Qn8pA/3VM
-   D668dSPsBV5HB2CtiZlHOEECw9wXa344fWQs543Ckv1PvrtapZFanYw8n
-   +s6Qoe09I98HPGTEa7+EyoNUjdprb7aY5kYRh5r3gVCU0iQIJsDFnsObi
-   el9rHexsT56EIDnTV6vse/xuf+5bn/sEqv6sVAL2x9yyWSEeAXQzlbP0f
-   X0PvsDpU/kztgX+LKRnK8i97WIEvhCb5eUU0TvSias84Nik3C2B5Fpq7a
-   fdZIxmfU7VJFdvLTtJTrM+k1BSC9Lg3IJEmMd5T5q+SBoYCud1I8pdvOJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="311761119"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="311761119"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 09:50:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="674803680"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="674803680"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga001.jf.intel.com with ESMTP; 23 Nov 2022 09:50:00 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 09:50:00 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 23 Nov 2022 09:50:00 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.172)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 23 Nov 2022 09:49:59 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EbbnLVJMZ9kqmMUb32Zf/IgscpsP6t8UYBElMdUD+MUSXF0HC6GHlhWtrwyvVf37ZCFT7wooPrcz/emvTom78+wlyIFnxCc66OLBlyzdch1JaRXc7VPDEV4tTjRxVjiiv7GuUQunX9xMiMIMHOq49Sd09ZTHLBG8EnURr1PXMJ+mzk9/dhyobPcTt5LolCDi/JOKygsqneeekrzZ4x4edY1CmnqpoxyFf72MHMhxAnawbHe9ET/rTgNCbMvOTIOTCHJpwPSHW1ZqpAu7U7hJzxWrlOoGHVe7KUgGI/LwfpEjKqDT7Z+3d2aaGMn5Dxu3dk6J900fhh0xJLpcUL3Ueg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EqASWZDMtDgqoMPjhz7wdZb7JbxTBw+PCQbk9sjI4k4=;
- b=U4lzEgd1J0yIQBwA+g4dDafX606OZwdEefl6JPUcG4GsXxNUFVTcMTzOIrSzi90+ZYz4fgSeLrcoV/YKaaBv1lEsFsYyUbC49sn34nfhURI6ZITSgYCcx30suPTh7IRjIQI34sYQZUe0iN01zSdTOLYFfSnOJv4SXjwlr1NBwVtd75wyM81h6GBO6KDLFeAYahNA3WWyp+JclfJdBaUxIP6s/e8VLxM+KpfRldKt471XmycMr9D2Ni17C4JMslRnMH2kSDEJiHEh6eaV0PQzOhEk23lbd+EPsOt8ppVqoHhwyE2/OQ1yulzUBsE+F0HI126d7+4Npysmd9WAWxG3AQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by SA2PR11MB4859.namprd11.prod.outlook.com (2603:10b6:806:f8::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.17; Wed, 23 Nov
- 2022 17:49:58 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::6005:96bf:e2e1:2f7a]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::6005:96bf:e2e1:2f7a%12]) with mapi id 15.20.5834.015; Wed, 23 Nov
- 2022 17:49:58 +0000
-Message-ID: <11f731b3-b157-11a0-6af7-79c6b4215cdb@intel.com>
-Date:   Wed, 23 Nov 2022 09:49:56 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: [PATCH v4 5/5] selftests/resctrl: Remove duplicate codes that
- clear each test result file
-Content-Language: en-US
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com>
- <20221117010541.1014481-6-tan.shaopeng@jp.fujitsu.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20221117010541.1014481-6-tan.shaopeng@jp.fujitsu.com>
+        Wed, 23 Nov 2022 13:26:11 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA9165E7B
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Nov 2022 10:26:09 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id s16-20020a25aa10000000b006e894071c9bso14094731ybi.20
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Nov 2022 10:26:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UTKNLC3sEdwi5W/ymGUtZmoZguoXsDn/aCWMxA6BdqI=;
+        b=C481PNvkzc7DlwTXHqN6vgdKjEiKOZnqhh7vA0BivRUkiGDBXsfWvS+aqM5Ic5Wpcr
+         h7TE7cu1aHQBNdQt9cVHoSTn5X/FI6z1WUmc/WH/2irT5ZVuYUrsmoGq+7REt8EMy8Xr
+         LT99NwXUsIsKyziGRB2YdrYPgYvuu/1AgG7fZrP4NEhbz4CYoNKCezhyiawzabFM4gsV
+         FHTTgGH0JjD0Ldd56wLkoug2iKXIqt/VCCNDAttGe7me/pQqjrTnITOjk3W2vpNQBpuh
+         X8jWdEkyx1H/07IRdWUKa3qts7P4tzAuMO2cbuD36k7R4XIooaLcepvvCPlEmleFBNO3
+         e+GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UTKNLC3sEdwi5W/ymGUtZmoZguoXsDn/aCWMxA6BdqI=;
+        b=FNtKPnXPpnjraB7fPPo+/BjVmu/Xw/ITXpABP35tjIB/XS2Ymh5Wy61L+KJSyPwjYt
+         IhTwGySOiGRMvjAXup3Ns9JvsdCHQ5pdtqpQEMZXTZCVPly5yh5y+en5ABlV02ybOsg3
+         IKVqCcmPCBi9325MvlE1ehZ2SI2+/acTxgE1y4ykj5/YFygrCfggmQhfjPqZukdm4bKH
+         3+D2LT/jm/RsWXYcBjylfRnt9PbTEh9R9AnvPaiEu/AIQZ9ZbpU1yInJVbd+jOWH87uO
+         OaMB6Ff/KMTOAPZO8B+jCsb73liqN7pHJlD4aVxqIsEpJWZ72RPyDBSXDDU3w+4tRoRg
+         hYog==
+X-Gm-Message-State: ANoB5pnfmi3OWUT0s/8WGPKN/HtBnG0AgZkjlM3c+8So8KYQjBBRZa+I
+        G5SyhBzDoQZMG31ETzxjKcrR0Rq8uw==
+X-Google-Smtp-Source: AA0mqf57QKKtP0tON+EX1hzSS75r5iZXu4m+XxHfZ+JzNm7z7paq9qM8MkTK6KL/0k9/L1QsReYByH15dw==
+X-Received: from rmoar.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:4259])
+ (user=rmoar job=sendgmr) by 2002:a05:6902:1805:b0:6e3:9a1d:c569 with SMTP id
+ cf5-20020a056902180500b006e39a1dc569mr5ybb.130.1669227968620; Wed, 23 Nov
+ 2022 10:26:08 -0800 (PST)
+Date:   Wed, 23 Nov 2022 18:25:57 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221123182558.2203639-1-rmoar@google.com>
+Subject: [PATCH v3 1/2] kunit: tool: parse KTAP compliant test output
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, isabbasso@riseup.net,
+        anders.roxell@linaro.org, Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0141.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::26) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|SA2PR11MB4859:EE_
-X-MS-Office365-Filtering-Correlation-Id: 554766cd-ca37-496d-090b-08dacd7b2342
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AeTtCUK2Xnz5DQqQa6tCXJIrG+iPGkymGXUJBAc2zGeiSwkHzNYWg36IiuaOkb/b0GFYxXkAdEIzJG0jpDMwedbdtVfdtoN8sMTRdKjIydc45JEAosi1ad7fjSz84hOvOEnYWF7Uer1AzP4C1XNGzzpie/RKWvDQusiFYt8GheXsd0/9BNDtflRr/zWaSyr8ZcdsEp6EGW/YgG4kIbYHNgwfIcCtVpwUlc5wTuEiN3jM338LfL+X7ATVCTt8JI3VNd+Ayq+Ss4rCn/m+qYfLqlO34I+YOUk+BHVfMWPcDGQjCx8J8CKepbyQ1U+I+nXNNzOfKZuSpYlQffTV+vtbfD9Z0wujWkWoCLpQXGCrRYwjGo23HHmHJcjJbFa+/sHag9mgjzTjHWSkmwg37tcDfefy+bd/EDc+bLwKfJtyObxeDMTFPnxBl5B2YlIDB9biT0oBMJarwYPohOToZXMVW41KWWEjbLDxltHeVQuqGb1E5iPuz5F2E5ixEo6Uk2CTgaCpWSl3frG5uT2QKcHXuuKbCdKXsn0+qINbAZhhFgAaZZLDQjtpo+q/IY3l15Q0vgvjPxnMdjMYEWXQ+8TX0gxPMwR5GK8XV9FDowEENPTa0nncM4zoEwHf7xwYKuOwPAbiy6lXIIPWr1wQ5JPfUTPlx/vk+DTxXEWy40UcqCtyn/gDuUF1i3Q72unFYcluGb0nQfDGPGQ1Shm0EDnaXwfh0ubO+TvgQkAjv+VhRno=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(346002)(366004)(396003)(39860400002)(451199015)(31686004)(36756003)(82960400001)(31696002)(86362001)(5660300002)(44832011)(2906002)(4744005)(38100700002)(110136005)(316002)(2616005)(6486002)(186003)(478600001)(8676002)(66556008)(66476007)(41300700001)(4326008)(8936002)(26005)(66946007)(53546011)(6512007)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WElEOCswM1BHbWhoaGV2MkJsZGZqeWY5UFdZMDlGN3BUTjlkN2lKN2d4WEZ3?=
- =?utf-8?B?OTcwVmNJaDYwbE1zblorTE1vclBtRXdHY0grSngzZDFvRHVqbzFZZXFJT3Nn?=
- =?utf-8?B?TVpGQk8rajRLbllPNUwwRnkxQVNMRnRnMUZ1L1pWZWcvYk9HTU1qQ0lNUjRF?=
- =?utf-8?B?T3c1dXVGaFBVZXBkQUxsckNkT1FQRnBNTSt0bDBIOWgrZXNOb28vMkUydWEy?=
- =?utf-8?B?Q2RrNjU0REE2TU50TDRYOER0UnBGL3p5SFlvbmREcU9ENmdEaGEzeERueFgx?=
- =?utf-8?B?ZDZjQlNGYnFrZGc2SjVCRGdEbWVkMkc5MTFUUHJ3VHg2R2lidUdpWmp0UFBM?=
- =?utf-8?B?SUQwY0Q1OWVWbkgxTmN1V25KUVlKTzhHWitiajBHeFdNSXVHTWp5MDNJTGEv?=
- =?utf-8?B?eGg5cmRwUklmN3RVOTVxcUs0dzNKdVB1QjdoWmZPVlZjSUhKQy9RL3V0RXFr?=
- =?utf-8?B?Y0wreTVNak1YeDM2NCtGU0xQMm1ITlpQdEtDTE5CZUlLakU1UTZZWkJDMkt5?=
- =?utf-8?B?SXJUZVFUN2w3aDNIc1ZrOXI0YUZZUk1rU29LT0FsUloxVWNYcVdoQVVaNlho?=
- =?utf-8?B?NWNEY25LdndlQ3NURyt3SXJDcTF5S2dZZmk2S0lsOEhzZFJoMHJTaWx5dEJ1?=
- =?utf-8?B?b1JneVI3TFUwRUpSQWo4M0RMYmVYaEVhVVVJcGJoYlpHUm12czBLUWZ3K3k3?=
- =?utf-8?B?TFdJZGpNbEd3NFVxOE9pWHQwSklmMjMvNjI3NktEMmU0d3F3YjhoM1AyWU1k?=
- =?utf-8?B?Rzkwc2hGeDlodVhrb2lpZ3VWb1h1VFVBQ3hTcU1wVzNGTWsybnZVRVV5eEpH?=
- =?utf-8?B?Zmp3dW44bCtxczhCVXczTk54VnNFL290RThyL1VnT25PVlR2Ryt2OExBZWFv?=
- =?utf-8?B?UmhwVlkwTUp5T01KYlJiUHp3UkRCckRJcENxSWtuNCtWdndkZjE1eXdENEt4?=
- =?utf-8?B?VnRZNjJBSzZCWndWTG9iMG1sVlNwM3JvN2tpOEx4clQ5VDBJK0JCUFlCTEFm?=
- =?utf-8?B?MFZXaWhIdUpKcnRqTnpVOE04WmFrcERwL3VUYlV3VHJ5dzZKOXpvbWFoTGZk?=
- =?utf-8?B?ajRCano2UGNobHAxTHlidFZSMjFiTWg0TFI2N3N4Znk4Ty9ENHBsaStFOVdq?=
- =?utf-8?B?VXNqaFkyVVFpNWFyRTJ2bVlkSUxJYlIxcHlzWGRMKzR6bk9PRmlGT0NKWmw5?=
- =?utf-8?B?WlRwTldSNk5VNlZNTVhxZytYV3Z3MzJoUXdQRVR5QmcvRjJocjVLdWRSTEJl?=
- =?utf-8?B?V3YyQ3J1bEtTNkZoU3NtbStuSVpFa05Sa1RuTnI4endmelNudit4MTRya1Nw?=
- =?utf-8?B?bFhGcTZZZDJLU0xkcXlzNkt4Q09oYkhuZlZwMmlhNUNSTnUzV21rQmh2MVZl?=
- =?utf-8?B?M2Zmc3o2aUpMeC94KzlvZ0g2MVRaL1dMYnZDbWpVQlozQzYrSzNIekpYNUtB?=
- =?utf-8?B?dENqazRXRXhuNFZzMXZwQkwxaVdQRC8zVXNyZUV2SE5rdXBETXRqa1ZISjdt?=
- =?utf-8?B?ZnNUc29CaGdNN0EyZjlPQXYwUmRhNGhiNzZjamRJcTNZbGJlSmp0Z2NTVktp?=
- =?utf-8?B?MzM0N0RXMURRUExxejJGVFRFVnQrQUpZWndJSndpaFJLTXlYam5ZTnBLYURa?=
- =?utf-8?B?bEVaNXEzOUJsaDdKcFFHUkZyMWZWY3pZMHJOeXVONWpBQjU3V2E4aUs3ODZQ?=
- =?utf-8?B?YXBrL254aWNlYU1zVHRicW5WWUV5Q1FnWnFGOFZTak9NYkRJQnJZOTBaTE9p?=
- =?utf-8?B?OWV0RW93bjAwYm1HSlVtZ3ZpUjVXR1NwbVp2TVlkakx2UFVuOHNVSkphQkY4?=
- =?utf-8?B?emdWVXNWaHJDaHlUL20vZjRQR0MzUG80Tjg0ZzQwYjEvOXhJOGw0UHFoRXVU?=
- =?utf-8?B?YVcvSGFQa2xwZGpkbDE1ZE5UdjFaNDFYSEpYclhpL0xmTEtXNy9xM0RkM2h5?=
- =?utf-8?B?WERFQ0I5UzR2Y3hlZThTaElQYUlPQ1laNWNoaHFVakk3T3o4S2hZUXg2RmF3?=
- =?utf-8?B?TnF6d21WaEs0TXFMTXdBeUlJNjB6aUptRkRNWmY0M29RWGpCaVo2a3VYM3Jp?=
- =?utf-8?B?VmRySTJVVXA4VFpvSCs4c1IzWE9rMXZrYUJTQ1AwTHQ3TGFCSElITlVkNmFk?=
- =?utf-8?B?WmVqL2Z1UDhUeHdRamc1bFJLNytIa1NpZ2tXV0V4UGVSVDg0RFFCMFkxUjc5?=
- =?utf-8?B?OXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 554766cd-ca37-496d-090b-08dacd7b2342
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 17:49:58.3798
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 77lSyVS0YTrWzC3C15PcLkwTsxMUSrBUdQQqO8ImxH9StHGGEZspmoyGpPwntAx+OC0ankX/Kz4KV5PyUFXIjf0LCKFqePptk40H78R/iss=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4859
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -160,28 +70,346 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shaopeng,
+Change the KUnit parser to be able to parse test output that complies with
+the KTAP version 1 specification format found here:
+https://kernel.org/doc/html/latest/dev-tools/ktap.html. Ensure the parser
+is able to parse tests with the original KUnit test output format as
+well.
 
-On 11/16/2022 5:05 PM, Shaopeng Tan wrote:
-> Before exiting each test function(run_cmt/cat/mbm/mba_test()),
-> test results("ok","not ok") are printed by ksft_test_result() and then
-> temporary result files are cleaned by function
-> cmt/cat/mbm/mba_test_cleanup().
-> However, before running ksft_test_result(),
-> function cmt/cat/mbm/mba_test_cleanup()
-> has been run in each test function as follows:
->   cmt_resctrl_val()
->   cat_perf_miss_val()
->   mba_schemata_change()
->   mbm_bw_change()
-> 
-> Remove duplicate codes that clear each test result file,
-> while ensuring cleanup properly even when errors occur in each test.
-> 
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+KUnit parser now accepts any of the following test output formats:
 
-Thank you very much.
+Original KUnit test output format:
 
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+ TAP version 14
+ 1..1
+   # Subtest: kunit-test-suite
+   1..3
+   ok 1 - kunit_test_1
+   ok 2 - kunit_test_2
+   ok 3 - kunit_test_3
+ # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+ # Totals: pass:3 fail:0 skip:0 total:3
+ ok 1 - kunit-test-suite
 
-Reinette
+KTAP version 1 test output format:
+
+ KTAP version 1
+ 1..1
+   KTAP version 1
+   1..3
+   ok 1 kunit_test_1
+   ok 2 kunit_test_2
+   ok 3 kunit_test_3
+ ok 1 kunit-test-suite
+
+New KUnit test output format (changes made in the next patch of
+this series):
+
+ KTAP version 1
+ 1..1
+   KTAP version 1
+   # Subtest: kunit-test-suite
+   1..3
+   ok 1 kunit_test_1
+   ok 2 kunit_test_2
+   ok 3 kunit_test_3
+ # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+ # Totals: pass:3 fail:0 skip:0 total:3
+ ok 1 kunit-test-suite
+
+Signed-off-by: Rae Moar <rmoar@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+
+Changes since v2:
+https://lore.kernel.org/all/CA+GJov4QZ8yrD8sgGeMYJ4zYkg2CEUX8owqzPFE0BQGe_f=
+0bFQ@mail.gmail.com/
+- Rebased onto linux-kselftest/kunit to correct merge conflict with
+  recently approved patch
+- Fixed typo
+- Added test_parse_subtest_header to test whether the =E2=80=9C# Subtest:=
+=E2=80=9D
+  line is being parsed correctly when using the new test format
+
+Changes since v1:
+https://lore.kernel.org/all/20221104194705.3245738-2-rmoar@google.com/
+- Switch order of patches to make changes to the parser before making
+changes to the test output
+- Change placeholder label for test header from =E2=80=9CTest suite=E2=80=
+=9D to empty
+string
+- Change parser to approve the new KTAP version line in the subtest header
+to be before the subtest header line rather than after.
+- Note: Considered changing parser to allow for the top-level of testing
+to have a '# Subtest' line as discussed in v1 but this breaks the missing
+test plan test. So I think it would be best to add this ability at a later
+time or after top-level test name and result lines are discussed for
+KTAP v2.
+
+ tools/testing/kunit/kunit_parser.py           | 79 ++++++++++++-------
+ tools/testing/kunit/kunit_tool_test.py        | 14 ++++
+ .../test_data/test_parse_ktap_output.log      |  8 ++
+ .../test_data/test_parse_subtest_header.log   |  7 ++
+ 4 files changed, 80 insertions(+), 28 deletions(-)
+ create mode 100644 tools/testing/kunit/test_data/test_parse_ktap_output.lo=
+g
+ create mode 100644 tools/testing/kunit/test_data/test_parse_subtest_header=
+.log
+
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kuni=
+t_parser.py
+index d0ed5dd5cfc4..4cc2f8b7ecd0 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -441,6 +441,7 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+ 	- '# Subtest: [test name]'
+ 	- '[ok|not ok] [test number] [-] [test name] [optional skip
+ 		directive]'
++	- 'KTAP version [version number]'
+=20
+ 	Parameters:
+ 	lines - LineStream of KTAP output to parse
+@@ -449,8 +450,9 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+ 	Log of diagnostic lines
+ 	"""
+ 	log =3D []  # type: List[str]
+-	while lines and not TEST_RESULT.match(lines.peek()) and not \
+-			TEST_HEADER.match(lines.peek()):
++	non_diagnostic_lines =3D [TEST_RESULT, TEST_HEADER, KTAP_START]
++	while lines and not any(re.match(lines.peek())
++			for re in non_diagnostic_lines):
+ 		log.append(lines.pop())
+ 	return log
+=20
+@@ -496,11 +498,15 @@ def print_test_header(test: Test) -> None:
+ 	test - Test object representing current test being printed
+ 	"""
+ 	message =3D test.name
++	if message !=3D "":
++		# Add a leading space before the subtest counts only if a test name
++		# is provided using a "# Subtest" header line.
++		message +=3D " "
+ 	if test.expected_count:
+ 		if test.expected_count =3D=3D 1:
+-			message +=3D ' (1 subtest)'
++			message +=3D '(1 subtest)'
+ 		else:
+-			message +=3D f' ({test.expected_count} subtests)'
++			message +=3D f'({test.expected_count} subtests)'
+ 	stdout.print_with_timestamp(format_test_divider(message, len(message)))
+=20
+ def print_log(log: Iterable[str]) -> None:
+@@ -647,7 +653,7 @@ def bubble_up_test_results(test: Test) -> None:
+ 	elif test.counts.get_status() =3D=3D TestStatus.TEST_CRASHED:
+ 		test.status =3D TestStatus.TEST_CRASHED
+=20
+-def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Te=
+st:
++def parse_test(lines: LineStream, expected_num: int, log: List[str], is_su=
+btest: bool) -> Test:
+ 	"""
+ 	Finds next test to parse in LineStream, creates new Test object,
+ 	parses any subtests of the test, populates Test object with all
+@@ -665,15 +671,32 @@ def parse_test(lines: LineStream, expected_num: int, =
+log: List[str]) -> Test:
+ 	1..4
+ 	[subtests]
+=20
+-	- Subtest header line
++	- Subtest header (must include either the KTAP version line or
++	  "# Subtest" header line)
+=20
+-	Example:
++	Example (preferred format with both KTAP version line and
++	"# Subtest" line):
++
++	KTAP version 1
++	# Subtest: name
++	1..3
++	[subtests]
++	ok 1 name
++
++	Example (only "# Subtest" line):
+=20
+ 	# Subtest: name
+ 	1..3
+ 	[subtests]
+ 	ok 1 name
+=20
++	Example (only KTAP version line, compliant with KTAP v1 spec):
++
++	KTAP version 1
++	1..3
++	[subtests]
++	ok 1 name
++
+ 	- Test result line
+=20
+ 	Example:
+@@ -685,28 +708,29 @@ def parse_test(lines: LineStream, expected_num: int, =
+log: List[str]) -> Test:
+ 	expected_num - expected test number for test to be parsed
+ 	log - list of strings containing any preceding diagnostic lines
+ 		corresponding to the current test
++	is_subtest - boolean indicating whether test is a subtest
+=20
+ 	Return:
+ 	Test object populated with characteristics and any subtests
+ 	"""
+ 	test =3D Test()
+ 	test.log.extend(log)
+-	parent_test =3D False
+-	main =3D parse_ktap_header(lines, test)
+-	if main:
+-		# If KTAP/TAP header is found, attempt to parse
++	if not is_subtest:
++		# If parsing the main/top-level test, parse KTAP version line and
+ 		# test plan
+ 		test.name =3D "main"
++		ktap_line =3D parse_ktap_header(lines, test)
+ 		parse_test_plan(lines, test)
+ 		parent_test =3D True
+ 	else:
+-		# If KTAP/TAP header is not found, test must be subtest
+-		# header or test result line so parse attempt to parser
+-		# subtest header
+-		parent_test =3D parse_test_header(lines, test)
++		# If not the main test, attempt to parse a test header containing
++		# the KTAP version line and/or subtest header line
++		ktap_line =3D parse_ktap_header(lines, test)
++		subtest_line =3D parse_test_header(lines, test)
++		parent_test =3D (ktap_line or subtest_line)
+ 		if parent_test:
+-			# If subtest header is found, attempt to parse
+-			# test plan and print header
++			# If KTAP version line and/or subtest header is found, attempt
++			# to parse test plan and print test header
+ 			parse_test_plan(lines, test)
+ 			print_test_header(test)
+ 	expected_count =3D test.expected_count
+@@ -721,7 +745,7 @@ def parse_test(lines: LineStream, expected_num: int, lo=
+g: List[str]) -> Test:
+ 		sub_log =3D parse_diagnostic(lines)
+ 		sub_test =3D Test()
+ 		if not lines or (peek_test_name_match(lines, test) and
+-				not main):
++				is_subtest):
+ 			if expected_count and test_num <=3D expected_count:
+ 				# If parser reaches end of test before
+ 				# parsing expected number of subtests, print
+@@ -735,20 +759,19 @@ def parse_test(lines: LineStream, expected_num: int, =
+log: List[str]) -> Test:
+ 				test.log.extend(sub_log)
+ 				break
+ 		else:
+-			sub_test =3D parse_test(lines, test_num, sub_log)
++			sub_test =3D parse_test(lines, test_num, sub_log, True)
+ 		subtests.append(sub_test)
+ 		test_num +=3D 1
+ 	test.subtests =3D subtests
+-	if not main:
++	if is_subtest:
+ 		# If not main test, look for test result line
+ 		test.log.extend(parse_diagnostic(lines))
+-		if (parent_test and peek_test_name_match(lines, test)) or \
+-				not parent_test:
+-			parse_test_result(lines, test, expected_num)
+-		else:
++		if test.name !=3D "" and not peek_test_name_match(lines, test):
+ 			test.add_error('missing subtest result line!')
++		else:
++			parse_test_result(lines, test, expected_num)
+=20
+-	# Check for there being no tests
++	# Check for there being no subtests within parent test
+ 	if parent_test and len(subtests) =3D=3D 0:
+ 		# Don't override a bad status if this test had one reported.
+ 		# Assumption: no subtests means CRASHED is from Test.__init__()
+@@ -758,11 +781,11 @@ def parse_test(lines: LineStream, expected_num: int, =
+log: List[str]) -> Test:
+=20
+ 	# Add statuses to TestCounts attribute in Test object
+ 	bubble_up_test_results(test)
+-	if parent_test and not main:
++	if parent_test and is_subtest:
+ 		# If test has subtests and is not the main test object, print
+ 		# footer.
+ 		print_test_footer(test)
+-	elif not main:
++	elif is_subtest:
+ 		print_test_result(test)
+ 	return test
+=20
+@@ -785,7 +808,7 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Te=
+st:
+ 		test.add_error('Could not find any KTAP output. Did any KUnit tests run?=
+')
+ 		test.status =3D TestStatus.FAILURE_TO_PARSE_TESTS
+ 	else:
+-		test =3D parse_test(lines, 0, [])
++		test =3D parse_test(lines, 0, [], False)
+ 		if test.status !=3D TestStatus.NO_TESTS:
+ 			test.status =3D test.counts.get_status()
+ 	stdout.print_with_timestamp(DIVIDER)
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/k=
+unit_tool_test.py
+index 84a08cf07242..d7f669cbf2a8 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -312,6 +312,20 @@ class KUnitParserTest(unittest.TestCase):
+ 		self.assertEqual(kunit_parser._summarize_failed_tests(result),
+ 			'Failures: all_failed_suite, some_failed_suite.test2')
+=20
++	def test_ktap_format(self):
++		ktap_log =3D test_data_path('test_parse_ktap_output.log')
++		with open(ktap_log) as file:
++			result =3D kunit_parser.parse_run_tests(file.readlines())
++		self.assertEqual(result.counts, kunit_parser.TestCounts(passed=3D3))
++		self.assertEqual('suite', result.subtests[0].name)
++		self.assertEqual('case_1', result.subtests[0].subtests[0].name)
++		self.assertEqual('case_2', result.subtests[0].subtests[1].name)
++
++	def test_parse_subtest_header(self):
++		ktap_log =3D test_data_path('test_parse_subtest_header.log')
++		with open(ktap_log) as file:
++			result =3D kunit_parser.parse_run_tests(file.readlines())
++		self.print_mock.assert_any_call(StrContains('suite (1 subtest)'))
+=20
+ def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
+ 	return kunit_parser.LineStream(enumerate(strs, start=3D1))
+diff --git a/tools/testing/kunit/test_data/test_parse_ktap_output.log b/too=
+ls/testing/kunit/test_data/test_parse_ktap_output.log
+new file mode 100644
+index 000000000000..ccdf244e5303
+--- /dev/null
++++ b/tools/testing/kunit/test_data/test_parse_ktap_output.log
+@@ -0,0 +1,8 @@
++KTAP version 1
++1..1
++  KTAP version 1
++  1..3
++  ok 1 case_1
++  ok 2 case_2
++  ok 3 case_3
++ok 1 suite
+diff --git a/tools/testing/kunit/test_data/test_parse_subtest_header.log b/=
+tools/testing/kunit/test_data/test_parse_subtest_header.log
+new file mode 100644
+index 000000000000..216631092e7b
+--- /dev/null
++++ b/tools/testing/kunit/test_data/test_parse_subtest_header.log
+@@ -0,0 +1,7 @@
++KTAP version 1
++1..1
++  KTAP version 1
++  # Subtest: suite
++  1..1
++  ok 1 test
++ok 1 suite
+\ No newline at end of file
+
+base-commit: 99c8c9276be71e6bc98979e95d56cdcbe0c2454e
+--=20
+2.38.1.584.g0f3c55d4c2-goog
+
