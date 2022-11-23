@@ -2,230 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B406368BF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 19:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBC9636935
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 19:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239651AbiKWS0Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Nov 2022 13:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
+        id S239566AbiKWSrl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Nov 2022 13:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239544AbiKWS0W (ORCPT
+        with ESMTP id S236582AbiKWSrj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:26:22 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A131670180
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Nov 2022 10:26:18 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-39afd53dcdbso110362137b3.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Nov 2022 10:26:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Afz8PsANDnUvtBvSoF0QFvNdyMeaZ1ofX1YaO/pgZVM=;
-        b=sBiuo8a2cIxrSgYaooXOob5HMsTHvVXAiUBTZJ9mlC+f6Y0+nHeU645NZr8dij4w19
-         EnpZ3hLjNRGdS4OPRryWUEWC/tvr+pe3UYsOoO88O/FL5ZwGcrGlzuzCnpyxxq3Z/Ji/
-         mNenC1rJc23zXngdfoCpK1n7nMvrP3l+XcFA2MP0QbP+EuZE/7nXeSuonVHuS/I6cmwX
-         BlBQMrpxofgI9snuABMtw32wVWrEL4StVttByA8MnLsKK/ZRC2+BZuThtI4XMs6voMll
-         vbpxGbAdsaJqEkiJRvzD2UB3rlhd72xmL28QzmeD9jEGADIqMf4+JJz5miw7HxFldVnn
-         NjDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Afz8PsANDnUvtBvSoF0QFvNdyMeaZ1ofX1YaO/pgZVM=;
-        b=67rqTIuMSjFiMBA8eouSqzo5HukdjjkzAEpXABMsKtq+JrslQRidyun5m8wNMXXBpd
-         1Uy0j64QxObjIH3qG8MAG48pny8/6Mh5F+e49zIRkDjMcmI4kiL6URHcgpTPJpTvYAhh
-         R+No9RZsIqGRAiPhBbEyqG3AIL6cAsSAKTmuGWHmKHgKAw5eWijG+4AhRtMM5yvGOPEc
-         IUaBJ0r1AyPArF78s9T2pERIDVI7S40VFZoHj3fDkzUWJBVp23njOE857XtxjP49AE7j
-         +/xOxNG/1ykkbkvhlFAVKEjsVJiU2Tu/7JTJXcVgdkzTn8hXDYkKQkjKkUFG6kiDNE/g
-         iieQ==
-X-Gm-Message-State: ANoB5pnIuoAaL/XMzbdyz61WVw686whWMIdFkqkdi/Lv6gwx6LwMdT2T
-        UMg2GxotJwiylkAJSwEoFBUX9P+jvQ==
-X-Google-Smtp-Source: AA0mqf6ZoB0Uy7y/SdWtM2cSZrRxbN7wf6VAUau2kP+ATiEfRQLlegtgUz26MstbcT9O8JzRRQDHBjJQiQ==
-X-Received: from rmoar.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:4259])
- (user=rmoar job=sendgmr) by 2002:a0d:e943:0:b0:38c:6e92:e2f9 with SMTP id
- s64-20020a0de943000000b0038c6e92e2f9mr4ywe.379.1669227977595; Wed, 23 Nov
- 2022 10:26:17 -0800 (PST)
-Date:   Wed, 23 Nov 2022 18:25:58 +0000
-In-Reply-To: <20221123182558.2203639-1-rmoar@google.com>
-Mime-Version: 1.0
-References: <20221123182558.2203639-1-rmoar@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221123182558.2203639-2-rmoar@google.com>
-Subject: [PATCH v3 2/2] kunit: improve KTAP compliance of KUnit test output
-From:   Rae Moar <rmoar@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
-Cc:     skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, isabbasso@riseup.net,
-        anders.roxell@linaro.org, Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 13:47:39 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2062.outbound.protection.outlook.com [40.107.96.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160302671;
+        Wed, 23 Nov 2022 10:47:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aBzg9IZp2N8HMLFjbk7euwlzN1AhNRmw+DNqmD5NqC2DCiijVK/5CAn98Iq91EF0WL6VvONmrNTBsu/vW05r8el4OjrbtrDiiU+mhClrj5I8PXJiY2Thnsr9s5YJE2TcoT5hzVBhtylWivjPB3Tx0OkRPF2iFbWTdmWnMDgmsPMXTlXqEabPjIvrp0DVy+UB2kXGN1Ui8jFnSOo9X6s1erwF0Lr5q8TAFJ04o7/h+2UHNK6DFAzJF/IfOzFz/DPU15i3t8S0VQKhdV36NFTW2s7OchUFUkCOfPA26DSvvk+xMlBzYtUOx7ItlV3cp9M7vAgRhkCsMGX2fc8qQNqfAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AMDXEtRqrX0c3kofuWVh9j+odrBDTAyhTMSuHZK8cAk=;
+ b=ItsjB3nnJLm20qD5yRsXRhzkNQDTW7MGkCtmzAzozZ/LitZPfwZ0Xx91hlECmJ0DnSbKksTwnw2lzMx+INfjWkqu5ndD+AIRlkkXqSsmlDN9f9tJaC2OLFb2bL4l6DHDSJo8YOX7votDL+JppPhdHfycPlkxyVZX/Gu1J3W6BmUGFwvUF3VJYC9R6+dDh4RE5XzRSzwOvMFdIZMxolsjtsLbOdxR97Eekd6crOcw68Dp1to55lZXsOQ0FIaUc4nYD8ex9n+QSmmGvfI4AbiRUf9Ir6F2xB2yC+atlztsbbPaz8y5Zdi8difbHDrisJt53TzXYUmCoBJH3nFV4F9JZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AMDXEtRqrX0c3kofuWVh9j+odrBDTAyhTMSuHZK8cAk=;
+ b=ADnJ/n0NqqCOan60BcGM/ZXhuKc9b55wPjJfgEmsBIIOWl8YLk3YgxUA/ktYWkKXaQxS29rq4sQ7VZNaOSxZGXvJvbGAZu1eyKSTj6HHXyaA4zGzptfVwnHkK5CsdBQw6HNkIKirWrIHcBf1r04sC8JbsHPsj2pnfy0rIw49NY1nJEGSBxfYgZBGbacrc2k5ST6E6J96Ob3fqws/NgW+w+zV86X8xK+bxiTpbvFkJcos1+QGFPBQ5EiWNw95BJ4BkVmZz/5NWBd8A5gk9Cea+49gC6/jrRCNYIQg9iN12nPlUB9P4ua6Fi7ChClCdcoeG0JPaWJejyW9NIlCZ/B14A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DM6PR12MB4927.namprd12.prod.outlook.com (2603:10b6:5:20a::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.18; Wed, 23 Nov 2022 18:47:33 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::8edd:6269:6f31:779e]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::8edd:6269:6f31:779e%6]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 18:47:33 +0000
+Message-ID: <3434a2fc-e936-d8c1-8bf9-8d822610f35c@nvidia.com>
+Date:   Wed, 23 Nov 2022 18:47:27 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH hid v12 03/15] HID: initial BPF implementation
+Content-Language: en-US
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+ <20221103155756.687789-4-benjamin.tissoires@redhat.com>
+ <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
+ <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0334.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18c::15) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|DM6PR12MB4927:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6bcb5de-bb79-42be-f1d1-08dacd832ea3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I9IDaBIpfst1tGGLWxs9HqrDUd60N6K7ZK5YfULzf4JuXRxanOmJGSI8ixSBseqjn3+AKng90tHDEXApujvEcGX3d7vyYGcin88u115xlPfULmvWpz1miIZRVcEm0k+hwChE2lvtWL06NeTkWXNsEV4JuZoLdv+ONTX+GWBuoabWxcJ+P0nqFlqXAYH9BRruaxH28R3FMFM/9ILuDW5lktI8Dgc17AxyNiQZDhzt/iGfL8GMEQcGbEhKDeCTrvXVoxcXSM2d3/hfPCs7ImLP6sHGw3hNUb6MIZl+vrm1adfftY0CVKueDBve5cXAHoRi1A3LQN/EID/FVPKwXpXkb+0poVGf18Q7sf7KtNdadv3B8qiLg8rXMeH4fbGunISNyCjPyFINUb4N5ftir53qUdhqOlWm0gzV3yXmKW8tpBqqMFXCZFV6ac3ZX5Y87N3SNMKd113GXy9iFrYBBxiKskz70wm/ewBTSqe3Flg2QNjmjz782NyOJOtpSFuwM22AQj3AnofGa8P+B9P1DF6ojyNDg5Q2GTqExpY06eA8z+uT0+PU+28Vv8TfBkyR/K1fqRK6aVd9nh27VZnkYdyLuCOtAWxSmek6xitr/hoKBSU3SLm4NqhiVYpVye5g2GGErlK2wfQx7rmH/Iw/1LYFaIQy4F4dvIXXidmdwqvbOV+UMDj8pzvlRX4pzKOVRrRJ23p2pUIe7dOvv6yGAsPlYeB774PO+A+r5bSfBXi9e1w=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(366004)(346002)(396003)(136003)(451199015)(31686004)(6486002)(6666004)(478600001)(55236004)(53546011)(6506007)(31696002)(26005)(8676002)(54906003)(6916009)(2906002)(316002)(6512007)(66476007)(66946007)(66556008)(4326008)(86362001)(38100700002)(41300700001)(186003)(36756003)(2616005)(7416002)(5660300002)(8936002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z2JscmNMY2FlZjVNR0V1TEg1emNydzhlekl6cG95WkY4U3lIc1dzRTQrRnBr?=
+ =?utf-8?B?Y1dPRjlYWFo3MkRORGFsMHJXNGVTWWY0bFMwM0VHTzdUYnduczBINDA1cWs4?=
+ =?utf-8?B?ZkYwNXJrQmt3YmJoQUNVS0hGZHhOMTducE1BSlRqNVVFS2VBUUdxMThOd0p3?=
+ =?utf-8?B?Rnl2SklLaXNhNFBCUDMyYWlqUmY5c3luR0d0ZmhwU0FTT2M3ZGtsWFo0WWhn?=
+ =?utf-8?B?QStnYWZvamdwY1ZCT2pWWE9hbjczM0c0QjdWQVpuWUZaUGUxRTV0UHBGZE9L?=
+ =?utf-8?B?MzBtK2lNOTY2azUyS2xPc2RJQ2lpbFdXR3A5WmsrL0IwaFhVbFFxVkovWEVD?=
+ =?utf-8?B?VlRnTE1iL0VlQ2xDRXNmZjlHR3ZnaEZWTE41VVdsUExNRm1FbnJMYlRGV1Bx?=
+ =?utf-8?B?YVlVZE9ML0VkK3pzdXp3YmlNL0gzZXMxRitJK2ZiTzQ3SXpjSk0zbWRDdU9Y?=
+ =?utf-8?B?QmFnYTk5YlNKb0RrT2F1S1UvTEZsSVpiUzR4eWZoaUx0OVRWNmk3c2FTQ09Q?=
+ =?utf-8?B?MEJaYlNGQWt5blBxTXhVK08yTUdPaGtoZ1A3V0l5ZExCcGsyU2ZKNDJNMHBw?=
+ =?utf-8?B?VHI3VktLODlac0VzUktSVGdrWVRVZDhwMG9xL3pTMFBUTlVNZGtnazlWY09t?=
+ =?utf-8?B?WmgycGxrcG00TVcxdU93bjRib0lCaGxzdnlpcVluN0lEY2UrcldTZ3RyVEQ4?=
+ =?utf-8?B?Ky9SZzhVLzRYL0NKbjZwZzgralVCeDdybTBGUXpxRENqQ2JvdTZ1OG8rQTFx?=
+ =?utf-8?B?cHBmd3M0VWZJbGo1Qjhac1laMXVYTWNFWWo1M0RwbEs1Y1ptR0pkdzJES3V5?=
+ =?utf-8?B?blk0cURrZGlkZE9TNWpkZXlYRXBURi9ibEYwenFXTWVZWUhhanZ2UmluNW9N?=
+ =?utf-8?B?VFJhbXowcVBlckNNN0MvSmdMaWxPRlF5TTY2VHExTXBEZE5ud3FsektrQ3Iy?=
+ =?utf-8?B?em9uRW5IeDN5ZzUrQTF5WDVRUnBYNjE4QkM2UVozU3BhM1lPckt1RXU4N0tY?=
+ =?utf-8?B?TkVDSmk3UXZwZ2E1dDdZckpvNlYwWk9wZCtiTEUrc0F2eHJNTGg0NEFPQm1t?=
+ =?utf-8?B?SGtjWUhESHhKSDkxRDEzRTFzYkQzemtLTHYvUFQ4KzBMRUVYRThUL01PaGJo?=
+ =?utf-8?B?UDBuTlpqKy9KNnlNYzc1QkR1ZmtIc002TS9XR3ZqNmQra3ZHMEt4L0FEL0Jo?=
+ =?utf-8?B?UTdNZEl5U1JCVTNWcWNmWVIwNmw5enB6Mng2cnBmRHg1VUVReGNkZVB5blc4?=
+ =?utf-8?B?RktPRkNpRDM3RmpHZ1ZPTCtCWU5tV3JnZlFqK1JQb0tHVU85bTJxa1Zya0F5?=
+ =?utf-8?B?RndDT0xtbFdUYjQ0WDdlZlQ2Z1Vpa2xud0Q3d3krcjNqR1YyZ1liY1B4b1Yv?=
+ =?utf-8?B?RDR6eWRWZU5waGQvSjJOd2M4VUl4dUJWNXdFR3pBUzUvQ3krM2VhTlRqa01j?=
+ =?utf-8?B?V0ZFNmFrNlAyaHFOanA2YzNhNGVOSFMrWTRXcW9ocERCUGt3MkREYkJ5eXA4?=
+ =?utf-8?B?QkNsT3ZRV1F0YVNrQzUwZjMxVUlsZlM2c1Jtb2RZSEhxV3g1RGFmbVE4M25B?=
+ =?utf-8?B?N1Urbmp1ZlJyekZlSkQ4L0lMMDc2eDFBVTk0bExqV212YmF2WkZ4WGx5ZjRr?=
+ =?utf-8?B?Y1Q4ZFlET1BvemxsV2NzaXdiVzNzQWVLSGo1QVFzQnA5ZmhPUmlWZGtYYUQz?=
+ =?utf-8?B?c01XVHVnZ09aeHN3NjVWYWQrSElKeUlJMmI4QVJNblM2d1dPalZNdDJqcitS?=
+ =?utf-8?B?aHlYU3lWQWtkTGJJb1h3NW0vQmpDVVhwNzlwcitvQ1FNcXpnSERwREVySkZl?=
+ =?utf-8?B?d0JURnVuSmF3bXFGV3ZBbDRXbXJsV2Jqcmh0ZUZuN2tYUjZaV04wNkRtN2Jo?=
+ =?utf-8?B?L2JPM0w3SzdjS2p2aXhEK0FVRE9vLzlSa0JaS3pVRXRoSXhNUkN2aTFZK0N1?=
+ =?utf-8?B?NmhpYTFUdk5ENmJhaEhFMFVpZzdiT0d6YlZlRjl0allXSXRDUi81MjdGMm9T?=
+ =?utf-8?B?RC9VOXZnZGJGWm5WWWpldWdwRldrdVRnWlgwSjgxQXhsMGJRM2dTbUV5b3pU?=
+ =?utf-8?B?V1NOYkNTZ0ZBU3NzdHY3ZUFzKzh0Nnpxa1I3WjgxcXVKc0MrYXlwMldmSytx?=
+ =?utf-8?Q?ARZFnOa7zpsI6W4vybHLx4F3v?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6bcb5de-bb79-42be-f1d1-08dacd832ea3
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 18:47:33.6052
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f2uIt2yuMMA/RPwktKvUp7OU4xe76ZjmUjCWciO0oINzpt+ODEdjMJjGjHwk4giedFFk33oh7CKpNz+xrMaW1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4927
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Change KUnit test output to better comply with KTAP v1 specifications
-found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
-1) Use "KTAP version 1" instead of "TAP version 14" as test output header
-2) Remove '-' between test number and test name on test result lines
-2) Add KTAP version lines to each subtest header as well
+Hi Benjamin,
 
-Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=80=
-=9D line now
-located after the KTAP version line. This does not completely match the
-KTAP v1 spec but since it is classified as a diagnostic line, it is not
-expected to be disruptive or break any existing parsers. This
-=E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
-(https://testanything.org/tap-version-14-specification.html) and it is
-used to define the test name before the results.
+On 23/11/2022 14:48, Benjamin Tissoires wrote:
 
-Original output:
+...
 
- TAP version 14
- 1..1
-   # Subtest: kunit-test-suite
-   1..3
-   ok 1 - kunit_test_1
-   ok 2 - kunit_test_2
-   ok 3 - kunit_test_3
- # kunit-test-suite: pass:3 fail:0 skip:0 total:3
- # Totals: pass:3 fail:0 skip:0 total:3
- ok 1 - kunit-test-suite
+>> We have a kernel test that checks for new warning and error messages on
+>> boot and with this change I am now seeing the following error message on
+>> our Tegra platforms ...
+>>
+>>    WARNING KERN hid_bpf: error while preloading HID BPF dispatcher: -13
+>>
+>> I have a quick look at the code, but I can't say I am familiar with
+>> this. So I wanted to ask if a way to fix this or avoid this? I see the
+>> code returns 0, so one option would be to make this an informational or
+>> debug print.
+> 
+> I am not in favor of debug in that case, because I suspect it'll hide
+> too much when getting a bug report. Informational could do, yes.
+> 
+> However, before that, I'd like to dig a little bit more on why it is
+> failing. I thought arm64 now has support of tracing bpf programs, so I
+> would not expect this to fail.
 
-New output:
+Yes it would be great if we could figure out why this is failing.
 
- KTAP version 1
- 1..1
-   KTAP version 1
-   # Subtest: kunit-test-suite
-   1..3
-   ok 1 kunit_test_1
-   ok 2 kunit_test_2
-   ok 3 kunit_test_3
- # kunit-test-suite: pass:3 fail:0 skip:0 total:3
- # Totals: pass:3 fail:0 skip:0 total:3
- ok 1 kunit-test-suite
+> Would you mind sending me your .config so I can check in it if you are
+> missing anything? I am thinking that maybe I need to also depend on
+> BPF_JIT.
 
-Signed-off-by: Rae Moar <rmoar@google.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
----
+It is basically the stock upstream arm64 defconfig, but I will forward 
+offline.
 
-Changes since v2:
-https://lore.kernel.org/all/20221121184743.1123556-2-rmoar@google.com/
-- Made fixes discussed on the v2 patch to now correctly output test
-  results after second level testing
+Cheers
+Jon
 
-Changes since v1:
-https://lore.kernel.org/all/20221104194705.3245738-1-rmoar@google.com/
-- Switch order of patches to make changes to the parser before making
-  changes to the test output
-- Change location of the new KTAP version line in subtest header to be
-  before the subtest header line
-
- lib/kunit/debugfs.c  | 2 +-
- lib/kunit/executor.c | 6 +++---
- lib/kunit/test.c     | 9 ++++++---
- 3 files changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index 1048ef1b8d6e..de0ee2e03ed6 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file *seq, vo=
-id *v)
- 	kunit_suite_for_each_test_case(suite, test_case)
- 		debugfs_print_result(seq, suite, test_case);
-=20
--	seq_printf(seq, "%s %d - %s\n",
-+	seq_printf(seq, "%s %d %s\n",
- 		   kunit_status_to_ok_not_ok(success), 1, suite->name);
- 	return 0;
- }
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 9bbc422c284b..74982b83707c 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -166,7 +166,7 @@ static void kunit_exec_run_tests(struct suite_set *suit=
-e_set)
- {
- 	size_t num_suites =3D suite_set->end - suite_set->start;
-=20
--	pr_info("TAP version 14\n");
-+	pr_info("KTAP version 1\n");
- 	pr_info("1..%zu\n", num_suites);
-=20
- 	__kunit_test_suites_init(suite_set->start, num_suites);
-@@ -177,8 +177,8 @@ static void kunit_exec_list_tests(struct suite_set *sui=
-te_set)
- 	struct kunit_suite * const *suites;
- 	struct kunit_case *test_case;
-=20
--	/* Hack: print a tap header so kunit.py can find the start of KUnit outpu=
-t. */
--	pr_info("TAP version 14\n");
-+	/* Hack: print a ktap header so kunit.py can find the start of KUnit outp=
-ut. */
-+	pr_info("KTAP version 1\n");
-=20
- 	for (suites =3D suite_set->start; suites < suite_set->end; suites++)
- 		kunit_suite_for_each_test_case((*suites), test_case) {
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 90640a43cf62..1c9d8d962d67 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -149,6 +149,7 @@ EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
-=20
- static void kunit_print_suite_start(struct kunit_suite *suite)
- {
-+	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
- 	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
- 		  suite->name);
- 	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "1..%zd",
-@@ -175,13 +176,13 @@ static void kunit_print_ok_not_ok(void *test_or_suite=
-,
- 	 * representation.
- 	 */
- 	if (suite)
--		pr_info("%s %zd - %s%s%s\n",
-+		pr_info("%s %zd %s%s%s\n",
- 			kunit_status_to_ok_not_ok(status),
- 			test_number, description, directive_header,
- 			(status =3D=3D KUNIT_SKIPPED) ? directive : "");
- 	else
- 		kunit_log(KERN_INFO, test,
--			  KUNIT_SUBTEST_INDENT "%s %zd - %s%s%s",
-+			  KUNIT_SUBTEST_INDENT "%s %zd %s%s%s",
- 			  kunit_status_to_ok_not_ok(status),
- 			  test_number, description, directive_header,
- 			  (status =3D=3D KUNIT_SKIPPED) ? directive : "");
-@@ -542,6 +543,8 @@ int kunit_run_tests(struct kunit_suite *suite)
- 			/* Get initial param. */
- 			param_desc[0] =3D '\0';
- 			test.param_value =3D test_case->generate_params(NULL, param_desc);
-+			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-+				  "KTAP version 1\n");
- 			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
- 				  "# Subtest: %s", test_case->name);
-=20
-@@ -555,7 +558,7 @@ int kunit_run_tests(struct kunit_suite *suite)
-=20
- 				kunit_log(KERN_INFO, &test,
- 					  KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
--					  "%s %d - %s",
-+					  "%s %d %s",
- 					  kunit_status_to_ok_not_ok(test.status),
- 					  test.param_index + 1, param_desc);
-=20
---=20
-2.38.1.584.g0f3c55d4c2-goog
-
+-- 
+nvpublic
