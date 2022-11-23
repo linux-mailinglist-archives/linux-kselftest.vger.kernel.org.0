@@ -2,250 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A6F6355B5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 10:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05610635F4A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 14:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237495AbiKWJVC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Nov 2022 04:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S238337AbiKWNXk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Nov 2022 08:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237399AbiKWJUk (ORCPT
+        with ESMTP id S238395AbiKWNXT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:20:40 -0500
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABBD742DC
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Nov 2022 01:20:39 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id u9so6596077vkk.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Nov 2022 01:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OWmkFV8OIvXMB0LNx+Rfdrv41pOXpwh5PgcyBE49Fak=;
-        b=C2k51aEBbBGqsgdUZykWEBbZAzhQJsZreSQf31rX7kC0cQj8ociOtRfbCHF/kMd9to
-         FyhF+eoG4a+MwBzkCakZW3CVJ3j/YeTA3VmDAXOkhspSTvMCK+GHfImbbsk01VtWvtac
-         mo8RYATwtiApEz8OfTj/DffqAYylsBL60mlZuaRnpVLdZCySfD9c30cLztcElFU8sCUD
-         mIY8EtqsbrXUnLH5jDrkq7qAY1UX9uNMTFU3K0CHrm9QNNlW9aLyWdXJEPCTT5VByz0l
-         aM26khM/8wuEpnNYrNs3hx+5TvWhv9F/T5nYpDw/bHfzQQPL19sKx7fRc7fNmMu1vcW7
-         lm9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OWmkFV8OIvXMB0LNx+Rfdrv41pOXpwh5PgcyBE49Fak=;
-        b=1oaM1q2KgHs5OfP0jSx3PjgorYnkR54rv9pVQxHtSUaYHuQs3++JrXNlwqx9XlkrrP
-         UBueYQJ6PXonhePpM9PaklAXZc6sTpOE0trWznUexw+TNp0ZfEmvbvWHTyL+5icubEMB
-         n2wNmhNPadLmnTcagqWN9Tp5bgcVDmh1d6F4rDdS4qDi8QqNpZZ7cMQw+e7i3oKCet7A
-         KMVCsptN3Q1dNI4mcKAq6OlxdTQPz6FPtUhc4gA6EIrrKbpxznZZmHVapsSPgo6rmFrg
-         E6tyWpPy0TU5mZ6WnivZvHUjyfCdmBqo0A2s3p5hzFBg/ERbl6seruHVlSbrwRC30f+v
-         6I4w==
-X-Gm-Message-State: ANoB5pkwVgBm9iHzaOZ1e69he9GF2IKoDcM7DOSq1XKcchCt77Ah30zN
-        VSpISIyMWrWxHyx/nqcu3RDqCpmtE4aHjT7XsLHZRw==
-X-Google-Smtp-Source: AA0mqf7LxQSQclcoOBTzJVY+p9DtmqgV0yJC34U6qdy9Xg8iU49XiBqQ1G1IYFVjRhzcXIqq0YVXRtHWVjFymVAydyY=
-X-Received: by 2002:a1f:230c:0:b0:3bb:eb08:6ee with SMTP id
- j12-20020a1f230c000000b003bbeb0806eemr4637581vkj.4.1669195238217; Wed, 23 Nov
- 2022 01:20:38 -0800 (PST)
+        Wed, 23 Nov 2022 08:23:19 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2067.outbound.protection.outlook.com [40.107.102.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EEE4733D;
+        Wed, 23 Nov 2022 05:03:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CV/Tpwujk+32u4athLMf1lpfjw1phLZd4zIT2fL9aRDtNIVnYMG/ZTuSDbV8tlRn/mzeXYVE/Zsl3zk+UWR2AnLeFWttt5wLnH0wVQ5F4J3V/XpfdelnA2jzQMioRPvT/TIM0xAf7CLm2nC0TVjKu3inMpmo3tBYHxvEBNCD5AqkXpLttsMEQN7gdzsOXv+GoWtHBrkWZz5gO92lkWkHsNehoMVA63y5t0AcmHS0vSajWt35ZBGpKg5wso8EqPewBvEP8+8UQkL9zVyP0ixr45+qhz5I0h02B//qe+s687c+7q++siFbVEY41dCbz5aeoQOS8xG8GACdDlLxke5j1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iPPVb1Z/5lQGck2N/JEfzyRg1bfeLV6ckiNRSpSgnl8=;
+ b=jmbuHZUtaibEvFj2FUrUJA3j6SW+HFnZX/aO/f5tzxUSSowRrtQLUb0apwZQOL9VEgSeb+RgnhIt0Q8lbWTFihwcTqtdFeD5K2cGYJjeuK/B9qceJfkCz7YyqaBlKKwPg9FqWe92ZOyrQjeEvCYETVh365csi3aMSSOFuKVO9nULA0Z+GCGjvuQoQcuDT5sK3pNkqXO25wAdP+bLWJVFoYdj6NFpgRj8BJLOok3lmyCz4uH74fvS5ksj/EdY5KctToYTa/emBCngjY/Pk3yazxwLICKuntO9TuM+WbkxrUFJJ5EXeYRXH62Zuy7/DKS9z7uuY4wPf6jxabNElwN78w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iPPVb1Z/5lQGck2N/JEfzyRg1bfeLV6ckiNRSpSgnl8=;
+ b=as2yB3xFBdKf8s6RCL2czCTJAuzPcu1bKY8OHpl7B+pTnydnfcWTKx0pX0PzQYy1OkMp1x75t9pN/bMlb441af+SH/Sl9BhSJmRXhOsJhpQmnUVdrTmZaLx4S+ZaadU1cAHXVGx24lUkASoVy3RUFOvSqImW2w5Vzdi8vmmVEpIaFp3eHHioVCpbmZSfvvDGI1UXd4g48p3l1vOsmaqijouV1EhZ9XREXKga/ufuPHudUciG/22OgQevRLk8hDExpOLM9UmE91R9gwjqKpvtTH775++bGU0MBxfsjW1sxKFCzNk1lUbmMTY5y1S7s3dpmN5h2dSCBuS0DiKSpkO9OA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL1PR12MB5318.namprd12.prod.outlook.com (2603:10b6:208:31d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 13:03:12 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 13:03:12 +0000
+Date:   Wed, 23 Nov 2022 09:03:11 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Joerg Roedel <joro@8bytes.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+        Anthony Krowiak <akrowiak@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        "Martins, Joao" <joao.m.martins@oracle.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Yang, Lixiao" <lixiao.yang@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v5 15/19] iommufd: vfio container FD ioctl compatibility
+Message-ID: <Y34aD4TheDlxTGbt@nvidia.com>
+References: <0-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+ <15-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+ <BN9PR11MB5276B0219008568A30F5A4738C099@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Y3ejMSTWvJuELQ7K@nvidia.com>
+ <BN9PR11MB5276939555C1460EFBFD15A68C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276939555C1460EFBFD15A68C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BL1PR13CA0073.namprd13.prod.outlook.com
+ (2603:10b6:208:2b8::18) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20221102175959.2921063-1-rmoar@google.com> <20221102175959.2921063-2-rmoar@google.com>
-In-Reply-To: <20221102175959.2921063-2-rmoar@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 23 Nov 2022 17:20:27 +0800
-Message-ID: <CABVgOS=JHm=pxFbcKDgJ1Ag4vDRTygZjwjp4sUq-_BUTNVgJyg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] kunit: add macro to allow conditionally exposing
- static symbols to tests
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, dlatypov@google.com,
-        skhan@linuxfoundation.org, tales.aparecida@gmail.com,
-        john.johansen@canonical.com, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        apparmor@lists.ubuntu.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000411b9e05ee1fcdbb"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5318:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4ee93a2-e996-43ac-2fe9-08dacd5313db
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MFH4AnygVw5yE/Io7Dnr4TBJvziIgYJfMz+iujpfZrhsi+D2jP9QuPVidkxDnLAWtDSOhEpZfXb0+MFKvkVcKELBx4SxorPhj8q77LdIpJ4ADi4SH4IpZ9zHGbTSMNHKEidpOowHLpSvYzzP6USOPsFAO/Cp3tc3qIB0sdggnTb1V9Ku6COafqlXe4dnld1fM4eHwo58Z9IQbiVNa0HeZf52O5C5ZRKD2KztI0N8mLLI9mFqefTyMvJq4f1zDZSYsa61cqs8Frnv/SPPIKvJniTYPRa796Cp5zQ27G3G/X50FdYqX8fw8K5eaqaramc8YdiKFp4PooDDAxv+CsueqTIegpyZM85nn2WWBkLW8SD6Xkh08UuFVtBZwA3zogwbnGy9hNM2jZi8gmdoNpho9+Yd64+RXsRnRSLrOtL9ZkO3QClJim8HIJIxBgSpPAu/+IMhVKOclddVGShiFCtpoNeHUhILGrMOOgDPCb+bvxxdKnw332nyPbrHZgCs7ZSoG2TypTgpL+kUt30bBqhzN5YCMsff42TnJemeUrRYW2Z22yiP89xdV3F5sgBvFrHdFubNbDPTfhfmJkZplVmtXeG/7+IdK9CWxIRyqMClhEDg4N30Sr2XuKri8rczeciCQcVQujNHyT40oZ6pJTfg5rgjxVp80kXPetVtHVs8SHf3F6SAlD2eBhWYD9lDP9HD
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(346002)(396003)(39860400002)(451199015)(8936002)(5660300002)(4326008)(66476007)(7416002)(66946007)(66556008)(7406005)(86362001)(41300700001)(8676002)(54906003)(6916009)(26005)(2616005)(2906002)(6486002)(186003)(36756003)(38100700002)(478600001)(6512007)(6506007)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Dr9jLZyfCfytEXDf60LaFBBsUzad0cKB+hS5KWNxnoWzmCtfiJmGgOe2sS3z?=
+ =?us-ascii?Q?jgwDqxCeL+gtPaWGQK414z/N4pMkHCs8LQKsSezNkgcuLb4swkpMI7wGjd51?=
+ =?us-ascii?Q?M0aTJOUeJ/eNFJ0e9J7Mf563ORZh6wnNXn5vf6+qj0EfXznhbqc84XXl2pWU?=
+ =?us-ascii?Q?CqYq0rjKEgV8+hfWQAauOFB/I9PaOTSKgyEY+WSShv5FjuIEVEXQYGcZlcAG?=
+ =?us-ascii?Q?0WZuF5P/lP50+zTsjlnj4wtb0gk5XTsTHlIEPiMsuS+NNSGCxn0m83PBjKg4?=
+ =?us-ascii?Q?fHl2Vd4ye77OkCRNupUC6k+UgVSqINOykD0MkcHm0U5iKggQirthawcVau9y?=
+ =?us-ascii?Q?8eKBnhyGQfd5zm0pd5W6P53CyKZUromxx9PSaaGnMOBfLvx6SgTjl5sWo6Cy?=
+ =?us-ascii?Q?fXTuHs7l0P28SAyvWdE7vdVZkIWVjOz+pYiQ58PdyYjZmrPGILUg6tUH37dh?=
+ =?us-ascii?Q?T67qKfHbQD2ely+ennPRT1M4vIGJxklmBKvOKAw07IEtErxN7k2YTNv/HAR9?=
+ =?us-ascii?Q?MHlKDoQQbd2Mcnd7bt9Zi82khnCX9Aq9UQvTvoswvFFKDJAIK32c0w1MUu1c?=
+ =?us-ascii?Q?GCWem+GTrAGKaby6c3ulT4ORsIa68y0wfNKNrn/7sALIlCiRt3jmY31uWab+?=
+ =?us-ascii?Q?SauQbk3qy5U+kqa3K6dhbkPIQwtIAqHr/F0MvF3Xa86lXOwWC3+9ZQeuj+Bd?=
+ =?us-ascii?Q?a5MN/TMBan8H/IP09fjpoDMVvNvCno/7GqG2GBnckeDAF5LCOH6jupoSioVA?=
+ =?us-ascii?Q?jlQyt19BN64WHJGE7wdO3rLFuwZVY6cRzROrBLPOzM8oNV5oGNV0bVGGiiaf?=
+ =?us-ascii?Q?pzDDniEWdMmpnb+G9MnTTh8LDx8lxyISmjSbcXVRhGh6wv/+4HQsfTK0NHXk?=
+ =?us-ascii?Q?7KPacHb8FTUngn5zveGI3BpccpoV2qm9lu1Zx2bwNl4zPk7Rl2ZRKsz7TtQA?=
+ =?us-ascii?Q?PcVYuw1unxv/6LDnrEelDoJpaZ8ntaehFcKWXuSDKoi8U/oEyE8+PcN1CTRP?=
+ =?us-ascii?Q?cXekM3yX8O1u40mdzoU92nS/goUNOUKqYmJfKtELZvDA0hd/hrH0gYpArCn6?=
+ =?us-ascii?Q?GLYmXrPhy8+2aZ67/72BxLjeAt8j0PKSlctm7PkQvsIYc3uIMwHPjgqqLT0o?=
+ =?us-ascii?Q?K4j6sAd0baOlRHMoLUpL9lF+OJUJ8IC+UEoUA0PjXgcut8k2hmLBhx1RuOkn?=
+ =?us-ascii?Q?f0Y84SjUuA2E9ZGqa8f33CCwbGOmu4S+EKoQaNAUsP+UMGlcP6F4XSHyjVWM?=
+ =?us-ascii?Q?Sx9jTRvkkdROBNzvTpzJ20GSpoeItJIAcKEo6A0qeHVFPM38ohCoJnPmxS8S?=
+ =?us-ascii?Q?+2Y7K6/fb3CBNet9vSnu4xQtOryVJdcbMbYfRroQ8JUsLIdUyomwAwxGwl60?=
+ =?us-ascii?Q?+pPxKaCad+Dlxd0pM25+BievpvVT2WlrCoYoY7dX957yQaZ4dgZ83NsWCFPT?=
+ =?us-ascii?Q?xSTrvg2vYySOwD66bvEEB8xVVgyWH8y02xfE2RdSwyNgcNvLsLksP64lnlnP?=
+ =?us-ascii?Q?qF0Vb4qHLGMC9UR9jKLmKjykbtsckIWjw7PHzWK54f9hH++Q2HBf3gp+OtPY?=
+ =?us-ascii?Q?dSt/1+7dUuJCmrpjEnI=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4ee93a2-e996-43ac-2fe9-08dacd5313db
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 13:03:12.7488
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WG6MA2rPfh3hY2c1yHCUcSq9pmHouf7RtgsXolU3coKFj9vFY+Z/FlUHeQ0eOJWq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5318
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000411b9e05ee1fcdbb
-Content-Type: text/plain; charset="UTF-8"
+On Wed, Nov 23, 2022 at 01:33:22AM +0000, Tian, Kevin wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > Sent: Friday, November 18, 2022 11:22 PM
+> > 
+> > On Fri, Nov 18, 2022 at 02:58:49AM +0000, Tian, Kevin wrote:
+> > > > From: Jason Gunthorpe <jgg@nvidia.com>
+> > > > Sent: Thursday, November 17, 2022 5:01 AM
+> > > > index ca28a135b9675f..2fdff04000b326 100644
+> > > > --- a/drivers/iommu/iommufd/Makefile
+> > > > +++ b/drivers/iommu/iommufd/Makefile
+> > > > @@ -5,6 +5,7 @@ iommufd-y := \
+> > > >  	io_pagetable.o \
+> > > >  	ioas.o \
+> > > >  	main.o \
+> > > > -	pages.o
+> > > > +	pages.o \
+> > > > +	vfio_compat.o
+> > > >
+> > >
+> > > move vfio_compat out of core? it's not required if VFIO
+> > > is not configured.
+> > 
+> > We can, but I don't know if we should. Compat ioctls are part of
+> > /dev/iommu, and technically have nothing to do with VFIO. A native
+> > iommufd application using VDPA could use them, if it wanted, for
+> > instance.
+> > 
+> 
+> I'm not sure whether that requires further VDPA support. Be safe
+> I'd like VDPA to explicitly select vfio_compact when that new
+> mixed scheme is supported. 
 
-On Thu, Nov 3, 2022 at 2:02 AM Rae Moar <rmoar@google.com> wrote:
->
-> Create two macros:
->
-> VISIBLE_IF_KUNIT - A macro that sets symbols to be static if CONFIG_KUNIT
-> is not enabled. Otherwise if CONFIG_KUNIT is enabled there is no change
-> to the symbol definition.
->
-> EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
-> EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is enabled. Must
-> use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING) in test file in order to
-> use symbols.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> ---
+It doesn't make any sense. The ioctls provided by the "vfio container"
+FD are entirely up to IOMMUFD, it doesn't matter what the consuming
+subsystem is. Just think of them as alternatives to the existing
+map/unmap iommfd provides in its native mode.
 
-This looks good to me overall.
+If you want to disable them is a decision that is driven more by
+eliminating the code from the kernel because you know your userspace
+doesn't use those ioctls - which has nothing to do if vfio is compiled
+in or not.
 
-Two thoughts (though they're not _problems_ with this patch, so
-shouldn't necessarily hold it up).
-
-How many KUnit headers do we want for these sorts of things? We've
-currently got 'test.h' (for actual tests) and 'test-bug.h' for the
-kunit_fail_current_test() style hooks. And there'll be 'static-stub.h'
-coming.
-Maybe it'd make sense to merge some of these, if it turns out the same
-code always needs to access them? On the other hand, I actually quite
-like having them separate like this. (Though the split of assertions
-into assert.h and perhaps renaming test-bug.h might be worth doing
-down the line.) No immediate action item, but something perhaps worth
-thinking about.
-
-Secondly, do we want to support individual subsystems and/or tests to
-have their own symbol namespaces. Again, not a problem for the moment,
-but we may need to deal with this if we need to export multiple copies
-of very-generically-named functions. Any thoughts (e.g., an
-EXPORT_SYMBOL_IF_KUNIT_NS macro which allows the user to specify the
-namespace?)
-
-Regardless, this is
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  include/kunit/visibility.h | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 include/kunit/visibility.h
->
-> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
-> new file mode 100644
-> index 000000000000..eb22c9e6b4eb
-> --- /dev/null
-> +++ b/include/kunit/visibility.h
-> @@ -0,0 +1,32 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * KUnit API to allow symbols to be conditionally visible during KUnit
-> + * testing
-> + *
-> + * Copyright (C) 2019, Google LLC.
-> + * Author: Brendan Higgins <brendanhiggins@google.com>
-
-Please update the date here, and use your name/email for the Author section.
-
-
-> + */
-> +
-> +#ifndef _KUNIT_VISIBILITY_H
-> +#define _KUNIT_VISIBILITY_H
-> +
-> +/**
-> + * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if CONFIG_KUNIT
-> + * is not enabled. Otherwise if CONFIG_KUNIT is enabled there is no change
-> + * to the symbol definition.
-> + *
-> + * EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
-> + * EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is
-> + * enabled. Must use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING)
-> + * in test file in order to use symbols.
-> + */
-> +#if IS_ENABLED(CONFIG_KUNIT)
-> +    #define VISIBLE_IF_KUNIT
-> +    #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
-> +           EXPORTED_FOR_KUNIT_TESTING)
-> +#else
-> +    #define VISIBLE_IF_KUNIT static
-> +    #define EXPORT_SYMBOL_IF_KUNIT(symbol)
-> +#endif
-> +
-> +#endif /* _KUNIT_VISIBILITY_H */
-> --
-> 2.38.1.273.g43a17bfeac-goog
->
-
---000000000000411b9e05ee1fcdbb
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC/
-4cIyAN6DZ9w7T8GsRjFqx36icJE9vroyDsoYUgtPMDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMjMwOTIwMzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAARCnTCbLXMEUKzW9RvM
-r4Re56xmKSG/QHCmNk85dolWzIAj6p+/SX/9oBPLbbAGrj0yocG19xYh90IIhmmLLaFV5076fyRB
-G5A8UtiCw9JuVeQmfZQ+Mw/71SRVBp9H9StGnnEiOcjC1XnH+XDiNwxkMOQh8hEwVIooZ2Sovjj7
-Hjmb8pBFeWBjIy48pmBiCGvD0GkEw/F/HmnJPZ66hRuzw1eCkuT7tIJN9UgEjgLNEHb5GpAnJ1cB
-Qeb2oR0H695NFQttFzTErZQD4O7lcZgRUq847e+fYLhwGpOBnQZL2pPH2G/LwIXyX4KMP+Lrsate
-tBYne0HeBrW1VSJZAg==
---000000000000411b9e05ee1fcdbb--
+Jason
