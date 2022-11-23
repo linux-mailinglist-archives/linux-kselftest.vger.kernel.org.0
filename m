@@ -2,169 +2,279 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC3163663E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 17:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9628F63665F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Nov 2022 18:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239196AbiKWQ5E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Nov 2022 11:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
+        id S238054AbiKWRAC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Nov 2022 12:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235632AbiKWQ45 (ORCPT
+        with ESMTP id S237659AbiKWRAB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:56:57 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690716DFC7;
-        Wed, 23 Nov 2022 08:56:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BEDoO4mN+he7uBbUjWqkjfFfyrXUzWVWeKQoD2tghhh5pGtCZoX39yZgomGQh1dz8J2nyA79ZHU6z8PcbuMY0WrJUA0U+idgoSxMaD8XE3s4SXL8v38MO80HxUeDLOBbge0ljVGnYFkMNjvTKQCmtJMqonCL4rd4iTLwwWVgDEGKiOZuGOVCRGtxjwvCECh+tT+MM29a8suhc+pvHrV9ImO1JQZuFWXLMNJvofVOYNwE/MSiuU/KZjklmlESygx1/Z+MaUFonxB8MbJt6bzFW9CTrBlTB2EwUiE6krUxxP1ZYzdWkAoPrAm+JNWxQdN8U75jsBvcm+w4ep/Kw8qTzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=frzMe64esO9khdvJFcrW0BrF3eypv5jhzpXDyTDioTU=;
- b=bAsnHFLNA0C7LFARlHciMRCZ5Opb/Jwxl+K9e7lBbemB2uJeHS5SPw9hDTO8aOKZxrT149BbO6z8lQu3R7/7oDUZd1emcoBkEcpg4EWQam/lI7eHPb519MIFpmTpSKf970bkWzLKbNUzerDKadjOOAtHhh5cdYuXj0jb76XJh7hTFN4mw89j+Uv7TqEjUKjiO9rvyDZfChkAfcXth9sI1A9kO6gm/Z6pRaaNoCCJ/Onw36Uxvyx4HT50UMnKqJemsGBxZKPMu5WFIF4J6a+uiW/rPdjPywqO2byRwanOtsl29MnePAK4MZgeNINiRROz6Ly30Ny6uZVEinFwuL6fEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=frzMe64esO9khdvJFcrW0BrF3eypv5jhzpXDyTDioTU=;
- b=FS/xAJ6tgtoS4WGV6Imhm8UNidk+7MqPdbesmZLbN02Q+LDyo5z3xXlD6SMLuAdZZ4PkG2j9ELTDNGLFQm69yBOYG8W6yOlkKcTC+NVzrWBb0ppPOrBcv+afvBZJ/QUuIJnvTfw1F9nc+JQFV+NZd9mWRwioW6Mn6AWXrW4kZw/PjjIbbWrRBE92O9dux3IBEskDD1lbBjuN95/ZwbOutD5dzPTXxfDRbD1nvWk6XWKFJudoj4QlZ7jdCJX5t2ZKxsHvwUvG/OKf/bJhjIbsfsPC+Z1xmOV8nT3M5nRhz+4oQiVMXj8CXVY9lqYUX32poExo6VOitIHAp2GYuAFeWg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH7PR12MB7354.namprd12.prod.outlook.com (2603:10b6:510:20d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
- 2022 16:56:53 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 16:56:53 +0000
-Date:   Wed, 23 Nov 2022 12:56:52 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-Cc:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-        Anthony Krowiak <akrowiak@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-        Lixiao Yang <lixiao.yang@intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v5 01/19] iommu: Add IOMMU_CAP_ENFORCE_CACHE_COHERENCY
-Message-ID: <Y35Q1M4riY2O9rxP@nvidia.com>
-References: <1-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
- <da5dffaf-3e75-9681-8e0d-4b7402b05b1f@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <da5dffaf-3e75-9681-8e0d-4b7402b05b1f@intel.com>
-X-ClientProxiedBy: MN2PR18CA0012.namprd18.prod.outlook.com
- (2603:10b6:208:23c::17) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 23 Nov 2022 12:00:01 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E712A781A6
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Nov 2022 08:59:58 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3a7081e3b95so76185097b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Nov 2022 08:59:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jayl9XfJvGWwHXVIk+ROjAbiw46GjWkW/kZXLe58Lv4=;
+        b=bAt0XaONGIclr0aqlZnlWXU7WcAtPBaQ5FrrIYNBEva6Jb5bPqwC+w5+rVMWD+38sA
+         5O1U+AaSKeb7xKFUmDFqD4dSwclkM8zyue2kefPAczf8jJWteKhqTp6wp/fhTvdXT8f9
+         BkqQ5SDK4qZfV9rysP9i/DbtuRT5XIyVTCX1/jJG0HYhrHD13j4NyJ8IfZlBlQ5t385s
+         T4AvtxZBDX/WmfXKFyP0MHkRWI3EjTJgIFrz+FVFJKJzjqoVvr9J+BJWSa3HSohood2I
+         3diHYw4J+uWTqz0ZeJfKYE5iwDz6U23mDdx2Tmrvn8+TDTQGaLo6ntDHMvfXvwDwjbbG
+         +hOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jayl9XfJvGWwHXVIk+ROjAbiw46GjWkW/kZXLe58Lv4=;
+        b=PLb6KNFHY/mpDYgtWZoetUZ7YfbVf/w9S6UH5oIr9nEeF3QOWRgsubrXcNzeoQlDbX
+         SI5FCOjHOEwZvJOXqm6f+n/4+bYTT4/2pebDfNGyIKyf4HjD/YA8j1NgodkU0oBDyFoX
+         QzPMLdEV9yRkyoIFv6TEVeaale4ZSuYuaqzsjB90gMmTcD68LNz3cwstSYZt8Q52GGXn
+         1BMc5At6b36rYZfjucSfYNDbEjQww05z7NiqVnmYi2kqisma2vJ9eh0mrIOtNCRCE+Mm
+         JkE7ksfrhVDsX216YNhn1eUjhJ+l/b3XfmDbWOObRSXE87n6DrGrYeisgyiH+eNT8+Ye
+         wG9Q==
+X-Gm-Message-State: ANoB5plSO7JrotUqEoGilYRl+sDsfCxA49KGkQExxMCft7Y6OKVbn0CO
+        Txlwmp9z0KqJMULohfW0AXSHXBUm8DyrEFhUWa/FUg==
+X-Google-Smtp-Source: AA0mqf53yzdME7BXpGKNx+IMODOX54r+r4qy38o90rDlX+bZwFqBAw0uj2Qpu8QlnZv7NwlRlxzRIHcWLg3QbQFjdZQ=
+X-Received: by 2002:a81:a14d:0:b0:3b1:8de1:e2b7 with SMTP id
+ y74-20020a81a14d000000b003b18de1e2b7mr2268062ywg.188.1669222797957; Wed, 23
+ Nov 2022 08:59:57 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB7354:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6ef82cc4-a2e1-4f96-e0be-08dacd73b8e6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qiMohi3Fom8Z671Xrm4TWsAie9V62W8lpXyVG9wV5nmprYG/FGIr6k1hVoR2mv9efgwROCwnmKGb/qTRM/9nWoo2TzBApmYgjqy4KOXtxXRJeKy/x2ef2lbUrGqTEPMQhq+Tt9O84ik3fiDUEcIeAp+zfahThQkrY0dUQh5Te1au1JYmw+wIMpJoRCSXLFbHNhmLllg7QhFQLqvKH8dxdL4QTlHQHQTqo6uAFKAEQjAJKbEdfaL2dSks3jdcZaBlm4XBytH7Bh+kH2bYW/qRZuzQ8lFjC73lM24PkP9q8G3UBCO5hZpkQ+6WGC5BtevklultZPWRgBs3QmKhuaCtx2W2inlt5vWijH79lm7Gnp+QX7p1Z9C02YkQ6Zq+gfLNbjeuHwac8oMUDxp1p78DFExopk/hDmNYumB9KGWi+oYVQ8zro66LkuBAPDhyxj/JsOL98QIjXC2U7hYjGsCxcOXq1QntIKPzVFEQI0pQv6F0bg3RfgD7sD5upIZb9s7zXwS440YK2LdZvR1LwGwviqCRiw1Y+6en+/tXAF8Uovxk1zILzuMK6ta48Z+l6iYXeco7zXpiHxEqbk1sif2nFxqUEPHCIB6PzKbnNn/RCQIxg66iHiDvnKL4EF5Ehf+dkmLoCxqWrZHkPlJRXZKcuw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(366004)(39860400002)(396003)(451199015)(4326008)(66476007)(8676002)(66946007)(41300700001)(5660300002)(8936002)(478600001)(6486002)(6916009)(316002)(38100700002)(66556008)(86362001)(26005)(6506007)(53546011)(6512007)(186003)(54906003)(7406005)(4744005)(36756003)(2906002)(7416002)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+gv+6Tnl01Emhu/Pl4j+r/z2uL++/7mbHgGvxOiPte18MGRqxxNZMrIJ4YL3?=
- =?us-ascii?Q?aW8XnfT6apNnS8EZwLRU1FaEIzkfZkPyduw/4lxne4k2zUeBsUvCNx/xajQa?=
- =?us-ascii?Q?VB2PWA4fgDOReNMKvrNDER8m/zK6A3zBLQvCQ8ZI3uoGCucfl+2rQVCzoYLE?=
- =?us-ascii?Q?U3t79pKM5+u0cgf2H5SxZwKMJG9u/zgdlR8u9My9Xgo5n5GgGR9J1kBKZXgV?=
- =?us-ascii?Q?qZzkrXoQLTh+5epGEso7TqNq6YEpU9yztVDC2A7GsvV7ZjoDBLJq91hK+AsB?=
- =?us-ascii?Q?r/6kYy8dHzgrPFjUmThOaVu3zWTz/WGXpGNJPv3JAYiksI+pDNp8L+ynvsCK?=
- =?us-ascii?Q?Q8scvwHZpCt8MMfRR2DwrCyZLPEUQLiYs4QjNWcgw9Xgvp22PCgTUXm0i1AD?=
- =?us-ascii?Q?j1Rjdfbg4xsDEmJ4fOQgHG6v1SlGA6tWL33E3B5Z/IG/4px7Y6V0edFR/SYU?=
- =?us-ascii?Q?szEQ0sYNmIo0hYztcm8KAkMMlZLxFUWTjc+HeTnLreVXaDDCtBiaYR+aQOnS?=
- =?us-ascii?Q?qiZ2jfe0JT6GYWDtdGl3dS5rggcEfPCejJpf7fhXYa2HhcLeAvkVR8ASnT7Q?=
- =?us-ascii?Q?3sTvUwI19Yn5xkuUmV9gE7gK1/m/46LEd1UCmSlmkrOsfAfniUxNactZ5LPn?=
- =?us-ascii?Q?QlBRCTbpljtxU4fxynbhDdFd6lkCND2MJtxbtneSjqXoUwLyUX3dr5cbF9Vt?=
- =?us-ascii?Q?yfIjbvkT8MZENM0JDWNbNiVfCMa3Y4veDcziATp4Piz8eMHv8Pw6jr+m8MFb?=
- =?us-ascii?Q?9TSUmPOAT9VQoTSZrhoh7A2Dsn15nh+UmsJt74WtwxJjszcy6kp/ktjyqDKh?=
- =?us-ascii?Q?MzHCynlgLkX2rp/BMce6Fg1JfRF9wbmFX6eoqfSCkjfoRV+xtawiQycQX3Ku?=
- =?us-ascii?Q?AyFO4qVMfT0YkV8C0vi253RlqgOMZoS9SsG8sKdu4a+ysZuQcuCTPfQVUzJa?=
- =?us-ascii?Q?BVUGsLzoSCG1AUMUowX4/kHDt3+Wt4R5Tu81vagcO9Jd47LsvN7w1Wlpb3JE?=
- =?us-ascii?Q?mh1O66v3n9BEW3FWKNyO9Vls2Vd76qVakd+iO3QFpEJv7dwPGmDVoBR7Vvut?=
- =?us-ascii?Q?g9AJd59Si3lBoyuqM5o7JcNsd195FahE6YjLSfazNDxLK9bmC+cD+agNrpng?=
- =?us-ascii?Q?c60VflAPXoiP455pcLcwilLgX9fPRWySLJCdOIXUEQo7S7CBzDIjSOxMyeCi?=
- =?us-ascii?Q?Z6ZGpohoH5HukKBZcPzJOUbdoQMZIsH+S57qhugUmmUVDDm2mS1CK+cdUMNP?=
- =?us-ascii?Q?ctQ9ufqWXHaaFX8fuu6p4dO1VKCVs/vs8ZZjE7dgy2eHDOaA6OHaJ/7g5kCC?=
- =?us-ascii?Q?l3gY4fmSfcwWZvxetbMFXG9o344dZyPGp+V8OP4Ec0SQR/NHZfqg2OmxJmxf?=
- =?us-ascii?Q?AqhdEiXJDoplWCyxfmLc/fFfKvNLJjZAythzYr1BUjZK+6OqQAFL/NsOUkyJ?=
- =?us-ascii?Q?9iOrWd4EhHLPNBIO+FLIMnjGhNwK4s19fcIfXW6JRvWJzH93wBVXzGVnZP96?=
- =?us-ascii?Q?SnIBz4bR0NBEg5lr5XPZVMBYlImRyX/4PwzePAZUu4+mw3DMWvQz9hoQpOpy?=
- =?us-ascii?Q?Cpand4N3vqM5r3YBEsQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ef82cc4-a2e1-4f96-e0be-08dacd73b8e6
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 16:56:53.4658
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QyeZobsaH6xwdIgRRL21EuKKZMlBXk6rJF5vWGfMbLRgx8q9+7684PgLfrLsm0kC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7354
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221119081252.3864249-1-davidgow@google.com> <20221119081252.3864249-2-davidgow@google.com>
+ <CAGS_qxqAUiMfKe2ksnqQtyWv0BWYLA4_uGqpu76d=Oh42mAUgQ@mail.gmail.com> <CABVgOSmfcJLs76efLe1zXgZwrSXrxKCLPAhSyx3P+WEkzZNR3A@mail.gmail.com>
+In-Reply-To: <CABVgOSmfcJLs76efLe1zXgZwrSXrxKCLPAhSyx3P+WEkzZNR3A@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 23 Nov 2022 08:59:46 -0800
+Message-ID: <CAGS_qxqCshqURWThsOj+ntBP5kXqOzxhde+A-29Pe2vhr7pBNQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kunit: Use the static key when retrieving the
+ current test
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sadiya Kazi <sadiyakazi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 04:30:23PM +0800, Yi Liu wrote:
-> On 2022/11/17 05:00, Jason Gunthorpe wrote:
-> > This queries if a domain linked to a device should expect to support
-> > enforce_cache_coherency() so iommufd can negotiate the rules for when a
-> > domain should be shared or not.
-> > 
-> > For iommufd a device that declares IOMMU_CAP_ENFORCE_CACHE_COHERENCY will
-> > not be attached to a domain that does not support it.
-> > 
-> > Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-> > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> > Tested-by: Nicolin Chen <nicolinc@nvidia.com>
-> > Tested-by: Yi Liu <yi.l.liu@intel.com>
-> > Tested-by: Lixiao Yang <lixiao.yang@intel.com>
-> > Tested-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> 
-> looks like Yu He's test-by was missed. :-) She has given it in below link.
+On Mon, Nov 21, 2022 at 7:16 PM David Gow <davidgow@google.com> wrote:
+> > Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> >
+> > Looks good to me, but some small optional nits about the Documentation.
+> >
+> > I'm a bit sad that the kunit_fail_current_test() macro is now a bit
+> > more complicated (has two definitions).
+>
+> I'm not too happy with it either, but I think it's worth having the
+> printf() format string checking, as well as making it possible to
+> optimise the call out (without needing LTO), and I can't think of a
+> better way of doing that at the moment.
+>
+> The only other option I can think of would be to have lots of #ifdefs
+> for the _contents_ of the functions, and that seemed more ugly to me.
 
-Oops, I fixed it thanks
+Sorry, I should have been more clear.
+I'm fine with it as-is.
 
-Jason
+It's just a bit sad that it could have remained a single definition,
+but that would sacrifice performance.
+The version in this patch can avoid the call to
+__kunit_fail_current_test() via static key, so that's more important.
+
+>
+> > Optional: perhaps it's long enough now that we should have a comment
+> > after the #endif, i.e.
+> > #endif   /* IS_BUILTIN(CONFIG_KUNIT) */
+> >
+>
+> Makes sense to me. Will add in v3.
+>
+> > <snip>
+> >
+> > >
+> > > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+> > > index 2737863ef365..e70014b82350 100644
+> > > --- a/Documentation/dev-tools/kunit/usage.rst
+> > > +++ b/Documentation/dev-tools/kunit/usage.rst
+> > > @@ -625,17 +625,21 @@ as shown in next section: *Accessing The Current Test*.
+> > >  Accessing The Current Test
+> > >  --------------------------
+> > >
+> > > -In some cases, we need to call test-only code from outside the test file.
+> > > -For example, see example in section *Injecting Test-Only Code* or if
+> > > -we are providing a fake implementation of an ops struct. Using
+> > > -``kunit_test`` field in ``task_struct``, we can access it via
+> > > -``current->kunit_test``.
+> > > +In some cases, we need to call test-only code from outside the test file,
+> > > +for example,  when providing a fake implementation of a function, or to fail
+> >
+> > nit: there are two spaces after "for example, "
+> >
+> > Personal preference: I'd rather keep "For example," as the start of a
+> > new sentence.
+> >
+> > > +any current test from within an error handler.
+>
+>
+> Hmm... I found it a bit ugly to keep "For example" at the start of the
+> sentence, as we then have to stick a (possibly duplicated) verb in to
+> make it actually a sentence.
+>
+> How about:
+> In some cases, we need to call test-only code from outside the test
+> file. For example, this is useful when providing a fake implementation
+> of a function, or if we wish to fail the current test from within an
+> error handler.
+
+I see what you mean. The initial wording is good as-is, I think.
+I thought I had some ideas of how to reword it, but they don't sound
+so good when I actually write them out.
+
+>
+>
+> > > +We can do this via the ``kunit_test`` field in ``task_struct``, which we can
+> > > +access using the ``kunit_get_current_test`` function in ``kunit/test-bug.h``.
+> >
+> > Personal preference: kunit_get_current_test()
+> > IMO that would make it easier to pick up when the reader is quickly
+> > scanning over.
+> >
+>
+> Agreed, will fix in v3.
+>
+> > >
+> > > -The example below includes how to implement "mocking":
+> > > +``kunit_get_current_test`` requires KUnit be built-in to the kernel, i.e.
+> > > +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
+> > > +or no test is currently running, in which case it will quickly return ``NULL``.
+> >
+> > I find this sentence a bit confusing.
+> >
+> > I think it's trying to convey that
+> > * it can be called no matter how the kernel is built or what cmdline
+> > args are given
+> > * but it doesn't work properly for CONFIG_KUNIT=m
+> > * for CONFIG_KUNIT=n, it's a static inline func that just returns NULL
+> > * when booting with `kunit.enabled=0`, it's fast (thanks to static keys)
+> >
+>
+> Yeah: that's the goal.
+>
+> > But the current wording basically says "the func requires
+> > CONFIG_KUNIT=y" then says it's safe to call it even if CONFIG_KUNIT=n.
+> > It feels a bit whiplashy.
+> >
+> > Should this be reworded to say the function can be used regardless of
+> > whether KUnit is enabled but add a `note` block about how it doesn't
+> > properly for CONFIG_KUNIT=m?
+> >
+>
+> How about:
+> ``kunit_get_current_test()`` is safe to call even if KUnit is not
+> enabled. If KUnit is not enabled (or was built as a module), or no
+> test is running, it will return NULL.
+>
+> Or:
+> ``kunit_get_current_test()`` is always available, but will only return
+> a test if KUnit is built-in to the kernel (i.e, CONFIG_KUNIT=y). In
+> all other cases, it will return NULL.
+>
+> We could add a:
+> This will compile to either a no-op or a static key, so will have
+
+*static key check?
+
+> negligible performance impact when no test is running.
+>
+> Thoughts?
+>
+> Regardless, the plan is to eventually get rid of the restriction with
+> modules, so hopefully that part of the awkwardness won't last too
+> long.
+
+I think both of these work, w/ a slight preference to the first.
+I think it more clearly explains how the function behaves, even if the
+gotcha "this function won't do what you expect with moduels" is not
+immediately apparent. But hopefully we can fix that soon so this
+becomes a moot point.
+I also think it works better for the section down below about
+kunit_fail_current_test().
+
+Up to you if you want to include the bit about the static key.
+I can see arguments either way.
+
+Daniel
+
+>
+> > > +
+> > > +The example below uses this to implement a "mock" implementation of a function, ``foo``:
+> > >
+> > >  .. code-block:: c
+> > >
+> > > -       #include <linux/sched.h> /* for current */
+> > > +       #include <kunit/test-bug.h> /* for kunit_get_current_test */
+> > >
+> > >         struct test_data {
+> > >                 int foo_result;
+> > > @@ -644,7 +648,7 @@ The example below includes how to implement "mocking":
+> > >
+> > >         static int fake_foo(int arg)
+> > >         {
+> > > -               struct kunit *test = current->kunit_test;
+> > > +               struct kunit *test = kunit_get_current_test();
+> > >                 struct test_data *test_data = test->priv;
+> > >
+> > >                 KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
+> > > @@ -675,7 +679,7 @@ Each test can have multiple resources which have string names providing the same
+> > >  flexibility as a ``priv`` member, but also, for example, allowing helper
+> > >  functions to create resources without conflicting with each other. It is also
+> > >  possible to define a clean up function for each resource, making it easy to
+> > > -avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/test.rst.
+> > > +avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/resource.rst.
+> >
+> > Oops, thanks for cleaning this up.
+> > I guess I forgot to update this when splitting out resource.rst or my
+> > change raced with the rewrite of this file.
+> >
+> > >
+> > >  Failing The Current Test
+> > >  ------------------------
+> > > @@ -703,3 +707,6 @@ structures as shown below:
+> > >         static void my_debug_function(void) { }
+> > >         #endif
+> > >
+> > > +Note that ``kunit_fail_current_test`` requires KUnit be built-in to the kernel, i.e.
+> > > +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
+> > > +or no test is currently running, but will do nothing.
+> >
+> > This is the same wording as above.
+> > I think it's clearer since what it's trying to convey is simpler, so
+> > it's probably fine.
+> >
+> > But if we do end up thinking of a good way to reword the previous bit,
+> > we might want to reword it here too.
+>
+> Yeah: I wrote this one first, then copied it above, so that's why this
+> one is a bit simpler. If we come up with something better for the
+> first one, we can keep it.
+>
+> _Maybe_ if we moved things to a .. note block, then we could share
+> that between both of these sections, though that has its own issues.
