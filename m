@@ -2,237 +2,197 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F5F637B04
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Nov 2022 15:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 074DA637D40
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Nov 2022 16:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiKXOEA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Nov 2022 09:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S229804AbiKXPvT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Nov 2022 10:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiKXODf (ORCPT
+        with ESMTP id S229682AbiKXPvS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:03:35 -0500
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3548C11E829;
-        Thu, 24 Nov 2022 06:01:10 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 10C032B06842;
-        Thu, 24 Nov 2022 09:01:06 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 24 Nov 2022 09:01:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669298466; x=
-        1669305666; bh=4jIAn2lueWeOwVkOG/WC5OUeXxRyuqGWxy80FbSFYkU=; b=e
-        qE3tHPPtqSf2ZlRLKRvMe8490eUorbxIPbR0H4ULV8nQghhKqp5ss/9vTme8mymX
-        Wa3py471Rdh+fPeIAzMVkoQl6aeMBnfzjwQFfmit3QF0c0tpDpOImZXbCmkvYpqH
-        0Mgh+v2jXIpsIhJ2kuRbfTwJ5OpmdaDdnugMwWgjP6RbGOcH0dKgu0q2txkgDEUA
-        YvcogazJb1A/8UAuHke2hu4dbEfN+BJz7QoK/h3OPExqr19VR7oXa8bfSl+2eu+E
-        8nw3hafR0oekv2iU1RwuNptkZycN/KvvC6RTAtHTDLBJHUrk8tG3RAf/NETJwYbu
-        3+DqHJoEWbVAyFO9ceiGQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669298466; x=
-        1669305666; bh=4jIAn2lueWeOwVkOG/WC5OUeXxRyuqGWxy80FbSFYkU=; b=l
-        T/mRiRFHe9A8a30ZwTwRCn7Atjq0eCn00PtFaChL5BXbD1p2ENm1wDe21wcAksFs
-        auGh1enyGhzlnelBo3eNDJ/uOpMX9J7tZYgRt/nAPlONro6RUYbhccaaXtzH1JCS
-        tNomDb+/7p9NVkzhX4q4xrvcnHo3rSKNvC8Kqv2dvMeP72TG8Hi33RrYo4iPlVQf
-        0Rw+qlK9SEYrojPSnFEOOZmhPRDc/BVN6IsGgOp6x0Q3Q1tqvCZUTKZh2VdD5yYX
-        Uiz8Mf5s8/XhZDbZ8ZnTIPD8A7UDSKlBTXyNx8tHLlINbYpknGbuveNLDrkXeTPl
-        QZ1nWcu2JE5j3/iErJSYw==
-X-ME-Sender: <xms:IXl_Y8j8Pe5Kk__SG2mhP6Ann5BycT9QheZVDYH0GgCUUz1-S3PoIw>
-    <xme:IXl_Y1Bt1uFmB6JyuOfMwn6vEA3YAiWsGT7JkPaH5ohuANNBfvlK25MaXKQTtlgJr
-    janSOgWnauP2n6XCWU>
-X-ME-Received: <xmr:IXl_Y0HDout03brAXwQ6rGHhIWie8H1A4aEUjHEsrRDck1m_dtNePnHLK1fnb2v4QWzN6-8JB5qZ1R4k2NU_cCLPtXy8gV0PZJWQWbOKeB_Yyg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieefgdeitdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeitdeuffevieeufedtuddvffffffegfffgkeeihfelleektdelhfevhfdu
-    udfhgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:IXl_Y9T0iDI5dOBpGDqiUte33CYb-6DYmvKVj6GMWZvMZq_q6Slzgg>
-    <xmx:IXl_Y5x6-leO15H1x3BYXERG-NZ1OIul1ZuFOsSHXaUf-ev4qS7_oA>
-    <xmx:IXl_Y774hFD8EI4QojFjc2Ebo_3IkTfGg2cRx-NYbi3kHg_rZ6DQ7g>
-    <xmx:Inl_Yy9vQHMkcwqNo4mOrRhHdbYgg7s5FDAU5jV92omxMq0_BXkDnnVR5m8>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 24 Nov 2022 09:01:04 -0500 (EST)
-Date:   Thu, 24 Nov 2022 15:01:03 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Gow <davidgow@google.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linaro-mm-sig@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
-        linux-media@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH 00/24] drm: Introduce Kunit Tests to VC4
-Message-ID: <20221124140103.saf2fyal75dscoot@houat>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <CABVgOSmtiPMd+GB40_o=eDPg3cKVA3qPNbbYFoRJvJRxQBDj5A@mail.gmail.com>
+        Thu, 24 Nov 2022 10:51:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D6131EC9
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Nov 2022 07:50:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669305023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RY55+mI/DdVynf6mJobax2x0nouP9gB/94T/eEnCQ84=;
+        b=JhC5IsXvX2RUOh60Vb+22q02Kc/unNt7IEGDy/tw9Q5mNNFqSzrP20w/3NGXXnSWx3ek/0
+        AHWiJ7sLFy6miJ7CsBI4SzL8+kQjcQWYeeSrTw4IYvqs7PylO3g3tfsJ+h43MEwSmW3vQf
+        hhMFMwndpX5olYvtIsRFFUDDKHp3C2A=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-215-RDhmgD0BPuSM-E40QdOAgw-1; Thu, 24 Nov 2022 10:50:22 -0500
+X-MC-Unique: RDhmgD0BPuSM-E40QdOAgw-1
+Received: by mail-io1-f70.google.com with SMTP id t2-20020a6b6402000000b006dea34ad528so1018712iog.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Nov 2022 07:50:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RY55+mI/DdVynf6mJobax2x0nouP9gB/94T/eEnCQ84=;
+        b=hzSxUIKM3JX1GwqZnXfDX5N2njcdYKKde+HY10b/V3lvaE2Xe7mkwrgTkCLusgWPcf
+         9c6HT1Qi/OhpBaiKm2Y8VuDHXxXP3KQq0t2VQk7b883JdlHwBJxPqmExy/Xz0/s/S8N0
+         zXElornMCDKmMXHj3ZBiZ3qBUqGJSfxAAmzYMNOYkI+MUlgrSqfXPKjdCjZl+wZTA/ea
+         TqxxKCUJAiZjULx/6vuSWfTj2WoQFTk2Y0BZvjiiEZkFzW24/n8e3kUxUChVVwyl9j+g
+         zDSGgSaloPbef9iTXAOaYdO17DPJmjGpfWnlZp2eH4N8HGrdIp/qRcoCcDAwobMUKR2R
+         EG1Q==
+X-Gm-Message-State: ANoB5pm54Yemff/nBtCfEy7zZWD+vc8kxEobzySJgX1Vl+O+tNXi6paS
+        b0eYNUORUWpULNvDJ3M5hNGaM/p8AmjmF960s+MInTFSWIEdo4kSJhAhsqOeHzGcmbFCnzKZF+d
+        7FwfUy0iqgEG35TnuHKHjeKnKGV/2a9Tx9leC0BCYPD0u
+X-Received: by 2002:a05:6e02:12c2:b0:302:e38e:761b with SMTP id i2-20020a056e0212c200b00302e38e761bmr2982593ilm.61.1669305021750;
+        Thu, 24 Nov 2022 07:50:21 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf50DvoaFAAKrDAN6ynBtlfajIpvDYjTyVfoAXhh1Q93IuTagRMPKBRzK4dRjX385fP/AwgqliXF5ra1BppOhJk=
+X-Received: by 2002:a05:6e02:12c2:b0:302:e38e:761b with SMTP id
+ i2-20020a056e0212c200b00302e38e761bmr2982569ilm.61.1669305021479; Thu, 24 Nov
+ 2022 07:50:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CABVgOSmtiPMd+GB40_o=eDPg3cKVA3qPNbbYFoRJvJRxQBDj5A@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+ <20221103155756.687789-4-benjamin.tissoires@redhat.com> <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
+ <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com> <CAADnVQ+kE+EJ9LAfwge9ksC0LR8r+ShQNYi5g-MDajufXq8Yxw@mail.gmail.com>
+In-Reply-To: <CAADnVQ+kE+EJ9LAfwge9ksC0LR8r+ShQNYi5g-MDajufXq8Yxw@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 24 Nov 2022 16:50:10 +0100
+Message-ID: <CAO-hwJJGxvrLRGSt7g0T1rYiuCCigVzQ-L6yKLM1-44EpYqmsQ@mail.gmail.com>
+Subject: Re: [PATCH hid v12 03/15] HID: initial BPF implementation
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David,
-
-On Thu, Nov 24, 2022 at 04:31:14PM +0800, David Gow wrote:
-> On Wed, Nov 23, 2022 at 11:28 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> >
-> > Hi,
-> >
-> > This series introduce Kunit tests to the vc4 KMS driver, but unlike wha=
-t we
-> > have been doing so far in KMS, it actually tests the atomic modesetting=
- code.
-> >
-> > In order to do so, I've had to improve a fair bit on the Kunit helpers =
-already
-> > found in the tree in order to register a full blown and somewhat functi=
-onal KMS
-> > driver.
-> >
-> > It's of course relying on a mock so that we can test it anywhere. The m=
-ocking
-> > approach created a number of issues, the main one being that we need to=
- create
-> > a decent mock in the first place, see patch 22. The basic idea is that I
-> > created some structures to provide a decent approximation of the actual
-> > hardware, and that would support both major architectures supported by =
-vc4.
-> >
-> > This is of course meant to evolve over time and support more tests, but=
- I've
-> > focused on testing the HVS FIFO assignment code which is fairly tricky =
-(and the
-> > tests have actually revealed one more bug with our current implementati=
-on). I
-> > used to have a userspace implementation of those tests, where I would c=
-opy and
-> > paste the kernel code and run the tests on a regular basis. It's was ob=
-viously
-> > fairly suboptimal, so it seemed like the perfect testbed for that serie=
-s.
+On Wed, Nov 23, 2022 at 9:14 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Thanks very much for this! I'm really excited to see these sorts of
-> tests being written.
->=20
-> I was able to successfully run these under qemu with:
-> ./tools/testing/kunit/kunit.py run --kunitconfig
-> drivers/gpu/drm/vc4/tests --arch arm64
-> --cross_compile=3Daarch64-linux-gnu-
-> (and also with clang, using --make_options LLVM=3D1 instead of the
-> --cross_compile flag)
->=20
-> On the other hand, they don't compile as a module:
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/gpu/drm/vc4/tests/vc4=
-_mock.o
-> ERROR: modpost: missing MODULE_LICENSE() in
-> drivers/gpu/drm/vc4/tests/vc4_mock_crtc.o
-> ERROR: modpost: missing MODULE_LICENSE() in
-> drivers/gpu/drm/vc4/tests/vc4_mock_output.o
-> ERROR: modpost: missing MODULE_LICENSE() in
-> drivers/gpu/drm/vc4/tests/vc4_mock_plane.o
-> ERROR: modpost: missing MODULE_LICENSE() in
-> drivers/gpu/drm/vc4/tests/vc4_test_pv_muxing.o
-> ERROR: modpost: missing MODULE_LICENSE() in
-> drivers/gpu/drm/tests/drm_managed_test.o
-> ERROR: modpost: "vc4_drm_driver"
-> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
-> ERROR: modpost: "vc5_drm_driver"
-> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
-> ERROR: modpost: "drm_kunit_helper_alloc_device"
-> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
-> ERROR: modpost: "__drm_kunit_helper_alloc_drm_device_with_driver"
-> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
-> ERROR: modpost: "__vc4_hvs_alloc"
-> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
-> ERROR: modpost: "vc4_dummy_plane"
-> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
-> ERROR: modpost: "vc4_mock_pv" [drivers/gpu/drm/vc4/tests/vc4_mock.ko] und=
-efined!
-> ERROR: modpost: "vc4_dummy_output"
-> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
-> ERROR: modpost: "vc4_kms_load" [drivers/gpu/drm/vc4/tests/vc4_mock.ko]
-> undefined!
-> ERROR: modpost: "vc4_txp_crtc_data"
-> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
-> WARNING: modpost: suppressed 17 unresolved symbol warnings because
-> there were too many)
+> On Wed, Nov 23, 2022 at 6:53 AM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > Hi Jon,
+> >
+> > On Wed, Nov 23, 2022 at 2:25 PM Jon Hunter <jonathanh@nvidia.com> wrote:
+> > >
+> > >
+> > > On 03/11/2022 15:57, Benjamin Tissoires wrote:
+> > > > Declare an entry point that can use fmod_ret BPF programs, and
+> > > > also an API to access and change the incoming data.
+> > > >
+> > > > A simpler implementation would consist in just calling
+> > > > hid_bpf_device_event() for any incoming event and let users deal
+> > > > with the fact that they will be called for any event of any device.
+> > > >
+> > > > The goal of HID-BPF is to partially replace drivers, so this situation
+> > > > can be problematic because we might have programs which will step on
+> > > > each other toes.
+> > > >
+> > > > For that, we add a new API hid_bpf_attach_prog() that can be called
+> > > > from a syscall and we manually deal with a jump table in hid-bpf.
+> > > >
+> > > > Whenever we add a program to the jump table (in other words, when we
+> > > > attach a program to a HID device), we keep the number of time we added
+> > > > this program in the jump table so we can release it whenever there are
+> > > > no other users.
+> > > >
+> > > > HID devices have an RCU protected list of available programs in the
+> > > > jump table, and those programs are called one after the other thanks
+> > > > to bpf_tail_call().
+> > > >
+> > > > To achieve the detection of users losing their fds on the programs we
+> > > > attached, we add 2 tracing facilities on bpf_prog_release() (for when
+> > > > a fd is closed) and bpf_free_inode() (for when a pinned program gets
+> > > > unpinned).
+> > > >
+> > > > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > >
+> > > ...
+> > >
+> > > > +static int __init hid_bpf_init(void)
+> > > > +{
+> > > > +     int err;
+> > > > +
+> > > > +     /* Note: if we exit with an error any time here, we would entirely break HID, which
+> > > > +      * is probably not something we want. So we log an error and return success.
+> > > > +      *
+> > > > +      * This is not a big deal: the syscall allowing to attach a BPF program to a HID device
+> > > > +      * will not be available, so nobody will be able to use the functionality.
+> > > > +      */
+> > > > +
+> > > > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &hid_bpf_kfunc_set);
+> > > > +     if (err) {
+> > > > +             pr_warn("error while setting HID BPF tracing kfuncs: %d", err);
+> > > > +             return 0;
+> > > > +     }
+> > > > +
+> > > > +     err = hid_bpf_preload_skel();
+> > > > +     if (err) {
+> > > > +             pr_warn("error while preloading HID BPF dispatcher: %d", err);
+> > > > +             return 0;
+> > > > +     }
+> > > > +
+> > > > +     /* register syscalls after we are sure we can load our preloaded bpf program */
+> > > > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &hid_bpf_syscall_kfunc_set);
+> > > > +     if (err) {
+> > > > +             pr_warn("error while setting HID BPF syscall kfuncs: %d", err);
+> > > > +             return 0;
+> > > > +     }
+> > > > +
+> > > > +     return 0;
+> > > > +}
+> > >
+> > >
+> > > We have a kernel test that checks for new warning and error messages on
+> > > boot and with this change I am now seeing the following error message on
+> > > our Tegra platforms ...
+> > >
+> > >   WARNING KERN hid_bpf: error while preloading HID BPF dispatcher: -13
+> > >
+> > > I have a quick look at the code, but I can't say I am familiar with
+> > > this. So I wanted to ask if a way to fix this or avoid this? I see the
+> > > code returns 0, so one option would be to make this an informational or
+> > > debug print.
+> >
+> > I am not in favor of debug in that case, because I suspect it'll hide
+> > too much when getting a bug report. Informational could do, yes.
+> >
+> > However, before that, I'd like to dig a little bit more on why it is
+> > failing. I thought arm64 now has support of tracing bpf programs, so I
+> > would not expect this to fail.
+>
+> Unfortunately the patches to add support for such tracing bpf progs got stuck.
+> Florent/Mark can probably share the latest status.
+>
 
-Thanks I'll fix it
+Oh... I noticed Jon's config was lacking CONFIG_FTRACE. So should I
+also add a depends on CONFIG_FTRACE to enable HID-BPF?
 
-> Most of those are just the need to export some symbols. There's some
-> work underway to support conditionally exporting symbols only if KUnit
-> is enabled, which may help:
-> https://lore.kernel.org/linux-kselftest/20221102175959.2921063-1-rmoar@go=
-ogle.com/
+Cheers,
+Benjamin
 
-That's awesome :)
-
-The current solution to include the test implementation is not ideal, so
-it's great to see a nicer solution being worked on.
-
-> Otherwise, I suspect the better short-term solution would just be to
-> require that the tests are built-in (or at least compiled into
-> whatever of the drm/vc4 modules makes most sense).
->=20
-> The only other thing which has me a little confused is the naming of
-> some of the functions, specifically with the __ prefix. Is it just for
-> internal functions (many of them aren't static, but maybe they could
-> use the VISIBLE_IF_KUNIT macro if that makes sense), or for versions
-> of functions which accept extra arguments?
-
-It was for internal functions that would definitely benefit from
-VISIBLE_IF_KUNIT indeed
-
-> Not a big deal (and maybe it's a DRM naming convention I'm ignorant
-> of), but I couldn't quite find a pattern on my first read through.
->=20
-> But on the whole, these look good from a KUnit point-of-view. It's
-> really to see some solid mocking and driver testing, too. There would
-> be ways to avoid passing the 'struct kunit' around in more places (or
-> to store extra data as a kunit_resource), but I think it's better
-> overall to pass it around like you have in this case -- it's certainly
-> more compatible with things which might span threads (e.g. the
-> workqueues).
-
-One thing I'm really unsure about and would like your input on is
-basically the entire device instantiation code in drm_kunit_helpers.c
-
-It's a little fishy since it will allocate a platform_device while the
-driver might expect some other bus device. And the code to bind the
-driver based around probe and workqueues seems like a hack.
-
-This is something that would benefit from having proper functions in
-kunit to allocate a proper device for a given test. This is already
-something that other unit test suites seems to get wrong, and I'm sure
-there's some bugs somewhere in the helpers I did for DRM. What do you
-think?
-
-Maxime
