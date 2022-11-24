@@ -2,197 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074DA637D40
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Nov 2022 16:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D4D638087
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Nov 2022 22:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiKXPvT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Nov 2022 10:51:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S229487AbiKXVVW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Nov 2022 16:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiKXPvS (ORCPT
+        with ESMTP id S229436AbiKXVVV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:51:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D6131EC9
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Nov 2022 07:50:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669305023;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RY55+mI/DdVynf6mJobax2x0nouP9gB/94T/eEnCQ84=;
-        b=JhC5IsXvX2RUOh60Vb+22q02Kc/unNt7IEGDy/tw9Q5mNNFqSzrP20w/3NGXXnSWx3ek/0
-        AHWiJ7sLFy6miJ7CsBI4SzL8+kQjcQWYeeSrTw4IYvqs7PylO3g3tfsJ+h43MEwSmW3vQf
-        hhMFMwndpX5olYvtIsRFFUDDKHp3C2A=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-215-RDhmgD0BPuSM-E40QdOAgw-1; Thu, 24 Nov 2022 10:50:22 -0500
-X-MC-Unique: RDhmgD0BPuSM-E40QdOAgw-1
-Received: by mail-io1-f70.google.com with SMTP id t2-20020a6b6402000000b006dea34ad528so1018712iog.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Nov 2022 07:50:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RY55+mI/DdVynf6mJobax2x0nouP9gB/94T/eEnCQ84=;
-        b=hzSxUIKM3JX1GwqZnXfDX5N2njcdYKKde+HY10b/V3lvaE2Xe7mkwrgTkCLusgWPcf
-         9c6HT1Qi/OhpBaiKm2Y8VuDHXxXP3KQq0t2VQk7b883JdlHwBJxPqmExy/Xz0/s/S8N0
-         zXElornMCDKmMXHj3ZBiZ3qBUqGJSfxAAmzYMNOYkI+MUlgrSqfXPKjdCjZl+wZTA/ea
-         TqxxKCUJAiZjULx/6vuSWfTj2WoQFTk2Y0BZvjiiEZkFzW24/n8e3kUxUChVVwyl9j+g
-         zDSGgSaloPbef9iTXAOaYdO17DPJmjGpfWnlZp2eH4N8HGrdIp/qRcoCcDAwobMUKR2R
-         EG1Q==
-X-Gm-Message-State: ANoB5pm54Yemff/nBtCfEy7zZWD+vc8kxEobzySJgX1Vl+O+tNXi6paS
-        b0eYNUORUWpULNvDJ3M5hNGaM/p8AmjmF960s+MInTFSWIEdo4kSJhAhsqOeHzGcmbFCnzKZF+d
-        7FwfUy0iqgEG35TnuHKHjeKnKGV/2a9Tx9leC0BCYPD0u
-X-Received: by 2002:a05:6e02:12c2:b0:302:e38e:761b with SMTP id i2-20020a056e0212c200b00302e38e761bmr2982593ilm.61.1669305021750;
-        Thu, 24 Nov 2022 07:50:21 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf50DvoaFAAKrDAN6ynBtlfajIpvDYjTyVfoAXhh1Q93IuTagRMPKBRzK4dRjX385fP/AwgqliXF5ra1BppOhJk=
-X-Received: by 2002:a05:6e02:12c2:b0:302:e38e:761b with SMTP id
- i2-20020a056e0212c200b00302e38e761bmr2982569ilm.61.1669305021479; Thu, 24 Nov
- 2022 07:50:21 -0800 (PST)
+        Thu, 24 Nov 2022 16:21:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDF293CDD;
+        Thu, 24 Nov 2022 13:21:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AFC86224C;
+        Thu, 24 Nov 2022 21:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6AF5C433C1;
+        Thu, 24 Nov 2022 21:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669324879;
+        bh=4iOIwt/vynOObx+cbBTS/yCN/FRzhSwQ034ah3adW3M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Y4OVe31iOdgEV546xa8aCvA/8VfNJZZopP38yfSn1Dgq6j0Udifv2qZz7axHqP5cu
+         6Ug5iJ544MYbrGCFtRcBvk4iG/AFauBfSaOTfn0+wyn1bJv3CxtiAJKfjda6KwNami
+         5+K6dJTsg+chpyzH7qXQBSUuXmoG5rm1rl4paeg5MJpN+4IL2q+VitKuQiscMK/Hql
+         Ysg4k0x7PcpdMbvxLPQ3hiz14dE1RmouOccLKGPZ/ExmVKMWAZ+JNuJbABgBG0Mxi0
+         YkRJOBpHLszfu+o/QluuewE1MRqZSTMaOHkHQzEt1+jijxj3KfRQ+KtJtvVdNghFnS
+         xpZ3uRNpNaMvw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 00/11] implement DAMOS filtering for anon pages and
+Date:   Thu, 24 Nov 2022 21:21:03 +0000
+Message-Id: <20221124212114.136863-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
- <20221103155756.687789-4-benjamin.tissoires@redhat.com> <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
- <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com> <CAADnVQ+kE+EJ9LAfwge9ksC0LR8r+ShQNYi5g-MDajufXq8Yxw@mail.gmail.com>
-In-Reply-To: <CAADnVQ+kE+EJ9LAfwge9ksC0LR8r+ShQNYi5g-MDajufXq8Yxw@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 24 Nov 2022 16:50:10 +0100
-Message-ID: <CAO-hwJJGxvrLRGSt7g0T1rYiuCCigVzQ-L6yKLM1-44EpYqmsQ@mail.gmail.com>
-Subject: Re: [PATCH hid v12 03/15] HID: initial BPF implementation
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 9:14 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Nov 23, 2022 at 6:53 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > Hi Jon,
-> >
-> > On Wed, Nov 23, 2022 at 2:25 PM Jon Hunter <jonathanh@nvidia.com> wrote:
-> > >
-> > >
-> > > On 03/11/2022 15:57, Benjamin Tissoires wrote:
-> > > > Declare an entry point that can use fmod_ret BPF programs, and
-> > > > also an API to access and change the incoming data.
-> > > >
-> > > > A simpler implementation would consist in just calling
-> > > > hid_bpf_device_event() for any incoming event and let users deal
-> > > > with the fact that they will be called for any event of any device.
-> > > >
-> > > > The goal of HID-BPF is to partially replace drivers, so this situation
-> > > > can be problematic because we might have programs which will step on
-> > > > each other toes.
-> > > >
-> > > > For that, we add a new API hid_bpf_attach_prog() that can be called
-> > > > from a syscall and we manually deal with a jump table in hid-bpf.
-> > > >
-> > > > Whenever we add a program to the jump table (in other words, when we
-> > > > attach a program to a HID device), we keep the number of time we added
-> > > > this program in the jump table so we can release it whenever there are
-> > > > no other users.
-> > > >
-> > > > HID devices have an RCU protected list of available programs in the
-> > > > jump table, and those programs are called one after the other thanks
-> > > > to bpf_tail_call().
-> > > >
-> > > > To achieve the detection of users losing their fds on the programs we
-> > > > attached, we add 2 tracing facilities on bpf_prog_release() (for when
-> > > > a fd is closed) and bpf_free_inode() (for when a pinned program gets
-> > > > unpinned).
-> > > >
-> > > > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > >
-> > > ...
-> > >
-> > > > +static int __init hid_bpf_init(void)
-> > > > +{
-> > > > +     int err;
-> > > > +
-> > > > +     /* Note: if we exit with an error any time here, we would entirely break HID, which
-> > > > +      * is probably not something we want. So we log an error and return success.
-> > > > +      *
-> > > > +      * This is not a big deal: the syscall allowing to attach a BPF program to a HID device
-> > > > +      * will not be available, so nobody will be able to use the functionality.
-> > > > +      */
-> > > > +
-> > > > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &hid_bpf_kfunc_set);
-> > > > +     if (err) {
-> > > > +             pr_warn("error while setting HID BPF tracing kfuncs: %d", err);
-> > > > +             return 0;
-> > > > +     }
-> > > > +
-> > > > +     err = hid_bpf_preload_skel();
-> > > > +     if (err) {
-> > > > +             pr_warn("error while preloading HID BPF dispatcher: %d", err);
-> > > > +             return 0;
-> > > > +     }
-> > > > +
-> > > > +     /* register syscalls after we are sure we can load our preloaded bpf program */
-> > > > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &hid_bpf_syscall_kfunc_set);
-> > > > +     if (err) {
-> > > > +             pr_warn("error while setting HID BPF syscall kfuncs: %d", err);
-> > > > +             return 0;
-> > > > +     }
-> > > > +
-> > > > +     return 0;
-> > > > +}
-> > >
-> > >
-> > > We have a kernel test that checks for new warning and error messages on
-> > > boot and with this change I am now seeing the following error message on
-> > > our Tegra platforms ...
-> > >
-> > >   WARNING KERN hid_bpf: error while preloading HID BPF dispatcher: -13
-> > >
-> > > I have a quick look at the code, but I can't say I am familiar with
-> > > this. So I wanted to ask if a way to fix this or avoid this? I see the
-> > > code returns 0, so one option would be to make this an informational or
-> > > debug print.
-> >
-> > I am not in favor of debug in that case, because I suspect it'll hide
-> > too much when getting a bug report. Informational could do, yes.
-> >
-> > However, before that, I'd like to dig a little bit more on why it is
-> > failing. I thought arm64 now has support of tracing bpf programs, so I
-> > would not expect this to fail.
->
-> Unfortunately the patches to add support for such tracing bpf progs got stuck.
-> Florent/Mark can probably share the latest status.
->
+DAMOS let users do system operations in a data access pattern oriented
+way.  The data access pattern, which is extracted by DAMON, is somewhat
+accurate more than what user space could know in many cases.  However,
+in some situation, users could know something more than the kernel about
+the pattern or some special requirements for some types of memory or
+processes.  For example, some users would have slow swap devices and
+knows latency-ciritical processes and therefore want to use DAMON-based
+proactive reclamation (DAMON_RECLAIM) for only non-anonymous pages of
+non-latency-critical processes.
 
-Oh... I noticed Jon's config was lacking CONFIG_FTRACE. So should I
-also add a depends on CONFIG_FTRACE to enable HID-BPF?
+For such restriction, users could exclude the memory regions from the
+initial monitoring regions and use non-dynamic monitoring regions update
+monitoring operations set including fvaddr and paddr.  They could also
+adjust the DAMOS target access pattern.  For dynamically changing memory
+layout and access pattern, those would be not enough.
 
-Cheers,
-Benjamin
+To help the case, add an interface, namely DAMOS filters, which can be
+used to avoid the DAMOS actions be applied to specific types of memory,
+to DAMON kernel API (damon.h).  At the moment, it supports filtering
+anonymous pages and/or specific memory cgroups in or out for each DAMOS
+scheme.
+
+This patchset adds the support for all DAMOS actions that 'paddr'
+monitoring operations set supports ('pageout', 'lru_prio', and
+'lru_deprio'), and the functionality is exposed via DAMON kernel API
+(damon.h) the DAMON sysfs interface (/sys/kernel/mm/damon/admins/), and
+DAMON_RECLAIM module parameters.
+
+Patches Sequence
+----------------
+
+First patch implements DAMOS filter interface to DAMON kernel API.
+Second patch makes the physical address space monitoring operations set
+to support the filters from all supporting DAMOS actions.  Third patch
+adds anonymous pages filter support to DAMON_RECLAIM, and the fourth
+patch documents the DAMON_RECLAIM's new feature.  Fifth to seventh
+patches implement DAMON sysfs files for support of the filters, and
+eighth patch connects the file to use DAMOS filters feature.  Ninth
+patch adds simple self test cases for DAMOS filters of the sysfs
+interface.  Finally, following two patches (tenth and eleventh) document
+the new features and interfaces.
+
+SeongJae Park (11):
+  mm/damon/core: implement damos filter
+  mm/damon/paddr: support DAMOS filters
+  mm/damon/reclaim: add a parameter called skip_anon for avoiding
+    anonymous pages reclamation
+  Docs/admin-guide/damon/reclaim: document 'skip_anon' parameter
+  mm/damon/sysfs-schemes: implement filters directory
+  mm/damon/sysfs-schemes: implement filter directory
+  mm/damon/sysfs-schemes: connect filter directory and filters directory
+  mm/damon/sysfs-schemes: implement scheme filters
+  selftests/damon/sysfs: test filters directory
+  Docs/admin-guide/mm/damon/usage: document DAMOS filters of sysfs
+  Docs/ABI/damon: document scheme filters files
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  29 ++
+ .../admin-guide/mm/damon/reclaim.rst          |   9 +
+ Documentation/admin-guide/mm/damon/usage.rst  |  48 ++-
+ include/linux/damon.h                         |  51 +++
+ mm/damon/core.c                               |  39 ++
+ mm/damon/paddr.c                              |  71 +++-
+ mm/damon/reclaim.c                            |  19 +
+ mm/damon/sysfs-schemes.c                      | 365 +++++++++++++++++-
+ tools/testing/selftests/damon/sysfs.sh        |  29 ++
+ 9 files changed, 647 insertions(+), 13 deletions(-)
+
+-- 
+2.25.1
 
