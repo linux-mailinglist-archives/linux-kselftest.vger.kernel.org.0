@@ -2,568 +2,480 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DC8637122
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Nov 2022 04:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E73637191
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Nov 2022 05:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiKXDkI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Nov 2022 22:40:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
+        id S229452AbiKXEtr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Nov 2022 23:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiKXDkH (ORCPT
+        with ESMTP id S229480AbiKXEtq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Nov 2022 22:40:07 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4ED59FC0;
-        Wed, 23 Nov 2022 19:40:05 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 23 Nov 2022 23:49:46 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C5B6DFD3;
+        Wed, 23 Nov 2022 20:49:43 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.159.196])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 843521F8BD;
-        Thu, 24 Nov 2022 03:40:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669261203; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3kE5NUWThCVRRsdGFyYOsO8l9ku9eMnYnLBVHWMjm1I=;
-        b=f3MVPglsFupuRYiunoG5A3voe1ahrwEI+1LRTlKTOQVmGB+h0Li5nEA+n+0VBQrR17Q9i7
-        HmHOrqRKQpEEp1Jg8l0wL93hLTMNRs2ZSKUJwW7UYGc9Brm/3auK363XMVdxekqliW50gu
-        UuvJbqnxbqAr+chH+t+miW6lvmwPHx8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669261203;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3kE5NUWThCVRRsdGFyYOsO8l9ku9eMnYnLBVHWMjm1I=;
-        b=DcOqTneZiOvR17LICSROi0PZmcMMT0+Hz6mjcFtR585cWEcbwgxqj9zMgfbLFZvgAxt7Kt
-        m9TfR2f/VVIQINCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 25C9013A8C;
-        Thu, 24 Nov 2022 03:40:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id LKjaNZDnfmMddAAAMHmgww
-        (envelope-from <mpdesouza@suse.de>); Thu, 24 Nov 2022 03:40:00 +0000
-Date:   Thu, 24 Nov 2022 00:39:57 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz,
-        pmladek@suse.com
-Subject: Re: [PATCH v2 2/2] selftests: livepatch: Test livepatching a heavily
- called syscall
-Message-ID: <20221124033957.cioxtjqkmmrvqji4@daedalus.suse.de>
-References: <20220630141226.2802-1-mpdesouza@suse.com>
- <20220630141226.2802-3-mpdesouza@suse.com>
- <Ys2Li9ilYtpmJhN3@redhat.com>
- <20221123133527.txf7khnkfwpc5vqf@daedalus.suse.de>
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id C67CF3F1D8;
+        Thu, 24 Nov 2022 04:49:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1669265375;
+        bh=ALmN89AFAGENuUaIVsJUuFwpftGPMuxhogH15T4hTrw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=IfzCUU3HJ1ouuNjUosR8jPOOyZ8Im8PunJ0elkUlOTZRzjy/VvSy2fgFbEl9qwlPp
+         4brBAQhcebi7wP9kUvJrvkU3byhTcOBhQnA5E7VTd6T3EyeNk3k5GJ6976KbnDKT1c
+         YzRXaf6L6cbfzk+hs5MqJ6765mAstC9g8wxWmvIoWasGq4fT28R5w3CTF+rhlEVH4w
+         E9QfproyNMuSGT0AS7vXeU/H9ZpS8ioPDt0K+DpfpdLHYw3LI7PNCi30XDZdbjhtCy
+         +tsFvwh1UBH+14gM7Cbq7KcmkR0SvJwtJvopFE1Ju6r0OHXecOztoETmYeX2mILBGn
+         KQEsVzJ0NkF+Q==
+Message-ID: <d5dec6d1-471c-ca23-bd08-75b499556158@canonical.com>
+Date:   Wed, 23 Nov 2022 20:49:30 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123133527.txf7khnkfwpc5vqf@daedalus.suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 2/2] apparmor: test: make static symbols visible during
+ kunit testing
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>
+Cc:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
+        dlatypov@google.com, skhan@linuxfoundation.org,
+        tales.aparecida@gmail.com, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        apparmor@lists.ubuntu.com
+References: <20221102175959.2921063-1-rmoar@google.com>
+ <20221102175959.2921063-3-rmoar@google.com>
+ <3fbf707a-fc9e-18c6-dc40-ec266bd524e5@canonical.com>
+ <CABVgOSkTojOjNv05aiD9tV7Vw12QOTtw9H9qCPFjjm_COdKb8w@mail.gmail.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <CABVgOSkTojOjNv05aiD9tV7Vw12QOTtw9H9qCPFjjm_COdKb8w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 10:35:27AM -0300, Marcos Paulo de Souza wrote:
-> On Tue, Jul 12, 2022 at 10:56:11AM -0400, Joe Lawrence wrote:
-> > On Thu, Jun 30, 2022 at 11:12:26AM -0300, Marcos Paulo de Souza wrote:
-> > > Syscalls are called a tricky way. Some architectures add a prefix to the
-> > > syscall name (SYSCALL_WRAPPER).
-> > > 
-> > > This new test creates one userspace process per online cpu calling getpid
-> > > continuously and tries to livepatch the getpid function. Add the correct
-> > > function prefix for all archs that select HAS_SYSCALL_WRAPPER.
-> > > 
-> > > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> > 
-> > Hi Marcos,
-> > 
-> > Thanks for working on this and sorry for the delayed reply.  I gave it a
-> > spin yesterday and have a few comments below...
+On 11/23/22 01:19, David Gow wrote:
+> On Tue, Nov 22, 2022 at 2:20 PM John Johansen
+> <john.johansen@canonical.com> wrote:
+>>
+>> On 11/2/22 10:59, Rae Moar wrote:
+>>> Use macros, VISIBLE_IF_KUNIT and EXPORT_SYMBOL_IF_KUNIT, to allow
+>>> static symbols to be conditionally set to be visible during KUnit
+>>> testing. Remove the need to include testing file in the implementation
+>>> file. Provide example of how static symbols can be dealt with in
+>>> testing.
+>>>
+>>> Signed-off-by: Rae Moar <rmoar@google.com>
+>>> ---
+>>>    security/apparmor/Kconfig                 |  4 +-
+>>>    security/apparmor/Makefile                |  2 +
+>>>    security/apparmor/include/policy_unpack.h | 50 ++++++++++++++++
+>>>    security/apparmor/policy_unpack.c         | 72 +++++++----------------
+>>>    security/apparmor/policy_unpack_test.c    |  5 ++
+>>>    5 files changed, 80 insertions(+), 53 deletions(-)
+>>>
+>>> diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
+>>> index cb3496e00d8a..f334e7cccf2d 100644
+>>> --- a/security/apparmor/Kconfig
+>>> +++ b/security/apparmor/Kconfig
+>>> @@ -106,8 +106,8 @@ config SECURITY_APPARMOR_PARANOID_LOAD
+>>>          Disabling the check will speed up policy loads.
+>>>
+>>>    config SECURITY_APPARMOR_KUNIT_TEST
+>>> -     bool "Build KUnit tests for policy_unpack.c" if !KUNIT_ALL_TESTS
+>>> -     depends on KUNIT=y && SECURITY_APPARMOR
+>>> +     tristate "Build KUnit tests for policy_unpack.c" if !KUNIT_ALL_TESTS
+>>> +     depends on KUNIT && SECURITY_APPARMOR
+>>>        default KUNIT_ALL_TESTS
+>>>        help
+>>>          This builds the AppArmor KUnit tests.
+>>> diff --git a/security/apparmor/Makefile b/security/apparmor/Makefile
+>>> index ff23fcfefe19..6a92428375eb 100644
+>>> --- a/security/apparmor/Makefile
+>>> +++ b/security/apparmor/Makefile
+>>> @@ -8,6 +8,8 @@ apparmor-y := apparmorfs.o audit.o capability.o task.o ipc.o lib.o match.o \
+>>>                  resource.o secid.o file.o policy_ns.o label.o mount.o net.o
+>>>    apparmor-$(CONFIG_SECURITY_APPARMOR_HASH) += crypto.o
+>>>
+>>> +obj-$(CONFIG_SECURITY_APPARMOR_KUNIT_TEST) += policy_unpack_test.o
+>>> +
+>>>    clean-files := capability_names.h rlim_names.h net_names.h
+>>>
+>>>    # Build a lower case string table of address family names
+>>> diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmor/include/policy_unpack.h
+>>> index eb5f7d7f132b..a963687bcc9b 100644
+>>> --- a/security/apparmor/include/policy_unpack.h
+>>> +++ b/security/apparmor/include/policy_unpack.h
+>>> @@ -48,6 +48,43 @@ enum {
+>>>        AAFS_LOADDATA_NDENTS            /* count of entries */
+>>>    };
+>>>
+>>> +/*
+>>> + * The AppArmor interface treats data as a type byte followed by the
+>>> + * actual data.  The interface has the notion of a named entry
+>>> + * which has a name (AA_NAME typecode followed by name string) followed by
+>>> + * the entries typecode and data.  Named types allow for optional
+>>> + * elements and extensions to be added and tested for without breaking
+>>> + * backwards compatibility.
+>>> + */
+>>> +
+>>> +enum aa_code {
+>>> +     AA_U8,
+>>> +     AA_U16,
+>>> +     AA_U32,
+>>> +     AA_U64,
+>>> +     AA_NAME,                /* same as string except it is items name */
+>>> +     AA_STRING,
+>>> +     AA_BLOB,
+>>> +     AA_STRUCT,
+>>> +     AA_STRUCTEND,
+>>> +     AA_LIST,
+>>> +     AA_LISTEND,
+>>> +     AA_ARRAY,
+>>> +     AA_ARRAYEND,
+>>> +};
+>>> +
+>>> +/*
+>>> + * aa_ext is the read of the buffer containing the serialized profile.  The
+>>> + * data is copied into a kernel buffer in apparmorfs and then handed off to
+>>> + * the unpack routines.
+>>> + */
+>>> +struct aa_ext {
+>>> +     void *start;
+>>> +     void *end;
+>>> +     void *pos;              /* pointer to current position in the buffer */
+>>> +     u32 version;
+>>> +};
+>>> +
+>>
+>> hrmmm, I prefer these symbols to be only available to the unpack code but can
+>> live with them being more widely available.
+>>
+>>>    /*
+>>>     * struct aa_loaddata - buffer of policy raw_data set
+>>>     *
+>>> @@ -126,4 +163,17 @@ static inline void aa_put_loaddata(struct aa_loaddata *data)
+>>>                kref_put(&data->count, aa_loaddata_kref);
+>>>    }
+>>>
+>>> +#if IS_ENABLED(CONFIG_KUNIT)
+>>> +bool inbounds(struct aa_ext *e, size_t size);
+>>> +size_t unpack_u16_chunk(struct aa_ext *e, char **chunk);
+>>> +bool unpack_X(struct aa_ext *e, enum aa_code code);
+>>> +bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name);
+>>> +bool unpack_u32(struct aa_ext *e, u32 *data, const char *name);
+>>> +bool unpack_u64(struct aa_ext *e, u64 *data, const char *name);
+>>> +size_t unpack_array(struct aa_ext *e, const char *name);
+>>> +size_t unpack_blob(struct aa_ext *e, char **blob, const char *name);
+>>> +int unpack_str(struct aa_ext *e, const char **string, const char *name);
+>>> +int unpack_strdup(struct aa_ext *e, char **string, const char *name);
+>>
+>> So this is a problem. If this symbols are going to be visible outside of the
+>> unpack code they need to be prefixed with aa_ to help avoid collisions with
+>> other kernel code.
+>>
 > 
-> It has been sometime since the last version, thanks for the comments. I have
-> some questions bellow.
+> Hmm... I agree we need some sort of way of restricting access to these symbols.
 > 
-> > 
-> > > ---
-> > >  tools/testing/selftests/livepatch/Makefile    |  12 +-
-> > >  .../selftests/livepatch/test-syscall.sh       |  52 ++++++
-> > >  .../test_binaries/test_klp-call_getpid.c      |  48 ++++++
-> > >  .../selftests/livepatch/test_modules/Makefile |   3 +-
-> > >  .../livepatch/test_modules/test_klp_syscall.c | 150 ++++++++++++++++++
-> > >  5 files changed, 261 insertions(+), 4 deletions(-)
-> > >  create mode 100755 tools/testing/selftests/livepatch/test-syscall.sh
-> > >  create mode 100644 tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c
-> > >  create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> > > 
-> > > diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-> > > index 5ef492b87bb1..35014197184e 100644
-> > > --- a/tools/testing/selftests/livepatch/Makefile
-> > > +++ b/tools/testing/selftests/livepatch/Makefile
-> > > @@ -1,10 +1,14 @@
-> > >  # SPDX-License-Identifier: GPL-2.0
-> > > +include ../../../build/Build.include
-> > > +include ../../../scripts/Makefile.arch
-> > > +include ../../../scripts/Makefile.include
-> > >  
-> > >  TEST_FILES := settings \
-> > >  		test_modules
-> > >  
-> > >  # We need the test_modules dir in order to make gen_tar and install to work
-> > > -TEST_GEN_PROGS_EXTENDED := test_modules/test_klp_atomic_replace.ko \
-> > > +TEST_GEN_PROGS_EXTENDED := test_binaries/test_klp-call_getpid \
-> > 
-> > Before I commit this to muscle memory, would "test_programs" better
-> > describe this directory?  When I see "binaries", I think of source vs.
-> > build and not kernel vs. userspace.
-> 
-> Done locally.
-> 
-> > 
-> > > +			test_modules/test_klp_atomic_replace.ko \
-> > >  			test_modules/test_klp_callbacks_busy.ko \
-> > >  			test_modules/test_klp_callbacks_demo.ko \
-> > >  			test_modules/test_klp_callbacks_demo2.ko \
-> > > @@ -13,7 +17,8 @@ TEST_GEN_PROGS_EXTENDED := test_modules/test_klp_atomic_replace.ko \
-> > >  			test_modules/test_klp_state.ko \
-> > >  			test_modules/test_klp_state2.ko \
-> > >  			test_modules/test_klp_state3.ko \
-> > > -			test_modules/test_klp_shadow_vars.ko
-> > > +			test_modules/test_klp_shadow_vars.ko \
-> > > +			test_modules/test_klp_syscall.ko
-> > >  
-> > >  TEST_PROGS_EXTENDED := functions.sh
-> > >  TEST_PROGS := \
-> > > @@ -21,7 +26,8 @@ TEST_PROGS := \
-> > >  	test-callbacks.sh \
-> > >  	test-shadow-vars.sh \
-> > >  	test-state.sh \
-> > > -	test-ftrace.sh
-> > > +	test-ftrace.sh \
-> > > +	test-syscall.sh
-> > >  
-> > >  # override lib.mk's default rules
-> > >  OVERRIDE_TARGETS := 1
-> > > diff --git a/tools/testing/selftests/livepatch/test-syscall.sh b/tools/testing/selftests/livepatch/test-syscall.sh
-> > > new file mode 100755
-> > > index 000000000000..fb3270de7f1f
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/livepatch/test-syscall.sh
-> > > @@ -0,0 +1,52 @@
-> > > +#!/bin/bash
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +# Copyright (C) 2022 SUSE
-> > > +# Author: Marcos Paulo de Souza <mpdesouza@suse.com>
-> > > +
-> > > +. $(dirname $0)/functions.sh
-> > > +
-> > > +MOD_SYSCALL=test_klp_syscall
-> > > +
-> > > +setup_config
-> > > +
-> > > +# - Start _NRPROC processes calling getpid and load a livepatch to patch the
-> > > +#   getpid syscall
-> > > +
-> > > +start_test "patch getpid syscall while being heavily hammered"
-> > > +
-> > > +for i in $(seq 0 $(( $(getconf _NPROCESSORS_ONLN) -1)) ); do
-> > > +	./test_binaries/test_klp-call_getpid &
-> > > +	pids[$i]="$!"
-> > > +done
-> > 
-> > On second thought, bash should only iterate through the elements that
-> > are defined, so your earlier version is probably better:
-> > 
-> >   for i in $(seq 1 $(getconf _NPROCESSORS_ONLN)); do
-> > 
-> > > +
-> > > +pid_list=$(echo ${pids[@]} | tr ' ' ',')
-> > > +load_lp $MOD_SYSCALL klp_pids=$pid_list
-> > > +
-> > 
-> > We could wait for all test_klp-call_getpid instances to execute the
-> > livepatch code:
-> > 
-> >   loop_until 'grep -q '^0$' /sys/kernel/test_klp_syscall/npids'
-> > 
-> > This has a built in timeout, so it's not infinitely looping.  You
-> > could add some die "reason" logic here, or just let the existing code
-> > cleanup after the failed test.
-> 
-> Makes sense. Done locally.
-> 
-> > 
-> > > +pending_pids=$(cat /sys/kernel/test_klp_syscall/npids)
-> > > +
-> > > +for pid in ${pids[@]}; do
-> > > +	kill $pid || true
-> > > +done
-> > > +
-> > > +disable_lp $MOD_SYSCALL
-> > > +unload_lp $MOD_SYSCALL
-> > > +
-> > > +if [[ "$pending_pids" != "0" ]]; then
-> > > +	echo -e "FAIL\n\n"
-> > > +	die "processes not livepatched: $pending_pids"
-> > > +fi
-> > > +
-> > > +check_result "% insmod test_modules/$MOD_SYSCALL.ko klp_pids=$pid_list
-> > > +livepatch: enabling patch '$MOD_SYSCALL'
-> > > +livepatch: '$MOD_SYSCALL': initializing patching transition
-> > > +livepatch: '$MOD_SYSCALL': starting patching transition
-> > > +livepatch: '$MOD_SYSCALL': completing patching transition
-> > > +livepatch: '$MOD_SYSCALL': patching complete
-> > > +% echo 0 > /sys/kernel/livepatch/$MOD_SYSCALL/enabled
-> > > +livepatch: '$MOD_SYSCALL': initializing unpatching transition
-> > > +livepatch: '$MOD_SYSCALL': starting unpatching transition
-> > > +livepatch: '$MOD_SYSCALL': completing unpatching transition
-> > > +livepatch: '$MOD_SYSCALL': unpatching complete
-> > > +% rmmod $MOD_SYSCALL"
-> > > +
-> > > +exit 0
-> > > diff --git a/tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c b/tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c
-> > > new file mode 100644
-> > > index 000000000000..ec470660dee6
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c
-> > > @@ -0,0 +1,48 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Copyright (C) 2017 SUSE
-> > > + * Author: Libor Pechacek <lpechacek@suse.cz>
-> > > + */
-> > > +
-> > > +#include <stdio.h>
-> > > +#include <unistd.h>
-> > > +#include <sys/syscall.h>
-> > > +#include <sys/types.h>
-> > > +#include <signal.h>
-> > > +
-> > > +static int stop = 0;
-> > 
-> > nit: no need to init global to 0
-> 
-> Indeed. Fixed.
-> 
-> > 
-> > > +static int sig_int;
-> > > +
-> > > +void hup_handler(int signum)
-> > > +{
-> > > +	stop = 1;
-> > > +}
-> > > +
-> > > +void int_handler(int signum)
-> > > +{
-> > > +	stop = 1;
-> > > +	sig_int = 1;
-> > > +}
-> > > +
-> > > +int main(int argc, char *argv[])
-> > > +{
-> > > +	pid_t orig_pid, pid;
-> > > +	long count = 0;
-> > > +
-> > > +	signal(SIGHUP, &hup_handler);
-> > > +	signal(SIGINT, &int_handler);
-> > > +
-> > > +	orig_pid = syscall(SYS_getpid);
-> > > +
-> > > +	while (!stop) {
-> > > +		pid = syscall(SYS_getpid);
-> > > +		if (pid != orig_pid)
-> > > +			return 1;
-> > 
-> > This test doesn't care about the user program return code, but I wonder
-> > if the status should be flipped -- this is the desired code path, not
-> > the one at the end of main(), right?
-> 
-> I got the code from our tests. IIUC, syscall with SYS_getpid cannot fail. I'll
-> double check before sending v3.
-> 
-> > 
-> > > +		count++;
-> > > +	}
-> > > +
-> > > +	if (sig_int)
-> > > +		printf("%ld iterations done\n", count);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-> > > index 1eab43b741cd..ebb754accf46 100644
-> > > --- a/tools/testing/selftests/livepatch/test_modules/Makefile
-> > > +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-> > > @@ -10,7 +10,8 @@ obj-m += test_klp_atomic_replace.o \
-> > >  	test_klp_state.o \
-> > >  	test_klp_state2.o \
-> > >  	test_klp_state3.o \
-> > > -	test_klp_shadow_vars.o
-> > > +	test_klp_shadow_vars.o \
-> > > +	test_klp_syscall.o
-> > >  
-> > >  %.ko:
-> > >  	make -C $(KDIR) M=$(TESTMODS_DIR) $@
-> > > diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> > > new file mode 100644
-> > > index 000000000000..e90f4ac8e7a4
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> > > @@ -0,0 +1,150 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Copyright (C) 2017-2022 SUSE
-> > > + * Authors: Libor Pechacek <lpechacek@suse.cz>
-> > > + *          Nicolai Stange <nstange@suse.de>
-> > > + *          Marcos Paulo de Souza <mpdesouza@suse.com>
-> > > + */
-> > > +
-> > > +#include <linux/module.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/sched.h>
-> > > +#include <linux/slab.h>
-> > > +#include <linux/livepatch.h>
-> > > +
-> > > +#if defined(__x86_64__)
-> > > +#define FN_PREFIX __x64_
-> > > +#elif defined(__s390x__)
-> > > +#define FN_PREFIX __s390x_
-> > > +#elif defined(__aarch64__)
-> > > +#define FN_PREFIX __arm64_
-> > > +#else
-> > > +/* powerpc does not select ARCH_HAS_SYSCALL_WRAPPER */
-> > > +#define FN_PREFIX
-> > > +#endif
-> > > +
-> > > +struct klp_pid_t {
-> > > +	pid_t pid;
-> > > +	struct list_head list;
-> > > +};
-> > > +static LIST_HEAD(klp_pid_list);
-> > > +
-> > > +/* Protects klp_pid_list */
-> > > +static DEFINE_MUTEX(kpid_mutex);
-> > > +
-> > > +static int klp_pids[NR_CPUS];
-> > > +static unsigned int npids;
-> > > +module_param_array(klp_pids, int, &npids, 0);
-> > > +
-> > > +static ssize_t npids_show(struct kobject *kobj, struct kobj_attribute *attr,
-> > > +			  char *buf)
-> > > +{
-> > > +	return sprintf(buf, "%u\n", npids);
-> > > +}
-> > > +
-> > > +static struct kobj_attribute klp_attr = __ATTR_RO(npids);
-> > > +static struct kobject *klp_kobj;
-> > > +
-> > > +static void free_klp_pid_list(void)
-> > > +{
-> > > +	struct klp_pid_t *kpid, *temp;
-> > > +
-> > > +	mutex_lock(&kpid_mutex);
-> > > +	list_for_each_entry_safe(kpid, temp, &klp_pid_list, list) {
-> > > +		list_del(&kpid->list);
-> > > +		kfree(kpid);
-> > > +	}
-> > > +	mutex_unlock(&kpid_mutex);
-> > > +}
-> > > +
-> > > +asmlinkage long lp_sys_getpid(void)
-> > > +{
-> > > +	struct klp_pid_t *kpid, *temp;
-> > > +
-> > > +	/*
-> > > +	 * For each thread calling getpid, check if the pid exists in
-> > > +	 * klp_pid_list. If yes, decrement the npids variable and remove the pid
-> > > +	 * from the list. npids will be later used to ensure that all pids
-> > > +	 * transitioned to the liveaptched state.
-> > 
-> > I go back and forth with this comment: 1) the code is pretty
-> > self-explanatory and 2) it explains what test-syscall.sh is doing with
-> > npids
-> > 
-> > Describing the behavioral difference I suggest below would be helpful
-> > (if you agree w/the change).  Something about removing the current pid
-> > from the list, okay, too.
-> 
-> Makes sense. I'll move the comment to the test.
-> 
-> > 
-> > Then as far as describing npids' purpose, I'd put that up at the top of
-> > the file where npids is defined.  It can be as generic as describing
-> > what it's counting.
-> 
-> Thanks for the suggestion. A short description will be added when defining the
-> module argument.
-> 
-> > 
-> > > +	 */
-> > > +	mutex_lock(&kpid_mutex);
-> > > +	list_for_each_entry_safe(kpid, temp, &klp_pid_list, list) {
-> > > +		if (current->pid == kpid->pid) {
-> > > +			list_del(&kpid->list);
-> > > +			kfree(kpid);
-> > > +			npids--;
-> > > +			break;
-> > 
-> > I think it would be safer to return task_tgid_vnr() here, but ...
-> > 
-> > > +		}
-> > > +	}
-> > > +	mutex_unlock(&kpid_mutex);
-> > > +
-> > > +	return task_tgid_vnr(current);
-> > 
-> > task_pid_vnr() here.  That way we're only changing behavior for the
-> > processes in the list and not all programs across the system.
-> 
-> So, looking at getpid syscall definition, it calls task_tgid_vnr:
-> 
-> SYSCALL_DEFINE0(getpid)
-> {
->         return task_tgid_vnr(current);
-> }
-> 
-> The function task_pid_vnr is called by gettid. So, IIUC, the test should call
-> task_tgid_vnr, since getpid is being livepatched.
-> 
-> Am I missing something?
-> 
-> > 
-> > > +}
-> > > +
-> > > +static struct klp_func vmlinux_funcs[] = {
-> > > +	{
-> > > +		.old_name = __stringify(FN_PREFIX) "sys_getpid",
-> > > +		.new_func = lp_sys_getpid,
-> > > +	}, {}
-> > > +};
-> > > +
-> > > +static struct klp_object objs[] = {
-> > > +	{
-> > > +		/* name being NULL means vmlinux */
-> > > +		.funcs = vmlinux_funcs,
-> > > +	}, {}
-> > > +};
-> > > +
-> > > +static struct klp_patch patch = {
-> > > +	.mod = THIS_MODULE,
-> > > +	.objs = objs,
-> > > +};
-> > > +
-> > > +static int livepatch_init(void)
-> > > +{
-> > > +	int ret;
-> > > +	struct klp_pid_t *kpid;
-> > > +
-> > > +	if (npids > 0) {
-> > > +		int i;
-> > > +
-> > > +		for (i = 0; i < npids; i++) {
-> > > +			kpid = kmalloc(sizeof(struct klp_pid_t), GFP_KERNEL);
-> > > +			if (!kpid)
-> > > +				goto err_mem;
-> > > +
-> > > +			kpid->pid = klp_pids[i];
-> > > +			list_add(&kpid->list, &klp_pid_list);
-> > > +		}
-> > > +	}
-> > > +
-> > > +	klp_kobj = kobject_create_and_add("test_klp_syscall", kernel_kobj);
-> > > +	if (!klp_kobj)
-> > > +		goto err_mem;
-> > > +
-> > > +	ret = sysfs_create_file(klp_kobj, &klp_attr.attr);
-> > > +	if (ret) {
-> > > +		kobject_put(klp_kobj);
-> > > +		goto out_klp_pid_list;
-> > > +	}
-> > > +
-> > > +	return klp_enable_patch(&patch);
-> > > +
-> > > +err_mem:
-> > > +	ret = -ENOMEM;
-> > > +out_klp_pid_list:
-> > > +	free_klp_pid_list();
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +static void livepatch_exit(void)
-> > > +{
-> > > +	free_klp_pid_list();
-> > > +	kobject_put(klp_kobj);
-> > > +}
-> > > +
-> > > +module_init(livepatch_init);
-> > > +module_exit(livepatch_exit);
-> > > +MODULE_LICENSE("GPL");
-> > > +MODULE_INFO(livepatch, "Y");
-> > 
-> > The linked list code looks like it should work and cleans up properly,
-> > but if the current test is the extent of what we need, it would be
-> > simpler to directly use klp_pids[] to track progress: since we're never
-> > going to livepatch pid 0, we could just search klp_pids[] for our pid
-> > and then zero it out once we've executed the livepatch code.
-> > 
-> > This would let us drop out the kmalloc and list management code (looks
-> > to be nearly 25% of the file at this point).  I think the kpid_mutex
-> > still needs to stay though.  Iterating through the fixed array shouldn't
-> > be too much more expensive than through the (shrinking) klp_pid_list.
-> > 
-> > On the other hand, if you think that we'll need to adapt this module to
-> > handle a dynamically changing list of klp_pids[], then perhaps a
-> > separate list is the way to go.
-> 
-> My first idea was to use klp_pids indexed by NR_CPUS, but I thought about bigger
-> machines with more CPUs, making the array too big for just a couple of pids to
-> be tracked...
+> As-is, they're _exported_ to a different symbol namespace, so it
 
-So, I already have klp_pids being defines using NR_CPUS, so forget what I said
-earlier. I'm changing the code locally to address klp_pids without using a
-linked list.
+if by exported you mean static. This particular set of symbols is not
+exported in a header and each function is static. They are accessible
+to the kunit tests because of some what gross
 
+#ifdef CONFIG_SECURITY_APPARMOR_KUNIT_TEST
+#include "policy_unpack_test.c"
+#endif /* CONFIG_SECURITY_APPARMOR_KUNIT_TEST */
+
+at the end of the file. And of course this means these tests can't be
+built as a module
+
+> shouldn't be a problem during linking when built as a module, nor if
+> KUnit is disabled (due to the preprocessor step).
 > 
-> Thinking again, I don't think it's a problem. Also, I don't believe that we
-> would need to dynamically add pids, so this code can go. In the next version
-> I'll just access klp_pids directly. Thanks for the suggestion!
+right
+
+> One option is to put these in a separate header (that only the test
+> and policy-unpack code include), but even that doesn't solve the
+> linking problem when built-in.
 > 
-> > 
-> > Final note, kbuild is probably my weakest area, so I'm of limited help
-> > review-wise there.  In trying out the code, I wasn't sure exactly how to
-> > run things.  I did:
-> > 
-> >   $ make -C tools/testing/selftests/livepatch/ run_tests
-> > 
-> > and that built everything and ran the tests (good).  I changed a few .c
-> > files and tried again, but they didn't rebuild.  Then from
-> > tools/testing/selftests/livepatch/test_modules/ I ran `make` and it only
-> > ran the clean target (not good, I think).
+a separate header might be as a pseudo documentation step but the
+reality is that I can't see anyone else including the existing header
+so its not really required.
+
+> So I guess namespacing is the only option which solves all of these
+> problems. (It'd be nice if the symbol namespacing system worked for
+> built-ins as well as modules...)
 > 
-> I need to test it and make sure the code is rebuilt. Thanks for noticing this
-> problem.
+yeah
+
+>>> +#endif
+>>> +
+>>>    #endif /* __POLICY_INTERFACE_H */
+>>> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
+>>> index 55d31bac4f35..c23aa70349aa 100644
+>>> --- a/security/apparmor/policy_unpack.c
+>>> +++ b/security/apparmor/policy_unpack.c
+>>> @@ -14,6 +14,7 @@
+>>>     */
+>>>
+>>>    #include <asm/unaligned.h>
+>>> +#include <kunit/visibility.h>
+>>>    #include <linux/ctype.h>
+>>>    #include <linux/errno.h>
+>>>    #include <linux/zlib.h>
+>>> @@ -37,43 +38,6 @@
+>>>    #define v7  7
+>>>    #define v8  8       /* full network masking */
+>>>
+>>> -/*
+>>> - * The AppArmor interface treats data as a type byte followed by the
+>>> - * actual data.  The interface has the notion of a named entry
+>>> - * which has a name (AA_NAME typecode followed by name string) followed by
+>>> - * the entries typecode and data.  Named types allow for optional
+>>> - * elements and extensions to be added and tested for without breaking
+>>> - * backwards compatibility.
+>>> - */
+>>> -
+>>> -enum aa_code {
+>>> -     AA_U8,
+>>> -     AA_U16,
+>>> -     AA_U32,
+>>> -     AA_U64,
+>>> -     AA_NAME,                /* same as string except it is items name */
+>>> -     AA_STRING,
+>>> -     AA_BLOB,
+>>> -     AA_STRUCT,
+>>> -     AA_STRUCTEND,
+>>> -     AA_LIST,
+>>> -     AA_LISTEND,
+>>> -     AA_ARRAY,
+>>> -     AA_ARRAYEND,
+>>> -};
+>>> -
+>>> -/*
+>>> - * aa_ext is the read of the buffer containing the serialized profile.  The
+>>> - * data is copied into a kernel buffer in apparmorfs and then handed off to
+>>> - * the unpack routines.
+>>> - */
+>>> -struct aa_ext {
+>>> -     void *start;
+>>> -     void *end;
+>>> -     void *pos;              /* pointer to current position in the buffer */
+>>> -     u32 version;
+>>> -};
+>>> -
+>>>    /* audit callback for unpack fields */
+>>>    static void audit_cb(struct audit_buffer *ab, void *va)
+>>>    {
+>>> @@ -199,10 +163,11 @@ struct aa_loaddata *aa_loaddata_alloc(size_t size)
+>>>    }
+>>>
+>>>    /* test if read will be in packed data bounds */
+>>> -static bool inbounds(struct aa_ext *e, size_t size)
+>>> +VISIBLE_IF_KUNIT bool inbounds(struct aa_ext *e, size_t size)
+>>>    {
+>>>        return (size <= e->end - e->pos);
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(inbounds);
+>>>
+>>>    static void *kvmemdup(const void *src, size_t len)
+>>>    {
+>>> @@ -220,7 +185,7 @@ static void *kvmemdup(const void *src, size_t len)
+>>>     *
+>>>     * Returns: the size of chunk found with the read head at the end of the chunk.
+>>>     */
+>>> -static size_t unpack_u16_chunk(struct aa_ext *e, char **chunk)
+>>> +VISIBLE_IF_KUNIT size_t unpack_u16_chunk(struct aa_ext *e, char **chunk)
+>>>    {
+>>>        size_t size = 0;
+>>>        void *pos = e->pos;
+>>> @@ -239,9 +204,10 @@ static size_t unpack_u16_chunk(struct aa_ext *e, char **chunk)
+>>>        e->pos = pos;
+>>>        return 0;
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(unpack_u16_chunk);
+>>>
+>>>    /* unpack control byte */
+>>> -static bool unpack_X(struct aa_ext *e, enum aa_code code)
+>>> +VISIBLE_IF_KUNIT bool unpack_X(struct aa_ext *e, enum aa_code code)
+>>>    {
+>>>        if (!inbounds(e, 1))
+>>>                return false;
+>>> @@ -250,6 +216,7 @@ static bool unpack_X(struct aa_ext *e, enum aa_code code)
+>>>        e->pos++;
+>>>        return true;
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(unpack_X);
+>>>
+>>>    /**
+>>>     * unpack_nameX - check is the next element is of type X with a name of @name
+>>> @@ -267,7 +234,7 @@ static bool unpack_X(struct aa_ext *e, enum aa_code code)
+>>>     *
+>>>     * Returns: false if either match fails, the read head does not move
+>>>     */
+>>> -static bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name)
+>>> +VISIBLE_IF_KUNIT bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name)
+>>>    {
+>>>        /*
+>>>         * May need to reset pos if name or type doesn't match
+>>> @@ -296,6 +263,7 @@ static bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name)
+>>>        e->pos = pos;
+>>>        return false;
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(unpack_nameX);
+>>>
+>>>    static bool unpack_u8(struct aa_ext *e, u8 *data, const char *name)
+>>>    {
+>>> @@ -315,7 +283,7 @@ static bool unpack_u8(struct aa_ext *e, u8 *data, const char *name)
+>>>        return false;
+>>>    }
+>>>
+>>> -static bool unpack_u32(struct aa_ext *e, u32 *data, const char *name)
+>>> +VISIBLE_IF_KUNIT bool unpack_u32(struct aa_ext *e, u32 *data, const char *name)
+>>>    {
+>>>        void *pos = e->pos;
+>>>
+>>> @@ -332,8 +300,9 @@ static bool unpack_u32(struct aa_ext *e, u32 *data, const char *name)
+>>>        e->pos = pos;
+>>>        return false;
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(unpack_u32);
+>>>
+>>> -static bool unpack_u64(struct aa_ext *e, u64 *data, const char *name)
+>>> +VISIBLE_IF_KUNIT bool unpack_u64(struct aa_ext *e, u64 *data, const char *name)
+>>>    {
+>>>        void *pos = e->pos;
+>>>
+>>> @@ -350,8 +319,9 @@ static bool unpack_u64(struct aa_ext *e, u64 *data, const char *name)
+>>>        e->pos = pos;
+>>>        return false;
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(unpack_u64);
+>>>
+>>> -static size_t unpack_array(struct aa_ext *e, const char *name)
+>>> +VISIBLE_IF_KUNIT size_t unpack_array(struct aa_ext *e, const char *name)
+>>>    {
+>>>        void *pos = e->pos;
+>>>
+>>> @@ -368,8 +338,9 @@ static size_t unpack_array(struct aa_ext *e, const char *name)
+>>>        e->pos = pos;
+>>>        return 0;
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(unpack_array);
+>>>
+>>> -static size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
+>>> +VISIBLE_IF_KUNIT size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
+>>>    {
+>>>        void *pos = e->pos;
+>>>
+>>> @@ -390,8 +361,9 @@ static size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
+>>>        e->pos = pos;
+>>>        return 0;
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(unpack_blob);
+>>>
+>>> -static int unpack_str(struct aa_ext *e, const char **string, const char *name)
+>>> +VISIBLE_IF_KUNIT int unpack_str(struct aa_ext *e, const char **string, const char *name)
+>>>    {
+>>>        char *src_str;
+>>>        size_t size = 0;
+>>> @@ -413,8 +385,9 @@ static int unpack_str(struct aa_ext *e, const char **string, const char *name)
+>>>        e->pos = pos;
+>>>        return 0;
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(unpack_str);
+>>>
+>>> -static int unpack_strdup(struct aa_ext *e, char **string, const char *name)
+>>> +VISIBLE_IF_KUNIT int unpack_strdup(struct aa_ext *e, char **string, const char *name)
+>>>    {
+>>>        const char *tmp;
+>>>        void *pos = e->pos;
+>>> @@ -432,6 +405,7 @@ static int unpack_strdup(struct aa_ext *e, char **string, const char *name)
+>>>
+>>>        return res;
+>>>    }
+>>> +EXPORT_SYMBOL_IF_KUNIT(unpack_strdup);
+>>>
+>> Again if the symbols are going to be exported they need the aa_ prefix
+>>
+>> But I am not sure this is worth doing, exporting a lot of symbols just so the
+>> test code can be built as a module doesn't seem worth it to me.
+>>
 > 
-> > 
-> > What is the typical workflow supposed to be in this combined setup?
+> Again, agreed that we need to namespace these for the non-module case
+> (the symbol namespacing should be okay otherwise).
 > 
-> The plan was to support all forms of running the selftests: by running it in
-> place and by running the "installed" kselftests. I'll test it again to make sure
-> that the code is rebuilt when it should.
+> One of the reasons behind doing this is that there are a few KUnit
+> users who can only run tests which are built as modules. In
+> particular, Android and (IIRC) Red Hat are both configuring all of
+> their kernels with KUnit built as a module, and distributing the KUnit
+> and KUnit test modules in a different package.
 > 
-> > 
-> > Thanks,
-> > 
-> > --
-> > Joe
-> > 
+ah, okay
+
+> If we kept things the way there are, then it'd not be possible to
+> unconditionally _build_ the apparmor tests, but only load and run them
+> on demand (due to the way they're built into the apparmor module,
+> they'd always run when it loads). This is a no-go for Android/Red Hat,
+> so they won't ship or run the apparmor tests. (There are some other
+> tests with the same problem, notably amdgpu, but apparmor seemed a
+> nice first trial-user, as it were, having a small but non-trivial
+> number of symbols to export.)
+> 
+> Thoughts?
+> 
+I'm not opposed to exporting them. It has a cost and I wanted there to
+be a real need before doing it. Since that need has been explained, my
+only requirement is to make sure they are properly namespaced.
+
+>>>
+>>>    /**
+>>> @@ -1251,7 +1225,3 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
+>>>
+>>>        return error;
+>>>    }
+>>> -
+>>> -#ifdef CONFIG_SECURITY_APPARMOR_KUNIT_TEST
+>>> -#include "policy_unpack_test.c"
+>>> -#endif /* CONFIG_SECURITY_APPARMOR_KUNIT_TEST */
+>>> diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
+>>> index 0a969b2e03db..3474fe2cd922 100644
+>>> --- a/security/apparmor/policy_unpack_test.c
+>>> +++ b/security/apparmor/policy_unpack_test.c
+>>> @@ -4,6 +4,7 @@
+>>>     */
+>>>
+>>>    #include <kunit/test.h>
+>>> +#include <kunit/visibility.h>
+>>>
+>>>    #include "include/policy.h"
+>>>    #include "include/policy_unpack.h"
+>>> @@ -43,6 +44,8 @@
+>>>    #define TEST_ARRAY_BUF_OFFSET \
+>>>        (TEST_NAMED_ARRAY_BUF_OFFSET + 3 + strlen(TEST_ARRAY_NAME) + 1)
+>>>
+>>> +MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
+>>> +
+>>>    struct policy_unpack_fixture {
+>>>        struct aa_ext *e;
+>>>        size_t e_size;
+>>> @@ -605,3 +608,5 @@ static struct kunit_suite apparmor_policy_unpack_test_module = {
+>>>    };
+>>>
+>>>    kunit_test_suite(apparmor_policy_unpack_test_module);
+>>> +
+>>> +MODULE_LICENSE("GPL");
+>>
+
