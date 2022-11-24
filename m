@@ -2,163 +2,237 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8456379D3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Nov 2022 14:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F5F637B04
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Nov 2022 15:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiKXNVv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Nov 2022 08:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S230260AbiKXOEA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Nov 2022 09:04:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiKXNVt (ORCPT
+        with ESMTP id S230265AbiKXODf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:21:49 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECD87210B;
-        Thu, 24 Nov 2022 05:21:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669296108; x=1700832108;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=Gbs0pJDzc/tagX8P07oSo6k68mvIwwsUtrxMBVb54fM=;
-  b=lKy/8U/EMRlaYlJxAzoTd4FU+D/8exdZDHiXdY8XZgEmbV/eB4KQ2IFq
-   EtMWYL8e8fJhQnI1B7eKWApjsRqIg+png+/ZQqeOny9BGVSikIzpqdvwt
-   GkuAnOy6+Ud2wjmvJ3+/aBH26ZmY7stzb8cCMKHjz8YojXMFJZ9KwwsQH
-   hu58S/mzq0hhty3389k36G+ocifzlR+PwtXQfHuTg5AOXDXwKEmAKV7iN
-   6/7Pzn45H0s+IFzyrq2ZbSpxdTSmX+95GHmo77ZzyzW6Xt2PR7X44KOci
-   JILWkru37oQh03BMkqZ0I+AGO80p7LXtZDITNeRtntAE5J+xNXKXdTo/5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="376443342"
-X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
-   d="scan'208";a="376443342"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 05:21:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="705760358"
-X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
-   d="scan'208";a="705760358"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Nov 2022 05:21:34 -0800
-Date:   Thu, 24 Nov 2022 21:17:12 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com,
-        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
-        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
-        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
-        pgonda@google.com, nikunj@amd.com, diviness@google.com,
-        maz@kernel.org, dmatlack@google.com, axelrasmussen@google.com,
-        maciej.szmigiero@oracle.com, mizhang@google.com,
-        bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V1 PATCH 1/6] KVM: x86: Add support for testing private memory
-Message-ID: <20221124131712.GA689510@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221111014244.1714148-1-vannapurve@google.com>
- <20221111014244.1714148-2-vannapurve@google.com>
- <20221122100705.GA619277@chaop.bj.intel.com>
- <Y30rqWwDRbH7nQaQ@google.com>
+        Thu, 24 Nov 2022 09:03:35 -0500
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3548C11E829;
+        Thu, 24 Nov 2022 06:01:10 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 10C032B06842;
+        Thu, 24 Nov 2022 09:01:06 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 24 Nov 2022 09:01:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669298466; x=
+        1669305666; bh=4jIAn2lueWeOwVkOG/WC5OUeXxRyuqGWxy80FbSFYkU=; b=e
+        qE3tHPPtqSf2ZlRLKRvMe8490eUorbxIPbR0H4ULV8nQghhKqp5ss/9vTme8mymX
+        Wa3py471Rdh+fPeIAzMVkoQl6aeMBnfzjwQFfmit3QF0c0tpDpOImZXbCmkvYpqH
+        0Mgh+v2jXIpsIhJ2kuRbfTwJ5OpmdaDdnugMwWgjP6RbGOcH0dKgu0q2txkgDEUA
+        YvcogazJb1A/8UAuHke2hu4dbEfN+BJz7QoK/h3OPExqr19VR7oXa8bfSl+2eu+E
+        8nw3hafR0oekv2iU1RwuNptkZycN/KvvC6RTAtHTDLBJHUrk8tG3RAf/NETJwYbu
+        3+DqHJoEWbVAyFO9ceiGQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669298466; x=
+        1669305666; bh=4jIAn2lueWeOwVkOG/WC5OUeXxRyuqGWxy80FbSFYkU=; b=l
+        T/mRiRFHe9A8a30ZwTwRCn7Atjq0eCn00PtFaChL5BXbD1p2ENm1wDe21wcAksFs
+        auGh1enyGhzlnelBo3eNDJ/uOpMX9J7tZYgRt/nAPlONro6RUYbhccaaXtzH1JCS
+        tNomDb+/7p9NVkzhX4q4xrvcnHo3rSKNvC8Kqv2dvMeP72TG8Hi33RrYo4iPlVQf
+        0Rw+qlK9SEYrojPSnFEOOZmhPRDc/BVN6IsGgOp6x0Q3Q1tqvCZUTKZh2VdD5yYX
+        Uiz8Mf5s8/XhZDbZ8ZnTIPD8A7UDSKlBTXyNx8tHLlINbYpknGbuveNLDrkXeTPl
+        QZ1nWcu2JE5j3/iErJSYw==
+X-ME-Sender: <xms:IXl_Y8j8Pe5Kk__SG2mhP6Ann5BycT9QheZVDYH0GgCUUz1-S3PoIw>
+    <xme:IXl_Y1Bt1uFmB6JyuOfMwn6vEA3YAiWsGT7JkPaH5ohuANNBfvlK25MaXKQTtlgJr
+    janSOgWnauP2n6XCWU>
+X-ME-Received: <xmr:IXl_Y0HDout03brAXwQ6rGHhIWie8H1A4aEUjHEsrRDck1m_dtNePnHLK1fnb2v4QWzN6-8JB5qZ1R4k2NU_cCLPtXy8gV0PZJWQWbOKeB_Yyg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieefgdeitdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeitdeuffevieeufedtuddvffffffegfffgkeeihfelleektdelhfevhfdu
+    udfhgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:IXl_Y9T0iDI5dOBpGDqiUte33CYb-6DYmvKVj6GMWZvMZq_q6Slzgg>
+    <xmx:IXl_Y5x6-leO15H1x3BYXERG-NZ1OIul1ZuFOsSHXaUf-ev4qS7_oA>
+    <xmx:IXl_Y774hFD8EI4QojFjc2Ebo_3IkTfGg2cRx-NYbi3kHg_rZ6DQ7g>
+    <xmx:Inl_Yy9vQHMkcwqNo4mOrRhHdbYgg7s5FDAU5jV92omxMq0_BXkDnnVR5m8>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 24 Nov 2022 09:01:04 -0500 (EST)
+Date:   Thu, 24 Nov 2022 15:01:03 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     David Gow <davidgow@google.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linaro-mm-sig@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
+        linux-media@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: Re: [PATCH 00/24] drm: Introduce Kunit Tests to VC4
+Message-ID: <20221124140103.saf2fyal75dscoot@houat>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
+ <CABVgOSmtiPMd+GB40_o=eDPg3cKVA3qPNbbYFoRJvJRxQBDj5A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y30rqWwDRbH7nQaQ@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CABVgOSmtiPMd+GB40_o=eDPg3cKVA3qPNbbYFoRJvJRxQBDj5A@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 08:06:01PM +0000, Sean Christopherson wrote:
-> On Tue, Nov 22, 2022, Chao Peng wrote:
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 10017a9f26ee..b3118d00b284 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -4280,6 +4280,10 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> > >  
-> > >  	fault->gfn = fault->addr >> PAGE_SHIFT;
-> > >  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
-> > > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING
-> > > +	fault->is_private = kvm_slot_can_be_private(fault->slot) &&
-> > > +			kvm_mem_is_private(vcpu->kvm, fault->gfn);
-> > > +#endif
-> > >  
-> > >  	if (page_fault_handle_page_track(vcpu, fault))
-> > >  		return RET_PF_EMULATE;
-> > > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > > index 5cdff5ca546c..2e759f39c2c5 100644
-> > > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > > @@ -188,7 +188,6 @@ struct kvm_page_fault {
-> > >  
-> > >  	/* Derived from mmu and global state.  */
-> > >  	const bool is_tdp;
-> > > -	const bool is_private;
-> > >  	const bool nx_huge_page_workaround_enabled;
-> > >  
-> > >  	/*
-> > > @@ -221,6 +220,9 @@ struct kvm_page_fault {
-> > >  	/* The memslot containing gfn. May be NULL. */
-> > >  	struct kvm_memory_slot *slot;
-> > >  
-> > > +	/* Derived from encryption bits of the faulting GPA for CVMs. */
-> > > +	bool is_private;
-> > 
-> > Either we can wrap it with the CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING or if
-> > it looks ugly I can remove the "const" in my code.
-> 
-> Hmm, I think we can keep the const.  Similar to the bug in kvm_faultin_pfn()[*],
-> the kvm_slot_can_be_private() is bogus.  A fault should be considered private if
-> it's marked as private, whether or not userspace has configured the slot to be
-> private is irrelevant.  I.e. the xarray is the single source of truth, memslots
-> are just plumbing.
+Hi David,
 
-That makes sense to me. Thanks.
+On Thu, Nov 24, 2022 at 04:31:14PM +0800, David Gow wrote:
+> On Wed, Nov 23, 2022 at 11:28 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> >
+> > Hi,
+> >
+> > This series introduce Kunit tests to the vc4 KMS driver, but unlike wha=
+t we
+> > have been doing so far in KMS, it actually tests the atomic modesetting=
+ code.
+> >
+> > In order to do so, I've had to improve a fair bit on the Kunit helpers =
+already
+> > found in the tree in order to register a full blown and somewhat functi=
+onal KMS
+> > driver.
+> >
+> > It's of course relying on a mock so that we can test it anywhere. The m=
+ocking
+> > approach created a number of issues, the main one being that we need to=
+ create
+> > a decent mock in the first place, see patch 22. The basic idea is that I
+> > created some structures to provide a decent approximation of the actual
+> > hardware, and that would support both major architectures supported by =
+vc4.
+> >
+> > This is of course meant to evolve over time and support more tests, but=
+ I've
+> > focused on testing the HVS FIFO assignment code which is fairly tricky =
+(and the
+> > tests have actually revealed one more bug with our current implementati=
+on). I
+> > used to have a userspace implementation of those tests, where I would c=
+opy and
+> > paste the kernel code and run the tests on a regular basis. It's was ob=
+viously
+> > fairly suboptimal, so it seemed like the perfect testbed for that serie=
+s.
+>
+> Thanks very much for this! I'm really excited to see these sorts of
+> tests being written.
+>=20
+> I was able to successfully run these under qemu with:
+> ./tools/testing/kunit/kunit.py run --kunitconfig
+> drivers/gpu/drm/vc4/tests --arch arm64
+> --cross_compile=3Daarch64-linux-gnu-
+> (and also with clang, using --make_options LLVM=3D1 instead of the
+> --cross_compile flag)
+>=20
+> On the other hand, they don't compile as a module:
+> ERROR: modpost: missing MODULE_LICENSE() in drivers/gpu/drm/vc4/tests/vc4=
+_mock.o
+> ERROR: modpost: missing MODULE_LICENSE() in
+> drivers/gpu/drm/vc4/tests/vc4_mock_crtc.o
+> ERROR: modpost: missing MODULE_LICENSE() in
+> drivers/gpu/drm/vc4/tests/vc4_mock_output.o
+> ERROR: modpost: missing MODULE_LICENSE() in
+> drivers/gpu/drm/vc4/tests/vc4_mock_plane.o
+> ERROR: modpost: missing MODULE_LICENSE() in
+> drivers/gpu/drm/vc4/tests/vc4_test_pv_muxing.o
+> ERROR: modpost: missing MODULE_LICENSE() in
+> drivers/gpu/drm/tests/drm_managed_test.o
+> ERROR: modpost: "vc4_drm_driver"
+> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
+> ERROR: modpost: "vc5_drm_driver"
+> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
+> ERROR: modpost: "drm_kunit_helper_alloc_device"
+> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
+> ERROR: modpost: "__drm_kunit_helper_alloc_drm_device_with_driver"
+> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
+> ERROR: modpost: "__vc4_hvs_alloc"
+> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
+> ERROR: modpost: "vc4_dummy_plane"
+> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
+> ERROR: modpost: "vc4_mock_pv" [drivers/gpu/drm/vc4/tests/vc4_mock.ko] und=
+efined!
+> ERROR: modpost: "vc4_dummy_output"
+> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
+> ERROR: modpost: "vc4_kms_load" [drivers/gpu/drm/vc4/tests/vc4_mock.ko]
+> undefined!
+> ERROR: modpost: "vc4_txp_crtc_data"
+> [drivers/gpu/drm/vc4/tests/vc4_mock.ko] undefined!
+> WARNING: modpost: suppressed 17 unresolved symbol warnings because
+> there were too many)
 
-> 
-> Then kvm_mmu_do_page_fault() can do something like:
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index dbaf6755c5a7..456a9daa36e5 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -260,6 +260,8 @@ enum {
->  static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->                                         u32 err, bool prefetch)
->  {
-> +       bool is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault);
-> +
->         struct kvm_page_fault fault = {
->                 .addr = cr2_or_gpa,
->                 .error_code = err,
-> @@ -269,13 +271,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->                 .rsvd = err & PFERR_RSVD_MASK,
->                 .user = err & PFERR_USER_MASK,
->                 .prefetch = prefetch,
-> -               .is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
-> +               .is_tdp = is_tdp,
->                 .nx_huge_page_workaround_enabled =
->                         is_nx_huge_page_enabled(vcpu->kvm),
->  
->                 .max_level = KVM_MAX_HUGEPAGE_LEVEL,
->                 .req_level = PG_LEVEL_4K,
->                 .goal_level = PG_LEVEL_4K,
-> +               .private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
-> +                          kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
->         };
->         int r;
-> 
-> [*] https://lore.kernel.org/all/Y3Vgc5KrNRA8r6vh@google.com
+Thanks I'll fix it
+
+> Most of those are just the need to export some symbols. There's some
+> work underway to support conditionally exporting symbols only if KUnit
+> is enabled, which may help:
+> https://lore.kernel.org/linux-kselftest/20221102175959.2921063-1-rmoar@go=
+ogle.com/
+
+That's awesome :)
+
+The current solution to include the test implementation is not ideal, so
+it's great to see a nicer solution being worked on.
+
+> Otherwise, I suspect the better short-term solution would just be to
+> require that the tests are built-in (or at least compiled into
+> whatever of the drm/vc4 modules makes most sense).
+>=20
+> The only other thing which has me a little confused is the naming of
+> some of the functions, specifically with the __ prefix. Is it just for
+> internal functions (many of them aren't static, but maybe they could
+> use the VISIBLE_IF_KUNIT macro if that makes sense), or for versions
+> of functions which accept extra arguments?
+
+It was for internal functions that would definitely benefit from
+VISIBLE_IF_KUNIT indeed
+
+> Not a big deal (and maybe it's a DRM naming convention I'm ignorant
+> of), but I couldn't quite find a pattern on my first read through.
+>=20
+> But on the whole, these look good from a KUnit point-of-view. It's
+> really to see some solid mocking and driver testing, too. There would
+> be ways to avoid passing the 'struct kunit' around in more places (or
+> to store extra data as a kunit_resource), but I think it's better
+> overall to pass it around like you have in this case -- it's certainly
+> more compatible with things which might span threads (e.g. the
+> workqueues).
+
+One thing I'm really unsure about and would like your input on is
+basically the entire device instantiation code in drm_kunit_helpers.c
+
+It's a little fishy since it will allocate a platform_device while the
+driver might expect some other bus device. And the code to bind the
+driver based around probe and workqueues seems like a hack.
+
+This is something that would benefit from having proper functions in
+kunit to allocate a proper device for a given test. This is already
+something that other unit test suites seems to get wrong, and I'm sure
+there's some bugs somewhere in the helpers I did for DRM. What do you
+think?
+
+Maxime
