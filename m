@@ -2,67 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C193C638867
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 12:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E06D66388C0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 12:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiKYLOn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Nov 2022 06:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S229733AbiKYLab (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Nov 2022 06:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiKYLOm (ORCPT
+        with ESMTP id S229718AbiKYLaa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:14:42 -0500
+        Fri, 25 Nov 2022 06:30:30 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7264D5EB
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:13:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976D017439
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:29:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669374822;
+        s=mimecast20190719; t=1669375774;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qFx/VXqLp/Ia7vJAw9Cj+XP8sI/+0/nuoQb7QGji8jU=;
-        b=U9auQhXVqixk0MWUNhoeZ7iS4TkChVz6eBYjq8X46dBP29nbsMeRVtVJ7s/0V+V7kJxR6Y
-        glEb4G2YaI8GoU0GK2LCf3tna+cvQqzWwW61SZpdQbSl2vGTHc267AmZuM2ZFH8gq1IL+Y
-        lt9Y4SRPrMqIUT2Mb96QbdD4xhrJyvU=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=s7B+glXPiHunh65c3ikcxd5Un328udBU6gxH6BbvNec=;
+        b=H3hkf7lab06TqZchFM1lTAcFieHf1ZZi+7V+Z0mHqVnvY1Wf87XkBghAq51+531TTL9Kyh
+        HEuIqZq6PULPlu5wAHDOh5wrGx1RPFBgTk0OMJ6lTFN07l4B6o7v/SeJ93LItk5/gEVbUl
+        NrIUfO0OEA4Uijwt9txcy+KmeUxnllY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-587-1RpVYNudNry-r-91zGfqTQ-1; Fri, 25 Nov 2022 06:13:40 -0500
-X-MC-Unique: 1RpVYNudNry-r-91zGfqTQ-1
-Received: by mail-wr1-f71.google.com with SMTP id t12-20020adfa2cc000000b0022adcbb248bso774580wra.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:13:40 -0800 (PST)
+ us-mta-659-12x4dKE9OSS641S9JCXs8Q-1; Fri, 25 Nov 2022 06:29:33 -0500
+X-MC-Unique: 12x4dKE9OSS641S9JCXs8Q-1
+Received: by mail-wm1-f69.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso2304356wmb.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:29:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qFx/VXqLp/Ia7vJAw9Cj+XP8sI/+0/nuoQb7QGji8jU=;
-        b=We6uT/4dtKO3N437VjIjo7+uVfJkJl45JLbh0XTNNiBVKA0ZS4KCpj/PqtHW7w8mZH
-         qFnLyIIZlTqul91i/JzEaBHEjJ6JqmHW0J12Tp6+SnPVWr6i+lZQIfKuqK79kiOFI9ug
-         A1wYVdhui1BZw5w5wBdPb9nqxJ1LaV66WipRGEvqAd9mfkfOldDcxBiHsvcKcu+9+e/w
-         I/4AEIUCSHI4sVudVnmQVIr6b/KKj4ntPzFAvWJIXPBUr12rA9/vcSmcBB5b2ie0X4/u
-         t+5r4PU+gJ8xMhl5fu5pntpqUmO7175QR7hP0W9dhi+r3wzdnN8ia5L3up0o871izrh6
-         gA1Q==
-X-Gm-Message-State: ANoB5pn24mBjhOcy/L7jhSklVdJeJrqGTF2zkfB2fNYD/EyUPmNzlI8J
-        n8ay0/7NZxx6paDgQ9e+x9v3a9qi6yAVVXcCMXbPbM4wRDSrHe6HQIp+rpMpcfh+NpzrmDL9vxW
-        EeIB2FFA7Lg0NMPOyULeHKP5qB+oY
-X-Received: by 2002:a05:600c:4113:b0:3cf:a3e0:73e4 with SMTP id j19-20020a05600c411300b003cfa3e073e4mr14008551wmi.21.1669374819685;
-        Fri, 25 Nov 2022 03:13:39 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4QbRaGQmx0lzXwDi9UpdtUdoe4KD8bKMgqn+J5cd47t76yI/i28tjLFg1hYaguZbzcAUiqhw==
-X-Received: by 2002:a05:600c:4113:b0:3cf:a3e0:73e4 with SMTP id j19-20020a05600c411300b003cfa3e073e4mr14008533wmi.21.1669374819497;
-        Fri, 25 Nov 2022 03:13:39 -0800 (PST)
+        bh=s7B+glXPiHunh65c3ikcxd5Un328udBU6gxH6BbvNec=;
+        b=neb3IBg/t0jOsUDxd7EymlAkK3JdLuNl8aXrI6zxPgJHHclBCMQtn2Ksu7XnSAjjtK
+         vXslp5rtEM2YLye30ORI/+oFxnXw5088O+nAQ/1v+Oixu0xSHryGbiUAw/6JQcq1mBXt
+         mJmaeXWBqmbKXIximecl72XNIYytxj8W9/ukDIZJrhZnAUxGiqHJeJAYgHUUxVdNLG6g
+         PmPAqPHIflH+LEPXKZfoOTjQtFSrjnBxlQqJk4q42HS91M0N1k8FWgukDk7vQhbX1wVB
+         1psavrpvzkVLKlg9V+6KfMSpRR+PnNFxwW7uoELxgvtFlIu92VMEmAdvf5VQgmMncJvv
+         Vy8g==
+X-Gm-Message-State: ANoB5pm8tGVOQNWzF53GZNzooMYMXDtcFW+ZHy48u6a5/J+KAQdGGGgL
+        VET1pjOlOVWtWcrH+EesZVJYah7q8zy0mvZEHVnxK34nRjWJkHWkFGM68ofrimeUAaleldwJ8Hs
+        NeLgGekNEoSuiZPgQ5VPFoioDPP3W
+X-Received: by 2002:a1c:4c0c:0:b0:3cf:9881:e9d9 with SMTP id z12-20020a1c4c0c000000b003cf9881e9d9mr27524198wmf.6.1669375772043;
+        Fri, 25 Nov 2022 03:29:32 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4tA122+galS8pDRgP2Y6iWuz67WbLgxFBL4oNYp0k+u30rTmKQtH54GX28s3piYeICYXfz4g==
+X-Received: by 2002:a1c:4c0c:0:b0:3cf:9881:e9d9 with SMTP id z12-20020a1c4c0c000000b003cf9881e9d9mr27524167wmf.6.1669375771857;
+        Fri, 25 Nov 2022 03:29:31 -0800 (PST)
 Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e3-20020a5d65c3000000b002383edcde09sm3440822wrw.59.2022.11.25.03.13.38
+        by smtp.gmail.com with ESMTPSA id r14-20020a5d4e4e000000b002366ded5864sm3471722wrt.116.2022.11.25.03.29.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 03:13:39 -0800 (PST)
-Message-ID: <2405809e-8183-e353-1259-94e16ebe8204@redhat.com>
-Date:   Fri, 25 Nov 2022 12:13:38 +0100
+        Fri, 25 Nov 2022 03:29:30 -0800 (PST)
+Message-ID: <05e6a16f-ee7f-1b9a-0ab8-5b042d60c86d@redhat.com>
+Date:   Fri, 25 Nov 2022 12:29:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH 17/24] drm/vc4: crtc: Pass the device and data in
- vc4_crtc_init
+Subject: Re: [PATCH 18/24] drm/vc4: crtc: Introduce a lower-level crtc init
+ helper
 Content-Language: en-US
 To:     Maxime Ripard <maxime@cerno.tech>,
         Maxime Ripard <mripard@kernel.org>,
@@ -80,9 +80,9 @@ Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
         linux-kernel@vger.kernel.org,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
 References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <20221123-rpi-kunit-tests-v1-17-051a0bb60a16@cerno.tech>
+ <20221123-rpi-kunit-tests-v1-18-051a0bb60a16@cerno.tech>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v1-17-051a0bb60a16@cerno.tech>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-18-051a0bb60a16@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -95,10 +95,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/23/22 16:25, Maxime Ripard wrote:
-> Both users of vc4_crtc_init need the same extra initialization to set
-> the pointer to the platform_device and the CRTC data. Since it's
-> mandatory, let's make them both arguments of vc4_crtc_init().
+On 11/23/22 16:26, Maxime Ripard wrote:
+> The current vc4_crtc_init() helper assumes that we will be using
+> hardware planes and calls vc4_plane_init().
+> 
+> While it's a reasonable assumption, we'll want to mock the plane and
+> thus provide our own. Let's create a helper that will take the plane as
+> an argument.
 > 
 > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > ---
