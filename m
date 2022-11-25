@@ -2,235 +2,257 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3722763853E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 09:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73709638570
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 09:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiKYId2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Nov 2022 03:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50464 "EHLO
+        id S229758AbiKYIoV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Nov 2022 03:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKYIdY (ORCPT
+        with ESMTP id S229883AbiKYIoG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:33:24 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E430231357
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:33:23 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id x24so1318407uaf.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:33:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a1xfDYPCqjhnOirhAgUNhzvQCH9Eq2waq7O3y2TwaHw=;
-        b=p4j7XAvzmQVbf+IC2SC5cZMuKNJH4cuy/NLax99hOeLNeVeANPYEJxlrE7E3g2NnHS
-         v3GiOMhjNDBLitClDrVZLrzAwe9rUklnjYCHESByewnnZk28/GghLN6obETtcHwoF/5U
-         HuoXb0Fr814pjoVmP7Q7rb2qE8WROAg0FatUVC50KysbLT/HAprbnhhRrhNOGpt1TAcK
-         AAalZ7qEHx+iDFtQHqEddX8KvzqtKRU8SBogNRrXKIDrjgUvP8lK0Q4r2+KTAFmCTAfs
-         U6AaebWbdu3x+f0KiAZSPslO5UGfBm9+1EJhn/D8bt78IB/vuTe/M43hY8nxwUv7XIeC
-         Si+g==
+        Fri, 25 Nov 2022 03:44:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE1C1C91E
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:43:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669365789;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sRZVtfy7jHF/otBGu/mU+bfgNu+7SQC3SDiG+Mz/0SA=;
+        b=eEA5QJNZJr/dvEzyfcSNpokME9276WOadtwi/2zDkyHDDUnrBoSTq3UfIbeNqImzOfyxx7
+        Jp04Ft1UanbnUuPp+lN38OL4s0FxCoHZscf2SD+ZEFm4QsLxXl+vf0vD0E+R+K+IiAA3I3
+        ZYrc1P7OY1U5eJEXTX5lGdZP9CY9fq8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-112-sfbLQmjdPRS2xxcA_wH6VA-1; Fri, 25 Nov 2022 03:43:08 -0500
+X-MC-Unique: sfbLQmjdPRS2xxcA_wH6VA-1
+Received: by mail-wm1-f70.google.com with SMTP id c126-20020a1c3584000000b003cfffcf7c1aso3899517wma.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:43:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a1xfDYPCqjhnOirhAgUNhzvQCH9Eq2waq7O3y2TwaHw=;
-        b=sJ6W9dqN+v5kJ9zBdplZNZ7rLKKOoJ7OMgbZ6eBnMqadRT+USxHCIMfJZW0g/FzDCT
-         xZCG3FoHkK+hnQnDa1qmh/bzOEDYfdHUAecIXiPI6mfOmXn4aelg+7NhTo6jbfdOjjRE
-         ASZtd2nmzSKXjfpOfIKNDdaWpZ7DcXx0/E/4JD5qYExFJsxkaJG2yafxYl2HwfWUMnqc
-         HqSuODrk8S0rvBH6HsgD4AvHxqndxsjpv4O1H5FrvoMgAFyOnLOhEsoZ0UoQckITbDV6
-         PPS/z4a//pB1YIrTktKDEm+GCVjxqF2AUPsVJsuqs7JG7QT4qSNAOH6iwykMZESrSTfs
-         i3Ig==
-X-Gm-Message-State: ANoB5pnwSCmQGTqgLdri6Jeae7DwOW+sjFfGqyuNuneZng5WXHWNHrYN
-        VxQUX3XWnFmUMA/trkXUfxOdiyd1/aw8DEXPn5bwcg==
-X-Google-Smtp-Source: AA0mqf6wmh2+DIDulwYb7PQy32QEgIJ3iYVaTQ4wAK6I8iWQQZlxgcXCPLYzZGYTu7+Ao+Q0XPCK02SwGWl4aS8e5c8=
-X-Received: by 2002:a05:6130:316:b0:418:b66a:6f26 with SMTP id
- ay22-20020a056130031600b00418b66a6f26mr11289425uab.21.1669365202876; Fri, 25
- Nov 2022 00:33:22 -0800 (PST)
+        bh=sRZVtfy7jHF/otBGu/mU+bfgNu+7SQC3SDiG+Mz/0SA=;
+        b=XDsOEujb6ipJjhpRCB82AhNx49leaT05BGWNifUwf7uORTKeXKcO+ZMniSIr/FHNJ4
+         mHmcO1ITscG749nJ6qcXhiRHJ6R6pgpTGcKr2mENTsJft7y0fOh0bdd+zxE6Nl6SYGmc
+         Nta8uIHEE2dRZ+GXEH0EKEThK9qC5j8WeGZDzFSK4oJahxJCIJOYS3GdVhaMEUAgKOoK
+         HRwra5qDotey6teMiN0OLD1PVsSWdPvURY+r6naPMhPx80uNkinE97dNDOcQxxvR3XOo
+         pIEDZCkCuKERkR2qzsWN/Sn6KXzpSBiKYo5lQTuJ6wizsNil5vs0B+UtarRKCa98WfWP
+         9/6Q==
+X-Gm-Message-State: ANoB5plBGPH4g9/ndQ9dUhQEN21Sk/NSONQLK+5XLm0LvhFFUpzq/UBd
+        IbFkS6NjQPml2PWjJxlDAhDGjIQ3hrcKKhnpfY9DPdrRJRtUfveNIqJYnvvWhBXQyOm0nWO3el0
+        ZLhsDX6r6BN3KoNZUK7dOUfEj+0eb
+X-Received: by 2002:adf:e412:0:b0:242:2cd:259 with SMTP id g18-20020adfe412000000b0024202cd0259mr2490689wrm.718.1669365787162;
+        Fri, 25 Nov 2022 00:43:07 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7NpneEPbu/BenchhBdj5/LhryjdAFoI4Kz3tEVBfEXrlPcu+cT/QmX7tIEwuOh5Vr44rV30Q==
+X-Received: by 2002:adf:e412:0:b0:242:2cd:259 with SMTP id g18-20020adfe412000000b0024202cd0259mr2490662wrm.718.1669365786878;
+        Fri, 25 Nov 2022 00:43:06 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id bt7-20020a056000080700b00236705daefesm3295974wrb.39.2022.11.25.00.43.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 00:43:05 -0800 (PST)
+Message-ID: <85ac616c-ef5e-eab6-4b0b-06c946a324ff@redhat.com>
+Date:   Fri, 25 Nov 2022 09:43:02 +0100
 MIME-Version: 1.0
-References: <20221119081252.3864249-1-davidgow@google.com> <20221119081252.3864249-3-davidgow@google.com>
- <Y39Kz0hI3IOKoqrJ@hyeyoo>
-In-Reply-To: <Y39Kz0hI3IOKoqrJ@hyeyoo>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 25 Nov 2022 16:33:11 +0800
-Message-ID: <CABVgOSmCdtnFatO+EU0T9fado1h7ZW0DAzO=Y2jPvt6mTmO57A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] mm: slub: test: Use the kunit_get_current_test() function
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f039b705ee475f79"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v5 06/19] iommufd: File descriptor, context, kconfig and
+ makefiles
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+        Anthony Krowiak <akrowiak@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Lixiao Yang <lixiao.yang@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+References: <6-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+ <0c6ba292-4e65-9a9f-b498-2409482a06b8@redhat.com>
+ <Y3fppPM9mCm6xIz6@nvidia.com>
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <Y3fppPM9mCm6xIz6@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000f039b705ee475f79
-Content-Type: text/plain; charset="UTF-8"
+Hi Jason,
 
-On Thu, Nov 24, 2022 at 6:43 PM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+On 11/18/22 21:23, Jason Gunthorpe wrote:
+> On Fri, Nov 18, 2022 at 05:27:35PM +0100, Eric Auger wrote:
+>>> +config IOMMUFD
+>>> +	tristate "IOMMU Userspace API"
+>>> +	select INTERVAL_TREE
+>>> +	select INTERVAL_TREE_SPAN_ITER
+>>> +	select IOMMU_API
+>>> +	default n
+>>> +	help
+>>> +	  Provides /dev/iommu the user API to control the IOMMU subsystem as
+>>> +	  it relates to managing IO page tables that point at user space memory.
+>> nit: missing ',' after /dev/iommu or Provides /dev/iommu user API
+> Done
 >
-> On Sat, Nov 19, 2022 at 04:12:52PM +0800, David Gow wrote:
-> > Use the newly-added function kunit_get_current_test() instead of
-> > accessing current->kunit_test directly. This function uses a static key
-> > to return more quickly when KUnit is enabled, but no tests are actively
-> > running. There should therefore be a negligible performance impact to
-> > enabling the slub KUnit tests.
-> >
-> > Other than the performance improvement, this should be a no-op.
-> >
-> > Cc: Oliver Glitta <glittao@gmail.com>
-> > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > Cc: Christoph Lameter <cl@linux.com>
-> > Cc: Vlastimil Babka <vbabka@suse.cz>
-> > Cc: David Rientjes <rientjes@google.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Signed-off-by: David Gow <davidgow@google.com>
-> > Acked-by: Vlastimil Babka <vbabka@suse.cz>
+>>> +/**
+>>> + * iommufd_ref_to_users() - Switch from destroy_rwsem to users refcount
+>>> + *        protection
+>>> + * @obj - Object to release
+>>> + *
+>>> + * Objects have two refcount protections (destroy_rwsem and the refcount_t
+>>> + * users). Holding either of these will prevent the object from being destroyed.
+>>> + *
+>>> + * Depending on the use case, one protection or the other is appropriate.  In
+>>> + * most cases references are being protected by the destroy_rwsem. This allows
+>>> + * orderly destruction of the object because iommufd_object_destroy_user() will
+>>> + * wait for it to become unlocked. However, as a rwsem, it cannot be held across
+>>> + * a system call return. So cases that have longer term needs must switch
+>>> + * to the weaker users refcount_t.
+>>> + *
+>>> + * With users protection iommufd_object_destroy_user() will return -EBUSY to
+>> iommufd_object_destroy_user() returns false and iommufd_destroy
+>>  retruns -EBUSY.
+> ""
+>  * With users protection iommufd_object_destroy_user() will return false,
+>  * refusing to destroy the object, causing -EBUSY to userspace.
+>  */
+> ""
 >
-> Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> with small comment:
+>>> + * userspace and refuse to destroy the object.
+>>> + */
+>>> +static inline void iommufd_ref_to_users(struct iommufd_object *obj)
+>>> +{
+>>> +	up_read(&obj->destroy_rwsem);
+>>> +	/* iommufd_lock_obj() obtains users as well */
+>> Do you have a way to check that put() is done in accordance, ie. we are
+>> not going to try up_read() the rwsem if this latter is not used anymore?
+> If put becomes unbalanced then fd closure will WARN_ON
 >
+> If someone misuses the rwsem (eg double up_reading it) then lockdep
+> will fire
 
-Thanks very much!
-
-> > ---
-> >
-> > This is intended as an example use of the new function. Other users
-> > (such as KASAN) will be updated separately, as there would otherwise be
-> > conflicts.
-> >
-> > We'll take this whole series via the kselftest/kunit tree.
-> >
-> > Changes since v2:
-> > https://lore.kernel.org/all/20221025071907.1251820-3-davidgow@google.com/
-> > - Get rid of a redundant 'likely' (Thanks Vlastimil Babka)
-> > - Use current->kunit_test directly when we already know a test is
-> >   running. (Thanks Vlastimil Babka)
-> > - Add Vlastimil's Acked-by.
-> >
-> > There was no v1 of this patch. v1 of the series can be found here:
-> > https://lore.kernel.org/linux-kselftest/20221021072854.333010-1-davidgow@google.com/T/#u
-> >
-> > Cheers,
-> > -- David
-> >
-> > ---
-> >  lib/slub_kunit.c | 1 +
-> >  mm/slub.c        | 3 ++-
-> >  2 files changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-> > index 7a0564d7cb7a..8fd19c8301ad 100644
-> > --- a/lib/slub_kunit.c
-> > +++ b/lib/slub_kunit.c
-> > @@ -1,5 +1,6 @@
-> >  // SPDX-License-Identifier: GPL-2.0
-> >  #include <kunit/test.h>
-> > +#include <kunit/test-bug.h>
+OK
 >
-> Is this #include needed in slub_kunit.c?
+>>> +static int iommufd_fops_release(struct inode *inode, struct file *filp)
+>>> +{
+>>> +	struct iommufd_ctx *ictx = filp->private_data;
+>>> +	struct iommufd_object *obj;
+>>> +
+>>> +	/* Destroy the graph from depth first */
+>> I would suggest: destroy the leaf objects first thanks to the
+>> hierarchical user ref counting? or something alike
+> "depth first" is a technical term when working with graphs..
+OK. I ignored that.
 >
+> How about replacing both comments with this:
+>
+> 	/*
+> 	 * The objects in the xarray form a graph of "users" counts, and we have
+> 	 * to destroy them in a depth first manner. Leaf objects will reduce the
+> 	 * users count of interior objects when they are destroyed.
+> 	 *
+> 	 * Repeatedly destroying all the "1 users" leaf objects will progress
+> 	 * until the entire list is destroyed. If this can't progress then there
+> 	 * is some bug related to object refcounting.
+> 	 */
+Yes that looks much clearer to me. Thanks!
+>
+>>> +	while (!xa_empty(&ictx->objects)) {
+>>> +		unsigned int destroyed = 0;
+>>> +		unsigned long index;
+>>> +
+>>> +		xa_for_each(&ictx->objects, index, obj) {
+>>> +			/*
+>>> +			 * Since we are in release elevated users must come from
+>>> +			 * other objects holding the users. We will eventually
+>> the sentense sounds a bit cryptic to me.
+>>> +			 * destroy the object that holds this one and the next
+>>> +			 * pass will progress it.
+>>> +			 */
+>>> +			if (!refcount_dec_if_one(&obj->users))
+>>> +				continue;
+>>> +			destroyed++;
+>>> +			xa_erase(&ictx->objects, index);
+>>> +			iommufd_object_ops[obj->type].destroy(obj);
+>>> +			kfree(obj);
+>> Use iommufd_object_abort_and_destroy(obj) instead of the above 3 lines?
+> Ah, they are not quite the same things, the order is different and
+> abort has a protective assertion that the xa_array hasn't been messed
+> with. It would be messy to merge them
+>
+> It is also very similar to iommufd_object_destroy_user() except we
+> shortcut some unncessary locking.
+OK
+>>> +/**
+>>> + * DOC: General ioctl format
+>>> + *
+>>> + * The ioctl interface follows a general format to allow for extensibility. Each
+>>> + * ioctl is passed in a structure pointer as the argument providing the size of
+>>> + * the structure in the first u32. The kernel checks that any structure space
+>>> + * beyond what it understands is 0. This allows userspace to use the backward
+>>> + * compatible portion while consistently using the newer, larger, structures.
+>>> + *
+>>> + * ioctls use a standard meaning for common errnos:
+>>> + *
+>>> + *  - ENOTTY: The IOCTL number itself is not supported at all
+>>> + *  - E2BIG: The IOCTL number is supported, but the provided structure has
+>>> + *    non-zero in a part the kernel does not understand.
+>>> + *  - EOPNOTSUPP: The IOCTL number is supported, and the structure is
+>>> + *    understood, however a known field has a value the kernel does not
+>>> + *    understand or support.
+>>> + *  - EINVAL: Everything about the IOCTL was understood, but a field is not
+>>> + *    correct.
+>>> + *  - ENOENT: An ID or IOVA provided does not exist.
+>>> + *  - ENOMEM: Out of memory.
+>>> + *  - EOVERFLOW: Mathematics oveflowed.
+>> overflowed
+> Done
+>
+> Thanks,
+> Jason
+>
+Thanks
 
-Yes: kunit_get_current_test() is defined in test-bug.h.
+Eric
 
-This header contains functions which are always available, even when
-KUnit is not enabled.
-
-(It's name isn't great: we may rename/refactor it down the line...)
-
-Cheers,
--- David
-
---000000000000f039b705ee475f79
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD/
-REs3LgjWnPyijJRNYhE0hnXx9xVprnQ+laPvvoEvNjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMjUwODMzMjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAQgQ0/kNimCRUd8gQda0L
-9Rht9rpi9jPK58VEmWpy4zVD4gGAstmnBV0r4iET1TK9XzsJhlJ7X5hZSRfwRGIwYPCJ1JcJDyn9
-i+57n4gti5WUUfpdH5tD8ToHFoajXXKhYbNI9eNXQTNlBRMN9PqH4pnvEdAVTF/5S1BGV36MpiYl
-fZ5yxGlmPTkjLLbcminp4Q8Kc+F90706p1x9YSLxDPglmFLE6FT5d9zfTxRuMc+pKA26CxHbVMTV
-HPEY9sHLmWb9h+eVa9rMejVKZhPWzzMRak5u+1YF32eueQW6Mhc389AMYnG+h0A1k+JDxs1cn+tw
-P3XOMYM/o0XyVtXvjA==
---000000000000f039b705ee475f79--
