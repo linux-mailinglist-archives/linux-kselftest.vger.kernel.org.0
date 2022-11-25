@@ -2,74 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CCB638D9B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 16:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB633638DD7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 16:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiKYPmm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Nov 2022 10:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S229895AbiKYPxh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Nov 2022 10:53:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKYPmL (ORCPT
+        with ESMTP id S229814AbiKYPx2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 10:42:11 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0605A46672;
-        Fri, 25 Nov 2022 07:42:11 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4AC372B;
-        Fri, 25 Nov 2022 07:42:17 -0800 (PST)
-Received: from ewhatever.cambridge.arm.com (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D7DA63F73B;
-        Fri, 25 Nov 2022 07:42:09 -0800 (PST)
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Shuah Khan <shuah@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Dilip Kota <dilip.kota@arm.com>
-Subject: [PATCH] selftests: splice_read: Fix sysfs read cases
-Date:   Fri, 25 Nov 2022 15:42:01 +0000
-Message-Id: <20221125154201.1991127-1-suzuki.poulose@arm.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 25 Nov 2022 10:53:28 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B78C490B1;
+        Fri, 25 Nov 2022 07:53:16 -0800 (PST)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3B44324000F;
+        Fri, 25 Nov 2022 15:51:13 +0000 (UTC)
+Message-ID: <bf975714-7edc-efdd-de84-56194aa6eb60@ovn.org>
+Date:   Fri, 25 Nov 2022 16:51:25 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Cc:     i.maximets@ovn.org, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        linux-kselftest@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Language: en-US
+To:     Adrian Moreno <amorenoz@redhat.com>,
+        Aaron Conole <aconole@redhat.com>, netdev@vger.kernel.org
+References: <20221122140307.705112-1-aconole@redhat.com>
+ <20221122140307.705112-2-aconole@redhat.com>
+ <c04242ee-f125-6d95-e263-65470222d3cf@ovn.org>
+ <83a0b3e4-1327-c1c4-4eb4-9a25ff533d1d@redhat.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [ovs-dev] [RFC net-next 1/6] openvswitch: exclude kernel flow key
+ from upcalls
+In-Reply-To: <83a0b3e4-1327-c1c4-4eb4-9a25ff533d1d@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-sysfs now supports splice_* operations with
+On 11/25/22 16:29, Adrian Moreno wrote:
+> 
+> 
+> On 11/23/22 22:22, Ilya Maximets wrote:
+>> On 11/22/22 15:03, Aaron Conole wrote:
+>>> When processing upcall commands, two groups of data are available to
+>>> userspace for processing: the actual packet data and the kernel
+>>> sw flow key data.  The inclusion of the flow key allows the userspace
+>>> avoid running through the dissection again.
+>>>
+>>> However, the userspace can choose to ignore the flow key data, as is
+>>> the case in some ovs-vswitchd upcall processing.  For these messages,
+>>> having the flow key data merely adds additional data to the upcall
+>>> pipeline without any actual gain.  Userspace simply throws the data
+>>> away anyway.
+>>
+>> Hi, Aaron.  While it's true that OVS in userpsace is re-parsing the
+>> packet from scratch and using the newly parsed key for the OpenFlow
+>> translation, the kernel-porvided key is still used in a few important
+>> places.  Mainly for the compatibility checking.  The use is described
+>> here in more details:
+>>    https://docs.kernel.org/networking/openvswitch.html#flow-key-compatibility
+>>
+>> We need to compare the key generated in userspace with the key
+>> generated by the kernel to know if it's safe to install the new flow
+>> to the kernel, i.e. if the kernel and OVS userpsace are parsing the
+>> packet in the same way.
+>>
+> 
+> Hi Ilya,
+> 
+> Do we need to do that for every packet?
+> Could we send a bitmask of supported fields to userspace at feature
+> negotiation and let OVS slowpath flows that it knows the kernel won't
+> be able to handle properly?
 
- commit f2d6c2708bd84 ("kernfs: wire up ->splice_read and ->splice_write")
+It's not that simple, because supported fields in a packet depend
+on previous fields in that same packet.  For example, parsing TCP
+header is generally supported, but it won't be parsed for IPv6
+fragments (even the first one), number of vlan headers will affect
+the parsing as we do not parse deeper than 2 vlan headers, etc.
+So, I'm afraid we have to have a per-packet information, unless we
+can somehow probe all the possible valid combinations of packet
+headers.
 
-Update the selftests to expect success instead of failure.
-
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Siddharth Gupta <sidgup@codeaurora.org
-Reported-by: Dilip Kota <dilip.kota@arm.com>
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
----
- tools/testing/selftests/splice/short_splice_read.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/splice/short_splice_read.sh b/tools/testing/selftests/splice/short_splice_read.sh
-index 22b6c8910b18..4710e09f49fa 100755
---- a/tools/testing/selftests/splice/short_splice_read.sh
-+++ b/tools/testing/selftests/splice/short_splice_read.sh
-@@ -127,7 +127,7 @@ expect_success "proc_handler: special read splice" test_splice /proc/sys/kernel/
- if ! [ -d /sys/module/test_module/sections ] ; then
- 	expect_success "test_module kernel module load" modprobe test_module
- fi
--expect_failure "kernfs attr splice" test_splice /sys/module/test_module/coresize
--expect_failure "kernfs binattr splice" test_splice /sys/module/test_module/sections/.init.text
-+expect_success "kernfs attr splice" test_splice /sys/module/test_module/coresize
-+expect_success "kernfs binattr splice" test_splice /sys/module/test_module/sections/.init.text
- 
- exit $ret
--- 
-2.38.1
+> 
+> 
+>> On the other hand, OVS today doesn't check the data, it only checks
+>> which fields are present.  So, if we can generate and pass the bitmap
+>> of fields present in the key or something similar without sending the
+>> full key, that might still save some CPU cycles and memory in the
+>> socket buffer while preserving the ability to check for forward and
+>> backward compatibility.  What do you think?
+>>
+>>
+>> The rest of the patch set seems useful even without patch #1 though.
+>>
+>> Nit: This patch #1 should probably be merged with the patch #6 and be
+>> at the end of a patch set, so the selftest and the main code are updated
+>> at the same time.
+>>
+>> Best regards, Ilya Maximets.
+>> _______________________________________________
+>> dev mailing list
+>> dev@openvswitch.org
+>> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
+>>
+> 
+> Thanks
 
