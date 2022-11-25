@@ -2,92 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CDA6388F3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 12:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB286638990
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 13:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiKYLmY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Nov 2022 06:42:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S229790AbiKYMTQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Nov 2022 07:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKYLmW (ORCPT
+        with ESMTP id S229894AbiKYMTP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:42:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CF41BE93
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:41:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669376488;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FOhIdeO2viHCtBqTf2iYEwnXDI6Ezk/3Vbjgspkc6Ig=;
-        b=c7tKW8ZQpWV70y0RyBULR6dFoyK22cVI3TGTRDCHODX9jXVFWrlDAD96bwC+kRpkxRZnI2
-        vyyPlLp5WeIIxu9nDdFyM+172b1BIZnuf88kVP7xR4ObB7qUjFzWp/jNwlEYt30t7vz0zV
-        ka4F568td+NJm0CSY/DwbhU4quh+Zt0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-41-KTUfAwz9O0u1g1HmK-88uQ-1; Fri, 25 Nov 2022 06:41:26 -0500
-X-MC-Unique: KTUfAwz9O0u1g1HmK-88uQ-1
-Received: by mail-wm1-f72.google.com with SMTP id e8-20020a05600c218800b003cf634f5280so1712176wme.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:41:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FOhIdeO2viHCtBqTf2iYEwnXDI6Ezk/3Vbjgspkc6Ig=;
-        b=VzcFQXHIz4yJxd6vno7Pjl9ph8fefIqLnuuLo3pY9Fgp5kul9J2jn74Py/2BQMJBAL
-         QVqtZou4pt/LJo8WUnGmfT2RwvcS2c9k9iCKOz2eVnR67NqvfM+02mgVuDofWq2Nnqfh
-         E+h10qoCG6XYzU8/gClw9qsXXWjDZYNTiFFILc6h5l9n+Q06hoUaLzQaUAJ0Mi3XLo+T
-         VIqmlKo8QcR0ZZn29h7k0T3qUMyTLtxDnll/mc2eIg2VtcH0s9K93nlzVpK6FG+KQwIv
-         uNWNqeK5SnUxijWneJphcvFNt5Huva41e6tPBGMcSd6kpCVHAQBeRGRCQ85pHGb1EXYM
-         ZXdg==
-X-Gm-Message-State: ANoB5pmhno5O98GIYc24BSU47FuMP9PW+BSXHOgF4cgG8E7ZVCkh8GGm
-        LzICC0Tk4OnGurq9nkeOYyRENmvIGhS7RPy5Dgi6RfcHQsmKe9nCiqMiZ5s7aBwO3VO1XMya4vU
-        XkHbmlbZCSXPUuJVdX3gqeVJBSFRW
-X-Received: by 2002:adf:e34d:0:b0:241:ee4a:2301 with SMTP id n13-20020adfe34d000000b00241ee4a2301mr7222679wrj.429.1669376485539;
-        Fri, 25 Nov 2022 03:41:25 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7XK7j/pUPAtmTo6t54sJnnyf1J8fqURJI79qjd/c5yPhwa217razm52j8W7b414NZu8YvG6w==
-X-Received: by 2002:adf:e34d:0:b0:241:ee4a:2301 with SMTP id n13-20020adfe34d000000b00241ee4a2301mr7222654wrj.429.1669376485339;
-        Fri, 25 Nov 2022 03:41:25 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id he6-20020a05600c540600b003cf4ec90938sm4846070wmb.21.2022.11.25.03.41.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 03:41:24 -0800 (PST)
-Message-ID: <a39d6b1f-a496-d293-8f27-c17d30d6c0b5@redhat.com>
-Date:   Fri, 25 Nov 2022 12:41:23 +0100
+        Fri, 25 Nov 2022 07:19:15 -0500
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A19421B8;
+        Fri, 25 Nov 2022 04:19:13 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVfPnmv_1669378749;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VVfPnmv_1669378749)
+          by smtp.aliyun-inc.com;
+          Fri, 25 Nov 2022 20:19:11 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] selftests/tls: Fix tls selftests dependency to correct algorithm
+Date:   Fri, 25 Nov 2022 20:19:05 +0800
+Message-Id: <20221125121905.88292-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 21/24] drm/vc4: hvs: Provide a function to initialize the
- HVS structure
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
-        dri-devel@lists.freedesktop.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <20221123-rpi-kunit-tests-v1-21-051a0bb60a16@cerno.tech>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v1-21-051a0bb60a16@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,21 +45,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/23/22 16:26, Maxime Ripard wrote:
-> We'll need to initialize the HVS structure without a backing device to
-> create a mock we'll use for testing.
-> 
-> Split the structure initialization part into a separate function.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
+Commit d2825fa9365d ("crypto: sm3,sm4 - move into crypto directory") moves
+the SM3 and SM4 stand-alone library and the algorithm implementation for
+the Crypto API into the same directory, and the corresponding relationship
+of Kconfig is modified, CONFIG_CRYPTO_SM3/4 corresponds to the stand-alone
+library of SM3/4, and CONFIG_CRYPTO_SM3/4_GENERIC corresponds to the
+algorithm implementation for the Crypto API. Therefore, it is necessary
+for this module to depend on the correct algorithm.
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Fixes: d2825fa9365d ("crypto: sm3,sm4 - move into crypto directory")
+Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: stable@vger.kernel.org # v5.19+
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ tools/testing/selftests/net/config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index ead7963b9bf0..bd89198cd817 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -43,5 +43,5 @@ CONFIG_NET_ACT_TUNNEL_KEY=m
+ CONFIG_NET_ACT_MIRRED=m
+ CONFIG_BAREUDP=m
+ CONFIG_IPV6_IOAM6_LWTUNNEL=y
+-CONFIG_CRYPTO_SM4=y
++CONFIG_CRYPTO_SM4_GENERIC=y
+ CONFIG_AMT=m
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.24.3 (Apple Git-128)
 
