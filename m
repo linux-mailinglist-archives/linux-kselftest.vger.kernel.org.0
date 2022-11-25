@@ -2,393 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775F8638EAA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 17:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB23639070
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 20:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiKYQ4X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Nov 2022 11:56:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S229717AbiKYT6B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Nov 2022 14:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiKYQ4V (ORCPT
+        with ESMTP id S229582AbiKYT6B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 11:56:21 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D202D1C7;
-        Fri, 25 Nov 2022 08:56:18 -0800 (PST)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669395376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nHn+krM5zkqrj8eTzbiYYf9V3Ti8/2Hp14OPp+k9Zxs=;
-        b=V5BFmn+peox5bSPvDeTnqHZLgfjhmzcLYsK63VuTo+RpWPzNVdgR12zDysitfqZwbGNr+0
-        8WUnONv6NaUPzAvzatYdUSXk7i1I77uqKagKqd6G/8FIju/MASmeRLEZGYnr4uYoOilxJi
-        DqQsduSFUBrrJoaec8bqUeSBi1WxYEC1JgWVLYv3VcvCktc1CMmTB1IjbOnjYMP1EoQ461
-        M7ZaxcQ+g5Sz+xgdObU2Y2LpOjIj505O4e9WfLQrxJrHMh29nyjB+QF0Vvd24diEiGvjmq
-        seykhXVCa3QTJGlyO3EalKrRxg5EpqyvR/CAJKBmouJe9eNhgkT0hJoo5mchvA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669395376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nHn+krM5zkqrj8eTzbiYYf9V3Ti8/2Hp14OPp+k9Zxs=;
-        b=V4DI8XqkoF+otsTJMGygfdDPhHurt88CKvmSfYlNMTZPuAki1nN+8Ngi+ktJlHTWBB0eWl
-        BvuIgO8U9i3F88Aw==
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 net-next 8/8] selftests: Add a basic HSR test.
-Date:   Fri, 25 Nov 2022 17:56:10 +0100
-Message-Id: <20221125165610.3802446-9-bigeasy@linutronix.de>
-In-Reply-To: <20221125165610.3802446-1-bigeasy@linutronix.de>
-References: <20221125165610.3802446-1-bigeasy@linutronix.de>
+        Fri, 25 Nov 2022 14:58:01 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CF121270
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 11:57:59 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id md8so371002pjb.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 11:57:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YJLkauZI0oQOUdRmxPmjcOBp2F34D1qexR4ClsK7aSY=;
+        b=psKFfe2zI0ppXCrO/O9WFviHMWDM88TN5BrmqvxJOZphjXFstQf8bThjYSBrhnHus6
+         dLTF/LjBPMHLpb6OfEpn6j2WT/w3R4qvNW4/Pelix94pJelCqv4RE6KvhGC59LNYQgeY
+         jRyqyLOAeRI3LizLlDR98wMPfDC9kefogj96rExlshabZm+dN6xoiib0HGFE81frra4W
+         v7IUsYPAU8BrseTT7SrP58c9Vfc/u2q91cdgx4ZoTCpKi+Rb6PlCMVtNoxpobK0AlgYl
+         I3OCoZNIaAPtz6FBe7I6w8Pu8FAfCjtOr9SJSBhdaUOWxxH18r1ECybfCpSA+rq+DxRS
+         vbKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YJLkauZI0oQOUdRmxPmjcOBp2F34D1qexR4ClsK7aSY=;
+        b=EEnpmrEzVm6VZZ86qA9dTfsSCy8grxXjs2LaOHTa4yTvhVfuODppKknk9TgyFtHRDW
+         0BCb3Dt86/pbtG47JwMZ3OlksakgKG/X/frSHdI6XdWDE9Nw6Lq1nfpVlG7zi2EkPmdf
+         pxIA50voTv8z/HjIT8mFBkp9hzIQb2qSDNrheDWVkTcB9VLyLX0wH7I8iyP72JlUD1+q
+         fMMPTqXF0fUBFmZfKiHoeqhCqsxf9S5EdB8vP2jwfGTO17F9Uj4cO+lhrVm8aFbTLIjr
+         1ZfLMWuadRJ0cWC/pj5zEYC2gKlB84lVSWdDpVMHrm6g92GFB6NezwVQDEApFRWc6HQF
+         ilwA==
+X-Gm-Message-State: ANoB5pkLclADLjRFHtQB8VzdfrPxV3eZ1YkxVzTgD5xo9Ww2XvogEhoF
+        uLPaW2vo74l3yak+l431iLUn4vZt3MxaZGgIAKI=
+X-Google-Smtp-Source: AA0mqf5PBdtv+d23qXdbEjbml3yxR/YlyFpoRtm6u+kBVNPQ4XTwmxU4QfJr184+ul39SYn4yirOMg==
+X-Received: by 2002:a17:90b:3544:b0:218:8666:f0fc with SMTP id lt4-20020a17090b354400b002188666f0fcmr37770117pjb.184.1669406279408;
+        Fri, 25 Nov 2022 11:57:59 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id t20-20020a170902e1d400b0016d4f05eb95sm3714386pla.272.2022.11.25.11.57.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 11:57:58 -0800 (PST)
+Message-ID: <63811e46.170a0220.c71d0.4e4c@mx.google.com>
+Date:   Fri, 25 Nov 2022 11:57:58 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Kernelci-Branch: next
+X-Kernelci-Kernel: v6.1-rc1-23-g00dd59519141
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next build: 8 builds: 0 failed, 8 passed,
+ 3 errors (v6.1-rc1-23-g00dd59519141)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This test adds a basic HSRv0 network with 3 nodes. In its current shape
-it sends and forwards packets, announcements and so merges nodes based
-on MAC A/B information.
-It is able to detect duplicate packets and packetloss should any occur.
+kselftest/next build: 8 builds: 0 failed, 8 passed, 3 errors (v6.1-rc1-23-g=
+00dd59519141)
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.1-rc1-23-g00dd59519141/
+
+Tree: kselftest
+Branch: next
+Git Describe: v6.1-rc1-23-g00dd59519141
+Git Commit: 00dd59519141398120b4baa65c0ab4b67dfd3e19
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Errors Detected:
+
+arm64:
+    defconfig+kselftest (clang-15): 1 error
+    defconfig+kselftest+arm64-chromebook (clang-15): 1 error
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-15): 1 error
+
+Errors summary:
+
+    3    error: write on a pipe with no reader
+
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-15) =E2=80=94 PASS, 1 error, 0 warnings, =
+0 section mismatches
+
+Errors:
+    error: write on a pipe with no reader
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-15) =E2=80=94 PASS, 1 er=
+ror, 0 warnings, 0 section mismatches
+
+Errors:
+    error: write on a pipe with no reader
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-15) =E2=80=94 PASS, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    error: write on a pipe with no reader
+
 ---
- tools/testing/selftests/Makefile            |   1 +
- tools/testing/selftests/net/hsr/Makefile    |   7 +
- tools/testing/selftests/net/hsr/config      |   4 +
- tools/testing/selftests/net/hsr/hsr_ping.sh | 256 ++++++++++++++++++++
- 4 files changed, 268 insertions(+)
- create mode 100644 tools/testing/selftests/net/hsr/Makefile
- create mode 100644 tools/testing/selftests/net/hsr/config
- create mode 100755 tools/testing/selftests/net/hsr/hsr_ping.sh
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Mak=
-efile
-index f07aef7c592c2..b57b091d80268 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -48,6 +48,7 @@ TARGETS +=3D nci
- TARGETS +=3D net
- TARGETS +=3D net/af_unix
- TARGETS +=3D net/forwarding
-+TARGETS +=3D net/hsr
- TARGETS +=3D net/mptcp
- TARGETS +=3D net/openvswitch
- TARGETS +=3D netfilter
-diff --git a/tools/testing/selftests/net/hsr/Makefile b/tools/testing/selft=
-ests/net/hsr/Makefile
-new file mode 100644
-index 0000000000000..92c1d9d080cd5
---- /dev/null
-+++ b/tools/testing/selftests/net/hsr/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+top_srcdir =3D ../../../../..
-+
-+TEST_PROGS :=3D hsr_ping.sh
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/net/hsr/config b/tools/testing/selftes=
-ts/net/hsr/config
-new file mode 100644
-index 0000000000000..22061204fb691
---- /dev/null
-+++ b/tools/testing/selftests/net/hsr/config
-@@ -0,0 +1,4 @@
-+CONFIG_IPV6=3Dy
-+CONFIG_NET_SCH_NETEM=3Dm
-+CONFIG_HSR=3Dy
-+CONFIG_VETH=3Dy
-diff --git a/tools/testing/selftests/net/hsr/hsr_ping.sh b/tools/testing/se=
-lftests/net/hsr/hsr_ping.sh
-new file mode 100755
-index 0000000000000..df91435387086
---- /dev/null
-+++ b/tools/testing/selftests/net/hsr/hsr_ping.sh
-@@ -0,0 +1,256 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+ret=3D0
-+ksft_skip=3D4
-+ipv6=3Dtrue
-+
-+optstring=3D"h4"
-+usage() {
-+	echo "Usage: $0 [OPTION]"
-+	echo -e "\t-4: IPv4 only: disable IPv6 tests (default: test both IPv4 and=
- IPv6)"
-+}
-+
-+while getopts "$optstring" option;do
-+	case "$option" in
-+	"h")
-+		usage $0
-+		exit 0
-+		;;
-+	"4")
-+		ipv6=3Dfalse
-+		;;
-+	"?")
-+		usage $0
-+		exit 1
-+		;;
-+esac
-+done
-+
-+sec=3D$(date +%s)
-+rndh=3D$(printf %x $sec)-$(mktemp -u XXXXXX)
-+ns1=3D"ns1-$rndh"
-+ns2=3D"ns2-$rndh"
-+ns3=3D"ns3-$rndh"
-+
-+cleanup()
-+{
-+	local netns
-+	for netns in "$ns1" "$ns2" "$ns3" ;do
-+		ip netns del $netns
-+	done
-+}
-+
-+ip -Version > /dev/null 2>&1
-+if [ $? -ne 0 ];then
-+	echo "SKIP: Could not run test without ip tool"
-+	exit $ksft_skip
-+fi
-+
-+trap cleanup EXIT
-+
-+for i in "$ns1" "$ns2" "$ns3" ;do
-+	ip netns add $i || exit $ksft_skip
-+	ip -net $i link set lo up
-+done
-+
-+echo "INFO: preparing interfaces."
-+# Three HSR nodes. Each node has one link to each of its neighbour, two li=
-nks in total.
-+#
-+#    ns1eth1 ----- ns2eth1
-+#      hsr1         hsr2
-+#    ns1eth2       ns2eth2
-+#       |            |
-+#    ns3eth1      ns3eth2
-+#           \    /
-+#            hsr3
-+#
-+# Interfaces
-+ip link add ns1eth1 netns "$ns1" type veth peer name ns2eth1 netns "$ns2"
-+ip link add ns1eth2 netns "$ns1" type veth peer name ns3eth1 netns "$ns3"
-+ip link add ns3eth2 netns "$ns3" type veth peer name ns2eth2 netns "$ns2"
-+
-+# HSRv0.
-+ip -net "$ns1" link add name hsr1 type hsr slave1 ns1eth1 slave2 ns1eth2 s=
-upervision 45 version 0 proto 0
-+ip -net "$ns2" link add name hsr2 type hsr slave1 ns2eth1 slave2 ns2eth2 s=
-upervision 45 version 0 proto 0
-+ip -net "$ns3" link add name hsr3 type hsr slave1 ns3eth1 slave2 ns3eth2 s=
-upervision 45 version 0 proto 0
-+
-+# IP for HSR
-+ip -net "$ns1" addr add 100.64.0.1/24 dev hsr1
-+ip -net "$ns1" addr add dead:beef:1::1/64 dev hsr1 nodad
-+ip -net "$ns2" addr add 100.64.0.2/24 dev hsr2
-+ip -net "$ns2" addr add dead:beef:1::2/64 dev hsr2 nodad
-+ip -net "$ns3" addr add 100.64.0.3/24 dev hsr3
-+ip -net "$ns3" addr add dead:beef:1::3/64 dev hsr3 nodad
-+
-+# All Links up
-+ip -net "$ns1" link set ns1eth1 up
-+ip -net "$ns1" link set ns1eth2 up
-+ip -net "$ns1" link set hsr1 up
-+
-+ip -net "$ns2" link set ns2eth1 up
-+ip -net "$ns2" link set ns2eth2 up
-+ip -net "$ns2" link set hsr2 up
-+
-+ip -net "$ns3" link set ns3eth1 up
-+ip -net "$ns3" link set ns3eth2 up
-+ip -net "$ns3" link set hsr3 up
-+
-+# $1: IP address
-+is_v6()
-+{
-+	[ -z "${1##*:*}" ]
-+}
-+
-+do_ping()
-+{
-+	local netns=3D"$1"
-+	local connect_addr=3D"$2"
-+	local ping_args=3D"-q -c 2"
-+
-+	if is_v6 "${connect_addr}"; then
-+		$ipv6 || return 0
-+		ping_args=3D"${ping_args} -6"
-+	fi
-+
-+	ip netns exec ${netns} ping ${ping_args} $connect_addr >/dev/null
-+	if [ $? -ne 0 ] ; then
-+		echo "$netns -> $connect_addr connectivity [ FAIL ]" 1>&2
-+		ret=3D1
-+		return 1
-+	fi
-+
-+	return 0
-+}
-+
-+do_ping_long()
-+{
-+	local netns=3D"$1"
-+	local connect_addr=3D"$2"
-+	local ping_args=3D"-q -c 10"
-+
-+	if is_v6 "${connect_addr}"; then
-+		$ipv6 || return 0
-+		ping_args=3D"${ping_args} -6"
-+	fi
-+
-+	OUT=3D"$(LANG=3DC ip netns exec ${netns} ping ${ping_args} $connect_addr =
-| grep received)"
-+	if [ $? -ne 0 ] ; then
-+		echo "$netns -> $connect_addr ping [ FAIL ]" 1>&2
-+		ret=3D1
-+		return 1
-+	fi
-+
-+	VAL=3D"$(echo $OUT | cut -d' ' -f1-8)"
-+	if [ "$VAL" !=3D "10 packets transmitted, 10 received, 0% packet loss," ]
-+	then
-+		echo "$netns -> $connect_addr ping TEST [ FAIL ]"
-+		echo "Expect to send and receive 10 packets and no duplicates."
-+		echo "Full message: ${OUT}."
-+		ret=3D1
-+		return 1
-+	fi
-+
-+	return 0
-+}
-+
-+stop_if_error()
-+{
-+	local msg=3D"$1"
-+
-+	if [ ${ret} -ne 0 ]; then
-+		echo "FAIL: ${msg}" 1>&2
-+		exit ${ret}
-+	fi
-+}
-+
-+
-+echo "INFO: Initial validation ping."
-+# Each node has to be able each one.
-+do_ping "$ns1" 100.64.0.2
-+do_ping "$ns2" 100.64.0.1
-+do_ping "$ns3" 100.64.0.1
-+stop_if_error "Initial validation failed."
-+
-+do_ping "$ns1" 100.64.0.3
-+do_ping "$ns2" 100.64.0.3
-+do_ping "$ns3" 100.64.0.2
-+
-+do_ping "$ns1" dead:beef:1::2
-+do_ping "$ns1" dead:beef:1::3
-+do_ping "$ns2" dead:beef:1::1
-+do_ping "$ns2" dead:beef:1::2
-+do_ping "$ns3" dead:beef:1::1
-+do_ping "$ns3" dead:beef:1::2
-+
-+stop_if_error "Initial validation failed."
-+
-+# Wait until supervisor all supervision frames have been processed and the=
- node
-+# entries have been merged. Otherwise duplicate frames will be observed wh=
-ich is
-+# valid at this stage.
-+WAIT=3D5
-+while [ ${WAIT} -gt 0 ]
-+do
-+	grep 00:00:00:00:00:00 /sys/kernel/debug/hsr/hsr*/node_table
-+	if [ $? -ne 0 ]
-+	then
-+		break
-+	fi
-+	sleep 1
-+	let WAIT =3D WAIT - 1
-+done
-+
-+# Just a safety delay in case the above check didn't handle it.
-+sleep 1
-+
-+echo "INFO: Longer ping test."
-+do_ping_long "$ns1" 100.64.0.2
-+do_ping_long "$ns1" dead:beef:1::2
-+do_ping_long "$ns1" 100.64.0.3
-+do_ping_long "$ns1" dead:beef:1::3
-+
-+stop_if_error "Longer ping test failed."
-+
-+do_ping_long "$ns2" 100.64.0.1
-+do_ping_long "$ns2" dead:beef:1::1
-+do_ping_long "$ns2" 100.64.0.3
-+do_ping_long "$ns2" dead:beef:1::2
-+stop_if_error "Longer ping test failed."
-+
-+do_ping_long "$ns3" 100.64.0.1
-+do_ping_long "$ns3" dead:beef:1::1
-+do_ping_long "$ns3" 100.64.0.2
-+do_ping_long "$ns3" dead:beef:1::2
-+stop_if_error "Longer ping test failed."
-+
-+echo "INFO: Cutting one link."
-+do_ping_long "$ns1" 100.64.0.3 &
-+
-+sleep 3
-+ip -net "$ns3" link set ns3eth1 down
-+wait
-+
-+ip -net "$ns3" link set ns3eth1 up
-+
-+stop_if_error "Failed with one link down."
-+
-+echo "INFO: Delay the link and drop a few packages."
-+tc -net "$ns3" qdisc add dev ns3eth1 root netem delay 50ms
-+tc -net "$ns2" qdisc add dev ns2eth1 root netem delay 5ms loss 25%
-+
-+do_ping_long "$ns1" 100.64.0.2
-+do_ping_long "$ns1" 100.64.0.3
-+
-+stop_if_error "Failed with delay and packetloss."
-+
-+do_ping_long "$ns2" 100.64.0.1
-+do_ping_long "$ns2" 100.64.0.3
-+
-+stop_if_error "Failed with delay and packetloss."
-+
-+do_ping_long "$ns3" 100.64.0.1
-+do_ping_long "$ns3" 100.64.0.2
-+stop_if_error "Failed with delay and packetloss."
-+
-+echo "INFO: All good."
-+exit $ret
---=20
-2.38.1
-
+For more info write to <info@kernelci.org>
