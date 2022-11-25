@@ -2,160 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EAF963856C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 09:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D98E638587
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 09:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiKYInh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Nov 2022 03:43:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S229827AbiKYIvi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Nov 2022 03:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiKYIn1 (ORCPT
+        with ESMTP id S229820AbiKYIvb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:43:27 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BC721E2D
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:43:24 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id my9-20020a17090b4c8900b002130d29fd7cso5163639pjb.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:43:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dkxFkrOpjQGLbrLmIP0+FclGqPGzevJvZOLievBv8dk=;
-        b=kqgbzNKEz/EBdl30RURuDttaaXxDeC30LnNegyGkFZc9kDj5JRKrZbbcEP9pwVxxZN
-         G9XRyB4jJukMFOoeTGeBeQ3CnM0EbzUy0iVy1MuX2Azm+2w3BQ9adRyL9kvkdnoRUBgI
-         X6bKvh5wnfqjPenjD+9aZ4sKilQcc3HfOGFYHURPQ69pGtxzEdI0XKeB9kAYdbFzp7Bg
-         iV3xmvTGIdnYEq9akRm0/9IGUCEtjMcs+FCtU+t6i2Mn7bMXvKRnkKAJSxnin4lI09Y7
-         1pZbQEDt8j+6a4aF/rIVEb1uQE3DhbYONBvJrOsxEcU1VcYGwGBsoyKH/GlpFeZvG8ID
-         eajQ==
+        Fri, 25 Nov 2022 03:51:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5C2275E0
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:50:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669366236;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZCa5X8lXlExaGphI0WGFeQw46HpXtfvTpixratHZyiE=;
+        b=U5OE6i2kK+253b1jnmoN/dJT5oWKLarXAF/d/b82PF5t212A6bQvFzh37aZ4h+FjZGNnvc
+        xl1JZTuo8RQv38OIrCpT1xhLqK8Kg0aB/NMSpwFYUdA6QcPhDHBgQiHQ09btvxgZOTbeTF
+        vlWs02MNI8f7gKFEP5MZkwxMRkGb+zc=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-104-DUXiRbdxOrmefzBZ_JZ_Uw-1; Fri, 25 Nov 2022 03:50:34 -0500
+X-MC-Unique: DUXiRbdxOrmefzBZ_JZ_Uw-1
+Received: by mail-wr1-f70.google.com with SMTP id t12-20020adfa2cc000000b0022adcbb248bso690709wra.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:50:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dkxFkrOpjQGLbrLmIP0+FclGqPGzevJvZOLievBv8dk=;
-        b=2abhKLDlLIKIc+DsqvKKwRcjJ39dISkN9spYu528BpEqhXPvkdV64azfDvYklZMwe+
-         Ri6NVKucnTQWQQazajLEMbNhhtF8O5gYySrNd7zI1A7ttBy71mWIatBBEHtaKbKDw3j8
-         RZqMm57kLrZTbiLXkyFg0E4kqjAj7nmrYW/cZfLjjSOykmbhUfuFiWh6zZb9pInacMff
-         gO9kmS/fA7xIwxQUKFVcsJ3TwEnQUC651r9Kke0+Oa7GCJHHSOKCbm5qNhZKjBcFgVW4
-         zH+xw2+bTbcplvsy9qZ9tIOpGP2PVuZkHbhSP0IEUuUakJCVAzpxVbKdF1vNtW2HyEMe
-         bDdA==
-X-Gm-Message-State: ANoB5pnYIC2lYgeRvYOE5l8zqeOctvwC99zjuDvXB+JXJp/h0Nwn+IUT
-        XHKnGiHq57dH9MgAinfM1sEXkOBwOJKJaA==
-X-Google-Smtp-Source: AA0mqf7RiYkevlcRuG6Fr8tnCwq1XAC9tTw8xXaio9yL/yIb9hcwf34Ri5nG0oPQNQBwzo8q3vRzqDIvG97ZmA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:90b:3809:b0:20a:c64c:ae80 with SMTP
- id mq9-20020a17090b380900b0020ac64cae80mr28596107pjb.12.1669365803760; Fri,
- 25 Nov 2022 00:43:23 -0800 (PST)
-Date:   Fri, 25 Nov 2022 16:43:06 +0800
-In-Reply-To: <20221125084306.1063074-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20221125084306.1063074-1-davidgow@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221125084306.1063074-3-davidgow@google.com>
-Subject: [PATCH v4 3/3] mm: slub: test: Use the kunit_get_current_test() function
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, Oliver Glitta <glittao@gmail.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZCa5X8lXlExaGphI0WGFeQw46HpXtfvTpixratHZyiE=;
+        b=1OAe9fiTLJJ5+WIqI6wGv5lK2dciga9Fw0ogyhQ1X3EgHFiO9lPe5l+uDgu2Nr0PLz
+         9lUyaYd4n9YneokNtC/6w7PMJqKO/Csr7D7p5OgXGp7C+fYAvO52gUER68ofd1U+GUpU
+         L4SSVW8FViODYSpTyQwEOpJBJgqq+8uOYp2nEB5TP5l6QkB/ZEYfp1x7lhY2vc8WA88/
+         Opb3WoRtAvYKImgvvtNQ7H5lQR++3UQb4UYQxijOahE4FBf+iND4qviRFRTFeFxJHcMy
+         i/J27Kf88dDDX+laHoATrr94TF9TJkzDCulwwD4VhkovUzeEzvj19asEKgBVYPEwSoVT
+         Uvag==
+X-Gm-Message-State: ANoB5plNGJI+t9zuTGdNNIpqGfMt8q7CbKAUvnaLwfwSwwANstTyh3WU
+        3niPjefrrhWKsmbUqTzy+G2m7w/DLCROO5b9oQ0WxdxVAUNsb4bQJwMgxkhhFuzsTqUpoA1idyw
+        Vk3lvtgUi/urb1qSZLS5bvW0wB6xD
+X-Received: by 2002:a5d:5305:0:b0:242:25e:e731 with SMTP id e5-20020a5d5305000000b00242025ee731mr2642360wrv.48.1669366233208;
+        Fri, 25 Nov 2022 00:50:33 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6mov6a1ABQsKCpweMfuKZj8FtStMvwn4E4x4v/bkoJJVxviE1bsUHgijhFDEI16xW3gYv3qw==
+X-Received: by 2002:a5d:5305:0:b0:242:25e:e731 with SMTP id e5-20020a5d5305000000b00242025ee731mr2642344wrv.48.1669366232940;
+        Fri, 25 Nov 2022 00:50:32 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id p11-20020a05600c468b00b003cfd10a33afsm8890236wmo.11.2022.11.25.00.50.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 00:50:32 -0800 (PST)
+Message-ID: <2517016e-1b31-b821-df0c-8c0498f11719@redhat.com>
+Date:   Fri, 25 Nov 2022 09:50:31 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 01/24] drm/tests: helpers: Rename the device init helper
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
+        dri-devel@lists.freedesktop.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
+ <20221123-rpi-kunit-tests-v1-1-051a0bb60a16@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-1-051a0bb60a16@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use the newly-added function kunit_get_current_test() instead of
-accessing current->kunit_test directly. This function uses a static key
-to return more quickly when KUnit is enabled, but no tests are actively
-running. There should therefore be a negligible performance impact to
-enabling the slub KUnit tests.
+On 11/23/22 16:25, Maxime Ripard wrote:
+> The name doesn't really fit the conventions for the other helpers in
+> DRM/KMS, so let's rename it to make it obvious that we allocate a new
+> DRM device.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
 
-Other than the performance improvement, this should be a no-op.
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
-Cc: Oliver Glitta <glittao@gmail.com>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: David Gow <davidgow@google.com>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
-
-This is intended as an example use of the new function. Other users
-(such as KASAN) will be updated separately, as there would otherwise be
-conflicts.
-
-We'll take this whole series via the kselftest/kunit tree.
-
-Changes since v3:
-https://lore.kernel.org/linux-kselftest/20221119081252.3864249-3-davidgow@google.com/
-- Add Hyeonggon's Acked-by.
-
-Changes since v2:
-https://lore.kernel.org/all/20221025071907.1251820-3-davidgow@google.com/
-- Get rid of a redundant 'likely' (Thanks Vlastimil Babka)
-- Use current->kunit_test directly when we already know a test is
-  running. (Thanks Vlastimil Babka)
-- Add Vlastimil's Acked-by.
-
-There was no v1 of this patch. v1 of the series can be found here:
-https://lore.kernel.org/linux-kselftest/20221021072854.333010-1-davidgow@google.com/T/#u
-
-Cheers,
--- David
-
----
- lib/slub_kunit.c | 1 +
- mm/slub.c        | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-index 7a0564d7cb7a..8fd19c8301ad 100644
---- a/lib/slub_kunit.c
-+++ b/lib/slub_kunit.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <kunit/test.h>
-+#include <kunit/test-bug.h>
- #include <linux/mm.h>
- #include <linux/slab.h>
- #include <linux/module.h>
-diff --git a/mm/slub.c b/mm/slub.c
-index 157527d7101b..1887996cb703 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -39,6 +39,7 @@
- #include <linux/memcontrol.h>
- #include <linux/random.h>
- #include <kunit/test.h>
-+#include <kunit/test-bug.h>
- #include <linux/sort.h>
- 
- #include <linux/debugfs.h>
-@@ -603,7 +604,7 @@ static bool slab_add_kunit_errors(void)
- {
- 	struct kunit_resource *resource;
- 
--	if (likely(!current->kunit_test))
-+	if (!kunit_get_current_test())
- 		return false;
- 
- 	resource = kunit_find_named_resource(current->kunit_test, "slab_errors");
 -- 
-2.38.1.584.g0f3c55d4c2-goog
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
