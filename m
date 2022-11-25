@@ -2,67 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42BB638823
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 12:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67427638828
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 12:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiKYLCD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Nov 2022 06:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
+        id S230352AbiKYLDE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Nov 2022 06:03:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiKYLBw (ORCPT
+        with ESMTP id S230351AbiKYLDD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:01:52 -0500
+        Fri, 25 Nov 2022 06:03:03 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C79D4A9C0
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:00:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA054B990
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:01:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669374056;
+        s=mimecast20190719; t=1669374117;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H/ZkLtm8A9FTaUIt1krh1NXQg3mdZeQrz9lNHvK9Ra0=;
-        b=KgajXx6a91KZg6gAWYWp2w9Tt6S+yTqr6lTP0OfXrDgIh0xNRZqCkdX2PoqBa4HHZ+D9SU
-        +TbQvAWN90T4S/ScVDhjEIYl8w4oFxF34ylD0hfXNQv38P/gvKP2Rk3mRY4TIhrg/he7hJ
-        IrIx1HBCTttfDuWxCZyzHxJkhs5bB0Q=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TfA9A7l0JYE/L8ETH4uO/o+2VqeJpw2uLOXbWd1Oacg=;
+        b=RYF5ajSd17NP2QCq0u0G1BHrNoKXMY9bLk046xPAznEs0hZv44MD9g9zLO18F31bxrTLKk
+        FxJ5sqSYgB0x9/RjRQO5E/+UFe5Iybra9G6COKCOP686MeuLG7ooPFHE6eAGqFDRfV4//7
+        +yqLUIj4d2ztA1JS/D6DgC/RF24D1Fg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-522-J7k3gu5nOJC-t413ju5JCw-1; Fri, 25 Nov 2022 06:00:47 -0500
-X-MC-Unique: J7k3gu5nOJC-t413ju5JCw-1
-Received: by mail-wm1-f72.google.com with SMTP id c10-20020a7bc84a000000b003cf81c2d3efso1675292wml.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:00:47 -0800 (PST)
+ us-mta-522-46aaLZEdNmiZxzJ2io3rrA-1; Fri, 25 Nov 2022 06:01:53 -0500
+X-MC-Unique: 46aaLZEdNmiZxzJ2io3rrA-1
+Received: by mail-wm1-f69.google.com with SMTP id m34-20020a05600c3b2200b003cf549cb32bso4049519wms.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 03:01:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H/ZkLtm8A9FTaUIt1krh1NXQg3mdZeQrz9lNHvK9Ra0=;
-        b=gRfpNuyLWvtc8dc8kyJxsggfJEC+xQadRyyLuLE4Xt/25taVFHR9F8sqJZ47FB+mPI
-         PX73/tUnNQC8uAkWB2BIsmvfc7K+7Z01h7UrlErZpVQd0Wi9sAYd8udJiGlHnpwuPlbh
-         32gsZ31ieIsHQdHAmLIopOUo9B01TpXY0d5zUubBMtjy4a85SCjlzLV+UJqY1/ZPb7Fk
-         b1arwGHzFOvEec9TATxtEP9bvlDH05mDpjht+Fv+ACtUxpqhFq9oCrfaphZtB1DAI0I6
-         IW7fuMM+D/afxrf/O4YSY8CebS1zeeyPgaGoYIup0MYedDGuEv7qMiCTgGFNhN6icL3o
-         VLdA==
-X-Gm-Message-State: ANoB5pnqBcF1koTr2kyJG2lCB7Xip77iqv+lEGj0rgDxjeAcDCNv1nWC
-        stZXnLC8PIWKyzjXdL8U1QBrZfs6o68ROD5R6Z/FybOVXoo3oe73PWRgPDGZGraLievezcqfjjg
-        /Fp2Hz8FegyMkExmlfe72XZnnA9hL
-X-Received: by 2002:adf:e508:0:b0:236:588f:b5d with SMTP id j8-20020adfe508000000b00236588f0b5dmr11244638wrm.255.1669374046472;
-        Fri, 25 Nov 2022 03:00:46 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7Xu/NP6mlFBtx0snOLhZERGkaY9p8k3uPMLjkAV/xFHCXfHC5Y76yhHYrvcopCb8lv41h+LQ==
-X-Received: by 2002:adf:e508:0:b0:236:588f:b5d with SMTP id j8-20020adfe508000000b00236588f0b5dmr11244612wrm.255.1669374046175;
-        Fri, 25 Nov 2022 03:00:46 -0800 (PST)
+        bh=TfA9A7l0JYE/L8ETH4uO/o+2VqeJpw2uLOXbWd1Oacg=;
+        b=21gzlr8wHtm+H4xT48iLFE7TQqIJb6dkNYRWXcqHuNSN6bM/IfSy336wT2+/Ble7Xz
+         RzYwGZ+LQbNneMn5DpnwNPls7vQMYe8l5N3IVtaxXc+LEVPvYDf+fw9LtZ5bU6lD1xi2
+         rdPsfRcz5GJMnnKmHL+XsZWINKEdsowpqYZopGpCLjYy7zihIK0pUXmTBglPwY1NX/1l
+         r6Jr4qpNsAonCJajLAbEyCmw4LDp3gXN5LXPzJ+oLy+PpDkyRIGIsgwT1eUz4QerP9l/
+         B7DE2pOGQuVMUA4Ud/bnJmShfXFCpTe91lePx7CRGWFZyUFNu+P66jB9+tTbwMY2ftht
+         +D2w==
+X-Gm-Message-State: ANoB5pkXJqnHfZ1ifs+uHn0V9Ket5zKpEUs2Ft6xgu2chE1X6zIu8blK
+        aqbgtkHQhdzJDuu5ecTrivkdddlmBgcnEMFdzhuSBvRswN7mDhw4Hr2yc18O6e8uBN9u6VaXrFZ
+        qro2sSRKLPK5KRK9juyy7P4dn3dBj
+X-Received: by 2002:a7b:c456:0:b0:3a5:f600:502e with SMTP id l22-20020a7bc456000000b003a5f600502emr18311884wmi.39.1669374111319;
+        Fri, 25 Nov 2022 03:01:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf54zF2uRxU4RbTU39UVEvJ1RZet14YgzdlvBFjd7gpCV0KEEizmQ7IkJumuXXzHwnc2Bml0/Q==
+X-Received: by 2002:a7b:c456:0:b0:3a5:f600:502e with SMTP id l22-20020a7bc456000000b003a5f600502emr18311846wmi.39.1669374111092;
+        Fri, 25 Nov 2022 03:01:51 -0800 (PST)
 Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p1-20020a1c5441000000b003b4cba4ef71sm8531125wmi.41.2022.11.25.03.00.44
+        by smtp.gmail.com with ESMTPSA id r11-20020a05600c35cb00b003a84375d0d1sm9723651wmq.44.2022.11.25.03.01.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 03:00:45 -0800 (PST)
-Message-ID: <2762e41f-0508-2e25-b787-7b68d5014a77@redhat.com>
-Date:   Fri, 25 Nov 2022 12:00:44 +0100
+        Fri, 25 Nov 2022 03:01:50 -0800 (PST)
+Message-ID: <8df31d1d-1ed9-eb6e-80bd-1f82adfb0185@redhat.com>
+Date:   Fri, 25 Nov 2022 12:01:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH 10/24] drm/vc4: kms: Sort the CRTCs by output before
- assigning them
+Subject: Re: [PATCH 11/24] drm/vc4: Constify container_of wrappers
 Content-Language: en-US
 To:     Maxime Ripard <maxime@cerno.tech>,
         Maxime Ripard <mripard@kernel.org>,
@@ -80,9 +79,9 @@ Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
         linux-kernel@vger.kernel.org,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
 References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <20221123-rpi-kunit-tests-v1-10-051a0bb60a16@cerno.tech>
+ <20221123-rpi-kunit-tests-v1-11-051a0bb60a16@cerno.tech>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v1-10-051a0bb60a16@cerno.tech>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-11-051a0bb60a16@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -96,58 +95,13 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 11/23/22 16:25, Maxime Ripard wrote:
-> On the vc4 devices (and later), the blending is done by a single device
-> called the HVS. The HVS has three FIFO that can operate in parallel, and
-> route their output to 6 CRTCs and 7 encoders on the BCM2711.
+> None of our wrappers around container_of to access our objects from the
+> DRM object pointer actually modify the latter.
 > 
-> Each of these CRTCs and encoders have some contraints on which FIFO they
-
-constraints.
-
-> can feed from, so we need some code to take all those constraints into
-> account and assign FIFOs to CRTCs.
+> Let's make them const.
 > 
-> The problem can be simplified by assigning those FIFOs to CRTCs by
-> ascending output index number. We had a comment mentioning it already,
-> but we were never actually enforcing it.
-> 
-> It was working still in most situations because the probe order is
-> roughly equivalent, except for the (optional, and fairly rarely used on
-> the Pi4) VEC which was last in the probe order sequence, but one of the
-> earliest device to assign.
-> 
-> This resulted in configurations that were rejected by our code but were
-> still valid with a different assignment.
-> 
-> We can fix this by making sure we assign CRTCs to FIFOs by ordering
-> them by ascending HVS output index.
-> 
-> Fixes: 87ebcd42fb7b ("drm/vc4: crtc: Assign output to channel automatically")
 > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > ---
-
-[...]
-
->  
-> -	for_each_oldnew_crtc_in_state(state, crtc, old_crtc_state, new_crtc_state, i) {
-> -		struct vc4_crtc_state *old_vc4_crtc_state =
-> -			to_vc4_crtc_state(old_crtc_state);
-> -		struct vc4_crtc_state *new_vc4_crtc_state =
-> -			to_vc4_crtc_state(new_crtc_state);
-> -		struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
-> +	/*
-> +	 * The problem we have to solve here is that we have up to 7
-> +	 * encoders, connected to up to 6 CRTCs.
-> +	 *
-> +	 * Those CRTCs, depending on the instance, can be routed to 1, 2
-> +	 * or 3 HVS FIFOs, and we need to set the change the muxing
-
-This sentence sounds a little bit off to me. Did you mean:
-
-"we need to set the muxing between" or "we need to change the muxing" ?
-
-I'm not familiar with VC4 but the patch seems to do what the commit message
-says, so the changes look good to me.
 
 Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
