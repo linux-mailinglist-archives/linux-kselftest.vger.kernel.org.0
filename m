@@ -2,94 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7AC63866C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 10:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F68F638746
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 11:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiKYJm4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Nov 2022 04:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S230139AbiKYKUv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Nov 2022 05:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiKYJmo (ORCPT
+        with ESMTP id S230088AbiKYKUt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:42:44 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE2E23BFE;
-        Fri, 25 Nov 2022 01:42:39 -0800 (PST)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669369357;
+        Fri, 25 Nov 2022 05:20:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E937141982
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 02:19:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669371587;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tkHfIWZ+AXddA17Vln4Zv2kJvTG9y3spaF3cG2QDrJU=;
-        b=U9GnlAVlA00LESkky61O56pvX9stU5T9eAGYoI06mvV7ObkG7eQmZw6BDKMJpjzb2Kbcgk
-        P1ikq9bsh06PjSX/DyKKNpGxfl2CQ8m/Mk+dh0w7bYfH/1x2spaJjayHM+MaDoca7aa9JI
-        nIvyEv2d4dlgkxMZulNU0mjKoHHCbOEMizE2XD1EKKWQPPsJ8nIU14EdvsBJHugSEDslJL
-        YlcepZNvqBFqYfWMdS5dzjpPFtSExSayFWDbMDYYKWPtVEnkjoiKfO6nVsg6Y9v93CtD/0
-        Jd2JSPaq08cS/ZivTWkdb6I18BxKL7z1HPbWK4ZtOVdoDrGqUDEqj9x4uh8tXA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669369357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tkHfIWZ+AXddA17Vln4Zv2kJvTG9y3spaF3cG2QDrJU=;
-        b=/nPSkX2ux5m+/P5mpV/FRizufVbb7UsOHs/O4CpzXs35wg3eH1hgnEmBsJAVPHcsxjOrHX
-        AxcsAWw9yHd7pzDg==
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Roland Mainz <roland.mainz@nrubsig.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/3] selftests: Make a warning if getcpu is missing on 32bit.
-Date:   Fri, 25 Nov 2022 10:42:16 +0100
-Message-Id: <20221125094216.3663444-4-bigeasy@linutronix.de>
-In-Reply-To: <20221125094216.3663444-1-bigeasy@linutronix.de>
-References: <20221125094216.3663444-1-bigeasy@linutronix.de>
+        bh=bY19rPV8ppg6ZUdn2yxRqF47aTG2fFJ0ZNtqig4Q8uo=;
+        b=ZYfzqq2+mOvrwfpxjaf04lQXHf/vLre39iedt2XH8yd3YL6Ux361DnYdTjhmdPzZP+WyMQ
+        Sr7qmLpNoCj/dI7NYjJD3AuNNjMXY9tv0JHofGeF214Ng+jlfWkXNES2spivhWLAPmqCK6
+        CFuUOjCh3/zRClPvdK3fK4zYbH7EJCM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-587-flgnV_JhMZuXwhC1Lg67Hw-1; Fri, 25 Nov 2022 05:19:43 -0500
+X-MC-Unique: flgnV_JhMZuXwhC1Lg67Hw-1
+Received: by mail-wm1-f70.google.com with SMTP id c1-20020a7bc001000000b003cfe40fca79so1630539wmb.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 02:19:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bY19rPV8ppg6ZUdn2yxRqF47aTG2fFJ0ZNtqig4Q8uo=;
+        b=Yj4WfH3dBnZX8NdKNFtUYYh1QIyv5Hh2luyL1Qm8qnnAOnmx/S0KWfa67K+aa93z0b
+         yAVLfluxARR5sMzb0MhVPn3kNsauZcPSIoGFjyDCZTl51NtGDaG6Hnz8zehvoBQCG5rB
+         JW/xFK1N+fV3aQPRr2E9TrVmsUiElSL1goELTWtLPX+84K6Ummj+kz3WIaR5ytxvODpB
+         iPxSS1G8i11gHh7PFwm84JA+PCRXI0cPjgfyH9ODxOCp16MJUrDWnOO5pd2grHUFjPvL
+         yCXphIb4fFrB8jP+W+jwhBy+5CrNQGd4BOyfI2dmk7CcxziZiiwEvzpOPnMmp7+H/9X5
+         zQMg==
+X-Gm-Message-State: ANoB5pnFrIwTylcZP+/wh+zov0JVRQrvWjTHmOsKbXs/28Dkn3Pe+1+L
+        FwougQCaIpkg3WI/YdEt+ti1ofwYaE6Nwk7cwIAXLkRRNREihK4CG9VyXNu4IgAQjgklM3enJhR
+        5OEgNyvXAWXPUMXvdvWtUuX77EowD
+X-Received: by 2002:adf:f189:0:b0:241:bc9e:a238 with SMTP id h9-20020adff189000000b00241bc9ea238mr12437050wro.558.1669371581920;
+        Fri, 25 Nov 2022 02:19:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf733o27EIhWoSlUjNsa9tcFhysJWN14yjguQxBT++y7CLSBTY7xXokXb5BEj/8z8JRbucHxIA==
+X-Received: by 2002:adf:f189:0:b0:241:bc9e:a238 with SMTP id h9-20020adff189000000b00241bc9ea238mr12437025wro.558.1669371581684;
+        Fri, 25 Nov 2022 02:19:41 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05600c19ca00b003c5571c27a1sm6216386wmq.32.2022.11.25.02.19.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 02:19:41 -0800 (PST)
+Message-ID: <68ad39a2-e47c-ffcb-34ad-ea680beac59c@redhat.com>
+Date:   Fri, 25 Nov 2022 11:19:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 05/24] drm/tests: helpers: Make sure the device is bound
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
+        dri-devel@lists.freedesktop.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
+ <20221123-rpi-kunit-tests-v1-5-051a0bb60a16@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-5-051a0bb60a16@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The vsyscall for getcpu has been wired up on 32bit so it can be warned
-now if missing.
+On 11/23/22 16:25, Maxime Ripard wrote:
+> The device managed resources are freed when the device is detached, so
+> it has to be bound in the first place.
+> 
+> Let's create a fake driver that we will bind to our fake device to
+> benefit from the device managed cleanups in our tests.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c | 60 +++++++++++++++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- tools/testing/selftests/x86/test_vsyscall.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+If I understood the platform core code correctly, the probe is always sync in
+the case of platform drivers. Unless .probe_type = PROBE_PREFER_ASYNCHRONOUS is
+set or a module is loaded using with the "async_probe=1" parameter. So I believe
+the wait queue won't be needed. The only DRM driver that forces an async probe is
+drivers/gpu/drm/hyperv/hyperv_drm_drv.c AFAICT.
 
-diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/se=
-lftests/x86/test_vsyscall.c
-index 5b45e6986aeab..47cab972807c4 100644
---- a/tools/testing/selftests/x86/test_vsyscall.c
-+++ b/tools/testing/selftests/x86/test_vsyscall.c
-@@ -92,11 +92,8 @@ static void init_vdso(void)
- 		printf("[WARN]\tfailed to find time in vDSO\n");
-=20
- 	vdso_getcpu =3D (getcpu_t)dlsym(vdso, "__vdso_getcpu");
--	if (!vdso_getcpu) {
--		/* getcpu() was never wired up in the 32-bit vDSO. */
--		printf("[%s]\tfailed to find getcpu in vDSO\n",
--		       sizeof(long) =3D=3D 8 ? "WARN" : "NOTE");
--	}
-+	if (!vdso_getcpu)
-+		printf("[WARN]\tfailed to find getcpu in vDSO\n");
- }
-=20
- static int init_vsys(void)
---=20
-2.38.1
+So I would drop this patch from the set for now.
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
