@@ -2,93 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B8B638C42
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 15:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECF8638D71
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Nov 2022 16:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiKYOds (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Nov 2022 09:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
+        id S229495AbiKYPaa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Nov 2022 10:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiKYOdq (ORCPT
+        with ESMTP id S229481AbiKYPa3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 09:33:46 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208142ED7B;
-        Fri, 25 Nov 2022 06:33:45 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DB89C5803E5;
-        Fri, 25 Nov 2022 09:33:41 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 25 Nov 2022 09:33:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1669386821; x=1669394021; bh=M6MnU6LmiA
-        YmvlmzIoIefG1FuwFoAznyitukgUEcknw=; b=P6EcLVbnBM2XgS0pzWCe/1rIDW
-        LJpD0QMQb7FEm85MnUCRx0OIT/NTT0Iat6SeNrZQ33egH5CGd3JqkVO8TYdYlwJQ
-        vrAZjZTditwnXo9fRTQXz2sZJjZIuKiBmW3+jT06X9mylNcQCwaFiizcn8pK927+
-        PowVQgWtPcog16wDBa1OOVLvLoiTkSaujr/rs1lPblFCvGihAIYdCmtb7fXtD0P2
-        md8BrtBzQsGth02UVxQVwjifyrfoMwhQ9gHoqyPmbKx4ITw69RjgPiUz6/SeWqg7
-        MDTATCC27wthxBtYdMPsSjzxlEqeCUCq5KXEgiQBJA4DeHMWGiQEaeFpLgzQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669386821; x=1669394021; bh=M6MnU6LmiAYmvlmzIoIefG1FuwFo
-        AznyitukgUEcknw=; b=j9jhcO81ZwRz1HzwCBRYdFInEE4Gu0n/iVzAkl1gjRN+
-        VGRNi0+3J29Zh/qZpFG0ZehU//Zf4eNGkPVyK7LvyTaAeql+jtWGuTm0U5zSF2TJ
-        I65Ug05FVmOx5AlurbYPPQOKTwdeTr+ZHTfMhIGV1y7VLu7Ihqu0BCUJnUlPbg8j
-        D/KC6mWK1oSrLQOzn/SIPpgfHvIWpMohK0dcPjC8x8UCP7T9nBmF3yUQc/DvUFTc
-        IW9etyFO5LVMrPdBpIjlfbK+kkny5z1BZkuqY1aO7eePY4sUV10ZVoM/LXWihz1E
-        4tu0RokOn3atFsFWacXh+3KO8yLTeoM0cMPbbDCe1g==
-X-ME-Sender: <xms:RNKAY91dPIvOopiSBkTlZTlsBtawKib3krM6hYQ2iK4L1lPTo4bPeQ>
-    <xme:RNKAY0Ghuvp2N3Ox1NHKS_kkb5iP2fd-5EB0veQZR2dWgDOzLvHtnkp5wY50-6lTx
-    cKgosbve5HIzDWdblY>
-X-ME-Received: <xmr:RNKAY95mo2uSj7_xUAsiyOQQj3g5DtI5TMSGg_THRkHo-yUYGuzRKxShcXnMxm73TUjElj81GR6SIYFJf9XEEKdmovwouFEz8PfeQsIKJpALtg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieehgdeiiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeevfeehfeekieffgeevleevtefgffefkedtfeeuhfettdegjeehgfegudff
-    ffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:RNKAY62siUBO6VQir3UrNe22QwYWPBDHPrGpfl_P707sZD7N330bJg>
-    <xmx:RNKAYwG4gZ0CkAhklQIb1FQHTdJwtcroegQS-7D3xsd2MhrWUEgb-A>
-    <xmx:RNKAY7_aXptjD05fY78X0D8c9xuodR2S7HsyxLzHSB3A8wwTGHyjCA>
-    <xmx:RdKAY2R83jecd_63_yfenloFGvhBQCg2ePMGaB9yA5U_fVvwXbOMyg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Nov 2022 09:33:39 -0500 (EST)
-Date:   Fri, 25 Nov 2022 15:33:37 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org
-Subject: Re: [PATCH 01/24] drm/tests: helpers: Rename the device init helper
-Message-ID: <20221125143337.edzn53n6ackomhv5@houat>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <20221123-rpi-kunit-tests-v1-1-051a0bb60a16@cerno.tech>
- <6a817cad-df46-42ac-3c14-dbdce681cde6@riseup.net>
+        Fri, 25 Nov 2022 10:30:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EE72611E
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 07:29:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669390175;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m1BChkWM80kgyYM0SCDcwv+2ZPer/HomIwTgropL0ac=;
+        b=UD1zdeXXbKFNTy/j3j7doEZ5Msw4/MWHh1FKraO8zrE7ORcWdWw8jUTdExdFYskM99BgCa
+        AHRdIdiRYOh9XBKJKBh1781EhMb7dOQvBIkDOYYzB6hHpAl7vwc71Kd4hoIDbwDZOx9xLj
+        DvpGGHUXCOmmfrKarsSH4/degN8EWJk=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-224-KewWHsGyMum-_2YUtmaiww-1; Fri, 25 Nov 2022 10:29:34 -0500
+X-MC-Unique: KewWHsGyMum-_2YUtmaiww-1
+Received: by mail-qt1-f197.google.com with SMTP id cm12-20020a05622a250c00b003a521f66e8eso4400145qtb.17
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 07:29:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m1BChkWM80kgyYM0SCDcwv+2ZPer/HomIwTgropL0ac=;
+        b=7hxTbzRQWvCdyFfJ1rteT1JScEo8gutg9N6EtcTtlepb+ivc39H83yG/sC7wuo2tNL
+         +CuZpeAKNDWHmZ1Tc2YWm7akWXXu/t1bslVnnUSvlBwznwJsVCDnb68JBgGhxVoXlbQL
+         5/oB01b3ilSwpRdgcVjfqwpM0FcJfql6ODe7ugRMjKbTKPYCKgtaA91qJvTMSIyjMQG3
+         cvzhyTH63fgGHsxioekH6ctmMxxAqtdJrTrbUQ9Hs6DXcaOS7cZDBcuwida0kt03nVRd
+         d8LT8y7PkwKDZmIBZO8m1c6BB7sY79y+CZ++8x2tim9IK+DiPSWt/MWN7Q1gKfi+rMrI
+         VD7g==
+X-Gm-Message-State: ANoB5pnXCjsZsjf6klcXQb/q7//dOU8S4oJwJ5omTPsLwpy8gsPUDPC8
+        fp3Ep+cNdEHm65qVUEq6qxFemSRR2g+RZYy88H8/LD/ZRpZD7n6UFhDMjMaSFRPIBAUo2y3Ba1g
+        Vq5fcHiSLBONrz0VNcFTEaNH1a8WK
+X-Received: by 2002:a37:8e05:0:b0:6fc:53ae:a979 with SMTP id q5-20020a378e05000000b006fc53aea979mr3317491qkd.735.1669390173394;
+        Fri, 25 Nov 2022 07:29:33 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7QqsBor66MxTzYPMb3it/9mbW0UcvGZ8swgbJR9AuZEedlRi01xoZpxj56zdIsD6rMTkp1UQ==
+X-Received: by 2002:a37:8e05:0:b0:6fc:53ae:a979 with SMTP id q5-20020a378e05000000b006fc53aea979mr3317469qkd.735.1669390173123;
+        Fri, 25 Nov 2022 07:29:33 -0800 (PST)
+Received: from [192.168.0.146] ([139.47.72.25])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05620a430c00b006fa4cac54a5sm2932849qko.72.2022.11.25.07.29.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 07:29:32 -0800 (PST)
+Message-ID: <83a0b3e4-1327-c1c4-4eb4-9a25ff533d1d@redhat.com>
+Date:   Fri, 25 Nov 2022 16:29:29 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="acmx5lmtcx2n462u"
-Content-Disposition: inline
-In-Reply-To: <6a817cad-df46-42ac-3c14-dbdce681cde6@riseup.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [ovs-dev] [RFC net-next 1/6] openvswitch: exclude kernel flow key
+ from upcalls
+Content-Language: en-US
+To:     Ilya Maximets <i.maximets@ovn.org>,
+        Aaron Conole <aconole@redhat.com>, netdev@vger.kernel.org
+Cc:     dev@openvswitch.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kselftest@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20221122140307.705112-1-aconole@redhat.com>
+ <20221122140307.705112-2-aconole@redhat.com>
+ <c04242ee-f125-6d95-e263-65470222d3cf@ovn.org>
+From:   Adrian Moreno <amorenoz@redhat.com>
+In-Reply-To: <c04242ee-f125-6d95-e263-65470222d3cf@ovn.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -96,41 +89,63 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---acmx5lmtcx2n462u
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On 11/23/22 22:22, Ilya Maximets wrote:
+> On 11/22/22 15:03, Aaron Conole wrote:
+>> When processing upcall commands, two groups of data are available to
+>> userspace for processing: the actual packet data and the kernel
+>> sw flow key data.  The inclusion of the flow key allows the userspace
+>> avoid running through the dissection again.
+>>
+>> However, the userspace can choose to ignore the flow key data, as is
+>> the case in some ovs-vswitchd upcall processing.  For these messages,
+>> having the flow key data merely adds additional data to the upcall
+>> pipeline without any actual gain.  Userspace simply throws the data
+>> away anyway.
+> 
+> Hi, Aaron.  While it's true that OVS in userpsace is re-parsing the
+> packet from scratch and using the newly parsed key for the OpenFlow
+> translation, the kernel-porvided key is still used in a few important
+> places.  Mainly for the compatibility checking.  The use is described
+> here in more details:
+>    https://docs.kernel.org/networking/openvswitch.html#flow-key-compatibility
+> 
+> We need to compare the key generated in userspace with the key
+> generated by the kernel to know if it's safe to install the new flow
+> to the kernel, i.e. if the kernel and OVS userpsace are parsing the
+> packet in the same way.
+> 
 
-On Fri, Nov 25, 2022 at 11:10:02AM -0300, Ma=EDra Canal wrote:
-> On 11/23/22 12:25, Maxime Ripard wrote:
-> > The name doesn't really fit the conventions for the other helpers in
-> > DRM/KMS, so let's rename it to make it obvious that we allocate a new
-> > DRM device.
-> >=20
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->=20
-> Although I believe using "drm_device" on the function name is a bit
-> redundant (maybe drm_kunit_helper_alloc_dev or drm_kunit_helper_alloc_dev=
-ice
-> would be cleaner),
+Hi Ilya,
 
-Yeah, I don't quite like the name either, but we'll need to also
-allocate a struct device in the next few patches so we need to make the
-distinction between a struct drm_device and a struct device.
+Do we need to do that for every packet?
+Could we send a bitmask of supported fields to userspace at feature negotiation 
+and let OVS slowpath flows that it knows the kernel won't be able to handle 
+properly?
 
-Maxime
 
---acmx5lmtcx2n462u
-Content-Type: application/pgp-signature; name="signature.asc"
+> On the other hand, OVS today doesn't check the data, it only checks
+> which fields are present.  So, if we can generate and pass the bitmap
+> of fields present in the key or something similar without sending the
+> full key, that might still save some CPU cycles and memory in the
+> socket buffer while preserving the ability to check for forward and
+> backward compatibility.  What do you think?
+> 
+> 
+> The rest of the patch set seems useful even without patch #1 though.
+> 
+> Nit: This patch #1 should probably be merged with the patch #6 and be
+> at the end of a patch set, so the selftest and the main code are updated
+> at the same time.
+> 
+> Best regards, Ilya Maximets.
+> _______________________________________________
+> dev mailing list
+> dev@openvswitch.org
+> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
+> 
 
------BEGIN PGP SIGNATURE-----
+Thanks
+-- 
+Adrián Moreno
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY4DSQQAKCRDj7w1vZxhR
-xeGkAPkBFLa3lV36E2W1jTknr7iiJBV/Zjt6EB2CqXA8txhT8AD/TvavUqFz4lG/
-jgViwFq+5i24QHZJ/YlXq5ZvEZ09pAI=
-=52Ai
------END PGP SIGNATURE-----
-
---acmx5lmtcx2n462u--
