@@ -2,101 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64BC639513
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Nov 2022 10:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1C363959F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Nov 2022 12:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiKZJ6X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 26 Nov 2022 04:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
+        id S229491AbiKZLN0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 26 Nov 2022 06:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKZJ6W (ORCPT
+        with ESMTP id S229450AbiKZLNZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 26 Nov 2022 04:58:22 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9C7183BC;
-        Sat, 26 Nov 2022 01:58:21 -0800 (PST)
-From:   Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669456700;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wi8dyZVc9G68XjdhvfH69E6KNFmTjqXlbORVLEosFQc=;
-        b=LJKKvsBWN7LXHT5nzOA2v68vVqlrTAkX03Brma48/LtxbfnSZl/oj/iNuDHQZ+UUXtxHoz
-        Vd/ejCgFAkLL6VDgcUCP3sGNZkxRqTkLaQLUgZ5HHFWDg4CA8+5DPQlnYTpCYJgX45MIda
-        y01qSF3Gj8BAxOkLjVwm1w1FPvBX3MRnwv58uyAF9WJsdVN6TL48azd41ogOE3ybY2BKKw
-        a+jvWhSdk5FhobeWNntT6+F2eszXtqEnQDXfw7sVeuGvjb60A0Y9RH69CDsYgB3fGgPaGP
-        W0w1s0mbbW+Dju09yWVVWAmYPRyDPNGTrXe8tRlWl+XPXhz91rtzgjcerWuYgA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669456700;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wi8dyZVc9G68XjdhvfH69E6KNFmTjqXlbORVLEosFQc=;
-        b=h23byget21rMZ+xhpsHEnPCkPlduNa+YELBut/oVhy8qugde9/hK1A81ucR76p2ISiNjBG
-        yweu3H01ToG779AA==
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 8/8] selftests: Add a basic HSR test.
-In-Reply-To: <20221125165610.3802446-9-bigeasy@linutronix.de>
-References: <20221125165610.3802446-1-bigeasy@linutronix.de>
- <20221125165610.3802446-9-bigeasy@linutronix.de>
-Date:   Sat, 26 Nov 2022 10:58:18 +0100
-Message-ID: <877czidolh.fsf@kurt>
+        Sat, 26 Nov 2022 06:13:25 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1276B17E02;
+        Sat, 26 Nov 2022 03:13:25 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so4752767pjd.5;
+        Sat, 26 Nov 2022 03:13:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wgpVMC8bvZTlVaXHEo2lO+7RGlkj48k53uTj/gB9BCs=;
+        b=dWThtiiKNBg5x2ryV+rTL8GPxB4T+txtD78vZMjaEmKoHmpFR2YpON19SSHeaItbAF
+         OaUjP2df/qi2zy8CoukO4z4CSrsYgeWOKtLbzjPhnm1c6qeVLyur+Y+8QfE/SzYvl9Ru
+         fb0EMXbbkoRE7LwQLeGBLKWjAiuH8BmiCWxKe8LCdrJGlluw0kqOPbWLqDf4PHISwfoQ
+         xDO10hDu0PFMQ5J5bm6rUoLIWZYVfjDhVP9OVPff4C5YPvZgXYJgbb/5L+Fvv67Yc7AP
+         HufSP3ZfjJ0eMhgxV+xqdn5lDCTTk+89ZEmXOlpsKHfECHsEf16P0p8PUI5nh7Wyqk5J
+         nA2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wgpVMC8bvZTlVaXHEo2lO+7RGlkj48k53uTj/gB9BCs=;
+        b=A16/3YT9D1tndMp8uKb5xhvkFxiANELT0W3sXD/N2/uTjcJ7GQFz1gv4Cvp0n1CDOn
+         kAsCmDzGFb1hxOJ1t2TMJODMsTYzmk/A5BD8SY/9LEhfJHxWNcJNGBsTqKS2tQ26S0Iy
+         SPzpe5YxbfHMLRZA3rTT7fmyKvBkpy5IH8PuszNN7EvarM1mdc7jaNdPXDaR0xfOMshd
+         NgSFbczzAabg+s7eJ5R+k4EhKHhSkDVPEKS3cyVG3koIzDupZtjKcsYYubfrhRREFFEv
+         CMtzLEYeD+i6VrW/M6DAH2yZhUxIft+nHZfOm2uIJIHJQX4d500RiTlLzxXcsjGhBWa0
+         EGyA==
+X-Gm-Message-State: ANoB5plgHQbJHJGYSstrjAIe52YkfJ7H6uyL9HH9AaVyew2GTE6H6kvU
+        oyLPBQOLW1U5lVlsH0m/GtM=
+X-Google-Smtp-Source: AA0mqf7fCEIjOQBE5SGQST3jU4rWrs2OdbQjaTmUtD/8qr8kil9aTcd9lbwAn9QMhT4Lv0q+EdXuxQ==
+X-Received: by 2002:a17:90a:460b:b0:218:8a84:aeca with SMTP id w11-20020a17090a460b00b002188a84aecamr38895752pjg.63.1669461204167;
+        Sat, 26 Nov 2022 03:13:24 -0800 (PST)
+Received: from WRT-WX9.. ([103.135.102.183])
+        by smtp.gmail.com with ESMTPSA id c194-20020a621ccb000000b0056a93838606sm4555639pfc.58.2022.11.26.03.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Nov 2022 03:13:23 -0800 (PST)
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Changbin Du <changbin.du@gmail.com>
+Subject: [PATCH 0/2] bpftool: improve error handing for missing .BTF section
+Date:   Sat, 26 Nov 2022 19:11:45 +0800
+Message-Id: <20221126111147.199366-1-changbin.du@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
 
-On Fri Nov 25 2022, Sebastian Andrzej Siewior wrote:
-> This test adds a basic HSRv0 network with 3 nodes. In its current shape
-> it sends and forwards packets, announcements and so merges nodes based
-> on MAC A/B information.
-> It is able to detect duplicate packets and packetloss should any occur.
->
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Changbin Du (2):
+  libbpf: show more info about missing ".BTF" section
+  makefiles: do not generate empty vmlinux.h
 
-I guess, support for version 1 and PRP can be added later.
+ samples/bpf/Makefile                 |  2 +-
+ tools/bpf/bpftool/Makefile           |  2 +-
+ tools/bpf/runqslower/Makefile        |  2 +-
+ tools/lib/bpf/btf.c                  | 12 ++++++++++++
+ tools/perf/Makefile.perf             |  2 +-
+ tools/testing/selftests/bpf/Makefile |  2 +-
+ 6 files changed, 17 insertions(+), 5 deletions(-)
 
-Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
+-- 
+2.37.2
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmOB4zoTHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgoVVD/43y204sbfWj+CZzQriGx+rszYBWcuy
-4kRUBBf1AFjch+HqVv+fRKn38vZ21CLyp+FI+8ZHzV+5MRCdtLmyNf66Oagt5hvg
-vtDD1aM3hgI+bQZJAADXYaSTbuftbqLPKli4aRseg/ESzSye6Oyr2PgoxKL6Qja1
-D2VKhkaGar2LMiD1aDjZCUJ7BCy5azNdpYiG4q0MmI9P7rY1XLwzH+fkVdvTJnSS
-mDF8pOf9ClFn9GzsuGQi5IKew0ovlJ49z5eO/dUeaTzG96K/GpVPBi3j+1UWJTav
-qa/Y9p4e3gHwe8eiRcwN23uqbTM0w3Lb55loEYrsezDvdgPIG/O1kw/s7laVaDMo
-JC1qA/sD6b4Cts7QnliKwl6QXg4tbYXczglwQY0+tRNizE60z1TT30PSa07pSlAF
-FzVJV3R45DFSIP5EXoOmOq/8/IU6EVC0jGZFWnij38d6XbfUNbRrgfnI7cnKX20Y
-/qlbwrcL4ckG3PVYCy/4gSIac9EE/TVnBiKZgXcuKJc5KD6H8YiPKNUb4jlXX61x
-rHYkHmjMsP6FkicLqZtESN/Cj4Px85bseevGDjHnR1k9wQ7GhniWpSWSBtfR8n6z
-f6wYnyQvEXjDq+D08kuMBUuyeBrxHGup+1bpl5kCYWAYrMTKZRP5Ps0Fb/EHg+pq
-7+RdlRzoCq+FtQ==
-=Ghnb
------END PGP SIGNATURE-----
---=-=-=--
