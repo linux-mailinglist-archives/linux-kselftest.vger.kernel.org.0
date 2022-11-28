@@ -2,76 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC0663A69A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 12:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673DF63A69D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 12:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiK1LFQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Nov 2022 06:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S230508AbiK1LFR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Nov 2022 06:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiK1LFO (ORCPT
+        with ESMTP id S230500AbiK1LFQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:05:14 -0500
+        Mon, 28 Nov 2022 06:05:16 -0500
 Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F055E192A7;
-        Mon, 28 Nov 2022 03:05:13 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 681995803DB;
-        Mon, 28 Nov 2022 06:05:13 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19E0192B3;
+        Mon, 28 Nov 2022 03:05:15 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 691B35803D4;
+        Mon, 28 Nov 2022 06:05:15 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 28 Nov 2022 06:05:13 -0500
+  by compute1.internal (MEProxy); Mon, 28 Nov 2022 06:05:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669633513; x=
-        1669640713; bh=7n/L8sWWtvZxkpRnLozsoGpUrXbwPv7SGpNu6V+FytI=; b=e
-        z9KKqfFXWDtG8FSHcwfr+kZHFeYwRjX/68NYRhAEJQsJVcsrZpioKEsiovSa2MCo
-        BC5dFy/SBSQwNEVK2QMU5Zr+yFNRzlxFfFRbH614QHDVqLH7HQxKpV81HiWdJZVr
-        YnYPF2I1YAryBHCusoPG0JsT7X8vUa7uujcF9qa56i+evi5+AR0zADBsNKGEy1Kq
-        ief/L0PL5Ymj8keLYIPtW1PaOz9DhYb1xFMcdyAsx3zM9C70UO+ya51cFU/9OYea
-        2amXw/BbaWfZNu09wVm+gjSTjoL6PesUwxqeYVKR/iwpAWV8DjATwnx0VLbgdNxu
-        EA5MwGCIcT9knCV7ft/Jw==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669633515; x=
+        1669640715; bh=rhwIVol0Sw9gpOfzp/VchLhtTbcBkSg5YY1nD1OY/Y0=; b=I
+        fAaNNf/Ef5obt1WjL1rcO0wkbnH5ou9NWy9lQ5vHpXIoFW51S2E795GfW3hLTURe
+        WYMQJHqaBqdeFe4cRvAExACljwQFHM4Dj4aKWesxP/DhEkqKabCRKiIx8ITflCE3
+        o+QT8OOzlXa1YO+B8D2yeXL6aXfTuOKgjHj0jJvD/K7MfmaDjlin9K07P9mx0GVy
+        M46yvrP2EAJeZZIpiU8mhENrZD/f/VPiIoXKNDa5Rp4EoBH1h7xWewQd7jSsdw2t
+        LgalR0h39AMEgtMoFhTERMNgRZOpqrYb3LrtL0divLBHrOg3GLb/wW1qlmJMB+Ow
+        fD8sHJ30O5t49l0wco95A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669633513; x=
-        1669640713; bh=7n/L8sWWtvZxkpRnLozsoGpUrXbwPv7SGpNu6V+FytI=; b=M
-        mrCSqaMry1j9O8Whe7oSZG/aOEqQJcJoLwontsT+GmXvUMeCDpT7ive+uP7waaS7
-        VRi180tGjQ/GbQZlMsFUz2A3qWrMzqZh/iCG1oSRS/F/YBTEyredONDctMpKR0Ps
-        0esZ/K1kdIDsSGQtBah3rcphq/1xmpdCtoT3S8VQLSV6wZqa5ibZ9TqCizGPk5aP
-        tyR/1hAHVoY0TWazkplKmn7DzimA7q/BNriVkSX9xH8YyMCiHnGZMw8KWHfoeAWE
-        XBWKWBwbZkKrONpcP6kcLJalYXI5zMVu03lz0WuboGJ7xaZ4QDyK1FL9iW6G4noT
-        yzQINtaI8IgoSIe8fTViw==
-X-ME-Sender: <xms:6ZWEYwgS7QrjOc0CGIm04crmYnZxApclp6Q8AB3JU90xnq0Dv--chg>
-    <xme:6ZWEY5D5eXxzbwTTv3yr8i_3eBMSiY33ivNqPKAriKlDWUNpxF-fONuVaCw5uWFcA
-    h1H9-Ji853o-D9dfw4>
-X-ME-Received: <xmr:6ZWEY4H6Rn6i34orQ4DJzWkQMakUTeZC2Eznauw9qDU_C96ZrplkOMAJD18Rt5LquPk_u6OP3ro_YCyXDYoH8h5bCnHndHKUI1HglYf8w8FHww>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669633515; x=
+        1669640715; bh=rhwIVol0Sw9gpOfzp/VchLhtTbcBkSg5YY1nD1OY/Y0=; b=K
+        FI4IYy/OCS2UJhwJPvZUAKfAIA1K+E6SuiUNpqIijQkdYq+jQU0cLBLRXii97iod
+        sJWIb4PMVSLvjQIz/0B2J805pt46OLJy8gc57DaEpMj7MJDIM3jbz/6/zVxwbawc
+        hKQ2hC3hTbmjYbwQUNMTwYKeWLTAPQ2zyA4NXdDnTSDlh3YxSfcOGnXPXg5mI8Hs
+        aHo4yU1/413NOhQi4IR3MvAQkyVl9mKVzvNLGV//yuWKAkE79h6GwI4jKIdeFv6r
+        ANJ79dneKZlwxDGwmcCPkhBzi0r9nW/2+naVaVCwfE7KdgEgfJh41Q8P3Ph0IClf
+        8dn1W/UN0aUnxmelM1eng==
+X-ME-Sender: <xms:65WEY8waubcY4rq4NYMJkogoZpmk5u5Bjt0Pd2y_w4zhiPybi9h1qA>
+    <xme:65WEYwTN6WuE6HVuJxbcwJPyLjFHF6m6RDPJJQP3FCNI-EljYydsc4fbM-mL-5m5s
+    vWf_rTjuezAnRy7178>
+X-ME-Received: <xmr:65WEY-U6zm8aIYjyHN1CUHYYYfyOZpgRSN1M5Xz57tfG3fPgrUvqh7-KoFV7hEQl521mZYk9CE2vyfpMGDs3A3FoduF6rhEPbCtVVtlB0AOqtg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgddvgecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgrgihi
     mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
     htthgvrhhnpeeuieeggffhffffieefheduieeuvdetgeeufeffvefgtedvffehheekffev
-    udefieenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    udefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:6ZWEYxT7F5v1OHfM7XC3AGKlPsixR-KL9er9bzEh729XLVICiOj0hA>
-    <xmx:6ZWEY9yjfZ_WStJ8Zem86bx_may0YGJFWDEm742S7CVPwnDB0rSPjQ>
-    <xmx:6ZWEY_4IbSE2wRuZdikzUJuWuIKPC_44AYwQD8dQEYr5WR0Le_VK3w>
-    <xmx:6ZWEY-RZsbyAfDcpp_5tvyHX4_AEs3KSotyzxj1eGsCPXPuJ2qjk3Q>
+X-ME-Proxy: <xmx:65WEY6g9uAn8lwfasBHS8hFqkFhko5n_lG_J9v827hzf1mGjdhbkNA>
+    <xmx:65WEY-D0-m3BtI9_6s4j5mktw7SCB14WM6CKnaXj6FOVWfE4PAcZ-A>
+    <xmx:65WEY7IfQstyv8qxp1pUrQAStJki-qU_rLCneuBDLxWEBFy5xUBsTA>
+    <xmx:65WEY2hZ9_WglFIzUlQnUBSdS2DnnvHVtIBt-eMOiBtog0NlZWrR1A>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Nov 2022 06:05:12 -0500 (EST)
+ 28 Nov 2022 06:05:14 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <maxime@cerno.tech>,
         Maxime Ripard <mripard@kernel.org>
-Cc:     linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>,
         linux-media@vger.kernel.org,
         =?UTF-8?q?Ma=EF=BF=BD=EF=BF=BDra=20Canal?= <mairacanal@riseup.net>,
         linux-kselftest@vger.kernel.org,
@@ -79,12 +79,12 @@ Cc:     linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
         Brendan Higgins <brendan.higgins@linux.dev>,
         kunit-dev@googlegroups.com,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: (subset) [PATCH 13/24] drm/vc4: kms: Constify the HVS old/new state helpers
-Date:   Mon, 28 Nov 2022 12:04:56 +0100
-Message-Id: <166963342297.56696.17736510274348505115.b4-ty@cerno.tech>
+Subject: Re: (subset) [PATCH 14/24] drm/vc4: txp: Reorder the variable assignments
+Date:   Mon, 28 Nov 2022 12:04:57 +0100
+Message-Id: <166963342297.56696.10895622968661502205.b4-ty@cerno.tech>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123-rpi-kunit-tests-v1-13-051a0bb60a16@cerno.tech>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech> <20221123-rpi-kunit-tests-v1-13-051a0bb60a16@cerno.tech>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-14-051a0bb60a16@cerno.tech>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech> <20221123-rpi-kunit-tests-v1-14-051a0bb60a16@cerno.tech>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -98,9 +98,9 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 23 Nov 2022 16:25:55 +0100, Maxime Ripard wrote:
-> The vc4_hvs_get_(old|new)_global_state functions don't modify the
-> drm_atomic_state passed as an argument, so let's make it const.
+On Wed, 23 Nov 2022 16:25:56 +0100, Maxime Ripard wrote:
+> The current order of variable assignments is unneccessarily complex,
+> let's make it simpler.
 > 
 > 
 
