@@ -2,357 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EB163B2C6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 21:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A5063B2D0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 21:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbiK1UKq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Nov 2022 15:10:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S231181AbiK1UOo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Nov 2022 15:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbiK1UKp (ORCPT
+        with ESMTP id S232919AbiK1UOo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Nov 2022 15:10:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBBD23156
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Nov 2022 12:09:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669666195;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4sF220u/GkyApiKYoqCxqyjsl0v/0IP+GvFHvvXQNpo=;
-        b=BbNtEsx5oDB6cwtH4Y+H5FO2z4Zmbv+w/+Y9Jpm0ral5oqYkXKDqK2vy7SXS6rFhpfcHAE
-        cfk2aUeVeu+Kwsa12AC+hGSo6NPxHcZ1umZBeZ/otRd3raaG0ZkGXo06tMdxhq31rhS8XJ
-        mYEUQY61JjHojerwgROSR8P+RaFxRwY=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-515-4-H8Z0AWOB63V8Uk_YNOyQ-1; Mon, 28 Nov 2022 15:09:52 -0500
-X-MC-Unique: 4-H8Z0AWOB63V8Uk_YNOyQ-1
-Received: by mail-qk1-f200.google.com with SMTP id az31-20020a05620a171f00b006fa2cc1b0bfso22811068qkb.23
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Nov 2022 12:09:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4sF220u/GkyApiKYoqCxqyjsl0v/0IP+GvFHvvXQNpo=;
-        b=Nb/pwBEWW8pXHMepjKXkbvv3MYl8njuzKyShtNH3Ojpvrkp1YIB+nmog6p3z/srxUU
-         tCKsZQupU2bQjq30yguaSmcjTnyrGt2UgoP/gwC38aUED1KQ6HrYYe6JO4CRTvk5wVdn
-         kjKMweD6PV5vXmUJ4Tg3duYARZjx1a+54pUSLgddD57fQvUcldm3d8R/bpBFEA1n3GO+
-         eIKL6VF7HJhGXCenYEhrC4mta3dAwpvC41LU08uk99UULNL+1lCfYv1Oif7g3OvBr8/q
-         VMIRAmTkd7wVi4hFABaBauEu7I2jkXE0qX+FcSqPzJw4BSmxR/sP3mlsWcVgbZMiLNrf
-         ZSjw==
-X-Gm-Message-State: ANoB5pmwse2lGYpzustKZ8XJP0f6SQDNdSIeSlmipQxSg8EOaC0Oq3J/
-        X06t5h78c7tqE15Bgv3HuM+6Ro9s+n9eiz9CeEwsPc+6Zk54DlBPheLr7sy48SSzfi/Lz+d/f7a
-        qHJEH5wwR4B1puv5tzOV3Ob1sMVNE
-X-Received: by 2002:a05:622a:1f97:b0:3a6:39c4:dc6 with SMTP id cb23-20020a05622a1f9700b003a639c40dc6mr41636341qtb.515.1669666186706;
-        Mon, 28 Nov 2022 12:09:46 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7WtjBWnjX0FjlsU8UH/MTtCvhMvsduqeQ0qoYF/zgpc5CFEHGvVu63Ai3dEq+pdE2AWlQz5w==
-X-Received: by 2002:a05:622a:1f97:b0:3a6:39c4:dc6 with SMTP id cb23-20020a05622a1f9700b003a639c40dc6mr41636300qtb.515.1669666186370;
-        Mon, 28 Nov 2022 12:09:46 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id r5-20020ac867c5000000b003a56796a764sm7398874qtp.25.2022.11.28.12.09.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 12:09:45 -0800 (PST)
-Message-ID: <18b8f84b-170c-a353-f8cb-e8021f31db02@redhat.com>
-Date:   Mon, 28 Nov 2022 21:09:36 +0100
+        Mon, 28 Nov 2022 15:14:44 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3733D27B04;
+        Mon, 28 Nov 2022 12:14:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=08/2Un2YGzJddEhSx7wn1daARTMK5OvPSBMOvCMzINI=; b=LqtalMNyuU4+k5RTvZu/mPL98S
+        o8GMW4mfahXsFshKuSALJ04tWQVB6919Y+DwyUVMW4FzDoaXGmaDae3SnWsCa34ugNaDwPfU0TA1g
+        x0B+OWKB5hW+KCcUcZ6W/WRwSamd1hmwt4v85UybVzZe32GveqRH5m7WnWKksjNl+fA7muEAqKkVP
+        mZPWh6QtnhxbOhVNgOAiUu08rVMyrWxtiPnr/2moN3KV4ZzBCNMn2IjTbf/RzRSXUzCWsX+/hJWql
+        6raDkSqrNL5q1eeKxgTEAFNJDIUufD985vTjoD4uryoikaPRCE26ZKQOHRPmCtCdRMjwNJiot8Xic
+        379Bak0w==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ozkWK-00AcJO-Rs; Mon, 28 Nov 2022 21:14:29 +0100
+Message-ID: <b48c4585-52b9-5311-5210-fd5679bda90f@igalia.com>
+Date:   Mon, 28 Nov 2022 17:14:21 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH v5 11/19] iommufd: IOCTLs for the io_pagetable
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 10/17] drm/tests: Add a test for DRM managed actions
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-        Anthony Krowiak <akrowiak@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-        Lixiao Yang <lixiao.yang@intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-References: <11-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
- <16bcfd63-2803-8000-7725-b42cd05061fa@redhat.com>
- <Y4T9ejjPETS3TPx7@nvidia.com>
-From:   Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <Y4T9ejjPETS3TPx7@nvidia.com>
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-10-efe5ed518b63@cerno.tech>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-10-efe5ed518b63@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 11/28/22 11:53, Maxime Ripard wrote:
+> DRM-managed actions are supposed to be ran whenever the device is
+> released. Let's introduce a basic unit test to make sure it happens.
+> 
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
-On 11/28/22 19:27, Jason Gunthorpe wrote:
-> On Sun, Nov 27, 2022 at 06:49:29PM +0100, Eric Auger wrote:
->
->>> +static int iommufd_ioas_load_iovas(struct rb_root_cached *itree,
->>> +				   struct iommu_iova_range __user *ranges,
->>> +				   u32 num)
->>> +{
->>> +	u32 i;
->>> +
->>> +	for (i = 0; i != num; i++) {
->> shouldn't it be < ?
-> It is logically equivalent
-damn. That sometimes happens to me when staring at so much code ;-)
->
->>> +int iommufd_ioas_allow_iovas(struct iommufd_ucmd *ucmd)
->>> +{
->>> +	struct iommu_ioas_allow_iovas *cmd = ucmd->cmd;
->>> +	struct rb_root_cached allowed_iova = RB_ROOT_CACHED;
->>> +	struct interval_tree_node *node;
->>> +	struct iommufd_ioas *ioas;
->>> +	struct io_pagetable *iopt;
->>> +	int rc = 0;
->>> +
->>> +	if (cmd->__reserved)
->>> +		return -EOPNOTSUPP;
->>> +
->>> +	ioas = iommufd_get_ioas(ucmd, cmd->ioas_id);
->>> +	if (IS_ERR(ioas))
->>> +		return PTR_ERR(ioas);
->>> +	iopt = &ioas->iopt;
->>> +
->>> +	rc = iommufd_ioas_load_iovas(&allowed_iova,
->>> +				     u64_to_user_ptr(cmd->allowed_iovas),
->>> +				     cmd->num_iovas);
->>> +	if (rc)
->>> +		goto out_free;
->>> +
->>> +	rc = iopt_set_allow_iova(iopt, &allowed_iova);
->> Please can you add a comment about why you need to proceed in 2 steps,
->> ie. add the ranges in a first tree and then 'swap' to the
->> iopt->allowed_tree (and eventually delete the first tree)?
-> Sure
->
-> 	/*
-> 	 * We want the allowed tree update to be atomic, so we have to keep the
-> 	 * original nodes around, and keep track of the new nodes as we allocate
-> 	 * memory for them. The simplest solution is to have a new/old tree and
-> 	 * then swap new for old. On success we free the old tree, on failure we
-> 	 * free the new tree.
-> 	 */
->
->>> +static int conv_iommu_prot(u32 map_flags)
->>> +{
->>> +	int iommu_prot;
->>> +
->>> +	/*
->>> +	 * We provide no manual cache coherency ioctls to userspace and most
->>> +	 * architectures make the CPU ops for cache flushing privileged.
->>> +	 * Therefore we require the underlying IOMMU to support CPU coherent
->>> +	 * operation. Support for IOMMU_CACHE is enforced by the
->>> +	 * IOMMU_CAP_CACHE_COHERENCY test during bind.
->>> +	 */
->>> +	iommu_prot = IOMMU_CACHE;
->> at init?
-> done
->
->>> +int iommufd_ioas_map(struct iommufd_ucmd *ucmd)
->>> +{
->>> +	struct iommu_ioas_map *cmd = ucmd->cmd;
->>> +	struct iommufd_ioas *ioas;
->>> +	unsigned int flags = 0;
->>> +	unsigned long iova;
->>> +	int rc;
->>> +
->>> +	if ((cmd->flags &
->>> +	     ~(IOMMU_IOAS_MAP_FIXED_IOVA | IOMMU_IOAS_MAP_WRITEABLE |
->>> +	       IOMMU_IOAS_MAP_READABLE)) ||
->>> +	    cmd->__reserved)
->>> +		return -EOPNOTSUPP;
->>> +	if (cmd->iova >= ULONG_MAX || cmd->length >= ULONG_MAX)
->>> +		return -EOVERFLOW;
->>> +
->>> +	ioas = iommufd_get_ioas(ucmd, cmd->ioas_id);
->>> +	if (IS_ERR(ioas))
->>> +		return PTR_ERR(ioas);
->>> +
->>> +	if (!(cmd->flags & IOMMU_IOAS_MAP_FIXED_IOVA))
->>> +		flags = IOPT_ALLOC_IOVA;
->>> +	iova = cmd->iova;
->> can be done either at initialization or only if MAP_FIXED_IOVA.
-> Done
->
->
->>> +int iommufd_option_rlimit_mode(struct iommu_option *cmd,
->>> +			       struct iommufd_ctx *ictx)
->>> +{
->> *object_id  and __reserved should be checked as per the uapi doc*
-> Ohh, yes, thanks:
->
-> @@ -317,6 +322,9 @@ int iommufd_ioas_unmap(struct iommufd_ucmd *ucmd)
->  int iommufd_option_rlimit_mode(struct iommu_option *cmd,
->                                struct iommufd_ctx *ictx)
->  {
-> +       if (cmd->object_id)
-> +               return -EOPNOTSUPP;
+Best Regards,
+- Maíra Canal
+
+> ---
+>  drivers/gpu/drm/tests/Makefile           |  1 +
+>  drivers/gpu/drm/tests/drm_managed_test.c | 71 ++++++++++++++++++++++++++++++++
+>  2 files changed, 72 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
+> index 94fe546d937d..486053052ba9 100644
+> --- a/drivers/gpu/drm/tests/Makefile
+> +++ b/drivers/gpu/drm/tests/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_DRM_KUNIT_TEST) += \
+>  	drm_format_test.o \
+>  	drm_framebuffer_test.o \
+>  	drm_kunit_helpers.o \
+> +	drm_managed_test.o \
+>  	drm_mm_test.o \
+>  	drm_modes_test.o \
+>  	drm_plane_helper_test.o \
+> diff --git a/drivers/gpu/drm/tests/drm_managed_test.c b/drivers/gpu/drm/tests/drm_managed_test.c
+> new file mode 100644
+> index 000000000000..1652dca11d30
+> --- /dev/null
+> +++ b/drivers/gpu/drm/tests/drm_managed_test.c
+> @@ -0,0 +1,71 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +
->         if (cmd->op == IOMMU_OPTION_OP_GET) {
->                 cmd->val64 = ictx->account_mode == IOPT_PAGES_ACCOUNT_MM;
->                 return 0;
-> diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-> index de5cc01023c0c5..bcb463e581009c 100644
-> --- a/drivers/iommu/iommufd/main.c
-> +++ b/drivers/iommu/iommufd/main.c
-> @@ -215,6 +215,9 @@ static int iommufd_option(struct iommufd_ucmd *ucmd)
->         struct iommu_option *cmd = ucmd->cmd;
->         int rc;
->  
-> +       if (cmd->__reserved)
-> +               return -EOPNOTSUPP;
+> +#include <drm/drm_drv.h>
+> +#include <drm/drm_kunit_helpers.h>
+> +#include <drm/drm_managed.h>
 > +
->         switch (cmd->option_id) {
->         case IOMMU_OPTION_RLIMIT_MODE:
->                 rc = iommufd_option_rlimit_mode(cmd, ucmd->ictx);
->
->>> +/**
->>> + * struct iommu_ioas_iova_ranges - ioctl(IOMMU_IOAS_IOVA_RANGES)
->>> + * @size: sizeof(struct iommu_ioas_iova_ranges)
->>> + * @ioas_id: IOAS ID to read ranges from
->>> + * @num_iovas: Input/Output total number of ranges in the IOAS
->>> + * @__reserved: Must be 0
->>> + * @allowed_iovas: Pointer to the output array of struct iommu_iova_range
->>> + * @out_iova_alignment: Minimum alignment required for mapping IOVA
->>> + *
->>> + * Query an IOAS for ranges of allowed IOVAs. Mapping IOVA outside these ranges
->>> + * is not allowed. num_iovas will be set to the total number of iovas and
->>> + * the allowed_iovas[] will be filled in as space permits.
->>> + *
->>> + * The allowed ranges are dependent on the HW path the DMA operation takes, and
->>> + * can change during the lifetime of the IOAS. A fresh empty IOAS will have a
->>> + * full range, and each attached device will narrow the ranges based on that
->>> + * device's HW restrictions. Detatching a device can widen the ranges. Userspace
->> detaching
->>> + * should query ranges after every attach/detatch to know what IOVAs are valid
->> detach
-> Done
->
->>> + * for mapping.
->>> + *
->>> + * On input num_iovas is the length of the allowed_iovas array. On output it is
->>> + * the total number of iovas filled in. The ioctl will return -EMSGSIZE and set
->>> + * num_iovas to the required value if num_iovas is too small. In this case the
->>> + * caller should allocate a larger output array and re-issue the ioctl.
->>> + */
->>> +struct iommu_ioas_iova_ranges {
->>> +	__u32 size;
->>> +	__u32 ioas_id;
->>> +	__u32 num_iovas;
->>> +	__u32 __reserved;
->>> +	__aligned_u64 allowed_iovas;
->>> +	__aligned_u64 out_iova_alignment;
->> document @out_iova_alignment?
->  * out_iova_alignment returns the minimum IOVA alignment that can be given
->  * to IOMMU_IOAS_MAP/COPY. IOVA's must satisfy:
->  *   starting_iova % out_iova_alignment == 0
->  *   (starting_iova + length) % out_iova_alignment == 0
->  * out_iova_alignment can be 1 indicating any IOVA is allowed. It cannot
->  * be higher than the system PAGE_SIZE.
->
->>> +/**
->>> + * struct iommu_ioas_map - ioctl(IOMMU_IOAS_MAP)
->>> + * @size: sizeof(struct iommu_ioas_map)
->>> + * @flags: Combination of enum iommufd_ioas_map_flags
->>> + * @ioas_id: IOAS ID to change the mapping of
->>> + * @__reserved: Must be 0
->>> + * @user_va: Userspace pointer to start mapping from
->>> + * @length: Number of bytes to map
->>> + * @iova: IOVA the mapping was placed at. If IOMMU_IOAS_MAP_FIXED_IOVA is set
->>> + *        then this must be provided as input.
->>> + *
->>> + * Set an IOVA mapping from a user pointer. If FIXED_IOVA is specified then the
->>> + * mapping will be established at iova, otherwise a suitable location based on
->>> + * the reserved and allowed lists will be automatically selected and returned in
->>> + * iova.
->> You do not mention anything about the fact the IOCTL cannot be called
->> twice for a given @user_va w/ FIXED_IOVA
->> Refering to VFIO_DMA_MAP_FLAG_VADDR.
->  * If IOMMU_IOAS_MAP_FIXED_IOVA is specified then the iova range must currently
->  * be unused, existing IOVA cannot be replaced.
->
->>> +/**
->>> + * struct iommu_ioas_copy - ioctl(IOMMU_IOAS_COPY)
->>> + * @size: sizeof(struct iommu_ioas_copy)
->>> + * @flags: Combination of enum iommufd_ioas_map_flags
->>> + * @dst_ioas_id: IOAS ID to change the mapping of
->>> + * @src_ioas_id: IOAS ID to copy from
->>> + * @length: Number of bytes to copy and map
->>> + * @dst_iova: IOVA the mapping was placed at. If IOMMU_IOAS_MAP_FIXED_IOVA is
->>> + *            set then this must be provided as input.
->>> + * @src_iova: IOVA to start the copy
->>> + *
->>> + * Copy an already existing mapping from src_ioas_id and establish it in
->>> + * dst_ioas_id. The src iova/length must exactly match a range used with
->>> + * IOMMU_IOAS_MAP.
->>> + *
->>> + * This may be used to efficiently clone a subset of an IOAS to another, or as a
->>> + * kind of 'cache' to speed up mapping. Copy has an effciency advantage over
->> efficiency
->>> + * establishing equivalent new mappings, as internal resources are shared, and
->>> + * the kernel will pin the user memory only once.
->>> + */
->>> +struct iommu_ioas_copy {
->>> +	__u32 size;
->>> +	__u32 flags;
->>> +	__u32 dst_ioas_id;
->>> +	__u32 src_ioas_id;
->> is src_ioas_id == dst_ioas_id allowed?
-> Yes
->
->>> +/**
->>> + * struct iommu_option - iommu option multiplexer
->>> + * @size: sizeof(struct iommu_option)
->>> + * @option_id: One of enum iommufd_option
->>> + * @op: One of enum iommufd_option_ops
->>> + * @__reserved: Must be 0
->>> + * @object_id: ID of the object if required
->>> + * @val64: Option value to set or value returned on get
->>> + *
->>> + * Change a simple option value. This multiplexor allows controlling a options
->> s/a options/options
-> Done
->
-> Thanks,
-> Jason
->
-Eric
-
+> +#include <kunit/resource.h>
+> +
+> +#include <linux/device.h>
+> +
+> +/* Ought to be enough for anybody */
+> +#define TEST_TIMEOUT_MS	100
+> +
+> +struct managed_test_priv {
+> +	bool action_done;
+> +	wait_queue_head_t action_wq;
+> +};
+> +
+> +static void drm_action(struct drm_device *drm, void *ptr)
+> +{
+> +	struct managed_test_priv *priv = ptr;
+> +
+> +	priv->action_done = true;
+> +	wake_up_interruptible(&priv->action_wq);
+> +}
+> +
+> +static void drm_test_managed_run_action(struct kunit *test)
+> +{
+> +	struct managed_test_priv *priv;
+> +	struct drm_device *drm;
+> +	struct device *dev;
+> +	int ret;
+> +
+> +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
+> +	init_waitqueue_head(&priv->action_wq);
+> +
+> +	dev = drm_kunit_helper_alloc_device(test);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
+> +
+> +	drm = __drm_kunit_helper_alloc_drm_device(test, dev, sizeof(*drm), 0, DRIVER_MODESET);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, drm);
+> +
+> +	ret = drmm_add_action_or_reset(drm, drm_action, priv);
+> +	KUNIT_EXPECT_EQ(test, ret, 0);
+> +
+> +	ret = drm_dev_register(drm, 0);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	drm_dev_unregister(drm);
+> +	drm_kunit_helper_free_device(test, dev);
+> +
+> +	ret = wait_event_interruptible_timeout(priv->action_wq, priv->action_done,
+> +					       msecs_to_jiffies(TEST_TIMEOUT_MS));
+> +	KUNIT_EXPECT_GT(test, ret, 0);
+> +}
+> +
+> +static struct kunit_case drm_managed_tests[] = {
+> +	KUNIT_CASE(drm_test_managed_run_action),
+> +	{}
+> +};
+> +
+> +static struct kunit_suite drm_managed_test_suite = {
+> +	.name = "drm-test-managed",
+> +	.test_cases = drm_managed_tests
+> +};
+> +
+> +kunit_test_suite(drm_managed_test_suite);
+> +
+> +MODULE_AUTHOR("Maxime Ripard <maxime@cerno.tech>");
+> +MODULE_LICENSE("GPL");
+> 
