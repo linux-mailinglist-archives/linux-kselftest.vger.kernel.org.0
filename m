@@ -2,91 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4567363B272
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 20:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AAA63B280
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 20:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbiK1Tow (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Nov 2022 14:44:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S233886AbiK1TtT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Nov 2022 14:49:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiK1Tov (ORCPT
+        with ESMTP id S233839AbiK1TtM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:44:51 -0500
-Received: from smtp-8fae.mail.infomaniak.ch (smtp-8fae.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FAA205D2
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Nov 2022 11:44:49 -0800 (PST)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4NLbXH1PfpzMq2xb;
-        Mon, 28 Nov 2022 20:44:47 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4NLbXG0YsSz3b;
-        Mon, 28 Nov 2022 20:44:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1669664687;
-        bh=xtG6qsMJEfUAt6o9RtMO7Q9XohBwkoKwmV/hAY7T+fk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R/XAxh8PlLTIrSeHXZgYmfRsKzExLYNoB3M5VKPSHJU0PAuzhH7fLzerfGiPFnje5
-         0S95vulRmmaxsNkv4e8Zr212jNQx/sbWsXZcEcGbE4IKRujgIRCCaAoi3SyDV59/NY
-         RXeiQKkoTai2lF12S33yMaKorotSHLqSqSEB/krE=
-Message-ID: <1232e4f3-e4b8-ff23-61e8-5465c8406f6e@digikod.net>
-Date:   Mon, 28 Nov 2022 20:44:44 +0100
+        Mon, 28 Nov 2022 14:49:12 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC8C27CC0;
+        Mon, 28 Nov 2022 11:49:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=VAmDay8Qe2++NlnJo/s9zmage8EXAfl6yM10J36267M=; b=KlyRebYWJtdIAFWsb7JuDb5P47
+        eGzD6qfJm+YoSe1Mind9vYfg8c0LAmobj0xdjme1b2dwc4aOVPUoR//F6U3oCLLNlgdN0gy3cCNqK
+        j7DvEjZXnB78iiEHB21IKJMsSN8dbUOSjK/6p4D6N5c4hkhH8ajPdskiiHSr4wsmT+sKBBg8D0Okc
+        f6+/KPwdvZNad7M0lxhyUbfVTFgrGHBR3eLBiI6PyJb2jdyK/rcpFDbom4RMC9ksCaFrfPBHZksUK
+        R00qzvfLiPuSsbx/36a8/LWdceALEWrIStiv2aRmmpMVB9Qsv/Z3XI/O082SchT+1kx1l1XnimewP
+        YIuUzNrQ==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ozk7a-00AbVH-Fp; Mon, 28 Nov 2022 20:48:54 +0100
+Message-ID: <eb318e69-3fc5-c041-cc17-e0549d6cf128@igalia.com>
+Date:   Mon, 28 Nov 2022 16:48:45 -0300
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH -next] selftests/landlock: Fix selftest ptrace_test run
- fail
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 05/17] drm/tests: helpers: Create the device in another
+ function
 Content-Language: en-US
-To:     limin <limin100@huawei.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, songmuchun@bytedance.com, tj@kernel.org,
-        lizefan.x@bytedance.com
-References: <20221128020409.1545717-1-limin100@huawei.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20221128020409.1545717-1-limin100@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-5-efe5ed518b63@cerno.tech>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-5-efe5ed518b63@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch changes the test semantic and then cannot work on my test 
-environment. On which kernel did you run test? Do you use Yama or 
-something similar?
+On 11/28/22 11:53, Maxime Ripard wrote:
+> We'll need in some tests to control when the device needs to be added
+> and removed, so let's split the device creation from the DRM device
+> creation function.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-On 28/11/2022 03:04, limin wrote:
-> Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent,
-> trace parent return -1 when child== 0
-> How to reproduce warning:
-> $ make -C tools/testing/selftests TARGETS=landlock run_tests
+Just a small nit below,
+
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
+
+>  
+> diff --git a/drivers/gpu/drm/tests/drm_probe_helper_test.c b/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> index be61a92b79d2..438b1d42b843 100644
+> --- a/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> +++ b/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> @@ -17,6 +17,7 @@
+>  
+>  struct drm_probe_helper_test_priv {
+>  	struct drm_device *drm;
+> +	struct device *dev;
+>  	struct drm_connector connector;
+>  };
+>  
+> @@ -39,7 +40,10 @@ static int drm_probe_helper_test_init(struct kunit *test)
+>  	KUNIT_ASSERT_NOT_NULL(test, priv);
+>  	test->priv = priv;
+>  
+> -	priv->drm = drm_kunit_helper_alloc_drm_device(test,
+> +	priv->dev = drm_kunit_helper_alloc_device(test);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
+> +
+> +	priv->drm = drm_kunit_helper_alloc_drm_device(test, priv->dev,
+>  						      DRIVER_MODESET | DRIVER_ATOMIC);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
+>  
+> @@ -55,6 +59,13 @@ static int drm_probe_helper_test_init(struct kunit *test)
+>  	return 0;
+>  }
+>  
+> +static void drm_probe_helper_test_exit(struct kunit *test)
+> +{
+> +	struct drm_probe_helper_test_priv *priv = test->priv;;
+
+There are two semicolons by the end of this statement.
+
+Best Regards,
+- Maíra Canal
+
+> +
+> +	drm_kunit_helper_free_device(test, priv->dev);
+> +}
+> +
+>  typedef struct drm_display_mode *(*expected_mode_func_t)(struct drm_device *);
+>  
+>  struct drm_connector_helper_tv_get_modes_test {
+> @@ -195,6 +206,7 @@ static struct kunit_case drm_test_connector_helper_tv_get_modes_tests[] = {
+>  static struct kunit_suite drm_test_connector_helper_tv_get_modes_suite = {
+>  	.name = "drm_connector_helper_tv_get_modes",
+>  	.init = drm_probe_helper_test_init,
+> +	.exit = drm_probe_helper_test_exit,
+>  	.test_cases = drm_test_connector_helper_tv_get_modes_tests,
+>  };
+>  
+> diff --git a/include/drm/drm_kunit_helpers.h b/include/drm/drm_kunit_helpers.h
+> index 6c12b1426ba0..b4277fe92c38 100644
+> --- a/include/drm/drm_kunit_helpers.h
+> +++ b/include/drm/drm_kunit_helpers.h
+> @@ -6,8 +6,11 @@
+>  struct drm_device;
+>  struct kunit;
+>  
+> +struct device *drm_kunit_helper_alloc_device(struct kunit *test);
+> +void drm_kunit_helper_free_device(struct kunit *test, struct device *dev);
+> +
+>  struct drm_device *
+> -drm_kunit_helper_alloc_drm_device(struct kunit *test,
+> +drm_kunit_helper_alloc_drm_device(struct kunit *test, struct device *dev,
+>  				  u32 features);
+>  
+>  #endif // DRM_KUNIT_HELPERS_H_
 > 
-> Signed-off-by: limin <limin100@huawei.com>
-> ---
->   tools/testing/selftests/landlock/ptrace_test.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/landlock/ptrace_test.c b/tools/testing/selftests/landlock/ptrace_test.c
-> index c28ef98ff3ac..88c4dc63eea0 100644
-> --- a/tools/testing/selftests/landlock/ptrace_test.c
-> +++ b/tools/testing/selftests/landlock/ptrace_test.c
-> @@ -267,12 +267,11 @@ TEST_F(hierarchy, trace)
->   		/* Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent. */
->   		err_proc_read = test_ptrace_read(parent);
->   		ret = ptrace(PTRACE_ATTACH, parent, NULL, 0);
-> +		EXPECT_EQ(-1, ret);
-> +		EXPECT_EQ(EPERM, errno);
->   		if (variant->domain_child) {
-> -			EXPECT_EQ(-1, ret);
-> -			EXPECT_EQ(EPERM, errno);
->   			EXPECT_EQ(EACCES, err_proc_read);
->   		} else {
-> -			EXPECT_EQ(0, ret);
->   			EXPECT_EQ(0, err_proc_read);
->   		}
->   		if (ret == 0) {
