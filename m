@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFCD63AF52
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 18:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2313063AFCB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 18:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbiK1Rks (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Nov 2022 12:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
+        id S233544AbiK1Rpo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Nov 2022 12:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233232AbiK1RkW (ORCPT
+        with ESMTP id S233510AbiK1RpK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:40:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B5529821;
-        Mon, 28 Nov 2022 09:39:09 -0800 (PST)
+        Mon, 28 Nov 2022 12:45:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139742CDD0;
+        Mon, 28 Nov 2022 09:41:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91A8AB80E97;
-        Mon, 28 Nov 2022 17:39:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0D6C43146;
-        Mon, 28 Nov 2022 17:39:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D8A061307;
+        Mon, 28 Nov 2022 17:41:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83FA4C4347C;
+        Mon, 28 Nov 2022 17:41:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669657147;
-        bh=wFJv/SIyttPLTWrKzL8P4VDK1X+3bsfYI2ibgv1F07I=;
+        s=k20201202; t=1669657266;
+        bh=1q6LV/XCGJkICRHPhOXZv9+sukcew2TPlUBl0//TvHc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iRywopb5iLgWmKM8X+Qof8N9lJga6mCW00b6QImfss65agDRC429RliWj4ctcYThu
-         xoVrgC86vxHlSfVEzaY9DgES7vdwB5SkpQQnPh9GcMDerU64hd7aFTd76+I5jEbuvv
-         /lpjn7fw/lGbIAkuo4x05ELrzL1PlguiIO1amZkTwxvR8btO0DVZHVhvfz+kebgz8t
-         +5A4GMIQ7uWiciES4lwtGSFwL20DhVfzCYJNL5cx4Q7HBumLp5MHbHAe5AL/Em7hbS
-         9b0TO3peZ8b4yqR7DRWCPTDXxci7zIovuhKnB0w6iwNDTUqTN1FxfmQXiwEakZ94y1
-         cUytOMUyO3O1w==
+        b=jQAdD8RvdcNdkJKKEDAgXowvhZVA0vcfH5qKaKwrXqs8qgg0NCNaZV4UHgPAPhqKR
+         S4CYNcKEtIYryzuIkNRRtwzCLBRfex/K4i98p6gWTbm+Dtqnvb/YaTKPClZgZmd01a
+         AbkS3+j2OQDMp5ZRBMqrHdfRwUTnWnXL0X0Sm6cNJD0kdkveOP8Vlw7z7D9GvWdlZp
+         EWr3HeECdYwBIMFjMkgzqkm2hP5X+1sYD6AZJ25ohIO4rsYlgjkB0iW++m219rCQYb
+         rSD2/hsQvIHCFtRkMV1WVz8OUtGvi3kBzCSJJ005nC/jdxCeu9HnWWnW6oqM6E1DdK
+         t/z4Zh2b/NdzQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>,
@@ -39,12 +39,12 @@ Cc:     =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>,
         Sasha Levin <sashal@kernel.org>, edumazet@google.com,
         kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 27/39] selftests/net: Find nettest in current directory
-Date:   Mon, 28 Nov 2022 12:36:07 -0500
-Message-Id: <20221128173642.1441232-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 17/24] selftests/net: Find nettest in current directory
+Date:   Mon, 28 Nov 2022 12:40:17 -0500
+Message-Id: <20221128174027.1441921-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221128173642.1441232-1-sashal@kernel.org>
-References: <20221128173642.1441232-1-sashal@kernel.org>
+In-Reply-To: <20221128174027.1441921-1-sashal@kernel.org>
+References: <20221128174027.1441921-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -99,10 +99,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 31c3b6ebd388..21ca91473c09 100755
+index 91f54112167f..364c82b797c1 100755
 --- a/tools/testing/selftests/net/fcnal-test.sh
 +++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -4196,10 +4196,13 @@ elif [ "$TESTS" = "ipv6" ]; then
+@@ -4072,10 +4072,13 @@ elif [ "$TESTS" = "ipv6" ]; then
  	TESTS="$TESTS_IPV6"
  fi
  
@@ -121,10 +121,10 @@ index 31c3b6ebd388..21ca91473c09 100755
  
  declare -i nfail=0
 diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-index 736e358dc549..dfe3d287f01d 100755
+index 694732e4b344..da6ab300207c 100755
 --- a/tools/testing/selftests/net/pmtu.sh
 +++ b/tools/testing/selftests/net/pmtu.sh
-@@ -686,10 +686,12 @@ setup_xfrm() {
+@@ -671,10 +671,12 @@ setup_xfrm() {
  }
  
  setup_nettest_xfrm() {
