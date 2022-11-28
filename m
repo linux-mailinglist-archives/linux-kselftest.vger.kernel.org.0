@@ -2,76 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AC063A69F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 12:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C42E63A6A2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 12:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiK1LFW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Nov 2022 06:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S230516AbiK1LF0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Nov 2022 06:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiK1LFS (ORCPT
+        with ESMTP id S230519AbiK1LFV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:05:18 -0500
+        Mon, 28 Nov 2022 06:05:21 -0500
 Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF8B192A6;
-        Mon, 28 Nov 2022 03:05:17 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 592BD5803D8;
-        Mon, 28 Nov 2022 06:05:17 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 28 Nov 2022 06:05:17 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E0B193CF;
+        Mon, 28 Nov 2022 03:05:20 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7E6815803D8;
+        Mon, 28 Nov 2022 06:05:19 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 28 Nov 2022 06:05:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669633517; x=
-        1669640717; bh=HGNA+mHj/3wrFiqggGiI6SdDBIAzNFhQQeizXQV556A=; b=j
-        ZzauxK33nvq3erVwAHB0njU8/xBZnnc8GESS+FAEBR6Cb9aRJ5vhBtsF4+vyI0Yr
-        ke4J0pa0mRPNGsdhc1vw2KX8ijgGgysOooB6+apBodZRDdNZOiu2awAhy/X7B5n4
-        gBRyNpG5LbTrixNu+lBjmY1UuyTuPNSF/VxO6mmXbAbDOinO+tYVZ2NajF8b5GkV
-        QujzpxBt1uu9JUoQqFf3ZYBmoZR5dUXtvC4ksgP6h8KBBKJeTrkLSmGmtGIqJbuT
-        +Bciz/o4WFvlCv+rqfF4+cZ5B/r9l99ejbRB5eBdR7JKKsEtSye5o92KoJj8VKw8
-        fKzzphXd5Cc/gPYX2EiYw==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669633519; x=
+        1669640719; bh=iBPrSVFAFsgtvDN1oy2ObGoqar4ThwUCtePKmIE8jEE=; b=V
+        fBDtmzq/0uO9A63pEtvJFOSvUCmWPNz6ZGN3hMMOWgdGk5mWNOXtRYWKFfFvz0ST
+        0aob+k9/WZ4MAfHj7oMddj6yZQ+tMrT6FMneeAGPsdkR+YEvfjEFx3QTjek/DcXt
+        /h9epo9Pr3zaaphoL+k4xtq9j6oRWlTPX6OovQjEBVN4qlysuwCbLi2bCTECgwuJ
+        TFz/tZ4i3WM9vl1keQBfHEf2Lf6GrQOAWG4BYEGDulP8aiPQAVL92RNhjqBkXVl8
+        AimtjCKWTrrebpG843TyRN0wpAOlqQBbfz9qGhzXFPkCVtvWA0UcTObgS3plAVHp
+        D7HakpbyFQ8iCappgTSiA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669633517; x=
-        1669640717; bh=HGNA+mHj/3wrFiqggGiI6SdDBIAzNFhQQeizXQV556A=; b=G
-        zO358g8yyQw9DAqp3T3H1x95Yr21NxKCp1sIYaV6YNbwFM3KD3kUY217wciCvq4c
-        FZ5okVG3IALaVU1HfnnLYVvOlN5lesKcsbmPQyyquWkxyDHz6IWUYRr5MAZCFDRJ
-        xPcNSmGBQLF0HztzAcyX1XvsXWPOt37j8lRETIZ7Cvhx8a8zyHPuQUGsDCRYPbJE
-        2u/MUGjNenATkuciYTzkKnWt1gQRYGoBhkiWO3jHptdHGBtQNEfLSJ1LR56ZJYU3
-        5QdDezNaXOhR0yvNlAtuqco/Q32kzHL1hiAtm17YIaZjx8h9l80+1bhb+RK+fP+f
-        oMtsr2SZDGxILP8IjHZnA==
-X-ME-Sender: <xms:7ZWEY2vnqWWeXvWbG1JXXNDv2e-dSNnYFmKIEIcuQOCfkNsqXLox2g>
-    <xme:7ZWEY7fG21cGPSDnExRidQaUU_JtxR_PozNZ8lRwhJP9lZR5OIebpGE9kyxwNg7z3
-    55VgF4RsxxtXv7VvRI>
-X-ME-Received: <xmr:7ZWEYxxeMLe6gSmb0ISFGA5KijO5Y6HnV4aC8e7mwcfPmpyL9SWhRU9B8OV8BH8plqyeQUu99GExfr6rB30YcgtNYzPlu0dWPv_1hxh1Xaf_-g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgddvgecutefuodetggdotefrodftvf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669633519; x=
+        1669640719; bh=iBPrSVFAFsgtvDN1oy2ObGoqar4ThwUCtePKmIE8jEE=; b=E
+        +lleZZiSunrHqGvmz/ZLI4R1U3h40tpGkpmGdplVoaUSrSFUEh89EkretORqHsbY
+        nS49++cBa1z2X1KtHSs6BR2uNB7KK/t2LC+elSdKkGXVGRw1myociGMhjs0hbrbc
+        Mc2+oRPth1NnObyzsY+uCal/ugawOBTAcmXZJ+0012pWMsEwgcLjeyzD9znD+Ja1
+        Aa4x0C6jGkyCl0oEpjK3ipB0TjUSX2anG09NnNQF4ugKzZ+0bQNoEA1L3FVqY7CF
+        tg3aH/gUlfmAYCYgkXhyLJr/QikPD1AANKsFeesEbRJLtBhdtNvAGY+5LqnL5qce
+        I386h/AAEVKJkmQT/RHeQ==
+X-ME-Sender: <xms:75WEYyZg43DvXLHryKVPXajPD84nl0zM8C3VrE6fBa32Id-Rr5vVNg>
+    <xme:75WEY1YwMDivzZt_pu9IavOhTHXYjA9605KHTVVcxI0bsmgbAlQrT4D68ZtShyYxV
+    N1h08A6BiJBarhtNMU>
+X-ME-Received: <xmr:75WEY88wmlKUaT2GVKmeqBkCO1CS4s6P-_Fg9SFshXMUamtzkbFMWS-tJyW35XJwjcqcz_MOYqIneYSX8x26RRdAleDQUSiiGxwxJDvOuoa3iA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrjedvgddvhecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgrgihi
     mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
     htthgvrhhnpeeuieeggffhffffieefheduieeuvdetgeeufeffvefgtedvffehheekffev
-    udefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    udefieenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:7ZWEYxOm2MKVWIxZkI8GXQbUWAOy-rQeo_1hICgAzuPLTKHJQ7b7_A>
-    <xmx:7ZWEY2-MO2sSY2_4dOataSSmsq8PjK9XxPepRLCGrexWcHG37FXnXA>
-    <xmx:7ZWEY5UhwWHt4Gi0zTsP2KOdRelCpUxYIcjBruIx4rCifHdYAUw81g>
-    <xmx:7ZWEY1eXGFji9Qx3taPTPvG-3kTbbM4x5XdCcIpyda1iR_77Rbxq9w>
+X-ME-Proxy: <xmx:75WEY0ouOHk3Fx3qasYwdPYtr7v6t1ZnXJs66BTbUjRu9zO4uK8Sgg>
+    <xmx:75WEY9r1_SosKzuNa0WcUZ3DPVcaa3Si5xYE39m_vTBGgPbNUqfJPg>
+    <xmx:75WEYyQm4qq9-CJYyVgWqdJFo-ui4bBpHTVx6x5T4FEQsOqjSiq8-w>
+    <xmx:75WEY6Jk-Rr5Vk_H0vnh0qZ6IKaKBJ132B70LwMQjm0VWLAzRr3oJg>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Nov 2022 06:05:16 -0500 (EST)
+ 28 Nov 2022 06:05:18 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <maxime@cerno.tech>,
         Maxime Ripard <mripard@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+Cc:     linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
         Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>,
+        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org,
         =?UTF-8?q?Ma=EF=BF=BD=EF=BF=BDra=20Canal?= <mairacanal@riseup.net>,
         linux-kselftest@vger.kernel.org,
@@ -79,12 +79,12 @@ Cc:     dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
         Brendan Higgins <brendan.higgins@linux.dev>,
         kunit-dev@googlegroups.com,
         Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: (subset) [PATCH 15/24] drm/vc4: Add TXP encoder type
-Date:   Mon, 28 Nov 2022 12:04:58 +0100
-Message-Id: <166963342297.56696.9898276346017786478.b4-ty@cerno.tech>
+Subject: Re: (subset) [PATCH 16/24] drm/vc4: txp: Initialise the CRTC before the encoder and connector
+Date:   Mon, 28 Nov 2022 12:04:59 +0100
+Message-Id: <166963342298.56696.9364312621338205407.b4-ty@cerno.tech>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123-rpi-kunit-tests-v1-15-051a0bb60a16@cerno.tech>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech> <20221123-rpi-kunit-tests-v1-15-051a0bb60a16@cerno.tech>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-16-051a0bb60a16@cerno.tech>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech> <20221123-rpi-kunit-tests-v1-16-051a0bb60a16@cerno.tech>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -98,15 +98,11 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 23 Nov 2022 16:25:57 +0100, Maxime Ripard wrote:
-> The TXP is integrated as a separate CRTC/Encoder/Connector combo, but
-> for some reason doesn't rely on the vc4_encoder type and it's associated
-> type.
-> 
-> Let's create a type to make it consistent with the other encoders.
+On Wed, 23 Nov 2022 16:25:58 +0100, Maxime Ripard wrote:
+> It makes more sense to register the CRTC before the encoder and
+> connectors, so let's move our call around.
 > 
 > 
-> [...]
 
 Applied to drm/drm-misc (drm-misc-next).
 
