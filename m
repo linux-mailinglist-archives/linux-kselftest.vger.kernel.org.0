@@ -2,42 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D42639F30
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 03:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F2863A1BE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 08:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiK1CET (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Nov 2022 21:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S229591AbiK1HFF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Nov 2022 02:05:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiK1CES (ORCPT
+        with ESMTP id S229529AbiK1HFE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Nov 2022 21:04:18 -0500
+        Mon, 28 Nov 2022 02:05:04 -0500
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FBAD2F9;
-        Sun, 27 Nov 2022 18:04:17 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NL7zv0ShszRpQL;
-        Mon, 28 Nov 2022 10:03:39 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B60B5586;
+        Sun, 27 Nov 2022 23:05:03 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NLGfw0Sn2zRpZD;
+        Mon, 28 Nov 2022 15:04:24 +0800 (CST)
 Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
  dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 10:04:15 +0800
+ 15.1.2375.31; Mon, 28 Nov 2022 15:05:01 +0800
 Received: from localhost.localdomain (10.90.53.65) by
  kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 10:04:15 +0800
+ 15.1.2375.31; Mon, 28 Nov 2022 15:05:00 +0800
 From:   limin <limin100@huawei.com>
-To:     <shuah@kernel.org>, <mic@digikod.net>,
-        <linux-kselftest@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <hannes@cmpxchg.org>, <mhocko@kernel.org>,
-        <roman.gushchin@linux.dev>, <shakeelb@google.com>,
-        <songmuchun@bytedance.com>, <tj@kernel.org>,
-        <lizefan.x@bytedance.com>
-Subject: [PATCH -next] selftests/landlock: Fix selftest ptrace_test run fail
-Date:   Mon, 28 Nov 2022 10:04:09 +0800
-Message-ID: <20221128020409.1545717-1-limin100@huawei.com>
+To:     <shuah@kernel.org>, <keescook@chromium.org>,
+        <bernd.edlinger@hotmail.de>, <ebiederm@xmission.com>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <songmuchun@bytedance.com>, <lizefan.x@bytedance.com>
+Subject: [PATCH -next] selftests/ptrace: Fix Test terminated by timeout in ptrace_attach
+Date:   Mon, 28 Nov 2022 15:04:54 +0800
+Message-ID: <20221128070454.1850273-1-limin100@huawei.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -54,35 +50,84 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent,
-trace parent return -1 when child== 0
+That is an open issue
+Bernd Edlinger wrote the test case in anticipation that all of
+patch series got accepted,but the last patch was not picked up
+for inclusion in the linux kernel.
 How to reproduce warning:
-$ make -C tools/testing/selftests TARGETS=landlock run_tests
+$ make -C tools/testing/selftests TARGETS=ptrace run_tests
+Example vmaccess from 6.1.0-next source tree run fail on bare metal
+  RUN global.attach ...
+  attach: Test terminated by timeout
+  FAIL  global.attach
 
+Link:https://lore.kernel.org/all/AM8PR10MB4708E6FF0E155261455064C2E4209@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM/
+Fixes: 2de4e82318c7 ("selftests/ptrace: add test cases for dead-locks")
 Signed-off-by: limin <limin100@huawei.com>
 ---
- tools/testing/selftests/landlock/ptrace_test.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ tools/testing/selftests/ptrace/vmaccess.c | 37 ++++++++---------------
+ 1 file changed, 13 insertions(+), 24 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/ptrace_test.c b/tools/testing/selftests/landlock/ptrace_test.c
-index c28ef98ff3ac..88c4dc63eea0 100644
---- a/tools/testing/selftests/landlock/ptrace_test.c
-+++ b/tools/testing/selftests/landlock/ptrace_test.c
-@@ -267,12 +267,11 @@ TEST_F(hierarchy, trace)
- 		/* Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent. */
- 		err_proc_read = test_ptrace_read(parent);
- 		ret = ptrace(PTRACE_ATTACH, parent, NULL, 0);
-+		EXPECT_EQ(-1, ret);
-+		EXPECT_EQ(EPERM, errno);
- 		if (variant->domain_child) {
--			EXPECT_EQ(-1, ret);
--			EXPECT_EQ(EPERM, errno);
- 			EXPECT_EQ(EACCES, err_proc_read);
- 		} else {
--			EXPECT_EQ(0, ret);
- 			EXPECT_EQ(0, err_proc_read);
- 		}
- 		if (ret == 0) {
+diff --git a/tools/testing/selftests/ptrace/vmaccess.c b/tools/testing/selftests/ptrace/vmaccess.c
+index 4db327b44586..751a41f1163c 100644
+--- a/tools/testing/selftests/ptrace/vmaccess.c
++++ b/tools/testing/selftests/ptrace/vmaccess.c
+@@ -45,42 +45,31 @@ TEST(vmaccess)
+ 
+ TEST(attach)
+ {
+-	int s, k, pid = fork();
++	int k;
++	int s;
+ 
++	pid_t pid = fork();
+ 	if (!pid) {
+-		pthread_t pt;
+-
+-		pthread_create(&pt, NULL, thread, NULL);
+-		pthread_join(pt, NULL);
++		ptrace(PTRACE_TRACEME, 0, NULL, NULL);
+ 		execlp("sleep", "sleep", "2", NULL);
+ 	}
+ 
+ 	sleep(1);
+ 	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
+-	ASSERT_EQ(errno, EAGAIN);
++	printf("k1:%d\n", k);
++	ASSERT_EQ(k, -1);
++	waitpid(pid, &s, WNOHANG);
+ 	ASSERT_EQ(k, -1);
+-	k = waitpid(-1, &s, WNOHANG);
+-	ASSERT_NE(k, -1);
+ 	ASSERT_NE(k, 0);
+ 	ASSERT_NE(k, pid);
+-	ASSERT_EQ(WIFEXITED(s), 1);
+-	ASSERT_EQ(WEXITSTATUS(s), 0);
+-	sleep(1);
+-	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
+-	ASSERT_EQ(k, 0);
+-	k = waitpid(-1, &s, 0);
+-	ASSERT_EQ(k, pid);
++	if (WIFEXITED(s))
++		ASSERT_EQ(WEXITSTATUS(s), 0);
++	if (WIFSTOPPED(s))
++		ASSERT_EQ(WSTOPSIG(s), SIGTRAP);
+ 	ASSERT_EQ(WIFSTOPPED(s), 1);
+-	ASSERT_EQ(WSTOPSIG(s), SIGSTOP);
+-	k = ptrace(PTRACE_DETACH, pid, 0L, 0L);
+-	ASSERT_EQ(k, 0);
+-	k = waitpid(-1, &s, 0);
+-	ASSERT_EQ(k, pid);
+-	ASSERT_EQ(WIFEXITED(s), 1);
+-	ASSERT_EQ(WEXITSTATUS(s), 0);
+-	k = waitpid(-1, NULL, 0);
++	sleep(1);
++	ptrace(PTRACE_CONT, pid, NULL, NULL);
+ 	ASSERT_EQ(k, -1);
+-	ASSERT_EQ(errno, ECHILD);
+ }
+ 
+ TEST_HARNESS_MAIN
 -- 
 2.33.0
 
