@@ -2,91 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA54D63AD8B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 17:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FBE63ADFD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Nov 2022 17:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbiK1QVk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Nov 2022 11:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
+        id S230046AbiK1QlS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Nov 2022 11:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiK1QVj (ORCPT
+        with ESMTP id S229795AbiK1QlR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:21:39 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713D6B7E5
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Nov 2022 08:21:38 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id v3so10378723pgh.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Nov 2022 08:21:38 -0800 (PST)
+        Mon, 28 Nov 2022 11:41:17 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509C324F2B;
+        Mon, 28 Nov 2022 08:41:16 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id bj12so27224477ejb.13;
+        Mon, 28 Nov 2022 08:41:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3SPTNDjDD7p4251KmVbwYpNYSw/fK88RKLG3Fou2M/8=;
-        b=NuoweXsJXULm6RYVG3ZIGJHN55oghx6QaI8q8AURyEnv34ek4WgY41IOyDfkZPpnZC
-         nBaJGSJ8qmZrEuNTB0W7C4Vq80YpPPYPwpqdW5ttDkr4v7ZVRbxkQMBleEsCl2nQpwOo
-         pR8KvmuWKBQCj3jRzTpXxPhCAOuIL3kxXShpCU33UaUEtFzjNAMyF4C+aQsn9m/EAybu
-         HLgFFYN7ui+qzaSQuzUP4hPCrET6t+pAUSG4R3GW+jBVFlif8y5KOzQl4DGFr328/Jxw
-         RdAwPXhBA2ECEq+0G9mzSv/DFbhio03EXsEwvDnyY4JqNVUqTtnEWuHuQKf81Is8GcDd
-         A31Q==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jjP+oHXKqqF5zS0C0EUDCrcK3pjIhLTSLdYwKHMtCFI=;
+        b=iGq5qLooqXThwOwtjjiCIc1whgDj7Fx3WrYx9vSVSXBcxJ3GuwlzQIPU5VXEsBjR77
+         fDDvRyZ1DRuZX6YctVtl0C+rBoeEp4ywwUuX2pb2RXdoljqOE7dJ4TJUAwZPeCeRlQNv
+         ay5OWYNu71dcILiF50dEwUkhDwPjIm7xKJqF1bpJ1W82wKsQYlpqBxNXW2fMrmq8APhb
+         mDV+ZqX0oJqI2d+8uw3uPOLAjw/4gLhvuxEwV+6HkI2TEtV9/PW97+/i1IwEuBvX5tX9
+         k8fa3ZUPyUZN1icDJag1oJPqWBnI0gj2wVrS9Zcpcr9POf12LLMskzunUHxftXK+yq2X
+         IGOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3SPTNDjDD7p4251KmVbwYpNYSw/fK88RKLG3Fou2M/8=;
-        b=Lf+oL8ka/xk/RUvTSNG3m7M51VWHOIA3Ww5Llowl2OsGYTumT5g0IKMtCDb62xVTQ2
-         0wsmXJecy4YOah49NG0x8fsdwmEkglg+8T+ZztpxL5Un0l3NlCr8VfbMy73E76a8IPhs
-         funK+k4oJc/DwAB7Fd5ZCPWQ6ft3hJ3ChhnbiHSG8qEBbhzhSYMRu7qKT/dPOy9RVRQp
-         cJ5Q6xz1RWVXI5u/+M/YnNZZmUsPwVF569VH0m5CwYhNg4Zjpv+wj+DfU0wpj4Rxj8/w
-         qYTY9+eatczY4wDAClYTvaJOoYB4sc0kYGjNHbo43NTiSTUImjm91ntAowQrJZMlYInY
-         DlVA==
-X-Gm-Message-State: ANoB5pnJibWuoORvTf/Fi1nW8u1XPRYuNGrAZ5OrMp1C7msV/MIvA2B4
-        omF1++CP9nH9yAGCfcwqnFkM1mRPYDb+vg==
-X-Google-Smtp-Source: AA0mqf5zzbD9A5lmapC2GGKQC+5jCoq1JklIaLBaA9YEUu7UbREHdvJi565q51PnekGCOUfMQIwUFw==
-X-Received: by 2002:a62:ab11:0:b0:574:cea8:4480 with SMTP id p17-20020a62ab11000000b00574cea84480mr15301526pff.72.1669652497815;
-        Mon, 28 Nov 2022 08:21:37 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w8-20020a17090a1b8800b001f94d25bfabsm9799780pjc.28.2022.11.28.08.21.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 08:21:37 -0800 (PST)
-Date:   Mon, 28 Nov 2022 16:21:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Marc Orr <marcorr@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com,
-        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
-        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
-        vbabka@suse.cz, erdemaktas@google.com, pgonda@google.com,
-        nikunj@amd.com, diviness@google.com, maz@kernel.org,
-        dmatlack@google.com, axelrasmussen@google.com,
-        maciej.szmigiero@oracle.com, mizhang@google.com,
-        bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V1 PATCH 1/6] KVM: x86: Add support for testing private memory
-Message-ID: <Y4TgDZPTXnnoTitB@google.com>
-References: <20221111014244.1714148-1-vannapurve@google.com>
- <20221111014244.1714148-2-vannapurve@google.com>
- <20221122100705.GA619277@chaop.bj.intel.com>
- <Y30rqWwDRbH7nQaQ@google.com>
- <CAA03e5EXU-TpZP2tyjEjfAAr9aNNcgmgOX6Rqv7ng+4Xc9H5AQ@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jjP+oHXKqqF5zS0C0EUDCrcK3pjIhLTSLdYwKHMtCFI=;
+        b=6LC6eeZfeC7s6NvQyFAITsKDY22lfovd8iznTO5qc19M095T5qk+Zjxf8j6n9XFjAg
+         KHvVvV5npXmHGOs5A/IH2ck5PJcEnMZBZerRnbzLSFvmj7w6ZwShAFcuQ1X7jfIuqahi
+         xVh4viKjTAjLqvuIQTbLt4zTZF8hxH4s46psnKsDcYacnuMkBVPyva0Z+Tff4ntUrcLN
+         M5gkGxorqGximySgFO9rfZx6xeRJz/yzxva/Nnb/yhBz0lOeKtaEYS8BbL5zdb07mVBQ
+         4jhREg1EbVheZg9g28Z5lJ4HGhP8dFSFWgokXi32C8WK+BRWq/wpV7QCYyf4W0lnbWsH
+         +9bQ==
+X-Gm-Message-State: ANoB5pmxK65RMzWdCkKgdCbRDFhKkPOAoCi2sBvS7sFTQ1OcEbt6vDhE
+        VAuHkggnkKTgc55xAo0R8YDoi7D28ECJt9/mmzw=
+X-Google-Smtp-Source: AA0mqf735MuN6EN0Omhyiib0Dnmqfd9HCeKNrPRRs/0daz9C8xf3gRuYxVttE1AuXtqljIpfwHGWZ3dAM/t1Z++7Qv4=
+X-Received: by 2002:a17:907:76e6:b0:7c0:543a:5229 with SMTP id
+ kg6-20020a17090776e600b007c0543a5229mr3755504ejc.58.1669653674591; Mon, 28
+ Nov 2022 08:41:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA03e5EXU-TpZP2tyjEjfAAr9aNNcgmgOX6Rqv7ng+4Xc9H5AQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20221126094530.226629-1-yangjihong1@huawei.com>
+ <20221126094530.226629-2-yangjihong1@huawei.com> <20221128015758.aekybr3qlahfopwq@MacBook-Pro-5.local>
+ <dc9d1823-80f2-e2d9-39a8-c39b6f52dec5@huawei.com>
+In-Reply-To: <dc9d1823-80f2-e2d9-39a8-c39b6f52dec5@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 28 Nov 2022 08:41:03 -0800
+Message-ID: <CAADnVQJPRCnESmJ92W39bo-btqNbYaNsGQO0is6FD3JLU_mSjQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: Adapt 32-bit return value kfunc for
+ 32-bit ARM when zext extension
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        colin.i.king@gmail.com, Artem Savkov <asavkov@redhat.com>,
+        Delyan Kratunov <delyank@fb.com>, bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,44 +93,150 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 23, 2022, Marc Orr wrote:
-> On Tue, Nov 22, 2022 at 12:06 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > > @@ -221,6 +220,9 @@ struct kvm_page_fault {
-> > > >     /* The memslot containing gfn. May be NULL. */
-> > > >     struct kvm_memory_slot *slot;
-> > > >
-> > > > +   /* Derived from encryption bits of the faulting GPA for CVMs. */
-> > > > +   bool is_private;
-> > >
-> > > Either we can wrap it with the CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING or if
-> > > it looks ugly I can remove the "const" in my code.
+On Mon, Nov 28, 2022 at 4:40 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+>
+>
+>
+> On 2022/11/28 9:57, Alexei Starovoitov wrote:
+> > On Sat, Nov 26, 2022 at 05:45:27PM +0800, Yang Jihong wrote:
+> >> For ARM32 architecture, if data width of kfunc return value is 32 bits,
+> >> need to do explicit zero extension for high 32-bit, insn_def_regno should
+> >> return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL. Otherwise,
+> >> opt_subreg_zext_lo32_rnd_hi32 returns -EFAULT, resulting in BPF failure.
+> >>
+> >> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> >> ---
+> >>   kernel/bpf/verifier.c | 44 ++++++++++++++++++++++++++++++++++++++++---
+> >>   1 file changed, 41 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> >> index 264b3dc714cc..193ea927aa69 100644
+> >> --- a/kernel/bpf/verifier.c
+> >> +++ b/kernel/bpf/verifier.c
+> >> @@ -1927,6 +1927,21 @@ find_kfunc_desc(const struct bpf_prog *prog, u32 func_id, u16 offset)
+> >>                     sizeof(tab->descs[0]), kfunc_desc_cmp_by_id_off);
+> >>   }
+> >>
+> >> +static int kfunc_desc_cmp_by_imm(const void *a, const void *b);
+> >> +
+> >> +static const struct bpf_kfunc_desc *
+> >> +find_kfunc_desc_by_imm(const struct bpf_prog *prog, s32 imm)
+> >> +{
+> >> +    struct bpf_kfunc_desc desc = {
+> >> +            .imm = imm,
+> >> +    };
+> >> +    struct bpf_kfunc_desc_tab *tab;
+> >> +
+> >> +    tab = prog->aux->kfunc_tab;
+> >> +    return bsearch(&desc, tab->descs, tab->nr_descs,
+> >> +                   sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm);
+> >> +}
+> >> +
+> >>   static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
+> >>                                       s16 offset)
+> >>   {
+> >> @@ -2342,6 +2357,13 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >>                       */
+> >>                      if (insn->src_reg == BPF_PSEUDO_CALL)
+> >>                              return false;
+> >> +
+> >> +                    /* Kfunc call will reach here because of insn_has_def32,
+> >> +                     * conservatively return TRUE.
+> >> +                     */
+> >> +                    if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
+> >> +                            return true;
+> >> +
+> >>                      /* Helper call will reach here because of arg type
+> >>                       * check, conservatively return TRUE.
+> >>                       */
+> >> @@ -2405,10 +2427,26 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >>   }
+> >>
+> >>   /* Return the regno defined by the insn, or -1. */
+> >> -static int insn_def_regno(const struct bpf_insn *insn)
+> >> +static int insn_def_regno(struct bpf_verifier_env *env, const struct bpf_insn *insn)
+> >>   {
+> >>      switch (BPF_CLASS(insn->code)) {
+> >>      case BPF_JMP:
+> >> +            if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+> >> +                    const struct bpf_kfunc_desc *desc;
+> >> +
+> >> +                    /* The value of desc cannot be NULL */
+> >> +                    desc = find_kfunc_desc_by_imm(env->prog, insn->imm);
+> >> +
+> >> +                    /* A kfunc can return void.
+> >> +                     * The btf type of the kfunc's return value needs
+> >> +                     * to be checked against "void" first
+> >> +                     */
+> >> +                    if (desc->func_model.ret_size == 0)
+> >> +                            return -1;
+> >> +                    else
+> >> +                            return insn->dst_reg;
+> >> +            }
+> >> +            fallthrough;
 > >
-> > Hmm, I think we can keep the const.  Similar to the bug in kvm_faultin_pfn()[*],
-> > the kvm_slot_can_be_private() is bogus.  A fault should be considered private if
-> > it's marked as private, whether or not userspace has configured the slot to be
-> > private is irrelevant.  I.e. the xarray is the single source of truth, memslots
-> > are just plumbing.
-> 
-> If we incorporate Sean's suggestion and use xarray as the single
-> source of truth, then can we get rid of the
-> HAVE_KVM_PRIVATE_MEM_TESTING config?
+> > I cannot make any sense of this patch.
+> > insn->dst_reg above is 0.
+> > The kfunc call doesn't define a register from insn_def_regno() pov.
+> >
+> > Are you hacking insn_def_regno() to return 0 so that
+> > if (WARN_ON(load_reg == -1)) {
+> >    verbose(env, "verifier bug. zext_dst is set, but no reg is defined\n");
+> >    return -EFAULT;
+> > }
+> > in opt_subreg_zext_lo32_rnd_hi32() doesn't trigger ?
+> >
+> > But this verifier message should have been a hint that you need
+> > to analyze why zext_dst is set on this kfunc call.
+> > Maybe it shouldn't ?
+> > Did you analyze the logic of mark_btf_func_reg_size() ?
+> make r0 zext is not caused by mark_btf_func_reg_size.
+>
+> This problem occurs when running the kfunc_call_test_ref_btf_id test
+> case in the 32-bit ARM environment.
 
-No, we still want the opt-in config.  
+Why is it not failing on x86-32 ?
 
-> Specifically, the self test can call the KVM_MEMORY_ENCRYPT_REG_REGION
-> ioctl which will set the bits for the private FD within KVM's xarray.
-
-Yes, but that should be disallowed for regular VMs without HAVE_KVM_PRIVATE_MEM_TESTING=y.
-
-> (Maybe this was part of the point that Sean was making; but his
-> feedback seemed focused on the discussion about keeping `is_private`
-> const, whereas I've been staring at this trying to figure out if we
-> can run the UPM selftests on a non-TDX/SNP VM WITHOUT a special
-> test-only config. And Sean's idea seems to eliminate the need for the
-> awkward CONFIG.)
-
-"need" was always relative.  It's obviously possible to enable any code without a
-Kconfig, the question is whether or not it's a good idea to do so.  In this case,
-the answer is "no", because allowing private memory opens up a number a of code
-paths and thus potential bugs.  And we need something for kvm_arch_has_private_mem()
-because returning "true" unconditionally is not correct for regular VMs.
+> The bpf prog is as follows:
+> int kfunc_call_test_ref_btf_id(struct __sk_buff *skb)
+> {
+> struct prog_test_ref_kfunc *pt;
+> unsigned long s = 0;
+> int ret = 0;
+>
+> pt = bpf_kfunc_call_test_acquire(&s);
+> if (pt) {
+>       // here, do_check clears the upper 32bits of r0 through:
+>       // check_alu_op
+>       //   ->check_reg_arg
+>       //    ->mark_insn_zext
+> if (pt->a != 42 || pt->b != 108)
+> ret = -1;
+> bpf_kfunc_call_test_release(pt);
+> }
+> return ret;
+> }
+>
+> >
+> > Before producing any patches please understand the logic fully.
+> > Your commit log
+> > "insn_def_regno should
+> >   return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL."
+> >
+> > Makes no sense to me, since dst_reg is unused in JMP insn.
+> > There is no concept of a src or dst register in a JMP insn.
+> >
+> > 32-bit x86 supports calling kfuncs. See emit_kfunc_call().
+> > And we don't have this "verifier bug. zext_dst is set" issue there, right?
+> > But what you're saying in the commit log:
+> > "if data width of kfunc return value is 32 bits"
+> > should have been applicable to x86-32 as well.
+> > So please start with a test that demonstrates the issue on x86-32 and
+> > then we can discuss the way to fix it.
+> >
+> > The patch 2 sort-of makes sense.
+> >
+> > For patch 3 pls add new test funcs to bpf_testmod.
+> > We will move all of them from net/bpf/test_run.c to bpf_testmod eventually.
+> > .
+> >
