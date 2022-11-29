@@ -2,162 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304A663B640
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 01:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BC563B66B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 01:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbiK2AE2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Nov 2022 19:04:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
+        id S234243AbiK2ANE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Nov 2022 19:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234760AbiK2AE0 (ORCPT
+        with ESMTP id S234664AbiK2AMm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Nov 2022 19:04:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493801AD92
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Nov 2022 16:04:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D954B61516
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 00:04:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7244C43141;
-        Tue, 29 Nov 2022 00:04:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669680265;
-        bh=Y43qJ/bNGK9Ddo25ogKXBarnhJnlJyovlWA7DkFzBLE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q7TjS4Ihh0OtWz32ArdI3FbEP9c/5tx+0f1FrR3O/fm0U/F9maIjVrCg4XZzrjADc
-         g9QrOJdtQj58hg3lH6RpChyJpmZ06qWKwBu56daQbuweWGvMn2CrEXp29i3L8AAE5B
-         fMycNHEDbCEihMhICWVYjvi2hBnW14hc8P/J5DTU3RIzGvl1XEYzhzRkTLP4wLwvXc
-         j/J6vSkm+mWFgMK5pLd2LqXOKQa/4z8/pScnAgSFRRvtW8hhVoesCK+kjOulPEX/Ul
-         sniDrlqKMrKk3joAmmwIKpV8eiX+5GRCbuuDbXYJbZ6xGN8jzxrIK1Wrtr/06fTssa
-         EhLuZ0BmCYtpw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 3/3] kselftest/arm64: Allow epoll_wait() to return more than one result
-Date:   Tue, 29 Nov 2022 00:03:55 +0000
-Message-Id: <20221129000355.812425-4-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221129000355.812425-1-broonie@kernel.org>
-References: <20221129000355.812425-1-broonie@kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3344; i=broonie@kernel.org; h=from:subject; bh=Y43qJ/bNGK9Ddo25ogKXBarnhJnlJyovlWA7DkFzBLE=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjhUxqhIIw+/0qMtilo7qwuKBAbrQGk/zdnqtiunQb UH+OizmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY4VMagAKCRAk1otyXVSH0BUgB/ 9/acYMk3PSV+yuqpG5TG1+9R2clCgHlt/XdScreju0VnajaqncYZjjCgK09lMvWJU2URpIOeQaYAEz K0ALu8kKxKdvxKzBNndRWyVZAi+GhWvl31EhlmQkCuRj56vFVGy4/g6Gu59CeYcLO4wp5f9wxL5iE0 qEWi6hRN+Q1TwBJM6g0YsfQ6qKeeyocB8QhD0VK1FPk2H4pYsUl/sk+m+SRndEMNbC21ygg1hLcjZD 046yZfje1ZnDHyU9wWb8d/DllyFqnGPUIiRVH2awAW6Ym434ptFzCSBppNszx1ZjypUjbKrphx4MPR V6KKjEPUvr8yFJ8yGu2vDJISdMKwKd
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 19:12:42 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6554E658D
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Nov 2022 16:12:40 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id w2-20020a17090a8a0200b002119ea856edso13074558pjn.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Nov 2022 16:12:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=X881tlPDVXUlMgACZfZTZeyY92tnJLZ+/B1dNTIs8Gc=;
+        b=Oi0ZjD5sM55sEXkn34mnC5VjQu6xKzBRPB+GDVOF2EnL4UyIrAVAj+ELyBOEjwwDGW
+         s52xHTMYBS43CadhoSIW0qCfFLr9/dNXGbYqxREAcpO5ADcuQcbGGoVLhGcyFqOifAYz
+         ojnWNbwTYlIyOmygoDbJnXy2VtgXqs/+yjKkqA2rMMM90MtJyW8+/OEsUGu7j28fquOe
+         yOvSTpwtVyfqFbCa/Z053nvtEqBPgJ3feWv7yramCZQ80+/cUgNFfd/Hu0S7PmVXRryp
+         Q/eyB0R27WV76y4VZNh25H39JHBqzfwP/Gr7dqgkyyzpXjcPx4HmPcDa9Lj/VZGtOJAy
+         T8zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X881tlPDVXUlMgACZfZTZeyY92tnJLZ+/B1dNTIs8Gc=;
+        b=omXAedR5EDEipD+8X3e8V9Iar5/gVVEFkCsas1LKAL/8IcFsY2hZo7fx/YfMBJbRlH
+         Nk8aoVxJt6NBxSAVXv8JkaVAZLYkf78pFBUTdAHuJDeBdfL2t2p+URci3aqR+RcZvSCa
+         Ytq/kZQZnYflzJZwjTzbhgoolm8MizTmboxW5D9bT6wS2I3NwgZjyUZHHxzbrm6IxcYs
+         XV8ogasU9wLPS5OgXhhL1qwJsYEFf0eIcefEd9+I2daQVAfXuZSQ+B6awC1WGOMeag62
+         jxm+AHPWhGxvPKKEzLL9r9az+dTE2jYktDqygrGCagcNdW2EHVqSSW8JkWqGrqIsjdse
+         ahRA==
+X-Gm-Message-State: ANoB5pmlA9DZKFjpuCLjrb9sMrnr0qxCncyIn+TCPRmD3Z40AIgqjzXR
+        j/8d+A63EE7Fy4vHZ13qViXivK1NuRVt9w==
+X-Google-Smtp-Source: AA0mqf7PIX8W1qzdvgiGt+aiUTDXV/YuuvuJ0Eo/G0bko1Yy573w+vZmfwFWp89lUQwQZ4vFaPcQTbgi/vUM/w==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a05:6a00:408b:b0:56b:ca57:ba8c with SMTP
+ id bw11-20020a056a00408b00b0056bca57ba8cmr35465110pfb.43.1669680759811; Mon,
+ 28 Nov 2022 16:12:39 -0800 (PST)
+Date:   Mon, 28 Nov 2022 16:12:34 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221129001234.606653-1-dlatypov@google.com>
+Subject: [PATCH] kunit: tool: don't include KTAP headers and the like in the
+ test log
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When everything is starting up we are likely to have a lot of child
-processes producing output at once.  This means that we can reduce
-overhead a bit by allowing epoll_wait() to return more than one
-descriptor at once, it cuts down on the number of system calls we need
-to do which on virtual platforms where the syscall overhead is a bit
-more noticable and we're likely to have a lot more children active can
-make a small but noticable difference.
+We print the "test log" on failure.
+This is meant to be all the kernel output that happened during the test.
 
-On physical platforms the relatively small number of processes being run
-and vastly improved speeds push the effects of this change into the
-noise.
+But we also include the special KTAP lines in it, which are often
+redundant.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+E.g. we include the "not ok" line in the log, right before we print
+that the test case failed...
+[13:51:48] Expected 2 + 1 == 2, but
+[13:51:48] 2 + 1 == 3 (0x3)
+[13:51:48] not ok 1 example_simple_test
+[13:51:48] [FAILED] example_simple_test
+
+More full example after this patch:
+[13:51:48] =================== example (4 subtests) ===================
+[13:51:48] # example_simple_test: initializing
+[13:51:48] # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+[13:51:48] Expected 2 + 1 == 2, but
+[13:51:48] 2 + 1 == 3 (0x3)
+[13:51:48] [FAILED] example_simple_test
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- tools/testing/selftests/arm64/fp/fp-stress.c | 27 +++++++++++++-------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+ tools/testing/kunit/kunit_parser.py    |  8 ++++----
+ tools/testing/kunit/kunit_tool_test.py | 17 +++++++++++++++++
+ 2 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
-index 65262cf30b09..d22f6e356440 100644
---- a/tools/testing/selftests/arm64/fp/fp-stress.c
-+++ b/tools/testing/selftests/arm64/fp/fp-stress.c
-@@ -39,6 +39,8 @@ struct child_data {
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 4cc2f8b7ecd0..99b8f058db40 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -295,7 +295,7 @@ def parse_ktap_header(lines: LineStream, test: Test) -> bool:
+ 		check_version(version_num, TAP_VERSIONS, 'TAP', test)
+ 	else:
+ 		return False
+-	test.log.append(lines.pop())
++	lines.pop()
+ 	return True
  
- static int epoll_fd;
- static struct child_data *children;
-+static struct epoll_event *evs;
-+static int tests;
- static int num_children;
- static bool terminate;
+ TEST_HEADER = re.compile(r'^# Subtest: (.*)$')
+@@ -318,8 +318,8 @@ def parse_test_header(lines: LineStream, test: Test) -> bool:
+ 	match = TEST_HEADER.match(lines.peek())
+ 	if not match:
+ 		return False
+-	test.log.append(lines.pop())
+ 	test.name = match.group(1)
++	lines.pop()
+ 	return True
  
-@@ -393,11 +395,11 @@ static void probe_vls(int vls[], int *vl_count, int set_vl)
- /* Handle any pending output without blocking */
- static void drain_output(bool flush)
- {
--	struct epoll_event ev;
- 	int ret = 1;
-+	int i;
+ TEST_PLAN = re.compile(r'1\.\.([0-9]+)')
+@@ -345,9 +345,9 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
+ 	if not match:
+ 		test.expected_count = None
+ 		return False
+-	test.log.append(lines.pop())
+ 	expected_count = int(match.group(1))
+ 	test.expected_count = expected_count
++	lines.pop()
+ 	return True
  
- 	while (ret > 0) {
--		ret = epoll_wait(epoll_fd, &ev, 1, 0);
-+		ret = epoll_wait(epoll_fd, evs, tests, 0);
- 		if (ret < 0) {
- 			if (errno == EINTR)
- 				continue;
-@@ -405,8 +407,8 @@ static void drain_output(bool flush)
- 				       strerror(errno), errno);
- 		}
+ TEST_RESULT = re.compile(r'^(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
+@@ -409,7 +409,7 @@ def parse_test_result(lines: LineStream, test: Test,
+ 	# Check if line matches test result line format
+ 	if not match:
+ 		return False
+-	test.log.append(lines.pop())
++	lines.pop()
  
--		if (ret == 1)
--			child_output(ev.data.ptr, ev.events, flush);
-+		for (i = 0; i < ret; i++)
-+			child_output(evs[i].data.ptr, evs[i].events, flush);
- 	}
- }
+ 	# Set name of test object
+ 	if skip_match:
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index d7f669cbf2a8..1ef921ac4331 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -84,6 +84,10 @@ class KUnitParserTest(unittest.TestCase):
+ 		self.print_mock = mock.patch('kunit_printer.Printer.print').start()
+ 		self.addCleanup(mock.patch.stopall)
  
-@@ -419,10 +421,9 @@ int main(int argc, char **argv)
- {
- 	int ret;
- 	int timeout = 10;
--	int cpus, tests, i, j, c;
-+	int cpus, i, j, c;
- 	int sve_vl_count, sme_vl_count, fpsimd_per_cpu;
- 	int sve_vls[MAX_VLS], sme_vls[MAX_VLS];
--	struct epoll_event ev;
- 	struct sigaction sa;
- 
- 	while ((c = getopt_long(argc, argv, "t:", options, NULL)) != -1) {
-@@ -508,6 +509,11 @@ int main(int argc, char **argv)
- 		ksft_print_msg("Failed to install SIGCHLD handler: %s (%d)\n",
- 			       strerror(errno), errno);
- 
-+	evs = calloc(tests, sizeof(*evs));
-+	if (!evs)
-+		ksft_exit_fail_msg("Failed to allocated %d epoll events\n",
-+				   tests);
++	def noPrintCallContains(self, substr: str):
++		for call in self.print_mock.mock_calls:
++			self.assertNotIn(substr, call.args[0])
 +
- 	for (i = 0; i < cpus; i++) {
- 		for (j = 0; j < fpsimd_per_cpu; j++)
- 			start_fpsimd(&children[num_children++], i, j);
-@@ -541,7 +547,7 @@ int main(int argc, char **argv)
- 		 * useful in emulation where we will both be slow and
- 		 * likely to have a large set of VLs.
- 		 */
--		ret = epoll_wait(epoll_fd, &ev, 1, 1000);
-+		ret = epoll_wait(epoll_fd, evs, tests, 1000);
- 		if (ret < 0) {
- 			if (errno == EINTR)
- 				continue;
-@@ -550,8 +556,11 @@ int main(int argc, char **argv)
- 		}
+ 	def assertContains(self, needle: str, haystack: kunit_parser.LineStream):
+ 		# Clone the iterator so we can print the contents on failure.
+ 		copy, backup = itertools.tee(haystack)
+@@ -327,6 +331,19 @@ class KUnitParserTest(unittest.TestCase):
+ 			result = kunit_parser.parse_run_tests(file.readlines())
+ 		self.print_mock.assert_any_call(StrContains('suite (1 subtest)'))
  
- 		/* Output? */
--		if (ret == 1) {
--			child_output(ev.data.ptr, ev.events, false);
-+		if (ret > 0) {
-+			for (i = 0; i < ret; i++) {
-+				child_output(evs[i].data.ptr, evs[i].events,
-+					     false);
-+			}
- 			continue;
- 		}
++	def test_show_test_output_on_failure(self):
++		output = """
++		KTAP version 1
++		1..1
++		  Test output.
++		not ok 1 test1
++		"""
++		result = kunit_parser.parse_run_tests(output.splitlines())
++		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
++
++		self.print_mock.assert_any_call(StrContains('Test output.'))
++		self.noPrintCallContains('not ok 1 test1')
++
+ def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
+ 	return kunit_parser.LineStream(enumerate(strs, start=1))
  
+
+base-commit: 11300092f6f4dc4103ac4bd950d62f94effc736a
 -- 
-2.30.2
+2.38.1.584.g0f3c55d4c2-goog
 
