@@ -2,60 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB9B63BF9B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 13:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC13A63C0DC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 14:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiK2MCU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Nov 2022 07:02:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S230508AbiK2NVc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Nov 2022 08:21:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbiK2MAz (ORCPT
+        with ESMTP id S231599AbiK2NVa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Nov 2022 07:00:55 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8B15CD0E;
-        Tue, 29 Nov 2022 04:00:42 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NM19Z17gzzRpV5;
-        Tue, 29 Nov 2022 20:00:02 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 20:00:41 +0800
-Received: from [10.67.111.113] (10.67.111.113) by
- kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 20:00:40 +0800
-Message-ID: <efb0eb17-b856-e437-8abb-d16213165420@huawei.com>
-Date:   Tue, 29 Nov 2022 20:00:28 +0800
+        Tue, 29 Nov 2022 08:21:30 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9512E6AA;
+        Tue, 29 Nov 2022 05:21:29 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id ud5so33728856ejc.4;
+        Tue, 29 Nov 2022 05:21:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BEXWF8wgzcW7ZxjWPkx8+f4d2FRc8kR6F94i8AKGlUg=;
+        b=HK/K2+2FWyjoqylZx2+vJVjnkw1p19ppDmICsC1ofo5sLP3pBdzAd53N7Nnos/UxGx
+         lqoPx63RqsxGc27X3QJbvWN6EhGuGlTam88Pht0puI8VI3FzYn7ACSpVh3ltZeMIMHfq
+         ClKTPuMNTb21oCLjT4AC2thFqyM9oHWbEiO2C+nvR6T9Csu5Q0YcA8NIkgqmjv95vKY3
+         2LWcbybG8S063IHIFERLvBKl6pLKjkI7DUZgF2GcCK4ItO074s/HbG1jVAo3Z1ZS648N
+         FYqW2b0k30dZIkjQbPZPrEZl26YadVRHlxTipuedQ1P2hZstWKYBJKpBiYv+/0MDaVM8
+         GQIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BEXWF8wgzcW7ZxjWPkx8+f4d2FRc8kR6F94i8AKGlUg=;
+        b=g37hgP1aEO5aNLfsCKLaLBWYHVY4LrYQhigkMMQ4ChYQcUYMV1rosF8zlIscCv01y3
+         iw4/7PS9PJOwJnnGUkMGPfazm27NEzIdNV8+LGvu17gt3sr9U8eWqamj3nBLI7hVzEXc
+         B30+xnqZIHZ8GxcLHNwKK3I2E2ma2EmXv1xzXpl/1+6FgR4PTbBMN5/54ebPnT3iRcW8
+         fkVfernDSiS6AeXCgya3HbmfushAOIZnjuUdpiDGtwfZ8ekVGTcSNKC+gLMPms35q5WN
+         AceZ+9jY9uR6TP9Mc5bqw8gfbrE8QjrdgC73JhovbM619i6NEwVC99q1k5CVT3xBhkyy
+         EV3g==
+X-Gm-Message-State: ANoB5pmyBaMBbFN4Z8U9Et1D/mnC82hVckc9rIeS8k+yb3XPvGT3XQJ8
+        JftE2UDVtcLBQ49/6kstxaM=
+X-Google-Smtp-Source: AA0mqf6RtGGkq6T8Wnu1E/U7OSSnj6Hov/AcUY+iag3ZCepKSrzMTbng17pYZEAnBUOf4iOa6neuXQ==
+X-Received: by 2002:a17:906:c18c:b0:7b2:8a6e:c569 with SMTP id g12-20020a170906c18c00b007b28a6ec569mr48548337ejz.582.1669728087975;
+        Tue, 29 Nov 2022 05:21:27 -0800 (PST)
+Received: from jimi.localdomain ([213.57.189.88])
+        by smtp.gmail.com with ESMTPSA id v25-20020aa7d9d9000000b00458a03203b1sm6252632eds.31.2022.11.29.05.21.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 05:21:27 -0800 (PST)
+From:   Eyal Birger <eyal.birger@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, steffen.klassert@secunet.com,
+        herbert@gondor.apana.org.au, andrii@kernel.org,
+        daniel@iogearbox.net, nicolas.dichtel@6wind.com,
+        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Eyal Birger <eyal.birger@gmail.com>
+Subject: [PATCH ipsec-next,v2 0/3] xfrm: interface: Add unstable helpers for XFRM metadata
+Date:   Tue, 29 Nov 2022 15:20:15 +0200
+Message-Id: <20221129132018.985887-1-eyal.birger@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH -next] selftests/landlock: Fix selftest ptrace_test run
- fail
-Content-Language: en-US
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <hannes@cmpxchg.org>, <mhocko@kernel.org>,
-        <roman.gushchin@linux.dev>, <shakeelb@google.com>,
-        <songmuchun@bytedance.com>, <tj@kernel.org>,
-        <lizefan.x@bytedance.com>
-References: <20221128020409.1545717-1-limin100@huawei.com>
- <1232e4f3-e4b8-ff23-61e8-5465c8406f6e@digikod.net>
- <7379a5fd-5593-c6ce-40fd-c543dcf70d2b@huawei.com>
- <e62a539b-614c-c008-873a-f9c57c7ecb33@digikod.net>
-From:   limin <limin100@huawei.com>
-In-Reply-To: <e62a539b-614c-c008-873a-f9c57c7ecb33@digikod.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.113]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,67 +77,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-cat /proc/cmdline
+This patch series adds xfrm metadata helpers using the unstable kfunc
+call interface for the TC-BPF hooks.
 
-BOOT_IMAGE=/vmlinuz-6.1.0-next-20221116 
-root=UUID=a65b3a79-dc02-4728-8a0c-5cf24f4ae08b ro 
-systemd.unified_cgroup_hierarchy=1 cgroup_no_v1=all
+This allows steering traffic towards different IPsec connections based
+on logic implemented in bpf programs.
 
+The helpers are integrated into the xfrm_interface module. For this
+purpose the main functionality of this module is moved to
+xfrm_interface_core.c.
 
-On 2022/11/29 19:03, Mickaël Salaün wrote:
-> I tested with next-20221116 and all tests are OK. Could you share your 
-> kernel configuration with a link? What is the content of /proc/cmdline?
->
-> On 29/11/2022 02:42, limin wrote:
->> I run test on Linux ubuntu2204 6.1.0-next-20221116
->>
->> I did't use yama.
->>
->> you can reproduce by this step:
->>
->> cd kernel_src
->>
->> cd tools/testing/selftests/landlock/
->> make
->> ./ptrace_test
->>
->>
->>
->>
->> On 2022/11/29 3:44, Mickaël Salaün wrote:
->>> This patch changes the test semantic and then cannot work on my test
->>> environment. On which kernel did you run test? Do you use Yama or
->>> something similar?
->>>
->>> On 28/11/2022 03:04, limin wrote:
->>>> Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent,
->>>> trace parent return -1 when child== 0
->>>> How to reproduce warning:
->>>> $ make -C tools/testing/selftests TARGETS=landlock run_tests
->>>>
->>>> Signed-off-by: limin <limin100@huawei.com>
->>>> ---
->>>>    tools/testing/selftests/landlock/ptrace_test.c | 5 ++---
->>>>    1 file changed, 2 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/landlock/ptrace_test.c
->>>> b/tools/testing/selftests/landlock/ptrace_test.c
->>>> index c28ef98ff3ac..88c4dc63eea0 100644
->>>> --- a/tools/testing/selftests/landlock/ptrace_test.c
->>>> +++ b/tools/testing/selftests/landlock/ptrace_test.c
->>>> @@ -267,12 +267,11 @@ TEST_F(hierarchy, trace)
->>>>            /* Tests PTRACE_ATTACH and PTRACE_MODE_READ on the 
->>>> parent. */
->>>>            err_proc_read = test_ptrace_read(parent);
->>>>            ret = ptrace(PTRACE_ATTACH, parent, NULL, 0);
->>>> +        EXPECT_EQ(-1, ret);
->>>> +        EXPECT_EQ(EPERM, errno);
->>>>            if (variant->domain_child) {
->>>> -            EXPECT_EQ(-1, ret);
->>>> -            EXPECT_EQ(EPERM, errno);
->>>>                EXPECT_EQ(EACCES, err_proc_read);
->>>>            } else {
->>>> -            EXPECT_EQ(0, ret);
->>>>                EXPECT_EQ(0, err_proc_read);
->>>>            }
->>>>            if (ret == 0) {
+Eyal Birger (3):
+  xfrm: interface: rename xfrm_interface.c to xfrm_interface_core.c
+  xfrm: interface: Add unstable helpers for setting/getting XFRM
+    metadata from TC-BPF
+  selftests/bpf: add xfrm_info tests
+
+ include/net/dst_metadata.h                    |   1 +
+ include/net/xfrm.h                            |  20 +
+ net/core/dst.c                                |   8 +-
+ net/xfrm/Makefile                             |   8 +
+ net/xfrm/xfrm_interface_bpf.c                 | 100 +++++
+ ...xfrm_interface.c => xfrm_interface_core.c} |  15 +
+ tools/testing/selftests/bpf/config            |   2 +
+ .../selftests/bpf/prog_tests/test_xfrm_info.c | 343 ++++++++++++++++++
+ .../selftests/bpf/progs/test_xfrm_info_kern.c |  74 ++++
+ 9 files changed, 569 insertions(+), 2 deletions(-)
+ create mode 100644 net/xfrm/xfrm_interface_bpf.c
+ rename net/xfrm/{xfrm_interface.c => xfrm_interface_core.c} (98%)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_xfrm_info.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xfrm_info_kern.c
+
+-- 
+2.34.1
+
