@@ -2,165 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E3363BCC1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 10:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C545C63BD3C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 10:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiK2JRZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Nov 2022 04:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S230152AbiK2Jro (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Nov 2022 04:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiK2JRS (ORCPT
+        with ESMTP id S231922AbiK2Jrl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:17:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA03559FF6
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 01:15:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669713333;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kLZwFc2T16+VzxzvdeqP7dZ+DZAGfAAiD+u0EUrSQ8s=;
-        b=h1Kb/NH8dw5gnC5bVAx8fu9o5KyZ3Q550uKuS3qiO2NC3lsfzfJyNknx/UO9A/qRJd4heE
-        183abT0rqIEWI/G8VXbYeqDw92IfyE1MZ/YPV9hkSuTloWb5HkwQPFEiAb4C3mKUkH49qq
-        SS/Uu4HdZSA3n+uwUNjcn/TsBN4FL3I=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-139-jnEn_uANM3SLPtRKzimoRA-1; Tue, 29 Nov 2022 04:15:25 -0500
-X-MC-Unique: jnEn_uANM3SLPtRKzimoRA-1
-Received: by mail-wr1-f71.google.com with SMTP id v14-20020adf8b4e000000b0024174021277so2669407wra.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 01:15:24 -0800 (PST)
+        Tue, 29 Nov 2022 04:47:41 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACBA2AA
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 01:47:39 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3ceb4c331faso20349227b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 01:47:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jUYvtMPSKjTs5g6MPMmEMkOFRg4aOqr2pjUMfkz/qL0=;
+        b=VQ+VIAZ+G3oo5EFPjNjRqx8Z8Psg8ZPV0zITQA1aPIi9vO2Cpg0DrBU3vtvPcGyT2Y
+         nMV9ijpQ8uFbAwUt95JvQuGa/kqtpAt9OmTGt+VGfGd244AgOKUNGUQ5JHjhUK6+6mQU
+         ZfLDINbdMs+HC7aZHpe4SWXzozkIphqrMNLD8/Xr0sqr7Egy9DVfNy7wMyCuvpN33k9a
+         nFafoqr9wQFcP8RzADkbXouMmadafPfQQ+Hz+G+tuItnwuzMqy6hG0Gt5pEbytpYKffB
+         K8MXyWDFqbobn0eHIVND4B6Osl15gRKgtC2sszltuv7A6zdizeCmCEg5ec1pe7O7Ygei
+         GI2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kLZwFc2T16+VzxzvdeqP7dZ+DZAGfAAiD+u0EUrSQ8s=;
-        b=tpFjVH/7ikt1uzN6LRSMnv9C5tIFdVNPTVzgWJqQ8k5eE5DOKTfH5kWVaS4QCVFHls
-         Oa7JZBAoNC+NeoQ8SXrERLxgxRoeFFcb1bEnioJCCPKDa6qda/5NaXZGztfSSAznX0qp
-         6iRPD2dMYhCNwiWszQ9n2N8N9fTpubENwEiTjdLIwvXMsgW0T3i3ZggeuLL6jWb/f16x
-         IcSRJkLORTeNmVyz3fdXcab2nN1jw9zH3yVs2amh9Y5yEiy58qnukXTTkmoh/UnBWqZK
-         lORfRl49danjr+7uPm3xYL4eiDF248P+1DyHFAookRGlRJFivySYtdgTuSUFk4qoZ1Kj
-         ag7Q==
-X-Gm-Message-State: ANoB5pmFmOeOnPe/h6v7eEBkSfja/nEZudHvloSg9Ax2zAG2Pt47jk2d
-        xqNRYeHfC+hVKmsT7cAIMaozys3An0gw7cXWpTReV7vxU5WAkOy/k9Po9njhxQRQr5tK8QpvlUj
-        TcWTqShiDg/66/aQs2w+HCo/lLBk6
-X-Received: by 2002:a05:600c:430c:b0:3cf:8ed7:7124 with SMTP id p12-20020a05600c430c00b003cf8ed77124mr42243453wme.140.1669713323767;
-        Tue, 29 Nov 2022 01:15:23 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5aMoFyhfTZRz6WGw0GcgDkcONZAiRyZAh+e0PFHXmVnEtFtgvwKaxuOXbIxhdoVgI1OB8H+Q==
-X-Received: by 2002:a05:600c:430c:b0:3cf:8ed7:7124 with SMTP id p12-20020a05600c430c00b003cf8ed77124mr42243382wme.140.1669713323266;
-        Tue, 29 Nov 2022 01:15:23 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:ca00:3fb8:c253:3bf7:b60e? (p200300cbc705ca003fb8c2533bf7b60e.dip0.t-ipconnect.de. [2003:cb:c705:ca00:3fb8:c253:3bf7:b60e])
-        by smtp.gmail.com with ESMTPSA id n26-20020a05600c3b9a00b003c6b70a4d69sm1498998wms.42.2022.11.29.01.15.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 01:15:22 -0800 (PST)
-Message-ID: <abcba252-13a0-50aa-79ec-28b649c892cd@redhat.com>
-Date:   Tue, 29 Nov 2022 10:15:20 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
- usage
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-17-david@redhat.com>
- <81fb0fa3-2e06-b765-56ac-a7d981194e59@redhat.com>
- <08b65ac6-6786-1080-18f8-d2be109c85fc@xs4all.nl>
- <9d0bf98a-3d6a-1082-e992-1338e1525935@redhat.com>
- <20221128145927.df895bf1966cfa125cae9668@linux-foundation.org>
- <22b1107b-0acc-5772-a883-8f3c4682eb1b@redhat.com>
- <c2681582-1e24-7ed9-e4fb-e2dd17a93aed@xs4all.nl>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <c2681582-1e24-7ed9-e4fb-e2dd17a93aed@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jUYvtMPSKjTs5g6MPMmEMkOFRg4aOqr2pjUMfkz/qL0=;
+        b=TNBE/xAsF/pg+RDQfRkBPC/BOhoEYSOfxAz1ZVM9QBsa8EHx4oF/Zlg3oLU9raRMtD
+         YISZbSjxrnAug/QPlaqfQPT6LaLleX2QLXOnxodPKfToWJYjLFQ0R+nGN4bJjtyYLXPH
+         y3OVnxjp5+0PYKCwjc0Gws9v8zngGd5YnX+xvqBg/QLCTv6P/cOomXiYVLtXb2lPJLkw
+         6nYpeZaEEr1TWFa2Qt/c+ig+BNJqivmzIVj0oxOOpf9vREnHHMPc2Gc8BJ531KYUaGdA
+         3OGzX+4wEnYgMP7Z/E0KBVOORvdKvAuuO2GX5d6LEyuHbFzkk+PjBAfvZOhoTLLU8McT
+         xCYw==
+X-Gm-Message-State: ANoB5pk9kJHSbA4OUu59QhD4ukxF3sLo9jMijChWZij926sd2q5u/i2P
+        8Ml16VHYoyLzxG7ilpz8SX6PzRQlP4jzRg==
+X-Google-Smtp-Source: AA0mqf7kQDdqeLRiGzeiyFv4w0FSFwHN284HPSYc1KooqTV79U9t2R1k8LQc1SmNrdp8VPuuG9B3LC9I9UjRGg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:aa05:0:b0:38f:f363:c996 with SMTP id
+ i5-20020a81aa05000000b0038ff363c996mr35ywh.442.1669715258425; Tue, 29 Nov
+ 2022 01:47:38 -0800 (PST)
+Date:   Tue, 29 Nov 2022 17:47:32 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221129094732.306449-1-davidgow@google.com>
+Subject: [PATCH] Documentation: kunit: Fix "How Do I Use This" / "Next Steps" sections
+From:   David Gow <davidgow@google.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Sadiya Kazi <sadiyakazi@google.com>
+Cc:     David Gow <davidgow@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 29.11.22 10:08, Hans Verkuil wrote:
-> On 29/11/2022 09:48, David Hildenbrand wrote:
->> On 28.11.22 23:59, Andrew Morton wrote:
->>> On Mon, 28 Nov 2022 09:18:47 +0100 David Hildenbrand <david@redhat.com> wrote:
->>>
->>>>> Less chances of things going wrong that way.
->>>>>
->>>>> Just mention in the v2 cover letter that the first patch was added to
->>>>> make it easy to backport that fix without being hampered by merge
->>>>> conflicts if it was added after your frame_vector.c patch.
->>>>
->>>> Yes, that's the way I would naturally do, it, however, Andrew prefers
->>>> delta updates for minor changes.
->>>>
->>>> @Andrew, whatever you prefer!
->>>
->>> I'm inclined to let things sit as they are.  Cross-tree conflicts
->>> happen, and Linus handles them.  I'll flag this (very simple) conflict
->>> in the pull request, if MM merges second.  If v4l merges second then
->>> hopefully they will do the same.  But this one is so simple that Linus
->>> hardly needs our help.
-> 
-> It's not about cross-tree conflicts, it's about the fact that my patch is
-> a fix that needs to be backported to older kernels. It should apply cleanly
-> to those older kernels if my patch goes in first, but if it is the other way
-> around I would have to make a new patch for the stable kernels.
+The 'index' and 'start' pages end with very similar "How Do I Use This"
+/ "Next Steps" sections respectively, which link to the other
+documentation pages. This wasn't updated when the tips.rst page was
+removed.
 
-IIUC, the conflict will be resolved at merge time and the merge 
-resolution will be part of the merge commit. It doesn't matter in which 
-order the patches go upstream, the merge commit resolves the problematic 
-overlap.
+Remove the reference to tips.rst, as well as tidy up the descriptions on
+all of the links (especially given that sphinx gives the page titles
+anyway.
 
-So your patch will be upstream as intended, where it can be cleanly 
-backported.
+Fixes: 4399c737a97d ("Documentation: kunit: Remove redundant 'tips.rst' page")
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ Documentation/dev-tools/kunit/index.rst | 18 +++++++-----------
+ Documentation/dev-tools/kunit/start.rst | 16 ++++++----------
+ 2 files changed, 13 insertions(+), 21 deletions(-)
 
-Hope I am not twisting reality ;)
-
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+index d5629817cd72..beec6f847ef4 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -99,14 +99,10 @@ Read also :ref:`kinds-of-tests`.
+ How do I use it?
+ ================
+ 
+-*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
+-*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+-*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
+-*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
+-*   Documentation/dev-tools/kunit/usage.rst - write tests.
+-*   Documentation/dev-tools/kunit/tips.rst - best practices with
+-    examples.
+-*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
+-    used for testing.
+-*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
+-    answers.
++*   Documentation/dev-tools/kunit/start.rst - for new KUnit users
++*   Documentation/dev-tools/kunit/architecture.rst - how KUnit is put together
++*   Documentation/dev-tools/kunit/run_wrapper.rst - run tests via kunit.py
++*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit.py
++*   Documentation/dev-tools/kunit/usage.rst - write tests
++*   Documentation/dev-tools/kunit/api/index.rst - API reference
++*   Documentation/dev-tools/kunit/faq.rst - common questions and answers
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index f4f504f1fb15..58c176348885 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -294,13 +294,9 @@ Congrats! You just wrote your first KUnit test.
+ Next Steps
+ ==========
+ 
+-*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+-*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
+-*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
+-*   Documentation/dev-tools/kunit/usage.rst - write tests.
+-*   Documentation/dev-tools/kunit/tips.rst - best practices with
+-    examples.
+-*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
+-    used for testing.
+-*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
+-    answers.
++*   Documentation/dev-tools/kunit/architecture.rst - how KUnit is put together
++*   Documentation/dev-tools/kunit/run_wrapper.rst - run tests via kunit.py
++*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit.py
++*   Documentation/dev-tools/kunit/usage.rst - write tests
++*   Documentation/dev-tools/kunit/api/index.rst - API reference
++*   Documentation/dev-tools/kunit/faq.rst - common questions and answers
 -- 
-Thanks,
-
-David / dhildenb
+2.38.1.584.g0f3c55d4c2-goog
 
