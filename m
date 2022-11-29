@@ -2,140 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E647B63C629
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 18:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6CC63C6E9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 19:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236117AbiK2RJp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Nov 2022 12:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S236658AbiK2SAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Nov 2022 13:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbiK2RJo (ORCPT
+        with ESMTP id S233312AbiK2SAs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Nov 2022 12:09:44 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2818C5D684
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 09:09:43 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3b48b139b46so145202277b3.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 09:09:43 -0800 (PST)
+        Tue, 29 Nov 2022 13:00:48 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26046B38F
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 10:00:46 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id w129so14430712pfb.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 10:00:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pVb3wvICcN747O+jvC7vxIAJjyL4j7lkEgDJJO1LR3A=;
-        b=HcNP+fi/2uvAX7ADjQIyenv50ifVamDfOWHKACyaxt6TonIK8DsSruNpJx5/BmGAVm
-         TI1jSraHtL8u11jMt47k/Djnx+VMzu9ez5lpo2jV7YtRKHxzgbHKiFvTkJTKfdlt5ULR
-         XrdWHCk75/3edfoc9gDiDUUEe/afCqrJUR9NEZ1pAwddPzW7dY9N6hY7cBWQaw1R5vpC
-         yriRlqG7CMxUTGv8wkJsxPkYDNcpmZa9IWSGSfi+/12SnN2VszZsMVvsnVqLDhGFuhIV
-         mWnIajP0TGZhThRW3dZvV80uAL290eWJnfamZbuzdEFtNLjX9BSZ5AP369I2bA1poi04
-         R4WA==
+        bh=TSI5hG4OpJqGbtaBgdMep1PH+0f8Fx62v+X9xZ1Fl94=;
+        b=PVqG6QzEOT3S84aLFS3ebN/+dcswywiw+Tx6QqHnhwexLip1a+xdTIutTPQLHGODOE
+         HUMJxl4i7tyn0wbyWEwmwvBAV5fXYIPCYh+PZ86ivuFF+Z2Evwdp8at1oPYfaqoo67JH
+         DfFuCRaP2xlxa/ergCj0mErkRDRutP8j+PmWU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pVb3wvICcN747O+jvC7vxIAJjyL4j7lkEgDJJO1LR3A=;
-        b=ol6Tkg1743Y9d3Ssqg4TX36esStWG2+W5NEyVL/V+2+mi0L6jVcsTyNr2eesrmt3RP
-         sNSYkASClNNGhzWmhG8UWiXMPZ4RoSqmuUOGC1sLKoGkv+wT6SxGxT00dvXThtrbjQJD
-         BKNiAw5j7TWN97L8G4hURFQC2Vsh0YosjGrQsJyGnOtkx5c42RmUXCzx65G7VU034oBC
-         3qjJb4R2jmHX4KmhVB8f+qljwDnou0aRqlAS3Gl+gxJb56JxPJxMIEUe/fd0hcbyhyt7
-         Uh9b0JvIR8TF0Aw1WvH7/kJ7izE+ctxV+ywIvc/R0grKLvwDIpoe4eNZrl8xpDdUKP9z
-         AA7g==
-X-Gm-Message-State: ANoB5pksbR0ksKIts2g3ZUN9LD5z84IATJ6KI2IyXqc59siMRl0z8bAo
-        mVCB4S+sCgqMpxPIyPjkk+vXSgWdZsHXsESGFGoQRw==
-X-Google-Smtp-Source: AA0mqf6J3hIbOQvZD3q3Mptj980X01dG/EjoeW5Zzv3ZIWc3NuiOSSTXN6VUtrRGWhTqbFh3aZ7551sTroNKupGKPTQ=
-X-Received: by 2002:a81:de4e:0:b0:3c2:47c6:814 with SMTP id
- o14-20020a81de4e000000b003c247c60814mr14295515ywl.394.1669741781891; Tue, 29
- Nov 2022 09:09:41 -0800 (PST)
+        bh=TSI5hG4OpJqGbtaBgdMep1PH+0f8Fx62v+X9xZ1Fl94=;
+        b=fPS4rY+lDq1mJIm6+VXyC8HuNW2l7PTBqUivvGVmwn+4KbVCxkacYML4f6yvVpy2KW
+         1tMTwQuZMrA70LNmwzTzUzc/XZpfF+JQ2e5F//n2pH8LsdrgKZ3751EJ0y8tQFZiStG6
+         rVeJAxcYe4xZC2CmK3JAOg+elFC2DsHUjRfO3WeMZfo6dImZQXkPylUL/mTYMVV5qKJO
+         kp5rWI8W3QcAIArSI0A+fd6m5BcZTE29pXL3NRatgdhjfNE96KermW8hfKOV9IiTaz5l
+         ZsfcGuPCPgi1wwcL9vU1LhaUAGw+EIReyo/8L3mAiMVAxq9pMEVq3UjfMBPhVPzikpBl
+         5I+g==
+X-Gm-Message-State: ANoB5pmwfveHzeE0NaUKZtu+Yf5Fvgg0SDqfOEytppzYFcDrXJbtVkZA
+        vYSpE/4fvUBgfNGgLdp5FTYgr2z06mX2VZn264+uXQ==
+X-Google-Smtp-Source: AA0mqf7u65cBqunX27gIoaEd70af4bgJCUl4C12pXRT79B5hou0hUEMAqHi1rrceJLd5hJK9hxM6ue6EB8yz9NAAWV8=
+X-Received: by 2002:a63:180a:0:b0:470:63e5:5c59 with SMTP id
+ y10-20020a63180a000000b0047063e55c59mr32417999pgl.172.1669744846086; Tue, 29
+ Nov 2022 10:00:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20221129001234.606653-1-dlatypov@google.com> <CABVgOS=6nx2SGRVjN1Ek1htsXehcnU1fnp6FMc0ATdOJfRd0iQ@mail.gmail.com>
-In-Reply-To: <CABVgOS=6nx2SGRVjN1Ek1htsXehcnU1fnp6FMc0ATdOJfRd0iQ@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 29 Nov 2022 09:09:29 -0800
-Message-ID: <CAGS_qxqu+opwMusOGSS3s9fLo2GfpgsCQOgq6VZyBcVb+zS6Zg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: don't include KTAP headers and the like in
- the test log
-To:     David Gow <davidgow@google.com>
-Cc:     brendanhiggins@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+ <20221103155756.687789-4-benjamin.tissoires@redhat.com> <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
+ <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com>
+ <CAADnVQ+kE+EJ9LAfwge9ksC0LR8r+ShQNYi5g-MDajufXq8Yxw@mail.gmail.com> <CAO-hwJJGxvrLRGSt7g0T1rYiuCCigVzQ-L6yKLM1-44EpYqmsQ@mail.gmail.com>
+In-Reply-To: <CAO-hwJJGxvrLRGSt7g0T1rYiuCCigVzQ-L6yKLM1-44EpYqmsQ@mail.gmail.com>
+From:   Florent Revest <revest@chromium.org>
+Date:   Tue, 29 Nov 2022 19:00:35 +0100
+Message-ID: <CABRcYmKyRchQhabi1Vd9RcMQFCcb=EtWyEbFDFRTc-L-U8WhgA@mail.gmail.com>
+Subject: Re: [PATCH hid v12 03/15] HID: initial BPF implementation
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 12:31 AM David Gow <davidgow@google.com> wrote:
+On Thu, Nov 24, 2022 at 4:50 PM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
 >
-> On Tue, Nov 29, 2022 at 8:12 AM Daniel Latypov <dlatypov@google.com> wrote:
+> On Wed, Nov 23, 2022 at 9:14 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > We print the "test log" on failure.
-> > This is meant to be all the kernel output that happened during the test.
-> >
-> > But we also include the special KTAP lines in it, which are often
-> > redundant.
-> >
-> > E.g. we include the "not ok" line in the log, right before we print
-> > that the test case failed...
-> > [13:51:48] Expected 2 + 1 == 2, but
-> > [13:51:48] 2 + 1 == 3 (0x3)
-> > [13:51:48] not ok 1 example_simple_test
-> > [13:51:48] [FAILED] example_simple_test
-> >
-> > More full example after this patch:
-> > [13:51:48] =================== example (4 subtests) ===================
-> > [13:51:48] # example_simple_test: initializing
-> > [13:51:48] # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
-> > [13:51:48] Expected 2 + 1 == 2, but
-> > [13:51:48] 2 + 1 == 3 (0x3)
-> > [13:51:48] [FAILED] example_simple_test
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> I totally agree we should skip these from the log. (Unless
-> --raw_output is enabled, but that obviously doesn't apply.)
->
-> Going forward, I think we should also probably disable
-> kunit.stats_enabled when running via kunit.py, too (again, unless
-> --raw_output is used.)
+> > On Wed, Nov 23, 2022 at 6:53 AM Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > >
+> > > Hi Jon,
+> > >
+> > > On Wed, Nov 23, 2022 at 2:25 PM Jon Hunter <jonathanh@nvidia.com> wrote:
+> > > >
+> > > > We have a kernel test that checks for new warning and error messages on
+> > > > boot and with this change I am now seeing the following error message on
+> > > > our Tegra platforms ...
+> > > >
+> > > >   WARNING KERN hid_bpf: error while preloading HID BPF dispatcher: -13
+> > > >
+> > > > I have a quick look at the code, but I can't say I am familiar with
+> > > > this. So I wanted to ask if a way to fix this or avoid this? I see the
+> > > > code returns 0, so one option would be to make this an informational or
+> > > > debug print.
+> > >
+> > > I am not in favor of debug in that case, because I suspect it'll hide
+> > > too much when getting a bug report. Informational could do, yes.
+> > >
+> > > However, before that, I'd like to dig a little bit more on why it is
+> > > failing. I thought arm64 now has support of tracing bpf programs, so I
+> > > would not expect this to fail.
 
-I considered including that as a patch 2/2 here.
-But changing the behavior like that felt a bit iffy.
+We have BPF trampolines on arm64 already but no ftrace direct calls
+right now. (so trampolines get jitted but don't get called eheh :)) So
+indeed BPF tracing programs (fentry/fexit/fmod_ret) do not work on
+arm64 at the moment.
 
-We've basically been telling people that looking at .kunit/test.log is
-logically equivalent to running with kunit.py run --raw_output.
-That would no longer be true after such a change.
-So I'm torn between that and automatically filtering them out in the
-parser side.
+> > Unfortunately the patches to add support for such tracing bpf progs got stuck.
+> > Florent/Mark can probably share the latest status.
 
-Cons of tweaking args based on --raw_output
-* now more magic, harder to explain (see above)
-* people might find test counts useful when looking at test.log
+We are working on an implementation of ftrace direct calls that would
+fit within the constraints of arm64 and play nice with the other users
+of the ftrace call site. Hopefully we have a patch to share in the
+next couple of weeks I'd say!
 
-Cons of filtering out test counts in the parser
-* risks false positives: filtering out other lines besides test counts
-* when there's missing output, this is less debuggable
-   * 99% of users are *not* going to dig into the python code
-  * but IMO users are fairly likely to notice the extra
-kunit.stats_enabled=0 cmdline arg
+> Oh... I noticed Jon's config was lacking CONFIG_FTRACE. So should I
+> also add a depends on CONFIG_FTRACE to enable HID-BPF?
 
-And overall, the benefit of hiding these is very small and cosmetic in nature.
-So that means making a tradeoff to do so feels more iffy.
+If HID-BPF fundamentally depends on a fmod_ret program being attached
+to function, it seems to me that it should depend on both:
+    CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS (CONFIG_FTRACE or even
+CONFIG_DYNAMIC_FTRACE aren't enough, there can be architectures that
+do not support direct calls. here you noticed it on arm64 which
+luckily should get fixed someday soon but there could be other
+architectures with that issue too)
+and
+    CONFIG_FUNCTION_ERROR_INJECTION (since [1] error injection needs
+to be explicitly opted-in, it's easy to miss it and fail to attach
+fmod_ret programs in mysterious ways)
 
-The hiding done in this patch seemed fine since there was no tradeoff,
-we just needed to stop including lines we've already recognized as
-KTAP directives.
+I'm thinking that maybe encoding these two dependencies in the
+CONFIG_HID_BPF is leaking too much of the bpf tracing abstraction to
+the user. Maybe the BPF Kconfig could provide "proxy" configs like
+HAVE_BPF_FENTRY_FEXIT, HAVE_BPF_FMOD_RET (naming is hard) to expose
+these dependencies better ?
 
->
-> In any case, this looks good and works well here.
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
-> Cheers,
-> -- David
+1: https://lore.kernel.org/lkml/20221121104403.1545f9b5@gandalf.local.home/
