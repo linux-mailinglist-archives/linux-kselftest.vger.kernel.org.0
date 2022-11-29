@@ -2,269 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A3063BBCE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 09:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 631EB63BBE3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 09:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbiK2Iie (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Nov 2022 03:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
+        id S230488AbiK2Inm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Nov 2022 03:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiK2IiA (ORCPT
+        with ESMTP id S230476AbiK2Ink (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Nov 2022 03:38:00 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1EA5ADF1;
-        Tue, 29 Nov 2022 00:36:43 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3bfd998fa53so78739827b3.5;
-        Tue, 29 Nov 2022 00:36:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pfkOEndp/yx+JRjSBn9cHN5l3i+pxuuJ2RW6geOPhYw=;
-        b=ZR+jEz0dzvk6xpPXj53lxM8aL/yM5BPKAlEKuEb2t2ZaMZ1JH83eYMMAMZehcWRpmG
-         kw46HaFKI48cro0faLI2xks648p73ZPWsjxjhNeVUov/LMYm/F1W8r3tUSmgufoRvcZw
-         Q+PxLywuZwFkwAjfImeVfX9QTz75wNwFWAP74bf84Sp24JPHIBxl2YJj4dsJGIVkEblU
-         PoDQZjAcp0pERxMYnggb5Potc6S9sL4Odyxb5PGnBNz6J+y1WHDdhCNlTsvNugvLf3UZ
-         i52QonMdSY/eGGRGj5v+zu9PVsy4/7tm04ktjA/bK5jzszlseIK5aBL/jDtBmozyKaDr
-         LnKw==
+        Tue, 29 Nov 2022 03:43:40 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E9422BCF
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 00:43:39 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id h10-20020a056e021b8a00b00302671bb5fdso11534474ili.21
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 00:43:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pfkOEndp/yx+JRjSBn9cHN5l3i+pxuuJ2RW6geOPhYw=;
-        b=zudvzIqIQfn2s590F1ALKkI2n5DaqI8kGGy9DVXDRdBfzfkvtKQy9YrPfEDS4hWGYd
-         RJbbikj2bOmzj0z9HXdr8dHRDkanoZqbWfGVqiQjz0rRGGhJRAvwftSGxCXrda1v6cef
-         VGWOQ7icuPtxzk0TCXKQc29ctP0A+bKuORTiv8Wq1EKiFOWWe66Du2+eME9YPnLfpy0+
-         KzArG0eej9NkaVervM7ifyamPClrEoS0xr12c73ULu5YIvdX0S6rLRsfwCH3oDkdwvMA
-         Fk6Z7kCmfkKKtzG6w5b6IMRzYhdoVDML4X+iN7Y05vhGa5QvIspVG5eC3LsodYwlPyAy
-         RUZQ==
-X-Gm-Message-State: ANoB5pl5Kk1F+xCha25QRJvgWZlXgtjR+qlXcm4rMtKYwrIBhasWregj
-        i/gqcE1diQn/NJOedW/VA2UZJq34c156IxzoaYbFh52oGA10tg==
-X-Google-Smtp-Source: AA0mqf4DCk0ParghyE4fj9eZZvvy0WbsGmVGy4yuDDXlIYdulWkpQwpmAj3+HsVlzh+fSws2ifKlC2iPCo+5pyrHq5c=
-X-Received: by 2002:a81:9bc6:0:b0:373:45d9:2263 with SMTP id
- s189-20020a819bc6000000b0037345d92263mr52738017ywg.507.1669711002850; Tue, 29
- Nov 2022 00:36:42 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eROaMJHXtlAeIf9+9B26Zu+8Ip7dRb8FLbrEw0ysiHM=;
+        b=k6wCwEpba8NDz0BG67FPKAwvxwil6sOg/VrgRD8jvRxR7qzwKF6fNm0+KoxPlcGAK2
+         Fjwc9za1Qg3O/20ajh2zbRLuyBJF7HTmWa8z+yf70S9hnfuZPSPeioWemZqMghT5Zonn
+         8yzZkskr2Yui6z/8cnEQOa6w6ZnjTxHE20gh7tT18Kt+Tys/0ZB3bmCL8ZrPCqAFvlTr
+         r6fRGFPeaYGQ6zF9qvqgKDtibShzPPZZBzfx85oXbwL/YmxZ5YNr3Ni2jsgOn9n65r+x
+         mBuCHtcmNltw4v4wEEFH2xinJ1Aq66Wx6yLrxhJTtk5DebfIQ8ef1kIICna4rWd8Z7hP
+         vAfA==
+X-Gm-Message-State: ANoB5pk/7klSQtKyDicrR/IjDCkrDw+TktpzKqOIY74nujkQHy08UHhI
+        0CGtSRn7P3cq1LYMbizlBjNiJ8UE7x/QD7lSlZPnlDUR75fC
+X-Google-Smtp-Source: AA0mqf5tw8EWQb8FXAqvp/obFtElLcB7emtzch+skwIA7xGcuSwuZs+WaOW7LPOpMzyLMx6UYtXvqKtjhgM6i1zT6fK0CgFDTe2N
 MIME-Version: 1.0
-References: <20221128160501.769892-1-eyal.birger@gmail.com>
- <20221128160501.769892-3-eyal.birger@gmail.com> <c8a2d940-ff85-c952-74d0-25ad2c33c1af@linux.dev>
-In-Reply-To: <c8a2d940-ff85-c952-74d0-25ad2c33c1af@linux.dev>
-From:   Eyal Birger <eyal.birger@gmail.com>
-Date:   Tue, 29 Nov 2022 10:36:31 +0200
-Message-ID: <CAHsH6Gtfe-nPTpquN=25gWuGL3ZGg9tBeQ=nFJGmtPNbMM0ghQ@mail.gmail.com>
-Subject: Re: [PATCH ipsec-next 2/3] xfrm: interface: Add unstable helpers for
- setting/getting XFRM metadata from TC-BPF
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        andrii@kernel.org, daniel@iogearbox.net, nicolas.dichtel@6wind.com,
-        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, shuah@kernel.org
+X-Received: by 2002:a05:6e02:1409:b0:300:f124:867e with SMTP id
+ n9-20020a056e02140900b00300f124867emr14899857ilo.44.1669711418539; Tue, 29
+ Nov 2022 00:43:38 -0800 (PST)
+Date:   Tue, 29 Nov 2022 00:43:38 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fac82605ee97fb72@google.com>
+Subject: [syzbot] WARNING in btrfs_free_reserved_data_space_noquota
+From:   syzbot <syzbot+adec8406ad17413d4c06@syzkaller.appspotmail.com>
+To:     christophe.leroy@csgroup.eu, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        npiggin@gmail.com, shuah@kernel.org,
+        syzkaller-bugs@googlegroups.com, ye.xingchen@zte.com.cn
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-(sent again in plain text, sorry for the noise).
+Hello,
 
-Hi Martin.
+syzbot found the following issue on:
 
-On Tue, Nov 29, 2022 at 3:58 AM Martin KaFai Lau <martin.lau@linux.dev> wrote:
->
-> On 11/28/22 8:05 AM, Eyal Birger wrote:
-> > This change adds xfrm metadata helpers using the unstable kfunc call
-> > interface for the TC-BPF hooks. This allows steering traffic towards
-> > different IPsec connections based on logic implemented in bpf programs.
-> >
-> > This object is built based on the availabilty of BTF debug info.
-> >
-> > The metadata percpu dsts used on TX take ownership of the original skb
-> > dsts so that they may be used as part of the xfrm transmittion logic -
-> > e.g.  for MTU calculations.
->
-> A few quick comments and questions:
+HEAD commit:    b7b275e60bcd Linux 6.1-rc7
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=158a7b73880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=adec8406ad17413d4c06
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169ccb75880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17bf7153880000
 
-Thanks for your comments!
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/525233126d34/disk-b7b275e6.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e8299bf41400/vmlinux-b7b275e6.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/eebf691dbf6f/bzImage-b7b275e6.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/5423c2d2ad62/mount_0.gz
 
->
-> >
-> > Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
-> > ---
-> >   include/net/dst_metadata.h     |  1 +
-> >   include/net/xfrm.h             | 20 ++++++++
-> >   net/core/dst.c                 |  4 ++
-> >   net/xfrm/Makefile              |  6 +++
-> >   net/xfrm/xfrm_interface_bpf.c  | 92 ++++++++++++++++++++++++++++++++++
->
-> Please tag for bpf-next
-Sure. I wasn't totally sure which tree this belongs to.
+The issue was bisected to:
 
->
-> >   net/xfrm/xfrm_interface_core.c | 15 ++++++
-> >   6 files changed, 138 insertions(+)
-> >   create mode 100644 net/xfrm/xfrm_interface_bpf.c
-> >
-> > diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-> > index a454cf4327fe..1b7fae4c6b24 100644
-> > --- a/include/net/dst_metadata.h
-> > +++ b/include/net/dst_metadata.h
-> > @@ -26,6 +26,7 @@ struct macsec_info {
-> >   struct xfrm_md_info {
-> >       u32 if_id;
-> >       int link;
-> > +     struct dst_entry *dst_orig;
-> >   };
-> >
-> >   struct metadata_dst {
->
-> [ ... ]
->
-> > diff --git a/net/core/dst.c b/net/core/dst.c
-> > index bc9c9be4e080..4c2eb7e56dab 100644
-> > --- a/net/core/dst.c
-> > +++ b/net/core/dst.c
-> > @@ -315,6 +315,8 @@ void metadata_dst_free(struct metadata_dst *md_dst)
-> >   #ifdef CONFIG_DST_CACHE
-> >       if (md_dst->type == METADATA_IP_TUNNEL)
-> >               dst_cache_destroy(&md_dst->u.tun_info.dst_cache);
-> > +     else if (md_dst->type == METADATA_XFRM)
-> > +             dst_release(md_dst->u.xfrm_info.dst_orig);
->
-> Why only release dst_orig under CONFIG_DST_CACHE?
-It's a relic from a previous version where I'd used dst cache.
-Will move out of this ifdef.
+commit c814bf958926ff45a9c1e899bd001006ab6cfbae
+Author: ye xingchen <ye.xingchen@zte.com.cn>
+Date:   Tue Aug 16 10:51:06 2022 +0000
 
->
-> >   #endif
-> >       kfree(md_dst);
-> >   }
-> > @@ -348,6 +350,8 @@ void metadata_dst_free_percpu(struct metadata_dst __percpu *md_dst)
-> >
-> >               if (one_md_dst->type == METADATA_IP_TUNNEL)
-> >                       dst_cache_destroy(&one_md_dst->u.tun_info.dst_cache);
-> > +             else if (one_md_dst->type == METADATA_XFRM)
-> > +                     dst_release(one_md_dst->u.xfrm_info.dst_orig);
->
-> Same here.
+    powerpc/selftests: Use timersub() for gettimeofday()
 
-Likewise.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=118c3d03880000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=138c3d03880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=158c3d03880000
 
->
-> [ ... ]
->
-> > diff --git a/net/xfrm/xfrm_interface_bpf.c b/net/xfrm/xfrm_interface_bpf.c
-> > new file mode 100644
-> > index 000000000000..d3997ab7cc28
-> > --- /dev/null
-> > +++ b/net/xfrm/xfrm_interface_bpf.c
-> > @@ -0,0 +1,92 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/* Unstable XFRM Helpers for TC-BPF hook
-> > + *
-> > + * These are called from SCHED_CLS BPF programs. Note that it is
-> > + * allowed to break compatibility for these functions since the interface they
-> > + * are exposed through to BPF programs is explicitly unstable.
-> > + */
-> > +
-> > +#include <linux/bpf.h>
-> > +#include <linux/btf_ids.h>
-> > +
-> > +#include <net/dst_metadata.h>
-> > +#include <net/xfrm.h>
-> > +
-> > +struct bpf_xfrm_info {
-> > +     u32 if_id;
-> > +     int link;
-> > +};
-> > +
-> > +static struct metadata_dst __percpu *xfrm_md_dst;
-> > +__diag_push();
-> > +__diag_ignore_all("-Wmissing-prototypes",
-> > +               "Global functions as their definitions will be in xfrm_interface BTF");
-> > +
-> > +__used noinline
-> > +int bpf_skb_get_xfrm_info(struct __sk_buff *skb_ctx, struct bpf_xfrm_info *to)
-> > +{
-> > +     struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> > +     struct xfrm_md_info *info;
-> > +
-> > +     memset(to, 0, sizeof(*to));
-> > +
-> > +     info = skb_xfrm_md_info(skb);
-> > +     if (!info)
-> > +             return -EINVAL;
-> > +
-> > +     to->if_id = info->if_id;
-> > +     to->link = info->link;
-> > +     return 0;
-> > +}
-> > +
-> > +__used noinline
-> > +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
-> > +                       const struct bpf_xfrm_info *from)
-> > +{
-> > +     struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> > +     struct metadata_dst *md_dst;
-> > +     struct xfrm_md_info *info;
-> > +
-> > +     if (unlikely(skb_metadata_dst(skb)))
-> > +             return -EINVAL;
-> > +
-> > +     md_dst = this_cpu_ptr(xfrm_md_dst);
-> > +
-> > +     info = &md_dst->u.xfrm_info;
-> > +     memset(info, 0, sizeof(*info));
-> > +
-> > +     info->if_id = from->if_id;
-> > +     info->link = from->link;
-> > +     info->dst_orig = skb_dst(skb);
-> However, the dst_orig init is not done under CONFIG_DST_CACHE though...
->
-> Also, is it possible that skb->_skb_refdst has SKB_DST_NOREF set and later below
-> ... (contd)
-Nice catch! will force dst is refcounted.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+adec8406ad17413d4c06@syzkaller.appspotmail.com
+Fixes: c814bf958926 ("powerpc/selftests: Use timersub() for gettimeofday()")
 
->
-> > +
-> > +     dst_hold((struct dst_entry *)md_dst);
-> > +     skb_dst_set(skb, (struct dst_entry *)md_dst);
-> > +     return 0;
-> > +}
-> > +
-> > +__diag_pop()
-> > +
-> > +BTF_SET8_START(xfrm_ifc_kfunc_set)
-> > +BTF_ID_FLAGS(func, bpf_skb_get_xfrm_info)
-> > +BTF_ID_FLAGS(func, bpf_skb_set_xfrm_info)
-> > +BTF_SET8_END(xfrm_ifc_kfunc_set)
-> > +
-> > +static const struct btf_kfunc_id_set xfrm_interface_kfunc_set = {
-> > +     .owner = THIS_MODULE,
-> > +     .set   = &xfrm_ifc_kfunc_set,
-> > +};
-> > +
-> > +int __init register_xfrm_interface_bpf(void)
-> > +{
-> > +     xfrm_md_dst = metadata_dst_alloc_percpu(0, METADATA_XFRM,
-> > +                                             GFP_KERNEL);
-> > +     if (!xfrm_md_dst)
-> > +             return -ENOMEM;
-> > +     return register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS,
-> > +                                      &xfrm_interface_kfunc_set);
->
-> Will cleanup_xfrm_interface_bpf() be called during error ?
-No. Will fix in v2.
+RDX: 0000000000000001 RSI: 0000000020000280 RDI: 0000000000000005
+RBP: 00007ffd32e91c70 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000008000000 R11: 0000000000000246 R12: 0000000000000006
+R13: 00007ffd32e91cb0 R14: 00007ffd32e91c90 R15: 0000000000000006
+ </TASK>
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3764 at fs/btrfs/space-info.h:122 btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
+WARNING: CPU: 1 PID: 3764 at fs/btrfs/space-info.h:122 btrfs_free_reserved_data_space_noquota+0x219/0x2b0 fs/btrfs/delalloc-space.c:179
+Modules linked in:
+CPU: 1 PID: 3764 Comm: syz-executor759 Not tainted 6.1.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:btrfs_space_info_update_bytes_may_use fs/btrfs/space-info.h:122 [inline]
+RIP: 0010:btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
+RIP: 0010:btrfs_free_reserved_data_space_noquota+0x219/0x2b0 fs/btrfs/delalloc-space.c:179
+Code: 2f 00 74 08 4c 89 ef e8 b5 98 32 fe 49 8b 5d 00 48 89 df 4c 8b 74 24 08 4c 89 f6 e8 21 81 de fd 4c 39 f3 73 16 e8 d7 7e de fd <0f> 0b 31 db 4c 8b 34 24 41 80 3c 2f 00 75 8c eb 92 e8 c1 7e de fd
+RSP: 0018:ffffc9000443f410 EFLAGS: 00010293
+RAX: ffffffff83ac1919 RBX: 00000000005cb000 RCX: ffff888027989d40
+RDX: 0000000000000000 RSI: 0000000000800000 RDI: 00000000005cb000
+RBP: dffffc0000000000 R08: ffffffff83ac190f R09: fffffbfff1cebe0e
+R10: fffffbfff1cebe0e R11: 1ffffffff1cebe0d R12: ffff8880774f3800
+R13: ffff8880774f3860 R14: 0000000000800000 R15: 1ffff1100ee9e70c
+FS:  0000555555aaa300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0d98f20140 CR3: 0000000025ccf000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_free_reserved_data_space+0x9d/0xd0 fs/btrfs/delalloc-space.c:199
+ btrfs_dio_iomap_begin+0x8f7/0x1070 fs/btrfs/inode.c:7762
+ iomap_iter+0x606/0x8a0 fs/iomap/iter.c:74
+ __iomap_dio_rw+0xd91/0x20d0 fs/iomap/direct-io.c:601
+ btrfs_dio_write+0x9c/0xe0 fs/btrfs/inode.c:8094
+ btrfs_direct_write fs/btrfs/file.c:1835 [inline]
+ btrfs_do_write_iter+0x871/0x1260 fs/btrfs/file.c:1980
+ do_iter_write+0x6c2/0xc20 fs/read_write.c:861
+ vfs_writev fs/read_write.c:934 [inline]
+ do_pwritev+0x200/0x350 fs/read_write.c:1031
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0d98ea8ea9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd32e91c38 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f0d98ea8ea9
+RDX: 0000000000000001 RSI: 0000000020000280 RDI: 0000000000000005
+RBP: 00007ffd32e91c70 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000008000000 R11: 0000000000000246 R12: 0000000000000006
+R13: 00007ffd32e91cb0 R14: 00007ffd32e91c90 R15: 0000000000000006
+ </TASK>
 
-Thanks!
-Eyal.
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
