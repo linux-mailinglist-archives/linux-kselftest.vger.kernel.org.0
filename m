@@ -2,103 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E8663BD43
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 10:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2627A63BE95
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 12:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiK2JuI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Nov 2022 04:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S232781AbiK2LGx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Nov 2022 06:06:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiK2JuH (ORCPT
+        with ESMTP id S232600AbiK2LGW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Nov 2022 04:50:07 -0500
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBCA2A97B;
-        Tue, 29 Nov 2022 01:50:05 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 18E7220199;
-        Tue, 29 Nov 2022 10:50:03 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HVnSnlaNbPSm; Tue, 29 Nov 2022 10:50:02 +0100 (CET)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 916CF20489;
-        Tue, 29 Nov 2022 10:50:02 +0100 (CET)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout1.secunet.com (Postfix) with ESMTP id 8A3AA80004A;
-        Tue, 29 Nov 2022 10:50:02 +0100 (CET)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 29 Nov 2022 10:50:02 +0100
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 29 Nov
- 2022 10:50:02 +0100
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id B63D03182F22; Tue, 29 Nov 2022 10:50:01 +0100 (CET)
-Date:   Tue, 29 Nov 2022 10:50:01 +0100
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-CC:     Eyal Birger <eyal.birger@gmail.com>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <herbert@gondor.apana.org.au>,
-        <andrii@kernel.org>, <daniel@iogearbox.net>,
-        <nicolas.dichtel@6wind.com>, <razor@blackwall.org>,
-        <mykolal@fb.com>, <ast@kernel.org>, <song@kernel.org>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>,
-        <shuah@kernel.org>
-Subject: Re: [PATCH ipsec-next 2/3] xfrm: interface: Add unstable helpers for
- setting/getting XFRM metadata from TC-BPF
-Message-ID: <20221129095001.GV704954@gauss3.secunet.de>
-References: <20221128160501.769892-1-eyal.birger@gmail.com>
- <20221128160501.769892-3-eyal.birger@gmail.com>
- <c8a2d940-ff85-c952-74d0-25ad2c33c1af@linux.dev>
+        Tue, 29 Nov 2022 06:06:22 -0500
+Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF836204A
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 03:03:32 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4NLzwH54j7zMpnsN;
+        Tue, 29 Nov 2022 12:03:27 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4NLzwG46yQzMppBm;
+        Tue, 29 Nov 2022 12:03:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1669719807;
+        bh=TLB1uJhOAIdI/EElBwqY+knrjdOQVyTAQPueqObbA9U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YJe3KcaBhpyR2dws3y80DgSUVZlwx7uKAL8ICdepm5y/JD/cXo3UmTENPWpcoWjdX
+         iGaj99GSJui7kLNVwPx15f58zrG9FynRunm/RKwKzAhDZD9LMb+K24HWd8yBvw5Dsf
+         +FVn3WoG66jczn2bHYe5O1IrpBBzEjGq4PnjBsFA=
+Message-ID: <e62a539b-614c-c008-873a-f9c57c7ecb33@digikod.net>
+Date:   Tue, 29 Nov 2022 12:03:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <c8a2d940-ff85-c952-74d0-25ad2c33c1af@linux.dev>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH -next] selftests/landlock: Fix selftest ptrace_test run
+ fail
+Content-Language: en-US
+To:     limin <limin100@huawei.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, songmuchun@bytedance.com, tj@kernel.org,
+        lizefan.x@bytedance.com
+References: <20221128020409.1545717-1-limin100@huawei.com>
+ <1232e4f3-e4b8-ff23-61e8-5465c8406f6e@digikod.net>
+ <7379a5fd-5593-c6ce-40fd-c543dcf70d2b@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <7379a5fd-5593-c6ce-40fd-c543dcf70d2b@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 05:58:23PM -0800, Martin KaFai Lau wrote:
-> On 11/28/22 8:05 AM, Eyal Birger wrote:
-> > This change adds xfrm metadata helpers using the unstable kfunc call
-> > interface for the TC-BPF hooks. This allows steering traffic towards
-> > different IPsec connections based on logic implemented in bpf programs.
-> > 
-> > This object is built based on the availabilty of BTF debug info.
-> > 
-> > The metadata percpu dsts used on TX take ownership of the original skb
-> > dsts so that they may be used as part of the xfrm transmittion logic -
-> > e.g.  for MTU calculations.
-> 
-> A few quick comments and questions:
-> 
-> > 
-> > Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
-> > ---
-> >   include/net/dst_metadata.h     |  1 +
-> >   include/net/xfrm.h             | 20 ++++++++
-> >   net/core/dst.c                 |  4 ++
-> >   net/xfrm/Makefile              |  6 +++
-> >   net/xfrm/xfrm_interface_bpf.c  | 92 ++++++++++++++++++++++++++++++++++
-> 
-> Please tag for bpf-next
+I tested with next-20221116 and all tests are OK. Could you share your 
+kernel configuration with a link? What is the content of /proc/cmdline?
 
-This is a change to xfrm ipsec, so it should go
-through the ipsec-next tree, unless there is
-a good reason for handling that different.
+On 29/11/2022 02:42, limin wrote:
+> I run test on Linux ubuntu2204 6.1.0-next-20221116
+> 
+> I did't use yama.
+> 
+> you can reproduce by this step:
+> 
+> cd kernel_src
+> 
+> cd tools/testing/selftests/landlock/
+> make
+> ./ptrace_test
+> 
+> 
+> 
+> 
+> On 2022/11/29 3:44, Mickaël Salaün wrote:
+>> This patch changes the test semantic and then cannot work on my test
+>> environment. On which kernel did you run test? Do you use Yama or
+>> something similar?
+>>
+>> On 28/11/2022 03:04, limin wrote:
+>>> Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent,
+>>> trace parent return -1 when child== 0
+>>> How to reproduce warning:
+>>> $ make -C tools/testing/selftests TARGETS=landlock run_tests
+>>>
+>>> Signed-off-by: limin <limin100@huawei.com>
+>>> ---
+>>>    tools/testing/selftests/landlock/ptrace_test.c | 5 ++---
+>>>    1 file changed, 2 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/landlock/ptrace_test.c
+>>> b/tools/testing/selftests/landlock/ptrace_test.c
+>>> index c28ef98ff3ac..88c4dc63eea0 100644
+>>> --- a/tools/testing/selftests/landlock/ptrace_test.c
+>>> +++ b/tools/testing/selftests/landlock/ptrace_test.c
+>>> @@ -267,12 +267,11 @@ TEST_F(hierarchy, trace)
+>>>            /* Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent. */
+>>>            err_proc_read = test_ptrace_read(parent);
+>>>            ret = ptrace(PTRACE_ATTACH, parent, NULL, 0);
+>>> +        EXPECT_EQ(-1, ret);
+>>> +        EXPECT_EQ(EPERM, errno);
+>>>            if (variant->domain_child) {
+>>> -            EXPECT_EQ(-1, ret);
+>>> -            EXPECT_EQ(EPERM, errno);
+>>>                EXPECT_EQ(EACCES, err_proc_read);
+>>>            } else {
+>>> -            EXPECT_EQ(0, ret);
+>>>                EXPECT_EQ(0, err_proc_read);
+>>>            }
+>>>            if (ret == 0) {
