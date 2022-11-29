@@ -2,287 +2,202 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C5563B786
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 02:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AAB63B80B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 03:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235150AbiK2B6j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Nov 2022 20:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S234962AbiK2CgB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Nov 2022 21:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234663AbiK2B6h (ORCPT
+        with ESMTP id S235258AbiK2Cfh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Nov 2022 20:58:37 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587B9419AE;
-        Mon, 28 Nov 2022 17:58:34 -0800 (PST)
-Message-ID: <c8a2d940-ff85-c952-74d0-25ad2c33c1af@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1669687112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wnDUg7hTxIXAET/T19mjG0DRQx0yYHWdq/wH+w9xkpw=;
-        b=b9oFc2uNv9j/GNo0OOTLfrigXSlMYHiJ+scZb9qRFRliQKt0OlhrYMWnwLSIU4GumS4WpI
-        ZHaTK6/fNdAQ286xhoMNZ1/DSrd5y3u7h4zb8ejZtRLyTdtnjQdEKW/t2tGqd+m8pXj5Fw
-        hm3JLF/ZtUM27B+q0FjAt8/aT+4lDQ4=
-Date:   Mon, 28 Nov 2022 17:58:23 -0800
-MIME-Version: 1.0
-Subject: Re: [PATCH ipsec-next 2/3] xfrm: interface: Add unstable helpers for
- setting/getting XFRM metadata from TC-BPF
+        Mon, 28 Nov 2022 21:35:37 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A43046674;
+        Mon, 28 Nov 2022 18:35:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669689317; x=1701225317;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=izSIgoXjUxHTluXy2pHi9YcXQpXtZU4vRWttBQQfWMM=;
+  b=YVtRKjqxguA4TLMNpB1jhlZB8u5s81bZJ+prz9EsOipYpHLc4fUWbtdR
+   DQw4OZiCxYcUNJdFk+CNdaAW1D/idQVjhDlkEHJBypy9tKa1fD9iRPoZ8
+   0E5tq6FFJldI5y3f4W5GYzbyJfIoM2aXcQFWt/zrTYP/x0Gftsoro3T/L
+   goEM1fc9mekRmuagj7//fhTOQBBxVMXFJ2BhHijHoAf69X+/NCCwgdWUZ
+   8UPHPyvxAi7DE7KvU3h9uBgi7wsxA8Osvy7Xsj9JsohsxIoVYUUjt2Ugs
+   rWlkkTmIgSh+65peKNcW9dQHwdwltph7bwgtwKPQ/lsYa5mHZT/GdvqdH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="379265845"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="379265845"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 18:35:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="972501610"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="972501610"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Nov 2022 18:35:15 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 28 Nov 2022 18:35:14 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 28 Nov 2022 18:35:14 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.47) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 28 Nov 2022 18:35:14 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E+oQz2q9kf4KH3Wgf78yyxpYULvo5gusFl1TzhMQ/Vk/it6XpA1gYVYZVQtneNvacOy3vzGOQpuKKPTPk5lbIPWFkZNwURNrIH9e4xXKZwE9fRo3frHYGFDzDM8GkGW+wFs4b+2K/ptaZCb+cpk1iIwh3zXnA8H0CmuvfXr6iazq0E11DWas+wYl+z0UfHqfYt3KYjgvUdzrhAAAqLUSZxuKd/FeIiPTKA+O6NTBY0VLYg/SK58uq6kuJFR4xb3Pwwc/lSXWqMUIYvqX5L9sAZPzwMfMx1/u5pxDPtlMdyJLAR5rvtmK8BRgX26ht18LEmEsbjvPhA65NZGXf6tq3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SstFRS59urPBLHGN+1RBuqZXDr8FEKNpvMG8wpXp+6o=;
+ b=R/U14WmZl4u0NGl5Dp6WMtNNKz6upnF76+YMwJRioT8FTPg8eqIGuRaJovL7YtGu9QfC+RGJSqF8WgtzP6bG/8r7egqrDZ0oiJaExCoGyeiFdet1JJ41xXKG8X4TkJ/sisucsZvwjnmmvg0DNOdFKk+sNYPl+weNZ8Zi0ocll3QveY0qsRIHvI9BmDGscAfYzry7D0dR8Mzyf5lLP1WdNUpCXVgjfVRTMojLuJCegX+5l3UmTm7TQwwBrldD+9EdCfBuepOTTQwIyGYG1t3WEEOhOC3i4AWpJ6CGDLRKzRqn0+dp2tKHMzP/qCdjvPvLElX5u+C+6P6hQZ2W3bkJwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY4PR11MB1320.namprd11.prod.outlook.com (2603:10b6:903:2b::21)
+ by PH7PR11MB6835.namprd11.prod.outlook.com (2603:10b6:510:1ee::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21; Tue, 29 Nov
+ 2022 02:35:12 +0000
+Received: from CY4PR11MB1320.namprd11.prod.outlook.com
+ ([fe80::7c2b:3507:c308:2437]) by CY4PR11MB1320.namprd11.prod.outlook.com
+ ([fe80::7c2b:3507:c308:2437%11]) with mapi id 15.20.5857.022; Tue, 29 Nov
+ 2022 02:35:12 +0000
+From:   "Zhou, Jie2X" <jie2x.zhou@intel.com>
+To:     "shuah@kernel.org" <shuah@kernel.org>,
+        "Weight, Russell H" <russell.h.weight@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "Zhang, Tianfei" <tianfei.zhang@intel.com>
+CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Li, Philip" <philip.li@intel.com>
+Subject: fw_fallback.sh test failed in Debian 11
+Thread-Topic: fw_fallback.sh test failed in Debian 11
+Thread-Index: AQHZA5lIOHIFr50OcUq4S5sLOYsQuQ==
+Date:   Tue, 29 Nov 2022 02:35:12 +0000
+Message-ID: <CY4PR11MB1320DAA7D7972E738EDA754EC5129@CY4PR11MB1320.namprd11.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Eyal Birger <eyal.birger@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        andrii@kernel.org, daniel@iogearbox.net, nicolas.dichtel@6wind.com,
-        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, shuah@kernel.org
-References: <20221128160501.769892-1-eyal.birger@gmail.com>
- <20221128160501.769892-3-eyal.birger@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20221128160501.769892-3-eyal.birger@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY4PR11MB1320:EE_|PH7PR11MB6835:EE_
+x-ms-office365-filtering-correlation-id: ff9547eb-5781-4a5d-ba5d-08dad1b25776
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8IcTOEo+U8ENlqAlUD2jnZ7g6MUS5VwklOdZDKeK0ulAOZmKrRFOqcnEAnbq3Dza0Puw+8f2s7Q+HdPBQcoStYbgt+caqqbFRYUpU9PvoxrporVNMHoYlvqVd6Hcyj35G0d9/1N8WifxxVtshxmltQJxx0UraTrG0Nt+9dqRCK8EscHRs4fkNQqg+ggCR7UUSiT/YR2/UtAo3a9nIJERNJyeP9Pvol/zVhOKidN2Xap7PQgQiDg6o2mw1b7kILzwFV1q1kZ0DtDD/cwP77wvXh1roORr2yovVZZY1GqSz06sX+zw4R8iOPnOTWT2DOTXqgyTGCWIShGA0CpopNusf1rJzn/oha/8fO332f7Y/W8PBcWmDM46Onp/y2QJyAMESso73DTY1OgKc3U2O8PNPOihGG317XJ5vDw6yBjd6tcZKlIXbTfnoszHvFdyK+jVXAOV6yiUyNTmc/7pexwnTg05F8l8/wOdeqdfsNXchBcs2uylHBSaGGOGwm4XMxl+Qrop0fXgox/scl1MViiEdLfkmRv2x9AtV0pJ4w8luYIYJHSYUXY3NnfoqQ9N5V+1nfWlUv9fMfJWRCCG5HQc0eUSd+DAV0UtrRxX2Bxy808q9vDQD3kYLB9+ZwuCEMUr2qer6coynz7HfRAytqA67MLct9P2xNe6umHuKMDd2RRkHY/lLZrd/moKhwIi+iGJJPVssA+hknuBhC8tt75rrw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(396003)(376002)(39860400002)(366004)(451199015)(2906002)(71200400001)(6636002)(91956017)(38100700002)(82960400001)(110136005)(41300700001)(86362001)(316002)(54906003)(5660300002)(76116006)(66476007)(33656002)(66556008)(64756008)(52536014)(66446008)(66946007)(8676002)(8936002)(4326008)(478600001)(6506007)(7696005)(55016003)(9686003)(26005)(107886003)(38070700005)(122000001)(186003)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?vg70mUoBPYUlXjImH0qkI+FwTt1YSvxrnBB9l5Y4FP/Cdr/yGuk4bz+tfF?=
+ =?iso-8859-1?Q?eCMiJxf0HiZq40Zc7XoWXQxLcSgFjn+jaZ5cNrQ+SAqgVRt5WhCbBicV5D?=
+ =?iso-8859-1?Q?0j5mJZIY2xeccFyXuF3NTZwcX4qKnRrh/iialU6kClwxAEUq+p9haY0OpS?=
+ =?iso-8859-1?Q?bu3aHt8hbEfto+mMNUzKF2I0uwk9r26yMnRC09LCByfJorEzmmE4mjerYg?=
+ =?iso-8859-1?Q?U2y5+qRlIBpGZLDYQcTOYRZgy0TfwdJlLVul57MH2wKqyGqorghh/YC5MN?=
+ =?iso-8859-1?Q?+3TMgJSm90XnJtmd+6YzNfswqpWxfCBP2xtThch9AFg6Ti8hBsTgxvX9lG?=
+ =?iso-8859-1?Q?vdRaEq731j6Ml6orsyocgvG5WAk8oyKr20GrXRVf+X1qwYzZyHigNwjQxu?=
+ =?iso-8859-1?Q?LdEAbOa2IZsm2gwKuAe/SRek7vY2bnIGUlayvZWhBtHLBycaxHDoJWVnkv?=
+ =?iso-8859-1?Q?LaJCKyDp4mM4l+T+Wa0PpPOEF949SUF6y2tZH83lILfuFt+Lh5LRuMVnIz?=
+ =?iso-8859-1?Q?6FTd9ssumpPZbMuBh2ZKCldTCUQYDjWpdILDKA1KdKmfo3uY625Yk/RzA7?=
+ =?iso-8859-1?Q?l8dLU+FCjrlCHY+gqhRdWNUgCRtwIkA7Bg7nK6Sp0Cxrz1hyK1jKiFq6yd?=
+ =?iso-8859-1?Q?k+J8/E5wD+c5NCCtQRFyeFTA2aHV9JjXknbm8P9ySiljkkPfqq60wmq0KZ?=
+ =?iso-8859-1?Q?MgT6NsCQ+Igefa1b5/47BNK0bFD9MKSVfIokxTCJ3/perawLWfKjuhz1V0?=
+ =?iso-8859-1?Q?pjKtVCaphO5zcvE1XrhCcM6d+tas6nC463rqpXELWYSJa0gD1+FfYcdJzb?=
+ =?iso-8859-1?Q?7BzsV47k2+VM77tBky4OJU8mggf91LMtc9y9LMgEeJ+fB5A8Iin1HEK2dt?=
+ =?iso-8859-1?Q?/EdwVMuP31rR945hPnDE6h/PAlSMppRWy0oFoFKNc0OWtryYLcCtVcoj77?=
+ =?iso-8859-1?Q?wAtNbq7C838XH2PDzT0H+iCKg9OnVXjHMZMNpK2b6JAJWe4auH1NYSmIIa?=
+ =?iso-8859-1?Q?jcL1Eylg8pZ0HnJ/jeqQHMe9ejzPUNjTtRrjK0ho3qv/vxcpUEfscJ16oc?=
+ =?iso-8859-1?Q?YT0e3Q56cb3P3Lg0TBymzT6hg0pNGFsp5uqe0u1tO86OgfjhFHrvqD2Jt7?=
+ =?iso-8859-1?Q?ciwbIrOvDBwl1lOrmmnBWYRa2KRsexgs2srpY9v+lukfB5y9RSxu5g3gL2?=
+ =?iso-8859-1?Q?XKV/yhIKrYQyiM6Ggue5kq0SX57xh/jM4sGafXizySOfgE9au709WdRAGe?=
+ =?iso-8859-1?Q?ospf/ZFzFXETBfrSehN7dIiXE3a45YYaHtXN8p7/N9CREEqyvCvz7mcMSs?=
+ =?iso-8859-1?Q?opzMvZYVLpgmLFDqyR7KVoNuY31zVeKSQoLi+WYczg97dNqZL44kOiFm6K?=
+ =?iso-8859-1?Q?JmcPYRueGCUXFyfQMTqYIeORiNG0mCInpekQX4a3d2VVsNVIChLzi/HMFq?=
+ =?iso-8859-1?Q?suUGrohBpo5ZH2dWfvFkX2WxsAn5JxoLtM9PbKd1PvNdR7orky200nsonB?=
+ =?iso-8859-1?Q?RKNSpgMAziScjY9+t50CQ3+Zpvh2eMBjcuko5fxkGzKkwfIW9R7n4lpKSU?=
+ =?iso-8859-1?Q?jLOz+hmWK052T+uubXLfGcEvfQFFctoLgO/L4JWhWMts6hded4yO5rIZx9?=
+ =?iso-8859-1?Q?1M2uBGgWWwWEEGjlWb/j2Bdzq/ilYCIk9+?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1320.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff9547eb-5781-4a5d-ba5d-08dad1b25776
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 02:35:12.7972
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kejxlQJ/xbWn+7YCKDFpzXnmYahakxyvrlEE1+OCMOQb5JzxN4O6ymI6ryt76YMSzWUaXw2zgmp9dhK2usWSmg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6835
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/28/22 8:05 AM, Eyal Birger wrote:
-> This change adds xfrm metadata helpers using the unstable kfunc call
-> interface for the TC-BPF hooks. This allows steering traffic towards
-> different IPsec connections based on logic implemented in bpf programs.
-> 
-> This object is built based on the availabilty of BTF debug info.
-> 
-> The metadata percpu dsts used on TX take ownership of the original skb
-> dsts so that they may be used as part of the xfrm transmittion logic -
-> e.g.  for MTU calculations.
-
-A few quick comments and questions:
-
-> 
-> Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
-> ---
->   include/net/dst_metadata.h     |  1 +
->   include/net/xfrm.h             | 20 ++++++++
->   net/core/dst.c                 |  4 ++
->   net/xfrm/Makefile              |  6 +++
->   net/xfrm/xfrm_interface_bpf.c  | 92 ++++++++++++++++++++++++++++++++++
-
-Please tag for bpf-next
-
->   net/xfrm/xfrm_interface_core.c | 15 ++++++
->   6 files changed, 138 insertions(+)
->   create mode 100644 net/xfrm/xfrm_interface_bpf.c
-> 
-> diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-> index a454cf4327fe..1b7fae4c6b24 100644
-> --- a/include/net/dst_metadata.h
-> +++ b/include/net/dst_metadata.h
-> @@ -26,6 +26,7 @@ struct macsec_info {
->   struct xfrm_md_info {
->   	u32 if_id;
->   	int link;
-> +	struct dst_entry *dst_orig;
->   };
->   
->   struct metadata_dst {
-
-[ ... ]
-
-> diff --git a/net/core/dst.c b/net/core/dst.c
-> index bc9c9be4e080..4c2eb7e56dab 100644
-> --- a/net/core/dst.c
-> +++ b/net/core/dst.c
-> @@ -315,6 +315,8 @@ void metadata_dst_free(struct metadata_dst *md_dst)
->   #ifdef CONFIG_DST_CACHE
->   	if (md_dst->type == METADATA_IP_TUNNEL)
->   		dst_cache_destroy(&md_dst->u.tun_info.dst_cache);
-> +	else if (md_dst->type == METADATA_XFRM)
-> +		dst_release(md_dst->u.xfrm_info.dst_orig);
-
-Why only release dst_orig under CONFIG_DST_CACHE?
-
->   #endif
->   	kfree(md_dst);
->   }
-> @@ -348,6 +350,8 @@ void metadata_dst_free_percpu(struct metadata_dst __percpu *md_dst)
->   
->   		if (one_md_dst->type == METADATA_IP_TUNNEL)
->   			dst_cache_destroy(&one_md_dst->u.tun_info.dst_cache);
-> +		else if (one_md_dst->type == METADATA_XFRM)
-> +			dst_release(one_md_dst->u.xfrm_info.dst_orig);
-
-Same here.
-
-[ ... ]
-
-> diff --git a/net/xfrm/xfrm_interface_bpf.c b/net/xfrm/xfrm_interface_bpf.c
-> new file mode 100644
-> index 000000000000..d3997ab7cc28
-> --- /dev/null
-> +++ b/net/xfrm/xfrm_interface_bpf.c
-> @@ -0,0 +1,92 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Unstable XFRM Helpers for TC-BPF hook
-> + *
-> + * These are called from SCHED_CLS BPF programs. Note that it is
-> + * allowed to break compatibility for these functions since the interface they
-> + * are exposed through to BPF programs is explicitly unstable.
-> + */
-> +
-> +#include <linux/bpf.h>
-> +#include <linux/btf_ids.h>
-> +
-> +#include <net/dst_metadata.h>
-> +#include <net/xfrm.h>
-> +
-> +struct bpf_xfrm_info {
-> +	u32 if_id;
-> +	int link;
-> +};
-> +
-> +static struct metadata_dst __percpu *xfrm_md_dst;
-> +__diag_push();
-> +__diag_ignore_all("-Wmissing-prototypes",
-> +		  "Global functions as their definitions will be in xfrm_interface BTF");
-> +
-> +__used noinline
-> +int bpf_skb_get_xfrm_info(struct __sk_buff *skb_ctx, struct bpf_xfrm_info *to)
-> +{
-> +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> +	struct xfrm_md_info *info;
-> +
-> +	memset(to, 0, sizeof(*to));
-> +
-> +	info = skb_xfrm_md_info(skb);
-> +	if (!info)
-> +		return -EINVAL;
-> +
-> +	to->if_id = info->if_id;
-> +	to->link = info->link;
-> +	return 0;
-> +}
-> +
-> +__used noinline
-> +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
-> +			  const struct bpf_xfrm_info *from)
-> +{
-> +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> +	struct metadata_dst *md_dst;
-> +	struct xfrm_md_info *info;
-> +
-> +	if (unlikely(skb_metadata_dst(skb)))
-> +		return -EINVAL;
-> +
-> +	md_dst = this_cpu_ptr(xfrm_md_dst);
-> +
-> +	info = &md_dst->u.xfrm_info;
-> +	memset(info, 0, sizeof(*info));
-> +
-> +	info->if_id = from->if_id;
-> +	info->link = from->link;
-> +	info->dst_orig = skb_dst(skb);
-However, the dst_orig init is not done under CONFIG_DST_CACHE though...
-
-Also, is it possible that skb->_skb_refdst has SKB_DST_NOREF set and later below 
-... (contd)
-
-> +
-> +	dst_hold((struct dst_entry *)md_dst);
-> +	skb_dst_set(skb, (struct dst_entry *)md_dst);
-> +	return 0;
-> +}
-> +
-> +__diag_pop()
-> +
-> +BTF_SET8_START(xfrm_ifc_kfunc_set)
-> +BTF_ID_FLAGS(func, bpf_skb_get_xfrm_info)
-> +BTF_ID_FLAGS(func, bpf_skb_set_xfrm_info)
-> +BTF_SET8_END(xfrm_ifc_kfunc_set)
-> +
-> +static const struct btf_kfunc_id_set xfrm_interface_kfunc_set = {
-> +	.owner = THIS_MODULE,
-> +	.set   = &xfrm_ifc_kfunc_set,
-> +};
-> +
-> +int __init register_xfrm_interface_bpf(void)
-> +{
-> +	xfrm_md_dst = metadata_dst_alloc_percpu(0, METADATA_XFRM,
-> +						GFP_KERNEL);
-> +	if (!xfrm_md_dst)
-> +		return -ENOMEM;
-> +	return register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS,
-> +					 &xfrm_interface_kfunc_set);
-
-Will cleanup_xfrm_interface_bpf() be called during error ?
-
-> +}
-> +
-> +void __exit cleanup_xfrm_interface_bpf(void)
-> +{
-> +	metadata_dst_free_percpu(xfrm_md_dst);
-> +}
-> diff --git a/net/xfrm/xfrm_interface_core.c b/net/xfrm/xfrm_interface_core.c
-> index 5a67b120c4db..1e1e8e965939 100644
-> --- a/net/xfrm/xfrm_interface_core.c
-> +++ b/net/xfrm/xfrm_interface_core.c
-> @@ -396,6 +396,14 @@ xfrmi_xmit2(struct sk_buff *skb, struct net_device *dev, struct flowi *fl)
->   
->   		if_id = md_info->if_id;
->   		fl->flowi_oif = md_info->link;
-> +		if (md_info->dst_orig) {
-> +			struct dst_entry *tmp_dst = dst;
-> +
-> +			dst = md_info->dst_orig;
-> +			skb_dst_set(skb, dst);
-
-(contd) ... skb_dst_set() is always called here.  (considering there is 
-skb_dst_set_noref()).
-
-
-> +			md_info->dst_orig = NULL;
-> +			dst_release(tmp_dst);
-> +		}
->   	} else {
->   		if_id = xi->p.if_id;
->   	}
-> @@ -1162,12 +1170,18 @@ static int __init xfrmi_init(void)
->   	if (err < 0)
->   		goto rtnl_link_failed;
->   
-> +	err = register_xfrm_interface_bpf();
-> +	if (err < 0)
-> +		goto kfunc_failed;
-> +
->   	lwtunnel_encap_add_ops(&xfrmi_encap_ops, LWTUNNEL_ENCAP_XFRM);
->   
->   	xfrm_if_register_cb(&xfrm_if_cb);
->   
->   	return err;
->   
-> +kfunc_failed:
-> +	rtnl_link_unregister(&xfrmi_link_ops);
->   rtnl_link_failed:
->   	xfrmi6_fini();
->   xfrmi6_failed:
-> @@ -1183,6 +1197,7 @@ static void __exit xfrmi_fini(void)
->   {
->   	xfrm_if_unregister_cb();
->   	lwtunnel_encap_del_ops(&xfrmi_encap_ops, LWTUNNEL_ENCAP_XFRM);
-> +	cleanup_xfrm_interface_bpf();
->   	rtnl_link_unregister(&xfrmi_link_ops);
->   	xfrmi4_fini();
->   	xfrmi6_fini();
-
+hi,=0A=
+=0A=
+fw_fallback.sh test failed.=0A=
+The error may caused by failed to write /sys/devices/virtual/misc/test_firm=
+ware/trigger_request.=0A=
+=0A=
+diff firmware/fw_fallback.sh_org firmware/fw_fallback.sh=0A=
+165c164,165=0A=
+<       echo -n "nope-$NAME" >"$DIR"/trigger_request 2>/dev/null &=0A=
+---=0A=
+>       echo "echo -n \"nope-$NAME\" >\"$DIR\"/trigger_request &"=0A=
+>       echo -n "nope-$NAME" >"$DIR"/trigger_request &=0A=
+=0A=
+# Test request_partial_firmware_into_buf() off=3D1 size=3D6 nofile: OK=0A=
+# Test request_partial_firmware_into_buf() off=3D2 size=3D10 nofile: OK=0A=
+# echo -n "nope-test-firmware.bin" >"/sys/devices/virtual/misc/test_firmwar=
+e"/trigger_request &=0A=
+# ./fw_fallback.sh: line 165: echo: write error: No such file or directory=
+=0A=
+# ./fw_fallback.sh: fallback mechanism immediately cancelled=0A=
+=0A=
+$ echo -n "nope-test-firmware.bin" >/sys/devices/virtual/misc/test_firmware=
+/trigger_request =0A=
+-bash: echo: write error: No such file or directory=0A=
+=0A=
+test OS: Debian 11=0A=
+test kernel: v6.1-rc6=0A=
+=0A=
+test output:=0A=
+# ./fw_fallback.sh: fallback mechanism immediately cancelled=0A=
+# =0A=
+# The file never appeared: /sys/devices/virtual/misc/test_firmware/nope-tes=
+t-firmware.bin/loading=0A=
+# =0A=
+# This might be a distribution udev rule setup by your distribution=0A=
+# to immediately cancel all fallback requests, this must be=0A=
+# removed before running these tests. To confirm look for=0A=
+# a firmware rule like /lib/udev/rules.d/50-firmware.rules=0A=
+# and see if you have something like this:=0A=
+# =0A=
+# SUBSYSTEM=3D=3D"firmware", ACTION=3D=3D"add", ATTR{loading}=3D"-1"=0A=
+# =0A=
+# If you do remove this file or comment out this line before=0A=
+# proceeding with these tests.=0A=
+not ok 1 selftests: firmware: fw_run_tests.sh # exit=3D1=0A=
+=0A=
+There is not /lib/udev/rules.d/50-firmware.rules in Debian 11.=0A=
+How can fw_run_tests.sh run successfully in Debian 11?=0A=
+=0A=
+best regards,=
