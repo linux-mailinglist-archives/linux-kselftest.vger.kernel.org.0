@@ -2,123 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2163F63C288
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 15:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E1463C4EB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Nov 2022 17:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234350AbiK2Obs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Nov 2022 09:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
+        id S235646AbiK2QPa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Nov 2022 11:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232976AbiK2Obr (ORCPT
+        with ESMTP id S235936AbiK2QPR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Nov 2022 09:31:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792C22AC6D
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 06:30:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669732252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+goulcWqTqjkFGhNVJrrZeOZ4jW3UE4cjV1o3g/9WTM=;
-        b=NBMoVx4hkG+56xObVRrHyOktSxavRfbEnUtv2vU2wbzM5RJljhqsTDrdzZEMqQPa7fLs21
-        SMz+Bz4lVrOPurmI+6AKC4x3BgHkauuMWKh+MRWOaLRsROua7ZxUNTThXiTUl0NdRllqoS
-        rjfG0owOJIAx/oZO7Ts6ubz6rN/rjwc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-syVIxEU1Mx6Kn1ElpwKu-A-1; Tue, 29 Nov 2022 09:30:50 -0500
-X-MC-Unique: syVIxEU1Mx6Kn1ElpwKu-A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 29 Nov 2022 11:15:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B66CCD;
+        Tue, 29 Nov 2022 08:15:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9614884368;
-        Tue, 29 Nov 2022 14:30:41 +0000 (UTC)
-Received: from RHTPC1VM0NT (unknown [10.22.34.89])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4E68C2166B4F;
-        Tue, 29 Nov 2022 14:30:41 +0000 (UTC)
-From:   Aaron Conole <aconole@redhat.com>
-To:     Ilya Maximets <i.maximets@ovn.org>
-Cc:     netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Graf <tgraf@suug.ch>, dev@openvswitch.org,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC net-next 1/6] openvswitch: exclude kernel flow key from
- upcalls
-References: <20221122140307.705112-1-aconole@redhat.com>
-        <20221122140307.705112-2-aconole@redhat.com>
-        <c04242ee-f125-6d95-e263-65470222d3cf@ovn.org>
-Date:   Tue, 29 Nov 2022 09:30:38 -0500
-In-Reply-To: <c04242ee-f125-6d95-e263-65470222d3cf@ovn.org> (Ilya Maximets's
-        message of "Wed, 23 Nov 2022 22:22:23 +0100")
-Message-ID: <f7ta649sui9.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEDEAB8169F;
+        Tue, 29 Nov 2022 16:15:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E1D3C433C1;
+        Tue, 29 Nov 2022 16:15:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669738512;
+        bh=7+SFe4iBpPQPpkZS2WbJcUsKadar590WDUqsLd4jJpU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m/SkbXFyDGDfdXOWx/ncH/41Fc1DwZeb3nirHjJkSWoqzgTV5io44u3LlkSnM5oXP
+         Yx32zaM0WAHFwsTcpVwde0JRLeqp2IpP0WbnOvduD4B2fXbJLt4Xbw+G/QAck9Am3R
+         DatCvHe6m48MTZgxjKJkHtn63keVecaZrfsXVgblHPSxPApN6bDTjJc6ui4bY2kAJF
+         54sUhyWV0q17pCosFwpsgxCgwGcrYcn28/y1/Y3wIJHkIkAdnDH9Jv5HtVRlN0/TIq
+         WQOVRi4UB2fDdpbIttQ42W/Il8ZN8b4LXEr8AzN9qO1vTfdcWRiZpyJ0n6DsJvtLYd
+         yn5Z0Va7/AwDw==
+Date:   Tue, 29 Nov 2022 08:15:10 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Steffen Klassert <steffen.klassert@secunet.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Eyal Birger <eyal.birger@gmail.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <herbert@gondor.apana.org.au>, <andrii@kernel.org>,
+        <daniel@iogearbox.net>, <nicolas.dichtel@6wind.com>,
+        <razor@blackwall.org>, <mykolal@fb.com>, <ast@kernel.org>,
+        <song@kernel.org>, <yhs@fb.com>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <shuah@kernel.org>
+Subject: Re: [PATCH ipsec-next 2/3] xfrm: interface: Add unstable helpers
+ for setting/getting XFRM metadata from TC-BPF
+Message-ID: <20221129081510.56b1025e@kernel.org>
+In-Reply-To: <20221129095001.GV704954@gauss3.secunet.de>
+References: <20221128160501.769892-1-eyal.birger@gmail.com>
+        <20221128160501.769892-3-eyal.birger@gmail.com>
+        <c8a2d940-ff85-c952-74d0-25ad2c33c1af@linux.dev>
+        <20221129095001.GV704954@gauss3.secunet.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ilya Maximets <i.maximets@ovn.org> writes:
+On Tue, 29 Nov 2022 10:50:01 +0100 Steffen Klassert wrote:
+> > Please tag for bpf-next  
+> 
+> This is a change to xfrm ipsec, so it should go
+> through the ipsec-next tree, unless there is
+> a good reason for handling that different.
 
-> On 11/22/22 15:03, Aaron Conole wrote:
->> When processing upcall commands, two groups of data are available to
->> userspace for processing: the actual packet data and the kernel
->> sw flow key data.  The inclusion of the flow key allows the userspace
->> avoid running through the dissection again.
->> 
->> However, the userspace can choose to ignore the flow key data, as is
->> the case in some ovs-vswitchd upcall processing.  For these messages,
->> having the flow key data merely adds additional data to the upcall
->> pipeline without any actual gain.  Userspace simply throws the data
->> away anyway.
->
-> Hi, Aaron.  While it's true that OVS in userpsace is re-parsing the
-> packet from scratch and using the newly parsed key for the OpenFlow
-> translation, the kernel-porvided key is still used in a few important
-> places.  Mainly for the compatibility checking.  The use is described
-> here in more details:
->   https://docs.kernel.org/networking/openvswitch.html#flow-key-compatibility
->
-> We need to compare the key generated in userspace with the key
-> generated by the kernel to know if it's safe to install the new flow
-> to the kernel, i.e. if the kernel and OVS userpsace are parsing the
-> packet in the same way.
->
-> On the other hand, OVS today doesn't check the data, it only checks
-> which fields are present.  So, if we can generate and pass the bitmap
-> of fields present in the key or something similar without sending the
-> full key, that might still save some CPU cycles and memory in the
-> socket buffer while preserving the ability to check for forward and
-> backward compatibility.  What do you think?
-
-Maybe that can work.  I will try testing.  If so, then I would change
-this semantic to send just the bitmap rather than omitting everything.
-
-> The rest of the patch set seems useful even without patch #1 though.
-
-I agree - but I didn't know if it made sense to submit the series
-without adding something impactful (like a test).  I will work a bit
-more on the flow area - maybe I can add enough actions and matches to
-implement basic flow tests to submit while we think more about the feature.
-
-> Nit: This patch #1 should probably be merged with the patch #6 and be
-> at the end of a patch set, so the selftest and the main code are updated
-> at the same time.
-
-Okay - I can restructure them this way.
-
-> Best regards, Ilya Maximets.
-
+Yeah, this is borderline. Do the patches apply cleanly to Linus's tree?
+If so maybe they can be posted as a PR and both trees can pull them in,
+avoiding any unnecessary back and forth...
