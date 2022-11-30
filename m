@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E0263D7B1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 15:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2378263D7B7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 15:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiK3OIA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Nov 2022 09:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S229993AbiK3OIa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Nov 2022 09:08:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiK3OHa (ORCPT
+        with ESMTP id S229823AbiK3OHg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:07:30 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8EC7B60B
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:04 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id l11so24196918edb.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:04 -0800 (PST)
+        Wed, 30 Nov 2022 09:07:36 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE438BD15
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:08 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id n21so41558158ejb.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=tessares.net; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2vVvw7X/GbK1uw8NEy53Xer3Z7d7cB2KBB5y6WQtaEk=;
-        b=XjUBpqcyqHxCl5bbgK7jToBOpwvQAdUjlUDfSdYpBivtym6A7Hjy9Ji9GWxsGn35wu
-         whAgDCdPd0+GO3yKt9nTej1ougdD6W4+ONtAezMQEVHMah486nU2eRHa2Ze8lG1NGP7M
-         Hzt4+vwj8IFJmGxXExxQK9QtOMP3vKsTLDGX7kMKZUGHqmi8XiqPQDuCtaIZ6Vy94vGg
-         SoLlDV3wxdqceLXYUY8iY3KA3BQp+PuzlZdU7XeG252hFcD5T8JuexAobFdMDTNK2NAP
-         X3ijy5gFhsZF7TcmD/uoEgrgBPPjTRr/4kjw6a0a0gyF5ZEJLU3gA7i9qEC+2m2hSpHb
-         8cZg==
+        bh=w8+9TtQhJTeugjJt6JDxh1bHQ8477mWDIxdOTyt8gMw=;
+        b=4oflt4ubSUqJSREur2/9AlJll73FxY6sPeNoi/8wc7ocqzr/u8Cl0H/oPniO8evrYC
+         7SEqf9JNI9HBQYpZwbpGd6PgvYJaZ7lzjqGVZw/3jk286YmCOgvsFOi46eTOHUKRwj2g
+         c/gsolXbaAlW2aAjBzQRmwIWjHrC5P3LGVNYKXD+3ARG9nokvofk7/EHXSxY3LKrYCq8
+         E49GiNfIMAwvMevvQQdi98im6TmTo2/aT1k8CUTo3T8HzBFvDX5Veu49i6PIdNgHmps0
+         SF6LShcVe6xUAYMKcqNWatomleAHfran5j/kWwOqpGwt54vpuo30sd0Hi8kVLrplmey2
+         jX2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2vVvw7X/GbK1uw8NEy53Xer3Z7d7cB2KBB5y6WQtaEk=;
-        b=QoKpVqWIJOy+anDrFKqQFASwqERmN0CObKyVrJRUcLDmqfFV5ot0u21HdDZbgYV6QQ
-         xhn4XeynBwYy08JciMaDmjoES7oNrh//khcZncDULqpU013rET7EZ3xvtOHrhQaDjz8e
-         Kic+e+VELGhk2IfTRb3qDh+IpsvZuKlE/T7n6jIjnqzt8hy0ntSRgC7Rrzh7thUbyA+k
-         +HKvsga4gdyGLmxlbAXOqr7czTN2HzTLt68Z5BEfJtwePa+HAA431+687hSmnB2DzIxT
-         qQdDDd5oWDgZRPrONGk6sl12MJu2nqN1jJUMYAV8yLnDL79XReJXDDzYrtuKPp39bZBP
-         0+1g==
-X-Gm-Message-State: ANoB5plL788tgKWEV9Hy2prQrWB48HC6wbS1TNFEU6Htx8WhknD03lT1
-        2E7icTpUjgDIIMB4IqsnNJoSug==
-X-Google-Smtp-Source: AA0mqf7G0IhHkis17R7KEahp13i9wYGOGmhYQ7PgYOGtNq4ygFCdTa/jZGdlyCipBJ8O/77Zd7y/Bg==
-X-Received: by 2002:a05:6402:ea0:b0:463:a83c:e019 with SMTP id h32-20020a0564020ea000b00463a83ce019mr39357779eda.253.1669817222886;
-        Wed, 30 Nov 2022 06:07:02 -0800 (PST)
+        bh=w8+9TtQhJTeugjJt6JDxh1bHQ8477mWDIxdOTyt8gMw=;
+        b=P57Z6TKCKpIM/1uxvwvQxrLhsgvkWVhhGC4nM10jgeI9wBY3x8BdZPS5/Qd2bK8sUI
+         O5qMM2JBt6b2mJgre2+vrDugqR5T2qiVrhJ8f0hPdJAw7MnYWR5R/Lpce6i7RhOMiexD
+         /zgz9Abx57+xm/WK/v7ov+GLiIMLy51fEjZC+VtkTP/QPpAHxUffcDHItx28uuMlINGM
+         FxIKLRKOc3MrcS6wXU07UvkdVteueNoyKss5KdbtjZwMfGWk5/Qd858Ut8/IQ3lN8npS
+         Xaxau41I5bzRbvaU/k594Pgi08XG1pCBBK6W9dMeluCXE05RinC/YDl7/0YFyVsnP8wX
+         M36w==
+X-Gm-Message-State: ANoB5pkYFfPKk6br3C914S47MPhONZJbxISaWkk1G4QhIF8vOZ00SO6P
+        VzmPzo+iOW9G50ncn1pEGzPE3w==
+X-Google-Smtp-Source: AA0mqf6xQFkbPndD0+0xMKNKfhBREvCTpy6IDc9dr5EQT+7HRW5hZ+Pa9H9qnGWSWNlwoac4ZVY9Aw==
+X-Received: by 2002:a17:906:1106:b0:7be:833e:d242 with SMTP id h6-20020a170906110600b007be833ed242mr16211181eja.405.1669817226587;
+        Wed, 30 Nov 2022 06:07:06 -0800 (PST)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b0073d83f80b05sm692454ejb.94.2022.11.30.06.07.01
+        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b0073d83f80b05sm692454ejb.94.2022.11.30.06.07.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 06:07:02 -0800 (PST)
+        Wed, 30 Nov 2022 06:07:05 -0800 (PST)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
 To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
@@ -57,28 +57,29 @@ To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 05/11] selftests: mptcp: declare var as local
-Date:   Wed, 30 Nov 2022 15:06:27 +0100
-Message-Id: <20221130140637.409926-6-matthieu.baerts@tessares.net>
+Cc:     Geliang Tang <geliang.tang@suse.com>, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 07/11] selftests: mptcp: enhance userspace pm tests
+Date:   Wed, 30 Nov 2022 15:06:29 +0100
+Message-Id: <20221130140637.409926-8-matthieu.baerts@tessares.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221130140637.409926-1-matthieu.baerts@tessares.net>
 References: <20221130140637.409926-1-matthieu.baerts@tessares.net>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4471; i=matthieu.baerts@tessares.net;
- h=from:subject; bh=lUshWFmqLTSaxhy6jIUdB01u4qUlhoHgYrons8BADMM=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjh2NozzGzy2cE3zTK8cmVfAW4GfQ6Gk8h75OQbl18
- aHAzCo6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4djaAAKCRD2t4JPQmmgc94cD/
- 4w5j2YieduhM2Ir7Q9nbuk6s10zRVFqoozqDn5HKr3y8keDSJotSnd6tkaGl1s8wRauAdWxqZ52X6q
- jKWBtCBElKSnFWg0iIg3wB8OcSdDqG5RFHg0Axcks7ANQvP1L/VOIl5EtJfbbRw0dPxgRqhMlgAQkx
- f3bKaTe/+17a7oBbF+m3ryHY/vr3EMSXsbqzOmy9IIJKi6Tfcc6Igl93ECukRmse/OkZ3jMNbxCYm3
- wtejSQM8lc8AphMo8AEugMjBsiHHNIP3wOZPEfgKHJbnZpBgII4ZL5iIzO7xVCIFem41UFaa/4k0Kx
- ZLaf5t59dh0BnuEj1VpZMB+3TZVRbL8BNU7rNk9kPh0WVZh7NxvrZDPELAsdyWY24Xno+4mdAXZlxa
- V2IOnDXjGsQsmeghitZbqSQXga+BHNJbdSW+uwdRqQX5lX7eyU3/MnZMEjp8aKf/R4RDurlkoCwYEX
- C1/Qx4myEgVyXGKzBjOkmtJZ/dtU+N6Eyjes5V0oK2V6vngSh4WkOHPnikfxFnMNH7xmXbXjTQV9ue
- GgICUbBYiaYTO7uUOTssR5Qn3R4VpS/gY14soly5lELLhTgET4A26wBh/dJQwUquG7xmDDRGSGBWzv
- gwGf3PYUlWd+EZDAbvjqB7wnTPJyA72XWSpiEjCYsFUisIJmXhAyZFByd/sw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2625; i=matthieu.baerts@tessares.net;
+ h=from:subject; bh=Uj60AGilfzPETmXERWWoIIHskkAhbbWouLnBIXu+gN4=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjh2NoIX0vsxi6qa6Jw9EvRJSFj6RKVVDVxl079pit
+ dpz244SJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4djaAAKCRD2t4JPQmmgc+QuD/
+ 4vEfMtrQx3rmlLZrWdN7G+a5I4u1HKqoMgVD/K8hnMq+rbBZsSxkXv0i13De/SUMveauxDcN+h0OGn
+ M9bWZkwrt7Vbd+YKt1Eajj+wYl5fN9RHqKXx3GhciodaTxc71HCEZwUDviloUYXzJjjDZzk5EnzM85
+ pEyDiRqsFHKfX2YcpXhdvk2HtGoLfFTXI1BzEpVyQnrcOimfiIPPI6iEDWvTleaeK7rug/FrOV1K5f
+ HL0btU98dEPfIAYfCaU1gem2Qf9OuRP155KNU0vwTwcnIb2Iv3rmBi6cPW83uz9wbRIfu+bQqvhRWC
+ hvWA6fKih0LTqlLAEB9H1fWPWlMXFQk9xQOMqF2a3FYp4M6I9jZSYB34yeDRO4z9gEYZi4M1Rkv+Zq
+ c5EOxvzuM7t8IBWVUnoUdfWqC7kFFr+DpYdstkHwL427+m741j8mylCCJeD2rcnzdWvaOW00J7B5NW
+ I2Bg+WsKmZoFU3p57XnpTtQMm90/x0O4EkO5hlEyaSyWSkdQuJmVZ3j0cpHsYNKfgssrvRGFnoDg1A
+ 0IpSJbkwPFpjFtGqWW0awE74dAbjF2yaBJ8TdMdNFJHS8qpmt/w2DSYZlrMo2S6FFW4lzNR0QqCH8t
+ dHY/qK32CqLtp1lbDrtl4UmBe+fPYE+e1J2nJpXdPRNYdxQGm9cXvTIzbQFg==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,182 +91,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Just to avoid classical Bash pitfall where variables are accidentally
-overridden by other functions because the proper scope has not been
-defined.
+From: Geliang Tang <geliang.tang@suse.com>
 
-That's also what is done in other MPTCP selftests scripts where all non
-local variables are defined at the beginning of the script and the
-others are defined with the "local" keyword.
+Some userspace pm tests failed since pm listener events have been added.
+Now MPTCP_EVENT_LISTENER_CREATED event becomes the first item in the
+events list like this:
 
+ type:15,family:2,sport:10006,saddr4:0.0.0.0
+ type:1,token:3701282876,server_side:1,family:2,saddr4:10.0.1.1,...
+
+And no token value in this MPTCP_EVENT_LISTENER_CREATED event.
+
+This patch fixes this by specifying the type 1 item to search for token
+values.
+
+Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- .../selftests/net/mptcp/mptcp_sockopt.sh      | 51 +++++++++++--------
- 1 file changed, 29 insertions(+), 22 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh   | 3 ++-
+ tools/testing/selftests/net/mptcp/userspace_pm.sh | 7 ++++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-index f74b237bcb32..1b70c0a304ce 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-@@ -22,6 +22,7 @@ add_mark_rules()
- 	local ns=$1
- 	local m=$2
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index 2a402b3b771f..f10ef65a7009 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -830,7 +830,8 @@ do_transfer()
+ 			if [ $userspace_pm -eq 0 ]; then
+ 				pm_nl_add_endpoint $ns1 $addr flags signal
+ 			else
+-				tk=$(sed -n 's/.*\(token:\)\([[:digit:]]*\).*$/\2/p;q' "$evts_ns1")
++				tk=$(grep "type:1," "$evts_ns1" |
++				     sed -n 's/.*\(token:\)\([[:digit:]]*\).*$/\2/p;q')
+ 				ip netns exec ${listener_ns} ./pm_nl_ctl ann $addr token $tk id $id
+ 				sleep 1
+ 				ip netns exec ${listener_ns} ./pm_nl_ctl rem token $tk id $id
+diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+index 5dfc3ee74b98..08a88ea47a29 100755
+--- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
++++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+@@ -172,9 +172,10 @@ make_connection()
+ 	client_serverside=$(sed --unbuffered -n 's/.*\(server_side:\)\([[:digit:]]*\).*$/\2/p;q'\
+ 				      "$client_evts")
+ 	kill_wait $server_evts_pid
+-	server_token=$(sed --unbuffered -n 's/.*\(token:\)\([[:digit:]]*\).*$/\2/p;q' "$server_evts")
+-	server_serverside=$(sed --unbuffered -n 's/.*\(server_side:\)\([[:digit:]]*\).*$/\2/p;q'\
+-				      "$server_evts")
++	server_token=$(grep "type:1," "$server_evts" |
++		       sed --unbuffered -n 's/.*\(token:\)\([[:digit:]]*\).*$/\2/p;q')
++	server_serverside=$(grep "type:1," "$server_evts" |
++			    sed --unbuffered -n 's/.*\(server_side:\)\([[:digit:]]*\).*$/\2/p;q')
+ 	rm -f "$client_evts" "$server_evts" "$file"
  
-+	local t
- 	for t in iptables ip6tables; do
- 		# just to debug: check we have multiple subflows connection requests
- 		ip netns exec $ns $t -A OUTPUT -p tcp --syn -m mark --mark $m -j ACCEPT
-@@ -36,6 +37,7 @@ add_mark_rules()
- 
- init()
- {
-+	local netns
- 	for netns in "$ns1" "$ns2" "$ns_sbox";do
- 		ip netns add $netns || exit $ksft_skip
- 		ip -net $netns link set lo up
-@@ -44,6 +46,7 @@ init()
- 		ip netns exec $netns sysctl -q net.ipv4.conf.default.rp_filter=0
- 	done
- 
-+	local i
- 	for i in `seq 1 4`; do
- 		ip link add ns1eth$i netns "$ns1" type veth peer name ns2eth$i netns "$ns2"
- 		ip -net "$ns1" addr add 10.0.$i.1/24 dev ns1eth$i
-@@ -73,6 +76,7 @@ init()
- 
- cleanup()
- {
-+	local netns
- 	for netns in "$ns1" "$ns2" "$ns_sbox"; do
- 		ip netns del $netns
- 	done
-@@ -103,15 +107,17 @@ check_mark()
- 	local ns=$1
- 	local af=$2
- 
--	tables=iptables
-+	local tables=iptables
- 
- 	if [ $af -eq 6 ];then
- 		tables=ip6tables
- 	fi
- 
-+	local counters values
- 	counters=$(ip netns exec $ns $tables -v -L OUTPUT | grep DROP)
- 	values=${counters%DROP*}
- 
-+	local v
- 	for v in $values; do
- 		if [ $v -ne 0 ]; then
- 			echo "FAIL: got $tables $values in ns $ns , not 0 - not all expected packets marked" 1>&2
-@@ -131,9 +137,9 @@ print_file_err()
- 
- check_transfer()
- {
--	in=$1
--	out=$2
--	what=$3
-+	local in=$1
-+	local out=$2
-+	local what=$3
- 
- 	cmp "$in" "$out" > /dev/null 2>&1
- 	if [ $? -ne 0 ] ;then
-@@ -156,18 +162,18 @@ is_v6()
- 
- do_transfer()
- {
--	listener_ns="$1"
--	connector_ns="$2"
--	cl_proto="$3"
--	srv_proto="$4"
--	connect_addr="$5"
-+	local listener_ns="$1"
-+	local connector_ns="$2"
-+	local cl_proto="$3"
-+	local srv_proto="$4"
-+	local connect_addr="$5"
- 
--	port=12001
-+	local port=12001
- 
- 	:> "$cout"
- 	:> "$sout"
- 
--	mptcp_connect="./mptcp_connect -r 20"
-+	local mptcp_connect="./mptcp_connect -r 20"
- 
- 	local local_addr
- 	if is_v6 "${connect_addr}"; then
-@@ -180,7 +186,7 @@ do_transfer()
- 		ip netns exec ${listener_ns} \
- 			$mptcp_connect -t ${timeout_poll} -l -M 1 -p $port -s ${srv_proto} -c TIMESTAMPNS,TCPINQ \
- 				${local_addr} < "$sin" > "$sout" &
--	spid=$!
-+	local spid=$!
- 
- 	sleep 1
- 
-@@ -189,12 +195,12 @@ do_transfer()
- 			$mptcp_connect -t ${timeout_poll} -M 2 -p $port -s ${cl_proto} -c TIMESTAMPNS,TCPINQ \
- 				$connect_addr < "$cin" > "$cout" &
- 
--	cpid=$!
-+	local cpid=$!
- 
- 	wait $cpid
--	retc=$?
-+	local retc=$?
- 	wait $spid
--	rets=$?
-+	local rets=$?
- 
- 	if [ ${rets} -ne 0 ] || [ ${retc} -ne 0 ]; then
- 		echo " client exit code $retc, server $rets" 1>&2
-@@ -229,9 +235,9 @@ do_transfer()
- 
- make_file()
- {
--	name=$1
--	who=$2
--	size=$3
-+	local name=$1
-+	local who=$2
-+	local size=$3
- 
- 	dd if=/dev/urandom of="$name" bs=1024 count=$size 2> /dev/null
- 	echo -e "\nMPTCP_TEST_FILE_END_MARKER" >> "$name"
-@@ -264,9 +270,9 @@ do_mptcp_sockopt_tests()
- 
- run_tests()
- {
--	listener_ns="$1"
--	connector_ns="$2"
--	connect_addr="$3"
-+	local listener_ns="$1"
-+	local connector_ns="$2"
-+	local connect_addr="$3"
- 	local lret=0
- 
- 	do_transfer ${listener_ns} ${connector_ns} MPTCP MPTCP ${connect_addr}
-@@ -282,7 +288,7 @@ run_tests()
- do_tcpinq_test()
- {
- 	ip netns exec "$ns_sbox" ./mptcp_inq "$@"
--	lret=$?
-+	local lret=$?
- 	if [ $lret -ne 0 ];then
- 		ret=$lret
- 		echo "FAIL: mptcp_inq $@" 1>&2
-@@ -297,6 +303,7 @@ do_tcpinq_tests()
- {
- 	local lret=0
- 
-+	local args
- 	for args in "-t tcp" "-r tcp"; do
- 		do_tcpinq_test $args
- 		lret=$?
+ 	if [ "$client_token" != "" ] && [ "$server_token" != "" ] && [ "$client_serverside" = 0 ] &&
 -- 
 2.37.2
 
