@@ -2,166 +2,233 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDBB63D37C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 11:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB2563D4D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 12:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233973AbiK3KfT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Nov 2022 05:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        id S230125AbiK3Lmd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Nov 2022 06:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiK3KfT (ORCPT
+        with ESMTP id S229468AbiK3Lmc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Nov 2022 05:35:19 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9744645A33;
-        Wed, 30 Nov 2022 02:35:16 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        Wed, 30 Nov 2022 06:42:32 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24752EF23;
+        Wed, 30 Nov 2022 03:42:30 -0800 (PST)
+Received: from [192.168.10.9] (unknown [39.45.24.242])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NMbF95Gf9z4wgn;
-        Wed, 30 Nov 2022 21:35:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1669804512;
-        bh=2MrGuwIIFFf8mJjgY+3KK6RoTtnWaC4YdC9C/t0dJp8=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=MZz6Vyz4jl/7be4CLSCqS1NokHNG94MkNHF4tEP8RWNQrNXtBfIMQBqudMSGwo8mg
-         3oZqIZ8CQubtYrcKyhl7S+v8fgJNf+NrF6aRMcBl3DcSPDjltNLEUXP7UaB1+jsI5e
-         bdTkVOO6uRsI+gpCJvN7HXYDsaXKrKE631J7LpxPvOTEyPvfWKuP0cEoI+t5eOlPCz
-         clndMy9QGm0t/VEirfX0Ru7fVj3ZxNkeUgnRQIRB8DAE8p2PXlcJM5A9xKJvAnmiQN
-         b4dIKQvOE8GAlenAjw76sz6bkv615PzP58HtJ7hJz9AWL3BIVuI75EX3alww0GjANO
-         UMkmfYx8b1rzg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     syzbot <syzbot+adec8406ad17413d4c06@syzkaller.appspotmail.com>,
-        christophe.leroy@csgroup.eu, clm@fb.com, dsterba@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, npiggin@gmail.com, shuah@kernel.org,
-        syzkaller-bugs@googlegroups.com, ye.xingchen@zte.com.cn
-Subject: Re: [syzbot] WARNING in btrfs_free_reserved_data_space_noquota
-In-Reply-To: <000000000000fac82605ee97fb72@google.com>
-References: <000000000000fac82605ee97fb72@google.com>
-Date:   Wed, 30 Nov 2022 21:35:09 +1100
-Message-ID: <87bkoobuhu.fsf@mpe.ellerman.id.au>
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19C756602B30;
+        Wed, 30 Nov 2022 11:42:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669808548;
+        bh=9XxmEbSKYgeKKnokakfeqMw6DJF63EW/WOBjbUfGkcw=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=eqmoQWHm1Y0AOAaCC4L2WSnMjWwwdEznVS6JbSYcnA8AH+uQgY/cfFfYDN6mBF1fF
+         q15WIefsFjY+C2EAjXjzniJe6Ay9kqUgjZlg5nvM2Fjxh7T9Hi6Yvy1O5cWV8CvUV6
+         K6KqiOHffYJ8e9mTeVg2Ya2vUaMuwfcpIPgWDqRpBebQYJ/5ITNTx9JM5vozes0/Nc
+         E2cxBwN/zhkmJ34MvqYGNPgyqhSm6FshGgpYr0Atrxwb9WGANwd8Og1RcQ3ZtoB9I0
+         s7mdl4k5JcWg2zjkZpLS/jOBZA7O6SDgWiGLYZBCFRM72fm8RG3Fhv6xITMVmeevWi
+         7Lj2oVSAkf+xw==
+Message-ID: <3d069746-d440-f1a6-1b64-5ee196c2fc21@collabora.com>
+Date:   Wed, 30 Nov 2022 16:42:17 +0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Zach O'Keefe <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>
+Subject: Re: [PATCH v6 0/3] Implement IOCTL to get and/or the clear info about
+ PTEs
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>
+References: <20221109102303.851281-1-usama.anjum@collabora.com>
+ <9c167d01-ef09-ec4e-b4a1-2fff62bf01fe@redhat.com>
+ <6fdce544-8d4f-8b3c-9208-735769a9e624@collabora.com>
+ <a90ee936-67a9-340d-bf2c-2f331617b0da@redhat.com>
+ <254130e7-7fb1-6cf1-e8fa-5bc2d4450431@collabora.com>
+ <bfcae708-db21-04b4-0bbe-712badd03071@redhat.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <bfcae708-db21-04b4-0bbe-712badd03071@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-syzbot <syzbot+adec8406ad17413d4c06@syzkaller.appspotmail.com> writes:
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    b7b275e60bcd Linux 6.1-rc7
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=158a7b73880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=adec8406ad17413d4c06
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169ccb75880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17bf7153880000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/525233126d34/disk-b7b275e6.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/e8299bf41400/vmlinux-b7b275e6.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/eebf691dbf6f/bzImage-b7b275e6.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/5423c2d2ad62/mount_0.gz
->
-> The issue was bisected to:
->
-> commit c814bf958926ff45a9c1e899bd001006ab6cfbae
-> Author: ye xingchen <ye.xingchen@zte.com.cn>
-> Date:   Tue Aug 16 10:51:06 2022 +0000
->
->     powerpc/selftests: Use timersub() for gettimeofday()
+On 11/21/22 8:55 PM, David Hildenbrand wrote:
+> On 21.11.22 16:00, Muhammad Usama Anjum wrote:
+>> Hello,
+>>
+>> Thank you for replying.
+>>
+>> On 11/14/22 8:46 PM, David Hildenbrand wrote:
+>>>> The soft-dirtiness is stored in the PTE. VMA is marked dirty to store the
+>>>> dirtiness for reused regions. Clearing the soft-dirty status of whole
+>>>> process is straight forward. When we want to clear/monitor the
+>>>> soft-dirtiness of a part of the virtual memory, there is a lot of internal
+>>>> noise. We don't want the non-dirty pages to become dirty because of how
+>>>> the
+>>>> soft-dirty feature has been working. Soft-dirty feature wasn't being used
+>>>> the way we want to use now. While monitoring a part of memory, it is not
+>>>> acceptable to get non-dirty pages as dirty. Non-dirty pages become dirty
+>>>> when the two VMAs are merged without considering if they both are dirty or
+>>>> not (34228d473efe). To monitor changes over the memory, sometimes VMAs are
+>>>> split to clear the soft-dirty bit in the VMA flags. But sometimes kernel
+>>>> decide to merge them backup. It is so waste of resources.
+>>>
+>>> Maybe you'd want a per-process option to not merge if the VM_SOFTDIRTY
+>>> property differs. But that might be just one alternative for handling this
+>>> case.
+>>>
+>>>>
+>>>> To keep things consistent, the default behavior of the IOCTL is to output
+>>>> even the extra non-dirty pages as dirty from the kernel noise. A optional
+>>>> PAGEMAP_NO_REUSED_REGIONS flag is added for those use cases which aren't
+>>>> tolerant of extra non-dirty pages. This flag can be considered as
+>>>> something
+>>>> which is by-passing the already present buggy implementation in the
+>>>> kernel.
+>>>> It is not buggy per say as the issue can be solved if we don't allow the
+>>>> two VMA which have different soft-dirty bits to get merged. But we are
+>>>> allowing that so that the total number of VMAs doesn't increase. This was
+>>>> acceptable at the time, but now with the use case of monitoring a part of
+>>>> memory for soft-dirty doesn't want this merging. So either we need to
+>>>> revert 34228d473efe and PAGEMAP_NO_REUSED_REGIONS flag will not be needed
+>>>> or we should allow PAGEMAP_NO_REUSED_REGIONS or similar mechanism to
+>>>> ignore
+>>>> the extra dirty pages which aren't dirty in reality.
+>>>>
+>>>> When PAGEMAP_NO_REUSED_REGIONS flag is used, only the PTEs are checked to
+>>>> find if the pages are dirty. So re-used regions cannot be detected. This
+>>>> has the only side-effect of not checking the VMAs. So this is
+>>>> limitation of
+>>>> using this flag which should be acceptable in the current state of code.
+>>>> This limitation is okay for the users as they can clear the soft-dirty bit
+>>>> of the VMA before starting to monitor a range of memory for
+>>>> soft-dirtiness.
+>>>>
+>>>>
+>>>>> Please separate that part out from the other changes; I am still not
+>>>>> convinced that we want this and what the semantical implications are.
+>>>>>
+>>>>> Let's take a look at an example: can_change_pte_writable()
+>>>>>
+>>>>>       /* Do we need write faults for softdirty tracking? */
+>>>>>       if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
+>>>>>           return false;
+>>>>>
+>>>>> We care about PTE softdirty tracking, if it is enabled for the VMA.
+>>>>> Tracking is enabled if: vma_soft_dirty_enabled()
+>>>>>
+>>>>>       /*
+>>>>>        * Soft-dirty is kind of special: its tracking is enabled when
+>>>>>        * the vma flags not set.
+>>>>>        */
+>>>>>       return !(vma->vm_flags & VM_SOFTDIRTY);
+>>>>>
+>>>>> Consequently, if VM_SOFTDIRTY is set, we are not considering the
+>>>>> soft_dirty
+>>>>> PTE bits accordingly.
+>>>> Sorry, I'm unable to completely grasp the meaning of the example. We have
+>>>> followed clear_refs_write() to write the soft-dirty bit clearing code in
+>>>> the current patch. Dirtiness of the VMA and the PTE may be set
+>>>> independently. Newer allocated memory has dirty bit set in the VMA. When
+>>>> something is written the memory, the soft dirty bit is set in the PTEs as
+>>>> well regardless if the soft dirty bit is set in the VMA or not.
+>>>>
+>>>
+>>> Let me try to find a simple explanation:
+>>>
+>>> After clearing a SOFTDIRTY PTE flag inside an area with VM_SOFTDIRTY set,
+>>> there are ways that PTE could get written to and it could become dirty,
+>>> without the PTE becoming softdirty.
+>>>
+>>> Essentially, inside a VMA with VM_SOFTDIRTY set, the PTE softdirty values
+>>> might be stale: there might be entries that are softdirty even though the
+>>> PTE is *not* marked softdirty.
+>> Can someone please share the example to reproduce this? In all of my
+>> testing, even if I ignore VM_SOFTDIRTY and only base my decision of
+>> soft-dirtiness on individual pages, it always passes.
+> 
+> Quick reproducer (the first and easiest one that triggered :) )
+> attached.
+> 
+> With no kernel changes, it works as expected.
+> 
+> # ./softdirty_mprotect
+> 
+> 
+> With the following kernel change to simulate what you propose it fails:
+> 
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index d22687d2e81e..f2c682bf7f64 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1457,8 +1457,8 @@ static pagemap_entry_t pte_to_pagemap_entry(struct
+> pagemapread *pm,
+>                 flags |= PM_FILE;
+>         if (page && !migration && page_mapcount(page) == 1)
+>                 flags |= PM_MMAP_EXCLUSIVE;
+> -       if (vma->vm_flags & VM_SOFTDIRTY)
+> -               flags |= PM_SOFT_DIRTY;
+> +       //if (vma->vm_flags & VM_SOFTDIRTY)
+> +       //      flags |= PM_SOFT_DIRTY;
+>  
+>         return make_pme(frame, flags);
+>  }
+> 
+> 
+> # ./softdirty_mprotect
+> Page #1 should be softdirty
+> 
+Thank you so much for sharing the issue and reproducer.
 
-That can't be right, that patch only touches
-tools/testing/selftests/powerpc/benchmarks/gettimeofday.c which isn't
-built into vmlinux - and definitely not for an x86 build.
+After remapping the second part of the memory and m-protecting +
+m-unprotecting the whole memory, the PTE of the first half of the memory
+doesn't get marked as soft dirty even after writing multiple times to it.
+Even if soft-dirtiness is cleared on the whole process, the PTE of the
+first half memory doesn't get dirty. This seems like more of a bug in
+mprotect. The mprotect should not mess up with the soft-dirty flag in the PTEs.
 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=118c3d03880000
+I'm debugging this. I hope to find the issue soon. Soft-dirty tracking in
+PTEs should be working correctly irrespective of the VM_SOFTDIRTY is set or
+not on the VMA.
 
-This says:
-  Reproducer flagged being flaky
+Cyrill has said in [1]:
+> ioctl might be an option indeed
+It brings some hope to this patch-set.
 
-AFAICS there isn't a syzbot command to ask for a new bisection, so
-someone will have to do it manually.
+[1] https://lore.kernel.org/all/Y4W0axw0ZgORtfkt@grain/
 
-cheers
-
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=138c3d03880000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=158c3d03880000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+adec8406ad17413d4c06@syzkaller.appspotmail.com
-> Fixes: c814bf958926 ("powerpc/selftests: Use timersub() for gettimeofday()")
->
-> RDX: 0000000000000001 RSI: 0000000020000280 RDI: 0000000000000005
-> RBP: 00007ffd32e91c70 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000008000000 R11: 0000000000000246 R12: 0000000000000006
-> R13: 00007ffd32e91cb0 R14: 00007ffd32e91c90 R15: 0000000000000006
->  </TASK>
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 3764 at fs/btrfs/space-info.h:122 btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
-> WARNING: CPU: 1 PID: 3764 at fs/btrfs/space-info.h:122 btrfs_free_reserved_data_space_noquota+0x219/0x2b0 fs/btrfs/delalloc-space.c:179
-> Modules linked in:
-> CPU: 1 PID: 3764 Comm: syz-executor759 Not tainted 6.1.0-rc7-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> RIP: 0010:btrfs_space_info_update_bytes_may_use fs/btrfs/space-info.h:122 [inline]
-> RIP: 0010:btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
-> RIP: 0010:btrfs_free_reserved_data_space_noquota+0x219/0x2b0 fs/btrfs/delalloc-space.c:179
-> Code: 2f 00 74 08 4c 89 ef e8 b5 98 32 fe 49 8b 5d 00 48 89 df 4c 8b 74 24 08 4c 89 f6 e8 21 81 de fd 4c 39 f3 73 16 e8 d7 7e de fd <0f> 0b 31 db 4c 8b 34 24 41 80 3c 2f 00 75 8c eb 92 e8 c1 7e de fd
-> RSP: 0018:ffffc9000443f410 EFLAGS: 00010293
-> RAX: ffffffff83ac1919 RBX: 00000000005cb000 RCX: ffff888027989d40
-> RDX: 0000000000000000 RSI: 0000000000800000 RDI: 00000000005cb000
-> RBP: dffffc0000000000 R08: ffffffff83ac190f R09: fffffbfff1cebe0e
-> R10: fffffbfff1cebe0e R11: 1ffffffff1cebe0d R12: ffff8880774f3800
-> R13: ffff8880774f3860 R14: 0000000000800000 R15: 1ffff1100ee9e70c
-> FS:  0000555555aaa300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f0d98f20140 CR3: 0000000025ccf000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  btrfs_free_reserved_data_space+0x9d/0xd0 fs/btrfs/delalloc-space.c:199
->  btrfs_dio_iomap_begin+0x8f7/0x1070 fs/btrfs/inode.c:7762
->  iomap_iter+0x606/0x8a0 fs/iomap/iter.c:74
->  __iomap_dio_rw+0xd91/0x20d0 fs/iomap/direct-io.c:601
->  btrfs_dio_write+0x9c/0xe0 fs/btrfs/inode.c:8094
->  btrfs_direct_write fs/btrfs/file.c:1835 [inline]
->  btrfs_do_write_iter+0x871/0x1260 fs/btrfs/file.c:1980
->  do_iter_write+0x6c2/0xc20 fs/read_write.c:861
->  vfs_writev fs/read_write.c:934 [inline]
->  do_pwritev+0x200/0x350 fs/read_write.c:1031
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f0d98ea8ea9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffd32e91c38 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f0d98ea8ea9
-> RDX: 0000000000000001 RSI: 0000000020000280 RDI: 0000000000000005
-> RBP: 00007ffd32e91c70 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000008000000 R11: 0000000000000246 R12: 0000000000000006
-> R13: 00007ffd32e91cb0 R14: 00007ffd32e91c90 R15: 0000000000000006
->  </TASK>
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+-- 
+BR,
+Muhammad Usama Anjum
