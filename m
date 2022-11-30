@@ -2,171 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2213963D6ED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 14:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDF563D704
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 14:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiK3NjH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Nov 2022 08:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S229814AbiK3Nm5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Nov 2022 08:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiK3Niv (ORCPT
+        with ESMTP id S229929AbiK3Nm4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Nov 2022 08:38:51 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7070A2CE19
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 05:38:35 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so2079805pjd.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 05:38:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=HYI7Myg6HEKItK/LnMmec4NKahQAF0usObjx5xEY4Xg=;
-        b=MCVY7nmHLGGmObun3qGOnNIesCq7S4j2qJGHTtaajI27XhivxqIPlfTv40c5PkbCqQ
-         lflFIf9rgbMt4plJnjL0uYOxYIbxvwQ0easT0ZyhsiWkGX+iXjK97oqckmJgUValRzMI
-         INr8lzl0U6fk+SUd+yDrNpynltMHQ5qlS6X/wKiRrx+Bx9gClPiVbnxRNxfrk16InhJ1
-         w+CPH9nW4TQIpXZmDjvBOm0Fpo0TGz3+ehJWjGbCNY4ieqo0rw6y8Gwn2IJTwxVx6V0G
-         BK9UBmW7fXSoWceLJjS3Uv2vaT1TgBuD0OciO+4ycvYRewb9syjo8RZYKnwBPg9bK7J9
-         7HNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HYI7Myg6HEKItK/LnMmec4NKahQAF0usObjx5xEY4Xg=;
-        b=77nZhPVJImeorhTCpdgLE23iJiEtt7ygGe1quSqJRXaUlikc0OXo70m3Q9cWleOyjZ
-         2i4aVZFhYJ1Pei7q+SLMDs1HBvmsE+lJe/aCwAe4dO1xmv05dWDf5gJUvmkKN2/ixGn1
-         rhqTsPpesEyvipWrl4NoqP3VgtYKetaRmxnfzsif+E6nYLaE0O0qpdZgXHbbxaKCmfPi
-         rtuV0wbBG66fHmMkGdLseYaOJyeMzYdTu16xZUmsP1nEtq87SaZooQk14Z74D5lq6ixO
-         vAM0J2gbNQ5Y64rNw+sIvE5Uy2X0Ms3GiZ60L4a8UE+Rvsw6fY0ix9fEwT3V3rkgfd1r
-         D4Eg==
-X-Gm-Message-State: ANoB5pkOYyRRMRKgTlilzOTmIuwxdwt4e01QrzP1+8sBkdDgrKQKjd7u
-        ZzSL36VI/g0UvjTLuHgZ76PLWQ==
-X-Google-Smtp-Source: AA0mqf7hjR2fGXqOcbFHUiYApXZm6e70cuQkOm/m3TFA00Y2lvMtYZgdhDnx5CB+QkFoqwTjCvLSaw==
-X-Received: by 2002:a17:903:22d0:b0:186:9405:290a with SMTP id y16-20020a17090322d000b001869405290amr42658945plg.133.1669815514935;
-        Wed, 30 Nov 2022 05:38:34 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id x27-20020aa7957b000000b0057534fcd895sm1399611pfq.108.2022.11.30.05.38.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 05:38:34 -0800 (PST)
-Message-ID: <63875cda.a70a0220.28eaa.211f@mx.google.com>
-Date:   Wed, 30 Nov 2022 05:38:34 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 30 Nov 2022 08:42:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B43D3E086
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 05:42:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1116D61BA3
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 13:42:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D8FC433C1;
+        Wed, 30 Nov 2022 13:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669815774;
+        bh=Z4YsbSuW2L2E0PCaV/Fdm4TGFl+eiPGNZpF4YJdVjRI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XyR2Kz6+biAaiJlvVFQ/U4ogycAIRUiaMBSJsn/fsw/WLHQaYCvGiyLj0u3bv8BIy
+         FII2X/UKnB5X1Qa4bHra0dXMzdeQUgLJ9w/MP53Q85NLkJrNyXI0Tbp1KyY9HhCaDc
+         LTjo1C0AGnLa7iMbBURtKMAQOsqkDDqUzNrPiJfj98EDVF30FH5BXrM8Dx7Lax1eP/
+         ps6oEpw+BRd9ObXPtl4+0H6Y0GdahKS8YYNwGvidyR5hHZpil6zkaLBhAN10LRPb95
+         A/LRSubrmC8cIh+TVkAjgUpJ/qLRfy4rfxP0MN9LqBJi++GU2LJOqbWO6QUr+DSN05
+         r9w1VuptGnUig==
+Date:   Wed, 30 Nov 2022 13:42:49 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 6/6] kselftest/alsa: Add more coverage of sample rates
+ and channel counts
+Message-ID: <Y4dd2b2cgkhGkR85@sirena.org.uk>
+References: <20221130000608.519574-1-broonie@kernel.org>
+ <20221130000608.519574-7-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.1-rc1-23-g8008d88e6d16
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-seccomp: 3 runs,
- 2 regressions (v6.1-rc1-23-g8008d88e6d16)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LkXPArDBIQ+IlES9"
+Content-Disposition: inline
+In-Reply-To: <20221130000608.519574-7-broonie@kernel.org>
+X-Cookie: Jesus is my POSTMASTER GENERAL ...
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 3 runs, 2 regressions (v6.1-rc1-23-g8008d=
-88e6d16)
 
-Regressions Summary
--------------------
+--LkXPArDBIQ+IlES9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+On Wed, Nov 30, 2022 at 12:06:08AM +0000, Mark Brown wrote:
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+> +	{ "8k.1.big",    "S16_LE",   8000, 2,     2000,   16000 },
+> +	{ "8k.2.big",    "S16_LE",   8000, 2,     4000,   32000 },
+> +	{ "44k1.2.big",  "S16_LE",  44100, 2,    22050,  192000 },
+> +	{ "48k.2.small", "S16_LE",  48000, 2,      512,    4096 },
+> +	{ "48k.2.big",   "S16_LE",  48000, 2,    24000,  192000 },
+> +	{ "48k.6.big",   "S16_LE",  48000, 6,    48000,  576000 },
+> +	{ "96k.2.big",   "S16_LE",  96000, 2,    48000,  384000 },
 
+It looks like the period/buffer size numbers need some tuning other than
+for 44.1kHz and 48kHz 6 channel, if I do any more fiddling with this
+series I'll split the problematic ones out into a separate commit if I
+don't get things sorted (but we could just leave things as-is and fix
+incrementally too I guess).
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
--rc1-23-g8008d88e6d16/plan/kselftest-seccomp/
+--LkXPArDBIQ+IlES9
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.1-rc1-23-g8008d88e6d16
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      8008d88e6d160c4e73de5be7c3dcc54e3ccccf49 =
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOHXdgACgkQJNaLcl1U
+h9CNLwf+JBoVVimM0Q6TBFs+OndC25sjt/A5hINKDUvit734gJFzUwd7LExgG7gH
+J7teCnR5q2E9y37AjkE2Q8r7jU+AYpVQdG5yT3RJDoJVoX6RA/w+glxKXWNcSv6O
+2BKzNFRksolSoJcNKLtJq58O+kO5tPGQrtk3d+2tLYaQer3t+C31huKYopEudNiT
+VEqm2+zN075A4Zd5sDzh+vfdCKfuY1qmgsOlPtxgu9Q4JSC+Gpj8R/kcAxCRd3t8
+4Dy6TG0SuQNovCDisTFGr9XXjdTGMftbMKiwwU/WZH+wKsPnnV0Cw4lv7pScu4a8
+GY+JrR1mac0BZ5/VOu2LB4Jvr1k9eg==
+=cwHx
+-----END PGP SIGNATURE-----
 
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/638750399b8d4fdce72abd16
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.6)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-23-g80=
-08d88e6d16/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-23-g80=
-08d88e6d16/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221125.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/638750399b8d=
-4fdce72abd17
-        failing since 43 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6387504e9e58bc411e2abd2d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.6)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-23-g80=
-08d88e6d16/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-23-g80=
-08d88e6d16/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221125.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/6387504e9e58=
-bc411e2abd2e
-        failing since 43 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =20
+--LkXPArDBIQ+IlES9--
