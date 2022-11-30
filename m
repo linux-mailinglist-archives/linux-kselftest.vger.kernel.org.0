@@ -2,202 +2,372 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A454A63D7C2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 15:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7373263D8C4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 16:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiK3OJE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Nov 2022 09:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S229769AbiK3PHF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Nov 2022 10:07:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiK3OHl (ORCPT
+        with ESMTP id S229513AbiK3PHE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:07:41 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC238BD23
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:14 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id s12so24183077edd.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xHXcuy6oLE+Bgau9uGaJ5XFA1fmV6aif/DsLUjpATIk=;
-        b=6pAl5L0VLYVXTiFnKW5E0skgWr5aO+z+xDFrjrFCoygUB9HiXC6ugck9ATxUopyWti
-         H8wqG8ibFuGqDbf4IxVAeG+MNjsB02sYm/XJbeaxKF+IZSNU1+5NIlmQlMshCEMMrDx3
-         LEJ9Fb9y+F9bLOtrqPFQ07p4zXiLA1tFbD4mnU+5cHobdfroCt9rehpFbgt1DeVNtU+G
-         cyXZM79AcPgsgUPEed9ODLeH0n14OrTVbrJUzxNPSz+thEi1umaCxayYXmLyegjTfds7
-         w1k4hD/aBdMHN4e4zelHwEEEqCnfdJnHIoAdgIlbQsP0O5tJ9n5Qjt/ssncXzjqO26aU
-         p+VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xHXcuy6oLE+Bgau9uGaJ5XFA1fmV6aif/DsLUjpATIk=;
-        b=aiZwHdfoZTSHjZbc1abcSOS1ZGqvwrsdhLIhqJujBOWrfL3mD+TXUS3HyJn3ibaVrJ
-         gP0l5GFToBmz314h5PQ+U49enbtboSyWn6zO0UJryVZtJcdNXdbRr4EBEDNtnXJSt5/B
-         Lo2xQrJa3bSXKFMzERNnUwnVleTp+a+Uje4ROI6ANkS+8+jCddxzp/7KGtZMQNYgltj0
-         xSGhmGpMRfEgG0+XwO8X8XHB6LFhDWKx5kKremR0tCOyF143u//674J66NgBo9HXo8UD
-         6XORZyU164PFq4hWTwYcVIy8NtCuZMQiRNBjfLYq8oLlfkxfuemhDiBZAIrXvO+OlWra
-         /EqQ==
-X-Gm-Message-State: ANoB5pmk2GpC16XPSSu98G1dBvHc5eSLtJM+SWdYs8v3UZIC6yp1Pu2g
-        tm4SZvwMr2Bu1v9C2124D3hlWQ==
-X-Google-Smtp-Source: AA0mqf6ewQ3Wcmzfrxx1kg91XYTrJwaHBigrcJyyV4Am60DQzR9SUx1Bh1B7j8tYPPI+bjGnpvw8TA==
-X-Received: by 2002:a05:6402:2074:b0:46a:bb9e:40d1 with SMTP id bd20-20020a056402207400b0046abb9e40d1mr23210839edb.242.1669817232990;
-        Wed, 30 Nov 2022 06:07:12 -0800 (PST)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b0073d83f80b05sm692454ejb.94.2022.11.30.06.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 06:07:12 -0800 (PST)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Geliang Tang <geliang.tang@suse.com>, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 11/11] selftests: mptcp: listener test for in-kernel PM
-Date:   Wed, 30 Nov 2022 15:06:33 +0100
-Message-Id: <20221130140637.409926-12-matthieu.baerts@tessares.net>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221130140637.409926-1-matthieu.baerts@tessares.net>
-References: <20221130140637.409926-1-matthieu.baerts@tessares.net>
+        Wed, 30 Nov 2022 10:07:04 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFE426FF;
+        Wed, 30 Nov 2022 07:07:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669820822; x=1701356822;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Zm2l0qyL1Vo5sqgeGy+VkNuJbeJTCqKZivTw2lf9ibg=;
+  b=Q/Mi7apfmGMiyWSbTKc4bXuRN7jTenOku1IGoghmDoMixYgYERPQTiuk
+   pE+oxPlz0lI7yeHU1h4UoiOlE5alUL8kDjxiIpF1p+FdziMMDFFt6NCx2
+   lWPbhL+XBq8z2xANF/7Kbf1Q5FDlmqfEAEr0zrd99FIfUuoY0Vu9uZ18Q
+   QMZPksqqI+ES292BNwSXr9UrJoYBbuTC8A6i7eOsM/Z00yMkrMz/e5VGf
+   poLBrnOPQvX3iWncnWtqEWf3ykNlEjPq+4aesr0S0VUq8e1dLpF6DkbYZ
+   pYdyWBPH3tomogiYdFBXRV+ceIw6N3DtUuWTG6MQBcLsFgROpq37O8wnz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="401692780"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="401692780"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 07:07:01 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="733013825"
+X-IronPort-AV: E=Sophos;i="5.96,206,1665471600"; 
+   d="scan'208";a="733013825"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.171.33]) ([10.249.171.33])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2022 07:06:52 -0800
+Message-ID: <f1077114-0f0c-0ec0-0dd7-8b6cbc26ebb1@linux.intel.com>
+Date:   Wed, 30 Nov 2022 23:06:51 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3645; i=matthieu.baerts@tessares.net;
- h=from:subject; bh=GYVgZ0ERRFhrNn6nnoF5lHfo9sSALlgzV4tXPFj4Gfk=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjh2NpDQZZlZIAutRRRraikXlvQ/bHo9/MRdBkQPGS
- nPdMgDOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4djaQAKCRD2t4JPQmmgcyohD/
- 91r32UYsZ+REfGf2SMW49ZwRShsLHwi5nPmiCAvVMANuAb2Y3i5PhjtnNnJCQLYLvgWRTQsH4YTNUg
- GQFlLgIUEygrccr5MOayeQePm0fDejaZHUjk5CW39jGzXwvgOqRvS712fn6ozELABLwvGHbSJRJV5y
- 9D9u0mscDRn8umN+CLnKKDdAtgrOXXLUwqYlZ73AqhRy+TVWvzc0fNyXNpfhoHxyzFgM504MzfJlUH
- yS/qOmPKSFW7q20nRSRvkM4h1Uy/7McV7bSLsBXa4zMOruaYE0nYHOiFkOx3Bxk/3ZFvBe1DQlit6g
- MR8ml8BpXoh0BYUKpP0NWZrD4bahTKRaxMjQRl3ozG4brL1ox1RP0Bt69iT56TGf7kV2sNMB3mMr19
- q8UrJTPtBd4B7m1GeDmrGOUtaqjxyjRJXVSQvObhNfIO/V2RV1i9eIbziAgXUvQKslgRdFQz7F5qCB
- 8hVWKG+47EqvJ/FSMdgNjCy9nM1+x3CJXO25g/G6VL3qub3xE1ztOATl1vYR09TpSq1907TsZX5Fp8
- J98/rJGjupG6Q5k1qrnCVYSzZsD4ARUpH9Rm3kigqIyf9vGVnUwC6dVWMQde0yTYmnLNbCxZLHn1uU
- kUCTllIMXHZv7MTbvuurpLPDWpao7kRurC+kTPJg2jRU6+/mXJrna2SOKsrQ==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 05/19] iommufd: Document overview of iommufd
+To:     Jason Gunthorpe <jgg@nvidia.com>, bpf@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Anthony Krowiak <akrowiak@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Lixiao Yang <lixiao.yang@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+References: <5-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <5-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Geliang Tang <geliang.tang@suse.com>
 
-This patch adds test coverage for listening sockets created by the
-in-kernel path manager in mptcp_join.sh.
+On 11/17/2022 5:00 AM, Jason Gunthorpe wrote:
+> From: Kevin Tian <kevin.tian@intel.com>
+>
+> Add iommufd into the documentation tree, and supply initial documentation.
+> Much of this is linked from code comments by kdoc.
+>
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>   Documentation/userspace-api/index.rst   |   1 +
+>   Documentation/userspace-api/iommufd.rst | 223 ++++++++++++++++++++++++
+>   2 files changed, 224 insertions(+)
+>   create mode 100644 Documentation/userspace-api/iommufd.rst
+>
+> diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
+> index c78da9ce0ec44e..f16337bdb8520f 100644
+> --- a/Documentation/userspace-api/index.rst
+> +++ b/Documentation/userspace-api/index.rst
+> @@ -25,6 +25,7 @@ place where this information is gathered.
+>      ebpf/index
+>      ioctl/index
+>      iommu
+> +   iommufd
+>      media/index
+>      netlink/index
+>      sysfs-platform_profile
+> diff --git a/Documentation/userspace-api/iommufd.rst b/Documentation/userspace-api/iommufd.rst
+> new file mode 100644
+> index 00000000000000..8b1392fd2e3487
+> --- /dev/null
+> +++ b/Documentation/userspace-api/iommufd.rst
+> @@ -0,0 +1,223 @@
+> +.. SPDX-License-Identifier: GPL-2.0+
+> +
+> +=======
+> +IOMMUFD
+> +=======
+> +
+> +:Author: Jason Gunthorpe
+> +:Author: Kevin Tian
+> +
+> +Overview
+> +========
+> +
+> +IOMMUFD is the user API to control the IOMMU subsystem as it relates to managing
+> +IO page tables from userspace using file descriptors. It intends to be general
+> +and consumable by any driver that wants to expose DMA to userspace. These
+> +drivers are eventually expected to deprecate any internal IOMMU logic
+> +they may already/historically implement (e.g. vfio_iommu_type1.c).
+> +
+> +At minimum iommufd provides universal support of managing I/O address spaces and
+> +I/O page tables for all IOMMUs, with room in the design to add non-generic
+> +features to cater to specific hardware functionality.
+> +
+> +In this context the capital letter (IOMMUFD) refers to the subsystem while the
+> +small letter (iommufd) refers to the file descriptors created via /dev/iommu for
+> +use by userspace.
+> +
+> +Key Concepts
+> +============
+> +
+> +User Visible Objects
+> +--------------------
+> +
+> +Following IOMMUFD objects are exposed to userspace:
+> +
+> +- IOMMUFD_OBJ_IOAS, representing an I/O address space (IOAS), allowing map/unmap
+> +  of user space memory into ranges of I/O Virtual Address (IOVA).
+> +
+> +  The IOAS is a functional replacement for the VFIO container, and like the VFIO
+> +  container it copies an IOVA map to a list of iommu_domains held within it.
+> +
+> +- IOMMUFD_OBJ_DEVICE, representing a device that is bound to iommufd by an
+> +  external driver.
+> +
+> +- IOMMUFD_OBJ_HW_PAGETABLE, representing an actual hardware I/O page table
+> +  (i.e. a single struct iommu_domain) managed by the iommu driver.
+> +
+> +  The IOAS has a list of HW_PAGETABLES that share the same IOVA mapping and
+> +  it will synchronize its mapping with each member HW_PAGETABLE.
+> +
+> +All user-visible objects are destroyed via the IOMMU_DESTROY uAPI.
+> +
+> +The diagram below shows relationship between user-visible objects and kernel
+> +datastructures (external to iommufd), with numbers referred to operations
+> +creating the objects and links::
+> +
+> +  _________________________________________________________
+> + |                         iommufd                         |
+> + |       [1]                                               |
+> + |  _________________                                      |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |                                     |
+> + | |                 |        [3]                 [2]      |
+> + | |                 |    ____________         __________  |
+> + | |      IOAS       |<--|            |<------|          | |
+> + | |                 |   |HW_PAGETABLE|       |  DEVICE  | |
+> + | |                 |   |____________|       |__________| |
+> + | |                 |         |                   |       |
+> + | |                 |         |                   |       |
+> + | |                 |         |                   |       |
+> + | |                 |         |                   |       |
+> + | |                 |         |                   |       |
+> + | |_________________|         |                   |       |
+> + |         |                   |                   |       |
+> + |_________|___________________|___________________|_______|
+> +           |                   |                   |
+> +           |              _____v______      _______v_____
+> +           | PFN storage |            |    |             |
+> +           |------------>|iommu_domain|    |struct device|
+> +                         |____________|    |_____________|
+> +
+> +1. IOMMUFD_OBJ_IOAS is created via the IOMMU_IOAS_ALLOC uAPI. An iommufd can
+> +   hold multiple IOAS objects. IOAS is the most generic object and does not
+> +   expose interfaces that are specific to single IOMMU drivers. All operations
+> +   on the IOAS must operate equally on each of the iommu_domains inside of it.
+> +
+> +2. IOMMUFD_OBJ_DEVICE is created when an external driver calls the IOMMUFD kAPI
+> +   to bind a device to an iommufd. The driver is expected to implement a set of
+> +   ioctls to allow userspace to initiate the binding operation. Successful
+> +   completion of this operation establishes the desired DMA ownership over the
+> +   device. The driver must also set the driver_managed_dma flag and must not
+> +   touch the device until this operation succeeds.
+> +
+> +3. IOMMUFD_OBJ_HW_PAGETABLE is created when an external driver calls the IOMMUFD
+> +   kAPI to attach a bound device to an IOAS. Similarly the external driver uAPI
+> +   allows userspace to initiate the attaching operation. If a compatible
+> +   pagetable already exists then it is reused for the attachment. Otherwise a
+> +   new pagetable object and iommu_domain is created. Successful completion of
+> +   this operation sets up the linkages among IOAS, device and iommu_domain. Once
+> +   this completes the device could do DMA.
+> +
+> +   Every iommu_domain inside the IOAS is also represented to userspace as a
+> +   HW_PAGETABLE object.
+> +
+> +   .. note::
+> +
+> +      Future IOMMUFD updates will provide an API to create and manipulate the
+> +      HW_PAGETABLE directly.
+> +
+> +A device can only bind to an iommufd due to DMA ownership claim and attach to at
+> +most one IOAS object (no support of PASID yet).
+> +
+> +Kernel Datastructure
+> +--------------------
+> +
+> +User visible objects are backed by following datastructures:
+> +
+> +- iommufd_ioas for IOMMUFD_OBJ_IOAS.
+> +- iommufd_device for IOMMUFD_OBJ_DEVICE.
+> +- iommufd_hw_pagetable for IOMMUFD_OBJ_HW_PAGETABLE.
+> +
+> +Several terminologies when looking at these datastructures:
+> +
+> +- Automatic domain - refers to an iommu domain created automatically when
+> +  attaching a device to an IOAS object. This is compatible to the semantics of
+> +  VFIO type1.
+> +
+> +- Manual domain - refers to an iommu domain designated by the user as the
+> +  target pagetable to be attached to by a device. Though currently there are
+> +  no uAPIs to directly create such domain, the datastructure and algorithms
+> +  are ready for handling that use case.
+> +
+> +- In-kernel user - refers to something like a VFIO mdev that is using the
+> +  IOMMUFD access interface to access the IOAS. This starts by creating an
+> +  iommufd_access object that is similar to the domain binding a physical device
+> +  would do. The access object will then allow converting IOVA ranges into struct
+> +  page * lists, or doing direct read/write to an IOVA.
+> +
+> +iommufd_ioas serves as the metadata datastructure to manage how IOVA ranges are
+> +mapped to memory pages, composed of:
+> +
+> +- struct io_pagetable holding the IOVA map
+> +- struct iopt_areas
 
-It adds the listener event checking in the existing "remove single
-address with port" test. The output looks like this:
+The struct name should be iopt_area, adding "s" is a typo or intented 
+for plural?
 
- 003 remove single address with port syn[ ok ] - synack[ ok ] - ack[ ok ]
-                                     add[ ok ] - echo  [ ok ] - pt [ ok ]
-                                     syn[ ok ] - synack[ ok ] - ack[ ok ]
-                                     syn[ ok ] - ack   [ ok ]
-                                     rm [ ok ] - rmsf  [ ok ]   invert
-                                     CREATE_LISTENER 10.0.2.1:10100[ ok ]
-                                     CLOSE_LISTENER 10.0.2.1:10100 [ ok ]
 
-Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- .../testing/selftests/net/mptcp/mptcp_join.sh | 58 ++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
+> representing populated portions of IOVA
+> +- struct iopt_pages representing the storage of PFNs
+> +- struct iommu_domain representing the IO page table in the IOMMU
+> +- struct iopt_pages_access representing in-kernel users of PFNs
+> +- struct xarray pinned_pfns holding a list of pages pinned by in-kernel users
+> +
+> +Each iopt_pages represents a logical linear array of full PFNs. The PFNs are
+> +ultimately derived from userspave
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 32a3694c57fb..d11d3d566608 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -2513,6 +2513,57 @@ backup_tests()
- 	fi
- }
- 
-+LISTENER_CREATED=15 #MPTCP_EVENT_LISTENER_CREATED
-+LISTENER_CLOSED=16  #MPTCP_EVENT_LISTENER_CLOSED
-+
-+AF_INET=2
-+AF_INET6=10
-+
-+verify_listener_events()
-+{
-+	local evt=$1
-+	local e_type=$2
-+	local e_family=$3
-+	local e_saddr=$4
-+	local e_sport=$5
-+	local type
-+	local family
-+	local saddr
-+	local sport
-+
-+	if [ $e_type = $LISTENER_CREATED ]; then
-+		stdbuf -o0 -e0 printf "\t\t\t\t\t CREATE_LISTENER %s:%s"\
-+			$e_saddr $e_sport
-+	elif [ $e_type = $LISTENER_CLOSED ]; then
-+		stdbuf -o0 -e0 printf "\t\t\t\t\t CLOSE_LISTENER %s:%s "\
-+			$e_saddr $e_sport
-+	fi
-+
-+	type=$(grep "type:$e_type," $evt |
-+	       sed --unbuffered -n 's/.*\(type:\)\([[:digit:]]*\).*$/\2/p;q')
-+	family=$(grep "type:$e_type," $evt |
-+		 sed --unbuffered -n 's/.*\(family:\)\([[:digit:]]*\).*$/\2/p;q')
-+	sport=$(grep "type:$e_type," $evt |
-+		sed --unbuffered -n 's/.*\(sport:\)\([[:digit:]]*\).*$/\2/p;q')
-+	if [ $family ] && [ $family = $AF_INET6 ]; then
-+		saddr=$(grep "type:$e_type," $evt |
-+			sed --unbuffered -n 's/.*\(saddr6:\)\([0-9a-f:.]*\).*$/\2/p;q')
-+	else
-+		saddr=$(grep "type:$e_type," $evt |
-+			sed --unbuffered -n 's/.*\(saddr4:\)\([0-9.]*\).*$/\2/p;q')
-+	fi
-+
-+	if [ $type ] && [ $type = $e_type ] &&
-+	   [ $family ] && [ $family = $e_family ] &&
-+	   [ $saddr ] && [ $saddr = $e_saddr ] &&
-+	   [ $sport ] && [ $sport = $e_sport ]; then
-+		stdbuf -o0 -e0 printf "[ ok ]\n"
-+		return 0
-+	fi
-+	fail_test
-+	stdbuf -o0 -e0 printf "[fail]\n"
-+}
-+
- add_addr_ports_tests()
- {
- 	# signal address with port
-@@ -2537,7 +2588,8 @@ add_addr_ports_tests()
- 	fi
- 
- 	# single address with port, remove
--	if reset "remove single address with port"; then
-+	# pm listener events
-+	if reset_with_events "remove single address with port"; then
- 		pm_nl_set_limits $ns1 0 1
- 		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal port 10100
- 		pm_nl_set_limits $ns2 1 1
-@@ -2545,6 +2597,10 @@ add_addr_ports_tests()
- 		chk_join_nr 1 1 1
- 		chk_add_nr 1 1 1
- 		chk_rm_nr 1 1 invert
-+
-+		verify_listener_events $evts_ns1 $LISTENER_CREATED $AF_INET 10.0.2.1 10100
-+		verify_listener_events $evts_ns1 $LISTENER_CLOSED $AF_INET 10.0.2.1 10100
-+		kill_events_pids
- 	fi
- 
- 	# subflow and signal with port, remove
--- 
-2.37.2
+typo, userspave -> userspace
 
+
+>   VAs via an mm_struct. Once they have been
+> +pinned the PFNs are stored in IOPTEs of an iommu_domain or inside the pinned_pages
+
+pinned_pages -> pinned_pfns?
+
+
+> +xarray if they have been pinned through an iommufd_access.
+> +
+> +PFN have to be copied between all combinations of storage locations, depending
+> +on what domains are present and what kinds of in-kernel "software access" users
+> +exists.
+
+exists -> exist.
+
+
+> The mechanism ensures that a page is pinned only once.
+> +
+> +An io_pagetable is composed of iopt_areas pointing at iopt_pages, along with a
+> +list of iommu_domains that mirror the IOVA to PFN map.
+> +
+> +Multiple io_pagetable-s, through their iopt_area-s, can share a single
+> +iopt_pages which avoids multi-pinning and double accounting of page
+> +consumption.
+> +
+> +iommufd_ioas is sharable between subsystems, e.g. VFIO and VDPA, as long as
+> +devices managed by different subsystems are bound to a same iommufd.
+> +
+> +IOMMUFD User API
+> +================
+> +
+> +.. kernel-doc:: include/uapi/linux/iommufd.h
+> +
+> +IOMMUFD Kernel API
+> +==================
+> +
+> +The IOMMUFD kAPI is device-centric with group-related tricks managed behind the
+> +scene. This allows the external drivers calling such kAPI to implement a simple
+> +device-centric uAPI for connecting its device to an iommufd, instead of
+> +explicitly imposing the group semantics in its uAPI as VFIO does.
+> +
+> +.. kernel-doc:: drivers/iommu/iommufd/device.c
+> +   :export:
+> +
+> +.. kernel-doc:: drivers/iommu/iommufd/main.c
+> +   :export:
+> +
+> +VFIO and IOMMUFD
+> +----------------
+> +
+> +Connecting a VFIO device to iommufd can be done in two ways.
+> +
+> +First is a VFIO compatible way by directly implementing the /dev/vfio/vfio
+> +container IOCTLs by mapping them into io_pagetable operations. Doing so allows
+> +the use of iommufd in legacy VFIO applications by symlinking /dev/vfio/vfio to
+> +/dev/iommufd or extending VFIO to SET_CONTAINER using an iommufd instead of a
+> +container fd.
+> +
+> +The second approach directly extends VFIO to support a new set of device-centric
+> +user API based on aforementioned IOMMUFD kernel API. It requires userspace
+> +change but better matches the IOMMUFD API semantics and easier to support new
+> +iommufd features when comparing it to the first approach.
+> +
+> +Currently both approaches are still work-in-progress.
+> +
+> +There are still a few gaps to be resolved to catch up with VFIO type1, as
+> +documented in iommufd_vfio_check_extension().
+> +
+> +Future TODOs
+> +============
+> +
+> +Currently IOMMUFD supports only kernel-managed I/O page table, similar to VFIO
+> +type1. New features on the radar include:
+> +
+> + - Binding iommu_domain's to PASID/SSID
+> + - Userspace page tables, for ARM, x86 and S390
+> + - Kernel bypass'd invalidation of user page tables
+> + - Re-use of the KVM page table in the IOMMU
+> + - Dirty page tracking in the IOMMU
+> + - Runtime Increase/Decrease of IOPTE size
+> + - PRI support with faults resolved in userspace
