@@ -2,177 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B79263E0FF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 20:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB0063E127
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 21:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiK3Tr7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Nov 2022 14:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
+        id S229794AbiK3UJo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Nov 2022 15:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiK3Tr5 (ORCPT
+        with ESMTP id S229535AbiK3UJn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Nov 2022 14:47:57 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F675436B
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 11:47:56 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id y17so9839486plp.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 11:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ihh5oofyez3CtNOQIHwFTADZecAohqCOwiubz5fncqA=;
-        b=mgji7ObiNmN8eVbpaz2mjgRdwSAUpuTFhzRs1nBB0wl7tOLWdgahWX5R8pzXzsKC1V
-         Qtn1fkqFBjJjcQDgKlDh57l5mnYK+Ecoh1a2vOJcc2t63/bIEFUCiKEps0W/XWxLwcjS
-         uEipbR9RmK8lHa3HKHs3GtiVqO61aYeRnQQBYU17wQNjkUKUZrQGXXWfYl9Buyk/5/mA
-         FrKfxv15/oPRfpGjiNA5iuwI5hpZXV2Gr4+XrjCWbXfELTHOed6nOoV7sUsNVRnSsyxm
-         lXB/RiZWL7eAwrTDd/bgWKDUr1Z4Q4M8R1g2bsjva2QnWftYdStcgeEeDNzrZS1jB//i
-         HeLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ihh5oofyez3CtNOQIHwFTADZecAohqCOwiubz5fncqA=;
-        b=nUdnKB2OxV3wiZcmt9iS5Cw/FOfPwas1DDxjMbA3B+XvKdOXI0JHTQ0Oai5KXeKfJA
-         oyLwY0dtvJLGTKlw897Ahg73JtabnWf9RirWJ9nLJrv3dC5X/XGYs4xbj0/kzRUvHbM4
-         +ddVE+qVUzo7mueELYHLHFmeyBlow2Hc+9WZdZ6DYmomG15KD38rQGg8vocbqCJWnNlB
-         fcsasAlt8uvy28qlrCAnumD7qxkweSpl1AmRaRp+YHI00yfZLjZEzW9Y7LXea1xdtjJF
-         cIMJBIZGstuPuxdeSbzTEyKmnEoP+iYvmeaFRiPqEB25sUD0aRv4oayNzvUKSjDMQnXn
-         9qwg==
-X-Gm-Message-State: ANoB5pnicUj0ai1LNukBf+YUJuCyT3ZYw5vWOoMUQ4ThzIYkg0lHKS4R
-        ZrOFA4qt59WDhafuq+viFTCyjQHTJdKqeWSdp9blUA==
-X-Google-Smtp-Source: AA0mqf7qPQwpY05hjWXylLqQi7yyJwO1Q1xUae2EZKtA8JJJtC3bef3O0Mr18W2iV3UxDeupUhFwyQrATnCV4d5QlPo=
-X-Received: by 2002:a17:90a:5317:b0:213:34f7:fb14 with SMTP id
- x23-20020a17090a531700b0021334f7fb14mr70448861pjh.25.1669837675431; Wed, 30
- Nov 2022 11:47:55 -0800 (PST)
+        Wed, 30 Nov 2022 15:09:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767C1578F8;
+        Wed, 30 Nov 2022 12:09:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BF0061DAE;
+        Wed, 30 Nov 2022 20:09:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E10C433C1;
+        Wed, 30 Nov 2022 20:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669838981;
+        bh=mMfylySxLnXAU3Y/Ax0ptN/yAL+W24Pd1ZjoQYO0TNY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OVOWegpHTQu7HgDi5T28oMfUtZ6xEOjyqsSvUcSgGZD2WwrM7aI9E32riHaGk+p40
+         fg2Ofgr8mrpTViZHf6X68TDuNWNSJpTXSrfqNkgpXVbby/UpzyZu95q29s4i7mT9LI
+         J9e7G1IY7EuCKw4BpXVQl6OjTSdnPhbVq/JoHyBtxoGdQfWiFRX6RBwP1yjaO2DlFW
+         JlXmVy+OlE3i2+6EqL5SsiHGBHVz00303Z0e8hEPuz28Yy7xpEy0LwqGN328UMwXxp
+         Eej0roYZh93xzOp1vToPsURhX9EZDYMw0bfrOQ342qn4+je4UG/eZMkI11UqWMrBZc
+         GzLqpbfjuzdmg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2 00/11]  implement DAMOS filtering for anon pages and
+Date:   Wed, 30 Nov 2022 20:09:26 +0000
+Message-Id: <20221130200937.118005-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221128020409.1545717-1-limin100@huawei.com> <1232e4f3-e4b8-ff23-61e8-5465c8406f6e@digikod.net>
- <7379a5fd-5593-c6ce-40fd-c543dcf70d2b@huawei.com> <e62a539b-614c-c008-873a-f9c57c7ecb33@digikod.net>
- <2bc18685-f975-497f-9c20-da99dbc296c0@huawei.com> <ed1f6874-0f24-8145-63d4-efe28545381b@digikod.net>
-In-Reply-To: <ed1f6874-0f24-8145-63d4-efe28545381b@digikod.net>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Wed, 30 Nov 2022 11:47:18 -0800
-Message-ID: <CALmYWFs0GG8o3WQw7PEGvT=qgHHGiTC_mE1kQ0oRVjNUJa36gA@mail.gmail.com>
-Subject: Re: [PATCH -next] selftests/landlock: Fix selftest ptrace_test run fail
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     limin <limin100@huawei.com>, hannes@cmpxchg.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        songmuchun@bytedance.com, tj@kernel.org, lizefan.x@bytedance.com,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jorge Lucangeli Obes <jorgelo@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 11:32 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>=
- wrote:
->
-> I checked and the Landlock ptrace test failed because Yama is enabled,
-> which is expected. You can check that with
-> /proc/sys/kernel/yama/ptrace_scope
->
-> Jeff Xu sent a patch to fix this case but it is not ready yet:
-> https://lore.kernel.org/r/20220628222941.2642917-1-jeffxu@google.com
->
-> Could you please send a new patch Jeff, and add Limin in Cc?
->
-Yes. This work is planned for Dec. I will start working on it soon.
-Jeff
+Changes from RFC v1
+(https://lore.kernel.org/damon/20221124212114.136863-1-sj@kernel.org/)
+- sysfs: Clean up filters directory from scheme directory cleanup path
+- sysfs: Link newly created filter to the scheme
+- sysfs: Ignore removed memcg when checking path
+- sysfs: Guard 'struct mem_cgroup' access with CONFIG_MEMCG
+  (kernel test robot)
 
->
-> On 29/11/2022 12:26, limin wrote:
-> > cat /proc/cmdline
-> > BOOT_IMAGE=3D/vmlinuz-6.1.0-next-20221116
-> > root=3DUUID=3Da65b3a79-dc02-4728-8a0c-5cf24f4ae08b ro
-> > systemd.unified_cgroup_hierarchy=3D1 cgroup_no_v1=3Dall
-> >
-> >
-> > config
-> >
-> > #
-> > # Automatically generated file; DO NOT EDIT.
-> > # Linux/x86 6.1.0-rc6 Kernel Configuration
-> > #
->
-> [...]
->
-> > CONFIG_SECURITY_YAMA=3Dy
->
-> [...]
->
-> > CONFIG_LSM=3D"landlock,lockdown,yama,integrity,apparmor"
-> [...]
-> >
-> > On 2022/11/29 19:03, Micka=C3=ABl Sala=C3=BCn wrote:
-> >> I tested with next-20221116 and all tests are OK. Could you share your
-> >> kernel configuration with a link? What is the content of /proc/cmdline=
-?
-> >>
-> >> On 29/11/2022 02:42, limin wrote:
-> >>> I run test on Linux ubuntu2204 6.1.0-next-20221116
-> >>>
-> >>> I did't use yama.
-> >>>
-> >>> you can reproduce by this step:
-> >>>
-> >>> cd kernel_src
-> >>>
-> >>> cd tools/testing/selftests/landlock/
-> >>> make
-> >>> ./ptrace_test
-> >>>
-> >>>
-> >>>
-> >>>
-> >>> On 2022/11/29 3:44, Micka=C3=ABl Sala=C3=BCn wrote:
-> >>>> This patch changes the test semantic and then cannot work on my test
-> >>>> environment. On which kernel did you run test? Do you use Yama or
-> >>>> something similar?
-> >>>>
-> >>>> On 28/11/2022 03:04, limin wrote:
-> >>>>> Tests PTRACE_ATTACH and PTRACE_MODE_READ on the parent,
-> >>>>> trace parent return -1 when child=3D=3D 0
-> >>>>> How to reproduce warning:
-> >>>>> $ make -C tools/testing/selftests TARGETS=3Dlandlock run_tests
-> >>>>>
-> >>>>> Signed-off-by: limin <limin100@huawei.com>
-> >>>>> ---
-> >>>>>     tools/testing/selftests/landlock/ptrace_test.c | 5 ++---
-> >>>>>     1 file changed, 2 insertions(+), 3 deletions(-)
-> >>>>>
-> >>>>> diff --git a/tools/testing/selftests/landlock/ptrace_test.c
-> >>>>> b/tools/testing/selftests/landlock/ptrace_test.c
-> >>>>> index c28ef98ff3ac..88c4dc63eea0 100644
-> >>>>> --- a/tools/testing/selftests/landlock/ptrace_test.c
-> >>>>> +++ b/tools/testing/selftests/landlock/ptrace_test.c
-> >>>>> @@ -267,12 +267,11 @@ TEST_F(hierarchy, trace)
-> >>>>>             /* Tests PTRACE_ATTACH and PTRACE_MODE_READ on the
-> >>>>> parent. */
-> >>>>>             err_proc_read =3D test_ptrace_read(parent);
-> >>>>>             ret =3D ptrace(PTRACE_ATTACH, parent, NULL, 0);
-> >>>>> +        EXPECT_EQ(-1, ret);
-> >>>>> +        EXPECT_EQ(EPERM, errno);
-> >>>>>             if (variant->domain_child) {
-> >>>>> -            EXPECT_EQ(-1, ret);
-> >>>>> -            EXPECT_EQ(EPERM, errno);
-> >>>>>                 EXPECT_EQ(EACCES, err_proc_read);
-> >>>>>             } else {
-> >>>>> -            EXPECT_EQ(0, ret);
-> >>>>>                 EXPECT_EQ(0, err_proc_read);
-> >>>>>             }
-> >>>>>             if (ret =3D=3D 0) {
+----
+
+DAMOS let users do system operations in a data access pattern oriented
+way.  The data access pattern, which is extracted by DAMON, is somewhat
+accurate more than what user space could know in many cases.  However,
+in some situation, users could know something more than the kernel about
+the pattern or some special requirements for some types of memory or
+processes.  For example, some users would have slow swap devices and
+knows latency-ciritical processes and therefore want to use DAMON-based
+proactive reclamation (DAMON_RECLAIM) for only non-anonymous pages of
+non-latency-critical processes.
+
+For such restriction, users could exclude the memory regions from the
+initial monitoring regions and use non-dynamic monitoring regions update
+monitoring operations set including fvaddr and paddr.  They could also
+adjust the DAMOS target access pattern.  For dynamically changing memory
+layout and access pattern, those would be not enough.
+
+To help the case, add an interface, namely DAMOS filters, which can be
+used to avoid the DAMOS actions be applied to specific types of memory,
+to DAMON kernel API (damon.h).  At the moment, it supports filtering
+anonymous pages and/or specific memory cgroups in or out for each DAMOS
+scheme.
+
+This patchset adds the support for all DAMOS actions that 'paddr'
+monitoring operations set supports ('pageout', 'lru_prio', and
+'lru_deprio'), and the functionality is exposed via DAMON kernel API
+(damon.h) the DAMON sysfs interface (/sys/kernel/mm/damon/admins/), and
+DAMON_RECLAIM module parameters.
+
+Patches Sequence
+----------------
+
+First patch implements DAMOS filter interface to DAMON kernel API.
+Second patch makes the physical address space monitoring operations set
+to support the filters from all supporting DAMOS actions.  Third patch
+adds anonymous pages filter support to DAMON_RECLAIM, and the fourth
+patch documents the DAMON_RECLAIM's new feature.  Fifth to seventh
+patches implement DAMON sysfs files for support of the filters, and
+eighth patch connects the file to use DAMOS filters feature.  Ninth
+patch adds simple self test cases for DAMOS filters of the sysfs
+interface.  Finally, following two patches (tenth and eleventh) document
+the new features and interfaces.
+
+SeongJae Park (11):
+  mm/damon/core: implement damos filter
+  mm/damon/paddr: support DAMOS filters
+  mm/damon/reclaim: add a parameter called skip_anon for avoiding
+    anonymous pages reclamation
+  Docs/admin-guide/damon/reclaim: document 'skip_anon' parameter
+  mm/damon/sysfs-schemes: implement filters directory
+  mm/damon/sysfs-schemes: implement filter directory
+  mm/damon/sysfs-schemes: connect filter directory and filters directory
+  mm/damon/sysfs-schemes: implement scheme filters
+  selftests/damon/sysfs: test filters directory
+  Docs/admin-guide/mm/damon/usage: document DAMOS filters of sysfs
+  Docs/ABI/damon: document scheme filters files
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  29 ++
+ .../admin-guide/mm/damon/reclaim.rst          |   9 +
+ Documentation/admin-guide/mm/damon/usage.rst  |  48 ++-
+ include/linux/damon.h                         |  51 +++
+ mm/damon/core.c                               |  39 ++
+ mm/damon/paddr.c                              |  71 +++-
+ mm/damon/reclaim.c                            |  19 +
+ mm/damon/sysfs-schemes.c                      | 370 +++++++++++++++++-
+ tools/testing/selftests/damon/sysfs.sh        |  29 ++
+ 9 files changed, 652 insertions(+), 13 deletions(-)
+
+-- 
+2.25.1
+
