@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2387E63D7AB
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDCE63D7AC
 	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 15:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiK3OHt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Nov 2022 09:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S229953AbiK3OHu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Nov 2022 09:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiK3OH1 (ORCPT
+        with ESMTP id S229758AbiK3OH1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 30 Nov 2022 09:07:27 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587D171F1A
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:01 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id e27so41585417ejc.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:01 -0800 (PST)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D76574CF7
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:03 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id gu23so23381318ejb.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=tessares.net; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aBj/U42gqgyxFUVrg5VQBmaofMncAmVJOsdRq/xN5Pc=;
-        b=NU5tWU08fHE1TTgVHomqTdpYrqbrIf5tIko5VY5yPUNv98/0JlYv0z+QbcuTaDrn1g
-         3Z0COWJO++GCtfc9NXGJmPEJcKQeABWWUfxIKCpyMBeIusxr0ZrKn+m0WlsYfYPKF0up
-         8Yk7flMl2X2Enfj1c3PyCCU71kQdBQxNS5X3YRXp64PrK0Qd1qwhvcg5mf+BFr2RC8mn
-         lIDO2MLV6EAkZXA1hZF2su0yqTvYP8r/0AmN+EVePxamAiqcnGtwhLCA8vDdgem2EYtn
-         Bf53TSGSok1P5Ki/NhjFqNY44qCuQHRHXp5R7OM2aekPzcrzvjDLIVgPsO7aOLRN0KWu
-         Er6w==
+        bh=IXRqop1kGCEX2u8HK3BLrgeD9xK0rFoNB2L0UfRu0sg=;
+        b=v006RZGKNhV7QldYcKIzJsCYNB63Tfp5FEfdFmJp6bROQIuqlnk8+FKbW7+BQPm+Pp
+         zOFNnSXmfagXgOSLKxFs3oROvyDkHghKcrDA9NxWVlHOLUnZ8OM+Z8uSLIs8p7hA/rv9
+         pnl/w3ie8D/tGrXuDFnTxTNKHdp/ZusM67kXjNzHCcQDhAsqKdwZW26VkHNMCGmftWaU
+         EbMGpaDORdqqdOCO1/imCDSQXswP2t+1j4KZ4L8udoAYRYbhVPDDz+9xzQPlK1w+e3jV
+         jwVPhPV6VB74LpQnBqQob/ZZW34U02qr9YRFSzBEFJS2cotxPXsoSqh9xy+CGrRSSEXx
+         MBAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aBj/U42gqgyxFUVrg5VQBmaofMncAmVJOsdRq/xN5Pc=;
-        b=MaV2CDkJnAW2zStZStzc1AJLz3/UXyY6BohHzmwDgCEwM49d2Ra487kZ27HvE3CSfU
-         Sc4AioXp6wNSGsR9MMMfrpJxlyRpd7gpe58HPX0LMMg3ka8dubPGoK1QUqD44pydAjps
-         7dUOt9Vzfaog2nOlPGfRDm7nLsTrk4gRx2pPmSnLzspxoL/CsCoqNWxY6ZrkAIF2SjaD
-         OztP/FxPLYOK6giF/iVMVrDZ1/2WGcwKK6N/Rwv6CvVWqNFDXHLQ/M30o360AorHLbv2
-         o7wFxiBZGo9A4P3zS0iMIugauMYasfQjyAoXrTD1O6VfdwZEKMugeE9tvtg3tBhgK1t0
-         Tb5w==
-X-Gm-Message-State: ANoB5pmCiSoN3ISqwkyfz9RNhbfvPM/j/vI3nU450EsrZCsHIwQGdX4Z
-        lcW0RLzYnT8C4GucdXLp+JBiDg==
-X-Google-Smtp-Source: AA0mqf4xvaSPBJ1Fh+TBfwNKz8pveAReQVkfUE1V97XbMJvkKYWfWQ3PzFquOMo+4NAUZTwurzC+wQ==
-X-Received: by 2002:a17:907:900f:b0:7c0:9879:38d4 with SMTP id ay15-20020a170907900f00b007c0987938d4mr3871460ejc.746.1669817219774;
-        Wed, 30 Nov 2022 06:06:59 -0800 (PST)
+        bh=IXRqop1kGCEX2u8HK3BLrgeD9xK0rFoNB2L0UfRu0sg=;
+        b=kS4NiJoCD9rdKyZH11uS6TgWa+l7aEwGsTUc/wX5msKQQ4GOinpFufNzbqsizUiPFD
+         YnBYlXpKfJtyubcS3dNwh+erdeuibUCcy9qxSrUosB3h8pNUv6L4pVH7U3PQaxRl+v2c
+         gyQ536OrUO1IuIyqTymf+vH5iyS9GtCn5/JsUETf1k1axQSRKL205J4nLIXVIdqr5xph
+         I2300nBDBY7iZdgS0z+qhHpbkC8yoJkK1tmoTJelQrt9AY2bACj95V5a5xMvjJDO8aee
+         jVGTcWZIbY0L1Cqn5thca/IvNGy92VOJD3ktEGaqsa6CvevVrcJ5fpw8joRfDU9XYe/A
+         vORA==
+X-Gm-Message-State: ANoB5pkW03BzpOG4iCyjylKHNV8dklzYCbhREmzDudvVxHgNigiUJfoV
+        7Nz0In9oSHZWd+tc2N2+iTri1w==
+X-Google-Smtp-Source: AA0mqf5Qkten+sdz5wTXblKGqR7rZD+RmmlVt4D0tNeFA1XdsS9NPPsgEi01P7NfbalH9380k5PJUQ==
+X-Received: by 2002:a17:906:89a3:b0:78d:408a:4a18 with SMTP id gg35-20020a17090689a300b0078d408a4a18mr52479961ejc.261.1669817221279;
+        Wed, 30 Nov 2022 06:07:01 -0800 (PST)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b0073d83f80b05sm692454ejb.94.2022.11.30.06.06.58
+        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b0073d83f80b05sm692454ejb.94.2022.11.30.06.07.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 06:06:59 -0800 (PST)
+        Wed, 30 Nov 2022 06:07:00 -0800 (PST)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
 To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
@@ -57,137 +57,85 @@ To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 03/11] selftests: mptcp: uniform 'rndh' variable
-Date:   Wed, 30 Nov 2022 15:06:25 +0100
-Message-Id: <20221130140637.409926-4-matthieu.baerts@tessares.net>
+Cc:     Geliang Tang <geliang.tang@suse.com>, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 04/11] selftests: mptcp: clearly declare global ns vars
+Date:   Wed, 30 Nov 2022 15:06:26 +0100
+Message-Id: <20221130140637.409926-5-matthieu.baerts@tessares.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221130140637.409926-1-matthieu.baerts@tessares.net>
 References: <20221130140637.409926-1-matthieu.baerts@tessares.net>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3621; i=matthieu.baerts@tessares.net;
- h=from:subject; bh=czOc1nAblZhAn2DlORqpq06aMc8ExsLsax85fE7Q4Qk=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjh2Nol4cUE4IpE/zP1tt/xCYKkzvQ42ktz7h9FiIY
- DoerSeeJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4djaAAKCRD2t4JPQmmgcwdIEA
- DIltlOcGse4BX3HAl47DtvDjhakb4Bw06Mel15849x658xaDBDla96q3PTR9C3UMH2KKcA0ea4sjUg
- UJd2YoQ7VF3IRziKDh0/MO/VeIQaHyJ5JdWVB4jxjSG5+KEQcTZebQME5+xb6+cyo15HUWPJyU+h+N
- 9eykHcuJKCS3bizVWZSH/YRGxaxByZKEcC4JVQV6wQDxIJq/b7pg6tPZ6WthRU6xvDYm/5Gv1exW1y
- RhBJx81T0DFPzEDNdb71wCY3ZflU+nz10bLgpapFLNvAmaFTqDLIPhPbfSHZ78KVAabcb5Eni93Ohz
- A4MCEhpvBRAtk2wEhY7DUDPZlCOj8ag44vIqAZzNEIWUzrvDPxRCLyGsreDK9AfiKKZIUY0sY1LllE
- BwWT3Eqxqfsxv4oO5JOmPfjRkxJZl9YERZIDh2Rf4o/cD7hjHJ8Hd7ZdH5cQUtXh7swyFcDST1csDr
- UJMa9qohkLwVBfZJ/eVJ9gKr/cJVSWN2IvvNKEExTHhle6PCq1+dKLbDQZx6ZjN7Y1lq47r4s8Nml3
- Uyd5vTn65hja1g6zhkVobRxfnUuxBtD7nZtyNZ/AsNmb0TkcjUOZXErSyemdklrT38fkbtlKHFzvQv
- P73kRx66KSufaY5kcjvaTOM/NF7oF5XwzgyjEnSFZtCN71AqeGOsv7PRn/AQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1440; i=matthieu.baerts@tessares.net;
+ h=from:subject; bh=vm+YLBU/ZtD1x+WUlv2naFFwGpGoYmoqnp2qkgB760M=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjh2NouvnL/n/xWVXPFT9olXEh+lvvARvqTTsiHK9z
+ UqifJbeJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4djaAAKCRD2t4JPQmmgc46LD/
+ 4yS1d70STmWag1bHFpeVw3ewfxgyI0JTsJlKmrxDdeXnjRoj8sRHXrkRobl50q/96ApVaXpU97L1nQ
+ BCXBSV0x+sbrHOLpGn8KHxVdse30n4D9woXwWRc+FNi8XPiPLnFPWM0tEK8ygBLYxE1w9dlyD5NZwA
+ cPKp0P8s//huK0fLkK7iE4uppBFbGqm5YIarbemAWgLeaAFSaXlX2V9wzFMkFR32oKceqLDFv92nV9
+ qMnm5xhVyE9756j696iw/TAjOxTtDvCha6mPq/LM94udQH+VAnbfB2LLKZboXCK6cXn1YQe5nbf/zn
+ ru9NnJrCZ6aZQEKqsW0djOKuAFEhCO/K9aDRAlfPtAorL6ECoxP8b42b+HxZe8TB3/5maYXsgaJkHd
+ EWfdH6S2L4GnxAodoQ723QJNi10w/9idJUH+TsDUcOSUJesB9FTepZtryG10/FDh/OeibPk/wfjCQH
+ VC9dpfuC7rw+jyuJ5NfCQAlylCWYau/6+4U2ufgfSu2HUUmP0zk0NzTDBnpHEz8lbA3BEwS0xsIaiL
+ pbSoSyJyXIoAyQeVkiZXPteRcf56y29vQgytqdcbcAFu2f2Rlg1pcHAydtGf41Ot/a/f1QZxgTnavG
+ kDVBiiYLFdns8jD69enBIwfKdGmXIsxTVpmaYQaqegnwjLrTGyhAOvN34Lnw==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The definition of 'rndh' was probably copied from one script to another
-but some times, 'sec' was not defined, not used and/or not spelled
-properly.
+It is clearer to declare these global variables at the beginning of the
+file as it is done in other MPTCP selftests rather than in functions in
+the middle of the script.
 
-Here all the 'rndh' are now defined the same way.
+So for uniformity reason, we can do the same here in mptcp_sockopt.sh.
 
+Suggested-by: Geliang Tang <geliang.tang@suse.com>
 Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/diag.sh          | 1 +
- tools/testing/selftests/net/mptcp/mptcp_connect.sh | 3 +--
- tools/testing/selftests/net/mptcp/mptcp_join.sh    | 5 +++--
- tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 2 ++
- tools/testing/selftests/net/mptcp/simult_flows.sh  | 1 +
- tools/testing/selftests/net/mptcp/userspace_pm.sh  | 2 +-
- 6 files changed, 9 insertions(+), 5 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
-index 515859a5168b..24bcd7b9bdb2 100755
---- a/tools/testing/selftests/net/mptcp/diag.sh
-+++ b/tools/testing/selftests/net/mptcp/diag.sh
-@@ -1,6 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+sec=$(date +%s)
- rndh=$(printf %x $sec)-$(mktemp -u XXXXXX)
- ns="ns1-$rndh"
- ksft_skip=4
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-index 63b722b505e5..a43d3e2f59bb 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-@@ -274,8 +274,7 @@ check_transfer()
- 
- check_mptcp_disabled()
- {
--	local disabled_ns
--	disabled_ns="ns_disabled-$sech-$(mktemp -u XXXXXX)"
-+	local disabled_ns="ns_disabled-$rndh"
- 	ip netns add ${disabled_ns} || exit $ksft_skip
- 
- 	# net.mptcp.enabled should be enabled by default
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 2eeaf4aca644..2a402b3b771f 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -59,8 +59,9 @@ init_partial()
- {
- 	capout=$(mktemp)
- 
--	local rndh
--	rndh=$(mktemp -u XXXXXX)
-+	local sec rndh
-+	sec=$(date +%s)
-+	rndh=$(printf %x $sec)-$(mktemp -u XXXXXX)
- 
- 	ns1="ns1-$rndh"
- 	ns2="ns2-$rndh"
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-index 6e8f4599cc44..dbee386450f3 100755
+index dbee386450f3..f74b237bcb32 100755
 --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
 +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-@@ -30,6 +30,8 @@ add_mark_rules()
+@@ -11,6 +11,12 @@ timeout_poll=30
+ timeout_test=$((timeout_poll * 2 + 1))
+ mptcp_connect=""
+ 
++sec=$(date +%s)
++rndh=$(printf %x $sec)-$(mktemp -u XXXXXX)
++ns1="ns1-$rndh"
++ns2="ns2-$rndh"
++ns_sbox="ns_sbox-$rndh"
++
+ add_mark_rules()
+ {
+ 	local ns=$1
+@@ -30,14 +36,6 @@ add_mark_rules()
  
  init()
  {
-+	local sec rndh
-+	sec=$(date +%s)
- 	rndh=$(printf %x $sec)-$(mktemp -u XXXXXX)
- 
- 	ns1="ns1-$rndh"
-diff --git a/tools/testing/selftests/net/mptcp/simult_flows.sh b/tools/testing/selftests/net/mptcp/simult_flows.sh
-index 189a664aed81..9f22f7e5027d 100755
---- a/tools/testing/selftests/net/mptcp/simult_flows.sh
-+++ b/tools/testing/selftests/net/mptcp/simult_flows.sh
-@@ -1,6 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+sec=$(date +%s)
- rndh=$(printf %x $sec)-$(mktemp -u XXXXXX)
- ns1="ns1-$rndh"
- ns2="ns2-$rndh"
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index 3229725b64b0..5dfc3ee74b98 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -33,7 +33,7 @@ client_addr_id=${RANDOM:0:2}
- server_addr_id=${RANDOM:0:2}
- 
- sec=$(date +%s)
--rndh=$(stdbuf -o0 -e0 printf %x "$sec")-$(mktemp -u XXXXXX)
-+rndh=$(printf %x "$sec")-$(mktemp -u XXXXXX)
- ns1="ns1-$rndh"
- ns2="ns2-$rndh"
- 
+-	local sec rndh
+-	sec=$(date +%s)
+-	rndh=$(printf %x $sec)-$(mktemp -u XXXXXX)
+-
+-	ns1="ns1-$rndh"
+-	ns2="ns2-$rndh"
+-	ns_sbox="ns_sbox-$rndh"
+-
+ 	for netns in "$ns1" "$ns2" "$ns_sbox";do
+ 		ip netns add $netns || exit $ksft_skip
+ 		ip -net $netns link set lo up
 -- 
 2.37.2
 
