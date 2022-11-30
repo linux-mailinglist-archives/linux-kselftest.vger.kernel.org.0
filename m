@@ -2,205 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361AD63E34E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 23:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F1263E359
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Nov 2022 23:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiK3WUD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Nov 2022 17:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
+        id S229613AbiK3WWs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Nov 2022 17:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiK3WUC (ORCPT
+        with ESMTP id S229551AbiK3WWr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Nov 2022 17:20:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B9386A36
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 14:19:10 -0800 (PST)
+        Wed, 30 Nov 2022 17:22:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E729486A02
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 14:21:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669846749;
+        s=mimecast20190719; t=1669846913;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=i6o5xsiCb8krzXFleCMYPHZ4PemlXBw4WGglNIquBOc=;
-        b=Ux5+W+2RSfjPxHOLYRNmBsqDgb5IsvEWDinTSblEsetOKxZpKeRuGSEcnbVEeVnbTLKsJe
-        +bBkiKUmMa1/YdYMSnf5V2sIH8MaXXCcjsaqq+paLABdCLFN7ICnN4jj4br182ERZhD+ge
-        oY+H5ipAYnxwZFnOtiwhKrj5gXmZRRM=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=tlhpALrMiGoDzod2chq2VQOjgDroj9IY+e5BnNee0KE=;
+        b=iQNEI/QbW3+pEuIuDCp3RCJY18f4Wpf+fbqQ2yBUdktsC43WXxFThKf7awRO3AirN0zyxN
+        4cMpVf/VZc1qoQwlau6dbns/ZlbCZVnXgdO/BMmu7lMutHwd6Rp96H4NEzf90SIByYYWZf
+        z+jBUs5VcEi5TcIjWBmRdmx62Cy/ooU=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-615-a264PMQTOyOZ9-kIHrC_iA-1; Wed, 30 Nov 2022 17:19:07 -0500
-X-MC-Unique: a264PMQTOyOZ9-kIHrC_iA-1
-Received: by mail-qk1-f199.google.com with SMTP id bj4-20020a05620a190400b006fc7c5d454cso28472819qkb.14
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 14:19:07 -0800 (PST)
+ us-mta-578-3bQ5No7PNnq6GYzdMJvfsg-1; Wed, 30 Nov 2022 17:21:51 -0500
+X-MC-Unique: 3bQ5No7PNnq6GYzdMJvfsg-1
+Received: by mail-qk1-f197.google.com with SMTP id i21-20020a05620a405500b006fb25ba3e00so41742485qko.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 14:21:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:subject:from:references:cc:to
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i6o5xsiCb8krzXFleCMYPHZ4PemlXBw4WGglNIquBOc=;
-        b=CFDUrS9vQYe8+c9tKipgCrGFGqyKORBIvw7CIgUo2zJjccjke2YeV0aejtXepTn8Ib
-         VwtwD/CmrrlaEXR1HstDbiY/Fm5Mi74r1lgLzI8lY7pl9p5kMxdd3R5yjKjDV0xMf1g5
-         jf2by7qMmi8tnNUXKz3rp51dLRls4UYyYI7DelAMhzprVnz/JwxNL2uKFZjKJpRBuFze
-         7DHAOqs33keGndrpWCOLvXGnuJHC7MzNcNuyn9hytea/jG0YF1LfhglM47G4YIht8uwK
-         XgBC56kCI2Y1nU4xAbYkFAyOxPcY98orKKHwZJ9OXpBVAabeqw9vW1dh9ES9bY89Wxeu
-         rRuw==
-X-Gm-Message-State: ANoB5pkg5LMh0PH5xN+B0Rtp1pnBIlba9t1+nekZNGeEJO8xV8LzxrCc
-        4uFZa7KyjtOg3hfHSfvtJAjYp28xMN5onW9X6n5agumkpeVfSOaKW/cwzqieCTgD1+1hH8cel2Q
-        Qojb1GxZHDMLs578VtYRJ406u2MxN
-X-Received: by 2002:a37:3c3:0:b0:6fc:9786:2809 with SMTP id 186-20020a3703c3000000b006fc97862809mr6715349qkd.766.1669846747431;
-        Wed, 30 Nov 2022 14:19:07 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5pN3jJGoF0gbBWxCZMJ1retVBfgEGufqLp719e7LR7xzbVfmLyToAzM4Z6FvMs6oYpHHng5g==
-X-Received: by 2002:a37:3c3:0:b0:6fc:9786:2809 with SMTP id 186-20020a3703c3000000b006fc97862809mr6715332qkd.766.1669846747121;
-        Wed, 30 Nov 2022 14:19:07 -0800 (PST)
+        bh=tlhpALrMiGoDzod2chq2VQOjgDroj9IY+e5BnNee0KE=;
+        b=NAqOnEiyY1OBmp4eFVmLxqlu9gqXBuY7fZDmo7hiBrdqTfoYCHI3kJyUaRuh/qfztN
+         BIoqMoVKFr3FwJh9C8FWiCHGNreBnweRAmc0zhgc3C9D7VCw0PZqARq0HH9LnqHqABuV
+         FYJDfZkG8DOrL1UX8GATwQo6ETocAgfFftN+Qpv+M85TCIeDZccEFUl8ZPKwVa9PNA0Q
+         wi+1xOuzlkhMpPyld3/qLaTn7zrSZx/Tt/jCJGQJCnRnR0qqiTrnRB9ptiKDgf4v0LHu
+         9TK6iP6ioUzMSbqKHte4diyGnK+hXjaFEeBkWosDd1thK7JAdXvzhClpuCeimmi0Kxqd
+         Txmg==
+X-Gm-Message-State: ANoB5plNw8B1pPo3tRv/NlORyKl84W2pgg/IjgNkdkl2GxoC8Qf9c7mf
+        +Jj9lOLVE4+5kn1gN4YxOF73L2gqtj3+FNAgAzjVnXttN10DBfU08JUAHijnaOe+62ARpULy7En
+        onKe9fWIe0NKPeYHA04u7CM1WMMxO
+X-Received: by 2002:a05:622a:5148:b0:3a5:176b:b1c7 with SMTP id ew8-20020a05622a514800b003a5176bb1c7mr45906994qtb.303.1669846911429;
+        Wed, 30 Nov 2022 14:21:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5x6fLVYxdQdtQ3S17/M5EP6Kje/BXfVF/HWhKe4z6jDPn3Tn+3o1h4Xk+08JZsDArklog9hg==
+X-Received: by 2002:a05:622a:5148:b0:3a5:176b:b1c7 with SMTP id ew8-20020a05622a514800b003a5176bb1c7mr45906973qtb.303.1669846911142;
+        Wed, 30 Nov 2022 14:21:51 -0800 (PST)
 Received: from [192.168.1.9] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id l28-20020a37f91c000000b006fca1691425sm1194426qkj.63.2022.11.30.14.19.05
+        by smtp.gmail.com with ESMTPSA id j8-20020ac85c48000000b0039ee562799csm1632825qtj.59.2022.11.30.14.21.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 14:19:06 -0800 (PST)
-To:     Marcos Paulo de Souza <mpdesouza@suse.de>
-Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
+        Wed, 30 Nov 2022 14:21:50 -0800 (PST)
+Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Miroslav Benes <mbenes@suse.cz>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
         live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz,
-        pmladek@suse.com
+        shuah@kernel.org, jpoimboe@redhat.com,
+        Petr Mladek <pmladek@suse.com>
 References: <20220630141226.2802-1-mpdesouza@suse.com>
- <20220630141226.2802-3-mpdesouza@suse.com> <Ys2Li9ilYtpmJhN3@redhat.com>
- <20221124130545.2f7cpc5xkzqiybsw@daedalus>
+ <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
+ <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz>
+ <8ff95ef5-db76-171d-4c4c-a84d9981290d@linuxfoundation.org>
+ <20220715144526.GF2737@pathway.suse.cz>
 From:   Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v2 2/2] selftests: livepatch: Test livepatching a heavily
- called syscall
-Message-ID: <62c7c2b3-bcc0-22c3-a2f2-f3570434a3a4@redhat.com>
-Date:   Wed, 30 Nov 2022 17:19:17 -0500
+Message-ID: <aae71b0b-74e3-5874-b12f-bf0d42d851e4@redhat.com>
+Date:   Wed, 30 Nov 2022 17:22:02 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <20221124130545.2f7cpc5xkzqiybsw@daedalus>
+In-Reply-To: <20220715144526.GF2737@pathway.suse.cz>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/24/22 8:05 AM, Marcos Paulo de Souza wrote:
-> On Tue, Jul 12, 2022 at 10:56:11AM -0400, Joe Lawrence wrote:
->> On Thu, Jun 30, 2022 at 11:12:26AM -0300, Marcos Paulo de Souza wrote:
-> ...
->> nit: no need to init global to 0
+On 7/15/22 10:45 AM, Petr Mladek wrote:
+> On Fri 2022-07-01 16:13:50, Shuah Khan wrote:
+>> On 7/1/22 1:48 AM, Miroslav Benes wrote:
+>>> On Thu, 30 Jun 2022, Shuah Khan wrote:
+>>>>
+>>>> Sorry Nack on this. Let's not add modules under selftests. Any usage of
+>>>> module_init()
+>>>> doesn't belong under selftests.
 >>
->>> +static int sig_int;
->>> +
->>> +void hup_handler(int signum)
->>> +{
->>> +	stop = 1;
->>> +}
->>> +
->>> +void int_handler(int signum)
->>> +{
->>> +	stop = 1;
->>> +	sig_int = 1;
->>> +}
->>> +
->>> +int main(int argc, char *argv[])
->>> +{
->>> +	pid_t orig_pid, pid;
->>> +	long count = 0;
->>> +
->>> +	signal(SIGHUP, &hup_handler);
->>> +	signal(SIGINT, &int_handler);
->>> +
->>> +	orig_pid = syscall(SYS_getpid);
->>> +
->>> +	while (!stop) {
->>> +		pid = syscall(SYS_getpid);
->>> +		if (pid != orig_pid)
->>> +			return 1;
->>
->> This test doesn't care about the user program return code, but I wonder
->> if the status should be flipped -- this is the desired code path, not
->> the one at the end of main(), right?
->>
-> ...
-
-Ah, nevermind ...
-
->>> +	 */
->>> +	mutex_lock(&kpid_mutex);
->>> +	list_for_each_entry_safe(kpid, temp, &klp_pid_list, list) {
->>> +		if (current->pid == kpid->pid) {
->>> +			list_del(&kpid->list);
->>> +			kfree(kpid);
->>> +			npids--;
->>> +			break;
->>
->> I think it would be safer to return task_tgid_vnr() here, but ...
->>
->>> +		}
->>> +	}
->>> +	mutex_unlock(&kpid_mutex);
->>> +
->>> +	return task_tgid_vnr(current);
->>
->> task_pid_vnr() here.  That way we're only changing behavior for the
->> processes in the list and not all programs across the system.
+>> Yes I did and after reviewing and thinking about it some more, I decided this
+>> is the right direction go down on.
 > 
-> I believe that these two suggestions can be linked per your answer. First of
-> all, I didn't write the original test program, but I agree that we can make it
-> better.
+> Do you have some particular reason why building modules in selftests
+> directory might cause problems, please?
 > 
-> My intent by upstreaming the test was to ensure that test programs
-> would keep working even when livepatching getpid while having processes calling
-> getpid nonstop. For the purpose of the test, the test module livepatches getpid,
-> but keeping the same behavior as before. The only change is to keep track of the
-> test programs that need to transition to livepatched state.
+> IMHO, the reason that the test modules are in lib is because the
+> modules were there before selftests. Developers historically loaded them
+> manually or they were built-in. Selftest were added later and are just
+> another way how the module can be loaded. This is the case,
+> for example, for lib/test_printf.c.
 > 
-> Per your comment on the test program it seems that we expected to receive a
-> different value from getpid, but it's not the case here. I believe the chec on
-> test program is confusing and doesn't bring any benefit, so maybe it's better to
-> remove it and keep the test even simpler:
+> Otherwise, I do not see any big difference between building binaries
+> and modules under tools/tests/selftests. As I said, in the older
+> thread, IMHO, it makes more sense to have the selftest sources
+> self-contained.
+> 
+> 
+> There actually seems to be a principal problem in the following use
+> case:
+> 
+> --- cut Documentation/dev-tools/kselftest.rst ---
+> Kselftest from mainline can be run on older stable kernels. Running tests
+> from mainline offers the best coverage. Several test rings run mainline
+> kselftest suite on stable releases. The reason is that when a new test
+> gets added to test existing code to regression test a bug, we should be
+> able to run that test on an older kernel. Hence, it is important to keep
+> code that can still test an older kernel and make sure it skips the test
+> gracefully on newer releases.
+> --- cut Documentation/dev-tools/kselftest.rst ---
+> 
+> together with
+> 
+> --- cut Documentation/dev-tools/kselftest.rst ---
+>  * First use the headers inside the kernel source and/or git repo, and then the
+>    system headers.  Headers for the kernel release as opposed to headers
+>    installed by the distro on the system should be the primary focus to be able
+>    to find regressions.
+> --- cut Documentation/dev-tools/kselftest.rst ---
+> 
+> It means that selftests should support running binaries built against
+> newer kernel sources on system running older kernel. But this might
+> be pretty hard to achieve and maintain.
+> 
+> The normal kernel rules are exactly the opposite. Old binaries must
+> be able to run on newer kernels. The old binaries were built against
+> older headers.
+> 
+> IMHO, the testing of stable kernels makes perfect sense. And if we
+> want to support it seriously than we need to allow building new
+> selftests against headers from the old to-be-tested kernel. And
+> it will be possible only when the selftests sources are as much
+> selfcontained as possible.
+> 
+> Does this makes any sense, please?
 > 
 
-Now that I re-read it months later, I see that I mistakenly thought that
-the livepatch was supposed to modify the return value.  So disregard my
-earlier suggestions / questions about that.
+Gentle bump.  Shuah, I believe that Marcos will be preparing a v3 based
+on review comments on the second patch.  We never resolved questions
+surrounding building modules selftests/ (the first patch) though.
 
->   --- a/tools/testing/selftests/livepatch/test_programs/test_klp-call_getpid.c
->   +++ b/tools/testing/selftests/livepatch/test_programs/test_klp-call_getpid.c
->   @@ -26,18 +26,13 @@ void int_handler(int signum)
-> 
->    int main(int argc, char *argv[])
->    {
->   -   pid_t orig_pid, pid;
->       long count = 0;
-> 
->       signal(SIGHUP, &hup_handler);
->       signal(SIGINT, &int_handler);
-> 
->   -   orig_pid = syscall(SYS_getpid);
->   -
->       while (!stop) {
->   -       pid = syscall(SYS_getpid);
->   -       if (pid != orig_pid)
->   -           return 1;
->   +       (void)syscall(SYS_getpid);
->           count++;
->       }
-> 
-> As as only care about the processes transitioning to the livepatched state, we
-> really don't care about the getpid return value (as it should be the same from patches
-> and unpatched state).
-> 
-> I believe this resolves both issues. What do you think?
-> 
-
-Verifying orig_pid against the current pid return value would verify
-that it was cleanly patched... though that seems incidental to the
-purpose of the test.  The simplification above is ok with me either way.
-
+Regards,
 -- 
 Joe
 
