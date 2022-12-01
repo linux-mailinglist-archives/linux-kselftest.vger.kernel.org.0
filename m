@@ -2,127 +2,217 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530EE63F7EF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Dec 2022 20:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D3F63F895
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Dec 2022 20:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiLATK4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 14:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S230232AbiLATwU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 14:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiLATKs (ORCPT
+        with ESMTP id S229807AbiLATwT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:10:48 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8878C5E04;
-        Thu,  1 Dec 2022 11:10:47 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id fz10so2121966qtb.3;
-        Thu, 01 Dec 2022 11:10:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8lBn7HA8s73zkhGBNG3m4Sb/6k6XYlgLSYhUWX2vb1I=;
-        b=R1N6Q+6EHAvFNQV7/6IZX3Aixg6UnmIt/9PjjzdEbOApqMebnO6IX1H7Mb50Gm02gz
-         VXdj+LWNboN0dcXgELaAg69k6+dZ4o68EkPz+PyNYIIo2VN1SQo89z8JZtKnvL9057it
-         leOaMYglJnV+FUMHAgoarShMntNo1M1DLtf34CvYeOjRmsXWyjkoZFYOM570hcHsHqGJ
-         xpMlzjuNgXuC0ILwBMhTPAsg9vA6a7InK0DJmlHmuCPCY8GgUKwob5zyBYaJHdTKBEF1
-         6N9919eAfx3ZqrhGhRfecNzr7v13/YbmRVEyYbhbdqqSc1SX6k+JorAXSrFE3d5DDvMd
-         3EIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8lBn7HA8s73zkhGBNG3m4Sb/6k6XYlgLSYhUWX2vb1I=;
-        b=okGilCwvprJ5/rkBpGExkY+Sgm3fvsF/dnwKYWsa2hMFbeGmrx/Km/mn/cWXTUgK3m
-         +FVAVs6Boz5rJnVccVaY0TBe2mA5VBP6CHAXSGjNXhcwBIsP2peuk+y9iRCGHKp0IArg
-         SMPi6nupN0JYt6RaZhITGhgD4633GIp4danywS54rR5Bvpw0TsDmVB8PRIBwfSLYL6og
-         SkmZZxqFMoMZctPiOBjEy8uF5AxO50PSgH/GCznmfYPMU/UZlOGmtwa+6y2YN+yU2gpM
-         mp9AcerXncv3t3wrpGVhvZJLHb2hmigjJPgyaO4vxWOZC0OqCnsNwlbdhLNjGTs3YOBF
-         UGiA==
-X-Gm-Message-State: ANoB5plw8vh+h/cprNjwE3GiE+Nlxa1quiu8wGE3hzqa3lT17j2YnxvF
-        QWEDB6VYu78264gPyq4nUeb1mPxrXYm+mn1R
-X-Google-Smtp-Source: AA0mqf4KtmNIsiq/zeXOvH+tkCJJ6Gmy0Ia5DiailXwqblPE+ac8gkWv7sEJwtKzv1A5t2Ns4XyLOQ==
-X-Received: by 2002:a37:be45:0:b0:6fb:f7a0:987d with SMTP id o66-20020a37be45000000b006fbf7a0987dmr48096466qkf.191.1669921846406;
-        Thu, 01 Dec 2022 11:10:46 -0800 (PST)
-Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net. [71.33.132.231])
-        by smtp.gmail.com with ESMTPSA id bs17-20020a05620a471100b006bbc3724affsm4006972qkb.45.2022.12.01.11.10.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 11:10:45 -0800 (PST)
-From:   James Hilliard <james.hilliard1@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
-        David Faust <david.faust@oracle.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] selftests/bpf: add GCC compatible builtins to bpf_legacy.h
-Date:   Thu,  1 Dec 2022 12:09:39 -0700
-Message-Id: <20221201190939.3230513-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 1 Dec 2022 14:52:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95290B8469
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 11:52:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B2CA62109
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 19:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6015AC433D6;
+        Thu,  1 Dec 2022 19:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669924337;
+        bh=E8LneJJGahSRzAFyNkoofCvon5tjAeUOeY9NwqMnrrE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qugjgLZBohQvVbkv30NRqEvnOaw6oSDnrPjIBYfO3PdIWw8bd7ovMFLtrSENV0LWH
+         zbehtN12UnGwFxKSTtzy4SjsRH5l8vXltSg12S6BpR35gMEQtRkb+uZ+6TSHu5BmN0
+         9BRI6BRDlNv+uySSJLoKBhJNEMGGp36gx3LGUwqm7/504gzUXmfboELlIcr22BZsok
+         CbAfxISX2y0gu5alDa63X9tpWSrbZYtXA17yheZw0fqNw3zeyA3TkxNZNdi3wYkuAd
+         gKBdfIhCPjd1ACPpg9P+UZJaJSpZ+od2XQFesneprDf7bxuG4n0YkQtXaDJCh2mxW6
+         tR98rgUqpCmtw==
+Date:   Thu, 1 Dec 2022 19:52:13 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     ALSA development <alsa-devel@alsa-project.org>,
+        Takashi Iwai <tiwai@suse.de>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftests/alsa: pcm - move more configuration to
+ configuration files
+Message-ID: <Y4kF7fG70EySxDQn@sirena.org.uk>
+References: <20221201173333.2494019-1-perex@perex.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="53hJecbtB+xfMhYR"
+Content-Disposition: inline
+In-Reply-To: <20221201173333.2494019-1-perex@perex.cz>
+X-Cookie: Leveraging always beats prototyping.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The bpf_legacy.h header uses llvm specific load functions, add
-GCC compatible variants as well to fix tests using these functions
-under GCC.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Cc: Jose E. Marchesi <jose.marchesi@oracle.com>
-Cc: David Faust <david.faust@oracle.com>
----
- tools/testing/selftests/bpf/bpf_legacy.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+--53hJecbtB+xfMhYR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/bpf/bpf_legacy.h b/tools/testing/selftests/bpf/bpf_legacy.h
-index 845209581440..256c2a90aa20 100644
---- a/tools/testing/selftests/bpf/bpf_legacy.h
-+++ b/tools/testing/selftests/bpf/bpf_legacy.h
-@@ -2,6 +2,15 @@
- #ifndef __BPF_LEGACY__
- #define __BPF_LEGACY__
- 
-+#if __GNUC__ && !__clang__
-+/* Functions to emit BPF_LD_ABS and BPF_LD_IND instructions.  We
-+ * provide the "standard" names as synonyms of the corresponding GCC
-+ * builtins.  Note how the SKB argument is ignored.
-+ */
-+#define load_byte(skb,off) __builtin_bpf_load_byte((off))
-+#define load_half(skb,off) __builtin_bpf_load_half((off))
-+#define load_word(skb,off) __builtin_bpf_load_word((off))
-+#else
- /* llvm builtin functions that eBPF C program may use to
-  * emit BPF_LD_ABS and BPF_LD_IND instructions
-  */
-@@ -11,6 +20,7 @@ unsigned long long load_half(void *skb,
- 			     unsigned long long off) asm("llvm.bpf.load.half");
- unsigned long long load_word(void *skb,
- 			     unsigned long long off) asm("llvm.bpf.load.word");
-+#endif
- 
- #endif
- 
--- 
-2.34.1
+On Thu, Dec 01, 2022 at 06:33:33PM +0100, Jaroslav Kysela wrote:
 
+> Obtain all test parameters from the configuration files. The defaults
+> are defined in the pcm-test.conf file. The test count and parameters
+> may be variable per specific hardware.
+
+> Also, handle alt_formats field now (with the fixes in the format loop).
+> It replaces the original "automatic" logic which is not so universal.
+
+> The code may be further extended to skip various tests based
+> on the configuration hints, if the exact PCM hardware parameters
+> are not available for the given hardware.
+
+> --- a/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
+> +++ b/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
+> @@ -55,6 +55,14 @@ card.hda {
+>  				period_size 24000
+>  				buffer_size 192000
+>  			}
+> +			test.time3 {
+> +				access RW_INTERLEAVED
+> +				format S16_LE
+> +				rate 44100
+> +				channels 2
+> +				period_size 24000
+> +				buffer_size 192000
+> +			}
+
+I really do think we should be giving these names which help people
+understand what the tests are intending to cover, it'll make it easier
+to both understand the results and maintian the configurations going
+forward.  Or at least commenting things, but names is probably better.
+Since the timeN is also used to figure out what type of test we're doing
+that'd mean either adding an explicit test_type field=20
+
+	pcm.test.48k2_S16 {
+		test_type time
+
+or block
+
+	pcm.test.time.48k2_S16
+
+or alternatively adding a human reabale name field
+
+	pcm.test.time1 {
+		description "48kHz Stereo S16_LE"
+
+which is more readable but does mean that automated systems aren't going
+to surface the meaningful name for users so readily - you get things
+like
+
+	https://linux.kernelci.org/test/plan/id/6388c0cba8274c94402abd12/
+	https://linux.kernelci.org/test/plan/id/6388ce6efef77e61ab2abd10/
+
+so there's a UI barrier before people see the test.
+
+mixer-test is kind of "fun" in how many test results it can generate on
+bigger systems but hey, and there's some output corruption going on in
+the first link which looses us the capture tests.  I have toyed with the
+idea of putting the control names into the mixer test names, but some of
+the test systems currently struggle with parsing spaces in the test
+name.
+
+I do see this is all kind of baked into snd_config_get_type()
+unfortunately so perhaps the new description/name field is the best
+option here?  We could add that incrementally.
+
+>  	for (pcm =3D pcm_list; pcm !=3D NULL; pcm =3D pcm->next) {
+> -		test_pcm_time1(pcm, "test.time1", "S16_LE", 48000, 2, 512, 4096);
+> -		test_pcm_time1(pcm, "test.time2", "S16_LE", 48000, 2, 24000, 192000);
+> +		cfg =3D pcm->pcm_config;
+> +		if (cfg =3D=3D NULL)
+> +			cfg =3D default_pcm_config;
+> +		cfg =3D conf_get_subtree(cfg, "test", NULL);
+> +		if (cfg =3D=3D NULL)
+> +			continue;
+> +		snd_config_for_each(i, next, cfg) {
+
+I can see the benefit in moving the defaults to a configuration file
+instead of code but rather than having it be an either/or it seems much
+better to have the board specific configuration file extend the
+defaults, resulting in us looping over both files if we've got both.
+We'd need to have something that avoided collisions, perhaps the
+simplest thing would be to just add an element into the printed test
+name for the source of the config so we get output like:
+
+	ok 1 test.default.time1.0.0.0.PLAYBACK
+	ok 2 test.system.time1.0.0.0.PLAYBACK
+
+That does mean that the system test list can't replace the generic test
+list but like I said elsewhere I think that would be a good thing for
+clarity anyway ("X works on system A but not the very similar system B,
+what's broken about system B...").
+
+> --- /dev/null
+> +++ b/tools/testing/selftests/alsa/pcm-test.conf
+> @@ -0,0 +1,16 @@
+> +pcm.test.time1 {
+> +	format S16_LE
+> +	alt_formats [ S32_LE ]
+> +	rate 48000
+> +	channels 2
+> +	period_size 512
+> +	buffer_size 4096
+> +}
+> +pcm.test.time2 {
+> +	format S16_LE
+> +	alt_formats [ S32_LE ]
+> +	rate 48000
+> +	channels 2
+> +	period_size 24000
+> +	buffer_size 192000
+> +}
+
+It's probably especially important that anything in a default
+configuration should skip on the constraints not being satisfied since
+we've no idea what the hardware we're running on is.  Rather than
+requiring skipping to be explicitly configured perhaps we could just set
+a flag based on if we're reading the default tests or a system specific
+file, I'm not sure I see a sensible use case for system specific tests
+specifying a configuration that can't be satisfied.  Doing things that
+way the flag could either mean we add skipping or that we report two
+results for each configured test:
+
+	not ok 1 test.system.time1.0.0.0.PLAYBACK.constraints
+	ok 2 test.system.time1.0.0.0.PLAYBACK # SKIP
+
+which is perhaps marginally simpler to implement and makes it clearer in
+the results if it was a straight up logic failure rather than a timing
+failure.
+
+I would also like to see 44.1kHz, 96kHz and at least one mono and one 6
+channel configuration adding (in my patches I added 8kHz mono since it's
+the most common practical mono format and 8kHz stereo so if 8kHz mono
+doesn't work it's a bit more obvious if it's mono or 8kHz that's broken).
+That could definitely be done incrementally though.
+
+--53hJecbtB+xfMhYR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOJBewACgkQJNaLcl1U
+h9AwhQf+J4U/pJ+kkchlGBmuS0cYhVtEf6P11C55p0kWxXnizGRG0xKdzx8ZYxPy
+2E520aiMi1lbaLolobgOVo8CZFEjY+W8fBMOLfJbC9Lqui5/2DCGck/bc29KTHS2
+K5lFqwm0AZnKscwG4HkPx2FVPm3Og9EmAwA0iOHVGUciEnqSxPh+TGFkrAdYhky9
+CxhneiMRqZ1Cy2LjkAO/+6CFRELCPk5GyXylUvqBDjqnAYuCZEn1NG+Wy/q0fwLl
+JWIs+rqlRm0L2rpYGY94CKOQKNxCR4Ya0HNaM3G3CCeXe49FDCynPjcvC7UAlQ/1
+CnIRaVhnxpiUJlade6k9XLWeXnhwyA==
+=4Ams
+-----END PGP SIGNATURE-----
+
+--53hJecbtB+xfMhYR--
