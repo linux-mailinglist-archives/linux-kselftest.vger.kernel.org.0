@@ -2,217 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D3F63F895
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Dec 2022 20:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FC963F91C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Dec 2022 21:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiLATwU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 14:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S230209AbiLAU2L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 15:28:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiLATwT (ORCPT
+        with ESMTP id S229913AbiLAU2K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 14:52:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95290B8469
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 11:52:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B2CA62109
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 19:52:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6015AC433D6;
-        Thu,  1 Dec 2022 19:52:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669924337;
-        bh=E8LneJJGahSRzAFyNkoofCvon5tjAeUOeY9NwqMnrrE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qugjgLZBohQvVbkv30NRqEvnOaw6oSDnrPjIBYfO3PdIWw8bd7ovMFLtrSENV0LWH
-         zbehtN12UnGwFxKSTtzy4SjsRH5l8vXltSg12S6BpR35gMEQtRkb+uZ+6TSHu5BmN0
-         9BRI6BRDlNv+uySSJLoKBhJNEMGGp36gx3LGUwqm7/504gzUXmfboELlIcr22BZsok
-         CbAfxISX2y0gu5alDa63X9tpWSrbZYtXA17yheZw0fqNw3zeyA3TkxNZNdi3wYkuAd
-         gKBdfIhCPjd1ACPpg9P+UZJaJSpZ+od2XQFesneprDf7bxuG4n0YkQtXaDJCh2mxW6
-         tR98rgUqpCmtw==
-Date:   Thu, 1 Dec 2022 19:52:13 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     ALSA development <alsa-devel@alsa-project.org>,
-        Takashi Iwai <tiwai@suse.de>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftests/alsa: pcm - move more configuration to
- configuration files
-Message-ID: <Y4kF7fG70EySxDQn@sirena.org.uk>
-References: <20221201173333.2494019-1-perex@perex.cz>
+        Thu, 1 Dec 2022 15:28:10 -0500
+X-Greylist: delayed 550 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 12:28:07 PST
+Received: from out-143.mta0.migadu.com (out-143.mta0.migadu.com [IPv6:2001:41d0:1004:224b::8f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8387CA1C03
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 12:28:07 -0800 (PST)
+Message-ID: <f4aa0e19-6c91-3d39-ca8a-7840bf46625d@linux.dev>
+Date:   Thu, 1 Dec 2022 12:18:45 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="53hJecbtB+xfMhYR"
-Content-Disposition: inline
-In-Reply-To: <20221201173333.2494019-1-perex@perex.cz>
-X-Cookie: Leveraging always beats prototyping.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH ipsec-next,v2 2/3] xfrm: interface: Add unstable helpers
+ for setting/getting XFRM metadata from TC-BPF
+Content-Language: en-US
+To:     Eyal Birger <eyal.birger@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        andrii@kernel.org, daniel@iogearbox.net, nicolas.dichtel@6wind.com,
+        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, shuah@kernel.org
+References: <20221129132018.985887-1-eyal.birger@gmail.com>
+ <20221129132018.985887-3-eyal.birger@gmail.com>
+ <b3306950-bea9-e914-0491-54048d6d55e4@linux.dev>
+ <CAHsH6Gs4OajjoXauDw9zERx=+tUqpbpnP_8SxzmKKDQ3r8xmJA@mail.gmail.com>
+ <CAHsH6Gv+WUDQvAL6jnzNFkNAKTk7ANahdbC_43y9x4t3AJZceA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAHsH6Gv+WUDQvAL6jnzNFkNAKTk7ANahdbC_43y9x4t3AJZceA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 12/1/22 5:30 AM, Eyal Birger wrote:
+> Hi Martin,
+> 
+> On Thu, Dec 1, 2022 at 7:55 AM Eyal Birger <eyal.birger@gmail.com> wrote:
+>>
+>> Hi Martin,
+>>
+>> On Wed, Nov 30, 2022 at 8:15 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+>>>
+>>> On 11/29/22 5:20 AM, Eyal Birger wrote:
+>>>> diff --git a/net/xfrm/xfrm_interface_bpf.c b/net/xfrm/xfrm_interface_bpf.c
+>>>> new file mode 100644
+>>>> index 000000000000..757e15857dbf
+>>>> --- /dev/null
+>>>> +++ b/net/xfrm/xfrm_interface_bpf.c
+>>>> @@ -0,0 +1,100 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>> +/* Unstable XFRM Helpers for TC-BPF hook
+>>>> + *
+>>>> + * These are called from SCHED_CLS BPF programs. Note that it is
+>>>> + * allowed to break compatibility for these functions since the interface they
+>>>> + * are exposed through to BPF programs is explicitly unstable.
+>>>> + */
+>>>> +
+>>>> +#include <linux/bpf.h>
+>>>> +#include <linux/btf_ids.h>
+>>>> +
+>>>> +#include <net/dst_metadata.h>
+>>>> +#include <net/xfrm.h>
+>>>> +
+>>>> +struct bpf_xfrm_info {
+>>> No need to introduce a bpf variant of the "struct xfrm_md_info" (more on this
+>>> later).
+>>>
+>>>> +     u32 if_id;
+>>>> +     int link;
+>>>> +};
+>>>> +
+>>>> +static struct metadata_dst __percpu *xfrm_md_dst;
+>>>> +__diag_push();
+>>>> +__diag_ignore_all("-Wmissing-prototypes",
+>>>> +               "Global functions as their definitions will be in xfrm_interface BTF");
+>>>> +
+>>>> +__used noinline
+>>>> +int bpf_skb_get_xfrm_info(struct __sk_buff *skb_ctx, struct bpf_xfrm_info *to)
+>>>
+>>> This kfunc is not needed.  It only reads the skb->_skb_refdst.  The new kfunc
+>>> bpf_rdonly_cast() can be used.  Take a look at the bpf_rdonly_cast() usages in
+>>> the selftests/bpf/progs/type_cast.c.  It was in bpf-next only but should also be
+>>> in net-next now.
+>>
+>> I'm somewhat concerned with this approach.
+>> Indeed it would remove the kfunc, and the API is declared "unstable", but
+>> still the implementation as dst isn't relevant to the user and would make
+>> the programs less readable.
+>>
+>> Also note that the helper can be also used as it is to get the xfrm info at
+>> egress from an lwt route (which stores the xfrm_info in the dst lwstate).
 
---53hJecbtB+xfMhYR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Right, the whole skb_xfrm_md_info() can be implemented in bpf prog itself, like 
+checking lwtstate.
 
-On Thu, Dec 01, 2022 at 06:33:33PM +0100, Jaroslav Kysela wrote:
+If adding a kfunc, how about directly expose skb_xfrm_md_info() itself as a 
+kfunc to bpf prog and directly return a "struct xfrm_md_info *" instead.  Then 
+there is no need to copy if_id/link...etc.  The bpf prog has no need to 
+initialize the "to" also.  Something like this:
 
-> Obtain all test parameters from the configuration files. The defaults
-> are defined in the pcm-test.conf file. The test count and parameters
-> may be variable per specific hardware.
+__used noinline
+const struct xfrm_md_info *bpf_skb_xfrm_md_info(const struct __sk_buff *skb) { ... }
 
-> Also, handle alt_formats field now (with the fixes in the format loop).
-> It replaces the original "automatic" logic which is not so universal.
+BTF_ID_FLAGS(func, bpf_skb_xfrm_md_info, KF_RET_NULL)
 
-> The code may be further extended to skip various tests based
-> on the configuration hints, if the exact PCM hardware parameters
-> are not available for the given hardware.
+>>
+>>>
+>>>> +{
+>>>> +     struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+>>>> +     struct xfrm_md_info *info;
+>>>> +
+>>>> +     memset(to, 0, sizeof(*to));
+>>>> +
+>>>> +     info = skb_xfrm_md_info(skb);
+>>>> +     if (!info)
+>>>> +             return -EINVAL;
+>>>> +
+>>>> +     to->if_id = info->if_id;
+>>>> +     to->link = info->link;
+>>>> +     return 0;
+>>>> +}
+>>>> +
+>>>> +__used noinline
+>>>> +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
+>>>> +                       const struct bpf_xfrm_info *from)
+>>>
+>>> Directly use "const struct xfrm_md_info *from" instead.  This kfunc can check
+>>> from->dst_orig != NULL and return -EINVAL.  It will then have a consistent API
+>>> with the bpf_rdonly_cast() mentioned above.
+>>
+>> See above.
+> 
+> Also, when trying this approach with bpf_set_xfrm_info() accepting
+> "const struct xfrm_md_info *from" I fail to load the program:
+> 
+> libbpf: prog 'set_xfrm_info': BPF program load failed: Invalid argument
+> libbpf: prog 'set_xfrm_info': -- BEGIN PROG LOAD LOG --
+> 0: R1=ctx(off=0,imm=0) R10=fp0
+> ; int set_xfrm_info(struct __sk_buff *skb)
+> 0: (bf) r6 = r1                       ; R1=ctx(off=0,imm=0)
+> R6_w=ctx(off=0,imm=0)
+> 1: (b7) r1 = 0                        ; R1_w=0
+> ; struct xfrm_md_info info = {};
+> 2: (7b) *(u64 *)(r10 -8) = r1         ; R1_w=0 R10=fp0 fp-8_w=00000000
+> 3: (7b) *(u64 *)(r10 -16) = r1        ; R1_w=0 R10=fp0 fp-16_w=00000000
+> 4: (b4) w1 = 0                        ; R1_w=0
+> ; __u32 index = 0;
+> 5: (63) *(u32 *)(r10 -20) = r1        ; R1_w=0 R10=fp0 fp-24=0000????
+> 6: (bf) r2 = r10                      ; R2_w=fp0 R10=fp0
+> ;
+> 7: (07) r2 += -20                     ; R2_w=fp-20
+> ; if_id = bpf_map_lookup_elem(&dst_if_id_map, &index);
+> 8: (18) r1 = 0xffff888006751c00       ; R1_w=map_ptr(off=0,ks=4,vs=4,imm=0)
+> 10: (85) call bpf_map_lookup_elem#1   ;
+> R0_w=map_value_or_null(id=1,off=0,ks=4,vs=4,imm=0)
+> 11: (bf) r1 = r0                      ;
+> R0_w=map_value_or_null(id=1,off=0,ks=4,vs=4,imm=0)
+> R1_w=map_value_or_null(id=1,off=0,ks=4,vs=4,imm=0)
+> 12: (b4) w0 = 2                       ; R0_w=2
+> ; if (!if_id)
+> 13: (15) if r1 == 0x0 goto pc+10      ; R1_w=map_value(off=0,ks=4,vs=4,imm=0)
+> 14: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
+> ;
+> 15: (07) r2 += -16                    ; R2_w=fp-16
+> ; info.if_id = *if_id;
+> 16: (61) r1 = *(u32 *)(r1 +0)         ;
+> R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff))
+> ; info.if_id = *if_id;
+> 17: (63) *(u32 *)(r2 +0) = r1         ;
+> R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R2_w=fp-16
+> fp-16_w=
+> ; ret = bpf_skb_set_xfrm_info(skb, &info);
+> 18: (bf) r1 = r6                      ; R1_w=ctx(off=0,imm=0)
+> R6_w=ctx(off=0,imm=0)
+> 19: (85) call bpf_skb_set_xfrm_info#81442
+> arg#1 pointer type STRUCT xfrm_md_info must point to scalar, or struct
+> with scalar
+> 
+> Is there some registration I need to do for this struct?
 
-> --- a/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
-> +++ b/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
-> @@ -55,6 +55,14 @@ card.hda {
->  				period_size 24000
->  				buffer_size 192000
->  			}
-> +			test.time3 {
-> +				access RW_INTERLEAVED
-> +				format S16_LE
-> +				rate 44100
-> +				channels 2
-> +				period_size 24000
-> +				buffer_size 192000
-> +			}
+Ah, thanks for trying!
+hmm... it will need a change to the verifier.  likely tag the param with 
+something like "const struct xfrm_md_info *from__nonscalar_ok".
 
-I really do think we should be giving these names which help people
-understand what the tests are intending to cover, it'll make it easier
-to both understand the results and maintian the configurations going
-forward.  Or at least commenting things, but names is probably better.
-Since the timeN is also used to figure out what type of test we're doing
-that'd mean either adding an explicit test_type field=20
+The reason of my earlier suggestion was to avoid the need to duplicate future 
+changes in xfrm_md_info to bpf_xfrm_info and more importantly avoid creating 
+another __sk_buff vs sk_buff like usage confusion.
 
-	pcm.test.48k2_S16 {
-		test_type time
+For now, lets stay with bpf_xfrm_info.  This can be changed later.
 
-or block
-
-	pcm.test.time.48k2_S16
-
-or alternatively adding a human reabale name field
-
-	pcm.test.time1 {
-		description "48kHz Stereo S16_LE"
-
-which is more readable but does mean that automated systems aren't going
-to surface the meaningful name for users so readily - you get things
-like
-
-	https://linux.kernelci.org/test/plan/id/6388c0cba8274c94402abd12/
-	https://linux.kernelci.org/test/plan/id/6388ce6efef77e61ab2abd10/
-
-so there's a UI barrier before people see the test.
-
-mixer-test is kind of "fun" in how many test results it can generate on
-bigger systems but hey, and there's some output corruption going on in
-the first link which looses us the capture tests.  I have toyed with the
-idea of putting the control names into the mixer test names, but some of
-the test systems currently struggle with parsing spaces in the test
-name.
-
-I do see this is all kind of baked into snd_config_get_type()
-unfortunately so perhaps the new description/name field is the best
-option here?  We could add that incrementally.
-
->  	for (pcm =3D pcm_list; pcm !=3D NULL; pcm =3D pcm->next) {
-> -		test_pcm_time1(pcm, "test.time1", "S16_LE", 48000, 2, 512, 4096);
-> -		test_pcm_time1(pcm, "test.time2", "S16_LE", 48000, 2, 24000, 192000);
-> +		cfg =3D pcm->pcm_config;
-> +		if (cfg =3D=3D NULL)
-> +			cfg =3D default_pcm_config;
-> +		cfg =3D conf_get_subtree(cfg, "test", NULL);
-> +		if (cfg =3D=3D NULL)
-> +			continue;
-> +		snd_config_for_each(i, next, cfg) {
-
-I can see the benefit in moving the defaults to a configuration file
-instead of code but rather than having it be an either/or it seems much
-better to have the board specific configuration file extend the
-defaults, resulting in us looping over both files if we've got both.
-We'd need to have something that avoided collisions, perhaps the
-simplest thing would be to just add an element into the printed test
-name for the source of the config so we get output like:
-
-	ok 1 test.default.time1.0.0.0.PLAYBACK
-	ok 2 test.system.time1.0.0.0.PLAYBACK
-
-That does mean that the system test list can't replace the generic test
-list but like I said elsewhere I think that would be a good thing for
-clarity anyway ("X works on system A but not the very similar system B,
-what's broken about system B...").
-
-> --- /dev/null
-> +++ b/tools/testing/selftests/alsa/pcm-test.conf
-> @@ -0,0 +1,16 @@
-> +pcm.test.time1 {
-> +	format S16_LE
-> +	alt_formats [ S32_LE ]
-> +	rate 48000
-> +	channels 2
-> +	period_size 512
-> +	buffer_size 4096
-> +}
-> +pcm.test.time2 {
-> +	format S16_LE
-> +	alt_formats [ S32_LE ]
-> +	rate 48000
-> +	channels 2
-> +	period_size 24000
-> +	buffer_size 192000
-> +}
-
-It's probably especially important that anything in a default
-configuration should skip on the constraints not being satisfied since
-we've no idea what the hardware we're running on is.  Rather than
-requiring skipping to be explicitly configured perhaps we could just set
-a flag based on if we're reading the default tests or a system specific
-file, I'm not sure I see a sensible use case for system specific tests
-specifying a configuration that can't be satisfied.  Doing things that
-way the flag could either mean we add skipping or that we report two
-results for each configured test:
-
-	not ok 1 test.system.time1.0.0.0.PLAYBACK.constraints
-	ok 2 test.system.time1.0.0.0.PLAYBACK # SKIP
-
-which is perhaps marginally simpler to implement and makes it clearer in
-the results if it was a straight up logic failure rather than a timing
-failure.
-
-I would also like to see 44.1kHz, 96kHz and at least one mono and one 6
-channel configuration adding (in my patches I added 8kHz mono since it's
-the most common practical mono format and 8kHz stereo so if 8kHz mono
-doesn't work it's a bit more obvious if it's mono or 8kHz that's broken).
-That could definitely be done incrementally though.
-
---53hJecbtB+xfMhYR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOJBewACgkQJNaLcl1U
-h9AwhQf+J4U/pJ+kkchlGBmuS0cYhVtEf6P11C55p0kWxXnizGRG0xKdzx8ZYxPy
-2E520aiMi1lbaLolobgOVo8CZFEjY+W8fBMOLfJbC9Lqui5/2DCGck/bc29KTHS2
-K5lFqwm0AZnKscwG4HkPx2FVPm3Og9EmAwA0iOHVGUciEnqSxPh+TGFkrAdYhky9
-CxhneiMRqZ1Cy2LjkAO/+6CFRELCPk5GyXylUvqBDjqnAYuCZEn1NG+Wy/q0fwLl
-JWIs+rqlRm0L2rpYGY94CKOQKNxCR4Ya0HNaM3G3CCeXe49FDCynPjcvC7UAlQ/1
-CnIRaVhnxpiUJlade6k9XLWeXnhwyA==
-=4Ams
------END PGP SIGNATURE-----
-
---53hJecbtB+xfMhYR--
