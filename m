@@ -2,146 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E5163FB01
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Dec 2022 23:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC91263FC68
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 00:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbiLAWzv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 17:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S231573AbiLAX67 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 18:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiLAWzp (ORCPT
+        with ESMTP id S231975AbiLAX6n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 17:55:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E58BE4E6
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 14:55:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 571A4B8203A
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 22:55:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB338C433C1;
-        Thu,  1 Dec 2022 22:55:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669935342;
-        bh=cvrPNkMdTayZW2+mx8ZpfTJbOGVT1F6b+IjEaJFrZ5w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XqQ1wp8af1M0pv58PHVj8RZKEfAQB2y0/QV5UbbRSlycy9xKML4wRwgluNDi7oQPG
-         85cbOHIm49UmuzBIWxSsk7v3UPTU27Sl54Hih4iQF+mD4c0k+H7sMibDef/qzJVIun
-         FReAkAUwc6xnxINrobcAX3torKf8IYT3Vpm6UXwJr+2JK1sEW1p8KZudZ6Bm5MGzVR
-         bqQCT3HhRHJw380/oRHxGZW1zrsLljompZs4HFpbxbfIey7Tvon0cI9qvhxv4W77qL
-         bXgluULiG6LPFor+UATu3HP9/T8C+gXSRiXHMrG4YnyUAqyqvkTgn+tPbP3nJWA5ms
-         9O0rY6GGO4dvg==
-Date:   Thu, 1 Dec 2022 22:55:37 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     ALSA development <alsa-devel@alsa-project.org>,
-        Takashi Iwai <tiwai@suse.de>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftests/alsa: pcm - move more configuration to
- configuration files
-Message-ID: <Y4kw6VErxaeDcKix@sirena.org.uk>
-References: <20221201173333.2494019-1-perex@perex.cz>
- <Y4kF7fG70EySxDQn@sirena.org.uk>
- <92abef25-2cbc-eb10-bb4d-e9cae06d7383@perex.cz>
+        Thu, 1 Dec 2022 18:58:43 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029FCC7242
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 15:58:42 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id d14so1455084ilq.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Dec 2022 15:58:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lmr7G8WA4Q1Nw43pzIc6PULkeAuv/I4fA+tW++foTfg=;
+        b=EHzcnH/SpQ9u5wDNpr658lLnobcH9ThK906nW6V5UAziYjE3IqoehgdsXhf4/oHooB
+         IniFFCHmKDskeZ9KbnkM3Wrdsg/tMKWBkT0Q4MoOBWYfA1crDT+RvBxYnz78/4EIUQtw
+         kE3blyd2cjvghEtPbmVGEpiSWRbSyF+5WiVvA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmr7G8WA4Q1Nw43pzIc6PULkeAuv/I4fA+tW++foTfg=;
+        b=P0Z8AG19qVJghP3moR2RNECJO/Y9SGKAE/6ObSa7wLKS1iyqRbijOiQy1HnG7FsFRv
+         0V1k+qHwHsMkhXynXWcf9Lqhp/zwBL2J2KkumHDHjFHZW6f92XOY0ipmRnDTRJmWW5rG
+         y6YuyFlQ0FBqaxBA8c0dmn2CsnpZbHidEBPTQRdbzhWo5BScaIjaFypY3ER2xWjttpjy
+         pnme7cjdRq09jPiC+8VisE/EQczqqEuikl+hgHHCpNgfvVn7nRwbmSoMQciA2sZkLt4Q
+         gqqbdqsNtbYL7x3fgctZFQe2Iu7cTNEQAEhS9ERUMkRGqw3ySQlLNWFI2K/bYSAyp6nU
+         o06Q==
+X-Gm-Message-State: ANoB5plEqYfF7QadwJznDbY6aEW+O3uO4E9xCgy3s6DVj45xylkLGll2
+        rdr4hhvkqlj7oxFQD/l90gMfiw==
+X-Google-Smtp-Source: AA0mqf7MJDJ2Yi3CnLvhd005w2bkmVeN+ouC0SBbUwS1dDkWyTppvgwklbIzvIWqXLFusAt2/M6gLA==
+X-Received: by 2002:a05:6e02:586:b0:303:3119:420e with SMTP id c6-20020a056e02058600b003033119420emr3496685ils.320.1669939121189;
+        Thu, 01 Dec 2022 15:58:41 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p134-20020a02298c000000b00363d6918540sm2104537jap.171.2022.12.01.15.58.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 15:58:40 -0800 (PST)
+Message-ID: <c5a6cb8a-7b99-249e-5ba4-732fc0ed2e30@linuxfoundation.org>
+Date:   Thu, 1 Dec 2022 16:58:38 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="flo8lt0x0gxthEpv"
-Content-Disposition: inline
-In-Reply-To: <92abef25-2cbc-eb10-bb4d-e9cae06d7383@perex.cz>
-X-Cookie: Leveraging always beats prototyping.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+Content-Language: en-US
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Miroslav Benes <mbenes@suse.cz>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, jpoimboe@redhat.com,
+        Petr Mladek <pmladek@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220630141226.2802-1-mpdesouza@suse.com>
+ <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
+ <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz>
+ <8ff95ef5-db76-171d-4c4c-a84d9981290d@linuxfoundation.org>
+ <20220715144526.GF2737@pathway.suse.cz>
+ <aae71b0b-74e3-5874-b12f-bf0d42d851e4@redhat.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <aae71b0b-74e3-5874-b12f-bf0d42d851e4@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 11/30/22 15:22, Joe Lawrence wrote:
+> On 7/15/22 10:45 AM, Petr Mladek wrote:
+>> On Fri 2022-07-01 16:13:50, Shuah Khan wrote:
+>>> On 7/1/22 1:48 AM, Miroslav Benes wrote:
+>>>> On Thu, 30 Jun 2022, Shuah Khan wrote:
+>>>>>
+>>>>> Sorry Nack on this. Let's not add modules under selftests. Any usage of
+>>>>> module_init()
+>>>>> doesn't belong under selftests.
+>>>
+>>> Yes I did and after reviewing and thinking about it some more, I decided this
+>>> is the right direction go down on.
+>>
+>> Do you have some particular reason why building modules in selftests
+>> directory might cause problems, please?
+>>
 
---flo8lt0x0gxthEpv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+My reasons are that with this change module_init() propagates out of
+strictly kernel space and now is in selftests which are user-space.
+Any changes to this interface will be tied to user-space change.
 
-On Thu, Dec 01, 2022 at 09:42:52PM +0100, Jaroslav Kysela wrote:
+This is my main concern. That is reason why I still ask the question
+about why is it necessary to make this change other than self-contained
+sources?
 
-> As for the generic tool, I would like to have an option to control all mechanisms:
+>> IMHO, the reason that the test modules are in lib is because the
+>> modules were there before selftests. Developers historically loaded them
+>> manually or they were built-in. Selftest were added later and are just
+>> another way how the module can be loaded. This is the case,
+>> for example, for lib/test_printf.c.
+>>
+>> Otherwise, I do not see any big difference between building binaries
+>> and modules under tools/tests/selftests. As I said, in the older
+>> thread, IMHO, it makes more sense to have the selftest sources
+>> self-contained.
 
-> 1) only default config
-> 2) only hw specific config
-> 3) default + hw specific configs (merged)
+Modules under lib are built when kernel gets built as opposed to when
+tests are built. So there is the difference in build order. I do see
+a difference from that point of view.
 
-> A new field in the pcm configuration may be added for this to build the
-> per-device-stream configuration. If we merge those two configs, I think that
-> only a field which will skip the default config is sufficient to cover all
-> possibilities. The test names are a good identification, what was executed.
+Yes, moving modules under selftests does make the tests self contained.
 
-That's not quite what I implemented (see below...) but I think it's
-not too far off.
+>>
+>>
+>> There actually seems to be a principal problem in the following use
+>> case:
+>>
+>> --- cut Documentation/dev-tools/kselftest.rst ---
+>> Kselftest from mainline can be run on older stable kernels. Running tests
+>> from mainline offers the best coverage. Several test rings run mainline
+>> kselftest suite on stable releases. The reason is that when a new test
+>> gets added to test existing code to regression test a bug, we should be
+>> able to run that test on an older kernel. Hence, it is important to keep
+>> code that can still test an older kernel and make sure it skips the test
+>> gracefully on newer releases.
+>> --- cut Documentation/dev-tools/kselftest.rst ---
+>>
+>> together with
+>>
+>> --- cut Documentation/dev-tools/kselftest.rst ---
+>>   * First use the headers inside the kernel source and/or git repo, and then the
+>>     system headers.  Headers for the kernel release as opposed to headers
+>>     installed by the distro on the system should be the primary focus to be able
+>>     to find regressions.
+>> --- cut Documentation/dev-tools/kselftest.rst ---
+>>
+>> It means that selftests should support running binaries built against
+>> newer kernel sources on system running older kernel. But this might
+>> be pretty hard to achieve and maintain.
+>>
+>> The normal kernel rules are exactly the opposite. Old binaries must
+>> be able to run on newer kernels. The old binaries were built against
+>> older headers.
+>>
 
-> As Takashi already applied your set, I'll try to merge my code with yours
-> and keep the added functionality.
+This case is applicable to when tests are built on a development system
+and binaries are moved to run on a target system.
 
-I've just prepared a branch which I'm running through my tests now which
-just does a revert, applies your patch and then does most of what I
-said.  I'll send it later assuming everything looks OK enough on my test
-farm (probably in ~1-2 hours).  All this working together is great but
-one of us needs to move to a different timezone.  :P  I think we're
-*roughly* on the same page here, just some edges to iron out.
+In general, newer tests offer the best coverage, hence the recommendation
+to run newer tests on older kernels assuming that the tests are built
+on a newer kernel and backwards should run in a backwards compatible
+way on older kernels.
 
-For the config merging/selection thing I think for the merge we could
-either add a section in the per-board config which overrides defaults or
-just go with what I did where we add the test list, as well as adding
-command line options to select only the per-board or only the
-per-system.  Does any of that line up with what you were thinking?
+Your use-case might be different from this where you do build tests
+on older kernels and run them on it in which case, you might have a
+requirement to revision match the tests and kernel. You can still do
+so.
 
-The following changes since commit 7d721baea138696d5a6746fb5bce0a510a91bd65:
+>> IMHO, the testing of stable kernels makes perfect sense. And if we
+>> want to support it seriously than we need to allow building new
+>> selftests against headers from the old to-be-tested kernel. And
+>> it will be possible only when the selftests sources are as much
+>> selfcontained as possible.
+>>
 
-  kselftest/alsa: Add more coverage of sample rates and channel counts (2022-12-01 20:02:14 +0100)
+Do you have a requirement that livepatch test has to be revision
+matched with the kernel? Even if that is the case, there is no real
+reason to move modules under selftests other than keeping them in
+one location.
 
-are available in the Git repository at:
+Also I didn't see any changes to README that explains this move and
+that this change now makes this test now depends on kernel only
+interfaces and hence will have to follow modules built outside of
+kernel build.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git alsa-pcm-test-hacks
+>> Does this makes any sense, please?
+>>
+> 
+> Gentle bump.  Shuah, I believe that Marcos will be preparing a v3 based
+> on review comments on the second patch.  We never resolved questions
+> surrounding building modules selftests/ (the first patch) though.
+> 
 
-for you to fetch changes up to 9e96c58e581313bd639fd51f37c8e831d7b4a05c:
+You can send patches again and I would like to hear good reasons other
+than self-containing the sources.
 
-  kselftest/alsa: pcm - Add more coverage by default (2022-12-01 22:46:30 +0000)
-
-----------------------------------------------------------------
-Jaroslav Kysela (1):
-      kselftest/alsa: pcm - move more configuration to configuration files
-
-Mark Brown (6):
-      kselftest/alsa: pcm - Drop recent coverage improvement changes
-      kselftest/alsa: pcm - Always run the default set of tests
-      kselftest/alsa: pcm - skip tests when we fail to set params
-      kselftest/alsa: pcm - Support optional description for tests
-      kselftest/alsa: pcm - Provide descriptions for the default tests
-      kselftest/alsa: pcm - Add more coverage by default
-
- tools/testing/selftests/alsa/Makefile              |   2 +-
- tools/testing/selftests/alsa/alsa-local.h          |   3 +
- tools/testing/selftests/alsa/conf.c                |  26 ++-
- .../alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf       |  43 +++--
- tools/testing/selftests/alsa/pcm-test.c            | 205 ++++++++++++++-------
- tools/testing/selftests/alsa/pcm-test.conf         |  63 +++++++
- 6 files changed, 250 insertions(+), 92 deletions(-)
- create mode 100644 tools/testing/selftests/alsa/pcm-test.conf
-
---flo8lt0x0gxthEpv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOJMOgACgkQJNaLcl1U
-h9COgAf/VyxeMSIg6OpTLZwnfDlNMwYrv7uwosthMbkLJcGYb7Gmb90HXGgySACb
-7GRJqv6MmCT5uurga7oWACYeeNSd61yS60h+2zEEUyuXU+uduAfGaJg9nEY76zee
-riUBcfspalqD4E9lyY40GhONvq8C1sLR/75VfzKTW/0RzKfgldzZh5vLI0Mbh6TH
-5TzFeTS8thOQA8i1ZkSYcksRMlDKE2oknGkmIdXZopVjCEEPKqVhVffhcrZwjsVA
-XgoEBud2oLe4+umBRj/oAtcxq6qICWWyKlq7qunPuUiswXYB4yardZBvJ68O2NZ1
-iyRNXM3K4FAxdDlY53QIw9TNOPpMYA==
-=1Urw
------END PGP SIGNATURE-----
-
---flo8lt0x0gxthEpv--
+thanks,
+-- Shuah
