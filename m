@@ -2,58 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993A663E95C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Dec 2022 06:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8DA63E981
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Dec 2022 06:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiLAFe0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 00:34:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+        id S229586AbiLAFzP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 00:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiLAFeZ (ORCPT
+        with ESMTP id S229499AbiLAFzO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 00:34:25 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A667BA1A13;
-        Wed, 30 Nov 2022 21:34:24 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3cbdd6c00adso6437547b3.11;
-        Wed, 30 Nov 2022 21:34:24 -0800 (PST)
+        Thu, 1 Dec 2022 00:55:14 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EDE9583B;
+        Wed, 30 Nov 2022 21:55:13 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id d128so703478ybf.10;
+        Wed, 30 Nov 2022 21:55:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yPdtGa6X3njfkFNkuvIG1qenpvjnTKe9wgiSnfM3voc=;
-        b=hOfUUbQ3/4SbT8e6Qpm4Vn3+0WdIaFTWwmGp/sRNi7SNJlOd7/a0PFieTj+vkdHwPl
-         Rhuplcg0LaUhKeaEAFqJOUHI+15Rp/2I0n/7tBkMYAVezo6+KA3sPbkgCcX8UKjTZ/9F
-         LHqJhNL0VevOxYaHHU51TUC+B+GlSOq/eoN2glIxSV88rZdHVC6ml0yBqG7HPX2mh0ws
-         FqLClLKK89dexo1DhpvHSsdkN62SdlFPAypw+QP0kpj7KkpK58NSw/0Tgg6AJc8otOjZ
-         z4n4AakDtlNnD2z5BELzKtBb6G0AEZNpw+Z/gxdyWpMj5lZtwEH6zSSlsV9FCZtBN7aZ
-         kMpw==
+        bh=yChL7yIzCEnt3FjAwYUfXFZMG8wFD6K7PQfVtNZ56BI=;
+        b=PUXMai9A1+c/BuiVcJUtuJu9PJnM364XcRVPfOyptdLUg+n9WJw9VO5lv83UPNiPo2
+         cHWvZ560kSWkgIYmiGCfe0GX/SMkBiat9WUsWKUS0+gU+h721HGmSZgjC+DvAC5/rOWD
+         x9XtYOtfbN/PVQrS7EjaBfgz+vHd4KKit+Dw5x+BljTtYoxyJNQy8k6ZmZammc+O/t/G
+         m+JWnWEc2Zf4YE4tsFuJ7EbV5lKnJJ0eqRALiNSX2cQ/HrCK5L94kxhDUaxlBx4AcutZ
+         /REApkFNxZw+Q/3snHFOzNp85T1AW8UO56ZeYArE5gSYcqAY6gwPxNxngESbINkrAFdS
+         3gSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yPdtGa6X3njfkFNkuvIG1qenpvjnTKe9wgiSnfM3voc=;
-        b=wYsmX6ozHz/7XF47rspU6q/FM1o7yMUPrxMHsY6Qok3no3f+PZ3KE6XxuBxVkTvEG8
-         ZC52B/yqb9rcUP0Rry/uveAU1MtPwKpUtlrJhrK1515Lf71/J8QUTMFFLOjBIjt6qv/e
-         D1Z7CXReWW39o1E8L+UA+1nhqZQzx3hgZAmEbjozPBYwEm9EmxMOvcD4o8s76PiKs++l
-         udWn0sHB+AiBN7cyH5ap5nzqROAHLEp/QJHuncKLGNkmoCrF3E4Mtht/aNBpgIN83pBf
-         6KeDgC/6kPbu7HLRBscg5UA4yHzBdbczTIxN+LM0Yv72qF+brWv/V3WxGcEnw1Dqdn0t
-         ylSQ==
-X-Gm-Message-State: ANoB5pmXkX73BqvR+ZQ77AgvsA15MOl5VH1YK+N/4Kjvob5ODTpLRz1C
-        xuSfDBhrdwhuGaY2FitctCfpVu9EjR05wmZyCbs=
-X-Google-Smtp-Source: AA0mqf4XJ1TiPBWbEqXGtFgbBFsJ+YTwfqfKpqMvFH1bXLTWBwga8Je0fYTYTSjsVlwcMEP8IcP41jk6IMyv/5H1fXI=
-X-Received: by 2002:a05:690c:312:b0:377:54e8:337d with SMTP id
- bg18-20020a05690c031200b0037754e8337dmr43352602ywb.117.1669872863399; Wed, 30
- Nov 2022 21:34:23 -0800 (PST)
+        bh=yChL7yIzCEnt3FjAwYUfXFZMG8wFD6K7PQfVtNZ56BI=;
+        b=kO2c5dSYl6tj+0Y9rSUriWBz7KwbHIA6bvVkwrrNmy5gCB0MSuwCuLtlWXLdVAq3Xp
+         qlMdM6VIzapSa/Vq70VmP/7NQIPEZH53KgTXLKzuwsWSvaBv5U1VKa4zaMxpS48FMfkz
+         Zi0CvTyLKM/lyU6lb4BWsTDoyibNiLEUZKRovBzRrN6SmyIdYHmKqJThOjPPpSlk/HnK
+         7J/AUIOajWRsLCC8fQZoV2RgbJz35z3Ls1Y2Et7AxVmPMjEooYguMKWGRo3NCJExKJgH
+         ZRfVJ9YH+myH/Bh4qv0SFsNF7TDUAceG3QW8e5YPfHpvomI82noKMTqiDTXkv3H5Y9OV
+         kKHA==
+X-Gm-Message-State: ANoB5plWyAi6+dwBQEVk0AgBYwB46M33UbnHy6stYksOti/6cPNj4kdW
+        4AahfI7ykDeXg1LrfejzUkNqvz2j2KKyIMhqmb4=
+X-Google-Smtp-Source: AA0mqf6QHww4klkODIMKsBdjtBa8m8YVL/lhkBwWrXCeKJoAAu/2zmYb7QyLPx2e8ttHEgggj0mp1AtBGiTmFB1XuLw=
+X-Received: by 2002:a05:6902:b1f:b0:6bd:b8f1:1495 with SMTP id
+ ch31-20020a0569020b1f00b006bdb8f11495mr52365332ybb.160.1669874112445; Wed, 30
+ Nov 2022 21:55:12 -0800 (PST)
 MIME-Version: 1.0
 References: <20221129132018.985887-1-eyal.birger@gmail.com>
- <20221129132018.985887-4-eyal.birger@gmail.com> <ba1a8717-7d9a-9a78-d80a-ad95bb902085@linux.dev>
-In-Reply-To: <ba1a8717-7d9a-9a78-d80a-ad95bb902085@linux.dev>
+ <20221129132018.985887-3-eyal.birger@gmail.com> <b3306950-bea9-e914-0491-54048d6d55e4@linux.dev>
+In-Reply-To: <b3306950-bea9-e914-0491-54048d6d55e4@linux.dev>
 From:   Eyal Birger <eyal.birger@gmail.com>
-Date:   Thu, 1 Dec 2022 07:34:12 +0200
-Message-ID: <CAHsH6Gvb94O6ir-emzop1FoDsbHh7QNVFrtDuohzvXpVe0S4Vg@mail.gmail.com>
-Subject: Re: [PATCH ipsec-next,v2 3/3] selftests/bpf: add xfrm_info tests
+Date:   Thu, 1 Dec 2022 07:55:01 +0200
+Message-ID: <CAHsH6Gs4OajjoXauDw9zERx=+tUqpbpnP_8SxzmKKDQ3r8xmJA@mail.gmail.com>
+Subject: Re: [PATCH ipsec-next,v2 2/3] xfrm: interface: Add unstable helpers
+ for setting/getting XFRM metadata from TC-BPF
 To:     Martin KaFai Lau <martin.lau@linux.dev>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, davem@davemloft.net,
@@ -77,302 +78,140 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi Martin,
 
-On Wed, Nov 30, 2022 at 8:41 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+On Wed, Nov 30, 2022 at 8:15 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
 >
 > On 11/29/22 5:20 AM, Eyal Birger wrote:
-> > Test the xfrm_info kfunc helpers.
-> >
-> > Note: the tests require support for xfrmi "external" mode in iproute2.
-> >
-> > The test setup creates three name spaces - NS0, NS1, NS2.
-> >
-> > XFRM tunnels are setup between NS0 and the two other NSs.
-> >
-> > The kfunc helpers are used to steer traffic from NS0 to the other
-> > NSs based on a userspace populated map and validate that the
-> > return traffic had arrived from the desired NS.
-> >
-> > Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
-> >
-> > ---
-> >
-> > v2:
-> >    - use an lwt route in NS1 for testing that flow as well
-> >    - indendation fix
-> > ---
-> >   tools/testing/selftests/bpf/config            |   2 +
-> >   .../selftests/bpf/prog_tests/test_xfrm_info.c | 343 ++++++++++++++++++
-> >   .../selftests/bpf/progs/test_xfrm_info_kern.c |  74 ++++
-> >   3 files changed, 419 insertions(+)
-> >   create mode 100644 tools/testing/selftests/bpf/prog_tests/test_xfrm_info.c
-> >   create mode 100644 tools/testing/selftests/bpf/progs/test_xfrm_info_kern.c
-> >
-> > diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-> > index 9213565c0311..9f39943d6ebd 100644
-> > --- a/tools/testing/selftests/bpf/config
-> > +++ b/tools/testing/selftests/bpf/config
-> > @@ -20,6 +20,7 @@ CONFIG_IKCONFIG_PROC=y
-> >   CONFIG_IMA=y
-> >   CONFIG_IMA_READ_POLICY=y
-> >   CONFIG_IMA_WRITE_POLICY=y
-> > +CONFIG_INET_ESP=y
-> >   CONFIG_IP_NF_FILTER=y
-> >   CONFIG_IP_NF_RAW=y
-> >   CONFIG_IP_NF_TARGET_SYNPROXY=y
-> > @@ -71,3 +72,4 @@ CONFIG_TEST_BPF=y
-> >   CONFIG_USERFAULTFD=y
-> >   CONFIG_VXLAN=y
-> >   CONFIG_XDP_SOCKETS=y
-> > +CONFIG_XFRM_INTERFACE=y
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/test_xfrm_info.c b/tools/testing/selftests/bpf/prog_tests/test_xfrm_info.c
+> > diff --git a/net/xfrm/xfrm_interface_bpf.c b/net/xfrm/xfrm_interface_bpf.c
 > > new file mode 100644
-> > index 000000000000..3aef72540934
+> > index 000000000000..757e15857dbf
 > > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/test_xfrm_info.c
->
-> Nit. Just xfrm_info.c
-
-Ok.
-
->
-> > @@ -0,0 +1,343 @@
-> > +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> > +
-> > +/*
-> > + * Topology:
-> > + * ---------
-> > + *   NS0 namespace         |   NS1 namespace        | NS2 namespace
-> > + *                         |                        |
-> > + *   +---------------+     |   +---------------+    |
-> > + *   |    ipsec0     |---------|    ipsec0     |    |
-> > + *   | 192.168.1.100 |     |   | 192.168.1.200 |    |
-> > + *   | if_id: bpf    |     |   +---------------+    |
-> > + *   +---------------+     |                        |
-> > + *           |             |                        |   +---------------+
-> > + *           |             |                        |   |    ipsec0     |
-> > + *           \------------------------------------------| 192.168.1.200 |
-> > + *                         |                        |   +---------------+
-> > + *                         |                        |
-> > + *                         |                        | (overlay network)
-> > + *      ------------------------------------------------------
-> > + *                         |                        | (underlay network)
-> > + *   +--------------+      |   +--------------+     |
-> > + *   |    veth01    |----------|    veth10    |     |
-> > + *   | 172.16.1.100 |      |   | 172.16.1.200 |     |
-> > + *   ---------------+      |   +--------------+     |
-> > + *                         |                        |
-> > + *   +--------------+      |                        |   +--------------+
-> > + *   |    veth02    |-----------------------------------|    veth20    |
-> > + *   | 172.16.2.100 |      |                        |   | 172.16.2.200 |
-> > + *   +--------------+      |                        |   +--------------+
+> > +++ b/net/xfrm/xfrm_interface_bpf.c
+> > @@ -0,0 +1,100 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/* Unstable XFRM Helpers for TC-BPF hook
 > > + *
-> > + *
-[...]
+> > + * These are called from SCHED_CLS BPF programs. Note that it is
+> > + * allowed to break compatibility for these functions since the interface they
+> > + * are exposed through to BPF programs is explicitly unstable.
+> > + */
 > > +
-> > +#define RUN_TEST(name)                                                       \
-> > +     ({                                                              \
-> > +             if (test__start_subtest(#name)) {                       \
-> > +                     test_ ## name();                                \
-> > +             }                                                       \
-> > +     })
+> > +#include <linux/bpf.h>
+> > +#include <linux/btf_ids.h>
 > > +
-> > +static void *test_xfrm_info_run_tests(void *arg)
+> > +#include <net/dst_metadata.h>
+> > +#include <net/xfrm.h>
+> > +
+> > +struct bpf_xfrm_info {
+> No need to introduce a bpf variant of the "struct xfrm_md_info" (more on this
+> later).
+>
+> > +     u32 if_id;
+> > +     int link;
+> > +};
+> > +
+> > +static struct metadata_dst __percpu *xfrm_md_dst;
+> > +__diag_push();
+> > +__diag_ignore_all("-Wmissing-prototypes",
+> > +               "Global functions as their definitions will be in xfrm_interface BTF");
+> > +
+> > +__used noinline
+> > +int bpf_skb_get_xfrm_info(struct __sk_buff *skb_ctx, struct bpf_xfrm_info *to)
+>
+> This kfunc is not needed.  It only reads the skb->_skb_refdst.  The new kfunc
+> bpf_rdonly_cast() can be used.  Take a look at the bpf_rdonly_cast() usages in
+> the selftests/bpf/progs/type_cast.c.  It was in bpf-next only but should also be
+> in net-next now.
+
+I'm somewhat concerned with this approach.
+Indeed it would remove the kfunc, and the API is declared "unstable", but
+still the implementation as dst isn't relevant to the user and would make
+the programs less readable.
+
+Also note that the helper can be also used as it is to get the xfrm info at
+egress from an lwt route (which stores the xfrm_info in the dst lwstate).
+
+>
 > > +{
-> > +     cleanup();
+> > +     struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+> > +     struct xfrm_md_info *info;
 > > +
-> > +     config_underlay();
-> > +     config_overlay();
->
-> config_*() is returning ok/err but no error checking here.  Does it make sense
-> to continue if the config_*() failed?
-
-I'll assert their success.
-
->
+> > +     memset(to, 0, sizeof(*to));
 > > +
-> > +     RUN_TEST(xfrm_info);
->
-> nit.  Remove this macro indirection.  There is only one test.
-
-Ok. I was considering other possible tests in the future, but this can
-be added then.
-
->
+> > +     info = skb_xfrm_md_info(skb);
+> > +     if (!info)
+> > +             return -EINVAL;
 > > +
-> > +     cleanup();
-> > +
-> > +     return NULL;
-> > +}
-> > +
-> > +static int probe_iproute2(void)
-> > +{
-> > +     if (SYS_NOFAIL("ip link add type xfrm help 2>&1 | "
-> > +                    "grep external > /dev/null")) {
-> > +             fprintf(stdout, "%s:SKIP: iproute2 with xfrm external support needed for this test\n", __func__);
->
-> Unfortunately, the BPF CI iproute2 does not have this support also :(
-> I am worry it will just stay SKIP for some time and rot.  Can you try to
-> directly use netlink here?
-
-Yeah, I wasn't sure if adding a libmnl (or alternative) dependency
-was ok here, and also didn't want to copy all that nl logic here.
-So I figured it would get there eventually.
-
-I noticed libmnl is used by the nf tests, so maybe its inclusion isn't too
-bad. Unless there's a better approach.
-
-As you noted, I should add this for the "external" support. However, I don't
-think adding the LWT route directly using nl is a good idea here so I'll
-make the NS1 use a regular xfrmi.
->
-> https://github.com/kernel-patches/bpf/actions/runs/3578467213/jobs/6019370754#step:6:6395
->
-> > +             return -1;
-> > +     }
+> > +     to->if_id = info->if_id;
+> > +     to->link = info->link;
 > > +     return 0;
 > > +}
 > > +
-> > +void serial_test_xfrm_info(void)
+> > +__used noinline
+> > +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
+> > +                       const struct bpf_xfrm_info *from)
 >
-> Remove "serial_".  New test must be able to run in parallel ("./test_progs -j").
+> Directly use "const struct xfrm_md_info *from" instead.  This kfunc can check
+> from->dst_orig != NULL and return -EINVAL.  It will then have a consistent API
+> with the bpf_rdonly_cast() mentioned above.
+
+See above.
+
+>
+> > +{
+> > +     struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+> > +     struct metadata_dst *md_dst;
+> > +     struct xfrm_md_info *info;
+> > +
+> > +     if (unlikely(skb_metadata_dst(skb)))
+> > +             return -EINVAL;
+> > +
+> > +     md_dst = this_cpu_ptr(xfrm_md_dst);
+> > +
+> > +     info = &md_dst->u.xfrm_info;
+> > +     memset(info, 0, sizeof(*info));
+>
+> Unnecessary memset here.  Everything should have been initialized below.
+> bpf_skb_set_tunnel_key() needs memset but not here.
 
 Ok.
 
 >
+> > +
+> > +     info->if_id = from->if_id;
+> > +     info->link = from->link;
+> > +     skb_dst_force(skb);
+> > +     info->dst_orig = skb_dst(skb);
+> > +
+> > +     dst_hold((struct dst_entry *)md_dst);
+> > +     skb_dst_set(skb, (struct dst_entry *)md_dst);
+> > +     return 0;
+> > +}
+> > +
+> > +__diag_pop()
+> > +
+> > +BTF_SET8_START(xfrm_ifc_kfunc_set)
+> > +BTF_ID_FLAGS(func, bpf_skb_get_xfrm_info)
+> > +BTF_ID_FLAGS(func, bpf_skb_set_xfrm_info)
+> > +BTF_SET8_END(xfrm_ifc_kfunc_set)
+> > +
+> > +static const struct btf_kfunc_id_set xfrm_interface_kfunc_set = {
+> > +     .owner = THIS_MODULE,
+> > +     .set   = &xfrm_ifc_kfunc_set,
+> > +};
+> > +
+> > +int __init register_xfrm_interface_bpf(void)
 > > +{
-> > +     pthread_t test_thread;
 > > +     int err;
 > > +
-> > +     if (probe_iproute2()) {
-> > +             test__skip();
-> > +             return;
-> > +     }
-> > +
-> > +     /* Run the tests in their own thread to isolate the namespace changes
-> > +      * so they do not affect the environment of other tests.
-> > +      * (specifically needed because of unshare(CLONE_NEWNS) in open_netns())
-> > +      */
+> > +     xfrm_md_dst = metadata_dst_alloc_percpu(0, METADATA_XFRM,
+> > +                                             GFP_KERNEL);
 >
-> I think this comment is mostly inherited from other tests (eg. tc_redirect.c)
-> but the pthread dance is actually unnecessary.  The test_progs.c will restore
-> the original netns before running the next test.  I am abort to remove this from
-> the tc_redirect.c also.  Please also avoid this pthread create here.
+> May be DEFINE_PER_CPU() instead?
 
-Ok. Indeed was inherited.
-
->
-> > +     err = pthread_create(&test_thread, NULL, &test_xfrm_info_run_tests, NULL);
-> > +     if (ASSERT_OK(err, "pthread_create"))
-> > +             ASSERT_OK(pthread_join(test_thread, NULL), "pthread_join");
-> > +}
-> > diff --git a/tools/testing/selftests/bpf/progs/test_xfrm_info_kern.c b/tools/testing/selftests/bpf/progs/test_xfrm_info_kern.c
-> > new file mode 100644
-> > index 000000000000..98991a83c1e9
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/test_xfrm_info_kern.c
->
->
-> Nit. Same here. Just xfrm_info.c.
-
-Ok.
-
->
-> > @@ -0,0 +1,74 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +#include <linux/bpf.h>
-> > +#include <linux/pkt_cls.h>
-> > +#include <bpf/bpf_helpers.h>
-> > +
-> > +#define log_err(__ret) bpf_printk("ERROR line:%d ret:%d\n", __LINE__, __ret)
->
-> Please try not to use unnecessary bpf_printk().  BPF CI is not capturing it also.
-
-Ok.
-
->
-> > +
-> > +struct {
-> > +     __uint(type, BPF_MAP_TYPE_ARRAY);
-> > +     __uint(max_entries, 2);
-> > +     __type(key, __u32);
-> > +     __type(value, __u32);
-> > +} dst_if_id_map SEC(".maps");
->
-> It is easier to use global variables instead of a map.
-
-Would these be available for read/write from the test application (as the
-map is currently populated/read from userspace)?
-
->
-> > +
-> > +struct bpf_xfrm_info {
-> > +     __u32 if_id;
-> > +     int link;
-> > +};
->
-> This needs __attribute__((preserve_access_index) for CO-RE.
-> It is easier to just include vmlinux.h to get the struct xfrm_md_info { ... }.
-
-Ok.
-
->
-> > +
-> > +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
-> > +                       const struct bpf_xfrm_info *from) __ksym;
-> > +int bpf_skb_get_xfrm_info(struct __sk_buff *skb_ctx,
-> > +                       struct bpf_xfrm_info *to) __ksym;
-> > +
-> > +SEC("tc")
-> > +int set_xfrm_info(struct __sk_buff *skb)
-> > +{
-> > +     struct bpf_xfrm_info info = {};
-> > +     __u32 *if_id = NULL;
-> > +     __u32 index = 0;
-> > +     int ret = -1;
-> > +
-> > +     if_id = bpf_map_lookup_elem(&dst_if_id_map, &index);
-> > +     if (!if_id) {
-> > +             log_err(ret);
-> > +             return TC_ACT_SHOT;
-> > +     }
-> > +
-> > +     info.if_id = *if_id;
-> > +     ret = bpf_skb_set_xfrm_info(skb, &info);
-> > +     if (ret < 0) {
-> > +             log_err(ret);
-> > +             return TC_ACT_SHOT;
-> > +     }
-> > +
-> > +     return TC_ACT_UNSPEC;
-> > +}
-> > +
-> > +SEC("tc")
-> > +int get_xfrm_info(struct __sk_buff *skb)
-> > +{
-> > +     struct bpf_xfrm_info info = {};
-> > +     __u32 *if_id = NULL;
-> > +     __u32 index = 1;
-> > +     int ret = -1;
-> > +
-> > +     if_id = bpf_map_lookup_elem(&dst_if_id_map, &index);
-> > +     if (!if_id) {
-> > +             log_err(ret);
-> > +             return TC_ACT_SHOT;
-> > +     }
-> > +
-> > +     ret = bpf_skb_get_xfrm_info(skb, &info);
-> > +     if (ret < 0) {
-> > +             log_err(ret);
-> > +             return TC_ACT_SHOT;
-> > +     }
-> > +
-> > +     *if_id = info.if_id;
-> > +
-> > +     return TC_ACT_UNSPEC;
-> > +}
-> > +
-> > +char _license[] SEC("license") = "GPL";
->
+Are you suggesting duplicating the dst init/cleanup logic here?
+Personally given that this happens once at module load, I think it's best to
+use the existing infrastructure, but am willing to add this here if you think
+it's better.
 
 Thanks for the review!
 Eyal.
