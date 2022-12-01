@@ -2,71 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB55C63F96C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Dec 2022 21:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC44863F99D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Dec 2022 22:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiLAUtD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 15:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S229924AbiLAVOg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 16:14:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiLAUsy (ORCPT
+        with ESMTP id S229629AbiLAVOf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 15:48:54 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29092FC15
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 12:48:52 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so3573367fac.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Dec 2022 12:48:52 -0800 (PST)
+        Thu, 1 Dec 2022 16:14:35 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84E6BF66F;
+        Thu,  1 Dec 2022 13:14:34 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso3831097wmb.0;
+        Thu, 01 Dec 2022 13:14:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yAseu4i3PcK2VyBCcm/JBiQAg0yuqET9kyP4xdihRV4=;
-        b=PTg9SqFNdtMsAH2OhbwpU59PZRJa1wLEtKxJKx+pJXfXWlggAHk03vJ46gzndyoUxe
-         1HlEYRvrk74d5BdVyRHcFBk7+J8VMi+S9LR5EfGnC0eqWW+PDTsUUg+uqDUDyw1c6AhE
-         u+hh8pl3PBkcL6TyGGbBFzvo9V7JrHsjlpDcbOxOTOSfdRXhgB/UN1Kn9GNFT8c104jb
-         WhLfRQBw2HtMUYnyRGtOmAvqaf6F1Itmv86fd0esx0orKVIuWZ3giECf3eVLYeJ0oVll
-         CMSLGPGXLdLjM1aLXAz1vMS5cP7lZvevtHypWNSzAN8k+1ZLdhkbemdOQ1C4SBuhn3IF
-         y1qQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=arGJugZXKuegCy+b2Wy748udH7dyCPYLgoQysJN9/+E=;
+        b=G8I3r0UFOmARwoPh8BwqG3XgTzilTOCk8MXuobDoiBD7EaZA2kag7KurO9gpBh9/xP
+         uSR1EztpspRtCkwrbNRGBRNBSR47ze8b1l0+lgwr8w2HbULTK6yueiUhMAzkwI4xBTBe
+         s4XA8ReFVa+PNNG3MK4uA2X2RrY+TIafn36iZFZ2D7Kw1UjZxXz39/ejXAXm9Eewk6gl
+         cht1EbbMZH484vH70ma10+T0qeW4taPBiFUr5h8IAk5KW6uh6ck9DhkBegEDvl3HRVq4
+         qFyESQ1nq11PvnjcSGtxNyM25auaOIqTirxYfV+qAzcut3QIaciMaooW8bRjKirPDzZh
+         78Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yAseu4i3PcK2VyBCcm/JBiQAg0yuqET9kyP4xdihRV4=;
-        b=Ne0aLRP8/cq+HSHTsPLo3KLZs+NPVindRhlJiSM2QMDC+YUlnIq5Ei1aCCdPmHTLjX
-         d/K1+pjke6PxyCmqe9uHvpQxyTXn9tWqQJrevCFUyQ3hi7M9Zw6/XAUrZbLDh/IvZ8d7
-         s8esggythixYr7U7oxwld4DUKvBw5/pL0/zTg11NI+wEj2TbyQ5GY/AZvgRhSEoN659i
-         Duf5cUw/BIJhsRsaxF8+9xK40aEtZ4vm0e9xHUc7zxbZQd86B+2uegZHKX+EcA4OaJNg
-         DAOQ4m+T/gbmophhNL3KWR08aJZ9lzs90rOJN0J9P6hh2H1hprr1QPEXxf3POCplJxl8
-         +uqw==
-X-Gm-Message-State: ANoB5pmFHO8YV9Jq0EBtj1V659soN1TUMvbr3Pa/hFORoOiHtSoKk5ic
-        lRReioeTm7GALMu+qGUVK+5fg5zrGY+SLfMwL1lIEw==
-X-Google-Smtp-Source: AA0mqf5F5CFUVn8vFbk5Vo6eWOs300tozGLZ6ngN50eurTi2822RjfxMckGaY/e2Nxhe1G79mkD7QL/QNiKWX7hqJmU=
-X-Received: by 2002:a05:6870:6707:b0:141:aba2:f9c4 with SMTP id
- gb7-20020a056870670700b00141aba2f9c4mr28592971oab.273.1669927732177; Thu, 01
- Dec 2022 12:48:52 -0800 (PST)
+        bh=arGJugZXKuegCy+b2Wy748udH7dyCPYLgoQysJN9/+E=;
+        b=lXRlXNXbthGXFnwqrP3CJPcA1L7nmQ5uZJhqgzedycNzaySjX5JvVYjdoNthZZtPxX
+         e/LFtV6hTMrj/c84AL/jE5TYWVqKQKrnAV6VtFkL6+gE3wYDlajrZyyjJQWkmcW3I7+H
+         NzRH9K36ojMZm5LqBq8aDGjjDfbsqohymeMRbmJwMdX1VTWt1XcVvKWFpAXH/eG35f9A
+         3MktCIPBBsWfFYoQtNTF3P70WZJKxduMv9OEtZCsrplKBTg2sH4JRXtJxsaHe5fJ/Q3x
+         vgZtSE5CjPHkp+9/IGLbyZor0AMY9LATFQ89VteFdCBPV5K7irj2C0yhoa1m2AFmz/oc
+         H2ew==
+X-Gm-Message-State: ANoB5pk647nZrZ9D4qKJzxx2xRrmvKVOY7DyjLRVCb1YbWtKXFjlvaBN
+        ScD1nMxsOmd9IFXsdq3NmRE=
+X-Google-Smtp-Source: AA0mqf7xIdmNr/IVA6wau15GjaiOh2J7K5KuHpMOHdbdrU0DZ6nCVr3UT/wYVLP1hqD2ohBVk4dp6Q==
+X-Received: by 2002:a05:600c:1e89:b0:3cf:774b:ce6f with SMTP id be9-20020a05600c1e8900b003cf774bce6fmr6367406wmb.133.1669929272979;
+        Thu, 01 Dec 2022 13:14:32 -0800 (PST)
+Received: from localhost.localdomain ([213.57.189.88])
+        by smtp.gmail.com with ESMTPSA id m35-20020a05600c3b2300b003b50428cf66sm7508708wms.33.2022.12.01.13.14.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 13:14:32 -0800 (PST)
+From:   Eyal Birger <eyal.birger@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, steffen.klassert@secunet.com,
+        herbert@gondor.apana.org.au, andrii@kernel.org,
+        daniel@iogearbox.net, nicolas.dichtel@6wind.com,
+        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+        liuhangbin@gmail.com, lixiaoyan@google.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Eyal Birger <eyal.birger@gmail.com>
+Subject: [PATCH bpf-next,v3 0/4] xfrm: interface: Add unstable helpers for XFRM metadata
+Date:   Thu,  1 Dec 2022 23:14:21 +0200
+Message-Id: <20221201211425.1528197-1-eyal.birger@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221129094732.306449-1-davidgow@google.com>
-In-Reply-To: <20221129094732.306449-1-davidgow@google.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Thu, 1 Dec 2022 15:48:39 -0500
-Message-ID: <CA+GJov7tG5s1YbvCvd9yxtkCN-2jns8GcgdyofuCf-rGYqAW-w@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: Fix "How Do I Use This" / "Next
- Steps" sections
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Latypov <dlatypov@google.com>,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,95 +78,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 4:47 AM David Gow <davidgow@google.com> wrote:
->
-> The 'index' and 'start' pages end with very similar "How Do I Use This"
-> / "Next Steps" sections respectively, which link to the other
-> documentation pages. This wasn't updated when the tips.rst page was
-> removed.
->
-> Remove the reference to tips.rst, as well as tidy up the descriptions on
-> all of the links (especially given that sphinx gives the page titles
-> anyway.
->
-> Fixes: 4399c737a97d ("Documentation: kunit: Remove redundant 'tips.rst' page")
-> Signed-off-by: David Gow <davidgow@google.com>
+This patch series adds xfrm metadata helpers using the unstable kfunc
+call interface for the TC-BPF hooks.
 
-This all looks good to me and runs smoothly. I personally like to have
-these links at the bottom of the page and think the new descriptions
-are good. I commented on a few of them below.
+This allows steering traffic towards different IPsec connections based
+on logic implemented in bpf programs.
 
-Reviewed-by: Rae Moar <rmoar@google.com>
+The helpers are integrated into the xfrm_interface module. For this
+purpose the main functionality of this module is moved to
+xfrm_interface_core.c.
 
-> ---
->  Documentation/dev-tools/kunit/index.rst | 18 +++++++-----------
->  Documentation/dev-tools/kunit/start.rst | 16 ++++++----------
->  2 files changed, 13 insertions(+), 21 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
-> index d5629817cd72..beec6f847ef4 100644
-> --- a/Documentation/dev-tools/kunit/index.rst
-> +++ b/Documentation/dev-tools/kunit/index.rst
-> @@ -99,14 +99,10 @@ Read also :ref:`kinds-of-tests`.
->  How do I use it?
->  ================
->
-> -*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
-> -*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
-> -*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
-> -*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
-> -*   Documentation/dev-tools/kunit/usage.rst - write tests.
-> -*   Documentation/dev-tools/kunit/tips.rst - best practices with
-> -    examples.
-> -*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
-> -    used for testing.
-> -*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
-> -    answers.
-> +*   Documentation/dev-tools/kunit/start.rst - for new KUnit users
-> +*   Documentation/dev-tools/kunit/architecture.rst - how KUnit is put together
+---
 
-I might slightly prefer Sadiya's version of this description: "get to
-know KUnit's design." But I would be happy with either description.
+Series changes in v3:
+  - tag bpf-next tree instead of ipsec-next
+  - add IFLA_XFRM_COLLECT_METADATA sync patch
 
-> +*   Documentation/dev-tools/kunit/run_wrapper.rst - run tests via kunit.py
-> +*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit.py
-> +*   Documentation/dev-tools/kunit/usage.rst - write tests
+Eyal Birger (4):
+  xfrm: interface: rename xfrm_interface.c to xfrm_interface_core.c
+  xfrm: interface: Add unstable helpers for setting/getting XFRM
+    metadata from TC-BPF
+  tools: add IFLA_XFRM_COLLECT_METADATA to uapi/linux/if_link.h
+  selftests/bpf: add xfrm_info tests
 
-I might slightly prefer "write KUnit tests" instead because with the
-current description the line looks like:
+ include/net/dst_metadata.h                    |   1 +
+ include/net/xfrm.h                            |  20 +
+ net/core/dst.c                                |   8 +-
+ net/xfrm/Makefile                             |   8 +
+ net/xfrm/xfrm_interface_bpf.c                 |  99 +++++
+ ...xfrm_interface.c => xfrm_interface_core.c} |  15 +
+ tools/include/uapi/linux/if_link.h            |   1 +
+ tools/testing/selftests/bpf/config            |   2 +
+ .../selftests/bpf/prog_tests/xfrm_info.c      | 365 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/xfrm_info.c |  40 ++
+ 10 files changed, 557 insertions(+), 2 deletions(-)
+ create mode 100644 net/xfrm/xfrm_interface_bpf.c
+ rename net/xfrm/{xfrm_interface.c => xfrm_interface_core.c} (98%)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xfrm_info.c
+ create mode 100644 tools/testing/selftests/bpf/progs/xfrm_info.c
 
-Writing Tests - write tests
+-- 
+2.34.1
 
-This seems a little repetitive, so "write KUnit tests" might be
-slightly better. But this description is accurate and I would be fine
-with it.
-
-> +*   Documentation/dev-tools/kunit/api/index.rst - API reference
-> +*   Documentation/dev-tools/kunit/faq.rst - common questions and answers
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index f4f504f1fb15..58c176348885 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -294,13 +294,9 @@ Congrats! You just wrote your first KUnit test.
->  Next Steps
->  ==========
->
-> -*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
-> -*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
-> -*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
-> -*   Documentation/dev-tools/kunit/usage.rst - write tests.
-> -*   Documentation/dev-tools/kunit/tips.rst - best practices with
-> -    examples.
-> -*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
-> -    used for testing.
-> -*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
-> -    answers.
-> +*   Documentation/dev-tools/kunit/architecture.rst - how KUnit is put together
-> +*   Documentation/dev-tools/kunit/run_wrapper.rst - run tests via kunit.py
-> +*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit.py
-> +*   Documentation/dev-tools/kunit/usage.rst - write tests
-> +*   Documentation/dev-tools/kunit/api/index.rst - API reference
-> +*   Documentation/dev-tools/kunit/faq.rst - common questions and answers
-> --
-> 2.38.1.584.g0f3c55d4c2-goog
->
