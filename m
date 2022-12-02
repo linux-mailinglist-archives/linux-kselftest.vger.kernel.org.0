@@ -2,44 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E7C640123
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 08:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E0F640157
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 08:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiLBHka (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Dec 2022 02:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        id S232533AbiLBHxK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Dec 2022 02:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiLBHk3 (ORCPT
+        with ESMTP id S232632AbiLBHwV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Dec 2022 02:40:29 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D50AD98E;
-        Thu,  1 Dec 2022 23:40:28 -0800 (PST)
-Message-ID: <5cac050a-d67b-587f-411e-946117ba8324@linux.dev>
-Date:   Thu, 1 Dec 2022 23:40:20 -0800
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next,v3 2/4] xfrm: interface: Add unstable helpers for
- setting/getting XFRM metadata from TC-BPF
-Content-Language: en-US
-To:     Eyal Birger <eyal.birger@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        andrii@kernel.org, daniel@iogearbox.net, nicolas.dichtel@6wind.com,
-        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, shuah@kernel.org, liuhangbin@gmail.com,
-        lixiaoyan@google.com
-References: <20221201211425.1528197-1-eyal.birger@gmail.com>
- <20221201211425.1528197-3-eyal.birger@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20221201211425.1528197-3-eyal.birger@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Fri, 2 Dec 2022 02:52:21 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F977B5D88
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 23:52:04 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C27E01FD83;
+        Fri,  2 Dec 2022 07:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669967522; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3agc/ogR7a15Jo/lFM0go+I/GeFV8zWnhBZvASG5u/U=;
+        b=jJvTDR1+HbejYxPdEvPQ0LQ4S54oasgFSXjRU775qe2eD++PtFa+kCJCH/ZJBEvtGKg362
+        UXJsE41YvgSkSVUMD8lyeprY3+x3vXfxDtcw3dKsWZSp7w7lI4hwGICfru/pZYepy80WXd
+        wyS5gAzn81NF5hKyQwC8rsYunrDtfGY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669967522;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3agc/ogR7a15Jo/lFM0go+I/GeFV8zWnhBZvASG5u/U=;
+        b=L6Blb3L1w2aq/16D6qG8d3+8X4AcmfxkXcrtnJnquGE603BUIk6G2P4loFJ2TE5E1Otper
+        t7lqvgzRw+MV94Dw==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 9C7E713644;
+        Fri,  2 Dec 2022 07:52:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id D1JRJaKuiWMdEwAAGKfGzw
+        (envelope-from <tiwai@suse.de>); Fri, 02 Dec 2022 07:52:02 +0000
+Date:   Fri, 02 Dec 2022 08:52:03 +0100
+Message-ID: <87y1rqkzto.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Shuah Khan <shuah@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 0/6] kselftest/alsa: pcm-test improvements
+In-Reply-To: <Y4kOvNi5I8/GK1yU@sirena.org.uk>
+References: <20221130000608.519574-1-broonie@kernel.org>
+        <a55212fc-a676-2335-b861-94ba8d10f207@perex.cz>
+        <87359zlz9t.wl-tiwai@suse.de>
+        <Y4kOvNi5I8/GK1yU@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,25 +71,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/1/22 1:14 PM, Eyal Birger wrote:
-> +int bpf_skb_get_xfrm_info(struct __sk_buff *skb_ctx, struct bpf_xfrm_info *to)
-> +{
-> +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> +	struct xfrm_md_info *info;
-> +
-> +	memset(to, 0, sizeof(*to));
+On Thu, 01 Dec 2022 21:29:48 +0100,
+Mark Brown wrote:
+> 
+> On Thu, Dec 01, 2022 at 08:06:22PM +0100, Takashi Iwai wrote:
+> > On Thu, 01 Dec 2022 18:42:22 +0100,
+> > Jaroslav Kysela wrote:
+> > > 
+> > > Let me know, if I can stack your changes on top, or perhaps, you may
+> > > be willing to adapt them.
+> > 
+> > As Mark has already sent a v2 series, I applied his v2 at first.
+> > Could you rebase and resubmit on top of my for-next branch?
+> 
+> Oh, this is getting a little confusing - I'd just picked Jaroslav's
+> patch into my tree and was in the middle redoing my ideas on top of his
+> code!  I might have something more later this evening...  I think we can
+> converge here, let me continue taking a look.
 
-This zero-ing is also not needed.  verifier ensures "to" is initialized before 
-calling this kfunc.
-
-> +
-> +	info = skb_xfrm_md_info(skb);
-> +	if (!info)
-> +		return -EINVAL;
-> +
-> +	to->if_id = info->if_id;
-> +	to->link = info->link;
-> +	return 0;
-> +}
+Ah then it was my misunderstanding, and everything should be fine now
+;)  Thanks!
 
 
+Takashi
