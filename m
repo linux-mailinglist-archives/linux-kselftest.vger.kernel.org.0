@@ -2,66 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DC263FD42
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 01:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F3663FD58
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 01:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbiLBAsX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 19:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
+        id S231626AbiLBAxL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 19:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbiLBAsX (ORCPT
+        with ESMTP id S230309AbiLBAxK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 19:48:23 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988AB32042
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 16:48:22 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id h193so3094340pgc.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Dec 2022 16:48:22 -0800 (PST)
+        Thu, 1 Dec 2022 19:53:10 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9CC8D64E
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 16:53:09 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so6843636pjh.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Dec 2022 16:53:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1aoDrl7lkSS9ga8y4LgwxWtNaGp55cRlozgPoS8NzPE=;
-        b=aSMiIJlx2ddMEuoJL1IRIDeYp8aNqLByh5cq+owsK9LDDfg8IXv1mXIA8UeiMDBDCK
-         +CLUkUp8qO+xMRN2+uszHnOKrGSObk174GCF3JtR0Wgagc/mk58OpRykjBbCf+Vd4V4q
-         q8cAA3zxTndZ1/G+dNx02YJVgUQTwy3VTrr+w=
+        bh=XyBUNma2/pYbDUwd0AEpCfAW8UmvTyVIMQbvVCIhkjM=;
+        b=bVgUeTsrg8bzGvV93UtCv9XNcvszgWb7QAtIdDr7Me2tepgdsPs2kw+4W0Ika1rn3X
+         dXkgt53D7jkEl0t6LV+LV8A6bjJdYd4q9LxE3xMmUp/ElJdVnmMkT+HbVKl+BcJQrYBP
+         22wTub10PuwV0PKzdO/bFm+2lWgIWrEIiH/fQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1aoDrl7lkSS9ga8y4LgwxWtNaGp55cRlozgPoS8NzPE=;
-        b=5702CStae8SuzDM+wA9/eLcLHXk/dgaUNi36bLjEzH4bjzdUXiNEul7sc1rpxVOlAF
-         jjdap7Fu8CIyFW40kXnUO7GHg8emJ8unQESaOyjHvdXyVbcoKNudMXO9kKu17o87nHsi
-         onjvkAzaFJ+nrmlFJ/rIz0JUcbwCWcjW3J0Fmw9oXHtfp6P/xXmJrvxT5YgxwUI1MCSH
-         V06jN9tUG3getOqvscinjtnKZhKcTnsJ1kzhTDQIY4SV1YcF0LMTvcXCi2OQy5DSKkf3
-         kXulHYes6lEstCKN1xVdlDASVDzZdBQe0tU8BT83918gx3cbzlWKYbCvLwBsM9HdbG9q
-         QHfA==
-X-Gm-Message-State: ANoB5pnOCgwUsaPQrNXN9jFTesr8pSykzDvoxhwLfQHgXiPrwLOzYj1I
-        48OfOKvMMtFqC32PU0cRD9WtbA==
-X-Google-Smtp-Source: AA0mqf6+F8pTy62QAx1b77iaWIFnsSLNBkoekEFWvLL1SzADQ+WnbHmbklWGt6I7xYLGknFEMi6EUw==
-X-Received: by 2002:a63:f048:0:b0:477:5e23:f9d1 with SMTP id s8-20020a63f048000000b004775e23f9d1mr41864006pgj.268.1669942101973;
-        Thu, 01 Dec 2022 16:48:21 -0800 (PST)
+        bh=XyBUNma2/pYbDUwd0AEpCfAW8UmvTyVIMQbvVCIhkjM=;
+        b=czbYAGGIXq5sXrUPS2pGwm389b2W7jEqeQdBpe5I+g86r5EoSnREfdg40N55TIeZKV
+         WSIAl52A+Fve6qRpNH1XN368IzHcV6rQ54aG5nmXQZatVEM1HR2My+L9bNwJ/whpAT5Y
+         tZODyWf/IhxOJDcPbpNK47HMVDaR8OOVN2YLG4KWWIvwUpxtS2WXrd6c4sTyxWCF0TXb
+         ryqhoxhDCx38IFBwwAS/7htp5CddmvKaRxDb3XuZFaOyQ/FpCSYvFHJg3rp36ptwutZ3
+         vf+AjYmD37k48oeVl7lcuKLRZh/6ZViecw6g+hIohSWuXcCVMBjMB7lPliZm74UhvZiT
+         NBQw==
+X-Gm-Message-State: ANoB5plrqt+mNMo4wwmg0bvh1d59bEJj9ELd+TbLjKnZ8ByTOQ4hxZ3/
+        oQ7ADPL2je2qFg6WA8dM8cMq3g==
+X-Google-Smtp-Source: AA0mqf5kY7K6H1Eeevu9SIZH52BCxqvw1zVXLhAShSeJAlQdO1Y5eaWkEBpwalGdUhJ9r/q94Gifsw==
+X-Received: by 2002:a17:902:a514:b0:189:97c3:6382 with SMTP id s20-20020a170902a51400b0018997c36382mr18353098plq.168.1669942388918;
+        Thu, 01 Dec 2022 16:53:08 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bd12-20020a170902830c00b001894198d0ebsm4222206plb.24.2022.12.01.16.48.21
+        by smtp.gmail.com with ESMTPSA id h9-20020a628309000000b00574de4a2fbasm3808867pfe.196.2022.12.01.16.53.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 16:48:21 -0800 (PST)
-Date:   Thu, 1 Dec 2022 16:48:20 -0800
+        Thu, 01 Dec 2022 16:53:07 -0800 (PST)
+Date:   Thu, 1 Dec 2022 16:53:06 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Bernd Edlinger <bernd.edlinger@hotmail.de>, ebiederm@xmission.com
-Cc:     limin <limin100@huawei.com>, shuah@kernel.org,
-        ebiederm@xmission.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        lizefan.x@bytedance.com
-Subject: Re: [PATCH -next] selftests/ptrace: Fix Test terminated by timeout
- in ptrace_attach
-Message-ID: <202212011638.31BBB562B@keescook>
-References: <20221128070454.1850273-1-limin100@huawei.com>
- <AS8P193MB1285BCEDA342A074F6A837FDE4139@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v4 1/3] kunit: Provide a static key to check if KUnit is
+ actively running tests
+Message-ID: <202212011652.4E8CB40@keescook>
+References: <20221125084306.1063074-1-davidgow@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AS8P193MB1285BCEDA342A074F6A837FDE4139@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+In-Reply-To: <20221125084306.1063074-1-davidgow@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,28 +72,115 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 08:56:09AM +0100, Bernd Edlinger wrote:
-> thanks for cleaning this up.
+On Fri, Nov 25, 2022 at 04:43:04PM +0800, David Gow wrote:
+> KUnit does a few expensive things when enabled. This hasn't been a
+> problem because KUnit was only enabled on test kernels, but with a few
+> people enabling (but not _using_) KUnit on production systems, we need a
+> runtime way of handling this.
+> 
+> Provide a 'kunit_running' static key (defaulting to false), which allows
+> us to hide any KUnit code behind a static branch. This should reduce the
+> performance impact (on other code) of having KUnit enabled to a single
+> NOP when no tests are running.
+> 
+> Note that, while it looks unintuitive, tests always run entirely within
+> __kunit_test_suites_init(), so it's safe to decrement the static key at
+> the end of this function, rather than in __kunit_test_suites_exit(),
+> which is only there to clean up results in debugfs.
+> 
+> Signed-off-by: David Gow <davidgow@google.com>
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> ---
+> This should be a no-op (other than a possible performance improvement)
+> functionality-wise, and lays the groundwork for a more optimised static
+> stub implementation.
+> 
+> The remaining patches in the series add a kunit_get_current_test()
+> function which is a more friendly and performant wrapper around
+> current->kunit_test, and use this in the slub test. They also improve
+> the documentation a bit.
+> 
+> If there are no objections, we'll take the whole series via the KUnit
+> tree.
+> 
+> Changes since v3:
+> https://lore.kernel.org/linux-kselftest/20221119081252.3864249-1-davidgow@google.com/
+> - Use DECLARE_STATIC_KEY_FALSE() -- thanks Daniel!
+> 
+> No changes since v2:
+> https://lore.kernel.org/all/20221025071907.1251820-1-davidgow@google.com/
+> 
+> Changes since v1:
+> https://lore.kernel.org/linux-kselftest/20221021072854.333010-1-davidgow@google.com/
+> - No changes in this patch.
+> - Patch 2/3 is reworked, patch 3/3 is new.
+> 
+> ---
+>  include/kunit/test.h | 4 ++++
+>  lib/kunit/test.c     | 6 ++++++
+>  2 files changed, 10 insertions(+)
+> 
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 4666a4d199ea..87ea90576b50 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -16,6 +16,7 @@
+>  #include <linux/container_of.h>
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+> +#include <linux/jump_label.h>
+>  #include <linux/kconfig.h>
+>  #include <linux/kref.h>
+>  #include <linux/list.h>
+> @@ -27,6 +28,9 @@
+>  
+>  #include <asm/rwonce.h>
+>  
+> +/* Static key: true if any KUnit tests are currently running */
+> +DECLARE_STATIC_KEY_FALSE(kunit_running);
+> +
+>  struct kunit;
+>  
+>  /* Size of log associated with test. */
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 1c9d8d962d67..87a5d795843b 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -20,6 +20,8 @@
+>  #include "string-stream.h"
+>  #include "try-catch-impl.h"
+>  
+> +DEFINE_STATIC_KEY_FALSE(kunit_running);
+> +
+>  #if IS_BUILTIN(CONFIG_KUNIT)
+>  /*
+>   * Fail the current test and print an error message to the log.
+> @@ -615,10 +617,14 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+>  		return 0;
+>  	}
+>  
+> +	static_branch_inc(&kunit_running);
 
-Oh, hm, I never saw the original email -- I'll check my Spam folder, it
-gets overly excited sometimes.
+Is it expected there will be multiple tests running? (I was expecting
+"static_branch_enable").
 
-> Just for completenes:
+> +
+>  	for (i = 0; i < num_suites; i++) {
+>  		kunit_init_suite(suites[i]);
+>  		kunit_run_tests(suites[i]);
+>  	}
+> +
+> +	static_branch_dec(&kunit_running);
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
+> -- 
+> 2.38.1.584.g0f3c55d4c2-goog
 > 
-> I have actually two patches submitted a while ago, but did not get any response so far,
-> one that would make the test case work as it is:
-> 
-> [PATCH v10] exec: Fix dead-lock in de_thread with ptrace_attach
-> https://lore.kernel.org/lkml/AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM/
-> 
-> and my favorite one, that would fix the dead-lock altogether (and adjust the test case accordingly):
-> 
-> [PATCH v11] exec: Fix dead-lock in de_thread with ptrace_attach
-> https://lore.kernel.org/lkml/AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM/
 
-This fell off my radar, but let's look at it again. Is this still an
-existing race after Eric's various refactorings? I assume so. Eric, can
-you looked at this case?
+Regardless:
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
