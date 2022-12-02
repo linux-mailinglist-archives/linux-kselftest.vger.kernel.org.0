@@ -2,127 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B934640340
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 10:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F10916403E2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 10:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbiLBJZs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Dec 2022 04:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
+        id S233172AbiLBJ7g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Dec 2022 04:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbiLBJZb (ORCPT
+        with ESMTP id S232696AbiLBJ7e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:25:31 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D5A2934A;
-        Fri,  2 Dec 2022 01:25:30 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 05CE81FDB3;
-        Fri,  2 Dec 2022 09:25:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669973129; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TKQzPesfFIXU9kqEqHI/x4slupL/82jvdX55wsPLZD4=;
-        b=Sy3wVXHao17TNESL3ZmsuofQN6YDA2x6DRwN/w0x4jVw4/iPMjkOsiagP+G5bJO4izPxIG
-        D9Wm8vR5FxuzZYknMyhIUXvrvLYLUk9otsdJcD4/PSEU/LuNkQhBqEPnCZJgSxGzO+6SB/
-        lVS/BXD0nILSJHcNQkQ8EiJ61DB813k=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D870F2C141;
-        Fri,  2 Dec 2022 09:25:28 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 10:25:25 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com
-Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-Message-ID: <Y4nEhb7yPK5l54IX@alley>
-References: <20220630141226.2802-1-mpdesouza@suse.com>
- <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
- <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz>
- <8ff95ef5-db76-171d-4c4c-a84d9981290d@linuxfoundation.org>
- <20220715144526.GF2737@pathway.suse.cz>
- <aae71b0b-74e3-5874-b12f-bf0d42d851e4@redhat.com>
- <c5a6cb8a-7b99-249e-5ba4-732fc0ed2e30@linuxfoundation.org>
+        Fri, 2 Dec 2022 04:59:34 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C095BD8AC;
+        Fri,  2 Dec 2022 01:59:33 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id f18so7013481wrj.5;
+        Fri, 02 Dec 2022 01:59:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UTPrzoP+SGh03HmopNhpASmjnce6kJFYd8daB4Hq44k=;
+        b=dWNeN3Y0oPlCIUgSBFx8GW/Ql6s3KxAxFhykMmbkE3STNifQY6qf9lHOxXwMxWhFqc
+         b/j8GDO7D8TzoSTFmlkQXD8XkVA6jEJfPvWnGO8HGZTC2+YULheWuTkIhnsJYhy4MbEx
+         qQmCPamdemAZ8red5Dn7c2syo0haTu5SBlyPRFq+xJeHkMb3hNqe+PTWsWlEOTDyzCBu
+         BWRj1u3fiN+XVYnj0ClTWNyy5FJTbAkLIK8tFd4l44kxsOZQiQ9vrgliKr/cCtAROh/m
+         Ogjc8DPEVJjn2YaIujZ1gXdb1IKI7YJG0LqGAwvXeIAc/v7Q52iMcQnFEk4i6tRW/YRU
+         h+6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UTPrzoP+SGh03HmopNhpASmjnce6kJFYd8daB4Hq44k=;
+        b=UmyHw3zZDE5OvWjTRjbUz/j2+hozqI5KcEQA9JqNn0yQRvLFdIAsm8j451GY939KX5
+         lqfhH32+e7KyKbrptHFWYM3TJDUWUiHzCkdfTansjnizepwWSguoAWCEcFRXTuRES8zB
+         L8XTH/D9fJjeEacNy2k1dijOs+w2ZVimW8UKgcBmQru/5Hm5JvBf12jHYTl7JVePy3yx
+         D887gjWR60ciesf8WLFdC0OnzH+18eNZ4Xx8hfxa+3fmmpUgrynKQrHUan9Rn0LlLDpb
+         LMhuzg/IhnXsgM3/d32OvHd3ULBk7iuVXUvLHem12euShvqQ4y+p44HROUCAloH6Yv9M
+         580A==
+X-Gm-Message-State: ANoB5pnJgz/AsJ5rKNCtWEpJY0OIJ8s3LEPYjk9ADTHea+RaoRE8iyaf
+        E6voTlkPTJvR4T+0WRaLE84=
+X-Google-Smtp-Source: AA0mqf5JNyIxpO047SssifwoiMQqHBpwCbrswENFnMYaNs5Nk//LWEVpKaquqXTd4GbhqwQIZRpBxQ==
+X-Received: by 2002:a5d:4dd0:0:b0:241:fa43:d982 with SMTP id f16-20020a5d4dd0000000b00241fa43d982mr26246364wru.134.1669975171806;
+        Fri, 02 Dec 2022 01:59:31 -0800 (PST)
+Received: from localhost.localdomain ([213.57.189.88])
+        by smtp.gmail.com with ESMTPSA id s1-20020adfdb01000000b002420a2cdc96sm6517851wri.70.2022.12.02.01.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 01:59:31 -0800 (PST)
+From:   Eyal Birger <eyal.birger@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, steffen.klassert@secunet.com,
+        herbert@gondor.apana.org.au, andrii@kernel.org,
+        daniel@iogearbox.net, nicolas.dichtel@6wind.com,
+        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+        liuhangbin@gmail.com, lixiaoyan@google.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Eyal Birger <eyal.birger@gmail.com>
+Subject: [PATCH bpf-next,v4 0/4] xfrm: interface: Add unstable helpers for XFRM metadata
+Date:   Fri,  2 Dec 2022 11:59:16 +0200
+Message-Id: <20221202095920.1659332-1-eyal.birger@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5a6cb8a-7b99-249e-5ba4-732fc0ed2e30@linuxfoundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu 2022-12-01 16:58:38, Shuah Khan wrote:
-> On 11/30/22 15:22, Joe Lawrence wrote:
-> > On 7/15/22 10:45 AM, Petr Mladek wrote:
-> > > On Fri 2022-07-01 16:13:50, Shuah Khan wrote:
-> > > > On 7/1/22 1:48 AM, Miroslav Benes wrote:
-> > > > > On Thu, 30 Jun 2022, Shuah Khan wrote:
-> > > > > > 
-> > > > > > Sorry Nack on this. Let's not add modules under selftests. Any usage of
-> > > > > > module_init()
-> > > > > > doesn't belong under selftests.
-> > > > 
-> > > > Yes I did and after reviewing and thinking about it some more, I decided this
-> > > > is the right direction go down on.
-> > > 
-> > > Do you have some particular reason why building modules in selftests
-> > > directory might cause problems, please?
-> > > 
-> 
-> My reasons are that with this change module_init() propagates out of
-> strictly kernel space and now is in selftests which are user-space.
-> Any changes to this interface will be tied to user-space change.
+This patch series adds xfrm metadata helpers using the unstable kfunc
+call interface for the TC-BPF hooks.
 
-I am sorry but I do not understand the meaning here. module_init() is
-called when module is loaded. It is not called in userspace.
+This allows steering traffic towards different IPsec connections based
+on logic implemented in bpf programs.
 
-Maybe, you mean that modules under lib/ are clearly in-tree
-modules. If we move then under tools/ then they will be build
-like out-of-tree modules. Except that they will be maintained in-tree
-so that it will be easy to keep them in sync.
+The helpers are integrated into the xfrm_interface module. For this
+purpose the main functionality of this module is moved to
+xfrm_interface_core.c.
 
-And I am sure that they will be actively maintained. The fixes are
-there to make sure that livepatching still works as expected.
-They must pass when any change is done in the livepatch subsystem.
-And they must pass when any kernel is released.
+---
 
-The only concern might be how build failure is handled. IMHO, we
-need to handle it the same way and test failure.
+Series changes in v3:
+  - tag bpf-next tree instead of ipsec-next
+  - add IFLA_XFRM_COLLECT_METADATA sync patch
 
+Eyal Birger (4):
+  xfrm: interface: rename xfrm_interface.c to xfrm_interface_core.c
+  xfrm: interface: Add unstable helpers for setting/getting XFRM
+    metadata from TC-BPF
+  tools: add IFLA_XFRM_COLLECT_METADATA to uapi/linux/if_link.h
+  selftests/bpf: add xfrm_info tests
 
-> In general, newer tests offer the best coverage, hence the recommendation
-> to run newer tests on older kernels assuming that the tests are built
-> on a newer kernel and backwards should run in a backwards compatible
-> way on older kernels.
+ include/net/dst_metadata.h                    |   1 +
+ include/net/xfrm.h                            |  20 +
+ net/core/dst.c                                |   8 +-
+ net/xfrm/Makefile                             |   8 +
+ net/xfrm/xfrm_interface_bpf.c                 | 123 ++++++
+ ...xfrm_interface.c => xfrm_interface_core.c} |  15 +
+ tools/include/uapi/linux/if_link.h            |   1 +
+ tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
+ tools/testing/selftests/bpf/config            |   2 +
+ .../selftests/bpf/prog_tests/xfrm_info.c      | 365 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_tracing_net.h     |   3 +
+ tools/testing/selftests/bpf/progs/xfrm_info.c |  35 ++
+ 12 files changed, 580 insertions(+), 2 deletions(-)
+ create mode 100644 net/xfrm/xfrm_interface_bpf.c
+ rename net/xfrm/{xfrm_interface.c => xfrm_interface_core.c} (98%)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xfrm_info.c
+ create mode 100644 tools/testing/selftests/bpf/progs/xfrm_info.c
 
-This works for the userspace interface that should always be backward
-compatible. But it does not work for kABI.
+-- 
+2.34.1
 
-
-> Do you have a requirement that livepatch test has to be revision
-> matched with the kernel? Even if that is the case, there is no real
-> reason to move modules under selftests other than keeping them in
-> one location.
-
-Yes, kABI is not backward compatible. But building the tests
-modules out-of-tree way would allow to build test modules with
-different kABI from the same sources.
-
-IMHO, this is common for any selttests using kernel modules.
-I am sure that neither test_printf nor test_scanf modules
-could be loaded in older kernels. Even though it might
-be useful to run improved tests for stable-like kernels.
-
-Best Regards,
-Petr
