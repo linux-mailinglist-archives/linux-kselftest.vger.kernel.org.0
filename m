@@ -2,114 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0576B6402C7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 09:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 016E66402D1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 10:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbiLBI7y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Dec 2022 03:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
+        id S232816AbiLBJCy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Dec 2022 04:02:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232798AbiLBI7f (ORCPT
+        with ESMTP id S232294AbiLBJCT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Dec 2022 03:59:35 -0500
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEC273409
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Dec 2022 00:58:06 -0800 (PST)
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 77B22A0040;
-        Fri,  2 Dec 2022 09:58:05 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 77B22A0040
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-        t=1669971485; bh=+T1hHk5yytZNhOvSZXVQTvkZacFlMWaHn/qEabjovXk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rq7JA8Lppg/Ra7HWAxn5Ihz7Qc4zr3JlpLoNHL9lHk84TwbfkboU+YSduKJcVwnvi
-         +UdUuWyzlpZompztic1mTFBo6kos1/VhFZh8WAaaleRd7V+7vzVK0Am4kcaQ5wXD4+
-         m0BUsTOXzMYMtwf7lUM2Si4c2zJZ56cN4Ipm6VNY=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: perex)
-        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-        Fri,  2 Dec 2022 09:58:00 +0100 (CET)
-Message-ID: <9501fe01-4a3f-f83a-f9aa-153410a94f7e@perex.cz>
-Date:   Fri, 2 Dec 2022 09:58:00 +0100
+        Fri, 2 Dec 2022 04:02:19 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC7798547;
+        Fri,  2 Dec 2022 01:00:42 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B27g5ts013292;
+        Fri, 2 Dec 2022 09:00:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=8xnE/Mb0rP1cjkQQ7k3iLfRpCly+KU3D84URS1QVylo=;
+ b=Ua5V/Efa2ZJwhDOyOgGdP3pTKIK0thms7qhlRfn0gaKcR0oon45fGCPDuCVrs7wJ9iAp
+ sCNnrdEUNqOm/Q2Rm5R6uR1kGUuWCKfCJFkMNfAEldVZB/fshpHAYTJ97TkVn+guABZZ
+ RB+SibMAVqVXZe1tOfMs3gNWQ/imiZ8tNStiAaqu5gxShzFWDn5sWA0COYb9iUQB0XES
+ Pt1BcOjBp7K+LpsIJp1g92kvCpvClFzKZ0Yr4npvr0rvOD3EWoInrGrAiZarOpeyfX2k
+ mu4XnnDjLoTD3frZbpHvO9fstRvh9foLMKFkBoCz7Q7pnDr4DtHEKdDoWI4qEGBYgbSv jA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m7d6t1w9h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 09:00:39 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B28UEkL016043;
+        Fri, 2 Dec 2022 09:00:38 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m7d6t1w88-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 09:00:38 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2B28njd3006167;
+        Fri, 2 Dec 2022 09:00:36 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3m3ae9gtk7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 09:00:36 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B291GEY4195004
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 2 Dec 2022 09:01:16 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0F344A4055;
+        Fri,  2 Dec 2022 09:00:33 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D90DA4040;
+        Fri,  2 Dec 2022 09:00:31 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.171.31.115])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Fri,  2 Dec 2022 09:00:31 +0000 (GMT)
+Date:   Fri, 2 Dec 2022 10:00:28 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v3 1/9] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+Message-ID: <20221202100028.686c605e@p-imbrenda>
+In-Reply-To: <dc192fa099eb1b7d49d19b52c416d21589e22d87.camel@linux.ibm.com>
+References: <20221117221758.66326-1-scgl@linux.ibm.com>
+        <20221117221758.66326-2-scgl@linux.ibm.com>
+        <20221201171528.13f17ec4@p-imbrenda>
+        <dc192fa099eb1b7d49d19b52c416d21589e22d87.camel@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/7] kselftest/alsa: pcm-test improvements
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.de>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org
-References: <20221202001749.3321187-1-broonie@kernel.org>
-From:   Jaroslav Kysela <perex@perex.cz>
-In-Reply-To: <20221202001749.3321187-1-broonie@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MIE7Tkq8dREDb3bLyBCIWdFsFhwuZl_T
+X-Proofpoint-ORIG-GUID: echR8s-Y313utW3Umn7s9LGDwFrdS-el
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-02_04,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 spamscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212020065
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02. 12. 22 1:17, Mark Brown wrote:
-> This series provides a bunch of quick updates which should make the
-> coverage from pcm-test a bit more useful, it adds some support for
-> skipping tests when the hardware/driver is unable to support the
-> requested configuration, support for providing user visible descriptions
-> and then expands the set of cases we cover to include more sample rates
-> and channel counts.  This should exercise switching between 8kHz and
-> 44.1kHz based rates and ensure that clocking doesn't get confused by
-> non-stereo channel counts, both of which are I expect common real world
-> errors, at least for embedded cards.
-> 
-> v3:
->   - "Rebase" onto Takashi's current tree (with a revert).
->   - Include Jaroslav's changes to specify all tests in the configuration
->     file parsing.
->   - Add a new "description" field to the configuration instead of trying
->     to name the tests.
->   - Always run both default and per-system tests, logging our success at
->     setting the per-system configurations as a separate test since they
->     shouldn't fail.
-> v2:
->   - Rebase onto Takashi's current tree.
->   - Tweak the buffer sizes for the newly added cases, don't be quite
->     so ambitious in how big a buffer we request for 96kHz and don't
->     go quite so small for 8kHz since some devices start hitting lower
->     limits on period size and struggle to deliver accurate timing.
-> 
-> Jaroslav Kysela (1):
->    kselftest/alsa: pcm - move more configuration to configuration files
-> 
-> Mark Brown (6):
->    kselftest/alsa: pcm - Drop recent coverage improvement changes
->    kselftest/alsa: pcm - Always run the default set of tests
->    kselftest/alsa: pcm - skip tests when we fail to set params
->    kselftest/alsa: pcm - Support optional description for tests
->    kselftest/alsa: pcm - Provide descriptions for the default tests
->    kselftest/alsa: pcm - Add more coverage by default
-> 
->   tools/testing/selftests/alsa/Makefile         |   2 +-
->   tools/testing/selftests/alsa/alsa-local.h     |   3 +
->   tools/testing/selftests/alsa/conf.c           |  26 ++-
->   .../alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf  |  43 ++--
->   tools/testing/selftests/alsa/pcm-test.c       | 205 ++++++++++++------
->   tools/testing/selftests/alsa/pcm-test.conf    |  63 ++++++
->   6 files changed, 250 insertions(+), 92 deletions(-)
->   create mode 100644 tools/testing/selftests/alsa/pcm-test.conf
-> 
-> 
-> base-commit: 7d721baea138696d5a6746fb5bce0a510a91bd65
+On Thu, 01 Dec 2022 18:44:56 +0100
+Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
 
-All looks good. I would probably do some things differently, but the goal is 
-same. I am fine with all changes.
+> > 
+> > please also document -EOPNOTSUPP  
+> 
+> I'd add "* -EOPNOTSUPP: should never occur", then, that ok with you?
 
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+no, also explain in which conditions it is returned
 
--- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+something like: 
+ * -EOPNOTSUPP: if the memslot is not writable (should never occour)
+
+> >   
+> > > + */
+> > > +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
+> > > +			       __uint128_t *old_p, __uint128_t new,
+> > > +			       u8 access_key)
+> > > +{
+> > > +	gfn_t gfn = gpa >> PAGE_SHIFT;
+> > > +	struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);  
+> > 
+> > exchange the above two lines (reverse christmas tree)  
+> 
+> Is this a hard requirement? Since there is a dependency.
+> If I do the initialization further down, the order wouldn't actually change.
+
+ahhhhh right, I had missed that
+
+keep it as it is, of course
+
+[...]
+
+> > I really dislike repeating the same code 5 times, but I guess there was
+> > no other way?  
+> 
+> I could use the function called by cmpxchg_user_key directly, but Heiko won't agree to that.
+> A macro would work too, of course, not sure if I prefer that tho.
+
+ok so there is no other way, let's keep it as it is
+
+[...]
+
+> To me it feels like KVM_S390_MEMOP_R_NO_XCHG is api surface and should be referenced here.
+> cmpxchg_guest_abs_with_key isn't mem op specific
+> (of course that's the only thing it is currently used for).
+
+fair enough
+
+> >   
+> > > +				if (copy_to_user(old_p, &old.raw[off_in_quad], mop->size))
+> > > +					r = -EFAULT;
+> > > +			}
+> > >  		} else {
+> > >  			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
+> > >  				r = -EFAULT;  
+> >   
+> 
+
