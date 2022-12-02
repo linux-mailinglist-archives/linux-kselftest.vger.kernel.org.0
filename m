@@ -2,105 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E32363FDF5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 03:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B4863FF54
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 05:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbiLBCHQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 21:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
+        id S231904AbiLBEJ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 23:09:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbiLBCHL (ORCPT
+        with ESMTP id S231468AbiLBEJ5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 21:07:11 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54268D4ADE;
-        Thu,  1 Dec 2022 18:07:03 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id o5-20020a17090a678500b00218cd5a21c9so3856712pjj.4;
-        Thu, 01 Dec 2022 18:07:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rKl/t3hakOg+uRmQvx0wOeBxtqYoX08A3/EM6NJoH6U=;
-        b=EFE5vwNPwJekGuDpnV9qPgENSxGIZ0xMQZJYWD2X9lqjw00nv0bKpGpVbc9i/C+vAO
-         FS3OzKthapYfTee+ocZGBWFFRydWBVjB72PxqFTiK69fIMTm0qOQUAAolxO6dq4vYTwX
-         y2ZtwKO34SgtOhsdEGPvER4PEsMGAlqLk4KKqlM7h5unshA1mnG0AAT+bO4v9j3UXNV3
-         sbkKlsN4EHNIaOlvTzZdTZUilNslXxfF9HDQzf0fCDAoOgPJWowsCcMMT7e0qwVaJ4Kl
-         e4oH3czN560omo3uMNsAxkYFea3EU0iT34pOwCLhN+/SrYxJ1NUtuuu4kLSYZN3mVtSy
-         zu4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rKl/t3hakOg+uRmQvx0wOeBxtqYoX08A3/EM6NJoH6U=;
-        b=TXUbhOm0Th4oI+VuRz+Jr6zTQCiRmr6ZsqC44/x7MTM7mWjLX5iz/BLrqdH3Xc5r4h
-         ZnauZy4YrTg/fRmshLskNvjJrYLT2+mBeXv3OAeTnWwhAEQy8TX5Bh94rh39p4R3Bc5v
-         Ya2bPN/X1kU2IBL+YLejZehT6t8e49+8nQrYFMBijvvoUXnMuPMkfcQdsjJMJuXOoHze
-         Xj9GVJNsns9hRZvbD7L9Uz0biJaEBXuf2McnZDOO1UHJIn9D4/Xop2mJDPx3/EDQA9ce
-         MP9xGAHZMFbnNseRJlJFHwhpax9pPGcMLdTEWveA9/AodmLoswm+gu5eXcXYyrx/FVyt
-         Ul2w==
-X-Gm-Message-State: ANoB5plMKOUwOn+DBD8DiydyTIKkWXUP2Zjpn3gvmY8EEmQaZRSqDr8g
-        gwO+FE0mlMIj9GA9eNisZ+E=
-X-Google-Smtp-Source: AA0mqf7ph5WIS2+a6zuk0OwSfZ90aWqAvpGvluLfBYXrVEgmbmyQ4c/e3uBHIWtgPOor6woPAI6sAg==
-X-Received: by 2002:a17:90a:7e8b:b0:213:df24:ed80 with SMTP id j11-20020a17090a7e8b00b00213df24ed80mr78244079pjl.186.1669946822739;
-        Thu, 01 Dec 2022 18:07:02 -0800 (PST)
-Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id x27-20020aa7957b000000b0057534fcd895sm3882532pfq.108.2022.12.01.18.06.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 18:07:01 -0800 (PST)
-Date:   Fri, 2 Dec 2022 10:06:56 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, shannon.nelson@oracle.com,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
-Subject: Re: [PATCH net] selftests: rtnetlink: correct xfrm policy rule in
- kci_test_ipsec_offload
-Message-ID: <Y4ldwIQlcXyZek1A@Laptop-X1>
-References: <20221201082246.14131-1-shaozhengchao@huawei.com>
+        Thu, 1 Dec 2022 23:09:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E671D038E;
+        Thu,  1 Dec 2022 20:09:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9569060EA8;
+        Fri,  2 Dec 2022 04:09:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0783C433D6;
+        Fri,  2 Dec 2022 04:09:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669954195;
+        bh=ubGorkvnG+fYZfKO1MSu0Vq8vrdN0JsKpKNkn8zefrg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mHBAPqLl/Oza2xOH739Dl2vFx5vT8VyCe0yr+iGFmkZI8X78b978HHrZLZlcCX+DT
+         0KdmXfH3lbDu+IjDZt9afeg1xJ7NKILzn7mYQL+aMV96FiUYAqSvsI14Z8FbRKu9ka
+         51CAztn8kq7vet+cKpx/s1Wru6vj4011GrvtyQRM1rVG1IlsOPpY7YqiaFvjLpGVP9
+         MnEBAoW5ym04KItdqMi5/EVqoLYm28/2h5rzN+W3EgpKolWueoe5yIgmGmE1E427cN
+         AIOgJjsOW5wnB1vG/hRovMWvor9f1QCddCBFp8nErni9iuJ76Z9u6VVNGfbOiRTlju
+         ssBVWJeTgxPDw==
+Date:   Thu, 1 Dec 2022 20:09:53 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        mptcp@lists.linux.dev, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 00/11] mptcp: PM listener events + selftests
+ cleanup
+Message-ID: <20221201200953.2944415e@kernel.org>
+In-Reply-To: <20221130140637.409926-1-matthieu.baerts@tessares.net>
+References: <20221130140637.409926-1-matthieu.baerts@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221201082246.14131-1-shaozhengchao@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 04:22:46PM +0800, Zhengchao Shao wrote:
-> When testing in kci_test_ipsec_offload, srcip is configured as $dstip,
-> it should add xfrm policy rule in instead of out.
-> The test result of this patch is as follows:
-> PASS: ipsec_offload
+On Wed, 30 Nov 2022 15:06:22 +0100 Matthieu Baerts wrote:
+> Thanks to the patch 6/11, the MPTCP path manager now sends Netlink events when
+> MPTCP listening sockets are created and closed. The reason why it is needed is
+> explained in the linked ticket [1]:
 > 
-> Fixes: 2766a11161cc ("selftests: rtnetlink: add ipsec offload API test")
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> ---
->  tools/testing/selftests/net/rtnetlink.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   MPTCP for Linux, when not using the in-kernel PM, depends on the userspace PM
+>   to create extra listening sockets before announcing addresses and ports. Let's
+>   call these "PM listeners".
 > 
-> diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-> index 0900c5438fbb..275491be3da2 100755
-> --- a/tools/testing/selftests/net/rtnetlink.sh
-> +++ b/tools/testing/selftests/net/rtnetlink.sh
-> @@ -782,7 +782,7 @@ kci_test_ipsec_offload()
->  	    tmpl proto esp src $srcip dst $dstip spi 9 \
->  	    mode transport reqid 42
->  	check_err $?
-> -	ip x p add dir out src $dstip/24 dst $srcip/24 \
-> +	ip x p add dir in src $dstip/24 dst $srcip/24 \
->  	    tmpl proto esp src $dstip dst $srcip spi 9 \
->  	    mode transport reqid 42
->  	check_err $?
-> -- 
-> 2.34.1
->
+>   With the existing MPTCP netlink events, a userspace PM can create PM listeners
+>   at startup time, or in response to an incoming connection. Creating sockets in
+>   response to connections is not optimal: ADD_ADDRs can't be sent until the
+>   sockets are created and listen()ed, and if all connections are closed then it
+>   may not be clear to the userspace PM daemon that PM listener sockets should be
+>   cleaned up.
+> 
+>   Hence this feature request: to add MPTCP netlink events for listening socket
+>   close & create, so PM listening sockets can be managed based on application
+>   activity.
+> 
+>   [1] https://github.com/multipath-tcp/mptcp_net-next/issues/313
+> 
+> Selftests for these new Netlink events have been added in patches 9,11/11.
+> 
+> The remaining patches introduce different cleanups and small improvements in
+> MPTCP selftests to ease the maintenance and the addition of new tests.
 
-Acked-by: Hangbin Liu <liuhangbin@gmail.com>
+Also could you warp you cover letters at 72 characters?
+I need to reflow them before I can read them :(
