@@ -2,197 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5E8640102
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 08:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2604564010D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 08:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiLBHZf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Dec 2022 02:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S232312AbiLBHdv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Dec 2022 02:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiLBHZf (ORCPT
+        with ESMTP id S232280AbiLBHdu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Dec 2022 02:25:35 -0500
-Received: from out-81.mta0.migadu.com (out-81.mta0.migadu.com [IPv6:2001:41d0:1004:224b::51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B988CAC6F5
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 23:25:33 -0800 (PST)
-Message-ID: <55c5d250-f3c4-84e0-c56f-cd554ee05482@linux.dev>
-Date:   Thu, 1 Dec 2022 23:25:22 -0800
+        Fri, 2 Dec 2022 02:33:50 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B70A65B7;
+        Thu,  1 Dec 2022 23:33:49 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 430801FDA8;
+        Fri,  2 Dec 2022 07:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669966428; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w7oXQABhKcba85k4/Fq5hfSey3hL6Wbzv/cZcgM/HRk=;
+        b=ZkyWncoVrmJV2eGSfYKl74OCI3uNW31WwisASZWLwqUkku2zcWzlfvB51YwpYGvkIOPhHA
+        dYbCBaBJAHsvhVcmPNMYvAO0JdlVnSIjGVyMjn7L2K/X2AaVyqBIEXPBDht+ivueXgXhZ+
+        JiF3LZRbyvnMR/MabRTzRT91EJvaV6Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669966428;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w7oXQABhKcba85k4/Fq5hfSey3hL6Wbzv/cZcgM/HRk=;
+        b=0wgkpxqa+tnu+cRzWK9Ut2/RAhFVAiA7IrRcyrs3rJVs3dZ/vf7L7f1bu7U4+8WF/qrcTM
+        633HVfB8a+WU8jDg==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 1A8492C141;
+        Fri,  2 Dec 2022 07:33:48 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 08:33:50 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+cc:     Joe Lawrence <joe.lawrence@redhat.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, jpoimboe@redhat.com,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+In-Reply-To: <c5a6cb8a-7b99-249e-5ba4-732fc0ed2e30@linuxfoundation.org>
+Message-ID: <alpine.LSU.2.21.2212020820390.5559@pobox.suse.cz>
+References: <20220630141226.2802-1-mpdesouza@suse.com> <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org> <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz> <8ff95ef5-db76-171d-4c4c-a84d9981290d@linuxfoundation.org> <20220715144526.GF2737@pathway.suse.cz>
+ <aae71b0b-74e3-5874-b12f-bf0d42d851e4@redhat.com> <c5a6cb8a-7b99-249e-5ba4-732fc0ed2e30@linuxfoundation.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next,v3 2/4] xfrm: interface: Add unstable helpers for
- setting/getting XFRM metadata from TC-BPF
-Content-Language: en-US
-To:     Eyal Birger <eyal.birger@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        andrii@kernel.org, daniel@iogearbox.net, nicolas.dichtel@6wind.com,
-        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, shuah@kernel.org, liuhangbin@gmail.com,
-        lixiaoyan@google.com
-References: <20221201211425.1528197-1-eyal.birger@gmail.com>
- <20221201211425.1528197-3-eyal.birger@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20221201211425.1528197-3-eyal.birger@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/1/22 1:14 PM, Eyal Birger wrote:
-> This change adds xfrm metadata helpers using the unstable kfunc call
-> interface for the TC-BPF hooks. This allows steering traffic towards
-> different IPsec connections based on logic implemented in bpf programs.
+On Thu, 1 Dec 2022, Shuah Khan wrote:
+
+> On 11/30/22 15:22, Joe Lawrence wrote:
+> > On 7/15/22 10:45 AM, Petr Mladek wrote:
+> >> On Fri 2022-07-01 16:13:50, Shuah Khan wrote:
+> >>> On 7/1/22 1:48 AM, Miroslav Benes wrote:
+> >>>> On Thu, 30 Jun 2022, Shuah Khan wrote:
+> >>>>>
+> >>>>> Sorry Nack on this. Let's not add modules under selftests. Any usage of
+> >>>>> module_init()
+> >>>>> doesn't belong under selftests.
+> >>>
+> >>> Yes I did and after reviewing and thinking about it some more, I decided
+> >>> this
+> >>> is the right direction go down on.
+> >>
+> >> Do you have some particular reason why building modules in selftests
+> >> directory might cause problems, please?
+> >>
 > 
-> This object is built based on the availabilty of BTF debug info.
+> My reasons are that with this change module_init() propagates out of
+> strictly kernel space and now is in selftests which are user-space.
+> Any changes to this interface will be tied to user-space change.
 
-s/availabilty/availability/
+I do not understand this (have not had a cup of tea yet).
 
-> 
-> The metadata percpu dsts used on TX take ownership of the original skb
-> dsts so that they may be used as part of the xfrm transmittion logic -
+module_init() is defined in include/linux/module.h. It is API. Every 
+kernel module, in-tree or out-of-tree, uses it. There is only one usage of 
+module_init() in Marcos's patch. In a kernel module, in tools/ 
+subdirectory yes.
 
-s/transmittion/transmission/
+If there is a change to module_init, it might need editing all the call 
+sites, yes. That is inherent.
+ 
+> This is my main concern. That is reason why I still ask the question
+> about why is it necessary to make this change other than self-contained
+> sources?
 
-[ ... ]
+I will quote myself from an earlier email in the thread which you have not 
+replied to...
 
-> diff --git a/net/xfrm/Makefile b/net/xfrm/Makefile
-> index 08a2870fdd36..cd47f88921f5 100644
-> --- a/net/xfrm/Makefile
-> +++ b/net/xfrm/Makefile
-> @@ -5,6 +5,12 @@
->   
->   xfrm_interface-$(CONFIG_XFRM_INTERFACE) += xfrm_interface_core.o
->   
-> +ifeq ($(CONFIG_XFRM_INTERFACE),m)
-> +xfrm_interface-$(CONFIG_DEBUG_INFO_BTF_MODULES) += xfrm_interface_bpf.o
-> +else ifeq ($(CONFIG_XFRM_INTERFACE),y)
-> +xfrm_interface-$(CONFIG_DEBUG_INFO_BTF) += xfrm_interface_bpf.o
-> +endif
-> +
->   obj-$(CONFIG_XFRM) := xfrm_policy.o xfrm_state.o xfrm_hash.o \
->   		      xfrm_input.o xfrm_output.o \
->   		      xfrm_sysctl.o xfrm_replay.o xfrm_device.o
-> diff --git a/net/xfrm/xfrm_interface_bpf.c b/net/xfrm/xfrm_interface_bpf.c
-> new file mode 100644
-> index 000000000000..7938bf6cbb32
-> --- /dev/null
-> +++ b/net/xfrm/xfrm_interface_bpf.c
-> @@ -0,0 +1,99 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Unstable XFRM Helpers for TC-BPF hook
-> + *
-> + * These are called from SCHED_CLS BPF programs. Note that it is
-> + * allowed to break compatibility for these functions since the interface they
-> + * are exposed through to BPF programs is explicitly unstable.
-> + */
-> +
-> +#include <linux/bpf.h>
-> +#include <linux/btf_ids.h>
-> +
-> +#include <net/dst_metadata.h>
-> +#include <net/xfrm.h>
-> +
-> +struct bpf_xfrm_info {
+"
+My main question is different though. As Marcos mentioned before, we would 
+like to have our tests really flexible and a possibility to prepare and 
+load different live patch modules based on a template is a part of it. 
+What is your proposal regarding this? I can imagine having a template in 
+lib/livepatch/ which would not be compilable and a script in 
+tools/testing/selftests/livepatch/ would copy it many times, amend the 
+copies (meaning parameters would be filled in with sed or the code would 
+be changed), compile them and load them. But this sounds horrible to me, 
+especially when compared to Marcos' approach in this patch set which is 
+quite straightforward.
+"
 
-Documentation is needed here and...
-
-> +	u32 if_id;
-> +	int link;
-> +};
-> +
-> +static struct metadata_dst __percpu *xfrm_md_dst;
-> +__diag_push();
-> +__diag_ignore_all("-Wmissing-prototypes",
-> +		  "Global functions as their definitions will be in xfrm_interface BTF");
-> +
-> +__used noinline
-> +int bpf_skb_get_xfrm_info(struct __sk_buff *skb_ctx, struct bpf_xfrm_info *to)
-
-... also this get and the following set kfunc.
-
-> +{
-> +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> +	struct xfrm_md_info *info;
-> +
-> +	memset(to, 0, sizeof(*to));
-> +
-> +	info = skb_xfrm_md_info(skb);
-> +	if (!info)
-> +		return -EINVAL;
-> +
-> +	to->if_id = info->if_id;
-> +	to->link = info->link;
-> +	return 0;
-> +}
-> +
-> +__used noinline
-> +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
-> +			  const struct bpf_xfrm_info *from)
-> +{
-> +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> +	struct metadata_dst *md_dst;
-> +	struct xfrm_md_info *info;
-> +
-> +	if (unlikely(skb_metadata_dst(skb)))
-> +		return -EINVAL;
-> +
-> +	md_dst = this_cpu_ptr(xfrm_md_dst);
-> +
-> +	info = &md_dst->u.xfrm_info;
-> +
-> +	info->if_id = from->if_id;
-> +	info->link = from->link;
-> +	skb_dst_force(skb);
-> +	info->dst_orig = skb_dst(skb);
-> +
-> +	dst_hold((struct dst_entry *)md_dst);
-> +	skb_dst_set(skb, (struct dst_entry *)md_dst);
-> +	return 0;
-> +}
-> +
-> +__diag_pop()
-> +
-> +BTF_SET8_START(xfrm_ifc_kfunc_set)
-> +BTF_ID_FLAGS(func, bpf_skb_get_xfrm_info)
-> +BTF_ID_FLAGS(func, bpf_skb_set_xfrm_info)
-> +BTF_SET8_END(xfrm_ifc_kfunc_set)
-> +
-> +static const struct btf_kfunc_id_set xfrm_interface_kfunc_set = {
-> +	.owner = THIS_MODULE,
-> +	.set   = &xfrm_ifc_kfunc_set,
-> +};
-> +
-> +int __init register_xfrm_interface_bpf(void)
-> +{
-> +	int err;
-> +
-> +	xfrm_md_dst = metadata_dst_alloc_percpu(0, METADATA_XFRM,
-> +						GFP_KERNEL);
-> +	if (!xfrm_md_dst)
-> +		return -ENOMEM;
-> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS,
-> +					&xfrm_interface_kfunc_set);
-> +	if (err < 0) {
-> +		cleanup_xfrm_interface_bpf();
-
-
-nit. Directly call metadata_dst_free_percpu(xfrm_md_dst), easier to read.
-> +		return err;
-> +	}
-> +	return 0;
-> +}
-> +
-> +void cleanup_xfrm_interface_bpf(void)
-> +{
-> +	metadata_dst_free_percpu(xfrm_md_dst);
-> +}
-
+Thank you
+Miroslav
