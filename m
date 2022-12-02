@@ -2,110 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7853363FD96
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 02:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FDB63FDAA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 02:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbiLBBTr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 20:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S231308AbiLBBfm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 20:35:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiLBBTq (ORCPT
+        with ESMTP id S229744AbiLBBfj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 20:19:46 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA87CEFA6
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 17:19:45 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id d128so4298952ybf.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Dec 2022 17:19:45 -0800 (PST)
+        Thu, 1 Dec 2022 20:35:39 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F26D20AB
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 17:35:39 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id k79so3552080pfd.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Dec 2022 17:35:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b7S/Lk010656nN0nZxqgfS6l85QGHGwdF8mVU2ojAvw=;
-        b=AT27u0tgCh7uOLyY8Ql580WvVeAiLYjcI4f7NZQk46/CLU3/+7buoJ9V9c45rcuscx
-         vO3aJrqhgyS83lteGHszZNkkP6VWo3MZjH2Qjet5VpEKr0WGC7ohz8eweYOlk/r4/M3N
-         2re1dOKiEt2z8CUlhFFmVe1BO2uIxZ+/7iLECz027ISRWR5OSHZtMIrQ3EJwwv+7BrA8
-         HuFq/TFGiHrpGVs5rpDfrSJezKlFjz8vkxbLERmHxYGvM66JGx9bqyz+9LTQMpygTbAX
-         obXKGb1YCfLqFUB3LT2WKVMxMV0uKAc214ok+1DRf56odpooPaRsD/tiliqpYyz/Ar2b
-         LRvQ==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CFb3U5p+g9lHeAJEKkWmB54GJi34sM+dMSVNG4ofgcI=;
+        b=mdafWcQTAJYDEQ2dOGqG6ilVN2VKgB8RpEUHnDf8RiKhaOq0MKEbdp5cfX8NIvn97I
+         6/ahQ5hyeJLoiAtAMJ/lMf7umtTcDcoTi33aivbciA8wLlGp2BDEi42fdNinfTJ34jTz
+         9IclAngJoJMYwcRhCg0k4ykpIKZU8Yl5koyAo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=b7S/Lk010656nN0nZxqgfS6l85QGHGwdF8mVU2ojAvw=;
-        b=vN9loZDWbiHWEAW1B9w9k3jgVzW2We3BERUkjrLn+57wsjDX7I+JkBK0gi/PAfF1mH
-         sOCscGPIwd3uk71/G5jJIkRqNE/UcxyvRSUNEL45l0mGgz4pHAxQZwFT+v86l1LRg6Fp
-         WMnJe+INgch6YjSNeJ6UrFOJpfzzwi9UxKe1shWV5jWJREuaH0o1F9nQ1wkOS8GbBaTE
-         ESaE+XrnshWDA4fFj5K+o1JePHc/k4RRiB4CxPrKuZbTATnal8GtbbgMhZmm0Sbggsru
-         E7nRSamrdhe66Azw/Z4diLnAb7VZqWqfg5n3yqSeXQIUxVq//J0gX6Nvg35heIKgll61
-         ggNg==
-X-Gm-Message-State: ANoB5pnVW7GjiKDNcn1DHmwh+9cNyzIDiiRHNeH7d94v2fE/31JXOrT9
-        3i5tomXh9pMP0snYXrVjxvzhNBR9DMx7pdgP4yZpRg==
-X-Google-Smtp-Source: AA0mqf5T9Ra5V6yzXWV8vxb2tO65VZIyhze90LfjaKJK9kFL4fvKtrfCro9CM2DGiAIYQHU0Nn4aBh3Rm5cSdQPsKak=
-X-Received: by 2002:a25:ef09:0:b0:6fc:63f6:eb89 with SMTP id
- g9-20020a25ef09000000b006fc63f6eb89mr3768398ybd.587.1669943984310; Thu, 01
- Dec 2022 17:19:44 -0800 (PST)
+        bh=CFb3U5p+g9lHeAJEKkWmB54GJi34sM+dMSVNG4ofgcI=;
+        b=6ek4OdUIPOytEqxE6TjfwHCMGQG/EQTGa9+D5xyYzJVWZaVwQoQ03KFdONc136sjUQ
+         k9lxe1TBXh79tDG5/sKOY+EuD7nEhKJlfvId3UOJyCV1BMQIeJJiWxU1KPsfvyL2zeW8
+         YBBX5XjoJTtTp6W5+WgzRIQYA2WaHOe1IUSgNXFwbPLkWsG+TP+ehxKJ7+4v4lihvBb0
+         zaJHHorQb3W1pg1MGlg2HoAcJJUaQ4Ie3/6xYdFItZN1+aY1I4eRhl/4EjD4ysTUeHzn
+         GasayX5POD5/EkKQzMO0MG7ZK5NyYnWoglrKdUO3Xm6J8yP2BIrFbzfjLS3pR/tOjfKo
+         l9UA==
+X-Gm-Message-State: ANoB5pls79DhYhzuVnUkj2WHA/23gzUSO5Tc5wfmkBEJ7riJhLfV2CKP
+        JPl6nEDzrdqxwkYlkGbtNjnQlA==
+X-Google-Smtp-Source: AA0mqf7A4pjAtf52pyg17PB+DLjH1xkxcDzx5zywoVg/h0X18sxGNmaa3OBZrWn1jeYQiHgNE8kbhw==
+X-Received: by 2002:aa7:8686:0:b0:576:1b68:2b59 with SMTP id d6-20020aa78686000000b005761b682b59mr5884350pfo.72.1669944933695;
+        Thu, 01 Dec 2022 17:35:33 -0800 (PST)
+Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
+        by smtp.gmail.com with ESMTPSA id s13-20020a65690d000000b00477fb27eaddsm3074241pgq.63.2022.12.01.17.35.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 17:35:33 -0800 (PST)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        mnissler@chromium.org, jannh@google.com,
+        linux-hardening@vger.kernel.org, Jeff Xu <jeffxu@chromium.org>
+Subject: [PATCH v3] mm/memfd: MFD_NOEXEC_SEAL and MFD_EXEC
+Date:   Fri,  2 Dec 2022 01:33:58 +0000
+Message-Id: <20221202013404.163143-1-jeffxu@google.com>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
 MIME-Version: 1.0
-References: <20221125084306.1063074-1-davidgow@google.com> <202212011652.4E8CB40@keescook>
-In-Reply-To: <202212011652.4E8CB40@keescook>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 1 Dec 2022 17:19:33 -0800
-Message-ID: <CAGS_qxotC7jCXewCoa3CwP0pxs=FRqZPF0oY67La0dUN1ay7LQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] kunit: Provide a static key to check if KUnit is
- actively running tests
-To:     Kees Cook <keescook@chromium.org>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 1, 2022 at 4:53 PM Kees Cook <keescook@chromium.org> wrote:
-> > +     static_branch_inc(&kunit_running);
->
-> Is it expected there will be multiple tests running? (I was expecting
-> "static_branch_enable").
+From: Jeff Xu <jeffxu@chromium.org>
 
-It shouldn't normally happen, no.
+Since Linux introduced the memfd feature, memfd have always had their execute bit set, and the memfd_create() syscall doesn't allow setting it differently.
 
-One possible use case:
-KUnit's unit tests for itself create fake test objects and operate on them.
-They don't currently exercise this particular code though, afaict
-(maybe they should).
+However, in a secure by default system, such as ChromeOS, (where all executables should come from the rootfs, which is protected by Verified boot), this executable nature of memfd opens a door for NoExec bypass and enables “confused deputy attack”.  E.g, in VRP bug [1]: cros_vm process created a memfd to share the content with an external process, however the memfd is overwritten and used for executing arbitrary code and root escalation. [2] lists more VRP in this kind.
 
->
-> > +
-> >       for (i = 0; i < num_suites; i++) {
-> >               kunit_init_suite(suites[i]);
-> >               kunit_run_tests(suites[i]);
-> >       }
-> > +
-> > +     static_branch_dec(&kunit_running);
-> >       return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
-> > --
-> > 2.38.1.584.g0f3c55d4c2-goog
-> >
->
-> Regardless:
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> --
-> Kees Cook
+On the other hand, executable memfd has its legit use, runc uses memfd’s seal and executable feature to copy the contents of the binary then execute them, for such system, we need a solution to differentiate runc's use of  executable memfds and an attacker's [3].
 
-Daniel
+To address those above, this set of patches add following:
+1> Let memfd_create() set X bit at creation time.
+2> Let memfd to be sealed for modifying X bit.
+3> A new pid namespace sysctl: vm.memfd_noexec to control behavior of X bit.  For example, if a container has vm.memfd_noexec=2, then memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+4> A new security hook in memfd_create(). This make it possible to a new LSM, which rejects or allows executable memfd based on its security policy.
+
+This is V3 version of patch: see [4] [5] for previous versions.
+ 
+[1] https://crbug.com/1305411
+[2] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
+[3] https://lwn.net/Articles/781013/
+[4] https://lwn.net/Articles/890096/
+[5] https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
+
+Daniel Verkamp (2):
+  mm/memfd: add F_SEAL_EXEC
+  selftests/memfd: add tests for F_SEAL_EXEC
+
+Jeff Xu (4):
+  mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+  selftests/memfd: add tests for MFD_NOEXEC_SEAL MFD_EXEC
+  mm/memfd: security hook for memfd_create
+  mm/memfd: Add write seals when apply SEAL_EXEC to executable memfd
+
+ include/linux/lsm_hook_defs.h              |   1 +
+ include/linux/lsm_hooks.h                  |   4 +
+ include/linux/pid_namespace.h              |  19 ++
+ include/linux/security.h                   |   6 +
+ include/uapi/linux/fcntl.h                 |   1 +
+ include/uapi/linux/memfd.h                 |   4 +
+ kernel/pid_namespace.c                     |  47 ++++
+ mm/memfd.c                                 |  54 +++-
+ mm/shmem.c                                 |   6 +
+ tools/testing/selftests/memfd/fuse_test.c  |   1 +
+ tools/testing/selftests/memfd/memfd_test.c | 305 ++++++++++++++++++++-
+ 11 files changed, 445 insertions(+), 3 deletions(-)
+
+
+base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
