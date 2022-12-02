@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B1D63FD05
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 01:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B0463FD08
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 01:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiLBA1U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 19:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S231843AbiLBA1X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 19:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiLBA03 (ORCPT
+        with ESMTP id S232192AbiLBA0e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 19:26:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16316CEF8B
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 16:21:31 -0800 (PST)
+        Thu, 1 Dec 2022 19:26:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FACDFB48
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 16:21:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A78DB621D8
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Dec 2022 00:21:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4DCBC4347C;
-        Fri,  2 Dec 2022 00:21:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41650B82042
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Dec 2022 00:21:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A315C433C1;
+        Fri,  2 Dec 2022 00:21:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669940490;
-        bh=2TvBpW+4mBe//AkYGD/5GQvrFqDxmtFqkYgIiMm0bgA=;
+        s=k20201202; t=1669940491;
+        bh=dBD1V0ORWBj1gViOrTy7ZqLawnuQQJYymah38QyRU4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KcFXp35NRCmH6ZYPyy31n3LAu+jwq2kJCWgdVsvSztn9MMq3fN5lUinCJdZ1YvEkF
-         xL4dZQRZhSzQ4HnmrrM8W96mwXdeFcWdNBgzcfpYZZ6d0fs2G/h2gfnE71GRNcKgVB
-         OPdCbe8GRRkBJZM19WY0vEBK6bVn6t5s4lmGAH88H9goXOR08p+gBb4WbkamrzGCVc
-         QoLCnO8NUQFK4YHOnW/xhVnLsW0lemZ41gg/UMz6x01iefSD22IYYFBkzVmliwREpA
-         PJG9aAxqvFn7BtGoGzEMbzjIM6yyFZHxJCIMmJJOQTe/LalIEFXbZWNMbaILIB+XcB
-         SCZurxV2CvlwQ==
+        b=JEEjVcEoCdDe2vydJgo6Fds44sBe4nGYVFs5kwlOOgY83hP0iaUWBGDlCA1+kjnRR
+         2WDdmVsnGlz8Mo7C6Zv4CaB51etgn7ku9gHIlMI/PsxqrrlCFKZ1M/yvmuOjkZdFop
+         20Sd6tfdBLXMjF9vhVNCxPiRC+ANdTVR8J9/as7ZI8UQGtMNGkRiFxVTCeyyCMXfD3
+         PslMnWKxud72BUGBaM2esWXY/MKGAEp2bf053D3cOf17KmKAQ0NYhIjLpa4fbcQwRN
+         dP4vihSqKnl/NdbIxxCuqyADDrDw870puxZ9SbzDaCETpzP9iHuc7V/f9bv6yXMd0a
+         n2YH6/YV5qTWw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
         Shuah Khan <shuah@kernel.org>
 Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 5/7] kselftest/alsa: pcm - Support optional description for tests
-Date:   Fri,  2 Dec 2022 00:17:47 +0000
-Message-Id: <20221202001749.3321187-6-broonie@kernel.org>
+Subject: [PATCH v3 6/7] kselftest/alsa: pcm - Provide descriptions for the default tests
+Date:   Fri,  2 Dec 2022 00:17:48 +0000
+Message-Id: <20221202001749.3321187-7-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221202001749.3321187-1-broonie@kernel.org>
 References: <20221202001749.3321187-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1131; i=broonie@kernel.org; h=from:subject; bh=2TvBpW+4mBe//AkYGD/5GQvrFqDxmtFqkYgIiMm0bgA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjiUQq9PhIaf0O7Ezd65lBt/l7LVB7O8/W0d1//JGw IXs0OSGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY4lEKgAKCRAk1otyXVSH0OyVB/ wLRcQW5P/g1qd8SZ5Zg9Fs9Jwc1mzWGb7otESMM0f0RMdhOW0Bge3A3SHfz+5BcIQH4lxdzgOb78Af B7HJdsZzP46f8w7uNybSWoqaYS4F9j0SF8GsxqOKytc0apmS315oCgTg0VE8jsB5aug0CO1HhzOSoG kSAcCs5KGqAHvckJm56UAILVKG/Udz6lqEYVudDuF1Eo2PxT7IuhQIEpZF7hKgQ9KmfTtbqlRkewZa JjQsUsZzz90F0V/TfbCNJrtpiRMeO+3ZEx8Nufw5KRpC9dS6jAPJOK/TDIcwWNXRBAmifSrau7X5nL Bw4t8oR5v+CZghefkEkgGID6hqR9uM
+X-Developer-Signature: v=1; a=openpgp-sha256; l=893; i=broonie@kernel.org; h=from:subject; bh=dBD1V0ORWBj1gViOrTy7ZqLawnuQQJYymah38QyRU4M=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjiUQrsTUC11H3brnOPFclzE/I346UGT29tb6iInrE QC+kHEGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY4lEKwAKCRAk1otyXVSH0IyhB/ 9hUsUOCb9wqCoPiH7AgPo3TXcnBHp9zypli7WnEc/yqw2ZtuO96CZbFDFz72DqFIqDqiHZDzjYeKn+ SRKMGmc+ttgXbm8dMJlkSDfMr+35fzOH7AKVV7hzQsHIYAbvpr/8oxWucxvONDuDJTim+Ol3xCrOxs CTWI1zv05zYvqq5PCRvjaeo2GxinTGCfXQ94J/sb6o24SOVjqZNtQ7b0XJUeDwJHgrJmv4piKNLy73 saRRuYwjX65h6IE+ECKM4lZiajYbxLu+bk1i2loBoFG1BYVVvn0FTGZqknw6OK63PkQfTt6Cr48DKr w+oYe/TAjIHrD+4dHxi5WWhbrwBx5Z
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,33 +56,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to help with the comprehensibility of tests it is useful for us to
-document what the test is attempting to cover. We could just do this through
-comments in the configuration files but in order to aid people looking at
-the output of the program in logs let's provide support for an optional
-'description' directive which we log prior to running each of the tests.
+Help people understand what the standard tests are trying to cover by
+providing descriptions which both serve as comments in the file and log
+messages in the program's output.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/alsa/pcm-test.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/alsa/pcm-test.conf | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
-index 5fbb3ff517aa..57d3f6dcb46b 100644
---- a/tools/testing/selftests/alsa/pcm-test.c
-+++ b/tools/testing/selftests/alsa/pcm-test.c
-@@ -244,6 +244,11 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
- 	snd_pcm_sw_params_t *sw_params;
- 	const char *test_class_name;
- 	bool skip = true;
-+	const char *desc;
-+
-+	desc = conf_get_string(pcm_cfg, "description", NULL, NULL);
-+	if (desc)
-+		ksft_print_msg("%s\n", desc);
- 
- 	switch (class) {
- 	case TEST_CLASS_DEFAULT:
+diff --git a/tools/testing/selftests/alsa/pcm-test.conf b/tools/testing/selftests/alsa/pcm-test.conf
+index 473a19251b49..1662a8c7073e 100644
+--- a/tools/testing/selftests/alsa/pcm-test.conf
++++ b/tools/testing/selftests/alsa/pcm-test.conf
+@@ -1,4 +1,5 @@
+ pcm.test.time1 {
++	description "48kHz stereo small periods"
+ 	format S16_LE
+ 	alt_formats [ S32_LE ]
+ 	rate 48000
+@@ -7,6 +8,7 @@ pcm.test.time1 {
+ 	buffer_size 4096
+ }
+ pcm.test.time2 {
++	description "48kHz stereo large periods"
+ 	format S16_LE
+ 	alt_formats [ S32_LE ]
+ 	rate 48000
 -- 
 2.30.2
 
