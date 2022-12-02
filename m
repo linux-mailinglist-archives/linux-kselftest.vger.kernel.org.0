@@ -2,580 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596196403EE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 11:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6216404B8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 11:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233205AbiLBJ77 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Dec 2022 04:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
+        id S233380AbiLBKds (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Dec 2022 05:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiLBJ7x (ORCPT
+        with ESMTP id S233375AbiLBKdi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Dec 2022 04:59:53 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5295DCB23D;
-        Fri,  2 Dec 2022 01:59:47 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id h11so6972298wrw.13;
-        Fri, 02 Dec 2022 01:59:47 -0800 (PST)
+        Fri, 2 Dec 2022 05:33:38 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C603C4CE2
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Dec 2022 02:33:36 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id e13so5874294edj.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Dec 2022 02:33:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uKZprtD+gA/jaDkOr29nKwQ1R5QjOuUs68voLZiKTzk=;
-        b=Ia6s9hFRCXGVXQcFexupk7b2LlAauudZ0+CytlPK1n/IwqkytqkFCiZoy5GKVOrXBR
-         9WAfLwNfOL2dbCdxjPdPh2YWCL5hkAIxgRMYopftfKCIpvUwc+IOyTvCCyFb4DCi9EOg
-         qtRDAGzBtczBE/2dXify7WyDLGRil3/u9E1zZyKmZMfpW++lBO/SyuQIDnrnVt4C8zCz
-         HPYt1uJqSl85z7dhzzr0tpzob/WiaZWCNjqwmxiYyU88RgUDqmWDjxAW/ZCBQydY+oxQ
-         z+XIkMiNXJ33uM4bxQD8X0SWZtwTlo5Pv0AljDOVFtCX5sKNP0woqWxwiYM5zPeKYBVl
-         xReg==
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/e58gZBtEpImuaapH5z3ZZXyBnJ+7CtdRYYz6q6IemE=;
+        b=FBEXuKdH6DfRsx/hPmSsGMAoEqRA85szN/9ar3oRgmjZKJSW0qhSTMipDJfm2YOWoQ
+         aWCWj3YaFHriFVFVuqIBHBXtPSRJz901i+Ix+WOHoKB1VeZHk0CAHkNfH9Smf9l9Rrvo
+         IM7L/PfDnCGhkeVRsZpsK5387PYAMfyEO9yXca3u/33VOejA35Y3GUqR26S+Fq+2fXAs
+         7prhT/G8V2D2zcr13/2W37SvVVSd/K4e//HKKA00PKCpBfAe/bn3D9M/KjmGI+m+j4uk
+         sMW66RUtnuKD1kEyUEwzuxEJ6wQ1LSgsuwNLLnkK8vqBclsIMWz3KBejJw9PelhZCz0P
+         Oexw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uKZprtD+gA/jaDkOr29nKwQ1R5QjOuUs68voLZiKTzk=;
-        b=PL1dz0wcCyheREAh56qtQv4rYsztrv5/iMFyY8bf2nj+05SYUmm1jwaiFowUqPt0cI
-         oSaSuQcgJJCEs1fBM/Mpwc9WZNdAMQ5w/hvHU9Cqf4OKn9lOE6NzskVrpn4km9CdmMq3
-         h4wAwbgHSI7GsiiIgHkK9dzLYE8IZbLBUdZhXnzl23XCbk3YCowvsq/HFMNKL9umCq3+
-         gFXlAe/ZiK5ZvGu9EhwylmwVrClFqkY9rreZv1eLa31F4KGRNL7St1jt/TqP/bn4dSfA
-         FzBnszJu8fb2BJf+kzzNDDBwzwMKRybx00Ul11EN1nkgzza7ONVLU6/ROsVvwGEfX2GU
-         O+Tg==
-X-Gm-Message-State: ANoB5pn32q9j1uQYucZgmv98vQDrY/cTzNU6r53acmHEqrLHWV2Dcr7F
-        2ncymJ8LREsZ57u200IrA64=
-X-Google-Smtp-Source: AA0mqf5UcuinNzJuLq961+wW53rGNkyowj46ikNmCjmZ/ykjpwKPMicVjSR4V7NPq1kUMujPlEDUpA==
-X-Received: by 2002:a05:6000:60c:b0:242:10ac:6ab2 with SMTP id bn12-20020a056000060c00b0024210ac6ab2mr17119718wrb.552.1669975185630;
-        Fri, 02 Dec 2022 01:59:45 -0800 (PST)
-Received: from localhost.localdomain ([213.57.189.88])
-        by smtp.gmail.com with ESMTPSA id s1-20020adfdb01000000b002420a2cdc96sm6517851wri.70.2022.12.02.01.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 01:59:45 -0800 (PST)
-From:   Eyal Birger <eyal.birger@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, steffen.klassert@secunet.com,
-        herbert@gondor.apana.org.au, andrii@kernel.org,
-        daniel@iogearbox.net, nicolas.dichtel@6wind.com,
-        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
-        liuhangbin@gmail.com, lixiaoyan@google.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Eyal Birger <eyal.birger@gmail.com>
-Subject: [PATCH bpf-next,v4 4/4] selftests/bpf: add xfrm_info tests
-Date:   Fri,  2 Dec 2022 11:59:20 +0200
-Message-Id: <20221202095920.1659332-5-eyal.birger@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221202095920.1659332-1-eyal.birger@gmail.com>
-References: <20221202095920.1659332-1-eyal.birger@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/e58gZBtEpImuaapH5z3ZZXyBnJ+7CtdRYYz6q6IemE=;
+        b=36Ow9+2JqnNdb/QHiD50Qn9dfnRI+7Dv5c36zdTpnFgQQ1VHc3J/blsxoBK64qJ/K4
+         53z/eml78daHVDO9Vr6D4kCQMTFd2WxAHclxOJAgE3QmYO9BixdyfisA4GF14Fm52Vh8
+         SCTZqVMdTx90doP+wUtMbIIxRzNlx7fbLb3RTEcs0v4khthwLmvLesQJ+MeXespTjT6k
+         EfKeWKjFE6d6kAjW++0mj579USSp2S0qNadHsJQbap71mLX+oL9VRj7l0hfDO28aj1H/
+         JsO/ysmkJVLVSlotJDEvhi3DwiSxwpxZg8nRxzFGGbYHhPC+vOGmMw3kxeyh5g/BugfU
+         4SyQ==
+X-Gm-Message-State: ANoB5pk93bdLBdcHzdTmA7PEluKkxOMkFe4ecjN5dR/mnkxO8Xm4f0G0
+        xa3viU/3fBWl9bEFX5WWcQmiBT70ctxepTeH
+X-Google-Smtp-Source: AA0mqf62g7tL05/yrH9Nmc/hP4lJkxbx6iU2/cPHDSx5Oqj8j6hZK8YiIPj5dHAh++pcOEG7PBPo0w==
+X-Received: by 2002:a05:6402:528d:b0:468:dc9:ec08 with SMTP id en13-20020a056402528d00b004680dc9ec08mr49095306edb.17.1669977214833;
+        Fri, 02 Dec 2022 02:33:34 -0800 (PST)
+Received: from [10.44.2.26] (84-199-106-91.ifiber.telenet-ops.be. [84.199.106.91])
+        by smtp.gmail.com with ESMTPSA id q18-20020a1709066b1200b007bf988ce9f7sm2876728ejr.38.2022.12.02.02.33.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 02:33:34 -0800 (PST)
+Message-ID: <fc48c2e1-1df2-c636-bfa4-621148790133@tessares.net>
+Date:   Fri, 2 Dec 2022 11:33:33 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH net-next 00/11] mptcp: PM listener events + selftests
+ cleanup
+Content-Language: en-GB
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        mptcp@lists.linux.dev, netdev@vger.kernel.org
+References: <20221130140637.409926-1-matthieu.baerts@tessares.net>
+ <20221201200953.2944415e@kernel.org>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20221201200953.2944415e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test the xfrm_info kfunc helpers.
+Hi Jakub,
 
-The test setup creates three name spaces - NS0, NS1, NS2.
+On 02/12/2022 05:09, Jakub Kicinski wrote:
+> On Wed, 30 Nov 2022 15:06:22 +0100 Matthieu Baerts wrote:
+>> Thanks to the patch 6/11, the MPTCP path manager now sends Netlink events when
+>> MPTCP listening sockets are created and closed. The reason why it is needed is
+>> explained in the linked ticket [1]:
+>>
+>>   MPTCP for Linux, when not using the in-kernel PM, depends on the userspace PM
+>>   to create extra listening sockets before announcing addresses and ports. Let's
+>>   call these "PM listeners".
+>>
+>>   With the existing MPTCP netlink events, a userspace PM can create PM listeners
+>>   at startup time, or in response to an incoming connection. Creating sockets in
+>>   response to connections is not optimal: ADD_ADDRs can't be sent until the
+>>   sockets are created and listen()ed, and if all connections are closed then it
+>>   may not be clear to the userspace PM daemon that PM listener sockets should be
+>>   cleaned up.
+>>
+>>   Hence this feature request: to add MPTCP netlink events for listening socket
+>>   close & create, so PM listening sockets can be managed based on application
+>>   activity.
+>>
+>>   [1] https://github.com/multipath-tcp/mptcp_net-next/issues/313
+>>
+>> Selftests for these new Netlink events have been added in patches 9,11/11.
+>>
+>> The remaining patches introduce different cleanups and small improvements in
+>> MPTCP selftests to ease the maintenance and the addition of new tests.
+> 
+> Also could you warp you cover letters at 72 characters?
+> I need to reflow them before I can read them :(
 
-XFRM tunnels are setup between NS0 and the two other NSs.
+Oops, my bad, I'm sorry for that! Thank you for having reported the issue!
 
-The kfunc helpers are used to steer traffic from NS0 to the other
-NSs based on a userspace populated bpf global variable and validate
-that the return traffic had arrived from the desired NS.
+I didn't notice I didn't set the limit to 72 chars for the
+"gitsendemail" file type like I did for "gitcommit" in my current vim
+config. Done now, next cover-letter should be properly formatted! :)
 
-Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
-
----
-v4: changes suggested by Martin KaFai Lau:
-  - minor coding and wording changes
-  - use vmlinux.h and bpf_tracing_net.h in test program
-  - avoid running on s390x in CI as kfuncs aren't supported there
-
-v3: changes suggested by Martin KaFai Lau:
-  - rename test_xfrm_info{,_kern}.c -> xfrm_info.c
-  - avoid running in a separate thread
-  - simplify test setup
-  - verify underlay/overlay success
-  - create NS0 xfrmi external device using netlink to avoid dependency
-    on newer iproute2
-  - remove use of bpf_trace_printk() in test programs
-  - add "preserve_access_index" attribute annotation in test program
-    struct definition
-  - use bss variables access instead of a map for userspace/bpf interface
-
-v2:
-  - use an lwt route in NS1 for testing that flow as well
-  - indendation fix
----
- tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
- tools/testing/selftests/bpf/config            |   2 +
- .../selftests/bpf/prog_tests/xfrm_info.c      | 365 ++++++++++++++++++
- .../selftests/bpf/progs/bpf_tracing_net.h     |   3 +
- tools/testing/selftests/bpf/progs/xfrm_info.c |  35 ++
- 5 files changed, 406 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xfrm_info.c
- create mode 100644 tools/testing/selftests/bpf/progs/xfrm_info.c
-
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index 3481f3a5ea6f..585fcf73c731 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -85,3 +85,4 @@ xdp_bonding                              # failed to auto-attach program 'trace_
- xdp_bpf2bpf                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
- xdp_do_redirect                          # prog_run_max_size unexpected error: -22 (errno 22)
- xdp_synproxy                             # JIT does not support calling kernel function                                (kfunc)
-+xfrm_info                                # JIT does not support calling kernel function                                (kfunc)
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index f9034ea00bc9..3543c76cef56 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -23,6 +23,7 @@ CONFIG_IKCONFIG_PROC=y
- CONFIG_IMA=y
- CONFIG_IMA_READ_POLICY=y
- CONFIG_IMA_WRITE_POLICY=y
-+CONFIG_INET_ESP=y
- CONFIG_IP_NF_FILTER=y
- CONFIG_IP_NF_RAW=y
- CONFIG_IP_NF_TARGET_SYNPROXY=y
-@@ -74,3 +75,4 @@ CONFIG_TEST_BPF=y
- CONFIG_USERFAULTFD=y
- CONFIG_VXLAN=y
- CONFIG_XDP_SOCKETS=y
-+CONFIG_XFRM_INTERFACE=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/xfrm_info.c b/tools/testing/selftests/bpf/prog_tests/xfrm_info.c
-new file mode 100644
-index 000000000000..926df2047d2a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xfrm_info.c
-@@ -0,0 +1,365 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+/*
-+ * Topology:
-+ * ---------
-+ *   NS0 namespace         |   NS1 namespace        | NS2 namespace
-+ *                         |                        |
-+ *   +---------------+     |   +---------------+    |
-+ *   |    ipsec0     |---------|    ipsec0     |    |
-+ *   | 192.168.1.100 |     |   | 192.168.1.200 |    |
-+ *   | if_id: bpf    |     |   +---------------+    |
-+ *   +---------------+     |                        |
-+ *           |             |                        |   +---------------+
-+ *           |             |                        |   |    ipsec0     |
-+ *           \------------------------------------------| 192.168.1.200 |
-+ *                         |                        |   +---------------+
-+ *                         |                        |
-+ *                         |                        | (overlay network)
-+ *      ------------------------------------------------------
-+ *                         |                        | (underlay network)
-+ *   +--------------+      |   +--------------+     |
-+ *   |    veth01    |----------|    veth10    |     |
-+ *   | 172.16.1.100 |      |   | 172.16.1.200 |     |
-+ *   ---------------+      |   +--------------+     |
-+ *                         |                        |
-+ *   +--------------+      |                        |   +--------------+
-+ *   |    veth02    |-----------------------------------|    veth20    |
-+ *   | 172.16.2.100 |      |                        |   | 172.16.2.200 |
-+ *   +--------------+      |                        |   +--------------+
-+ *
-+ *
-+ * Test Packet flow
-+ * -----------
-+ *  The tests perform 'ping 192.168.1.200' from the NS0 namespace:
-+ *  1) request is routed to NS0 ipsec0
-+ *  2) NS0 ipsec0 tc egress BPF program is triggered and sets the if_id based
-+ *     on the requested value. This makes the ipsec0 device in external mode
-+ *     select the destination tunnel
-+ *  3) ping reaches the other namespace (NS1 or NS2 based on which if_id was
-+ *     used) and response is sent
-+ *  4) response is received on NS0 ipsec0, tc ingress program is triggered and
-+ *     records the response if_id
-+ *  5) requested if_id is compared with received if_id
-+ */
-+
-+#include <net/if.h>
-+#include <linux/rtnetlink.h>
-+#include <linux/if_link.h>
-+
-+#include "test_progs.h"
-+#include "network_helpers.h"
-+#include "xfrm_info.skel.h"
-+
-+#define NS0 "xfrm_test_ns0"
-+#define NS1 "xfrm_test_ns1"
-+#define NS2 "xfrm_test_ns2"
-+
-+#define IF_ID_0_TO_1 1
-+#define IF_ID_0_TO_2 2
-+#define IF_ID_1 3
-+#define IF_ID_2 4
-+
-+#define IP4_ADDR_VETH01 "172.16.1.100"
-+#define IP4_ADDR_VETH10 "172.16.1.200"
-+#define IP4_ADDR_VETH02 "172.16.2.100"
-+#define IP4_ADDR_VETH20 "172.16.2.200"
-+
-+#define ESP_DUMMY_PARAMS \
-+    "proto esp aead 'rfc4106(gcm(aes))' " \
-+    "0xe4d8f4b4da1df18a3510b3781496daa82488b713 128 mode tunnel "
-+
-+#define PING_ARGS "-i 0.01 -c 3 -w 10 -q"
-+
-+#define SYS(fmt, ...)						\
-+	({							\
-+		char cmd[1024];					\
-+		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-+		if (!ASSERT_OK(system(cmd), cmd))		\
-+			goto fail;				\
-+	})
-+
-+#define SYS_NOFAIL(fmt, ...)					\
-+	({							\
-+		char cmd[1024];					\
-+		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-+		system(cmd);					\
-+	})
-+
-+static int attach_tc_prog(struct bpf_tc_hook *hook, int igr_fd, int egr_fd)
-+{
-+	LIBBPF_OPTS(bpf_tc_opts, opts1, .handle = 1, .priority = 1,
-+		    .prog_fd = igr_fd);
-+	LIBBPF_OPTS(bpf_tc_opts, opts2, .handle = 1, .priority = 1,
-+		    .prog_fd = egr_fd);
-+	int ret;
-+
-+	ret = bpf_tc_hook_create(hook);
-+	if (!ASSERT_OK(ret, "create tc hook"))
-+		return ret;
-+
-+	if (igr_fd >= 0) {
-+		hook->attach_point = BPF_TC_INGRESS;
-+		ret = bpf_tc_attach(hook, &opts1);
-+		if (!ASSERT_OK(ret, "bpf_tc_attach")) {
-+			bpf_tc_hook_destroy(hook);
-+			return ret;
-+		}
-+	}
-+
-+	if (egr_fd >= 0) {
-+		hook->attach_point = BPF_TC_EGRESS;
-+		ret = bpf_tc_attach(hook, &opts2);
-+		if (!ASSERT_OK(ret, "bpf_tc_attach")) {
-+			bpf_tc_hook_destroy(hook);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static void cleanup(void)
-+{
-+	SYS_NOFAIL("test -f /var/run/netns/" NS0 " && ip netns delete " NS0);
-+	SYS_NOFAIL("test -f /var/run/netns/" NS1 " && ip netns delete " NS1);
-+	SYS_NOFAIL("test -f /var/run/netns/" NS2 " && ip netns delete " NS2);
-+}
-+
-+static int config_underlay(void)
-+{
-+	SYS("ip netns add " NS0);
-+	SYS("ip netns add " NS1);
-+	SYS("ip netns add " NS2);
-+
-+	/* NS0 <-> NS1 [veth01 <-> veth10] */
-+	SYS("ip link add veth01 netns " NS0 " type veth peer name veth10 netns " NS1);
-+	SYS("ip -net " NS0 " addr add " IP4_ADDR_VETH01 "/24 dev veth01");
-+	SYS("ip -net " NS0 " link set dev veth01 up");
-+	SYS("ip -net " NS1 " addr add " IP4_ADDR_VETH10 "/24 dev veth10");
-+	SYS("ip -net " NS1 " link set dev veth10 up");
-+
-+	/* NS0 <-> NS2 [veth02 <-> veth20] */
-+	SYS("ip link add veth02 netns " NS0 " type veth peer name veth20 netns " NS2);
-+	SYS("ip -net " NS0 " addr add " IP4_ADDR_VETH02 "/24 dev veth02");
-+	SYS("ip -net " NS0 " link set dev veth02 up");
-+	SYS("ip -net " NS2 " addr add " IP4_ADDR_VETH20 "/24 dev veth20");
-+	SYS("ip -net " NS2 " link set dev veth20 up");
-+
-+	return 0;
-+fail:
-+	return -1;
-+}
-+
-+static int setup_xfrm_tunnel_ns(const char *ns, const char *ipv4_local,
-+				const char *ipv4_remote, int if_id)
-+{
-+	/* State: local -> remote */
-+	SYS("ip -net %s xfrm state add src %s dst %s spi 1 "
-+	    ESP_DUMMY_PARAMS "if_id %d", ns, ipv4_local, ipv4_remote, if_id);
-+
-+	/* State: local <- remote */
-+	SYS("ip -net %s xfrm state add src %s dst %s spi 1 "
-+	    ESP_DUMMY_PARAMS "if_id %d", ns, ipv4_remote, ipv4_local, if_id);
-+
-+	/* Policy: local -> remote */
-+	SYS("ip -net %s xfrm policy add dir out src 0.0.0.0/0 dst 0.0.0.0/0 "
-+	    "if_id %d tmpl src %s dst %s proto esp mode tunnel if_id %d", ns,
-+	    if_id, ipv4_local, ipv4_remote, if_id);
-+
-+	/* Policy: local <- remote */
-+	SYS("ip -net %s xfrm policy add dir in src 0.0.0.0/0 dst 0.0.0.0/0 "
-+	    "if_id %d tmpl src %s dst %s proto esp mode tunnel if_id %d", ns,
-+	    if_id, ipv4_remote, ipv4_local, if_id);
-+
-+	return 0;
-+fail:
-+	return -1;
-+}
-+
-+static int setup_xfrm_tunnel(const char *ns_a, const char *ns_b,
-+			     const char *ipv4_a, const char *ipv4_b,
-+			     int if_id_a, int if_id_b)
-+{
-+	return setup_xfrm_tunnel_ns(ns_a, ipv4_a, ipv4_b, if_id_a) ||
-+		setup_xfrm_tunnel_ns(ns_b, ipv4_b, ipv4_a, if_id_b);
-+}
-+
-+static struct rtattr *rtattr_add(struct nlmsghdr *nh, unsigned short type,
-+				 unsigned short len)
-+{
-+	struct rtattr *rta =
-+		(struct rtattr *)((uint8_t *)nh + RTA_ALIGN(nh->nlmsg_len));
-+	rta->rta_type = type;
-+	rta->rta_len = RTA_LENGTH(len);
-+	nh->nlmsg_len = RTA_ALIGN(nh->nlmsg_len) + RTA_ALIGN(rta->rta_len);
-+	return rta;
-+}
-+
-+static struct rtattr *rtattr_add_str(struct nlmsghdr *nh, unsigned short type,
-+				     const char *s)
-+{
-+	struct rtattr *rta = rtattr_add(nh, type, strlen(s));
-+
-+	memcpy(RTA_DATA(rta), s, strlen(s));
-+	return rta;
-+}
-+
-+static struct rtattr *rtattr_begin(struct nlmsghdr *nh, unsigned short type)
-+{
-+	return rtattr_add(nh, type, 0);
-+}
-+
-+static void rtattr_end(struct nlmsghdr *nh, struct rtattr *attr)
-+{
-+	uint8_t *end = (uint8_t *)nh + nh->nlmsg_len;
-+
-+	attr->rta_len = end - (uint8_t *)attr;
-+}
-+
-+static int setup_xfrmi_external_dev(const char *ns)
-+{
-+	struct {
-+		struct nlmsghdr nh;
-+		struct ifinfomsg info;
-+		unsigned char data[128];
-+	} req;
-+	struct rtattr *link_info, *info_data;
-+	struct nstoken *nstoken;
-+	int ret = -1, sock = -1;
-+	struct nlmsghdr *nh;
-+
-+	memset(&req, 0, sizeof(req));
-+	nh = &req.nh;
-+	nh->nlmsg_len = NLMSG_LENGTH(sizeof(req.info));
-+	nh->nlmsg_type = RTM_NEWLINK;
-+	nh->nlmsg_flags |= NLM_F_CREATE | NLM_F_REQUEST;
-+
-+	rtattr_add_str(nh, IFLA_IFNAME, "ipsec0");
-+	link_info = rtattr_begin(nh, IFLA_LINKINFO);
-+	rtattr_add_str(nh, IFLA_INFO_KIND, "xfrm");
-+	info_data = rtattr_begin(nh, IFLA_INFO_DATA);
-+	rtattr_add(nh, IFLA_XFRM_COLLECT_METADATA, 0);
-+	rtattr_end(nh, info_data);
-+	rtattr_end(nh, link_info);
-+
-+	nstoken = open_netns(ns);
-+	if (!ASSERT_OK_PTR(nstoken, "setns"))
-+		goto done;
-+
-+	sock = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, NETLINK_ROUTE);
-+	if (!ASSERT_GE(sock, 0, "netlink socket"))
-+		goto done;
-+	ret = send(sock, nh, nh->nlmsg_len, 0);
-+	if (!ASSERT_EQ(ret, nh->nlmsg_len, "netlink send length"))
-+		goto done;
-+
-+	ret = 0;
-+done:
-+	if (sock != -1)
-+		close(sock);
-+	if (nstoken)
-+		close_netns(nstoken);
-+	return ret;
-+}
-+
-+static int config_overlay(void)
-+{
-+	if (setup_xfrm_tunnel(NS0, NS1, IP4_ADDR_VETH01, IP4_ADDR_VETH10,
-+			      IF_ID_0_TO_1, IF_ID_1))
-+		goto fail;
-+	if (setup_xfrm_tunnel(NS0, NS2, IP4_ADDR_VETH02, IP4_ADDR_VETH20,
-+			      IF_ID_0_TO_2, IF_ID_2))
-+		goto fail;
-+
-+	/* Older iproute2 doesn't support this option */
-+	if (!ASSERT_OK(setup_xfrmi_external_dev(NS0), "xfrmi"))
-+		goto fail;
-+
-+	SYS("ip -net " NS0 " addr add 192.168.1.100/24 dev ipsec0");
-+	SYS("ip -net " NS0 " link set dev ipsec0 up");
-+
-+	SYS("ip -net " NS1 " link add ipsec0 type xfrm if_id %d", IF_ID_1);
-+	SYS("ip -net " NS1 " addr add 192.168.1.200/24 dev ipsec0");
-+	SYS("ip -net " NS1 " link set dev ipsec0 up");
-+
-+	SYS("ip -net " NS2 " link add ipsec0 type xfrm if_id %d", IF_ID_2);
-+	SYS("ip -net " NS2 " addr add 192.168.1.200/24 dev ipsec0");
-+	SYS("ip -net " NS2 " link set dev ipsec0 up");
-+
-+	return 0;
-+fail:
-+	return -1;
-+}
-+
-+static int test_xfrm_ping(struct xfrm_info *skel, u32 if_id)
-+{
-+	skel->bss->req_if_id = if_id;
-+
-+	SYS("ping -i 0.01 -c 3 -w 10 -q 192.168.1.200 > /dev/null");
-+
-+	if (!ASSERT_EQ(skel->bss->resp_if_id, if_id, "if_id"))
-+		goto fail;
-+
-+	return 0;
-+fail:
-+	return -1;
-+}
-+
-+static void _test_xfrm_info(void)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
-+	int get_xfrm_info_prog_fd, set_xfrm_info_prog_fd;
-+	struct xfrm_info *skel = NULL;
-+	struct nstoken *nstoken = NULL;
-+	int ifindex;
-+
-+	/* load and attach bpf progs to ipsec dev tc hook point */
-+	skel = xfrm_info__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "xfrm_info__open_and_load"))
-+		goto done;
-+	nstoken = open_netns(NS0);
-+	if (!ASSERT_OK_PTR(nstoken, "setns " NS0))
-+		goto done;
-+	ifindex = if_nametoindex("ipsec0");
-+	if (!ASSERT_NEQ(ifindex, 0, "ipsec0 ifindex"))
-+		goto done;
-+	tc_hook.ifindex = ifindex;
-+	set_xfrm_info_prog_fd = bpf_program__fd(skel->progs.set_xfrm_info);
-+	get_xfrm_info_prog_fd = bpf_program__fd(skel->progs.get_xfrm_info);
-+	if (!ASSERT_GE(set_xfrm_info_prog_fd, 0, "bpf_program__fd"))
-+		goto done;
-+	if (!ASSERT_GE(get_xfrm_info_prog_fd, 0, "bpf_program__fd"))
-+		goto done;
-+	if (attach_tc_prog(&tc_hook, get_xfrm_info_prog_fd,
-+			   set_xfrm_info_prog_fd))
-+		goto done;
-+
-+	/* perform test */
-+	if (!ASSERT_EQ(test_xfrm_ping(skel, IF_ID_0_TO_1), 0, "ping " NS1))
-+		goto done;
-+	if (!ASSERT_EQ(test_xfrm_ping(skel, IF_ID_0_TO_2), 0, "ping " NS2))
-+		goto done;
-+
-+done:
-+	if (nstoken)
-+		close_netns(nstoken);
-+	if (skel)
-+		xfrm_info__destroy(skel);
-+}
-+
-+void test_xfrm_info(void)
-+{
-+	cleanup();
-+
-+	if (!ASSERT_OK(config_underlay(), "config_underlay"))
-+		goto done;
-+	if (!ASSERT_OK(config_overlay(), "config_overlay"))
-+		goto done;
-+
-+	if (test__start_subtest("xfrm_info"))
-+		_test_xfrm_info();
-+
-+done:
-+	cleanup();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-index adb087aecc9e..b394817126cf 100644
---- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-@@ -25,6 +25,9 @@
- #define IPV6_TCLASS		67
- #define IPV6_AUTOFLOWLABEL	70
- 
-+#define TC_ACT_UNSPEC		(-1)
-+#define TC_ACT_SHOT		2
-+
- #define SOL_TCP			6
- #define TCP_NODELAY		1
- #define TCP_MAXSEG		2
-diff --git a/tools/testing/selftests/bpf/progs/xfrm_info.c b/tools/testing/selftests/bpf/progs/xfrm_info.c
-new file mode 100644
-index 000000000000..3acedcdd962d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/xfrm_info.c
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include "bpf_tracing_net.h"
-+#include <bpf/bpf_helpers.h>
-+
-+__u32 req_if_id;
-+__u32 resp_if_id;
-+
-+int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
-+			  const struct bpf_xfrm_info *from) __ksym;
-+int bpf_skb_get_xfrm_info(struct __sk_buff *skb_ctx,
-+			  struct bpf_xfrm_info *to) __ksym;
-+
-+SEC("tc")
-+int set_xfrm_info(struct __sk_buff *skb)
-+{
-+	struct bpf_xfrm_info info = { .if_id = req_if_id };
-+
-+	return bpf_skb_set_xfrm_info(skb, &info) ? TC_ACT_SHOT : TC_ACT_UNSPEC;
-+}
-+
-+SEC("tc")
-+int get_xfrm_info(struct __sk_buff *skb)
-+{
-+	struct bpf_xfrm_info info = {};
-+
-+	if (bpf_skb_get_xfrm_info(skb, &info) < 0)
-+		return TC_ACT_SHOT;
-+
-+	resp_if_id = info.if_id;
-+
-+	return TC_ACT_UNSPEC;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+Cheers,
+Matt
 -- 
-2.34.1
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
