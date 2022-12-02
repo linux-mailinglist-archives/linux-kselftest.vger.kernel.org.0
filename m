@@ -2,144 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F197640F6F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 21:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37B9640FC4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 22:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234266AbiLBUvR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Dec 2022 15:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
+        id S229527AbiLBVGP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Dec 2022 16:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235020AbiLBUuu (ORCPT
+        with ESMTP id S229500AbiLBVGO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Dec 2022 15:50:50 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C617E38BB;
-        Fri,  2 Dec 2022 12:49:49 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id z192so7485767yba.0;
-        Fri, 02 Dec 2022 12:49:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mu84QcF4nGS1pRC8Av6fg3KQ7KwDjJQ4dLvyiZ13eHk=;
-        b=Tus0r5uMYaRAJz+2MnvZSM9L+9gP82Q4ojUcUqHic8lEw6bLz/l9UXbXBZZgyRl9oP
-         5gsHZVD01uYm/oEm/ih+orHOqPSMhP2qHtR3E65s0QpvDs94x0lt1cYOSmAzxo/GA5gb
-         LfVFPzEQpiPU3KB4kfVGMvrbaeCVRzGlOwkuc80FX2N5Ni1RxLJ8J9k5GV4Lgk0dFUUZ
-         VTEagQbT4VhQMuqy4MxfBWm5I/q04AB/1Ae5iFbLtNCeGfJy2Y+E5nuV6f33uxqhTKVi
-         Svol8J+zIWCdgH+Zm27uQ+O9YzSVL5YJXai/zwW14G8Wr+QQq67jMSQ5bFUMABMQ+QL0
-         +oOA==
+        Fri, 2 Dec 2022 16:06:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B402EA5D4
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Dec 2022 13:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670015118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cFFC8DQP235KAQhynGslmUAEiqukq9bbJSq7ImsePcg=;
+        b=T/193CqJnNIWE0Wxto4OdjIarCFKdcwQAvD/oKa1YNs3oh+cFWSbahqjOhmlMmXm4BkGV3
+        eQCpxbnlqI2+eJzvrdsJ+WWVqLRLobrqInQDcvfWM2Cc47FX4uY1bK/4TaUiKeyMm3KSuZ
+        iIqYzwdZSyDNrBk3Hh3RYazTQi0QDv4=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-612-dL8U8J5APuOZa_r2rus45Q-1; Fri, 02 Dec 2022 16:05:15 -0500
+X-MC-Unique: dL8U8J5APuOZa_r2rus45Q-1
+Received: by mail-qt1-f198.google.com with SMTP id cj6-20020a05622a258600b003a519d02f59so20453206qtb.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Dec 2022 13:05:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mu84QcF4nGS1pRC8Av6fg3KQ7KwDjJQ4dLvyiZ13eHk=;
-        b=EUqOd3BHwT8/YJIwFi5ldp7llmVHasbEawk91d1uTfICb1ADouTSWftpLpSS5Nbthr
-         maJwvt2tMP9B0I0yPCf5hgltFPo8LTb3qfekimXjxZMKfBHb0qyScZlwtg1aS3OCdQlJ
-         +tnHnCV2y4oQtYao+vQy71uT/vMqgb6oJN9iefNDsDVmgeSrc4/Y7/dhFiVb2zBjcMz8
-         /Agzggi+iLQtfI9N8nciVXeSv136/nuKfmqeMEeNXQBNWY/Ko7DKdePTCW/eamnknjoz
-         TB/t8qB5DvLsloMc1p1Pt5QM4k6dUmtQSc5CYaKY0YJ5+u6ZbaNp6uSAPTkNxXdk1ZLW
-         w6dw==
-X-Gm-Message-State: ANoB5pksSbjJ6OpbHFNMFGkD08FLThHgTO6DlQJqAx7Rk/QEmZeeEBJy
-        Ytax989W+sSBRIVxncv8ZYFrlB3ikVoGO0eJOvIbD7/xyl6NYA==
-X-Google-Smtp-Source: AA0mqf5G8fgB6xxIczohQ/X7u6CGL/qnAqg5943cNlIcDefwH1BJKc8d47UVjhtEc1jbGSYWQYxdwdVzpWJQC611SJw=
-X-Received: by 2002:a25:401:0:b0:6fa:8a4b:40b6 with SMTP id
- 1-20020a250401000000b006fa8a4b40b6mr13041679ybe.230.1670014188666; Fri, 02
- Dec 2022 12:49:48 -0800 (PST)
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:subject:from:references:cc:to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cFFC8DQP235KAQhynGslmUAEiqukq9bbJSq7ImsePcg=;
+        b=IzSSyUPDh7QQjyskln493d3wPwMXwnEfZacy/MYzIAxvB4Vv1APozDXKzBXjZ2DCNy
+         uduBWRet+K3sfATckAriaRfEu3KpB7dWiw/igiPVfQ83d+Z9GsuHJOuw8PwZvhVnRNab
+         9u7z1lfSZp6g/DHf5vDdpdhGd/34ZMTyXCvEnAcMoPE8ZWh/ExohoygzYAMnpNNqrT9P
+         NPsyXjD+y1h0yxbbRPHWkNFfwPnykwrKuLWp/O9txSUSKGh2aQwkHNlQ1iQcGF3a/3s9
+         Ep8KtKJwtjF9Vq7OAEdEU0DGRWzT7sUD2XYy4f9YL3Nqx1Emk61lqr6KzUJfbsxgmlHK
+         X/GQ==
+X-Gm-Message-State: ANoB5pnwpIzxK3EcHvbMiKhwaAlymqzSw6RUvbywud6klIfFCluNhqOF
+        PFTv3/SNF48jqckVDKim6GQrDd2VocJSt2WpSx0fjWUtvXv8KgQ3oWqTrPP99r4iLWhgwQWrq2m
+        Twhf9OqjAp4xD+9idv/fvYHfVYHf6
+X-Received: by 2002:a05:622a:249:b0:39c:b5a2:5eb2 with SMTP id c9-20020a05622a024900b0039cb5a25eb2mr67826959qtx.39.1670015114804;
+        Fri, 02 Dec 2022 13:05:14 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7vp3IqAgQ6ZMG3YOqX9iv6KuZoBk5uX+Ua75WkVAW8bb9j7DfCTCTUCSehg/cIXkMvDfHQgw==
+X-Received: by 2002:a05:622a:249:b0:39c:b5a2:5eb2 with SMTP id c9-20020a05622a024900b0039cb5a25eb2mr67826934qtx.39.1670015114551;
+        Fri, 02 Dec 2022 13:05:14 -0800 (PST)
+Received: from [192.168.1.9] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05620a430600b006fc5a1d9cd4sm6305004qko.34.2022.12.02.13.05.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 13:05:14 -0800 (PST)
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Miroslav Benes <mbenes@suse.cz>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, jpoimboe@redhat.com
+References: <20220630141226.2802-1-mpdesouza@suse.com>
+ <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
+ <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz>
+ <8ff95ef5-db76-171d-4c4c-a84d9981290d@linuxfoundation.org>
+ <20220715144526.GF2737@pathway.suse.cz>
+ <aae71b0b-74e3-5874-b12f-bf0d42d851e4@redhat.com>
+ <c5a6cb8a-7b99-249e-5ba4-732fc0ed2e30@linuxfoundation.org>
+ <Y4nEhb7yPK5l54IX@alley>
+ <21025073-0ed6-427e-219e-99e9731f6688@linuxfoundation.org>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+Message-ID: <ed5a1f19-1e2e-7a04-7cc8-1a0324b2d508@redhat.com>
+Date:   Fri, 2 Dec 2022 16:05:25 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20221202095920.1659332-1-eyal.birger@gmail.com>
- <20221202095920.1659332-3-eyal.birger@gmail.com> <6d0e13eb-63e0-a777-2a27-7f2e02867a13@linux.dev>
- <CAHsH6Gtt4vihaZ5kCFsjT8x1SmuiUkijnVxgAA9bMp4NOgPeAw@mail.gmail.com> <4cf2ecd4-2f21-848a-00df-4e4fd86667eb@linux.dev>
-In-Reply-To: <4cf2ecd4-2f21-848a-00df-4e4fd86667eb@linux.dev>
-From:   Eyal Birger <eyal.birger@gmail.com>
-Date:   Fri, 2 Dec 2022 22:49:37 +0200
-Message-ID: <CAHsH6Gt=WQhcqTsrDRhVyOSMwc4be5JaY9LpkbtFunvNZx3_Cg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next,v4 2/4] xfrm: interface: Add unstable helpers for
- setting/getting XFRM metadata from TC-BPF
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        andrii@kernel.org, daniel@iogearbox.net, nicolas.dichtel@6wind.com,
-        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, shuah@kernel.org, liuhangbin@gmail.com,
-        lixiaoyan@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <21025073-0ed6-427e-219e-99e9731f6688@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 10:27 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
->
-> On 12/2/22 11:42 AM, Eyal Birger wrote:
-> > Hi Martin,
-> >
-> > On Fri, Dec 2, 2022 at 9:08 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
-> >>
-> >> On 12/2/22 1:59 AM, Eyal Birger wrote:
-> >>> +__used noinline
-> >>> +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
-> >>> +                       const struct bpf_xfrm_info *from)
-> >>> +{
-> >>> +     struct sk_buff *skb = (struct sk_buff *)skb_ctx;
-> >>> +     struct metadata_dst *md_dst;
-> >>> +     struct xfrm_md_info *info;
-> >>> +
-> >>> +     if (unlikely(skb_metadata_dst(skb)))
-> >>> +             return -EINVAL;
-> >>> +
-> >>> +     md_dst = this_cpu_ptr(xfrm_md_dst);
-> >>> +
-> >>> +     info = &md_dst->u.xfrm_info;
-> >>> +
-> >>> +     info->if_id = from->if_id;
-> >>> +     info->link = from->link;
-> >>> +     skb_dst_force(skb);
-> >>> +     info->dst_orig = skb_dst(skb);
-> >>> +
-> >>> +     dst_hold((struct dst_entry *)md_dst);
-> >>> +     skb_dst_set(skb, (struct dst_entry *)md_dst);
-> >>
-> >>
-> >> I may be missed something obvious and this just came to my mind,
-> >>
-> >> What stops cleanup_xfrm_interface_bpf() being run while skb is still holding the
-> >> md_dst?
-> >>
-> > Oh I think you're right. I missed this.
-> >
-> > In order to keep this implementation I suppose it means that the module would
-> > not be allowed to be removed upon use of this kfunc. but this could be seen as
-> > annoying from the configuration user experience.
-> >
-> > Alternatively the metadata dsts can be separately allocated from the kfunc,
-> > which is probably the simplest approach to maintain, so I'll work on that
-> > approach.
->
-> If it means dst_alloc on every skb, it will not be cheap.
->
-> Another option is to metadata_dst_alloc_percpu() once during the very first
-> bpf_skb_set_xfrm_info() call and the xfrm_md_dst memory will never be freed.  It
-> is a tradeoff but likely the correct one.  You can take a look at
-> bpf_get_skb_set_tunnel_proto().
->
+On 12/2/22 3:03 PM, Shuah Khan wrote:
+> On 12/2/22 02:25, Petr Mladek wrote:
+>>
+>> Yes, kABI is not backward compatible. But building the tests
+>> modules out-of-tree way would allow to build test modules with
+>> different kABI from the same sources.
+>>
+> 
+> Okay. This is a solid reason for livepatch modules to live under
+> sefltests. Let's capture this in README and the other updates that
+> need to be made to it in v3.
+> 
 
-Yes, I originally wrote this as a helper similar to the tunnel key
-helper which uses bpf_get_skb_set_tunnel_proto(), and when converting
-to kfuncs I kept the
-percpu implementation.
+One additional benefit, however small, is that I think everyone is
+building production livepatches, source based or via kpatch-build, as
+out-of-tree modules.  (Miroslav/Petr/Marcos please correct me if I'm
+wrong about source based.)
 
-However, the set tunnel key code is never unloaded. Whereas taking this
-approach here would mean that this memory would leak on each module reload
-iiuc.
+Having the livepatch selftests live under selftests/ would imply that
+new subsystem (build) features would have to support the production
+build use case from the get go.
 
-Eyal.
+Regards,
+
+-- 
+Joe
+
