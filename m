@@ -2,121 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37B9640FC4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 22:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1760640FFA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 22:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiLBVGP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Dec 2022 16:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S234534AbiLBV1U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Dec 2022 16:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLBVGO (ORCPT
+        with ESMTP id S234462AbiLBV1T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:06:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B402EA5D4
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Dec 2022 13:05:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670015118;
+        Fri, 2 Dec 2022 16:27:19 -0500
+Received: from out-242.mta0.migadu.com (out-242.mta0.migadu.com [91.218.175.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF00EE94E
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Dec 2022 13:27:17 -0800 (PST)
+Message-ID: <b35e5328-c57f-a5f7-d9cb-eaee1a73991a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1670016435;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cFFC8DQP235KAQhynGslmUAEiqukq9bbJSq7ImsePcg=;
-        b=T/193CqJnNIWE0Wxto4OdjIarCFKdcwQAvD/oKa1YNs3oh+cFWSbahqjOhmlMmXm4BkGV3
-        eQCpxbnlqI2+eJzvrdsJ+WWVqLRLobrqInQDcvfWM2Cc47FX4uY1bK/4TaUiKeyMm3KSuZ
-        iIqYzwdZSyDNrBk3Hh3RYazTQi0QDv4=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-612-dL8U8J5APuOZa_r2rus45Q-1; Fri, 02 Dec 2022 16:05:15 -0500
-X-MC-Unique: dL8U8J5APuOZa_r2rus45Q-1
-Received: by mail-qt1-f198.google.com with SMTP id cj6-20020a05622a258600b003a519d02f59so20453206qtb.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Dec 2022 13:05:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:subject:from:references:cc:to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cFFC8DQP235KAQhynGslmUAEiqukq9bbJSq7ImsePcg=;
-        b=IzSSyUPDh7QQjyskln493d3wPwMXwnEfZacy/MYzIAxvB4Vv1APozDXKzBXjZ2DCNy
-         uduBWRet+K3sfATckAriaRfEu3KpB7dWiw/igiPVfQ83d+Z9GsuHJOuw8PwZvhVnRNab
-         9u7z1lfSZp6g/DHf5vDdpdhGd/34ZMTyXCvEnAcMoPE8ZWh/ExohoygzYAMnpNNqrT9P
-         NPsyXjD+y1h0yxbbRPHWkNFfwPnykwrKuLWp/O9txSUSKGh2aQwkHNlQ1iQcGF3a/3s9
-         Ep8KtKJwtjF9Vq7OAEdEU0DGRWzT7sUD2XYy4f9YL3Nqx1Emk61lqr6KzUJfbsxgmlHK
-         X/GQ==
-X-Gm-Message-State: ANoB5pnwpIzxK3EcHvbMiKhwaAlymqzSw6RUvbywud6klIfFCluNhqOF
-        PFTv3/SNF48jqckVDKim6GQrDd2VocJSt2WpSx0fjWUtvXv8KgQ3oWqTrPP99r4iLWhgwQWrq2m
-        Twhf9OqjAp4xD+9idv/fvYHfVYHf6
-X-Received: by 2002:a05:622a:249:b0:39c:b5a2:5eb2 with SMTP id c9-20020a05622a024900b0039cb5a25eb2mr67826959qtx.39.1670015114804;
-        Fri, 02 Dec 2022 13:05:14 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7vp3IqAgQ6ZMG3YOqX9iv6KuZoBk5uX+Ua75WkVAW8bb9j7DfCTCTUCSehg/cIXkMvDfHQgw==
-X-Received: by 2002:a05:622a:249:b0:39c:b5a2:5eb2 with SMTP id c9-20020a05622a024900b0039cb5a25eb2mr67826934qtx.39.1670015114551;
-        Fri, 02 Dec 2022 13:05:14 -0800 (PST)
-Received: from [192.168.1.9] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05620a430600b006fc5a1d9cd4sm6305004qko.34.2022.12.02.13.05.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 13:05:14 -0800 (PST)
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com
-References: <20220630141226.2802-1-mpdesouza@suse.com>
- <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
- <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz>
- <8ff95ef5-db76-171d-4c4c-a84d9981290d@linuxfoundation.org>
- <20220715144526.GF2737@pathway.suse.cz>
- <aae71b0b-74e3-5874-b12f-bf0d42d851e4@redhat.com>
- <c5a6cb8a-7b99-249e-5ba4-732fc0ed2e30@linuxfoundation.org>
- <Y4nEhb7yPK5l54IX@alley>
- <21025073-0ed6-427e-219e-99e9731f6688@linuxfoundation.org>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-Message-ID: <ed5a1f19-1e2e-7a04-7cc8-1a0324b2d508@redhat.com>
-Date:   Fri, 2 Dec 2022 16:05:25 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        bh=r5qJrXyOh08/0G2OJHK5zG6IyLevRu3YZQO062C5ygo=;
+        b=QuaT4mbjrdiK2bBRjTk+FGIbCvdlh7IDvioHJsBDutl6Gm9snOSYrQa7P5tRh2Hg98Dmsh
+        sZIXJcJLhO29G+LPziJDg45F1gdYehwaFFIilMhFtvtqeAqvG22AtV54d5aojkaFli2D+I
+        TLagRgvx58wAi63rT3X8QElWGQBZY+A=
+Date:   Fri, 2 Dec 2022 13:27:08 -0800
 MIME-Version: 1.0
-In-Reply-To: <21025073-0ed6-427e-219e-99e9731f6688@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
+Subject: Re: [PATCH bpf-next,v4 2/4] xfrm: interface: Add unstable helpers for
+ setting/getting XFRM metadata from TC-BPF
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Eyal Birger <eyal.birger@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        andrii@kernel.org, daniel@iogearbox.net, nicolas.dichtel@6wind.com,
+        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, shuah@kernel.org, liuhangbin@gmail.com,
+        lixiaoyan@google.com
+References: <20221202095920.1659332-1-eyal.birger@gmail.com>
+ <20221202095920.1659332-3-eyal.birger@gmail.com>
+ <6d0e13eb-63e0-a777-2a27-7f2e02867a13@linux.dev>
+ <CAHsH6Gtt4vihaZ5kCFsjT8x1SmuiUkijnVxgAA9bMp4NOgPeAw@mail.gmail.com>
+ <4cf2ecd4-2f21-848a-00df-4e4fd86667eb@linux.dev>
+ <CAHsH6Gt=WQhcqTsrDRhVyOSMwc4be5JaY9LpkbtFunvNZx3_Cg@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAHsH6Gt=WQhcqTsrDRhVyOSMwc4be5JaY9LpkbtFunvNZx3_Cg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/2/22 3:03 PM, Shuah Khan wrote:
-> On 12/2/22 02:25, Petr Mladek wrote:
+On 12/2/22 12:49 PM, Eyal Birger wrote:
+> On Fri, Dec 2, 2022 at 10:27 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
 >>
->> Yes, kABI is not backward compatible. But building the tests
->> modules out-of-tree way would allow to build test modules with
->> different kABI from the same sources.
+>> On 12/2/22 11:42 AM, Eyal Birger wrote:
+>>> Hi Martin,
+>>>
+>>> On Fri, Dec 2, 2022 at 9:08 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+>>>>
+>>>> On 12/2/22 1:59 AM, Eyal Birger wrote:
+>>>>> +__used noinline
+>>>>> +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
+>>>>> +                       const struct bpf_xfrm_info *from)
+>>>>> +{
+>>>>> +     struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+>>>>> +     struct metadata_dst *md_dst;
+>>>>> +     struct xfrm_md_info *info;
+>>>>> +
+>>>>> +     if (unlikely(skb_metadata_dst(skb)))
+>>>>> +             return -EINVAL;
+>>>>> +
+>>>>> +     md_dst = this_cpu_ptr(xfrm_md_dst);
+>>>>> +
+>>>>> +     info = &md_dst->u.xfrm_info;
+>>>>> +
+>>>>> +     info->if_id = from->if_id;
+>>>>> +     info->link = from->link;
+>>>>> +     skb_dst_force(skb);
+>>>>> +     info->dst_orig = skb_dst(skb);
+>>>>> +
+>>>>> +     dst_hold((struct dst_entry *)md_dst);
+>>>>> +     skb_dst_set(skb, (struct dst_entry *)md_dst);
+>>>>
+>>>>
+>>>> I may be missed something obvious and this just came to my mind,
+>>>>
+>>>> What stops cleanup_xfrm_interface_bpf() being run while skb is still holding the
+>>>> md_dst?
+>>>>
+>>> Oh I think you're right. I missed this.
+>>>
+>>> In order to keep this implementation I suppose it means that the module would
+>>> not be allowed to be removed upon use of this kfunc. but this could be seen as
+>>> annoying from the configuration user experience.
+>>>
+>>> Alternatively the metadata dsts can be separately allocated from the kfunc,
+>>> which is probably the simplest approach to maintain, so I'll work on that
+>>> approach.
+>>
+>> If it means dst_alloc on every skb, it will not be cheap.
+>>
+>> Another option is to metadata_dst_alloc_percpu() once during the very first
+>> bpf_skb_set_xfrm_info() call and the xfrm_md_dst memory will never be freed.  It
+>> is a tradeoff but likely the correct one.  You can take a look at
+>> bpf_get_skb_set_tunnel_proto().
 >>
 > 
-> Okay. This is a solid reason for livepatch modules to live under
-> sefltests. Let's capture this in README and the other updates that
-> need to be made to it in v3.
+> Yes, I originally wrote this as a helper similar to the tunnel key
+> helper which uses bpf_get_skb_set_tunnel_proto(), and when converting
+> to kfuncs I kept the
+> percpu implementation.
 > 
+> However, the set tunnel key code is never unloaded. Whereas taking this
+> approach here would mean that this memory would leak on each module reload
+> iiuc.
 
-One additional benefit, however small, is that I think everyone is
-building production livepatches, source based or via kpatch-build, as
-out-of-tree modules.  (Miroslav/Petr/Marcos please correct me if I'm
-wrong about source based.)
-
-Having the livepatch selftests live under selftests/ would imply that
-new subsystem (build) features would have to support the production
-build use case from the get go.
-
-Regards,
-
--- 
-Joe
-
+'struct metadata_dst __percpu *xfrm_md_dst' cannot be in the xfrm module. 
+filter.c could be an option.
