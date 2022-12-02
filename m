@@ -2,152 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE49A63FDB5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 02:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E32363FDF5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 03:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiLBBgO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Dec 2022 20:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S231782AbiLBCHQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Dec 2022 21:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbiLBBgA (ORCPT
+        with ESMTP id S231922AbiLBCHL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 20:36:00 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCB8D2DB7
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 17:35:58 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id r7so3537255pfl.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Dec 2022 17:35:58 -0800 (PST)
+        Thu, 1 Dec 2022 21:07:11 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54268D4ADE;
+        Thu,  1 Dec 2022 18:07:03 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id o5-20020a17090a678500b00218cd5a21c9so3856712pjj.4;
+        Thu, 01 Dec 2022 18:07:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MP31bsPSm9f+hAa3TK6LgXNEEfW0wwdldtJ51E5YYMM=;
-        b=h54Ivo7q4Zdaa4YfuGYp4JEDINKQlEWi8Y7JROzg8A6deqnzT+HJ3ASFvDkyQDhVPt
-         6bmrFOZPo7Ftex4TwpNnkPOGsFVX7JF7cuu99nPIRYwkovEhOOIAQSNjazxInWQoXHzy
-         /tl+ViyHQ9zvXgJhzRK5IHKjw/NbaqwCPfWn4=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rKl/t3hakOg+uRmQvx0wOeBxtqYoX08A3/EM6NJoH6U=;
+        b=EFE5vwNPwJekGuDpnV9qPgENSxGIZ0xMQZJYWD2X9lqjw00nv0bKpGpVbc9i/C+vAO
+         FS3OzKthapYfTee+ocZGBWFFRydWBVjB72PxqFTiK69fIMTm0qOQUAAolxO6dq4vYTwX
+         y2ZtwKO34SgtOhsdEGPvER4PEsMGAlqLk4KKqlM7h5unshA1mnG0AAT+bO4v9j3UXNV3
+         sbkKlsN4EHNIaOlvTzZdTZUilNslXxfF9HDQzf0fCDAoOgPJWowsCcMMT7e0qwVaJ4Kl
+         e4oH3czN560omo3uMNsAxkYFea3EU0iT34pOwCLhN+/SrYxJ1NUtuuu4kLSYZN3mVtSy
+         zu4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MP31bsPSm9f+hAa3TK6LgXNEEfW0wwdldtJ51E5YYMM=;
-        b=SMub4PiWA3PmbXuKcqeGqZ/fw7P3sqgoLYUuwmV24O4mMmKuW7GIRAJ9MGVEQ2D3p5
-         19DaPg/SrjMtBJBAerO/ZNU7w/xNYiwHriYNL6m3lU4MXkNJ0UhrtNhlgZYihS43a6B5
-         YxOl4c5EonkeFZHOJLwooY6caj2Z7OBeIaMbQ/TXZCldm0lJ7s3VDvKaiG4Zvwz1THtn
-         374HUnHGe/v+qI7weLpfgkCl1nGLMhAyeJldqhDeI2bvY2g81huCCT0mNLYfNQl8LJLJ
-         mlSeaDhp7sMmCXZbiuAWr9YSpwJjpx5dWR4GFQequnbjJxdMlcTREnZMcsBHChkqKMin
-         Qj2w==
-X-Gm-Message-State: ANoB5pmqD3zcugXeg8py7RRHGZJUZ20XFib19HT0s9CircV/G8Vz56Kt
-        Hf2RKxpvVzHKmTe4TL27S6U7ew==
-X-Google-Smtp-Source: AA0mqf6s5/DD/qEipDy95aXwC2Z3tWXhD0ZZ1Ih93gpvBAsrbgYstV1S9ORwEXoi15r0GE04k1z42A==
-X-Received: by 2002:a63:185a:0:b0:476:e84c:ab63 with SMTP id 26-20020a63185a000000b00476e84cab63mr47437406pgy.496.1669944957535;
-        Thu, 01 Dec 2022 17:35:57 -0800 (PST)
-Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
-        by smtp.gmail.com with ESMTPSA id s13-20020a65690d000000b00477fb27eaddsm3074241pgq.63.2022.12.01.17.35.56
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rKl/t3hakOg+uRmQvx0wOeBxtqYoX08A3/EM6NJoH6U=;
+        b=TXUbhOm0Th4oI+VuRz+Jr6zTQCiRmr6ZsqC44/x7MTM7mWjLX5iz/BLrqdH3Xc5r4h
+         ZnauZy4YrTg/fRmshLskNvjJrYLT2+mBeXv3OAeTnWwhAEQy8TX5Bh94rh39p4R3Bc5v
+         Ya2bPN/X1kU2IBL+YLejZehT6t8e49+8nQrYFMBijvvoUXnMuPMkfcQdsjJMJuXOoHze
+         Xj9GVJNsns9hRZvbD7L9Uz0biJaEBXuf2McnZDOO1UHJIn9D4/Xop2mJDPx3/EDQA9ce
+         MP9xGAHZMFbnNseRJlJFHwhpax9pPGcMLdTEWveA9/AodmLoswm+gu5eXcXYyrx/FVyt
+         Ul2w==
+X-Gm-Message-State: ANoB5plMKOUwOn+DBD8DiydyTIKkWXUP2Zjpn3gvmY8EEmQaZRSqDr8g
+        gwO+FE0mlMIj9GA9eNisZ+E=
+X-Google-Smtp-Source: AA0mqf7ph5WIS2+a6zuk0OwSfZ90aWqAvpGvluLfBYXrVEgmbmyQ4c/e3uBHIWtgPOor6woPAI6sAg==
+X-Received: by 2002:a17:90a:7e8b:b0:213:df24:ed80 with SMTP id j11-20020a17090a7e8b00b00213df24ed80mr78244079pjl.186.1669946822739;
+        Thu, 01 Dec 2022 18:07:02 -0800 (PST)
+Received: from Laptop-X1 ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id x27-20020aa7957b000000b0057534fcd895sm3882532pfq.108.2022.12.01.18.06.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 17:35:57 -0800 (PST)
-From:   jeffxu@chromium.org
-To:     skhan@linuxfoundation.org, keescook@chromium.org
-Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mnissler@chromium.org, jannh@google.com,
-        linux-hardening@vger.kernel.org, Jeff Xu <jeffxu@chromium.org>
-Subject: [PATCH v3] mm/memfd: Add write seals when apply SEAL_EXEC to executable memfd
-Date:   Fri,  2 Dec 2022 01:34:04 +0000
-Message-Id: <20221202013404.163143-7-jeffxu@google.com>
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-In-Reply-To: <20221202013404.163143-1-jeffxu@google.com>
-References: <20221202013404.163143-1-jeffxu@google.com>
+        Thu, 01 Dec 2022 18:07:01 -0800 (PST)
+Date:   Fri, 2 Dec 2022 10:06:56 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, shannon.nelson@oracle.com,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com
+Subject: Re: [PATCH net] selftests: rtnetlink: correct xfrm policy rule in
+ kci_test_ipsec_offload
+Message-ID: <Y4ldwIQlcXyZek1A@Laptop-X1>
+References: <20221201082246.14131-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201082246.14131-1-shaozhengchao@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jeff Xu <jeffxu@chromium.org>
+On Thu, Dec 01, 2022 at 04:22:46PM +0800, Zhengchao Shao wrote:
+> When testing in kci_test_ipsec_offload, srcip is configured as $dstip,
+> it should add xfrm policy rule in instead of out.
+> The test result of this patch is as follows:
+> PASS: ipsec_offload
+> 
+> Fixes: 2766a11161cc ("selftests: rtnetlink: add ipsec offload API test")
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> ---
+>  tools/testing/selftests/net/rtnetlink.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
+> index 0900c5438fbb..275491be3da2 100755
+> --- a/tools/testing/selftests/net/rtnetlink.sh
+> +++ b/tools/testing/selftests/net/rtnetlink.sh
+> @@ -782,7 +782,7 @@ kci_test_ipsec_offload()
+>  	    tmpl proto esp src $srcip dst $dstip spi 9 \
+>  	    mode transport reqid 42
+>  	check_err $?
+> -	ip x p add dir out src $dstip/24 dst $srcip/24 \
+> +	ip x p add dir in src $dstip/24 dst $srcip/24 \
+>  	    tmpl proto esp src $dstip dst $srcip spi 9 \
+>  	    mode transport reqid 42
+>  	check_err $?
+> -- 
+> 2.34.1
+>
 
-When apply F_SEAL_EXEC to an executable memfd, add write seals also to
-prevent modification of memfd.
-
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
----
- mm/memfd.c                                 |  3 +++
- tools/testing/selftests/memfd/memfd_test.c | 25 ++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
-
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 96dcfbfed09e..3a04c0698957 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -222,6 +222,9 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
- 		}
- 	}
- 
-+	if (seals & F_SEAL_EXEC && inode->i_mode & 0111)
-+		seals |= F_ALL_SEALS;
-+
- 	*file_seals |= seals;
- 	error = 0;
- 
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index 775c9e6c061e..0731e5b3cdce 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -32,6 +32,13 @@
- #define F_SEAL_EXEC	0x0020
- #endif
- 
-+#define F_ALL_SEALS (F_SEAL_SEAL | \
-+		     F_SEAL_SHRINK | \
-+		     F_SEAL_GROW | \
-+		     F_SEAL_WRITE | \
-+		     F_SEAL_FUTURE_WRITE | \
-+		     F_SEAL_EXEC)
-+
- #ifndef MAX_PATH
- #define MAX_PATH 256
- #endif
-@@ -1006,6 +1013,7 @@ static void test_exec_seal(void)
- 
- 	printf("%s SEAL-EXEC\n", memfd_str);
- 
-+	printf("%s	Apply SEAL_EXEC\n", memfd_str);
- 	fd = mfd_assert_new("kern_memfd_seal_exec",
- 			    mfd_def_size,
- 			    MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_EXEC);
-@@ -1024,7 +1032,24 @@ static void test_exec_seal(void)
- 	mfd_fail_chmod(fd, 0700);
- 	mfd_fail_chmod(fd, 0100);
- 	mfd_assert_chmod(fd, 0666);
-+	mfd_assert_write(fd);
-+	close(fd);
-+
-+	printf("%s	Apply ALL_SEALS\n", memfd_str);
-+	fd = mfd_assert_new("kern_memfd_seal_exec",
-+			    mfd_def_size,
-+			    MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_EXEC);
- 
-+	mfd_assert_mode(fd, 0777);
-+	mfd_assert_chmod(fd, 0700);
-+
-+	mfd_assert_has_seals(fd, 0);
-+	mfd_assert_add_seals(fd, F_SEAL_EXEC);
-+	mfd_assert_has_seals(fd, F_ALL_SEALS);
-+
-+	mfd_fail_chmod(fd, 0711);
-+	mfd_fail_chmod(fd, 0600);
-+	mfd_fail_write(fd);
- 	close(fd);
- }
- 
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog
-
+Acked-by: Hangbin Liu <liuhangbin@gmail.com>
