@@ -2,102 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C569C640F27
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 21:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E860E640F2D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Dec 2022 21:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbiLBUYP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Dec 2022 15:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S233637AbiLBU1U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Dec 2022 15:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiLBUYO (ORCPT
+        with ESMTP id S233548AbiLBU1S (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Dec 2022 15:24:14 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1A4DF45;
-        Fri,  2 Dec 2022 12:24:12 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id o5so9539814wrm.1;
-        Fri, 02 Dec 2022 12:24:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HWLZbrwyvitTVJVVBqs7BQW3jKoB+thAYx4GCZD+AaM=;
-        b=FEqFFlYrW/PjdzCFSbIy0xo7MCTyw6Dd/+lFO0vSj6yz/EHiSVCxCAbTGULKWVY3E4
-         RBK6katbdYqRtyu7pW1h6sQBg5+HKQwVXgtwXfrLcKc4/3P5DF0gk7UFc7mphRRo+KZL
-         VMYT3SkuqPHkbCLCSaz73S4bYESirD6nOfxu/OnBKyk8FKQttG9/ugfmntjZqlZ4AJFP
-         qj0CcX8a2cduamYphmw/+tbVxSzqmHKMtUhKUnqhSDzfv+GO2RhxbGetAmOdFZnrvYFo
-         LrAJpExZnqifF0ebRo1ZLLb2jRepTSFL64Nw5xaUzaIBO58D+V7zX1eyaXOwhbHOHe1l
-         6D4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HWLZbrwyvitTVJVVBqs7BQW3jKoB+thAYx4GCZD+AaM=;
-        b=TnK46Jv0MIyoxR3parSvdIHzpAaGZ4ZST4h21qgSyAKlOfeZlTwIdDuG8eGvm/Pvus
-         LKfL6ksJTaCUfJxATsvqeTPKLOLHntYXXgzG8He+cX4vTtF4vSV0naKqKBgOGx7QsWMT
-         USg+UGMBQxe4HmcIqh/gejcNQH8KxpoiOdQbO1YVASFKQUDL+gSeQVd+fkLukCFj/Oo2
-         1xPuDvGBVE4pm8+1+iqlpHx3ZZvfpROj4VMDPdshnmJpUkMmxmzWVeAagGtiIrfzxshn
-         0ZGDK6LeEDpWbkG+lJyjnZ/ULrG2GTSbMI4zkaO6ZJRJ+0r1pmdoWYXVAJyA92Na1a+V
-         vSxw==
-X-Gm-Message-State: ANoB5pmhPi46ijtDkj3/rADSJjgJUvcyfQiLwUeW/TcWb/0WxfpDtzC1
-        wMfI896s+UB7cc2blZrsSl2KY2rYQsYsbKKg
-X-Google-Smtp-Source: AA0mqf43bVKPAjCTIQl32HsfqJj4TL6iP3u2fljVt3YhggxW8aCWKn3wq7M0qtIbscDGuokESlgivw==
-X-Received: by 2002:adf:f24a:0:b0:242:3be9:71c7 with SMTP id b10-20020adff24a000000b002423be971c7mr5301585wrp.329.1670012650632;
-        Fri, 02 Dec 2022 12:24:10 -0800 (PST)
-Received: from [192.168.0.209] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id bg28-20020a05600c3c9c00b003cfa3a12660sm15154616wmb.1.2022.12.02.12.24.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 12:24:10 -0800 (PST)
-Message-ID: <4fb9ef31-4d40-8e74-640f-bdbe60825bf1@gmail.com>
-Date:   Fri, 2 Dec 2022 20:24:08 +0000
+        Fri, 2 Dec 2022 15:27:18 -0500
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9B8ECA01
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Dec 2022 12:27:13 -0800 (PST)
+Message-ID: <4cf2ecd4-2f21-848a-00df-4e4fd86667eb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1670012831;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NUcEALuux82cTjstILvzqBke9w8vB4f799oxTJvNJ0Y=;
+        b=rgsljsucGydqBrYw+l7rotjrX/oVrOk7tpEFaDxm9NO0nrNpXPgum9XLfUHhUKSsxsl22W
+        WcsIMySL2O40G/zJZyozp1a+WQGByA4zzq+1unUQj9KktzMJ9PxRMKYbTmRcn9hsCM5Vgi
+        uf4iisiXfmbCRLvGWo2NKm+jz7pVRZw=
+Date:   Fri, 2 Dec 2022 12:27:01 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH][next] KVM: selftests: Fix spelling mistake
- "probabalistic" -> "probabilistic"
+Subject: Re: [PATCH bpf-next,v4 2/4] xfrm: interface: Add unstable helpers for
+ setting/getting XFRM metadata from TC-BPF
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221201091354.1613652-1-colin.i.king@gmail.com>
- <Y4o0Nq4SKGZgDOxi@google.com>
- <10445a4d-0175-3e5e-aa74-9d232737a7c2@gmail.com>
- <Y4pEaaQsnDWEOxjH@google.com> <Y4pKfrX1ZfKhAT6y@google.com>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <Y4pKfrX1ZfKhAT6y@google.com>
+To:     Eyal Birger <eyal.birger@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        andrii@kernel.org, daniel@iogearbox.net, nicolas.dichtel@6wind.com,
+        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, shuah@kernel.org, liuhangbin@gmail.com,
+        lixiaoyan@google.com
+References: <20221202095920.1659332-1-eyal.birger@gmail.com>
+ <20221202095920.1659332-3-eyal.birger@gmail.com>
+ <6d0e13eb-63e0-a777-2a27-7f2e02867a13@linux.dev>
+ <CAHsH6Gtt4vihaZ5kCFsjT8x1SmuiUkijnVxgAA9bMp4NOgPeAw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CAHsH6Gtt4vihaZ5kCFsjT8x1SmuiUkijnVxgAA9bMp4NOgPeAw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02/12/2022 18:57, Sean Christopherson wrote:
-> On Fri, Dec 02, 2022, Sean Christopherson wrote:
->> On Fri, Dec 02, 2022, Colin King (gmail) wrote:
->>> You may be better off with using codespell
->>
->> Heh, my kind of nitpicking people :-)
->>
->>    MSDOS->MS-DOS
->>
->> Thanks a ton, that's exactly what I was looking for!
+On 12/2/22 11:42 AM, Eyal Birger wrote:
+> Hi Martin,
 > 
-> For anyone following along and/or laughing at me, checkpatch even supports using
-> codespell, e.g.
+> On Fri, Dec 2, 2022 at 9:08 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+>>
+>> On 12/2/22 1:59 AM, Eyal Birger wrote:
+>>> +__used noinline
+>>> +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
+>>> +                       const struct bpf_xfrm_info *from)
+>>> +{
+>>> +     struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+>>> +     struct metadata_dst *md_dst;
+>>> +     struct xfrm_md_info *info;
+>>> +
+>>> +     if (unlikely(skb_metadata_dst(skb)))
+>>> +             return -EINVAL;
+>>> +
+>>> +     md_dst = this_cpu_ptr(xfrm_md_dst);
+>>> +
+>>> +     info = &md_dst->u.xfrm_info;
+>>> +
+>>> +     info->if_id = from->if_id;
+>>> +     info->link = from->link;
+>>> +     skb_dst_force(skb);
+>>> +     info->dst_orig = skb_dst(skb);
+>>> +
+>>> +     dst_hold((struct dst_entry *)md_dst);
+>>> +     skb_dst_set(skb, (struct dst_entry *)md_dst);
+>>
+>>
+>> I may be missed something obvious and this just came to my mind,
+>>
+>> What stops cleanup_xfrm_interface_bpf() being run while skb is still holding the
+>> md_dst?
+>>
+> Oh I think you're right. I missed this.
 > 
->    ./scripts/checkpatch.pl -g HEAD --codespell
+> In order to keep this implementation I suppose it means that the module would
+> not be allowed to be removed upon use of this kfunc. but this could be seen as
+> annoying from the configuration user experience.
+> 
+> Alternatively the metadata dsts can be separately allocated from the kfunc,
+> which is probably the simplest approach to maintain, so I'll work on that
+> approach.
 
-checkpatch also uses a misspelling dictionary that I occasionally 
-contribute to with common spelling mistakes that I find and fix.
+If it means dst_alloc on every skb, it will not be cheap.
 
-Colin
+Another option is to metadata_dst_alloc_percpu() once during the very first 
+bpf_skb_set_xfrm_info() call and the xfrm_md_dst memory will never be freed.  It 
+is a tradeoff but likely the correct one.  You can take a look at 
+bpf_get_skb_set_tunnel_proto().
 
