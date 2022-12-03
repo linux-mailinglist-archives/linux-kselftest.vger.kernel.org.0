@@ -2,71 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AEA641361
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Dec 2022 03:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DDD6413D9
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Dec 2022 03:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbiLCCaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Dec 2022 21:30:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
+        id S234694AbiLCC6v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Dec 2022 21:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234951AbiLCCaK (ORCPT
+        with ESMTP id S234876AbiLCC6u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Dec 2022 21:30:10 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36500E0760
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Dec 2022 18:30:10 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id b21so6238743plc.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Dec 2022 18:30:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CWt07COLqhM0wZS8+aSuBFX0K5MaXOD5vm4AlkQK9u8=;
-        b=ibJN+4wupMeFZ8AsO0XiaFGivYyW2MY8j9syFwSujyzsv8WIvvQldHP0Mw+8z+BtGq
-         +UM8iq8dyM8sYwdY14XNad29HiFmWd6Qav74FWK5Ij3GLXj+9mUdrsoQ9Op6Brm9boVS
-         qA69QuShWk84L3KGUcVi8zcoNcRtMcDwru8WtwsOUxBX4PCzQq2yi4ArmDlhntkN4FuY
-         SrkCGavYXx5dNpTWKxnmz4RLfgfohN8Uebag3wtDA4QffX+MVkAr/CjWUbotqfxo0Sd5
-         5eGUlsoWU0/Vd2EXp3Oorpz8Dx0a0o6CyY8W3M5Bfyo98mfI74cnheSly1UbCCx0hDzj
-         46qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CWt07COLqhM0wZS8+aSuBFX0K5MaXOD5vm4AlkQK9u8=;
-        b=XpqOMvHmhQCiOGMxmntu6U2G91e2VcUzywGN9VPz4gEdU6yTat0z2OGiAl9SQ0bKGX
-         +/uyzvx7Nj8cTbtUMMKLZBhVJbM1IXF2md5MvPcVHd/dNClpikqJmH27P1GRppH0ky+O
-         BvevN/cqQ31D9tJUIy2Fafk3kE2T/YmmXLIERnjM6Z3lhDRkVyDOMrBQRipo/6+nnrLj
-         J7Tx5QOCH2UV/lXpFIRUbIrXLK51xyE9vaDEiHDb9yTpdenyrUWVLiC4ErRM5lfiFFMG
-         Anso6X7Pm2zaRsrljsDe+6OcFYOwAGx16xoyLMb304nQzhGXjdFxxT4TvKQzVSK3T+pm
-         XLmw==
-X-Gm-Message-State: ANoB5pn7JANySjBmyJRZkbxcmwojwCufXMyyEVUwxzVJnj6gLrb+skzD
-        CQJ1FREPyKUtG/j/viN6RwmoNxucowQ6sfj3+yEdMg==
-X-Google-Smtp-Source: AA0mqf4+7wHUUYy7iS3SBS3k5hhK+zqhcW2r6ExsGfYHliv7BR/cjYNM/HINU3xucnxLrSzdQD0p4/Gr+j/OQbHxh0I=
-X-Received: by 2002:a17:90a:5317:b0:213:34f7:fb14 with SMTP id
- x23-20020a17090a531700b0021334f7fb14mr82075775pjh.25.1670034609492; Fri, 02
- Dec 2022 18:30:09 -0800 (PST)
+        Fri, 2 Dec 2022 21:58:50 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570AEEE94D;
+        Fri,  2 Dec 2022 18:58:48 -0800 (PST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NPDyK1nTszFprd;
+        Sat,  3 Dec 2022 10:58:01 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 3 Dec 2022 10:58:44 +0800
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: Adapt 32-bit return value kfunc for
+ 32-bit ARM when zext extension
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        <colin.i.king@gmail.com>, Artem Savkov <asavkov@redhat.com>,
+        Delyan Kratunov <delyank@fb.com>, bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20221126094530.226629-1-yangjihong1@huawei.com>
+ <20221126094530.226629-2-yangjihong1@huawei.com>
+ <20221128015758.aekybr3qlahfopwq@MacBook-Pro-5.local>
+ <dc9d1823-80f2-e2d9-39a8-c39b6f52dec5@huawei.com>
+ <CAADnVQJPRCnESmJ92W39bo-btqNbYaNsGQO0is6FD3JLU_mSjQ@mail.gmail.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <8cb54255-4dce-6d50-d6f0-ac9af0e56f37@huawei.com>
+Date:   Sat, 3 Dec 2022 10:58:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-References: <20221202013404.163143-1-jeffxu@google.com> <20221202013404.163143-7-jeffxu@google.com>
- <CABVzXAkoGoypAs86EG5RsJZ=CXPu3NtTHb7_2=byQt7A7p7krQ@mail.gmail.com>
-In-Reply-To: <CABVzXAkoGoypAs86EG5RsJZ=CXPu3NtTHb7_2=byQt7A7p7krQ@mail.gmail.com>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Fri, 2 Dec 2022 18:29:32 -0800
-Message-ID: <CALmYWFuR93cgj1_P4=S81Wntg-m_6g-0Vd2JQmrLWmA7=B7QVA@mail.gmail.com>
-Subject: Re: [PATCH v3] mm/memfd: Add write seals when apply SEAL_EXEC to
- executable memfd
-To:     Daniel Verkamp <dverkamp@chromium.org>
-Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
-        keescook@chromium.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, hughd@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <CAADnVQJPRCnESmJ92W39bo-btqNbYaNsGQO0is6FD3JLU_mSjQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,103 +78,175 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Daniel
 
-Thanks for your review.
 
-On Fri, Dec 2, 2022 at 3:24 PM Daniel Verkamp <dverkamp@chromium.org> wrote:
->
-> On Thu, Dec 1, 2022 at 5:36 PM <jeffxu@chromium.org> wrote:
-> >
-> > From: Jeff Xu <jeffxu@chromium.org>
-> >
-> > When apply F_SEAL_EXEC to an executable memfd, add write seals also to
-> > prevent modification of memfd.
-> >
-> > Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-> > ---
-> >  mm/memfd.c                                 |  3 +++
-> >  tools/testing/selftests/memfd/memfd_test.c | 25 ++++++++++++++++++++++
-> >  2 files changed, 28 insertions(+)
-> >
-> > diff --git a/mm/memfd.c b/mm/memfd.c
-> > index 96dcfbfed09e..3a04c0698957 100644
-> > --- a/mm/memfd.c
-> > +++ b/mm/memfd.c
-> > @@ -222,6 +222,9 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
-> >                 }
-> >         }
-> >
-> > +       if (seals & F_SEAL_EXEC && inode->i_mode & 0111)
-> > +               seals |= F_ALL_SEALS;
-> > +
-> >         *file_seals |= seals;
-> >         error = 0;
-> >
->
-> Hi Jeff,
->
-> (Following up on some discussion on the original review, sorry for any
-> duplicate comments.)
->
-> Making F_SEAL_EXEC imply all seals (including F_SEAL_SEAL) seems a bit
-> confusing. This at least needs documentation to make it clear.
->
-> Rather than silently adding other seals, perhaps we could return an
-> error if the caller requests F_SEAL_EXEC but not the write seals, so
-> the other seals would have to be explicitly listed in the application
-> code. This would have the same net effect without making the
-> F_SEAL_EXEC operation too magical.
->
-If we take error out approach, application need to add
-F_SEAL_SHRINK|F_SEAL_GROW|F_SEAL_WRITE|F_SEAL_FUTURE_WRITE
-when F_SEAL_EXEC is used.
-Personally I think it is a bit long. From an API point of view, we can
-think of this as
-sealing the whole executable instead of just "X" bit.
+On 2022/11/29 0:41, Alexei Starovoitov wrote:
+> On Mon, Nov 28, 2022 at 4:40 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+>>
+>>
+>>
+>> On 2022/11/28 9:57, Alexei Starovoitov wrote:
+>>> On Sat, Nov 26, 2022 at 05:45:27PM +0800, Yang Jihong wrote:
+>>>> For ARM32 architecture, if data width of kfunc return value is 32 bits,
+>>>> need to do explicit zero extension for high 32-bit, insn_def_regno should
+>>>> return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL. Otherwise,
+>>>> opt_subreg_zext_lo32_rnd_hi32 returns -EFAULT, resulting in BPF failure.
+>>>>
+>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>>>> ---
+>>>>    kernel/bpf/verifier.c | 44 ++++++++++++++++++++++++++++++++++++++++---
+>>>>    1 file changed, 41 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>>> index 264b3dc714cc..193ea927aa69 100644
+>>>> --- a/kernel/bpf/verifier.c
+>>>> +++ b/kernel/bpf/verifier.c
+>>>> @@ -1927,6 +1927,21 @@ find_kfunc_desc(const struct bpf_prog *prog, u32 func_id, u16 offset)
+>>>>                      sizeof(tab->descs[0]), kfunc_desc_cmp_by_id_off);
+>>>>    }
+>>>>
+>>>> +static int kfunc_desc_cmp_by_imm(const void *a, const void *b);
+>>>> +
+>>>> +static const struct bpf_kfunc_desc *
+>>>> +find_kfunc_desc_by_imm(const struct bpf_prog *prog, s32 imm)
+>>>> +{
+>>>> +    struct bpf_kfunc_desc desc = {
+>>>> +            .imm = imm,
+>>>> +    };
+>>>> +    struct bpf_kfunc_desc_tab *tab;
+>>>> +
+>>>> +    tab = prog->aux->kfunc_tab;
+>>>> +    return bsearch(&desc, tab->descs, tab->nr_descs,
+>>>> +                   sizeof(tab->descs[0]), kfunc_desc_cmp_by_imm);
+>>>> +}
+>>>> +
+>>>>    static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
+>>>>                                        s16 offset)
+>>>>    {
+>>>> @@ -2342,6 +2357,13 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>>>                        */
+>>>>                       if (insn->src_reg == BPF_PSEUDO_CALL)
+>>>>                               return false;
+>>>> +
+>>>> +                    /* Kfunc call will reach here because of insn_has_def32,
+>>>> +                     * conservatively return TRUE.
+>>>> +                     */
+>>>> +                    if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
+>>>> +                            return true;
+>>>> +
+>>>>                       /* Helper call will reach here because of arg type
+>>>>                        * check, conservatively return TRUE.
+>>>>                        */
+>>>> @@ -2405,10 +2427,26 @@ static bool is_reg64(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>>>    }
+>>>>
+>>>>    /* Return the regno defined by the insn, or -1. */
+>>>> -static int insn_def_regno(const struct bpf_insn *insn)
+>>>> +static int insn_def_regno(struct bpf_verifier_env *env, const struct bpf_insn *insn)
+>>>>    {
+>>>>       switch (BPF_CLASS(insn->code)) {
+>>>>       case BPF_JMP:
+>>>> +            if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+>>>> +                    const struct bpf_kfunc_desc *desc;
+>>>> +
+>>>> +                    /* The value of desc cannot be NULL */
+>>>> +                    desc = find_kfunc_desc_by_imm(env->prog, insn->imm);
+>>>> +
+>>>> +                    /* A kfunc can return void.
+>>>> +                     * The btf type of the kfunc's return value needs
+>>>> +                     * to be checked against "void" first
+>>>> +                     */
+>>>> +                    if (desc->func_model.ret_size == 0)
+>>>> +                            return -1;
+>>>> +                    else
+>>>> +                            return insn->dst_reg;
+>>>> +            }
+>>>> +            fallthrough;
+>>>
+>>> I cannot make any sense of this patch.
+>>> insn->dst_reg above is 0.
+>>> The kfunc call doesn't define a register from insn_def_regno() pov.
+>>>
+>>> Are you hacking insn_def_regno() to return 0 so that
+>>> if (WARN_ON(load_reg == -1)) {
+>>>     verbose(env, "verifier bug. zext_dst is set, but no reg is defined\n");
+>>>     return -EFAULT;
+>>> }
+>>> in opt_subreg_zext_lo32_rnd_hi32() doesn't trigger ?
+>>>
+>>> But this verifier message should have been a hint that you need
+>>> to analyze why zext_dst is set on this kfunc call.
+>>> Maybe it shouldn't ?
+>>> Did you analyze the logic of mark_btf_func_reg_size() ?
+>> make r0 zext is not caused by mark_btf_func_reg_size.
+>>
+>> This problem occurs when running the kfunc_call_test_ref_btf_id test
+>> case in the 32-bit ARM environment.
+> 
+> Why is it not failing on x86-32 ?
+Use the latest mainline kernel code to test on the x86_32 machine. The 
+test also fails:
 
-If there is a new type of write SEAL in future, all applications need
-to be updated, that is much harder,
-and updating the kernel is easier.
+   # ./test_progs -t kfunc_call/kfunc_call_test_ref_btf_id
+   Failed to load bpf_testmod.ko into the kernel: -8
+   WARNING! Selftests relying on bpf_testmod.ko will be skipped.
+   libbpf: prog 'kfunc_call_test_ref_btf_id': BPF program load failed: 
+Bad address
+   libbpf: prog 'kfunc_call_test_ref_btf_id': -- BEGIN PROG LOAD LOG --
+   processed 25 insns (limit 1000000) max_states_per_insn 0 total_states 
+2 peak_states 2 mark_read 1
+   -- END PROG LOAD LOG --
+   libbpf: prog 'kfunc_call_test_ref_btf_id': failed to load: -14
+   libbpf: failed to load object 'kfunc_call_test'
+   libbpf: failed to load BPF skeleton 'kfunc_call_test': -14
+   verify_success:FAIL:skel unexpected error: -14
 
-Maybe I should remove F_SEAL_SEAL, so this code is still correct if a
-new type of "Non-Write" seal  is added in future.
+Therefore, this problem also exists on x86_32:
+"verifier bug. zext_dst is set, but no reg is defined"
 
-> Additionally, if the goal is to enforce W^X, I don't think this
-> completely closes the gap. There will always be a period where it is
-> both writable and executable with this API:
->
-> 1. memfd_create(MFD_EXEC). Can't use MFD_NOEXEC since that would seal
-> chmod(+x), so the memfd is W + X here.
-> 2. write() code to the memfd.
-> 3. fcntl(F_ADD_SEALS, F_SEAL_EXEC) to convert the memfd to !W + X.
->
-> I think one of the attack vectors involved the attacker waiting for
-> another process to create a memfd, pausing/delaying the victim
-> process, overwriting the memfd with their own code, and calling exec()
-> on it, which is still possible in the window between steps 1 and 3
-> with this design.
->
-There are also step 4.
-4. call exec on the memfd,
-In confused deputy attack, attacker wants to inject content into memfd
-before step 4,
-because step 4 is by a privilege process, attackers can gain root
-escalation this way.
-
-Ideally step 2 rewrites the whole memfd,  (injecting  content between
-1 and 2 won't work), and
-step 3 is the next line after 2, making the process to stop  exactly
-between 2 and 3 is not easy.
-
-So enforcing W^X can reduce the attack surface. It also defines the
-most secure way for dev,
-or else, dev might:
-- forget to apply the W seal.
-- choose to apply X and W seal in multiple calls, thus adding a gap.
-
-> Thanks,
-> -- Daniel
-
-Thanks
-Jeff
+> 
+>> The bpf prog is as follows:
+>> int kfunc_call_test_ref_btf_id(struct __sk_buff *skb)
+>> {
+>> struct prog_test_ref_kfunc *pt;
+>> unsigned long s = 0;
+>> int ret = 0;
+>>
+>> pt = bpf_kfunc_call_test_acquire(&s);
+>> if (pt) {
+>>        // here, do_check clears the upper 32bits of r0 through:
+>>        // check_alu_op
+>>        //   ->check_reg_arg
+>>        //    ->mark_insn_zext
+>> if (pt->a != 42 || pt->b != 108)
+>> ret = -1;
+>> bpf_kfunc_call_test_release(pt);
+>> }
+>> return ret;
+>> }
+>>
+>>>
+>>> Before producing any patches please understand the logic fully.
+>>> Your commit log
+>>> "insn_def_regno should
+>>>    return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL."
+>>>
+>>> Makes no sense to me, since dst_reg is unused in JMP insn.
+>>> There is no concept of a src or dst register in a JMP insn.
+>>>
+>>> 32-bit x86 supports calling kfuncs. See emit_kfunc_call().
+>>> And we don't have this "verifier bug. zext_dst is set" issue there, right?
+>>> But what you're saying in the commit log:
+>>> "if data width of kfunc return value is 32 bits"
+>>> should have been applicable to x86-32 as well.
+>>> So please start with a test that demonstrates the issue on x86-32 and
+>>> then we can discuss the way to fix it.
+>>>
+>>> The patch 2 sort-of makes sense.
+>>>
+>>> For patch 3 pls add new test funcs to bpf_testmod.
+>>> We will move all of them from net/bpf/test_run.c to bpf_testmod eventually.
+>>> .
+>>>
+> .
+> 
