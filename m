@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D326447A0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Dec 2022 16:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 035696447B8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Dec 2022 16:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235366AbiLFPJ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Dec 2022 10:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
+        id S235066AbiLFPMv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Dec 2022 10:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235003AbiLFPI7 (ORCPT
+        with ESMTP id S235448AbiLFPMK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:08:59 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D402ED61
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Dec 2022 07:05:26 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id s7so14175334plk.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Dec 2022 07:05:26 -0800 (PST)
+        Tue, 6 Dec 2022 10:12:10 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C2C10DC
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Dec 2022 07:08:58 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id p24so14206618plw.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Dec 2022 07:08:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=SdDrnGbeR2v4+0YeS8iLZurDBTuoZ6giO5nJB6MXDpc=;
-        b=gla1Qr7Lsi2V/LMEq8ivJqXkjuP1I1XUlibNigkT1+tSLY5PR78ImSF8PRBZx7mDRz
-         PS3P6DP8ygF7wkjT9ht1FoiUXhppBPD0MBtrr50gprl7iDZ0/C7xVw77XARLLfxcDGoh
-         8iyyp6ODxuDBSTIvZ4k0NJyd81ER1o9rS00Zg=
+        b=HRXDHMToyddfrl/ROUn4uOBcTbTQ2QyyCXAjNDopj6X5rVwgC32M4mUD7NJ01wB6wa
+         GM13EEGIbDYLGbpfyisp5Ga6uTYs07egLysIKA05ecCKqMD8EECOCGM7j1SVlEVxA2Q4
+         2KMk5V1gqCKzZ50fX5ae0iG4J289AqAjBUdMI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=SdDrnGbeR2v4+0YeS8iLZurDBTuoZ6giO5nJB6MXDpc=;
-        b=RLu7HPKJ6H5GVRxo2a1wxKN+bOPALIOMdXToqhy5suCgXcPj0b41VPhg6clKyWGrIW
-         3ab1yF2cBviclYzmH656d7UzTBGfBQnO4BHLyCh5dGYkEopH1/tvpUOHmJhi7kBlPN7o
-         ccL3yhWQFr1T3qBFkxYq820K9wbzOpPZxh1iDqTbQ4vRHXoVxKx5QHAwCtJtHoHKZkBs
-         RdSEA3dxmXVhmQsyNYyIXU81/Fu5oc7eh4/plPf8zj3b+rO2ySOlammwge8lzd9u14Vp
-         C/l57PYBE8ra0g/k2Hw2GE4X/wJgVxovlmNmfa7XNqX2WvZl4R4M3c93Wtf2c3JbOpZX
-         x2kA==
-X-Gm-Message-State: ANoB5pkEgb/tn7q82lVIiGRMjbExfvKZO1NW//aWVqD8rRzTtsfxhtck
-        zCYLlz2hy8gzRFYxCYthScQyzw==
-X-Google-Smtp-Source: AA0mqf4wc9GPe25DQszT3uaz5/GvyY1ehkRjapIQVkuyZSxhT7GFovQfNshTArYwyjCAXlXvIoS7ow==
-X-Received: by 2002:a17:90a:df8f:b0:219:20ed:101e with SMTP id p15-20020a17090adf8f00b0021920ed101emr51444646pjv.215.1670339126392;
-        Tue, 06 Dec 2022 07:05:26 -0800 (PST)
+        b=bpQe/SLxid0gXhkN3RPrFAd+viyRgznMSnBygQ3Ugya1KdD9SEZ1E/zy6XLgFaOZr2
+         EynCTAroJD38k/Qv7Vln1P3pIgZ27SvZ7hyGREbMJZlsCAiDpr8K8nP303f2xUsYfwN6
+         eo8JNcLKkolJtcwNBIHQkNTTljIpXpzqpxSKbqcf1txrO7OG9QlTGa+BPdkHqLBwrhFJ
+         0u1X+o+GtygoRznQTsto84zsX5rpVzKdYf29YSBXmdEB1ubdT9ZN0Y0Qvw0fOaDEiQQO
+         cXppt47DFNCZ/FmUIApebLAXuQeReTNM8IEID6HtQ+8d/IdubeZtni+5AAr0Comeg0TO
+         VZig==
+X-Gm-Message-State: ANoB5pmZE5SJBuLJ2u9nRTbfTf5CpgMQ/pFfm0YPEnVmaeHrC4U0umEf
+        QVQeKD1fpViFIhUocak7qkRcPg==
+X-Google-Smtp-Source: AA0mqf5iBwQsRXbelwBgW9iBe9GzeLTZlNMT7NEjGg5QPj3iPqWVdVG8HciDAnbX24nGijTuvHfYvg==
+X-Received: by 2002:a17:90a:df91:b0:219:8464:84d5 with SMTP id p17-20020a17090adf9100b00219846484d5mr24362180pjv.9.1670339306071;
+        Tue, 06 Dec 2022 07:08:26 -0800 (PST)
 Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
-        by smtp.gmail.com with ESMTPSA id y5-20020a17090a784500b002187a4dd830sm12766094pjl.46.2022.12.06.07.05.25
+        by smtp.gmail.com with ESMTPSA id n3-20020a170902dc8300b00189a50d2a3esm12652874pld.241.2022.12.06.07.08.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 07:05:25 -0800 (PST)
+        Tue, 06 Dec 2022 07:08:25 -0800 (PST)
 From:   jeffxu@chromium.org
 To:     skhan@linuxfoundation.org, keescook@chromium.org
 Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
@@ -56,14 +56,14 @@ Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
         Jeff Xu <jeffxu@chromium.org>,
         kernel test robot <lkp@intel.com>
 Subject: [PATCH v4 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-Date:   Tue,  6 Dec 2022 15:05:20 +0000
-Message-Id: <20221206150520.1963880-1-jeffxu@google.com>
+Date:   Tue,  6 Dec 2022 15:08:18 +0000
+Message-Id: <20221206150818.1964179-1-jeffxu@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
