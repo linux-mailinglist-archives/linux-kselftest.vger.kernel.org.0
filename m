@@ -2,94 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5732A643BB1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Dec 2022 04:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5D7643D6E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Dec 2022 08:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiLFDNk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Dec 2022 22:13:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        id S231530AbiLFHKU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Dec 2022 02:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiLFDNj (ORCPT
+        with ESMTP id S229449AbiLFHKT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Dec 2022 22:13:39 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3801A203
-        for <linux-kselftest@vger.kernel.org>; Mon,  5 Dec 2022 19:13:37 -0800 (PST)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NR54s13DNzJp5S;
-        Tue,  6 Dec 2022 11:10:05 +0800 (CST)
-Received: from [10.40.193.166] (10.40.193.166) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Dec 2022 11:13:33 +0800
-Subject: Re: [PATCH] dma-mapping: benchmark: Fix compile error in user-space
- tool
-To:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Barry Song <song.bao.hua@hisilicon.com>
-References: <20221205135022.49708-1-gbayer@linux.ibm.com>
-CC:     Joerg Roedel <joro@8bytes.org>, Shuah Khan <shuah@kernel.org>,
-        <iommu@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <fd189113-deae-d6b7-bb9a-a5a94f7b0815@hisilicon.com>
-Date:   Tue, 6 Dec 2022 11:13:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        Tue, 6 Dec 2022 02:10:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40627E00F;
+        Mon,  5 Dec 2022 23:10:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDB1E614A8;
+        Tue,  6 Dec 2022 07:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 10BBBC433C1;
+        Tue,  6 Dec 2022 07:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670310617;
+        bh=hsEA/fB6VIyC3Wm5z/cc41AOVcPc9FbmrqahCWlyALw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jlzcs1ZHHeBGU4D/KJxDCP/8gyer4A74U+/9MQcpqTlWjbLJTnRLIUDBOI2ynfTg5
+         qpw61plYLgUXIqF2D+T5R8CGvtxdHoQk5Hqn1crp45FWuuKf4f5aFo5PQfZUof+Nzg
+         AOHt51Xi4dZpnHFcuGoeuPKoM1lel5J5n2qh9WvfZnAN2d4qDj9Lo4Zx8Aqko7EpxE
+         gywULrq33fo9A1aQnwuheuCDkZ3Xrz6/aiGOdJtcMKnPS/iL9I/m2rf2tB6AaLERe6
+         ihn0wh3w4I1woipL9Rc0NSPy2evuhtzHz6BNSvL4O29djkHJtQ3gXIgdAjs0uqdQnB
+         MqAf/HkTKbXWg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DC6C9E21EFD;
+        Tue,  6 Dec 2022 07:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20221205135022.49708-1-gbayer@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next,v6 0/4] xfrm: interface: Add unstable helpers for
+ XFRM metadata
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167031061689.3006.16415663365727591503.git-patchwork-notify@kernel.org>
+Date:   Tue, 06 Dec 2022 07:10:16 +0000
+References: <20221203084659.1837829-1-eyal.birger@gmail.com>
+In-Reply-To: <20221203084659.1837829-1-eyal.birger@gmail.com>
+To:     Eyal Birger <eyal.birger@gmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, steffen.klassert@secunet.com,
+        herbert@gondor.apana.org.au, andrii@kernel.org,
+        daniel@iogearbox.net, nicolas.dichtel@6wind.com,
+        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+        liuhangbin@gmail.com, lixiaoyan@google.com, jtoppins@redhat.com,
+        kuniyu@amazon.co.jp, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hello:
 
-在 2022/12/5 21:50, Gerd Bayer 写道:
-> Since [1] the user-space program dma_map_benchmark shares the header file
-> linux/map_benchmark.h with the kernel driver in kernel/dma/map_benchmark.c.
-> With latest kernel version this does not compile any more.
->
-> While https://kernelnewbies.org/KernelHeaders suggests otherwise, allow it
-> to use of kernel headers through the uapi/ include direcotry. I assume we can
-> do so safely, since the controlling user-space program is distributed with
-> the kernel.
->
-> With this change dma_map_benchmark compiles with just the obvious warning
-> about uapi usage on ARCH=x86 and s390 and runs on ARCH=s390.
->
-> [1] commit 8ddde07a3d28 ("dma-mapping: benchmark: extract a common header file for map_benchmark definition")
->
-> Signed-off-by: Gerd Bayer <gbayer@linux.ibm.com>
+This series was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-It also solves the compile error on arm64 platform.
-Acked-by:  Xiang Chen <chenxiang66@hisilicon.com>
+On Sat,  3 Dec 2022 10:46:55 +0200 you wrote:
+> This patch series adds xfrm metadata helpers using the unstable kfunc
+> call interface for the TC-BPF hooks.
+> 
+> This allows steering traffic towards different IPsec connections based
+> on logic implemented in bpf programs.
+> 
+> The helpers are integrated into the xfrm_interface module. For this
+> purpose the main functionality of this module is moved to
+> xfrm_interface_core.c.
+> 
+> [...]
 
-> ---
->   tools/testing/selftests/dma/dma_map_benchmark.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-> index 5c997f17fcbd..d49d7ea6a63e 100644
-> --- a/tools/testing/selftests/dma/dma_map_benchmark.c
-> +++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-> @@ -10,7 +10,7 @@
->   #include <unistd.h>
->   #include <sys/ioctl.h>
->   #include <sys/mman.h>
-> -#include <linux/types.h>
-> +#include <uapi/linux/types.h>
->   #include <linux/map_benchmark.h>
->   
->   #define NSEC_PER_MSEC	1000000L
->
-> base-commit: 8abacb3356e68261ccd3a2ad74ed6042363e5d0f
+Here is the summary with links:
+  - [bpf-next,v6,1/4] xfrm: interface: rename xfrm_interface.c to xfrm_interface_core.c
+    https://git.kernel.org/bpf/bpf-next/c/ee9a113ab634
+  - [bpf-next,v6,2/4] xfrm: interface: Add unstable helpers for setting/getting XFRM metadata from TC-BPF
+    https://git.kernel.org/bpf/bpf-next/c/94151f5aa966
+  - [bpf-next,v6,3/4] tools: add IFLA_XFRM_COLLECT_METADATA to uapi/linux/if_link.h
+    https://git.kernel.org/bpf/bpf-next/c/4f4ac4d9106e
+  - [bpf-next,v6,4/4] selftests/bpf: add xfrm_info tests
+    https://git.kernel.org/bpf/bpf-next/c/90a3a05eb33f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
