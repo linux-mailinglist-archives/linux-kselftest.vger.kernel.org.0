@@ -2,116 +2,218 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFB2646034
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 18:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C01DA6460D9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 19:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiLGR1S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Dec 2022 12:27:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S229724AbiLGSEP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Dec 2022 13:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiLGR0q (ORCPT
+        with ESMTP id S229548AbiLGSEO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:26:46 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC80A6D7C6;
-        Wed,  7 Dec 2022 09:26:29 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NS3tK3Vcyz9xHdQ;
-        Thu,  8 Dec 2022 01:19:21 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD34m9YzJBjc9DJAA--.62662S9;
-        Wed, 07 Dec 2022 18:26:06 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
-        jackmanb@chromium.org, mykolal@fb.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v2 7/7] selftests/bpf: Change return value in test_libbpf_get_fd_by_id_opts.c
-Date:   Wed,  7 Dec 2022 18:24:34 +0100
-Message-Id: <20221207172434.435893-8-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221207172434.435893-1-roberto.sassu@huaweicloud.com>
-References: <20221207172434.435893-1-roberto.sassu@huaweicloud.com>
+        Wed, 7 Dec 2022 13:04:14 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD8C5FB81
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Dec 2022 10:04:12 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id m18so14335058eji.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Dec 2022 10:04:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Y3J9nRo6jjR898InKO9fN5El2ZHwhdxJj4gps9mW9I=;
+        b=WDfEQTvSWUKR2XYWJ+dWKCVbWt+sMD2uLoCQpVaKldt8vNOkPUPgGofPbi2cUr5dSo
+         zKHFf2lSksnail5LKzdEuuK/aLYdBSWUeGpsdWS6MbTRCt+8yGkLrra9BJKLi28o7cM3
+         swrfzprx1QZQ6i/P7MER+Nw9SNkXCZ1CWBpfvwovKooJH9XxH0COQ9unBKlPcXSESYHK
+         /MkOZWrbz8r6/prv7Oi96EXddhSvDlsx2c7To5QA/ysYAQ2hfR4ayaErKHwzKZJfeaMH
+         Mrr1sOogkvfaVPZBF4mUPQONsJVuyhvBGnfIeK2t/l4Q0QIYTkMyaI29Hnf/qfxfclED
+         FwTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7Y3J9nRo6jjR898InKO9fN5El2ZHwhdxJj4gps9mW9I=;
+        b=uvnuCQDcqAU3xPZnRkBDzs+5Fbs+IIaPrDTn7cmWfYbkHO1gY7+VK6HPhBYIjihjt5
+         9zr5+yquEpmGOLP9DkUCkRxOLKT7oVXnh7OaJtd6sjIlHAu1fCx6rNsf0fsU5BjbeQvx
+         3mi2/e8qHir9FiWEe8uilI47lxmWPdepu0c4Yi9ioo118Gu3ZyRVRBWPDXx0PZMS+XYF
+         pf5aM18dMZ8KOHW61qs23rO7+QGuFxeTyjdiyi9zqdi6ss01GFo0grNAcAJf4eHpHNX7
+         /BNGz3794NFB6v1z17qzdY7szyjJlKHYCSfJFBMoBSxDC3C5mBjf7eE4nN0sSnQPlcP6
+         tb5g==
+X-Gm-Message-State: ANoB5pnhCd83dkgtZ4aTaBTd/cawTrJsY8kNdndlXJiarlImLmj2RkJ4
+        s7QETETQUFp5ihSwhuIsGJk0MiEWJLRWzuZjP2TlUQ==
+X-Google-Smtp-Source: AA0mqf4GK3fY4JRgFIXwuUYkxuecsGUZfZU67WBevfA6m3jUpRrtCEUNkJOwVT5rq9uO0O4VRrx33l1aZc3NG+wC8mw=
+X-Received: by 2002:a17:906:b0b:b0:7c1:36:8ffe with SMTP id
+ u11-20020a1709060b0b00b007c100368ffemr9861155ejg.725.1670436251215; Wed, 07
+ Dec 2022 10:04:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwD34m9YzJBjc9DJAA--.62662S9
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw15Ar4xtry3Cr17uFWUCFg_yoW8ArW5pF
-        WrXw1YkFZYgr1xu3W7JFWDGFySkFyxZayUXFW8JryDZr18XF4DJr18KF1Yqr98Gr4vgwsa
-        vr4xKrWYkr18CaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
-        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
-        v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-        pf9x07j7GYLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4JqpAAAso
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221207164338.1535591-1-mclapinski@google.com>
+ <20221207164338.1535591-2-mclapinski@google.com> <843af7b5-8917-e9e3-de27-cb328f53fb70@efficios.com>
+In-Reply-To: <843af7b5-8917-e9e3-de27-cb328f53fb70@efficios.com>
+From:   =?UTF-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>
+Date:   Wed, 7 Dec 2022 19:04:00 +0100
+Message-ID: <CAAi7L5eVa-KFxG5DLrFXbEdVx-CxLLPzg_kPE9OLa3mkrV+AjQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] sched/membarrier: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrei Vagin <avagin@gmail.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Wed, Dec 7, 2022 at 6:07 PM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> On 2022-12-07 11:43, Michal Clapinski wrote:
+> > Provide a method to query previously issued registrations.
+> >
+> > Signed-off-by: Michal Clapinski <mclapinski@google.com>
+> > ---
+> >   include/uapi/linux/membarrier.h |  4 ++++
+> >   kernel/sched/membarrier.c       | 39 ++++++++++++++++++++++++++++++++-
+> >   2 files changed, 42 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/uapi/linux/membarrier.h b/include/uapi/linux/membarrier.h
+> > index 737605897f36..5f3ad6d5be6f 100644
+> > --- a/include/uapi/linux/membarrier.h
+> > +++ b/include/uapi/linux/membarrier.h
+> > @@ -137,6 +137,9 @@
+> >    * @MEMBARRIER_CMD_SHARED:
+> >    *                          Alias to MEMBARRIER_CMD_GLOBAL. Provided for
+> >    *                          header backward compatibility.
+> > + * @MEMBARRIER_CMD_GET_REGISTRATIONS:
+> > + *                          Returns a bitmask of previously issued
+> > + *                          registration commands.
+> >    *
+> >    * Command to be passed to the membarrier system call. The commands need to
+> >    * be a single bit each, except for MEMBARRIER_CMD_QUERY which is assigned to
+> > @@ -153,6 +156,7 @@ enum membarrier_cmd {
+> >       MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE     = (1 << 6),
+> >       MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ                   = (1 << 7),
+> >       MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ          = (1 << 8),
+> > +     MEMBARRIER_CMD_GET_REGISTRATIONS                        = (1 << 9),
 
-In the no_alu32 version, the eBPF assembly looks like:
+Btw. I could do this as a flag to MEMBARRIER_CMD_QUERY instead of a
+separate command. Would that be preferable?
 
-       0:	b7 00 00 00 00 00 00 00	r0 = 0
-       1:	79 12 00 00 00 00 00 00	r2 = *(u64 *)(r1 + 0)
-       2:	18 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00	r3 = 0 ll
-       4:	5d 32 04 00 00 00 00 00	if r2 != r3 goto +4 <LBB0_2>
-       5:	79 10 08 00 00 00 00 00	r0 = *(u64 *)(r1 + 8)
-       6:	67 00 00 00 3e 00 00 00	r0 <<= 62
-       7:	c7 00 00 00 3f 00 00 00	r0 s>>= 63
-       8:	57 00 00 00 f3 ff ff ff	r0 &= -13
 
-Unfortunately, ANDing of negative numbers is not yet supported in the
-verifier. As a consequence, current bounds are lost in the AND operation,
-resulting in estimating a positive return value, even if there isn't.
+> >
+> >       /* Alias for header backward compatibility. */
+> >       MEMBARRIER_CMD_SHARED                   = MEMBARRIER_CMD_GLOBAL,
+> > diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
+> > index 0c5be7ebb1dc..2ad881d07752 100644
+> > --- a/kernel/sched/membarrier.c
+> > +++ b/kernel/sched/membarrier.c
+> > @@ -159,7 +159,8 @@
+> >       | MEMBARRIER_CMD_PRIVATE_EXPEDITED                              \
+> >       | MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED                     \
+> >       | MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK                \
+> > -     | MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
+> > +     | MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK                     \
+> > +     | MEMBARRIER_CMD_GET_REGISTRATIONS)
+> >
+> >   static void ipi_mb(void *info)
+> >   {
+> > @@ -540,6 +541,40 @@ static int membarrier_register_private_expedited(int flags)
+> >       return 0;
+> >   }
+> >
+> > +static int membarrier_get_registrations(void)
+> > +{
+> > +     struct task_struct *p = current;
+> > +     struct mm_struct *mm = p->mm;
+> > +     int registrations_mask = 0, membarrier_state, i;
+> > +     static const int states[] = {
+> > +             MEMBARRIER_STATE_GLOBAL_EXPEDITED |
+> > +                     MEMBARRIER_STATE_GLOBAL_EXPEDITED_READY,
+>
+> What is the purpose of checking for the _READY state flag as well here ?
 
-For now, return -EPERM instead of -EACCES, to remove the AND operation and
-let the verifier know that the return value is legitimate (negative or
-zero).
+Answered below.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- .../selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c    | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c
-index f5ac5f3e8919..a143dbbd5573 100644
---- a/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c
-+++ b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_by_id_opts.c
-@@ -29,8 +29,13 @@ int BPF_PROG(check_access, struct bpf_map *map, fmode_t fmode)
- 	if (map != (struct bpf_map *)&data_input)
- 		return 0;
- 
-+	/*
-+	 * Prefer -EPERM to -EACCES to avoid ANDing negative numbers in the
-+	 * no_alu32 version, which results in the current register bounds to
-+	 * be lost.
-+	 */
- 	if (fmode & FMODE_WRITE)
--		return -EACCES;
-+		return -EPERM;
- 
- 	return 0;
- }
--- 
-2.25.1
+>
+>
+> > +             MEMBARRIER_STATE_PRIVATE_EXPEDITED |
+> > +                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_READY,
+> > +             MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE |
+> > +                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE_READY,
+> > +             MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ |
+> > +                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ_READY
+> > +     };
+> > +     static const int registration_cmds[] = {
+> > +             MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED,
+> > +             MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED,
+> > +             MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE,
+> > +             MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ
+> > +     };
+> > +     BUILD_BUG_ON(ARRAY_SIZE(states) != ARRAY_SIZE(registration_cmds));
+> > +
+> > +     membarrier_state = atomic_read(&mm->membarrier_state);
+> > +     for (i = 0; i < ARRAY_SIZE(states); ++i) {
+> > +             if (membarrier_state & states[i]) {
+>
+> The mask will match if either of the flags to match are set. Is that
+> your intent ?
 
+Kind of, it was just the easiest to write. As explained in the cover
+letter, I don't really care much about the result of this while the
+process is running. And when the process is frozen, either state and
+state_ready are set or none of them.
+
+
+>
+>
+> > +                     registrations_mask |= registration_cmds[i];
+> > +                     membarrier_state &= ~states[i];
+>
+> So I understand that those _READY flags are there purely for making sure
+> we clear the membarrier_state for validation that they have all been
+> checked with the following WARN_ON_ONCE(). Am I on the right track ?
+
+Yes, exactly. It wastes time but I'm worried about people adding new
+states and not updating this function. A suggestion on how to do this
+better (especially at compile time) would be greatly appreciated.
+
+
+>
+> > +             }
+> > +     }
+> > +     WARN_ON_ONCE(membarrier_state != 0);
+>
+> Thanks,
+>
+> Mathieu
+>
+> > +     return registrations_mask;
+> > +}
+> > +
+> >   /**
+> >    * sys_membarrier - issue memory barriers on a set of threads
+> >    * @cmd:    Takes command values defined in enum membarrier_cmd.
+> > @@ -623,6 +658,8 @@ SYSCALL_DEFINE3(membarrier, int, cmd, unsigned int, flags, int, cpu_id)
+> >               return membarrier_private_expedited(MEMBARRIER_FLAG_RSEQ, cpu_id);
+> >       case MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ:
+> >               return membarrier_register_private_expedited(MEMBARRIER_FLAG_RSEQ);
+> > +     case MEMBARRIER_CMD_GET_REGISTRATIONS:
+> > +             return membarrier_get_registrations();
+> >       default:
+> >               return -EINVAL;
+> >       }
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
+>
