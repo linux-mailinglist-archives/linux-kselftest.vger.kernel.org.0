@@ -2,66 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7823D645256
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 03:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C190964529F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 04:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiLGCy6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Dec 2022 21:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S229762AbiLGDns (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Dec 2022 22:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLGCy5 (ORCPT
+        with ESMTP id S229513AbiLGDnp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Dec 2022 21:54:57 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106B62EF5F
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Dec 2022 18:54:56 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id r3so3059806vkq.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Dec 2022 18:54:56 -0800 (PST)
+        Tue, 6 Dec 2022 22:43:45 -0500
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9951CB57
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Dec 2022 19:43:43 -0800 (PST)
+Received: by mail-ua1-x932.google.com with SMTP id 97so5656803uam.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Dec 2022 19:43:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b92AUF3otjJG6J5DiAW9+h+pJPd9M9NUjS1ArBc8kpA=;
-        b=MvSzsyiKHgqaT9tR8J/hC53qV/XnyeZ1lFj7qkiktcuXV4zPbnukLTu5ceBoIhoBUN
-         gEs3nrFeym5W1jcvdKSdINZnKUOrFj/6owPn/Vd08F7mvx9Whsamr8fHdLQ63arGOdUk
-         XCu4ik3ALKweZtnXui9uFIaFWCDjVxc8ph9eDwy1b928IObi2grIgjfjug2Bd/CMjKdw
-         bG88OTtSL+oKzNHgq0YUBIGdeZzhlnwpFBZmppuRwwu1zG58eu2RUMJDkAwxBF84jPln
-         CXtVhpHKiDc156x8ZrOhe9edSYBNpWVKj9YBnkYvy1u3AQaeS12X20/7oxxiUVQ2wgDz
-         MoKA==
+        bh=5poCNn0ZYnIBK8HtDg1QpowuuOSdQyeWrpAEHCBQkuQ=;
+        b=X+7qp9Ic6n2opixQPB0R3o+MEcxmsPpxqqFEp1cAscCcJj2q8ecuDQxozFlXhqY7Ae
+         StG7nVX/tnZifDJXUEOUzaP9yLjEUjzyJ5zoCQuQc2LvGcO0syAaTfDFCVv4RVBDk7JG
+         ioWWedExUuxQjbxyTeA4cKVVqXvu1J70A0+SKbupZZZV0kwwTu/ee2M+1fNxRqfTEEze
+         nBsbnYt6Ki3+/8OlZBrbrH8o//wpQQGpRrQlxctoBqjp9Ozcin+yChDn+Y1E+6iXt6Pn
+         aeghqsrDkgeXRjTQjlFAqzBbl/GC8LF6uYG70slk5Hb8ezaXRM8klyQhCSt0ktUs7Lrt
+         vk/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=b92AUF3otjJG6J5DiAW9+h+pJPd9M9NUjS1ArBc8kpA=;
-        b=LY1Jlf/CdDz6v4bHoPNUB41b4Ho4tQWuClvltgrM7iAQAW9fImHLHSt63X6+sF+X7s
-         70Mb/L8Mg9tqzcRlwMdu1/EdxBDD1IfcHEbggR7OupVfpgY1/yTPOE9ESxh90rZ4aSu8
-         OUbzYPdRZljhJUXtDo/8DQ1jHgHxz5PPnh0r7PPvNkz8aXxXzsbJ3PgsOjurvOJmOmqi
-         NcGX+OSNXm/3E3SEqTRFSZn5lB5PyzxGBBVg7dvRqg54metkKbud47pHoMcU3+tie4o4
-         +BYCtxlHTR3HZ5M3rUC0fmi09CFTvxIXNdC8l31sBssyH4bToxhqHgGRFuNk0rYKhmWU
-         21tA==
-X-Gm-Message-State: ANoB5pnjt52Xnvr7177WDNayoFa9irjYpxPLctgOxAt0+7w+pDB/DP6J
-        PCW+R4jmmbp1SAwsTVnGI+akwCyCAnCmtMuSeFL0eg==
-X-Google-Smtp-Source: AA0mqf68ajJtQPax1pmUrvSoqG7xsxXARst3K27OmqRvea+nD9SM8zQs/GMOod1N7OrCQNW/HVkyrkQ8qCAD6zq/WIk=
-X-Received: by 2002:a1f:5cc5:0:b0:3bd:1d27:eaa with SMTP id
- q188-20020a1f5cc5000000b003bd1d270eaamr15466699vkb.4.1670381695006; Tue, 06
- Dec 2022 18:54:55 -0800 (PST)
+        bh=5poCNn0ZYnIBK8HtDg1QpowuuOSdQyeWrpAEHCBQkuQ=;
+        b=sbQ/Ksft9vhujP/En1GjDNhAC1esZUFw9xIRplfsnjZvfNV1gLbkclZ6biHxXMIrX/
+         aeaIaWaJcf9AwJZqMWnHutjjTPyyIj7iZ/WN5lRc5Lnp0BKirUWVvZqOPSytVeOp935s
+         u28faUlc7Q+IK84YG/cNaIh7XLaHxtC9ghcyeFZPnOUI+8k5SU00rWLYplV+LQMn2uPH
+         g2X6+lkUxhCIl36123aIxNv76m1NuchUFgzcUWbhuo1S+yhdRAqplndvRCOFWJ6S7ILL
+         jIc922RiAqEaJQFNstgasUncRjVg7oZHfvGp/cE6Pl7VKAnKi2uKd0SYyCIx7bKms7rQ
+         KFLQ==
+X-Gm-Message-State: ANoB5pk0Leu2qWdlCJu9XWvWjWXGfqbpF1OQE0f4qF/iDVFsbRnF3w/k
+        ea7e1pUYSpUN/Df1MVt7ACfqPALgqaxRY/avgdjL8w==
+X-Google-Smtp-Source: AA0mqf6sklV7YR6WTKjIDRJijy4i01TVd+/k09s6PNC/+tgdSO1vDdORhvElloknpxEjTQcYNPD7wXD2EcbeuA7D+Xc=
+X-Received: by 2002:ab0:7028:0:b0:419:e6:4af6 with SMTP id u8-20020ab07028000000b0041900e64af6mr29654866ual.52.1670384622594;
+ Tue, 06 Dec 2022 19:43:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20221207014024.340230-1-rmoar@google.com> <3bc67108-9f4a-4cd7-619d-d61816625e1a@canonical.com>
-In-Reply-To: <3bc67108-9f4a-4cd7-619d-d61816625e1a@canonical.com>
+References: <20221130185419.2552673-1-dlatypov@google.com>
+In-Reply-To: <20221130185419.2552673-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 7 Dec 2022 10:54:43 +0800
-Message-ID: <CABVgOS==niZi5O4Gk8uxHdnmX4YFs2e6XYG=B+SQ6Po6v6bHkg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] kunit: add macro to allow conditionally exposing
- static symbols to tests
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-        dlatypov@google.com, skhan@linuxfoundation.org,
-        tales.aparecida@gmail.com, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        apparmor@lists.ubuntu.com
+Date:   Wed, 7 Dec 2022 11:43:31 +0800
+Message-ID: <CABVgOSm_J878tGhWzvGa_y4fYZEUDrSaZN49=kKnn0W7ESe2wA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: make parser preserve whitespace when
+ printing test log
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000097d84805ef340bbf"
+        boundary="0000000000001709cb05ef34ba8f"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -73,100 +70,189 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000097d84805ef340bbf
+--0000000000001709cb05ef34ba8f
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Dec 7, 2022 at 10:43 AM John Johansen
-<john.johansen@canonical.com> wrote:
+On Thu, Dec 1, 2022 at 2:54 AM 'Daniel Latypov' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> On 12/6/22 17:40, Rae Moar wrote:
-> > Currently in order to test a static function, tests must be included in the
-> > same translation unit as the function. However, this can cause issues with
-> > including implementation and test code in the same file. As an alternative,
-> > the first patch in this series creates a macro that will set a function to
-> > be static or not depending on whether CONFIG_KUNIT is enabled. This allows
-> > the function to be visible during testing and static otherwise.
-> >
-> > As an example, the current status quo to test static functions is:
-> >
-> > === test.c ===
-> >
-> > static void test_case(struct kunit *test)
-> > {
-> >    KUNIT_EXPECT_EQ(test, my_func_to_test(), 2);
-> > }
-> >
-> > Then the tests are included in the implementation file as a workaround to
-> > the issue of testing static functions:
-> >
-> > === implementation.c ===
-> >
-> > static int my_func_to_test() {...}
-> > ...
-> > #include "test.c"
-> >
-> > Instead, the function could be defined with this new macro:
-> >
-> > === implementation.c ===
-> >
-> > VISIBLE_IF_KUNIT int my_func_to_test() {...}
-> >
-> > The first patch also creates a macro that will export a symbol into a kunit
-> > testing namespace only if CONFIG_KUNIT is enabled. This follows the logic
-> > above and allows symbols to be conditionally exported based on the testing
-> > status.
-> >
-> > The second patch in the series updates the policy_unpack test in AppArmor
-> > to show an example of how to use both of these macros in order to address
-> > the issue of testing static functions. Additionally, the patch allows the
-> > policy_unpack test to be built as a module.
-> >
-> > Changes since v2:
-> >   - Add mention of namespacing symbols to the commit message of the
-> >     second patch.
-> >   - Change module name in the second patch from policy_unpack_test to
-> >     apparmor_policy_unpack_test.
-> >
-> > Changes since v1:
-> >   - Changed the namespace of exported symbols for the apparmor
-> >     policy_unpack_test by adding the aa_ prefix.
-> >   - Separated the documentation comments for macros in
-> >     include/kunit/visibility.h.
-> >   - Changed copyright date and author for include/kunit/visibility.h.
-> >
-> > Rae Moar (2):
-> >    kunit: add macro to allow conditionally exposing static symbols to
-> >      tests
-> >    apparmor: test: make static symbols visible during kunit testing
-> >
-> >   include/kunit/visibility.h                |  33 +++
-> >   security/apparmor/Kconfig                 |   4 +-
-> >   security/apparmor/Makefile                |   3 +
-> >   security/apparmor/include/policy_unpack.h |  50 +++++
-> >   security/apparmor/policy_unpack.c         | 238 ++++++++++------------
-> >   security/apparmor/policy_unpack_test.c    |  69 ++++---
-> >   6 files changed, 229 insertions(+), 168 deletions(-)
-> >   create mode 100644 include/kunit/visibility.h
-> >
-> >
-> > base-commit: 0f08f3e2a0186dfb8e33cb46105228eb18448a0e
+> Currently, kunit_parser.py is stripping all leading whitespace to make
+> parsing easier. But this means we can't accurately show kernel output
+> for failing tests or when the kernel crashes.
 >
-> thanks Rae,
+> Embarassingly, this affects even KUnit's own output, e.g.
+> [13:40:46] Expected 2 + 1 == 2, but
+> [13:40:46] 2 + 1 == 3 (0x3)
+> [13:40:46] not ok 1 example_simple_test
+> [13:40:46] [FAILED] example_simple_test
 >
-> looks good to me, David unless you tell me otherwise I assume this is
-> still going in via the kselftest/kunit tree.
+> After this change, here's what the output in context would look like
+> [13:40:46] =================== example (4 subtests) ===================
+> [13:40:46] # example_simple_test: initializing
+> [13:40:46] # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+> [13:40:46] Expected 2 + 1 == 2, but
+> [13:40:46]     2 + 1 == 3 (0x3)
+> [13:40:46] [FAILED] example_simple_test
+> [13:40:46] [SKIPPED] example_skip_test
+> [13:40:46] [SKIPPED] example_mark_skipped_test
+> [13:40:46] [PASSED] example_all_expect_macros_test
+> [13:40:46]     # example: initializing suite
+> [13:40:46] # example: pass:1 fail:1 skip:2 total:4
+> [13:40:46] # Totals: pass:1 fail:1 skip:2 total:4
+> [13:40:46] ===================== [FAILED] example =====================
 >
+> This example shows one minor cosmetic defect this approach has.
+> The test counts lines prevent us from dedenting the suite-level output.
+> But at the same time, any form of non-KUnit output would do the same
+> unless it happened to be indented as well.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Yup, both of these are looking good to me (and work fine on my machine).
+I agree that this is a good idea.
 
-I've added these to the queue for the kselftest/kunit tree. There's a
-chance they won't make it into 6.2, but if not, they should be the
-first things in the 6.3 branch.
+Personally, I think we could avoid some of the 'dedent' issues by
+disabling the test statistics lines when run via kunit.py (if
+raw_output is not enabled). That's probably better as a separate
+patch, though, so this looks good to go.
 
-Thanks very much,
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
 -- David
 
---00000000000097d84805ef340bbf
+>  tools/testing/kunit/kunit.py           |  2 +-
+>  tools/testing/kunit/kunit_parser.py    | 27 +++++++++++++-------------
+>  tools/testing/kunit/kunit_tool_test.py |  2 ++
+>  3 files changed, 16 insertions(+), 15 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index e7b6549712d6..43fbe96318fe 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -202,7 +202,7 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
+>                 if request.raw_output == 'all':
+>                         pass
+>                 elif request.raw_output == 'kunit':
+> -                       output = kunit_parser.extract_tap_lines(output, lstrip=False)
+> +                       output = kunit_parser.extract_tap_lines(output)
+>                 for line in output:
+>                         print(line.rstrip())
+>                 parse_time = time.time() - parse_start
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index 99b8f058db40..a225799f6b1b 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -13,6 +13,7 @@ from __future__ import annotations
+>  from dataclasses import dataclass
+>  import re
+>  import sys
+> +import textwrap
+>
+>  from enum import Enum, auto
+>  from typing import Iterable, Iterator, List, Optional, Tuple
+> @@ -208,12 +209,12 @@ class LineStream:
+>
+>  # Parsing helper methods:
+>
+> -KTAP_START = re.compile(r'KTAP version ([0-9]+)$')
+> -TAP_START = re.compile(r'TAP version ([0-9]+)$')
+> -KTAP_END = re.compile('(List of all partitions:|'
+> +KTAP_START = re.compile(r'\s*KTAP version ([0-9]+)$')
+> +TAP_START = re.compile(r'\s*TAP version ([0-9]+)$')
+> +KTAP_END = re.compile(r'\s*(List of all partitions:|'
+>         'Kernel panic - not syncing: VFS:|reboot: System halted)')
+>
+> -def extract_tap_lines(kernel_output: Iterable[str], lstrip=True) -> LineStream:
+> +def extract_tap_lines(kernel_output: Iterable[str]) -> LineStream:
+>         """Extracts KTAP lines from the kernel output."""
+>         def isolate_ktap_output(kernel_output: Iterable[str]) \
+>                         -> Iterator[Tuple[int, str]]:
+> @@ -239,11 +240,8 @@ def extract_tap_lines(kernel_output: Iterable[str], lstrip=True) -> LineStream:
+>                                 # stop extracting KTAP lines
+>                                 break
+>                         elif started:
+> -                               # remove the prefix and optionally any leading
+> -                               # whitespace. Our parsing logic relies on this.
+> +                               # remove the prefix, if any.
+>                                 line = line[prefix_len:]
+> -                               if lstrip:
+> -                                       line = line.lstrip()
+>                                 yield line_num, line
+>         return LineStream(lines=isolate_ktap_output(kernel_output))
+>
+> @@ -298,7 +296,7 @@ def parse_ktap_header(lines: LineStream, test: Test) -> bool:
+>         lines.pop()
+>         return True
+>
+> -TEST_HEADER = re.compile(r'^# Subtest: (.*)$')
+> +TEST_HEADER = re.compile(r'^\s*# Subtest: (.*)$')
+>
+>  def parse_test_header(lines: LineStream, test: Test) -> bool:
+>         """
+> @@ -322,7 +320,7 @@ def parse_test_header(lines: LineStream, test: Test) -> bool:
+>         lines.pop()
+>         return True
+>
+> -TEST_PLAN = re.compile(r'1\.\.([0-9]+)')
+> +TEST_PLAN = re.compile(r'^\s*1\.\.([0-9]+)')
+>
+>  def parse_test_plan(lines: LineStream, test: Test) -> bool:
+>         """
+> @@ -350,9 +348,9 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
+>         lines.pop()
+>         return True
+>
+> -TEST_RESULT = re.compile(r'^(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
+> +TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
+>
+> -TEST_RESULT_SKIP = re.compile(r'^(ok|not ok) ([0-9]+) (- )?(.*) # SKIP(.*)$')
+> +TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?(.*) # SKIP(.*)$')
+>
+>  def peek_test_name_match(lines: LineStream, test: Test) -> bool:
+>         """
+> @@ -511,8 +509,9 @@ def print_test_header(test: Test) -> None:
+>
+>  def print_log(log: Iterable[str]) -> None:
+>         """Prints all strings in saved log for test in yellow."""
+> -       for m in log:
+> -               stdout.print_with_timestamp(stdout.yellow(m))
+> +       formatted = textwrap.dedent('\n'.join(log))
+> +       for line in formatted.splitlines():
+> +               stdout.print_with_timestamp(stdout.yellow(line))
+>
+>  def format_test_result(test: Test) -> str:
+>         """
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 1ef921ac4331..0c2190514103 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -336,12 +336,14 @@ class KUnitParserTest(unittest.TestCase):
+>                 KTAP version 1
+>                 1..1
+>                   Test output.
+> +                   Indented more.
+>                 not ok 1 test1
+>                 """
+>                 result = kunit_parser.parse_run_tests(output.splitlines())
+>                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
+>
+>                 self.print_mock.assert_any_call(StrContains('Test output.'))
+> +               self.print_mock.assert_any_call(StrContains('  Indented more.'))
+>                 self.noPrintCallContains('not ok 1 test1')
+>
+>  def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
+>
+> base-commit: 0f08f3e2a0186dfb8e33cb46105228eb18448a0e
+> --
+> 2.38.1.584.g0f3c55d4c2-goog
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20221130185419.2552673-1-dlatypov%40google.com.
+
+--0000000000001709cb05ef34ba8f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -233,14 +319,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB9
-hCAHtDp2SmCIg48x7Xwsagl5HzrO2Rxx6kO5ZyytNDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjEyMDcwMjU0NTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAG
+KwPA66sM05FsqPgvQdH9ARPUWLeimeXcH0mpVwTPBjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjEyMDcwMzQzNDJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZ3oK6ZaJ3jPkpkpKdzZD
-STwCXyqAB7keaXBPcmIzMLUK6sZ2g0dQ0Dhew1xxjLpcZS+HOuGUIfVyX/KSxfX6pruiZx3rDDio
-GZLFpqgHTvXWLBIYDtd5ZPJ1vQguWoK4eYTpruQtJkfiXxYmkwQrgTY6hzRyAoGO4FlEBfO5G6El
-DB6qZXRG6+ZbNHTtJ3AAc6pzE+Ogs0VxMgi+5C+Ors1Vxs/E9I9/Rl6zBO8TA9MOAQlTkwO3tgjI
-bLoKdxRHuCgWnTGdfrwas5geGDGLTNeCVhhyLm0+pjl2Jo7ihaTZd5nfpOCCIWxo/+jiFzBttd31
-hznKlhazXHtM3F1KCA==
---00000000000097d84805ef340bbf--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAA8jdtAoUs+HO9gZeHmiY
+S2M8/slIVJsduTIUPWXViQJ1+pqZlcbS1VDkKG6v/SqedjyaykgJuNjKypCYxL3JAbARYzFMpCDp
+qqAlMSLVc+mimHsz639rI9VuRspmg9UoVone5x3aRCW2cmPvfGx1Myd3Z5jataX6Q5/lk/uzq3KW
+oOyrb2RnMeXGpsdojuuCqRIqdTeiBwUk708REo9LfiNIspz0wxijCIFNmMEZK5J1OPQHAdsFTBmH
+lc/flnKaJX3wCI3WuPcTdYwDtA7RUUq6wiXevURartXIZWGhxeFuc7HGo0WF9R7Q8sLL5YWJcT32
+cXQXtonZp2VQ3iU91A==
+--0000000000001709cb05ef34ba8f--
