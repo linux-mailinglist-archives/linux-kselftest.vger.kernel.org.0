@@ -2,64 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C01DA6460D9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 19:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCA5646136
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 19:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiLGSEP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Dec 2022 13:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
+        id S229572AbiLGSiX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Dec 2022 13:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLGSEO (ORCPT
+        with ESMTP id S229437AbiLGSiW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Dec 2022 13:04:14 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD8C5FB81
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Dec 2022 10:04:12 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id m18so14335058eji.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Dec 2022 10:04:12 -0800 (PST)
+        Wed, 7 Dec 2022 13:38:22 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99B83E091
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Dec 2022 10:38:20 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id j206so6131851ybj.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Dec 2022 10:38:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Y3J9nRo6jjR898InKO9fN5El2ZHwhdxJj4gps9mW9I=;
-        b=WDfEQTvSWUKR2XYWJ+dWKCVbWt+sMD2uLoCQpVaKldt8vNOkPUPgGofPbi2cUr5dSo
-         zKHFf2lSksnail5LKzdEuuK/aLYdBSWUeGpsdWS6MbTRCt+8yGkLrra9BJKLi28o7cM3
-         swrfzprx1QZQ6i/P7MER+Nw9SNkXCZ1CWBpfvwovKooJH9XxH0COQ9unBKlPcXSESYHK
-         /MkOZWrbz8r6/prv7Oi96EXddhSvDlsx2c7To5QA/ysYAQ2hfR4ayaErKHwzKZJfeaMH
-         Mrr1sOogkvfaVPZBF4mUPQONsJVuyhvBGnfIeK2t/l4Q0QIYTkMyaI29Hnf/qfxfclED
-         FwTA==
+        bh=MI36gkcoa82WBWphf8dOS4w63VIaZLD9SoczTV9gm0Y=;
+        b=MQs9nIcZX7LliaVqVsB7hR+EGr+h9ItCJamtzr2XczDwpWhs5fq0IqJvLAViSltG4S
+         midAHUAWL1vb9BnwH8AhSAx4PP5pPxHZn1HHzjz5gDGFfwlKi586N1zH2yEHeD/mDlaH
+         zc7gbVe+fQOTsv1ZooCep9efHSU8npkqKQ2B3zciWUogCnsw4NJV+wlDCcPGnADW1DIg
+         PNB5A25nl6OBWojC7leqrhZBYI1q57wZctGcuSBgCdSfTExF5khXzlwzh0J7ojxZIiaW
+         +PYUKqHZl/1jx6ft9jqimZNv4DOSCniM8ZIdMJ+4hfTz68tj0InGyCFqkxDQuww2XTP+
+         +Hvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7Y3J9nRo6jjR898InKO9fN5El2ZHwhdxJj4gps9mW9I=;
-        b=uvnuCQDcqAU3xPZnRkBDzs+5Fbs+IIaPrDTn7cmWfYbkHO1gY7+VK6HPhBYIjihjt5
-         9zr5+yquEpmGOLP9DkUCkRxOLKT7oVXnh7OaJtd6sjIlHAu1fCx6rNsf0fsU5BjbeQvx
-         3mi2/e8qHir9FiWEe8uilI47lxmWPdepu0c4Yi9ioo118Gu3ZyRVRBWPDXx0PZMS+XYF
-         pf5aM18dMZ8KOHW61qs23rO7+QGuFxeTyjdiyi9zqdi6ss01GFo0grNAcAJf4eHpHNX7
-         /BNGz3794NFB6v1z17qzdY7szyjJlKHYCSfJFBMoBSxDC3C5mBjf7eE4nN0sSnQPlcP6
-         tb5g==
-X-Gm-Message-State: ANoB5pnhCd83dkgtZ4aTaBTd/cawTrJsY8kNdndlXJiarlImLmj2RkJ4
-        s7QETETQUFp5ihSwhuIsGJk0MiEWJLRWzuZjP2TlUQ==
-X-Google-Smtp-Source: AA0mqf4GK3fY4JRgFIXwuUYkxuecsGUZfZU67WBevfA6m3jUpRrtCEUNkJOwVT5rq9uO0O4VRrx33l1aZc3NG+wC8mw=
-X-Received: by 2002:a17:906:b0b:b0:7c1:36:8ffe with SMTP id
- u11-20020a1709060b0b00b007c100368ffemr9861155ejg.725.1670436251215; Wed, 07
- Dec 2022 10:04:11 -0800 (PST)
+        bh=MI36gkcoa82WBWphf8dOS4w63VIaZLD9SoczTV9gm0Y=;
+        b=0r+HPLhcJbQ7K5zLty/MFxaFlPGP75Z9/H4EI33bMiJzGCMPaySmbohQNZZoq631ek
+         025GQii6XH3BXefqDr+XaGzUUNzQUy6W+WI1dgSJ+FaG8Qv1X7HwyIOmsEyoO6FPFtK4
+         tcc7GxThkgdHgE0+UiBdynKggk/fctwW9/VsqnIINFedtXoPXTgYoR/Si5crhOO3d23l
+         2tUZB7ZnT4gRvGCXqgJkrJUALlj40WuErqHkLcW6nW7B6aDum0Wx0NfZ93JtcUa7HJpz
+         sxWZp4r3yv4TJqOiRjQhKB5si3+NT7oyvQJzAgxT0gG861DlKRkflz1AgWOPNJCvqXZG
+         1DhQ==
+X-Gm-Message-State: ANoB5pkKQuTMVG6TbFc2HxycS4FbpCQKMb65dGxOlMDRQvqc8cvtLqT4
+        bntabaFMhhbYzvPdxFSv2AR+aco1WOI0BjspoS9R2sj9nlcR1A0u
+X-Google-Smtp-Source: AA0mqf7CufYp/DXokYoy/IZMuamDXkcwHmhMQI61ICmuAgU69niU8NGZ47lKiGmKZAF3akr6Ol+PnmpzwdI71l6m/C0=
+X-Received: by 2002:a25:14c5:0:b0:703:46ef:3b03 with SMTP id
+ 188-20020a2514c5000000b0070346ef3b03mr8273795ybu.644.1670438299979; Wed, 07
+ Dec 2022 10:38:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20221207164338.1535591-1-mclapinski@google.com>
- <20221207164338.1535591-2-mclapinski@google.com> <843af7b5-8917-e9e3-de27-cb328f53fb70@efficios.com>
-In-Reply-To: <843af7b5-8917-e9e3-de27-cb328f53fb70@efficios.com>
-From:   =?UTF-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>
-Date:   Wed, 7 Dec 2022 19:04:00 +0100
-Message-ID: <CAAi7L5eVa-KFxG5DLrFXbEdVx-CxLLPzg_kPE9OLa3mkrV+AjQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/membarrier: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrei Vagin <avagin@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20221130185419.2552673-1-dlatypov@google.com> <CABVgOSm_J878tGhWzvGa_y4fYZEUDrSaZN49=kKnn0W7ESe2wA@mail.gmail.com>
+In-Reply-To: <CABVgOSm_J878tGhWzvGa_y4fYZEUDrSaZN49=kKnn0W7ESe2wA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 7 Dec 2022 10:38:08 -0800
+Message-ID: <CAGS_qxr0AWCAT-wAw=fFkzryCc+MDZchi1kuRoRTSahzDQW_Ug@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: make parser preserve whitespace when
+ printing test log
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -72,148 +70,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 6:07 PM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
+On Tue, Dec 6, 2022 at 7:43 PM David Gow <davidgow@google.com> wrote:
 >
-> On 2022-12-07 11:43, Michal Clapinski wrote:
-> > Provide a method to query previously issued registrations.
+> On Thu, Dec 1, 2022 at 2:54 AM 'Daniel Latypov' via KUnit Development
+
+<snip>
+
+> > After this change, here's what the output in context would look like
+> > [13:40:46] =================== example (4 subtests) ===================
+> > [13:40:46] # example_simple_test: initializing
+> > [13:40:46] # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+> > [13:40:46] Expected 2 + 1 == 2, but
+> > [13:40:46]     2 + 1 == 3 (0x3)
+> > [13:40:46] [FAILED] example_simple_test
+> > [13:40:46] [SKIPPED] example_skip_test
+> > [13:40:46] [SKIPPED] example_mark_skipped_test
+> > [13:40:46] [PASSED] example_all_expect_macros_test
+> > [13:40:46]     # example: initializing suite
+> > [13:40:46] # example: pass:1 fail:1 skip:2 total:4
+> > [13:40:46] # Totals: pass:1 fail:1 skip:2 total:4
+> > [13:40:46] ===================== [FAILED] example =====================
 > >
-> > Signed-off-by: Michal Clapinski <mclapinski@google.com>
+> > This example shows one minor cosmetic defect this approach has.
+> > The test counts lines prevent us from dedenting the suite-level output.
+> > But at the same time, any form of non-KUnit output would do the same
+> > unless it happened to be indented as well.
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > > ---
-> >   include/uapi/linux/membarrier.h |  4 ++++
-> >   kernel/sched/membarrier.c       | 39 ++++++++++++++++++++++++++++++++-
-> >   2 files changed, 42 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/uapi/linux/membarrier.h b/include/uapi/linux/membarrier.h
-> > index 737605897f36..5f3ad6d5be6f 100644
-> > --- a/include/uapi/linux/membarrier.h
-> > +++ b/include/uapi/linux/membarrier.h
-> > @@ -137,6 +137,9 @@
-> >    * @MEMBARRIER_CMD_SHARED:
-> >    *                          Alias to MEMBARRIER_CMD_GLOBAL. Provided for
-> >    *                          header backward compatibility.
-> > + * @MEMBARRIER_CMD_GET_REGISTRATIONS:
-> > + *                          Returns a bitmask of previously issued
-> > + *                          registration commands.
-> >    *
-> >    * Command to be passed to the membarrier system call. The commands need to
-> >    * be a single bit each, except for MEMBARRIER_CMD_QUERY which is assigned to
-> > @@ -153,6 +156,7 @@ enum membarrier_cmd {
-> >       MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE     = (1 << 6),
-> >       MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ                   = (1 << 7),
-> >       MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ          = (1 << 8),
-> > +     MEMBARRIER_CMD_GET_REGISTRATIONS                        = (1 << 9),
+>
+> I agree that this is a good idea.
+>
+> Personally, I think we could avoid some of the 'dedent' issues by
+> disabling the test statistics lines when run via kunit.py (if
+> raw_output is not enabled). That's probably better as a separate
+> patch, though, so this looks good to go.
 
-Btw. I could do this as a flag to MEMBARRIER_CMD_QUERY instead of a
-separate command. Would that be preferable?
+I was of a similar mindset initially, which is why I held off on
+sending this patch out.
+But as noted at the end of the commit desc, literally ~any kernel
+output will cause this to happen.
+And the whole point of this patch is to show such output, newly unmangled ;)
 
+Secondly, only the kunit_{info,warn,err} logs are indented like this.
+I think most test output would be coming from code outside the test
+file, i.e. normal pr_info() calls.
 
-> >
-> >       /* Alias for header backward compatibility. */
-> >       MEMBARRIER_CMD_SHARED                   = MEMBARRIER_CMD_GLOBAL,
-> > diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
-> > index 0c5be7ebb1dc..2ad881d07752 100644
-> > --- a/kernel/sched/membarrier.c
-> > +++ b/kernel/sched/membarrier.c
-> > @@ -159,7 +159,8 @@
-> >       | MEMBARRIER_CMD_PRIVATE_EXPEDITED                              \
-> >       | MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED                     \
-> >       | MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK                \
-> > -     | MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
-> > +     | MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK                     \
-> > +     | MEMBARRIER_CMD_GET_REGISTRATIONS)
-> >
-> >   static void ipi_mb(void *info)
-> >   {
-> > @@ -540,6 +541,40 @@ static int membarrier_register_private_expedited(int flags)
-> >       return 0;
-> >   }
-> >
-> > +static int membarrier_get_registrations(void)
-> > +{
-> > +     struct task_struct *p = current;
-> > +     struct mm_struct *mm = p->mm;
-> > +     int registrations_mask = 0, membarrier_state, i;
-> > +     static const int states[] = {
-> > +             MEMBARRIER_STATE_GLOBAL_EXPEDITED |
-> > +                     MEMBARRIER_STATE_GLOBAL_EXPEDITED_READY,
->
-> What is the purpose of checking for the _READY state flag as well here ?
+But I figured I should still call it out somewhere in this email
+though, since it does look a bit strange.
+Maybe it didn't need to be as prominently as the commit desc.
 
-Answered below.
+Also, I was leaning towards just hiding it via some filtering in
+kunit_parser.py, but Rae's reply [1] made me more unsure about which
+way to go. So I'm thinking of leaving the lines in there for now.
+[1] https://lore.kernel.org/linux-kselftest/CA+GJov6QKNy5fxkiu0P29WDtFgNs0GP4T27=X5Sva+V_BYc3+A@mail.gmail.com/
 
-
->
->
-> > +             MEMBARRIER_STATE_PRIVATE_EXPEDITED |
-> > +                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_READY,
-> > +             MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE |
-> > +                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE_READY,
-> > +             MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ |
-> > +                     MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ_READY
-> > +     };
-> > +     static const int registration_cmds[] = {
-> > +             MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED,
-> > +             MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED,
-> > +             MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE,
-> > +             MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ
-> > +     };
-> > +     BUILD_BUG_ON(ARRAY_SIZE(states) != ARRAY_SIZE(registration_cmds));
-> > +
-> > +     membarrier_state = atomic_read(&mm->membarrier_state);
-> > +     for (i = 0; i < ARRAY_SIZE(states); ++i) {
-> > +             if (membarrier_state & states[i]) {
->
-> The mask will match if either of the flags to match are set. Is that
-> your intent ?
-
-Kind of, it was just the easiest to write. As explained in the cover
-letter, I don't really care much about the result of this while the
-process is running. And when the process is frozen, either state and
-state_ready are set or none of them.
-
-
->
->
-> > +                     registrations_mask |= registration_cmds[i];
-> > +                     membarrier_state &= ~states[i];
->
-> So I understand that those _READY flags are there purely for making sure
-> we clear the membarrier_state for validation that they have all been
-> checked with the following WARN_ON_ONCE(). Am I on the right track ?
-
-Yes, exactly. It wastes time but I'm worried about people adding new
-states and not updating this function. A suggestion on how to do this
-better (especially at compile time) would be greatly appreciated.
-
-
->
-> > +             }
-> > +     }
-> > +     WARN_ON_ONCE(membarrier_state != 0);
->
-> Thanks,
->
-> Mathieu
->
-> > +     return registrations_mask;
-> > +}
-> > +
-> >   /**
-> >    * sys_membarrier - issue memory barriers on a set of threads
-> >    * @cmd:    Takes command values defined in enum membarrier_cmd.
-> > @@ -623,6 +658,8 @@ SYSCALL_DEFINE3(membarrier, int, cmd, unsigned int, flags, int, cpu_id)
-> >               return membarrier_private_expedited(MEMBARRIER_FLAG_RSEQ, cpu_id);
-> >       case MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ:
-> >               return membarrier_register_private_expedited(MEMBARRIER_FLAG_RSEQ);
-> > +     case MEMBARRIER_CMD_GET_REGISTRATIONS:
-> > +             return membarrier_get_registrations();
-> >       default:
-> >               return -EINVAL;
-> >       }
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> https://www.efficios.com
->
+Daniel
