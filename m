@@ -2,295 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0D2645C81
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 15:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B498645DE7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 16:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiLGO1U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Dec 2022 09:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S229565AbiLGPts (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Dec 2022 10:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbiLGO0s (ORCPT
+        with ESMTP id S229663AbiLGPtq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:26:48 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B805C5FBB6;
-        Wed,  7 Dec 2022 06:26:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7WCURuc2PPraHWzw6A9eFTozRqyV32p8iHua71/1Pbc=; b=NyKUyEIScREOP4k+T3Trmy1KpY
-        qgYKPKhUb5ZP1zc/7gsVPtPKH0b33zRPpsGaMsSOKMOB8cbadZr3vsAVCjtGmg8OmX35uQjlLnFrO
-        VBV00VjarWPDiGHzLcEwDI/7g7zjHaYSrCukCmzpN+LuhTBfrbp1LzsitDy7i/PEp1qq26gMTdiGS
-        fb3BvvWfOhd3PQaCXBhXO8iojUMjm24MmkNxuTDOVonhtstAmODGPKSPiCDGG0ht80oVjYf8NOm/B
-        JrtgU7vyABHSHwvqOQsV0Ne+NywJZv7PTHzA+G0kl2HY4EI+GX2YeyAO/B3eLhRLTdgsrAPzvUb/u
-        jIV6JyjQ==;
-Received: from [143.107.182.242] (helo=[10.41.75.14])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1p2vNN-00GcOE-2j; Wed, 07 Dec 2022 15:26:21 +0100
-Message-ID: <51fb1fdd-edf0-b2a3-0573-76a9101adfb3@igalia.com>
-Date:   Wed, 7 Dec 2022 11:26:13 -0300
+        Wed, 7 Dec 2022 10:49:46 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB6B27CE5
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Dec 2022 07:49:45 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d7so1106338pll.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Dec 2022 07:49:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SebK6VeMwVI8zNPc+AGDZ/foDvzVT7LenZ1q5aL6Vd0=;
+        b=bXpIMlKZLOugUItEp+yK3IZEPErrpxgFQ3yGo+icXLxideMkE4N9Fl1V9tRqJmVJKL
+         kkGO+i3x5P4gqnCUXgxjG6vCaQUG4ifV0IyOaZqXC1wAIy4PoD6cdcnJ+oJrZBc/aqiq
+         xPr95nZlhxEuoy7lqLgIC5sVkXFhlAxbDK/BU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SebK6VeMwVI8zNPc+AGDZ/foDvzVT7LenZ1q5aL6Vd0=;
+        b=JfRW6cqHh4xcv+tLAcVEiJVo8PFy2qQPlP91BNAiLoKbOW6XirhApUcEOeGsTbXMbs
+         /j+XO6MkLl910QC/F1wjerifcGhzt0Rd+pI+aOoZNEOTVsqfPXLrrzL1lS3ZXqSKzOmY
+         cSnIfrgJeYOZe4TUTeuaa9M7Z4gCzz918tD2k9M9zx+PJOSXC16hqw+IzrYc6z02HSun
+         c0LY0tBHf1N9OU9bfsZGyAv5ZbSUxUwh+21Zi0KXCS8jtDEpZFhADFo5gtdSeLYzrYQd
+         nTO1d/UCieN5UKDZ8l9+VdSU2VdjZyM2UtjFT5OMpIfNlwZhEDKqARig/7j/l+80iPgh
+         M2og==
+X-Gm-Message-State: ANoB5pkfKCsXh3qSgvXCaYJQmHgK59tsiMB8EXYemsf0sQ7jwKXefka9
+        e76ATetXsjxGgXB284UIYI/4ZQ==
+X-Google-Smtp-Source: AA0mqf7DJw1rIWEXKC49n6cPVKA1w2gt+CVOmiPUQGyrAdU+wzfuFVLdh+Ap0uUT4HhJtSSro1Heww==
+X-Received: by 2002:a17:902:9a82:b0:189:e085:8416 with SMTP id w2-20020a1709029a8200b00189e0858416mr714393plp.17.1670428184683;
+        Wed, 07 Dec 2022 07:49:44 -0800 (PST)
+Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b0017f7628cbddsm14920934plh.30.2022.12.07.07.49.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 07:49:44 -0800 (PST)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org
+Subject: [PATCH v6 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
+Date:   Wed,  7 Dec 2022 15:49:33 +0000
+Message-Id: <20221207154939.2532830-1-jeffxu@google.com>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 18/20] drm/vc4: tests: Fail the current test if we
- access a register
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>
-Cc:     David Gow <davidgow@google.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        linux-media@vger.kernel.org
-References: <20221123-rpi-kunit-tests-v3-0-4615a663a84a@cerno.tech>
- <20221123-rpi-kunit-tests-v3-18-4615a663a84a@cerno.tech>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v3-18-4615a663a84a@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/1/22 12:11, Maxime Ripard wrote:
-> Accessing a register when running under kunit is a bad idea since our
-> device is completely mocked.
-> 
-> Fail the current test if we ever access any of our hardware registers.
-> 
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+From: Jeff Xu <jeffxu@google.com>
 
-Reviewed-by: Maíra Canal <mcanal@igalia.com>
+Since Linux introduced the memfd feature, memfd have always had their
+execute bit set, and the memfd_create() syscall doesn't allow setting
+it differently.
 
-Just a small nit: I believe that macros with multiple statements should 
-be enclosed in a do-while block [1], even READ macros. I saw that you 
-enclosed the WRITE macros on a do-while block, but not the READ macros.
+However, in a secure by default system, such as ChromeOS, (where all
+executables should come from the rootfs, which is protected by Verified
+boot), this executable nature of memfd opens a door for NoExec bypass
+and enables “confused deputy attack”.  E.g, in VRP bug [1]: cros_vm
+process created a memfd to share the content with an external process,
+however the memfd is overwritten and used for executing arbitrary code
+and root escalation. [2] lists more VRP in this kind.
 
-[1] 
-https://www.kernel.org/doc/html/latest/process/coding-style.html#macros-enums-and-rtl
+On the other hand, executable memfd has its legit use, runc uses memfd’s
+seal and executable feature to copy the contents of the binary then
+execute them, for such system, we need a solution to differentiate runc's
+use of  executable memfds and an attacker's [3].
 
-Best Regards,
-- Maíra Canal
+To address those above, this set of patches add following:
+1> Let memfd_create() set X bit at creation time.
+2> Let memfd to be sealed for modifying X bit.
+3> A new pid namespace sysctl: vm.memfd_noexec to control the behavior of
+   X bit.For example, if a container has vm.memfd_noexec=2, then
+   memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+4> A new security hook in memfd_create(). This make it possible to a new
+LSM, which rejects or allows executable memfd based on its security policy.
 
-> ---
->   drivers/gpu/drm/vc4/vc4_crtc.c      | 13 +++++++++++--
->   drivers/gpu/drm/vc4/vc4_dpi.c       | 13 +++++++++++--
->   drivers/gpu/drm/vc4/vc4_drv.h       | 29 +++++++++++++++++++++++++----
->   drivers/gpu/drm/vc4/vc4_dsi.c       |  9 ++++++++-
->   drivers/gpu/drm/vc4/vc4_hdmi_regs.h |  4 ++++
->   drivers/gpu/drm/vc4/vc4_txp.c       | 13 +++++++++++--
->   drivers/gpu/drm/vc4/vc4_vec.c       | 13 +++++++++++--
->   7 files changed, 81 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/vc4/vc4_crtc.c b/drivers/gpu/drm/vc4/vc4_crtc.c
-> index 7d1a696477ce..a1a3465948c4 100644
-> --- a/drivers/gpu/drm/vc4/vc4_crtc.c
-> +++ b/drivers/gpu/drm/vc4/vc4_crtc.c
-> @@ -50,8 +50,17 @@
->   
->   #define HVS_FIFO_LATENCY_PIX	6
->   
-> -#define CRTC_WRITE(offset, val) writel(val, vc4_crtc->regs + (offset))
-> -#define CRTC_READ(offset) readl(vc4_crtc->regs + (offset))
-> +#define CRTC_WRITE(offset, val)								\
-> +	do {										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		writel(val, vc4_crtc->regs + (offset));					\
-> +	} while (0)
-> +
-> +#define CRTC_READ(offset)								\
-> +	({										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		readl(vc4_crtc->regs + (offset));					\
-> +	})
->   
->   static const struct debugfs_reg32 crtc_regs[] = {
->   	VC4_REG32(PV_CONTROL),
-> diff --git a/drivers/gpu/drm/vc4/vc4_dpi.c b/drivers/gpu/drm/vc4/vc4_dpi.c
-> index 1f8f44b7b5a5..0edf3c4c98c8 100644
-> --- a/drivers/gpu/drm/vc4/vc4_dpi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_dpi.c
-> @@ -103,8 +103,17 @@ to_vc4_dpi(struct drm_encoder *encoder)
->   	return container_of(encoder, struct vc4_dpi, encoder.base);
->   }
->   
-> -#define DPI_READ(offset) readl(dpi->regs + (offset))
-> -#define DPI_WRITE(offset, val) writel(val, dpi->regs + (offset))
-> +#define DPI_READ(offset)								\
-> +	({										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		readl(dpi->regs + (offset));						\
-> +	})
-> +
-> +#define DPI_WRITE(offset, val)								\
-> +	do {										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		writel(val, dpi->regs + (offset));					\
-> +	} while (0)
->   
->   static const struct debugfs_reg32 dpi_regs[] = {
->   	VC4_REG32(DPI_C),
-> diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
-> index 418f4f308e36..78fda5332cb3 100644
-> --- a/drivers/gpu/drm/vc4/vc4_drv.h
-> +++ b/drivers/gpu/drm/vc4/vc4_drv.h
-> @@ -19,6 +19,8 @@
->   #include <drm/drm_mm.h>
->   #include <drm/drm_modeset_lock.h>
->   
-> +#include <kunit/test-bug.h>
-> +
->   #include "uapi/drm/vc4_drm.h"
->   
->   struct drm_device;
-> @@ -645,10 +647,29 @@ to_vc4_crtc_state(const struct drm_crtc_state *crtc_state)
->   	return container_of(crtc_state, struct vc4_crtc_state, base);
->   }
->   
-> -#define V3D_READ(offset) readl(vc4->v3d->regs + offset)
-> -#define V3D_WRITE(offset, val) writel(val, vc4->v3d->regs + offset)
-> -#define HVS_READ(offset) readl(hvs->regs + offset)
-> -#define HVS_WRITE(offset, val) writel(val, hvs->regs + offset)
-> +#define V3D_READ(offset)								\
-> +	({										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		readl(vc4->v3d->regs + (offset));						\
-> +	})
-> +
-> +#define V3D_WRITE(offset, val)								\
-> +	do {										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		writel(val, vc4->v3d->regs + (offset));					\
-> +	} while (0)
-> +
-> +#define HVS_READ(offset)								\
-> +	({										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		readl(hvs->regs + (offset));						\
-> +	})
-> +
-> +#define HVS_WRITE(offset, val)								\
-> +	do {										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		writel(val, hvs->regs + (offset));					\
-> +	} while (0)
->   
->   #define VC4_REG32(reg) { .name = #reg, .offset = reg }
->   
-> diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
-> index 878e05d79e81..2c9cb27903a0 100644
-> --- a/drivers/gpu/drm/vc4/vc4_dsi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_dsi.c
-> @@ -617,6 +617,8 @@ dsi_dma_workaround_write(struct vc4_dsi *dsi, u32 offset, u32 val)
->   	dma_cookie_t cookie;
->   	int ret;
->   
-> +	kunit_fail_current_test("Accessing a register in a unit test!\n");
-> +
->   	/* DSI0 should be able to write normally. */
->   	if (!chan) {
->   		writel(val, dsi->regs + offset);
-> @@ -645,7 +647,12 @@ dsi_dma_workaround_write(struct vc4_dsi *dsi, u32 offset, u32 val)
->   		DRM_ERROR("Failed to wait for DMA: %d\n", ret);
->   }
->   
-> -#define DSI_READ(offset) readl(dsi->regs + (offset))
-> +#define DSI_READ(offset)								\
-> +	({										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		readl(dsi->regs + (offset));						\
-> +	})
-> +
->   #define DSI_WRITE(offset, val) dsi_dma_workaround_write(dsi, offset, val)
->   #define DSI_PORT_READ(offset) \
->   	DSI_READ(dsi->variant->port ? DSI1_##offset : DSI0_##offset)
-> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi_regs.h b/drivers/gpu/drm/vc4/vc4_hdmi_regs.h
-> index 48db438550b1..b04b2fc8d831 100644
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi_regs.h
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi_regs.h
-> @@ -456,6 +456,8 @@ static inline u32 vc4_hdmi_read(struct vc4_hdmi *hdmi,
->   
->   	WARN_ON(pm_runtime_status_suspended(&hdmi->pdev->dev));
->   
-> +	kunit_fail_current_test("Accessing an HDMI register in a unit test!\n");
-> +
->   	if (reg >= variant->num_registers) {
->   		dev_warn(&hdmi->pdev->dev,
->   			 "Invalid register ID %u\n", reg);
-> @@ -486,6 +488,8 @@ static inline void vc4_hdmi_write(struct vc4_hdmi *hdmi,
->   
->   	WARN_ON(pm_runtime_status_suspended(&hdmi->pdev->dev));
->   
-> +	kunit_fail_current_test("Accessing an HDMI register in a unit test!\n");
-> +
->   	if (reg >= variant->num_registers) {
->   		dev_warn(&hdmi->pdev->dev,
->   			 "Invalid register ID %u\n", reg);
-> diff --git a/drivers/gpu/drm/vc4/vc4_txp.c b/drivers/gpu/drm/vc4/vc4_txp.c
-> index 2b69454b8534..ef5cab2a3aa9 100644
-> --- a/drivers/gpu/drm/vc4/vc4_txp.c
-> +++ b/drivers/gpu/drm/vc4/vc4_txp.c
-> @@ -145,8 +145,17 @@
->   /* Number of lines received and committed to memory. */
->   #define TXP_PROGRESS		0x10
->   
-> -#define TXP_READ(offset) readl(txp->regs + (offset))
-> -#define TXP_WRITE(offset, val) writel(val, txp->regs + (offset))
-> +#define TXP_READ(offset)								\
-> +	({										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		readl(txp->regs + (offset));						\
-> +	})
-> +
-> +#define TXP_WRITE(offset, val)								\
-> +	do {										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		writel(val, txp->regs + (offset));					\
-> +	} while (0)
->   
->   struct vc4_txp {
->   	struct vc4_crtc	base;
-> diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
-> index e270a4099be3..f589ab918f4d 100644
-> --- a/drivers/gpu/drm/vc4/vc4_vec.c
-> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
-> @@ -207,8 +207,17 @@ struct vc4_vec {
->   	struct debugfs_regset32 regset;
->   };
->   
-> -#define VEC_READ(offset) readl(vec->regs + (offset))
-> -#define VEC_WRITE(offset, val) writel(val, vec->regs + (offset))
-> +#define VEC_READ(offset)								\
-> +	({										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		readl(vec->regs + (offset));						\
-> +	})
-> +
-> +#define VEC_WRITE(offset, val)								\
-> +	do {										\
-> +		kunit_fail_current_test("Accessing a register in a unit test!\n");	\
-> +		writel(val, vec->regs + (offset));					\
-> +	} while (0)
->   
->   static inline struct vc4_vec *
->   encoder_to_vc4_vec(struct drm_encoder *encoder)
-> 
+This is V6 version of patch: see [4] [5] [6] [7] for previous versions.
+
+[1] https://crbug.com/1305411
+[2] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
+[3] https://lwn.net/Articles/781013/
+[4] https://lwn.net/Articles/890096/
+[5] https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
+[6] https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
+[7] https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
+
+Daniel Verkamp (2):
+  mm/memfd: add F_SEAL_EXEC
+  selftests/memfd: add tests for F_SEAL_EXEC
+
+Jeff Xu (4):
+  mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+  mm/memfd: Add write seals when apply SEAL_EXEC to executable memfd
+  selftests/memfd: add tests for MFD_NOEXEC_SEAL MFD_EXEC
+  mm/memfd: security hook for memfd_create
+
+ include/linux/lsm_hook_defs.h              |   1 +
+ include/linux/lsm_hooks.h                  |   4 +
+ include/linux/pid_namespace.h              |  19 ++
+ include/linux/security.h                   |   6 +
+ include/uapi/linux/fcntl.h                 |   1 +
+ include/uapi/linux/memfd.h                 |   4 +
+ kernel/pid_namespace.c                     |   5 +
+ kernel/pid_sysctl.h                        |  59 ++++
+ mm/memfd.c                                 |  61 +++-
+ mm/shmem.c                                 |   6 +
+ security/security.c                        |  13 +
+ tools/testing/selftests/memfd/fuse_test.c  |   1 +
+ tools/testing/selftests/memfd/memfd_test.c | 348 ++++++++++++++++++++-
+ 13 files changed, 525 insertions(+), 3 deletions(-)
+ create mode 100644 kernel/pid_sysctl.h
+
+
+base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
