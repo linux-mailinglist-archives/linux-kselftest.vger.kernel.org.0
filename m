@@ -2,76 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DFF645167
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 02:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E126764522E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 03:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiLGBpG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Dec 2022 20:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57862 "EHLO
+        id S229650AbiLGCnR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Dec 2022 21:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLGBpA (ORCPT
+        with ESMTP id S229487AbiLGCnQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:45:00 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410E45288A
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Dec 2022 17:44:59 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so91154pjj.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Dec 2022 17:44:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G4K9ZUmYsCxxchQmMrwAUo9vu1D928UD4ZeUzjYPtuc=;
-        b=CYzt+zIi/4GN/K95j9qM5oJ7nfGevpUSJjlkifnWXo6axlWb2X+FIL98KspgUsBwGC
-         M/yWVA5i/wQLc8+la++A8/KSKPrQX77yYvJdPNqQeWJE3trSEFpnV43XgBOwA73wKbB9
-         VpHXbNQadSM/gpiJpFyNwrtSqHYrJeGi/DbFGy5zCfK8kebSdZB0zDvFnXpP1eAjgilV
-         KTAdL6fsaynhLFhBWGwCLUS/KnkUtZEel0uc1su3UxcgTaX+8YLK3pJBPow5m1R2hLks
-         eqTANsKTTcSiK0IDK2LHZGFHsxsBGBDybuZifqbv2kVtJi0cCg018400dZ5I7BFaeCMp
-         HKKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G4K9ZUmYsCxxchQmMrwAUo9vu1D928UD4ZeUzjYPtuc=;
-        b=qPKknWLro5GM4miBtG2Foy9ALcCV14zUQTfqW0QXBEAhPtZzDg46akUaZT803LpRkN
-         tn4kI4+DC3Wom7vUnWO1NQ5rMIdw1S1Tb9oxyosdIv6xy1UElP7Lesgb4iyCTAEAWT8Q
-         OxLZ8wITRf8IeIPa4MtAAQmTLY5epVIkGbno1T68qgUmRrn10nkYWXUkOAli0LHpu3Di
-         iw8yUHPepiyoaZNEbezx+xD7hiCRLwjPvUzYljj5m2IlZKepJ3zlyWxrfu+er+IHBWRO
-         7cDmlnvOC7nyN5Uo+OZnQITImhhDPWS8LkVnlR09TxrG7c1UMTwTMP6yv00MpFhloCEh
-         i17Q==
-X-Gm-Message-State: ANoB5pmswMXqCZYz2JeTRR56SsXBwt6qBcqQw7/fVz+t2/WEtHwk8pfV
-        t/EWISmjzm+bEu2ybAjEBCIzKA==
-X-Google-Smtp-Source: AA0mqf5e9WTWkYYX8+eNr0xOX6dYc+v6GziWbMbo43+uuHJHnhy6yQMzt1z4JyZU2TFG6+rXCAWFtg==
-X-Received: by 2002:a17:902:d647:b0:189:cf7a:b564 with SMTP id y7-20020a170902d64700b00189cf7ab564mr15046087plh.8.1670377498674;
-        Tue, 06 Dec 2022 17:44:58 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h13-20020a65468d000000b00477f5ae26bbsm10421191pgr.50.2022.12.06.17.44.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 17:44:58 -0800 (PST)
-Date:   Wed, 7 Dec 2022 01:44:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-        Ricardo Koller <ricarkol@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>
-Subject: Re: [PATCH] KVM: selftests: Fix build for memstress.[ch] rename
-Message-ID: <Y4/wF19A7snZQH3I@google.com>
-References: <20221206175916.250104-1-broonie@kernel.org>
- <20221207074108.42477c2d@canb.auug.org.au>
- <47b3d23b-e00e-b78f-69f4-4687f4ac607f@redhat.com>
+        Tue, 6 Dec 2022 21:43:16 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E31F52174;
+        Tue,  6 Dec 2022 18:43:12 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 5B6EA423FD;
+        Wed,  7 Dec 2022 02:43:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1670380990;
+        bh=AyqmyTETt8sSaAzP7S+Vz9Kwo2mKJ2hXybWEyJnLAYQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=ab4JVNizrbEoXQnI45C6o9f0hiwOHhclv4Tm1dOFq2Xum0UFFTmtjWXN8ekJ2HFWC
+         ZcjNeKD8CV5y+0aKJ82hWYK+Y8lCKfMHClY8T7jPYThDZMCYiqEd2XozGcJy5cDp6m
+         eZ2JfwCPuNV0kFT2WK5Owq7om1V+r1p+G4+/rNJejsHG/LleDNkwS6jSaIsZXT9FTv
+         vka5qd5KGGew9ihTRpC/IPmPJiI4E81wHTiKBeuuvDu+xrtKKXTulJ6ij1LeiS24ZO
+         Ml10dwnklj2ydeZSVocRqaqbiboWXidveB0qrNOjM4FQiHztljbFknG/u3GFkjpEsa
+         CnwE6lTYFxZzQ==
+Message-ID: <3bc67108-9f4a-4cd7-619d-d61816625e1a@canonical.com>
+Date:   Tue, 6 Dec 2022 18:43:05 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <47b3d23b-e00e-b78f-69f4-4687f4ac607f@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 0/2] kunit: add macro to allow conditionally exposing
+ static symbols to tests
+Content-Language: en-US
+To:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
+        davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, tales.aparecida@gmail.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, apparmor@lists.ubuntu.com
+References: <20221207014024.340230-1-rmoar@google.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20221207014024.340230-1-rmoar@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,16 +61,80 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-+Oliver
-
-On Wed, Dec 07, 2022, Paolo Bonzini wrote:
-> On 12/6/22 21:42, Stephen Rothwell wrote:
-> > Thanks for that.  I have added that as a merge fix patch to the kvm-arm
-> > merge.  I assume this will be fixed up when that tree is merged into
-> > the kvm tree.
+On 12/6/22 17:40, Rae Moar wrote:
+> Currently in order to test a static function, tests must be included in the
+> same translation unit as the function. However, this can cause issues with
+> including implementation and test code in the same file. As an alternative,
+> the first patch in this series creates a macro that will set a function to
+> be static or not depending on whether CONFIG_KUNIT is enabled. This allows
+> the function to be visible during testing and static otherwise.
 > 
-> Yes, I'll push as soon as I get confirmation that my own resolution is
-> correct.
+> As an example, the current status quo to test static functions is:
+> 
+> === test.c ===
+> 
+> static void test_case(struct kunit *test)
+> {
+>    KUNIT_EXPECT_EQ(test, my_func_to_test(), 2);
+> }
+> 
+> Then the tests are included in the implementation file as a workaround to
+> the issue of testing static functions:
+> 
+> === implementation.c ===
+> 
+> static int my_func_to_test() {...}
+> ...
+> #include "test.c"
+> 
+> Instead, the function could be defined with this new macro:
+> 
+> === implementation.c ===
+> 
+> VISIBLE_IF_KUNIT int my_func_to_test() {...}
+> 
+> The first patch also creates a macro that will export a symbol into a kunit
+> testing namespace only if CONFIG_KUNIT is enabled. This follows the logic
+> above and allows symbols to be conditionally exported based on the testing
+> status.
+> 
+> The second patch in the series updates the policy_unpack test in AppArmor
+> to show an example of how to use both of these macros in order to address
+> the issue of testing static functions. Additionally, the patch allows the
+> policy_unpack test to be built as a module.
+> 
+> Changes since v2:
+>   - Add mention of namespacing symbols to the commit message of the
+>     second patch.
+>   - Change module name in the second patch from policy_unpack_test to
+>     apparmor_policy_unpack_test.
+> 
+> Changes since v1:
+>   - Changed the namespace of exported symbols for the apparmor
+>     policy_unpack_test by adding the aa_ prefix.
+>   - Separated the documentation comments for macros in
+>     include/kunit/visibility.h.
+>   - Changed copyright date and author for include/kunit/visibility.h.
+> 
+> Rae Moar (2):
+>    kunit: add macro to allow conditionally exposing static symbols to
+>      tests
+>    apparmor: test: make static symbols visible during kunit testing
+> 
+>   include/kunit/visibility.h                |  33 +++
+>   security/apparmor/Kconfig                 |   4 +-
+>   security/apparmor/Makefile                |   3 +
+>   security/apparmor/include/policy_unpack.h |  50 +++++
+>   security/apparmor/policy_unpack.c         | 238 ++++++++++------------
+>   security/apparmor/policy_unpack_test.c    |  69 ++++---
+>   6 files changed, 229 insertions(+), 168 deletions(-)
+>   create mode 100644 include/kunit/visibility.h
+> 
+> 
+> base-commit: 0f08f3e2a0186dfb8e33cb46105228eb18448a0e
 
-Holler if you need/want help on getting arm's page_fault_test.c functional, I
-think Oliver is already poking at it.
+thanks Rae,
+
+looks good to me, David unless you tell me otherwise I assume this is
+still going in via the kselftest/kunit tree.
+
