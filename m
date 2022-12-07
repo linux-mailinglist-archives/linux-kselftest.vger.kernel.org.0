@@ -2,67 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C190964529F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 04:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23F164530E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 05:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiLGDns (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Dec 2022 22:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S229669AbiLGEda (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Dec 2022 23:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiLGDnp (ORCPT
+        with ESMTP id S229613AbiLGEd2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Dec 2022 22:43:45 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9951CB57
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Dec 2022 19:43:43 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id 97so5656803uam.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Dec 2022 19:43:43 -0800 (PST)
+        Tue, 6 Dec 2022 23:33:28 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE8C53EFF
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Dec 2022 20:33:26 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id g13-20020a056a000b8d00b0056e28b15757so14449472pfj.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Dec 2022 20:33:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5poCNn0ZYnIBK8HtDg1QpowuuOSdQyeWrpAEHCBQkuQ=;
-        b=X+7qp9Ic6n2opixQPB0R3o+MEcxmsPpxqqFEp1cAscCcJj2q8ecuDQxozFlXhqY7Ae
-         StG7nVX/tnZifDJXUEOUzaP9yLjEUjzyJ5zoCQuQc2LvGcO0syAaTfDFCVv4RVBDk7JG
-         ioWWedExUuxQjbxyTeA4cKVVqXvu1J70A0+SKbupZZZV0kwwTu/ee2M+1fNxRqfTEEze
-         nBsbnYt6Ki3+/8OlZBrbrH8o//wpQQGpRrQlxctoBqjp9Ozcin+yChDn+Y1E+6iXt6Pn
-         aeghqsrDkgeXRjTQjlFAqzBbl/GC8LF6uYG70slk5Hb8ezaXRM8klyQhCSt0ktUs7Lrt
-         vk/g==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IvWkeGtUjMlhesefa10GSIC9wVnySMexFE31r+XG6CU=;
+        b=mgbl9t5PdlFHX60KL8e6/OKUKxgBLYRWTElHEga2nFDoYKO1K/hp4tEqDj/8CsChay
+         05H/f7nGllxcL2au6eSy4air3rF+0D41Pxwg5/j8g455JVTiZbr59nHWwNU0IwYot5tL
+         cR3x7gfBtOXJPdwNA6fpo6jJByat8ePTwr3rsZH1KIrsKoSmDdGubG6gx9nzW3QolKYM
+         W0HqhvFUbjWxCuWXb4KLPKmwrmEm/SjJhzVTsBu2eYeetLx8beH6Zb3yoxsxhhow9N1T
+         XUB8dZtlEohAS3LUb+nzG2nq0SPb/i/TsYc2k9P3NNWneShcHrVljnBCEGtEv5sYB6Cp
+         AG5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5poCNn0ZYnIBK8HtDg1QpowuuOSdQyeWrpAEHCBQkuQ=;
-        b=sbQ/Ksft9vhujP/En1GjDNhAC1esZUFw9xIRplfsnjZvfNV1gLbkclZ6biHxXMIrX/
-         aeaIaWaJcf9AwJZqMWnHutjjTPyyIj7iZ/WN5lRc5Lnp0BKirUWVvZqOPSytVeOp935s
-         u28faUlc7Q+IK84YG/cNaIh7XLaHxtC9ghcyeFZPnOUI+8k5SU00rWLYplV+LQMn2uPH
-         g2X6+lkUxhCIl36123aIxNv76m1NuchUFgzcUWbhuo1S+yhdRAqplndvRCOFWJ6S7ILL
-         jIc922RiAqEaJQFNstgasUncRjVg7oZHfvGp/cE6Pl7VKAnKi2uKd0SYyCIx7bKms7rQ
-         KFLQ==
-X-Gm-Message-State: ANoB5pk0Leu2qWdlCJu9XWvWjWXGfqbpF1OQE0f4qF/iDVFsbRnF3w/k
-        ea7e1pUYSpUN/Df1MVt7ACfqPALgqaxRY/avgdjL8w==
-X-Google-Smtp-Source: AA0mqf6sklV7YR6WTKjIDRJijy4i01TVd+/k09s6PNC/+tgdSO1vDdORhvElloknpxEjTQcYNPD7wXD2EcbeuA7D+Xc=
-X-Received: by 2002:ab0:7028:0:b0:419:e6:4af6 with SMTP id u8-20020ab07028000000b0041900e64af6mr29654866ual.52.1670384622594;
- Tue, 06 Dec 2022 19:43:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20221130185419.2552673-1-dlatypov@google.com>
-In-Reply-To: <20221130185419.2552673-1-dlatypov@google.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IvWkeGtUjMlhesefa10GSIC9wVnySMexFE31r+XG6CU=;
+        b=b5/E1C8X1eCx3WKY6HxuuMTZKX9k2ZKXtNujfYrD+z8LEweGJXXvPeTQ+nP51TnP/P
+         FY6avp+piKp8cURqYvAM/hVahHe8P1QEo06vm6Y1zoafulnyQT8YRVTwdsRWq/uvj00c
+         p6hPg/4JwKVPsUC6vn2F4fGaoLACM6trt65JXshRqw8CTeXnbUf0ZtWkHqoR9xe+aGIw
+         oCEu49m+P2E93Jmt/q3mre2JpvdZ04pL8ZudsH8z9njSBAufFqGD81NSd5s37cZTnhA5
+         rtXYmp9bwYIla62iJc9zDutRMXHAAzI86esrNwH+76+8LN19KCUhwdU/b8smtEqT8J7e
+         tF9g==
+X-Gm-Message-State: ANoB5pmA5MOyC1/NMbxx9ePHaZAf0nvSIRg7rLZwV/0xiq+CeMyVGpdz
+        JNObAjfRg/H3oRQM0uxipEJj//jChn2lMw==
+X-Google-Smtp-Source: AA0mqf4Hn+LnJNdhPwrPFWUhFWXsixlghXusLdty9oGmVKJYA1Hh9E9bL/uPYzqpSAo2da2yHtIaUoVFLSLhCw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:6a00:b81:b0:575:276b:d8c9 with SMTP
+ id g1-20020a056a000b8100b00575276bd8c9mr46276896pfj.82.1670387605982; Tue, 06
+ Dec 2022 20:33:25 -0800 (PST)
+Date:   Wed,  7 Dec 2022 12:33:19 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221207043319.1890954-1-davidgow@google.com>
+Subject: [PATCH v2] Documentation: kunit: Fix "How Do I Use This" / "Next
+ Steps" sections
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 7 Dec 2022 11:43:31 +0800
-Message-ID: <CABVgOSm_J878tGhWzvGa_y4fYZEUDrSaZN49=kKnn0W7ESe2wA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: make parser preserve whitespace when
- printing test log
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, rmoar@google.com,
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Rae Moar <rmoar@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     David Gow <davidgow@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Daniel Latypov <dlatypov@google.com>,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001709cb05ef34ba8f"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,263 +73,96 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000001709cb05ef34ba8f
-Content-Type: text/plain; charset="UTF-8"
+The "How Do I Use This" section of index.rst and "Next Steps" section of
+start.rst were just copies of the table of contents, and therefore
+weren't really useful either when looking a sphinx generated output
+(which already had the TOC visible) or when reading the source (where
+it's just a list of files that ls could give you).
 
-On Thu, Dec 1, 2022 at 2:54 AM 'Daniel Latypov' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> Currently, kunit_parser.py is stripping all leading whitespace to make
-> parsing easier. But this means we can't accurately show kernel output
-> for failing tests or when the kernel crashes.
->
-> Embarassingly, this affects even KUnit's own output, e.g.
-> [13:40:46] Expected 2 + 1 == 2, but
-> [13:40:46] 2 + 1 == 3 (0x3)
-> [13:40:46] not ok 1 example_simple_test
-> [13:40:46] [FAILED] example_simple_test
->
-> After this change, here's what the output in context would look like
-> [13:40:46] =================== example (4 subtests) ===================
-> [13:40:46] # example_simple_test: initializing
-> [13:40:46] # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
-> [13:40:46] Expected 2 + 1 == 2, but
-> [13:40:46]     2 + 1 == 3 (0x3)
-> [13:40:46] [FAILED] example_simple_test
-> [13:40:46] [SKIPPED] example_skip_test
-> [13:40:46] [SKIPPED] example_mark_skipped_test
-> [13:40:46] [PASSED] example_all_expect_macros_test
-> [13:40:46]     # example: initializing suite
-> [13:40:46] # example: pass:1 fail:1 skip:2 total:4
-> [13:40:46] # Totals: pass:1 fail:1 skip:2 total:4
-> [13:40:46] ===================== [FAILED] example =====================
->
-> This example shows one minor cosmetic defect this approach has.
-> The test counts lines prevent us from dedenting the suite-level output.
-> But at the same time, any form of non-KUnit output would do the same
-> unless it happened to be indented as well.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+Instead, provide a small number of concrete next steps, and a bit more
+description about what the pages contain.
 
-I agree that this is a good idea.
+This also removes the broken reference to 'tips.rst', which was
+previously removed.
 
-Personally, I think we could avoid some of the 'dedent' issues by
-disabling the test statistics lines when run via kunit.py (if
-raw_output is not enabled). That's probably better as a separate
-patch, though, so this looks good to go.
+Fixes: 4399c737a97d ("Documentation: kunit: Remove redundant 'tips.rst' page")
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-Reviewed-by: David Gow <davidgow@google.com>
+Thanks everyone for reviewing v1. Since this is pretty much a complete
+rewrite, I've left Reviewed-by tags off, as I don't feel the previous
+reviews totally apply. Feel free to review again if you have any
+comments.
 
 Cheers,
 -- David
 
->  tools/testing/kunit/kunit.py           |  2 +-
->  tools/testing/kunit/kunit_parser.py    | 27 +++++++++++++-------------
->  tools/testing/kunit/kunit_tool_test.py |  2 ++
->  3 files changed, 16 insertions(+), 15 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index e7b6549712d6..43fbe96318fe 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -202,7 +202,7 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
->                 if request.raw_output == 'all':
->                         pass
->                 elif request.raw_output == 'kunit':
-> -                       output = kunit_parser.extract_tap_lines(output, lstrip=False)
-> +                       output = kunit_parser.extract_tap_lines(output)
->                 for line in output:
->                         print(line.rstrip())
->                 parse_time = time.time() - parse_start
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index 99b8f058db40..a225799f6b1b 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -13,6 +13,7 @@ from __future__ import annotations
->  from dataclasses import dataclass
->  import re
->  import sys
-> +import textwrap
->
->  from enum import Enum, auto
->  from typing import Iterable, Iterator, List, Optional, Tuple
-> @@ -208,12 +209,12 @@ class LineStream:
->
->  # Parsing helper methods:
->
-> -KTAP_START = re.compile(r'KTAP version ([0-9]+)$')
-> -TAP_START = re.compile(r'TAP version ([0-9]+)$')
-> -KTAP_END = re.compile('(List of all partitions:|'
-> +KTAP_START = re.compile(r'\s*KTAP version ([0-9]+)$')
-> +TAP_START = re.compile(r'\s*TAP version ([0-9]+)$')
-> +KTAP_END = re.compile(r'\s*(List of all partitions:|'
->         'Kernel panic - not syncing: VFS:|reboot: System halted)')
->
-> -def extract_tap_lines(kernel_output: Iterable[str], lstrip=True) -> LineStream:
-> +def extract_tap_lines(kernel_output: Iterable[str]) -> LineStream:
->         """Extracts KTAP lines from the kernel output."""
->         def isolate_ktap_output(kernel_output: Iterable[str]) \
->                         -> Iterator[Tuple[int, str]]:
-> @@ -239,11 +240,8 @@ def extract_tap_lines(kernel_output: Iterable[str], lstrip=True) -> LineStream:
->                                 # stop extracting KTAP lines
->                                 break
->                         elif started:
-> -                               # remove the prefix and optionally any leading
-> -                               # whitespace. Our parsing logic relies on this.
-> +                               # remove the prefix, if any.
->                                 line = line[prefix_len:]
-> -                               if lstrip:
-> -                                       line = line.lstrip()
->                                 yield line_num, line
->         return LineStream(lines=isolate_ktap_output(kernel_output))
->
-> @@ -298,7 +296,7 @@ def parse_ktap_header(lines: LineStream, test: Test) -> bool:
->         lines.pop()
->         return True
->
-> -TEST_HEADER = re.compile(r'^# Subtest: (.*)$')
-> +TEST_HEADER = re.compile(r'^\s*# Subtest: (.*)$')
->
->  def parse_test_header(lines: LineStream, test: Test) -> bool:
->         """
-> @@ -322,7 +320,7 @@ def parse_test_header(lines: LineStream, test: Test) -> bool:
->         lines.pop()
->         return True
->
-> -TEST_PLAN = re.compile(r'1\.\.([0-9]+)')
-> +TEST_PLAN = re.compile(r'^\s*1\.\.([0-9]+)')
->
->  def parse_test_plan(lines: LineStream, test: Test) -> bool:
->         """
-> @@ -350,9 +348,9 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
->         lines.pop()
->         return True
->
-> -TEST_RESULT = re.compile(r'^(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
-> +TEST_RESULT = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
->
-> -TEST_RESULT_SKIP = re.compile(r'^(ok|not ok) ([0-9]+) (- )?(.*) # SKIP(.*)$')
-> +TEST_RESULT_SKIP = re.compile(r'^\s*(ok|not ok) ([0-9]+) (- )?(.*) # SKIP(.*)$')
->
->  def peek_test_name_match(lines: LineStream, test: Test) -> bool:
->         """
-> @@ -511,8 +509,9 @@ def print_test_header(test: Test) -> None:
->
->  def print_log(log: Iterable[str]) -> None:
->         """Prints all strings in saved log for test in yellow."""
-> -       for m in log:
-> -               stdout.print_with_timestamp(stdout.yellow(m))
-> +       formatted = textwrap.dedent('\n'.join(log))
-> +       for line in formatted.splitlines():
-> +               stdout.print_with_timestamp(stdout.yellow(line))
->
->  def format_test_result(test: Test) -> str:
->         """
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 1ef921ac4331..0c2190514103 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -336,12 +336,14 @@ class KUnitParserTest(unittest.TestCase):
->                 KTAP version 1
->                 1..1
->                   Test output.
-> +                   Indented more.
->                 not ok 1 test1
->                 """
->                 result = kunit_parser.parse_run_tests(output.splitlines())
->                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
->
->                 self.print_mock.assert_any_call(StrContains('Test output.'))
-> +               self.print_mock.assert_any_call(StrContains('  Indented more.'))
->                 self.noPrintCallContains('not ok 1 test1')
->
->  def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
->
-> base-commit: 0f08f3e2a0186dfb8e33cb46105228eb18448a0e
-> --
-> 2.38.1.584.g0f3c55d4c2-goog
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20221130185419.2552673-1-dlatypov%40google.com.
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20221129094732.306449-1-davidgow@google.com/
+- Totally rewrite both sections to only include (and provide more
+  context for) the most concrete next steps.
+  - Thanks Bagas for pointing out that this basically duplicates the TOC
+    as-is.
 
---0000000000001709cb05ef34ba8f
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+---
+ Documentation/dev-tools/kunit/index.rst | 19 ++++++++-----------
+ Documentation/dev-tools/kunit/start.rst | 19 +++++++++----------
+ 2 files changed, 17 insertions(+), 21 deletions(-)
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAG
-KwPA66sM05FsqPgvQdH9ARPUWLeimeXcH0mpVwTPBjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjEyMDcwMzQzNDJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAA8jdtAoUs+HO9gZeHmiY
-S2M8/slIVJsduTIUPWXViQJ1+pqZlcbS1VDkKG6v/SqedjyaykgJuNjKypCYxL3JAbARYzFMpCDp
-qqAlMSLVc+mimHsz639rI9VuRspmg9UoVone5x3aRCW2cmPvfGx1Myd3Z5jataX6Q5/lk/uzq3KW
-oOyrb2RnMeXGpsdojuuCqRIqdTeiBwUk708REo9LfiNIspz0wxijCIFNmMEZK5J1OPQHAdsFTBmH
-lc/flnKaJX3wCI3WuPcTdYwDtA7RUUq6wiXevURartXIZWGhxeFuc7HGo0WF9R7Q8sLL5YWJcT32
-cXQXtonZp2VQ3iU91A==
---0000000000001709cb05ef34ba8f--
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+index d5629817cd72..b3593ae29ace 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -99,14 +99,11 @@ Read also :ref:`kinds-of-tests`.
+ How do I use it?
+ ================
+ 
+-*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
+-*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+-*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
+-*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
+-*   Documentation/dev-tools/kunit/usage.rst - write tests.
+-*   Documentation/dev-tools/kunit/tips.rst - best practices with
+-    examples.
+-*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
+-    used for testing.
+-*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
+-    answers.
++You can find a step-by-step guide to writing and running KUnit tests in
++Documentation/dev-tools/kunit/start.rst
++
++Alternatively, feel free to look through the rest of the KUnit documentation,
++or to experiment with tools/testing/kunit/kunit.py and the example test under
++lib/kunit/kunit-example-test.c
++
++Happy testing!
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index f4f504f1fb15..224387a43543 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -294,13 +294,12 @@ Congrats! You just wrote your first KUnit test.
+ Next Steps
+ ==========
+ 
+-*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+-*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
+-*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
+-*   Documentation/dev-tools/kunit/usage.rst - write tests.
+-*   Documentation/dev-tools/kunit/tips.rst - best practices with
+-    examples.
+-*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
+-    used for testing.
+-*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
+-    answers.
++If you're interested in using some of the more advanced features of kunit.py,
++take a look at Documentation/dev-tools/kunit/run_wrapper.rst
++
++If you'd like to run tests without using kunit.py, check out
++Documentation/dev-tools/kunit/run_manual.rst
++
++For more information on writing KUnit tests (including some common techniques
++for testing different things), see Documentation/dev-tools/kunit/usage.rst
++
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
