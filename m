@@ -2,48 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B498645DE7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 16:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5A1645DE8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Dec 2022 16:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiLGPts (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Dec 2022 10:49:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
+        id S229619AbiLGPtv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Dec 2022 10:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiLGPtq (ORCPT
+        with ESMTP id S229746AbiLGPtq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 7 Dec 2022 10:49:46 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB6B27CE5
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Dec 2022 07:49:45 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id d7so1106338pll.9
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040134B777
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Dec 2022 07:49:46 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id p24so17413883plw.1
         for <linux-kselftest@vger.kernel.org>; Wed, 07 Dec 2022 07:49:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SebK6VeMwVI8zNPc+AGDZ/foDvzVT7LenZ1q5aL6Vd0=;
-        b=bXpIMlKZLOugUItEp+yK3IZEPErrpxgFQ3yGo+icXLxideMkE4N9Fl1V9tRqJmVJKL
-         kkGO+i3x5P4gqnCUXgxjG6vCaQUG4ifV0IyOaZqXC1wAIy4PoD6cdcnJ+oJrZBc/aqiq
-         xPr95nZlhxEuoy7lqLgIC5sVkXFhlAxbDK/BU=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=71ca0yPxFF6EaiLKMWlrSqitNHDHlqW3RCkGeX1vy+A=;
+        b=PhU557wYsKo/iDLZ/eBYG10j3SUNufkud5V4AzaP2ICyOtQc995aeL12t/n/DCDOjS
+         NMogyAHS/VfnZLMBDSu6Di4KmFIVVQ0uOhTFzgcacngKlg82FwY5QBCqc7jvGtP83Lsg
+         0oNoHBlwcyoa3/tfXpapegc2TgwcvzzxnMc4Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SebK6VeMwVI8zNPc+AGDZ/foDvzVT7LenZ1q5aL6Vd0=;
-        b=JfRW6cqHh4xcv+tLAcVEiJVo8PFy2qQPlP91BNAiLoKbOW6XirhApUcEOeGsTbXMbs
-         /j+XO6MkLl910QC/F1wjerifcGhzt0Rd+pI+aOoZNEOTVsqfPXLrrzL1lS3ZXqSKzOmY
-         cSnIfrgJeYOZe4TUTeuaa9M7Z4gCzz918tD2k9M9zx+PJOSXC16hqw+IzrYc6z02HSun
-         c0LY0tBHf1N9OU9bfsZGyAv5ZbSUxUwh+21Zi0KXCS8jtDEpZFhADFo5gtdSeLYzrYQd
-         nTO1d/UCieN5UKDZ8l9+VdSU2VdjZyM2UtjFT5OMpIfNlwZhEDKqARig/7j/l+80iPgh
-         M2og==
-X-Gm-Message-State: ANoB5pkfKCsXh3qSgvXCaYJQmHgK59tsiMB8EXYemsf0sQ7jwKXefka9
-        e76ATetXsjxGgXB284UIYI/4ZQ==
-X-Google-Smtp-Source: AA0mqf7DJw1rIWEXKC49n6cPVKA1w2gt+CVOmiPUQGyrAdU+wzfuFVLdh+Ap0uUT4HhJtSSro1Heww==
-X-Received: by 2002:a17:902:9a82:b0:189:e085:8416 with SMTP id w2-20020a1709029a8200b00189e0858416mr714393plp.17.1670428184683;
-        Wed, 07 Dec 2022 07:49:44 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=71ca0yPxFF6EaiLKMWlrSqitNHDHlqW3RCkGeX1vy+A=;
+        b=p6pYHtHY87DyIb/qp6Dc8/mBldmFIedR/y+AEtk5oV9oEvrExBC0hi017Lz5O/cdco
+         jrW3D07iu4a+dHlaGB67YbpYbABnybX9PZbAeKfqBSNHY+Dlz1QiUm6ybUQEMGPpeVbD
+         9lVrW58E1MGDeB9TX4OSgLmpM1tDFwpYIkpCl69eJpnzk+ypeH06OvizV9qejYeUy827
+         zd3rjKoAav1OmA06ytuTHFAPV9y7qlEe7oYlEsHMfGPvX0braIlGwh0dOMvlvvuuTnxZ
+         5zvfwHZ2hiSN7lebZpjWeJteQ3kR+i49gWI7P1iftAVe3UuOCWatZWnzmA40lJAujSTR
+         awhw==
+X-Gm-Message-State: ANoB5pm2rEjtmbvZIAQ/SPieVeaJdlUXK6oFaZjIl1eBgnXYWaTVNx0P
+        djlSEK/47JK+OQ7J9+0+KZiwfQ==
+X-Google-Smtp-Source: AA0mqf6LlztV8oc9Di/UeVnMjrwTxAuHnQqhNmrhBv6DODQ39jcxdztg/nAsot9XSmGNU3B9Sjff5Q==
+X-Received: by 2002:a17:902:8343:b0:187:1f0:4579 with SMTP id z3-20020a170902834300b0018701f04579mr748942pln.61.1670428185700;
+        Wed, 07 Dec 2022 07:49:45 -0800 (PST)
 Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b0017f7628cbddsm14920934plh.30.2022.12.07.07.49.43
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b0017f7628cbddsm14920934plh.30.2022.12.07.07.49.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 07 Dec 2022 07:49:44 -0800 (PST)
 From:   jeffxu@chromium.org
@@ -53,12 +54,13 @@ Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
         jorgelo@chromium.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         jannh@google.com, linux-hardening@vger.kernel.org
-Subject: [PATCH v6 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
-Date:   Wed,  7 Dec 2022 15:49:33 +0000
-Message-Id: <20221207154939.2532830-1-jeffxu@google.com>
+Subject: [PATCH v6 1/6] mm/memfd: add F_SEAL_EXEC
+Date:   Wed,  7 Dec 2022 15:49:34 +0000
+Message-Id: <20221207154939.2532830-2-jeffxu@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+In-Reply-To: <20221207154939.2532830-1-jeffxu@google.com>
+References: <20221207154939.2532830-1-jeffxu@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
@@ -69,72 +71,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jeff Xu <jeffxu@google.com>
+From: Daniel Verkamp <dverkamp@chromium.org>
 
-Since Linux introduced the memfd feature, memfd have always had their
-execute bit set, and the memfd_create() syscall doesn't allow setting
-it differently.
+The new F_SEAL_EXEC flag will prevent modification of the exec bits:
+written as traditional octal mask, 0111, or as named flags, S_IXUSR |
+S_IXGRP | S_IXOTH. Any chmod(2) or similar call that attempts to modify
+any of these bits after the seal is applied will fail with errno EPERM.
 
-However, in a secure by default system, such as ChromeOS, (where all
-executables should come from the rootfs, which is protected by Verified
-boot), this executable nature of memfd opens a door for NoExec bypass
-and enables “confused deputy attack”.  E.g, in VRP bug [1]: cros_vm
-process created a memfd to share the content with an external process,
-however the memfd is overwritten and used for executing arbitrary code
-and root escalation. [2] lists more VRP in this kind.
+This will preserve the execute bits as they are at the time of sealing,
+so the memfd will become either permanently executable or permanently
+un-executable.
 
-On the other hand, executable memfd has its legit use, runc uses memfd’s
-seal and executable feature to copy the contents of the binary then
-execute them, for such system, we need a solution to differentiate runc's
-use of  executable memfds and an attacker's [3].
+Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
+Co-developed-by: Jeff Xu <jeffxu@google.com>
+Signed-off-by: Jeff Xu <jeffxu@google.com>
+---
+ include/uapi/linux/fcntl.h | 1 +
+ mm/memfd.c                 | 2 ++
+ mm/shmem.c                 | 6 ++++++
+ 3 files changed, 9 insertions(+)
 
-To address those above, this set of patches add following:
-1> Let memfd_create() set X bit at creation time.
-2> Let memfd to be sealed for modifying X bit.
-3> A new pid namespace sysctl: vm.memfd_noexec to control the behavior of
-   X bit.For example, if a container has vm.memfd_noexec=2, then
-   memfd_create() without MFD_NOEXEC_SEAL will be rejected.
-4> A new security hook in memfd_create(). This make it possible to a new
-LSM, which rejects or allows executable memfd based on its security policy.
-
-This is V6 version of patch: see [4] [5] [6] [7] for previous versions.
-
-[1] https://crbug.com/1305411
-[2] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
-[3] https://lwn.net/Articles/781013/
-[4] https://lwn.net/Articles/890096/
-[5] https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
-[6] https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
-[7] https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
-
-Daniel Verkamp (2):
-  mm/memfd: add F_SEAL_EXEC
-  selftests/memfd: add tests for F_SEAL_EXEC
-
-Jeff Xu (4):
-  mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-  mm/memfd: Add write seals when apply SEAL_EXEC to executable memfd
-  selftests/memfd: add tests for MFD_NOEXEC_SEAL MFD_EXEC
-  mm/memfd: security hook for memfd_create
-
- include/linux/lsm_hook_defs.h              |   1 +
- include/linux/lsm_hooks.h                  |   4 +
- include/linux/pid_namespace.h              |  19 ++
- include/linux/security.h                   |   6 +
- include/uapi/linux/fcntl.h                 |   1 +
- include/uapi/linux/memfd.h                 |   4 +
- kernel/pid_namespace.c                     |   5 +
- kernel/pid_sysctl.h                        |  59 ++++
- mm/memfd.c                                 |  61 +++-
- mm/shmem.c                                 |   6 +
- security/security.c                        |  13 +
- tools/testing/selftests/memfd/fuse_test.c  |   1 +
- tools/testing/selftests/memfd/memfd_test.c | 348 ++++++++++++++++++++-
- 13 files changed, 525 insertions(+), 3 deletions(-)
- create mode 100644 kernel/pid_sysctl.h
-
-
-base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+index 2f86b2ad6d7e..e8c07da58c9f 100644
+--- a/include/uapi/linux/fcntl.h
++++ b/include/uapi/linux/fcntl.h
+@@ -43,6 +43,7 @@
+ #define F_SEAL_GROW	0x0004	/* prevent file from growing */
+ #define F_SEAL_WRITE	0x0008	/* prevent writes */
+ #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
++#define F_SEAL_EXEC	0x0020  /* prevent chmod modifying exec bits */
+ /* (1U << 31) is reserved for signed error codes */
+ 
+ /*
+diff --git a/mm/memfd.c b/mm/memfd.c
+index 08f5f8304746..4ebeab94aa74 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -147,6 +147,7 @@ static unsigned int *memfd_file_seals_ptr(struct file *file)
+ }
+ 
+ #define F_ALL_SEALS (F_SEAL_SEAL | \
++		     F_SEAL_EXEC | \
+ 		     F_SEAL_SHRINK | \
+ 		     F_SEAL_GROW | \
+ 		     F_SEAL_WRITE | \
+@@ -175,6 +176,7 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
+ 	 *   SEAL_SHRINK: Prevent the file from shrinking
+ 	 *   SEAL_GROW: Prevent the file from growing
+ 	 *   SEAL_WRITE: Prevent write access to the file
++	 *   SEAL_EXEC: Prevent modification of the exec bits in the file mode
+ 	 *
+ 	 * As we don't require any trust relationship between two parties, we
+ 	 * must prevent seals from being removed. Therefore, sealing a file
+diff --git a/mm/shmem.c b/mm/shmem.c
+index c1d8b8a1aa3b..e18a9cf9d937 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1085,6 +1085,12 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
+ 	if (error)
+ 		return error;
+ 
++	if ((info->seals & F_SEAL_EXEC) && (attr->ia_valid & ATTR_MODE)) {
++		if ((inode->i_mode ^ attr->ia_mode) & 0111) {
++			return -EPERM;
++		}
++	}
++
+ 	if (S_ISREG(inode->i_mode) && (attr->ia_valid & ATTR_SIZE)) {
+ 		loff_t oldsize = inode->i_size;
+ 		loff_t newsize = attr->ia_size;
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog
 
