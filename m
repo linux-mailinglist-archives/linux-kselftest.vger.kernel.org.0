@@ -2,178 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E666476CF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Dec 2022 20:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B74E64778A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Dec 2022 21:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiLHTtd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Dec 2022 14:49:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
+        id S229798AbiLHU4A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Dec 2022 15:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLHTtc (ORCPT
+        with ESMTP id S229463AbiLHUz7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:49:32 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B47389EE
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Dec 2022 11:49:30 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so5751425pjr.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Dec 2022 11:49:30 -0800 (PST)
+        Thu, 8 Dec 2022 15:55:59 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF7D89AF6
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Dec 2022 12:55:57 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id r18so2126098pgr.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Dec 2022 12:55:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/iRRuEpq3SHF2tTVNW+V0pd2eP3QVViktpfmGsJo8SE=;
-        b=kbZjAjJOckI+jlOCJbuKM/9hTPPtgPZftSrpNxz+6MLKgxGWvBLLNyUR+yLtAe1FHf
-         wJpg2MHXkTzpBNyZxTGd1AdsYy4ZLs6dxynTISt9vca/TyPOGTgUZjlcmzeqpYDnp/lr
-         nfbOFjW274MxXgm+RUWP24N0ybK+fuofYxDYYO/sGvPoD5lfmmfOO3tdwNjQLoMr4mpd
-         /RF/OCtj9uVDzdQiD1V8pMJXjG1PPQFii8S4PnRl+HioQe97ZvVWKQiPgKLeNQV2/HJw
-         gBUXqS7+VDy/y8Zx1/EhxyC9Yxe7Bai4askP49YC2QyLOF6z9J+4HJ7bjYXM/dfQMhAm
-         uWhQ==
+        bh=NJg0tjf49GVzZZXYJm/ESQ/vYejcTaVis8L45uiNSHA=;
+        b=WGDXl+n8K/dWeZKeldPrcD/v5Zbw4izCFegv/+gHVqJz5fo4i63IakbdgfDk32UOJ0
+         K7CA6axewHrdePgh+eO1x8V+20MgZoSmeS/R+OUwnzbSv5HurnxALTfCXtREO7ppxxNa
+         U6LdFtKTrAAZMCV9qJ/PEyYe9JUYQMujpcuIg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/iRRuEpq3SHF2tTVNW+V0pd2eP3QVViktpfmGsJo8SE=;
-        b=VM3XPQOBSHR3ONMaVHnokRcQrD+l/Ca6Fuv4VxJY+0PII4rEpfSMhKhxgKnz4n7yjm
-         lH8sW5PhOpkMfRpQAxzv6Rh+jSnzA8QgAUuw8dWgAR4pm9mK8LecQk++lqC9Dy7WkKHi
-         DuTQHyN+SyS1sT2GdHKTAncDRIHxxiERMe5CWjsJTXNU9VVVYaANp+oLsSMkiyNetsI2
-         G8orHtBq3xquBCbvy3qJNCqiA0ECGDe9ozwhQObk9JgEuS9q+WHYkpe+ooR6Orc+UQS3
-         PvA4AWcKJIYBXzdNpNsrbdWE1v16SCosmZcYkoB4Y0raKwDZf5a/rxrtRC4pAy6/aF3r
-         Yu3A==
-X-Gm-Message-State: ANoB5pmymH2NSZ2Adu4vpWY0jdxSHcxhL5d9j9y9pwU9nMvp5DNORyCJ
-        eDRe1Q4QVD6RPnOeIOB8o6ff7g==
-X-Google-Smtp-Source: AA0mqf4+sYmN6TRhUnqm6pJbxgGCoSUwTGEipBsiO/jKS6U41yXiKghC+TQNsnXSTcuYW70TLswWgg==
-X-Received: by 2002:a17:90a:d681:b0:218:84a0:65eb with SMTP id x1-20020a17090ad68100b0021884a065ebmr1775305pju.1.1670528969909;
-        Thu, 08 Dec 2022 11:49:29 -0800 (PST)
-Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
-        by smtp.gmail.com with ESMTPSA id d15-20020a17090ac24f00b0020b7de675a4sm34718pjx.41.2022.12.08.11.49.29
+        bh=NJg0tjf49GVzZZXYJm/ESQ/vYejcTaVis8L45uiNSHA=;
+        b=slHZtISuYQwYvIRRZ22KF7Rf4Y6Z7/iwLeDyaMsYlQkWiCeL7FVoF2x4+d6eoT7Zux
+         MQYjeTZ5cOGwMKOa4T/TlZuz+HgZciTKzuCHBwlgRp6SyUKZD8vKNGKAHWSPsQ9jb1Az
+         mA+I2DeifHe2Zp1MIT2obwV4RnPwZHOTfNZnv2HvQReWA2Dc8U2RBNB83RZ/3Zkgdh3W
+         yTR2F8Y39W3Iw8YRrO4mX8+m7xSL9r06/wuPym5R7KDcEGKI5elpTfcHE9XWWyyf30Hc
+         IQSMF/IqicvS6DTz9R9TvGNyOvA6+FTKdwiTKN5yNkHz3MZdj1FLq+lU2qp3MOcvuzru
+         fEjQ==
+X-Gm-Message-State: ANoB5pkUpP4kRajDj+WBVBawP6GziPvEy4B7HOOUHoDeO1DNHMKX56fb
+        uSaTEXLxQCkk3PJY2kA3K3qLUQ==
+X-Google-Smtp-Source: AA0mqf4zdrgHUuOag7wMXflhe99eH3jKylHoxnM8ECvbLmGYxFdavLPXAx42+E9rBdvD3R4pu3TLog==
+X-Received: by 2002:a62:e219:0:b0:577:5678:bc80 with SMTP id a25-20020a62e219000000b005775678bc80mr9602372pfi.62.1670532956522;
+        Thu, 08 Dec 2022 12:55:56 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a7-20020aa78e87000000b005764c8f8f07sm12310108pfr.84.2022.12.08.12.55.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 11:49:29 -0800 (PST)
-Date:   Thu, 8 Dec 2022 11:49:26 -0800
-From:   Ricardo Koller <ricarkol@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: selftests: Setup ucall after loading program
- into guest memory
-Message-ID: <Y5I/xiFMLVbpAZj+@google.com>
-References: <20221207214809.489070-1-oliver.upton@linux.dev>
- <20221207214809.489070-3-oliver.upton@linux.dev>
- <Y5EoZ5uwrTF3eSKw@google.com>
- <Y5EtMWuTaJk9I3Bd@google.com>
- <Y5EutGSjkRmdItQb@google.com>
- <Y5Exwzr6Ibmmthl0@google.com>
- <Y5IxNTKRnacfSsLt@google.com>
- <Y5I0paok+dvTtrkt@google.com>
+        Thu, 08 Dec 2022 12:55:56 -0800 (PST)
+Date:   Thu, 8 Dec 2022 12:55:55 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jeff Xu <jeffxu@google.com>
+Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v6 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
+Message-ID: <202212081255.22D92C5@keescook>
+References: <20221207154939.2532830-1-jeffxu@google.com>
+ <202212080809.687CC8BC23@keescook>
+ <CALmYWFukzdw4e3RHWRsdXvYr1RZs7Bx6NZ3AK91hoArgVy-RxQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5I0paok+dvTtrkt@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CALmYWFukzdw4e3RHWRsdXvYr1RZs7Bx6NZ3AK91hoArgVy-RxQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 07:01:57PM +0000, Sean Christopherson wrote:
-> On Thu, Dec 08, 2022, Ricardo Koller wrote:
-> > On Thu, Dec 08, 2022 at 12:37:23AM +0000, Oliver Upton wrote:
-> > > On Thu, Dec 08, 2022 at 12:24:20AM +0000, Sean Christopherson wrote:
-> > > > > Even still, that's just a kludge to make ucalls work. We have other
-> > > > > MMIO devices (GIC distributor, for example) that work by chance since
-> > > > > nothing conflicts with the constant GPAs we've selected in the tests.
-> > > > > 
-> > > > > I'd rather we go down the route of having an address allocator for the
-> > > > > for both the VA and PA spaces to provide carveouts at runtime.
-> > > > 
-> > > > Aren't those two separate issues?  The PA, a.k.a. memslots space, can be solved
-> > > > by allocating a dedicated memslot, i.e. doesn't need a carve.  At worst, collisions
-> > > > will yield very explicit asserts, which IMO is better than whatever might go wrong
-> > > > with a carve out.
-> > > 
-> > > Perhaps the use of the term 'carveout' wasn't right here.
-> > > 
-> > > What I'm suggesting is we cannot rely on KVM memslots alone to act as an
-> > > allocator for the PA space. KVM can provide devices to the guest that
-> > > aren't represented as memslots. If we're trying to fix PA allocations
-> > > anyway, why not make it generic enough to suit the needs of things
-> > > beyond ucalls?
-> > 
-> > One extra bit of information: in arm, IO is any access to an address (within
-> > bounds) not backed by a memslot. Not the same as x86 where MMIO are writes to
-> > read-only memslots.  No idea what other arches do.
-> 
-> I don't think that's correct, doesn't this code turn write abort on a RO memslot
-> into an io_mem_abort()?  Specifically, the "(write_fault && !writable)" check will
-> match, and assuming none the the edge cases in the if-statement fire, KVM will
-> send the write down io_mem_abort().
+On Thu, Dec 08, 2022 at 10:33:19AM -0800, Jeff Xu wrote:
+> On Thu, Dec 8, 2022 at 8:13 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Wed, Dec 07, 2022 at 03:49:33PM +0000, jeffxu@chromium.org wrote:
+> > > This is V6 version of patch: see [4] [5] [6] [7] for previous versions.
+> >
+> > When sending a new version, can you include an overview of what changed
+> > between this version and the prior version? This helps reviewers who are
+> > following along, so it's easier to focus our attention on the
+> > differences. Also, it's helpful to version the links:
+> >
+> > > [4] https://lwn.net/Articles/890096/
+> > > [5] https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
+> > > [6] https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
+> > > [7] https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
+> >
+> > e.g.:
+> >
+> > v6:
+> > - moved foo to bar
+> > - improve comments for baz
+> > v5: https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
+> > v3: https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
+> > v2: ...etc
+> >
+> Will do!
+> Much appreciated for helping me  through the process of my first patch
+> in the kernel.
 
-You are right. In fact, page_fault_test checks precisely that: writes on
-RO memslots are sent to userspace as an mmio exit. I was just referring
-to the MMIO done for ucall.
+Happy to help! I'm excited to see this gap in memfd security closed. :)
 
-Having said that, we could use ucall as writes on read-only memslots
-like what x86 does.
-
-> 
-> 	gfn = fault_ipa >> PAGE_SHIFT;
-> 	memslot = gfn_to_memslot(vcpu->kvm, gfn);
-> 	hva = gfn_to_hva_memslot_prot(memslot, gfn, &writable);
-> 	write_fault = kvm_is_write_fault(vcpu);
-> 	if (kvm_is_error_hva(hva) || (write_fault && !writable)) {
-> 		/*
-> 		 * The guest has put either its instructions or its page-tables
-> 		 * somewhere it shouldn't have. Userspace won't be able to do
-> 		 * anything about this (there's no syndrome for a start), so
-> 		 * re-inject the abort back into the guest.
-> 		 */
-> 		if (is_iabt) {
-> 			ret = -ENOEXEC;
-> 			goto out;
-> 		}
-> 
-> 		if (kvm_vcpu_abt_iss1tw(vcpu)) {
-> 			kvm_inject_dabt(vcpu, kvm_vcpu_get_hfar(vcpu));
-> 			ret = 1;
-> 			goto out_unlock;
-> 		}
-> 
-> 		/*
-> 		 * Check for a cache maintenance operation. Since we
-> 		 * ended-up here, we know it is outside of any memory
-> 		 * slot. But we can't find out if that is for a device,
-> 		 * or if the guest is just being stupid. The only thing
-> 		 * we know for sure is that this range cannot be cached.
-> 		 *
-> 		 * So let's assume that the guest is just being
-> 		 * cautious, and skip the instruction.
-> 		 */
-> 		if (kvm_is_error_hva(hva) && kvm_vcpu_dabt_is_cm(vcpu)) {
-> 			kvm_incr_pc(vcpu);
-> 			ret = 1;
-> 			goto out_unlock;
-> 		}
-> 
-> 		/*
-> 		 * The IPA is reported as [MAX:12], so we need to
-> 		 * complement it with the bottom 12 bits from the
-> 		 * faulting VA. This is always 12 bits, irrespective
-> 		 * of the page size.
-> 		 */
-> 		fault_ipa |= kvm_vcpu_get_hfar(vcpu) & ((1 << 12) - 1);
-> 		ret = io_mem_abort(vcpu, fault_ipa);
-> 		goto out_unlock;
-> 	}
+-- 
+Kees Cook
