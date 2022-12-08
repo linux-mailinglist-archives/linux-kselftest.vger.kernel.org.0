@@ -2,63 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B86647002
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Dec 2022 13:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D452D647087
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Dec 2022 14:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiLHMuY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Dec 2022 07:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S229788AbiLHNLK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Dec 2022 08:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbiLHMuA (ORCPT
+        with ESMTP id S229555AbiLHNLJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:50:00 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F4A8E592;
-        Thu,  8 Dec 2022 04:49:55 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NSYry19v5z4xvR;
-        Thu,  8 Dec 2022 23:49:54 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        linux-kselftest@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Anshuman Khandual <khandual@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221205084429.570654-1-linmq006@gmail.com>
-References: <20221205084429.570654-1-linmq006@gmail.com>
-Subject: Re: [PATCH] selftests/powerpc: Fix resource leaks
-Message-Id: <167050321517.1457988.92380060922256003.b4-ty@ellerman.id.au>
-Date:   Thu, 08 Dec 2022 23:40:15 +1100
+        Thu, 8 Dec 2022 08:11:09 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01A481DBD;
+        Thu,  8 Dec 2022 05:11:06 -0800 (PST)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NSZJQ6lWmzJqP8;
+        Thu,  8 Dec 2022 21:10:14 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.63) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 8 Dec 2022 21:11:03 +0800
+From:   Zhao Gongyi <zhaogongyi@huawei.com>
+To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <shuah@kernel.org>
+CC:     <zhaogongyi@huawei.com>
+Subject: [PATCH -next 0/2] Add setup/cleanup for run.sh
+Date:   Thu, 8 Dec 2022 21:08:03 +0800
+Message-ID: <20221208130805.66660-1-zhaogongyi@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.63]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 5 Dec 2022 12:44:27 +0400, Miaoqian Lin wrote:
-> In check_all_cpu_dscr_defaults, opendir() opens the directory stream.
-> Add missing closedir() in the error path to release it.
-> 
-> In check_cpu_dscr_default, open() creates an open file descriptor.
-> Add missing close() in the error path to release it.
-> 
-> 
-> [...]
+1. Add saving and restore of scaling_governor for cpus
+2. Remove the tmp files before the test exit
 
-Applied to powerpc/next.
+Zhao Gongyi (2):
+  selftests/intel_pstate: Add saving and restore of scaling_governor
+  selftests/intel_pstate: do cleanup at exit
 
-[1/1] selftests/powerpc: Fix resource leaks
-      https://git.kernel.org/powerpc/c/8f4ab7da904ab7027ccd43ddb4f0094e932a5877
+ tools/testing/selftests/intel_pstate/run.sh | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-cheers
+--
+2.17.1
+
