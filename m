@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5186647457
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Dec 2022 17:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4248464748F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Dec 2022 17:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiLHQc0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Dec 2022 11:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S229709AbiLHQqk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Dec 2022 11:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLHQcX (ORCPT
+        with ESMTP id S230194AbiLHQqj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:32:23 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CA9388F
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Dec 2022 08:32:21 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id s196so1594299pgs.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Dec 2022 08:32:21 -0800 (PST)
+        Thu, 8 Dec 2022 11:46:39 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2258AD998
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Dec 2022 08:46:37 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so5233596pjs.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Dec 2022 08:46:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=57Ddcfru2LvUQsSfd0q8Xr1c5dKIodEjUxeNkx/mxX0=;
-        b=KGXTAc0X86Oo6sdnfCoLnqgKb5/YNtxmCXPjMyJjXMlnm2HJcButMWPYzawWdOta/N
-         cSs0YGuCxdtkeovYlpHj3CV+CQEvO/hbxrQx1u6l8gMF21cfbWsfXnVMQQi/LwiZ+Pau
-         DELp5r470Ahb/RW/lEDJ84wtTsNeWiUz+jKmY=
+        bh=M5g9x1VwrktuopxwMZHjOgJ8tHfMh8aN/AqahvEyUyc=;
+        b=U2b9lM71DR7CIe1jVRJVDqcCVhIQHrqrw/uvbLFZM9bDhCqODmtXgLThl7qogxizyH
+         LHX+6BExWkAsbrHdlV59CE1zTXObbdVbPVjURA6GJFFKmtA6dpDCKmVME2CfPTDIysXO
+         78uEvSSKu9kDFFKutu9isCrAh0vezxIhwguWU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=57Ddcfru2LvUQsSfd0q8Xr1c5dKIodEjUxeNkx/mxX0=;
-        b=dzLC1ExgeH27Y2d9eh6QwE9mJaY1f+UKUkn+8B+Hi2A6SDK5SKUeRpzPOZJAH/dvpw
-         7Q0an5zKcu/VsOtrcC42hmVRqIpOqFYTgAAvHEa0JULHOprYOnSX4vzXjIbcNVPTaiDS
-         uxVampri0xV7Doz0f+MBTrC6AGO6szS+2LCxZ8WX80B48mrMUtewusLtLxvzKiHBrCCP
-         85cyE2h2fxK6pQhVJcy+hY/yDNHG0JtnQX/F3V2fhXTU7dzbfonXMfbi2D28p0RaPmDM
-         SSwIfLLd3HLBbqhgsV32xMPz9gJISuf+2x/KpA8vEBnoVR49s66STBc478BWM1Vyp6ZB
-         kxGA==
-X-Gm-Message-State: ANoB5pnDhlQHhPhLiZ8CUv3ffWwTaXqJHkWg5iBqXjzMOOrtWSnOrjtl
-        vQxJq2kyeeu+rXyUn6cmUx9m+w==
-X-Google-Smtp-Source: AA0mqf4wxnc/rqiR7541frAh3SkYVsc69VXIbiMFJy68m5JROZIV5OyvOZr8KZI5wI6EPDwLWc4BDQ==
-X-Received: by 2002:a62:3882:0:b0:56b:9ce2:891f with SMTP id f124-20020a623882000000b0056b9ce2891fmr83105047pfa.43.1670517140886;
-        Thu, 08 Dec 2022 08:32:20 -0800 (PST)
+        bh=M5g9x1VwrktuopxwMZHjOgJ8tHfMh8aN/AqahvEyUyc=;
+        b=41VtBC/9ZMS1Bowv3L7At4jZAgFt0daoE49WW21DE0prXqlUEZH0U8guJXA8ZFBK6Y
+         Am5Qwb68gmjb3QrXuheMOS1uKDv1mpkwL70BAR6B9FxzcIRIgL7osoO1Q9/FZt+Idanl
+         i5ZOAOscNNVYShX3wpWiM5YFJ9acamPHJ6kKCxLEQThSssSIgIculrPJLi3SEs0vQbCl
+         u2vIrezHpP3iCfqVcSoz+NDD3TcgAzGFkOeA1Gw9Vsn+oJZjyRV1MRget8EhC8KqS+cH
+         wgPSipTUuDXCkzWDy1J+Cro7IVAtYKh7ntem2m+D2Th7n4B2lKzKnMCkADRM2OC8pqOk
+         06Lg==
+X-Gm-Message-State: ANoB5pnhBCY/gNuW7hz1Y4oBoXCcJ4uketDiztdyO8ycrV6Uz1BrJtBK
+        dN/qoXHJO2HlGvoRxIX4IZKZzQ==
+X-Google-Smtp-Source: AA0mqf7rJ3anr4Kc+n7+Zjin6BYJYXJCfq/+N+XN/qjcSVRqcGe1qoouE4guqX4TOa/NYXtzAAEA9A==
+X-Received: by 2002:a17:902:dacd:b0:189:6889:c30a with SMTP id q13-20020a170902dacd00b001896889c30amr61854329plx.6.1670517997289;
+        Thu, 08 Dec 2022 08:46:37 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c20600b00186ff402508sm16742741pll.281.2022.12.08.08.32.20
+        by smtp.gmail.com with ESMTPSA id f6-20020a170902ce8600b001743ba85d39sm16877857plg.110.2022.12.08.08.46.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 08:32:20 -0800 (PST)
-Date:   Thu, 8 Dec 2022 08:32:19 -0800
+        Thu, 08 Dec 2022 08:46:36 -0800 (PST)
+Date:   Thu, 8 Dec 2022 08:46:35 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     jeffxu@chromium.org
 Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
@@ -54,9 +54,10 @@ Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
         jeffxu@google.com, jorgelo@chromium.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
+        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-security-module@vger.kernel.org
 Subject: Re: [PATCH v6 6/6] mm/memfd: security hook for memfd_create
-Message-ID: <202212080831.9010D8A@keescook>
+Message-ID: <202212080845.8E9D894B@keescook>
 References: <20221207154939.2532830-1-jeffxu@google.com>
  <20221207154939.2532830-7-jeffxu@google.com>
 MIME-Version: 1.0
@@ -65,7 +66,8 @@ Content-Disposition: inline
 In-Reply-To: <20221207154939.2532830-7-jeffxu@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,6 +86,12 @@ On Wed, Dec 07, 2022 at 03:49:39PM +0000, jeffxu@chromium.org wrote:
 > 
 > Signed-off-by: Jeff Xu <jeffxu@google.com>
 > Reported-by: kernel test robot <lkp@intel.com>
+
+Oh, btw, please CC linux-security-module@vger.kernel.org when adding new
+hooks. (I've added the CC here.)
+
+-Kees
+
 > ---
 >  include/linux/lsm_hook_defs.h |  1 +
 >  include/linux/lsm_hooks.h     |  4 ++++
@@ -174,9 +182,6 @@ On Wed, Dec 07, 2022 at 03:49:39PM +0000, jeffxu@chromium.org wrote:
 > +					option, val, len, mnt_opts);
 > +}
 > +EXPORT_SYMBOL(security_add_mnt_opt);
-
-I think security_add_mnt_opt() isn't supposed to be in here. :)
-
 > +
 > +int security_memfd_create(char *name, unsigned int flags)
 > +{
@@ -189,12 +194,6 @@ I think security_add_mnt_opt() isn't supposed to be in here. :)
 > -- 
 > 2.39.0.rc0.267.gcb52ba06e7-goog
 > 
-
-Otherwise looks good.
-
-Thanks!
-
--Kees
 
 -- 
 Kees Cook
