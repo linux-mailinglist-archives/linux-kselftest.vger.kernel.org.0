@@ -2,69 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF3B647419
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Dec 2022 17:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006FD647423
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Dec 2022 17:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiLHQVe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Dec 2022 11:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        id S230245AbiLHQXj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Dec 2022 11:23:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiLHQVd (ORCPT
+        with ESMTP id S230205AbiLHQXd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:21:33 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7E76FF00
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Dec 2022 08:21:31 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id u5so2042195pjy.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Dec 2022 08:21:31 -0800 (PST)
+        Thu, 8 Dec 2022 11:23:33 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217E060B7F
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Dec 2022 08:23:24 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id b2so5240314eja.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Dec 2022 08:23:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=ventanamicro.com; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hrJ14ayLT7F+1zAXfd85zeuS9jwgRhVrcw7Y0+tLb6Y=;
-        b=g8P4/eojTrI2HBCiA4zp/WCQXL2NPFnOjDEnV/senXcKqmtpvz8/sl35IibIlf56Xb
-         ZynllzhNzGK/ud3dS9sa5QvNDOO/hi6CMtTwElRCKkJcwqr16oyYBna2FSFSeQmU9wko
-         JEFCS20QBntq7LbVs0aCBuYQzFzL9J9+gjq70=
+        bh=3ffOMrqHbGPKnX9DON08suhw00B/x5l9qlgIhBCvn1s=;
+        b=GcVbR78qgq1zGKeFap4dpyJP2ETn3kww5rg3v8dPl3tCWN0G6qxnGcbwgcX5MCo3OM
+         fKWfEFTBvO7N8XCZBPsxpIZJu/I7SUe3aPGwiRpN/CQgiksUDLrb6z4cKnWd08AfEpdZ
+         r94BbeUn5ovd//wzHhKXPJAWTKlrbHK2MlOIz3fbM4mGNb97gj9dHvVIeeiBbVWMUG83
+         kIoNpiUMsufVsm/m95AH/BSknL/IIYi4+Au5NXHpzpAF6U9MwGhYl2DJgI8UrQgHnbO0
+         7dRNIeeoHyKJg18727lHNV+cCrVrJsiUn1rn7oMXL7Wu9l4f3Ev75gNhks+qShMbBZI8
+         WEAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hrJ14ayLT7F+1zAXfd85zeuS9jwgRhVrcw7Y0+tLb6Y=;
-        b=Ix7SdoDBkUs6cL/BYbu9DI8RsbFJ3gQ/wzCNYXB135CXgVKx/9j8nbP2mkSBnueX+D
-         y3SOq5QVlkPYLONzTtLQXXH7eezOmGHViVVVFEEMqPurC32VfdE1HKooYthKaeTJrq/+
-         FhkrSKFz6Fr9sHD2+5doitFZxn5Re5Crc3HnCqhoZhx5xMVU5EBEN9ZycLt87FdLJQkZ
-         iveNtJfNhzvLZQdulCPn29xM4Koqqv4TrRKb4u1jBeoNLIaRqphY4o0nnoxnxPRydsFH
-         LX2jOs25dQyiE4XOxyy194o0aXGgUUXtTP3g3763XT5oX89UaX0I0koNoQucqIcN5uLA
-         09Ag==
-X-Gm-Message-State: ANoB5plWCXWPR7Z0GAR5ESRTJgf2qsAaLBSceZGY5zbPsqSKAuhf3fmJ
-        hMogEXjgZKLcZrinw8J8sG1boQ==
-X-Google-Smtp-Source: AA0mqf7RMfVU6OSBfzQOkqOeCkx3TWMEkSgjK0ClXrEprodhsyI5WvH+XKjOP1ImKWPf16MmgfyfaA==
-X-Received: by 2002:a17:90a:9f46:b0:219:b1db:f7e3 with SMTP id q6-20020a17090a9f4600b00219b1dbf7e3mr23917526pjv.64.1670516490729;
-        Thu, 08 Dec 2022 08:21:30 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id pc16-20020a17090b3b9000b00212cf2fe8c3sm7924158pjb.1.2022.12.08.08.21.30
+        bh=3ffOMrqHbGPKnX9DON08suhw00B/x5l9qlgIhBCvn1s=;
+        b=SGrM/ohUFqQ+fotNf8KXYE/P1awInCv2KM+sPJVtivnVsFIJKHGh0cRSPtORPnFSbA
+         nhizzji44Ud+bNsvZFrGyVbrSfjMeJ1u58CnphnHcR9tOjFcmgEhYnwo3iSqQYjg8lv1
+         PXi9IPAfODKzJGBB59iEdeWEMTa3ix/EOWTQuxVxmcQly3m2ddTvlDC7ba19HljeFtCz
+         DVPm+MsunfhtmlP3vVypi0tucd2tt/7pmRdzfOHThu8ve8dXU6ubjt1eIdYahN++4z22
+         PRmM83776CSCjBhC7W73vec7IXdoxWF81ihv8z/fzZn2NdPc1umVl+8fMQUPuMe2e2bb
+         iz7w==
+X-Gm-Message-State: ANoB5pnS5bCJ2whQUD3OxA6cxqYyhXe0OA0SJOLqRD5c1DORsPUrJEra
+        z7F7YRVaDckWIABO5VBkx7jhig==
+X-Google-Smtp-Source: AA0mqf7cWc12/11dRI8UuaKffduEO9pgwBnCtENeaj4X4vsk2ZRqNQGH/MayWHmkzyTTju2hui+ZmA==
+X-Received: by 2002:a17:907:a426:b0:78d:f456:1ec6 with SMTP id sg38-20020a170907a42600b0078df4561ec6mr3278655ejc.23.1670516602675;
+        Thu, 08 Dec 2022 08:23:22 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
+        by smtp.gmail.com with ESMTPSA id i9-20020a170906698900b007bff9fb211fsm9884789ejr.57.2022.12.08.08.23.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 08:21:30 -0800 (PST)
-Date:   Thu, 8 Dec 2022 08:21:29 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     jeffxu@chromium.org
-Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jeffxu@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v6 2/6] selftests/memfd: add tests for F_SEAL_EXEC
-Message-ID: <202212080818.28476A4@keescook>
-References: <20221207154939.2532830-1-jeffxu@google.com>
- <20221207154939.2532830-3-jeffxu@google.com>
+        Thu, 08 Dec 2022 08:23:22 -0800 (PST)
+Date:   Thu, 8 Dec 2022 17:23:21 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>, kvm@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.linux.dev,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/4] KVM: arm64: selftests: Align VA space allocator with
+ TTBR0
+Message-ID: <20221208162321.d745p2lsedxdf7v6@kamzik>
+References: <20221207214809.489070-1-oliver.upton@linux.dev>
+ <20221207214809.489070-4-oliver.upton@linux.dev>
+ <Y5EtP5z6rxSK1VUe@google.com>
+ <Y5EvVtAoDSHvIKie@google.com>
+ <Y5E5UixcJQ4+tNYg@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221207154939.2532830-3-jeffxu@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <Y5E5UixcJQ4+tNYg@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,42 +79,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 03:49:35PM +0000, jeffxu@chromium.org wrote:
-> From: Daniel Verkamp <dverkamp@chromium.org>
-> 
-> Basic tests to ensure that user/group/other execute bits cannot be
-> changed after applying F_SEAL_EXEC to a memfd.
-> 
-> Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
-> Co-developed-by: Jeff Xu <jeffxu@google.com>
-> Signed-off-by: Jeff Xu <jeffxu@google.com>
-> ---
->  tools/testing/selftests/memfd/memfd_test.c | 129 ++++++++++++++++++++-
->  1 file changed, 128 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-> index 94df2692e6e4..1d7e7b36bbdd 100644
-> --- a/tools/testing/selftests/memfd/memfd_test.c
-> +++ b/tools/testing/selftests/memfd/memfd_test.c
-> @@ -28,12 +28,44 @@
->  #define MFD_DEF_SIZE 8192
->  #define STACK_SIZE 65536
->  
-> +#ifndef F_SEAL_EXEC
-> +#define F_SEAL_EXEC	0x0020
-> +#endif
-> +
-> +#ifndef MAX_PATH
-> +#define MAX_PATH 256
-> +#endif
+On Thu, Dec 08, 2022 at 01:09:38AM +0000, Sean Christopherson wrote:
+...
+> Actually, before we do anything, we should get confirmation from the s390 and
+> RISC-V folks on whether they have a canonical hole like x86, i.e. maybe x86 is
+> the oddball.
 
-I'd expect this to be named PATH_MAX, and it shouldn't need to have an
-#ifdef? That's a regular POSIX define.
+riscv splits like x86.
 
-Otherwise, looks good. Though it'd be nice if this test use
-kselftest_harness.h, but that's not your problem. :)
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+Thanks,
+drew
