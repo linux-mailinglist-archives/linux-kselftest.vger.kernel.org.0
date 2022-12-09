@@ -2,102 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47DA648097
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Dec 2022 11:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 491AD64861A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Dec 2022 17:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLIKEi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Dec 2022 05:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        id S229894AbiLIQFD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Dec 2022 11:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiLIKEZ (ORCPT
+        with ESMTP id S229545AbiLIQFB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Dec 2022 05:04:25 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE8A63B8F;
-        Fri,  9 Dec 2022 02:04:23 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id cg5so3186486qtb.12;
-        Fri, 09 Dec 2022 02:04:23 -0800 (PST)
+        Fri, 9 Dec 2022 11:05:01 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D65A511F2
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Dec 2022 08:05:00 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id 65so3992612pfx.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Dec 2022 08:05:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ueWjZxTYbaDQuWzBrDeCTZV53qbvnkwWshi5C3odIuU=;
+        b=EWSu99laS2GBJK/j/npVWxjB2fyUhNZIb5ap7uGNrpmhSjYdFN/R5KpVoxG7XCsT28
+         eSKCiuIsD3XZsUYjZbzlb6EMTTSOe2j5irk0ak1/VsWmw5GdGbvIraYAA7d8py5Y9LVc
+         gc+Rh7B/MQTSKEPQllLXMnkWdzW6pKuiXnL2U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ihXtAUazn+V3lw4sgrM4dxPP4Vq6tOqT1cB+Rh/ZS30=;
-        b=oh9sOn+0WiGHB6Qnc5Vl0sxFgnEwskcnh2PQgNNVm/FJQGzACoOKyTtz5Ceyay6KXY
-         0n+rQg+2myxXsPg1Sptfty0+5Nuf1RSEdqP5yO7OJ/LdzrJPcBl3batFRuxAcWUyxyzc
-         dwGPJxx8chLE1Sq6hNifP5LvUQTbgoHlbgFxLT5th0SJNC5Z01wOabbBTxpR0XxIniS3
-         o+0+cpROku4wUO+AlV63lj0LUh/J43l6qe82dl5XbKcsSQ4vhL/+SeN6rX9/yBPwV6Mm
-         yY+mZaOw+/kjBVwOYhVJGPo17Cg0EFySq76aA70kas8FN04S2YkbsUvo3ZwDjhC5/xZU
-         Dc4g==
-X-Gm-Message-State: ANoB5pl1SLmzixsY0do3zdJ05fQzwnv6DadFj0aqVKRxIHrRfVtOeRWj
-        ubswzOzEwR6bNpUxyQzl6DB8KyeBDeYFBQ==
-X-Google-Smtp-Source: AA0mqf7W4C4jGHiKZqS9BqTop362HVzxLJhT37BW9EQaaAH6hCbf/1QKktWeh5JqTX5A8i81nQNn5g==
-X-Received: by 2002:a05:622a:4a0d:b0:3a5:3230:5e6f with SMTP id fv13-20020a05622a4a0d00b003a532305e6fmr7025383qtb.8.1670580262065;
-        Fri, 09 Dec 2022 02:04:22 -0800 (PST)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id v7-20020ac87487000000b003a7ec97c882sm629924qtq.6.2022.12.09.02.04.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 02:04:21 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3bf4ade3364so45993107b3.3;
-        Fri, 09 Dec 2022 02:04:21 -0800 (PST)
-X-Received: by 2002:a0d:cb4c:0:b0:38e:e541:d8ca with SMTP id
- n73-20020a0dcb4c000000b0038ee541d8camr22239587ywd.283.1670580260918; Fri, 09
- Dec 2022 02:04:20 -0800 (PST)
+        bh=ueWjZxTYbaDQuWzBrDeCTZV53qbvnkwWshi5C3odIuU=;
+        b=p8ZO4k98ahpH892gzpbcFLWXCaJTf93sbMckRh4olrvd4mfh7+yF+UP5Fj9YvEsT6h
+         yEdzxgxkAlO8y3Cw1HeFwEsso4PEwvlKQXLg7bxde+i7frSj7khmAPQTJkcgnjub3xaU
+         RRl1rSvLPWkyDDpch+EEXT/0chLOqTVmbOYujCJx2Zd/Vpm76yHzvxmM1OqPPFhRKoD7
+         UA1bMuA6I00aXnMS2Rsng8mdrenW7C1h6eIzJ6UTmwrAn+3/FF6Z/ynsYQfRHagpCnSN
+         2fRrNkkqDXS8hI6GmvIPizItSbXjJwZtH02S9VgVz8P8245JB+BLmSHBj7smwWwBRmza
+         SdHg==
+X-Gm-Message-State: ANoB5pnPavR3vW17BgKaQ24AuU0h+u7g9ClQahsqjD0qNyEvJcBUBs0X
+        hxbVr76a+JkKFBhcqPAFVuWvkw==
+X-Google-Smtp-Source: AA0mqf5i1xoBmEhRL9IDhhL+iKpEzBdOcNxUpPz5R22PuXbmHssMXjzHK5BBkv0qkIG7zHOA1PGhoA==
+X-Received: by 2002:a62:87cc:0:b0:576:dc40:6db9 with SMTP id i195-20020a6287cc000000b00576dc406db9mr6237516pfe.13.1670601899690;
+        Fri, 09 Dec 2022 08:04:59 -0800 (PST)
+Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa795af000000b00576670cc170sm1460504pfk.93.2022.12.09.08.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 08:04:59 -0800 (PST)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v7 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
+Date:   Fri,  9 Dec 2022 16:04:47 +0000
+Message-Id: <20221209160453.3246150-1-jeffxu@google.com>
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
 MIME-Version: 1.0
-References: <4d07ad990740a5f1e426ce4566fb514f60ec9bdd.1670509558.git.geert+renesas@glider.be>
- <20221208145745.a0424a67725f431a28737b6a@linux-foundation.org>
-In-Reply-To: <20221208145745.a0424a67725f431a28737b6a@linux-foundation.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 9 Dec 2022 11:04:09 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXVkdmnKDobfZHkk+Lxradq238wAcaLOyW-cmS7J3MS4g@mail.gmail.com>
-Message-ID: <CAMuHMdXVkdmnKDobfZHkk+Lxradq238wAcaLOyW-cmS7J3MS4g@mail.gmail.com>
-Subject: Re: [PATCH] lib: Add Dhrystone benchmark test
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-kselftest@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Andrew,
+From: Jeff Xu <jeffxu@google.com>
 
-On Thu, Dec 8, 2022 at 11:57 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> On Thu,  8 Dec 2022 15:31:28 +0100 Geert Uytterhoeven <geert+renesas@glider.be> wrote:
->
-> > Hence make the classical Dhrystone 2.1 benchmark available as a Linux
-> > kernel test module, based on[1].
->
-> I can take a look at this after the merge window
+Since Linux introduced the memfd feature, memfd have always had their
+execute bit set, and the memfd_create() syscall doesn't allow setting
+it differently.
 
-Thanks!
+However, in a secure by default system, such as ChromeOS, (where all
+executables should come from the rootfs, which is protected by Verified
+boot), this executable nature of memfd opens a door for NoExec bypass
+and enables “confused deputy attack”.  E.g, in VRP bug [1]: cros_vm
+process created a memfd to share the content with an external process,
+however the memfd is overwritten and used for executing arbitrary code
+and root escalation. [2] lists more VRP in this kind.
 
-> I'm not able to figure out the licensing of this.
-> https://netlib.org/benchmark/dhry-c appears to be silent on the topic?
+On the other hand, executable memfd has its legit use, runc uses memfd’s
+seal and executable feature to copy the contents of the binary then
+execute them, for such system, we need a solution to differentiate runc's
+use of  executable memfds and an attacker's [3].
 
-Searching the internet, people claim it's just public domain...
+To address those above, this set of patches add following:
+1> Let memfd_create() set X bit at creation time.
+2> Let memfd to be sealed for modifying X bit.
+3> A new pid namespace sysctl: vm.memfd_noexec to control the behavior of
+   X bit.For example, if a container has vm.memfd_noexec=2, then
+   memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+4> A new security hook in memfd_create(). This make it possible to a new
+LSM, which rejects or allows executable memfd based on its security policy.
 
-My topic/dhry-unsquashed branch has my rationale:
+Change history:
+v7:
+- patch 2/6: remove #ifdef and MAX_PATH (memfd_test.c).
+- patch 3/6: check capability (CAP_SYS_ADMIN) from userns instead of
+		global ns (pid_sysctl.h). Add a tab (pid_namespace.h).
+- patch 5/6: remove #ifdef (memfd_test.c)
+- patch 6/6: remove unneeded security_move_mount(security.c).
 
-    FreeBSD uses BSD-2-Clause for this, which is probably the closest to the
-    original intention of the authors.
-    Augment with GPL-2.0-only, as this now calls into internal Linux APIs.
+v6:https://lore.kernel.org/lkml/20221206150233.1963717-1-jeffxu@google.com/
+- Address comment and move "#ifdef CONFIG_" from .c file to pid_sysctl.h
 
-Gr{oetje,eeting}s,
+v5:https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
+- Pass vm.memfd_noexec from current ns to child ns.
+- Fix build issue detected by kernel test robot.
+- Add missing security.c
 
-                        Geert
+v3:https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
+- Address API design comments in v2.
+- Let memfd_create() to set X bit at creation time.
+- A new pid namespace sysctl: vm.memfd_noexec to control behavior of X bit.
+- A new security hook in memfd_create().
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+v2:https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
+- address comments in V1.
+- add sysctl (vm.mfd_noexec) to set the default file permissions of
+  memfd_create to be non-executable.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+v1:https://lwn.net/Articles/890096/
+
+[1] https://crbug.com/1305411
+[2] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
+[3] https://lwn.net/Articles/781013/
+
+Daniel Verkamp (2):
+  mm/memfd: add F_SEAL_EXEC
+  selftests/memfd: add tests for F_SEAL_EXEC
+
+Jeff Xu (4):
+  mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+  mm/memfd: Add write seals when apply SEAL_EXEC to executable memfd
+  selftests/memfd: add tests for MFD_NOEXEC_SEAL MFD_EXEC
+  mm/memfd: security hook for memfd_create
+
+ include/linux/lsm_hook_defs.h              |   1 +
+ include/linux/lsm_hooks.h                  |   4 +
+ include/linux/pid_namespace.h              |  19 ++
+ include/linux/security.h                   |   6 +
+ include/uapi/linux/fcntl.h                 |   1 +
+ include/uapi/linux/memfd.h                 |   4 +
+ kernel/pid_namespace.c                     |   5 +
+ kernel/pid_sysctl.h                        |  59 ++++
+ mm/memfd.c                                 |  61 +++-
+ mm/shmem.c                                 |   6 +
+ security/security.c                        |   5 +
+ tools/testing/selftests/memfd/fuse_test.c  |   1 +
+ tools/testing/selftests/memfd/memfd_test.c | 341 ++++++++++++++++++++-
+ 13 files changed, 510 insertions(+), 3 deletions(-)
+ create mode 100644 kernel/pid_sysctl.h
+
+
+base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
+
