@@ -2,157 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836F4648A1B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Dec 2022 22:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E4D6491E1
+	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Dec 2022 03:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiLIVfe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Dec 2022 16:35:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S229849AbiLKC2c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 10 Dec 2022 21:28:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLIVfe (ORCPT
+        with ESMTP id S229560AbiLKC2c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Dec 2022 16:35:34 -0500
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE6392303
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Dec 2022 13:35:32 -0800 (PST)
-Date:   Fri, 9 Dec 2022 21:35:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670621730;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=agoBlhJw/+KDy0+W1zZ2GK62ctFzKYI+xFVcrAtjBk8=;
-        b=NS3bk9bTW9yLMUQP30XiRdXGlm8TEp49GntXjwxUVIVsQeD+1YLPL1WSTesnsFRMj2C5eZ
-        W73BsYN6UvL8vHW74CeWdogfHe73GQIRS/cPcBODhsokqQ0TuoGYty61NU5wXaoRkdTPkn
-        xxWmMg1XF3PjR6O8sxtFMuAkKAxtZZY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Peter Gonda <pgonda@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        Ricardo Koller <ricarkol@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] KVM: selftests: Avoid infinite loop if
- ucall_alloc() fails
-Message-ID: <Y5OqHUxCblbiysuo@google.com>
-References: <20221209015307.1781352-1-oliver.upton@linux.dev>
- <20221209015307.1781352-8-oliver.upton@linux.dev>
- <Y5OisdH5ohtr6r3j@google.com>
+        Sat, 10 Dec 2022 21:28:32 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DD010546;
+        Sat, 10 Dec 2022 18:28:31 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id m18so20049459eji.5;
+        Sat, 10 Dec 2022 18:28:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kz8UCTQ9WHAf5JhkPjYAXVzTT4HzgSv8RTOSjH8wUj4=;
+        b=K9G0WDjvIfRxiA8xrSmt44yBpBQVe0AdlIRTD1yh8vaEmcgFncS9IkxTNR3Rg1kLve
+         o3Walf+HtOmGONYALr1A1TDnL9VcsNLakuRdAqwnUPIMm7rdUxXJBYSe9+LPQ/1OIw/G
+         Tw1NWUs/8qnCRX6/wuE9OXTvHpJfLruu7uXaSZwtOBuCebyAbO9E4TgvHLH2RMOSo+qX
+         P/Ir6AZZO6T5RAn+uAHuoHkV934xUAX0oBXZr5xyZFuYAiQruvWoQcGX1BXLZl+AllN+
+         pfsDXS7nEF1stgJAhKktNlzJgmI/3E9CsMbBRywaMqsiN2qiz29Hy/6OwR+xUVw1KUrX
+         qWuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kz8UCTQ9WHAf5JhkPjYAXVzTT4HzgSv8RTOSjH8wUj4=;
+        b=tv126fXhMCNPl4ZZCIRbG79S4m+jHw8CZ5TSS62pI3gberKnkA+1CUOHQwmI0PtM9B
+         cFgjS28ZNvzZvdWKC8jJjKpjTZh3P2YLuGTzRMKcZ3EBSEIVzfp2ijGmKGiLIgSX8gc/
+         CvD/3zUesWfo9+J9U8TL03PAIRQuOCQwbTVc/ySSHwrSm8lRPlOMHYIBurhyCLIqZm2B
+         2Y23Owur+nhvnjzukSOArL+8pbluuU8WZmfw4jU5pei4w2FBEO8s2kvKcOmsZ9Jqgdof
+         BPr68duhxfphGw44GsNWDdMwnoXWItjvbgmIFHHIScPrDmDkJEomTxHPpHUG/hUfP4qt
+         a8ZQ==
+X-Gm-Message-State: ANoB5pk8RqNNn9L8PykGcI1a4lBf0TG4cSIYeqcW54epXXOIrIHt0PNq
+        bTjy0X4oCv3suMCxeDNqCfVqADbI6N5q9r2Iczc=
+X-Google-Smtp-Source: AA0mqf5prpvAqhvSogkAQlNu7wWUWpyU4sAQFN1xjbIalUKERm86mEBlmrSum2+sDjBmVH64S0nFkDoFm4KaRT2hoQA=
+X-Received: by 2002:a17:906:4351:b0:78d:513d:f447 with SMTP id
+ z17-20020a170906435100b0078d513df447mr70015362ejm.708.1670725709381; Sat, 10
+ Dec 2022 18:28:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5OisdH5ohtr6r3j@google.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20221207172434.435893-1-roberto.sassu@huaweicloud.com> <20221207172434.435893-3-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221207172434.435893-3-roberto.sassu@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 10 Dec 2022 18:28:18 -0800
+Message-ID: <CAADnVQKhWEtqAkMnWR8Twpc6uPo_MWnAf68R-xeM=YVqxkLOyQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH v2 2/7] bpf: Mark ALU32 operations in bpf_reg_state structure
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 09:03:45PM +0000, Sean Christopherson wrote:
+On Wed, Dec 7, 2022 at 9:25 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> BPF LSM needs a reliable source of information to determine if the return
+> value given by eBPF programs is acceptable or not. At the moment, choosing
+> either the 64 bit or the 32 bit one does not seem to be an option
+> (selftests fail).
+>
+> If we choose the 64 bit one, the following happens.
+>
+>       14:       61 10 00 00 00 00 00 00 r0 = *(u32 *)(r1 + 0)
+>       15:       74 00 00 00 15 00 00 00 w0 >>= 21
+>       16:       54 00 00 00 01 00 00 00 w0 &= 1
+>       17:       04 00 00 00 ff ff ff ff w0 += -1
+>
+> This is the last part of test_deny_namespace. After #16, the register
+> values are:
+>
+> smin_value = 0x0, smax_value = 0x1,
+> s32_min_value = 0x0, s32_max_value = 0x1,
+>
+> After #17, they become:
+>
+> smin_value = 0x0, smax_value = 0xffffffff,
+> s32_min_value = 0xffffffff, s32_max_value = 0x0
+>
+> where only the 32 bit values are correct.
+>
+> If we choose the 32 bit ones, the following happens.
+>
+> 0000000000000000 <check_access>:
+>        0:       79 12 00 00 00 00 00 00 r2 = *(u64 *)(r1 + 0)
+>        1:       79 10 08 00 00 00 00 00 r0 = *(u64 *)(r1 + 8)
+>        2:       67 00 00 00 3e 00 00 00 r0 <<= 62
+>        3:       c7 00 00 00 3f 00 00 00 r0 s>>= 63
+>
+> This is part of test_libbpf_get_fd_by_id_opts (no_alu32 version). In this
+> case, 64 bit register values should be used (for the 32 bit ones, there is
+> no precise information from the verifier).
+>
+> As the examples above suggest that which register values to use depends on
+> the specific case, mark ALU32 operations in bpf_reg_state structure, so
+> that BPF LSM can choose the proper ones.
 
-[...]
+I have a hard time understanding what is the problem you're
+trying to solve and what is the proposed fix.
 
-> > -	GUEST_ASSERT(0);
-> > +out:
-> > +	/*
-> > +	 * If the guest cannot grab a ucall structure from the pool then the
-> > +	 * only option to get out to userspace is a bare ucall. This is probably
-> > +	 * a good time to mention that guest assertions depend on ucalls with
-> > +	 * arguments too.
-> > +	 */
-> > +	GUEST_UCALL_NONE();
-> 
-> UCALL_NONE isn't much better than infinite stack recursion, e.g. a test might end
-> up passing by dumb luck, or go in the wrong direction because it sometimes handles
-> UCALL_NONE.
-
-Oh, I was just seeking an end to my misery. Yeah, we can use a magic
-value to signal this instead.
-
-> How about this?
-
-LGTM.
-
---
-Thanks,
-Oliver
-
-> From: Sean Christopherson <seanjc@google.com>
-> Date: Fri, 9 Dec 2022 12:55:44 -0800
-> Subject: [PATCH] KVM: selftests: Use magic value to signal ucall_alloc()
->  failure
-> 
-> Use a magic value to signal a ucall_alloc() failure instead of simply
-> doing GUEST_ASSERT().  GUEST_ASSERT() relies on ucall_alloc() and so a
-> failure puts the guest into an infinite loop.
-> 
-> Use -1 as the magic value, as a real ucall struct should never wrap.
-> 
-> Reported-by: Oliver Upton <oliver.upton@linux.dev>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  tools/testing/selftests/kvm/lib/ucall_common.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-> index 0cc0971ce60e..2f0e2ea941cc 100644
-> --- a/tools/testing/selftests/kvm/lib/ucall_common.c
-> +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-> @@ -4,6 +4,8 @@
->  #include "linux/bitmap.h"
->  #include "linux/atomic.h"
->  
-> +#define GUEST_UCALL_FAILED -1
-> +
->  struct ucall_header {
->  	DECLARE_BITMAP(in_use, KVM_MAX_VCPUS);
->  	struct ucall ucalls[KVM_MAX_VCPUS];
-> @@ -41,7 +43,8 @@ static struct ucall *ucall_alloc(void)
->  	struct ucall *uc;
->  	int i;
->  
-> -	GUEST_ASSERT(ucall_pool);
-> +	if (!ucall_pool)
-> +		goto ucall_failed;
->  
->  	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
->  		if (!test_and_set_bit(i, ucall_pool->in_use)) {
-> @@ -51,7 +54,13 @@ static struct ucall *ucall_alloc(void)
->  		}
->  	}
->  
-> -	GUEST_ASSERT(0);
-> +ucall_failed:
-> +	/*
-> +	 * If the vCPU cannot grab a ucall structure, make a bare ucall with a
-> +	 * magic value to signal to get_ucall() that things went sideways.
-> +	 * GUEST_ASSERT() depends on ucall_alloc() and so cannot be used here.
-> +	 */
-> +	ucall_arch_do_ucall(GUEST_UCALL_FAILED);
->  	return NULL;
->  }
->  
-> @@ -93,6 +102,9 @@ uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
->  
->  	addr = ucall_arch_get_ucall(vcpu);
->  	if (addr) {
-> +		TEST_ASSERT(addr != (void *)GUEST_UCALL_FAILED,
-> +			    "Guest failed to allocate ucall struct");
-> +
->  		memcpy(uc, addr, sizeof(*uc));
->  		vcpu_run_complete_io(vcpu);
->  	} else {
-> 
-> base-commit: dc2efbe4813e0dc4368779bc36c5f0e636cb8eb2
-> -- 
-> 
+The patch is trying to remember the bitness of the last
+operation, but what for?
+The registers are 64-bit. There are 32-bit operations,
+but they always update the upper 32-bits of the register.
+reg_bounds_sync() updates 32 and 64 bit bounds regardless
+whether the previous operation was on 32 or 64 bit.
+It seems you're trying to hack around something that breaks
+patch 3 which also looks fishy.
+Please explain the problem first with a concrete example.
