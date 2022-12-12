@@ -2,233 +2,268 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C24064A648
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Dec 2022 18:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2621A64A6B9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Dec 2022 19:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbiLLRwi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Dec 2022 12:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
+        id S233186AbiLLSPF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Dec 2022 13:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbiLLRw0 (ORCPT
+        with ESMTP id S233173AbiLLSOf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:52:26 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F4C15804;
-        Mon, 12 Dec 2022 09:52:18 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BCHZDn3001970;
-        Mon, 12 Dec 2022 09:52:11 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=BW8RxOPY4BR32e3X4O5sHtM9JstLJevdNW8v9ImuH1M=;
- b=iq7weq11+Np8qaZkh82kY5sLvE62HmsesiuIBLmMJZdKmM8hHVT+wpEi4ZP5akjIVEgW
- bHZNyqUO4AG0KQ3s66NR2H08+/i25bi5usZhEvsei20oI0HcIGeFvPCmyVbahTub1AbF
- mENDAIre22zzhJMP7yPVmFu2c9Tza6aB4ELtQLpNiTUCkWnhKa1+BU9E3t/dYICZt1PQ
- S1J/ScimNY+fqeo/WW/1NFh18UMBu4FAsko8mD8Ks+RwAb/5zPvQX/i7Hg5k8J9f4u73
- vh4tlFpJNyX/3GXslRuz11eW8F4gw1DJXUd2fikZxwHHSZjxSZODytRdXJhHdb4FgNEA Rw== 
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2177.outbound.protection.outlook.com [104.47.55.177])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3me494k5by-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Dec 2022 09:52:10 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oMHUhMJiOqNr5xjgcj8U+4F9dyRqMDo5NN1HpghW9U8CiP0memh67OUceL9Z2SeY68PXjplnpNRAZ/rv56EJGa8Hwp6vHrA4DwhRVrSMIGKiVc9w91mwXoJ8fRGrNrOwBm6aK81ZBXx/BbpBIWD2eHfpLs7sis+/qsdZgS6F9QbEzzo/rajSDF+44sD9nkk3x6T+ddrehE5HMw02H/T6EC35VmLplHYW17Yx+6WYVFwRLv78KRM/haRA5y5tL/nMJSHxPpp6UP5hLFzo5RmOWZDJT26Lv/Z4G/YKZlkkovPFT3XtnXbn13B/bYn5jdR8QeFz/irTBhfyinBkhUoqgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BW8RxOPY4BR32e3X4O5sHtM9JstLJevdNW8v9ImuH1M=;
- b=foU1jsXtCGY+IePtdzxncwlMG6rfzU8n4FP0pS+kWBBAErzEtlEqzGJYz0iWtKQjG+qsHJ52k2svU12/CD9HY8l1wTDQO4T8pX2/Zq4bVjoN06mRznm3g5Dvqq2QhlwHkrZriyczzvA6GIQs4XW1RWKmuyywr/N5vgHs0bM0MmfbGEV9T7QVZFGvJ1B4i51SjHyoduKxcV/8QgWInBkooKxAtp6Yyx3Kn7TGESJ3gfvvrg/PHqoLHjTbMNTq2n6AfL22rJeAdx53Lo3RvbBzbMAorGEb9x/2JJw3G3Ye0JJ3UpQvsHsoauNxDvgiqFCSnajkyNW5/x01fR2kjjJZZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from DM5PR1501MB2055.namprd15.prod.outlook.com (2603:10b6:4:a1::13)
- by IA1PR15MB5396.namprd15.prod.outlook.com (2603:10b6:208:388::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 17:52:08 +0000
-Received: from DM5PR1501MB2055.namprd15.prod.outlook.com
- ([fe80::f462:bf61:5f19:e2e9]) by DM5PR1501MB2055.namprd15.prod.outlook.com
- ([fe80::f462:bf61:5f19:e2e9%4]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 17:52:08 +0000
-Message-ID: <53f21d98-4ee6-c0e9-1c0a-5fae23c1b9a8@meta.com>
-Date:   Mon, 12 Dec 2022 09:52:03 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH hid v12 05/15] HID: bpf jmp table: simplify the logic of
- cleaning up programs
-Content-Language: en-US
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
- <20221103155756.687789-6-benjamin.tissoires@redhat.com>
- <CAO-hwJ+fYvpD5zbDNq-f-gUEVpxsrdJ7K-ceNd37nLxzBxYL+g@mail.gmail.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <CAO-hwJ+fYvpD5zbDNq-f-gUEVpxsrdJ7K-ceNd37nLxzBxYL+g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0124.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::9) To DM5PR1501MB2055.namprd15.prod.outlook.com
- (2603:10b6:4:a1::13)
+        Mon, 12 Dec 2022 13:14:35 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3D363F0;
+        Mon, 12 Dec 2022 10:11:32 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NW8cw22X3z9v7Z3;
+        Tue, 13 Dec 2022 02:03:28 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAX7GJ9bpdj28EJAA--.1472S2;
+        Mon, 12 Dec 2022 19:10:18 +0100 (CET)
+Message-ID: <314e38b8931d0bf6d7d9deec7605dbf5b0c51c7e.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH v2 2/7] bpf: Mark ALU32 operations in bpf_reg_state
+ structure
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 12 Dec 2022 19:10:01 +0100
+In-Reply-To: <CAADnVQJedxOdWnDfLcK-o5SiKK-2Qkw-b=-kiP_8rryF3MgtpQ@mail.gmail.com>
+References: <20221207172434.435893-1-roberto.sassu@huaweicloud.com>
+         <20221207172434.435893-3-roberto.sassu@huaweicloud.com>
+         <CAADnVQKhWEtqAkMnWR8Twpc6uPo_MWnAf68R-xeM=YVqxkLOyQ@mail.gmail.com>
+         <17749b60bcffdc05ce0343199c14ef3cf2d54010.camel@huaweicloud.com>
+         <CAADnVQJedxOdWnDfLcK-o5SiKK-2Qkw-b=-kiP_8rryF3MgtpQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR1501MB2055:EE_|IA1PR15MB5396:EE_
-X-MS-Office365-Filtering-Correlation-Id: 694a8e57-fb17-4621-b830-08dadc6996bf
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G5LvU9hzJQ4b4DozLzirTEPYbjZ4+Hl62x1+u54pkw34L+DmbOVx8Lq7f80lXA0FumUg0JTpWTAOLdozVo02GWCyTQ2iCxN+/6eKOybU+tX1uP4mOOwx1ACMZrYByvyWZM5QbuWYxrBL5UK5jz4ZtscPjX8p7HFl8Lhhz40q7PlDpnB1ESnlvcy37/8P//ODokvIlqGUe2wpnx5fhEUrPZctXXCjcA2g7CP7q7zuVgcOQMUC3IUTs7+Awfi1Vbsl85lvuV4121AclXT0azkQvGsOT3hZDjMZV90CveWQaumbfv7kiy5rIFyo6Aw+3LqpJVEnEs+8ytH4r0wU10ionD3eqlMND0qARnyQ7byTNA2XXBQGouHADVp66hVZgCRq3Ho001n6JZW805yfUq5DE6YVn9bpz3nFvdf1f8UMpsZ2/P5/A74LVIevUkqAOHOzw32ITaZ+vURytQ38a5tsPvHVCpIbhjDx/Oa4+pYrNYbhhEns4E6cHEVnpkGdiTzR+ZHIuBEauB+KeMu/KMzhcqGGePusElVUBiwdBcDJHLIYwIeDRxNtkyv9P8gtbgiPUzczksww7AHyCuhdKGnuhwFUnr3jB0TU6qN4M2GUwottEVUp1w5VNNNfiG4J9Zfnr4TRWG/0uH/IzAN3VGRXpgqnyGPYoRz6w5FmvOEJox8s0Zy76u39EFd1mASkcejDVkfpCy7Wc7zUYgeO8RnIxbx6cDMdk0zfH1vGkW1Ojy8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1501MB2055.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(451199015)(41300700001)(5660300002)(2616005)(7416002)(2906002)(8936002)(36756003)(6512007)(6506007)(186003)(6666004)(53546011)(478600001)(6486002)(316002)(66476007)(66556008)(66946007)(110136005)(4326008)(8676002)(31686004)(38100700002)(83380400001)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WkhtSm9OWXVZcGdmb29TMUgxM0JOUGlMWmZCcC9vSVA3ZndaSnV1UThJWGZJ?=
- =?utf-8?B?TGtBbXZ4UmQ1UHhoQ0tscjVkQkJLdHlBbHU4ZXVCR2swRlg3V3FyVzVOZGM3?=
- =?utf-8?B?QjVWcTVrWDNqTnZjNEJ5Z1hxbHZtdDBSUGZoWjUrRS81RHdETmpXTmFOcXZN?=
- =?utf-8?B?c0NxanNMOC9yZWxCamIxWTFQM0Joa29ja1o4V2h2aFB5VENweGpvOUFlRWNz?=
- =?utf-8?B?dHQ5SVF1RGc0VEp0ekJJemkvOGw2YmlzcFJ6M1BtdFEvYzdPdnZoMEh4UUtO?=
- =?utf-8?B?UVdKMTZ1UVhMMFJ3V1FSUTBHTGVTeTFjL0o1djFhaEFPUGVvVjRHQUFIOFkr?=
- =?utf-8?B?bGJFdVFLL3pTY2I2dzl5YitoQ0VxQVQrMFUwQldrNEVGK3J2MkJ6aWJYMk82?=
- =?utf-8?B?cEZIOE9UZ3ZONUVMaThaVVJPMG04WDFiczF3VHdVOEhVaG5LZWVwS1VVR1Fr?=
- =?utf-8?B?SjBOdnFOc2xnZUNaejZqaGt4UlMwNGtoN1kwdjlrUXo1MmdtemZsWWs2a1hS?=
- =?utf-8?B?Yk1SMVY0YzlRVlBKZG45bVE3a2g3bEN2aStGdkl2cFZpSGV4NDFsbzhYVGVx?=
- =?utf-8?B?cGhOKy9EWjk4VTY2S1NhY0JYY01RN1RLdEdrbTUyWlF2VTcrR0xiaWxLaFd2?=
- =?utf-8?B?TTZ6d0oybHVPUTYzbCtrN041bWg0a3d1RUxxazJ3OCsvMjUwWXBVL25GZ00w?=
- =?utf-8?B?ZG9XL1o4MEhlbTFwcDhZQnBNZ2ZuQ0dtQTJZOGxWOWJyOTJmblZkdVdmaVUy?=
- =?utf-8?B?RERWQU1qNjlhMTlDVkIzcVo1Z01pUjRtWHJVMTF3MnNndDhZbUJvRjQvdTdW?=
- =?utf-8?B?bVVaRFRlWE85YUF0anh2eTNTRnQvcXlITTRubjlqTW5WWmZMWW83UUwxQ2NV?=
- =?utf-8?B?WEVXNzZoOFhBN0pGQnBtT3NXdDZRVGsxZ3lYU29ZeXdCMEk2czFmZDZ4ME1T?=
- =?utf-8?B?bHUyZzZiMXozc2k0bHdOZ2ViNUpXRE1zREgxVUtwTWVIWGcvY0ZrRkdyNitj?=
- =?utf-8?B?R3U0WFFSdUdKYzA5bUlGYVk1RnJVSXdwdFVZcjQxV2hncHRIU2JyRzF6S2U5?=
- =?utf-8?B?eVV3U2FyNDZBTllvQWRQN1hEZVJPMC9KZUJKclMyNDU3RWkxK1NRUlRvQzNJ?=
- =?utf-8?B?U3UxS1o0QTZrMWNYM0hDR2xuNlB1N3VEb3JXOGJRYS9VUmlCZXBuNTdIKzdV?=
- =?utf-8?B?NVl2ejEySjZFL1h1bU5MMWFMcFg0aGxDU0JYUUhIdzQyaE13SmN2SVZEa2hp?=
- =?utf-8?B?UU1LVEhscjM2S0RBZThRZ1orL25Hc25odC9uVGt2MVNnaXgxOGgzQ0dQblNT?=
- =?utf-8?B?UWx4ZWtKdlhqYXdTbFA1LzVJR1QzWE1MVHJycG1ka2pmZDV1LzBmWHAzSkM3?=
- =?utf-8?B?SkZQSi9wV2RpUnE2Y3RXOFN2eEpEMnFkWHZ3Ui8rUVgydHI4T2kwRzVqcnFO?=
- =?utf-8?B?UEhHQjdDc2NLZ1JsY3dxNXdWbEpLb1RtZzBOUXdNR0JhL1czVHQyM01vZzc3?=
- =?utf-8?B?MXhsR3hyNXZVRHlBOUZYOEgvUUtFd0h2S08xK0RLVlh5ZVRVN216N09PN0d1?=
- =?utf-8?B?dk5oY2k0SE02V0RoeitMcHVVYzVTWnY3bVRzbS9sRXRkWTRkblMweXNWZm9M?=
- =?utf-8?B?UFBlcFd2dnlsSVc1Q1hlWlYzV3JENnl5YXhjdXFreXBZOTlYR3NuZ2tFSEcy?=
- =?utf-8?B?cUtUQklVa2Jwa0phVUN3eWh2c0RBRjZEeHd5L2E1U2p1NUFYMkc1cjVMY1Fs?=
- =?utf-8?B?TkM5dTZEdU1qRTNlQ05pZTJCRWg2c1ZjOHBxMXJTNE9kNG12SzFuWnVOSENR?=
- =?utf-8?B?SkpOdnU4OWpma1FqU3RrRTU4UUZzUkt3VEJsb1orN2Q0SGQvalJtTS9lQXc0?=
- =?utf-8?B?TTdiNXlmcGd6amM3YVp2ZHI3VE9HYzMxb29PSm1xMHMwN0RtdDUzb1M1UDh5?=
- =?utf-8?B?M0NSQXorWFpmenQycEpkbFNDbzVCTEdSTkZoMitjZzVZanNKTkY0VkZEdW4z?=
- =?utf-8?B?RnRPME05c2p5RFl4T1NMUFlWZXB5aTB5OEUzQ041OFpkcHBzZVJzU1B0SEkw?=
- =?utf-8?B?OTRxYmxESWkrbkhxKzlvUTJxUzNXN3dNN3k5dEVlRXVnV21Bd0h3ZEZXcWQv?=
- =?utf-8?B?UktxOXlLcXFsK3F4c3ZkWENLYjZhK05pM3c1QkxwRGgwUjNLQkxKR0hjUnFu?=
- =?utf-8?B?UXc9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 694a8e57-fb17-4621-b830-08dadc6996bf
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1501MB2055.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 17:52:08.6263
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HPYtoO1MGBBTIxeLkVTT6IWspO5BKPvAUeqzJev71IDhRk5D6ZcVM7AZpXES24sh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR15MB5396
-X-Proofpoint-GUID: 9C9ik_E1PgQW2jEJgk11QgFG0e1Kgi3K
-X-Proofpoint-ORIG-GUID: 9C9ik_E1PgQW2jEJgk11QgFG0e1Kgi3K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-12_02,2022-12-12_02,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAX7GJ9bpdj28EJAA--.1472S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3JrWruF4xtryfXr1xGr1kuFg_yoWxGFyrpr
+        W3GF17Kr4kWr1xZrnrtws8XFnYyF10y3WUWF98Gry2vwnxKFy7Ar17KFyYk3WDAr10yr1S
+        qr1DXrsFqw4DZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAEBF1jj4aN6wAFsV
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, 2022-12-12 at 09:04 -0800, Alexei Starovoitov wrote:
+> On Mon, Dec 12, 2022 at 4:45 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Sat, 2022-12-10 at 18:28 -0800, Alexei Starovoitov wrote:
+> > > On Wed, Dec 7, 2022 at 9:25 AM Roberto Sassu
+> > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > 
+> > > > BPF LSM needs a reliable source of information to determine if the return
+> > > > value given by eBPF programs is acceptable or not. At the moment, choosing
+> > > > either the 64 bit or the 32 bit one does not seem to be an option
+> > > > (selftests fail).
+> > > > 
+> > > > If we choose the 64 bit one, the following happens.
+> > > > 
+> > > >       14:       61 10 00 00 00 00 00 00 r0 = *(u32 *)(r1 + 0)
+> > > >       15:       74 00 00 00 15 00 00 00 w0 >>= 21
+> > > >       16:       54 00 00 00 01 00 00 00 w0 &= 1
+> > > >       17:       04 00 00 00 ff ff ff ff w0 += -1
+> > > > 
+> > > > This is the last part of test_deny_namespace. After #16, the register
+> > > > values are:
+> > > > 
+> > > > smin_value = 0x0, smax_value = 0x1,
+> > > > s32_min_value = 0x0, s32_max_value = 0x1,
+> > > > 
+> > > > After #17, they become:
+> > > > 
+> > > > smin_value = 0x0, smax_value = 0xffffffff,
+> > > > s32_min_value = 0xffffffff, s32_max_value = 0x0
+> > > > 
+> > > > where only the 32 bit values are correct.
+> > > > 
+> > > > If we choose the 32 bit ones, the following happens.
+> > > > 
+> > > > 0000000000000000 <check_access>:
+> > > >        0:       79 12 00 00 00 00 00 00 r2 = *(u64 *)(r1 + 0)
+> > > >        1:       79 10 08 00 00 00 00 00 r0 = *(u64 *)(r1 + 8)
+> > > >        2:       67 00 00 00 3e 00 00 00 r0 <<= 62
+> > > >        3:       c7 00 00 00 3f 00 00 00 r0 s>>= 63
+> > > > 
+> > > > This is part of test_libbpf_get_fd_by_id_opts (no_alu32 version). In this
+> > > > case, 64 bit register values should be used (for the 32 bit ones, there is
+> > > > no precise information from the verifier).
+> > > > 
+> > > > As the examples above suggest that which register values to use depends on
+> > > > the specific case, mark ALU32 operations in bpf_reg_state structure, so
+> > > > that BPF LSM can choose the proper ones.
+> > > 
+> > > I have a hard time understanding what is the problem you're
+> > > trying to solve and what is the proposed fix.
+> > 
+> > The problem is allowing BPF LSM programs to return positive values when
+> > LSM hooks expect zero or negative values. Those values could be
+> > converted to a pointer, and escape the IS_ERR() check.
+> 
+> The bigger goal is clear.
+> 
+> > The challenge is to ensure that the verifier prediction of R0 is
+> > accurate, so that the eBPF program is not unnecessarily rejected.
+> 
+> There is a code in the verifier already that checks ret values.
+> lsm restrictions should fit right in.
+> 
+> > > The patch is trying to remember the bitness of the last
+> > > operation, but what for?
+> > > The registers are 64-bit. There are 32-bit operations,
+> > > but they always update the upper 32-bits of the register.
+> > > reg_bounds_sync() updates 32 and 64 bit bounds regardless
+> > > whether the previous operation was on 32 or 64 bit.
+> > 
+> > Ok, yes. I also thought that using the 64 bit register should be ok,
+> > but selftests fail.
+> 
+> maybe selftests are buggy?
+> they fail with patch 3 alone without patch 2 ?
+> please explain exactly the problem.
 
+Ok, I let it run getting what the verifier provides (smin/smax).
 
-On 12/12/22 9:02 AM, Benjamin Tissoires wrote:
-> On Thu, Nov 3, 2022 at 4:58 PM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
->>
->> Kind of a hack, but works for now:
->>
->> Instead of listening for any close of eBPF program, we now
->> decrement the refcount when we insert it in our internal
->> map of fd progs.
->>
->> This is safe to do because:
->> - we listen to any call of destructor of programs
->> - when a program is being destroyed, we disable it by removing
->>    it from any RCU list used by any HID device (so it will never
->>    be called)
->> - we then trigger a job to cleanup the prog fd map, but we overwrite
->>    the removal of the elements to not do anything on the programs, just
->>    remove the allocated space
->>
->> This is better than previously because we can remove the map of known
->> programs and their usage count. We now rely on the refcount of
->> bpf, which has greater chances of being accurate.
->>
->> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->>
->> ---
-> 
-> So... I am a little bit embarrassed, but it turns out that this hack
-> is not safe enough.
-> 
-> If I compile the kernel with LLVM=1, the function
-> bpf_prog_put_deferred() is optimized in a weird way: if we are not in
-> irq, the function is inlined into __bpf_prog_put(), but if we are, the
-> function is still kept around as it is called in a scheduled work
-> item.
-> 
-> This is something I completely overlooked: I assume that if the
-> function would be inlined, the HID entrypoint BPF preloaded object
-> would not be able to bind, thus deactivating HID-BPF safely. But if a
-> function can be both inlined and not inlined, then I have no
-> guarantees that my cleanup call will be called. Meaning that a HID
-> device might believe there is still a bpf function to call. And things
-> will get messy, with kernel crashes and others.
+smin_value = 0xffffffff, smax_value = 0xffffffff,
+s32_min_value = 0xffffffff, s32_max_value = 0xffffffff,
+Invalid R0, cannot return > 1
+#10      bpf_cookie:FAIL
 
-You should not rely fentry to a static function. This is unstable
-as compiler could inline it if that static function is called
-directly. You could attach to a global function if it is not
-compiled with lto.
+smin_value = 0x0, smax_value = 0xffffffff,
+s32_min_value = 0xffffffff, s32_max_value = 0x0,
+Invalid R0, cannot return 1
+#58/1    deny_namespace/unpriv_userns_create_no_bpf:FAIL
+#58      deny_namespace:FAIL
 
-> 
-> An easy "fix" would be to tag bpf_prog_put_deferred() with "noinline",
-> but it just feels wrong to have that for this specific reason.
+smin_value = 0x0, smax_value = 0xffffffff,
+s32_min_value = 0xffffffff, s32_max_value = 0x0,
+Invalid R0, cannot return 1
+#100     libbpf_get_fd_by_id_opts:FAIL
 
-This is not a right approach just for this purpose.
+smin_value = 0xfffffffe, smax_value = 0xfffffffe,
+s32_min_value = 0xfffffffe, s32_max_value = 0xfffffffe,
+#114     lookup_key:FAIL
 
+smin_value = 0xffffffff, smax_value = 0xffffffff,
+s32_min_value = 0xffffffff, s32_max_value = 0xffffffff,
+Invalid R0, cannot return > 1
+#210     test_ima:FAIL
+
+smin_value = 0xffffffff, smax_value = 0xffffffff,
+s32_min_value = 0xffffffff, s32_max_value = 0xffffffff,
+Invalid R0, cannot return > 1
+#211     test_local_storage:FAIL
+
+smin_value = 0xffffffff, smax_value = 0xffffffff,
+s32_min_value = 0xffffffff, s32_max_value = 0xffffffff,
+Invalid R0, cannot return > 1
+#212     test_lsm:FAIL
+
+As you can see, these tests fail because smin or smax are positive
+values.
+
+I kept the selftest patches. In test_lsm, for example, ret is a
+parameter, populated by previous eBPF programs. In this case, I added
+an additional check to explicitly reject positive values.
+
+> > Regarding your comment, I have not seen reg_bounds_sync() for the case
+> > R = imm.
 > 
-> AFAICT, gcc is not doing that optimisation, but nothing prevents it
-> from doing it, and suddenly that will be a big whole in the kernel.
+> because it's unnecessary there.
+
+	__mark_reg_known(regs + insn->dst_reg,
+			 (u32)insn->imm);
+
+This prevents smin/smax from being negative. But I know that this was
+patched by Jann Horn. Remembering the endianness of the operation,
+makes it clear what register value you should use.
+
+> > > It seems you're trying to hack around something that breaks
+> > > patch 3 which also looks fishy.
+> > 
+> > I thought it was a good idea that changes in the LSM infrastructure are
+> > automatically reflected in the boundaries that BPF LSM should enforce.
 > 
-> As much as I wish I had another option, I think for the sake of
-> everyone (and for my future holidays) I'll postpone HID-BPF to 6.3.
+> That's fine. Encoding restrictions in lsm_hook_defs.h
+> is the cleanest approach.
 > 
-> I actually thought of another way of removing that trampoline call. So
-> I'm not entirely going back to the drawing board hopefully.
+> > If not, I'm open to new ideas. If we should use BTF ID sets, I'm fine
+> > with it.
+> > 
+> > > Please explain the problem first with a concrete example.
+> > 
+> > Ok, I have a simple one:
+> > 
+> > $ llvm-objdump -d test_bpf_cookie.bpf.o
+> > 
+> > 0000000000000000 <test_int_hook>:
+> > 
+> > [...]
+> > 
+> >        8:       85 00 00 00 0e 00 00 00 call 14
+> >        9:       b4 06 00 00 ff ff ff ff w6 = -1
+> >       10:       5e 08 07 00 00 00 00 00 if w8 != w0 goto +7 <LBB11_3>
+> >       11:       bf 71 00 00 00 00 00 00 r1 = r7
+> >       12:       85 00 00 00 ae 00 00 00 call 174
+> >       13:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 = 0 ll
+> >       15:       79 12 00 00 00 00 00 00 r2 = *(u64 *)(r1 + 0)
+> >       16:       4f 02 00 00 00 00 00 00 r2 |= r0
+> >       17:       7b 21 00 00 00 00 00 00 *(u64 *)(r1 + 0) = r2
+> > 
+> > smin_value = 0xffffffff, smax_value = 0xffffffff,
+> > s32_min_value = 0xffffffff, s32_max_value = 0xffffffff,
 > 
-> [a few hours laters]
-> 
-> Just as a preview, I am reusing the bpf_link idea: when we call
-> hid_bpf_attach_prog(), this creates a bpf_link, and that link is the
-> one that needs to be pinned. Whenever all the references of that link
-> are dropped, I get called in the link's ->release() function, and I
-> can force the unbinding of the hid-device to the program at that time.
-> 
-> Way safer (no refcount mess up) and no optimisations can interfere,
-> now that I am not "tracing" the bpf core code.
-> 
-> Cheers,
-> Benjamin
-> 
+> and this applies where?
+
+This is in check_return_code(), for BPF_PROG_TYPE_LSM.
+
+> what reg are you talking about?
+
+R0.
+
+> Where is the issue?
+
+s32_min_value/s32_max_value are the values we should get.
+
+Roberto
+
