@@ -2,115 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8966764BC30
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Dec 2022 19:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED4464BD2A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Dec 2022 20:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234899AbiLMSiF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Dec 2022 13:38:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S235844AbiLMTWk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Dec 2022 14:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236271AbiLMSh7 (ORCPT
+        with ESMTP id S235382AbiLMTWi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:37:59 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C9CF6D
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Dec 2022 10:37:58 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id n63so2181570iod.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Dec 2022 10:37:58 -0800 (PST)
+        Tue, 13 Dec 2022 14:22:38 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351F318388
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Dec 2022 11:22:31 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so4676389pjd.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Dec 2022 11:22:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zVw/Ub8n925hTRnFdUzvOTA/UBWQnS0OdDCK00ziL7s=;
-        b=XrBbWdcrYPzuedqF0FgemXWCGtU7UrqvPAsmrbFXqGYJ28FAp6XGTo5oEn8x273sqU
-         1n/9Yzgl1P7zdafD9gaHuWhGonKRYglyMefa//+e41c5/9SaL5CtXhV701foySxdl0f5
-         yRDHeGzCpWk0jJ3+phN5yr8QuFGKRgubk9o+Q=
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GooOz5xzwABA0aXeznw8tJUM/w4xxzmJuyWu/svzARU=;
+        b=JQhIG2Dnt+kBdWNk3DVyFOdSdA0ib8mpr1HWSpWifG0Wgsu5cuwDKCXsQh8tWSrgyH
+         42GLmuR2Ph/Wci79VjQVy/C/W1o9PE46hYWAfq6TzhzJhdV7/d7OqkZ2F8n88iknOoVz
+         hkMKqFCyV52bkH93aadGRLMw2f38wQCcx+hq0MfiIE/9xCfCA6vzvyy2StriIrmjZt/s
+         Kp5RjTqR9zVNNWyBrneZ8Evqug9QLnxruisFOoy4/pOTlPwghDIaLH80mrTgUuFaN8dY
+         CdLmgmoqvfnRiL7VkF08qMmXGb9EEGcjpzdpOejtRPF6oCABT9Y6c47t+Zw54yxDiRnh
+         91fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zVw/Ub8n925hTRnFdUzvOTA/UBWQnS0OdDCK00ziL7s=;
-        b=mUTVNf/7NCO6NeHfsvt6cW2u58kXM5Eo4pXo/StmqSFzq5ayxtkZCj99mJXEJRYYpu
-         CWkxambp13fDKH5frdrvXRxQ0NgyyA8ZDgJi9ekwQaQFHZcbaJcTuGncXvIAXhPhCj1B
-         /NaOoZsXRdIm3sp4TqITKBgFntb73jABR8317E5qhpGAC9RXqqRNhtjVz5+ZHsWbtOqH
-         0u7gTSiIRRptjL0Y7CAHIFGXyKhqUUO/IXJHRtp7eu1vkcMEIZg8w/+o+yMwHUXxTPJ7
-         hpmE7k89N3eda0qaa1hjZfGpLsAkjNKXkslgBTNi+cdxbkwv59Ufpc/Lsg31bwv18A6q
-         6eJQ==
-X-Gm-Message-State: ANoB5pmQO+PzOupAXVyxek01v3crEIiUhh267clOOp6Zr3czqBE7Q1aX
-        QibMe8b1P6JvcT8nQ1L4RmkkIw==
-X-Google-Smtp-Source: AA0mqf7aJOMAxmp4CXqLPZfMIko49C01+d4Mm/IeX3PQ/xS4thygg7ozqQaxaFm0a2G0H35SvgIdew==
-X-Received: by 2002:a6b:500e:0:b0:6e2:d3f7:3b60 with SMTP id e14-20020a6b500e000000b006e2d3f73b60mr2036775iob.2.1670956677330;
-        Tue, 13 Dec 2022 10:37:57 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q18-20020a0566022f1200b006e2f42a30c2sm3596261iow.35.2022.12.13.10.37.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 10:37:56 -0800 (PST)
-Message-ID: <2ee34e21-44bd-71e7-6da2-f4bea9a35452@linuxfoundation.org>
-Date:   Tue, 13 Dec 2022 11:37:56 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GooOz5xzwABA0aXeznw8tJUM/w4xxzmJuyWu/svzARU=;
+        b=YD9WVhcBLzJzA/E7j1XxI2Jl9QXyuTwYjH/5ukWJBkUqewwnhQihBrKY7jWqVoqAwr
+         ENBnIA/zle9J9KVgrAFg6lmhEFUfJztktkyjUW19PSrTBDEBj6JX1r/FczPD520d0F9M
+         /fYulloCcHXiyRoAjDH5x6ffkV01rj9z4/fqSNlq5sbNpqzLKHMWGfQuzExEfVfo5q3F
+         79vojbJi964ovpwSYuLujshinXb0U+OXsRbMqCCbz0OCtIUOqo6PvPUw2DWVWr2Ynxbz
+         bLpZarEzqpktCZsQh5ZyH9hkyqlKgO1TYHEP4HwUqzC6DiqexYB8Vs41Rv8NdcTw6Ez1
+         SSaA==
+X-Gm-Message-State: ANoB5pnBG5mEkj8Z2cNcBaeyIMt4ze3Tn5eU9PsvSmdSJcFEEqwyhPdm
+        LW3XO4bV4RODguy4U5STVgC5VmxfJ8bcY2sLVWc4
+X-Google-Smtp-Source: AA0mqf7aGuvEMwZQ2myz4q21F/vwAjdbZ8+nOsSBmZZRAt8LcZga6xnXTekj7k2zRVU4K/i46QHyS2HTCWcbSGlnof8=
+X-Received: by 2002:a17:902:a70b:b0:189:b0a3:cf4f with SMTP id
+ w11-20020a170902a70b00b00189b0a3cf4fmr37496320plq.56.1670959350637; Tue, 13
+ Dec 2022 11:22:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] kselftest/alsa: Increase kselftest timeout
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221213183242.1908249-1-nfraprado@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221213183242.1908249-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221209160453.3246150-1-jeffxu@google.com> <20221209160453.3246150-7-jeffxu@google.com>
+ <CAHC9VhRBMTQvnBdSwMbkOsk9eemYfvCmj9TRgxtMeuex4KLCPA@mail.gmail.com> <CALmYWFvrasXnshO01YGWRyC7qKk4o0G88yAgkgjO1YBumF5zeA@mail.gmail.com>
+In-Reply-To: <CALmYWFvrasXnshO01YGWRyC7qKk4o0G88yAgkgjO1YBumF5zeA@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 13 Dec 2022 14:22:19 -0500
+Message-ID: <CAHC9VhQKsjiGv3Af0iqg_TLNzCvdTaLnhw+BRTF9OEtJg1hX7g@mail.gmail.com>
+Subject: Re: [PATCH v7 6/6] mm/memfd: security hook for memfd_create
+To:     Jeff Xu <jeffxu@google.com>
+Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        keescook@chromium.org, akpm@linux-foundation.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/13/22 11:32, Nícolas F. R. A. Prado wrote:
-> The default timeout for kselftests is 45 seconds, but pcm-test can take
-> longer than that to run depending on the number of PCMs present on a
-> device.
-> 
-> As a data point, running pcm-test on mt8192-asurada-spherion takes about
-> 1m15s.
-> 
-> Set the timeout to 10 minutes, which should give enough slack to run the
-> test even on devices with many PCMs.
-> 
+On Tue, Dec 13, 2022 at 10:00 AM Jeff Xu <jeffxu@google.com> wrote:
+> On Fri, Dec 9, 2022 at 10:29 AM Paul Moore <paul@paul-moore.com> wrote:
+> > On Fri, Dec 9, 2022 at 11:05 AM <jeffxu@chromium.org> wrote:
+> > >
+> > > From: Jeff Xu <jeffxu@google.com>
+> > >
+> > > The new security_memfd_create allows lsm to check flags of
+> > > memfd_create.
+> > >
+> > > The security by default system (such as chromeos) can use this
+> > > to implement system wide lsm to allow only non-executable memfd
+> > > being created.
+> > >
+> > > Signed-off-by: Jeff Xu <jeffxu@google.com>
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > ---
+> > >  include/linux/lsm_hook_defs.h | 1 +
+> > >  include/linux/lsm_hooks.h     | 4 ++++
+> > >  include/linux/security.h      | 6 ++++++
+> > >  mm/memfd.c                    | 5 +++++
+> > >  security/security.c           | 5 +++++
+> > >  5 files changed, 21 insertions(+)
+> >
+> > We typically require at least one in-tree LSM implementation to
+> > accompany a new LSM hook.  Beyond simply providing proof that the hook
+> > has value, it helps provide a functional example both for reviewers as
+> > well as future LSM implementations.  Also, while the BPF LSM is
+> > definitely "in-tree", its nature is such that the actual
+> > implementation lives out-of-tree; something like SELinux, AppArmor,
+> > Smack, etc. are much more desirable from an in-tree example
+> > perspective.
+>
+> Thanks for the comments.
+> Would that be OK if I add a new LSM in the kernel  to block executable
+> memfd creation ?
 
-10 minutes is way too long.
+If you would be proposing the LSM only to meet the requirement of
+providing an in-tree LSM example, no that would definitely *not* be
+okay.
 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
-> ---
-> 
->   tools/testing/selftests/alsa/settings | 1 +
->   1 file changed, 1 insertion(+)
->   create mode 100644 tools/testing/selftests/alsa/settings
-> 
-> diff --git a/tools/testing/selftests/alsa/settings b/tools/testing/selftests/alsa/settings
-> new file mode 100644
-> index 000000000000..a62d2fa1275c
-> --- /dev/null
-> +++ b/tools/testing/selftests/alsa/settings
-> @@ -0,0 +1 @@
-> +timeout=600
+Proposing a new LSM involves documenting a meaningful security model,
+implementing it, developing tests, going through a (likely multi-step)
+review process, and finally accepting the long term maintenance
+responsibilities of this new LSM.  If you are proposing a new LSM
+because you feel the current LSMs do not provide a security model
+which meets your needs, then yes, proposing a new LSM might be a good
+idea.  However, if you are proposing a new LSM because you don't want
+to learn how to add a new hook to an existing LSM, then I suspect you
+are misguided/misinformed with the amount of work involved in
+submitting a new LSM.
 
-Adding timeouts like this especially 10 minutes will increase the time
-it takes to run tests. We run the risk of people not wanting to run tests
-anymore.
+> Alternatively,  it might be possible to add this into SELinux or
+> landlock, it will be a larger change.
 
-thanks,
--- Shuah
+It will be a much smaller change than submitting a new LSM, and it
+would have infinitely more value to the community than a throw-away
+LSM where the only use-case is getting your code merged upstream.
 
-
+-- 
+paul-moore.com
