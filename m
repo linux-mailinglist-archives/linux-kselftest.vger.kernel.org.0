@@ -2,135 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B72864BF48
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Dec 2022 23:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC96264C038
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Dec 2022 00:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236526AbiLMWWj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Dec 2022 17:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S236895AbiLMXGM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Dec 2022 18:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiLMWWi (ORCPT
+        with ESMTP id S236913AbiLMXGK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Dec 2022 17:22:38 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9291FF9C;
-        Tue, 13 Dec 2022 14:22:35 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id c1so7374777lfi.7;
-        Tue, 13 Dec 2022 14:22:35 -0800 (PST)
+        Tue, 13 Dec 2022 18:06:10 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D142BE4
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Dec 2022 15:06:05 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so5176359pjm.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Dec 2022 15:06:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=grg0bvt97ijbsfmyQgu+5+MNtO6B9tZuIIZrlfXrE7g=;
-        b=G9cs68AGm0bDo2dxa3H+gWo/J6MyRHIeXJ20mm/LQuWgWQUgQehvq+ynwR+urC9gwZ
-         BLHGiQ/auh2nYN2KleCpgDML8YKeuit5PfaNAzQPpdNIvABNP/SeHVlmiylqr/8p0AAZ
-         6MC9RaeQKHJHAvVuHGbVYwTiGxYH2VQ2c+M7r6hBH/ic6J4JoG12hOrHLivluU+F3lEN
-         trBhSbjWvENewcIbEfgZ2RwvoN1xGZuwGedaopx0YnwEu65SoWgJpM8Wsxj9bePxt2kI
-         +NZInILggNT3DlntTw27WrASJa22vkPuwtTEE/2FBNHuIO1YFQ8KlQwwh6+qm660raC/
-         GCiA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gfY9SoTee3EZfG+2GksijgMhXy5soJud6c/PL62EovE=;
+        b=q+jiqGbU2B/BB8WwCZG+WNfd8+StTAJUM8yeY8lrPAZVnU3+xBG9L/NwIHYotkdVlU
+         iLyF378FtFxO5qF9FFS3lSZfo8YcOUUDL06uGMXgxT/NaFR3VdPLbjz8dkk4mWi8oRXO
+         CS8+/KiW16y1XpaAlHTMPzpNGX21XTyui5wLf30t12VJHlJGZj7vZ+I+VdkuIJPhBJ+c
+         O8DbRyOT2QTULNTMtD3La1yLMM/uq0pKFsQB4AloZQ8RPN8jiYiII/0UW34/CtHb/1HL
+         PdKs7N/sVcr+hChQIGzVQ1hdkiUBVAnUdrrGlSukBnjg1vdVnANPtzIWnnbgMqyJ9Xbm
+         4N4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=grg0bvt97ijbsfmyQgu+5+MNtO6B9tZuIIZrlfXrE7g=;
-        b=PWA0LKtAhIGuvc2CKP/K2/a6TnSeinhv21spuw1CgWL41fL8goooWaB6TCbNjlf8f9
-         ZHlZw6ejO0kHma21wWZWBburpTLAKbl8TZgZDhy3xARQle+0KW15lfJD6XvCkU7Qb9f5
-         mHnaKRr2JRpUWYAIMPvvoRedb10WFHHaL175piqOy6qyykO1YKu5kfVp+JLOuV/RY2DC
-         p5/v2AcHSlnjzBbeWaKpmEUxzNDMyyym9spfbiSyh6HhEOvE1i579m2BN3BiZpE4s+O5
-         hs0Mx7ZaUV7ZoiF0S0Rj+Qgq95Jdg6Wc5eCfVy61btke1FLrz671v0JenT3fLx+qkqvd
-         JiWg==
-X-Gm-Message-State: ANoB5pm30xpSlPvDYFBYXWkYKRhLYCEwq5faBl38INeIX+6WEQXVAu3f
-        IWhAqyxs3x7jlympkuWwd7o=
-X-Google-Smtp-Source: AA0mqf7apQ6SPd44a4c4jCfkeueA+Hwx6ga2toN4O+BsyaHnVrSk6bw5HptAKGAyvZiPDSlnd5V11g==
-X-Received: by 2002:a05:6512:3d0e:b0:4b5:9043:2530 with SMTP id d14-20020a0565123d0e00b004b590432530mr7831770lfv.68.1670970153809;
-        Tue, 13 Dec 2022 14:22:33 -0800 (PST)
-Received: from grain.localdomain ([5.18.253.97])
-        by smtp.gmail.com with ESMTPSA id o5-20020ac25e25000000b004acd6e441cesm530270lfg.205.2022.12.13.14.22.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 14:22:32 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 820EB5A0020; Wed, 14 Dec 2022 01:22:31 +0300 (MSK)
-Date:   Wed, 14 Dec 2022 01:22:31 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        "open list : KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        Paul Gofman <pgofman@codeweavers.com>
-Subject: Re: [PATCH v6 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <Y5j7J3hI7Div/WH8@grain>
-References: <20221109102303.851281-1-usama.anjum@collabora.com>
- <20221109102303.851281-3-usama.anjum@collabora.com>
- <Y5eSKBJ9hTtw9cbK@grain>
- <d7185563-3a7a-d69e-d3d1-1a2b071aa85d@collabora.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gfY9SoTee3EZfG+2GksijgMhXy5soJud6c/PL62EovE=;
+        b=QbUyBQYTaZzk2mxIivdGZ2ReqUu5lHY57Ae0fjuBZzB87e1YN38nojKaoZ0iH+KJyO
+         VIUhxYyYl599QJBjRAkAruj92GgjwnwbPjCry1042ue7pUDPZPvIAFJo2KN+gy2Nux4x
+         EYE/3hFWccYjQjjsR56ItICW1gmuZH63s1LCyE8yLqfy92TTpRGLikSBnxFqG+yraXNG
+         I4q2RaNQsYCpM9LbUmGM1dLkMuyfdAOSZN0Si8ESGcQ+s+UGoU4O5QjfS75mJeh0BCoq
+         0zNLG0rZU/zBLgzyyFyQu1ujYuYV6V/sLg0Tjf6F4POTN9jZusKRsvoZoSwH9kaHmKlt
+         mKww==
+X-Gm-Message-State: ANoB5pm+U/3JDInzGfaSaZ77IhBQWjwR4jarXyVvfU+FbUiexoOA2Ay1
+        wmWllCkVqoTIPV6k6j/HcmWSU4ABS/FuoWEA5s/VPg==
+X-Google-Smtp-Source: AA0mqf4fP2Z14LlLZRDbviMdNfqOrCLOgYzTISeAkWFLEBVOZgWI6FEWIPQvWDoJWGDdm493oPcC2PPuU1Ufcjxa8xE=
+X-Received: by 2002:a17:902:ec04:b0:189:894c:6b58 with SMTP id
+ l4-20020a170902ec0400b00189894c6b58mr54167047pld.172.1670972764571; Tue, 13
+ Dec 2022 15:06:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d7185563-3a7a-d69e-d3d1-1a2b071aa85d@collabora.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221209160453.3246150-1-jeffxu@google.com> <20221209160453.3246150-7-jeffxu@google.com>
+ <CAHC9VhRBMTQvnBdSwMbkOsk9eemYfvCmj9TRgxtMeuex4KLCPA@mail.gmail.com>
+ <CALmYWFvrasXnshO01YGWRyC7qKk4o0G88yAgkgjO1YBumF5zeA@mail.gmail.com> <CAHC9VhQKsjiGv3Af0iqg_TLNzCvdTaLnhw+BRTF9OEtJg1hX7g@mail.gmail.com>
+In-Reply-To: <CAHC9VhQKsjiGv3Af0iqg_TLNzCvdTaLnhw+BRTF9OEtJg1hX7g@mail.gmail.com>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Tue, 13 Dec 2022 15:05:28 -0800
+Message-ID: <CALmYWFvU7-+oUEhfvbpQLrYV90iNfWUiF5bsEs_YM4QbZn8kcQ@mail.gmail.com>
+Subject: Re: [PATCH v7 6/6] mm/memfd: security hook for memfd_create
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        keescook@chromium.org, akpm@linux-foundation.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 06:04:04PM +0500, Muhammad Usama Anjum wrote:
-> > Hi Muhammad! I'm really sorry for diving in such late (unfortunatelly too busy to
-> > step in yet). Anyway, while in general such interface looks reasonable here are
-> > few moments which really bothers me: as far as I undertstand you don't need
-> > vzalloc here, plain vmalloc should works as well since you copy only filled
-> > results back to userspace.
+On Tue, Dec 13, 2022 at 11:22 AM Paul Moore <paul@paul-moore.com> wrote:
 >
-> Thank you for reviewing. Correct, I'll update to use vmalloc.
-> 
-> > Next -- there is no restriction on vec_len parameter,
-> > is not here a door for DoS from userspace? Say I could start a number of ioctl
-> > on same pagemap and try to allocate very big amount of vec_len in summay causing
-> > big pressure on kernel's memory. Or I miss something obvious here?
+> On Tue, Dec 13, 2022 at 10:00 AM Jeff Xu <jeffxu@google.com> wrote:
+> > On Fri, Dec 9, 2022 at 10:29 AM Paul Moore <paul@paul-moore.com> wrote:
+> > > On Fri, Dec 9, 2022 at 11:05 AM <jeffxu@chromium.org> wrote:
+> > > >
+> > > > From: Jeff Xu <jeffxu@google.com>
+> > > >
+> > > > The new security_memfd_create allows lsm to check flags of
+> > > > memfd_create.
+> > > >
+> > > > The security by default system (such as chromeos) can use this
+> > > > to implement system wide lsm to allow only non-executable memfd
+> > > > being created.
+> > > >
+> > > > Signed-off-by: Jeff Xu <jeffxu@google.com>
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > ---
+> > > >  include/linux/lsm_hook_defs.h | 1 +
+> > > >  include/linux/lsm_hooks.h     | 4 ++++
+> > > >  include/linux/security.h      | 6 ++++++
+> > > >  mm/memfd.c                    | 5 +++++
+> > > >  security/security.c           | 5 +++++
+> > > >  5 files changed, 21 insertions(+)
+> > >
+> > > We typically require at least one in-tree LSM implementation to
+> > > accompany a new LSM hook.  Beyond simply providing proof that the hook
+> > > has value, it helps provide a functional example both for reviewers as
+> > > well as future LSM implementations.  Also, while the BPF LSM is
+> > > definitely "in-tree", its nature is such that the actual
+> > > implementation lives out-of-tree; something like SELinux, AppArmor,
+> > > Smack, etc. are much more desirable from an in-tree example
+> > > perspective.
+> >
+> > Thanks for the comments.
+> > Would that be OK if I add a new LSM in the kernel  to block executable
+> > memfd creation ?
 >
-> Yes, there is a chance that a large chunk of kernel memory can get
-> allocated here as vec_len can be very large. We need to think of limiting
-> this buffer in the current implementation. Any reasonable limit should
-> work. I'm not sure what would be the reasonable limit. Maybe couple of
-> hundred MBs? I'll think about it. Or I should update the implementation
-> such that less amount of intermediate buffer can be used like mincore does.
-> But this can complicate the implementation further as we are already using
-> page ranges instead of keeping just the flags. I'll see what can be done.
+> If you would be proposing the LSM only to meet the requirement of
+> providing an in-tree LSM example, no that would definitely *not* be
+> okay.
+>
+> Proposing a new LSM involves documenting a meaningful security model,
+> implementing it, developing tests, going through a (likely multi-step)
+> review process, and finally accepting the long term maintenance
+> responsibilities of this new LSM.  If you are proposing a new LSM
+> because you feel the current LSMs do not provide a security model
+> which meets your needs, then yes, proposing a new LSM might be a good
+> idea.  However, if you are proposing a new LSM because you don't want
+> to learn how to add a new hook to an existing LSM, then I suspect you
+> are misguided/misinformed with the amount of work involved in
+> submitting a new LSM.
+>
+> > Alternatively,  it might be possible to add this into SELinux or
+> > landlock, it will be a larger change.
+>
+> It will be a much smaller change than submitting a new LSM, and it
+> would have infinitely more value to the community than a throw-away
+> LSM where the only use-case is getting your code merged upstream.
+>
+Thanks, my original thought is this LSM will be used by ChromeOS,
+since all of its memfd shall be non-executable. That said, I see the community
+will benefit more with this in SELinux.
 
-You know, I'm not yet convinced about overall design. This is new uapi which
-should be reviewed very very carefully, once merged in we can't step back and
-will have to live with it forever. As to buffer size: look how pagemap_read
-is implemented, it allocates PAGEMAP_WALK_SIZE buffer array to gather results
-then copies it back to userspace. If the main idea to be able to walk over
-memory of a process with mm context locked it still doesn't bring much benefit
-because once ioctl is complete the state of mm can be changed so precise results
-are only possible if target process is not running.
+I will work to add this in SELinux, appreciate help while I'm learning
+to add this.
 
-Maybe all of these aspects are been discussed already I probably need to read
-all previous converstaions first :)
+Jeff
+
+> --
+> paul-moore.com
