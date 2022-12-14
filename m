@@ -2,114 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE61564CFC4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Dec 2022 19:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EC264D368
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Dec 2022 00:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237276AbiLNSyq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Dec 2022 13:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
+        id S229726AbiLNX2i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Dec 2022 18:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238881AbiLNSyn (ORCPT
+        with ESMTP id S229697AbiLNX2H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Dec 2022 13:54:43 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952002A733
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Dec 2022 10:54:42 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id 17so4374689pll.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Dec 2022 10:54:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=o2e1a6vpAxQHzaMqe1Zz1YgsBuyNkLZSUPq8vet5Q+E=;
-        b=ljRXDQoz8d06UpaHKC+SuGt8xrjQEfQSizAAs+M7Oa0UFCOyc+ZVFVtSu/m47RyC0P
-         WJux7UP4wXmjSPCsUwuDwIDa9H/CfAsZyqgqoA57G2Fm50pMq3dHqVuXQUKJBj9giDuO
-         9zDWG2mb8TECeq3VFaiiXxcz6/WlWRjsZr/D8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o2e1a6vpAxQHzaMqe1Zz1YgsBuyNkLZSUPq8vet5Q+E=;
-        b=z0CNLBAeGVU4HkJOqFIf4de15VPhHuXOX233ubmy3azwR0b9aQ2hLOST8bMc4AUyt1
-         mv7wZPU2k1WJQk/zJGX2W6nOXRq17Q7xYbVoTfVCGmc/yPLKV48ojDKFdbHz05D8NU11
-         l3FZ6ifNhffxsV1XCOxonEvsKiXaTKWoG+vKzM9OcpLB+w0qu+y0kFn2RNQZGBiUG2Lf
-         DsR0v677GYEZtae+zLM2RlohZYO4/q9bH5PK95i0A1sHJ6dzlJDPf3V6YXq0h/gWAn+0
-         lGmNMrwmTQ8P2toyUoe/FnKl2bE32l+haAkVSjYj/A8ubqEEbd2FiXEJm+iiGo0wn/De
-         VgMQ==
-X-Gm-Message-State: ANoB5pmoeZohFgBxkRRM0yYu9ggYbYsuQgDfrqBhRqstZawQwi20LWki
-        WR+TpJRkw7zPbliOAcFLE63hAg==
-X-Google-Smtp-Source: AA0mqf5EzxQYQAX02yhiiZgN1ZRrh5wT7FRtFv9+LhYZc4owjG2hoCS8v2lD4r8dZcTHO5Rdw9SJhw==
-X-Received: by 2002:a17:90a:6506:b0:214:222:6ed3 with SMTP id i6-20020a17090a650600b0021402226ed3mr27015223pjj.43.1671044082079;
-        Wed, 14 Dec 2022 10:54:42 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k7-20020a17090a9d8700b00218f9bd50c7sm1710962pjp.50.2022.12.14.10.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 10:54:41 -0800 (PST)
-Date:   Wed, 14 Dec 2022 10:54:40 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     jeffxu@chromium.org
-Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jeffxu@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v7 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
-Message-ID: <202212141053.7F5D1F6@keescook>
-References: <20221209160453.3246150-1-jeffxu@google.com>
+        Wed, 14 Dec 2022 18:28:07 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53CB4B98A;
+        Wed, 14 Dec 2022 15:26:17 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 18413320046E;
+        Wed, 14 Dec 2022 18:26:16 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 14 Dec 2022 18:26:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1671060375; x=1671146775; bh=pd
+        7hPqCj1rehq8dhbnt6R5oY2ttXZHs4/Flb91zMciw=; b=L1GSh0Y2wzAAZIidc3
+        ymLqrA6lW80edFw11+ahwc+Qmtd8xkDNi0OS5rUjwEKP3zuEZ4C8+m1Id92jq4zE
+        0dLVz4+CDU3oZW8qozAIxJefisJ2nSnjDjLWLqm5VtLdf+1b4+OXIT8Iz1YzJyGe
+        xNjChP35Gq9rEmfyL6lR0qFIobM22nrpmV78sCa9LpXH5bpuPv2bvBoO6rZhwqvL
+        prRFGS8n6/6nhc94zskG+7kR55Q4fiBuFQyPGoPpm9L1sm7oeMnGcxMFOs5OAaES
+        9BSLVaCIKk8DnxNGMOZwDRob7LxwpePNH5WerLNsAPvQMh+0eu7edGP9du1kJYka
+        jWZg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1671060375; x=1671146775; bh=pd7hPqCj1rehq
+        8dhbnt6R5oY2ttXZHs4/Flb91zMciw=; b=DsPoClf0RQVxj54YXJw/qv0CQrrrn
+        LmN3WpfoJIgkwv81pLN+QHifyZLE+QdVOpI4t2PrKYEnxJfqp4bEqyQ8QHaBILyc
+        HJ+oRsMeYO/GkxEKNsFf4eT9dICKQIPOew+YG6Bw5AoXZaSczquzhGqCYnLyAU/C
+        w3nMIIae3zjNnxBp82GQEc0p/jD6+cSWTYSn4Go4KIgZu+RkP61SU4xt01PSp8fW
+        1HGQbqMjeL5Hpmoebjwwkmn2w9j2Y43JzUTpoPg9Ltc12AlABCZGxQQn/iR408jo
+        25E9V3MX5ah/AX03iQ+kWPfX54f/dGrSlxZtNl5IDENVip5uITuzOQumg==
+X-ME-Sender: <xms:l1uaYzOuuxHr5L3DTAuW2n7BHUkyR6V_LuelF0EQAYnthdrxflf_kw>
+    <xme:l1uaY98ZZUSOXoc_cxJaZJRvtSf71NNd-OQ2sbzv52oSEVmfHQvMFvsnePZVeljq5
+    rXGGLhFkIs-WSpjTw>
+X-ME-Received: <xmr:l1uaYyS2PifTTu_BhsQ_pGNtZHMYMdi_ZEexW1EfBPrgY2zSJD1jX8ANGgwO-QOtkwsXH4fGZfuBK2ZZeRa2d8IiuYVabnYCfs9AYmjIPS0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeggddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculdejtddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredt
+    tdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
+    ggtffrrghtthgvrhhnpefgfefggeejhfduieekvdeuteffleeifeeuvdfhheejleejjeek
+    gfffgefhtddtteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:l1uaY3tRa3P-O_zJfAxl7kqFGOp7udvfCNZXRJe86GvNRhxj3BXSBA>
+    <xmx:l1uaY7f3jZO-v6X1pTKQmqbI9RTkEWWYKzgsBnvqtFNSwQtqQAqMaQ>
+    <xmx:l1uaYz1_m-9vd_6UNk0vZRjNrDpUA122y2sDbBXfoO_ZFW7bn_Lh9A>
+    <xmx:l1uaY2ujI-drrgDgpQVnnOuDVd_VrjKADwUndj7ddCX6ok-YkcUKig>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 14 Dec 2022 18:26:14 -0500 (EST)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc:     ppenkov@aviatrix.com, dbird@aviatrix.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 4/6] bpf: selftests: Support not connecting client socket
+Date:   Wed, 14 Dec 2022 16:25:31 -0700
+Message-Id: <3623f9fbdfe7e1be46ca6745312eb020329d23c9.1671049840.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <cover.1671049840.git.dxu@dxuuu.xyz>
+References: <cover.1671049840.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221209160453.3246150-1-jeffxu@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 04:04:47PM +0000, jeffxu@chromium.org wrote:
-> From: Jeff Xu <jeffxu@google.com>
-> 
-> Since Linux introduced the memfd feature, memfd have always had their
-> execute bit set, and the memfd_create() syscall doesn't allow setting
-> it differently.
-> 
-> However, in a secure by default system, such as ChromeOS, (where all
-> executables should come from the rootfs, which is protected by Verified
-> boot), this executable nature of memfd opens a door for NoExec bypass
-> and enables “confused deputy attack”.  E.g, in VRP bug [1]: cros_vm
-> process created a memfd to share the content with an external process,
-> however the memfd is overwritten and used for executing arbitrary code
-> and root escalation. [2] lists more VRP in this kind.
-> 
-> On the other hand, executable memfd has its legit use, runc uses memfd’s
-> seal and executable feature to copy the contents of the binary then
-> execute them, for such system, we need a solution to differentiate runc's
-> use of  executable memfds and an attacker's [3].
-> 
-> To address those above, this set of patches add following:
-> 1> Let memfd_create() set X bit at creation time.
-> 2> Let memfd to be sealed for modifying X bit.
-> 3> A new pid namespace sysctl: vm.memfd_noexec to control the behavior of
->    X bit.For example, if a container has vm.memfd_noexec=2, then
->    memfd_create() without MFD_NOEXEC_SEAL will be rejected.
-> 4> A new security hook in memfd_create(). This make it possible to a new
-> LSM, which rejects or allows executable memfd based on its security policy.
+For connectionless protocols or raw sockets we do not want to actually
+connect() to the server.
 
-I think patch 1-5 look good to land. The LSM hook seems separable, and
-could continue on its own. Thoughts?
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ tools/testing/selftests/bpf/network_helpers.c | 5 +++--
+ tools/testing/selftests/bpf/network_helpers.h | 1 +
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-(Which tree should memfd change go through?)
-
--Kees
-
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 01de33191226..24f5efebc7dd 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -301,8 +301,9 @@ int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
+ 		       strlen(opts->cc) + 1))
+ 		goto error_close;
+ 
+-	if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
+-		goto error_close;
++	if (!opts->noconnect)
++		if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
++			goto error_close;
+ 
+ 	return fd;
+ 
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index f882c691b790..8be04cd76d8b 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -21,6 +21,7 @@ struct network_helper_opts {
+ 	const char *cc;
+ 	int timeout_ms;
+ 	bool must_fail;
++	bool noconnect;
+ };
+ 
+ /* ipv4 test vector */
 -- 
-Kees Cook
+2.39.0
+
