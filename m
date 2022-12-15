@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6D564D46F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Dec 2022 01:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E357F64D478
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Dec 2022 01:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiLOAOW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Dec 2022 19:14:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S229629AbiLOAPK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Dec 2022 19:15:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiLOANp (ORCPT
+        with ESMTP id S229926AbiLOANr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:13:45 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60786532F8
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Dec 2022 16:12:18 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id d7so5118759pll.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Dec 2022 16:12:18 -0800 (PST)
+        Wed, 14 Dec 2022 19:13:47 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECCD537C2
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Dec 2022 16:12:19 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso1070073pjt.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Dec 2022 16:12:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FZNFa0Som2cEXdyImA0PHzAPIxujgLNI2oeSKx5nHZI=;
-        b=Mar/wnyOMbOk1+C6Q5uXoFrUdKfYUVRbk56ST4Cdpt8bBvB6kbwiHHlmlZHyoJqUXq
-         0bC2mxcb4Aba4AQ7l5WLkMe1+FiheB82JTvBZg70Btv3MIEnYkyusR0jImZrs5zZt2R4
-         WYPS2HBzWXj5LCp/LfNQb6K4VUdeyB2KhB+/8=
+        bh=Wap6ucoC/WNJsFqIKWfaQDf7c8pQKriu9bpCkWTKgYw=;
+        b=jrjMjhda4PybAUVjFY7IQKKupKhbGV+Mr9a0lFv3B35sRZPqco0xNPmAkFb+WHAFg7
+         I9RucflGE1RXALl2sPWfUMgLRPERW8ynUHuM4CeSRxwbtCOFb0CeDVWn+kfFugc7kcVV
+         aI+YohYNTtIqZ6VwI2BNdLYoh/3EFdcfO5Ouw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FZNFa0Som2cEXdyImA0PHzAPIxujgLNI2oeSKx5nHZI=;
-        b=Z/iR42dycRNaArpCX033rlT4QWm7qkcaK7tY8lqiqrC/jbXKeCW2fyTDS7N37Z0eqf
-         p66khDtnq4jt8Uc+CjX80xkbhYVilzOL5SrRK4vyBdmnf74Gzo7M9HJuz/CvEh5jx61W
-         dVMwiURJCKgsK+/zsmW98J7Rv8eHfrsm0ip8SzwuGlZptd/OwuX+nklyRDIOG2J1rx7h
-         njcqUs2wRAZxIDddx9jrt0fOCBmdZTaUYsGHhEvQqzWlC+eBHOOzIgC80PisMMcV65bL
-         1OMyEtdcNy+0DcsGN1/5vPCClhA5yYGZ+zLyVqu+HcGt5jV2nl7bE1FCL2UA65WYpEib
-         hA7w==
-X-Gm-Message-State: ANoB5pmAZ9IWhEe14Dywwp4UoJZLjjzkPEaj2ZX1r7Ev2Rzp2ikqkNQP
-        wohoxbmwZ+UrkUxYY4rfPaEf3A==
-X-Google-Smtp-Source: AA0mqf6GJzrv+PwU1r/NMlYDtOak9TKNkI9c0zXY6nAVkp4XlqigEungkSMJ1qEv73IT1BAvIE/pQw==
-X-Received: by 2002:a17:90a:7890:b0:221:4338:a6ae with SMTP id x16-20020a17090a789000b002214338a6aemr17461030pjk.33.1671063137955;
-        Wed, 14 Dec 2022 16:12:17 -0800 (PST)
+        bh=Wap6ucoC/WNJsFqIKWfaQDf7c8pQKriu9bpCkWTKgYw=;
+        b=5NOgpmFhRwPCpx3zrIeW5mPk+PlZJd9Y3hzkQ2MQDE5JMO1pNZrn9Z3FKWLVqKrkGa
+         zXsGE9TsV3BEMZBgjGYUMuPRdMTgwCUvVVgs1C0+wXjlwi/P9wc5f8T15Kw1wkX59CzR
+         YsFAFvcL5yIXi1phbIsRpDKt6AoNoF8UIjYlliV4Xln/0dDDkwbLZyrjT1POld1gFWCq
+         qloO4uXE/f4V/KTTtMyUXQiv0qwFdUev039hFzfgytmJeVvL05BVpr6Om7fu7QwdxToY
+         XO++wRdv2mlGNGiQSdFpsiDrTgRbLo+od6SXIK9HdEe7iM6ky6OgKDQnDa4+Ej8Et5dD
+         KSpQ==
+X-Gm-Message-State: ANoB5pnqAu7sHorjSwx1mzUQfORqwIMiLLScaSkCf3nageM/qa65oiGg
+        8DbQKIIlPmOMSKX12dMQvJYOIQ==
+X-Google-Smtp-Source: AA0mqf5cZwYQAYuPApV9GBj1mQ1CYi6VGv1tzcvhwLtLDWN1jPWIpK9QDfSh5+tGbml7AZgIHJjXTQ==
+X-Received: by 2002:a05:6a21:3a8d:b0:ad:2ae:bb6e with SMTP id zv13-20020a056a213a8d00b000ad02aebb6emr29116822pzb.55.1671063138943;
+        Wed, 14 Dec 2022 16:12:18 -0800 (PST)
 Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
-        by smtp.gmail.com with ESMTPSA id 3-20020a17090a08c300b0021937b2118bsm1845738pjn.54.2022.12.14.16.12.16
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a08c300b0021937b2118bsm1845738pjn.54.2022.12.14.16.12.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 16:12:17 -0800 (PST)
+        Wed, 14 Dec 2022 16:12:18 -0800 (PST)
 From:   jeffxu@chromium.org
 To:     skhan@linuxfoundation.org, keescook@chromium.org
 Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
@@ -55,9 +55,9 @@ Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         jannh@google.com, linux-hardening@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v8 4/5] mm/memfd: Add write seals when apply SEAL_EXEC to executable memfd
-Date:   Thu, 15 Dec 2022 00:12:04 +0000
-Message-Id: <20221215001205.51969-5-jeffxu@google.com>
+Subject: [PATCH v8 5/5] selftests/memfd: add tests for MFD_NOEXEC_SEAL MFD_EXEC
+Date:   Thu, 15 Dec 2022 00:12:05 +0000
+Message-Id: <20221215001205.51969-6-jeffxu@google.com>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
 In-Reply-To: <20221215001205.51969-1-jeffxu@google.com>
 References: <20221215001205.51969-1-jeffxu@google.com>
@@ -65,7 +65,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,43 +74,330 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Jeff Xu <jeffxu@google.com>
 
-In order to avoid WX mappings, add F_SEAL_WRITE when apply
-F_SEAL_EXEC to an executable memfd, so W^X from start.
-
-This implys application need to fill the content of the memfd first,
-after F_SEAL_EXEC is applied, application can no longer modify the
-content of the memfd.
-
-Typically, application seals the memfd right after writing to it.
-For example:
-1. memfd_create(MFD_EXEC).
-2. write() code to the memfd.
-3. fcntl(F_ADD_SEALS, F_SEAL_EXEC) to convert the memfd to W^X.
-4. call exec() on the memfd.
+Tests to verify MFD_NOEXEC, MFD_EXEC and vm.memfd_noexec sysctl.
 
 Signed-off-by: Jeff Xu <jeffxu@google.com>
+Co-developed-by: Daniel Verkamp <dverkamp@chromium.org>
+Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- mm/memfd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/memfd/fuse_test.c  |   1 +
+ tools/testing/selftests/memfd/memfd_test.c | 228 ++++++++++++++++++++-
+ 2 files changed, 224 insertions(+), 5 deletions(-)
 
-diff --git a/mm/memfd.c b/mm/memfd.c
-index ec70675a7069..92f0a5765f7c 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -222,6 +222,12 @@ static int memfd_add_seals(struct file *file, unsigned int seals)
- 		}
- 	}
+diff --git a/tools/testing/selftests/memfd/fuse_test.c b/tools/testing/selftests/memfd/fuse_test.c
+index be675002f918..93798c8c5d54 100644
+--- a/tools/testing/selftests/memfd/fuse_test.c
++++ b/tools/testing/selftests/memfd/fuse_test.c
+@@ -22,6 +22,7 @@
+ #include <linux/falloc.h>
+ #include <fcntl.h>
+ #include <linux/memfd.h>
++#include <linux/types.h>
+ #include <sched.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+index f18a15a1f275..ae71f15f790d 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -30,6 +30,14 @@
  
-+	/*
-+	 * SEAL_EXEC implys SEAL_WRITE, making W^X from the start.
-+	 */
-+	if (seals & F_SEAL_EXEC && inode->i_mode & 0111)
-+		seals |= F_SEAL_SHRINK|F_SEAL_GROW|F_SEAL_WRITE|F_SEAL_FUTURE_WRITE;
+ #define F_SEAL_EXEC	0x0020
+ 
++#define F_WX_SEALS (F_SEAL_SHRINK | \
++		    F_SEAL_GROW | \
++		    F_SEAL_WRITE | \
++		    F_SEAL_FUTURE_WRITE | \
++		    F_SEAL_EXEC)
 +
- 	*file_seals |= seals;
- 	error = 0;
++#define MFD_NOEXEC_SEAL	0x0008U
++
+ /*
+  * Default is not to test hugetlbfs
+  */
+@@ -80,6 +88,37 @@ static int mfd_assert_new(const char *name, loff_t sz, unsigned int flags)
+ 	return fd;
+ }
  
++static void sysctl_assert_write(const char *val)
++{
++	int fd = open("/proc/sys/vm/memfd_noexec", O_WRONLY | O_CLOEXEC);
++
++	if (fd < 0) {
++		printf("open sysctl failed\n");
++		abort();
++	}
++
++	if (write(fd, val, strlen(val)) < 0) {
++		printf("write sysctl failed\n");
++		abort();
++	}
++}
++
++static void sysctl_fail_write(const char *val)
++{
++	int fd = open("/proc/sys/vm/memfd_noexec", O_WRONLY | O_CLOEXEC);
++
++	if (fd < 0) {
++		printf("open sysctl failed\n");
++		abort();
++	}
++
++	if (write(fd, val, strlen(val)) >= 0) {
++		printf("write sysctl %s succeeded, but failure expected\n",
++				val);
++		abort();
++	}
++}
++
+ static int mfd_assert_reopen_fd(int fd_in)
+ {
+ 	int fd;
+@@ -758,6 +797,9 @@ static void test_create(void)
+ 	mfd_fail_new("", ~0);
+ 	mfd_fail_new("", 0x80000000U);
+ 
++	/* verify EXEC and NOEXEC_SEAL can't both be set */
++	mfd_fail_new("", MFD_EXEC | MFD_NOEXEC_SEAL);
++
+ 	/* verify MFD_CLOEXEC is allowed */
+ 	fd = mfd_assert_new("", 0, MFD_CLOEXEC);
+ 	close(fd);
+@@ -969,20 +1011,21 @@ static void test_seal_resize(void)
+ 
+ /*
+  * Test SEAL_EXEC
+- * Test that chmod() cannot change x bits after sealing
++ * Test fd is created with exec and allow sealing.
++ * chmod() cannot change x bits after sealing.
+  */
+-static void test_seal_exec(void)
++static void test_exec_seal(void)
+ {
+ 	int fd;
+ 
+ 	printf("%s SEAL-EXEC\n", memfd_str);
+ 
++	printf("%s	Apply SEAL_EXEC\n", memfd_str);
+ 	fd = mfd_assert_new("kern_memfd_seal_exec",
+ 			    mfd_def_size,
+-			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
++			    MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_EXEC);
+ 
+ 	mfd_assert_mode(fd, 0777);
+-
+ 	mfd_assert_chmod(fd, 0644);
+ 
+ 	mfd_assert_has_seals(fd, 0);
+@@ -996,10 +1039,181 @@ static void test_seal_exec(void)
+ 	mfd_fail_chmod(fd, 0700);
+ 	mfd_fail_chmod(fd, 0100);
+ 	mfd_assert_chmod(fd, 0666);
++	mfd_assert_write(fd);
++	close(fd);
++
++	printf("%s	Apply ALL_SEALS\n", memfd_str);
++	fd = mfd_assert_new("kern_memfd_seal_exec",
++			    mfd_def_size,
++			    MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_EXEC);
++
++	mfd_assert_mode(fd, 0777);
++	mfd_assert_chmod(fd, 0700);
++
++	mfd_assert_has_seals(fd, 0);
++	mfd_assert_add_seals(fd, F_SEAL_EXEC);
++	mfd_assert_has_seals(fd, F_WX_SEALS);
+ 
++	mfd_fail_chmod(fd, 0711);
++	mfd_fail_chmod(fd, 0600);
++	mfd_fail_write(fd);
++	close(fd);
++}
++
++/*
++ * Test EXEC_NO_SEAL
++ * Test fd is created with exec and not allow sealing.
++ */
++static void test_exec_no_seal(void)
++{
++	int fd;
++
++	printf("%s EXEC_NO_SEAL\n", memfd_str);
++
++	/* Create with EXEC but without ALLOW_SEALING */
++	fd = mfd_assert_new("kern_memfd_exec_no_sealing",
++			    mfd_def_size,
++			    MFD_CLOEXEC | MFD_EXEC);
++	mfd_assert_mode(fd, 0777);
++	mfd_assert_has_seals(fd, F_SEAL_SEAL);
++	mfd_assert_chmod(fd, 0666);
+ 	close(fd);
+ }
+ 
++/*
++ * Test memfd_create with MFD_NOEXEC flag
++ */
++static void test_noexec_seal(void)
++{
++	int fd;
++
++	printf("%s NOEXEC_SEAL\n", memfd_str);
++
++	/* Create with NOEXEC and ALLOW_SEALING */
++	fd = mfd_assert_new("kern_memfd_noexec",
++			    mfd_def_size,
++			    MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_NOEXEC_SEAL);
++	mfd_assert_mode(fd, 0666);
++	mfd_assert_has_seals(fd, F_SEAL_EXEC);
++	mfd_fail_chmod(fd, 0777);
++	close(fd);
++
++	/* Create with NOEXEC but without ALLOW_SEALING */
++	fd = mfd_assert_new("kern_memfd_noexec",
++			    mfd_def_size,
++			    MFD_CLOEXEC | MFD_NOEXEC_SEAL);
++	mfd_assert_mode(fd, 0666);
++	mfd_assert_has_seals(fd, F_SEAL_EXEC);
++	mfd_fail_chmod(fd, 0777);
++	close(fd);
++}
++
++static void test_sysctl_child(void)
++{
++	int fd;
++
++	printf("%s sysctl 0\n", memfd_str);
++	sysctl_assert_write("0");
++	fd = mfd_assert_new("kern_memfd_sysctl_0",
++			    mfd_def_size,
++			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
++
++	mfd_assert_mode(fd, 0777);
++	mfd_assert_has_seals(fd, 0);
++	mfd_assert_chmod(fd, 0644);
++	close(fd);
++
++	printf("%s sysctl 1\n", memfd_str);
++	sysctl_assert_write("1");
++	fd = mfd_assert_new("kern_memfd_sysctl_1",
++			    mfd_def_size,
++			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
++
++	mfd_assert_mode(fd, 0666);
++	mfd_assert_has_seals(fd, F_SEAL_EXEC);
++	mfd_fail_chmod(fd, 0777);
++	sysctl_fail_write("0");
++	close(fd);
++
++	printf("%s sysctl 2\n", memfd_str);
++	sysctl_assert_write("2");
++	mfd_fail_new("kern_memfd_sysctl_2",
++		MFD_CLOEXEC | MFD_ALLOW_SEALING);
++	sysctl_fail_write("0");
++	sysctl_fail_write("1");
++}
++
++static int newpid_thread_fn(void *arg)
++{
++	test_sysctl_child();
++	return 0;
++}
++
++static void test_sysctl_child2(void)
++{
++	int fd;
++
++	sysctl_fail_write("0");
++	fd = mfd_assert_new("kern_memfd_sysctl_1",
++			    mfd_def_size,
++			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
++
++	mfd_assert_mode(fd, 0666);
++	mfd_assert_has_seals(fd, F_SEAL_EXEC);
++	mfd_fail_chmod(fd, 0777);
++	close(fd);
++}
++
++static int newpid_thread_fn2(void *arg)
++{
++	test_sysctl_child2();
++	return 0;
++}
++static pid_t spawn_newpid_thread(unsigned int flags, int (*fn)(void *))
++{
++	uint8_t *stack;
++	pid_t pid;
++
++	stack = malloc(STACK_SIZE);
++	if (!stack) {
++		printf("malloc(STACK_SIZE) failed: %m\n");
++		abort();
++	}
++
++	pid = clone(fn,
++		    stack + STACK_SIZE,
++		    SIGCHLD | flags,
++		    NULL);
++	if (pid < 0) {
++		printf("clone() failed: %m\n");
++		abort();
++	}
++
++	return pid;
++}
++
++static void join_newpid_thread(pid_t pid)
++{
++	waitpid(pid, NULL, 0);
++}
++
++/*
++ * Test sysctl
++ * A very basic sealing test to see whether setting/retrieving seals works.
++ */
++static void test_sysctl(void)
++{
++	int pid = spawn_newpid_thread(CLONE_NEWPID, newpid_thread_fn);
++
++	join_newpid_thread(pid);
++
++	printf("%s child ns\n", memfd_str);
++	sysctl_assert_write("1");
++
++	pid = spawn_newpid_thread(CLONE_NEWPID, newpid_thread_fn2);
++	join_newpid_thread(pid);
++}
++
+ /*
+  * Test sharing via dup()
+  * Test that seals are shared between dupped FDs and they're all equal.
+@@ -1173,13 +1387,15 @@ int main(int argc, char **argv)
+ 
+ 	test_create();
+ 	test_basic();
++	test_exec_seal();
++	test_exec_no_seal();
++	test_noexec_seal();
+ 
+ 	test_seal_write();
+ 	test_seal_future_write();
+ 	test_seal_shrink();
+ 	test_seal_grow();
+ 	test_seal_resize();
+-	test_seal_exec();
+ 
+ 	test_share_dup("SHARE-DUP", "");
+ 	test_share_mmap("SHARE-MMAP", "");
+@@ -1195,6 +1411,8 @@ int main(int argc, char **argv)
+ 	test_share_fork("SHARE-FORK", SHARED_FT_STR);
+ 	join_idle_thread(pid);
+ 
++	test_sysctl();
++
+ 	printf("memfd: DONE\n");
+ 
+ 	return 0;
 -- 
 2.39.0.rc1.256.g54fd8350bd-goog
 
