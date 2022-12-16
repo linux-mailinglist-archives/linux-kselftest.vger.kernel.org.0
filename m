@@ -2,72 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D02064F350
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Dec 2022 22:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8A564F374
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Dec 2022 22:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiLPVpK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Dec 2022 16:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S229613AbiLPVr4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Dec 2022 16:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLPVpI (ORCPT
+        with ESMTP id S229635AbiLPVrk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Dec 2022 16:45:08 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E89D32B9C;
-        Fri, 16 Dec 2022 13:45:07 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so2700240wms.2;
-        Fri, 16 Dec 2022 13:45:07 -0800 (PST)
+        Fri, 16 Dec 2022 16:47:40 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343E1B43
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Dec 2022 13:47:36 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso7461752pjt.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Dec 2022 13:47:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GRK3ufbYho0z9LiSN86FnA5BN6pv7SkyPTFsiET5xIc=;
-        b=FqV5ZpDNvorXYyLpowDzrdKInEILpDvNy30qKoV0gMOzQMUp5S8UxLXlhmghPi9Hkg
-         Em+Oib6+DVksyWYEIGRYuMAS520rW7LCPEvDvcMkdgjPhzWlNas86EaayO0lrmy8goAp
-         zmrgLWBmZnD3wuFLt24FMF+qqE/GNufngpY7dLDdqpIiFJED7tsLdFHZUMkOYZzNPRYs
-         MjepnAYaSUsxxARCMosTLXJfDjEjEvIwupu6S278/exYqeXhmP15EpdYRpf0kmJuZ450
-         tjn7uvnzevFuIf6z8pKic6CcVSKcgaHOVVZe1XkjrtbxBbi2oYQsCf2GPThziw0XxqVD
-         w7SA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6nVEs5xFKdjJrb7rw+tJ+EGskEE/XSoBaU5tE1Of2UM=;
+        b=imch457wLU85EdPzcALjROdhazTLRL8lGUTPNwvtmi9e/Zx5tvC5qObvSwlPANkyp7
+         IbI5E4saBVEEk8pKdB8uc9IxGwWPBvM9xjE8D9Opdg1/orL++y/vOMdMKASdhvX0/1mt
+         cQ8ks02Vdm62J08IecNC24yv+sglbd382CWEybZDHpvlzWPAcR7m8k8CaYYL+7bY/Fsd
+         U+wIMsGKUpqvjcTyRzT8D1vT+Yx/q0ViD/qBaWXyVKjK69WcKqRySzzK4a4iOaX60vWU
+         tw1r1xQAEiAzoK/2AARS4tOiF/Uwf6la+eYVZNPyuaTrycHB9PtkJ9brVbyAreybaBbo
+         Wi4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GRK3ufbYho0z9LiSN86FnA5BN6pv7SkyPTFsiET5xIc=;
-        b=5xQhrrmPk6ne94Qff6jLjtvKvRBPZbCYHrRyG+iLHoIJOqp++pSgDYm7J9v8O4Snxw
-         etEkwOlAG1psgXfiAy8++wXxlPVzvzXJ8AbWesN/mw3kQiNKQloEuXa+tuqphdKjYeX8
-         adis7jvL/KXUCucQ6LHuIx67w7bVmZeR9nqeycPuYkPkFmxXDGj6zhZJWmlRdaP+Q4o3
-         B3tVLb/iWurH4U0xs/+wW0Mu6zyy22dYdfxOXagdG9Bxm7c6eibMMR7zD+b8bvMYLwO6
-         zg1s3dxSxsLKeJMmIpi6igybL3m4R6eNFxNlyOg2sTM2Dv4EEItjGMNS2yGL+9ZjltTY
-         kDDQ==
-X-Gm-Message-State: ANoB5pkGNLmxTWk7IC9ySKqQGfsU2xyeHl/P6Kq8qYku0AMRVjCqu00D
-        tzQERjftOU296/qxtDtFHq4=
-X-Google-Smtp-Source: AA0mqf6VMLjHVjuSEBVqErF+mL/E0FJGDdBthNbYiNUdxFDFCpUa//9B+fdATpcwXQjf3zXLFPzupg==
-X-Received: by 2002:a05:600c:4fd1:b0:3cf:a08f:10a5 with SMTP id o17-20020a05600c4fd100b003cfa08f10a5mr27514173wmq.31.1671227105543;
-        Fri, 16 Dec 2022 13:45:05 -0800 (PST)
-Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.googlemail.com with ESMTPSA id z19-20020a05600c221300b003a3170a7af9sm3728762wml.4.2022.12.16.13.45.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 13:45:04 -0800 (PST)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Jakub Matena <matenajakub@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH] selftest/vm: add mremap expand merge offset test
-Date:   Fri, 16 Dec 2022 21:44:36 +0000
-Message-Id: <20221216214436.405071-1-lstoakes@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        bh=6nVEs5xFKdjJrb7rw+tJ+EGskEE/XSoBaU5tE1Of2UM=;
+        b=PAgHdXvwG92yggKJT8tlsEHpDMbOtQcoxTA0EUsT8HQ6y9BmSx+xXN/rnsrblQW8Wl
+         tAtlBd3xkxiFFYmSCuzeT853Qu+r8ukNYiVK8LPmfD3Nv8MIpdDQ4sEpOGneiOapedVe
+         RJOGZI4o/3MLCGQy8bS4MIJnVU+40eu6eUq6J/nmpqltvPhXE7WpCqNQVSF09k9rwRWb
+         P75Agxv6FxG0NhApnlMT4aURc4Avci1ZnIj+ixx+o6wHYWd201+4S9q++39hshcWEtMr
+         KEZTIb0V2ZRfDJYEO1PIvuCpUkLUEuhxEec9Dnbf3M3DM294Xy6xr66OL7qyXgTR/PLE
+         DunQ==
+X-Gm-Message-State: AFqh2krm5MY7313jGdAqJPudS8s0arK7JnbYTbnSpBMSkvemwZHoNcAl
+        n+hVy5y3pgUI6rXdGmtqzQ27zzq9hxtmLkq3Ei4EiQ==
+X-Google-Smtp-Source: AMrXdXujucDbis+jisu/8phFW07nKafYIDiwu/+Zr6WdeALYIoQUEtnKDq4oRFNwWnebww/zp5jU4JPy+wNaMFqJTKM=
+X-Received: by 2002:a17:90a:4612:b0:219:a43b:1006 with SMTP id
+ w18-20020a17090a461200b00219a43b1006mr1266289pjg.195.1671227255426; Fri, 16
+ Dec 2022 13:47:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221207154939.2532830-1-jeffxu@google.com> <20221207154939.2532830-4-jeffxu@google.com>
+ <202212080821.5AE7EE99@keescook> <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+ <Y5yS8wCnuYGLHMj4@x1n> <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
+ <20221216094259.bec91e4abd6cf54a05ce2813@linux-foundation.org>
+ <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com> <202212161233.85C9783FB@keescook>
+In-Reply-To: <202212161233.85C9783FB@keescook>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Fri, 16 Dec 2022 13:46:58 -0800
+Message-ID: <CALmYWFuENPRvCAOF6of=Ufct5jjAbJ=iDyH7eODhdbm24uAK3Q@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>, jeffxu@chromium.org,
+        skhan@linuxfoundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,174 +77,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test to assert that we can mremap() and expand a mapping starting
-from an offset within an existing mapping. We unmap the last page in a 3
-page mapping to ensure that the remap should always succeed, before
-remapping from the 2nd page.
+On Fri, Dec 16, 2022 at 12:35 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Fri, Dec 16, 2022 at 10:11:44AM -0800, Jeff Xu wrote:
+> > Once per boot seems too little, it would be nice if we can list all processes.
+> > I agree ratelimited might be too much.
+> > There is a feature gap here for logging.
+> >
+> > Kees, what do you think ?
+>
+> I agree once per boot is kind of frustrating "I fixed the one warning,
+> oh, now it's coming from a different process". But ratelimit is, in
+> retrospect, still too often.
+>
+> Let's go with per boot -- this should be noisy "enough" to get the
+> changes in API into the callers without being too much of a hassle.
+>
+Agreed.  Let's go with per boot.
 
-This is additionally a regression test for the issue solved in "mm, mremap:
-fix mremap() expanding vma with addr inside vma" and confirmed to fail
-prior to the change and pass after it.
+Hi Andrew, what is your preference ? I can send a patch  or you
+directly fix it in mm-unstable ?
 
-Finally, this patch updates the existing mremap expand merge test to check
-error conditions and reduce code duplication between the two tests.
+Thanks
+-Jeff
 
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- tools/testing/selftests/vm/mremap_test.c | 111 +++++++++++++++++++----
- 1 file changed, 93 insertions(+), 18 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
-index 9496346973d4..28a17d4e8afd 100644
---- a/tools/testing/selftests/vm/mremap_test.c
-+++ b/tools/testing/selftests/vm/mremap_test.c
-@@ -119,30 +119,19 @@ static unsigned long long get_mmap_min_addr(void)
- }
-
- /*
-- * This test validates that merge is called when expanding a mapping.
-- * Mapping containing three pages is created, middle page is unmapped
-- * and then the mapping containing the first page is expanded so that
-- * it fills the created hole. The two parts should merge creating
-- * single mapping with three pages.
-+ * Using /proc/self/maps, assert that the specified address range is contained
-+ * within a single mapping.
-  */
--static void mremap_expand_merge(unsigned long page_size)
-+static bool is_range_mapped(void *start, void *end)
- {
--	char *test_name = "mremap expand merge";
- 	FILE *fp;
- 	char *line = NULL;
- 	size_t len = 0;
- 	bool success = false;
--	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
--
--	munmap(start + page_size, page_size);
--	mremap(start, page_size, 2 * page_size, 0);
-
- 	fp = fopen("/proc/self/maps", "r");
--	if (fp == NULL) {
--		ksft_test_result_fail("%s\n", test_name);
--		return;
--	}
-+	if (fp == NULL)
-+		return false;
-
- 	while (getline(&line, &len, fp) != -1) {
- 		char *first = strtok(line, "- ");
-@@ -150,16 +139,101 @@ static void mremap_expand_merge(unsigned long page_size)
- 		char *second = strtok(NULL, "- ");
- 		void *second_val = (void *) strtol(second, NULL, 16);
-
--		if (first_val == start && second_val == start + 3 * page_size) {
-+		if (first_val <= start && second_val >= end) {
- 			success = true;
- 			break;
- 		}
- 	}
-+
-+	fclose(fp);
-+	return success;
-+}
-+
-+/*
-+ * This test validates that merge is called when expanding a mapping.
-+ * Mapping containing three pages is created, middle page is unmapped
-+ * and then the mapping containing the first page is expanded so that
-+ * it fills the created hole. The two parts should merge creating
-+ * single mapping with three pages.
-+ */
-+static void mremap_expand_merge(unsigned long page_size)
-+{
-+	char *test_name = "mremap expand merge";
-+	bool success = false;
-+	int errsv = 0;
-+	char *remap;
-+	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+
-+	if (start == MAP_FAILED) {
-+		errsv = errno;
-+		goto error;
-+	}
-+
-+	munmap(start + page_size, page_size);
-+	remap = mremap(start, page_size, 2 * page_size, 0);
-+	if (remap == MAP_FAILED) {
-+		errsv = errno;
-+		munmap(start, page_size);
-+		munmap(start + 2 * page_size, page_size);
-+		goto error;
-+	}
-+
-+	success = is_range_mapped(start, start + 3 * page_size);
-+
-+	munmap(start, 3 * page_size);
-+	goto out;
-+
-+error:
-+	ksft_print_msg("Unexpected mapping/remapping error: %s\n",
-+		       strerror(errsv));
-+out:
-+	if (success)
-+		ksft_test_result_pass("%s\n", test_name);
-+	else
-+		ksft_test_result_fail("%s\n", test_name);
-+}
-+
-+/*
-+ * Similar to mremap_expand_merge() except instead of removing the middle page,
-+ * we remove the last then attempt to remap offset from the second page. This
-+ * should result in the mapping being restored to its former state.
-+ */
-+static void mremap_expand_merge_offset(unsigned long page_size)
-+{
-+
-+	char *test_name = "mremap expand merge offset";
-+	bool success = false;
-+	int errsv = 0;
-+	char *remap;
-+	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+
-+	if (start == MAP_FAILED) {
-+		errsv = errno;
-+		goto error;
-+	}
-+
-+	/* Unmap final page to ensure we have space to expand. */
-+	munmap(start + 2 * page_size, page_size);
-+	remap = mremap(start + page_size, page_size, 2 * page_size, 0);
-+	if (remap == MAP_FAILED) {
-+		errsv = errno;
-+		munmap(start, 2 * page_size);
-+		goto error;
-+	}
-+
-+	success = is_range_mapped(start, start + 3 * page_size);
-+	goto out;
-+
-+error:
-+	ksft_print_msg("Unexpected mapping/remapping error: %s\n",
-+		       strerror(errsv));
-+out:
- 	if (success)
- 		ksft_test_result_pass("%s\n", test_name);
- 	else
- 		ksft_test_result_fail("%s\n", test_name);
--	fclose(fp);
- }
-
- /*
-@@ -459,6 +533,7 @@ int main(int argc, char **argv)
- 				     pattern_seed);
-
- 	mremap_expand_merge(page_size);
-+	mremap_expand_merge_offset(page_size);
-
- 	if (run_perf_tests) {
- 		ksft_print_msg("\n%s\n",
---
-2.38.1
+> --
+> Kees Cook
