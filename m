@@ -2,75 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F3664E7A6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Dec 2022 08:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC1A64E818
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Dec 2022 09:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbiLPHRu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Dec 2022 02:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
+        id S229561AbiLPIVY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Dec 2022 03:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiLPHRt (ORCPT
+        with ESMTP id S229495AbiLPIVW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Dec 2022 02:17:49 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFAA13E34
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Dec 2022 23:17:47 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id d185so1560732vsd.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Dec 2022 23:17:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eVKIG5UBizWKBtyvWledYHpd24ATpHjeEXZ43I4enuw=;
-        b=WtapbrBCroAdv1i3g6k0p44tGyGkde5hfterw3/neA89osupsjYNAD43bsAmeu7S9h
-         vZ/mtyMac20wxtOdbcXx7mCGQK/bUVCrIBb8QH6gpCTWRHCVS9E+D76BzY4Xa1bsom5o
-         hXwig+q190ajg6aTrQjj8usU3APP9psYFJpXAa4JpZU5O6ojwAEVYZCm92JHtVv+TfBw
-         liIltF89E9FiH1qbwM5coNwSGbwfDvHl9wSeF4BKDSYmWhxZzegTrKjnA+hDxVaIUQto
-         /u+BDzOzUuxRIsmEjomKcG3Q/QYDrToYBkAg2SvK2RPfk5Ya8jS3C+HStq38RNn2yRMn
-         opUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eVKIG5UBizWKBtyvWledYHpd24ATpHjeEXZ43I4enuw=;
-        b=NWXyiIArCDKpc1RWlANUFMPWTLbRwuB7Om4VAzY2dIffn3Ghbw11roYbxgmJZnyQWQ
-         GA0GtBMrBPY91UHHv4fS5dT3SWF65ZQkU+KxhRCfNzzkRKZdgHKTk8mmjIMMxvMLFlTh
-         lx1y9WzPWUEQFozdEnCl1CaesbhrunK3akyNiZv5d9yntl0J5p+cuKsi2TaeFhFyjsaO
-         hSA3eJwq88VXXmJhJxdhFfZK4hXvQmJPqQQKW6pOFV/Z+DR0SF76vfBRg7Z5dgkcHle8
-         wt6afzbl9tZjPUcJM1sAbxLQuzeBvf6wKJRx3eLuFCZGbeR3Aag5SOt8JJrF2oDJgocv
-         uMzQ==
-X-Gm-Message-State: ANoB5pkeV2+kh0ho6xbWicJZ2tOl6+K2B6ZChtk7lv/yB3NQDWvHLLui
-        mDPNeXgDYCcizhkfZEfqUN2orUa0/feAzowWNAJcWQ==
-X-Google-Smtp-Source: AA0mqf40vUhkxz9DjVcOn/rlDEPQREYWPww3U81Tfud40lkmrRnj6MiWA6kycUdu91B43riarqIixR4q1a9rOGfypbs=
-X-Received: by 2002:a05:6102:5785:b0:3b0:7178:7fe8 with SMTP id
- dh5-20020a056102578500b003b071787fe8mr41775934vsb.38.1671175066606; Thu, 15
- Dec 2022 23:17:46 -0800 (PST)
+        Fri, 16 Dec 2022 03:21:22 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Dec 2022 00:21:20 PST
+Received: from esa8.fujitsucc.c3s2.iphmx.com (esa8.fujitsucc.c3s2.iphmx.com [68.232.159.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953C5120A0;
+        Fri, 16 Dec 2022 00:21:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1671178881; x=1702714881;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=DOVAsG92tNRTqJQeIS4gzRjs1XJUSphFO3n8a95zzSk=;
+  b=fTjVjtlc6WvN5dOTLZxVVwVPn4bUM0vj2VzSrUf0niwnR+CLDFzPlBbj
+   B6OL+Uwn/kFZwEWM11i2I8+pMjGljYo9031VUzEdyG5ci4/WOVxUfku56
+   wHz9b+2K8oKhiBxNuDbo5eKWfP+98At3NJGrUMJ+v3IAYH8YuGmWO4Axv
+   6kPT5L69zD/j2WLKy31cZg8W6vXORzc85E7LHKiifjxzcT9G+x5G9h5Q+
+   FVN//tR3SrF6ieK3+r4qmof8Bh0W14h14tLNNQnKHUKC0fPG/KuEhx7By
+   ng7lay92NNYJLJsQEBw861MJFjmnXJPw7hcRvVw8N7Q+u33KeL7zAq9OG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="72599434"
+X-IronPort-AV: E=Sophos;i="5.96,249,1665414000"; 
+   d="scan'208";a="72599434"
+Received: from mail-os0jpn01lp2104.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.104])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 17:20:13 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bsDdWzMSEFgkugro+OErYT8UwrokJI+vKb33mEY25tsvzwQG7MFqjAfFY1OafAXcuvEqUf5TKgcnxI76sSUmnavez3gqJG+Vq6VEjl2IKNcXfHCzvEhIBgLN5TTabNPt/Fy+WN65euE/vFmCvIQ8gaWq7OFrfxI6XYkyiKuYLzAq4ISVphiH2fExtW613SWGJzjaQ/dTQHKNwO/7Cr95QzF7e2YagzjjASLk2vzTGfAb3C+Yp+iWLz0l8GJSdB+ajUG04j70MoVo3SN5f9SFE+wu35FjofVPUEGHHaly/ArMUjLneeevwVIRbXPVkERUEbm384u8ZB7vuhiLAvsKCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DOVAsG92tNRTqJQeIS4gzRjs1XJUSphFO3n8a95zzSk=;
+ b=QYS5VxS54Nvj4HHzRpUSNnI5n6iIRhoQtHdlAEFz0pzb9sROuv+sGUqGPejrXMlp/wWSG7o7xKtPwsP5GKb9fTbCJTP5ESoaXXtgWLUgWyG5y3bMpWrHHwopvLiRWnePCblvwEiyqCSMm/caFQ0rrHWveKilqcnXyH4cUVv3oYQHrb4pDfCbk/ICbd2S1Z3cFRJeEZYP587yGPNO4kL8hNJuLBTqeRdj7ARzfyb1P8UuELoPnlcFcKv7aNrtGzZyBKGDZTw+igE8rnBJEsJJK2rwicYP3GYAr4kSyt2w+qQtZNC8ALCKX0vw2CMgUfCsH5o8Ot4f34rjXWD+uCfgjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+Received: from OSZPR01MB6328.jpnprd01.prod.outlook.com (2603:1096:604:e8::8)
+ by TYAPR01MB5786.jpnprd01.prod.outlook.com (2603:1096:404:8053::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.15; Fri, 16 Dec
+ 2022 08:20:10 +0000
+Received: from OSZPR01MB6328.jpnprd01.prod.outlook.com
+ ([fe80::5ab2:75fd:5b59:b295]) by OSZPR01MB6328.jpnprd01.prod.outlook.com
+ ([fe80::5ab2:75fd:5b59:b295%8]) with mapi id 15.20.5924.012; Fri, 16 Dec 2022
+ 08:20:10 +0000
+From:   "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
+To:     'Reinette Chatre' <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: RE: [PATCH v4 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+Thread-Topic: [PATCH v4 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+Thread-Index: AQHY+iGKVtajSkrGmEuJ9jg67HQSRq5M00IAgADx+yCABt9YgIACkaeQgACIj4CAAQYgIIAAp8SAgBbrv5A=
+Date:   Fri, 16 Dec 2022 08:20:10 +0000
+Message-ID: <OSZPR01MB632837AC9133DFBD2061637D8BE69@OSZPR01MB6328.jpnprd01.prod.outlook.com>
+References: <20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com>
+ <20221117010541.1014481-5-tan.shaopeng@jp.fujitsu.com>
+ <af1b4e59-2b4b-ddbb-2218-0e2808b718a3@intel.com>
+ <TYAPR01MB6330CDB2C59C58EE77B912538B0F9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+ <ba5a9ef2-b4ca-5c90-cc03-2296586455a6@intel.com>
+ <TYAPR01MB63300F91A0755310E78D98308B159@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+ <ce549bc3-7e54-b1d3-7ec5-4cde66bd468f@intel.com>
+ <TYAPR01MB6330FFB9E5BA7CCDC652EE3F8B149@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+ <9801fa7f-5971-1f5f-1b63-0d672c32fcf1@intel.com>
+In-Reply-To: <9801fa7f-5971-1f5f-1b63-0d672c32fcf1@intel.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?utf-8?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2Uw?=
+ =?utf-8?B?NTBfRW5hYmxlZD10cnVlOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJh?=
+ =?utf-8?B?Yy1hYjRkLTNiMGY0ZmVjZTA1MF9TZXREYXRlPTIwMjItMTItMTZUMDg6MTM6?=
+ =?utf-8?B?NThaOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0?=
+ =?utf-8?B?ZmVjZTA1MF9NZXRob2Q9U3RhbmRhcmQ7IE1TSVBfTGFiZWxfYTcyOTVjYzEt?=
+ =?utf-8?B?ZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX05hbWU9RlVKSVRTVS1SRVNU?=
+ =?utf-8?B?UklDVEVE4oCLOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRk?=
+ =?utf-8?B?LTNiMGY0ZmVjZTA1MF9TaXRlSWQ9YTE5ZjEyMWQtODFlMS00ODU4LWE5ZDgt?=
+ =?utf-8?B?NzM2ZTI2N2ZkNGM3OyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1h?=
+ =?utf-8?B?YjRkLTNiMGY0ZmVjZTA1MF9BY3Rpb25JZD00MTM5YzVmNS1kZTEyLTQzN2Mt?=
+ =?utf-8?B?YmRlNC1hYzY4MzE5YzllOGI7IE1TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00?=
+ =?utf-8?B?MmFjLWFiNGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA=?=
+x-shieldmailcheckerpolicyversion: FJ-ISEC-20181130-VDI-enc
+x-shieldmailcheckermailid: 41489974e2fe424697abedcc0acd9d0e
+x-securitypolicycheck: OK by SHieldMailChecker v2.6.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OSZPR01MB6328:EE_|TYAPR01MB5786:EE_
+x-ms-office365-filtering-correlation-id: 959f92d5-7e87-4ba4-4423-08dadf3e5943
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: oHRqBFmZ02k5ueY1iiFo9Bl4meeYnZg7t42DiuiexfbzdDn7VxfnMjmd7X7PgJOc7NF/IH5uASp+SK5Wrv1AH+JYDMH+biuGuoXVkqXn85Oa8JGDGw41KLOPQ9W0PRBMmXQJntrWWM6zpTHjWNucwp4koQieahoqCIQAiOsUqg5mu+5ELEJ4quq5KCWNKFUZejb5UszJcoEXwz0mgk/AnQxVk8efmd/eDdVFSruhgoswCQYkscgeQKMBV889TjCvgl7jCBgBsc02qEY7CM7E6ib2RB+lpcrVKiZDeROnHZ06t7NehrFI5grGD91ZOXjB4zS47Hp5ffL1x7qyJlaFlSZPd6bv9AOUYwPmaJUbNLV4byNaRESuuDnGPD9vkjFqFI/cyV10Q+EFxW86WvJycar4U/CTJnyWZw6IFCpMBqkM29lJ2gIfeta1j9levkjNGAiMuSyUdbsWvdgEqTXuTVRPQGObLMfMXJkghMALiVrmhn5MZiKSYxgf5IGwkeeXIW57LO1M4x6GmrW21iNN70h0yaA5GpWfGs2hcNb4BTuQ0+OCgs5zUIV0lxm4PeqDe2+w6l90Ue7Z9suaMISaEYpl/4qFuOWhABGMrzsGBXa3+2RmhTlV8+h9wtawdqTHiMqTuhaXURNmDZLyJbgvxbwEl2u9p7Fvbp2B+LatsO2Anuw/CFFDjOA8G0OLf9iNpYugQ2IsIaRSnpqRKTU1z6sZCRkWXrINR88llvIKxOg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSZPR01MB6328.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(136003)(366004)(39860400002)(346002)(1590799012)(451199015)(8936002)(52536014)(33656002)(66476007)(64756008)(66446008)(85182001)(4326008)(8676002)(41300700001)(66946007)(76116006)(66556008)(54906003)(316002)(83380400001)(38100700002)(82960400001)(122000001)(38070700005)(55016003)(71200400001)(478600001)(26005)(86362001)(53546011)(7696005)(186003)(9686003)(6506007)(2906002)(1580799009)(66899015)(110136005)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dUs1QXZkaVVFeUdkeDRPQXBIK0gvd0IvdTN0TktLOUJIb3YvRkI2QnRpN0xS?=
+ =?utf-8?B?VmlkMkZkVzE2VmNjOHVoTkRkSGQ4QnNUM0RGWGprdWV6TjBWbzNqd2xEUWIw?=
+ =?utf-8?B?ZlpTTmRYTmJxYkxheDBGbVVBWG9YZmlQa1hlaEgweEhGUXR0dGpSV0NJcXVo?=
+ =?utf-8?B?WWhQN2E4djJKL2pTaTlDMk1pL0lVd0FoK2ZkMjdZU1h0V3RSZmhIOWR0dFU3?=
+ =?utf-8?B?K3ZhdmhZN0p5eHVaRVQ1aUtIUG02RmJGNEdOdy9qMEZTSXJoTXlBQWZsVjJ2?=
+ =?utf-8?B?VEhrRjk3ci94NGVTVDRmblNlM3FqZmRjQzlhUk1YQTFNa3dLYzhqMmd6QWQz?=
+ =?utf-8?B?aHJpa1pJdkY2YnV2VkF5aDU1YXNSYTJHcndaSVV5WVN6MldmMHhQQXZiTSta?=
+ =?utf-8?B?aWViZXNIQU9FRXV6NG5VWXdNaGl2ejBwY0h6MHJZUEZnL0EwVVVVemdUcEx4?=
+ =?utf-8?B?ZU5SakZxeUUxUmwxNlFXMGVualNHSWFkQnJ5L3dSM0hXSWFUUmY3WVlyN2Ro?=
+ =?utf-8?B?dkhkYkRmMnhZNW12cy80SnNuOUhDaC9aaGRpY09iOFVKY3ZwenBYeERTYys0?=
+ =?utf-8?B?eHFvcFR3QnJ0SktlTzhRSkpPMVdxU0RrSnMyNjBiR0szZUJYdldxQkF3NllZ?=
+ =?utf-8?B?ckIrM0ttQ2tYVEFFdGN5QkFROWtLT3Rpa0MrU3lpZnk4ZEE2bzVWWFZMY2Yy?=
+ =?utf-8?B?d3c5MHp1Zk1yUVc3b2xQYW9JUzlyQ2xwdmJQazg3VnQvS0lNQnhiY0p1ZnY5?=
+ =?utf-8?B?QmZ3RE5YMmliYkZzR0YwUlZ4Z1pBenlBM3pDWVVLZUNTV0hBMVZyZ1E4YVVE?=
+ =?utf-8?B?R21tZkI0TFpPZnJGY052K3o2T0RuNzYvNzBsZC9JczBSOVVvaXJBbGJZWUR6?=
+ =?utf-8?B?S0orMzF5Nm1CVkJOTzZUQWJHSkV3N1F6bFREZVY3ci9vcXRLUWg4ajhZZXRN?=
+ =?utf-8?B?SU11SzdHcllpRWc3S1M1Z1VOTVlRLytndnZqT1pJNldjOXdRbVErVHIzMmdQ?=
+ =?utf-8?B?cit2S0JZVmxRUzdIM0RZbnBZT21lck0xQkR1dkdRdC9UVGxXL051Sk1zR1NU?=
+ =?utf-8?B?MzF6Um9GeVhHdVlTbStyTWZ1MXplMXBTMDc5SFRCTmR0T2JzLzd2QXhmSm00?=
+ =?utf-8?B?RXFURFBkamU5ajRDb2hQWm1MeEZ2dUQ5OTZYek9HelNVU3JVNjl2ZDN1NVpq?=
+ =?utf-8?B?d3hFL3BDczVrS1VDV2IxSWVCbWJObFE0UFRPbkhlTG5ZdnJ0Wm1SU2NQNDFs?=
+ =?utf-8?B?UnB1UzRMbUw5YkFyQk1ncXJBMGxELzZ0VHlYWmpsRGYxSlQ3MmZFRFNyT1dC?=
+ =?utf-8?B?TlEyZHM3aU9sTkZwMDA3eWl2ZDNnYVNIYzlNQzBRNGg3L1RKK2g0TVI1TnRi?=
+ =?utf-8?B?QkRlRDBCeEkzcG1EMHBpVHN3TCttTFVNbDVHWGpETW14U0huZGtBQVV5bUdT?=
+ =?utf-8?B?eStpVVExQzNPWUVvcXZ6bWg2VmZLcmozTitIS0ZSSTIzS2toV1JXWmYyZDU1?=
+ =?utf-8?B?ZXZmL2dYendiOWx3a21SR09LN2p3YXNxRDljd1Y0YlMzTlNyT2habEErbVZR?=
+ =?utf-8?B?Ujk4dStmRlBZNXlPcXYyZ0xCcnc4bU1vR1h0Z2pRbUZhaWFCYkw4WTRkajlI?=
+ =?utf-8?B?M0RweGViOGRTbUlrZ2VQQVhZa0J4Q2xyYklicFNNMWg3ODM2WkY0ZE1iSytQ?=
+ =?utf-8?B?TGFjYlMvM0NtaVFnTEtpL3hRbmoxSDFDT0RsTW1TL21qUFBMNzE4Z0NQbWVB?=
+ =?utf-8?B?OWFkSXloMFlBZXA2RW9mMFN3QjJWUTRSUlB0YUcwUG9wVTNab0dUQ3R6UmtS?=
+ =?utf-8?B?QlpWK0RQQk9lWjJIWHhXQkhsZzB6ZUJpbUJZZzVSc1FSa2k0MFFsOWFRNXRX?=
+ =?utf-8?B?aEZwSDE3aE9vb2VEaE1RN3MyLzk5T1B1U3VPVUJTUlFxSi85Umx1cjhzYUln?=
+ =?utf-8?B?TE11Y1lubURpNDR1Rk9mSmpRRWoxMkp4QUpEc0FYaGw5Y1B1eTNxb1FqTUR0?=
+ =?utf-8?B?MzJmOTkrZkZ0V25ueUZpRjN0NklTN04vbHRGRDZKbHhzcTF1REtVQWRvZi9r?=
+ =?utf-8?B?YnpXVW9BZUEvZWpZNlkydVNqL2dQaVhtaTJFbFRDVGNBUjgyQUpITHkyMWl5?=
+ =?utf-8?B?dkpObDFKa1hBMGRtNFBqbjZJaG1uRXNmRCtVQTNVVUkwL3VKb2VOeGVLdTdz?=
+ =?utf-8?B?MkE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221208061841.2186447-1-davidgow@google.com> <20221208061841.2186447-3-davidgow@google.com>
- <CAGS_qxqUuaGeeUSpERLduvm7f6A7c+psBwUr=RiBFzPFRipHkg@mail.gmail.com>
-In-Reply-To: <CAGS_qxqUuaGeeUSpERLduvm7f6A7c+psBwUr=RiBFzPFRipHkg@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 16 Dec 2022 15:17:35 +0800
-Message-ID: <CABVgOSm8fscdE_uX9=gYBRUBQ1dMYuijxK7odJEbRgVG-VrZOA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Documentation: Add Function Redirection API docs
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Fradley <joefradley@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003a5b3605efecc4f5"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSZPR01MB6328.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 959f92d5-7e87-4ba4-4423-08dadf3e5943
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Dec 2022 08:20:10.4424
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yhfKcTzAGdpTDj3pQa4gpo8x27qpvj/GqiFucXGx95vUA9L8roPXetPziwMrMLBiUmHJdcrmgiA6FkIQf7PGeoMqnTDBIRlrOwqPAsQFPVM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB5786
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,452 +167,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000003a5b3605efecc4f5
-Content-Type: text/plain; charset="UTF-8"
-
-On Fri, 16 Dec 2022 at 02:55, 'Daniel Latypov' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> On Wed, Dec 7, 2022 at 10:18 PM 'David Gow' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > From: Sadiya Kazi <sadiyakazi@google.com>
-> >
-> > Added a new page (functionredirection.rst) that describes the Function
-> > Redirection (static stubbing) API. This page will be expanded if we add,
-> > for example, ftrace-based stubbing.
-> >
-> > In addition,
-> > 1. Updated the api/index.rst page to create an entry for function
-> >    redirection api
-> > 2. Updated the toctree to be hidden, reducing redundancy on the
-> >    generated page.
-> >
-> > Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
-> > Co-developed-by: David Gow <davidgow@google.com>
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> Since I wrote the example code snippets (over at
-> https://kunit.dev/mocking.html#compile-time), I wasn't sure if I
-> should give an Rb tag.
-> But the majority of this doc is text I had no part in writing, so with
-> that caveat:
->
-> Reviewed-by: Daniel Latypov <dlatypov@google.com>
->
-
-Thanks: I'd forgotten we'd adapted that code from the kunit.dev
-website. We'll add you as a Co-developed-by in the next version.
-
-> I noticed a few typos we could fix.
-> The rest of my comments are optional suggestions about rewording some
-> bits and adding `` to identifiers.
->
-
-Most of the lack of `` in identifiers is deliberate: because the
-kerneldoc comments are included, having the identifiers (particularly
-functions and function-like macros, with the () after them)
-automatically get turned into links to the reference documentation
-below by sphinx.
-
-> > ---
-> >
-> > Note that this patch is new to v1 of the series, and wasn't included in
-> > the previous RFCs.
-> >
-> > ---
-> >  .../kunit/api/functionredirection.rst         | 162 ++++++++++++++++++
-> >  Documentation/dev-tools/kunit/api/index.rst   |  13 +-
-> >  2 files changed, 172 insertions(+), 3 deletions(-)
-> >  create mode 100644 Documentation/dev-tools/kunit/api/functionredirection.rst
-> >
-> > diff --git a/Documentation/dev-tools/kunit/api/functionredirection.rst b/Documentation/dev-tools/kunit/api/functionredirection.rst
-> > new file mode 100644
-> > index 000000000000..fc7644dfea65
-> > --- /dev/null
-> > +++ b/Documentation/dev-tools/kunit/api/functionredirection.rst
-> > @@ -0,0 +1,162 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +========================
-> > +Function Redirection API
-> > +========================
-> > +
-> > +Overview
-> > +========
-> > +
-> > +When writing unit tests, it's important to be able to isolate the code being
-> > +tested from other parts of the kernel. This ensures the reliability of the test
-> > +(it won't be affected by external factors), reduces dependencies on specific
-> > +hardware or config options (making the test easier to run), and protects the
-> > +stability of the rest of the system (making it less likely for test-specific
-> > +state to interfere with the rest of the system).
-> > +
-> > +While for some code (typically generic data structures, helpers, and toher
->
-> s/toher/other
->
-
-Nice catch, thanks.
-
-> > +"pure function") this is trivial, for others (like device drivers, filesystems,
->
-> s/function/functions, perhaps?
->
-
-Will fix, thanks.
-
-> > +core subsystems) the code is heavily coupled with other parts of the kernel.
-> > +
-> > +This often involves global state in some way: be it global lists of devices,
->
-> s/be it/be it a
->
-
-Will change to "be it a global list" (singular).
-
-> > +the filesystem, or hardware state, this needs to be either carefully managed,
-> > +isolated, and restored, or avoided altogether by replacing access to and
-> > +mutation of this state with a "fake" or "mock" variant.
->
-> optional nit: this sentence feels a bit long.
-> If we can find a way to split it up, that would be nice.
->
-> Perhaps something like:
-> This coupling is often due to global state: be it a global list of devices...
-> Tests need to either carefully manage, isolate, and restore state or
-> they can avoid it altogether by...
->
-
-Sounds good to me! Will go with this.
-
-> > +
-> > +This can be done by refactoring the code to abstract out access to such state,
-> > +by introducing a layer of indirection which can use or emulate a separate set of
->
-> optional nit: "abstract our access... by introducing a layer of
-> indirection" feels a bit redundant.
-> These are the same thing.
->
-> Perhaps instead: "abstract out access to such state so tests can..."
->
-
-Hmm... I see what you mean, but do feel that explicitly calling out "a
-layer of indirection" is more clear than just making it more
-"abstract".
-I'll play around with the wording of this.
-
-> > +test state. However, such refactoring comes with its own costs (and undertaking
-> > +significant refactoring before being able to write tests is suboptimal).
-> > +
-> > +A simpler way to intercept some of the function calls is to use function
-> > +redirection via static stubs.
->
-> Maybs s/intercept/replace?
-> Intercept makes it sounds like we're supporting "test spies", but if
-> you use the macro below, you have no way of implementing such a thing.
->
-> E.g. it makes it sound like we can have
->   int func() {
->     if (intercepted) { ++func_called; }
->     // still run the rest of func
->   }
->
-
-Yeah, test spies may be a feature we want to add later, but I agree
-this could be confusing.
-
-> > +
-> > +
-> > +Static Stubs
-> > +============
-> > +
-> > +Static stubs are a way of redirecting calls to one function (the "real"
-> > +function) to another function (the "replacement" function).
-> > +
-> > +It works by adding a macro to the "real" function which checks to see if a test
-> > +is running, and if a replacement function is available. If so, that function is
-> > +called in place of the original.
-> > +
-> > +Using static stubs is pretty straightforward:
-> > +
-> > +1. Add the KUNIT_STATIC_STUB_REDIRECT() macro to the start of the "real"
->
-> nit: should we use ``KUNIT_STATIC_STUB_REDIRECT()`` to format it as code?
->
-
-As noted above, sphinx will link to the reference for the macro if we
-don't use quotes.
-
-> > +   function.
-> > +
-> > +   This should be the first statement in the function, after any variable
-> > +   declarations. KUNIT_STATIC_STUB_REDIRECT() takes the name of the
->
-> ditto ``
->
-
-Again, sphinx links without ``.
-
-> > +   function, followed by all of the arguments passed to the real function.
-> > +
-> > +   For example:
-> > +
-> > +   .. code-block:: c
-> > +
-> > +       void send_data_to_hardware(const char *str)
-> > +       {
-> > +               KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
-> > +               /* real implementation */
-> > +       }
-> > +
-> > +2. Write one or more replacement functions.
-> > +
-> > +   These functions should have the same function signature as the real function.
-> > +   In the event they need to access or modify test-specific state, they can use
-> > +   kunit_get_current_test() to get a struct kunit pointer. This can then
->
-> ditto for ``kunit_get_current_test`` and ``struct kunit``
->
-
-Sphinx will also recognise the 'struct' keyword here, and should link
-to the documentation for struct kunit.
-
-> > +   be passed to the expectation/assertion macros, or used to look up KUnit
-> > +   resources.
-> > +
-> > +   For example:
-> > +
-> > +   .. code-block:: c
-> > +
-> > +       void fake_send_data_to_hardware(const char *str)
-> > +       {
-> > +               struct kunit *test = kunit_get_current_test();
-> > +               KUNIT_EXPECT_STREQ(test, str, "Hello World!");
-> > +       }
-> > +
-> > +3. Activate the static stub from your test.
-> > +
-> > +   From within a test, the redirection can be enabled with
-> > +   kunit_activate_static_stub(), which accepts a struct kunit pointer,
->
-> ditto here
->
-> > +   the real function, and the replacement function. You can call this several
-> > +   times with different replacement functions to swap out implementations of the
-> > +   function.
-> > +
-> > +   In our example, this would be
-> > +
-> > +   .. code-block:: c
-> > +
-> > +        kunit_activate_static_stub(test,
-> > +                                   send_data_to_hardware,
-> > +                                   fake_send_data_to_hardware);
-> > +
-> > +4. Call (perhaps indirectly) the real function.
-> > +
-> > +   Once the redirection is activated, any call to the real function will call
-> > +   the replacement function instead. Such calls may be buried deep in the
-> > +   implementation of another function, but must occur from the test's kthread.
-> > +
-> > +   For example:
-> > +
-> > +   .. code-block:: c
-> > +
-> > +        send_data_to_hardware("Hello World!"); /* Succeeds */
-> > +        send_data_to_hardware("Something else"); /* Fails the test. */
-> > +
-> > +5. (Optionally) disable the stub.
-> > +
-> > +   When you no longer need it, the redirection can be disabled (and hence the
-> > +   original behaviour of the 'real' function resumed) using
-> > +   kunit_deactivate_static_stub(). If the stub is not manually deactivated, it
-> > +   will nevertheless be disabled when the test finishes.
->
-> optional nit: this block of text feels overly long to me, personally.
->
-> Perhaps something shorter like:
-> When you no longer need it, you can disable the stub manually by
-> calling ``kunit_deactive_static_stub()``.
-> Otherwise, it will be disabled automatically at the end of the test.
->
-
-Hmm... I'm not sure if the explicit mention that this resumes the
-normal "real" function behaviour is helpful. Will consider for v2.
-
-> > +
-> > +   For example:
-> > +
-> > +   .. code-block:: c
-> > +
-> > +        kunit_deactivate_static_stub(test, send_data_to_hardware);
-> > +
-> > +
-> > +It's also possible to use these replacement functions to test to see if a
-> > +function is called at all, for example:
-> > +
-> > +.. code-block:: c
-> > +
-> > +       void send_data_to_hardware(const char *str)
-> > +       {
-> > +               KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
-> > +               /* real implementation */
-> > +       }
-> > +
-> > +       /* In test file */
-> > +       int times_called = 0;
-> > +       void fake_send_data_to_hardware(const char *str)
-> > +       {
-> > +               /* fake implementation */
->
-> minor nit: in the original example, this body was basically a placeholder.
-> Given we're starting this section with saying "here's how you can
-> count the function calls", this is the only thing you'd ever put in
-> the body.
->
-> So I'd prefer we just drop the comment.
->
-
-Makes sense, will do.
-
-> > +               times_called++;
-> > +       }
-> > +       ...
-> > +       /* In the test case, redirect calls for the duration of the test */
-> > +       kunit_activate_static_stub(test, send_data_to_hardware, fake_send_data_to_hardware);
-> > +
-> > +       send_data_to_hardware("hello");
-> > +       KUNIT_EXPECT_EQ(test, times_called, 1);
-> > +
-> > +       /* Can also deactivate the stub early, if wanted */
-> > +       kunit_deactivate_static_stub(test, send_data_to_hardware);
-> > +
-> > +       send_data_to_hardware("hello again");
-> > +       KUNIT_EXPECT_EQ(test, times_called, 1);
-> > +
-> > +
-> > +
-> > +API Reference
-> > +=============
-> > +
-> > +.. kernel-doc:: include/kunit/static_stub.h
-> > +   :internal:
-> > diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
-> > index 45ce04823f9f..2d8f756aab56 100644
-> > --- a/Documentation/dev-tools/kunit/api/index.rst
-> > +++ b/Documentation/dev-tools/kunit/api/index.rst
-> > @@ -4,17 +4,24 @@
-> >  API Reference
-> >  =============
-> >  .. toctree::
-> > +       :hidden:
-> >
-> >         test
-> >         resource
-> > +       functionredirection
-> >
-> > -This section documents the KUnit kernel testing API. It is divided into the
-> > +
-> > +This page documents the KUnit kernel testing API. It is divided into the
-> >  following sections:
-> >
-> >  Documentation/dev-tools/kunit/api/test.rst
-> >
-> > - - documents all of the standard testing API
-> > + - Documents all of the standard testing API
-> >
-> >  Documentation/dev-tools/kunit/api/resource.rst
-> >
-> > - - documents the KUnit resource API
-> > + - Documents the KUnit resource API
-> > +
-> > +Documentation/dev-tools/kunit/api/functionredirection.rst
-> > +
-> > + - Documents the KUnit Function Redirection API
-> > --
-> > 2.39.0.rc0.267.gcb52ba06e7-goog
->
->
-
-Cheers,
--- David
-
---0000000000003a5b3605efecc4f5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAq
-brvYSTnZ/5bXHmsTyBvUD/xTHXpgKn/y+y5YHzMAhDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjEyMTYwNzE3NDdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEATkC/dNnb4pwrnP7N4Qk7
-3kjaN9rXUwS0LWxorWPb1Gv8JM5SSAaeqpks67SmeoEOaQZaGGZi8Qc4ygQDsv/jJfmXp1JshPvM
-h024ZxeP7a03hFSAsGzL689I6gAhYxlV66gw89u+MaakMV/r5QWbzF51sEeo9EFvAUR/njcuGRKs
-KKzzelX0mVi+B31Nh3vJ4dQPLj2ProPW+iEWn8w7gxC12quNgDidRwcIb8yP7eUM4GVfZXFOK3O6
-xSrIzeH3pc3dI6FFNrQ2b8a1pZmQbtLHMxYCgNQzLy1VZf/OqWzzcoixm2HZif7Mq6kg2sNOLuWq
-6Lc8iq0uVM/2vNJZHQ==
---0000000000003a5b3605efecc4f5--
+SGkgUmVpbmV0dGUNCg0KPiBPbiAxMi8xLzIwMjIgMTI6MjAgQU0sIFNoYW9wZW5nIFRhbiAoRnVq
+aXRzdSkgd3JvdGU6DQo+ID4gSGkgUmVpbmV0dGUsDQo+ID4NCj4gPj4gT24gMTEvMzAvMjAyMiAx
+MjozMiBBTSwgU2hhb3BlbmcgVGFuIChGdWppdHN1KSB3cm90ZToNCj4gPj4NCj4gPj4+IFJlbW92
+aW5nIGN0cmxfaGFuZGxlcigpIGlzIG9ubHkgcGFydCBvZiB0aGUgZml4IGluIHRoZSBuZXh0IHZl
+cnNpb24odjUpLg0KPiA+Pj4gQWxsIGZpeGVzIGFzIGZvbGxvd3MuDQo+ID4+Pg0KPiA+Pj4gLS0t
+IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcmVzY3RybC9jYXRfdGVzdC5jDQo+ID4+PiArKysg
+Yi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9yZXNjdHJsL2NhdF90ZXN0LmMNCj4gPj4+IEBAIC05
+OCwxMiArOTgsMTcgQEAgdm9pZCBjYXRfdGVzdF9jbGVhbnVwKHZvaWQpDQo+ID4+PiAgICAgICAg
+IHJlbW92ZShSRVNVTFRfRklMRV9OQU1FMik7DQo+ID4+PiAgfQ0KPiA+Pj4NCj4gPj4+ICtzdGF0
+aWMgdm9pZCBjdHJsY19oYW5kbGVyX2NoaWxkKGludCBzaWdudW0sIHNpZ2luZm9fdCAqaW5mbywg
+dm9pZA0KPiA+Pj4gKypwdHIpIHsNCj4gPj4+ICsgICAgICAgZXhpdChFWElUX1NVQ0NFU1MpOw0K
+PiA+Pj4gK30NCj4gPj4+ICsNCj4gPj4NCj4gPj4gQ291bGQgeW91IHBsZWFzZSBlbGFib3JhdGUg
+d2h5IHRoaXMgaXMgbmVjZXNzYXJ5Pw0KPiA+DQo+ID4gSWYgZW50ZXIgImN0cmwtYyIgd2hlbiBy
+dW5uaW5nICJyZXNjdHJsX3Rlc3RzIC10IGNhdCIsIFNJR0lOVCB3aWxsIGJlDQo+ID4gc2VudCB0
+byBhbGwgcHJvY2Vzc2VzIChwYXJlbnQmY2hpbGQpLg0KPiA+DQo+ID4gQXQgdGhpcyB0aW1lLCB0
+aGUgY2hpbGQgcHJvY2VzcyByZWNlaXZlcyBhIFNJR0lOVCBzaWduYWwsIGJ1dCBkb2VzIG5vdCB0
+YWtlIGFueQ0KPiBhY3Rpb24uDQo+ID4gSW4gdGhpcyBjYXNlIHRoZSBwYXJlbnQgcHJvY2VzcyBt
+YXkgbm90IGNhbGwgY3RybGNfaGFuZGxlcigpIGFzIGV4cGVjdGVkLg0KPiANCj4gQXBvbG9naWVz
+LCBidXQgSSBhbSBub3QgYWJsZSB0byBmb2xsb3cuIE15IHVuZGVyc3RhbmRpbmcgaXMgdGhhdCB0
+aGUgaWRlYWwgaW4NCj4gd29ya2luZyBhbiBmYWlsaW5nIGNhc2UgaXMgZm9yIHRoZSBwYXJlbnQg
+dG8ga2lsbCB0aGUgY2hpbGQuDQo+IENvdWxkIHlvdSBwbGVhc2UgZWxhYm9yYXRlIHdoeSB0aGUg
+Y3RybGNfaGFuZGxlcigpIG1heSBub3QgYmUgY2FsbGVkPw0KDQpBcG9sb2dpZXMgZm9yIHRoZSBs
+YXRlIHJlcGxheS4NCg0KVGhlIHByb2JsZW0gaXMgdGhhdCBhdCB0aGUgdGltZSBvZiBydW5uaW5n
+IENBVCB0ZXN0LCANCnByZXZpb3VzIGN0cmxjX2hhbmRsZXIgZnJvbSBNQk0vTUJBL0NNVCB0ZXN0
+IHdpbGwgYmUgaW5oZXJpdGVkIHRvIGNoaWxkIHByb2Nlc3MuDQoNCkxldCBtZSBleHBsYWluIGlu
+IGRldGFpbDoNCkluIHJlc2N0cmxfdGVzdHMsdGhlIGRlZmF1bHQgcnVuIG9yZGVyIG9mIHRoZSB0
+ZXN0cyBpcyBNQk0tPk1CQS0+Q01ULT5DQVQuDQpXaGVuIHJ1bm5pbmcgTUJNLCBNQkEsIENNVCwg
+c2lnbmFsIGhhbmRsZXIoY3RybGNfaGFuZGxlcikgd2FzIHNldCB0byB0aGUgcGFyZW50IHByb2Nl
+c3MuDQpBZnRlciB0aGVzZSB0ZXN0cywgd2hlbiBmb3JrKCkgaXMgZXhlY3V0ZWQgaW4gQ0FULCAN
+CnRoZSBzaWduYWwgaGFuZGxlciBzZXQgYnkgTUJNL01CQS9DTVQgaXMgaW5oZXJpdGVkIGJ5IHRo
+ZSBwYXJlbnQmY2hpbGQgcHJvY2VzcyBvZiBDQVQuDQpBdCB0aGlzIHRpbWUsIGlmICJjdHJsK2Mi
+IFNJR0lOVCBpcyBzZW50IHRvIHBhcmVudCZjaGlsZCBwcm9jZXNzLA0KYWNjb3JkaW5nIHRvIHRo
+ZSBpbmhlcml0ZWQgc2lnbmFsIGhhbmRsZXIsDQp0aGUgY2hpbGQgcHJvY2VzcyBtYXkga2lsbCBw
+YXJlbnQgcHJvY2VzcyBiZWZvcmUgcGFyZW50IHByb2Nlc3Mga2lsbHMgY2hpbGQgcHJvY2Vzcy4N
+ClRoZXJlZm9yZSwgd2hlbiBydW5uaW5nIGFsbCB0ZXN0cyhNQk0tPk1CQS0+Q01ULT5DQVQpLA0K
+c2lnbmFsIGhhbmRsZXIgb2YgY2hpbGQgcHJvY2VzcyBuZWVkIHRvIGJlIG92ZXJyaWRkZW4gaW4g
+Q0FULg0KDQpBbHNvLCB3aGVuIHJ1bm5pbmcgQ0FUIHRlc3Qgb25seSwNCnNpbmNlIHRoZXJlIGFy
+ZSBubyBzaWduYWwgaGFuZGxlciB0aGF0IGNhbiBiZSBpbmhlcml0ZWQgZnJvbSBvdGhlciB0ZXN0
+cywNCnNpZ25hbCBoYW5kbGVyIG9mIHBhcmVudCBwcm9jZXNzIG5lZWQgdG8gYmUgc2V0Lg0KDQo+
+ID4gVGhlcmVmb3JlLCBjdHJsY19oYW5kbGVyX2NoaWxkKCkgaXMgbmVjZXNzYXJ5Lg0KPiA+DQo+
+ID4gSXQgbWF5IGJlIGJldHRlciB0byBpZ25vcmUgdGhlIHNpZ25hbCwgdGhlbiBjb2RlIGNhbiBi
+ZSBzaW1wbGUgYXMgZm9sbG93cy4NCj4gPiAtLS0tDQo+ID4gICAgICAgICBpZiAoYm1fcGlkID09
+IDApIHsNCj4gPiAgICAgICAgICAgICAgICAgcGFyYW0ubWFzayA9IGxfbWFza18xOw0KPiA+ICAg
+ICAgICAgICAgICAgICBzdHJjcHkocGFyYW0uY3RybGdycCwgImMxIik7DQo+ID4gICAgICAgICAg
+ICAgICAgIHN0cmNweShwYXJhbS5tb25ncnAsICJtMSIpOw0KPiA+ICAgICAgICAgICAgICAgICBw
+YXJhbS5zcGFuID0gY2FjaGVfc2l6ZSAqIG4gLyBjb3VudF9vZl9iaXRzOw0KPiA+ICAgICAgICAg
+ICAgICAgICBzdHJjcHkocGFyYW0uZmlsZW5hbWUsIFJFU1VMVF9GSUxFX05BTUUxKTsNCj4gPiAg
+ICAgICAgICAgICAgICAgcGFyYW0ubnVtX29mX3J1bnMgPSAwOw0KPiA+ICAgICAgICAgICAgICAg
+ICBwYXJhbS5jcHVfbm8gPSBzaWJsaW5nX2NwdV9ubzsNCj4gPiAgICAgICAgICAgICAgICAgLyog
+SWdub3JlIHRoZSBzaWduYWwsYW5kIHdhaXQgdG8gYmUgY2xlYW5lZCB1cCBieSB0aGUgcGFyZW50
+DQo+IHByb2Nlc3MgKi8NCj4gPiAgICAgICAgICAgICAgICAgc2lnZmlsbHNldCgmc2lnYWN0LnNh
+X21hc2spOw0KPiA+ICAgICAgICAgICAgICAgICBzaWdhY3Quc2FfaGFuZGxlciA9IFNJR19JR047
+DQo+ID4gICAgICAgICAgICAgICAgIC8vc2lnYWN0LnNhX3NpZ2FjdGlvbiA9IGN0cmxjX2hhbmRs
+ZXJfY2hpbGQ7ICAvL2RlbGV0ZQ0KPiA+ICAgICAgICAgICAgICAgICBpZiAoc2lnYWN0aW9uKFNJ
+R0lOVCwgJnNpZ2FjdCwgTlVMTCkgfHwNCj4gPiAgICAgICAgICAgICAgICAgICAgIHNpZ2FjdGlv
+bihTSUdURVJNLCAmc2lnYWN0LCBOVUxMKSB8fA0KPiA+ICAgICAgICAgICAgICAgICAgICAgc2ln
+YWN0aW9uKFNJR0hVUCwgJnNpZ2FjdCwgTlVMTCkpDQo+ID4gICAgICAgICAgICAgICAgICAgICAg
+ICAgcGVycm9yKCIjIHNpZ2FjdGlvbiIpOw0KPiA+ICAgICAgICAgfSBlbHNlIHsNCg0KQmVzdCBy
+ZWdhcmRzLA0KU2hhb3BlbmcNCg==
