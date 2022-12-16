@@ -2,62 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0705E64EE1C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Dec 2022 16:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF58364F02F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Dec 2022 18:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbiLPPrx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Dec 2022 10:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
+        id S231710AbiLPRQU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Dec 2022 12:16:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiLPPrw (ORCPT
+        with ESMTP id S231429AbiLPRQU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Dec 2022 10:47:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16EC1027
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Dec 2022 07:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671205624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LxMkecyGYG9dLIpgBNsZUPusnmfyW4vuV2TgoZY8b1I=;
-        b=A1fXn9zjQ901DtvygIiyjjRKQzc4DqxvufQO1InD+mby2JrcmFAsrEotH/wQk55KkGvQMn
-        CXwuC1DZ0jGVg2Q5Dbc19xL94w6zpHJmU5CMQ2JG2mpxWIC/WOaH1QwDVnRYqitkZQAYmy
-        eLrxmaQe15/kqGhAvJIz2gQAN5NMGzI=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-562-34bpwe5PNw62aKSDh-ZP2A-1; Fri, 16 Dec 2022 10:47:02 -0500
-X-MC-Unique: 34bpwe5PNw62aKSDh-ZP2A-1
-Received: by mail-qv1-f70.google.com with SMTP id w1-20020a056214012100b004c6ecf32001so1650416qvs.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Dec 2022 07:47:02 -0800 (PST)
+        Fri, 16 Dec 2022 12:16:20 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EF329CAE
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Dec 2022 09:16:18 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id n4so2973625plp.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Dec 2022 09:16:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1vFt+PxUURFiZfVHrvBsmq3MYjQQnliB4U9G0LtHwvo=;
+        b=NzIXW8IPm6aqdfZVn8wF9pvH9EX2CYlT+NecBtjOLfEuyXc+cx2NKGt5J+FnKO1bjJ
+         TrF0y0yo6mVxhuVq30y+t91fPsGX6xGd9sb28pCmi+59SPnJev9IpMY/dcGPJmgXxLzp
+         uYMcp6cAQtYqy4jgdLA97Jt9m1/T5UmPMFJisqTII7KPitmCMZEDdbkzlV2rVl6bYHA4
+         cHbNfGO25NidGQjLdH+U6LTY95WHrEs/cMS3wJB4NiEqJbZc8YCuwLiuoX1snZ9fquUB
+         6TFyUQQ35fJyhZeTgW8uzcMzgbwY2W4AZcTPgGrzdmrUN5UHDplf+8ch5izUjtf2VG6v
+         UsfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LxMkecyGYG9dLIpgBNsZUPusnmfyW4vuV2TgoZY8b1I=;
-        b=UUytwdeuguVojMo5wuukwOlHAbz6+ytLpwLEQo5rpbACFNzUPIdxPAPGAbJSlOfHMk
-         weaJRcNEVY3gFQ/KJShrM3El8dKNv+T3QzaDr1JB60pXMKnt6moaHJXCxg8yJqb7Pgls
-         /ZEYs9fiQFLRoVVpU9Ry9nxxpHzHVueX8DlOog3yM3kO2lwAZxMQz2nEcPUYw9F2JDTe
-         R3MMXcN9UA3N+3CgMLjrmUVV1yw/VbNyWyZ4w4wQHoz0F5e2r6MxPkjKiriIVhG3wG9E
-         XAaMRzfBvagRFbNaK6i30r6kIVfMIy6JatOdzi9hFT7migQfMxwn5F4l3T0opUN3+xAa
-         piHg==
-X-Gm-Message-State: ANoB5pmU79n6poirM5aQHJuNJRIkuatmonKeUSNzk37zJady4gSh0Rci
-        CWrAfUDH5LfckQKF1W6LipHmcIwLYEox1gQyfSzQrslhoUbfpfLTYmRiWmiGnSbUN50uEa5RHSe
-        f2p83Ame6caPRT3+T9QK8TbuIz+/j
-X-Received: by 2002:a05:622a:40c5:b0:3a5:306f:b124 with SMTP id ch5-20020a05622a40c500b003a5306fb124mr45697428qtb.10.1671205622303;
-        Fri, 16 Dec 2022 07:47:02 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5eK8zxu4MtCAROwOHMPjA4TRfLrCS+AsiC6Si+i4v1cyQH5maRZ4RJ3yJvRLlW+Au04FcIJQ==
-X-Received: by 2002:a05:622a:40c5:b0:3a5:306f:b124 with SMTP id ch5-20020a05622a40c500b003a5306fb124mr45697411qtb.10.1671205622117;
-        Fri, 16 Dec 2022 07:47:02 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
-        by smtp.gmail.com with ESMTPSA id a5-20020ac844a5000000b003a68af60591sm1466597qto.70.2022.12.16.07.47.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Dec 2022 07:47:01 -0800 (PST)
-Date:   Fri, 16 Dec 2022 10:46:59 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Jeff Xu <jeffxu@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1vFt+PxUURFiZfVHrvBsmq3MYjQQnliB4U9G0LtHwvo=;
+        b=O84zxDX4xOMGNHjluf/4xw+GcyPJefeBtRv9BcivCUOlh/34LODr7s9EDsKsq9ic2B
+         1clLGvwT7nR2sYCryVe0gCeLRLHYA9so1BQIxwkTQQSPmzFmp8QIlBvjiq8vkT1WNxkk
+         EKdiA3U23TwP0J9clpfB3VHBw30zTTtqIgv1mGKil/9EcCpoqJy5jOwL4+3SC6y216/k
+         KqmiNQul+3GttF5sjwCvxElZGYNYPwRmQ/T4ZHb8vLLpGiQOXaUYSKYO1VZdS1vG265h
+         0IWRAq2R/1Gu/ApSHUuieEkIPNdOux3ynwtAoioTIJxVZSlwA04QPzlM0N/GBzpjpt2m
+         61Og==
+X-Gm-Message-State: AFqh2krebKNSB0EDUa4HyzxNeZSApApriEKAPR80CCEcDL2vWIsWSgmb
+        WXRITHKA9tAJ6oXOPByhsMVj8OfFd5WuEywtj22/iw==
+X-Google-Smtp-Source: AMrXdXvvu/Vp44NQhthEXWvCfyRa+UVxHXgPTglhTuliY9e8JxjquA4ilh9D3roeSj0Fhi+0+KgwBHTBi2wbT081p2k=
+X-Received: by 2002:a17:90a:69c7:b0:21a:8dc:1b5e with SMTP id
+ s65-20020a17090a69c700b0021a08dc1b5emr653725pjj.26.1671210977931; Fri, 16 Dec
+ 2022 09:16:17 -0800 (PST)
+MIME-Version: 1.0
+References: <20221207154939.2532830-1-jeffxu@google.com> <20221207154939.2532830-4-jeffxu@google.com>
+ <202212080821.5AE7EE99@keescook> <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+ <Y5yS8wCnuYGLHMj4@x1n>
+In-Reply-To: <Y5yS8wCnuYGLHMj4@x1n>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Fri, 16 Dec 2022 09:15:40 -0800
+Message-ID: <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Peter Xu <peterx@redhat.com>
 Cc:     Kees Cook <keescook@chromium.org>, jeffxu@chromium.org,
         skhan@linuxfoundation.org, akpm@linux-foundation.org,
         dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
@@ -65,19 +63,11 @@ Cc:     Kees Cook <keescook@chromium.org>, jeffxu@chromium.org,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         jannh@google.com, linux-hardening@vger.kernel.org,
         kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-Message-ID: <Y5yS8wCnuYGLHMj4@x1n>
-References: <20221207154939.2532830-1-jeffxu@google.com>
- <20221207154939.2532830-4-jeffxu@google.com>
- <202212080821.5AE7EE99@keescook>
- <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,28 +75,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Jeff,
+On Fri, Dec 16, 2022 at 7:47 AM Peter Xu <peterx@redhat.com> wrote:
+>
+> Hi, Jeff,
+>
+> On Thu, Dec 08, 2022 at 02:55:45PM -0800, Jeff Xu wrote:
+> > > > +     if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
+>
+> [...]
+>
+> > > > +             pr_warn_ratelimited(
+> > > > +                     "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
+> > > > +                     task_pid_nr(current), get_task_comm(comm, current));
+>
+> This will be frequently dumped right now with mm-unstable.  Is that what it
+> wanted to achieve?
+>
+> [   10.822575] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=491 'systemd'
+> [   10.824743] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=495 '(sd-executor)'
+> ...
+>
+> If there's already a sane default value (and also knobs for the user to
+> change the default) not sure whether it's saner to just keep it silent as
+> before?
+>
+Thanks for your comments.
 
-On Thu, Dec 08, 2022 at 02:55:45PM -0800, Jeff Xu wrote:
-> > > +     if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
+The intention is it is a reminder to adjust API calls to explicitly
+setting this bit.
+The sysctl vm.memfd_noexec = 0 1 is for transaction to the final
+state, and 2 depends on API call setting this bit.
 
-[...]
+The log is ratelimited, and there is a rate limit setting:
+/proc/sys/kernel/printk_ratelimit
+/proc/sys/kernel/printk_ratelimit_burst
 
-> > > +             pr_warn_ratelimited(
-> > > +                     "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
-> > > +                     task_pid_nr(current), get_task_comm(comm, current));
+Best regards,
+Jeff
 
-This will be frequently dumped right now with mm-unstable.  Is that what it
-wanted to achieve?
-
-[   10.822575] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=491 'systemd'
-[   10.824743] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=495 '(sd-executor)'
-...
-
-If there's already a sane default value (and also knobs for the user to
-change the default) not sure whether it's saner to just keep it silent as
-before?
-
--- 
-Peter Xu
-
+> --
+> Peter Xu
+>
