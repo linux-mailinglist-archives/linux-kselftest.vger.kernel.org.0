@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABB264FC9B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Dec 2022 23:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE67364FC9E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Dec 2022 23:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiLQWgO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 17 Dec 2022 17:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
+        id S230158AbiLQWg0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 17 Dec 2022 17:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLQWgN (ORCPT
+        with ESMTP id S229991AbiLQWgV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 17 Dec 2022 17:36:13 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF41BE14;
-        Sat, 17 Dec 2022 14:36:12 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id g10so5621187plo.11;
-        Sat, 17 Dec 2022 14:36:12 -0800 (PST)
+        Sat, 17 Dec 2022 17:36:21 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AA7DF9B;
+        Sat, 17 Dec 2022 14:36:18 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so9512089pjr.3;
+        Sat, 17 Dec 2022 14:36:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=csOYqUeHxLTPATSvh1AYSJ+5CbE6leQVeEwGWs1d3Xo=;
-        b=He++fKLMtJ04Vk25015fW8A0NJ8KRu99gIF1BTTRykv8EzUagWxTXz3MEeBgkLXxwD
-         s+9B/nxa03WYn8pRGvfAO8zzYUXyjfV+97bQ/mCKRqI8MEnNmbd9CGlULvwskidKW5qb
-         NQlQkvWqh41Q+CedAtmO+tchfXb6ODRQyw4VjJvOqmjzMrOe3yHRh9n0xhmgDSKSzbYf
-         LNVExJuH4Rs8Oc83LDOVgnXE3my1czOzwBgyHm1FXye2NIDHgRWMjSN9bj82lzRsHgO+
-         NN6X1Ofy8S0w7oGfpsY+ZrGouBKhhYj6N3ofygeAHvoSv93+0CCl+LwV87olFCWcm9br
-         F6mQ==
+        bh=j/x+afgh1ISBbPnqbY131/KLKQLBCqSdbqqjGYkdUb0=;
+        b=IW1S7JyfXFSmWvxk6gMhZug6pfeHdNdgY37zEjjD/JmrXVaXgi/KXE1+TN3SKiHx1F
+         O4TszTlAt5kynelThdmi2Wjec9cipMeCcKI4Gii8kJbsIAtzaOpZ+N06xoKZ3UKoE1+n
+         APXw7UtHDHpyYqdvfSGFKzaRadZ0MxG2+9FoMrdzETpVf8sd+i+HAjT36llOcvvBgP0f
+         mVK3dLD9POmL8TXVpe+wlLLIWYEYMajUXK4rZ9Gtbd8tL5umXAgCpaBmcFx8mOTNG4Oa
+         hwTjQANXReCYaMC3qfaw/T15+PouA1L/aZMhiptHxkxHN1QZFKvJjyl5zYtQkR/pgrJG
+         rPQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=csOYqUeHxLTPATSvh1AYSJ+5CbE6leQVeEwGWs1d3Xo=;
-        b=LAxNbKdCXPuV0FBvdQjHnYhuOHUW1OvvuUwUBiFeecoLNdVEnKfg4fNslA98NLJPbO
-         7vs5ViqQvgSAr7DmrKWgCkVpnIsHcFljtk71TNNrx0EtlZxhlwIK1d2zpiabEvNuVhwE
-         FJbDVOlGGFi8y6AY0DrnsNAAmuI3KU3e7sPnfmh7+w5KidH+ow+odXmZtKHjJlG15Pr3
-         831XdGQJ2EQmksRO/BDN9uwxJCIAOb29e4tSwo1Xycp62B4cQlGa9PGysekkp9gRxszg
-         tBX8xBc+tggUwBSKn2mK+x0Sf9BziR1cW1Uj9KI5NUHZJcZrJbFQjK5s8vH3dVoDWtTu
-         M9mw==
-X-Gm-Message-State: AFqh2koYk409PHIMFDT3TKYBkT3mU6Y4oOF8ftcVzUsgJSCNFm3uTGbU
-        ZgEXxtp/kb0wRiNDTg2a++I=
-X-Google-Smtp-Source: AMrXdXu/qWZVQq6iNS+YiLhbTIdOPTzdfgk7QS2/w500GDjL4ns+7wij9Fmik24v7qWavcALSpX5xg==
-X-Received: by 2002:a17:902:f607:b0:186:8d78:740c with SMTP id n7-20020a170902f60700b001868d78740cmr4895147plg.6.1671316571561;
-        Sat, 17 Dec 2022 14:36:11 -0800 (PST)
+        bh=j/x+afgh1ISBbPnqbY131/KLKQLBCqSdbqqjGYkdUb0=;
+        b=vP7jPszf8qtGZl7t5dVtbDrYXyXi8VIGcF27EcmsLInanb+xerOj4JXmgX96NqKydI
+         je9BWFW+00pwAH7BkxK79mm9S3XldcLWVVIzbXrL5brkIqJsVrlT4jYHJgogW9cbkaPu
+         yrUQAGVoPr/ZU2kMn1EigJYgVFVcbGhxVts+nlOzYQpu/zswVlbWmXEOSZJSS+SzVhZG
+         JpHAlQq3aOKAA1vRbtmmRhkZpnPv9eOwHEwahjBOeg0IBMgvmmpePQhreF1+AB5qJAUm
+         qPquBF/+TAI1HCMEt6u1DxQBQVSGPoArhF8oaUVl/C803ZdE2wA9qPpbvliDedp7rDRv
+         B3sg==
+X-Gm-Message-State: AFqh2kpBxk9/Dcpc9CCeUqy+4xgHvAsFD1YHmNKL+vmSAZZkVfRDgWuc
+        2axeyVHcDpZb7trWSM3yBqY=
+X-Google-Smtp-Source: AMrXdXvyldrQM+icuuDpeqSxgOlxhnJZ7fov1jplJPtL8crIBtJ4q/X95pvJfq/n7f7FSa3ZuchL4g==
+X-Received: by 2002:a17:902:e212:b0:189:30cd:8fa2 with SMTP id u18-20020a170902e21200b0018930cd8fa2mr3027852plb.50.1671316578407;
+        Sat, 17 Dec 2022 14:36:18 -0800 (PST)
 Received: from WRT-WX9.. ([103.135.102.144])
-        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b001801aec1f6bsm4031660ple.141.2022.12.17.14.36.04
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b001801aec1f6bsm4031660ple.141.2022.12.17.14.36.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 14:36:10 -0800 (PST)
+        Sat, 17 Dec 2022 14:36:17 -0800 (PST)
 From:   Changbin Du <changbin.du@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -72,9 +72,9 @@ Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
         Mykola Lysenko <mykolal@fb.com>,
         linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH v3 1/2] libbpf: show error info about missing ".BTF" section
-Date:   Sun, 18 Dec 2022 06:35:08 +0800
-Message-Id: <20221217223509.88254-2-changbin.du@gmail.com>
+Subject: [PATCH v3 2/2] bpf: makefiles: do not generate empty vmlinux.h
+Date:   Sun, 18 Dec 2022 06:35:09 +0800
+Message-Id: <20221217223509.88254-3-changbin.du@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221217223509.88254-1-changbin.du@gmail.com>
 References: <20221217223509.88254-1-changbin.du@gmail.com>
@@ -91,29 +91,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Show the real problem instead of just saying "No such file or directory".
+Remove the empty vmlinux.h if bpftool failed to dump btf info.
+The empty vmlinux.h can hide real error when reading output
+of make.
 
-Now will print below info:
-libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux
-Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
+This is done by adding .DELETE_ON_ERROR special target in related
+makefiles.
 
 Signed-off-by: Changbin Du <changbin.du@gmail.com>
 ---
- tools/lib/bpf/btf.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/bpf/bpftool/Makefile           | 3 +++
+ tools/testing/selftests/bpf/Makefile | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 71e165b09ed5..dd2badf1a54e 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
- 	err = 0;
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 787b857d3fb5..313fd1b09189 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -289,3 +289,6 @@ FORCE:
+ .PHONY: all FORCE bootstrap clean install-bin install uninstall
+ .PHONY: doc doc-clean doc-install doc-uninstall
+ .DEFAULT_GOAL := all
++
++# Delete partially updated (corrupted) files on error
++.DELETE_ON_ERROR:
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index c22c43bbee19..205e8c3c346a 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -626,3 +626,6 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
+ 			       liburandom_read.so)
  
- 	if (!btf_data) {
-+		pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
- 		err = -ENOENT;
- 		goto done;
- 	}
+ .PHONY: docs docs-clean
++
++# Delete partially updated (corrupted) files on error
++.DELETE_ON_ERROR:
 -- 
 2.37.2
 
