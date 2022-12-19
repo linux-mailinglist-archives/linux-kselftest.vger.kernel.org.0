@@ -2,84 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7A2651220
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Dec 2022 19:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DD2651484
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Dec 2022 21:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbiLSSmM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Dec 2022 13:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S232498AbiLSU6A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Dec 2022 15:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbiLSSmA (ORCPT
+        with ESMTP id S232559AbiLSU54 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Dec 2022 13:42:00 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F9312AC0
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 10:41:53 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id om16-20020a17090b3a9000b002216006cbffso9143393pjb.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 10:41:53 -0800 (PST)
+        Mon, 19 Dec 2022 15:57:56 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEE72DC1
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 12:57:55 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id y3so5398284ilq.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 12:57:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lUe/HAilA5uQeCY16YFaRupilsMtPutRzDO3+Pp/Z1I=;
-        b=VTq+9e6lK/+M/Nv1j25mTFqCS9fuVM/WZbUbgu9tZwrcHrGxG6PntyfRkU+FvADdee
-         L0xvjCh8ckvZGB6cpfeUe4IQ+bLunDiizoaASo0ZdeouOvfyC8sCV83I4xOMAH3E6WU7
-         Aj+J1oFcyo4meAB3Bb46FiIEDj9uk0KT6FDP1rRDVb3xXMWE9BG6l8Ns3MWoI+MpdxXQ
-         TskENOsmgZE4LMzu47cNdQOiUNZGML+2W/luhO9bnIQhrLYcSJ8J0GBJIcCLgpGqEWsn
-         95p/WYoGDRcovc4hNTHXLYcyx5cyylfxnAxPf3ukjrC4zFee3ni1ji4qK1wkaqsU+T+U
-         SREA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cDyNy+WaMMbT46Nu7xWJABOPqLJ4mBNBg4G6GLyPSyA=;
+        b=KbhNEFItgqJpUb34PlBkSxussrLfWq638sk0HFl2FLNBYTaK/8B4hTsudLtq1bkC1w
+         vw6Mr7C6FMx0V9UJAN8QRJjXtAVRsS8TGBOT5wg10yxC3S3lyss+1REqu2O661mXQsvS
+         GhMwTohEAzhRfBnOPffbA8rBfCf3MI+2aQ93m3m48zG2Pi2C9W4eBEbbQ1XHOm3wy3Co
+         2Pa7fSPzW6XYStHFMfwq9D1nABzUYP7WS7XSzJbojT+PG/EmyKDqIVBoTlN8rqJ9aBjZ
+         WMUaHMyF4BODgsiwDuP18a2NdEZFL4LRWE5/PIE2lXJxqdegoOZ8cHXi7GUSgtRL76ED
+         8dHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lUe/HAilA5uQeCY16YFaRupilsMtPutRzDO3+Pp/Z1I=;
-        b=jE3hGL3e1nd1O8dtHGcCwYl71KPm9yE7OrvlbbuwyyYnpf4b17r6Fo6wivOvozXTt1
-         a0sk+z8mGbK1pMORqqF5FZ6BbYg5SIJ2SGzudLfJF71mvcml4O1O6CdDHA6a7rDRIAIC
-         Tcxs7Qk1vMknfb2j41jGQkk5PgUnNNkGS2kW73vj5LBfhw+z11XDrJ7M1QjGaHWFThxl
-         sBL39UVyTrXQsOFI5p7zrFqT0E484V6qBkZId1XIiV8Cihtdb9ZAteI5XRmxVukGFZrc
-         GJyBOJ/fPBzjPmUwm3uXKcu7KYUDbvbndRA/3VY77q/aCfh/qjiMz+bN/D7UeFfaSvTh
-         jEPQ==
-X-Gm-Message-State: AFqh2kqsNx5e8Vuak0Q3EOvUtIRoALeX2HIhA3OG1UGq+23jzDuPhBlH
-        CGQI4LMjFiiMDSP8FcbkB/adDdM=
-X-Google-Smtp-Source: AMrXdXu0/MeW/tiiga+F2SHL+s2785/arVi+FMGPK3PZ0NYpYry9ow01VET95wyHYkhhD3EfIoUOJNk=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90a:fe08:b0:218:770c:9a40 with SMTP id
- ck8-20020a17090afe0800b00218770c9a40mr2448017pjb.158.1671475312904; Mon, 19
- Dec 2022 10:41:52 -0800 (PST)
-Date:   Mon, 19 Dec 2022 10:41:51 -0800
-In-Reply-To: <20221218051734.31411-2-cehrig@cloudflare.com>
-Mime-Version: 1.0
-References: <20221218051734.31411-1-cehrig@cloudflare.com> <20221218051734.31411-2-cehrig@cloudflare.com>
-Message-ID: <Y6Cwb875k9sJyBfx@google.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add BPF_F_NO_TUNNEL_KEY test
-From:   sdf@google.com
-To:     Christian Ehrig <cehrig@cloudflare.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Kui-Feng Lee <kuifeng@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Kaixi Fan <fankaixi.li@bytedance.com>,
-        Paul Chaignon <paul@isovalent.com>,
-        Shmulik Ladkani <shmulik@metanetworks.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cDyNy+WaMMbT46Nu7xWJABOPqLJ4mBNBg4G6GLyPSyA=;
+        b=yKBR/c4i9QiDUCOC9Epr7dPxFEaXink1C076d7qzM8CuOXIxNy/0XSdo4GMOwqoh+X
+         GghnCq9oQP8Twi+qprf8lJz9ZmVvoHQXhUqmpyb6wkFAyGIqNKOYWCP5NMvFJCU7q465
+         Wx2z4P0o9OMY8rgge9VPklE2rkv48sGAW/jvL+VZcyu7lkviBUTa4YANeK5R+xfFVR9W
+         SwTJgEvfFye/ZZNlVmxHw7wK6e0laeCbn+7I0/Xvb2v9/QJzCyirZQ0Wr67a0ztEl33t
+         LKKJw7UOxJ0J+wp5i5s8QZyosf5X1HhL2eOOuE8GyQWL0PtXtt8PwotBS4VmWyGHwww4
+         9knQ==
+X-Gm-Message-State: ANoB5pmUA5G55vdMk1IkJILp1UJPMOkFlrA/ojbVT2cwMcKwFNTe/Iwi
+        P/b8Taz0gHO6ZLKMdYCAjtpftA==
+X-Google-Smtp-Source: AA0mqf5AJOutoWTrKLNf0NtrR35QSZ3Fj/E2MBNWrinQOUSozCbfMplOw5BVmBmSUVTZpkqDzkVokw==
+X-Received: by 2002:a92:cd4f:0:b0:303:410a:f2b3 with SMTP id v15-20020a92cd4f000000b00303410af2b3mr25223881ilq.13.1671483474816;
+        Mon, 19 Dec 2022 12:57:54 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:6550:fd9a:e118:25dc])
+        by smtp.gmail.com with ESMTPSA id b16-20020a026f50000000b003987df8bccdsm1856814jae.43.2022.12.19.12.57.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 12:57:54 -0800 (PST)
+Date:   Mon, 19 Dec 2022 13:57:50 -0700
+From:   Ross Zwisler <zwisler@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Zheng Yejian <zhengyejian1@huawei.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+Subject: Re: [PATCH 2/2] tracing/selftests: Add test for event filtering on
+ function name
+Message-ID: <Y6DQTvOrHRZ8gjDz@google.com>
+References: <20221219183106.518341498@goodmis.org>
+ <20221219183214.075559302@goodmis.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219183214.075559302@goodmis.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,141 +80,22 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/18, Christian Ehrig wrote:
-> This patch adds a selftest simulating a GRE sender and receiver using
-> tunnel headers without tunnel keys. It validates if packets encapsulated
-> using BPF_F_NO_TUNNEL_KEY are decapsulated by a GRE receiver not
-> configured with tunnel keys.
+On Mon, Dec 19, 2022 at 01:31:08PM -0500, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> With the new filter logic of passing in the name of a function to match an
+> instruction pointer (or the address of the function), add a test to make
+> sure that it is functional.
+> 
+> This is also the first test to test plain filtering. The filtering has
+> been tested via the trigger logic, which uses the same code, but there was
+> nothing to test just the event filter, so this test is the first to add
+> such a case.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Shuah Khan <skhan@linuxfoundation.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-> Signed-off-by: Christian Ehrig <cehrig@cloudflare.com>
-
-Acked-by: Stanislav Fomichev <sdf@google.com>
-
-> ---
->   .../selftests/bpf/progs/test_tunnel_kern.c    | 21 ++++++++++
->   tools/testing/selftests/bpf/test_tunnel.sh    | 40 +++++++++++++++++--
->   2 files changed, 58 insertions(+), 3 deletions(-)
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c  
-> b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> index 98af55f0bcd3..508da4a23c4f 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> @@ -81,6 +81,27 @@ int gre_set_tunnel(struct __sk_buff *skb)
->   	return TC_ACT_OK;
->   }
-
-> +SEC("tc")
-> +int gre_set_tunnel_no_key(struct __sk_buff *skb)
-> +{
-> +	int ret;
-> +	struct bpf_tunnel_key key;
-> +
-> +	__builtin_memset(&key, 0x0, sizeof(key));
-> +	key.remote_ipv4 = 0xac100164; /* 172.16.1.100 */
-> +	key.tunnel_ttl = 64;
-> +
-> +	ret = bpf_skb_set_tunnel_key(skb, &key, sizeof(key),
-> +				     BPF_F_ZERO_CSUM_TX | BPF_F_SEQ_NUMBER |
-> +				     BPF_F_NO_TUNNEL_KEY);
-> +	if (ret < 0) {
-> +		log_err(ret);
-> +		return TC_ACT_SHOT;
-> +	}
-> +
-> +	return TC_ACT_OK;
-> +}
-> +
->   SEC("tc")
->   int gre_get_tunnel(struct __sk_buff *skb)
->   {
-> diff --git a/tools/testing/selftests/bpf/test_tunnel.sh  
-> b/tools/testing/selftests/bpf/test_tunnel.sh
-> index 2eaedc1d9ed3..06857b689c11 100755
-> --- a/tools/testing/selftests/bpf/test_tunnel.sh
-> +++ b/tools/testing/selftests/bpf/test_tunnel.sh
-> @@ -66,15 +66,20 @@ config_device()
-
->   add_gre_tunnel()
->   {
-> +	tun_key=
-> +	if [ -n "$1" ]; then
-> +		tun_key="key $1"
-> +	fi
-> +
->   	# at_ns0 namespace
->   	ip netns exec at_ns0 \
-> -        ip link add dev $DEV_NS type $TYPE seq key 2 \
-> +        ip link add dev $DEV_NS type $TYPE seq $tun_key \
->   		local 172.16.1.100 remote 172.16.1.200
->   	ip netns exec at_ns0 ip link set dev $DEV_NS up
->   	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
-
->   	# root namespace
-> -	ip link add dev $DEV type $TYPE key 2 external
-> +	ip link add dev $DEV type $TYPE $tun_key external
->   	ip link set dev $DEV up
->   	ip addr add dev $DEV 10.1.1.200/24
->   }
-> @@ -238,7 +243,7 @@ test_gre()
-
->   	check $TYPE
->   	config_device
-> -	add_gre_tunnel
-> +	add_gre_tunnel 2
->   	attach_bpf $DEV gre_set_tunnel gre_get_tunnel
->   	ping $PING_ARG 10.1.1.100
->   	check_err $?
-> @@ -253,6 +258,30 @@ test_gre()
->           echo -e ${GREEN}"PASS: $TYPE"${NC}
->   }
-
-> +test_gre_no_tunnel_key()
-> +{
-> +	TYPE=gre
-> +	DEV_NS=gre00
-> +	DEV=gre11
-> +	ret=0
-> +
-> +	check $TYPE
-> +	config_device
-> +	add_gre_tunnel
-> +	attach_bpf $DEV gre_set_tunnel_no_key gre_get_tunnel
-> +	ping $PING_ARG 10.1.1.100
-> +	check_err $?
-> +	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
-> +	check_err $?
-> +	cleanup
-> +
-> +        if [ $ret -ne 0 ]; then
-> +                echo -e ${RED}"FAIL: $TYPE"${NC}
-> +                return 1
-> +        fi
-> +        echo -e ${GREEN}"PASS: $TYPE"${NC}
-> +}
-> +
->   test_ip6gre()
->   {
->   	TYPE=ip6gre
-> @@ -589,6 +618,7 @@ cleanup()
->   	ip link del ipip6tnl11 2> /dev/null
->   	ip link del ip6ip6tnl11 2> /dev/null
->   	ip link del gretap11 2> /dev/null
-> +	ip link del gre11 2> /dev/null
->   	ip link del ip6gre11 2> /dev/null
->   	ip link del ip6gretap11 2> /dev/null
->   	ip link del geneve11 2> /dev/null
-> @@ -641,6 +671,10 @@ bpf_tunnel_test()
->   	test_gre
->   	errors=$(( $errors + $? ))
-
-> +	echo "Testing GRE tunnel (without tunnel keys)..."
-> +	test_gre_no_tunnel_key
-> +	errors=$(( $errors + $? ))
-> +
->   	echo "Testing IP6GRE tunnel..."
->   	test_ip6gre
->   	errors=$(( $errors + $? ))
-> --
-> 2.37.4
-
+Reviewed-by: Ross Zwisler <zwisler@google.com>
