@@ -2,100 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416456514D9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Dec 2022 22:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7AC651564
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Dec 2022 23:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbiLSV0Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Dec 2022 16:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S229934AbiLSWMu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Dec 2022 17:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbiLSV0X (ORCPT
+        with ESMTP id S232437AbiLSWMW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Dec 2022 16:26:23 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFAD6460
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 13:26:22 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id d14so14755090edj.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 13:26:22 -0800 (PST)
+        Mon, 19 Dec 2022 17:12:22 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145FC164A4
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 14:11:43 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id y2so5476084ily.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 14:11:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=GCXGJJNKGTWuXb6V003J6pOwCnEMsetkiLzAhdYVzW0=;
-        b=LtAF2xSDlToVTnXEy9LEzSpz+GkrYgPLsAQGgze39udobM+kGKBCX3CEY+1EgLEUTC
-         Uc/EiqqgUe5lUCzrKnoJ5S0ecwbhlLTI5MCUwc07oww71PWzfmlqFSiVc99ZwROvEqcb
-         qrngqVlRC93l9usMvokx/fLao5HYoVBNnE9Jw=
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i+5fBxr0lCerXn/Yuwt3YA+eF3QHf4Pm/K1HNIdR4Yw=;
+        b=WKqyAZIz5MUR5DDQkGcUJRFdyBbNq2tXpvuDOOH+hVMD3E+SxrOeOkx5+TlsJ/sUdT
+         FXk/bdGSfJjW9Y1f1Tuxfw6uG8doVAVWWuCqAR+NzOzS7/dsaclGzGhUYJcCbg5lwmXb
+         o7v99LwuQk5vgQkCJ1vuFxXZCmezv9I4nkb6I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GCXGJJNKGTWuXb6V003J6pOwCnEMsetkiLzAhdYVzW0=;
-        b=PHe+wi4sr/8yoJlFGhTt9fy3MSl+qI+3WFaNwibL7WUttRbnVwK9TjKGqNiYuPaxkJ
-         /mhji08N3Y2SBkz1ap+hMeOSzksDTzOT9GRoblyhgciLE2LZhCOSGAfi+LeieeC9Nsax
-         TwydDRzZ1PGLW/zXqwtiZZdzCQyYec5B/uUAo6rZndFwx4mU7wWo2otQrXNlmdWKTtKf
-         MRMyBmerBLt0IvJR79CkHSrKUnrUdKpFCbiLuERCO2PJaXA09M9fOcOjMLkyydbz9nJu
-         uNzUMZ9iAUIsTyoVqJXTuAbnd2TgUofBUl17c5H/sStwvlRfebspsVuTvKfa2+Cs2oDT
-         RfNw==
-X-Gm-Message-State: AFqh2komr2E/H/RACB+c2I7Y1Bm6jr1SR/i9kAUZsLvg+tU2Jpcxe4qU
-        TGWnf9Y+daSFb8z3XinLGlexHQ==
-X-Google-Smtp-Source: AMrXdXsVsa+mINTX9SXwUHvirH1jBMYbU+7Ik/+LmiyZ7seBhwCX7NH3K7CK/dkVCf6frMzTTiFYOQ==
-X-Received: by 2002:a05:6402:25c7:b0:461:c5b4:a7d0 with SMTP id x7-20020a05640225c700b00461c5b4a7d0mr5967924edb.24.1671485180824;
-        Mon, 19 Dec 2022 13:26:20 -0800 (PST)
-Received: from cloudflare.com (79.184.201.14.ipv4.supernova.orange.pl. [79.184.201.14])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056402184800b0047021294426sm4801729edy.90.2022.12.19.13.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 13:26:20 -0800 (PST)
-References: <20221218051734.31411-1-cehrig@cloudflare.com>
- <20221218051734.31411-2-cehrig@cloudflare.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Christian Ehrig <cehrig@cloudflare.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Kui-Feng Lee <kuifeng@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Kaixi Fan <fankaixi.li@bytedance.com>,
-        Paul Chaignon <paul@isovalent.com>,
-        Shmulik Ladkani <shmulik@metanetworks.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add BPF_F_NO_TUNNEL_KEY test
-Date:   Mon, 19 Dec 2022 22:26:02 +0100
-In-reply-to: <20221218051734.31411-2-cehrig@cloudflare.com>
-Message-ID: <87a63jjdac.fsf@cloudflare.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i+5fBxr0lCerXn/Yuwt3YA+eF3QHf4Pm/K1HNIdR4Yw=;
+        b=YWv048MTwrbduKK2l2FH/ktSgIv08VgQElgC057Bi3xr3qGdIolPbxUolB0+QnPNgW
+         ZQV6ussBUE1EVq252ghf2EIWBlKeO/8DXwMHz/fE/9tXpVWXIfhqj2x3lglr7WGcknRJ
+         zziS+7kHzsEfmT+xZI6wfdWDc9QxzZzcKENC+Xe4ciLVX0KLBivHqhPSfLzdLiuyQvyL
+         Qiwj7r1nechkF9iomLZ6Sfa1tqozW48Ge8j2mZicE8ZHN2x/sw/5DTK2rhO+W1znzmBd
+         kxNpXgSUDXPnkZ3etF0SIhGU8jFjdZXVPlLzc6oyzk/hk5a6ZaWsufXm3lVq7BFuDBPW
+         1LqA==
+X-Gm-Message-State: ANoB5pnzXTaKT9Q80Kp8QhqJ5i7ic3BJ+SKj8+QDv+UXSDBqbQwHS46J
+        cZM3q/+hvpz0rD84Nd7+br54jA==
+X-Google-Smtp-Source: AA0mqf7zghrpxEOqa7lnFcSPA7YcI61pK9QzyHtXriaC03/iIxTUF+IEgYcbz1U9j1kWNEWsoJgg7A==
+X-Received: by 2002:a05:6e02:892:b0:303:9c30:7eff with SMTP id z18-20020a056e02089200b003039c307effmr4662210ils.2.1671487902382;
+        Mon, 19 Dec 2022 14:11:42 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v8-20020a056e020f8800b002e939413e83sm3602774ilo.48.2022.12.19.14.11.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 14:11:40 -0800 (PST)
+Message-ID: <5e3e9408-8ddd-3649-ef98-4bd611c528cc@linuxfoundation.org>
+Date:   Mon, 19 Dec 2022 15:11:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/2] tracing/selftests: Add test for event filtering on
+ function name
+To:     Ross Zwisler <zwisler@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Zheng Yejian <zhengyejian1@huawei.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221219183106.518341498@goodmis.org>
+ <20221219183214.075559302@goodmis.org> <Y6DQTvOrHRZ8gjDz@google.com>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <Y6DQTvOrHRZ8gjDz@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 06:17 AM +01, Christian Ehrig wrote:
-> This patch adds a selftest simulating a GRE sender and receiver using
-> tunnel headers without tunnel keys. It validates if packets encapsulated
-> using BPF_F_NO_TUNNEL_KEY are decapsulated by a GRE receiver not
-> configured with tunnel keys.
->
-> Signed-off-by: Christian Ehrig <cehrig@cloudflare.com>
-> ---
+On 12/19/22 13:57, Ross Zwisler wrote:
+> On Mon, Dec 19, 2022 at 01:31:08PM -0500, Steven Rostedt wrote:
+>> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+>>
+>> With the new filter logic of passing in the name of a function to match an
+>> instruction pointer (or the address of the function), add a test to make
+>> sure that it is functional.
+>>
+>> This is also the first test to test plain filtering. The filtering has
+>> been tested via the trigger logic, which uses the same code, but there was
+>> nothing to test just the event filter, so this test is the first to add
+>> such a case.
+>>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: Shuah Khan <skhan@linuxfoundation.org>
+>> Cc: linux-kselftest@vger.kernel.org
+>> Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
+> Reviewed-by: Ross Zwisler <zwisler@google.com>
 
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Thank you both. I will apply this after rc1 comes out.
+
+thanks,
+-- Shuah
