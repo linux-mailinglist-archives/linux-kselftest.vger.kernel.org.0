@@ -2,142 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E42651215
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Dec 2022 19:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF4565121D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Dec 2022 19:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbiLSSfJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Dec 2022 13:35:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S232231AbiLSSlm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Dec 2022 13:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbiLSSe3 (ORCPT
+        with ESMTP id S231693AbiLSSlk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Dec 2022 13:34:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A565213FAB;
-        Mon, 19 Dec 2022 10:32:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60C1FB80F6F;
-        Mon, 19 Dec 2022 18:32:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF6BC4339B;
-        Mon, 19 Dec 2022 18:32:15 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1p7Kvu-0005TZ-0g;
-        Mon, 19 Dec 2022 13:32:14 -0500
-Message-ID: <20221219183214.075559302@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Mon, 19 Dec 2022 13:31:08 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        Mon, 19 Dec 2022 13:41:40 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DFDCE2C
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 10:41:38 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id k7-20020a17090a39c700b002192c16f19aso3882011pjf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Dec 2022 10:41:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SNYwUfFTuoAl5hIOKZfjRFYuwooe+ZnU5TXmMtVw1Vw=;
+        b=PCE1gF+1xjOltBu41UU9JPCPlViAY0cp05OJvxQyQmPrpc7dNlHqmkq7q85iScUgvx
+         59kbvpZ4IjfRtmma8ODffuMTsAdjF6mc9FKVnFuKmw3rIELY0aR224rULoZiXejfOyPf
+         FqKdlLrrnzQ6/TCerumh1X/uvJfXZqds67yZn+AFQJl4989wHnRjAT2AzwxFsBTJNKfx
+         cL6dAu+m1G6g1ck0y4oLro0/8KGrxIl8w+FuqOar5e0t0qvTFZly6zsHf3kBOU8TZs8R
+         LLRlKdcxr8DoXqpBUn8ZIP3Srjfi+Eo3QZ34EJGob+nKn5A2MI7/q1aI8OxYh9LPoYPL
+         oMfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SNYwUfFTuoAl5hIOKZfjRFYuwooe+ZnU5TXmMtVw1Vw=;
+        b=8HaObajc91Z2dmnfTUHhqqBaIO45/fV8ntcZGogBk7RW8DcU27otSH4C39YkcU2kBi
+         7LEhjDPBlnw0DM22uUrzEk98j/M1RqAQq/ZrF2PgVHsGVUISH+DtbZCpKaLk1GljWv5p
+         AYbL6FJZriUx2k7bSG/CbsDb/kICH2sVLZGGfQNJlztWhDVfJCsSsnmrNRtJkNU//+dd
+         swO3JmqPr8DnUTE6E5BRMi4oYjrBCZYGbuUHsAZlqhWJy/JgGfVe63pZbErh3DmxZNRz
+         sUBa7tflgug5DDXSCxIAJHwk1JsrZyxQJD4zgIhsdzbYarXBje37NZwkuQAfPQHiNELa
+         7rUg==
+X-Gm-Message-State: ANoB5pmMUP8jZGN3+0RXm4eNGlbagGLUJaUCkFyLmwoOjb7xZDNKi4al
+        DZ8qwEX8DBASdArWZoJXiSRhTFU=
+X-Google-Smtp-Source: AA0mqf5TTar+nQv3C/Qqpl/Q/pwSxFitrhZd1MdtZyr+Jmy7ViVHZitW9mXzJszzBU8Xm9p1hKZoeEI=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:902:74c3:b0:189:71ff:cfb5 with SMTP id
+ f3-20020a17090274c300b0018971ffcfb5mr60929233plt.7.1671475298158; Mon, 19 Dec
+ 2022 10:41:38 -0800 (PST)
+Date:   Mon, 19 Dec 2022 10:41:36 -0800
+In-Reply-To: <20221218051734.31411-1-cehrig@cloudflare.com>
+Mime-Version: 1.0
+References: <20221218051734.31411-1-cehrig@cloudflare.com>
+Message-ID: <Y6CwYK4xMTJv/R7u@google.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add flag BPF_F_NO_TUNNEL_KEY to bpf_skb_set_tunnel_key()
+From:   sdf@google.com
+To:     Christian Ehrig <cehrig@cloudflare.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Kui-Feng Lee <kuifeng@fb.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Kaixi Fan <fankaixi.li@bytedance.com>,
+        Shmulik Ladkani <shmulik@metanetworks.com>,
+        Paul Chaignon <paul@isovalent.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/2] tracing/selftests: Add test for event filtering on function name
-References: <20221219183106.518341498@goodmis.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 12/18, Christian Ehrig wrote:
+> This patch allows to remove TUNNEL_KEY from the tunnel flags bitmap
+> when using bpf_skb_set_tunnel_key by providing a BPF_F_NO_TUNNEL_KEY
+> flag. On egress, the resulting tunnel header will not contain a tunnel
+> key if the protocol and implementation supports it.
 
-With the new filter logic of passing in the name of a function to match an
-instruction pointer (or the address of the function), add a test to make
-sure that it is functional.
+> At the moment bpf_tunnel_key wants a user to specify a numeric tunnel
+> key. This will wrap the inner packet into a tunnel header with the key
+> bit and value set accordingly. This is problematic when using a tunnel
+> protocol that supports optional tunnel keys and a receiving tunnel
+> device that is not expecting packets with the key bit set. The receiver
+> won't decapsulate and drop the packet.
 
-This is also the first test to test plain filtering. The filtering has
-been tested via the trigger logic, which uses the same code, but there was
-nothing to test just the event filter, so this test is the first to add
-such a case.
+> RFC 2890 and RFC 2784 GRE tunnels are examples where this flag is
+> useful. It allows for generating packets, that can be decapsulated by
+> a GRE tunnel device not operating in collect metadata mode or not
+> expecting the key bit set.
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- .../test.d/filter/event-filter-function.tc    | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
+> Signed-off-by: Christian Ehrig <cehrig@cloudflare.com>
 
-diff --git a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-new file mode 100644
-index 000000000000..e2ff3bf4df80
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-@@ -0,0 +1,58 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: event filter function - test event filtering on functions
-+# requires: set_event events/kmem/kmem_cache_free/filter
-+# flags: instance
-+
-+fail() { #msg
-+    echo $1
-+    exit_fail
-+}
-+
-+echo "Test event filter function name"
-+echo 0 > tracing_on
-+echo 0 > events/enable
-+echo > trace
-+echo 'call_site.function == exit_mmap' > events/kmem/kmem_cache_free/filter
-+echo 1 > events/kmem/kmem_cache_free/enable
-+echo 1 > tracing_on
-+ls > /dev/null
-+echo 0 > events/kmem/kmem_cache_free/enable
-+
-+hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
-+misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
-+
-+if [ $hitcnt -eq 0 ]; then
-+	exit_fail
-+fi
-+
-+if [ $misscnt -gt 0 ]; then
-+	exit_fail
-+fi
-+
-+address=`grep ' exit_mmap$' /proc/kallsyms | cut -d' ' -f1`
-+
-+echo "Test event filter function address"
-+echo 0 > tracing_on
-+echo 0 > events/enable
-+echo > trace
-+echo "call_site.function == 0x$address" > events/kmem/kmem_cache_free/filter
-+echo 1 > events/kmem/kmem_cache_free/enable
-+echo 1 > tracing_on
-+sleep 1
-+echo 0 > events/kmem/kmem_cache_free/enable
-+
-+hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
-+misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
-+
-+if [ $hitcnt -eq 0 ]; then
-+	exit_fail
-+fi
-+
-+if [ $misscnt -gt 0 ]; then
-+	exit_fail
-+fi
-+
-+reset_events_filter
-+
-+exit 0
--- 
-2.35.1
+Acked-by: Stanislav Fomichev <sdf@google.com>
 
+> ---
+>   include/uapi/linux/bpf.h       | 4 ++++
+>   net/core/filter.c              | 5 ++++-
+>   tools/include/uapi/linux/bpf.h | 4 ++++
+>   3 files changed, 12 insertions(+), 1 deletion(-)
+
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 464ca3f01fe7..bc1a3d232ae4 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -2001,6 +2001,9 @@ union bpf_attr {
+>    * 			sending the packet. This flag was added for GRE
+>    * 			encapsulation, but might be used with other protocols
+>    * 			as well in the future.
+> + * 		**BPF_F_NO_TUNNEL_KEY**
+> + * 			Add a flag to tunnel metadata indicating that no tunnel
+> + * 			key should be set in the resulting tunnel header.
+>    *
+>    * 		Here is a typical usage on the transmit path:
+>    *
+> @@ -5764,6 +5767,7 @@ enum {
+>   	BPF_F_ZERO_CSUM_TX		= (1ULL << 1),
+>   	BPF_F_DONT_FRAGMENT		= (1ULL << 2),
+>   	BPF_F_SEQ_NUMBER		= (1ULL << 3),
+> +	BPF_F_NO_TUNNEL_KEY		= (1ULL << 4),
+>   };
+
+>   /* BPF_FUNC_skb_get_tunnel_key flags. */
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 929358677183..c746e4d77214 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4615,7 +4615,8 @@ BPF_CALL_4(bpf_skb_set_tunnel_key, struct sk_buff  
+> *, skb,
+>   	struct ip_tunnel_info *info;
+
+>   	if (unlikely(flags & ~(BPF_F_TUNINFO_IPV6 | BPF_F_ZERO_CSUM_TX |
+> -			       BPF_F_DONT_FRAGMENT | BPF_F_SEQ_NUMBER)))
+> +			       BPF_F_DONT_FRAGMENT | BPF_F_SEQ_NUMBER |
+> +			       BPF_F_NO_TUNNEL_KEY)))
+>   		return -EINVAL;
+>   	if (unlikely(size != sizeof(struct bpf_tunnel_key))) {
+>   		switch (size) {
+> @@ -4653,6 +4654,8 @@ BPF_CALL_4(bpf_skb_set_tunnel_key, struct sk_buff  
+> *, skb,
+>   		info->key.tun_flags &= ~TUNNEL_CSUM;
+>   	if (flags & BPF_F_SEQ_NUMBER)
+>   		info->key.tun_flags |= TUNNEL_SEQ;
+> +	if (flags & BPF_F_NO_TUNNEL_KEY)
+> +		info->key.tun_flags &= ~TUNNEL_KEY;
+
+>   	info->key.tun_id = cpu_to_be64(from->tunnel_id);
+>   	info->key.tos = from->tunnel_tos;
+> diff --git a/tools/include/uapi/linux/bpf.h  
+> b/tools/include/uapi/linux/bpf.h
+> index 464ca3f01fe7..bc1a3d232ae4 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -2001,6 +2001,9 @@ union bpf_attr {
+>    * 			sending the packet. This flag was added for GRE
+>    * 			encapsulation, but might be used with other protocols
+>    * 			as well in the future.
+> + * 		**BPF_F_NO_TUNNEL_KEY**
+> + * 			Add a flag to tunnel metadata indicating that no tunnel
+> + * 			key should be set in the resulting tunnel header.
+>    *
+>    * 		Here is a typical usage on the transmit path:
+>    *
+> @@ -5764,6 +5767,7 @@ enum {
+>   	BPF_F_ZERO_CSUM_TX		= (1ULL << 1),
+>   	BPF_F_DONT_FRAGMENT		= (1ULL << 2),
+>   	BPF_F_SEQ_NUMBER		= (1ULL << 3),
+> +	BPF_F_NO_TUNNEL_KEY		= (1ULL << 4),
+>   };
+
+>   /* BPF_FUNC_skb_get_tunnel_key flags. */
+> --
+> 2.37.4
 
