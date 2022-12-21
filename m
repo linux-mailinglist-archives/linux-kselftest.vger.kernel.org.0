@@ -2,137 +2,272 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0F0652BF3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Dec 2022 04:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E34652C94
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Dec 2022 06:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiLUDzg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Dec 2022 22:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
+        id S229961AbiLUF71 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Dec 2022 00:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234172AbiLUDzd (ORCPT
+        with ESMTP id S229448AbiLUF70 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Dec 2022 22:55:33 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856BA1EED2
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Dec 2022 19:55:32 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d15so14317365pls.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Dec 2022 19:55:32 -0800 (PST)
+        Wed, 21 Dec 2022 00:59:26 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7728E79;
+        Tue, 20 Dec 2022 21:59:25 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id y3so7477676ilq.0;
+        Tue, 20 Dec 2022 21:59:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LG53lA26L/ncngjFCHRhyvrs5xf1POMXaF/i7pP2T2w=;
-        b=jE8ug6sV2Ksmc1BjKlm2igxId/ENjDWpxJUXauuLCDWxTXh5ogm7qEZcDK557UrubC
-         CrP+Ib8pkTZdIZEdo3nkWvf5LrUWmr4jzVAoTsF/GdW73ifIopte2waaoubyn/9pOerY
-         WAfRkiwcznSlocee7G/hOSFzDtFRdLMj3soEhqVIsFxGlXL84laUyc3rDUUFohWw9FGU
-         5ITGwmYLdSoJpaDqay0DHYJdne1DhHXdxu/ZhO87WLlQPJXGXJ9pxE54c3n2Yam5WAMJ
-         Z4jmRQbXMkrl9CI0akL6yhV89RmgjdmqRaldmqh7AzpJGJFOPNEePFm2YBQD/wudUzJD
-         Jzxw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NTAcqyZi4W+uNvx0HYCH7K/UWAkMHmtbGpytiWnrUo=;
+        b=mcfDIPPmOH7rWQnM/v7aWKAHCv1U9AFPS5zUZ8YXKmag/b8GKqwNKNC/yy5NJhjL+z
+         uzR4TewO2g8iUvMc3pfULNoMkr8qk6OYIBnK3AseWiqf2ob2vUm0bsGrnCHMfAhgHxOq
+         qm6B48yUax7tBSEYK43LwIxlEc0LmcykT9MswAZC3H7Y0z0lOqWzDQLi5Fti4JZ8Vrp6
+         IsNiN23KZ+8Cy5XuaI3vGzi+7NpvfnhSS/Xz/478DwfEBBUiTgDu5qzfiDDzinnTin6Z
+         yiKfOMdGjMMORM+999yLlTPapp2KHTgg27WxAjBWhkcSTLoNtgATpVrONS3r+drdib1a
+         gIuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LG53lA26L/ncngjFCHRhyvrs5xf1POMXaF/i7pP2T2w=;
-        b=ugv2PVRMAdIYgcnBe9MTmmSbCcPIlguPkUJZlc6+yKp9VLG3ngFpf80qj9hBumg6nN
-         e+Ea+mAwW2oRfT+4hO7iXaqk6vc/ud0emtAfXW0Sl6RKQq2/Ja4sn3AZ93mW4z3Cbq0Y
-         Z8M7Ace3T/W8gdBB2hKTJXwu6LKvIYiQjIfCp1bydEhxbxzc54Bc4mcdc7l/eY1MWDci
-         DhY+kzkaZGjvvaEcQ+BFwJx7/o+n0VaMPzXVYObjmJdRGSsvXUk5uHJDvVFATC38QxuN
-         xpTUuxlT3+7vOd5ocX1Fg9ea6fRYCU3nW0gdNcI2j3ZMcJll/4ShThI34DcfWfYfYCUD
-         CJ0g==
-X-Gm-Message-State: AFqh2kqU0MwPL0bDLPmxpGFZmMo24OU/JRj9CtyHtthUWkC1LYqfeVXF
-        FvR+fLvaCkTsMd+CnoylDduvMQ==
-X-Google-Smtp-Source: AMrXdXucR+r5a6DTmL41q4+SegBpEAwe4Wonw64R9urkdQSpXNK8K3BOVXCMoHZst4hjRq8i7ONt9w==
-X-Received: by 2002:a17:902:7405:b0:18f:a4e1:9908 with SMTP id g5-20020a170902740500b0018fa4e19908mr661321pll.15.1671594931937;
-        Tue, 20 Dec 2022 19:55:31 -0800 (PST)
-Received: from leoy-yangtze.lan (n058152048225.netvigator.com. [58.152.48.225])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902654500b00188fcc4fc00sm10165715pln.79.2022.12.20.19.55.26
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+NTAcqyZi4W+uNvx0HYCH7K/UWAkMHmtbGpytiWnrUo=;
+        b=AxeD/qKzIvdTPtFYVf7oExfaUxLh7ObV2+x6ks60HZmAHzKRsLlUFbsZtqKZ7etdF8
+         gm7m0/MHgKHyir7yJHCdCdJrcLtobWDYHgrsQ0/EmYLA0V1PCxEH7CyZwa4eW/rQiTf/
+         JTF5tMBnl/c8MW+aMbubmaYTSz6lYqNARWloFK4Hofmt4gxqrGUcZEbkge75+Tx5SkNh
+         mBdKHHpUbAlPYylaBoQxdtaUP3tvn3WZ69cKDqnY1hepxbwS+GTDi8FfWtQkh22mvdlW
+         GTOBkpg6Eqw2DHiX/t0dQ583hzY9Kj1q9iO65OvNwa0n91vTbxtrRgF/7YDL1mAFsc/q
+         p5Jw==
+X-Gm-Message-State: AFqh2kqoifJ7yAjOToYZAkOpx6C5gNard4dbCNZPSZ9FiiCfs6dpQZqR
+        2SU9tUJd/yo1M+fdqybx5WPKn+ICL9D4Lphj
+X-Google-Smtp-Source: AMrXdXtBCBTWGUjxKkQYB6+2tmxDLbf/zN22r8j0Rz9PtPcXywOIqLZzy2hPRCdemJ3ZZJZncyzOAw==
+X-Received: by 2002:a92:ce07:0:b0:300:1cc8:7ec7 with SMTP id b7-20020a92ce07000000b003001cc87ec7mr577234ilo.12.1671602365053;
+        Tue, 20 Dec 2022 21:59:25 -0800 (PST)
+Received: from james-x399.localdomain (71-33-132-231.hlrn.qwest.net. [71.33.132.231])
+        by smtp.gmail.com with ESMTPSA id b3-20020a029583000000b003748d3552e1sm5282647jai.154.2022.12.20.21.59.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 19:55:31 -0800 (PST)
-Date:   Wed, 21 Dec 2022 11:55:24 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Quentin Monnet <quentin@isovalent.com>,
-        Changbin Du <changbin.du@gmail.com>,
+        Tue, 20 Dec 2022 21:59:24 -0800 (PST)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF"
- section
-Message-ID: <Y6KDrELoIfPbh3VN@leoy-yangtze.lan>
-References: <20221217223509.88254-1-changbin.du@gmail.com>
- <20221217223509.88254-2-changbin.du@gmail.com>
- <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan>
- <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
- <Y6GdofET0gHQzRX6@leoy-yangtze.lan>
- <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH bpf-next] selftests/bpf: move struct definitions out of function params
+Date:   Tue, 20 Dec 2022 22:58:48 -0700
+Message-Id: <20221221055856.2786043-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 04:13:13PM -0800, Andrii Nakryiko wrote:
+Anonymous structs can't be declared inside function parameter
+definitions in current c standards, however clang doesn't detect this
+condition currently while GCC does.
 
-[...]
+Details: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108189
 
-> > > > > @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
-> > > > >   err = 0;
-> > > > >
-> > > > >   if (!btf_data) {
-> > > > > +         pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
-> > > > >           err = -ENOENT;
-> >
-> > btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
-> > section, therefore, bpftool dumps error string "No such file or
-> > directory".  It's confused that actually vmlinux is existed.
-> >
-> > I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
-> > better choice?) to replace -ENOENT at here, this can avoid bpftool to
-> > outputs "No such file or directory" in this case.
-> 
-> The only really meaningful error code would be -ESRCH, which
-> strerror() will translate to "No such process", which is also
-> completely confusing.
+Fixes errors like:
+progs/btf_dump_test_case_bitfields.c:85:7: error: anonymous struct declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+   85 | int f(struct {
+      |       ^~~~~~
 
-Or maybe -ENODATA (No data available) is a better choice?
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ .../bpf/progs/btf_dump_test_case_bitfields.c  |  9 ++++--
+ .../progs/btf_dump_test_case_namespacing.c    | 10 ++++---
+ .../bpf/progs/btf_dump_test_case_packing.c    | 10 ++++---
+ .../bpf/progs/btf_dump_test_case_padding.c    | 10 ++++---
+ .../bpf/progs/btf_dump_test_case_syntax.c     | 30 +++++++++++++------
+ 5 files changed, 46 insertions(+), 23 deletions(-)
 
-Thanks,
-Leo
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
+index e01690618e1e..c75f6bd06a49 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
+@@ -82,11 +82,16 @@ struct bitfield_flushed {
+ 	long b: 16;
+ };
+ 
+-int f(struct {
++/* ----- START-EXPECTED-OUTPUT ----- */
++struct root_struct {
+ 	struct bitfields_only_mixed_types _1;
+ 	struct bitfield_mixed_with_others _2;
+ 	struct bitfield_flushed _3;
+-} *_)
++};
++
++/* ------ END-EXPECTED-OUTPUT ------ */
++
++int f(struct root_struct *_)
+ {
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
+index 92a4ad428710..d7cf2a8487c9 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
+@@ -49,9 +49,7 @@ typedef int Y;
+ 
+ typedef int Z;
+ 
+-/*------ END-EXPECTED-OUTPUT ------ */
+-
+-int f(struct {
++struct root_struct {
+ 	struct S _1;
+ 	S _2;
+ 	union U _3;
+@@ -67,7 +65,11 @@ int f(struct {
+ 	X xx;
+ 	Y yy;
+ 	Z zz;
+-} *_)
++};
++
++/*------ END-EXPECTED-OUTPUT ------ */
++
++int f(struct root_struct *_)
+ {
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+index 7998f27df7dd..e039ceb50c43 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+@@ -132,9 +132,7 @@ struct outer_packed_struct {
+ 	struct nested_packed_struct b;
+ } __attribute__((packed));
+ 
+-/* ------ END-EXPECTED-OUTPUT ------ */
+-
+-int f(struct {
++struct root_struct {
+ 	struct packed_trailing_space _1;
+ 	struct non_packed_trailing_space _2;
+ 	struct packed_fields _3;
+@@ -147,7 +145,11 @@ int f(struct {
+ 	struct usb_host_endpoint _10;
+ 	struct outer_nonpacked_struct _11;
+ 	struct outer_packed_struct _12;
+-} *_)
++};
++
++/* ------ END-EXPECTED-OUTPUT ------ */
++
++int f(struct root_struct *_)
+ {
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+index 79276fbe454a..2ca46ad8d66a 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+@@ -220,9 +220,7 @@ struct outer_mixed_but_unpacked {
+ 	struct nested_packed b2;
+ };
+ 
+-/* ------ END-EXPECTED-OUTPUT ------ */
+-
+-int f(struct {
++struct root_struct {
+ 	struct padded_implicitly _1;
+ 	struct padded_explicitly _2;
+ 	struct padded_a_lot _3;
+@@ -243,7 +241,11 @@ int f(struct {
+ 	struct ib_wc _201;
+ 	struct acpi_object_method _202;
+ 	struct outer_mixed_but_unpacked _203;
+-} *_)
++} __attribute__((packed));
++
++/* ------ END-EXPECTED-OUTPUT ------ */
++
++int f(struct root_struct *_)
+ {
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 26fffb02ed10..3e31df7cecc6 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -104,24 +104,24 @@ typedef void (*printf_fn_t)(const char *, ...);
+  *   typedef const fn_output_inner_t fn_ptr_arr2_t[5];
+  */
+ /* ----- START-EXPECTED-OUTPUT ----- */
+-typedef char * const * (*fn_ptr2_t)(struct {
+-	int a;
+-}, int (*)(int));
++struct struct_a;
++
++typedef char * const * (*fn_ptr2_t)(struct struct_a, int (*)(int));
++
++struct struct_c;
++
++struct struct_h;
+ 
+ typedef struct {
+ 	int a;
+-	void (*b)(int, struct {
+-		int c;
+-	}, union {
++	void (*b)(int, struct struct_c, union {
+ 		char d;
+ 		int e[5];
+ 	});
+ } (*fn_complex_t)(union {
+ 	void *f;
+ 	char g[16];
+-}, struct {
+-	int h;
+-});
++}, struct struct_h);
+ 
+ typedef void (* (*signal_t)(int, void (*)(int)))(int);
+ 
+@@ -272,6 +272,18 @@ struct root_struct {
+ 	struct float_struct _15;
+ };
+ 
++struct struct_a {
++	int a;
++};
++
++struct struct_h {
++	int h;
++};
++
++struct struct_c {
++	int c;
++};
++
+ /* ------ END-EXPECTED-OUTPUT ------ */
+ 
+ int f(struct root_struct *s)
+-- 
+2.34.1
 
-> In general, I always found these strerror() messages extremely
-> unhelpful and confusing. I wonder if we should make an effort to
-> actually emit symbolic names of errors instead (literally, "-ENOENT"
-> in this case). This is all tooling for engineers, I find -ENOENT or
-> -ESRCH much more meaningful as an error message, compared to "No such
-> file" seemingly human-readable interpretation.
-> 
-> Quenting, what do you think about the above proposal for bpftool? We
-> can have some libbpf helper internally and do it in libbpf error
-> messages as well and just reuse the logic in bpftool, perhaps?
-> 
-> Anyways, I've applied this patch set to bpf-next. Thanks.
