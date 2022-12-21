@@ -2,98 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4567B6527E6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Dec 2022 21:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 126F8652A5A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Dec 2022 01:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiLTUcd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Dec 2022 15:32:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S234445AbiLUAOf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Dec 2022 19:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234409AbiLTUcB (ORCPT
+        with ESMTP id S234442AbiLUAOC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Dec 2022 15:32:01 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2E51F636;
-        Tue, 20 Dec 2022 12:31:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1671568268; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=AIc5uaO3ypMUPMx3xjmDnPW1UDmslbJttmZf8L9NU0Rz/6VVWPKkgAEWv3NPmNesImnjkCeRz4KDUa+DVGs6hX5NiU9pG6M/XNvx1Sp6Dq20nRixmbCfF1DoOacIqPdTILOkieMWF63xXt7rL7oIIN2Vz15snr3Z44CWLNIaLiY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1671568268; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=MwpXKEJAPVR+byJdB5oIAwS4ZE/NgA8mrHIQ8L3UdxQ=; 
-        b=Ux9m/rWxrQPC7m1Ld/p7XMtM9JMX9vmfduafJjBQ1y9+yey+IvWO/H0lXOAJd8cRzf7LOhJrDyBIKaznzSkMo3zcD6Eybu5vmhb2lmDddSV7v0omfUfPg5wv5u9IZuLNlGYko9CIPEYY6BpvpRknvCNqWxjx6agJ+jwRYHGFyvA=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671568268;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Message-ID:Date:Date:MIME-Version:From:From:Subject:Subject:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=MwpXKEJAPVR+byJdB5oIAwS4ZE/NgA8mrHIQ8L3UdxQ=;
-        b=jTOmAqMexqMX0S9XtrQ0BdGZgCbmPtk17u9NJNA6oiASBgLqsDtF/q2Snd9kWygq
-        IuvLnUMDLT2S6mXgiWHyQcxnqOJw6EkFWVTgnGjNenBoA+6PTzw3oo2YuyHnpm+D+lj
-        vY839xcFVCpIZFmYCpUOutOOYfLnt10UwKM/ZnVQ=
-Received: from [192.168.1.9] (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1671568266792170.31739805186044; Wed, 21 Dec 2022 02:01:06 +0530 (IST)
-Message-ID: <9e1390c5-844c-9fa5-693e-da9d10c64e21@siddh.me>
-Date:   Wed, 21 Dec 2022 02:01:04 +0530
+        Tue, 20 Dec 2022 19:14:02 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7C9205FB;
+        Tue, 20 Dec 2022 16:13:27 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id qk9so33128844ejc.3;
+        Tue, 20 Dec 2022 16:13:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/CkWUTtnXtFdBonK+Hr2bihTCTKwFRgaMGiP5ubhFJM=;
+        b=RxemTcOkAAOCSnKpzXAa20/l/IF8AGKsxrBEYMJMESw7nLG1JJUiYFpw3WNmBHKMYx
+         2xUQwe56HvDbpg1oH5xV4EknU3X1jTx6gzFtarI2XYu9ogv3iYILKxxZxq4Xgseu0yBE
+         Ak/AW9eWEVzU+slDXruur04265h479VtK5C8T+2mby54siRIrgg5QIytIiG/1RnWs4t4
+         UyOIVDxizA9POLZ0ggM7+REZyWcgEHfMqGLws4nTrBIg9fTRIT1VoPYiB9cZ7UQn7J/h
+         s/XFzOmTRv9JQk6ec2sqdR3DPa2ZQHXJBJ3qpIhymk5AwWJ2XaqWqqGIz50dYFUBI9l7
+         cvXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/CkWUTtnXtFdBonK+Hr2bihTCTKwFRgaMGiP5ubhFJM=;
+        b=Sp1i1vbKEyC2ht1SB5lSz0mH76NHuFlI+8e+x79YmcpvUKrylTbNUMnnYHJ7UCQiHZ
+         WAqWNo+VAoUg8LX9H6b738r4CF3mLHv6e829D5IByoRUDnhjMyj+JyC9no8kg4sXqLX6
+         gYWfDqSmNq2LfK3ce5hxcmOoDjD19Oait6OXMGVN8Xqie6EAllC8xuZ32X/x1H1Lt9kT
+         A2+e0YoFSZJ9sGIB+mPzt6BrQMiF4fmvaV7E4NSV+Isv/aPlSc/ob/I1HKvg4HaAREYB
+         NTvInaoY4cw8vtKtsqx5KN+9cCpq07hxA/vn+dPDzzK8UQ9+oYqpPCKE2HK+IjCRxdks
+         6TOQ==
+X-Gm-Message-State: ANoB5plBEXc9ofK0FjlrTGdZId/UQnEaYTXPYPwuVhJq89AnThxaeIjz
+        HzkJ1YyZ9aS2B9gcnfG+OyIs/OpQ+6841K0tl5g=
+X-Google-Smtp-Source: AA0mqf7oW7LbTNUBSaYQWZxQTaza7/YMvZf/jqph3Skp5ZguAZC6ORw10jyzshIECGsB5Rc0GjO574CzEKp94mja9m8=
+X-Received: by 2002:a17:906:3e53:b0:7c1:1f2b:945f with SMTP id
+ t19-20020a1709063e5300b007c11f2b945fmr7436538eji.302.1671581605781; Tue, 20
+ Dec 2022 16:13:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-From:   Siddh Raman Pant <code@siddh.me>
-Subject: Re: [PATCH] selftests: Add missing <sys/syscall.h> to mount_setattr
- test
-To:     Daan De Meyer <daan.j.demeyer@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kselftests <linux-kselftest@vger.kernel.org>,
-        Seth Forshee <sforshee@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-References: <20221201150218.2374366-1-daan.j.demeyer@gmail.com>
-Content-Language: en-US, en-GB, hi-IN
-In-Reply-To: <20221201150218.2374366-1-daan.j.demeyer@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221217223509.88254-1-changbin.du@gmail.com> <20221217223509.88254-2-changbin.du@gmail.com>
+ <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan> <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
+ <Y6GdofET0gHQzRX6@leoy-yangtze.lan>
+In-Reply-To: <Y6GdofET0gHQzRX6@leoy-yangtze.lan>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 20 Dec 2022 16:13:13 -0800
+Message-ID: <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF" section
+To:     Leo Yan <leo.yan@linaro.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 01 2022 at 20:32:18 +0530, Daan De Meyer wrote:
-> Including <sys/syscall.h> is required to define __NR_mount_setattr
-> and __NR_open_tree which the mount_setattr test relies on.
-> 
-> Signed-off-by: Daan De Meyer <daan.j.demeyer@gmail.com>
-> ---
->  tools/testing/selftests/mount_setattr/mount_setattr_test.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> index 8c5fea68ae67..da85f8af482c 100644
-> --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> @@ -11,6 +11,7 @@
->  #include <sys/wait.h>
->  #include <sys/vfs.h>
->  #include <sys/statvfs.h>
-> +#include <sys/syscall.h>
->  #include <sys/sysinfo.h>
->  #include <stdlib.h>
->  #include <unistd.h>
+On Tue, Dec 20, 2022 at 3:34 AM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> On Tue, Dec 20, 2022 at 09:31:14AM +0800, Changbin Du wrote:
+>
+> [...]
+>
+> > > > Now will print below info:
+> > > > libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux
+> > >
+> > > Recently I encountered the same issue, it could be caused by:
+> > > either missing to install tool pahole or missing to enable kernel
+> > > configuration CONFIG_DEBUG_INFO_BTF.
+> > >
+> > > Could we give explict info for reasoning failure?  Like:
+> > >
+> > > "libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux,
+> > > please install pahole and enable CONFIG_DEBUG_INFO_BTF=y for kernel building".
+> > >
+> > This is vmlinux special information and similar tips are removed from
+> > patch V2. libbpf is common for all ELFs.
+>
+> Okay, I see.  Sorry for noise.
+>
+> > > > Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
+> > >
+> > > This log is confusing when we can find vmlinux file but without BTF
+> > > section.  Consider to use a separate patch to detect vmlinux not
+> > > found case and print out "No such file or directory"?
+> > >
+> > I think it's already there. If the file doesn't exist, open will fail.
+>
+> [...]
+>
+> > > > @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+> > > >   err = 0;
+> > > >
+> > > >   if (!btf_data) {
+> > > > +         pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
+> > > >           err = -ENOENT;
+>
+> btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
+> section, therefore, bpftool dumps error string "No such file or
+> directory".  It's confused that actually vmlinux is existed.
+>
+> I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
+> better choice?) to replace -ENOENT at here, this can avoid bpftool to
+> outputs "No such file or directory" in this case.
 
-Tested-by: Siddh Raman Pant <code@siddh.me>
+The only really meaningful error code would be -ESRCH, which
+strerror() will translate to "No such process", which is also
+completely confusing.
 
-Though this oversight actually led to gcc detecting another
-another error [1], as it entered the #ifndef __NR_mount_setattr
-block.
+In general, I always found these strerror() messages extremely
+unhelpful and confusing. I wonder if we should make an effort to
+actually emit symbolic names of errors instead (literally, "-ENOENT"
+in this case). This is all tooling for engineers, I find -ENOENT or
+-ESRCH much more meaningful as an error message, compared to "No such
+file" seemingly human-readable interpretation.
 
-Thanks,
-Siddh
+Quenting, what do you think about the above proposal for bpftool? We
+can have some libbpf helper internally and do it in libbpf error
+messages as well and just reuse the logic in bpftool, perhaps?
 
-[1] https://lore.kernel.org/all/20221211092820.85527-1-code@siddh.me/
+
+Anyways, I've applied this patch set to bpf-next. Thanks.
+
+
+>
+> Thanks,
+> Leo
