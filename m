@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB481653B0D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Dec 2022 04:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2F9653B10
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Dec 2022 04:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234933AbiLVDwg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Dec 2022 22:52:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S234949AbiLVDwn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Dec 2022 22:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234932AbiLVDwf (ORCPT
+        with ESMTP id S234953AbiLVDwm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Dec 2022 22:52:35 -0500
+        Wed, 21 Dec 2022 22:52:42 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AF723329;
-        Wed, 21 Dec 2022 19:52:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1444186A6;
+        Wed, 21 Dec 2022 19:52:38 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.88.132])
-        by gnuweeb.org (Postfix) with ESMTPSA id 9D18F81A20;
-        Thu, 22 Dec 2022 03:52:29 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 7729A81A0D;
+        Thu, 22 Dec 2022 03:52:34 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1671681153;
-        bh=dAu4u8hilpZPllAVwu00C5OS/7zywFlN7MRAKmmU8vY=;
+        s=default; t=1671681158;
+        bh=7CHYFJ/fWvU3HmqUeRZ+VXRA4YRaz7Sx/PWqqaM5V34=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=feCVYsbUUPipmlfjwXpY+Bispi3vMoCpuOKrfMEolGAzEiNO+8X0jywpx1358j0uD
-         Vf46EbF7dN9cXkvscwqZwrFzkGnV9KUHcM5gUgfU4VY+VKTWJtEa7mE+8N2yvv6itn
-         VLsJvT077b6ewF/6H+NfU8vEqorWBe2iv1NpPncxOjtwIwvDB2FVPn7Mizhi0yZHyn
-         SM9MM0N5h5CbAl+JtmCeJQDnA6sAjMkzijfsL/VXsSWvACwAkWGYSdt61c/75sT3LQ
-         cC/ACddnjE0EI85M/8jEJdLmhNw7lDOJnR8sgP+xHzY7y8YyPOyFZuBpL9oQ7v5cm1
-         sMou4sZAbNuOA==
+        b=OAr/7wyrio6E1/EaQ1M1rE1/PZVifyMfZI3ucHwy85zJYky5RY12Y+9aiE2RZw231
+         2feH9uuKuOWyZtteCOwapCVVLvuI4pfaxx2SkRugm8I2vXxfldLaoNWw+0XK7I1jR8
+         WGpOhumr90RujdFpnWDTg6xszQEaQaHGqRnSnAqZHgHESJJVTy609MpkLkvRcTjRaT
+         0WyC50LXJ7FYc1kIqOh+TvotowI7B1E/wMGdqKj5834q4SSpEfpOerJV+oL29Dx9f/
+         ZD1OA4+Qo5fMOmSUs9Uaq5Tkzt7AU8tzmBWfll7ppSBNLmC3pPG0vMs4oqmscV4dtN
+         FRcqZfbRnochQ==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>
@@ -42,9 +42,9 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Kselftest Mailing List 
         <linux-kselftest@vger.kernel.org>
-Subject: [RFC PATCH v1 4/8] selftests/nolibc: Add `-Wall` and `-Wno-unsed-function` to the CFLAGS
-Date:   Thu, 22 Dec 2022 10:51:30 +0700
-Message-Id: <20221222035134.3467659-5-ammar.faizi@intel.com>
+Subject: [RFC PATCH v1 5/8] selftests/nolibc: Add `fork(2)` selftest
+Date:   Thu, 22 Dec 2022 10:51:31 +0700
+Message-Id: <20221222035134.3467659-6-ammar.faizi@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221222035134.3467659-1-ammar.faizi@intel.com>
 References: <20221222035134.3467659-1-ammar.faizi@intel.com>
@@ -61,45 +61,78 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Turn on more compiler warnings to help spot issues. Skip unused
-function warning as it's inevitable in the nolibc test suite.
-
-While adding these flags, remove unused variables in run_stdlib()
-warned by the `-Wall` flag.
+Ensure the fork() function can create a child process. Also, when the
+child exits, the parent must be able to get the child's exit code
+via waitpid().
 
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- tools/testing/selftests/nolibc/Makefile      | 2 +-
- tools/testing/selftests/nolibc/nolibc-test.c | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 45 ++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 572fe72df68d..f6602a2c2bbd 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -66,7 +66,7 @@ else
- Q=@
- endif
- 
--CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables
-+CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -Wall -Wno-unused-function
- LDFLAGS := -s
- 
- help:
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index f14f5076fb6d..8d69f8a0f35a 100644
+index 8d69f8a0f35a..309cabbddeec 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -542,9 +542,7 @@ int run_syscall(int min, int max)
- int run_stdlib(int min, int max)
- {
- 	int test;
--	int tmp;
- 	int ret = 0;
--	void *p1, *p2;
+@@ -442,6 +442,50 @@ int test_getdents64(const char *dir)
+ 	return ret;
+ }
  
- 	for (test = min; test >= 0 && test <= max; test++) {
- 		int llen = 0; // line length
++/*
++ * Test fork().
++ * Make sure the exit code can be read from the parent process.
++ */
++static int test_fork_and_exit(int expected_code)
++{
++	int status;
++	int code;
++	pid_t ret;
++	pid_t p;
++
++	p = fork();
++	if (p < 0)
++		return p;
++
++	if (!p)
++		exit(expected_code);
++
++	do {
++		ret = waitpid(p, &status, 0);
++		if (ret < 0)
++			return ret;
++	} while (!WIFEXITED(status));
++
++	code = WEXITSTATUS(status);
++	if (code != expected_code) {
++		printf("test_fork_and_exit(): waitpid(): Invalid exit code: %d; expected = %d\n", code, expected_code);
++		return -1;
++	}
++
++	return 0;
++}
++
++static int test_fork(void)
++{
++	int i;
++
++	for (i = 0; i < 255; i++) {
++		if (test_fork_and_exit(i))
++			return -1;
++	}
++	return 0;
++}
++
+ /* Run syscall tests between IDs <min> and <max>.
+  * Return 0 on success, non-zero on failure.
+  */
+@@ -494,6 +538,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(dup3_0);            tmp = dup3(0, 100, 0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
+ 		CASE_TEST(dup3_m1);           tmp = dup3(-1, 100, 0); EXPECT_SYSER(1, tmp, -1, EBADF); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(execve_root);       EXPECT_SYSER(1, execve("/", (char*[]){ [0] = "/", [1] = NULL }, NULL), -1, EACCES); break;
++		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork()); break;
+ 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
+ 		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
+ 		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
 -- 
 Ammar Faizi
 
