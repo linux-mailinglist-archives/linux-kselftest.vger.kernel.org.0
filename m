@@ -2,98 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4524654453
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Dec 2022 16:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9898C65456B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Dec 2022 17:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235500AbiLVP2J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Dec 2022 10:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
+        id S229904AbiLVQ6f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Dec 2022 11:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235516AbiLVP2F (ORCPT
+        with ESMTP id S229830AbiLVQ6e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:28:05 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B026166;
-        Thu, 22 Dec 2022 07:28:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1671722883;
-        bh=rpA44R7emjI1qfvYw5PNQuISdxrQHVVRQfHfzR8tV+I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XtKGHoWZPqL/uWvKgIGwBbfsliUlaqCaZKBwUAxvR4ETlyzVenEeU/R1uNZNpBii9
-         qt0qqcVZsOeeaSdvOvPyz/sBdsp/7umSMIt0ngwu3st2G9kyg/Xm9LKSH8bZet40Pv
-         /9GendsgWKLq86hoZTOuRbByW239ktBrf80ho4iYrxX3jf1PrgMd7lMdmpHrbjkLfx
-         wP/sVDAqtdNvYXXCIUWwSH6hzO0FadaI4sia24RPwdy5dx2fF9m1rwF8lZqszlnI9l
-         Xg3eiak7cAuhU2rwV/r0UCJlork92zX9rbBwLPyq4qkTsoOG1tkNI10+d6X0wY/vCM
-         LcR+N0DOyvc3Q==
-Received: from [10.1.0.30] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NdDhz57syzc1J;
-        Thu, 22 Dec 2022 10:28:03 -0500 (EST)
-Message-ID: <9fad5641-ebd4-d2e5-6f87-2c409c336072@efficios.com>
-Date:   Thu, 22 Dec 2022 10:28:28 -0500
+        Thu, 22 Dec 2022 11:58:34 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C086B15A3D
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Dec 2022 08:58:33 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id d14so1232583ilq.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Dec 2022 08:58:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SSFXjoWtwnBi1YCgBNkvPzvy1204ExxRx5Br5L9WXvk=;
+        b=OZlR/LevIjNdSzuBnMAiRvMJ5QDcLy4QB/ZNpwaA0VetIf2kMuSYT9f1I4GT3Ag8NT
+         bJu10lAGBCOnK9SdCJI54ZLneqexvyzxEIdFRn1+bRDLAeYhGEzgZv57EdLNjMO27w33
+         W27fGkdoVmZKdpL+lKiBq5uwZ6KFWEt6+WtL8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SSFXjoWtwnBi1YCgBNkvPzvy1204ExxRx5Br5L9WXvk=;
+        b=Nic+164Cokr3Pr0AfvK3lwErthLX6eMyJOo2jGoHAnb5ZM3ikKmK+XrEsTpCE2pIyj
+         NEKWiz0OMM2AV/dEaA3/jVppWrPRbLo01LwwbkzRQidMfqB+mVwBQT2ZjnSOwFy1EbjV
+         0LMMCFfMr64pdXI7OzauyhK1MCmSmyjOlhrXGZrUDx9jGqdK92ks7RdII2FbyU9BtWvu
+         IRP4TS7ZZa9Rrc4MiWuCJYJPUHXMOzl1BKeVcS/RLldQH75MXAeJ35T1/1V15Ngt64vL
+         U9/V1NTqFX/ZZjtEV+k0MberLWEPUQtN5XB2uOaq9Omaw9qomNkjGssjHgaNsdZ0gBIE
+         CcKA==
+X-Gm-Message-State: AFqh2kq1z5NZyuCMxXeL2rT+epcocQbx3k8oVS1lFPBmRGIXqzLCE1lj
+        85BdPG/zarrGf1hwUb3UrHl45g==
+X-Google-Smtp-Source: AMrXdXsGXi8YHMjU+Yn6Whmi5DC7cWLuRQ5V7D1MYexq88w8oVPxr6Mul/NcH9nlBsUf2FCsPhJQnA==
+X-Received: by 2002:a05:6e02:1244:b0:304:b2dc:4274 with SMTP id j4-20020a056e02124400b00304b2dc4274mr850849ilq.3.1671728313103;
+        Thu, 22 Dec 2022 08:58:33 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c17-20020a92dc91000000b00302f4f69f62sm368590iln.12.2022.12.22.08.58.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 08:58:31 -0800 (PST)
+Message-ID: <641d1e50-a9d0-dc15-be76-07b8ace25dae@linuxfoundation.org>
+Date:   Thu, 22 Dec 2022 09:58:30 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 0/2] sched/membarrier, selftests: Introduce
- MEMBARRIER_CMD_GET_REGISTRATIONS
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] selftests: pci: pci-selftest: add support for PCI
+ endpoint driver test
+To:     Aman Gupta <aman1.gupta@samsung.com>, shradha.t@samsung.com,
+        pankaj.dubey@samsung.com, kishon@ti.com, lpieralisi@kernel.org,
+        kw@linux.com, shuah@kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <CGME20221007053726epcas5p357c35abb79327fee6327bc6493e0178c@epcas5p3.samsung.com>
+ <20221007053934.5188-1-aman1.gupta@samsung.com>
 Content-Language: en-US
-To:     Michal Clapinski <mclapinski@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Andrei Vagin <avagin@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20221207164338.1535591-1-mclapinski@google.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20221207164338.1535591-1-mclapinski@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221007053934.5188-1-aman1.gupta@samsung.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-12-07 11:43, Michal Clapinski wrote:
-> This change provides a method to query previously issued registrations.
-> It's needed for CRIU (checkpoint/restore in userspace). Before this
-> change we had to issue private membarrier commands during checkpoint -
-> if they succeeded, they must have been registered. Unfortunately global
-> membarrier succeeds even on unregistered processes, so there was no way to
-> tell if MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED had been issued or not.
+On 10/6/22 23:39, Aman Gupta wrote:
+> This patch enables the support to perform selftest on PCIe endpoint
+> driver present in the system. The following tests are currently
+> performed by the selftest utility
 > 
-> CRIU is run after the process has been frozen with ptrace, so we don't
-> have to worry too much about the result of running this command in parallel
-> with registration commands.
-
-Peter, Paul, I'm OK with the proposed changes. Should we route this 
-through sched/core from the tip tree ?
-
-For both patches:
-
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-Thanks,
-
-Mathieu
-
+> 1. BAR Tests (BAR0 to BAR5)
+> 2. MSI Interrupt Tests (MSI1 to MSI32)
+> 3. Read Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
+> 4. Write Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
+> 5. Copy Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
 > 
-> Michal Clapinski (2):
->    sched/membarrier: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
->    selftests/membarrier: Test MEMBARRIER_CMD_GET_REGISTRATIONS
-> 
->   include/uapi/linux/membarrier.h               |  4 ++
->   kernel/sched/membarrier.c                     | 39 ++++++++++++++++++-
->   .../membarrier/membarrier_test_impl.h         | 33 ++++++++++++++++
->   .../membarrier/membarrier_test_multi_thread.c |  2 +-
->   .../membarrier_test_single_thread.c           |  6 ++-
->   5 files changed, 81 insertions(+), 3 deletions(-)
-> 
+> Signed-off-by: Aman Gupta <aman1.gupta@samsung.com>
+> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Adding Bjorn Helgaas to the thread.
 
+Adding pcit test under selftests is good. There is another pcitest
+under tools/pci. I would like to see if the existing code in
+tools/pci/pcitest.c can be leveraged.
+
+As part of this test work, also look into removing tools/pci so
+we don't have to maintain duplicate code in two places.
+
+thanks,
+-- Shuah
