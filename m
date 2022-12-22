@@ -2,77 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569926545BC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Dec 2022 18:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE13654629
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Dec 2022 19:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbiLVRtw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Dec 2022 12:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S235540AbiLVSwR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Dec 2022 13:52:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLVRtv (ORCPT
+        with ESMTP id S229984AbiLVSv7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Dec 2022 12:49:51 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B9F28E09
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Dec 2022 09:49:50 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id y4so1380978iof.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Dec 2022 09:49:50 -0800 (PST)
+        Thu, 22 Dec 2022 13:51:59 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4A029363;
+        Thu, 22 Dec 2022 10:51:41 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id x22so6955092ejs.11;
+        Thu, 22 Dec 2022 10:51:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mqHEp9ox4TOhI9Z8ZKpq+s6nfolOdpEjmtrAzmdooGQ=;
-        b=T19EbH9yM68PlmesobZUAHslWbqvnsdofXAWYkoDd21ytKCO7eQFuyzCWQe/JwZBQ+
-         A0IoWhpwaqh4h8Te6ARx1LUIrDQQLaCYTYXZHR0o+gO4t2LPVM216LtHwjPgZlYnWNXA
-         S/DV3Ac/UgXZQYpU56t2bCBZd0rVC1aDxErjk=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+wjlf9HtdBwtd5BfrKK3NoAIyLd+UFeDv/NhLgMN1as=;
+        b=A4i6MI57PBStveX53sUUEvZ+x7r1V47+5xIVi+hPAAfEWErZ06/pJUlK4Hst9pX/b8
+         XlJsuixCjjzgxhcnCMGoxM5AEfOvrtXGsbYxsdOnJg3yL04oHA3B4hzJ63iRKf4XCCcy
+         +4ezcGTXJvXs/CsX9i+BqbEmLHYworqDNE7nCKjxq7RHtsGCXdeSufvd8EQwmkpIZRmc
+         7CMhvEKfe26E8krl41lM7uYmiegPQzavuvjHeheWfjx2y3/74PG8dDEFo/mfClmMm+fM
+         iVkHNcOuHpAWzrA1430NggdBSgVRlkVZw79JIUMGN3drPnGPOodEjpMsNufwvlmYqKY5
+         c3+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mqHEp9ox4TOhI9Z8ZKpq+s6nfolOdpEjmtrAzmdooGQ=;
-        b=o3gVOUT1Msuhc9DRgQV5Tj3a1iCOOZzKH9LUJ6lc+HVled2it2uldL1r8WNXxErkd9
-         MGbhkRXWo7vVMSCRKdqVDHTYAOTeKI2PMpSOn9EQalXMEGAdlCcxxMYvvhx/ms/YN/pK
-         wDArW3U4yGP7NE6Z77EsyBcR+afDU/n7MgR3GcDGTT/qkPcwAp39/ClkY9hIn5tgVFrh
-         9C2T/r3w7uewDhK6eDmUOU0vGCgV4kCGeoUBO/pqiOqjnh3ZLeiMVevNm115dq8huMPY
-         ETCDeEcHJZgPwjDJbMkeFe+FTdmCodH3zUCFczuyEX0s/aNkKiMaeZWEKMct2CebRZho
-         Fe+Q==
-X-Gm-Message-State: AFqh2kplNuWnTeoGdhKyjntOaF6kRi/DrHR3vVN8pEjssS8+9gPkeDss
-        w+EpE3wl2Q3xzC1jmifq+nZMwQ==
-X-Google-Smtp-Source: AMrXdXuhKYNoiXTT7XUOvJZmZbDPvd6cMep5zuvCJkKBZuDodE2fssf0IDpYGFVCpWA50TPp+E1nCg==
-X-Received: by 2002:a6b:410f:0:b0:6e2:d6ec:21f8 with SMTP id n15-20020a6b410f000000b006e2d6ec21f8mr880549ioa.2.1671731389989;
-        Thu, 22 Dec 2022 09:49:49 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id u24-20020a02b1d8000000b0038a5b48f3d4sm268386jah.3.2022.12.22.09.49.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 09:49:49 -0800 (PST)
-Message-ID: <b2a5db97-dc59-33ab-71cd-f591e0b1b34d@linuxfoundation.org>
-Date:   Thu, 22 Dec 2022 10:49:48 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+wjlf9HtdBwtd5BfrKK3NoAIyLd+UFeDv/NhLgMN1as=;
+        b=sMVEBBEi07v4TAMXgZRWCpzbOI5iR8X+oUAl+WHypYpUcSFjqDS5A5IqBsdZ9y74Du
+         WKzDTMJzXNPR/O5T68klx8PhXey02s7/8F7MlhU6TmNj3AL/QuDHtzkrYTBpe7Segwb5
+         ugeDvg9j1UFoarbgcNCr/VPnp3F8RblqYu5kmW1EkW+qF3NITFaJOhv0rpyycE+lbeL9
+         HPl3n7FQzChXN+bMrMArhCxbYPsIRHi7Z6swibmE+SbPYWkn4P9bYOQ2n6R0l2sSvcbs
+         9515Nu6InFegoga2k21UuO47WWaU2oglf+a7WyKq4Yp/X6tcmMTy1I9qDig7JQU1akMO
+         ITTA==
+X-Gm-Message-State: AFqh2koWSQNYZmnWX2+fJcnCR3XtcpdUaO9p06RlzoEtP6ItoMUZtbdt
+        3madA/gprR9mbfzXbeImnhDURSPwoakw9PXXE4/hCS2p
+X-Google-Smtp-Source: AMrXdXtN2rRR20R19i6vscCm4IWwKN/GFSFnTNL5An/JnKDjI+AGAskvFSxXaCgJEImPDZBjcbQAJSLtaww1FHflMl0=
+X-Received: by 2002:a17:906:f209:b0:7fd:f0b1:c8ec with SMTP id
+ gt9-20020a170906f20900b007fdf0b1c8ecmr453038ejb.114.1671735100056; Thu, 22
+ Dec 2022 10:51:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] selftests: pci: pci-selftest: add support for PCI
- endpoint driver test
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Aman Gupta <aman1.gupta@samsung.com>, shradha.t@samsung.com,
-        pankaj.dubey@samsung.com, kishon@ti.com, lpieralisi@kernel.org,
-        kw@linux.com, shuah@kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <CGME20221007053726epcas5p357c35abb79327fee6327bc6493e0178c@epcas5p3.samsung.com>
- <20221007053934.5188-1-aman1.gupta@samsung.com>
- <641d1e50-a9d0-dc15-be76-07b8ace25dae@linuxfoundation.org>
- <20221222174532.GA59500@thinkpad>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221222174532.GA59500@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+References: <20221217223509.88254-1-changbin.du@gmail.com> <20221217223509.88254-2-changbin.du@gmail.com>
+ <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan> <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
+ <Y6GdofET0gHQzRX6@leoy-yangtze.lan> <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
+ <Y6KDrELoIfPbh3VN@leoy-yangtze.lan>
+In-Reply-To: <Y6KDrELoIfPbh3VN@leoy-yangtze.lan>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 22 Dec 2022 10:51:28 -0800
+Message-ID: <CAEf4BzaiNOo_qqo16qLACfBe6esg2w+GafqU0TtwZMprpuDBEQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF" section
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Quentin Monnet <quentin@isovalent.com>,
+        Changbin Du <changbin.du@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,46 +89,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/22/22 10:45, Manivannan Sadhasivam wrote:
-> On Thu, Dec 22, 2022 at 09:58:30AM -0700, Shuah Khan wrote:
->> On 10/6/22 23:39, Aman Gupta wrote:
->>> This patch enables the support to perform selftest on PCIe endpoint
->>> driver present in the system. The following tests are currently
->>> performed by the selftest utility
->>>
->>> 1. BAR Tests (BAR0 to BAR5)
->>> 2. MSI Interrupt Tests (MSI1 to MSI32)
->>> 3. Read Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
->>> 4. Write Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
->>> 5. Copy Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
->>>
->>> Signed-off-by: Aman Gupta <aman1.gupta@samsung.com>
->>> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
->>
->> Adding Bjorn Helgaas to the thread.
->>
->> Adding pcit test under selftests is good. There is another pcitest
->> under tools/pci. I would like to see if the existing code in
->> tools/pci/pcitest.c can be leveraged.
->>
->> As part of this test work, also look into removing tools/pci so
->> we don't have to maintain duplicate code in two places.
->>
-> 
-> It has been agreed in a thread with Greg [1] to {re}move the tests under
-> tools/pci and utilize the kselftest.
-> 
+On Tue, Dec 20, 2022 at 7:55 PM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> On Tue, Dec 20, 2022 at 04:13:13PM -0800, Andrii Nakryiko wrote:
+>
+> [...]
+>
+> > > > > > @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+> > > > > >   err = 0;
+> > > > > >
+> > > > > >   if (!btf_data) {
+> > > > > > +         pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
+> > > > > >           err = -ENOENT;
+> > >
+> > > btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
+> > > section, therefore, bpftool dumps error string "No such file or
+> > > directory".  It's confused that actually vmlinux is existed.
+> > >
+> > > I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
+> > > better choice?) to replace -ENOENT at here, this can avoid bpftool to
+> > > outputs "No such file or directory" in this case.
+> >
+> > The only really meaningful error code would be -ESRCH, which
+> > strerror() will translate to "No such process", which is also
+> > completely confusing.
+>
+> Or maybe -ENODATA (No data available) is a better choice?
 
-Inline with what I am suggesting. However, I don't see either move or
-delete of tools/pci in the patch?
+-ENODATA sounds good to me, yep.
 
-The first patch could start with git mv of the existing files and then
-make changes to preserver the history.
-
-> 
-> [1] https://lore.kernel.org/lkml/Y2FTWLw0tKuZ9Cdl@kroah.com/
-> 
-
-thanks,
--- Shuah
-
+>
+> Thanks,
+> Leo
+>
+> > In general, I always found these strerror() messages extremely
+> > unhelpful and confusing. I wonder if we should make an effort to
+> > actually emit symbolic names of errors instead (literally, "-ENOENT"
+> > in this case). This is all tooling for engineers, I find -ENOENT or
+> > -ESRCH much more meaningful as an error message, compared to "No such
+> > file" seemingly human-readable interpretation.
+> >
+> > Quenting, what do you think about the above proposal for bpftool? We
+> > can have some libbpf helper internally and do it in libbpf error
+> > messages as well and just reuse the logic in bpftool, perhaps?
+> >
+> > Anyways, I've applied this patch set to bpf-next. Thanks.
