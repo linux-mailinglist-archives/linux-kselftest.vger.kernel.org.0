@@ -2,86 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F07654995
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Dec 2022 01:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5353665499B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Dec 2022 01:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235659AbiLWAKf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Dec 2022 19:10:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S229910AbiLWAN5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Dec 2022 19:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiLWAKZ (ORCPT
+        with ESMTP id S229783AbiLWAN4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Dec 2022 19:10:25 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D41B22BF8;
-        Thu, 22 Dec 2022 16:10:22 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0E2B15C0110;
-        Thu, 22 Dec 2022 19:10:22 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 22 Dec 2022 19:10:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1671754222; x=1671840622; bh=on
-        htEckhuX8csdtNozlcaBjqdIEEh4L7+8wYGdwUQtU=; b=OL6SwrpwQEbQ99nqQt
-        sf7U9qkrJc8k9sPOzJaV7bfIxFwfmAE8tn5s8gIGc60Df7D068SXzBcWe5NBc/Gi
-        xo7kv0XBCp1p3zyqvEGsl6AcKf3rmmvFeuXIReMajv9Y5+24gyhw+d8zJJN8b9BX
-        fSqJC+By6q3F/1E7TICQKcOt3KMSpLbxBED1zDCrWzf99nOTYMlCP/zFKUSmFWF6
-        1NWcflTBXYN6ruNqOJxeOafjf/LcNp9Haso0AeJIr34oqx+d/oZCZAwEqMGuc53E
-        5RkCqDkoceOvRrvcJMN+qCxSq4PlvaPf5/sZHjCcgTmPuoTn0cik+cuVexQozWn4
-        x/EA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1671754222; x=1671840622; bh=onhtEckhuX8cs
-        dtNozlcaBjqdIEEh4L7+8wYGdwUQtU=; b=LYLT8OqlbPm6qYtjmIt58QE+u9f59
-        P8ZL7Z9e3ozdIR+ZfcqpSfawmNTQwEOOMSN1LSaX9VQUqjumQ46pi/IvrKq2SvEK
-        SW4rRY8fP+9pvm085lWNpDlsEY1CPTOjX4aBqvDRlUmAOjz0GMdKRfFEg3DrD2pN
-        93arsnKNS/LZ4cjGr0xI3wTt/Uxfk9MVmlicyTZAU8FPo0ENO7ObnVqWbUIp84LX
-        sW+Xkgz+fNWMbg/qauQoodlVHvley6McZ4p4K3GqUdD3usZvW+qRf2BNy/mf2zJz
-        Awk3kccMXI9zrRBEj9OqzbXdfNSezDQ5HjjHT6LS8FyDxZmIIOXKhkzDg==
-X-ME-Sender: <xms:7fGkY10zdI_odPkgreTYzv_tudqJCAqYYwgOAc7m-_-lhQtpW0AJWw>
-    <xme:7fGkY8GIUcLGkhKclvdRQLIhK8RlTWV9IaHkUshD2mTguDqsXJ51CjwGPm1S6GB97
-    tNTNSXJ7orEbZLgtZI>
-X-ME-Received: <xmr:7fGkY1744GS2BQA1vrQUXQf1g2CAJQi6aoW9qJyYr6RUWLf8g2JYFA2rNozXicFjsy2GqQzfNtoeNkYL0vST>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrhedugddvtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefvhihlvghr
-    ucfjihgtkhhsuceotghouggvsehthihhihgtkhhsrdgtohhmqeenucggtffrrghtthgvrh
-    hnpeetfeeikeekieeuieehffeigeetffekhedtteegkeehgefgffevfeegheevtdejheen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegtohguvg
-    esthihhhhitghkshdrtghomh
-X-ME-Proxy: <xmx:7fGkYy2gedJR4FCR8z1J3JL4RzRr30TS-pgzn9HJmplFfX1_PNlSuQ>
-    <xmx:7fGkY4Flcc_EMbtRaevCNdyRDrfVotURtKhetHUCqjJzQyQQUms5Tw>
-    <xmx:7fGkYz-6TCYLoUJhlLjdWkc8iDLDcbfZ6scBDhYX2ZyY_JYE_Z8b-g>
-    <xmx:7vGkYw9acH1474Ew0-54OJnanvMx75t5XjFcltUQPJ__cMmyDerdlw>
-Feedback-ID: i78e14604:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 22 Dec 2022 19:10:20 -0500 (EST)
-From:   Tyler Hicks <code@tyhicks.com>
-To:     gregkh@linuxfoundation.org, stable@vger.kernel.org
-Cc:     "Tyler Hicks" <code@tyhicks.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gavin Shan <gshan@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH 5.15 2/2] KVM: selftests: Fix build regression by using accessor function
-Date:   Thu, 22 Dec 2022 18:09:58 -0600
-Message-Id: <20221223000958.729256-3-code@tyhicks.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221223000958.729256-1-code@tyhicks.com>
-References: <20221223000958.729256-1-code@tyhicks.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Thu, 22 Dec 2022 19:13:56 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B053264BE
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Dec 2022 16:13:56 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id pa16-20020a17090b265000b0020a71040b4cso1726562pjb.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Dec 2022 16:13:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GPSysGAZa55nuUkb2Ih+MCRLyMCYc0jfLWIStqar/Ew=;
+        b=Q2fp2fViZYQmjABDbOlNm+s4gHb7QMx+a9N99tHJpeKoNus7beuKwA84TUJdATLbdG
+         sq3uqywv7wl+E2hEsT77xyG3MM+ZjxMrWEls3jNvyoGMZoQrN3nhsk1y8GLKDLimki0a
+         e3P+Jj0S6ijxEsAZ6P79qLcJoe9hN23jbdCiPY6qMe7NvoqbaaiaFK7YWTmFs8NItvSp
+         vlXJ1QhtlP8iPcA3XKnpmVGytYowLIxnHf5d931eFQd7XCESJdUV9yQdwZJoWVL+mnAZ
+         mv/VB4rCVS5MqMSC15EKTPI0ivkamF6RXmuJ423+pW7pdf62IC1lGxOkdjdp2WsTr9bk
+         IJDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GPSysGAZa55nuUkb2Ih+MCRLyMCYc0jfLWIStqar/Ew=;
+        b=XuW+h2/CP7FEJD+QGkGRt+SXCAOrw+dFC0bNe/RlN8Ja1W/sVJOOFyTnmL8j5qR6Rh
+         rUR0Tn4wTQgRwtuIdDxfMjkRQazeyFKFvq5eBa9KVXTbD90mPFrkEG3mix0PENZw9jn4
+         lrquTw8QyItauPe9ZlmZ0KoMbiQaixGErjY4cahaDlk/NyzlNTqMr1XAoDvmLPdfW2JA
+         yZ06Pl7gsWJ3yRUAoxlbFTmTjeDmNpToyIIAxF8PaMyqqIJUW5ZWz46YUdEdYTPqD+7x
+         MSEO4rwvKDVoS3liKra83LM/Dg8pK/MFEy65hJO8GX1D0PFyC19V6g/Z/LaZf2mzqFW4
+         C8fg==
+X-Gm-Message-State: AFqh2kopbU4tw/L/k1IbKTxByRPQnfCFwyjqZYP6mT+DcMqSARRCvpTv
+        4/rjmZJliYI7hOmzt7ohyGItWVUMdk/iCCdw
+X-Google-Smtp-Source: AMrXdXvKB4/hjodXCCmAf88j534jf/MqKWZgd91wpCO6eXU20E9ur8obGtj0TYzGdpYu2fh7hDZKmWl8JHbo5vsQ
+X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
+ (user=vannapurve job=sendgmr) by 2002:aa7:8081:0:b0:56d:2e71:449 with SMTP id
+ v1-20020aa78081000000b0056d2e710449mr491383pff.46.1671754435394; Thu, 22 Dec
+ 2022 16:13:55 -0800 (PST)
+Date:   Fri, 23 Dec 2022 00:13:44 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221223001352.3873203-1-vannapurve@google.com>
+Subject: [V3 PATCH 0/8] KVM: selftests: SEV: selftests for fd-based private memory
+From:   Vishal Annapurve <vannapurve@google.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, shuah@kernel.org, yang.zhong@intel.com,
+        drjones@redhat.com, ricarkol@google.com, aaronlewis@google.com,
+        wei.w.wang@intel.com, kirill.shutemov@linux.intel.com,
+        corbet@lwn.net, hughd@google.com, jlayton@kernel.org,
+        bfields@fieldses.org, akpm@linux-foundation.org,
+        chao.p.peng@linux.intel.com, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, seanjc@google.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com,
+        Vishal Annapurve <vannapurve@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,38 +83,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Tyler Hicks" <code@tyhicks.com>
+This series implements selftests executing SEV VMs to target the feature
+implemented by Chao via:
+https://lore.kernel.org/lkml/20221220074318.GC1724933@chaop.bj.intel.com/T/
 
-Fix the stable backport of commit 05c2224d4b04 ("KVM: selftests: Fix
-number of pages for memory slot in memslot_modification_stress_test"),
-which caused memslot_modification_stress_test.c build failures due to
-trying to access private members of struct kvm_vm.
+Below changes aim to test the fd based approach for guest private memory
+in context of SEV VMs executing on AMD SEV compatible platforms.
 
-v6.0 commit b530eba14c70 ("KVM: selftests: Get rid of
-kvm_util_internal.h") and some other commits got rid of the accessors
-and made all of the KVM data structures public. Keep using the accessors
-in older kernels.
+sev_private_mem_test.c file adds selftest to access private memory from
+the guest via private/shared accesses and checking if the contents can be
+leaked to/accessed by vmm via shared memory view before/after
+conversions.
 
-There is no corresponding upstream commit for this change.
+To allow SEV/SEV-ES VMs to toggle the encryption bit during memory
+conversion, support is added for mapping guest pagetables to guest va
+ranges and passing the mapping information to guests via shared pages.
 
-Signed-off-by: Tyler Hicks (Microsoft) <code@tyhicks.com>
----
- tools/testing/selftests/kvm/memslot_modification_stress_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Updates in v3:
+1) Dropped RFC tag.
+2) Pagetable mapping logic is revisited to reduce the APIs and passing
+the information to guest is simplified.
+3) Additional changes to execute hypercall as per cpu type are added
+4) Selftest implementation is based on revised non-confidential VM
+selftests.
 
-diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-index 1d806b8ffee2..766c1790df66 100644
---- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-+++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-@@ -72,7 +72,7 @@ struct memslot_antagonist_args {
- static void add_remove_memslot(struct kvm_vm *vm, useconds_t delay,
- 			       uint64_t nr_modifications)
- {
--	uint64_t pages = max_t(int, vm->page_size, getpagesize()) / vm->page_size;
-+	uint64_t pages = max_t(int, vm_get_page_size(vm), getpagesize()) / vm_get_page_size(vm);
- 	uint64_t gpa;
- 	int i;
- 
+Link to RFC v2:
+https://lore.kernel.org/lkml/20220830224259.412342-8-vannapurve@google.com/T/
+
+This series has dependency on following patch series:
+1) Series mentioned above from Chao
+2) Selftests testing fd based memory for non-confidential VMs:
+https://lore.kernel.org/lkml/20221205232341.4131240-5-vannapurve@google.com/T/
+3) Selftests to add SEV VM creation and execution from Peter and Michael:
+https://lore.kernel.org/lkml/20221018205845.770121-3-pgonda@google.com/T/
+4) Series to execute hypercall natively:
+https://lore.kernel.org/lkml/20221222230458.3828342-1-vannapurve@google.com/
+
+Github link for the patches posted as part of this series:
+https://github.com/vishals4gh/linux/commits/sev_upm_selftests_rfc_v3
+
+Vishal Annapurve (8):
+  KVM: selftests: private_mem: Use native hypercall
+  KVM: selftests: Support mapping pagetables to guest virtual memory
+  KVM: selftests: x86: Support changing gpa encryption masks
+  KVM: selftests: Split SEV VM creation logic
+  KVM: selftests: Enable pagetable mapping for SEV VMs
+  KVM: selftests: Refactor private_mem_test
+  KVM: selftests: private_mem_test: Add support for SEV VMs
+  KVM: selftests: Add private mem test for SEV VMs
+
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   2 +
+ .../selftests/kvm/include/kvm_util_base.h     |  88 +++++++
+ .../include/x86_64/private_mem_test_helper.h  |  18 ++
+ .../selftests/kvm/include/x86_64/processor.h  |   4 +
+ .../selftests/kvm/include/x86_64/sev.h        |   4 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  88 ++++++-
+ .../selftests/kvm/lib/x86_64/private_mem.c    |   2 +-
+ .../kvm/lib/x86_64/private_mem_test_helper.c  | 228 ++++++++++++++++++
+ .../selftests/kvm/lib/x86_64/processor.c      |  80 ++++++
+ tools/testing/selftests/kvm/lib/x86_64/sev.c  |  25 +-
+ .../selftests/kvm/x86_64/private_mem_test.c   | 187 +-------------
+ .../kvm/x86_64/sev_private_mem_test.c         |  26 ++
+ 13 files changed, 562 insertions(+), 191 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/private_mem_test_helper.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/private_mem_test_helper.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/sev_private_mem_test.c
+
 -- 
-2.34.1
+2.39.0.314.g84b9a713c41-goog
 
