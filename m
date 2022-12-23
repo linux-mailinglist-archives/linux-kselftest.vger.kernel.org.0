@@ -2,142 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C9D6552DA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Dec 2022 17:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FAF6552EE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Dec 2022 17:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbiLWQe6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Dec 2022 11:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
+        id S232053AbiLWQqv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Dec 2022 11:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236390AbiLWQb0 (ORCPT
+        with ESMTP id S232220AbiLWQqd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Dec 2022 11:31:26 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17D61112
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 08:31:25 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id o13so2670760ilc.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 08:31:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pIeqnV74AwuRk7r8TOoasYJ76RTjL+agKCQ9LEalU4M=;
-        b=OeVW7MtnEDNGgy1/bURGkOEdhXzvEAHAqq5HKpimHHgIp+V1JFjjuYxbNHcxBEUtzc
-         DD2NflD7UhQbSYNpkrHfzZPhI4iOj2SrtDu5IHjzo3Y7PxYRwdcMMlB/dS1GMb3jEZ11
-         LHqXkm6eIhuQaueQUJADXQbT0zRwzhhZv/X4M=
+        Fri, 23 Dec 2022 11:46:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226E42734
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 08:45:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671813948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2P7wb2jYiHju8X65PSWfviKi+RGDuevtVJeM6R/Rnj8=;
+        b=XvcpNZD2FwNsBinkVi/zP47jon+YgIAHeGhJwBqHBeSvW5cXxwQkCQgm7xbDgmLMGS++j3
+        1PkiTk7vXkDq+yMswi60+DIjiyRNvaEGCQFQCqj9FePygUkNvNI3p9qruSy+8LW7ZaKNgf
+        3M9U1xLHX4e11pL5vBYD9o1nR5swFl8=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-332-mHXwYqKvMemb0qBTfIpiQw-1; Fri, 23 Dec 2022 11:45:47 -0500
+X-MC-Unique: mHXwYqKvMemb0qBTfIpiQw-1
+Received: by mail-ed1-f71.google.com with SMTP id y2-20020a056402440200b004779fcdf1baso3974027eda.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 08:45:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pIeqnV74AwuRk7r8TOoasYJ76RTjL+agKCQ9LEalU4M=;
-        b=y8F6nRch06CerATb/nOsNtLtk6JdYGzY6aASGycO+ekoCF6fNCztqra7/gU5MggZHV
-         o118dPdqfRODJSHVQ8DO6PtJtjyFYoilkIxtPE7pEJiVsdkUbLdDdsH3arCD3qD+/xBJ
-         fds3XQGj6bq7TcIsbkhVyrmpe5pwsyhgd6pjET+EuIaIy0FMvbjjIrZjU6MYqjzI4Adt
-         nTGo5WkvQOoJw5HuOYl9MjGrf8mVKgyQ7Rtf7xSgtsIWpcA/xrpjuEKtXpVDF8eBfYiO
-         J9SZfkrCpoCUsdUJr6vHQf9BbJ/aUESS0F8lsZlnF75vtk+x4ydWHVe3UQMPeIyRoFQR
-         mw/A==
-X-Gm-Message-State: AFqh2kojpJxcFhm6jlSz25KIlruL0gYERCzJ7/+asveKmeoiOGmUmD00
-        1wgGKpYecDF/cLP8Cq+na7lKAA==
-X-Google-Smtp-Source: AMrXdXuLBZH3Xbh5KNh2CUg+8Iei84e6JhS6SvjROlma/Q/xZEYy0eJgGwCOYltgFum3SRGojbi0Kw==
-X-Received: by 2002:a92:d189:0:b0:309:2fa4:d45 with SMTP id z9-20020a92d189000000b003092fa40d45mr1396923ilz.0.1671813085166;
-        Fri, 23 Dec 2022 08:31:25 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id g15-20020a02a08f000000b0039c2ceb6bbbsm1025092jah.113.2022.12.23.08.31.23
+        bh=2P7wb2jYiHju8X65PSWfviKi+RGDuevtVJeM6R/Rnj8=;
+        b=gU/X7bhxhteUxpgLBGcBgTgKxWceyrBX2Go78oycVU48FjoF8UibsXup6RRfzPIAhb
+         T9Whx4YxbN/KSriv3O9SUr04IP+tVFBEkMJ8sXDR36vjpfLE8FKYYQ+o7tg5v69V9W+c
+         MFIQlDr61BhWIajn/6C3+Zlsev8kZsrraMxuuWhYPp+vO25CVcyM2LuoaKsYWXsOI5Zn
+         3WL+U6pP1JrKsFRh5/QCCEVntQ1eG9FSlxTtmkI0Nw14rnPussptpfQKekQY+0zXLs+d
+         7V6U3qZrMyZkNSnXF33XX7bIkjBrXBXZjtroBHB+f+sRlNDay9umjgWUzhzMs1hbJSVR
+         lqKg==
+X-Gm-Message-State: AFqh2kpDQDu/UkONqVzpXMHMjriSip3mwpt2/t/6GoBtmzeeEGtZ01rt
+        s+wYpB2KELn2tBdhM60y73JUEY85AiJvyvVs91uACv4lrIThlRKDdSHjN+i7vTNgn2TZO3n1UiO
+        Fl1f5gPC+u4CGpJB03HM4/w/v6iXJ
+X-Received: by 2002:a17:906:eb8f:b0:7ae:5473:fdb8 with SMTP id mh15-20020a170906eb8f00b007ae5473fdb8mr8267928ejb.22.1671813945977;
+        Fri, 23 Dec 2022 08:45:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXukVWAYoII33XVIbh70Q55o2Wi4hGesgiBN++IKDnq0DyhaXO0YpEQLIHWdRG2I5tK3VKdEpg==
+X-Received: by 2002:a17:906:eb8f:b0:7ae:5473:fdb8 with SMTP id mh15-20020a170906eb8f00b007ae5473fdb8mr8267913ejb.22.1671813945751;
+        Fri, 23 Dec 2022 08:45:45 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id lr9-20020a170906fb8900b007be886f0db5sm1525901ejb.209.2022.12.23.08.45.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 08:31:24 -0800 (PST)
-Message-ID: <7dcefe25-d31c-bc26-4910-e53bed6eb01c@linuxfoundation.org>
-Date:   Fri, 23 Dec 2022 09:31:23 -0700
+        Fri, 23 Dec 2022 08:45:45 -0800 (PST)
+Message-ID: <d0519826-79ae-38b4-5ec2-04c7e0874ef6@redhat.com>
+Date:   Fri, 23 Dec 2022 17:45:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] selftests: pci: pci-selftest: add support for PCI
- endpoint driver test
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 5.15 0/2] Fix kvm selftest build failures in linux-5.15.y
 Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Aman Gupta <aman1.gupta@samsung.com>, shradha.t@samsung.com,
-        pankaj.dubey@samsung.com, kishon@ti.com, lpieralisi@kernel.org,
-        kw@linux.com, shuah@kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <CGME20221007053726epcas5p357c35abb79327fee6327bc6493e0178c@epcas5p3.samsung.com>
- <20221007053934.5188-1-aman1.gupta@samsung.com>
- <641d1e50-a9d0-dc15-be76-07b8ace25dae@linuxfoundation.org>
- <20221222174532.GA59500@thinkpad>
- <b2a5db97-dc59-33ab-71cd-f591e0b1b34d@linuxfoundation.org>
- <20221223150211.GC4587@thinkpad>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221223150211.GC4587@thinkpad>
+To:     Tyler Hicks <code@tyhicks.com>, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gavin Shan <gshan@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>
+References: <20221223000958.729256-1-code@tyhicks.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221223000958.729256-1-code@tyhicks.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/23/22 08:02, Manivannan Sadhasivam wrote:
-> On Thu, Dec 22, 2022 at 10:49:48AM -0700, Shuah Khan wrote:
->> On 12/22/22 10:45, Manivannan Sadhasivam wrote:
->>> On Thu, Dec 22, 2022 at 09:58:30AM -0700, Shuah Khan wrote:
->>>> On 10/6/22 23:39, Aman Gupta wrote:
->>>>> This patch enables the support to perform selftest on PCIe endpoint
->>>>> driver present in the system. The following tests are currently
->>>>> performed by the selftest utility
->>>>>
->>>>> 1. BAR Tests (BAR0 to BAR5)
->>>>> 2. MSI Interrupt Tests (MSI1 to MSI32)
->>>>> 3. Read Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
->>>>> 4. Write Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
->>>>> 5. Copy Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
->>>>>
->>>>> Signed-off-by: Aman Gupta <aman1.gupta@samsung.com>
->>>>> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
->>>>
->>>> Adding Bjorn Helgaas to the thread.
->>>>
->>>> Adding pcit test under selftests is good. There is another pcitest
->>>> under tools/pci. I would like to see if the existing code in
->>>> tools/pci/pcitest.c can be leveraged.
->>>>
->>>> As part of this test work, also look into removing tools/pci so
->>>> we don't have to maintain duplicate code in two places.
->>>>
->>>
->>> It has been agreed in a thread with Greg [1] to {re}move the tests under
->>> tools/pci and utilize the kselftest.
->>>
->>
->> Inline with what I am suggesting. However, I don't see either move or
->> delete of tools/pci in the patch?
->>
->> The first patch could start with git mv of the existing files and then
->> make changes to preserver the history.
->>
+On 12/23/22 01:09, Tyler Hicks wrote:
+> From: "Tyler Hicks" <code@tyhicks.com>
 > 
-> Right. This patch was posted independently of the series [1] that I submitted to
-> fix the return values of IOCTL calls used in drivers/misc/pci_endpoint_test.c
-> driver.
+> The backport of commit 05c2224d4b04 ("KVM: selftests: Fix number of
+> pages for memory slot in memslot_modification_stress_test") broke the
+> build of the KVM selftest memslot_modification_stress_test.c source file
+> in two ways:
 > 
-> Then in that series, it was decided to move the existing test to kselftest. So,
-> I suggested Aman Gupta [2] to integrate my latest patches, add the kselftest
-> patch on top, then remove the existing test under tools/pci.
+> - Incorrectly assumed that max_t() was defined despite commit
+>    5cf67a6051ea ("tools/include: Add _RET_IP_ and math definitions to
+>    kernel.h") not being present
+> - Incorrectly assumed that kvm_vm struct members could be directly
+>    accessed despite b530eba14c70 ("KVM: selftests: Get rid of
+>    kvm_util_internal.h") not being present
 > 
-> The kselftest patch can also move the driver first and then make the change as
-> you suggested. Either way it is fine by me.
+> Backport the first commit, as it is simple enough. Work around the lack
+> of the second commit by using the accessors to get to the kvm_vm struct
+> members.
+> 
+> Note that the linux-6.0.y backport of commit 05c2224d4b04 ("KVM:
+> selftests: Fix number of pages for memory slot in
+> memslot_modification_stress_test") is fine because the two prerequisite
+> commits, mentioned above, are both present in v6.0.
+> 
+> Tyler
+> 
+> Karolina Drobnik (1):
+>    tools/include: Add _RET_IP_ and math definitions to kernel.h
+> 
+> Tyler Hicks (Microsoft) (1):
+>    KVM: selftests: Fix build regression by using accessor function
+> 
+>   tools/include/linux/kernel.h                                | 6 ++++++
+>   .../selftests/kvm/memslot_modification_stress_test.c        | 2 +-
+>   2 files changed, 7 insertions(+), 1 deletion(-)
 > 
 
-As I mentioned in my previous email, I prefer to see the move as the first
-patch and then changes on top. This preserves the history and cleaner.
-
-thanks,
--- Shuah
-
-
+Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
