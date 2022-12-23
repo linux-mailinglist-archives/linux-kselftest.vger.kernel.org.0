@@ -2,73 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F450655371
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Dec 2022 19:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D302655532
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Dec 2022 23:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbiLWSH3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Dec 2022 13:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S231793AbiLWWgc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Dec 2022 17:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiLWSH2 (ORCPT
+        with ESMTP id S229937AbiLWWgb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:07:28 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449702706
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 10:07:27 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id m4so5594640pls.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 10:07:27 -0800 (PST)
+        Fri, 23 Dec 2022 17:36:31 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AE25594
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 14:36:30 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id z17so2931394qki.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 14:36:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YNX34iDEDxhm/E73u2ryfjAMjkVi+n5xnZV2QkAaR8Y=;
-        b=B2pQNduQHUwfqdHCdaOSiaNR7q68ettEq3dUpGBPNb0sTtZvKsYwmkKSzUB5qdw/lV
-         vsRPFX4RsX8ALAsgJhE8acYKHoqJvOAuPlel3zp14FztNUmVMbfVgmkeFlc40Tw/JGR6
-         W0UTXJ/2e9iivuwCSOdbxkpg9lITujhaGfv1Pk4lBIZRivylOuRxESQtdO8HpCTG+2Rd
-         NxQSrit5JJ9rudyvZY5phz4kGh5CiMNDSvvZytbN61wCApficmhdGFoaiqQWGiBuH+oy
-         zC6JSqk8dF4YljZcV3RJppACZ6ZUPatI/IOSUsjJC/3ZZpOmX0t9irb6JyUF7+k50nJQ
-         B0Pg==
+        bh=cqv6ukAe7n3WdU3prmY1TtPIP91KUSKKlSsncE//qT8=;
+        b=rlNzMsI6IxVGMiw8F+R1DNaHN9CugTOl9IgmZAzgzCB2jnQ9BLDli+Fgyd7EExQLrg
+         APzRAvrgB1VKgcraEpZFy8n7678xXQ3yzYkg+Y+VzuIj5m6GsiyTFh+961MOIPoFwAA/
+         GfAMHyEfEFybgz8YjsxebQlrBi+9JevG6p2vA2NNw2Z3AcvNn2LWvwmjJ70Y+xU0YbQ/
+         wB1QXgxGnDaiOj2FEzn0FEVrQnrdQ8pB5kNi7MgjS5H2ucg+WCJ3VYe940+llB+Wgrft
+         92DxFNSTeja4KSYlvnK5P/TsI0bQ/3AQpDkGbf/N3xugfCQT8vuyjURSSWmcOan86Rsx
+         KzqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YNX34iDEDxhm/E73u2ryfjAMjkVi+n5xnZV2QkAaR8Y=;
-        b=avea1oV06EckEmLoyCtZLvCU4mloYNpiomU5Q+aVeXd1qaLmE6u/lpWAxDYlAEYKZD
-         Dcd0w0a88ucQzD2f1Y4yFkAfBqlKdDO8rqyawDXlauaZYPlTcaJAaqchC822vlGxyylG
-         tVAUb0VMeAMyeUX63H2kH3lpedhf2MQdXO/QXZSKYmjNdWWZdOlDs9BHcZ3RDVfg4bIw
-         bSEZr/tI21w4+F9NogGoItgju443pb0y3TMUA6NtaxCj7bNJej5Ug6ox0yps+4lFNpLS
-         n1nLqKxG9GyaVbcT6D0Qe+tsObileWT3CPN8Elut/ce/sqKszWr4oktdgA7mM592uHNX
-         nFHQ==
-X-Gm-Message-State: AFqh2ko1Zg5dlUZTezSk0HLRPMX6OF7ECKn0HvfT5ZiESAj91IX40XiU
-        +KjZ6V+VDA7zUkI9T6hEpHT5vkFV/eJI4HpzHv9Fwg==
-X-Google-Smtp-Source: AMrXdXskn96xRY553YKd1nrPaJh3C6uD/jtUl/8ZfvlJSCTFs8haNJjns05KLdYBkqDSQobKq75Nsy9TPJmWu3O4YIk=
-X-Received: by 2002:a17:902:b690:b0:174:7d26:812f with SMTP id
- c16-20020a170902b69000b001747d26812fmr658130pls.63.1671818846456; Fri, 23 Dec
- 2022 10:07:26 -0800 (PST)
+        bh=cqv6ukAe7n3WdU3prmY1TtPIP91KUSKKlSsncE//qT8=;
+        b=lt7Kr5we1Rp0IhT4hPgLNTAZUbMY1YzEZCrThL9w6nKa1CprVz1Ok+Koi0TrWcuJUp
+         gdUDboWg91YAmXHlj5Vt7Hr2nUqkEChr61jhhwnGuvZHhSmjPKFBaU/gbSaqgMc61DaT
+         blQrhJtAHaQ58prgWxUwtyD7ixvaPurfgY1x5IhnaAraBBOTwaZ6ksKGAoMqtC2+r7n5
+         nGH+LquRs7S9H4exIAjZSQNIX7fWybK382EUkrDhxjC/Tp1+T1wEkKpDM3JFWuhsdOI1
+         oJfj6l3a8HSzCqQeNth2lyks66NukPD19/5M/RYwSBnUrJjEYXSV9k4W6xJVmaN47o9H
+         UXWw==
+X-Gm-Message-State: AFqh2kohWRnKBcBd7bMEZRzi94YIs9NYAIyU4gWj6cmF4X8wzzxIjgQt
+        O9lNuafimVC2pi0WILoIAMFiwCGSrkL0HRU7Eg4a2A==
+X-Google-Smtp-Source: AMrXdXuRQCvY0uoZyyRRGYA+UsBd5fPA18lLwLNDzUkeizNc9wN9X/xF9w0EsZDZ0MYtKGR8waTSUNKvgMknHrVCy3E=
+X-Received: by 2002:a05:620a:490a:b0:702:103e:c728 with SMTP id
+ ed10-20020a05620a490a00b00702103ec728mr648073qkb.220.1671834989939; Fri, 23
+ Dec 2022 14:36:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20221207154939.2532830-1-jeffxu@google.com> <20221207154939.2532830-4-jeffxu@google.com>
- <202212080821.5AE7EE99@keescook> <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
- <Y5yS8wCnuYGLHMj4@x1n> <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
- <20221216094259.bec91e4abd6cf54a05ce2813@linux-foundation.org>
- <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com>
- <202212161233.85C9783FB@keescook> <CALmYWFuENPRvCAOF6of=Ufct5jjAbJ=iDyH7eODhdbm24uAK3Q@mail.gmail.com>
- <20221216140641.bf6e47b7c4f5a53f34c8cf9a@linux-foundation.org>
- <CALmYWFuqAruM=Brh_54hWL+HiKD+RABK4y+hzd4phOzOZ_0=CA@mail.gmail.com> <f185bb42-b29c-977e-312e-3349eea15383@linuxfoundation.org>
-In-Reply-To: <f185bb42-b29c-977e-312e-3349eea15383@linuxfoundation.org>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Fri, 23 Dec 2022 10:06:49 -0800
-Message-ID: <CALmYWFs3Qm_89e8cCcVu0otrZpMVe3rWxqANAQwQDJgaK3S+oA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Xu <peterx@redhat.com>, jeffxu@chromium.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
+References: <20221222230458.3828342-1-vannapurve@google.com> <20221223173733.1624778-1-pbonzini@redhat.com>
+In-Reply-To: <20221223173733.1624778-1-pbonzini@redhat.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Fri, 23 Dec 2022 14:36:18 -0800
+Message-ID: <CAGtprH_3QoOBhTve2uC1tV9rg4C8tqfU4zATXW_DusjHXWaxdg@mail.gmail.com>
+Subject: Re: [V3 PATCH 0/2] Execute hypercalls from guests according to cpu
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        bgardon@google.com, seanjc@google.com, oupton@google.com,
+        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com,
+        pgonda@google.com, andrew.jones@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -81,51 +71,20 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 8:55 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Fri, Dec 23, 2022 at 9:38 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> On 12/16/22 16:40, Jeff Xu wrote:
-> > On Fri, Dec 16, 2022 at 2:06 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >>
-> >> On Fri, 16 Dec 2022 13:46:58 -0800 Jeff Xu <jeffxu@google.com> wrote:
-> >>
-> >>> On Fri, Dec 16, 2022 at 12:35 PM Kees Cook <keescook@chromium.org> wrote:
-> >>>>
-> >>>> On Fri, Dec 16, 2022 at 10:11:44AM -0800, Jeff Xu wrote:
-> >>>>> Once per boot seems too little, it would be nice if we can list all processes.
-> >>>>> I agree ratelimited might be too much.
-> >>>>> There is a feature gap here for logging.
-> >>>>>
-> >>>>> Kees, what do you think ?
-> >>>>
-> >>>> I agree once per boot is kind of frustrating "I fixed the one warning,
-> >>>> oh, now it's coming from a different process". But ratelimit is, in
-> >>>> retrospect, still too often.
-> >>>>
-> >>>> Let's go with per boot -- this should be noisy "enough" to get the
-> >>>> changes in API into the callers without being too much of a hassle.
-> >>>>
-> >>> Agreed.  Let's go with per boot.
-> >>>
-> >>> Hi Andrew, what is your preference ? I can send a patch  or you
-> >>> directly fix it in mm-unstable ?
-> >>
-> >> Like this?
-> >>
-> > Yes. Thanks!
-> >
+> > This series adds support of executing hypercall as per the native cpu
+> > type queried using cpuid instruction. CPU vendor type is stored after
+> > one time execution of cpuid instruction to be reused later.
 >
-> Sorry jumping into this discussion a bit late. Is it possible to provide
-> a way to enable full logging as a debug option to tag more processes?
+> Makes sense, are you going to add more patches that use the new function?
 >
-Codewise it is possible, maybe by adding a sysctl or CONFIG_, but I am not sure
-the best practice to do this with the kernel?
-
-Kees/Andrew, do you have suggestions ?
-
-Thanks
-Jeff
-
-
-> thanks,
-> -- Shuah
+> Paolo
 >
+>
+
+Yeah, another series [1] uploaded recently, uses this newly added function.
+
+[1] https://lore.kernel.org/lkml/20221223001352.3873203-1-vannapurve@google.com/
+
+- Vishal
