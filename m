@@ -2,89 +2,291 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D302655532
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Dec 2022 23:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A6165565B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Dec 2022 01:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbiLWWgc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Dec 2022 17:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S232594AbiLXACc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Dec 2022 19:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiLWWgb (ORCPT
+        with ESMTP id S231214AbiLXACa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Dec 2022 17:36:31 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AE25594
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 14:36:30 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id z17so2931394qki.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 14:36:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cqv6ukAe7n3WdU3prmY1TtPIP91KUSKKlSsncE//qT8=;
-        b=rlNzMsI6IxVGMiw8F+R1DNaHN9CugTOl9IgmZAzgzCB2jnQ9BLDli+Fgyd7EExQLrg
-         APzRAvrgB1VKgcraEpZFy8n7678xXQ3yzYkg+Y+VzuIj5m6GsiyTFh+961MOIPoFwAA/
-         GfAMHyEfEFybgz8YjsxebQlrBi+9JevG6p2vA2NNw2Z3AcvNn2LWvwmjJ70Y+xU0YbQ/
-         wB1QXgxGnDaiOj2FEzn0FEVrQnrdQ8pB5kNi7MgjS5H2ucg+WCJ3VYe940+llB+Wgrft
-         92DxFNSTeja4KSYlvnK5P/TsI0bQ/3AQpDkGbf/N3xugfCQT8vuyjURSSWmcOan86Rsx
-         KzqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cqv6ukAe7n3WdU3prmY1TtPIP91KUSKKlSsncE//qT8=;
-        b=lt7Kr5we1Rp0IhT4hPgLNTAZUbMY1YzEZCrThL9w6nKa1CprVz1Ok+Koi0TrWcuJUp
-         gdUDboWg91YAmXHlj5Vt7Hr2nUqkEChr61jhhwnGuvZHhSmjPKFBaU/gbSaqgMc61DaT
-         blQrhJtAHaQ58prgWxUwtyD7ixvaPurfgY1x5IhnaAraBBOTwaZ6ksKGAoMqtC2+r7n5
-         nGH+LquRs7S9H4exIAjZSQNIX7fWybK382EUkrDhxjC/Tp1+T1wEkKpDM3JFWuhsdOI1
-         oJfj6l3a8HSzCqQeNth2lyks66NukPD19/5M/RYwSBnUrJjEYXSV9k4W6xJVmaN47o9H
-         UXWw==
-X-Gm-Message-State: AFqh2kohWRnKBcBd7bMEZRzi94YIs9NYAIyU4gWj6cmF4X8wzzxIjgQt
-        O9lNuafimVC2pi0WILoIAMFiwCGSrkL0HRU7Eg4a2A==
-X-Google-Smtp-Source: AMrXdXuRQCvY0uoZyyRRGYA+UsBd5fPA18lLwLNDzUkeizNc9wN9X/xF9w0EsZDZ0MYtKGR8waTSUNKvgMknHrVCy3E=
-X-Received: by 2002:a05:620a:490a:b0:702:103e:c728 with SMTP id
- ed10-20020a05620a490a00b00702103ec728mr648073qkb.220.1671834989939; Fri, 23
- Dec 2022 14:36:29 -0800 (PST)
+        Fri, 23 Dec 2022 19:02:30 -0500
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 16:02:28 PST
+Received: from 7.mo546.mail-out.ovh.net (7.mo546.mail-out.ovh.net [46.105.45.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD02175B1
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 16:02:28 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.111.208.63])
+        by mo546.mail-out.ovh.net (Postfix) with ESMTPS id 920EF24CA9;
+        Fri, 23 Dec 2022 23:42:40 +0000 (UTC)
+Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
+ DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Sat, 24 Dec 2022 00:42:38 +0100
+From:   Quentin Deslandes <qde@naccy.de>
+To:     <qde@naccy.de>
+CC:     <kernel-team@meta.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Dmitrii Banshchikov <me@ubique.spb.ru>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH bpf-next v3 00/16] bpfilter
+Date:   Sat, 24 Dec 2022 00:40:08 +0100
+Message-ID: <20221223234127.474463-1-qde@naccy.de>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221222230458.3828342-1-vannapurve@google.com> <20221223173733.1624778-1-pbonzini@redhat.com>
-In-Reply-To: <20221223173733.1624778-1-pbonzini@redhat.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Fri, 23 Dec 2022 14:36:18 -0800
-Message-ID: <CAGtprH_3QoOBhTve2uC1tV9rg4C8tqfU4zATXW_DusjHXWaxdg@mail.gmail.com>
-Subject: Re: [V3 PATCH 0/2] Execute hypercalls from guests according to cpu
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        bgardon@google.com, seanjc@google.com, oupton@google.com,
-        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com,
-        pgonda@google.com, andrew.jones@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [37.65.8.229]
+X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
+ (172.16.2.91)
+X-Ovh-Tracer-Id: 4391572586693783159
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -85
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeejgeehueefjeeihfeugefftdehtdeikeduvdettefgieekffekuefgveekgedvheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhusghunhhtuhdrtghomhenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdpsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvg
+ hrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhsughfsehgohhoghhlvgdrtghomhdpkhhpshhinhhghheskhgvrhhnvghlrdhorhhgpdhjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdphihhshesfhgsrdgtohhmpdhsohhngheskhgvrhhnvghlrdhorhhgpdhmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprghnughrihhisehkvghrnhgvlhdrohhrghdpuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdgrshhtsehkvghrnhgvlhdrohhrghdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheegiedpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 9:38 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> > This series adds support of executing hypercall as per the native cpu
-> > type queried using cpuid instruction. CPU vendor type is stored after
-> > one time execution of cpuid instruction to be reused later.
->
-> Makes sense, are you going to add more patches that use the new function?
->
-> Paolo
->
->
+The patchset is based on the patches from David S. Miller [1],
+Daniel Borkmann [2], and Dmitrii Banshchikov [3].
 
-Yeah, another series [1] uploaded recently, uses this newly added function.
+The main goal of the patchset is to prepare bpfilter for
+iptables' configuration blob parsing and code generation.
 
-[1] https://lore.kernel.org/lkml/20221223001352.3873203-1-vannapurve@google.com/
+The patchset introduces data structures and code for matches,
+targets, rules and tables. Beside that the code generation
+is introduced.
 
-- Vishal
+The first version of the code generation supports only "inline"
+mode - all chains and their rules emit instructions in linear
+approach.
+
+Things that are not implemented yet:
+  1) The process of switching from the previous BPF programs to the
+     new set isn't atomic.
+  2) No support of device ifindex - it's hardcoded
+  3) No helper subprog for counters update
+
+Another problem is using iptables' blobs for tests and filter
+table initialization. While it saves lines something more
+maintainable should be done here.
+
+The plan for the next iteration:
+  1) Add a helper program for counters update
+  2) Handle ifindex
+
+Patches 1/2 adds definitions of the used types.
+Patch 3 adds logging to bpfilter.
+Patch 4 adds an associative map.
+Patch 5 add runtime context structure.
+Patches 6/7 add code generation infrastructure and TC code generator.
+Patches 8/9/10/11/12 add code for matches, targets, rules and table.
+Patch 13 adds code generation for table.
+Patch 14 handles hooked setsockopt(2) calls.
+Patch 15 adds filter table
+Patch 16 uses prepared code in main().
+
+Due to poor hardware availability on my side, I've not been able to
+benchmark those changes. I plan to get some numbers for the next iteration.
+
+FORWARD filter chain is now supported, however, it's attached to
+TC INGRESS along with INPUT filter chain. This is due to XDP not supporting
+multiple programs to be attached. I could generate a single program
+out of both INPUT and FORWARD chains, but that would prevent another
+BPF program to be attached to the interface anyway. If a solution
+exists to attach both those programs to XDP while allowing for other
+programs to be attached, it requires more investigation. In the meantime,
+INPUT and FORWARD filtering is supported using TC.
+
+Most of the code in this series was written by Dmitrii Banshchikov,
+my changes are limited to v3. I've tried to reflect this fact in the
+commits by adding 'Co-developed-by:' and 'Signed-off-by:' for Dmitrii,
+please tell me this was done the wrong way.
+
+v2 -> v3
+Chains:
+  * Add support for FORWARD filter chain.
+  * Add generation of BPF bytecode to assess whether a packet should be
+    forwarded or not, using bpf_fib_lookup().
+  * Allow for multiple programs to be attached to TC.
+  * Allow for multiple TC hooks to be used.
+Code generation:
+  * Remove duplicated BPF bytecode generation.
+  * Fix a bug regarding jump offset during generation.
+  * Remove support for XDP from the series, as it's not currently
+    used.
+Table:
+  * Add new filter_table_update_counters() virtual call. It updates
+    the table's counter stored in the ipt_entry structure. This way,
+    when iptables tries to fetch the values of the counters, bpfilter only
+    has to copy the ipt_entry cached in the table structure.
+Logging:
+  * Refactor logging primitives.
+Sockopts:
+  * Add support for userspace counters querying.
+Rule:
+  * Store the rule's index inside struct rule, to each counters'
+    map usage.
+
+v1 -> v2
+Maps:
+  * Use map_upsert instead of separate map_insert and map_update
+Matches:
+  * Add a new virtual call - gen_inline. The call is used for
+  * inline generating of a rule's match.
+Targets:
+  * Add a new virtual call - gen_inline. The call is used for inline
+    generating of a rule's target.
+Rules:
+  * Add code generation for rules
+Table:
+  * Add struct table_ops
+  * Add map for table_ops
+  * Add filter table
+  * Reorganize the way filter table is initialized
+Sockopts:
+  * Install/uninstall BPF programs while handling
+    IPT_SO_SET_REPLACE
+Code generation:
+  * Add first version of the code generation
+Dependencies:
+  * Add libbpf
+
+v0 -> v1
+IO:
+  * Use ssize_t in pvm_read, pvm_write for total_bytes
+  * Move IO functions into sockopt.c and main.c
+Logging:
+  * Use LOGLEVEL_EMERG, LOGLEVEL_NOTICE, LOGLEVE_DEBUG
+    while logging to /dev/kmsg
+  * Prepend log message with <n> where n is log level
+  * Conditionally enable BFLOG_DEBUG messages
+  * Merge bflog.{h,c} into context.h
+Matches:
+  * Reorder fields in struct match_ops for tight packing
+  * Get rid of struct match_ops_map
+  * Rename udp_match_ops to xt_udp
+  * Use XT_ALIGN macro
+  * Store payload size in match size
+  * Move udp match routines into a separate file
+Targets:
+  * Reorder fields in struct target_ops for tight packing
+  * Get rid of struct target_ops_map
+  * Add comments for convert_verdict function
+Rules:
+  * Add validation
+Tables:
+  * Combine table_map and table_list into table_index
+  * Add validation
+Sockopts:
+  * Handle IPT_SO_GET_REVISION_TARGET
+
+1. https://lore.kernel.org/patchwork/patch/902785/
+2. https://lore.kernel.org/patchwork/patch/902783/
+3. https://kernel.ubuntu.com/~cking/stress-ng/stress-ng.pdf
+
+Quentin Deslandes (16):
+  bpfilter: add types for usermode helper
+  tools: add bpfilter usermode helper header
+  bpfilter: add logging facility
+  bpfilter: add map container
+  bpfilter: add runtime context
+  bpfilter: add BPF bytecode generation infrastructure
+  bpfilter: add support for TC bytecode generation
+  bpfilter: add match structure
+  bpfilter: add support for src/dst addr and ports
+  bpfilter: add target structure
+  bpfilter: add rule structure
+  bpfilter: add table structure
+  bpfilter: add table code generation
+  bpfilter: add setsockopt() support
+  bpfilter: add filter table
+  bpfilter: handle setsockopt() calls
+
+ include/uapi/linux/bpfilter.h                 |  154 +++
+ net/bpfilter/Makefile                         |   16 +-
+ net/bpfilter/codegen.c                        | 1040 +++++++++++++++++
+ net/bpfilter/codegen.h                        |  183 +++
+ net/bpfilter/context.c                        |  168 +++
+ net/bpfilter/context.h                        |   24 +
+ net/bpfilter/filter-table.c                   |  344 ++++++
+ net/bpfilter/filter-table.h                   |   18 +
+ net/bpfilter/logger.c                         |   52 +
+ net/bpfilter/logger.h                         |   80 ++
+ net/bpfilter/main.c                           |  132 ++-
+ net/bpfilter/map-common.c                     |   51 +
+ net/bpfilter/map-common.h                     |   19 +
+ net/bpfilter/match.c                          |   55 +
+ net/bpfilter/match.h                          |   37 +
+ net/bpfilter/rule.c                           |  286 +++++
+ net/bpfilter/rule.h                           |   37 +
+ net/bpfilter/sockopt.c                        |  533 +++++++++
+ net/bpfilter/sockopt.h                        |   15 +
+ net/bpfilter/table.c                          |  391 +++++++
+ net/bpfilter/table.h                          |   59 +
+ net/bpfilter/target.c                         |  203 ++++
+ net/bpfilter/target.h                         |   57 +
+ net/bpfilter/xt_udp.c                         |  111 ++
+ tools/include/uapi/linux/bpfilter.h           |  175 +++
+ .../testing/selftests/bpf/bpfilter/.gitignore |    8 +
+ tools/testing/selftests/bpf/bpfilter/Makefile |   57 +
+ .../selftests/bpf/bpfilter/bpfilter_util.h    |   80 ++
+ .../selftests/bpf/bpfilter/test_codegen.c     |  338 ++++++
+ .../testing/selftests/bpf/bpfilter/test_map.c |   63 +
+ .../selftests/bpf/bpfilter/test_match.c       |   69 ++
+ .../selftests/bpf/bpfilter/test_rule.c        |   56 +
+ .../selftests/bpf/bpfilter/test_target.c      |   83 ++
+ .../selftests/bpf/bpfilter/test_xt_udp.c      |   48 +
+ 34 files changed, 4999 insertions(+), 43 deletions(-)
+ create mode 100644 net/bpfilter/codegen.c
+ create mode 100644 net/bpfilter/codegen.h
+ create mode 100644 net/bpfilter/context.c
+ create mode 100644 net/bpfilter/context.h
+ create mode 100644 net/bpfilter/filter-table.c
+ create mode 100644 net/bpfilter/filter-table.h
+ create mode 100644 net/bpfilter/logger.c
+ create mode 100644 net/bpfilter/logger.h
+ create mode 100644 net/bpfilter/map-common.c
+ create mode 100644 net/bpfilter/map-common.h
+ create mode 100644 net/bpfilter/match.c
+ create mode 100644 net/bpfilter/match.h
+ create mode 100644 net/bpfilter/rule.c
+ create mode 100644 net/bpfilter/rule.h
+ create mode 100644 net/bpfilter/sockopt.c
+ create mode 100644 net/bpfilter/sockopt.h
+ create mode 100644 net/bpfilter/table.c
+ create mode 100644 net/bpfilter/table.h
+ create mode 100644 net/bpfilter/target.c
+ create mode 100644 net/bpfilter/target.h
+ create mode 100644 net/bpfilter/xt_udp.c
+ create mode 100644 tools/include/uapi/linux/bpfilter.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/.gitignore
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/Makefile
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_codegen.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_map.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_match.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_rule.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_target.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
+
+--
+2.38.1
