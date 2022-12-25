@@ -2,239 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F534655679
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Dec 2022 01:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E558B655C40
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Dec 2022 04:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236443AbiLXAGE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Dec 2022 19:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
+        id S230201AbiLYDeD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 24 Dec 2022 22:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233538AbiLXAFn (ORCPT
+        with ESMTP id S229441AbiLYDeC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Dec 2022 19:05:43 -0500
-Received: from 1.mo545.mail-out.ovh.net (1.mo545.mail-out.ovh.net [178.33.109.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE46193DE
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 16:04:47 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.109.143.149])
-        by mo545.mail-out.ovh.net (Postfix) with ESMTPS id 5D3B725F9C;
-        Sat, 24 Dec 2022 00:04:45 +0000 (UTC)
-Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
- DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 01:04:44 +0100
-From:   Quentin Deslandes <qde@naccy.de>
-To:     <qde@naccy.de>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Dmitrii Banshchikov <me@ubique.spb.ru>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>
-Subject: [PATCH bpf-next v3 16/16] bpfilter: handle setsockopt() calls
-Date:   Sat, 24 Dec 2022 01:04:02 +0100
-Message-ID: <20221224000402.476079-17-qde@naccy.de>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
-References: <20221224000402.476079-1-qde@naccy.de>
+        Sat, 24 Dec 2022 22:34:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1408895A5;
+        Sat, 24 Dec 2022 19:33:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF676B803F2;
+        Sun, 25 Dec 2022 03:33:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23FB0C433EF;
+        Sun, 25 Dec 2022 03:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671939236;
+        bh=HBs48LNTjteYim6wGJgPGSaGT7qA/LzlKBR3O8bHfls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jtDumGesS6zPX7w7WZPcPtT9aQpJ0Wf/p4LZ5LMUQq7BKFDyf8Mx4Kx/gFXhel7u1
+         z+HQQETjQ6xeG5nYSoHtMEzwcZxoPOXgYNnezzrE+D+W9g+HVuh2tKIBJqK9eZZyle
+         yFlOu7MRBMIqIU3UiVAZHujhfdLej1Aivbo7TomFhwNqc41uhp+5gYn2vNRPFBvgcA
+         0E/E5xcrODfgxk8pa4QPkKLxliIHXETYKgzy1aL9HcY+VWB7vwN2U3/dn+5mVD3Ctw
+         XtkhDrdcl0KZSSTr8PIJHDg0+uWZNFdp7MdT0VPnGZddHWHUVmmTGtJwPzo1FS3f3v
+         h5Pb3hLVW+SsA==
+Date:   Sat, 24 Dec 2022 22:33:54 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Tyler Hicks <code@tyhicks.com>, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Gavin Shan <gshan@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 5.15 0/2] Fix kvm selftest build failures in linux-5.15.y
+Message-ID: <Y6fEohBcwosOVKch@sashalap>
+References: <20221223000958.729256-1-code@tyhicks.com>
+ <d0519826-79ae-38b4-5ec2-04c7e0874ef6@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [37.65.8.229]
-X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
- (172.16.2.91)
-X-Ovh-Tracer-Id: 4763963984512609911
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrg
- eskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeghedpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <d0519826-79ae-38b4-5ec2-04c7e0874ef6@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use earlier introduced infrastructure and handle setsockopt(2) calls.
+On Fri, Dec 23, 2022 at 05:45:44PM +0100, Paolo Bonzini wrote:
+>On 12/23/22 01:09, Tyler Hicks wrote:
+>>From: "Tyler Hicks" <code@tyhicks.com>
+>>
+>>The backport of commit 05c2224d4b04 ("KVM: selftests: Fix number of
+>>pages for memory slot in memslot_modification_stress_test") broke the
+>>build of the KVM selftest memslot_modification_stress_test.c source file
+>>in two ways:
+>>
+>>- Incorrectly assumed that max_t() was defined despite commit
+>>   5cf67a6051ea ("tools/include: Add _RET_IP_ and math definitions to
+>>   kernel.h") not being present
+>>- Incorrectly assumed that kvm_vm struct members could be directly
+>>   accessed despite b530eba14c70 ("KVM: selftests: Get rid of
+>>   kvm_util_internal.h") not being present
+>>
+>>Backport the first commit, as it is simple enough. Work around the lack
+>>of the second commit by using the accessors to get to the kvm_vm struct
+>>members.
+>>
+>>Note that the linux-6.0.y backport of commit 05c2224d4b04 ("KVM:
+>>selftests: Fix number of pages for memory slot in
+>>memslot_modification_stress_test") is fine because the two prerequisite
+>>commits, mentioned above, are both present in v6.0.
+>>
+>>Tyler
+>>
+>>Karolina Drobnik (1):
+>>   tools/include: Add _RET_IP_ and math definitions to kernel.h
+>>
+>>Tyler Hicks (Microsoft) (1):
+>>   KVM: selftests: Fix build regression by using accessor function
+>>
+>>  tools/include/linux/kernel.h                                | 6 ++++++
+>>  .../selftests/kvm/memslot_modification_stress_test.c        | 2 +-
+>>  2 files changed, 7 insertions(+), 1 deletion(-)
+>>
+>
+>Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+>
 
-Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
-Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
-Signed-off-by: Quentin Deslandes <qde@naccy.de>
----
- net/bpfilter/main.c | 132 ++++++++++++++++++++++++++++++--------------
- 1 file changed, 90 insertions(+), 42 deletions(-)
+Queued up, thanks!
 
-diff --git a/net/bpfilter/main.c b/net/bpfilter/main.c
-index 291a92546246..c157277c48b5 100644
---- a/net/bpfilter/main.c
-+++ b/net/bpfilter/main.c
-@@ -1,64 +1,112 @@
- // SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ */
-+
- #define _GNU_SOURCE
--#include <sys/uio.h>
-+
- #include <errno.h>
- #include <stdio.h>
--#include <sys/socket.h>
--#include <fcntl.h>
-+#include <stdlib.h>
-+#include <sys/types.h>
- #include <unistd.h>
--#include "../../include/uapi/linux/bpf.h"
--#include <asm/unistd.h>
-+
-+#include "context.h"
-+#include "filter-table.h"
-+#include "logger.h"
- #include "msgfmt.h"
-+#include "sockopt.h"
- 
--FILE *debug_f;
-+#define do_exact(fd, op, buffer, count)							  \
-+	({										  \
-+		typeof(count) __count = count;						  \
-+		size_t total = 0;							  \
-+		int r = 0;								  \
-+											  \
-+		do {									  \
-+			const ssize_t part = op(fd, (buffer) + total, (__count) - total); \
-+			if (part > 0) {							  \
-+				total += part;						  \
-+			} else if (part == 0 && (__count) > 0) {			  \
-+				r = -EIO;						  \
-+				break;							  \
-+			} else if (part == -1) {					  \
-+				if (errno == EINTR)					  \
-+					continue;					  \
-+				r = -errno;						  \
-+				break;							  \
-+			}								  \
-+		} while (total < (__count));						  \
-+											  \
-+		r;									  \
-+	})
- 
--static int handle_get_cmd(struct mbox_request *cmd)
-+static int read_exact(int fd, void *buffer, size_t count)
- {
--	switch (cmd->cmd) {
--	case 0:
--		return 0;
--	default:
--		break;
--	}
--	return -ENOPROTOOPT;
-+	return do_exact(fd, read, buffer, count);
-+}
-+
-+static int write_exact(int fd, const void *buffer, size_t count)
-+{
-+	return do_exact(fd, write, buffer, count);
- }
- 
--static int handle_set_cmd(struct mbox_request *cmd)
-+static int setup_context(struct context *ctx)
- {
--	return -ENOPROTOOPT;
-+	int r;
-+
-+	r = logger_init();
-+	if (r < 0)
-+		return r;
-+
-+	BFLOG_DBG("log file opened and ready to use");
-+
-+	r = create_filter_table(ctx);
-+	if (r < 0)
-+		BFLOG_ERR("failed to created filter table: %s", STRERR(r));
-+
-+	return r;
- }
- 
--static void loop(void)
-+static void loop(struct context *ctx)
- {
--	while (1) {
--		struct mbox_request req;
--		struct mbox_reply reply;
--		int n;
--
--		n = read(0, &req, sizeof(req));
--		if (n != sizeof(req)) {
--			fprintf(debug_f, "invalid request %d\n", n);
--			return;
--		}
--
--		reply.status = req.is_set ?
--			handle_set_cmd(&req) :
--			handle_get_cmd(&req);
--
--		n = write(1, &reply, sizeof(reply));
--		if (n != sizeof(reply)) {
--			fprintf(debug_f, "reply failed %d\n", n);
--			return;
--		}
-+	struct mbox_request req;
-+	struct mbox_reply reply;
-+	int r;
-+
-+	for (;;) {
-+		r = read_exact(STDIN_FILENO, &req, sizeof(req));
-+		if (r)
-+			BFLOG_EMERG("cannot read request: %s", STRERR(r));
-+
-+		reply.status = handle_sockopt_request(ctx, &req);
-+
-+		r = write_exact(STDOUT_FILENO, &reply, sizeof(reply));
-+		if (r)
-+			BFLOG_EMERG("cannot write reply: %s", STRERR(r));
- 	}
- }
- 
- int main(void)
- {
--	debug_f = fopen("/dev/kmsg", "w");
--	setvbuf(debug_f, 0, _IOLBF, 0);
--	fprintf(debug_f, "<5>Started bpfilter\n");
--	loop();
--	fclose(debug_f);
-+	struct context ctx;
-+	int r;
-+
-+	r = create_context(&ctx);
-+	if (r)
-+		return r;
-+
-+	r = setup_context(&ctx);
-+	if (r) {
-+		free_context(&ctx);
-+		return r;
-+	}
-+
-+	loop(&ctx);
-+
-+	// Disregard return value, the application is closed anyway.
-+	(void)logger_clean();
-+
- 	return 0;
- }
 -- 
-2.38.1
-
+Thanks,
+Sasha
