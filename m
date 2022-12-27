@@ -2,38 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A4A656B5A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 14:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE602656B5F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 14:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiL0NdF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Dec 2022 08:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        id S231221AbiL0Ngw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Dec 2022 08:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiL0NdE (ORCPT
+        with ESMTP id S231445AbiL0Ngs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:33:04 -0500
+        Tue, 27 Dec 2022 08:36:48 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0576DB1D6;
-        Tue, 27 Dec 2022 05:33:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9021FB7C5;
+        Tue, 27 Dec 2022 05:36:47 -0800 (PST)
 Received: from [10.7.7.5] (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id E95E37E2BA;
-        Tue, 27 Dec 2022 13:32:59 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 016557E2BA;
+        Tue, 27 Dec 2022 13:36:43 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1672147983;
-        bh=i77DIBl5pA2lkekeQ2mmSNW2g6Fu6p88wv+enkBT8hE=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=ZJ9DyL6bvMg8msWUpK4TCfW2D4cIYzCMfRUIMsX/ZkxiXK1ZqLIWoWXmT4F8jbWll
-         tz00VjQyscF2J1yhFPY5qH0P5yK5Vfxjf2a19id7bUkaOszrGMahimYM80SKcjxdpj
-         edd7+S8AiCB2qrwY8s62RoXWepaMts709vINjUhtjzXCPF5R052ue2yu5m2aLq+siv
-         H2cJqhcazkY1yxdX7MQVAR3/QTFT4glQvo25e5uaPv/CvvRToXzDAyWWX+2ki6XF0E
-         vLaChiUrF3J0ujWrmY0b4iLdL+8IHOEO3y9uqkjWfjB6tPES/Stg2nX83FiuTwooXa
-         JYk+uogr9pLHQ==
-Message-ID: <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
-Date:   Tue, 27 Dec 2022 20:32:57 +0700
+        s=default; t=1672148207;
+        bh=EAmnj0RlIG0MGwi3OSqM2CbWUp31upcL4Rr7mE3BEzk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=m3vFWGgFos4CVm/6DKMfvLRN3lO3Hf8erFN7TuCBwpYdoRs5SfWZcewOZyO2yKniC
+         PhHPT0lNHM20h0JbVMUIz5AgtdblS2c/vDzoQcqw7sy3p1kBoMd/53NX+Z9S4weeul
+         WKhSisQDra81GMtPICtyInDEtD2enrqqqrhr48cbccPliJOU5u1veaQ+ffJm1B1zvm
+         jWk+ckJjVJgeG95ZIVAcdGqMAPg6sb9i6Vgb2m9/b/XxNZpYXl5R2M5hqpM9+fPTH1
+         7Ex289a63N1CVaG/s9F8wMDiRCuN9TPxoiATEeyktBNqg/PoJxHI4ze8Lnrpa5dXCM
+         54+J+p+MRtnRw==
+Message-ID: <d206f87d-2107-7cdb-ee2a-7fe718f06f3d@gnuweeb.org>
+Date:   Tue, 27 Dec 2022 20:36:41 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
+Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
+Content-Language: en-US
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     Shuah Khan <shuah@kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
@@ -50,10 +52,9 @@ References: <20221222035134.3467659-1-ammar.faizi@intel.com>
  <20221222043452.GB29086@1wt.eu>
  <20221222134615.3535422-1-ammar.faizi@intel.com>
  <20221227062640.GA5337@1wt.eu>
-Content-Language: en-US
+ <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
-In-Reply-To: <20221227062640.GA5337@1wt.eu>
+In-Reply-To: <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -65,39 +66,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/27/22 1:26 PM, Willy Tarreau wrote:
-> Yes, and quite frankly I prefer to make that the least complicated.
-> Doing just a simple loop in the _start code is trivial. The main
-> concern was to store the data. Till now we had an optional .bss
-> section, we didn't save environ and errno was optional. But let's
-> be honest, while it does allow for writing the smallest programs,
-> most programs will have at least one global variable and will get
-> this section anyway, so we don't save anything in practice. This
-> concern used to be valid when I was making tiny executables when
-> running on floppies where each byte mattered, but now that's pointless.
+On 12/27/22 8:32 PM, Ammar Faizi wrote:
+>> Thus now my focus will be on storing these variables where relevant
+>> for all archs, so that your getauxval() implementation works on top
+>> of it. It will be much cleaner and will also improve programs' ease
+>> of implementation and reliability.
 > 
-> Thus what I'm proposing is to switch to weak symbol definitions for
-> errno, environ, and auxv. I did a quick test to make sure that the same
-> symbol was properly used when accessed from two units and that's OK, I'm
-> seeing the same instance for all of them (which is better than the current
-> situation where errno is static, hence per-unit).
+> Are you going to wire up a patchset for it?
+> 
+> If so, I'll wait for it. When it's already committed, I'll base this
+> series on top it.
+> 
+> Or I take your series locally then submit your patches and mine in a
+> single series.
+> 
+> What do you prefer?
 
-Looks good to me.
-
-> Thus now my focus will be on storing these variables where relevant
-> for all archs, so that your getauxval() implementation works on top
-> of it. It will be much cleaner and will also improve programs' ease
-> of implementation and reliability.
-
-Are you going to wire up a patchset for it?
-
-If so, I'll wait for it. When it's already committed, I'll base this
-series on top it.
-
-Or I take your series locally then submit your patches and mine in a
-single series.
-
-What do you prefer?
+Side note:
+I only know x86 Assembly. So unfortunately, I can't get them working
+on all arch(s).
 
 -- 
 Ammar Faizi
