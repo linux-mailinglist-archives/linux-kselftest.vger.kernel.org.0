@@ -2,60 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCDD656BAD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 15:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D44656D36
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 18:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiL0OVd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Dec 2022 09:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        id S230326AbiL0RHY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Dec 2022 12:07:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbiL0OVP (ORCPT
+        with ESMTP id S229801AbiL0RHX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 09:21:15 -0500
+        Tue, 27 Dec 2022 12:07:23 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFFC64DD
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 06:21:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD68BD0;
+        Tue, 27 Dec 2022 09:07:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7575061174
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 14:21:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7DA1C433F2;
-        Tue, 27 Dec 2022 14:21:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B9A8611B3;
+        Tue, 27 Dec 2022 17:07:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E8D5C433F2;
+        Tue, 27 Dec 2022 17:07:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672150871;
-        bh=w/aM5yPMx4Ph/CwKI7rsdx9fo77jVtrew5tIYC4hKYE=;
+        s=k20201202; t=1672160841;
+        bh=GT0ib72WyJtF+L2c/Gx69hmpwfVEAu1SUy6Sba1vebw=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=VflBJVrcIOo9fCmtHe0hVJnjXLjPjHtEg0Siumz/4G/xM3V4Hm708EinGWZGbylTB
-         USP5d7b6TsLjMMEeoI5kSX2gkF202Y0djjvhwWqbxetG1B5b5DwoBNmC8M+f1Pu+Ik
-         SGBly3Hw004gYu+0j9wRb39G/1vu6mfCPhcqgwB4gfJ0oS3kuFTsDP05CEta92phYm
-         nSzUgSmaQeQhEbO6Fd+mZ2OdgF/hg6yKkdG/geLMlS94cHbcgyCEMO7zxBns1ale8p
-         R9/9bImXv7rkqW6Xye2RLo/zXcdodz61dZUw3FoAsi7X5097pYo31hq4+rH5t1nzPP
-         AVEBAFVxYsCnA==
+        b=armwAVD8T9mnAHhKri3M65L6kE3DC7P4+9S9GX2v5Uad6JYCmDmaDcfQqt/lHDlMo
+         0U7u8r7JydEhiBVKgQE6MiXgfLD1NmTkBEq3pRNlJ1v4j1e42cn/RE/uzihYlDNDYW
+         fX5QgJqAf1WG6iPPpJFCQAz2G/DnkgWiorsbtmAOB6H0akio09KSpUY9F4uzCC/Lt+
+         Ar+z43jE31St23utVgVv8bUowLjhjWxXJcU/flt6IbGdefoayoWASJMDnvdLKKqzkR
+         3hpIvKNaQLQ7zki+4Sy3wa7O8lxkhNjROWefL5F9cNN9Q6M/qJSFcT6ch18tm82gTS
+         DEoruS8nSxScQ==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 14:20:43 +0000
-Subject: [PATCH v3 4/4] kselftest/arm64: Add test case for TPIDR2 signal frame records
+Date:   Tue, 27 Dec 2022 17:06:46 +0000
+Subject: [PATCH v4 1/7] kselftest/alsa: pcm - Drop recent coverage improvement changes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221208-arm64-tpidr2-sig-v3-4-c77c6c8775f4@kernel.org>
-References: <20221208-arm64-tpidr2-sig-v3-0-c77c6c8775f4@kernel.org>
-In-Reply-To: <20221208-arm64-tpidr2-sig-v3-0-c77c6c8775f4@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Message-Id: <20221208-alsa-pcm-test-hacks-v4-1-5a152e65b1e1@kernel.org>
+References: <20221208-alsa-pcm-test-hacks-v4-0-5a152e65b1e1@kernel.org>
+In-Reply-To: <20221208-alsa-pcm-test-hacks-v4-0-5a152e65b1e1@kernel.org>
+To:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3397; i=broonie@kernel.org;
- h=from:subject:message-id; bh=w/aM5yPMx4Ph/CwKI7rsdx9fo77jVtrew5tIYC4hKYE=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqv9LOIFLTpBoh67/8PwNpZJ4mGT+7slfjlnYY/DV
- ySFM/oiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6r/SwAKCRAk1otyXVSH0LsJB/
- 0d7HryVSGW5pUlLtSB49mdsP20JUWUC+1SK8H9J/dsOYNqfL2guG22c5g1pUguyeVHiWWfBBYblB8l
- wEO7xtx8ebOF+zOvUEzNPvtirfXbv7DZakHJIuRTj58bgi/ac3CBUu59h/Yj/L+STSDDopqnjnAji8
- +UAJVpiGB7HJxVVsgXcU5VBlQJWAKI24hpBKhKKTqCH0B7cuSPbiDtXBYxrbgeUv9+3aA0K43a9vLY
- jrLsusZdOh7BizkdQLA9117ZSWT9Y5V66MmnHf7RPcDvHBgbVAXURx/w55dJ8SXTLYDbmBlDa7W3fT
- Nc8Z17nCPkKNLP4ko6qj+qNtQKnU4h
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9518; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=GT0ib72WyJtF+L2c/Gx69hmpwfVEAu1SUy6Sba1vebw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqyZAbqPyo20g/crzqVyXwv4m9w1ElysCONNEpBgI
+ bgiBg2CJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6smQAAKCRAk1otyXVSH0C7rB/
+ 43TCyZavNZeBUCukQZ0aKXxemyrt9wIDijRAIMMLKWAPw+PmZCLnKwER/fYBIjqRoO/L27Xj2ynJQb
+ 5Qh1u2jkqIDgj6597uylgyy0O9NRncJYUBCWm2C6Fvia7E9ZsPeIPvMsvgZsvmyESA30ccsAmp7Aio
+ t6XC95XqZhUBzFL0DmQ4XF4MnNy8J08g+GlJ04P9YJVrU7pC+MfAqLliwXZ5tYZzgrc5pEgQAK6+Qw
+ YLNyhN+/XwEjtnahY9w+3ohRMQl0dZX1sEGEYZlJcBr0szzUWcyfX74qkzfphzStoRcHp7vdJCmmin
+ N/xb5kdCTsDRercTKaCBtauObfEh6w
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,125 +66,263 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ensure that we get signal context for TPIDR2 if and only if SME is present
-on the system. Since TPIDR2 is owned by libc we merely validate that the
-value is whatever it was set to, this isn't ideal since it's likely to
-just be the default of 0 with current systems but it avoids future false
-positives.
+In preparation to adopting a better, more comprehensive approach to
+adding the coverage that was just added using some changes from Jaroslav
+which were sent at the same time the recently added improvements were
+being applied drop what was applied.  This reverts:
 
+  7d721baea138 "kselftest/alsa: Add more coverage of sample rates and channel counts"
+  ee12040dd53a "kselftest/alsa: Provide more meaningful names for tests"
+  ae95efd9754c "kselftest/alsa: Don't any configuration in the sample config"
+  8370d9b00c92 Revert "kselftest/alsa: Report failures to set the requested channels as skips"
+  f944f8b539ea "kselftest/alsa: Report failures to set the requested sample rate as skips"
+  22eeb8f531c1 "kselftest/alsa: Refactor pcm-test to list the tests to run in a struct"
+
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/signal/.gitignore    |  1 +
- .../arm64/signal/testcases/tpidr2_siginfo.c        | 90 ++++++++++++++++++++++
- 2 files changed, 91 insertions(+)
+ .../alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf       | 35 ++++-----
+ tools/testing/selftests/alsa/pcm-test.c            | 88 +++++++------------
+---
+ .../alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf       | 35 ++++-----
+ tools/testing/selftests/alsa/pcm-test.c            | 88 +++++++---------------
+ 2 files changed, 42 insertions(+), 81 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
-index e8d2b57f73ec..e1b6c4d961b5 100644
---- a/tools/testing/selftests/arm64/signal/.gitignore
-+++ b/tools/testing/selftests/arm64/signal/.gitignore
-@@ -4,5 +4,6 @@ fake_sigreturn_*
- sme_*
- ssve_*
- sve_*
-+tpidr2_siginfo
- za_*
- !*.[ch]
-diff --git a/tools/testing/selftests/arm64/signal/testcases/tpidr2_siginfo.c b/tools/testing/selftests/arm64/signal/testcases/tpidr2_siginfo.c
-new file mode 100644
-index 000000000000..6a2c82bf7ead
---- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/tpidr2_siginfo.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 ARM Limited
-+ *
-+ * Verify that the TPIDR2 register context in signal frames is set up as
-+ * expected.
-+ */
-+
-+#include <signal.h>
-+#include <ucontext.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <unistd.h>
-+#include <asm/sigcontext.h>
-+
-+#include "test_signals_utils.h"
-+#include "testcases.h"
-+
-+static union {
-+	ucontext_t uc;
-+	char buf[1024 * 128];
-+} context;
-+
-+#define SYS_TPIDR2 "S3_3_C13_C0_5"
-+
-+static uint64_t get_tpidr2(void)
-+{
-+	uint64_t val;
-+
-+	asm volatile (
-+		"mrs	%0, " SYS_TPIDR2 "\n"
-+		: "=r"(val)
-+		:
-+		: "cc");
-+
-+	return val;
-+}
-+
-+int tpidr2_present(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
-+{
-+	struct _aarch64_ctx *head = GET_BUF_RESV_HEAD(context);
-+	struct tpidr2_context *tpidr2_ctx;
-+	size_t offset;
-+	bool in_sigframe;
-+	bool have_sme;
-+	__u64 orig_tpidr2;
-+
-+	have_sme = getauxval(AT_HWCAP2) & HWCAP2_SME;
-+	if (have_sme)
-+		orig_tpidr2 = get_tpidr2();
-+
-+	if (!get_current_context(td, &context.uc, sizeof(context)))
-+		return 1;
-+
-+	tpidr2_ctx = (struct tpidr2_context *)
-+		get_header(head, TPIDR2_MAGIC, td->live_sz, &offset);
-+
-+	in_sigframe = tpidr2_ctx != NULL;
-+
-+	fprintf(stderr, "TPIDR2 sigframe %s on system %s SME\n",
-+		in_sigframe ? "present" : "absent",
-+		have_sme ? "with" : "without");
-+
-+	td->pass = (in_sigframe == have_sme);
-+
-+	/*
-+	 * Check that the value we read back was the one present at
-+	 * the time that the signal was triggered.  TPIDR2 is owned by
-+	 * libc so we can't safely choose the value and it is possible
-+	 * that we may need to revisit this in future if something
-+	 * starts deciding to set a new TPIDR2 between us reading and
-+	 * the signal.
-+	 */
-+	if (have_sme && tpidr2_ctx) {
-+		if (tpidr2_ctx->tpidr2 != orig_tpidr2) {
-+			fprintf(stderr, "TPIDR2 in frame is %llx, was %llx\n",
-+				tpidr2_ctx->tpidr2, orig_tpidr2);
-+			td->pass = false;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+struct tdescr tde = {
-+	.name = "TPIDR2",
-+	.descr = "Validate that TPIDR2 is present as expected",
-+	.timeout = 3,
-+	.run = tpidr2_present,
-+};
+diff --git a/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf b/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
+index 9eca985e0c08..0a83f35d43eb 100644
+--- a/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
++++ b/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
+@@ -39,25 +39,22 @@ card.hda {
+ 	#
+ 	pcm.0.0 {
+ 		PLAYBACK {
+-			#
+-			# Uncomment to override values for specific tests
+-			#
+-			#test_name1 {
+-			#	access RW_INTERLEAVED
+-			#	format S16_LE
+-			#	rate 48000
+-			#	channels 2
+-			#	period_size 512
+-			#	buffer_size 4096
+-			#}
+-			#test_name2 {
+-			#	access RW_INTERLEAVED
+-			#	format S16_LE
+-			#	rate 48000
+-			#	channels 2
+-			#	period_size 24000
+-			#	buffer_size 192000
+-			#}
++			test.time1 {
++				access RW_INTERLEAVED	# can be omitted - default
++				format S16_LE		# can be omitted - default
++				rate 48000		# can be omitted - default
++				channels 2		# can be omitted - default
++				period_size 512
++				buffer_size 4096
++			}
++			test.time2 {
++				access RW_INTERLEAVED
++				format S16_LE
++				rate 48000
++				channels 2
++				period_size 24000
++				buffer_size 192000
++			}
+ 		}
+ 		CAPTURE {
+ 			# use default tests, check for the presence
+diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
+index f293c7d81009..6e7dfc395b98 100644
+--- a/tools/testing/selftests/alsa/pcm-test.c
++++ b/tools/testing/selftests/alsa/pcm-test.c
+@@ -37,15 +37,6 @@ struct pcm_data *pcm_list = NULL;
+ int num_missing = 0;
+ struct pcm_data *pcm_missing = NULL;
+ 
+-struct time_test_def {
+-	const char *cfg_prefix;
+-	const char *format;
+-	long rate;
+-	long channels;
+-	long period_size;
+-	long buffer_size;
+-};
+-
+ void timestamp_now(timestamp_t *tstamp)
+ {
+ 	if (clock_gettime(CLOCK_MONOTONIC_RAW, tstamp))
+@@ -229,7 +220,9 @@ static void find_pcms(void)
+ }
+ 
+ static void test_pcm_time1(struct pcm_data *data,
+-			   const struct time_test_def *test)
++			   const char *cfg_prefix, const char *sformat,
++			   long srate, long schannels,
++			   long speriod_size, long sbuffer_size)
+ {
+ 	char name[64], key[128], msg[256];
+ 	const char *cs;
+@@ -241,32 +234,30 @@ static void test_pcm_time1(struct pcm_data *data,
+ 	snd_pcm_sframes_t frames;
+ 	long long ms;
+ 	long rate, channels, period_size, buffer_size;
+-	unsigned int rchannels;
+ 	unsigned int rrate;
+ 	snd_pcm_uframes_t rperiod_size, rbuffer_size, start_threshold;
+ 	timestamp_t tstamp;
+ 	bool pass = false, automatic = true;
+ 	snd_pcm_hw_params_t *hw_params;
+ 	snd_pcm_sw_params_t *sw_params;
+-	bool skip = false;
+ 
+ 	snd_pcm_hw_params_alloca(&hw_params);
+ 	snd_pcm_sw_params_alloca(&sw_params);
+ 
+-	cs = conf_get_string(data->pcm_config, test->cfg_prefix, "format", test->format);
++	cs = conf_get_string(data->pcm_config, cfg_prefix, "format", sformat);
+ 	format = snd_pcm_format_value(cs);
+ 	if (format == SND_PCM_FORMAT_UNKNOWN)
+ 		ksft_exit_fail_msg("Wrong format '%s'\n", cs);
+-	rate = conf_get_long(data->pcm_config, test->cfg_prefix, "rate", test->rate);
+-	channels = conf_get_long(data->pcm_config, test->cfg_prefix, "channels", test->channels);
+-	period_size = conf_get_long(data->pcm_config, test->cfg_prefix, "period_size", test->period_size);
+-	buffer_size = conf_get_long(data->pcm_config, test->cfg_prefix, "buffer_size", test->buffer_size);
++	rate = conf_get_long(data->pcm_config, cfg_prefix, "rate", srate);
++	channels = conf_get_long(data->pcm_config, cfg_prefix, "channels", schannels);
++	period_size = conf_get_long(data->pcm_config, cfg_prefix, "period_size", speriod_size);
++	buffer_size = conf_get_long(data->pcm_config, cfg_prefix, "buffer_size", sbuffer_size);
+ 
+-	automatic = strcmp(test->format, snd_pcm_format_name(format)) == 0 &&
+-			test->rate == rate &&
+-			test->channels == channels &&
+-			test->period_size == period_size &&
+-			test->buffer_size == buffer_size;
++	automatic = strcmp(sformat, snd_pcm_format_name(format)) == 0 &&
++			srate == rate &&
++			schannels == channels &&
++			speriod_size == period_size &&
++			sbuffer_size == buffer_size;
+ 
+ 	samples = malloc((rate * channels * snd_pcm_format_physical_width(format)) / 8);
+ 	if (!samples)
+@@ -302,7 +293,7 @@ static void test_pcm_time1(struct pcm_data *data,
+ 		if (automatic && format == SND_PCM_FORMAT_S16_LE) {
+ 			format = SND_PCM_FORMAT_S32_LE;
+ 			ksft_print_msg("%s.%d.%d.%d.%s.%s format S16_LE -> S32_LE\n",
+-					 test->cfg_prefix,
++					 cfg_prefix,
+ 					 data->card, data->device, data->subdevice,
+ 					 snd_pcm_stream_name(data->stream),
+ 					 snd_pcm_access_name(access));
+@@ -311,17 +302,11 @@ static void test_pcm_time1(struct pcm_data *data,
+ 					   snd_pcm_format_name(format), snd_strerror(err));
+ 		goto __close;
+ 	}
+-	rchannels = channels;
+-	err = snd_pcm_hw_params_set_channels_near(handle, hw_params, &rchannels);
++	err = snd_pcm_hw_params_set_channels(handle, hw_params, channels);
+ 	if (err < 0) {
+ 		snprintf(msg, sizeof(msg), "snd_pcm_hw_params_set_channels %ld: %s", channels, snd_strerror(err));
+ 		goto __close;
+ 	}
+-	if (rchannels != channels) {
+-		snprintf(msg, sizeof(msg), "channels unsupported %ld != %ld", channels, rchannels);
+-		skip = true;
+-		goto __close;
+-	}
+ 	rrate = rate;
+ 	err = snd_pcm_hw_params_set_rate_near(handle, hw_params, &rrate, 0);
+ 	if (err < 0) {
+@@ -329,8 +314,7 @@ static void test_pcm_time1(struct pcm_data *data,
+ 		goto __close;
+ 	}
+ 	if (rrate != rate) {
+-		snprintf(msg, sizeof(msg), "rate unsupported %ld != %ld", rate, rrate);
+-		skip = true;
++		snprintf(msg, sizeof(msg), "rate mismatch %ld != %ld", rate, rrate);
+ 		goto __close;
+ 	}
+ 	rperiod_size = period_size;
+@@ -378,7 +362,7 @@ static void test_pcm_time1(struct pcm_data *data,
+ 	}
+ 
+ 	ksft_print_msg("%s.%d.%d.%d.%s hw_params.%s.%s.%ld.%ld.%ld.%ld sw_params.%ld\n",
+-			 test->cfg_prefix,
++			 cfg_prefix,
+ 			 data->card, data->device, data->subdevice,
+ 			 snd_pcm_stream_name(data->stream),
+ 			 snd_pcm_access_name(access),
+@@ -426,40 +410,21 @@ static void test_pcm_time1(struct pcm_data *data,
+ 	msg[0] = '\0';
+ 	pass = true;
+ __close:
+-	if (!skip) {
+-		ksft_test_result(pass, "%s.%d.%d.%d.%s%s%s\n",
+-				 test->cfg_prefix,
+-				 data->card, data->device, data->subdevice,
+-				 snd_pcm_stream_name(data->stream),
+-				 msg[0] ? " " : "", msg);
+-	} else {
+-		ksft_test_result_skip("%s.%d.%d.%d.%s%s%s\n",
+-				      test->cfg_prefix,
+-				      data->card, data->device,
+-				      data->subdevice,
+-				      snd_pcm_stream_name(data->stream),
+-				      msg[0] ? " " : "", msg);
+-	}
++	ksft_test_result(pass, "%s.%d.%d.%d.%s%s%s\n",
++			 cfg_prefix,
++			 data->card, data->device, data->subdevice,
++			 snd_pcm_stream_name(data->stream),
++			 msg[0] ? " " : "", msg);
+ 	free(samples);
+ 	if (handle)
+ 		snd_pcm_close(handle);
+ }
+ 
+-static const struct time_test_def time_tests[] = {
+-	/* name          format     rate   chan  period  buffer */
+-	{ "8k.1.big",    "S16_LE",   8000, 2,     8000,   32000 },
+-	{ "8k.2.big",    "S16_LE",   8000, 2,     8000,   32000 },
+-	{ "44k1.2.big",  "S16_LE",  44100, 2,    22050,  192000 },
+-	{ "48k.2.small", "S16_LE",  48000, 2,      512,    4096 },
+-	{ "48k.2.big",   "S16_LE",  48000, 2,    24000,  192000 },
+-	{ "48k.6.big",   "S16_LE",  48000, 6,    48000,  576000 },
+-	{ "96k.2.big",   "S16_LE",  96000, 2,    48000,  192000 },
+-};
++#define TESTS_PER_PCM 2
+ 
+ int main(void)
+ {
+ 	struct pcm_data *pcm;
+-	int i;
+ 
+ 	ksft_print_header();
+ 
+@@ -467,7 +432,7 @@ int main(void)
+ 
+ 	find_pcms();
+ 
+-	ksft_set_plan(num_missing + num_pcms * ARRAY_SIZE(time_tests));
++	ksft_set_plan(num_missing + num_pcms * TESTS_PER_PCM);
+ 
+ 	for (pcm = pcm_missing; pcm != NULL; pcm = pcm->next) {
+ 		ksft_test_result(false, "test.missing.%d.%d.%d.%s\n",
+@@ -476,9 +441,8 @@ int main(void)
+ 	}
+ 
+ 	for (pcm = pcm_list; pcm != NULL; pcm = pcm->next) {
+-		for (i = 0; i < ARRAY_SIZE(time_tests); i++) {
+-			test_pcm_time1(pcm, &time_tests[i]);
+-		}
++		test_pcm_time1(pcm, "test.time1", "S16_LE", 48000, 2, 512, 4096);
++		test_pcm_time1(pcm, "test.time2", "S16_LE", 48000, 2, 24000, 192000);
+ 	}
+ 
+ 	conf_free();
 
 -- 
 2.30.2
