@@ -2,116 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64B6656B43
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 14:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A4A656B5A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 14:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiL0NIg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Dec 2022 08:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
+        id S229502AbiL0NdF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Dec 2022 08:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiL0NIM (ORCPT
+        with ESMTP id S229488AbiL0NdE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:08:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2DBBC22
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 05:07:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 402ED61159
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 13:07:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8D4C433D2;
-        Tue, 27 Dec 2022 13:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672146470;
-        bh=xDyRSGoHuFrSYgE6BySpQvmHRd5fFKw0HhCRo1ANkdQ=;
-        h=From:Date:Subject:To:Cc:From;
-        b=lpYHhhQpdGO6t0fm727aOH62PysUs+PcFIESMuAbEAroUjx4WVN5Fj48rqq8crxeQ
-         Lvtvw8KUb1vau5FO7AUd5GaQE0yEadb7t6pzs0PnSw1jiUv/bfB2z2pYvfsIQFnsdJ
-         EXFYBXKIzf0CPUb3XReOcr6KzyJpAeNnIspFXXqRM2ZSOv9RtpZ0gItAZ9xgw6J0Gj
-         C76n9sCQVmy54dBlVRUydP2le4jznbamD6ff794vOi9JlSO1EsCHjNmuSMD5K9cNI2
-         Qz6fe7wzWfUdmqniNw2wbwv8amrDIaDdq4Fui7iv8k6S5LAxggImsEtoTVhvaFwpL+
-         D7Nlp44hvBtyA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 13:07:45 +0000
-Subject: [PATCH] kselftest/arm64: Skip non-power of 2 SVE vector lengths in fp-stress
+        Tue, 27 Dec 2022 08:33:04 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0576DB1D6;
+        Tue, 27 Dec 2022 05:33:03 -0800 (PST)
+Received: from [10.7.7.5] (unknown [182.253.183.184])
+        by gnuweeb.org (Postfix) with ESMTPSA id E95E37E2BA;
+        Tue, 27 Dec 2022 13:32:59 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1672147983;
+        bh=i77DIBl5pA2lkekeQ2mmSNW2g6Fu6p88wv+enkBT8hE=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=ZJ9DyL6bvMg8msWUpK4TCfW2D4cIYzCMfRUIMsX/ZkxiXK1ZqLIWoWXmT4F8jbWll
+         tz00VjQyscF2J1yhFPY5qH0P5yK5Vfxjf2a19id7bUkaOszrGMahimYM80SKcjxdpj
+         edd7+S8AiCB2qrwY8s62RoXWepaMts709vINjUhtjzXCPF5R052ue2yu5m2aLq+siv
+         H2cJqhcazkY1yxdX7MQVAR3/QTFT4glQvo25e5uaPv/CvvRToXzDAyWWX+2ki6XF0E
+         vLaChiUrF3J0ujWrmY0b4iLdL+8IHOEO3y9uqkjWfjB6tPES/Stg2nX83FiuTwooXa
+         JYk+uogr9pLHQ==
+Message-ID: <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
+Date:   Tue, 27 Dec 2022 20:32:57 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        VNLX Kernel Department <kernel@vnlx.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+References: <20221222035134.3467659-1-ammar.faizi@intel.com>
+ <20221222043452.GB29086@1wt.eu>
+ <20221222134615.3535422-1-ammar.faizi@intel.com>
+ <20221227062640.GA5337@1wt.eu>
+Content-Language: en-US
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
+In-Reply-To: <20221227062640.GA5337@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221220-arm64-fp-stress-pow2-v1-1-d0ce756b57af@kernel.org>
-X-B4-Tracking: v=1; b=H4sIACHuqmMC/x2NQQqDMBAAvyJ77lKzBG37ldJDoqvuwSTsSlsQ/
- 97Y4zAMs4OxChs8mh2U32KSUwV3aWBYQpoZZawM1BI5ohaDrp3HqaBtymZY8ocw3hxz53vn7wQ1
- jcEYo4Y0LGecVWZJ1zXYxnr6ojzJ9799vo7jB5Pi7yuGAAAA
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1805; i=broonie@kernel.org;
- h=from:subject:message-id; bh=xDyRSGoHuFrSYgE6BySpQvmHRd5fFKw0HhCRo1ANkdQ=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu4kzZW+osJBWLRnRJG2tHjFPO2kQXbFgnObJURI
- 32NtFhGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6ruJAAKCRAk1otyXVSH0M5VB/
- 4oKaYfrwEPMwiLaRdrfHUr7/xz8ImCGpQvXsgT80O/PuNAdwx2HSal2DWhAbMiqNuvw1Een/6hs/dh
- TAtb0lt5x+O8GC7JF0l0ONuk02BHupCkADjt37/x1iP3jwEdZNPx42vqxZ9mY1OjCwUQhKWKFFCj/4
- 2sOH8c2SYylHu5iAdhISQ/b7JHU153Zo1LKABwQnt+2FPOsDtItecL9WeE5/VNQc1Va73GQpcUM1h1
- xqYOyVX2zPQQosesGEtAFu/2TdL1JItRCVf3TQNKs31B4NLTPaia29B0npYEpg1MN2IhWPwVVZpWmx
- jZQjXaQfq+XqN1q+x1sxsorOIIbNQ1
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As documented in issue C215 in the known issues list for DDI0487I.a [1] Arm
-will be making a retroactive change to SVE to remove the possibility of
-selecting non power of two vector lengths. This has no impact on existing
-physical implementations but most virtual implementations have implemented
-the full range of permissible vector lengths. Given how demanding fp-stress
-is for these implementations update to only attempt to enumerate the power
-of two vector lengths, reducing the load created on existing virtual
-implementations and only exercising the functionality that will be seen in
-physical implementations.
+On 12/27/22 1:26 PM, Willy Tarreau wrote:
+> Yes, and quite frankly I prefer to make that the least complicated.
+> Doing just a simple loop in the _start code is trivial. The main
+> concern was to store the data. Till now we had an optional .bss
+> section, we didn't save environ and errno was optional. But let's
+> be honest, while it does allow for writing the smallest programs,
+> most programs will have at least one global variable and will get
+> this section anyway, so we don't save anything in practice. This
+> concern used to be valid when I was making tiny executables when
+> running on floppies where each byte mattered, but now that's pointless.
+> 
+> Thus what I'm proposing is to switch to weak symbol definitions for
+> errno, environ, and auxv. I did a quick test to make sure that the same
+> symbol was properly used when accessed from two units and that's OK, I'm
+> seeing the same instance for all of them (which is better than the current
+> situation where errno is static, hence per-unit).
 
-[1] https://developer.arm.com/documentation/102105/ia-00/
+Looks good to me.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/fp-stress.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> Thus now my focus will be on storing these variables where relevant
+> for all archs, so that your getauxval() implementation works on top
+> of it. It will be much cleaner and will also improve programs' ease
+> of implementation and reliability.
 
-diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
-index f8b2f41aac36..2b95f9451b1b 100644
---- a/tools/testing/selftests/arm64/fp/fp-stress.c
-+++ b/tools/testing/selftests/arm64/fp/fp-stress.c
-@@ -377,7 +377,7 @@ static void probe_vls(int vls[], int *vl_count, int set_vl)
- 
- 	*vl_count = 0;
- 
--	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
-+	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
- 		vl = prctl(set_vl, vq * 16);
- 		if (vl == -1)
- 			ksft_exit_fail_msg("SET_VL failed: %s (%d)\n",
-@@ -385,6 +385,9 @@ static void probe_vls(int vls[], int *vl_count, int set_vl)
- 
- 		vl &= PR_SVE_VL_LEN_MASK;
- 
-+		if (*vl_count && (vl == vls[*vl_count - 1]))
-+			break;
-+
- 		vq = sve_vq_from_vl(vl);
- 
- 		vls[*vl_count] = vl;
+Are you going to wire up a patchset for it?
 
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20221220-arm64-fp-stress-pow2-b81ee6471492
+If so, I'll wait for it. When it's already committed, I'll base this
+series on top it.
 
-Best regards,
+Or I take your series locally then submit your patches and mine in a
+single series.
+
+What do you prefer?
+
 -- 
-Mark Brown <broonie@kernel.org>
+Ammar Faizi
+
