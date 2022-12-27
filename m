@@ -2,152 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0181656D41
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 18:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2112F656DE7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 19:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiL0RIN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Dec 2022 12:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
+        id S229744AbiL0SWw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Dec 2022 13:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbiL0RHk (ORCPT
+        with ESMTP id S229488AbiL0SWu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 12:07:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5CCBF6A;
-        Tue, 27 Dec 2022 09:07:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E202611D1;
-        Tue, 27 Dec 2022 17:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E40C433AF;
-        Tue, 27 Dec 2022 17:07:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672160852;
-        bh=uxaBKlEBdgL2vH6RIInA6fuLSoTpmrLUhjWBaHzLQMY=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=B0vvlwYeBFVsH5dzWcS9zGctixO+BcVewUGdlEbOSaTLz6q4UGTMnJfw5wtWPC8Ki
-         Z//pmIfDhIzmK9aBnkuh2SLvCJnSrzzjX+h/JxoW+h6XHL0aOecAWUC+te1OVgBEmU
-         KkAlT0XTbuomePlmuHknbIuoG7N6GWr5hClA9oXnDOuzJQrXP7D+21w6h57Vea2BMM
-         x4c9/BMJ0LyOWy6X+nvuR2HaonZKqwJPUKhlQ4b9aeU2vPJR4VokQ/5+kzLQEdEcgV
-         /yRcqvwCYLrJFYPJseOWvfSqhtWTIZOQgfyLeybXhOo9khAAeF+1SDbFcQdmbwKt2X
-         omC8FY3PycjcQ==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 17:06:52 +0000
-Subject: [PATCH v4 7/7] kselftest/alsa: pcm - Add more coverage by default
+        Tue, 27 Dec 2022 13:22:50 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A087A479;
+        Tue, 27 Dec 2022 10:22:48 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 82so9273210pgc.0;
+        Tue, 27 Dec 2022 10:22:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J8ot+Jdx+D59AwrGMZTmiCuGz/IhA+F0yQn6+KVt1YQ=;
+        b=HyF6cB0mWZ2TSlFW9mAKovRNLXijf3as7pmAi1V95kZSIyWvvBplRhJlE4VVPyNqX7
+         qtCoQU5sWSbILGXI6CBflgv7SX3FFmM1aVK44WsidwxsaQxJjKX8nTjsZe4rr8Wy++rm
+         nsmuo/2u41S5tYXqYUnEjPhSKMNE/H6UPEyhWJ3+ieuKz20OkVevhpXLdPxu8gCC3wmW
+         nKqdI9MgcKwM6ogbznoCSdmDpaA/EDby71Hq2Rj2fNXUnWiulVxbXeeycVzt4fXpS4On
+         mkYQJoppWDprkpa4Mow+zxHc8zsSaEeO3afXfD0uNU/uVXgMkqrNIUbWJn4bvdAUBuOi
+         Ihdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J8ot+Jdx+D59AwrGMZTmiCuGz/IhA+F0yQn6+KVt1YQ=;
+        b=VtWDaM73RIINM+NP5tY2J/A4aYNOmI/PWe7uvidCQQvQPYMj1o4SOBPmUTFaOoHliO
+         ZnEHjPqbH/PKXUvLKHN1pluYVgVSzwwilw6b0xRWa/nyfLuU8mO+taNTvAQpJNaYEKd8
+         OzGprd4LgVsVthLMQtFjheIkBTgADuYSKQrJ5wpPBhLDjk2VpmqZAgJ4gXzeaKCfYuHe
+         rVqqKidLg4v+0FcgETft6feSMF8ErQ6OwDwCXdI/qGAqE5NZOmUThk5c7hsCOsogpGnF
+         H+dJcs8TIJWQW7LxgX5GbXF/s2wwPCRZohqdZyTKorLnJWyVyTrNFweh6uG5xY/o0fZM
+         g2qQ==
+X-Gm-Message-State: AFqh2krtgEYYF6t7VdXIH8kzvsVc04557A5hNFeB7HNGQISSyPKkMwEq
+        04Vdi0tp3pYm42vktnfxvKc=
+X-Google-Smtp-Source: AMrXdXtBYXeAiheD48UtMezozvp/2x4UPN1YxCG7e0vQs3SR1QOOAfCAzUkW6dNPh8BlKMBeCsux2Q==
+X-Received: by 2002:a05:6a00:3217:b0:580:ffa0:bfcf with SMTP id bm23-20020a056a00321700b00580ffa0bfcfmr10572108pfb.6.1672165367602;
+        Tue, 27 Dec 2022 10:22:47 -0800 (PST)
+Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:68a7])
+        by smtp.gmail.com with ESMTPSA id z7-20020a623307000000b00576d4d69909sm8886485pfz.8.2022.12.27.10.22.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Dec 2022 10:22:47 -0800 (PST)
+Date:   Tue, 27 Dec 2022 10:22:42 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Quentin Deslandes <qde@naccy.de>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Dmitrii Banshchikov <me@ubique.spb.ru>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        Kernel Team <kernel-team@meta.com>, fw@strlen.de
+Subject: Re: [PATCH bpf-next v3 00/16] bpfilter
+Message-ID: <20221227182242.ozkc6u2lbwneoi4r@macbook-pro-6.dhcp.thefacebook.com>
+References: <20221224000402.476079-1-qde@naccy.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221208-alsa-pcm-test-hacks-v4-7-5a152e65b1e1@kernel.org>
-References: <20221208-alsa-pcm-test-hacks-v4-0-5a152e65b1e1@kernel.org>
-In-Reply-To: <20221208-alsa-pcm-test-hacks-v4-0-5a152e65b1e1@kernel.org>
-To:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2160; i=broonie@kernel.org;
- h=from:subject:message-id; bh=uxaBKlEBdgL2vH6RIInA6fuLSoTpmrLUhjWBaHzLQMY=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqyZF4AynULWOON7IsKhfOyuMp8d1cKEzp28jmiLn
- bAKabXmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6smRQAKCRAk1otyXVSH0L4CB/
- 9Y/IcV/hbQxayzYQsUYnwl4bcP73J3w9Q8D4DLLlcycEy9+CT7NbYvB17FUeibbOMc4XoojPKLTSpV
- qcaYQ9DSDtHboeRb70V7brVMWPnWDKiDXL2U84cDKqt2TFa7PJu8LnutT2N5ko/3UAu3UtAgA8/akI
- wiOevp+bm+amAgoHMuqFVwh2XVDuVWRZr60Ib2HsLDYgImHhSgudVrxvzF4sgpyg5u2xKHqFPUcWc+
- Y5Oi2RMVA0FwgMYR78oZeUYPqOwdHWzIuqCueNshnmMhCy+k11lLh8Y9rsuQq4eoW/lNRzohzQUIzE
- Co6Kr1lvBNNjZEbIhPZEOM8aaV1Elv
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add more coverage to our standard test cases:
+On Sat, Dec 24, 2022 at 01:03:46AM +0100, Quentin Deslandes wrote:
+> 
+> Due to poor hardware availability on my side, I've not been able to
+> benchmark those changes. I plan to get some numbers for the next iteration.
 
- - 8kHz mono and stereo to verify that the most common mono format is
-   clocked correctly.
- - 44.1kHz stereo to verify that this different clock base is generated
-   accurately.
- - 48kHz 6 channel to verify that 6 channel is clocked correctly.
- - 96kHz stereo since that is a common audiophile rate.
+Yeah. Performance numbers would be my main question :)
 
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/alsa/pcm-test.conf | 47 +++++++++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
+> FORWARD filter chain is now supported, however, it's attached to
+> TC INGRESS along with INPUT filter chain. This is due to XDP not supporting
+> multiple programs to be attached. I could generate a single program
+> out of both INPUT and FORWARD chains, but that would prevent another
+> BPF program to be attached to the interface anyway. If a solution
+> exists to attach both those programs to XDP while allowing for other
+> programs to be attached, it requires more investigation. In the meantime,
+> INPUT and FORWARD filtering is supported using TC.
 
-diff --git a/tools/testing/selftests/alsa/pcm-test.conf b/tools/testing/selftests/alsa/pcm-test.conf
-index 1662a8c7073e..71bd3f78a6f2 100644
---- a/tools/testing/selftests/alsa/pcm-test.conf
-+++ b/tools/testing/selftests/alsa/pcm-test.conf
-@@ -1,4 +1,31 @@
- pcm.test.time1 {
-+	description "8kHz mono large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 8000
-+	channels 1
-+	period_size 8000
-+	buffer_size 32000
-+}
-+pcm.test.time2 {
-+	description "8kHz stereo large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 8000
-+	channels 2
-+	period_size 8000
-+	buffer_size 32000
-+}
-+pcm.test.time3 {
-+	description "44.1kHz stereo large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 44100
-+	channels 2
-+	period_size 22500
-+	buffer_size 192000
-+}
-+pcm.test.time4 {
- 	description "48kHz stereo small periods"
- 	format S16_LE
- 	alt_formats [ S32_LE ]
-@@ -7,7 +34,7 @@ pcm.test.time1 {
- 	period_size 512
- 	buffer_size 4096
- }
--pcm.test.time2 {
-+pcm.test.time5 {
- 	description "48kHz stereo large periods"
- 	format S16_LE
- 	alt_formats [ S32_LE ]
-@@ -16,3 +43,21 @@ pcm.test.time2 {
- 	period_size 24000
- 	buffer_size 192000
- }
-+pcm.test.time6 {
-+	description "48kHz 6 channel large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 48000
-+	channels 2
-+	period_size 48000
-+	buffer_size 576000
-+}
-+pcm.test.time7 {
-+	description "96kHz stereo large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 96000
-+	channels 2
-+	period_size 48000
-+	buffer_size 192000
-+}
+I think we can ignore XDP chaining for now assuming that Daniel's bpf_link-tc work
+will be applicable to XDP as well, so we'll have a simple chaining
+for XDP eventually.
 
--- 
-2.30.2
+As far as attaching to TC... I think it would be great to combine bpfilter
+codegen and attach to Florian's bpf hooks exactly at netfilter.
+See
+https://git.breakpoint.cc/cgit/fw/nf-next.git/commit/?h=nf_hook_jit_bpf_29&id=0c1ec06503cb8a142d3ad9f760b72d94ea0091fa
+With nf_hook_ingress() calling either into classic iptable or into bpf_prog_run_nf
+which is either generated by Florian's optimizer of nf chains or into
+bpfilter generated code would be ideal.
