@@ -2,46 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D47656B37
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 14:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C897656B39
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Dec 2022 14:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbiL0NHW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Dec 2022 08:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S229789AbiL0NHV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Dec 2022 08:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiL0NGy (ORCPT
+        with ESMTP id S231651AbiL0NG4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:06:54 -0500
+        Tue, 27 Dec 2022 08:06:56 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6517D277;
-        Tue, 27 Dec 2022 05:06:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEF5277;
+        Tue, 27 Dec 2022 05:06:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 144AAB81018;
-        Tue, 27 Dec 2022 13:06:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A846C433D2;
-        Tue, 27 Dec 2022 13:06:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32A9AB8101D;
+        Tue, 27 Dec 2022 13:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42AB9C43392;
+        Tue, 27 Dec 2022 13:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672146410;
-        bh=3ILPi1ChGnvR1ETggv6KNQ4ch36Nx40vsMckHaMpbOM=;
-        h=From:Subject:Date:To:Cc:From;
-        b=idx29gCQxi2nBZTKMsgrNDZOcjG8UCqbtmcuRc9KVd7rIIyKX3ZkWzV/sz5lHiInr
-         0JrK/D5NZ0imfdv63qgewWcZ8xCEOr4hJKWD3VRShJJGibrrQHkzyB1a95a7aiGWNq
-         TrGM0+bDGrFQgzizgOH7NoHBRsokXaovtRm2kUZxSbdzOdGkoYPjvXPrJz6NJ6tild
-         SDuGtIzoxp0cnyfZ3aHQq/SGsIEk+9yHVefajHdxAmbb9gH1eQnSCQCG1+aD+vfxlx
-         pHbIysQ20bQccFxnEpjsIiTZ1C0zFV4Ln1Hy2mgjm94kD3dVeYulNO9ZGhsEjXyx2I
-         ivWqnax2bZPxw==
+        s=k20201202; t=1672146412;
+        bh=RNcNgyi+XWeNF+WSinst8npBEXg52AmbeM5w3G+O9YA=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=X1mXjweTTYK8xa39s4cz6r7MbA+2CJZyqC5RKsj+ACMyyIOmfCUJUgL5+UZb4Dul4
+         fGaNKbhxAIXxZ+ZEXBOoJNXYEF9k/NwjmaM0AQeG8pu+yCkZDnSKbdQkmzN67B8M6M
+         zr0ZU/GH7tvTgK9IzBa920Xed5Yg1aC/tvnebchLf4X/ySqw8cl6suqVwi8fbgtXEd
+         WgStWeGtjRQlTEZ2P6Mxq8adIEM6LeAdXVIsGr5CoNAXy6oZWeMQR7aqv0aTvwQXYa
+         6S82w3JCzDnkXR4DTapI1NhW0/usghZ2naaIvpISx1gd/WgG9e436GGpwGDxwbcpym
+         lZ2jnAt0IvECA==
 From:   Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/4] kselftest/arm64: syscall-abi fix and enhancements
 Date:   Tue, 27 Dec 2022 13:06:35 +0000
-Message-Id: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
+Subject: [PATCH 1/4] kselftest/arm64: Fix syscall-abi for systems without 128 bit SME
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANztqmMC/x2NQQrCQAwAv1JyNtBNVcSviIfsmtrgdisJVEvp3
- 916nDnMrOBiKg7XZgWTWV2nUiEcGkgDl6egPioDtUSBqEO28XxEXzxxzshR0UfBqeQFUxcjpba/
- BDlBDUR2wWhc0rAnPpO9dv026fX7f97u2/YD9US2AYMAAAA=
+Message-Id: <20221223-arm64-syscall-abi-sme-only-v1-1-4fabfbd62087@kernel.org>
+References: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
+In-Reply-To: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
@@ -49,15 +48,15 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1283; i=broonie@kernel.org;
- h=from:subject:message-id; bh=3ILPi1ChGnvR1ETggv6KNQ4ch36Nx40vsMckHaMpbOM=;
- b=owGbwMvMwMWocq27KDak/QLjabUkhuRVb59czLoifuBdZr5Cpt6xg/FHpfbf/Vdw6MbM5Kh1WTNF
- xaNVOhmNWRgYuRhkxRRZ1j7LWJUeLrF1/qP5r2AGsTKBTGHg4hSAi+iy/xV3TImOV8sqzFD8lfqj/Z
- FZsY5Al/uOdlP+dNb2W20/vpXb6UbJ5ljEFeQVrIzuWhD+eiH/krW2T/TlNi1kCG3sZf1R6OE8VyRT
- I+Vz+ETljz3XspLl9shEvf8g/eqATk+QpNnJb2cTJ/pfSFnFU3ruw9WMR3Ms3NYIsLS2FgqoP63d3K
- Zxz7KYcX+m6YH7P/75X77pc+OmSYTUpom7r7ennf1f+krcPOLjg2CHz7uUd/jPT28UUP6fVCV8++GH
- qC9ZEg+ufdK09PgZXBr4kl1iYeKkrpQLAY7pUos+ib8L541WnWAif+xqcULTJ69ZUkdyDVpCRCTl9h
- fPOHGj/0zBf+OtDjE/Vppaiy0HAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1220; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=RNcNgyi+XWeNF+WSinst8npBEXg52AmbeM5w3G+O9YA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu3l6Oy4cmr1i0AZdD7/l1h/+/8+rwatiqVG6BTH
+ CJpZJdKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6rt5QAKCRAk1otyXVSH0C0GB/
+ 41Fa+ye3U2Z+ujAnWV+Wyw58vmNFHQRwErFPW8ILHwKAurwod1ESbL3QB84c6oyxBY0Xm5akg63pKv
+ AHyoOJo0V7ylfEeo+KLhIUf+/j8g5TvTgL4Ao+wuUdR7FniW9n17Nup/g8NpAKE3zNNwK0gFZWBwZ2
+ K9w8Fh+LI8/LVusdHwE+3xf9EfObLOoFNTXDvrIR5XDFJkzX+shp7IFgdNLowymPJJHaeo4DQ+mAB5
+ UuFkn34rcrCOzQumrWH9SD6nD+PBk6SVn+K5J+RdJDkSWGj55n+FFmX+PBbUxyNLT4vHB3PnNqdJXG
+ HitVrnB+Lng5mN3x5qHOU90Q67lNzG
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,35 +68,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The first patch here is a fix which should ideally be sent as such,
-currently the program will hang on architecturally valid systems which
-implement SME but not 128 bit vector lengths.  The remaining patches
-are general enhancements, including coverage for the SME ABI on SME only
-systems.
+SME does not mandate any specific VL so we may not have 128 bit SME but
+the algorithm used for enumerating VLs assumes that we will. Add the
+required check to ensure that the algorithm terminates.
 
-To: Catalin Marinas <catalin.marinas@arm.com>
-To: Will Deacon <will@kernel.org>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Fixes: 43e3f85523e4 ("kselftest/arm64: Add SME support to syscall ABI test")
 Signed-off-by: Mark Brown <broonie@kernel.org>
-
 ---
-Mark Brown (4):
-      kselftest/arm64: Fix syscall-abi for systems without 128 bit SME
-      kselftest/arm64: Only enumerate VLs once in syscall-abi
-      kselftest/arm64: Verify SME only ABI in syscall-abi
-      kselftest/arm64: Only enumerate power of two VLs in syscall-abi
+ tools/testing/selftests/arm64/abi/syscall-abi.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- .../testing/selftests/arm64/abi/syscall-abi-asm.S  |  14 ++-
- tools/testing/selftests/arm64/abi/syscall-abi.c    | 133 +++++++++++++--------
- 2 files changed, 89 insertions(+), 58 deletions(-)
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20221223-arm64-syscall-abi-sme-only-c3bb2c0f81e5
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
+index dd7ebe536d05..ffe719b50c21 100644
+--- a/tools/testing/selftests/arm64/abi/syscall-abi.c
++++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
+@@ -390,6 +390,10 @@ static void test_one_syscall(struct syscall_cfg *cfg)
+ 
+ 			sme_vl &= PR_SME_VL_LEN_MASK;
+ 
++			/* Found lowest VL */
++			if (sve_vq_from_vl(sme_vl) > sme_vq)
++				break;
++
+ 			if (sme_vq != sve_vq_from_vl(sme_vl))
+ 				sme_vq = sve_vq_from_vl(sme_vl);
+ 
+@@ -461,6 +465,10 @@ int sme_count_vls(void)
+ 
+ 		vl &= PR_SME_VL_LEN_MASK;
+ 
++		/* Found lowest VL */
++		if (sve_vq_from_vl(vl) > vq)
++			break;
++
+ 		if (vq != sve_vq_from_vl(vl))
+ 			vq = sve_vq_from_vl(vl);
+ 
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
