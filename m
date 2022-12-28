@@ -2,416 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA326571F3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Dec 2022 03:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD431657642
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Dec 2022 13:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbiL1CAd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Dec 2022 21:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S232974AbiL1MDA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Dec 2022 07:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbiL1CAc (ORCPT
+        with ESMTP id S233112AbiL1MC3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 21:00:32 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8767B292
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 18:00:30 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 7so9785931pga.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 18:00:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xb8jJPqAsZD3bkiqHrdaFakWJ3w1ushhBL+PrBwDuro=;
-        b=Et9I8+HEhgQhnhgHIHWqEipxttx+lPZtqZ1ZZHCONiAst/ULmA73XUWQb+FJtNm6J3
-         msTO8MI0Nzdrn6u3KRZ7XP6H+Mq24NyI3tdsQgpnWrq8i30M1O8HJooIQKSQAFV/w/AD
-         GGY+dcM0CJvcQrFfFVBZLXaCBR4bWXq+Ox+vMBN/Feqolp4eKIsDDdlYJl94rc1oGaY5
-         NkNtcJRdNzSabZHV4pf1GRhOS28+QDHVnXXEtZand5VmtUQsM3SETMhpY9euFTADHDxU
-         QU2BYrLOgQM1QVGTp782y4ny7YAExdePylBIJYKBK8mkaUSt0izGnvMGCGQ3+k1yYUeI
-         AxiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xb8jJPqAsZD3bkiqHrdaFakWJ3w1ushhBL+PrBwDuro=;
-        b=4AHiR5bYh7TC6/hmm+FLCfzw7nuFHTJ3KW48I2sNijJ3uCcy/xL9W6CcMkuxVz2vum
-         poEjRPOFM98Kmnl5JCKEQitVvCrs5GQmDbJx5w8aUb6/kAX5QaOt/Ed3DW3ezAzooKGz
-         sxE8fjXYFacn9FsuZ6WPiE7d1MZVrMAH/hpTDt5kE+ZNknIaVYvhquT+WzE8dKoTBWNa
-         wS8ka2f78EuWGgcCUr3sczXw6BcumgDcfrMyU+7yhawYFBWDtJjepH0TgYI+3K6Iaxwl
-         vH9uejJQ5fv5L/FgxLKZc3/pkxAipzBaoYasuyW+gSY2f/tjE7EJ3vOMX8cfThZ1dUos
-         bInQ==
-X-Gm-Message-State: AFqh2kpqMqyqJ1icylpIb+Inm/ZGq0yxJTupER99b1+DxSqFKD9ekz2M
-        6nB6DzBAupZ3awQkfM64W2CiO+6IO6qG7u2MIQm1NQ==
-X-Google-Smtp-Source: AMrXdXsE51z3NvYJCtXjWgC8fIzxdAX8wWhz/lVKCERVTd6SU6/Jyhvn9zWXNd6LMS4K7H+jOB3KeRRqvX2I6lGCrxE=
-X-Received: by 2002:a62:1c4d:0:b0:581:1898:93ae with SMTP id
- c74-20020a621c4d000000b00581189893aemr611997pfc.51.1672192829589; Tue, 27 Dec
- 2022 18:00:29 -0800 (PST)
+        Wed, 28 Dec 2022 07:02:29 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A492A2AEE;
+        Wed, 28 Dec 2022 04:01:42 -0800 (PST)
+Received: from [10.7.7.5] (unknown [182.253.183.184])
+        by gnuweeb.org (Postfix) with ESMTPSA id E0E6A7E258;
+        Wed, 28 Dec 2022 12:01:38 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1672228902;
+        bh=Yw3TuLngTSu3YPEHEdu5NGY2ZRCtBOIME+CW2blUEs8=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=MjNkG8lxgq2o1fPcIbFjRNB7VWK9krBeq3aNDYaLcqFQKPdejJx74tVrBb5T5s4au
+         eTO2mkcJrwlA2NKG760KjK0uzSTTSCCXHnlSgHxFQtSGRD/s8tPnFTOchu/ZtFIGRK
+         R1xXc3B7k09S33iZD5WoZjdWgCAdDy4zsH8h/5OYuMH21VXqgDtBQeXgREv0yG5dwL
+         PO1PV0PUqkoTzNikbTKrlLOKFC47nkWAaYh1Rf5j3QsHru4h4e78sA8tm6ZfvkgVdT
+         7/+n+TudLNq68SljvWnDkPkVDulQz+wsCyEGJRPrV5fEHWkzpTmy1oL637AXb5w5Xb
+         5Mu8vAkMPnxCQ==
+Message-ID: <23e84c59-4f2c-01b4-5b8a-80af39a1d761@gnuweeb.org>
+Date:   Wed, 28 Dec 2022 19:01:36 +0700
 MIME-Version: 1.0
-References: <20221220031023.197178-1-rmoar@google.com>
-In-Reply-To: <20221220031023.197178-1-rmoar@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 27 Dec 2022 18:00:18 -0800
-Message-ID: <CAGS_qxrp_oT7b_NNP4PfES06QAp-V4B4BAETFd3Wv9x-F8Zhrg@mail.gmail.com>
-Subject: Re: [PATCH v1] lib/hashtable_test.c: add test for the hashtable structure
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        VNLX Kernel Department <kernel@vnlx.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+References: <20221222035134.3467659-1-ammar.faizi@intel.com>
+ <20221222043452.GB29086@1wt.eu>
+ <20221222134615.3535422-1-ammar.faizi@intel.com>
+ <20221227062640.GA5337@1wt.eu>
+ <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
+ <20221227184902.GA6287@1wt.eu>
+Content-Language: en-US
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
+In-Reply-To: <20221227184902.GA6287@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 7:16 PM Rae Moar <rmoar@google.com> wrote:
->
-> Add a KUnit test for the kernel hashtable implementation in
-> include/linux/hashtable.h.
->
-> Note that this version does not yet test each of the rcu
-> alternative versions of functions.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
+On 12/28/22 1:49 AM, Willy Tarreau wrote:
+> I'll try to do it but do not want to make you wait too long in case it
+> gets delayed. In the worst case we should only postpone the getauxval()
+> patch and not the other ones.
 
-Looks pretty good from a cursory glance.
-Had some mostly stylistic nits/suggestions below.
+I will split it into 2 patchset then.
 
-> ---
->
-> Note: The check patch script is outputting open brace errors on lines
-> 154, 186, 231 of lib/hashtable_test.c but I believe the format of the
-> braces on those lines is consistent with the Linux Kernel style guide.
-> Will continue to look at these errors.
->
->  lib/Kconfig.debug    |  13 ++
->  lib/Makefile         |   1 +
->  lib/hashtable_test.c | 299 +++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 313 insertions(+)
->  create mode 100644 lib/hashtable_test.c
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 3fc7abffc7aa..3cf3b6f8cff4 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2458,6 +2458,19 @@ config LIST_KUNIT_TEST
->
->           If unsure, say N.
->
-> +config HASHTABLE_KUNIT_TEST
-> +       tristate "KUnit Test for Kernel Hashtable structures" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This builds the hashtable KUnit test suite.
-> +         It tests the API and basic functionality of the functions
-> +         and associated macros defined in include/linux/hashtable.h.
+> BTW, do you think your arch-specific changes for sigaction() will be
+> easily portable to other architectures ? I feel a bit wary of starting
+> to have different features per architecture given the purpose of the
+> lib, so the more uniform the coverage the better.
 
-nit: the "functions and associated macros" == "the API", so perhaps we
-can shorten this a bit.
+The 'rt_sigaction()' itself doesn't seem to be an arch specific, but
+the way it resumes the execution needs to call 'rt_sigreturn()' which
+is arch specific. I took a look at the kernel source code, most
+architectures read 'struct rt_sigframe' from the stack pointer.
 
-> +         For more information on KUnit and unit tests in general please refer
-> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +         If unsure, say N.
-> +
->  config LINEAR_RANGES_TEST
->         tristate "KUnit test for linear_ranges"
->         depends on KUNIT
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 161d6a724ff7..9036d3aeee0a 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -370,6 +370,7 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
->  CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
->  obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
->  obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-> +obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
->  obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
->  obj-$(CONFIG_BITS_TEST) += test_bits.o
->  obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-> diff --git a/lib/hashtable_test.c b/lib/hashtable_test.c
-> new file mode 100644
-> index 000000000000..7907df66a8e7
-> --- /dev/null
-> +++ b/lib/hashtable_test.c
-> @@ -0,0 +1,299 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test for the Kernel Hashtable structures.
-> + *
-> + * Copyright (C) 2022, Google LLC.
-> + * Author: Rae Moar <rmoar@google.com>
-> + */
-> +#include <kunit/test.h>
-> +
-> +#include <linux/hashtable.h>
-> +
-> +struct hashtable_test_entry {
-> +       int key;
-> +       int data;
-> +       struct hlist_node node;
-> +       int visited;
-> +};
-> +
-> +static void hashtable_test_hash_init(struct kunit *test)
-> +{
-> +       /* Test the different ways of initialising a hashtable. */
-> +       DEFINE_HASHTABLE(hash1, 3);
-> +       DECLARE_HASHTABLE(hash2, 3);
-> +
-> +       hash_init(hash1);
-> +       hash_init(hash2);
-> +
-> +       KUNIT_EXPECT_TRUE(test, hash_empty(hash1));
-> +       KUNIT_EXPECT_TRUE(test, hash_empty(hash2));
-> +}
-> +
-> +static void hashtable_test_hash_empty(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry a;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       hash_init(hash);
-> +       KUNIT_EXPECT_TRUE(test, hash_empty(hash));
-> +
-> +       a.key = 1;
-> +       a.data = 13;
-> +       hash_add(hash, &a.node, a.key);
-> +
-> +       /* Hashtable should no longer be empty. */
-> +       KUNIT_EXPECT_FALSE(test, hash_empty(hash));
-> +}
-> +
-> +static void hashtable_test_hash_hashed(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry a, b;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       hash_init(hash);
-> +       a.key = 1;
-> +       a.data = 13;
-> +       b.key = 1;
-> +       b.data = 2;
-> +
-> +       hash_add(hash, &a.node, a.key);
-> +       hash_add(hash, &b.node, b.key);
-> +
-> +       KUNIT_EXPECT_TRUE(test, hash_hashed(&a.node));
-> +       KUNIT_EXPECT_TRUE(test, hash_hashed(&b.node));
-> +}
-> +
-> +static void hashtable_test_hash_add(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry a, b, *x;
-> +       int bkt;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       hash_init(hash);
-> +       a.key = 1;
-> +       a.data = 13;
-> +       a.visited = 0;
-> +       b.key = 2;
-> +       b.data = 10;
-> +       b.visited = 0;
-> +
-> +       hash_add(hash, &a.node, a.key);
-> +       hash_add(hash, &b.node, b.key);
-> +
-> +       hash_for_each(hash, bkt, x, node) {
-> +               if (x->key == a.key && x->data == a.data)
-> +                       a.visited += 1;
-> +               if (x->key == b.key && x->data == b.data)
-> +                       b.visited += 1;
-> +       }
+https://github.com/torvalds/linux/blob/631aa744423173bf921191ba695bbc7c1aabd9e0/arch/x86/kernel/signal_32.c#L145
+https://github.com/torvalds/linux/blob/631aa744423173bf921191ba695bbc7c1aabd9e0/arch/x86/kernel/signal_64.c#L243-L271
+https://github.com/torvalds/linux/blob/a6b450573b912316ad36262bfc70e7c3870c56d1/arch/arm64/kernel/signal.c#L668-L699
+https://github.com/torvalds/linux/blob/a6b450573b912316ad36262bfc70e7c3870c56d1/arch/arm64/kernel/signal32.c#L259
+https://github.com/torvalds/linux/blob/eb67d239f3aa1711afb0a42eab50459d9f3d672e/arch/riscv/kernel/signal.c#L101
 
-  x->visited += 1;
-or
-  x->visited++;
-also do the same thing.
+On the x86-64 arch, the implementation is just like this:
 
-Note: given x is supposed to point to a or b, I don't know if checking
-against a.data does us much good.
-If we're trying to check that hash_add() doesn't mutate the keys and
-data, this code won't catch it.
-We'd have to instead do something like
-  if(x->key != 1 && x->key != 2) KUNIT_FAIL(test, ...);
+    __arch_restore_rt:
+        #
+        # ((%rsp - sizeof(long)) must point to 'struct rt_sigframe')
+        #
+        # 'struct rt_sigframe' is automatically constructed by
+        # the kernel when a signal is caught.
+        #
+        movl       $0xf, %eax // __NR_rt_sigreturn == 0xf
+        syscall
 
-> +
-> +       /* Both entries should have been visited exactly once. */
-> +       KUNIT_EXPECT_EQ(test, a.visited, 1);
-> +       KUNIT_EXPECT_EQ(test, b.visited, 1);
-> +}
-> +
-> +static void hashtable_test_hash_del(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry a, b, *x;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       hash_init(hash);
-> +       a.key = 1;
-> +       a.data = 13;
-> +       b.key = 2;
-> +       b.data = 10;
-> +       b.visited = 0;
-> +
-> +       hash_add(hash, &a.node, a.key);
-> +       hash_add(hash, &b.node, b.key);
-> +
-> +       hash_del(&b.node);
-> +       hash_for_each_possible(hash, x, node, b.key) {
-> +               if (x->key == b.key && x->data == b.data)
-> +                       b.visited += 1;
+I believe aarch64 and RISCV don't behave differently, but different
+registers.
 
-Similarly to above, x->visited += 1 (or ++) is probably better.
+Not sure what PowerPC does here, it seems a bit different:
+https://github.com/torvalds/linux/blob/1612c382ffbdf1f673caec76502b1c00e6d35363/arch/powerpc/kernel/signal_64.c#L744
 
-> +       }
-> +
-> +       /* The deleted entry should not have been visited. */
-> +       KUNIT_EXPECT_EQ(test, b.visited, 0);
-> +
-> +       hash_del(&a.node);
-> +
-> +       /* The hashtable should be empty. */
-> +       KUNIT_EXPECT_TRUE(test, hash_empty(hash));
-> +}
-> +
-> +static void hashtable_test_hash_for_each(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry entries[3];
-> +       struct hashtable_test_entry *x;
-> +       int bkt, i, j, count;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       /* Initialize a hashtable with three entries. */
-> +       hash_init(hash);
-> +       for (i = 0; i < 3; i++) {
-> +               entries[i].key = i;
-> +               entries[i].data = i + 10;
-> +               entries[i].visited = 0;
-> +               hash_add(hash, &entries[i].node, entries[i].key);
-> +       }
-> +
-> +       count = 0;
-> +       hash_for_each(hash, bkt, x, node) {
-> +               if (x->key >= 0 && x->key < 3)
-> +                       entries[x->key].visited += 1;
+I haven't taken a look at other archs.
 
-Would this be better using an assert to fail the test if we see unexpected keys?
-E.g. like
-  if (x->key < 0 || x->key > 3) KUNIT_ASSERT_FAILURE(test, ...);
-  x->visited++;
-  count++;
-or
-  KUNIT_ASSERT_GE(test, x->key, 0);
-  KUNIT_ASSERT_LT(test, x->key, 3);
+What do you think? Is it affordable for nolibc to implement all of
+these?
 
-> +               count++;
-> +       }
-> +
-> +       /* Should have visited each entry exactly once. */
-> +       KUNIT_EXPECT_EQ(test, count, 3);
-> +       for (j = 0; j < 3; j++)
-> +               KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-> +}
-> +
-> +static void hashtable_test_hash_for_each_safe(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry entries[3];
-> +       struct hashtable_test_entry *x;
-> +       struct hlist_node *tmp;
-> +       int bkt, i, j, count;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       /* Initialize a hashtable with three entries. */
-> +       hash_init(hash);
-> +       for (i = 0; i < 3; i++) {
-> +               entries[i].key = i;
-> +               entries[i].data = i + 10;
-> +               entries[i].visited = 0;
-> +               hash_add(hash, &entries[i].node, entries[i].key);
-> +       }
-> +
-> +       count = 0;
-> +       hash_for_each_safe(hash, bkt, tmp, x, node) {
-> +               if (x->key >= 0 && x->key < 3) {
-> +                       entries[x->key].visited += 1;
-> +                       hash_del(&entries[x->key].node);
-> +               }
-> +               count++;
-> +       }
-> +
-> +       /* Should have visited each entry exactly once. */
-> +       KUNIT_EXPECT_EQ(test, count, 3);
-> +       for (j = 0; j < 3; j++)
-> +               KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-> +}
-> +
-> +static void hashtable_test_hash_for_each_possible(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry entries[4];
-> +       struct hashtable_test_entry *x;
-> +       int i, j, count;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       /* Initialize a hashtable with three entries with key = 1. */
-> +       hash_init(hash);
-> +       for (i = 0; i < 3; i++) {
-> +               entries[i].key = 1;
-> +               entries[i].data = i;
-> +               entries[i].visited = 0;
-> +               hash_add(hash, &entries[i].node, entries[i].key);
-> +       }
-> +
-> +       /* Add an entry with key = 2. */
-> +       entries[3].key = 2;
-> +       entries[3].data = 3;
-> +       entries[3].visited = 0;
-> +       hash_add(hash, &entries[3].node, entries[3].key);
-> +
-> +       count = 0;
-> +       hash_for_each_possible(hash, x, node, 1) {
-> +               if (x->data >= 0 && x->data < 4)
-> +                       entries[x->data].visited += 1;
-> +               count++;
-> +       }
-> +
-> +       /* Should have visited each entry with key = 1 exactly once. */
-> +       for (j = 0; j < 3; j++)
-> +               KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-> +
-> +       /* If entry with key = 2 is in the same bucket as the entries with
-> +        * key = 1, check it was visited. Otherwise ensure that only three
-> +        * entries were visited.
-> +        */
-> +       if (hash_min(1, HASH_BITS(hash)) == hash_min(2, HASH_BITS(hash))) {
+-- 
+Ammar Faizi
 
-nit: this feels like we might be a bit too tied to the impl (not sure
-if it'll change anytime soon, but still).
-
-Could we check the bucket using hash_for_each?
-E.g.
-
-// assume we change the keys from {1,2} to {0,1}
-int buckets[2];
-hash_for_each(hash, bkt, x, node) {
-  buckets[x->key] = bkt;
-}
-
-if (buckets[0] == buckets[1]) { // all in the same bucket
-  ...
-} else { ... }
-
-> +               KUNIT_EXPECT_EQ(test, count, 4);
-> +               KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
-> +       } else {
-> +               KUNIT_EXPECT_EQ(test, count, 3);
-
-should we also check that entries[3].visited == 0?
-
-Daniel
