@@ -2,113 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8A465866C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Dec 2022 20:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2477565898E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Dec 2022 06:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233582AbiL1TZS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Dec 2022 14:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S231194AbiL2Fli (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Dec 2022 00:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbiL1TZF (ORCPT
+        with ESMTP id S229538AbiL2Flh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Dec 2022 14:25:05 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4181705E
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Dec 2022 11:24:56 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id r17-20020a17090aa09100b0021903e75f14so7090335pjp.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Dec 2022 11:24:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIyfuO6L8HnU8CmCldKrIpDi7aTZJyxJfn1wljTzIeI=;
-        b=HbphtqtIjGcu1bCKK6wFWu4E/GlYZGDlsYger0IgbCeUkoHRrvjgvwYnY/vOQNJS3v
-         FyjI7bdMglfCpRTTsNvK49p8IyLNoVRBVdcnldRVB+HUTo08LKiSrhC5Q/0Uc+QQdp+X
-         IHJ89MTp65CrwucYaVMtjMiROhNdBnnGYlBREUmDHiQkTkehUA4DlpRUBvud1+SVqpMC
-         6jKDiAXw31yGNOiO07z1YlMzIXbFVC8qVLvnQMkUpOleAVc5L3CryHcplcqTmY4Pt+Gf
-         tXjGKaI88IH6T+SOZw737PpHr745DcyWzXyYFxhUqfzzIygXPYuztcWMdNooU6ZBsvBQ
-         U5Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIyfuO6L8HnU8CmCldKrIpDi7aTZJyxJfn1wljTzIeI=;
-        b=MnqUbjBH5ZtEuiYBl7flzcHTKlbmPX8qehPnymH5Tej/0sgPMg68TwIFhAls5BZ6HO
-         A4hUMkTWey4G3H3cFEOHE9lN3g8PyYPMrz2DgT8g67N9IkeS58COrViw37wmNBYRlh7p
-         vrDg2QYS+UQxq00/ImVy1fhwPee173thyGwExywmZr4u4hXoBSJj8iW4iw8qk1Ke7Xec
-         Gi43RsmR+jAIC76eeNTVP6WvdpxFO740oIEZYqCY2x3jXGscXQmmA1znfS18HjQT8usu
-         Cof9OVGJgcTe6vVJ4uykWeprcTLOmiBxx19e27PkICWSDhzIWW+B30FOTkRUC1uuYvZQ
-         pPDQ==
-X-Gm-Message-State: AFqh2krVI7I1m59aKkDDLGEXxKpPSOEmC5LXMfMFAUV8lkZ70Talle7g
-        IEkMeq/WyiiH0smEAM2rMvqqCYumrQbP6P1l
-X-Google-Smtp-Source: AMrXdXvOH+6kWmrNXWr4DzT0DiqLcTz70aEBBsdc901akacOkyNgSBf4mYJaruRIUQ+DNlIh+bmPNeoAoGZ2Pser
-X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:90a:7c48:b0:225:ff38:5494 with SMTP
- id e8-20020a17090a7c4800b00225ff385494mr796035pjl.151.1672255496443; Wed, 28
- Dec 2022 11:24:56 -0800 (PST)
-Date:   Wed, 28 Dec 2022 19:24:38 +0000
-In-Reply-To: <20221228192438.2835203-1-vannapurve@google.com>
-Mime-Version: 1.0
-References: <20221228192438.2835203-1-vannapurve@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221228192438.2835203-5-vannapurve@google.com>
-Subject: [V4 PATCH 4/4] KVM: selftests: x86: Invoke kvm hypercall as per host cpu
-From:   Vishal Annapurve <vannapurve@google.com>
-To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thu, 29 Dec 2022 00:41:37 -0500
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7D310B72;
+        Wed, 28 Dec 2022 21:41:36 -0800 (PST)
+Received: from localhost.localdomain (1.general.phlin.uk.vpn [10.172.194.38])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id BFC2043519;
+        Thu, 29 Dec 2022 05:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1672292494;
+        bh=K8ugYDZRkBzYLfNsSqHX8RJMnPEEi0o0mHYPYxH+SLI=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=XqOBpPvoVd0ncnFiqoSkWtdU86ck2Ge69FXp082fJRaJKMDTXKxobVdLMN/wYwMu5
+         MrAGtz6/Kj/kuGz7flskJMeeqcaF7rI5B+18E9d/VfBi7cAUfAwWcbo9yU4355snis
+         DQtQM1qnAeyeUDsa+hxhan+S8lk81wA0dzbZTj3jQv2TPT9SxroeeLWzWnt5FFLO6D
+         F/42SMmS+dP+3GI9/o+nSGUjKsdsbthETzAafrN5xmaFz2Ys4NGUgenwzCJqydWNfm
+         /cvnGgZpe9ZMZOexPv1egNvFpr7Pnm5IHDNx2VfDOZ91bH2YLn7IAfo7sSBVZFykzO
+         WJ+rTZHFbYGFw==
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Cc:     pbonzini@redhat.com, shuah@kernel.org, bgardon@google.com,
-        seanjc@google.com, oupton@google.com, peterx@redhat.com,
-        vkuznets@redhat.com, dmatlack@google.com,
-        Vishal Annapurve <vannapurve@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, naresh.kamboju@linaro.org,
+        po-hsu.lin@canonical.com
+Subject: [PATCH] selftests: net: fix cmsg_so_mark.sh test hang
+Date:   Thu, 29 Dec 2022 13:41:06 +0800
+Message-Id: <20221229054106.96682-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Invoke vmcall/vmmcall instructions from kvm_hypercall as per host CPU
-type. CVMs and current kvm_hyerpcall callers need to execute hypercall
-as per the cpu type to avoid KVM having to emulate the instruction
-anyways.
+This cmsg_so_mark.sh test will hang on non-amd64 systems because of the
+infinity loop for argument parsing in cmsg_sender.
 
-CVMs need to avoid KVM emulation as the guest code is not updatable
-from KVM. Guest code region can be marked un-mondifiable from KVM
-without CVMs as well, so in general it's safer to avoid KVM emulation
-for vmcall/vmmcall instructions.
+Variable "o" in cs_parse_args() for taking getopt() should be an int,
+otherwise it will be 255 when getopt() returns -1 on non-amd64 system
+and thus causing infinity loop.
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+Link: https://lore.kernel.org/lkml/CA+G9fYsM2k7mrF7W4V_TrZ-qDauWM394=8yEJ=-t1oUg8_40YA@mail.gmail.com/t/
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
 ---
- tools/testing/selftests/kvm/lib/x86_64/processor.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/cmsg_sender.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 18f0608743d1..cc0b9c17fa91 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1154,9 +1154,15 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
+index 75dd83e..24b21b1 100644
+--- a/tools/testing/selftests/net/cmsg_sender.c
++++ b/tools/testing/selftests/net/cmsg_sender.c
+@@ -110,7 +110,7 @@ static void __attribute__((noreturn)) cs_usage(const char *bin)
+ 
+ static void cs_parse_args(int argc, char *argv[])
  {
- 	uint64_t r;
+-	char o;
++	int o;
  
--	asm volatile("vmcall"
-+	asm volatile("test %[use_vmmcall], %[use_vmmcall]\n\t"
-+		     "jnz 1f\n\t"
-+		     "vmcall\n\t"
-+		     "jmp 2f\n\t"
-+		     "1: vmmcall\n\t"
-+		     "2:"
- 		     : "=a"(r)
--		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
-+		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3),
-+		       [use_vmmcall] "r" (is_host_cpu_amd()));
- 	return r;
- }
- 
+ 	while ((o = getopt(argc, argv, "46sS:p:m:M:d:tf:F:c:C:l:L:H:")) != -1) {
+ 		switch (o) {
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.7.4
 
