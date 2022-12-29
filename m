@@ -2,116 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55126658C53
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Dec 2022 12:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6876565930B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Dec 2022 00:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiL2LmL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Dec 2022 06:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S230322AbiL2XH0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Dec 2022 18:07:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiL2LmI (ORCPT
+        with ESMTP id S229537AbiL2XHZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Dec 2022 06:42:08 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA691EE2B;
-        Thu, 29 Dec 2022 03:42:07 -0800 (PST)
-Received: from [192.168.88.87] (unknown [125.160.97.236])
-        by gnuweeb.org (Postfix) with ESMTPSA id CD84D7E259;
-        Thu, 29 Dec 2022 11:42:03 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1672314126;
-        bh=Wm/M0KFPV/UrXA6Ml+ZYeaSNEGdUKJquP84+pixMr+Q=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=ioEorrDULg3Vw9Qd+4LGx9rD7cCo67YGL8iFu7LH+j5isM323rjg3vzUW+u5yueMZ
-         RVzN1O83fZL6I+9sCJ7M6InEbiYLXC3t1CWc9M6nJKPn2DsxlgqhnEpY00wcw86iBV
-         1qhspCaMEOt5GtvxTaXjmyaDW9FnO3JGxB8VTUH1+XQEBp0mFA2OnEB9brCE6GchKr
-         Fgf3BUk68UNoWamXXKM0Ubw9yMwdaimTBt4SrAZLx0fh2bv2pPap1tkLGOnxWiHsQg
-         UZBD4GivfptXWNdiVmxFbjZ32PcASp6lWmb04kxQJnthS2wRMZ0UkBTt9M38uYqqSY
-         OS5u22AWSGmxA==
-Message-ID: <39d68044-2641-75da-929a-f5e852f0a3d0@gnuweeb.org>
-Date:   Thu, 29 Dec 2022 18:41:59 +0700
+        Thu, 29 Dec 2022 18:07:25 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808C416487
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Dec 2022 15:07:24 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id z18so10503501ils.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Dec 2022 15:07:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=o7uei9zrAWrOOZeeNT79yAqnNOL1YbIB/w/YKJPnjdA=;
+        b=iZpCxqVbZUIzuHPBmJ/9MdkYPOqbyQAqyEST2lYuwe5QRxSe25tdwf2MFki0Icl1o4
+         1+3eanZv8CvCx/yZ7maSBfhwPlMVVSO5FDRDLwLdg87KZH06dPPwQo8rLomXZOKpOfiI
+         2SN8GFtVMDhumg+wIjGl9ZOBB6a1TgKnx3DX0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o7uei9zrAWrOOZeeNT79yAqnNOL1YbIB/w/YKJPnjdA=;
+        b=3pxWNAw3tZrSBWOjR60D0AfsjDBdQgM/zWl7JYzqpiIXHfUK7+kaLb+HDDqDfUrORI
+         sctq7bVNO8layn60evy/2OC+egM0qEYqKG4PEyCWXnyNDG5gIZ1lCs2BLKHeA5El29qa
+         IGmYQGFDEILA03mo5tsuA9k7o2PCxg68oY9CVoje8d6o+WnuqdnApDIGNsXAgYcfwqDs
+         00yvBWEYKr9pipFKgzGE5ebNXZyVdwZmji5bxN025YtlnnQXRfUii5TnoxAa2QQnndYB
+         P30OvLiiuJF1ex9i1/XkHWP5RGOLa449ixmgNDs5lAoeAnOZZlpgukG7Zqy09EdhlvV5
+         dGyQ==
+X-Gm-Message-State: AFqh2krfJhib9C35bAs905/Z8bdovPZ1+ZBqu8lGptQ6vBbXYySWYUhM
+        ZaNsnleXNEYwPcNK0mEtE/RPVg==
+X-Google-Smtp-Source: AMrXdXsgkS/UOfQRcOyPX4s3Ojqm+h0bJ1IAG4FBmO9jBY0wiE+b3tOwYft3t6MQDwa6csoUWZDYIA==
+X-Received: by 2002:a92:c9cb:0:b0:304:c683:3c8a with SMTP id k11-20020a92c9cb000000b00304c6833c8amr4063217ilq.3.1672355243696;
+        Thu, 29 Dec 2022 15:07:23 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id o3-20020a92d383000000b0030341bffab8sm5980440ilo.31.2022.12.29.15.07.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Dec 2022 15:07:22 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------Wui0JXF5eqvFybFanSvyLAih"
+Message-ID: <226f1d09-aed1-e1c7-1607-e71393cd3a51@linuxfoundation.org>
+Date:   Thu, 29 Dec 2022 16:07:21 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
 Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        VNLX Kernel Department <kernel@vnlx.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>,
-        Muhammad Rizki <kiizuha@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>
-References: <20221222035134.3467659-1-ammar.faizi@intel.com>
- <20221222043452.GB29086@1wt.eu>
- <20221222134615.3535422-1-ammar.faizi@intel.com>
- <20221227062640.GA5337@1wt.eu>
- <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
- <20221227184902.GA6287@1wt.eu>
- <23e84c59-4f2c-01b4-5b8a-80af39a1d761@gnuweeb.org>
- <20221228133513.GA7457@1wt.eu>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
-In-Reply-To: <20221228133513.GA7457@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] KUnit fixes update for Linux 6.2-rc2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/28/22 8:35 PM, Willy Tarreau wrote:
-> OK thanks!
-> 
-> I've pushed for you an update which starts to do what I proposed. Errno
-> and environ are now marked weak for all archs, and _auxv is set for i386,
-> x86_64, arm64 and arm for now:
-> 
->     https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20221227-nolibc-weak-2
-> 
-> You can already use it to implement getauxval(), it will normally work
-> for these archs.
+This is a multi-part message in MIME format.
+--------------Wui0JXF5eqvFybFanSvyLAih
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Will do and be back with two patch series.
+Hi Linus,
 
-> I think we could avoid the asm specific stuff is we get rid of the frame
-> pointer. Please look below:
-> 
->    __attribute__((weak,unused,noreturn,optimize("omit-frame-pointer"),section(".text.nolibc_rt_sigreturn")))
->    void sys_rt_sigreturn()
->    {
->          my_syscall0(__NR_rt_sigreturn);
->          __builtin_unreachable();
->    }
+Please pull the following KUnit fixes update for Linux 6.2-rc2.
 
-Wow! You just taught me that we can force optimize a function with
-optimize("omit-frame-pointer") attribute. Nice to know this one!
+This KUnit update for Linux 6.2-rc2 consists of:
 
-I compile-tested it and it indeed gives the correct code on x86-64.
-Hopefully this approach works for all archs.
+- alloc_string_stream_fragment() error path fix to free before
+   returning a failure.
 
-> It gives me the correct code for x86_64 and i586. I don't know if other
-> architectures will want to add a prologue. I tried with "naked" but it's
-> ignored by the compiler since the function is not purely asm. Not very
-> important but given that we already have everything to perform our calls
-> it would make sense to stay on this. By the way, for the sake of
-> consistency with other syscalls, I do think the function (or label if
-> we can't do otherwise) should be called "sys_rt_sigreturn" as it just
-> performs a syscall.
+diff is attached.
 
-Will call that 'sys_rt_sigreturn' in the next series.
+thanks,
+-- Shuah
 
-Thanks!
+----------------------------------------------------------------
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
--- 
-Ammar Faizi
+   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.2-rc2
+
+for you to fetch changes up to 93ef83050e597634d2c7dc838a28caf5137b9404:
+
+   kunit: alloc_string_stream_fragment error handling bug fix (2022-12-26 16:01:36 -0700)
+
+----------------------------------------------------------------
+linux-kselftest-kunit-fixes-6.2-rc2
+
+This KUnit update for Linux 6.2-rc2 consists of:
+
+- alloc_string_stream_fragment() error path fix to free before
+   returning a failure.
+
+----------------------------------------------------------------
+YoungJun.park (1):
+       kunit: alloc_string_stream_fragment error handling bug fix
+
+  lib/kunit/string-stream.c | 4 +++-
+  1 file changed, 3 insertions(+), 1 deletion(-)
+----------------------------------------------------------------
+--------------Wui0JXF5eqvFybFanSvyLAih
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-kunit-fixes-6.2-rc2.diff"
+Content-Disposition: attachment;
+ filename="linux-kselftest-kunit-fixes-6.2-rc2.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC9zdHJpbmctc3RyZWFtLmMgYi9saWIva3VuaXQvc3Ry
+aW5nLXN0cmVhbS5jCmluZGV4IGY1ZjUxMTY2ZDhjMi4uY2MzMjc0M2MxMTcxIDEwMDY0NAot
+LS0gYS9saWIva3VuaXQvc3RyaW5nLXN0cmVhbS5jCisrKyBiL2xpYi9rdW5pdC9zdHJpbmct
+c3RyZWFtLmMKQEAgLTIzLDggKzIzLDEwIEBAIHN0YXRpYyBzdHJ1Y3Qgc3RyaW5nX3N0cmVh
+bV9mcmFnbWVudCAqYWxsb2Nfc3RyaW5nX3N0cmVhbV9mcmFnbWVudCgKIAkJcmV0dXJuIEVS
+Ul9QVFIoLUVOT01FTSk7CiAKIAlmcmFnLT5mcmFnbWVudCA9IGt1bml0X2ttYWxsb2ModGVz
+dCwgbGVuLCBnZnApOwotCWlmICghZnJhZy0+ZnJhZ21lbnQpCisJaWYgKCFmcmFnLT5mcmFn
+bWVudCkgeworCQlrdW5pdF9rZnJlZSh0ZXN0LCBmcmFnKTsKIAkJcmV0dXJuIEVSUl9QVFIo
+LUVOT01FTSk7CisJfQogCiAJcmV0dXJuIGZyYWc7CiB9Cg==
+
+--------------Wui0JXF5eqvFybFanSvyLAih--
