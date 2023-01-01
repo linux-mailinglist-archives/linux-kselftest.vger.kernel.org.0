@@ -2,55 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701A265A9ED
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Jan 2023 13:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D24965AAB9
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Jan 2023 17:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjAAMKS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 1 Jan 2023 07:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
+        id S230492AbjAAQng (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 1 Jan 2023 11:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjAAMKR (ORCPT
+        with ESMTP id S229447AbjAAQnf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 1 Jan 2023 07:10:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD9B2BCF;
-        Sun,  1 Jan 2023 04:10:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A09E660DC5;
-        Sun,  1 Jan 2023 12:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F1D15C43392;
-        Sun,  1 Jan 2023 12:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672575016;
-        bh=HS6hQhzfJcGLiKObxkOMK8wJSzB6v+ql7r+nb/4JGps=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qHRD861CPrVPlYUcGQM6HjPv1j9IS7yHQUVVBZhUXhvkd6Ak2HRCl4CULe+QnH/89
-         BhkAMZQ60HDWv624GS2RsqUsw77OFZ6cQ7srratN2/Sdc3KW5pT1jhbYK0EGgJZgSe
-         2vHj7veGBhJObTs9KDtk/6UxZ7GvflKj5GQQ+6lT1he1/oaVSTlrz3rRhWqTYZJrtM
-         I8j1h0dA6S0uIEsghtd4kWDcxsclla6pMLVJBoQL7WLy8Dewe+dAV7YbRlcPKzdv1R
-         4DhDAFfycgPYdZ2UanZH3Le+UJPNK33VvxgJdP7BV5EJnde2s9ZWky4prhJVxCP799
-         SHBPXQYa9FUAg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D1FF3E5250A;
-        Sun,  1 Jan 2023 12:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 1 Jan 2023 11:43:35 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C992621;
+        Sun,  1 Jan 2023 08:43:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1672591398; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=ZdIco5S82jNZcc1SWnPRd9xwdwZWsyVleYrPay2ObR9BIbNwK3tGvTKj69THN6c6AZaif6T0N8hTYwPSY2bYu93xo/BQFYSoeu9T0u5PtdF2AO+Rq+fAgxOpeR1tHAkuwF+RxNOC60Mpg9HtP1oLD/NQrIViRmJ083HGbSmVKH8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1672591398; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=TEeQeO6TY4vFIEf1eZcrDvhLFzRqjIwITXNArJVWYK8=; 
+        b=AChNHaZE9bbaU5N5xZO4gGMZbyn5tqD4JqMlQiEHXIEawuuyhj9tia+JxH8wpnM/OdncsLEaH/5BSQZ2fZYG3diUPxLMChDS9Os3sJLuZ6OH9kChfyR6WyktOy7bjDVJ5cJR63h2XLV+fLpMYR5/HW7p0bh2xwyaMwqMsX+dPOk=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672591398;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:MIME-Version:To:To:Cc:Cc:References:Subject:Subject:From:From:Message-ID:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=TEeQeO6TY4vFIEf1eZcrDvhLFzRqjIwITXNArJVWYK8=;
+        b=ai6IJ/on+tf3CDg14Kv9rbf6CiaO2Lm588IUYEabXutLxkedrJKgDQFd2Y/gGnET
+        HKFXJF8qmJUk2PGLvHdE8mlNYgDj+NT+PfuIQbDeVxAH8QCjE8jMWcFAo+kltd73ogc
+        I8rOyGNT5hDLijqFIAVht3fqu/LtksI1yOsfTxb0=
+Received: from [192.168.1.9] (110.226.31.37 [110.226.31.37]) by mx.zoho.in
+        with SMTPS id 1672591395924950.1870279856462; Sun, 1 Jan 2023 22:13:15 +0530 (IST)
+Date:   Sun, 1 Jan 2023 22:13:14 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/2] selftests: net: fix for arp_ndisc_evict_nocarrier test
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167257501585.16085.18087813673437590807.git-patchwork-notify@kernel.org>
-Date:   Sun, 01 Jan 2023 12:10:15 +0000
-References: <20221230091829.217007-1-po-hsu.lin@canonical.com>
-In-Reply-To: <20221230091829.217007-1-po-hsu.lin@canonical.com>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, dsahern@kernel.org, prestwoj@gmail.com,
-        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+To:     Christian Brauner <brauner@kernel.org>,
+        Seth Forshee <sforshee@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kselftests <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20221211092820.85527-1-code@siddh.me>
+Subject: Re: [PATCH] selftests/mount_setattr: Remove redefinition of struct
+ mount_attr
+Content-Language: en-US, en-GB, hi-IN
+From:   Siddh Raman Pant <code@siddh.me>
+Message-ID: <24a4ca6b-8e05-b45b-5cbc-1a470051f1d3@siddh.me>
+In-Reply-To: <20221211092820.85527-1-code@siddh.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,34 +64,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Sun, 11 Dec 2022 14:58:20 +0530, Siddh Raman Pant wrote:
+> It is already included via sys/mount.h on line 10.
+>=20
+> GCC error reproducible by: make kselftest TARGETS=3D"mount_setattr"
+>=20
+> mount_setattr_test.c:107:8: error: redefinition of =E2=80=98struct mount_=
+attr=E2=80=99
+>   107 | struct mount_attr {
+>       |        ^~~~~~~~~~
+> In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
+>                  from mount_setattr_test.c:10:
+> ../../../../usr/include/linux/mount.h:129:8: note: originally defined her=
+e
+>   129 | struct mount_attr {
+>       |        ^~~~~~~~~~
+>=20
+> Signed-off-by: Siddh Raman Pant <code@siddh.me>
+> ---
+>  tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
+>  1 file changed, 7 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b=
+/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+> index 8c5fea68ae67..582669ca38e9 100644
+> --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+> +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+> @@ -103,13 +103,6 @@
+>   #else
+>     #define __NR_mount_setattr 442
+>   #endif
+> -
+> -struct mount_attr {
+> - __u64 attr_set;
+> - __u64 attr_clr;
+> - __u64 propagation;
+> - __u64 userns_fd;
+> -};
+>  #endif
+ >=20
+>  #ifndef __NR_open_tree
+> --=20
+> 2.35.1
 
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Hi,
 
-On Fri, 30 Dec 2022 17:18:27 +0800 you wrote:
-> This patchset will fix a false-positive issue caused by the command in
-> cleanup_v6() of the arp_ndisc_evict_nocarrier test.
-> 
-> Also, it will make the test to return a non-zero value for any failure
-> reported in the test for us to avoid false-negative results.
-> 
-> Po-Hsu Lin (2):
->   selftests: net: fix cleanup_v6() for arp_ndisc_evict_nocarrier
->   selftests: net: return non-zero for failures reported in
->     arp_ndisc_evict_nocarrier
-> 
-> [...]
+Please review the above patch, which can be found on the link below:
+https://lore.kernel.org/all/20221211092820.85527-1-code@siddh.me
 
-Here is the summary with links:
-  - [1/2] selftests: net: fix cleanup_v6() for arp_ndisc_evict_nocarrier
-    https://git.kernel.org/netdev/net/c/9c4d7f45d607
-  - [2/2] selftests: net: return non-zero for failures reported in arp_ndisc_evict_nocarrier
-    https://git.kernel.org/netdev/net/c/1856628baa17
+This was encountered before the patch adding missing <sys/syscall.h>
+was applied, which just means that I went into the code path under
+#ifndef __NR_mount_setattr, and encountered the error.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thanks,
+Siddh
 
