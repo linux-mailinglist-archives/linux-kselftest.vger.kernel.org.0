@@ -2,69 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E0665B502
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jan 2023 17:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CDF65B507
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Jan 2023 17:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233185AbjABQVs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Jan 2023 11:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
+        id S233787AbjABQXD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Jan 2023 11:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236663AbjABQVl (ORCPT
+        with ESMTP id S229691AbjABQXC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:21:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312B7BFA
-        for <linux-kselftest@vger.kernel.org>; Mon,  2 Jan 2023 08:20:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672676453;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XSm9E5rxDgi7DwJ0VMt6Hp3omj7CtMsgyOLZMGchtlU=;
-        b=S4lH2pD3KTj/A9xEOpwwTA7px4iyHCyD79F3Sx8M0GqtVnXPvLkpGQsw1qNXFQl+jDhpIl
-        ugUkvUImOFn/56ddvnnbp71bgUSMeejaBNWQqF3jfNwlctr5hD2+Ozr1XASnPbd7+NphfB
-        M2MNtJhKr5xVVJxlIO7VQNdw7owbRNw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-546-iUZL9fVtOU2SVy79YkAjvg-1; Mon, 02 Jan 2023 11:20:52 -0500
-X-MC-Unique: iUZL9fVtOU2SVy79YkAjvg-1
-Received: by mail-wm1-f69.google.com with SMTP id bi18-20020a05600c3d9200b003d991844dbcso9179540wmb.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jan 2023 08:20:51 -0800 (PST)
+        Mon, 2 Jan 2023 11:23:02 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A50BFA;
+        Mon,  2 Jan 2023 08:23:01 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id j17so21377128wrr.7;
+        Mon, 02 Jan 2023 08:23:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JtrZJGG/9ONXWQK8K8EYr6Mu2Yv+AdhTcX6fB6Ad+Ws=;
+        b=U8cMgp43zME/UUsV5fYCzziBwgm9TzA66IEzuiUoPXP0yGnS72lyJz4YZCMQXcKETc
+         SLipjb0N8trq5AFmoBatrX7h2KOhLnO6DHtIuJrIYQSpCbFOvmiEX6gRtIm9Yo5hulyM
+         Eo1ZicNP+ICe9275K8wHpZR1W3ljC+aF1UjdZMgNbppDQtnVIhwUXd0cI+QcjV9yL8Wb
+         lCiUXyZeufFQeCUs5TJXw/rD/o08BVnS9zJRvi092Qgq8cqS50xwXHNgT0CCHUWLQXVd
+         Y1OzvXt8973O4vU6JOHS+8S+1s8pIanuCXrk3TiDJFJ/LO2HbbuaP2RJPqX5ydMobK0Z
+         5Kog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XSm9E5rxDgi7DwJ0VMt6Hp3omj7CtMsgyOLZMGchtlU=;
-        b=d60tT54bWPx2zjW2s9SMAL8+EQwFqQudbxKc+8dM3hHcgEmrF2fd98Q96WJrNv4sU2
-         wwdbal8FOTz4bH6btXpFbpoekgIuiHbTJVbzHySbKwF1VmBw1Zf80GGpjb85EFcIsVNq
-         KlI0W6pS0TNiwpInb+Aa0hg/cD5MWXtN8E30lIX2mBsN2jYcjDU+tgT7DxAPN3OAaxhG
-         DE0M23zrzT/C0n5SKAJIR5YuVeoHz3NOfWIk50CTC3Ust7zl8FemIyLsE1DIOrwMYGtM
-         6Re7G3aI51JrWAKnigWuSNSZ13hmMu5GFVf9kA40HTSlb4YCT7Jgs7lRi2y3QXooeORC
-         QirQ==
-X-Gm-Message-State: AFqh2kpHmC8ch0/TLAfHqHWlSRoMWz6KPjKsurB64yYXkYcGptdTCpZ7
-        u/EDPOaZWvIxHueR5ytjTw68T9kL4VPA1kl5OIw3bVdcP2qoSi1G8faUFagHjlonrPEAD7zcS9t
-        V+6dIsR3GnvtozIfaR22QNGanjB3L
-X-Received: by 2002:a05:600c:35d4:b0:3d2:2d2a:d581 with SMTP id r20-20020a05600c35d400b003d22d2ad581mr28436817wmq.30.1672676451102;
-        Mon, 02 Jan 2023 08:20:51 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtzXRUkM+s5POwXYF4sAJXmfQyH3XWOyrl0suKMisN2guuCSOG41kkBU5NIvqoqUqfQ3jRVvg==
-X-Received: by 2002:a05:600c:35d4:b0:3d2:2d2a:d581 with SMTP id r20-20020a05600c35d400b003d22d2ad581mr28436810wmq.30.1672676450906;
-        Mon, 02 Jan 2023 08:20:50 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:500:9382:2e5a:fea:8889? (p200300cbc703050093822e5a0fea8889.dip0.t-ipconnect.de. [2003:cb:c703:500:9382:2e5a:fea:8889])
-        by smtp.gmail.com with ESMTPSA id r15-20020a0560001b8f00b002709e616fa2sm28859339wru.64.2023.01.02.08.20.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 08:20:50 -0800 (PST)
-Message-ID: <b6b25373-ba6b-6610-1030-7f795f01987c@redhat.com>
-Date:   Mon, 2 Jan 2023 17:20:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3] selftest/vm: add mremap expand merge offset test
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JtrZJGG/9ONXWQK8K8EYr6Mu2Yv+AdhTcX6fB6Ad+Ws=;
+        b=xbdjlu25xMKYfTF422IRCr8t4rrVUgHuWZMLHBFS64yAb15X9im+Y2WN2jPK3C7rtE
+         aEu8qiOcl6TjXwoadhuxMDG5SzT4lNnGuJRZKvlrtZmdKoKiPGuCKlc4DGdW0hQKvemi
+         4BcT6NHImH0CVKB2eHCcAn9/0HHbXv5C0H+YnT7o2hR7LKykNtTO3jXaktgVOYqFL+yD
+         1+NRzG0SDtlDNXzk8weJVCaowHyV97diqPfrMKryq+ggAeXIpo5Dh2weey4OL2fdBeV9
+         F/pM5KkDvIHaKv8stlAmqmYx/wePpVDA5hQtZbxfu7JzJDFfB/3q++BQr/oiEzTIBCyV
+         SKeg==
+X-Gm-Message-State: AFqh2ko0nRzCrSblz3swmyq3OxmNqQ3l8m3CzJrHEQIPo3qv8GWvYwlZ
+        ywb9xKnV74IPvRHq7Mkqn7o=
+X-Google-Smtp-Source: AMrXdXtK3qhbssNb8jaGvY6CuVsLbAHJCxqazo1psLpGKF2hIHrJDpbedrnYj3T3yI6PJ/DheWn4/A==
+X-Received: by 2002:a05:6000:18a6:b0:280:4a9:c8dc with SMTP id b6-20020a05600018a600b0028004a9c8dcmr23150483wri.16.1672676580368;
+        Mon, 02 Jan 2023 08:23:00 -0800 (PST)
+Received: from localhost ([2a01:4c8:469:341:d1e1:a149:58ed:f096])
+        by smtp.gmail.com with ESMTPSA id h9-20020adffd49000000b00242209dd1ffsm28897101wrs.41.2023.01.02.08.22.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 08:22:59 -0800 (PST)
+Date:   Mon, 2 Jan 2023 16:22:58 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
@@ -72,54 +59,40 @@ Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         Matthew Wilcox <willy@infradead.org>,
         Mel Gorman <mgorman@techsingularity.net>,
         Michal Hocko <mhocko@kernel.org>
+Subject: Re: [PATCH v3] selftest/vm: add mremap expand merge offset test
+Message-ID: <Y7ME4v00R7ULlxV4@lucifer>
 References: <420e491062db9151504aef5661c8a2d928ef6bd7.1672675224.git.lstoakes@gmail.com>
- <9d13393a-d203-23de-30ae-4d6476a94fd7@redhat.com> <Y7MBqfYv54rY48Wi@lucifer>
- <f29b6cb0-d46b-7d89-c8ad-12b9addf8ce8@redhat.com> <Y7MDVT4dO2pqxJwJ@lucifer>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y7MDVT4dO2pqxJwJ@lucifer>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <9d13393a-d203-23de-30ae-4d6476a94fd7@redhat.com>
+ <Y7MBqfYv54rY48Wi@lucifer>
+ <f29b6cb0-d46b-7d89-c8ad-12b9addf8ce8@redhat.com>
+ <Y7MDVT4dO2pqxJwJ@lucifer>
+ <b6b25373-ba6b-6610-1030-7f795f01987c@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6b25373-ba6b-6610-1030-7f795f01987c@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02.01.23 17:16, Lorenzo Stoakes wrote:
-> On Mon, Jan 02, 2023 at 05:10:40PM +0100, David Hildenbrand wrote:
->> Maybe wait until tomorrow for feedback from others. Make sure to include my
->> acked-by.
-> 
-> Too late... I thought Andrew typically added these kind of things himself? As an
-> Acked-by could be a reply to an unmodified patch for example. Though I guess
-> it'd save you having to reply to the v4? Anyway sorry, already sent it!
+On Mon, Jan 02, 2023 at 05:20:49PM +0100, David Hildenbrand wrote:
+> Maintainers usually apply tags that are sent to the latest version, when
+> picking up the patch. Maintainers usually refrain from going through
+> multiple earlier patch versions to pick up tags -- especially, because some
+> changes might require a submitter from dropping tags (e.g., bigger changes)
+> and the tags might no longer be valid.
+>
+> So better always include tags when resending, so they don't get lost.
+>
 
-Maintainers usually apply tags that are sent to the latest version, when 
-picking up the patch. Maintainers usually refrain from going through 
-multiple earlier patch versions to pick up tags -- especially, because 
-some changes might require a submitter from dropping tags (e.g., bigger 
-changes) and the tags might no longer be valid.
+Ack, apologies again, and that's completely reasonable. Would you mind adding to
+the v4 thread just so we have it? Going forward I'll make sure to propagate the
+tags!
 
-So better always include tags when resending, so they don't get lost.
-
-> 
-> It's sat in the mailing list so others can review further if required, this is a
-> bank holiday in the UK, and as a part-time contributor (and otherwise distracted
-> by book work) it is a rare moment to be able to respond to feedback so will tend
-> to get squashed into evenings/weekends/public holidays :) If people have further
-> comments I will, of course, respond as + when I can!
-> 
-> Cheers!
-
-Happy holidays then :)
-
--- 
-Thanks,
-
-David / dhildenb
-
+Thanks for the review!
