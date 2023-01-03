@@ -2,179 +2,197 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9694F65C8CD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jan 2023 22:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2144965CA84
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jan 2023 00:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjACVSX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Jan 2023 16:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
+        id S238056AbjACXrC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Jan 2023 18:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237984AbjACVR5 (ORCPT
+        with ESMTP id S237815AbjACXq7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:17:57 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FD0CCE;
-        Tue,  3 Jan 2023 13:17:55 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 9279B604F0;
-        Tue,  3 Jan 2023 22:17:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1672780672; bh=G5V1cU0HYZhDxE9taU2aOMLqHjB6CkikceEOy3RebCU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rM0OCUlrNeWNRKeYoEotzSEJCeD6i4c/wffL2JHXhRp9rSyQ8Khl01pP/BArH2/gY
-         qWqH12fdJLiwbgt8EguSm+plRCtw2vt192+/J2X2jZU2GX8eyrQMgrAu68SYWlzGHF
-         Nmjcy6FyoCjFpSB+OwqFFIliFTSchpNjupV/664mrdnzZAlBkq8f0WbNA01e47AYI6
-         nBQRGE8pKhAeOmHnH5lWwxZOTUc9G1LhaCVN1EQIqOXikrDkqFRA628gmmYxsjjmTm
-         ycPWGrgNt7l25Ii3OWDDVlekK6CaE8rulM2g/fflQPDw224wD38MMG+AO4H9QjuqCR
-         qRx5WR9wao23A==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id LWxoyVTuGw-N; Tue,  3 Jan 2023 22:17:50 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.196.35])
-        by domac.alu.hr (Postfix) with ESMTPSA id 2FA9A604EE;
-        Tue,  3 Jan 2023 22:17:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1672780670; bh=G5V1cU0HYZhDxE9taU2aOMLqHjB6CkikceEOy3RebCU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JnmnFw+LigC4b6T+8aqKLeTTtswqfEIAaeEpmFE7aPaPL6ZgTaCH3yPbJnK/4oUwQ
-         vQFsq6DjjZ8AlfbdiNJr7hIqWRl6CVcX3UE2SOu1DBDkAk3BIJkrJnqb62CDUt4cFV
-         RiP/Rh+fAur7zXI6uDJrx8Xj69FRCfDaVVtUksSFuX+6mrRHFj67Uk9biGvY81zdj/
-         UmuY0cELg9oaCFSIoTXhwnJ23P4IYwBaPzqc+MP/p3LqHqb2lw4qbokdLTBp16CYMk
-         oMjH8r1LqJQLboEX/BbyIO+JnvwSLd/iXcab7M7JSsX3Vc41vAGrtPkWccWSFg+eqx
-         RGWFf6nEyqN8w==
-Message-ID: <714c3712-a390-ac60-40d4-c759b326e3c5@alu.unizg.hr>
-Date:   Tue, 3 Jan 2023 22:17:49 +0100
+        Tue, 3 Jan 2023 18:46:59 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBDD1004E;
+        Tue,  3 Jan 2023 15:46:58 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id u19so78606786ejm.8;
+        Tue, 03 Jan 2023 15:46:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3oSb7JXJVS/6HsFecUnGwQqOOB9BR+/FVmXe6sUvBjE=;
+        b=gTbDgWlCH4NUcCEHgth2YTnVqtz4s4PKz+5t3gYtxN5MZc/LvN+nJoGJJTISFRSwrs
+         w7pwymo+rn2BVMZudW2Xk6ZRv9sxlcO321RroJPRpATfUSEdl99e2+eBB6dFfFWEqyRr
+         KHR4OANaK7QgwTNcrf6CpPboBwZ+H3m74npjgBNekhmRjZBp5BDdZTG28bEyZEKLe1aj
+         LN0OAKAxx+3FOh4o6EhTjiNSXUmxihBDxy+xbXN2esrqPr8F88hN8W/l+k1QT4wDHM0C
+         ZU3GvFfRsG3VaXyuhXEpYQVBw0ikmucnv4PLXcvg0Gabb1PjMBYaokh3LO1pb323WZ+9
+         Z/AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3oSb7JXJVS/6HsFecUnGwQqOOB9BR+/FVmXe6sUvBjE=;
+        b=57Q2UmTxvpuubDmxLNSh0wrvy9lWbT4yeOo87y3wZeDu/ld/x12HF5MFq5b4bJVCkf
+         MJtxCR3EWQZ5IV9rrdNmYDNqVTQn/LKcE0X296WayEKMAcCDqYdPjpdnxyKIKlcAMAGU
+         ecbhnMCAv0OfJQE0eDvC+aftYCDeuQUNnX5hUwGMgEQJfZ0VgXgFOBVdNq5JU4LgQvVS
+         rhFKioxrHMj6tIzyR/5XuzhpFeek23i270FXQhvh2Zo8MNKje9mUSMUBPr0AQZJq53BK
+         hlUzLc9GzS6XDNQtWUHOsiMDmd2+svcbVz6TjJjpa9OaUMug5d0hMRMJBykEgcOXZGTa
+         sSJg==
+X-Gm-Message-State: AFqh2kow8FDFah/O7bEibL4MExqnBpXI8ZZO/Z0+Hijqzve8o0cjnCXI
+        A6YP5tEibEKT2dUQ+6vWLV0T4ygYOLsXsxDojrM=
+X-Google-Smtp-Source: AMrXdXuhifcsN+8XoM8iEoIb5YJM9m8QkCS0hSkZA7F88v0P+GOkciVAILvtt3gP0l/69vPr+tvVBoIzvy8akGQX88U=
+X-Received: by 2002:a17:906:f43:b0:84c:95c7:304d with SMTP id
+ h3-20020a1709060f4300b0084c95c7304dmr2153565ejj.545.1672789616772; Tue, 03
+ Jan 2023 15:46:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: PROBLEM: Hang in selftests/netfilter/nft_trans_stress.sh
-Content-Language: en-US
-To:     Florian Westphal <fw@strlen.de>
-Cc:     linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>
-References: <281b5a5e-4b56-ef6f-9896-49b364924662@alu.unizg.hr>
- <20230103142817.GA19686@breakpoint.cc>
- <11cc1fca-01b3-f83b-eb9e-3ceffd68b6d4@alu.unizg.hr>
- <20230103161101.GB19686@breakpoint.cc>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <20230103161101.GB19686@breakpoint.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221217223509.88254-1-changbin.du@gmail.com> <20221217223509.88254-2-changbin.du@gmail.com>
+ <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan> <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
+ <Y6GdofET0gHQzRX6@leoy-yangtze.lan> <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
+ <ea02357d-c5c7-aeff-e045-d639315d87e9@isovalent.com>
+In-Reply-To: <ea02357d-c5c7-aeff-e045-d639315d87e9@isovalent.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 3 Jan 2023 15:46:44 -0800
+Message-ID: <CAEf4BzZMJGrRhNeQeWB0fRsuRYUv01aZGhvDeFV2o5zdpRbR-w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF" section
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Leo Yan <leo.yan@linaro.org>, Changbin Du <changbin.du@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03. 01. 2023. 17:11, Florian Westphal wrote:
-> Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr> wrote:
->>> Can you send me the output of 'bash -x nft_trans_stress.sh'?
->>> It should tell which command/program isn't making progress.
->>
->> Hi, Florian!
->>
->> Well, when ran alone, the script ended successfully:
->>
->> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter# bash nft_trans_stress.sh
->> PASS: nft add/delete test returned 0
->> PASS: nft reload test returned 0
->> PASS: nft add/delete with nftrace enabled test returned 0
->> PASS: nft add/delete with nftrace enabled test returned 0
->> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter#
->>
->> There was no stall after "nft reload test" in a standalone superuser run.
-> 
-> Hmm.  Does this patch make it work when running via 'make kselftest'?
-> 
-> diff --git a/tools/testing/selftests/netfilter/nft_trans_stress.sh b/tools/testing/selftests/netfilter/nft_trans_stress.sh
-> --- a/tools/testing/selftests/netfilter/nft_trans_stress.sh
-> +++ b/tools/testing/selftests/netfilter/nft_trans_stress.sh
-> @@ -10,12 +10,20 @@
->   ksft_skip=4
->   
->   testns=testns-$(mktemp -u "XXXXXXXX")
-> +tmp=""
->   
->   tables="foo bar baz quux"
->   global_ret=0
->   eret=0
->   lret=0
->   
-> +cleanup() {
-> +	ip netns pids "$testns" | xargs kill 2>/dev/null
-> +	ip netns del "$testns"
-> +
-> +	rm -f "$tmp"
-> +}
-> +
->   check_result()
->   {
->   	local r=$1
-> @@ -43,6 +51,7 @@ if [ $? -ne 0 ];then
->   	exit $ksft_skip
->   fi
->   
-> +trap cleanup EXIT
->   tmp=$(mktemp)
->   
->   for table in $tables; do
-> @@ -139,11 +148,4 @@ done
->   
->   check_result $lret "add/delete with nftrace enabled"
->   
-> -pkill -9 ping
-> -
-> -wait
-> -
-> -rm -f "$tmp"
-> -ip netns del "$testns"
-> -
->   exit $global_ret
+On Tue, Jan 3, 2023 at 7:03 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>
+> 2022-12-20 16:13 UTC-0800 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> > On Tue, Dec 20, 2022 at 3:34 AM Leo Yan <leo.yan@linaro.org> wrote:
+> >>
+> >> On Tue, Dec 20, 2022 at 09:31:14AM +0800, Changbin Du wrote:
+> >>
+> >> [...]
+> >>
+> >>>>> Now will print below info:
+> >>>>> libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux
+> >>>>
+> >>>> Recently I encountered the same issue, it could be caused by:
+> >>>> either missing to install tool pahole or missing to enable kernel
+> >>>> configuration CONFIG_DEBUG_INFO_BTF.
+> >>>>
+> >>>> Could we give explict info for reasoning failure?  Like:
+> >>>>
+> >>>> "libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux,
+> >>>> please install pahole and enable CONFIG_DEBUG_INFO_BTF=y for kernel building".
+> >>>>
+> >>> This is vmlinux special information and similar tips are removed from
+> >>> patch V2. libbpf is common for all ELFs.
+> >>
+> >> Okay, I see.  Sorry for noise.
+> >>
+> >>>>> Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
+> >>>>
+> >>>> This log is confusing when we can find vmlinux file but without BTF
+> >>>> section.  Consider to use a separate patch to detect vmlinux not
+> >>>> found case and print out "No such file or directory"?
+> >>>>
+> >>> I think it's already there. If the file doesn't exist, open will fail.
+> >>
+> >> [...]
+> >>
+> >>>>> @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+> >>>>>   err = 0;
+> >>>>>
+> >>>>>   if (!btf_data) {
+> >>>>> +         pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
+> >>>>>           err = -ENOENT;
+> >>
+> >> btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
+> >> section, therefore, bpftool dumps error string "No such file or
+> >> directory".  It's confused that actually vmlinux is existed.
+> >>
+> >> I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
+> >> better choice?) to replace -ENOENT at here, this can avoid bpftool to
+> >> outputs "No such file or directory" in this case.
+> >
+> > The only really meaningful error code would be -ESRCH, which
+> > strerror() will translate to "No such process", which is also
+> > completely confusing.
+> >
+> > In general, I always found these strerror() messages extremely
+> > unhelpful and confusing. I wonder if we should make an effort to
+> > actually emit symbolic names of errors instead (literally, "-ENOENT"
+> > in this case). This is all tooling for engineers, I find -ENOENT or
+> > -ESRCH much more meaningful as an error message, compared to "No such
+> > file" seemingly human-readable interpretation.
+> >
+> > Quenting, what do you think about the above proposal for bpftool? We
+> > can have some libbpf helper internally and do it in libbpf error
+> > messages as well and just reuse the logic in bpftool, perhaps?
+>
+> Apologies for the delay.
+> What you're proposing is to replace all messages currently looking like
+> this:
+>
+>         $ bpftool prog
+>         Error: can't get next program: Operation not permitted
+>
+> by:
+>
+>         $ bpftool prog
+>         Error: can't get next program: -EPERM
+>
+> Do I understand correctly?
 
-I've got the following output:
+yep, that's what I had in mind
 
-make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter'
-TAP version 13
-1..17
-# selftests: netfilter: nft_trans_stress.sh
-# PASS: nft add/delete test returned 0
-# PASS: nft reload test returned 0
-#
-not ok 1 selftests: netfilter: nft_trans_stress.sh # TIMEOUT 45 seconds
-# selftests: netfilter: nft_fib.sh
-# PASS: fib expression did not cause unwanted packet drops
+>
+> I think the strerror() messages are helpful in some occasions (they
+> _are_ more human-friendly to many users), but it's also true that
+> they're not always precise. With bpftool, "Invalid argument" is a
+> classic when the program doesn't load, and may lead to confusion with
+> the args passed to bpftool on the command line. Then there are the other
+> corner cases like the one discussed in this thread. So, why not.
 
-It did not hang, but still did not finish all 4 tests correctly like when ran standalone:
+maybe the right approach would be to have both symbolic error name and
+its human-readable representation, so for example above
 
-root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter# time ./nft_trans_stress.sh
-PASS: nft add/delete test returned 0
-PASS: nft reload test returned 0
-PASS: nft add/delete with nftrace enabled test returned 0
-PASS: nft add/delete with nftrace enabled test returned 0
+Error: can't get next program: [-EPERM] Operation not permitted
 
-real	1m11.014s
-user	0m6.470s
-sys	0m20.344s
-root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter#
+or something like that? And if error value is unknown, just keep it as
+integer: "[-5555]" ?
 
-I hope we're closer to the solution.
+>
+> If we do change, yeah I'd rather have as much of this handling in libbpf
+> itself, and then adjust bpftool to handle the remaining cases, for
+> consistency.
 
-Kind regards,
-Mirsad
+we can teach libbpf_strerror_r() to do this and if bpftool is going to
+use it consistently then it would get the benefit automatically
 
---
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
+>
+> Quentin
