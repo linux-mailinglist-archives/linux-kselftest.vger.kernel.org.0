@@ -2,97 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A57565C676
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jan 2023 19:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9694F65C8CD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Jan 2023 22:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbjACSk0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Jan 2023 13:40:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
+        id S230166AbjACVSX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Jan 2023 16:18:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233780AbjACSkB (ORCPT
+        with ESMTP id S237984AbjACVR5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Jan 2023 13:40:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04C413F35;
-        Tue,  3 Jan 2023 10:39:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64313614DF;
-        Tue,  3 Jan 2023 18:39:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 082A1C433F0;
-        Tue,  3 Jan 2023 18:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672771192;
-        bh=8Umq9Xxnllow9TnRdcVuyzsumvQE9TJSU80rpAx4mmo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZBZLOeV1P+JPxPFAILiNI0V2m5VILP42ToLmN7Ldsyr6VnDnTfYKFK876LxfoL2EG
-         ejihKDPv3LFj3wl9jevGKW5IAwedb8Nc/Qiu5z1CQVd1opA6hZpgVpG45VPJUj+6pC
-         3/1Ov7gLsIokEIwN7ozsBiSIVgSMbNsaC/KSxt+4Px0hW3SDEkyLvoC+WefQKLLmRh
-         Sjjb1SwdFTWYytF8mMCxbsBNdD3IbmMZAatmFumUa5G1ObfHIEA7sQtX8s6UeEo87v
-         9z5KV4vAxdIusbeXiR5o0KfCuGA/s5KWMnO8TFQrguvMzatq6osVCof9elO1zvCS6o
-         8obMs4szsd0lQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "YoungJun.park" <her0gyugyu@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 6.1 08/10] kunit: alloc_string_stream_fragment error handling bug fix
-Date:   Tue,  3 Jan 2023 13:39:32 -0500
-Message-Id: <20230103183934.2022663-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230103183934.2022663-1-sashal@kernel.org>
-References: <20230103183934.2022663-1-sashal@kernel.org>
+        Tue, 3 Jan 2023 16:17:57 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FD0CCE;
+        Tue,  3 Jan 2023 13:17:55 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 9279B604F0;
+        Tue,  3 Jan 2023 22:17:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1672780672; bh=G5V1cU0HYZhDxE9taU2aOMLqHjB6CkikceEOy3RebCU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=rM0OCUlrNeWNRKeYoEotzSEJCeD6i4c/wffL2JHXhRp9rSyQ8Khl01pP/BArH2/gY
+         qWqH12fdJLiwbgt8EguSm+plRCtw2vt192+/J2X2jZU2GX8eyrQMgrAu68SYWlzGHF
+         Nmjcy6FyoCjFpSB+OwqFFIliFTSchpNjupV/664mrdnzZAlBkq8f0WbNA01e47AYI6
+         nBQRGE8pKhAeOmHnH5lWwxZOTUc9G1LhaCVN1EQIqOXikrDkqFRA628gmmYxsjjmTm
+         ycPWGrgNt7l25Ii3OWDDVlekK6CaE8rulM2g/fflQPDw224wD38MMG+AO4H9QjuqCR
+         qRx5WR9wao23A==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LWxoyVTuGw-N; Tue,  3 Jan 2023 22:17:50 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.196.35])
+        by domac.alu.hr (Postfix) with ESMTPSA id 2FA9A604EE;
+        Tue,  3 Jan 2023 22:17:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1672780670; bh=G5V1cU0HYZhDxE9taU2aOMLqHjB6CkikceEOy3RebCU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JnmnFw+LigC4b6T+8aqKLeTTtswqfEIAaeEpmFE7aPaPL6ZgTaCH3yPbJnK/4oUwQ
+         vQFsq6DjjZ8AlfbdiNJr7hIqWRl6CVcX3UE2SOu1DBDkAk3BIJkrJnqb62CDUt4cFV
+         RiP/Rh+fAur7zXI6uDJrx8Xj69FRCfDaVVtUksSFuX+6mrRHFj67Uk9biGvY81zdj/
+         UmuY0cELg9oaCFSIoTXhwnJ23P4IYwBaPzqc+MP/p3LqHqb2lw4qbokdLTBp16CYMk
+         oMjH8r1LqJQLboEX/BbyIO+JnvwSLd/iXcab7M7JSsX3Vc41vAGrtPkWccWSFg+eqx
+         RGWFf6nEyqN8w==
+Message-ID: <714c3712-a390-ac60-40d4-c759b326e3c5@alu.unizg.hr>
+Date:   Tue, 3 Jan 2023 22:17:49 +0100
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: PROBLEM: Hang in selftests/netfilter/nft_trans_stress.sh
+Content-Language: en-US
+To:     Florian Westphal <fw@strlen.de>
+Cc:     linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>
+References: <281b5a5e-4b56-ef6f-9896-49b364924662@alu.unizg.hr>
+ <20230103142817.GA19686@breakpoint.cc>
+ <11cc1fca-01b3-f83b-eb9e-3ceffd68b6d4@alu.unizg.hr>
+ <20230103161101.GB19686@breakpoint.cc>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230103161101.GB19686@breakpoint.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "YoungJun.park" <her0gyugyu@gmail.com>
+On 03. 01. 2023. 17:11, Florian Westphal wrote:
+> Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr> wrote:
+>>> Can you send me the output of 'bash -x nft_trans_stress.sh'?
+>>> It should tell which command/program isn't making progress.
+>>
+>> Hi, Florian!
+>>
+>> Well, when ran alone, the script ended successfully:
+>>
+>> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter# bash nft_trans_stress.sh
+>> PASS: nft add/delete test returned 0
+>> PASS: nft reload test returned 0
+>> PASS: nft add/delete with nftrace enabled test returned 0
+>> PASS: nft add/delete with nftrace enabled test returned 0
+>> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter#
+>>
+>> There was no stall after "nft reload test" in a standalone superuser run.
+> 
+> Hmm.  Does this patch make it work when running via 'make kselftest'?
+> 
+> diff --git a/tools/testing/selftests/netfilter/nft_trans_stress.sh b/tools/testing/selftests/netfilter/nft_trans_stress.sh
+> --- a/tools/testing/selftests/netfilter/nft_trans_stress.sh
+> +++ b/tools/testing/selftests/netfilter/nft_trans_stress.sh
+> @@ -10,12 +10,20 @@
+>   ksft_skip=4
+>   
+>   testns=testns-$(mktemp -u "XXXXXXXX")
+> +tmp=""
+>   
+>   tables="foo bar baz quux"
+>   global_ret=0
+>   eret=0
+>   lret=0
+>   
+> +cleanup() {
+> +	ip netns pids "$testns" | xargs kill 2>/dev/null
+> +	ip netns del "$testns"
+> +
+> +	rm -f "$tmp"
+> +}
+> +
+>   check_result()
+>   {
+>   	local r=$1
+> @@ -43,6 +51,7 @@ if [ $? -ne 0 ];then
+>   	exit $ksft_skip
+>   fi
+>   
+> +trap cleanup EXIT
+>   tmp=$(mktemp)
+>   
+>   for table in $tables; do
+> @@ -139,11 +148,4 @@ done
+>   
+>   check_result $lret "add/delete with nftrace enabled"
+>   
+> -pkill -9 ping
+> -
+> -wait
+> -
+> -rm -f "$tmp"
+> -ip netns del "$testns"
+> -
+>   exit $global_ret
 
-[ Upstream commit 93ef83050e597634d2c7dc838a28caf5137b9404 ]
+I've got the following output:
 
-When it fails to allocate fragment, it does not free and return error.
-And check the pointer inappropriately.
+make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter'
+TAP version 13
+1..17
+# selftests: netfilter: nft_trans_stress.sh
+# PASS: nft add/delete test returned 0
+# PASS: nft reload test returned 0
+#
+not ok 1 selftests: netfilter: nft_trans_stress.sh # TIMEOUT 45 seconds
+# selftests: netfilter: nft_fib.sh
+# PASS: fib expression did not cause unwanted packet drops
 
-Fixed merge conflicts with
-commit 618887768bb7 ("kunit: update NULL vs IS_ERR() tests")
-Shuah Khan <skhan@linuxfoundation.org>
+It did not hang, but still did not finish all 4 tests correctly like when ran standalone:
 
-Signed-off-by: YoungJun.park <her0gyugyu@gmail.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- lib/kunit/string-stream.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter# time ./nft_trans_stress.sh
+PASS: nft add/delete test returned 0
+PASS: nft reload test returned 0
+PASS: nft add/delete with nftrace enabled test returned 0
+PASS: nft add/delete with nftrace enabled test returned 0
 
-diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-index a608746020a9..7aeabe1a3dc5 100644
---- a/lib/kunit/string-stream.c
-+++ b/lib/kunit/string-stream.c
-@@ -23,8 +23,10 @@ static struct string_stream_fragment *alloc_string_stream_fragment(
- 		return ERR_PTR(-ENOMEM);
- 
- 	frag->fragment = kunit_kmalloc(test, len, gfp);
--	if (!frag->fragment)
-+	if (!frag->fragment) {
-+		kunit_kfree(test, frag);
- 		return ERR_PTR(-ENOMEM);
-+	}
- 
- 	return frag;
- }
+real	1m11.014s
+user	0m6.470s
+sys	0m20.344s
+root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/netfilter#
+
+I hope we're closer to the solution.
+
+Kind regards,
+Mirsad
+
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 -- 
-2.35.1
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
 
