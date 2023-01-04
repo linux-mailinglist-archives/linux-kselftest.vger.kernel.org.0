@@ -2,397 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759D665D68B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jan 2023 15:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA8965DB41
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Jan 2023 18:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbjADOuE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Jan 2023 09:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S239526AbjADR14 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Jan 2023 12:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbjADOuA (ORCPT
+        with ESMTP id S235317AbjADR1z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Jan 2023 09:50:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144C117E2D
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 Jan 2023 06:49:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672843753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=vYvLrxNyig4C2xqpvcE+0kFAae3psmSX82BXbPf3PXw=;
-        b=GR9MmgqtWlWjSfms4RWkgTug8w3YxaWmsHku4bVyNzsdF00N0ATlCjIK8EX/uwYX47Ydps
-        zF9CLlw/nqDakqWGMnSIUNOWFl0hDaJZJ2ruNDix0FsiZaIbbmCnJfNd5iqMmOKOEYADNw
-        2ytfEYdCFRNqtweS86JwWoxjX76n2Kk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-uZTwnicCP9GfYWq8ihQLrg-1; Wed, 04 Jan 2023 09:49:10 -0500
-X-MC-Unique: uZTwnicCP9GfYWq8ihQLrg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8414E858F09;
-        Wed,  4 Jan 2023 14:49:09 +0000 (UTC)
-Received: from t480s.fritz.box (unknown [10.39.193.90])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9FC66C15BA0;
-        Wed,  4 Jan 2023 14:49:06 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Wed, 4 Jan 2023 12:27:55 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74711180D;
+        Wed,  4 Jan 2023 09:27:53 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304FxpWL005636;
+        Wed, 4 Jan 2023 17:27:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=hgVLBZKjQjTK22ngbI2KF/s8rDVwlOYDUeR6IOpssyI=;
+ b=RsEyVRoN/Dt65oj0xs+/rZT3XhPHrvf4taxqt6Q+VGZOSxhvWGtdXKMWTlTzxzVLsfIU
+ 0IT1hJ/a0wr6rCepX8eQ9FZ2cOtYJ87v2FNgIOvvzTAXBJ5//N0lgLjJfIGgUwUNy8tX
+ iEhi3pKt5V7Mm0tnJxy3EZl3DmO20hpU1VLKtSfjV0oHFMG7k7u54ErNsTUdt+Aq6lrd
+ +0yTflB9fuvpJO4U2F4PDZLNVKgmOeiNnSyoN+CuEtNpYDvMhWMmpQIaaJYfGiwuRkl5
+ bHVrd00mHt4vOkRElCzHeuIjC7f+aKxtOsNu1D03daH5tFr51HOJwdP0TuGP6WR8m+Aq 2A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwckda26h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 17:27:41 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 304GqTod002027;
+        Wed, 4 Jan 2023 17:27:41 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mwckda261-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 17:27:41 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 304CbDI6021071;
+        Wed, 4 Jan 2023 17:27:39 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3mtcq6dmkw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 17:27:39 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 304HRZkB23790010
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 Jan 2023 17:27:35 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7371220043;
+        Wed,  4 Jan 2023 17:27:35 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 91B7C2004B;
+        Wed,  4 Jan 2023 17:27:34 +0000 (GMT)
+Received: from osiris (unknown [9.179.28.126])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed,  4 Jan 2023 17:27:34 +0000 (GMT)
+Date:   Wed, 4 Jan 2023 18:27:33 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        oe-kbuild-all@lists.linux.dev,
         David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: [PATCH mm-unstable v1] selftests/vm: cow: Add COW tests for collapsing of PTE-mapped anon THP
-Date:   Wed,  4 Jan 2023 15:49:05 +0100
-Message-Id: <20230104144905.460075-1-david@redhat.com>
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v4 1/9] KVM: s390: Extend MEM_OP ioctl by storage key
+ checked cmpxchg
+Message-ID: <Y7W3BR4WmaapBQMT@osiris>
+References: <20221213165405.2953539-2-scgl@linux.ibm.com>
+ <202212141025.6iR1ex8g-lkp@intel.com>
+ <4b96b112d5415d08a81d30657feec2c8c3000f7c.camel@linux.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4b96b112d5415d08a81d30657feec2c8c3000f7c.camel@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: pcbH_lpASS6ZxiHwImdail8xfvFZjMVk
+X-Proofpoint-GUID: 9YIMm65j_RIPiBtOH8fjcOAsdFTGrxS5
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=923 clxscore=1011
+ priorityscore=1501 malwarescore=0 adultscore=0 impostorscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301040142
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, anonymous PTE-mapped THPs cannot be collapsed in-place:
-collapsing (e.g., via MADV_COLLAPSE) implies allocating a fresh THP and
-mapping that new THP via a PMD: as it's a fresh anon THP, it will get the
-exclusive flag set on the head page and everybody is happy.
+On Mon, Dec 19, 2022 at 10:24:33PM +0100, Janis Schoetterl-Glausch wrote:
+> On Wed, 2022-12-14 at 10:23 +0800, kernel test robot wrote:
+> > Hi Janis,
+> > 
+> > Thank you for the patch! Yet something to improve:
+> > All errors (new ones prefixed by >>):
+> > 
+> >    s390-linux-ld: arch/s390/kvm/gaccess.o: in function `__cmpxchg_user_key':
+> > > > arch/s390/include/asm/uaccess.h:410: undefined reference to `__ashlti3'
+> > > > s390-linux-ld: arch/s390/include/asm/uaccess.h:411: undefined reference to `__ashlti3'
+> >    s390-linux-ld: arch/s390/include/asm/uaccess.h:458: undefined reference to `__ashlti3'
+> >    s390-linux-ld: arch/s390/include/asm/uaccess.h:459: undefined reference to `__ashlti3'
+> > 51098f0eb22e2f Janis Schoetterl-Glausch 2022-11-16 @410  		_old = (old & 0xff) << shift;
+> > 51098f0eb22e2f Janis Schoetterl-Glausch 2022-11-16 @411  		_new = (new & 0xff) << shift;
+> 
+> Not sure what it is in this config that causes gcc to emit this
+> symbol instead of a shift instruction, but casting old/new to 32 bit
+> fixes the error.
 
-However, if the kernel would ever support in-place collapse of anonymous
-THPs (replacing a page table mapping each sub-page of a THP via PTEs with a
-single PMD mapping the complete THP), exclusivity information stored for
-each sub-page would have to be collapsed accordingly:
+Right.. now we have the same fun with 128 bit arithmetics that we had
+with 64 bit arithmetics on 32 bit. I really missed that :)
 
-(1) All PTEs map !exclusive anon sub-pages: the in-place collapsed THP
-    must not not have the exclusive flag set on the head page mapped by
-    the PMD. This is the easiest case to handle ("simply don't set any
-    exclusive flags").
-
-(2) All PTEs map exclusive anon sub-pages: when collapsing, we have to
-    clear the exclusive flag from all tail pages and only leave the
-    exclusive flag set for the head page. Otherwise, fork() after
-    collapse would not clear the exclusive flags from the tail pages
-    and we'd be in trouble once PTE-mapping the shared THP when writing
-    to shared tail pages that still have the exclusive flag set. This
-    would effectively revert what the PTE-mapping code does when
-    propagating the exclusive flag to all sub-pages.
-
-(3) PTEs map a mixture of exclusive and !exclusive anon sub-pages (can
-    happen e.g., due to MADV_DONTFORK before fork()). We must not
-    collapse the THP in-place, otherwise bad things may happen:
-    the exclusive flags of sub-pages would get ignored and the
-    exclusive flag of the head page would get used instead.
-
-Now that we have MADV_COLLAPSE in place to trigger collapsing a THP,
-let's add some test cases that would bail out early, if we'd
-voluntarily/accidantially unlock in-place collapse for anon THPs and
-forget about taking proper care of exclusive flags.
-
-Running the test on a kernel with MADV_COLLAPSE support:
-  # [INFO] Anonymous THP tests
-  # [RUN] Basic COW after fork() when collapsing before fork()
-  ok 169 No leak from parent into child
-  # [RUN] Basic COW after fork() when collapsing after fork() (fully shared)
-  ok 170 # SKIP MADV_COLLAPSE failed: Invalid argument
-  # [RUN] Basic COW after fork() when collapsing after fork() (lower shared)
-  ok 171 No leak from parent into child
-  # [RUN] Basic COW after fork() when collapsing after fork() (upper shared)
-  ok 172 No leak from parent into child
-
-For now, MADV_COLLAPSE always seems to fail if all PTEs map shared
-sub-pages.
-
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Cc: Zach O'Keefe <zokeefe@google.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-
-A patch from Hugh made me explore the wonderful world of in-place collapse
-of THP, and I was briefly concerned that it would apply to anon THP as
-well. After thinking about it a bit, I decided to add test cases, to better
-be safe than sorry in any case, and to document how PG_anon_exclusive is to
-be handled in that case.
-
----
- tools/testing/selftests/vm/cow.c | 228 +++++++++++++++++++++++++++++++
- 1 file changed, 228 insertions(+)
-
-diff --git a/tools/testing/selftests/vm/cow.c b/tools/testing/selftests/vm/cow.c
-index 26f6ea3079e2..16216d893d96 100644
---- a/tools/testing/selftests/vm/cow.c
-+++ b/tools/testing/selftests/vm/cow.c
-@@ -30,6 +30,10 @@
- #include "../kselftest.h"
- #include "vm_util.h"
- 
-+#ifndef MADV_COLLAPSE
-+#define MADV_COLLAPSE 25
-+#endif
-+
- static size_t pagesize;
- static int pagemap_fd;
- static size_t thpsize;
-@@ -1178,6 +1182,228 @@ static int tests_per_anon_test_case(void)
- 	return tests;
- }
- 
-+enum anon_thp_collapse_test {
-+	ANON_THP_COLLAPSE_UNSHARED,
-+	ANON_THP_COLLAPSE_FULLY_SHARED,
-+	ANON_THP_COLLAPSE_LOWER_SHARED,
-+	ANON_THP_COLLAPSE_UPPER_SHARED,
-+};
-+
-+static void do_test_anon_thp_collapse(char *mem, size_t size,
-+				      enum anon_thp_collapse_test test)
-+{
-+	struct comm_pipes comm_pipes;
-+	char buf;
-+	int ret;
-+
-+	ret = setup_comm_pipes(&comm_pipes);
-+	if (ret) {
-+		ksft_test_result_fail("pipe() failed\n");
-+		return;
-+	}
-+
-+	/*
-+	 * Trigger PTE-mapping the THP by temporarily mapping a single subpage
-+	 * R/O, such that we can try collapsing it later.
-+	 */
-+	ret = mprotect(mem + pagesize, pagesize, PROT_READ);
-+	if (ret) {
-+		ksft_test_result_fail("mprotect() failed\n");
-+		goto close_comm_pipes;
-+	}
-+	ret = mprotect(mem + pagesize, pagesize, PROT_READ | PROT_WRITE);
-+	if (ret) {
-+		ksft_test_result_fail("mprotect() failed\n");
-+		goto close_comm_pipes;
-+	}
-+
-+	switch (test) {
-+	case ANON_THP_COLLAPSE_UNSHARED:
-+		/* Collapse before actually COW-sharing the page. */
-+		ret = madvise(mem, size, MADV_COLLAPSE);
-+		if (ret) {
-+			ksft_test_result_skip("MADV_COLLAPSE failed: %s\n",
-+					      strerror(errno));
-+			goto close_comm_pipes;
-+		}
-+		break;
-+	case ANON_THP_COLLAPSE_FULLY_SHARED:
-+		/* COW-share the full PTE-mapped THP. */
-+		break;
-+	case ANON_THP_COLLAPSE_LOWER_SHARED:
-+		/* Don't COW-share the upper part of the THP. */
-+		ret = madvise(mem + size / 2, size / 2, MADV_DONTFORK);
-+		if (ret) {
-+			ksft_test_result_fail("MADV_DONTFORK failed\n");
-+			goto close_comm_pipes;
-+		}
-+		break;
-+	case ANON_THP_COLLAPSE_UPPER_SHARED:
-+		/* Don't COW-share the lower part of the THP. */
-+		ret = madvise(mem, size / 2, MADV_DONTFORK);
-+		if (ret) {
-+			ksft_test_result_fail("MADV_DONTFORK failed\n");
-+			goto close_comm_pipes;
-+		}
-+		break;
-+	default:
-+		assert(false);
-+	}
-+
-+	ret = fork();
-+	if (ret < 0) {
-+		ksft_test_result_fail("fork() failed\n");
-+		goto close_comm_pipes;
-+	} else if (!ret) {
-+		switch (test) {
-+		case ANON_THP_COLLAPSE_UNSHARED:
-+		case ANON_THP_COLLAPSE_FULLY_SHARED:
-+			exit(child_memcmp_fn(mem, size, &comm_pipes));
-+			break;
-+		case ANON_THP_COLLAPSE_LOWER_SHARED:
-+			exit(child_memcmp_fn(mem, size / 2, &comm_pipes));
-+			break;
-+		case ANON_THP_COLLAPSE_UPPER_SHARED:
-+			exit(child_memcmp_fn(mem + size / 2, size / 2,
-+					     &comm_pipes));
-+			break;
-+		default:
-+			assert(false);
-+		}
-+	}
-+
-+	while (read(comm_pipes.child_ready[0], &buf, 1) != 1)
-+		;
-+
-+	switch (test) {
-+	case ANON_THP_COLLAPSE_UNSHARED:
-+		break;
-+	case ANON_THP_COLLAPSE_UPPER_SHARED:
-+	case ANON_THP_COLLAPSE_LOWER_SHARED:
-+		/*
-+		 * Revert MADV_DONTFORK such that we merge the VMAs and are
-+		 * able to actually collapse.
-+		 */
-+		ret = madvise(mem, size, MADV_DOFORK);
-+		if (ret) {
-+			ksft_test_result_fail("MADV_DOFORK failed\n");
-+			write(comm_pipes.parent_ready[1], "0", 1);
-+			wait(&ret);
-+			goto close_comm_pipes;
-+		}
-+		/* FALLTHROUGH */
-+	case ANON_THP_COLLAPSE_FULLY_SHARED:
-+		/* Collapse before anyone modified the COW-shared page. */
-+		ret = madvise(mem, size, MADV_COLLAPSE);
-+		if (ret) {
-+			ksft_test_result_skip("MADV_COLLAPSE failed: %s\n",
-+					      strerror(errno));
-+			write(comm_pipes.parent_ready[1], "0", 1);
-+			wait(&ret);
-+			goto close_comm_pipes;
-+		}
-+		break;
-+	default:
-+		assert(false);
-+	}
-+
-+	/* Modify the page. */
-+	memset(mem, 0xff, size);
-+	write(comm_pipes.parent_ready[1], "0", 1);
-+
-+	wait(&ret);
-+	if (WIFEXITED(ret))
-+		ret = WEXITSTATUS(ret);
-+	else
-+		ret = -EINVAL;
-+
-+	ksft_test_result(!ret, "No leak from parent into child\n");
-+close_comm_pipes:
-+	close_comm_pipes(&comm_pipes);
-+}
-+
-+static void test_anon_thp_collapse_unshared(char *mem, size_t size)
-+{
-+	do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_UNSHARED);
-+}
-+
-+static void test_anon_thp_collapse_fully_shared(char *mem, size_t size)
-+{
-+	do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_FULLY_SHARED);
-+}
-+
-+static void test_anon_thp_collapse_lower_shared(char *mem, size_t size)
-+{
-+	do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_LOWER_SHARED);
-+}
-+
-+static void test_anon_thp_collapse_upper_shared(char *mem, size_t size)
-+{
-+	do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_UPPER_SHARED);
-+}
-+
-+/*
-+ * Test cases that are specific to anonymous THP: pages in private mappings
-+ * that may get shared via COW during fork().
-+ */
-+static const struct test_case anon_thp_test_cases[] = {
-+	/*
-+	 * Basic COW test for fork() without any GUP when collapsing a THP
-+	 * before fork().
-+	 *
-+	 * Re-mapping a PTE-mapped anon THP using a single PMD ("in-place
-+	 * collapse") might easily get COW handling wrong when not collapsing
-+	 * exclusivity information properly.
-+	 */
-+	{
-+		"Basic COW after fork() when collapsing before fork()",
-+		test_anon_thp_collapse_unshared,
-+	},
-+	/* Basic COW test, but collapse after COW-sharing a full THP. */
-+	{
-+		"Basic COW after fork() when collapsing after fork() (fully shared)",
-+		test_anon_thp_collapse_fully_shared,
-+	},
-+	/*
-+	 * Basic COW test, but collapse after COW-sharing the lower half of a
-+	 * THP.
-+	 */
-+	{
-+		"Basic COW after fork() when collapsing after fork() (lower shared)",
-+		test_anon_thp_collapse_lower_shared,
-+	},
-+	/*
-+	 * Basic COW test, but collapse after COW-sharing the upper half of a
-+	 * THP.
-+	 */
-+	{
-+		"Basic COW after fork() when collapsing after fork() (upper shared)",
-+		test_anon_thp_collapse_upper_shared,
-+	},
-+};
-+
-+static void run_anon_thp_test_cases(void)
-+{
-+	int i;
-+
-+	if (!thpsize)
-+		return;
-+
-+	ksft_print_msg("[INFO] Anonymous THP tests\n");
-+
-+	for (i = 0; i < ARRAY_SIZE(anon_thp_test_cases); i++) {
-+		struct test_case const *test_case = &anon_thp_test_cases[i];
-+
-+		ksft_print_msg("[RUN] %s\n", test_case->desc);
-+		do_run_with_thp(test_case->fn, THP_RUN_PMD);
-+	}
-+}
-+
-+static int tests_per_anon_thp_test_case(void)
-+{
-+	return thpsize ? 1 : 0;
-+}
-+
- typedef void (*non_anon_test_fn)(char *mem, const char *smem, size_t size);
- 
- static void test_cow(char *mem, const char *smem, size_t size)
-@@ -1518,6 +1744,7 @@ int main(int argc, char **argv)
- 
- 	ksft_print_header();
- 	ksft_set_plan(ARRAY_SIZE(anon_test_cases) * tests_per_anon_test_case() +
-+		      ARRAY_SIZE(anon_thp_test_cases) * tests_per_anon_thp_test_case() +
- 		      ARRAY_SIZE(non_anon_test_cases) * tests_per_non_anon_test_case());
- 
- 	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
-@@ -1526,6 +1753,7 @@ int main(int argc, char **argv)
- 		ksft_exit_fail_msg("opening pagemap failed\n");
- 
- 	run_anon_test_cases();
-+	run_anon_thp_test_cases();
- 	run_non_anon_test_cases();
- 
- 	err = ksft_get_fail_cnt();
--- 
-2.39.0
-
+Fixed the way you proposed it:
+https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=cmpxchg_user_key&id=b33d59fb37ddcb6ee65d4fa23cc3d58793d13c5b
