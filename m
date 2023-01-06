@@ -2,68 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9983660270
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 15:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960AF660588
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 18:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjAFOoT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Jan 2023 09:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S235545AbjAFRTX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Jan 2023 12:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbjAFOnx (ORCPT
+        with ESMTP id S235742AbjAFRTL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:43:53 -0500
-Received: from 3.mo545.mail-out.ovh.net (3.mo545.mail-out.ovh.net [46.105.34.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C6F6086D
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 Jan 2023 06:43:51 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.111.172.143])
-        by mo545.mail-out.ovh.net (Postfix) with ESMTPS id 943A22579B;
-        Fri,  6 Jan 2023 14:43:48 +0000 (UTC)
-Received: from [192.168.1.125] (37.65.8.229) by DAG10EX1.indiv4.local
- (172.16.2.91) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.16; Fri, 6 Jan
- 2023 15:43:40 +0100
-Message-ID: <8773f286-74ba-4efb-4a94-0c1f91d959bd@naccy.de>
-Date:   Fri, 6 Jan 2023 15:43:39 +0100
+        Fri, 6 Jan 2023 12:19:11 -0500
+X-Greylist: delayed 56087 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Jan 2023 09:19:05 PST
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4707DE18;
+        Fri,  6 Jan 2023 09:19:05 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 14F92604F3;
+        Fri,  6 Jan 2023 18:19:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673025542; bh=bbciZY0FY+dm7Ftyy2TqJhYcG6unTZLWiVPeHAgnz3s=;
+        h=Date:From:Subject:To:Cc:From;
+        b=rmNDDYGMJGcBV8AUoZ2S7vvVwW5qLFETB3QUv9n2ofyRFLYG2129oiyOncPCVVDo1
+         /97DjBxSr9upT0KGhvYLhb92FZ8Pzl2DOhoik0ZHZgSy/yVf5nszK7E+I/5R+JwcJH
+         fM8reeJ+aFxTVWkg1MS1i+6ZOkEqNP9EThLmuqGNHkGyuZe8qIhiSyxFDdbmkgPONF
+         qbQ5mq/hOxnZC5gZAtxnAmLtK438UsJNBeHc6Lsut9kK1cp0TXHCfpR75p8EF8x1gV
+         hGOxE09whWU0KFYpesg3QFlFzcEXo/jZW97FD8Eo5y6oEXR3WUHnq2VLbgg+Cvj+IV
+         KfPquE3p74TkA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XtY6v37OufNU; Fri,  6 Jan 2023 18:18:59 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.196.35])
+        by domac.alu.hr (Postfix) with ESMTPSA id 439B4604F0;
+        Fri,  6 Jan 2023 18:18:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673025539; bh=bbciZY0FY+dm7Ftyy2TqJhYcG6unTZLWiVPeHAgnz3s=;
+        h=Date:From:Subject:To:Cc:From;
+        b=lnfQxP5Xm0X3NGASRcnG48pXseJqrkD3Mz6puc8BwJU9ckRsLvNGG71j4vzI+wmGQ
+         R28uejPWWXXq7/BDf0M1s/mBiXrIJKk/tc4CqzeYnLgKSJqj/nZWVzORuAtuE4nT/e
+         /nataA+Ay9oDpp2YlBMZ7RRBJ1EO+rlV1vNZf3+E9X3W87LXsKp72mRf1BDO0tyR+d
+         T+YzLgjTKfm6FEeq9z9ZYzQFQVRLeCNin4HwffqIRejTI08mCNUyczjIzqF45LaQ8s
+         n7Jlef+P3tiUOoiSgr4xvTO6n5IKBEaHnsmv8KUugBarAIk+khCCZbvGvbSvJvEv3Z
+         YvA5U6QS+Vv+Q==
+Message-ID: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
+Date:   Fri, 6 Jan 2023 18:18:58 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH bpf-next v3 00/16] bpfilter
-Content-Language: fr
-To:     Florian Westphal <fw@strlen.de>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: [PATCH selftest/net/af_unix 1/1] Fix size of parameter to connect()
+To:     netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Dmitrii Banshchikov <me@ubique.spb.ru>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>
-References: <20221224000402.476079-1-qde@naccy.de>
- <20230103114540.GB13151@breakpoint.cc>
-From:   Quentin Deslandes <qde@naccy.de>
-In-Reply-To: <20230103114540.GB13151@breakpoint.cc>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florian Westphal <fw@strlen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.65.8.229]
-X-ClientProxiedBy: CAS11.indiv4.local (172.16.1.11) To DAG10EX1.indiv4.local
- (172.16.2.91)
-X-Ovh-Tracer-Id: 3721662146057268988
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkedtgdeikecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeegtefggeegtedtfeefkedvkeefleeiffeludetlefhkeffffejkefhgeeludeftdenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepfhifsehsthhrlhgvnhdruggvpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrgeskhgvrhhnvghlrdhorhhgpdgvughumhgrii
- gvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhjohhlshgrsehkvghrnhgvlhdrohhrghdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdfovfetjfhoshhtpehmohehgeehpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,49 +71,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Le 03/01/2023 à 12:45, Florian Westphal a écrit :
-> Quentin Deslandes <qde@naccy.de> wrote:
->> The patchset is based on the patches from David S. Miller [1],
->> Daniel Borkmann [2], and Dmitrii Banshchikov [3].
->>
->> Note: I've partially sent this patchset earlier due to a
->> mistake on my side, sorry for then noise.
->>
->> The main goal of the patchset is to prepare bpfilter for
->> iptables' configuration blob parsing and code generation.
->>
->> The patchset introduces data structures and code for matches,
->> targets, rules and tables. Beside that the code generation
->> is introduced.
->>
->> The first version of the code generation supports only "inline"
->> mode - all chains and their rules emit instructions in linear
->> approach.
->>
->> Things that are not implemented yet:
->>    1) The process of switching from the previous BPF programs to the
->>       new set isn't atomic.
-> 
-> You can't make this atomic from userspace perspective, the
-> get/setsockopt API of iptables uses a read-modify-write model.
 
-This refers to updating the programs from bpfilter's side. It won't
-be atomic from iptables point of view, but currently bpfilter will
-remove the program associated to a table, before installing the new
-one. This means packets received in between those operations are
-not filtered. I assume a better solution is possible.
+From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-> Tentatively I'd try to extend libnftnl and generate bpf code there,
-> since its used by both iptables(-nft) and nftables we'd automatically
-> get support for both.
+Adjust size parameter in connect() to match the type of the parameter, to fix "No such file or directory"
+error in selftests/net/af_unix/test_oob_unix.c:127.
 
-That's one of the option, this could also remain in the kernel
-tree or in a dedicated git repository. I don't know which one would
-be the best, I'm open to suggestions.
+The existing code happens to work provided that the autogenerated pathname is shorter than
+sizeof (struct sockaddr), which is why it hasn't been noticed earlier.
 
-> I was planning to look into "attach bpf progs to raw netfilter hooks"
-> in Q1 2023, once the initial nf-bpf-codegen is merged.
+Visible from the trace excerpt:
 
-Is there any plan to support non raw hooks? That's mainly out
-of curiosity, I don't even know whether that would be a good thing
-or not.
+bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+[pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+
+BUG: The filename is trimmed to sizeof (struct sockaddr).
+
+The patch is generated against the "vanilla" torvalds mainline tree 6.2-rc2.
+
+Thanks and regards,
+Mirsad Todorovac
+
+Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Cc: Florian Westphal <fw@strlen.de>
+Reviewed-by: Florian Westphal <fw@strlen.de>
+
+---
+  tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+index b57e91e1c3f2..532459a15067 100644
+--- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
++++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+@@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+
+         wait_for_signal(pipefd[0]);
+         if (connect(cfd, (struct sockaddr *)consumer_addr,
+-                    sizeof(struct sockaddr)) != 0) {
++                    sizeof(*consumer_addr)) != 0) {
+                 perror("Connect failed");
+                 kill(0, SIGTERM);
+                 exit(1);
+
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
