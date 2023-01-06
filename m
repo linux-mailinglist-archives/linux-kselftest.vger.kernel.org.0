@@ -2,136 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CFB660191
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 14:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B36660235
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 15:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbjAFNxR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Jan 2023 08:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        id S233754AbjAFOb4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Jan 2023 09:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbjAFNxQ (ORCPT
+        with ESMTP id S235241AbjAFObV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Jan 2023 08:53:16 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298E81A210;
-        Fri,  6 Jan 2023 05:53:15 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id C67AA604F1;
-        Fri,  6 Jan 2023 14:53:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673013193; bh=Q+AzEgTW/m2Pdu5fLVw0AFRlFGHoMItl3/gtOwW2H+s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iDcIOkiFJfGX+psihuAYtSFeBTC+eH+3vaa1iabieBOGzw65S55QwRNFgKRuOFjsi
-         vW8XCWnfQyi9YKIrbNjnEVVZ5jUYQ20Yt9JMKo+cSPwBLr+Jdao2ofxfCRN4l8X/N5
-         17nXBfR+Ecq7TYOB16BArFjBSdjgVPAvwQ9joHY0KkDJ62ilAcsoWN2sa/YqLwwLuA
-         KVfsrJPGPq9G7n+e+fZYiFD/oRD3RWPQFl0k14uaH470mrH3C1Nso+bGFM3R7oo+xo
-         Vq3jEnPE1HdLIYmzmeiw3mBmDdAL2ql8gcrtvbTGmkqPtA4jz+WBYyx4BXVojcS3uN
-         ISbHjCybQjeUQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id SumuLJYPe6DP; Fri,  6 Jan 2023 14:53:11 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.196.35])
-        by domac.alu.hr (Postfix) with ESMTPSA id 729A0604F0;
-        Fri,  6 Jan 2023 14:53:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673013191; bh=Q+AzEgTW/m2Pdu5fLVw0AFRlFGHoMItl3/gtOwW2H+s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZnyFrMUW2LV1zU3pbUA5kgndltV48IbcTEs0SF3zdqUiYclFx7gNOOK5opKKD07+T
-         mJsVriaFXLuRP3Cxs86+rIbErLJxMSam6BnR45PV5NlzXoqoFz9nSrhAbASPY8dwz0
-         F15DVizRhqtaZ9M8IvPnn0+a0j1ApwdxSfQSZ/HrBs1p0ky0/bgm/kLQDWI4ky9L4S
-         NO2r4BvdHO5cniVvOEhCaaRuCjTzTkGd3jAaRj4eA6NR95lbdgmOPGPp0snxqoRmNi
-         WIjZ7IcxEco19NG+GthNle9Hz5Mj/O0E0Z9FMjruJlZSMFHTWkcBKaF65KHuRCHs1g
-         6A5XdQSN2o6qg==
-Message-ID: <97a9b094-11cc-5ad1-4874-8ead69a54127@alu.unizg.hr>
-Date:   Fri, 6 Jan 2023 14:53:11 +0100
+        Fri, 6 Jan 2023 09:31:21 -0500
+X-Greylist: delayed 957 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Jan 2023 06:31:15 PST
+Received: from 4.mo619.mail-out.ovh.net (4.mo619.mail-out.ovh.net [46.105.36.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2B97F470
+        for <linux-kselftest@vger.kernel.org>; Fri,  6 Jan 2023 06:31:15 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.108.4.137])
+        by mo619.mail-out.ovh.net (Postfix) with ESMTPS id E39B22288D;
+        Fri,  6 Jan 2023 14:15:14 +0000 (UTC)
+Received: from [192.168.1.125] (37.65.8.229) by DAG10EX1.indiv4.local
+ (172.16.2.91) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.16; Fri, 6 Jan
+ 2023 15:15:12 +0100
+Message-ID: <cf6f7e30-9b0e-497b-87d4-df450949cd32@naccy.de>
+Date:   Fri, 6 Jan 2023 15:15:12 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: BUG: core dump in selftest of proc fs
-Content-Language: en-US
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-References: <fd9206f6-3ec4-cafc-e313-dfddf957bd5e@alu.unizg.hr>
- <Y7f6WBUXBz8tlr3b@p183>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <Y7f6WBUXBz8tlr3b@p183>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH bpf-next v3 00/16] bpfilter
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Dmitrii Banshchikov <me@ubique.spb.ru>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>, <fw@strlen.de>
+References: <20221224000402.476079-1-qde@naccy.de>
+ <20221227182242.ozkc6u2lbwneoi4r@macbook-pro-6.dhcp.thefacebook.com>
+Content-Language: fr
+From:   Quentin Deslandes <qde@naccy.de>
+In-Reply-To: <20221227182242.ozkc6u2lbwneoi4r@macbook-pro-6.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [37.65.8.229]
+X-ClientProxiedBy: CAS11.indiv4.local (172.16.1.11) To DAG10EX1.indiv4.local
+ (172.16.2.91)
+X-Ovh-Tracer-Id: 3239214032702926553
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -85
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkedtgdeivdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfghrlhcuvffnffculdduhedmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomhepsfhuvghnthhinhcuffgvshhlrghnuggvshcuoehquggvsehnrggttgihrdguvgeqnecuggftrfgrthhtvghrnhephfeuieffudeutdfgkeelffehtefhueeuudegteeghfetgfeutdejhfefhfdtgedtnecuffhomhgrihhnpegsrhgvrghkphhoihhnthdrtggtnecukfhppeduvdejrddtrddtrddupdefjedrieehrdekrddvvdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoqhguvgesnhgrtggthidruggvqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegrlhgvgigvihdrshhtrghrohhvohhithhovhesghhmrghilhdrtghomhdpnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrh
+ hupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrgeskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhjohhlshgrsehkvghrnhgvlhdrohhrghdpfhifsehsthhrlhgvnhdruggvpdfovfetjfhoshhtpehmoheiudelpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 06. 01. 2023. 11:39, Alexey Dobriyan wrote:
-> On Wed, Jan 04, 2023 at 07:27:40PM +0100, Mirsad Goran Todorovac wrote:
->> Dear all,
+Le 27/12/2022 à 19:22, Alexei Starovoitov a écrit :
+> On Sat, Dec 24, 2022 at 01:03:46AM +0100, Quentin Deslandes wrote:
 >>
->> Trying to complete `make kselftest` for the first time, so maybe I'm doing something wrong?
->>
->> Or we are having a regression in 6.2-rc2 release candidate ...
->>
->> However, the output of selftest run is:
->>
->> make[2]: Entering directory '.../linux_torvalds/tools/testing/selftests/proc'
->> TAP version 13
->> 1..21
->> # selftests: proc: fd-001-lookup
->> ok 1 selftests: proc: fd-001-lookup
->> # selftests: proc: fd-002-posix-eq
->> ok 2 selftests: proc: fd-002-posix-eq
->> # selftests: proc: fd-003-kthread
->> ok 3 selftests: proc: fd-003-kthread
->> # selftests: proc: proc-loadavg-001
->> ok 4 selftests: proc: proc-loadavg-001
->> # selftests: proc: proc-empty-vm
->> # proc-empty-vm: proc-empty-vm.c:184: test_proc_pid_maps: Assertion `rv == 0' failed.
->> # /usr/bin/timeout: the monitored command dumped core
->> # Aborted
->> not ok 5 selftests: proc: proc-empty-vm # exit=134
->> # selftests: proc: proc-pid-vm
->> # proc-pid-vm: proc-pid-vm.c:365: main: Assertion `rv == len' failed.
->> # /usr/bin/timeout: the monitored command dumped core
->> # Aborted
->>
->> Please find attached lshw output, dmesg, config and lsmod.
->>
->> I am available for further diagnostics.
->>
->> The platform is Ubuntu 22.10 kinetic kudu on a Lenovo Ideapad 3 15ITL6 laptop.
+>> Due to poor hardware availability on my side, I've not been able to
+>> benchmark those changes. I plan to get some numbers for the next iteration.
 > 
-> The "bug" is that "call rel32" instruction testing for executable
-> vsyscall page which should be relocated to "call 0xffffffffff600000"
-> is messed up. Ubuntu 22.10 ships with "vsyscall=xonly" so there should not be
-> any faults when executing from it. But segfault happens with normal
-> randomised userspace address.
+> Yeah. Performance numbers would be my main question :)
+
+Hardware is on the way! :)
+
+>> FORWARD filter chain is now supported, however, it's attached to
+>> TC INGRESS along with INPUT filter chain. This is due to XDP not supporting
+>> multiple programs to be attached. I could generate a single program
+>> out of both INPUT and FORWARD chains, but that would prevent another
+>> BPF program to be attached to the interface anyway. If a solution
+>> exists to attach both those programs to XDP while allowing for other
+>> programs to be attached, it requires more investigation. In the meantime,
+>> INPUT and FORWARD filtering is supported using TC.
 > 
-> I'll change it to "call *rax" which should be more robust (and works)
-> and free from relocations.
+> I think we can ignore XDP chaining for now assuming that Daniel's bpf_link-tc work
+> will be applicable to XDP as well, so we'll have a simple chaining
+> for XDP eventually.
+> 
+> As far as attaching to TC... I think it would be great to combine bpfilter
+> codegen and attach to Florian's bpf hooks exactly at netfilter.
+> See
+> https://git.breakpoint.cc/cgit/fw/nf-next.git/commit/?h=nf_hook_jit_bpf_29&id=0c1ec06503cb8a142d3ad9f760b72d94ea0091fa
+> With nf_hook_ingress() calling either into classic iptable or into bpf_prog_run_nf
+> which is either generated by Florian's optimizer of nf chains or into
+> bpfilter generated code would be ideal.
 
-If you will need to test the patch in the same environment where the problem initially
-occurred, I am ready at your disposal.
-
-Thanks,
-Mirsad
-
---
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
+That sounds interesting. If my understanding is correct, Florian's
+work doesn't yet allow for userspace-generated programs to be attached,
+which will be required for bpfilter.
