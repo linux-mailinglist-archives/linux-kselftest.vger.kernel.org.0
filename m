@@ -2,68 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B36660235
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 15:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E99660258
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 15:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233754AbjAFOb4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Jan 2023 09:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S229568AbjAFOiO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Jan 2023 09:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235241AbjAFObV (ORCPT
+        with ESMTP id S232556AbjAFOiM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Jan 2023 09:31:21 -0500
-X-Greylist: delayed 957 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Jan 2023 06:31:15 PST
-Received: from 4.mo619.mail-out.ovh.net (4.mo619.mail-out.ovh.net [46.105.36.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2B97F470
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 Jan 2023 06:31:15 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.108.4.137])
-        by mo619.mail-out.ovh.net (Postfix) with ESMTPS id E39B22288D;
-        Fri,  6 Jan 2023 14:15:14 +0000 (UTC)
-Received: from [192.168.1.125] (37.65.8.229) by DAG10EX1.indiv4.local
- (172.16.2.91) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.16; Fri, 6 Jan
- 2023 15:15:12 +0100
-Message-ID: <cf6f7e30-9b0e-497b-87d4-df450949cd32@naccy.de>
-Date:   Fri, 6 Jan 2023 15:15:12 +0100
+        Fri, 6 Jan 2023 09:38:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C848099F
+        for <linux-kselftest@vger.kernel.org>; Fri,  6 Jan 2023 06:37:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673015846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P/zfGuEErfx9YxOb8v5xGvNVY0pRdOYDG3xC/nVLZ30=;
+        b=LzahyLOiYxfBw8+iz6KJdvbXLzxyGKM38tJXuvZ99jWXkRaa/pWiyWxnw96ad3VDUa2eXu
+        7q4jlekkasA/LqLYg9M/U5fpDBPx9jLNVaQku8V76TftuHrNV3w7hQrjxJbj82bVr65Szq
+        yH27ihWZYsAqqHcHol1SvEh7iCg56mw=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-166-3ElgMbyaOZ2iEBnLVkqyQg-1; Fri, 06 Jan 2023 09:37:25 -0500
+X-MC-Unique: 3ElgMbyaOZ2iEBnLVkqyQg-1
+Received: by mail-il1-f199.google.com with SMTP id i20-20020a056e021d1400b0030c306598c6so1211699ila.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Jan 2023 06:37:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P/zfGuEErfx9YxOb8v5xGvNVY0pRdOYDG3xC/nVLZ30=;
+        b=DLRS6YYZ+iE/KIOSClEjMsWubQEN4+x/IhN7gRsrf4YyMF6zk5GWJim1Go9wmxlhYC
+         BiM4UJgNvpP069FCFgRbhYBn118mUD6S2mj26lm0G4tzVSEvdXM2ZX5F4WPXDUO0VPb7
+         DLXfpD+B3QGA7u/wx1FNgGhraDFcmQmpBTT2cLrL1E0aR7Y6E+e6gRH8/fGUCj/L7oKg
+         eto71dgytvu3BQX5ei/EBWfB8fg+Z0vJs4OJzR8SNibUAwsYBY2f8apBtFWwnSDZnIo0
+         XUo+i4IH0bmhD8zs5m6oxpNjNqyE0/6voz2ggRIhsg2pPlojaz1/4zHjS2cwqz68Z8Er
+         u7DA==
+X-Gm-Message-State: AFqh2kqJ8GhPHs7qDY39bM/RKyc7a20k8T+jmKv+2nXxZN3s5Q19bBn7
+        wu0WXhRIYTbni7uknOCeYmP1R5x4WfhXPD/oIofbdqLySnGBb0Jy7JxKTbZa7FyvEy0pjQ1qCx1
+        jx00qtjz3T1goUrCkaoX3wTRVO/1wW05cw222UgOnTxw6
+X-Received: by 2002:a02:54c7:0:b0:38a:757f:dac9 with SMTP id t190-20020a0254c7000000b0038a757fdac9mr4442642jaa.84.1673015844323;
+        Fri, 06 Jan 2023 06:37:24 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvM4bw2Ko76z00L7EjKh+skm8JncjwnAQJE6ihiSkxq86ANz2AZ+mFp90pOVnrlYrhleh2gJGZWL4Ra8my8I3c=
+X-Received: by 2002:a02:54c7:0:b0:38a:757f:dac9 with SMTP id
+ t190-20020a0254c7000000b0038a757fdac9mr4442635jaa.84.1673015844043; Fri, 06
+ Jan 2023 06:37:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH bpf-next v3 00/16] bpfilter
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+References: <20230106102332.1019632-9-benjamin.tissoires@redhat.com> <202301062140.zfdqzE9b-lkp@intel.com>
+In-Reply-To: <202301062140.zfdqzE9b-lkp@intel.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 6 Jan 2023 15:37:12 +0100
+Message-ID: <CAO-hwJK3RetR9T_=4C+3Fmj-ThNx-3XWgrOJGAL9VebM-PdgLw@mail.gmail.com>
+Subject: Re: [PATCH HID for-next v1 8/9] HID: bpf: clean up entrypoint
+To:     kernel test robot <lkp@intel.com>
+Cc:     Greg KH <greg@kroah.com>, Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Dmitrii Banshchikov <me@ubique.spb.ru>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>, <fw@strlen.de>
-References: <20221224000402.476079-1-qde@naccy.de>
- <20221227182242.ozkc6u2lbwneoi4r@macbook-pro-6.dhcp.thefacebook.com>
-Content-Language: fr
-From:   Quentin Deslandes <qde@naccy.de>
-In-Reply-To: <20221227182242.ozkc6u2lbwneoi4r@macbook-pro-6.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.65.8.229]
-X-ClientProxiedBy: CAS11.indiv4.local (172.16.1.11) To DAG10EX1.indiv4.local
- (172.16.2.91)
-X-Ovh-Tracer-Id: 3239214032702926553
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrkedtgdeivdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfghrlhcuvffnffculdduhedmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomhepsfhuvghnthhinhcuffgvshhlrghnuggvshcuoehquggvsehnrggttgihrdguvgeqnecuggftrfgrthhtvghrnhephfeuieffudeutdfgkeelffehtefhueeuudegteeghfetgfeutdejhfefhfdtgedtnecuffhomhgrihhnpegsrhgvrghkphhoihhnthdrtggtnecukfhppeduvdejrddtrddtrddupdefjedrieehrdekrddvvdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoqhguvgesnhgrtggthidruggvqedpnhgspghrtghpthhtohepuddprhgtphhtthhopegrlhgvgigvihdrshhtrghrohhvohhithhovhesghhmrghilhdrtghomhdpnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrh
- hupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrgeskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhjohhlshgrsehkvghrnhgvlhdrohhrghdpfhifsehsthhrlhgvnhdruggvpdfovfetjfhoshhtpehmoheiudelpdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,37 +81,69 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Le 27/12/2022 à 19:22, Alexei Starovoitov a écrit :
-> On Sat, Dec 24, 2022 at 01:03:46AM +0100, Quentin Deslandes wrote:
->>
->> Due to poor hardware availability on my side, I've not been able to
->> benchmark those changes. I plan to get some numbers for the next iteration.
-> 
-> Yeah. Performance numbers would be my main question :)
+On Fri, Jan 6, 2023 at 2:42 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Benjamin,
+>
+> I love your patch! Perhaps something to improve:
+>
+> [auto build test WARNING on hid/for-next]
+> [also build test WARNING on next-20230106]
+> [cannot apply to shuah-kselftest/next shuah-kselftest/fixes char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.2-rc2]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Tissoires/selftests-hid-add-vmtest-sh/20230106-182823
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+> patch link:    https://lore.kernel.org/r/20230106102332.1019632-9-benjamin.tissoires%40redhat.com
+> patch subject: [PATCH HID for-next v1 8/9] HID: bpf: clean up entrypoint
+> config: i386-randconfig-a013
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/46336953b47885c5111b7c1a92403b3d94cf3d41
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Benjamin-Tissoires/selftests-hid-add-vmtest-sh/20230106-182823
+>         git checkout 46336953b47885c5111b7c1a92403b3d94cf3d41
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hid/bpf/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/hid/bpf/hid_bpf_jmp_table.c:502:6: warning: no previous prototype for function 'call_hid_bpf_prog_put_deferred' [-Wmissing-prototypes]
+>    void call_hid_bpf_prog_put_deferred(struct work_struct *work)
+>         ^
+>    drivers/hid/bpf/hid_bpf_jmp_table.c:502:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void call_hid_bpf_prog_put_deferred(struct work_struct *work)
+>    ^
+>    static
+>    1 warning generated.
+>
+>
+> vim +/call_hid_bpf_prog_put_deferred +502 drivers/hid/bpf/hid_bpf_jmp_table.c
+>
+> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  501
+> 0baef37335dd4d Benjamin Tissoires 2022-11-03 @502  void call_hid_bpf_prog_put_deferred(struct work_struct *work)
+> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  503  {
+> ade9207f04dc40 Benjamin Tissoires 2023-01-06  504       /* kept around for patch readability, to be dropped in the next commmit */
+> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  505  }
+> f5c27da4e3c8a2 Benjamin Tissoires 2022-11-03  506
+>
 
-Hardware is on the way! :)
+Oops, this function should have been dropped in 8/9 "HID: bpf: clean
+up entrypoint". It's now dead code. I'll fix it in v2.
 
->> FORWARD filter chain is now supported, however, it's attached to
->> TC INGRESS along with INPUT filter chain. This is due to XDP not supporting
->> multiple programs to be attached. I could generate a single program
->> out of both INPUT and FORWARD chains, but that would prevent another
->> BPF program to be attached to the interface anyway. If a solution
->> exists to attach both those programs to XDP while allowing for other
->> programs to be attached, it requires more investigation. In the meantime,
->> INPUT and FORWARD filtering is supported using TC.
-> 
-> I think we can ignore XDP chaining for now assuming that Daniel's bpf_link-tc work
-> will be applicable to XDP as well, so we'll have a simple chaining
-> for XDP eventually.
-> 
-> As far as attaching to TC... I think it would be great to combine bpfilter
-> codegen and attach to Florian's bpf hooks exactly at netfilter.
-> See
-> https://git.breakpoint.cc/cgit/fw/nf-next.git/commit/?h=nf_hook_jit_bpf_29&id=0c1ec06503cb8a142d3ad9f760b72d94ea0091fa
-> With nf_hook_ingress() calling either into classic iptable or into bpf_prog_run_nf
-> which is either generated by Florian's optimizer of nf chains or into
-> bpfilter generated code would be ideal.
+Cheers,
+Benjamin
 
-That sounds interesting. If my understanding is correct, Florian's
-work doesn't yet allow for userspace-generated programs to be attached,
-which will be required for bpfilter.
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
+
