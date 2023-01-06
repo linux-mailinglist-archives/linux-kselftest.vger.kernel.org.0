@@ -2,137 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F626660711
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 20:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA8C66071B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 20:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbjAFTYk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Jan 2023 14:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S229883AbjAFT2j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Jan 2023 14:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjAFTYj (ORCPT
+        with ESMTP id S229752AbjAFT2i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:24:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610F314017;
-        Fri,  6 Jan 2023 11:24:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CCA9B81E54;
-        Fri,  6 Jan 2023 19:24:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D00C433D2;
-        Fri,  6 Jan 2023 19:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673033075;
-        bh=pUhCzZXW5uAhkeucFRyrJOvPIYXPSxjQMSSltvsf5GU=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Zg7s+fH2r6yDUAXq7LG9zDV6ebrf7mSY33tZ0Wv9vInilOm+PQPBl7YI/pyB1U5r1
-         i6OYuslhR+AnFPfzdcIMMIkNJ+HtIAJCqzs21ZJXUmP5R0OA8bDsjBpP3qMVu55s+f
-         DrnaN2JuWSGlXo3+hk3R2Cb/j3vYuuF9VmOAInQvLttwvM8X6jnBFMsivq+Uh9mZ/y
-         SBj4t9anW09U/WadQFpbIILYOVgtiJpRWwAh5XTVnSlHvrhOnVM7Xx40GTGGDuPWSz
-         9YJJrDuwmJ9ixKglReDDYj5XZJUpK43C12eywkDyBi947ntU/hbkRlxp96MChHKxGU
-         18my1U1xeiA2Q==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Fri, 06 Jan 2023 19:24:19 +0000
-Subject: [PATCH] KVM: selftests: Fix build of rseq test
+        Fri, 6 Jan 2023 14:28:38 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E1526DB;
+        Fri,  6 Jan 2023 11:28:38 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id EDEC8604F1;
+        Fri,  6 Jan 2023 20:28:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673033316; bh=pkj5eZw69uhq7PAkgnV5pcK3+tC4Sfkn0s8g4WltJmE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ety5o8haNBbW+RifhVPXyGmX2hKK0NB9ij6NSjaYRlDf963W7LAMpuDY76eIHX3R6
+         6ifhVI/YLsLwCd9JEHsaEj9wLhQ0kKMQVldaWgm9vMTvtS0k8oEQUbJqYJbMi8xkhe
+         dsj1yvyfLv+vokrfitytxvkT3hxn9Wz4go557KoWGYOCG08iKtp/XXF9nCMThfEV1D
+         RmibZb6tCYtzZCSa2Wp4tHEeNfKTv2O9wt/w3Qhlr+0nCbbr8muW4yzPV9gdKpY7qQ
+         /9v5UmJRHq2TEF9QlsrEb2CterbHByfUHRdah/I/OPd0X6Jxf8RD8gchJGlsY556UP
+         8XidSd52AkF/g==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AJhsjG6nCrlb; Fri,  6 Jan 2023 20:28:33 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.196.35])
+        by domac.alu.hr (Postfix) with ESMTPSA id 54E68604F0;
+        Fri,  6 Jan 2023 20:28:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673033313; bh=pkj5eZw69uhq7PAkgnV5pcK3+tC4Sfkn0s8g4WltJmE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BiwEXrucVJK+nf2UqsmGK7gOM/32OtlZRBNXHFc5VLOrCriwerp0hpnQ/z3EAiG/x
+         rLOZ54sy0I1pwCQVFwBbj7VELIAwzEwkMyWSfjKx+orIIQjhXzhUWW7qbxwESZrKZv
+         Saj7U57INZf/bCirAZ4LNlB2v2RYJ4SCWi5sr3IuMGBZzT5yqOjo2Zcc3MCmw5zquV
+         B9+O3YHSGcL/xFFMi/qpRJaQYMqqkYSBkb4pgr1SrUnXkszVKE5+/r5rPVQ7r/dZ5q
+         IfNbIthiBpRi7NWtbyr7OQ80qQK4yOwwjRMRq8FFQ1uOUitXgsYjmPBba3mcgis96A
+         20ti8+lmS7ylw==
+Message-ID: <b80ffedf-3f53-08f7-baf0-db0450b8853f@alu.unizg.hr>
+Date:   Fri, 6 Jan 2023 20:28:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230106-fix-kvm-rseq-build-v1-1-b704d9831d02@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAGN1uGMC/x3N3QrCMAyG4VsZOTbQ1vmDtyIepG10QVe3RMdg7
- N7tPHw/ePgWMFZhg0uzgPIkJu9Sw+8aSB2VB6Pk2hBc2DvvjniXGZ9Tj2o8YvzKK2PrKR3OkXwO
- J6gwkjFGpZK6jX76YVsH5Wr/V9fbuv4Apj854XoAAAA=
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Oliver Upton <oliver.upton@linux.dev>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-214b3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2193; i=broonie@kernel.org;
- h=from:subject:message-id; bh=pUhCzZXW5uAhkeucFRyrJOvPIYXPSxjQMSSltvsf5GU=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjuHVxdxGpcompwADLK642hJjFryKat+gJATaaaUrJ
- 4OqQOO2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY7h1cQAKCRAk1otyXVSH0GxeB/
- 41bDW/XmF/u3hghygJer46nez9Uh+ZOg7fBgU9rscLSq41/MoAoXDn+rjn/3v8TmsjvUXopoHL1YCo
- hzVYuH4J8zE68t3nJ0iIrqbCG9W2lCyQD79HTk4nQDzbeYHQ6SLNnP3E8Zo+Oy1O/aUIoF9fE/4X+u
- K3hI1kwXXS4jcqok2ji9NyhAzwJ89fwLhcm2la4juA32a6Hm3dBqo0dVslfHQniYt0yhhX1EHChkOH
- H10Tl1n1TSuulr+dsf+nWZGToPrdF3fuqYRmWQ0JImG8fntrX+IGf0jV9A6Xbnp5cNB+fRt6YbAutL
- w+NZIjpBhYkZYki8wkyEFBwY25d58S
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: [PATCH net v2] af_unix: selftest: Fix the size of the parameter to
+ connect()
+Content-Language: en-US, hr
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     davem@davemloft.net, edumazet@google.com, fw@strlen.de,
+        kuba@kernel.org, kuniyu@amazon.co.jp, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
+ <20230106175828.13333-1-kuniyu@amazon.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230106175828.13333-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The KVM rseq test is failing to build in -next due to a commit merged
-from the tip tree which adds a wrapper for sys_getcpu() to the rseq
-kselftests, conflicting with the wrapper already included in the KVM
-selftest:
 
-rseq_test.c:48:13: error: conflicting types for 'sys_getcpu'
-   48 | static void sys_getcpu(unsigned *cpu)
-          |             ^~~~~~~~~~
-In file included from rseq_test.c:23:
-../rseq/rseq.c:82:12: note: previous definition of 'sys_getcpu' was here
-   82 | static int sys_getcpu(unsigned *cpu, unsigned *node)
-          |            ^~~~~~~~~~
+From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-Fix this by removing the local wrapper and moving the result check up to
-the caller.
+Adjust size parameter in connect() to match the type of the parameter, to
+fix the "No such file or directory" error in selftests/net/af_unix/
+test_oob_unix.c:127.
 
-Fixes: 99babd04b250 ("selftests/rseq: Implement rseq numa node id field selftest")
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
-This will need to go via the tip tree due to the breaking change being
-there.
----
- tools/testing/selftests/kvm/rseq_test.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+The existing code happens to work provided that the autogenerated pathname
+is shorter than sizeof (struct sockaddr), which is why it hasn't been
+noticed earlier.
 
-diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-index 3045fdf9bdf5..f74e76d03b7e 100644
---- a/tools/testing/selftests/kvm/rseq_test.c
-+++ b/tools/testing/selftests/kvm/rseq_test.c
-@@ -41,18 +41,6 @@ static void guest_code(void)
- 		GUEST_SYNC(0);
- }
- 
--/*
-- * We have to perform direct system call for getcpu() because it's
-- * not available until glic 2.29.
-- */
--static void sys_getcpu(unsigned *cpu)
--{
--	int r;
--
--	r = syscall(__NR_getcpu, cpu, NULL, NULL);
--	TEST_ASSERT(!r, "getcpu failed, errno = %d (%s)", errno, strerror(errno));
--}
--
- static int next_cpu(int cpu)
- {
- 	/*
-@@ -249,7 +237,9 @@ int main(int argc, char *argv[])
- 			 * across the seq_cnt reads.
- 			 */
- 			smp_rmb();
--			sys_getcpu(&cpu);
-+			r = sys_getcpu(&cpu, NULL);
-+			TEST_ASSERT(!r, "getcpu failed, errno = %d (%s)",
-+				    errno, strerror(errno));
- 			rseq_cpu = rseq_current_cpu_raw();
- 			smp_rmb();
- 		} while (snapshot != atomic_read(&seq_cnt));
+Visible from the trace excerpt:
+
+bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+[pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+
+BUG: The filename is trimmed to sizeof (struct sockaddr).
+
+The patch is generated against the "vanilla" torvalds mainline tree 6.2-rc2.
+(Tested to apply against net.git tree.)
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Cc: Florian Westphal <fw@strlen.de>
+Reviewed-by: Florian Westphal <fw@strlen.de>
+Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
 ---
-base-commit: 469a89fd3bb73bb2eea628da2b3e0f695f80b7ce
-change-id: 20230106-fix-kvm-rseq-build-41ac58ba1d27
+  tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
+diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+index b57e91e1c3f2..532459a15067 100644
+--- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
++++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+@@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+
+  	wait_for_signal(pipefd[0]);
+  	if (connect(cfd, (struct sockaddr *)consumer_addr,
+-		     sizeof(struct sockaddr)) != 0) {
++		     sizeof(*consumer_addr)) != 0) {
+  		perror("Connect failed");
+  		kill(0, SIGTERM);
+
+
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 -- 
-Mark Brown <broonie@kernel.org>
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
