@@ -2,197 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2C4660705
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 20:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F626660711
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 20:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbjAFTUB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Jan 2023 14:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S231638AbjAFTYk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Jan 2023 14:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjAFTUA (ORCPT
+        with ESMTP id S230270AbjAFTYj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:20:00 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DF373E26;
-        Fri,  6 Jan 2023 11:19:58 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id CFD22604F1;
-        Fri,  6 Jan 2023 20:19:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673032795; bh=aw5exVyI+B1u4awEJxlKl0A6jA33w5svmejfQDbjXXU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fsS0PTItehDbTzAuBqsAJGEQ4ebd82LRT0cnz8rr4jpF5twqDAxZ6zhM2NPSTsNs8
-         jNKsK9t4CIwqXprmYJOGb4zyzDPYtGTBLTFimvag8kYBT+hIRbQBu2Eo8vDm8MwSNR
-         RukvZWAIazPM0Zj/PB2+BiRy3bvziAYB9tGP+ZM4SUERLWc5GTnQ/cr3IFj7xOjXh9
-         IakgNvAwV39fwpf4Tw5CIt76X2Y/L9gQUO+d6pdJRqv421ZfXk71/5qasNROnKyrAJ
-         NkKvFrRuuAO+AzldI7NlIKUPBrAADf4N31E8VNbrdjV8XMr5YLLyNUq9sevlnoTgn9
-         QT7uOo3nXf4Rw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ea3YROiPfPs6; Fri,  6 Jan 2023 20:19:53 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.196.35])
-        by domac.alu.hr (Postfix) with ESMTPSA id 301E2604F0;
-        Fri,  6 Jan 2023 20:19:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673032793; bh=aw5exVyI+B1u4awEJxlKl0A6jA33w5svmejfQDbjXXU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IZbQNO3oYDirik5HMt0cBpp+qDMKUT8+zZCWbupoFsHb3zMbrS9hniLGTloNWdwEB
-         VeVUrFWTlltr9Af2uD18ZMUbh/7mb8NFsWRTEjAhoSqeUPiUi6PkJ8GD3j4Z/X7QDc
-         +BZajV0blBzJWO44rbWoex2rNuYUxP79VO47dLUFIUFNVKGwzysMu8sbdIMjuW6dFd
-         CGlnT1n8ZF8S0wgIefrUzNCdQz8wBpiOrlW6lJ7kzqqzVdWWDXIJ8rqmy4hfB3rAub
-         b/7YzqSD+E1471nh9MVmQ9gYXRJKIzrRjyXQSc3LdxKOn8z5fN/Y/mkcU0Ed03Qzzo
-         K+9K2OqIeTRXA==
-Message-ID: <1b8abfbb-d589-0b2b-c7a1-6e92d628fbdf@alu.unizg.hr>
-Date:   Fri, 6 Jan 2023 20:19:51 +0100
+        Fri, 6 Jan 2023 14:24:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610F314017;
+        Fri,  6 Jan 2023 11:24:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CCA9B81E54;
+        Fri,  6 Jan 2023 19:24:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D00C433D2;
+        Fri,  6 Jan 2023 19:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673033075;
+        bh=pUhCzZXW5uAhkeucFRyrJOvPIYXPSxjQMSSltvsf5GU=;
+        h=From:Date:Subject:To:Cc:From;
+        b=Zg7s+fH2r6yDUAXq7LG9zDV6ebrf7mSY33tZ0Wv9vInilOm+PQPBl7YI/pyB1U5r1
+         i6OYuslhR+AnFPfzdcIMMIkNJ+HtIAJCqzs21ZJXUmP5R0OA8bDsjBpP3qMVu55s+f
+         DrnaN2JuWSGlXo3+hk3R2Cb/j3vYuuF9VmOAInQvLttwvM8X6jnBFMsivq+Uh9mZ/y
+         SBj4t9anW09U/WadQFpbIILYOVgtiJpRWwAh5XTVnSlHvrhOnVM7Xx40GTGGDuPWSz
+         9YJJrDuwmJ9ixKglReDDYj5XZJUpK43C12eywkDyBi947ntU/hbkRlxp96MChHKxGU
+         18my1U1xeiA2Q==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Fri, 06 Jan 2023 19:24:19 +0000
+Subject: [PATCH] KVM: selftests: Fix build of rseq test
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH selftest/net/af_unix 1/1] Fix size of parameter to
- connect()
-Content-Language: en-US, hr
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     davem@davemloft.net, edumazet@google.com, fw@strlen.de,
-        kuba@kernel.org, kuniyu@amazon.co.jp, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, shuah@kernel.org
-References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
- <20230106175828.13333-1-kuniyu@amazon.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <20230106175828.13333-1-kuniyu@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230106-fix-kvm-rseq-build-v1-1-b704d9831d02@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGN1uGMC/x3N3QrCMAyG4VsZOTbQ1vmDtyIepG10QVe3RMdg7
+ N7tPHw/ePgWMFZhg0uzgPIkJu9Sw+8aSB2VB6Pk2hBc2DvvjniXGZ9Tj2o8YvzKK2PrKR3OkXwO
+ J6gwkjFGpZK6jX76YVsH5Wr/V9fbuv4Apj854XoAAAA=
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Oliver Upton <oliver.upton@linux.dev>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12-dev-214b3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2193; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=pUhCzZXW5uAhkeucFRyrJOvPIYXPSxjQMSSltvsf5GU=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjuHVxdxGpcompwADLK642hJjFryKat+gJATaaaUrJ
+ 4OqQOO2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY7h1cQAKCRAk1otyXVSH0GxeB/
+ 41bDW/XmF/u3hghygJer46nez9Uh+ZOg7fBgU9rscLSq41/MoAoXDn+rjn/3v8TmsjvUXopoHL1YCo
+ hzVYuH4J8zE68t3nJ0iIrqbCG9W2lCyQD79HTk4nQDzbeYHQ6SLNnP3E8Zo+Oy1O/aUIoF9fE/4X+u
+ K3hI1kwXXS4jcqok2ji9NyhAzwJ89fwLhcm2la4juA32a6Hm3dBqo0dVslfHQniYt0yhhX1EHChkOH
+ H10Tl1n1TSuulr+dsf+nWZGToPrdF3fuqYRmWQ0JImG8fntrX+IGf0jV9A6Xbnp5cNB+fRt6YbAutL
+ w+NZIjpBhYkZYki8wkyEFBwY25d58S
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+The KVM rseq test is failing to build in -next due to a commit merged
+from the tip tree which adds a wrapper for sys_getcpu() to the rseq
+kselftests, conflicting with the wrapper already included in the KVM
+selftest:
 
-On 06. 01. 2023. 18:58, Kuniyuki Iwashima wrote:
-> Hi,
-> 
-> Thanks for the patch.
+rseq_test.c:48:13: error: conflicting types for 'sys_getcpu'
+   48 | static void sys_getcpu(unsigned *cpu)
+          |             ^~~~~~~~~~
+In file included from rseq_test.c:23:
+../rseq/rseq.c:82:12: note: previous definition of 'sys_getcpu' was here
+   82 | static int sys_getcpu(unsigned *cpu, unsigned *node)
+          |            ^~~~~~~~~~
 
-Thank you for your quick review. I had to do the homework before replying.
+Fix this by removing the local wrapper and moving the result check up to
+the caller.
 
-> From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Date:   Fri, 6 Jan 2023 18:18:58 +0100
->> From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->>
->> Adjust size parameter in connect() to match the type of the parameter, to fix "No such file or directory"
->> error in selftests/net/af_unix/test_oob_unix.c:127.
-> 
-> Could you wrap the changelog to 75 chars except for log (strace below) ?
-> checkpatch.pl will help.
-> 
->    $ git show HEAD --format=email | ./scripts/checkpatch.pl
+Fixes: 99babd04b250 ("selftests/rseq: Implement rseq numa node id field selftest")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+This will need to go via the tip tree due to the breaking change being
+there.
+---
+ tools/testing/selftests/kvm/rseq_test.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-The complete result according to the guidelines will be in the followup email.
+diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+index 3045fdf9bdf5..f74e76d03b7e 100644
+--- a/tools/testing/selftests/kvm/rseq_test.c
++++ b/tools/testing/selftests/kvm/rseq_test.c
+@@ -41,18 +41,6 @@ static void guest_code(void)
+ 		GUEST_SYNC(0);
+ }
+ 
+-/*
+- * We have to perform direct system call for getcpu() because it's
+- * not available until glic 2.29.
+- */
+-static void sys_getcpu(unsigned *cpu)
+-{
+-	int r;
+-
+-	r = syscall(__NR_getcpu, cpu, NULL, NULL);
+-	TEST_ASSERT(!r, "getcpu failed, errno = %d (%s)", errno, strerror(errno));
+-}
+-
+ static int next_cpu(int cpu)
+ {
+ 	/*
+@@ -249,7 +237,9 @@ int main(int argc, char *argv[])
+ 			 * across the seq_cnt reads.
+ 			 */
+ 			smp_rmb();
+-			sys_getcpu(&cpu);
++			r = sys_getcpu(&cpu, NULL);
++			TEST_ASSERT(!r, "getcpu failed, errno = %d (%s)",
++				    errno, strerror(errno));
+ 			rseq_cpu = rseq_current_cpu_raw();
+ 			smp_rmb();
+ 		} while (snapshot != atomic_read(&seq_cnt));
 
->> The existing code happens to work provided that the autogenerated pathname is shorter than
->> sizeof (struct sockaddr), which is why it hasn't been noticed earlier.
->>
->> Visible from the trace excerpt:
->>
->> bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
->> clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
->> [pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
->>
->> BUG: The filename is trimmed to sizeof (struct sockaddr).
->>
->> The patch is generated against the "vanilla" torvalds mainline tree 6.2-rc2.
-> 
-> Every patch that fixes networking code has to be applied cleanly on net.git.
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
-> 
-> But the patch can not be applied to net.git.
+---
+base-commit: 469a89fd3bb73bb2eea628da2b3e0f695f80b7ce
+change-id: 20230106-fix-kvm-rseq-build-41ac58ba1d27
 
-I have tested the patch against net.git, and it is a verbatim copy (tested by diff).
-
-> Could you check this ?
-> https://patchwork.kernel.org/project/netdevbpf/patch/bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr/
-> 
-> Also, the mail title should be
-> 
->    [PATCH Tree Version Nth/Total] subsystem: Description.
-> 
-> Next time, Tree is net and Version is v2, and we need not write 1/1, so the
-> subject should be
-> 
->    [PATCH net v2] af_unix: selftest: Fix size of parameter to connect()
-
-Got it. Will do in the followup email.
-
-> Please see here for details.
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/process/maintainer-netdev.rst
-> 
-> 
->>
->> Thanks and regards,
->> Mirsad Todorovac
-> 
-> You can remove these lines.
-
-Sure.
-
->> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> 
-> In this case, you are the reporter and the author of the patch, so the
-> Reported-by tag is not needed.  Instead, you have to add your SOB tag.
-> 
->    Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-
-OK.
-
->> Cc: "David S. Miller" <davem@davemloft.net>
->> Cc: Eric Dumazet <edumazet@google.com>
->> Cc: Jakub Kicinski <kuba@kernel.org>
->> Cc: Paolo Abeni <pabeni@redhat.com>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
->> Cc: Florian Westphal <fw@strlen.de>
->> Reviewed-by: Florian Westphal <fw@strlen.de>
-> 
-> Please add Fixes tag as I said here.
-> https://lore.kernel.org/netdev/20230103111335.81600-1-kuniyu@amazon.com/#r
-> 
-> Thank you,
-> Kuniyuki
-> 
-> 
->>
->> ---
->>    tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
->>    1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
->> index b57e91e1c3f2..532459a15067 100644
->> --- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
->> +++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
->> @@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
->>
->>           wait_for_signal(pipefd[0]);
->>           if (connect(cfd, (struct sockaddr *)consumer_addr,
->> -                    sizeof(struct sockaddr)) != 0) {
->> +                    sizeof(*consumer_addr)) != 0) {
->>                   perror("Connect failed");
->>                   kill(0, SIGTERM);
->>                   exit(1);
->>
-
---
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+Best regards,
 -- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
+Mark Brown <broonie@kernel.org>
