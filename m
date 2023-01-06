@@ -2,254 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AA165F86F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 02:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7543465F942
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 02:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235861AbjAFBAi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Jan 2023 20:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        id S229530AbjAFBoX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Jan 2023 20:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbjAFBAh (ORCPT
+        with ESMTP id S229451AbjAFBoW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Jan 2023 20:00:37 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1692F792;
-        Thu,  5 Jan 2023 17:00:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672966836; x=1704502836;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=0b9xfC+GjgDFSB5V/RacZDvfaZtGuGlB/6pLG3MqCzc=;
-  b=Ulfb/KnEf0iXFa2sw0Giy1UhqBb83P+hQEIWHv4SbPFA06NxRyyBoaLg
-   Vvwqgvpxwdu8V+VN3ZfAGucEBl5W5qvb1U2JPIoJSH+G5D7D+ulhjsN0O
-   zylOnj8U7BLfqURIlKuZfRXZEi3mjywlPu98jHZYvXfP+H7Y0qgZazAte
-   muz9kXFKZIkpBIunj/n/BbZ0KPJEHyWV/izR/Ftlqf+Rgwm/PphM+Awx6
-   50806HhE2oKT7MQ9fZHuERxlMAbNdKDuQHzBb/u0E+QY+5Q69IKknE3fy
-   3UCFS2gcn79xbp0EHTO534RscMQhk3U3gUHZpAK45ZdCO+pge66YI+R4G
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="305885953"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="305885953"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2023 17:00:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="763344803"
-X-IronPort-AV: E=Sophos;i="5.96,303,1665471600"; 
-   d="scan'208";a="763344803"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Jan 2023 17:00:35 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 5 Jan 2023 17:00:34 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 5 Jan 2023 17:00:34 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 5 Jan 2023 17:00:34 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WqlIsgWMlwcP7KjqSlYJZ+mQSQLABg/q9KlpzgvLu9D2Az55qJjnuSj+9l8h0neDYAe1n+zYs8WDHcaqnLvvd3wJe7Rjv9jw7FgCJbvkuLu3jsNnGENO9epSjncS+uCwOnbkOANJHF6kZ3C+5J8eq23Tos6IGg/PZnK9dHmyu0Xj3p+qgEyTJVKKyjCVjQhO7MC4meVCgJ56e6P28zQv3I/9DRlnpIlMHXqyfZzRSnAgNmPmVtUDj24dMeVigdQ/oOIL11IQG4lTgnWNPYt3yeuRGLQZv/qP/Sc8Tdwvt3NQnnQF+GenGbEF/H59jjT/Z6ukUH+zLzwEvpj8Ht/4iA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RQz1biJvGl+ygb4NPr1ozzBjISJCFOWGrYpwAvfYApw=;
- b=hvdxSkQ+g+pA9E8u0GG2X+THmRx5nxFFBOjp/YxgCv4AjHLPU0xyFFZYKkE8Hck9vrScdrDvdGq3ssLvLXMQnx7z+gxjfTPw3JP4w7j8G+WFiIWllsQ3fqV9+8Fydu4qZXE2yZev9Ze9wuSX1KJFg/mMsJ+VHY/MEztMlXCkD9FPnVR5hra9YXa5mQZs+kJA24BlHwoA7Tm5fUmsrCV+N0m77B6ggn//I3/W6/Qv6NJJOUKVbMTfvOcVBenJnwXQINOUEpZgELkVyQ497kr5/V61V9wLsk+3bOJrdfkvOku61s3PKcJQCZ7ur9avh0ML6+zAXgKv3Wppap1Qo2rksg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
- by SJ2PR11MB7617.namprd11.prod.outlook.com (2603:10b6:a03:4cb::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 6 Jan
- 2023 01:00:32 +0000
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::e478:cda7:b9c4:c457]) by BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::e478:cda7:b9c4:c457%5]) with mapi id 15.20.5944.019; Fri, 6 Jan 2023
- 01:00:32 +0000
-Date:   Fri, 6 Jan 2023 09:00:21 +0800
-From:   Aaron Lu <aaron.lu@intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "Raphael S. Carvalho" <raphaelsc@scylladb.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Igor Seletskiy <i@cloudlinux.com>,
-        Pavel Boldin <boldin.pavel@gmail.com>,
-        Moritz Lipp <github@mlq.me>,
-        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
-        Michael Schwarz <michael.schwarz91@gmail.com>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
-Message-ID: <Y7dypc4sFcmYlXQQ@ziqianlu-desk2>
-References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1>
- <Y7bT0OL8RAWkCu0Z@kroah.com>
- <CAKhLTr1a+fTs2KyT3fm9yMxfjNwW_yLV7vRjrUXdNx8gfg8LqA@mail.gmail.com>
- <Y7bg5sxEZDIaGoXK@kroah.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y7bg5sxEZDIaGoXK@kroah.com>
-X-ClientProxiedBy: SGAP274CA0008.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::20)
- To BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
+        Thu, 5 Jan 2023 20:44:22 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCB21C43E;
+        Thu,  5 Jan 2023 17:44:20 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 92860604F1;
+        Fri,  6 Jan 2023 02:44:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1672969455; bh=j0I8Yg736QaEcLiDbDpjG//QkBBv0KbB4F0zCJztB50=;
+        h=Date:To:Cc:From:Subject:From;
+        b=YhmcuEesCE2aMfiaoaiv9I8l+c4DdjBEiSnxGEmUcBGaGRx/4HF1MBMCojRTJs90V
+         wh9FvfCnIua4NrJ9GCZsrpEtvVyaciVZNVOhV99QyLyG8MfzSANBBqPhPN9X6YJ0rb
+         Evd/PhAMNalrGgjOXPdc+4d+F/mA1I6hmmHLme0ZJ5FM9cdZCCBXfcOJAKWl+U5JYH
+         SiwERgDfpwjlxXzBBAWNYZq3ZdLv2LExBWsAfdqaXExKk5m1XCUbMicBqJHIeH4+Hl
+         EcHSO/y0ZDgDpzYGtDqzjJyHATf1E7SAAIS9FLhO5A+lFUWfmmAjbK05OpJnJhBw8A
+         jcTqbQFctWwLw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id msczIeCKyGkU; Fri,  6 Jan 2023 02:44:13 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.196.35])
+        by domac.alu.hr (Postfix) with ESMTPSA id 5F127604F0;
+        Fri,  6 Jan 2023 02:44:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1672969453; bh=j0I8Yg736QaEcLiDbDpjG//QkBBv0KbB4F0zCJztB50=;
+        h=Date:To:Cc:From:Subject:From;
+        b=O167wkos98+hcqUs6h330GpW0tzm8eOuTxaZ/VJvLgB6O+nEqgYcFRgY592Bxj1dx
+         ED+jUYzKZnd9HmqGoXe8EbTUvTguQTWH8F6n8AMu1lK4MbytEurX1x22MKdWr+iHSD
+         zVTQeo8qyXQYpCc+aAmUslN98r0Nsymtm9fBDf+M/IoitzUhQvW1Kai626Vnq8ALol
+         EzYOPeYDJ2EBlhty5vS7Xx2zEE8uLVyGXnLC5T8xbDu9mi4hzJpqY+5fJwIFXqVEa3
+         oiPe1AKpjqtsAtaiiLjPraOdTlF3Va4tHlwNHTkaPeAj+GegRCFXut6xV0E0A06e28
+         /0YOsCX3Q0aEw==
+Content-Type: multipart/mixed; boundary="------------QSSseDKsp4kXRF0c0Oi6OPbY"
+Message-ID: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
+Date:   Fri, 6 Jan 2023 02:44:11 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|SJ2PR11MB7617:EE_
-X-MS-Office365-Filtering-Correlation-Id: f5d2befe-e291-4ee2-ac41-08daef8168fc
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iVoLvfmgBPpw+Z74kbi/K53nAJrXh6dJGR7lq12U4Qide1GIv2AaN++9umqzchkEhx3CKY68zwKiEJkug07eHudky96NclueCGBfO8alHRznmo4dTcYXv414tuFHCkRvxaD/ae1qMbyEDbBo2eJIu8PYw/mZs7Eozl0hq1jhe3NOfN3+u0Ea4dnxc8YVieBnvHLVKBcoNeDZTNGb/ZTOuTRNuerx0hx+B9S5FvdCQUbjFPv9H/ihnpD60zD8fEemfgXE7qjwqwDr/bKaqNxniDP008f+pZf0aSakEsHS2H/i8FETafPUhDjTd9Gzyj3EQ8DggBjhOMwnNzaozeHAn23qq8NsncM/SMJJJNJH4KXHiVTnaveijOBTdmciW8IQx94CeVXCo+nUTJMuk/V7hoWjXNEyRp7qORUe0lwrlzaCB547Y6Sd01g6owkrSl8KuDvd3VEeI/QxRalp9b8NFcPr4E9aBU+NTrCd3SoWCYHxPdz3N18S9/aTmFl17w7yQfGDTbCZoKZG+bSmax6ReRhZBiDcuPpQdOc6+bhKZic48gF6sX01Lj50LTexKmEsJvKFS0V3yB9rVRWxbYDGfmJycvwbolS6xGc4OJkyWhoTqcL0YQpyYDKcQTN1LVNx4dqcF7NKoQDDSpp7D19iWZilj2ChgK/W3fFIAN0SQjpMlempo9+yLVwucOrnC4hdxPaNu9zRwgncbEqlBF3x4A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(346002)(366004)(396003)(136003)(376002)(451199015)(83380400001)(33716001)(86362001)(66556008)(66946007)(66476007)(38100700002)(82960400001)(8936002)(8676002)(9686003)(4326008)(2906002)(186003)(44832011)(53546011)(316002)(6916009)(6512007)(5660300002)(6506007)(26005)(41300700001)(6666004)(54906003)(6486002)(966005)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xYuQxTfPnGzLDpAG1TcQJ4Upxmt1Kp8kyjh9JKyba2fumq2le+56Ia/yFkye?=
- =?us-ascii?Q?WATvKf1AGaI9f6l23cYaYn1bMb5Debxh8L19KGhrheqiBQ9Ri7XR3/5wqo/U?=
- =?us-ascii?Q?vT899mL9nLA+Q+aZVTsURCaxGg3RZg1/NLIX6otOM9MY4AiMwjzrSffu2Wcq?=
- =?us-ascii?Q?a4BoVnPU4QgbHta3EvQVVaz8wpUlbJnRwPMcgjtJmcIZFVRpNN3H2j3ijKVv?=
- =?us-ascii?Q?3bIr0o27cwuJEoChCX2EGN1j8wubKl2PcM7kHExdrwTYSRtNYcyKo/7TnAE2?=
- =?us-ascii?Q?4Q2UoFxD9+4H0wjHW22+Gre39i8aIvLvto9nttjuSXlunzEubwGfwM5V4A0Z?=
- =?us-ascii?Q?wUOp8IOaOQ9e1MWacIqZ3e4Uxrjze+3lY885MfdVph9Fb1stqidTcjuX6HFH?=
- =?us-ascii?Q?68J9gmRNChKl+JS+tiU77ht6RgVACAHIO0fSJJk7bAdS0xZk5ZNnDPn6iATd?=
- =?us-ascii?Q?QquNJ12hhTGTspUcGf295kbUHfLLmjmrhpegHhC44JIs8IbA5iazXkstqDS+?=
- =?us-ascii?Q?SJpalbC7IhrxDiPyxjsRL9EXf1mcwOcP6+k/H6M2HYk69WJZGZ8A27Jq6V8l?=
- =?us-ascii?Q?11RUeFV3HCEdG/M8zvjN4dGD8etrqSB4Gt6W5GfHD0d9omfDh9ZHu9HL9I+3?=
- =?us-ascii?Q?FFPuGawgMXhuvZq6+26KHzTGYySjkjn3Ws1qlILG64pbg7rNkGZPbT7VP5rA?=
- =?us-ascii?Q?nU9y0uYZzi4C82ZU6DMxYQ9i1yzUouwKcYkwxpMBjK1GxdzRy7LPjP3OCZOQ?=
- =?us-ascii?Q?mUSTgf5uRX/snm0sTwxTYWUenzgkmSaP+6N2CeVb8yaLc1jt+jO89hqytKvn?=
- =?us-ascii?Q?xpQG9AsRSACkRCJ8H43BZDtrBD7blq/A4Ev9uulsBFee3GkBHDsngAw3M2LG?=
- =?us-ascii?Q?uvvvAqPlrZrrGgLqRIPoD9Zp/7mZNFY7mWfYzlJeYHv11sKiktQd3FhvyqUw?=
- =?us-ascii?Q?usLQStF3Vs1R+CDot3al849iF1bvjkB+XbBQpwCuISutYYObhXQ9W7M2wyTN?=
- =?us-ascii?Q?vnRsXDQsC3wxkt16StIgLdfiOpyJ4Mzi+kaueq0b4IiZArRvHdNusJEsBqrG?=
- =?us-ascii?Q?MiGgaQUyXrsRQuirHvCGx25idluwiP8edoClgnLklD53z/l9bdiPKPAfTA1k?=
- =?us-ascii?Q?88ZD7hj61Dy2kX7Y5nI1QlEXLIZ+8zOj5DJEYYSBMKEf6n1DAsfvmEkW0Hn8?=
- =?us-ascii?Q?GXFUhjrUDNKadATM4G/L1hzrPHU7KuuksvhwlMfw5mDiZDv3AitBNOTIT1gx?=
- =?us-ascii?Q?GSN4Omk48cSVDHbAPF6x8iKmL5WsDrjJCY70sOLbk3IK6FQ8RPM2q+NpT3SC?=
- =?us-ascii?Q?4sknyWeeaHCWKBEQqF6XOWDbFmVRCpl2AJKogoJbIlqxru3maybE9WD+Evob?=
- =?us-ascii?Q?CYCE2VAXDYPjSfEWt+kQXEEpXTPqYfml8sUoD+/Sk5Vhuoy+V8IeuCn66SA3?=
- =?us-ascii?Q?z1MfZjYKcigFUlSdcuPVKQq7mDHDaViZljfz6xQD+IGgyC/Wwa4Ft9EZkTYE?=
- =?us-ascii?Q?1Ob+Q/Rh6W78OLKSAgMl1uEf1p105dxnUP+Nj4BzKKrNkvvVWz2guA+oeRf9?=
- =?us-ascii?Q?lmBKIpXljumtMPNcRfwcWiA5IXCeq3/OqKtTd8vI?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5d2befe-e291-4ee2-ac41-08daef8168fc
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2023 01:00:31.9430
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GttUSQnua4tdoWka2rWjYSQ0P8BsJXWyJIv1oUMRFl3/CtGbAhqLkeaVPiK2woeFRj5Ph5ybXX25QSj88brWrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7617
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     linux-kselftest@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs when
+ selftest restarted
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Greg,
+This is a multi-part message in MIME format.
+--------------QSSseDKsp4kXRF0c0Oi6OPbY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 05, 2023 at 03:38:30PM +0100, Greg KH wrote:
-> On Thu, Jan 05, 2023 at 11:11:15AM -0300, Raphael S. Carvalho wrote:
-> > On Thu, Jan 5, 2023 at 10:42 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Thu, Jan 05, 2023 at 08:35:05PM +0800, Aaron Lu wrote:
-> > > > To capture potential programming errors like mistakenly setting Global
-> > > > bit on kernel page table entries, a selftest for meltdown is added.
-> > > >
-> > > > This selftest is based on Pavel Boldin's work at:
-> > > > https://github.com/linux-test-project/ltp/blob/master/testcases/cve/meltdown.c
-> > > >
-> > > > In addition to the existing test of reading kernel variable
-> > > > saved_command_line from user space, one more test of reading user local
-> > > > variable through kernel direct map address is added. For the existing
-> > > > test(reading saved_command_line) to report a failure, both the high kernel
-> > > > mapping and low kernel mapping have to be in leaked state; For the added
-> > > > test(read local var), only low kernel mapping leak is enough to trigger
-> > > > a test fail, so both tests are useful.
-> > > >
-> > > > Test results of 10 runs:
-> > > >
-> > > > On v6.1-rc8 with nopti kernel cmdline option:
-> > > >
-> > > > host              test_out_rate_1    test_out_rate_2
-> > > > lkp-bdw-de1            50%               100%
-> > > > lkp-hsw-d01            70%               100%
-> > > > lkp-hsw-d02             0%                80%
-> > > > lkp-hsw-d03            60%               100%
-> > > > lkp-hsw-d04            20%               100%
-> > > > lkp-hsw-d05            60%               100%
-> > > > lkp-ivb-d01             0%                70%
-> > > > lkp-kbl-d01           100%               100%
-> > > > lkp-skl-d02           100%                90%
-> > > > lkp-skl-d03            90%               100%
-> > > > lkp-skl-d05            60%               100%
-> > > > kbl-vm                100%                80%
-> > > > 2 other machines have 0% rate for both tests.
-> > > >
-> > > > bdw=broadwell, hsw=haswell, ivb=ivybridge, etc.
-> > > >
-> > > > test_out_rate_1: test reports fail rate for the test of reading
-> > > > saved_command_line from user space;
-> > > > test_out_rate_2: test reports fail rate for the test of reading user
-> > > > local variable through kernel direct map address in user space.
-> > > >
-> > > > On v5.19 without nopti cmdline option:
-> > > > host              test_out_rate_2
-> > > > lkp-bdw-de1            80%
-> > > > lkp-hsw-4ex1           50%
-> > > > lkp-hsw-d01            30%
-> > > > lkp-hsw-d03            10%
-> > > > lkp-hsw-d04            10%
-> > > > lkp-kbl-d01            10%
-> > > > kbl-vm                 80%
-> > > > 7 other machines have 0% rate for test2.
-> > > >
-> > > > Also tested on an i386 VM with 512M memory and the test out rate is 100%
-> > > > when adding nopti to kernel cmdline with v6.1-rc8.
-> > > >
-> > > > Main changes I made from Pavel Boldin's meltdown test are:
-> > > > - Replace rdtscll() and clflush() with kernel's implementation;
-> > > > - Reimplement find_symbol_in_file() to avoid bringing in LTP's library
-> > > >   functions;
-> > > > - Coding style changes: placing the function return type in the same
-> > > >   line of the function.
-> > > >
-> > > > Signed-off-by: Aaron Lu <aaron.lu@intel.com>
-> > > > ---
-> > > > Notable changes from RFC v3:
-> > > > - Drop RFC tag;
-> > > > - Change the base code from zlib licensed one to GPL licensed one.
-> > >
-> > > Sorry, but this still gets my NAK for the issues raised in previous
-> > > reviews that are not addressed here for some reason :(
-> > 
-> > Greg, the selftest is no longer based on
-> > https://github.com/IAIK/meltdown/blob/master/LICENSE, which is
-> > originally zlib licensed. In this version, Aaron is basing the test on
-> > https://github.com/linux-test-project/ltp/blob/master/testcases/cve/meltdown.c,
-> > which is indeed licensed with: GPL-2.0-or-later
-> 
-> That's not what the submission looks like, it looks a lot like the last
-> one from the first defines and variables...
-> 
-> But hey, what do I know, I'm not a lawyer which is why I keep insisting
-> that one from Intel actually read over this submission and sign-off on
-> it to verify that they agree with all of this.
+Hi all,
 
-As Raphael has kindly clarified for me, I'm now taking GPL-2.0-or-later
-licensed code and did some modifications and then released it as
-GPL-2.0-or-later, I suppose this is legally a right thing to do for
-anyone?
+I was wondering whether I am already obnoxious with three or four bug reports in
+two days and you might find it easier to hire an assassin to silence me
+than to fix them :)
 
-If you do not trust what I've done is what I've claimed, now the
-original author Pavel Boldin has given the patch a "LGTM" tag, does that
-address your concern?
+But the saner approach prevailed and I thought of the advantage of pulling
+through with 6.2-rc2 selftests on all my available hardware.
 
-Thanks,
-Aaron
+Please find included the lshw output, config and dmesg log.
+The kernel is essentially vanilla mainline torvalds tree kernel with
+CONFIG_KMEMLEAK=y and MG-LRU enabled (somewhat maybe brave, but I believe unrelated).
+
+https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-namespace-20230106/config-6.2-rc2-20230104.txt
+https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-namespace-20230106/dmesg-20220105.txt
+
+[root@pc-mtodorov linux_torvalds]# tools/testing/selftests/net/l2_tos_ttl_inherit.sh
+┌────────┬───────┬───────┬──────────────┬──────────────┬───────┬────────┐
+├────────┼───────┼───────┼──────────────┼──────────────┼───────┼────────┤
+│  Type  │ outer | inner │     tos      │      ttl     │  vlan │ result │
+├────────┼───────┼───────┼──────────────┼──────────────┼───────┼────────┤
+│    gre │     4 │     4 │ inherit 0xc4 │  inherit 116 │ false │Cannot create namespace file "/var/run/netns/testing": File exists
+RTNETLINK answers: File exists
+RTNETLINK answers: File exists
+RTNETLINK answers: File exists
+
+Of course, I should have tried to fix these myself, but I am not quite an expert
+in namespaces.
+
+BTW, Florian asked for a bash -x output, so I am providing one to save one roundtrip:
+
+https://domac.alu.unizg.hr/~mtodorov/linux/selftests/net-namespace-20230106/bash.html
+
+Kind regards,
+Mirsad
+
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+--------------QSSseDKsp4kXRF0c0Oi6OPbY
+Content-Type: application/x-xz; name="lshw.txt.xz"
+Content-Disposition: attachment; filename="lshw.txt.xz"
+Content-Transfer-Encoding: base64
+
+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
+
+
+--------------QSSseDKsp4kXRF0c0Oi6OPbY--
