@@ -2,68 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA8C66071B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 20:28:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F4C660722
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 20:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjAFT2j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Jan 2023 14:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S231335AbjAFTaU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Jan 2023 14:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjAFT2i (ORCPT
+        with ESMTP id S234720AbjAFTaT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Jan 2023 14:28:38 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E1526DB;
-        Fri,  6 Jan 2023 11:28:38 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id EDEC8604F1;
-        Fri,  6 Jan 2023 20:28:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673033316; bh=pkj5eZw69uhq7PAkgnV5pcK3+tC4Sfkn0s8g4WltJmE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ety5o8haNBbW+RifhVPXyGmX2hKK0NB9ij6NSjaYRlDf963W7LAMpuDY76eIHX3R6
-         6ifhVI/YLsLwCd9JEHsaEj9wLhQ0kKMQVldaWgm9vMTvtS0k8oEQUbJqYJbMi8xkhe
-         dsj1yvyfLv+vokrfitytxvkT3hxn9Wz4go557KoWGYOCG08iKtp/XXF9nCMThfEV1D
-         RmibZb6tCYtzZCSa2Wp4tHEeNfKTv2O9wt/w3Qhlr+0nCbbr8muW4yzPV9gdKpY7qQ
-         /9v5UmJRHq2TEF9QlsrEb2CterbHByfUHRdah/I/OPd0X6Jxf8RD8gchJGlsY556UP
-         8XidSd52AkF/g==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AJhsjG6nCrlb; Fri,  6 Jan 2023 20:28:33 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.196.35])
-        by domac.alu.hr (Postfix) with ESMTPSA id 54E68604F0;
-        Fri,  6 Jan 2023 20:28:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673033313; bh=pkj5eZw69uhq7PAkgnV5pcK3+tC4Sfkn0s8g4WltJmE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BiwEXrucVJK+nf2UqsmGK7gOM/32OtlZRBNXHFc5VLOrCriwerp0hpnQ/z3EAiG/x
-         rLOZ54sy0I1pwCQVFwBbj7VELIAwzEwkMyWSfjKx+orIIQjhXzhUWW7qbxwESZrKZv
-         Saj7U57INZf/bCirAZ4LNlB2v2RYJ4SCWi5sr3IuMGBZzT5yqOjo2Zcc3MCmw5zquV
-         B9+O3YHSGcL/xFFMi/qpRJaQYMqqkYSBkb4pgr1SrUnXkszVKE5+/r5rPVQ7r/dZ5q
-         IfNbIthiBpRi7NWtbyr7OQ80qQK4yOwwjRMRq8FFQ1uOUitXgsYjmPBba3mcgis96A
-         20ti8+lmS7ylw==
-Message-ID: <b80ffedf-3f53-08f7-baf0-db0450b8853f@alu.unizg.hr>
-Date:   Fri, 6 Jan 2023 20:28:33 +0100
+        Fri, 6 Jan 2023 14:30:19 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135FB14D02;
+        Fri,  6 Jan 2023 11:30:18 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id m18so5677126eji.5;
+        Fri, 06 Jan 2023 11:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mmDHBoIoLadMu0Asj1DLZDWnRgLsgqhRy9d3kzCtsbk=;
+        b=fBSt+s/kl5kXlV1FTvypk7dxtpv+6oPtbovssMhu4Q25Fp6vyR+EMA4tPOnB12Fc03
+         MvvrJGBQcviV5iUqCdonSuf0vrBgfR2qn0fnSaintaFBYBomCV5VcddZQG+nL2J5fpzB
+         pveWieFdK4GqaIFCY5wKDedE5QgQatt5hJ/+bUSDJRrLLs/1gCOpU6FKRYQP0/kpYIiI
+         64BQvCGYHfRYV6LttaTEra22DNt624VAFh+ddUNsg9P32oQjp8vUo6CJ7QQHNyYt+kvd
+         REKIvBr/8AhSUw3DS7XYnnsqMcnJHRawaJUbIgFvqrcLEhUowl69q6SGI1QNvf6Miecs
+         8UpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mmDHBoIoLadMu0Asj1DLZDWnRgLsgqhRy9d3kzCtsbk=;
+        b=qmYhwlCjfGlpN1V6vuo8a/ktwcjz7md4craS8vIWm4YQVvG8ckCVLU9CzRW98csJFt
+         7KmR7z+LSAwyGOQfMNqgc91aP+apZiWPafUBUAdB7DHxlj7hiKj0NnZAjT1t/VX4nC1J
+         oqEnXJYKuVrjfL3nkEuuWJSWcA880wHjDSmia3/RMIuQCNRvbLhqslzLreFWuuO8s/Sj
+         H4gIt9ImxODxdILGKIkKUBDrN1+btZgVH5zb5c3jFfukZ1xZSMLp137QvdGf/0bcnzRB
+         EJ43Kr3fBZu4uHB+Mfyw4u6ZqtWQKtEGdtccO4OkFaSP5KXEgEbeJ5Jc61YxqZs5e9Zq
+         qxsw==
+X-Gm-Message-State: AFqh2kq0zw9pcVt05bPtt86QP6s1Ozn6RYGzLv3+u1CI5w8Xnluojctm
+        nGbPKCHfBx8GfOrdiDPlVrb1LbUdZQ==
+X-Google-Smtp-Source: AMrXdXuoEr49qzXo+JbmRXTlMavUPZCQXqCp1GFjHebdRFtRuCA6gEm1EM7jKSCFx89J5Q6Zxl17yg==
+X-Received: by 2002:a17:907:11cf:b0:7c2:3b8a:9f0d with SMTP id va15-20020a17090711cf00b007c23b8a9f0dmr49674013ejb.51.1673033416581;
+        Fri, 06 Jan 2023 11:30:16 -0800 (PST)
+Received: from p183 ([46.53.252.178])
+        by smtp.gmail.com with ESMTPSA id k9-20020a17090646c900b007806c1474e1sm666404ejs.127.2023.01.06.11.30.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 11:30:16 -0800 (PST)
+Date:   Fri, 6 Jan 2023 22:30:14 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Brian Foster <bfoster@redhat.com>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: [PATCH] proc: fix PIE proc-empty-vm, proc-pid-vm tests
+Message-ID: <Y7h2xvzKLg36DSq8@p183>
+References: <fd9206f6-3ec4-cafc-e313-dfddf957bd5e@alu.unizg.hr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: [PATCH net v2] af_unix: selftest: Fix the size of the parameter to
- connect()
-Content-Language: en-US, hr
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     davem@davemloft.net, edumazet@google.com, fw@strlen.de,
-        kuba@kernel.org, kuniyu@amazon.co.jp, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, shuah@kernel.org
-References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
- <20230106175828.13333-1-kuniyu@amazon.com>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <20230106175828.13333-1-kuniyu@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fd9206f6-3ec4-cafc-e313-dfddf957bd5e@alu.unizg.hr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,65 +75,99 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+vsyscall detection code uses direct call to the beginning of
+the vsyscall page:
 
-From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+	asm ("call %P0" :: "i" (0xffffffffff600000))
 
-Adjust size parameter in connect() to match the type of the parameter, to
-fix the "No such file or directory" error in selftests/net/af_unix/
-test_oob_unix.c:127.
+It generates "call rel32" instruction but it is not relocated if binary
+is PIE, so binary segfaults into random userspace address and vsyscall
+page status is detected incorrectly.
 
-The existing code happens to work provided that the autogenerated pathname
-is shorter than sizeof (struct sockaddr), which is why it hasn't been
-noticed earlier.
+Do more direct:
 
-Visible from the trace excerpt:
+	asm ("call *%rax")
 
-bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
-clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
-[pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+which doesn't do need any relocaltions.
 
-BUG: The filename is trimmed to sizeof (struct sockaddr).
+Mark g_vsyscall as volatile for a good measure, I didn't find instruction
+setting it to 0. Now the code is obviously correct:
 
-The patch is generated against the "vanilla" torvalds mainline tree 6.2-rc2.
-(Tested to apply against net.git tree.)
+	xor	eax, eax
+	mov	rdi, rbp
+	mov	rsi, rbp
+	mov	DWORD PTR [rip+0x2d15], eax      # g_vsyscall = 0
+	mov	rax, 0xffffffffff600000
+	call	rax
+	mov	DWORD PTR [rip+0x2d02], 1        # g_vsyscall = 1
+	mov	eax, DWORD PTR ds:0xffffffffff600000
+	mov	DWORD PTR [rip+0x2cf1], 2        # g_vsyscall = 2
+	mov	edi, [rip+0x2ceb]                # exit(g_vsyscall)
+	call	exit
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Cc: Florian Westphal <fw@strlen.de>
-Reviewed-by: Florian Westphal <fw@strlen.de>
-Fixes: 314001f0bf92 ("af_unix: Add OOB support")
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Note: fixed proc-empty-vm test oopses 5.19.0-28-generic kernel
+	but this is separate story.
 
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 ---
-  tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-index b57e91e1c3f2..532459a15067 100644
---- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
-+++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-@@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+ tools/testing/selftests/proc/proc-empty-vm.c |   12 +++++++-----
+ tools/testing/selftests/proc/proc-pid-vm.c   |    9 +++++----
+ 2 files changed, 12 insertions(+), 9 deletions(-)
 
-  	wait_for_signal(pipefd[0]);
-  	if (connect(cfd, (struct sockaddr *)consumer_addr,
--		     sizeof(struct sockaddr)) != 0) {
-+		     sizeof(*consumer_addr)) != 0) {
-  		perror("Connect failed");
-  		kill(0, SIGTERM);
-
-
---
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
+--- a/tools/testing/selftests/proc/proc-empty-vm.c
++++ b/tools/testing/selftests/proc/proc-empty-vm.c
+@@ -25,6 +25,7 @@
+ #undef NDEBUG
+ #include <assert.h>
+ #include <errno.h>
++#include <stdint.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -41,7 +42,7 @@
+  * 1: vsyscall VMA is --xp		vsyscall=xonly
+  * 2: vsyscall VMA is r-xp		vsyscall=emulate
+  */
+-static int g_vsyscall;
++static volatile int g_vsyscall;
+ static const char *g_proc_pid_maps_vsyscall;
+ static const char *g_proc_pid_smaps_vsyscall;
+ 
+@@ -147,11 +148,12 @@ static void vsyscall(void)
+ 
+ 		g_vsyscall = 0;
+ 		/* gettimeofday(NULL, NULL); */
++		uint64_t rax = 0xffffffffff600000;
+ 		asm volatile (
+-			"call %P0"
+-			:
+-			: "i" (0xffffffffff600000), "D" (NULL), "S" (NULL)
+-			: "rax", "rcx", "r11"
++			"call *%[rax]"
++			: [rax] "+a" (rax)
++			: "D" (NULL), "S" (NULL)
++			: "rcx", "r11"
+ 		);
+ 
+ 		g_vsyscall = 1;
+--- a/tools/testing/selftests/proc/proc-pid-vm.c
++++ b/tools/testing/selftests/proc/proc-pid-vm.c
+@@ -257,11 +257,12 @@ static void vsyscall(void)
+ 
+ 		g_vsyscall = 0;
+ 		/* gettimeofday(NULL, NULL); */
++		uint64_t rax = 0xffffffffff600000;
+ 		asm volatile (
+-			"call %P0"
+-			:
+-			: "i" (0xffffffffff600000), "D" (NULL), "S" (NULL)
+-			: "rax", "rcx", "r11"
++			"call *%[rax]"
++			: [rax] "+a" (rax)
++			: "D" (NULL), "S" (NULL)
++			: "rcx", "r11"
+ 		);
+ 
+ 		g_vsyscall = 1;
