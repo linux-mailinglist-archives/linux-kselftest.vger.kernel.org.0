@@ -2,132 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960AF660588
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 18:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EE866061A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Jan 2023 18:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbjAFRTX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Jan 2023 12:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
+        id S231690AbjAFR7Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Jan 2023 12:59:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235742AbjAFRTL (ORCPT
+        with ESMTP id S231450AbjAFR6u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Jan 2023 12:19:11 -0500
-X-Greylist: delayed 56087 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Jan 2023 09:19:05 PST
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4707DE18;
-        Fri,  6 Jan 2023 09:19:05 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 14F92604F3;
-        Fri,  6 Jan 2023 18:19:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673025542; bh=bbciZY0FY+dm7Ftyy2TqJhYcG6unTZLWiVPeHAgnz3s=;
-        h=Date:From:Subject:To:Cc:From;
-        b=rmNDDYGMJGcBV8AUoZ2S7vvVwW5qLFETB3QUv9n2ofyRFLYG2129oiyOncPCVVDo1
-         /97DjBxSr9upT0KGhvYLhb92FZ8Pzl2DOhoik0ZHZgSy/yVf5nszK7E+I/5R+JwcJH
-         fM8reeJ+aFxTVWkg1MS1i+6ZOkEqNP9EThLmuqGNHkGyuZe8qIhiSyxFDdbmkgPONF
-         qbQ5mq/hOxnZC5gZAtxnAmLtK438UsJNBeHc6Lsut9kK1cp0TXHCfpR75p8EF8x1gV
-         hGOxE09whWU0KFYpesg3QFlFzcEXo/jZW97FD8Eo5y6oEXR3WUHnq2VLbgg+Cvj+IV
-         KfPquE3p74TkA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id XtY6v37OufNU; Fri,  6 Jan 2023 18:18:59 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.196.35])
-        by domac.alu.hr (Postfix) with ESMTPSA id 439B4604F0;
-        Fri,  6 Jan 2023 18:18:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673025539; bh=bbciZY0FY+dm7Ftyy2TqJhYcG6unTZLWiVPeHAgnz3s=;
-        h=Date:From:Subject:To:Cc:From;
-        b=lnfQxP5Xm0X3NGASRcnG48pXseJqrkD3Mz6puc8BwJU9ckRsLvNGG71j4vzI+wmGQ
-         R28uejPWWXXq7/BDf0M1s/mBiXrIJKk/tc4CqzeYnLgKSJqj/nZWVzORuAtuE4nT/e
-         /nataA+Ay9oDpp2YlBMZ7RRBJ1EO+rlV1vNZf3+E9X3W87LXsKp72mRf1BDO0tyR+d
-         T+YzLgjTKfm6FEeq9z9ZYzQFQVRLeCNin4HwffqIRejTI08mCNUyczjIzqF45LaQ8s
-         n7Jlef+P3tiUOoiSgr4xvTO6n5IKBEaHnsmv8KUugBarAIk+khCCZbvGvbSvJvEv3Z
-         YvA5U6QS+Vv+Q==
-Message-ID: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
-Date:   Fri, 6 Jan 2023 18:18:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+        Fri, 6 Jan 2023 12:58:50 -0500
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA277D9FE;
+        Fri,  6 Jan 2023 09:58:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1673027929; x=1704563929;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=v0c5rS0g/FP0JyphM1OQziPGtUPHcAvofBABcEmtwE4=;
+  b=AdE1c8QjeXq8igaxbbsmupelOOVfZn1yKZRkgXp3HwYHJ+UPMwYpF3dv
+   wMl1IDZi2hIfv9UlhNxjvJa650tPMhaM0O4HBA1qBVqz4UKjpiA9F1p+x
+   7HJIFJicvC/FqsiAjORuOqxjU2kZeVP9w0omjDoh3J4bCs5kFwLtuxYY4
+   4=;
+X-IronPort-AV: E=Sophos;i="5.96,306,1665446400"; 
+   d="scan'208";a="284118343"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 17:58:45 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com (Postfix) with ESMTPS id 1109AA2DC8;
+        Fri,  6 Jan 2023 17:58:41 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Fri, 6 Jan 2023 17:58:41 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.83) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
+ Fri, 6 Jan 2023 17:58:36 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <mirsad.todorovac@alu.unizg.hr>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <fw@strlen.de>,
+        <kuba@kernel.org>, <kuniyu@amazon.co.jp>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <shuah@kernel.org>,
+        <kuniyu@amazon.com>
 Subject: [PATCH selftest/net/af_unix 1/1] Fix size of parameter to connect()
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florian Westphal <fw@strlen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Sat, 7 Jan 2023 02:58:28 +0900
+Message-ID: <20230106175828.13333-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
+References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.43.160.83]
+X-ClientProxiedBy: EX13D41UWB004.ant.amazon.com (10.43.161.135) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi,
 
-From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Thanks for the patch.
 
-Adjust size parameter in connect() to match the type of the parameter, to fix "No such file or directory"
-error in selftests/net/af_unix/test_oob_unix.c:127.
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Date:   Fri, 6 Jan 2023 18:18:58 +0100
+> From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> 
+> Adjust size parameter in connect() to match the type of the parameter, to fix "No such file or directory"
+> error in selftests/net/af_unix/test_oob_unix.c:127.
 
-The existing code happens to work provided that the autogenerated pathname is shorter than
-sizeof (struct sockaddr), which is why it hasn't been noticed earlier.
+Could you wrap the changelog to 75 chars except for log (strace below) ?
+checkpatch.pl will help.
 
-Visible from the trace excerpt:
+  $ git show HEAD --format=email | ./scripts/checkpatch.pl
 
-bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
-clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
-[pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
 
-BUG: The filename is trimmed to sizeof (struct sockaddr).
+> 
+> The existing code happens to work provided that the autogenerated pathname is shorter than
+> sizeof (struct sockaddr), which is why it hasn't been noticed earlier.
+> 
+> Visible from the trace excerpt:
+> 
+> bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+> clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+> [pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+> 
+> BUG: The filename is trimmed to sizeof (struct sockaddr).
+> 
+> The patch is generated against the "vanilla" torvalds mainline tree 6.2-rc2.
 
-The patch is generated against the "vanilla" torvalds mainline tree 6.2-rc2.
+Every patch that fixes networking code has to be applied cleanly on net.git.
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
 
-Thanks and regards,
-Mirsad Todorovac
+But the patch can not be applied to net.git.
+Could you check this ?
+https://patchwork.kernel.org/project/netdevbpf/patch/bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr/
 
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Cc: Florian Westphal <fw@strlen.de>
-Reviewed-by: Florian Westphal <fw@strlen.de>
+Also, the mail title should be
 
----
-  tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+  [PATCH Tree Version Nth/Total] subsystem: Description.
 
-diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-index b57e91e1c3f2..532459a15067 100644
---- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
-+++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
-@@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+Next time, Tree is net and Version is v2, and we need not write 1/1, so the
+subject should be
 
-         wait_for_signal(pipefd[0]);
-         if (connect(cfd, (struct sockaddr *)consumer_addr,
--                    sizeof(struct sockaddr)) != 0) {
-+                    sizeof(*consumer_addr)) != 0) {
-                 perror("Connect failed");
-                 kill(0, SIGTERM);
-                 exit(1);
+  [PATCH net v2] af_unix: selftest: Fix size of parameter to connect()
 
---
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+Please see here for details.
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/Documentation/process/maintainer-netdev.rst
+
+
+> 
+> Thanks and regards,
+> Mirsad Todorovac
+
+You can remove these lines.
+
+
+> 
+> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+
+In this case, you are the reporter and the author of the patch, so the
+Reported-by tag is not needed.  Instead, you have to add your SOB tag.
+
+  Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+
+
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+> Cc: Florian Westphal <fw@strlen.de>
+> Reviewed-by: Florian Westphal <fw@strlen.de>
+
+Please add Fixes tag as I said here.
+https://lore.kernel.org/netdev/20230103111335.81600-1-kuniyu@amazon.com/#r
+
+Thank you,
+Kuniyuki
+
+
+> 
+> ---
+>   tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+> index b57e91e1c3f2..532459a15067 100644
+> --- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
+> +++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+> @@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+> 
+>          wait_for_signal(pipefd[0]);
+>          if (connect(cfd, (struct sockaddr *)consumer_addr,
+> -                    sizeof(struct sockaddr)) != 0) {
+> +                    sizeof(*consumer_addr)) != 0) {
+>                  perror("Connect failed");
+>                  kill(0, SIGTERM);
+>                  exit(1);
+> 
+> --
+> Mirsad Goran Todorovac
+> Sistem inženjer
+> Grafički fakultet | Akademija likovnih umjetnosti
+> Sveučilište u Zagrebu
+> -- 
+> System engineer
+> Faculty of Graphic Arts | Academy of Fine Arts
+> University of Zagreb, Republic of Croatia
+> The European Union
