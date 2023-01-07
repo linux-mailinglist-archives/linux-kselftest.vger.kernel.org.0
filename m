@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32C1660C31
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Jan 2023 04:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00228660C41
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Jan 2023 04:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjAGDgt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Jan 2023 22:36:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S236714AbjAGDk2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Jan 2023 22:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjAGDgs (ORCPT
+        with ESMTP id S236776AbjAGDk0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Jan 2023 22:36:48 -0500
+        Fri, 6 Jan 2023 22:40:26 -0500
 Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69E26471;
-        Fri,  6 Jan 2023 19:36:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACA18D5C8;
+        Fri,  6 Jan 2023 19:40:24 -0800 (PST)
 Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 82DD2604F0;
-        Sat,  7 Jan 2023 04:36:39 +0100 (CET)
+        by domac.alu.hr (Postfix) with ESMTP id 43B47604F1;
+        Sat,  7 Jan 2023 04:40:23 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
-        t=1673062600; bh=usEPs2z0NeHXunWjrrFs/3ME5ULtPxYq3W+us+xTUc0=;
+        t=1673062823; bh=j01mQb8I5u689YuQw+ChwSxg7IB7KBCJmP6hGzSe+so=;
         h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Kj6BkZsPSyJywfjX9V7qIo8dEDvgNX7K8A/XZRQ0PMqBPKtABzKHXpAWln3clShXU
-         tvSt216GdJ2U+iHvZgKKYn21fBtmiQHrkcdit6XujqDuK1kXrslcfcFcyEbxMuPtoY
-         0Sr3LXZqOt1eeo2s4iGgKVXCl0vtt2XIEQgLXfXXcZiandiR6lg5VkrsmjEF57kuKC
-         MHiJNZZEZg+fFWoRlckrqjdBlBtQRdbAoXrBujgO/qFaJ9F/P5yEYclkKz+m8nNmBA
-         amOszf2lE0VljBjmcV1KOxgSQPyEBo5sBBNqlqZRPFcf7atuzWC++5r11i46Hn5cck
-         0l5pDHHOBlQrQ==
+        b=fcu4HcuzuZ/P9jRH6RNpZubOP0xy9Tqn4dSo6j3CGQxmFZGhjfQG+Mys9uGCWCBKm
+         DJ3c5FaRZ/EbntEbtvzYQW2PTdtLUtDko9Vz0/x/crn5Fwepklv3JyyF4C/+L4UZXI
+         CseqPJig+KY5aAMgg+eQaDFIvEta/MJNLMyeDEsRNX1r16KTZJPj9UiTvwFmVtUwf/
+         4WnucXvoS0K+/HthKcQ+jmop+lK7NWPdlJF+54CpbGndAM5xmPjk46Bb1kmA/mEgKl
+         XninS0jUdwYpuYlTZxA0DHd1dbMa2RObEIFDihr4vYKb/py8UchrMDUdyhu03fPJri
+         bBuy1yVAs6YeQ==
 X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
 Received: from domac.alu.hr ([127.0.0.1])
         by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4nnbAIEkRzy1; Sat,  7 Jan 2023 04:36:36 +0100 (CET)
+        with ESMTP id UgvktLthh6J8; Sat,  7 Jan 2023 04:40:20 +0100 (CET)
 Received: by domac.alu.hr (Postfix, from userid 1014)
-        id ACA27604F1; Sat,  7 Jan 2023 04:36:36 +0100 (CET)
+        id AB762604F2; Sat,  7 Jan 2023 04:40:20 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.hr; s=mail;
-        t=1673062596; bh=usEPs2z0NeHXunWjrrFs/3ME5ULtPxYq3W+us+xTUc0=;
+        t=1673062820; bh=j01mQb8I5u689YuQw+ChwSxg7IB7KBCJmP6hGzSe+so=;
         h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=qU7Mx9f2oTM5hKOTPJEediH97wwMbdR/SrdL2n4hlrClAVrMvuDCfmGS47jyzPk3u
-         6veyuzZudIwb1lWG7QC+ugeBTYBoYS6xWJbD70Yuj0ky5rOkSnyGOa7/RuORD93nUp
-         ShU6C/bnOyNvz7Z8hvzyENtLCL5mV37GNkcW+e2PHsNCHLMCNgUFoibmVv6wVAD29f
-         v9FQlNAzWXipofytYwmNZAaYoyRNFBjLhMNB9BM4yXEJFroCxrBQ/3dJ5+oS/vgBte
-         YlU4KVDK4B48xsOvbFLGxTqn/pAXBubYsvtUhxc/h2j1VrQ1ODGnUnQ8DrSj+k60sT
-         iy5zfjrBtXh7Q==
+        b=Byfgq7kO0qX1Vp0niERdxBYNDVVrBuM1JUY1zAaDnpV7uFjrb3E4+eeTJC1e/FaaS
+         I3Nnk0lqf+oV7rcFMYzeiPX+rkQwcwos2p9HGhpGUPz7l73/BhawOFKxVXVnisQeqj
+         nYT+5H8Js9zUElqI/sZhpWk7kHe/6ec5O0RlC4jw8MrzMt5a0HCZc67leIYxbAEx8v
+         B6/VPQ+6YaOw+ui2NxisGHBesc2GM9KTteqwzPYRiVXEiWU8/VPxWQmPlsJ0oUlVf7
+         NZYZFBqlf6nwJ+8GJRANkR6/O1Y/Ef14KqMsEryghQrP4NyqSyaawOOuEX3w+jFX65
+         cujLnUJ3hy72w==
 Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A9C9D604F0;
-        Sat,  7 Jan 2023 04:36:36 +0100 (CET)
-Date:   Sat, 7 Jan 2023 04:36:36 +0100 (CET)
+        by domac.alu.hr (Postfix) with ESMTP id A612E604F1;
+        Sat,  7 Jan 2023 04:40:20 +0100 (CET)
+Date:   Sat, 7 Jan 2023 04:40:20 +0100 (CET)
 From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.hr>
 To:     Jakub Kicinski <kuba@kernel.org>,
         Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
@@ -53,15 +53,15 @@ cc:     Kuniyuki Iwashima <kuniyu@amazon.com>, davem@davemloft.net,
         edumazet@google.com, fw@strlen.de, kuniyu@amazon.co.jp,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
-Subject: Re: [PATCH net v2] af_unix: selftest: Fix the size of the parameter
- to connect()
+Subject: [PATCH net v4] af_unix: selftest: Fix the size of the parameter to
+ connect()
 In-Reply-To: <20230106180808.51550e82@kernel.org>
-Message-ID: <alpine.DEB.2.21.2301070433300.26826@domac.alu.hr>
+Message-ID: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
 References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>        <20230106175828.13333-1-kuniyu@amazon.com>        <b80ffedf-3f53-08f7-baf0-db0450b8853f@alu.unizg.hr>        <20230106161450.1d5579bf@kernel.org>        <8fb1a2c5-ee35-67eb-ef3c-e2673061850d@alu.unizg.hr>
  <20230106180808.51550e82@kernel.org>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="899744747-57767353-1673062596=:26826"
+Content-Type: multipart/mixed; boundary="899744747-660964784-1673062820=:26826"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -74,36 +74,61 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---899744747-57767353-1673062596=:26826
+--899744747-660964784-1673062820=:26826
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
 
-On Fri, 6 Jan 2023, Jakub Kicinski wrote:
 
-> On Sat, 7 Jan 2023 02:42:43 +0100 Mirsad Goran Todorovac wrote:
-> > > still doesn't apply, probably because there are two email footers  
-> > 
-> > Thank you for the guidelines to make your robots happy :), the next
-> > time I will assume all these from start, provided that I find and
-> > patch another bug or issue.
-> 
-> Ah, sorry, wrong assumption :S
-> 
-> Your email client converts tabs to spaces, that's the problem.
-> 
-> Could you try get send-email ?
+From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-Sorry, couldn't make git send-email nor mutt IMAP running at such a short 
-notice.
+Adjust size parameter in connect() to match the type of the parameter, to
+fix "No such file or directory" error in selftests/net/af_unix/
+test_oob_unix.c:127.
 
-I've chosen Alpine due to advice in Documentation/process/email-clients.rst
+The existing code happens to work provided that the autogenerated pathname
+is shorter than sizeof (struct sockaddr), which is why it hasn't been
+noticed earlier.
 
-Hope that will work.
+Visible from the trace excerpt:
 
-Thank you for your patience with guidelines for this patch.
+bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+[pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
 
-Thanks,
-Mirsad
+BUG: The filename is trimmed to sizeof (struct sockaddr).
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Cc: Florian Westphal <fw@strlen.de>
+Reviewed-by: Florian Westphal <fw@strlen.de>
+Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+---
+
+The patch is generated against the "vanilla" Torvalds mainline tree 6.2-rc2.
+(Tested and applies against the net.git tree.)
+
+
+ tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+index b57e91e1c3f2..532459a15067 100644
+--- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
++++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+@@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+ 
+ 	wait_for_signal(pipefd[0]);
+ 	if (connect(cfd, (struct sockaddr *)consumer_addr,
+-		     sizeof(struct sockaddr)) != 0) {
++		     sizeof(*consumer_addr)) != 0) {
+ 		perror("Connect failed");
+ 		kill(0, SIGTERM);
+ 		exit(1);
 
 --
 Mirsad Goran Todorovac
@@ -115,4 +140,4 @@ System engineer
 Faculty of Graphic Arts | Academy of Fine Arts
 University of Zagreb, Republic of Croatia
 The European Union
---899744747-57767353-1673062596=:26826--
+--899744747-660964784-1673062820=:26826--
