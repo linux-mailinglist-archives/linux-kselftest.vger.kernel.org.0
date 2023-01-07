@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0152660F1A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Jan 2023 14:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979A7660F1C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Jan 2023 14:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjAGNcf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 7 Jan 2023 08:32:35 -0500
+        id S232416AbjAGNcq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 7 Jan 2023 08:32:46 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbjAGNc0 (ORCPT
+        with ESMTP id S231859AbjAGNcd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Jan 2023 08:32:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6315E0A5;
-        Sat,  7 Jan 2023 05:32:24 -0800 (PST)
+        Sat, 7 Jan 2023 08:32:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98795D415;
+        Sat,  7 Jan 2023 05:32:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D962B810AA;
-        Sat,  7 Jan 2023 13:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC7AC433EF;
-        Sat,  7 Jan 2023 13:32:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 575A360C14;
+        Sat,  7 Jan 2023 13:32:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3D1C433D2;
+        Sat,  7 Jan 2023 13:32:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673098342;
-        bh=HGJHlcKefwA/vKHzLOsju9wxMYeQUgD1tHvIeGZhwP4=;
+        s=k20201202; t=1673098350;
+        bh=lA+rE8kKU4UerwopcQ1eDt8yxXIRd212goJdv8X2Ulo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PNrzDEV/aOPxQaA9ne4EU1emyfiqMkOkcV/hymisgM67DzCy+jw+H10Yk0C2JmRYy
-         aw1l9jmWeMlBEBn6wfTSI9E5WrJNaohNhPM+WMZDdDLXadkoWTfQyBXyUsmCwCsXZf
-         rjrJS6uZ1PBqfXcDDfCY1AnsS4Kad4vhnags7NvDnmq3v5HBDsVmWU3ZmdysSDeT1X
-         USleihtE+VMLLWG4yLVDSwuSCXsvqLAfe7+WNkaP/v/FMc+I9IezXffJ1Yi6DyWocZ
-         E8/rGGNtzQ2LCwW8vxulw+ytnxPFFKOE9kEoZtZJQpKQC6pMYsQnA3sRWqKA+rHsPP
-         FbMVepdiY9JcA==
+        b=kX2M9ZVPoclER5r+AYgjQNDSJPnG2X0VHHYExO94dzwNPeeIwexodLfSdEtSHz53T
+         bRIVV77kkNHpyFAG0a3VQyfdq7TJ/tJZcYHCehITGUgcpAsHb/yFmG6hV+uyCHlG3W
+         bGMNDuAVxWUt0bzV62ordUOSXhHNPsKi2fi6PEyThPykZUoVpV+CAolu2JAKwUcwzL
+         cCBW3jih6ABBjXOxH4YtoU+S0iTZhLYXUwZUGGhWz7uEZ8Av0Wr7LTav/vja7VdFJM
+         PSmtvrlnuouQVx5BrVyq1kH/3eOds0fy9dbhURyXv7uKocmtRLcUIZfA3j6Rh/9xKx
+         K+U9yjfSNjhng==
 From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/3] tracing/eprobe: Fix to add filter on eprobe description in README file
-Date:   Sat,  7 Jan 2023 22:32:17 +0900
-Message-Id: <167309833728.640500.12232259238201433587.stgit@devnote3>
+Subject: [PATCH 2/3] selftests/ftrace: Fix eprobe syntax test case to check filter support
+Date:   Sat,  7 Jan 2023 22:32:27 +0900
+Message-Id: <167309834742.640500.379128668288448035.stgit@devnote3>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 In-Reply-To: <167309832823.640500.13244630381161014364.stgit@devnote3>
 References: <167309832823.640500.13244630381161014364.stgit@devnote3>
@@ -58,27 +58,30 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Fix to add a description of the filter on eprobe in README file. This
-is required to identify the kernel supports the filter on eprobe or not.
+Fix eprobe syntax test case to check whether the kernel supports the filter
+on eprobe for filter syntax test command. Without this fix, this test case
+will fail if the kernel supports eprobe but doesn't support the filter on
+eprobe.
 
-Fixes: 752be5c5c910 ("tracing/eprobe: Add eprobe filter support")
+Fixes: 9e14bae7d049 ("selftests/ftrace: Add eprobe syntax error testcase")
 Cc: stable@vger.kernel.org
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- kernel/trace/trace.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../test.d/dynevent/eprobes_syntax_errors.tc       |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index a555a861b978..d0c22766dc26 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5598,7 +5598,7 @@ static const char readme_msg[] =
- #ifdef CONFIG_HIST_TRIGGERS
- 	"\t           s:[synthetic/]<event> <field> [<field>]\n"
- #endif
--	"\t           e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]\n"
-+	"\t           e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>] [if <filter>]\n"
- 	"\t           -:[<group>/][<event>]\n"
- #ifdef CONFIG_KPROBE_EVENTS
- 	"\t    place: [<module>:]<symbol>[+<offset>]|<memaddr>\n"
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
+index fc1daac7f066..4f5e8c665156 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
+@@ -22,6 +22,8 @@ check_error 'e:foo/^bar.1 syscalls/sys_enter_openat'	# BAD_EVENT_NAME
+ check_error 'e:foo/bar syscalls/sys_enter_openat arg=^dfd'	# BAD_FETCH_ARG
+ check_error 'e:foo/bar syscalls/sys_enter_openat ^arg=$foo'	# BAD_ATTACH_ARG
+ 
+-check_error 'e:foo/bar syscalls/sys_enter_openat if ^'	# NO_EP_FILTER
++if grep -q '<attached-group>\.<attached-event>.*\[if <filter>\]' README; then
++  check_error 'e:foo/bar syscalls/sys_enter_openat if ^'	# NO_EP_FILTER
++fi
+ 
+ exit 0
 
