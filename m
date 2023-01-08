@@ -2,235 +2,236 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9161A6617A5
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 18:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DF16617AC
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 18:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbjAHR4Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 8 Jan 2023 12:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S231134AbjAHR7A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Jan 2023 12:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236106AbjAHR4J (ORCPT
+        with ESMTP id S229459AbjAHR66 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Jan 2023 12:56:09 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97517DF7E;
-        Sun,  8 Jan 2023 09:56:06 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 30DAA604F0;
-        Sun,  8 Jan 2023 18:56:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673200564; bh=cFy19nqO0N/rhSk+x/Xbk7AN8qcY/NuNeS7fDEclcDk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MntAe4S1+xnRIi2KmZ6YYRg5CMrQcoKB19K+5YZ5i7HEjSa2qKX3E0cYHGpVd1Htn
-         vch5jOJOXv62y3CXQbIjjsUEZESYO4J/tGqaaC+KSvqTVqn6yIWrLc/UhTCG6IS/8Y
-         lNxpqpB3wzpliVb/xYIQjedtJJG5eq1twLMG6iKgXy37raBX8+luPSDb3MHmEaFOwx
-         sAbvxFp6M7zM7/xRkL9ucceBM4ULZsVo+ccqRuWu9gVovUpnY8FmBWQnZdfsQ7vySP
-         5/59kUDkEsEP8uSvzoW6NW/peFFDXRC1n7bEKgej6tXQwsKj/4jlFzPd0D7xHQx4EZ
-         HPrVvKer66i7Q==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Zp4xA9GqTLLj; Sun,  8 Jan 2023 18:56:01 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.196.35])
-        by domac.alu.hr (Postfix) with ESMTPSA id A210C604F1;
-        Sun,  8 Jan 2023 18:56:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673200561; bh=cFy19nqO0N/rhSk+x/Xbk7AN8qcY/NuNeS7fDEclcDk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ujlhbDy0JzHx2y/4fSmdWLvXZDAt54KhtztTjC4+GebspozRbHHkEwEZhISvBBQlv
-         Ch0sol339H4G03B1KVulopc5sLsZ4SIw7yTVSKAS8y4fk+FqEMJP8mQvlb3CQc0FfG
-         ccEScBTeHhf5/uK/WiP9CSS/cetQ+5XVbQlFzTWFm7lbE02WpTZzcifp9PIdGTDrhg
-         j/MGgQYERPdk76FTfcYMWZhdM6Wd0eGvV7kYzGjVKMJVSXzPDnk7G5jfxOXenEMRnD
-         3s17M+fIC6ArUTv71zb1SFm9T7Ndjq042OhCTpTcR7hGqnreAg9nrPAWQclCqEA4Lf
-         8EiogmljR2+/w==
-Message-ID: <d51dcdba-86b8-78d7-d173-5826d9fa88ca@alu.unizg.hr>
-Date:   Sun, 8 Jan 2023 18:55:59 +0100
+        Sun, 8 Jan 2023 12:58:58 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 001C264D9;
+        Sun,  8 Jan 2023 09:58:55 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 308Hwg9X020774;
+        Sun, 8 Jan 2023 18:58:42 +0100
+Date:   Sun, 8 Jan 2023 18:58:42 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v3 0/5] nolibc signal handling support
+Message-ID: <20230108175842.GB18859@1wt.eu>
+References: <20230108135904.851762-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs when
- selftest restarted
-Content-Language: en-US, hr
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias May <matthias.may@westermo.com>
-References: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
- <Y7i5cT1AlyC53hzN@debian> <5ef41d3c-8d81-86b3-c571-044636702342@alu.unizg.hr>
- <Y7lpO9IHtSIyHVej@debian> <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
- <Y7rNgPj9WIroPcQ/@debian> <750cd534-1361-4102-67c5-2898814f8b4c@alu.unizg.hr>
- <Y7ryNK2sMv+PC6xr@debian>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <Y7ryNK2sMv+PC6xr@debian>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230108135904.851762-1-ammar.faizi@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 08. 01. 2023. 17:41, Guillaume Nault wrote:
-> On Sun, Jan 08, 2023 at 03:49:05PM +0100, Mirsad Goran Todorovac wrote:
->> On 08. 01. 2023. 15:04, Guillaume Nault wrote:
->>
->>> For some reasons, your host doesn't accept the VXLAN packets received
->>> over veth0. I guess there are some firewalling rules incompatible with
->>> this tests script.
->>
->> That beats me. It is essentially a vanilla desktop AlmaLinux (CentOS fork)
->> installation w 6.2-rc2 vanilla torvalds tree kernel.
->>
->> Maybe DHCPv4+DHCPv6 assigned address got in the way?
+Hi Ammar,
+
+On Sun, Jan 08, 2023 at 08:58:59PM +0700, Ammar Faizi wrote:
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 > 
-> I don't think so. The host sends an administratively prohibited
-> error. That's not an IP address conflict (and the script uses reserved
-> IP address ranges which shouldn't conflict with those assigned to regular
-> host).
+> Hi Willy,
 > 
-> The problem looks more like what you get with some firewalling setup
-> (like an "iptables XXX -j REJECT --reject-with icmp-admin-prohibited"
-> command).
-
-To eliminate that, the only rules that seem to be enabled are those automatic,
-as this is essentially a desktop machine. This reminds me that I forgot to
-install fail2ban, I thought it came with the system ...
-
-[root@pc-mtodorov linux_torvalds]# iptables-save
-# Generated by iptables-save v1.8.4 on Sun Jan  8 18:50:53 2023
-*filter
-:INPUT ACCEPT [15241235:25618772171]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [13209318:19634265528]
-:LIBVIRT_INP - [0:0]
-:LIBVIRT_OUT - [0:0]
-:LIBVIRT_FWO - [0:0]
-:LIBVIRT_FWI - [0:0]
-:LIBVIRT_FWX - [0:0]
-COMMIT
-# Completed on Sun Jan  8 18:50:53 2023
-# Generated by iptables-save v1.8.4 on Sun Jan  8 18:50:53 2023
-*security
-:INPUT ACCEPT [15163987:25613250223]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [13209319:19634265904]
-COMMIT
-# Completed on Sun Jan  8 18:50:53 2023
-# Generated by iptables-save v1.8.4 on Sun Jan  8 18:50:53 2023
-*raw
-:PREROUTING ACCEPT [15241455:25618791347]
-:OUTPUT ACCEPT [13209321:19634266304]
-COMMIT
-# Completed on Sun Jan  8 18:50:53 2023
-# Generated by iptables-save v1.8.4 on Sun Jan  8 18:50:53 2023
-*mangle
-:PREROUTING ACCEPT [15241455:25618791347]
-:INPUT ACCEPT [15241235:25618772171]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [13209322:19634266440]
-:POSTROUTING ACCEPT [13211416:19634553617]
-:LIBVIRT_PRT - [0:0]
--A POSTROUTING -j LIBVIRT_PRT
--A LIBVIRT_PRT -o virbr0 -p udp -m udp --dport 68 -j CHECKSUM --checksum-fill
-COMMIT
-# Completed on Sun Jan  8 18:50:53 2023
-# Generated by iptables-save v1.8.4 on Sun Jan  8 18:50:53 2023
-*nat
-:PREROUTING ACCEPT [282314:13237147]
-:INPUT ACCEPT [207948:8194212]
-:POSTROUTING ACCEPT [1351498:86025578]
-:OUTPUT ACCEPT [1351498:86025578]
-:LIBVIRT_PRT - [0:0]
--A POSTROUTING -j LIBVIRT_PRT
--A LIBVIRT_PRT -s 192.168.122.0/24 -d 224.0.0.0/24 -j RETURN
--A LIBVIRT_PRT -s 192.168.122.0/24 -d 255.255.255.255/32 -j RETURN
--A LIBVIRT_PRT -s 192.168.122.0/24 ! -d 192.168.122.0/24 -p tcp -j MASQUERADE --to-ports 1024-65535
--A LIBVIRT_PRT -s 192.168.122.0/24 ! -d 192.168.122.0/24 -p udp -j MASQUERADE --to-ports 1024-65535
--A LIBVIRT_PRT -s 192.168.122.0/24 ! -d 192.168.122.0/24 -j MASQUERADE
-COMMIT
-# Completed on Sun Jan  8 18:50:53 2023
-[root@pc-mtodorov linux_torvalds]# 
-[root@pc-mtodorov linux_torvalds]# ip6tables-save
-# Generated by ip6tables-save v1.8.4 on Sun Jan  8 18:52:56 2023
-*filter
-:INPUT ACCEPT [8458:771878]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [9605:895758]
-:LIBVIRT_INP - [0:0]
-:LIBVIRT_OUT - [0:0]
-:LIBVIRT_FWO - [0:0]
-:LIBVIRT_FWI - [0:0]
-:LIBVIRT_FWX - [0:0]
--A INPUT -j LIBVIRT_INP
--A FORWARD -j LIBVIRT_FWX
--A FORWARD -j LIBVIRT_FWI
--A FORWARD -j LIBVIRT_FWO
--A OUTPUT -j LIBVIRT_OUT
-COMMIT
-# Completed on Sun Jan  8 18:52:56 2023
-# Generated by ip6tables-save v1.8.4 on Sun Jan  8 18:52:56 2023
-*security
-:INPUT ACCEPT [7327:586054]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [9605:895758]
-COMMIT
-# Completed on Sun Jan  8 18:52:56 2023
-# Generated by ip6tables-save v1.8.4 on Sun Jan  8 18:52:56 2023
-*raw
-:PREROUTING ACCEPT [10028:893325]
-:OUTPUT ACCEPT [9605:895758]
-COMMIT
-# Completed on Sun Jan  8 18:52:56 2023
-# Generated by ip6tables-save v1.8.4 on Sun Jan  8 18:52:56 2023
-*mangle
-:PREROUTING ACCEPT [9679:867735]
-:INPUT ACCEPT [8458:771878]
-:FORWARD ACCEPT [0:0]
-:OUTPUT ACCEPT [9605:895758]
-:POSTROUTING ACCEPT [10500:1051905]
-:LIBVIRT_PRT - [0:0]
--A POSTROUTING -j LIBVIRT_PRT
-COMMIT
-# Completed on Sun Jan  8 18:52:56 2023
-# Generated by ip6tables-save v1.8.4 on Sun Jan  8 18:52:56 2023
-*nat
-:PREROUTING ACCEPT [252:33745]
-:INPUT ACCEPT [105:21315]
-:POSTROUTING ACCEPT [2041:188025]
-:OUTPUT ACCEPT [2041:188025]
-:LIBVIRT_PRT - [0:0]
--A POSTROUTING -j LIBVIRT_PRT
-COMMIT
-# Completed on Sun Jan  8 18:52:56 2023
-[root@pc-mtodorov linux_torvalds]# 
-
->>> I can probably help with the l2tp.sh failure and maybe with the
->>> fcnal-test.sh hang. Please report them in their own mail thread.
->>
->> Then I will Cc: you for sure on those two.
->>
->> But I cannot promise that this will be today. In fact, tomorrow is prognosed
->> rain so I'd better use the remaining blue-sky-patched day to do some biking ;-)
+> On top of the series titled "nolibc auxiliary vector retrieval support".
+> The prerequisite patches of this series are in that series.
 > 
-> No hurry :)
+> This is v2 of nolibc signal handling support. It adds signal handling
+> support to the nolibc subsystem:
+> 
+> 1)  Initial implementation of nolibc sigaction(2) function.
+> 
+>     `sigaction()` needs an architecture-dependent "signal trampoline"
+>     function that invokes __rt_sigreturn syscall to resume the process
+>     after a signal gets handled.
+> 
+>     The "signal trampoline" function is called `__restore_rt` in this
+>     implementation. The naming `__restore_rt` is important for GDB. It
+>     also has to be given a special optimization attribute
+>     "omit-frame-pointer" to prevent the compiler from creating a stack
+>     frame that makes the `%rsp` value no longer points to the `struct
+>     rt_sigframe` that the kernel constructed.
+> 
+> 
+> 2)  signal(2) function.
+> 
+>     signal() function is the simpler version of sigaction(). Unlike
+>     sigaction(), which fully controls the struct sigaction, the caller
+>     only cares about the sa_handler when calling the signal() function.
+>     signal() internally calls sigaction().
+> 
+> 
+> 3)  More selftests.
+> 
+>     This series also adds selftests for:
+>       - fork(2)
+>       - sigaction(2)
+>       - signal(2)
+> 
+> 
+> Side note for __restore_rt:
+> This has been tested on x86-64 arch and `__restore_rt` generates the
+> correct code. The `__restore_rt` codegen correctness on other
+> architectures need to be evaluated as well. If it can't generate the
+> correct code, it has to be written in inline Assembly.
 
-:)
+I'm currently testing it on various archs. For now:
 
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+  - x86_64 and arm64 pass the test
+
+  - i386 and arm fail:
+      59 sigactiontest_sigaction_sig(2): Failed to set a signal handler
+       = -1 EINVAL                [FAIL]
+      60 signaltest_signal_sig(2): Failed to set a signal handler
+       = -1 EINVAL                   [FAIL]
+
+  - riscv and mips build are now broken:
+      sysroot/riscv/include/sys.h:1110:18: error: 'struct sigaction' has no member named 'sa_restorer'
+       1110 |         if (!act2.sa_restorer) {
+            |                  ^
+      sysroot/riscv/include/sys.h:1111:34: error: 'SA_RESTORER' undeclared (first use in this function); did you mean 'SA_RESTART'?
+       1111 |                 act2.sa_flags |= SA_RESTORER;
+            |                                  ^~~~~~~~~~~
+            |                                  SA_RESTART
+
+  - s390 segfaults:
+      58 select_fault = -1 EFAULT              [OK]
+      59 sigactionqemu: uncaught target signal 11 (Segmentation fault) - core dumped
+      Segmentation fault
+
+    It dies in __restore_rt at 1006ba4 while performing the syscall,
+    I don't know why, maybe this arch requires an alt stack or whatever :
+
+      0000000001006ba0 <__restore_rt>:
+       1006ba0:       a7 19 00 ad             lghi    %r1,173
+       1006ba4:       0a 00                   svc     0
+       1006ba6:       07 07                   nopr    %r7
+
+At the very least we need to make sure we don't degrade existing tests,
+which means making sure that it builds everywhere and that all those
+which build do work.
+
+It would be nice to figure what's failing on i386. Given that both it
+and arm fail on EINVAL while both x86_64 and arm64 work, I suspect that
+once you figure what breaks i386 it'll fix the problem on arm at the
+same time. I had a quick look but didn't spot anything suspicious.
+Once we've figured this, we could decide to tag archs supporting
+sig_action() and condition the functions definition and the tests to
+these.
+
+The advantage of trying with i386 is that your regular tools and the
+debugger you used for x86_64 will work. I'm proceeding like this with
+the toolchains from https://mirrors.edge.kernel.org/pub/tools/crosstool/ :
+
+ $ make nolibc-test LDFLAGS=-g CFLAGS=-g ARCH=i386 CC=/path/to/gcc-11.3.0-nolibc/i386-linux/bin/i386-linux-gcc
+ $ gdb ./nolibc-test
+ > b sigaction
+ > run
+ > s
+ ...
  
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+Note that the code looks correct at first glance:
 
+0804b4a0 <__restore_rt>:
+ 804b4a0:       b8 ad 00 00 00          mov    $0xad,%eax
+ 804b4a5:       cd 80                   int    $0x80
+
+I also think that the printf() in test_sigaction_sig() are not welcome
+as they corrupt the output. Maybe one thing you could do to preserve the
+info would be to prepend a space in front of the message and remove the
+LF. For example the simple patch below:
+
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index a1883467451a..42f794c646b7 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -535,7 +535,7 @@ static int test_sigaction_sig(int sig)
+         */
+        ret = sigaction(sig, &new, &old);
+        if (ret) {
+-               printf("test_sigaction_sig(%d): Failed to set a signal handler\n", sig);
++               printf(" (failed to set handler for signal %d)", sig);
+                return ret;
+        }
+ 
+@@ -549,7 +549,7 @@ static int test_sigaction_sig(int sig)
+         * test_signal_handler() must set @g_test_sig to @sig.
+         */
+        if (g_test_sig != sig) {
+-               printf("test_sigaction_sig(%d): Invalid g_test_sig value (%d != %d)\n", sig, g_test_sig, sig);
++               printf(" (invalid g_test_sig value (%d != %d))", sig, g_test_sig);
+                return -1;
+        }
+ 
+@@ -558,7 +558,7 @@ static int test_sigaction_sig(int sig)
+         */
+        ret = sigaction(sig, &old, NULL);
+        if (ret) {
+-               printf("test_sigaction_sig(%d): Failed to restore the signal handler\n", sig);
++               printf(" (Failed to restore handler for signal %d)", sig);
+                return ret;
+        }
+ 
+@@ -574,7 +574,7 @@ static int test_signal_sig(int sig)
+         */
+        old = signal(sig, test_signal_handler);
+        if (old == SIG_ERR) {
+-               printf("test_signal_sig(%d): Failed to set a signal handler\n", sig);
++               printf(" (failed to set handler for signal %d)", sig);
+                return -1;
+        }
+ 
+@@ -588,7 +588,7 @@ static int test_signal_sig(int sig)
+         * test_signal_handler() must set @g_test_sig to @sig.
+         */
+        if (g_test_sig != sig) {
+-               printf("test_signal_sig(%d): Invalid g_test_sig value (%d != %d)\n", sig, g_test_sig, sig);
++               printf(" (invalid g_test_sig value (%d != %d))", sig, g_test_sig);
+                return -1;
+        }
+ 
+@@ -597,7 +597,7 @@ static int test_signal_sig(int sig)
+         */
+        old = signal(sig, old);
+        if (old == SIG_ERR) {
+-               printf("test_signal_sig(%d): Failed to restore the signal handler\n", sig);
++               printf(" (Failed to restore handler for signal %d)", sig);
+                return -1;
+        }
+ 
+Gives me this:
+
+...
+56 select_null = 0                       [OK]
+57 select_stdout = 1                     [OK]
+58 select_fault = -1 EFAULT              [OK]
+59 sigaction (failed to set handler for signal 2) = -1 EINVAL                [FAIL]
+60 signal (failed to set handler for signal 2) = -1 EINVAL                   [FAIL]
+61 stat_blah = -1 ENOENT                 [OK]
+62 stat_fault = -1 EFAULT                [OK]
+63 symlink_root = -1 EEXIST              [OK]
+...
+
+Which is way more readable and still grep-friendly.
+
+Thanks!
+Willy
