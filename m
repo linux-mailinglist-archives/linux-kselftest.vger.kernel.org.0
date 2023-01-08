@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CE7661597
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 14:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E518661598
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 14:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjAHN6Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 8 Jan 2023 08:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S233007AbjAHN60 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Jan 2023 08:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjAHN6W (ORCPT
+        with ESMTP id S232939AbjAHN6Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Jan 2023 08:58:22 -0500
+        Sun, 8 Jan 2023 08:58:25 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E49D2FE;
-        Sun,  8 Jan 2023 05:58:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5935D2FF;
+        Sun,  8 Jan 2023 05:58:24 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id 4E6717E6D0;
-        Sun,  8 Jan 2023 13:58:18 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id AF84E7E6D5;
+        Sun,  8 Jan 2023 13:58:21 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673186301;
-        bh=BkTOpKaeNmCPtwR5gdbSfSfyuS5UVBZalGi2xnE4O5s=;
+        s=default; t=1673186304;
+        bh=wcpOgJmHUqHilg+MA55c94wnAlyf9zHTIyYePnjiqNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tAlpPOYoyNS07iwYSbr6NMlh3VacCe9dxJ1Kx8fm9C2wzb2FnYGDA3QUVNmH7BbtR
-         8VwmBFiui5bP7pVX21V8oleWO1KXGsfzhKObTNVxrfsPpnJmLCjLK3VMAGIqqKUXlT
-         YvjIByFKXxIbtQB8lmwb9PeXHYGCOFoT3mgNu5zwoepue9YukyCs8sEPLRb86daKuZ
-         WaowmigasH6Rz1WCNxvUjCIsMoO6iT2lVvPWcG5xu/EdV1Qn5OrjBvWF9+ODP1/CT5
-         oPt2N46aqGW4aqPqQN8LbvXhxSKDnsyamGF9hG+Cw/QqrK2P9967ah1OZsyNKmdT5P
-         gyjVvrEFpHuMA==
+        b=EFXZkn/3XD4yXC9/kl1H5fo6KHZ5WXwvEzPwVJRY+oy6THg+LUcgqGZqjedoPNQVP
+         TPFcc8x8q2Om7FZ24wCiusqC9yie+y+0U8H9vZ/vsup2nKBvP1DG7gaAwnM7/K8vXO
+         ij5BA5kXIugK5sfb40wRTi6DImcbv+1WPBXy2QtfItgEH+JVpnl8xHqYpUay7jldol
+         AiTfAO63d2oM311mt9jRi3n9kqlvtGJTMC5s7p5KZBYtgw6HbN6MEMg+LG8V9Ot9jV
+         qmyuorbPFE/2C+bFOJz84vybWBitXC3OjpMOwi2TQgx7RHWePH0HxxXEmG/m6BQbQS
+         5zs909NZv8c8w==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -40,9 +40,9 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Kselftest Mailing List 
         <linux-kselftest@vger.kernel.org>
-Subject: [RESEND PATCH v1 1/3] nolibc/stdlib: Implement `getauxval(3)` function
-Date:   Sun,  8 Jan 2023 20:58:07 +0700
-Message-Id: <20230108135809.850210-2-ammar.faizi@intel.com>
+Subject: [RESEND PATCH v1 2/3] nolibc/sys: Implement `getpagesize(2)` function
+Date:   Sun,  8 Jan 2023 20:58:08 +0700
+Message-Id: <20230108135809.850210-3-ammar.faizi@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230108135809.850210-1-ammar.faizi@intel.com>
 References: <20230108135809.850210-1-ammar.faizi@intel.com>
@@ -59,64 +59,65 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Previous commits save the address of the auxiliary vector into a global
-variable @_auxv. This commit creates a new function 'getauxval()' as a
-helper function to get the auxv value based on the given key.
+This function returns the page size used by the running kernel. The
+page size value is taken from the auxiliary vector at 'AT_PAGESZ' key.
 
-The behavior of this function is identic with the function documented
-in 'man 3 getauxval'. This function is also needed to implement
-'getpagesize()' function that we will wire up in the next patches.
+'getpagesize(2)' is assumed as a syscall becuase the manpage placement
+of this function is in entry 2 ('man 2 getpagesize') despite there is
+no real 'getpagesize(2)' syscall in the Linux syscall table. Define
+this function in 'sys.h'.
 
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- tools/include/nolibc/stdlib.h | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
 
-diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-index 92378c4b9660..cdca557c4013 100644
---- a/tools/include/nolibc/stdlib.h
-+++ b/tools/include/nolibc/stdlib.h
-@@ -12,6 +12,7 @@
- #include "types.h"
- #include "sys.h"
- #include "string.h"
+Side note:
+This function calls 'getauxval(3)' function that's defined in
+'stdlib.h', but since most functions in 'stdlib.h' needs 'sys.h', the
+'sys.h' is always included first. Therefore, we need a forward
+declaration of 'getauxval(3)' in sys.h.
+
+ tools/include/nolibc/sys.h | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 3db1dd8c74ee..acf7cf438010 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -18,6 +18,7 @@
+ #include <linux/fs.h>
+ #include <linux/loop.h>
+ #include <linux/time.h>
 +#include <linux/auxvec.h>
  
- struct nolibc_heap {
- 	size_t	len;
-@@ -108,6 +109,32 @@ char *getenv(const char *name)
- 	return _getenv(name, environ);
+ #include "arch.h"
+ #include "errno.h"
+@@ -498,6 +499,26 @@ pid_t gettid(void)
+ 	return sys_gettid();
  }
  
++static unsigned long getauxval(unsigned long key);
++
++/*
++ * long getpagesize(void);
++ */
++
 +static __attribute__((unused))
-+unsigned long getauxval(unsigned long type)
++long getpagesize(void)
 +{
-+	const unsigned long *auxv = _auxv;
-+	unsigned long ret;
++	long ret;
 +
-+	if (!auxv)
-+		return 0;
-+
-+	while (1) {
-+		if (!auxv[0] && !auxv[1]) {
-+			ret = 0;
-+			break;
-+		}
-+
-+		if (auxv[0] == type) {
-+			ret = auxv[1];
-+			break;
-+		}
-+
-+		auxv += 2;
++	ret = getauxval(AT_PAGESZ);
++	if (!ret) {
++		SET_ERRNO(ENOENT);
++		return -1;
 +	}
 +
 +	return ret;
 +}
 +
- static __attribute__((unused))
- void *malloc(size_t len)
- {
+ 
+ /*
+  * int gettimeofday(struct timeval *tv, struct timezone *tz);
 -- 
 Ammar Faizi
 
