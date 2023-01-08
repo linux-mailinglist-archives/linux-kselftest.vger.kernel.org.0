@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6860661595
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 14:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31CE7661597
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 14:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjAHN6T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 8 Jan 2023 08:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
+        id S230498AbjAHN6Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Jan 2023 08:58:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjAHN6S (ORCPT
+        with ESMTP id S229482AbjAHN6W (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Jan 2023 08:58:18 -0500
+        Sun, 8 Jan 2023 08:58:22 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C57BD2FF;
-        Sun,  8 Jan 2023 05:58:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E49D2FE;
+        Sun,  8 Jan 2023 05:58:21 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id E1B5D7E500;
-        Sun,  8 Jan 2023 13:58:14 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 4E6717E6D0;
+        Sun,  8 Jan 2023 13:58:18 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673186297;
-        bh=NdCVmLa+pw7nZy6+S+FXSNHPcYPSKeVE+Ni5WrI54Yo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fSsP07xGNskU3SZbEmoErORykg9QJTOKDWXaBhm9JXOeW1ArhZf/CY2jci2FNGcEk
-         2bFAbnwWq2tpEWezkt2PRKRx1hFfbgkH5xRUS7lR/9x9pAJlGLzS0xD2Bfx9mzFt0K
-         PsLCp9q6Qw77vY7cE0yNPSh0tnGdImCxo0p7Ocz46C86lpd3MTkpl+xCGWsrsx1fWc
-         xBlhWQf2cE83vAI9zA9DSplX5HazawSFFDJNqpzWyAo9sIk8aPzJk9lhoaarmirso8
-         V596ySDc/HnfvMW7GxdGS69Par2r2sQkZUM1PRklQO+8zRd+SkJEuXNorbaDq6rz4v
-         zBhh8gkvejSfQ==
+        s=default; t=1673186301;
+        bh=BkTOpKaeNmCPtwR5gdbSfSfyuS5UVBZalGi2xnE4O5s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tAlpPOYoyNS07iwYSbr6NMlh3VacCe9dxJ1Kx8fm9C2wzb2FnYGDA3QUVNmH7BbtR
+         8VwmBFiui5bP7pVX21V8oleWO1KXGsfzhKObTNVxrfsPpnJmLCjLK3VMAGIqqKUXlT
+         YvjIByFKXxIbtQB8lmwb9PeXHYGCOFoT3mgNu5zwoepue9YukyCs8sEPLRb86daKuZ
+         WaowmigasH6Rz1WCNxvUjCIsMoO6iT2lVvPWcG5xu/EdV1Qn5OrjBvWF9+ODP1/CT5
+         oPt2N46aqGW4aqPqQN8LbvXhxSKDnsyamGF9hG+Cw/QqrK2P9967ah1OZsyNKmdT5P
+         gyjVvrEFpHuMA==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -40,10 +40,12 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Kselftest Mailing List 
         <linux-kselftest@vger.kernel.org>
-Subject: [RESEND PATCH v1 0/3] nolibc auxiliary vector retrieval support
-Date:   Sun,  8 Jan 2023 20:58:06 +0700
-Message-Id: <20230108135809.850210-1-ammar.faizi@intel.com>
+Subject: [RESEND PATCH v1 1/3] nolibc/stdlib: Implement `getauxval(3)` function
+Date:   Sun,  8 Jan 2023 20:58:07 +0700
+Message-Id: <20230108135809.850210-2-ammar.faizi@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230108135809.850210-1-ammar.faizi@intel.com>
+References: <20230108135809.850210-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,37 +59,64 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Hi Willy,
+Previous commits save the address of the auxiliary vector into a global
+variable @_auxv. This commit creates a new function 'getauxval()' as a
+helper function to get the auxv value based on the given key.
 
-This series is a follow up of our previous discussion about getauxval()
-and getpagesize() functions.
-
-It will apply cleanly on top of your "20221227-nolibc-weak-4" branch.
-Base commit: b6887ec8b0b0 ("tools/nolibc: add auxiliary vector
-retrieval for mips").
-
-I have added a selftest for the getpagesize() function, but I am not
-sure how to assert the correctness of getauxval(). I think it is fine
-not to add a selftest for getauxval(). If you think we should, please
-give some advice on the test mechanism.
-
-Thanks!
+The behavior of this function is identic with the function documented
+in 'man 3 getauxval'. This function is also needed to implement
+'getpagesize()' function that we will wire up in the next patches.
 
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
+ tools/include/nolibc/stdlib.h | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-Ammar Faizi (3):
-  nolibc/stdlib: Implement `getauxval(3)` function
-  nolibc/sys: Implement `getpagesize(2)` function
-  selftests/nolibc: Add `getpagesize(2)` selftest
-
- tools/include/nolibc/stdlib.h                | 27 ++++++++++++++++++
- tools/include/nolibc/sys.h                   | 21 ++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c | 30 ++++++++++++++++++++
- 3 files changed, 78 insertions(+)
-
-
-base-commit: b6887ec8b0b0c78db414b78e329bf2ce234dedd5
+diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+index 92378c4b9660..cdca557c4013 100644
+--- a/tools/include/nolibc/stdlib.h
++++ b/tools/include/nolibc/stdlib.h
+@@ -12,6 +12,7 @@
+ #include "types.h"
+ #include "sys.h"
+ #include "string.h"
++#include <linux/auxvec.h>
+ 
+ struct nolibc_heap {
+ 	size_t	len;
+@@ -108,6 +109,32 @@ char *getenv(const char *name)
+ 	return _getenv(name, environ);
+ }
+ 
++static __attribute__((unused))
++unsigned long getauxval(unsigned long type)
++{
++	const unsigned long *auxv = _auxv;
++	unsigned long ret;
++
++	if (!auxv)
++		return 0;
++
++	while (1) {
++		if (!auxv[0] && !auxv[1]) {
++			ret = 0;
++			break;
++		}
++
++		if (auxv[0] == type) {
++			ret = auxv[1];
++			break;
++		}
++
++		auxv += 2;
++	}
++
++	return ret;
++}
++
+ static __attribute__((unused))
+ void *malloc(size_t len)
+ {
 -- 
 Ammar Faizi
 
