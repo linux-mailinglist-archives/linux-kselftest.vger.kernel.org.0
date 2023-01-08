@@ -2,72 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E206619F7
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 22:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1226619FC
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 22:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjAHVag (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 8 Jan 2023 16:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S234075AbjAHVbk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Jan 2023 16:31:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbjAHVaf (ORCPT
+        with ESMTP id S233656AbjAHVbe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:30:35 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B056158;
-        Sun,  8 Jan 2023 13:30:33 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 05EEC604F1;
-        Sun,  8 Jan 2023 22:30:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673213431; bh=6bFY0+6U8NZmKtX+MFR+30MPyUxcHqLB8IlTkTcposo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rxmXkq9HoXu7DXK4ce6GFsCmqY7ysp6CbaVYtzS9ijxKx9sLmIP9kDFbZ6JOct4dl
-         Fm+O8Tgogty4G/KCzr8+xdF6mnDgB47C+Z0zqWZYkzU5zEZBdU3+hibuUyzYfoRPTk
-         PsUdr7mkYGhpdvdg+qNPaH6WwFuF4vhrmrJLa0A/zC2mGbharIjnz6T/9vunWGsbXq
-         rIGsXfLzXkul5TJRJ9yGp36AAqaSk1rOZL1zwFDqi3GK6sHWrsxTwydOvCn2BwGmm+
-         4LOsRVS9QGdWWfziY0gtlZc+Rvlr29EW0rFGjnaVVYZ3+NSXtOO/VunNq6PJs5weZx
-         8S9XG2ykeFfZA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id nTFwe5H3eL8x; Sun,  8 Jan 2023 22:30:28 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.196.35])
-        by domac.alu.hr (Postfix) with ESMTPSA id E9886604F0;
-        Sun,  8 Jan 2023 22:30:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1673213428; bh=6bFY0+6U8NZmKtX+MFR+30MPyUxcHqLB8IlTkTcposo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qWVcdqMnK7LJZKG0xyZE8Wh0alvO/npanPaBF0GUGiXSwlR0ydvx/lQfaKoyduv4n
-         Hjn0kSkR6dDqyQykiy+0gMxA4Z7TkEv7/JEezjSf/2MgyQtfQn6rB/apNyEsk+LFdo
-         CkRb9Mhn6eBRhy2UhDvai9QbpS/Z6O6XL1369a0pd2O3ByEoil+XqICGALVZ78kfmz
-         cDG2Io7t97B3Lue0n3L4VcSMR977OfJEYb/80kyWs8FVZLzLcrNR/4cNCbxAPahaeE
-         rhIpbUptcjPYDWYCNVRgSiswpj2YdbWg2XUsa6ssUWsv+o/mF/l0DHuM0AWdkiJqS0
-         7zscghNkIMEuw==
-Message-ID: <a0add3e5-5e37-1585-bcf6-57ead27ccdae@alu.unizg.hr>
-Date:   Sun, 8 Jan 2023 22:30:27 +0100
+        Sun, 8 Jan 2023 16:31:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AB8BD2;
+        Sun,  8 Jan 2023 13:31:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAF74B80C71;
+        Sun,  8 Jan 2023 21:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCADCC433EF;
+        Sun,  8 Jan 2023 21:31:30 +0000 (UTC)
+Date:   Sun, 8 Jan 2023 16:31:28 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/3] selftests/tracing: Fix some testcases for recent
+ change
+Message-ID: <20230108163128.2860894d@rorschach.local.home>
+In-Reply-To: <167309832823.640500.13244630381161014364.stgit@devnote3>
+References: <167309832823.640500.13244630381161014364.stgit@devnote3>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net v2] af_unix: selftest: Fix the size of the parameter
- to connect()
-Content-Language: en-US, hr
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>, davem@davemloft.net,
-        edumazet@google.com, fw@strlen.de, kuniyu@amazon.co.jp,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
-References: <bd7ff00a-6892-fd56-b3ca-4b3feb6121d8@alu.unizg.hr>
- <20230106175828.13333-1-kuniyu@amazon.com>
- <b80ffedf-3f53-08f7-baf0-db0450b8853f@alu.unizg.hr>
- <20230106161450.1d5579bf@kernel.org>
- <8fb1a2c5-ee35-67eb-ef3c-e2673061850d@alu.unizg.hr>
- <20230106180808.51550e82@kernel.org>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <20230106180808.51550e82@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +45,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 07. 01. 2023. 03:08, Jakub Kicinski wrote:
-> On Sat, 7 Jan 2023 02:42:43 +0100 Mirsad Goran Todorovac wrote:
->>> still doesn't apply, probably because there are two email footers  
->>
->> Thank you for the guidelines to make your robots happy :), the next
->> time I will assume all these from start, provided that I find and
->> patch another bug or issue.
+On Sat,  7 Jan 2023 22:32:08 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> This includes some patches to fix 2 issues on ftrace selftests.
 > 
-> Ah, sorry, wrong assumption :S
+> - eprobe filter and eprobe syntax test case were introduced but it
+>   doesn't check whether the kernel supports eprobe filter. Thus the
+>   new test case fails on the kernel which has eprobe but not support
+>   eprobe filter. To solve this issue, add a filter description to
+>   README file [1/3] and run the filter syntax error test only if the
+>   description is found in the README file [2/3].
 > 
-> Your email client converts tabs to spaces, that's the problem.
+> - Recently objtool adds prefix symbols for the function padding nops,
+>   and the probepoint test case fails because this probepoint test case
+>   tests whether the kprobe event can probe the target function and the
+>   functions next to the target function. But the prefix symbols can not
+>   be probed. Thus these prefix symbols must be skipped [3/3].
 > 
-> Could you try get send-email ?
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (Google) (3):
+>       tracing/eprobe: Fix to add filter on eprobe description in README file
+>       selftests/ftrace: Fix eprobe syntax test case to check filter support
+>       selftests/ftrace: Fix probepoint testcase to ignore __pfx_* symbols
+> 
+>
 
-Sorry, Jakub, just to "remove this from stack", did the
-[PATCH net v4] af_unix: selftest: Fix the size of the parameter to connect()
-apply?
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-I can't seem to handle more than about half a dozen of bug reports at a time or
-I started overlooking emails :(
-
-Thanks,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
+-- Steve
