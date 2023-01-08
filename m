@@ -2,63 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368BD6615B3
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 15:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734C86615DC
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 15:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjAHOFp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 8 Jan 2023 09:05:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S231410AbjAHOtO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Jan 2023 09:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbjAHOFm (ORCPT
+        with ESMTP id S229822AbjAHOtN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Jan 2023 09:05:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51839DEEB
-        for <linux-kselftest@vger.kernel.org>; Sun,  8 Jan 2023 06:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673186695;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bXflzFi1IY8CvdFuCK9K1db17KIG9ke2lGlsL5eBMpE=;
-        b=SvP8ekAIqcOgi1IwFNYhYd6TdupD/4X2ptAF0OQVZ2E1UrXxA+XANQCvSu/zbwLcEWMngx
-        h7JvKJsXNi4fTve6/UOMRZGNlRdimz/pSHsMuIFK4doJj8s1QbA6/SrqG3unA3EzKmZUsy
-        xCE1ncG8mp0EwsJj5gxq0pcMxRiam7k=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-96-ewaGx42ZNNeiTQZyQ1uoDw-1; Sun, 08 Jan 2023 09:04:54 -0500
-X-MC-Unique: ewaGx42ZNNeiTQZyQ1uoDw-1
-Received: by mail-qv1-f71.google.com with SMTP id mu2-20020a056214328200b00531cc0222faso3865739qvb.14
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Jan 2023 06:04:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bXflzFi1IY8CvdFuCK9K1db17KIG9ke2lGlsL5eBMpE=;
-        b=zmMS5+IwAv2XuUfTVT+lMo6NnsnCdMtO4S216G+0o7s3uYC3CD9gpOLjYIf8NQXGYy
-         /4XZhdRKNhJrS9mLE/4Bbv//75gc/Yd0vsIDPW08gJ6keATor+l/ce0a+hMmHHtlYG5U
-         39gLes7ouGZsubhX+9FzFgVVwj9SJaUDR5E8xVCDX6YW/FMYKJnQPsDjQrpRRYryKn/L
-         4ksP0DxnbjvEInDJ8eVuVi34eZ+aT1DZ4Se7Blv1/UA2nESlhqCMyUY3Ga4vn+foCejW
-         fsK9t7TnjpEX/blRj0i/K/bvNo+2wlQS9bihQhKTxMAvliueEFOuX1RJukVVbvFc6x2q
-         EbKw==
-X-Gm-Message-State: AFqh2kr1q4zk8PNMojKqBEyGoGqiVTyIAzpqB5vwKWavnuScA1PcsacH
-        trSdbR0+ioOUckV48Ojl1bho+vMdBhgij07QxIYMfsUIcnIM3qNAZHNU5t19j+BrNnPcoXrgRD3
-        aMX/+i6rwVZ+AQnJYddDoYUEP73Sm
-X-Received: by 2002:ac8:44d7:0:b0:3a5:4fa8:141c with SMTP id b23-20020ac844d7000000b003a54fa8141cmr95767666qto.23.1673186693557;
-        Sun, 08 Jan 2023 06:04:53 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtID8TsAZQOvN8rRZIxWPf6fGBYCJ6FbN75okARmRvpDMZM4heK3p03Na4clHPhQKpXQ2oNJw==
-X-Received: by 2002:ac8:44d7:0:b0:3a5:4fa8:141c with SMTP id b23-20020ac844d7000000b003a54fa8141cmr95767646qto.23.1673186693303;
-        Sun, 08 Jan 2023 06:04:53 -0800 (PST)
-Received: from debian (2a01cb058918ce0098fed9113971adae.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:98fe:d911:3971:adae])
-        by smtp.gmail.com with ESMTPSA id jr49-20020a05622a803100b003ad373d04b6sm232494qtb.59.2023.01.08.06.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 06:04:52 -0800 (PST)
-Date:   Sun, 8 Jan 2023 15:04:48 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+        Sun, 8 Jan 2023 09:49:13 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CAEFAF1;
+        Sun,  8 Jan 2023 06:49:12 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id AD2C4604F1;
+        Sun,  8 Jan 2023 15:49:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673189349; bh=OS8rlvupmkFQBCQzSf/w7ocx8qttC8TLbeD1niJU5eg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oYz7NEp4jURKXSDmFzXXdYHy7Zk/Gr7COc8X1BeigKrig72LjSwE378wbMdOf1ZMI
+         mppNHBQ2MS4BypN4i3XYusEiVuQT6nK89hDz7qTntUn/QfNyFj9TD6Ur/2Yt9aSIoP
+         B0lmnZNP2asZzEHpszTtJdkQKBlwEm+G93/Itj6GD6PA3lbEnazhaU/AeiElC6zBVD
+         OESXoXEuKT6aq/hI4CZwjtZYomzRSf1WpQhcmzKNyoFGfn+vZIu+z17Yth0vW5Xmhm
+         wLixBwnwiE1hTG1apgM7wUSJ3PyZPhWwhAxSJhZ1kVwpzHPt0+Io8abUN4RBw4a/PR
+         FqfucYm8YaNrQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fUg93Lk8AU9Y; Sun,  8 Jan 2023 15:49:07 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.196.35])
+        by domac.alu.hr (Postfix) with ESMTPSA id 9EAD2604F0;
+        Sun,  8 Jan 2023 15:49:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673189347; bh=OS8rlvupmkFQBCQzSf/w7ocx8qttC8TLbeD1niJU5eg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HfAoLkwNQgTJOS23qUFNlQSXnG2HXCMjgUWeSi+pZ1WOOPGcMIFa9/1w7I7r+VP08
+         v+tJOh4ao35SBXRZnaKYvRRCd5Y6Xpaz4rUYHnaYlC+d6aBwDK76P7/d7ian8Uello
+         maXs9jGmgOhgqEDwmE7jhLy7Eq4I5VykmDuEFpQaoxzmvqFI+uQy5C/l1coO9bxdvU
+         avxXhUQ9dBEsT9B1KbTt5/TKgTln0HzHflxyIF2rbRAI65U6l9kI9RBEkFnYeTS8dl
+         /q7YlJK9CaApBbHm4HBkdyYBZ7HdVL+f14yzwBhMuMZFC98azn+/9JnR1ZerycsoTK
+         oovKqBEbZmgYA==
+Message-ID: <750cd534-1361-4102-67c5-2898814f8b4c@alu.unizg.hr>
+Date:   Sun, 8 Jan 2023 15:49:05 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs when
+ selftest restarted
+Content-Language: en-US, hr
+To:     Guillaume Nault <gnault@redhat.com>
 Cc:     linux-kselftest@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -66,114 +59,114 @@ Cc:     linux-kselftest@vger.kernel.org,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Matthias May <matthias.may@westermo.com>
-Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs
- when selftest restarted
-Message-ID: <Y7rNgPj9WIroPcQ/@debian>
 References: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
- <Y7i5cT1AlyC53hzN@debian>
- <5ef41d3c-8d81-86b3-c571-044636702342@alu.unizg.hr>
- <Y7lpO9IHtSIyHVej@debian>
- <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+ <Y7i5cT1AlyC53hzN@debian> <5ef41d3c-8d81-86b3-c571-044636702342@alu.unizg.hr>
+ <Y7lpO9IHtSIyHVej@debian> <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
+ <Y7rNgPj9WIroPcQ/@debian>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <Y7rNgPj9WIroPcQ/@debian>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 10:11:25AM +0100, Mirsad Goran Todorovac wrote:
-> [root@pc-mtodorov marvin]# tcpdump --immediate-mode -p -v -i veth0 -n
-> dropped privs to tcpdump
-> tcpdump: listening on veth0, link-type EN10MB (Ethernet), capture size 262144 bytes
-> 08:30:22.835825 IP (tos 0x0, ttl 64, id 2490, offset 0, flags [none], proto UDP (17), length 78)
->     198.18.0.1.35195 > 198.18.0.2.vxlan: VXLAN, flags [I] (0x08), vni 100
-> ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 198.19.0.2 tell 198.19.0.1, length 28
-> 08:30:22.835926 IP (tos 0x0, ttl 64, id 1388, offset 0, flags [none], proto UDP (17), length 78)
->     198.18.0.2.35195 > 198.18.0.1.vxlan: VXLAN, flags [I] (0x08), vni 100
-> ARP, Ethernet (len 6), IPv4 (len 4), Reply 198.19.0.2 is-at a6:45:d5:c4:93:1f, length 28
-> 08:30:22.835976 IP (tos 0xc0, ttl 64, id 29533, offset 0, flags [none], proto ICMP (1), length 106)
->     198.18.0.1 > 198.18.0.2: ICMP host 198.18.0.1 unreachable - admin prohibited filter, length 86
->         IP (tos 0x0, ttl 64, id 1388, offset 0, flags [none], proto UDP (17), length 78)
->     198.18.0.2.35195 > 198.18.0.1.vxlan: VXLAN, flags [I] (0x08), vni 100
-> ARP, Ethernet (len 6), IPv4 (len 4), Reply 198.19.0.2 is-at a6:45:d5:c4:93:1f, length 28
+On 08. 01. 2023. 15:04, Guillaume Nault wrote:
 
-For some reasons, your host doesn't accept the VXLAN packets received
-over veth0. I guess there are some firewalling rules incompatible with
-this tests script.
+> For some reasons, your host doesn't accept the VXLAN packets received
+> over veth0. I guess there are some firewalling rules incompatible with
+> this tests script.
 
-> > -------- >8 --------
-> > 
-> > Isolate testing environment and ensure everything is cleaned up on
-> > exit.
-> > 
-> > diff --git a/tools/testing/selftests/net/l2_tos_ttl_inherit.sh b/tools/testing/selftests/net/l2_tos_ttl_inherit.sh
+That beats me. It is essentially a vanilla desktop AlmaLinux (CentOS fork)
+installation w 6.2-rc2 vanilla torvalds tree kernel.
 
-> Wow, Guillaueme, this patch actually made things unstuck :)
+Maybe DHCPv4+DHCPv6 assigned address got in the way?
 
-Great! The patch isolates the testing environment, making it less
-dependent from the host that runs it. So the routing and firewalling
-configurations don't interfere anymore.
+>>> -------- >8 --------
+>>>
+>>> Isolate testing environment and ensure everything is cleaned up on
+>>> exit.
+>>>
+>>> diff --git a/tools/testing/selftests/net/l2_tos_ttl_inherit.sh b/tools/testing/selftests/net/l2_tos_ttl_inherit.sh
+> 
+>> Wow, Guillaueme, this patch actually made things unstuck :)
+> 
+> Great! The patch isolates the testing environment, making it less
+> dependent from the host that runs it. So the routing and firewalling
+> configurations don't interfere anymore.
 
-> The entire tools/tests/selftests/net section now had a PASS w "OK", save for a couple of tests here:
-> 
-> not ok 1 selftests: nci: nci_dev # exit=1
-> not ok 12 selftests: net: nat6to4.o
-> not ok 13 selftests: net: run_netsocktests # exit=1
-> not ok 29 selftests: net: udpgro_bench.sh # exit=255
-> not ok 30 selftests: net: udpgro.sh # exit=255
-> not ok 37 selftests: net: fcnal-test.sh # TIMEOUT 1500 seconds
-> not ok 38 selftests: net: l2tp.sh # exit=2
-> not ok 46 selftests: net: icmp_redirect.sh # exit=1
-> not ok 55 selftests: net: vrf_route_leaking.sh # exit=1
-> not ok 59 selftests: net: udpgro_fwd.sh # exit=1
-> not ok 60 selftests: net: udpgro_frglist.sh # exit=255
-> not ok 61 selftests: net: veth.sh # exit=1
-> not ok 68 selftests: net: srv6_end_dt46_l3vpn_test.sh # exit=1
-> not ok 69 selftests: net: srv6_end_dt4_l3vpn_test.sh # exit=1
-> not ok 75 selftests: net: arp_ndisc_evict_nocarrier.sh # exit=255
-> not ok 83 selftests: net: test_ingress_egress_chaining.sh # exit=1
-> not ok 1 selftests: net/hsr: hsr_ping.sh # TIMEOUT 45 seconds
-> not ok 3 selftests: net/mptcp: mptcp_join.sh # exit=1
-> 
-> If you are interested in additional diagnostics, this is a very interesting part of the
-> Linux kernel testing ...
-> 
-> There was apparent hang in selftest/net/fcnal-test.sh as well.
-> I can help you with the diagnostics if you wish? Thanks.
-> 
-> If I could make them all work both on Ubuntu 22.10 kinetic kudu and AlmaLinux 8.7
-> stone smilodon (CentOS fork), this would be a milestone for me :)
+:)
 
-I'm surprised you have so many failures. Feel free to report them
-individually. Don't forget to Cc the authors of the scripts. Just
-pay attention not to overwhelm people.
+>> The entire tools/tests/selftests/net section now had a PASS w "OK", save for a couple of tests here:
+>>
+>> not ok 1 selftests: nci: nci_dev # exit=1
+>> not ok 12 selftests: net: nat6to4.o
+>> not ok 13 selftests: net: run_netsocktests # exit=1
+>> not ok 29 selftests: net: udpgro_bench.sh # exit=255
+>> not ok 30 selftests: net: udpgro.sh # exit=255
+>> not ok 37 selftests: net: fcnal-test.sh # TIMEOUT 1500 seconds
+>> not ok 38 selftests: net: l2tp.sh # exit=2
+>> not ok 46 selftests: net: icmp_redirect.sh # exit=1
+>> not ok 55 selftests: net: vrf_route_leaking.sh # exit=1
+>> not ok 59 selftests: net: udpgro_fwd.sh # exit=1
+>> not ok 60 selftests: net: udpgro_frglist.sh # exit=255
+>> not ok 61 selftests: net: veth.sh # exit=1
+>> not ok 68 selftests: net: srv6_end_dt46_l3vpn_test.sh # exit=1
+>> not ok 69 selftests: net: srv6_end_dt4_l3vpn_test.sh # exit=1
+>> not ok 75 selftests: net: arp_ndisc_evict_nocarrier.sh # exit=255
+>> not ok 83 selftests: net: test_ingress_egress_chaining.sh # exit=1
+>> not ok 1 selftests: net/hsr: hsr_ping.sh # TIMEOUT 45 seconds
+>> not ok 3 selftests: net/mptcp: mptcp_join.sh # exit=1
+>>
+>> If you are interested in additional diagnostics, this is a very interesting part of the
+>> Linux kernel testing ...
+>>
+>> There was apparent hang in selftest/net/fcnal-test.sh as well.
+>> I can help you with the diagnostics if you wish? Thanks.
+>>
+>> If I could make them all work both on Ubuntu 22.10 kinetic kudu and AlmaLinux 8.7
+>> stone smilodon (CentOS fork), this would be a milestone for me :)
+> 
+> I'm surprised you have so many failures. Feel free to report them
+> individually. Don't forget to Cc the authors of the scripts. Just
+> pay attention not to overwhelm people.
 
-I can probably help with the l2tp.sh failure and maybe with the
-fcnal-test.sh hang. Please report them in their own mail thread.
+Sure. I have already submitted half a dozen and I already feel the backlash,
+"wear and tear" :)
 
-> Have a nice day!
-> 
-> Regards,
-> Mirsad
-> 
-> -- 
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
->  
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
-> The European Union
-> 
-> 
+But it is a good brainstorming session for me.
+
+I realise that developers receive a lot of bug reports from the volume of LKML.
+
+> I can probably help with the l2tp.sh failure and maybe with the
+> fcnal-test.sh hang. Please report them in their own mail thread.
+
+Then I will Cc: you for sure on those two.
+
+But I cannot promise that this will be today. In fact, tomorrow is prognosed
+rain so I'd better use the remaining blue-sky-patched day to do some biking ;-)
+
+Anyway, I haven't received feedback from all submitted bug reports, so my stack
+is near the overload. However, I made the "make kselftest" complete on both boxes
+(and OSs of Debian and RH lineage), so I already feel some accomplishment :)
+
+Maybe some issues will be fixed in today's release candidate, anyway.
+
+Mirsad 
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
 
