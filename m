@@ -2,149 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305956615A3
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 14:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 368BD6615B3
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 15:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbjAHN7s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 8 Jan 2023 08:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S230205AbjAHOFp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Jan 2023 09:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbjAHN7j (ORCPT
+        with ESMTP id S233375AbjAHOFm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Jan 2023 08:59:39 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6A3101C0;
-        Sun,  8 Jan 2023 05:59:27 -0800 (PST)
-Received: from localhost.localdomain (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id A9ECD7E6FB;
-        Sun,  8 Jan 2023 13:59:24 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673186367;
-        bh=mVPQCOGvQrQvEwk4wkn1H2/KyDcjp/35/HH0BBizaVM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WQ2Y0OZccoWJ4VANBonNBnyq71Wgvpfhn5CGvrm6AYqexv+K2s7V7t30BW/xYXusL
-         O5DYYQh+Xh/aPVpg0O9yTWmZ1HSqMQNj86TkdE5PUzZlUy0Nx+QOdV20JqHzLGnTD/
-         qjrwtAwR+sBLPRhrpOdIB7fQtF8033wdrV42z/HB0zINq9Q4a76ys5qAo3kfrnq6BC
-         jOn82WccpkBxq6+dv1FI8APn/QEKawwh0pX68hC7LNrnbseq4WYUWsCPt6Xg3ltyE8
-         9cXXxXVBYVZRkJZtamm9xC3GZQUReLXb4UELtiu646JxONbeLUbrEva3zcZVUopShv
-         tpgmoEo7eKOVw==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v3 5/5] selftests/nolibc: Add `signal(2)` selftest
-Date:   Sun,  8 Jan 2023 20:59:04 +0700
-Message-Id: <20230108135904.851762-6-ammar.faizi@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230108135904.851762-1-ammar.faizi@intel.com>
-References: <20230108135904.851762-1-ammar.faizi@intel.com>
+        Sun, 8 Jan 2023 09:05:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51839DEEB
+        for <linux-kselftest@vger.kernel.org>; Sun,  8 Jan 2023 06:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673186695;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bXflzFi1IY8CvdFuCK9K1db17KIG9ke2lGlsL5eBMpE=;
+        b=SvP8ekAIqcOgi1IwFNYhYd6TdupD/4X2ptAF0OQVZ2E1UrXxA+XANQCvSu/zbwLcEWMngx
+        h7JvKJsXNi4fTve6/UOMRZGNlRdimz/pSHsMuIFK4doJj8s1QbA6/SrqG3unA3EzKmZUsy
+        xCE1ncG8mp0EwsJj5gxq0pcMxRiam7k=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-96-ewaGx42ZNNeiTQZyQ1uoDw-1; Sun, 08 Jan 2023 09:04:54 -0500
+X-MC-Unique: ewaGx42ZNNeiTQZyQ1uoDw-1
+Received: by mail-qv1-f71.google.com with SMTP id mu2-20020a056214328200b00531cc0222faso3865739qvb.14
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Jan 2023 06:04:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bXflzFi1IY8CvdFuCK9K1db17KIG9ke2lGlsL5eBMpE=;
+        b=zmMS5+IwAv2XuUfTVT+lMo6NnsnCdMtO4S216G+0o7s3uYC3CD9gpOLjYIf8NQXGYy
+         /4XZhdRKNhJrS9mLE/4Bbv//75gc/Yd0vsIDPW08gJ6keATor+l/ce0a+hMmHHtlYG5U
+         39gLes7ouGZsubhX+9FzFgVVwj9SJaUDR5E8xVCDX6YW/FMYKJnQPsDjQrpRRYryKn/L
+         4ksP0DxnbjvEInDJ8eVuVi34eZ+aT1DZ4Se7Blv1/UA2nESlhqCMyUY3Ga4vn+foCejW
+         fsK9t7TnjpEX/blRj0i/K/bvNo+2wlQS9bihQhKTxMAvliueEFOuX1RJukVVbvFc6x2q
+         EbKw==
+X-Gm-Message-State: AFqh2kr1q4zk8PNMojKqBEyGoGqiVTyIAzpqB5vwKWavnuScA1PcsacH
+        trSdbR0+ioOUckV48Ojl1bho+vMdBhgij07QxIYMfsUIcnIM3qNAZHNU5t19j+BrNnPcoXrgRD3
+        aMX/+i6rwVZ+AQnJYddDoYUEP73Sm
+X-Received: by 2002:ac8:44d7:0:b0:3a5:4fa8:141c with SMTP id b23-20020ac844d7000000b003a54fa8141cmr95767666qto.23.1673186693557;
+        Sun, 08 Jan 2023 06:04:53 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtID8TsAZQOvN8rRZIxWPf6fGBYCJ6FbN75okARmRvpDMZM4heK3p03Na4clHPhQKpXQ2oNJw==
+X-Received: by 2002:ac8:44d7:0:b0:3a5:4fa8:141c with SMTP id b23-20020ac844d7000000b003a54fa8141cmr95767646qto.23.1673186693303;
+        Sun, 08 Jan 2023 06:04:53 -0800 (PST)
+Received: from debian (2a01cb058918ce0098fed9113971adae.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:98fe:d911:3971:adae])
+        by smtp.gmail.com with ESMTPSA id jr49-20020a05622a803100b003ad373d04b6sm232494qtb.59.2023.01.08.06.04.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 06:04:52 -0800 (PST)
+Date:   Sun, 8 Jan 2023 15:04:48 +0100
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     linux-kselftest@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias May <matthias.may@westermo.com>
+Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs
+ when selftest restarted
+Message-ID: <Y7rNgPj9WIroPcQ/@debian>
+References: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
+ <Y7i5cT1AlyC53hzN@debian>
+ <5ef41d3c-8d81-86b3-c571-044636702342@alu.unizg.hr>
+ <Y7lpO9IHtSIyHVej@debian>
+ <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Sun, Jan 08, 2023 at 10:11:25AM +0100, Mirsad Goran Todorovac wrote:
+> [root@pc-mtodorov marvin]# tcpdump --immediate-mode -p -v -i veth0 -n
+> dropped privs to tcpdump
+> tcpdump: listening on veth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+> 08:30:22.835825 IP (tos 0x0, ttl 64, id 2490, offset 0, flags [none], proto UDP (17), length 78)
+>     198.18.0.1.35195 > 198.18.0.2.vxlan: VXLAN, flags [I] (0x08), vni 100
+> ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 198.19.0.2 tell 198.19.0.1, length 28
+> 08:30:22.835926 IP (tos 0x0, ttl 64, id 1388, offset 0, flags [none], proto UDP (17), length 78)
+>     198.18.0.2.35195 > 198.18.0.1.vxlan: VXLAN, flags [I] (0x08), vni 100
+> ARP, Ethernet (len 6), IPv4 (len 4), Reply 198.19.0.2 is-at a6:45:d5:c4:93:1f, length 28
+> 08:30:22.835976 IP (tos 0xc0, ttl 64, id 29533, offset 0, flags [none], proto ICMP (1), length 106)
+>     198.18.0.1 > 198.18.0.2: ICMP host 198.18.0.1 unreachable - admin prohibited filter, length 86
+>         IP (tos 0x0, ttl 64, id 1388, offset 0, flags [none], proto UDP (17), length 78)
+>     198.18.0.2.35195 > 198.18.0.1.vxlan: VXLAN, flags [I] (0x08), vni 100
+> ARP, Ethernet (len 6), IPv4 (len 4), Reply 198.19.0.2 is-at a6:45:d5:c4:93:1f, length 28
 
-Just like the sigaction() selftest, but for signal().
+For some reasons, your host doesn't accept the VXLAN packets received
+over veth0. I guess there are some firewalling rules incompatible with
+this tests script.
 
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 54 ++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+> > -------- >8 --------
+> > 
+> > Isolate testing environment and ensure everything is cleaned up on
+> > exit.
+> > 
+> > diff --git a/tools/testing/selftests/net/l2_tos_ttl_inherit.sh b/tools/testing/selftests/net/l2_tos_ttl_inherit.sh
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index c348c92d26f6..946ed0132f93 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -565,6 +565,45 @@ static int test_sigaction_sig(int sig)
- 	return 0;
- }
- 
-+static int test_signal_sig(int sig)
-+{
-+	sighandler_t old;
-+
-+	/*
-+	 * Set the signal handler.
-+	 */
-+	old = signal(sig, test_signal_handler);
-+	if (old == SIG_ERR) {
-+		printf("test_signal_sig(%d): Failed to set a signal handler\n", sig);
-+		return -1;
-+	}
-+
-+	/*
-+	 * Test the signal handler.
-+	 */
-+	g_test_sig = 0;
-+	kill(getpid(), sig);
-+
-+	/*
-+	 * test_signal_handler() must set @g_test_sig to @sig.
-+	 */
-+	if (g_test_sig != sig) {
-+		printf("test_signal_sig(%d): Invalid g_test_sig value (%d != %d)\n", sig, g_test_sig, sig);
-+		return -1;
-+	}
-+
-+	/*
-+	 * Restore the original signal handler.
-+	 */
-+	old = signal(sig, old);
-+	if (old == SIG_ERR) {
-+		printf("test_signal_sig(%d): Failed to restore the signal handler\n", sig);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
- static const int g_sig_to_test[] = {
- 	SIGINT,
- 	SIGHUP,
-@@ -587,6 +626,20 @@ static int test_sigaction(void)
- 	return 0;
- }
- 
-+static int test_signal(void)
-+{
-+	size_t i;
-+	int ret;
-+
-+	for (i = 0; i < (sizeof(g_sig_to_test) / sizeof(g_sig_to_test[0])); i++) {
-+		ret = test_signal_sig(g_sig_to_test[i]);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- /* Run syscall tests between IDs <min> and <max>.
-  * Return 0 on success, non-zero on failure.
-  */
-@@ -669,6 +722,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(select_stdout);     EXPECT_SYSNE(1, ({ fd_set fds; FD_ZERO(&fds); FD_SET(1, &fds); select(2, NULL, &fds, NULL, NULL); }), -1); break;
- 		CASE_TEST(select_fault);      EXPECT_SYSER(1, select(1, (void *)1, NULL, NULL, 0), -1, EFAULT); break;
- 		CASE_TEST(sigaction);         EXPECT_SYSZR(1, test_sigaction()); break;
-+		CASE_TEST(signal);            EXPECT_SYSZR(1, test_signal()); break;
- 		CASE_TEST(stat_blah);         EXPECT_SYSER(1, stat("/proc/self/blah", &stat_buf), -1, ENOENT); break;
- 		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
- 		CASE_TEST(symlink_root);      EXPECT_SYSER(1, symlink("/", "/"), -1, EEXIST); break;
--- 
-Ammar Faizi
+> Wow, Guillaueme, this patch actually made things unstuck :)
+
+Great! The patch isolates the testing environment, making it less
+dependent from the host that runs it. So the routing and firewalling
+configurations don't interfere anymore.
+
+> The entire tools/tests/selftests/net section now had a PASS w "OK", save for a couple of tests here:
+> 
+> not ok 1 selftests: nci: nci_dev # exit=1
+> not ok 12 selftests: net: nat6to4.o
+> not ok 13 selftests: net: run_netsocktests # exit=1
+> not ok 29 selftests: net: udpgro_bench.sh # exit=255
+> not ok 30 selftests: net: udpgro.sh # exit=255
+> not ok 37 selftests: net: fcnal-test.sh # TIMEOUT 1500 seconds
+> not ok 38 selftests: net: l2tp.sh # exit=2
+> not ok 46 selftests: net: icmp_redirect.sh # exit=1
+> not ok 55 selftests: net: vrf_route_leaking.sh # exit=1
+> not ok 59 selftests: net: udpgro_fwd.sh # exit=1
+> not ok 60 selftests: net: udpgro_frglist.sh # exit=255
+> not ok 61 selftests: net: veth.sh # exit=1
+> not ok 68 selftests: net: srv6_end_dt46_l3vpn_test.sh # exit=1
+> not ok 69 selftests: net: srv6_end_dt4_l3vpn_test.sh # exit=1
+> not ok 75 selftests: net: arp_ndisc_evict_nocarrier.sh # exit=255
+> not ok 83 selftests: net: test_ingress_egress_chaining.sh # exit=1
+> not ok 1 selftests: net/hsr: hsr_ping.sh # TIMEOUT 45 seconds
+> not ok 3 selftests: net/mptcp: mptcp_join.sh # exit=1
+> 
+> If you are interested in additional diagnostics, this is a very interesting part of the
+> Linux kernel testing ...
+> 
+> There was apparent hang in selftest/net/fcnal-test.sh as well.
+> I can help you with the diagnostics if you wish? Thanks.
+> 
+> If I could make them all work both on Ubuntu 22.10 kinetic kudu and AlmaLinux 8.7
+> stone smilodon (CentOS fork), this would be a milestone for me :)
+
+I'm surprised you have so many failures. Feel free to report them
+individually. Don't forget to Cc the authors of the scripts. Just
+pay attention not to overwhelm people.
+
+I can probably help with the l2tp.sh failure and maybe with the
+fcnal-test.sh hang. Please report them in their own mail thread.
+
+> Have a nice day!
+> 
+> Regards,
+> Mirsad
+> 
+> -- 
+> Mirsad Goran Todorovac
+> Sistem inženjer
+> Grafički fakultet | Akademija likovnih umjetnosti
+> Sveučilište u Zagrebu
+>  
+> System engineer
+> Faculty of Graphic Arts | Academy of Fine Arts
+> University of Zagreb, Republic of Croatia
+> The European Union
+> 
+> 
 
