@@ -2,89 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E81661FD8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jan 2023 09:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB0B6620D9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jan 2023 10:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjAIIUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Jan 2023 03:20:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S236913AbjAIJC2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Jan 2023 04:02:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234366AbjAIIUR (ORCPT
+        with ESMTP id S237001AbjAIJB3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Jan 2023 03:20:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970F9E0F7;
-        Mon,  9 Jan 2023 00:20:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FBC260F52;
-        Mon,  9 Jan 2023 08:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 82ECCC433D2;
-        Mon,  9 Jan 2023 08:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673252415;
-        bh=KTrfFgAv3+JXQu+1kgYfM9lEW/AMt691TEuwtpv29Mo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=o4pZVGI/MqugqFakVlRWuyHF5O12VCaybR+8eybr+aLinbjQ7+47ThX44bF9Y1rDq
-         Emqn1DoWTFP1MaEWkP7tojt8cm9PVDCcXt+ljoL5deAT3w4B27kguWR0kco/DbgFZz
-         qBJyHFfgX7b9pAsJ7s4/yKA9G6ooBp4BeQXFlDRAuovfsFwibrmMlfKad4t7Q2K48q
-         fU0h0NseshNSZS79Wk3a8hDD8DDkNiprm5xgLON9mrt4XLmHSWFfg3RcK/IJUdEcKt
-         yBjTEt+RsSn3bFRUJ+tKWHe1j9GEsGWs/aQIcu6Y+E2qOndF1ECLZDjVoqHzlIdzIh
-         4jYlxkNQKby4w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 62C1EE4D005;
-        Mon,  9 Jan 2023 08:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 9 Jan 2023 04:01:29 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7592DFB;
+        Mon,  9 Jan 2023 00:54:49 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 91010604F2;
+        Mon,  9 Jan 2023 09:54:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673254486; bh=8DeTwAhLzt4dVHB7OlsNpU1KQ00qgAGdnmKRRJi0MPA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=j+0UzbchyMfHFD/15BqQQvsF7QZ7idUrYzM9YZacjPgeREvIFben/NJI9BRDgbvQC
+         JyTvJrZXew6oY/j2/sCAW2GktTyVUnVFtf3IGmnTIFe4D7j4pbDLyCcrXpSxOJiZUG
+         SYQtP2Mu3i9OanX9f/eGKhxknZfDdQX1wC2nXP++uKaYyL4M3EE7JAiXa5aMKLUA9k
+         xK9T6REioF/bMQopX0EGtYyQuIm2dzPPpOiLAQ/oEwGWmvXWb1BJ0mFmNvUuMa3fG2
+         XbFYOqKzkb6x8TfJ6Ch4texoIHM+dRGREfEnGrr+J6kKIO8DnD3KQFFtBQflzd2CPn
+         vpTfvDI6mArJA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pV2t13sZzXmh; Mon,  9 Jan 2023 09:54:44 +0100 (CET)
+Received: from [10.0.1.103] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id E2EBE604F1;
+        Mon,  9 Jan 2023 09:54:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1673254484; bh=8DeTwAhLzt4dVHB7OlsNpU1KQ00qgAGdnmKRRJi0MPA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=17Li/CZ2X+HdR6AMbhB35rD7x3S+re57M8l7vS+VkUuBLdbGPBLnw0HME9PbunKdZ
+         aqCLJ2P0Mc5uduByJlpqWdeHFtRgmaHwpOtUBChw8jRc274ZoRnp3sk6xbexsxqrdx
+         DfBT5Ebbj3rQ1Udz8z+VGQIz2XGVLP6ySGh/kaH/rwgA4GLoI2E4mFgIoQIzN2+kv5
+         7m17+8Pt+/uT7f4y/iOqz9+leMyccix/OSo4L480pe/wjtUIV0Aekm8VIwv6AICYf+
+         XzS33ZCBDE8zJ+NFMZ6NLgcPRqlyBDxP9iG0fGB65PdgK1/a4kTE9sXl/osHUGb2vR
+         qFgFh5Ab7Sepw==
+Message-ID: <00edc00c-7e44-3641-ded7-e9f908946514@alu.unizg.hr>
+Date:   Mon, 9 Jan 2023 09:53:42 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v4] af_unix: selftest: Fix the size of the parameter to
- connect()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167325241540.15932.15557684259360648731.git-patchwork-notify@kernel.org>
-Date:   Mon, 09 Jan 2023 08:20:15 +0000
-References: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
-In-Reply-To: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.hr>
-Cc:     kuba@kernel.org, mirsad.todorovac@alu.unizg.hr, kuniyu@amazon.com,
-        davem@davemloft.net, edumazet@google.com, fw@strlen.de,
-        kuniyu@amazon.co.jp, linux-kernel@vger.kernel.org,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH net v4] af_unix: selftest: Fix the size of the parameter
+ to connect()
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>, mirsad.todorovac@alu.hr
+Cc:     davem@davemloft.net, edumazet@google.com, fw@strlen.de,
+        kuba@kernel.org, kuniyu@amazon.co.jp, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         pabeni@redhat.com, shuah@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
+ <20230109011512.15267-1-kuniyu@amazon.com>
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230109011512.15267-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Sat, 7 Jan 2023 04:40:20 +0100 (CET) you wrote:
-> From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+On 9.1.2023. 2:15, Kuniyuki Iwashima wrote:
+> From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.hr>
+> Date:   Sat, 7 Jan 2023 04:40:20 +0100 (CET)
+>> From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>>
+>> Adjust size parameter in connect() to match the type of the parameter, to
+>> fix "No such file or directory" error in selftests/net/af_unix/
+>> test_oob_unix.c:127.
+>>
+>> The existing code happens to work provided that the autogenerated pathname
+>> is shorter than sizeof (struct sockaddr), which is why it hasn't been
+>> noticed earlier.
+>>
+>> Visible from the trace excerpt:
+>>
+>> bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+>> clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+>> [pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+>>
+>> BUG: The filename is trimmed to sizeof (struct sockaddr).
+>>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Eric Dumazet <edumazet@google.com>
+>> Cc: Jakub Kicinski <kuba@kernel.org>
+>> Cc: Paolo Abeni <pabeni@redhat.com>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+>> Cc: Florian Westphal <fw@strlen.de>
+>> Reviewed-by: Florian Westphal <fw@strlen.de>
+>> Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 > 
-> Adjust size parameter in connect() to match the type of the parameter, to
-> fix "No such file or directory" error in selftests/net/af_unix/
-> test_oob_unix.c:127.
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 > 
-> The existing code happens to work provided that the autogenerated pathname
-> is shorter than sizeof (struct sockaddr), which is why it hasn't been
-> noticed earlier.
-> 
-> [...]
+> You can check the current status here.
+> https://patchwork.kernel.org/project/netdevbpf/patch/alpine.DEB.2.21.2301070437400.26826@domac.alu.hr/
 
-Here is the summary with links:
-  - [net,v4] af_unix: selftest: Fix the size of the parameter to connect()
-    https://git.kernel.org/netdev/net/c/7d6ceeb1875c
+Thank you very much for your time on this, Koniyuki, Jakub.
 
-You are awesome, thank you!
+> PS: you may want to check config not to send a mail as multipart next time.
+
+Done! Thanks for the hint. This should work:
+
+   [ Sending Preferences ]
+       [X]  Do Not Generate Sender Header
+       [ ]  Use Sender Instead of X-X-Sender
+       [X]  Do Not Send Flowed Text
+       [X]  Downgrade Multipart to Text
+
+Maybe add this to Documentation/process/email-clients.rst, section 
+Alpine? It could save some round-trips ...
+
+Thanks,
+Mirsad
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+--
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
