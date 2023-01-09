@@ -2,123 +2,247 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95223662E36
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jan 2023 19:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB1A662E33
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jan 2023 19:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbjAISKD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Jan 2023 13:10:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
+        id S233468AbjAISJp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Jan 2023 13:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236966AbjAISIv (ORCPT
+        with ESMTP id S235328AbjAISIt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Jan 2023 13:08:51 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91FD3D9F6
-        for <linux-kselftest@vger.kernel.org>; Mon,  9 Jan 2023 10:07:46 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309HJXMg029484;
-        Mon, 9 Jan 2023 18:07:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=b0omC51hQ9dIzKK7x5A+V5ONEtf1YUmVCXFhs5tfw2Q=;
- b=dZrh9QNB+KBEdlutI+rvAAWK4AOJAUzgjXaR5PHtSKfR0FvPzVm1rp1GUk7+w36B2xrI
- 4pHVqixvmpDxpw2NofEdsO1sTexI6+OmEG0sgs58WBkGkchGGxkJXmWzgPJshR/fq6mn
- t1xd/UnsJRZFLdO0HW/sBkuo33kjKyDwX/kW2ZKsTzTuXwrwGN/yzGfNop2SoWDahTb0
- F6987njhRIZULT5D+J6xXL4BplG4ssCPGTo5Xz4KvcCJDOvutYTCzl6s3meay++sLAQa
- h6NbSfb6ug01lqM/e6BKlgwaNu5M/ZJRI8IzgtfzMeeCxDSPiyAQkg7V39jA5/9W+KZW Qw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myjk7meua-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 18:07:26 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3098vsjJ000654;
-        Mon, 9 Jan 2023 18:07:24 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6kahm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 18:07:24 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 309I7MZv52560326
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Jan 2023 18:07:22 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A66720043;
-        Mon,  9 Jan 2023 18:07:22 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B9B8320049;
-        Mon,  9 Jan 2023 18:07:21 +0000 (GMT)
-Received: from dilbert5.fritz.box (unknown [9.171.48.140])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Jan 2023 18:07:21 +0000 (GMT)
-From:   Gerd Bayer <gbayer@linux.ibm.com>
-To:     Xiang Chen <chenxiang66@hisilicon.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev,
-        linux-kselftest@vger.kernel.org,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Subject: [PATCH] selftests:dma: Fix compile error in user-space tool
-Date:   Mon,  9 Jan 2023 19:07:21 +0100
-Message-Id: <20230109180721.187324-1-gbayer@linux.ibm.com>
-X-Mailer: git-send-email 2.39.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 42Jb_o16O5jOZ8ExxC93aJlM8fsnyZpv
-X-Proofpoint-GUID: 42Jb_o16O5jOZ8ExxC93aJlM8fsnyZpv
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 9 Jan 2023 13:08:49 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8183C3A8
+        for <linux-kselftest@vger.kernel.org>; Mon,  9 Jan 2023 10:07:43 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id h192so6436191pgc.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Jan 2023 10:07:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cjepIbO6GWlHhX91qulkt2Gx/2Rp33KnfWlDoun7rHc=;
+        b=njVGvA2BBq3lnqckIDLq2Gfu60hjfzhMZj2lCDBA9Q/Lpa3+ceKbvbCs7TKBQE6VJI
+         JcLcW2ERDIL33DzVnKFGiRsQDhsvMqscBoj/k1aNTZeqSd+0O+78Kgx6Vg3zbyValq16
+         h4mCDaoPitJhps3c/ZPEY8VZWtzGEaa92W68IbCJgZSSUlI2EBgQJ9rJ2rFN5p0HAayC
+         rkBh3/3+LriKDJ3ih4M1SbWqcNNFZctTCctIRO1JQrgWvMNOIt1QhgmzRUAUfQRe+BIg
+         RY2Nh3iZ38UcRLASvxnTDMrmJArGi3ESXXRR3EOtolt7GJydZNIud/QfIf29lt0RhaFH
+         v8HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cjepIbO6GWlHhX91qulkt2Gx/2Rp33KnfWlDoun7rHc=;
+        b=2BqiBoruIiP2wmMpZuOpp9/Uk7Z9woke7rkTlVt7BSO8yNR94RwGRIyDS3hT1xmPPZ
+         LKOOu7YJRBIYUoB8HO0H46115i8REelff8+diaLl/ZOn2ZZ+ACoCdkSXDYPax7io675S
+         wAj9Q6k0iJvO0ek6u0hQsNch3kIxtzIyW2pTT2lDxNvhG7ZlRlK2O32usDutqlgvejBZ
+         qBQo+b3fWuCzuQSo8ViyqH7lQmd2GqF9g70RbgLwOiqApqhV3vSgyFsped5Z0ZZ0oj+k
+         TyYXPxExawXEzJuThzCcyto4pOITNcohu5rT51zop7cDZ2vB6ZWD7XbujToDisjWa+3n
+         yQ8Q==
+X-Gm-Message-State: AFqh2ko0YfzRTb3REIwRYnbup6tMtTFtLpA+LkEY1XwnPKpXremccqPw
+        Hqy9tWcReLRP5dvUH3clGUcyMryBjTlbxw0/
+X-Google-Smtp-Source: AMrXdXs8UZlZ+kaiOTh68EobJZJpxdjrDGhRiljc7mD96iwfDDLVeszhLuzh0X0p8er38fyUS+VXGw==
+X-Received: by 2002:a05:6a00:1948:b0:581:bfac:7a52 with SMTP id s8-20020a056a00194800b00581bfac7a52mr702100pfk.1.1673287662364;
+        Mon, 09 Jan 2023 10:07:42 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id k18-20020a628412000000b0058103f45d9esm3138368pfd.82.2023.01.09.10.07.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 10:07:41 -0800 (PST)
+Date:   Mon, 9 Jan 2023 18:07:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, oupton@google.com,
+        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com
+Subject: Re: [V4 PATCH 1/4] KVM: selftests: x86: use this_cpu_* helpers
+Message-ID: <Y7xX6hg+YTgTrAzW@google.com>
+References: <20221228192438.2835203-1-vannapurve@google.com>
+ <20221228192438.2835203-2-vannapurve@google.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_11,2023-01-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 impostorscore=0 suspectscore=0 spamscore=0 phishscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301090125
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221228192438.2835203-2-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since [1] the user-space program dma_map_benchmark shares the header file
-linux/map_benchmark.h with the kernel driver in kernel/dma/map_benchmark.c.
-With latest kernel version this does not compile anymore.
+On Wed, Dec 28, 2022, Vishal Annapurve wrote:
+> Use this_cpu_* helpers to query the cpu vendor.
 
-While https://kernelnewbies.org/KernelHeaders suggests otherwise, allow it
-to use kernel headers through the uapi/ include directory. I assume we can
-do so safely, since the controlling user-space program is distributed with
-the kernel.
+Neither the changelog nor the shortlog captures what this patch actually does,
+or rather what I inteded it to do.  Specifically, what I suggested (or intended
+to suggest) was:
 
-With this change dma_map_benchmark compiles with just the obvious warning
-about uapi usage on ARCH=x86, arm64, and s390 and runs on ARCH=s390.
+  KVM: selftests: Rename vendor string helpers to use "this_cpu" prefix
 
-[1] commit 8ddde07a3d28 ("dma-mapping: benchmark: extract a common header
-file for map_benchmark definition")
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
 
-Signed-off-by: Gerd Bayer <gbayer@linux.ibm.com>
-Acked-by: Xiang Chen <chenxiang66@hisilicon.com>
+...
+
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index acfa1d01e7df..a799af572f3f 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1006,26 +1006,14 @@ void kvm_x86_state_cleanup(struct kvm_x86_state *state)
+>  	free(state);
+>  }
+>  
+> -static bool cpu_vendor_string_is(const char *vendor)
+> -{
+> -	const uint32_t *chunk = (const uint32_t *)vendor;
+> -	uint32_t eax, ebx, ecx, edx;
+> -
+> -	cpuid(0, &eax, &ebx, &ecx, &edx);
+> -	return (ebx == chunk[0] && edx == chunk[1] && ecx == chunk[2]);
+> -}
+> -
+>  bool is_intel_cpu(void)
+
+Drop the is_intel_cpu() and is_amd_cpu() wrappers.  The whole point of the rename
+was so that it's obvious at the call site that the function is checking the "current"
+CPU context.
+
+That obviously means dropping the is_host_cpu_amd() and is_host_cpu_intel() wrappers
+too.  IMO, the extra layer to jump through (more from a code reading perspective then
+a code generation perspective) isn't worth protecting the booleans.
+
+It's slightly more churn (in between patches, not overall), but the benefit is that
+it allows squasing patches 2 and 3 into a single patch, e.g. "KVM: selftests: Cache
+host CPU vendor (AMD vs. Intel)"
+
 ---
- tools/testing/selftests/dma/dma_map_benchmark.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/include/x86_64/processor.h    | 3 +++
+ tools/testing/selftests/kvm/lib/x86_64/processor.c        | 8 ++++----
+ tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c   | 4 ++--
+ tools/testing/selftests/kvm/x86_64/mmio_warning_test.c    | 2 +-
+ .../testing/selftests/kvm/x86_64/pmu_event_filter_test.c  | 4 ++--
+ .../kvm/x86_64/vmx_exception_with_invalid_guest_state.c   | 2 +-
+ 6 files changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-index 5c997f17fcbd..d49d7ea6a63e 100644
---- a/tools/testing/selftests/dma/dma_map_benchmark.c
-+++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-@@ -10,7 +10,7 @@
- #include <unistd.h>
- #include <sys/ioctl.h>
- #include <sys/mman.h>
--#include <linux/types.h>
-+#include <uapi/linux/types.h>
- #include <linux/map_benchmark.h>
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index fdb1af5ca611..c7885f72132a 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -19,6 +19,9 @@
  
- #define NSEC_PER_MSEC	1000000L
+ #include "../kvm_util.h"
+ 
++extern bool host_cpu_is_intel;
++extern bool host_cpu_is_amd;
++
+ #define NMI_VECTOR		0x02
+ 
+ #define X86_EFLAGS_FIXED	 (1u << 1)
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 0b8de34aa10e..84915bc7d689 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -19,8 +19,8 @@
+ #define MAX_NR_CPUID_ENTRIES 100
+ 
+ vm_vaddr_t exception_handlers;
+-static bool host_cpu_is_amd;
+-static bool host_cpu_is_intel;
++bool host_cpu_is_amd;
++bool host_cpu_is_intel;
+ 
+ static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
+ {
+@@ -115,7 +115,7 @@ static void sregs_dump(FILE *stream, struct kvm_sregs *sregs, uint8_t indent)
+ 
+ bool kvm_is_tdp_enabled(void)
+ {
+-	if (this_cpu_is_intel())
++	if (host_cpu_is_intel)
+ 		return get_kvm_intel_param_bool("ept");
+ 	else
+ 		return get_kvm_amd_param_bool("npt");
+@@ -1218,7 +1218,7 @@ unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
+ 	max_gfn = (1ULL << (vm->pa_bits - vm->page_shift)) - 1;
+ 
+ 	/* Avoid reserved HyperTransport region on AMD processors.  */
+-	if (!this_cpu_is_amd())
++	if (!host_cpu_is_amd)
+ 		return max_gfn;
+ 
+ 	/* On parts with <40 physical address bits, the area is fully hidden */
+diff --git a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+index 5489c9836ec8..0f728f05ea82 100644
+--- a/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
++++ b/tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c
+@@ -48,10 +48,10 @@ static void guest_main(void)
+ 	const uint8_t *other_hypercall_insn;
+ 	uint64_t ret;
+ 
+-	if (this_cpu_is_intel()) {
++	if (host_cpu_is_intel) {
+ 		native_hypercall_insn = vmx_vmcall;
+ 		other_hypercall_insn  = svm_vmmcall;
+-	} else if (this_cpu_is_amd()) {
++	} else if (host_cpu_is_amd) {
+ 		native_hypercall_insn = svm_vmmcall;
+ 		other_hypercall_insn  = vmx_vmcall;
+ 	} else {
+diff --git a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+index b0a2a0bae0f3..ce1ccc4c1503 100644
+--- a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
++++ b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+@@ -93,7 +93,7 @@ int main(void)
+ {
+ 	int warnings_before, warnings_after;
+ 
+-	TEST_REQUIRE(this_cpu_is_intel());
++	TEST_REQUIRE(host_cpu_is_intel);
+ 
+ 	TEST_REQUIRE(!vm_is_unrestricted_guest(NULL));
+ 
+diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+index c728822461b2..4dbb454e1760 100644
+--- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
++++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+@@ -363,7 +363,7 @@ static void test_pmu_config_disable(void (*guest_code)(void))
+  */
+ static bool use_intel_pmu(void)
+ {
+-	return this_cpu_is_intel() &&
++	return host_cpu_is_intel &&
+ 	       kvm_cpu_property(X86_PROPERTY_PMU_VERSION) &&
+ 	       kvm_cpu_property(X86_PROPERTY_PMU_NR_GP_COUNTERS) &&
+ 	       kvm_pmu_has(X86_PMU_FEATURE_BRANCH_INSNS_RETIRED);
+@@ -397,7 +397,7 @@ static bool use_amd_pmu(void)
+ 	uint32_t family = kvm_cpu_family();
+ 	uint32_t model = kvm_cpu_model();
+ 
+-	return this_cpu_is_amd() &&
++	return host_cpu_is_amd &&
+ 		(is_zen1(family, model) ||
+ 		 is_zen2(family, model) ||
+ 		 is_zen3(family, model));
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c b/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
+index 53e1ef2fc774..ccdfa5dc1a4d 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_exception_with_invalid_guest_state.c
+@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 
+-	TEST_REQUIRE(this_cpu_is_intel());
++	TEST_REQUIRE(host_cpu_is_intel);
+ 	TEST_REQUIRE(!vm_is_unrestricted_guest(NULL));
+ 
+ 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
 
-base-commit: 1fe4fd6f5cad346e598593af36caeadc4f5d4fa9
+base-commit: 04b420511919f7b78f17f5fa6dc92975a8b2d7c4
 -- 
-2.39.0
 
