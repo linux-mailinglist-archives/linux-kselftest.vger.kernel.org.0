@@ -2,42 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1226619FC
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Jan 2023 22:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15118661BCE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jan 2023 02:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234075AbjAHVbk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 8 Jan 2023 16:31:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S231238AbjAIBPh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Jan 2023 20:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233656AbjAHVbe (ORCPT
+        with ESMTP id S230219AbjAIBPg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Jan 2023 16:31:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AB8BD2;
-        Sun,  8 Jan 2023 13:31:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAF74B80C71;
-        Sun,  8 Jan 2023 21:31:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCADCC433EF;
-        Sun,  8 Jan 2023 21:31:30 +0000 (UTC)
-Date:   Sun, 8 Jan 2023 16:31:28 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/3] selftests/tracing: Fix some testcases for recent
- change
-Message-ID: <20230108163128.2860894d@rorschach.local.home>
-In-Reply-To: <167309832823.640500.13244630381161014364.stgit@devnote3>
-References: <167309832823.640500.13244630381161014364.stgit@devnote3>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 8 Jan 2023 20:15:36 -0500
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD31A9FC3;
+        Sun,  8 Jan 2023 17:15:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1673226936; x=1704762936;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Tzdk/KaJxyH01KkCF6YkesSdqVT3pEjQXiFVNSArzuQ=;
+  b=IAeNi3FjCMe5/kplEn2adbJZ407IGhaLHRlzbKuuY7ovP9kTp5KSCVXH
+   slIdVQfIHt4cJi1oCWSDLQBo7Pcpslgfbwwz+s6vxGVV00Bep/2qYcwH4
+   69N6Q8plLVtIZbZH1GFY9D5H4yuDJDMQeDihRp1deABwgqdGcISo/RN3A
+   U=;
+X-IronPort-AV: E=Sophos;i="5.96,311,1665446400"; 
+   d="scan'208";a="286283629"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 01:15:33 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-m6i4x-bbc6e425.us-east-1.amazon.com (Postfix) with ESMTPS id 9506881178;
+        Mon,  9 Jan 2023 01:15:29 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Mon, 9 Jan 2023 01:15:28 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.120) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.7;
+ Mon, 9 Jan 2023 01:15:24 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <mirsad.todorovac@alu.hr>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <fw@strlen.de>,
+        <kuba@kernel.org>, <kuniyu@amazon.co.jp>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <mirsad.todorovac@alu.unizg.hr>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <shuah@kernel.org>
+Subject: Re: [PATCH net v4] af_unix: selftest: Fix the size of the parameter to connect()
+Date:   Mon, 9 Jan 2023 10:15:12 +0900
+Message-ID: <20230109011512.15267-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
+References: <alpine.DEB.2.21.2301070437400.26826@domac.alu.hr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.43.160.120]
+X-ClientProxiedBy: EX13D34UWA004.ant.amazon.com (10.43.160.177) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,35 +68,78 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat,  7 Jan 2023 22:32:08 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.hr>
+Date:   Sat, 7 Jan 2023 04:40:20 +0100 (CET)
+> From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> 
+> Adjust size parameter in connect() to match the type of the parameter, to
+> fix "No such file or directory" error in selftests/net/af_unix/
+> test_oob_unix.c:127.
+> 
+> The existing code happens to work provided that the autogenerated pathname
+> is shorter than sizeof (struct sockaddr), which is why it hasn't been
+> noticed earlier.
+> 
+> Visible from the trace excerpt:
+> 
+> bind(3, {sa_family=AF_UNIX, sun_path="unix_oob_453059"}, 110) = 0
+> clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7fa6a6577a10) = 453060
+> [pid <child>] connect(6, {sa_family=AF_UNIX, sun_path="unix_oob_45305"}, 16) = -1 ENOENT (No such file or directory)
+> 
+> BUG: The filename is trimmed to sizeof (struct sockaddr).
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+> Cc: Florian Westphal <fw@strlen.de>
+> Reviewed-by: Florian Westphal <fw@strlen.de>
+> Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-> This includes some patches to fix 2 issues on ftrace selftests.
-> 
-> - eprobe filter and eprobe syntax test case were introduced but it
->   doesn't check whether the kernel supports eprobe filter. Thus the
->   new test case fails on the kernel which has eprobe but not support
->   eprobe filter. To solve this issue, add a filter description to
->   README file [1/3] and run the filter syntax error test only if the
->   description is found in the README file [2/3].
-> 
-> - Recently objtool adds prefix symbols for the function padding nops,
->   and the probepoint test case fails because this probepoint test case
->   tests whether the kprobe event can probe the target function and the
->   functions next to the target function. But the prefix symbols can not
->   be probed. Thus these prefix symbols must be skipped [3/3].
-> 
-> Thank you,
-> 
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+
+You can check the current status here.
+https://patchwork.kernel.org/project/netdevbpf/patch/alpine.DEB.2.21.2301070437400.26826@domac.alu.hr/
+
+PS: you may want to check config not to send a mail as multipart next time.
+
+Thank you,
+Kuniyuki
+
+
 > ---
 > 
-> Masami Hiramatsu (Google) (3):
->       tracing/eprobe: Fix to add filter on eprobe description in README file
->       selftests/ftrace: Fix eprobe syntax test case to check filter support
->       selftests/ftrace: Fix probepoint testcase to ignore __pfx_* symbols
+> The patch is generated against the "vanilla" Torvalds mainline tree 6.2-rc2.
+> (Tested and applies against the net.git tree.)
 > 
->
-
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
+> 
+>  tools/testing/selftests/net/af_unix/test_unix_oob.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/af_unix/test_unix_oob.c b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+> index b57e91e1c3f2..532459a15067 100644
+> --- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
+> +++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+> @@ -124,7 +124,7 @@ void producer(struct sockaddr_un *consumer_addr)
+>  
+>  	wait_for_signal(pipefd[0]);
+>  	if (connect(cfd, (struct sockaddr *)consumer_addr,
+> -		     sizeof(struct sockaddr)) != 0) {
+> +		     sizeof(*consumer_addr)) != 0) {
+>  		perror("Connect failed");
+>  		kill(0, SIGTERM);
+>  		exit(1);
+> 
+> --
+> Mirsad Goran Todorovac
+> Sistem inženjer
+> Grafički fakultet | Akademija likovnih umjetnosti
+> Sveučilište u Zagrebu
+> 
+> System engineer
+> Faculty of Graphic Arts | Academy of Fine Arts
+> University of Zagreb, Republic of Croatia
+> The European Union
