@@ -2,163 +2,227 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AC8662B17
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jan 2023 17:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4563662B71
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Jan 2023 17:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjAIQXh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Jan 2023 11:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S233562AbjAIQnQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Jan 2023 11:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233970AbjAIQXP (ORCPT
+        with ESMTP id S229979AbjAIQnP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Jan 2023 11:23:15 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEF5BF7E
-        for <linux-kselftest@vger.kernel.org>; Mon,  9 Jan 2023 08:23:14 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id e10so6208990pgc.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Jan 2023 08:23:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ihGUjj0LvNosmMvceFYhcU4jWooAyH8DgnkbRcWRKo=;
-        b=EIuMuNifZAZt7Xli18hbSQdtUmE5TKUZdjdCU7GMvD8NGUWFAcckj69cyY8dTZxBuD
-         Egb+HDHnj6bGA6owziVsrnqmc0mpn9N0YkWWbHJ34flGa0zPJjslIwxmRiixFe6FIxEM
-         H1gd661Uz/0vdsrySY3t20Joh4eiK7Tx7N3BKzSIf6YiJDDAwl66HlKg4g52NoncmKDL
-         U2vEY8X89MnQqwCH9V0bUgp2FBAz0J/nAe+ybMa1VUls2Z4XBIKc8+vXgvK2pLUxQPnF
-         quQeZGOvULYjEQ4mrKYEhq0M7FyCn+ikBdJY39qb3r7CvWKfXnYIaWaEv89N+flWX+6C
-         DLrw==
+        Mon, 9 Jan 2023 11:43:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B122603
+        for <linux-kselftest@vger.kernel.org>; Mon,  9 Jan 2023 08:42:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673282549;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W9uCN3VQ3btzl2FPuIbtk5ZKyJr6zz6N2a76k393fHs=;
+        b=Hzm0IO3cddwlHlEL5NKmApwpD9BVLyNvcdF2HtY35XoNCaE9xMnzjsW8Cnq5gVoh+MSW+g
+        n1i0ZMEByk0tv0kDJqwg7V8E0xcSPAKXhX+4L5VlrUPt8YFH+BiCVtNQba4Y6YMxSMJTek
+        pK84i/n8CdqKf2n9/4ghrDnaEMLnWEI=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-653--BJm8HP_MlGuo3riRRGaAg-1; Mon, 09 Jan 2023 11:42:27 -0500
+X-MC-Unique: -BJm8HP_MlGuo3riRRGaAg-1
+Received: by mail-wr1-f69.google.com with SMTP id d27-20020adfa35b000000b002bc813ba677so288412wrb.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Jan 2023 08:42:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5ihGUjj0LvNosmMvceFYhcU4jWooAyH8DgnkbRcWRKo=;
-        b=gxlzBzLMKZGUo50SrRRTmXXF5JpafGhNiz9XIrmSE2LEEi9/fT4pGNWhaT0xwHnU1I
-         +sTP+Z9lzWxi9mUCUT4BaaU4f1SE0l08+udtF9KdYPF0URoHpB+wqTGcaxRgqaVCar3N
-         QZw8R8ud7XFtXrGcm/1jMgmkKdRC6IUI/kYZaC0otUeU3OpSp+MnByN32z69YIStP6wY
-         JrQ26SwMLKQyLbjGdorIYe1SAYiKF9Xq/Gppvk7KUbOTfsN9cpCHFBljXWcfdN1afb7/
-         78WKqy2wSdKdjzVEf/TTiHNwm8pOZA2VDVK5YF5A4zmeVM0h+6rn3wbTwLcatoVFPnRf
-         +dHw==
-X-Gm-Message-State: AFqh2koDUIVflY87VCawQmmTw/fO4MUDOyksNvH8bBDWQIu2EQny+alV
-        qDqAGfgh5EnTGzwOpTfQYrB/hA==
-X-Google-Smtp-Source: AMrXdXtWhEqNqPFVl/uaozcZh8BZT/2gMbDUzsG0+IUAZVVYNTHPHhsB7FZRZ1pfjeUUe14I6OHAYQ==
-X-Received: by 2002:aa7:973c:0:b0:574:8995:c0d0 with SMTP id k28-20020aa7973c000000b005748995c0d0mr655787pfg.1.1673281393473;
-        Mon, 09 Jan 2023 08:23:13 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x4-20020a628604000000b00576f7bd92cdsm6474170pfd.14.2023.01.09.08.23.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 08:23:12 -0800 (PST)
-Date:   Mon, 9 Jan 2023 16:23:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] KVM: x86: update APIC_ID also when disabling
- x2APIC in kvm_lapic_set_base
-Message-ID: <Y7w/bYP4VGqoVcjH@google.com>
-References: <20230109130605.2013555-1-eesposit@redhat.com>
- <20230109130605.2013555-2-eesposit@redhat.com>
- <c61ce1a6393a108c76e53cb99249aba5ab318e07.camel@redhat.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W9uCN3VQ3btzl2FPuIbtk5ZKyJr6zz6N2a76k393fHs=;
+        b=2OXdima7yjYbdts1bK9Hcsmim8sQAk+t7DMhTpI/L9NAJXRih7L2wwt1Xgw4S2osg9
+         ZCzLQbuL5+Dl+1q/ZUobEHt0D58hrYyLBMDAKyPLO1smcbpzQB05sKlDxOMzyn6koPag
+         2KeLJte/96SycSVgpADdfgPaE3z6kQ9CdqW4bQDoQ8BrOiwBOqvJhqHOk+hIt6EeBStY
+         wQFXQODr5iPD9YmdhfChkYolcqVYMTI8zaU3TYFhU1MgeZIWfCq9EWmEEMifXiJJIJ4s
+         SFrwE7xPqAPGl6OVxAvKNo2K4dtE5RDrko+fNv7UDudXZzv+H+yfj0zPiP48FfBWmSfg
+         mGNQ==
+X-Gm-Message-State: AFqh2kqWsvH4yKxg1BK4f+KT0ABcRl+uYTfTIeoNnO0fFs2wll4hVj2e
+        2RRmgICsvUE2nG1g/oBTVrwFRInpasDdcedpLvVCX3dTz7xXBn+B2yqYoeTW0/Y04qtQbv91Ies
+        P8fsYFE+vAg5FspSn53DWwoNC4X2R
+X-Received: by 2002:adf:f402:0:b0:270:c07e:56 with SMTP id g2-20020adff402000000b00270c07e0056mr35801396wro.53.1673282546793;
+        Mon, 09 Jan 2023 08:42:26 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuDdRq6l4D7tqj25ezhGwOEQPszZc1qC6Ax7Wv4ZPTyTh7QWw6hCI6gshgkwfk7zWzwDrx/Jg==
+X-Received: by 2002:adf:f402:0:b0:270:c07e:56 with SMTP id g2-20020adff402000000b00270c07e0056mr35801381wro.53.1673282546464;
+        Mon, 09 Jan 2023 08:42:26 -0800 (PST)
+Received: from ?IPV6:2003:cb:c703:8f00:ba3:7d27:204f:8e29? (p200300cbc7038f000ba37d27204f8e29.dip0.t-ipconnect.de. [2003:cb:c703:8f00:ba3:7d27:204f:8e29])
+        by smtp.gmail.com with ESMTPSA id z2-20020a5d6402000000b00297dcfdc90fsm8954756wru.24.2023.01.09.08.42.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Jan 2023 08:42:26 -0800 (PST)
+Message-ID: <0ee389dc-5e47-5b7e-4db5-637eb2b3fbc9@redhat.com>
+Date:   Mon, 9 Jan 2023 17:42:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c61ce1a6393a108c76e53cb99249aba5ab318e07.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: =?UTF-8?Q?Re=3a_PROBLEM=3a_selftest/vm/cow=2ec_failed_to_compile_?=
+ =?UTF-8?B?KOKAmE1BRFZfUEFHRU9VVOKAmSB1bmRlY2xhcmVkKQ==?=
+Content-Language: en-US
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <0f117203-3227-cd16-61c2-2dd3de75ecc7@alu.unizg.hr>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <0f117203-3227-cd16-61c2-2dd3de75ecc7@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 09, 2023, Maxim Levitsky wrote:
-> On Mon, 2023-01-09 at 08:06 -0500, Emanuele Giuseppe Esposito wrote:
-> > If KVM_SET_MSR firstly enables and then disables x2APIC, make sure
-> > APIC_ID is actually updated correctly, since bits and offset differ from
-> > xAPIC and x2APIC.
-> > 
-> > Currently this is not handled correctly, as kvm_set_apic_base() will
-> > have msr_info->host_initiated, so switching from x2APIC to xAPIC won't
-> > fail, but kvm_lapic_set_base() does not handle the case.
-> > 
-> > Fixes: 8d860bbeedef ("kvm: vmx: Basic APIC virtualization controls have three settings")
-> > Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-> > ---
-> >  arch/x86/kvm/lapic.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > index 4efdb4a4d72c..df0a50099aa2 100644
-> > --- a/arch/x86/kvm/lapic.c
-> > +++ b/arch/x86/kvm/lapic.c
-> > @@ -2394,8 +2394,12 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
-> >  		}
-> >  	}
-> >  
-> > -	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
-> > -		kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-> > +	if ((old_value ^ value) & X2APIC_ENABLE) {
-> > +		if (value & X2APIC_ENABLE)
-> > +			kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-> > +		else
-> > +			kvm_apic_set_xapic_id(apic, vcpu->vcpu_id);
-> > +	}
-> >  
-> >  	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
-> >  		kvm_vcpu_update_apicv(vcpu);
+On 08.01.23 11:58, Mirsad Goran Todorovac wrote:
+> Hi all,
 > 
+> During "make kselftest" there is an error in selftest/vm/cow.c compilation on
+> platform:
 > 
-> I don't think that this patch is 100% needed in a strict sense, but I don't
-> object to it either.
+> - Lenovo desktop 10TX000VCR (LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB)
+> - AlmaLinux 8.7 (CentOS fork)
+> - gcc 8.5.0 20210514 (Red Hat 8.5.0-15)
+> - vanilla kernel 6.2-rc2 from the torvalds mainline tree.
+> 
+> Compilation fails to find "#define MADV_PAGEOUT":
+> 
+> [root@pc-mtodorov vm]# make
+> gcc -Wall -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../.. -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include  -isystem /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include -no-pie     cow.c vm_util.c -lrt -lpthread  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm/cow
+> cow.c: In function ‘do_run_with_base_page’:
+> cow.c:755:26: error: ‘MADV_PAGEOUT’ undeclared (first use in this function); did you mean ‘MADV_RANDOM’?
+>     madvise(mem, pagesize, MADV_PAGEOUT);
+>                            ^~~~~~~~~~~~
+>                            MADV_RANDOM
+> cow.c:755:26: note: each undeclared identifier is reported only once for each function it appears in
+> cow.c: In function ‘do_run_with_thp’:
+> cow.c:914:22: error: ‘MADV_PAGEOUT’ undeclared (first use in this function); did you mean ‘MADV_RANDOM’?
+>     madvise(mem, size, MADV_PAGEOUT);
+>                        ^~~~~~~~~~~~
+>                        MADV_RANDOM
+> make: *** [../lib.mk:145: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm/cow] Error 1
+> [root@pc-mtodorov vm]#
+> 
+> MADV_PAGEOUT is defined in #include <asm-generic/mman-common.h> :
+> 
+> [root@pc-mtodorov vm]# grep MADV_PAGEOUT -r /usr/include
+> /usr/include/asm-generic/mman-common.h:#define MADV_PAGEOUT     21              /* reclaim these pages */
+> [root@pc-mtodorov vm]# grep MADV_PAGEOUT -r ../../../../usr/include
+> ../../../../usr/include/asm-generic/mman-common.h:#define MADV_PAGEOUT  21              /* reclaim these pages */
+> [root@pc-mtodorov vm]#
+> 
+> However, gcc -E shows that asm-generic/mman-common.h is somehow never included:
+> 
+> ---------------------------------------------------------------------------------------------
+> [root@pc-mtodorov vm]# gcc -Wall -E -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../.. -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include  -isystem /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include -no-pie     cow.c | cat -s | less
+> # 1 "/usr/include/sys/mman.h" 1 3 4
+> # 25 "/usr/include/sys/mman.h" 3 4
+> # 1 "/usr/lib/gcc/x86_64-redhat-linux/8/include/stddef.h" 1 3 4
+> # 26 "/usr/include/sys/mman.h" 2 3 4
+> # 41 "/usr/include/sys/mman.h" 3 4
+> # 1 "/usr/include/bits/mman.h" 1 3 4
+> # 49 "/usr/include/bits/mman.h" 3 4
+> # 1 "/usr/include/bits/mman-linux.h" 1 3 4
+> # 117 "/usr/include/bits/mman-linux.h" 3 4
+> # 1 "/usr/include/bits/mman-shared.h" 1 3 4
+> # 42 "/usr/include/bits/mman-shared.h" 3 4
+> 
+> int memfd_create (const char *__name, unsigned int __flags) __attribute__ ((__nothrow__ , __leaf__));
+> int mlock2 (const void *__addr, size_t __length, unsigned int __flags) __attribute__ ((__nothrow__ , __leaf__));
+> int pkey_alloc (unsigned int __flags, unsigned int __access_rights) __attribute__ ((__nothrow__ , __leaf__));
+> int pkey_set (int __key, unsigned int __access_rights) __attribute__ ((__nothrow__ , __leaf__));
+> int pkey_get (int __key) __attribute__ ((__nothrow__ , __leaf__));
+> int pkey_free (int __key) __attribute__ ((__nothrow__ , __leaf__));
+> int pkey_mprotect (void *__addr, size_t __len, int __prot, int __pkey) __attribute__ ((__nothrow__ , __leaf__));
+> 
+> # 117 "/usr/include/bits/mman-linux.h" 2 3 4
+> # 49 "/usr/include/bits/mman.h" 2 3 4
+> # 42 "/usr/include/sys/mman.h" 2 3 4
+> 
+> # 57 "/usr/include/sys/mman.h" 3 4
+> extern void *mmap (void *__addr, size_t __len, int __prot,
+>       int __flags, int __fd, __off_t __offset) __attribute__ ((__nothrow__ , __leaf__));
+> # 70 "/usr/include/sys/mman.h" 3 4
+> extern void *mmap64 (void *__addr, size_t __len, int __prot,
+>         int __flags, int __fd, __off64_t __offset) __attribute__ ((__nothrow__ , __leaf__));
+> 
+> extern int munmap (void *__addr, size_t __len) __attribute__ ((__nothrow__ , __leaf__));
+> extern int mprotect (void *__addr, size_t __len, int __prot) __attribute__ ((__nothrow__ , __leaf__));
+> extern int msync (void *__addr, size_t __len, int __flags);
+> extern int madvise (void *__addr, size_t __len, int __advice) __attribute__ ((__nothrow__ , __leaf__));
+> extern int posix_madvise (void *__addr, size_t __len, int __advice) __attribute__ ((__nothrow__ , __leaf__));
+> extern int mlock (const void *__addr, size_t __len) __attribute__ ((__nothrow__ , __leaf__));
+> extern int munlock (const void *__addr, size_t __len) __attribute__ ((__nothrow__ , __leaf__));
+> extern int mlockall (int __flags) __attribute__ ((__nothrow__ , __leaf__));
+> extern int munlockall (void) __attribute__ ((__nothrow__ , __leaf__));
+> extern int mincore (void *__start, size_t __len, unsigned char *__vec)
+>       __attribute__ ((__nothrow__ , __leaf__));
+> 
+> # 133 "/usr/include/sys/mman.h" 3 4
+> 
+> extern void *mremap (void *__addr, size_t __old_len, size_t __new_len,
+>         int __flags, ...) __attribute__ ((__nothrow__ , __leaf__));
+> extern int remap_file_pages (void *__start, size_t __size, int __prot,
+>          size_t __pgoff, int __flags) __attribute__ ((__nothrow__ , __leaf__));
+> extern int shm_open (const char *__name, int __oflag, mode_t __mode);
+> extern int shm_unlink (const char *__name);
+> -------------------------------------------------------------------------------------------------------
+> 
+> FYI:
+> 
+> On the platform:
+> 
+> - Ubuntu 22.10 kinetic kudu
+> - gcc 12.2.0
+> - same 6.2-rc2
+> 
+> , MADV_PAGEOUT is also defined in bits/mmap-linux.h, so the compile passes.
+> 
+> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm# grep MADV_PAGEOUT -r /usr/include
+> /usr/include/asm-generic/mman-common.h:#define MADV_PAGEOUT	21		/* reclaim these pages */
+> /usr/include/x86_64-linux-gnu/bits/mman-linux.h:# define MADV_PAGEOUT     21	/* Reclaim these pages.  */
+> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm# grep MADV_PAGEOUT -r ../../../../usr/include
+> ../../../../usr/include/asm-generic/mman-common.h:#define MADV_PAGEOUT	21		/* reclaim these pages */
+> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm#
+> 
+> However, mman-common.h from ../../../../usr/include/asm-generic/mman-common.h is also not included,
+> as of "gcc -E", but only bits/mman-linux.h:
+> 
+> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm# gcc -Wall -E -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../.. -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include  -isystem /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include -no-pie     cow.c | grep mman-common.h
+> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm# gcc -Wall -E -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../.. -I /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include  -isystem /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/../../../usr/include -no-pie     cow.c | grep mman-linux.h
+> # 1 "/usr/include/x86_64-linux-gnu/bits/mman-linux.h" 1 3 4
+> # 119 "/usr/include/x86_64-linux-gnu/bits/mman-linux.h" 3 4
+> # 120 "/usr/include/x86_64-linux-gnu/bits/mman-linux.h" 2 3 4
+> root@marvin-IdeaPad-3-15ITL6:/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/vm#
+> 
+> I hope this is enough information for you to debug the issue.
+> 
+> I am standing by for any additional diagnostics needed.
 
-I'd prefer not to go this route, I assume/suspect there's a diffferent underlying
-issue that is the real problem.
+Won't userfaultfd.c fail in a similar way?
 
-> The switch between x2apic and xapic mode is not allowed by X86 spec, while
-> vise versa is allowed and I think that the spec says that in this case APIC
-> ID is restored to its default value.
+Anyhow, khugepaged.c jas
 
-No, APIC ID is initialized on RESET, but AFAIK it's preserved for all other
-transitions.  It's definitely preserved on INIT (doesn't touch the enable bit),
-and this snippet from the SDM more or less says the APIC ID is preserved when it's
-disabled in IA32_APIC_BASE.
+#ifndef MADV_PAGEOUT
+#define MADV_PAGEOUT 21
+#endif
 
-  From the disabled state, the only valid x2APIC transition using IA32_APIC_BASE
-  is to the xAPIC mode (EN= 1, EXTD = 0). Thus the only means to transition from
-  x2APIC mode to xAPIC mode is a two-step process:
+So most probably we should do the same.
 
-   - first transition from x2APIC mode to local APIC disabled mode (EN= 0, EXTD = 0),
-   - followed by another transition from disabled mode to xAPIC mode (EN= 1, EXTD= 0).
+-- 
+Thanks,
 
-  Consequently, all the APIC register states in the x2APIC, except for the x2APIC ID
-  (32 bits), are not preserved across mode transitions.
+David / dhildenb
 
-And for RESET vs. INIT
-
-  A reset in this state places the x2APIC in xAPIC mode. All APIC registers
-  (including the local APIC ID register) are initialized as described in Section
-  10.12.5.1.
-
-  An INIT in this state keeps the x2APIC in the x2APIC mode. The state of the
-  local APIC ID register is preserved (all 32 bits). However, all the other APIC
-  registers are initialized as a result of the INIT transition.
-
-Emanuele, what is the actual issue you are trying to fix?  E.g. is APICv left
-inihibited after an emulated RESET?  Something else?  Stuffing APIC state from
-userspace should do the right thing after commit ef40757743b4 ("KVM: x86: fix
-APICv/x2AVIC disabled when vm reboot by itself") and this patch:
-
-  https://lore.kernel.org/all/20230106011306.85230-33-seanjc@google.com
