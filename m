@@ -2,46 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0455664BE4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 20:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C59664BE8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 20:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234191AbjAJTEH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Jan 2023 14:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
+        id S239157AbjAJTEk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Jan 2023 14:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239663AbjAJTEG (ORCPT
+        with ESMTP id S239667AbjAJTEK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:04:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB8CC2C;
-        Tue, 10 Jan 2023 11:04:05 -0800 (PST)
+        Tue, 10 Jan 2023 14:04:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486C913E90;
+        Tue, 10 Jan 2023 11:04:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B61B61866;
-        Tue, 10 Jan 2023 19:04:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFDBC433EF;
-        Tue, 10 Jan 2023 19:04:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A93618A8;
+        Tue, 10 Jan 2023 19:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CDBC43396;
+        Tue, 10 Jan 2023 19:04:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673377444;
-        bh=cMloBfgRXcPaivDxBGV45/PyJEpmffBJWfiRdIAMdCU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fys4UPeZcW4izhx0mZgQ1PCbzZt6jepaHXFAtoLEQs89oOmk2vLAVFtddnsKwxI4t
-         +AMfSBQZk/zCA2ti229JqsdbQ3nvnXrAIuXJE8gzw9iwWEkMuI+m6EaInONFuAszm6
-         UkkEQ4P4manxdf0QPiF9htrVPPqcQ9WS4oxfrRe5SBAoqMPKkM6Qgzqs2uLhtle5T3
-         ujGNazYNSpsSiR/EAXQ25c1y25/XsmGBlEgEJ0OUmHEQpw8Pm1jcEw/BoOBGuvfpAq
-         +rkxFPkQlWCF/FiF0+M6kh4OziuHTDkfsswT8liRrUrpaJb0sdFv7On+BHtfeDcSPm
-         eDxURokTs+u1A==
+        s=k20201202; t=1673377449;
+        bh=y7EJfcMY/StD0BzUoTQruwXSI1p0oqW6ITb/hdOvcrQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CLZxihBAiJLZVfs0Gql2wf2QPPpAjOoIvVTvC1iFyj15MBftu/CkfH34Vda0M8H6A
+         LVdNE4VpqvAcjUx/zCJtqza160cp3d50h7xIVoxs60At+V3fa0aN6iunDJ7NIIJT0Y
+         uLELoRXyzQpaM/X4QQJzBSrER3vmzj0DSOzyhP+cmAqIO2ldcW1K5BrRXmvprqlOio
+         kWJAaRkw33Y7Qb2FfE3pAkEjdB919Knkdv2dqXm3aJMFHqS3pmTEWyFN8SzIhwt0tx
+         J9xaMoKq9Ad7/6vJKGdeOLKcMhTsN2yzZvnJLAmfSx3F+TGIGrmbMuIwiZejTfiXQw
+         gS7Fy5LrDtfzw==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/8] mm/damon: trivial fixups
-Date:   Tue, 10 Jan 2023 19:03:52 +0000
-Message-Id: <20230110190400.119388-1-sj@kernel.org>
+Subject: [PATCH 7/8] selftests/damon/sysfs: hide expected write failures
+Date:   Tue, 10 Jan 2023 19:03:59 +0000
+Message-Id: <20230110190400.119388-8-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230110190400.119388-1-sj@kernel.org>
+References: <20230110190400.119388-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -53,33 +54,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patchset contains patches for trivial fixups of DAMON's
-documentation, MAINTAINERS section, and selftests.
+DAMON selftests for sysfs (sysfs.sh) tests if some writes to DAMON sysfs
+interface files fails as expected.  It makes the test results noisy with
+the failure error message because it tests a number of such failures.
+Redirect the expected failure error messages to /dev/null to make the
+results clean.
 
-SeongJae Park (8):
-  mm/damon/core: update kernel-doc comments for DAMOS action supports of
-    each DAMON operations set
-  mm/damon/core: update kernel-doc comments for DAMOS filters supports
-    of each DAMON operations set
-  Docs/mm/damon/index: mention DAMOS on the intro
-  Docs/admin-guide/mm/damon/usage: update DAMOS actions/filters supports
-    of each DAMON operations set
-  Docs/mm/damon: add a maintainer-profile for DAMON
-  MAINTAINERS/DAMON: link maintainer profile, git trees, and website
-  selftests/damon/sysfs: hide expected write failures
-  selftests/damon/debugfs_rm_non_contexts: hide expected write error
-    messages
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ tools/testing/selftests/damon/sysfs.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Documentation/admin-guide/mm/damon/usage.rst  | 41 ++++++++----
- Documentation/mm/damon/index.rst              | 22 ++++---
- Documentation/mm/damon/maintainer-profile.rst | 62 +++++++++++++++++++
- MAINTAINERS                                   |  5 ++
- include/linux/damon.h                         | 11 ++++
- .../damon/debugfs_rm_non_contexts.sh          |  2 +-
- tools/testing/selftests/damon/sysfs.sh        |  2 +-
- 7 files changed, 122 insertions(+), 23 deletions(-)
- create mode 100644 Documentation/mm/damon/maintainer-profile.rst
-
+diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
+index a00336ffdcad..bcd4734ca094 100644
+--- a/tools/testing/selftests/damon/sysfs.sh
++++ b/tools/testing/selftests/damon/sysfs.sh
+@@ -24,7 +24,7 @@ ensure_write_fail()
+ 	content=$2
+ 	reason=$3
+ 
+-	if echo "$content" > "$file"
++	if (echo "$content" > "$file") 2> /dev/null
+ 	then
+ 		echo "writing $content to $file succeed ($fail_reason)"
+ 		echo "expected failure because $reason"
 -- 
 2.25.1
 
