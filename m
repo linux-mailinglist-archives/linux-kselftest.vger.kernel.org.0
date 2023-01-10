@@ -2,86 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9FD664C01
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 20:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B311A664D3F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 21:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239565AbjAJTIu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Jan 2023 14:08:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S233214AbjAJU1F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Jan 2023 15:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239764AbjAJTIQ (ORCPT
+        with ESMTP id S233379AbjAJU0s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:08:16 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9B62DF1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 11:07:20 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 17so14251009pll.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 11:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=P1yZ2rNXY9+OCT2MctvfeqyzaEmRMSdK9cnP/qUD3es=;
-        b=HulWpN3OqpO54u6cPuVDdQltxY/fxlzGQnBNBhw9p/WwPEBiviSDJ+JEav0A4p0BDi
-         nQClbKn2krzf5xzUUul+xfQ8+E1acsIqjE6fn5x3WvfOD+FBBySt0bobCk8SE4P1QA3v
-         3KIrMOnr1JuzERZButT5IVawEs1vynARr/7ba+m78yiqXzdckTfhlP731gneYD7nyujQ
-         paJALe1Nyup2BVE5u8lyjJ4J8N6Co38Yz/vlve8RoldnjQ2zltx+NygJ8UqCyheJkI8f
-         zVLNU/dttLt1LZsEOxDgd9Ha/N5pZTykObvqt+m8SFb27i765m8hmcimiImBfGOWVGH5
-         xzQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1yZ2rNXY9+OCT2MctvfeqyzaEmRMSdK9cnP/qUD3es=;
-        b=Zq91UvfQY/VWRZbIjr8REBIHZkX35hA9/WLveSZoOSUPVlXX6unoSXrwfgukbApB4y
-         0bYz4HT//jNNn7HGxc35eWvi5Lde0sLpEz58qMHxhVCmnq3FwuRf8IW2ZWcsS24bT0L9
-         JL0isJ7S2pS/JZuajjTt2/fH90IohHwPuRNVp3wXxdA90DHzl42Mg1lnvhFObYiP2c/+
-         qpp9W+NQ5ucUU0Zb0pCU5cEMG/NusGtM0JVgfm26PHYEu+GiK4k0OnJruXAj2b3gxD4T
-         rmXh+adqbmZOpAyS+3LxO0z9GFoiZltI5iTTc8OyQ1fXhe0Kes01v3hZ/KcBkFqVh8yv
-         dhrw==
-X-Gm-Message-State: AFqh2kobEDlG9q9elcxn/HzaPFjK9/4zkHzb+NZW4ItYjkfdEvU4eD/F
-        9CTQdP3nn57Hiu1Cs4ykQdzCQA==
-X-Google-Smtp-Source: AMrXdXvPJCjnKjpu/C3fOnUqxkmb0rowb3o4CPE21MAZXvaWlO9x+E+NcO57ODSh2Du+60yMYtseqQ==
-X-Received: by 2002:a05:6a20:1394:b0:b5:a970:8d5a with SMTP id w20-20020a056a20139400b000b5a9708d5amr152380pzh.0.1673377639322;
-        Tue, 10 Jan 2023 11:07:19 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id r4-20020aa79624000000b0056bd1bf4243sm8484018pfg.53.2023.01.10.11.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 11:07:18 -0800 (PST)
-Date:   Tue, 10 Jan 2023 19:07:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] KVM: x86: update APIC_ID also when disabling
- x2APIC in kvm_lapic_set_baseg
-Message-ID: <Y723YwUj/0+U++jI@google.com>
-References: <20230109130605.2013555-1-eesposit@redhat.com>
- <20230109130605.2013555-2-eesposit@redhat.com>
- <c61ce1a6393a108c76e53cb99249aba5ab318e07.camel@redhat.com>
- <Y7w/bYP4VGqoVcjH@google.com>
- <5664d006-9452-2033-5605-48aa0ee77ca8@redhat.com>
- <fa0758f5-abd1-ad09-3878-adf296c7aac5@redhat.com>
+        Tue, 10 Jan 2023 15:26:48 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B21B50E42;
+        Tue, 10 Jan 2023 12:26:46 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AJg7Pv018415;
+        Tue, 10 Jan 2023 20:26:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=gilVsgHY50Koq0FUZYD7/cY+Q5JzP7e6TtMunJl80LE=;
+ b=qvTJYtDqsA2vRIt0fX9gW+oe0AWBNdX1iSeEBDjas+ldV2PI2Fwy1YA/ommQlXVQYSHu
+ NnQlGK7B+fyfNDQR7sBycByTqKkow7z4AbCzOefsdQu5coVed2t3/m+BLvoavZIy5cXb
+ 5M/m7r8PYAMuUYCsKUxMxUHXTNmu6flcLZ3KDRDB/4072WQyxnwdhTpw/AiKY5a5cpIb
+ yaYzHRCXX1GBjQm1Mg4N/FOowu0oN1d0sl3HxoyO/3uq/IvjxDgvKv2DeP25j8j5FP7S
+ GItw8R9DZSVjEtr1fUokrNal3/c2MQzRw6Sr8Eb6zfUvHy+EZMMAKPLTirbNoerDm8ev Yw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1edd8yg8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 20:26:42 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30AJgHfn018853;
+        Tue, 10 Jan 2023 20:26:42 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1edd8yfe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 20:26:41 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30AIuAgp000570;
+        Tue, 10 Jan 2023 20:26:39 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6ndgn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 20:26:39 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30AKQZv946399846
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 Jan 2023 20:26:35 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 94DAF20043;
+        Tue, 10 Jan 2023 20:26:35 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0D40720040;
+        Tue, 10 Jan 2023 20:26:35 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 10 Jan 2023 20:26:34 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: [PATCH v5 00/10] KVM: s390: Extend MEM_OP ioctl by storage key checked cmpxchg
+Date:   Tue, 10 Jan 2023 21:26:22 +0100
+Message-Id: <20230110202632.2533978-1-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fa0758f5-abd1-ad09-3878-adf296c7aac5@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: w1M_610gOfPUo9PgvRP2UVsXslIbmKTd
+X-Proofpoint-GUID: r_AibupwR09-BgOJZew9gkciPBKVdHJo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-10_09,2023-01-10_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 bulkscore=0 adultscore=0 phishscore=0
+ mlxlogscore=999 malwarescore=0 spamscore=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301100133
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,177 +98,155 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 10, 2023, Paolo Bonzini wrote:
-> On 1/10/23 13:16, Emanuele Giuseppe Esposito wrote:
-> > I think the test in patch 2 I wrote gives a better idea on what I am
-> > trying to fix:
+User space can use the MEM_OP ioctl to make storage key checked reads
+and writes to the guest, however, it has no way of performing atomic,
+key checked, accesses to the guest.
+Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+mode. For now, support this mode for absolute accesses only.
 
-Tests and descriptions of expected s vs. actual behavior explain what _you_ think
-should happen, but don't help explain what higher level bug is being fixed.  IIUC,
-QEMU emulates RESET and expects the xAPIC ID to be re-initialized.  That's the
-info that should be provided in the changelog since it ties KVM behavior to a
-real world userspace emulating actual hardware behavior.
+This mode can be use, for example, to set the device-state-change
+indicator and the adapter-local-summary indicator atomically.
 
-> > if we are transitioning from x2APIC to xAPIC (RESET I
-> > would say, even though I am not sure if userspace really does it in the
-> > way I do it in the test, ie through KVM_SET_MSRS), the APIC_ID is not
-> > updated back in the right bits, and we can see that by querying the ID
-> > with KVM_GET_LAPIC after disabling x2APIC.
-> > 
-> > Now, if the way I reproduce this issue is correct, it is indeed a bug
-> > and needs to be fixed with the fix in patch 1 or something similar.
-> > I think it won't really make any difference if instead following what
-> > the doc says (x2APIC -> disabled -> xAPIC) we directly do x2APIC -> xAPIC.
-> 
-> Yes, the default value at reset is xAPIC mode, so a reset will do a
-> KVM_SET_MSRS that clears X2APIC_ENABLE but leaves
-> MSR_IA32_APICBASE_ENABLE set.
-> 
-> So, if I understand correctly...
-> 
-> > The test in patch 2 started being developed to test ef40757743b47 ("KVM:
-> > x86: fix APICv/x2AVIC disabled when vm reboot by itself") even though I
-> > honestly didn't really understand how to replicate that bug (see cover
-> > letter) and instead I found this other possibility that still manages to
-> > screw APIC_ID.
-> 
-> ... what you're saying is that there were two different bugs, but one
-> fixing any one of them was enough to prevent the symptoms shown by
-> commit ef40757743b47?  That is:
-> 
-> - the APICv inhibit was set by KVM_GET_LAPIC because it called
-> kvm_lapic_xapic_id_updated(), and the call was unnecessary as fixed in
-> commit ef40757743b47;
-> 
-> - however, there is no reason for the vCPU ID to be mismatched.  It
-> happened because the code didn't handle the host-initiated x2APIC->xAPIC
-> case and thus lacked a call to kvm_apic_set_xapic_id().
-> 
-> If so, I think the idea of the patch is fine.
-> 
-> Just one thing: your patch also changes the APIC_ID on the
-> x2APIC->disabled transition, not just the "forbidden" (i.e. host-
-> initiated only) x2APIC->xAPIC transition.  I think  this is okay too: the
-> manual says:
->
->    10.4.3 Enabling or Disabling the Local APIC
-> 
->    When IA32_APIC_BASE[11] is set to 0, prior initialization to the APIC
->    may be lost and the APIC may return to the state described in Section
->    10.4.7.1, “Local APIC State After Power-Up or Reset.”
-> 
->    10.4.7.1 Local APIC State After Power-Up or Reset
-> 
->    ... The local APIC ID register is set to a unique APIC ID. ...
-> 
-> (which must be an xAPIC ID) and this is what your patch does.
+Also contains some fixes/changes for the memop selftest independent of
+the cmpxchg changes.
 
-Ugh, couldn't find that yesterday.  It's actually irrelevant though, KVM already
-stuffs the APIC ID when the APIC goes from DISABLED to ENABLED (xAPIC) since commit:
+v4 -> v5
+ * refuse cmpxchg if not write (thanks Thomas)
+ * minor doc changes (thanks Claudio)
+ * picked up R-b's (thanks Thomas & Claudio)
+ * memop selftest fixes
+ * rebased
 
-  49bd29ba1dbd ("KVM: x86: reset APIC ID when enabling LAPIC")
+v3 -> v4
+ * no functional change intended
+ * rework documentation a bit
+ * name extension cap cmpxchg bit
+ * picked up R-b (thanks Thomas)
+ * various changes (rename variable, comments, ...) see range-diff below
 
-For giggles, and because I misread that like 5 times, I tested on hardware.  Intel
-CPUs since at least Haswell make the APIC ID read-only, i.e. it's a moot point on
-Intel these days.  But on AMD, the APIC ID is preserved across disabling => enabling
-xAPIC.
+v2 -> v3
+ * rebase onto the wip/cmpxchg_user_key branch in the s390 kernel repo
+ * use __uint128_t instead of unsigned __int128
+ * put moving of testlist into main into separate patch
+ * pick up R-b's (thanks Nico)
 
-> In fact perhaps you can change the code further to invoke
-> kvm_lapic_reset() after static_branch_inc(&apic_hw_disabled.key)?  It's
-> just a bit messy that you have a call back to kvm_lapic_set_base() in
-> there, so perhaps something like this can help:
+v1 -> v2
+ * get rid of xrk instruction for cmpxchg byte and short implementation
+ * pass old parameter via pointer instead of in mem_op struct
+ * indicate failure of cmpxchg due to wrong old value by special return
+   code
+ * picked up R-b's (thanks Thomas)
 
-I'd rather not touch kvm_lapic_reset().  KVM doesn't emulate RESET, and I don't
-want to make assumptions about why userspace is forcing x2APIC => xAPIC.  If
-userspace wants to propery emulate RESET, it can use KVM_SET_LAPIC.
+Janis Schoetterl-Glausch (10):
+  KVM: s390: Extend MEM_OP ioctl by storage key checked cmpxchg
+  Documentation: KVM: s390: Describe KVM_S390_MEMOP_F_CMPXCHG
+  KVM: s390: selftest: memop: Pass mop_desc via pointer
+  KVM: s390: selftest: memop: Replace macros by functions
+  KVM: s390: selftest: memop: Move testlist into main
+  KVM: s390: selftest: memop: Add cmpxchg tests
+  KVM: s390: selftest: memop: Add bad address test
+  KVM: s390: selftest: memop: Fix typo
+  KVM: s390: selftest: memop: Fix wrong address being used in test
+  KVM: s390: selftest: memop: Fix integer literal
 
-My preference is to do a light tweak on the original patch, with a rewritten
-shortlog and changelog.  And because I spent way, way too much time digging into
-this, I went a bit overboard...
+ Documentation/virt/kvm/api.rst            |  20 +-
+ include/uapi/linux/kvm.h                  |   7 +
+ arch/s390/kvm/gaccess.h                   |   3 +
+ arch/s390/kvm/gaccess.c                   | 102 ++++
+ arch/s390/kvm/kvm-s390.c                  |  41 +-
+ tools/testing/selftests/kvm/s390x/memop.c | 675 +++++++++++++++++-----
+ 6 files changed, 696 insertions(+), 152 deletions(-)
 
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 10 Jan 2023 10:40:33 -0800
-Subject: [PATCH] KVM: x86: Reinitialize xAPIC ID when userspace forces x2APIC
- => xAPIC
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Reinitialize the xAPIC ID to the vCPU ID when userspace forces the APIC
-to transition directly from x2APIC to xAPIC mode, e.g. to emulate RESET.
-KVM already stuffs the xAPIC ID when the APIC is transitioned from
-DISABLED to xAPIC (commit 49bd29ba1dbd ("KVM: x86: reset APIC ID when
-enabling LAPIC")), i.e. userspace is conditioned to expect KVM to update
-the xAPIC ID, but KVM doesn't handle the architecturally-impossible case
-where userspace forces x2APIC=>xAPIC via KVM_SET_MSRS.
-
-On its own, the "bug" is benign, as userspace emulation of RESET will also
-stuff APIC registers via KVM_SET_LAPIC, i.e. will manually set the xAPIC
-ID.  However, commit 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on
-changes to APIC ID or APIC base") introduced a bug, fixed by commit
-commit ef40757743b4 ("KVM: x86: fix APICv/x2AVIC disabled when vm reboot
-by itself"), that caused KVM to fail to properly update the xAPIC ID when
-handling KVM_SET_LAPIC.  Refresh the xAPIC ID even though it's not
-strictly necessary so that KVM provides consistent behavior.
-
-Note, KVM follows Intel architecture with regard to handling the xAPIC ID
-and x2APIC IDs across mode transitions.  For the APIC DISABLED case
-(commit 49bd29ba1dbd), Intel's SDM says the xAPIC ID _may_ be
-reinitialized
-
-    10.4.3 Enabling or Disabling the Local APIC
-
-    When IA32_APIC_BASE[11] is set to 0, prior initialization to the APIC
-    may be lost and the APIC may return to the state described in Section
-    10.4.7.1, “Local APIC State After Power-Up or Reset.”
-
-    10.4.7.1 Local APIC State After Power-Up or Reset
-
-    ... The local APIC ID register is set to a unique APIC ID. ...
-
-i.e. KVM's behavior is legal as per Intel's architecture.   In practice,
-Intel's behavior is N/A as modern Intel CPUs (since at least Haswell) make
-the xAPIC ID fully read-only.
-
-And for xAPIC => x2APIC transitions (commit 257b9a5faab5 ("KVM: x86: use
-correct APIC ID on x2APIC transition")), Intel's SDM says:
-
-  Any APIC ID value written to the memory-mapped local APIC ID register
-  is not preserved.
-
-AMD's APM says nothing (that I could find) about the xAPIC ID when the
-APIC is DISABLED, but testing on bare metal (Rome) shows that the xAPIC ID
-is preserved when the APIC is DISABLED and re-enabled in xAPIC mode.  AMD
-also preserves the xAPIC ID when the APIC is transitioned from xAPIC to
-x2APIC, i.e. allows a backdoor write of the x2APIC ID, which is again not
-emulated by KVM.
-
-Reported-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/lapic.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 80f92cbc4029..79141d76ad49 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2485,8 +2485,12 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
- 		}
- 	}
- 
--	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
--		kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-+	if ((old_value ^ value) & X2APIC_ENABLE) {
-+		if (value & X2APIC_ENABLE)
-+			kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-+		else if (value & MSR_IA32_APICBASE_ENABLE)
-+			kvm_apic_set_xapic_id(apic, vcpu->vcpu_id);
-+	}
- 
- 	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
- 		kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
-
-base-commit: 91dc252b0dbb6879e4067f614df1e397fec532a1
+Range-diff against v4:
+ 1:  75a20d2e27f2 !  1:  6adc166ee141 KVM: s390: Extend MEM_OP ioctl by storage key checked cmpxchg
+    @@ arch/s390/kvm/kvm-s390.c: static int kvm_s390_vm_mem_op(struct kvm *kvm, struct
+     +		 */
+     +		if (mop->size > sizeof(new))
+     +			return -EINVAL;
+    ++		if (mop->op != KVM_S390_MEMOP_ABSOLUTE_WRITE)
+    ++			return -EINVAL;
+     +		if (copy_from_user(&new.raw[off_in_quad], uaddr, mop->size))
+     +			return -EFAULT;
+     +		if (copy_from_user(&old.raw[off_in_quad], old_addr, mop->size))
+ 2:  5c5ad96a4c81 !  2:  fce9a063ab70 Documentation: KVM: s390: Describe KVM_S390_MEMOP_F_CMPXCHG
+    @@ Commit message
+         checked) cmpxchg operations on guest memory.
+     
+         Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+    +    Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+     
+      ## Documentation/virt/kvm/api.rst ##
+     @@ Documentation/virt/kvm/api.rst: The fields in each entry are defined as follows:
+    @@ Documentation/virt/kvm/api.rst: The fields in each entry are defined as follows:
+      :Returns: = 0 on success,
+                < 0 on generic error (e.g. -EFAULT or -ENOMEM),
+     -          > 0 if an exception occurred while walking the page tables
+    -+          16 bit program exception code if the access causes such an exception
+    -+          other code > 0xffff with special meaning
+    ++          16 bit program exception code if the access causes such an exception,
+    ++          other code > 0xffff with special meaning.
+      
+      Read or write data from/to the VM's memory.
+      The KVM_CAP_S390_MEM_OP_EXTENSION capability specifies what functionality is
+ 3:  9cbcb313d91d =  3:  94c1165ae24a KVM: s390: selftest: memop: Pass mop_desc via pointer
+ 4:  21d98b9deaae !  4:  027c87eee0ac KVM: s390: selftest: memop: Replace macros by functions
+    @@ Commit message
+         need the exta flexibility.
+     
+         Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+    +    Reviewed-by: Thomas Huth <thuth@redhat.com>
+     
+      ## tools/testing/selftests/kvm/s390x/memop.c ##
+     @@ tools/testing/selftests/kvm/s390x/memop.c: struct mop_desc {
+ 5:  866fcd7fbc97 !  5:  16ac410ecc0f KVM: s390: selftest: memop: Move testlist into main
+    @@ tools/testing/selftests/kvm/s390x/memop.c: static void test_errors(void)
+      {
+      	int extension_cap, idx;
+      
+    -+	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
+      	TEST_REQUIRE(kvm_has_cap(KVM_CAP_S390_MEM_OP));
+     +	extension_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP_EXTENSION);
+      
+    --	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
+    +-	ksft_print_header();
+     +	struct testdef {
+     +		const char *name;
+     +		void (*test)(void);
+    @@ tools/testing/selftests/kvm/s390x/memop.c: static void test_errors(void)
+     +		},
+     +	};
+      
+    - 	ksft_print_header();
+    --
+    ++	ksft_print_header();
+      	ksft_set_plan(ARRAY_SIZE(testlist));
+      
+     -	extension_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP_EXTENSION);
+    @@ tools/testing/selftests/kvm/s390x/memop.c: static void test_errors(void)
+     -			ksft_test_result_skip("%s - extension level %d not supported\n",
+     -					      testlist[idx].name,
+     -					      testlist[idx].extension);
+    -+			ksft_test_result_skip("%s - requirements not met (kernel has extension cap %#x\n)",
+    ++			ksft_test_result_skip("%s - requirements not met (kernel has extension cap %#x)\n",
+     +					      testlist[idx].name, extension_cap);
+      		}
+      	}
+ 6:  c3e473677786 !  6:  214281b6eb96 KVM: s390: selftest: memop: Add cmpxchg tests
+    @@ tools/testing/selftests/kvm/s390x/memop.c: static void test_errors(void)
+     +		rv = ERR_MOP(t.vm, ABSOLUTE, WRITE, mem1, i, GADDR((void *)~0xfffUL),
+     +			     CMPXCHG_OLD(&old));
+     +		TEST_ASSERT(rv > 0, "ioctl allows bad guest address for cmpxchg");
+    ++		rv = ERR_MOP(t.vm, ABSOLUTE, READ, mem1, i, GADDR_V(mem1),
+    ++			     CMPXCHG_OLD(&old));
+    ++		TEST_ASSERT(rv == -1 && errno == EINVAL,
+    ++			    "ioctl allows read cmpxchg call");
+     +	}
+     +	for (i = 2; i <= 16; i *= 2) {
+     +		rv = ERR_MOP(t.vm, ABSOLUTE, WRITE, mem1, i, GADDR_V(mem1 + 1),
+ 7:  90288760656e =  7:  2d6776733e64 KVM: s390: selftest: memop: Add bad address test
+ 8:  e3d4b9b2ba61 =  8:  8c49eafd2881 KVM: s390: selftest: memop: Fix typo
+ 9:  13fedd6e3d9e =  9:  0af907110b34 KVM: s390: selftest: memop: Fix wrong address being used in test
+ -:  ------------ > 10:  886c80b2bdce KVM: s390: selftest: memop: Fix integer literal
 -- 
+2.34.1
 
