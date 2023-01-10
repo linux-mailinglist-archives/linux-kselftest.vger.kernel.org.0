@@ -2,169 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE252663F50
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 12:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7C7664045
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 13:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjAJLgU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Jan 2023 06:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
+        id S238245AbjAJMTZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Jan 2023 07:19:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232310AbjAJLgL (ORCPT
+        with ESMTP id S238361AbjAJMSU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Jan 2023 06:36:11 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04473113A;
-        Tue, 10 Jan 2023 03:36:03 -0800 (PST)
-Received: from lhrpeml500004.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NrpXg50mcz6J91l;
-        Tue, 10 Jan 2023 19:30:59 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- lhrpeml500004.china.huawei.com (7.191.163.9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 10 Jan 2023 11:35:59 +0000
-Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
- lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2375.034;
- Tue, 10 Jan 2023 11:35:59 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Yi Liu <yi.l.liu@intel.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-CC:     Alex Williamson <alex.williamson@redhat.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        "Jason Wang" <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        zhukeqian <zhukeqian1@huawei.com>
-Subject: RE: [PATCH v4 00/17] IOMMUFD Generic interface
-Thread-Topic: [PATCH v4 00/17] IOMMUFD Generic interface
-Thread-Index: AQHY8wv6WqOaN9m/WUKJgvcZCnpZkK454qzggAFgXgCAXKMbQA==
-Date:   Tue, 10 Jan 2023 11:35:59 +0000
-Message-ID: <36b0fdac061e4680b5966d2774f0026a@huawei.com>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <3a20e56423f544dab312bca1bcb56ce4@huawei.com>
- <000cf099-9824-39b8-3719-cf43b33ae1ef@intel.com>
-In-Reply-To: <000cf099-9824-39b8-3719-cf43b33ae1ef@intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.202.227.178]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 10 Jan 2023 07:18:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3DB1CB2B
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 04:16:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673353011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/VBegRFUI9M946r5K4XKBTlecjNtq9+i9FsUOMeXf0I=;
+        b=A8bMxJiE/XL3j6vBFB5eGWUjp1PpRCdt4axVFNCPQWcFsGxUugV6ttxI527NBsUmGTCgpV
+        Ma4OKY0YENos/sFxOkcdj9IF60puz22mng083P/icadU8M+vGGGHgA03Mt/8i7NN+osF8z
+        IcvM9jdkgHr3F7/aTn+rqrHG+Jh/zXA=
+Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
+ [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-488-NTHtqzWuN3ugGNtDmi21hg-1; Tue, 10 Jan 2023 07:16:50 -0500
+X-MC-Unique: NTHtqzWuN3ugGNtDmi21hg-1
+Received: by mail-ua1-f72.google.com with SMTP id o43-20020ab0596e000000b0038421e4c7deso5432222uad.19
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 04:16:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/VBegRFUI9M946r5K4XKBTlecjNtq9+i9FsUOMeXf0I=;
+        b=nQBkHgZmjq7WN+Uny75JOzsN9F8NuacxmBxhDACpdJdReB3XgFCeEdv87uwmvZSzSm
+         yt5I+Z/IYjtw/aluTrWLcjg2E+/H/Ggvl2yv0TFSmO3h0i7hWUMxjPgAx45wDrp6Y/hO
+         +uQWsrK6Nlej8xz7v/xpFCyhttDJBcyYzN2MHpNJC7q9/JZnpfTGE7ML/ytWFXhivLHj
+         31Uf0nLDGPoa2Yr+js3ucIIH52sChnbju7juNUvm3CGssZ+WYHpE5ih9EcFB6UNW9IhC
+         Gbb+cw9v93/g5sCqC7ceB58+JvKQ4gjfapAzMen2e2T6VYYeaY//8WJahkaxpROVnde3
+         naQg==
+X-Gm-Message-State: AFqh2koMJDyhlM4sdAegpfr//2NFRmNZohYQa7+musulv7MboXUgxlXJ
+        5wUvbPLh9p9ZcxM0g7QeIiEL3VlrvAJ4TXthxVzXD89KbscFhBj3UwjC4ZsBJ+8V5R1eLZxVuvb
+        FW93nF6L2gU+rk1sn4XsKEX+a00O7
+X-Received: by 2002:a67:f455:0:b0:3ca:6d6b:bcaf with SMTP id r21-20020a67f455000000b003ca6d6bbcafmr26834244vsn.29.1673353009740;
+        Tue, 10 Jan 2023 04:16:49 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuUTKcI/fRyAlKDhNxr3HKrEFM4cjfX+H6/x9o1D6WHwkRTwjoaVbwT1FFiguCw9h2GsrAX8g==
+X-Received: by 2002:a67:f455:0:b0:3ca:6d6b:bcaf with SMTP id r21-20020a67f455000000b003ca6d6bbcafmr26834220vsn.29.1673353009415;
+        Tue, 10 Jan 2023 04:16:49 -0800 (PST)
+Received: from [192.168.149.123] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
+        by smtp.gmail.com with ESMTPSA id bm39-20020a05620a19a700b00704d8ad2e11sm7001400qkb.42.2023.01.10.04.16.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 04:16:48 -0800 (PST)
+Message-ID: <5664d006-9452-2033-5605-48aa0ee77ca8@redhat.com>
+Date:   Tue, 10 Jan 2023 13:16:43 +0100
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH 1/2] KVM: x86: update APIC_ID also when disabling
+ x2APIC in kvm_lapic_set_base
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Gautam Menghani <gautammenghani201@gmail.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230109130605.2013555-1-eesposit@redhat.com>
+ <20230109130605.2013555-2-eesposit@redhat.com>
+ <c61ce1a6393a108c76e53cb99249aba5ab318e07.camel@redhat.com>
+ <Y7w/bYP4VGqoVcjH@google.com>
+Content-Language: de-CH
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+In-Reply-To: <Y7w/bYP4VGqoVcjH@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogWWkgTGl1IFttYWlsdG86
-eWkubC5saXVAaW50ZWwuY29tXQ0KPiBTZW50OiAxMiBOb3ZlbWJlciAyMDIyIDEyOjQ1DQo+IFRv
-OiBTaGFtZWVyYWxpIEtvbG90aHVtIFRob2RpIDxzaGFtZWVyYWxpLmtvbG90aHVtLnRob2RpQGh1
-YXdlaS5jb20+Ow0KPiBKYXNvbiBHdW50aG9ycGUgPGpnZ0BudmlkaWEuY29tPjsgYnBmQHZnZXIu
-a2VybmVsLm9yZzsgSm9uYXRoYW4gQ29yYmV0DQo+IDxjb3JiZXRAbHduLm5ldD47IERhdmlkIFdv
-b2Rob3VzZSA8ZHdtdzJAaW5mcmFkZWFkLm9yZz47DQo+IGlvbW11QGxpc3RzLmxpbnV4LmRldjsg
-Sm9lcmcgUm9lZGVsIDxqb3JvQDhieXRlcy5vcmc+OyBLZXZpbiBUaWFuDQo+IDxrZXZpbi50aWFu
-QGludGVsLmNvbT47IGxpbnV4LWRvY0B2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LWtzZWxmdGVz
-dEB2Z2VyLmtlcm5lbC5vcmc7IGxsdm1AbGlzdHMubGludXguZGV2OyBOYXRoYW4gQ2hhbmNlbGxv
-cg0KPiA8bmF0aGFuQGtlcm5lbC5vcmc+OyBOaWNrIERlc2F1bG5pZXJzIDxuZGVzYXVsbmllcnNA
-Z29vZ2xlLmNvbT47IE1pZ3VlbA0KPiBPamVkYSA8b2plZGFAa2VybmVsLm9yZz47IFJvYmluIE11
-cnBoeSA8cm9iaW4ubXVycGh5QGFybS5jb20+OyBTaHVhaA0KPiBLaGFuIDxzaHVhaEBrZXJuZWwu
-b3JnPjsgU3VyYXZlZSBTdXRoaWt1bHBhbml0DQo+IDxzdXJhdmVlLnN1dGhpa3VscGFuaXRAYW1k
-LmNvbT47IFRvbSBSaXggPHRyaXhAcmVkaGF0LmNvbT47IFdpbGwNCj4gRGVhY29uIDx3aWxsQGtl
-cm5lbC5vcmc+DQo+IENjOiBBbGV4IFdpbGxpYW1zb24gPGFsZXgud2lsbGlhbXNvbkByZWRoYXQu
-Y29tPjsgTHUgQmFvbHUNCj4gPGJhb2x1Lmx1QGxpbnV4LmludGVsLmNvbT47IENoYWl0YW55YSBL
-dWxrYXJuaSA8Y2hhaXRhbnlha0BudmlkaWEuY29tPjsNCj4gQ29ybmVsaWEgSHVjayA8Y29odWNr
-QHJlZGhhdC5jb20+OyBEYW5pZWwgSm9yZGFuDQo+IDxkYW5pZWwubS5qb3JkYW5Ab3JhY2xlLmNv
-bT47IERhdmlkIEdpYnNvbg0KPiA8ZGF2aWRAZ2lic29uLmRyb3BiZWFyLmlkLmF1PjsgRXJpYyBB
-dWdlciA8ZXJpYy5hdWdlckByZWRoYXQuY29tPjsgRXJpYw0KPiBGYXJtYW4gPGZhcm1hbkBsaW51
-eC5pYm0uY29tPjsgSmFzb24gV2FuZyA8amFzb3dhbmdAcmVkaGF0LmNvbT47DQo+IEplYW4tUGhp
-bGlwcGUgQnJ1Y2tlciA8amVhbi1waGlsaXBwZUBsaW5hcm8ub3JnPjsgSm9hbyBNYXJ0aW5zDQo+
-IDxqb2FvLm0ubWFydGluc0BvcmFjbGUuY29tPjsga3ZtQHZnZXIua2VybmVsLm9yZzsgTWF0dGhl
-dyBSb3NhdG8NCj4gPG1qcm9zYXRvQGxpbnV4LmlibS5jb20+OyBNaWNoYWVsIFMuIFRzaXJraW4g
-PG1zdEByZWRoYXQuY29tPjsgTmljb2xpbg0KPiBDaGVuIDxuaWNvbGluY0BudmlkaWEuY29tPjsg
-TmlrbGFzIFNjaG5lbGxlIDxzY2huZWxsZUBsaW51eC5pYm0uY29tPjsNCj4gemh1a2VxaWFuIDx6
-aHVrZXFpYW4xQGh1YXdlaS5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjQgMDAvMTddIElP
-TU1VRkQgR2VuZXJpYyBpbnRlcmZhY2UNCj4gDQo+IEhpIFNoYW1lZXIsDQo+IA0KPiBPbiAyMDIy
-LzExLzExIDIzOjUxLCBTaGFtZWVyYWxpIEtvbG90aHVtIFRob2RpIHdyb3RlOg0KPiA+DQo+ID4N
-Cj4gPj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4gRnJvbTogSmFzb24gR3VudGhv
-cnBlIFttYWlsdG86amdnQG52aWRpYS5jb21dDQo+ID4+IFNlbnQ6IDA4IE5vdmVtYmVyIDIwMjIg
-MDA6NDkNCj4gPj4gVG86IGJwZkB2Z2VyLmtlcm5lbC5vcmc7IEpvbmF0aGFuIENvcmJldCA8Y29y
-YmV0QGx3bi5uZXQ+OyBEYXZpZA0KPiA+PiBXb29kaG91c2UgPGR3bXcyQGluZnJhZGVhZC5vcmc+
-OyBpb21tdUBsaXN0cy5saW51eC5kZXY7IEpvZXJnDQo+IFJvZWRlbA0KPiA+PiA8am9yb0A4Ynl0
-ZXMub3JnPjsgS2V2aW4gVGlhbiA8a2V2aW4udGlhbkBpbnRlbC5jb20+Ow0KPiA+PiBsaW51eC1k
-b2NAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rc2VsZnRlc3RAdmdlci5rZXJuZWwub3JnOw0KPiA+
-PiBsbHZtQGxpc3RzLmxpbnV4LmRldjsgTmF0aGFuIENoYW5jZWxsb3IgPG5hdGhhbkBrZXJuZWwu
-b3JnPjsgTmljaw0KPiA+PiBEZXNhdWxuaWVycyA8bmRlc2F1bG5pZXJzQGdvb2dsZS5jb20+OyBN
-aWd1ZWwgT2plZGENCj4gPG9qZWRhQGtlcm5lbC5vcmc+Ow0KPiA+PiBSb2JpbiBNdXJwaHkgPHJv
-YmluLm11cnBoeUBhcm0uY29tPjsgU2h1YWggS2hhbg0KPiA8c2h1YWhAa2VybmVsLm9yZz47DQo+
-ID4+IFN1cmF2ZWUgU3V0aGlrdWxwYW5pdCA8c3VyYXZlZS5zdXRoaWt1bHBhbml0QGFtZC5jb20+
-OyBUb20gUml4DQo+ID4+IDx0cml4QHJlZGhhdC5jb20+OyBXaWxsIERlYWNvbiA8d2lsbEBrZXJu
-ZWwub3JnPg0KPiA+PiBDYzogQWxleCBXaWxsaWFtc29uIDxhbGV4LndpbGxpYW1zb25AcmVkaGF0
-LmNvbT47IEx1IEJhb2x1DQo+ID4+IDxiYW9sdS5sdUBsaW51eC5pbnRlbC5jb20+OyBDaGFpdGFu
-eWEgS3Vsa2FybmkNCj4gPGNoYWl0YW55YWtAbnZpZGlhLmNvbT47DQo+ID4+IENvcm5lbGlhIEh1
-Y2sgPGNvaHVja0ByZWRoYXQuY29tPjsgRGFuaWVsIEpvcmRhbg0KPiA+PiA8ZGFuaWVsLm0uam9y
-ZGFuQG9yYWNsZS5jb20+OyBEYXZpZCBHaWJzb24NCj4gPj4gPGRhdmlkQGdpYnNvbi5kcm9wYmVh
-ci5pZC5hdT47IEVyaWMgQXVnZXIgPGVyaWMuYXVnZXJAcmVkaGF0LmNvbT47DQo+IEVyaWMNCj4g
-Pj4gRmFybWFuIDxmYXJtYW5AbGludXguaWJtLmNvbT47IEphc29uIFdhbmcgPGphc293YW5nQHJl
-ZGhhdC5jb20+Ow0KPiA+PiBKZWFuLVBoaWxpcHBlIEJydWNrZXIgPGplYW4tcGhpbGlwcGVAbGlu
-YXJvLm9yZz47IEpvYW8gTWFydGlucw0KPiA+PiA8am9hby5tLm1hcnRpbnNAb3JhY2xlLmNvbT47
-IGt2bUB2Z2VyLmtlcm5lbC5vcmc7IE1hdHRoZXcgUm9zYXRvDQo+ID4+IDxtanJvc2F0b0BsaW51
-eC5pYm0uY29tPjsgTWljaGFlbCBTLiBUc2lya2luIDxtc3RAcmVkaGF0LmNvbT47DQo+IE5pY29s
-aW4NCj4gPj4gQ2hlbiA8bmljb2xpbmNAbnZpZGlhLmNvbT47IE5pa2xhcyBTY2huZWxsZSA8c2No
-bmVsbGVAbGludXguaWJtLmNvbT47DQo+ID4+IFNoYW1lZXJhbGkgS29sb3RodW0gVGhvZGkgPHNo
-YW1lZXJhbGkua29sb3RodW0udGhvZGlAaHVhd2VpLmNvbT47DQo+IFlpDQo+ID4+IExpdSA8eWku
-bC5saXVAaW50ZWwuY29tPjsgemh1a2VxaWFuIDx6aHVrZXFpYW4xQGh1YXdlaS5jb20+DQo+ID4+
-IFN1YmplY3Q6IFtQQVRDSCB2NCAwMC8xN10gSU9NTVVGRCBHZW5lcmljIGludGVyZmFjZQ0KPiA+
-IFsuLi5dDQo+ID4+DQo+ID4+IC0gVXNlcnNwYWNlIHBhZ2UgdGFibGVzIGFrYSAnbmVzdGVkIHRy
-YW5zbGF0aW9uJyBmb3IgQVJNIGFuZCBJbnRlbCBpb21tdQ0KPiA+PiAgICBkcml2ZXJzOg0KPiA+
-PiAgICBodHRwczovL2dpdGh1Yi5jb20vbmljb2xpbmMvaW9tbXVmZC9jb21taXRzL2lvbW11ZmRf
-bmVzdGluZw0KPiA+DQo+ID4gSGkgRXJpYy9ZaS9OaWNvbGluLA0KPiA+DQo+ID4gQ291bGQgeW91
-IHBsZWFzZSBwcm92aWRlIGEgbGF0ZXN0IEtlcm5lbC9RZW11IGJyYW5jaCBmb3IgdGhlIEFSTSBu
-ZXN0aW5nDQo+IHN1cHBvcnQ/DQo+ID4gVGhlIGFib3ZlIGxpbmsgcG9pbnRzIHRvIFlpJ3MgZ2l0
-LCBidXQgbm90IHN1cmUgd2hpY2ggb25lIGlzIGxhdGVzdC9zdGFibGUgdG8NCj4gPiBoYXZlIGEg
-cGxheS4NCj4gDQo+IE5pY29saW4gYW5kIEkgYXJlIHdvcmtpbmcgb24gdGhlIG5ldyB2ZXJzaW9u
-IGZvciBuZXN0aW5nIHN1cHBvcnQuIEJlbG93DQo+IGtlcm5sIGJyYW5jaCBpcyBvdXIgbGF0ZXN0
-IHByb2dyZXNzIHNvIGZhci4gQXMgdGhlIG5hbWluZywgaXQncyBzdGlsbA0KPiB3aXAuIFdlIGFs
-c28gbmVlZCB0byB3b3Jrb3V0IGEgUWVtdSB2ZXJzaW9uLCBzbyBzdGlsbCBuZWVkIHNvbWUgdGlt
-ZQ0KPiBiZWZvcmUgc2hhcmluZyB3aXRoIHlvdS4NCj4gDQo+IGh0dHBzOi8vZ2l0aHViLmNvbS95
-aWxpdTE3NjUvaW9tbXVmZC90cmVlL3dpcC9pb21tdWZkLXY2LjEtcmMzLW5lc3RpbmcNCg0KSGkg
-WWksDQoNClRoYW5rcyBmb3IgdGhhdC4gSSBhdHRlbXB0ZWQgQVJNIHZTVkEgc3VwcG9ydCBiYXNl
-ZCBvbiB5b3VyIGFib3ZlIGJyYW5jaA0KYW5kIHJlbGF0ZWQgUWVtdSBicmFuY2guIFdpdGggZmV3
-IGhhY2tzIGFuZCBhZGRpdGlvbmFsIHBhdGNoZXMgdGhlIHByb3RvdHlwZQ0KY29kZSB3b3JrcyB3
-ZWxsIG9uIEhpU2lsaWNvbiBBUk0gcGxhdGZvcm0uIA0KDQpQbGVhc2UgZmluZCB0aGUgY29ycmVz
-cG9uZGluZyBicmFuY2hlcyBlcmUsDQpodHRwczovL2dpdGh1Yi5jb20vaGlzaWxpY29uL2tlcm5l
-bC1kZXYvdHJlZS9pb21tdWZkLXY2LjEtcmMzLW5lc3RpbmctYXJtLXZTVkENCmh0dHBzOi8vZ2l0
-aHViLmNvbS9oaXNpbGljb24vcWVtdS90cmVlL3FlbXUtaW9tbXVmZC02LjEtcmMzLWFybS12U1ZB
-DQoNClBsZWFzZSBsZXQgbWUga25vdyBpZiB0aGVyZSBhcmUgYW55IHJlY2VudCBicmFuY2hlcyBm
-b3IgQVJNIHN1cHBvcnQuDQoNClRoYW5rcywNClNoYW1lZXINCiANCj4gDQo+IC0tDQo+IFJlZ2Fy
-ZHMsDQo+IFlpIExpdQ0KDQo=
+
+
+Am 09/01/2023 um 17:23 schrieb Sean Christopherson:
+> On Mon, Jan 09, 2023, Maxim Levitsky wrote:
+>> On Mon, 2023-01-09 at 08:06 -0500, Emanuele Giuseppe Esposito wrote:
+>>> If KVM_SET_MSR firstly enables and then disables x2APIC, make sure
+>>> APIC_ID is actually updated correctly, since bits and offset differ from
+>>> xAPIC and x2APIC.
+>>>
+>>> Currently this is not handled correctly, as kvm_set_apic_base() will
+>>> have msr_info->host_initiated, so switching from x2APIC to xAPIC won't
+>>> fail, but kvm_lapic_set_base() does not handle the case.
+>>>
+>>> Fixes: 8d860bbeedef ("kvm: vmx: Basic APIC virtualization controls have three settings")
+>>> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+>>> ---
+>>>  arch/x86/kvm/lapic.c | 8 ++++++--
+>>>  1 file changed, 6 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+>>> index 4efdb4a4d72c..df0a50099aa2 100644
+>>> --- a/arch/x86/kvm/lapic.c
+>>> +++ b/arch/x86/kvm/lapic.c
+>>> @@ -2394,8 +2394,12 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
+>>>  		}
+>>>  	}
+>>>  
+>>> -	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
+>>> -		kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
+>>> +	if ((old_value ^ value) & X2APIC_ENABLE) {
+>>> +		if (value & X2APIC_ENABLE)
+>>> +			kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
+>>> +		else
+>>> +			kvm_apic_set_xapic_id(apic, vcpu->vcpu_id);
+>>> +	}
+>>>  
+>>>  	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
+>>>  		kvm_vcpu_update_apicv(vcpu);
+>>
+>>
+>> I don't think that this patch is 100% needed in a strict sense, but I don't
+>> object to it either.
+> 
+> I'd prefer not to go this route, I assume/suspect there's a diffferent underlying
+> issue that is the real problem.
+> 
+>> The switch between x2apic and xapic mode is not allowed by X86 spec, while
+>> vise versa is allowed and I think that the spec says that in this case APIC
+>> ID is restored to its default value.
+> 
+> No, APIC ID is initialized on RESET, but AFAIK it's preserved for all other
+> transitions.  It's definitely preserved on INIT (doesn't touch the enable bit),
+> and this snippet from the SDM more or less says the APIC ID is preserved when it's
+> disabled in IA32_APIC_BASE.
+> 
+>   From the disabled state, the only valid x2APIC transition using IA32_APIC_BASE
+>   is to the xAPIC mode (EN= 1, EXTD = 0). Thus the only means to transition from
+>   x2APIC mode to xAPIC mode is a two-step process:
+> 
+>    - first transition from x2APIC mode to local APIC disabled mode (EN= 0, EXTD = 0),
+>    - followed by another transition from disabled mode to xAPIC mode (EN= 1, EXTD= 0).
+> 
+>   Consequently, all the APIC register states in the x2APIC, except for the x2APIC ID
+>   (32 bits), are not preserved across mode transitions.
+> 
+> And for RESET vs. INIT
+> 
+>   A reset in this state places the x2APIC in xAPIC mode. All APIC registers
+>   (including the local APIC ID register) are initialized as described in Section
+>   10.12.5.1.
+> 
+>   An INIT in this state keeps the x2APIC in the x2APIC mode. The state of the
+>   local APIC ID register is preserved (all 32 bits). However, all the other APIC
+>   registers are initialized as a result of the INIT transition.
+> 
+> Emanuele, what is the actual issue you are trying to fix?  E.g. is APICv left
+> inihibited after an emulated RESET?  Something else?
+
+I think the test in patch 2 I wrote gives a better idea on what I am
+trying to fix: if we are transitioning from x2APIC to xAPIC (RESET I
+would say, even though I am not sure if userspace really does it in the
+way I do it in the test, ie through KVM_SET_MSRS), the APIC_ID is not
+updated back in the right bits, and we can see that by querying the ID
+with KVM_GET_LAPIC after disabling x2APIC.
+
+Now, if the way I reproduce this issue is correct, it is indeed a bug
+and needs to be fixed with the fix in patch 1 or something similar.
+I think it won't really make any difference if instead following what
+the doc says (x2APIC -> disabled -> xAPIC) we directly do x2APIC -> xAPIC.
+
+The test in patch 2 started being developed to test ef40757743b47 ("KVM:
+x86: fix APICv/x2AVIC disabled when vm reboot by itself") even though I
+honestly didn't really understand how to replicate that bug (see cover
+letter) and instead I found this other possibility that still manages to
+screw APIC_ID.
+
+Hope this clarifies it a little,
+Emanuele
+
+  Stuffing APIC state from
+> userspace should do the right thing after commit ef40757743b4 ("KVM: x86: fix
+> APICv/x2AVIC disabled when vm reboot by itself") and this patch:
+> 
+>   https://lore.kernel.org/all/20230106011306.85230-33-seanjc@google.com
+> 
+
