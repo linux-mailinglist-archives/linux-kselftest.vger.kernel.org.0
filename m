@@ -2,127 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA2E664D55
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 21:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D45664D8B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 21:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234107AbjAJU1L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Jan 2023 15:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
+        id S229660AbjAJUi0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Jan 2023 15:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbjAJU06 (ORCPT
+        with ESMTP id S232145AbjAJUiZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Jan 2023 15:26:58 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F43392E2;
-        Tue, 10 Jan 2023 12:26:57 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AKP6nZ018499;
-        Tue, 10 Jan 2023 20:26:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=cA8XJvyVgGxAY7KShYJGljhyy4b1i01QqIUktkumM/g=;
- b=sKdDdJiogOFp3JOela2SKcLAVlnPRIqGqVUaiOavtbukqLKu2FThNurN6CsZy4C+XtVP
- d3QcFTQxIy2XXAJ6oTgwQUUnxEIIeY/+4He3/A0yNoT5+QxrZZbgbkLyelTIWu1VCMse
- O5K6CtbMC7r2nEZzDHkXAqDlxSk/aiCAm9rKWDYuAQqBnazut9HaKnUx8tMweYGiuOW1
- kLoYOBL4rtA5vjYUKwj6TVCtg6K1Mf7i9v8orI1VrjQQk7T+qUQS5Is00oNsvIndyekI
- evnrL4nlMxsO6gb0SL/YLV4b+NfOTLByxPo4Z2I0G+bpQafYs5zgnLsU4Hp/iRpgQGNT Pw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1f1ng10f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 20:26:48 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30AKQ3sg020789;
-        Tue, 10 Jan 2023 20:26:47 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1f1ng100-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 20:26:47 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30AIoVwj014076;
-        Tue, 10 Jan 2023 20:26:45 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3my00fne84-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 10 Jan 2023 20:26:45 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30AKQfZV45613364
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Jan 2023 20:26:41 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9558420040;
-        Tue, 10 Jan 2023 20:26:41 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1119720043;
-        Tue, 10 Jan 2023 20:26:41 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 10 Jan 2023 20:26:41 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: [PATCH v5 10/10] KVM: s390: selftest: memop: Fix integer literal
-Date:   Tue, 10 Jan 2023 21:26:32 +0100
-Message-Id: <20230110202632.2533978-11-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230110202632.2533978-1-scgl@linux.ibm.com>
-References: <20230110202632.2533978-1-scgl@linux.ibm.com>
+        Tue, 10 Jan 2023 15:38:25 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3698485B1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 12:38:23 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id dw9so12216057pjb.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 12:38:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=adAxM/tdxethfCc9kWsVP4uZeaLxTRj54+QnNFBkUNY=;
+        b=q6L5OgUTT+UTRnL01un1afM9agRNUadY7z3gcTMkTail3+Qhky05OYeoYhqXQYg/2V
+         oNM0bJF76X8c1a11DiRZwcxUUHYL3WCdBjquE+qsCek2XUUM0gXKs5jgYWAsvJKFOq3s
+         2lnuRusHfIRnNbb9jdGjYhKOTOw50LK1/BLu87Zi/Mpo+hASVtgSMMzyjjmxYUTFskob
+         p27WyREJ+flNoKcGO2HMB4eNUNOHlrLrKCJ+wJHvQBcRyydwzjIxEbXRXn1ARZZEyQGa
+         CjT+HPcFde0Kq8RXE0OBr1Oysi/okt8jgq4il6jxujPqUwEvyhWt1lPGGK2sbFlYhhn8
+         ZxZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=adAxM/tdxethfCc9kWsVP4uZeaLxTRj54+QnNFBkUNY=;
+        b=0UxNeMwIOU3PtzHr0UWTu8hIA3sjzx4zRDU85U2oYYYxraHwlft4kdftEfriXZDwm0
+         /DIfSB5Y1jKZY4NTkv+/r92ArnkJ2tnM1HbwTA2btC1AqLu75fhGcZLHPmimImoZKzbq
+         CU//8FEIv4uLvSUTHGH/P9rykkPClwwiP90BvpTXwlMstja7y9FIKTInlr5gSzwOcReS
+         e+3Hap0rv3MmYSIBBQTuai8G9o5UUU2zUYs7mIH49AqxNnP1mJkypaiF83x/Gn2R9vC4
+         BcoiIuWy2oGQ2ORQm4PhFJIrgk7QaXvIZv4f9pLzU6xRu4+69+G7y9DrKV8vrY4/a5kF
+         6wow==
+X-Gm-Message-State: AFqh2kompUI/hDSZTjv/GHFVM1dTq+ufd5wqPInegQy/wl8uYfkO3e2Z
+        EPjYX1/mMfnx2PotiYA0D2bh0d/avWTu0obd19EuqQ==
+X-Google-Smtp-Source: AMrXdXsEsCNJ48Atas4Y6eD6ioPdCdz81nx9K6hMDwJwBy/FjZKLO3qICbX1P4jlmpWAughD783FHgYsDQpRu2d1nFw=
+X-Received: by 2002:a17:90b:4b4c:b0:219:6be1:7ff2 with SMTP id
+ mi12-20020a17090b4b4c00b002196be17ff2mr6404270pjb.79.1673383103232; Tue, 10
+ Jan 2023 12:38:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Q7HGdz9GBgwk_UEPL69yMugCGGm7Yvlb
-X-Proofpoint-GUID: C7BgqCchxBC96-yTcMFLC18GhgD_b9pk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-10_09,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 mlxlogscore=999 phishscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301100133
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230107040203.never.112-kees@kernel.org> <CAMuHMdURtDNzzaoBM4DpEHKiDsgnA-7Yc9QO=5gsmwz9PHWK5w@mail.gmail.com>
+ <ae952aa5-f113-8786-6fe4-60e5fa0ced2b@suse.cz>
+In-Reply-To: <ae952aa5-f113-8786-6fe4-60e5fa0ced2b@suse.cz>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 10 Jan 2023 12:38:11 -0800
+Message-ID: <CAGS_qxrOVhXQaxqKknS2CJpHeCWHaMshvdJNdzeN6+KxQmY_uA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: memcpy: Split slow memcpy tests into MEMCPY_SLOW_KUNIT_TEST
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-hardening@vger.kernel.org, David Gow <davidgow@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The address is a 64 bit value, specifying a 32 bit value can crash the
-guest. In this case things worked out with -O2 but not -O0.
+On Mon, Jan 9, 2023 at 11:51 PM Vlastimil Babka <vbabka@suse.cz> wrote:
+>
+> +Cc rest of kunit from MAINTAINERS
+>
+> On 1/7/23 11:55, Geert Uytterhoeven wrote:
+> > Hi Kees,
+> >
+> > On Sat, Jan 7, 2023 at 5:02 AM Kees Cook <keescook@chromium.org> wrote:
+> >> Since the long memcpy tests may stall a system for tens of seconds
+> >> in virtualized architecture environments, split those tests off under
+> >> CONFIG_MEMCPY_SLOW_KUNIT_TEST so they can be separately disabled.
 
-Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Fixes: 1bb873495a9e ("KVM: s390: selftests: Add more copy memop tests")
----
- tools/testing/selftests/kvm/s390x/memop.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+<snip>
 
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index 03f74c6c9fee..2173f7bca601 100644
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -838,7 +838,7 @@ static void guest_copy_key_fetch_prot_override(void)
- 	GUEST_SYNC(STAGE_INITED);
- 	set_storage_key_range(0, PAGE_SIZE, 0x18);
- 	set_storage_key_range((void *)last_page_addr, PAGE_SIZE, 0x0);
--	asm volatile ("sske %[key],%[addr]\n" :: [addr] "r"(0), [key] "r"(0x18) : "cc");
-+	asm volatile ("sske %[key],%[addr]\n" :: [addr] "r"(0L), [key] "r"(0x18) : "cc");
- 	GUEST_SYNC(STAGE_SKEYS_SET);
- 
- 	for (;;) {
--- 
-2.34.1
+> >>
+> >> -static void init_large(struct kunit *test)
+> >> +static int init_large(struct kunit *test)
+> >>  {
+> >> +       if (!IS_ENABLED(CONFIG_MEMCPY_SLOW_KUNIT_TEST)) {
+> >> +               kunit_skip(test, "Slow test skipped. Enable with CONFIG_MEMCPY_SLOW_KUNIT_TEST=y");
+> >
+> > So I can't make the slower tests available for when I need them,
+> > but not run them by default?
+>
+> Indeed it seems weird to tie this to a config option without runtime override.
+>
+> > I guess that's why you made MEMCPY_SLOW_KUNIT_TEST tristate originally,
+> > to have a separate module with the slow tests?
+>
+> On the other hand I can imagine requiring a separate module for slow tests
+> would lead to more churn - IIUC there would need to be two files instead of
+> memcpy_kunit.c, possibly a duplicated boilerplate code (or another shared .c
+> file).
+>
+> So the idea is to have a generic way to mark some tests as slow and a way to
+> opt-in/opt-out for those when running the tests. Maybe KUnit folks already
+> have such mechanism or have an idea how to implement that.
 
+There is no mechanism atm, and we'd still need to figure it out so
+it'll be a while.
+So I think a patch like this makes sense in the short-term.
+
+This is definitely something we've always thought would be useful eventually.
+See this TODO which has been there since day 1 ;)
+https://elixir.bootlin.com/linux/latest/source/lib/kunit/try-catch.c#L36
+
+It just felt like it would be premature to come up with something when
+basically all the tests up until now ran ~instantly.
+
+Throwing out some rough implementation ideas:
+I was thinking the granularity for these timeout annotations would be
+at the suite-level.
+If we go with that, then I guess the intended flow is to group slow
+tests into their own suite and mark them as such.
+
+Then maybe we'd have some runtime way of disabling/enabling "long"
+tests, like a cmdline opt.
+E.g. you'd pass `kunit.max_test_size=30` to exclude tests longer than
+30 seconds.
+
+Daniel
