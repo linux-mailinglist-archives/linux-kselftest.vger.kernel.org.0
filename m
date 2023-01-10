@@ -2,170 +2,195 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C6166423F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 14:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 424096642CF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Jan 2023 15:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbjAJNtT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Jan 2023 08:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S230010AbjAJOIk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Jan 2023 09:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbjAJNtK (ORCPT
+        with ESMTP id S238493AbjAJOIF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Jan 2023 08:49:10 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2069.outbound.protection.outlook.com [40.107.94.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC854E434;
-        Tue, 10 Jan 2023 05:49:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AaNpA/82wHCfrzWU6it4n6UKDbiptW0cSMGXQrMQ+zbZkNIdIpk3N9ayDigZDO7A0A+dra80RdhZPNrfO0f4XZQJS3ueOc5PSL+zq4XmlXMYKGZd9O83M0dS0RoQ1ntCIh+r2REgTauKdwfJp7Mzwqwtx9JgAnPSiSaKiBxk+c8O+r5xBEWbmXhFKPR1iO9aEJhwafFsW0HjP3ecyYa5NxunaFP7qvIT0Y1dUFl2ZRCCOrX6UjKDExtGCLd6Z+AF2wTIhJ2Ttp/clldLI64X9iF801Zt9o/E8rHbYSzYIdg7UyS8J1ybiCmOv5+6SGz6RwOSrsvoJHg1zseFzMcN7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=30ADi7SmKKflsICxuEjPFnULaxwBK2WQ2Aqgoh2hZ+c=;
- b=By+cSx/3Gp7D9HDDlmVZJasafn8Sn0rmVZdRE+bTkOCcymLbwQp/teXgRrh2B0hDHPotKkvS087NYFuq8rQvw7M8rAiWfLRW8oMrcF+0lGeZ+UpxXt68IZFm4JXzeypr90x+YmAmNO/l6Oz7SWfWVQCrlBuB33Jb9aG/SHwlpTxugI/3OGW47h4Fm4NJfjqJnd2unrSAAzE9oS1b0OWybd8cshsPxchB8i0oYN7h6LOgItZGkNRxYzSdddS4GBr46hcwkRNoYlurwkkvX0EDH5HK4Z5ffjeIQxFHYWKgBUFxqcTadAAWUG2nMAUuCBIEUul4gpaNlsI8AzAfrawN1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=30ADi7SmKKflsICxuEjPFnULaxwBK2WQ2Aqgoh2hZ+c=;
- b=XLCIeAQl4zn/p2iKytEzwH7d8oENEsQEeyb5onI5H3fXu11lOtKI+sceaHc6tm//7tWNVOh9F92MiP+QbVMV0wlvM0ELg5OIhbHftieNtp1isRImTqAwUUZKYba4kaBYpqZrA5ffwS+tCdCTfn/g0lUtl4GcMrcUvYd2xna9TdLwkfm967iGPCQIJ1NfylpsbF1O/rQwdLuRzJEe5iR0CrVjkKcIpT27DQKDM7yjCvNyWs8sojCJ4cKz0TXzvLyA3ssZ92aybavJERdoJS4dLtvE8872MtTL1CQWaBFyKwS5/GCSoLd9nqsVDEvE7C5IsRpL6UBzXFrrHmznvZ2X2Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH7PR12MB5998.namprd12.prod.outlook.com (2603:10b6:510:1da::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 13:49:07 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%8]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 13:49:07 +0000
-Date:   Tue, 10 Jan 2023 09:49:01 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-Cc:     Yi Liu <yi.l.liu@intel.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        zhukeqian <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v4 00/17] IOMMUFD Generic interface
-Message-ID: <Y71szSt7jRFKTMcl@nvidia.com>
-References: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <3a20e56423f544dab312bca1bcb56ce4@huawei.com>
- <000cf099-9824-39b8-3719-cf43b33ae1ef@intel.com>
- <36b0fdac061e4680b5966d2774f0026a@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <36b0fdac061e4680b5966d2774f0026a@huawei.com>
-X-ClientProxiedBy: FR1P152CA0137.LAMP152.PROD.OUTLOOK.COM
- (2603:10d6:200:22::29) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Tue, 10 Jan 2023 09:08:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3F82702
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 06:07:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673359639;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=osQGl6WdeMNERrK4mmhBqzkrB96DwCjWqn8ZMWvtmjo=;
+        b=eICQ+yRTEEi8K1U2TGTSZLL1FMQ2N11Y9S579+WjT/AuTUjoERGDO3MUOZgZ/EzGSWchBT
+        K6SblvHFel7QMJZtXM2Ahp6uv9wLyQCwrissFiE2dfx4BXRtrJx3dge5FceMsPjcIE3Gin
+        Cw+pxG1IVxYSlU3sjjztXkD5NGlkrCI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-511-N0T_mmDpOlW2eNmocl0Ayg-1; Tue, 10 Jan 2023 09:07:18 -0500
+X-MC-Unique: N0T_mmDpOlW2eNmocl0Ayg-1
+Received: by mail-wm1-f72.google.com with SMTP id bi11-20020a05600c3d8b00b003d9ebf905c9so3737468wmb.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 06:07:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=osQGl6WdeMNERrK4mmhBqzkrB96DwCjWqn8ZMWvtmjo=;
+        b=IRUHzhM76GTBD7/JQ/kiiVJGvXgkTPiLpK5Zj2+zpYq69WWp3s7bV77AoZBZQUFAlT
+         x7RCquxKBD//CHHf+DhYBsLEhPCbfZyCw30W/e4wucrGh6j7uou4kCO0PXbpC8ZHAqlS
+         GUted9JCtUAho4ddQnfsMybw/MzcFJSmVwMh1IOL+/7eDmdZwL7JmxSC/7Za38yf41V6
+         lSuWnMSn+jmCym6m9WPruyODZEs9ZlJOszTg0aFR+EMuA5JfKyxb37doTIj1MHOeFxe2
+         /hfqem4so3CHc76tIsBJZ+6s00oPDoopqSql68zLPk5i4F/Kdod5lpsHfh6NkCI0lBkY
+         IISA==
+X-Gm-Message-State: AFqh2ko6aImEIt8iuwPX5ALbWESZq+7HitOcHwQ7d1Cv5yVZqNSiG5rf
+        FGuyoX1zSKCCKwW/BELvErBxRXMoy6CNKAQFGHu3m2sxsoRduvOeOXTB2V35OQeJGQSzvj4ME7w
+        tNFJCKZaOJjOPpLQILZTXjpLgCSBs
+X-Received: by 2002:a05:600c:1e09:b0:3cf:b73f:bf8f with SMTP id ay9-20020a05600c1e0900b003cfb73fbf8fmr48604145wmb.7.1673359637366;
+        Tue, 10 Jan 2023 06:07:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtq26GfZVm03WMwtx5KiMTHAU1t+qysGYw90grsxTVbY0STkNPBhngXA6sfEIYm6mKB+sxdVw==
+X-Received: by 2002:a05:600c:1e09:b0:3cf:b73f:bf8f with SMTP id ay9-20020a05600c1e0900b003cfb73fbf8fmr48604113wmb.7.1673359637069;
+        Tue, 10 Jan 2023 06:07:17 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id g12-20020a05600c310c00b003c70191f267sm21192545wmo.39.2023.01.10.06.07.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 06:07:16 -0800 (PST)
+Message-ID: <fa0758f5-abd1-ad09-3878-adf296c7aac5@redhat.com>
+Date:   Tue, 10 Jan 2023 15:07:15 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB5998:EE_
-X-MS-Office365-Filtering-Correlation-Id: 667fee0c-6cdd-4d58-9b66-08daf3117180
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: boQATzeObUbGsTbvM1Kzc/LV3D2IXC9AmS9a1OH3y2yw8aQjrWRYlE26ZMgz/kudCjnTRvGel/lMXggsmszCsT9tmFFm8QecMCsBg3UXMogrwm+66lYFwJzGv05TNrK9uuto1XIzpznLiif/wmxRC3vEB7ni6rGJTPiTLXf8ObAoDhmLAyZEG9BQuRSeyjORiDli5R+ZSZ+SE0QMygf1GoUahmPvKCGVgKBt/JsN95366sIHBHGJplBK9Ov6P9to5mkpJt2vDzEB3Pdos0mvNjSYSlFs+GnIDyWhs7gLsLdZci9w/P43WDmqG2l0+FAjewsbA142/OsGPVa++apD2y85VQlYFS02kjApqzSbXZfdvmEdw6vUuYRXvpCySNjZCwj9s/6ivNeIl9EF5lBsozN5Mbvodz9GjH80h+TOPPcKKF4m+PM4F2MxqLMnxE3dRybeuazoPnHOjDLbH9L5PtPxGbLbNOmrW4tvsa4F1aIIslmhHLdexwfjIF6Qx02wLfijC0Wlh5cHU9+KQUzwpzfz3K6akw+onCyeg1C4lATzSaKMhV6Q3zIFL4bDTbArBKdgJk4CC1CCPREVb68krRhmt5QByCIKtsNZQkoCeDHZ9S1AfmgZIWyB6MZFKKiXUzRCObQdzjqfLuamKniAqVoZs6X4y0aqsC1v5V8zG+/TlzMcJywVr8StK5tE7QdySWXSiAWG2vvE0apnFTn4FGo0u2Lwe02HnkCq8d1SQ0td7mzl2a4nUMjFdf4puC+t0+KX7+RhOKs+IKHlIaTBhg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(346002)(136003)(39860400002)(376002)(451199015)(8936002)(2906002)(5660300002)(7406005)(41300700001)(7416002)(4744005)(4326008)(316002)(6916009)(8676002)(66556008)(66476007)(66946007)(54906003)(26005)(6512007)(2616005)(38100700002)(186003)(86362001)(966005)(36756003)(478600001)(6486002)(6506007)(6666004)(41533002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tRA5BmOetzxvl9+QlnNypyonrV8ncaL7mJvDrQ2Bj6qf7p86RO7vL94JZvzN?=
- =?us-ascii?Q?zSJtOO0dcm0p/Z/BTmPaV4B1RMmFYxt75Tp5djJGcm9nntsH7rqbkCUfCS3z?=
- =?us-ascii?Q?SeNID29mz+BSM91HvY8rzj5z/KAsXYL+276yYj9UTjdYi9FhGZbvKJKpOXR/?=
- =?us-ascii?Q?hsWfW6p7yym6sqbSK8NHgxGtm3lZT+nj/AK7y9wnUYRyjRQ01ge8j8Nwp78m?=
- =?us-ascii?Q?rhUHY8NKIhli7U47wrWfttt5rbg+9RCrtgWZlPFDAFJl0zYgw5HLLKBCpOKk?=
- =?us-ascii?Q?MJI8JqWnmk53wjuJnusPY/ebBfW0FGqOGLyJd0VcC9iB0ymEky9Xtd005FpZ?=
- =?us-ascii?Q?QzxQY/+wO1xgKFm549XCh8ZV2BLBmYXmRBrREKcqQ1yMM1Skz2ylASTsmmwB?=
- =?us-ascii?Q?B2G6yccK1wQjlIjCrBFRfwOe5LVsMIyRamvAUGi0hPc7ec/H1CkqbuCnzrDe?=
- =?us-ascii?Q?6ZucNiR4ZJ+e6TQ1EAbfibzHaEcO/ts3wrIQbMji2rNfbkFlldWsdsvCGleD?=
- =?us-ascii?Q?i2OqQHbd/Gb2uJVdCuIPl2FMwKbjXth1cZPRzbSNCOqXj1RBWSF5SwC6oNMZ?=
- =?us-ascii?Q?KyVYsNJhWSLNm+Fq5x6wnNfpil8riSYuTgSOQJWFPz/4rsqqV6FC19FJer8x?=
- =?us-ascii?Q?wCmqZvhqBO92Qvlan6Cd/mP85jfHrEn/qfJgiqT+E3vHy8XGA89VAwIyPFM8?=
- =?us-ascii?Q?oi9o8Q8HAAzlfVjDeaXXIO+/qftQX0kO4GDtjNoIOsglMR/F9FyWfHK0yNZw?=
- =?us-ascii?Q?dp+EDwqMRuAmG/7Nv30QNOF9bu0y3dBNOTH14NW3k7Vb1srBqnvrZVrvpw0s?=
- =?us-ascii?Q?zn3s7Ol/GYRPiwjQcZdh0nwYjCYyy0s6PUGdgwZz94pdps7tlqMLAQOFCOrS?=
- =?us-ascii?Q?UmcpWT/+HzgP4r+IiFpdY5tcGJESCOCgk7USw4egjbx8gn3aKRIxnKsVeBy4?=
- =?us-ascii?Q?fwEk5RM4GwODnOS49abr2vl/tgKAtotnyOfQOffgfPTSbXHZajMGyqVbUR3V?=
- =?us-ascii?Q?oM1ljEeCLINdHI44J5duscedf1uv72HiUabcitu6N5gnBvhwGUG464YkrgdF?=
- =?us-ascii?Q?BMzaG6oOHed2A27YdBVJg8les79hlcwggfL5CIR7HI7JBpctdz4WNYK0tnLl?=
- =?us-ascii?Q?QKTydwbILLkxTi0R9r6zJnUQwtZw2LU4xOyxs311+drjn7MaN5meDtAl2Lag?=
- =?us-ascii?Q?ZtMbxPJyefZHJ+zjX4zuTLkDHmRXnFO9Qfl1mGaYywwdB9ZGcPG+/x/nXqzV?=
- =?us-ascii?Q?sSdfFotAvPAMP6zRqJuUE3m+beZcEfcMxFk1TXpgIt7TjR7oJlEHvvkf/Ze4?=
- =?us-ascii?Q?kD0nouLZqqNqH1F4j4tpljzt8K6z+hecItEez72ahTeASu7H8FhBiFXlvEfU?=
- =?us-ascii?Q?COcpFlCq5MuHLOr4Wqmb1CmmCPp6NjJ+JVfFkx1lER73h5EltnoEe2enghwX?=
- =?us-ascii?Q?z3q4feyx0JjK4kZPHXoxaVh8PhbIREl1Sj+uvNmD9wkQMRq7sCfvFfhKEHsc?=
- =?us-ascii?Q?duZm0+vV8TGPIDgRfFdy/vWZkezx4l4+VdruxPNUR47T64a7aVCbxrvKZXWQ?=
- =?us-ascii?Q?Wknx8APNnzlzMypqFtkCs7xkFIyQSfSdnCZFV+0J?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 667fee0c-6cdd-4d58-9b66-08daf3117180
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 13:49:07.3577
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rlQlY9Q0Yi7gfMp2B20Bx6d5QoDYbX9/26oLBHnZVXzhp6hfmGtuTFtbXAbNM2Fs
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5998
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Gautam Menghani <gautammenghani201@gmail.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230109130605.2013555-1-eesposit@redhat.com>
+ <20230109130605.2013555-2-eesposit@redhat.com>
+ <c61ce1a6393a108c76e53cb99249aba5ab318e07.camel@redhat.com>
+ <Y7w/bYP4VGqoVcjH@google.com>
+ <5664d006-9452-2033-5605-48aa0ee77ca8@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [RFC PATCH 1/2] KVM: x86: update APIC_ID also when disabling
+ x2APIC in kvm_lapic_set_base
+In-Reply-To: <5664d006-9452-2033-5605-48aa0ee77ca8@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 11:35:59AM +0000, Shameerali Kolothum Thodi wrote:
+On 1/10/23 13:16, Emanuele Giuseppe Esposito wrote:
+> I think the test in patch 2 I wrote gives a better idea on what I am
+> trying to fix: if we are transitioning from x2APIC to xAPIC (RESET I
+> would say, even though I am not sure if userspace really does it in the
+> way I do it in the test, ie through KVM_SET_MSRS), the APIC_ID is not
+> updated back in the right bits, and we can see that by querying the ID
+> with KVM_GET_LAPIC after disabling x2APIC.
+> 
+> Now, if the way I reproduce this issue is correct, it is indeed a bug
+> and needs to be fixed with the fix in patch 1 or something similar.
+> I think it won't really make any difference if instead following what
+> the doc says (x2APIC -> disabled -> xAPIC) we directly do x2APIC -> xAPIC.
 
-> Thanks for that. I attempted ARM vSVA support based on your above branch
-> and related Qemu branch. With few hacks and additional patches the prototype
-> code works well on HiSilicon ARM platform. 
+Yes, the default value at reset is xAPIC mode, so a reset will do a
+KVM_SET_MSRS that clears X2APIC_ENABLE but leaves
+MSR_IA32_APICBASE_ENABLE set.
 
-Nice!
- 
-> Please find the corresponding branches ere,
-> https://github.com/hisilicon/kernel-dev/tree/iommufd-v6.1-rc3-nesting-arm-vSVA
+So, if I understand correctly...
 
-We need to have a big think about how the PASID/PRI caps should be
-working in VFIO..
+> The test in patch 2 started being developed to test ef40757743b47 ("KVM:
+> x86: fix APICv/x2AVIC disabled when vm reboot by itself") even though I
+> honestly didn't really understand how to replicate that bug (see cover
+> letter) and instead I found this other possibility that still manages to
+> screw APIC_ID.
 
-The whole PRI thing needs to be its own series and need a careful look
+... what you're saying is that there were two different bugs, but one
+fixing any one of them was enough to prevent the symptoms shown by
+commit ef40757743b47?  That is:
 
-Can you also look at the dirty tracking stuff? I'd really like to see
-that done for the huawei vfio live migration driver
+- the APICv inhibit was set by KVM_GET_LAPIC because it called
+kvm_lapic_xapic_id_updated(), and the call was unnecessary as fixed in
+commit ef40757743b47;
 
-Thanks,
-Jason
+- however, there is no reason for the vCPU ID to be mismatched.  It
+happened because the code didn't handle the host-initiated x2APIC->xAPIC
+case and thus lacked a call to kvm_apic_set_xapic_id().
+
+If so, I think the idea of the patch is fine.
+
+Just one thing: your patch also changes the APIC_ID on the
+x2APIC->disabled transition, not just the "forbidden" (i.e. host-
+initiated only) x2APIC->xAPIC transition.  I think  this is okay too: the
+manual says:
+
+    10.4.3 Enabling or Disabling the Local APIC
+
+    When IA32_APIC_BASE[11] is set to 0, prior initialization to the APIC
+    may be lost and the APIC may return to the state described in Section
+    10.4.7.1, “Local APIC State After Power-Up or Reset.”
+
+    10.4.7.1 Local APIC State After Power-Up or Reset
+
+    ... The local APIC ID register is set to a unique APIC ID. ...
+
+(which must be an xAPIC ID) and this is what your patch does.
+
+In fact perhaps you can change the code further to invoke
+kvm_lapic_reset() after static_branch_inc(&apic_hw_disabled.key)?  It's
+just a bit messy that you have a call back to kvm_lapic_set_base() in
+there, so perhaps something like this can help:
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 4efdb4a4d72c..24e5df23a4d9 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2433,9 +2436,7 @@ void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
+  
+  void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
+  {
+-	struct kvm_lapic *apic = vcpu->arch.apic;
+  	u64 msr_val;
+-	int i;
+  
+  	if (!init_event) {
+  		msr_val = APIC_DEFAULT_PHYS_BASE | MSR_IA32_APICBASE_ENABLE;
+@@ -2444,8 +2445,14 @@ void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
+  		kvm_lapic_set_base(vcpu, msr_val);
+  	}
+  
+-	if (!apic)
+-		return;
++	if (vcpu->arch.apic)
++		__kvm_lapic_reset(vcpu, init_event);
++}
++
++static void __kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
++{
++	struct kvm_lapic *apic = vcpu->arch.apic;
++	int i;
+  
+  	/* Stop the timer in case it's a reset to an active apic */
+  	hrtimer_cancel(&apic->lapic_timer.timer);
+
+
+(just a sketch to show the idea, of course __kvm_lapic_reset would have to
+go first).
+
+Paolo
+
