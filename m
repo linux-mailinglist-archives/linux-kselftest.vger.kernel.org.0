@@ -2,139 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6844F6657D8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jan 2023 10:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD0A665813
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jan 2023 10:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbjAKJmd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Jan 2023 04:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S236347AbjAKJvE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Jan 2023 04:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235843AbjAKJmH (ORCPT
+        with ESMTP id S239359AbjAKJt1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Jan 2023 04:42:07 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EECC2AEB;
-        Wed, 11 Jan 2023 01:38:40 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30B8UAZS018544;
-        Wed, 11 Jan 2023 09:38:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=NQVc4bCv4qniwG8bw8oflKqMsx23eK69Poj6LY6puuk=;
- b=T9KkDCuSc6YOyHt/57WMqGcaqoBvcZpvBf1w+dcTCaLKGRXIfwb8klFAAilKRi6wI0MZ
- YFh3tRHtk2tsivoFn142xBxB1PH6g7ofEMLCzfqnaTYMIrBY0O/k4fTNcfdv26yHNF5v
- mrEjiq50rnM3VDPe188YaJ6Zja7nkuohyNWD3RmhQpHCsKpLHXHC2eTFB5OeKjfri24x
- 0URr6s63F4NETAGj0/83ACewARZbd5lHFG09w4Muj4siBd592eQtUL77kYsoEBC2jHhg
- sTNkLybE05YyGK7lDEMolPq1sPi0XQN1LdBVRh4/6Puf+iNGVT/Vqtmho7VFvjNS0TcG 1A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1snm1esd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 09:38:35 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30B8VnG6022864;
-        Wed, 11 Jan 2023 09:38:35 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1snm1erf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 09:38:35 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30B1RQvN030882;
-        Wed, 11 Jan 2023 09:38:33 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3n1kf7gk1r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 09:38:33 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30B9cT9I30867844
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Jan 2023 09:38:29 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 632642004B;
-        Wed, 11 Jan 2023 09:38:29 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD1F020040;
-        Wed, 11 Jan 2023 09:38:28 +0000 (GMT)
-Received: from [9.171.7.243] (unknown [9.171.7.243])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 11 Jan 2023 09:38:28 +0000 (GMT)
-Message-ID: <10ba824d-6174-2fc4-b58b-a914cc5524be@linux.ibm.com>
-Date:   Wed, 11 Jan 2023 10:38:28 +0100
+        Wed, 11 Jan 2023 04:49:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCF6BC06
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jan 2023 01:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673430440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UE0xeHCU2bfsdgMc1zyv/Lgw7gDb0/ii1vRY0TiYYqA=;
+        b=EMhKlkmdS3qFRNzxiKuhhcsqueEo2vXA5+s32Ze98Yw+4zyEKilDZgJf54HKmRIVY+8K7z
+        uLXg7DfBvI7XeuLVS7ndL70j6FdgvXHDt7oyyHCLvUiQgAdXnI6jhANHajot7hqhVOub5o
+        JQkTCfB7D9vfUizBOgvkJ4RiNMsfjhM=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-629-5CcgKPL3NfK5bsij2KL82g-1; Wed, 11 Jan 2023 04:47:19 -0500
+X-MC-Unique: 5CcgKPL3NfK5bsij2KL82g-1
+Received: by mail-io1-f70.google.com with SMTP id e15-20020a056602158f00b006e01d8fa493so8747853iow.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jan 2023 01:47:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UE0xeHCU2bfsdgMc1zyv/Lgw7gDb0/ii1vRY0TiYYqA=;
+        b=o548b+U3YFNJYbBJpm6ZWDrEnKI+Djot0WGtGIU7At0rhl93G4RoWMp6kTnxt/XB+g
+         HOPVX0q7Wdfueh8cxdvpUOdDrZ/w6Eb6QBYuKYhsaubXD3c+spJnxRVP0moYiCHs3m1F
+         mQ5wTC8trPxTdfylRMKqbYoYcZZSDAB22ibDTLErZpwERWVeuGjJDAsbRp+Mrw7/vy3F
+         L50DUrRtd13CplxcGL5NoMPC7oq7whkagojtdT/yhCyyGkDYyCBHNYaOJmG0VUPDAkqj
+         2EGFYz8KMh9IcTI2ri9Tq1tRIbDl43jxqa2w70hXUFKHw1sberQYjOq/906BYsUObIFq
+         iNLg==
+X-Gm-Message-State: AFqh2koxnHG9yVbRDwYRHyQU0KkqF0I9+78JPAmKaEdh+UJZMbYGfUZQ
+        Es/a6PkFNZue1rMPYUXzXWR6ztX+ZNZP0CD7MPtKhvi4IIk0O/lvldpGxlWlabfo4Y1W7kKn6Bu
+        JlOnPM2i6A8Vg4dNlByICKEfNEacGZXzf0LY+zFcTgkOp
+X-Received: by 2002:a05:6602:449:b0:6df:bfeb:f15d with SMTP id e9-20020a056602044900b006dfbfebf15dmr5813364iov.122.1673430439236;
+        Wed, 11 Jan 2023 01:47:19 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtMGuR8Fz8YM4jgsNWownmj/QbuhKvKMrvrkynsYoffbOpUWKeQSLAK7R9clAJLj9D4yWVopYxCWeyDIqtLC0Q=
+X-Received: by 2002:a05:6602:449:b0:6df:bfeb:f15d with SMTP id
+ e9-20020a056602044900b006dfbfebf15dmr5813358iov.122.1673430439027; Wed, 11
+ Jan 2023 01:47:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 01/10] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20230110202632.2533978-1-scgl@linux.ibm.com>
- <20230110202632.2533978-2-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230110202632.2533978-2-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: CNwXYW343tftih-Q8VSAGH_KywNKeO--
-X-Proofpoint-GUID: a-YGHPhU_EzZ5t_qoeYF_xDAeRzlCnrd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-11_04,2023-01-10_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- phishscore=0 adultscore=0 spamscore=0 suspectscore=0 bulkscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301110073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
+ <20230106102332.1019632-7-benjamin.tissoires@redhat.com> <20230111061054.dqduab66plb6uzg2@macbook-pro-6.dhcp.thefacebook.com>
+In-Reply-To: <20230111061054.dqduab66plb6uzg2@macbook-pro-6.dhcp.thefacebook.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 11 Jan 2023 10:47:07 +0100
+Message-ID: <CAO-hwJLk7dNYHiharC0wR0563aTE9NfD_jE5qxdoM9m0pW__cA@mail.gmail.com>
+Subject: Re: [PATCH HID for-next v1 6/9] HID: bpf: rework how programs are
+ attached and stored in the kernel
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/10/23 21:26, Janis Schoetterl-Glausch wrote:
-> User space can use the MEM_OP ioctl to make storage key checked reads
-> and writes to the guest, however, it has no way of performing atomic,
-> key checked, accesses to the guest.
-> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
-> mode. For now, support this mode for absolute accesses only.
-> 
-> This mode can be use, for example, to set the device-state-change
-> indicator and the adapter-local-summary indicator atomically.
-> 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
->   include/uapi/linux/kvm.h |   7 +++
->   arch/s390/kvm/gaccess.h  |   3 ++
->   arch/s390/kvm/gaccess.c  | 102 +++++++++++++++++++++++++++++++++++++++
->   arch/s390/kvm/kvm-s390.c |  41 +++++++++++++++-
->   4 files changed, 151 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 55155e262646..452f43c1cc34 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -583,6 +583,8 @@ struct kvm_s390_mem_op {
->   		struct {
->   			__u8 ar;	/* the access register number */
->   			__u8 key;	/* access key, ignored if flag unset */
-> +			__u8 pad1[6];	/* ignored */
-> +			__u64 old_addr;	/* ignored if flag unset */
+On Wed, Jan 11, 2023 at 7:11 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Jan 06, 2023 at 11:23:29AM +0100, Benjamin Tissoires wrote:
+> >
+> > +static void hid_bpf_link_release(struct bpf_link *link)
+> > +{
+> > +     struct hid_bpf_link *hid_link =
+> > +             container_of(link, struct hid_bpf_link, link);
+> > +
+> > +     __clear_bit(hid_link->index, jmp_table.enabled);
+> > +     schedule_work(&release_work);
+> > +}
+>
+> ...
+>
+> > +     link->index = prog_idx;
+>
+> I was super confused that you use prog_idx as a bit in jmp_table
+> and had to look into your tree what hid_bpf_jmp_table.c is doing.
+> Looks like it's not prog_id (which is prog->aux->id) that we know.
+> It's hid specific prog idx in that jmp table.
+> Maybe would be good to rename your prog_idx to something with 'hid' suffix or prefix?
+> or 'table' suffix or prefix ?
+> prog_table_idx ?
 
-These 3 are only used for flag values >=4, no?
-They aren't used for all flag values but for specific ones, right?
+prog_table_idx sounds good :)
 
+>
+> Other than that the patch set looking great.
+
+great, thanks!
+
+> I'm assuming removing call_hid_bpf_prog_put_deferred() and everything related
+> comes in the next set?
+>
+
+Yep. I'll probably send it tomorrow. I have a bunch of urgent
+corporate stuff to do today so won't have time for the fun part of the
+job :(
+
+Cheers,
+Benjamin
 
