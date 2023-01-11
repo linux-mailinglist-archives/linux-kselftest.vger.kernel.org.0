@@ -2,335 +2,245 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AFD6665EF1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jan 2023 16:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B945665FE1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Jan 2023 17:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234872AbjAKPTb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Jan 2023 10:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S232320AbjAKQBi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Jan 2023 11:01:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbjAKPT0 (ORCPT
+        with ESMTP id S231602AbjAKQBh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Jan 2023 10:19:26 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D97FCE9;
-        Wed, 11 Jan 2023 07:19:24 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30BFG3LL009132;
-        Wed, 11 Jan 2023 15:19:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=OHDMQpv2dJpEZbt3U/eWON7xyHWAcKvE5imG6Zbu2sk=;
- b=Ivvg8j3xnfjATGyWHBE4wppo+nXs7ZKlw7xxYbUa5olN+btTurcqDOcuaXvFJbbd+oV+
- ig3BoceRn5NWYyy3QjmxfehQglprNEtLCw6QatCCO92MlPFMTEzpW/P5cjDI8qQit/un
- N7RwVGIOOckz6HXNpjBgYKGfQ6oXXQueVhXLW4TKR1eXmlXmY0UQLAp7UWLgATvD8I0b
- /D/W9K89mILBiNveG/W2HGT4eVBkJ4bPehPEPYtzprA+pB89TwWNU1PJHJQ+q9WI5f3L
- 8HqtAQB9P5Yi/VOuLuKnkFFGQ0oaxnhNOfQ8reAGcI/tXDwmKJn0IQSTnjbgVwVvFd/D CQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1ykv02tp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 15:19:19 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30BFGZ7s010434;
-        Wed, 11 Jan 2023 15:19:19 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1ykv02t0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 15:19:19 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30B1dE6j003398;
-        Wed, 11 Jan 2023 15:19:17 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3n1kmtgscv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Jan 2023 15:19:17 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30BFJDlU39256320
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Jan 2023 15:19:13 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2DD7620049;
-        Wed, 11 Jan 2023 15:19:13 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD9C820043;
-        Wed, 11 Jan 2023 15:19:12 +0000 (GMT)
-Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.175.58])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 11 Jan 2023 15:19:12 +0000 (GMT)
-Message-ID: <bcc971f8acc670bb05e44451f027458dcea1f095.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 01/10] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Janosch Frank <frankja@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Date:   Wed, 11 Jan 2023 16:19:12 +0100
-In-Reply-To: <02b34aa1-d71a-99cc-77db-3613f881b1a8@linux.ibm.com>
-References: <20230110202632.2533978-1-scgl@linux.ibm.com>
-         <20230110202632.2533978-2-scgl@linux.ibm.com>
-         <02b34aa1-d71a-99cc-77db-3613f881b1a8@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Wed, 11 Jan 2023 11:01:37 -0500
+X-Greylist: delayed 1797 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 Jan 2023 08:01:35 PST
+Received: from mx08-0057a101.pphosted.com (mx08-0057a101.pphosted.com [185.183.31.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956E5B37;
+        Wed, 11 Jan 2023 08:01:35 -0800 (PST)
+Received: from pps.filterd (m0214196.ppops.net [127.0.0.1])
+        by mx07-0057a101.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30BDGIW5028732;
+        Wed, 11 Jan 2023 16:22:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=westermo.com; h=message-id : date :
+ to : cc : references : from : subject : in-reply-to : content-type :
+ mime-version; s=12052020; bh=tLK6Rp03ddsHrxNw7sH4GtkfsxmUPeyCbUOarV6/puw=;
+ b=gGPpnsyZAhDWmQaFYVZmtQ5BKgPXmRqn0cJjd+JVVd8skSly3RPPfnDy3ECFUuu6ji83
+ b3CZavNpdU/4O07WzlWVONPQVRy/kiL+2UQ0nncRmyU7EuLuwh8MAoWvRM9MXkqtCzv2
+ GtzY2Q7u+r9OtgNiliuvgJ1CToXDR+Aipk2BwDLagpDR3GUoYHBJbhLy+gVuBxSag8+E
+ SnjCZ0QbRJTS1nGG4Xw6QKbPda8oF5xp/eRf0bFQl7yqFKg+sgA05vwPx3xuB26lGS2i
+ 65ecyx4+nqZbd5nB/QX/RbV3RJBepdHgmHtcXIC8VjwcfJrHgqtPBeo92obz4JZJYubZ 0Q== 
+Received: from mail.beijerelectronics.com ([195.67.87.131])
+        by mx07-0057a101.pphosted.com (PPS) with ESMTPS id 3n1k4v8kph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 11 Jan 2023 16:22:06 +0100
+Received: from EX01GLOBAL.beijerelectronics.com (10.101.10.25) by
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.2375.17; Wed, 11 Jan 2023 16:22:06 +0100
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (104.47.11.237)
+ by EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.2375.17 via Frontend Transport; Wed, 11 Jan 2023 16:22:06 +0100
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X8KFon1aZH1tujAp7PLYR22Xz60kVhSRPVqfLrm6OzinvVS13QJ6bFksAtbYGZ/CE5/VqoKteMqCm6Nj8a+JvoTYoPnxMIjqTNhaYO/VrhPHYRrWs4niJzo81dWr+bcG3iDwxqLUbCZzYN3rpGFw7mHi8ytR87hw5hjV+5cj3w4mddIKmYk21tLoEdOAN7esWwmr771ifhwEGej45Xq4aZvRl4UqsN8Y7jcoPXE6O5T6TwCsgEibm+00PZ1WVGydWG+6tP+q9tyct8W/aO/S9jS/q5SBYVjgBX1Cm5PhDHw6cYGWPFtOLPOrfWTK11r3zIz888thb9+esTkI4P66vA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tLK6Rp03ddsHrxNw7sH4GtkfsxmUPeyCbUOarV6/puw=;
+ b=lVtLseZYUrJaVDPe6wuyTuYB+v7sE0XaDP47uf8UNDa9dJmpLFCB5QwyuTCJBAQjkdzHhL0tgR3Ti62EsL6vY+pbFRamR4eaTTp+QQMdj0sI1OGuNBo7sLTmdMPhoqunT5PY1rJLdaFoaqpgfMiao/JwoTnpfuIKQgQdiz2VohzBau5sjGVWSi4xt5NNzn8/FwbZ/8B/V1YvyZW81RoxwoxXAd63aK66oS9gPoyJY9/qejLiHVdjWfocOFTAo5IXHjc37seGU2wkCDwPfWYz89v9VVfMb3asmefeNyS3tOXo1sHaZkJXh+2mQe3ABg6dTYiD9zmvBVW5mvMcvnk61Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=westermo.com; dmarc=pass action=none header.from=westermo.com;
+ dkim=pass header.d=westermo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=beijerelectronicsab.onmicrosoft.com;
+ s=selector1-beijerelectronicsab-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tLK6Rp03ddsHrxNw7sH4GtkfsxmUPeyCbUOarV6/puw=;
+ b=LUoKWUf+k6+mSJNqJ96eKgt8WzLg9AY46n2NugtLReCXNBS108rSzwH8C0s1pKxDEJwRIZI+H4q4qd5pF51Igxjg6SIWu+fvNFHTNpB59/bj7QHTwDxqAYrhcT2pEjn/ojxkrloUSJPaMqbL37GBQ6llfYlUMCveVVsmr4kkLh4=
+Received: from DB9P192MB1388.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:296::18)
+ by DU0P192MB1570.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:34a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.10; Wed, 11 Jan
+ 2023 15:22:04 +0000
+Received: from DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
+ ([fe80::31:63fd:e1a9:d9f8]) by DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
+ ([fe80::31:63fd:e1a9:d9f8%3]) with mapi id 15.20.6002.013; Wed, 11 Jan 2023
+ 15:22:04 +0000
+Message-ID: <8f6cc42b-c320-45dc-0e45-2377a2fbe215@westermo.com>
+Date:   Wed, 11 Jan 2023 16:22:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Guillaume Nault <gnault@redhat.com>
+CC:     <linux-kselftest@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+References: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
+ <Y7i5cT1AlyC53hzN@debian> <5ef41d3c-8d81-86b3-c571-044636702342@alu.unizg.hr>
+ <Y7lpO9IHtSIyHVej@debian>
+From:   Matthias May <matthias.may@westermo.com>
+Autocrypt: addr=matthias.may@westermo.com; keydata=
+ xjMEX4AtKhYJKwYBBAHaRw8BAQdA2IyjGBS2NbuL0F3NsiMsHp16B5GiXHP9BfSgRcI4rgLN
+ KE1hdHRoaWFzIE1heSA8bWF0dGhpYXMubWF5QHdlc3Rlcm1vLmNvbT7ClgQTFggAPhYhBHfj
+ Ao2HgnGv7h0n/d92tgRTPA2+BQJfgC0qAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQWAgMBAh4B
+ AheAAAoJEN92tgRTPA2+J/YBANR7Q1w436MVMDaIOmnxP9FimzEpsHorYNQfe8fp4cjPAP9v
+ Ccg5Qd3odmd0orodCB6qXqLwOHexh+N60F8I0TuTBc44BF+ALSoSCisGAQQBl1UBBQEBB0CU
+ u0gESJr6GFA6GopcHFxtL/WH7nalrP2NoCGTFWdXWgMBCAfCfgQYFggAJhYhBHfjAo2HgnGv
+ 7h0n/d92tgRTPA2+BQJfgC0qAhsMBQkJZgGAAAoJEN92tgRTPA2+IQoA/2Vg2VE+hB5i4MOI
+ PWGsf80E9zA0Cv/489ps7HaHFuSzAQCm8MVuy6EsMIBXQ84nTb0anpfLHCQMsRNMuW/GkELh CA==
+Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs when
+ selftest restarted
+In-Reply-To: <Y7lpO9IHtSIyHVej@debian>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------JoXwdeoPf89RcPICgF3xHres"
+X-ClientProxiedBy: ZR0P278CA0198.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:44::12) To DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:10:296::18)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0hicx49KazwkwGbCXu7TchEQ7JKiaHKx
-X-Proofpoint-GUID: DsRBmqnKfeqUgLeRT3nG2uYVvgG1fI1M
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-11_07,2023-01-11_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 adultscore=0 malwarescore=0 mlxscore=0
- clxscore=1015 mlxlogscore=999 spamscore=0 impostorscore=0
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301110109
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9P192MB1388:EE_|DU0P192MB1570:EE_
+X-MS-Office365-Filtering-Correlation-Id: 286ec8ee-928e-4e70-9259-08daf3e7985e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 35cdMaMO09WYAsPMoozg5BcJJJasQQZ35bf/JM11lab65WQinWNgrm+XQMtWrOtLjUR3etOTchoG8ela/E2t56HBcbc4kRMy8JPQFD40oxVymPd/U8k9YI4TjnbpQvf42jvCA0ZYxKyp45Cz6CdO3+6b51ybD1pSct+FpkNMeizGQz7Q7iX/Hu2qXzqdk2yyqlt8gbogUC0kMCaOEqVvUYP4k5pWmRItqnidF8vHc1S8Pms/Gu7Yt9BYlluDINV7BHRpz9vFuH2uuQqo8Fk9hDB5D9q1yQkw9D1BHJx4UsPKgaP+YPmrhVsduNusDhwXCcsoBqFXKIMT3ySW1z6vYn6bJlDLgQzUaynULnTFh6GOxxwQM8lPOrqo5nGYgwuO2vyGk2Bm3VVcswGNm3LZ49QuxpPN823T2AXRfb70DRbkFdZD05F2YKqVEcNdwoZ7LcNGpLcRfRaubtG+sVhw9lkshZno39RMFSG7kWINlZ8GncmWWWRpypFThNJG96L8OUBO6C829MoDL1Mm6JHhhJseyZ/TOVPPyj/O3T8MztBAVUAUDEssh4syL9st2KJA81DoI+zjDMBcarExDQ9tOKv2LqzPv8ft4cU1rlmN5AbAuthatFfnINI08r4+E329Ricv06mfueO9w26G5bisMhxzKnYZmuGoiHwlCNkOSv8DvmJWWFfGQYkGuOuizfH63e9JcKW5LmkFyM65PnBeLHSpWg8Xf12X/AfS+R/RclRa5AsfSnAIZlfr2OX8ecJP3HU+9uGvaTiNkIDtNaZsLg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P192MB1388.EURP192.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39850400004)(136003)(366004)(346002)(376002)(451199015)(2906002)(66476007)(31686004)(66946007)(4326008)(8676002)(6916009)(235185007)(5660300002)(7416002)(38100700002)(38350700002)(26005)(41300700001)(66556008)(316002)(44832011)(8936002)(36756003)(31696002)(186003)(54906003)(478600001)(6486002)(6506007)(33964004)(53546011)(6512007)(52116002)(2616005)(21480400003)(83380400001)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Tkg0aEFsZlIrT0czMENtTEtSM1dEQ0Jqa3VHaEFOYkVqU1lyQ2cwL3dsWGVX?=
+ =?utf-8?B?SjBBVTlYMmxRZWNnLzE2b3dVZTkxV3BVU040UGhnNjdTSXJjM0cxaGtYVW8w?=
+ =?utf-8?B?R214ZCtqYTl2UGNDMnE3MmxPYlZHM3FRSkMycTJxTkd6Q1VQa0dwOWRFaEln?=
+ =?utf-8?B?dUdtRXo3R0VMQXJVQjU2dHpkdXFCTXBSTWZKRnNTVnN3dk83Sm9UYUZkaGxD?=
+ =?utf-8?B?RkxHRjZoUlZ4ZHBmRUVuOUZuVU1haUl2NUhJamcwZE8rdnNLSVhleEhSdCty?=
+ =?utf-8?B?RFVqbndwNFcwRjVpeGIvOW5SWDk2VnpkUE5WS0psamJWeUwrVi9sc04wdmc4?=
+ =?utf-8?B?L0dnMzVmM3VFRm93RDR1MEdZTGtsS1ZacmRVV1NmYitmZnMrdXM1SWNWYkR2?=
+ =?utf-8?B?MjdQWmdKczIwSTYrYVl2Y0ovRmVLK1hCaE1UcUZjQUY4TTh0b2VzY1l0S1lE?=
+ =?utf-8?B?bmx1NUVJOXVkaFNEWUlYbTNsRm05QXZsNTRFeVd4YStwZ2M3UE9NdjloRUpp?=
+ =?utf-8?B?MlNwdmZFVFJOa0lQNjA1RU8vdjEzVlVqRGdFTGYwYUIrMWluVVBubWg1MjVM?=
+ =?utf-8?B?SWN4eGxMN2MwdS8xQVhqL254YzBxTTBjOVkvcUl1RHpWeG9iYmtBSkRJZjZY?=
+ =?utf-8?B?b29aMVU3amVYZmtXWkgvWEFVYTZFa20yMlNTQ2ZUUmJuL0t2ZTlwWTFPMVZ1?=
+ =?utf-8?B?TnZNSGt5bjlWUkRsY3JZdGM5TTBCTUtSZkluMGVxaXk1aVhqRlErMkRMMFIy?=
+ =?utf-8?B?d0Nkbm9sMUdLMXhTNUZtSmtqNnU3VVpqWFBYTmhQUU1TZ0Z2b1hVZWd0OGtn?=
+ =?utf-8?B?cHB4WUROQ0w5RHNyV1R1RHhQVkUvVFdNcFk5UGJOdlpPb20rZmJPenVIR0tz?=
+ =?utf-8?B?eVloMWZEekR1akhlVjBzcWpTK25iS3l6blFkb2pLZmVPNlNGaUV5cjZzQnBu?=
+ =?utf-8?B?OVFGYUVHdVluWm9ZbjZURXhvSWdrU3Fua2lBK0RRMW1LQkJNVHpFbTJyOFM4?=
+ =?utf-8?B?S1Z4VnFiazRSdlBYVGFTUS9GVW1Zc1BuSDlDQVpxSm5Vc1o4S0pZclFzdmpx?=
+ =?utf-8?B?WDNSajNhdHhuZDkvYmNibm1BWldGR2VKSTNPNGdqQjFEdWpYeEVSNVl4KzB3?=
+ =?utf-8?B?M1RRcU1LT005OUdhaDJ2UHBXVUVwWjkzMWRjRHl0WXFtZThMYTQ5YjBFd2Mx?=
+ =?utf-8?B?M2JyWTREVFg3RHRwOUN2MzQwVnhzeXRPWHM1c0kxTDY0MVQ0ZWNrd0xyZWd1?=
+ =?utf-8?B?S09ZZEtoMU9Ddm03Zjk3QTlLVkJidUJSeUNoa2NCMUdFYVYySk1rei9xN0tr?=
+ =?utf-8?B?blczaXVpZFJWM29heGNaRW9TUGdmVGFrR3piVW1tNEU4TXorK01SOXpXRHpx?=
+ =?utf-8?B?Uk9uQ1NCdEdMUVMvaFBLcm9WdmlJT3pUaDJCZlFLcmQ1a3d1cUR1MVk3MnRP?=
+ =?utf-8?B?c1pDdE9VTUlRYkRFTGNUUm0zd0o3UlJ1cnRDZTNJMnp6QkYvUUZLT3I0aGI1?=
+ =?utf-8?B?WEZEd1VxTXNIUjkvOVM5czJkb2pnR0xIakpRU1VvQ3VPbHV6c2VBckRYNWc5?=
+ =?utf-8?B?RzZadmloMXNHTzRNREd5Nk95R20raFBEWlo3WlNZVGJOYjdjN2ZISytYU1g0?=
+ =?utf-8?B?Z0YrQk1MUW9ySEpEWEZ6dnBtY3B2MWg0SmxoMHJudXQzUnVsY1JESm1jNmhv?=
+ =?utf-8?B?VERYWTdLM1hOZjRFc2RTNC9XRkRKV2MydHRkNitsZTk1L05XQTFMNzhoY1RU?=
+ =?utf-8?B?R0xnRFBpVHI3akViMTB6U3Y3OGsvSEM2VWVFdCtoUm54T24rVzZFS1lGeTYw?=
+ =?utf-8?B?NjUxVDAvVkYzSW1NRDBVd3BDYWhnU1NsRUNDWC9Zd2k4TmVlY1FPYmNKR0dB?=
+ =?utf-8?B?dG44bHlWT3pnTC9lSld5TmxHVHRBWDB3eVJBOHVnRFVGR2NKSVNFZzBmY3JE?=
+ =?utf-8?B?OXZyeThtMkJOdlc5UEJsdkcvVnZUaHRaeUZxMDhhSTQxVXhjY0dTbHJnQVJ1?=
+ =?utf-8?B?aHhlZWJDR1grMjM1NTFLdWpqT2tYYW1HRndLZ2tsOEk1cGNWV2phUzZxN3U1?=
+ =?utf-8?B?RVQ4aXBWQ3RQZTFnYWZoZEwrazM0YmlUMSs3QjFFeGRhbnVZSVhRUnoydG4y?=
+ =?utf-8?Q?p8u872PB/BA4kdRxAA3xdMIE8?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 286ec8ee-928e-4e70-9259-08daf3e7985e
+X-MS-Exchange-CrossTenant-AuthSource: DB9P192MB1388.EURP192.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2023 15:22:04.7394
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4b2e9b91-de77-4ca7-8130-c80faee67059
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YreA+JyHUvR2mP4pQ1KowN3sKtrD2D4bAznbrcOFNKMVaSnuq8JQwKgzrLVtpTaa3WKcIZDt4oQ6Mk+vJ/JRsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0P192MB1570
+X-OrganizationHeadersPreserved: DU0P192MB1570.EURP192.PROD.OUTLOOK.COM
+X-CrossPremisesHeadersPromoted: EX01GLOBAL.beijerelectronics.com
+X-CrossPremisesHeadersFiltered: EX01GLOBAL.beijerelectronics.com
+X-OriginatorOrg: westermo.com
+X-Proofpoint-ORIG-GUID: AAQT2kddaGFrqIlprP-Ifut-k7LnRtlO
+X-Proofpoint-GUID: AAQT2kddaGFrqIlprP-Ifut-k7LnRtlO
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2023-01-11 at 10:35 +0100, Janosch Frank wrote:
-> On 1/10/23 21:26, Janis Schoetterl-Glausch wrote:
-> > User space can use the MEM_OP ioctl to make storage key checked reads
-> > and writes to the guest, however, it has no way of performing atomic,
-> > key checked, accesses to the guest.
-> > Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
-> > mode. For now, support this mode for absolute accesses only.
-> >=20
-> > This mode can be use, for example, to set the device-state-change
-> > indicator and the adapter-local-summary indicator atomically.
-> >=20
-> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> > ---
-> >   include/uapi/linux/kvm.h |   7 +++
-> >   arch/s390/kvm/gaccess.h  |   3 ++
-> >   arch/s390/kvm/gaccess.c  | 102 ++++++++++++++++++++++++++++++++++++++=
-+
-> >   arch/s390/kvm/kvm-s390.c |  41 +++++++++++++++-
-> >   4 files changed, 151 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index 55155e262646..452f43c1cc34 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -583,6 +583,8 @@ struct kvm_s390_mem_op {
-> >   		struct {
-> >   			__u8 ar;	/* the access register number */
-> >   			__u8 key;	/* access key, ignored if flag unset */
-> > +			__u8 pad1[6];	/* ignored */
-> > +			__u64 old_addr;	/* ignored if flag unset */
-> >   		};
-> >   		__u32 sida_offset; /* offset into the sida */
-> >   		__u8 reserved[32]; /* ignored */
-> > @@ -599,6 +601,11 @@ struct kvm_s390_mem_op {
-> >   #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
-> >   #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
-> >   #define KVM_S390_MEMOP_F_SKEY_PROTECTION	(1ULL << 2)
-> > +#define KVM_S390_MEMOP_F_CMPXCHG		(1ULL << 3)
-> > +/* flags specifying extension support */
->=20
-> Would that fit behind the bit shifts without getting into the "line too=
-=20
-> long" territory?
+--------------JoXwdeoPf89RcPICgF3xHres
+Content-Type: multipart/mixed; boundary="------------nmUr7CFpDinqhCGfOsR13lIA";
+ protected-headers="v1"
+From: Matthias May <matthias.may@westermo.com>
+To: Guillaume Nault <gnault@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Message-ID: <8f6cc42b-c320-45dc-0e45-2377a2fbe215@westermo.com>
+Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs when
+ selftest restarted
+References: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
+ <Y7i5cT1AlyC53hzN@debian> <5ef41d3c-8d81-86b3-c571-044636702342@alu.unizg.hr>
+ <Y7lpO9IHtSIyHVej@debian>
+In-Reply-To: <Y7lpO9IHtSIyHVej@debian>
 
-Bit shifts or the next line?
->=20
-> > +#define KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG 0x2
->=20
-> \n please
+--------------nmUr7CFpDinqhCGfOsR13lIA
+Content-Type: multipart/mixed; boundary="------------lyKep0HQQFeCzI7puU0d4Mzy"
 
-Not sure about all that, this is the way it looks right now:
+--------------lyKep0HQQFeCzI7puU0d4Mzy
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-/* types for kvm_s390_mem_op->op */
-#define KVM_S390_MEMOP_LOGICAL_READ     0
-#define KVM_S390_MEMOP_LOGICAL_WRITE    1
-#define KVM_S390_MEMOP_SIDA_READ        2
-#define KVM_S390_MEMOP_SIDA_WRITE       3
-#define KVM_S390_MEMOP_ABSOLUTE_READ    4
-#define KVM_S390_MEMOP_ABSOLUTE_WRITE   5
-/* flags for kvm_s390_mem_op->flags */
-#define KVM_S390_MEMOP_F_CHECK_ONLY             (1ULL << 0)
-#define KVM_S390_MEMOP_F_INJECT_EXCEPTION       (1ULL << 1)
-#define KVM_S390_MEMOP_F_SKEY_PROTECTION        (1ULL << 2)
-#define KVM_S390_MEMOP_F_CMPXCHG                (1ULL << 3)
-/* flags specifying extension support */
-#define KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG 0x2
-/* Non program exception return codes (pgm codes are 16 bit) */
-#define KVM_S390_MEMOP_R_NO_XCHG                (1 << 16)
+T24gMDcuMDEuMjMgMTM6NDQsIEd1aWxsYXVtZSBOYXVsdCB3cm90ZToNCj4gW0NjOiBNYXR0
+aGlhcyBzaW5jZSBoZSdzIHRoZSBvcmlnaW5hbCBhdXRob3Igb2YgdGhlIHNjcmlwdF0NCj4g
+DQo+ICpzbmlwcGVkKg0KSGkgR3VpbGxhdW1lDQoNClRoYW5rcyBmb3IgdGhlIGNsZWFudXAg
+cGF0Y2guDQpZb3UgZml4IHNvbWUgb2YgdGhlIHRoaW5ncyB0aGF0IGNhbWUgdG8gbXkgbWlu
+ZA0KKDIgTlNzIGluc3RlYWQgb2YgbWFpbiBhbmQgdGVzdGluZywgYW5kIHByb3BlciBjbGVh
+bnVwIG9uIGV4aXQpIGFmdGVyDQp0aGUgdGVzdCB3YXMgc3VibWl0dGVkL3J1bm5pbmcsIGJ1
+dCB0aGVuIGxpZmUgZ290IGludG8gdGhlIHdheSBhbmQgaQ0KbmV2ZXIgY2FtZSBhcm91bmQg
+dG8gZml4IGl0Li4uDQoNCkxvb2tzIGdvb2QgdG8gbWUuDQpBY2tlZC1ieTogTWF0dGhpYXMg
+TWF5IDxtYXR0aGlhcy5tYXlAd2VzdGVybW8uY29tPg0KDQpCUg0KTWF0dGhpYXMNCg==
+--------------lyKep0HQQFeCzI7puU0d4Mzy
+Content-Type: application/pgp-keys; name="OpenPGP_0xDF76B604533C0DBE.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xDF76B604533C0DBE.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Seems consistent to me.
->=20
-> > +/* Non program exception return codes (pgm codes are 16 bit) */
-> > +#define KVM_S390_MEMOP_R_NO_XCHG		(1 << 16)
-> >  =20
-> >   /* for KVM_INTERRUPT */
-> >   struct kvm_interrupt {
-> > diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
-> > index 9408d6cc8e2c..92a3b9fb31ec 100644
-> > --- a/arch/s390/kvm/gaccess.h
-> > +++ b/arch/s390/kvm/gaccess.h
-> > @@ -206,6 +206,9 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, un=
-signed long ga, u8 ar,
-> >   int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
-> >   		      void *data, unsigned long len, enum gacc_mode mode);
-> >  =20
-> > +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
-> > +			       __uint128_t *old, __uint128_t new, u8 access_key);
-> > +
-> >   /**
-> >    * write_guest_with_key - copy data from kernel space to guest space
-> >    * @vcpu: virtual cpu
-> > diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-> > index 0243b6e38d36..6165e761a637 100644
-> > --- a/arch/s390/kvm/gaccess.c
-> > +++ b/arch/s390/kvm/gaccess.c
-> > @@ -1161,6 +1161,108 @@ int access_guest_real(struct kvm_vcpu *vcpu, un=
-signed long gra,
-> >   	return rc;
-> >   }
-> >  =20
-> > +/**
-> > + * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute ad=
-dress.
-> > + * @kvm: Virtual machine instance.
-> > + * @gpa: Absolute guest address of the location to be changed.
-> > + * @len: Operand length of the cmpxchg, required: 1 <=3D len <=3D 16. =
-Providing a
-> > + *       non power of two will result in failure.
-> > + * @old_addr: Pointer to old value. If the location at @gpa contains t=
-his value, the
-> > + *         exchange will succeed. After calling cmpxchg_guest_abs_with=
-_key() *@old
-> > + *         contains the value at @gpa before the attempt to exchange t=
-he value.
-> > + * @new: The value to place at @gpa.
-> > + * @access_key: The access key to use for the guest access.
-> > + *
-> > + * Atomically exchange the value at @gpa by @new, if it contains *@old=
-.
-> > + * Honors storage keys.
-> > + *
-> > + * Return: * 0: successful exchange
-> > + *         * 1: exchange unsuccessful
-> > + *         * a program interruption code indicating the reason cmpxchg=
- could
-> > + *           not be attempted
->=20
->  > 1 Access related program interruption code indicating the reason=20
-> cmpxchg could not be attempted
->=20
-> < 1 Kernel / input data error codes
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-I think I'll do it like I said in the email to Thomas, that way it's maxima=
-lly
-explicit about the return values one might get.
->=20
-> > + *         * -EINVAL: address misaligned or len not power of two
-> > + *         * -EAGAIN: transient failure (len 1 or 2)
-> > + *         * -EOPNOTSUPP: read-only memslot (should never occur)
->=20
-> Would PGM_PROTECTED also make sense here instead of EOPNOTSUPP?
+xjMEX4AtKhYJKwYBBAHaRw8BAQdA2IyjGBS2NbuL0F3NsiMsHp16B5GiXHP9BfSg
+RcI4rgLNKE1hdHRoaWFzIE1heSA8bWF0dGhpYXMubWF5QHdlc3Rlcm1vLmNvbT7C
+lgQTFggAPhYhBHfjAo2HgnGv7h0n/d92tgRTPA2+BQJfgC0qAhsDBQkJZgGABQsJ
+CAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEN92tgRTPA2+J/YBANR7Q1w436MVMDaI
+OmnxP9FimzEpsHorYNQfe8fp4cjPAP9vCcg5Qd3odmd0orodCB6qXqLwOHexh+N6
+0F8I0TuTBc44BF+ALSoSCisGAQQBl1UBBQEBB0CUu0gESJr6GFA6GopcHFxtL/WH
+7nalrP2NoCGTFWdXWgMBCAfCfgQYFggAJhYhBHfjAo2HgnGv7h0n/d92tgRTPA2+
+BQJfgC0qAhsMBQkJZgGAAAoJEN92tgRTPA2+IQoA/2Vg2VE+hB5i4MOIPWGsf80E
+9zA0Cv/489ps7HaHFuSzAQCm8MVuy6EsMIBXQ84nTb0anpfLHCQMsRNMuW/GkELh
+CA=3D=3D
+=3DtbX5
+-----END PGP PUBLIC KEY BLOCK-----
 
-I don't think so, if you get EOPNOTSUPP there's a programming error somewhe=
-re
-that needs to be fixed.
-I wouldn't want to mix that with the totally fine case of a protection exce=
-ption.
->=20
-[...]
+--------------lyKep0HQQFeCzI7puU0d4Mzy--
 
-> > @@ -2772,12 +2779,19 @@ static bool access_key_invalid(u8 access_key)
-> >   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op=
- *mop)
-> >   {
-> >   	void __user *uaddr =3D (void __user *)mop->buf;
-> > +	void __user *old_addr =3D (void __user *)mop->old_addr;
-> > +	union {
-> > +		__uint128_t quad;
-> > +		char raw[sizeof(__uint128_t)];
-> > +	} old =3D { .quad =3D 0}, new =3D { .quad =3D 0 };
-> > +	unsigned int off_in_quad =3D sizeof(new) - mop->size;
-> >   	u64 supported_flags;
-> >   	void *tmpbuf =3D NULL;
-> >   	int r, srcu_idx;
-> >  =20
-> >   	supported_flags =3D KVM_S390_MEMOP_F_SKEY_PROTECTION
-> > -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
-> > +			  | KVM_S390_MEMOP_F_CHECK_ONLY
-> > +			  | KVM_S390_MEMOP_F_CMPXCHG;
-> >   	if (mop->flags & ~supported_flags || !mop->size)
-> >   		return -EINVAL;
-> >   	if (mop->size > MEM_OP_MAX_SIZE)
-> > @@ -2799,6 +2813,21 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, s=
-truct kvm_s390_mem_op *mop)
-> >   	} else {
-> >   		mop->key =3D 0;
-> >   	}
-> > +	if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
-> > +		/*
-> > +		 * This validates off_in_quad. Checking that size is a power
-> > +		 * of two is not necessary, as cmpxchg_guest_abs_with_key
-> > +		 * takes care of that
-> > +		 */
-> > +		if (mop->size > sizeof(new))
-> > +			return -EINVAL;
->=20
-> !mop->size || mop->size > sizeof(new)
+--------------nmUr7CFpDinqhCGfOsR13lIA--
 
-Not sure why that would be necessary, but I did write
-"Operand length of the cmpxchg, required: 1 <=3D len <=3D 16",
-so I'll trust my past self on that.
->=20
->=20
-> > +		if (mop->op !=3D KVM_S390_MEMOP_ABSOLUTE_WRITE)
-> > +			return -EINVAL;
-> > +		if (copy_from_user(&new.raw[off_in_quad], uaddr, mop->size))
-> > +			return -EFAULT;
-> > +		if (copy_from_user(&old.raw[off_in_quad], old_addr, mop->size))
-> > +			return -EFAULT;
-> > +	}
-> >   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
-> >   		tmpbuf =3D vmalloc(mop->size);
-> >   		if (!tmpbuf)
-> > @@ -2829,6 +2858,14 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, s=
-truct kvm_s390_mem_op *mop)
-> >   	case KVM_S390_MEMOP_ABSOLUTE_WRITE: {
-> >   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> >   			r =3D check_gpa_range(kvm, mop->gaddr, mop->size, GACC_STORE, mop-=
->key);
-> > +		} else if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
-> > +			r =3D cmpxchg_guest_abs_with_key(kvm, mop->gaddr, mop->size,
-> > +						       &old.quad, new.quad, mop->key);
-> > +			if (r =3D=3D 1) {
-> > +				r =3D KVM_S390_MEMOP_R_NO_XCHG;
->=20
-> Why don't we return KVM_S390_MEMOP_R_NO_XCHG from=20
-> cmpxchg_guest_abs_with_key instead of aliasing 1 here?
+--------------JoXwdeoPf89RcPICgF3xHres
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-I think it's a bit ugly, since cmpxchg_guest_abs_with_key is an internal fu=
-nction and not memop specific.
-I don't like returning a MEMOP API constant there.
+-----BEGIN PGP SIGNATURE-----
 
-> > +				if (copy_to_user(old_addr, &old.raw[off_in_quad], mop->size))
-> > +					r =3D -EFAULT;
-> > +			}
-> >   		} else {
-> >   			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
-> >   				r =3D -EFAULT;
->=20
+wnsEABYIACMWIQR34wKNh4Jxr+4dJ/3fdrYEUzwNvgUCY77UGgUDAAAAAAAKCRDfdrYEUzwNvkdC
+AQDHMR3suP6ZsOzb3lEHmAX1ojeInFUt+BMKLFOxvBQYswD/cxMGLO/gtnfILWcXg4G3wwH76H33
+5u78CyXwysMF4AU=
+=tem9
+-----END PGP SIGNATURE-----
 
+--------------JoXwdeoPf89RcPICgF3xHres--
