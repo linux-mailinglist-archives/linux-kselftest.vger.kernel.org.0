@@ -2,144 +2,197 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAC3667A23
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jan 2023 17:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5359D667D97
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Jan 2023 19:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235851AbjALQAQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Jan 2023 11:00:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
+        id S240193AbjALSO2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Jan 2023 13:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236370AbjALP7n (ORCPT
+        with ESMTP id S240518AbjALSNs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Jan 2023 10:59:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981384FCED;
-        Thu, 12 Jan 2023 07:51:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 564FAB81EBD;
-        Thu, 12 Jan 2023 15:51:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FAECC433EF;
-        Thu, 12 Jan 2023 15:51:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673538717;
-        bh=yTTb2Tm+5+3xMGeFN/U2gUsQGw74zuDp1qN2tQFtvZo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q9RZ/4cZNvwQ/2InsNasQMBAY2PsqCImDaXEPkTDxFENN1J/trHfYW+X+aRu2OIF3
-         PcITO8JK3/iQgHnKdTxl2eKkPL5NsAKN7XKbaCugZx7dGXHWb2PyoAJ+6xomgHethw
-         rNj0gBpCPRqi4bcnDlEZhJ7ncdWM7h99PWNgBbjZmdId2NqEjHa8TKrh21ddCSBMgv
-         CnW1RL5kRgwo9LB9CO0HTp50JPF4udILV53qGcFZGPlx27SlojaJNC8HpS/clhVzl1
-         3DT8ln1dPZ5YPUk1eMiA2LYkIW0G3BFy+MeOPWmAwLRURULD0by7JXn9dyOSw40tJM
-         Ky88arOiAPu/w==
-Date:   Fri, 13 Jan 2023 00:51:53 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Akanksha J N <akanksha@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, mhiramat@kernel.org,
-        rostedt@goodmis.org, shuah@kernel.org
-Subject: Re: [PATCH] selftests/ftrace: Extend multiple_kprobes.tc to add
- multiple consecutive probes in a function
-Message-Id: <20230113005153.c6ca2f75b9d12627eb63308a@kernel.org>
-In-Reply-To: <1673529279.3c5f8oes3z.naveen@linux.ibm.com>
-References: <20230112095600.37665-1-akanksha@linux.ibm.com>
-        <1673529279.3c5f8oes3z.naveen@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 12 Jan 2023 13:13:48 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AD96DBAC
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Jan 2023 09:43:18 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id j16-20020a05600c1c1000b003d9ef8c274bso11361893wms.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Jan 2023 09:43:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8YUfEdizU6etVNTRXoI4GW0/pb7ruC4LypASoGIVwPU=;
+        b=2KtC7802s32bVsm7NZjN7KH4JundRVEoKhT7MLX3ExFrG8IJ4+v3cCKL/BOb6NeuAr
+         WflCfYzguxCXWVA84P4+arDan1X86BYFIMJc8Y37BZtvt/1ck7WxQwvtJAZwNSkBkY+N
+         Ao2M2KztoSLHYoEPIuX8nTrP8drcderZ0PMpldAK8AiU6Xoz9UxEYf+yVxocKa7zwcI5
+         xefZ9mwdftJ4KjE38zxYWn8GLitnxJjyHexF+ZI+6mKgAdUpokoIhNTVwt01pCC4sOBC
+         XxUxhiu5SQl/tKVWAkiI6k5Xm6azWV1eUWUvOpCV7ln/SeqgZ4w/uH+8R9+wyRCb3DS3
+         noig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8YUfEdizU6etVNTRXoI4GW0/pb7ruC4LypASoGIVwPU=;
+        b=u7IhKq1ZmeyfQSGnvMYdrbAhWfzWYo3x10ZYU5xNV6Plwp4eDIoX71+b3y1nIhHijE
+         YDy0jyJKLPFtLFzQRbLkdpjW27/PxwfKtVq3nyLsgwVVcMfafLaDmDrZzqfd5YtcHkAf
+         2/eLaTKLemXyCwvreOuc+KHcrP2yFHQsI9yjV+mYLttITrvihsCdn4Rg6i8sYt4Sc68K
+         bAxD0el2e9MdopU1Mq3yO4EemjZtIwdDfM5o1rOgQw2/Ez6k1jSqLgX8hJTDnc9wTNee
+         Z/ytu1iUsiiJmOcg7y9ntzLJ0B0M/rc5+WCov9A2Y4/Vk6qQ3Od5k15Pny3/Znf5ke9/
+         SLqg==
+X-Gm-Message-State: AFqh2kraQJODDOdIzW9R7o7kPl98lPRrQUDgR68MY4EdNopz3gEnB8UT
+        dODCvnCOeSHkF2v+Al2XSP/jYQ==
+X-Google-Smtp-Source: AMrXdXvK/Dxj0h2KI8ZmmNzOHGYhNVCFb4CLn9xyRam5mqbJmKWsmKzga/swbRi3y8zBS1sJHNoECg==
+X-Received: by 2002:a05:600c:c87:b0:3d9:73fb:8aaa with SMTP id fj7-20020a05600c0c8700b003d973fb8aaamr46696670wmb.8.1673545396847;
+        Thu, 12 Jan 2023 09:43:16 -0800 (PST)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id hg9-20020a05600c538900b003cfa622a18asm26448769wmb.3.2023.01.12.09.43.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 09:43:16 -0800 (PST)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Date:   Thu, 12 Jan 2023 18:42:51 +0100
+Subject: [PATCH net 1/3] mptcp: explicitly specify sock family at subflow
+ creation time
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <20230112-upstream-net-20230112-netlink-v4-v6-v1-1-6a8363a221d2@tessares.net>
+References: <20230112-upstream-net-20230112-netlink-v4-v6-v1-0-6a8363a221d2@tessares.net>
+In-Reply-To: <20230112-upstream-net-20230112-netlink-v4-v6-v1-0-6a8363a221d2@tessares.net>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kishen Maloor <kishen.maloor@intel.com>,
+        Florian Westphal <fw@strlen.de>, Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3907;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=s+3xVgukLGyOe4wr8E0yNyqO1BWR4F9rZ7m7xbrXwhc=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjwEayyEL2TZPccGTRXgPHRC1HAS9t3XYCkU15kPTM
+ hAQuVZSJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY8BGsgAKCRD2t4JPQmmgcy48D/
+ 9INvcrgJwYWWJjoPXs3GnIhV9aEsw999RC4xYkwhfyvmT5af/I4pDPHMyCWBNf+u3N2iJnVMnSoLK6
+ omjUZ8KvNuhlK8RJ178lcVztmvyYpVL+17/zoeArxUH+w1Hmr4cqHGpv8rGC/9we34lmQ3zWBgECmd
+ a/aDROtQYsnfBu/FIavm64IzA3g5ouCfUAy4WAVDy5PfHe3OVGfQ4ftaZM61TCo/3AvZwF9k19MIx7
+ imwoUl9YY7g6PGf8Sm65Non2oe5C12DXIlxSA1h3uAKGKoTsdE2Qtpk00yZykK68kN1rwZA9ivUuXn
+ eE2OYIjs/RNDPMwBbwNlafJsLt523vDgIJyE/+eeqYOZftWuF6b4SBxMpCVBHOCdERDE/6NN9aA0V3
+ SXFsGGD+ravF6uD/uAtMnV/bHf3Dc3rDKALgtdfbf9mWdgKV/oxuVFzruIK3ARyVQilefKpYlwMnbl
+ h5Twxa6KnBGr11FMnX8/Cpr6Dst54q8JvhftvLSOnGc+8ZuHuiKFcMczOOHh5fGatQI/StezvT9sC2
+ uBOBuI3umttX8BqL/lkD4eI9OkZpL7GEGZCaozGnqOcRNyWuriGWXdMWoh0d09Mns8DtkyJTLKoL4I
+ BiLiqqt6Cg9RcWaMEVUb0LOs1+a0nz2HuUgdLAcf4ItdD+0wffRxfn5RtqVg==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 12 Jan 2023 18:51:14 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+From: Paolo Abeni <pabeni@redhat.com>
 
-> Akanksha J N wrote:
-> > Commit 97f88a3d723162 ("powerpc/kprobes: Fix null pointer reference in
-> > arch_prepare_kprobe()") fixed a recent kernel oops that was caused as
-> > ftrace-based kprobe does not generate kprobe::ainsn::insn and it gets
-> > set to NULL.
-> > Extend multiple kprobes test to add kprobes on first 256 bytes within a
-> > function, to be able to test potential issues with kprobes on
-> > successive instructions.
+Let the caller specify the to-be-created subflow family.
 
-What is the purpose of that test? If you intended to add a kprobe events
-with some offset so that it becomes ftrace-based kprobe, it should be
-a different test case, because
+For a given MPTCP socket created with the AF_INET6 family, the current
+userspace PM can already ask the kernel to create subflows in v4 and v6.
+If "plain" IPv4 addresses are passed to the kernel, they are
+automatically mapped in v6 addresses "by accident". This can be
+problematic because the userspace will need to pass different addresses,
+now the v4-mapped-v6 addresses to destroy this new subflow.
 
- - This is a test case for checking multiple (at least 256) kprobe events
-  can be defined and enabled.
+On the other hand, if the MPTCP socket has been created with the AF_INET
+family, the command to create a subflow in v6 will be accepted but the
+result will not be the one as expected as new subflow will be created in
+IPv4 using part of the v6 addresses passed to the kernel: not creating
+the expected subflow then.
 
- - If you want to check the ftrace-based kprobe, it should be near the
-   function entry, maybe within 16 bytes or so.
+No functional change intended for the in-kernel PM where an explicit
+enforcement is currently in place. This arbitrary enforcement will be
+leveraged by other patches in a future version.
 
- - Also, you don't need to enable it at once (and should not for this case).
+Fixes: 702c2f646d42 ("mptcp: netlink: allow userspace-driven subflow establishment")
+Cc: stable@vger.kernel.org
+Co-developed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+ net/mptcp/protocol.c | 2 +-
+ net/mptcp/protocol.h | 3 ++-
+ net/mptcp/subflow.c  | 9 +++++----
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-> > The '|| true' is added with the echo statement to ignore errors that are
-> > caused by trying to add kprobes to non probeable lines and continue with
-> > the test.
-
-Can you add another test case for that? (and send it to the MLs which Cc'd
-to this mail)
-e.g. 
-
-   for i in `seq 0 16`; do
-     echo p:testprobe $FUNCTION_FORK+${i} >> kprobe_events || continue
-     echo 1 > events/kprobes/testprobe/enable
-     ( echo "forked" )
-     echo 0 > events/kprobes/testprobe/enable
-     echo > kprobe_events
-   done
-
-
-BTW, after we introduce the fprobe event (https://lore.kernel.org/linux-trace-kernel/166792255429.919356.14116090269057513181.stgit@devnote3/) that test case may be
-update to check fprobe events.
-
-Thank you,
-
-> > 
-> > Signed-off-by: Akanksha J N <akanksha@linux.ibm.com>
-> > ---
-> >  .../selftests/ftrace/test.d/kprobe/multiple_kprobes.tc        | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> 
-> Thanks for adding this test!
-> 
-> > 
-> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
-> > index be754f5bcf79..f005c2542baa 100644
-> > --- a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
-> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
-> > @@ -25,6 +25,10 @@ if [ $L -ne 256 ]; then
-> >    exit_fail
-> >  fi
-> > 
-> > +for i in `seq 0 255`; do
-> > +  echo p $FUNCTION_FORK+${i} >> kprobe_events || true
-> > +done
-> > +
-> >  cat kprobe_events >> $testlog
-> > 
-> >  echo 1 > events/kprobes/enable
-> 
-> Thinking about this more, I wonder if we should add an explicit fork 
-> after enabling the events, similar to kprobe_args.tc:
-> 	( echo "forked" )
-> 
-> That will ensure we hit all the probes we added. With that change:
-> Acked-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> 
-> 
-> - Naveen
-
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index b7ad030dfe89..8cd6cc67c2c5 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -98,7 +98,7 @@ static int __mptcp_socket_create(struct mptcp_sock *msk)
+ 	struct socket *ssock;
+ 	int err;
+ 
+-	err = mptcp_subflow_create_socket(sk, &ssock);
++	err = mptcp_subflow_create_socket(sk, sk->sk_family, &ssock);
+ 	if (err)
+ 		return err;
+ 
+diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+index a0d1658ce59e..a9e0355744b6 100644
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -641,7 +641,8 @@ bool mptcp_addresses_equal(const struct mptcp_addr_info *a,
+ /* called with sk socket lock held */
+ int __mptcp_subflow_connect(struct sock *sk, const struct mptcp_addr_info *loc,
+ 			    const struct mptcp_addr_info *remote);
+-int mptcp_subflow_create_socket(struct sock *sk, struct socket **new_sock);
++int mptcp_subflow_create_socket(struct sock *sk, unsigned short family,
++				struct socket **new_sock);
+ void mptcp_info2sockaddr(const struct mptcp_addr_info *info,
+ 			 struct sockaddr_storage *addr,
+ 			 unsigned short family);
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index bd387d4b5a38..ec54413fb31f 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -1547,7 +1547,7 @@ int __mptcp_subflow_connect(struct sock *sk, const struct mptcp_addr_info *loc,
+ 	if (!mptcp_is_fully_established(sk))
+ 		goto err_out;
+ 
+-	err = mptcp_subflow_create_socket(sk, &sf);
++	err = mptcp_subflow_create_socket(sk, loc->family, &sf);
+ 	if (err)
+ 		goto err_out;
+ 
+@@ -1660,7 +1660,9 @@ static void mptcp_subflow_ops_undo_override(struct sock *ssk)
+ #endif
+ 		ssk->sk_prot = &tcp_prot;
+ }
+-int mptcp_subflow_create_socket(struct sock *sk, struct socket **new_sock)
++
++int mptcp_subflow_create_socket(struct sock *sk, unsigned short family,
++				struct socket **new_sock)
+ {
+ 	struct mptcp_subflow_context *subflow;
+ 	struct net *net = sock_net(sk);
+@@ -1673,8 +1675,7 @@ int mptcp_subflow_create_socket(struct sock *sk, struct socket **new_sock)
+ 	if (unlikely(!sk->sk_socket))
+ 		return -EINVAL;
+ 
+-	err = sock_create_kern(net, sk->sk_family, SOCK_STREAM, IPPROTO_TCP,
+-			       &sf);
++	err = sock_create_kern(net, family, SOCK_STREAM, IPPROTO_TCP, &sf);
+ 	if (err)
+ 		return err;
+ 
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.37.2
