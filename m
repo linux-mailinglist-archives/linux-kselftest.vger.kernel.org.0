@@ -2,96 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27A666AC8C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Jan 2023 17:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5044366B260
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jan 2023 17:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjANQQT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 14 Jan 2023 11:16:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S231378AbjAOQDh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Jan 2023 11:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjANQQS (ORCPT
+        with ESMTP id S231605AbjAOQDF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 14 Jan 2023 11:16:18 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A5593E2
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Jan 2023 08:16:17 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id h6-20020a17090aa88600b00223fccff2efso17110788pjq.6
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Jan 2023 08:16:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BzgEcC1ikADsSn9DBlaMTyfNz57w5J1py6VoLV6xpdI=;
-        b=oKK4Om/Zr+blK1xdfE/T2ofv4VPBmTYvP4I3rHnvDEIufhZEZqJVCXwSyF0GVNQspG
-         P8jHMhQWgQ3XuQscECgXhAjxPT7IpynAt5BnQbBir+lRADI3e70KMdQUelWIKZDOTZFo
-         pNCut45+TEwJGwbzceWNdgtEqKkKaQMt6vQTCtwsf01/DlP9si1UsNWDrvKZ2p2/CAKw
-         JE9vuWKLv5ahm7nO5Z2DGyAo+Ajg+4Up0tq+miYlAlcU1mHNE6QzUQMRwqdLW8t1Itlz
-         ZLhl9x++3lzk2S4dDJ4PDF9CPYhMZyqk+CNCkcJpmo5ZhAL+aN5/1f6dI56WeHsAm8Sj
-         naMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BzgEcC1ikADsSn9DBlaMTyfNz57w5J1py6VoLV6xpdI=;
-        b=Wopu80hiNf09HflthBE57BCxt3Xx8oFmyvs8oLDzU7Zyrmp1Szi8X12vJIRMZAVx/2
-         +DJ3MLvgGiGgdCyoJvOmLvfOLHHELn6JKjZbX+LKm4UWbrSWgJqxEgSn97YMNj6aX0fM
-         eZnz5B+AWJJfxxXQqeMICodMjPnsW45YxgpWRRnEmmhFuOI+8bJxMyLwr7baL3124H6U
-         IMTLhxo7Ecc+xUqCvlNLyOvsxMuaEeSIawQts7i6fCf8dqn/Me0X5CH5lJCRZpw3roLa
-         S7DkzDZ93emaTR/VPpMMXc6D/i6Z4iR4/ZFLsapSiRHxmgvrZ9CnXOpkZ2ou5/763sGB
-         0SfQ==
-X-Gm-Message-State: AFqh2koQG3XoYHCvfyIhzf+8VzFLFMS30OpCmW+zUfdI0X5qSGO5pb8q
-        sTVZNaTL0kbGzJBYnZBoC7PQOtw4uHRL5Ls/vw==
-X-Google-Smtp-Source: AMrXdXv7MgW1NvJDvr1pN8B/h8tiUFGKAnGn7dp9yk9nJWdzTVBt8tzoDZkMtyWc7Oypt4sgFs2vxtow8do6j1Q9ZA==
-X-Received: from ackerleytng-cloudtop-sg.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:b30])
- (user=ackerleytng job=sendgmr) by 2002:a17:90b:68e:b0:226:2e5:2e1a with SMTP
- id m14-20020a17090b068e00b0022602e52e1amr5030109pjz.145.1673712977533; Sat,
- 14 Jan 2023 08:16:17 -0800 (PST)
-Date:   Sat, 14 Jan 2023 16:15:57 +0000
-In-Reply-To: <20230114161557.499685-1-ackerleytng@google.com>
-Mime-Version: 1.0
-References: <20230114161557.499685-1-ackerleytng@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230114161557.499685-3-ackerleytng@google.com>
-Subject: [PATCH 2/2] KVM: selftests: Reuse kvm_setup_gdt in vcpu_init_descriptor_tables
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Wei Wang <wei.w.wang@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 15 Jan 2023 11:03:05 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A12B1815A;
+        Sun, 15 Jan 2023 08:01:23 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.184])
+        by gnuweeb.org (Postfix) with ESMTPSA id 5318E7E795;
+        Sun, 15 Jan 2023 16:01:10 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1673798473;
+        bh=CV1abQ9gGejZbJXQ/TOIyi+DJk5vgSgg0ar02f3kMKc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dFsocE8EW0qbhPz0n26OQwMnwu76IzrCvnr4FOc4u5uziFcMMynAhfQ4Zc6w+P4Tr
+         aHymi2PXurC5HHVEt2e5UONi/CvZx+IKvg1En8NTgUTJkPH8XxNrFue57W6zpKdujz
+         OPx4EcOS+7SUEau5p3KZ4PWQAea576m7P18DipeA9uWIxwNeGzkbsI+UQEZgjjCQ+T
+         I9e7XgxNebR5TxGb2jQsDlz6uVGTSGI8eHpu5rEEz9pIhOsjqcjIddLUEIm/hr2/TG
+         CBJ1xd+VdLgbkRZB2/NKeoEmOMAMnMWuoALxY2bFHgiAscBhP6/nhAjVcsDiu5XA44
+         ors9p4Tsg1y9g==
+Date:   Sun, 15 Jan 2023 23:01:06 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v3 0/5] nolibc signal handling support
+Message-ID: <Y8QjQnkPxVyEOxPz@biznet-home.integral.gnuweeb.org>
+References: <20230108135904.851762-1-ammar.faizi@intel.com>
+ <20230108175842.GB18859@1wt.eu>
+ <Y7sL9U1dYkuWJ8rS@biznet-home.integral.gnuweeb.org>
+ <20230108184930.GC18859@1wt.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230108184930.GC18859@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Refactor vcpu_init_descriptor_tables to use kvm_setup_gdt
+On Sun, Jan 08, 2023 at 07:49:30PM +0100, Willy Tarreau wrote:
+> On Mon, Jan 09, 2023 at 01:31:17AM +0700, Ammar Faizi wrote:
+> > I'll be pondering this code this week (to follow what actually the
+> > rt_sigaction wants on i386 and arm):
+> > 
+> >   https://github.com/torvalds/linux/blob/v6.2-rc3/kernel/signal.c#L4404-L4434
+> 
+> Seems like it could simply be a matter of sigsetsize, which is the
+> first one returning -EINVAL.
+> 
+> > Hopefully, I can get it sorted before the weekend.
+> 
+> OK!
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- tools/testing/selftests/kvm/lib/x86_64/processor.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I couldn't dedicate much time to this, but I looked into it, and here's
+my report on the progress. I didn't manage to find a proper solution to
+this. But yes, you're right. It's a matter of 'sizeof(sigset_t)'.
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 33ca7f5232a4..8d544e9237aa 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1119,8 +1119,7 @@ void vcpu_init_descriptor_tables(struct kvm_vcpu *vcpu)
- 	vcpu_sregs_get(vcpu, &sregs);
- 	sregs.idt.base = vm->idt;
- 	sregs.idt.limit = NUM_INTERRUPTS * sizeof(struct idt_entry) - 1;
--	sregs.gdt.base = vm->gdt;
--	sregs.gdt.limit = getpagesize() - 1;
-+	kvm_setup_gdt(vcpu->vm, &sregs.gdt);
- 	kvm_seg_set_kernel_data_64bit(NULL, DEFAULT_DATA_SELECTOR, &sregs.gs);
- 	vcpu_sregs_set(vcpu, &sregs);
- 	*(vm_vaddr_t *)addr_gva2hva(vm, (vm_vaddr_t)(&exception_handlers)) = vm->handlers;
+So here is my observation. Currently, nolibc's sys.h includes this:
+
+    #include <asm/signal.h>
+
+The definition of 'sigset_t' in that header is: 
+
+    typedef unsigned long sigset_t;
+
+On i386, 'sizeof(unsigned long)' is 4, but on x86-64 it's 8.
+
+That is not the 'sigset_t' that the kernel wants. The kernel wants the
+'sigset_t' that is in <asm-generic/signal.h>:
+
+    #define _NSIG       64
+    #define _NSIG_BPW   __BITS_PER_LONG      // this 64 on x86-64, but 32 on i386.
+    #define _NSIG_WORDS (_NSIG / _NSIG_BPW)
+
+    typedef struct {
+        unsigned long sig[_NSIG_WORDS];
+    } sigset_t;
+
+The above struct is always 8 bytes in size. In other words:
+
+    _NSIG_WORDS == 2 on i386
+    _NSIG_WORDS == 1 on x86-64
+    sizeof(unsigned long) == 4 on i386
+    sizeof(unsigned long) == 8 on x86-64
+
+Therefore, sizeof(unsigned long [_NSIG_WORDS]) is always 8 on both
+architectures. That's the correct size.
+
+I tried to #include <asm-generic/signal.h> but it conflicts with the
+other 'sigset_t' definition. So I can't do that.
+
+Why are there two different definitions of 'sigset_t'? I don't know.
+
+I probably should read the story behind this syscall to get it
+implemented right. Let me ponder this again on Monday. But at least I
+tell what I have found so people can give some comments on it...
+
 -- 
-2.39.0.314.g84b9a713c41-goog
+Ammar Faizi
 
