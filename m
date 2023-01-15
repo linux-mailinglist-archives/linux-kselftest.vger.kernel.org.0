@@ -2,44 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B920D66B312
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jan 2023 18:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B31F66B313
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jan 2023 18:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbjAORXe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 Jan 2023 12:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S231276AbjAORXl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Jan 2023 12:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbjAORXd (ORCPT
+        with ESMTP id S231497AbjAORXj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 Jan 2023 12:23:33 -0500
+        Sun, 15 Jan 2023 12:23:39 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA03D1041F;
-        Sun, 15 Jan 2023 09:23:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E351041F;
+        Sun, 15 Jan 2023 09:23:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63242B80B40;
-        Sun, 15 Jan 2023 17:23:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C22C433F0;
-        Sun, 15 Jan 2023 17:23:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7341B80B40;
+        Sun, 15 Jan 2023 17:23:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D03DC433D2;
+        Sun, 15 Jan 2023 17:23:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673803409;
-        bh=mKINwWTR8WTVY9DFaNiqoFfR0ztBjU88mhl2U8cmLNU=;
+        s=k20201202; t=1673803415;
+        bh=0FoBf2sjDheQfj32WNuuwWqRQe1dDhI40cDLo8KD18I=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ao4rj+Kmv42ji6pDYhZXQ1Vy+C7s3J8v2UBetluP1OvZ3TUqQCg1cLj51ew9Jmek7
-         4jfwVku13sQpzTEV2/n4VWCOgTtGvIG50fgVbZeOaznJrvVfFcnuCjBNXHnpClscHu
-         mrFUVxUdQuSS2HER9b3CFbA3u01e+GfW5CibeP2o41whFVUR0NN/z54QZ5v2EeTplh
-         rZqgNvZ9Wh6fYHbJi8zXJopg9JPySc+d1E7yeS7RZ786v7z/3hIWUhDcSwdySgbOwr
-         I1SRkzMKRJk5q5KEF02p32KiCKjMhssQLue0PonDzDkga5jCyu7tTOF9VDt3ShSNN0
-         ke7+rPsMGgpjg==
-Subject: [PATCH v2 30/41] SUNRPC: Move remaining internal definitions to
- gss_krb5_internal.h
+        b=t4W2a9ZVbYZequnlAUlVg7H3KAMu7B88DwbEUxIr08MvX7/Bpk9X+PraK84dLdhsX
+         8p6WuI7U+At/k6s9vYrIREDsbFI//Ck0MUp2iBGaovbxSvLpnzPU66afKG8ttGFtb7
+         YlV3i2fYUcMtcIqqCBQnYkNLr5bCR0KbT5AqZ98nHWdR2SEyxu9LSb5VhP/CIWeaCZ
+         6Aqlow4vmYxCJ3Ooeo9frspa7C9DQrKWrqDjj7ITJzx76vLhrAW+q2FBYa1jRi9U/E
+         WpofRm9OFVqPaS66Ng5NHDpXM7mL3wcloEkTa6AMJDKGzYoPk/6uUCcxc+z63gIUwi
+         WDSQLh9flIQxg==
+Subject: [PATCH v2 31/41] SUNRPC: Add KUnit tests for rpcsec_krb5.ko
 From:   Chuck Lever <cel@kernel.org>
 To:     linux-nfs@vger.kernel.org
 Cc:     dhowells@redhat.com, simo@redhat.com,
         linux-kselftest@vger.kernel.org
-Date:   Sun, 15 Jan 2023 12:23:27 -0500
-Message-ID: <167380340784.10651.13072870050177651658.stgit@bazille.1015granger.net>
+Date:   Sun, 15 Jan 2023 12:23:34 -0500
+Message-ID: <167380341422.10651.7617772621466313010.stgit@bazille.1015granger.net>
 In-Reply-To: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
 References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
 User-Agent: StGit/1.5
@@ -57,326 +56,400 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Chuck Lever <chuck.lever@oracle.com>
 
-The goal is to leave only protocol-defined items in gss_krb5.h so
-that it can be easily replaced by a generic header. Implementation
-specific items are moved to the new internal header.
+The Kerberos RFCs provide test vectors to verify the operation of
+an implementation. Introduce a KUnit test framework to exercise the
+Linux kernel's implementation of Kerberos.
+
+Start with test cases for the RFC 3961-defined n-fold function. The
+sample vectors for that are found in RFC 3961 Section 10.
+
+Run the GSS Kerberos 5 mechanism's unit tests with this command:
+
+$ ./tools/testing/kunit/kunit.py run \
+	--kunitconfig ./net/sunrpc/.kunitconfig
 
 Tested-by: Scott Mayhew <smayhew@redhat.com>
 Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 ---
- include/linux/sunrpc/gss_krb5.h         |  117 -------------------------------
- net/sunrpc/auth_gss/auth_gss.c          |   17 +++++
- net/sunrpc/auth_gss/gss_krb5_crypto.c   |    1 
- net/sunrpc/auth_gss/gss_krb5_internal.h |   94 +++++++++++++++++++++++++
- 4 files changed, 111 insertions(+), 118 deletions(-)
+ net/sunrpc/.kunitconfig                 |   22 +++
+ net/sunrpc/Kconfig                      |   15 ++
+ net/sunrpc/auth_gss/Makefile            |    2 
+ net/sunrpc/auth_gss/gss_krb5_internal.h |    4 +
+ net/sunrpc/auth_gss/gss_krb5_keys.c     |   15 +-
+ net/sunrpc/auth_gss/gss_krb5_test.c     |  244 +++++++++++++++++++++++++++++++
+ 6 files changed, 298 insertions(+), 4 deletions(-)
+ create mode 100644 net/sunrpc/.kunitconfig
+ create mode 100644 net/sunrpc/auth_gss/gss_krb5_test.c
 
-diff --git a/include/linux/sunrpc/gss_krb5.h b/include/linux/sunrpc/gss_krb5.h
-index cbb6c8192890..78a80bf3fdcb 100644
---- a/include/linux/sunrpc/gss_krb5.h
-+++ b/include/linux/sunrpc/gss_krb5.h
-@@ -42,12 +42,6 @@
- #include <linux/sunrpc/gss_err.h>
- #include <linux/sunrpc/gss_asn1.h>
+diff --git a/net/sunrpc/.kunitconfig b/net/sunrpc/.kunitconfig
+new file mode 100644
+index 000000000000..dc9abe4faa4f
+--- /dev/null
++++ b/net/sunrpc/.kunitconfig
+@@ -0,0 +1,22 @@
++CONFIG_KUNIT=y
++CONFIG_UBSAN=y
++CONFIG_STACKTRACE=y
++CONFIG_NET=y
++CONFIG_NETWORK_FILESYSTEMS=y
++CONFIG_INET=y
++CONFIG_FILE_LOCKING=y
++CONFIG_MULTIUSER=y
++CONFIG_CRYPTO=y
++CONFIG_CRYPTO_CBC=y
++CONFIG_CRYPTO_CTS=y
++CONFIG_CRYPTO_ECB=y
++CONFIG_CRYPTO_HMAC=y
++CONFIG_CRYPTO_MD5=y
++CONFIG_CRYPTO_SHA1=y
++CONFIG_CRYPTO_DES=y
++CONFIG_NFS_FS=y
++CONFIG_SUNRPC=y
++CONFIG_SUNRPC_GSS=y
++CONFIG_RPCSEC_GSS_KRB5=y
++CONFIG_RPCSEC_GSS_KRB5_ENCTYPES_DES=y
++CONFIG_RPCSEC_GSS_KRB5_KUNIT_TEST=y
+diff --git a/net/sunrpc/Kconfig b/net/sunrpc/Kconfig
+index def7e1ce348b..214e07e39f7b 100644
+--- a/net/sunrpc/Kconfig
++++ b/net/sunrpc/Kconfig
+@@ -103,6 +103,21 @@ config RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA2
+ 	  SHA-2 digests. These include aes128-cts-hmac-sha256-128 and
+ 	  aes256-cts-hmac-sha384-192.
  
--/*
-- * The RFCs often specify payload lengths in bits. This helper
-- * converts a specified bit-length to the number of octets/bytes.
-- */
--#define BITS2OCTETS(x)	((x) / 8)
--
- /* Length of constant used in key derivation */
- #define GSS_KRB5_K5CLENGTH (5)
- 
-@@ -60,74 +54,6 @@
- /* Maximum blocksize for the supported crypto algorithms */
- #define GSS_KRB5_MAX_BLOCKSIZE  (16)
- 
--struct krb5_ctx;
--
--struct gss_krb5_enctype {
--	const u32		etype;		/* encryption (key) type */
--	const u32		ctype;		/* checksum type */
--	const char		*name;		/* "friendly" name */
--	const char		*encrypt_name;	/* crypto encrypt name */
--	const char		*aux_cipher;	/* aux encrypt cipher name */
--	const char		*cksum_name;	/* crypto checksum name */
--	const u16		signalg;	/* signing algorithm */
--	const u16		sealalg;	/* sealing algorithm */
--	const u32		cksumlength;	/* checksum length */
--	const u32		keyed_cksum;	/* is it a keyed cksum? */
--	const u32		keybytes;	/* raw key len, in bytes */
--	const u32		keylength;	/* protocol key length, in octets */
--	const u32		Kc_length;	/* checksum subkey length, in octets */
--	const u32		Ke_length;	/* encryption subkey length, in octets */
--	const u32		Ki_length;	/* integrity subkey length, in octets */
--
--	int (*import_ctx)(struct krb5_ctx *ctx, gfp_t gfp_mask);
--	int (*derive_key)(const struct gss_krb5_enctype *gk5e,
--			  const struct xdr_netobj *in,
--			  struct xdr_netobj *out,
--			  const struct xdr_netobj *label,
--			  gfp_t gfp_mask);
--	u32 (*encrypt)(struct krb5_ctx *kctx, u32 offset,
--			struct xdr_buf *buf, struct page **pages);
--	u32 (*decrypt)(struct krb5_ctx *kctx, u32 offset, u32 len,
--		       struct xdr_buf *buf, u32 *headskip, u32 *tailskip);
--	u32 (*get_mic)(struct krb5_ctx *kctx, struct xdr_buf *text,
--		       struct xdr_netobj *token);
--	u32 (*verify_mic)(struct krb5_ctx *kctx, struct xdr_buf *message_buffer,
--			  struct xdr_netobj *read_token);
--	u32 (*wrap)(struct krb5_ctx *kctx, int offset,
--		    struct xdr_buf *buf, struct page **pages);
--	u32 (*unwrap)(struct krb5_ctx *kctx, int offset, int len,
--		      struct xdr_buf *buf, unsigned int *slack,
--		      unsigned int *align);
--};
--
--/* krb5_ctx flags definitions */
--#define KRB5_CTX_FLAG_INITIATOR         0x00000001
--#define KRB5_CTX_FLAG_CFX               0x00000002
--#define KRB5_CTX_FLAG_ACCEPTOR_SUBKEY   0x00000004
--
--struct krb5_ctx {
--	int			initiate; /* 1 = initiating, 0 = accepting */
--	u32			enctype;
--	u32			flags;
--	const struct gss_krb5_enctype *gk5e; /* enctype-specific info */
--	struct crypto_sync_skcipher *enc;
--	struct crypto_sync_skcipher *seq;
--	struct crypto_sync_skcipher *acceptor_enc;
--	struct crypto_sync_skcipher *initiator_enc;
--	struct crypto_sync_skcipher *acceptor_enc_aux;
--	struct crypto_sync_skcipher *initiator_enc_aux;
--	struct crypto_ahash	*acceptor_sign;
--	struct crypto_ahash	*initiator_sign;
--	struct crypto_ahash	*initiator_integ;
--	struct crypto_ahash	*acceptor_integ;
--	u8			Ksess[GSS_KRB5_MAX_KEYLEN]; /* session key */
--	u8			cksum[GSS_KRB5_MAX_KEYLEN];
--	atomic_t		seq_send;
--	atomic64_t		seq_send64;
--	time64_t		endtime;
--	struct xdr_netobj	mech_used;
--};
--
- /* The length of the Kerberos GSS token header */
- #define GSS_KRB5_TOK_HDR_LEN	(16)
- 
-@@ -245,47 +171,4 @@ enum seal_alg {
- #define KG_USAGE_INITIATOR_SEAL (24)
- #define KG_USAGE_INITIATOR_SIGN (25)
- 
--/*
-- * This compile-time check verifies that we will not exceed the
-- * slack space allotted by the client and server auth_gss code
-- * before they call gss_wrap().
-- */
--#define GSS_KRB5_MAX_SLACK_NEEDED \
--	(GSS_KRB5_TOK_HDR_LEN     /* gss token header */         \
--	+ GSS_KRB5_MAX_CKSUM_LEN  /* gss token checksum */       \
--	+ GSS_KRB5_MAX_BLOCKSIZE  /* confounder */               \
--	+ GSS_KRB5_MAX_BLOCKSIZE  /* possible padding */         \
--	+ GSS_KRB5_TOK_HDR_LEN    /* encrypted hdr in v2 token */\
--	+ GSS_KRB5_MAX_CKSUM_LEN  /* encryption hmac */          \
--	+ 4 + 4                   /* RPC verifier */             \
--	+ GSS_KRB5_TOK_HDR_LEN                                   \
--	+ GSS_KRB5_MAX_CKSUM_LEN)
--
--u32
--make_checksum(struct krb5_ctx *kctx, char *header, int hdrlen,
--		struct xdr_buf *body, int body_offset, u8 *cksumkey,
--		unsigned int usage, struct xdr_netobj *cksumout);
--
--int
--gss_encrypt_xdr_buf(struct crypto_sync_skcipher *tfm, struct xdr_buf *outbuf,
--		    int offset, struct page **pages);
--
--int
--gss_decrypt_xdr_buf(struct crypto_sync_skcipher *tfm, struct xdr_buf *inbuf,
--		    int offset);
--
--s32
--krb5_make_seq_num(struct krb5_ctx *kctx,
--		struct crypto_sync_skcipher *key,
--		int direction,
--		u32 seqnum, unsigned char *cksum, unsigned char *buf);
--
--s32
--krb5_get_seq_num(struct krb5_ctx *kctx,
--	       unsigned char *cksum,
--	       unsigned char *buf, int *direction, u32 *seqnum);
--
--int
--xdr_extend_head(struct xdr_buf *buf, unsigned int base, unsigned int shiftlen);
--
- #endif /* _LINUX_SUNRPC_GSS_KRB5_H */
-diff --git a/net/sunrpc/auth_gss/auth_gss.c b/net/sunrpc/auth_gss/auth_gss.c
-index 2d7b1e03110a..1af71fbb0d80 100644
---- a/net/sunrpc/auth_gss/auth_gss.c
-+++ b/net/sunrpc/auth_gss/auth_gss.c
-@@ -49,6 +49,22 @@ static unsigned int gss_key_expire_timeo = GSS_KEY_EXPIRE_TIMEO;
- # define RPCDBG_FACILITY	RPCDBG_AUTH
- #endif
- 
-+/*
-+ * This compile-time check verifies that we will not exceed the
-+ * slack space allotted by the client and server auth_gss code
-+ * before they call gss_wrap().
-+ */
-+#define GSS_KRB5_MAX_SLACK_NEEDED					\
-+	(GSS_KRB5_TOK_HDR_LEN		/* gss token header */		\
-+	+ GSS_KRB5_MAX_CKSUM_LEN	/* gss token checksum */	\
-+	+ GSS_KRB5_MAX_BLOCKSIZE	/* confounder */		\
-+	+ GSS_KRB5_MAX_BLOCKSIZE	/* possible padding */		\
-+	+ GSS_KRB5_TOK_HDR_LEN		/* encrypted hdr in v2 token */	\
-+	+ GSS_KRB5_MAX_CKSUM_LEN	/* encryption hmac */		\
-+	+ XDR_UNIT * 2			/* RPC verifier */		\
-+	+ GSS_KRB5_TOK_HDR_LEN						\
-+	+ GSS_KRB5_MAX_CKSUM_LEN)
++config RPCSEC_GSS_KRB5_KUNIT_TEST
++	tristate "KUnit tests for RPCSEC GSS Kerberos" if !KUNIT_ALL_TESTS
++	depends on RPCSEC_GSS_KRB5 && KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This builds the KUnit tests for RPCSEC GSS Kerberos 5.
 +
- #define GSS_CRED_SLACK		(RPC_MAX_AUTH_SIZE * 2)
- /* length of a krb5 verifier (48), plus data added before arguments when
-  * using integrity (two 4-byte integers): */
-@@ -1042,6 +1058,7 @@ gss_create_new(const struct rpc_auth_create_args *args, struct rpc_clnt *clnt)
- 		goto err_put_mech;
- 	auth = &gss_auth->rpc_auth;
- 	auth->au_cslack = GSS_CRED_SLACK >> 2;
-+	BUILD_BUG_ON(GSS_KRB5_MAX_SLACK_NEEDED > RPC_MAX_AUTH_SIZE);
- 	auth->au_rslack = GSS_KRB5_MAX_SLACK_NEEDED >> 2;
- 	auth->au_verfsize = GSS_VERF_SLACK >> 2;
- 	auth->au_ralign = GSS_VERF_SLACK >> 2;
-diff --git a/net/sunrpc/auth_gss/gss_krb5_crypto.c b/net/sunrpc/auth_gss/gss_krb5_crypto.c
-index 4f29216d414a..5c811b554fd1 100644
---- a/net/sunrpc/auth_gss/gss_krb5_crypto.c
-+++ b/net/sunrpc/auth_gss/gss_krb5_crypto.c
-@@ -572,7 +572,6 @@ xdr_extend_head(struct xdr_buf *buf, unsigned int base, unsigned int shiftlen)
- 	if (shiftlen == 0)
- 		return 0;
++	  KUnit tests run during boot and output the results to the debug
++	  log in TAP format (https://testanything.org/). Only useful for
++	  kernel devs running KUnit test harness and are not for inclusion
++	  into a production build.
++
++	  For more information on KUnit and unit tests in general, refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
+ config SUNRPC_DEBUG
+ 	bool "RPC: Enable dprintk debugging"
+ 	depends on SUNRPC && SYSCTL
+diff --git a/net/sunrpc/auth_gss/Makefile b/net/sunrpc/auth_gss/Makefile
+index 4a29f4c5dac4..012ae1720689 100644
+--- a/net/sunrpc/auth_gss/Makefile
++++ b/net/sunrpc/auth_gss/Makefile
+@@ -13,3 +13,5 @@ obj-$(CONFIG_RPCSEC_GSS_KRB5) += rpcsec_gss_krb5.o
  
--	BUILD_BUG_ON(GSS_KRB5_MAX_SLACK_NEEDED > RPC_MAX_AUTH_SIZE);
- 	BUG_ON(shiftlen > RPC_MAX_AUTH_SIZE);
- 
- 	p = buf->head[0].iov_base + base;
+ rpcsec_gss_krb5-y := gss_krb5_mech.o gss_krb5_seal.o gss_krb5_unseal.o \
+ 	gss_krb5_seqnum.o gss_krb5_wrap.o gss_krb5_crypto.o gss_krb5_keys.o
++
++obj-$(CONFIG_RPCSEC_GSS_KRB5_KUNIT_TEST) += gss_krb5_test.o
 diff --git a/net/sunrpc/auth_gss/gss_krb5_internal.h b/net/sunrpc/auth_gss/gss_krb5_internal.h
-index c955e7b76c4d..850748f6733a 100644
+index 850748f6733a..9aba1647c205 100644
 --- a/net/sunrpc/auth_gss/gss_krb5_internal.h
 +++ b/net/sunrpc/auth_gss/gss_krb5_internal.h
-@@ -8,6 +8,79 @@
- #ifndef _NET_SUNRPC_AUTH_GSS_KRB5_INTERNAL_H
- #define _NET_SUNRPC_AUTH_GSS_KRB5_INTERNAL_H
+@@ -214,4 +214,8 @@ u32 krb5_etm_encrypt(struct krb5_ctx *kctx, u32 offset, struct xdr_buf *buf,
+ u32 krb5_etm_decrypt(struct krb5_ctx *kctx, u32 offset, u32 len,
+ 		     struct xdr_buf *buf, u32 *headskip, u32 *tailskip);
  
-+/*
-+ * The RFCs often specify payload lengths in bits. This helper
-+ * converts a specified bit-length to the number of octets/bytes.
-+ */
-+#define BITS2OCTETS(x)	((x) / 8)
++#if IS_ENABLED(CONFIG_KUNIT)
++void krb5_nfold(u32 inbits, const u8 *in, u32 outbits, u8 *out);
++#endif
 +
-+struct krb5_ctx;
-+
-+struct gss_krb5_enctype {
-+	const u32		etype;		/* encryption (key) type */
-+	const u32		ctype;		/* checksum type */
-+	const char		*name;		/* "friendly" name */
-+	const char		*encrypt_name;	/* crypto encrypt name */
-+	const char		*aux_cipher;	/* aux encrypt cipher name */
-+	const char		*cksum_name;	/* crypto checksum name */
-+	const u16		signalg;	/* signing algorithm */
-+	const u16		sealalg;	/* sealing algorithm */
-+	const u32		cksumlength;	/* checksum length */
-+	const u32		keyed_cksum;	/* is it a keyed cksum? */
-+	const u32		keybytes;	/* raw key len, in bytes */
-+	const u32		keylength;	/* protocol key length, in octets */
-+	const u32		Kc_length;	/* checksum subkey length, in octets */
-+	const u32		Ke_length;	/* encryption subkey length, in octets */
-+	const u32		Ki_length;	/* integrity subkey length, in octets */
-+
-+	int (*import_ctx)(struct krb5_ctx *ctx, gfp_t gfp_mask);
-+	int (*derive_key)(const struct gss_krb5_enctype *gk5e,
-+			  const struct xdr_netobj *in,
-+			  struct xdr_netobj *out,
-+			  const struct xdr_netobj *label,
-+			  gfp_t gfp_mask);
-+	u32 (*encrypt)(struct krb5_ctx *kctx, u32 offset,
-+		       struct xdr_buf *buf, struct page **pages);
-+	u32 (*decrypt)(struct krb5_ctx *kctx, u32 offset, u32 len,
-+		       struct xdr_buf *buf, u32 *headskip, u32 *tailskip);
-+	u32 (*get_mic)(struct krb5_ctx *kctx, struct xdr_buf *text,
-+		       struct xdr_netobj *token);
-+	u32 (*verify_mic)(struct krb5_ctx *kctx, struct xdr_buf *message_buffer,
-+			  struct xdr_netobj *read_token);
-+	u32 (*wrap)(struct krb5_ctx *kctx, int offset,
-+		    struct xdr_buf *buf, struct page **pages);
-+	u32 (*unwrap)(struct krb5_ctx *kctx, int offset, int len,
-+		      struct xdr_buf *buf, unsigned int *slack,
-+		      unsigned int *align);
-+};
-+
-+/* krb5_ctx flags definitions */
-+#define KRB5_CTX_FLAG_INITIATOR         0x00000001
-+#define KRB5_CTX_FLAG_ACCEPTOR_SUBKEY   0x00000004
-+
-+struct krb5_ctx {
-+	int			initiate; /* 1 = initiating, 0 = accepting */
-+	u32			enctype;
-+	u32			flags;
-+	const struct gss_krb5_enctype *gk5e; /* enctype-specific info */
-+	struct crypto_sync_skcipher *enc;
-+	struct crypto_sync_skcipher *seq;
-+	struct crypto_sync_skcipher *acceptor_enc;
-+	struct crypto_sync_skcipher *initiator_enc;
-+	struct crypto_sync_skcipher *acceptor_enc_aux;
-+	struct crypto_sync_skcipher *initiator_enc_aux;
-+	struct crypto_ahash	*acceptor_sign;
-+	struct crypto_ahash	*initiator_sign;
-+	struct crypto_ahash	*initiator_integ;
-+	struct crypto_ahash	*acceptor_integ;
-+	u8			Ksess[GSS_KRB5_MAX_KEYLEN]; /* session key */
-+	u8			cksum[GSS_KRB5_MAX_KEYLEN];
-+	atomic_t		seq_send;
-+	atomic64_t		seq_send64;
-+	time64_t		endtime;
-+	struct xdr_netobj	mech_used;
-+};
-+
- /*
-  * GSS Kerberos 5 mechanism Per-Message calls.
+ #endif /* _NET_SUNRPC_AUTH_GSS_KRB5_INTERNAL_H */
+diff --git a/net/sunrpc/auth_gss/gss_krb5_keys.c b/net/sunrpc/auth_gss/gss_krb5_keys.c
+index 99251f15723a..5347fe1cc93f 100644
+--- a/net/sunrpc/auth_gss/gss_krb5_keys.c
++++ b/net/sunrpc/auth_gss/gss_krb5_keys.c
+@@ -61,6 +61,7 @@
+ #include <linux/sunrpc/xdr.h>
+ #include <linux/lcm.h>
+ #include <crypto/hash.h>
++#include <kunit/visibility.h>
+ 
+ #include "gss_krb5_internal.h"
+ 
+@@ -68,13 +69,18 @@
+ # define RPCDBG_FACILITY        RPCDBG_AUTH
+ #endif
+ 
+-/*
++/**
++ * krb5_nfold - n-fold function
++ * @inbits: number of bits in @in
++ * @in: buffer containing input to fold
++ * @outbits: number of bits in the output buffer
++ * @out: buffer to hold the result
++ *
+  * This is the n-fold function as described in rfc3961, sec 5.1
+  * Taken from MIT Kerberos and modified.
   */
-@@ -96,8 +169,19 @@ static inline int krb5_derive_key(struct krb5_ctx *kctx,
- 	return gk5e->derive_key(gk5e, inkey, outkey, &label, gfp_mask);
+-
+-static void krb5_nfold(u32 inbits, const u8 *in,
+-		       u32 outbits, u8 *out)
++VISIBLE_IF_KUNIT
++void krb5_nfold(u32 inbits, const u8 *in, u32 outbits, u8 *out)
+ {
+ 	unsigned long ulcm;
+ 	int byte, i, msbit;
+@@ -135,6 +141,7 @@ static void krb5_nfold(u32 inbits, const u8 *in,
+ 		}
+ 	}
  }
++EXPORT_SYMBOL_IF_KUNIT(krb5_nfold);
  
-+s32 krb5_make_seq_num(struct krb5_ctx *kctx, struct crypto_sync_skcipher *key,
-+		      int direction, u32 seqnum, unsigned char *cksum,
-+		      unsigned char *buf);
+ /*
+  * This is the DK (derive_key) function as described in rfc3961, sec 5.1
+diff --git a/net/sunrpc/auth_gss/gss_krb5_test.c b/net/sunrpc/auth_gss/gss_krb5_test.c
+new file mode 100644
+index 000000000000..f67dbf7c8af4
+--- /dev/null
++++ b/net/sunrpc/auth_gss/gss_krb5_test.c
+@@ -0,0 +1,244 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2022 Oracle and/or its affiliates.
++ *
++ * KUnit test of SunRPC's GSS Kerberos mechanism. Subsystem
++ * name is "rpcsec_gss_krb5".
++ */
 +
-+s32 krb5_get_seq_num(struct krb5_ctx *kctx, unsigned char *cksum,
-+		     unsigned char *buf, int *direction, u32 *seqnum);
++#include <kunit/test.h>
++#include <kunit/visibility.h>
 +
- void krb5_make_confounder(u8 *p, int conflen);
- 
-+u32 make_checksum(struct krb5_ctx *kctx, char *header, int hdrlen,
-+		  struct xdr_buf *body, int body_offset, u8 *cksumkey,
-+		  unsigned int usage, struct xdr_netobj *cksumout);
++#include <linux/kernel.h>
 +
- u32 gss_krb5_checksum(struct crypto_ahash *tfm, char *header, int hdrlen,
- 		      const struct xdr_buf *body, int body_offset,
- 		      struct xdr_netobj *cksumout);
-@@ -108,6 +192,16 @@ u32 krb5_encrypt(struct crypto_sync_skcipher *key, void *iv, void *in,
- u32 krb5_decrypt(struct crypto_sync_skcipher *key, void *iv, void *in,
- 		 void *out, int length);
- 
-+int xdr_extend_head(struct xdr_buf *buf, unsigned int base,
-+		    unsigned int shiftlen);
++#include <linux/sunrpc/xdr.h>
++#include <linux/sunrpc/gss_krb5.h>
 +
-+int gss_encrypt_xdr_buf(struct crypto_sync_skcipher *tfm,
-+			struct xdr_buf *outbuf, int offset,
-+			struct page **pages);
++#include "gss_krb5_internal.h"
 +
-+int gss_decrypt_xdr_buf(struct crypto_sync_skcipher *tfm,
-+			struct xdr_buf *inbuf, int offset);
++MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
 +
- u32 gss_krb5_aes_encrypt(struct krb5_ctx *kctx, u32 offset,
- 			 struct xdr_buf *buf, struct page **pages);
- 
++struct gss_krb5_test_param {
++	const char			*desc;
++	u32				nfold;
++	const struct xdr_netobj         *plaintext;
++	const struct xdr_netobj		*expected_result;
++};
++
++static inline void gss_krb5_get_desc(const struct gss_krb5_test_param *param,
++				     char *desc)
++{
++	strscpy(desc, param->desc, KUNIT_PARAM_DESC_SIZE);
++}
++
++#define DEFINE_HEX_XDR_NETOBJ(name, hex_array...)		\
++	static const u8 name ## _data[] = { hex_array };	\
++	static const struct xdr_netobj name = {			\
++		.data	= (u8 *)name##_data,			\
++		.len	= sizeof(name##_data),			\
++	}
++
++/*
++ * RFC 3961 Appendix A.1.  n-fold
++ *
++ * The n-fold function is defined in section 5.1 of RFC 3961.
++ *
++ * This test material is copyright (C) The Internet Society (2005).
++ */
++
++DEFINE_HEX_XDR_NETOBJ(nfold_test1_plaintext,
++		      0x30, 0x31, 0x32, 0x33, 0x34, 0x35
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test1_expected_result,
++		      0xbe, 0x07, 0x26, 0x31, 0x27, 0x6b, 0x19, 0x55
++);
++
++DEFINE_HEX_XDR_NETOBJ(nfold_test2_plaintext,
++		      0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test2_expected_result,
++		      0x78, 0xa0, 0x7b, 0x6c, 0xaf, 0x85, 0xfa
++);
++
++DEFINE_HEX_XDR_NETOBJ(nfold_test3_plaintext,
++		      0x52, 0x6f, 0x75, 0x67, 0x68, 0x20, 0x43, 0x6f,
++		      0x6e, 0x73, 0x65, 0x6e, 0x73, 0x75, 0x73, 0x2c,
++		      0x20, 0x61, 0x6e, 0x64, 0x20, 0x52, 0x75, 0x6e,
++		      0x6e, 0x69, 0x6e, 0x67, 0x20, 0x43, 0x6f, 0x64,
++		      0x65
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test3_expected_result,
++		      0xbb, 0x6e, 0xd3, 0x08, 0x70, 0xb7, 0xf0, 0xe0
++);
++
++DEFINE_HEX_XDR_NETOBJ(nfold_test4_plaintext,
++		      0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test4_expected_result,
++		      0x59, 0xe4, 0xa8, 0xca, 0x7c, 0x03, 0x85, 0xc3,
++		      0xc3, 0x7b, 0x3f, 0x6d, 0x20, 0x00, 0x24, 0x7c,
++		      0xb6, 0xe6, 0xbd, 0x5b, 0x3e
++);
++
++DEFINE_HEX_XDR_NETOBJ(nfold_test5_plaintext,
++		      0x4d, 0x41, 0x53, 0x53, 0x41, 0x43, 0x48, 0x56,
++		      0x53, 0x45, 0x54, 0x54, 0x53, 0x20, 0x49, 0x4e,
++		      0x53, 0x54, 0x49, 0x54, 0x56, 0x54, 0x45, 0x20,
++		      0x4f, 0x46, 0x20, 0x54, 0x45, 0x43, 0x48, 0x4e,
++		      0x4f, 0x4c, 0x4f, 0x47, 0x59
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test5_expected_result,
++		      0xdb, 0x3b, 0x0d, 0x8f, 0x0b, 0x06, 0x1e, 0x60,
++		      0x32, 0x82, 0xb3, 0x08, 0xa5, 0x08, 0x41, 0x22,
++		      0x9a, 0xd7, 0x98, 0xfa, 0xb9, 0x54, 0x0c, 0x1b
++);
++
++DEFINE_HEX_XDR_NETOBJ(nfold_test6_plaintext,
++		      0x51
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test6_expected_result,
++		      0x51, 0x8a, 0x54, 0xa2, 0x15, 0xa8, 0x45, 0x2a,
++		      0x51, 0x8a, 0x54, 0xa2, 0x15, 0xa8, 0x45, 0x2a,
++		      0x51, 0x8a, 0x54, 0xa2, 0x15
++);
++
++DEFINE_HEX_XDR_NETOBJ(nfold_test7_plaintext,
++		      0x62, 0x61
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test7_expected_result,
++		      0xfb, 0x25, 0xd5, 0x31, 0xae, 0x89, 0x74, 0x49,
++		      0x9f, 0x52, 0xfd, 0x92, 0xea, 0x98, 0x57, 0xc4,
++		      0xba, 0x24, 0xcf, 0x29, 0x7e
++);
++
++DEFINE_HEX_XDR_NETOBJ(nfold_test_kerberos,
++		      0x6b, 0x65, 0x72, 0x62, 0x65, 0x72, 0x6f, 0x73
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test8_expected_result,
++		      0x6b, 0x65, 0x72, 0x62, 0x65, 0x72, 0x6f, 0x73
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test9_expected_result,
++		      0x6b, 0x65, 0x72, 0x62, 0x65, 0x72, 0x6f, 0x73,
++		      0x7b, 0x9b, 0x5b, 0x2b, 0x93, 0x13, 0x2b, 0x93
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test10_expected_result,
++		      0x83, 0x72, 0xc2, 0x36, 0x34, 0x4e, 0x5f, 0x15,
++		      0x50, 0xcd, 0x07, 0x47, 0xe1, 0x5d, 0x62, 0xca,
++		      0x7a, 0x5a, 0x3b, 0xce, 0xa4
++);
++DEFINE_HEX_XDR_NETOBJ(nfold_test11_expected_result,
++		      0x6b, 0x65, 0x72, 0x62, 0x65, 0x72, 0x6f, 0x73,
++		      0x7b, 0x9b, 0x5b, 0x2b, 0x93, 0x13, 0x2b, 0x93,
++		      0x5c, 0x9b, 0xdc, 0xda, 0xd9, 0x5c, 0x98, 0x99,
++		      0xc4, 0xca, 0xe4, 0xde, 0xe6, 0xd6, 0xca, 0xe4
++);
++
++static const struct gss_krb5_test_param rfc3961_nfold_test_params[] = {
++	{
++		.desc			= "64-fold(\"012345\")",
++		.nfold			= 64,
++		.plaintext		= &nfold_test1_plaintext,
++		.expected_result	= &nfold_test1_expected_result,
++	},
++	{
++		.desc			= "56-fold(\"password\")",
++		.nfold			= 56,
++		.plaintext		= &nfold_test2_plaintext,
++		.expected_result	= &nfold_test2_expected_result,
++	},
++	{
++		.desc			= "64-fold(\"Rough Consensus, and Running Code\")",
++		.nfold			= 64,
++		.plaintext		= &nfold_test3_plaintext,
++		.expected_result	= &nfold_test3_expected_result,
++	},
++	{
++		.desc			= "168-fold(\"password\")",
++		.nfold			= 168,
++		.plaintext		= &nfold_test4_plaintext,
++		.expected_result	= &nfold_test4_expected_result,
++	},
++	{
++		.desc			= "192-fold(\"MASSACHVSETTS INSTITVTE OF TECHNOLOGY\")",
++		.nfold			= 192,
++		.plaintext		= &nfold_test5_plaintext,
++		.expected_result	= &nfold_test5_expected_result,
++	},
++	{
++		.desc			= "168-fold(\"Q\")",
++		.nfold			= 168,
++		.plaintext		= &nfold_test6_plaintext,
++		.expected_result	= &nfold_test6_expected_result,
++	},
++	{
++		.desc			= "168-fold(\"ba\")",
++		.nfold			= 168,
++		.plaintext		= &nfold_test7_plaintext,
++		.expected_result	= &nfold_test7_expected_result,
++	},
++	{
++		.desc			= "64-fold(\"kerberos\")",
++		.nfold			= 64,
++		.plaintext		= &nfold_test_kerberos,
++		.expected_result	= &nfold_test8_expected_result,
++	},
++	{
++		.desc			= "128-fold(\"kerberos\")",
++		.nfold			= 128,
++		.plaintext		= &nfold_test_kerberos,
++		.expected_result	= &nfold_test9_expected_result,
++	},
++	{
++		.desc			= "168-fold(\"kerberos\")",
++		.nfold			= 168,
++		.plaintext		= &nfold_test_kerberos,
++		.expected_result	= &nfold_test10_expected_result,
++	},
++	{
++		.desc			= "256-fold(\"kerberos\")",
++		.nfold			= 256,
++		.plaintext		= &nfold_test_kerberos,
++		.expected_result	= &nfold_test11_expected_result,
++	},
++};
++
++/* Creates the function rfc3961_nfold_gen_params */
++KUNIT_ARRAY_PARAM(rfc3961_nfold, rfc3961_nfold_test_params, gss_krb5_get_desc);
++
++static void rfc3961_nfold_case(struct kunit *test)
++{
++	const struct gss_krb5_test_param *param = test->param_value;
++	u8 *result;
++
++	/* Arrange */
++	result = kunit_kzalloc(test, 4096, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, result);
++
++	/* Act */
++	krb5_nfold(param->plaintext->len * 8, param->plaintext->data,
++		   param->expected_result->len * 8, result);
++
++	/* Assert */
++	KUNIT_EXPECT_EQ_MSG(test,
++			    memcmp(param->expected_result->data,
++				   result, param->expected_result->len), 0,
++			    "result mismatch");
++}
++
++static struct kunit_case rfc3961_test_cases[] = {
++	{
++		.name			= "RFC 3961 n-fold",
++		.run_case		= rfc3961_nfold_case,
++		.generate_params	= rfc3961_nfold_gen_params,
++	},
++};
++
++static struct kunit_suite rfc3961_suite = {
++	.name			= "RFC 3961 tests",
++	.test_cases		= rfc3961_test_cases,
++};
++
++kunit_test_suites(&rfc3961_suite);
++
++MODULE_DESCRIPTION("Test RPCSEC GSS Kerberos 5 functions");
++MODULE_LICENSE("GPL");
 
 
