@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF6E66B2D6
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jan 2023 18:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D5A66B2D8
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jan 2023 18:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjAORUc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 Jan 2023 12:20:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S230332AbjAORUj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Jan 2023 12:20:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjAORUb (ORCPT
+        with ESMTP id S231204AbjAORUi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 Jan 2023 12:20:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026B31041B;
-        Sun, 15 Jan 2023 09:20:31 -0800 (PST)
+        Sun, 15 Jan 2023 12:20:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA1E1041B;
+        Sun, 15 Jan 2023 09:20:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9386060DB7;
-        Sun, 15 Jan 2023 17:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CFDC433EF;
-        Sun, 15 Jan 2023 17:20:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ACF860D45;
+        Sun, 15 Jan 2023 17:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 298F8C433EF;
+        Sun, 15 Jan 2023 17:20:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673803230;
-        bh=QaJGYjsXTHDcxun8svP1bv6moYjQCPBWR2JSPH/tTRE=;
+        s=k20201202; t=1673803236;
+        bh=KldhuGSYRC2SS9/MNT62J+Rs6IstRysPw1wIfoosjFA=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ouW71AmjL10asdgBCGlCGp6bBmmRdfrhKmb0q8wmQw/2uekPD0xsOT04IhcOgJRs6
-         pTJTVFGDpWwBbSSCa1QyB5nU1HmF6hPTlMP96snaugyFGk2EKrZsE93WGId3QhTVC8
-         OB29yQSlsvyStJIdUczXOWFZQzY5wRvbEAu2TbgcZPS3ipEWs2lSo4ewiQCk8RlyqH
-         +dXfisJKkJSAHftOAlRJlrO81ecTSCa8n2qb9bOj96gbNYuB9c3WWrsDxzuIcWg0dy
-         pjRRcdfOOC6r5rB6Rh4cL05JOY92Xf2MPjdesbc9iDnzycFxXcn0S9rmlb4LEhwMJn
-         zKkR0fqBKXQoA==
-Subject: [PATCH v2 02/41] SUNRPC: Remove .blocksize field from struct
+        b=loRMtL26zcQt5S2HJLc+TZP4Vdnzg6jv0QbXRL7aNbKwb46SK+W94h38w1cCab5Xj
+         aBMUkpSq9KrXsOcRsdDI8ySgPq7cLXLT+sCl7clPxjTSwp5lCtokSdFneNshu7J+Jz
+         rG4xOZ922lpJqF/O3CdwjYMCt8MrZ788ewnzLmXiePewMr0KsegvBvIWPttUi894Ol
+         ArcjXD3Rk6vIrBdj8eQ5DBrQA/Tj/9BGP+l6T57cWrmDPxzMHL/jmHinATbpUNVkq0
+         Yci4s8EqHZxU3+Yu++N1qS+w3jtNJEQWNa5lHes3FsCAkAfcw0gnocNnJ//TzCKQbl
+         FljDIE9j8wVAw==
+Subject: [PATCH v2 03/41] SUNRPC: Remove .conflen field from struct
  gss_krb5_enctype
 From:   Chuck Lever <cel@kernel.org>
 To:     linux-nfs@vger.kernel.org
 Cc:     dhowells@redhat.com, simo@redhat.com,
         linux-kselftest@vger.kernel.org
-Date:   Sun, 15 Jan 2023 12:20:28 -0500
-Message-ID: <167380322880.10651.6370178427209294751.stgit@bazille.1015granger.net>
+Date:   Sun, 15 Jan 2023 12:20:35 -0500
+Message-ID: <167380323522.10651.400594527559998778.stgit@bazille.1015granger.net>
 In-Reply-To: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
 References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
 User-Agent: StGit/1.5
@@ -57,110 +57,135 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Chuck Lever <chuck.lever@oracle.com>
 
-It is not clear from documenting comments, specifications, or code
-usage what value the gss_krb5_enctype.blocksize field is supposed
-to store. The "encryption blocksize" depends only on the cipher
-being used, so that value can be derived where it's needed instead
-of stored as a constant.
-
-RFC 3961 Section 5.2 says:
-
-> cipher block size, c
->    This is the block size of the block cipher underlying the
->    encryption and decryption functions indicated above, used for key
->    derivation and for the size of the message confounder and initial
->    vector.  (If a block cipher is not in use, some comparable
->    parameter should be determined.)  It must be at least 5 octets.
->
->    This is not actually an independent parameter; rather, it is a
->    property of the functions E and D.  It is listed here to clarify
->    the distinction between it and the message block size, m.
-
-In the Linux kernel's implemenation of the SunRPC RPCSEC GSS
-Kerberos 5 mechanism, the cipher block size, which is dependent on
-the encryption and decryption transforms, is used only in
-krb5_derive_key(), so it is straightforward to replace it.
+Now that arcfour-hmac is gone, the confounder length is again the
+same as the cipher blocksize for every implemented enctype. The
+gss_krb5_enctype::conflen field is no longer necessary.
 
 Tested-by: Scott Mayhew <smayhew@redhat.com>
 Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 ---
- include/linux/sunrpc/gss_krb5.h     |    1 -
- net/sunrpc/auth_gss/gss_krb5_keys.c |    4 +---
- net/sunrpc/auth_gss/gss_krb5_mech.c |    4 ----
- 3 files changed, 1 insertion(+), 8 deletions(-)
+ include/linux/sunrpc/gss_krb5.h       |    3 ---
+ net/sunrpc/auth_gss/gss_krb5_crypto.c |    9 +++++----
+ net/sunrpc/auth_gss/gss_krb5_mech.c   |    4 ----
+ net/sunrpc/auth_gss/gss_krb5_wrap.c   |    4 ++--
+ 4 files changed, 7 insertions(+), 13 deletions(-)
 
 diff --git a/include/linux/sunrpc/gss_krb5.h b/include/linux/sunrpc/gss_krb5.h
-index 0135139ddf20..9a833825b55b 100644
+index 9a833825b55b..51860e3a0216 100644
 --- a/include/linux/sunrpc/gss_krb5.h
 +++ b/include/linux/sunrpc/gss_krb5.h
-@@ -64,7 +64,6 @@ struct gss_krb5_enctype {
+@@ -64,9 +64,6 @@ struct gss_krb5_enctype {
  	const char		*cksum_name;	/* crypto checksum name */
  	const u16		signalg;	/* signing algorithm */
  	const u16		sealalg;	/* sealing algorithm */
--	const u32		blocksize;	/* encryption blocksize */
- 	const u32		conflen;	/* confounder length
- 						   (normally the same as
- 						   the blocksize) */
-diff --git a/net/sunrpc/auth_gss/gss_krb5_keys.c b/net/sunrpc/auth_gss/gss_krb5_keys.c
-index 726c076950c0..554cfd23f288 100644
---- a/net/sunrpc/auth_gss/gss_krb5_keys.c
-+++ b/net/sunrpc/auth_gss/gss_krb5_keys.c
-@@ -150,7 +150,6 @@ u32 krb5_derive_key(const struct gss_krb5_enctype *gk5e,
- 	struct crypto_sync_skcipher *cipher;
- 	u32 ret = EINVAL;
+-	const u32		conflen;	/* confounder length
+-						   (normally the same as
+-						   the blocksize) */
+ 	const u32		cksumlength;	/* checksum length */
+ 	const u32		keyed_cksum;	/* is it a keyed cksum? */
+ 	const u32		keybytes;	/* raw key len, in bytes */
+diff --git a/net/sunrpc/auth_gss/gss_krb5_crypto.c b/net/sunrpc/auth_gss/gss_krb5_crypto.c
+index 3ea58175e159..8aa5610ef660 100644
+--- a/net/sunrpc/auth_gss/gss_krb5_crypto.c
++++ b/net/sunrpc/auth_gss/gss_krb5_crypto.c
+@@ -610,6 +610,7 @@ gss_krb5_aes_encrypt(struct krb5_ctx *kctx, u32 offset,
+ 	struct encryptor_desc desc;
+ 	u32 cbcbytes;
+ 	unsigned int usage;
++	unsigned int conflen;
  
--	blocksize = gk5e->blocksize;
- 	keybytes = gk5e->keybytes;
- 	keylength = gk5e->keylength;
+ 	if (kctx->initiate) {
+ 		cipher = kctx->initiator_enc;
+@@ -623,12 +624,13 @@ gss_krb5_aes_encrypt(struct krb5_ctx *kctx, u32 offset,
+ 		usage = KG_USAGE_ACCEPTOR_SEAL;
+ 	}
+ 	blocksize = crypto_sync_skcipher_blocksize(cipher);
++	conflen = crypto_sync_skcipher_blocksize(cipher);
  
-@@ -160,11 +159,10 @@ u32 krb5_derive_key(const struct gss_krb5_enctype *gk5e,
- 	cipher = crypto_alloc_sync_skcipher(gk5e->encrypt_name, 0, 0);
- 	if (IS_ERR(cipher))
- 		goto err_return;
-+	blocksize = crypto_sync_skcipher_blocksize(cipher);
- 	if (crypto_sync_skcipher_setkey(cipher, inkey->data, inkey->len))
- 		goto err_return;
+ 	/* hide the gss token header and insert the confounder */
+ 	offset += GSS_KRB5_TOK_HDR_LEN;
+-	if (xdr_extend_head(buf, offset, kctx->gk5e->conflen))
++	if (xdr_extend_head(buf, offset, conflen))
+ 		return GSS_S_FAILURE;
+-	gss_krb5_make_confounder(buf->head[0].iov_base + offset, kctx->gk5e->conflen);
++	gss_krb5_make_confounder(buf->head[0].iov_base + offset, conflen);
+ 	offset -= GSS_KRB5_TOK_HDR_LEN;
  
--	/* allocate and set up buffers */
+ 	if (buf->tail[0].iov_base != NULL) {
+@@ -744,7 +746,6 @@ gss_krb5_aes_decrypt(struct krb5_ctx *kctx, u32 offset, u32 len,
+ 	}
+ 	blocksize = crypto_sync_skcipher_blocksize(cipher);
+ 
 -
- 	ret = ENOMEM;
- 	inblockdata = kmalloc(blocksize, gfp_mask);
- 	if (inblockdata == NULL)
+ 	/* create a segment skipping the header and leaving out the checksum */
+ 	xdr_buf_subsegment(buf, &subbuf, offset + GSS_KRB5_TOK_HDR_LEN,
+ 				    (len - offset - GSS_KRB5_TOK_HDR_LEN -
+@@ -801,7 +802,7 @@ gss_krb5_aes_decrypt(struct krb5_ctx *kctx, u32 offset, u32 len,
+ 		ret = GSS_S_BAD_SIG;
+ 		goto out_err;
+ 	}
+-	*headskip = kctx->gk5e->conflen;
++	*headskip = blocksize;
+ 	*tailskip = kctx->gk5e->cksumlength;
+ out_err:
+ 	if (ret && ret != GSS_S_BAD_SIG)
 diff --git a/net/sunrpc/auth_gss/gss_krb5_mech.c b/net/sunrpc/auth_gss/gss_krb5_mech.c
-index 1c092b05c2bb..dd85fc9ca80b 100644
+index dd85fc9ca80b..08a86ece665e 100644
 --- a/net/sunrpc/auth_gss/gss_krb5_mech.c
 +++ b/net/sunrpc/auth_gss/gss_krb5_mech.c
 @@ -47,7 +47,6 @@ static const struct gss_krb5_enctype supported_gss_krb5_enctypes[] = {
  	  .sealalg = SEAL_ALG_DES,
  	  .keybytes = 7,
  	  .keylength = 8,
--	  .blocksize = 8,
- 	  .conflen = 8,
+-	  .conflen = 8,
  	  .cksumlength = 8,
  	  .keyed_cksum = 0,
-@@ -69,7 +68,6 @@ static const struct gss_krb5_enctype supported_gss_krb5_enctypes[] = {
+ 	},
+@@ -68,7 +67,6 @@ static const struct gss_krb5_enctype supported_gss_krb5_enctypes[] = {
  	  .sealalg = SEAL_ALG_DES3KD,
  	  .keybytes = 21,
  	  .keylength = 24,
--	  .blocksize = 8,
- 	  .conflen = 8,
+-	  .conflen = 8,
  	  .cksumlength = 20,
  	  .keyed_cksum = 1,
-@@ -92,7 +90,6 @@ static const struct gss_krb5_enctype supported_gss_krb5_enctypes[] = {
+ 	},
+@@ -90,7 +88,6 @@ static const struct gss_krb5_enctype supported_gss_krb5_enctypes[] = {
  	  .sealalg = -1,
  	  .keybytes = 16,
  	  .keylength = 16,
--	  .blocksize = 16,
- 	  .conflen = 16,
+-	  .conflen = 16,
  	  .cksumlength = 12,
  	  .keyed_cksum = 1,
-@@ -115,7 +112,6 @@ static const struct gss_krb5_enctype supported_gss_krb5_enctypes[] = {
+ 	},
+@@ -112,7 +109,6 @@ static const struct gss_krb5_enctype supported_gss_krb5_enctypes[] = {
  	  .sealalg = -1,
  	  .keybytes = 32,
  	  .keylength = 32,
--	  .blocksize = 16,
- 	  .conflen = 16,
+-	  .conflen = 16,
  	  .cksumlength = 12,
  	  .keyed_cksum = 1,
+ 	},
+diff --git a/net/sunrpc/auth_gss/gss_krb5_wrap.c b/net/sunrpc/auth_gss/gss_krb5_wrap.c
+index 48337687848c..bd068e936947 100644
+--- a/net/sunrpc/auth_gss/gss_krb5_wrap.c
++++ b/net/sunrpc/auth_gss/gss_krb5_wrap.c
+@@ -168,7 +168,7 @@ gss_wrap_kerberos_v1(struct krb5_ctx *kctx, int offset,
+ 	struct page		**tmp_pages;
+ 	u32			seq_send;
+ 	u8			*cksumkey;
+-	u32			conflen = kctx->gk5e->conflen;
++	u32			conflen = crypto_sync_skcipher_blocksize(kctx->enc);
+ 
+ 	dprintk("RPC:       %s\n", __func__);
+ 
+@@ -261,7 +261,7 @@ gss_unwrap_kerberos_v1(struct krb5_ctx *kctx, int offset, int len,
+ 	void			*data_start, *orig_start;
+ 	int			data_len;
+ 	int			blocksize;
+-	u32			conflen = kctx->gk5e->conflen;
++	u32			conflen = crypto_sync_skcipher_blocksize(kctx->enc);
+ 	int			crypt_offset;
+ 	u8			*cksumkey;
+ 	unsigned int		saved_len = buf->len;
 
 
