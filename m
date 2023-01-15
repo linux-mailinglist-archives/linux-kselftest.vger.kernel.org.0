@@ -2,262 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B1266B329
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jan 2023 18:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4366E66B356
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jan 2023 19:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231466AbjAORYm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 Jan 2023 12:24:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S231362AbjAOR75 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Jan 2023 12:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbjAORYl (ORCPT
+        with ESMTP id S231229AbjAOR74 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 Jan 2023 12:24:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F99476BB;
-        Sun, 15 Jan 2023 09:24:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2A1660DB5;
-        Sun, 15 Jan 2023 17:24:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB4BC433EF;
-        Sun, 15 Jan 2023 17:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673803479;
-        bh=SduC0z5d1D+d54bhYt1PAjiRjmtc4LR5jq6bBn2gC14=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=GH9/Uk5ddp3pbPw7wqVZVKmgfiCCulss7Znd8xowk7Vx4YYeTUASao988unDRDO0v
-         3vD1JpZxXc8pH0X7FGPhxmm5MVg8TIIUHTdBjgAu9eOUCdAanOgFBNesbtk8hScz30
-         49ZK4HnyeSPFUzYGvQSUNqQ5AiMdvRfLbSQcir++yVLwHhzqHtGsdtAJnO0vcff8Kn
-         JAx8MxwinIjLeN9IUZ/xu9pOopRz2bYo6L5FO7C2xwB/jpJNTFSqqzGkSK9ZF5nubF
-         rianJhIiQHkpl9xgJPkZA67tAOnCguEoR459cbaVUVgt+aa29C54ZEPle6fZcwy3r/
-         /pbYypfTegtPA==
-Subject: [PATCH v2 41/41] SUNRPC: Add encryption self-tests
-From:   Chuck Lever <cel@kernel.org>
-To:     linux-nfs@vger.kernel.org
-Cc:     dhowells@redhat.com, simo@redhat.com,
+        Sun, 15 Jan 2023 12:59:56 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E95CC3F;
+        Sun, 15 Jan 2023 09:59:55 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so31777861pjk.3;
+        Sun, 15 Jan 2023 09:59:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kadheJ1b09KgtyLj9+2dkLZRUBCHQfWVd+yZnt+e1yk=;
+        b=K74bt2dkLR/B+9EClHqEEIElkkyafMlCmCdI4dr0gO6ZApaP+U/bw5fRAGusxwxiR1
+         Mu+1abtbC9Ldvb540qFiEcxPqcPeLc5EEwXsxFVxWzVP7dxJ0JDFZ/VuwLjxccDcGLYJ
+         Wwjewfw5Jck7tPKi4iPhiRBCgNbtheex1LE1zy+vPPu0tnk0biN7AMf1qVEZcXACRDGO
+         2zm1bQS1OYNA6skRYNEJ4trRonYCrslGUjjP3SZTLmoYLVdHQzJSvovuDOtRwGiG15Xw
+         nhwBetxfUsMB9QJzGj5RrL0Ukt8gOahi7Dfu7l9CMQZ6Gkx0tA/v+Nkx8kVXn0iMq78C
+         NJSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kadheJ1b09KgtyLj9+2dkLZRUBCHQfWVd+yZnt+e1yk=;
+        b=aGQMDXG70nXGqa22/oQExBx3fbmiDsQn32gU3V5JdBGnrH86POkM6fADW+cCrWLHC2
+         Hrh/pXDUsoLQH7HtTfXPJori5YvGv8v38kDHBhj+KbmqG/KegUYoN+4NsfqasFnmYent
+         k1+8uRzIzCFf4KOnEzzQhhGACc9IwQAgru7S3T8IJYGXMrOVg5QaTuvhKWxyvklGIUyM
+         0aZxjjQkPkjqpS+FbyFxrxUmLLQko5JwPGrFSWibvKtTNfuzRcbeYJy5xnvvPPO60GAt
+         ofwqytojQl+u0qOKX3InD9mXolhs5mz0/NXptzREq1a0xzC6QRyCTMnTJ6VFYv6yI6/d
+         OWVQ==
+X-Gm-Message-State: AFqh2krhqTIhbzhxcT1XHmY05RZJo9yqcOsxbS6sNxRW58xoiYJaJ2sZ
+        OYMnZvgdkYxBnjKCIGlqees=
+X-Google-Smtp-Source: AMrXdXvQhTorh9DHt/JQhk2Uq8z+0LqazZE5TaPDF3SG92Mi0rpniY8JCwzWhgJkAQracBY/Hqtg8g==
+X-Received: by 2002:a17:90a:b38a:b0:225:c902:c86a with SMTP id e10-20020a17090ab38a00b00225c902c86amr18217485pjr.28.1673805594681;
+        Sun, 15 Jan 2023 09:59:54 -0800 (PST)
+Received: from MacBook-Pro-6.local ([2620:10d:c090:400::5:df0a])
+        by smtp.gmail.com with ESMTPSA id q63-20020a17090a17c500b002191ffeac8esm4134395pja.20.2023.01.15.09.59.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Jan 2023 09:59:53 -0800 (PST)
+Date:   Sun, 15 Jan 2023 09:59:50 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Date:   Sun, 15 Jan 2023 12:24:38 -0500
-Message-ID: <167380347809.10651.324873285352998096.stgit@bazille.1015granger.net>
-In-Reply-To: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
-References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
-User-Agent: StGit/1.5
+Subject: Re: [PATCH HID for-next v2 6/9] HID: bpf: rework how programs are
+ attached and stored in the kernel
+Message-ID: <20230115175950.xa75mmt6jhjhxgdq@MacBook-Pro-6.local>
+References: <20230113090935.1763477-1-benjamin.tissoires@redhat.com>
+ <20230113090935.1763477-7-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113090935.1763477-7-benjamin.tissoires@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+On Fri, Jan 13, 2023 at 10:09:32AM +0100, Benjamin Tissoires wrote:
+> Previously, HID-BPF was relying on a bpf tracing program to be notified
+> when a program was released from userspace. This is error prone, as
+> LLVM sometimes inline the function and sometimes not.
+> 
+> So instead of messing up with the bpf prog ref count, we can use the
+> bpf_link concept which actually matches exactly what we want:
+> - a bpf_link represents the fact that a given program is attached to a
+>   given HID device
+> - as long as the bpf_link has fd opened (either by the userspace program
+>   still being around or by pinning the bpf object in the bpffs), the
+>   program stays attached to the HID device
+> - once every user has closed the fd, we get called by
+>   hid_bpf_link_release() that we no longer have any users, and we can
+>   disconnect the program to the device in 2 passes: first atomically clear
+>   the bit saying that the link is active, and then calling release_work in
+>   a scheduled work item.
+> 
+> This solves entirely the problems of BPF tracing not showing up and is
+> definitely cleaner.
+> 
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-With the KUnit infrastructure recently added, we are free to define
-other unit tests particular to our implementation. As an example,
-I've added a self-test that encrypts then decrypts a string, and
-checks the result.
-
-Tested-by: Scott Mayhew <smayhew@redhat.com>
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
----
- net/sunrpc/auth_gss/gss_krb5_crypto.c   |   20 ++++-
- net/sunrpc/auth_gss/gss_krb5_internal.h |    3 +
- net/sunrpc/auth_gss/gss_krb5_test.c     |  124 +++++++++++++++++++++++++++++++
- 3 files changed, 142 insertions(+), 5 deletions(-)
-
-diff --git a/net/sunrpc/auth_gss/gss_krb5_crypto.c b/net/sunrpc/auth_gss/gss_krb5_crypto.c
-index d0879a4d3122..6c7c52eeed4f 100644
---- a/net/sunrpc/auth_gss/gss_krb5_crypto.c
-+++ b/net/sunrpc/auth_gss/gss_krb5_crypto.c
-@@ -713,10 +713,21 @@ int krb5_cbc_cts_encrypt(struct crypto_sync_skcipher *cts_tfm,
- }
- EXPORT_SYMBOL_IF_KUNIT(krb5_cbc_cts_encrypt);
- 
--static int
--krb5_cbc_cts_decrypt(struct crypto_sync_skcipher *cts_tfm,
--		     struct crypto_sync_skcipher *cbc_tfm,
--		     u32 offset, struct xdr_buf *buf)
-+/**
-+ * krb5_cbc_cts_decrypt - decrypt in CBC mode with CTS
-+ * @cts_tfm: CBC cipher with CTS
-+ * @cbc_tfm: base CBC cipher
-+ * @offset: starting byte offset for plaintext
-+ * @buf: OUT: output buffer
-+ *
-+ * Return values:
-+ *   %0: decryption successful
-+ *   negative errno: decryption could not be completed
-+ */
-+VISIBLE_IF_KUNIT
-+int krb5_cbc_cts_decrypt(struct crypto_sync_skcipher *cts_tfm,
-+			 struct crypto_sync_skcipher *cbc_tfm,
-+			 u32 offset, struct xdr_buf *buf)
- {
- 	u32 blocksize, nblocks, cbcbytes;
- 	struct decryptor_desc desc;
-@@ -752,6 +763,7 @@ krb5_cbc_cts_decrypt(struct crypto_sync_skcipher *cts_tfm,
- 	/* Remaining plaintext is handled with CBC-CTS. */
- 	return gss_krb5_cts_crypt(cts_tfm, buf, cbcbytes, desc.iv, NULL, 0);
- }
-+EXPORT_SYMBOL_IF_KUNIT(krb5_cbc_cts_decrypt);
- 
- u32
- gss_krb5_aes_encrypt(struct krb5_ctx *kctx, u32 offset,
-diff --git a/net/sunrpc/auth_gss/gss_krb5_internal.h b/net/sunrpc/auth_gss/gss_krb5_internal.h
-index c907eda2ad72..b673e2626acb 100644
---- a/net/sunrpc/auth_gss/gss_krb5_internal.h
-+++ b/net/sunrpc/auth_gss/gss_krb5_internal.h
-@@ -221,6 +221,9 @@ int krb5_cbc_cts_encrypt(struct crypto_sync_skcipher *cts_tfm,
- 			 struct crypto_sync_skcipher *cbc_tfm, u32 offset,
- 			 struct xdr_buf *buf, struct page **pages,
- 			 u8 *iv, unsigned int ivsize);
-+int krb5_cbc_cts_decrypt(struct crypto_sync_skcipher *cts_tfm,
-+			 struct crypto_sync_skcipher *cbc_tfm,
-+			 u32 offset, struct xdr_buf *buf);
- u32 krb5_etm_checksum(struct crypto_sync_skcipher *cipher,
- 		      struct crypto_ahash *tfm, const struct xdr_buf *body,
- 		      int body_offset, struct xdr_netobj *cksumout);
-diff --git a/net/sunrpc/auth_gss/gss_krb5_test.c b/net/sunrpc/auth_gss/gss_krb5_test.c
-index fe3e4b81221a..c287ce15c419 100644
---- a/net/sunrpc/auth_gss/gss_krb5_test.c
-+++ b/net/sunrpc/auth_gss/gss_krb5_test.c
-@@ -1909,10 +1909,132 @@ static struct kunit_suite rfc8009_suite = {
- 	.test_cases		= rfc8009_test_cases,
- };
- 
-+/*
-+ * Encryption self-tests
-+ */
-+
-+DEFINE_STR_XDR_NETOBJ(encrypt_selftest_plaintext,
-+		      "This is the plaintext for the encryption self-test.");
-+
-+static const struct gss_krb5_test_param encrypt_selftest_params[] = {
-+	{
-+		.desc			= "aes128-cts-hmac-sha1-96 encryption self-test",
-+		.enctype		= ENCTYPE_AES128_CTS_HMAC_SHA1_96,
-+		.Ke			= &rfc3962_encryption_key,
-+		.plaintext		= &encrypt_selftest_plaintext,
-+	},
-+	{
-+		.desc			= "aes256-cts-hmac-sha1-96 encryption self-test",
-+		.enctype		= ENCTYPE_AES256_CTS_HMAC_SHA1_96,
-+		.Ke			= &rfc3962_encryption_key,
-+		.plaintext		= &encrypt_selftest_plaintext,
-+	},
-+	{
-+		.desc			= "camellia128-cts-cmac encryption self-test",
-+		.enctype		= ENCTYPE_CAMELLIA128_CTS_CMAC,
-+		.Ke			= &camellia128_cts_cmac_Ke,
-+		.plaintext		= &encrypt_selftest_plaintext,
-+	},
-+	{
-+		.desc			= "camellia256-cts-cmac encryption self-test",
-+		.enctype		= ENCTYPE_CAMELLIA256_CTS_CMAC,
-+		.Ke			= &camellia256_cts_cmac_Ke,
-+		.plaintext		= &encrypt_selftest_plaintext,
-+	},
-+	{
-+		.desc			= "aes128-cts-hmac-sha256-128 encryption self-test",
-+		.enctype		= ENCTYPE_AES128_CTS_HMAC_SHA256_128,
-+		.Ke			= &aes128_cts_hmac_sha256_128_Ke,
-+		.plaintext		= &encrypt_selftest_plaintext,
-+	},
-+	{
-+		.desc			= "aes256-cts-hmac-sha384-192 encryption self-test",
-+		.enctype		= ENCTYPE_AES256_CTS_HMAC_SHA384_192,
-+		.Ke			= &aes256_cts_hmac_sha384_192_Ke,
-+		.plaintext		= &encrypt_selftest_plaintext,
-+	},
-+};
-+
-+/* Creates the function encrypt_selftest_gen_params */
-+KUNIT_ARRAY_PARAM(encrypt_selftest, encrypt_selftest_params,
-+		  gss_krb5_get_desc);
-+
-+/*
-+ * Encrypt and decrypt plaintext, and ensure the input plaintext
-+ * matches the output plaintext. A confounder is not added in this
-+ * case.
-+ */
-+static void encrypt_selftest_case(struct kunit *test)
-+{
-+	const struct gss_krb5_test_param *param = test->param_value;
-+	struct crypto_sync_skcipher *cts_tfm, *cbc_tfm;
-+	const struct gss_krb5_enctype *gk5e;
-+	struct xdr_buf buf;
-+	void *text;
-+	int err;
-+
-+	/* Arrange */
-+	gk5e = gss_krb5_lookup_enctype(param->enctype);
-+	KUNIT_ASSERT_NOT_NULL(test, gk5e);
-+
-+	cbc_tfm = crypto_alloc_sync_skcipher(gk5e->aux_cipher, 0, 0);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, cbc_tfm);
-+	err = crypto_sync_skcipher_setkey(cbc_tfm, param->Ke->data, param->Ke->len);
-+	KUNIT_ASSERT_EQ(test, err, 0);
-+
-+	cts_tfm = crypto_alloc_sync_skcipher(gk5e->encrypt_name, 0, 0);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, cts_tfm);
-+	err = crypto_sync_skcipher_setkey(cts_tfm, param->Ke->data, param->Ke->len);
-+	KUNIT_ASSERT_EQ(test, err, 0);
-+
-+	text = kunit_kzalloc(test, roundup(param->plaintext->len,
-+					   crypto_sync_skcipher_blocksize(cbc_tfm)),
-+			     GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, text);
-+
-+	memcpy(text, param->plaintext->data, param->plaintext->len);
-+	memset(&buf, 0, sizeof(buf));
-+	buf.head[0].iov_base = text;
-+	buf.head[0].iov_len = param->plaintext->len;
-+	buf.len = buf.head[0].iov_len;
-+
-+	/* Act */
-+	err = krb5_cbc_cts_encrypt(cts_tfm, cbc_tfm, 0, &buf, NULL, NULL, 0);
-+	KUNIT_ASSERT_EQ(test, err, 0);
-+	err = krb5_cbc_cts_decrypt(cts_tfm, cbc_tfm, 0, &buf);
-+	KUNIT_ASSERT_EQ(test, err, 0);
-+
-+	/* Assert */
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    param->plaintext->len, buf.len,
-+			    "length mismatch");
-+	KUNIT_EXPECT_EQ_MSG(test,
-+			    memcmp(param->plaintext->data,
-+				   buf.head[0].iov_base, buf.len), 0,
-+			    "plaintext mismatch");
-+
-+	crypto_free_sync_skcipher(cts_tfm);
-+	crypto_free_sync_skcipher(cbc_tfm);
-+}
-+
-+static struct kunit_case encryption_test_cases[] = {
-+	{
-+		.name			= "Encryption self-tests",
-+		.run_case		= encrypt_selftest_case,
-+		.generate_params	= encrypt_selftest_gen_params,
-+	},
-+};
-+
-+static struct kunit_suite encryption_test_suite = {
-+	.name			= "Encryption test suite",
-+	.test_cases		= encryption_test_cases,
-+};
-+
- kunit_test_suites(&rfc3961_suite,
- 		  &rfc3962_suite,
- 		  &rfc6803_suite,
--		  &rfc8009_suite);
-+		  &rfc8009_suite,
-+		  &encryption_test_suite);
- 
- MODULE_DESCRIPTION("Test RPCSEC GSS Kerberos 5 functions");
- MODULE_LICENSE("GPL");
-
-
+Acked-by: Alexei Starovoitov <ast@kernel.org>
