@@ -2,43 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07EA66B301
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jan 2023 18:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F29C666B303
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Jan 2023 18:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjAORWl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 Jan 2023 12:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
+        id S231482AbjAORWt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Jan 2023 12:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbjAORWk (ORCPT
+        with ESMTP id S231489AbjAORWs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 Jan 2023 12:22:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AA71041F;
-        Sun, 15 Jan 2023 09:22:39 -0800 (PST)
+        Sun, 15 Jan 2023 12:22:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0255D10AA3;
+        Sun, 15 Jan 2023 09:22:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95C0360D2C;
-        Sun, 15 Jan 2023 17:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6CC2C433F0;
-        Sun, 15 Jan 2023 17:22:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B29CDB80B44;
+        Sun, 15 Jan 2023 17:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 220DEC433EF;
+        Sun, 15 Jan 2023 17:22:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673803358;
-        bh=45m96J5KWPKZVW+2fsRJu7bQ5STAd82eJ1NPlWVlSts=;
+        s=k20201202; t=1673803364;
+        bh=2srKmPaKM0iP/835UYP+iqVGCN8xpo3/FyKC5VfF2Gw=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=I3lUEiuCL4fMu3cRgMv+tfF87EZbhHJh467jqfS5wMn1w8ZlwCCO5UEmFjmGmoaS6
-         ZyuukmC68O3NmQmxgNV0KOJKLvpWoMVDc9tCTQuIozhKNRa+9ORJTbxcrxx7DS0HgN
-         qDYi5fozfh1qJ2An/PU+AJT/1h4/tROPLPU4nFbjmaMqRW3MaqAmCMB2SFSPUz9nif
-         Kczlo56RkcE0MWl4A3Hrn7t0ip8DE0pBKM9/M2ZNNpV9LCFKOH/RIeYCqa8ym0RHR0
-         CwGI/e34EnB0B1UctF58TwXEGMcx4m+D4O9XjKEop2lJtD/NUj6tQMeEB1A+K4Mgxz
-         DtAk1EjJmzQ5w==
-Subject: [PATCH v2 22/41] SUNRPC: Refactor CBC with CTS into helpers
+        b=R+VPSunFDBuSKtv7mPl7Act/9fOuoFBk+WH4Mm3j0LyBiQNmT838J+AUyOHaNX1HM
+         8E8iwzKRPsdpzUylLsaEARIx4NBmIbbWYf4aeeokNlEwcLmgUNl6F5yT6FwLhye4ti
+         BZ5zKuD241LrUISQe+71iweRpPMZwPQ3xOn0bHCWFrOVYtjcAarAPkDC9c+dobn0A4
+         MMmpU3+GtEPvw9JxTsZ88XFTPDeVwvvxaikwa0qIGD36gv0AAiOmbpuM1TT3ei4B6I
+         u9bwT5EaCxK3G97CESLLeAAEqXo2cCQ62jiH1xWCrFW6soCelB2i6CYRHmV8zQBCct
+         XyKaZ6xWxjaMQ==
+Subject: [PATCH v2 23/41] SUNRPC: Add gk5e definitions for RFC 8009 encryption
+ types
 From:   Chuck Lever <cel@kernel.org>
 To:     linux-nfs@vger.kernel.org
 Cc:     dhowells@redhat.com, simo@redhat.com,
         linux-kselftest@vger.kernel.org
-Date:   Sun, 15 Jan 2023 12:22:36 -0500
-Message-ID: <167380335682.10651.15171292873857240391.stgit@bazille.1015granger.net>
+Date:   Sun, 15 Jan 2023 12:22:43 -0500
+Message-ID: <167380336323.10651.16305246945409527645.stgit@bazille.1015granger.net>
 In-Reply-To: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
 References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
 User-Agent: StGit/1.5
@@ -56,280 +57,176 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Chuck Lever <chuck.lever@oracle.com>
 
-Cryptosystem profile enctypes all use cipher block chaining
-with ciphertext steal (CBC-with-CTS). However enctypes that are
-currently supported in the Linux kernel SunRPC implementation
-use only the encrypt-&-MAC approach. The RFC 8009 enctypes use
-encrypt-then-MAC, which performs encryption and checksumming in
-a different order.
+Fill in entries in the supported_gss_krb5_enctypes array for the
+encryption types defined in RFC 8009. These new enctypes use the
+SHA-256 and SHA-384 message digest algorithms (as defined in
+FIPS-180) instead of the deprecated SHA-1 algorithm, and are thus
+more secure.
 
-Refactor to make it possible to share the CBC with CTS encryption
-and decryption mechanisms between e&M and etM enctypes.
+Note that NIST has scheduled SHA-1 for deprecation:
+
+https://www.nist.gov/news-events/news/2022/12/nist-retires-sha-1-cryptographic-algorithm
+
+Thus these new encryption types are placed under a separate CONFIG
+option to enable distributors to separately introduce support for
+the AES-SHA2 enctypes and deprecate support for the current set of
+AES-SHA1 encryption types as their user space allows.
+
+As this implementation is still a "beta", the default is to not
+build it automatically.
 
 Tested-by: Scott Mayhew <smayhew@redhat.com>
 Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 ---
- net/sunrpc/auth_gss/gss_krb5_crypto.c |  187 +++++++++++++++++++--------------
- 1 file changed, 105 insertions(+), 82 deletions(-)
+ include/linux/sunrpc/gss_krb5.h     |   19 ++++++++++++-
+ net/sunrpc/Kconfig                  |   14 ++++++++++
+ net/sunrpc/auth_gss/gss_krb5_mech.c |   51 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 82 insertions(+), 2 deletions(-)
 
-diff --git a/net/sunrpc/auth_gss/gss_krb5_crypto.c b/net/sunrpc/auth_gss/gss_krb5_crypto.c
-index c5845fdda527..65c8b6982729 100644
---- a/net/sunrpc/auth_gss/gss_krb5_crypto.c
-+++ b/net/sunrpc/auth_gss/gss_krb5_crypto.c
-@@ -641,6 +641,100 @@ gss_krb5_cts_crypt(struct crypto_sync_skcipher *cipher, struct xdr_buf *buf,
- 	return ret;
- }
+diff --git a/include/linux/sunrpc/gss_krb5.h b/include/linux/sunrpc/gss_krb5.h
+index 3e97d2a7c87d..8ff397b5c04b 100644
+--- a/include/linux/sunrpc/gss_krb5.h
++++ b/include/linux/sunrpc/gss_krb5.h
+@@ -54,8 +54,8 @@
+ /* Maximum key length (in bytes) for the supported crypto algorithms */
+ #define GSS_KRB5_MAX_KEYLEN (32)
+ 
+-/* Maximum checksum function output for the supported crypto algorithms */
+-#define GSS_KRB5_MAX_CKSUM_LEN  (20)
++/* Maximum checksum function output for the supported enctypes */
++#define GSS_KRB5_MAX_CKSUM_LEN  (24)
+ 
+ /* Maximum blocksize for the supported crypto algorithms */
+ #define GSS_KRB5_MAX_BLOCKSIZE  (16)
+@@ -160,6 +160,12 @@ enum seal_alg {
+ 	SEAL_ALG_DES3KD = 0x0002
+ };
  
 +/*
-+ * To provide confidentiality, encrypt using cipher block chaining
-+ * with ciphertext stealing. Message integrity is handled separately.
++ * These values are assigned by IANA and published via the
++ * subregistry at the link below:
++ *
++ * https://www.iana.org/assignments/kerberos-parameters/kerberos-parameters.xhtml#kerberos-parameters-2
 + */
-+static int
-+krb5_cbc_cts_encrypt(struct crypto_sync_skcipher *cts_tfm,
-+		     struct crypto_sync_skcipher *cbc_tfm,
-+		     u32 offset, struct xdr_buf *buf, struct page **pages)
-+{
-+	u32 blocksize, nbytes, nblocks, cbcbytes;
-+	struct encryptor_desc desc;
-+	int err;
-+
-+	blocksize = crypto_sync_skcipher_blocksize(cts_tfm);
-+	nbytes = buf->len - offset;
-+	nblocks = (nbytes + blocksize - 1) / blocksize;
-+	cbcbytes = 0;
-+	if (nblocks > 2)
-+		cbcbytes = (nblocks - 2) * blocksize;
-+
-+	memset(desc.iv, 0, sizeof(desc.iv));
-+
-+	/* Handle block-sized chunks of plaintext with CBC. */
-+	if (cbcbytes) {
-+		SYNC_SKCIPHER_REQUEST_ON_STACK(req, cbc_tfm);
-+
-+		desc.pos = offset;
-+		desc.fragno = 0;
-+		desc.fraglen = 0;
-+		desc.pages = pages;
-+		desc.outbuf = buf;
-+		desc.req = req;
-+
-+		skcipher_request_set_sync_tfm(req, cbc_tfm);
-+		skcipher_request_set_callback(req, 0, NULL, NULL);
-+
-+		sg_init_table(desc.infrags, 4);
-+		sg_init_table(desc.outfrags, 4);
-+
-+		err = xdr_process_buf(buf, offset, cbcbytes, encryptor, &desc);
-+		skcipher_request_zero(req);
-+		if (err)
-+			return err;
-+	}
-+
-+	/* Remaining plaintext is handled with CBC-CTS. */
-+	err = gss_krb5_cts_crypt(cts_tfm, buf, offset + cbcbytes,
-+				 desc.iv, pages, 1);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static int
-+krb5_cbc_cts_decrypt(struct crypto_sync_skcipher *cts_tfm,
-+		     struct crypto_sync_skcipher *cbc_tfm,
-+		     u32 offset, struct xdr_buf *buf)
-+{
-+	u32 blocksize, nblocks, cbcbytes;
-+	struct decryptor_desc desc;
-+	int err;
-+
-+	blocksize = crypto_sync_skcipher_blocksize(cts_tfm);
-+	nblocks = (buf->len + blocksize - 1) / blocksize;
-+	cbcbytes = 0;
-+	if (nblocks > 2)
-+		cbcbytes = (nblocks - 2) * blocksize;
-+
-+	memset(desc.iv, 0, sizeof(desc.iv));
-+
-+	/* Handle block-sized chunks of plaintext with CBC. */
-+	if (cbcbytes) {
-+		SYNC_SKCIPHER_REQUEST_ON_STACK(req, cbc_tfm);
-+
-+		desc.fragno = 0;
-+		desc.fraglen = 0;
-+		desc.req = req;
-+
-+		skcipher_request_set_sync_tfm(req, cbc_tfm);
-+		skcipher_request_set_callback(req, 0, NULL, NULL);
-+
-+		sg_init_table(desc.frags, 4);
-+
-+		err = xdr_process_buf(buf, 0, cbcbytes, decryptor, &desc);
-+		skcipher_request_zero(req);
-+		if (err)
-+			return err;
-+	}
-+
-+	/* Remaining plaintext is handled with CBC-CTS. */
-+	return gss_krb5_cts_crypt(cts_tfm, buf, cbcbytes, desc.iv, NULL, 0);
-+}
-+
- u32
- gss_krb5_aes_encrypt(struct krb5_ctx *kctx, u32 offset,
- 		     struct xdr_buf *buf, struct page **pages)
-@@ -650,11 +744,7 @@ gss_krb5_aes_encrypt(struct krb5_ctx *kctx, u32 offset,
- 	u8 *ecptr;
- 	struct crypto_sync_skcipher *cipher, *aux_cipher;
- 	struct crypto_ahash *ahash;
--	int blocksize;
- 	struct page **save_pages;
--	int nblocks, nbytes;
--	struct encryptor_desc desc;
--	u32 cbcbytes;
- 	unsigned int conflen;
+ #define CKSUMTYPE_CRC32			0x0001
+ #define CKSUMTYPE_RSA_MD4		0x0002
+ #define CKSUMTYPE_RSA_MD4_DES		0x0003
+@@ -170,6 +176,8 @@ enum seal_alg {
+ #define CKSUMTYPE_HMAC_SHA1_DES3	0x000c
+ #define CKSUMTYPE_HMAC_SHA1_96_AES128   0x000f
+ #define CKSUMTYPE_HMAC_SHA1_96_AES256   0x0010
++#define CKSUMTYPE_HMAC_SHA256_128_AES128	0x0013
++#define CKSUMTYPE_HMAC_SHA384_192_AES256	0x0014
+ #define CKSUMTYPE_HMAC_MD5_ARCFOUR      -138 /* Microsoft md5 hmac cksumtype */
  
- 	if (kctx->initiate) {
-@@ -666,7 +756,6 @@ gss_krb5_aes_encrypt(struct krb5_ctx *kctx, u32 offset,
- 		aux_cipher = kctx->acceptor_enc_aux;
- 		ahash = kctx->acceptor_integ;
- 	}
--	blocksize = crypto_sync_skcipher_blocksize(cipher);
- 	conflen = crypto_sync_skcipher_blocksize(cipher);
+ /* from gssapi_err_krb5.h */
+@@ -190,6 +198,11 @@ enum seal_alg {
  
- 	/* hide the gss token header and insert the confounder */
-@@ -710,69 +799,30 @@ gss_krb5_aes_encrypt(struct krb5_ctx *kctx, u32 offset,
- 	if (err)
- 		return GSS_S_FAILURE;
+ /* per Kerberos v5 protocol spec crypto types from the wire. 
+  * these get mapped to linux kernel crypto routines.  
++ *
++ * These values are assigned by IANA and published via the
++ * subregistry at the link below:
++ *
++ * https://www.iana.org/assignments/kerberos-parameters/kerberos-parameters.xhtml#kerberos-parameters-1
+  */
+ #define ENCTYPE_NULL            0x0000
+ #define ENCTYPE_DES_CBC_CRC     0x0001	/* DES cbc mode with CRC-32 */
+@@ -203,6 +216,8 @@ enum seal_alg {
+ #define ENCTYPE_DES3_CBC_SHA1   0x0010
+ #define ENCTYPE_AES128_CTS_HMAC_SHA1_96 0x0011
+ #define ENCTYPE_AES256_CTS_HMAC_SHA1_96 0x0012
++#define ENCTYPE_AES128_CTS_HMAC_SHA256_128	0x0013
++#define ENCTYPE_AES256_CTS_HMAC_SHA384_192	0x0014
+ #define ENCTYPE_ARCFOUR_HMAC            0x0017
+ #define ENCTYPE_ARCFOUR_HMAC_EXP        0x0018
+ #define ENCTYPE_UNKNOWN         0x01ff
+diff --git a/net/sunrpc/Kconfig b/net/sunrpc/Kconfig
+index 1135ff362132..b1aa2318e1dc 100644
+--- a/net/sunrpc/Kconfig
++++ b/net/sunrpc/Kconfig
+@@ -76,6 +76,20 @@ config RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA1
+ 	  SHA-1 digests. These include aes128-cts-hmac-sha1-96 and
+ 	  aes256-cts-hmac-sha1-96.
  
--	nbytes = buf->len - offset - GSS_KRB5_TOK_HDR_LEN;
--	nblocks = (nbytes + blocksize - 1) / blocksize;
--	cbcbytes = 0;
--	if (nblocks > 2)
--		cbcbytes = (nblocks - 2) * blocksize;
--
--	memset(desc.iv, 0, sizeof(desc.iv));
--
--	if (cbcbytes) {
--		SYNC_SKCIPHER_REQUEST_ON_STACK(req, aux_cipher);
--
--		desc.pos = offset + GSS_KRB5_TOK_HDR_LEN;
--		desc.fragno = 0;
--		desc.fraglen = 0;
--		desc.pages = pages;
--		desc.outbuf = buf;
--		desc.req = req;
--
--		skcipher_request_set_sync_tfm(req, aux_cipher);
--		skcipher_request_set_callback(req, 0, NULL, NULL);
--
--		sg_init_table(desc.infrags, 4);
--		sg_init_table(desc.outfrags, 4);
--
--		err = xdr_process_buf(buf, offset + GSS_KRB5_TOK_HDR_LEN,
--				      cbcbytes, encryptor, &desc);
--		skcipher_request_zero(req);
--		if (err)
--			goto out_err;
--	}
--
--	/* Make sure IV carries forward from any CBC results. */
--	err = gss_krb5_cts_crypt(cipher, buf,
--				 offset + GSS_KRB5_TOK_HDR_LEN + cbcbytes,
--				 desc.iv, pages, 1);
--	if (err) {
--		err = GSS_S_FAILURE;
--		goto out_err;
--	}
-+	err = krb5_cbc_cts_encrypt(cipher, aux_cipher,
-+				   offset + GSS_KRB5_TOK_HDR_LEN,
-+				   buf, pages);
-+	if (err)
-+		return GSS_S_FAILURE;
++config RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA2
++	bool "Enable Kerberos enctypes based on AES and SHA-2"
++	depends on RPCSEC_GSS_KRB5
++	depends on CRYPTO_CBC && CRYPTO_CTS
++	depends on CRYPTO_HMAC && CRYPTO_SHA256 && CRYPTO_SHA512
++	depends on CRYPTO_AES
++	default n
++	select RPCSEC_GSS_KRB5_CRYPTOSYSTEM
++	help
++	  Choose Y to enable the use of Kerberos 5 encryption types
++	  that utilize Advanced Encryption Standard (AES) ciphers and
++	  SHA-2 digests. These include aes128-cts-hmac-sha256-128 and
++	  aes256-cts-hmac-sha384-192.
++
+ config SUNRPC_DEBUG
+ 	bool "RPC: Enable dprintk debugging"
+ 	depends on SUNRPC && SYSCTL
+diff --git a/net/sunrpc/auth_gss/gss_krb5_mech.c b/net/sunrpc/auth_gss/gss_krb5_mech.c
+index ec3cca8fadc5..1951867f3fa8 100644
+--- a/net/sunrpc/auth_gss/gss_krb5_mech.c
++++ b/net/sunrpc/auth_gss/gss_krb5_mech.c
+@@ -146,6 +146,57 @@ static const struct gss_krb5_enctype supported_gss_krb5_enctypes[] = {
+ 	  .keyed_cksum = 1,
+ 	},
+ #endif
++
++#if defined(CONFIG_RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA2)
++	/*
++	 * AES-128 with SHA-256 (RFC 8009)
++	 */
++	{
++		.etype		= ENCTYPE_AES128_CTS_HMAC_SHA256_128,
++		.ctype		= CKSUMTYPE_HMAC_SHA256_128_AES128,
++		.name		= "aes128-cts-hmac-sha256-128",
++		.encrypt_name	= "cts(cbc(aes))",
++		.aux_cipher	= "cbc(aes)",
++		.cksum_name	= "hmac(sha256)",
++		.cksumlength	= BITS2OCTETS(128),
++		.keyed_cksum	= 1,
++		.keylength	= BITS2OCTETS(128),
++		.Kc_length	= BITS2OCTETS(128),
++		.Ke_length	= BITS2OCTETS(128),
++		.Ki_length	= BITS2OCTETS(128),
++
++		.import_ctx	= gss_krb5_import_ctx_v2,
++
++		.get_mic	= gss_krb5_get_mic_v2,
++		.verify_mic	= gss_krb5_verify_mic_v2,
++		.wrap		= gss_krb5_wrap_v2,
++		.unwrap		= gss_krb5_unwrap_v2,
++	},
++	/*
++	 * AES-256 with SHA-384 (RFC 8009)
++	 */
++	{
++		.etype		= ENCTYPE_AES256_CTS_HMAC_SHA384_192,
++		.ctype		= CKSUMTYPE_HMAC_SHA384_192_AES256,
++		.name		= "aes256-cts-hmac-sha384-192",
++		.encrypt_name	= "cts(cbc(aes))",
++		.aux_cipher	= "cbc(aes)",
++		.cksum_name	= "hmac(sha384)",
++		.cksumlength	= BITS2OCTETS(192),
++		.keyed_cksum	= 1,
++		.keylength	= BITS2OCTETS(256),
++		.Kc_length	= BITS2OCTETS(192),
++		.Ke_length	= BITS2OCTETS(256),
++		.Ki_length	= BITS2OCTETS(192),
++
++		.import_ctx	= gss_krb5_import_ctx_v2,
++
++		.get_mic	= gss_krb5_get_mic_v2,
++		.verify_mic	= gss_krb5_verify_mic_v2,
++		.wrap		= gss_krb5_wrap_v2,
++		.unwrap		= gss_krb5_unwrap_v2,
++	},
++#endif
+ };
  
- 	/* Now update buf to account for HMAC */
- 	buf->tail[0].iov_len += kctx->gk5e->cksumlength;
- 	buf->len += kctx->gk5e->cksumlength;
- 
--out_err:
--	if (err)
--		err = GSS_S_FAILURE;
--	return err;
-+	return GSS_S_COMPLETE;
- }
- 
- u32
- gss_krb5_aes_decrypt(struct krb5_ctx *kctx, u32 offset, u32 len,
- 		     struct xdr_buf *buf, u32 *headskip, u32 *tailskip)
- {
--	struct xdr_buf subbuf;
--	u32 ret = 0;
- 	struct crypto_sync_skcipher *cipher, *aux_cipher;
- 	struct crypto_ahash *ahash;
- 	struct xdr_netobj our_hmac_obj;
- 	u8 our_hmac[GSS_KRB5_MAX_CKSUM_LEN];
- 	u8 pkt_hmac[GSS_KRB5_MAX_CKSUM_LEN];
--	int nblocks, blocksize, cbcbytes;
--	struct decryptor_desc desc;
-+	struct xdr_buf subbuf;
-+	u32 ret = 0;
- 
- 	if (kctx->initiate) {
- 		cipher = kctx->acceptor_enc;
-@@ -783,44 +833,17 @@ gss_krb5_aes_decrypt(struct krb5_ctx *kctx, u32 offset, u32 len,
- 		aux_cipher = kctx->initiator_enc_aux;
- 		ahash = kctx->initiator_integ;
- 	}
--	blocksize = crypto_sync_skcipher_blocksize(cipher);
- 
- 	/* create a segment skipping the header and leaving out the checksum */
- 	xdr_buf_subsegment(buf, &subbuf, offset + GSS_KRB5_TOK_HDR_LEN,
- 				    (len - offset - GSS_KRB5_TOK_HDR_LEN -
- 				     kctx->gk5e->cksumlength));
- 
--	nblocks = (subbuf.len + blocksize - 1) / blocksize;
--
--	cbcbytes = 0;
--	if (nblocks > 2)
--		cbcbytes = (nblocks - 2) * blocksize;
--
--	memset(desc.iv, 0, sizeof(desc.iv));
--
--	if (cbcbytes) {
--		SYNC_SKCIPHER_REQUEST_ON_STACK(req, aux_cipher);
--
--		desc.fragno = 0;
--		desc.fraglen = 0;
--		desc.req = req;
--
--		skcipher_request_set_sync_tfm(req, aux_cipher);
--		skcipher_request_set_callback(req, 0, NULL, NULL);
--
--		sg_init_table(desc.frags, 4);
--
--		ret = xdr_process_buf(&subbuf, 0, cbcbytes, decryptor, &desc);
--		skcipher_request_zero(req);
--		if (ret)
--			goto out_err;
--	}
--
--	/* Make sure IV carries forward from any CBC results. */
--	ret = gss_krb5_cts_crypt(cipher, &subbuf, cbcbytes, desc.iv, NULL, 0);
-+	ret = krb5_cbc_cts_decrypt(cipher, aux_cipher, 0, &subbuf);
- 	if (ret)
- 		goto out_err;
- 
-+	/* Calculate our hmac over the plaintext data */
- 	our_hmac_obj.len = sizeof(our_hmac);
- 	our_hmac_obj.data = our_hmac;
- 	ret = gss_krb5_checksum(ahash, NULL, 0, &subbuf, 0, &our_hmac_obj);
-@@ -837,7 +860,7 @@ gss_krb5_aes_decrypt(struct krb5_ctx *kctx, u32 offset, u32 len,
- 		ret = GSS_S_BAD_SIG;
- 		goto out_err;
- 	}
--	*headskip = blocksize;
-+	*headskip = crypto_sync_skcipher_blocksize(cipher);
- 	*tailskip = kctx->gk5e->cksumlength;
- out_err:
- 	if (ret && ret != GSS_S_BAD_SIG)
+ /*
 
 
