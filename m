@@ -2,43 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A16D66C5E6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jan 2023 17:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 975B966C5EB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jan 2023 17:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbjAPQL4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Jan 2023 11:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S232752AbjAPQMI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Jan 2023 11:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbjAPQLa (ORCPT
+        with ESMTP id S232508AbjAPQLk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:11:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F338225E23;
-        Mon, 16 Jan 2023 08:07:10 -0800 (PST)
+        Mon, 16 Jan 2023 11:11:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7242A170;
+        Mon, 16 Jan 2023 08:07:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9BFBB8107A;
-        Mon, 16 Jan 2023 16:07:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 202C2C433F2;
-        Mon, 16 Jan 2023 16:06:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9B0460C1B;
+        Mon, 16 Jan 2023 16:07:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03963C433F0;
+        Mon, 16 Jan 2023 16:07:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673885228;
-        bh=WwCo8yRB6dFp4ZiyQerjxV2WtbT/gthd4StD45QKtWM=;
+        s=k20201202; t=1673885238;
+        bh=YIZ3uB2IzBtLRxi9pxrxIF2q4BwjBGt3zRE+tzdWzEQ=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=Eks77w0KDQmUhLbtp+m6F56yoU8GUJ97NCZKusJElxPY8P34T9hCvj12P1zUtSWL8
-         tqvby29UDXGphDtA9Jke65KDOyZclQWoPbvETBq+doeUMrnMPMnHEtAhYLe2xbADej
-         Px+3lHevIrga/gRtB1IXes7Czrlnmd+aBqFBEkLLgd2LQK0+tGXB4NhFnsjW+3DwSu
-         MTfzGGGw7ixcy+dgaNnPTCge60kvoIuQoBPtmxXelqf7kN6MHpkjRh9CiQaRT03bAY
-         XGJph489W2Y8zEc9AMu9LogZy+AjSVrSgiUEYWMsAo1laOyAiXjmPqngmOG9H96Yc+
-         6/6ayD8jW3wyA==
+        b=Z6ldLFUT8jxxU+NzGscV5cZOBStaSbFGgo6WIIq0yapOmh5GwFeMcFUmH9YfIYjkA
+         iczWRn3dbuzFO53TxyWwrMzitsHvoR4MnRB0BrpioHHQHpyMGC2ffTuDzZTh3kpA54
+         ANfaczatPxce08geGIfd8jnl7UcO1HCjbOWrOm7GRi6XPVkoLmeLldSRoy8yg09FOf
+         H6P0GXtFAUmE4vJ5a30NMNraPtSIctcJMjx3cW68efn14+K7AuCz2vuW6Bao8+yKRT
+         G/WPS2DJdCf/MQION4geQxuQsLBzTp0JGZy4eGpvhY62iGWlsJjt0hZb+Z2kd/CGzL
+         /UW9Vb2oiDXXA==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 16 Jan 2023 16:04:48 +0000
-Subject: [PATCH v4 13/21] arm64/sme: Add hwcaps for SME 2 and 2.1 features
+Date:   Mon, 16 Jan 2023 16:04:49 +0000
+Subject: [PATCH v4 14/21] kselftest/arm64: Add a stress test program for
+ ZT0
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221208-arm64-sme2-v4-13-f2fa0aef982f@kernel.org>
+Message-Id: <20221208-arm64-sme2-v4-14-f2fa0aef982f@kernel.org>
 References: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
 In-Reply-To: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -56,161 +57,419 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-77e06
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7246; i=broonie@kernel.org;
- h=from:subject:message-id; bh=WwCo8yRB6dFp4ZiyQerjxV2WtbT/gthd4StD45QKtWM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjxXWrEtZoR7hXz8TkDQamzk+13UcR1EU4iD1HjRMI
- CoFtnNeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY8V1qwAKCRAk1otyXVSH0EsDB/
- 0SkvplBXWYMMpA+9fkKrbTjgYmlurWPaCwfW3xQ32wpWG9dgj2W8DMgh6H4uVIUHRQCPkN6UWVenBo
- 9XbWsRMOs4FTSopZ2ofO10FC6ik+74Zv4CumZIeMBJ8y4gZfbjfG2cJQnwYxlWUHBS5EhF6L9ge5vh
- hD0iSLOUd6p6VLJcCc0Ml6cYs4ectZmrVWr6xSHVq+A0GdYU1FvUA4iMWAZhkwZ1TNJOrB9avnM7zb
- 5/Vq57AQMyGFVuJIKIcGTgLWZpJlAUZFN+pesU6y13tHwvuqV8S4Le6tKG9TUeLmljcHipcsa2l1bL
- deq161ALFX3NI9CRlaSysrUtcLL1Y/
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8602; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=YIZ3uB2IzBtLRxi9pxrxIF2q4BwjBGt3zRE+tzdWzEQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjxXWsXITeyQPtYdGZ1mDfRIP+DI74qatZmi2hOvzU
+ adwUpSKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY8V1rAAKCRAk1otyXVSH0FzXB/
+ 4/ecO2qrGGWRGKujgOOmpT0NWK8bleMc8DWevHveFpjx/gWdmA5vIFjkII31Bj1CC2XcTw2WTLz1TW
+ 5NnvbZXxjqioGu5iRP/OKwxQVZ1nX+vqynBWqPti/gYTpoGE6FX751cfeiduT8AEkBYYMPaG3cItwh
+ eJ8dNbCnAfRbjiYpee1AN02ggUs5IWc+LEm1eiFnSU+Ja3Y9olG6BVG06zh3ApMEs6Fff7FteohjIr
+ p1JmXl7fYht0yMpBfZl7cHgaXF4ZWWhEPyi/3lOdEVVI7KyMKpBzYzs/MkxvOBxxTtSeUJUcZ6/yoB
+ uI7bOiHZQKh9JLGw0Ug5Jby8axZC0C
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to allow userspace to discover the presence of the new SME features
-add hwcaps for them.
+Following the pattern for the other register sets add a stress test program
+for ZT0 which continually loads and verifies patterns in the register in
+an effort to discover context switching problems.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/arm64/elf_hwcaps.rst  | 18 ++++++++++++++++++
- arch/arm64/include/asm/hwcap.h      |  6 ++++++
- arch/arm64/include/uapi/asm/hwcap.h |  6 ++++++
- arch/arm64/kernel/cpufeature.c      | 14 ++++++++++++++
- arch/arm64/kernel/cpuinfo.c         |  6 ++++++
- 5 files changed, 50 insertions(+)
+ tools/testing/selftests/arm64/fp/.gitignore |   1 +
+ tools/testing/selftests/arm64/fp/Makefile   |   3 +
+ tools/testing/selftests/arm64/fp/sme-inst.h |  20 ++
+ tools/testing/selftests/arm64/fp/zt-test.S  | 317 ++++++++++++++++++++++++++++
+ 4 files changed, 341 insertions(+)
 
-diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
-index 6fed84f935df..8a9d4bf7daf4 100644
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -284,6 +284,24 @@ HWCAP2_RPRFM
- HWCAP2_SVE2P1
-     Functionality implied by ID_AA64ZFR0_EL1.SVEver == 0b0010.
+diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
+index df79d29664a1..41bde4c97d47 100644
+--- a/tools/testing/selftests/arm64/fp/.gitignore
++++ b/tools/testing/selftests/arm64/fp/.gitignore
+@@ -12,3 +12,4 @@ vlset
+ za-fork
+ za-ptrace
+ za-test
++zt-test
+diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
+index 36db61358ed5..aff3026d3dff 100644
+--- a/tools/testing/selftests/arm64/fp/Makefile
++++ b/tools/testing/selftests/arm64/fp/Makefile
+@@ -14,6 +14,7 @@ TEST_GEN_PROGS_EXTENDED := fp-pidbench fpsimd-test \
+ 	sve-test \
+ 	ssve-test \
+ 	za-test \
++	zt-test \
+ 	vlset
+ TEST_PROGS_EXTENDED := fpsimd-stress sve-stress ssve-stress za-stress
  
-+HWCAP2_SME2
-+    Functionality implied by ID_AA64SMFR0_EL1.SMEver == 0b0001.
-+
-+HWCAP2_SME2P1
-+    Functionality implied by ID_AA64SMFR0_EL1.SMEver == 0b0010.
-+
-+HWCAP2_SMEI16I32
-+    Functionality implied by ID_AA64SMFR0_EL1.I16I32 == 0b0101
-+
-+HWCAP2_SMEBI32I32
-+    Functionality implied by ID_AA64SMFR0_EL1.BI32I32 == 0b1
-+
-+HWCAP2_SMEB16B16
-+    Functionality implied by ID_AA64SMFR0_EL1.B16B16 == 0b1
-+
-+HWCAP2_SMEF16F16
-+    Functionality implied by ID_AA64SMFR0_EL1.F16F16 == 0b1
-+
- 4. Unused AT_HWCAP bits
- -----------------------
+@@ -41,5 +42,7 @@ $(OUTPUT)/za-fork: za-fork.c $(OUTPUT)/za-fork-asm.o
+ $(OUTPUT)/za-ptrace: za-ptrace.c
+ $(OUTPUT)/za-test: za-test.S $(OUTPUT)/asm-utils.o
+ 	$(CC) -nostdlib $^ -o $@
++$(OUTPUT)/zt-test: zt-test.S $(OUTPUT)/asm-utils.o
++	$(CC) -nostdlib $^ -o $@
  
-diff --git a/arch/arm64/include/asm/hwcap.h b/arch/arm64/include/asm/hwcap.h
-index 06dd12c514e6..475c803ecf42 100644
---- a/arch/arm64/include/asm/hwcap.h
-+++ b/arch/arm64/include/asm/hwcap.h
-@@ -123,6 +123,12 @@
- #define KERNEL_HWCAP_CSSC		__khwcap2_feature(CSSC)
- #define KERNEL_HWCAP_RPRFM		__khwcap2_feature(RPRFM)
- #define KERNEL_HWCAP_SVE2P1		__khwcap2_feature(SVE2P1)
-+#define KERNEL_HWCAP_SME2		__khwcap2_feature(SME2)
-+#define KERNEL_HWCAP_SME2P1		__khwcap2_feature(SME2P1)
-+#define KERNEL_HWCAP_SME_I16I32		__khwcap2_feature(SME_I16I32)
-+#define KERNEL_HWCAP_SME_BI32I32	__khwcap2_feature(SME_BI32I32)
-+#define KERNEL_HWCAP_SME_B16B16		__khwcap2_feature(SME_B16B16)
-+#define KERNEL_HWCAP_SME_F16F16		__khwcap2_feature(SME_F16F16)
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/arm64/fp/sme-inst.h b/tools/testing/selftests/arm64/fp/sme-inst.h
+index 7191e53ca1c0..9292bba5400b 100644
+--- a/tools/testing/selftests/arm64/fp/sme-inst.h
++++ b/tools/testing/selftests/arm64/fp/sme-inst.h
+@@ -48,4 +48,24 @@
+ 		| ((\offset) & 7)
+ .endm
  
- /*
-  * This yields a mask that user programs can use to figure out what
-diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
-index b713d30544f1..69a4fb749c65 100644
---- a/arch/arm64/include/uapi/asm/hwcap.h
-+++ b/arch/arm64/include/uapi/asm/hwcap.h
-@@ -96,5 +96,11 @@
- #define HWCAP2_CSSC		(1UL << 34)
- #define HWCAP2_RPRFM		(1UL << 35)
- #define HWCAP2_SVE2P1		(1UL << 36)
-+#define HWCAP2_SME2		(1UL << 37)
-+#define HWCAP2_SME2P1		(1UL << 38)
-+#define HWCAP2_SME_I16I32	(1UL << 39)
-+#define HWCAP2_SME_BI32I32	(1UL << 40)
-+#define HWCAP2_SME_B16B16	(1UL << 41)
-+#define HWCAP2_SME_F16F16	(1UL << 42)
- 
- #endif /* _UAPI__ASM_HWCAP_H */
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index fd90905bc2e6..5bd959bd9a1f 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -288,12 +288,20 @@ static const struct arm64_ftr_bits ftr_id_aa64smfr0[] = {
- 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_I16I64_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
- 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_F64F64_SHIFT, 1, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_I16I32_SHIFT, 4, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_B16B16_SHIFT, 1, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_F16F16_SHIFT, 1, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
- 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_I8I32_SHIFT, 4, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
- 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_F16F32_SHIFT, 1, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
- 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_B16F32_SHIFT, 1, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_BI32I32_SHIFT, 1, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
- 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_F32F32_SHIFT, 1, 0),
- 	ARM64_FTR_END,
-@@ -2841,11 +2849,17 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
- #ifdef CONFIG_ARM64_SME
- 	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_EL1_SME_SHIFT, 4, FTR_UNSIGNED, ID_AA64PFR1_EL1_SME_IMP, CAP_HWCAP, KERNEL_HWCAP_SME),
- 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_FA64_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_FA64_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_FA64),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_SMEver_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_EL1_SMEver_SME2p1, CAP_HWCAP, KERNEL_HWCAP_SME2P1),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_SMEver_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_EL1_SMEver_SME2, CAP_HWCAP, KERNEL_HWCAP_SME2),
- 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_I16I64_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_EL1_I16I64_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_I16I64),
- 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_F64F64_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_F64F64_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_F64F64),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_I16I32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_I16I32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_I16I32),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_B16B16_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_B16B16_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_B16B16),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_F16F16_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_F16F16_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_F16F16),
- 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_I8I32_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_EL1_I8I32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_I8I32),
- 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_F16F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_F16F32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_F16F32),
- 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_B16F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_B16F32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_B16F32),
-+	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_BI32I32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_BI32I32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_BI32I32),
- 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_F32F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_F32F32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_F32F32),
- #endif /* CONFIG_ARM64_SME */
- 	{},
-diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
-index 379695262b77..85e54417d141 100644
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -119,6 +119,12 @@ static const char *const hwcap_str[] = {
- 	[KERNEL_HWCAP_CSSC]		= "cssc",
- 	[KERNEL_HWCAP_RPRFM]		= "rprfm",
- 	[KERNEL_HWCAP_SVE2P1]		= "sve2p1",
-+	[KERNEL_HWCAP_SME2]		= "sme2",
-+	[KERNEL_HWCAP_SME2P1]		= "sme2p1",
-+	[KERNEL_HWCAP_SME_I16I32]	= "smei16i32",
-+	[KERNEL_HWCAP_SME_BI32I32]	= "smebi32i32",
-+	[KERNEL_HWCAP_SME_B16B16]	= "smeb16b16",
-+	[KERNEL_HWCAP_SME_F16F16]	= "smef16f16",
- };
- 
- #ifdef CONFIG_COMPAT
++/*
++ * LDR (ZT0)
++ *
++ *	LDR ZT0, nx
++ */
++.macro _ldr_zt nx
++	.inst	0xe11f8000			\
++		| (((\nx) & 0x1f) << 5)
++.endm
++
++/*
++ * STR (ZT0)
++ *
++ *	STR ZT0, nx
++ */
++.macro _str_zt nx
++	.inst	0xe13f8000			\
++		| (((\nx) & 0x1f) << 5)
++.endm
++
+ #endif
+diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
+new file mode 100644
+index 000000000000..7ec90976cf5e
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/zt-test.S
+@@ -0,0 +1,317 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2021-2 ARM Limited.
++// Original author: Mark Brown <broonie@kernel.org>
++//
++// Scalable Matrix Extension ZT context switch test
++// Repeatedly writes unique test patterns into ZT0
++// and reads them back to verify integrity.
++
++#include <asm/unistd.h>
++#include "assembler.h"
++#include "asm-offsets.h"
++#include "sme-inst.h"
++
++.arch_extension sve
++
++#define ZT_SZ	512
++#define ZT_B	(ZT_SZ / 8)
++
++// Declare some storage space to shadow ZT register contents and a
++// scratch buffer.
++.pushsection .text
++.data
++.align 4
++ztref:
++	.space	ZT_B
++scratch:
++	.space	ZT_B
++.popsection
++
++
++// Generate a test pattern for storage in ZT
++// x0: pid
++// x1: generation
++
++// These values are used to construct a 32-bit pattern that is repeated in the
++// scratch buffer as many times as will fit:
++// bits 31:24	generation number (increments once per test_loop)
++// bits 23: 8	pid
++// bits  7: 0	32-bit lane index
++
++function pattern
++	mov	w3, wzr
++	bfi	w3, w0, #8, #16		// PID
++	bfi	w3, w1, #24, #8		// Generation
++
++	ldr	x0, =scratch
++	mov	w1, #ZT_B / 4
++
++0:	str	w3, [x0], #4
++	add	w3, w3, #1		// Lane
++	subs	w1, w1, #1
++	b.ne	0b
++
++	ret
++endfunction
++
++// Set up test pattern in a ZT horizontal vector
++// x0: pid
++// x1: generation
++function setup_zt
++	mov	x4, x30
++
++	bl	pattern			// Get pattern in scratch buffer
++	ldr	x0, =ztref
++	ldr	x1, =scratch
++	mov	x2, #ZT_B
++	bl	memcpy
++
++	ldr	x0, =ztref
++	_ldr_zt 0			// load zt0 from pointer x0
++
++	ret	x4
++endfunction
++
++// Trivial memory compare: compare x2 bytes starting at address x0 with
++// bytes starting at address x1.
++// Returns only if all bytes match; otherwise, the program is aborted.
++// Clobbers x0-x5.
++function memcmp
++	cbz	x2, 2f
++
++	stp	x0, x1, [sp, #-0x20]!
++	str	x2, [sp, #0x10]
++
++	mov	x5, #0
++0:	ldrb	w3, [x0, x5]
++	ldrb	w4, [x1, x5]
++	add	x5, x5, #1
++	cmp	w3, w4
++	b.ne	1f
++	subs	x2, x2, #1
++	b.ne	0b
++
++1:	ldr	x2, [sp, #0x10]
++	ldp	x0, x1, [sp], #0x20
++	b.ne	barf
++
++2:	ret
++endfunction
++
++// Verify that a ZT vector matches its shadow in memory, else abort
++// Clobbers x0-x3
++function check_zt
++	mov	x3, x30
++
++	ldr	x0, =scratch		// Poison scratch
++	mov	x1, #ZT_B
++	bl	memfill_ae
++
++	ldr	x0, =scratch
++	_str_zt 0
++
++	ldr	x0, =ztref
++	ldr	x1, =scratch
++	mov	x2, #ZT_B
++	mov	x30, x3
++	b	memcmp
++endfunction
++
++// Any SME register modified here can cause corruption in the main
++// thread -- but *only* the locations modified here.
++function irritator_handler
++	// Increment the irritation signal count (x23):
++	ldr	x0, [x2, #ucontext_regs + 8 * 23]
++	add	x0, x0, #1
++	str	x0, [x2, #ucontext_regs + 8 * 23]
++
++	// Corrupt some random ZT data
++#if 0
++	adr	x0, .text + (irritator_handler - .text) / 16 * 16
++	movi	v0.8b, #1
++	movi	v9.16b, #2
++	movi	v31.8b, #3
++#endif
++
++	ret
++endfunction
++
++function tickle_handler
++	// Increment the signal count (x23):
++	ldr	x0, [x2, #ucontext_regs + 8 * 23]
++	add	x0, x0, #1
++	str	x0, [x2, #ucontext_regs + 8 * 23]
++
++	ret
++endfunction
++
++function terminate_handler
++	mov	w21, w0
++	mov	x20, x2
++
++	puts	"Terminated by signal "
++	mov	w0, w21
++	bl	putdec
++	puts	", no error, iterations="
++	ldr	x0, [x20, #ucontext_regs + 8 * 22]
++	bl	putdec
++	puts	", signals="
++	ldr	x0, [x20, #ucontext_regs + 8 * 23]
++	bl	putdecn
++
++	mov	x0, #0
++	mov	x8, #__NR_exit
++	svc	#0
++endfunction
++
++// w0: signal number
++// x1: sa_action
++// w2: sa_flags
++// Clobbers x0-x6,x8
++function setsignal
++	str	x30, [sp, #-((sa_sz + 15) / 16 * 16 + 16)]!
++
++	mov	w4, w0
++	mov	x5, x1
++	mov	w6, w2
++
++	add	x0, sp, #16
++	mov	x1, #sa_sz
++	bl	memclr
++
++	mov	w0, w4
++	add	x1, sp, #16
++	str	w6, [x1, #sa_flags]
++	str	x5, [x1, #sa_handler]
++	mov	x2, #0
++	mov	x3, #sa_mask_sz
++	mov	x8, #__NR_rt_sigaction
++	svc	#0
++
++	cbz	w0, 1f
++
++	puts	"sigaction failure\n"
++	b	.Labort
++
++1:	ldr	x30, [sp], #((sa_sz + 15) / 16 * 16 + 16)
++	ret
++endfunction
++
++// Main program entry point
++.globl _start
++function _start
++_start:
++	mov	x23, #0		// signal count
++
++	mov	w0, #SIGINT
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGTERM
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGUSR1
++	adr	x1, irritator_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
++	mov	w0, #SIGUSR2
++	adr	x1, tickle_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
++	smstart_za
++
++	// Obtain our PID, to ensure test pattern uniqueness between processes
++	mov	x8, #__NR_getpid
++	svc	#0
++	mov	x20, x0
++
++	puts	"PID:\t"
++	mov	x0, x20
++	bl	putdecn
++
++	mov	x22, #0		// generation number, increments per iteration
++.Ltest_loop:
++	mov	x0, x20
++	mov	x1, x22
++	bl	setup_zt
++
++	mov	x8, #__NR_sched_yield	// Encourage preemption
++	svc	#0
++
++	mrs	x0, S3_3_C4_C2_2	// SVCR should have ZA=1,SM=0
++	and	x1, x0, #3
++	cmp	x1, #2
++	b.ne	svcr_barf
++
++	bl	check_zt
++
++	add	x22, x22, #1	// Everything still working
++	b	.Ltest_loop
++
++.Labort:
++	mov	x0, #0
++	mov	x1, #SIGABRT
++	mov	x8, #__NR_kill
++	svc	#0
++endfunction
++
++function barf
++// fpsimd.c acitivty log dump hack
++//	ldr	w0, =0xdeadc0de
++//	mov	w8, #__NR_exit
++//	svc	#0
++// end hack
++	smstop
++	mov	x10, x0	// expected data
++	mov	x11, x1	// actual data
++	mov	x12, x2	// data size
++
++	puts	"Mismatch: PID="
++	mov	x0, x20
++	bl	putdec
++	puts	", iteration="
++	mov	x0, x22
++	bl	putdec
++	puts	"\tExpected ["
++	mov	x0, x10
++	mov	x1, x12
++	bl	dumphex
++	puts	"]\n\tGot      ["
++	mov	x0, x11
++	mov	x1, x12
++	bl	dumphex
++	puts	"]\n"
++
++	mov	x8, #__NR_getpid
++	svc	#0
++// fpsimd.c acitivty log dump hack
++//	ldr	w0, =0xdeadc0de
++//	mov	w8, #__NR_exit
++//	svc	#0
++// ^ end of hack
++	mov	x1, #SIGABRT
++	mov	x8, #__NR_kill
++	svc	#0
++//	mov	x8, #__NR_exit
++//	mov	x1, #1
++//	svc	#0
++endfunction
++
++function svcr_barf
++	mov	x10, x0
++
++	puts	"Bad SVCR: "
++	mov	x0, x10
++	bl	putdecn
++
++	mov	x8, #__NR_exit
++	mov	x1, #1
++	svc	#0
++endfunction
 
 -- 
 2.34.1
