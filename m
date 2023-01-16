@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7847E66C5F5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jan 2023 17:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B538D66C5FB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jan 2023 17:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjAPQMo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Jan 2023 11:12:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
+        id S232787AbjAPQNB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Jan 2023 11:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbjAPQL5 (ORCPT
+        with ESMTP id S232790AbjAPQMK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:11:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC2226588;
-        Mon, 16 Jan 2023 08:07:30 -0800 (PST)
+        Mon, 16 Jan 2023 11:12:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2768C2A9BA;
+        Mon, 16 Jan 2023 08:07:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BB3461042;
-        Mon, 16 Jan 2023 16:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F3AAC433F0;
-        Mon, 16 Jan 2023 16:07:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A724B8100C;
+        Mon, 16 Jan 2023 16:07:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34275C4339C;
+        Mon, 16 Jan 2023 16:07:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673885249;
-        bh=gxSkti1F5ID0rEdBPkOYNkvbTLYrpACDWicjOQ/QHTM=;
+        s=k20201202; t=1673885256;
+        bh=MPucUh5nMM1iQ9zAE7rDc23uTz6TPGd3yaLu/ElA83s=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=UyhocAeyDfUf7mfbCx7OgiHk3Ie4WUcMm09BaUqiVJ3cx8osp/udAklTxui+DxT6H
-         aULoCL9MkXtEgOhJXHeBy1zqkLOXusLRo3cE4iSSrU69UU3PMz2cXgjQoPYliWBDT5
-         AZ2yp2qiW1g7Le6RDPSYuAGlZB80pcU2RGJV+foDLtQv5NoBzgH2IW2fSgc7xy+Tqa
-         NDfFPO6PsKKLwkbt1SAFLMn8ma6LTUic8VC0uVBRngwqHhu7rG5f/gS/4p4Rs7JErH
-         ypA/NC+P5qvlve6iNSu3eV0dzyl7R2lHNQ7MjL1ttTr6FZD1U0QSFGb84rxVBMOfX+
-         xSWjpF8VBqeuw==
+        b=iuOyXvjIV7xA5YHyOtZzbazrfBaesm1aSLxmOLv+7UEcDHQqVkztJvkvlVWg/aiwz
+         umNBYV3RfSQvHR24d5GtwqZUTswgEYivz1k6Mk+GQtfAVSkEMvv2arKs2gBzL90lQb
+         owTWqSLvpxC3I5gUNRKgrnTnroEUSi9o11+TJFdwomnad5wZb5gBDHGIrGr/N5cKFu
+         cl8Jv/5jSwRbEtzL8Ju26OZYPsqXPzgrnhmqP1cP2+Qu3KVnAsMbbZSxIW/s5CWEb/
+         0Teb+VYZOrNE79mRNpVvNjAhnIA9jg9tKkokZVNq7FK6FIkWNmkoKdNQdBMDJziJ8Y
+         gtEWdUgL8KTEw==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 16 Jan 2023 16:04:51 +0000
-Subject: [PATCH v4 16/21] kselftest/arm64: Enumerate SME2 in the signal
- test utility code
+Date:   Mon, 16 Jan 2023 16:04:52 +0000
+Subject: [PATCH v4 17/21] kselftest/arm64: Teach the generic signal context
+ validation about ZT
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221208-arm64-sme2-v4-16-f2fa0aef982f@kernel.org>
+Message-Id: <20221208-arm64-sme2-v4-17-f2fa0aef982f@kernel.org>
 References: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
 In-Reply-To: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -57,15 +57,15 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-77e06
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1822; i=broonie@kernel.org;
- h=from:subject:message-id; bh=gxSkti1F5ID0rEdBPkOYNkvbTLYrpACDWicjOQ/QHTM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjxXWuKST4k3gNaZh8n3qOfHlKwGQND65u7UKsCoNg
- E0iu9p6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY8V1rgAKCRAk1otyXVSH0L9oB/
- 90Pya2mgn5xLyBimadSMbweuMVLpEbeXxuJCJCt76/XtBmgMegGZmqZXvI4ikBWdrp5cK86xqy8Jwr
- JmcTbCDmaLuuno5d/So7oei2uamX+3DSgA3Jphfl66Q384isc+h+NNkLb27Kfuqrv5AU4N5LnmVWsH
- JDimqMrewSkJkuZnM64zRhV5rZXsPbjKwc81GTR18aDeFdbXvC9bCfDvBVJ8M5nPKI4g/qb4voHNcq
- sewxzos3q2qgFm7uKhpmFGAvDtKO589LnMLDEczs522xDRW/CMgzy0+OiGOOJCIFlKzbkHXIGdVjYV
- yOafhDjHP0UCN5GM061gzJtTs/NjYt
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3173; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=MPucUh5nMM1iQ9zAE7rDc23uTz6TPGd3yaLu/ElA83s=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjxXWuq2xm82pLoA5y4Nkh8zSmq241XVVBVuB49Z3T
+ Kn55b76JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY8V1rgAKCRAk1otyXVSH0H+4B/
+ 0TJKtvtGUngMnoljDrMhE54f7qgIHgtQFbRCW5MHO4mNhVzojOEDeZBSMgZ/gM1lINqpSeQBzJLuuO
+ rz6jBjT0mqTKWTOcYIcmfQRER45aGIW8Br9+gOkLkCX7KCziXkbynS5FcuneqG7Y2ZXF++6nUxbKjQ
+ I0Dh5p46O70Q+sr25BfinhqPgae7lNldZ14JVIQns75nV9E1YQ2n61evx96nTtMTtX4cYchXyxLRMa
+ bTgVCEc0sAM47krNzmUJWCxvL00v/cMixnIzJAIDtjgveWKogEJT/DYlsEiIXUG8FvbPsfcg2Xe322
+ fUE4/oIev2uAhlJ4MArQTIjR8sqPpl
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -77,56 +77,102 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Support test cases for SME2 by adding it to the set of features that we
-enumerate so test cases can check for it.
+Add ZT to the set of signal contexts that the shared code understands and
+validates the form of.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/signal/test_signals.h       | 2 ++
- tools/testing/selftests/arm64/signal/test_signals_utils.c | 3 +++
- 2 files changed, 5 insertions(+)
+ .../selftests/arm64/signal/testcases/testcases.c   | 36 ++++++++++++++++++++++
+ .../selftests/arm64/signal/testcases/testcases.h   |  1 +
+ 2 files changed, 37 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
-index 0c645834ddc3..1e6273d81575 100644
---- a/tools/testing/selftests/arm64/signal/test_signals.h
-+++ b/tools/testing/selftests/arm64/signal/test_signals.h
-@@ -34,6 +34,7 @@ enum {
- 	FSVE_BIT,
- 	FSME_BIT,
- 	FSME_FA64_BIT,
-+	FSME2_BIT,
- 	FMAX_END
- };
+diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.c b/tools/testing/selftests/arm64/signal/testcases/testcases.c
+index d2eda7b5de26..27d495fa52f8 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/testcases.c
++++ b/tools/testing/selftests/arm64/signal/testcases/testcases.c
+@@ -108,6 +108,26 @@ bool validate_za_context(struct za_context *za, char **err)
+ 	return true;
+ }
  
-@@ -41,6 +42,7 @@ enum {
- #define FEAT_SVE		(1UL << FSVE_BIT)
- #define FEAT_SME		(1UL << FSME_BIT)
- #define FEAT_SME_FA64		(1UL << FSME_FA64_BIT)
-+#define FEAT_SME2		(1UL << FSME2_BIT)
++bool validate_zt_context(struct zt_context *zt, char **err)
++{
++	if (!zt || !err)
++		return false;
++
++	/* If the context is present there should be at least one register */
++	if (zt->nregs == 0) {
++		*err = "no registers";
++		return false;
++	}
++
++	/* Size should agree with the number of registers */
++	if (zt->head.size != ZT_SIG_CONTEXT_SIZE(zt->nregs)) {
++		*err = "register count does not match size";
++		return false;
++	}
++
++	return true;
++}
++
+ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ {
+ 	bool terminated = false;
+@@ -117,6 +137,7 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ 	struct extra_context *extra = NULL;
+ 	struct sve_context *sve = NULL;
+ 	struct za_context *za = NULL;
++	struct zt_context *zt = NULL;
+ 	struct _aarch64_ctx *head =
+ 		(struct _aarch64_ctx *)uc->uc_mcontext.__reserved;
+ 	void *extra_data = NULL;
+@@ -177,6 +198,13 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ 			za = (struct za_context *)head;
+ 			new_flags |= ZA_CTX;
+ 			break;
++		case ZT_MAGIC:
++			if (flags & ZT_CTX)
++				*err = "Multiple ZT_MAGIC";
++			/* Size is validated in validate_za_context() */
++			zt = (struct zt_context *)head;
++			new_flags |= ZT_CTX;
++			break;
+ 		case EXTRA_MAGIC:
+ 			if (flags & EXTRA_CTX)
+ 				*err = "Multiple EXTRA_MAGIC";
+@@ -234,6 +262,9 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ 		if (new_flags & ZA_CTX)
+ 			if (!validate_za_context(za, err))
+ 				return false;
++		if (new_flags & ZT_CTX)
++			if (!validate_zt_context(zt, err))
++				return false;
  
- /*
-  * A descriptor used to describe and configure a test case.
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-index 308e229e58ab..07f518f0e58d 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-@@ -29,6 +29,7 @@ static char const *const feats_names[FMAX_END] = {
- 	" SVE ",
- 	" SME ",
- 	" FA64 ",
-+	" SME2 ",
- };
+ 		flags |= new_flags;
  
- #define MAX_FEATS_SZ	128
-@@ -323,6 +324,8 @@ int test_init(struct tdescr *td)
- 			td->feats_supported |= FEAT_SME;
- 		if (getauxval(AT_HWCAP2) & HWCAP2_SME_FA64)
- 			td->feats_supported |= FEAT_SME_FA64;
-+		if (getauxval(AT_HWCAP2) & HWCAP2_SME2)
-+			td->feats_supported |= FEAT_SME2;
- 		if (feats_ok(td)) {
- 			if (td->feats_required & td->feats_supported)
- 				fprintf(stderr,
+@@ -245,6 +276,11 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ 		return false;
+ 	}
+ 
++	if (terminated && (flags & ZT_CTX) && !(flags & ZA_CTX)) {
++		*err = "ZT context but no ZA context";
++		return false;
++	}
++
+ 	return true;
+ }
+ 
+diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.h b/tools/testing/selftests/arm64/signal/testcases/testcases.h
+index 040afded0b76..a08ab0d6207a 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/testcases.h
++++ b/tools/testing/selftests/arm64/signal/testcases/testcases.h
+@@ -18,6 +18,7 @@
+ #define SVE_CTX		(1 << 1)
+ #define ZA_CTX		(1 << 2)
+ #define EXTRA_CTX	(1 << 3)
++#define ZT_CTX		(1 << 4)
+ 
+ #define KSFT_BAD_MAGIC	0xdeadbeef
+ 
 
 -- 
 2.34.1
