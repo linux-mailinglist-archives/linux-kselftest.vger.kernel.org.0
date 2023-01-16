@@ -2,205 +2,391 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB6266B918
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jan 2023 09:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDCC66C593
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Jan 2023 17:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjAPIcY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Jan 2023 03:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S232508AbjAPQHi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Jan 2023 11:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbjAPIcX (ORCPT
+        with ESMTP id S231951AbjAPQHD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Jan 2023 03:32:23 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B1144B9;
-        Mon, 16 Jan 2023 00:32:22 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30G5phDE024176;
-        Mon, 16 Jan 2023 08:32:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=cNQBmWTp5okDMaJ+iwK67PR7Z6647nKho7OPtuocnEg=;
- b=rmQkgq4FopF4FF9X9XY43KAufTXiSsg6BcS4/VBr/h/xTFJjfI4QjIJ6f2M34zpWok/P
- TCdz5o1B3EpqHq10c5z9LG7JWjk2I0d7YDNsk21zS1+C0er0f6V4wm4nQ/aJsoMBzILn
- 43kHBSzzcosoiR/l9wW9vUq+DXU5CNu6y1zCy8H0+4F0dKwTJC8s9UlZ+k0WkCuyDrSx
- CHd00JZ6YWl+LCmm04jCnJtXsOYA/DDWe23kiKtcxMYCmzMAHYC3+16LgAwzf7Bbjvm8
- j+kodc26zEHDYqRQPYAMqIB3xinkxhEFvbLj4nscIy9OA/c94F/kSZTnxQJO7b5wa4ev KA== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n4fqpt8hd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 Jan 2023 08:32:11 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30FJjHvE007302;
-        Mon, 16 Jan 2023 08:32:08 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n3m16hhwj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 Jan 2023 08:32:08 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30G8W6Ml30278002
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Jan 2023 08:32:06 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 174A520043;
-        Mon, 16 Jan 2023 08:32:06 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD57520040;
-        Mon, 16 Jan 2023 08:32:05 +0000 (GMT)
-Received: from localhost (unknown [9.124.31.239])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 16 Jan 2023 08:32:05 +0000 (GMT)
-Date:   Mon, 16 Jan 2023 14:02:04 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] selftests/ftrace: Extend multiple_kprobes.tc to add
- multiple consecutive probes in a function
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Akanksha J N <akanksha@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
-        shuah@kernel.org
-References: <20230112095600.37665-1-akanksha@linux.ibm.com>
-        <1673529279.3c5f8oes3z.naveen@linux.ibm.com>
-        <20230113005153.c6ca2f75b9d12627eb63308a@kernel.org>
-        <1673601511.tq30r5phea.naveen@linux.ibm.com>
-        <20230114002126.a37640f815b74e9e78259a9f@kernel.org>
-In-Reply-To: <20230114002126.a37640f815b74e9e78259a9f@kernel.org>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1673856229.a7tekgas75.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: JnwrrQiQIEf4CwyE70Xus10rYvdQdGN8
-X-Proofpoint-GUID: JnwrrQiQIEf4CwyE70Xus10rYvdQdGN8
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 16 Jan 2023 11:07:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5808424123;
+        Mon, 16 Jan 2023 08:05:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19D75B80DC7;
+        Mon, 16 Jan 2023 16:05:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739AAC433F1;
+        Mon, 16 Jan 2023 16:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673885118;
+        bh=oOgTsPmP77gfZ9aN3fKhVcLZdopUgO5oDN6uiNQXtwo=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=TnaFV6+rjXQDdha5PjLz7zIA20ifHCn90xAwVauuKMvEDcZ8JONwVpTZiRnE5YO+H
+         5mUOcOnT/J1SC/R2sg7886ofu/2zLAtWRpktwUA6TLnWA87L1vos7xDxrXoo3brDdK
+         9WAN0SLC0tcKXutftFarVUPXK7SGBhJE3eJbcPmKa7BEqaHizmlgYXCkr6I75OaDsQ
+         4SQu39gR8n9MBcRTzm0ZnlwINCMqBncGwMUYU5ndyDDMN5feEWqg00jy2zE/Ze38Oj
+         HF/55RPZeWA/Hrm2WSrEz2CDhHHfjqMHiQMqAq6KdOhduScyx/cOBoVm3gEWUitDfP
+         IIoEbBvGQsgvg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Mon, 16 Jan 2023 16:04:36 +0000
+Subject: [PATCH v4 01/21] arm64/sme: Rename za_state to sme_state
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-16_06,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0 spamscore=0
- suspectscore=0 malwarescore=0 clxscore=1015 mlxlogscore=958
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301160062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221208-arm64-sme2-v4-1-f2fa0aef982f@kernel.org>
+References: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
+In-Reply-To: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12-dev-77e06
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11499; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=oOgTsPmP77gfZ9aN3fKhVcLZdopUgO5oDN6uiNQXtwo=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjxXWiU4cWEb06aVAijUfAjOySAyuZKEnXTGvCO9bl
+ AmCI82WJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY8V1ogAKCRAk1otyXVSH0MMWB/
+ wPMiJtKxbMmXU+37pnDzflwMvU9MNXmuitEX894EJsN9/vPadj7tpwVnHCFVm88R0LIKriyBgkGwAk
+ ADDRW7cM2X5rE7z46fXaf5qK7zRVrH5zOLH6agmETun/tf8LnhbP48p/JsuuKKj6mIinuBqcjG6Gb/
+ Zra6s9p2gZDRc1vagW+yDk90PZq21vRG7Vyc4JtUgLibf6Cf7c8l5P/NDSEzwqXfYE7icGgpwgvBdP
+ /J2FB772eQvU2JxBVprLEUebu0T9YITvimGDwxov1MSDmsBHKSZ8Ob/MbKM3zznhDv7pALQgTh0giP
+ 4qKPjvtREMknZxIfT3VbjGp5qNwdvC
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Masami Hiramatsu wrote:
-> Hi Naveen,
->=20
-> On Fri, 13 Jan 2023 14:59:51 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> Masami Hiramatsu wrote:
->> > On Thu, 12 Jan 2023 18:51:14 +0530
->> > "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->> >=20
->> >> Akanksha J N wrote:
->> >> > Commit 97f88a3d723162 ("powerpc/kprobes: Fix null pointer reference=
- in
->> >> > arch_prepare_kprobe()") fixed a recent kernel oops that was caused =
-as
->> >> > ftrace-based kprobe does not generate kprobe::ainsn::insn and it ge=
-ts
->> >> > set to NULL.
->> >> > Extend multiple kprobes test to add kprobes on first 256 bytes with=
-in a
->> >> > function, to be able to test potential issues with kprobes on
->> >> > successive instructions.
->> >=20
->> > What is the purpose of that test? If you intended to add a kprobe even=
-ts
->> > with some offset so that it becomes ftrace-based kprobe, it should be
->> > a different test case, because
->>=20
->> This is a follow up to:
->> http://lore.kernel.org/1664530538.ke6dp49pwh.naveen@linux.ibm.com
->>=20
->> The intent is to add consecutive probes covering KPROBES_ON_FTRACE,=20
->> vanilla trap-based kprobes as well as optprobes to ensure all of those=20
->> and their interactions are good.
->=20
-> Hmm, that should be implemented for each architecture with specific
-> knowledge instead of random offset, so that we can ensure the kprobe
-> is on ftrace/optimized or using trap. Also, it should check the
-> debugfs/kprobes/list file.
+In preparation for adding support for storage for ZT0 to the thread_struct
+rename za_state to sme_state. Since ZT0 is accessible when PSTATE.ZA is
+set just like ZA itself we will extend the allocation done for ZA to
+cover it, avoiding the need to further expand task_struct for non-SME
+tasks.
 
-...
+No functional changes.
 
->=20
->>=20
->> >=20
->> >  - This is a test case for checking multiple (at least 256) kprobe eve=
-nts
->> >   can be defined and enabled.
->> >=20
->> >  - If you want to check the ftrace-based kprobe, it should be near the
->> >    function entry, maybe within 16 bytes or so.
->> >=20
->> >  - Also, you don't need to enable it at once (and should not for this =
-case).
->> >=20
->> >> > The '|| true' is added with the echo statement to ignore errors tha=
-t are
->> >> > caused by trying to add kprobes to non probeable lines and continue=
- with
->> >> > the test.
->> >=20
->> > Can you add another test case for that? (and send it to the MLs which =
-Cc'd
->> > to this mail)
->> > e.g.=20
->> >=20
->> >    for i in `seq 0 16`; do
->> >      echo p:testprobe $FUNCTION_FORK+${i} >> kprobe_events || continue
->> >      echo 1 > events/kprobes/testprobe/enable
->> >      ( echo "forked" )
->> >      echo 0 > events/kprobes/testprobe/enable
->> >      echo > kprobe_events
->> >    done
->>=20
->> The current test to add multiple kprobes within a function also falls=20
->> under the purview of multiple_kprobes.tc, but it can be split into a=20
->> separate multiple_kprobes_func.tc if you think that will be better.
->>=20
->=20
-> Yes, please make it separate, this test case is for checking whether
-> the ftrace can define/enable/disable multiple kprobe events. Not for
-> checking kprobe with different types, nor checking interactions among
-> different types of kprobes.
->=20
-> (BTW, if you want to test optprobe on x86, you can not put the probes
->  within the jump instruction (+5 bytes). It will unoptimize existing
->  optimized kprobe in that case)
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/include/asm/fpsimd.h    | 15 +++++++++------
+ arch/arm64/include/asm/processor.h |  2 +-
+ arch/arm64/kernel/fpsimd.c         | 34 +++++++++++++++++-----------------
+ arch/arm64/kernel/process.c        | 13 +++++++------
+ arch/arm64/kernel/ptrace.c         |  6 +++---
+ arch/arm64/kernel/signal.c         |  8 ++++----
+ arch/arm64/kvm/fpsimd.c            |  2 +-
+ 7 files changed, 42 insertions(+), 38 deletions(-)
 
-Ok, I can see why we won't be able to optimize any of the probes on x86=20
-with this approach. But, we should be able to do so on powerpc and arm,=20
-the only other architectures supporting OPTPROBES at this time. For x86,=20
-we may have to extend the test to check kprobes/list.
+diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+index e6fa1e2982c8..2d3fa80cd95d 100644
+--- a/arch/arm64/include/asm/fpsimd.h
++++ b/arch/arm64/include/asm/fpsimd.h
+@@ -61,7 +61,7 @@ extern void fpsimd_kvm_prepare(void);
+ struct cpu_fp_state {
+ 	struct user_fpsimd_state *st;
+ 	void *sve_state;
+-	void *za_state;
++	void *sme_state;
+ 	u64 *svcr;
+ 	unsigned int sve_vl;
+ 	unsigned int sme_vl;
+@@ -355,14 +355,17 @@ extern int sme_get_current_vl(void);
+ 
+ /*
+  * Return how many bytes of memory are required to store the full SME
+- * specific state (currently just ZA) for task, given task's currently
+- * configured vector length.
++ * specific state for task, given task's currently configured vector
++ * length.
+  */
+-static inline size_t za_state_size(struct task_struct const *task)
++static inline size_t sme_state_size(struct task_struct const *task)
+ {
+ 	unsigned int vl = task_get_sme_vl(task);
++	size_t size;
+ 
+-	return ZA_SIG_REGS_SIZE(sve_vq_from_vl(vl));
++	size = ZA_SIG_REGS_SIZE(sve_vq_from_vl(vl));
++
++	return size;
+ }
+ 
+ #else
+@@ -382,7 +385,7 @@ static inline int sme_max_virtualisable_vl(void) { return 0; }
+ static inline int sme_set_current_vl(unsigned long arg) { return -EINVAL; }
+ static inline int sme_get_current_vl(void) { return -EINVAL; }
+ 
+-static inline size_t za_state_size(struct task_struct const *task)
++static inline size_t sme_state_size(struct task_struct const *task)
+ {
+ 	return 0;
+ }
+diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+index d51b32a69309..3918f2a67970 100644
+--- a/arch/arm64/include/asm/processor.h
++++ b/arch/arm64/include/asm/processor.h
+@@ -161,7 +161,7 @@ struct thread_struct {
+ 	enum fp_type		fp_type;	/* registers FPSIMD or SVE? */
+ 	unsigned int		fpsimd_cpu;
+ 	void			*sve_state;	/* SVE registers, if any */
+-	void			*za_state;	/* ZA register, if any */
++	void			*sme_state;	/* ZA and ZT state, if any */
+ 	unsigned int		vl[ARM64_VEC_MAX];	/* vector length */
+ 	unsigned int		vl_onexec[ARM64_VEC_MAX]; /* vl after next exec */
+ 	unsigned long		fault_address;	/* fault info */
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index dcc81e7200d4..9e168a9eb615 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -299,7 +299,7 @@ void task_set_vl_onexec(struct task_struct *task, enum vec_type type,
+ /*
+  * TIF_SME controls whether a task can use SME without trapping while
+  * in userspace, when TIF_SME is set then we must have storage
+- * alocated in sve_state and za_state to store the contents of both ZA
++ * alocated in sve_state and sme_state to store the contents of both ZA
+  * and the SVE registers for both streaming and non-streaming modes.
+  *
+  * If both SVCR.ZA and SVCR.SM are disabled then at any point we
+@@ -429,7 +429,7 @@ static void task_fpsimd_load(void)
+ 		write_sysreg_s(current->thread.svcr, SYS_SVCR);
+ 
+ 		if (thread_za_enabled(&current->thread))
+-			za_load_state(current->thread.za_state);
++			za_load_state(current->thread.sme_state);
+ 
+ 		if (thread_sm_enabled(&current->thread))
+ 			restore_ffr = system_supports_fa64();
+@@ -490,7 +490,7 @@ static void fpsimd_save(void)
+ 		*svcr = read_sysreg_s(SYS_SVCR);
+ 
+ 		if (*svcr & SVCR_ZA_MASK)
+-			za_save_state(last->za_state);
++			za_save_state(last->sme_state);
+ 
+ 		/* If we are in streaming mode override regular SVE. */
+ 		if (*svcr & SVCR_SM_MASK) {
+@@ -1257,30 +1257,30 @@ void fpsimd_release_task(struct task_struct *dead_task)
+ #ifdef CONFIG_ARM64_SME
+ 
+ /*
+- * Ensure that task->thread.za_state is allocated and sufficiently large.
++ * Ensure that task->thread.sme_state is allocated and sufficiently large.
+  *
+  * This function should be used only in preparation for replacing
+- * task->thread.za_state with new data.  The memory is always zeroed
++ * task->thread.sme_state with new data.  The memory is always zeroed
+  * here to prevent stale data from showing through: this is done in
+  * the interest of testability and predictability, the architecture
+  * guarantees that when ZA is enabled it will be zeroed.
+  */
+ void sme_alloc(struct task_struct *task)
+ {
+-	if (task->thread.za_state) {
+-		memset(task->thread.za_state, 0, za_state_size(task));
++	if (task->thread.sme_state) {
++		memset(task->thread.sme_state, 0, sme_state_size(task));
+ 		return;
+ 	}
+ 
+ 	/* This could potentially be up to 64K. */
+-	task->thread.za_state =
+-		kzalloc(za_state_size(task), GFP_KERNEL);
++	task->thread.sme_state =
++		kzalloc(sme_state_size(task), GFP_KERNEL);
+ }
+ 
+ static void sme_free(struct task_struct *task)
+ {
+-	kfree(task->thread.za_state);
+-	task->thread.za_state = NULL;
++	kfree(task->thread.sme_state);
++	task->thread.sme_state = NULL;
+ }
+ 
+ void sme_kernel_enable(const struct arm64_cpu_capabilities *__always_unused p)
+@@ -1488,7 +1488,7 @@ void do_sme_acc(unsigned long esr, struct pt_regs *regs)
+ 
+ 	sve_alloc(current, false);
+ 	sme_alloc(current);
+-	if (!current->thread.sve_state || !current->thread.za_state) {
++	if (!current->thread.sve_state || !current->thread.sme_state) {
+ 		force_sig(SIGKILL);
+ 		return;
+ 	}
+@@ -1609,7 +1609,7 @@ static void fpsimd_flush_thread_vl(enum vec_type type)
+ void fpsimd_flush_thread(void)
+ {
+ 	void *sve_state = NULL;
+-	void *za_state = NULL;
++	void *sme_state = NULL;
+ 
+ 	if (!system_supports_fpsimd())
+ 		return;
+@@ -1634,8 +1634,8 @@ void fpsimd_flush_thread(void)
+ 		clear_thread_flag(TIF_SME);
+ 
+ 		/* Defer kfree() while in atomic context */
+-		za_state = current->thread.za_state;
+-		current->thread.za_state = NULL;
++		sme_state = current->thread.sme_state;
++		current->thread.sme_state = NULL;
+ 
+ 		fpsimd_flush_thread_vl(ARM64_VEC_SME);
+ 		current->thread.svcr = 0;
+@@ -1645,7 +1645,7 @@ void fpsimd_flush_thread(void)
+ 
+ 	put_cpu_fpsimd_context();
+ 	kfree(sve_state);
+-	kfree(za_state);
++	kfree(sme_state);
+ }
+ 
+ /*
+@@ -1711,7 +1711,7 @@ static void fpsimd_bind_task_to_cpu(void)
+ 	WARN_ON(!system_supports_fpsimd());
+ 	last->st = &current->thread.uw.fpsimd_state;
+ 	last->sve_state = current->thread.sve_state;
+-	last->za_state = current->thread.za_state;
++	last->sme_state = current->thread.sme_state;
+ 	last->sve_vl = task_get_sve_vl(current);
+ 	last->sme_vl = task_get_sme_vl(current);
+ 	last->svcr = &current->thread.svcr;
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 269ac1c25ae2..4ce0c4313ec6 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -311,23 +311,24 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
+ 	 * This may be shortly freed if we exec() or if CLONE_SETTLS
+ 	 * but it's simpler to do it here. To avoid confusing the rest
+ 	 * of the code ensure that we have a sve_state allocated
+-	 * whenever za_state is allocated.
++	 * whenever sme_state is allocated.
+ 	 */
+ 	if (thread_za_enabled(&src->thread)) {
+ 		dst->thread.sve_state = kzalloc(sve_state_size(src),
+ 						GFP_KERNEL);
+ 		if (!dst->thread.sve_state)
+ 			return -ENOMEM;
+-		dst->thread.za_state = kmemdup(src->thread.za_state,
+-					       za_state_size(src),
+-					       GFP_KERNEL);
+-		if (!dst->thread.za_state) {
++
++		dst->thread.sme_state = kmemdup(src->thread.sme_state,
++						sme_state_size(src),
++						GFP_KERNEL);
++		if (!dst->thread.sme_state) {
+ 			kfree(dst->thread.sve_state);
+ 			dst->thread.sve_state = NULL;
+ 			return -ENOMEM;
+ 		}
+ 	} else {
+-		dst->thread.za_state = NULL;
++		dst->thread.sme_state = NULL;
+ 		clear_tsk_thread_flag(dst, TIF_SME);
+ 	}
+ 
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 2686ab157601..67256e7772e4 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -1045,7 +1045,7 @@ static int za_get(struct task_struct *target,
+ 	if (thread_za_enabled(&target->thread)) {
+ 		start = end;
+ 		end = ZA_PT_SIZE(vq);
+-		membuf_write(&to, target->thread.za_state, end - start);
++		membuf_write(&to, target->thread.sme_state, end - start);
+ 	}
+ 
+ 	/* Zero any trailing padding */
+@@ -1099,7 +1099,7 @@ static int za_set(struct task_struct *target,
+ 
+ 	/* Allocate/reinit ZA storage */
+ 	sme_alloc(target);
+-	if (!target->thread.za_state) {
++	if (!target->thread.sme_state) {
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
+@@ -1124,7 +1124,7 @@ static int za_set(struct task_struct *target,
+ 	start = ZA_PT_ZA_OFFSET;
+ 	end = ZA_PT_SIZE(vq);
+ 	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf,
+-				 target->thread.za_state,
++				 target->thread.sme_state,
+ 				 start, end);
+ 	if (ret)
+ 		goto out;
+diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+index e0d09bf5b01b..27768809dd3e 100644
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -389,7 +389,7 @@ static int preserve_za_context(struct za_context __user *ctx)
+ 		 * fpsimd_signal_preserve_current_state().
+ 		 */
+ 		err |= __copy_to_user((char __user *)ctx + ZA_SIG_REGS_OFFSET,
+-				      current->thread.za_state,
++				      current->thread.sme_state,
+ 				      ZA_SIG_REGS_SIZE(vq));
+ 	}
+ 
+@@ -420,7 +420,7 @@ static int restore_za_context(struct user_ctxs *user)
+ 
+ 	/*
+ 	 * Careful: we are about __copy_from_user() directly into
+-	 * thread.za_state with preemption enabled, so protection is
++	 * thread.sme_state with preemption enabled, so protection is
+ 	 * needed to prevent a racing context switch from writing stale
+ 	 * registers back over the new data.
+ 	 */
+@@ -429,13 +429,13 @@ static int restore_za_context(struct user_ctxs *user)
+ 	/* From now, fpsimd_thread_switch() won't touch thread.sve_state */
+ 
+ 	sme_alloc(current);
+-	if (!current->thread.za_state) {
++	if (!current->thread.sme_state) {
+ 		current->thread.svcr &= ~SVCR_ZA_MASK;
+ 		clear_thread_flag(TIF_SME);
+ 		return -ENOMEM;
+ 	}
+ 
+-	err = __copy_from_user(current->thread.za_state,
++	err = __copy_from_user(current->thread.sme_state,
+ 			       (char __user const *)user->za +
+ 					ZA_SIG_REGS_OFFSET,
+ 			       ZA_SIG_REGS_SIZE(vq));
+diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
+index 02dd7e9ebd39..235775d0c825 100644
+--- a/arch/arm64/kvm/fpsimd.c
++++ b/arch/arm64/kvm/fpsimd.c
+@@ -143,7 +143,7 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
+ 		fp_state.st = &vcpu->arch.ctxt.fp_regs;
+ 		fp_state.sve_state = vcpu->arch.sve_state;
+ 		fp_state.sve_vl = vcpu->arch.sve_max_vl;
+-		fp_state.za_state = NULL;
++		fp_state.sme_state = NULL;
+ 		fp_state.svcr = &vcpu->arch.svcr;
+ 		fp_state.fp_type = &vcpu->arch.fp_type;
+ 
 
-Crucially, I think trying to place a probe at each byte can still=20
-exercize interactions across KPROBES_ON_FTRACE and normal kprobes, so=20
-this test is still a good start. In addition, we get to ensure that=20
-kprobes infrastructure is rejecting placing probes at non-instruction=20
-boundaries.
-
->=20
-> And do you really need to run "multiple" kprobes at once?
-> I think what you need is 'kprobe_opt_types.tc'.
-
-Yes, enabling those probes is a good stress test to ensure we are only=20
-accepting valid probe locations.
-
-multiple_kprobe_types.tc ? :)
-
-
-Thanks,
-Naveen
+-- 
+2.34.1
 
