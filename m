@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E467B670BB5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jan 2023 23:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F280670DD5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 00:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjAQWh1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Jan 2023 17:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
+        id S229529AbjAQXqE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Jan 2023 18:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjAQWhC (ORCPT
+        with ESMTP id S229748AbjAQXpk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:37:02 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67724F861
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 14:12:44 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id 200so18529268pfx.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 14:12:44 -0800 (PST)
+        Tue, 17 Jan 2023 18:45:40 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6BB4DE25
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 14:51:47 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso467047pjt.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 14:51:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M9YW+lwhjFOD4p6LmIXUirNO23qllr5fTwF/5IqDM2Y=;
-        b=QFG6GWHXqBMM7GsWXt3Hr4bJ1B2S7Xr4CFM24cED5KtkzBBs+b5GQ/86H/d4eHip+t
-         d9veLwx80rIkaBJsl3kKDBpXOkE5LZkY3Ab0vBUtS0ClC96ieweI0OrM/lOJjk75aCSW
-         +MITjt5k+UHflslBkemgH/xekPOCzoXOhsYMAzBLR/7oNX2or9JRoUyeG63I3MEVgcKr
-         p1iYGHI1R2nONABIlLsCF9zbJsT0O6Lyuwnekv6OMN+0rf8eod4J49iOK/auaEBu1Dy3
-         ebbHaHl3S/+6EtAVziSqJ39ASlZZrBZ4r05Mbvwxe1eOHeFdcea65lGPLDqz5rvNHT7U
-         25yg==
+        bh=4dz4YSfpv2T4m79ecLVLYg/MjvlF/TKDxbBLqvBzZUw=;
+        b=sv78Dh2Q372NesG6fn9eLYR446uOhxqMw95J9Xmhrg1XZKK9E0pPqMndt5u6CFNZt+
+         wEx7TGifDWupQ1scvBA7o1nLOawl/DGYwQ/EpX3Vefiab0uJOUJG0SfBWAjtwQfs3Oym
+         9VvMWaizc8KXBH/FiUMj//KhicHS00IpGpo/4RCopkl9BMcYDeUnlsqv3wUtQA4yMTfT
+         wNZSSV1OQs2TLn+dbNinHZ4ZSqgEbAuy5evzUe8XBMKF4hNltMJPeY/gN0UC0FHD254Q
+         kF4s5VHwl6vpnWc2LRSEN9qEOrgZj2zH8YjY9UAxxNUdPIMuzjRJlkcQ1Sm03Mpvlryj
+         fAmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M9YW+lwhjFOD4p6LmIXUirNO23qllr5fTwF/5IqDM2Y=;
-        b=4ujaMGkicVL+Gq0zJiiBN9n+VaTWt3HhUtWKz9lzlFTOBFeoAwuZmkCbiut94K87LW
-         L2gMkXwJszYbNAz6gzNG7JZUZACB5zyd7SsODYpxCpY7tDnWU2TT7KkMdZJ8GnPEStdn
-         +WsPVmuLDAmqUUjTSryNe34wuQy443cvJVigSOiv0gVQBKqILuCTJLCK3/cn74Va1sgl
-         HA0+bboWC5B6dwS/Xr5L0OzY1OsF8hyOr3jTa8qv0l++qlePjNaV5N+mayXKBHLMb7Ub
-         QtejixZU2kfpYtoGftA8v2Uzy5GhQrj01Svu81eC7ooe+EaLvV6niYxx1Db6t5ieyrOS
-         Aa5Q==
-X-Gm-Message-State: AFqh2krNj8Nngq1qxF0+g91madp+/DI20oqDEq4eN1DkiOHYEOIFH+MH
-        YjDG0dZVSv785OH6CIV0rFUI5A==
-X-Google-Smtp-Source: AMrXdXsxfo+xqmW7i1lvwa6CRHsBy8qgST2EYmwTSV2bp+gjyNC1TrUprRW0J90ZkExuFN7WkNsF/w==
-X-Received: by 2002:a05:6a00:a87:b0:582:13b5:d735 with SMTP id b7-20020a056a000a8700b0058213b5d735mr2626944pfl.0.1673993563929;
-        Tue, 17 Jan 2023 14:12:43 -0800 (PST)
+        bh=4dz4YSfpv2T4m79ecLVLYg/MjvlF/TKDxbBLqvBzZUw=;
+        b=ZXE9rYN7OVhOann0CDzx4E3K4P16Ghi6VojqPkCzqXPTCMgRvFEGVKy4advRskGgNv
+         lxlCbiMSmlGz54/iqVWo4vtHu9KBtR2yiXjJ61Vly4ibCtXSIqoRkwnHigYNVtwR/hoS
+         zXJ+/ZEbfBPDSOwud88Jx2T5gNh1dmhHebXeA+t30hmQMxgX1XhtlV4jE2slmjeckvkP
+         Ky2Klol64CvOUACnDp+GMO6o4wHlHGpFYxEtBTIgOoqd5jgvFRbl4m2u58c6dNBbixlq
+         nDoO8mAxjZKvs/bP6SUyLm+kyG7ldiMQ4X1+RrfGKOuuvY6aaRT0SAZBVNXrPMJzZ73j
+         ihnQ==
+X-Gm-Message-State: AFqh2kppw5OeCIsb8c+NptuQ4ZI2F9roMMwYa15UJ4Ixcnj5JQMTUd2i
+        IGS7/u0vG6jX/HWUsYsPumkCMg==
+X-Google-Smtp-Source: AMrXdXtw6UInomjD3WXWYJY8U/YyUCazJws5E/fdEK6s0Kvi4UPULlGid2XrdO9gLfFWa2NS3d4S5A==
+X-Received: by 2002:a05:6a20:ce43:b0:b8:c3c0:e7f7 with SMTP id id3-20020a056a20ce4300b000b8c3c0e7f7mr395043pzb.1.1673995906357;
+        Tue, 17 Jan 2023 14:51:46 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i24-20020aa796f8000000b0058d99337381sm5119064pfq.172.2023.01.17.14.12.43
+        by smtp.gmail.com with ESMTPSA id z13-20020aa79e4d000000b0058bc1a13ffcsm7232252pfq.25.2023.01.17.14.51.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 14:12:43 -0800 (PST)
-Date:   Tue, 17 Jan 2023 22:12:40 +0000
+        Tue, 17 Jan 2023 14:51:45 -0800 (PST)
+Date:   Tue, 17 Jan 2023 22:51:42 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Vishal Annapurve <vannapurve@google.com>
 Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -70,18 +70,19 @@ Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         diviness@google.com, maz@kernel.org, dmatlack@google.com,
         axelrasmussen@google.com, maciej.szmigiero@oracle.com,
         mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V2 PATCH 5/6] KVM: selftests: Add get_free_huge_2m_pages
-Message-ID: <Y8cdWKaZVXQFcO+i@google.com>
+Subject: Re: [V2 PATCH 4/6] KVM: selftests: x86: Add helpers to execute VMs
+ with private memory
+Message-ID: <Y8cmfjRIRp2EphTa@google.com>
 References: <20221205232341.4131240-1-vannapurve@google.com>
- <20221205232341.4131240-6-vannapurve@google.com>
+ <20221205232341.4131240-5-vannapurve@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221205232341.4131240-6-vannapurve@google.com>
+In-Reply-To: <20221205232341.4131240-5-vannapurve@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,62 +91,50 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> Add an API to query free 2MB hugepages in the system.
-> 
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> ---
->  .../testing/selftests/kvm/include/test_util.h  |  1 +
->  tools/testing/selftests/kvm/lib/test_util.c    | 18 ++++++++++++++++++
->  2 files changed, 19 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> index aea80071f2b8..3d1cc215940a 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -122,6 +122,7 @@ struct vm_mem_backing_src_alias {
->  bool thp_configured(void);
->  size_t get_trans_hugepagesz(void);
->  size_t get_def_hugetlb_pagesz(void);
-> +size_t get_free_huge_2mb_pages(void);
->  const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
->  size_t get_backing_src_pagesz(uint32_t i);
->  bool is_backing_src_hugetlb(uint32_t i);
-> diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-> index d33b98bfe8a3..745573023b57 100644
-> --- a/tools/testing/selftests/kvm/lib/test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/test_util.c
-> @@ -162,6 +162,24 @@ size_t get_trans_hugepagesz(void)
->  	return size;
->  }
->  
-> +size_t get_free_huge_2mb_pages(void)
-
-I strongly prefer to follow the precedence set by other tests, which at this
-point means defaulting to non-huge pages.  I do think we need to make it easier
-and/or automatic to test hugepages, but I would like to tackle that problem
-separately.  E.g. a kernel built without hugepage support will fail the fopen()
-below.
-
+> +void vcpu_run_and_handle_mapgpa(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
 > +{
-> +	size_t free_pages;
-> +	FILE *f;
-> +	int ret;
+> +	/*
+> +	 * Loop until the guest exits with any reason other than
+> +	 * KVM_HC_MAP_GPA_RANGE hypercall.
+> +	 */
 > +
-> +	f = fopen("/sys/kernel/mm/hugepages/hugepages-2048kB/free_hugepages", "r");
-> +	TEST_ASSERT(f != NULL, "Error in opening hugepages-2048kB/free_hugepages");
+> +	while (true) {
+> +		vcpu_run(vcpu);
 > +
-> +	do {
-> +		ret = fscanf(f, "%ld", &free_pages);
-> +	} while (errno == EINTR);
-> +	TEST_ASSERT(ret < 1, "Error reading hugepages-2048kB/free_hugepages");
-> +	fclose(f);
-> +
-> +	return free_pages;
-> +}
-> +
->  size_t get_def_hugetlb_pagesz(void)
->  {
->  	char buf[64];
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
-> 
+> +		if ((vcpu->run->exit_reason == KVM_EXIT_HYPERCALL) &&
+> +			(vcpu->run->hypercall.nr == KVM_HC_MAP_GPA_RANGE)) {
+
+I get what you're trying to do, and I completely agree that we need better helpers
+and/or macros to reduce this type of boilerplate, but adding a one-off helper like
+this is going to be a net negative overall.  This helper services exactly one use
+case, and also obfuscates what a test does.
+
+In other words, this is yet another thing that needs broad, generic support
+(_vcpu_run() is a very special case).  E.g. something like this to make it easy
+for tests to run a guest and handle ucalls plus specific exits (just a strawman,
+I think we can do better for handling ucalls).
+
+#define vcpu_run_loop(vcpu, handlers, ucalls)				\
+do {									\
+	uint32_t __exit;						\
+	int __r = 0;							\
+									\
+	while (!r)  {							\
+		vcpu_run(vcpu);						\
+									\
+		__exit = vcpu->run->exit_reason;			\
+									\
+		if (__exit < ARRAY_SIZE(handlers) && handlers[__exit])	\
+			__r = handlers[__exit](vcpu);			\	
+		else if (__exit == KVM_EXIT_IO && ucalls)		\
+			__r = handle_exit_ucall(vcpu, ucalls,		\
+						ARRAY_SIZE(ucalls));	\
+		else							\
+			TEST_FAIL(...)					\
+	}								\
+} while (0)
+
+
+For this series, I think it makes sense to just open code yet another test.  It
+really doesn't end up being much code, which is partly why we haven't added
+helpers :-/
