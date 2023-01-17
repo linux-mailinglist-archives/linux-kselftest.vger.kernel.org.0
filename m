@@ -2,269 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D2166D826
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jan 2023 09:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C6C66D9A0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Jan 2023 10:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236127AbjAQI1U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Jan 2023 03:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
+        id S236538AbjAQJPy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Jan 2023 04:15:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236110AbjAQI1R (ORCPT
+        with ESMTP id S236545AbjAQJPa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Jan 2023 03:27:17 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A7E22798
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 00:27:14 -0800 (PST)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230117082713epoutp042d13f0ec850e976b26ded00d3cbabe0b~7Czqv29p31212412124epoutp04A
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 08:27:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230117082713epoutp042d13f0ec850e976b26ded00d3cbabe0b~7Czqv29p31212412124epoutp04A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1673944033;
-        bh=S3Ojmh1XA4ZWIhhqdoj+w/+9KBQjnC5giJH2MCTF8rw=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=h+oaoMXfpas/6KKtdQtV63pJA8f3mBReausflaxHy/Orw3Xe3USnuVBblw3mMR5t8
-         Xzw1OIio9ATc5ATWf2VwrtWk+2Q1wpJsc3JXOb83lHRb1ObGwkb7VxJExoi5Kpfvyf
-         pLRuM8Pex0Aw18IuUloiwacJWhSLEkHMuyF+ls+0=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20230117082712epcas5p37dcc08d6c2228bf0649b25b6efe54ab9~7CzqaMqGX1808218082epcas5p3k;
-        Tue, 17 Jan 2023 08:27:12 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Nx27M38RMz4x9QS; Tue, 17 Jan
-        2023 08:27:11 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8F.6B.62806.FDB56C36; Tue, 17 Jan 2023 17:27:11 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230117081303epcas5p285d274074092a1f9c2f82629329e075e~7CnTOt6yM2643826438epcas5p22;
-        Tue, 17 Jan 2023 08:13:03 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230117081303epsmtrp2f5a058985e02d151062da86aef8a8764~7CnTNz7xE2401024010epsmtrp2j;
-        Tue, 17 Jan 2023 08:13:03 +0000 (GMT)
-X-AuditID: b6c32a4a-c43ff7000000f556-91-63c65bdf2b0c
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        40.9F.02211.F8856C36; Tue, 17 Jan 2023 17:13:03 +0900 (KST)
-Received: from FDSFTE506 (unknown [107.122.82.24]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230117081301epsmtip2f9b454f6fe56e895cbd9a5fa95835539~7CnRfxvej2754227542epsmtip2Q;
-        Tue, 17 Jan 2023 08:13:01 +0000 (GMT)
-From:   "Aman Gupta/FDS SW /SSIR/Engineer/Samsung Electronics" 
-        <aman1.gupta@samsung.com>
-To:     "'Shuah Khan'" <skhan@linuxfoundation.org>,
-        "'Manivannan Sadhasivam'" <manivannan.sadhasivam@linaro.org>
-Cc:     <shradha.t@samsung.com>, <pankaj.dubey@samsung.com>,
-        <kishon@ti.com>, <lpieralisi@kernel.org>, <kw@linux.com>,
-        <shuah@kernel.org>, "'Bjorn Helgaas'" <helgaas@kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        "'Padmanabhan Rajanbabu'" <p.rajanbabu@samsung.com>
-In-Reply-To: 
-Subject: RE: [PATCH] selftests: pci: pci-selftest: add support for PCI
- endpoint driver test
-Date:   Tue, 17 Jan 2023 13:42:59 +0530
-Message-ID: <03e201d92a4b$851a7e00$8f4f7a00$@samsung.com>
+        Tue, 17 Jan 2023 04:15:30 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F293CE04;
+        Tue, 17 Jan 2023 01:07:03 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id mp20so27172210ejc.7;
+        Tue, 17 Jan 2023 01:07:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fu40KvQods0f8+f4pClm3XB2VIfGWpRE1TO7X5DnksY=;
+        b=F337AvHuIwnYmV6Vd1NkpkROLrRrtw3hFucTWByWJwBEdyfpSeSpQl7htMKc5ycrXb
+         jGGq6WYPZbwKGTCn2wFAMccvmGy6+0NlNK1vqTYRv0Wa2BxqeMSu8M0RZ8pD4sj436TK
+         txw73PqxI6pfZLw23NN5Jpf7K8DETEbYVxoz3/+mUO44zZrvJZx/XQzJL7B+bXq0kN2S
+         PA4dk74VsLGMSxTBJ0MqzPejMps8HWRVhPjy397ehx15HyB2pL3IjLru8SF5mVTqCVwr
+         v4Sp+OnJFK95cR24e6KFlLrjaHuAiyYvmSqFffFYOv29Eur9rD0BQ10Z/hvlirUfxQt9
+         gu8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fu40KvQods0f8+f4pClm3XB2VIfGWpRE1TO7X5DnksY=;
+        b=ccJZ5EvFzOtoy72rT+HoMUCxV9xcbCbfWwQr8lNOYu3MTMt2dWl1XE/IxEmE4zcq/f
+         HlQrQ4bk5B/cqbXJ0bBC+h6TPjN4A8K1y1qqrk3zGPkbfBMI2G/bIaV4qPd6USyX5+Hp
+         2VDT52epzB3OoC79m+lW1+S8SBeKgmTNVMzp0iA6hg6CCjhFY03KADQwgb+qx49Esb+o
+         3FGUkJAXOhwYRWUM/LCqQkWZOrWjFO8Ec4LlUZgOmdhvykuKoqzmAS+lYeF75jdFOl0z
+         VgvJUkcyDrH2esk8w8hZTm9r21TuZq2BSTLCgVGnEy5IgjnbpHmR4myrEI5+WnA9dLXb
+         26cQ==
+X-Gm-Message-State: AFqh2kpjVED7AGgHAnz0wXIaFtc0Q/Oeg5jn2u8JHGEN/fOVyFGj0tsE
+        sqskKDcCa+AqmwpYaBJlC6F6lgUa51M=
+X-Google-Smtp-Source: AMrXdXvWe1xTCoV3Dt1xTDPw5sA577HJxS77ZsddbAWFzuWfnHh+rJlqzPEogdpojkWJ03oLe6HprA==
+X-Received: by 2002:a17:907:d606:b0:86f:b541:cd02 with SMTP id wd6-20020a170907d60600b0086fb541cd02mr2382239ejc.28.1673946421996;
+        Tue, 17 Jan 2023 01:07:01 -0800 (PST)
+Received: from gmail.com (1F2EF7EB.nat.pool.telekom.hu. [31.46.247.235])
+        by smtp.gmail.com with ESMTPSA id k22-20020a1709063fd600b00862497eafb2sm6815655ejj.103.2023.01.17.01.07.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 01:07:01 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 17 Jan 2023 10:06:48 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        kernel test robot <lkp@intel.com>,
+        Shuah Khan <shuah@kernel.org>, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [tip:sched/core 7/28] rseq.c:139:37: error: 'AT_RSEQ_ALIGN'
+ undeclared; did you mean 'R_SH_ALIGN'?
+Message-ID: <Y8ZlKOsN1wGk9tTc@gmail.com>
+References: <202301170348.7WLKH1pl-lkp@intel.com>
+ <bfa719c3-bd1f-5fc4-40ab-6dc6822b7628@efficios.com>
+ <4449d8b5-b7a5-0f09-5b42-7b70ba00f8f6@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQFofYvwiqARWvL8UeiI8Zt/EpZYDAIhr9qdAalpc/cChsb4YwE9D0rUANGoP4wCy8h+hq8JBMfggCEz27A=
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmlu796GPJBgc+ilm8OrOWzeLC0x42
-        i4ae36wW0++8Z7M4O+84m0XLnxYWi7stnawWRzcGWyza+oXdovdwrcWUl+vYLfZOX8bqwOOx
-        aVUnm8eda3vYPJ5cmc7ksX/uGnaPvi2rGD2O39jO5PF5k1wAe1S2TUZqYkpqkUJqXnJ+SmZe
-        uq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QnUoKZYk5pUChgMTiYiV9O5ui/NKS
-        VIWM/OISW6XUgpScApMCveLE3OLSvHS9vNQSK0MDAyNToMKE7Iy27q2MBWe0Kh50f2NqYLyo
-        1MXIySEhYCKxbmknSxcjF4eQwG5GifnbbzNDOJ8YJS6daWSHcL4xSszs3McI07Lh9XMWEFtI
-        YC+jxM3Ocoii54wSK5btYwNJsAlESPR03gPq5uAQEciTOPAyDSTMLLCKSeLU80CQMKcAr8SE
-        f9YgYWGBWIlln/rYQWwWAVWJv9svMoPYvAKWEoe2/2eEsAUlTs58wgIxRlti2cLXzBDnKEj8
-        fLqMFcQWEUiSOLj9KztEjbjE0Z89YM9ICBzhkPhzth3qfheJk/M3skLYwhKvjm9hh7ClJD6/
-        28sGYcdLnP+7jAXCzpC4vPcplG0vceDKHBaQ+5kFNCXW79KHCMtKTD21jgliL59E7+8nTBBx
-        Xokd82BsVYnvUzqgbpaWaHp9lnUCo9IsJK/NQvLaLCQvzELYtoCRZRWjZGpBcW56arFpgVFe
-        ajk8upPzczcxghOxltcOxocPPugdYmTiYDzEKMHBrCTC67frcLIQb0piZVVqUX58UWlOavEh
-        RlNgeE9klhJNzgfmgrySeEMTSwMTMzMzE0tjM0Mlcd7UrfOThQTSE0tSs1NTC1KLYPqYODil
-        Gph2v2Gavzcrpqyx+YqivZpAvPOc1UV6Sdkn/zvbrzLWs1+WuCpAImbWzMXPQz4XsRVsPK2m
-        lv++Y7atb3NZzleLP1dT7lTNctx2VV4v/ldK82KugLxD3vrBdrce/GPiWH3v4KKPcRn9vZMN
-        L22wmfTN8rWkW+9XA/c8+4W2jYuM1OP/vO1X/7bA32Ety8rKinDLQwHitz/se/Hnc2CqyLy1
-        n/lmPmHbvW3BZ903Xpp5W7Oyr2n/615wXXjxTC+7tXvj8zdxR5ku0TBNXJtlLvbk/GXZs9eL
-        X0o9s5l3xat21+MpyQ5XDC1jz/y8pZMYfVyvu1GA94aVcjvnDu1YtaOmFpoVB1ycudyffw44
-        vlyJpTgj0VCLuag4EQArXfK2TQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMIsWRmVeSWpSXmKPExsWy7bCSvG5/xLFkgw8PuSxenVnLZnHhaQ+b
-        RUPPb1aL6Xfes1mcnXeczaLlTwuLxd2WTlaLoxuDLRZt/cJu0Xu41mLKy3XsFnunL2N14PHY
-        tKqTzePOtT1sHk+uTGfy2D93DbtH35ZVjB7Hb2xn8vi8SS6APYrLJiU1J7MstUjfLoEr4+6H
-        T+wFHzUrfl97zNjA+Eaxi5GTQ0LARGLD6+csXYxcHEICuxklfm/pYoRISEvcPzuJDcIWllj5
-        7zk7RNFTRokZnz+DFbEJhEkcmjgTzBYRyJPYMmEyWAOzwBYmia/rSiAampglVlzay9rFyMHB
-        KcArMeGfNYgpLBAt8XRqPUg5i4CqxN/tF5lBbF4BS4lD2/8zQtiCEidnPmGBGKkt0fuwlRHG
-        XrbwNTPEbQoSP58uY4U4IUni4Pav7BA14hJHf/YwT2AUnoVk1Cwko2YhGTULScsCRpZVjJKp
-        BcW56bnFhgWGeanlesWJucWleel6yfm5mxjB8ailuYNx+6oPeocYmTgYDzFKcDArifD67Tqc
-        LMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILUIpgsEwenVAOT1JSYejF/
-        GZ2PHVclL7r/ky8y/yIfUra//dk11SX3liRwnFgxZw7b6+u/rj+9x6t498ibexwHVuyPv3lN
-        XHP7HAdbplnLjt+ews+5QsPPKYBxw2KNxx3zCje7+zHPXsHXG8zPdizhqLx9ktzzdXMsTp97
-        zPjJoDNmOp/IwQO2Yp0lAWULrpvmcahxaH79cl6zMGdO/c+P7etDJs+dtPxW6M7U47su7mfb
-        xKla5pz2fJVBRlfNywn7J58W+rL59M4ZKa/LM2qy/SYIbnrnotKekdzqmr5CTPiEj3Sg2El/
-        vedyYsmFrP8CbVwOSOc3e73Usaw6PTvC6e2lnso/3GxFK5O03j/cNGPK9/ULFho3KbEUZyQa
-        ajEXFScCADa89ZU2AwAA
-X-CMS-MailID: 20230117081303epcas5p285d274074092a1f9c2f82629329e075e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221007053726epcas5p357c35abb79327fee6327bc6493e0178c
-References: <CGME20221007053726epcas5p357c35abb79327fee6327bc6493e0178c@epcas5p3.samsung.com>
-        <20221007053934.5188-1-aman1.gupta@samsung.com>
-        <641d1e50-a9d0-dc15-be76-07b8ace25dae@linuxfoundation.org>
-        <20221222174532.GA59500@thinkpad>
-        <b2a5db97-dc59-33ab-71cd-f591e0b1b34d@linuxfoundation.org>
-        <20221223150211.GC4587@thinkpad>
-        <7dcefe25-d31c-bc26-4910-e53bed6eb01c@linuxfoundation.org> 
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4449d8b5-b7a5-0f09-5b42-7b70ba00f8f6@linuxfoundation.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Respected madam/sir
-Gentle Reminder
 
-> -----Original Message-----
-> From: Aman Gupta/FDS SW /SSIR/Engineer/Samsung Electronics
-> =5Bmailto:aman1.gupta=40samsung.com=5D
-> Sent: 27 December 2022 10:45
-> To: 'Shuah Khan' <skhan=40linuxfoundation.org>; 'Manivannan Sadhasivam'
-> <manivannan.sadhasivam=40linaro.org>
-> Cc: 'shradha.t=40samsung.com' <shradha.t=40samsung.com>;
-> 'pankaj.dubey=40samsung.com' <pankaj.dubey=40samsung.com>;
-> 'kishon=40ti.com' <kishon=40ti.com>; 'lpieralisi=40kernel.org'
-> <lpieralisi=40kernel.org>; 'kw=40linux.com' <kw=40linux.com>;
-> 'shuah=40kernel.org' <shuah=40kernel.org>; 'Bjorn Helgaas'
-> <helgaas=40kernel.org>; 'linux-pci=40vger.kernel.org' <linux-
-> pci=40vger.kernel.org>; 'linux-kselftest=40vger.kernel.org' <linux-
-> kselftest=40vger.kernel.org>; 'Padmanabhan Rajanbabu'
-> <p.rajanbabu=40samsung.com>
-> Subject: RE: =5BPATCH=5D selftests: pci: pci-selftest: add support for PC=
-I endpoint
-> driver test
->=20
->=20
->=20
-> > -----Original Message-----
-> > From: Shuah Khan =5Bmailto:skhan=40linuxfoundation.org=5D
-> > Sent: 23 December 2022 22:01
-> > To: Manivannan Sadhasivam <manivannan.sadhasivam=40linaro.org>
-> > Cc: Aman Gupta <aman1.gupta=40samsung.com>;
-> shradha.t=40samsung.com;
-> > pankaj.dubey=40samsung.com; kishon=40ti.com; lpieralisi=40kernel.org;
-> > kw=40linux.com; shuah=40kernel.org; Bjorn Helgaas <helgaas=40kernel.org=
->;
-> > linux-pci=40vger.kernel.org; linux-kselftest=40vger.kernel.org;
-> > Padmanabhan Rajanbabu <p.rajanbabu=40samsung.com>; Shuah Khan
-> > <skhan=40linuxfoundation.org>
-> > Subject: Re: =5BPATCH=5D selftests: pci: pci-selftest: add support for =
-PCI
-> > endpoint driver test
-> >
-> > On 12/23/22 08:02, Manivannan Sadhasivam wrote:
-> > > On Thu, Dec 22, 2022 at 10:49:48AM -0700, Shuah Khan wrote:
-> > >> On 12/22/22 10:45, Manivannan Sadhasivam wrote:
-> > >>> On Thu, Dec 22, 2022 at 09:58:30AM -0700, Shuah Khan wrote:
-> > >>>> On 10/6/22 23:39, Aman Gupta wrote:
-> > >>>>> This patch enables the support to perform selftest on PCIe
-> > >>>>> endpoint driver present in the system. The following tests are
-> > >>>>> currently performed by the selftest utility
-> > >>>>>
-> > >>>>> 1. BAR Tests (BAR0 to BAR5)
-> > >>>>> 2. MSI Interrupt Tests (MSI1 to MSI32) 3. Read Tests (For 1,
-> > >>>>> 1024, 1025, 1024000, 1024001 Bytes) 4. Write Tests (For 1, 1024,
-> > >>>>> 1025, 1024000, 1024001 Bytes) 5. Copy Tests (For 1, 1024, 1025,
-> > >>>>> 1024000,
-> > >>>>> 1024001 Bytes)
-> > >>>>>
-> > >>>>> Signed-off-by: Aman Gupta <aman1.gupta=40samsung.com>
-> > >>>>> Signed-off-by: Padmanabhan Rajanbabu
-> > <p.rajanbabu=40samsung.com>
-> > >>>>
-> > >>>> Adding Bjorn Helgaas to the thread.
-> > >>>>
-> > >>>> Adding pcit test under selftests is good. There is another
-> > >>>> pcitest under tools/pci. I would like to see if the existing code
-> > >>>> in tools/pci/pcitest.c can be leveraged.
-> > >>>>
-> > >>>> As part of this test work, also look into removing tools/pci so
-> > >>>> we don't have to maintain duplicate code in two places.
-> > >>>>
-> > >>>
-> > >>> It has been agreed in a thread with Greg =5B1=5D to =7Bre=7Dmove th=
-e tests
-> > >>> under tools/pci and utilize the kselftest.
-> > >>>
-> > >>
-> > >> Inline with what I am suggesting. However, I don't see either move
-> > >> or delete of tools/pci in the patch?
-> > >>
-> > >> The first patch could start with git mv of the existing files and
-> > >> then make changes to preserver the history.
-> > >>
-> > >
-> > > Right. This patch was posted independently of the series =5B1=5D that=
- I
-> > > submitted to fix the return values of IOCTL calls used in
-> > > drivers/misc/pci_endpoint_test.c driver.
-> > >
-> > > Then in that series, it was decided to move the existing test to
-> > > kselftest. So, I suggested Aman Gupta =5B2=5D to integrate my latest
-> > > patches, add the kselftest patch on top, then remove the existing
-> > > test
-> > under tools/pci.
-> > >
-> > > The kselftest patch can also move the driver first and then make the
-> > > change as you suggested. Either way it is fine by me.
-> > >
-> >
-> > As I mentioned in my previous email, I prefer to see the move as the
-> > first patch and then changes on top. This preserves the history and cle=
-aner.
-> >
-> > thanks,
-> > -- Shuah
-> >
->=20
-> Hi Shuah,
->=20
-> Thanks for review and suggestion. I understand that we would like to reus=
-e
-> and preserve the history of tools/pci/pcietest.c. So we have two approach=
-es:
->=20
-> 1: Using git mv command move existing code from tools/pci/ to
-> tools/testing/selftest/drivers/pci/ and then update the file to convert t=
-o
-> kselftest framework. I thought about this but after movement, when we
-> move it to kselftest format it is going to be huge churn and we will be h=
-aving
-> modification in almost all lines.
->=20
-> 2: Develop kselftest based driver in tools/testing/selftest/drivers/pci/ =
-and
-> eventually delete existing file from tools/pci/ folder providing justific=
-ation in
-> commit message.
->=20
-> From my viewpoint, going with the second approach makes more sense
-> because if almost complete file is getting modified, and it will make the
-> review process complex and anyways there is not much code reusability.
-> Please let me know if you have any other thought process or if I am missi=
-ng
-> anything to understand your approach.
->=20
-> Thanks,
-> Aman Gupta
-> >
+* Shuah Khan <skhan@linuxfoundation.org> wrote:
 
+> On 1/16/23 13:18, Mathieu Desnoyers wrote:
+> > On 2023-01-16 14:40, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+> > > head:   79ba1e607d68178db7d3fe4f6a4aa38f06805e7b
+> > > commit: 03f5c0272d1b59343144e199becc911dae52c37e [7/28] selftests/rseq: Use ELF auxiliary vector for extensible rseq
+> > > compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> > > reproduce:
+> > >          # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=03f5c0272d1b59343144e199becc911dae52c37e
+> > >          git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+> > >          git fetch --no-tags tip sched/core
+> > >          git checkout 03f5c0272d1b59343144e199becc911dae52c37e
+> > >          make O=/tmp/kselftest headers
+> > >          make O=/tmp/kselftest -C tools/testing/selftests
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > In order to fix this, I need to change -I../../../../usr/include/ for $(KHDR_INCLUDES) in tools/testing/selftests/rseq/Makefile
+> > 
+> > I can find 25 odd uses of the same pattern in the kernel selftests. Should I fix them all in one go ?
+> 
+> kselftest build depends on headers installed in the root directory.
+> The main makefile enforces this dependency. If this test is being
+> built without installing headers by itself, I think the scripts that
+> build individual tests have to makes sure headers are installed first.
 
+Why isn't the Makefile saying anything about it & enforcing it? self-tests 
+are usually self-sufficient to build in the individual directories.
+
+Thanks,
+
+	Ingo
