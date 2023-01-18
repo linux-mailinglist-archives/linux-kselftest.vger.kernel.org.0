@@ -2,129 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7276715E9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 09:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E25671B6E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 13:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbjARINj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Jan 2023 03:13:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S229706AbjARMER (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Jan 2023 07:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjARIMk (ORCPT
+        with ESMTP id S229475AbjARMD6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Jan 2023 03:12:40 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE394C6D8;
-        Tue, 17 Jan 2023 23:42:25 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id g13so50519858lfv.7;
-        Tue, 17 Jan 2023 23:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WogcXw5V1dMUk2yAmcSaqUx3fjFKGGjC2OchSCFaRqI=;
-        b=W1vKNzXcW4o7IgdoAL+E9UDjAPHxmJQ9sTOucXTBt9P7tTTRkfvNaK2uKALGjWEqkV
-         P30POXU33GsV+zVFKLvSVc08Nn1ozsS7uyQdCzunMCqjJCwWdi5jo13qsVQjqSKsemZv
-         +DEDaxw1/38djQa9aKIe/l041tjx7fxCH45m6Yo1ymPeToGZ0Eg/xggLs1mnCc8qtXp5
-         fQRViXuU5XPr8dXypHCsYw4swi76ByhxTI0GXW+jV7iMrPQXUfUxjkRL4DHj4XkTQGQT
-         UCTd8iQL47QPXGe7pyYvh+6hboJ9JFlKGOKJwaZk/GPcUV+OdueEahid+LHRjg0s+/GF
-         8wjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WogcXw5V1dMUk2yAmcSaqUx3fjFKGGjC2OchSCFaRqI=;
-        b=Kyqq9keluFRVMfhk9uCOCJESDf7Gi0lInOGBieBVYeiwEFZhVevjFffOmZ8nHZ5RAN
-         eAyhkWr36g8X5oa2aLXP8SYpMvYa7htEOF92D0KA1dANKwevJ5PLzkhJW0eiALRh6xoU
-         buKb8XydFF87dDDh6KRRFfvu4WHix5T8KaHOtxPy+JkG5Ymtb0S3EjoCKbv9NvRyxZ29
-         dOSsW4QRVAwTGk/aITIHy8nhwie/8mRYC/C7sx/fmFxDXgy4naptNF7xHea5uH8k0IuI
-         MJ+oXtGl2VXYEA5vD90aHufiBtxg4h4S0vflG/SRGTb3XZVD8kDwx5KgA/dbtekq81rQ
-         wgxw==
-X-Gm-Message-State: AFqh2kojd0Es33cY5eFqAw5MCgtPn7T5DodB/EXkPn8Cys4TDzkc28E/
-        IgwCxY3WKC0VhqpElt097No=
-X-Google-Smtp-Source: AMrXdXue+OGDgorAqaEOtatXxZXkTPdQ1/cJFe/pnQXlzV0Bu/t8n4gQWL68XKAFQx06ucpwca+Cmg==
-X-Received: by 2002:a19:ac0c:0:b0:4c8:ae6b:ea8d with SMTP id g12-20020a19ac0c000000b004c8ae6bea8dmr1321742lfc.8.1674027744171;
-        Tue, 17 Jan 2023 23:42:24 -0800 (PST)
-Received: from localhost.localdomain ([46.147.136.0])
-        by smtp.gmail.com with ESMTPSA id z17-20020a056512371100b004cc898ce1c5sm3831792lfr.163.2023.01.17.23.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 23:42:23 -0800 (PST)
-From:   Alexander Pantyukhin <apantykhin@gmail.com>
-To:     davidgow@google.com
-Cc:     dlatypov@google.com, brendan.higgins@linux.dev,
+        Wed, 18 Jan 2023 07:03:58 -0500
+X-Greylist: delayed 613 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 03:21:28 PST
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160EA7ED6E;
+        Wed, 18 Jan 2023 03:21:10 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id 6E9572B066B3;
+        Wed, 18 Jan 2023 06:02:20 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 18 Jan 2023 06:02:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1674039740; x=
+        1674046940; bh=3zDauVDrBD5IYlcejFEH8P/3gtQiLfa4M6BBOvD4PGk=; b=d
+        /SokZi5s6PFfRKFx/x+HhBKrl2YwDMN62J0JW917NeqW8Xwwky6FB2fJe7WAZ32o
+        9pGra02D8wkjzpVi11TtTiS70iOH7RCS0QdzPgcoJj21Yhd/jkOm/D/DjKnYkSqc
+        uSQji6yD8Buc0FdkFeYf0p8oOVKljlRq519ly1dXzjZdzcyBbgFyUYVm+hEYFpc6
+        8HNP0AkP/Bt358lKjn6DmgEmipMoBhrCf6hNnagVKCD7L30wTuhOTh0cJ9ipGJHR
+        Vnar8RGAs1VbK5hEAiEvGMzCToi3r3EN5EGkW4O6byZrvctVixkK3p6iubqW5a+Z
+        IAIxSkZK/AyQFxzK0mw8Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674039740; x=
+        1674046940; bh=3zDauVDrBD5IYlcejFEH8P/3gtQiLfa4M6BBOvD4PGk=; b=H
+        FCDVwouY+JX/r/ireSvac5FEUV1FrHnbSU0G1iEiTAqVXUZxldeaeq4kVItsikhA
+        szaGX7R7h2A09rYuKcbKYLbJNKNriHJgGaZp0+Eg6E1UTonYoyb2axz+oMR3kkwU
+        6QLFJNFUzrLRsPGO1kfMSRB4rVawpz0YNIuXf7zcwBi9kWkgwGLVUGL3j0yE9tHL
+        93TaiZ57anz35x3o9hdzYpRjRjXhpbEN0/3FTfdTC7UjhXQxko2rIvHfUy8LVwjk
+        RpsRjxnP8aYDrShh0oipc1OXVj9wqO8BsGvAj8TtSoeU1WRlvGBHKG25FosJLZ3G
+        YAuqrSbyDJT8OJauTdAAQ==
+X-ME-Sender: <xms:utHHYxOFGWSk2B8MSu5gKaOlu46XNB-oAn_8yvVVy37c-HFHy1TToQ>
+    <xme:utHHYz_X5vsrvfF2PCNqCFgPHZjNYu7r94Re6qBNsFRGqQ5n2ME-KvOg_gbEyM1eZ
+    vOSQlH-z2URA-P2GIE>
+X-ME-Received: <xmr:utHHYwSYIK45Decs67Wye3QyWQhjPAski9vae8I26djfW7WTJSdkmqvRFpxVyNBq78z-x_Opa4kD0eCFfjWTRrUKc__S26wTutz7_VwtkDeUCw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtkedgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepiedtueffveeiueeftdduvdffffffgeffgfekiefhleelkedtlefhvefh
+    udduhffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
+    tghh
+X-ME-Proxy: <xmx:utHHY9u9B00Uanh0x1Ge0z4tj1LswOsHk5J3tzn-bXnkkuhPoyX0tQ>
+    <xmx:utHHY5dcBu2e4KC6ixksKdl_8KC51esNnqCzqrkRs23Xt1Z0PIWSDw>
+    <xmx:utHHY52y_3AvYbrq0ramv7Izmi6mhSPcKfDa2Mf9KPLj3YpAQebkjg>
+    <xmx:vNHHYyvM53WePqH1SyXGD2Beo19IEJeUNfRm-RFelVahHBfN8_cRlQ8j6R0>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 18 Jan 2023 06:02:18 -0500 (EST)
+Date:   Wed, 18 Jan 2023 12:02:15 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     David Gow <davidgow@google.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Joe Fradley <joefradley@google.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        Alexander Pantyukhin <apantykhin@gmail.com>
-Subject: [PATCH V2] tools/testing/kunit/kunit.py: remove redundant double check
-Date:   Wed, 18 Jan 2023 12:42:19 +0500
-Message-Id: <20230118074219.3921-1-apantykhin@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kunit: Export kunit_running()
+Message-ID: <20230118110215.yexhgghqmmmkibsi@houat>
+References: <20230117165039.1871598-1-arnd@kernel.org>
+ <CABVgOSnAFM3HozugcOdmgEBja7Q5n1OYkV+ZJ+uFnCaWDTVneQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CABVgOSnAFM3HozugcOdmgEBja7Q5n1OYkV+ZJ+uFnCaWDTVneQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The build_tests function contained double checking for not success
-result. It is fixed in the current patch. Additional small
-simplifications of code like using ternary if were applied (avoid using
-the same operation by calculation times differ in two places).
+Hi David, Arnd,
 
-Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
----
- tools/testing/kunit/kunit.py | 19 +++++--------------
- 1 file changed, 5 insertions(+), 14 deletions(-)
+Thanks for fixing this issue
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 43fbe96318fe..0e3e08cc0204 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -77,11 +77,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
- 	config_start = time.time()
- 	success = linux.build_reconfig(request.build_dir, request.make_options)
- 	config_end = time.time()
--	if not success:
--		return KunitResult(KunitStatus.CONFIG_FAILURE,
--				   config_end - config_start)
--	return KunitResult(KunitStatus.SUCCESS,
--			   config_end - config_start)
-+	status = KunitStatus.SUCCESS if success else KunitStatus.CONFIG_FAILURE
-+	return KunitResult(status, config_end - config_start)
- 
- def build_tests(linux: kunit_kernel.LinuxSourceTree,
- 		request: KunitBuildRequest) -> KunitResult:
-@@ -92,14 +89,8 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
- 				     request.build_dir,
- 				     request.make_options)
- 	build_end = time.time()
--	if not success:
--		return KunitResult(KunitStatus.BUILD_FAILURE,
--				   build_end - build_start)
--	if not success:
--		return KunitResult(KunitStatus.BUILD_FAILURE,
--				   build_end - build_start)
--	return KunitResult(KunitStatus.SUCCESS,
--			   build_end - build_start)
-+	status = KunitStatus.SUCCESS if success else KunitStatus.BUILD_FAILURE
-+	return KunitResult(status, build_end - build_start)
- 
- def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
- 			   request: KunitBuildRequest) -> KunitResult:
-@@ -145,7 +136,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
- 		tests = _list_tests(linux, request)
- 		if request.run_isolated == 'test':
- 			filter_globs = tests
--		if request.run_isolated == 'suite':
-+		elif request.run_isolated == 'suite':
- 			filter_globs = _suites_from_test_list(tests)
- 			# Apply the test-part of the user's glob, if present.
- 			if '.' in request.filter_glob:
--- 
-2.25.1
+On Wed, Jan 18, 2023 at 08:37:26AM +0800, David Gow wrote:
+> On Wed, 18 Jan 2023 at 00:50, Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > Using kunit_fail_current_test() in a loadable module causes a link
+> > error like:
+> >
+> > ERROR: modpost: "kunit_running" [drivers/gpu/drm/vc4/vc4.ko] undefined!
+> >
+> > Export the symbol to allow using it from modules.
+> >
+> > Fixes: da43ff045c3f ("drm/vc4: tests: Fail the current test if we acces=
+s a register")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+>=20
+> Thanks for fixing this!
+>=20
+> I think the longer-term solution for this is the "hooks" approach
+> (which works even when KUnit itself is built as a module):
+> https://lore.kernel.org/all/20230117142737.246446-1-davidgow@google.com/
+>=20
+> But this looks good to fix it in the meantime.
+>=20
+> Reviewed-by: David Gow <davidgow@google.com>
 
+How do you want to merge that patch? Will you take it through your tree?
+
+Maxime
