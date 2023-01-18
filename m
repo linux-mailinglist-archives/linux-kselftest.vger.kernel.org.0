@@ -2,74 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85082672912
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 21:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB2567294C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 21:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjARUL2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Jan 2023 15:11:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
+        id S229770AbjARUaA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Jan 2023 15:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjARULU (ORCPT
+        with ESMTP id S230089AbjARU3v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:11:20 -0500
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59EA5DC26;
-        Wed, 18 Jan 2023 12:11:13 -0800 (PST)
-Received: by mail-il1-x142.google.com with SMTP id m7so94659ilh.7;
-        Wed, 18 Jan 2023 12:11:13 -0800 (PST)
+        Wed, 18 Jan 2023 15:29:51 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0A348A00
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 12:29:23 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id b17so228556pld.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 12:29:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YIxZYj7eSsuia8WbIjlSg4jlVWCI9wmpVpaDv9bWJuY=;
-        b=b/AJv+Yz0q1aHUoMexookxY52jz6rwrer8JQEwBvKM1OA3S8B1iAt/vGbraek60Efa
-         4bN+I1rpbmNvvFi4xek9qblY+FR8M7LVJGAu5UU0mJA+blgMSkr9P9oSzaXOWEvlPRNR
-         SJwWaWuU6S971nI/1hrRhp0UhDpHN66C3wleauxdWY54REHxx9dC67Adihyeo3hzxmRR
-         jbcVfYulxn7lou8AD8k/pL/DgklVSsLK7yGdUUvjvzhlPHZeZfiiEhENL4K0dTadp3/5
-         6F0dVURwDmnIGZzhJR1wpeeZ2ZeJYanVT23L6jefBkdLHea0/Y7xC+LdtGIqR/QCb0Yp
-         lOdA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jKRAitOiQPmbS5rGDLLUsUfTY+3zbVCInzKKQFPomOQ=;
+        b=FF4fNXhpxmUqtDelix2KoSryIBaNqGl+XLfP5SPCekXuBCH9BkdWoDW8nMupEshT62
+         Ioob3GjJnWXZv1ySlu0Pz9TgviwQ7hMfZKXNfeg3P4MrAOBwL/Q/clkCzckyBi8iItFR
+         sDXf00DQ/kvqnu34xVhg/r6AJkmV70cQk+kPXieWd/8Ssq++E54TJq82Oo5UaJqm+NYC
+         2liFtD6f9nLxL1x0Bl9ihlQ++UmOhe/cMpoymnNeshPWeuHJ6RnubhF8/ewy3PSTPqUZ
+         qE2AD93U4pPKkPcVbBgMC+IEFwG4OhGVXEU5MnthQ7fjPjqiVPEisHo0zjINbi3s3UaX
+         f7eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YIxZYj7eSsuia8WbIjlSg4jlVWCI9wmpVpaDv9bWJuY=;
-        b=8RZrDZcdRf+aJG8bpSoj3dAzSM5YttHvzEKVLLAj/GXklIY4PGZL2ZFaGKs8247rRt
-         3b8YWU+PGCOh+azdD2/DK5OqRfxv1hWRY6OP6xJ/Djz75NwLE56ZiCjoZW3kishEb27/
-         DZ/TKK2tc71NQ+SH3KdqIxBZAoAMP41cr44E1KOOoJD8qei9B8Z90kL6eoVtWLin/P4N
-         X8HvM4z47R1IqKuXlUDCRif6Pa5BFyz3OeMS6kY56tPxWnvxX4R0R3uiaUnqZhBis3ZC
-         iAA2HYYdEJQ3IwtS9b/AAJzZMfpxRJj3hVMtqSj+MQJbQ8aJgIBLYamTmZ7qzfWZ8qgb
-         npug==
-X-Gm-Message-State: AFqh2koo/s49ViH/LjfRTlQdSnFwhN0tliP9+1eRvMqENQWj9t7ibTBM
-        TlY1TBLKVMcvXOJpDr5WcI+d2i49cNvg
-X-Google-Smtp-Source: AMrXdXtwjaApDMB3XWr6gQZuBYEYUyZxG/xCEfNGBICQm7WT6cfXjB6YYAnLEpX8nXAPEcRN1aSQiQ==
-X-Received: by 2002:a92:7a0c:0:b0:30e:ecd7:d3fa with SMTP id v12-20020a927a0c000000b0030eecd7d3famr7499313ilc.12.1674072672995;
-        Wed, 18 Jan 2023 12:11:12 -0800 (PST)
-Received: from fedora.mshome.net ([104.184.156.161])
-        by smtp.gmail.com with ESMTPSA id i5-20020a92c945000000b0030bfbc121a1sm10299998ilq.79.2023.01.18.12.11.10
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jKRAitOiQPmbS5rGDLLUsUfTY+3zbVCInzKKQFPomOQ=;
+        b=xkCaUNDqgLFAR8kCOmzRFT00rdx1V2G2ncfitYAqZyhzsPh8uuxxF/K3HL9PoBAiix
+         Ic0m2NVa3OCJXeDEDjaHSUkeQqOtWhofASLF5/Xfcgz2QcMYx5uNjXAUG5u0K5uxtx1e
+         gYHnNlD4wEcerCR1E6Ogtrce4UxcG+G0zQ4Aet7rLD+hZvoNTZvr8O6nQSfIi3K2kN+O
+         bHEdoWCewCv/oFgeqcdmVuTgIN9CZdcEheBfEHzMW5JLWEO5fBNgL4Ltkpb4GepWsHzY
+         QWjGNgUKKtKuIUPFvvA63OikgnKAZDVrGE+3LCVQ9eDhxaU4xwJpk1bJHBvcqtM89CPd
+         sL6w==
+X-Gm-Message-State: AFqh2kqnI8Gpq91PGxeoFncH/8ZED46yfrj9lkdmoNBwzZ+wmLWxxS+0
+        krY3RH/qurH4C+xAGvefyLViBQ==
+X-Google-Smtp-Source: AMrXdXvEbVDnE8TMf736ZzmYy1jZgkqSSPdF1yfGj5D9moZsDvf8/UHNAFw4GbQucPxSv3nraZPRRg==
+X-Received: by 2002:a17:90b:1206:b0:229:188a:c0e7 with SMTP id gl6-20020a17090b120600b00229188ac0e7mr8203143pjb.49.1674073763324;
+        Wed, 18 Jan 2023 12:29:23 -0800 (PST)
+Received: from [127.0.1.1] (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
+        by smtp.gmail.com with ESMTPSA id t13-20020a17090a3b4d00b002132f3e71c6sm1724948pjf.52.2023.01.18.12.29.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 12:11:12 -0800 (PST)
-From:   Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, krisman@collabora.com,
-        tglx@linutronix.de, luto@kernel.org, oleg@redhat.com,
-        peterz@infradead.org, ebiederm@xmission.com,
-        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Subject: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter for sud configuration
-Date:   Wed, 18 Jan 2023 15:10:55 -0500
-Message-Id: <20230118201055.147228-4-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230118201055.147228-1-gregory.price@memverge.com>
-References: <20230118201055.147228-1-gregory.price@memverge.com>
+        Wed, 18 Jan 2023 12:29:22 -0800 (PST)
+From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
+Subject: [PATCH RFC 0/3] vsock: add support for sockmap
+Date:   Wed, 18 Jan 2023 12:27:39 -0800
+Message-Id: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADtWyGMC/x2OywrCMBBFf6XM2oFOXPjYCn6AW3GRx2iD7SQkM
+ Qil/27i5sLhwuGskDl5znAeVkhcffZBGtBuADtpeTF61xjUqPYj0RHzJ8aQCtYc7Bv7LDqiDSJs
+ izczo2JSp4NTRKSheYzOjCZpsVM3Oa48h7iwlP7GxE///Rfc4Xa9wGPbfgucVMKWAAAA
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>
+X-Mailer: b4 0.11.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,182 +93,87 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch implements ptrace getter and setter interface for syscall
-syscall user dispatch configuration info.
+Add support for sockmap to vsock.
 
-Presently, these settings are write-only via prctl, making it impossible
-to implement transparent checkpoint.
+We're testing usage of vsock as a way to redirect guest-local UDS requests to
+the host and this patch series greatly improves the performance of such a
+setup.
 
-This is modeled after a similar interface for SECCOMP, which can have
-its configuration dumped by ptrace for software like CRIU.
+Compared to copying packets via userspace, this improves throughput by 221% in
+basic testing.
 
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
+Tested as follows.
+
+Setup: guest unix dgram sender -> guest vsock redirector -> host vsock server
+Threads: 1
+Payload: 64k
+No sockmap:
+- 76.3 MB/s
+- The guest vsock redirector was
+  "socat VSOCK-CONNECT:2:1234 UNIX-RECV:/path/to/sock"
+Using sockmap (this patch):
+- 168.8 MB/s (+221%)
+- The guest redirector was a simple sockmap echo server,
+  redirecting unix ingress to vsock 2:1234 egress.
+- Same sender and server programs
+
+Only the virtio transport has been tested. The loopback transport was used in
+writing bpf/selftests, but not thoroughly tested otherwise.
+
+This series requires the skb patch.
+
+To: Stefan Hajnoczi <stefanha@redhat.com>
+To: Stefano Garzarella <sgarzare@redhat.com>
+To: "Michael S. Tsirkin" <mst@redhat.com>
+To: Jason Wang <jasowang@redhat.com>
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Mykola Lysenko <mykolal@fb.com>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yhs@fb.com>
+To: John Fastabend <john.fastabend@gmail.com>
+To: KP Singh <kpsingh@kernel.org>
+To: Stanislav Fomichev <sdf@google.com>
+To: Hao Luo <haoluo@google.com>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: virtualization@lists.linux-foundation.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+
 ---
- .../admin-guide/syscall-user-dispatch.rst     |  5 +-
- include/linux/syscall_user_dispatch.h         | 19 +++++++
- include/uapi/linux/ptrace.h                   | 10 ++++
- kernel/entry/syscall_user_dispatch.c          | 49 +++++++++++++++++++
- kernel/ptrace.c                               |  9 ++++
- 5 files changed, 91 insertions(+), 1 deletion(-)
+Bobby Eshleman (3):
+      vsock: support sockmap
+      selftests/bpf: add vsock to vmtest.sh
+      selftests/bpf: Add a test case for vsock sockmap
 
-diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
-index 60314953c728..a23ae21a1d5b 100644
---- a/Documentation/admin-guide/syscall-user-dispatch.rst
-+++ b/Documentation/admin-guide/syscall-user-dispatch.rst
-@@ -43,7 +43,10 @@ doesn't rely on any of the syscall ABI to make the filtering.  It uses
- only the syscall dispatcher address and the userspace key.
- 
- As the ABI of these intercepted syscalls is unknown to Linux, these
--syscalls are not instrumentable via ptrace or the syscall tracepoints.
-+syscalls are not instrumentable via ptrace or the syscall tracepoints,
-+however an interfaces to suspend, checkpoint, and restore syscall user
-+dispatch configuration has been added to ptrace to assist userland
-+checkpoint/restart software.
- 
- Interface
- ---------
-diff --git a/include/linux/syscall_user_dispatch.h b/include/linux/syscall_user_dispatch.h
-index a0ae443fb7df..dbf384b7a26e 100644
---- a/include/linux/syscall_user_dispatch.h
-+++ b/include/linux/syscall_user_dispatch.h
-@@ -22,6 +22,13 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- #define clear_syscall_work_syscall_user_dispatch(tsk) \
- 	clear_task_syscall_work(tsk, SYSCALL_USER_DISPATCH)
- 
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
-+
- #else
- struct syscall_user_dispatch {};
- 
-@@ -35,6 +42,18 @@ static inline void clear_syscall_work_syscall_user_dispatch(struct task_struct *
- {
- }
- 
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
- #endif /* CONFIG_GENERIC_ENTRY */
- 
- #endif /* _SYSCALL_USER_DISPATCH_H */
-diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
-index ba9e3f19a22c..8b93c78189b5 100644
---- a/include/uapi/linux/ptrace.h
-+++ b/include/uapi/linux/ptrace.h
-@@ -112,6 +112,16 @@ struct ptrace_rseq_configuration {
- 	__u32 pad;
- };
- 
-+#define PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG 0x4210
-+#define PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG 0x4211
-+struct syscall_user_dispatch_config {
-+	__u64 mode;
-+	__s8 *selector;
-+	__u64 offset;
-+	__u64 len;
-+	__u8 on_dispatch;
-+};
-+
- /*
-  * These values are stored in task->ptrace_message
-  * by ptrace_stop to describe the current syscall-stop.
-diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-index 7607f4598dd8..ae4f9a4b96ac 100644
---- a/kernel/entry/syscall_user_dispatch.c
-+++ b/kernel/entry/syscall_user_dispatch.c
-@@ -111,3 +111,52 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- 
- 	return 0;
- }
-+
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch *sd = &task->syscall_dispatch;
-+	struct syscall_user_dispatch_config config;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (sd->selector) {
-+		config.mode = PR_SYS_DISPATCH_ON;
-+		config.offset = sd->offset;
-+		config.len = sd->len;
-+		config.selector = sd->selector;
-+		config.on_dispatch = sd->on_dispatch;
-+	} else {
-+		config.mode = PR_SYS_DISPATCH_OFF;
-+		config.offset = 0;
-+		config.len = 0;
-+		config.selector = NULL;
-+		config.on_dispatch = false;
-+	}
-+	if (copy_to_user(data, &config, sizeof(config)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch_config config;
-+	int ret;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&config, data, sizeof(config)))
-+		return -EFAULT;
-+
-+	ret = set_syscall_user_dispatch(config.mode, config.offset, config.len,
-+			config.selector);
-+	if (ret)
-+		return ret;
-+
-+	task->syscall_dispatch.on_dispatch = config.on_dispatch;
-+	return 0;
-+}
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index a6ad815bd4be..0b210a1450e7 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -32,6 +32,7 @@
- #include <linux/compat.h>
- #include <linux/sched/signal.h>
- #include <linux/minmax.h>
-+#include <linux/syscall_user_dispatch.h>
- 
- #include <asm/syscall.h>	/* for syscall_get_* */
- 
-@@ -1264,6 +1265,14 @@ int ptrace_request(struct task_struct *child, long request,
- 		break;
- #endif
- 
-+	case PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_set_config(child, addr, datavp);
-+		break;
-+
-+	case PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_get_config(child, addr, datavp);
-+		break;
-+
- 	default:
- 		break;
- 	}
+ drivers/vhost/vsock.c                              |   1 +
+ include/linux/virtio_vsock.h                       |   1 +
+ include/net/af_vsock.h                             |  17 ++
+ net/vmw_vsock/Makefile                             |   1 +
+ net/vmw_vsock/af_vsock.c                           |  59 ++++++-
+ net/vmw_vsock/virtio_transport.c                   |   2 +
+ net/vmw_vsock/virtio_transport_common.c            |  22 +++
+ net/vmw_vsock/vsock_bpf.c                          | 180 +++++++++++++++++++++
+ net/vmw_vsock/vsock_loopback.c                     |   2 +
+ tools/testing/selftests/bpf/config.x86_64          |   4 +
+ .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++
+ tools/testing/selftests/bpf/vmtest.sh              |   1 +
+ 12 files changed, 447 insertions(+), 6 deletions(-)
+---
+base-commit: f12f4326c6a75a74e908714be6d2f0e2f0fd0d76
+change-id: 20230118-support-vsock-sockmap-connectible-2e1297d2111a
+
+Best regards,
 -- 
-2.39.0
-
+Bobby Eshleman <bobby.eshleman@bytedance.com>
