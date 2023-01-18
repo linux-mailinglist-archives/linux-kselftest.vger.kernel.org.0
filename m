@@ -2,35 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E60671227
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 04:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD95F67122F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 04:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjARDw5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Jan 2023 22:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        id S229695AbjARDxA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Jan 2023 22:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjARDw4 (ORCPT
+        with ESMTP id S229495AbjARDw4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 17 Jan 2023 22:52:56 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3655353B11;
-        Tue, 17 Jan 2023 19:52:54 -0800 (PST)
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FF653F88;
+        Tue, 17 Jan 2023 19:52:55 -0800 (PST)
 From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
         s=mail; t=1674013973;
-        bh=LeJ7gI3yR8MhBw3LdfOaYZv4aNx3sO+fd4js1DkSvTk=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=aumQF/TcOjSY7DpoHL3bnZxTpOw/p54FeLWG97HAHPjnEQg+txWdK/gPtO0W6i45g
-         ttGko7iGFV+IRqIv/PWxgpsZFqZQVDNc4k2SWr8vmNOvUmmXwOINTXMuRB6Uib9wS+
-         +vs31as6Dd2UkdP8QgBGnOGSI94HSa1ddvleySLE=
+        bh=VPkw+CFKrjA0cPdq/u5VGCcCh6yOS2YGYVj7RG8ao0M=;
+        h=From:Subject:Date:To:Cc:From;
+        b=p5O0dSUSIlG0xpmCHxE0f1bI59w7GlMpK9kZrIo7JRdgikFFJ4FEXPnV50yY0Qzsp
+         WocB82jcdn1s7N6J5poR93NuMfKakRdaaLusDl5SD6Tgl8TAb+OvbcsB5iKqdyo/HE
+         u5i7xMBNz3LlEboiBCrNYZ1EFK58IMW2Tnqw6xMs=
+Subject: [PATCH 0/3] align custom kbuild messages to standard layout
 Date:   Wed, 18 Jan 2023 03:52:18 +0000
-Subject: [PATCH 1/3] selftests/bpf: align kbuild messages to standard
+Message-Id: <20230118-kbuild-alignment-v1-0-eb5e9fd55c92@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230118-kbuild-alignment-v1-1-eb5e9fd55c92@weissschuh.net>
-References: <20230118-kbuild-alignment-v1-0-eb5e9fd55c92@weissschuh.net>
-In-Reply-To: <20230118-kbuild-alignment-v1-0-eb5e9fd55c92@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAPJsx2MC/x2NwQrCQAwFf6XkbKBbsVR/RTxkt882uEbZbUUo/
+ XeDxxkYZqOKoqh0aTYq+GjVlzmEQ0NpFpvAOjpT13bHNoSBH3HVPLJknewJWzhJSDgPkFPfk2dR
+ KjgWsTR7aGvOLt8Fd/3+P9fbvv8AR1Hu43cAAAA=
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -46,11 +47,11 @@ Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1674013966; l=1017;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674013966; l=1603;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=LeJ7gI3yR8MhBw3LdfOaYZv4aNx3sO+fd4js1DkSvTk=;
- b=tBkx8uRJ5OT383z4h0Cc9/q/mtXjwWDwrQNqqqE2xzO28njGH8YjaQGfK9uXkZWjeYduZGVCJKh+
- gjzRUk+FDKlW2QIxzV1YJHjlJpynKpzqgtgWZbeHfRXVfDgDKrQT
+ bh=VPkw+CFKrjA0cPdq/u5VGCcCh6yOS2YGYVj7RG8ao0M=;
+ b=fzmaTIEzM9UNJhAR0rXp3b0cFQKR+SxGqJl9VLhfb1aUxF6s7omM/5KFmqCI8bOn7FENNaqQsXma
+ n3rnz0yeDjZU5Yq/QR2E3mnRHqwho7sgbw1BolMcTyPL9VZMdQTW
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,24 +73,40 @@ The common layout for kbuild messages is as follows:
 The custom message formatting included an additional space in the action
 part, which leads to misalignments with the rest of kbuild.
 
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yhs@fb.com>
+To: John Fastabend <john.fastabend@gmail.com>
+To: KP Singh <kpsingh@kernel.org>
+To: Stanislav Fomichev <sdf@google.com>
+To: Hao Luo <haoluo@google.com>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Mykola Lysenko <mykolal@fb.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+
 ---
- tools/testing/selftests/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Weißschuh (3):
+      selftests/bpf: align kbuild messages to standard
+      bpf: iterators: align kbuild messages to standard
+      tools/resolve_btfids: align kbuild messages to standard
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index c22c43bbee19..5190c19295d4 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -98,7 +98,7 @@ Q =
- msg =
- else
- Q = @
--msg = @printf '  %-8s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
-+msg = @printf '  %-7s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
- MAKEFLAGS += --no-print-directory
- submake_extras := feature_display=0
- endif
+ kernel/bpf/preload/iterators/Makefile | 2 +-
+ tools/bpf/resolve_btfids/Makefile     | 2 +-
+ tools/testing/selftests/bpf/Makefile  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+---
+base-commit: c1649ec55708ae42091a2f1bca1ab49ecd722d55
+change-id: 20230118-kbuild-alignment-ca1ce98ea566
 
+Best regards,
 -- 
-2.39.1
+Thomas Weißschuh <linux@weissschuh.net>
