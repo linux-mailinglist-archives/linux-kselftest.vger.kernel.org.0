@@ -2,76 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455EC672276
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 17:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABC8672443
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 17:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjARQGZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Jan 2023 11:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
+        id S230002AbjARQz7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Jan 2023 11:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbjARQFw (ORCPT
+        with ESMTP id S230286AbjARQz4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:05:52 -0500
+        Wed, 18 Jan 2023 11:55:56 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87C3589B9
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 08:02:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DDA14495
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 08:55:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674057741;
+        s=mimecast20190719; t=1674060908;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hiMzFHa6vn9qE7yooc5qdXggq/ibnI2kdxrThSA73HI=;
-        b=LbcUJKBneNnfTKolUe2NBocU9MV+QkiULW4DKJW7MSgTJuEV8LlY4xUs6ILcxCbKHN/8AZ
-        wOomASmtAsDjfKhl68XVxwxRUvbUli2bizFCW9U6xnGwHDVHg5UL/OzGMdyVIgchA0DvGB
-        rKa9JOnbkUm/9qLzDn2Z0i/wJ+N064E=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=NXDkukCGDDbIwdVjEbXoFsk14utwQSi8UJxIyseUvo8=;
+        b=DY+2qLIKejfrtkYNsq+Lfj2Q228PcJpxOKs/jfPXlQGtqSFnEINEg6Z3BScnPOuENwvDjG
+        kW0TQWkPkCwMw2j52G5f92hlgZzqQlZVF+cUDsm63kIZqKT4ssxkkN4Wh5J1mkd5Wy1LLO
+        TpqvDXcN7SlFP01hq3MPrQ6PIm+eB1Q=
+Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
+ [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-283--gfE2oYqNRa2yM6e5H6lmg-1; Wed, 18 Jan 2023 11:02:20 -0500
-X-MC-Unique: -gfE2oYqNRa2yM6e5H6lmg-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-15f0a1b7764so3444259fac.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 08:02:19 -0800 (PST)
+ us-mta-327-nNLGUkzPM2SNPE56awuZ3g-1; Wed, 18 Jan 2023 11:55:05 -0500
+X-MC-Unique: nNLGUkzPM2SNPE56awuZ3g-1
+Received: by mail-vs1-f72.google.com with SMTP id m63-20020a677142000000b003ce30446ff5so9203629vsc.23
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 08:55:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hiMzFHa6vn9qE7yooc5qdXggq/ibnI2kdxrThSA73HI=;
-        b=kHdfqsoqjNFR2ic2i9KYQ0Vgi+fxtmk/wMg9Fr3EbNirZa9yYr6vbXPBMg1d7RR0Yo
-         teb8ymf6TwCWSkZGHrJnIz987kq5koTgSld4jwRqI7TqS/0fm+HqDSoxhhbFYYOmJCqX
-         NozGZl/XI5G11pEfcuKkwNN+88YSIS4G2T9VHJrB86O9TEER997hQGfPg5nuJsn+x36e
-         JU5vJCimNKt0GYZ5Htk4YFYgqH7plD+DfnIi82TQSY6TLZYSTbzftO9S2jpye2scixtj
-         3oOdff9hQc8N0eHcO/v3ZoE2WzZel9to2L7V+zxVDpLc17yuaWGONTrDLmO2b7/R6ieX
-         U8sA==
-X-Gm-Message-State: AFqh2kpk1ThIJxAEIckWmL8DXUjW04ueGLac8dQyG0h1hN9StGBZptLP
-        adiLzudUDkS9Sgms2lRrMjIiSegw5WT2/m1Sok53z7xw3xjmTAMBniKWd0rOippOxCtyIMl5G9R
-        K1NG0W0rcae2AmS7YiqaLVs01UfKx
-X-Received: by 2002:a05:6870:1b86:b0:15f:14cb:eebb with SMTP id hm6-20020a0568701b8600b0015f14cbeebbmr4094469oab.40.1674057739235;
-        Wed, 18 Jan 2023 08:02:19 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuXG/KeMADpB1tftjJTWWRNlVWexlA62bftD0m1Dv60ZS2jLu3nc9dXB72y0VhVuOLfFBk0YQ==
-X-Received: by 2002:a05:6870:1b86:b0:15f:14cb:eebb with SMTP id hm6-20020a0568701b8600b0015f14cbeebbmr4094432oab.40.1674057738600;
-        Wed, 18 Jan 2023 08:02:18 -0800 (PST)
-Received: from m8.users.ipa.redhat.com (cpe-158-222-141-151.nyc.res.rr.com. [158.222.141.151])
-        by smtp.gmail.com with ESMTPSA id bi26-20020a05620a319a00b00706a1551408sm3065760qkb.4.2023.01.18.08.02.17
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NXDkukCGDDbIwdVjEbXoFsk14utwQSi8UJxIyseUvo8=;
+        b=XaY2fTVd/eWdy9iGSyK6QShQsWwD2LHmVF96C8AGqFDdUvYVJB/OQ5w2rHQ9OACan1
+         ZVUrzj3VDg+JJx2PIZnOyVBDfdaX5YF3TPinWxaEUqG5te2UoNONfnpeWnVMrHm5OIV9
+         wZuYJCfr/eUPyRIKDtllwgF7sze1jqI5o5d/VdcV1QZlWaCY+1hA2/RVEP6bkX16ggSt
+         prVz+cgGwWddO33RRn3iU+flWinb8/6xLAZllkTtOxrnnWr8wWXIuPNonaJppH5DFYZE
+         S+QFjb2IC/maXDjcaRJL7EDszaDOScQqtdgfUDfQpNhh6fP2eyiUdvcPYw/fj1AzUDuY
+         KDag==
+X-Gm-Message-State: AFqh2kr1iLzFvaZmsvfyxllEpl1dPLBzpcVRKiEASpVqU8ig8i5jPXiu
+        p6Ly+zo4kTU2DYfe5HsH/kDhInpT2qaCPWpJE2tN1RaG2bRHqrUlW/gIfYcet3uJ/AYgKe/6YQt
+        9Kxm5sIPLXE/gEVMgLPpZMLhYFi1+
+X-Received: by 2002:a05:6102:14aa:b0:3d1:3b77:eccb with SMTP id d42-20020a05610214aa00b003d13b77eccbmr4625641vsv.32.1674060903558;
+        Wed, 18 Jan 2023 08:55:03 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtfUDE93Hj9NBAi0fV5nniObyvetYgHNfybdyrV5OsYvIshSx8M23O3FZSKa0SjM49mqmSYtw==
+X-Received: by 2002:a05:6102:14aa:b0:3d1:3b77:eccb with SMTP id d42-20020a05610214aa00b003d13b77eccbmr4625606vsv.32.1674060903180;
+        Wed, 18 Jan 2023 08:55:03 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id y4-20020a05620a44c400b007069375e0f4sm4420004qkp.122.2023.01.18.08.55.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 08:02:18 -0800 (PST)
-Message-ID: <0b96ee92145831afba9d099d948fdd0af1b3180c.camel@redhat.com>
-Subject: Re: [PATCH v2 00/41] RPCSEC GSS krb5 enhancements
-From:   Simo Sorce <simo@redhat.com>
-To:     Chuck Lever <cel@kernel.org>, linux-nfs@vger.kernel.org
-Cc:     dhowells@redhat.com, linux-kselftest@vger.kernel.org
-Date:   Wed, 18 Jan 2023 11:02:17 -0500
-In-Reply-To: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
-References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
-Organization: Red Hat
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Wed, 18 Jan 2023 08:55:02 -0800 (PST)
+Date:   Wed, 18 Jan 2023 11:54:59 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v7 1/4] userfaultfd: Add UFFD WP Async support
+Message-ID: <Y8gkY8OlnOwvlkj4@x1n>
+References: <20230109064519.3555250-1-usama.anjum@collabora.com>
+ <20230109064519.3555250-2-usama.anjum@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230109064519.3555250-2-usama.anjum@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,129 +101,328 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 2023-01-15 at 12:20 -0500, Chuck Lever wrote:
-> The purpose of this series is to improve/harden the security
-> provided by the Linux kernel's RPCSEC GSS Kerberos 5 mechanism.
-> There are lots of clean-ups in this series, but the pertinent
-> feature is the addition of a clean deprecation path for the DES-
-> and SHA1-based encryption types in accordance with Internet BCPs.
->=20
-> This series disables DES-based enctypes by default, provides a
-> mechanism for disabling SHA1-based enctypes, and introduces two
-> modern enctypes that do not use deprecated crypto algorithms.
->=20
-> Not only does that improve security for Kerberos 5 users, but it
-> also prepares SunRPC for eventually switching to a shared common
-> kernel Kerberos 5 implementation, which surely will not implement
-> any deprecated encryption types (in particular, DES-based ones).
->=20
-> Today, MIT supports both of the newly-introduced enctypes, but
-> Heimdal does not appear to. Thus distributions can enable and
-> disable kernel enctype support to match the set of enctypes
-> supported in their user space Kerberos libraries.
->=20
-> Scott has been kicking the tires -- we've found no regressions with
-> the current SHA1-based enctypes, while the new ones are disabled by
-> default until we have an opportunity for interop testing. The KUnit
-> tests for the new enctypes pass and this implementation successfully
-> interoperates with itself using these enctypes. Therefore I believe
-> it to be safe to merge.
->=20
-> When this series gets merged, the Linux NFS community should select
-> and announce a date-certain for removal of SunRPC's DES-based
-> enctype code.
->=20
+Hi, Muhammad,
+
+On Mon, Jan 09, 2023 at 11:45:16AM +0500, Muhammad Usama Anjum wrote:
+> Add new WP Async mode (UFFDIO_WRITEPROTECT_MODE_ASYNC_WP) which resolves
+> the page faults on its own. It can be used to track that which pages have
+> been written to from the time the pages were write protected. It is very
+> efficient way to track the changes as uffd is by nature pte/pmd based.
+> 
+> UFFD WP (UFFDIO_WRITEPROTECT_MODE_WP) sends the page faults to the
+> userspace where the pages which have been written-to can be tracked. But
+> it is not efficient. This is why this async version is being added.
+> After setting the WP Async, the pages which have been written to can be
+> found in the pagemap file or information can be obtained from the
+> PAGEMAP_IOCTL (see next patches).
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > ---
->=20
-> Changes since v1:
-> - Addressed Simo's NAK on "SUNRPC: Improve Kerberos confounder generation=
-"
-> - Added Cc: linux-kselftest@ for review of the KUnit-related patches
->=20
->=20
-> Chuck Lever (41):
->       SUNRPC: Add header ifdefs to linux/sunrpc/gss_krb5.h
->       SUNRPC: Remove .blocksize field from struct gss_krb5_enctype
->       SUNRPC: Remove .conflen field from struct gss_krb5_enctype
->       SUNRPC: Improve Kerberos confounder generation
->       SUNRPC: Obscure Kerberos session key
->       SUNRPC: Refactor set-up for aux_cipher
->       SUNRPC: Obscure Kerberos encryption keys
->       SUNRPC: Obscure Kerberos signing keys
->       SUNRPC: Obscure Kerberos integrity keys
->       SUNRPC: Refactor the GSS-API Per Message calls in the Kerberos mech=
-anism
->       SUNRPC: Remove another switch on ctx->enctype
->       SUNRPC: Add /proc/net/rpc/gss_krb5_enctypes file
->       NFSD: Replace /proc/fs/nfsd/supported_krb5_enctypes with a symlink
->       SUNRPC: Replace KRB5_SUPPORTED_ENCTYPES macro
->       SUNRPC: Enable rpcsec_gss_krb5.ko to be built without CRYPTO_DES
->       SUNRPC: Remove ->encrypt and ->decrypt methods from struct gss_krb5=
-_enctype
->       SUNRPC: Rename .encrypt_v2 and .decrypt_v2 methods
->       SUNRPC: Hoist KDF into struct gss_krb5_enctype
->       SUNRPC: Clean up cipher set up for v1 encryption types
->       SUNRPC: Parametrize the key length passed to context_v2_alloc_ciphe=
-r()
->       SUNRPC: Add new subkey length fields
->       SUNRPC: Refactor CBC with CTS into helpers
->       SUNRPC: Add gk5e definitions for RFC 8009 encryption types
->       SUNRPC: Add KDF-HMAC-SHA2
->       SUNRPC: Add RFC 8009 encryption and decryption functions
->       SUNRPC: Advertise support for RFC 8009 encryption types
->       SUNRPC: Support the Camellia enctypes
->       SUNRPC: Add KDF_FEEDBACK_CMAC
->       SUNRPC: Advertise support for the Camellia encryption types
->       SUNRPC: Move remaining internal definitions to gss_krb5_internal.h
->       SUNRPC: Add KUnit tests for rpcsec_krb5.ko
->       SUNRPC: Export get_gss_krb5_enctype()
->       SUNRPC: Add KUnit tests RFC 3961 Key Derivation
->       SUNRPC: Add Kunit tests for RFC 3962-defined encryption/decryption
->       SUNRPC: Add KDF KUnit tests for the RFC 6803 encryption types
->       SUNRPC: Add checksum KUnit tests for the RFC 6803 encryption types
->       SUNRPC: Add encryption KUnit tests for the RFC 6803 encryption type=
-s
->       SUNRPC: Add KDF-HMAC-SHA2 Kunit tests
->       SUNRPC: Add RFC 8009 checksum KUnit tests
->       SUNRPC: Add RFC 8009 encryption KUnit tests
->       SUNRPC: Add encryption self-tests
->=20
->=20
->  fs/nfsd/nfsctl.c                         |   74 +-
->  include/linux/sunrpc/gss_krb5.h          |  196 +--
->  include/linux/sunrpc/gss_krb5_enctypes.h |   41 -
->  net/sunrpc/.kunitconfig                  |   30 +
->  net/sunrpc/Kconfig                       |   96 +-
->  net/sunrpc/auth_gss/Makefile             |    2 +
->  net/sunrpc/auth_gss/auth_gss.c           |   17 +
->  net/sunrpc/auth_gss/gss_krb5_crypto.c    |  656 +++++--
->  net/sunrpc/auth_gss/gss_krb5_internal.h  |  232 +++
->  net/sunrpc/auth_gss/gss_krb5_keys.c      |  416 ++++-
->  net/sunrpc/auth_gss/gss_krb5_mech.c      |  730 +++++---
->  net/sunrpc/auth_gss/gss_krb5_seal.c      |  122 +-
->  net/sunrpc/auth_gss/gss_krb5_seqnum.c    |    2 +
->  net/sunrpc/auth_gss/gss_krb5_test.c      | 2040 ++++++++++++++++++++++
->  net/sunrpc/auth_gss/gss_krb5_unseal.c    |   63 +-
->  net/sunrpc/auth_gss/gss_krb5_wrap.c      |  124 +-
->  net/sunrpc/auth_gss/svcauth_gss.c        |   65 +
->  17 files changed, 4001 insertions(+), 905 deletions(-)
->  delete mode 100644 include/linux/sunrpc/gss_krb5_enctypes.h
->  create mode 100644 net/sunrpc/.kunitconfig
->  create mode 100644 net/sunrpc/auth_gss/gss_krb5_internal.h
->  create mode 100644 net/sunrpc/auth_gss/gss_krb5_test.c
->=20
-> --
-> Chuck Lever
+>  fs/userfaultfd.c                 | 150 +++++++++++++++++--------------
+>  include/uapi/linux/userfaultfd.h |   6 ++
+>  2 files changed, 90 insertions(+), 66 deletions(-)
+> 
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 15a5bf765d43..be5e10d15058 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -69,6 +69,7 @@ struct userfaultfd_ctx {
+>  	unsigned int features;
+>  	/* released */
+>  	bool released;
+> +	bool async;
 
-I reviewed the whole patchset (except the Camellia related commits):
-Reviewed-by: Simo Sorce <simo@redhat.com>
+Let's just make it a feature flag,
 
-Simo.
+  UFFD_FEATURE_WP_ASYNC
 
---=20
-Simo Sorce
-RHEL Crypto Team
-Red Hat, Inc
+>  	/* memory mappings are changing because of non-cooperative event */
+>  	atomic_t mmap_changing;
+>  	/* mm with one ore more vmas attached to this userfaultfd_ctx */
+> @@ -497,80 +498,93 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+>  
+>  	/* take the reference before dropping the mmap_lock */
+>  	userfaultfd_ctx_get(ctx);
+> +	if (ctx->async) {
 
+Firstly, please consider not touching the existing code/indent as much as
+what this patch did.  Hopefully we can keep the major part of sync uffd be
+there with its git log, it also helps reviewing your code.  You can add the
+async block before that, handle the fault and return just earlier.
 
+And, I think this is a bit too late because we're going to return with
+VM_FAULT_RETRY here, while maybe we don't need to retry at all here because
+we're going to resolve the page fault immediately.
+
+I assume you added this because you wanted userfaultfd_ctx_get() to make
+sure the uffd context will not go away from under us, but it's not needed
+if we're still holding the mmap read lock.  I'd expect for async mode we
+don't really need to release it at all.
+
+> +		// Resolve page fault of this page
+
+Please use "/* ... */" as that's the common pattern of commenting in the
+Linux kernel, at least what I see in mm/.
+
+> +		unsigned long addr = (ctx->features & UFFD_FEATURE_EXACT_ADDRESS) ?
+> +				      vmf->real_address : vmf->address;
+> +		struct vm_area_struct *dst_vma = find_vma(ctx->mm, addr);
+> +		size_t s = PAGE_SIZE;
+
+This is weird - if we want async uffd-wp, let's consider huge page from the
+1st day.
+
+> +
+> +		if (dst_vma->vm_flags & VM_HUGEPAGE) {
+
+VM_HUGEPAGE is only a hint.  It doesn't mean this page is always a huge
+page.  For anon, we can have thp wr-protected as a whole, not happening for
+!anon because we'll split already.
+
+For anon, if a write happens to a thp being uffd-wp-ed, we'll keep that pmd
+wr-protected and report the uffd message.  The pmd split happens when the
+user invokes UFFDIO_WRITEPROTECT on the small page.  I think it'll stop
+working for async uffd-wp because we're going to resolve the page faults
+right away.
+
+So for async uffd-wp (note: this will be different from hugetlb), you may
+want to consider having a pre-requisite patch to change wp_huge_pmd()
+behavior: rather than calling handle_userfault(), IIUC you can also just
+fallback to the split path right below (__split_huge_pmd) so the thp will
+split now even before the uffd message is generated.
+
+I think it should be transparent to the user and it'll start working for
+you with async uffd-wp here, because it means when reaching
+handle_userfault, it should not be possible to have thp at all since they
+should have all split up.
+
+> +			s = HPAGE_SIZE;
+> +			addr &= HPAGE_MASK;
+> +		}
+>  
+> -	init_waitqueue_func_entry(&uwq.wq, userfaultfd_wake_function);
+> -	uwq.wq.private = current;
+> -	uwq.msg = userfault_msg(vmf->address, vmf->real_address, vmf->flags,
+> -				reason, ctx->features);
+> -	uwq.ctx = ctx;
+> -	uwq.waken = false;
+> -
+> -	blocking_state = userfaultfd_get_blocking_state(vmf->flags);
+> +		ret = mwriteprotect_range(ctx->mm, addr, s, false, &ctx->mmap_changing);
+
+This is an overkill - we're pretty sure it's a single page, no need to call
+a range function here.
+
+> +	} else {
+> +		init_waitqueue_func_entry(&uwq.wq, userfaultfd_wake_function);
+> +		uwq.wq.private = current;
+> +		uwq.msg = userfault_msg(vmf->address, vmf->real_address, vmf->flags,
+> +					reason, ctx->features);
+> +		uwq.ctx = ctx;
+> +		uwq.waken = false;
+>  
+> -        /*
+> -         * Take the vma lock now, in order to safely call
+> -         * userfaultfd_huge_must_wait() later. Since acquiring the
+> -         * (sleepable) vma lock can modify the current task state, that
+> -         * must be before explicitly calling set_current_state().
+> -         */
+> -	if (is_vm_hugetlb_page(vma))
+> -		hugetlb_vma_lock_read(vma);
+> +		blocking_state = userfaultfd_get_blocking_state(vmf->flags);
+>  
+> -	spin_lock_irq(&ctx->fault_pending_wqh.lock);
+> -	/*
+> -	 * After the __add_wait_queue the uwq is visible to userland
+> -	 * through poll/read().
+> -	 */
+> -	__add_wait_queue(&ctx->fault_pending_wqh, &uwq.wq);
+> -	/*
+> -	 * The smp_mb() after __set_current_state prevents the reads
+> -	 * following the spin_unlock to happen before the list_add in
+> -	 * __add_wait_queue.
+> -	 */
+> -	set_current_state(blocking_state);
+> -	spin_unlock_irq(&ctx->fault_pending_wqh.lock);
+> +		/*
+> +		 * Take the vma lock now, in order to safely call
+> +		 * userfaultfd_huge_must_wait() later. Since acquiring the
+> +		 * (sleepable) vma lock can modify the current task state, that
+> +		 * must be before explicitly calling set_current_state().
+> +		 */
+> +		if (is_vm_hugetlb_page(vma))
+> +			hugetlb_vma_lock_read(vma);
+>  
+> -	if (!is_vm_hugetlb_page(vma))
+> -		must_wait = userfaultfd_must_wait(ctx, vmf->address, vmf->flags,
+> -						  reason);
+> -	else
+> -		must_wait = userfaultfd_huge_must_wait(ctx, vma,
+> -						       vmf->address,
+> -						       vmf->flags, reason);
+> -	if (is_vm_hugetlb_page(vma))
+> -		hugetlb_vma_unlock_read(vma);
+> -	mmap_read_unlock(mm);
+> +		spin_lock_irq(&ctx->fault_pending_wqh.lock);
+> +		/*
+> +		 * After the __add_wait_queue the uwq is visible to userland
+> +		 * through poll/read().
+> +		 */
+> +		__add_wait_queue(&ctx->fault_pending_wqh, &uwq.wq);
+> +		/*
+> +		 * The smp_mb() after __set_current_state prevents the reads
+> +		 * following the spin_unlock to happen before the list_add in
+> +		 * __add_wait_queue.
+> +		 */
+> +		set_current_state(blocking_state);
+> +		spin_unlock_irq(&ctx->fault_pending_wqh.lock);
+>  
+> -	if (likely(must_wait && !READ_ONCE(ctx->released))) {
+> -		wake_up_poll(&ctx->fd_wqh, EPOLLIN);
+> -		schedule();
+> -	}
+> +		if (!is_vm_hugetlb_page(vma))
+> +			must_wait = userfaultfd_must_wait(ctx, vmf->address, vmf->flags,
+> +							  reason);
+> +		else
+> +			must_wait = userfaultfd_huge_must_wait(ctx, vma,
+> +							       vmf->address,
+> +							       vmf->flags, reason);
+> +		if (is_vm_hugetlb_page(vma))
+> +			hugetlb_vma_unlock_read(vma);
+> +		mmap_read_unlock(mm);
+> +
+> +		if (likely(must_wait && !READ_ONCE(ctx->released))) {
+> +			wake_up_poll(&ctx->fd_wqh, EPOLLIN);
+> +			schedule();
+> +		}
+>  
+> -	__set_current_state(TASK_RUNNING);
+> +		__set_current_state(TASK_RUNNING);
+>  
+> -	/*
+> -	 * Here we race with the list_del; list_add in
+> -	 * userfaultfd_ctx_read(), however because we don't ever run
+> -	 * list_del_init() to refile across the two lists, the prev
+> -	 * and next pointers will never point to self. list_add also
+> -	 * would never let any of the two pointers to point to
+> -	 * self. So list_empty_careful won't risk to see both pointers
+> -	 * pointing to self at any time during the list refile. The
+> -	 * only case where list_del_init() is called is the full
+> -	 * removal in the wake function and there we don't re-list_add
+> -	 * and it's fine not to block on the spinlock. The uwq on this
+> -	 * kernel stack can be released after the list_del_init.
+> -	 */
+> -	if (!list_empty_careful(&uwq.wq.entry)) {
+> -		spin_lock_irq(&ctx->fault_pending_wqh.lock);
+>  		/*
+> -		 * No need of list_del_init(), the uwq on the stack
+> -		 * will be freed shortly anyway.
+> +		 * Here we race with the list_del; list_add in
+> +		 * userfaultfd_ctx_read(), however because we don't ever run
+> +		 * list_del_init() to refile across the two lists, the prev
+> +		 * and next pointers will never point to self. list_add also
+> +		 * would never let any of the two pointers to point to
+> +		 * self. So list_empty_careful won't risk to see both pointers
+> +		 * pointing to self at any time during the list refile. The
+> +		 * only case where list_del_init() is called is the full
+> +		 * removal in the wake function and there we don't re-list_add
+> +		 * and it's fine not to block on the spinlock. The uwq on this
+> +		 * kernel stack can be released after the list_del_init.
+>  		 */
+> -		list_del(&uwq.wq.entry);
+> -		spin_unlock_irq(&ctx->fault_pending_wqh.lock);
+> +		if (!list_empty_careful(&uwq.wq.entry)) {
+> +			spin_lock_irq(&ctx->fault_pending_wqh.lock);
+> +			/*
+> +			 * No need of list_del_init(), the uwq on the stack
+> +			 * will be freed shortly anyway.
+> +			 */
+> +			list_del(&uwq.wq.entry);
+> +			spin_unlock_irq(&ctx->fault_pending_wqh.lock);
+> +		}
+>  	}
+> -
+>  	/*
+>  	 * ctx may go away after this if the userfault pseudo fd is
+>  	 * already released.
+> @@ -1861,11 +1875,14 @@ static int userfaultfd_writeprotect(struct userfaultfd_ctx *ctx,
+>  		return ret;
+>  
+>  	if (uffdio_wp.mode & ~(UFFDIO_WRITEPROTECT_MODE_DONTWAKE |
+> -			       UFFDIO_WRITEPROTECT_MODE_WP))
+> +			       UFFDIO_WRITEPROTECT_MODE_WP |
+> +			       UFFDIO_WRITEPROTECT_MODE_ASYNC_WP))
+>  		return -EINVAL;
+>  
+> -	mode_wp = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_WP;
+> +	mode_wp = uffdio_wp.mode & (UFFDIO_WRITEPROTECT_MODE_WP |
+> +				    UFFDIO_WRITEPROTECT_MODE_ASYNC_WP);
+>  	mode_dontwake = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_DONTWAKE;
+> +	ctx->async = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_ASYNC_WP;
+
+Please no..  ctx attributes shouldn't be easily changed by a single ioctl.
+
+I suggest we have a new feature bit as I mentioned above (say,
+UFFD_FEATURE_WP_ASYNC), set it once with UFFDIO_API and it should apply to
+the whole lifecycle of this uffd handle.  That flag should (something I can
+quickly think of):
+
+  - Have effect only if the uffd will be registered with WP mode (of
+    course) or ignored in any other modes,
+
+  - Should fail any attempts of UFFDIO_WRITEPROTECT with wp=false on this
+    uffd handle because with async faults no page fault resolution needed
+    from userspace,
+
+  - Should apply to any region registered with this uffd ctx, so it's
+    exclusively used with sync uffd-wp mode.
+
+Then when the app wants to wr-protect in async mode, it simply goes ahead
+with UFFDIO_WRITEPROTECT(wp=true), it'll happen exactly the same as when it
+was sync mode.  It's only the pf handling procedure that's different (along
+with how the fault is reported - rather than as a message but it'll be
+consolidated into the soft-dirty bit).
+
+>  
+>  	if (mode_wp && mode_dontwake)
+>  		return -EINVAL;
+> @@ -2126,6 +2143,7 @@ static int new_userfaultfd(int flags)
+>  	ctx->flags = flags;
+>  	ctx->features = 0;
+>  	ctx->released = false;
+> +	ctx->async = false;
+>  	atomic_set(&ctx->mmap_changing, 0);
+>  	ctx->mm = current->mm;
+>  	/* prevent the mm struct to be freed */
+> diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+> index 005e5e306266..b89665653861 100644
+> --- a/include/uapi/linux/userfaultfd.h
+> +++ b/include/uapi/linux/userfaultfd.h
+> @@ -284,6 +284,11 @@ struct uffdio_writeprotect {
+>   * UFFDIO_WRITEPROTECT_MODE_DONTWAKE: set the flag to avoid waking up
+>   * any wait thread after the operation succeeds.
+>   *
+> + * UFFDIO_WRITEPROTECT_MODE_ASYNC_WP: set the flag to write protect a
+> + * range, the flag is unset automatically when the page is written.
+> + * This is used to track which pages have been written to from the
+> + * time the memory was write protected.
+> + *
+>   * NOTE: Write protecting a region (WP=1) is unrelated to page faults,
+>   * therefore DONTWAKE flag is meaningless with WP=1.  Removing write
+>   * protection (WP=0) in response to a page fault wakes the faulting
+> @@ -291,6 +296,7 @@ struct uffdio_writeprotect {
+>   */
+>  #define UFFDIO_WRITEPROTECT_MODE_WP		((__u64)1<<0)
+>  #define UFFDIO_WRITEPROTECT_MODE_DONTWAKE	((__u64)1<<1)
+> +#define UFFDIO_WRITEPROTECT_MODE_ASYNC_WP	((__u64)1<<2)
+>  	__u64 mode;
+>  };
+>  
+> -- 
+> 2.30.2
+> 
+
+-- 
+Peter Xu
 
