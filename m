@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6462767122C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 04:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BF967122A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 04:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjARDw7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Jan 2023 22:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
+        id S229650AbjARDw6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Jan 2023 22:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjARDw4 (ORCPT
+        with ESMTP id S229448AbjARDw4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 17 Jan 2023 22:52:56 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE6B53E75;
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D83B53F81;
         Tue, 17 Jan 2023 19:52:55 -0800 (PST)
 From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
         s=mail; t=1674013973;
-        bh=KpYnQTE7Q4vLwsdxk/CiqAMvN8ld8VPSFFsnhjdwuic=;
+        bh=1RCqqZydnDFaJZOYxPVplOG7gSvedFP5vnvPdym2MNk=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=iEqeZkH/XiKYxvb2LtOoBlTVvjZA737gnaycON7XLqEdz55zqLSs1JwreM83YeQOB
-         KVEmyLCjrYx/+tY0PEpz3bDvxM2BAuAp9//Kg6KIbsQeyJG/4P5LXtT9WcQnPfLkl+
-         TCCZ0cfMsiM/RzE/LhzJgSW4irYaW4G9hnOmPoug=
-Date:   Wed, 18 Jan 2023 03:52:19 +0000
-Subject: [PATCH 2/3] bpf: iterators: align kbuild messages to standard
+        b=Oom12uDZEeK8c+uFQ7KYGYIyqHwcp2ZSwuXw7cXNu1ulczqYtzPUedbNlUtbhXorS
+         NNz13CSPU4OR/twlvI7sJU07iPrAerurNNi9NUFVMJhBO3SizaACCeic5Qa1PVyVQe
+         p2NrPcgUx+e3HFDPLrI3DnZ5Nv6JhUEReLHYoEx4=
+Date:   Wed, 18 Jan 2023 03:52:20 +0000
+Subject: [PATCH 3/3] tools/resolve_btfids: align kbuild messages to standard
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230118-kbuild-alignment-v1-2-eb5e9fd55c92@weissschuh.net>
+Message-Id: <20230118-kbuild-alignment-v1-3-eb5e9fd55c92@weissschuh.net>
 References: <20230118-kbuild-alignment-v1-0-eb5e9fd55c92@weissschuh.net>
 In-Reply-To: <20230118-kbuild-alignment-v1-0-eb5e9fd55c92@weissschuh.net>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -46,11 +46,11 @@ Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1674013966; l=976;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674013966; l=957;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=KpYnQTE7Q4vLwsdxk/CiqAMvN8ld8VPSFFsnhjdwuic=;
- b=ub6o/8GBy8+Ikdjoq2W3KoUA+ZWNBi74hbqLchtpOsuWFSbxoJLYgi3sROXhZpJZq+b2HBhXFeHx
- 4UsNeBpsBDKBPvTVpDR9YpaGW1LPntvNhJxIHIrggghl7AB3A6Ck
+ bh=1RCqqZydnDFaJZOYxPVplOG7gSvedFP5vnvPdym2MNk=;
+ b=Obt7j+FeHbwpRmVExoT9rOQOGNSXFjjaJMIksWp8W4sLuwDgrtpS2uqhIZKLUmb7QDAzdQ95cWPM
+ 1Nksn1MlA61vBpCC2W73X/bGlu6pKqSBkOEDVsLjkbDgtHP1BCwG
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,21 +74,21 @@ part, which leads to misalignments with the rest of kbuild.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/bpf/preload/iterators/Makefile | 2 +-
+ tools/bpf/resolve_btfids/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/preload/iterators/Makefile b/kernel/bpf/preload/iterators/Makefile
-index 6762b1260f2f..7c6bb9d010ca 100644
---- a/kernel/bpf/preload/iterators/Makefile
-+++ b/kernel/bpf/preload/iterators/Makefile
-@@ -26,7 +26,7 @@ Q =
- msg =
- else
- Q = @
--msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
-+msg = @printf '  %-7s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
- MAKEFLAGS += --no-print-directory
- submake_extras := feature_display=0
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index 19a3112e271a..f4106d514b9c 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -12,7 +12,7 @@ else
+   ifeq ($(silent),1)
+     msg =
+   else
+-    msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
++    msg = @printf '  %-7s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
+   endif
+   MAKEFLAGS=--no-print-directory
  endif
 
 -- 
