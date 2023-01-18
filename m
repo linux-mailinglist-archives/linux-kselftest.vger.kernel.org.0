@@ -2,89 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBC56724A7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 18:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2273672646
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Jan 2023 19:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjARRRh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Jan 2023 12:17:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        id S229607AbjARSGX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Jan 2023 13:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbjARRRS (ORCPT
+        with ESMTP id S229677AbjARSFl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Jan 2023 12:17:18 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEE959576
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 09:17:16 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id p24so37528950plw.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 09:17:16 -0800 (PST)
+        Wed, 18 Jan 2023 13:05:41 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523225A823
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 10:03:27 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id g68so24005891pgc.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 10:03:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6FL8JJKN1LVzWkPF+aKtJUdwHaz9en8xDzUW2zFOrSY=;
-        b=bl5IHfblF7oi96NNkA5U8SF7wUtop9rpLyHBYs/4MD+DADCJ6isUH3ZccvjespkLZD
-         gXwGmB8IdvutFO2kyTnloszSczWHCoKGfI0xG1j2Ve7NarDvGd+URgpodYb19MJaH0zX
-         RPikpRZqC7VGmj+XI1sO0dpytVz5VH0NFQdvEeeYc2H4LDBAQ8i2KWpNvjQ/zdZ64Aif
-         Ta6Gn9SHn1KpN21U6TsCYRCkzVuVZVycpaUyRvdubCEtUP/O+Sejy1reztba8QfEwtde
-         Ky7f0b80BDeXQbMn20TkFDFRyyL5nozpU7s/VU/Vzb6+D3GxrVXlO1/pwwFhTV96xl/G
-         WGXA==
+        bh=1LWD9/QLpObyf7uK4hbDzgQfFl7VFFLA3YY+bVGtV2A=;
+        b=EmorF5thQTFFqPxBHfiajOhPpV4kMBr2heHGT5Nxk7gEWpjPWQVv7PvLYdr/SIkIqh
+         3+V/J9iAtXDUR5/KO7ldxpBFPXIZt+3vXRi890HHMQRzkYYumlG2fgJvuI41a3NeE+kl
+         7D2TU1iuEreOX3I7BOsoDu7KhXITypHsoXhk1fUaqJn2wbyH2YGfx7ygQzCsgCyEA2RY
+         AnQFps5xWyYMMZY25ZmReDxwFsd9yrriiId7x/1N0ok9+qLlAxdVBcJf2b2klq8sLAyi
+         iAXChOsswjZ3UjzKefnbxLKFjC7GGt3BkZB8yBA0ypwJ/6BlNm2zCp4Qxlt9hU6igRE6
+         yMBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6FL8JJKN1LVzWkPF+aKtJUdwHaz9en8xDzUW2zFOrSY=;
-        b=AaiercfBhwHcqF1hhKDm46uKkPckzkAj4VljGefeD+2SAqMRX33mkTu2roAFu5+y1i
-         LtusgK1CnRvqqWgXjlFm05cMpEQx7e9BEmgKk9BUocoBAC90xlBImSEN/aTFiNhamHoP
-         JKyok0Jfwxg6RcOLOnsKC2RFxRHJKzgiQxTeU9CJn0Kl+iZW20Yem9xkzkK5qFc/z6Uk
-         0qwYxT1N/m7NJHj+LlC8NpsPUB9tOM46+SdHwBz2QhQjejdnvI5DFiSCPFQHw9XMamS+
-         fPTM2l82NixyYHI2B6OTM5V6gHzs3JLxrDR0YpNRFNqgQ9tv77hFWnoQzRnDyVB4tVWs
-         69Lg==
-X-Gm-Message-State: AFqh2kqip6kK9wBWQa+lMfdpCxWevbcN0w0cki0/6HlrNBVMDrwpz7A5
-        cBOzvPUXoDzeBvctluhPs+LnmA==
-X-Google-Smtp-Source: AMrXdXtOORgNGTIyd11R2eMP7ByXXE52rPFRkTZwXhynNFuQSIdozZ7e3gP+UEGWXjWMQ6ldDAX2Ig==
-X-Received: by 2002:a17:902:e808:b0:189:b910:c6d2 with SMTP id u8-20020a170902e80800b00189b910c6d2mr3394337plg.1.1674062235976;
-        Wed, 18 Jan 2023 09:17:15 -0800 (PST)
+        bh=1LWD9/QLpObyf7uK4hbDzgQfFl7VFFLA3YY+bVGtV2A=;
+        b=MNe44nPWjIn+3f/ZamaTq1quBnJ6oz9+Xh7gwvmdZLC8h4ZoKn95pSciYuFULmikuI
+         7dZVpUZUzlUWBA23vw+wbN7YZXn5EDg50nH9sWQsI19wRxprROm1yMnqjOfryhGzsmJY
+         RyMMH3+F9BSCSzeT4S5O36o0QAgzGFEKdXSaf/02D6OaIdEhBYEGnfl6gaVKPNwVGyVx
+         5wxTghy9LKYVvhTB8VhyVWd9xDfVlnaqyVhY3O2VZpWHvDODep5oGb45z1C9SLRBwVsA
+         RedAEm5oNVUZCCxt1El45EHrnaVIhq00NaBUhQY2yZBl1QipHwwh5iosFkDvrpWe1ADi
+         N0cg==
+X-Gm-Message-State: AFqh2krne+ZoQ9TvQu9oSbFtmNJnylvovXtEJxlAP1TZsqeyB0iEAGwv
+        cX36ZS+aXoi4ngFsDZ3ovnPTsw==
+X-Google-Smtp-Source: AMrXdXtiFexFV6OeMcBVrHc0yLyJV0VjIVxq5F3AHMqYHHbWZxOSlD1/ie70xe37tAttZMs8iz4jSw==
+X-Received: by 2002:aa7:9041:0:b0:58b:cb1b:978f with SMTP id n1-20020aa79041000000b0058bcb1b978fmr1487655pfo.1.1674065002413;
+        Wed, 18 Jan 2023 10:03:22 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170902ced100b001895f7c8a71sm6609409plg.97.2023.01.18.09.17.15
+        by smtp.gmail.com with ESMTPSA id 124-20020a621882000000b0057709fce782sm17720022pfy.54.2023.01.18.10.03.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 09:17:15 -0800 (PST)
-Date:   Wed, 18 Jan 2023 17:17:11 +0000
+        Wed, 18 Jan 2023 10:03:22 -0800 (PST)
+Date:   Wed, 18 Jan 2023 18:03:18 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V2 PATCH 0/6] KVM: selftests: selftests for fd-based private
- memory
-Message-ID: <Y8gpl+LwSuSgBFks@google.com>
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <Y8dG3WDxY2OCGPby@google.com>
- <20230118112511.wrljyng2xiz3yktv@box.shutemov.name>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        David Matlack <dmatlack@google.com>,
+        Wei Wang <wei.w.wang@intel.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] KVM: selftests: Fix initialization of GDT limit
+Message-ID: <Y8g0Zv0IjLEBw5qO@google.com>
+References: <20230114161557.499685-1-ackerleytng@google.com>
+ <20230114161557.499685-2-ackerleytng@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230118112511.wrljyng2xiz3yktv@box.shutemov.name>
+In-Reply-To: <20230114161557.499685-2-ackerleytng@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,68 +75,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 18, 2023, Kirill A. Shutemov wrote:
-> On Wed, Jan 18, 2023 at 01:09:49AM +0000, Sean Christopherson wrote:
-> > On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> > > This series implements selftests targeting the feature floated by Chao via:
-> > > https://lore.kernel.org/lkml/20221202061347.1070246-10-chao.p.peng@linux.intel.com/T/
-> > > 
-> > > Below changes aim to test the fd based approach for guest private memory
-> > > in context of normal (non-confidential) VMs executing on non-confidential
-> > > platforms.
-> > > 
-> > > private_mem_test.c file adds selftest to access private memory from the
-> > > guest via private/shared accesses and checking if the contents can be
-> > > leaked to/accessed by vmm via shared memory view before/after conversions.
-> > > 
-> > > Updates in V2:
-> > > 1) Simplified vcpu run loop implementation API
-> > > 2) Removed VM creation logic from private mem library
-> > 
-> > I pushed a rework version of this series to:
-> > 
-> >   git@github.com:sean-jc/linux.git x86/upm_base_support
+On Sat, Jan 14, 2023, Ackerley Tng wrote:
+> Subtract 1 to initialize GDT limit according to spec.
+
+Nit, make changelogs standalone, i.e. don't make me read the code just to
+understand the changelog.  "Subtract 1" is meaningless without seeing the
+existing code.  The changelog doesn't need to be a play-by-play, e.g. describing
+the change as "inclusive vs. exclusive" is also fine, the important thing is that
+readers can gain a basic understanding of the change without needing to read code.
+
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>  tools/testing/selftests/kvm/lib/x86_64/processor.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> It still has build issue with lockdep enabled that I mentioned before:
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index acfa1d01e7df..33ca7f5232a4 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -502,7 +502,12 @@ static void kvm_setup_gdt(struct kvm_vm *vm, struct kvm_dtable *dt)
+>  		vm->gdt = __vm_vaddr_alloc_page(vm, MEM_REGION_DATA);
+>  
+>  	dt->base = vm->gdt;
+> -	dt->limit = getpagesize();
+> +
+> +	/*
+> +	 * Intel SDM Volume 3, 3.5.1:
 
-Yeah, I haven't updated the branch since last Friday, i.e. I haven't fixed the
-known bugs yet.  I pushed the selftests changes at the same as everything else,
-just didn't get to typing up the emails until yesterday.
+As a general rule, especially in code comments, never reference manual sections
+by their index/numbers, there's a 99% chance the comment will be stale within a
+few years.
 
-> https://lore.kernel.org/all/20230116134845.vboraky2nd56szos@box.shutemov.name/
+Quoting manuals is ok, because if the quote because stale then that in and of
+itself is an interesting datapoint.  If referencing a specific section is the
+easiest way to convey something, then use then name of the section, as that's less
+likely to be arbitrarily change.
+
+In this case, I'd just omit the comment entirely.  We have to assume readers have
+a minimum level of knowledge, and IMO this is firmly below (above?) the threshold.
+
+> "the GDT limit should always be one less
+> +	 * than an integral multiple of eight"
+> +	 */
+> +	dt->limit = getpagesize() - 1;
+>  }
+>  
+>  static void kvm_setup_tss_64bit(struct kvm_vm *vm, struct kvm_segment *segp,
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 > 
-> And when compiled with lockdep, it triggers a lot of warnings about missed
-> locks, like this:
-
-Ah crud, I knew I was forgetting something.  The lockdep assertion can simply be
-removed, mmu_lock doesn't need to be held to read attributes.  I knew the assertion
-was wrong when I added it, but I wanted to remind myself to take a closer look at
-the usage of kvm_mem_is_private() and forgot to go back and delete the assertion.
-
-The use of kvm_mem_is_private() in kvm_mmu_do_page_fault() is technically unsafe.
-Similar to getting the pfn, if mmu_lock isn't held, consuming the attributes
-(private vs. shared) needs MMU notifier protection, i.e. the attributes are safe
-to read only after mmu_invalidate_seq is snapshot.
-
-However, is_private gets rechecked by __kvm_faultin_pfn(), which is protected by
-the sequence counter, and so the technically unsafe read is verified in the end.
-The obvious alternative is to make is_private an output of kvm_faultin_pfn(), but
-that's incorrect for SNP and TDX guests, in which case "is_private" is a property
-of the fault itself.
-
-TL;DR: I'm going to delete the assertion and add a comment in kvm_mmu_do_page_fault()
-explaining why it's safe to consume kvm_mem_is_private() for "legacy" guests.
-
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 35a339891aed..da0afe81cf10 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -2310,8 +2310,6 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
- #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
- static inline unsigned long kvm_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
- {
--       lockdep_assert_held(kvm->mmu_lock);
--
-        return xa_to_value(xa_load(&kvm->mem_attr_array, gfn));
- }
-
