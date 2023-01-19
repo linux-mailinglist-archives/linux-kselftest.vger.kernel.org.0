@@ -2,91 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A975674280
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jan 2023 20:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 288E36743FC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jan 2023 22:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjASTPQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Jan 2023 14:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        id S229943AbjASVKY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Jan 2023 16:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjASTOW (ORCPT
+        with ESMTP id S229961AbjASVJ2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Jan 2023 14:14:22 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F651966CA;
-        Thu, 19 Jan 2023 11:13:05 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id c26so2245247pfp.10;
-        Thu, 19 Jan 2023 11:13:05 -0800 (PST)
+        Thu, 19 Jan 2023 16:09:28 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DACF9B12F
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jan 2023 13:02:43 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id y187-20020a638ac4000000b004cf52d8bb9bso1547906pgd.21
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jan 2023 13:02:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hp6yFzF+wsVEa0WBaxMhTO9O/mR1H5I+SKpcOxOzy5Q=;
-        b=jSnBKmfpUvc+un0ORHkgMHkHhLCrX46czrBEvsYvY3rNao+BfXLO00yf6juMSQxzeG
-         AMvRNowqWEtvr6xIstUJE/jUC/B59U+5ALN/BHTt7lH4mj942gu1TeXXX/nyQio0qxo8
-         OPpDK4TCS1Z8uY3Q1AaqT4Xfqh8vhSNiy+RMs5q3p9Ozu/HFw2ThlfB2JdLSIbtnU7SI
-         zVlzzDOHCkmfUyxho1of2ZzUOb2NU54nY+UClCIkLTCKoiohf0nUaf7F9K2g60NOcUFV
-         hnBqlclV9PHiFFjcOkXdPEg3YAWzSYrgSidbo89nXx9oYfqz2kbD0BGgb/OoAkKWmqDj
-         OJYg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X/nCb6M9YYnG5q59FjSK1/m/H/eNOYXaUrw06G9TEt8=;
+        b=Gen9QK/tX9ilYnNa5f4OHUZ8BgeRvkLM7R4PkxAQTfGG+5du6gwRAF4PuFEXb1jxYN
+         6z5ZmfwcoXn/g/a+bNzi+RXbr0ZlpyWiiVyYoPMINJsFl3hRVPucoX+jmUc+vTHBifWS
+         EgdNg8FSvBavWTeKmHR93xnaEvP3VH6heZeag0yk0gnORtBvxyumzcD8DQ7bUKRx8s+x
+         aLY9Ve74gYhCo27f1IRAkvvZn7kq3KHmL8Dnk92NI3uVxxxwyOLiFLTaFfmPTjEBLxv3
+         n8y2HxZb4PkIfFI8q9OqF4FYOy/E8ACOpB4SpYvnCsnU+pihmZK3k//Dk6y48tK0rriI
+         nwYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hp6yFzF+wsVEa0WBaxMhTO9O/mR1H5I+SKpcOxOzy5Q=;
-        b=WvR2QNzhZc5PrOl4wLNxx5nQAq7jQw1bzTn7A4dAZUNAXkSq21EImSOvipnr6qF9bG
-         vY+ETRwyhimnLv9kmZ5iqzCe9Pi3AjAA0R4+Ibk79YYpMEvzxOnwdu4E5GMQPfCGXvhZ
-         6wmny08wnxNwjCe4JiDhGa1+CnDSIsNJ1XnqbOE9iWfVcWCrNPZuI8MJMUixMQLL1Hfr
-         OgSGhhiIYiEI2hGSYt8OAXxNZEpH606LocUDKh7/hY90AyXkp6C9M384Qprn/qg4JDsD
-         hZ8rlARFrgsNAhfssriYkXwEPLKL4MXYkv/lE0PIgC/3DHDy1OW3Pws+tZXg+E8fDrcF
-         vhhg==
-X-Gm-Message-State: AFqh2krbIBGAb4pqRUs3IPSxPUHGZeDNV4X//aqjzub+VB4o7Uy0O/Es
-        Zk0Cmn6gT0nksvZbWlM4SiY=
-X-Google-Smtp-Source: AMrXdXttYXeHlAHsKvGQuRpv00MAksbsNKqK1QF216tiS6HVa5WDr4jr7q1JXOcqDjYlV4ASgYyv/Q==
-X-Received: by 2002:aa7:9607:0:b0:580:9e9e:c442 with SMTP id q7-20020aa79607000000b005809e9ec442mr13174811pfg.24.1674155582525;
-        Thu, 19 Jan 2023 11:13:02 -0800 (PST)
-Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
-        by smtp.gmail.com with ESMTPSA id x10-20020aa79aca000000b0058a0e61136asm18539819pfp.66.2023.01.19.11.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 11:13:02 -0800 (PST)
-Date:   Wed, 18 Jan 2023 15:14:02 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X/nCb6M9YYnG5q59FjSK1/m/H/eNOYXaUrw06G9TEt8=;
+        b=x+0/eNhpGnbShPnEcpaCSSSfNUMicgTQbW2YDVoDk6xsNh24i+x6QkXJary2j3F6Yj
+         U9HPBttv67MqE3hHVVj9L+5e70b9deDdteZod7YpF+QpsVifXYYeVwj1S/WXnJcPGFEc
+         o7Ov9CaG321XEKVj+fb1LSKW9nRCXrCqdyZqTFxayGi5GwGcvVC4xAr8Pljk19+QJREw
+         4WE2PrXq/WhLZOviaB4i9zaMRPQJnAlpWwRrKvS+CgowSCkXTMLgECdSZGJ4d6rBEord
+         6cSjFcijIBB71rEDCLIiwixWT8m2tRAMI0IiIHb08lP1NbNFx7x2xcXWl4fkxqNZCY1s
+         CfGA==
+X-Gm-Message-State: AFqh2kqsgFZ+78e3RJd2cSwSIvqngm3TDGF/oaGY6fkG51Y+ZbBXxtZY
+        vtERYhN27Vs2wgBYtnTlwXX0KonrLgc=
+X-Google-Smtp-Source: AMrXdXsXSsGgbcyo2faFpsC272vzzcvyo+yaoJ5KVJCnQbnd+E/g246DY6zPwCVunssV49ktBb+quKpflk0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:289:b0:194:d057:46d0 with SMTP id
+ j9-20020a170903028900b00194d05746d0mr281687plr.52.1674162163222; Thu, 19 Jan
+ 2023 13:02:43 -0800 (PST)
+Date:   Thu, 19 Jan 2023 21:01:25 +0000
+In-Reply-To: <20230111004445.416840-1-vannapurve@google.com>
+Mime-Version: 1.0
+References: <20230111004445.416840-1-vannapurve@google.com>
+X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
+Message-ID: <167409102513.2376237.18253375780531585777.b4-ty@google.com>
+Subject: Re: [V5 PATCH 0/3] Execute hypercalls according to host cpu
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH RFC 3/3] selftests/bpf: Add a test case for vsock sockmap
-Message-ID: <Y8gMugD5vEi1BwBu@bullseye>
-References: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
- <20230118-support-vsock-sockmap-connectible-v1-3-d47e6294827b@bytedance.com>
- <20230119104813.2bkmb3t43eq63i3o@sgarzare-redhat>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119104813.2bkmb3t43eq63i3o@sgarzare-redhat>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Vishal Annapurve <vannapurve@google.com>
+Cc:     pbonzini@redhat.com, shuah@kernel.org, bgardon@google.com,
+        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com,
+        pgonda@google.com, andrew.jones@linux.dev,
+        Oliver Upton <oliver.upton@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,249 +73,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 11:48:13AM +0100, Stefano Garzarella wrote:
-> On Wed, Jan 18, 2023 at 12:27:41PM -0800, Bobby Eshleman wrote:
-> > Add a test case testing the redirection from connectible AF_VSOCK
-> > sockets to connectible AF_UNIX sockets.
-> > 
-> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-> > ---
-> > .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++++
-> > 1 file changed, 163 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-> > index 2cf0c7a3fe232..8b5a2e09c9ede 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-> > @@ -18,6 +18,7 @@
-> > #include <string.h>
-> > #include <sys/select.h>
-> > #include <unistd.h>
-> > +#include <linux/vm_sockets.h>
-> > 
-> > #include <bpf/bpf.h>
-> > #include <bpf/libbpf.h>
-> > @@ -249,6 +250,16 @@ static void init_addr_loopback6(struct sockaddr_storage *ss, socklen_t *len)
-> > 	*len = sizeof(*addr6);
-> > }
-> > 
-> > +static void init_addr_loopback_vsock(struct sockaddr_storage *ss, socklen_t *len)
-> > +{
-> > +	struct sockaddr_vm *addr = memset(ss, 0, sizeof(*ss));
-> > +
-> > +	addr->svm_family = AF_VSOCK;
-> > +	addr->svm_port = VMADDR_PORT_ANY;
-> > +	addr->svm_cid = VMADDR_CID_LOCAL;
+On Wed, 11 Jan 2023 00:44:42 +0000, Vishal Annapurve wrote:
+> Confidential VMs(CVMs) need to execute hypercall instruction as per the CPU
+> type. Normally KVM emulates the vmcall/vmmcall instruction by patching
+> the guest code at runtime. Such a guest memory manipulation by KVM is
+> not allowed with CVMs and is also undesirable in general.
 > 
-> Wait, IIUC we only use loopback, so why do we need to attach the
-> vhost-vsock-pci device to QEMU?
+> This series adds support of executing hypercall as per the host cpu vendor.
+> CPU vendor is queried early during selftest setup and guest setup to be
+> reused later.
 > 
-> At that point if we add CONFIG_VSOCKETS_LOOPBACK in all configurations, it
-> should also work with aarch64 and s390x.
-> 
+> [...]
 
-Oh that is great, I'll drop the vhost-vsock-pci device then. I thought
-adding it fixed the error I was getting when trying to use
-VMADDR_CID_LOCAL, but it must have just been adding
-CONFIG_VSOCKETS_LOOPBACK that fixed it.
+Applied to kvm-x86 selftests, thanks!
 
-Thanks,
-Bobby
+[1/3] KVM: selftests: x86: Use "this_cpu" prefix for cpu vendor queries
+      https://github.com/kvm-x86/linux/commit/093db78b8e6b
+[2/3] KVM: selftests: x86: Cache host CPU vendor (AMD vs. Intel)
+      https://github.com/kvm-x86/linux/commit/832ffb370183
+[3/3] KVM: selftests: x86: Use host's native hypercall instruction in kvm_hypercall()
+      https://github.com/kvm-x86/linux/commit/019dfeb31650
 
-> > +	*len = sizeof(*addr);
-> > +}
-> > +
-> > static void init_addr_loopback(int family, struct sockaddr_storage *ss,
-> > 			       socklen_t *len)
-> > {
-> > @@ -259,6 +270,9 @@ static void init_addr_loopback(int family, struct sockaddr_storage *ss,
-> > 	case AF_INET6:
-> > 		init_addr_loopback6(ss, len);
-> > 		return;
-> > +	case AF_VSOCK:
-> > +		init_addr_loopback_vsock(ss, len);
-> > +		return;
-> > 	default:
-> > 		FAIL("unsupported address family %d", family);
-> > 	}
-> > @@ -1434,6 +1448,8 @@ static const char *family_str(sa_family_t family)
-> > 		return "IPv6";
-> > 	case AF_UNIX:
-> > 		return "Unix";
-> > +	case AF_VSOCK:
-> > +		return "VSOCK";
-> > 	default:
-> > 		return "unknown";
-> > 	}
-> > @@ -1644,6 +1660,151 @@ static void test_unix_redir(struct test_sockmap_listen *skel, struct bpf_map *ma
-> > 	unix_skb_redir_to_connected(skel, map, sotype);
-> > }
-> > 
-> > +/* Returns two connected loopback vsock sockets */
-> > +static int vsock_socketpair_connectible(int sotype, int *v0, int *v1)
-> > +{
-> > +	struct sockaddr_storage addr;
-> > +	socklen_t len = sizeof(addr);
-> > +	int s, p, c;
-> > +
-> > +	s = socket_loopback(AF_VSOCK, sotype);
-> > +	if (s < 0)
-> > +		return -1;
-> > +
-> > +	c = xsocket(AF_VSOCK, sotype | SOCK_NONBLOCK, 0);
-> > +	if (c == -1)
-> > +		goto close_srv;
-> > +
-> > +	if (getsockname(s, sockaddr(&addr), &len) < 0)
-> > +		goto close_cli;
-> > +
-> > +	if (connect(c, sockaddr(&addr), len) < 0 && errno != EINPROGRESS) {
-> > +		FAIL_ERRNO("connect");
-> > +		goto close_cli;
-> > +	}
-> > +
-> > +	len = sizeof(addr);
-> > +	p = accept_timeout(s, sockaddr(&addr), &len, IO_TIMEOUT_SEC);
-> > +	if (p < 0)
-> > +		goto close_cli;
-> > +
-> > +	*v0 = p;
-> > +	*v1 = c;
-> > +
-> > +	return 0;
-> > +
-> > +close_cli:
-> > +	close(c);
-> > +close_srv:
-> > +	close(s);
-> > +
-> > +	return -1;
-> > +}
-> > +
-> > +static void vsock_unix_redir_connectible(int sock_mapfd, int verd_mapfd,
-> > +					 enum redir_mode mode, int sotype)
-> > +{
-> > +	const char *log_prefix = redir_mode_str(mode);
-> > +	char a = 'a', b = 'b';
-> > +	int u0, u1, v0, v1;
-> > +	int sfd[2];
-> > +	unsigned int pass;
-> > +	int err, n;
-> > +	u32 key;
-> > +
-> > +	zero_verdict_count(verd_mapfd);
-> > +
-> > +	if (socketpair(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0, sfd))
-> > +		return;
-> > +
-> > +	u0 = sfd[0];
-> > +	u1 = sfd[1];
-> > +
-> > +	err = vsock_socketpair_connectible(sotype, &v0, &v1);
-> > +	if (err) {
-> > +		FAIL("vsock_socketpair_connectible() failed");
-> > +		goto close_uds;
-> > +	}
-> > +
-> > +	err = add_to_sockmap(sock_mapfd, u0, v0);
-> > +	if (err) {
-> > +		FAIL("add_to_sockmap failed");
-> > +		goto close_vsock;
-> > +	}
-> > +
-> > +	n = write(v1, &a, sizeof(a));
-> > +	if (n < 0)
-> > +		FAIL_ERRNO("%s: write", log_prefix);
-> > +	if (n == 0)
-> > +		FAIL("%s: incomplete write", log_prefix);
-> > +	if (n < 1)
-> > +		goto out;
-> > +
-> > +	n = recv(mode == REDIR_INGRESS ? u0 : u1, &b, sizeof(b), MSG_DONTWAIT);
-> > +	if (n < 0)
-> > +		FAIL("%s: recv() err, errno=%d", log_prefix, errno);
-> > +	if (n == 0)
-> > +		FAIL("%s: incomplete recv", log_prefix);
-> > +	if (b != a)
-> > +		FAIL("%s: vsock socket map failed, %c != %c", log_prefix, a, b);
-> > +
-> > +	key = SK_PASS;
-> > +	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
-> > +	if (err)
-> > +		goto out;
-> > +	if (pass != 1)
-> > +		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
-> > +out:
-> > +	key = 0;
-> > +	bpf_map_delete_elem(sock_mapfd, &key);
-> > +	key = 1;
-> > +	bpf_map_delete_elem(sock_mapfd, &key);
-> > +
-> > +close_vsock:
-> > +	close(v0);
-> > +	close(v1);
-> > +
-> > +close_uds:
-> > +	close(u0);
-> > +	close(u1);
-> > +}
-> > +
-> > +static void vsock_unix_skb_redir_connectible(struct test_sockmap_listen *skel,
-> > +					     struct bpf_map *inner_map,
-> > +					     int sotype)
-> > +{
-> > +	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-> > +	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
-> > +	int sock_map = bpf_map__fd(inner_map);
-> > +	int err;
-> > +
-> > +	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
-> > +	if (err)
-> > +		return;
-> > +
-> > +	skel->bss->test_ingress = false;
-> > +	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_EGRESS, sotype);
-> > +	skel->bss->test_ingress = true;
-> > +	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_INGRESS, sotype);
-> > +
-> > +	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
-> > +}
-> > +
-> > +static void test_vsock_redir(struct test_sockmap_listen *skel, struct bpf_map *map)
-> > +{
-> > +	const char *family_name, *map_name;
-> > +	char s[MAX_TEST_NAME];
-> > +
-> > +	family_name = family_str(AF_VSOCK);
-> > +	map_name = map_type_str(map);
-> > +	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
-> > +	if (!test__start_subtest(s))
-> > +		return;
-> > +
-> > +	vsock_unix_skb_redir_connectible(skel, map, SOCK_STREAM);
-> > +	vsock_unix_skb_redir_connectible(skel, map, SOCK_SEQPACKET);
-> > +}
-> > +
-> > static void test_reuseport(struct test_sockmap_listen *skel,
-> > 			   struct bpf_map *map, int family, int sotype)
-> > {
-> > @@ -2015,12 +2176,14 @@ void serial_test_sockmap_listen(void)
-> > 	run_tests(skel, skel->maps.sock_map, AF_INET6);
-> > 	test_unix_redir(skel, skel->maps.sock_map, SOCK_DGRAM);
-> > 	test_unix_redir(skel, skel->maps.sock_map, SOCK_STREAM);
-> > +	test_vsock_redir(skel, skel->maps.sock_map);
-> > 
-> > 	skel->bss->test_sockmap = false;
-> > 	run_tests(skel, skel->maps.sock_hash, AF_INET);
-> > 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
-> > 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_DGRAM);
-> > 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_STREAM);
-> > +	test_vsock_redir(skel, skel->maps.sock_hash);
-> > 
-> > 	test_sockmap_listen__destroy(skel);
-> > }
-> > 
-> > -- 
-> > 2.30.2
-> > 
-> 
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
