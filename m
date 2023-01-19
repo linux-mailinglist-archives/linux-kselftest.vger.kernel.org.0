@@ -2,88 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A18A676A54
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Jan 2023 00:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED6A676B20
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Jan 2023 06:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjAUXc4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Jan 2023 18:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
+        id S229493AbjAVFDT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 22 Jan 2023 00:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjAUXc4 (ORCPT
+        with ESMTP id S229480AbjAVFDS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Jan 2023 18:32:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8526910250;
-        Sat, 21 Jan 2023 15:32:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F44060918;
-        Sat, 21 Jan 2023 23:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE0BC433D2;
-        Sat, 21 Jan 2023 23:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674343974;
-        bh=xmn62+MR0FZVY202glZIVA2fWAdWaDi9PFeFOODhzlo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ucCJ5P6k2XO8FZmWC7j/0m3scJ+JP8M3Lt7rAMloSoivtrbhwI5Uk0TXgnZazsYQ7
-         XCS1ozVJ2jOAIU/IWRJYYRfnf2HFoavTPDm31X9bX6zoqghYqPcq7acRRlYXiFqyM7
-         dZIt7j+WFjX7TMRO9ZXMXgtmP6yWXY7zh0heuCAq+UM4hhJWVAeCJpYG5EKoqeuon7
-         ftjBLJ7LzmwheSgDjrtP8c6bv93PUsjMdqyMEs4yEaF7jbSHzYrFgNP5xggFnkhq6y
-         eVdjJC5keIt1s5R1jNeTAFcSKDYeXqCMo0SCDzcxSqwU7VFGzCohPnngBqR3sTzh41
-         pJt27ge1chd8Q==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc:     Yipeng Zou <zouyipeng@huawei.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/ftrace: Fix bash specific "==" operator
-Date:   Sun, 22 Jan 2023 08:32:50 +0900
-Message-Id: <167434397083.3069767.14730152459198287532.stgit@devnote3>
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-User-Agent: StGit/0.19
+        Sun, 22 Jan 2023 00:03:18 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A2118A97;
+        Sat, 21 Jan 2023 21:03:17 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id d10so6820078pgm.13;
+        Sat, 21 Jan 2023 21:03:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1rPxEawLgI/tGMgZXoPPdkllAiNZ4imDQSRKldW+0Tg=;
+        b=ZmJe4uoWdrrnu2t0uTnKxkUzdqQIQCbXavzLn5Cckr5wQAN/XNChg6QUa3fC3gqvec
+         ZmffyDkvxjsGFn8lwh7w0D2Wqa4wOTLJ6so7CRqVkI/3oPrMWiS7YDk5EU6RD4IAiARw
+         WO/6KN+/Y/+1/1XOkM5/8yvgltDyHbcAUSDgyZ51d5H+evuJC7n6s0N4/gWuEGKZljYU
+         H6dofb3q0KXwc6iZhZDP6IDfiBZBIgK26cERQryQo/3ttWk3pnyh+th3liOs7N1HT3VD
+         exVu0cfFBrJAXSXqMGAtUNVm3cISNCjmI7HSrQfjXbsnybNZsh9PGCBXdD+eQ//CEweb
+         FHZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1rPxEawLgI/tGMgZXoPPdkllAiNZ4imDQSRKldW+0Tg=;
+        b=sqw+lnym3lFQ9Ah61wyFTZCX0rkzG/rnxetzqwy//eaPst26fiyS3Nc04gzf0b9zrD
+         U0PBKDgd+wvSFDR1NebN+TqB9vYQwi11Bdj5LEkgE0XdU0m8qvFH4HU6MhPnh6v1hgNp
+         u19AJBQW95I8Im8ow/9oc/d2tGgMQvEIArwxVQe4PmfXRGiM2hvgGcSe9r2PGvSgnLPU
+         VGXCLJsOlSHVv/DDhhyYxmLIq8VlCmoyidl97YbyfQMauPhzY8l7/K+q4AZbGzFzwll7
+         j8y53BUPmpu5nqrYH+KcHdvdeiXdzBDwUnVSRAoXLiYSElx0e2hESzrTvebf/1sjVhpx
+         dTag==
+X-Gm-Message-State: AFqh2kowCwCDW+73unZOIU1Bhbf2n3DapW1pTkezp+YG0aNMA9G/7Ylk
+        DbnpWMRumHH0z7I7ONTLr94=
+X-Google-Smtp-Source: AMrXdXu31CyeCOIYHJy4PMa+lMnTUCPNOOCVGdySsvrNk+I6w/8v5j3J3q9D4DHiL0qBs7XWzHuMxg==
+X-Received: by 2002:a05:6a00:4519:b0:58d:f047:53b7 with SMTP id cw25-20020a056a00451900b0058df04753b7mr14535557pfb.3.1674363796900;
+        Sat, 21 Jan 2023 21:03:16 -0800 (PST)
+Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
+        by smtp.gmail.com with ESMTPSA id h11-20020a056a00000b00b0058dd9c46a8csm9062788pfk.64.2023.01.21.21.03.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Jan 2023 21:03:16 -0800 (PST)
+Date:   Thu, 19 Jan 2023 03:47:02 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH RFC 1/3] vsock: support sockmap
+Message-ID: <Y8i9NlRpIR/KE/q2@bullseye>
+References: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
+ <20230118-support-vsock-sockmap-connectible-v1-1-d47e6294827b@bytedance.com>
+ <Y8w7d+6UASP3jUHf@pop-os.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y8w7d+6UASP3jUHf@pop-os.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Sat, Jan 21, 2023 at 11:22:31AM -0800, Cong Wang wrote:
+> On Wed, Jan 18, 2023 at 12:27:39PM -0800, Bobby Eshleman wrote:
+> > +static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
+> > +{
+> > +	struct vsock_sock *vsk = vsock_sk(sk);
+> > +
+> > +	if (!vsk->transport)
+> > +		return -ENODEV;
+> > +
+> > +	if (!vsk->transport->read_skb)
+> > +		return -EOPNOTSUPP;
+> 
+> Can we move these two checks to sockmap update path? It would make
+> vsock_read_skb() faster.
+> 
+> > +
+> > +	return vsk->transport->read_skb(vsk, read_actor);
+> > +}
+> 
+> Essentially can be just this one line.
+> 
+> Thanks.
 
-Since commit a1d6cd88c897 ("selftests/ftrace: event_triggers: wait
-longer for test_event_enable") introduced bash specific "=="
-comparation operator, that test will fail when we run it on a
-posix-shell. `checkbashisms` warned it as below.
+That makes sense, will do.
 
-possible bashism in ftrace/func_event_triggers.tc line 45 (should be 'b = a'):
-        if [ "$e" == $val ]; then
-
-This replaces it with "=".
-
-Fixes: a1d6cd88c897 ("selftests/ftrace: event_triggers: wait longer for test_event_enable")
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- .../ftrace/test.d/ftrace/func_event_triggers.tc    |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
-index 3eea2abf68f9..2ad7d4b501cc 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
-@@ -42,7 +42,7 @@ test_event_enabled() {
- 
-     while [ $check_times -ne 0 ]; do
- 	e=`cat $EVENT_ENABLE`
--	if [ "$e" == $val ]; then
-+	if [ "$e" = $val ]; then
- 	    return 0
- 	fi
- 	sleep $SLEEP_TIME
-
+Thanks,
+Bobby
