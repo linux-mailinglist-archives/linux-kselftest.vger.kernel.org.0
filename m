@@ -2,72 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76452674D0A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jan 2023 07:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193D3674D68
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jan 2023 07:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjATGNf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Jan 2023 01:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S230004AbjATGgO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Jan 2023 01:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjATGNf (ORCPT
+        with ESMTP id S230105AbjATGgM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Jan 2023 01:13:35 -0500
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED4A402F6
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jan 2023 22:13:33 -0800 (PST)
-Received: by mail-vk1-xa30.google.com with SMTP id l129so2084397vkh.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jan 2023 22:13:33 -0800 (PST)
+        Fri, 20 Jan 2023 01:36:12 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FB67857B
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jan 2023 22:36:04 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id j185so4655540vsc.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Jan 2023 22:36:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3cp5+0IZ0b1elwFnA00XP9yynWf818i5PJxxSICGPkY=;
-        b=UUC5AnM9iea1sXQrOYBfknQO9OjF2BhXJbMaeXU1V47O2NXHFkQggstGslLtDXr1YG
-         2X5o0fSR3mNXalaLE8lmwjPJZrIbaG988Gu70Ap7li4CP5UN2jgcLO+p1dNoI5zYcFmy
-         M7gu0GIU51uQxOYyO350kSoLlMvYxhDyUs43ST/xqp7ju6dY+BdkeyhS7jibg8sTS99F
-         BxnGyuRQp/JAeuIxEBEbnVBWqsIa9jr+W91FnCgjxGeDbLyc5ds46c472XsE9TxcLtsU
-         U5kba493OV2czZF2AAsRtokK+IzZ/E+Su3A6O+ylQAm3Lp8dSPvLI01x6BjmCcI5D8hY
-         x9xQ==
+        bh=qy5QpkDgKcjRmFyzlbMv6YwYo7DTNQxGKeHuIVIPSu8=;
+        b=NeDqDQdcv2k6m/cdNqbIYMncK6cS4acU5m9UCI6gyMwh/GrhUCHSoHIpnAaXek+9GL
+         k0/SffdqdkIYMXAFcn1yClJuTAssIehJ/aEHhkNOdW2kvGe2EvUOTssk+6lonuJeg/kl
+         gjeDtTu07DPLfWXr3LXe3QKh5+0itA/+Jb3Ui25nJSlKzrOJ9QX8QqUvdBHsjSJxXRIw
+         Z84cSJV0W6+NwQTU1fHgJ+78zzpzfyKhwACb/LDRro+HEr1tNnrX39aM8HUJ9Y4LgtzF
+         70UvD5fXQfqB7GSpV+gcYoeCzgJfq1VRBqFHWB8v2oJvUoQb6GCTei/rI/C4HTS81xeX
+         xIPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3cp5+0IZ0b1elwFnA00XP9yynWf818i5PJxxSICGPkY=;
-        b=Cg4R7BdPoiwiSqIdwGfwSZlglX9MJk0MvB8vAWaI0wOslOY0MJ57WXu794GaTzCUHD
-         V4NjaQvwzdVa7XH7Mn/Dt/uMQ4J/ViDFXxv+xTRxAHVEwgkKAiqdyLEbozSNSOmubFGg
-         GGc1O316hpW3KVUMVs+3/rjeutdjtNU8Yq6dEbs/G9JHpU0Nj6UOWNiuHN/ulOIrOnFj
-         h84MQRTvbMov683S0bCXaTAwWYBnLt8b9moOFwURCPpz7LPfNtVKgFpyETpT6jYBryir
-         bPZnsEPB3lTKauQ7yk7wp8CjzWwt8jiarjy5lbc94MC0X/eNnmhnCunmYDeX0oQ1SjX4
-         NC2Q==
-X-Gm-Message-State: AFqh2kpElW2ng5+HJhodWrVm7pHhOX7K7nUClGzMSPr7+IxR65SyepbF
-        31qQfv2KyYlHM33DJ/tJ1U4rmaz+m4AZ8uVP8vd2pq+O55RTUW89
-X-Google-Smtp-Source: AMrXdXufrI52UjQXQ6GGLw9lQsfz/2mvfxkmyhftu+yH1CTKJQQc1S2EtkVFSfyeFINGGkZfCha7EDpuOdcDqmDjgE0=
-X-Received: by 2002:a1f:fec5:0:b0:3d5:3549:d569 with SMTP id
- l188-20020a1ffec5000000b003d53549d569mr1774737vki.4.1674195212509; Thu, 19
- Jan 2023 22:13:32 -0800 (PST)
+        bh=qy5QpkDgKcjRmFyzlbMv6YwYo7DTNQxGKeHuIVIPSu8=;
+        b=G3zrJRJjKqGElsggDuTM7RWz9CY6Me8bETK2viGUvN1v+snzJleFv+SrP13VRV7kNd
+         Hj3URly+Kw6tHClpEyRDvYldaahaONHjmcty1UgKehcsBEYWlLAlBerzqoFvA1zGwhaT
+         mVJi3bSLB6+Fzxbw5SZ8U/1Cat49E8omF2wdKulybMSkMUplfTDlJEshWuk70r8q62zj
+         0UAg0A4z7/IUD4b/9YvEB4N/jX8r+xBix4FJhWsuXmLHgVZcZRYJxYsUhHCHe2+HGe+K
+         PP9eH6lYJvWZUbm3m73VXbhRiEeDnk0CtN0kXXhA1gBjNfH0+RMlMs6q7+nYQouPuzPf
+         +r7g==
+X-Gm-Message-State: AFqh2kqw5/4B1tui2AyYGEq43qG9L9vrRiCEN3Ni+ljVLwFiOFBwb63R
+        regJgrzPXNSH/ixbtyyAAu0omXKVJipCJHAvuNkzNg==
+X-Google-Smtp-Source: AMrXdXvjSeaQUrsDI/wO8qCs8/GgwXFzMxE0oFHyVynypIpjETKCEgLlZZot1a6rPy5p9zsFNN++VkiPNSsKCmq2id4=
+X-Received: by 2002:a05:6102:316f:b0:3d2:30a3:70d1 with SMTP id
+ l15-20020a056102316f00b003d230a370d1mr1947808vsm.38.1674196563825; Thu, 19
+ Jan 2023 22:36:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20230117165039.1871598-1-arnd@kernel.org> <CABVgOSnAFM3HozugcOdmgEBja7Q5n1OYkV+ZJ+uFnCaWDTVneQ@mail.gmail.com>
- <20230118110215.yexhgghqmmmkibsi@houat>
-In-Reply-To: <20230118110215.yexhgghqmmmkibsi@houat>
+References: <20230118074219.3921-1-apantykhin@gmail.com>
+In-Reply-To: <20230118074219.3921-1-apantykhin@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 20 Jan 2023 14:13:21 +0800
-Message-ID: <CABVgOSmZzB1rHrgLUBD316su62NbBHpyZ4a3pLWAxqN5u3x9oA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Export kunit_running()
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Joe Fradley <joefradley@google.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>,
+Date:   Fri, 20 Jan 2023 14:35:51 +0800
+Message-ID: <CABVgOSn9ULgwDNTz3V=n+OM088jS7NsJ1mrfcQv-mYVy6zNbVg@mail.gmail.com>
+Subject: Re: [PATCH V2] tools/testing/kunit/kunit.py: remove redundant double check
+To:     Alexander Pantyukhin <apantykhin@gmail.com>
+Cc:     dlatypov@google.com, brendan.higgins@linux.dev,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f1bb9705f2abf2b8"
+        boundary="0000000000007ca05005f2ac4398"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -79,50 +70,78 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000f1bb9705f2abf2b8
+--0000000000007ca05005f2ac4398
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 18 Jan 2023 at 19:02, Maxime Ripard <maxime@cerno.tech> wrote:
+On Wed, 18 Jan 2023 at 15:42, Alexander Pantyukhin <apantykhin@gmail.com> wrote:
 >
-> Hi David, Arnd,
+> The build_tests function contained double checking for not success
+> result. It is fixed in the current patch. Additional small
+> simplifications of code like using ternary if were applied (avoid using
+> the same operation by calculation times differ in two places).
 >
-> Thanks for fixing this issue
->
-> On Wed, Jan 18, 2023 at 08:37:26AM +0800, David Gow wrote:
-> > On Wed, 18 Jan 2023 at 00:50, Arnd Bergmann <arnd@kernel.org> wrote:
-> > >
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > Using kunit_fail_current_test() in a loadable module causes a link
-> > > error like:
-> > >
-> > > ERROR: modpost: "kunit_running" [drivers/gpu/drm/vc4/vc4.ko] undefined!
-> > >
-> > > Export the symbol to allow using it from modules.
-> > >
-> > > Fixes: da43ff045c3f ("drm/vc4: tests: Fail the current test if we access a register")
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > > ---
-> >
-> > Thanks for fixing this!
-> >
-> > I think the longer-term solution for this is the "hooks" approach
-> > (which works even when KUnit itself is built as a module):
-> > https://lore.kernel.org/all/20230117142737.246446-1-davidgow@google.com/
-> >
-> > But this looks good to fix it in the meantime.
-> >
-> > Reviewed-by: David Gow <davidgow@google.com>
->
-> How do you want to merge that patch? Will you take it through your tree?
->
+> Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
+> ---
 
-We'll take this via the kunit/kselftest tree, thanks!
+Looks good, thanks!
+
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
---000000000000f1bb9705f2abf2b8
+>  tools/testing/kunit/kunit.py | 19 +++++--------------
+>  1 file changed, 5 insertions(+), 14 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 43fbe96318fe..0e3e08cc0204 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -77,11 +77,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
+>         config_start = time.time()
+>         success = linux.build_reconfig(request.build_dir, request.make_options)
+>         config_end = time.time()
+> -       if not success:
+> -               return KunitResult(KunitStatus.CONFIG_FAILURE,
+> -                                  config_end - config_start)
+> -       return KunitResult(KunitStatus.SUCCESS,
+> -                          config_end - config_start)
+> +       status = KunitStatus.SUCCESS if success else KunitStatus.CONFIG_FAILURE
+> +       return KunitResult(status, config_end - config_start)
+>
+>  def build_tests(linux: kunit_kernel.LinuxSourceTree,
+>                 request: KunitBuildRequest) -> KunitResult:
+> @@ -92,14 +89,8 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+>                                      request.build_dir,
+>                                      request.make_options)
+>         build_end = time.time()
+> -       if not success:
+> -               return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  build_end - build_start)
+> -       if not success:
+> -               return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  build_end - build_start)
+> -       return KunitResult(KunitStatus.SUCCESS,
+> -                          build_end - build_start)
+> +       status = KunitStatus.SUCCESS if success else KunitStatus.BUILD_FAILURE
+> +       return KunitResult(status, build_end - build_start)
+>
+>  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
+>                            request: KunitBuildRequest) -> KunitResult:
+> @@ -145,7 +136,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+>                 tests = _list_tests(linux, request)
+>                 if request.run_isolated == 'test':
+>                         filter_globs = tests
+> -               if request.run_isolated == 'suite':
+> +               elif request.run_isolated == 'suite':
+>                         filter_globs = _suites_from_test_list(tests)
+>                         # Apply the test-part of the user's glob, if present.
+>                         if '.' in request.filter_glob:
+> --
+> 2.25.1
+>
+
+--0000000000007ca05005f2ac4398
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -189,14 +208,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC0
-FivcN/jamo5lbj8eKC4Jl9MQsJfjcgpgYUBpNQnFcjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjAwNjEzMzJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBc
+Hee2zGQkbKY++RPOkOwGHwW2Zo6Gzl9RuGezlAHKVjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjAwNjM2MDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAKE4dYRt7aFNEocsGPKrL
-DcYF0cM2WlHtJOoBCjasK4ctIKMtFr32dNMV+8IPD3rvzXip4O8UyeJJ5PHz92VegpGeFbdnZY2z
-9oV+MX7PpUr4UyzY/sQ77GzQJdlVT12L7bA6g/ht8XK9PUAmEyHRhww/Okq3/Xr2nOoU2CDXziFn
-hQvji3cxRQ5TdN6hPI19suhNIyykbw65GdV7Df4Ij4hToqW7gJMjtPuq9p9ZxgEX4qqk8lDz+LaT
-3OnBEuymYP5O4dCEgbRkVEayMlqvaZl6JOM2LjCrAg0aAWuyRIUuwS0xiseb475KfiguXJuJGifP
-JRQUcX/c1jz296wXWw==
---000000000000f1bb9705f2abf2b8--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAg30BpaJZJKfObeSMb/5W
+C2xKu7zwz+66LYk/e0mXJVXBEXpwJEcby751gFFNv5bkYlq4UvhdMncAh9l8vThQfY3+Wv02IVNL
+8L2UOVgzoJ0NkcV+vT+8zequQJ2k/sGlUo6kk3yJNx8avJa0njvXr4RNdNm4RgUg5gzs6+WuKtz1
+MhipZeHdGTpl5QMOcT7uYfrSwFnn92RBL12dHYd8Ni64A+VlwLQFr0ohTeLT9PRUk0chJ97g2qpA
+sP5K1to6u7TJNW/K1wgi5IvTSvUhMtfVmsERkNNtevy6Zn+3q+4QE5hmomdtS6xS2DZmaO5zjI7E
+fhpa8/GbYRR7PRC1LQ==
+--0000000000007ca05005f2ac4398--
