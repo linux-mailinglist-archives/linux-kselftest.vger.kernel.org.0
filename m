@@ -2,167 +2,577 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18CA674EDE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jan 2023 09:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBB2674FF4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jan 2023 09:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjATIEQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Jan 2023 03:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S229619AbjATI4H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Jan 2023 03:56:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjATIEP (ORCPT
+        with ESMTP id S229706AbjATI4G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Jan 2023 03:04:15 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6573B40D6;
-        Fri, 20 Jan 2023 00:04:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674201854; x=1705737854;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=8trI9cfIBR6MCsdMqi/ZPKiDgY1RdyZgb5Z0pNKSbB8=;
-  b=UbsaMuVS9SHlkXeyeWd7GwHQxb3nHJQWCPBDKPl97eYA6cV2mPLiLoI6
-   JB3hPgNMh8tLyLyz0IWgKvnhqEIL4UO1M6NAYLKYLod8/Dh6R8iLts6n2
-   D8RiROLD6H3xfpVMeeNndwJUvJDd2p05epCEEr2p8yfkSWrwvjQ3Z4Khk
-   /Sv1w2wojUoYny5M22A8gZA2MS3Ri5PSiPLZoGRmB+0HACC4QQjAw9knm
-   RFDao1Gi4T8J2E4FCdAvX97T3bfBKw9y58tv8q99ZKAykJuAxPTZoW5/j
-   ytWlL2lE832mUt3c7uzmS1gPHdaudThjKfW0tZjf0G8fKMwT+mkctLiwo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305895239"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="305895239"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 00:04:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="834332842"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="834332842"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga005.jf.intel.com with ESMTP; 20 Jan 2023 00:04:13 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 20 Jan 2023 00:04:13 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 20 Jan 2023 00:04:12 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 20 Jan 2023 00:04:12 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 20 Jan 2023 00:04:11 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KmbB8dPo9jIKKnuQQIZKd0tcFjXNJrH6xI0W9XmvKvnGFJcKJdRIIA1svKJKwMFambm8LdYKF/0duWmQxz6O04/67bDmO7+Cd3d0UMkehwR/kjtZkbDKXYb1hckyydIxiny93KT6N/X1WRwLZZl2tSPukF+YnMA45J6EPxigsFijDtTKssLR7uJ3drUwBFlbR2D9Nv25PZgazVc82lXiBA0fZer+4Gg5EA85KXJ7fv75LPwY7JSD2nx7UDxFQaWDzQ2h9JiQX/z+vSv06Xv8vXmRoToVJQobQ6jOlN8J9I9fKv9f5L/rif5Y3VVg04DjFjI++40ZbpqZzIYWZrlozg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8trI9cfIBR6MCsdMqi/ZPKiDgY1RdyZgb5Z0pNKSbB8=;
- b=DZjFjsOGPt6maZAuvhqpkL8QFOe7hQ3ZFLDoHPATUuDqz3zw/IuLdEbRNoG1zrLweRcSYhiCzZwW2XGWxqagIkMu+QoMgvbVkOI351Tu6m9uKMttGP4ekdrF4pF0aIpLcX9VzJAL+dDNUfE8MXjWfGp/SNM2osIEzI5T6FWuiEgrhcWUmye1u/2MJKkFtDENFvo6yZUkMxQp3RhRFOwnJin1wGuptLaZLka5o7tl6wMoVmctGIfO9pLY8kA+iIx642ac0C5d8qUzwogoQnuicOBG1g8IXXWroCLTvd1lfieW45P9CZBfnYxpu4//RmcZIbZfSQOt3kyBqmG7+o0k+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by PH7PR11MB6905.namprd11.prod.outlook.com (2603:10b6:510:201::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Fri, 20 Jan
- 2023 08:04:09 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%9]) with mapi id 15.20.6002.025; Fri, 20 Jan 2023
- 08:04:09 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>
-CC:     "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] selftests: iommu: Fix test_cmd_destroy_access() call in
- user_copy
-Thread-Topic: [PATCH] selftests: iommu: Fix test_cmd_destroy_access() call in
- user_copy
-Thread-Index: AQHZLKLEbd6vY9EuRUyt8zSxkkCw2q6m8iQw
-Date:   Fri, 20 Jan 2023 08:04:09 +0000
-Message-ID: <BN9PR11MB5276D3F6AA7536D5CA08A3C68CC59@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230120074204.1368-1-nicolinc@nvidia.com>
-In-Reply-To: <20230120074204.1368-1-nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB6905:EE_
-x-ms-office365-filtering-correlation-id: ea257803-22f9-4f35-9849-08dafabce90d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TcnmfnIhEmMcyO0YtPmslZnOQLqpyNJi0VgVs50cYZ/nw5/1K9ynuC8Bhtxyj0Udw511QfQ760Bs0r4JtrT5iF8H8rhIerx0aSx2ib6hugxOedRJmjXs27NXgFD9AyNqzEwh95nMZiBwCLzNczh9MMHQyi9ncEmzLFOnW882Jhik0voA3cVVJLkfnB2FXeIQPwHymkksY/3Dm3+rBtNxx8aLqjwa134zdx2Wj7BD9QU/GPb5N/bs9jNxdv2wF/JR+bYlXR2rFsRrw2YEhvbGnAEkdeDFWEW58626EK2FozNtAv7fa0pUY3LfN0wdTClUGgjcoO2jkcqZysGY1t3i80+PDV9/QGrHdu2ChXcumORRfTimS8R2p/2plo138P09By090jst8cCDRE9MV+n9sBYfF6ExYB7Q1qm7ZWjl0LmRs5dYPj/U0l9wS01ynXhSjRiPvYv3OlWNAwmSjApWMd9Q00bfz8+SpUOLqBYFOtsAf5Xm92EFkHtSRBPQ/W/2HzR1kwLE+OM/S9M7biPwiryTCiRSJ9stMn1mVyDo93MiCLFmfdRG2fCM6UfklKx8dBk4u+SvpX57sy46d9JukQoJp0c4ht4VSONpeJ1Xi4sbuGPy6zmvSPz7qB0V3VDSorMm28hDFuB9EPvgq2EZdRxQPU//h12/fvTqJmJ8puu1rSg6as23xUUlZBrGKclPwOHn/fdRxbqCVdplIjdBCA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(366004)(346002)(376002)(396003)(451199015)(83380400001)(33656002)(55016003)(64756008)(4744005)(9686003)(4326008)(66946007)(41300700001)(66446008)(76116006)(66476007)(66556008)(8676002)(26005)(186003)(478600001)(6506007)(8936002)(5660300002)(52536014)(71200400001)(316002)(7696005)(110136005)(38070700005)(54906003)(86362001)(38100700002)(82960400001)(2906002)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EzqoOuKTC6Lhit0f+g5Neg3c4V6MHhPSKDbK/W7DvbxxCiJpbEB7OHglGRj0?=
- =?us-ascii?Q?pBd2B3u8lU6j6UFS42u4KlBYSVeeAAxWHYVV0rfDzgf9mtLHlwfRMOTZPa8b?=
- =?us-ascii?Q?bjl+TyPlEkfkoSrMmuIpuOSIgMf/WrDceq6SbI0hnjrdDAdox5gJGZUzJE9R?=
- =?us-ascii?Q?lU3G2yYMasR8kJzat9d5hMe55O5azCKzftpp4sx/ruAVUt2zPJiIFg78Rkru?=
- =?us-ascii?Q?/BIP2YJTXyvmaHeJ0fImDdwy3gFxN8UjqcXsquXI5cyK/voBcXBIAcI7q5UN?=
- =?us-ascii?Q?kH0S9+jQO0TD1lujHrpZQy7onuabUAob/iJmHouybPTZU77wHIvnZsvHEOnq?=
- =?us-ascii?Q?cN7ionAg4syiafxpTUh6tV+Lv47Q1JwTAqMe+Pe2KzEK3RSHFy6XwPIk1FLI?=
- =?us-ascii?Q?cOE1PcIb+y6mJqnGeubf8UF9uPHYFDrLHYJzT2/nLPxfg0emTfBhHkoi3iCu?=
- =?us-ascii?Q?1j1dtbJKS3S303aZ2BJDW6X2bPRUrxrRqvZBHVCC4wmD+zdzyIGHZ/9iQLux?=
- =?us-ascii?Q?a0zsrKZhlnlEOtu8F/Gr37opsJjmwT4scxoStIhOQpgnJ9dx3VMxCLL1rIfX?=
- =?us-ascii?Q?k0/Vj/9M7fYWnObuc1/60R8UB4jYIvkHkPZcLF84ZlaU5Bn/hpOGuCj+gvnY?=
- =?us-ascii?Q?arRe2F9xE+HEtfrjw3N8Ip2wQ6+ZV+QSnO73ELB0V1wan9ObOldeW4UGXqTE?=
- =?us-ascii?Q?PH/grgk5RJAprgoqNnpohJ8lnC42I7OcT+tWrhGrdSxEYZHYHhIRQr5MwFKM?=
- =?us-ascii?Q?AR9NmrEWAV0n31ieXmhBHETssHNBuo991GhyvC0LOwwVLOdfFfMw91uXFI9T?=
- =?us-ascii?Q?/Wx1hnrbLa/0vNw70KWNn74/puiVNbRw5Gl6JmWsP7A4Dc6yEebtNT8Agj+c?=
- =?us-ascii?Q?Dc6lC6FT86Obo6su0FDBhg/wvlB1tlTRj+jMMDDNy8HjdVj91YkRa9iq5Qpa?=
- =?us-ascii?Q?tOtts3mMjQUxLHrykYoLKmVk6B75Q6X7rna6QvOrI8vlMoDzqd3zgAIyb4e9?=
- =?us-ascii?Q?2DJ3dK/Dh+ErIfREpRS1yQHD/+IOpgWJBBhT/+E8cFu5agV8ttbQEklab67X?=
- =?us-ascii?Q?Qfl6GXrLMjjiyA9keYE5YC7r+rG7I61itdntlCJZ65AxJx6GT0IGQG0SuyaK?=
- =?us-ascii?Q?k+G9ufGcUvc/yRTG9VHjs6z4L0KDqHWAWrYQq0K9vde2CrkWiKIlrZdO9+HK?=
- =?us-ascii?Q?DZtKdbWRhs+KFBJAcAtlsXut/BWTFo8o8XxiKpPdmY3HDBT9/jItP4Kn+MIv?=
- =?us-ascii?Q?xY+f1Up/0TwYjjO59QXHOWNhB5AQ01WE0bfFkLWTY1Xygb0n3KGT+cy26/VT?=
- =?us-ascii?Q?0TExd3OJ1ZaiEyndYe31GXAzHm6OV/WpBulkH0QfgShOEKH1yDBHh5qHP0Kj?=
- =?us-ascii?Q?poHk5ot391cObZGbJBc5D6LTwo0IfVxjdszOQW5gNgpKy/o/Wr8wwQh3TLyL?=
- =?us-ascii?Q?6X+xam4U89v+HNgKRYj7lOo8JhK01dKvsF+WIfC4q+f9Eg5CCRBbHKcsyrqp?=
- =?us-ascii?Q?CbdT9vB9sXuD6eC2Zr6eY6H6qkbLnQFqACwk33rzM85hM7yEURDcpUUhan7T?=
- =?us-ascii?Q?ti/9r/x6U2AMxMPvxrI4UQYxDvBhWohb6ScKpN/6?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 20 Jan 2023 03:56:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233DC3D903
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 00:55:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674204913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s3e6hycgcO72eezO5v4pG9Hz9NkTNCouPRTfvFIUR2A=;
+        b=hZxi/2odcL3VQ4aZ3FF/WGvkFC5wuA0NZRaCrevj9/qFtDsfE+LAVv1GtLxDj5hEHfe2jQ
+        RwuiOoS1yWTNYA8qejHXlDhs2YPddqu/dU4Z22P9wwqTOConM5Y3KXxkvbyntniCdaD2PC
+        mGeG/kGue5X+O0HQjkEEZPtnOZfYvH0=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-408-4Su0OarxPjagHYoVHVTebQ-1; Fri, 20 Jan 2023 03:55:12 -0500
+X-MC-Unique: 4Su0OarxPjagHYoVHVTebQ-1
+Received: by mail-qv1-f71.google.com with SMTP id k15-20020a0cd68f000000b00535261af1b1so2221289qvi.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 00:55:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s3e6hycgcO72eezO5v4pG9Hz9NkTNCouPRTfvFIUR2A=;
+        b=peNwSgrqOzOgcZf6DCy2q2xna/I3g8cLE6cgeY+JJwnYrfOXhzMCbjPHSkUmLruFeT
+         hD5B8JTDzs0frX8ELOElPjF6UgmR8c7R5jRggG63/iGS5GHydHHJ+iES7pBTCNXs2krk
+         3v2Ggj3E9rvbBvW1Gquyk37lV6lfgK/4kZyDS0Ns4Yb4n1Kqgt4k4/old5T8gFyX7s3p
+         N5hqnNAAYa+bB3xLu7g8SNA+uQ6X1IYD7jQM52/T5xxNo6rkOWA/ChQhIrCe4LHVR7i9
+         ToP9RBwOM66+FA7bBG2nvnAeYnyS6QvYvC7QvjccLPr8IZuJHX8lYUQifbmEcx5Dnyoy
+         lJDQ==
+X-Gm-Message-State: AFqh2kraWh73zep1k0rescQtkOganKrHDPfR98PPrYItcDPmaxbgCeNZ
+        n0Avfdg1ZxjQ2S77zAv0ZLsAbshT6rM6jEdrklo9zrgaFqfUAMAuusQLraUggY6Y4R+pTWvJASH
+        6QoLgE903weXCv2HCDzRmbhdGkiHM
+X-Received: by 2002:ac8:5292:0:b0:3ab:65aa:a873 with SMTP id s18-20020ac85292000000b003ab65aaa873mr18565444qtn.24.1674204911342;
+        Fri, 20 Jan 2023 00:55:11 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtNnfvnXFPEwSoieIIOLcxRwjQu+UvQGnuCuQdvztXT9H8gf9ryouEKgkJUY0ME+LbBoSGzPw==
+X-Received: by 2002:ac8:5292:0:b0:3ab:65aa:a873 with SMTP id s18-20020ac85292000000b003ab65aaa873mr18565408qtn.24.1674204910958;
+        Fri, 20 Jan 2023 00:55:10 -0800 (PST)
+Received: from sgarzare-redhat (host-87-11-6-29.retail.telecomitalia.it. [87.11.6.29])
+        by smtp.gmail.com with ESMTPSA id s10-20020a05620a29ca00b006fcb77f3bd6sm25996574qkp.98.2023.01.20.00.55.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 00:55:10 -0800 (PST)
+Date:   Fri, 20 Jan 2023 09:55:02 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Song Liu <song@kernel.org>, Eric Dumazet <edumazet@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Paolo Abeni <pabeni@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>, Hao Luo <haoluo@google.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH RFC 1/3] vsock: support sockmap
+Message-ID: <20230120085502.xkltjilx6nmnxxgj@sgarzare-redhat>
+References: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
+ <20230118-support-vsock-sockmap-connectible-v1-1-d47e6294827b@bytedance.com>
+ <20230119103936.ezjhewtqldhovybs@sgarzare-redhat>
+ <Y8gLW0hI1sFtQ3Md@bullseye>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea257803-22f9-4f35-9849-08dafabce90d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2023 08:04:09.6811
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aXvELDcfT4lpwsdrWOqCARgC1R2JiQ8BhqSwfxvXr7GOZa2ZynoL9lr+aHgzEVISE2WLQGopcLSdfu1Yh4jwVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6905
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y8gLW0hI1sFtQ3Md@bullseye>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Friday, January 20, 2023 3:42 PM
->=20
-> The test_cmd_destroy_access() should end with a semicolon, so add one.
-> There is a test_ioctl_destroy(ioas_id) following already, so drop one.
->=20
-> Fixes: 57f0988706fe ("iommufd: Add a selftest")
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+On Wed, Jan 18, 2023 at 03:08:11PM +0000, Bobby Eshleman wrote:
+>On Thu, Jan 19, 2023 at 11:39:36AM +0100, Stefano Garzarella wrote:
+>> On Wed, Jan 18, 2023 at 12:27:39PM -0800, Bobby Eshleman wrote:
+>> > This patch adds sockmap support for vsock sockets. It is intended to be
+>> > usable by all transports, but only the virtio transport is implemented.
+>> >
+>> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>> > ---
+>> > drivers/vhost/vsock.c                   |   1 +
+>> > include/linux/virtio_vsock.h            |   1 +
+>> > include/net/af_vsock.h                  |  17 +++
+>> > net/vmw_vsock/Makefile                  |   1 +
+>> > net/vmw_vsock/af_vsock.c                |  59 +++++++++--
+>> > net/vmw_vsock/virtio_transport.c        |   2 +
+>> > net/vmw_vsock/virtio_transport_common.c |  22 ++++
+>> > net/vmw_vsock/vsock_bpf.c               | 180 ++++++++++++++++++++++++++++++++
+>> > net/vmw_vsock/vsock_loopback.c          |   2 +
+>> > 9 files changed, 279 insertions(+), 6 deletions(-)
+>>
+>> ./scripts/checkpatch.pl --strict prints some simple warnings/checks that
+>> I suggest to fix :-)
+>>
+>
+>Oops, thanks. New machine, forgot my pre-commit hook. Putting in place
+>now.
+>
+>> >
+>> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+>> > index 1f3b89c885cca..3c6dc036b9044 100644
+>> > --- a/drivers/vhost/vsock.c
+>> > +++ b/drivers/vhost/vsock.c
+>> > @@ -439,6 +439,7 @@ static struct virtio_transport vhost_transport = {
+>> > 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
+>> > 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
+>> >
+>> > +		.read_skb = virtio_transport_read_skb,
+>> > 	},
+>> >
+>> > 	.send_pkt = vhost_transport_send_pkt,
+>> > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+>> > index 3f9c166113063..c58453699ee98 100644
+>> > --- a/include/linux/virtio_vsock.h
+>> > +++ b/include/linux/virtio_vsock.h
+>> > @@ -245,4 +245,5 @@ u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 wanted);
+>> > void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit);
+>> > void virtio_transport_deliver_tap_pkt(struct sk_buff *skb);
+>> > int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *list);
+>> > +int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t read_actor);
+>> > #endif /* _LINUX_VIRTIO_VSOCK_H */
+>> > diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+>> > index 568a87c5e0d0f..a73f5fbd296af 100644
+>> > --- a/include/net/af_vsock.h
+>> > +++ b/include/net/af_vsock.h
+>> > @@ -75,6 +75,7 @@ struct vsock_sock {
+>> > 	void *trans;
+>> > };
+>> >
+>> > +s64 vsock_connectible_has_data(struct vsock_sock *vsk);
+>> > s64 vsock_stream_has_data(struct vsock_sock *vsk);
+>> > s64 vsock_stream_has_space(struct vsock_sock *vsk);
+>> > struct sock *vsock_create_connected(struct sock *parent);
+>> > @@ -173,6 +174,9 @@ struct vsock_transport {
+>> >
+>> > 	/* Addressing. */
+>> > 	u32 (*get_local_cid)(void);
+>> > +
+>> > +	/* Read a single skb */
+>> > +	int (*read_skb)(struct vsock_sock *, skb_read_actor_t);
+>> > };
+>> >
+>> > /**** CORE ****/
+>> > @@ -225,5 +229,18 @@ int vsock_init_tap(void);
+>> > int vsock_add_tap(struct vsock_tap *vt);
+>> > int vsock_remove_tap(struct vsock_tap *vt);
+>> > void vsock_deliver_tap(struct sk_buff *build_skb(void *opaque), void *opaque);
+>> > +int vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+>> > +			      int flags);
+>> > +int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
+>> > +			       size_t len, int flags);
+>> > +
+>> > +#ifdef CONFIG_BPF_SYSCALL
+>> > +extern struct proto vsock_proto;
+>> > +int vsock_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore);
+>> > +void __init vsock_bpf_build_proto(void);
+>> > +#else
+>> > +static inline void __init vsock_bpf_build_proto(void)
+>> > +{}
+>> > +#endif
+>> >
+>> > #endif /* __AF_VSOCK_H__ */
+>> > diff --git a/net/vmw_vsock/Makefile b/net/vmw_vsock/Makefile
+>> > index 6a943ec95c4a5..5da74c4a9f1d1 100644
+>> > --- a/net/vmw_vsock/Makefile
+>> > +++ b/net/vmw_vsock/Makefile
+>> > @@ -8,6 +8,7 @@ obj-$(CONFIG_HYPERV_VSOCKETS) += hv_sock.o
+>> > obj-$(CONFIG_VSOCKETS_LOOPBACK) += vsock_loopback.o
+>> >
+>> > vsock-y += af_vsock.o af_vsock_tap.o vsock_addr.o
+>> > +vsock-$(CONFIG_BPF_SYSCALL) += vsock_bpf.o
+>> >
+>> > vsock_diag-y += diag.o
+>> >
+>> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>> > index d593d5b6d4b15..7081b3a992c1e 100644
+>> > --- a/net/vmw_vsock/af_vsock.c
+>> > +++ b/net/vmw_vsock/af_vsock.c
+>> > @@ -116,10 +116,13 @@ static void vsock_sk_destruct(struct sock *sk);
+>> > static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
+>> >
+>> > /* Protocol family. */
+>> > -static struct proto vsock_proto = {
+>> > +struct proto vsock_proto = {
+>> > 	.name = "AF_VSOCK",
+>> > 	.owner = THIS_MODULE,
+>> > 	.obj_size = sizeof(struct vsock_sock),
+>> > +#ifdef CONFIG_BPF_SYSCALL
+>> > +	.psock_update_sk_prot = vsock_bpf_update_proto,
+>> > +#endif
+>> > };
+>> >
+>> > /* The default peer timeout indicates how long we will wait for a peer response
+>> > @@ -865,7 +868,7 @@ s64 vsock_stream_has_data(struct vsock_sock *vsk)
+>> > }
+>> > EXPORT_SYMBOL_GPL(vsock_stream_has_data);
+>> >
+>> > -static s64 vsock_connectible_has_data(struct vsock_sock *vsk)
+>> > +s64 vsock_connectible_has_data(struct vsock_sock *vsk)
+>> > {
+>> > 	struct sock *sk = sk_vsock(vsk);
+>> >
+>> > @@ -874,6 +877,7 @@ static s64 vsock_connectible_has_data(struct vsock_sock *vsk)
+>> > 	else
+>> > 		return vsock_stream_has_data(vsk);
+>> > }
+>> > +EXPORT_SYMBOL_GPL(vsock_connectible_has_data);
+>> >
+>> > s64 vsock_stream_has_space(struct vsock_sock *vsk)
+>> > {
+>> > @@ -1131,6 +1135,19 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
+>> > 	return mask;
+>> > }
+>> >
+>> > +static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
+>> > +{
+>> > +	struct vsock_sock *vsk = vsock_sk(sk);
+>> > +
+>> > +	if (!vsk->transport)
+>> > +		return -ENODEV;
+>> > +
+>> > +	if (!vsk->transport->read_skb)
+>> > +		return -EOPNOTSUPP;
+>> > +
+>> > +	return vsk->transport->read_skb(vsk, read_actor);
+>> > +}
+>> > +
+>> > static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+>> > 			       size_t len)
+>> > {
+>> > @@ -1241,19 +1258,32 @@ static int vsock_dgram_connect(struct socket *sock,
+>> >
+>> > 	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
+>> > 	sock->state = SS_CONNECTED;
+>> > +	sk->sk_state = TCP_ESTABLISHED;
+>>
+>> Why we need this change?
+>> If it's a fix, we should put it in another patch.
+>>
+>
+>This is just required by sockmap's function that determines if a socket
+>is a valid one to add to a map. It will refuse to add any socket that is
+>not TCP_ESTABLISHED to a sockmap.
+>
+>This was the approach that unix dgrams took, so I followed here.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Okay, make sense to me.
+Maybe mention that in the commit message.
+
+>
+>> >
+>> > out:
+>> > 	release_sock(sk);
+>> > 	return err;
+>> > }
+>> >
+>> > -static int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
+>> > -			       size_t len, int flags)
+>> > +int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
+>> > +			size_t len, int flags)
+>> > {
+>> > -	struct vsock_sock *vsk = vsock_sk(sock->sk);
+>> > +	const struct proto *prot;
+>>
+>> We should use the guard for this statement as in
+>> vsock_connectible_recvmsg().
+>>
+>
+>Got it.
+>
+>> > +	struct vsock_sock *vsk;
+>> > +	struct sock *sk;
+>> > +
+>> > +	sk = sock->sk;
+>> > +	vsk = vsock_sk(sk);
+>> > +
+>> > +#ifdef CONFIG_BPF_SYSCALL
+>> > +	prot = READ_ONCE(sk->sk_prot);
+>> > +	if (prot != &vsock_proto)
+>> > +		return prot->recvmsg(sk, msg, len, flags, NULL);
+>> > +#endif
+>> >
+>> > 	return vsk->transport->dgram_dequeue(vsk, msg, len, flags);
+>> > }
+>> > +EXPORT_SYMBOL_GPL(vsock_dgram_recvmsg);
+>> >
+>> > static const struct proto_ops vsock_dgram_ops = {
+>> > 	.family = PF_VSOCK,
+>> > @@ -1272,6 +1302,7 @@ static const struct proto_ops vsock_dgram_ops = {
+>> > 	.recvmsg = vsock_dgram_recvmsg,
+>> > 	.mmap = sock_no_mmap,
+>> > 	.sendpage = sock_no_sendpage,
+>> > +	.read_skb = vsock_read_skb,
+>> > };
+>> >
+>> > static int vsock_transport_cancel_pkt(struct vsock_sock *vsk)
+>> > @@ -2085,13 +2116,16 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
+>> > 	return err;
+>> > }
+>> >
+>> > -static int
+>> > +int
+>> > vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+>> > 			  int flags)
+>> > {
+>> > 	struct sock *sk;
+>> > 	struct vsock_sock *vsk;
+>> > 	const struct vsock_transport *transport;
+>> > +#ifdef CONFIG_BPF_SYSCALL
+>> > +	const struct proto *prot;
+>> > +#endif
+>> > 	int err;
+>> >
+>> > 	sk = sock->sk;
+>> > @@ -2138,6 +2172,14 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+>> > 		goto out;
+>> > 	}
+>> >
+>> > +#ifdef CONFIG_BPF_SYSCALL
+>> > +	prot = READ_ONCE(sk->sk_prot);
+>> > +	if (prot != &vsock_proto) {
+>> > +		release_sock(sk);
+>> > +		return prot->recvmsg(sk, msg, len, flags, NULL);
+>> > +	}
+>> > +#endif
+>> > +
+>> > 	if (sk->sk_type == SOCK_STREAM)
+>> > 		err = __vsock_stream_recvmsg(sk, msg, len, flags);
+>> > 	else
+>> > @@ -2147,6 +2189,7 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+>> > 	release_sock(sk);
+>> > 	return err;
+>> > }
+>> > +EXPORT_SYMBOL_GPL(vsock_connectible_recvmsg);
+>> >
+>> > static int vsock_set_rcvlowat(struct sock *sk, int val)
+>> > {
+>> > @@ -2187,6 +2230,7 @@ static const struct proto_ops vsock_stream_ops = {
+>> > 	.mmap = sock_no_mmap,
+>> > 	.sendpage = sock_no_sendpage,
+>> > 	.set_rcvlowat = vsock_set_rcvlowat,
+>> > +	.read_skb = vsock_read_skb,
+>> > };
+>> >
+>> > static const struct proto_ops vsock_seqpacket_ops = {
+>> > @@ -2208,6 +2252,7 @@ static const struct proto_ops vsock_seqpacket_ops = {
+>> > 	.recvmsg = vsock_connectible_recvmsg,
+>> > 	.mmap = sock_no_mmap,
+>> > 	.sendpage = sock_no_sendpage,
+>> > +	.read_skb = vsock_read_skb,
+>> > };
+>> >
+>> > static int vsock_create(struct net *net, struct socket *sock,
+>> > @@ -2347,6 +2392,8 @@ static int __init vsock_init(void)
+>> > 		goto err_unregister_proto;
+>> > 	}
+>> >
+>> > +	vsock_bpf_build_proto();
+>> > +
+>> > 	return 0;
+>> >
+>> > err_unregister_proto:
+>> > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+>> > index 28b5a8e8e0948..e95df847176b6 100644
+>> > --- a/net/vmw_vsock/virtio_transport.c
+>> > +++ b/net/vmw_vsock/virtio_transport.c
+>> > @@ -457,6 +457,8 @@ static struct virtio_transport virtio_transport = {
+>> > 		.notify_send_pre_enqueue  =
+>> > 		virtio_transport_notify_send_pre_enqueue,
+>> > 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
+>> > 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
+>> > +
+>> > +		.read_skb = virtio_transport_read_skb,
+>> > 	},
+>> >
+>> > 	.send_pkt = virtio_transport_send_pkt,
+>> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>> > index a1581c77cf84a..9a87ead5b1fc5 100644
+>> > --- a/net/vmw_vsock/virtio_transport_common.c
+>> > +++ b/net/vmw_vsock/virtio_transport_common.c
+>> > @@ -1388,6 +1388,28 @@ int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *queue)
+>> > }
+>> > EXPORT_SYMBOL_GPL(virtio_transport_purge_skbs);
+>> >
+>> > +int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t recv_actor)
+>> > +{
+>> > +	struct virtio_vsock_sock *vvs = vsk->trans;
+>> > +	struct sock *sk = sk_vsock(vsk);
+>> > +	struct sk_buff *skb;
+>> > +	int copied = 0;
+>>
+>> We could avoid initializing `copied`, since it is overwritten later.
+>>
+>
+>Got it.
+>
+>> > +	int off = 0;
+>> > +	int err;
+>> > +
+>> > +	spin_lock_bh(&vvs->rx_lock);
+>> > +	skb = __skb_recv_datagram(sk, &vvs->rx_queue, MSG_DONTWAIT, &off, &err);
+>>
+>> Will this work also for STREAM and SEQPACKET sockets?
+>>
+>
+>Yep, it is used for non-datagram sockets as well because it is free of race
+>conditions, and handles waits/errors sensibly. For example, in
+>unix_accept():
+>
+>https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/unix/af_unix.c#n1696
+
+Good to know :-)
+I'd add a comment, just because the function name suggests something 
+else.
+
+>
+>> > +	spin_unlock_bh(&vvs->rx_lock);
+>> > +
+>> > +	if (!skb)
+>> > +		return err;
+>> > +
+>> > +	copied = recv_actor(sk, skb);
+>> > +	kfree_skb(skb);
+>>
+>> I would have moved these steps to vsock_read_skb() to avoid duplicating
+>> these steps in each transport. Perhaps not all transports want to pass
+>> skb ownership to the caller, though, so maybe we can leave it that
+>> way for now.
+>>
+>
+>That is a good point though. I bet your initial hunch is the right one.
+>If even one other transport duplicates this, then I'd say it is worth
+>pulling up into vsock_read_skb().
+
+Make sense to me :-)
+
+>
+>> > +	return copied;
+>> > +}
+>> > +EXPORT_SYMBOL_GPL(virtio_transport_read_skb);
+>> > +
+>> > MODULE_LICENSE("GPL v2");
+>> > MODULE_AUTHOR("Asias He");
+>> > MODULE_DESCRIPTION("common code for virtio vsock");
+>> > diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
+>> > new file mode 100644
+>> > index 0000000000000..9e11282d3bc1f
+>> > --- /dev/null
+>> > +++ b/net/vmw_vsock/vsock_bpf.c
+>> > @@ -0,0 +1,180 @@
+>> > +// SPDX-License-Identifier: GPL-2.0
+>> > +/* Copyright (c) 2022 Bobby Eshleman <bobby.eshleman@bytedance.com>
+>> > + *
+>> > + * Based off of net/unix/unix_bpf.c
+>> > + */
+>> > +
+>> > +#include <linux/bpf.h>
+>> > +#include <linux/module.h>
+>> > +#include <linux/skmsg.h>
+>> > +#include <linux/socket.h>
+>> > +#include <net/af_vsock.h>
+>> > +#include <net/sock.h>
+>> > +
+>> > +#define vsock_sk_has_data(__sk, __psock)				\
+>> > +		({	!skb_queue_empty(&__sk->sk_receive_queue) ||	\
+>> > +			!skb_queue_empty(&__psock->ingress_skb) ||	\
+>> > +			!list_empty(&__psock->ingress_msg);		\
+>> > +		})
+>> > +
+>> > +static struct proto *vsock_dgram_prot_saved __read_mostly;
+>> > +static DEFINE_SPINLOCK(vsock_dgram_prot_lock);
+>> > +static struct proto vsock_dgram_bpf_prot;
+>> > +
+>> > +static bool vsock_has_data(struct vsock_sock *vsk, struct sk_psock *psock)
+>> > +{
+>> > +	struct sock *sk = sk_vsock(vsk);
+>> > +	s64 ret;
+>> > +
+>> > +	ret = vsock_connectible_has_data(vsk);
+>> > +	if (ret > 0)
+>> > +		return true;
+>> > +
+>> > +	return vsock_sk_has_data(sk, psock);
+>> > +}
+>> > +
+>> > +static int vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
+>> > +{
+>> > +	struct vsock_sock *vsk;
+>> > +	int err;
+>> > +
+>> > +	DEFINE_WAIT(wait);
+>> > +
+>> > +	vsk = vsock_sk(sk);
+>> > +	err = 0;
+>> > +
+>> > +	while (vsock_has_data(vsk, psock)) {
+>> > +		prepare_to_wait(sk_sleep(sk), &wait, TASK_INTERRUPTIBLE);
+>> > +
+>> > +		if (sk->sk_err != 0 ||
+>> > +		    (sk->sk_shutdown & RCV_SHUTDOWN) ||
+>> > +		    (vsk->peer_shutdown & SEND_SHUTDOWN)) {
+>> > +			break;
+>> > +		}
+>> > +
+>> > +		if (timeo == 0) {
+>> > +			err = -EAGAIN;
+>> > +			break;
+>> > +		}
+>> > +
+>> > +		release_sock(sk);
+>> > +		timeo = schedule_timeout(timeo);
+>> > +		lock_sock(sk);
+>> > +
+>> > +		if (signal_pending(current)) {
+>> > +			err = sock_intr_errno(timeo);
+>> > +			break;
+>> > +		} else if (timeo == 0) {
+>> > +			err = -EAGAIN;
+>> > +			break;
+>> > +		}
+>> > +	}
+>> > +
+>> > +	finish_wait(sk_sleep(sk), &wait);
+>> > +
+>> > +	if (err)
+>> > +		return err;
+>> > +
+>> > +	return 0;
+>> > +}
+>> > +
+>> > +static int vsock_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int flags)
+>> > +{
+>> > +	int err;
+>> > +	struct socket *sock = sk->sk_socket;
+>> > +
+>> > +	if (sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET)
+>> > +		err = vsock_connectible_recvmsg(sock, msg, len, flags);
+>> > +	else
+>>
+>> Could it happen that it is not DGRAM and we should return an error in
+>> this case?
+>>
+>
+>I'm not sure but for the sake of safety, I'll add that.
+
+Yep, I agree.
+
+Thanks,
+Stefano
+
