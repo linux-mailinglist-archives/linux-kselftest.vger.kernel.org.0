@@ -2,249 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B7D675415
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jan 2023 13:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128AC6757A5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Jan 2023 15:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjATMEt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Jan 2023 07:04:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S230417AbjATOpE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Jan 2023 09:45:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjATMEr (ORCPT
+        with ESMTP id S230456AbjATOpC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Jan 2023 07:04:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CE47C875;
-        Fri, 20 Jan 2023 04:04:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C59EB824B2;
-        Fri, 20 Jan 2023 12:04:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A344C433EF;
-        Fri, 20 Jan 2023 12:04:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674216283;
-        bh=AxlzWP6bKYbN0GnwW4HFD2FOqyA4ObEOwSpC6C3TMVo=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=WvNBXs7kDf+LDPS5KvNo7Mk+i3I+U6Yku8IXJ7x6yR6ikIapfigmFzzRwEw2g5HKh
-         rGX+57t3TBRxDSrU1C3jXxvJaw7nprEyYLk2cGq/Q2yvjHed8uAvwavqsU9FEwRgYL
-         bBmwufbFyfhJaJGAg1mPNDlnF05u3qArqYKmlxSKla4ICOSBau44QapuZ+A9dj8Oap
-         /VfAKbapfnOfjvGSfFgbLq/a4HGjFMF+YISZUnqaUEwlSqxIjgz2BW/ffUIW358vi5
-         SIAzlqomhOtRMK+3PvK/+Qhq8FXAwEsMLSoSfJlSlsLPunB9PpFrbIxJSpUAkFL4ed
-         Vg/Qppyp+YnkA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Fri, 20 Jan 2023 12:04:09 +0000
-Subject: [PATCH 2/2] kselftest/arm64: Verify simultaneous SSVE and ZA
- context generation
+        Fri, 20 Jan 2023 09:45:02 -0500
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1832BCFD26;
+        Fri, 20 Jan 2023 06:44:38 -0800 (PST)
+Received: by mail-io1-xd44.google.com with SMTP id q130so2537422iod.4;
+        Fri, 20 Jan 2023 06:44:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hDCYG8WxS/pUjt/n8MvGqQ4mEBFsqI4uxAOlI7paeNc=;
+        b=ZKv2kJnbHZoYZy1tJyO4tdeh91R61byMjNI2lb14x8KJae1X5W0y4SjIBSNS1kHRdb
+         oigCmrD81gGVVGUbcrqhcIFKQz6nDsSr5DazytIj3JGvflF/m2P6KyFYPTlTVvVuTxKF
+         +CCZvCHJ20T0wdFaUFkadoTZO92RW8K6iiqfnrrGwPtJz5XlVdOVELQkcnQwSlf8vekW
+         jLCkuE7eZFleOD4LEysRktAkKxR/OUdQDMYlodZFOEgM2s3cv73ohw2KPUYkZVt3G/ct
+         2WD1tWGgvuTcdRDQ8D6tW9faTAs/szW+tedVcUEXKO15Ibc57FL/ptN/1uFkGrw3wXIz
+         pqzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hDCYG8WxS/pUjt/n8MvGqQ4mEBFsqI4uxAOlI7paeNc=;
+        b=a1hcwUn/ThxYlF+tuzUb2bA5ERssRJcEX+0n+IZZ8iYCf67WCeSePo4CAoBrmyc6vS
+         ymY8EUbAz6Ur6ZhtUd/PGeEfDJYriVKDPkzBUr0IhZ0vmi3h8cW3FBaN1lS2hbiFzyN3
+         4P8NuKgJD7LOM0lArSelE1kkS8L9dfkSls6uxrB70/fpWdcFhBRKlN2CbPtXtPKxq75G
+         Hfn4QyEDJbRrY3b0Y3hXfasHCTFXHPetS+7Hq2x/knELXQJO2fhCw8Pd1LneR6k/E34B
+         JPD52OpBXb04X6b4/sGJyrr78MTbeTqqZzIIP+sk6fHZNQuJXFRs1KNyg1HFbzjkcaBi
+         JXEA==
+X-Gm-Message-State: AFqh2koFdht3Qx1OpBMLifFfRDlOkhQjvw3xqWI5cdw8Q+CWxBIZbRZT
+        knKbX+9ea2jTv7fSyZFCFb3TpTVunD68
+X-Google-Smtp-Source: AMrXdXuMycxFXCNiEYKeHDhmhI7Qlr14maanOHP2VLUa80rQsKw4EVW4q2yPZ6+LLLQfFL6ThMcBsA==
+X-Received: by 2002:a5d:8348:0:b0:6e3:c112:3339 with SMTP id q8-20020a5d8348000000b006e3c1123339mr9578231ior.16.1674225846816;
+        Fri, 20 Jan 2023 06:44:06 -0800 (PST)
+Received: from fedora.mshome.net ([104.184.156.161])
+        by smtp.gmail.com with ESMTPSA id p185-20020a0229c2000000b003a7c47efde0sm1513852jap.11.2023.01.20.06.44.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 06:44:06 -0800 (PST)
+From:   Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, krisman@collabora.com,
+        tglx@linutronix.de, luto@kernel.org, oleg@redhat.com,
+        peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Subject: [PATCH v3 0/3] Checkpoint Support for Syscall User Dispatch
+Date:   Fri, 20 Jan 2023 09:43:53 -0500
+Message-Id: <20230120144356.40717-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230117-arm64-test-ssve-za-v1-2-203c00150154@kernel.org>
-References: <20230117-arm64-test-ssve-za-v1-0-203c00150154@kernel.org>
-In-Reply-To: <20230117-arm64-test-ssve-za-v1-0-203c00150154@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-77e06
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4446; i=broonie@kernel.org;
- h=from:subject:message-id; bh=AxlzWP6bKYbN0GnwW4HFD2FOqyA4ObEOwSpC6C3TMVo=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjyoNVHWUkN1v2qrFjL52jNiXt6aMJTyoa1/+Eu2S4
- y+piR3SJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY8qDVQAKCRAk1otyXVSH0LDbB/
- 9vFflIr4202fmnXNpnBP8sn0cctd7RrGBVmkY4P9O8AuKV7NjLLIQvrvTfS/TZhZMy/UMfhj9a/WZu
- Ox6jU+xliFc9N1KqC9gs1uJMdU/1H9zd2fBZn5T+CszetXIw/WhwWO0g7kfhL2MF3MIIhu9jW97Bhl
- mXqj94h3IYqwUxH6WGfSSnKLeAzC90Zz56OpXQYWTjjdfCFb68dnEDLGZARU3yhkuHsSyt+ueKLitM
- au80gapcMRTStHqqu0Z5Qm1PV2YP3elQOb51O86De7t/YzAKWG6pU30C4s5gAMP2wdh6I6JhluezXA
- 60KouzTF4gelARoelTUV4baDte6fi1
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test that generates SSVE and ZA context in a single signal frame to
-ensure that nothing is going wrong in that case for any reason.
+v3: Kernel test robot static function fix
+    Whitespace nitpicks
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- .../arm64/signal/testcases/ssve_za_regs.c          | 162 +++++++++++++++++++++
- 1 file changed, 162 insertions(+)
+v2: Implements the getter/setter interface in ptrace rather than prctl
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/ssve_za_regs.c b/tools/testing/selftests/arm64/signal/testcases/ssve_za_regs.c
-new file mode 100644
-index 000000000000..954a21f6121a
---- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/ssve_za_regs.c
-@@ -0,0 +1,162 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2021 ARM Limited
-+ *
-+ * Verify that both the streaming SVE and ZA register context in
-+ * signal frames is set up as expected when enabled simultaneously.
-+ */
-+
-+#include <signal.h>
-+#include <ucontext.h>
-+#include <sys/prctl.h>
-+
-+#include "test_signals_utils.h"
-+#include "testcases.h"
-+
-+static union {
-+	ucontext_t uc;
-+	char buf[1024 * 128];
-+} context;
-+static unsigned int vls[SVE_VQ_MAX];
-+unsigned int nvls = 0;
-+
-+static bool sme_get_vls(struct tdescr *td)
-+{
-+	int vq, vl;
-+
-+	/*
-+	 * Enumerate up to SVE_VQ_MAX vector lengths
-+	 */
-+	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
-+		vl = prctl(PR_SME_SET_VL, vq * 16);
-+		if (vl == -1)
-+			return false;
-+
-+		vl &= PR_SME_VL_LEN_MASK;
-+
-+		/* Skip missing VLs */
-+		vq = sve_vq_from_vl(vl);
-+
-+		vls[nvls++] = vl;
-+	}
-+
-+	/* We need at least one VL */
-+	if (nvls < 1) {
-+		fprintf(stderr, "Only %d VL supported\n", nvls);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static void setup_regs(void)
-+{
-+	/* smstart sm; real data is TODO */
-+	asm volatile(".inst 0xd503437f" : : : );
-+
-+	/* smstart za; real data is TODO */
-+	asm volatile(".inst 0xd503457f" : : : );
-+}
-+
-+static char zeros[ZA_SIG_REGS_SIZE(SVE_VQ_MAX)];
-+
-+static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
-+			 unsigned int vl)
-+{
-+	size_t offset;
-+	struct _aarch64_ctx *head = GET_BUF_RESV_HEAD(context);
-+	struct _aarch64_ctx *regs;
-+	struct sve_context *ssve;
-+	struct za_context *za;
-+	int ret;
-+
-+	fprintf(stderr, "Testing VL %d\n", vl);
-+
-+	ret = prctl(PR_SME_SET_VL, vl);
-+	if (ret != vl) {
-+		fprintf(stderr, "Failed to set VL, got %d\n", ret);
-+		return 1;
-+	}
-+
-+	/*
-+	 * Get a signal context which should have the SVE and ZA
-+	 * frames in it.
-+	 */
-+	setup_regs();
-+	if (!get_current_context(td, &context.uc, sizeof(context)))
-+		return 1;
-+
-+	regs = get_header(head, SVE_MAGIC, GET_BUF_RESV_SIZE(context),
-+			  &offset);
-+	if (!regs) {
-+		fprintf(stderr, "No SVE context\n");
-+		return 1;
-+	}
-+
-+	ssve = (struct sve_context *)regs;
-+	if (ssve->vl != vl) {
-+		fprintf(stderr, "Got SSVE VL %d, expected %d\n", ssve->vl, vl);
-+		return 1;
-+	}
-+
-+	if (!(ssve->flags & SVE_SIG_FLAG_SM)) {
-+		fprintf(stderr, "SVE_SIG_FLAG_SM not set in SVE record\n");
-+		return 1;
-+	}
-+
-+	fprintf(stderr, "Got expected SSVE size %u and VL %d\n",
-+		regs->size, ssve->vl);
-+
-+	regs = get_header(head, ZA_MAGIC, GET_BUF_RESV_SIZE(context),
-+			  &offset);
-+	if (!regs) {
-+		fprintf(stderr, "No ZA context\n");
-+		return 1;
-+	}
-+
-+	za = (struct za_context *)regs;
-+	if (za->vl != vl) {
-+		fprintf(stderr, "Got ZA VL %d, expected %d\n", za->vl, vl);
-+		return 1;
-+	}
-+
-+	fprintf(stderr, "Got expected ZA size %u and VL %d\n",
-+		regs->size, za->vl);
-+
-+	/* We didn't load any data into ZA so it should be all zeros */
-+	if (memcmp(zeros, (char *)za + ZA_SIG_REGS_OFFSET,
-+		   ZA_SIG_REGS_SIZE(sve_vq_from_vl(za->vl))) != 0) {
-+		fprintf(stderr, "ZA data invalid\n");
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int sme_regs(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
-+{
-+	int i;
-+
-+	for (i = 0; i < nvls; i++) {
-+		if (do_one_sme_vl(td, si, uc, vls[i]))
-+			return 1;
-+	}
-+
-+	td->pass = 1;
-+
-+	return 0;
-+}
-+
-+struct tdescr tde = {
-+	.name = "Streaming SVE registers",
-+	.descr = "Check that we get the right Streaming SVE registers reported",
-+	/*
-+	 * We shouldn't require FA64 but things like memset() used in the
-+	 * helpers might use unsupported instructions so for now disable
-+	 * the test unless we've got the full instruction set.
-+	 */
-+	.feats_required = FEAT_SME | FEAT_SME_FA64,
-+	.timeout = 3,
-+	.init = sme_get_vls,
-+	.run = sme_regs,
-+};
+Syscall user dispatch makes it possible to cleanly intercept system
+calls from user-land.  However, most transparent checkpoint software
+presently leverages some combination of ptrace and system call
+injection to place software in a ready-to-checkpoint state.
+
+If Syscall User Dispatch is enabled at the time of being quiesced,
+injected system calls will subsequently be interposed upon and
+dispatched to the task's signal handler.
+
+This patch set implements 3 features to enable software such as CRIU
+to cleanly interpose upon software leveraging syscall user dispatch.
+
+- Implement PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH, akin to a similar
+  feature for SECCOMP.  This allows a ptracer to temporarily disable
+  syscall user dispatch, making syscall injection possible.
+
+- Implement an fs/proc extension that reports whether Syscall User
+  Dispatch is being used in proc/status.  A similar value is present
+  for SECCOMP, and is used to determine whether special logic is
+  needed during checkpoint/resume.
+
+- Implement a getter interface for Syscall User Dispatch config info.
+  To resume successfully, the checkpoint/resume software has to
+  save and restore this information.  Presently this configuration
+  is write-only, with no way for C/R software to save it.
+
+  This was done in ptrace because syscall user dispatch is not part of
+  uapi. The syscall_user_dispatch_config structure was added to the
+  ptrace exports.
+
+
+Gregory Price (3):
+  ptrace,syscall_user_dispatch: Implement Syscall User Dispatch
+    Suspension
+  fs/proc/array: Add Syscall User Dispatch to proc status
+  ptrace,syscall_user_dispatch: add a getter/setter for sud
+    configuration
+
+ .../admin-guide/syscall-user-dispatch.rst     |  5 +-
+ fs/proc/array.c                               |  8 +++
+ include/linux/ptrace.h                        |  2 +
+ include/linux/syscall_user_dispatch.h         | 19 +++++++
+ include/uapi/linux/ptrace.h                   | 16 +++++-
+ kernel/entry/syscall_user_dispatch.c          | 54 +++++++++++++++++++
+ kernel/ptrace.c                               | 13 +++++
+ 7 files changed, 115 insertions(+), 2 deletions(-)
 
 -- 
-2.34.1
+2.39.0
 
