@@ -2,182 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4A5676663
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jan 2023 14:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FF9676772
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jan 2023 17:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjAUNFq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Jan 2023 08:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
+        id S229943AbjAUQlh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 Jan 2023 11:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjAUNFk (ORCPT
+        with ESMTP id S229787AbjAUQlg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Jan 2023 08:05:40 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2858829E1E;
-        Sat, 21 Jan 2023 05:05:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674306338; x=1705842338;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mYPaUET6yMOwGGV2IxKGzIaVsssVsIa9IyUsova1n/0=;
-  b=HiMMIfSawWQ/8+JG3AJ362LXZ5Ath/niOQfL4c+tib2Xkm9NSFsOy4Rz
-   tT5oD4ReGVyDDxthy2kOKQ6H3G6iI+umZ8YADhl/qU2X13rxbfoxtLFZ8
-   Ty7wjtEMsWNLwsJAg5Cs09fyea5arpdIoSprnc9X7bCEQR/rcIc88+dbU
-   PnUyq+R1GpIHiuc21cXMj0RajafTuo6pzqnuvewTtIVsCelav2OU1VvQf
-   zkYMjfK3rbMgXAyBqauLKlEU/avc+fFgEelWD6dJc0sO6Uro+7vY8E1pq
-   46omzp1QrVa5VSTNPuUc9Fj08wG5r/aF7Vo3APf7uMCCWJOUUVJB4LJhH
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="412015640"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="412015640"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 05:05:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="654087129"
-X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
-   d="scan'208";a="654087129"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 21 Jan 2023 05:05:22 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pJDYf-00045M-1L;
-        Sat, 21 Jan 2023 13:05:21 +0000
-Date:   Sat, 21 Jan 2023 21:04:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gregory Price <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, krisman@collabora.com,
-        tglx@linutronix.de, luto@kernel.org, oleg@redhat.com,
-        peterz@infradead.org, ebiederm@xmission.com,
-        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Subject: Re: [PATCH v4 2/3] fs/proc/array: Add Syscall User Dispatch to proc
- status
-Message-ID: <202301212030.OheLeUFY-lkp@intel.com>
-References: <20230121102316.331935-3-gregory.price@memverge.com>
+        Sat, 21 Jan 2023 11:41:36 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E0C27996
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Jan 2023 08:41:34 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id k18so7874951pll.5
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 Jan 2023 08:41:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JOX2RPz2RmtLcTQJgM9TGwdLXWI4jQY3SMsLFF1TY9E=;
+        b=bmJaKN/bKfHhWZIWLtG2Pvn/c3k/r56F3JpBC0xtiCFoVEaZstRHrIIv1rj8TBRBQK
+         wGmh1iELEC3vZAgMiqrS56nSh/t3U7tqztDw/H2VEfLSkeR1QCMYoqTPghwDD/2QCrw5
+         VO14AFkoqIv8MWZbasbs6mAtQECs9VDv4lwofXmoUq/4KlG0fMQetgf4bsoUgGy+lik3
+         iCQhilOxmKw4VQZOHVr45XTUNjUe9zsrVMCxbH7LXDj8dSRGuB/LGoASQVEf9hrp10zb
+         7u40hGlgLiZadPrSVOFXcL/ND+1Ue99TeWOw+KvTXROW8+gNTQ2Nv94yPLnqpVnMziIb
+         2geg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JOX2RPz2RmtLcTQJgM9TGwdLXWI4jQY3SMsLFF1TY9E=;
+        b=Uegn6xsOjJn688ws308l5GomMOGVCaacOvDi6g9PLTeIHqD/A43gPtw2HWmf4Vv9PY
+         fTyBe6XCEKRkVOyN9BcymCxveoEoMqzrtZ8PJbp4Sb1MbP4+kvbUW32qMfldJlNTGH2c
+         NivMAjBrwGqiLxN0kyj2iZQNGpibLnZ2M8aZDryAmOKWLdWJ1u5tAMF1dUbPrSx9m1qo
+         Vrbp6tE2sktNvBXffHrBUaxgdfAGxfI1j+b6XyNDykAQYTdxMs4uIsMCnaRgT4kA0Kb2
+         I0O6WcVCzV7B3sw+usV1Ln0c7e4jNa5c0Q/T2FvzqCLI5tepPT+DBwAQ4hUpGWKgdbqu
+         xy1w==
+X-Gm-Message-State: AFqh2kqLnQzr9hguNzATKXe2D0nXhYQYZP2P6uVU6BjsoUCp35iV3d5Y
+        gmh1OGzPpAQ7sZayqSzoum4p5TMXPvUghXO6h+Q=
+X-Google-Smtp-Source: AMrXdXvq2npG37Pv2yeeR+lthk+zvozE0BI+KQV6/Q4aojPLb99SNXOuSBlijkfumF51ltILhLTyYA==
+X-Received: by 2002:a17:902:e811:b0:194:98ef:a40e with SMTP id u17-20020a170902e81100b0019498efa40emr21966312plg.31.1674319294182;
+        Sat, 21 Jan 2023 08:41:34 -0800 (PST)
+Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
+        by smtp.gmail.com with ESMTPSA id c8-20020a170902d48800b00174f61a7d09sm5790513plg.247.2023.01.21.08.41.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 21 Jan 2023 08:41:33 -0800 (PST)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Huang Rui'" <ray.huang@amd.com>, <sedat.dilek@gmail.com>,
+        <li.meng@amd.com>, <skhan@linuxfoundation.org>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "Doug Smythies" <dsmythies@telus.net>
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
+In-Reply-To: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
+Subject: [PATCH v2] selftests: amd-pstate: Don't delete source files via Makefile
+Date:   Sat, 21 Jan 2023 08:41:35 -0800
+Message-ID: <000601d92db7$39e9d0b0$adbd7210$@telus.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230121102316.331935-3-gregory.price@memverge.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: Adkts+qzXK0iZufMT6q77LIlw14ifA==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Gregory,
+Revert the portion of a recent Makefile change that incorrectly
+deletes source files when doing "make clean".
 
-Thank you for the patch! Yet something to improve:
+Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+Acked-by: Huang Rui <ray.huang@amd.com>
+Signed-off-by: Doug Smythies <dsmythies@telus.net>
+---
+v2: fix address list.
+---
+ tools/testing/selftests/amd-pstate/Makefile | 5 -----
+ 1 file changed, 5 deletions(-)
 
-[auto build test ERROR on linus/master]
-[cannot apply to tip/core/entry]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+index 5f195ee756d6..5fd1424db37d 100644
+--- a/tools/testing/selftests/amd-pstate/Makefile
++++ b/tools/testing/selftests/amd-pstate/Makefile
+@@ -7,11 +7,6 @@ all:
+ uname_M := $(shell uname -m 2>/dev/null || echo not)
+ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230121-182401
-patch link:    https://lore.kernel.org/r/20230121102316.331935-3-gregory.price%40memverge.com
-patch subject: [PATCH v4 2/3] fs/proc/array: Add Syscall User Dispatch to proc status
-config: hexagon-randconfig-r016-20230119 (https://download.01.org/0day-ci/archive/20230121/202301212030.OheLeUFY-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a2cb8440d45e7d3030e7349c7c598971a951e5f2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230121-182401
-        git checkout a2cb8440d45e7d3030e7349c7c598971a951e5f2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
+-ifeq (x86,$(ARCH))
+-TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+-TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+-endif
+-
+ TEST_PROGS := run.sh
+ TEST_FILES := basic.sh tbench.sh gitsource.sh
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/proc/array.c:61:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/proc/array.c:61:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/proc/array.c:61:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/proc/array.c:435:8: error: use of undeclared identifier 'TIF_SYSCALL_USER_DISPATCH'
-                               test_syscall_work(SYSCALL_USER_DISPATCH));
-                               ^
-   include/linux/thread_info.h:168:45: note: expanded from macro 'test_syscall_work'
-           test_ti_thread_flag(current_thread_info(), TIF_##fl)
-                                                      ^
-   <scratch space>:37:1: note: expanded from here
-   TIF_SYSCALL_USER_DISPATCH
-   ^
-   6 warnings and 1 error generated.
+--
+2.25.1
 
 
-vim +/TIF_SYSCALL_USER_DISPATCH +435 fs/proc/array.c
 
-   430	
-   431	static inline void task_syscall_user_dispatch(struct seq_file *m,
-   432							struct task_struct *p)
-   433	{
-   434		seq_put_decimal_ull(m, "\nSyscall_user_dispatch:\t",
- > 435				    test_syscall_work(SYSCALL_USER_DISPATCH));
-   436	}
-   437	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
