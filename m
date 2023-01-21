@@ -2,254 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B866765AE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jan 2023 11:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA78676659
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jan 2023 14:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjAUKXb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 Jan 2023 05:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S229728AbjAUNFj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 Jan 2023 08:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjAUKX1 (ORCPT
+        with ESMTP id S229575AbjAUNFi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Jan 2023 05:23:27 -0500
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE8B45BF0;
-        Sat, 21 Jan 2023 02:23:25 -0800 (PST)
-Received: by mail-qt1-x844.google.com with SMTP id j9so6140417qtv.4;
-        Sat, 21 Jan 2023 02:23:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RgFqur+BidWWWQr7r2LPXldx8oTQot1Qp1tXD/WiXfY=;
-        b=Y60BRocz38pQeT9LNHp+OoXGPTE5kAuDg3kXW+KKqMXkJ1wrdemi6j2so6grTKGJJt
-         VaODOSwRAlmo2HB09dnLSkc5SPPADWxIayCQSspbs+j1KVBDMOAyAVeLiDswzBtRJdXl
-         +9aDwn1LEoARBcTXYFikMtdcnEzRMDGHqZQ75lsTYpuP/7WFbLby/0UDh+P+4QBzGnf7
-         l+POgSQDt1hgmlJFZLgcNrsx8iGxg2FJXw6p9NoZ385ZWpjRlVOWyc6ndulKsFDXBUUg
-         ywRJq8es34UChKZYhajU64YCNZEiFlHAGih4QkYX1KVSNWwmg8XPW2KtfHfwS5jP8xAn
-         69LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RgFqur+BidWWWQr7r2LPXldx8oTQot1Qp1tXD/WiXfY=;
-        b=S3IJXAGO7xcrPm2/t0ncdws6wkMyua7qFX6VP1k9yqOj0cMcFWd7aSMmZ0V5Zs5CQo
-         e3fyPJrQrer4jriO4WrXfBkXPKbZ2x2hKGd+UuuZ1sl40Vk0HpUZ1mr6yNZUzPRBtFl8
-         fc+nU0duZsgy1xI4ZI2sCYAHPNyIqJv7Pb4WeO8ck1NTa0BMk+R3MUSQePl9aw9g61ih
-         I3mwExd/xDWaOHSTBzc6CnogypPvQAFU0BCDT0oUDjzzHYKJk416ZvcsOmWc2LgMIYNv
-         VZtlSDX5sXUPQZBsoOrVMxJ1JeWl7wJYkH1GK1Wiu7dMn7Bztap0SE1TlI9nC6STNF63
-         QUGA==
-X-Gm-Message-State: AFqh2kqQRVtTLFhloxL/KPMTnpm4BzNGkN0DoPO+bXwALCGcx531S7eY
-        +8Ooaos3T+QR4iT0mVnWG9HsBR52G/Rf
-X-Google-Smtp-Source: AMrXdXuHQGEmCLoJYFISVqUDA492mFQpJoWc32U8Y4YOlLVLoy7qj3BAkQvnUl7dGluAVfy6aJpeiQ==
-X-Received: by 2002:ac8:59ca:0:b0:3b6:6669:dd28 with SMTP id f10-20020ac859ca000000b003b66669dd28mr27405204qtf.18.1674296604839;
-        Sat, 21 Jan 2023 02:23:24 -0800 (PST)
-Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
-        by smtp.gmail.com with ESMTPSA id y2-20020a05620a44c200b006e42a8e9f9bsm14128630qkp.121.2023.01.21.02.23.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 02:23:24 -0800 (PST)
-From:   Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, krisman@collabora.com,
-        tglx@linutronix.de, luto@kernel.org, oleg@redhat.com,
-        peterz@infradead.org, ebiederm@xmission.com,
+        Sat, 21 Jan 2023 08:05:38 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A720B2B0A7;
+        Sat, 21 Jan 2023 05:05:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674306328; x=1705842328;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hQqpAboKcp0CU8eDrws4JPIasl3/c8rUFWjk4p58ebE=;
+  b=FxaTTy7VA4/eUBx7ADs5k2VWhx435auA+At2gPhj27d64GdhPZCtTqnF
+   0qWTNLCqds8T8rcZ5PkGrCf/5rv3xc+dgHreq8/V4417CkBkVzUSKmg2y
+   0+w9jQ26i5bYOXJfGtVBJMzpbwxAhA9667uZ1SeVzx0SHvyccxaAH3Wpq
+   gXhWWTGmHYVbJfTbRg9Uu32UVMiF5h6iP8VaTcxIObvjLmM6elKxVQ4Ov
+   GHHnlVMkif10LEk2anL0rKa4Vhl49ufCVacCHc6ZNfhEqZiaUmX0kcQ5z
+   a7eAQkv6QI9xlvCxwvSnoN1jlZaQklJZlj+CU4i5yfB/72OWizz6C6FmN
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="412015627"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="412015627"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2023 05:05:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="654087127"
+X-IronPort-AV: E=Sophos;i="5.97,235,1669104000"; 
+   d="scan'208";a="654087127"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 21 Jan 2023 05:05:22 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJDYf-00045G-0s;
+        Sat, 21 Jan 2023 13:05:21 +0000
+Date:   Sat, 21 Jan 2023 21:04:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        oleg@redhat.com, peterz@infradead.org, ebiederm@xmission.com,
         akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
         shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Subject: [PATCH v4 3/3] ptrace,syscall_user_dispatch: add a getter/setter for sud configuration
-Date:   Sat, 21 Jan 2023 05:23:16 -0500
-Message-Id: <20230121102316.331935-4-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230121102316.331935-1-gregory.price@memverge.com>
-References: <20230121102316.331935-1-gregory.price@memverge.com>
+Subject: Re: [PATCH v4 2/3] fs/proc/array: Add Syscall User Dispatch to proc
+ status
+Message-ID: <202301212030.oAj9QJnD-lkp@intel.com>
+References: <20230121102316.331935-3-gregory.price@memverge.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230121102316.331935-3-gregory.price@memverge.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Implement ptrace getter/setter interface for syscall user dispatch.
+Hi Gregory,
 
-Presently, these settings are write-only via prctl, making it impossible
-to implement transparent checkpoint (coordination with the software is
-required).
+Thank you for the patch! Yet something to improve:
 
-This is modeled after a similar interface for SECCOMP, which can have
-its configuration dumped by ptrace for software like CRIU.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.2-rc4 next-20230120]
+[cannot apply to tip/core/entry]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
----
- .../admin-guide/syscall-user-dispatch.rst     |  5 +-
- include/linux/syscall_user_dispatch.h         | 19 ++++++++
- include/uapi/linux/ptrace.h                   | 10 ++++
- kernel/entry/syscall_user_dispatch.c          | 46 +++++++++++++++++++
- kernel/ptrace.c                               |  9 ++++
- 5 files changed, 88 insertions(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230121-182401
+patch link:    https://lore.kernel.org/r/20230121102316.331935-3-gregory.price%40memverge.com
+patch subject: [PATCH v4 2/3] fs/proc/array: Add Syscall User Dispatch to proc status
+config: arc-randconfig-r043-20230119 (https://download.01.org/0day-ci/archive/20230121/202301212030.oAj9QJnD-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a2cb8440d45e7d3030e7349c7c598971a951e5f2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Gregory-Price/ptrace-syscall_user_dispatch-Implement-Syscall-User-Dispatch-Suspension/20230121-182401
+        git checkout a2cb8440d45e7d3030e7349c7c598971a951e5f2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
-index 60314953c728..a23ae21a1d5b 100644
---- a/Documentation/admin-guide/syscall-user-dispatch.rst
-+++ b/Documentation/admin-guide/syscall-user-dispatch.rst
-@@ -43,7 +43,10 @@ doesn't rely on any of the syscall ABI to make the filtering.  It uses
- only the syscall dispatcher address and the userspace key.
- 
- As the ABI of these intercepted syscalls is unknown to Linux, these
--syscalls are not instrumentable via ptrace or the syscall tracepoints.
-+syscalls are not instrumentable via ptrace or the syscall tracepoints,
-+however an interfaces to suspend, checkpoint, and restore syscall user
-+dispatch configuration has been added to ptrace to assist userland
-+checkpoint/restart software.
- 
- Interface
- ---------
-diff --git a/include/linux/syscall_user_dispatch.h b/include/linux/syscall_user_dispatch.h
-index a0ae443fb7df..9e1bd0d87c1e 100644
---- a/include/linux/syscall_user_dispatch.h
-+++ b/include/linux/syscall_user_dispatch.h
-@@ -22,6 +22,13 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- #define clear_syscall_work_syscall_user_dispatch(tsk) \
- 	clear_task_syscall_work(tsk, SYSCALL_USER_DISPATCH)
- 
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
-+
- #else
- struct syscall_user_dispatch {};
- 
-@@ -35,6 +42,18 @@ static inline void clear_syscall_work_syscall_user_dispatch(struct task_struct *
- {
- }
- 
-+static inline int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
-+static inline int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
- #endif /* CONFIG_GENERIC_ENTRY */
- 
- #endif /* _SYSCALL_USER_DISPATCH_H */
-diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
-index ba9e3f19a22c..8b93c78189b5 100644
---- a/include/uapi/linux/ptrace.h
-+++ b/include/uapi/linux/ptrace.h
-@@ -112,6 +112,16 @@ struct ptrace_rseq_configuration {
- 	__u32 pad;
- };
- 
-+#define PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG 0x4210
-+#define PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG 0x4211
-+struct syscall_user_dispatch_config {
-+	__u64 mode;
-+	__s8 *selector;
-+	__u64 offset;
-+	__u64 len;
-+	__u8 on_dispatch;
-+};
-+
- /*
-  * These values are stored in task->ptrace_message
-  * by ptrace_stop to describe the current syscall-stop.
-diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-index b5ec75164805..a303c8de59af 100644
---- a/kernel/entry/syscall_user_dispatch.c
-+++ b/kernel/entry/syscall_user_dispatch.c
-@@ -111,3 +111,49 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- 
- 	return 0;
- }
-+
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch *sd = &task->syscall_dispatch;
-+	struct syscall_user_dispatch_config config;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (test_syscall_work(SYSCALL_USER_DISPATCH))
-+		config.mode = PR_SYS_DISPATCH_ON;
-+	else
-+		config.mode = PR_SYS_DISPATCH_OFF;
-+
-+	config.offset = sd->offset;
-+	config.len = sd->len;
-+	config.selector = sd->selector;
-+	config.on_dispatch = sd->on_dispatch;
-+
-+	if (copy_to_user(data, &config, sizeof(config)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch_config config;
-+	int ret;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&config, data, sizeof(config)))
-+		return -EFAULT;
-+
-+	ret = set_syscall_user_dispatch(config.mode, config.offset, config.len,
-+			config.selector);
-+	if (ret)
-+		return ret;
-+
-+	task->syscall_dispatch.on_dispatch = config.on_dispatch;
-+	return 0;
-+}
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index a348b68d07a2..76de46e080e2 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -32,6 +32,7 @@
- #include <linux/compat.h>
- #include <linux/sched/signal.h>
- #include <linux/minmax.h>
-+#include <linux/syscall_user_dispatch.h>
- 
- #include <asm/syscall.h>	/* for syscall_get_* */
- 
-@@ -1263,6 +1264,14 @@ int ptrace_request(struct task_struct *child, long request,
- 		break;
- #endif
- 
-+	case PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_set_config(child, addr, datavp);
-+		break;
-+
-+	case PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_get_config(child, addr, datavp);
-+		break;
-+
- 	default:
- 		break;
- 	}
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/asm-generic/current.h:5,
+                    from arch/arc/include/asm/current.h:20,
+                    from include/linux/sched.h:12,
+                    from include/linux/time_namespace.h:6,
+                    from fs/proc/array.c:59:
+   fs/proc/array.c: In function 'task_syscall_user_dispatch':
+>> include/linux/thread_info.h:168:52: error: 'TIF_SYSCALL_USER_DISPATCH' undeclared (first use in this function); did you mean 'PR_SET_SYSCALL_USER_DISPATCH'?
+     168 |         test_ti_thread_flag(current_thread_info(), TIF_##fl)
+         |                                                    ^~~~
+   fs/proc/array.c:435:29: note: in expansion of macro 'test_syscall_work'
+     435 |                             test_syscall_work(SYSCALL_USER_DISPATCH));
+         |                             ^~~~~~~~~~~~~~~~~
+   include/linux/thread_info.h:168:52: note: each undeclared identifier is reported only once for each function it appears in
+     168 |         test_ti_thread_flag(current_thread_info(), TIF_##fl)
+         |                                                    ^~~~
+   fs/proc/array.c:435:29: note: in expansion of macro 'test_syscall_work'
+     435 |                             test_syscall_work(SYSCALL_USER_DISPATCH));
+         |                             ^~~~~~~~~~~~~~~~~
+
+
+vim +168 include/linux/thread_info.h
+
+3136b93c3fb2b7 Gabriel Krisman Bertazi 2020-11-16  164  
+3136b93c3fb2b7 Gabriel Krisman Bertazi 2020-11-16  165  #define set_syscall_work(fl)						\
+5903f61e035320 Gabriel Krisman Bertazi 2020-11-23  166  	set_ti_thread_flag(current_thread_info(), TIF_##fl)
+3136b93c3fb2b7 Gabriel Krisman Bertazi 2020-11-16  167  #define test_syscall_work(fl) \
+5903f61e035320 Gabriel Krisman Bertazi 2020-11-23 @168  	test_ti_thread_flag(current_thread_info(), TIF_##fl)
+3136b93c3fb2b7 Gabriel Krisman Bertazi 2020-11-16  169  #define clear_syscall_work(fl) \
+5903f61e035320 Gabriel Krisman Bertazi 2020-11-23  170  	clear_ti_thread_flag(current_thread_info(), TIF_##fl)
+3136b93c3fb2b7 Gabriel Krisman Bertazi 2020-11-16  171  
+
 -- 
-2.39.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
