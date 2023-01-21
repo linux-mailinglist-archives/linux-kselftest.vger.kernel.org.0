@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DE26761FA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jan 2023 01:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7646761FC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Jan 2023 01:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjAUAQg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Jan 2023 19:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
+        id S229796AbjAUAQj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Jan 2023 19:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjAUAQd (ORCPT
+        with ESMTP id S229769AbjAUAQg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:16:33 -0500
+        Fri, 20 Jan 2023 19:16:36 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2C6AA7C5
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:16:20 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id n194-20020a2540cb000000b008038647d9ebso1909995yba.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:16:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF7AC41E6
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:16:24 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id k15-20020a5b0a0f000000b007eba3f8e3baso7401392ybq.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:16:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T7o4vSmm7ZL1KEassKDMWSbS80FYjDRO3LkEb1B3l7A=;
-        b=Ol7HjVscoT8ho/9hbUrrCazQ67jYdiv/WqZ3xCCEBOmLMoRYL3BVBpX9yE4cKVDNaM
-         k2Bs1B5PSpElX8QFPMjeAqEYDtW6CtPgpDi+gHVAujrUnMRQfAvsZpqSatGSNrRowTaY
-         qWOU0SderZMc9TdF+m65z5N/Gy26LtNslf/DkyoJYelWAo3xwiQtDsGz+8R91hjiD+1B
-         l5KYpyddlEv1NtUoggfZL9Kb5LuD9WrfVdLaMcy96u+xYmf8sycyvox4f0JLDUf/+mvX
-         dEbJG3xxtHu7lbyab1L26tQFECJWcXKTfIsiqYhE4WfGeXUMwnPZA6OXAjwJsBj9Ko2T
-         /7RA==
+        bh=BLjdusZm+xjhNzljGhXw4f9568iWucER7Te8w8OqhFs=;
+        b=TDIaCVqYeIkQPZRKMJoacHO6RWwqZ2saZD80hqMq+dsF0MaeVOmsLzBudmhT2LAPx6
+         zXDGZGPegVLI4pfT2pxUSy2kD77TugYTngV83uqsZH0JbgQjUo3PECb0APIQb47XYCU9
+         FqwQQ0drC8OvMGcqLF17TkJ2k0eZfsT1Zrg/5meqhIngWjQD5BqlijWlRxExc0y3Uu4d
+         IIJ6t3o1ybuEgQVMCJCJG2Jxzi/FF9RYYuTrxEZU/uPetZKthsFlpDy6vDTBeTw+dVz5
+         xnBH5JLrC3+jM+Bgx5gy7skPT/bfFSb6GNucSPJw/48hiZ7D2UOe1g//87WZ714vK9yr
+         5zXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T7o4vSmm7ZL1KEassKDMWSbS80FYjDRO3LkEb1B3l7A=;
-        b=1BLK3PilYT35gcoUeTV/bq00smhl4UlO99XHwkmdSHsKvH9OaNjcwM8PVvDEeHbyB8
-         RSrV1xEYZAcFhnIssnfNUwk/1p9upYjFadTYhbrsj4iNEHa3N/A7tgy7da6NM5SRtiY+
-         xanB8VjcvBYGEi+mjwlaTLdqxtDY4NsVcFtEewMZK3iMPnvwRAQTXQkMDXiu1v5ZMlpI
-         Lxxt4y/l5tJ5MVypUQ7LRElZnPWkbCpwt9ggPUz6m1A31vgrWrzbPeWWNr/jj1EhATeg
-         NuffuGIo4C3eXSAQvjj2espfa1ubfDpnVRRVwp3EcaJNTxYpiuO8wc8qCECwa6wjEoFj
-         XxwQ==
-X-Gm-Message-State: AFqh2kqWOFZEk9ustVNCTioCAXKXUVTZxZf8QiGu9ulULQMMz6FOopEo
-        L+n83fs9NVNbDLJcTYAdcu21/u4Mp605uzdF24bw5CBH1KRNWN64rVLimOJ4niO2kWAQC9dysOU
-        ZKbm9ulek/8NJAJe63U1gkLDlzEevUnITiP/+FdO5buwKReJB7j4HjH0F6jkda37UqT+VITBpcF
-        STAKoTijZbf08=
-X-Google-Smtp-Source: AMrXdXvb6e+7GbFt53kF2e0bJ3VgqeUIfUKaID4GUf2ASLS61yYJrydHuxqaqc5U/Mq13V5eDDpJ8IqcnwLc8SZnBQ==
+        bh=BLjdusZm+xjhNzljGhXw4f9568iWucER7Te8w8OqhFs=;
+        b=Z4C7yMi7YCYvxOnkBVnHiQkYCi4xMd1ODfCY4HApYWoIxAd2Q7vHMeQPN9YOLvR1lH
+         aE01kf07LQVKnFDmXXntW5NplfwqjGY0EjGQ9aysPVryfSNNV2q4T+LnIDR4AiPVhY+N
+         gRilARjjvEA0AHACs0J8YJ5zJz5fTDS46DxyBOGfSqEUrMagosVxZYYqTGWFtmOXE4Lf
+         Vn/Ru//XtSN+L4r5DOQs3XJ7MYgz4XC4iebzWOlqu+zkVYgrlZXmGE3UGPa6JsCVLj4O
+         yhiP1Ccu27FLOtWegPjUL5T+/MR2pP2SdPScuvJrgeMSrBNuQCmYLDGesV2qGnNdDz7t
+         NeNw==
+X-Gm-Message-State: AFqh2kpfVaCmSZgBCkcWMkuaxate0Or6G/j3Lf/BnumpvQvK94qJh9zi
+        oOvvMLo1HUaVSSlRhJf22UtV+Bvf5l58FOIcYWfYtxSX2w2moZEGjkbaAMkceQ++PbWCbW2eKmB
+        fKrrWJP4vX+Q4phhfNyKO7cq1tgKE+XvybU8tDsbwQB0kbPD3YOC95cYUtxOByhoMPBq7nCoIFh
+        SFiaVJYRpqUcg=
+X-Google-Smtp-Source: AMrXdXsHP5+f2fpfYzE99STHEa4P9O08B98yUTieK273C17++g9izQw4HiDu7GbrwsdBFOcun4exBxIBpIXN2zIitg==
 X-Received: from ackerleytng-cloudtop-sg.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:b30])
- (user=ackerleytng job=sendgmr) by 2002:a0d:d5c6:0:b0:4ef:ce3a:a54 with SMTP
- id x189-20020a0dd5c6000000b004efce3a0a54mr2181857ywd.485.1674260179077; Fri,
- 20 Jan 2023 16:16:19 -0800 (PST)
-Date:   Sat, 21 Jan 2023 00:15:13 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a25:dc8f:0:b0:768:2e4c:9799 with SMTP
+ id y137-20020a25dc8f000000b007682e4c9799mr2014885ybe.481.1674260183238; Fri,
+ 20 Jan 2023 16:16:23 -0800 (PST)
+Date:   Sat, 21 Jan 2023 00:15:14 +0000
 In-Reply-To: <20230121001542.2472357-1-ackerleytng@google.com>
 Mime-Version: 1.0
 References: <20230121001542.2472357-1-ackerleytng@google.com>
 X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230121001542.2472357-3-ackerleytng@google.com>
-Subject: [RFC PATCH v3 02/31] KVM: selftests: Add support for creating
- non-default type VMs
+Message-ID: <20230121001542.2472357-4-ackerleytng@google.com>
+Subject: [RFC PATCH v3 03/31] KVM: selftests: Expose function that sets up
+ sregs based on VM's mode
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
@@ -82,94 +82,90 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Erdem Aktas <erdemaktas@google.com>
+This allows initializing sregs without setting vCPU registers in
+KVM.
 
-Currently vm_create function only creates KVM_VM_TYPE_DEFAULT type VMs.
-Adding type parameter to ____vm_create to create new VM types.
+No functional change intended.
 
-Signed-off-by: Erdem Aktas <erdemaktas@google.com>
-Reviewed-by: David Matlack <dmatlack@google.com>
-Signed-off-by: Ryan Afranji <afranji@google.com>
-Signed-off-by: Sagi Shahar <sagis@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util_base.h | 6 ++++--
- tools/testing/selftests/kvm/lib/kvm_util.c          | 6 +++---
- tools/testing/selftests/kvm/lib/x86_64/sev.c        | 2 +-
- 3 files changed, 8 insertions(+), 6 deletions(-)
+ .../selftests/kvm/include/x86_64/processor.h  |  2 +
+ .../selftests/kvm/lib/x86_64/processor.c      | 39 ++++++++++---------
+ 2 files changed, 23 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 0db5cd4b8383a..0fa4dab3d8e52 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -27,6 +27,8 @@
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index e8ca0d8a6a7e0..74e0d3698f30c 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -644,6 +644,8 @@ const struct kvm_cpuid_entry2 *get_cpuid_entry(const struct kvm_cpuid2 *cpuid,
+ void vcpu_init_cpuid(struct kvm_vcpu *vcpu, const struct kvm_cpuid2 *cpuid);
+ void vcpu_set_hv_cpuid(struct kvm_vcpu *vcpu);
  
- #define NSEC_PER_SEC 1000000000L
- 
-+#define KVM_VM_TYPE_DEFAULT	0
++void vcpu_setup_mode_sregs(struct kvm_vm *vm, struct kvm_sregs *sregs);
 +
- typedef uint64_t vm_paddr_t; /* Virtual Machine (Guest) physical address */
- typedef uint64_t vm_vaddr_t; /* Virtual Machine (Guest) virtual address */
- 
-@@ -686,13 +688,13 @@ uint64_t vm_nr_pages_required(enum vm_guest_mode mode,
-  * __vm_create() does NOT create vCPUs, @nr_runnable_vcpus is used purely to
-  * calculate the amount of memory needed for per-vCPU data, e.g. stacks.
-  */
--struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages);
-+struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages, int type);
- struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint32_t nr_runnable_vcpus,
- 			   uint64_t nr_extra_pages);
- 
- static inline struct kvm_vm *vm_create_barebones(void)
- {
--	return ____vm_create(VM_MODE_DEFAULT, 0);
-+	return ____vm_create(VM_MODE_DEFAULT, 0, KVM_VM_TYPE_DEFAULT);
+ static inline struct kvm_cpuid_entry2 *__vcpu_get_cpuid_entry(struct kvm_vcpu *vcpu,
+ 							      uint32_t function,
+ 							      uint32_t index)
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index ed811181320de..1bb07d3c025b0 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -589,35 +589,38 @@ static void kvm_setup_tss_64bit(struct kvm_vm *vm, struct kvm_segment *segp,
+ 	kvm_seg_fill_gdt_64bit(vm, segp);
  }
  
- static inline struct kvm_vm *vm_create(uint32_t nr_runnable_vcpus)
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 5257bce6f546d..14246f0fd2e78 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -185,7 +185,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
- _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
- 	       "Missing new mode params?");
- 
--struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages)
-+struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages, int type)
+-static void vcpu_setup(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
++void vcpu_setup_mode_sregs(struct kvm_vm *vm, struct kvm_sregs *sregs)
  {
- 	struct kvm_vm *vm;
+-	struct kvm_sregs sregs;
+-
+-	/* Set mode specific system register values. */
+-	vcpu_sregs_get(vcpu, &sregs);
+-
+-	sregs.idt.limit = 0;
++	sregs->idt.limit = 0;
  
-@@ -201,7 +201,7 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages)
- 	hash_init(vm->regions.slot_hash);
+-	kvm_setup_gdt(vm, &sregs.gdt);
++	kvm_setup_gdt(vm, &sregs->gdt);
  
- 	vm->mode = mode;
--	vm->type = 0;
-+	vm->type = type;
+ 	switch (vm->mode) {
+ 	case VM_MODE_PXXV48_4K:
+-		sregs.cr0 = X86_CR0_PE | X86_CR0_NE | X86_CR0_PG;
+-		sregs.cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
+-		sregs.efer |= (EFER_LME | EFER_LMA | EFER_NX);
+-
+-		kvm_seg_set_unusable(&sregs.ldt);
+-		kvm_seg_set_kernel_code_64bit(vm, DEFAULT_CODE_SELECTOR, &sregs.cs);
+-		kvm_seg_set_kernel_data_64bit(vm, DEFAULT_DATA_SELECTOR, &sregs.ds);
+-		kvm_seg_set_kernel_data_64bit(vm, DEFAULT_DATA_SELECTOR, &sregs.es);
+-		kvm_setup_tss_64bit(vm, &sregs.tr, 0x18);
++		sregs->cr0 = X86_CR0_PE | X86_CR0_NE | X86_CR0_PG;
++		sregs->cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
++		sregs->efer |= (EFER_LME | EFER_LMA | EFER_NX);
++
++		kvm_seg_set_unusable(&sregs->ldt);
++		kvm_seg_set_kernel_code_64bit(vm, DEFAULT_CODE_SELECTOR, &sregs->cs);
++		kvm_seg_set_kernel_data_64bit(vm, DEFAULT_DATA_SELECTOR, &sregs->ds);
++		kvm_seg_set_kernel_data_64bit(vm, DEFAULT_DATA_SELECTOR, &sregs->es);
++		kvm_setup_tss_64bit(vm, &sregs->tr, 0x18);
+ 		break;
  
- 	vm->pa_bits = vm_guest_mode_params[mode].pa_bits;
- 	vm->va_bits = vm_guest_mode_params[mode].va_bits;
-@@ -337,7 +337,7 @@ struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint32_t nr_runnable_vcpus,
- 	struct userspace_mem_region *slot0;
- 	struct kvm_vm *vm;
+ 	default:
+ 		TEST_FAIL("Unknown guest mode, mode: 0x%x", vm->mode);
+ 	}
  
--	vm = ____vm_create(mode, nr_pages);
-+	vm = ____vm_create(mode, nr_pages, KVM_VM_TYPE_DEFAULT);
- 
- 	kvm_vm_elf_load(vm, program_invocation_name);
- 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/sev.c b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-index faed2ebe63ac9..dedfd9f45cfb3 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/sev.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-@@ -221,7 +221,7 @@ struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t policy, void *guest_code,
- 	uint64_t nr_pages = vm_nr_pages_required(mode, 1, 0);
- 	struct kvm_vm *vm;
- 
--	vm = ____vm_create(mode, nr_pages);
-+	vm = ____vm_create(mode, nr_pages, KVM_VM_TYPE_DEFAULT);
- 
- 	kvm_sev_ioctl(vm, KVM_SEV_INIT, NULL);
+-	sregs.cr3 = vm->pgd;
++	sregs->cr3 = vm->pgd;
++}
++
++static void vcpu_setup(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
++{
++	struct kvm_sregs sregs;
++
++	vcpu_sregs_get(vcpu, &sregs);
++	vcpu_setup_mode_sregs(vm, &sregs);
+ 	vcpu_sregs_set(vcpu, &sregs);
+ }
  
 -- 
 2.39.0.246.g2a6d74b583-goog
