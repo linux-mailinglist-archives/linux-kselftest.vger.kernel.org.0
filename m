@@ -2,123 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED6A676B20
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Jan 2023 06:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F3F6770A8
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Jan 2023 17:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjAVFDT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 22 Jan 2023 00:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S229837AbjAVQkz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 22 Jan 2023 11:40:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjAVFDS (ORCPT
+        with ESMTP id S229766AbjAVQky (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 22 Jan 2023 00:03:18 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A2118A97;
-        Sat, 21 Jan 2023 21:03:17 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id d10so6820078pgm.13;
-        Sat, 21 Jan 2023 21:03:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1rPxEawLgI/tGMgZXoPPdkllAiNZ4imDQSRKldW+0Tg=;
-        b=ZmJe4uoWdrrnu2t0uTnKxkUzdqQIQCbXavzLn5Cckr5wQAN/XNChg6QUa3fC3gqvec
-         ZmffyDkvxjsGFn8lwh7w0D2Wqa4wOTLJ6so7CRqVkI/3oPrMWiS7YDk5EU6RD4IAiARw
-         WO/6KN+/Y/+1/1XOkM5/8yvgltDyHbcAUSDgyZ51d5H+evuJC7n6s0N4/gWuEGKZljYU
-         H6dofb3q0KXwc6iZhZDP6IDfiBZBIgK26cERQryQo/3ttWk3pnyh+th3liOs7N1HT3VD
-         exVu0cfFBrJAXSXqMGAtUNVm3cISNCjmI7HSrQfjXbsnybNZsh9PGCBXdD+eQ//CEweb
-         FHZA==
+        Sun, 22 Jan 2023 11:40:54 -0500
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF65B193E5;
+        Sun, 22 Jan 2023 08:40:53 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id q15so8028037qtn.0;
+        Sun, 22 Jan 2023 08:40:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1rPxEawLgI/tGMgZXoPPdkllAiNZ4imDQSRKldW+0Tg=;
-        b=sqw+lnym3lFQ9Ah61wyFTZCX0rkzG/rnxetzqwy//eaPst26fiyS3Nc04gzf0b9zrD
-         U0PBKDgd+wvSFDR1NebN+TqB9vYQwi11Bdj5LEkgE0XdU0m8qvFH4HU6MhPnh6v1hgNp
-         u19AJBQW95I8Im8ow/9oc/d2tGgMQvEIArwxVQe4PmfXRGiM2hvgGcSe9r2PGvSgnLPU
-         VGXCLJsOlSHVv/DDhhyYxmLIq8VlCmoyidl97YbyfQMauPhzY8l7/K+q4AZbGzFzwll7
-         j8y53BUPmpu5nqrYH+KcHdvdeiXdzBDwUnVSRAoXLiYSElx0e2hESzrTvebf/1sjVhpx
-         dTag==
-X-Gm-Message-State: AFqh2kowCwCDW+73unZOIU1Bhbf2n3DapW1pTkezp+YG0aNMA9G/7Ylk
-        DbnpWMRumHH0z7I7ONTLr94=
-X-Google-Smtp-Source: AMrXdXu31CyeCOIYHJy4PMa+lMnTUCPNOOCVGdySsvrNk+I6w/8v5j3J3q9D4DHiL0qBs7XWzHuMxg==
-X-Received: by 2002:a05:6a00:4519:b0:58d:f047:53b7 with SMTP id cw25-20020a056a00451900b0058df04753b7mr14535557pfb.3.1674363796900;
-        Sat, 21 Jan 2023 21:03:16 -0800 (PST)
-Received: from localhost (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
-        by smtp.gmail.com with ESMTPSA id h11-20020a056a00000b00b0058dd9c46a8csm9062788pfk.64.2023.01.21.21.03.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 21:03:16 -0800 (PST)
-Date:   Thu, 19 Jan 2023 03:47:02 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH RFC 1/3] vsock: support sockmap
-Message-ID: <Y8i9NlRpIR/KE/q2@bullseye>
-References: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
- <20230118-support-vsock-sockmap-connectible-v1-1-d47e6294827b@bytedance.com>
- <Y8w7d+6UASP3jUHf@pop-os.localdomain>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=05DRwYLuKPNybBZTc2206qYE9TZgh2rdWBVkpwkOzJ0=;
+        b=A8GGQ75mKCkHCPmZFV3cVLEJgz45RxIhvimMNuHQbqa3F1hlyIEqCJYyaYIXaLkb/q
+         r1U1EAAldMxjZ4Lr7V1GsKJEfojWTV8h8QxPu6eK96R6ll6cI59v2oepU2PGOoZ1/9sU
+         D7TQ0JQkm3Gx5r0wz6Z4ZN+VbPviRvkGkF7MyAv/OxjZlD4K6L/sX25jbOK/35/7Thja
+         f6UwhdhOkKjpLIO/CYkZSxPSSgF1yN5DVC84LMwHYUrnTje4ddUZ8g1khb05RjyRLeZ0
+         6jxbL65BFi7h0nhIUgbsm2GRm8JBqchw2k+p6/hbBr2O4auV/kvmEIJGkKumKow12vKf
+         tY7Q==
+X-Gm-Message-State: AFqh2kpFmTQQAcWOgHGoQPwRoI+gR4/SGEdvQmXf+LjbO/5EV6GNWaj6
+        uKI/eXADlUTgZ/MxqCFYeEFbk/oFFIn8Zw==
+X-Google-Smtp-Source: AMrXdXt56zWlt1UrPh9C8DjE1rii7b15j8o4rhAwC+uwP6lgPZcFbNs6gQoa7ltikAFKRLay+nnzWw==
+X-Received: by 2002:a05:622a:4319:b0:3b6:5fc7:f554 with SMTP id el25-20020a05622a431900b003b65fc7f554mr24229269qtb.7.1674405652705;
+        Sun, 22 Jan 2023 08:40:52 -0800 (PST)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b006cebda00630sm30140670qkp.60.2023.01.22.08.40.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Jan 2023 08:40:52 -0800 (PST)
+Received: by mail-yb1-f172.google.com with SMTP id c124so12127597ybb.13;
+        Sun, 22 Jan 2023 08:40:52 -0800 (PST)
+X-Received: by 2002:a25:9801:0:b0:7d5:b884:3617 with SMTP id
+ a1-20020a259801000000b007d5b8843617mr1914368ybo.380.1674405651979; Sun, 22
+ Jan 2023 08:40:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8w7d+6UASP3jUHf@pop-os.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230112035529.13521-1-schmitzmic@gmail.com> <20230112035529.13521-4-schmitzmic@gmail.com>
+In-Reply-To: <20230112035529.13521-4-schmitzmic@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 22 Jan 2023 17:40:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUNxLwv8eQRCxSPh6J26gEaMzS=1w6s5zTBWGnnNzmmiA@mail.gmail.com>
+Message-ID: <CAMuHMdUNxLwv8eQRCxSPh6J26gEaMzS=1w6s5zTBWGnnNzmmiA@mail.gmail.com>
+Subject: Re: [PATCH v13 3/3] tools/testing - seccomp test fixes for m68k
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     linux-m68k@vger.kernel.org, glaubitz@physik.fu-berlin.de,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 11:22:31AM -0800, Cong Wang wrote:
-> On Wed, Jan 18, 2023 at 12:27:39PM -0800, Bobby Eshleman wrote:
-> > +static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
-> > +{
-> > +	struct vsock_sock *vsk = vsock_sk(sk);
-> > +
-> > +	if (!vsk->transport)
-> > +		return -ENODEV;
-> > +
-> > +	if (!vsk->transport->read_skb)
-> > +		return -EOPNOTSUPP;
-> 
-> Can we move these two checks to sockmap update path? It would make
-> vsock_read_skb() faster.
-> 
-> > +
-> > +	return vsk->transport->read_skb(vsk, read_actor);
-> > +}
-> 
-> Essentially can be just this one line.
-> 
-> Thanks.
+CC linux-kselftest
 
-That makes sense, will do.
+On Thu, Jan 12, 2023 at 4:55 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> Add m68k seccomp definitions to seccomp_bpf self test code.
+>
+> Tested on ARAnyM.
+>
+> Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
+>
+> --
+> Changes from v12:
+>
+> Michael Karcher:
+> - use correct definition of ARCH_REGS (use of struct pt_regs
+>   cause stack overflow on passing register set to user space
+>   due to size mismatch, and has some register offsets wrong)
 
-Thanks,
-Bobby
+Thanks for the update!
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+i.e. will queue in the m68k for-v6.3 branch.
+
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -138,6 +138,8 @@ struct seccomp_data {
+>  #  define __NR_seccomp 337
+>  # elif defined(__sh__)
+>  #  define __NR_seccomp 372
+> +# elif defined(__mc68000__)
+> +#  define __NR_seccomp 380
+>  # else
+>  #  warning "seccomp syscall number unknown for this architecture"
+>  #  define __NR_seccomp 0xffff
+> @@ -1838,6 +1840,10 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+>  # define ARCH_REGS             struct pt_regs
+>  # define SYSCALL_NUM(_regs)    (_regs).regs[3]
+>  # define SYSCALL_RET(_regs)    (_regs).regs[0]
+> +#elif defined(__mc68000__)
+> +# define ARCH_REGS     struct user_regs_struct
+> +# define SYSCALL_NUM(_regs)    (_regs).orig_d0
+> +# define SYSCALL_RET(_regs)    (_regs).d0
+>  #else
+>  # error "Do not know how to find your architecture's registers and syscalls"
+>  #endif
+> @@ -1902,7 +1908,7 @@ const bool ptrace_entry_set_syscall_ret =
+>   * Use PTRACE_GETREGS and PTRACE_SETREGS when available. This is useful for
+>   * architectures without HAVE_ARCH_TRACEHOOK (e.g. User-mode Linux).
+>   */
+> -#if defined(__x86_64__) || defined(__i386__) || defined(__mips__)
+> +#if defined(__x86_64__) || defined(__i386__) || defined(__mips__) || defined(__mc68000__)
+>  # define ARCH_GETREGS(_regs)   ptrace(PTRACE_GETREGS, tracee, 0, &(_regs))
+>  # define ARCH_SETREGS(_regs)   ptrace(PTRACE_SETREGS, tracee, 0, &(_regs))
+>  #else
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
