@@ -2,95 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E52678366
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jan 2023 18:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A2E6783E7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jan 2023 19:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjAWRhc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Jan 2023 12:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
+        id S233171AbjAWSAn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Jan 2023 13:00:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjAWRha (ORCPT
+        with ESMTP id S233197AbjAWSAj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:37:30 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C0A1A5F1;
-        Mon, 23 Jan 2023 09:37:16 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 30NHb7x1014494;
-        Mon, 23 Jan 2023 18:37:07 +0100
-Date:   Mon, 23 Jan 2023 18:37:07 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/2] selftests/nolibc: small simplification of test
- development phase
-Message-ID: <20230123173707.GC13172@1wt.eu>
-References: <20230121085320.11712-1-w@1wt.eu>
- <20230121200038.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <20230121213455.GA16121@1wt.eu>
- <Y868lIin0bLM9HfM@biznet-home.integral.gnuweeb.org>
- <20230123172016.GB13172@1wt.eu>
- <Y87EVVt431Wx2zXk@biznet-home.integral.gnuweeb.org>
+        Mon, 23 Jan 2023 13:00:39 -0500
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F14C302B6
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 10:00:38 -0800 (PST)
+Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
+        id 3F89A5616BD1; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
+From:   Stefan Roesch <shr@devkernel.io>
+To:     linux-mm@kvack.org
+Cc:     shr@devkernel.io, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: [RESEND RFC PATCH v1 00/20] mm: process/cgroup ksm support
+Date:   Mon, 23 Jan 2023 09:37:28 -0800
+Message-Id: <20230123173748.1734238-1-shr@devkernel.io>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y87EVVt431Wx2zXk@biznet-home.integral.gnuweeb.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_HELO_PASS,SPF_NEUTRAL,SUSPICIOUS_RECIPS,TVD_RCVD_IP autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 12:31:01AM +0700, Ammar Faizi wrote:
-> I figured it out. It turned qemu-user is a different package.
-> So I have "qemu-system" installed, but not "qemu-user".
-> 
-> Without building from source, just do this on Ubuntu:
-> 
->   $ sudo apt-get install qemu-user -y
->   ...
->   Preparing to unpack .../qemu-user_1%3a6.2+dfsg-2ubuntu6.6_amd64.deb ...
->   Unpacking qemu-user (1:6.2+dfsg-2ubuntu6.6) ...
->   Selecting previously unselected package qemu-user-binfmt.
->   Preparing to unpack .../qemu-user-binfmt_1%3a6.2+dfsg-2ubuntu6.6_amd64.deb ...
->   Unpacking qemu-user-binfmt (1:6.2+dfsg-2ubuntu6.6) ...
->   Setting up qemu-user (1:6.2+dfsg-2ubuntu6.6) ...
->   Setting up qemu-user-binfmt (1:6.2+dfsg-2ubuntu6.6) ...
->   Processing triggers for man-db (2.10.2-1) ...
-> 
->   $ which qemu-x86_64
->   /usr/bin/qemu-x86_64
+So far KSM can only be enabled by calling madvise for memory regions. Wha=
+t is
+required to enable KSM for more workloads is to enable / disable it at th=
+e
+process / cgroup level.
 
-Ah cool! I looked for something like this on a remote ubuntu system but
-failed to figure it out by myself. Do you also have the other archs with
-it ?
+1. New options for prctl system command
+This patch series adds two new options to the prctl system call. The firs=
+t
+one allows to enable KSM at the process level and the second one to query=
+ the
+setting.
 
->   $ sudo make run-user
->   MKDIR   sysroot/x86/include
->   make[1]: Entering directory '/home/ammarfaizi2/work/linux.work.cc/tools/include/nolibc'
->   make[2]: Entering directory '/home/ammarfaizi2/work/linux.work.cc'
->   make[2]: Leaving directory '/home/ammarfaizi2/work/linux.work.cc'
->   make[2]: Entering directory '/home/ammarfaizi2/work/linux.work.cc'
->     INSTALL /home/ammarfaizi2/work/linux.work.cc/tools/testing/selftests/nolibc/sysroot/sysroot/include
->   make[2]: Leaving directory '/home/ammarfaizi2/work/linux.work.cc'
->   make[1]: Leaving directory '/home/ammarfaizi2/work/linux.work.cc/tools/include/nolibc'
->     CC      nolibc-test
->   83 test(s) passed.
+The setting will be inherited by child processes.
 
-Great. And without sudo you should see two of them fail. I intend to
-implement geteuid() and condition their result to it, that will be
-sufficient for most cases. I'd rather avoid seeing users run test
-programs under sudo actually, since they're run on the local system :-/
+With the above setting, KSM can be enabled for the seed process of a cgro=
+up
+and all processes in the cgroup will inherit the setting.
 
-> Sorry for that. I didn't know that they come from different packages.
-> It works fine for me now.
+2. Changes to KSM processing
+When KSM is enabled at the process level, the KSM code will iterate over =
+all
+the VMA's and enable KSM for the eligible VMA's.
 
-No, don't be sorry, quite the opposite, you taught us something useful!
+When forking a process that has KSM enabled, the setting will be inherite=
+d by
+the new child process.
 
-Thank you!
-Willy
+In addition when KSM is disabled for a process, KSM will be disabled for =
+the
+VMA's where KSM has been enabled.
+
+3. Add tracepoints to KSM
+Currently KSM has no tracepoints. This adds tracepoints to the key KSM fu=
+nctions
+to make it easier to debug KSM.
+
+4. Add general_profit metric
+The general_profit metric of KSM is specified in the documentation, but n=
+ot
+calculated. This adds the general profit metric to /sys/kernel/debug/mm/k=
+sm.
+
+5. Add more metrics to ksm_stat
+This adds the process profit and ksm type metric to /proc/<pid>/ksm_stat.
+
+6. Add more tests to ksm_tests
+This adds an option to specify the merge type to the ksm_tests. This allo=
+ws to
+test madvise and prctl KSM. It also adds a new option to query if prctl K=
+SM has
+been enabled. It adds a fork test to verify that the KSM process setting =
+is
+inherited by client processes.
+
+
+Stefan Roesch (20):
+  mm: add new flag to enable ksm per process
+  mm: add flag to __ksm_enter
+  mm: add flag to __ksm_exit call
+  mm: invoke madvise for all vmas in scan_get_next_rmap_item
+  mm: support disabling of ksm for a process
+  mm: add new prctl option to get and set ksm for a process
+  mm: add tracepoints to ksm
+  mm: split off pages_volatile function
+  mm: expose general_profit metric
+  docs: document general_profit sysfs knob
+  mm: calculate ksm process profit metric
+  mm: add ksm_merge_type() function
+  mm: expose ksm process profit metric in ksm_stat
+  mm: expose ksm merge type in ksm_stat
+  docs: document new procfs ksm knobs
+  tools: add new prctl flags to prctl in tools dir
+  selftests/vm: add KSM prctl merge test
+  selftests/vm: add KSM get merge type test
+  selftests/vm: add KSM fork test
+  selftests/vm: add two functions for debugging merge outcome
+
+ Documentation/ABI/testing/sysfs-kernel-mm-ksm |   8 +
+ Documentation/admin-guide/mm/ksm.rst          |   8 +-
+ MAINTAINERS                                   |   1 +
+ fs/proc/base.c                                |   5 +
+ include/linux/ksm.h                           |  19 +-
+ include/linux/sched/coredump.h                |   1 +
+ include/trace/events/ksm.h                    | 257 ++++++++++++++++++
+ include/uapi/linux/prctl.h                    |   2 +
+ kernel/sys.c                                  |  29 ++
+ mm/ksm.c                                      | 134 ++++++++-
+ tools/include/uapi/linux/prctl.h              |   2 +
+ tools/testing/selftests/vm/Makefile           |   3 +-
+ tools/testing/selftests/vm/ksm_tests.c        | 254 ++++++++++++++---
+ 13 files changed, 665 insertions(+), 58 deletions(-)
+ create mode 100644 include/trace/events/ksm.h
+
+
+base-commit: c1649ec55708ae42091a2f1bca1ab49ecd722d55
+--=20
+2.30.2
+
