@@ -2,29 +2,29 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8626783F1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jan 2023 19:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E8B67841B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jan 2023 19:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbjAWSCR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Jan 2023 13:02:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
+        id S233808AbjAWSGP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Jan 2023 13:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbjAWSCQ (ORCPT
+        with ESMTP id S233763AbjAWSGN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:02:16 -0500
+        Mon, 23 Jan 2023 13:06:13 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4CE2CFC6
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 10:02:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDED30E95
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 10:05:45 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 4EC195616BD9; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
+        id 530B85616BDB; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     linux-mm@kvack.org
 Cc:     shr@devkernel.io, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [RESEND RFC PATCH v1 04/20] mm: invoke madvise for all vmas in scan_get_next_rmap_item
-Date:   Mon, 23 Jan 2023 09:37:32 -0800
-Message-Id: <20230123173748.1734238-5-shr@devkernel.io>
+Subject: [RESEND RFC PATCH v1 05/20] mm: support disabling of ksm for a process
+Date:   Mon, 23 Jan 2023 09:37:33 -0800
+Message-Id: <20230123173748.1734238-6-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123173748.1734238-1-shr@devkernel.io>
 References: <20230123173748.1734238-1-shr@devkernel.io>
@@ -40,79 +40,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If the new flag MMF_VM_MERGE_ANY has been set for a process, iterate
-over all the vmas and enable ksm if possible. For the vmas that can be
-ksm enabled this is only done once.
+This adds the ability to disable ksm for a process if ksm has been
+enabled for the process.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
 ---
- mm/ksm.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ mm/ksm.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
 diff --git a/mm/ksm.c b/mm/ksm.c
-index 83796328574c..967eda719fab 100644
+index 967eda719fab..5fa6b46dfa3b 100644
 --- a/mm/ksm.c
 +++ b/mm/ksm.c
-@@ -1013,6 +1013,7 @@ static int unmerge_and_remove_all_rmap_items(void)
-=20
- 			mm_slot_free(mm_slot_cache, mm_slot);
- 			clear_bit(MMF_VM_MERGEABLE, &mm->flags);
-+			clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
- 			mmdrop(mm);
- 		} else
- 			spin_unlock(&ksm_mmlist_lock);
-@@ -2243,6 +2244,17 @@ static struct ksm_rmap_item *get_next_rmap_item(st=
-ruct ksm_mm_slot *mm_slot,
- 	return rmap_item;
+@@ -2588,6 +2588,27 @@ int __ksm_enter(struct mm_struct *mm, int flag)
+ 	return 0;
  }
 =20
-+static bool vma_ksm_mergeable(struct vm_area_struct *vma)
++static void unmerge_vmas(struct mm_struct *mm)
 +{
-+	if (vma->vm_flags & VM_MERGEABLE)
-+		return true;
++	struct vm_area_struct *vma;
++	struct vma_iterator vmi;
 +
-+	if (test_bit(MMF_VM_MERGE_ANY, &vma->vm_mm->flags))
-+		return true;
++	vma_iter_init(&vmi, mm, 0);
 +
-+	return false;
-+}
-+
- static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
- {
- 	struct mm_struct *mm;
-@@ -2319,8 +2331,20 @@ static struct ksm_rmap_item *scan_get_next_rmap_it=
-em(struct page **page)
- 		goto no_vmas;
-=20
- 	for_each_vma(vmi, vma) {
--		if (!(vma->vm_flags & VM_MERGEABLE))
-+		if (!vma_ksm_mergeable(vma))
- 			continue;
-+		if (!(vma->vm_flags & VM_MERGEABLE)) {
++	mmap_read_lock(mm);
++	for_each_vma(vmi, vma) {
++		if (vma->vm_flags & VM_MERGEABLE) {
 +			unsigned long flags =3D vma->vm_flags;
 +
-+			/* madvise failed, use next vma */
-+			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &fla=
-gs))
-+				continue;
-+			/* vma, not supported as being mergeable */
-+			if (!(flags & VM_MERGEABLE))
++			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_UNMERGEABLE, &f=
+lags))
 +				continue;
 +
 +			vma->vm_flags =3D flags;
 +		}
- 		if (ksm_scan.address < vma->vm_start)
- 			ksm_scan.address =3D vma->vm_start;
- 		if (!vma->anon_vma)
-@@ -2389,6 +2413,7 @@ static struct ksm_rmap_item *scan_get_next_rmap_ite=
-m(struct page **page)
++	}
++	mmap_read_unlock(mm);
++}
++
+ void __ksm_exit(struct mm_struct *mm, int flag)
+ {
+ 	struct ksm_mm_slot *mm_slot;
+@@ -2595,8 +2616,10 @@ void __ksm_exit(struct mm_struct *mm, int flag)
+ 	int easy_to_free =3D 0;
 =20
- 		mm_slot_free(mm_slot_cache, mm_slot);
- 		clear_bit(MMF_VM_MERGEABLE, &mm->flags);
-+		clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
- 		mmap_read_unlock(mm);
- 		mmdrop(mm);
- 	} else {
+ 	if (!(current->flags & PF_EXITING) && flag =3D=3D MMF_VM_MERGE_ANY &&
+-	    test_bit(MMF_VM_MERGE_ANY, &mm->flags))
++		test_bit(MMF_VM_MERGE_ANY, &mm->flags)) {
+ 		clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
++		unmerge_vmas(mm);
++	}
+=20
+ 	/*
+ 	 * This process is exiting: if it's straightforward (as is the
 --=20
 2.30.2
 
