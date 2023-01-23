@@ -2,130 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F3F6770A8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Jan 2023 17:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBBE67744E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jan 2023 04:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjAVQkz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 22 Jan 2023 11:40:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        id S230137AbjAWD3s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 22 Jan 2023 22:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjAVQky (ORCPT
+        with ESMTP id S229514AbjAWD3r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 22 Jan 2023 11:40:54 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF65B193E5;
-        Sun, 22 Jan 2023 08:40:53 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id q15so8028037qtn.0;
-        Sun, 22 Jan 2023 08:40:53 -0800 (PST)
+        Sun, 22 Jan 2023 22:29:47 -0500
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF5B1448C;
+        Sun, 22 Jan 2023 19:29:46 -0800 (PST)
+Received: by mail-qt1-x841.google.com with SMTP id fd15so8792312qtb.9;
+        Sun, 22 Jan 2023 19:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FEkC9pUr+UCV2Cz2pZIS9YUG59kfzZzD0JR8q3g/PeY=;
+        b=B3NVlRrGcw4YdHWkZ6EEItGqaDMGRX+yV1MSy6UZmQG3jBAlTfftSFQ4RpiDrSQDf1
+         jv9myVbWGZFXXgIRkB2DG4fiDGJAYI9y7/+KKhlKE2SgnzYXRi25p83tCOtR3rmcAsRq
+         QaINTMh9jhwJVaDOl2WGvF5DSZRdgI06T44a3sNVMe5oDB83gLH54DtDMSu+wQtj9kVp
+         fsdIXfNJBLAtYTM3vfEjxnpovMji69TYSORKs9fDuFB4dEARs5263JnvUL5Cj27UzVOu
+         i+JbRN2+3fdkIirCvdtWN+E/spIhz0KFh7rJu3sfmVGAt7UtIbvWgPpgI/u6O+UXch5j
+         ycDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=05DRwYLuKPNybBZTc2206qYE9TZgh2rdWBVkpwkOzJ0=;
-        b=A8GGQ75mKCkHCPmZFV3cVLEJgz45RxIhvimMNuHQbqa3F1hlyIEqCJYyaYIXaLkb/q
-         r1U1EAAldMxjZ4Lr7V1GsKJEfojWTV8h8QxPu6eK96R6ll6cI59v2oepU2PGOoZ1/9sU
-         D7TQ0JQkm3Gx5r0wz6Z4ZN+VbPviRvkGkF7MyAv/OxjZlD4K6L/sX25jbOK/35/7Thja
-         f6UwhdhOkKjpLIO/CYkZSxPSSgF1yN5DVC84LMwHYUrnTje4ddUZ8g1khb05RjyRLeZ0
-         6jxbL65BFi7h0nhIUgbsm2GRm8JBqchw2k+p6/hbBr2O4auV/kvmEIJGkKumKow12vKf
-         tY7Q==
-X-Gm-Message-State: AFqh2kpFmTQQAcWOgHGoQPwRoI+gR4/SGEdvQmXf+LjbO/5EV6GNWaj6
-        uKI/eXADlUTgZ/MxqCFYeEFbk/oFFIn8Zw==
-X-Google-Smtp-Source: AMrXdXt56zWlt1UrPh9C8DjE1rii7b15j8o4rhAwC+uwP6lgPZcFbNs6gQoa7ltikAFKRLay+nnzWw==
-X-Received: by 2002:a05:622a:4319:b0:3b6:5fc7:f554 with SMTP id el25-20020a05622a431900b003b65fc7f554mr24229269qtb.7.1674405652705;
-        Sun, 22 Jan 2023 08:40:52 -0800 (PST)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b006cebda00630sm30140670qkp.60.2023.01.22.08.40.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 08:40:52 -0800 (PST)
-Received: by mail-yb1-f172.google.com with SMTP id c124so12127597ybb.13;
-        Sun, 22 Jan 2023 08:40:52 -0800 (PST)
-X-Received: by 2002:a25:9801:0:b0:7d5:b884:3617 with SMTP id
- a1-20020a259801000000b007d5b8843617mr1914368ybo.380.1674405651979; Sun, 22
- Jan 2023 08:40:51 -0800 (PST)
+        bh=FEkC9pUr+UCV2Cz2pZIS9YUG59kfzZzD0JR8q3g/PeY=;
+        b=7HaS+Bz1MgHV2Hywceg3bIdl/r+6VkrzO8ja2e3azjwiJIQxh0YZ2HUXW3EXa5Je1r
+         ycJuvuRxWZThwfC4MKztCbi2E+5CMr8J7zr8/iUwepnLGQ33BOjRXJKFeNigLzdSx4HA
+         IkkOvSLFYMCjLhcIohS825QYl/xhePEjgfFtlU20JKMTE2uIyzBLECVYYa0ygXgYeUc9
+         2WyISjIRVbwICpjZh0Rs3/AduAq5TEBU//zE7I62WUG71tuodA+GRxHp4SpgEyHDGMgm
+         H1hZNQxVuO28fTbzpsnB7f2O1edF0ulFFeRIwPHZHf7xYhygQTGtefpnxFJBxRTAEehp
+         BKPg==
+X-Gm-Message-State: AFqh2kqD+n4mBS3tqg778tumkVU93o4DpzcHEsUb3IMicT+r7w8uVB3/
+        UKpVH0Szn5SuJ7M3Vcp6SYtTN+fVt1fn
+X-Google-Smtp-Source: AMrXdXvw882JiP/yU35jd2navQhWjO5M0L15eWb3kqKgPgqmFLmRd5kduEz+Ktvu/N4D7+lrLjeg4Q==
+X-Received: by 2002:a05:622a:4a83:b0:3b6:3931:640d with SMTP id fw3-20020a05622a4a8300b003b63931640dmr34813029qtb.48.1674444584937;
+        Sun, 22 Jan 2023 19:29:44 -0800 (PST)
+Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
+        by smtp.gmail.com with ESMTPSA id u3-20020ae9c003000000b0070928ee3933sm4875492qkk.75.2023.01.22.19.29.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jan 2023 19:29:44 -0800 (PST)
+From:   Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, krisman@collabora.com,
+        tglx@linutronix.de, luto@kernel.org, oleg@redhat.com,
+        peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Subject: [PATCH v5 0/3] Checkpoint Support for Syscall User Dispatch
+Date:   Sun, 22 Jan 2023 22:29:39 -0500
+Message-Id: <20230123032942.18263-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230112035529.13521-1-schmitzmic@gmail.com> <20230112035529.13521-4-schmitzmic@gmail.com>
-In-Reply-To: <20230112035529.13521-4-schmitzmic@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 22 Jan 2023 17:40:40 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUNxLwv8eQRCxSPh6J26gEaMzS=1w6s5zTBWGnnNzmmiA@mail.gmail.com>
-Message-ID: <CAMuHMdUNxLwv8eQRCxSPh6J26gEaMzS=1w6s5zTBWGnnNzmmiA@mail.gmail.com>
-Subject: Re: [PATCH v13 3/3] tools/testing - seccomp test fixes for m68k
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     linux-m68k@vger.kernel.org, glaubitz@physik.fu-berlin.de,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CC linux-kselftest
+v5: automated test for !defined(GENERIC_ENTRY) failed, fix fs/proc
+    use ifdef for GENERIC_ENTRY || TIF_SYSCALL_USER_DISPATCH
+    note: syscall user dispatch is not presently supported for
+          non-generic entry, but could be implemented. question is
+          whether the TIF_ define should be carved out now or then
 
-On Thu, Jan 12, 2023 at 4:55 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> Add m68k seccomp definitions to seccomp_bpf self test code.
->
-> Tested on ARAnyM.
->
-> Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
->
-> --
-> Changes from v12:
->
-> Michael Karcher:
-> - use correct definition of ARCH_REGS (use of struct pt_regs
->   cause stack overflow on passing register set to user space
->   due to size mismatch, and has some register offsets wrong)
+v4: Whitespace
+    s/CHECKPOINT_RESTART/CHECKPOINT_RESUME
+    check test_syscall_work(SYSCALL_USER_DISPATCH) to determine if it's
+    turned on or not in fs/proc/array and getter interface
 
-Thanks for the update!
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-i.e. will queue in the m68k for-v6.3 branch.
+v3: Kernel test robot static function fix
+    Whitespace nitpicks
 
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -138,6 +138,8 @@ struct seccomp_data {
->  #  define __NR_seccomp 337
->  # elif defined(__sh__)
->  #  define __NR_seccomp 372
-> +# elif defined(__mc68000__)
-> +#  define __NR_seccomp 380
->  # else
->  #  warning "seccomp syscall number unknown for this architecture"
->  #  define __NR_seccomp 0xffff
-> @@ -1838,6 +1840,10 @@ TEST_F(TRACE_poke, getpid_runs_normally)
->  # define ARCH_REGS             struct pt_regs
->  # define SYSCALL_NUM(_regs)    (_regs).regs[3]
->  # define SYSCALL_RET(_regs)    (_regs).regs[0]
-> +#elif defined(__mc68000__)
-> +# define ARCH_REGS     struct user_regs_struct
-> +# define SYSCALL_NUM(_regs)    (_regs).orig_d0
-> +# define SYSCALL_RET(_regs)    (_regs).d0
->  #else
->  # error "Do not know how to find your architecture's registers and syscalls"
->  #endif
-> @@ -1902,7 +1908,7 @@ const bool ptrace_entry_set_syscall_ret =
->   * Use PTRACE_GETREGS and PTRACE_SETREGS when available. This is useful for
->   * architectures without HAVE_ARCH_TRACEHOOK (e.g. User-mode Linux).
->   */
-> -#if defined(__x86_64__) || defined(__i386__) || defined(__mips__)
-> +#if defined(__x86_64__) || defined(__i386__) || defined(__mips__) || defined(__mc68000__)
->  # define ARCH_GETREGS(_regs)   ptrace(PTRACE_GETREGS, tracee, 0, &(_regs))
->  # define ARCH_SETREGS(_regs)   ptrace(PTRACE_SETREGS, tracee, 0, &(_regs))
->  #else
+v2: Implements the getter/setter interface in ptrace rather than prctl
 
-Gr{oetje,eeting}s,
+Syscall user dispatch makes it possible to cleanly intercept system
+calls from user-land.  However, most transparent checkpoint software
+presently leverages some combination of ptrace and system call
+injection to place software in a ready-to-checkpoint state.
 
-                        Geert
+If Syscall User Dispatch is enabled at the time of being quiesced,
+injected system calls will subsequently be interposed upon and
+dispatched to the task's signal handler.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+This patch set implements 3 features to enable software such as CRIU
+to cleanly interpose upon software leveraging syscall user dispatch.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+- Implement PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH, akin to a similar
+  feature for SECCOMP.  This allows a ptracer to temporarily disable
+  syscall user dispatch, making syscall injection possible.
+
+- Implement an fs/proc extension that reports whether Syscall User
+  Dispatch is being used in proc/status.  A similar value is present
+  for SECCOMP, and is used to determine whether special logic is
+  needed during checkpoint/resume.
+
+- Implement a getter interface for Syscall User Dispatch config info.
+  To resume successfully, the checkpoint/resume software has to
+  save and restore this information.  Presently this configuration
+  is write-only, with no way for C/R software to save it.
+
+  This was done in ptrace because syscall user dispatch is not part of
+  uapi. The syscall_user_dispatch_config structure was added to the
+  ptrace exports.
+
+Gregory Price (3):
+  ptrace,syscall_user_dispatch: Implement Syscall User Dispatch
+    Suspension
+  fs/proc/array: Add Syscall User Dispatch to proc status
+  ptrace,syscall_user_dispatch: add a getter/setter for sud
+    configuration
+
+ .../admin-guide/syscall-user-dispatch.rst     |  5 +-
+ fs/proc/array.c                               | 10 ++++
+ include/linux/ptrace.h                        |  2 +
+ include/linux/syscall_user_dispatch.h         | 19 +++++++
+ include/uapi/linux/ptrace.h                   | 16 +++++-
+ kernel/entry/syscall_user_dispatch.c          | 51 +++++++++++++++++++
+ kernel/ptrace.c                               | 13 +++++
+ 7 files changed, 114 insertions(+), 2 deletions(-)
+
+-- 
+2.39.0
+
