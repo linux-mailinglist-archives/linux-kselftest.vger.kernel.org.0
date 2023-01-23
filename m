@@ -2,92 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F09678029
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jan 2023 16:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C710678042
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Jan 2023 16:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbjAWPmF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Jan 2023 10:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
+        id S232867AbjAWPpl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Jan 2023 10:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbjAWPmD (ORCPT
+        with ESMTP id S232714AbjAWPpk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 10:42:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9C3298CD
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 07:41:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674488475;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uaUUtgXgmy7k2/WeJoiebCH4/uPcZhQeGH1gQkn9fM0=;
-        b=VKA5K69MsXtFr8tl2YbixBUfn3075BTjpkR6PUZyi8217/jSVeFtPwB3j59JJWR5CsLS6a
-        EhOW9WD9zEnDofKdu25q5eBKrREVAhluqk/im2ZxsmrZq34jB4yzKe52JVtGVRuEzMS42e
-        BUDRVqMswk6Kcs8AeGMhxm3p9ww+I3A=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-Z0Cfls3eNN2w8rOGGhhRWw-1; Mon, 23 Jan 2023 10:41:09 -0500
-X-MC-Unique: Z0Cfls3eNN2w8rOGGhhRWw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 23 Jan 2023 10:45:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831E3E04B;
+        Mon, 23 Jan 2023 07:45:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ABECD3C0F66A;
-        Mon, 23 Jan 2023 15:41:08 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-192-224.brq.redhat.com [10.40.192.224])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 4B1EE140EBF4;
-        Mon, 23 Jan 2023 15:41:05 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 23 Jan 2023 16:41:06 +0100 (CET)
-Date:   Mon, 23 Jan 2023 16:41:02 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Gregory Price <gourry.memverge@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
-        peterz@infradead.org, ebiederm@xmission.com,
-        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter
- for sud configuration
-Message-ID: <20230123154101.GA6268@redhat.com>
-References: <20230123032942.18263-1-gregory.price@memverge.com>
- <20230123032942.18263-4-gregory.price@memverge.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 205F360F7A;
+        Mon, 23 Jan 2023 15:45:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C4AC433A0;
+        Mon, 23 Jan 2023 15:45:34 +0000 (UTC)
+Date:   Mon, 23 Jan 2023 10:45:30 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Stefan Roesch <shr@devkernel.io>
+Cc:     kernel-team@fb.com, acme@redhat.com, akpm@linux-foundation.org,
+        bobwxc@email.cn, brauner@kernel.org, brho@google.com,
+        broonie@kernel.org, catalin.marinas@arm.com, cgel.zte@gmail.com,
+        corbet@lwn.net, dave@stgolabs.net, ebiederm@xmission.com,
+        eugenis@google.com, hannes@cmpxchg.org, linmiaohe@huawei.com,
+        mhiramat@kernel.org, mhocko@suse.com, ran.xiaokai@zte.com.cn,
+        rppt@kernel.org, shuah@kernel.org, shy828301@gmail.com,
+        song@kernel.org, Vincenzo.Frascino@arm.com, will@kernel.org,
+        willy@infradead.org, yang.yang29@zte.com.cn,
+        zhengqi.arch@bytedance.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [RESEND RFC PATCH v1 07/20] mm: add tracepoints to ksm
+Message-ID: <20230123104530.4ec0aeb4@gandalf.local.home>
+In-Reply-To: <20230123050042.1752641-8-shr@devkernel.io>
+References: <20230123050042.1752641-1-shr@devkernel.io>
+        <20230123050042.1752641-8-shr@devkernel.io>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123032942.18263-4-gregory.price@memverge.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 01/22, Gregory Price wrote:
->
-> +int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-> +		void __user *data)
-> +{
-> +	struct syscall_user_dispatch *sd = &task->syscall_dispatch;
-> +	struct syscall_user_dispatch_config config;
-> +
-> +	if (size != sizeof(struct syscall_user_dispatch_config))
-> +		return -EINVAL;
-> +
-> +	if (test_syscall_work(SYSCALL_USER_DISPATCH))
-> +		config.mode = PR_SYS_DISPATCH_ON;
-> +	else
-> +		config.mode = PR_SYS_DISPATCH_OFF;
+On Sun, 22 Jan 2023 21:00:29 -0800
+Stefan Roesch <shr@devkernel.io> wrote:
 
-Stupid question...
+> This adds the following tracepoints to ksm:
+> - start / stop scan
+> - ksm enter / exit
+> - merge a page
+> - merge a page with ksm
+> - remove a page
+> - remove a rmap item
+> 
+> Signed-off-by: Stefan Roesch <shr@devkernel.io>
+> ---
+>  MAINTAINERS                |   1 +
+>  include/trace/events/ksm.h | 257 +++++++++++++++++++++++++++++++++++++
+>  mm/ksm.c                   |  20 ++-
+>  3 files changed, 276 insertions(+), 2 deletions(-)
+>  create mode 100644 include/trace/events/ksm.h
 
-Why do we need 2/3 (which reports SYSCALL_USER_DISPATCH in proc/pid/status) then?
+From the tracing pov:
 
-Oleg.
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
+-- Steve
