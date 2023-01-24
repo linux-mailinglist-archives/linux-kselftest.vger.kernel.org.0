@@ -2,135 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BD3678D40
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 02:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF896678E33
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 03:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbjAXBVf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Jan 2023 20:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S229605AbjAXCXy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Jan 2023 21:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232728AbjAXBVe (ORCPT
+        with ESMTP id S229589AbjAXCXx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 20:21:34 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344CC9EDC
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 17:21:29 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id m3-20020a17090a414300b00229ef93c5b0so11924001pjg.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 17:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wgGa5wrgAdo2NeUwkpPTr8VHG2ztyXDjbUcIQKILZZQ=;
-        b=Fj59aztvZsI93KqVdNsaBYgt0ezKwdgNzsUWuwRdK3YtJgfxyhWeV0YpdCsA254hdh
-         WNYQaNlZiuY31AdjFsdXMb2hOYwhdOxjeVXeI48dRt+far/UCt0p6INt1pEFeJWaEdvH
-         QNwTW9ViwWmLYRMlGlTofNZMRnlovWq8+qA2wm0RoPBtYuBHGIvQOQrrOgUB+Elmp/at
-         i+FZEXyRNNAVO5kKKpkgVoFIWBJfYTEYcZllDATZ+N4p9SEVumhM1oAYbm5Sf3GzkYL1
-         wVZuBCXqpFZZgWGzPRk2R3cY9F7Ca1V9tZSFMG+t9ypHjIYnWhroNO20jiQaP/vqypQT
-         /LVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wgGa5wrgAdo2NeUwkpPTr8VHG2ztyXDjbUcIQKILZZQ=;
-        b=a5ceMaRKs56emvVHDHwFgtH9qGUWOgUZvcZ3CfmuKyLqhpJb2xEtp9+DxFf0fDxUD5
-         lkXWH5k70cD6ctDXYs+gXCAVLbh30Z2opZ9hgjzyOpTr3gwJr7AeW6kEaui6ygrVCRvV
-         ygC/cPJJ6vaAqc4Ecp4opIN4oeraqco/khE3OKJsNNr2KMZhFMrIgBFk31M3LjAktPpl
-         pC+K4ay7x0IMzcCe/MuUwDigbU+hnaahGIx6urDLWu0EiTn4fQdx9Jg0yuHp+42Jwyib
-         W88zYmjIi+FP5dJjybEPs7ENkpO5BMbBcWNyJaI+stTnPta4vAMFNx5lkGQKBCCdN7pv
-         2dKg==
-X-Gm-Message-State: AO0yUKXvC35sLxW4uNQ+QIa4Bm5guho/c7A5h1jk1NLwHCKIxifzlBV6
-        ju9OlLt0o/fLvmLnzVfAh0+D0W+vlYNR4P9K1ss=
-X-Google-Smtp-Source: AK7set/9pywbGEv0WlLYt3ONqn8dxZuuJBmeuykZqm87ZDRWGqgG45nB8eagGTlznEd5u4nG4ID0Ug==
-X-Received: by 2002:a17:902:7891:b0:191:4367:7fde with SMTP id q17-20020a170902789100b0019143677fdemr15867pll.0.1674523288475;
-        Mon, 23 Jan 2023 17:21:28 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id jf1-20020a170903268100b001960690b5d4sm359391plb.59.2023.01.23.17.21.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 17:21:28 -0800 (PST)
-Date:   Tue, 24 Jan 2023 01:21:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Erdem Aktas <erdemaktas@google.com>
-Cc:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
-        Ackerley Tng <ackerleytng@google.com>,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        isaku.yamahata@intel.com, sagis@google.com, afranji@google.com,
-        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
-        maz@kernel.org, bgardon@google.com, jmattson@google.com,
-        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
-        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
-        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
-        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
-        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
-        pshier@google.com, axelrasmussen@google.com,
-        zhenzhong.duan@intel.com, like.xu@linux.intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [RFC PATCH v3 08/31] KVM: selftests: Require GCC to realign
- stacks on function entry
-Message-ID: <Y88ylDFfMQNcUEw7@google.com>
-References: <20230121001542.2472357-1-ackerleytng@google.com>
- <20230121001542.2472357-9-ackerleytng@google.com>
- <Y8sxjppvEnm4IBWG@google.com>
- <CAAYXXYy7=ZTCZ1LQ3_Sy39ju_xG5++dTrxi+DKGcbpJ5VJ3OuQ@mail.gmail.com>
- <99a36eed-e4e5-60ec-0f88-a33d1842a0d6@maciej.szmigiero.name>
- <Y87XnYZx1qzZOLKR@google.com>
- <CAAYXXYyqDJx4=cSy3kp7vX4VF+5z_Rtm6wPM8_o9BmHkB_T-kg@mail.gmail.com>
+        Mon, 23 Jan 2023 21:23:53 -0500
+X-Greylist: delayed 2444 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 18:23:52 PST
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602DE11E80
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 18:23:52 -0800 (PST)
+Received: from [IPV6:2601:646:8600:40c0:425:cd56:6750:e1bf] ([IPv6:2601:646:8600:40c0:425:cd56:6750:e1bf])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30O1eSHj2561466
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Mon, 23 Jan 2023 17:40:29 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30O1eSHj2561466
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023010601; t=1674524430;
+        bh=YrgX1n/tIlj1rb7tM6ALcujNTv1yB+Mh9YnbH5zcxQQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GJ0qIz296tcHS/P/5rd7F4DCCjwKO+5BgnlfjaUoNlzVIKmhvJBvjLh2xX3DzAqcL
+         5zvgyxJ5jX2cN8/XBpMSrxw31zoTqF5+1qes3uSzAyhWZ/n3RDYyOviFnrQYZZWCmE
+         NfBIlayEBaaePPafSAJ4e+lDOwGlaBhwobN752qkCfq/KD1jZnCmK+PYLJdEcF3Cbn
+         ndb7aP5mtZahjva66TeVKPOn13guHXOr+dF0/gLau0tSSR05hc2kUh2TksbAk6UcLo
+         qZxhE6CJs42nwhDnlFLwD9BEdFRKadAjz5rU0PCM+IGHiNq3ebav5RX7iqugufOpSb
+         dkDQIV/tNouRQ==
+Message-ID: <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
+Date:   Mon, 23 Jan 2023 17:40:23 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAYXXYyqDJx4=cSy3kp7vX4VF+5z_Rtm6wPM8_o9BmHkB_T-kg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH v1 1/2] selftests/x86: sysret_rip: Handle syscall in a
+ FRED system
+Content-Language: en-US
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xin Li <xin3.li@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com>
+ <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com>
+ <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
+ <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
+ <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
+ <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com>
+ <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org>
+ <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
+ <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
+ <20230124002625.581323-2-ammarfaizi2@gnuweeb.org>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20230124002625.581323-2-ammarfaizi2@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 23, 2023, Erdem Aktas wrote:
-> On Mon, Jan 23, 2023 at 10:53 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Mon, Jan 23, 2023, Maciej S. Szmigiero wrote:
-> > > On 23.01.2023 19:30, Erdem Aktas wrote:
-> > > > On Fri, Jan 20, 2023 at 4:28 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > > >
-> > > > > On Sat, Jan 21, 2023, Ackerley Tng wrote:
-> > > > > > Some SSE instructions assume a 16-byte aligned stack, and GCC compiles
-> > > > > > assuming the stack is aligned:
-> > > > > > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40838. This combination
-> > > > > > results in a #GP in guests.
-> > > > > >
-> > > > > > Adding this compiler flag will generate an alternate prologue and
-> > > > > > epilogue to realign the runtime stack, which makes selftest code
-> > > > > > slower and bigger, but this is okay since we do not need selftest code
-> > > > > > to be extremely performant.
-> > > > >
-> > > > > Huh, I had completely forgotten that this is why SSE is problematic.  I ran into
-> > > > > this with the base UPM selftests and just disabled SSE.  /facepalm.
-> > > > >
-> > > > > We should figure out exactly what is causing a misaligned stack.  As you've noted,
-> > > > > the x86-64 ABI requires a 16-byte aligned RSP.  Unless I'm misreading vm_arch_vcpu_add(),
-> > > > > the starting stack should be page aligned, which means something is causing the
-> > > > > stack to become unaligned at runtime.  I'd rather hunt down that something than
-> > > > > paper over it by having the compiler force realignment.
-> > > >
-> > > > Is not it due to the 32bit execution part of the guest code at boot
-> > > > time. Any push/pop of 32bit registers might make it a 16-byte
-> > > > unaligned stack.
-> > >
-> > > 32-bit stack needs to be 16-byte aligned, too (at function call boundaries) -
-> > > see [1] chapter 2.2.2 "The Stack Frame"
-> >
-> > And this showing up in the non-TDX selftests rules that out as the sole problem;
-> > the selftests stuff 64-bit mode, i.e. don't have 32-bit boot code.
-> 
-> Thanks Maciej and Sean for the clarification. I was suspecting the
-> hand-coded assembly part that we have for TDX tests but  it being
-> happening in the non-TDX selftests disproves it.
+On 1/23/23 16:26, Ammar Faizi wrote:
+> +
+> +static long do_syscall(long nr_syscall, unsigned long arg1, unsigned long arg2,
+> +		       unsigned long arg3, unsigned long arg4,
+> +		       unsigned long arg5, unsigned long arg6)
+> +{
+> +	register unsigned long r11 asm("%r11");
+> +	register unsigned long r10 asm("%r10");
+> +	register unsigned long r8 asm("%r8");
+> +	register unsigned long r9 asm("%r9");
+> +	unsigned long rcx, rbx;
+> +
+> +	r11 = r11_sentinel;
+> +	rcx = rcx_sentinel;
+> +	r10 = arg4;
+> +	r8 = arg5;
+> +	r9 = arg6;
+> +
+> +	asm volatile (
+> +		"movq	-8(%%rsp), %%r12\n\t"	/* Don't clobber redzone. */
+> +		"pushq	%[rflags_sentinel]\n\t"
+> +		"popf\n\t"
+> +		"movq	%%r12, -8(%%rsp)\n\t"
+> +		"leaq	1f(%%rip), %[rbx]\n\t"
+> +		"syscall\n"
+> +		"1:"
+> +
+> +		: "+a" (nr_syscall),
+> +		  "+r" (r11),
+> +		  "+c" (rcx),
+> +		  [rbx] "=b" (rbx)
+> +
+> +		: [rflags_sentinel] "g" (rflags_sentinel),
+> +		  "D" (arg1),	/* %rdi */
+> +		  "S" (arg2),	/* %rsi */
+> +		  "d" (arg3),	/* %rdx */
+> +		  "r" (r10),
+> +		  "r" (r8),
+> +		  "r" (r9)
+> +
+> +		: "r12", "memory"
+> +	);
+> +
+> +	/*
+> +	 * Test that:
+> +	 *
+> +	 * - "syscall" in a FRED system doesn't clobber %rcx and %r11.
+> +	 * - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
+> +	 *
+> +	 */
+> +	assert(check_regs_result(r11, rcx, rbx) != REGS_ERROR);
+> +	return nr_syscall;
+> +}
+> +
 
-Not necessarily, it could be both.  Goofs in the handcoded assembly and PEBKAC
-on my end :-)
+So as per Andrew's comment, add:
+
+register void * rsp asm("%rsp");
+
+...
+
+"+r" (rsp)	/* clobber the redzone */
+
+... as the right way to avoid redzone problems.
+
+	-hpa
