@@ -2,104 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56496790C0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 07:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBB36790EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 07:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbjAXGSv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Jan 2023 01:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
+        id S229956AbjAXGar (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Jan 2023 01:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjAXGSp (ORCPT
+        with ESMTP id S232847AbjAXG37 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Jan 2023 01:18:45 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC4130E98;
-        Mon, 23 Jan 2023 22:18:41 -0800 (PST)
-Received: from [IPV6:2601:646:8600:40c0:425:cd56:6750:e1bf] ([IPv6:2601:646:8600:40c0:425:cd56:6750:e1bf])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30O6G6Kk2637243
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Mon, 23 Jan 2023 22:16:07 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30O6G6Kk2637243
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023010601; t=1674540968;
-        bh=XH58Wca77uh7IXdxF4TdaMGV0Z0CqzpSfbHHO9L64g8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ll9wKs6zudIiHj1aifzzdajB6Af6+Zw6Z2OzuCT0o4621+OBeOdD3DgaGj2K5rWEG
-         lozu0JsZF4T4vcZ6ONJdBsIUbzU+z0PQuLlmSW41wc7zLSpRIsQp7mowKXJrb14drQ
-         /4ChkFGcHsGJTY6HQtSS4fNdGuc+vcnvarZMP3HHfE+sB16qHyKgmCSaXosmwOdFdD
-         02AL7ipXOwLsECVWCHvjFTcFfmoAKGgqXp2YrmYspmIoOUx9pIH1upWYZJDGCzXCPL
-         v25bsfD1uhXzbFc/bVG94tysGJtodmt9l71iDZ53/vfjDD3w/neoMaGtqwybAfGC2X
-         jnS1yHQ+eP6Qg==
-Message-ID: <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
-Date:   Mon, 23 Jan 2023 22:16:01 -0800
+        Tue, 24 Jan 2023 01:29:59 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B7F3E09C;
+        Mon, 23 Jan 2023 22:29:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4u7sdeygL2SI0vuOn3AQXqOOeojipj5nJ8JBXiSMSP4=; b=Y1N1Bp85zWT1Yc4mWO5RM/5swn
+        z1s/ae7nZBU1XI2LeDBAOv+06U0Bu1PJWHXCDrEjlbbph1xr+oh6cmoXIod4hdcTSIhg05KsUMsH6
+        Mt0SAUZbeNMdj95LikeyPio6/J/WyHzPQbupOE2KMJ+OXZv8xSLLdBNtO7Ot/A8dx2JalSA7ubKi2
+        aFuBB1XW7qW1wiu2y2b/BJd4x/N6dLqevlGltWAruZGC7j2J5NPe6Xz6f5IgVH1uIF87LFk4mGzQ9
+        1iI2DWcT8gQ30YpVU8YQ5BM2WIzRNm5oNr5lR1NU6lLpwGy0B15qzrZcjDOK9MRUi3zNGYFfM5749
+        r4m38yZA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pKCny-002Vim-8c; Tue, 24 Jan 2023 06:29:14 +0000
+Date:   Mon, 23 Jan 2023 22:29:14 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
+        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
+        mkoutny@suse.com, daniel@ffwll.ch, linuxppc-dev@lists.ozlabs.org,
+        linux-fpga@vger.kernel.org, linux-rdma@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org,
+        bpf@vger.kernel.org, rds-devel@oss.oracle.com,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 01/19] mm: Introduce vm_account
+Message-ID: <Y896ugI8HoXDRjp3@infradead.org>
+References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+ <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH v2 2/2] selftests/x86: sysret_rip: Add more syscall
- tests with respect to `%rcx` and `%r11`
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        x86 Mailing List <x86@kernel.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xin Li <xin3.li@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com>
- <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com>
- <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com>
- <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
- <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
- <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
- <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com>
- <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
- <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
- <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
-Content-Language: en-US
-From:   "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+> +/**
+> + * vm_account_init - Initialise a new struct vm_account.
+> + * @vm_account: pointer to uninitialised vm_account.
+> + * @task: task to charge against.
+> + * @user: user to charge against. Must be non-NULL for VM_ACCOUNT_USER.
+> + * @flags: flags to use when charging to vm_account.
+> + *
+> + * Initialise a new uninitialiused struct vm_account. Takes references
+> + * on the task/mm/user/cgroup as required although callers must ensure
+> + * any references passed in remain valid for the duration of this
+> + * call.
+> + */
+> +void vm_account_init(struct vm_account *vm_account, struct task_struct *task,
+> +		struct user_struct *user, enum vm_account_flags flags);
 
 
-On 1/23/23 18:27, Ammar Faizi wrote:
-> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> 
-> Test that:
-> 
->   - "syscall" in a FRED system doesn't clobber %rcx and %r11.
->   - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
-> 
-> Test them out with a trivial system call like __NR_getppid and friends
-> which are extremely likely to return with SYSRET on an IDT system; check
-> that it returns a nonnegative value and then save the result.
-> 
-
-"Nonnegative" here should be "valid"; it is an implementation detail 
-that the error value is -1.
-
-However, you are not checking that you don't get a mix of REGS_SAVED and 
-REGS_SYSRET, which is a major part of the point.
-
-	-hpa
-
+kerneldoc comments are supposed to be next to the implementation, and
+not the declaration in the header.
 
