@@ -2,114 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B160678CD0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 01:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BD3678D40
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 02:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbjAXA07 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Jan 2023 19:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S232743AbjAXBVf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Jan 2023 20:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbjAXA06 (ORCPT
+        with ESMTP id S232728AbjAXBVe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 19:26:58 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462C939B89;
-        Mon, 23 Jan 2023 16:26:52 -0800 (PST)
-Received: from localhost.localdomain (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id D2214824E0;
-        Tue, 24 Jan 2023 00:26:45 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674520012;
-        bh=SXQXpbuiBQdiwXpH2+78kfJuScDGyhqpyjZmkT1By0E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qZ4AUcVqaCg4Eqketr209fH1DlzQ7tYfr4oo/RJDieFUYL3SPhUeuiFadn9JS9c/u
-         cT9mBLn3vi89aAsRL6rZ7aL9Yw1Xq27Gwc32zhDxTo+IeJRgy6a8B2aEjH2rNL+z9a
-         uvgGnK5S+WAwfJjetSfovuygOacgRjMorVPIfejVRtmKBUoRxDvVGeg5e/U5wt+GNr
-         XsBNLifoZj/ZZJSwNqzDWWe7UXrLyuoefZlHDp7brkzMeIdM5581OlwRSIKB5BE+g+
-         9Y2OUde4q6XdCj+rNvyX0Y19rF+C/nf+8/EZXoth5qbswSFnJnn2UfT+64VgJFCms8
-         dyZebDu32OVmA==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     x86 Mailing List <x86@kernel.org>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xin Li <xin3.li@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v1 2/2] selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx` and `%r11`
-Date:   Tue, 24 Jan 2023 07:26:25 +0700
-Message-Id: <20230124002625.581323-3-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
-References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com> <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com> <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com> <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com> <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com> <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org> <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
- <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
+        Mon, 23 Jan 2023 20:21:34 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344CC9EDC
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 17:21:29 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id m3-20020a17090a414300b00229ef93c5b0so11924001pjg.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 17:21:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wgGa5wrgAdo2NeUwkpPTr8VHG2ztyXDjbUcIQKILZZQ=;
+        b=Fj59aztvZsI93KqVdNsaBYgt0ezKwdgNzsUWuwRdK3YtJgfxyhWeV0YpdCsA254hdh
+         WNYQaNlZiuY31AdjFsdXMb2hOYwhdOxjeVXeI48dRt+far/UCt0p6INt1pEFeJWaEdvH
+         QNwTW9ViwWmLYRMlGlTofNZMRnlovWq8+qA2wm0RoPBtYuBHGIvQOQrrOgUB+Elmp/at
+         i+FZEXyRNNAVO5kKKpkgVoFIWBJfYTEYcZllDATZ+N4p9SEVumhM1oAYbm5Sf3GzkYL1
+         wVZuBCXqpFZZgWGzPRk2R3cY9F7Ca1V9tZSFMG+t9ypHjIYnWhroNO20jiQaP/vqypQT
+         /LVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wgGa5wrgAdo2NeUwkpPTr8VHG2ztyXDjbUcIQKILZZQ=;
+        b=a5ceMaRKs56emvVHDHwFgtH9qGUWOgUZvcZ3CfmuKyLqhpJb2xEtp9+DxFf0fDxUD5
+         lkXWH5k70cD6ctDXYs+gXCAVLbh30Z2opZ9hgjzyOpTr3gwJr7AeW6kEaui6ygrVCRvV
+         ygC/cPJJ6vaAqc4Ecp4opIN4oeraqco/khE3OKJsNNr2KMZhFMrIgBFk31M3LjAktPpl
+         pC+K4ay7x0IMzcCe/MuUwDigbU+hnaahGIx6urDLWu0EiTn4fQdx9Jg0yuHp+42Jwyib
+         W88zYmjIi+FP5dJjybEPs7ENkpO5BMbBcWNyJaI+stTnPta4vAMFNx5lkGQKBCCdN7pv
+         2dKg==
+X-Gm-Message-State: AO0yUKXvC35sLxW4uNQ+QIa4Bm5guho/c7A5h1jk1NLwHCKIxifzlBV6
+        ju9OlLt0o/fLvmLnzVfAh0+D0W+vlYNR4P9K1ss=
+X-Google-Smtp-Source: AK7set/9pywbGEv0WlLYt3ONqn8dxZuuJBmeuykZqm87ZDRWGqgG45nB8eagGTlznEd5u4nG4ID0Ug==
+X-Received: by 2002:a17:902:7891:b0:191:4367:7fde with SMTP id q17-20020a170902789100b0019143677fdemr15867pll.0.1674523288475;
+        Mon, 23 Jan 2023 17:21:28 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id jf1-20020a170903268100b001960690b5d4sm359391plb.59.2023.01.23.17.21.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 17:21:28 -0800 (PST)
+Date:   Tue, 24 Jan 2023 01:21:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Erdem Aktas <erdemaktas@google.com>
+Cc:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        Ackerley Tng <ackerleytng@google.com>,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        isaku.yamahata@intel.com, sagis@google.com, afranji@google.com,
+        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
+        maz@kernel.org, bgardon@google.com, jmattson@google.com,
+        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
+        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
+        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
+        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
+        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
+        pshier@google.com, axelrasmussen@google.com,
+        zhenzhong.duan@intel.com, like.xu@linux.intel.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC PATCH v3 08/31] KVM: selftests: Require GCC to realign
+ stacks on function entry
+Message-ID: <Y88ylDFfMQNcUEw7@google.com>
+References: <20230121001542.2472357-1-ackerleytng@google.com>
+ <20230121001542.2472357-9-ackerleytng@google.com>
+ <Y8sxjppvEnm4IBWG@google.com>
+ <CAAYXXYy7=ZTCZ1LQ3_Sy39ju_xG5++dTrxi+DKGcbpJ5VJ3OuQ@mail.gmail.com>
+ <99a36eed-e4e5-60ec-0f88-a33d1842a0d6@maciej.szmigiero.name>
+ <Y87XnYZx1qzZOLKR@google.com>
+ <CAAYXXYyqDJx4=cSy3kp7vX4VF+5z_Rtm6wPM8_o9BmHkB_T-kg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAYXXYyqDJx4=cSy3kp7vX4VF+5z_Rtm6wPM8_o9BmHkB_T-kg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Mon, Jan 23, 2023, Erdem Aktas wrote:
+> On Mon, Jan 23, 2023 at 10:53 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Mon, Jan 23, 2023, Maciej S. Szmigiero wrote:
+> > > On 23.01.2023 19:30, Erdem Aktas wrote:
+> > > > On Fri, Jan 20, 2023 at 4:28 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > > >
+> > > > > On Sat, Jan 21, 2023, Ackerley Tng wrote:
+> > > > > > Some SSE instructions assume a 16-byte aligned stack, and GCC compiles
+> > > > > > assuming the stack is aligned:
+> > > > > > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40838. This combination
+> > > > > > results in a #GP in guests.
+> > > > > >
+> > > > > > Adding this compiler flag will generate an alternate prologue and
+> > > > > > epilogue to realign the runtime stack, which makes selftest code
+> > > > > > slower and bigger, but this is okay since we do not need selftest code
+> > > > > > to be extremely performant.
+> > > > >
+> > > > > Huh, I had completely forgotten that this is why SSE is problematic.  I ran into
+> > > > > this with the base UPM selftests and just disabled SSE.  /facepalm.
+> > > > >
+> > > > > We should figure out exactly what is causing a misaligned stack.  As you've noted,
+> > > > > the x86-64 ABI requires a 16-byte aligned RSP.  Unless I'm misreading vm_arch_vcpu_add(),
+> > > > > the starting stack should be page aligned, which means something is causing the
+> > > > > stack to become unaligned at runtime.  I'd rather hunt down that something than
+> > > > > paper over it by having the compiler force realignment.
+> > > >
+> > > > Is not it due to the 32bit execution part of the guest code at boot
+> > > > time. Any push/pop of 32bit registers might make it a 16-byte
+> > > > unaligned stack.
+> > >
+> > > 32-bit stack needs to be 16-byte aligned, too (at function call boundaries) -
+> > > see [1] chapter 2.2.2 "The Stack Frame"
+> >
+> > And this showing up in the non-TDX selftests rules that out as the sole problem;
+> > the selftests stuff 64-bit mode, i.e. don't have 32-bit boot code.
+> 
+> Thanks Maciej and Sean for the clarification. I was suspecting the
+> hand-coded assembly part that we have for TDX tests but  it being
+> happening in the non-TDX selftests disproves it.
 
-Test that:
-
- - "syscall" in a FRED system doesn't clobber %rcx and %r11.
- - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
-
-Test them out with a trivial system call like __NR_getppid and friends
-which are extremely likely to return with SYSRET on an IDT system; check
-that it returns a nonnegative value and then save the result.
-
-Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
-Co-developed-by: "H. Peter Anvin" <hpa@zytor.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-
-Missing a Signed-off-by tag from HPA. 
-
-@hpa send your sign off if you like this patch.
-
- tools/testing/selftests/x86/sysret_rip.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 9056f2e2674d2bc5..c55f6d04f0ae1f2d 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -252,8 +252,17 @@ static void test_syscall_fallthrough_to(unsigned long ip)
- 	printf("[OK]\tWe survived\n");
- }
- 
-+static void test_syscall_rcx_r11(void)
-+{
-+	do_syscall(__NR_getpid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_gettid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_getppid, 0, 0, 0, 0, 0, 0);
-+}
-+
- int main()
- {
-+	test_syscall_rcx_r11();
-+
- 	/*
- 	 * When the kernel returns from a slow-path syscall, it will
- 	 * detect whether SYSRET is appropriate.  If it incorrectly
--- 
-Ammar Faizi
-
+Not necessarily, it could be both.  Goofs in the handcoded assembly and PEBKAC
+on my end :-)
