@@ -2,409 +2,197 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A0567927F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 09:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9C8679358
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 09:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbjAXIEJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Jan 2023 03:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S233077AbjAXIof (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Jan 2023 03:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbjAXIEF (ORCPT
+        with ESMTP id S232744AbjAXIoe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Jan 2023 03:04:05 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC7E303FB
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 00:04:02 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id nb8-20020a17090b35c800b0022bb3fd0718so3935158pjb.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 00:04:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6MfHTuEf4r86+PFtflimvGxC6PNCOKta4sNIc6FGOy8=;
-        b=b1M6Nlc5jpnDMvZgET1XVlu7rTMoo8JEImsGaOtaoUw/ZLlvaIaMyYmoZWJ2QwXsfn
-         QMZGnlcpTtktGNMyytpFf+3Lryep7rs17S5w8WrntnpwxA97T1pUbq24K0+eLjdZsQdg
-         r/+nOfAClMbm5tYdVZayl00qSZLehEWv0gt7K71uNz/MbfGL9DoZ8EXJcwVDaLypAUAM
-         Ynmbxjz117bA/tisqQF5lTiK4EPvUgHO+u3oHAtuQuI6GQq7T3Vj4EeI/fq6w9L7XW/I
-         N+emk3nl1NiXRcvJsb3OuOb+WYK82BDSZtoln5QsYFK2FQAKR7GB1OuQ3ujrFKZGQDjN
-         3b1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6MfHTuEf4r86+PFtflimvGxC6PNCOKta4sNIc6FGOy8=;
-        b=ezTooiz/TviBHBA4vBG3WTer925IspNM2jDSnqVyJueb/KxOCnrIcM+UXD6b3dfni6
-         J8y3G+vOXOQlqNh9emd7zLVgxjrvcwLKjK584XcX/kvdBKCM/WhLQCY0nCMehgELUXSs
-         VJRnNSeuuEacTJEmAu+7N64N36KJJTMNI2wxBDbq6MfJYszknftLhoBA4gZt7GnWoN5s
-         nmZsJ67Qu+Ug8qE65KSJhN+iIE3VthlWH5rBpK8IJok2wn+djAr1J7g6iraOIP+pry4V
-         qJvMzQngr3GGDenmv4s8UMHdlRtYDj2LWFD03sSBol7ilnfzEjbYEwXrvVjniDM9a5ji
-         t5JQ==
-X-Gm-Message-State: AFqh2kqzH41s8pOskQ1wMGno6rPu5JJwkpGaXMjoRfhtaJglPrW7IBTZ
-        +KSQY9oigQscVK/Rra/mNUdU3A5lUMO2oA==
-X-Google-Smtp-Source: AMrXdXvdrVCihXYcqPjQjglWu9qwd55uNK+jZY14LmMkaPoZuxY30uChtzHtE/Gjln1OcM4VshIpI2eAhW3ADA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:902:b217:b0:194:7c22:1885 with SMTP
- id t23-20020a170902b21700b001947c221885mr2567366plr.26.1674547441782; Tue, 24
- Jan 2023 00:04:01 -0800 (PST)
-Date:   Tue, 24 Jan 2023 16:03:50 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230124080350.2275652-1-davidgow@google.com>
-Subject: [RFC PATCH v2] kunit: Add "hooks" to call into KUnit when it's built
- as a module
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>
-Cc:     Sadiya Kazi <sadiyakazi@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 24 Jan 2023 03:44:34 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BF132533;
+        Tue, 24 Jan 2023 00:44:32 -0800 (PST)
+Received: from localhost.localdomain (unknown [39.45.186.163])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BF4DF6602DE5;
+        Tue, 24 Jan 2023 08:44:24 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674549871;
+        bh=e4CQ5fwaejmFh2jEyV59ZLNZDU1xLhAA6U/NLInBTGs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F/AWXdkBfsGNPgTQSr/q+7Lnn6TcjKA1/OIvjLMwR0kj68SDFMl7NdXHcls218wKg
+         6n/4yTQgtDYqDZHf6zJAY/ogzjHbNwIBX3PZ0bt4jWGJMzUcxSfXKWxNNLtWf2gA3q
+         vl1+H0rKuQbOdbhjTl00bnVXU+saRsLW6aSbIhUzZJfer6iMn8H+QekSFlspwcSfKR
+         zSfGoCFo76EfQ8LUS+bKtquQ8Bxb7JuZPrtsUzenShHrImW1wgKrOPqk9qnED9utBb
+         s4yf8MutpLaaJY9sL/QQ4WFlH5szs6SJNd/G470AbVBLNLEcA/Jn1rvEpXCxcs8Mbv
+         oIxcPuo7R6mBQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: [PATCH v8 0/4] Implement IOCTL to get and/or the clear info about PTEs
+Date:   Tue, 24 Jan 2023 13:43:19 +0500
+Message-Id: <20230124084323.1363825-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KUnit has several macros and functions intended for use from non-test
-code. These hooks, currently the kunit_get_current_test() and
-kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
+*Changes in v8:*
+- Update uffd async wp implementation
+- Improve PAGEMAP_IOCTL implementation
 
-In order to support this case, the required functions and static data
-need to be available unconditionally, even when KUnit itself is not
-built-in. The new 'hooks.c' file is therefore always included, and has
-both the static key required for kunit_get_current_test(), and a
-function pointer to the real implementation of
-__kunit_fail_current_test(), which is populated when the KUnit module is
-loaded.
+*Changes in v7:*
+- Add uffd wp async
+- Update the IOCTL to use uffd under the hood instead of soft-dirty
+  flags
 
-A new header, kunit/hooks-table.h, contains a table of all hooks, and is
-repeatedly included with different definitions of the KUNIT_HOOK() in
-order to automatically generate the needed function pointer tables. When
-KUnit is disabled, or the module is not loaded, these function pointers
-are all NULL. This shouldn't be a problem, as they're all used behind
-wrappers which check kunit_running and/or that the pointer is non-NULL.
+Hello,
 
-This can then be extended for future features which require similar
-"hook" behaviour, such as static stubs:
-https://lore.kernel.org/all/20221208061841.2186447-1-davidgow@google.com/
+Note:
+Soft-dirty pages and pages which have been written-to are synonyms. As
+kernel already has soft-dirty feature inside which we have given up to
+use, we are using written-to terminology while using UFFD async WP under
+the hood.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+the info about page table entries. The following operations are
+supported in this ioctl:
+- Get the information if the pages have been written-to (PAGE_IS_WT),
+  file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+  (PAGE_IS_SWAPPED).
+- Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+  pages have been written-to.
+- Find pages which have been written-to and write protect the pages
+  (atomic PAGE_IS_WT + PAGEMAP_WP_ENGAGE)
 
-This is basically a prerequisite for the stub features working when
-KUnit is built as a module, and should nicely make a few other tests
-work then, too.
+It is possible to find and clear soft-dirty pages entirely in userspace.
+But it isn't efficient:
+- The mprotect and SIGSEGV handler for bookkeeping
+- The userfaultfd wp with the handler for bookkeeping
 
-v2 adds a slightly-excessive macro-based system for defining hooks. This
-made adding the static stub hooks absolutely trivial, and the complexity
-is totally hidden from the user (being an internal KUnit implementation
-detail), so I'm more comfortable with this than some other macro magic.
+Some benchmarks can be seen here[1]. This series adds features that weren't
+present earlier:
+- There is no atomic get soft-dirty PTE bit status and clear present in
+  the kernel.
+- The pages which have been written-to can not be found in accurate way.
+  (Kernel's soft-dirty PTE bit + sof_dirty VMA bit shows more soft-dirty
+  pages than there actually are.)
 
-It does however result in a huge number of checkpatch.pl errors, as
-we're using macros in unconventional ways, and checkpatch just can't
-work out the syntax. These are mostly "Macros with complex values should
-be enclosed in parentheses", "Macros with multiple statements should be
-enclosed in a do - while loop", and similar, which don't apply due to
-the macros not being expressions: they are mostly declarations or
-assignment statements. There are a few others where checkpatch thinks
-that the return value is the function name and similar, so complains
-about the style.
+Historically, soft-dirty PTE bit tracking has been used in the CRIU
+project. The procfs interface is enough for finding the soft-dirty bit
+status and clearing the soft-dirty bit of all the pages of a process.
+We have the use case where we need to track the soft-dirty PTE bit for
+only specific pages on demand. We need this tracking and clear mechanism
+of a region of memory while the process is running to emulate the
+getWriteWatch() syscall of Windows.
 
-Open questions:
-- Is this macro-based system worth it, or was v1 better?
-- Should we rename test-bug.h to hooks.h or similar.
-  (I think so, but would rather do it in a separate patch, to make it
-  easier to review. There are a few includes of it scattered about.)
-- Is making these NULL when KUnit isn't around sensible, or should we
-  auto-generate a "default" implementation. This is a pretty easy
-  extension to the macros here.
-  (I think NULL is good for now, as we have wrappers for these anyway.
-  If we want to change our minds later as we add more hooks, it's easy.)
-- Any other thoughts?
+*(Moved to using UFFD instead of soft-dirty to find pages which have been
+written-to from v7 patch series)*:
+Stop using the soft-dirty flags for finding which pages have been
+written to. It is too delicate and wrong as it shows more soft-dirty
+pages than the actual soft-dirty pages. There is no interest in
+correcting it [2][3] as this is how the feature was written years ago.
+It shouldn't be updated to changed behaviour. Peter Xu has suggested
+using the async version of the UFFD WP [4] as it is based inherently
+on the PTEs.
 
-Cheers,
--- David
+So in this patch series, I've added a new mode to the UFFD which is
+asynchronous version of the write protect. When this variant of the
+UFFD WP is used, the page faults are resolved automatically by the
+kernel. The pages which have been written-to can be found by reading
+pagemap file (!PM_UFFD_WP). This feature can be used successfully to
+find which pages have been written to from the time the pages were
+write protected. This works just like the soft-dirty flag without
+showing any extra pages which aren't soft-dirty in reality.
 
-Changes since RFC v1:
-https://lore.kernel.org/all/20230117142737.246446-1-davidgow@google.com/
-- Major refit to auto-generate the hook code using macros.
-- (Note that previous Reviewed-by tags have not been added, as this is a
-  big enough change it probably needs a re-reviews. Thanks Rae for
-  reviewing RFC v1 previously, though!)
----
- Documentation/dev-tools/kunit/usage.rst | 14 +++++-----
- include/kunit/hooks-table.h             | 34 +++++++++++++++++++++++++
- include/kunit/test-bug.h                | 24 +++++++++--------
- lib/Makefile                            |  4 +++
- lib/kunit/Makefile                      |  3 +++
- lib/kunit/hooks.c                       | 27 ++++++++++++++++++++
- lib/kunit/test.c                        | 22 +++++++++++-----
- 7 files changed, 103 insertions(+), 25 deletions(-)
- create mode 100644 include/kunit/hooks-table.h
- create mode 100644 lib/kunit/hooks.c
+The information related to pages if the page is file mapped, present and
+swapped is required for the CRIU project [5][6]. The addition of the
+required mask, any mask, excluded mask and return masks are also required
+for the CRIU project [5].
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 48f8196d5aad..6424493b93cb 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -648,10 +648,9 @@ We can do this via the ``kunit_test`` field in ``task_struct``, which we can
- access using the ``kunit_get_current_test()`` function in ``kunit/test-bug.h``.
- 
- ``kunit_get_current_test()`` is safe to call even if KUnit is not enabled. If
--KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
--running in the current task, it will return ``NULL``. This compiles down to
--either a no-op or a static key check, so will have a negligible performance
--impact when no test is running.
-+KUnit is not enabled, or if no test is running in the current task, it will
-+return ``NULL``. This compiles down to either a no-op or a static key check,
-+so will have a negligible performance impact when no test is running.
- 
- The example below uses this to implement a "mock" implementation of a function, ``foo``:
- 
-@@ -726,8 +725,7 @@ structures as shown below:
- 	#endif
- 
- ``kunit_fail_current_test()`` is safe to call even if KUnit is not enabled. If
--KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
--running in the current task, it will do nothing. This compiles down to either a
--no-op or a static key check, so will have a negligible performance impact when
--no test is running.
-+KUnit is not enabled, or if no test is running in the current task, it will do
-+nothing. This compiles down to either a no-op or a static key check, so will
-+have a negligible performance impact when no test is running.
- 
-diff --git a/include/kunit/hooks-table.h b/include/kunit/hooks-table.h
-new file mode 100644
-index 000000000000..0b5eafd199ed
---- /dev/null
-+++ b/include/kunit/hooks-table.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * KUnit 'Hooks' function pointer table
-+ *
-+ * This file is included multiple times, each time with a different definition
-+ * of KUNIT_HOOK. This provides one place where all of the hooks can be listed
-+ * which can then be converted into function / implementation declarations, or
-+ * code to set function pointers.
-+ *
-+ * Copyright (C) 2023, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+/*
-+ * To declare a hook, use:
-+ * KUNIT_HOOK(name, retval, args), where:
-+ * - name: the function name of the exported hook
-+ * - retval: the type of the return value of the hook
-+ * - args: the arguments to the hook, of the form (int a, int b)
-+ *
-+ * Note that the argument list should be contained within the brackets (),
-+ * and that the implementation of the hook should be in a <name>_impl
-+ * function, which should not be declared static, but need not be exported.
-+ */
-+
-+#ifndef KUNIT_HOOK
-+#error KUNIT_HOOK must be defined before including the hooks table
-+#endif
-+
-+KUNIT_HOOK(__kunit_fail_current_test, __printf(3, 4) void,
-+	   (const char *file, int line, const char *fmt, ...));
-+
-+/* Undefine KUNIT_HOOK at the end, ready for the next use. */
-+#undef KUNIT_HOOK
-diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-index c1b2e14eab64..3203ffc0a08b 100644
---- a/include/kunit/test-bug.h
-+++ b/include/kunit/test-bug.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * KUnit API allowing dynamic analysis tools to interact with KUnit tests
-+ * KUnit API providing hooks for non-test code to interact with tests.
-  *
-  * Copyright (C) 2020, Google LLC.
-  * Author: Uriel Guajardo <urielguajardo@google.com>
-@@ -9,7 +9,7 @@
- #ifndef _KUNIT_TEST_BUG_H
- #define _KUNIT_TEST_BUG_H
- 
--#if IS_BUILTIN(CONFIG_KUNIT)
-+#if IS_ENABLED(CONFIG_KUNIT)
- 
- #include <linux/jump_label.h> /* For static branch */
- #include <linux/sched.h>
-@@ -43,20 +43,21 @@ static inline struct kunit *kunit_get_current_test(void)
-  * kunit_fail_current_test() - If a KUnit test is running, fail it.
-  *
-  * If a KUnit test is running in the current task, mark that test as failed.
-- *
-- * This macro will only work if KUnit is built-in (though the tests
-- * themselves can be modules). Otherwise, it compiles down to nothing.
-  */
- #define kunit_fail_current_test(fmt, ...) do {					\
- 		if (static_branch_unlikely(&kunit_running)) {			\
-+			/* Guaranteed to be non-NULL when kunit_running true*/	\
- 			__kunit_fail_current_test(__FILE__, __LINE__,		\
- 						  fmt, ##__VA_ARGS__);		\
- 		}								\
- 	} while (0)
- 
- 
--extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
--						    const char *fmt, ...);
-+/* Declare all of the available hooks. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	extern retval (*name)args
-+
-+#include "kunit/hooks-table.h"
- 
- #else
- 
-@@ -66,10 +67,11 @@ static inline struct kunit *kunit_get_current_test(void) { return NULL; }
- #define kunit_fail_current_test(fmt, ...) \
- 		__kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
- 
--static inline __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
--							    const char *fmt, ...)
--{
--}
-+/* No-op stubs if KUnit is not enabled. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	static retval (*name)args = NULL
-+
-+#include "kunit/hooks-table.h"
- 
- #endif
- 
-diff --git a/lib/Makefile b/lib/Makefile
-index 4d9461bfea42..9031de6ca73c 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -126,6 +126,10 @@ CFLAGS_test_fpu.o += $(FPU_CFLAGS)
- obj-$(CONFIG_TEST_LIVEPATCH) += livepatch/
- 
- obj-$(CONFIG_KUNIT) += kunit/
-+# Include the KUnit hooks unconditionally. They'll compile to nothing if
-+# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
-+# function pointers) which need to be built-in even when KUnit is a module.
-+obj-y += kunit/hooks.o
- 
- ifeq ($(CONFIG_DEBUG_KOBJECT),y)
- CFLAGS_kobject.o += -DDEBUG
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index 29aff6562b42..deeb46cc879b 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -11,6 +11,9 @@ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
- kunit-objs +=				debugfs.o
- endif
- 
-+# KUnit 'hooks' are built-in even when KUnit is built as a module.
-+lib-y +=				hooks.o
-+
- obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
- 
- # string-stream-test compiles built-in only.
-diff --git a/lib/kunit/hooks.c b/lib/kunit/hooks.c
-new file mode 100644
-index 000000000000..29e81614f486
---- /dev/null
-+++ b/lib/kunit/hooks.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit 'Hooks' implementation.
-+ *
-+ * This file contains code / structures which should be built-in even when
-+ * KUnit itself is built as a module.
-+ *
-+ * Copyright (C) 2022, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+/* This file is always built-in, so make sure it's empty if CONFIG_KUNIT=n */
-+#if IS_ENABLED(CONFIG_KUNIT)
-+
-+#include <kunit/test-bug.h>
-+
-+DEFINE_STATIC_KEY_FALSE(kunit_running);
-+EXPORT_SYMBOL(kunit_running);
-+
-+/* Function pointers for hooks. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	retval (*name)args; \
-+	EXPORT_SYMBOL(name)
-+
-+#include "kunit/hooks-table.h"
-+
-+#endif
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index c9ebf975e56b..b6c88f722b68 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -20,13 +20,10 @@
- #include "string-stream.h"
- #include "try-catch-impl.h"
- 
--DEFINE_STATIC_KEY_FALSE(kunit_running);
--
--#if IS_BUILTIN(CONFIG_KUNIT)
- /*
-  * Fail the current test and print an error message to the log.
-  */
--void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
-+void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
- {
- 	va_list args;
- 	int len;
-@@ -53,8 +50,6 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
- 	kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffer);
- 	kunit_kfree(current->kunit_test, buffer);
- }
--EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
--#endif
- 
- /*
-  * Enable KUnit tests to run.
-@@ -775,8 +770,18 @@ void kunit_cleanup(struct kunit *test)
- }
- EXPORT_SYMBOL_GPL(kunit_cleanup);
- 
-+/* Declarations for the hook implemetnations */
-+#define KUNIT_HOOK(name, retval, args) \
-+	extern retval name##_impl args
-+#include "kunit/hooks-table.h"
-+
- static int __init kunit_init(void)
- {
-+	/* Install the KUnit hook functions. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	name = name##_impl
-+#include "kunit/hooks-table.h"
-+
- 	kunit_debugfs_init();
- #ifdef CONFIG_MODULES
- 	return register_module_notifier(&kunit_mod_nb);
-@@ -788,6 +793,11 @@ late_initcall(kunit_init);
- 
- static void __exit kunit_exit(void)
- {
-+	/* Remove the KUnit hook functions. */
-+#define KUNIT_HOOK(name, retval, args) \
-+	name = NULL
-+#include "kunit/hooks-table.h"
-+
- #ifdef CONFIG_MODULES
- 	unregister_module_notifier(&kunit_mod_nb);
- #endif
+The IOCTL returns the addresses of the pages which match the specific masks.
+The page addresses are returned in struct page_region in a compact form.
+The max_pages is needed to support a use case where user only wants to get
+a specific number of pages. So there is no need to find all the pages of
+interest in the range when max_pages is specified. The IOCTL returns when
+the maximum number of the pages are found. The max_pages is optional. If
+max_pages is specified, it must be equal or greater than the vec_size.
+This restriction is needed to handle worse case when one page_region only
+contains info of one page and it cannot be compacted. This is needed to
+emulate the Windows getWriteWatch() syscall.
+
+The patch series include the detailed selftest which can be used as an example
+for the uffd async wp test and PAGEMAP_IOCTL. It shows the interface usages as
+well.
+
+[1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+[2] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+[3] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+[4] https://lore.kernel.org/all/Y6Hc2d+7eTKs7AiH@x1n
+[5] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com/
+[6] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com/
+
+Regards,
+Muhammad Usama Anjum
+
+Muhammad Usama Anjum (4):
+  userfaultfd: Add UFFD WP Async support
+  userfaultfd: split mwriteprotect_range()
+  fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about
+    PTEs
+  selftests: vm: add pagemap ioctl tests
+
+ fs/proc/task_mmu.c                         | 294 +++++++
+ fs/userfaultfd.c                           |  21 +
+ include/linux/userfaultfd_k.h              |  16 +
+ include/uapi/linux/fs.h                    |  50 ++
+ include/uapi/linux/userfaultfd.h           |   8 +-
+ mm/memory.c                                |  29 +-
+ mm/userfaultfd.c                           |  40 +-
+ tools/include/uapi/linux/fs.h              |  50 ++
+ tools/testing/selftests/vm/.gitignore      |   1 +
+ tools/testing/selftests/vm/Makefile        |   5 +-
+ tools/testing/selftests/vm/pagemap_ioctl.c | 880 +++++++++++++++++++++
+ 11 files changed, 1374 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
+
 -- 
-2.39.0.246.g2a6d74b583-goog
+2.30.2
 
