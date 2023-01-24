@@ -2,151 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9073767913A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 07:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE64C67923D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 08:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbjAXGrN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Jan 2023 01:47:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
+        id S232995AbjAXHpo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Jan 2023 02:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjAXGrN (ORCPT
+        with ESMTP id S232143AbjAXHpn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Jan 2023 01:47:13 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB8B27D55;
-        Mon, 23 Jan 2023 22:47:12 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id E897B82EF1;
-        Tue, 24 Jan 2023 06:47:05 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674542832;
-        bh=ji1qYlM/NEIxpmkTGVfmalIw/nejW1Mp1PflUs7Ahts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ju3HN76Yj8FVoED4L1IiCSDh5eKvTZrk7CUdLLP1tgr0FPmijpZcn/b7G3onvps8I
-         flxbrt+7PwetqVBONTXGmiXmDeSmQhV8eplWxHc9nzbIK96Moa3FzEsCT3Lwp9oHZX
-         6mFqIIWJVFOVurOHPxmUnyTyhE1jqtVDDzpnLQ2LTrlMkcjJT8GMPSWO9WQx39MLQX
-         YTeN5NRAN/auijD6wSsw3v72dawFMpLbWBsOLGre6GUw3XftnKZrSczvpJ3GSQ5t3l
-         NIUreN5AMI+wlGuRfEWaCGBI0A6h5RqSfExWeQdYLXMl4pfMnHnXC1SvH6wKE1ZZLq
-         ip8uSKhK5uK9g==
-Date:   Tue, 24 Jan 2023 13:47:01 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     x86 Mailing List <x86@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xin Li <xin3.li@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 2/2] selftests/x86: sysret_rip: Add more syscall
- tests with respect to `%rcx` and `%r11`
-Message-ID: <Y89+5R6pJDUfHUwH@biznet-home.integral.gnuweeb.org>
-References: <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
- <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
- <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
- <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com>
- <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
- <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
- <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
- <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
- <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
+        Tue, 24 Jan 2023 02:45:43 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D823D916
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 23:45:42 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 7so10779100pga.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 23:45:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vJmIox6nYoDKliIWSxm/VUOFrFsfHFNO3hI+IU1v92Q=;
+        b=BCbqiuY/C3cqUfcOdYLLYjLEXH3ufOEVw+Cs7qrr/nH/37Q55NPs3swSjzPr87VDqO
+         W8EBbmUyxOSTQ6vt2bD36IreEJsTyhvZd6+Ug6oIH5fdu6vBLRAcu+r8WTpn9dvc7v0v
+         BUAdk2tHZRpwOTzcRjPe2XpcWk0RSzmQ2r8eQBHy1lYszquMXrpuARq4/G41OUKCj/nO
+         tY/ffb3dEn86KIr1HfVfRh9tAuVyq10TWfNR6RoXwv7dmNL/HVXtNXXJeMQbUdjuZI5T
+         4qJMN2fFLsfZQ4hoeZ4kE4Jkqv6lpuvUhq3atzzTpmJwWTTZXsVt7/Rbxa+OmLRWeuWD
+         dDuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vJmIox6nYoDKliIWSxm/VUOFrFsfHFNO3hI+IU1v92Q=;
+        b=WbDe/WURsafENyhOiuFTj1gly7EgTyKVtKaoU7sIlF6Lv0koIJ+6hTNJZvN3Jf/l2j
+         oseAhkxOs26eofd7F8uKH3ivTPkeg8ddRSlnvoS9M67m3s1lE4SZC1JjqXkkfnJZFqNS
+         DHAQAV3NzowLOwbeoIaONDiNfaql4VlHc80Ew+hrgU3tvG6SsaSpHjHhrLO3rnRcz1hk
+         SPTMqxslZnU+GnRwbEfB951ZtxKadCKXBdMR4OIbZO3+RLvIjNIyYjYiu8MB46YP0gc0
+         35e0QUI4aRNXY0VCinXGVd4sGYFPKnL0l+W7F00tlqI1K3q0oZgT/VcAK6xUN8lMFpmc
+         sDOQ==
+X-Gm-Message-State: AFqh2kr4/cDkPEY7g5OuTL0yM+oAEeekyuuwdi1imrUw+Pl88VKLjkbg
+        M4HND3gK3st/FYd8nTV3KvbcrA==
+X-Google-Smtp-Source: AMrXdXs06gzgy7A+aueeZwW/WZKJAmaEYyPQ7p4KuEbfjLFhVhB3CEEIt7OTOg57BPZv6sa3mDXfMQ==
+X-Received: by 2002:a05:6a00:410c:b0:583:3bb3:438c with SMTP id bu12-20020a056a00410c00b005833bb3438cmr31285930pfb.10.1674546341763;
+        Mon, 23 Jan 2023 23:45:41 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u29-20020a056a00099d00b0058bbdaaa5e4sm857699pfg.162.2023.01.23.23.45.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 23:45:41 -0800 (PST)
+Message-ID: <63cf8ca5.050a0220.498a0.173d@mx.google.com>
+Date:   Mon, 23 Jan 2023 23:45:41 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: next
+X-Kernelci-Kernel: v6.2-rc5
+X-Kernelci-Report-Type: build
+Subject: kselftest/next build: 7 builds: 0 failed, 7 passed,
+ 2 warnings (v6.2-rc5)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 01:41:30PM +0700, Ammar Faizi wrote:
-> On Mon, Jan 23, 2023 at 10:16:01PM -0800, H. Peter Anvin wrote:
-> > However, you are not checking that you don't get a mix of REGS_SAVED and
-> > REGS_SYSRET, which is a major part of the point.
-> 
-> Good point!
-> 
-> What do you think of adding this on top of patch #1?
-> 
-> diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-> index 75c72d34dbc5840c..3da827713831acbc 100644
-> --- a/tools/testing/selftests/x86/sysret_rip.c
-> +++ b/tools/testing/selftests/x86/sysret_rip.c
-> @@ -47,11 +47,14 @@ static const unsigned long rcx_sentinel = 0x5ca1ab1e0b57ac1e;
->  static const unsigned long rflags_sentinel = 0x200a93;
->  
->  enum regs_ok {
-> -	REGS_ERROR  = -1,	/* Invalid register contents */
-> -	REGS_SAVED  =  0,	/* Registers properly preserved */
-> -	REGS_SYSRET =  1	/* Registers match syscall/sysret */
-> +	REGS_INIT_VAL	= -2,	/* For init value checker, never returned */
-> +	REGS_ERROR 	= -1,	/* Invalid register contents */
-> +	REGS_SAVED 	=  0,	/* Registers properly preserved */
-> +	REGS_SYSRET	=  1	/* Registers match syscall/sysret */
->  };
->  
-> +static enum regs_ok regs_ok_state = REGS_INIT_VAL;
-> +
->  /*
->   * Returns:
->   *  0 = %rcx and %r11 preserved.
-> @@ -86,6 +89,7 @@ static long do_syscall(long nr_syscall, unsigned long arg1, unsigned long arg2,
->  	register unsigned long r9 asm("%r9");
->  	register void *rsp asm("%rsp");
->  	unsigned long rcx, rbx;
-> +	enum regs_ok ret;
->  
->  	r11 = r11_sentinel;
->  	rcx = rcx_sentinel;
-> @@ -124,7 +128,14 @@ static long do_syscall(long nr_syscall, unsigned long arg1, unsigned long arg2,
->  	 * - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
->  	 *
->  	 */
-> -	assert(check_regs_result(r11, rcx, rbx) != REGS_ERROR);
-> +	ret = check_regs_result(r11, rcx, rbx);
-> +	assert(ret != REGS_ERROR);
-> +
-> +	if (regs_ok_state == REGS_INIT_VAL)
-> +		regs_ok_state = ret;
-> +	else
-> +		assert(ret == regs_ok_state);
-> +
->  	return nr_syscall;
->  }
->  
+kselftest/next build: 7 builds: 0 failed, 7 passed, 2 warnings (v6.2-rc5)
 
-And oh, on top of that. Add a comment, just to make it clear...
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.2-rc5/
 
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 3da827713831acbc..3d783f5baee1b66a 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -131,6 +131,10 @@ static long do_syscall(long nr_syscall, unsigned long arg1, unsigned long arg2,
-        ret = check_regs_result(r11, rcx, rbx);
-        assert(ret != REGS_ERROR);
- 
-+       /*
-+        * Check that we don't get a mix of REGS_SAVED and REGS_SYSRET.
-+        * Need at least 2 times 'syscall' invoked from this function.
-+        */
-        if (regs_ok_state == REGS_INIT_VAL)
-                regs_ok_state = ret;
-        else
+Tree: kselftest
+Branch: next
+Git Describe: v6.2-rc5
+Git Commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
--- 
-Ammar Faizi
+Warnings Detected:
 
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-15): 2 warnings
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x141ef6
+    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to =
+!ENDBR: native_write_cr4+0x4
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-15) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-15) =E2=80=94 PASS, 0 errors, 2 w=
+arnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x141ef6
+    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to !ENDB=
+R: native_write_cr4+0x4
+
+---
+For more info write to <info@kernelci.org>
