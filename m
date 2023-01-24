@@ -2,105 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E14679E75
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 17:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2716679E78
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 17:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234052AbjAXQVe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Jan 2023 11:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S234035AbjAXQV5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Jan 2023 11:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbjAXQVc (ORCPT
+        with ESMTP id S231544AbjAXQV4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Jan 2023 11:21:32 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32064ABEA;
-        Tue, 24 Jan 2023 08:21:28 -0800 (PST)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pKM2x-0007MD-Fm; Tue, 24 Jan 2023 17:21:19 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pKM2w-000AGl-Ro; Tue, 24 Jan 2023 17:21:18 +0100
-Subject: Re: [PATCH] selftests/bpf: fix vmtest static compilation error
-To:     "Daniel T. Lee" <danieltimlee@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20230121064128.67914-1-danieltimlee@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <32195f48-8b45-1a78-1964-dfe7b5a4933f@iogearbox.net>
-Date:   Tue, 24 Jan 2023 17:21:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 24 Jan 2023 11:21:56 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7364A1EB;
+        Tue, 24 Jan 2023 08:21:53 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id C4B09FFC;
+        Tue, 24 Jan 2023 16:21:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C4B09FFC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1674577313; bh=e9Ms9NIy69DBSpc92O0jPbndqt+BbCrpQpQKJy7enug=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WPbLObmI5eAb0UsjPjiNUr79jLBFhGBDmCGswQ79irtiddDZD2UhaHwuf8wU5gtfI
+         2jAAKuH+RBriYMbp7LixiK6L7pNeOUSxZFezSVb/0m50PA3orzwhQC4NuRPNqwGCwB
+         XDrYpBoLrZhu/1rM+RSTjEWiP7ym60bfW/4Vo1Lg/rKXyJovUrqZu7VNX82OlQTAZC
+         ZyjzajqT1YDtnHxcrXFSGDlm8v77Ug8RcmouOhagCzpz0AYS92XrGo6W7CfyimkdKa
+         Jf1qzBf10+bNkiATeHsiLRqWoz2H91c1xuBWPntnymecG7+43dW6zNirv1E1MWCaQ7
+         YZ0dyfisBnmwQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stefan Roesch <shr@devkernel.io>, linux-mm@kvack.org
+Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [RESEND RFC PATCH v1 10/20] docs: document general_profit sysfs
+ knob
+In-Reply-To: <Y89Zko/TWYcphmJA@debian.me>
+References: <20230123173748.1734238-1-shr@devkernel.io>
+ <20230123173748.1734238-11-shr@devkernel.io> <Y89Zko/TWYcphmJA@debian.me>
+Date:   Tue, 24 Jan 2023 09:21:51 -0700
+Message-ID: <87h6wfhpi8.fsf@meer.lwn.net>
 MIME-Version: 1.0
-In-Reply-To: <20230121064128.67914-1-danieltimlee@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26791/Tue Jan 24 09:27:43 2023)
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/21/23 7:41 AM, Daniel T. Lee wrote:
-> As stated in README.rst, in order to resolve errors with linker errors,
-> 'LDLIBS=-static' should be used. Most problems will be solved by this
-> option, but in the case of urandom_read, this won't fix the problem. So
-> the Makefile is currently implemented to strip the 'static' option when
-> compiling the urandom_read. However, stripping this static option isn't
-> configured properly on $(LDLIBS) correctly, which is now causing errors
-> on static compilation.
-> 
->      # LDLIBS=-static ./vmtest.sh
->      ld.lld: error: attempted static link of dynamic object liburandom_read.so
->      clang: error: linker command failed with exit code 1 (use -v to see invocation)
->      make: *** [Makefile:190: /linux/tools/testing/selftests/bpf/urandom_read] Error 1
->      make: *** Waiting for unfinished jobs....
-> 
-> This commit fixes this problem by configuring the strip with $(LDLIBS).
-> 
-> Fixes: 68084a136420 ("selftests/bpf: Fix building bpf selftests statically")
-> Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
-> ---
->   tools/testing/selftests/bpf/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 22533a18705e..7bd1ce9c8d87 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -188,7 +188,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
->   $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
->   	$(call msg,BINARY,,$@)
->   	$(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
-> -		     liburandom_read.so $(LDLIBS)			       \
-> +		     liburandom_read.so $(filter-out -static,$(LDLIBS))	     \
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-Do we need the same also for liburandom_read.so target's $(LDLIBS) further above?
+> Seems like the wording is confusing me, so I write the improv:
+>
+> ---- >8 ----
+> diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-ksm b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+> index 7768e90f7a8fef..5309a912ab679b 100644
+> --- a/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+> +++ b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+> @@ -56,6 +56,6 @@ What:		/sys/kernel/mm/ksm/general_profit
+>  Date:		January 2023
+>  KernelVersion:  6.1
+>  Contact:	Linux memory management mailing list <linux-mm@kvack.org>
+> -Description:	Measure how effective KSM is.
+> -		general_profit: how effective is KSM. The formula for the
+> -		calculation is in Documentation/admin-guide/mm/ksm.rst.
+> +Description:	Measure the KSM profit. See
+> +		:ref:`KSM documentation <monitoring-ksm-profit>` for details
+> +		on the calculated formula.
 
->   		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->   		     -Wl,-rpath=. -o $@
->   
-> 
+So the original at least attempted to tell us what "KSM profit" is; the
+"improved" version makes no such effort.  I don't think that is actually
+better.
 
+jon
