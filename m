@@ -2,145 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C148E678E41
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 03:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AD9678E91
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 03:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjAXCbi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Jan 2023 21:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S231538AbjAXCv1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Jan 2023 21:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjAXCbh (ORCPT
+        with ESMTP id S229930AbjAXCvX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 21:31:37 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7D59EF0;
-        Mon, 23 Jan 2023 18:31:32 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 2FDF282EF0;
-        Tue, 24 Jan 2023 02:31:25 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674527492;
-        bh=IW8oyeE4wu7owMW/4DM/ie2HFK4Drs3s2h6ZsTjIYy0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AE1p2m2+ZBx54M+Ncmx4HVGgVeCo9bIR+b/BZXnehiQrGCthkOydJj2Ocu8KuZbGj
-         ReXquTvKq5ECYdEGHqpyQM53W3kvSszOgdT7XGz5UDIKSKCjPlqNycXzMmQ4RpGiXp
-         ab9/+neJJFX8dz9thbgW5EDgSKkfZHEMK3TDYdUFEu6qGw2WG+NQ5O62GuoqPriHVX
-         ucWMlRpmqZA9x8kQUWKjsguEF4oZrpdMEltNBGW/7hCurZiky9M0fTxf4VpyCwKoK2
-         432ZOM/DjbQnIxVuuKbocvlw+6qTUqlD8A0cs028vx6DpR6O8omPTTB+/sUuz+qbL6
-         263dXJA7ZxU1Q==
-Date:   Tue, 24 Jan 2023 09:31:22 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     x86 Mailing List <x86@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xin Li <xin3.li@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v1 1/2] selftests/x86: sysret_rip: Handle syscall in
- a FRED system
-Message-ID: <Y89C+h4Fz4tvjbx5@biznet-home.integral.gnuweeb.org>
-References: <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
- <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
- <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
- <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com>
- <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org>
- <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
- <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
- <20230124002625.581323-2-ammarfaizi2@gnuweeb.org>
- <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
+        Mon, 23 Jan 2023 21:51:23 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC2512875;
+        Mon, 23 Jan 2023 18:51:21 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id n7so12565080wrx.5;
+        Mon, 23 Jan 2023 18:51:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gAY8vTZyGk4M83RejMJDWSVQbhO5UIeP+/JnuniVPrg=;
+        b=S2EsGrQuOEU3Y4RGr7uuVf6dI5nPSlI0GiuLVrqgLazzWYX90iOjMzZYyVgMddzVsX
+         w25hR1vptvZlEFwB0eyVraN5Qvzn84zZ8lb9TG3E8lT8wKDXRpBUzLyopqBno9Be3kAu
+         HsJ1gZ60PCggsTDTxlLQ/D8o5TDpJcmshYmhqLneSeHjAOSyU4GNB3nfsfYgPjbzcD9N
+         PrNH+lW9zs8irTLqDMrkXcNHjI0a27JOWm9htzAag+2PFbTHoZSMmoxOstSbPBiLdZbr
+         MStHGVmBFjOlqlj4cVKQmTCLeen9k0uw9biauAa4u0l8JJgxOtx8DQb8shfd9H5ZDECp
+         MQdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gAY8vTZyGk4M83RejMJDWSVQbhO5UIeP+/JnuniVPrg=;
+        b=F+CaRI50BwA2THGPdYkSdt0jm/VauLkQTqYNhoYzD1sQQEZzKkRPtdhZZq/RachUnW
+         mndZbsdmYcdhl1D2Tg0zSSUucOT51cTqMbD3HZ5h+UyK9WyOR0lsqqRjfTHssXAFstHU
+         B98P+jgEKVXFHRTdf9RqoKNpvPuYIxEc2X1HN56TSG4LrkPzlLVrGw+KC2D15G8SrHkc
+         f2e00zUFQACJFCK6V8EQ7b+udj+VNAPV+zA41if4n+s7f34ZklQUz6SN7B+kqp/A2/Xf
+         gDUc1HGhpdujbtgcPIPU/IKoo/53UfMD4J4DfyM4+2C8s8+oaYlAgsn/mXUtt0C/RQjr
+         LXSw==
+X-Gm-Message-State: AFqh2krIOW6KBbdVUz/Z96iIRDp6mwrMx48l389SK1zPWnNlJJQcb93L
+        h2oaEwGFBpo7kL9YYlIsAlrbv69dZdIXWRiBe0M=
+X-Google-Smtp-Source: AMrXdXtE2KHUJeDVXhPQUTYkHKp8SQa1hujduK30aDNEeyEHd80uFa/sA9H62IvvTm5YgT/eugKtTOl8LOGRi8K5uU8=
+X-Received: by 2002:a5d:4851:0:b0:2be:575:2e07 with SMTP id
+ n17-20020a5d4851000000b002be05752e07mr675943wrs.111.1674528680274; Mon, 23
+ Jan 2023 18:51:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
+References: <20230123032942.18263-1-gregory.price@memverge.com> <20230123032942.18263-4-gregory.price@memverge.com>
+In-Reply-To: <20230123032942.18263-4-gregory.price@memverge.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Mon, 23 Jan 2023 18:51:07 -0800
+Message-ID: <CANaxB-x86NUAYG1F2+-uOj676weVOdy9aKnmxjaHTuNxek28gg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter for
+ sud configuration
+To:     Gregory Price <gourry.memverge@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        oleg@redhat.com, peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 05:40:23PM -0800, H. Peter Anvin wrote:
-> On 1/23/23 16:26, Ammar Faizi wrote:
-> > +
-> > +static long do_syscall(long nr_syscall, unsigned long arg1, unsigned long arg2,
-> > +		       unsigned long arg3, unsigned long arg4,
-> > +		       unsigned long arg5, unsigned long arg6)
-> > +{
-> > +	register unsigned long r11 asm("%r11");
-> > +	register unsigned long r10 asm("%r10");
-> > +	register unsigned long r8 asm("%r8");
-> > +	register unsigned long r9 asm("%r9");
-> > +	unsigned long rcx, rbx;
-> > +
-> > +	r11 = r11_sentinel;
-> > +	rcx = rcx_sentinel;
-> > +	r10 = arg4;
-> > +	r8 = arg5;
-> > +	r9 = arg6;
-> > +
-> > +	asm volatile (
-> > +		"movq	-8(%%rsp), %%r12\n\t"	/* Don't clobber redzone. */
-> > +		"pushq	%[rflags_sentinel]\n\t"
-> > +		"popf\n\t"
-> > +		"movq	%%r12, -8(%%rsp)\n\t"
-> > +		"leaq	1f(%%rip), %[rbx]\n\t"
-> > +		"syscall\n"
-> > +		"1:"
-> > +
-> > +		: "+a" (nr_syscall),
-> > +		  "+r" (r11),
-> > +		  "+c" (rcx),
-> > +		  [rbx] "=b" (rbx)
-> > +
-> > +		: [rflags_sentinel] "g" (rflags_sentinel),
-> > +		  "D" (arg1),	/* %rdi */
-> > +		  "S" (arg2),	/* %rsi */
-> > +		  "d" (arg3),	/* %rdx */
-> > +		  "r" (r10),
-> > +		  "r" (r8),
-> > +		  "r" (r9)
-> > +
-> > +		: "r12", "memory"
-> > +	);
-> > +
-> > +	/*
-> > +	 * Test that:
-> > +	 *
-> > +	 * - "syscall" in a FRED system doesn't clobber %rcx and %r11.
-> > +	 * - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
-> > +	 *
-> > +	 */
-> > +	assert(check_regs_result(r11, rcx, rbx) != REGS_ERROR);
-> > +	return nr_syscall;
-> > +}
-> > +
-> 
-> So as per Andrew's comment, add:
-> 
-> register void * rsp asm("%rsp");
-> 
-> ...
-> 
-> "+r" (rsp)	/* clobber the redzone */
-> 
-> ... as the right way to avoid redzone problems.
+On Sun, Jan 22, 2023 at 8:22 PM Gregory Price <gourry.memverge@gmail.com> wrote:
+<snip>
+>
+> +#define PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG 0x4210
+> +#define PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG 0x4211
+> +struct syscall_user_dispatch_config {
+> +       __u64 mode;
+> +       __s8 *selector;
+> +       __u64 offset;
+> +       __u64 len;
+> +       __u8 on_dispatch;
 
-Fixed in v2.
+Sorry, I didn't notice this in the previous version. on_dispatch looks
+like an internal
+property and I don't see how we can stop a process with ptrace when on_dispatch
+is set to a non-zero value. I am not sure that we need to expose it to
+user-space.
 
--- 
-Ammar Faizi
+Other than that, the patch looks good to me.
 
+Thanks,
+Andrei
