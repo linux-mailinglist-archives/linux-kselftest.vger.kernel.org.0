@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08F0678CCC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 01:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B160678CD0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 01:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjAXA0r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Jan 2023 19:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S232338AbjAXA07 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Jan 2023 19:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbjAXA0r (ORCPT
+        with ESMTP id S231663AbjAXA06 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 19:26:47 -0500
+        Mon, 23 Jan 2023 19:26:58 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6406130298;
-        Mon, 23 Jan 2023 16:26:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462C939B89;
+        Mon, 23 Jan 2023 16:26:52 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 0144F82EEC;
-        Tue, 24 Jan 2023 00:26:38 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id D2214824E0;
+        Tue, 24 Jan 2023 00:26:45 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674520005;
-        bh=uOXMIFPHH6Taa5PJZcX/83WxxdECJ3fiub4JNGmhqHs=;
+        s=default; t=1674520012;
+        bh=SXQXpbuiBQdiwXpH2+78kfJuScDGyhqpyjZmkT1By0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J1F1WY1FFnPBZ/GNV/3aC0D1LMcr9iPwv9djaJuG8587IiHfJV6PCRDCEPm/ZFxqW
-         fZf+Amv+27ThmcYCnh+rYG8UHWYjhoBaQAL4PpH4vNEUQ7cU9axlYyKGTjkqhQFoqG
-         NxSsgEow8PaZ8FC8hh4qMcB8C2n2UgVSZD7iKFCwu0sVSRr0nPUDUdGzaV4arMf0Kh
-         /Oj9dnbhMAPX1LaIQuWOxbkxCtX0rT229JL0MQ3wfzD7KncvPTYAZsJbHcgHklNX8l
-         +8xYNPMllMMaQs0OB/CgUOomn2w2qp2zDSgBlOesg0N1s3iJz9V0pBTxL2xBRcIQ4A
-         0gpTt91c+pjkQ==
+        b=qZ4AUcVqaCg4Eqketr209fH1DlzQ7tYfr4oo/RJDieFUYL3SPhUeuiFadn9JS9c/u
+         cT9mBLn3vi89aAsRL6rZ7aL9Yw1Xq27Gwc32zhDxTo+IeJRgy6a8B2aEjH2rNL+z9a
+         uvgGnK5S+WAwfJjetSfovuygOacgRjMorVPIfejVRtmKBUoRxDvVGeg5e/U5wt+GNr
+         XsBNLifoZj/ZZJSwNqzDWWe7UXrLyuoefZlHDp7brkzMeIdM5581OlwRSIKB5BE+g+
+         9Y2OUde4q6XdCj+rNvyX0Y19rF+C/nf+8/EZXoth5qbswSFnJnn2UfT+64VgJFCms8
+         dyZebDu32OVmA==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     x86 Mailing List <x86@kernel.org>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -47,9 +47,9 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Linux Kselftest Mailing List 
         <linux-kselftest@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v1 1/2] selftests/x86: sysret_rip: Handle syscall in a FRED system
-Date:   Tue, 24 Jan 2023 07:26:24 +0700
-Message-Id: <20230124002625.581323-2-ammarfaizi2@gnuweeb.org>
+Subject: [RFC PATCH v1 2/2] selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx` and `%r11`
+Date:   Tue, 24 Jan 2023 07:26:25 +0700
+Message-Id: <20230124002625.581323-3-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
 References: <SA1PR11MB6734FA9139B9C9F6CC2ED123A8C59@SA1PR11MB6734.namprd11.prod.outlook.com> <5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com> <18B5DB6D-AEBD-4A67-A7B3-CE64940819B7@zytor.com> <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com> <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com> <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org> <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
@@ -67,23 +67,16 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-The current selftest asserts %r11 == %rflags after the 'syscall'
-returns to user. Such an assertion doesn't apply to a FRED system
-because in a FRED system the 'syscall' instruction does not set
-%r11=%rflags and %rcx=%rip.
+Test that:
 
-Handle the FRED case. Now, test that:
+ - "syscall" in a FRED system doesn't clobber %rcx and %r11.
+ - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
 
-  - "syscall" in a FRED system doesn't clobber %rcx and %r11.
-  - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
+Test them out with a trivial system call like __NR_getppid and friends
+which are extremely likely to return with SYSRET on an IDT system; check
+that it returns a nonnegative value and then save the result.
 
-The 'raise()' function from libc can't be used to control those
-registers. Therefore, create a syscall wrapper in inline Assembly to
-fully control them.
-
-Fixes: 660602140103 ("selftests/x86: Add a selftest for SYSRET to noncanonical addresses")
 Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
-Reported-by: Xin Li <xin3.li@intel.com>
 Co-developed-by: "H. Peter Anvin" <hpa@zytor.com>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
@@ -92,127 +85,31 @@ Missing a Signed-off-by tag from HPA.
 
 @hpa send your sign off if you like this patch.
 
- tools/testing/selftests/x86/sysret_rip.c | 96 +++++++++++++++++++++++-
- 1 file changed, 95 insertions(+), 1 deletion(-)
+ tools/testing/selftests/x86/sysret_rip.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 84d74be1d90207ab..9056f2e2674d2bc5 100644
+index 9056f2e2674d2bc5..c55f6d04f0ae1f2d 100644
 --- a/tools/testing/selftests/x86/sysret_rip.c
 +++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -39,6 +39,95 @@ asm (
- extern const char test_page[];
- static void const *current_test_page_addr = test_page;
- 
-+/* Arbitrary values */
-+static const unsigned long r11_sentinel = 0xfeedfacedeadbeef;
-+static const unsigned long rcx_sentinel = 0x5ca1ab1e0b57ac1e;
-+
-+/* An arbitrary *valid* RFLAGS value */
-+static const unsigned long rflags_sentinel = 0x200a93;
-+
-+enum regs_ok {
-+	REGS_ERROR  = -1,	/* Invalid register contents */
-+	REGS_SAVED  =  0,	/* Registers properly preserved */
-+	REGS_SYSRET =  1	/* Registers match syscall/sysret */
-+};
-+
-+/*
-+ * Returns:
-+ *  0 = %rcx and %r11 preserved.
-+ *  1 = %rcx and %r11 set to %rflags and %rip.
-+ * -1 = %rcx and/or %r11 set to any other values.
-+ *
-+ * Note that check_regs_syscall() sets %rbx to the syscall return %rip.
-+ */
-+static enum regs_ok check_regs_result(unsigned long r11, unsigned long rcx,
-+				      unsigned long rbx)
-+{
-+	if (r11 == r11_sentinel && rcx == rcx_sentinel) {
-+		return REGS_SAVED;
-+	} else if (r11 == rflags_sentinel && rcx == rbx) {
-+		return REGS_SYSRET;
-+	} else {
-+		printf("[FAIL] check_regs_result\n");
-+		printf("        r11_sentinel = %#lx; %%r11 = %#lx;\n", r11_sentinel, r11);
-+		printf("        rcx_sentinel = %#lx; %%rcx = %#lx;\n", rcx_sentinel, rcx);
-+		printf("        rflags_sentinel = %#lx\n", rflags_sentinel);
-+		return REGS_ERROR;
-+	}
-+}
-+
-+static long do_syscall(long nr_syscall, unsigned long arg1, unsigned long arg2,
-+		       unsigned long arg3, unsigned long arg4,
-+		       unsigned long arg5, unsigned long arg6)
-+{
-+	register unsigned long r11 asm("%r11");
-+	register unsigned long r10 asm("%r10");
-+	register unsigned long r8 asm("%r8");
-+	register unsigned long r9 asm("%r9");
-+	unsigned long rcx, rbx;
-+
-+	r11 = r11_sentinel;
-+	rcx = rcx_sentinel;
-+	r10 = arg4;
-+	r8 = arg5;
-+	r9 = arg6;
-+
-+	asm volatile (
-+		"movq	-8(%%rsp), %%r12\n\t"	/* Don't clobber redzone. */
-+		"pushq	%[rflags_sentinel]\n\t"
-+		"popf\n\t"
-+		"movq	%%r12, -8(%%rsp)\n\t"
-+		"leaq	1f(%%rip), %[rbx]\n\t"
-+		"syscall\n"
-+		"1:"
-+
-+		: "+a" (nr_syscall),
-+		  "+r" (r11),
-+		  "+c" (rcx),
-+		  [rbx] "=b" (rbx)
-+
-+		: [rflags_sentinel] "g" (rflags_sentinel),
-+		  "D" (arg1),	/* %rdi */
-+		  "S" (arg2),	/* %rsi */
-+		  "d" (arg3),	/* %rdx */
-+		  "r" (r10),
-+		  "r" (r8),
-+		  "r" (r9)
-+
-+		: "r12", "memory"
-+	);
-+
-+	/*
-+	 * Test that:
-+	 *
-+	 * - "syscall" in a FRED system doesn't clobber %rcx and %r11.
-+	 * - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
-+	 *
-+	 */
-+	assert(check_regs_result(r11, rcx, rbx) != REGS_ERROR);
-+	return nr_syscall;
-+}
-+
- static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
- 		       int flags)
- {
-@@ -101,11 +190,16 @@ static void sigusr1(int sig, siginfo_t *info, void *ctx_void)
- 	return;
+@@ -252,8 +252,17 @@ static void test_syscall_fallthrough_to(unsigned long ip)
+ 	printf("[OK]\tWe survived\n");
  }
  
-+static void __raise(int sig)
++static void test_syscall_rcx_r11(void)
 +{
-+	do_syscall(__NR_kill, getpid(), sig, 0, 0, 0, 0);
++	do_syscall(__NR_getpid, 0, 0, 0, 0, 0, 0);
++	do_syscall(__NR_gettid, 0, 0, 0, 0, 0, 0);
++	do_syscall(__NR_getppid, 0, 0, 0, 0, 0, 0);
 +}
 +
- static void test_sigreturn_to(unsigned long ip)
+ int main()
  {
- 	rip = ip;
- 	printf("[RUN]\tsigreturn to 0x%lx\n", ip);
--	raise(SIGUSR1);
-+	__raise(SIGUSR1);
- }
- 
- static jmp_buf jmpbuf;
++	test_syscall_rcx_r11();
++
+ 	/*
+ 	 * When the kernel returns from a slow-path syscall, it will
+ 	 * detect whether SYSRET is appropriate.  If it incorrectly
 -- 
 Ammar Faizi
 
