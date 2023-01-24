@@ -2,139 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D02567A362
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 20:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7795667A485
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Jan 2023 22:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234375AbjAXTuH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Jan 2023 14:50:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S233527AbjAXVCn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Jan 2023 16:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234465AbjAXTuG (ORCPT
+        with ESMTP id S229487AbjAXVCm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Jan 2023 14:50:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD273A246
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 11:49:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674589762;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R85STr6GIhhr+ztwclj6pO6G7kZRrikgcAMPHnfe248=;
-        b=eFk4/9hgL7Rawca+FgAOSo6KsKSCLyFdoD1Oho0erKm7DBFBrCjyYb0AowPhD1puH2HD6h
-        fMXNOmjgsRgESJjLzSdbXInofgi2rj+FwLs6+BMJw+A6S3Fvfvwn05h8XALqgOHl/clh20
-        M4QGMN+4xMvnt0ldxMTsfuwBi7qr4jY=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-218-DPXXo9B_Msyz0xGCQENbSA-1; Tue, 24 Jan 2023 14:49:21 -0500
-X-MC-Unique: DPXXo9B_Msyz0xGCQENbSA-1
-Received: by mail-qv1-f70.google.com with SMTP id l6-20020ad44446000000b00537721bfd2dso73546qvt.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 11:49:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R85STr6GIhhr+ztwclj6pO6G7kZRrikgcAMPHnfe248=;
-        b=RUyheu/OC3lbItwVYFZ1SnLbHzJ328nRHkLaWiNho1PQBdLLr/JLr6J1d6AzII6MXK
-         zE+FBq41d0hF5ELdDOpL+AON+DRkvrkvioPvGhe2AXM5nxsoz/yAjvZu/Nq5uISLJRSz
-         Lg1AXoYntIQ64i/bNroGWdPHRl1GEjnCcSSTZBpGvHffiaxAX2DtfH1lgCUUo/OFLtSx
-         ouye70wbVF+ujZsql2LyuXXXqtzjf2v0UZyVepIqQvZhRHfMgo2zE7fm44lapEnpD/Aq
-         q6x18nvsbrUhfpy3gy/1KL1m1ar0SZx5vMZdYBXuXeBJJnGkr+nO3acuHkvNyeHYKyQh
-         RItA==
-X-Gm-Message-State: AFqh2kr0rvE9l9fBzBPmWRrvCa7w5tR5ANqfreBqma1rswzpq5IylKHg
-        e+D52iBNtKJ/QFdWLPF8E1FaYZeNiK5OSpfOU/AMA6pNCt0W79ufNGN29/xCF+/W792Z5vtHikD
-        vgIdVzkbstpIGIzXleqa+I+14kjUw
-X-Received: by 2002:ac8:4758:0:b0:3b6:36a0:adbe with SMTP id k24-20020ac84758000000b003b636a0adbemr40222105qtp.6.1674589761218;
-        Tue, 24 Jan 2023 11:49:21 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXu1WuGrk9av6WUp2+OZodLHrIX79DJLQmWseM2cM1QbiDQQOkRVcd+zhy6zkWOiNmjgkRdG5Q==
-X-Received: by 2002:ac8:4758:0:b0:3b6:36a0:adbe with SMTP id k24-20020ac84758000000b003b636a0adbemr40222080qtp.6.1674589760880;
-        Tue, 24 Jan 2023 11:49:20 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id x12-20020ac87ecc000000b0039cc0fbdb61sm1789700qtj.53.2023.01.24.11.49.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 11:49:20 -0800 (PST)
-Date:   Tue, 24 Jan 2023 14:49:18 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v7 0/4] Implement IOCTL to get and/or the clear info
- about PTEs
-Message-ID: <Y9A2PsCS7gfKWfaM@x1n>
-References: <20230109064519.3555250-1-usama.anjum@collabora.com>
- <Y8hutCGec6je5toG@x1n>
- <0eb79bb3-7384-11c6-a380-c027f09305f2@collabora.com>
+        Tue, 24 Jan 2023 16:02:42 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A672141B6B;
+        Tue, 24 Jan 2023 13:02:39 -0800 (PST)
+Received: from [IPV6:2601:646:8600:40c0:425:cd56:6750:e1bf] ([IPv6:2601:646:8600:40c0:425:cd56:6750:e1bf])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30OKxS182864905
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 24 Jan 2023 12:59:28 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30OKxS182864905
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023010601; t=1674593970;
+        bh=9DoeK4pzKCZ3oaVq5FOrw6uKFJ44twkQ98xAmRhBhKE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ePbJFTc0iGeSoXi2dUxZBxD7tYcuZnLph7f5toU8zeVvCxLnEiVMWPmNyqUs6qpxc
+         gc93d23/ifog6fq+BYPcZQs6I1dJtP6i5dNpW1zrmKyDpFRtkg+8xNh1mUzQdrUJN7
+         /YLxM3sPU+WF3dcfnQVTvWNxtRsR8coafLnRNuPgjz4ze8dbDf/9oNUjfRDNNO0r39
+         BJd5aosDQPCp+CEMjtN7QsvUGOQP/ae+TqW3XDD6EtymLb3Xp6OPNw/9cpDwMwa131
+         tOYpFtzEYvmwKNEA6TG1XyymYaQzYfng+1voObl+lAbOWIvg10IIzkz4Jw+URsxSIW
+         Aj0SkIlbRuZpw==
+Message-ID: <48072ce2-e28d-9267-1f8e-3c76682fb782@zytor.com>
+Date:   Tue, 24 Jan 2023 12:59:23 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0eb79bb3-7384-11c6-a380-c027f09305f2@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH v3 2/2] selftests/x86: sysret_rip: Add more syscall
+ tests with respect to `%rcx` and `%r11`
+Content-Language: en-US
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        x86 Mailing List <x86@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xin Li <xin3.li@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
+ <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
+ <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
+ <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com>
+ <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
+ <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
+ <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
+ <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
+ <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
+ <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
+ <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+ <20230124100926.637335-1-ammarfaizi2@gnuweeb.org>
+ <20230124100926.637335-3-ammarfaizi2@gnuweeb.org>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20230124100926.637335-3-ammarfaizi2@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 06:15:00PM +0500, Muhammad Usama Anjum wrote:
-> > Firstly, doc update is more than welcomed to explain the new interface
-> > first (before throwing the code..).  That can be done in pagemap.rst on
-> > pagemap changes, or userfaultfd.rst on userfaultfd.
-> Okay. I'll add the documentation in next version or after the series has
-> been accepted. Initially I'd added the documentation. But the code kept on
-> changing so much that I had to spend considerable time on updating the
-> documentation. I know it is better to add documentation with the patches.
-> I'll try to add it.
 
-Yes, logically it should be the thing people start looking with.  It'll
-help reviewers to understand how does it work in general if relevant
-description is not in the cover letter, so it can matter even before the
-series is merged.
 
-> > There're four kinds of masks (required/anyof/excluded/return).  Are they
-> > all needed?  Why this is a good interface design?
-> Then, CRIU developers Andrea [1] and Danylo [2], asked to include all these
-> different kinds of masks. I'd thought of these masks as fancy filter inside
-> the kernel. But there wasn't anyone else to review. So I'd included them to
-> move forward. Please let me know your thoughts after reading emails from [1].
+On 1/24/23 02:09, Ammar Faizi wrote:
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> 
+> Test that:
+> 
+>   - "syscall" in a FRED system doesn't clobber %rcx and %r11.
+>   - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
+> 
+> Test them out with a trivial system call like __NR_getppid and friends
+> which are extremely likely to return with SYSRET on an IDT system.
+> 
+> Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
+> Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-The idea makes sense to me, thanks.  I just hope "moving it forward" is not
-the only reason that you included it.
+Add to the description that the purpose of this is to ensure that 
+various system calls are *consistent*, as per the comment immediately 
+below your code.
 
-Please also consider to attach relevant links to your next cover letter so
-new reviewers can be aware of why the interface is proposed like that.
-
-IMHO it would be also great if the CRIU people can acknowledge the
-interface at some point to make sure it satisfies the needs.  An POC would
-be even better on CRIU, but maybe that's asking too much.
-
--- 
-Peter Xu
+	-hpa
 
