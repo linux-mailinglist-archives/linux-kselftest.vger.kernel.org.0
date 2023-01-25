@@ -2,306 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C892167C0A5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 00:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B41567C0C4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 00:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjAYXOL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 18:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
+        id S229454AbjAYXY2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 18:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjAYXOK (ORCPT
+        with ESMTP id S229539AbjAYXY1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 18:14:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6F043933
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 15:14:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCB6A61638
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 23:14:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B46C433EF;
-        Wed, 25 Jan 2023 23:14:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674688448;
-        bh=GCKem8r3LcwYjlif3GwXIc3Wqfp8QW/7Nl+E9QiHXHE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=m3pOOqh2r9ZtV11fp9tsW52xYQowPEcOqjHigcKnsoORtYkgPHsdJRNRZ+nmy88nf
-         N2EgeqfEQt1t1hTatnYTfpnivxmlFDkCuvOyCiJZZ0jBTd5TmQvVrFbzRWUnSQob2V
-         IMRxf0gPxAq37YHrDP5LKeL4/YMqFI0l8yaJ78jKMLEfC4f+d8LSAc3hWl094/nXzS
-         JaJVUnH52Z4ppHL+Dp1DNEkM6YPkB2eRNjciw3yR35C9zktrRN7ERrgFlYkfxBzgXB
-         B2BsfIWuHTrJO9saQC+WH7+pT2Hx0YLk3oazTxjfXS4vKpZArTCXwseBQY3WFrNvoM
-         7kkHbNsjXellA==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        keescook@chromium.org, luto@amacapital.net, wad@chromium.org
-Subject: [PATCH] testing: kselftest_harness: add filtering and enumerating tests
-Date:   Wed, 25 Jan 2023 15:13:56 -0800
-Message-Id: <20230125231356.1070986-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Wed, 25 Jan 2023 18:24:27 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E04EB43;
+        Wed, 25 Jan 2023 15:24:26 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 68211824E0;
+        Wed, 25 Jan 2023 23:24:19 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674689065;
+        bh=zhEhASVFM/Au5cThaAVr8lOzqAVrP1V8SBnPOSUlAds=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BfnpgP1gwAvctQdGaPovsk+HWtJf1Bg3IRFpUq0p8YF87IASfmnBs8XkcF/9qTFIi
+         utlFTPX6kEKPmFEDxRgamtXR5Dw+K44F+QZlLQJwe/2puvmqegrVzczv2F6hnHESgt
+         jyxi9TPWCUJ1rxuIOUtyNozmbZhI6C+mhc/tqKAbD/9BpyjDZ9I7ImpcGjdUJd5r8g
+         TLIGvS6vHzadmyN3boa2PftPeVf6RQrOrKY3lCMSiN+l/wp1S/VSQUR8NkI7S4VilK
+         IcvTttCV1W5BrIBk9WAmjY00cnj9nNw9GQwPekIbZ5y8tu4wq/PWpGfAhR65XzXBI6
+         B4r16r+bbuE+A==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin3.li@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Shuah Khan <shuah@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v7 0/3] sysret_rip update for the Intel FRED architecture
+Date:   Thu, 26 Jan 2023 06:24:12 +0700
+Message-Id: <20230125232415.860397-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com> <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com> <20230124022729.596997-1-ammarfaizi2@gnuweeb.org> <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As the number of test cases and length of execution grows it's
-useful to select only a subset of tests. In TLS for instance we
-have a matrix of variants for different crypto protocols and
-during development mostly care about testing a handful.
-This is quicker and makes reading output easier.
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-This patch adds argument parsing to kselftest_harness.
+Hi,
 
-It supports a couple of ways to filter things, I could not come
-up with one way which will cover all cases.
+This is an RFC patchset v7. There are three patches in this series.
 
-The first and simplest switch is -r which takes the name of
-a test to run (can be specified multiple times). For example:
+Xin Li reported that the sysret_rip test fails at:
 
-  $ ./my_test -r some.test.name -r some.other.name
+        assert(ctx->uc_mcontext.gregs[REG_EFL] ==
+               ctx->uc_mcontext.gregs[REG_R11]);
 
-will run tests some.test.name and some.other.name (where "some"
-is the fixture, "test" and "other" and "name is the test.)
+on the Intel FRED architecture. Let's handle the FRED system scenario
+too. The 'syscall' instruction in a FRED system doesn't set %rcx=%rip
+and %r11=%rflags.
 
-Then there is a handful of group filtering options. f/v/t for
-filtering by fixture/variant/test. They have both positive
-(match -> run) and negative versions (match -> skip).
-If user specifies any positive option we assume the default
-is not to run the tests. If only negative options are set
-we assume the tests are supposed to be run by default.
+Syscall and sysenter in a FRED system are treated equivalently to
+software interrupts, e.g. INT 0x80. They do not modify any registers.
 
-  Usage: ./tools/testing/selftests/net/tls [-h|-l] [-t|-T|-v|-V|-f|-F|-r name]
-	-h       print help
-	-l       list all tests
+Link: https://lore.kernel.org/lkml/5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com
 
-	-t name  include test
-	-T name  exclude test
-	-v name  include variant
-	-V name  exclude variant
-	-f name  include fixture
-	-F name  exclude fixture
-	-r name  run specified test
+## Changelog v7:
 
-  Test filter options can be specified multiple times. The filtering stops
-  at the first match. For example to include all tests from variant 'bla'
-  but not test 'foo' specify '-T foo -v bla'.
+   - Fix comment, REGS_ERROR no longer exists in the enum (Ammar).
 
-Here we can request for example all tests from fixture "foo" to run:
+   - Update commit message (Ammar).
 
- ./my_test -f foo
+## Changelog v6:
 
-or to skip variants var1 and var2:
+   - Move the check-regs assertion in sigusr1() to check_regs_result()
+     (HPA).
 
- ./my_test -V var1 -V var2
+   - Add a new test just like sigusr1(), but don't modify REG_RCX and
+     REG_R11. This is used to test SYSRET behavior consistency (HPA).
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+## Changelog v5:
+
+   - Fix do_syscall() return value (Ammar).
+
+## Changelog v4:
+
+   - Fix the assertion condition inside the SIGUSR1 handler (Xin Li).
+
+   - Explain the purpose of patch #2 in the commit message (HPA).
+
+   - Update commit message (Ammar).
+
+   - Repeat test_syscall_rcx_r11_consistent() 32 times to be more sure
+     that the result is really consistent (Ammar).
+
+## Changelog v3:
+
+   - Test that we don't get a mix of REGS_SAVED and REGS_SYSRET,
+     which is a major part of the point (HPA).
+
+## Changelog v2:
+
+   - Use "+r"(rsp) as the right way to avoid redzone problems
+     per Andrew's comment (HPA).
+
+
+Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
-v2:
- - use getopt()
 
-CC: keescook@chromium.org
-CC: luto@amacapital.net
-CC: wad@chromium.org
-CC: shuah@kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/kselftest_harness.h | 142 +++++++++++++++++++-
- 1 file changed, 137 insertions(+), 5 deletions(-)
+Ammar Faizi (3):
+  selftests/x86: sysret_rip: Handle syscall in a FRED system
+  selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx` and `%r11`
+  selftests/x86: sysret_rip: Test SYSRET with a signal handler
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 25f4d54067c0..d8bff2005dfc 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -54,6 +54,7 @@
- #define _GNU_SOURCE
- #endif
- #include <asm/types.h>
-+#include <ctype.h>
- #include <errno.h>
- #include <stdbool.h>
- #include <stdint.h>
-@@ -985,6 +986,127 @@ void __wait_for_test(struct __test_metadata *t)
- 	}
- }
- 
-+static void test_harness_list_tests(void)
-+{
-+	struct __fixture_variant_metadata *v;
-+	struct __fixture_metadata *f;
-+	struct __test_metadata *t;
-+
-+	for (f = __fixture_list; f; f = f->next) {
-+		v = f->variant;
-+		t = f->tests;
-+
-+		if (f == __fixture_list)
-+			fprintf(stderr, "%-20s %-25s %s\n",
-+				"# FIXTURE", "VARIANT", "TEST");
-+		else
-+			fprintf(stderr, "--------------------------------------------------------------------------------\n");
-+
-+		do {
-+			fprintf(stderr, "%-20s %-25s %s\n",
-+				t == f->tests ? f->name : "",
-+				v ? v->name : "",
-+				t ? t->name : "");
-+
-+			v = v ? v->next : NULL;
-+			t = t ? t->next : NULL;
-+		} while (v || t);
-+	}
-+}
-+
-+static int test_harness_argv_check(int argc, char **argv)
-+{
-+	int opt;
-+
-+	while ((opt = getopt(argc, argv, "hlF:f:V:v:t:T:r:")) != -1) {
-+		switch (opt) {
-+		case 'f':
-+		case 'F':
-+		case 'v':
-+		case 'V':
-+		case 't':
-+		case 'T':
-+		case 'r':
-+			break;
-+		case 'l':
-+			test_harness_list_tests();
-+			return KSFT_SKIP;
-+		case 'h':
-+		default:
-+			fprintf(stderr,
-+				"Usage: %s [-h|-l] [-t|-T|-v|-V|-f|-F|-r name]\n"
-+				"\t-h       print help\n"
-+				"\t-l       list all tests\n"
-+				"\n"
-+				"\t-t name  include test\n"
-+				"\t-T name  exclude test\n"
-+				"\t-v name  include variant\n"
-+				"\t-V name  exclude variant\n"
-+				"\t-f name  include fixture\n"
-+				"\t-F name  exclude fixture\n"
-+				"\t-r name  run specified test\n"
-+				"\n"
-+				"Test filter options can be specified "
-+				"multiple times. The filtering stops\n"
-+				"at the first match. For example to "
-+				"include all tests from variant 'bla'\n"
-+				"but not test 'foo' specify '-T foo -v bla'.\n"
-+				"", argv[0]);
-+			return opt == 'h' ? KSFT_SKIP : KSFT_FAIL;
-+		}
-+	}
-+
-+	return KSFT_PASS;
-+}
-+
-+static bool test_enabled(int argc, char **argv,
-+			 struct __fixture_metadata *f,
-+			 struct __fixture_variant_metadata *v,
-+			 struct __test_metadata *t)
-+{
-+	unsigned int flen = 0, vlen = 0, tlen = 0;
-+	bool has_positive = false;
-+	int opt;
-+
-+	optind = 1;
-+	while ((opt = getopt(argc, argv, "F:f:V:v:t:T:r:")) != -1) {
-+		has_positive |= islower(opt);
-+
-+		switch (tolower(opt)) {
-+		case 't':
-+			if (!strcmp(t->name, optarg))
-+				return islower(opt);
-+			break;
-+		case 'f':
-+			if (!strcmp(f->name, optarg))
-+				return islower(opt);
-+			break;
-+		case 'v':
-+			if (!strcmp(v->name, optarg))
-+				return islower(opt);
-+			break;
-+		case 'r':
-+			if (!tlen) {
-+				flen = strlen(f->name);
-+				vlen = strlen(v->name);
-+				tlen = strlen(t->name);
-+			}
-+			if (strlen(optarg) == flen + 1 + vlen + !!vlen + tlen &&
-+			    !strncmp(f->name, &optarg[0], flen) &&
-+			    !strncmp(v->name, &optarg[flen + 1], vlen) &&
-+			    !strncmp(t->name, &optarg[flen + 1 + vlen + !!vlen], tlen))
-+				return true;
-+			break;
-+		}
-+	}
-+
-+	/*
-+	 * If there are no positive tests then we assume user just wants
-+	 * exclusions and everything else is a pass.
-+	 */
-+	return !has_positive;
-+}
-+
- void __run_test(struct __fixture_metadata *f,
- 		struct __fixture_variant_metadata *variant,
- 		struct __test_metadata *t)
-@@ -1032,24 +1154,32 @@ void __run_test(struct __fixture_metadata *f,
- 			f->name, variant->name[0] ? "." : "", variant->name, t->name);
- }
- 
--static int test_harness_run(int __attribute__((unused)) argc,
--			    char __attribute__((unused)) **argv)
-+static int test_harness_run(int argc, char **argv)
- {
- 	struct __fixture_variant_metadata no_variant = { .name = "", };
- 	struct __fixture_variant_metadata *v;
- 	struct __fixture_metadata *f;
- 	struct __test_results *results;
- 	struct __test_metadata *t;
--	int ret = 0;
-+	int ret;
- 	unsigned int case_count = 0, test_count = 0;
- 	unsigned int count = 0;
- 	unsigned int pass_count = 0;
- 
-+	ret = test_harness_argv_check(argc, argv);
-+	if (ret != KSFT_PASS)
-+		return ret;
-+
- 	for (f = __fixture_list; f; f = f->next) {
- 		for (v = f->variant ?: &no_variant; v; v = v->next) {
--			case_count++;
-+			unsigned int old_tests = test_count;
-+
- 			for (t = f->tests; t; t = t->next)
--				test_count++;
-+				if (test_enabled(argc, argv, f, v, t))
-+					test_count++;
-+
-+			if (old_tests != test_count)
-+				case_count++;
- 		}
- 	}
- 
-@@ -1063,6 +1193,8 @@ static int test_harness_run(int __attribute__((unused)) argc,
- 	for (f = __fixture_list; f; f = f->next) {
- 		for (v = f->variant ?: &no_variant; v; v = v->next) {
- 			for (t = f->tests; t; t = t->next) {
-+				if (!test_enabled(argc, argv, f, v, t))
-+					continue;
- 				count++;
- 				t->results = results;
- 				__run_test(f, v, t);
+ tools/testing/selftests/x86/sysret_rip.c | 171 +++++++++++++++++++++--
+ 1 file changed, 162 insertions(+), 9 deletions(-)
+
+
+base-commit: e12ad468c22065a2826b2fc4c11d2113a7975301
 -- 
-2.39.1
+Ammar Faizi
 
