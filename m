@@ -2,144 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C868D67A968
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 04:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C16467AA2D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 07:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbjAYDub (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Jan 2023 22:50:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        id S232753AbjAYGHd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 01:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjAYDu2 (ORCPT
+        with ESMTP id S229611AbjAYGHd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Jan 2023 22:50:28 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C891F4FC20;
-        Tue, 24 Jan 2023 19:50:23 -0800 (PST)
-Received: from localhost.localdomain (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 60E8882EFF;
-        Wed, 25 Jan 2023 03:50:17 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674618623;
-        bh=24uiwiwmC/lxSl6sPnXU7b81z+lVBJdoQkn4/RYmk6s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aN4OdJrwSItmrkKFjy0QM33mb8gTgrGcqIrOIk1S1Wd7qdegX41mKOdbQZHgJF0IL
-         k8/8oC54Vf1PLgADpcGFuTILbuPcfAo9MAdz/i6TkpOUmxcdRG0qS37MG7b5iZgL5x
-         x6/433jDrKg+UIA55+GLtgHCWM3fmS5bBUha2LGzSb0Q6YCCRAcwbLltJFBLWAS+1c
-         vP3sLIngu4LWIHUFcERGavR+iWSNlaZ0hRYkzgVpSDoN0cpdbhhXioVouB1rGMpmML
-         M8bEgoE2jGlEI75J1jGikBydd2qiUfqfQVazuCW+0TOCmq5o6RrmfoN32qQYY9YMuP
-         prqPHUF6PENUw==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin3.li@intel.com>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v5 2/2] selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx` and `%r11`
-Date:   Wed, 25 Jan 2023 10:49:58 +0700
-Message-Id: <20230125034958.734527-3-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
-References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com> <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com> <20230124022729.596997-1-ammarfaizi2@gnuweeb.org> <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
- <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
+        Wed, 25 Jan 2023 01:07:33 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B4A1BCA;
+        Tue, 24 Jan 2023 22:07:30 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id h24so22953119lfv.6;
+        Tue, 24 Jan 2023 22:07:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=25jMM77qoNhLMrn8AMJzPlEVfBj8k8RbdPA119mhwbE=;
+        b=BZzsq844KEVQsOKniO42tpzVN9wTwav/dJ+XAP4CgplzAX6g9G+hh1ft5E5mOICbpf
+         KhvSUZVdySGOUcdMvIQABgNGBvRbI2CWn+LoJzh1/oW3GahRgw/tGR1w9NcFnyQfKrCm
+         ObDdoWEGJTYrzsN46fx14VhmA64/U5og8f/YJwMO80w+PkLJh2jw/lq2ZzQXQe3XrqYF
+         VHzxtDQHeiltltFVTxxH9Nm/0tYdhnny5t+gh+h+9VIiFAImQjzdaKKyWQZ7eWOI0tZU
+         BsyGrBpxXJVTFQ+X0tegJvrqO6fyBRQNW2rKJcQcRTvhm29e1PSa457GWojRKYoPu4QM
+         5ztQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=25jMM77qoNhLMrn8AMJzPlEVfBj8k8RbdPA119mhwbE=;
+        b=sZAxzRBWNsxvFtvARb/CxYHYHLHxs3tE/D1mUrsdeElxxewQBaRSlRE1J0zJj/r7ij
+         wnKyifXhlKre/VM6aS1hG1AwlJfANLZQbE9azJ1yhuuOOcjOSl8UTt52ps/i150EryA4
+         gfxDRa/hII0w/jIzwBSTEjmH7dUy9CNcsEazXWlYGvi9hRWg6e2ikVD8hA0/QSRtTJeG
+         PEtElydIrgv8PR7JG/v6wbxmfmam8bH2MVsTLkJHFeldf24/pJdk+wR0bnSoxngIvB6h
+         2iVyODbplYQnsP1Ct+el2SKnlOh6hL0ao43Hw4XujoWzShV8RNfJ8P7Hpw6z/aZfjAyZ
+         H1Fw==
+X-Gm-Message-State: AFqh2kqtqj0ipENnbEZIB0mJrqQXBHZQJ1D/AxXh65ZuM8KtBZxHAPjm
+        743SL0Iz19AjSuG4Hw7MguqGCtsYaeVnGf9dCw==
+X-Google-Smtp-Source: AMrXdXsbwi2mT00SYPsyH8yTHdzGuZuws2V7VeXaNzMyTX4yJS2xyK2zElfNRKjs/QkNrA4tZ+tIJG2lucJ7s52Ffwk=
+X-Received: by 2002:a19:a40b:0:b0:4cb:435b:69d0 with SMTP id
+ q11-20020a19a40b000000b004cb435b69d0mr1495046lfc.49.1674626848465; Tue, 24
+ Jan 2023 22:07:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230121064128.67914-1-danieltimlee@gmail.com> <32195f48-8b45-1a78-1964-dfe7b5a4933f@iogearbox.net>
+In-Reply-To: <32195f48-8b45-1a78-1964-dfe7b5a4933f@iogearbox.net>
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+Date:   Wed, 25 Jan 2023 15:07:11 +0900
+Message-ID: <CAEKGpzjc4Yr-pwUQK8spVt18ZYKNav=4=SQv=7Te2jsM7o35ew@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: fix vmtest static compilation error
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>, bpf <bpf@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Wed, Jan 25, 2023 at 1:21 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 1/21/23 7:41 AM, Daniel T. Lee wrote:
+> > As stated in README.rst, in order to resolve errors with linker errors,
+> > 'LDLIBS=-static' should be used. Most problems will be solved by this
+> > option, but in the case of urandom_read, this won't fix the problem. So
+> > the Makefile is currently implemented to strip the 'static' option when
+> > compiling the urandom_read. However, stripping this static option isn't
+> > configured properly on $(LDLIBS) correctly, which is now causing errors
+> > on static compilation.
+> >
+> >      # LDLIBS=-static ./vmtest.sh
+> >      ld.lld: error: attempted static link of dynamic object liburandom_read.so
+> >      clang: error: linker command failed with exit code 1 (use -v to see invocation)
+> >      make: *** [Makefile:190: /linux/tools/testing/selftests/bpf/urandom_read] Error 1
+> >      make: *** Waiting for unfinished jobs....
+> >
+> > This commit fixes this problem by configuring the strip with $(LDLIBS).
+> >
+> > Fixes: 68084a136420 ("selftests/bpf: Fix building bpf selftests statically")
+> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+> > ---
+> >   tools/testing/selftests/bpf/Makefile | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index 22533a18705e..7bd1ce9c8d87 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -188,7 +188,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
+> >   $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+> >       $(call msg,BINARY,,$@)
+> >       $(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
+> > -                  liburandom_read.so $(LDLIBS)                              \
+> > +                  liburandom_read.so $(filter-out -static,$(LDLIBS))      \
+>
+> Do we need the same also for liburandom_read.so target's $(LDLIBS) further above?
+>
 
-Test that:
+Oops, I didn't notice that.
+I'll apply the review and send the next version of patch!
 
-  - REGS_SAVED: "syscall" in a FRED system doesn't clobber %rcx and
-    %r11.
+> >                    -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+> >                    -Wl,-rpath=. -o $@
+> >
+> >
+>
 
-  - REGS_SYSRET: "syscall" in a non-FRED system sets %rcx=%rip and
-    %r11=%rflags.
 
-Test them out with trivial system calls like __NR_getppid and friends
-which are extremely likely to return with SYSRET on an IDT system.
-
-Goals of this test:
-
-  - Ensure that the syscall behavior is consistent. It should be either
-    always REGS_SAVED or always REGS_SYSRET. Not a mix of them.
-
-  - The kernel doesn't leak its internal data when returning to
-    userspace.
-
-Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
-Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- tools/testing/selftests/x86/sysret_rip.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index d3dc5ec496854179..7ebfb603bf45fa0a 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -270,8 +270,24 @@ static void test_syscall_fallthrough_to(unsigned long ip)
- 	printf("[OK]\tWe survived\n");
- }
- 
-+/*
-+ * Ensure that various system calls are consistent.
-+ * We should not get a mix of REGS_SAVED and REGS_SYSRET.
-+ */
-+static void test_syscall_rcx_r11_consistent(void)
-+{
-+	do_syscall(__NR_getpid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_gettid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_getppid, 0, 0, 0, 0, 0, 0);
-+}
-+
- int main()
- {
-+	int i;
-+
-+	for (i = 0; i < 32; i++)
-+		test_syscall_rcx_r11_consistent();
-+
- 	/*
- 	 * When the kernel returns from a slow-path syscall, it will
- 	 * detect whether SYSRET is appropriate.  If it incorrectly
-@@ -279,7 +295,7 @@ int main()
- 	 * it'll crash on Intel CPUs.
- 	 */
- 	sethandler(SIGUSR1, sigusr1, 0);
--	for (int i = 47; i < 64; i++)
-+	for (i = 47; i < 64; i++)
- 		test_sigreturn_to(1UL<<i);
- 
- 	clearhandler(SIGUSR1);
-@@ -290,7 +306,7 @@ int main()
- 	test_syscall_fallthrough_to((1UL << 47) - 2*PAGE_SIZE);
- 
- 	/* These are the interesting cases. */
--	for (int i = 47; i < 64; i++) {
-+	for (i = 47; i < 64; i++) {
- 		test_syscall_fallthrough_to((1UL<<i) - PAGE_SIZE);
- 		test_syscall_fallthrough_to(1UL<<i);
- 	}
 -- 
-Ammar Faizi
-
+Best,
+Daniel T. Lee
