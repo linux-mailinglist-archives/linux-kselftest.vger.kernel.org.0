@@ -2,108 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CD867AF28
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 11:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116ED67AF45
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 11:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjAYKBi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 05:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S235259AbjAYKE5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 05:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234742AbjAYKBi (ORCPT
+        with ESMTP id S233829AbjAYKEz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:01:38 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70D74997D;
-        Wed, 25 Jan 2023 02:01:36 -0800 (PST)
-Received: from [10.7.7.5] (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id A4B1481845;
-        Wed, 25 Jan 2023 10:01:30 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674640896;
-        bh=x9lHtMUH0x+G4Cs0bWdf77jIPMLuFaUkJSBDuX4bGVU=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=hJHyvsMf4ONEbmMqrxfad8XwkzL2XQhelvbJ5u98gs4W3jz+/XfcfbM6kz28ulwmK
-         0nniAmPLyER4LR/95aJS8RZB2yY+WXaxJX+02OayjyxhMay/z0taXTcDmZVoxu8Ysm
-         Z5CSAjWuoSO6UdRhl2DgOOjIM5R30TBChFgdAGB3HwYjXuujEHRAT3h2tM+4lyZLkV
-         SzMh83D/bJR9mdgLI4I1t31ceRbY7OwV3hleeVXoEXVfTuAxF+tJSUgeNLleChgEPq
-         acilaBmIhO30b4fKnVuXrVRDghFrJxahza4cFS2bDdMpLyLVe1/I6fNH/Ozq8SERG5
-         FJXDlsDtqlc2A==
-Message-ID: <8d66a0ff-54b5-ab0a-2638-6f11c1c0d6f5@gnuweeb.org>
-Date:   Wed, 25 Jan 2023 17:01:27 +0700
+        Wed, 25 Jan 2023 05:04:55 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4F312F38;
+        Wed, 25 Jan 2023 02:04:52 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id i65so13083472pfc.0;
+        Wed, 25 Jan 2023 02:04:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JwzqINKHCVROHxyUeM7gAg9VP3mqXT4x5vbM4VvtkuE=;
+        b=L/bq7vAfQEmvURcKZ+hAnGqb1ZIfXrTmJAmc0c/k8uPbliRDyHQ2JQepuEBDXqSjCA
+         +T9NA+4whuV6mAZgZYdNES7OB8wdh43LHdmAplureUm9trPO4mHWzTHRdM1mK9cYoTi/
+         OaUN7FuvKOP3Q8QUogWXuH7dFX1Cu5a7RGGqNRfYB65L/FALCGp/49n7dPcBpLziU8Ct
+         ybgTnaZtqNNAg2TmORc1iCinbrj6wdtDO9SukzgdHlyfpn6bRZExjsURpTRlrlVeHmH0
+         q6u4GQiB/XmbT0UmQqA/u7eqg2bAn+Tcl9MJJNGECRTwfsyu6HNvb84mO9NW2tX3z2Ff
+         GQZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JwzqINKHCVROHxyUeM7gAg9VP3mqXT4x5vbM4VvtkuE=;
+        b=6ANq7eodJ9nDLU443uPgzU1UJ/N5Dvsk0LyAIldyOE7aP9GYCBnOhY71GqC2VKvUyg
+         QPuLzBPrQkKTOvI6FwVTE2aHic8iZRlhW4bx04LOKysoQRcLTFhnj3coU+vTEufmE/S4
+         zQ9RHgU1YprxWYgt4pw8dOuKDIi9Y9hrB9p8G8zcdfziUXqut/9MoRdLkM8jrOxVTWsb
+         DiOzTaqIBdFsgBXUIMSPhCIV88S1hBl2nhqGZon8jMfaZbPtrX1osD6EMSEyCFMRhM6m
+         FlEONGKIG9EmzKqfdC1SnBn8wgm7qrZzyQ36TxUg+Bqqm2+tOMXvU0BE7U9wkjzTD4ey
+         kPzA==
+X-Gm-Message-State: AFqh2krOHVQjwAdUkRoptBasc2mBIUS5c5WgagxM2zPjVGYq5xqv3MIw
+        jI/N/A3TgY6+If1Hq805bA==
+X-Google-Smtp-Source: AMrXdXtggbBx++LlOvDs7f+HPSpGdXM2uIoQ1INBv4LsX+ScqQIe/UdMVM5+6ORVsEiDrPbi/5lEow==
+X-Received: by 2002:aa7:9e0c:0:b0:58d:ae6d:14d5 with SMTP id y12-20020aa79e0c000000b0058dae6d14d5mr32492938pfq.27.1674641091344;
+        Wed, 25 Jan 2023 02:04:51 -0800 (PST)
+Received: from WDIR.. ([182.209.58.25])
+        by smtp.gmail.com with ESMTPSA id g12-20020a056a00078c00b0058837da69edsm3171723pfu.128.2023.01.25.02.04.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 02:04:50 -0800 (PST)
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [bpf-next v2] selftests/bpf: fix vmtest static compilation error
+Date:   Wed, 25 Jan 2023 19:04:40 +0900
+Message-Id: <20230125100440.21734-1-danieltimlee@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v5 1/2] selftests/x86: sysret_rip: Handle syscall in a
- FRED system
-Content-Language: en-US
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Xin Li <xin3.li@intel.com>, Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com>
- <20230124022729.596997-1-ammarfaizi2@gnuweeb.org>
- <20230124022729.596997-3-ammarfaizi2@gnuweeb.org>
- <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com>
- <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org>
- <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
- <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
- <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
- <20230125034958.734527-2-ammarfaizi2@gnuweeb.org>
- <8770815f-0f23-d0c5-e56a-d401827842c9@zytor.com>
- <Y9D8++DxphJS1oc4@biznet-home.integral.gnuweeb.org>
-In-Reply-To: <Y9D8++DxphJS1oc4@biznet-home.integral.gnuweeb.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/25/23 4:57 PM, Ammar Faizi wrote:
-> On Wed, Jan 25, 2023 at 12:39:26AM -0800, H. Peter Anvin wrote:
->>>    	/* Set IP and CX to match so that SYSRET can happen. */
->>>    	ctx->uc_mcontext.gregs[REG_RIP] = rip;
->>>    	ctx->uc_mcontext.gregs[REG_RCX] = rip;
->>
->> It would be interesting to have the syscall handler try both with and
->> without this (so it would end up doing both IRET and SYSCALL on legacy.)
->> Perhaps SIGUSR1 versus SIGUSR2...
-> 
-> Just to clarify this more so I am sure I understand it correctly.
-> 
-> Did you mean to have the same signal handler without modifiying
-> 'REG_RCX' but still change 'REG_RIP'?
-> 
-> IOW, we want to only *remove*:
-> 
->     ctx->uc_mcontext.gregs[REG_RCX] = rip;
-> 
-> and *keep*:
-> 
->     ctx->uc_mcontext.gregs[REG_RIP] = rip;
-> 
-> for the SIGUSR2 handler. Thus, inside the entry64 we will jump to the
-> iret path because %rcx != %r11 upon rt_sigreturn()?
+As stated in README.rst, in order to resolve errors with linker errors,
+'LDLIBS=-static' should be used. Most problems will be solved by this
+option, but in the case of urandom_read, this won't fix the problem. So
+the Makefile is currently implemented to strip the 'static' option when
+compiling the urandom_read. However, stripping this static option isn't
+configured properly on $(LDLIBS) correctly, which is now causing errors
+on static compilation.
 
-s/%rcx != %r11/%rcx != %rip/
+    # LDLIBS=-static ./vmtest.sh
+    ld.lld: error: attempted static link of dynamic object liburandom_read.so
+    clang: error: linker command failed with exit code 1 (use -v to see invocation)
+    make: *** [Makefile:190: /linux/tools/testing/selftests/bpf/urandom_read] Error 1
+    make: *** Waiting for unfinished jobs....
 
+This commit fixes this problem by configuring the strip with $(LDLIBS).
+
+Fixes: 68084a136420 ("selftests/bpf: Fix building bpf selftests statically")
+Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+
+---
+Changes in V2:
+ - Add extra filter-out logic to LDLIBS
+---
+ tools/testing/selftests/bpf/Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index c22c43bbee19..2323a2b98b81 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -181,14 +181,15 @@ endif
+ # do not fail. Static builds leave urandom_read relying on system-wide shared libraries.
+ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
+ 	$(call msg,LIB,,$@)
+-	$(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $^ $(LDLIBS)   \
++	$(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS))   \
++		     $^ $(filter-out -static,$(LDLIBS))	     \
+ 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+ 		     -fPIC -shared -o $@
+ 
+ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
+-		     liburandom_read.so $(LDLIBS)			       \
++		     liburandom_read.so $(filter-out -static,$(LDLIBS))	     \
+ 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+ 		     -Wl,-rpath=. -o $@
+ 
 -- 
-Ammar Faizi
+2.34.1
 
