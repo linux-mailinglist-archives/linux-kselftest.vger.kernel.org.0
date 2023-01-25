@@ -2,64 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AE267AA62
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 07:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E06AD67AA99
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 07:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbjAYGiX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 01:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S230160AbjAYG5H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 01:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233586AbjAYGiW (ORCPT
+        with ESMTP id S234860AbjAYG5H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 01:38:22 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5533F2A3
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 22:38:21 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id c15so4199054uas.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 22:38:21 -0800 (PST)
+        Wed, 25 Jan 2023 01:57:07 -0500
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97E4460BD
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 22:57:05 -0800 (PST)
+Received: by mail-vk1-xa2a.google.com with SMTP id v81so8760776vkv.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 22:57:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V/Vj4XAt0f/+81NZ06h7dxEafqSmssg2WS/uOyx4ZsI=;
-        b=mn+Y6lfM+XM7dAX5PtUnSPuWlXCu2/6nCG+kOilmgJcd1VtWslzATA/4ocbYaNgayV
-         3TUiet2t/+CT4+KiXG4/gpwp5l3vFlt4WqJiOX5twWDG5Y4G7x1TFMfGloXAkrDQN1rY
-         h3E2BaWDvaj+XVnwp65PX7mu3tffiqgu+SYjSieXUxZ/5YXwNsWKL7tX5KmFSDnGn3S9
-         fkSDKfOaqED6DxLn77V4WyMiKTzkJ7U3xRs8tcP3jxWwZuJpcZx3Rjh1e9qkyEcqSSmV
-         baCaMApix/meWlJzWcfzw2CzmUev+4KGaAlOhdqoji20tWukUN2L5LS8cUqIC9T9kzeh
-         HTJQ==
+        bh=i4WRkX67OFC+Y2/SyB89xJNBgzCQCpicp3GBXnKp7Jg=;
+        b=WGNVmBdp5fM2nJ5ST+q8tHAKx5I6ULs5lp9GnexJZH2S1M1S9sGWDl/dIEhXmxYeyP
+         T5uhmdHeAK3k9Duux0ElPd8UUtaff/tqIYQGnPcAzb1puD4Z2xtTgiAUGMfR1PBjzoV+
+         /1Qs5uAU0B8pLbu4QqeTYLp2YDf2rUxVBud6McnPJ++MncNz9yp3wK112YG/RFTYahtD
+         08DmdWSxE9fZYKlX2mgKKWSIS+05nKN8ovs/12B0NnvmFYzejf3uf3kJqDTc54nLcvir
+         eVhYOjMJO0jg/wRe3b+rnNDZgNsX6igx8/bSH2tlf8KDGUowCOfpvxPtE63Lvo0LQlsO
+         +18A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=V/Vj4XAt0f/+81NZ06h7dxEafqSmssg2WS/uOyx4ZsI=;
-        b=JmWI0HYqozl0fzvhwLqPyPADjL3oppXOhlf623720wtjhEIvRm2XT5z5q4Maqn/dM/
-         vSkNWpDGxm8/0znuE5OK3uF7V1euvKij0LJS89lHn3Nh4RAS0jcYcbzeQes9uMgNptw3
-         967ujXPJrzFxGitXOxNAifGH9gYeiLbKfZgQlGChna1nS9fkuqTEs7cJ986O9z+7rxZr
-         k9L2IgjKIas1DVpgzOSaHQY6sH7mLDAZDf/nF8L3xZNwvWltBFF6Ni9Rs1HWHcmQpHoy
-         aFLYLAiJPwXldH87dF58JHLOcantx4BW5vx8RNTZbBOgOtEok6FgiJTgE9A5r2ixH+IY
-         0B8A==
-X-Gm-Message-State: AFqh2koN7Cv9ZhnZONJjxMuWOMhpRMbu1IQ5iXDKIZ+HVvshdxOTfXJB
-        sWXtC17dWIsEPGBuoYuq5u3gVoDQPs99NuRhtnweDPty7qjzlpfkYcg=
-X-Google-Smtp-Source: AMrXdXtrpm0DykpuTo8YHoJNv7Aw0k7FU59u9Oacd3hflPVW8jRLF6uHwTZ09IvWmOHGd/nvjKgdz/dnnHLlONgktPA=
-X-Received: by 2002:ab0:3155:0:b0:419:25c5:30dc with SMTP id
- e21-20020ab03155000000b0041925c530dcmr3745651uam.26.1674628700126; Tue, 24
- Jan 2023 22:38:20 -0800 (PST)
+        bh=i4WRkX67OFC+Y2/SyB89xJNBgzCQCpicp3GBXnKp7Jg=;
+        b=2tiVH/2PLADfjYhvtvsMg3cuJTUW/WLnDREMu98hNUqRQCBQx5b/5yTtGvupgkcp1C
+         /HqKiV2H9wS7M64423rZuk4PK6cCEL2wiq/Fz1VWsvEHFagvnI5ilyIHieQwTGinAlqt
+         GPTtmd/8chQfNK/I4iQ2W1ZfR7ip9OWgK4mGkByLaoHQ76qJz7jzuHrcCTwpOoCWdm7V
+         pzZr5s4fSMbRCN7Ys0573is30GMTNRt/rqaKASFflkKe5INyjBRYmXejgZq2MSmDc6ih
+         uMMC6gIXwH3BMU6ZzYuJuxV2zJQxxcAx+QHdvTyr4+d6zbkwMMP9rcPrHiqo5+Dsl+Tp
+         MFwQ==
+X-Gm-Message-State: AFqh2ko53e6OJuIHWQ+jci2X/gqaaLQWrXswv21ZcoUs5CK/T3A6l2zC
+        o4t4DsYFSmwbZuRSJXmzQELnZknIP6mg3sqFgTKp2w==
+X-Google-Smtp-Source: AMrXdXs24MjZtPX91L1NJnOwH4N6rV9jjq9jDj+sUmw0dT2KZuLU/1G1tfhqA1bjuUr1O4ROE6oHodn8kHwl8r/vGF0=
+X-Received: by 2002:a1f:1e04:0:b0:3e1:54d0:8817 with SMTP id
+ e4-20020a1f1e04000000b003e154d08817mr3792032vke.37.1674629824782; Tue, 24 Jan
+ 2023 22:57:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20230125061927.141538-1-rmoar@google.com>
-In-Reply-To: <20230125061927.141538-1-rmoar@google.com>
+References: <20230121212717.10187-1-apantykhin@gmail.com>
+In-Reply-To: <20230121212717.10187-1-apantykhin@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 25 Jan 2023 14:38:08 +0800
-Message-ID: <CABVgOSkaBJE1FMSquPaZ=5ULFLyfrkMYKixn0YLZZJAtKoNG_g@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: fix bug in KUNIT_EXPECT_MEMEQ
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, dlatypov@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
+Date:   Wed, 25 Jan 2023 14:56:53 +0800
+Message-ID: <CABVgOSms6xJXXuYreaFcQdE8jjcFj5Sip9gWosgRXDYkzNuuKA@mail.gmail.com>
+Subject: Re: [PATCH] tools/testing/kunit/kunit.py extract handlers
+To:     Alexander Pantyukhin <apantykhin@gmail.com>
+Cc:     dlatypov@google.com, brendan.higgins@linux.dev,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d1dfc905f310e026"
+        boundary="000000000000db2a3005f311239f"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,125 +70,219 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000d1dfc905f310e026
+--000000000000db2a3005f311239f
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 25 Jan 2023 at 14:19, Rae Moar <rmoar@google.com> wrote:
+On Sun, 22 Jan 2023 at 05:27, Alexander Pantyukhin <apantykhin@gmail.com> wrote:
 >
-> In KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ, add check if one of the
-> inputs is NULL and fail if this is the case.
+> The main function contains a wide if-elif block that handles different
+> subcommands. It's possible to make code refactoring to extract
+> subcommands handlers.
 >
-> Currently, the kernel crashes if one of the inputs is NULL. Instead,
-> fail the test and add an appropriate error message.
->
-> This was found by the kernel test robot:
-> https://lore.kernel.org/all/202212191448.D6EDPdOh-lkp@intel.com/
->
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
+> Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
 > ---
 
-This looks good to me, modulo a small formatting issue with the
-continuation backslashes (see below).
+Thanks -- this is a much nicer way of doing things!
 
-It might be worth considering this as a fix to the patch which first
-introduced the MEMEQ macros with a Fixes tag, e.g.:
-Fixes: b8a926bea8b1 ("kunit: Introduce KUNIT_EXPECT_MEMEQ and
-KUNIT_EXPECT_MEMNEQ macros")
-
-Otherwise, this is:
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  include/kunit/test.h |  7 ++++---
->  lib/kunit/assert.c   | 40 +++++++++++++++++++++++++---------------
->  2 files changed, 29 insertions(+), 18 deletions(-)
+>  tools/testing/kunit/kunit.py | 167 ++++++++++++++++++++---------------
+>  1 file changed, 96 insertions(+), 71 deletions(-)
 >
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 87ea90576b50..3c7045e22512 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -683,9 +683,10 @@ do {                                                                              \
->                 .right_text = #right,                                          \
->         };                                                                     \
->                                                                                \
-> -       if (likely(memcmp(__left, __right, __size) op 0))                      \
-> -               break;                                                         \
-> -                                                                              \
-> +       if (likely(__left && __right))                     \
-> +               if (likely(memcmp(__left, __right, __size) op 0))            \
-> +                       break;                                                         \
-> +                                                                                              \
-
-The backslashes no longer line up here.
-
->         _KUNIT_FAILED(test,                                                    \
->                       assert_type,                                             \
->                       kunit_mem_assert,                                        \
-> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-> index f5b50babe38d..05a09652f5a1 100644
-> --- a/lib/kunit/assert.c
-> +++ b/lib/kunit/assert.c
-> @@ -241,24 +241,34 @@ void kunit_mem_assert_format(const struct kunit_assert *assert,
->         mem_assert = container_of(assert, struct kunit_mem_assert,
->                                   assert);
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 43fbe96318fe..8cd818867504 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -395,6 +395,95 @@ def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree
+>                         extra_qemu_args=qemu_args)
 >
-> -       string_stream_add(stream,
-> -                         KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-> -                         mem_assert->text->left_text,
-> -                         mem_assert->text->operation,
-> -                         mem_assert->text->right_text);
-> +       if (!mem_assert->left_value) {
-> +               string_stream_add(stream,
-> +                                 KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
-> +                                 mem_assert->text->left_text);
-> +       } else if (!mem_assert->right_value) {
-> +               string_stream_add(stream,
-> +                                 KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
-> +                                 mem_assert->text->right_text);
-> +       } else {
-> +               string_stream_add(stream,
-> +                               KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
-> +                               mem_assert->text->left_text,
-> +                               mem_assert->text->operation,
-> +                               mem_assert->text->right_text);
 >
-> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
-> -                         mem_assert->text->left_text);
-> -       kunit_assert_hexdump(stream, mem_assert->left_value,
-> -                            mem_assert->right_value, mem_assert->size);
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
-> +                               mem_assert->text->left_text);
-> +               kunit_assert_hexdump(stream, mem_assert->left_value,
-> +                                       mem_assert->right_value, mem_assert->size);
+> +def run_handler(cli_args):
+> +       if not os.path.exists(cli_args.build_dir):
+> +               os.mkdir(cli_args.build_dir)
+> +
+> +       linux = tree_from_args(cli_args)
+> +       request = KunitRequest(build_dir=cli_args.build_dir,
+> +                                       make_options=cli_args.make_options,
+> +                                       jobs=cli_args.jobs,
+> +                                       raw_output=cli_args.raw_output,
+> +                                       json=cli_args.json,
+> +                                       timeout=cli_args.timeout,
+> +                                       filter_glob=cli_args.filter_glob,
+> +                                       kernel_args=cli_args.kernel_args,
+> +                                       run_isolated=cli_args.run_isolated)
+> +       result = run_tests(linux, request)
+> +       if result.status != KunitStatus.SUCCESS:
+> +               sys.exit(1)
+> +
+> +
+> +def config_handler(cli_args):
+> +       if cli_args.build_dir and (
+> +                       not os.path.exists(cli_args.build_dir)):
+> +               os.mkdir(cli_args.build_dir)
+> +
+> +       linux = tree_from_args(cli_args)
+> +       request = KunitConfigRequest(build_dir=cli_args.build_dir,
+> +                                               make_options=cli_args.make_options)
+> +       result = config_tests(linux, request)
+> +       stdout.print_with_timestamp((
+> +               'Elapsed time: %.3fs\n') % (
+> +                       result.elapsed_time))
+> +       if result.status != KunitStatus.SUCCESS:
+> +               sys.exit(1)
+> +
+> +
+> +def build_handler(cli_args):
+> +       linux = tree_from_args(cli_args)
+> +       request = KunitBuildRequest(build_dir=cli_args.build_dir,
+> +                                       make_options=cli_args.make_options,
+> +                                       jobs=cli_args.jobs)
+> +       result = config_and_build_tests(linux, request)
+> +       stdout.print_with_timestamp((
+> +               'Elapsed time: %.3fs\n') % (
+> +                       result.elapsed_time))
+> +       if result.status != KunitStatus.SUCCESS:
+> +               sys.exit(1)
+> +
+> +
+> +def exec_handler(cli_args):
+> +       linux = tree_from_args(cli_args)
+> +       exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
+> +                                       build_dir=cli_args.build_dir,
+> +                                       json=cli_args.json,
+> +                                       timeout=cli_args.timeout,
+> +                                       filter_glob=cli_args.filter_glob,
+> +                                       kernel_args=cli_args.kernel_args,
+> +                                       run_isolated=cli_args.run_isolated)
+> +       result = exec_tests(linux, exec_request)
+> +       stdout.print_with_timestamp((
+> +               'Elapsed time: %.3fs\n') % (result.elapsed_time))
+> +       if result.status != KunitStatus.SUCCESS:
+> +               sys.exit(1)
+> +
+> +
+> +def parse_handler(cli_args):
+> +       if cli_args.file is None:
+> +               sys.stdin.reconfigure(errors='backslashreplace')  # pytype: disable=attribute-error
+> +               kunit_output = sys.stdin
+> +       else:
+> +               with open(cli_args.file, 'r', errors='backslashreplace') as f:
+> +                       kunit_output = f.read().splitlines()
+> +       # We know nothing about how the result was created!
+> +       metadata = kunit_json.Metadata()
+> +       request = KunitParseRequest(raw_output=cli_args.raw_output,
+> +                                       json=cli_args.json)
+> +       result, _ = parse_tests(request, metadata, kunit_output)
+> +       if result.status != KunitStatus.SUCCESS:
+> +               sys.exit(1)
+> +
+> +
+> +subcommand_handlers_map = {
+> +       'run': run_handler,
+> +       'config': config_handler,
+> +       'build': build_handler,
+> +       'exec': exec_handler,
+> +       'parse': parse_handler
+> +}
+> +
+> +
+>  def main(argv):
+>         parser = argparse.ArgumentParser(
+>                         description='Helps writing and running KUnit tests.')
+> @@ -438,78 +527,14 @@ def main(argv):
+>         if get_kernel_root_path():
+>                 os.chdir(get_kernel_root_path())
 >
-> -       string_stream_add(stream, "\n");
-> +               string_stream_add(stream, "\n");
+> -       if cli_args.subcommand == 'run':
+> -               if not os.path.exists(cli_args.build_dir):
+> -                       os.mkdir(cli_args.build_dir)
+> -
+> -               linux = tree_from_args(cli_args)
+> -               request = KunitRequest(build_dir=cli_args.build_dir,
+> -                                      make_options=cli_args.make_options,
+> -                                      jobs=cli_args.jobs,
+> -                                      raw_output=cli_args.raw_output,
+> -                                      json=cli_args.json,
+> -                                      timeout=cli_args.timeout,
+> -                                      filter_glob=cli_args.filter_glob,
+> -                                      kernel_args=cli_args.kernel_args,
+> -                                      run_isolated=cli_args.run_isolated)
+> -               result = run_tests(linux, request)
+> -               if result.status != KunitStatus.SUCCESS:
+> -                       sys.exit(1)
+> -       elif cli_args.subcommand == 'config':
+> -               if cli_args.build_dir and (
+> -                               not os.path.exists(cli_args.build_dir)):
+> -                       os.mkdir(cli_args.build_dir)
+> -
+> -               linux = tree_from_args(cli_args)
+> -               request = KunitConfigRequest(build_dir=cli_args.build_dir,
+> -                                            make_options=cli_args.make_options)
+> -               result = config_tests(linux, request)
+> -               stdout.print_with_timestamp((
+> -                       'Elapsed time: %.3fs\n') % (
+> -                               result.elapsed_time))
+> -               if result.status != KunitStatus.SUCCESS:
+> -                       sys.exit(1)
+> -       elif cli_args.subcommand == 'build':
+> -               linux = tree_from_args(cli_args)
+> -               request = KunitBuildRequest(build_dir=cli_args.build_dir,
+> -                                           make_options=cli_args.make_options,
+> -                                           jobs=cli_args.jobs)
+> -               result = config_and_build_tests(linux, request)
+> -               stdout.print_with_timestamp((
+> -                       'Elapsed time: %.3fs\n') % (
+> -                               result.elapsed_time))
+> -               if result.status != KunitStatus.SUCCESS:
+> -                       sys.exit(1)
+> -       elif cli_args.subcommand == 'exec':
+> -               linux = tree_from_args(cli_args)
+> -               exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
+> -                                               build_dir=cli_args.build_dir,
+> -                                               json=cli_args.json,
+> -                                               timeout=cli_args.timeout,
+> -                                               filter_glob=cli_args.filter_glob,
+> -                                               kernel_args=cli_args.kernel_args,
+> -                                               run_isolated=cli_args.run_isolated)
+> -               result = exec_tests(linux, exec_request)
+> -               stdout.print_with_timestamp((
+> -                       'Elapsed time: %.3fs\n') % (result.elapsed_time))
+> -               if result.status != KunitStatus.SUCCESS:
+> -                       sys.exit(1)
+> -       elif cli_args.subcommand == 'parse':
+> -               if cli_args.file is None:
+> -                       sys.stdin.reconfigure(errors='backslashreplace')  # pytype: disable=attribute-error
+> -                       kunit_output = sys.stdin
+> -               else:
+> -                       with open(cli_args.file, 'r', errors='backslashreplace') as f:
+> -                               kunit_output = f.read().splitlines()
+> -               # We know nothing about how the result was created!
+> -               metadata = kunit_json.Metadata()
+> -               request = KunitParseRequest(raw_output=cli_args.raw_output,
+> -                                           json=cli_args.json)
+> -               result, _ = parse_tests(request, metadata, kunit_output)
+> -               if result.status != KunitStatus.SUCCESS:
+> -                       sys.exit(1)
+> -       else:
+> +       subcomand_handler = subcommand_handlers_map.get(cli_args.subcommand, None)
+> +
+> +       if subcomand_handler is None:
+>                 parser.print_help()
+> +               return
+> +
+> +       subcomand_handler(cli_args)
+> +
 >
-> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
-> -                         mem_assert->text->right_text);
-> -       kunit_assert_hexdump(stream, mem_assert->right_value,
-> -                            mem_assert->left_value, mem_assert->size);
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
-> +                               mem_assert->text->right_text);
-> +               kunit_assert_hexdump(stream, mem_assert->right_value,
-> +                                       mem_assert->left_value, mem_assert->size);
->
-> -       kunit_assert_print_msg(message, stream);
-> +               kunit_assert_print_msg(message, stream);
-> +       }
->  }
->  EXPORT_SYMBOL_GPL(kunit_mem_assert_format);
->
-> base-commit: 5cb26c298ffde271d9bd1dd1b87ad028218f77fe
+>  if __name__ == '__main__':
+>         main(sys.argv[1:])
 > --
-> 2.39.1.405.gd4c25cc71f-goog
+> 2.25.1
 >
 
---000000000000d1dfc905f310e026
+--000000000000db2a3005f311239f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -256,14 +349,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDM
-B0uuZmCMMek4jfUCcJ+a4C2/9PTc8ACqVjASBiv2DjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjUwNjM4MjBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAl
+vcFdY0UlfK8uOZ9RKFgGgVpgQmGbYLIKb3QYDsIhODAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjUwNjU3MDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAL8z4NN+CIGf5vv/uBEQJ
-KVIjgltcYo0nnGdyjXd1msDs3S0G0DCBvDfphOQvSnAQd+xl6unCBo6EUEtujDbb5zhpjU/awAbp
-49atZaWjp9URunSTzvoIlXzcklLh+wkmYPq0xwtPGL5FA+HFYazkaqBkQyOBqACSozE0bxVKtfKd
-r9+QsMgNhjMxnqdDx82X2b0VUQpxxUYBeb89gc01lS4+XqlPCY7IV/O87TR1RkZ9ytSeWrHi4EY2
-1oljyVCAtH+NYd0eKd23QwwTnhLw2rWKhxZQHM9KCqQB/K9CiYXaTYsMoDhnTPFDLEqc3hOUyt0Q
-+gc86qMvqfqdMAWLEA==
---000000000000d1dfc905f310e026--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAyfBfMEaJai21Cm7tXwon
+OtuSj70+yIICR67C2+Ktwd86GTGCyPSNBkcIwO/MIDoe+qePjRBcbDjdH4rfz+JhU1HOu2580nd7
+ioyEp2eMyAACWdv9Hzec4IQvYycO/XoTQnWhhAN4ud/Z70ov1XrRqolZryphXVepKalHrKpJZ0bH
+8Yy64BOZoF1RajuHzfYppZQ0dEht9ATz+9D2fgdLF58QFpcnJ2Je+GHyyYolap8oQ0yIRg1P2Uwt
+LeWtbP4jpbVNfYauVV9gWjWALjEwvQiV+QzMpF7L2Nkti0Vt2ZoTBQ7LepVbBehcKReaOABdByoM
+4amT2cIuOxwXL1XERQ==
+--000000000000db2a3005f311239f--
