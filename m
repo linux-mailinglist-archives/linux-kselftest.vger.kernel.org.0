@@ -2,75 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C16467AA2D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 07:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E7767AA43
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 07:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbjAYGHd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 01:07:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S234484AbjAYGTq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 01:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjAYGHd (ORCPT
+        with ESMTP id S229646AbjAYGTp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 01:07:33 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B4A1BCA;
-        Tue, 24 Jan 2023 22:07:30 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id h24so22953119lfv.6;
-        Tue, 24 Jan 2023 22:07:30 -0800 (PST)
+        Wed, 25 Jan 2023 01:19:45 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796F228868
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 22:19:44 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4c11ae6ab25so177277917b3.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 22:19:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=25jMM77qoNhLMrn8AMJzPlEVfBj8k8RbdPA119mhwbE=;
-        b=BZzsq844KEVQsOKniO42tpzVN9wTwav/dJ+XAP4CgplzAX6g9G+hh1ft5E5mOICbpf
-         KhvSUZVdySGOUcdMvIQABgNGBvRbI2CWn+LoJzh1/oW3GahRgw/tGR1w9NcFnyQfKrCm
-         ObDdoWEGJTYrzsN46fx14VhmA64/U5og8f/YJwMO80w+PkLJh2jw/lq2ZzQXQe3XrqYF
-         VHzxtDQHeiltltFVTxxH9Nm/0tYdhnny5t+gh+h+9VIiFAImQjzdaKKyWQZ7eWOI0tZU
-         BsyGrBpxXJVTFQ+X0tegJvrqO6fyBRQNW2rKJcQcRTvhm29e1PSa457GWojRKYoPu4QM
-         5ztQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rN+sm+TcugjUv59BMF0yG8d1YW/2kNYdNAY7JYWtYoU=;
+        b=f9UIMJC2vqWBeTaMiQjOJIw/h6moDE7Vx1h6AAUCHw9ZcZwTmkfoMoKAxeNGQWE10D
+         5uCwIXapRgC01sIpfJdfBourkCV3UyU1UkawxV8hgjLOzAXgKXhFUOc4L+PPi+ihffSV
+         pN4ICj+K1xr/lFY3VH0W+X7ke3Y3AwzS2+uDk52tc1rDNxmbvzdvg/bOwUW7imdC99G/
+         FfZzzz7HGioffluxkziMrPLSguCYxe7TUqyI4OUAk5DmGTtCcmFoTohCFeLKtKYwWMKs
+         hRFtRhDKPFLfVxNQ6HzibIP/59XQ7hFmlSpg5C7RdjPRpyhX/Dpd1+someJQV/J2iD/y
+         gXEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=25jMM77qoNhLMrn8AMJzPlEVfBj8k8RbdPA119mhwbE=;
-        b=sZAxzRBWNsxvFtvARb/CxYHYHLHxs3tE/D1mUrsdeElxxewQBaRSlRE1J0zJj/r7ij
-         wnKyifXhlKre/VM6aS1hG1AwlJfANLZQbE9azJ1yhuuOOcjOSl8UTt52ps/i150EryA4
-         gfxDRa/hII0w/jIzwBSTEjmH7dUy9CNcsEazXWlYGvi9hRWg6e2ikVD8hA0/QSRtTJeG
-         PEtElydIrgv8PR7JG/v6wbxmfmam8bH2MVsTLkJHFeldf24/pJdk+wR0bnSoxngIvB6h
-         2iVyODbplYQnsP1Ct+el2SKnlOh6hL0ao43Hw4XujoWzShV8RNfJ8P7Hpw6z/aZfjAyZ
-         H1Fw==
-X-Gm-Message-State: AFqh2kqtqj0ipENnbEZIB0mJrqQXBHZQJ1D/AxXh65ZuM8KtBZxHAPjm
-        743SL0Iz19AjSuG4Hw7MguqGCtsYaeVnGf9dCw==
-X-Google-Smtp-Source: AMrXdXsbwi2mT00SYPsyH8yTHdzGuZuws2V7VeXaNzMyTX4yJS2xyK2zElfNRKjs/QkNrA4tZ+tIJG2lucJ7s52Ffwk=
-X-Received: by 2002:a19:a40b:0:b0:4cb:435b:69d0 with SMTP id
- q11-20020a19a40b000000b004cb435b69d0mr1495046lfc.49.1674626848465; Tue, 24
- Jan 2023 22:07:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20230121064128.67914-1-danieltimlee@gmail.com> <32195f48-8b45-1a78-1964-dfe7b5a4933f@iogearbox.net>
-In-Reply-To: <32195f48-8b45-1a78-1964-dfe7b5a4933f@iogearbox.net>
-From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-Date:   Wed, 25 Jan 2023 15:07:11 +0900
-Message-ID: <CAEKGpzjc4Yr-pwUQK8spVt18ZYKNav=4=SQv=7Te2jsM7o35ew@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: fix vmtest static compilation error
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>, bpf <bpf@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-kselftest@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rN+sm+TcugjUv59BMF0yG8d1YW/2kNYdNAY7JYWtYoU=;
+        b=y2LrzoNRtY89jHOI4XNHPU3QFjQ5DeEPNBvthTyTmufIjRrLu7BovzDs0eeFbdzjhH
+         IKhroCjFntJUZ8LiE1XS9K9poFazldx1JsHi0fxKJYexY/a0HelRFm2a/g7Nc0E6HdeX
+         9PrcBT6omH8Uqjk2RzR/lIeEt90Mp508HTngHaSu7EuFBYVQ8xZnxTaGPUxyGt0IVtph
+         BqJ+CBheiJTXGLwYMa8j9OmTppsfij0TG+r5Xv+nYhydXWeJzYZaaEVnnZ6N8oIAUsUm
+         nqmB8QKCBGpQKRUUxX2RYkC58ni97ohCKLORaF/796AMdJ8KQ4Ak6u7GiHMIry6PPlId
+         QZAQ==
+X-Gm-Message-State: AO0yUKXPGDf00aR4rDYM5CIMmtRYb9noWVCacfuY7SSP4PdVvynooLuM
+        TfJlbfYysJ1+kTnXLd9C3VEw5gri1Q==
+X-Google-Smtp-Source: AK7set8CBvCLr3fTesrkX4RhU0QPjG2ETUfl1pA3AVqwS7g5yhO/xJaFw1tJZD8G3z3bq+fxDk2A0vM13g==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a25:320f:0:b0:80b:5654:64f2 with SMTP id
+ y15-20020a25320f000000b0080b565464f2mr781190yby.640.1674627583719; Tue, 24
+ Jan 2023 22:19:43 -0800 (PST)
+Date:   Wed, 25 Jan 2023 06:19:27 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.405.gd4c25cc71f-goog
+Message-ID: <20230125061927.141538-1-rmoar@google.com>
+Subject: [PATCH v1] kunit: fix bug in KUNIT_EXPECT_MEMEQ
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Rae Moar <rmoar@google.com>, kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,55 +67,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 1:21 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 1/21/23 7:41 AM, Daniel T. Lee wrote:
-> > As stated in README.rst, in order to resolve errors with linker errors,
-> > 'LDLIBS=-static' should be used. Most problems will be solved by this
-> > option, but in the case of urandom_read, this won't fix the problem. So
-> > the Makefile is currently implemented to strip the 'static' option when
-> > compiling the urandom_read. However, stripping this static option isn't
-> > configured properly on $(LDLIBS) correctly, which is now causing errors
-> > on static compilation.
-> >
-> >      # LDLIBS=-static ./vmtest.sh
-> >      ld.lld: error: attempted static link of dynamic object liburandom_read.so
-> >      clang: error: linker command failed with exit code 1 (use -v to see invocation)
-> >      make: *** [Makefile:190: /linux/tools/testing/selftests/bpf/urandom_read] Error 1
-> >      make: *** Waiting for unfinished jobs....
-> >
-> > This commit fixes this problem by configuring the strip with $(LDLIBS).
-> >
-> > Fixes: 68084a136420 ("selftests/bpf: Fix building bpf selftests statically")
-> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
-> > ---
-> >   tools/testing/selftests/bpf/Makefile | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index 22533a18705e..7bd1ce9c8d87 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -188,7 +188,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
-> >   $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
-> >       $(call msg,BINARY,,$@)
-> >       $(Q)$(CLANG) $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
-> > -                  liburandom_read.so $(LDLIBS)                              \
-> > +                  liburandom_read.so $(filter-out -static,$(LDLIBS))      \
->
-> Do we need the same also for liburandom_read.so target's $(LDLIBS) further above?
->
+In KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ, add check if one of the
+inputs is NULL and fail if this is the case.
 
-Oops, I didn't notice that.
-I'll apply the review and send the next version of patch!
+Currently, the kernel crashes if one of the inputs is NULL. Instead,
+fail the test and add an appropriate error message.
 
-> >                    -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> >                    -Wl,-rpath=. -o $@
-> >
-> >
->
+This was found by the kernel test robot:
+https://lore.kernel.org/all/202212191448.D6EDPdOh-lkp@intel.com/
 
+Reported-by: kernel test robot <lkp@intel.com>
 
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
+ include/kunit/test.h |  7 ++++---
+ lib/kunit/assert.c   | 40 +++++++++++++++++++++++++---------------
+ 2 files changed, 29 insertions(+), 18 deletions(-)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 87ea90576b50..3c7045e22512 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -683,9 +683,10 @@ do {									       \
+ 		.right_text = #right,					       \
+ 	};								       \
+ 									       \
+-	if (likely(memcmp(__left, __right, __size) op 0))		       \
+-		break;							       \
+-									       \
++	if (likely(__left && __right))			   \
++		if (likely(memcmp(__left, __right, __size) op 0))	     \
++			break;							       \
++											       \
+ 	_KUNIT_FAILED(test,						       \
+ 		      assert_type,					       \
+ 		      kunit_mem_assert,					       \
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index f5b50babe38d..05a09652f5a1 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -241,24 +241,34 @@ void kunit_mem_assert_format(const struct kunit_assert *assert,
+ 	mem_assert = container_of(assert, struct kunit_mem_assert,
+ 				  assert);
+ 
+-	string_stream_add(stream,
+-			  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+-			  mem_assert->text->left_text,
+-			  mem_assert->text->operation,
+-			  mem_assert->text->right_text);
++	if (!mem_assert->left_value) {
++		string_stream_add(stream,
++				  KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
++				  mem_assert->text->left_text);
++	} else if (!mem_assert->right_value) {
++		string_stream_add(stream,
++				  KUNIT_SUBTEST_INDENT "Expected %s is not null, but is\n",
++				  mem_assert->text->right_text);
++	} else {
++		string_stream_add(stream,
++				KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
++				mem_assert->text->left_text,
++				mem_assert->text->operation,
++				mem_assert->text->right_text);
+ 
+-	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
+-			  mem_assert->text->left_text);
+-	kunit_assert_hexdump(stream, mem_assert->left_value,
+-			     mem_assert->right_value, mem_assert->size);
++		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
++				mem_assert->text->left_text);
++		kunit_assert_hexdump(stream, mem_assert->left_value,
++					mem_assert->right_value, mem_assert->size);
+ 
+-	string_stream_add(stream, "\n");
++		string_stream_add(stream, "\n");
+ 
+-	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
+-			  mem_assert->text->right_text);
+-	kunit_assert_hexdump(stream, mem_assert->right_value,
+-			     mem_assert->left_value, mem_assert->size);
++		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
++				mem_assert->text->right_text);
++		kunit_assert_hexdump(stream, mem_assert->right_value,
++					mem_assert->left_value, mem_assert->size);
+ 
+-	kunit_assert_print_msg(message, stream);
++		kunit_assert_print_msg(message, stream);
++	}
+ }
+ EXPORT_SYMBOL_GPL(kunit_mem_assert_format);
+
+base-commit: 5cb26c298ffde271d9bd1dd1b87ad028218f77fe
 -- 
-Best,
-Daniel T. Lee
+2.39.1.405.gd4c25cc71f-goog
+
