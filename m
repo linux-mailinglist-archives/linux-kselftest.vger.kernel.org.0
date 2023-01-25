@@ -2,173 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECFA67BB97
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 21:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76A067BDE2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 22:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236114AbjAYUDJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 15:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S236160AbjAYVOi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 16:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236126AbjAYUDH (ORCPT
+        with ESMTP id S236120AbjAYVOh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 15:03:07 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64DA12587
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 12:03:05 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so3259406pjl.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 12:03:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ho2Hi2912fVWCTL/MUkeOLiuJ+v7kgAR/cNl539SRB4=;
-        b=5TUit6OKPOu2R0uuTKRZJw2Jq2yS5J1P9vrY0moXS6u71K6NvXpy41mekPYu+NQI9Q
-         Z9SJmCi0zQmM2H9gD4UYI54BaB1X21bb6Tb1f+sfkxQ04oEGX1qI36WZNHQN3fr2951x
-         vuPkaCWylbHazyWLu2Rp8lUh5Ylj6vR/DCL7ZkeUXm8VfXhNFJKOvB3i+L1FEAx/h14n
-         q/F15Zx9aT6DTxyVexEFOjHS0LJ+GCkA7JAXxpikIIc11gAQp5zoh9nFkkUJLZ44GwXy
-         liTM6FAXsbAZ2jJRVT4qF8OmnGljyXtTc6Q+iK4mH57wsZ7YXXbPRaclMspvhziBAtNo
-         /nrQ==
+        Wed, 25 Jan 2023 16:14:37 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F205FCD
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 13:14:35 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0DB573F2D7
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 21:14:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1674681273;
+        bh=zuLI4Bp627ZhHkhqlP1iDRjahT6gPWQWdVEKJTBWAPw=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=HYYEj7oN1WkD1d0VldRtq5Yukbg0bkezPqswkqyG4NlcsPV1W6GpgTfDE5xV738A4
+         FiyznUmBZNe4S4k/nBO2jWXiB4nQLmwonRVo1tpRSRJM6On0ocTmr6fK/16rueavPY
+         HJcjGkNOKIuNc08zysgr6x+avf93iNJRpcdoCM6GYx3FrNqzi1d2jcGJ+HGw6UQJ4Z
+         D6LsmoATCAQVfHvBFs2I96NBdbaLc8DsukPcl1kJNb4zLNLiGklVvBdLASjESpCSlT
+         rZlb9lZuqNHyrMKUL7E+/oTfD35XXb9UTlsANNuJD9PlotaNrl/l7aVZUBC68S/Nn4
+         qg8//+0batvng==
+Received: by mail-wm1-f69.google.com with SMTP id z22-20020a05600c0a1600b003db00dc4b69so1718126wmp.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 13:14:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ho2Hi2912fVWCTL/MUkeOLiuJ+v7kgAR/cNl539SRB4=;
-        b=NPWb8rz+7Xc7AOZUnaZEQuXFGYhaH+2z0LPD3W7PjNYyiIu+/LecjNJ9MXqW96uf56
-         jlkZpb6k73Hn8b77tIwLL27Vd2exJAJHsV3mYKlb2sHXlh9hUSAZXeffnQ29A9+DjnSi
-         +6hRp88Bw4obgrzQxrZAN6fD/mUnCdOU+qNYNyTqAmgD+ZtMuCBFjfmT/bvSA0uoNx9Z
-         0+aWeg4ExnIisfc9mRaEuIVUE3QGNclseMSliNy/WDVrO8y3pxp6nT0i4GlBiqP+ATJf
-         YCJ8++aCJ/jmCKkPxemPqbREGiWxnAfFFipPohGULtqZCGcod2sKN5rrEaFdSJSnJv+6
-         tQow==
-X-Gm-Message-State: AFqh2koUGR0OH5YLupDVo6xt+KfsbyGx+BPLg+iowxFjWrG75REKX0Gr
-        r1DqpGxd5gJLg0zLRgn9ncFgdZDlXM5pf3Inf7I=
-X-Google-Smtp-Source: AMrXdXuzcIaKpblSzcTTY2x8tTd19aNvNUzRxEsZt9X6bL0nPhAVDujDAFJ8kqPPeXzY0w3t+QNItg==
-X-Received: by 2002:a17:90a:4a95:b0:225:c3ab:3137 with SMTP id f21-20020a17090a4a9500b00225c3ab3137mr35230686pjh.44.1674676985168;
-        Wed, 25 Jan 2023 12:03:05 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id e6-20020a17090a7c4600b0022c03785e9dsm2078619pjl.18.2023.01.25.12.03.04
+        bh=zuLI4Bp627ZhHkhqlP1iDRjahT6gPWQWdVEKJTBWAPw=;
+        b=jESow0WF3qNL3Yr9/kECYokUeXnXNAfunrEnnVmFxG0LSsOWpoUC78jFjzvg1Tf3uP
+         jQOjV5381Q+SgLR1KpzMWl4Zsc38UMAixcoKkHtjEgdAb0x2E2WfB9/iwy+bnU14iIZu
+         nm332tmPpW+2gZZtiQVPXcb46hJnvvtiFUOsY0htr3ETI4gB0r8eILJiNTvYzFCqGGMw
+         lmb2PGGZMWNvzGokTat2Yr3K7hIHdeYQFiOi2CQy/D4lsqrFK7yZvsYYKUs1FKmhG6dJ
+         MQsL6RwHZEgangArL+ULOPaSfegQQMKSuwr5X0/b1Fghc3SancVjvaANEFnnP9jv4yzx
+         vKCA==
+X-Gm-Message-State: AFqh2kqkKNBCU35gXlQX8aHWQX1G3N0ttsgk8u7DWZ4QBHNP/tYicTwx
+        EbxTiVLuNGSfDPJX+HuuRcC7V20dWxzje1fx6EmLWsmEPuGqQKMUN/q/PAxSAJ9S0mv0FvxNoSd
+        NjNBNTBOjIyXKbZjRU90xFuLuSPgYAj3mXFk6zburRo0u/Q==
+X-Received: by 2002:adf:f0c7:0:b0:2bd:e18d:c9e5 with SMTP id x7-20020adff0c7000000b002bde18dc9e5mr30002378wro.40.1674681272278;
+        Wed, 25 Jan 2023 13:14:32 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsEXTSteavR2oIdqHFpmfgQvV0sc0iT8QGFY/uEQuvNeO8SmPQBaIfEVUScik9B0mqdVFu5KA==
+X-Received: by 2002:adf:f0c7:0:b0:2bd:e18d:c9e5 with SMTP id x7-20020adff0c7000000b002bde18dc9e5mr30002370wro.40.1674681272108;
+        Wed, 25 Jan 2023 13:14:32 -0800 (PST)
+Received: from qwirkle.internal ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id l10-20020a05600012ca00b002bfb02153d1sm5738146wrx.45.2023.01.25.13.14.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 12:03:04 -0800 (PST)
-Message-ID: <63d18af8.170a0220.95a3.3653@mx.google.com>
-Date:   Wed, 25 Jan 2023 12:03:04 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 25 Jan 2023 13:14:31 -0800 (PST)
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v2 1/2] selftests: net: Fix missing nat6to4.o when running udpgro_frglist.sh
+Date:   Wed, 25 Jan 2023 21:13:49 +0000
+Message-Id: <20230125211350.113855-1-andrei.gherzan@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: fixes
-X-Kernelci-Kernel: linux-kselftest-fixes-6.2-rc5-1-ga49fb7218ed8
-X-Kernelci-Report-Type: test
-Subject: kselftest/fixes kselftest-seccomp: 2 runs,
- 2 regressions (linux-kselftest-fixes-6.2-rc5-1-ga49fb7218ed8)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes kselftest-seccomp: 2 runs, 2 regressions (linux-kselftest-f=
-ixes-6.2-rc5-1-ga49fb7218ed8)
+The udpgro_frglist.sh uses nat6to4.o which is tested for existence in
+bpf/nat6to4.o (relative to the script). This is where the object is
+compiled. Even so, the script attempts to use it as part of tc with a
+different path (../bpf/nat6to4.o). As a consequence, this fails the script:
 
-Regressions Summary
--------------------
+Error opening object ../bpf/nat6to4.o: No such file or directory
+Cannot initialize ELF context!
+Unable to load program
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+This change refactors these references to use a variable for consistency
+and also reformats two long lines.
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+---
+ tools/testing/selftests/net/udpgro_frglist.sh | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
+diff --git a/tools/testing/selftests/net/udpgro_frglist.sh b/tools/testing/selftests/net/udpgro_frglist.sh
+index c9c4b9d65839..1fdf2d53944d 100755
+--- a/tools/testing/selftests/net/udpgro_frglist.sh
++++ b/tools/testing/selftests/net/udpgro_frglist.sh
+@@ -6,6 +6,7 @@
+ readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+ 
+ BPF_FILE="../bpf/xdp_dummy.bpf.o"
++BPF_NAT6TO4_FILE="./bpf/nat6to4.o"
+ 
+ cleanup() {
+ 	local -r jobs="$(jobs -p)"
+@@ -40,8 +41,12 @@ run_one() {
+ 
+ 	ip -n "${PEER_NS}" link set veth1 xdp object ${BPF_FILE} section xdp
+ 	tc -n "${PEER_NS}" qdisc add dev veth1 clsact
+-	tc -n "${PEER_NS}" filter add dev veth1 ingress prio 4 protocol ipv6 bpf object-file ../bpf/nat6to4.o section schedcls/ingress6/nat_6  direct-action
+-	tc -n "${PEER_NS}" filter add dev veth1 egress prio 4 protocol ip bpf object-file ../bpf/nat6to4.o section schedcls/egress4/snat4 direct-action
++	tc -n "${PEER_NS}" filter add dev veth1 ingress prio 4 protocol \
++		ipv6 bpf object-file "$BPF_NAT6TO4_FILE" section \
++		schedcls/ingress6/nat_6 direct-action
++	tc -n "${PEER_NS}" filter add dev veth1 egress prio 4 protocol \
++		ip bpf object-file "$BPF_NAT6TO4_FILE" section \
++		schedcls/egress4/snat4 direct-action
+         echo ${rx_args}
+ 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx ${rx_args} -r &
+ 
+@@ -88,7 +93,7 @@ if [ ! -f ${BPF_FILE} ]; then
+ 	exit -1
+ fi
+ 
+-if [ ! -f bpf/nat6to4.o ]; then
++if [ ! -f "$BPF_NAT6TO4_FILE" ]; then
+ 	echo "Missing nat6to4 helper. Build bpfnat6to4.o selftest first"
+ 	exit -1
+ fi
+-- 
+2.34.1
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
-ux-kselftest-fixes-6.2-rc5-1-ga49fb7218ed8/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: linux-kselftest-fixes-6.2-rc5-1-ga49fb7218ed8
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      a49fb7218ed84a4c5e6c56b9fd933498b9730912 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d17aad1d9ce2c271915eba
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.7)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.2-rc5-1-ga49fb7218ed8/arm64/defconfig+kselftest+arm64-chromebook/=
-clang-15/lab-collabora/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.2-rc5-1-ga49fb7218ed8/arm64/defconfig+kselftest+arm64-chromebook/=
-clang-15/lab-collabora/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230120.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63d17aad1d9c=
-e2c271915ebb
-        failing since 98 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d17ab44a699e156b915ebb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.7)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.2-rc5-1-ga49fb7218ed8/arm64/defconfig+kselftest+arm64-chromebook/=
-clang-15/lab-collabora/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16=
-.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.2-rc5-1-ga49fb7218ed8/arm64/defconfig+kselftest+arm64-chromebook/=
-clang-15/lab-collabora/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230120.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63d17ab44a69=
-9e156b915ebc
-        failing since 98 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =20
