@@ -2,98 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5768667AF84
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 11:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0818067AFE9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 11:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235467AbjAYKUY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 05:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        id S235439AbjAYKoN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 05:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235457AbjAYKUV (ORCPT
+        with ESMTP id S235643AbjAYKoM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:20:21 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08C237F0A;
-        Wed, 25 Jan 2023 02:20:20 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30PAHgFr3073106
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Wed, 25 Jan 2023 02:17:42 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30PAHgFr3073106
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023010601; t=1674641863;
-        bh=fgf0O//Iw/voqvEUpEUdG2dcondsK9mqYxF3Vys4i7U=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=baJF93gAtdLK96f3IaSa5ZFBoo00AUsymj332aKjUMi5V74ufdqhVJViR1NOCbQY5
-         XxQeu48s2haA57Z8EzxC1M8KvRdfiTAlfpH3hVYyJv0ueDiJ6RglPPBYAxN/DDFTFH
-         9MWEeg2LuHE/4rPaqK5Gl3MMpjgTnF2kEVmCBDgMZpT2vw7+qXf35HWXO2Jwhjyyiw
-         1GQ9cdnsBXijCzj1hl4t2UXyfx5pfARrAZ0LWR49rNGxcdPImqzy/vLmOeIKtkPkIs
-         vI9rCm2LUSafcVJbq+b8LREOVTBPmoHets1aLr8p3jaOH1y1TQowEEbCOLp7xtpq36
-         fxK4cg2+LDHaA==
-Date:   Wed, 25 Jan 2023 02:17:41 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-CC:     Xin Li <xin3.li@intel.com>, Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v5_1/2=5D_selftests/x86=3A_sy?= =?US-ASCII?Q?sret=5Frip=3A_Handle_syscall_in_a_FRED_system?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y9D8++DxphJS1oc4@biznet-home.integral.gnuweeb.org>
-References: <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com> <20230124022729.596997-1-ammarfaizi2@gnuweeb.org> <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org> <20230125034958.734527-1-ammarfaizi2@gnuweeb.org> <20230125034958.734527-2-ammarfaizi2@gnuweeb.org> <8770815f-0f23-d0c5-e56a-d401827842c9@zytor.com> <Y9D8++DxphJS1oc4@biznet-home.integral.gnuweeb.org>
-Message-ID: <A7DAB159-7C02-412D-9CFB-5C3C3760DECB@zytor.com>
+        Wed, 25 Jan 2023 05:44:12 -0500
+X-Greylist: delayed 1107 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 Jan 2023 02:44:09 PST
+Received: from 5.mo541.mail-out.ovh.net (5.mo541.mail-out.ovh.net [46.105.59.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEC117170
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 02:44:09 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.111.172.110])
+        by mo541.mail-out.ovh.net (Postfix) with ESMTPS id C214725152;
+        Wed, 25 Jan 2023 10:25:36 +0000 (UTC)
+Received: from localhost (37.65.8.229) by DAG10EX1.indiv4.local (172.16.2.91)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.17; Wed, 25 Jan
+ 2023 11:25:35 +0100
+Date:   Wed, 25 Jan 2023 11:25:34 +0100
+From:   Quentin Deslandes <qde@naccy.de>
+To:     Florian Westphal <fw@strlen.de>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Dmitrii Banshchikov <me@ubique.spb.ru>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v3 00/16] bpfilter
+Message-ID: <20230125102423.vsrqn27jm3h3fvj7@dev-bpfilter1>
+References: <20221224000402.476079-1-qde@naccy.de>
+ <20230103114540.GB13151@breakpoint.cc>
+ <8773f286-74ba-4efb-4a94-0c1f91d959bd@naccy.de>
+ <20230112031728.GL27644@breakpoint.cc>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230112031728.GL27644@breakpoint.cc>
+X-Originating-IP: [37.65.8.229]
+X-ClientProxiedBy: CAS11.indiv4.local (172.16.1.11) To DAG10EX1.indiv4.local
+ (172.16.2.91)
+X-Ovh-Tracer-Id: 262334681463582460
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddvvddgudeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjihesthekredttddtudenucfhrhhomhepsfhuvghnthhinhcuffgvshhlrghnuggvshcuoehquggvsehnrggttgihrdguvgeqnecuggftrfgrthhtvghrnhepleetleevveelhfeufeeutdegvdffgfevkeegvdfhhfejjeeghfduhfeluedvvddunecukfhppeduvdejrddtrddtrddupdefjedrieehrdekrddvvdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeoqhguvgesnhgrtggthidruggvqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehffiesshhtrhhlvghnrdguvgdplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdpsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrg
+ iivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhhrgholhhuohesghhoohhglhgvrdgtohhmpdhsughfsehgohhoghhlvgdrtghomhdpkhhpshhinhhghheskhgvrhhnvghlrdhorhhgpdhjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdphihhshesfhgsrdgtohhmpdhsohhngheskhgvrhhnvghlrdhorhhgpdhmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprghnughrihhisehkvghrnhgvlhdrohhrghdpuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdgrshhtsehkvghrnhgvlhdrohhrghdpnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdpoffvtefjohhsthepmhhoheeguddpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On January 25, 2023 1:57:15 AM PST, Ammar Faizi <ammarfaizi2@gnuweeb=2Eorg>=
- wrote:
->On Wed, Jan 25, 2023 at 12:39:26AM -0800, H=2E Peter Anvin wrote:
->> >   	/* Set IP and CX to match so that SYSRET can happen=2E */
->> >   	ctx->uc_mcontext=2Egregs[REG_RIP] =3D rip;
->> >   	ctx->uc_mcontext=2Egregs[REG_RCX] =3D rip;
->>=20
->> It would be interesting to have the syscall handler try both with and
->> without this (so it would end up doing both IRET and SYSCALL on legacy=
-=2E)
->> Perhaps SIGUSR1 versus SIGUSR2=2E=2E=2E
->
->Just to clarify this more so I am sure I understand it correctly=2E
->
->Did you mean to have the same signal handler without modifiying
->'REG_RCX' but still change 'REG_RIP'?
->
->IOW, we want to only *remove*:
->
->   ctx->uc_mcontext=2Egregs[REG_RCX] =3D rip;
->
->and *keep*:
->
->   ctx->uc_mcontext=2Egregs[REG_RIP] =3D rip;
->
->for the SIGUSR2 handler=2E Thus, inside the entry64 we will jump to the
->iret path because %rcx !=3D %r11 upon rt_sigreturn()?
->
+On Thu, Jan 12, 2023 at 04:17:28AM +0100, Florian Westphal wrote:
+> Quentin Deslandes <qde@naccy.de> wrote:
+> > Le 03/01/2023 à 12:45, Florian Westphal a écrit :
+> > > You can't make this atomic from userspace perspective, the
+> > > get/setsockopt API of iptables uses a read-modify-write model.
+> > 
+> > This refers to updating the programs from bpfilter's side. It won't
+> > be atomic from iptables point of view, but currently bpfilter will
+> > remove the program associated to a table, before installing the new
+> > one. This means packets received in between those operations are
+> > not filtered. I assume a better solution is possible.
+> 
+> Ah, I see, thanks.
+> 
+> > > Tentatively I'd try to extend libnftnl and generate bpf code there,
+> > > since its used by both iptables(-nft) and nftables we'd automatically
+> > > get support for both.
+> > 
+> > That's one of the option, this could also remain in the kernel
+> > tree or in a dedicated git repository. I don't know which one would
+> > be the best, I'm open to suggestions.
+> 
+> I can imagine that this will see a flurry of activity in the early
+> phase so I think a 'semi test repo' makes sense.
+> 
+> Provideded license allows this, useable bits and pieces can then
+> be grafted on to libnftnl (or iptables or whatever).
+> 
+> > > I was planning to look into "attach bpf progs to raw netfilter hooks"
+> > > in Q1 2023, once the initial nf-bpf-codegen is merged.
+> > 
+> > Is there any plan to support non raw hooks? That's mainly out
+> > of curiosity, I don't even know whether that would be a good thing
+> > or not.
+> 
+> Not sure what 'non raw hook' is.  Idea was to expose
+> 
+> 1. protcocol family
+> 2. hook number (prerouting, input etc)
+> 3. priority
+> 
+> to userspace via bpf syscall/bpf link.
+> 
+> userspace would then provide the above info to kernel via
+> bpf(... BPF_LINK_CREATE )
+> 
+> which would then end up doing:
+> --------------
+> h.hook = nf_hook_run_bpf; // wrapper to call BPF_PROG_RUN
+> h.priv = prog; // the bpf program to run
+> h.pf = attr->netfilter.pf;
+> h.priority = attr->netfilter.priority;
+> h.hooknum = attr->netfilter.hooknum;
+> 
+> nf_register_net_hook(net, &h);
+> --------------
+> 
+> After that nf_hook_slow() calls the bpf program just like any
+> other of the netfilter hooks.
+> 
+> Does that make sense or did you have something else in mind?
 
-I guess it would depend on what they "normally" are=2E My #1 impulse would=
- be to leave them both unchanged=2E
+Sounds good to me. I thought you were referring to hooks available for
+the RAW table (as in `iptables --table raw...`).
+
+Thanks,
+Quentin
+
