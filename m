@@ -2,67 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06AD67AA99
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 07:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9E967AAB1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 08:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjAYG5H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 01:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S234449AbjAYHJx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 02:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234860AbjAYG5H (ORCPT
+        with ESMTP id S231563AbjAYHJw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 01:57:07 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97E4460BD
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 22:57:05 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id v81so8760776vkv.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Jan 2023 22:57:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i4WRkX67OFC+Y2/SyB89xJNBgzCQCpicp3GBXnKp7Jg=;
-        b=WGNVmBdp5fM2nJ5ST+q8tHAKx5I6ULs5lp9GnexJZH2S1M1S9sGWDl/dIEhXmxYeyP
-         T5uhmdHeAK3k9Duux0ElPd8UUtaff/tqIYQGnPcAzb1puD4Z2xtTgiAUGMfR1PBjzoV+
-         /1Qs5uAU0B8pLbu4QqeTYLp2YDf2rUxVBud6McnPJ++MncNz9yp3wK112YG/RFTYahtD
-         08DmdWSxE9fZYKlX2mgKKWSIS+05nKN8ovs/12B0NnvmFYzejf3uf3kJqDTc54nLcvir
-         eVhYOjMJO0jg/wRe3b+rnNDZgNsX6igx8/bSH2tlf8KDGUowCOfpvxPtE63Lvo0LQlsO
-         +18A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i4WRkX67OFC+Y2/SyB89xJNBgzCQCpicp3GBXnKp7Jg=;
-        b=2tiVH/2PLADfjYhvtvsMg3cuJTUW/WLnDREMu98hNUqRQCBQx5b/5yTtGvupgkcp1C
-         /HqKiV2H9wS7M64423rZuk4PK6cCEL2wiq/Fz1VWsvEHFagvnI5ilyIHieQwTGinAlqt
-         GPTtmd/8chQfNK/I4iQ2W1ZfR7ip9OWgK4mGkByLaoHQ76qJz7jzuHrcCTwpOoCWdm7V
-         pzZr5s4fSMbRCN7Ys0573is30GMTNRt/rqaKASFflkKe5INyjBRYmXejgZq2MSmDc6ih
-         uMMC6gIXwH3BMU6ZzYuJuxV2zJQxxcAx+QHdvTyr4+d6zbkwMMP9rcPrHiqo5+Dsl+Tp
-         MFwQ==
-X-Gm-Message-State: AFqh2ko53e6OJuIHWQ+jci2X/gqaaLQWrXswv21ZcoUs5CK/T3A6l2zC
-        o4t4DsYFSmwbZuRSJXmzQELnZknIP6mg3sqFgTKp2w==
-X-Google-Smtp-Source: AMrXdXs24MjZtPX91L1NJnOwH4N6rV9jjq9jDj+sUmw0dT2KZuLU/1G1tfhqA1bjuUr1O4ROE6oHodn8kHwl8r/vGF0=
-X-Received: by 2002:a1f:1e04:0:b0:3e1:54d0:8817 with SMTP id
- e4-20020a1f1e04000000b003e154d08817mr3792032vke.37.1674629824782; Tue, 24 Jan
- 2023 22:57:04 -0800 (PST)
+        Wed, 25 Jan 2023 02:09:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84AE5260;
+        Tue, 24 Jan 2023 23:09:50 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30P4PWSj012719;
+        Wed, 25 Jan 2023 07:09:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=dk4L0nxHFgeoextqDDpHvgs+Wvi0a7VUuGjWYKu97xI=;
+ b=QbDliG0OgojK9f3uvIfzJgtCvWBtR2K2fAJHFF9iyNKdDWgVfldsiAh7E9C9A5ucq/M0
+ dXDTnSEpMQW/lMLXAV5knUUHhFAdBL7X/jOv8K+EZqIzqftpA6JsVWZs0cZjVU/ie+3g
+ luOTK0sYT+2FnONBv2PrxGC6/KNViQDZQfvX1yNFiXZvoPI930ZFzH3p5saxe5vF7Y9P
+ LjBN4BHFJ+6T/V2083nyRL4EJZ5KIsuBI8SbG+XAyQmwQ8kr68xjHRN4oh1MqxlYbg4t
+ JwyuXPvlENbUY+DKh5dqfj/CLSzhvMwP4+4G3AtRTzZQj2V0jYbm8zk3PTCz/+yDla3t +Q== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na9hvga4s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 07:09:44 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OFtTQP015313;
+        Wed, 25 Jan 2023 07:09:42 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n87p6bd58-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 07:09:42 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30P79dpd50135534
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Jan 2023 07:09:39 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 08F6E20043;
+        Wed, 25 Jan 2023 07:09:39 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7280120040;
+        Wed, 25 Jan 2023 07:09:38 +0000 (GMT)
+Received: from localhost (unknown [9.43.44.248])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 25 Jan 2023 07:09:38 +0000 (GMT)
+Date:   Wed, 25 Jan 2023 12:39:36 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH] selftests/ftrace: Extend multiple_kprobes.tc to add
+ multiple consecutive probes in a function
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Akanksha J N <akanksha@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
+        shuah@kernel.org
+References: <20230112095600.37665-1-akanksha@linux.ibm.com>
+        <1673529279.3c5f8oes3z.naveen@linux.ibm.com>
+        <20230113005153.c6ca2f75b9d12627eb63308a@kernel.org>
+        <1673601511.tq30r5phea.naveen@linux.ibm.com>
+        <20230114002126.a37640f815b74e9e78259a9f@kernel.org>
+        <1673856229.a7tekgas75.naveen@linux.ibm.com>
+        <20230120085554.ab4dc1b72990a4957c4c88e2@kernel.org>
+In-Reply-To: <20230120085554.ab4dc1b72990a4957c4c88e2@kernel.org>
 MIME-Version: 1.0
-References: <20230121212717.10187-1-apantykhin@gmail.com>
-In-Reply-To: <20230121212717.10187-1-apantykhin@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 25 Jan 2023 14:56:53 +0800
-Message-ID: <CABVgOSms6xJXXuYreaFcQdE8jjcFj5Sip9gWosgRXDYkzNuuKA@mail.gmail.com>
-Subject: Re: [PATCH] tools/testing/kunit/kunit.py extract handlers
-To:     Alexander Pantyukhin <apantykhin@gmail.com>
-Cc:     dlatypov@google.com, brendan.higgins@linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000db2a3005f311239f"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1674629944.vwzovyd4lk.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: pf6msvON4-I-YzcNZ0QklmHr5QuubfMT
+X-Proofpoint-GUID: pf6msvON4-I-YzcNZ0QklmHr5QuubfMT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-25_02,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxlogscore=922 priorityscore=1501 phishscore=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 mlxscore=0 impostorscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301250064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,293 +93,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000db2a3005f311239f
-Content-Type: text/plain; charset="UTF-8"
+Hi Masami,
 
-On Sun, 22 Jan 2023 at 05:27, Alexander Pantyukhin <apantykhin@gmail.com> wrote:
->
-> The main function contains a wide if-elif block that handles different
-> subcommands. It's possible to make code refactoring to extract
-> subcommands handlers.
->
-> Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
-> ---
+Masami Hiramatsu wrote:
+>> >=20
+>> > Yes, please make it separate, this test case is for checking whether
+>> > the ftrace can define/enable/disable multiple kprobe events. Not for
+>> > checking kprobe with different types, nor checking interactions among
+>> > different types of kprobes.
+>> >=20
+>> > (BTW, if you want to test optprobe on x86, you can not put the probes
+>> >  within the jump instruction (+5 bytes). It will unoptimize existing
+>> >  optimized kprobe in that case)
+>>=20
+>> Ok, I can see why we won't be able to optimize any of the probes on x86=20
+>> with this approach. But, we should be able to do so on powerpc and arm,=20
+>> the only other architectures supporting OPTPROBES at this time. For x86,=
+=20
+>> we may have to extend the test to check kprobes/list.
+>=20
+> Are there any instruction type specific limitation on those arch for
+> using optprobe? I guess the 'call' (branch with link register) will not
+> able to be optimized because it leaves the trampoline address on the
+> stack.
 
-Thanks -- this is a much nicer way of doing things!
+Yes, at least on powerpc, we only optimize ALU instructions and do not=20
+optimize load/store instructions, among many others. This is the reason=20
+we try to put a probe uptil 256 offset into a function in the proposed=20
+test, which will almost certainly catch an instruction that can be=20
+optimized.
 
-Reviewed-by: David Gow <davidgow@google.com>
+>=20
+>>=20
+>> Crucially, I think trying to place a probe at each byte can still=20
+>> exercize interactions across KPROBES_ON_FTRACE and normal kprobes, so=20
+>> this test is still a good start. In addition, we get to ensure that=20
+>> kprobes infrastructure is rejecting placing probes at non-instruction=20
+>> boundaries.
+>=20
+> The interfere between probes can be happen between kprobes and optprobe
+> (*only on x86*), but not with KPORBES_ON_FTRACE. The ftrace replaced NOP
+> will be handled as one instruction.=20
 
-Cheers,
--- David
+Yes.
 
->  tools/testing/kunit/kunit.py | 167 ++++++++++++++++++++---------------
->  1 file changed, 96 insertions(+), 71 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 43fbe96318fe..8cd818867504 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -395,6 +395,95 @@ def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree
->                         extra_qemu_args=qemu_args)
->
->
-> +def run_handler(cli_args):
-> +       if not os.path.exists(cli_args.build_dir):
-> +               os.mkdir(cli_args.build_dir)
-> +
-> +       linux = tree_from_args(cli_args)
-> +       request = KunitRequest(build_dir=cli_args.build_dir,
-> +                                       make_options=cli_args.make_options,
-> +                                       jobs=cli_args.jobs,
-> +                                       raw_output=cli_args.raw_output,
-> +                                       json=cli_args.json,
-> +                                       timeout=cli_args.timeout,
-> +                                       filter_glob=cli_args.filter_glob,
-> +                                       kernel_args=cli_args.kernel_args,
-> +                                       run_isolated=cli_args.run_isolated)
-> +       result = run_tests(linux, request)
-> +       if result.status != KunitStatus.SUCCESS:
-> +               sys.exit(1)
-> +
-> +
-> +def config_handler(cli_args):
-> +       if cli_args.build_dir and (
-> +                       not os.path.exists(cli_args.build_dir)):
-> +               os.mkdir(cli_args.build_dir)
-> +
-> +       linux = tree_from_args(cli_args)
-> +       request = KunitConfigRequest(build_dir=cli_args.build_dir,
-> +                                               make_options=cli_args.make_options)
-> +       result = config_tests(linux, request)
-> +       stdout.print_with_timestamp((
-> +               'Elapsed time: %.3fs\n') % (
-> +                       result.elapsed_time))
-> +       if result.status != KunitStatus.SUCCESS:
-> +               sys.exit(1)
-> +
-> +
-> +def build_handler(cli_args):
-> +       linux = tree_from_args(cli_args)
-> +       request = KunitBuildRequest(build_dir=cli_args.build_dir,
-> +                                       make_options=cli_args.make_options,
-> +                                       jobs=cli_args.jobs)
-> +       result = config_and_build_tests(linux, request)
-> +       stdout.print_with_timestamp((
-> +               'Elapsed time: %.3fs\n') % (
-> +                       result.elapsed_time))
-> +       if result.status != KunitStatus.SUCCESS:
-> +               sys.exit(1)
-> +
-> +
-> +def exec_handler(cli_args):
-> +       linux = tree_from_args(cli_args)
-> +       exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
-> +                                       build_dir=cli_args.build_dir,
-> +                                       json=cli_args.json,
-> +                                       timeout=cli_args.timeout,
-> +                                       filter_glob=cli_args.filter_glob,
-> +                                       kernel_args=cli_args.kernel_args,
-> +                                       run_isolated=cli_args.run_isolated)
-> +       result = exec_tests(linux, exec_request)
-> +       stdout.print_with_timestamp((
-> +               'Elapsed time: %.3fs\n') % (result.elapsed_time))
-> +       if result.status != KunitStatus.SUCCESS:
-> +               sys.exit(1)
-> +
-> +
-> +def parse_handler(cli_args):
-> +       if cli_args.file is None:
-> +               sys.stdin.reconfigure(errors='backslashreplace')  # pytype: disable=attribute-error
-> +               kunit_output = sys.stdin
-> +       else:
-> +               with open(cli_args.file, 'r', errors='backslashreplace') as f:
-> +                       kunit_output = f.read().splitlines()
-> +       # We know nothing about how the result was created!
-> +       metadata = kunit_json.Metadata()
-> +       request = KunitParseRequest(raw_output=cli_args.raw_output,
-> +                                       json=cli_args.json)
-> +       result, _ = parse_tests(request, metadata, kunit_output)
-> +       if result.status != KunitStatus.SUCCESS:
-> +               sys.exit(1)
-> +
-> +
-> +subcommand_handlers_map = {
-> +       'run': run_handler,
-> +       'config': config_handler,
-> +       'build': build_handler,
-> +       'exec': exec_handler,
-> +       'parse': parse_handler
-> +}
-> +
-> +
->  def main(argv):
->         parser = argparse.ArgumentParser(
->                         description='Helps writing and running KUnit tests.')
-> @@ -438,78 +527,14 @@ def main(argv):
->         if get_kernel_root_path():
->                 os.chdir(get_kernel_root_path())
->
-> -       if cli_args.subcommand == 'run':
-> -               if not os.path.exists(cli_args.build_dir):
-> -                       os.mkdir(cli_args.build_dir)
-> -
-> -               linux = tree_from_args(cli_args)
-> -               request = KunitRequest(build_dir=cli_args.build_dir,
-> -                                      make_options=cli_args.make_options,
-> -                                      jobs=cli_args.jobs,
-> -                                      raw_output=cli_args.raw_output,
-> -                                      json=cli_args.json,
-> -                                      timeout=cli_args.timeout,
-> -                                      filter_glob=cli_args.filter_glob,
-> -                                      kernel_args=cli_args.kernel_args,
-> -                                      run_isolated=cli_args.run_isolated)
-> -               result = run_tests(linux, request)
-> -               if result.status != KunitStatus.SUCCESS:
-> -                       sys.exit(1)
-> -       elif cli_args.subcommand == 'config':
-> -               if cli_args.build_dir and (
-> -                               not os.path.exists(cli_args.build_dir)):
-> -                       os.mkdir(cli_args.build_dir)
-> -
-> -               linux = tree_from_args(cli_args)
-> -               request = KunitConfigRequest(build_dir=cli_args.build_dir,
-> -                                            make_options=cli_args.make_options)
-> -               result = config_tests(linux, request)
-> -               stdout.print_with_timestamp((
-> -                       'Elapsed time: %.3fs\n') % (
-> -                               result.elapsed_time))
-> -               if result.status != KunitStatus.SUCCESS:
-> -                       sys.exit(1)
-> -       elif cli_args.subcommand == 'build':
-> -               linux = tree_from_args(cli_args)
-> -               request = KunitBuildRequest(build_dir=cli_args.build_dir,
-> -                                           make_options=cli_args.make_options,
-> -                                           jobs=cli_args.jobs)
-> -               result = config_and_build_tests(linux, request)
-> -               stdout.print_with_timestamp((
-> -                       'Elapsed time: %.3fs\n') % (
-> -                               result.elapsed_time))
-> -               if result.status != KunitStatus.SUCCESS:
-> -                       sys.exit(1)
-> -       elif cli_args.subcommand == 'exec':
-> -               linux = tree_from_args(cli_args)
-> -               exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
-> -                                               build_dir=cli_args.build_dir,
-> -                                               json=cli_args.json,
-> -                                               timeout=cli_args.timeout,
-> -                                               filter_glob=cli_args.filter_glob,
-> -                                               kernel_args=cli_args.kernel_args,
-> -                                               run_isolated=cli_args.run_isolated)
-> -               result = exec_tests(linux, exec_request)
-> -               stdout.print_with_timestamp((
-> -                       'Elapsed time: %.3fs\n') % (result.elapsed_time))
-> -               if result.status != KunitStatus.SUCCESS:
-> -                       sys.exit(1)
-> -       elif cli_args.subcommand == 'parse':
-> -               if cli_args.file is None:
-> -                       sys.stdin.reconfigure(errors='backslashreplace')  # pytype: disable=attribute-error
-> -                       kunit_output = sys.stdin
-> -               else:
-> -                       with open(cli_args.file, 'r', errors='backslashreplace') as f:
-> -                               kunit_output = f.read().splitlines()
-> -               # We know nothing about how the result was created!
-> -               metadata = kunit_json.Metadata()
-> -               request = KunitParseRequest(raw_output=cli_args.raw_output,
-> -                                           json=cli_args.json)
-> -               result, _ = parse_tests(request, metadata, kunit_output)
-> -               if result.status != KunitStatus.SUCCESS:
-> -                       sys.exit(1)
-> -       else:
-> +       subcomand_handler = subcommand_handlers_map.get(cli_args.subcommand, None)
-> +
-> +       if subcomand_handler is None:
->                 parser.print_help()
-> +               return
-> +
-> +       subcomand_handler(cli_args)
-> +
->
->  if __name__ == '__main__':
->         main(sys.argv[1:])
-> --
-> 2.25.1
->
+>=20
+>> > And do you really need to run "multiple" kprobes at once?
+>> > I think what you need is 'kprobe_opt_types.tc'.
+>>=20
+>> Yes, enabling those probes is a good stress test to ensure we are only=20
+>> accepting valid probe locations.
+>>=20
+>> multiple_kprobe_types.tc ? :)
+>=20
+> Please don't mixed it with the concept of 'multiple' probe test.
+> It is different that
+>  - kprobes can put probes on each instruction boundary.
+>  - kprobes can allocate and enable multiple probes at the same time.
+>=20
+> What the multiple_kprobes.tc tests is the latter one.
+> (This is the reason why it chooses different functions so as not to
+>  interfere with each other.)
 
---000000000000db2a3005f311239f
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Ok, I was coming from the point of view that both tests end up=20
+installing "multiple" kprobes, but I do see your point.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAl
-vcFdY0UlfK8uOZ9RKFgGgVpgQmGbYLIKb3QYDsIhODAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjUwNjU3MDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAyfBfMEaJai21Cm7tXwon
-OtuSj70+yIICR67C2+Ktwd86GTGCyPSNBkcIwO/MIDoe+qePjRBcbDjdH4rfz+JhU1HOu2580nd7
-ioyEp2eMyAACWdv9Hzec4IQvYycO/XoTQnWhhAN4ud/Z70ov1XrRqolZryphXVepKalHrKpJZ0bH
-8Yy64BOZoF1RajuHzfYppZQ0dEht9ATz+9D2fgdLF58QFpcnJ2Je+GHyyYolap8oQ0yIRg1P2Uwt
-LeWtbP4jpbVNfYauVV9gWjWALjEwvQiV+QzMpF7L2Nkti0Vt2ZoTBQ7LepVbBehcKReaOABdByoM
-4amT2cIuOxwXL1XERQ==
---000000000000db2a3005f311239f--
+How about adding two new tests:
+1. The same test as has been proposed in this thread: trying to add a=20
+kprobe at every byte within $FUNCTION_FORK upto an offset of 256 bytes.=20
+We can probably call it kprobe_insn_boundary.tc
+2. A new test to ensure we can add different kprobe types=20
+(kprobe_opt_types.tc). This test will need to enable and check if each=20
+probe has been optimized or not and needs arch-specific knowledge so=20
+that we can take care of x86.
+
+Would that be ok?
+
+
+Thanks,
+Naveen
+
