@@ -2,81 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8070067B284
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 13:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7020467B2D9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 14:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbjAYMTU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 07:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        id S235536AbjAYNBl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 08:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235566AbjAYMTI (ORCPT
+        with ESMTP id S235222AbjAYNBa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 07:19:08 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8303F72BD;
-        Wed, 25 Jan 2023 04:19:07 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.165.226])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 25 Jan 2023 08:01:30 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C30846730;
+        Wed, 25 Jan 2023 05:01:29 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 613ED6602E43;
-        Wed, 25 Jan 2023 12:18:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674649145;
-        bh=8pBnnWTRCzJetctu8Nbw6JJEIemO40Oj4vUcQtXcfGg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=F7KhLA2McNOeHM6FUER+Uc9UkGtMLFCI26a93xGU8BG4e6doRmku8xHSzd5DA4Ljx
-         arLliEsGKg6V/CdUqjU8gxw49K+M8pa+vvQpCZ7KRerOTYvZHCLBwQ38BYlNH13Yus
-         7lzwaWY4LgfVpe8M0dpRTiWk+IyPQvLHduULFtbtPYCmM24EZVvmxrGLnvbJOZ/2am
-         Z1P788FsylIi0qw+ncIPPhORHQg+uHsiu2XWPpAE1s3REKdL4A3Nb88vqQahtVGUfp
-         KRUun+8gUwAf98n7c3I8EAC3NLMyx4NprwEW+wsGmnImeNqKhsdBSqRoV1t8TQVGCG
-         vXHWXGurCPdlw==
-Message-ID: <1310badc-5fcd-dc98-9b5c-85044c6c7083@collabora.com>
-Date:   Wed, 25 Jan 2023 17:18:52 +0500
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1995121A38;
+        Wed, 25 Jan 2023 13:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674651688; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZHPUEmgHN9HHsele0Ce3YewvjVaFUupPCQ2N9ydCuzU=;
+        b=r+QImpXSov56FLm1H+hELmnDF3ba33PDw9X+GNnrXwjl2eQ+ZuX3YhWChiKOdofziQIIEm
+        lXbb2vLp56dhnNJ7EOBz3awHc1j72nCdmCZWUEIjOJydKML1zstPO/PSZz0O5XA4flp7vX
+        J2LJKE4EyuI1Ln1V1xiBggPmq3RuK7Y=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EF07E1339E;
+        Wed, 25 Jan 2023 13:01:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uoscOCco0WNBGAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 13:01:27 +0000
+Date:   Wed, 25 Jan 2023 14:01:27 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Stefan Roesch <shr@devkernel.io>, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, CGEL <cgel.zte@gmail.com>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [RESEND RFC PATCH v1 00/20] mm: process/cgroup ksm support
+Message-ID: <Y9EoJ0jlXMeuJzuY@dhcp22.suse.cz>
+References: <20230123173748.1734238-1-shr@devkernel.io>
+ <5844ee9f-1992-a62a-2141-3b694a1e1915@redhat.com>
+ <qvqwbkmnj014.fsf@dev0134.prn3.facebook.com>
+ <a391e98c-88af-886c-0426-c41c9980afa1@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v7 1/4] userfaultfd: Add UFFD WP Async support
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230109064519.3555250-1-usama.anjum@collabora.com>
- <20230109064519.3555250-2-usama.anjum@collabora.com> <Y8gkY8OlnOwvlkj4@x1n>
- <0bed5911-48b9-0cc2-dfcf-d3bc3b0e8388@collabora.com> <Y8lxW5YtD6MX61WD@x1n>
- <Y8qq0dKIJBshua+X@x1n> <328f54c1-171f-22a1-10c9-8b7a25bd8027@collabora.com>
- <Y9AUsCxgitOI2lUA@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y9AUsCxgitOI2lUA@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a391e98c-88af-886c-0426-c41c9980afa1@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,26 +66,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/24/23 10:26 PM, Peter Xu wrote:
-> On Mon, Jan 23, 2023 at 03:11:20PM +0500, Muhammad Usama Anjum wrote:
->>> One thing worth mention is, I think for async wp it doesn't need to be
->>> restricted by UFFD_USER_MODE_ONLY, because comparing to the sync messages
->>> it has no risk of being utilized for malicious purposes.
->> I think with updated handling path updated in do_wp_page() and
->> wp_huge_pmd() in version, UFFD_USER_MODE_ONLY will not affect us.
+On Tue 24-01-23 19:01:49, David Hildenbrand wrote:
+> [...]
 > 
-> This is more or less a comment for the design, the new code should work (by
-> bypassing handle_userfaultfd(), where this bit was checked).
+> > > I'm going to point out the security aspect, and that e.g., Windows used to
+> > > enable it system-wide before getting taught by security experts otherwise.
+> > > Details on KSM and security aspects can be found in that thread.
+> > > 
+> > If I'm not mistaken the security aspect exists today. When KSM is
+> > enabled with madvise this is the same.
 > 
-> We'll need an man page update if this feature will be merged [1], and if so
-> it'll need to be updated for the UFFD_USER_MODE_ONLY section regarding to
-> async uffd-wp support too.  I think that can also be worked out after the
-> series being accepted first, so just a heads up.
+> Yes, and we mostly only use it for virtual machines -- and to be precise,
+> guest memory only -- where it has to be enabled explicitly on a well
+> documented basis ...
 > 
-> [1] https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git
-Thank you for explaining it. Definitely, we'll update the man pages after
-the change has been merged. I've added it to my notes.>
+> Impossible for an admin to force it on other parts of the hypervisor process
+> that might be more security sensitive. Or on other arbitrary applications,
+> for now.
+> 
+> > 
+> > > Long story short: one has to be very careful with that and only enable it for
+> > > very carefully selected worklads. Letting a workload opt-in on a VMA level is
+> > > most probably safer than an admin blindly turning this on for random processes
+> > > ... >>
+> [...]
+> 
+> > > 
+> > > [1] https://lore.kernel.org/all/20220517092701.1662641-1-xu.xin16@zte.com.cn/
+> > > [2] https://lore.kernel.org/all/20220609055658.703472-1-xu.xin16@zte.com.cn/
+> > > 
+> > My understanding is that there were problems with the patch and how it
+> > exposed KSM. The other objection was the enable-all configuration
+> > option.
+> 
+> I don't remember all the discussions, but one concern was how to handle
+> processes that deliberately want to disable it on some parts of memory.
+> 
+> Anyhow, I cc'ed the relevant parties already.
 
+Thanks! I do not remember all the details from the past discussion
+except it was /proc and later global setting. Neither really were great
+choices. We have discussed pidfd_madvise and prctl IIRC. For the latter
+there was no real argument about when it is desirable to apply merging
+on all existing vmas (e.g. is it really desirable on stack/brk or malloc
+arenas or would user need to opt out for those).
+
+I have read through your cover letter and it talks about the interface
+but it doesn't really talk about usecases and how they are supposed to
+use this feature - except the prctl based flag gets inherited. So could
+you elaborate some more about those usecases please?
 -- 
-BR,
-Muhammad Usama Anjum
+Michal Hocko
+SUSE Labs
