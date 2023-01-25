@@ -2,47 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575BD67B827
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 18:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B53467B87C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Jan 2023 18:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235606AbjAYRNy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 12:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
+        id S229806AbjAYR1U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 12:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235395AbjAYRNx (ORCPT
+        with ESMTP id S229612AbjAYR1U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 12:13:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74781A5C3;
-        Wed, 25 Jan 2023 09:13:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DEBBB81B4A;
-        Wed, 25 Jan 2023 17:13:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D970EC433A0;
-        Wed, 25 Jan 2023 17:13:39 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1pKjL8-004NqF-2j;
-        Wed, 25 Jan 2023 12:13:38 -0500
-Message-ID: <20230125171338.659803282@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Wed, 25 Jan 2023 12:12:54 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        linux-kselftest@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [for-next][PATCH 02/12] tracing/selftests: Add test for event filtering on function name
-References: <20230125171252.431857411@goodmis.org>
+        Wed, 25 Jan 2023 12:27:20 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D348E30E9;
+        Wed, 25 Jan 2023 09:27:18 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 30PHOh0f3191260
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Wed, 25 Jan 2023 09:24:43 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 30PHOh0f3191260
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023010601; t=1674667484;
+        bh=E6ZzjSvSbOY36CL4Ti5rEQx63MkTAMDPF+DyyM4GwZs=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=dxTDz57hBamdDcZbJiBjHk5SCcxYmmC7kpsvv/b/0vkYBstNrKJpJA3MmZhEDaDgo
+         +qP2uCpDjkKh3ExV/Q7SdTmsGhmDvzhUV4JEQbxLT3EkZZ00iNFTy/dXAeyWPkO/YL
+         ax85Silr+iqPkWqJD14N06T9qv3BkUUpQTrbhT/4jr13HNlIB1rWh7iJrN2xEzgjGs
+         3WWP0+QTsUYNwjniu1eRAF636DHVomElYfMzWJxmq3LaEOtvT7WC4LulLbzzWoAQn2
+         usAGv5mrlp21A7URRoO+k7hLqWQztYTDbkbSzVPHg1OWHsgeODhKBptRJYWvrgncpK
+         DDNIotQd3xbUw==
+Date:   Wed, 25 Jan 2023 09:24:40 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     "Li, Xin3" <xin3.li@intel.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>
+CC:     "Hansen, Dave" <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: =?US-ASCII?Q?RE=3A_=5BRFC_PATCH_v5_0/2=5D_sysret=5Frip_up?= =?US-ASCII?Q?date_for_the_Intel_FRED_architecture?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <SA1PR11MB673480C4129F7A7EA9DFAF4AA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com> <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com> <20230124022729.596997-1-ammarfaizi2@gnuweeb.org> <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org> <20230125034958.734527-1-ammarfaizi2@gnuweeb.org> <SA1PR11MB67345C4DFEE720C08D30D93DA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com> <Y9DpNG+jb8G/lhA1@biznet-home.integral.gnuweeb.org> <SA1PR11MB673480C4129F7A7EA9DFAF4AA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
+Message-ID: <A5C220D5-BCE6-42DC-8115-ED41CD011993@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,95 +67,24 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On January 25, 2023 9:07:18 AM PST, "Li, Xin3" <xin3=2Eli@intel=2Ecom> wrot=
+e:
+>> > This version passes on FRED, thanks a lot for quickly fixing it=2E
+>>=20
+>> Great!
+>>=20
+>> Can you pick these two patches and include it in the next version of
+>> "x86: enable FRED for x86-64" RFC patchset?
+>
+>Would it be better to get this patch set merged first?
+>
+>Otherwise surely I will include it in the FRED patch set=2E
+>
+>  Xin
+>
+>=20
+>
 
-With the new filter logic of passing in the name of a function to match an
-instruction pointer (or the address of the function), add a test to make
-sure that it is functional.
-
-This is also the first test to test plain filtering. The filtering has
-been tested via the trigger logic, which uses the same code, but there was
-nothing to test just the event filter, so this test is the first to add
-such a case.
-
-Link: https://lkml.kernel.org/r/20221219183214.075559302@goodmis.org
-
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Cc: Zheng Yejian <zhengyejian1@huawei.com>
-Cc: linux-kselftest@vger.kernel.org
-Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Reviewed-by: Ross Zwisler <zwisler@google.com>
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- .../test.d/filter/event-filter-function.tc    | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-
-diff --git a/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-new file mode 100644
-index 000000000000..e2ff3bf4df80
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc
-@@ -0,0 +1,58 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: event filter function - test event filtering on functions
-+# requires: set_event events/kmem/kmem_cache_free/filter
-+# flags: instance
-+
-+fail() { #msg
-+    echo $1
-+    exit_fail
-+}
-+
-+echo "Test event filter function name"
-+echo 0 > tracing_on
-+echo 0 > events/enable
-+echo > trace
-+echo 'call_site.function == exit_mmap' > events/kmem/kmem_cache_free/filter
-+echo 1 > events/kmem/kmem_cache_free/enable
-+echo 1 > tracing_on
-+ls > /dev/null
-+echo 0 > events/kmem/kmem_cache_free/enable
-+
-+hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
-+misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
-+
-+if [ $hitcnt -eq 0 ]; then
-+	exit_fail
-+fi
-+
-+if [ $misscnt -gt 0 ]; then
-+	exit_fail
-+fi
-+
-+address=`grep ' exit_mmap$' /proc/kallsyms | cut -d' ' -f1`
-+
-+echo "Test event filter function address"
-+echo 0 > tracing_on
-+echo 0 > events/enable
-+echo > trace
-+echo "call_site.function == 0x$address" > events/kmem/kmem_cache_free/filter
-+echo 1 > events/kmem/kmem_cache_free/enable
-+echo 1 > tracing_on
-+sleep 1
-+echo 0 > events/kmem/kmem_cache_free/enable
-+
-+hitcnt=`grep kmem_cache_free trace| grep exit_mmap | wc -l`
-+misscnt=`grep kmem_cache_free trace| grep -v exit_mmap | wc -l`
-+
-+if [ $hitcnt -eq 0 ]; then
-+	exit_fail
-+fi
-+
-+if [ $misscnt -gt 0 ]; then
-+	exit_fail
-+fi
-+
-+reset_events_filter
-+
-+exit 0
--- 
-2.39.0
+If the maintainers are ok with it, it would be better to merge it sooner: =
+once we have agreed on the semantics, which I believe we have, we should be=
+ testing those semantics and nothing else=2E
