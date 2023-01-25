@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B41567C0C4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 00:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5D567C0C6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 00:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjAYXY2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Jan 2023 18:24:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S235298AbjAYXYf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Jan 2023 18:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjAYXY1 (ORCPT
+        with ESMTP id S235286AbjAYXYe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 18:24:27 -0500
+        Wed, 25 Jan 2023 18:24:34 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E04EB43;
-        Wed, 25 Jan 2023 15:24:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF4023DAB;
+        Wed, 25 Jan 2023 15:24:32 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 68211824E0;
-        Wed, 25 Jan 2023 23:24:19 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 553FF82EFE;
+        Wed, 25 Jan 2023 23:24:26 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674689065;
-        bh=zhEhASVFM/Au5cThaAVr8lOzqAVrP1V8SBnPOSUlAds=;
+        s=default; t=1674689072;
+        bh=esmX/7V1+r0INpHmeEptwhnVrmI7QSkQT7lZUUUYBRw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BfnpgP1gwAvctQdGaPovsk+HWtJf1Bg3IRFpUq0p8YF87IASfmnBs8XkcF/9qTFIi
-         utlFTPX6kEKPmFEDxRgamtXR5Dw+K44F+QZlLQJwe/2puvmqegrVzczv2F6hnHESgt
-         jyxi9TPWCUJ1rxuIOUtyNozmbZhI6C+mhc/tqKAbD/9BpyjDZ9I7ImpcGjdUJd5r8g
-         TLIGvS6vHzadmyN3boa2PftPeVf6RQrOrKY3lCMSiN+l/wp1S/VSQUR8NkI7S4VilK
-         IcvTttCV1W5BrIBk9WAmjY00cnj9nNw9GQwPekIbZ5y8tu4wq/PWpGfAhR65XzXBI6
-         B4r16r+bbuE+A==
+        b=fbcSBj9L3oqnmMfDSGMSIBqLIOQO0KF6GoqV6YHamfqmO70ie+wmxloy4IWQuJxUG
+         rPmtG68VMqJF+yh3HDlbQ/2eqUkHaySt7lJqOAARFEZ8BQWp6xQvzynInPqmcdm08U
+         OmcWpxB7gcqajayHgFaeAjnjfEp1EERxT0zvZ/awqnYRDwH1QfFQ8w7aPVHbs0Sdr5
+         NBpMjxtyKD7/HlyCxiJJjVNYxvhk7X0MHc+BO9T+yxKu0wxH7nmwfXmYWxjnyzE/LN
+         +faLRqpfHuCQT/s6rYNMvGSIMgYsTkqYG831F+aD8k7K9KTpcXyHjJRfGIv5lJaeCk
+         nUiPY+19QAUyQ==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin3.li@intel.com>
 Cc:     Dave Hansen <dave.hansen@intel.com>,
@@ -45,12 +45,13 @@ Cc:     Dave Hansen <dave.hansen@intel.com>,
         Linux Kselftest Mailing List 
         <linux-kselftest@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v7 0/3] sysret_rip update for the Intel FRED architecture
-Date:   Thu, 26 Jan 2023 06:24:12 +0700
-Message-Id: <20230125232415.860397-1-ammarfaizi2@gnuweeb.org>
+Subject: [RFC PATCH v7 1/3] selftests/x86: sysret_rip: Handle syscall in a FRED system
+Date:   Thu, 26 Jan 2023 06:24:13 +0700
+Message-Id: <20230125232415.860397-2-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+In-Reply-To: <20230125232415.860397-1-ammarfaizi2@gnuweeb.org>
 References: <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com> <25b96960-a07e-a952-5c23-786b55054126@zytor.com> <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org> <6cd0db14-c9e2-3598-fd10-4b473d78c373@citrix.com> <5ecc383c-621b-57d9-7f6d-d63496fca3b3@zytor.com> <20230124022729.596997-1-ammarfaizi2@gnuweeb.org> <20230124022729.596997-3-ammarfaizi2@gnuweeb.org> <ce25e53f-91d4-d793-42a5-036d6bce0b4c@zytor.com> <Y899kHYbz32H1S6a@biznet-home.integral.gnuweeb.org> <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com> <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
+ <20230125232415.860397-1-ammarfaizi2@gnuweeb.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -64,79 +65,173 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Hi,
+The current selftest asserts (%r11 == %rflags) after the 'syscall'
+returns to user. Such an assertion doesn't apply to the FRED system
+because in that system the 'syscall' instruction does not set
+%r11=%rflags and %rcx=%rip.
 
-This is an RFC patchset v7. There are three patches in this series.
+Handle the FRED case. Now, test that:
 
-Xin Li reported that the sysret_rip test fails at:
+  - "syscall" in a FRED system doesn't clobber %rcx and %r11.
+  - "syscall" in a non-FRED system sets %rcx=%rip and %r11=%rflags.
 
-        assert(ctx->uc_mcontext.gregs[REG_EFL] ==
-               ctx->uc_mcontext.gregs[REG_R11]);
+The 'raise()' function from libc can't be used to control those
+registers. Therefore, create a syscall wrapper in inline Assembly to
+fully control them.
 
-on the Intel FRED architecture. Let's handle the FRED system scenario
-too. The 'syscall' instruction in a FRED system doesn't set %rcx=%rip
-and %r11=%rflags.
-
-Syscall and sysenter in a FRED system are treated equivalently to
-software interrupts, e.g. INT 0x80. They do not modify any registers.
-
-Link: https://lore.kernel.org/lkml/5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com
-
-## Changelog v7:
-
-   - Fix comment, REGS_ERROR no longer exists in the enum (Ammar).
-
-   - Update commit message (Ammar).
-
-## Changelog v6:
-
-   - Move the check-regs assertion in sigusr1() to check_regs_result()
-     (HPA).
-
-   - Add a new test just like sigusr1(), but don't modify REG_RCX and
-     REG_R11. This is used to test SYSRET behavior consistency (HPA).
-
-## Changelog v5:
-
-   - Fix do_syscall() return value (Ammar).
-
-## Changelog v4:
-
-   - Fix the assertion condition inside the SIGUSR1 handler (Xin Li).
-
-   - Explain the purpose of patch #2 in the commit message (HPA).
-
-   - Update commit message (Ammar).
-
-   - Repeat test_syscall_rcx_r11_consistent() 32 times to be more sure
-     that the result is really consistent (Ammar).
-
-## Changelog v3:
-
-   - Test that we don't get a mix of REGS_SAVED and REGS_SYSRET,
-     which is a major part of the point (HPA).
-
-## Changelog v2:
-
-   - Use "+r"(rsp) as the right way to avoid redzone problems
-     per Andrew's comment (HPA).
-
-
+Fixes: 660602140103 ("selftests/x86: Add a selftest for SYSRET to noncanonical addresses")
+Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
+Reported-by: Xin Li <xin3.li@intel.com>
 Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
 Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
+ tools/testing/selftests/x86/sysret_rip.c | 114 +++++++++++++++++++++--
+ 1 file changed, 107 insertions(+), 7 deletions(-)
 
-Ammar Faizi (3):
-  selftests/x86: sysret_rip: Handle syscall in a FRED system
-  selftests/x86: sysret_rip: Add more syscall tests with respect to `%rcx` and `%r11`
-  selftests/x86: sysret_rip: Test SYSRET with a signal handler
-
- tools/testing/selftests/x86/sysret_rip.c | 171 +++++++++++++++++++++--
- 1 file changed, 162 insertions(+), 9 deletions(-)
-
-
-base-commit: e12ad468c22065a2826b2fc4c11d2113a7975301
+diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
+index 84d74be1d90207ab..ef3f492d95f6f2a1 100644
+--- a/tools/testing/selftests/x86/sysret_rip.c
++++ b/tools/testing/selftests/x86/sysret_rip.c
+@@ -39,6 +39,104 @@ asm (
+ extern const char test_page[];
+ static void const *current_test_page_addr = test_page;
+ 
++/* Arbitrary values */
++static const unsigned long r11_sentinel = 0xfeedfacedeadbeef;
++static const unsigned long rcx_sentinel = 0x5ca1ab1e0b57ac1e;
++
++/* An arbitrary *valid* RFLAGS value */
++static const unsigned long rflags_sentinel = 0x200a93;
++
++enum regs_ok {
++	REGS_UNDEFINED	= -1,	/* For consistency checker init, never returned */
++	REGS_SAVED	=  0,	/* Registers properly preserved */
++	REGS_SYSRET	=  1	/* Registers match syscall/sysret */
++};
++
++/*
++ * @rbx should be set to the syscall return %rip.
++ */
++static void check_regs_result(unsigned long r11, unsigned long rcx,
++			      unsigned long rbx)
++{
++	static enum regs_ok regs_ok_state = REGS_UNDEFINED;
++	enum regs_ok ret;
++
++	/*
++	 * REGS_SAVED  = %rcx and %r11 preserved (Intel FRED).
++	 * REGS_SYSRET = %rcx and %r11 set to %rflags and %rip.
++	 */
++	if (r11 == r11_sentinel && rcx == rcx_sentinel) {
++		ret = REGS_SAVED;
++	} else if (r11 == rflags_sentinel && rcx == rbx) {
++		ret = REGS_SYSRET;
++	} else {
++		printf("[FAIL] check_regs_result\n");
++		printf("        r11_sentinel = %#lx; %%r11 = %#lx;\n", r11_sentinel, r11);
++		printf("        rcx_sentinel = %#lx; %%rcx = %#lx;\n", rcx_sentinel, rcx);
++		printf("        rflags_sentinel = %#lx\n", rflags_sentinel);
++		exit(1);
++	}
++
++
++	/*
++	 * Test that we don't get a mix of REGS_SAVED and REGS_SYSRET.
++	 * It needs at least calling check_regs_result() twice to assert.
++	 */
++	if (regs_ok_state == REGS_UNDEFINED) {
++		/*
++		 * First time calling check_regs_result().
++		 */
++		regs_ok_state = ret;
++	} else {
++		assert(regs_ok_state == ret);
++	}
++}
++
++static long do_syscall(long nr_syscall, unsigned long arg1, unsigned long arg2,
++		       unsigned long arg3, unsigned long arg4,
++		       unsigned long arg5, unsigned long arg6)
++{
++	register unsigned long r11 asm("%r11");
++	register unsigned long r10 asm("%r10");
++	register unsigned long r8 asm("%r8");
++	register unsigned long r9 asm("%r9");
++	register void *rsp asm("%rsp");
++	unsigned long rcx, rbx;
++
++	r11 = r11_sentinel;
++	rcx = rcx_sentinel;
++	r10 = arg4;
++	r8 = arg5;
++	r9 = arg6;
++
++	asm volatile (
++		"pushq	%[rflags_sentinel]\n\t"
++		"popf\n\t"
++		"leaq	1f(%%rip), %[rbx]\n\t"
++		"syscall\n"
++		"1:"
++
++		: "+a" (nr_syscall),
++		  "+r" (r11),
++		  "+c" (rcx),
++		  [rbx] "=b" (rbx),
++		  "+r" (rsp)	/* Clobber the redzone */
++
++		: [rflags_sentinel] "g" (rflags_sentinel),
++		  "D" (arg1),	/* %rdi */
++		  "S" (arg2),	/* %rsi */
++		  "d" (arg3),	/* %rdx */
++		  "r" (r10),
++		  "r" (r8),
++		  "r" (r9)
++
++		: "memory"
++	);
++
++	check_regs_result(r11, rcx, rbx);
++	return nr_syscall;
++}
++
+ static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
+ 		       int flags)
+ {
+@@ -88,24 +186,26 @@ static void sigusr1(int sig, siginfo_t *info, void *ctx_void)
+ 
+ 	memcpy(&initial_regs, &ctx->uc_mcontext.gregs, sizeof(gregset_t));
+ 
++	check_regs_result(ctx->uc_mcontext.gregs[REG_R11],
++			  ctx->uc_mcontext.gregs[REG_RCX],
++			  ctx->uc_mcontext.gregs[REG_RBX]);
++
+ 	/* Set IP and CX to match so that SYSRET can happen. */
+ 	ctx->uc_mcontext.gregs[REG_RIP] = rip;
+ 	ctx->uc_mcontext.gregs[REG_RCX] = rip;
+-
+-	/* R11 and EFLAGS should already match. */
+-	assert(ctx->uc_mcontext.gregs[REG_EFL] ==
+-	       ctx->uc_mcontext.gregs[REG_R11]);
+-
+ 	sethandler(SIGSEGV, sigsegv_for_sigreturn_test, SA_RESETHAND);
++}
+ 
+-	return;
++static void __raise(int sig)
++{
++	do_syscall(__NR_kill, getpid(), sig, 0, 0, 0, 0);
+ }
+ 
+ static void test_sigreturn_to(unsigned long ip)
+ {
+ 	rip = ip;
+ 	printf("[RUN]\tsigreturn to 0x%lx\n", ip);
+-	raise(SIGUSR1);
++	__raise(SIGUSR1);
+ }
+ 
+ static jmp_buf jmpbuf;
 -- 
 Ammar Faizi
 
