@@ -2,93 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421EE67D4C9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 19:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6EF67D5F4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 21:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjAZS72 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Jan 2023 13:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
+        id S232724AbjAZUJB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Jan 2023 15:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjAZS71 (ORCPT
+        with ESMTP id S232747AbjAZUIu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Jan 2023 13:59:27 -0500
-X-Greylist: delayed 648 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 10:59:26 PST
-Received: from sp14.canonet.ne.jp (sp14.canonet.ne.jp [210.134.168.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB3BA20680
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 10:59:26 -0800 (PST)
-Received: from csp14.canonet.ne.jp (unknown [172.21.160.134])
-        by sp14.canonet.ne.jp (Postfix) with ESMTP id E9F131E06A8;
-        Fri, 27 Jan 2023 03:48:37 +0900 (JST)
-Received: from echeck14.canonet.ne.jp ([172.21.160.124])
-        by csp4 with ESMTP
-        id L7IbpIUtoVjWJL7Ibp2fFs; Fri, 27 Jan 2023 03:48:37 +0900
-X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=WsmVjfTv c=1 sm=1 tr=0
- ts=63d2cb05 cx=g_jp:t_eml p=jICtXCb1Bd4A:10 p=QA8zHFxAwLBQ4A9MkZgA:9
- p=WKcvGfCz9DfGexK3dBCb:22 a=puqJfqqrwnhV2n3dwg+kWg==:117
- a=yr9NA9NbXb0B05yJHQEWeQ==:17 a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10
- a=RvmDmJFTN0MA:10 a=x7bEGLp0ZPQA:10 a=CjuIK1q_8ugA:10 a=0iaRBTTaEecA:10
- a=xo5jKAKm-U-Zyk2_beg_:22"
-X-CNT-CMCheck-Score: 100.00
-Received: from echeck14.canonet.ne.jp (localhost [127.0.0.1])
-        by esets.canonet.ne.jp (Postfix) with ESMTP id 91E231C025B;
-        Fri, 27 Jan 2023 03:48:37 +0900 (JST)
-X-Virus-Scanner: This message was checked by ESET Mail Security
-        for Linux/BSD. For more information on ESET Mail Security,
-        please, visit our website: http://www.eset.com/.
-Received: from smtp14.canonet.ne.jp (unknown [172.21.160.104])
-        by echeck14.canonet.ne.jp (Postfix) with ESMTP id 6025C1C0252;
-        Fri, 27 Jan 2023 03:48:37 +0900 (JST)
-Received: from daime.co.jp (webmail.canonet.ne.jp [210.134.169.250])
-        by smtp14.canonet.ne.jp (Postfix) with ESMTPA id 940E215F967;
-        Fri, 27 Jan 2023 03:48:36 +0900 (JST)
+        Thu, 26 Jan 2023 15:08:50 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A747166B;
+        Thu, 26 Jan 2023 12:08:43 -0800 (PST)
+Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
+        by gnuweeb.org (Postfix) with ESMTPSA id 5FF2082F37;
+        Thu, 26 Jan 2023 20:08:37 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1674763722;
+        bh=2uK4PjvwK03HI9Z+rE8QjRWxVNSJBr+QdWaWqL0x9cI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I9aZGjdfHpodIG9EaE0S7ixL3e/iR4Hr+sYIC1sUq4qzwhhjDmj0pG32tpGRNfoOv
+         Wg8yaXBchbgTmPx6/ur8qr6g5HsOBFEca/beD3gGIVscG035d6rFZDWldJFWMPdU3x
+         ypP+R45NYS+7QGDOp2zzXuLC3W1vm6UxCrwRDdRErvuA1U62fGgN/DUXVd/NHg3gvv
+         wO4dqMVGVMlMAZ/40uVuPGmm1RTgj3WC7OPPdheclkiUpHypXD5eV7lN+T3UBVskFQ
+         M3vfF4ZfWiyMWKmegqPs6oZMfRSVIf7OYiLW5JoO1H0+oTk0ozQBSDNdzl1hrigdlE
+         Z7+ZiAHD7mEMw==
+Date:   Fri, 27 Jan 2023 03:08:33 +0700
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Borislav Petkov <bp@alien8.de>, Shuah Khan <shuah@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        x86 Mailing List <x86@kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v1 1/2] selftests/x86: sysret_rip: Handle syscall in
+ a FRED system
+Message-ID: <Y9LdwVX9BaZA7zmA@biznet-home.integral.gnuweeb.org>
+References: <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
+ <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
+ <fb1cab9f-a373-38e6-92e6-456332010653@gnuweeb.org>
+ <F554C5FE-5074-410A-B0B5-EFE983D57946@zytor.com>
+ <Y88bhrDoPw5tOyKu@biznet-home.integral.gnuweeb.org>
+ <509443c8-e0fd-935f-63d8-7264f5dd3c05@zytor.com>
+ <20230124002625.581323-1-ammarfaizi2@gnuweeb.org>
+ <20230124002625.581323-2-ammarfaizi2@gnuweeb.org>
+ <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
 MIME-Version: 1.0
-Message-ID: <20230126184836.00004D34.0344@daime.co.jp>
-Date:   Fri, 27 Jan 2023 03:48:36 +0900
-From:   "Mrs Alice Walton" <daime@daime.co.jp>
-To:     <INQUIRY@daime.co.jp>
-Reply-To: <alicewaltton1@gmail.com>
-Subject: INQUIRY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-ORGANIZATION: Mrs Alice Walton
-X-MAILER: Active! mail
-X-EsetResult: clean, %VIRUSNAME%
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1674758917;VERSION=7944;MC=1088385827;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
-X-I-ESET-AS: RN=0;RNP=
-X-ESET-Antispam: OK
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOCALPART_IN_SUBJECT,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_MR_MRS,
-        UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5087]
-        *  1.1 LOCALPART_IN_SUBJECT Local part of To: address appears in
-        *      Subject
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [alicewaltton1[at]gmail.com]
-        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 T_HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  1.0 XPRIO_SHORT_SUBJ Has X Priority header + short subject
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f5c24df-514d-5d89-f58f-ec8c3eb1e049@zytor.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Jan 23, 2023 at 05:40:23PM -0800, H. Peter Anvin wrote:
+> So as per Andrew's comment, add:
+> 
+> register void * rsp asm("%rsp");
+> 
+> ...
+> 
+> "+r" (rsp)	/* clobber the redzone */
+> 
+> ... as the right way to avoid redzone problems.
 
-Greetings,
+I played with this more. I found something wrong with this. This doesn't
+work for me. The compiler still uses red zone despite I use "+r" (rsp).
 
-I trust you are well. I sent you an email yesterday, I just want to confirm if you received it.
-Please let me know as soon as possible,
+What did I do wrong?
 
-Regard
-Mrs Alice Walton
+-----
 
+ammarfaizi2@integral2:/tmp$ gcc -fno-stack-protector -O2 -Wall -Wextra test.c -o test
+ammarfaizi2@integral2:/tmp$ objdump --no-show-raw-insn -d test | grep "a_leaf_func_with_red_zone>:" -A8
+0000000000001180 <a_leaf_func_with_red_zone>:
+    1180:  endbr64 
+    1184:  mov    $0x1,%eax
+    1189:  mov    %rax,-0x8(%rsp)   ## BUG!!!
+    118e:  pushf  
+    118f:  pop    %rax
+    1190:  mov    -0x8(%rsp),%rax   ## BUG!!!
+    1195:  ret
+
+
+ammarfaizi2@integral2:/tmp$ clang -O2 -Wall -Wextra test.c -o test
+ammarfaizi2@integral2:/tmp$ objdump --no-show-raw-insn -d test | grep "a_leaf_func_with_red_zone>:" -A6
+0000000000001140 <a_leaf_func_with_red_zone>:
+    1140:  mov    $0x1,%eax
+    1145:  mov    %rax,-0x8(%rsp)   ## BUG!!!
+    114a:  pushf  
+    114b:  pop    %rax
+    114c:  mov    -0x8(%rsp),%rax   ## BUG!!!
+    1151:  ret
+
+
+-----
+ammarfaizi2@integral2:~$ gcc --version
+gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+ammarfaizi2@integral2:~$ clang --version
+Ubuntu clang version 16.0.0 (++20230124031324+d63e492562f2-1~exp1~20230124151444.705)
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+
+
+-----
+test.c:
+
+#include <stdio.h>
+static inline void clobber_redzone(void)
+{
+        register void *rsp __asm__("%rsp");
+        unsigned long rflags;
+
+        __asm__ volatile ("pushf; popq %1"
+                          : "+r" (rsp), "=r" (rflags));
+}
+
+static inline void set_red_zone(long *mem, long val)
+{
+        __asm__ volatile ("movq %[val], %[mem]"
+                           : [mem] "=m" (*mem)
+                           : [val] "r" (val));
+}
+
+static inline long get_red_zone(long *mem)
+{
+        long ret;
+
+        __asm__ volatile ("movq %[in], %[out]"
+                           : [out] "=r" (ret)
+                           : [in] "m" (*mem));
+        return ret;
+}
+
+__attribute__((__noinline__))
+long a_leaf_func_with_red_zone(void)
+{
+        long x;
+
+        set_red_zone(&x, 1);
+        clobber_redzone();
+        /* The correct retval is 1 */
+        return get_red_zone(&x);
+}
+
+int main(void)
+{
+        printf("ret = %ld\n", a_leaf_func_with_red_zone());
+        return 0;
+}
+
+-- 
+Ammar Faizi
 
