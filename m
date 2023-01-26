@@ -2,121 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9590F67D6E4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 21:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F73467D8B3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 23:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjAZU5Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Jan 2023 15:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
+        id S232815AbjAZWny (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Jan 2023 17:43:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjAZU5Y (ORCPT
+        with ESMTP id S232353AbjAZWnx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:57:24 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C407534339
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 12:57:23 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id p12so1304005ilq.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 12:57:23 -0800 (PST)
+        Thu, 26 Jan 2023 17:43:53 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEED45F79
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 14:43:51 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso3161334pjp.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 14:43:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8q92vU6FC2OBfigvvadZc6pP7ck9MsJPPUZntKKUy/A=;
-        b=DZqV6twI7VDtxWwtbB602B5SBi+EoZE3C2HyPq+uwbkahM3VPw1QtNWS7g9P5EEQQq
-         2P1Ij9Xwl4uzPzC/ZUT78vGXyyDU3nFU7OGsfm0KUkbBKPf2ZwK0Uv4fVQ8Mq40wiM8R
-         ejCk3AqWm/XyADqZsr5wood3OyIU729juzb+U=
+        d=telus.net; s=google;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFmyaM0qz+rP4yApBEttqduj7Z0OhMB/DfI8H+Cxm7o=;
+        b=ToCn803vC3/2IxDu/GKQ6uEKkfLf2ohR1BjDYu1h0dj3Onrq4G1F98z67g0wI5qure
+         cybGG3OUv832mfxhdAGnSR7dBnUYoYyl/immJn2lYF4rIHeuptoGaxV8+3a4Gj3GBPH2
+         UBmo3T+2eUf+EBzbSsTCZH4WxmiaOKIIatcrWffs6f4NFML9Okq/MyoOWxhcox5B285d
+         570yYtFEo2a4zwD2PLJeiudaTFyJ3MRKPNwzBB/Z9UZyvECXEkqNn9SJu5f5BlQV/oS4
+         4YzHO+9nfo3JRqRw9p9ruu2O67PxCpQyzIk2j68wlkwHs18dUOLF9JIPdWmEg9Rsz1Lg
+         1o6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8q92vU6FC2OBfigvvadZc6pP7ck9MsJPPUZntKKUy/A=;
-        b=0KkuQicFiLpueZBWPWaJ2Z8T8EESUSVzebtZrF5MzCK/4pdRRnOesyy8MwMl/fQW7r
-         Ug14t7lgmMhcH5Wl39w0s+VOH1e7OyEBwRK9lLQFVKrYWLAXeEsXhk0DDNmTBZHTNdry
-         +W5ckL67flu/NebsFr4vcdwiDFFrgIe7mFTIK7I2V5sKnZWe5koeiOovW26IbbCLScJ9
-         JBLMe/utUJSwIHcYQPmq4haE+rshorMHMELzlm9gdEhrjRGJtdNdpanBwoV3+jejtisH
-         q0BLbCutu/R/NYNtokkfWhnUbdMNfE3sm6hXU5aU/Kgk5pKjuF5ZGjXlfF+gF/E57sVj
-         pGNQ==
-X-Gm-Message-State: AO0yUKX9+6fFXsOEjdVHhsgsLkDvNQQHDP9y7dYrb7h1wIxXMIDtd1o5
-        nUH4NiwTqY9ryw041AVh/MrI+A==
-X-Google-Smtp-Source: AK7set/aCj/6RUlMRa8YLjfXNAgQWi6CmMdvODO5LIRSwVpCey+4a2mR0eim95Ix+3SaJyy2MgIchA==
-X-Received: by 2002:a92:6810:0:b0:310:9adc:e1bb with SMTP id d16-20020a926810000000b003109adce1bbmr1421856ilc.0.1674766643095;
-        Thu, 26 Jan 2023 12:57:23 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id f9-20020a022409000000b0039e048ad8e7sm756643jaa.59.2023.01.26.12.57.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 12:57:22 -0800 (PST)
-Message-ID: <7b3cbbd1-8c27-adf9-d2ed-c037f67bd697@linuxfoundation.org>
-Date:   Thu, 26 Jan 2023 13:57:21 -0700
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFmyaM0qz+rP4yApBEttqduj7Z0OhMB/DfI8H+Cxm7o=;
+        b=gzT+xG9XBoNAJJ5HavP0QjRTyCemwEzyHzzjry8A4HkEVgFPOhQ15L6uoWKIaW9ovT
+         6uKm1dWAeAOD+Flc7/3v+bM9H+QFXtMH3KjbNeD/gd7ImMsx5z4un7gHHlMb9kmFLWQK
+         uUPMRq+ykDRmZfeTdyKoJnvhwBsd6tgKqZlgfF4yQuAtT/tcEin6ktnj7RHsd2d0lOJP
+         VsQJiif06LCeWbwYaExVic0p6ndRMJTPCwsmKmkrES9HcbRfwrRJj5Hxh42EE3FjWvhD
+         u29VnU4qDQGwoXVayjX6RljEihMQXtBzc77MjvhViod+kjcUX3UfIUZc//Z4H85F0LTw
+         nD9A==
+X-Gm-Message-State: AFqh2kr01VCbCwCqtOL68ecWf+LYDxVF6j1ZWpQjdhwk0KXBwNawCpXI
+        bGNg9SND8mYoepP9ahCqpJbBeQ==
+X-Google-Smtp-Source: AMrXdXuTdeV/8t6XkbnhsD07G5vLYy6Ac3Q2DyKs0AFTVHK8sWOYASSvfvHGsHkc+/vbp9e+OsjJww==
+X-Received: by 2002:a05:6a20:3d09:b0:b8:6fe8:5ed7 with SMTP id y9-20020a056a203d0900b000b86fe85ed7mr53553747pzi.44.1674773031010;
+        Thu, 26 Jan 2023 14:43:51 -0800 (PST)
+Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
+        by smtp.gmail.com with ESMTPSA id y15-20020a056a001c8f00b0059260f01115sm165090pfw.76.2023.01.26.14.43.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 26 Jan 2023 14:43:50 -0800 (PST)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Shuah Khan'" <skhan@linuxfoundation.org>,
+        "'Huang Rui'" <ray.huang@amd.com>, <li.meng@amd.com>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "Doug Smythies" <dsmythies@telus.net>, <sedat.dilek@gmail.com>
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net> <000601d92db7$39e9d0b0$adbd7210$@telus.net> <c38ba6b9-b748-cf84-92bd-d29211b10f24@linuxfoundation.org>
+In-Reply-To: <c38ba6b9-b748-cf84-92bd-d29211b10f24@linuxfoundation.org>
+Subject: RE: [PATCH v2] selftests: amd-pstate: Don't delete source files via Makefile
+Date:   Thu, 26 Jan 2023 14:43:53 -0800
+Message-ID: <008501d931d7$aaba8360$002f8a20$@telus.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] selftests: pci: pci-selftest: add support for PCI
- endpoint driver test
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Aman Gupta/FDS SW /SSIR/Engineer/Samsung Electronics 
-        <aman1.gupta@samsung.com>
-Cc:     'Manivannan Sadhasivam' <manivannan.sadhasivam@linaro.org>,
-        shradha.t@samsung.com, pankaj.dubey@samsung.com, kishon@ti.com,
-        lpieralisi@kernel.org, kw@linux.com, shuah@kernel.org,
-        linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        'Padmanabhan Rajanbabu' <p.rajanbabu@samsung.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230117195903.GA142672@bhelgaas>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230117195903.GA142672@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain;
+        charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQGd7wYRnyVvksQxjZQjWj1dK3j3EwMDsqvcAhOVwtSu/xNR8A==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/17/23 12:59, Bjorn Helgaas wrote:
-> On Tue, Dec 27, 2022 at 10:45:26AM +0530, Aman Gupta/FDS SW /SSIR/Engineer/Samsung Electronics wrote:
->> ...
->> Thanks for review and suggestion. I understand that we would like to
->> reuse and preserve the history of tools/pci/pcietest.c. So we have
->> two approaches:
->>
->> 1: Using git mv command move existing code from tools/pci/ to
->> tools/testing/selftest/drivers/pci/ and then update the file to
->> convert to kselftest framework. I thought about this but after
->> movement, when we move it to kselftest format it is going to be huge
->> churn and we will be having modification in almost all lines.
->>
->> 2: Develop kselftest based driver in
->> tools/testing/selftest/drivers/pci/ and eventually delete existing
->> file from tools/pci/ folder providing justification in commit
->> message.
->>
->>  From my viewpoint, going with the second approach makes more sense
->> because if almost complete file is getting modified, and it will
->> make the review process complex and anyways there is not much code
->> reusability.
->>
->> Please let me know if you have any other thought
->> process or if I am missing anything to understand your approach.
-> 
-> I vote for the first approach, with "git mv" and subsequent conversion
-> (in separate patches, of course).  If git knows about the move,
-> "git log --follow" will be useful even though the conversion will be a
-> big patch.  Adding a new test with the connection to the old one only
-> in the commit log makes more work for people who dig through the
-> history in the future.
-> 
+On 2023.01.25 09:03 Shuah Khan wrote:
+> On 1/21/23 09:41, Doug Smythies wrote:
+>> Revert the portion of a recent Makefile change that incorrectly
+>> deletes source files when doing "make clean".
+>> 
+>> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+>> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+>> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+>> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+>> Acked-by: Huang Rui <ray.huang@amd.com>
+>> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+>> ---
+>> v2: fix address list.
+>> ---
+>>   tools/testing/selftests/amd-pstate/Makefile | 5 -----
+>>   1 file changed, 5 deletions(-)
+>> 
+>> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+>> index 5f195ee756d6..5fd1424db37d 100644
+>> --- a/tools/testing/selftests/amd-pstate/Makefile
+>> +++ b/tools/testing/selftests/amd-pstate/Makefile
+>> @@ -7,11 +7,6 @@ all:
+>>   uname_M := $(shell uname -m 2>/dev/null || echo not)
+>>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>> 
+>> -ifeq (x86,$(ARCH))
+>> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+>> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+>> -endif
+>> -
+>
+> This looks good - Do you need these files to run this test and if so
+> do these need to installed when the test is run on a test system?
 
-Thanks Bjorn for explaining this in more detail that I did.
+I do not know.
+It is a question for the AMD people.
 
-Please send revised patches following the first approach.
+> Now applied to linux-kselftest fixes. I will send this up for the next
+> rc.
 
-thanks,
--- Shuah
+Thank you
+... Doug
+
 
