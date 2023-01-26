@@ -2,243 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B1967D216
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 17:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E2767D23C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 17:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbjAZQsF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Jan 2023 11:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
+        id S229777AbjAZQ5K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Jan 2023 11:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjAZQsE (ORCPT
+        with ESMTP id S229662AbjAZQ5K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Jan 2023 11:48:04 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789D310AB8;
-        Thu, 26 Jan 2023 08:48:01 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QG0E2U022895;
-        Thu, 26 Jan 2023 16:47:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=H9BGEl0RtETnTYX/w1MPim2M0yzG/FokCSxhsZYeRJM=;
- b=Mfy0tUgUoqrDZqveTcFR1bNs2IYgRbrbB03FWbUAz59uSDUqauXnONxNhAfUvO/Uwfel
- k+FtrJ3gI5P6j9EaHv2iyOKlRqPfQdJCAnGrSz0qJdKP0GoYfXvJtAgmK1Nb7Vet6E/M
- vH2fAIHOyLvi5NdOcZE5rPRRG6K6CPG+Gq5g+oMBQutN0lt/BXaibf5fYis+KxEf+RqA
- DfNGT9dObSSp4FNrxBb+Bxh+DpzcGIg1SF4VMRKSzHaOyX6Zj2+w3/TToJomM1DjgvIb
- b0PPY3DeDTHpZDw2O+z5keNzjPW7TzE5yQeHjIXNcirwuniUa3BVsUanUioX3272dgHq ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbvnjs7u5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 16:47:58 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QGVoCX004738;
-        Thu, 26 Jan 2023 16:47:57 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbvnjs7tc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 16:47:57 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30QEw0cX032068;
-        Thu, 26 Jan 2023 16:47:55 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3n87p64qy3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 16:47:54 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QGlocr24510768
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 16:47:50 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 78B0B20043;
-        Thu, 26 Jan 2023 16:47:50 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 438B820063;
-        Thu, 26 Jan 2023 16:47:44 +0000 (GMT)
-Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.157.249])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 26 Jan 2023 16:47:44 +0000 (GMT)
-Message-ID: <6d870c61856f84c9c48262eecf9001012163edbb.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 08/14] KVM: s390: Move common code of mem_op
- functions into functions
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Janosch Frank <frankja@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Date:   Thu, 26 Jan 2023 17:47:43 +0100
-In-Reply-To: <dbd8204a-5413-b593-7ede-1c5ea7ee4425@linux.ibm.com>
-References: <20230125212608.1860251-1-scgl@linux.ibm.com>
-         <20230125212608.1860251-9-scgl@linux.ibm.com>
-         <a1141cf5-8c44-5e9e-688c-c9dab3ebe8d4@redhat.com>
-         <dbd8204a-5413-b593-7ede-1c5ea7ee4425@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Thu, 26 Jan 2023 11:57:10 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F1ECA28
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 08:57:08 -0800 (PST)
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1AD6B3FFED
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 16:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1674752227;
+        bh=AqdG7g/ZZSZ4pNA8kNsOLtm4cZ2nj059acclO2QHloQ=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=DclGZmfeAPz6NdPSTdjaoTnOHdAEMhU8ymwJKe4dVhqKTbNpq6/CVGpCG0TcFUx03
+         1kWAakKEpUqev/VKc23Q6+ZQMM0d+xIzTbtkfUzk5VRK/WZAYcwDLabyrkSCpMbOrK
+         MZ/ObcgZLGHWr7CIah1tvdy4cCI0tInZZeg0ojCFEcDS/xeYQgwkb3bh9K/Hwe8WE5
+         YIFnTuxnpTOA2wkGu65urwlcKsh/Yk4tZWZEzUmUt14OZ1RRt9+32u+Mw4vlFFK2l+
+         Gw4Ih2JusAHeFEUod/B61r1PfZD1awIDhJjvx+fjJgDvAynKMHbSlkVP2tsjb2OSs4
+         LjcAgL3qQX5Mw==
+Received: by mail-wm1-f70.google.com with SMTP id h9-20020a1ccc09000000b003db1c488826so3121620wmb.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 08:57:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AqdG7g/ZZSZ4pNA8kNsOLtm4cZ2nj059acclO2QHloQ=;
+        b=Rv9k+S1DL9JZaBA0ngFgz+DvjlX8/DPWC+sxCPkHjshXa3EHIgAyYZ7Kfp45h9j/Zq
+         9bzSkyGR6EmGteyVgMkZzy70KbHAyed+TTHhU+ztBX7Z8sVwdndd6PDP+0jypiWeQiI1
+         g1xVKAvr62IBl4zr9iS9oLZw+8y+jQUN+zef9fpug7AVQphi3cpCfgW+FG62F8RVktT8
+         Qd2JO5gEPDxi1IrUjbId4r6rRNe+I7sIhwU7DIgJn+SYFT1sa8BI0sYmr9fWQZNFzZOq
+         62garzF5a9zfBe1kNOyA5muwsHpGpZlz4PVXaC+pHw5a5Y/Jnz7nt5IoP+jwjfs/ec21
+         cltw==
+X-Gm-Message-State: AO0yUKXcBKduiXC4QCe9TjThiCoVZ1uw0ubD/LuBemNK2U28YqkbytKr
+        9Lb18JGwZIYiwPhn/Wx+C4AXoCZ/p+U3mARyCKpOlkUJmkWBlodmnOoYPD1qYuDNAgQPovLI9i2
+        mYiPBVrlBUPXxsB0PRdoAaCV61Mtg17GjNQSqJ9GGD/orPg==
+X-Received: by 2002:a5d:4578:0:b0:2bf:c725:85 with SMTP id a24-20020a5d4578000000b002bfc7250085mr2088197wrc.12.1674752226311;
+        Thu, 26 Jan 2023 08:57:06 -0800 (PST)
+X-Google-Smtp-Source: AK7set+6H2kfXMT7ftWtKu40YIJWufbyLiNwAPLxiuN+FJ6q9L1RwkmEUjFPqgtZSaO3tmoiBUHB5w==
+X-Received: by 2002:a5d:4578:0:b0:2bf:c725:85 with SMTP id a24-20020a5d4578000000b002bfc7250085mr2088187wrc.12.1674752226168;
+        Thu, 26 Jan 2023 08:57:06 -0800 (PST)
+Received: from qwirkle.internal ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id n1-20020a5d6b81000000b002bdc39849d1sm1701946wrx.44.2023.01.26.08.57.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 08:57:05 -0800 (PST)
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftest: net: Improve IPV6_TCLASS/IPV6_HOPLIMIT tests apparmor compatibility
+Date:   Thu, 26 Jan 2023 16:55:48 +0000
+Message-Id: <20230126165548.230453-1-andrei.gherzan@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6axKEfGUJckkU8JWwTO_v_qeHDGBBlFa
-X-Proofpoint-GUID: tWQ6c_HrWz5wNnhZiQ1Xq5oiF-SUuYm6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_07,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260160
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2023-01-26 at 14:02 +0100, Janosch Frank wrote:
-> On 1/26/23 07:48, Thomas Huth wrote:
-> > On 25/01/2023 22.26, Janis Schoetterl-Glausch wrote:
-> > > The vcpu and vm mem_op ioctl implementations share some functionality=
-.
-> > > Move argument checking and buffer allocation into functions and call
-> > > them from both implementations.
-> > > This allows code reuse in case of additional future mem_op operations=
-.
-> > >=20
-> > > Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-> > > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> > > ---
-> > >    arch/s390/kvm/kvm-s390.c | 80 +++++++++++++++++++++---------------=
-----
-> > >    1 file changed, 42 insertions(+), 38 deletions(-)
-> > >=20
-> > > diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> > > index e4890e04b210..e0dfaa195949 100644
-> > > --- a/arch/s390/kvm/kvm-s390.c
-> > > +++ b/arch/s390/kvm/kvm-s390.c
-> > > @@ -2764,24 +2764,44 @@ static int kvm_s390_handle_pv(struct kvm *kvm=
-, struct kvm_pv_cmd *cmd)
-> > >    	return r;
-> > >    }
-> > >   =20
-> > > -static bool access_key_invalid(u8 access_key)
-> > > +static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 s=
-upported_flags)
-> > >    {
-> > > -	return access_key > 0xf;
-> > > +	if (mop->flags & ~supported_flags || !mop->size)
-> > > +		return -EINVAL;
-> > > +	if (mop->size > MEM_OP_MAX_SIZE)
-> > > +		return -E2BIG;
-> > > +	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> > > +		if (mop->key > 0xf)
-> > > +			return -EINVAL;
-> > > +	} else {
-> > > +		mop->key =3D 0;
-> > > +	}
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void *mem_op_alloc_buf(struct kvm_s390_mem_op *mop)
-> > > +{
-> > > +	void *buf;
-> > > +
-> > > +	if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)
-> > > +		return NULL;
-> > > +	buf =3D vmalloc(mop->size);
-> > > +	if (!buf)
-> > > +		return ERR_PTR(-ENOMEM);
-> > > +	return buf;
-> > >    }
-> > >   =20
-> > >    static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem=
-_op *mop)
-> > >    {
-> > >    	void __user *uaddr =3D (void __user *)mop->buf;
-> > > -	u64 supported_flags;
-> > >    	void *tmpbuf =3D NULL;
-> >=20
-> > You likely can now remove the "=3D NULL" here, I guess?
-> >=20
-> > >    	int r, srcu_idx;
-> > >   =20
-> > > -	supported_flags =3D KVM_S390_MEMOP_F_SKEY_PROTECTION
-> > > -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
-> > > -	if (mop->flags & ~supported_flags || !mop->size)
-> > > -		return -EINVAL;
-> > > -	if (mop->size > MEM_OP_MAX_SIZE)
-> > > -		return -E2BIG;
-> > > +	r =3D mem_op_validate_common(mop, KVM_S390_MEMOP_F_SKEY_PROTECTION =
-|
-> > > +					KVM_S390_MEMOP_F_CHECK_ONLY);
-> > > +	if (r)
-> > > +		return r;
-> > > +
-> > >    	/*
-> > >    	 * This is technically a heuristic only, if the kvm->lock is not
-> > >    	 * taken, it is not guaranteed that the vm is/remains non-protect=
-ed.
-> > > @@ -2793,17 +2813,9 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm,=
- struct kvm_s390_mem_op *mop)
-> > >    	 */
-> > >    	if (kvm_s390_pv_get_handle(kvm))
-> > >    		return -EINVAL;
-> > > -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> > > -		if (access_key_invalid(mop->key))
-> > > -			return -EINVAL;
-> > > -	} else {
-> > > -		mop->key =3D 0;
-> > > -	}
-> > > -	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
-> > > -		tmpbuf =3D vmalloc(mop->size);
-> > > -		if (!tmpbuf)
-> > > -			return -ENOMEM;
-> > > -	}
-> > > +	tmpbuf =3D mem_op_alloc_buf(mop);
-> > > +	if (IS_ERR(tmpbuf))
-> > > +		return PTR_ERR(tmpbuf);
-> > >   =20
-> > >    	srcu_idx =3D srcu_read_lock(&kvm->srcu);
-> > >   =20
-> > > @@ -5250,28 +5262,20 @@ static long kvm_s390_vcpu_mem_op(struct kvm_v=
-cpu *vcpu,
-> > >    {
-> > >    	void __user *uaddr =3D (void __user *)mop->buf;
-> > >    	void *tmpbuf =3D NULL;
-> >=20
-> > ... and here, too.
-> >=20
-> > But I have to admit that I'm also not sure whether I like the
-> > mem_op_alloc_buf() part or not (the mem_op_validate_common() part looks=
- fine
-> > to me) : mem_op_alloc_buf() is a new function with 11 lines of code, an=
-d the
-> > old spots that allocate memory were only 5 lines of code each, so you n=
-ow
-> > increased the LoC count and additionally have to fiddly with IS_ERR and
-> > PTR_ERR which is always a little bit ugly in my eyes ... IMHO I'd rathe=
-r
-> > keep the old code here. But that's just my 0.02 =E2=82=AC, if you think=
- it's nicer
-> > with mem_op_alloc_buf(), I won't insist on keeping the old code.
-> >=20
-> >    Thomas
-> >=20
->=20
-> I've done a PoC that has a **buff argument and combines the check with=
-=20
-> the alloc.
+"tcpdump" is used to capture traffic in these tests while using a random,
+temporary and not suffixed file for it. This can interfere with apparmor
+configuration where the tool is only allowed to read from files with
+'known' extensions.
 
-I just didn't like that much because it felt like an unspecific memop_do_th=
-ings function.
+The MINE type application/vnd.tcpdump.pcap was registered with IANA for
+pcap files and .pcap is the extension that is both most common but also
+aligned with standard apparmor configurations. See TCPDUMP(8) for more
+details.
+
+This improves compatibility with standard apparmor configurations by
+using ".pcap" as the file extension for the tests' temporary files.
+
+Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+---
+ tools/testing/selftests/net/cmsg_ipv6.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/cmsg_ipv6.sh b/tools/testing/selftests/net/cmsg_ipv6.sh
+index 2d89cb0ad288..330d0b1ceced 100755
+--- a/tools/testing/selftests/net/cmsg_ipv6.sh
++++ b/tools/testing/selftests/net/cmsg_ipv6.sh
+@@ -6,7 +6,7 @@ ksft_skip=4
+ NS=ns
+ IP6=2001:db8:1::1/64
+ TGT6=2001:db8:1::2
+-TMPF=`mktemp`
++TMPF=$(mktemp --suffix ".pcap")
+ 
+ cleanup()
+ {
+-- 
+2.34.1
+
