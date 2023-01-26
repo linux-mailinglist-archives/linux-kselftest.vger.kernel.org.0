@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6EF67D5F4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 21:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF6567D605
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 21:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbjAZUJB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Jan 2023 15:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S232108AbjAZUQh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Jan 2023 15:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232747AbjAZUIu (ORCPT
+        with ESMTP id S229550AbjAZUQg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Jan 2023 15:08:50 -0500
+        Thu, 26 Jan 2023 15:16:36 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A747166B;
-        Thu, 26 Jan 2023 12:08:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9533576A8;
+        Thu, 26 Jan 2023 12:16:35 -0800 (PST)
 Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.88.152])
-        by gnuweeb.org (Postfix) with ESMTPSA id 5FF2082F37;
-        Thu, 26 Jan 2023 20:08:37 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 8F53D82F37;
+        Thu, 26 Jan 2023 20:16:29 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1674763722;
-        bh=2uK4PjvwK03HI9Z+rE8QjRWxVNSJBr+QdWaWqL0x9cI=;
+        s=default; t=1674764195;
+        bh=kHLECQg8kFjQCmSfDgk5MqX+WpL3YrPE1zNex967A50=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I9aZGjdfHpodIG9EaE0S7ixL3e/iR4Hr+sYIC1sUq4qzwhhjDmj0pG32tpGRNfoOv
-         Wg8yaXBchbgTmPx6/ur8qr6g5HsOBFEca/beD3gGIVscG035d6rFZDWldJFWMPdU3x
-         ypP+R45NYS+7QGDOp2zzXuLC3W1vm6UxCrwRDdRErvuA1U62fGgN/DUXVd/NHg3gvv
-         wO4dqMVGVMlMAZ/40uVuPGmm1RTgj3WC7OPPdheclkiUpHypXD5eV7lN+T3UBVskFQ
-         M3vfF4ZfWiyMWKmegqPs6oZMfRSVIf7OYiLW5JoO1H0+oTk0ozQBSDNdzl1hrigdlE
-         Z7+ZiAHD7mEMw==
-Date:   Fri, 27 Jan 2023 03:08:33 +0700
+        b=bpaB/JwdxgZE2LcwmvWuG6Jr0NldDTm/vba1qf50HeNcg8WtCfx0BntrMVVbSth+6
+         9Hk8zWpPLiBdNTC1pLD8jY29F9CjSHl4uXTO+/Jx7X+VJJY/0eYE340GQ22mEkNwaY
+         K63lHS3nH/CEIa91kStYnp0JoFs5C3BncCEZKv0SwE5ubk9pUAlQ9xYhmEdkJMgrZj
+         VrwT8nXZP/bNj6gqjA964gHJ99SDJUPi5ICGqvCTSnEwT8US6myHiMbKBWE5r8bner
+         FxaKWGdPLMRJP4mOR71ZcPNBCbPLqbzo6TNYMYBDmRl8AvuC9a/GVf8glmJO4SY2Qb
+         5Mj8DDTUKP6Rg==
+Date:   Fri, 27 Jan 2023 03:16:25 +0700
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
+Cc:     Xin Li <xin3.li@intel.com>, Dave Hansen <dave.hansen@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -48,7 +48,7 @@ Cc:     Dave Hansen <dave.hansen@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: [RFC PATCH v1 1/2] selftests/x86: sysret_rip: Handle syscall in
  a FRED system
-Message-ID: <Y9LdwVX9BaZA7zmA@biznet-home.integral.gnuweeb.org>
+Message-ID: <Y9LfmQ/r1/pEP+uv@biznet-home.integral.gnuweeb.org>
 References: <SA1PR11MB673498933098295BFC7C2900A8CB9@SA1PR11MB6734.namprd11.prod.outlook.com>
  <b6e36a5c-6f5e-eda6-54ad-a0c20eb00402@intel.com>
  <25b96960-a07e-a952-5c23-786b55054126@zytor.com>
@@ -71,6 +71,9 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
+
+
+[ Resending, missed Xin Li from the Cc list... ]
 
 On Mon, Jan 23, 2023 at 05:40:23PM -0800, H. Peter Anvin wrote:
 > So as per Andrew's comment, add:
@@ -176,4 +179,5 @@ int main(void)
 
 -- 
 Ammar Faizi
+
 
