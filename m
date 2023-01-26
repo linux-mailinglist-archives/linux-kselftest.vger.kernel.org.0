@@ -2,127 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF7F67C59C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 09:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7141967C7EE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 11:01:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236237AbjAZITz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Jan 2023 03:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S236996AbjAZKBv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Jan 2023 05:01:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236232AbjAZITw (ORCPT
+        with ESMTP id S236985AbjAZKBu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Jan 2023 03:19:52 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830D067796;
-        Thu, 26 Jan 2023 00:19:51 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30Q7UoDZ027942;
-        Thu, 26 Jan 2023 08:19:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=w1SKFIv5r6+TuNq7lmTQSD7DtViWx/NFlXNfIRbezzo=;
- b=RxX3QlNPoS5I7JhEsvY3heKqGgwG5H4gL0BlYM53ZiXqpczx6PWIcP97ROD9kH7qGRLM
- P7hWL/jJD8UdzrnW0ZEsKbzutUNBauCWBL6UPwJ6nSxoZstrKXz3/jv1t9gYkNvkVDN/
- B3LxxCXuRIWFZOMnXx8fVdUf3jWTL5V4ZcKHQtEDzq3CBvbo5TknZg+n4dh+ys4KrL2H
- 27+Nz9n6zOdloj/0PZn5dGkbhFnkZHE4dzSoMrRMQuAW3Fvk9QG1yxKh8Yda6kX/YOCp
- 6S7pOxj9wfryWsBt0AdKHbafj1wqjYUJ/cjtkrZ5NVTrilxQFbSfe5NeMYhlEAO6ZETE qA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbhkad9k1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 08:19:42 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30Q807HM007694;
-        Thu, 26 Jan 2023 08:19:41 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbhkad9j8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 08:19:41 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PMixBj004576;
-        Thu, 26 Jan 2023 08:19:39 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3n87afcerc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 Jan 2023 08:19:38 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30Q8JZ9749938688
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 Jan 2023 08:19:35 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2127120040;
-        Thu, 26 Jan 2023 08:19:35 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9BC232004B;
-        Thu, 26 Jan 2023 08:19:34 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.250])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 26 Jan 2023 08:19:34 +0000 (GMT)
-Date:   Thu, 26 Jan 2023 09:19:34 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
-Message-ID: <Y9I3liGZJhNtt1N5@osiris>
-References: <20230125212608.1860251-1-scgl@linux.ibm.com>
- <20230125212608.1860251-13-scgl@linux.ibm.com>
+        Thu, 26 Jan 2023 05:01:50 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93601E5E3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 02:01:48 -0800 (PST)
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 15BEC3F2F9
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 10:01:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1674727307;
+        bh=qmbeNJYddIm33c9TQhZva/uzIIudmnT9AUCV4avsvwY=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=D81rGlh+8gIfEk1MB4XRcgfw40DqYG6G9TdYGi4CiGSisJMVNqtKncyNzvN/W77h4
+         tZ5Uv9H+aphKHyCxU5K39N9r94yRaZLk67AdNEpB6f6IaJzThhxn3ZB07JF6WySNah
+         3KQYa52z4dN9GhM9ZT2UlZQM40m7cwwheP2Nq2rSJWDAyeSoG5LWKHcOv/AIcO+6ZY
+         zjBE33wyzX15yiyr1CWxJ2MiBcHEl65StT7bytgwT2fefFZ2s/ngOsf698ARrjZVbB
+         e8aaRbpLdiwA5GPKs+BcqcfG0ajhcFAlI33p9GXdaRcQSs47q7974e5X1hVTg2vQnt
+         Hlc1Kvv9bXW/A==
+Received: by mail-wr1-f69.google.com with SMTP id i8-20020a05600011c800b002bfb6712623so184721wrx.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Jan 2023 02:01:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qmbeNJYddIm33c9TQhZva/uzIIudmnT9AUCV4avsvwY=;
+        b=RtI6EhpZdcofqAG06DzojXrrfPrJJVppdubX8o+fTyhRsC6vtPcnn0xeDH/Zo86gdj
+         FrDx+Lzt3Mv05QONZeCSe96+XSyHdn3gc+Qe30G/aLkUYX7tanc2p9huwSzYWw7GOAs4
+         Ag/HyCwotYkm1JS21z35vG7GZKoBC7s+DIpTfLZVX345qnif2AxbkR2uV8tM8yH2cwg6
+         pLQodeBg3mJ6MDuxqnNoo9BBGfwEqJlSVTuWKXTg6g30yMPDHsOR/UfZNErN2jHifEDV
+         04+XI3rcJdsYEjSCvRUGxGtKMOgTOGw0JkrZxuDSF5tvEViHuFd5tRTU9c4R/LaUAb55
+         2wfw==
+X-Gm-Message-State: AFqh2koIsLaywLjOn61QsfyT8j7/7Flal+kA2mVD5Qq08pk5o9Qwlz25
+        4kpjiLZIgdit8yidrxmZm5Kj0JlsiE5LRsiGACk2eboLugYUSyK/UpPv94cYX1ImWwb5R2vYxGQ
+        hSUIGpRu5HGBGDX9j2o3ptiuP+AQyqNKXuGQYpQwP3+GXUA==
+X-Received: by 2002:a05:600c:224a:b0:3da:fa15:8658 with SMTP id a10-20020a05600c224a00b003dafa158658mr38175488wmm.32.1674727306712;
+        Thu, 26 Jan 2023 02:01:46 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsACBfudiPPidBi8+IIBTW1b0+zkM2W0/wb9NMshJQpl91iZI+fLXOJeCGFHPIUki0qMi8aqQ==
+X-Received: by 2002:a05:600c:224a:b0:3da:fa15:8658 with SMTP id a10-20020a05600c224a00b003dafa158658mr38175466wmm.32.1674727306453;
+        Thu, 26 Jan 2023 02:01:46 -0800 (PST)
+Received: from qwirkle ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id bd16-20020a05600c1f1000b003d1f3e9df3csm4435258wmb.7.2023.01.26.02.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Jan 2023 02:01:46 -0800 (PST)
+Date:   Thu, 26 Jan 2023 10:01:44 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] selftests: net: Fix missing nat6to4.o when
+ running udpgro_frglist.sh
+Message-ID: <Y9JPiA11CHNOMibr@qwirkle>
+References: <20230125211350.113855-1-andrei.gherzan@canonical.com>
+ <20230125230843.6ea157b1@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125212608.1860251-13-scgl@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VgjH7YKl424iAO4clPGJBQUw0OfmbI4s
-X-Proofpoint-ORIG-GUID: mlOscjtaWAVu1lk_0oQDdr1ahSrT9QAw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_02,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 phishscore=0
- malwarescore=0 bulkscore=0 adultscore=0 spamscore=0 mlxlogscore=511
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301260076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230125230843.6ea157b1@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 10:26:06PM +0100, Janis Schoetterl-Glausch wrote:
-> User space can use the MEM_OP ioctl to make storage key checked reads
-> and writes to the guest, however, it has no way of performing atomic,
-> key checked, accesses to the guest.
-> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
-> op. For now, support this op for absolute accesses only.
+Hi Jakub,
+
+Thanks for taking a look at this.
+
+On 23/01/25 11:08PM, Jakub Kicinski wrote:
+> On Wed, 25 Jan 2023 21:13:49 +0000 Andrei Gherzan wrote:
+> > The udpgro_frglist.sh uses nat6to4.o which is tested for existence in
+> > bpf/nat6to4.o (relative to the script). This is where the object is
+> > compiled. Even so, the script attempts to use it as part of tc with a
+> > different path (../bpf/nat6to4.o). As a consequence, this fails the script:
 > 
-> This op can be use, for example, to set the device-state-change
-> indicator and the adapter-local-summary indicator atomically.
+> Is this a recent regression? Can you add a Fixes tag?
+
+This issue seems to be included from the beginning (edae34a3ed92). I can't say
+why this was not seen before upstream but on our side, this test was disabled
+internally due to lack of CC support in BPF programs. This was fixed in the
+meanwhile in 837a3d66d698 (selftests: net: Add cross-compilation support for
+BPF programs) and we found this issue while trying to reenable the test.
+
+So if you think that is reasonable, I could add a Fixes tag for the initial 
+script commit edae34a3ed92 (selftests net: add UDP GRO fraglist + bpf
+self-tests) and push a v3.
+
+> What tree did you base this patch on? Doesn't seem to apply
+
+The patches were done on top of
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git, the master
+branch - 948ef7bb70c4 (Merge tag 'modules-6.2-rc6' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux). There is another
+merge that happened in the meanwhile but the rebase works without issues. I can
+send a rebased v3 if needed.
+
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
->  include/uapi/linux/kvm.h |   8 +++
->  arch/s390/kvm/gaccess.h  |   3 ++
->  arch/s390/kvm/gaccess.c  | 103 +++++++++++++++++++++++++++++++++++++++
->  arch/s390/kvm/kvm-s390.c |  56 ++++++++++++++++++++-
->  4 files changed, 169 insertions(+), 1 deletion(-)
-...
-> +		ret = cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key);
+> > Error opening object ../bpf/nat6to4.o: No such file or directory
+> > Cannot initialize ELF context!
+> > Unable to load program
+> > 
+> > This change refactors these references to use a variable for consistency
+> > and also reformats two long lines.
+> > 
+> > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
 
-FWIW, this and the three others need a __user annotation:
-
-		ret = cmpxchg_user_key((u8 __user *)hva, &old, *old_addr, new, access_key);
-
-Otherwise you end up with sparse warnings (compile with C=1).
+-- 
+Andrei Gherzan
