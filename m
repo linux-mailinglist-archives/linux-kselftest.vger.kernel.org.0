@@ -2,114 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3312167CE2F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 15:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7A067D011
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Jan 2023 16:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjAZOdO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Jan 2023 09:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
+        id S232554AbjAZPYZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Jan 2023 10:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbjAZOdL (ORCPT
+        with ESMTP id S232501AbjAZPYK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Jan 2023 09:33:11 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D358A47437;
-        Thu, 26 Jan 2023 06:33:06 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.165.226])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A80EE6602E70;
-        Thu, 26 Jan 2023 14:32:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674743585;
-        bh=mV9P8bJmZu6ZoVaX/AoLhr6Mb+mbynE4WbhCFBSCjyE=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=FNbePeBQeO8Fdj/wt46vQOVYphnTBs4KEpYulFjh8hvNua+sMT7opUr8ibsC+Eh93
-         0OQeEXt+yEX3c+Z0t8r2Q9gNHLjgXearU+jHnYfS3oRNcYb+N+/Em2U8UtgyPclSLE
-         vlk/ZrkmCi95r9EKBWKa3Xrw4J4Vj6ODkBva2Q5Ea+X7BNJKCyvUflEpMFUWEz203F
-         wMJuADIlJs3vX2xWykkCRgcMGahtzEAeLo/1AzxnsOogEh325x7/m4ITpd6I1Enq3j
-         QKm4ZnmMS6hH+0lSbMnk6o1qbx7GKkAKA+wqtZTXMA97N1HPH0yAiLNKZO8RyjmLD6
-         NiKy62m6D6/6g==
-Message-ID: <e14875ff-7d59-ae24-9fb0-8169c54c7a17@collabora.com>
-Date:   Thu, 26 Jan 2023 19:32:53 +0500
+        Thu, 26 Jan 2023 10:24:10 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE2B420C;
+        Thu, 26 Jan 2023 07:23:53 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QFEiR3004356;
+        Thu, 26 Jan 2023 15:23:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=38Q/0OCGry8peDMSSdqlhdz0+1fJJuYxwowWJYS44go=;
+ b=f0JWtdmKNHHIZwUwiDGJM69eVPs8Y5AjYb3g3BqL94aw5tg1LbDgjTxK9NpBqs5omPfD
+ TWWDJN7GOgxjXPd1iahdemLwBRJahCVwLZpzaU+tTSETaHm9kGOuj7qtBC5QfjlupSCI
+ 3CQjRLWGZ+yD8GxOW+U/2yUeCF8B3XxP0e7wGSYai1vlceE17tdWqDKO0lTlRelg9eKd
+ RVpK/DeNGlqzUrO3YFqB64vrsaciUfCtzTM4gteJtftdeSydjnV3Ni88FPpjCqWDYJeR
+ rwl/e6DDkP91ra6Whr/eTN0A/3hxSO72Vdz6slnBwqvMzcNGk4OVUavZo3ZRGogjc5fE EA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbv06g5rr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 15:23:48 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30QFEqEK004557;
+        Thu, 26 Jan 2023 15:23:47 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nbv06g5qw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 15:23:47 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30Q2KLlU027371;
+        Thu, 26 Jan 2023 15:23:45 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3n87p6cpay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 15:23:45 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30QFNeUG44827002
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 Jan 2023 15:23:40 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A228E2004D;
+        Thu, 26 Jan 2023 15:23:40 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 668CA20043;
+        Thu, 26 Jan 2023 15:23:40 +0000 (GMT)
+Received: from [9.152.224.253] (unknown [9.152.224.253])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 26 Jan 2023 15:23:40 +0000 (GMT)
+Message-ID: <2a21195b-9a13-a332-bab9-e2c023fc37a6@linux.ibm.com>
+Date:   Thu, 26 Jan 2023 16:23:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v7 3/4] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     Peter Xu <peterx@redhat.com>
-References: <20230109064519.3555250-1-usama.anjum@collabora.com>
- <20230109064519.3555250-4-usama.anjum@collabora.com> <Y8hyqhgx41/ET7bC@x1n>
- <31b71791-66b0-c2d8-81da-e17eff5ffbe8@collabora.com> <Y9AVuF63y9UjEYcj@x1n>
 Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y9AVuF63y9UjEYcj@x1n>
-Content-Type: text/plain; charset=UTF-8
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>
+References: <20230125212608.1860251-1-scgl@linux.ibm.com>
+ <20230125212608.1860251-5-scgl@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v6 04/14] KVM: s390: selftest: memop: Add bad address test
+In-Reply-To: <20230125212608.1860251-5-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: S7x_h8djFowqJrL1JZ7Fwk9QiDnFy7Pd
+X-Proofpoint-ORIG-GUID: RdPz5P2-f5xBlgJ2o1DLR7EfVdsF4d4e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_07,2023-01-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ malwarescore=0 clxscore=1015 mlxscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301260146
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/24/23 10:30 PM, Peter Xu wrote:
-> On Mon, Jan 23, 2023 at 05:18:13PM +0500, Muhammad Usama Anjum wrote:
->>>> +	if (IS_GET_OP(p) && p->max_pages && (p->found_pages == p->max_pages))
->>>> +		return -ENOSPC;
->>>
->>> This is the function to test "whether the walker should walk the vma
->>> specified".  This check should IIUC be meaningless because found_pages
->>> doesn't boost during vma switching, while OTOH your pmd walker fn should do
->>> proper check when increasing found_pages and return -ENOSPC properly when
->>> the same condition met.  That should be enough, IMHO.
->> This check is needed in case we want to abort the walk at once. We return
->> negative value from here which aborts the walk. Returning negative value
->> from pmd_entry doesn't abort the walk. So this check is needed in the
->> test_walk.
-> 
-> Why?  What I see locally is (walk_pmd_range):
-> 
-> 		if (ops->pmd_entry)
-> 			err = ops->pmd_entry(pmd, addr, next, walk);
-> 		if (err)
-> 			break;
-Sorry, mistake on my part. I'll correct it in next version (v9).
+On 1/25/23 22:25, Janis Schoetterl-Glausch wrote:
+> Add test that tries to access, instead of CHECK_ONLY.
+""
+Add a test that tries a real write to a bad address.
+A CHECK_ONLY test doesn't cover all paths.
+""
+
+At first I thought you were replacing a test.
 
 > 
-> Thanks,
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
+> ---
+>   tools/testing/selftests/kvm/s390x/memop.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index bbc191a13760..5aae27549437 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -641,7 +641,9 @@ static void _test_errors_common(struct test_info info, enum mop_target target, i
+>   
+>   	/* Bad guest address: */
+>   	rv = ERR_MOP(info, target, WRITE, mem1, size, GADDR((void *)~0xfffUL), CHECK_ONLY);
+> -	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory access");
+> +	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory address");
 
--- 
-BR,
-Muhammad Usama Anjum
+"ioctl does not report bad guest memory address on CHECK_ONLY write" ?
+
+> +	rv = ERR_MOP(info, target, WRITE, mem1, size, GADDR((void *)~0xfffUL));
+> +	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory address");
+
+"ioctl does not report bad guest memory address on write" ?
+
+Not really necessary in this case, it just needs to be different from 
+the one on top.
+
+>   
+>   	/* Bad host address: */
+>   	rv = ERR_MOP(info, target, WRITE, 0, size, GADDR_V(mem1));
+
