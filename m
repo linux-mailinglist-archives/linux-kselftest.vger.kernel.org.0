@@ -2,223 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD1167ED48
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 19:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9624467EDA1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 19:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235307AbjA0SS1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Jan 2023 13:18:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
+        id S234935AbjA0Shi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Jan 2023 13:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235040AbjA0SSK (ORCPT
+        with ESMTP id S234906AbjA0Shg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 13:18:10 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D5314235
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 10:17:50 -0800 (PST)
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DD23B3FFED
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 18:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1674843401;
-        bh=NS1tmL66awX/7is5ZjMX3UkQ9Ca2dXMZqnsizI2is20=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=ptrMIMhp2EfBm9ahy7KdQzy6yG2xk4XEze/IxYUv/QvJnNAVa0IF9z0CYP/46pcCp
-         uZBkYcceeaQW8qVlOgbwZbDI+oud6z4UD7Qt8ctjDhdEMjkJ+xGeN2dnVo40V9Th3d
-         fXDrignwZMbKAS+iJOueuoFwZLhTrTTm/ZQRlEKhLA3FjBbxAL4lPRQxe+yPJkMTT3
-         pEz7Ksjj/CIdJv0NV076c+VWUZ1Pq4kcWOywa/qlf3hAV1liZGNuFsDjPXOmj+kCUD
-         T9yQPHIhq2hEyPIMjeljhC5ASdRm/GDgKbanl5BTOs0Uid7JdeJ03+lmBYxvzyPFp3
-         2QIr2jpFSqWQA==
-Received: by mail-wm1-f71.google.com with SMTP id z11-20020a1c4c0b000000b003db062505b9so1764792wmf.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 10:16:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NS1tmL66awX/7is5ZjMX3UkQ9Ca2dXMZqnsizI2is20=;
-        b=GYQSlp5IjstjZr6dA8i/SUExyrl7dLt+C4EAJQE0G1ked5mX9UL++09iQAsbs3X7Gg
-         hHmV6NKZ2yQHXjwjwpoXPRdAPu2liY7QD1IPPcJ+NDM8YfErL+7CXBljJrxOow4digdB
-         UN7b+7AFSCubpoFWIAgI/YOkXiaojLh4Mek1aXDDrFnctkLGXzCwxt+i+FLdvtfAPxyA
-         nR8u2/MXcl00ZCRArBsoo2HkROU1AqCyuPf+QJwy/ORW6tFeq746pezRMDxqnfBNPMAy
-         E8r2Ii7nAqUMcsc1kbNt4lF4qHkDSXCGlHCWzrY1m82WO3+vewlwOK0SmdqzOJAIjvei
-         l8PA==
-X-Gm-Message-State: AFqh2kqeWBXLTvVLc90hCHXtYmTn/uFWV3FPu1UG6qng8GnGbZ9zUhr9
-        H/GLNcCkw6+heJXsNnQNHP9MwvJFxWVar07zyfG/lle49Hujuj2ccmleQvAo/DIFh7VQw1wSy3H
-        aXNzDy1kcmFVWq7fbCJL5Wc3CHzlEWNXV+yTbZIfZdwUB8g==
-X-Received: by 2002:adf:ce06:0:b0:2bf:95cc:744c with SMTP id p6-20020adfce06000000b002bf95cc744cmr22921801wrn.0.1674843401388;
-        Fri, 27 Jan 2023 10:16:41 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs81PzIVwkImeU01Xj6gNTWRhY8/AaM+bmQlNIMb3W6rmGJizQ7t8D6RRx8NOndZeC5qb9/ug==
-X-Received: by 2002:adf:ce06:0:b0:2bf:95cc:744c with SMTP id p6-20020adfce06000000b002bf95cc744cmr22921787wrn.0.1674843401196;
-        Fri, 27 Jan 2023 10:16:41 -0800 (PST)
-Received: from qwirkle.internal ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id a18-20020adffad2000000b002be53aa2260sm5122798wrs.117.2023.01.27.10.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 10:16:40 -0800 (PST)
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Willem de Bruijn <willemb@google.com>
-Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Fri, 27 Jan 2023 13:37:36 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05285CD2A;
+        Fri, 27 Jan 2023 10:37:34 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RIQbw5032084;
+        Fri, 27 Jan 2023 18:37:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=urV66HWbZhpDrN15YV3AnyXAk9Itc+BmHifeRfarMtM=;
+ b=N9szarZq3qQUsp2Yfwk8IWXphI+Z3OnEDaMzySbCdyGNKIyoYKpWXkgH5urwLHrQKHOa
+ fe0h60or8k0eKzqBvuZ1c+1JCMHGdYttSLCisXBq4if23okJeCJwnYZjdubuqyq/PX+s
+ H+4/8SN89mjMV1l81go4id5oxMhYpDgUbRxcef5Hl0VzrfftFJ4NkH/chbwG6YnCf916
+ 8WyTXJzXO8gmaY2sLfTQoRGSmcCKmrCn1oaRFyiXFLEVjio13pgHCCyHsMLnbjDCIkk0
+ MEI4l30jqn4UQXEAztKslBpimAsocrpONpKFGAGCuJRLRYEbBMQipk3BhwMWjqCYoZ2j CA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nckw6g7b7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 18:37:31 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30RIRYwB004637;
+        Fri, 27 Jan 2023 18:37:30 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nckw6g7ap-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 18:37:30 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30R6xQPB013377;
+        Fri, 27 Jan 2023 18:37:29 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n87p6dnkq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Jan 2023 18:37:28 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30RIbNFN44302658
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 Jan 2023 18:37:25 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B36BD20040;
+        Fri, 27 Jan 2023 18:37:23 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 786582004D;
+        Fri, 27 Jan 2023 18:37:23 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.154.20])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 27 Jan 2023 18:37:23 +0000 (GMT)
+Message-ID: <930bd974894365e88fc68699b59f94114bf7e5ba.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v1] KVM: selftests: Compile s390 tests with
+ -march=z10
+From:   Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential back-off retries
-Date:   Fri, 27 Jan 2023 18:16:25 +0000
-Message-Id: <20230127181625.286546-1-andrei.gherzan@canonical.com>
-X-Mailer: git-send-email 2.34.1
+Date:   Fri, 27 Jan 2023 19:37:23 +0100
+In-Reply-To: <df451f90-0809-cd99-4494-c930cf4936e5@redhat.com>
+References: <20230127174552.3370169-1-nsg@linux.ibm.com>
+         <df451f90-0809-cd99-4494-c930cf4936e5@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SbYPTV7MtKq1EhBM_Tf3XOKL4twxBz0Z
+X-Proofpoint-ORIG-GUID: QVDootv03q7e5hizVSIq3-VT27t-gIvt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_11,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
+ clxscore=1015 mlxscore=0 impostorscore=0 adultscore=0 priorityscore=1501
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301270167
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The tx and rx test programs are used in a couple of test scripts including
-"udpgro_bench.sh". Taking this as an example, when the rx/tx programs
-are invoked subsequently, there is a chance that the rx one is not ready to
-accept socket connections. This racing bug could fail the test with at
-least one of the following:
+On Fri, 2023-01-27 at 19:12 +0100, Thomas Huth wrote:
+> On 27/01/2023 18.45, Nina Schoetterl-Glausch wrote:
+> > The guest used in s390 kvm selftests is not be set up to handle all
+> > instructions the compiler might emit, i.e. vector instructions, leading
+> > to crashes.
+> > Limit what the compiler emits to the oldest machine model currently
+> > supported by Linux.
+> >=20
+> > Signed-off-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+> > ---
+> >=20
+> > Should we also set -mtune?
+>=20
+> I don't think it's really necessary
+>=20
+> > Since it are vector instructions that caused the problem here, there
+> > are some alternatives:
+> >   * use -mno-vx
+> >   * set the required guest control bit to enable vector instructions on
+> >     models supporting them
+> >=20
+> > -march=3Dz10 might prevent similar issues with other instructions, but =
+I
+> > don't know if there actually exist other relevant instructions, so it
+> > could be needlessly restricting.
+>=20
+> FWIW, the vector instructions have been introduced with the z13 ... so=
+=20
+> limiting to the zEC12 could be enough.
 
-./udpgso_bench_tx: connect: Connection refused
-./udpgso_bench_tx: sendmsg: Connection refused
-./udpgso_bench_tx: write: Connection refused
+Yes, however, if we only want to fix the issue with regards to vector instr=
+uctions,
+one of the alternatives would be a better solution, IMO.
+With regards to the second, I'm not sure what happens on old models if we
+unconditionally enable the control bit, I'm guessing it'd be fine.
+The question is how likely similar issues are and if we're fine with possib=
+ly running into them.
+For what it's worth, finding the cause here was easy, tracing kvm-s390 even=
+ts showed the faulting
+instruction.
 
-This change addresses this by adding routines that retry the socket
-operations with an exponential back off algorithm from 100ms to 2s.
-
-Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
----
- tools/testing/selftests/net/udpgso_bench_tx.c | 57 +++++++++++++------
- 1 file changed, 41 insertions(+), 16 deletions(-)
-
-diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-index f1fdaa270291..4dea9ee7eb46 100644
---- a/tools/testing/selftests/net/udpgso_bench_tx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-@@ -53,6 +53,9 @@
- 
- #define NUM_PKT		100
- 
-+#define MAX_DELAY	2000000
-+#define INIT_DELAY	100000
-+
- static bool	cfg_cache_trash;
- static int	cfg_cpu		= -1;
- static int	cfg_connected	= true;
-@@ -257,13 +260,18 @@ static void flush_errqueue(int fd, const bool do_poll)
- static int send_tcp(int fd, char *data)
- {
- 	int ret, done = 0, count = 0;
-+	useconds_t delay = INIT_DELAY;
- 
- 	while (done < cfg_payload_len) {
--		ret = send(fd, data + done, cfg_payload_len - done,
--			   cfg_zerocopy ? MSG_ZEROCOPY : 0);
--		if (ret == -1)
--			error(1, errno, "write");
--
-+		delay = INIT_DELAY;
-+		while ((ret = send(fd, data + done, cfg_payload_len - done,
-+				cfg_zerocopy ? MSG_ZEROCOPY : 0)) == -1) {
-+			usleep(delay);
-+			if (delay < MAX_DELAY)
-+				delay *= 2;
-+			else
-+				error(1, errno, "write");
-+		}
- 		done += ret;
- 		count++;
- 	}
-@@ -274,17 +282,23 @@ static int send_tcp(int fd, char *data)
- static int send_udp(int fd, char *data)
- {
- 	int ret, total_len, len, count = 0;
-+	useconds_t delay = INIT_DELAY;
- 
- 	total_len = cfg_payload_len;
- 
- 	while (total_len) {
- 		len = total_len < cfg_mss ? total_len : cfg_mss;
- 
--		ret = sendto(fd, data, len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
--			     cfg_connected ? NULL : (void *)&cfg_dst_addr,
--			     cfg_connected ? 0 : cfg_alen);
--		if (ret == -1)
--			error(1, errno, "write");
-+		delay = INIT_DELAY;
-+		while ((ret = sendto(fd, data, len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
-+				cfg_connected ? NULL : (void *)&cfg_dst_addr,
-+				cfg_connected ? 0 : cfg_alen)) == -1) {
-+			usleep(delay);
-+			if (delay < MAX_DELAY)
-+				delay *= 2;
-+			else
-+				error(1, errno, "write");
-+		}
- 		if (ret != len)
- 			error(1, errno, "write: %uB != %uB\n", ret, len);
- 
-@@ -378,6 +392,7 @@ static int send_udp_segment(int fd, char *data)
- 	struct iovec iov = {0};
- 	size_t msg_controllen;
- 	struct cmsghdr *cmsg;
-+	useconds_t delay = INIT_DELAY;
- 	int ret;
- 
- 	iov.iov_base = data;
-@@ -401,9 +416,13 @@ static int send_udp_segment(int fd, char *data)
- 	msg.msg_name = (void *)&cfg_dst_addr;
- 	msg.msg_namelen = cfg_alen;
- 
--	ret = sendmsg(fd, &msg, cfg_zerocopy ? MSG_ZEROCOPY : 0);
--	if (ret == -1)
--		error(1, errno, "sendmsg");
-+	while ((ret = sendmsg(fd, &msg, cfg_zerocopy ? MSG_ZEROCOPY : 0)) == -1) {
-+		usleep(delay);
-+		if (delay < MAX_DELAY)
-+			delay *= 2;
-+		else
-+			error(1, errno, "sendmsg");
-+	}
- 	if (ret != iov.iov_len)
- 		error(1, 0, "sendmsg: %u != %llu\n", ret,
- 			(unsigned long long)iov.iov_len);
-@@ -616,6 +635,7 @@ int main(int argc, char **argv)
- {
- 	unsigned long num_msgs, num_sends;
- 	unsigned long tnow, treport, tstop;
-+	useconds_t delay = INIT_DELAY;
- 	int fd, i, val, ret;
- 
- 	parse_opts(argc, argv);
-@@ -648,9 +668,14 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
--	if (cfg_connected &&
--	    connect(fd, (void *)&cfg_dst_addr, cfg_alen))
--		error(1, errno, "connect");
-+	if (cfg_connected)
-+		while (connect(fd, (void *)&cfg_dst_addr, cfg_alen)) {
-+			usleep(delay);
-+			if (delay < MAX_DELAY)
-+				delay *= 2;
-+			else
-+				error(1, errno, "connect");
-+		}
- 
- 	if (cfg_segment)
- 		set_pmtu_discover(fd, cfg_family == PF_INET);
--- 
-2.34.1
+>=20
+> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selft=
+ests/kvm/Makefile
+> > index 1750f91dd936..df0989949eb5 100644
+> > --- a/tools/testing/selftests/kvm/Makefile
+> > +++ b/tools/testing/selftests/kvm/Makefile
+> > @@ -200,6 +200,9 @@ CFLAGS +=3D -Wall -Wstrict-prototypes -Wuninitializ=
+ed -O2 -g -std=3Dgnu99 \
+> >   	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+> >   	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. $(EXTRA_CFLAGS) \
+> >   	$(KHDR_INCLUDES)
+> > +ifeq ($(ARCH),s390)
+> > +	CFLAGS +=3D -march=3Dz10
+> > +endif
+>=20
+> Starting with z10 sounds sane to me, we still can adjust later if necessa=
+ry.
+>=20
+> Reviewed-by: Thomas Huth <thuth@redhat.com>
+>=20
+Thanks!
 
