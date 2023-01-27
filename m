@@ -2,131 +2,206 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573A667E7D0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 15:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A8D67E852
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 15:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjA0OLB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Jan 2023 09:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
+        id S233322AbjA0OdH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Jan 2023 09:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbjA0OK6 (ORCPT
+        with ESMTP id S233326AbjA0OdC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:10:58 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26237D293
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:10:40 -0800 (PST)
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7EF893F20B
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 14:10:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1674828639;
-        bh=oZN9ZgvVoZFD5cH0pJuh6IBZpyTqF0BSG7O/j2ykq4o=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=PTLh9VG4973Symiwvu4yqoraO4fSrlCCsC1HD6zRcDF2hopTOx8zDq7qRl0++HHh4
-         FksZaObH5hZV/w8VPr1imIJMBLRXgQY/UuJ6BRyRmj/qS+2FG+vj78eS9211djmQV7
-         pKAusOKIEmLtNBZcfcMlZGujx7rVpCQEei3qKkmnK/I6sRdDU3W9DBLIot7QLKZ5u0
-         QvEnGx7gUyaLTEljk522nCIt7JZ6+hIUCmCqLAaHp0nUfp3gT8UvGgOH2uUlStPCKr
-         gi4AsVfyyraM1jkgfy5q/gjRW7vm7TF2o5k5KZ9vfpijXzJM1bb2bygK8b9OW5GBHg
-         D0+1DiAiZY6Fw==
-Received: by mail-wr1-f69.google.com with SMTP id w16-20020a5d4b50000000b002bfca568cdfso723275wrs.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:10:39 -0800 (PST)
+        Fri, 27 Jan 2023 09:33:02 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08103EB62
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:32:57 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id d22so1977068iof.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4VJl1LFj78awaMi5u1yCyS89RCOFZobWhyD03Egy1dY=;
+        b=e2S+T+hw8P+2HOsuX++A4wB4qB0exNACPcbnqddJ1iayW63HOp3y7k999fxSY+GNQm
+         WKLwzxo9LrgQ4PKeLugPBdT2kFegxKKjrL89ZJRlHWpJz5DpUOJMwKwnwU76zfPBL+dk
+         6WwLjwPZZbN5HMkYP/crQbMNgnA2BVT4itYy3x2uRkx9Pk4Gq0BH85yZ2mj2BcPj1jEO
+         aJJmcVBgCyIXqiuCL8lYUX0UMRltMyYishf11RCDCu3PRHGmXkAHE7pc0DYCKJJUhXlj
+         K0s+xY04Wsu7L05JBk9Ic/1trtNjjF9ZB9iwVjsJsCqZ3WX1aNftxv5F80uLd4AWvgb7
+         Dvjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oZN9ZgvVoZFD5cH0pJuh6IBZpyTqF0BSG7O/j2ykq4o=;
-        b=QbZLh1lcCjeMPM7DPN1KtrueMyHafCPaoVF6vRGugn376OQc9YbOAicSgsxAV52Q7o
-         XFM1JKLUXsFziIoiMC66Xoeb2IsHfcpYdieEgwECrpiJJUEzOc39KKryr0P9Y2ghHZaC
-         hgjOQE2Clps/RxtC+lwuoHfh9JayxraI/xgej4/ekg0VCBFQ5Q4ahsGwjgmshSduF3bQ
-         rqtH0LcRBFCwp/IHD0PFYnWlE7wmNmem3WN02xajoSirA98WQGpqN9CFrAVJwjUnffoB
-         sMUGXgyp+B9oj7UIQEqJB0azMkeRsUu5yfoYBQ3Ic2Jcnz5EpSvnBcWb7n2iarCCgyrA
-         kRUQ==
-X-Gm-Message-State: AFqh2krdwvRoDtLSv5gtv6YIOZLBHc8h3fefxbHmELHRH6KOsfaVtMXD
-        rCPYmNK3ojUXNVdgcXEnWX44wSnjSVdDvmoc5qwjVTbyKQeIGFdEICp8DVgf2oWYYZ6SmlR1b9x
-        fODuuv344wtu0ItX3wWakPvHF4Qkd5s57dmREmkho+rIJQg==
-X-Received: by 2002:a5d:6e08:0:b0:2be:493d:1384 with SMTP id h8-20020a5d6e08000000b002be493d1384mr24246113wrz.22.1674828637791;
-        Fri, 27 Jan 2023 06:10:37 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsXH+cOMzFUup27auMjUGxsJO9RSPYKSE+c7FGLX/KkpEARW9yOBWrq17aboos/PD+urHQSJA==
-X-Received: by 2002:a5d:6e08:0:b0:2be:493d:1384 with SMTP id h8-20020a5d6e08000000b002be493d1384mr24246095wrz.22.1674828637612;
-        Fri, 27 Jan 2023 06:10:37 -0800 (PST)
-Received: from qwirkle ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id a4-20020adffb84000000b002bc7f64efa3sm3999120wrr.29.2023.01.27.06.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 06:10:37 -0800 (PST)
-Date:   Fri, 27 Jan 2023 14:10:35 +0000
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     Jakub Kicinski <kuba@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4VJl1LFj78awaMi5u1yCyS89RCOFZobWhyD03Egy1dY=;
+        b=oYm36OZfuNK875VrNLM/z7iDpT0IkmaR7oTgjUBa5K89v49Uhof3ArVIq7Rui03rOJ
+         ieTaRIc7IURsxIOrGa23dq0hIepwelJUpAoL1wlbPtQUmIKKzshwM7I6V/wMMAn4kKzf
+         5NVQ3OivnMbyzNMxLephnA7xYRyeYGULDkfTrCAFBI4+2JN9Lcau8CaM1lqnJuQuSuBJ
+         iuq1BubDsq5RA8TlkZTQNhH3uO90JWgeoh8lzOusack43pJjyiYYAKc/TaX48tfHUY+z
+         bpd0AZnYkRvUz22LmBqupI/QNdTUfm7TTXWMzssD1rEwmxwa1R6V5DmbPGzonDWz3y29
+         uGKQ==
+X-Gm-Message-State: AO0yUKWiHsKfyxcvsNbe9i9LIHyOOGXJ1kVqruaFgJ3qCA3HCQL4aCVd
+        1R2torMuZzbwx6BQtQUXG4qzIZsmR/5omewzHM0knw==
+X-Google-Smtp-Source: AK7set+3mZJkF8fkciCG6VzvikUhcMDERUzDhLStD/6poffAcfmiE2I8eb4RebH3huth4FaWurCefne/onY5y8p1T2A=
+X-Received: by 2002:a02:ad06:0:b0:3a9:5776:864 with SMTP id
+ s6-20020a02ad06000000b003a957760864mr1383179jan.67.1674829976842; Fri, 27 Jan
+ 2023 06:32:56 -0800 (PST)
+MIME-Version: 1.0
+References: <20230127140944.265135-1-andrei.gherzan@canonical.com> <20230127140944.265135-3-andrei.gherzan@canonical.com>
+In-Reply-To: <20230127140944.265135-3-andrei.gherzan@canonical.com>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Fri, 27 Jan 2023 06:32:44 -0800
+Message-ID: <CANP3RGchqLRLRAxgWU69DzWfa9R2d0AhgeBdpJhmaE+c-Sszjw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] selftests: net: Fix udpgro_frglist.sh shellcheck
+ warnings and errors
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Hangbin Liu <liuhangbin@gmail.com>
-Subject: Re: [PATCH v2 1/2] selftests: net: Fix missing nat6to4.o when
- running udpgro_frglist.sh
-Message-ID: <Y9PbW7UpCJjPWtUt@qwirkle>
-References: <20230125211350.113855-1-andrei.gherzan@canonical.com>
- <20230125230843.6ea157b1@kernel.org>
- <Y9JPiA11CHNOMibr@qwirkle>
- <20230126153621.7503a73e@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126153621.7503a73e@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Lina Wang <lina.wang@mediatek.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 23/01/26 03:36PM, Jakub Kicinski wrote:
-> On Thu, 26 Jan 2023 10:01:44 +0000 Andrei Gherzan wrote:
-> > On 23/01/25 11:08PM, Jakub Kicinski wrote:
-> > > On Wed, 25 Jan 2023 21:13:49 +0000 Andrei Gherzan wrote:  
-> > > > The udpgro_frglist.sh uses nat6to4.o which is tested for existence in
-> > > > bpf/nat6to4.o (relative to the script). This is where the object is
-> > > > compiled. Even so, the script attempts to use it as part of tc with a
-> > > > different path (../bpf/nat6to4.o). As a consequence, this fails the script:  
-> > > 
-> > > Is this a recent regression? Can you add a Fixes tag?  
-> > 
-> > This issue seems to be included from the beginning (edae34a3ed92). I can't say
-> > why this was not seen before upstream but on our side, this test was disabled
-> > internally due to lack of CC support in BPF programs. This was fixed in the
-> > meanwhile in 837a3d66d698 (selftests: net: Add cross-compilation support for
-> > BPF programs) and we found this issue while trying to reenable the test.
-> > 
-> > So if you think that is reasonable, I could add a Fixes tag for the initial 
-> > script commit edae34a3ed92 (selftests net: add UDP GRO fraglist + bpf
-> > self-tests) and push a v3.
-> 
-> We have queued commit 3c107f36db06 ("selftests/net: mv bpf/nat6to4.c 
-> to net folder") in net-next, I think that should fix it, too?
+On Fri, Jan 27, 2023 at 6:09 AM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
+>
+> This change fixes the following shellcheck warnings and errors:
+>
+> * SC2155 (warning): Declare and assign separately to avoid masking return
+>   values.
+> * SC2124 (warning): Assigning an array to a string! Assign as array, or use
+>   instead of @ to concatenate.
+> * SC2034 (warning): ipv4_args appears unused. Verify use (or export if used
+>   externally).
+> * SC2242 (error): Can only exit with status 0-255. Other data should be
+>   written to stdout/stderr.
+> * SC2068 (error): Double quote array expansions to avoid re-splitting
+>   elements.
+>
+> Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+> Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> ---
+>  tools/testing/selftests/net/udpgro_frglist.sh | 20 +++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/testing/selftests/net/udpgro_frglist.sh b/tools/testing/selftests/net/udpgro_frglist.sh
+> index e1ca49de2491..97bf20e9afd8 100755
+> --- a/tools/testing/selftests/net/udpgro_frglist.sh
+> +++ b/tools/testing/selftests/net/udpgro_frglist.sh
+> @@ -3,7 +3,8 @@
+>  #
+>  # Run a series of udpgro benchmarks
+>
+> -readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+> +PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+> +readonly PEER_NS
+>
+>  BPF_FILE="../bpf/xdp_dummy.bpf.o"
+>  BPF_NAT6TO4_FILE="nat6to4.o"
+> @@ -19,7 +20,7 @@ trap cleanup EXIT
+>
+>  run_one() {
+>         # use 'rx' as separator between sender args and receiver args
+> -       local -r all="$@"
+> +       local -r all="$*"
 
-That would fix it indeed. Thanks for the pointer.
+this should technically use arrays, something like
 
-> 
-> > > What tree did you base this patch on? Doesn't seem to apply  
-> > 
-> > The patches were done on top of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git, the master
-> > branch - 948ef7bb70c4 (Merge tag 'modules-6.2-rc6' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux). There is another
-> > merge that happened in the meanwhile but the rebase works without issues. I can
-> > send a rebased v3 if needed.
-> 
-> Could you try linux-next or net-next ?
+local -a -r args=("$@")
 
-I have sent a v3 rebased on linux-next, split out the remaining changes
-and added a commit to fix some shellcheck warnings/errors.
+but perhaps just get rid of args and just use "$@" directly below
 
--- 
-Andrei Gherzan
+>         local -r tx_args=${all%rx*}
+>         local rx_args=${all#*rx}
+>
+> @@ -56,13 +57,13 @@ run_one() {
+>  }
+>
+>  run_in_netns() {
+> -       local -r args=$@
+> +       local -r args="$*"
+>    echo ${args}
+>         ./in_netns.sh $0 __subprocess ${args}
+
+ie. here could just use "$@" directly twice instead of defining args.
+$0 should be doublequoted - though I guess it'll never be empty, and
+is unlikely to include spaces.
+>  }
+>
+>  run_udp() {
+> -       local -r args=$@
+> +       local -r args="$*"
+>
+>         echo "udp gso - over veth touching data"
+>         run_in_netns ${args} -u -S 0 rx -4 -v
+> @@ -72,7 +73,7 @@ run_udp() {
+>  }
+>
+>  run_tcp() {
+> -       local -r args=$@
+> +       local -r args="$*"
+>
+>         echo "tcp - over veth touching data"
+>         run_in_netns ${args} -t rx -4 -t
+> @@ -80,7 +81,6 @@ run_tcp() {
+>
+>  run_all() {
+>         local -r core_args="-l 4"
+
+is this still useful? embed directly in ipv6_args
+
+> -       local -r ipv4_args="${core_args} -4  -D 192.168.1.1"
+
+perhaps this should stay as a comment??
+
+>         local -r ipv6_args="${core_args} -6  -D 2001:db8::1"
+>
+>         echo "ipv6"
+> @@ -90,19 +90,19 @@ run_all() {
+>
+>  if [ ! -f ${BPF_FILE} ]; then
+
+double quote
+"${BPF_FILE}"
+in case space in file name
+
+>         echo "Missing ${BPF_FILE}. Build bpf selftest first"
+> -       exit -1
+> +       exit 1
+>  fi
+>
+>  if [ ! -f "$BPF_NAT6TO4_FILE" ]; then
+
+there seems to be inconsistency around [ vs [[, use [[ if relying on bash anyway
+
+>         echo "Missing nat6to4 helper. Build bpf nat6to4.o selftest first"
+> -       exit -1
+> +       exit 1
+>  fi
+>
+>  if [[ $# -eq 0 ]]; then
+>         run_all
+>  elif [[ $1 == "__subprocess" ]]; then
+
+while this does indeed work, imho $1 should be "$1" to be less confusing
+
+>         shift
+> -       run_one $@
+> +       run_one "$@"
+>  else
+> -       run_in_netns $@
+> +       run_in_netns "$@"
+>  fi
+> --
+> 2.34.1
