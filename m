@@ -2,161 +2,241 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9624467EDA1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 19:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B0A67EDC0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 19:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234935AbjA0Shi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Jan 2023 13:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S234978AbjA0Sn7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Jan 2023 13:43:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234906AbjA0Shg (ORCPT
+        with ESMTP id S234348AbjA0Snx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 13:37:36 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05285CD2A;
-        Fri, 27 Jan 2023 10:37:34 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RIQbw5032084;
-        Fri, 27 Jan 2023 18:37:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=urV66HWbZhpDrN15YV3AnyXAk9Itc+BmHifeRfarMtM=;
- b=N9szarZq3qQUsp2Yfwk8IWXphI+Z3OnEDaMzySbCdyGNKIyoYKpWXkgH5urwLHrQKHOa
- fe0h60or8k0eKzqBvuZ1c+1JCMHGdYttSLCisXBq4if23okJeCJwnYZjdubuqyq/PX+s
- H+4/8SN89mjMV1l81go4id5oxMhYpDgUbRxcef5Hl0VzrfftFJ4NkH/chbwG6YnCf916
- 8WyTXJzXO8gmaY2sLfTQoRGSmcCKmrCn1oaRFyiXFLEVjio13pgHCCyHsMLnbjDCIkk0
- MEI4l30jqn4UQXEAztKslBpimAsocrpONpKFGAGCuJRLRYEbBMQipk3BhwMWjqCYoZ2j CA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nckw6g7b7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 18:37:31 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30RIRYwB004637;
-        Fri, 27 Jan 2023 18:37:30 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nckw6g7ap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 18:37:30 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30R6xQPB013377;
-        Fri, 27 Jan 2023 18:37:29 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n87p6dnkq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Jan 2023 18:37:28 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30RIbNFN44302658
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 Jan 2023 18:37:25 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B36BD20040;
-        Fri, 27 Jan 2023 18:37:23 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 786582004D;
-        Fri, 27 Jan 2023 18:37:23 +0000 (GMT)
-Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.154.20])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 27 Jan 2023 18:37:23 +0000 (GMT)
-Message-ID: <930bd974894365e88fc68699b59f94114bf7e5ba.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH v1] KVM: selftests: Compile s390 tests with
- -march=z10
-From:   Nina Schoetterl-Glausch <nsg@linux.ibm.com>
-To:     Thomas Huth <thuth@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 27 Jan 2023 19:37:23 +0100
-In-Reply-To: <df451f90-0809-cd99-4494-c930cf4936e5@redhat.com>
-References: <20230127174552.3370169-1-nsg@linux.ibm.com>
-         <df451f90-0809-cd99-4494-c930cf4936e5@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Fri, 27 Jan 2023 13:43:53 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3007761E1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 10:43:52 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6B70C3F2F8
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 18:43:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1674845028;
+        bh=XiDfwrtQmIYCUcD8u3S8ChFouAMc6g+DcNufJxicUgQ=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=Uv9A30z0Qyf8EO2aGIjExQu5SDh1UTHzBaodrqo2b2MVtKZFuxsIZIyhu4HcLMHFC
+         WlG7j/1kZwU3IGqLQUMghutJkdN3vYUcG0cGvMt/9kwbFYNaj2/YFxyLihsufV+j1V
+         F8LMOoE0rMVv5i0LJdRNsknE/A1K4l4MMJRqbBlECnaZFOm/6sMFH+drODS1hQ5IjD
+         4QLGXZeZ9XxwrGd3hTrIbe7a7UC+hjHv6KZMV5yNOtjQ2OJcKLgN1sdYLIexLVqOAA
+         g3jFVfL2cwbp+gfULTEcDrytKkYuhL1CiByHuav+rWG5eGqUZVjcN0ihGPeHFB7HiT
+         gRf8RfHDtxHtA==
+Received: by mail-wm1-f69.google.com with SMTP id p1-20020a05600c1d8100b003daff82f5edso3205854wms.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 10:43:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XiDfwrtQmIYCUcD8u3S8ChFouAMc6g+DcNufJxicUgQ=;
+        b=ddlwPt2GxGqfHMU162mmsVIZNF6UfhtN/imtoWuY24H13ERQcK3ZRk2CRfp1TMQwA9
+         Z3ZlpVNzNZeNq1ACI3ojHKcgbEm4Pk7mAToIELyfyny7kCIRXlmZ1DW1T7mHqUxHbuU1
+         OQlfTWLbV2NM9VK8xIr++xJhezCXBPNHWVlMlI6R31N6HkINxlcIUEGRyJNMuCAyF2iC
+         Rq/qNU9XtXe0AfQX9Y/AdIS0fZJ03MbsCBPalWzr1SCSbFeosgP2wW2bD86U8QCrzscw
+         pvBKEIw7hxx0YzKRk0l1rzbYKl+EgwvnBY8RcFHOdhgUoqFCngZITcGiMRyRoWL/K2iv
+         yHxw==
+X-Gm-Message-State: AFqh2koDkL8i5lYjvMyOSeVV6jeZ2lgGkN8nE7BrM5AlYAS5atnju5aF
+        44hZvrzcp51M6jVFATPW5Oj2cubvyQj7w5xnDm/YaDAAIfvpM54NbsTeGw3husufGt5a7WrLLgP
+        7WY7pdLhnhK0KxvFi93tpq3tUrB9NxjxjT+iORrejHKvdug==
+X-Received: by 2002:a1c:cc11:0:b0:3da:1d52:26b5 with SMTP id h17-20020a1ccc11000000b003da1d5226b5mr47883404wmb.14.1674845025400;
+        Fri, 27 Jan 2023 10:43:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvC8ImX3BIkyIZQCXDWeCNeGIA82L5yixhvXk4MqP+UfuRQRKikf7sEdocNH//sSFtPcMkd4A==
+X-Received: by 2002:a1c:cc11:0:b0:3da:1d52:26b5 with SMTP id h17-20020a1ccc11000000b003da1d5226b5mr47883392wmb.14.1674845025235;
+        Fri, 27 Jan 2023 10:43:45 -0800 (PST)
+Received: from qwirkle ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id r3-20020a05600c424300b003dc3b188411sm2271302wmm.36.2023.01.27.10.43.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 10:43:44 -0800 (PST)
+Date:   Fri, 27 Jan 2023 18:43:42 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Lina Wang <lina.wang@mediatek.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] selftests: net: Fix udpgro_frglist.sh shellcheck
+ warnings and errors
+Message-ID: <Y9QbXuMOV3BWSzt5@qwirkle>
+References: <20230127140944.265135-1-andrei.gherzan@canonical.com>
+ <20230127140944.265135-3-andrei.gherzan@canonical.com>
+ <CANP3RGchqLRLRAxgWU69DzWfa9R2d0AhgeBdpJhmaE+c-Sszjw@mail.gmail.com>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SbYPTV7MtKq1EhBM_Tf3XOKL4twxBz0Z
-X-Proofpoint-ORIG-GUID: QVDootv03q7e5hizVSIq3-VT27t-gIvt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_11,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- clxscore=1015 mlxscore=0 impostorscore=0 adultscore=0 priorityscore=1501
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301270167
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANP3RGchqLRLRAxgWU69DzWfa9R2d0AhgeBdpJhmaE+c-Sszjw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2023-01-27 at 19:12 +0100, Thomas Huth wrote:
-> On 27/01/2023 18.45, Nina Schoetterl-Glausch wrote:
-> > The guest used in s390 kvm selftests is not be set up to handle all
-> > instructions the compiler might emit, i.e. vector instructions, leading
-> > to crashes.
-> > Limit what the compiler emits to the oldest machine model currently
-> > supported by Linux.
-> >=20
-> > Signed-off-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+On 23/01/27 06:32AM, Maciej Żenczykowski wrote:
+> On Fri, Jan 27, 2023 at 6:09 AM Andrei Gherzan
+> <andrei.gherzan@canonical.com> wrote:
+> >
+> > This change fixes the following shellcheck warnings and errors:
+> >
+> > * SC2155 (warning): Declare and assign separately to avoid masking return
+> >   values.
+> > * SC2124 (warning): Assigning an array to a string! Assign as array, or use
+> >   instead of @ to concatenate.
+> > * SC2034 (warning): ipv4_args appears unused. Verify use (or export if used
+> >   externally).
+> > * SC2242 (error): Can only exit with status 0-255. Other data should be
+> >   written to stdout/stderr.
+> > * SC2068 (error): Double quote array expansions to avoid re-splitting
+> >   elements.
+> >
+> > Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+> > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
 > > ---
-> >=20
-> > Should we also set -mtune?
->=20
-> I don't think it's really necessary
->=20
-> > Since it are vector instructions that caused the problem here, there
-> > are some alternatives:
-> >   * use -mno-vx
-> >   * set the required guest control bit to enable vector instructions on
-> >     models supporting them
-> >=20
-> > -march=3Dz10 might prevent similar issues with other instructions, but =
-I
-> > don't know if there actually exist other relevant instructions, so it
-> > could be needlessly restricting.
->=20
-> FWIW, the vector instructions have been introduced with the z13 ... so=
-=20
-> limiting to the zEC12 could be enough.
+> >  tools/testing/selftests/net/udpgro_frglist.sh | 20 +++++++++----------
+> >  1 file changed, 10 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/net/udpgro_frglist.sh b/tools/testing/selftests/net/udpgro_frglist.sh
+> > index e1ca49de2491..97bf20e9afd8 100755
+> > --- a/tools/testing/selftests/net/udpgro_frglist.sh
+> > +++ b/tools/testing/selftests/net/udpgro_frglist.sh
+> > @@ -3,7 +3,8 @@
+> >  #
+> >  # Run a series of udpgro benchmarks
+> >
+> > -readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+> > +PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+> > +readonly PEER_NS
+> >
+> >  BPF_FILE="../bpf/xdp_dummy.bpf.o"
+> >  BPF_NAT6TO4_FILE="nat6to4.o"
+> > @@ -19,7 +20,7 @@ trap cleanup EXIT
+> >
+> >  run_one() {
+> >         # use 'rx' as separator between sender args and receiver args
+> > -       local -r all="$@"
+> > +       local -r all="$*"
+> 
+> this should technically use arrays, something like
+> 
+> local -a -r args=("$@")
+> 
+> but perhaps just get rid of args and just use "$@" directly below
 
-Yes, however, if we only want to fix the issue with regards to vector instr=
-uctions,
-one of the alternatives would be a better solution, IMO.
-With regards to the second, I'm not sure what happens on old models if we
-unconditionally enable the control bit, I'm guessing it'd be fine.
-The question is how likely similar issues are and if we're fine with possib=
-ly running into them.
-For what it's worth, finding the cause here was easy, tracing kvm-s390 even=
-ts showed the faulting
-instruction.
+Using it directly would not work with the substitutions later because it
+would try to apply it to each positional parameter in turn. Same when
+using an intermediate array.
 
->=20
-> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selft=
-ests/kvm/Makefile
-> > index 1750f91dd936..df0989949eb5 100644
-> > --- a/tools/testing/selftests/kvm/Makefile
-> > +++ b/tools/testing/selftests/kvm/Makefile
-> > @@ -200,6 +200,9 @@ CFLAGS +=3D -Wall -Wstrict-prototypes -Wuninitializ=
-ed -O2 -g -std=3Dgnu99 \
-> >   	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
-> >   	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. $(EXTRA_CFLAGS) \
-> >   	$(KHDR_INCLUDES)
-> > +ifeq ($(ARCH),s390)
-> > +	CFLAGS +=3D -march=3Dz10
-> > +endif
->=20
-> Starting with z10 sounds sane to me, we still can adjust later if necessa=
-ry.
->=20
-> Reviewed-by: Thomas Huth <thuth@redhat.com>
->=20
-Thanks!
+> 
+> >         local -r tx_args=${all%rx*}
+> >         local rx_args=${all#*rx}
+> >
+> > @@ -56,13 +57,13 @@ run_one() {
+> >  }
+> >
+> >  run_in_netns() {
+> > -       local -r args=$@
+> > +       local -r args="$*"
+> >    echo ${args}
+> >         ./in_netns.sh $0 __subprocess ${args}
+> 
+> ie. here could just use "$@" directly twice instead of defining args.
+> $0 should be doublequoted - though I guess it'll never be empty, and
+> is unlikely to include spaces.
 
+That sounds fine to me. I'll include it in v4.
+
+> >  }
+> >
+> >  run_udp() {
+> > -       local -r args=$@
+> > +       local -r args="$*"
+> >
+> >         echo "udp gso - over veth touching data"
+> >         run_in_netns ${args} -u -S 0 rx -4 -v
+> > @@ -72,7 +73,7 @@ run_udp() {
+> >  }
+> >
+> >  run_tcp() {
+> > -       local -r args=$@
+> > +       local -r args="$*"
+> >
+> >         echo "tcp - over veth touching data"
+> >         run_in_netns ${args} -t rx -4 -t
+> > @@ -80,7 +81,6 @@ run_tcp() {
+> >
+> >  run_all() {
+> >         local -r core_args="-l 4"
+> 
+> is this still useful? embed directly in ipv6_args
+> 
+> > -       local -r ipv4_args="${core_args} -4  -D 192.168.1.1"
+> 
+> perhaps this should stay as a comment??
+
+Well the way I see it is one or the other. We either embed and drop
+ipv4_args or keep ipv4_args as a comment but also core_args. I'll do the
+former in v4 if no other objections.
+
+> 
+> >         local -r ipv6_args="${core_args} -6  -D 2001:db8::1"
+> >
+> >         echo "ipv6"
+> > @@ -90,19 +90,19 @@ run_all() {
+> >
+> >  if [ ! -f ${BPF_FILE} ]; then
+> 
+> double quote
+> "${BPF_FILE}"
+> in case space in file name
+
+This change only targets warning/error issues. There are way more "info"
+ones, but I didn't want to splash a big patch for all those.
+
+> 
+> >         echo "Missing ${BPF_FILE}. Build bpf selftest first"
+> > -       exit -1
+> > +       exit 1
+> >  fi
+> >
+> >  if [ ! -f "$BPF_NAT6TO4_FILE" ]; then
+> 
+> there seems to be inconsistency around [ vs [[, use [[ if relying on bash anyway
+
+
+
+> 
+> >         echo "Missing nat6to4 helper. Build bpf nat6to4.o selftest first"
+> > -       exit -1
+> > +       exit 1
+> >  fi
+> >
+> >  if [[ $# -eq 0 ]]; then
+> >         run_all
+> >  elif [[ $1 == "__subprocess" ]]; then
+> 
+> while this does indeed work, imho $1 should be "$1" to be less confusing
+
+Agreed and again, there are a good set of other places where this is
+needed. Should I just address them all in an extra patch? Again, this
+one only scoped warnings/errors to avoid impact.
+
+Thanks for the review.
+
+-- 
+Andrei Gherzan
