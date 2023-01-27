@@ -2,148 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB81767EB47
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 17:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF2967EC22
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 18:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235041AbjA0QnI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Jan 2023 11:43:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
+        id S234934AbjA0RJ1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Jan 2023 12:09:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233726AbjA0QnD (ORCPT
+        with ESMTP id S234966AbjA0RJP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 11:43:03 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5442A8B043;
-        Fri, 27 Jan 2023 08:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1674837739;
-        bh=WYiWkP/dtwkyA62g8kjNmEj2OL3Za+7+2rHtPJbfeCQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TGhlH0nsA3U7PwlWIZIq03em86sQbxEK4x6zgKRvcF6npz3GAC0KqBfSROqeX3I9G
-         Dxk1EWpuUUXorJsQm6rRA11h9pepuUPDomXvuGwlIeeQwUtTXtoy+FO6rEKoppS3x6
-         OHETtHbsRP3fakDLR0v9vFwK5xRNoCOvLXxpymzV8TXSsTA3RILafQzrqpzcRKAWOX
-         hnPHnW9Cif5tBuH1Zbgma4RBdtXup41jX11B/w0N4F6dUUCGgkq11JrW9hsVtWOUyf
-         GxnDwaQzC7HsZ5E7rv1SFRg/IGzVkNOWbaOkDAWwbn/1RVSq4PXNOSJ3tN1dSIo40f
-         RKdS+vZtOvekA==
-Received: from [10.93.0.190] (unknown [62.119.240.70])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3Nf20nq8zhkV;
-        Fri, 27 Jan 2023 11:42:17 -0500 (EST)
-Message-ID: <19a5036f-a7f4-846d-57ac-eee69d6a0ff0@efficios.com>
-Date:   Fri, 27 Jan 2023 17:42:53 +0100
+        Fri, 27 Jan 2023 12:09:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B99C212A9
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 09:07:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674839162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PmxGa44W6isfjTBSzVfP/UwTsDElhnXKEsXbjHCdyrI=;
+        b=FXrmoCriZHJfHWTWMh5dxJw9rVXJMusII24utF+WW3hBJ+HbDLj1gtQ9yeW5ooDVm9tLRO
+        +sy+MnZ8pg+qVCeS3zfGIq4Rh5UXAqnISCYndzEtBsu0X80D4NKvgFOoYAXx1IiV7qUqba
+        jjtSQj0jTELU927MPLsCvXcpdGpxeyQ=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-570-DDr5IepJP4aBx9hWZPehoQ-1; Fri, 27 Jan 2023 12:06:00 -0500
+X-MC-Unique: DDr5IepJP4aBx9hWZPehoQ-1
+Received: by mail-qv1-f71.google.com with SMTP id lv8-20020a056214578800b0053477624294so3082712qvb.22
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 09:06:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PmxGa44W6isfjTBSzVfP/UwTsDElhnXKEsXbjHCdyrI=;
+        b=WFx2WzR2YD8Odas7l/yfESFf/1GytmIRYcXIb0wJrRGQpu1uJW22MHKAaQ4FxmPgZi
+         dW/GUX7x5vQYLwjhZ5LWHYXNKnCghc9EVly7mqX5JRKc/d/TVbTbjjKYHf5KA3ttdlD2
+         DhODS8SrV3IrRUsyve9z5LON3eeQZn4IBaV8odFd5XYJ43jqLAk2UrEm/iDTY0xYMo9E
+         ZXm4su5tHpe9lLQWk0/c9n/u9VOhWMXsAKFg7aud5VJ6r0y51YXPK6eBOJ53YaGqkxOu
+         ZGrWH6ypLFVWL7eAA6Fh1uIgOi5YmM3w1SK1ZZZQEfbW1r/2M8fitFgLGNB6kok3wMv2
+         3mxQ==
+X-Gm-Message-State: AFqh2kqUmf/RcJOouft/X6guMSGuglS9dCqvwsvtIO+ntywK9CGtdA15
+        Q4eAcqwYXSGL17d9OLqTGUJe/f3MH2CCJi6kW33pCQ2bRTSyd+qtu8JwiSZ+4+vSoB5GntAaGKU
+        mL9ba4QU3bPFH0lCTS0eksGcIDfG8
+X-Received: by 2002:a05:622a:598b:b0:3a9:8f6c:2d7c with SMTP id gb11-20020a05622a598b00b003a98f6c2d7cmr63120118qtb.52.1674839160397;
+        Fri, 27 Jan 2023 09:06:00 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsBuMR76qCD9iNhA3MG7zbleHxGuuO1yl2hlMrlf18HF044I6aiUQq824mIaMRnIi9g+mEKbA==
+X-Received: by 2002:a05:622a:598b:b0:3a9:8f6c:2d7c with SMTP id gb11-20020a05622a598b00b003a98f6c2d7cmr63120073qtb.52.1674839160145;
+        Fri, 27 Jan 2023 09:06:00 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id x20-20020ac84a14000000b00399fe4aac3esm2949817qtq.50.2023.01.27.09.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 09:05:59 -0800 (PST)
+Date:   Fri, 27 Jan 2023 12:05:57 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v8 2/4] userfaultfd: split mwriteprotect_range()
+Message-ID: <Y9QEdbkZxOJ10oEJ@x1n>
+References: <20230124084323.1363825-1-usama.anjum@collabora.com>
+ <20230124084323.1363825-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 17/34] selftests: net: Fix incorrect kernel headers search
- path
-Content-Language: en-US
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
- <20230127135755.79929-18-mathieu.desnoyers@efficios.com>
- <9174ce77-f891-8428-6c36-6b8b4a21cd26@tessares.net>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <9174ce77-f891-8428-6c36-6b8b4a21cd26@tessares.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230124084323.1363825-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-01-27 11:21, Matthieu Baerts wrote:
-> Hi Mathieu,
+On Tue, Jan 24, 2023 at 01:43:21PM +0500, Muhammad Usama Anjum wrote:
+> Split mwriteprotect_range() to create a unlocked version. This
+> will be used in the next patch to write protect a memory area.
+> Add a helper function, wp_range_async() as well.
 > 
-> On 27/01/2023 14:57, Mathieu Desnoyers wrote:
->> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
->> building against kernel headers from the build environment in scenarios
->> where kernel headers are installed into a specific output directory
->> (O=...).
-> 
-> Thank you for the patch!
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-You're welcome :)
+IIUC this patch is not needed.  You have a stable vma, so I think you can
+directly use uffd_wp_range(), while most of the mwriteprotect_range() is
+not needed.
 
-> 
->> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: linux-kselftest@vger.kernel.org
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: <stable@vger.kernel.org>    [5.18+]
-> 
-> (It might be useful to add a "Fixes" tag as well to clearly indicate the
-> dependence with a specific commit and better understand the fix.)
-
-Just a bit of context: I found this problematic pattern in my own 
-selftests (rseq and membarrier), and figured that it was an issue all 
-across the board. I did an initial single-patch fix, and then split it 
-up in 34 patches based on feedback from Shuah Khan.
-
-I know it should have a Fixed ... tag, but I simply don't have time to 
-do the historical investigation work for all the 34 patches form this 
-patchset. Perhaps someone else is up to the task ?
-
-> 
-> (and add all the individual maintainers of the files you modify -- feel
-> free to use 'b4' to help you for this task ;-) )
-
-If this can be automated, then perhaps Shuah can use it to append the 
-relevant information ?
-
-> 
-> (...)
-> 
->> diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
->> index 43a723626126..06bba013bcef 100644
->> --- a/tools/testing/selftests/net/mptcp/Makefile
->> +++ b/tools/testing/selftests/net/mptcp/Makefile
->> @@ -2,7 +2,7 @@
->>   
->>   top_srcdir = ../../../../..
->>   
->> -CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
->> +CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g $(KHDR_INCLUDES)
-> 
-> I only looked at the modification here with MPTCP selftests and it looks
-> good to me. It makes sense because if KHDR_INCLUDES is not set, it will
-> be set later by lib.mk I suppose.
-> 
-> Just one small thing: I guess you can also remove "top_srcdir" variable
-> that is no longer used, right? I see that "lib.mk" uses a variable with
-> the same name but it overrides its value anyway. But it is likely I
-> missed something there :)
-> 
-> If indeed it is no longer needed, I guess a few Makefile can be adapted
-> according to:
-> 
->    git grep top_srcdir -- tools/testing/selftests/*/
-> 
-
-Yes, this should perhaps come as additional fixes on top of my series. I 
-don't have time to do it myself though.
-
-Anyone willing to contribute it ?
-
-> I guess most of these Makefile are very similar, no? For MPTCP, we
-> simply looked at what was done elsewhere :)
-
-Yes, I did likewise.
-
-Thanks for the feedback,
-
-Mathieu
-
-> 
-> Cheers,
-> Matt
+There's one trivial detail of ignoring userfaultfd_ctx->mmap_changing when
+it's set to true, but I don't think it applies here either because it was
+used to resolve a problem in uffd non-cooperative mode on the predictable
+behavior of events, here I don't think it matters a lot either.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Peter Xu
 
