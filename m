@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B3A67E776
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 14:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC1A67E77B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 14:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbjA0N6j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Jan 2023 08:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
+        id S234352AbjA0N6m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Jan 2023 08:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233688AbjA0N61 (ORCPT
+        with ESMTP id S233925AbjA0N62 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:58:27 -0500
+        Fri, 27 Jan 2023 08:58:28 -0500
 Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C6C23308;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AEA2312C;
         Fri, 27 Jan 2023 05:58:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
         s=smtpout1; t=1674827888;
-        bh=qyXkvYUwyIa3WaXYDPo/AGluylZ3rgz4mbOR6T5kRy8=;
+        bh=7jIfTNCu7zpPLHJpUW3uli6pP+V4do4UcRBq1ufAji0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fx7Ccsg1l4/bIlGKAci/UtOvrAJQFUWqzzn492GzbHcL4h1usGWczP/8oHFZbF5xo
-         8qfAjhTZ7Sa+22OS2kqcZWJIXdvqlo4M+/VOcV0BXZow1FkdctwFwLgW9ANI/IyZJS
-         Zi+JLh0AQI6oJZslJIrl2/N6xATYSAuEsdq6WjD0Y1EcgeqqsbgbZ3TzqdJ8i4zESh
-         so0TvFfUgEUkHw9oJL7Iv8DDfB+Po3DAJaX7UY9r7ZwC4/PEEsJIZ/s/4jFdTKjkU9
-         lPunRDoIzEN2mh+wPQL0bfWoF+gztAjdvSmLCVwIeuIjGKDQogXgs30C/aHRIGIfcv
-         G4/tkHIXBe8OA==
+        b=mvURC9U1jZI6BZB0ToC7FIqkTyLlEnklVvuXSavwfDi5OJBDX8BbJXZTVE79Ro1y6
+         qjBz5USNdaQ2LoEooh45BZZu4u+Rq89a3B6BiCzSpKF/+cY2d24icng8W/rckilmVS
+         dEWIWRrHyG5u6e2QrwlYdQtH2dKLtY23jQ94Xl6RE5ByZ5jHlQFz4bvt3eduq19B1v
+         lHNALEEByemodJogrT+eLdLnV+a2Bt8Rd8QOcsEZuJvb8wBRZOB/5FMC3ms4pqhG8D
+         mLCtXVrL50YGcn2QL1btABgcOT7KTgpThZzkjbE9X5bsIV5Y6AMNERja4NMFJAr74T
+         WL6yOCtK/O26A==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0c0JvFzhd3;
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0c1jKPzhd4;
         Fri, 27 Jan 2023 08:58:08 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>
 Cc:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 33/34] selftests: ptrace: Use installed kernel headers search path
-Date:   Fri, 27 Jan 2023 08:57:54 -0500
-Message-Id: <20230127135755.79929-34-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 34/34] selftests: tdx: Use installed kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:55 -0500
+Message-Id: <20230127135755.79929-35-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
@@ -59,20 +59,36 @@ Cc: Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
 ---
- tools/testing/selftests/ptrace/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/tdx/Makefile         | 2 +-
+ tools/testing/selftests/tdx/tdx_guest_test.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
-index 2f1f532c39db..96ffa94afb91 100644
---- a/tools/testing/selftests/ptrace/Makefile
-+++ b/tools/testing/selftests/ptrace/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--CFLAGS += -std=c99 -pthread -iquote../../../../include/uapi -Wall
-+CFLAGS += -std=c99 -pthread -Wall $(KHDR_INCLUDES)
+diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
+index 8dd43517cd55..306e9c4d5ef7 100644
+--- a/tools/testing/selftests/tdx/Makefile
++++ b/tools/testing/selftests/tdx/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- TEST_GEN_PROGS := get_syscall_info peeksiginfo vmaccess
+-CFLAGS += -O3 -Wl,-no-as-needed -Wall -static
++CFLAGS += -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES) -static
  
+ TEST_GEN_PROGS := tdx_guest_test
+ 
+diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
+index 2a2afd856798..81d8cb88ea1a 100644
+--- a/tools/testing/selftests/tdx/tdx_guest_test.c
++++ b/tools/testing/selftests/tdx/tdx_guest_test.c
+@@ -12,8 +12,8 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ 
++#include <linux/tdx-guest.h>
+ #include "../kselftest_harness.h"
+-#include "../../../../include/uapi/linux/tdx-guest.h"
+ 
+ #define TDX_GUEST_DEVNAME "/dev/tdx_guest"
+ #define HEX_DUMP_SIZE 8
 -- 
 2.25.1
 
