@@ -2,226 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E7467E981
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 16:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005D367EABB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Jan 2023 17:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbjA0PdY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Jan 2023 10:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S234025AbjA0QWB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Jan 2023 11:22:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbjA0PdX (ORCPT
+        with ESMTP id S230423AbjA0QV5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 10:33:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC09757B8
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 07:32:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674833558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sJQRlyLqASk+uXdbQGFsiJ2d1fNp4UuhBEQ/arPq7Lc=;
-        b=MrH7wwDKxc2H5aSs+8wC3RSre+/RZTmkAFUdsYqRlz8uB7lSloxhNk0CBn+iShngU3enhP
-        monH51mYjWN/KEwdxb+HNnIY6sNeo4yTD1cjdQMoqQUhTNLEiPjgmhfG8MKmBJTPGnJLHH
-        pImxRSQkYKsKaec9v3hz3xC0NhKvQjs=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-144-Yxt5xYzeMtGJpTGs-h_8Nw-1; Fri, 27 Jan 2023 10:32:37 -0500
-X-MC-Unique: Yxt5xYzeMtGJpTGs-h_8Nw-1
-Received: by mail-qk1-f200.google.com with SMTP id de37-20020a05620a372500b00707391077b4so3188436qkb.17
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 07:32:37 -0800 (PST)
+        Fri, 27 Jan 2023 11:21:57 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9DFD518
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 08:21:53 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id rl14so15174489ejb.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 08:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HSNW9eDCc8qC28SnczcwrmjDfHdMbiyLyRXKQWjQyVI=;
+        b=YnklbmeC7xhmg2DUPNwdKFRzl+4vG/QS2ZTEP4GXswUv1LK3rOxd9PB3uDhoPNlOQL
+         m5CpIXMOYvLuwJWV3QhvA1NDwFpkgcI1YXgMtNoKWEtcHV+VS9iEPsDtjUUKyhVwtvUU
+         1G0mkvghMm54BeLGx0dikLkNtOp3qKe4Ub9N6nXWrYcqc/E2QvYivhh6qWl1uMsDcxHx
+         XV/ORE+O8U1fufY3olMFiOzr+uFcUBYFDdYWVYFm0Hmukj08rP5+4wz7W2/l4K8VwkMx
+         PXx2juheT9QURmAcD9sztPVPrsxSN2PlJSYNvOmTY631qpVOu6MCPiikcKLgO1xpb3/p
+         8w0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sJQRlyLqASk+uXdbQGFsiJ2d1fNp4UuhBEQ/arPq7Lc=;
-        b=f/310XgPOtq789xvzd1HZvYrt+sCNSgnlqkbOLpmdVl6wJukvk3aYap5pRmyuDBATt
-         xqJPXm/l4by2prKpYCQM6pCu4jXGXRibAtHdPJRcQLJ2m9rCl502yZN9C97BHIUNrVI0
-         p611rd9wjqKONTpxBoA7pIi6RMHtRXnP2uIallcatvUUG4eeFN0tkt6PpNFu4cPzCn3j
-         4IXKQtIwgpbN82dO0fTSN49DnjhxgONMkBfBGyI82usoxUVRAsgSpT4G3guyROPKImTx
-         TwVyRrQO6rm6zx1c4+RVjIXol6Jj4zFexqBRU5RpIQhpMC7dZ3/QJwF4b3CZ17JqYlHg
-         93QA==
-X-Gm-Message-State: AFqh2kqVrMTnakx+n9EvY1hbV8+J6dZ7kVOptvJx6x7Cu2fJay7N52Ht
-        0CutdKYqFncKP6IZAT83FMG/xT0F4SFUJRW5wHXCv171fvkZ5fBPd2K5+hCFjv8PaTfVmL/PgVW
-        wHcWDW5aGiP/oykbQJtV9OB6L8fDN
-X-Received: by 2002:ac8:45c4:0:b0:3b6:34b0:fc9c with SMTP id e4-20020ac845c4000000b003b634b0fc9cmr54937825qto.42.1674833557016;
-        Fri, 27 Jan 2023 07:32:37 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt0k4/DU6oVKnRtGvExXLnbSo8VJTo48yXrLbOJjyyP3PKeDnkAkB1/MMIbIrafuBgbyw9qpA==
-X-Received: by 2002:ac8:45c4:0:b0:3b6:34b0:fc9c with SMTP id e4-20020ac845c4000000b003b634b0fc9cmr54937805qto.42.1674833556730;
-        Fri, 27 Jan 2023 07:32:36 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id j18-20020ac84052000000b003b635a5d56csm2821434qtl.30.2023.01.27.07.32.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 07:32:35 -0800 (PST)
-Date:   Fri, 27 Jan 2023 10:32:33 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v8 1/4] userfaultfd: Add UFFD WP Async support
-Message-ID: <Y9PtHUONh2ImQyKF@x1n>
-References: <20230124084323.1363825-1-usama.anjum@collabora.com>
- <20230124084323.1363825-2-usama.anjum@collabora.com>
- <Y9MHM+RVzvigcTTk@x1n>
- <1968dff9-f48a-3290-a15b-a8b739f31ed2@collabora.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HSNW9eDCc8qC28SnczcwrmjDfHdMbiyLyRXKQWjQyVI=;
+        b=N6I5vV/Rz8rfxzZXCiQOXHT3tlnRDu8XqLp879D670L/l0Ae8+C+hJSc3RkbVMbnQ9
+         7LbwOlayNtURN6evZuWKwX+mkVce8PZexKfU4qs8v/bKgCgl4JR6YCh0tzFgQ/qmYfG9
+         JYddcnkqGzhGK7GvRGG/2okTaX59sJxl2w6cphqAIkEapZmlIZL56m2N2RKnUu958JdQ
+         nuVYJQijexH28BbUQTjfemw9Q+cdj/YQaBfeTyCAAQAnUqEjSIuqciPJc19VhAIaxWiI
+         L7dXTCDIEJ6ht6YqnIq0261JjeXj6jsCGD+t9lwSbWoof7pjctUcgTz9HBoVgii+9SPc
+         xKIw==
+X-Gm-Message-State: AO0yUKUBF1DpRbAaqB9m+odIkLcGU7R95n2OYiaiJ/diUQed9zmpip3I
+        XEc4kI3aMdjXjPEVMgttslSYEg==
+X-Google-Smtp-Source: AK7set8W8aeDEdCFLfwaUEgFyL/5MHo0l2bEdR11o4KmIXuxIeXDmcn7ffdEYzbaB/xVmHJEA5H3Qw==
+X-Received: by 2002:a17:906:d1d0:b0:878:6df7:ce74 with SMTP id bs16-20020a170906d1d000b008786df7ce74mr6111842ejb.23.1674836512256;
+        Fri, 27 Jan 2023 08:21:52 -0800 (PST)
+Received: from [10.44.2.5] ([81.246.10.41])
+        by smtp.gmail.com with ESMTPSA id hd16-20020a170907969000b0087854d35687sm2538205ejc.172.2023.01.27.08.21.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jan 2023 08:21:51 -0800 (PST)
+Message-ID: <9174ce77-f891-8428-6c36-6b8b4a21cd26@tessares.net>
+Date:   Fri, 27 Jan 2023 17:21:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1968dff9-f48a-3290-a15b-a8b739f31ed2@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 17/34] selftests: net: Fix incorrect kernel headers search
+ path
+Content-Language: en-GB
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+ <20230127135755.79929-18-mathieu.desnoyers@efficios.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230127135755.79929-18-mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:47:14AM +0500, Muhammad Usama Anjum wrote:
-> >> diff --git a/mm/memory.c b/mm/memory.c
-> >> index 4000e9f017e0..8c03b133d483 100644
-> >> --- a/mm/memory.c
-> >> +++ b/mm/memory.c
-> >> @@ -3351,6 +3351,18 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
-> >>  
-> >>  	if (likely(!unshare)) {
-> >>  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
-> >> +			if (userfaultfd_wp_async(vma)) {
-> >> +				/*
-> >> +				 * Nothing needed (cache flush, TLB invalidations,
-> >> +				 * etc.) because we're only removing the uffd-wp bit,
-> >> +				 * which is completely invisible to the user. This
-> >> +				 * falls through to possible CoW.
-> > 
-> > Here it says it falls through to CoW, but..
-> > 
-> >> +				 */
-> >> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
-> >> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
-> >> +					   pte_clear_uffd_wp(*vmf->pte));
-> >> +				return 0;
-> > 
-> > ... it's not doing so.  The original lines should do:
-> > 
-> > https://lore.kernel.org/all/Y8qq0dKIJBshua+X@x1n/
+Hi Mathieu,
 
-[1]
+On 27/01/2023 14:57, Mathieu Desnoyers wrote:
+> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+> building against kernel headers from the build environment in scenarios
+> where kernel headers are installed into a specific output directory
+> (O=...).
 
-> > 
-> > Side note: you cannot modify pgtable after releasing the pgtable lock.
-> > It's racy.
-> If I don't unlock and return after removing the UFFD_WP flag in case of
-> async wp, the target just gets stuck. Maybe the pte lock is not unlocked in
-> some path.
-> 
-> If I unlock and don't return, the crash happens.
-> 
-> So I'd put unlock and return from here. Please comment on the below patch
-> and what do you think should be done. I've missed something.
+Thank you for the patch!
 
-Have you tried to just use exactly what I suggested in [1]?  I'll paste
-again:
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: <stable@vger.kernel.org>    [5.18+]
 
----8<---
-diff --git a/mm/memory.c b/mm/memory.c
-index 4000e9f017e0..09aab434654c 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3351,8 +3351,20 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+(It might be useful to add a "Fixes" tag as well to clearly indicate the
+dependence with a specific commit and better understand the fix.)
 
-        if (likely(!unshare)) {
-                if (userfaultfd_pte_wp(vma, *vmf->pte)) {
--                       pte_unmap_unlock(vmf->pte, vmf->ptl);
--                       return handle_userfault(vmf, VM_UFFD_WP);
-+                       if (userfaultfd_uffd_wp_async(vma)) {
-+                               /*
-+                                * Nothing needed (cache flush, TLB
-+                                * invalidations, etc.) because we're only
-+                                * removing the uffd-wp bit, which is
-+                                * completely invisible to the user.
-+                                * This falls through to possible CoW.
-+                                */
-+                               set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
-+                                          pte_clear_uffd_wp(*vmf->pte));
-+                       } else {
-+                               pte_unmap_unlock(vmf->pte, vmf->ptl);
-+                               return handle_userfault(vmf, VM_UFFD_WP);
-+                       }
-                }
----8<---
+(and add all the individual maintainers of the files you modify -- feel
+free to use 'b4' to help you for this task ;-) )
 
-Note that there's no "return", neither the unlock.  The lock is used in the
-follow up write fault resolution and it's released later.
+(...)
 
-Meanwhile please fully digest how pgtable lock is used in this path before
-moving forward on any of such changes.
+> diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
+> index 43a723626126..06bba013bcef 100644
+> --- a/tools/testing/selftests/net/mptcp/Makefile
+> +++ b/tools/testing/selftests/net/mptcp/Makefile
+> @@ -2,7 +2,7 @@
+>  
+>  top_srcdir = ../../../../..
+>  
+> -CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
+> +CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g $(KHDR_INCLUDES)
 
-> 
-> > 
-> >> +			}
-> >>  			pte_unmap_unlock(vmf->pte, vmf->ptl);
-> >>  			return handle_userfault(vmf, VM_UFFD_WP);
-> >>  		}
-> >> @@ -4812,8 +4824,21 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
-> >>  
-> >>  	if (vma_is_anonymous(vmf->vma)) {
-> >>  		if (likely(!unshare) &&
-> >> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
-> >> -			return handle_userfault(vmf, VM_UFFD_WP);
-> >> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
-> >> +			if (userfaultfd_wp_async(vmf->vma)) {
-> >> +				/*
-> >> +				 * Nothing needed (cache flush, TLB invalidations,
-> >> +				 * etc.) because we're only removing the uffd-wp bit,
-> >> +				 * which is completely invisible to the user. This
-> >> +				 * falls through to possible CoW.
-> >> +				 */
-> >> +				set_pmd_at(vmf->vma->vm_mm, vmf->address, vmf->pmd,
-> >> +					   pmd_clear_uffd_wp(*vmf->pmd));
-> > 
-> > This is for THP, not hugetlb.
-> > 
-> > Clearing uffd-wp bit here for the whole pmd is wrong to me, because we
-> > track writes in small page sizes only.  We should just split.
-> By detecting if the fault is async wp, just splitting the PMD doesn't work.
-> The below given snippit is working right now. But definately, the fault of
-> the whole PMD is being resolved which if we can bypass by correctly
-> splitting would be highly desirable. Can you please take a look on UFFD
-> side and suggest the changes? It would be much appreciated. I'm attaching
-> WIP v9 patches for you to apply on next(next-20230105) and pagemap_ioctl
-> selftest can be ran to test things after making changes.
+I only looked at the modification here with MPTCP selftests and it looks
+good to me. It makes sense because if KHDR_INCLUDES is not set, it will
+be set later by lib.mk I suppose.
 
-Can you elaborate why thp split didn't work?  Or if you want, I can look
-into this and provide the patch to enable uffd async mode.
+Just one small thing: I guess you can also remove "top_srcdir" variable
+that is no longer used, right? I see that "lib.mk" uses a variable with
+the same name but it overrides its value anyway. But it is likely I
+missed something there :)
 
-Thanks,
+If indeed it is no longer needed, I guess a few Makefile can be adapted
+according to:
 
+  git grep top_srcdir -- tools/testing/selftests/*/
+
+I guess most of these Makefile are very similar, no? For MPTCP, we
+simply looked at what was done elsewhere :)
+
+Cheers,
+Matt
 -- 
-Peter Xu
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
