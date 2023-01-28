@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAA967F8C0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jan 2023 15:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C2A67F8BD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jan 2023 15:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbjA1Oip (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 28 Jan 2023 09:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S234485AbjA1Oio (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 28 Jan 2023 09:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234405AbjA1Oim (ORCPT
+        with ESMTP id S230336AbjA1Oim (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sat, 28 Jan 2023 09:38:42 -0500
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D9B206A6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08521DBB6;
         Sat, 28 Jan 2023 06:38:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1674916720; x=1706452720;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TIWAIiE/Um0/DDy4ue9IDiDz57FjmJ1SOy/S5NjSc+k=;
-  b=ODGHJ8mvM3XdyYoe49pIV/SI4nASaLwPgD52VSeaf/NJy9h5YLEuRJ6P
-   CIE7ux6KDmctesQRMCfX1+uCwElfiOokFpg4hI/1K/Dh4hlMn5Z5jOSWm
-   GGVPOIsA+XuOhRrB60ks4wSreO2tlhtyQ597EKlviJtXHR8ln+C55P/+i
-   QBKk8xfqnvju3vke7CYI2Juam+OJ5qtaciMU1FdMq6yoHZbiC9c6jkNIC
-   f1pz5KjJqaQJ9vtcSrASVRGEk+DHK/87m4FyJwfxbiyzhjPX+jjR/n4G4
-   57o4Zc21jC+nmP5FxvOpGLTkxVqhmddJG9ETVcvvDCdpPd5rYulmRfiFL
+  bh=7tzz0OFAYxOocSKroByLjFR0he9CM8tPp7zRmAddfEA=;
+  b=V+4vg7rkb3qW45x6X4EqDQ3tiLh2ijOLQsEoR/ATCQ2jq+e+eibjwKwV
+   IaI5rzLjRcLErqkpk2O18LTUxdxXm9/YWKZWFUWIDH12XP9YV4hAEltVB
+   vgxoimOlCnd8RILpYSmnffhzz/RXa0Pmyi3dpsLu37dgYmg/Iw+21sXb3
+   FndjWI6uyMGXkPkSw41Ji7e7V5/zVmJ44Zcj/7m37tPD/vW6+Yy+Lav+g
+   SthJTxv9nsJqYbrdYIUKFZ+w+8jqaNFt5/kd0NFBXMOYaBQCFp4mN8wX2
+   OblRBLAl4SstNWwNje9iA6jmH2CwNCDbCgC9p9GzkV6+jx08tFg7l0nD/
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="306944590"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="306944583"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="306944590"
+   d="scan'208";a="306944583"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 06:38:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="908984119"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="908984118"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="908984119"
+   d="scan'208";a="908984118"
 Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
   by fmsmga006.fm.intel.com with ESMTP; 28 Jan 2023 06:38:35 -0800
 Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pLmLi-0000nh-2j;
+        id 1pLmLi-0000nf-2b;
         Sat, 28 Jan 2023 14:38:34 +0000
-Date:   Sat, 28 Jan 2023 22:38:19 +0800
+Date:   Sat, 28 Jan 2023 22:38:22 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
@@ -63,7 +63,7 @@ Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         Sven Schnelle <svens@linux.ibm.com>
 Subject: Re: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key
  checked cmpxchg
-Message-ID: <202301282258.RvVJOYVA-lkp@intel.com>
+Message-ID: <202301282223.YafIuB1E-lkp@intel.com>
 References: <20230125212608.1860251-13-scgl@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -93,7 +93,7 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Janis-Schoetterl-Glausch/
 base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
 patch link:    https://lore.kernel.org/r/20230125212608.1860251-13-scgl%40linux.ibm.com
 patch subject: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key checked cmpxchg
-config: s390-randconfig-r022-20230123 (https://download.01.org/0day-ci/archive/20230128/202301282258.RvVJOYVA-lkp@intel.com/config)
+config: s390-randconfig-r044-20230123 (https://download.01.org/0day-ci/archive/20230128/202301282223.YafIuB1E-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
