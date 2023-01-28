@@ -2,52 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DCB67F371
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jan 2023 02:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4694B67F3A3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jan 2023 02:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjA1BFm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Jan 2023 20:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
+        id S232953AbjA1BQb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Jan 2023 20:16:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjA1BFl (ORCPT
+        with ESMTP id S231648AbjA1BQa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 20:05:41 -0500
+        Fri, 27 Jan 2023 20:16:30 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D488003F;
-        Fri, 27 Jan 2023 17:05:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A74D222D4;
+        Fri, 27 Jan 2023 17:16:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BA40B82209;
-        Sat, 28 Jan 2023 01:05:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E6AC433D2;
-        Sat, 28 Jan 2023 01:05:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 094FCB82209;
+        Sat, 28 Jan 2023 01:16:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C029C433D2;
+        Sat, 28 Jan 2023 01:16:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674867937;
-        bh=zwFp7OLE6mqJKvAqS7r9p7cbYPOOvzIRKPKfObXqSoY=;
+        s=k20201202; t=1674868586;
+        bh=1mj5p1JqgSFAq91cMLICU1M15Cyqj+sAG9pB3DcSdwQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XDIjFePXZuzRFpjSEAYdUjb5XASHHgwnmAa+rIdsQk63qoa0t+2d/lESKzDfmyRGw
-         FaC2gSa5y7C86A+OON757UIWOSb1/9g/IIRK/BxgLNEVX+AaqJxm+p9q9ht0RDJx0v
-         kM3sNP0e6gNb4ip5M1K1EDFwDCpq/UdgpagoQPBj9/DhROl/2+KAU61TMeT2dC5yHi
-         zC9Bq7e5kINRJNqI83oVG7d/9Ljywy3BMOVMs29HsJ2dSJNF3cqZ1P+D1CaX8RdtCu
-         U2rvTUYSbADbgiPU4k3oT0R4kNZgRB+Y/NBI4Xlop17K46ItDhxwBpwEHOW2hEYUIV
-         QJb17uXjA3PXA==
-Date:   Sat, 28 Jan 2023 10:05:33 +0900
+        b=DFtZUVSmOLI6M/fPc52KBzKQHWGiJSlvc7BOtEQstW2NWxrlEzfA9G8x5qkfMPgZQ
+         i+ACRAQWAn+c26cm35PnmQ6HRayFlrr2UWlgLhUaHl4sUAUMbpRJwv4lDyI/uvdjF0
+         plU5coibpOyOPUe60YVNowsL3PF9MKvMYPZbQEHqUk6IxK639cIpUauuFoXBdcEG2y
+         94VY+gOtRJEaE1070i7L9SCnpBgEuT7nOfhAsFrRvzRJuuxJ0SqR6VJpiKO32yrFp9
+         rfWVX3FzjaKg6Pwfc5Q/FYMT+DAs7iPGmAkAhn1QuEbjobqpUBItZGIAL0tQ93SpPP
+         U5w63hiEBAtAg==
+Date:   Sat, 28 Jan 2023 10:16:22 +0900
 From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Donglin Peng <dolinux.peng@gmail.com>, mhiramat@kernel.org,
-        xiehuan09@gmail.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6] tracing/probe: add a char type to show the character
- value of traced arguments
-Message-Id: <20230128100533.38af2d809099cc8cecba8f3d@kernel.org>
-In-Reply-To: <20230124173800.639a8165@gandalf.local.home>
-References: <20221219110613.367098-1-dolinux.peng@gmail.com>
-        <20230124173800.639a8165@gandalf.local.home>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Akanksha J N <akanksha@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
+        shuah@kernel.org
+Subject: Re: [PATCH] selftests/ftrace: Extend multiple_kprobes.tc to add
+ multiple consecutive probes in a function
+Message-Id: <20230128101622.ce6f8e64d929e29d36b08b73@kernel.org>
+In-Reply-To: <1674629944.vwzovyd4lk.naveen@linux.ibm.com>
+References: <20230112095600.37665-1-akanksha@linux.ibm.com>
+        <1673529279.3c5f8oes3z.naveen@linux.ibm.com>
+        <20230113005153.c6ca2f75b9d12627eb63308a@kernel.org>
+        <1673601511.tq30r5phea.naveen@linux.ibm.com>
+        <20230114002126.a37640f815b74e9e78259a9f@kernel.org>
+        <1673856229.a7tekgas75.naveen@linux.ibm.com>
+        <20230120085554.ab4dc1b72990a4957c4c88e2@kernel.org>
+        <1674629944.vwzovyd4lk.naveen@linux.ibm.com>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -58,196 +65,98 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 24 Jan 2023 17:38:00 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Wed, 25 Jan 2023 12:39:36 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+
+> Hi Masami,
+> 
+> Masami Hiramatsu wrote:
+> >> > 
+> >> > Yes, please make it separate, this test case is for checking whether
+> >> > the ftrace can define/enable/disable multiple kprobe events. Not for
+> >> > checking kprobe with different types, nor checking interactions among
+> >> > different types of kprobes.
+> >> > 
+> >> > (BTW, if you want to test optprobe on x86, you can not put the probes
+> >> >  within the jump instruction (+5 bytes). It will unoptimize existing
+> >> >  optimized kprobe in that case)
+> >> 
+> >> Ok, I can see why we won't be able to optimize any of the probes on x86 
+> >> with this approach. But, we should be able to do so on powerpc and arm, 
+> >> the only other architectures supporting OPTPROBES at this time. For x86, 
+> >> we may have to extend the test to check kprobes/list.
+> > 
+> > Are there any instruction type specific limitation on those arch for
+> > using optprobe? I guess the 'call' (branch with link register) will not
+> > able to be optimized because it leaves the trampoline address on the
+> > stack.
+> 
+> Yes, at least on powerpc, we only optimize ALU instructions and do not 
+> optimize load/store instructions, among many others. This is the reason 
+> we try to put a probe uptil 256 offset into a function in the proposed 
+> test, which will almost certainly catch an instruction that can be 
+> optimized.
+> 
+> > 
+> >> 
+> >> Crucially, I think trying to place a probe at each byte can still 
+> >> exercize interactions across KPROBES_ON_FTRACE and normal kprobes, so 
+> >> this test is still a good start. In addition, we get to ensure that 
+> >> kprobes infrastructure is rejecting placing probes at non-instruction 
+> >> boundaries.
+> > 
+> > The interfere between probes can be happen between kprobes and optprobe
+> > (*only on x86*), but not with KPORBES_ON_FTRACE. The ftrace replaced NOP
+> > will be handled as one instruction. 
+> 
+> Yes.
+> 
+> > 
+> >> > And do you really need to run "multiple" kprobes at once?
+> >> > I think what you need is 'kprobe_opt_types.tc'.
+> >> 
+> >> Yes, enabling those probes is a good stress test to ensure we are only 
+> >> accepting valid probe locations.
+> >> 
+> >> multiple_kprobe_types.tc ? :)
+> > 
+> > Please don't mixed it with the concept of 'multiple' probe test.
+> > It is different that
+> >  - kprobes can put probes on each instruction boundary.
+> >  - kprobes can allocate and enable multiple probes at the same time.
+> > 
+> > What the multiple_kprobes.tc tests is the latter one.
+> > (This is the reason why it chooses different functions so as not to
+> >  interfere with each other.)
+> 
+> Ok, I was coming from the point of view that both tests end up 
+> installing "multiple" kprobes, but I do see your point.
+> 
+> How about adding two new tests:
+> 1. The same test as has been proposed in this thread: trying to add a 
+> kprobe at every byte within $FUNCTION_FORK upto an offset of 256 bytes. 
+> We can probably call it kprobe_insn_boundary.tc
+
+OK.
+
+> 2. A new test to ensure we can add different kprobe types 
+> (kprobe_opt_types.tc). This test will need to enable and check if each 
+> probe has been optimized or not and needs arch-specific knowledge so 
+> that we can take care of x86.
+
+OK, this should be only for x86. 
 
 > 
-> Looking back at emails that happened when I was off ;-)
-> 
-> Masami, what's you thoughts about this patch?
+> Would that be ok?
 
-Oops, I also missed this.
-
-Thanks for updating the patch!
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-I'll pick this to the for-next.
+Yes, this sounds good to me. 
 
 Thank you!
 
-
-> 
-> -- Steve
 > 
 > 
-> On Mon, 19 Dec 2022 03:06:13 -0800
-> Donglin Peng <dolinux.peng@gmail.com> wrote:
-> 
-> > There are scenes that we want to show the character value of traced
-> > arguments other than a decimal or hexadecimal or string value for debug
-> > convinience. I add a new type named 'char' to do it and a new test case
-> > file named 'kprobe_args_char.tc' to do selftest for char type.
-> > 
-> > For example:
-> > 
-> > The to be traced function is 'void demo_func(char type, char *name);', we
-> > can add a kprobe event as follows to show argument values as we want:
-> > 
-> > echo  'p:myprobe demo_func $arg1:char +0($arg2):char[5]' > kprobe_events
-> > 
-> > we will get the following trace log:
-> > 
-> > ... myprobe: (demo_func+0x0/0x29) arg1='A' arg2={'b','p','f','1',''}
-> > 
-> > Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > ---
-> > Changes in v6:
-> >  - change "\'%c\'" to "'%c'" in trace_probe.c
-> > 
-> > Changes in v5:
-> >  - wrap the output character with single quotes
-> >  - add a test case named kprobe_args_char.tc to do selftest
-> > 
-> > Changes in v4:
-> >  - update the example in the commit log
-> > 
-> > Changes in v3:
-> >  - update readme_msg
-> > 
-> > Changes in v2:
-> >  - fix build warnings reported by kernel test robot
-> >  - modify commit log
-> > ---
-> >  Documentation/trace/kprobetrace.rst           |  3 +-
-> >  kernel/trace/trace.c                          |  2 +-
-> >  kernel/trace/trace_probe.c                    |  2 +
-> >  kernel/trace/trace_probe.h                    |  1 +
-> >  .../ftrace/test.d/kprobe/kprobe_args_char.tc  | 47 +++++++++++++++++++
-> >  5 files changed, 53 insertions(+), 2 deletions(-)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
-> > 
-> > diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
-> > index 4274cc6a2f94..007972a3c5c4 100644
-> > --- a/Documentation/trace/kprobetrace.rst
-> > +++ b/Documentation/trace/kprobetrace.rst
-> > @@ -58,7 +58,7 @@ Synopsis of kprobe_events
-> >    NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-> >    FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
-> >  		  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
-> > -		  (x8/x16/x32/x64), "string", "ustring" and bitfield
-> > +		  (x8/x16/x32/x64), "char", "string", "ustring" and bitfield
-> >  		  are supported.
-> >  
-> >    (\*1) only for the probe on function entry (offs == 0).
-> > @@ -80,6 +80,7 @@ E.g. 'x16[4]' means an array of x16 (2bytes hex) with 4 elements.
-> >  Note that the array can be applied to memory type fetchargs, you can not
-> >  apply it to registers/stack-entries etc. (for example, '$stack1:x8[8]' is
-> >  wrong, but '+8($stack):x8[8]' is OK.)
-> > +Char type can be used to show the character value of traced arguments.
-> >  String type is a special type, which fetches a "null-terminated" string from
-> >  kernel space. This means it will fail and store NULL if the string container
-> >  has been paged out. "ustring" type is an alternative of string for user-space.
-> > diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> > index 6d7ef130f57e..c602081e64c8 100644
-> > --- a/kernel/trace/trace.c
-> > +++ b/kernel/trace/trace.c
-> > @@ -5615,7 +5615,7 @@ static const char readme_msg[] =
-> >  	"\t           $stack<index>, $stack, $retval, $comm,\n"
-> >  #endif
-> >  	"\t           +|-[u]<offset>(<fetcharg>), \\imm-value, \\\"imm-string\"\n"
-> > -	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, string, symbol,\n"
-> > +	"\t     type: s8/16/32/64, u8/16/32/64, x8/16/32/64, char, string, symbol,\n"
-> >  	"\t           b<bit-width>@<bit-offset>/<container-size>, ustring,\n"
-> >  	"\t           <type>\\[<array-size>\\]\n"
-> >  #ifdef CONFIG_HIST_TRIGGERS
-> > diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> > index bb2f95d7175c..794a21455396 100644
-> > --- a/kernel/trace/trace_probe.c
-> > +++ b/kernel/trace/trace_probe.c
-> > @@ -50,6 +50,7 @@ DEFINE_BASIC_PRINT_TYPE_FUNC(x8,  u8,  "0x%x")
-> >  DEFINE_BASIC_PRINT_TYPE_FUNC(x16, u16, "0x%x")
-> >  DEFINE_BASIC_PRINT_TYPE_FUNC(x32, u32, "0x%x")
-> >  DEFINE_BASIC_PRINT_TYPE_FUNC(x64, u64, "0x%Lx")
-> > +DEFINE_BASIC_PRINT_TYPE_FUNC(char, u8, "'%c'")
-> >  
-> >  int PRINT_TYPE_FUNC_NAME(symbol)(struct trace_seq *s, void *data, void *ent)
-> >  {
-> > @@ -93,6 +94,7 @@ static const struct fetch_type probe_fetch_types[] = {
-> >  	ASSIGN_FETCH_TYPE_ALIAS(x16, u16, u16, 0),
-> >  	ASSIGN_FETCH_TYPE_ALIAS(x32, u32, u32, 0),
-> >  	ASSIGN_FETCH_TYPE_ALIAS(x64, u64, u64, 0),
-> > +	ASSIGN_FETCH_TYPE_ALIAS(char, u8, u8,  0),
-> >  	ASSIGN_FETCH_TYPE_ALIAS(symbol, ADDR_FETCH_TYPE, ADDR_FETCH_TYPE, 0),
-> >  
-> >  	ASSIGN_FETCH_TYPE_END
-> > diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> > index de38f1c03776..8c86aaa8b0c9 100644
-> > --- a/kernel/trace/trace_probe.h
-> > +++ b/kernel/trace/trace_probe.h
-> > @@ -164,6 +164,7 @@ DECLARE_BASIC_PRINT_TYPE_FUNC(x16);
-> >  DECLARE_BASIC_PRINT_TYPE_FUNC(x32);
-> >  DECLARE_BASIC_PRINT_TYPE_FUNC(x64);
-> >  
-> > +DECLARE_BASIC_PRINT_TYPE_FUNC(char);
-> >  DECLARE_BASIC_PRINT_TYPE_FUNC(string);
-> >  DECLARE_BASIC_PRINT_TYPE_FUNC(symbol);
-> >  
-> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
-> > new file mode 100644
-> > index 000000000000..285b4770efad
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_char.tc
-> > @@ -0,0 +1,47 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# description: Kprobe event char type argument
-> > +# requires: kprobe_events
-> > +
-> > +case `uname -m` in
-> > +x86_64)
-> > +  ARG1=%di
-> > +;;
-> > +i[3456]86)
-> > +  ARG1=%ax
-> > +;;
-> > +aarch64)
-> > +  ARG1=%x0
-> > +;;
-> > +arm*)
-> > +  ARG1=%r0
-> > +;;
-> > +ppc64*)
-> > +  ARG1=%r3
-> > +;;
-> > +ppc*)
-> > +  ARG1=%r3
-> > +;;
-> > +s390*)
-> > +  ARG1=%r2
-> > +;;
-> > +mips*)
-> > +  ARG1=%r4
-> > +;;
-> > +*)
-> > +  echo "Please implement other architecture here"
-> > +  exit_untested
-> > +esac
-> > +
-> > +: "Test get argument (1)"
-> > +echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char" > kprobe_events
-> > +echo 1 > events/kprobes/testprobe/enable
-> > +echo "p:test $FUNCTION_FORK" >> kprobe_events
-> > +grep -qe "testprobe.* arg1='t'" trace
-> > +
-> > +echo 0 > events/kprobes/testprobe/enable
-> > +: "Test get argument (2)"
-> > +echo "p:testprobe tracefs_create_dir arg1=+0(${ARG1}):char arg2=+0(${ARG1}):char[4]" > kprobe_events
-> > +echo 1 > events/kprobes/testprobe/enable
-> > +echo "p:test $FUNCTION_FORK" >> kprobe_events
-> > +grep -qe "testprobe.* arg1='t' arg2={'t','e','s','t'}" trace
+> Thanks,
+> Naveen
 > 
 
 
