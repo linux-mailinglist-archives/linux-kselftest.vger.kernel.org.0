@@ -2,76 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC07A67F5C3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jan 2023 08:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE9F67F5D2
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Jan 2023 08:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbjA1Hth (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 28 Jan 2023 02:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S233024AbjA1H5g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 28 Jan 2023 02:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbjA1Htc (ORCPT
+        with ESMTP id S229843AbjA1H5f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:49:32 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD85783D1
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 23:49:30 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5005ef73cf3so78979697b3.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 23:49:30 -0800 (PST)
+        Sat, 28 Jan 2023 02:57:35 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A9B402CC
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 23:57:34 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id 187so7538366vsv.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 23:57:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=771NPyRF1PEt8cs2hCV18puTF3LGONEcEJnkC6VrUwM=;
-        b=Xe48EWeSfcJugp9Fqys1a4HBtDNLooqtWsIE1RteRtRyRQICJL3sy+3N7Zd4gnyZs1
-         e/EUgOTUYLEp5BkjcI6i9SUMhSMXOhT8oLZgu+sqtx0UIByQw8jS3a122xO78VhL3N/e
-         EChvjI0sUTHFErwRPLCUjeHBs7JQjdZCe9aVq/3fNeIjhCXqvmh74lSeFZnSMSZBNB7V
-         fgHzKjRCLZWuMPoIgWErpolwxxvTD88wGxF2SPq7bhhtDSUEf6MlOnNzDMcBKXGCOwNB
-         oDWZ1t3n20GM/SHg9RgTa9rb6ssbWS/XZGpsaVVxQwGp9WCPcIRfktO5olwH3gviBknV
-         M8YA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iGQQuRQc/dTfORygglHNKbj/63uwgfeJN1UmtUBEN3Y=;
+        b=rOq9NQTaFDG6F6749dTpbMMLMt9N86/Z6r89UhYBdjdetBW6Sx/SvNM5W8ypFrKyrH
+         QmWI2T7O4wbQPRXEUdOBC+w9s6NPdovcdRXo2XCEjsL0jMXijcrGS3kLygK0JugvbBjn
+         qUB1dnZEf4EO0CIB0JQfmsGukM08q4wVTGCXGazTolcekQf7nTWNpaYP81YMx1C5UkTx
+         zg9bz3zJzpSnSVjRG8HvQnQ2RYzf2hT1SanvXzHZ9PpHTWExeXNCFs/PqaRg6D0yMHJ6
+         jnHhBh1L4y7x5w98wdf6VJb2vJd4OnQWY+D+FKaMK8cSSW7jdO5WahHgRhVmSNXOpFCs
+         GBhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=771NPyRF1PEt8cs2hCV18puTF3LGONEcEJnkC6VrUwM=;
-        b=ecuj70X6/tJ02BIH/D9ZonJ9ZJ81vE+9cSuhDPt1reydNcQZHEWCtw9mg2wVetjiO7
-         4sCJtGC2n+GBee35iVECjyOBb48QIGs9mgqqMZieVd/QUxo10IJ68EgyG9vyIdvnev3z
-         HGAKksQkQMxtKTUjoHxsdgWSrVik75Myu+sZCKsL2lilsVRTmDQtyYc1GzqjMP0Fio3Z
-         eeLsjnv3gwyDRbtuz4L4br5EV5upHHDygmxyQle7v/almm/5fVGjTE0Y497DM/L9BfVg
-         BrBJqJvAGh5LWn9+AvSM0K/d27UKBaLDTACnRk4v2kvoi6qA+6xJehSRVE2zxJOcEoXu
-         /DQg==
-X-Gm-Message-State: AFqh2kpfBQeKmkQfovoklliqO9gNjmnqtQxATr22qmmOwVCJdyE2aiJD
-        Y/nGbNQcuqJOmbY2vCTG55uJxlm727HHbQ==
-X-Google-Smtp-Source: AMrXdXuMV3wsThXD7wbG0TCsvlinfj8R6omUbC0OplNqe0/ZHUXG3RUNA/0fvUzpGeyBv6A3b5h5vFP1jYFGpg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:79d0:0:b0:4fe:276a:baf4 with SMTP id
- u199-20020a8179d0000000b004fe276abaf4mr4068084ywc.401.1674892170006; Fri, 27
- Jan 2023 23:49:30 -0800 (PST)
-Date:   Sat, 28 Jan 2023 15:49:18 +0800
-In-Reply-To: <20230128074918.1180523-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20230128074918.1180523-1-davidgow@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230128074918.1180523-2-davidgow@google.com>
-Subject: [PATCH v2 2/2] Documentation: Add Function Redirection API docs
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iGQQuRQc/dTfORygglHNKbj/63uwgfeJN1UmtUBEN3Y=;
+        b=PKWSGL7e7jLaM6oeYKUaKUUIGGle2t++P2GTYp3fTU9qLbvS+jkM4v2FDz9+OJnyp3
+         Nzz4rRCQ3EAlHElr5ro1CSO0FMPccNuFGCWC7G9I2embW3q4Qg7m1pE45lQ+8kQ8QnKr
+         56GPahGJ2lZEfvyotvfzGemsb7d9+NOyAoiwx5g0zW/liTFQSZZaDpCY6oXgdxo0auER
+         QYYKJQgTpLRNQAL3wNhyOLbw63Fs6bixyX7UmwVmRnjyZwq6Ej+LAgK9CEQRt4fBFvrQ
+         qMksHGl5E6NRDJWMPg4TKABZzYwMRE7StA5VWL9tN1WkviuWstqD3OusyKoNQYrKKYer
+         vsVQ==
+X-Gm-Message-State: AO0yUKW3xJeNChDo2UPTg6kw1XNZLI8/KEQotMqrtqewYaEYrP55kxe7
+        5+f+lhxXMfzgs4QhkzclUY91AS20emkcCVfN8v9MqQ==
+X-Google-Smtp-Source: AK7set+iAC1O7VcJefkNLU+iAkowg6dLtYAv0wDfDSmWSjN0LAOMdOFF2U0W2cto4q6oFAOPlRj70oqd4400Vl3gCsU=
+X-Received: by 2002:a67:2686:0:b0:3eb:b8d8:6b3e with SMTP id
+ m128-20020a672686000000b003ebb8d86b3emr1003951vsm.22.1674892653209; Fri, 27
+ Jan 2023 23:57:33 -0800 (PST)
+MIME-Version: 1.0
+References: <20230127203950.781709-1-rmoar@google.com>
+In-Reply-To: <20230127203950.781709-1-rmoar@google.com>
 From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Fradley <joefradley@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+Date:   Sat, 28 Jan 2023 15:57:21 +0800
+Message-ID: <CABVgOS=c5JhPT+GZ-f43ff5cGS3oR=NnL9K8vuk8nDv_jngHvA@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: fix bug in KUNIT_EXPECT_MEMEQ
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a7ba4105f34e55ff"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,242 +71,216 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Sadiya Kazi <sadiyakazi@google.com>
+--000000000000a7ba4105f34e55ff
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Added a new page (functionredirection.rst) that describes the Function
-Redirection (static stubbing) API. This page will be expanded if we add,
-for example, ftrace-based stubbing.
+On Sat, 28 Jan 2023 at 04:40, Rae Moar <rmoar@google.com> wrote:
+>
+> In KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ, add check if one of the
+> inputs is NULL and fail if this is the case.
+>
+> Currently, the kernel crashes if one of the inputs is NULL. Instead,
+> fail the test and add an appropriate error message.
+>
+> Fixes: b8a926bea8b1 ("kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPEC=
+T_MEMNEQ macros")
+>
+> This was found by the kernel test robot:
+> https://lore.kernel.org/all/202212191448.D6EDPdOh-lkp@intel.com/
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
+> ---
+>
+> Changes since v1:
+> - Fix formatting of backslashes
+> - Add Fixes: ... statement to commit message
+>
 
-In addition,
-1. Updated the api/index.rst page to create an entry for function
-   redirection api
-2. Updated the toctree to be hidden, reducing redundancy on the
-   generated page.
+Looks good to me, now.
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
-Co-developed-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
+Thanks.
+=E2=80=94 David
 
-Note that this document reworks some elements of the KUnit website's "mocking"
-page at http://kunit.dev/mocking.html written by Daniel Latypov, and used with
-his permission.
+>  include/kunit/test.h |  5 +++--
+>  lib/kunit/assert.c   | 40 +++++++++++++++++++++++++---------------
+>  2 files changed, 28 insertions(+), 17 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 87ea90576b50..a20bff149bdf 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -683,8 +683,9 @@ do {                                                 =
+                              \
+>                 .right_text =3D #right,                                  =
+        \
+>         };                                                               =
+      \
+>                                                                          =
+      \
+> -       if (likely(memcmp(__left, __right, __size) op 0))                =
+      \
+> -               break;                                                   =
+      \
+> +       if (likely(__left && __right))                                   =
+      \
+> +               if (likely(memcmp(__left, __right, __size) op 0))        =
+      \
+> +                       break;                                           =
+      \
+>                                                                          =
+      \
+>         _KUNIT_FAILED(test,                                              =
+      \
+>                       assert_type,                                       =
+      \
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index f5b50babe38d..05a09652f5a1 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -241,24 +241,34 @@ void kunit_mem_assert_format(const struct kunit_ass=
+ert *assert,
+>         mem_assert =3D container_of(assert, struct kunit_mem_assert,
+>                                   assert);
+>
+> -       string_stream_add(stream,
+> -                         KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n"=
+,
+> -                         mem_assert->text->left_text,
+> -                         mem_assert->text->operation,
+> -                         mem_assert->text->right_text);
+> +       if (!mem_assert->left_value) {
+> +               string_stream_add(stream,
+> +                                 KUNIT_SUBTEST_INDENT "Expected %s is no=
+t null, but is\n",
+> +                                 mem_assert->text->left_text);
+> +       } else if (!mem_assert->right_value) {
+> +               string_stream_add(stream,
+> +                                 KUNIT_SUBTEST_INDENT "Expected %s is no=
+t null, but is\n",
+> +                                 mem_assert->text->right_text);
+> +       } else {
+> +               string_stream_add(stream,
+> +                               KUNIT_SUBTEST_INDENT "Expected %s %s %s, =
+but\n",
+> +                               mem_assert->text->left_text,
+> +                               mem_assert->text->operation,
+> +                               mem_assert->text->right_text);
+>
+> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s =3D=3D\n",
+> -                         mem_assert->text->left_text);
+> -       kunit_assert_hexdump(stream, mem_assert->left_value,
+> -                            mem_assert->right_value, mem_assert->size);
+> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s =3D=
+=3D\n",
+> +                               mem_assert->text->left_text);
+> +               kunit_assert_hexdump(stream, mem_assert->left_value,
+> +                                       mem_assert->right_value, mem_asse=
+rt->size);
+>
+> -       string_stream_add(stream, "\n");
+> +               string_stream_add(stream, "\n");
+>
+> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s =3D=3D\n",
+> -                         mem_assert->text->right_text);
+> -       kunit_assert_hexdump(stream, mem_assert->right_value,
+> -                            mem_assert->left_value, mem_assert->size);
+> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s =3D=
+=3D\n",
+> +                               mem_assert->text->right_text);
+> +               kunit_assert_hexdump(stream, mem_assert->right_value,
+> +                                       mem_assert->left_value, mem_asser=
+t->size);
+>
+> -       kunit_assert_print_msg(message, stream);
+> +               kunit_assert_print_msg(message, stream);
+> +       }
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_mem_assert_format);
+>
+> base-commit: 5835ffc27381c2d32c3f0d7b575cb3397555ab47
+> --
+> 2.39.1.456.gfc5497dd1b-goog
+>
 
-Changes since v1:
-https://lore.kernel.org/all/20221208061841.2186447-3-davidgow@google.com/
-- Fix a bunch of typos (Thanks, Daniel)
-- Remove a redundant comment (Thanks, Daniel)
-- Reword a few things to be clearer, especially about global state.
+--000000000000a7ba4105f34e55ff
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
----
- .../kunit/api/functionredirection.rst         | 162 ++++++++++++++++++
- Documentation/dev-tools/kunit/api/index.rst   |  13 +-
- 2 files changed, 172 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/dev-tools/kunit/api/functionredirection.rst
-
-diff --git a/Documentation/dev-tools/kunit/api/functionredirection.rst b/Documentation/dev-tools/kunit/api/functionredirection.rst
-new file mode 100644
-index 000000000000..3791efc2fcca
---- /dev/null
-+++ b/Documentation/dev-tools/kunit/api/functionredirection.rst
-@@ -0,0 +1,162 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+========================
-+Function Redirection API
-+========================
-+
-+Overview
-+========
-+
-+When writing unit tests, it's important to be able to isolate the code being
-+tested from other parts of the kernel. This ensures the reliability of the test
-+(it won't be affected by external factors), reduces dependencies on specific
-+hardware or config options (making the test easier to run), and protects the
-+stability of the rest of the system (making it less likely for test-specific
-+state to interfere with the rest of the system).
-+
-+While for some code (typically generic data structures, helpers, and other
-+"pure functions") this is trivial, for others (like device drivers,
-+filesystems, core subsystems) the code is heavily coupled with other parts of
-+the kernel.
-+
-+This coupling is often due to global state in some way: be it a global list of
-+devices, the filesystem, or some hardware state. Tests need to either carefully
-+manage, isolate, and restore state, or they can avoid it altogether by
-+replacing access to and mutation of this state with a "fake" or "mock" variant.
-+
-+By refactoring access to such state, such as by introducing a layer of
-+indirection which can use or emulate a separate set of test state. However,
-+such refactoring comes with its own costs (and undertaking significant
-+refactoring before being able to write tests is suboptimal).
-+
-+A simpler way to intercept and replace some of the function calls is to use
-+function redirection via static stubs.
-+
-+
-+Static Stubs
-+============
-+
-+Static stubs are a way of redirecting calls to one function (the "real"
-+function) to another function (the "replacement" function).
-+
-+It works by adding a macro to the "real" function which checks to see if a test
-+is running, and if a replacement function is available. If so, that function is
-+called in place of the original.
-+
-+Using static stubs is pretty straightforward:
-+
-+1. Add the KUNIT_STATIC_STUB_REDIRECT() macro to the start of the "real"
-+   function.
-+
-+   This should be the first statement in the function, after any variable
-+   declarations. KUNIT_STATIC_STUB_REDIRECT() takes the name of the
-+   function, followed by all of the arguments passed to the real function.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	void send_data_to_hardware(const char *str)
-+	{
-+		KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
-+		/* real implementation */
-+	}
-+
-+2. Write one or more replacement functions.
-+
-+   These functions should have the same function signature as the real function.
-+   In the event they need to access or modify test-specific state, they can use
-+   kunit_get_current_test() to get a struct kunit pointer. This can then
-+   be passed to the expectation/assertion macros, or used to look up KUnit
-+   resources.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	void fake_send_data_to_hardware(const char *str)
-+	{
-+		struct kunit *test = kunit_get_current_test();
-+		KUNIT_EXPECT_STREQ(test, str, "Hello World!");
-+	}
-+
-+3. Activate the static stub from your test.
-+
-+   From within a test, the redirection can be enabled with
-+   kunit_activate_static_stub(), which accepts a struct kunit pointer,
-+   the real function, and the replacement function. You can call this several
-+   times with different replacement functions to swap out implementations of the
-+   function.
-+
-+   In our example, this would be
-+
-+   .. code-block:: c
-+
-+	kunit_activate_static_stub(test,
-+				   send_data_to_hardware,
-+				   fake_send_data_to_hardware);
-+
-+4. Call (perhaps indirectly) the real function.
-+
-+   Once the redirection is activated, any call to the real function will call
-+   the replacement function instead. Such calls may be buried deep in the
-+   implementation of another function, but must occur from the test's kthread.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	send_data_to_hardware("Hello World!"); /* Succeeds */
-+	send_data_to_hardware("Something else"); /* Fails the test. */
-+
-+5. (Optionally) disable the stub.
-+
-+   When you no longer need it, disable the redirection (and hence resume the
-+   original behaviour of the 'real' function) using
-+   kunit_deactivate_static_stub(). Otherwise, it will be automatically disabled
-+   when the test exits.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	kunit_deactivate_static_stub(test, send_data_to_hardware);
-+
-+
-+It's also possible to use these replacement functions to test to see if a
-+function is called at all, for example:
-+
-+.. code-block:: c
-+
-+	void send_data_to_hardware(const char *str)
-+	{
-+		KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
-+		/* real implementation */
-+	}
-+
-+	/* In test file */
-+	int times_called = 0;
-+	void fake_send_data_to_hardware(const char *str)
-+	{
-+		times_called++;
-+	}
-+	...
-+	/* In the test case, redirect calls for the duration of the test */
-+	kunit_activate_static_stub(test, send_data_to_hardware, fake_send_data_to_hardware);
-+
-+	send_data_to_hardware("hello");
-+	KUNIT_EXPECT_EQ(test, times_called, 1);
-+
-+	/* Can also deactivate the stub early, if wanted */
-+	kunit_deactivate_static_stub(test, send_data_to_hardware);
-+
-+	send_data_to_hardware("hello again");
-+	KUNIT_EXPECT_EQ(test, times_called, 1);
-+
-+
-+
-+API Reference
-+=============
-+
-+.. kernel-doc:: include/kunit/static_stub.h
-+   :internal:
-diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
-index 45ce04823f9f..2d8f756aab56 100644
---- a/Documentation/dev-tools/kunit/api/index.rst
-+++ b/Documentation/dev-tools/kunit/api/index.rst
-@@ -4,17 +4,24 @@
- API Reference
- =============
- .. toctree::
-+	:hidden:
- 
- 	test
- 	resource
-+	functionredirection
- 
--This section documents the KUnit kernel testing API. It is divided into the
-+
-+This page documents the KUnit kernel testing API. It is divided into the
- following sections:
- 
- Documentation/dev-tools/kunit/api/test.rst
- 
-- - documents all of the standard testing API
-+ - Documents all of the standard testing API
- 
- Documentation/dev-tools/kunit/api/resource.rst
- 
-- - documents the KUnit resource API
-+ - Documents the KUnit resource API
-+
-+Documentation/dev-tools/kunit/api/functionredirection.rst
-+
-+ - Documents the KUnit Function Redirection API
--- 
-2.39.1.456.gfc5497dd1b-goog
-
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
+jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
+p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
+2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
++bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
+/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCw
+CQVba67xjdrZzx8PR4MfUh+HMEWmTxKj4or546+7xjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjgwNzU3MzNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAWPh9W9DvXoyMAay9sHlC
+IJAkjWcPxP8SyYZe2lKWxyAjKZU3+w1eDxysZpQlC3GvpJlkRfb7AMdPOODK6mj+1KbAvdNt27sl
+WsTHZxfll8kL2RO1v0FSNqQ2xps1M9OMRWrKjDmAvLLw/3qzs7sw7+1mrWsg/Imxi1SsywGsfRYO
+XQ7CdEG3uYEqvl0/sf7ujNDLJhWh5yucZcjGi704Hd7h60N/yAHym/jHpiXIuNOmLEyRD2S7xjYu
+82lXoXpScujmzLwItD39FI/stqAIGrXe+FHKuixBVVyCmQDzSgdTRLDbtIAxPJsjw9Y/AdRuD8B5
+5P01WItm24b7K0lDbQ==
+--000000000000a7ba4105f34e55ff--
