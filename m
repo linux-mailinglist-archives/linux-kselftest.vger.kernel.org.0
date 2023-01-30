@@ -2,75 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E01D681669
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 17:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2235681673
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 17:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237561AbjA3QaU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 11:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S237542AbjA3QcU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 11:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237500AbjA3QaN (ORCPT
+        with ESMTP id S236233AbjA3QcT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:30:13 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1A5360BF
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:30:09 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id h5so14688591ybj.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:30:09 -0800 (PST)
+        Mon, 30 Jan 2023 11:32:19 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3101A3525C
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:32:18 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id h18so2557838ilj.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:32:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TPFC8cMkklXYROXSktfu+SUe+7hNbiwoBvUWNNZQCno=;
-        b=DRdqm1G7sz3+3jrt8fpDzB2z7HSSV6gtQFBIYiP27otecjCpAmCJ/txHXrv9KVYa3x
-         qVj0/ioZFHZGG0RhY2RjIU28alJdx8PK+cAYA1NUX2cyWAbaK7ulvOeyxepPdGoeQ82O
-         dRXQmKtn/U1k9bpYrXfzqNOYAV2R6Wb7CPrHLhqEU/pau7bAEhEx0vcfQjLOa8bbe83l
-         LcLbDvELQwmwyhT1qWefL4Ckg+4Y9Eg3x50x6A5AqDYk3uEkwwNxPvIUhQdeGvcWsYHm
-         5lBZqjmgpLBFt3p0go1gf+N/n4spXoV+piyg05OZslsUTAb1Hu9ExSw4CG4zK+riUDDG
-         w7fA==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OWrtWG8MThNoqJJD59hvCVnxXQO10Lw87QwcI21YP84=;
+        b=KVmuLAq6+1sLlsEegGJvCE/YAC1AN/dGZFD+I5P4dirBM7Nnz/hVe/+O01yMaSpGeH
+         qSdHj1BJcIJzegg2lrrfLCiqOPKZsEoImq6GatwLbKEJAtB8Fm9r++QV7Rl0IYyfbrWk
+         JqWixarDELqPKRMRel8ameXlhyEHhbQr0w1Iw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TPFC8cMkklXYROXSktfu+SUe+7hNbiwoBvUWNNZQCno=;
-        b=AdRYFXyXPvqXocxQMaFwqg7XKAYKgsSuu+o633XggYaerB76chHUlLFkywCXHndbd3
-         iMngQ7yk+RxJfEWfVOex8K/MzcmMxzb10pf9Sx+jl1wVvSiuSKg0VHv1+wZTQooGBaGn
-         aPN90abEYPgCsf4s53Mrk9WL8aBQSf3/CaVXxx+4GkjzG1onAakg88cEVrDfwE+4joyT
-         jS4g+h+4lrk4qtNESjaQjAZKMV8ohniT9tNlAAMPSYjJReoev7TS2q3/Dhc3d2J7jea9
-         ym4GJpCDniGgOVdFtb7h51I32epc3/MP9jtgpUeMhgYvaGTxlG5mVCBGmPTnqGfMyjj+
-         FDFg==
-X-Gm-Message-State: AFqh2kruyFZAx+TeA7Z7E9GMOK2aMrckr5uFjmoK0oH8jMAGwQw4WShu
-        q5lb50fvRavr3U1Mtg9NqpwYCdtgDoiWVHg4BBxy5zOIvBR4JG7d
-X-Google-Smtp-Source: AMrXdXtJPRSD2nJpeETSjyTWb9N9nQlXe9LDLFV+Yj2ibrJyK6JgNXl7Kct1hYSFYMK2S6UcEpqYAjYsGida7vX8NDA=
-X-Received: by 2002:a25:84ce:0:b0:7b7:c7ed:eee9 with SMTP id
- x14-20020a2584ce000000b007b7c7edeee9mr4700617ybm.334.1675096208397; Mon, 30
- Jan 2023 08:30:08 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OWrtWG8MThNoqJJD59hvCVnxXQO10Lw87QwcI21YP84=;
+        b=i1z8LYTIneDdHMfi4fHz27xYKMmTckKllrOURyxf8WyB8i9BqSJAZDRm7K3o65Qyrd
+         EJA/NK2BN/vrnCa5dBNEKz1IXB35Md4kgdrrK5K6Ks/sgs6WGPoNmaFc1x7q117vV+0e
+         omwjU7AmLtv8hRHGfoiXlVYtswRjsEZ2POeEXepwLrY5teDB7VKZmNaUxDWsS6FthF+a
+         6pNpfrmVEP17VOHsRkCIlQASFwET37DK4fyr0ZczTGLjnaZKSyTJTIyh61lVVNOT0iTX
+         sT9hoL49JZwenHJFqlk6LkzmJ4Ao5ko5k6VqoAFKQnHlvQOD9qmAmQh8YbjFjvwfU/mH
+         BZpQ==
+X-Gm-Message-State: AFqh2kqAqIp1OLd6GBlPvBDjbUmdFvj0m7+MV4jLGWayc34t/j5+m4WW
+        ltl6Ak1MmLSxlXJd7/tEJ2wOag==
+X-Google-Smtp-Source: AMrXdXuU3+9j/Rjvw8C+ukn67BvaWIEI91xJn2ZY7kFLPKG3RDFG4Qms2skTiiP3lY4Uj0ew4JcMgA==
+X-Received: by 2002:a92:2a07:0:b0:30c:1dda:42dd with SMTP id r7-20020a922a07000000b0030c1dda42ddmr7228513ile.1.1675096337499;
+        Mon, 30 Jan 2023 08:32:17 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c62-20020a029644000000b003a96cc2bbdesm4273919jai.85.2023.01.30.08.32.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 08:32:16 -0800 (PST)
+Message-ID: <0d95f6b4-c949-2f06-62fb-f35d70b1782d@linuxfoundation.org>
+Date:   Mon, 30 Jan 2023 09:32:15 -0700
 MIME-Version: 1.0
-References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
- <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
- <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
- <Y9e9S3ENl0oszAH/@qwirkle> <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
- <Y9fT+LABhW+/3Nal@qwirkle> <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
- <Y9ftL5c4klThCi9Q@qwirkle> <Y9fu7TR5VC33j+EP@qwirkle>
-In-Reply-To: <Y9fu7TR5VC33j+EP@qwirkle>
-From:   Willem de Bruijn <willemb@google.com>
-Date:   Mon, 30 Jan 2023 11:29:31 -0500
-Message-ID: <CA+FuTSf1tJ7kw+GCXf0YBRv0HaR8v7=iy6b36hrsmx8hEr5knQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
- back-off retries
-To:     Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 21/34] selftests: powerpc: Fix incorrect kernel headers
+ search path
+Content-Language: en-US
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+ <20230127135755.79929-22-mathieu.desnoyers@efficios.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230127135755.79929-22-mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,118 +78,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 11:23 AM Andrei Gherzan
-<andrei.gherzan@canonical.com> wrote:
->
-> On 23/01/30 04:15PM, Andrei Gherzan wrote:
-> > On 23/01/30 11:03AM, Willem de Bruijn wrote:
-> > > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
-> > > <andrei.gherzan@canonical.com> wrote:
-> > > >
-> > > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
-> > > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
-> > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > >
-> > > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
-> > > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
-> > > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
-> > > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > > >
-> > > > > > > > > The tx and rx test programs are used in a couple of test scripts including
-> > > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
-> > > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
-> > > > > > > > > accept socket connections. This racing bug could fail the test with at
-> > > > > > > > > least one of the following:
-> > > > > > > > >
-> > > > > > > > > ./udpgso_bench_tx: connect: Connection refused
-> > > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
-> > > > > > > > > ./udpgso_bench_tx: write: Connection refused
-> > > > > > > > >
-> > > > > > > > > This change addresses this by adding routines that retry the socket
-> > > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
-> > > > > > > > >
-> > > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-> > > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > > > > >
-> > > > > > > > Synchronizing the two processes is indeed tricky.
-> > > > > > > >
-> > > > > > > > Perhaps more robust is opening an initial TCP connection, with
-> > > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
-> > > > > > > > go.
-> > > > > > >
-> > > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
-> > > > > > > socket to show up in 'ss' output before firing-up the client - quite
-> > > > > > > alike what mptcp self-tests are doing.
-> > > > > >
-> > > > > > I like this idea. I have tested it and it works as expected with the
-> > > > > > exeception of:
-> > > > > >
-> > > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
-> > > > > >
-> > > > > > Any ideas on how to handle this? I could retry and that works.
-> > > > >
-> > > > > This happens (also) without the zerocopy flag, right? That
-> > > > >
-> > > > > It might mean reaching the sndbuf limit, which can be adjusted with
-> > > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
-> > > > > expect this test to bump up against that limit.
-> > > > >
-> > > > > A few zerocopy specific reasons are captured in
-> > > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
-> > > >
-> > > > I have dug a bit more into this, and it does look like your hint was in
-> > > > the right direction. The fails I'm seeing are only with the zerocopy
-> > > > flag.
-> > > >
-> > > > From the reasons (doc) above I can only assume optmem limit as I've
-> > > > reproduced it with unlimited locked pages and the fails are transient.
-> > > > That leaves optmem limit. Bumping the value I have by default (20480) to
-> > > > (2048000) made the sendmsg succeed as expected. On the other hand, the
-> > > > tests started to fail with something like:
-> > > >
-> > > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
-> > > > expected    773707 received
-> > >
-> > > More zerocopy completions than number of sends. I have not seen this before.
-> > >
-> > > The completions are ranges of IDs, one per send call for datagram sockets.
-> > >
-> > > Even with segmentation offload, the counter increases per call, not per segment.
-> > >
-> > > Do you experience this without any other changes to udpgso_bench_tx.c.
-> > > Or are there perhaps additional sendmsg calls somewhere (during
-> > > initial sync) that are not accounted to num_sends?
-> >
-> > Indeed, that looks off. No, I have run into this without any changes in
-> > the tests (besides the retry routine in the shell script that waits for
-> > rx to come up). Also, as a data point.
->
-> Actually wait. I don't think that is the case here. "expected" is the
-> number of sends. In this case we sent 1076 more messages than
-> completions. Am I missing something obvious?
+On 1/27/23 06:57, Mathieu Desnoyers wrote:
+> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+> building against kernel headers from the build environment in scenarios
+> where kernel headers are installed into a specific output directory
+> (O=...).
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: <stable@vger.kernel.org>    [5.18+]
+> ---
+>   tools/testing/selftests/powerpc/ptrace/Makefile   | 2 +-
+>   tools/testing/selftests/powerpc/security/Makefile | 2 +-
+>   tools/testing/selftests/powerpc/syscalls/Makefile | 2 +-
+>   tools/testing/selftests/powerpc/tm/Makefile       | 2 +-
+>   4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/powerpc/ptrace/Makefile b/tools/testing/selftests/powerpc/ptrace/Makefile
+> index 2f02cb54224d..cbeeaeae8837 100644
+> --- a/tools/testing/selftests/powerpc/ptrace/Makefile
+> +++ b/tools/testing/selftests/powerpc/ptrace/Makefile
+> @@ -33,7 +33,7 @@ TESTS_64 := $(patsubst %,$(OUTPUT)/%,$(TESTS_64))
+>   $(TESTS_64): CFLAGS += -m64
+>   $(TM_TESTS): CFLAGS += -I../tm -mhtm
+>   
+> -CFLAGS += -I../../../../../usr/include -fno-pie
+> +CFLAGS += $(KHDR_INCLUDES) -fno-pie
+>   
+>   $(OUTPUT)/ptrace-gpr: ptrace-gpr.S
+>   $(OUTPUT)/ptrace-pkey $(OUTPUT)/core-pkey: LDLIBS += -pthread
+> diff --git a/tools/testing/selftests/powerpc/security/Makefile b/tools/testing/selftests/powerpc/security/Makefile
+> index 7488315fd847..e0d979ab0204 100644
+> --- a/tools/testing/selftests/powerpc/security/Makefile
+> +++ b/tools/testing/selftests/powerpc/security/Makefile
+> @@ -5,7 +5,7 @@ TEST_PROGS := mitigation-patching.sh
+>   
+>   top_srcdir = ../../../../..
+>   
+> -CFLAGS += -I../../../../../usr/include
+> +CFLAGS += $(KHDR_INCLUDES)
+>   
+>   include ../../lib.mk
+>   
+> diff --git a/tools/testing/selftests/powerpc/syscalls/Makefile b/tools/testing/selftests/powerpc/syscalls/Makefile
+> index b63f8459c704..d1f2648b112b 100644
+> --- a/tools/testing/selftests/powerpc/syscalls/Makefile
+> +++ b/tools/testing/selftests/powerpc/syscalls/Makefile
+> @@ -1,7 +1,7 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   TEST_GEN_PROGS := ipc_unmuxed rtas_filter
+>   
+> -CFLAGS += -I../../../../../usr/include
+> +CFLAGS += $(KHDR_INCLUDES)
+>   
+>   top_srcdir = ../../../../..
+>   include ../../lib.mk
+> diff --git a/tools/testing/selftests/powerpc/tm/Makefile b/tools/testing/selftests/powerpc/tm/Makefile
+> index 5881e97c73c1..3876805c2f31 100644
+> --- a/tools/testing/selftests/powerpc/tm/Makefile
+> +++ b/tools/testing/selftests/powerpc/tm/Makefile
+> @@ -17,7 +17,7 @@ $(TEST_GEN_PROGS): ../harness.c ../utils.c
+>   CFLAGS += -mhtm
+>   
+>   $(OUTPUT)/tm-syscall: tm-syscall-asm.S
+> -$(OUTPUT)/tm-syscall: CFLAGS += -I../../../../../usr/include
+> +$(OUTPUT)/tm-syscall: CFLAGS += $(KHDR_INCLUDES)
+>   $(OUTPUT)/tm-tmspr: CFLAGS += -pthread
+>   $(OUTPUT)/tm-vmx-unavail: CFLAGS += -pthread -m64
+>   $(OUTPUT)/tm-resched-dscr: ../pmu/lib.c
 
-Oh indeed.
+Adding powerpc maitainers.
 
-Receiving fewer completions than transmission is more likely.
+Would you me to take this patch through kselftest tree? If you
+decide to take this through yours:
 
-This should be the result of datagrams still being somewhere in the
-system. In a qdisc, or waiting for the network interface to return a
-completion notification, say.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Does this remain if adding a longer wait before the final flush_errqueue?
-
-Or, really, the right fix is to keep polling there until the two are
-equal, up to some timeout. Currently flush_errqueue calls poll only
-once.
-
-
->
-> >
-> > As an additional data point, this was only seen on the IPv6 tests. I've
-> > never been able to replicate it on the IPv4 run.
->
-> I was also fast to send this but it is not correct. I managed to
-> reproduce it on both IPv4 and IPv6.
->
-> --
-> Andrei Gherzan
+thanks,
+-- Shuah
