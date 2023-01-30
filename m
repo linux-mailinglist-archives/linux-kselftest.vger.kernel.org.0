@@ -2,57 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1857F681BB8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 21:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7478A681C3F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 22:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjA3UsO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 15:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S230285AbjA3VEg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 16:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbjA3UsD (ORCPT
+        with ESMTP id S230315AbjA3VE1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:48:03 -0500
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57413E0AE;
-        Mon, 30 Jan 2023 12:46:51 -0800 (PST)
-Received: from [192.168.192.83] (unknown [50.47.134.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 60F753F307;
-        Mon, 30 Jan 2023 20:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675111609;
-        bh=RXq2UM0+WksUOmibUuTIAvL8Lbl2rVqMKpgMUhz1XeM=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=ZXDgPGfEC8pCqG7c2Nm0foAQ7q+/b2tORV74ptp1ctfm/vxQARMlBskLaMjKWTjpY
-         GMJVpi21mhw9NFbHsRFuWis3hQ/86sx3V4kLpTK2FsjGkxQMwMiCrnSsbB9wHVXQF6
-         SwZmPQWQermRBQ7ODwuaeMSBQPsDch/QfX0oU8QxhcW8Knxm/xnPlFN7JtpGG/RVIz
-         RZDrjT9BzegIJUEjd2qT05WyY9yvu1uX7+HoeQPiUzveAGOi/t44wJN+KEwf28WYc+
-         9aceCaeUeSnbeOVGzH1K7T0wntnTVzvyUXv4BpK/WEty1hlaj1i/HNW7H+NS2Hzm8j
-         IgP3Yf0Vhdn7A==
-Message-ID: <94ba4bd9-5aaf-2469-457c-196b864c76f1@canonical.com>
-Date:   Mon, 30 Jan 2023 12:46:44 -0800
+        Mon, 30 Jan 2023 16:04:27 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E4947EDB;
+        Mon, 30 Jan 2023 13:04:08 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id m2so35242733ejb.8;
+        Mon, 30 Jan 2023 13:04:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7PgfiDJfXr3snHFNvpVEuL8JdLQTDd0vNID/MExBMQw=;
+        b=JymqcdzWTjmwsGWSJ6/Q8tMC8BCwZuJxzPG7pzdb4uIEnKd/Nqag4dBJCYeCTHxtPl
+         Sq4aBvKbZHpQ1YLTymviHFcLlgYAsT05LfOLwOH8eJybmdHBk7Ys7nq1E7mCjlUeJcpE
+         759JFskqVZwYuE2zwAV8XjEOIbKqb1BVASQUKWy+zWvYPkzzakx9PoIGxQOBZXQLcJrF
+         4fI3gO5cVFhL/+KjydxjqvYUvYxfkSfUjMwizRx7142kOtuSLnTfAUOLexRlmLkO2Bw5
+         oxk0/8xNIqpqchG+2nwxUp6rfD9dtbgOMYKD6Id/xqA5E0EcZu0cs+B2vuGNG63yCGCP
+         KJ2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7PgfiDJfXr3snHFNvpVEuL8JdLQTDd0vNID/MExBMQw=;
+        b=6VKESxgncXr4y2ddwy7Dl6/pM1ynpf9xCTGqDBoRZYMHnBbfSsWpgUobZCWve6fXlF
+         EtBQeHeSUYuQ+R4BHI2h0W6OBWm6XvbRtUMQBYLYo/p6+AoHTwvGHqvZnCs6s8RTyVyH
+         5/19hMYP3gdWxzreOrUDT5MIMglTYnpL8Djs55R6Rd6Wbc7tIBh+sfQSzwbAeSRKILyE
+         xGJkb36zlqd0K+fLRnusZamkCN235hIYcWfKogTHiFwwqSJulYDc+LvFZupRREME00ij
+         jarLBWf4AscwYe5taPNk4nxSr/HeNSFigVExRducomm+XMnEupFJAltEnWfgv01Gf6OE
+         csWg==
+X-Gm-Message-State: AO0yUKXVGj31XBgi7mY6QKmsCLk3Hc9I9Tebtqmi7PsQM0tdbgoPNCga
+        Qw7rrUIx6PXHjeP7hEzjkmOAsQCysyqvsqbazKw=
+X-Google-Smtp-Source: AK7set/142GEEA0/4909juyZJfVRjmlJ6/58BsZBMmdfRBeZKiCN/6AL8iJ53MG8sQb1I9hTgaHGJcltO1NuoZzoazs=
+X-Received: by 2002:a17:906:b2d7:b0:883:8fdc:fbba with SMTP id
+ cf23-20020a170906b2d700b008838fdcfbbamr1882584ejb.215.1675112646635; Mon, 30
+ Jan 2023 13:04:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1] apparmor: fix use of strcpy in policy_unpack_test
-Content-Language: en-US
-To:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-        davidgow@google.com, dlatypov@google.com
-Cc:     apparmor@lists.ubuntu.com, skhan@linuxfoundation.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20230127201219.775410-1-rmoar@google.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20230127201219.775410-1-rmoar@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230130183549.85471-1-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20230130183549.85471-1-mathieu.desnoyers@efficios.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 30 Jan 2023 13:03:55 -0800
+Message-ID: <CAADnVQLve5je3GKesCjn5HhuxgOe2u1OX7GQnx-58dsuUFWbZQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] selftests: bpf: Fix incorrect kernel headers
+ search path
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        bpf <bpf@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,80 +82,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/27/23 12:12, Rae Moar wrote:
-> Replace the use of strcpy() in build_aa_ext_struct() in
-> policy_unpack_test.c with strscpy().
-> 
-> strscpy() is the safer method to use to ensure the buffer does not
-> overflow. This was found by kernel test robot:
-> https://lore.kernel.org/all/202301040348.NbfVsXO0-lkp@intel.com/.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> Signed-off-by: Rae Moar <rmoar@google.com>
-
-lgtm
-
-I have pulled this into apparmor-next
-
+On Mon, Jan 30, 2023 at 10:36 AM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+> building against kernel headers from the build environment in scenarios
+> where kernel headers are installed into a specific output directory
+> (O=...).
+>
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> Cc: <bpf@vger.kernel.org>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: Stanislav Fomichev <sdf@google.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Mykola Lysenko <mykolal@fb.com>
+> Cc: <stable@vger.kernel.org>    [5.18+]
 > ---
-> 
-> Note: This patch is based on the apparmor-next branch. However, the
-> patch should also apply cleanly to the kselftest/kunit branch.
-> 
->   security/apparmor/policy_unpack_test.c | 13 ++++++-------
->   1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
-> index e1bfdab524b7..5c9bde25e56d 100644
-> --- a/security/apparmor/policy_unpack_test.c
-> +++ b/security/apparmor/policy_unpack_test.c
-> @@ -69,31 +69,30 @@ static struct aa_ext *build_aa_ext_struct(struct policy_unpack_fixture *puf,
->   
->   	*buf = AA_NAME;
->   	*(buf + 1) = strlen(TEST_STRING_NAME) + 1;
-> -	strcpy(buf + 3, TEST_STRING_NAME);
-> +	strscpy(buf + 3, TEST_STRING_NAME, e->end - (void *)(buf + 3));
->   
->   	buf = e->start + TEST_STRING_BUF_OFFSET;
->   	*buf = AA_STRING;
->   	*(buf + 1) = strlen(TEST_STRING_DATA) + 1;
-> -	strcpy(buf + 3, TEST_STRING_DATA);
-> -
-> +	strscpy(buf + 3, TEST_STRING_DATA, e->end - (void *)(buf + 3));
->   	buf = e->start + TEST_NAMED_U32_BUF_OFFSET;
->   	*buf = AA_NAME;
->   	*(buf + 1) = strlen(TEST_U32_NAME) + 1;
-> -	strcpy(buf + 3, TEST_U32_NAME);
-> +	strscpy(buf + 3, TEST_U32_NAME, e->end - (void *)(buf + 3));
->   	*(buf + 3 + strlen(TEST_U32_NAME) + 1) = AA_U32;
->   	*((u32 *)(buf + 3 + strlen(TEST_U32_NAME) + 2)) = TEST_U32_DATA;
->   
->   	buf = e->start + TEST_NAMED_U64_BUF_OFFSET;
->   	*buf = AA_NAME;
->   	*(buf + 1) = strlen(TEST_U64_NAME) + 1;
-> -	strcpy(buf + 3, TEST_U64_NAME);
-> +	strscpy(buf + 3, TEST_U64_NAME, e->end - (void *)(buf + 3));
->   	*(buf + 3 + strlen(TEST_U64_NAME) + 1) = AA_U64;
->   	*((u64 *)(buf + 3 + strlen(TEST_U64_NAME) + 2)) = TEST_U64_DATA;
->   
->   	buf = e->start + TEST_NAMED_BLOB_BUF_OFFSET;
->   	*buf = AA_NAME;
->   	*(buf + 1) = strlen(TEST_BLOB_NAME) + 1;
-> -	strcpy(buf + 3, TEST_BLOB_NAME);
-> +	strscpy(buf + 3, TEST_BLOB_NAME, e->end - (void *)(buf + 3));
->   	*(buf + 3 + strlen(TEST_BLOB_NAME) + 1) = AA_BLOB;
->   	*(buf + 3 + strlen(TEST_BLOB_NAME) + 2) = TEST_BLOB_DATA_SIZE;
->   	memcpy(buf + 3 + strlen(TEST_BLOB_NAME) + 6,
-> @@ -102,7 +101,7 @@ static struct aa_ext *build_aa_ext_struct(struct policy_unpack_fixture *puf,
->   	buf = e->start + TEST_NAMED_ARRAY_BUF_OFFSET;
->   	*buf = AA_NAME;
->   	*(buf + 1) = strlen(TEST_ARRAY_NAME) + 1;
-> -	strcpy(buf + 3, TEST_ARRAY_NAME);
-> +	strscpy(buf + 3, TEST_ARRAY_NAME, e->end - (void *)(buf + 3));
->   	*(buf + 3 + strlen(TEST_ARRAY_NAME) + 1) = AA_ARRAY;
->   	*((u16 *)(buf + 3 + strlen(TEST_ARRAY_NAME) + 2)) = TEST_ARRAY_SIZE;
->   
-> 
-> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+>  tools/testing/selftests/bpf/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index c22c43bbee19..6998c816afef 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -327,7 +327,7 @@ endif
+>  CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+>  BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)          \
+>              -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
+> -            -I$(abspath $(OUTPUT)/../usr/include)
+> +            $(KHDR_INCLUDES)
 
+It breaks the build:
+https://github.com/kernel-patches/bpf/actions/runs/4047075637/jobs/6960655246
+
+make[1]: *** No rule to make target '/linux/bpf.h', needed by
+'/tmp/work/bpf/bpf/tools/testing/selftests/bpf/bpf-helpers.rst'. Stop.
