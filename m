@@ -2,156 +2,168 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996746815DD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 17:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1E86815F6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 17:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjA3QDp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 11:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
+        id S236272AbjA3QH2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 11:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbjA3QDo (ORCPT
+        with ESMTP id S236669AbjA3QH1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:03:44 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275B88696
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:03:43 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-50e7a0f0cc8so103619667b3.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:03:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRnVG2nFTl4BwwenWUJgDtW21KKjiHwQU7q0KoM8lwU=;
-        b=fmy99mpVYplzHItVV0gIU7OdiZlttPxcrt/KnNdXQNOWmWxYmnB/WCKhz4K8EBEGXt
-         a5igaK3FNXLKMzHBEzfPPeYeV/IVcNeJuZOldRgf4WXt2Uc4Ytfa8IgUocobC9ryhrgQ
-         /Y5aWaietYFmNytacnPCjqKzBhfhyOSph6Ff5EIiLvSXOR8p+5kNRKrZA86ji2oUKd0b
-         KXSDTV/lz2YYzW+b9PnnlP6VUWiOnrK6JyLRWpuxGDlmjFQsofaF+iqkh7EBvrUXXVnn
-         edUwAZIwEcc3QwYD7LdiYWvtDcWWe+L2Lzit10SscOUAvTC5CCwQnc3EdBjjeHuLWnsy
-         H1rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kRnVG2nFTl4BwwenWUJgDtW21KKjiHwQU7q0KoM8lwU=;
-        b=CQM2lmBkbFSK0qATOR1Y2BjFu1m1AR/3RcybTyG4OLNgGUDkh+0EQ93GnW7XZr5o68
-         YzmcKSPcZbCTtz9gGI5m41CvU2kF2mvc8T9+e6TYl65QPI0ocB2KTeru0QNBMQ44fJsO
-         O67qOAbysEfFghfh2nZdX2y0q/uhzFNO+nlD2WMjQvJJvS0U5eH2I/0S6s8wgoivkDZn
-         UhyJpxOVYO5q6SzWcH8+oYqeFunThVUkIbVOLu2pXCQtNl3+Bd3beT71i6X5lDcjnG6T
-         ZG+LAVkB2CJcOwNT9lDBJG9Ypz92dzP61BXvMDT7Frm0dhFbHELseUceQppYNusxQHQ8
-         x14g==
-X-Gm-Message-State: AFqh2kqs2TY2bAqQtx7wVb7ASzv5Kq6osZFliV1JVInPYIX60hkbWW2H
-        ZpAqAF8ZpApLqAca6IEcqMvsdU8ccrffWZ8sRXSKdQ==
-X-Google-Smtp-Source: AMrXdXvILrB2xzvcs4JWtChQeHtXR/03YwCUY753A7xYVSr+kSIcmJU0sRWmI+QKZ2CoZyM0GDYqqeq1Y8umluN2zW0=
-X-Received: by 2002:a81:4006:0:b0:46b:c07c:c1d9 with SMTP id
- l6-20020a814006000000b0046bc07cc1d9mr3775924ywn.56.1675094622259; Mon, 30 Jan
- 2023 08:03:42 -0800 (PST)
+        Mon, 30 Jan 2023 11:07:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0EF23C59;
+        Mon, 30 Jan 2023 08:07:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7CE5B81253;
+        Mon, 30 Jan 2023 16:07:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776C9C433A1;
+        Mon, 30 Jan 2023 16:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675094842;
+        bh=X4aq03qfTprEgg2P4B5jLjLns6Z9kMvMXBP08AnjJnI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=i7O+hF0hl9PK/gRifk/Lx6Cf95CUAHMvtwdk9RQn/pzfwCfJPlwnySra5Tvn/BDb7
+         o084qt3maIAsgLnrR5ZjFxF+bowJ/e9Ei99Ni121huFuHnDCSRxbwdQ29OlLwBYmed
+         ci7SNMalsdIC3RJtpm7Ba10qAA3jVbbd573BzG35X5rjQsSRIkFwzsWQtg+1r4AM1A
+         tsTAcsxHvu8Y5ooCdVpCX/q6fmTRbZi957Zj8yM/5Rt7whyxAW/ngXWouoo/GR+xex
+         imwuspjLijKr7Ak+dLBAJYiB5hah1RbhubHp1QRgiqZGwavPUe0Bb5baeOpSBqXmZm
+         3d9JEPVDZr5qA==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-163bd802238so3421753fac.1;
+        Mon, 30 Jan 2023 08:07:22 -0800 (PST)
+X-Gm-Message-State: AFqh2kpHI1kLWLnS8uz0E0MM2xYiIneJN9e+UVWjT1xeNx0AcGunMTic
+        cBOyHJzZZotJ1b8NwjYGHFahpWWr9lWhLzUuSMQ=
+X-Google-Smtp-Source: AK7set/tThFmcDWiZDC78vg3qp3LDXCIDyDuvYxEoearW2/LsbnmuL+8lG7lptjujOfHv7SSHPIU0pJxdMy5lE+Cocw=
+X-Received: by 2002:a05:6870:110f:b0:160:3296:a9b9 with SMTP id
+ 15-20020a056870110f00b001603296a9b9mr2289709oaf.287.1675094841638; Mon, 30
+ Jan 2023 08:07:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
- <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
- <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
- <Y9e9S3ENl0oszAH/@qwirkle> <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
- <Y9fT+LABhW+/3Nal@qwirkle>
-In-Reply-To: <Y9fT+LABhW+/3Nal@qwirkle>
-From:   Willem de Bruijn <willemb@google.com>
-Date:   Mon, 30 Jan 2023 11:03:06 -0500
-Message-ID: <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
-Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
- back-off retries
-To:     Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230130090426.13864-1-likexu@tencent.com>
+In-Reply-To: <20230130090426.13864-1-likexu@tencent.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 31 Jan 2023 01:06:45 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT=8Z_-OJdEdUNvUwYpXvWZU7JnYLHW-o+w9GBXjaFbMQ@mail.gmail.com>
+Message-ID: <CAK7LNAT=8Z_-OJdEdUNvUwYpXvWZU7JnYLHW-o+w9GBXjaFbMQ@mail.gmail.com>
+Subject: Re: [PATCH] .gitignore: Keep track of archived files as they are
+ added to a new git repo
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Kees Cook <keescook@chromium.org>, Andrew Davis <afd@ti.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
-<andrei.gherzan@canonical.com> wrote:
+On Mon, Jan 30, 2023 at 6:04 PM Like Xu <like.xu.linux@gmail.com> wrote:
 >
-> On 23/01/30 08:35AM, Willem de Bruijn wrote:
-> > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
-> > <andrei.gherzan@canonical.com> wrote:
-> > >
-> > > On 23/01/30 09:26AM, Paolo Abeni wrote:
-> > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
-> > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
-> > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > >
-> > > > > > The tx and rx test programs are used in a couple of test scripts including
-> > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
-> > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
-> > > > > > accept socket connections. This racing bug could fail the test with at
-> > > > > > least one of the following:
-> > > > > >
-> > > > > > ./udpgso_bench_tx: connect: Connection refused
-> > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
-> > > > > > ./udpgso_bench_tx: write: Connection refused
-> > > > > >
-> > > > > > This change addresses this by adding routines that retry the socket
-> > > > > > operations with an exponential back off algorithm from 100ms to 2s.
-> > > > > >
-> > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-> > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > >
-> > > > > Synchronizing the two processes is indeed tricky.
-> > > > >
-> > > > > Perhaps more robust is opening an initial TCP connection, with
-> > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
-> > > > > go.
-> > > >
-> > > > Another option would be waiting for the listener(tcp)/receiver(udp)
-> > > > socket to show up in 'ss' output before firing-up the client - quite
-> > > > alike what mptcp self-tests are doing.
-> > >
-> > > I like this idea. I have tested it and it works as expected with the
-> > > exeception of:
-> > >
-> > > ./udpgso_bench_tx: sendmsg: No buffer space available
-> > >
-> > > Any ideas on how to handle this? I could retry and that works.
-> >
-> > This happens (also) without the zerocopy flag, right? That
-> >
-> > It might mean reaching the sndbuf limit, which can be adjusted with
-> > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
-> > expect this test to bump up against that limit.
-> >
-> > A few zerocopy specific reasons are captured in
-> > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
+> From: Like Xu <likexu@tencent.com>
 >
-> I have dug a bit more into this, and it does look like your hint was in
-> the right direction. The fails I'm seeing are only with the zerocopy
-> flag.
+> With thousands of commits going into mainline each development cycle,
+> the metadata .git folder size is gradually expanding (1GB+), and for some
+> developers (most likely testers) who don't care about the lengthy git-log,
+> they just use git-archive to distribute a certain version of code (~210MB)
+> and rebuild git repository from anywhere for further code changes, e.g.
 >
-> From the reasons (doc) above I can only assume optmem limit as I've
-> reproduced it with unlimited locked pages and the fails are transient.
-> That leaves optmem limit. Bumping the value I have by default (20480) to
-> (2048000) made the sendmsg succeed as expected. On the other hand, the
-> tests started to fail with something like:
+>   $ git init && git add . -A
 >
-> ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
-> expected    773707 received
+> Then unfortunately, the file tracking metadata from the original git-repo
+> using "git add -f" will also be lost, to the point where part of source
+> files wrapped by git-archive may be accidentally cleaned up:
+>
+>   $ git clean -nxdf
+>   Would remove Documentation/devicetree/bindings/.yamllint
+>   Would remove drivers/clk/.kunitconfig
+>   Would remove drivers/gpu/drm/tests/.kunitconfig
+>   Would remove drivers/hid/.kunitconfig
+>   Would remove fs/ext4/.kunitconfig
+>   Would remove fs/fat/.kunitconfig
+>   Would remove kernel/kcsan/.kunitconfig
+>   Would remove lib/kunit/.kunitconfig
+>   Would remove mm/kfence/.kunitconfig
+>   Would remove tools/testing/selftests/arm64/tags/
+>   Would remove tools/testing/selftests/kvm/.gitignore
+>   Would remove tools/testing/selftests/kvm/Makefile
+>   Would remove tools/testing/selftests/kvm/config
+>   Would remove tools/testing/selftests/kvm/settings
+>
+> This asymmetry is very troubling to those users since finding out which
+> files to track with "git add -f" clearly requires priori knowledge on
+> various subsystems. The eradication of this little issue requires naturally
+> making git-init aware of all .gitignore restrictions at different file tree
+> hierarchies. Similar issues can be troubleshot with "git check-ignore -v"
+> for any mistakenly cleaned files.
+>
+> Signed-off-by: Like Xu <likexu@tencent.com>
 
-More zerocopy completions than number of sends. I have not seen this before.
 
-The completions are ranges of IDs, one per send call for datagram sockets.
 
-Even with segmentation offload, the counter increases per call, not per segment.
+tools/testing/selftests/kvm/.gitignore is already meh.
 
-Do you experience this without any other changes to udpgso_bench_tx.c.
-Or are there perhaps additional sendmsg calls somewhere (during
-initial sync) that are not accounted to num_sends?
+I hope somebody will submit a better fix.
 
-> Also, this audit fail is transient as with the buffer limit one.
+
+
+
+> ---
+>  .gitignore                               | 2 ++
+>  tools/testing/selftests/arm64/.gitignore | 2 ++
+>  tools/testing/selftests/kvm/.gitignore   | 4 ++++
+>  3 files changed, 8 insertions(+)
+>  create mode 100644 tools/testing/selftests/arm64/.gitignore
+>
+> diff --git a/.gitignore b/.gitignore
+> index 20dce5c3b9e0..fa39e98caee3 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -102,6 +102,8 @@ modules.order
+>  !.gitignore
+>  !.mailmap
+>  !.rustfmt.toml
+> +!.yamllint
+> +!.kunitconfig
+>
+>  #
+>  # Generated include files
+> diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
+> new file mode 100644
+> index 000000000000..135d709d2d65
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/.gitignore
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +!tags
+> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> index 6d9381d60172..96561c8e06e0 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -5,3 +5,7 @@
+>  !*.h
+>  !*.S
+>  !*.sh
+> +!.gitignore
+> +!Makefile
+> +!settings
+> +!config
+> \ No newline at end of file
+> --
+> 2.39.1
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
