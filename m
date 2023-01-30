@@ -2,79 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE3F681AD2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 20:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E253681AEF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 20:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236712AbjA3TwS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 14:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S235949AbjA3T6c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 14:58:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjA3TwR (ORCPT
+        with ESMTP id S234742AbjA3T6b (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:52:17 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A59C4617A;
-        Mon, 30 Jan 2023 11:52:16 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id m2so34654471ejb.8;
-        Mon, 30 Jan 2023 11:52:15 -0800 (PST)
+        Mon, 30 Jan 2023 14:58:31 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD46E3B0F1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 11:58:29 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-50aa54cc7c0so147497467b3.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 11:58:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sSc4g7nvJKandIv/rMf9SszIbfj3jQh7I5IHKjdlPVs=;
-        b=SxEpUCfK9Oqj2XYYB6c/P+mZcr9oXylUbJfrvqrAQg5TAe8djCKBliswqP8D3jelkZ
-         aKLAkv0SkyDGkJsSniATXnyYwGQ9KfGpDNTrILlxXuluFsVT2epqbtqnN3XTD4/JaMO+
-         uWJ0HsRUPFe5n2YBimAivCTYEUZjgNmshaMlLeZsoN9h/EGh9snc6KMOolS0WNgMWywt
-         4YdaeoyqFRTcQ5rJmF4i1sNOYLv5GgDA+KWcynfsXComcdsNisou7TydkMIzJ+f87rrx
-         qUZ9DprgLB+x70vv18//RVhmE2O/c+OVeqSPXS3Z8j/uO2/2Ps9+MzIdylqYBRIjUM0s
-         Dwtw==
+        bh=i03ptR9fFLW5fJH/wPMLlxTLMbIyvVbZn3SkcwYrQcQ=;
+        b=h6MFIKg7fj6u5OaxCTbe48QrqZ0u9cN6VLysxptuK+Kqer56MahV7CjI0JTVFB7kpb
+         rBaWQWvRu5aXlSh9BruBKkUp3A3zH59k13A5wAgFAjilytkzbTwsYPlIZE8ZdjpFVHXO
+         r2Jpn8Btx/a9kycJESwKJ03IiD4In3f8gJjeA/FTV2tTdHWtAgI1gRZFrx4ZRBRty3CZ
+         168sBvYd+mSFh8DSsKZL3H+QJBBg8zCC5aDgy1hKHRS4fuXNjuxHUeFV54MSFYq5mJMt
+         qEJvKmTROBgRjB2CQA1a6IQ0w+trzu3pG9Vyj1Udqu6j5b1kVUHGsoDbpFtJOpmjdjTo
+         tUNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sSc4g7nvJKandIv/rMf9SszIbfj3jQh7I5IHKjdlPVs=;
-        b=oWsAbo8ik8l6ozlV5te2hVQnjGlw/Xun7x8XWtSO3TyQTXF0V2Rc3TsAH8XwqmZ4Q4
-         /B242/A8T4H903pv1BQaWMfn9nW1RIVi3ynQJrfHlly3mXFO+hVYO1/yMkbBCGgCThyK
-         uMYoLv3IATEiI3tuw7MbQie9Z+fnzuG8DfRe7hmKkH5oMkwY3h81d4nAx8XyzEqNp+Zq
-         OzIEoo+LBsce4pcUn7VXOh4D0m+Y8m5wbfShZut+ARgSBy4wMzMnPpvgY5w2AF2bXECu
-         wlnkLmeNY6yNFZ9QB5XkQ5gsQ89g238JznnZ2hkq3gp2TLb9reAxnG63hw1HIQHviSvc
-         +vMw==
-X-Gm-Message-State: AFqh2kpFZ9jRAMGE2wfgC0GPM2pw0aHS2vOR5KGx3mp9HSh036iECKdk
-        ZLqaSxusFkmT0zIOYaeUtLfS0ouGMVau4nhfXManNDVm4zk=
-X-Google-Smtp-Source: AMrXdXudTqgdM3+I8mgvgkYxiO4cmG/GpQA2LBqWtWyKEb7WoFRmj1FeTe8fWoVxZ92AbUm1q4YUsT92cIYd2WqVcM0=
-X-Received: by 2002:a17:906:380e:b0:877:5b9b:b426 with SMTP id
- v14-20020a170906380e00b008775b9bb426mr8031462ejc.12.1675108334423; Mon, 30
- Jan 2023 11:52:14 -0800 (PST)
+        bh=i03ptR9fFLW5fJH/wPMLlxTLMbIyvVbZn3SkcwYrQcQ=;
+        b=lM4GGFuRzct78Jn2l4Fj6M+IlPJHwSSbHs+XtPDu87Bt7nOWHl5oHNp4ev6g7vlntz
+         jnayZmAKlXnRLU2/130nFAowxBiRDF0TM+EUjTxdSO1ae4wYeLEWYSLtG/UfS9Fj11LG
+         SEfAjiN6imzHFmrkTs82SQytkFoHTAUJHqlIw6aLMpwb4iWIqk+bWpNpzJXXAQ/WCYqD
+         V3VHqWYslzkDy/YjjGnF0eCQdxSkHgzKDEGcu+tOW6Sq6OlMkoJKuMejNiGvhn6N9GCJ
+         ZiA8pTzybbAbk4hShjrjBFhUw9nscnxmYaWNXIcaUy9l5BOsL1zCtSkhZw0L3MO7bTX9
+         iVrg==
+X-Gm-Message-State: AO0yUKVoAw8EEXptjhqMprHCNOfVRRf/zjAuyf43xLU7bvcvyVGQE0cb
+        uUoHI6taOaj64Cgh+D9wqszudZoATY44ELluiMFMRA==
+X-Google-Smtp-Source: AK7set+84QqUVzPLTgiujO7cFK7Mj/KcKfR0HfahV7rS2yXkT9qnaCG6qVPvGnsQLBs759QmRN/eDZLWvB/s8zvlrlo=
+X-Received: by 2002:a81:254b:0:b0:519:6acb:f25a with SMTP id
+ l72-20020a81254b000000b005196acbf25amr313652ywl.480.1675108708820; Mon, 30
+ Jan 2023 11:58:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20230130181915.1113313-1-zwisler@google.com> <20230130181915.1113313-4-zwisler@google.com>
-In-Reply-To: <20230130181915.1113313-4-zwisler@google.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 30 Jan 2023 11:52:03 -0800
-Message-ID: <CAADnVQJ7KxEK92qOz0Ya4MrACHpxngSpG4W38xuGEgZmXEG-vQ@mail.gmail.com>
-Subject: Re: [PATCH 3/9] selftests/bpf: use canonical ftrace path
-To:     Ross Zwisler <zwisler@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+References: <Y9e9S3ENl0oszAH/@qwirkle> <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
+ <Y9fT+LABhW+/3Nal@qwirkle> <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
+ <Y9ftL5c4klThCi9Q@qwirkle> <Y9fu7TR5VC33j+EP@qwirkle> <CA+FuTSf1tJ7kw+GCXf0YBRv0HaR8v7=iy6b36hrsmx8hEr5knQ@mail.gmail.com>
+ <Y9f+7tMWMtPACLz9@qwirkle> <CA+FuTScThEWVevZ+KVgLOZ6zb4Ush6RtKL4FmC2cFMg+Q-OWpw@mail.gmail.com>
+ <Y9gLeNqorZNQ1gjp@qwirkle> <Y9gfpa7vks5Ndl8q@qwirkle>
+In-Reply-To: <Y9gfpa7vks5Ndl8q@qwirkle>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Mon, 30 Jan 2023 14:57:52 -0500
+Message-ID: <CA+FuTSckAeDGSBYE3bv2qR9cXpqac8Vmu6YxC1HTJx7YLY7gnQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
+ back-off retries
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,30 +77,186 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 10:19 AM Ross Zwisler <zwisler@chromium.org> wrote:
+On Mon, Jan 30, 2023 at 2:51 PM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
 >
-> The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
->
-> But, from Documentation/trace/ftrace.rst:
->
->   Before 4.1, all ftrace tracing control files were within the debugfs
->   file system, which is typically located at /sys/kernel/debug/tracing.
->   For backward compatibility, when mounting the debugfs file system,
->   the tracefs file system will be automatically mounted at:
->
->   /sys/kernel/debug/tracing
->
-> Many tests in the bpf selftest code still refer to this older debugfs
-> path, so let's update them to avoid confusion.
+> On 23/01/30 06:24PM, Andrei Gherzan wrote:
+> > On 23/01/30 12:35PM, Willem de Bruijn wrote:
+> > > On Mon, Jan 30, 2023 at 12:31 PM Andrei Gherzan
+> > > <andrei.gherzan@canonical.com> wrote:
+> > > >
+> > > > On 23/01/30 11:29AM, Willem de Bruijn wrote:
+> > > > > On Mon, Jan 30, 2023 at 11:23 AM Andrei Gherzan
+> > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > >
+> > > > > > On 23/01/30 04:15PM, Andrei Gherzan wrote:
+> > > > > > > On 23/01/30 11:03AM, Willem de Bruijn wrote:
+> > > > > > > > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
+> > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
+> > > > > > > > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
+> > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
+> > > > > > > > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
+> > > > > > > > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
+> > > > > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > The tx and rx test programs are used in a couple of test scripts including
+> > > > > > > > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
+> > > > > > > > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
+> > > > > > > > > > > > > > accept socket connections. This racing bug could fail the test with at
+> > > > > > > > > > > > > > least one of the following:
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > ./udpgso_bench_tx: connect: Connection refused
+> > > > > > > > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
+> > > > > > > > > > > > > > ./udpgso_bench_tx: write: Connection refused
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > This change addresses this by adding routines that retry the socket
+> > > > > > > > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+> > > > > > > > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Synchronizing the two processes is indeed tricky.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Perhaps more robust is opening an initial TCP connection, with
+> > > > > > > > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
+> > > > > > > > > > > > > go.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
+> > > > > > > > > > > > socket to show up in 'ss' output before firing-up the client - quite
+> > > > > > > > > > > > alike what mptcp self-tests are doing.
+> > > > > > > > > > >
+> > > > > > > > > > > I like this idea. I have tested it and it works as expected with the
+> > > > > > > > > > > exeception of:
+> > > > > > > > > > >
+> > > > > > > > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
+> > > > > > > > > > >
+> > > > > > > > > > > Any ideas on how to handle this? I could retry and that works.
+> > > > > > > > > >
+> > > > > > > > > > This happens (also) without the zerocopy flag, right? That
+> > > > > > > > > >
+> > > > > > > > > > It might mean reaching the sndbuf limit, which can be adjusted with
+> > > > > > > > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
+> > > > > > > > > > expect this test to bump up against that limit.
+> > > > > > > > > >
+> > > > > > > > > > A few zerocopy specific reasons are captured in
+> > > > > > > > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
+> > > > > > > > >
+> > > > > > > > > I have dug a bit more into this, and it does look like your hint was in
+> > > > > > > > > the right direction. The fails I'm seeing are only with the zerocopy
+> > > > > > > > > flag.
+> > > > > > > > >
+> > > > > > > > > From the reasons (doc) above I can only assume optmem limit as I've
+> > > > > > > > > reproduced it with unlimited locked pages and the fails are transient.
+> > > > > > > > > That leaves optmem limit. Bumping the value I have by default (20480) to
+> > > > > > > > > (2048000) made the sendmsg succeed as expected. On the other hand, the
+> > > > > > > > > tests started to fail with something like:
+> > > > > > > > >
+> > > > > > > > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
+> > > > > > > > > expected    773707 received
+> > > > > > > >
+> > > > > > > > More zerocopy completions than number of sends. I have not seen this before.
+> > > > > > > >
+> > > > > > > > The completions are ranges of IDs, one per send call for datagram sockets.
+> > > > > > > >
+> > > > > > > > Even with segmentation offload, the counter increases per call, not per segment.
+> > > > > > > >
+> > > > > > > > Do you experience this without any other changes to udpgso_bench_tx.c.
+> > > > > > > > Or are there perhaps additional sendmsg calls somewhere (during
+> > > > > > > > initial sync) that are not accounted to num_sends?
+> > > > > > >
+> > > > > > > Indeed, that looks off. No, I have run into this without any changes in
+> > > > > > > the tests (besides the retry routine in the shell script that waits for
+> > > > > > > rx to come up). Also, as a data point.
+> > > > > >
+> > > > > > Actually wait. I don't think that is the case here. "expected" is the
+> > > > > > number of sends. In this case we sent 1076 more messages than
+> > > > > > completions. Am I missing something obvious?
+> > > > >
+> > > > > Oh indeed.
+> > > > >
+> > > > > Receiving fewer completions than transmission is more likely.
+> > > >
+> > > > Exactly, yes.
+> > > >
+> > > > > This should be the result of datagrams still being somewhere in the
+> > > > > system. In a qdisc, or waiting for the network interface to return a
+> > > > > completion notification, say.
+> > > > >
+> > > > > Does this remain if adding a longer wait before the final flush_errqueue?
+> > > >
+> > > > Yes and no. But not realiably unless I go overboard.
+> > > >
+> > > > > Or, really, the right fix is to keep polling there until the two are
+> > > > > equal, up to some timeout. Currently flush_errqueue calls poll only
+> > > > > once.
+> > > >
+> > > > That makes sense. I have implemented a retry and this ran for a good
+> > > > while now.
+> > > >
+> > > > -               flush_errqueue(fd, true);
+> > > > +               while (true) {
+> > > > +                       flush_errqueue(fd, true);
+> > > > +                       if ((stat_zcopies == num_sends) || (delay >= MAX_DELAY))
+> > > > +                               break;
+> > > > +                       usleep(delay);
+> > > > +                       delay *= 2;
+> > > > +               }
+> > > >
+> > > > What do you think?
+> > >
+> > > Thanks for running experiments.
+> > >
+> > > We can avoid the unconditional sleep, as the poll() inside
+> > > flush_errqueue already takes a timeout.
+> > >
+> > > One option is to use start_time = clock_gettime(..) or gettimeofday
+> > > before poll, and restart poll until either the exit condition or
+> > > timeout is reached, with timeout = orig_time - elapsed_time.
+> >
+> > Yes, this was more of a quick draft. I was thinking to move it into the
+> > flush function (while making it aware of num_sends via a parameter):
+> >
+> > if (do_poll) {
+> >   struct pollfd fds = {0};
+> >   int ret;
+> >   unsigned long tnow, tstop;
+> >
+> >   fds.fd = fd;
+> >   tnow = gettimeofday_ms();
+> >   tstop = tnow + POLL_LOOP_TIMEOUT_MS;
+> >   while ((stat_zcopies != num_sends) && (tnow < tstop)) {
 
-I wish that was the case, but in reality there are still systems
-out there where tracefs is only mounted in that old location.
-For example in one my VMs:
+The new condition to loop until stat_zcopies == num_sends should only
+be tested on the final call. This likely needs to become a separate
+boolean. Or a separate flush_errqueue_last() function, and leave the
+existing one as is.
 
-$ cat /proc/mounts |grep tracefs
-tracefs /sys/kernel/debug/tracing tracefs rw,relatime 0 0
-$ ls /sys/kernel/tracing/
-$ uname -r
-6.2.0-rc5-01030-gc1a3daf7363b
+We can probably merge the outer for and inner while loops
 
-So this change will break the tests. We cannot do it.
+> >     ret = poll(&fds, 1, 500);
+
+Instead of 500, this becomes tstop - tnow.
+
+> >     if (ret == 0) {
+> >       if (cfg_verbose)
+> >         fprintf(stderr, "poll timeout\n");
+
+Poll timeouts are now expected to an extent. Only report once at the
+end of the function if the poll was only called once and timed out.
+> >       } else if (ret < 0) {
+> >         error(1, errno, "poll");
+> >     }
+> >     tnow = gettimeofday_ms();
+> >   }
+> > }
+> >
+> > Does this make more sense?
+>
+> Obviously, this should be a do/while. Anyway, this works as expected
+> after leaving it for a around two hours.
+
+Great to hear you found the cause.
