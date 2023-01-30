@@ -2,78 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289DA680836
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 10:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0C1680A50
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 11:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235799AbjA3JK0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 04:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S235761AbjA3KDe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 05:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235594AbjA3JKY (ORCPT
+        with ESMTP id S235845AbjA3KDd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:10:24 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763929F;
-        Mon, 30 Jan 2023 01:10:23 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.165.226])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 35DF06602E2A;
-        Mon, 30 Jan 2023 09:10:15 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675069821;
-        bh=/l1ZA909PK+xOECy6RWevd3pYBOOmWKWLYoZHDERZd8=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=VXjvZz+hCCgMh9CNLBkp08d1EtF4OT//jWEFDvgnJuR54ryFfcB82MGaOOymQGIhq
-         k+VqrLhTOWhFgL9CRaE1GjOI4aXCfgyfQV00hwCQZgMu4qPbr5/CWcksAA8KRYgW0D
-         sD3jhX82/6V5IWZInIh23Ux3H5NY3DX8zJKYkfvMx8W4BbOdGg0VecV4A9xy3yGABr
-         K+QEJnPQMT4HN70Ue9QBllXQHdTyBSnzCdzBqh2KmM0/PxCh2Xr7lba5rvwKW2LMTk
-         p8g3hpdTWa4ZGQSVJIa4Ckj3RVgKIo2uuL/Bl9euykx3U94MW0kUUSXAsXUfrtsgKd
-         ntxb0+Jp+Kzgg==
-Message-ID: <c3cc49b6-1ad3-f5aa-50bb-a12f3bbb377a@collabora.com>
-Date:   Mon, 30 Jan 2023 14:10:11 +0500
+        Mon, 30 Jan 2023 05:03:33 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAF717CCB;
+        Mon, 30 Jan 2023 02:03:32 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U8iKik030631;
+        Mon, 30 Jan 2023 09:25:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7fprBaYwOOCmXuJOkAQ5QMZkawuxe6OxrvBklOkDwp4=;
+ b=VT2OJCH83qwUtR2nCB+VoxZ35E9UGC8Uorro5rAVpYGEY6N2m41fldPyMCCp2rDQ7Unt
+ PNYM14yEUWMdK5ekxNbf2nsTORIbqpKKisHiADdSUiXV9ocLIet0A15b/gJWd6+bXh1l
+ Zee/VBYDLL+hUZIjsf/dC0ic37c7llZH0YE5/MnoZxq2X54Yd69nr1S3MlbIzFDuNg9i
+ cltAJusmn8WRg7uUYw0xIiqW/M9/Fv4vl/eby0KD0CMTIP9zu//7aq96H3j3DhWTRx+L
+ sr+aJTiULrZeSMehKeo2ic84cLkM36HsErlQXlCLpqMbRSGyT/gsyNA+/XU7k32NRyO2 5Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3neamygygs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 09:25:38 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30U8kCJR000988;
+        Mon, 30 Jan 2023 09:25:38 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3neamygygc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 09:25:38 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30T3EN37011107;
+        Mon, 30 Jan 2023 09:25:36 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3ncvv69ee5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 09:25:36 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30U9PWUX42336590
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 Jan 2023 09:25:32 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7C4220043;
+        Mon, 30 Jan 2023 09:25:32 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4514A20040;
+        Mon, 30 Jan 2023 09:25:32 +0000 (GMT)
+Received: from [9.171.8.15] (unknown [9.171.8.15])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 30 Jan 2023 09:25:32 +0000 (GMT)
+Message-ID: <0746a825-ca04-3746-a6ff-5289903a2843@linux.ibm.com>
+Date:   Mon, 30 Jan 2023 10:25:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+To:     Nina Schoetterl-Glausch <nsg@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v8 2/4] userfaultfd: split mwriteprotect_range()
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Huth <thuth@redhat.com>
+References: <20230127174552.3370169-1-nsg@linux.ibm.com>
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230124084323.1363825-1-usama.anjum@collabora.com>
- <20230124084323.1363825-3-usama.anjum@collabora.com> <Y9QEdbkZxOJ10oEJ@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y9QEdbkZxOJ10oEJ@x1n>
-Content-Type: text/plain; charset=UTF-8
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [RFC PATCH v1] KVM: selftests: Compile s390 tests with -march=z10
+In-Reply-To: <20230127174552.3370169-1-nsg@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vf_8CxvDOGmi9MSZ3bOC8w0-DH10hZoa
+X-Proofpoint-GUID: ry1WlnRGW5T7WMJDlJyHDe1k9w7gI4iE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_07,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 clxscore=1011 phishscore=0
+ suspectscore=0 malwarescore=0 priorityscore=1501 mlxscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300086
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,25 +96,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/27/23 10:05 PM, Peter Xu wrote:
-> On Tue, Jan 24, 2023 at 01:43:21PM +0500, Muhammad Usama Anjum wrote:
->> Split mwriteprotect_range() to create a unlocked version. This
->> will be used in the next patch to write protect a memory area.
->> Add a helper function, wp_range_async() as well.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+On 1/27/23 18:45, Nina Schoetterl-Glausch wrote:
+> The guest used in s390 kvm selftests is not be set up to handle all
+> instructions the compiler might emit, i.e. vector instructions, leading
+> to crashes.
+> Limit what the compiler emits to the oldest machine model currently
+> supported by Linux.
 > 
-> IIUC this patch is not needed.  You have a stable vma, so I think you can
-> directly use uffd_wp_range(), while most of the mwriteprotect_range() is
-> not needed.
-> 
-> There's one trivial detail of ignoring userfaultfd_ctx->mmap_changing when
-> it's set to true, but I don't think it applies here either because it was
-> used to resolve a problem in uffd non-cooperative mode on the predictable
-> behavior of events, here I don't think it matters a lot either.
-> 
-Thanks, I'll drop this patch and do direct wiring to uffd_wp_range().
+> Signed-off-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+> ---
 
--- 
-BR,
-Muhammad Usama Anjum
+Technically it's a fix but as the tests have been running fine for years 
+I'm inclined to put it into a full release rather than a fix rc.
+
+Thanks for taking care of the fix:
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+
+> Should we also set -mtune?
+> Since it are vector instructions that caused the problem here, there
+> are some alternatives:
+>   * use -mno-vx
+>   * set the required guest control bit to enable vector instructions on
+>     models supporting them
+> 
+> -march=z10 might prevent similar issues with other instructions, but I
+> don't know if there actually exist other relevant instructions, so it
+> could be needlessly restricting.
+> 
+> 
+>   tools/testing/selftests/kvm/Makefile | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 1750f91dd936..df0989949eb5 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -200,6 +200,9 @@ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+>   	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+>   	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. $(EXTRA_CFLAGS) \
+>   	$(KHDR_INCLUDES)
+> +ifeq ($(ARCH),s390)
+> +	CFLAGS += -march=z10
+> +endif
+>   
+>   no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
+>           $(CC) -Werror $(CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
+
