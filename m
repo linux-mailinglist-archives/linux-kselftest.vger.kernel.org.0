@@ -2,72 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7533468164E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 17:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E01D681669
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 17:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236977AbjA3Q0z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 11:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S237561AbjA3QaU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 11:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236952AbjA3Q0w (ORCPT
+        with ESMTP id S237500AbjA3QaN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:26:52 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA6442BDC;
-        Mon, 30 Jan 2023 08:26:50 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id kt14so33404211ejc.3;
-        Mon, 30 Jan 2023 08:26:50 -0800 (PST)
+        Mon, 30 Jan 2023 11:30:13 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1A5360BF
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:30:09 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id h5so14688591ybj.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:30:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aeL1yKKafH0YF5Q9OP+rEdMznPKqMD6znWn+lV0SJEE=;
-        b=Hd3fnaNoOTxaUp7Hq7bKAOE66/ain081O4hQYqaTrsOR60rRpoZf8zKh05Jxr+4Jae
-         wpcBsw49wYdU8cFlbeYJ3DjXNFfwWqc+LpDpUaOQeTsuC/qRdsMKFqfaPMficR//d1QK
-         VIIiUTHHh30frPyYu6By4gbLFQQxKM9iYI73zJwXtyx/Ngu1pDIwQdhEDO1mqJouhGgQ
-         Gu3sLUWgMoezlBmVxy7zVSwh4BN/0idG6PGJR1pCkRTZx4m6Y9BAOWDIj45f1+Adm5gA
-         sSxTB9Uf//WEO8AdELFVpU5nYssq5JCrIBx7b1NMopRpiGgIUSQtej23Qg4d3+1fJog/
-         rGBw==
+        bh=TPFC8cMkklXYROXSktfu+SUe+7hNbiwoBvUWNNZQCno=;
+        b=DRdqm1G7sz3+3jrt8fpDzB2z7HSSV6gtQFBIYiP27otecjCpAmCJ/txHXrv9KVYa3x
+         qVj0/ioZFHZGG0RhY2RjIU28alJdx8PK+cAYA1NUX2cyWAbaK7ulvOeyxepPdGoeQ82O
+         dRXQmKtn/U1k9bpYrXfzqNOYAV2R6Wb7CPrHLhqEU/pau7bAEhEx0vcfQjLOa8bbe83l
+         LcLbDvELQwmwyhT1qWefL4Ckg+4Y9Eg3x50x6A5AqDYk3uEkwwNxPvIUhQdeGvcWsYHm
+         5lBZqjmgpLBFt3p0go1gf+N/n4spXoV+piyg05OZslsUTAb1Hu9ExSw4CG4zK+riUDDG
+         w7fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aeL1yKKafH0YF5Q9OP+rEdMznPKqMD6znWn+lV0SJEE=;
-        b=CHEVDpjCNah6Sb3uamRsFjCZiIXIyVXnxpX8bjwS23MoP+CFXyne6aXiJBo48CNu+y
-         Kz8eQQ+w0b4TJ20GCawVm/uHOdhwmfxoXTiQcI4H/p9gL/fQiFZNUzWuzycJpO/wmQ5Z
-         /U/ypZlp07llGJueSbakAkxP83GKDQ2xtqNKoJW1RTZzTHKSAs44vAheYJuSTdOVdl2i
-         kqCmJFFIh/WXkkUMDJiaKx2fObCvRGqtNFRzNvXeJ1Bbb+2uSV1bvjRosPcqcVfMbENS
-         CK0C0awMe1CzVCrmwtH5+sqo3zd6u7U8AN/ae6Tc/vwF8PTOG/8fMBmV8kIepe9op6vP
-         9Z/Q==
-X-Gm-Message-State: AFqh2kpkKlMHwkJzPCGhVifL5QhnW9W3ANE535PWHxphFQ+AxRB6zaiC
-        c6IFtG/8+HMt1lbV9Kqf2uSDdSt3nysNZl5G/6TLBUCV
-X-Google-Smtp-Source: AMrXdXuSbqX5vKm2qlcpbVVGoqd5LbtVnloM1xeupFRm7Uq1v6/dKga5nvw3NPtU0WopYiPJzQ2qNhbkGqnBxbKys4k=
-X-Received: by 2002:a17:906:7ac2:b0:86e:429b:6a20 with SMTP id
- k2-20020a1709067ac200b0086e429b6a20mr7769751ejo.247.1675096008450; Mon, 30
- Jan 2023 08:26:48 -0800 (PST)
+        bh=TPFC8cMkklXYROXSktfu+SUe+7hNbiwoBvUWNNZQCno=;
+        b=AdRYFXyXPvqXocxQMaFwqg7XKAYKgsSuu+o633XggYaerB76chHUlLFkywCXHndbd3
+         iMngQ7yk+RxJfEWfVOex8K/MzcmMxzb10pf9Sx+jl1wVvSiuSKg0VHv1+wZTQooGBaGn
+         aPN90abEYPgCsf4s53Mrk9WL8aBQSf3/CaVXxx+4GkjzG1onAakg88cEVrDfwE+4joyT
+         jS4g+h+4lrk4qtNESjaQjAZKMV8ohniT9tNlAAMPSYjJReoev7TS2q3/Dhc3d2J7jea9
+         ym4GJpCDniGgOVdFtb7h51I32epc3/MP9jtgpUeMhgYvaGTxlG5mVCBGmPTnqGfMyjj+
+         FDFg==
+X-Gm-Message-State: AFqh2kruyFZAx+TeA7Z7E9GMOK2aMrckr5uFjmoK0oH8jMAGwQw4WShu
+        q5lb50fvRavr3U1Mtg9NqpwYCdtgDoiWVHg4BBxy5zOIvBR4JG7d
+X-Google-Smtp-Source: AMrXdXtJPRSD2nJpeETSjyTWb9N9nQlXe9LDLFV+Yj2ibrJyK6JgNXl7Kct1hYSFYMK2S6UcEpqYAjYsGida7vX8NDA=
+X-Received: by 2002:a25:84ce:0:b0:7b7:c7ed:eee9 with SMTP id
+ x14-20020a2584ce000000b007b7c7edeee9mr4700617ybm.334.1675096208397; Mon, 30
+ Jan 2023 08:30:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
- <20230127135755.79929-3-mathieu.desnoyers@efficios.com> <4defb04e-ddcb-b344-6e9f-35023dee0d2a@linuxfoundation.org>
-In-Reply-To: <4defb04e-ddcb-b344-6e9f-35023dee0d2a@linuxfoundation.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 30 Jan 2023 08:26:37 -0800
-Message-ID: <CAADnVQ+1hB-1B_-2LrYC3XvMiEyA2yZv9fz51dDrMABG3dsQ_g@mail.gmail.com>
-Subject: Re: [PATCH 02/34] selftests: bpf: Fix incorrect kernel headers search path
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
+References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
+ <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
+ <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
+ <Y9e9S3ENl0oszAH/@qwirkle> <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
+ <Y9fT+LABhW+/3Nal@qwirkle> <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
+ <Y9ftL5c4klThCi9Q@qwirkle> <Y9fu7TR5VC33j+EP@qwirkle>
+In-Reply-To: <Y9fu7TR5VC33j+EP@qwirkle>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Mon, 30 Jan 2023 11:29:31 -0500
+Message-ID: <CA+FuTSf1tJ7kw+GCXf0YBRv0HaR8v7=iy6b36hrsmx8hEr5knQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
+ back-off retries
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,43 +78,118 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 8:12 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Mon, Jan 30, 2023 at 11:23 AM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
 >
-> On 1/27/23 06:57, Mathieu Desnoyers wrote:
-> > Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
-> > building against kernel headers from the build environment in scenarios
-> > where kernel headers are installed into a specific output directory
-> > (O=...).
+> On 23/01/30 04:15PM, Andrei Gherzan wrote:
+> > On 23/01/30 11:03AM, Willem de Bruijn wrote:
+> > > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
+> > > <andrei.gherzan@canonical.com> wrote:
+> > > >
+> > > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
+> > > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
+> > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > >
+> > > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
+> > > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
+> > > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
+> > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > >
+> > > > > > > > > The tx and rx test programs are used in a couple of test scripts including
+> > > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
+> > > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
+> > > > > > > > > accept socket connections. This racing bug could fail the test with at
+> > > > > > > > > least one of the following:
+> > > > > > > > >
+> > > > > > > > > ./udpgso_bench_tx: connect: Connection refused
+> > > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
+> > > > > > > > > ./udpgso_bench_tx: write: Connection refused
+> > > > > > > > >
+> > > > > > > > > This change addresses this by adding routines that retry the socket
+> > > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
+> > > > > > > > >
+> > > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+> > > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > > > > > >
+> > > > > > > > Synchronizing the two processes is indeed tricky.
+> > > > > > > >
+> > > > > > > > Perhaps more robust is opening an initial TCP connection, with
+> > > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
+> > > > > > > > go.
+> > > > > > >
+> > > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
+> > > > > > > socket to show up in 'ss' output before firing-up the client - quite
+> > > > > > > alike what mptcp self-tests are doing.
+> > > > > >
+> > > > > > I like this idea. I have tested it and it works as expected with the
+> > > > > > exeception of:
+> > > > > >
+> > > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
+> > > > > >
+> > > > > > Any ideas on how to handle this? I could retry and that works.
+> > > > >
+> > > > > This happens (also) without the zerocopy flag, right? That
+> > > > >
+> > > > > It might mean reaching the sndbuf limit, which can be adjusted with
+> > > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
+> > > > > expect this test to bump up against that limit.
+> > > > >
+> > > > > A few zerocopy specific reasons are captured in
+> > > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
+> > > >
+> > > > I have dug a bit more into this, and it does look like your hint was in
+> > > > the right direction. The fails I'm seeing are only with the zerocopy
+> > > > flag.
+> > > >
+> > > > From the reasons (doc) above I can only assume optmem limit as I've
+> > > > reproduced it with unlimited locked pages and the fails are transient.
+> > > > That leaves optmem limit. Bumping the value I have by default (20480) to
+> > > > (2048000) made the sendmsg succeed as expected. On the other hand, the
+> > > > tests started to fail with something like:
+> > > >
+> > > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
+> > > > expected    773707 received
+> > >
+> > > More zerocopy completions than number of sends. I have not seen this before.
+> > >
+> > > The completions are ranges of IDs, one per send call for datagram sockets.
+> > >
+> > > Even with segmentation offload, the counter increases per call, not per segment.
+> > >
+> > > Do you experience this without any other changes to udpgso_bench_tx.c.
+> > > Or are there perhaps additional sendmsg calls somewhere (during
+> > > initial sync) that are not accounted to num_sends?
 > >
-> > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: linux-kselftest@vger.kernel.org
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: <stable@vger.kernel.org>    [5.18+]
-> > ---
-> >   tools/testing/selftests/bpf/Makefile | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index c22c43bbee19..6998c816afef 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -327,7 +327,7 @@ endif
-> >   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-> >   BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)               \
-> >            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
-> > -          -I$(abspath $(OUTPUT)/../usr/include)
-> > +          $(KHDR_INCLUDES)
-> >
-> >   CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
-> >              -Wno-compare-distinct-pointer-types
+> > Indeed, that looks off. No, I have run into this without any changes in
+> > the tests (besides the retry routine in the shell script that waits for
+> > rx to come up). Also, as a data point.
 >
->
->
-> Adding bpf maintainers - bpf patches usually go through bpf tree.
->
-> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> Actually wait. I don't think that is the case here. "expected" is the
+> number of sends. In this case we sent 1076 more messages than
+> completions. Am I missing something obvious?
 
-Please resubmit as separate patch with [PATCH bpf-next] subj
-and cc bpf@vger, so that BPF CI can test it on various architectures
-and config combinations.
+Oh indeed.
+
+Receiving fewer completions than transmission is more likely.
+
+This should be the result of datagrams still being somewhere in the
+system. In a qdisc, or waiting for the network interface to return a
+completion notification, say.
+
+Does this remain if adding a longer wait before the final flush_errqueue?
+
+Or, really, the right fix is to keep polling there until the two are
+equal, up to some timeout. Currently flush_errqueue calls poll only
+once.
+
+
+>
+> >
+> > As an additional data point, this was only seen on the IPv6 tests. I've
+> > never been able to replicate it on the IPv4 run.
+>
+> I was also fast to send this but it is not correct. I managed to
+> reproduce it on both IPv4 and IPv6.
+>
+> --
+> Andrei Gherzan
