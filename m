@@ -2,142 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42E0681FD4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 00:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CA7681FE6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 00:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjA3Xp4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 18:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
+        id S229460AbjA3XrV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 18:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjA3Xpz (ORCPT
+        with ESMTP id S229580AbjA3XrU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:45:55 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCF92B610;
-        Mon, 30 Jan 2023 15:45:53 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id m8so3525515edd.10;
-        Mon, 30 Jan 2023 15:45:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K9VOT142oF1CR1Ax5dNwKVoSH2mYxiMG43ulowgTfdM=;
-        b=ifmLcLYLQjQQls0ws954fkLlIyYomtftNUNRivmMHoFEjzo+JOMGe2dk1q9S/UWfNx
-         amGL6PWdYFEnpHjeZHwfGrrJSQIK09s41CP1XPxSSrZ099s519ePBt1PZ8LwuGp7IFwV
-         ctQ0QhaeWJzwwijBriFIrkaI0alDLmw/rTWOwmy50t+AFzdjz3Fe54L2638LKDJdTzvm
-         +l6AZRXTh3JcmsM+HZr7bLe6ewZSiiNes0GXVT2ha7nu6d0PROs03px5MJlvGwIaKlne
-         DIoQ4xB/hylrT0L2uhOq9D5eeOnfNJ3CJFYg0IlkecGTB/NpkTwdsJFjyGyhWMpeiwr3
-         lmkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K9VOT142oF1CR1Ax5dNwKVoSH2mYxiMG43ulowgTfdM=;
-        b=tvcML2QlqW8uH5TVFO8j04zaVgNIJbaW3WprRM2ylLNMspaLGd6aQ3UAOMXlh9SICO
-         Jfqy8+lrGEUUXmTQyDQbneQ6QXRdKhignwmGlJm+QSKgp3V8BKi7Vaz4VNYoAmH7cMH0
-         TuJtKCfbla4+9KwuNWOqN1t83c3I0sY5ppn77sDNytEN4C7CljJuVzhAzmfWauoePATu
-         DBh2IHkvwq2FdNJThTDGHizQcBEkh9QjjsF3bEDfF71RFA08XBDpXwEQ8W4ImIY9iQ4u
-         QtDY9pE9K6/aI2+ceA8DlHsbHWWR/K1GaUJfwXhU1No3LLuyx1OEMqIhQvf0qK/thnbY
-         twUg==
-X-Gm-Message-State: AFqh2kqh+3lV+R8AIw2TZWwSzoKoWzIyctqlAuQUAOk/ToIT36h03a6i
-        +DLsZp9Nn56gLgn/CWCycep1i29cdRid8mOfiJL6HhjX
-X-Google-Smtp-Source: AMrXdXsMszPcJ+OGXCw+F0NthlgRQBnBUZoZJBZ1wp3U+BMzxLaDjnqsjok0Dp4PZDTCCsaTSihjgsHbokVoXVEJmIE=
-X-Received: by 2002:a50:a44e:0:b0:49e:36d1:16e with SMTP id
- v14-20020a50a44e000000b0049e36d1016emr10053591edb.42.1675122351676; Mon, 30
- Jan 2023 15:45:51 -0800 (PST)
+        Mon, 30 Jan 2023 18:47:20 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0CD2BF01
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 15:47:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D0BC3CE1AD0
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 23:47:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53308C433D2;
+        Mon, 30 Jan 2023 23:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675122423;
+        bh=NFcCQqMaQK7JCYrOjfKaS2ObsN2ap71CGfdIOBpl9AQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=rLkhY6uCOoPwPLYtXR8po3hLWO7GL75MtOXbfz2Sm6eQNKgi6bkfI9WnmjJJV4Zwl
+         VdcDu1i7S5zBDKXU31JbhdkyTolEU3khtxGjLdxEIpsBJakZrJAtfWx7mbhdi5nzGQ
+         tDtAbo14WGmyrrDA/Ht5j/4+GREaA1SrqYJuG91QxEnqDspsEf2oSNe+Sreo2qoloK
+         w+ZN2eNGsa7l4RPFzwh7uL8BnxlDlk7EmTAr6gf6S7Q9P9tnLvIRe3EhvRd93nsZvV
+         vs/QgHfbkQhuCIIOjMNaUJtkX7vN3Rk/nuWKyTBQVyGOrlKKpndunk9MEB34PfHpNZ
+         J0LPdMCJsHh6Q==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Mon, 30 Jan 2023 23:45:57 +0000
+Subject: [PATCH] kselftest/arm64: Remove redundant _start labels from
+ zt-test
 MIME-Version: 1.0
-References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com> <560824bd-da2d-044c-4f71-578fc34a47cd@linuxfoundation.org>
-In-Reply-To: <560824bd-da2d-044c-4f71-578fc34a47cd@linuxfoundation.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 30 Jan 2023 15:45:40 -0800
-Message-ID: <CAADnVQLV+BERfHNUeii=sZfU+z4WF-jsWUN8aMtzv0tYxh9Rcw@mail.gmail.com>
-Subject: Re: [PATCH 00/34] selftests: Fix incorrect kernel headers search path
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        ppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230130-arm64-fix-sme2-clang-v1-1-3ce81d99ea8f@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALRW2GMC/x2NywrCQAxFf6VkbWA6KVb8FXExj2iDdioJqFD67
+ 6Yuz+Ee7grGKmxw7lZQfovJ0hz6QwdlSu3OKNUZYogUegqYdD4OeJMv2swRy9NHSJmYR6rjqQ7
+ gaU7GmDW1Mu3xZ9HHrl/KHv7fLtdt+wGW3fLJfQAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=994; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=NFcCQqMaQK7JCYrOjfKaS2ObsN2ap71CGfdIOBpl9AQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj2Fb0wDa9KgtPRmh+mY5nB2KAk8sy9+pDILqY8k0a
+ a9wJI2CJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY9hW9AAKCRAk1otyXVSH0Iv3CA
+ CGvQI0CfphWZzEiFs6kGrwl73f5ZazlQlFVkutB1pMMkc0JQLoOPrGdZBR/L9MUE1mE35MMBOWxWPH
+ nKWo+FCCOVBVFrqFCFQgahZU5w0Wa98YyqWY9k3Bn41KibXc0yPHrQZDVWXiEEHvBSN/BNTbl6h09h
+ ycRREOIEz+hDjGYxObFc99wdWYYK3uQtTxLQ5eI9sMV6jeqsuOTnd2f2LaGxqEKw0bel2VvBwWi9Bc
+ BYTy6mD46vCpY6GvATneqdpALLPwQ6UPTZyjlDyp0wAX2+lyAXRcB4yNg/zpVekDIrssXQs3Nzk9Gz
+ vjO7/Jw6hqGkou+9sZd1t73j1k9nY/
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 2:46 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 1/27/23 06:57, Mathieu Desnoyers wrote:
-> > Hi,
-> >
-> > This series fixes incorrect kernel header search path in kernel
-> > selftests.
-> >
-> > Near the end of the series, a few changes are not tagged as "Fixes"
-> > because the current behavior is to rely on the kernel sources uapi files
-> > rather than on the installed kernel header files. Nevertheless, those
-> > are updated for consistency.
-> >
-> > There are situations where "../../../../include/" was added to -I search
-> > path, which is bogus for userspace tests and caused issues with types.h.
-> > Those are removed.
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> > Mathieu Desnoyers (34):
->
-> The below patches are now applied to linux-kselftest next for Linux 6.3-rc1
->
-> >    selftests: arm64: Fix incorrect kernel headers search path
-> >    selftests: clone3: Fix incorrect kernel headers search path
-> >    selftests: core: Fix incorrect kernel headers search path
-> >    selftests: dma: Fix incorrect kernel headers search path
-> >    selftests: dmabuf-heaps: Fix incorrect kernel headers search path
-> >    selftests: drivers: Fix incorrect kernel headers search path
-> >    selftests: filesystems: Fix incorrect kernel headers search path
-> >    selftests: futex: Fix incorrect kernel headers search path
-> >    selftests: gpio: Fix incorrect kernel headers search path
-> >    selftests: ipc: Fix incorrect kernel headers search path
-> >    selftests: kcmp: Fix incorrect kernel headers search path
-> >    selftests: media_tests: Fix incorrect kernel headers search path
-> >    selftests: membarrier: Fix incorrect kernel headers search path
-> >    selftests: mount_setattr: Fix incorrect kernel headers search path
-> >    selftests: move_mount_set_group: Fix incorrect kernel headers search
-> >      path
-> >    selftests: perf_events: Fix incorrect kernel headers search path
-> >    selftests: pid_namespace: Fix incorrect kernel headers search path
-> >    selftests: pidfd: Fix incorrect kernel headers search path
-> >    selftests: ptp: Fix incorrect kernel headers search path
-> >    selftests: rseq: Fix incorrect kernel headers search path
-> >    selftests: sched: Fix incorrect kernel headers search path
-> >    selftests: seccomp: Fix incorrect kernel headers search path
-> >    selftests: sync: Fix incorrect kernel headers search path
-> >    selftests: user_events: Fix incorrect kernel headers search path
-> >    selftests: vm: Fix incorrect kernel headers search path
-> >    selftests: x86: Fix incorrect kernel headers search path
-> >    selftests: iommu: Use installed kernel headers search path
-> >    selftests: memfd: Use installed kernel headers search path
-> >    selftests: ptrace: Use installed kernel headers search path
-> >    selftests: tdx: Use installed kernel headers search path
-> >
->
-> These will be applied by maintainers to their trees.
+The newly added zt-test program copied the pattern from the other FP
+stress test programs of having a redundant _start label which is
+rejected by clang, as we did in a parallel series for the other tests
+remove the label so we can build with clang.
 
-Not in this form. They break the build.
+No functional change.
 
-> >    selftests: bpf: Fix incorrect kernel headers search path # 02/34
-> >    selftests: net: Fix incorrect kernel headers search path # 17/34
-> >    selftests: powerpc: Fix incorrect kernel headers search path # 21/34
-> >    selftests: bpf docs: Use installed kernel headers search path # 30/34
->
-> thanks,
-> -- Shuah
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/zt-test.S | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
+index 7ec90976cf5e..d63286397638 100644
+--- a/tools/testing/selftests/arm64/fp/zt-test.S
++++ b/tools/testing/selftests/arm64/fp/zt-test.S
+@@ -200,7 +200,6 @@ endfunction
+ // Main program entry point
+ .globl _start
+ function _start
+-_start:
+ 	mov	x23, #0		// signal count
+ 
+ 	mov	w0, #SIGINT
+
+---
+base-commit: 3eb1b41fba97a1586e3ecca8c10547071f541567
+change-id: 20230130-arm64-fix-sme2-clang-3b3ee73d78d4
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
