@@ -2,159 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC4568081F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 10:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 289DA680836
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 10:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbjA3JEz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 04:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S235799AbjA3JK0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 04:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236039AbjA3JEt (ORCPT
+        with ESMTP id S235594AbjA3JKY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:04:49 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065D12BED6;
-        Mon, 30 Jan 2023 01:04:47 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id j5so10471110pjn.5;
-        Mon, 30 Jan 2023 01:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=s6UNdUpKWpLSTSOHWKFbbLTpe021E5XwaO8VPJyBruA=;
-        b=fDQUb7nqvxToI/bLKsxrjgL1kp+4v6u1YF5/SLsB8nGadBv9GlY3URT6jiA1YTcdME
-         VaGMZzo020vEs+jm8HfIUJe5k/B3Q880/VFzh2SA7NDdOsmAFctCzrovUfYsY4Bz2SBQ
-         cLRUlKyiVp7YvHbcFEuRmB/Iakam1la0sb4uz42Er+wFx9kxzQMQ27b1TGsg0vDdmkWd
-         GcaMTCuz9va70pE18H+y0yQFDYevZaoyV8OYFvy02YgoFZbcwDwOww25QL/h+L9TSti5
-         U+lDhkIJngLsR3TqMLYWCXpK4KvV+l393w86+zWQ4Fr0Ke7GwIo9HTp3zSzBr0EB/GQj
-         XB7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s6UNdUpKWpLSTSOHWKFbbLTpe021E5XwaO8VPJyBruA=;
-        b=f5ZqgbaMx5nXawUQ/8d4wyzuunWyX96CyZ8Ky3x5Nthnx1HhUpta2N7OKMR39Jam0o
-         Jv+C6fBq75MpunpsaxtFimSAGeQiXAV7NUyW6Cr05AjqdwTT0n5amhRsIMePtAsUXUio
-         PZLDDrEiZRL4iu87NsRMHmvPrH2if85lSp3VoKXbH6p7pRHsUjiivgAg+z5RbDGrUS88
-         g/InXXSngcA86M3kV9cS2Fn6XJo6bt9KKnQpFoe7ZXsTfbtkkyuAkSRmkwQCLAwSS+jC
-         JgIPVzu6Vel54xSCSVQCdvRyfc5KxVT0jUtwoXWrIvJ3BjSfssOrBimcy7Uk0mf2y49Y
-         myjQ==
-X-Gm-Message-State: AO0yUKVsvat7EVPvblwvDYuRFWbdVQYmI/5xyb1XAhImz+jugMWuqrlg
-        qKl7042ubVMvjwYra3tzl4c=
-X-Google-Smtp-Source: AK7set/3TAw8yhF6CPCb2wGY/0b8uhcN34CMIRKK2RrHevObDG2VhwyzGWNLsR1uIB/skeUSrEC0lA==
-X-Received: by 2002:a17:902:ce87:b0:196:341b:ed7 with SMTP id f7-20020a170902ce8700b00196341b0ed7mr21641187plg.15.1675069486498;
-        Mon, 30 Jan 2023 01:04:46 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id x7-20020a1709029a4700b00192aa53a7d5sm7255321plv.8.2023.01.30.01.04.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 01:04:46 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Kees Cook <keescook@chromium.org>, Andrew Davis <afd@ti.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH] .gitignore: Keep track of archived files as they are added to a new git repo
-Date:   Mon, 30 Jan 2023 17:04:26 +0800
-Message-Id: <20230130090426.13864-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 30 Jan 2023 04:10:24 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763929F;
+        Mon, 30 Jan 2023 01:10:23 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.165.226])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 35DF06602E2A;
+        Mon, 30 Jan 2023 09:10:15 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675069821;
+        bh=/l1ZA909PK+xOECy6RWevd3pYBOOmWKWLYoZHDERZd8=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=VXjvZz+hCCgMh9CNLBkp08d1EtF4OT//jWEFDvgnJuR54ryFfcB82MGaOOymQGIhq
+         k+VqrLhTOWhFgL9CRaE1GjOI4aXCfgyfQV00hwCQZgMu4qPbr5/CWcksAA8KRYgW0D
+         sD3jhX82/6V5IWZInIh23Ux3H5NY3DX8zJKYkfvMx8W4BbOdGg0VecV4A9xy3yGABr
+         K+QEJnPQMT4HN70Ue9QBllXQHdTyBSnzCdzBqh2KmM0/PxCh2Xr7lba5rvwKW2LMTk
+         p8g3hpdTWa4ZGQSVJIa4Ckj3RVgKIo2uuL/Bl9euykx3U94MW0kUUSXAsXUfrtsgKd
+         ntxb0+Jp+Kzgg==
+Message-ID: <c3cc49b6-1ad3-f5aa-50bb-a12f3bbb377a@collabora.com>
+Date:   Mon, 30 Jan 2023 14:10:11 +0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v8 2/4] userfaultfd: split mwriteprotect_range()
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230124084323.1363825-1-usama.anjum@collabora.com>
+ <20230124084323.1363825-3-usama.anjum@collabora.com> <Y9QEdbkZxOJ10oEJ@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y9QEdbkZxOJ10oEJ@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On 1/27/23 10:05 PM, Peter Xu wrote:
+> On Tue, Jan 24, 2023 at 01:43:21PM +0500, Muhammad Usama Anjum wrote:
+>> Split mwriteprotect_range() to create a unlocked version. This
+>> will be used in the next patch to write protect a memory area.
+>> Add a helper function, wp_range_async() as well.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> 
+> IIUC this patch is not needed.  You have a stable vma, so I think you can
+> directly use uffd_wp_range(), while most of the mwriteprotect_range() is
+> not needed.
+> 
+> There's one trivial detail of ignoring userfaultfd_ctx->mmap_changing when
+> it's set to true, but I don't think it applies here either because it was
+> used to resolve a problem in uffd non-cooperative mode on the predictable
+> behavior of events, here I don't think it matters a lot either.
+> 
+Thanks, I'll drop this patch and do direct wiring to uffd_wp_range().
 
-With thousands of commits going into mainline each development cycle,
-the metadata .git folder size is gradually expanding (1GB+), and for some
-developers (most likely testers) who don't care about the lengthy git-log,
-they just use git-archive to distribute a certain version of code (~210MB)
-and rebuild git repository from anywhere for further code changes, e.g.
-
-  $ git init && git add . -A
-
-Then unfortunately, the file tracking metadata from the original git-repo
-using "git add -f" will also be lost, to the point where part of source
-files wrapped by git-archive may be accidentally cleaned up:
-
-  $ git clean -nxdf
-  Would remove Documentation/devicetree/bindings/.yamllint
-  Would remove drivers/clk/.kunitconfig
-  Would remove drivers/gpu/drm/tests/.kunitconfig
-  Would remove drivers/hid/.kunitconfig
-  Would remove fs/ext4/.kunitconfig
-  Would remove fs/fat/.kunitconfig
-  Would remove kernel/kcsan/.kunitconfig
-  Would remove lib/kunit/.kunitconfig
-  Would remove mm/kfence/.kunitconfig
-  Would remove tools/testing/selftests/arm64/tags/
-  Would remove tools/testing/selftests/kvm/.gitignore
-  Would remove tools/testing/selftests/kvm/Makefile
-  Would remove tools/testing/selftests/kvm/config
-  Would remove tools/testing/selftests/kvm/settings
-
-This asymmetry is very troubling to those users since finding out which
-files to track with "git add -f" clearly requires priori knowledge on
-various subsystems. The eradication of this little issue requires naturally
-making git-init aware of all .gitignore restrictions at different file tree
-hierarchies. Similar issues can be troubleshot with "git check-ignore -v"
-for any mistakenly cleaned files.
-
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- .gitignore                               | 2 ++
- tools/testing/selftests/arm64/.gitignore | 2 ++
- tools/testing/selftests/kvm/.gitignore   | 4 ++++
- 3 files changed, 8 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/.gitignore
-
-diff --git a/.gitignore b/.gitignore
-index 20dce5c3b9e0..fa39e98caee3 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -102,6 +102,8 @@ modules.order
- !.gitignore
- !.mailmap
- !.rustfmt.toml
-+!.yamllint
-+!.kunitconfig
- 
- #
- # Generated include files
-diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
-new file mode 100644
-index 000000000000..135d709d2d65
---- /dev/null
-+++ b/tools/testing/selftests/arm64/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+!tags
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 6d9381d60172..96561c8e06e0 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -5,3 +5,7 @@
- !*.h
- !*.S
- !*.sh
-+!.gitignore
-+!Makefile
-+!settings
-+!config
-\ No newline at end of file
 -- 
-2.39.1
-
+BR,
+Muhammad Usama Anjum
