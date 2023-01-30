@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E121B681CBC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 22:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA522681CD3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Jan 2023 22:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjA3V2R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 16:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        id S231224AbjA3Vfn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 16:35:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjA3V2R (ORCPT
+        with ESMTP id S231201AbjA3Vfm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:28:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB68147EC6
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 13:27:18 -0800 (PST)
+        Mon, 30 Jan 2023 16:35:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2144684
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 13:34:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675114038;
+        s=mimecast20190719; t=1675114494;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=DUjUOCosc+n9O/YY6buBifhq9wPTzqRNFK3SmiShyMc=;
-        b=b5xx1aT3+GuVPiRzw3zMT1/bg/s6L/FiKLNKmbPr4Zg5+Tbl08Dwf6CNAO027PLwgw7/Nw
-        XTY/mP7iBFLXHzajs+LnI8fGqN9S00GSBEFILsl0SUYh+qPqwqNVD9kqge13YhnEvZvwtT
-        8egvByttfI/PL8r4CJIIf+YtgcpDl2s=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=7BSxtpSj4BrAFBe1Q7X5Ylg8I71bsH6V8VmhxdA0ZpI=;
+        b=TghO/WboHJlfs/sLkCc1Kthc8PPA2fTXKnVb0/1NKA9Y6YmfntcIct4Erxvg5Biq+9jDiC
+        Xdcteu55q15Sbf6YUKcL3F206jU3jMTp14kX69fIX5MNMZFcm6ozmHk9+z5x+9hgvApz0R
+        8L588CC5ig/U/4thv75C0902PBPFSsg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-627-4tAPZZdnONezZOotNxJX_g-1; Mon, 30 Jan 2023 16:27:16 -0500
-X-MC-Unique: 4tAPZZdnONezZOotNxJX_g-1
-Received: by mail-qt1-f198.google.com with SMTP id w25-20020ac86b19000000b003b692f65ca2so5670691qts.20
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 13:27:16 -0800 (PST)
+ us-mta-100-Ff5dFyWnMf-gq_M8bkmFcQ-1; Mon, 30 Jan 2023 16:34:52 -0500
+X-MC-Unique: Ff5dFyWnMf-gq_M8bkmFcQ-1
+Received: by mail-qk1-f199.google.com with SMTP id g6-20020ae9e106000000b00720f9e6e3e2so1544617qkm.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 13:34:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DUjUOCosc+n9O/YY6buBifhq9wPTzqRNFK3SmiShyMc=;
-        b=rstCXuOEkp+NcnC5V9bt9ZpPKFMK55hsDWfRG4liDJMGvzUVWk6cRHwpynbWeWXNMa
-         rajgeJ5thX1HCx5A8UHfipWJJcz3KL042ILlWZ3UYl8ruOlK75m5qtbO25QfTK+63v9B
-         Yomh1Bfb7fG0DCHQOo7FnoHyvFl0Cuem1oY29kE8ECYJGq67YH1WsD6F56KoK+RwLM2d
-         DYd8q4p/1rKMZFpV6Dj0vJOc+UEphepApch2F7xmTi8xnDnGUDwBWchBWIPyUQ2MuABM
-         eZ94i4Xu1gwZecOI1acRj3NY3YFWaYBOLjhgfRJ+Gvdq0exMlOyKLEsGB8PFpBcMnTYM
-         0hIg==
-X-Gm-Message-State: AO0yUKXoqsKH44pgHFYhP9lFbPSq9OMbidHRGSNt4zwQl9xeMWgVL7Du
-        fvvWhHAUhbkn2Rs1a2CFuK2BgcX7iLt4d2qqztOwgBLS9T9qUKBloVBgBhpnn9fYjOIKNQkDBMz
-        cV/3RiTC9/Ka4KCyd5OTj0OiZELIC
-X-Received: by 2002:a0c:ebc8:0:b0:537:6e4c:ac60 with SMTP id k8-20020a0cebc8000000b005376e4cac60mr8802589qvq.2.1675114035604;
-        Mon, 30 Jan 2023 13:27:15 -0800 (PST)
-X-Google-Smtp-Source: AK7set9TUlrBdCpVee0Syc/iu5fDy/5lnof3SbV+U+NkYNoyBgzcAg3OjwV20+VqTlOzMOIBNbiuPg==
-X-Received: by 2002:a0c:ebc8:0:b0:537:6e4c:ac60 with SMTP id k8-20020a0cebc8000000b005376e4cac60mr8802538qvq.2.1675114035240;
-        Mon, 30 Jan 2023 13:27:15 -0800 (PST)
+        bh=7BSxtpSj4BrAFBe1Q7X5Ylg8I71bsH6V8VmhxdA0ZpI=;
+        b=CoW6w3mEeqUwEMLCVeub4AjkJegnRuKTE/VX0gJjBk0XHCUyl/7Mrl04XFyqnrU9Xp
+         8LzMAt3JFqkeZpM36ZKWRRgCU8R9Akhgn9OSkaBPLTgXFFwwwRb65JD/67oVwZDmZcVv
+         v1+qXVPSDQsHrSZTFeijZfqoThGlTZW2ltieOSIug5qmxSfCLgXibcjM4Ha3D1cq7nSV
+         4Y0a4nIXwcWa6wAvvL/pTopD66ca9oxmVX2StSTie2bsmvk9ZkKSunu4WyDj5gtSKirr
+         YpQQQwGFTddXO6JJnb28k4vek5z2pQY1lbKaj2U/Bd8qAwtctm8GC7qxS5kNZa3JKVOw
+         SZsQ==
+X-Gm-Message-State: AO0yUKVY840Z7C7sJQhEvZLbS+9g/20fHnmE9EDXTyhaIMLAcsssp4Hk
+        21INiuuTdt+Sa0KdxPovmSebkuc6oJjFj/W9CavZ1FGpHkpBP+TtKOSd8NJGFITP7ZcfCXDFL4B
+        pHeMQB8r7/aqrN5XX2v2AFkoUyw4U
+X-Received: by 2002:ac8:550b:0:b0:3b8:4951:57bb with SMTP id j11-20020ac8550b000000b003b8495157bbmr3383751qtq.5.1675114492268;
+        Mon, 30 Jan 2023 13:34:52 -0800 (PST)
+X-Google-Smtp-Source: AK7set+kUbZekNhe/Em61clYhE5CvtRxiubqnW3sSZZq/i2jVbSztFLD9L4HgdjzGzOWpE7h6EK0CA==
+X-Received: by 2002:ac8:550b:0:b0:3b8:4951:57bb with SMTP id j11-20020ac8550b000000b003b8495157bbmr3383706qtq.5.1675114492023;
+        Mon, 30 Jan 2023 13:34:52 -0800 (PST)
 Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id x20-20020a05620a01f400b0071d2cd07560sm3984325qkn.124.2023.01.30.13.27.12
+        by smtp.gmail.com with ESMTPSA id l3-20020ac84a83000000b003a5c6ad428asm8589540qtq.92.2023.01.30.13.34.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 13:27:14 -0800 (PST)
-Date:   Mon, 30 Jan 2023 16:27:12 -0500
+        Mon, 30 Jan 2023 13:34:51 -0800 (PST)
+Date:   Mon, 30 Jan 2023 16:34:49 -0500
 From:   Peter Xu <peterx@redhat.com>
 To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -83,18 +83,17 @@ Cc:     David Hildenbrand <david@redhat.com>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v8 1/4] userfaultfd: Add UFFD WP Async support
-Message-ID: <Y9g2MAwycCJ3N2tf@x1n>
+Subject: Re: [PATCH v8 3/4] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <Y9g3+RdfYIH3N47i@x1n>
 References: <20230124084323.1363825-1-usama.anjum@collabora.com>
- <20230124084323.1363825-2-usama.anjum@collabora.com>
- <Y9MHM+RVzvigcTTk@x1n>
- <1968dff9-f48a-3290-a15b-a8b739f31ed2@collabora.com>
- <Y9PtHUONh2ImQyKF@x1n>
- <d8c30ea7-05a1-d53b-1391-472ff5b2a7fd@collabora.com>
+ <20230124084323.1363825-4-usama.anjum@collabora.com>
+ <Y9QLqY0mQ6eD6Zm+@x1n>
+ <01bc1428-5340-5a75-6876-417194edba39@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d8c30ea7-05a1-d53b-1391-472ff5b2a7fd@collabora.com>
+In-Reply-To: <01bc1428-5340-5a75-6876-417194edba39@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -105,192 +104,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 01:38:16PM +0500, Muhammad Usama Anjum wrote:
-> On 1/27/23 8:32 PM, Peter Xu wrote:
-> > On Fri, Jan 27, 2023 at 11:47:14AM +0500, Muhammad Usama Anjum wrote:
-> >>>> diff --git a/mm/memory.c b/mm/memory.c
-> >>>> index 4000e9f017e0..8c03b133d483 100644
-> >>>> --- a/mm/memory.c
-> >>>> +++ b/mm/memory.c
-> >>>> @@ -3351,6 +3351,18 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
-> >>>>  
-> >>>>  	if (likely(!unshare)) {
-> >>>>  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
-> >>>> +			if (userfaultfd_wp_async(vma)) {
-> >>>> +				/*
-> >>>> +				 * Nothing needed (cache flush, TLB invalidations,
-> >>>> +				 * etc.) because we're only removing the uffd-wp bit,
-> >>>> +				 * which is completely invisible to the user. This
-> >>>> +				 * falls through to possible CoW.
-> >>>
-> >>> Here it says it falls through to CoW, but..
-> >>>
-> >>>> +				 */
-> >>>> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
-> >>>> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
-> >>>> +					   pte_clear_uffd_wp(*vmf->pte));
-> >>>> +				return 0;
-> >>>
-> >>> ... it's not doing so.  The original lines should do:
-> >>>
-> >>> https://lore.kernel.org/all/Y8qq0dKIJBshua+X@x1n/
-> > 
-> > [1]
-> > 
-> >>>
-> >>> Side note: you cannot modify pgtable after releasing the pgtable lock.
-> >>> It's racy.
-> >> If I don't unlock and return after removing the UFFD_WP flag in case of
-> >> async wp, the target just gets stuck. Maybe the pte lock is not unlocked in
-> >> some path.
-> >>
-> >> If I unlock and don't return, the crash happens.
-> >>
-> >> So I'd put unlock and return from here. Please comment on the below patch
-> >> and what do you think should be done. I've missed something.
-> > 
-> > Have you tried to just use exactly what I suggested in [1]?  I'll paste
-> > again:
-> > 
-> > ---8<---
-> > diff --git a/mm/memory.c b/mm/memory.c
-> > index 4000e9f017e0..09aab434654c 100644
-> > --- a/mm/memory.c
-> > +++ b/mm/memory.c
-> > @@ -3351,8 +3351,20 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
-> > 
-> >         if (likely(!unshare)) {
-> >                 if (userfaultfd_pte_wp(vma, *vmf->pte)) {
-> > -                       pte_unmap_unlock(vmf->pte, vmf->ptl);
-> > -                       return handle_userfault(vmf, VM_UFFD_WP);
-> > +                       if (userfaultfd_uffd_wp_async(vma)) {
-> > +                               /*
-> > +                                * Nothing needed (cache flush, TLB
-> > +                                * invalidations, etc.) because we're only
-> > +                                * removing the uffd-wp bit, which is
-> > +                                * completely invisible to the user.
-> > +                                * This falls through to possible CoW.
-> > +                                */
-> > +                               set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
-> > +                                          pte_clear_uffd_wp(*vmf->pte));
-> > +                       } else {
-> > +                               pte_unmap_unlock(vmf->pte, vmf->ptl);
-> > +                               return handle_userfault(vmf, VM_UFFD_WP);
-> > +                       }
-> >                 }
-> > ---8<---
-> > 
-> > Note that there's no "return", neither the unlock.  The lock is used in the
-> > follow up write fault resolution and it's released later.
-> I've tried out the exact patch above. This doesn't work. The pages keep
-> their WP flag even after being resolved in do_wp_page() while is written on
-> the page.
-> 
-> So I'd added pte_unmap_unlock() and return 0 from here. This makes the
-> patch to work. Maybe you can try this on your end to see what I'm seeing here?
+On Mon, Jan 30, 2023 at 04:12:25PM +0500, Muhammad Usama Anjum wrote:
 
-Oh maybe it's because it didn't update orig_pte.  If you want, you can try
-again with doing so by changing:
+[...]
 
-  set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
-             pte_clear_uffd_wp(*vmf->pte));
-
-into:
-
-  pte_t pte = pte_clear_uffd_wp(*vmf->pte);
-  set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
-  /* Update this to be prepared for following up CoW handling */
-  vmf->orig_pte = pte;
-
-> 
 > > 
-> > Meanwhile please fully digest how pgtable lock is used in this path before
-> > moving forward on any of such changes.
+> >> +#define IS_WP_ENGAGE_OP(a)	(a->flags & PAGEMAP_WP_ENGAGE)
+> >> +#define IS_GET_OP(a)		(a->vec)
 > > 
-> >>
-> >>>
-> >>>> +			}
-> >>>>  			pte_unmap_unlock(vmf->pte, vmf->ptl);
-> >>>>  			return handle_userfault(vmf, VM_UFFD_WP);
-> >>>>  		}
-> >>>> @@ -4812,8 +4824,21 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
-> >>>>  
-> >>>>  	if (vma_is_anonymous(vmf->vma)) {
-> >>>>  		if (likely(!unshare) &&
-> >>>> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
-> >>>> -			return handle_userfault(vmf, VM_UFFD_WP);
-> >>>> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
-> >>>> +			if (userfaultfd_wp_async(vmf->vma)) {
-> >>>> +				/*
-> >>>> +				 * Nothing needed (cache flush, TLB invalidations,
-> >>>> +				 * etc.) because we're only removing the uffd-wp bit,
-> >>>> +				 * which is completely invisible to the user. This
-> >>>> +				 * falls through to possible CoW.
-> >>>> +				 */
-> >>>> +				set_pmd_at(vmf->vma->vm_mm, vmf->address, vmf->pmd,
-> >>>> +					   pmd_clear_uffd_wp(*vmf->pmd));
-> >>>
-> >>> This is for THP, not hugetlb.
-> >>>
-> >>> Clearing uffd-wp bit here for the whole pmd is wrong to me, because we
-> >>> track writes in small page sizes only.  We should just split.
-> >> By detecting if the fault is async wp, just splitting the PMD doesn't work.
-> >> The below given snippit is working right now. But definately, the fault of
-> >> the whole PMD is being resolved which if we can bypass by correctly
-> >> splitting would be highly desirable. Can you please take a look on UFFD
-> >> side and suggest the changes? It would be much appreciated. I'm attaching
-> >> WIP v9 patches for you to apply on next(next-20230105) and pagemap_ioctl
-> >> selftest can be ran to test things after making changes.
+> > Having a->vec to imply the GET is fine, but IMHO not as clean as having
+> > each OP a bit in the flags.
 > > 
-> > Can you elaborate why thp split didn't work?  Or if you want, I can look
-> > into this and provide the patch to enable uffd async mode.
-> Sorry, I was doing the wrong way. Splitting the page does work. What do you
-> think about the following:
-> 
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3351,6 +3351,17 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
-> 
->  	if (likely(!unshare)) {
->  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
-> +			if (userfaultfd_wp_async(vma)) {
-> +				/*
-> +				 * Nothing needed (cache flush, TLB invalidations,
-> +				 * etc.) because we're only removing the uffd-wp bit,
-> +				 * which is completely invisible to the user.
-> +				 */
-> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
-> +					   pte_clear_uffd_wp(*vmf->pte));
-> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
-> +				return 0;
+> > How about:
+> > 
+> > #define  PAGEMAP_OP_GET       (1UL << 0)
+> > #define  PAGEMAP_OP_WP        (1UL << 1)
+> > #define  PAGEMAP_OP_MASK      (PAGEMAP_OP_GET | PAGEMAP_OP_WP)
+> > 
+> > ?
+> > 
+> > Then a->vec requried for PAGEMAP_OP_GET.
+> I had something like PAGEMAP_OP_GET and PAGEMAP_OP_WP flags once until I
+> was asked to only keep WP flag and vec != NULL will imply GET flag in a
+> previous review. I'm ready to change again if there are more notes on it?
 
-Please give it a shot with above to see whether we can avoid the "return 0"
-here.
+Sorry to know that; that's somewhat frustrating when you need to go back
+and forth on subjective comments like mine.  So if you still think your
+original way is better then at least you have two votes now. :) Your call
+to choose any, I have a preference as I said but not that strong.
 
-> +			}
->  			pte_unmap_unlock(vmf->pte, vmf->ptl);
->  			return handle_userfault(vmf, VM_UFFD_WP);
->  		}
-> @@ -4812,8 +4823,13 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault
-> *vmf)
-> 
->  	if (vma_is_anonymous(vmf->vma)) {
->  		if (likely(!unshare) &&
-> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
-> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
-> +			if (userfaultfd_wp_async(vmf->vma)) {
-> +				__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
-> +				return 0;
+[...]
 
-Same here, I hope it'll work for you if you just goto __split_huge_pmd()
-right below and return with VM_FAULT_FALLBACK.  It avoids one more round of
-fault just like the pte case above.
+> > 
+> >> +			     struct pagemap_scan_private *p, unsigned long addr, unsigned int len)
+> >> +{
+> >> +	unsigned long bitmap, cur = PAGEMAP_SCAN_BITMAP(wt, file, pres, swap);
+> >> +	bool cpy = true;
+> >> +	struct page_region *prev = &p->prev;
+> >> +
+> >> +	if (HAS_NO_SPACE(p))
+> >> +		return -ENOSPC;
+> > 
+> > This can be moved to below [1], we should stop scanning immediately if the
+> > condition met.
+> It would be definately possible. Wouldn't it be strange to return error
+> when the operation was successful? A function should return error only when
+> the current execution is unsuccessful. So I'm returning error only when the
+> space is full and there is no space left in the buffer anymore.
 
-> +			}
->  			return handle_userfault(vmf, VM_UFFD_WP);
-> +		}
->  		return do_huge_pmd_wp_page(vmf);
->  	}
+I would expect the user to always provide some more space than they expect
+because the merging of page_regions are kind of unpredictable from the
+user's POV.
+
+But yeah, maybe you're right.  I'm fine to keep that as is.
+
+Thanks,
 
 -- 
 Peter Xu
