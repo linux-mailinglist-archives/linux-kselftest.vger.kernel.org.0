@@ -2,193 +2,216 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94CC6830FE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 16:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC242683138
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 16:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbjAaPMU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 10:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
+        id S233214AbjAaPSl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 10:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjAaPMA (ORCPT
+        with ESMTP id S233171AbjAaPSR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:12:00 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B49154207
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 07:10:04 -0800 (PST)
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2E93D3F194
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 15:08:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675177732;
-        bh=39hNPh+zAyhzqVKLTaksH9IiMGXkYwZwdaQ4GuB3Kaw=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=Jx+1J5OdxwCEU/N9WL962w1/EfasHfxsnJyDJ4ywDRu9fZTqSzbN7ZPfdoE97c+gN
-         pPXzZ3EGDuG/0y1P+wOhDQfv00AI32a3ZhgnX3X243jcS1o3R4+TL500ORZOh+HYS8
-         iUWfvPm9L5cURZd3xEyMlpwBHVlOZp+FJCU9NIWHA+wF5OBNLqmfq4b+A/9SVU9sYH
-         CJ7v1zPRC0Mxg4Yzt/DuvBn47zYZMs/glT2nS26DdeMxi6Tyuz7X/hPclYDvv8H7e2
-         lOjgtmztvTu7v6d6MLuL5VXSFhCrKo1CVivdXHRfYETGN/utGyGyGplp07hmJ0ovh5
-         0MvS3uMSqaOPg==
-Received: by mail-wm1-f71.google.com with SMTP id iv6-20020a05600c548600b003dc4b8ee42fso5318508wmb.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 07:08:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=39hNPh+zAyhzqVKLTaksH9IiMGXkYwZwdaQ4GuB3Kaw=;
-        b=R4PWI8sFdwlACyJFgmMi0Z33KlxtnXacJ5N1gxjhFV13FehIsfWfaD8bsUk0BXyQJA
-         /nSyQIP1vsxKEDfD7tsd/O6CFT2ZIGSMlWqY1ZMNXB06CtKJ72taaWLk6l9iN4k9x8/K
-         F+xQaqgwSLewBqghZBJaUAC5MRd0yQ70yvtIZ//craAv8wQaE2y3iNWZIoc5hyI0tVMy
-         +/X07uDCfSECQwxCN/3/j381DLtnWmQIdHXyMWeY3WOETITOKSMOy6o7yLrXGYjEG8yP
-         Bet4QtGPHCfOSQSK8Rp/7igaD9jR1Y28f4DquCmJaGlcZG4tQ0eQXggQevH97SmCrqfq
-         9xGQ==
-X-Gm-Message-State: AFqh2kp8wJ+1rEUKe8tqoCYpybZREW/ZCEyF5iSdpdXKNsRiM7SiJBZN
-        rYbFrobbi0QNWg4PIw72R8m7qLrl9etnX7siUt90wiyf3Rh0lIShPoiDDplepFAcL1jNQXHmyo2
-        fihXxCYUAPVlsiWNHT5Tr/qThCXaYCRqZ2v0xAvr/xRU3BQ==
-X-Received: by 2002:a05:600c:34d1:b0:3db:1434:c51a with SMTP id d17-20020a05600c34d100b003db1434c51amr47954660wmq.40.1675177730909;
-        Tue, 31 Jan 2023 07:08:50 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsrYavNdHKe40jjTdXUREYpE+Zo2RTZ0oK6vUnkjcqRQxzhOvcovconVzXpPbNSPSe7G96X8A==
-X-Received: by 2002:a05:600c:34d1:b0:3db:1434:c51a with SMTP id d17-20020a05600c34d100b003db1434c51amr47954630wmq.40.1675177730632;
-        Tue, 31 Jan 2023 07:08:50 -0800 (PST)
-Received: from qwirkle ([2001:67c:1560:8007::aac:c4dd])
-        by smtp.gmail.com with ESMTPSA id y21-20020a05600c17d500b003dc46242c4csm10848089wmo.10.2023.01.31.07.08.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 07:08:50 -0800 (PST)
-Date:   Tue, 31 Jan 2023 15:08:48 +0000
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] selftests: net: udpgso_bench_tx: Cater for
- pending datagrams zerocopy benchmarking
-Message-ID: <Y9kvADcYZ18XFTXu@qwirkle>
-References: <20230131130412.432549-1-andrei.gherzan@canonical.com>
- <20230131130412.432549-4-andrei.gherzan@canonical.com>
- <d9ca623d01274889913001ce92f686652fa8fea8.camel@redhat.com>
+        Tue, 31 Jan 2023 10:18:17 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998BF45BEA;
+        Tue, 31 Jan 2023 07:16:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1675178186;
+        bh=ef9Tt/UsbJRvNjzO4j1FZEBc8SF5MQJAlbohpOz9LEI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mfaZkS72+7A/jP2ZUGIQ8OiWNGvRhGmszDMYeYUPQup65pFCOaflsUVm9zc1yPYij
+         WcEjgefJvQldTY9xUXbCx7DTvd9NDnpkH69xV/wBdNdjFN5Q0G5JHvhmgkIyxupkHe
+         krREaYFVi0pd9775S+4YVrpgkYqY/R5O+agZN0EWfKZv/JG6VS9u/v0oPnbUZs1bEl
+         phVt25kx3PLFoJGEH0BKLMF3P2eZBVSu3NsRmGBnh6Z0JA8NX/6ov/QXomrfiDJVYr
+         udsOGn3rdavNiiBhjsn7jTvIhkT1xWivwkI9MwMSheUPXbLfcANp7uivetdt+hyLul
+         4zUZVoqCSSI9A==
+Received: from [172.16.0.188] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P5pY55k65zhyZ;
+        Tue, 31 Jan 2023 10:16:25 -0500 (EST)
+Message-ID: <edad4f4d-f19e-34dc-06f5-7d30fd5d058f@efficios.com>
+Date:   Tue, 31 Jan 2023 10:17:05 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d9ca623d01274889913001ce92f686652fa8fea8.camel@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH bpf-next 1/2] selftests: bpf: Fix incorrect kernel headers
+ search path
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        bpf <bpf@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        stable <stable@vger.kernel.org>
+References: <20230130183549.85471-1-mathieu.desnoyers@efficios.com>
+ <CAADnVQLve5je3GKesCjn5HhuxgOe2u1OX7GQnx-58dsuUFWbZQ@mail.gmail.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <CAADnVQLve5je3GKesCjn5HhuxgOe2u1OX7GQnx-58dsuUFWbZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 23/01/31 03:51PM, Paolo Abeni wrote:
-> On Tue, 2023-01-31 at 13:04 +0000, Andrei Gherzan wrote:
-> > The test tool can check that the zerocopy number of completions value is
-> > valid taking into consideration the number of datagram send calls. This can
-> > catch the system into a state where the datagrams are still in the system
-> > (for example in a qdisk, waiting for the network interface to return a
-> > completion notification, etc).
-> > 
-> > This change adds a retry logic of computing the number of completions up to
-> > a configurable (via CLI) timeout (default: 2 seconds).
-> > 
-> > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > ---
-> >  tools/testing/selftests/net/udpgso_bench_tx.c | 38 +++++++++++++++----
-> >  1 file changed, 30 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-> > index b47b5c32039f..5a29b5f24023 100644
-> > --- a/tools/testing/selftests/net/udpgso_bench_tx.c
-> > +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-> > @@ -62,6 +62,7 @@ static int	cfg_payload_len	= (1472 * 42);
-> >  static int	cfg_port	= 8000;
-> >  static int	cfg_runtime_ms	= -1;
-> >  static bool	cfg_poll;
-> > +static int	cfg_poll_loop_timeout_ms = 2000;
-> >  static bool	cfg_segment;
-> >  static bool	cfg_sendmmsg;
-> >  static bool	cfg_tcp;
-> > @@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
-> >  	}
-> >  }
-> >  
-> > -static void flush_errqueue(int fd, const bool do_poll)
-> > +static void flush_errqueue(int fd, const bool do_poll,
-> > +		unsigned long poll_timeout, const bool poll_err)
-> >  {
-> >  	if (do_poll) {
-> >  		struct pollfd fds = {0};
-> >  		int ret;
-> >  
-> >  		fds.fd = fd;
-> > -		ret = poll(&fds, 1, 500);
-> > +		ret = poll(&fds, 1, poll_timeout);
-> >  		if (ret == 0) {
-> > -			if (cfg_verbose)
-> > +			if ((cfg_verbose) && (poll_err))
-> >  				fprintf(stderr, "poll timeout\n");
-> >  		} else if (ret < 0) {
-> >  			error(1, errno, "poll");
-> > @@ -254,6 +256,22 @@ static void flush_errqueue(int fd, const bool do_poll)
-> >  	flush_errqueue_recv(fd);
-> >  }
-> >  
-> > +static void flush_errqueue_retry(int fd, const bool do_poll, unsigned long num_sends)
-> > +{
-> > +	unsigned long tnow, tstop;
-> > +	bool first_try = true;
-> > +
-> > +	tnow = gettimeofday_ms();
-> > +	tstop = tnow + cfg_poll_loop_timeout_ms;
-> > +	do {
-> > +		flush_errqueue(fd, do_poll, tstop - tnow, first_try);
-> > +		first_try = false;
-> > +		if (!do_poll)
-> > +			usleep(1000);  // a throttling delay if polling is enabled
+On 2023-01-30 16:03, Alexei Starovoitov wrote:
+> On Mon, Jan 30, 2023 at 10:36 AM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+>> building against kernel headers from the build environment in scenarios
+>> where kernel headers are installed into a specific output directory
+>> (O=...).
+>>
+>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+>> Cc: <bpf@vger.kernel.org>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: linux-kselftest@vger.kernel.org
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Alexei Starovoitov <ast@kernel.org>
+>> Cc: Daniel Borkmann <daniel@iogearbox.net>
+>> Cc: Andrii Nakryiko <andrii@kernel.org>
+>> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+>> Cc: Song Liu <song@kernel.org>
+>> Cc: Yonghong Song <yhs@fb.com>
+>> Cc: John Fastabend <john.fastabend@gmail.com>
+>> Cc: KP Singh <kpsingh@kernel.org>
+>> Cc: Stanislav Fomichev <sdf@google.com>
+>> Cc: Hao Luo <haoluo@google.com>
+>> Cc: Jiri Olsa <jolsa@kernel.org>
+>> Cc: Mykola Lysenko <mykolal@fb.com>
+>> Cc: <stable@vger.kernel.org>    [5.18+]
+>> ---
+>>   tools/testing/selftests/bpf/Makefile | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> index c22c43bbee19..6998c816afef 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -327,7 +327,7 @@ endif
+>>   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+>>   BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)          \
+>>               -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
+>> -            -I$(abspath $(OUTPUT)/../usr/include)
+>> +            $(KHDR_INCLUDES)
 > 
-> Even if the kernel codying style is not very strictly enforced for
-> self-tests, please avoid c++ style comments.
+> It breaks the build:
+> https://github.com/kernel-patches/bpf/actions/runs/4047075637/jobs/6960655246
 > 
-> More importantly, as Willem noded, this function is always called with
-> do_poll == true. You should drop such argument and the related branch
-> above.
+> make[1]: *** No rule to make target '/linux/bpf.h', needed by
+> '/tmp/work/bpf/bpf/tools/testing/selftests/bpf/bpf-helpers.rst'. Stop.
 
-Agreed. I will drop.
+I finally figured out why I did not catch it in my own testing: it appears
+that the bpf selftest is special: it's not built when issuing "make" from
+tools/testing/selftests/. Perhaps that's also why Shuah did not see any
+issues with my bpf patches:
 
-> 
-> > +		tnow = gettimeofday_ms();
-> > +	} while ((stat_zcopies != num_sends) && (tnow < tstop));
-> > +}
-> > +
-> >  static int send_tcp(int fd, char *data)
-> >  {
-> >  	int ret, done = 0, count = 0;
-> > @@ -413,8 +431,9 @@ static int send_udp_segment(int fd, char *data)
-> >  
-> >  static void usage(const char *filepath)
-> >  {
-> > -	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
-> > -		    filepath);
-> > +	error(1, 0,
-> > +			"Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
-> > +			filepath);
-> 
-> Please avoid introducing unnecessary white-space changes (no reason to
-> move the usage text on a new line)
+tools/testing/selftests/Makefile:
 
-The only reason why I've done this was to make scripts/checkpatch.pl
-happy:
+# User can optionally provide a TARGETS skiplist.  By default we skip
+# BPF since it has cutting edge build time dependencies which require
+# more effort to install.
+SKIP_TARGETS ?= bpf
 
-WARNING: line length of 141 exceeds 100 columns
-#83: FILE: tools/testing/selftests/net/udpgso_bench_tx.c:432:
+It appears that the baseline bpf selftest on v6.2-rc6 does not build on
+my system:
 
-I can drop and ignore the warning, or maybe it would have been better to
-just mention this in git message. What do you prefer?
+   CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+progs/test_bpf_nf.c:156:7: error: no member named 'mark' in 'struct nf_conn'
+                 ct->mark = 77;
+                 ~~  ^
+progs/test_bpf_nf.c:160:42: error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+                 bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+                                                        ^
+progs/test_bpf_nf.c:163:42: error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+                 bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+                                                        ^
+progs/test_bpf_nf.c:187:38: error: no member named 'mark' in 'struct nf_conn'
+                                 test_insert_lookup_mark = ct_lk->mark;
+                                                           ~~~~~  ^
+progs/test_bpf_nf.c:189:12: error: use of undeclared identifier 'IPS_CONFIRMED'
+                                                      IPS_CONFIRMED | IPS_SEEN_REPLY);
+                                                      ^
+progs/test_bpf_nf.c:189:28: error: use of undeclared identifier 'IPS_SEEN_REPLY'
+                                                      IPS_CONFIRMED | IPS_SEEN_REPLY);
+                                                                      ^
+progs/test_bpf_nf.c:209:11: error: no member named 'mark' in 'struct nf_conn'
+                 if (ct->mark == 42) {
+                     ~~  ^
+progs/test_bpf_nf.c:210:8: error: no member named 'mark' in 'struct nf_conn'
+                         ct->mark++;
+                         ~~  ^
+progs/test_bpf_nf.c:211:33: error: no member named 'mark' in 'struct nf_conn'
+                         test_exist_lookup_mark = ct->mark;
+                                                  ~~  ^
+9 errors generated.
+
+Based on this:
+https://lore.kernel.org/bpf/37649bee-5eb3-93a2-ac57-56eb375ef8cd@iogearbox.net/
+
+It appears that NF_CONNTRACK_MARK should be set to =y. Perhaps it should be
+detected at selftest build time and skipped rather than failing to build ? It
+appears to be a case where a user-space selftest depends on internal kernel data
+structures:
+
+Ref. include/net/netfilter/nf_conntrack.h:struct nf_conn
+
+After setting this config option, it fails at:
+
+   GEN-SKEL [test_progs] test_kfunc_dynptr_param.skel.h
+libbpf: sec '?lsm.s/bpf': corrupted program 'not_ptr_to_stack', offset 48, size 0
+Error: failed to open BPF object file: Invalid argument
+make: *** [Makefile:546: /home/efficios/git/linux/tools/testing/selftests/bpf/test_kfunc_dynptr_param.skel.h] Error 234
+make: *** Deleting file '/home/efficios/git/linux/tools/testing/selftests/bpf/test_kfunc_dynptr_param.skel.h'
+
+Based on this issue: https://github.com/libbpf/libbpf-bootstrap/issues/12 it appears
+that bpf selftests are only meant to be used against a set of pre-specified kernel configurations.
+README.rst confirms that. So let's use tools/testing/selftests/bpf/config.x86_64
+with make olddefconfig for my kernel build then. It would have been less unexpected for the
+bpf selftests to report incorrect or missing kernel config options rather than limiting the
+supported set to specific configuration files provided by the bpf selftests. This limits
+the testing coverage to very few kernel configurations.
+
+It still does not work. I need to explicitly enable BPF_SYSCALL=y which is not present in
+the bpf selftests config.x86_64. Then I can explicitly reenable DEBUG_INFO_BTF=y. It appears
+that config.x86_64 is outdated in the bpf selftests. It also misses NF_CONNTRACK_MARK=y.
+So let's assume that config.x86_64 is outdated and broken and go with
+tools/testing/selftests/bpf/config followed by make olddefconfig.
+
+No more luck, this time the bpf kernel config misses the DEBUG_KERNEL=y, which is needed
+for DEBUG_INFO and DEBUG_INFO_BTF.
+
+Now it's:
+
+   CLANG   /home/efficios/git/linux/tools/testing/selftests/bpf/tools/build/bpftool/profiler.bpf.o
+skeleton/profiler.bpf.c:18:21: error: invalid application of 'sizeof' to an incomplete type 'struct bpf_perf_event_value'
+         __uint(value_size, sizeof(struct bpf_perf_event_value));
+[...]
+
+And that's where I give up. Has anyone else succeeded in building bpf selftests locally ?
+
+Thanks,
+
+Mathieu
 
 -- 
-Andrei Gherzan
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
