@@ -2,149 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016946821EB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 03:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC71682243
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 03:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjAaCL7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 21:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S229972AbjAaCgs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 21:36:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbjAaCL6 (ORCPT
+        with ESMTP id S230075AbjAaCgq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 21:11:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5F034C00;
-        Mon, 30 Jan 2023 18:11:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0803D61207;
-        Tue, 31 Jan 2023 02:11:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6946DC4339E;
-        Tue, 31 Jan 2023 02:11:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675131111;
-        bh=J4THsiG9lLyLN3k2Af+1RJMzU2KokWwxCCLUO1sPYt8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cm2cfj0u3Ip5CCGI9jFiEtPOTPAfCuRIpoQwi+E5172677H+x+qdVRxhOc0k1kCEP
-         B525O3vQ85VjjvOIBvEB1Oy2dct0Fmh4Wr5n+rKyhs7LIaNrNCNNX89UDXDIuBl5DJ
-         UZ4bdNRMLzm7bF6BTHUROa6olyodCfIkWQya1BBCAeUEqSQjdRNIhPenmaPCWzIcYi
-         WLu6Ogi3hh5l5qDH3hLVqRNDTUF5k5oX9mkpsbAhu7jabpuvkFHVKw95Msw4iEGaRU
-         hS3+ZhQf8lJL3niGFgMpxPOyaY4RJfqezeoHXqkYn25UQgwfDlkDy15yWY8j3lttum
-         a6saradCwGwmA==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-142b72a728fso17635813fac.9;
-        Mon, 30 Jan 2023 18:11:51 -0800 (PST)
-X-Gm-Message-State: AO0yUKUhBh+ZytLE4OmStgpyTgo3KTvMl5dpT40ozmWz1WlLUk1rsvFA
-        zOPKBsnViCRVzI3fqGukG+p3O4mHH9VtrH7q/v4=
-X-Google-Smtp-Source: AK7set88x7PTFS/EkgEmwBm7Z2BVIAeds9RHbeMd/xFzfWrHyFzj6viRldUTxcVcDzFNyBcQOd8RnWSxJDDWhbHcY+g=
-X-Received: by 2002:a05:6870:330b:b0:163:a45a:9e41 with SMTP id
- x11-20020a056870330b00b00163a45a9e41mr522847oae.194.1675131110687; Mon, 30
- Jan 2023 18:11:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20230127145708.12915-1-andriy.shevchenko@linux.intel.com>
- <CABVgOSmZsAQcf6Ou_tyZL=hpiJcxMxXzmMfV5wRyCPBsb_d0UQ@mail.gmail.com>
- <CAK7LNASsnDymUS=Pyo77g=0v58fMn38PY66A887nC8_E6_qXAg@mail.gmail.com> <CABVgOSnRC3AuUo4Qc2K3pXEcj3Wbt9LE2DTbejGrPOCKefxB2g@mail.gmail.com>
-In-Reply-To: <CABVgOSnRC3AuUo4Qc2K3pXEcj3Wbt9LE2DTbejGrPOCKefxB2g@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 31 Jan 2023 11:11:14 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR8D6E_md3=1dLAc-o73xmKXDRXv9Fi_hiav1VhPSW58w@mail.gmail.com>
-Message-ID: <CAK7LNAR8D6E_md3=1dLAc-o73xmKXDRXv9Fi_hiav1VhPSW58w@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] .gitignore: Unignore .kunitconfig
-To:     David Gow <davidgow@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
+        Mon, 30 Jan 2023 21:36:46 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B431027D68
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 18:36:13 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id e11-20020a17090a77cb00b0022925dd66d3so8819841pjs.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 18:36:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rzt0/3jsMFJUfIhPaBwoOkey3oh79UDiXKh2IWsZmn0=;
+        b=K3+uNVeLsYBpdR+StkpRilWPuzp9BhVJMT5HHjDPiG9zQRr6DXc3CuLxN2CN73sFMR
+         4hBMbgSFoXabaZ1YKjHzyqBF5LhtffZ4MeT9PDfae0Tf4kgjZ4fj5QO6aOTu5EmjR5b8
+         vsE+0MWch+sS5XN1LW+AoBKrrFnvC+TziOlFZBZa5hdHjLlcrNmNRl04rznpa6uYmeYq
+         3bFmYqU15coJDy6fwDDGEbyBWiEaaFos3z5Mg027kMAGidIfvPNFWVthu9NGw7TO9T6y
+         tKjBTDF05Yxnf/eWFbJkm7yfrl7S7RtG+0b+wqQaM+Fkfr8fZfsbW2FRFWfD7yJhL6Qk
+         tKrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rzt0/3jsMFJUfIhPaBwoOkey3oh79UDiXKh2IWsZmn0=;
+        b=2N/5xG3wmRotqRpCLihvT6HlcwIv0BflqOaPl6vREQdeUVUXk4wb8cLOQ4sIGjCP/i
+         q8QTHmD9B2Qf6TDnZebOnp6dQfE88e1Ud+XPMtxCKUw+mhx13qTVfYDFAulDxmEODQBC
+         j9yHcWCL7/YqRCigr2NuK71027Oa/PdjvjHXE8sSbAcrs1FFQGesQsVn4A0XosP9QCCn
+         2mcufS5emyoR8qd88dj7IHjBe/9nP8OumTzsR4ybg2X4P6bX4sapOLCGApzeThptTEx6
+         nFifbDbb0S+UO/IaMdJTU9BPU88vio8W84GNzjqBtQJR7Yf6aqovF0zF14Duj/tnZIMz
+         KOlA==
+X-Gm-Message-State: AFqh2krUTapeu0QHogMOHt3YUrlyJYLVTckQgKaKwbi44zXwqiBJrvWR
+        RMlqy/M3/sq0jfkCapfDmW/9yFMhK/ZSQA==
+X-Google-Smtp-Source: AMrXdXu9Jp65RUI63xyyhAsw+D0hWv/DjieVAkRwci9M/liREghVAwWDGEbKiqyKZJdLjojUR35XPRu8VTNP2g==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a63:2001:0:b0:4be:74f7:d3f7 with SMTP id
+ g1-20020a632001000000b004be74f7d3f7mr5746281pgg.124.1675132571123; Mon, 30
+ Jan 2023 18:36:11 -0800 (PST)
+Date:   Tue, 31 Jan 2023 10:35:03 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230131023503.1629871-1-davidgow@google.com>
+Subject: [PATCH] kunit: fix kunit_test_init_section_suites(...)
+From:   David Gow <davidgow@google.com>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 9:01 AM David Gow <davidgow@google.com> wrote:
->
-> On Sat, 28 Jan 2023 at 22:37, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > On Sat, Jan 28, 2023 at 3:56 PM David Gow <davidgow@google.com> wrote:
-> > >
-> > > On Fri, 27 Jan 2023 at 22:56, Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > There are almost dozen of .kunitconfig files that are ignored but
-> > > > tracked. Unignore them.
-> > > >
-> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > ---
-> > >
-> > > Thanks! Only the original root-directory .kunitignore file was
-> > > intended to be ignored, and that's no longer as important, and is now
-> > > in the build dir anyway.
-> > >
-> > > Reviewed-by: David Gow <davidgow@google.com>
-> > >
-> > > Cheers,
-> > > -- David
-> > >
-> > > >  .gitignore | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/.gitignore b/.gitignore
-> > > > index 22984d22d29e..e4f2ba0be516 100644
-> > > > --- a/.gitignore
-> > > > +++ b/.gitignore
-> > > > @@ -100,6 +100,7 @@ modules.order
-> > > >  !.get_maintainer.ignore
-> > > >  !.gitattributes
-> > > >  !.gitignore
-> > > > +!.kunitconfig
-> > > >  !.mailmap
-> > > >  !.rustfmt.toml
-> > > >
-> > > > --
-> > > > 2.39.0
-> > > >
-> >
-> >
-> > Why is this a dot file in the first place?
-> >
->
-> In short, historical reasons.
->
-> The long answer is that there are two places "kunitconfig" files are
-> used: as a user-provided file with their preferred test config (which
-> is kept local), and as a recommended test config for a given subsystem
-> (which is checked in).
-> Originally, no .kunitconfig files were checked in: one was either
-> autogenerated or manually modified and left in the root source
-> directory. This eventually moved into the build directory, and a
-> number of features which de-emphasized it in favour of command-line
-> arguments and the (new) checked-in per-subsystem configs, which
-> probably shouldn't be hidden.
+From: Brendan Higgins <brendan.higgins@linux.dev>
 
+Looks like kunit_test_init_section_suites(...) was messed up in a merge
+conflict. This fixes it.
 
-Do you mean there are two types for .kunitconfig - auto-generated ones
-and check-in ones?
+kunit_test_init_section_suites(...) was not updated to avoid the extra
+level of indirection when .kunit_test_suites was flattened. Given no-one
+was actively using it, this went unnoticed for a long period of time.
 
-If this patch is applied, is there a possibility where
-auto-generated .kunitconfig files would be accidentally
-added to the repository?
+Fixes: e5857d396f35 ("kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites")
+Signed-off-by: Brendan Higgins <brendan.higgins@linux.dev>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ include/kunit/test.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-
-
-
-
-> There's no fundamental reason (other than it being a bit annoying to
-> rename everything and update the code) we can't change it, either for
-> all kunitconfig files, or just the checked-in ones, if that's
-> preferred.
->
-> -- David
-
-
-
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 87ea90576b50..716deaeef3dd 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -303,7 +303,6 @@ static inline int kunit_run_all_tests(void)
+  */
+ #define kunit_test_init_section_suites(__suites...)			\
+ 	__kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),	\
+-			    CONCATENATE(__UNIQUE_ID(suites), _probe),	\
+ 			    ##__suites)
+ 
+ #define kunit_test_init_section_suite(suite)	\
 -- 
-Best Regards
-Masahiro Yamada
+2.39.1.456.gfc5497dd1b-goog
+
