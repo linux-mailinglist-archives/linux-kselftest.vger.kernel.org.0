@@ -2,204 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B8F683833
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 22:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CDC6838DD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 22:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjAaVBP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 16:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S231687AbjAaVry (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 16:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjAaVBO (ORCPT
+        with ESMTP id S231663AbjAaVrx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:01:14 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CA330E7
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 13:01:13 -0800 (PST)
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3365944304
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 21:01:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675198872;
-        bh=etom2qVxb9kUkl83UlutiswUofv0UufWb2skcOFCPPw=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=OYIRDBX40LZv2AyQXVZxynP7XXUNxBfKEFrL6a2GJwdUztOOTivJrTP5mCHo3xUeF
-         96HsTPbZ7ABSeZHDfMe5k0S3Hd+V6YseyFXF0lAjNS+suzXwbjNK88JtYfrrdTWpmq
-         wpB4Sm8mE2aVfdHoaKuROUIzRPB7mSqPBealMqlttVp95Gwq2oi/SRNVohr8EndGbl
-         yqiKdzPDgWr+bnPiCpsjXumD7hkzQBxPhTI9onLP76VERGvVcgAfs7tqXOaY/8yRjc
-         cnjNLRhpmFPBwAIkO4YqEjdYYGLby0hgBy8ofB2lq3Y52jZFMwLoq17HlnJ8+7WiQ/
-         UVAG5OS/ZoXDA==
-Received: by mail-wr1-f69.google.com with SMTP id j25-20020adfd219000000b002bfd1484f9bso2147776wrh.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 13:01:12 -0800 (PST)
+        Tue, 31 Jan 2023 16:47:53 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7B55AA48
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 13:47:50 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-4ff1fa82bbbso221536747b3.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 13:47:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EvA04MAVbr1UuAjYFXOV/pgoyn0pjItg1LdvvQcMI8c=;
+        b=H0BHVeKa4qEFSSRzJElwMZ4GewmdUx3WiPFixCTp+9kb6GH0ec4EOCufp1bGBVJoaU
+         0vzBHCsXLtM7wxZ2o+duBMw3vgJs3cLrYgZ9KViPKlw8qA+8b7pncYkWLM8wXM4EMiLT
+         Wz+vm9YD0dgqaYLnmlzQ2uD+fjZwC8EBuadn+BREBwfGPH1E2O+YTq8b/FRKugSEH02k
+         ljvVLMI9/GzzEOgqq9Fz4PdOk0kVlQvITmFVxUjPOo1bhNIw+qHhlRNO7vo5qmE5gZrM
+         aTNiq7MdRlWqfHXXQoQI45iks7npKbF0tcjRA0fCzl4nVZWRo/5HVY88Y6EJAatig2CY
+         X5Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=etom2qVxb9kUkl83UlutiswUofv0UufWb2skcOFCPPw=;
-        b=iNvzFC21ebrzxn2j0aGj4VjsWkbLsj0r+g7uQsPb1rZsR+Yapc+arB9vHF/rK+dGIW
-         puSPrQVUspVbjn8QHczRe1plBnu+W59syBe+qpAwZGHRuDC/h9r31sWLGNVU9rFuGKwd
-         5ZhQ7vnl2ELpZQ3i+c8yfxNWE7dw2+1uXQDRCU9+JIgag60qUMBYyM0u0Z2+Xc4voeZ7
-         Ob8WfAP28Vw9401thr70MbehDTtobKpfssxVosuTLf1D2msyP08MFj5ZOzCSa0KGZlHF
-         GxokAk90XuN/7FxKqMlDicFP/lYWsdVTQElsysY8q9Y+6FQn2DAxmw8AVQuF58x5QSlj
-         XSIg==
-X-Gm-Message-State: AO0yUKVnq/Ad/jEfiocF70IyJFY3KInlI8vawc8YW1ayyhc42ZHGBNrI
-        50/+NYdp7FvSHxkctq1F9RWsdPtLWemEhfwpYZ0kTUXoAilcKHNTSo+cyaDs0N2wfcp+YaEKH61
-        +YC+mFRpkMpDbGV0GyoYaMisNnto5cVsvogAXV94/owzxcA==
-X-Received: by 2002:a5d:5092:0:b0:2bf:ee58:72b1 with SMTP id a18-20020a5d5092000000b002bfee5872b1mr325274wrt.23.1675198871632;
-        Tue, 31 Jan 2023 13:01:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set8tasggKf/Rx9l1go+kcn/gV3gCYWXptSmptiXfMWE21yhGCKkWfePVwItC66FiAsdLnfbQow==
-X-Received: by 2002:a5d:5092:0:b0:2bf:ee58:72b1 with SMTP id a18-20020a5d5092000000b002bfee5872b1mr325240wrt.23.1675198871377;
-        Tue, 31 Jan 2023 13:01:11 -0800 (PST)
-Received: from qwirkle.internal ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id t27-20020adfa2db000000b002366553eca7sm15530408wra.83.2023.01.31.13.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 13:01:10 -0800 (PST)
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     "David S. Miller" <davem@davemloft.net>,
+        bh=EvA04MAVbr1UuAjYFXOV/pgoyn0pjItg1LdvvQcMI8c=;
+        b=0BbeF5akWeh/OpdSj/PzGUkuAKamSzuEa9yQ+Tt6EItqbMREIGJIRGFOCOG3F2oWa8
+         M9/AdFbOmSFZV8ZweeeB3EBIfdLa9kpMRtk4zvlA1dQgy3koSp8BySnXkiomkqFnSQ/U
+         YnvGerJlLl8tNYPT2zQfl4UEWFGjbAEX2AewN7MAsxWXNXhFEVWlyCSdjgz0HDM2xvwD
+         eO/93GsOckcrnXQjz+miTNXhj0ZmmteOQTrt5Zw0F19KetiEl+sdpiLnQn7ddoFJ/CyD
+         tZi2hiyILLrj2KSESGDg29jAApf3aKqFmi9I9AW1kp7LlwL7773Aj8FbXnhmhyt3tJIa
+         nZyg==
+X-Gm-Message-State: AFqh2krbl31tsVCBNfCXIB2mZdcQ9s66yQYv31QrgJUtmXHFOcW0jSOA
+        O/ljYzToiL09hmzZ1KfiSxvYmRjYhFTn2rJLtsrd5Q==
+X-Google-Smtp-Source: AMrXdXvxUzexZvvtDOoB1xHI01ESP1152UTaWhUHhWH0zrdl0HhwlkoUzxS9ShAH3OIgN7jOLAH+IeIK7nYk3bvnCVk=
+X-Received: by 2002:a81:4006:0:b0:46b:c07c:c1d9 with SMTP id
+ l6-20020a814006000000b0046bc07cc1d9mr4380896ywn.56.1675201668950; Tue, 31 Jan
+ 2023 13:47:48 -0800 (PST)
+MIME-Version: 1.0
+References: <20230131210051.475983-4-andrei.gherzan@canonical.com>
+In-Reply-To: <20230131210051.475983-4-andrei.gherzan@canonical.com>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Tue, 31 Jan 2023 16:47:13 -0500
+Message-ID: <CA+FuTSfeehkZMZonHA-nFDK37=eNdG6E-7xkcixn1Hs_s44_EQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 4/4] selftests: net: udpgso_bench_tx: Cater
+ for pending datagrams zerocopy benchmarking
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Fred Klassen <fklassen@appneta.com>
-Cc:     Willem de Bruijn <willemb@google.com>,
-        Andrei Gherzan <andrei.gherzan@canonical.com>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3 4/4] selftests: net: udpgso_bench_tx: Cater for pending datagrams zerocopy benchmarking
-Date:   Tue, 31 Jan 2023 21:00:51 +0000
-Message-Id: <20230131210051.475983-4-andrei.gherzan@canonical.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fred Klassen <fklassen@appneta.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test tool can check that the zerocopy number of completions value is
-valid taking into consideration the number of datagram send calls. This can
-catch the system into a state where the datagrams are still in the system
-(for example in a qdisk, waiting for the network interface to return a
-completion notification, etc).
+On Tue, Jan 31, 2023 at 4:01 PM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
+>
+> The test tool can check that the zerocopy number of completions value is
+> valid taking into consideration the number of datagram send calls. This can
+> catch the system into a state where the datagrams are still in the system
+> (for example in a qdisk, waiting for the network interface to return a
+> completion notification, etc).
+>
+> This change adds a retry logic of computing the number of completions up to
+> a configurable (via CLI) timeout (default: 2 seconds).
+>
+> Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
+> Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> Cc: Willem de Bruijn <willemb@google.com>
+> Cc: Paolo Abeni <pabeni@redhat.com>
 
-This change adds a retry logic of computing the number of completions up to
-a configurable (via CLI) timeout (default: 2 seconds).
+Fixes should go to net, instead of net-next.
 
-Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
-Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
----
- tools/testing/selftests/net/udpgso_bench_tx.c | 34 +++++++++++++++----
- 1 file changed, 27 insertions(+), 7 deletions(-)
+But the code itself looks good to me.
 
-diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-index b47b5c32039f..ef887842522a 100644
---- a/tools/testing/selftests/net/udpgso_bench_tx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-@@ -62,6 +62,7 @@ static int	cfg_payload_len	= (1472 * 42);
- static int	cfg_port	= 8000;
- static int	cfg_runtime_ms	= -1;
- static bool	cfg_poll;
-+static int	cfg_poll_loop_timeout_ms = 2000;
- static bool	cfg_segment;
- static bool	cfg_sendmmsg;
- static bool	cfg_tcp;
-@@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
- 	}
- }
- 
--static void flush_errqueue(int fd, const bool do_poll)
-+static void flush_errqueue(int fd, const bool do_poll,
-+		unsigned long poll_timeout, const bool poll_err)
- {
- 	if (do_poll) {
- 		struct pollfd fds = {0};
- 		int ret;
- 
- 		fds.fd = fd;
--		ret = poll(&fds, 1, 500);
-+		ret = poll(&fds, 1, poll_timeout);
- 		if (ret == 0) {
--			if (cfg_verbose)
-+			if ((cfg_verbose) && (poll_err))
- 				fprintf(stderr, "poll timeout\n");
- 		} else if (ret < 0) {
- 			error(1, errno, "poll");
-@@ -254,6 +256,20 @@ static void flush_errqueue(int fd, const bool do_poll)
- 	flush_errqueue_recv(fd);
- }
- 
-+static void flush_errqueue_retry(int fd, unsigned long num_sends)
-+{
-+	unsigned long tnow, tstop;
-+	bool first_try = true;
-+
-+	tnow = gettimeofday_ms();
-+	tstop = tnow + cfg_poll_loop_timeout_ms;
-+	do {
-+		flush_errqueue(fd, true, tstop - tnow, first_try);
-+		first_try = false;
-+		tnow = gettimeofday_ms();
-+	} while ((stat_zcopies != num_sends) && (tnow < tstop));
-+}
-+
- static int send_tcp(int fd, char *data)
- {
- 	int ret, done = 0, count = 0;
-@@ -413,7 +429,8 @@ static int send_udp_segment(int fd, char *data)
- 
- static void usage(const char *filepath)
- {
--	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
-+	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
-+		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
- 		    filepath);
- }
- 
-@@ -423,7 +440,7 @@ static void parse_opts(int argc, char **argv)
- 	int max_len, hdrlen;
- 	int c;
- 
--	while ((c = getopt(argc, argv, "46acC:D:Hl:mM:p:s:PS:tTuvz")) != -1) {
-+	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
- 		switch (c) {
- 		case '4':
- 			if (cfg_family != PF_UNSPEC)
-@@ -452,6 +469,9 @@ static void parse_opts(int argc, char **argv)
- 		case 'l':
- 			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
- 			break;
-+		case 'L':
-+			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
-+			break;
- 		case 'm':
- 			cfg_sendmmsg = true;
- 			break;
-@@ -679,7 +699,7 @@ int main(int argc, char **argv)
- 			num_sends += send_udp(fd, buf[i]);
- 		num_msgs++;
- 		if ((cfg_zerocopy && ((num_msgs & 0xF) == 0)) || cfg_tx_tstamp)
--			flush_errqueue(fd, cfg_poll);
-+			flush_errqueue(fd, cfg_poll, 500, true);
- 
- 		if (cfg_msg_nr && num_msgs >= cfg_msg_nr)
- 			break;
-@@ -698,7 +718,7 @@ int main(int argc, char **argv)
- 	} while (!interrupted && (cfg_runtime_ms == -1 || tnow < tstop));
- 
- 	if (cfg_zerocopy || cfg_tx_tstamp)
--		flush_errqueue(fd, true);
-+		flush_errqueue_retry(fd, num_sends);
- 
- 	if (close(fd))
- 		error(1, errno, "close");
--- 
-2.34.1
-
+Reviewed-by: Willem de Bruijn <willemb@google.com>
