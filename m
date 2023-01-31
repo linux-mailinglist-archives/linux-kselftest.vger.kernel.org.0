@@ -2,121 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D34B6831CE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 16:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B81BB6831E2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 16:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbjAaPtF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 10:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
+        id S231773AbjAaPxJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 10:53:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjAaPtE (ORCPT
+        with ESMTP id S231728AbjAaPxH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:49:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73715B45C
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 07:48:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675180093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jj+MngsoDFpfREm8kwbslfBpvRZkqzFwR4JCZm4vAvo=;
-        b=hkL0LkZXAz2N7+H/ElK4no7jB+9kmtrWdM5x8/jRTiUq/MXq3sZBXUm20lwCQeJb7666OV
-        6GvMN6eDnw618Fraxr1+YGDbqAJFEzvC4CzO0P4vBgLpCpbZa7Os7V0J01ZrJzqLCYD9B9
-        BVOMuVTA/mwKq8f6t0npyn2a/CCfsqA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-526-RZY8mZo5Mt-fchm6kb8SFQ-1; Tue, 31 Jan 2023 10:48:08 -0500
-X-MC-Unique: RZY8mZo5Mt-fchm6kb8SFQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B063F18E52D8;
-        Tue, 31 Jan 2023 15:48:07 +0000 (UTC)
-Received: from llong.com (unknown [10.22.10.235])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 52927492C3E;
-        Tue, 31 Jan 2023 15:48:07 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Waiman Long <longman@redhat.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-Subject: [PATCH] cgroup/cpuset: Fix wrong check in update_parent_subparts_cpumask()
-Date:   Tue, 31 Jan 2023 10:48:03 -0500
-Message-Id: <20230131154803.192530-1-longman@redhat.com>
+        Tue, 31 Jan 2023 10:53:07 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA55234FC;
+        Tue, 31 Jan 2023 07:53:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675180386; x=1706716386;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ul30YowJ/hdgvarujvqemzj4xp48ISoRMAjzYZ6+Ks4=;
+  b=KEKX41lRVWmH21uy9eZSMOEtxa8afPoMrgyCz3A+L9dJIPaReLQ3lXx7
+   PqT9/wpMchA2WAbtTagg/rHqpBGojjrOcIS/xcgo+h+9CJC0eLeTUJFrw
+   Nn/sAWAx2uAMRfPQp7KhJVoeyASG9qkqXhe/bz3LY0l2WKacMRs4iJJ/9
+   2MvsArmddKv4UDPGHyPU3OE3TNrKrH+bBixTWo48r47fRXlmm1MpyKCfu
+   1wGbwjWvNJfE7ajZoLkMLsYFOpYyMhGb3wLz4aKcc0urzRdQsRLubQVa/
+   TxB9zuydZEQlvPm2hEtY3OtIXhE791DYmKRJgaec9vTN0ETcEZQ0r8WKM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="329983898"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="329983898"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 07:53:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="909953990"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="909953990"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Jan 2023 07:52:59 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pMswM-0004WY-1B;
+        Tue, 31 Jan 2023 15:52:58 +0000
+Date:   Tue, 31 Jan 2023 23:52:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <202301312359.8WtBkSkQ-lkp@intel.com>
+References: <20230131083257.3302830-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131083257.3302830-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It was found that the check to see if a partition could use up all
-the cpus from the parent cpuset in update_parent_subparts_cpumask()
-was incorrect. As a result, it is possible to leave parent with no
-effective cpu left even if there are tasks in the parent cpuset. This
-can lead to system panic as reported in [1].
+Hi Muhammad,
 
-Fix this probem by updating the check to fail the enabling the partition
-if parent's effective_cpus is a subset of the child's cpus_allowed.
+Thank you for the patch! Yet something to improve:
 
-Also record the error code when an error happens in update_prstate()
-and add a test case where parent partition and child have the same cpu
-list and parent has task. Enabling partition in the child will fail in
-this case.
+[auto build test ERROR on shuah-kselftest/fixes]
+[also build test ERROR on linus/master v6.2-rc6 next-20230131]
+[cannot apply to shuah-kselftest/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[1] https://www.spinics.net/lists/cgroups/msg36254.html
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git fixes
+patch link:    https://lore.kernel.org/r/20230131083257.3302830-3-usama.anjum%40collabora.com
+patch subject: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about PTEs
+config: arc-defconfig (https://download.01.org/0day-ci/archive/20230131/202301312359.8WtBkSkQ-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/11677b6b7fda958031115ea40aa219fc32c7dea4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
+        git checkout 11677b6b7fda958031115ea40aa219fc32c7dea4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-Fixes: f0af1bfc27b5 ("cgroup/cpuset: Relax constraints to partition & cpus changes")
-Reported-by: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c                            | 3 ++-
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index a29c0b13706b..205dc9edcaa9 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1346,7 +1346,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
- 		 * A parent can be left with no CPU as long as there is no
- 		 * task directly associated with the parent partition.
- 		 */
--		if (!cpumask_intersects(cs->cpus_allowed, parent->effective_cpus) &&
-+		if (cpumask_subset(parent->effective_cpus, cs->cpus_allowed) &&
- 		    partition_is_populated(parent, cs))
- 			return PERR_NOCPUS;
- 
-@@ -2324,6 +2324,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 		new_prs = -new_prs;
- 	spin_lock_irq(&callback_lock);
- 	cs->partition_root_state = new_prs;
-+	WRITE_ONCE(cs->prs_err, err);
- 	spin_unlock_irq(&callback_lock);
- 	/*
- 	 * Update child cpusets, if present.
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 186e1c26867e..75c100de90ff 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -268,6 +268,7 @@ TEST_MATRIX=(
- 	# Taking away all CPUs from parent or itself if there are tasks
- 	# will make the partition invalid.
- 	"  S+ C2-3:P1:S+  C3:P1  .      .      T     C2-3    .      .     0 A1:2-3,A2:2-3 A1:P1,A2:P-1"
-+	"  S+  C3:P1:S+    C3    .      .      T      P1     .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
- 	"  S+ $SETUP_A123_PARTITIONS    .    T:C2-3   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
- 	"  S+ $SETUP_A123_PARTITIONS    . T:C2-3:C1-3 .      .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
- 
+All errors (new ones prefixed by >>):
+
+   fs/proc/task_mmu.c: In function 'pagemap_scan_pmd_entry':
+>> fs/proc/task_mmu.c:1927:17: error: implicit declaration of function 'uffd_wp_range' [-Werror=implicit-function-declaration]
+    1927 |                 uffd_wp_range(walk->mm, vma, start, addr - start, true);
+         |                 ^~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/uffd_wp_range +1927 fs/proc/task_mmu.c
+
+  1915	
+  1916		pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+  1917		if (IS_GET_OP(p)) {
+  1918			for (addr = start; addr < end; pte++, addr += PAGE_SIZE) {
+  1919				ret = pagemap_scan_output(!is_pte_uffd_wp(*pte), vma->vm_file,
+  1920							  pte_present(*pte), is_swap_pte(*pte), p, addr, 1);
+  1921				if (ret)
+  1922					break;
+  1923			}
+  1924		}
+  1925		pte_unmap_unlock(pte - 1, ptl);
+  1926		if ((!ret || ret == -ENOSPC) && IS_WP_ENGAGE_OP(p) && (addr - start))
+> 1927			uffd_wp_range(walk->mm, vma, start, addr - start, true);
+  1928	
+  1929		cond_resched();
+  1930		return ret;
+  1931	}
+  1932	
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
