@@ -2,280 +2,193 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D94768272E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 09:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CED8768296D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 10:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjAaIpV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 03:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S232675AbjAaJsV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 04:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjAaIpF (ORCPT
+        with ESMTP id S232837AbjAaJsI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 03:45:05 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B21A4A1F2;
-        Tue, 31 Jan 2023 00:40:50 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.165.226])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 40F036602EB0;
-        Tue, 31 Jan 2023 08:40:20 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675154430;
-        bh=rgu7DTIg2yh3vlm4bDLiBc5n/dNTUucjeoIq3IaxRes=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=kYq80rrVyqb14gdPV8m4rokazQdVee0TJewpQ8ndOjQdIMMManRCPZ7I/rUAomJBl
-         TnK2kcah33Z5+ydN/qa4Hsp8NXXPioNzIVJX/fakke/hnDmU4ufKrvCs6qI+f4aflg
-         gMZrOdIX5CNWn3vzsmej9/GMR1jbvWU0/tabs9+mvDHRLBwWJzl3X69O0SdNeqpjNp
-         pmkqBP0aog2sNtThK0cxrzrt04ytFbNDQdU/V6mkkBHaxCcQICYKAxUD5DPnwuxSgs
-         s2bFeAkin24Lh440R2h8vxadA/PSQiXDmc4OEI+DBat6xxExN/+yC5kTiM3B4C39zm
-         75qbyyMFQESqg==
-Message-ID: <a85f5857-8a96-c55f-00f8-dc498f7be334@collabora.com>
-Date:   Tue, 31 Jan 2023 13:40:13 +0500
+        Tue, 31 Jan 2023 04:48:08 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19995FF8;
+        Tue, 31 Jan 2023 01:47:56 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id u5so9494067pfm.10;
+        Tue, 31 Jan 2023 01:47:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A655nD9x3a8hHtfO8IDUSlIL069yAfQEg9w8Iv6Dufs=;
+        b=m12/umS4j2j0YqF5LiWwgSDuueEjUt9WJxbgd3UcEGFgpncM5fxHeU8fp3pIWJZu/Z
+         e8eaJAIjV3VUEKfJReLmAnzxAFEKylpVdbsY03rnbrgtM03mBeX2l7hJ47XWovIFjsyZ
+         GLv7z6ni9u0Rg9b+zM2u0BNBUPn4b8jue2pzsnMpYcjRtuioKu7XMNusVeVorDQOq9ev
+         hd/ncgcvuu9k5R03+tRwSiR92xMmq9nRmxc8GsWTfh1GHE6Owv6IEUSCCel5QQnvomDH
+         Ev63/O/mqL5+Oh9xlNyUibwJXO+EjCC6Z7uO2CNLGM7NxYeDpx3/vh90Q5eyqknrdlMU
+         UCXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A655nD9x3a8hHtfO8IDUSlIL069yAfQEg9w8Iv6Dufs=;
+        b=MRdyzLe3bs/IzBBsH4CnLVVf1vu+v4eOD/rn+nnrNHMkoBcHa+kLpWylDSU0fkL2Z7
+         rbYkDuJXncbibxT5XMunS4MKI5ZpgFWi/X3A3cgtssFjsR5wKEwKX/zEfv3aG2dJIXah
+         p64/5ghfTgjGTfB6sCw3SH3wtjiGusPFJ/AVPxlH/wmwRX53ak/sruho7npFVbGbFTW/
+         61+ji7+5bvniY3ndDzDC1K5tj904Mg5YcCoO4VrdjBjF8vcOCXoQ8p7EfL8+soJ7TsDL
+         03UOTQDcSkmYD1GmwukWZ5gs4hUOPk7c0qOF2dTq+shED38Y0DRkVZ4InmqkvsgA7ibC
+         zuvg==
+X-Gm-Message-State: AO0yUKWEbQPK1IL5OWXVMG7fa/Y5QXdE3ox/eSpbyVdXrCFqvfNUJx4p
+        RlV0JWVqE9QdkhJJEvmFhak=
+X-Google-Smtp-Source: AK7set9O4tsrz6wug59doXOI4kgE9FXIm4c4WQEycPHDa80z7J04/eOPcCC3ahy+mW4viPWptwCkEA==
+X-Received: by 2002:a05:6a00:26cf:b0:580:ea08:5277 with SMTP id p15-20020a056a0026cf00b00580ea085277mr9060494pfw.16.1675158476139;
+        Tue, 31 Jan 2023 01:47:56 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id j11-20020aa7928b000000b0058bb8943c9asm8911641pfa.161.2023.01.31.01.47.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 01:47:55 -0800 (PST)
+Message-ID: <18068631-d634-679c-3dd1-4493d186ffb8@gmail.com>
+Date:   Tue, 31 Jan 2023 17:47:46 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v8 1/4] userfaultfd: Add UFFD WP Async support
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] .gitignore: Keep track of archived files as they are
+ added to a new git repo
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230124084323.1363825-1-usama.anjum@collabora.com>
- <20230124084323.1363825-2-usama.anjum@collabora.com> <Y9MHM+RVzvigcTTk@x1n>
- <1968dff9-f48a-3290-a15b-a8b739f31ed2@collabora.com> <Y9PtHUONh2ImQyKF@x1n>
- <d8c30ea7-05a1-d53b-1391-472ff5b2a7fd@collabora.com> <Y9g2MAwycCJ3N2tf@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y9g2MAwycCJ3N2tf@x1n>
-Content-Type: text/plain; charset=UTF-8
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Kees Cook <keescook@chromium.org>, Andrew Davis <afd@ti.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        Will Deacon <will@kernel.org>
+References: <20230130090426.13864-1-likexu@tencent.com>
+ <CAK7LNAT=8Z_-OJdEdUNvUwYpXvWZU7JnYLHW-o+w9GBXjaFbMQ@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <CAK7LNAT=8Z_-OJdEdUNvUwYpXvWZU7JnYLHW-o+w9GBXjaFbMQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/31/23 2:27 AM, Peter Xu wrote:
-> On Mon, Jan 30, 2023 at 01:38:16PM +0500, Muhammad Usama Anjum wrote:
->> On 1/27/23 8:32 PM, Peter Xu wrote:
->>> On Fri, Jan 27, 2023 at 11:47:14AM +0500, Muhammad Usama Anjum wrote:
->>>>>> diff --git a/mm/memory.c b/mm/memory.c
->>>>>> index 4000e9f017e0..8c03b133d483 100644
->>>>>> --- a/mm/memory.c
->>>>>> +++ b/mm/memory.c
->>>>>> @@ -3351,6 +3351,18 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->>>>>>  
->>>>>>  	if (likely(!unshare)) {
->>>>>>  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
->>>>>> +			if (userfaultfd_wp_async(vma)) {
->>>>>> +				/*
->>>>>> +				 * Nothing needed (cache flush, TLB invalidations,
->>>>>> +				 * etc.) because we're only removing the uffd-wp bit,
->>>>>> +				 * which is completely invisible to the user. This
->>>>>> +				 * falls through to possible CoW.
->>>>>
->>>>> Here it says it falls through to CoW, but..
->>>>>
->>>>>> +				 */
->>>>>> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
->>>>>> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
->>>>>> +					   pte_clear_uffd_wp(*vmf->pte));
->>>>>> +				return 0;
->>>>>
->>>>> ... it's not doing so.  The original lines should do:
->>>>>
->>>>> https://lore.kernel.org/all/Y8qq0dKIJBshua+X@x1n/
->>>
->>> [1]
->>>
->>>>>
->>>>> Side note: you cannot modify pgtable after releasing the pgtable lock.
->>>>> It's racy.
->>>> If I don't unlock and return after removing the UFFD_WP flag in case of
->>>> async wp, the target just gets stuck. Maybe the pte lock is not unlocked in
->>>> some path.
->>>>
->>>> If I unlock and don't return, the crash happens.
->>>>
->>>> So I'd put unlock and return from here. Please comment on the below patch
->>>> and what do you think should be done. I've missed something.
->>>
->>> Have you tried to just use exactly what I suggested in [1]?  I'll paste
->>> again:
->>>
->>> ---8<---
->>> diff --git a/mm/memory.c b/mm/memory.c
->>> index 4000e9f017e0..09aab434654c 100644
->>> --- a/mm/memory.c
->>> +++ b/mm/memory.c
->>> @@ -3351,8 +3351,20 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->>>
->>>         if (likely(!unshare)) {
->>>                 if (userfaultfd_pte_wp(vma, *vmf->pte)) {
->>> -                       pte_unmap_unlock(vmf->pte, vmf->ptl);
->>> -                       return handle_userfault(vmf, VM_UFFD_WP);
->>> +                       if (userfaultfd_uffd_wp_async(vma)) {
->>> +                               /*
->>> +                                * Nothing needed (cache flush, TLB
->>> +                                * invalidations, etc.) because we're only
->>> +                                * removing the uffd-wp bit, which is
->>> +                                * completely invisible to the user.
->>> +                                * This falls through to possible CoW.
->>> +                                */
->>> +                               set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
->>> +                                          pte_clear_uffd_wp(*vmf->pte));
->>> +                       } else {
->>> +                               pte_unmap_unlock(vmf->pte, vmf->ptl);
->>> +                               return handle_userfault(vmf, VM_UFFD_WP);
->>> +                       }
->>>                 }
->>> ---8<---
->>>
->>> Note that there's no "return", neither the unlock.  The lock is used in the
->>> follow up write fault resolution and it's released later.
->> I've tried out the exact patch above. This doesn't work. The pages keep
->> their WP flag even after being resolved in do_wp_page() while is written on
->> the page.
+On 31/1/2023 12:06 am, Masahiro Yamada wrote:
+> On Mon, Jan 30, 2023 at 6:04 PM Like Xu <like.xu.linux@gmail.com> wrote:
 >>
->> So I'd added pte_unmap_unlock() and return 0 from here. This makes the
->> patch to work. Maybe you can try this on your end to see what I'm seeing here?
-> 
-> Oh maybe it's because it didn't update orig_pte.  If you want, you can try
-> again with doing so by changing:
-> 
->   set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
->              pte_clear_uffd_wp(*vmf->pte));
-> 
-> into:
-> 
->   pte_t pte = pte_clear_uffd_wp(*vmf->pte);
->   set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
->   /* Update this to be prepared for following up CoW handling */
->   vmf->orig_pte = pte;
-> 
-It works.
-
+>> From: Like Xu <likexu@tencent.com>
 >>
->>>
->>> Meanwhile please fully digest how pgtable lock is used in this path before
->>> moving forward on any of such changes.
->>>
->>>>
->>>>>
->>>>>> +			}
->>>>>>  			pte_unmap_unlock(vmf->pte, vmf->ptl);
->>>>>>  			return handle_userfault(vmf, VM_UFFD_WP);
->>>>>>  		}
->>>>>> @@ -4812,8 +4824,21 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
->>>>>>  
->>>>>>  	if (vma_is_anonymous(vmf->vma)) {
->>>>>>  		if (likely(!unshare) &&
->>>>>> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
->>>>>> -			return handle_userfault(vmf, VM_UFFD_WP);
->>>>>> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
->>>>>> +			if (userfaultfd_wp_async(vmf->vma)) {
->>>>>> +				/*
->>>>>> +				 * Nothing needed (cache flush, TLB invalidations,
->>>>>> +				 * etc.) because we're only removing the uffd-wp bit,
->>>>>> +				 * which is completely invisible to the user. This
->>>>>> +				 * falls through to possible CoW.
->>>>>> +				 */
->>>>>> +				set_pmd_at(vmf->vma->vm_mm, vmf->address, vmf->pmd,
->>>>>> +					   pmd_clear_uffd_wp(*vmf->pmd));
->>>>>
->>>>> This is for THP, not hugetlb.
->>>>>
->>>>> Clearing uffd-wp bit here for the whole pmd is wrong to me, because we
->>>>> track writes in small page sizes only.  We should just split.
->>>> By detecting if the fault is async wp, just splitting the PMD doesn't work.
->>>> The below given snippit is working right now. But definately, the fault of
->>>> the whole PMD is being resolved which if we can bypass by correctly
->>>> splitting would be highly desirable. Can you please take a look on UFFD
->>>> side and suggest the changes? It would be much appreciated. I'm attaching
->>>> WIP v9 patches for you to apply on next(next-20230105) and pagemap_ioctl
->>>> selftest can be ran to test things after making changes.
->>>
->>> Can you elaborate why thp split didn't work?  Or if you want, I can look
->>> into this and provide the patch to enable uffd async mode.
->> Sorry, I was doing the wrong way. Splitting the page does work. What do you
->> think about the following:
+>> With thousands of commits going into mainline each development cycle,
+>> the metadata .git folder size is gradually expanding (1GB+), and for some
+>> developers (most likely testers) who don't care about the lengthy git-log,
+>> they just use git-archive to distribute a certain version of code (~210MB)
+>> and rebuild git repository from anywhere for further code changes, e.g.
 >>
->> --- a/mm/memory.c
->> +++ b/mm/memory.c
->> @@ -3351,6 +3351,17 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>>    $ git init && git add . -A
 >>
->>  	if (likely(!unshare)) {
->>  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
->> +			if (userfaultfd_wp_async(vma)) {
->> +				/*
->> +				 * Nothing needed (cache flush, TLB invalidations,
->> +				 * etc.) because we're only removing the uffd-wp bit,
->> +				 * which is completely invisible to the user.
->> +				 */
->> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
->> +					   pte_clear_uffd_wp(*vmf->pte));
->> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
->> +				return 0;
-> 
-> Please give it a shot with above to see whether we can avoid the "return 0"
-> here.
-> 
->> +			}
->>  			pte_unmap_unlock(vmf->pte, vmf->ptl);
->>  			return handle_userfault(vmf, VM_UFFD_WP);
->>  		}
->> @@ -4812,8 +4823,13 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault
->> *vmf)
+>> Then unfortunately, the file tracking metadata from the original git-repo
+>> using "git add -f" will also be lost, to the point where part of source
+>> files wrapped by git-archive may be accidentally cleaned up:
 >>
->>  	if (vma_is_anonymous(vmf->vma)) {
->>  		if (likely(!unshare) &&
->> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
->> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
->> +			if (userfaultfd_wp_async(vmf->vma)) {
->> +				__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
->> +				return 0;
+>>    $ git clean -nxdf
+>>    Would remove Documentation/devicetree/bindings/.yamllint
+>>    Would remove drivers/clk/.kunitconfig
+>>    Would remove drivers/gpu/drm/tests/.kunitconfig
+>>    Would remove drivers/hid/.kunitconfig
+>>    Would remove fs/ext4/.kunitconfig
+>>    Would remove fs/fat/.kunitconfig
+>>    Would remove kernel/kcsan/.kunitconfig
+>>    Would remove lib/kunit/.kunitconfig
+>>    Would remove mm/kfence/.kunitconfig
+>>    Would remove tools/testing/selftests/arm64/tags/
+>>    Would remove tools/testing/selftests/kvm/.gitignore
+>>    Would remove tools/testing/selftests/kvm/Makefile
+>>    Would remove tools/testing/selftests/kvm/config
+>>    Would remove tools/testing/selftests/kvm/settings
+>>
+>> This asymmetry is very troubling to those users since finding out which
+>> files to track with "git add -f" clearly requires priori knowledge on
+>> various subsystems. The eradication of this little issue requires naturally
+>> making git-init aware of all .gitignore restrictions at different file tree
+>> hierarchies. Similar issues can be troubleshot with "git check-ignore -v"
+>> for any mistakenly cleaned files.
+>>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
 > 
-> Same here, I hope it'll work for you if you just goto __split_huge_pmd()
-> right below and return with VM_FAULT_FALLBACK.  It avoids one more round of
-> fault just like the pte case above.
 > 
-It works as well.
-
->> +			}
->>  			return handle_userfault(vmf, VM_UFFD_WP);
->> +		}
->>  		return do_huge_pmd_wp_page(vmf);
->>  	}
+> 
+> tools/testing/selftests/kvm/.gitignore is already meh.
+> 
+> I hope somebody will submit a better fix.
+> 
 > 
 
--- 
-BR,
-Muhammad Usama Anjum
+If we don't append "!.gitignore" to tools/testing/selftests/kvm/.gitignore,
+the same issue still exists due to the "*" entry in the same file:
+
+# git version 2.31.1
+$ git clean -nxdf
+Would remove tools/testing/selftests/kvm/.gitignore
+
+Is there a better move for this kind of git usage,
+or could any maintainer pick this up? Thanks.
+
+> 
+> 
+>> ---
+>>   .gitignore                               | 2 ++
+>>   tools/testing/selftests/arm64/.gitignore | 2 ++
+>>   tools/testing/selftests/kvm/.gitignore   | 4 ++++
+>>   3 files changed, 8 insertions(+)
+>>   create mode 100644 tools/testing/selftests/arm64/.gitignore
+>>
+>> diff --git a/.gitignore b/.gitignore
+>> index 20dce5c3b9e0..fa39e98caee3 100644
+>> --- a/.gitignore
+>> +++ b/.gitignore
+>> @@ -102,6 +102,8 @@ modules.order
+>>   !.gitignore
+>>   !.mailmap
+>>   !.rustfmt.toml
+>> +!.yamllint
+>> +!.kunitconfig
+>>
+>>   #
+>>   # Generated include files
+>> diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
+>> new file mode 100644
+>> index 000000000000..135d709d2d65
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/.gitignore
+>> @@ -0,0 +1,2 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +!tags
+>> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+>> index 6d9381d60172..96561c8e06e0 100644
+>> --- a/tools/testing/selftests/kvm/.gitignore
+>> +++ b/tools/testing/selftests/kvm/.gitignore
+>> @@ -5,3 +5,7 @@
+>>   !*.h
+>>   !*.S
+>>   !*.sh
+>> +!.gitignore
+>> +!Makefile
+>> +!settings
+>> +!config
+>> \ No newline at end of file
+>> --
+>> 2.39.1
+>>
+> 
+> 
