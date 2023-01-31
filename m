@@ -2,216 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC242683138
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 16:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D34B6831CE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 16:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233214AbjAaPSl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 10:18:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S233446AbjAaPtF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 10:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233171AbjAaPSR (ORCPT
+        with ESMTP id S229828AbjAaPtE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:18:17 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998BF45BEA;
-        Tue, 31 Jan 2023 07:16:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1675178186;
-        bh=ef9Tt/UsbJRvNjzO4j1FZEBc8SF5MQJAlbohpOz9LEI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mfaZkS72+7A/jP2ZUGIQ8OiWNGvRhGmszDMYeYUPQup65pFCOaflsUVm9zc1yPYij
-         WcEjgefJvQldTY9xUXbCx7DTvd9NDnpkH69xV/wBdNdjFN5Q0G5JHvhmgkIyxupkHe
-         krREaYFVi0pd9775S+4YVrpgkYqY/R5O+agZN0EWfKZv/JG6VS9u/v0oPnbUZs1bEl
-         phVt25kx3PLFoJGEH0BKLMF3P2eZBVSu3NsRmGBnh6Z0JA8NX/6ov/QXomrfiDJVYr
-         udsOGn3rdavNiiBhjsn7jTvIhkT1xWivwkI9MwMSheUPXbLfcANp7uivetdt+hyLul
-         4zUZVoqCSSI9A==
-Received: from [172.16.0.188] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P5pY55k65zhyZ;
-        Tue, 31 Jan 2023 10:16:25 -0500 (EST)
-Message-ID: <edad4f4d-f19e-34dc-06f5-7d30fd5d058f@efficios.com>
-Date:   Tue, 31 Jan 2023 10:17:05 -0500
+        Tue, 31 Jan 2023 10:49:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73715B45C
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 07:48:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675180093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jj+MngsoDFpfREm8kwbslfBpvRZkqzFwR4JCZm4vAvo=;
+        b=hkL0LkZXAz2N7+H/ElK4no7jB+9kmtrWdM5x8/jRTiUq/MXq3sZBXUm20lwCQeJb7666OV
+        6GvMN6eDnw618Fraxr1+YGDbqAJFEzvC4CzO0P4vBgLpCpbZa7Os7V0J01ZrJzqLCYD9B9
+        BVOMuVTA/mwKq8f6t0npyn2a/CCfsqA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-526-RZY8mZo5Mt-fchm6kb8SFQ-1; Tue, 31 Jan 2023 10:48:08 -0500
+X-MC-Unique: RZY8mZo5Mt-fchm6kb8SFQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B063F18E52D8;
+        Tue, 31 Jan 2023 15:48:07 +0000 (UTC)
+Received: from llong.com (unknown [10.22.10.235])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 52927492C3E;
+        Tue, 31 Jan 2023 15:48:07 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+Subject: [PATCH] cgroup/cpuset: Fix wrong check in update_parent_subparts_cpumask()
+Date:   Tue, 31 Jan 2023 10:48:03 -0500
+Message-Id: <20230131154803.192530-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH bpf-next 1/2] selftests: bpf: Fix incorrect kernel headers
- search path
-Content-Language: en-US
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        bpf <bpf@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        stable <stable@vger.kernel.org>
-References: <20230130183549.85471-1-mathieu.desnoyers@efficios.com>
- <CAADnVQLve5je3GKesCjn5HhuxgOe2u1OX7GQnx-58dsuUFWbZQ@mail.gmail.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <CAADnVQLve5je3GKesCjn5HhuxgOe2u1OX7GQnx-58dsuUFWbZQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-01-30 16:03, Alexei Starovoitov wrote:
-> On Mon, Jan 30, 2023 at 10:36 AM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
->>
->> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
->> building against kernel headers from the build environment in scenarios
->> where kernel headers are installed into a specific output directory
->> (O=...).
->>
->> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
->> Cc: <bpf@vger.kernel.org>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: linux-kselftest@vger.kernel.org
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Alexei Starovoitov <ast@kernel.org>
->> Cc: Daniel Borkmann <daniel@iogearbox.net>
->> Cc: Andrii Nakryiko <andrii@kernel.org>
->> Cc: Martin KaFai Lau <martin.lau@linux.dev>
->> Cc: Song Liu <song@kernel.org>
->> Cc: Yonghong Song <yhs@fb.com>
->> Cc: John Fastabend <john.fastabend@gmail.com>
->> Cc: KP Singh <kpsingh@kernel.org>
->> Cc: Stanislav Fomichev <sdf@google.com>
->> Cc: Hao Luo <haoluo@google.com>
->> Cc: Jiri Olsa <jolsa@kernel.org>
->> Cc: Mykola Lysenko <mykolal@fb.com>
->> Cc: <stable@vger.kernel.org>    [5.18+]
->> ---
->>   tools/testing/selftests/bpf/Makefile | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index c22c43bbee19..6998c816afef 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -327,7 +327,7 @@ endif
->>   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
->>   BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)          \
->>               -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
->> -            -I$(abspath $(OUTPUT)/../usr/include)
->> +            $(KHDR_INCLUDES)
-> 
-> It breaks the build:
-> https://github.com/kernel-patches/bpf/actions/runs/4047075637/jobs/6960655246
-> 
-> make[1]: *** No rule to make target '/linux/bpf.h', needed by
-> '/tmp/work/bpf/bpf/tools/testing/selftests/bpf/bpf-helpers.rst'. Stop.
+It was found that the check to see if a partition could use up all
+the cpus from the parent cpuset in update_parent_subparts_cpumask()
+was incorrect. As a result, it is possible to leave parent with no
+effective cpu left even if there are tasks in the parent cpuset. This
+can lead to system panic as reported in [1].
 
-I finally figured out why I did not catch it in my own testing: it appears
-that the bpf selftest is special: it's not built when issuing "make" from
-tools/testing/selftests/. Perhaps that's also why Shuah did not see any
-issues with my bpf patches:
+Fix this probem by updating the check to fail the enabling the partition
+if parent's effective_cpus is a subset of the child's cpus_allowed.
 
-tools/testing/selftests/Makefile:
+Also record the error code when an error happens in update_prstate()
+and add a test case where parent partition and child have the same cpu
+list and parent has task. Enabling partition in the child will fail in
+this case.
 
-# User can optionally provide a TARGETS skiplist.  By default we skip
-# BPF since it has cutting edge build time dependencies which require
-# more effort to install.
-SKIP_TARGETS ?= bpf
+[1] https://www.spinics.net/lists/cgroups/msg36254.html
 
-It appears that the baseline bpf selftest on v6.2-rc6 does not build on
-my system:
+Fixes: f0af1bfc27b5 ("cgroup/cpuset: Relax constraints to partition & cpus changes")
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/cgroup/cpuset.c                            | 3 ++-
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-   CLNG-BPF [test_maps] test_bpf_nf.bpf.o
-progs/test_bpf_nf.c:156:7: error: no member named 'mark' in 'struct nf_conn'
-                 ct->mark = 77;
-                 ~~  ^
-progs/test_bpf_nf.c:160:42: error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
-                 bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-                                                        ^
-progs/test_bpf_nf.c:163:42: error: use of undeclared identifier 'NF_NAT_MANIP_DST'
-                 bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-                                                        ^
-progs/test_bpf_nf.c:187:38: error: no member named 'mark' in 'struct nf_conn'
-                                 test_insert_lookup_mark = ct_lk->mark;
-                                                           ~~~~~  ^
-progs/test_bpf_nf.c:189:12: error: use of undeclared identifier 'IPS_CONFIRMED'
-                                                      IPS_CONFIRMED | IPS_SEEN_REPLY);
-                                                      ^
-progs/test_bpf_nf.c:189:28: error: use of undeclared identifier 'IPS_SEEN_REPLY'
-                                                      IPS_CONFIRMED | IPS_SEEN_REPLY);
-                                                                      ^
-progs/test_bpf_nf.c:209:11: error: no member named 'mark' in 'struct nf_conn'
-                 if (ct->mark == 42) {
-                     ~~  ^
-progs/test_bpf_nf.c:210:8: error: no member named 'mark' in 'struct nf_conn'
-                         ct->mark++;
-                         ~~  ^
-progs/test_bpf_nf.c:211:33: error: no member named 'mark' in 'struct nf_conn'
-                         test_exist_lookup_mark = ct->mark;
-                                                  ~~  ^
-9 errors generated.
-
-Based on this:
-https://lore.kernel.org/bpf/37649bee-5eb3-93a2-ac57-56eb375ef8cd@iogearbox.net/
-
-It appears that NF_CONNTRACK_MARK should be set to =y. Perhaps it should be
-detected at selftest build time and skipped rather than failing to build ? It
-appears to be a case where a user-space selftest depends on internal kernel data
-structures:
-
-Ref. include/net/netfilter/nf_conntrack.h:struct nf_conn
-
-After setting this config option, it fails at:
-
-   GEN-SKEL [test_progs] test_kfunc_dynptr_param.skel.h
-libbpf: sec '?lsm.s/bpf': corrupted program 'not_ptr_to_stack', offset 48, size 0
-Error: failed to open BPF object file: Invalid argument
-make: *** [Makefile:546: /home/efficios/git/linux/tools/testing/selftests/bpf/test_kfunc_dynptr_param.skel.h] Error 234
-make: *** Deleting file '/home/efficios/git/linux/tools/testing/selftests/bpf/test_kfunc_dynptr_param.skel.h'
-
-Based on this issue: https://github.com/libbpf/libbpf-bootstrap/issues/12 it appears
-that bpf selftests are only meant to be used against a set of pre-specified kernel configurations.
-README.rst confirms that. So let's use tools/testing/selftests/bpf/config.x86_64
-with make olddefconfig for my kernel build then. It would have been less unexpected for the
-bpf selftests to report incorrect or missing kernel config options rather than limiting the
-supported set to specific configuration files provided by the bpf selftests. This limits
-the testing coverage to very few kernel configurations.
-
-It still does not work. I need to explicitly enable BPF_SYSCALL=y which is not present in
-the bpf selftests config.x86_64. Then I can explicitly reenable DEBUG_INFO_BTF=y. It appears
-that config.x86_64 is outdated in the bpf selftests. It also misses NF_CONNTRACK_MARK=y.
-So let's assume that config.x86_64 is outdated and broken and go with
-tools/testing/selftests/bpf/config followed by make olddefconfig.
-
-No more luck, this time the bpf kernel config misses the DEBUG_KERNEL=y, which is needed
-for DEBUG_INFO and DEBUG_INFO_BTF.
-
-Now it's:
-
-   CLANG   /home/efficios/git/linux/tools/testing/selftests/bpf/tools/build/bpftool/profiler.bpf.o
-skeleton/profiler.bpf.c:18:21: error: invalid application of 'sizeof' to an incomplete type 'struct bpf_perf_event_value'
-         __uint(value_size, sizeof(struct bpf_perf_event_value));
-[...]
-
-And that's where I give up. Has anyone else succeeded in building bpf selftests locally ?
-
-Thanks,
-
-Mathieu
-
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index a29c0b13706b..205dc9edcaa9 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1346,7 +1346,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 		 * A parent can be left with no CPU as long as there is no
+ 		 * task directly associated with the parent partition.
+ 		 */
+-		if (!cpumask_intersects(cs->cpus_allowed, parent->effective_cpus) &&
++		if (cpumask_subset(parent->effective_cpus, cs->cpus_allowed) &&
+ 		    partition_is_populated(parent, cs))
+ 			return PERR_NOCPUS;
+ 
+@@ -2324,6 +2324,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 		new_prs = -new_prs;
+ 	spin_lock_irq(&callback_lock);
+ 	cs->partition_root_state = new_prs;
++	WRITE_ONCE(cs->prs_err, err);
+ 	spin_unlock_irq(&callback_lock);
+ 	/*
+ 	 * Update child cpusets, if present.
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 186e1c26867e..75c100de90ff 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -268,6 +268,7 @@ TEST_MATRIX=(
+ 	# Taking away all CPUs from parent or itself if there are tasks
+ 	# will make the partition invalid.
+ 	"  S+ C2-3:P1:S+  C3:P1  .      .      T     C2-3    .      .     0 A1:2-3,A2:2-3 A1:P1,A2:P-1"
++	"  S+  C3:P1:S+    C3    .      .      T      P1     .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
+ 	"  S+ $SETUP_A123_PARTITIONS    .    T:C2-3   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
+ 	"  S+ $SETUP_A123_PARTITIONS    . T:C2-3:C1-3 .      .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
+ 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+2.31.1
 
