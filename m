@@ -2,100 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5498E6839BE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 23:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693A4683A3B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Feb 2023 00:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjAaW46 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 17:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S231661AbjAaXLV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 18:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjAaW45 (ORCPT
+        with ESMTP id S229637AbjAaXLU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:56:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF0B3C30
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 14:56:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 18:11:20 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0274A4DCCA
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 15:11:18 -0800 (PST)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95E2AB81D7C
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 22:56:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC34EC433A0;
-        Tue, 31 Jan 2023 22:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675205814;
-        bh=OtSjI6ErC2KrOpOPD79SOpL8y4H/aKc0tdYvKxcYNe0=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=LgKikaC/U0JusrKWAZEhz8Qxwen9RlEN5dOXrjLIhAZN3sDFE5ROtPVAFt1oURFUV
-         H/qcm7A71pc2fp1gSK9zLiagz47llXuHU1bftqVfIjR7J6nXOTCC81jHWE8FhB6KkN
-         Rz1IcLgzlwq1VyqW8XfvB+LEQPHYQnS/eq36LDh1Y3HeD++0WyjV27m41WiO3fNE/b
-         TN+7KV40STpDoNUSdoOyTFenk/LDRPwqgGOLdP5hxoqpS090w0FyctEu6L3pD5l60w
-         bFGmOfPA/bylAe83wFkprz55LiFo/13Hg/9IZgIgHmZFKwsXZu3qswGojaEeYiVqwG
-         O5Dlj+gw+zrLw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 31 Jan 2023 22:56:35 +0000
-Subject: [PATCH 2/2] kselftest/arm64: Fix enumeration of systems without
- 128 bit SME for SSVE+ZA
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E65C441ADC
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 23:11:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675206673;
+        bh=od+H8iRL7U/hEgOt5OEJuPafvt2sARzXNu/6vCcYVbk=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=Emd2ME9OxazSdT6MMb6MAw5t+sqidRGny3P32w1+dL9I11YdEb6B7My7sL39yDtUA
+         MSD1mJFCs1jOTaP3ZMsgBSso3Gsbx8TgeEAmvLqEUjMBmN3UGdFHu9oCCHRbwjo1iC
+         QJcxCc2RpqYirZRHYWe34BtsiT0RqEK9p7IQb2m3Ml2NL/Fh1ejPWfr7PRnRxu+kMF
+         9TjT1TJ5W+5epFyNdql4e2Kz7gGJ/6ZBaS//oLIh+uyCMYA99xFnMz+hHznjPnw+xa
+         OvvStsviakosk9ePrL0RMKV9aHOkgylT2zSzD+42zqPt9WH1Bs/KVHnm5ju8YdCo2h
+         Hli7lErL3WA0g==
+Received: by mail-wm1-f72.google.com with SMTP id o42-20020a05600c512a00b003dc5341afbaso83566wms.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 15:11:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=od+H8iRL7U/hEgOt5OEJuPafvt2sARzXNu/6vCcYVbk=;
+        b=SvKXO3up0HwTKA4fuv/C9aLKq0pOTrRhuCv7Hu16B79Zh3a6nmQDRbHXgNf22m1Rl9
+         79khBQClGR0GsiNKAcIgYZiS8Hpn0OUoSImI7Im4bJa/bi8KtuX3T5Es1aB0lL6jRZN5
+         b59o2fjyhcCQl5wNNHUQXQZWOzqxqGfp6UKSsanlwmpUzOGEJVs4Skmml63K0BFQSfhM
+         iv7UPFBhv+aJQwhuJco4DK/4wvdszOdpM1o4ZNPVnPq9nzAaMq12LmYZHQwuUaodDExX
+         KIbNI33UQwKfeKqDuLkXoffScPFCrJvrhNeug/zaxawU+zOdP8ulR2bapYh46x2XnXHm
+         Cy5w==
+X-Gm-Message-State: AO0yUKWmRsu3IlUEmnX54nKvfAE0M1p0y/WBP1okA2jbTNd5rb4qTuko
+        ZPtMqdY6YJUKB7RJFMKhKCpBsbDYRK+jDMDC9C5LyTG7GSpTd9/rcWycDcPm/XI/mBaPfBCMMVr
+        Ees/Guumrj8CtmyBK9ZNK+xc5Tt0j0i6yf4dtGxVV5AlrDw==
+X-Received: by 2002:a05:6000:1561:b0:2bf:eb67:4774 with SMTP id 1-20020a056000156100b002bfeb674774mr957183wrz.11.1675206669919;
+        Tue, 31 Jan 2023 15:11:09 -0800 (PST)
+X-Google-Smtp-Source: AK7set+UghtwG5i6RKk6gUXdtXT/2iCWC9F9Q8LwQyUgDAkiThUw4PdcBKNkwWZzCmZP4Bi8M/VSCA==
+X-Received: by 2002:a05:6000:1561:b0:2bf:eb67:4774 with SMTP id 1-20020a056000156100b002bfeb674774mr957170wrz.11.1675206669737;
+        Tue, 31 Jan 2023 15:11:09 -0800 (PST)
+Received: from qwirkle ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id x7-20020a5d6b47000000b002bbed1388a5sm15947931wrw.15.2023.01.31.15.11.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 15:11:09 -0800 (PST)
+Date:   Tue, 31 Jan 2023 23:11:07 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Willem de Bruijn <willemb@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Fred Klassen <fklassen@appneta.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 4/4] selftests: net: udpgso_bench_tx: Cater
+ for pending datagrams zerocopy benchmarking
+Message-ID: <Y9mgC7cEyRuS8UPg@qwirkle>
+References: <20230131210051.475983-4-andrei.gherzan@canonical.com>
+ <CA+FuTScJCaW+UL0dDDg-7nNdhdZV7Xs5MrfBkGAg-jR4az+DRQ@mail.gmail.com>
+ <Y9mTRER69Z7BGqB5@qwirkle>
+ <CA+FuTSfHtidA9zLZMpo+1AoVh=rN=nWyxfVtsUDuuJHmr9UFUw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230131-arm64-kselftest-sig-sme-no-128-v1-2-d47c13dc8e1e@kernel.org>
-References: <20230131-arm64-kselftest-sig-sme-no-128-v1-0-d47c13dc8e1e@kernel.org>
-In-Reply-To: <20230131-arm64-kselftest-sig-sme-no-128-v1-0-d47c13dc8e1e@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1172; i=broonie@kernel.org;
- h=from:subject:message-id; bh=OtSjI6ErC2KrOpOPD79SOpL8y4H/aKc0tdYvKxcYNe0=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj2Zywr31KZLAYLwJ5v6DynGCGVMQoGzElJh0HBMei
- 3kHgE0yJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY9mcsAAKCRAk1otyXVSH0OgRB/
- 4wtAYPV4wlkbmsVU5P7Hta+FKaTfj/MgzI6/3uUNLvJGk6O5gZn2Yd39pV6pJulll5EkqUQDgQI/bw
- xNQ+eBAXy/8UdueD7o4OcJkcWSw0lPTTT0w/XeRAyuotcJiH4CFuL33VFP+mXQwS/YAQzziLT3tnMt
- RslNf/3oOPftLUv0YS9x1WRqeGiaEf0wv8Yfxw0K1Goclhbxb2N3EAyEk1gMZOxGUxaa+nU7KdzqN8
- uyBB3J9RSqT5a/WF7jef6C2Qbmfdq0AtvBnWEux2SZ2FQavLA3qUkIJPQA+DFR/iNLfnJ7ASPnKLQd
- jz4MwsFkuGTcs2agK80cizz7SkTKTu
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+FuTSfHtidA9zLZMpo+1AoVh=rN=nWyxfVtsUDuuJHmr9UFUw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The current signal handling tests for SME do not account for the fact that
-unlike SVE all SME vector lengths are optional so we can't guarantee that
-we will encounter the minimum possible VL, they will hang enumerating VLs
-on such systems. Abort enumeration when we find the lowest VL in the newly
-added ssve_za_regs test.
+On 23/01/31 05:28PM, Willem de Bruijn wrote:
+> On Tue, Jan 31, 2023 at 5:16 PM Andrei Gherzan
+> <andrei.gherzan@canonical.com> wrote:
+> >
+> > On 23/01/31 04:51PM, Willem de Bruijn wrote:
+> > > On Tue, Jan 31, 2023 at 4:01 PM Andrei Gherzan
+> > > <andrei.gherzan@canonical.com> wrote:
+> > > >
+> > > > The test tool can check that the zerocopy number of completions value is
+> > > > valid taking into consideration the number of datagram send calls. This can
+> > > > catch the system into a state where the datagrams are still in the system
+> > > > (for example in a qdisk, waiting for the network interface to return a
+> > > > completion notification, etc).
+> > > >
+> > > > This change adds a retry logic of computing the number of completions up to
+> > > > a configurable (via CLI) timeout (default: 2 seconds).
+> > > >
+> > > > Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
+> > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > > Cc: Willem de Bruijn <willemb@google.com>
+> > > > Cc: Paolo Abeni <pabeni@redhat.com>
+> > > > ---
+> > > >  tools/testing/selftests/net/udpgso_bench_tx.c | 34 +++++++++++++++----
+> > > >  1 file changed, 27 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > > index b47b5c32039f..ef887842522a 100644
+> > > > --- a/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > > +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > > @@ -62,6 +62,7 @@ static int    cfg_payload_len = (1472 * 42);
+> > > >  static int     cfg_port        = 8000;
+> > > >  static int     cfg_runtime_ms  = -1;
+> > > >  static bool    cfg_poll;
+> > > > +static int     cfg_poll_loop_timeout_ms = 2000;
+> > > >  static bool    cfg_segment;
+> > > >  static bool    cfg_sendmmsg;
+> > > >  static bool    cfg_tcp;
+> > > > @@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
+> > > >         }
+> > > >  }
+> > > >
+> > > > -static void flush_errqueue(int fd, const bool do_poll)
+> > > > +static void flush_errqueue(int fd, const bool do_poll,
+> > > > +               unsigned long poll_timeout, const bool poll_err)
+> > >
+> > > nit: his indentation looks off though
+> >
+> > This one I've missed but I couldn't find any guidelines on it. Could you
+> > clarify to me what this should be or point me to soem docs? Happy to fix
+> > otherwise. I'm currently using vim smartindent but it is definitely not
+> > in line with what is here already.
+> 
+> It should align with the parameter above.
 
-Fixes: bc69da5ff087 ("kselftest/arm64: Verify simultaneous SSVE and ZA context generation")
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/signal/testcases/ssve_za_regs.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Found the roots of the issue - tab stop was 4 so it was rendered
+confusing for me. I'll fix and resend including email prefix change (net
+vs net next) and the CC footers (they should be Cc: not CC:).
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/ssve_za_regs.c b/tools/testing/selftests/arm64/signal/testcases/ssve_za_regs.c
-index 954a21f6121a..1f62621794d5 100644
---- a/tools/testing/selftests/arm64/signal/testcases/ssve_za_regs.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/ssve_za_regs.c
-@@ -34,6 +34,10 @@ static bool sme_get_vls(struct tdescr *td)
- 
- 		vl &= PR_SME_VL_LEN_MASK;
- 
-+		/* Did we find the lowest supported VL? */
-+		if (vq < sve_vq_from_vl(vl))
-+			break;
-+
- 		/* Skip missing VLs */
- 		vq = sve_vq_from_vl(vl);
- 
+> 
+> https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking-long-lines-and-strings
 
 -- 
-2.30.2
-
+Andrei Gherzan
