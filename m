@@ -2,322 +2,200 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279A66824D1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 07:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F72368267A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 09:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjAaGsP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 01:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
+        id S231387AbjAaIdu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 03:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjAaGsN (ORCPT
+        with ESMTP id S231296AbjAaIdm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 01:48:13 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3D43F293
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 22:47:36 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-50e79ffba49so103882847b3.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 22:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uyVDT9hNRxOyIsJIBjKV9Q9oIt4VPBRQYD4t43TiWdc=;
-        b=tYXjU+Ya2DqfSC7Lkxmg+htkRCcX+8wR8Q/19YLsaelK8vXl6f875cfh430R19F/FC
-         Fut0d+1SBLTIUyoB6sSrgmlpvs9CDXvb/smSrWcq44nZFTvb2R6i/6beOejYcuYkZH4p
-         A+FSN8szb/+R21sypxqRO/qHN/fZRp+EGFi2CcGztbN2kpVmZWEqskjoP+XaLO3mQ33l
-         JUlIoqBfLkQvYU1OPsQDAfN4hBw0i8N6sIu/hz0Z/hNZTW5+3ZJiaYu10E5DDu0XU/JO
-         Vhsc/EKupKBE/lEPizDFqd0TZ+CvsispckvFfEZlFSeL4omnYAtWnEJKRV5RkYzSBWZ6
-         e6Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uyVDT9hNRxOyIsJIBjKV9Q9oIt4VPBRQYD4t43TiWdc=;
-        b=qDllwu4IloueMFbHlxvD/c2eAtmVfVfzalCqRH+7g3AXtnJhZOn2PLGkRX3mhPBuAk
-         /LmiWoDgajEZ1xoSOIhAUwGNbDdeiGN5gdszh5m+/AM7kW4jvlrjTX/7vsd5ho+YBwEj
-         sBC1JiitJUEPRDRZu1qCRGp5HZqbMoZXBdN35hh0ZtNcSExiIuClXSTmklfpk1eaPszq
-         0S1+R49955JFu+nMS5J7Zt6sBTvY2dRx6Tp64sY5SO/rblEF2Z+E6GE9F2lXM+F+JfBf
-         QldrgVYG4A+u3gmoGX+4Glnds97ix+BsEw1gST4QsEA2gz3WOmxv5eNli2KnLqw13IdP
-         AeKw==
-X-Gm-Message-State: AO0yUKWBZfTkpGMwtS5fUfmKy7vi+4diU4cbhVu6qp31v4HKO9MwSZRo
-        6bpgGXoTKsjjqowHKisUYj4/QJSB0il7sA==
-X-Google-Smtp-Source: AK7set+vJXe4+f8Sh+J/oa3KG4/osfk1EV+A6j04S0uXCps+/7JGg5Ed2Y/xgT8XRtyKMoTiywWFDiF2k2MBEA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:1189:b0:80b:6760:dc8f with SMTP
- id m9-20020a056902118900b0080b6760dc8fmr875246ybu.108.1675147614014; Mon, 30
- Jan 2023 22:46:54 -0800 (PST)
-Date:   Tue, 31 Jan 2023 14:46:41 +0800
-In-Reply-To: <20230131064641.1912756-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20230131064641.1912756-1-davidgow@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230131064641.1912756-2-davidgow@google.com>
-Subject: [PATCH v3 2/2] Documentation: Add Function Redirection API docs
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Fradley <joefradley@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 31 Jan 2023 03:33:42 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E243646164;
+        Tue, 31 Jan 2023 00:33:26 -0800 (PST)
+Received: from localhost.localdomain (unknown [39.45.165.226])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3C03B6602EB0;
+        Tue, 31 Jan 2023 08:33:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675154005;
+        bh=KJbGh1Bj17VTFv93jkKBVRsISoOlHjybxqWUawq2KpM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FgmYI6UHF9aE+H/Q9eWdIsL8FW3r28LAZWQNElm3eXbBy43/sDcHD/kQ5TqsN3KbH
+         +VrKH+jmlsPAU9InrYkH0b/hMiqQ+yBrq5xWeaDrDxLvORP3M/FToXn+yAKzZ/BlWN
+         YPp+abd3tSTJDGoIjw0Qv0q3O/sFpJ410vthcreUyVZcX6itZIXep1faELKGYTumCW
+         fST3kqqvg2VzmjZdBkzWO5LNivh/01maQJSAALglRzWqBRpZC+HuYsl8Tl/0XnpnCa
+         zDewz6NMShnGS9Nkw+d9hnxmjpEpjMaCaCjmUl9pw03vaoR7w9yG1JIiQ9o1W7Nzn7
+         7BTt58Ukh0NnA==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: [PATCH v9 0/3] Implement IOCTL to get and/or the clear info about PTEs
+Date:   Tue, 31 Jan 2023 13:32:54 +0500
+Message-Id: <20230131083257.3302830-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Sadiya Kazi <sadiyakazi@google.com>
+*Changes in v9:*
+- Correct fault resolution for userfaultfd wp async
+- Fix build warnings and errors which were happening on some configs
+- Simplify pagemap ioctl's code
 
-Added a new page (functionredirection.rst) that describes the Function
-Redirection (static stubbing) API. This page will be expanded if we add,
-for example, ftrace-based stubbing.
+*Changes in v8:*
+- Update uffd async wp implementation
+- Improve PAGEMAP_IOCTL implementation
 
-In addition,
-1. Updated the api/index.rst page to create an entry for function
-   redirection api
-2. Updated the toctree to be hidden, reducing redundancy on the
-   generated page.
+*Changes in v7:*
+- Add uffd wp async
+- Update the IOCTL to use uffd under the hood instead of soft-dirty
+  flags
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
-Co-developed-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
+Hello,
 
-Note that this document reworks some elements of the KUnit website's "mocking"
-page at http://kunit.dev/mocking.html written by Daniel Latypov, and used with
-his permission.
+Note:
+Soft-dirty pages and pages which have been written-to are synonyms. As
+kernel already has soft-dirty feature inside which we have given up to
+use, we are using written-to terminology while using UFFD async WP under
+the hood.
 
-No changes since v2:
-https://lore.kernel.org/linux-kselftest/20230128074918.1180523-2-davidgow@google.com/
+This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+the info about page table entries. The following operations are
+supported in this ioctl:
+- Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+  file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+  (PAGE_IS_SWAPPED).
+- Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+  pages have been written-to.
+- Find pages which have been written-to and write protect the pages
+  (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
 
-Changes since v1:
-https://lore.kernel.org/all/20221208061841.2186447-3-davidgow@google.com/
-- Fix a bunch of typos (Thanks, Daniel)
-- Remove a redundant comment (Thanks, Daniel)
-- Reword a few things to be clearer, especially about global state.
+It is possible to find and clear soft-dirty pages entirely in userspace.
+But it isn't efficient:
+- The mprotect and SIGSEGV handler for bookkeeping
+- The userfaultfd wp (synchronous) with the handler for bookkeeping
 
----
- .../kunit/api/functionredirection.rst         | 162 ++++++++++++++++++
- Documentation/dev-tools/kunit/api/index.rst   |  13 +-
- 2 files changed, 172 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/dev-tools/kunit/api/functionredirection.rst
+Some benchmarks can be seen here[1]. This series adds features that weren't
+present earlier:
+- There is no atomic get soft-dirty/Written-to status and clear present in
+  the kernel.
+- The pages which have been written-to can not be found in accurate way.
+  (Kernel's soft-dirty PTE bit + sof_dirty VMA bit shows more soft-dirty
+  pages than there actually are.)
 
-diff --git a/Documentation/dev-tools/kunit/api/functionredirection.rst b/Documentation/dev-tools/kunit/api/functionredirection.rst
-new file mode 100644
-index 000000000000..3791efc2fcca
---- /dev/null
-+++ b/Documentation/dev-tools/kunit/api/functionredirection.rst
-@@ -0,0 +1,162 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+========================
-+Function Redirection API
-+========================
-+
-+Overview
-+========
-+
-+When writing unit tests, it's important to be able to isolate the code being
-+tested from other parts of the kernel. This ensures the reliability of the test
-+(it won't be affected by external factors), reduces dependencies on specific
-+hardware or config options (making the test easier to run), and protects the
-+stability of the rest of the system (making it less likely for test-specific
-+state to interfere with the rest of the system).
-+
-+While for some code (typically generic data structures, helpers, and other
-+"pure functions") this is trivial, for others (like device drivers,
-+filesystems, core subsystems) the code is heavily coupled with other parts of
-+the kernel.
-+
-+This coupling is often due to global state in some way: be it a global list of
-+devices, the filesystem, or some hardware state. Tests need to either carefully
-+manage, isolate, and restore state, or they can avoid it altogether by
-+replacing access to and mutation of this state with a "fake" or "mock" variant.
-+
-+By refactoring access to such state, such as by introducing a layer of
-+indirection which can use or emulate a separate set of test state. However,
-+such refactoring comes with its own costs (and undertaking significant
-+refactoring before being able to write tests is suboptimal).
-+
-+A simpler way to intercept and replace some of the function calls is to use
-+function redirection via static stubs.
-+
-+
-+Static Stubs
-+============
-+
-+Static stubs are a way of redirecting calls to one function (the "real"
-+function) to another function (the "replacement" function).
-+
-+It works by adding a macro to the "real" function which checks to see if a test
-+is running, and if a replacement function is available. If so, that function is
-+called in place of the original.
-+
-+Using static stubs is pretty straightforward:
-+
-+1. Add the KUNIT_STATIC_STUB_REDIRECT() macro to the start of the "real"
-+   function.
-+
-+   This should be the first statement in the function, after any variable
-+   declarations. KUNIT_STATIC_STUB_REDIRECT() takes the name of the
-+   function, followed by all of the arguments passed to the real function.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	void send_data_to_hardware(const char *str)
-+	{
-+		KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
-+		/* real implementation */
-+	}
-+
-+2. Write one or more replacement functions.
-+
-+   These functions should have the same function signature as the real function.
-+   In the event they need to access or modify test-specific state, they can use
-+   kunit_get_current_test() to get a struct kunit pointer. This can then
-+   be passed to the expectation/assertion macros, or used to look up KUnit
-+   resources.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	void fake_send_data_to_hardware(const char *str)
-+	{
-+		struct kunit *test = kunit_get_current_test();
-+		KUNIT_EXPECT_STREQ(test, str, "Hello World!");
-+	}
-+
-+3. Activate the static stub from your test.
-+
-+   From within a test, the redirection can be enabled with
-+   kunit_activate_static_stub(), which accepts a struct kunit pointer,
-+   the real function, and the replacement function. You can call this several
-+   times with different replacement functions to swap out implementations of the
-+   function.
-+
-+   In our example, this would be
-+
-+   .. code-block:: c
-+
-+	kunit_activate_static_stub(test,
-+				   send_data_to_hardware,
-+				   fake_send_data_to_hardware);
-+
-+4. Call (perhaps indirectly) the real function.
-+
-+   Once the redirection is activated, any call to the real function will call
-+   the replacement function instead. Such calls may be buried deep in the
-+   implementation of another function, but must occur from the test's kthread.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	send_data_to_hardware("Hello World!"); /* Succeeds */
-+	send_data_to_hardware("Something else"); /* Fails the test. */
-+
-+5. (Optionally) disable the stub.
-+
-+   When you no longer need it, disable the redirection (and hence resume the
-+   original behaviour of the 'real' function) using
-+   kunit_deactivate_static_stub(). Otherwise, it will be automatically disabled
-+   when the test exits.
-+
-+   For example:
-+
-+   .. code-block:: c
-+
-+	kunit_deactivate_static_stub(test, send_data_to_hardware);
-+
-+
-+It's also possible to use these replacement functions to test to see if a
-+function is called at all, for example:
-+
-+.. code-block:: c
-+
-+	void send_data_to_hardware(const char *str)
-+	{
-+		KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
-+		/* real implementation */
-+	}
-+
-+	/* In test file */
-+	int times_called = 0;
-+	void fake_send_data_to_hardware(const char *str)
-+	{
-+		times_called++;
-+	}
-+	...
-+	/* In the test case, redirect calls for the duration of the test */
-+	kunit_activate_static_stub(test, send_data_to_hardware, fake_send_data_to_hardware);
-+
-+	send_data_to_hardware("hello");
-+	KUNIT_EXPECT_EQ(test, times_called, 1);
-+
-+	/* Can also deactivate the stub early, if wanted */
-+	kunit_deactivate_static_stub(test, send_data_to_hardware);
-+
-+	send_data_to_hardware("hello again");
-+	KUNIT_EXPECT_EQ(test, times_called, 1);
-+
-+
-+
-+API Reference
-+=============
-+
-+.. kernel-doc:: include/kunit/static_stub.h
-+   :internal:
-diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
-index 45ce04823f9f..2d8f756aab56 100644
---- a/Documentation/dev-tools/kunit/api/index.rst
-+++ b/Documentation/dev-tools/kunit/api/index.rst
-@@ -4,17 +4,24 @@
- API Reference
- =============
- .. toctree::
-+	:hidden:
- 
- 	test
- 	resource
-+	functionredirection
- 
--This section documents the KUnit kernel testing API. It is divided into the
-+
-+This page documents the KUnit kernel testing API. It is divided into the
- following sections:
- 
- Documentation/dev-tools/kunit/api/test.rst
- 
-- - documents all of the standard testing API
-+ - Documents all of the standard testing API
- 
- Documentation/dev-tools/kunit/api/resource.rst
- 
-- - documents the KUnit resource API
-+ - Documents the KUnit resource API
-+
-+Documentation/dev-tools/kunit/api/functionredirection.rst
-+
-+ - Documents the KUnit Function Redirection API
+Historically, soft-dirty PTE bit tracking has been used in the CRIU
+project. The procfs interface is enough for finding the soft-dirty bit
+status and clearing the soft-dirty bit of all the pages of a process.
+We have the use case where we need to track the soft-dirty PTE bit for
+only specific pages on-demand. We need this tracking and clear mechanism
+of a region of memory while the process is running to emulate the
+getWriteWatch() syscall of Windows.
+
+*(Moved to using UFFD instead of soft-dirtyi feature to find pages which
+have been written-to from v7 patch series)*:
+Stop using the soft-dirty flags for finding which pages have been
+written to. It is too delicate and wrong as it shows more soft-dirty
+pages than the actual soft-dirty pages. There is no interest in
+correcting it [2][3] as this is how the feature was written years ago.
+It shouldn't be updated to changed behaviour. Peter Xu has suggested
+using the async version of the UFFD WP [4] as it is based inherently
+on the PTEs.
+
+So in this patch series, I've added a new mode to the UFFD which is
+asynchronous version of the write protect. When this variant of the
+UFFD WP is used, the page faults are resolved automatically by the
+kernel. The pages which have been written-to can be found by reading
+pagemap file (!PM_UFFD_WP). This feature can be used successfully to
+find which pages have been written to from the time the pages were
+write protected. This works just like the soft-dirty flag without
+showing any extra pages which aren't soft-dirty in reality.
+
+The information related to pages if the page is file mapped, present and
+swapped is required for the CRIU project [5][6]. The addition of the
+required mask, any mask, excluded mask and return masks are also required
+for the CRIU project [5].
+
+The IOCTL returns the addresses of the pages which match the specific masks.
+The page addresses are returned in struct page_region in a compact form.
+The max_pages is needed to support a use case where user only wants to get
+a specific number of pages. So there is no need to find all the pages of
+interest in the range when max_pages is specified. The IOCTL returns when
+the maximum number of the pages are found. The max_pages is optional. If
+max_pages is specified, it must be equal or greater than the vec_size.
+This restriction is needed to handle worse case when one page_region only
+contains info of one page and it cannot be compacted. This is needed to
+emulate the Windows getWriteWatch() syscall.
+
+The patch series include the detailed selftest which can be used as an example
+for the uffd async wp test and PAGEMAP_IOCTL. It shows the interface usages as
+well.
+
+[1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+[2] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+[3] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+[4] https://lore.kernel.org/all/Y6Hc2d+7eTKs7AiH@x1n
+[5] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com/
+[6] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com/
+
+Regards,
+Muhammad Usama Anjum
+
+Muhammad Usama Anjum (3):
+  userfaultfd: Add UFFD WP Async support
+  fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about
+    PTEs
+  selftests: vm: add pagemap ioctl tests
+
+ fs/proc/task_mmu.c                         | 290 +++++++
+ fs/userfaultfd.c                           |  11 +
+ include/linux/userfaultfd_k.h              |   6 +
+ include/uapi/linux/fs.h                    |  50 ++
+ include/uapi/linux/userfaultfd.h           |   8 +-
+ mm/memory.c                                |  23 +-
+ tools/include/uapi/linux/fs.h              |  50 ++
+ tools/testing/selftests/vm/.gitignore      |   1 +
+ tools/testing/selftests/vm/Makefile        |   5 +-
+ tools/testing/selftests/vm/pagemap_ioctl.c | 881 +++++++++++++++++++++
+ 10 files changed, 1319 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
+
 -- 
-2.39.1.456.gfc5497dd1b-goog
+2.30.2
 
