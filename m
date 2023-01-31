@@ -2,171 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6512C683904
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 23:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936C868391F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 23:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbjAaWET (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 17:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S230494AbjAaWQq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 17:16:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbjAaWER (ORCPT
+        with ESMTP id S230360AbjAaWQo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:04:17 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBE45AA58
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 14:04:13 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4b34cf67fb6so179815137b3.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 14:04:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hHgl236BVfwTQ35JpXHYmzAIuFKEayd+GMozQ/eghgw=;
-        b=WHNYPmOZxbemeT8b9FCEYZ1Qk92ha/CQ3JaHq+PEp8YFNo+q0ryoC3x6C3RO2obfFf
-         arga+6jOQiWZe2eq5q7W0JqwBa/tXV8gzF+FqHfNkRPUWgKyC3kbmOTMb70iCmplrKrd
-         4p3xWmmED654qRwqbZZLuaiuQ5ddiNTUmNdkg/qK+fvks3FjpbxhXv1FLl0L3iiaAgAr
-         IViSsOU9UjT/igSxTXCqD6EPaneT/+6K8wZLopolBvt4t2XFK6VcvbTX+QAF2p9463Sj
-         AbVwCtT2FdBDj8tsEWzyayJRYiqNOoyptBF90EM5g0DHPZ0Y1C5OUOqO9UdZsVxuNLNO
-         XZRw==
+        Tue, 31 Jan 2023 17:16:44 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1E546157
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 14:16:42 -0800 (PST)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DA59D442FD
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 22:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675203399;
+        bh=3LEsGOPfaWLvr4rWba86yn4WIRMiISgxju1CpktcCjc=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=KVXMjjv6Tn6BrWBhdN/0riJ+crbzZZ6I71EWEtw9+4xywkQjMbZGsKdT5IvJ3Htll
+         N5UR9IrSq73zOs7LDIqIdrLKGhAajPN4bTU86LlVysHAsDkaEJjv1/Ikd+X+8GI1DC
+         zAD0NpBZhuApVSH/kQCem4imAwnE3rYT3siM1bTVN3PLMe9NMuh3RJxGh7fbP1xIqL
+         0WXLVqupAGP8wQWUzUFkoyxxddSZb7YbiCV8V/gbhE1cF/CFYJh1q7ZiUY4Fc14Cwo
+         CP1OkE30pE7rF30hEcaerxrrRk02H+e0bfWwykSjZ0Gm0waDtwCTXoY8lhupkkXNWk
+         t01xL9raESwvA==
+Received: by mail-wm1-f71.google.com with SMTP id k17-20020a05600c1c9100b003dd41ad974bso34277wms.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 14:16:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hHgl236BVfwTQ35JpXHYmzAIuFKEayd+GMozQ/eghgw=;
-        b=55G9V6rQ8KbxvWkHnZFjHSaTiVXmcZ7WNF4dDdegxZtIc/GyfAz+Hxg7WX3B/a7f97
-         6efmBT7yriWITqF/W1bhMQWTUa7c4sC9i5Qh6WeOrQkb2H19mL9r2y2w95kePdmvzPVC
-         z+WbNTTQoIu4PzsqGEDsW2qzGiS+2xD7ayvyHo2LPOPZloj8fsv/FRHiPTaA2h1grfsw
-         jHu9JhRPyma65+Pez5/6ERsdrbyu2+kMk2YDEYVwNbSi4yBgtJGgE9Xdj6YKyRPT6ggC
-         jndTDexBe+mJhG4R0N5Qg6p3EhlqRzmxIIm4wRZY4VKNb6kMWjfPXW6iMsDx41cssk6J
-         Lb1g==
-X-Gm-Message-State: AO0yUKVA/PrAQlACvjygWsgLymeaM7nMIECZPifY1AtimAHp3tTuqGLV
-        UFXlzJtyPt6um2zomMjHzljL61Qltw==
-X-Google-Smtp-Source: AK7set/PIoxhNAc5wXsGxC3/QETHrKPQYKB+AF7xsrfyy+VIa80p5cv9hVnpjZcts7iJsrytDX9J/wkayA==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a81:6946:0:b0:506:527a:5146 with SMTP id
- e67-20020a816946000000b00506527a5146mr2725476ywc.178.1675202652837; Tue, 31
- Jan 2023 14:04:12 -0800 (PST)
-Date:   Tue, 31 Jan 2023 22:03:55 +0000
-In-Reply-To: <20230131220355.1603527-1-rmoar@google.com>
-Mime-Version: 1.0
-References: <20230131220355.1603527-1-rmoar@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230131220355.1603527-4-rmoar@google.com>
-Subject: [PATCH v1 3/3] kunit: fix bug of extra newline characters in debugfs logs
-From:   Rae Moar <rmoar@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
-Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3LEsGOPfaWLvr4rWba86yn4WIRMiISgxju1CpktcCjc=;
+        b=a/NeTan58fe+U1PyZJ9P6qtcdZ3WIg7b/d6mYy7zG5RfYFqc53jJzvc7pbMPhqkb06
+         qIoqhyAyb3HAFugkX9OHoDHMAEafmBMesjffxZtxNQvWFVmFV4yRVbRWv/Pon3ZNu42G
+         r+yfXMRwRTBUM/Z1zw6qYSJgVk0GPcRaWqJbH0xSS/LHU8rYuriGbmkK27MFaukL40cs
+         m6F8T94IIYPTD7E01ow1nKSfCp5u0z43GlDt+PiHF7QY+cb+Lz5AG5spVvMQJ2vHPA0n
+         Zmg0m8eQc+VhUSMbmV6qBFvotbV9Z3qSpWgQXREtlF81P3CSsyzuXITFfM09kRQb4q+c
+         0j7w==
+X-Gm-Message-State: AO0yUKU6pt+JMr5t5dACc0UipQA5Wv7S1pSMe9eDuQk/Aa15qJ4HcRML
+        cxaq7Feax5iLojV4dXrxuvFJpNgKViEInwqIlqyyAofvK81OCh2SkMnQjxA2tyVZZSJi32df4Zv
+        nNxIHNv5FH1V6bqDlrhNb0/8m15J4k4GBOU/5l1u5udYmyw==
+X-Received: by 2002:a05:6000:78e:b0:2bf:bd69:234a with SMTP id bu14-20020a056000078e00b002bfbd69234amr557226wrb.1.1675203398876;
+        Tue, 31 Jan 2023 14:16:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set/lLbaZ/D3uEBeeWj1ztr3m9PU6oxrO8Aw1mQVoXGJAEXY6mmm1ITFn3HWksaCmXOb8EwiiaA==
+X-Received: by 2002:a05:6000:78e:b0:2bf:bd69:234a with SMTP id bu14-20020a056000078e00b002bfbd69234amr557209wrb.1.1675203398639;
+        Tue, 31 Jan 2023 14:16:38 -0800 (PST)
+Received: from qwirkle ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id y8-20020adfdf08000000b002bfb31bda06sm16905072wrl.76.2023.01.31.14.16.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 14:16:38 -0800 (PST)
+Date:   Tue, 31 Jan 2023 22:16:36 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Willem de Bruijn <willemb@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Fred Klassen <fklassen@appneta.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 4/4] selftests: net: udpgso_bench_tx: Cater
+ for pending datagrams zerocopy benchmarking
+Message-ID: <Y9mTRER69Z7BGqB5@qwirkle>
+References: <20230131210051.475983-4-andrei.gherzan@canonical.com>
+ <CA+FuTScJCaW+UL0dDDg-7nNdhdZV7Xs5MrfBkGAg-jR4az+DRQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+FuTScJCaW+UL0dDDg-7nNdhdZV7Xs5MrfBkGAg-jR4az+DRQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix bug of the extra newline characters in debugfs logs. When a
-line is added to debugfs with a newline character at the end,
-an extra line appears in the debugfs log. Remove these extra lines.
+On 23/01/31 04:51PM, Willem de Bruijn wrote:
+> On Tue, Jan 31, 2023 at 4:01 PM Andrei Gherzan
+> <andrei.gherzan@canonical.com> wrote:
+> >
+> > The test tool can check that the zerocopy number of completions value is
+> > valid taking into consideration the number of datagram send calls. This can
+> > catch the system into a state where the datagrams are still in the system
+> > (for example in a qdisk, waiting for the network interface to return a
+> > completion notification, etc).
+> >
+> > This change adds a retry logic of computing the number of completions up to
+> > a configurable (via CLI) timeout (default: 2 seconds).
+> >
+> > Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
+> > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > Cc: Willem de Bruijn <willemb@google.com>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > ---
+> >  tools/testing/selftests/net/udpgso_bench_tx.c | 34 +++++++++++++++----
+> >  1 file changed, 27 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+> > index b47b5c32039f..ef887842522a 100644
+> > --- a/tools/testing/selftests/net/udpgso_bench_tx.c
+> > +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+> > @@ -62,6 +62,7 @@ static int    cfg_payload_len = (1472 * 42);
+> >  static int     cfg_port        = 8000;
+> >  static int     cfg_runtime_ms  = -1;
+> >  static bool    cfg_poll;
+> > +static int     cfg_poll_loop_timeout_ms = 2000;
+> >  static bool    cfg_segment;
+> >  static bool    cfg_sendmmsg;
+> >  static bool    cfg_tcp;
+> > @@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
+> >         }
+> >  }
+> >
+> > -static void flush_errqueue(int fd, const bool do_poll)
+> > +static void flush_errqueue(int fd, const bool do_poll,
+> > +               unsigned long poll_timeout, const bool poll_err)
+> 
+> nit: his indentation looks off though
 
-Add kunit_log_newline_test to provide test coverage for this issue.
-(Also, move kunit_log_test above suite definition to remove the
-unnecessary declaration prior to the suite definition)
+This one I've missed but I couldn't find any guidelines on it. Could you
+clarify to me what this should be or point me to soem docs? Happy to fix
+otherwise. I'm currently using vim smartindent but it is definitely not
+in line with what is here already.
 
-Signed-off-by: Rae Moar <rmoar@google.com>
----
- lib/kunit/kunit-test.c | 36 ++++++++++++++++++++++++------------
- lib/kunit/test.c       |  9 ++++++++-
- 2 files changed, 32 insertions(+), 13 deletions(-)
+> 
+> >  {
+> >         if (do_poll) {
+> >                 struct pollfd fds = {0};
+> >                 int ret;
+> >
+> >                 fds.fd = fd;
+> > -               ret = poll(&fds, 1, 500);
+> > +               ret = poll(&fds, 1, poll_timeout);
+> >                 if (ret == 0) {
+> > -                       if (cfg_verbose)
+> > +                       if ((cfg_verbose) && (poll_err))
+> >                                 fprintf(stderr, "poll timeout\n");
+> >                 } else if (ret < 0) {
+> >                         error(1, errno, "poll");
+> > @@ -254,6 +256,20 @@ static void flush_errqueue(int fd, const bool do_poll)
+> >         flush_errqueue_recv(fd);
+> >  }
 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 4df0335d0d06..e9114a466f1e 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite = {
- 	.test_cases = kunit_resource_test_cases,
- };
- 
--static void kunit_log_test(struct kunit *test);
--
--static struct kunit_case kunit_log_test_cases[] = {
--	KUNIT_CASE(kunit_log_test),
--	{}
--};
--
--static struct kunit_suite kunit_log_test_suite = {
--	.name = "kunit-log-test",
--	.test_cases = kunit_log_test_cases,
--};
--
- static void kunit_log_test(struct kunit *test)
- {
- 	struct kunit_suite suite;
-@@ -481,6 +469,30 @@ static void kunit_log_test(struct kunit *test)
- #endif
- }
- 
-+static void kunit_log_newline_test(struct kunit *test)
-+{
-+#ifdef CONFIG_KUNIT_DEBUGFS
-+	kunit_info(test, "extra newline\n");
-+
-+	KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "extra newline\n"),
-+		"Missing log line, full log:\n%s", test->log);
-+	KUNIT_EXPECT_NULL(test, strstr(test->log, "extra newline\n\n"));
-+#else
-+	kunit_skip(test, "only useful when debugfs is enabled");
-+#endif
-+}
-+
-+static struct kunit_case kunit_log_test_cases[] = {
-+	KUNIT_CASE(kunit_log_test),
-+	KUNIT_CASE(kunit_log_newline_test),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_log_test_suite = {
-+	.name = "kunit-log-test",
-+	.test_cases = kunit_log_test_cases,
-+};
-+
- static void kunit_status_set_failure_test(struct kunit *test)
- {
- 	struct kunit fake;
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 27763f0b420c..76d9c31943bf 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -117,6 +117,7 @@ void kunit_log_append(char *log, const char *fmt, ...)
- 	char line[KUNIT_LOG_SIZE];
- 	va_list args;
- 	int len_left;
-+	int line_len;
- 
- 	if (!log)
- 		return;
-@@ -125,10 +126,16 @@ void kunit_log_append(char *log, const char *fmt, ...)
- 	if (len_left <= 0)
- 		return;
- 
-+	// Evaluate the length of the line with arguments
- 	va_start(args, fmt);
--	vsnprintf(line, sizeof(line), fmt, args);
-+	line_len = vsnprintf(line, sizeof(line), fmt, args);
- 	va_end(args);
- 
-+	// If line has two newline characters, do not print
-+	// second newline character
-+	if (fmt[strlen(fmt) - 2] == '\n')
-+		line[line_len - 1] = '\0';
-+
- 	strncat(log, line, len_left);
- }
- EXPORT_SYMBOL_GPL(kunit_log_append);
 -- 
-2.39.1.456.gfc5497dd1b-goog
-
+Andrei Gherzan
