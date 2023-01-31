@@ -2,90 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10364682D72
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 14:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBEC682DD8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 14:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjAaNL3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 08:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S232193AbjAaN1I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 08:27:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbjAaNLZ (ORCPT
+        with ESMTP id S232198AbjAaN1F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:11:25 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD5B72B2
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 05:10:51 -0800 (PST)
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 42B2B41ACB
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 13:10:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675170650;
-        bh=Q741xVNPxljikF40G1tYF49pa5Q5XmgVMznZqucbJ7U=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=fAca59CdFOSnI/YHCepxXwoKlsHzm+RNDZyqzd3kFwhrLQklSAVekOSa7uDlOnjzm
-         JZEWQWTjVnvCr3KDmLqr5oLH+jprmRUdg3U0WkB+aW5gaG39JSy4f5j3CnSrFabq2s
-         RAi7/ozAa6yU4RxFhamOANCuGWe2nOjXqmWew6DtqQI+XtqfCKzIPsVaLSSgbJoZ+R
-         kjYy67aGFAZsplJQu93bL4kWKZBkpmLY82idjtmP6JrpmnFHQ+Gsgi3RB8bDDLvoAR
-         9Ep/yEPFODkTGWDPZlhz89qgGrbK4WSPm45fotYh43KxaNLUWrnbLbZld5Fix/cTR1
-         /Al3OU7Vj4erw==
-Received: by mail-wm1-f69.google.com with SMTP id e38-20020a05600c4ba600b003dc434dabbdso6539206wmp.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 05:10:50 -0800 (PST)
+        Tue, 31 Jan 2023 08:27:05 -0500
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82D44F85D
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 05:27:03 -0800 (PST)
+Received: by mail-ua1-x932.google.com with SMTP id g24so2906894uap.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 05:27:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GfS17ZsZf/XGjm2u6f2FzTjc0hMl0etPEncmPApzois=;
+        b=Wb36UBmbhS+WqAz7txl8yXQCUTlj6ppRvBGqjFrTMw6hAnW+zQNaZayCPUn7Cyi6mP
+         SRQq6FIVi0+KKddcP/X2TLN2GVKEEGXP7GnSONi4UIZISYltZLgcWMyTB+tg9L4qSAUQ
+         5ioImuNRvBZjMRXVA+qGZAM7M9x7PkgYxPGfAbHfrRjxL5b2zNR/KKMI1YpUtqBfYoWR
+         MVBolnjoIACZ8Z+safk/ZKF1MW3iBumBc4xUrPfPvTOJ32DpSXfxOPQqkObcA7WjTwH5
+         xW4pYXWieilM7qit5sB+VXx+/pFt22t5NVGR3owhsxbm4KQTreMK6dTLqUDucdksizwj
+         YAZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q741xVNPxljikF40G1tYF49pa5Q5XmgVMznZqucbJ7U=;
-        b=L03xMHPTTsFgsP7NfCIMwlGlxhFSnEJvQxXNk0H7G7FYpYTSLwXAowur817jbURCtK
-         sgdOiYQGYsFz+t2USzKwXU0ZArutuFBTscGvUextH1HVy3YX1gE0bIbtvAjP9bYipT86
-         Imgb7iSmtTWaxKlLvMhBh7pyZ0iswNuBSEyZqyFqueXtqbFmQqLJNluc+aka6CoMKtHp
-         LoZdbxy1uuf61mNO2PKQFr+dHoH11DteRv5FjCZ08MWmt6Ghd0x7I4+zMBwEFvhIrkjl
-         fAp0snoOciRm09+creJxu+KIHeVvVGoiBk8CFwRpOIAez1NKIJwQFf5zJlRPK7Hyay8+
-         oEHQ==
-X-Gm-Message-State: AO0yUKUanb7NILle2IfPoHwR1KfG6IrJlHerFlBi+C62ts84N2N55xEX
-        o28y5hfK0ltOzP6ic5rc9xXvXMrTpMBtnz23Xkg1+CQ3Kg7XQ24MvBheir12kaBrjfQK61sae1o
-        ILeQTCeQVk/ypDm71iBzAiv4h+nodaN9UuBOMGNagG6HKYA==
-X-Received: by 2002:a05:600c:4b1c:b0:3dc:5bd7:62ec with SMTP id i28-20020a05600c4b1c00b003dc5bd762ecmr6352554wmp.32.1675170645254;
-        Tue, 31 Jan 2023 05:10:45 -0800 (PST)
-X-Google-Smtp-Source: AK7set9Ugoyg1AvpTA39S5u6IM1/+onmzCaM4fhfsMAW0FXiPhLGAHpTn5QJOXYOy3L9Jftn4bO8uQ==
-X-Received: by 2002:a05:600c:4b1c:b0:3dc:5bd7:62ec with SMTP id i28-20020a05600c4b1c00b003dc5bd762ecmr6352527wmp.32.1675170644924;
-        Tue, 31 Jan 2023 05:10:44 -0800 (PST)
-Received: from qwirkle ([2001:67c:1560:8007::aac:c4dd])
-        by smtp.gmail.com with ESMTPSA id i1-20020a05600c354100b003dc4050c97bsm2331886wmq.3.2023.01.31.05.10.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 05:10:44 -0800 (PST)
-Date:   Tue, 31 Jan 2023 13:10:42 +0000
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     Willem de Bruijn <willemb@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
- back-off retries
-Message-ID: <Y9kTUlJLO/H0rbhp@qwirkle>
-References: <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
- <Y9ftL5c4klThCi9Q@qwirkle>
- <Y9fu7TR5VC33j+EP@qwirkle>
- <CA+FuTSf1tJ7kw+GCXf0YBRv0HaR8v7=iy6b36hrsmx8hEr5knQ@mail.gmail.com>
- <Y9f+7tMWMtPACLz9@qwirkle>
- <CA+FuTScThEWVevZ+KVgLOZ6zb4Ush6RtKL4FmC2cFMg+Q-OWpw@mail.gmail.com>
- <Y9gLeNqorZNQ1gjp@qwirkle>
- <Y9gfpa7vks5Ndl8q@qwirkle>
- <CA+FuTSckAeDGSBYE3bv2qR9cXpqac8Vmu6YxC1HTJx7YLY7gnQ@mail.gmail.com>
- <Y9gnqNnkiPEw+Pp8@qwirkle>
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GfS17ZsZf/XGjm2u6f2FzTjc0hMl0etPEncmPApzois=;
+        b=0QKppgUxMNUxcbnJI3O3aLjq+yd5OIxJvLZrJwjrUC7HNeMcmTky3iKP/LezA40Q1n
+         akPWfUF947Pr95TUU9006UkGnaKB1uBx0+N3C9QUObToFLe3CkNMc/6hBkFp7maP6c9O
+         K5/bvIGMZtvJkYJPEqRcsu1hDPk9qp/uGrwweznWFmIew85dfrRyUs7Tzp0RI97g7xwR
+         nHBZMn9z9x+EYtAXdMtZN20I3LRRRHeTQQyaewjMw0tpFNLDWSems3ftqYvO2eY9gq7e
+         ONQ+/fCZibSmfWH/EkLDcCiqmKQwKD5ETzx0BvFe+bHQGk6zZxrJ65VuXiYLn7+dqFkY
+         bLuw==
+X-Gm-Message-State: AO0yUKUmtxXzy4BXlihFGBdlYBsHf6bUaayfSEXXDU97xAHTnjYOjelW
+        BIpupquu68eYJAE3o4wm+5spgbLHVFSCExTxsvhziQ==
+X-Google-Smtp-Source: AK7set+tU4T1j3AbvjYWH81S2+9ulJezSl5aE+CptZjtz5YU7IekXvouVxl8K3K2RyIMAMcgGFkPkci7S+A1LVR1iDk=
+X-Received: by 2002:ab0:2841:0:b0:662:b4d9:ff5f with SMTP id
+ c1-20020ab02841000000b00662b4d9ff5fmr1268412uaq.46.1675171623007; Tue, 31 Jan
+ 2023 05:27:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9gnqNnkiPEw+Pp8@qwirkle>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Received: by 2002:ab0:6007:0:b0:661:69f8:2c75 with HTTP; Tue, 31 Jan 2023
+ 05:27:02 -0800 (PST)
+In-Reply-To: <20230131023503.1629871-1-davidgow@google.com>
+References: <20230131023503.1629871-1-davidgow@google.com>
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+Date:   Tue, 31 Jan 2023 10:27:02 -0300
+Message-ID: <CAKgze5YQnQUPZFpy2h_CObB8zhwmKzGFUQ7tnC3_LqNZVW+-+A@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix kunit_test_init_section_suites(...)
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,212 +72,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 23/01/30 08:25PM, Andrei Gherzan wrote:
-> On 23/01/30 02:57PM, Willem de Bruijn wrote:
-> > On Mon, Jan 30, 2023 at 2:51 PM Andrei Gherzan
-> > <andrei.gherzan@canonical.com> wrote:
-> > >
-> > > On 23/01/30 06:24PM, Andrei Gherzan wrote:
-> > > > On 23/01/30 12:35PM, Willem de Bruijn wrote:
-> > > > > On Mon, Jan 30, 2023 at 12:31 PM Andrei Gherzan
-> > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > >
-> > > > > > On 23/01/30 11:29AM, Willem de Bruijn wrote:
-> > > > > > > On Mon, Jan 30, 2023 at 11:23 AM Andrei Gherzan
-> > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > >
-> > > > > > > > On 23/01/30 04:15PM, Andrei Gherzan wrote:
-> > > > > > > > > On 23/01/30 11:03AM, Willem de Bruijn wrote:
-> > > > > > > > > > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
-> > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
-> > > > > > > > > > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
-> > > > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
-> > > > > > > > > > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
-> > > > > > > > > > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
-> > > > > > > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > > The tx and rx test programs are used in a couple of test scripts including
-> > > > > > > > > > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
-> > > > > > > > > > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
-> > > > > > > > > > > > > > > > accept socket connections. This racing bug could fail the test with at
-> > > > > > > > > > > > > > > > least one of the following:
-> > > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > > ./udpgso_bench_tx: connect: Connection refused
-> > > > > > > > > > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
-> > > > > > > > > > > > > > > > ./udpgso_bench_tx: write: Connection refused
-> > > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > > This change addresses this by adding routines that retry the socket
-> > > > > > > > > > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
-> > > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-> > > > > > > > > > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > Synchronizing the two processes is indeed tricky.
-> > > > > > > > > > > > > > >
-> > > > > > > > > > > > > > > Perhaps more robust is opening an initial TCP connection, with
-> > > > > > > > > > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
-> > > > > > > > > > > > > > > go.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
-> > > > > > > > > > > > > > socket to show up in 'ss' output before firing-up the client - quite
-> > > > > > > > > > > > > > alike what mptcp self-tests are doing.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > I like this idea. I have tested it and it works as expected with the
-> > > > > > > > > > > > > exeception of:
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Any ideas on how to handle this? I could retry and that works.
-> > > > > > > > > > > >
-> > > > > > > > > > > > This happens (also) without the zerocopy flag, right? That
-> > > > > > > > > > > >
-> > > > > > > > > > > > It might mean reaching the sndbuf limit, which can be adjusted with
-> > > > > > > > > > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
-> > > > > > > > > > > > expect this test to bump up against that limit.
-> > > > > > > > > > > >
-> > > > > > > > > > > > A few zerocopy specific reasons are captured in
-> > > > > > > > > > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
-> > > > > > > > > > >
-> > > > > > > > > > > I have dug a bit more into this, and it does look like your hint was in
-> > > > > > > > > > > the right direction. The fails I'm seeing are only with the zerocopy
-> > > > > > > > > > > flag.
-> > > > > > > > > > >
-> > > > > > > > > > > From the reasons (doc) above I can only assume optmem limit as I've
-> > > > > > > > > > > reproduced it with unlimited locked pages and the fails are transient.
-> > > > > > > > > > > That leaves optmem limit. Bumping the value I have by default (20480) to
-> > > > > > > > > > > (2048000) made the sendmsg succeed as expected. On the other hand, the
-> > > > > > > > > > > tests started to fail with something like:
-> > > > > > > > > > >
-> > > > > > > > > > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
-> > > > > > > > > > > expected    773707 received
-> > > > > > > > > >
-> > > > > > > > > > More zerocopy completions than number of sends. I have not seen this before.
-> > > > > > > > > >
-> > > > > > > > > > The completions are ranges of IDs, one per send call for datagram sockets.
-> > > > > > > > > >
-> > > > > > > > > > Even with segmentation offload, the counter increases per call, not per segment.
-> > > > > > > > > >
-> > > > > > > > > > Do you experience this without any other changes to udpgso_bench_tx.c.
-> > > > > > > > > > Or are there perhaps additional sendmsg calls somewhere (during
-> > > > > > > > > > initial sync) that are not accounted to num_sends?
-> > > > > > > > >
-> > > > > > > > > Indeed, that looks off. No, I have run into this without any changes in
-> > > > > > > > > the tests (besides the retry routine in the shell script that waits for
-> > > > > > > > > rx to come up). Also, as a data point.
-> > > > > > > >
-> > > > > > > > Actually wait. I don't think that is the case here. "expected" is the
-> > > > > > > > number of sends. In this case we sent 1076 more messages than
-> > > > > > > > completions. Am I missing something obvious?
-> > > > > > >
-> > > > > > > Oh indeed.
-> > > > > > >
-> > > > > > > Receiving fewer completions than transmission is more likely.
-> > > > > >
-> > > > > > Exactly, yes.
-> > > > > >
-> > > > > > > This should be the result of datagrams still being somewhere in the
-> > > > > > > system. In a qdisc, or waiting for the network interface to return a
-> > > > > > > completion notification, say.
-> > > > > > >
-> > > > > > > Does this remain if adding a longer wait before the final flush_errqueue?
-> > > > > >
-> > > > > > Yes and no. But not realiably unless I go overboard.
-> > > > > >
-> > > > > > > Or, really, the right fix is to keep polling there until the two are
-> > > > > > > equal, up to some timeout. Currently flush_errqueue calls poll only
-> > > > > > > once.
-> > > > > >
-> > > > > > That makes sense. I have implemented a retry and this ran for a good
-> > > > > > while now.
-> > > > > >
-> > > > > > -               flush_errqueue(fd, true);
-> > > > > > +               while (true) {
-> > > > > > +                       flush_errqueue(fd, true);
-> > > > > > +                       if ((stat_zcopies == num_sends) || (delay >= MAX_DELAY))
-> > > > > > +                               break;
-> > > > > > +                       usleep(delay);
-> > > > > > +                       delay *= 2;
-> > > > > > +               }
-> > > > > >
-> > > > > > What do you think?
-> > > > >
-> > > > > Thanks for running experiments.
-> > > > >
-> > > > > We can avoid the unconditional sleep, as the poll() inside
-> > > > > flush_errqueue already takes a timeout.
-> > > > >
-> > > > > One option is to use start_time = clock_gettime(..) or gettimeofday
-> > > > > before poll, and restart poll until either the exit condition or
-> > > > > timeout is reached, with timeout = orig_time - elapsed_time.
-> > > >
-> > > > Yes, this was more of a quick draft. I was thinking to move it into the
-> > > > flush function (while making it aware of num_sends via a parameter):
-> > > >
-> > > > if (do_poll) {
-> > > >   struct pollfd fds = {0};
-> > > >   int ret;
-> > > >   unsigned long tnow, tstop;
-> > > >
-> > > >   fds.fd = fd;
-> > > >   tnow = gettimeofday_ms();
-> > > >   tstop = tnow + POLL_LOOP_TIMEOUT_MS;
-> > > >   while ((stat_zcopies != num_sends) && (tnow < tstop)) {
-> > 
-> > The new condition to loop until stat_zcopies == num_sends should only
-> > be tested on the final call. This likely needs to become a separate
-> > boolean. Or a separate flush_errqueue_last() function, and leave the
-> > existing one as is.
-> 
-> Wouldn't a do/while be enough here?
-> 
-> > 
-> > We can probably merge the outer for and inner while loops
-> > 
-> > > >     ret = poll(&fds, 1, 500);
-> > 
-> > Instead of 500, this becomes tstop - tnow.
-> 
-> Right. Missed this one.
-> 
-> > 
-> > > >     if (ret == 0) {
-> > > >       if (cfg_verbose)
-> > > >         fprintf(stderr, "poll timeout\n");
-> > 
-> > Poll timeouts are now expected to an extent. Only report once at the
-> > end of the function if the poll was only called once and timed out.
-> 
-> I had to think about this a bit but now I see your point and it makes
-> sense.
-> 
-> > > >       } else if (ret < 0) {
-> > > >         error(1, errno, "poll");
-> > > >     }
-> > > >     tnow = gettimeofday_ms();
-> > > >   }
-> > > > }
-> > > >
-> > > > Does this make more sense?
-> > >
-> > > Obviously, this should be a do/while. Anyway, this works as expected
-> > > after leaving it for a around two hours.
-> > 
-> > Great to hear you found the cause.
-> 
-> Hats off for hints.
+On 1/30/23, David Gow <davidgow@google.com> wrote:
+> From: Brendan Higgins <brendan.higgins@linux.dev>
+>
+> Looks like kunit_test_init_section_suites(...) was messed up in a merge
+> conflict. This fixes it.
+>
+> kunit_test_init_section_suites(...) was not updated to avoid the extra
+> level of indirection when .kunit_test_suites was flattened. Given no-one
+> was actively using it, this went unnoticed for a long period of time.
+>
+> Fixes: e5857d396f35 ("kunit: flatten kunit_suite*** to kunit_suite** in
+> .kunit_test_suites")
+> Signed-off-by: Brendan Higgins <brendan.higgins@linux.dev>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>  include/kunit/test.h | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 87ea90576b50..716deaeef3dd 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -303,7 +303,6 @@ static inline int kunit_run_all_tests(void)
+>   */
+>  #define kunit_test_init_section_suites(__suites...)			\
+>  	__kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),	\
+> -			    CONCATENATE(__UNIQUE_ID(suites), _probe),	\
+>  			    ##__suites)
+>
+>  #define kunit_test_init_section_suite(suite)	\
+> --
+> 2.39.1.456.gfc5497dd1b-goog
+>
+>
 
-I have pushed a new version with a couple of other changes here and
-there.
+Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
 
-https://lore.kernel.org/netdev/20230131130412.432549-1-andrei.gherzan@canonical.com/T/#t
-
-Paolo, for the synchronisation implementation I took your advice.
-
-Looking forward for your feedback.
-
--- 
-Andrei Gherzan
+Thanks!
