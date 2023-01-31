@@ -2,159 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A7D682116
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 01:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 016946821EB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 03:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjAaAxW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Jan 2023 19:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
+        id S231407AbjAaCL7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Jan 2023 21:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjAaAxV (ORCPT
+        with ESMTP id S231439AbjAaCL6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 19:53:21 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1F2E04D;
-        Mon, 30 Jan 2023 16:53:20 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id nn18-20020a17090b38d200b0022bfb584987so12868901pjb.2;
-        Mon, 30 Jan 2023 16:53:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jBYldhL8pTWqB3BqjInd39Jcu1r7g+Kxk37exfegHcI=;
-        b=b2JJ+b1c9pBa8vvw60U+wt9PkFe5oyfkppoG3QrQ87BnswsR71K9MpcVrNozZ0KEl9
-         iTWvvLBgatoqKHqb6RGO2U0OBAGlFhmmvTKR+EOnV6G0vmqVsaFbIIZ5mCtMKBQSlwBi
-         3GQRUOXLnd9r8sN1TETlMzsj90KMrqLFo0/MPNPWZpUb3BTndbH3/f0+cUxOoPUWa3r9
-         S45J7wxzZ7ZP1H2+0ZMHL8U43McqdX5yE5c7WbMZ2Gt0sUWoJLCEr3GyfgdL1hsFVrcb
-         ptERI7CQ7JT2q/qCOZLBgsPUgumiZ7Mx46Qt46T+g82ykILDsAjTcEopgWvEaT5LCi19
-         2AWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jBYldhL8pTWqB3BqjInd39Jcu1r7g+Kxk37exfegHcI=;
-        b=RoA4DMUskHxKxd4lDfxENUTTGMxG3NnZ9khN3DObgQFROscifoldPZ1nOMbEl6g3TR
-         5SrtBVb6dk4lqzCxPdketEj/M8one+pvG1RF49+rIKLUgYN59q07csUKY1IRinFxgP5y
-         3KcqRwhJEjjtl7H7feWs6mzXH/MtH/umK2rvKBL0ZWQz30rld2EhPlYMaPSOLmA2m7V9
-         dAg5KP02D1i5usAYKEUiLS3n3yN1YVD26fOuevGT3LFn8cb3YI/z24IQ/WgbpJp4eEJe
-         DHstn1LmcTK1c5S3dJuBULDGxaznKsYfYQPWrklQ0lwdiku6xQ5CBXjit5U6aBn8khiC
-         VnCA==
-X-Gm-Message-State: AO0yUKVnh3I8Ohx/Z7RgX8kFEBgyu8fy1gYeyXbljk6wBhanK4+5e1FU
-        w7TaHIeYcvC9mWOUY96q+kE2tnhExHU=
-X-Google-Smtp-Source: AK7set+A0QTFKRqjBMuZoq4Wo4mo09+R9ZCV1G/LpP3BiEvAwLBrdpiNXf+1CYEjx249igNHV4hxTA==
-X-Received: by 2002:a17:902:f095:b0:196:1d89:7002 with SMTP id p21-20020a170902f09500b001961d897002mr7677082pla.31.1675126399830;
-        Mon, 30 Jan 2023 16:53:19 -0800 (PST)
-Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:a52d])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170902ba9100b001967692d6f5sm3742819pls.227.2023.01.30.16.53.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 16:53:19 -0800 (PST)
-Date:   Mon, 30 Jan 2023 16:53:15 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ross Zwisler <zwisler@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 3/9] selftests/bpf: use canonical ftrace path
-Message-ID: <20230131005315.phdnhkeeconxxm3e@macbook-pro-6.dhcp.thefacebook.com>
-References: <20230130181915.1113313-1-zwisler@google.com>
- <20230130181915.1113313-4-zwisler@google.com>
- <CAADnVQJ7KxEK92qOz0Ya4MrACHpxngSpG4W38xuGEgZmXEG-vQ@mail.gmail.com>
- <20230130145932.37cf6b73@gandalf.local.home>
- <CAADnVQ+F3Z70mu3-QyyNFyJ2qCkDXnMJCW-o+fcnZo=LWj5d9g@mail.gmail.com>
- <20230130183419.0626dc21@gandalf.local.home>
+        Mon, 30 Jan 2023 21:11:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5F034C00;
+        Mon, 30 Jan 2023 18:11:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0803D61207;
+        Tue, 31 Jan 2023 02:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6946DC4339E;
+        Tue, 31 Jan 2023 02:11:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675131111;
+        bh=J4THsiG9lLyLN3k2Af+1RJMzU2KokWwxCCLUO1sPYt8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cm2cfj0u3Ip5CCGI9jFiEtPOTPAfCuRIpoQwi+E5172677H+x+qdVRxhOc0k1kCEP
+         B525O3vQ85VjjvOIBvEB1Oy2dct0Fmh4Wr5n+rKyhs7LIaNrNCNNX89UDXDIuBl5DJ
+         UZ4bdNRMLzm7bF6BTHUROa6olyodCfIkWQya1BBCAeUEqSQjdRNIhPenmaPCWzIcYi
+         WLu6Ogi3hh5l5qDH3hLVqRNDTUF5k5oX9mkpsbAhu7jabpuvkFHVKw95Msw4iEGaRU
+         hS3+ZhQf8lJL3niGFgMpxPOyaY4RJfqezeoHXqkYn25UQgwfDlkDy15yWY8j3lttum
+         a6saradCwGwmA==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-142b72a728fso17635813fac.9;
+        Mon, 30 Jan 2023 18:11:51 -0800 (PST)
+X-Gm-Message-State: AO0yUKUhBh+ZytLE4OmStgpyTgo3KTvMl5dpT40ozmWz1WlLUk1rsvFA
+        zOPKBsnViCRVzI3fqGukG+p3O4mHH9VtrH7q/v4=
+X-Google-Smtp-Source: AK7set88x7PTFS/EkgEmwBm7Z2BVIAeds9RHbeMd/xFzfWrHyFzj6viRldUTxcVcDzFNyBcQOd8RnWSxJDDWhbHcY+g=
+X-Received: by 2002:a05:6870:330b:b0:163:a45a:9e41 with SMTP id
+ x11-20020a056870330b00b00163a45a9e41mr522847oae.194.1675131110687; Mon, 30
+ Jan 2023 18:11:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130183419.0626dc21@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230127145708.12915-1-andriy.shevchenko@linux.intel.com>
+ <CABVgOSmZsAQcf6Ou_tyZL=hpiJcxMxXzmMfV5wRyCPBsb_d0UQ@mail.gmail.com>
+ <CAK7LNASsnDymUS=Pyo77g=0v58fMn38PY66A887nC8_E6_qXAg@mail.gmail.com> <CABVgOSnRC3AuUo4Qc2K3pXEcj3Wbt9LE2DTbejGrPOCKefxB2g@mail.gmail.com>
+In-Reply-To: <CABVgOSnRC3AuUo4Qc2K3pXEcj3Wbt9LE2DTbejGrPOCKefxB2g@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 31 Jan 2023 11:11:14 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR8D6E_md3=1dLAc-o73xmKXDRXv9Fi_hiav1VhPSW58w@mail.gmail.com>
+Message-ID: <CAK7LNAR8D6E_md3=1dLAc-o73xmKXDRXv9Fi_hiav1VhPSW58w@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] .gitignore: Unignore .kunitconfig
+To:     David Gow <davidgow@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 06:34:19PM -0500, Steven Rostedt wrote:
-> On Mon, 30 Jan 2023 12:03:52 -0800
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+On Tue, Jan 31, 2023 at 9:01 AM David Gow <davidgow@google.com> wrote:
+>
+> On Sat, 28 Jan 2023 at 22:37, Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Sat, Jan 28, 2023 at 3:56 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > On Fri, 27 Jan 2023 at 22:56, Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
 > > > >
-> > > > So this change will break the tests. We cannot do it.  
+> > > > There are almost dozen of .kunitconfig files that are ignored but
+> > > > tracked. Unignore them.
+> > > >
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > ---
 > > >
-> > > Could we add a way to try to mount it?
+> > > Thanks! Only the original root-directory .kunitignore file was
+> > > intended to be ignored, and that's no longer as important, and is now
+> > > in the build dir anyway.
 > > >
-> > > If anything, the tests should not have the path hard coded. It should then
-> > > look to see if it is mounted and use the path that is found. Otherwise it
-> > > should try mounting it at the correct location.
+> > > Reviewed-by: David Gow <davidgow@google.com>
 > > >
-> > > Feel free to take the code from libtracefs (and modify it):
+> > > Cheers,
+> > > -- David
 > > >
-> > > https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/tree/src/tracefs-utils.c#n89
-> > >
-> > > It will make the test code much more robust.  
-> > 
-> > The point is not about tests. The point is that this change might break
-> > some users that are working today with /sys/kernel/debug/tracing.
-> 
-> > It also might be mounted differently.
-> > For example from another system:
-> > cat /proc/mounts|grep trace
-> > tracefs /sys/kernel/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0
-> > tracefs /sys/kernel/debug/tracing tracefs rw,relatime 0 0
-> 
-> Yes, and the code works when it's mounted multiple times.
-> 
-> > 
-> > So I suggest leaving the code as-is.
-> 
-> Why?  I want to make /sys/kernel/debug/tracing deprecated. It's a hack to
-> not break old code. I've had complaints about that hack, and there's even
-> systems that disable the auto mounting (that is, /sys/kernel/debug/tracing
-> would not exist in such configs) This was never expected to be a permanent
-> solution.
+> > > >  .gitignore | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/.gitignore b/.gitignore
+> > > > index 22984d22d29e..e4f2ba0be516 100644
+> > > > --- a/.gitignore
+> > > > +++ b/.gitignore
+> > > > @@ -100,6 +100,7 @@ modules.order
+> > > >  !.get_maintainer.ignore
+> > > >  !.gitattributes
+> > > >  !.gitignore
+> > > > +!.kunitconfig
+> > > >  !.mailmap
+> > > >  !.rustfmt.toml
+> > > >
+> > > > --
+> > > > 2.39.0
+> > > >
+> >
+> >
+> > Why is this a dot file in the first place?
+> >
+>
+> In short, historical reasons.
+>
+> The long answer is that there are two places "kunitconfig" files are
+> used: as a user-provided file with their preferred test config (which
+> is kept local), and as a recommended test config for a given subsystem
+> (which is checked in).
+> Originally, no .kunitconfig files were checked in: one was either
+> autogenerated or manually modified and left in the root source
+> directory. This eventually moved into the build directory, and a
+> number of features which de-emphasized it in favour of command-line
+> arguments and the (new) checked-in per-subsystem configs, which
+> probably shouldn't be hidden.
 
-I don't think /sys/kernel/debug/tracing can ever be deprecated.
-There are plenty of user space applications (not bpf related at all) that
-expect it to be in that location.
 
-Quick search shows:
+Do you mean there are two types for .kunitconfig - auto-generated ones
+and check-in ones?
 
-android profiler:
-https://android.googlesource.com/platform/external/perfetto/+/refs/heads/master/src/tools/dump_ftrace_stats/main.cc#60
+If this patch is applied, is there a possibility where
+auto-generated .kunitconfig files would be accidentally
+added to the repository?
 
-java profiler:
-https://github.com/jvm-profiling-tools/async-profiler/blob/master/src/perfEvents_linux.cpp#L85
 
-> If anything, leaving hardcoded calls like that forces the user to mount
-> debugfs when they may not want to. The entire point of tracefs was to allow
-> users to have access to the trace events without having to expose debugfs
-> and all the crud it brings with it. This was requested several times before
-> it was added.
 
-All makes sense.
 
-> What is your technical reason for not modifying the code to look for
-> tracefs in /sys/kernel/tracing and if it's not there try
-> /sys/kernel/debug/tracing, and if both are not found, try mounting it.
 
-libbpf already has code to probe both locations.
-The point that full deprecation of /sys/kernel/debug/tracing is not possible,
-hence no point doing the diff:
-48 files changed, 96 insertions(+), 95 deletions(-)
-It doesn't move the needle. Just a code churn.
+> There's no fundamental reason (other than it being a bit annoying to
+> rename everything and update the code) we can't change it, either for
+> all kunitconfig files, or just the checked-in ones, if that's
+> preferred.
+>
+> -- David
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
