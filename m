@@ -2,111 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBEC682DD8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 14:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92208682E07
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 14:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbjAaN1I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 08:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
+        id S232280AbjAaNeQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 08:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjAaN1F (ORCPT
+        with ESMTP id S231688AbjAaNeJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:27:05 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82D44F85D
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 05:27:03 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id g24so2906894uap.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 05:27:03 -0800 (PST)
+        Tue, 31 Jan 2023 08:34:09 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760954FC21
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 05:34:00 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-50aa54cc7c0so175509647b3.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 05:34:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GfS17ZsZf/XGjm2u6f2FzTjc0hMl0etPEncmPApzois=;
-        b=Wb36UBmbhS+WqAz7txl8yXQCUTlj6ppRvBGqjFrTMw6hAnW+zQNaZayCPUn7Cyi6mP
-         SRQq6FIVi0+KKddcP/X2TLN2GVKEEGXP7GnSONi4UIZISYltZLgcWMyTB+tg9L4qSAUQ
-         5ioImuNRvBZjMRXVA+qGZAM7M9x7PkgYxPGfAbHfrRjxL5b2zNR/KKMI1YpUtqBfYoWR
-         MVBolnjoIACZ8Z+safk/ZKF1MW3iBumBc4xUrPfPvTOJ32DpSXfxOPQqkObcA7WjTwH5
-         xW4pYXWieilM7qit5sB+VXx+/pFt22t5NVGR3owhsxbm4KQTreMK6dTLqUDucdksizwj
-         YAZQ==
+        bh=UfAxiDAmvznYrbgPrLSyoN97qBwE5q5NN2eH2aFQI+Q=;
+        b=R/eHb6Npg6vVgzTXkX8g8LE9Y5MUKvgwQf8Anu/dR7BGaQZkf7gp5So/Fqw4Aoc+Xf
+         Fl2GfNdYxfHhgB+OB+04F3HGhZ2gaaCqVvVowEaxe8yW0THaQRVCnATBgcZKjZrDKKh0
+         LLl7z4LnS2f0cE1IllrwZ1DYrgjzTi1O6I5VWoH9oaydSen0op/WFiuSnZcz2wQ986Ux
+         WoQcxHWDU7Y92mkQJRDrE33K7elATYpeuO6uqOACpTG09Y8pznpawgFdDnUNrkSPFS6f
+         qnJL1tvO/g07xZ07xZ/FMnri8/sP3dKKz8CowWHsnKcjQTlY9x1qIwtN29JMFC2o+jwv
+         7e5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GfS17ZsZf/XGjm2u6f2FzTjc0hMl0etPEncmPApzois=;
-        b=0QKppgUxMNUxcbnJI3O3aLjq+yd5OIxJvLZrJwjrUC7HNeMcmTky3iKP/LezA40Q1n
-         akPWfUF947Pr95TUU9006UkGnaKB1uBx0+N3C9QUObToFLe3CkNMc/6hBkFp7maP6c9O
-         K5/bvIGMZtvJkYJPEqRcsu1hDPk9qp/uGrwweznWFmIew85dfrRyUs7Tzp0RI97g7xwR
-         nHBZMn9z9x+EYtAXdMtZN20I3LRRRHeTQQyaewjMw0tpFNLDWSems3ftqYvO2eY9gq7e
-         ONQ+/fCZibSmfWH/EkLDcCiqmKQwKD5ETzx0BvFe+bHQGk6zZxrJ65VuXiYLn7+dqFkY
-         bLuw==
-X-Gm-Message-State: AO0yUKUmtxXzy4BXlihFGBdlYBsHf6bUaayfSEXXDU97xAHTnjYOjelW
-        BIpupquu68eYJAE3o4wm+5spgbLHVFSCExTxsvhziQ==
-X-Google-Smtp-Source: AK7set+tU4T1j3AbvjYWH81S2+9ulJezSl5aE+CptZjtz5YU7IekXvouVxl8K3K2RyIMAMcgGFkPkci7S+A1LVR1iDk=
-X-Received: by 2002:ab0:2841:0:b0:662:b4d9:ff5f with SMTP id
- c1-20020ab02841000000b00662b4d9ff5fmr1268412uaq.46.1675171623007; Tue, 31 Jan
- 2023 05:27:03 -0800 (PST)
+        bh=UfAxiDAmvznYrbgPrLSyoN97qBwE5q5NN2eH2aFQI+Q=;
+        b=NgwVIXnVTtW0WTNMcGiqDCB1AThXXF6l8DnXQXgBC/3CQaJCz0xA7akids3vhTned8
+         XaTHUDj+NPa9WBCPncHuhpW6gSmXzqd3Yc04kzQPZLxvZuFMoDS2fPTAv5AXoArhyRph
+         8jDHALavxLvnchzg8IRcBD1IzW6aBXZZecc+PpL6zGmOp9PA9r9XW3jQSct103VG47kj
+         io7VPVNanB78rOEoJV4ys+cEJ40tr0YLBmqBowggqOeLVitH8L5l/5Wg8eyLHC+OgTHT
+         QIXmxLw093WHudHSNL5NjkuhlELqZJybK+HYPbHZySlzid1EN7+iKAUMKfym4mwwZjd/
+         Op5w==
+X-Gm-Message-State: AO0yUKUAoKyLauY4B8HJKIHD8cCFCOSHsegH9K7fuiz3YEFaVDbYq6u5
+        o8uSbMLy+LY5cXy3HGclexjTdTM2V6RVDTD2qlG/2Q==
+X-Google-Smtp-Source: AK7set/Jg9zDWxUGopNUlLIrLYvWe6RszOxFMimwmW9N+5DWMWHJD6setkT7/38T/PwmMccANZj0Yfz+3EoYA+5Mnd8=
+X-Received: by 2002:a81:a211:0:b0:506:6a3a:abde with SMTP id
+ w17-20020a81a211000000b005066a3aabdemr3012120ywg.43.1675172039574; Tue, 31
+ Jan 2023 05:33:59 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ab0:6007:0:b0:661:69f8:2c75 with HTTP; Tue, 31 Jan 2023
- 05:27:02 -0800 (PST)
-In-Reply-To: <20230131023503.1629871-1-davidgow@google.com>
-References: <20230131023503.1629871-1-davidgow@google.com>
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-Date:   Tue, 31 Jan 2023 10:27:02 -0300
-Message-ID: <CAKgze5YQnQUPZFpy2h_CObB8zhwmKzGFUQ7tnC3_LqNZVW+-+A@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix kunit_test_init_section_suites(...)
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230131130412.432549-1-andrei.gherzan@canonical.com> <20230131130412.432549-3-andrei.gherzan@canonical.com>
+In-Reply-To: <20230131130412.432549-3-andrei.gherzan@canonical.com>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Tue, 31 Jan 2023 08:33:23 -0500
+Message-ID: <CA+FuTSdtzFXWWDLk=LOdrkS00oH4HGvtoYYQh7YQd2ADsp0UbA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] selftests: net: udpgso_bench: Fix racing bug
+ between the rx/tx programs
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/30/23, David Gow <davidgow@google.com> wrote:
-> From: Brendan Higgins <brendan.higgins@linux.dev>
+On Tue, Jan 31, 2023 at 8:06 AM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
 >
-> Looks like kunit_test_init_section_suites(...) was messed up in a merge
-> conflict. This fixes it.
+> "udpgro_bench.sh" invokes udpgso_bench_rx/udpgso_bench_tx programs
+> subsequently and while doing so, there is a chance that the rx one is not
+> ready to accept socket connections. This racing bug could fail the test
+> with at least one of the following:
 >
-> kunit_test_init_section_suites(...) was not updated to avoid the extra
-> level of indirection when .kunit_test_suites was flattened. Given no-one
-> was actively using it, this went unnoticed for a long period of time.
+> ./udpgso_bench_tx: connect: Connection refused
+> ./udpgso_bench_tx: sendmsg: Connection refused
+> ./udpgso_bench_tx: write: Connection refused
 >
-> Fixes: e5857d396f35 ("kunit: flatten kunit_suite*** to kunit_suite** in
-> .kunit_test_suites")
-> Signed-off-by: Brendan Higgins <brendan.higgins@linux.dev>
-> Signed-off-by: David Gow <davidgow@google.com>
+> This change addresses this by making udpgro_bench.sh wait for the rx
+> program to be ready before firing off the tx one - with an exponential back
+> off algorithm from 1s to 10s.
+>
+> Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+
+please CC: reviewers of previous revisions on new revisions
+
+also for upcoming patches: please clearly mark net or net-next.
 > ---
->  include/kunit/test.h | 1 -
->  1 file changed, 1 deletion(-)
+>  tools/testing/selftests/net/udpgso_bench.sh | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 >
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 87ea90576b50..716deaeef3dd 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -303,7 +303,6 @@ static inline int kunit_run_all_tests(void)
->   */
->  #define kunit_test_init_section_suites(__suites...)			\
->  	__kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),	\
-> -			    CONCATENATE(__UNIQUE_ID(suites), _probe),	\
->  			    ##__suites)
+> diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
+> index dc932fd65363..20b5db8fcbde 100755
+> --- a/tools/testing/selftests/net/udpgso_bench.sh
+> +++ b/tools/testing/selftests/net/udpgso_bench.sh
+> @@ -7,6 +7,7 @@ readonly GREEN='\033[0;92m'
+>  readonly YELLOW='\033[0;33m'
+>  readonly RED='\033[0;31m'
+>  readonly NC='\033[0m' # No Color
+> +readonly TESTPORT=8000 # Keep this in sync with udpgso_bench_rx/tx
+
+then also pass explicit -p argument to the processes to keep all three
+consistent
+
 >
->  #define kunit_test_init_section_suite(suite)	\
+>  readonly KSFT_PASS=0
+>  readonly KSFT_FAIL=1
+> @@ -56,10 +57,27 @@ trap wake_children EXIT
+>
+>  run_one() {
+>         local -r args=$@
+> +       local -r init_delay_s=1
+> +       local -r max_delay_s=10
+> +       local delay_s=0
+> +       local nr_socks=0
+>
+>         ./udpgso_bench_rx &
+>         ./udpgso_bench_rx -t &
+>
+> +       # Wait for the above test program to get ready to receive connections.
+> +       delay_s="${init_delay_s}"
+> +       while [ "$delay_s" -lt "$max_delay_s" ]; do
+> +               nr_socks="$(ss -lnHi | grep -c "\*:${TESTPORT}")"
+> +               [ "$nr_socks" -eq 2 ] && break
+> +               sleep "$delay_s"
+> +               delay="$((delay*2))"
+
+I don't think we need exponential back-off for something this simple
+
+> +       done
+> +       if [ "$nr_socks" -ne 2 ]; then
+> +               echo "timed out while waiting for udpgso_bench_rx"
+> +               exit 1
+> +       fi
+> +
+>         ./udpgso_bench_tx ${args}
+>  }
+>
 > --
-> 2.39.1.456.gfc5497dd1b-goog
+> 2.34.1
 >
->
-
-Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
-
-Thanks!
