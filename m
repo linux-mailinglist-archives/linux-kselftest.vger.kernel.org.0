@@ -2,122 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B05A682E9B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 15:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5E2682F74
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 15:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjAaOBP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 09:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
+        id S231287AbjAaOk3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 09:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbjAaOBO (ORCPT
+        with ESMTP id S230369AbjAaOk1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:01:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7444227AE
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 06:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675173615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sW7aiMox0CriK8aU+HN+jb3vaXSIy6HBnrk2aPiMthI=;
-        b=CS7INI6UBU+XrplRHUlP2jUDASerlHTzc221Hr0D5vDtVH/UrqjBsNx17vQ7uHWhx8CwIj
-        z2ZKLniN4vn5b9AYOvzk9gVvwzam+z3iPpuzoAXBGvDaqMk2vE+Lg6NHLHtIjAQgQjLG2N
-        28sss/vH7tGw6U4T+dpPc+tSQ2ZWO1w=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-321-a0jD0AXsNrW9TwUr5iX7aA-1; Tue, 31 Jan 2023 09:00:12 -0500
-X-MC-Unique: a0jD0AXsNrW9TwUr5iX7aA-1
-Received: by mail-wr1-f69.google.com with SMTP id l8-20020adfc788000000b002bdfe72089cso2494625wrg.21
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 06:00:12 -0800 (PST)
+        Tue, 31 Jan 2023 09:40:27 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7B33EC57
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 06:40:26 -0800 (PST)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 20E7C442ED
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 14:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675176025;
+        bh=XHZduMLns3Y7r5k79prz1oAhShsJx/gipbVLJCHhlGk=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=VB1JA+e1Q99GCdcdhSzo5p9TPOSz0Jj8ArKt93UZMlxo2TQdUdA6shPJts7uczSfS
+         7OS1I6DMwpKL6dc/EQGEt1PTyGqh6dFna924TmuDvL+e9i37iOxbM48iakiM26mPiB
+         1Fckulf7R9ljbGAyNJ4ZX10l0kicVq6bMB0DQ4+ZWYp4cok6UD8Tz8Q047nlzIHfZK
+         9r3V0Qx2svvMBpR5S3J0sru5mq/g6cOswRdYv0c8En6AJaI2lJgtnvstJtigJhNF6/
+         XVRxul3lM4/d048rbcSLIFZpPYfDaLdCvLVJPPoXg/ugnnC7OJIecStHEQ6tiFDGt6
+         5MHoPwRJlC+LA==
+Received: by mail-wm1-f72.google.com with SMTP id o5-20020a05600c4fc500b003db0b3230efso11372179wmq.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 06:40:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sW7aiMox0CriK8aU+HN+jb3vaXSIy6HBnrk2aPiMthI=;
-        b=PSoCQsLpEP/z+jLvc1E57XHqD10ZI+sut0s1x8mCly4PzaCnvZAidqAeoG12N3egBS
-         a4Dz7lIbBilLCvvYC4h/G9ujCuBXWlGhFjLxa3sWUfQ3SNKKjyQT8Hq0UpcG+/p+PaXG
-         jPzIuk5aa/86RhqIS9AE3LA8zIXV5XS0qOYpNravNiyF2XI9DEc5RmNyZQW0jP6d5sS/
-         +4EydQKKB+NUxFmQp4R5XY+rBUtkJCG+NN4GnrWV2sVO0SV1YGIo5WvmKRZLX2iWyJ0Y
-         duZoPxXmFe8TJGvemQSKu6g2fCDBQb7f8f+RuJMhRRt/sKeqDPJtfavqk2kygXdk50OG
-         mznA==
-X-Gm-Message-State: AO0yUKX4xxnPv4WHVca9loWcQhrn3Y7e8EssB7dUVCz0HJQ8M6xNBaPO
-        l7/RYPgxpmGuvVdYOVO8uuZMvW1vAOyeoy1VbQw2oYFRinAuhBYHM5hybfu6OM6QHdlMjg/vhDX
-        wKGBQ740/SXcoBlUIyrRi48ZlurEK
-X-Received: by 2002:a05:600c:3b84:b0:3dc:1031:14c4 with SMTP id n4-20020a05600c3b8400b003dc103114c4mr3752223wms.14.1675173611364;
-        Tue, 31 Jan 2023 06:00:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set94yYHCQtMUhLwwFZW2Tw85+OPCk5GgL8jU/FYp0b92bP94albwy2k0jgp6h4ZElMMLuWMq1g==
-X-Received: by 2002:a05:600c:3b84:b0:3dc:1031:14c4 with SMTP id n4-20020a05600c3b8400b003dc103114c4mr3752186wms.14.1675173611028;
-        Tue, 31 Jan 2023 06:00:11 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f0a:ca00:f74f:2017:1617:3ec3? (p200300d82f0aca00f74f201716173ec3.dip0.t-ipconnect.de. [2003:d8:2f0a:ca00:f74f:2017:1617:3ec3])
-        by smtp.gmail.com with ESMTPSA id e38-20020a05600c4ba600b003dc434900e1sm11512963wmp.34.2023.01.31.06.00.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 06:00:10 -0800 (PST)
-Message-ID: <658eda9c-d716-fcb7-ba0c-b36f646195f1@redhat.com>
-Date:   Tue, 31 Jan 2023 15:00:08 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XHZduMLns3Y7r5k79prz1oAhShsJx/gipbVLJCHhlGk=;
+        b=JeSV38rYpVXmxMIYc/1XUZe0lIHUL8QNViQArLnFT9OOrAjsJLNQ5zvcoZGE4wWSsT
+         6qsVOL6f5+7gcVGy4Bqiy8tkfLqPS4HFxGj3d3FbuERW2gjJpOn0R2Af5AIWHpPu3dg2
+         CO2S1EcQKM1GYVFO1wFfiskzNx8tzccIYNHnEXvRauiLJmYcxW6bb4s5Kmi0+X02Ypf9
+         OXUlZWkFVCrFw7gaEV8ZrCRW9EWEFmB6pzU68MGlXBCYAlMZE19fFEAGMk7YwsK1q3a2
+         yKN1uJ4qQbAMk14Sm3WVJsg8aqAR8TM7wvXBydZNzNP3q/5oAUShvTCAqyXYqY2t6s2E
+         OpPQ==
+X-Gm-Message-State: AO0yUKVAiUkYxOE8vkv64jMWVTfBmyGs7wEo78Qcu/GT0TcL5UjEiS0t
+        v2g6RN0LyPsEM1MsjbqXuoQRGfcay23tfYYaSXxuTHolcTkPXrhajdh8HiJdyClvhQ9bpfcZoQd
+        hVYnCnl2Jt2yGSaqtVk4eo2StPmS1L1HiH91OVuLZGRYk+Q==
+X-Received: by 2002:a05:600c:3b8f:b0:3dc:4633:9844 with SMTP id n15-20020a05600c3b8f00b003dc46339844mr15329503wms.17.1675176021641;
+        Tue, 31 Jan 2023 06:40:21 -0800 (PST)
+X-Google-Smtp-Source: AK7set+EbSgEyXZd4rdDr0ISKIc/bI1f2vwrKcgwG0bUb2kTOVWw33DTexl9UMEDfIuhWw4JxLpblg==
+X-Received: by 2002:a05:600c:3b8f:b0:3dc:4633:9844 with SMTP id n15-20020a05600c3b8f00b003dc46339844mr15329456wms.17.1675176021119;
+        Tue, 31 Jan 2023 06:40:21 -0800 (PST)
+Received: from qwirkle ([2001:67c:1560:8007::aac:c4dd])
+        by smtp.gmail.com with ESMTPSA id c3-20020a1c3503000000b003dc1d668866sm19414222wma.10.2023.01.31.06.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 06:40:20 -0800 (PST)
+Date:   Tue, 31 Jan 2023 14:40:18 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Willem de Bruijn <willemb@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] selftests: net: udpgso_bench_rx/tx: Stop when
+ wrong CLI args are provided
+Message-ID: <Y9koUno9kGkNJkma@qwirkle>
+References: <20230131130412.432549-1-andrei.gherzan@canonical.com>
+ <20230131130412.432549-2-andrei.gherzan@canonical.com>
+ <CA+FuTSf1ffpep=wV=__J96Ju_nPkd96=c+ny4mC+SxrhRp0ofA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 01/19] mm: Introduce vm_account
-Content-Language: en-US
-To:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
-        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch, linuxppc-dev@lists.ozlabs.org,
-        linux-fpga@vger.kernel.org, linux-rdma@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org,
-        bpf@vger.kernel.org, rds-devel@oss.oracle.com,
-        linux-kselftest@vger.kernel.org
-References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
- <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+FuTSf1ffpep=wV=__J96Ju_nPkd96=c+ny4mC+SxrhRp0ofA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 24.01.23 06:42, Alistair Popple wrote:
-> Kernel drivers that pin pages should account these pages against
-> either user->locked_vm or mm->pinned_vm and fail the pinning if
-> RLIMIT_MEMLOCK is exceeded and CAP_IPC_LOCK isn't held.
+On 23/01/31 08:35AM, Willem de Bruijn wrote:
+> On Tue, Jan 31, 2023 at 8:08 AM Andrei Gherzan
+> <andrei.gherzan@canonical.com> wrote:
+> >
+> > Leaving unrecognized arguments buried in the output, can easily hide a
+> > CLI/script typo. Avoid this by exiting when wrong arguments are provided to
+> > the udpgso_bench test programs.
+> >
+> > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
 > 
-> Currently drivers open-code this accounting and use various methods to
-> update the atomic variables and check against the limits leading to
-> various bugs and inconsistencies. To fix this introduce a standard
-> interface for charging pinned and locked memory. As this involves
-> taking references on kernel objects such as mm_struct or user_struct
-> we introduce a new vm_account struct to hold these references. Several
-> helper functions are then introduced to grab references and check
-> limits.
-> 
-> As the way these limits are charged and enforced is visible to
-> userspace we need to be careful not to break existing applications by
-> charging to different counters. As a result the vm_account functions
-> support accounting to different counters as required.
-> 
-> A future change will extend this to also account against a cgroup for
-> pinned pages.
+> I'm on the fence on this. Test binaries are not necessarily robust
+> against bad input. If you insist.
 
-The term "vm_account" is misleading, no? VM_ACCOUNT is for accounting 
-towards the commit limit ....
+I'll keep it in the set (for next v), but I don't mind if it doesn't end
+up applied. It was just something I stumbled into.
+
+> When sending patches to net, please always add a Fixes tag.
+
+I'll keep that in mind.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Andrei Gherzan
