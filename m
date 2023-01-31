@@ -2,62 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AACA6839BC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 23:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B86366839BD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 23:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjAaW4w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 17:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S229759AbjAaW4z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 17:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjAaW4w (ORCPT
+        with ESMTP id S229574AbjAaW4y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:56:52 -0500
+        Tue, 31 Jan 2023 17:56:54 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DC926AF
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 14:56:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEF626AF
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 14:56:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 306B76173D
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 22:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC45C433D2;
-        Tue, 31 Jan 2023 22:56:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B18A61743
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 22:56:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078A0C4339E;
+        Tue, 31 Jan 2023 22:56:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675205810;
-        bh=r9zFAcCDC9u36l4cZwW0HdkMNBYXJGy6sbJP8D7ZUcU=;
-        h=From:Subject:Date:To:Cc:From;
-        b=lMPKrC/fiHlb0XN+meN84yIW5Uiko5DdVp4qBQaZ6r5x2Eo4oK5LJkVhQAmJlYnin
-         Y7XP8XRbJmaBe8dWwRrc9w4EyGr5EmU3i8A8gjmvnWYIlkjWufrBFKOeNUjD/cthBZ
-         eqYDcP2qmyB7yO7+x7RsyMi3k3dME+P44C4D9/uB1VSpnPuu1ZvEH0Fn8Q7LSstuWY
-         Brs7phcsGqqSZ4Zn7FhXr1rzdaQ9cHKgJe9rmPjQxjWJpU01jAt7cLCDbws7XufR5p
-         FFsENtgS+SQgrlae58cvmcUapfERq27NqYDb9XrEOUgoPYL1S1Z4sBLlBInE5HboEr
-         rv44ZGcNAfnug==
+        s=k20201202; t=1675205812;
+        bh=NOhvDhCN7uOA9tKbnAmGofUYUWi9IqtE+mHDLpY5sxE=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=RuphEXQHw9LgnFPPRytT/f65Yayrm8j3/j+lTTvUUCVl67YXytbAv+QtmluTill0u
+         hsvggWfIu2fGOCaaAUqt198yV95o5wLAQV5yiyFA1MjmGD80zp+PztY0P9Ta0NuDvF
+         RyJWEc06C+CPae1MpT99lKugaIWFfVpdDn4ekK2lWO8FLjdHzpnngZCKm/8rlpm/k/
+         /ms9ZXSYA3na9y/6KLHvWPttIjA4lRH1MACa5AeyOTGKO+9OUz77z9ZWHGNCyLHCH8
+         ryjCkadV0H9kgSHB6BemictRk5zaKfQH06zVVDwdhQuFLgUt+NxT7OWw0J1bzqIiGJ
+         TEU3A+NZmPqZQ==
 From:   Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/2] kselftest/arm64: Fix enumeration of SME VLs on systems
- without VL 128
-Date:   Tue, 31 Jan 2023 22:56:33 +0000
-Message-Id: <20230131-arm64-kselftest-sig-sme-no-128-v1-0-d47c13dc8e1e@kernel.org>
+Date:   Tue, 31 Jan 2023 22:56:34 +0000
+Subject: [PATCH 1/2] kselftest/arm64: Fix enumeration of systems without
+ 128 bit SME
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKGc2WMC/x2Nyw6CMBAAf4Xs2U36UIP+iuFQ6AIbpDW7RE0I/
- 07hOHOYWUFJmBSe1QpCX1bOqYC9VNCNIQ2EHAuDM84b6y0Gme9XnJTe/UK6oPKAOhOmjNbVWMf
- o7MObW/AOSqQNSthKSN14ZH5ZpkN/hHr+n99Xs207gfmEr4cAAAA=
+Message-Id: <20230131-arm64-kselftest-sig-sme-no-128-v1-1-d47c13dc8e1e@kernel.org>
+References: <20230131-arm64-kselftest-sig-sme-no-128-v1-0-d47c13dc8e1e@kernel.org>
+In-Reply-To: <20230131-arm64-kselftest-sig-sme-no-128-v1-0-d47c13dc8e1e@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1162; i=broonie@kernel.org;
- h=from:subject:message-id; bh=r9zFAcCDC9u36l4cZwW0HdkMNBYXJGy6sbJP8D7ZUcU=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj2ZyuEzHhXZrW7uLcd/h1UKqBpoWh85K4wV3zfS6b
- PB1pjdKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY9mcrgAKCRAk1otyXVSH0BumB/
- 9uKe2/vH/ZGki/V0znR8cDRIvZpaaIww5Q1LoOm/m8G62AquggtQp/9lVSm6Lhg6KeRP7ogVbtU7fx
- g5oxfZQOkgmI4e87cfxJQwEvEqLAgEL5MZ1xZEQA1hYkvRjdchZkCM3L57/emNhFA/m2u6wncd/HZY
- 8exNx9wb5dmIOepQbgHWdp3IM5EhImAWVKGZWeCbYqZqlN+RAvHJ/dpHG6V+JRnxZpytL5L/lUd5nW
- akoTwe/Zf+77S3QMCrJBvjYoNM9SpxQ0nnZuimo6ZCe6YZPCO6/rji8emmOP9oAX1tDffehKAqU4e+
- sEvkOxaUFaFFSkFScX8/Rp33SsXQzG
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1729; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=NOhvDhCN7uOA9tKbnAmGofUYUWi9IqtE+mHDLpY5sxE=;
+ b=owGbwMvMwMWocq27KDak/QLjabUkhuSbc9b359l+t02fVfE20FF89t5Vt0JXRx5iCjef/HX3Ve77
+ smtOdzIaszAwcjHIiimyrH2WsSo9XGLr/EfzX8EMYmUCmcLAxSkAE/lfwf6b/YHflNzpfaEPuo2/Cf
+ Npee5qfvKiWfbysrtqBybdsp0cc6GIzWexm2tRlyz/q31Covt9eI4olJW7GGtEB5e+YfuZ8fO6WcUL
+ rqqLEn4V828tiIu98mZu6NrvmfJ/O98pSK8unrHcx1tx3s7ZBULC3uz9ZnIOPZoR7MFfT4eLqa8tt+
+ uTeaNeusY85OP1LRm3+Gu3XGTtu+Msdoq3MaVMdIHfXo525oKn/u7JRqJWi50tIrNjZnFHbgzQn51Z
+ bLnXz+/5RTU1iU/1H31XvxZhSZop0jd9xUmt2K0P0tZM+hgW37Tr6sNtoocuOcc/k3SZVv8zX3Kumm
+ VGSKyUGEdH5+RFJUWGXB/tu+OCAA==
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,31 +68,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These two patches fix a repeated error with the way we enumerate SME
-VLs, the code for which is cut'n'pasted into each test.  It's in two
-patches because the first applies to Linus' tree and the second covers a
-new test added in -next, even if they're both applied for -next now this
-should help with backporting.
+The current signal handling tests for SME do not account for the fact that
+unlike SVE all SME vector lengths are optional so we can't guarantee that
+we will encounter the minimum possible VL, they will hang enumerating VLs
+on such systems. Abort enumeration when we find the lowest VL.
 
-It would be good to factor this code out but that's a separate issue,
-I'll tackle that for the next release (along with the general fun with
-the build system in these tests).
-
+Fixes: 4963aeb35a9e ("kselftest/arm64: signal: Add SME signal handling tests")
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Mark Brown (2):
-      kselftest/arm64: Fix enumeration of systems without 128 bit SME
-      kselftest/arm64: Fix enumeration of systems without 128 bit SME for SSVE+ZA
+ tools/testing/selftests/arm64/signal/testcases/ssve_regs.c | 4 ++++
+ tools/testing/selftests/arm64/signal/testcases/za_regs.c   | 4 ++++
+ 2 files changed, 8 insertions(+)
 
- tools/testing/selftests/arm64/signal/testcases/ssve_regs.c    | 4 ++++
- tools/testing/selftests/arm64/signal/testcases/ssve_za_regs.c | 4 ++++
- tools/testing/selftests/arm64/signal/testcases/za_regs.c      | 4 ++++
- 3 files changed, 12 insertions(+)
----
-base-commit: 8154ffb7a51882c00730952ed21d80ed76f165d7
-change-id: 20230131-arm64-kselftest-sig-sme-no-128-8dd219305a32
+diff --git a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+index cd738265cdcd..00bbdc9a6269 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
++++ b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+@@ -34,6 +34,10 @@ static bool sme_get_vls(struct tdescr *td)
+ 
+ 		vl &= PR_SME_VL_LEN_MASK;
+ 
++		/* Did we find the lowest supported VL? */
++		if (vq < sve_vq_from_vl(vl))
++			break;
++
+ 		/* Skip missing VLs */
+ 		vq = sve_vq_from_vl(vl);
+ 
+diff --git a/tools/testing/selftests/arm64/signal/testcases/za_regs.c b/tools/testing/selftests/arm64/signal/testcases/za_regs.c
+index ea45acb115d5..174ad6656696 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/za_regs.c
++++ b/tools/testing/selftests/arm64/signal/testcases/za_regs.c
+@@ -34,6 +34,10 @@ static bool sme_get_vls(struct tdescr *td)
+ 
+ 		vl &= PR_SME_VL_LEN_MASK;
+ 
++		/* Did we find the lowest supported VL? */
++		if (vq < sve_vq_from_vl(vl))
++			break;
++
+ 		/* Skip missing VLs */
+ 		vq = sve_vq_from_vl(vl);
+ 
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
