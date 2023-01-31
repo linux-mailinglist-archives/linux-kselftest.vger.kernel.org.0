@@ -2,55 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99B96824CE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 07:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 279A66824D1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 07:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjAaGsD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 01:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S230225AbjAaGsP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 01:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjAaGsB (ORCPT
+        with ESMTP id S230320AbjAaGsN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 01:48:01 -0500
+        Tue, 31 Jan 2023 01:48:13 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AEE30E2
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 22:47:35 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4bdeb1bbeafso155764877b3.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 22:47:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3D43F293
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 22:47:36 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-50e79ffba49so103882847b3.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 22:47:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=C0lSF9+6BB2p8q7DVk8Ve6aQbQV5kmgfstM+8LP0Hig=;
-        b=kzge/Fqh+dwX3TGXj53ds/bCavN8kLQjhXhEQKgYToQ4f2YQtchcpSp42CsGVzS/Kz
-         U5bNbYuDC803JiqusZUYvF/rrfwCMKNyo55/LuPsXz5Sh6l65I8yYdCJoQQpqT1S3VYy
-         BHmlvd8OyXWEUNdJjPiBtS3d76qE2WGhFNpnUOSpq9DFZH8LH43/w4WzP4pXdbx3dPhH
-         Rvn3CLPjDyyzU8vhMiviI7xaGZGh2UmW/6lW2skNeAJQwOSwudHMnM7i8c3TdkWhr2eA
-         NX7rzvQlgZ5HXpk/zOc346/aH8IH0mJEVGrsXpYplprgLhh3luAWMoIB87hyY0q6wQqh
-         gqDw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uyVDT9hNRxOyIsJIBjKV9Q9oIt4VPBRQYD4t43TiWdc=;
+        b=tYXjU+Ya2DqfSC7Lkxmg+htkRCcX+8wR8Q/19YLsaelK8vXl6f875cfh430R19F/FC
+         Fut0d+1SBLTIUyoB6sSrgmlpvs9CDXvb/smSrWcq44nZFTvb2R6i/6beOejYcuYkZH4p
+         A+FSN8szb/+R21sypxqRO/qHN/fZRp+EGFi2CcGztbN2kpVmZWEqskjoP+XaLO3mQ33l
+         JUlIoqBfLkQvYU1OPsQDAfN4hBw0i8N6sIu/hz0Z/hNZTW5+3ZJiaYu10E5DDu0XU/JO
+         Vhsc/EKupKBE/lEPizDFqd0TZ+CvsispckvFfEZlFSeL4omnYAtWnEJKRV5RkYzSBWZ6
+         e6Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C0lSF9+6BB2p8q7DVk8Ve6aQbQV5kmgfstM+8LP0Hig=;
-        b=D/2Se7ygtVIeOvH6PUVKxzTyIwou0Ymf2d9x1KvV1TuGf96xlz1xVXZJbsUPTnwswl
-         /5enBJp+5HMeOE930/FnuUKBatmhHKyCej7VhgU+/ZiSyDzniwvf0aIbbPiasqBSxrO+
-         soZx23fg8Vm+HFrq9WBDvkgbNScc4AMJ7+PPkNswX7+DI56EmmyGVkXYxoXpq27n9wbO
-         jHzypppdS0y42mMssVvI99UcZmczzfJa3pjr1PtklSdLrptgfCjoV8eU+Hpkc0ObUTCL
-         1b/XcK6b10j6VweyLUZj4FbpjGMF24L0mYzmziDQyMKHpyaGdA0+BapEd9ExAwKB2fn9
-         o6hA==
-X-Gm-Message-State: AO0yUKWNN205XBdB6X4aVzyDPkmIAlD86E7jBBKKH5264o2F9vRSjAZm
-        CG4TE6SAUSn1ZacKIS/p9GaoYt1NDIWzJA==
-X-Google-Smtp-Source: AK7set+hC0kNgKrySR/qqfRNAl+0BibchiXkAw2G1e7MEVhfMNVvTkeLQvVnapxpl6EB+4Dv/8Z0mPe5U3kMYQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uyVDT9hNRxOyIsJIBjKV9Q9oIt4VPBRQYD4t43TiWdc=;
+        b=qDllwu4IloueMFbHlxvD/c2eAtmVfVfzalCqRH+7g3AXtnJhZOn2PLGkRX3mhPBuAk
+         /LmiWoDgajEZ1xoSOIhAUwGNbDdeiGN5gdszh5m+/AM7kW4jvlrjTX/7vsd5ho+YBwEj
+         sBC1JiitJUEPRDRZu1qCRGp5HZqbMoZXBdN35hh0ZtNcSExiIuClXSTmklfpk1eaPszq
+         0S1+R49955JFu+nMS5J7Zt6sBTvY2dRx6Tp64sY5SO/rblEF2Z+E6GE9F2lXM+F+JfBf
+         QldrgVYG4A+u3gmoGX+4Glnds97ix+BsEw1gST4QsEA2gz3WOmxv5eNli2KnLqw13IdP
+         AeKw==
+X-Gm-Message-State: AO0yUKWBZfTkpGMwtS5fUfmKy7vi+4diU4cbhVu6qp31v4HKO9MwSZRo
+        6bpgGXoTKsjjqowHKisUYj4/QJSB0il7sA==
+X-Google-Smtp-Source: AK7set+vJXe4+f8Sh+J/oa3KG4/osfk1EV+A6j04S0uXCps+/7JGg5Ed2Y/xgT8XRtyKMoTiywWFDiF2k2MBEA==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:ca97:0:b0:80b:d8f7:af56 with SMTP id
- a145-20020a25ca97000000b0080bd8f7af56mr2508780ybg.611.1675147609557; Mon, 30
- Jan 2023 22:46:49 -0800 (PST)
-Date:   Tue, 31 Jan 2023 14:46:40 +0800
+ (user=davidgow job=sendgmr) by 2002:a05:6902:1189:b0:80b:6760:dc8f with SMTP
+ id m9-20020a056902118900b0080b6760dc8fmr875246ybu.108.1675147614014; Mon, 30
+ Jan 2023 22:46:54 -0800 (PST)
+Date:   Tue, 31 Jan 2023 14:46:41 +0800
+In-Reply-To: <20230131064641.1912756-1-davidgow@google.com>
 Mime-Version: 1.0
+References: <20230131064641.1912756-1-davidgow@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230131064641.1912756-1-davidgow@google.com>
-Subject: [PATCH v3 1/2] kunit: Expose 'static stub' API to redirect functions
+Message-ID: <20230131064641.1912756-2-davidgow@google.com>
+Subject: [PATCH v3 2/2] Documentation: Add Function Redirection API docs
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendan.higgins@linux.dev>,
         Kees Cook <keescook@chromium.org>,
@@ -62,14 +64,14 @@ To:     Brendan Higgins <brendan.higgins@linux.dev>,
         Joe Fradley <joefradley@google.com>,
         Steve Muckle <smuckle@google.com>,
         Jonathan Corbet <corbet@lwn.net>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org,
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Gow <davidgow@google.com>,
         Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,435 +79,245 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a simple way of redirecting calls to functions by including a
-special prologue in the "real" function which checks to see if the
-replacement function should be called (and, if so, calls it).
+From: Sadiya Kazi <sadiyakazi@google.com>
 
-To redirect calls to a function, make the first (non-declaration) line
-of the function:
+Added a new page (functionredirection.rst) that describes the Function
+Redirection (static stubbing) API. This page will be expanded if we add,
+for example, ftrace-based stubbing.
 
-	KUNIT_STATIC_STUB_REDIRECT(function_name, [function arguments]);
+In addition,
+1. Updated the api/index.rst page to create an entry for function
+   redirection api
+2. Updated the toctree to be hidden, reducing redundancy on the
+   generated page.
 
-(This will compile away to nothing if KUnit is not enabled, otherwise it
-will check if a redirection is active, call the replacement function,
-and return. This check is protected by a static branch, so has very
-little overhead when there are no KUnit tests running.)
-
-Calls to the real function can be redirected to a replacement using:
-
-	kunit_activate_static_stub(test, real_fn, replacement_fn);
-
-The redirection will only affect calls made from within the kthread of
-the current test, and will be automatically disabled when the test
-completes. It can also be manually disabled with
-kunit_deactivate_static_stub().
-
-The 'example' KUnit test suite has a more complete example.
-
+Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
 Co-developed-by: Daniel Latypov <dlatypov@google.com>
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Co-developed-by: David Gow <davidgow@google.com>
 Signed-off-by: David Gow <davidgow@google.com>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 ---
 
-This patch depends upon the 'hooks' implementation in
-https://lore.kernel.org/linux-kselftest/20230128071007.1134942-1-davidgow@google.com/
+Note that this document reworks some elements of the KUnit website's "mocking"
+page at http://kunit.dev/mocking.html written by Daniel Latypov, and used with
+his permission.
 
-Note that checkpatch.pl does warn about control flow in the
-KUNIT_STATIC_STUB_REDIRECT() macro. This is an intentional design choice
-(we think it makes the feature easier to use), though if there are
-strong objections, we can of course reconsider.
-
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20230128074918.1180523-1-davidgow@google.com/
-- The example comment for KUNIT_STATIC_STUB_REDIRECT() now uses the
-  correct 'int' return type. (Thanks, Brendan)
+No changes since v2:
+https://lore.kernel.org/linux-kselftest/20230128074918.1180523-2-davidgow@google.com/
 
 Changes since v1:
-https://lore.kernel.org/all/20221208061841.2186447-2-davidgow@google.com/
-- Adapted to use the "hooks" mechanism
-  - See: https://lore.kernel.org/linux-kselftest/20230128071007.1134942-1-davidgow@google.com/
-  - Now works when KUnit itself is compiled as a module (CONFIG_KUNIT=m)
-
-Changes since RFC v2:
-https://lore.kernel.org/linux-kselftest/20220910212804.670622-2-davidgow@google.com/
-- Now uses the kunit_get_current_test() function, which uses the static
-  key to reduce overhead.
-  - Thanks Kees for the suggestion.
-  - Note that this does prevent redirections from working when
-    CONFIG_KUNIT=m -- this is a restriction of kunit_get_current_test()
-    which will be removed in a future patch.
-- Several tidy-ups to the inline documentation.
-
-Changes since RFC v1:
-https://lore.kernel.org/lkml/20220318021314.3225240-2-davidgow@google.com/
-- Use typecheck_fn() to fix typechecking in some cases (thanks Brendan)
+https://lore.kernel.org/all/20221208061841.2186447-3-davidgow@google.com/
+- Fix a bunch of typos (Thanks, Daniel)
+- Remove a redundant comment (Thanks, Daniel)
+- Reword a few things to be clearer, especially about global state.
 
 ---
- include/kunit/static_stub.h    | 113 ++++++++++++++++++++++++++++++
- include/kunit/test-bug.h       |   1 +
- lib/kunit/Makefile             |   1 +
- lib/kunit/hooks-impl.h         |   2 +
- lib/kunit/kunit-example-test.c |  38 ++++++++++
- lib/kunit/static_stub.c        | 123 +++++++++++++++++++++++++++++++++
- 6 files changed, 278 insertions(+)
- create mode 100644 include/kunit/static_stub.h
- create mode 100644 lib/kunit/static_stub.c
+ .../kunit/api/functionredirection.rst         | 162 ++++++++++++++++++
+ Documentation/dev-tools/kunit/api/index.rst   |  13 +-
+ 2 files changed, 172 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/dev-tools/kunit/api/functionredirection.rst
 
-diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
+diff --git a/Documentation/dev-tools/kunit/api/functionredirection.rst b/Documentation/dev-tools/kunit/api/functionredirection.rst
 new file mode 100644
-index 000000000000..9b80150a5d62
+index 000000000000..3791efc2fcca
 --- /dev/null
-+++ b/include/kunit/static_stub.h
-@@ -0,0 +1,113 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * KUnit function redirection (static stubbing) API.
-+ *
-+ * Copyright (C) 2022, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+#ifndef _KUNIT_STATIC_STUB_H
-+#define _KUNIT_STATIC_STUB_H
++++ b/Documentation/dev-tools/kunit/api/functionredirection.rst
+@@ -0,0 +1,162 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+#if !IS_ENABLED(CONFIG_KUNIT)
++========================
++Function Redirection API
++========================
 +
-+/* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
-+#define KUNIT_TRIGGER_STATIC_STUB(real_fn_name, args...) do {} while (0)
++Overview
++========
 +
-+#else
++When writing unit tests, it's important to be able to isolate the code being
++tested from other parts of the kernel. This ensures the reliability of the test
++(it won't be affected by external factors), reduces dependencies on specific
++hardware or config options (making the test easier to run), and protects the
++stability of the rest of the system (making it less likely for test-specific
++state to interfere with the rest of the system).
 +
-+#include <kunit/test.h>
-+#include <kunit/test-bug.h>
++While for some code (typically generic data structures, helpers, and other
++"pure functions") this is trivial, for others (like device drivers,
++filesystems, core subsystems) the code is heavily coupled with other parts of
++the kernel.
 +
-+#include <linux/compiler.h> /* for {un,}likely() */
-+#include <linux/sched.h> /* for task_struct */
++This coupling is often due to global state in some way: be it a global list of
++devices, the filesystem, or some hardware state. Tests need to either carefully
++manage, isolate, and restore state, or they can avoid it altogether by
++replacing access to and mutation of this state with a "fake" or "mock" variant.
 +
++By refactoring access to such state, such as by introducing a layer of
++indirection which can use or emulate a separate set of test state. However,
++such refactoring comes with its own costs (and undertaking significant
++refactoring before being able to write tests is suboptimal).
 +
-+/**
-+ * KUNIT_STATIC_STUB_REDIRECT() - call a replacement 'static stub' if one exists
-+ * @real_fn_name: The name of this function (as an identifier, not a string)
-+ * @args: All of the arguments passed to this function
-+ *
-+ * This is a function prologue which is used to allow calls to the current
-+ * function to be redirected by a KUnit test. KUnit tests can call
-+ * kunit_activate_static_stub() to pass a replacement function in. The
-+ * replacement function will be called by KUNIT_TRIGGER_STATIC_STUB(), which
-+ * will then return from the function. If the caller is not in a KUnit context,
-+ * the function will continue execution as normal.
-+ *
-+ * Example:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	int real_func(int n)
-+ *	{
-+ *		KUNIT_STATIC_STUB_REDIRECT(real_func, n);
-+ *		return 0;
-+ *	}
-+ *
-+ *	int replacement_func(int n)
-+ *	{
-+ *		return 42;
-+ *	}
-+ *
-+ *	void example_test(struct kunit *test)
-+ *	{
-+ *		kunit_activate_static_stub(test, real_func, replacement_func);
-+ *		KUNIT_EXPECT_EQ(test, real_func(1), 42);
-+ *	}
-+ *
-+ */
-+#define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...)		\
-+do {									\
-+	typeof(&real_fn_name) replacement;				\
-+	struct kunit *current_test = kunit_get_current_test();		\
-+									\
-+	if (likely(!current_test))					\
-+		break;							\
-+									\
-+	replacement = kunit_hooks.get_static_stub_address(current_test,	\
-+							&real_fn_name);	\
-+									\
-+	if (unlikely(replacement))					\
-+		return replacement(args);				\
-+} while (0)
-+
-+/* Helper function for kunit_activate_static_stub(). The macro does
-+ * typechecking, so use it instead.
-+ */
-+void __kunit_activate_static_stub(struct kunit *test,
-+				  void *real_fn_addr,
-+				  void *replacement_addr);
-+
-+/**
-+ * kunit_activate_static_stub() - replace a function using static stubs.
-+ * @test: A pointer to the 'struct kunit' test context for the current test.
-+ * @real_fn_addr: The address of the function to replace.
-+ * @replacement_addr: The address of the function to replace it with.
-+ *
-+ * When activated, calls to real_fn_addr from within this test (even if called
-+ * indirectly) will instead call replacement_addr. The function pointed to by
-+ * real_fn_addr must begin with the static stub prologue in
-+ * KUNIT_TRIGGER_STATIC_STUB() for this to work. real_fn_addr and
-+ * replacement_addr must have the same type.
-+ *
-+ * The redirection can be disabled again with kunit_deactivate_static_stub().
-+ */
-+#define kunit_activate_static_stub(test, real_fn_addr, replacement_addr) do {	\
-+	typecheck_fn(typeof(&real_fn_addr), replacement_addr);			\
-+	__kunit_activate_static_stub(test, real_fn_addr, replacement_addr);	\
-+} while (0)
++A simpler way to intercept and replace some of the function calls is to use
++function redirection via static stubs.
 +
 +
-+/**
-+ * kunit_deactivate_static_stub() - disable a function redirection
-+ * @test: A pointer to the 'struct kunit' test context for the current test.
-+ * @real_fn_addr: The address of the function to no-longer redirect
-+ *
-+ * Deactivates a redirection configured with kunit_activate_static_stub(). After
-+ * this function returns, calls to real_fn_addr() will execute the original
-+ * real_fn, not any previously-configured replacement.
-+ */
-+void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr);
++Static Stubs
++============
 +
-+#endif
-+#endif
-diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-index 2b505a95b641..30ca541b6ff2 100644
---- a/include/kunit/test-bug.h
-+++ b/include/kunit/test-bug.h
-@@ -20,6 +20,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
- /* Hooks table: a table of function pointers filled in when kunit loads */
- extern struct kunit_hooks_table {
- 	__printf(3, 4) void (*fail_current_test)(const char*, int, const char*, ...);
-+	void *(*get_static_stub_address)(struct kunit *test, void *real_fn_addr);
- } kunit_hooks;
- 
- /**
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index deeb46cc879b..da665cd4ea12 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -2,6 +2,7 @@ obj-$(CONFIG_KUNIT) +=			kunit.o
- 
- kunit-objs +=				test.o \
- 					resource.o \
-+					static_stub.o \
- 					string-stream.o \
- 					assert.o \
- 					try-catch.o \
-diff --git a/lib/kunit/hooks-impl.h b/lib/kunit/hooks-impl.h
-index d911f40f76db..ec745a39832c 100644
---- a/lib/kunit/hooks-impl.h
-+++ b/lib/kunit/hooks-impl.h
-@@ -16,12 +16,14 @@
- 
- /* List of declarations. */
- void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...);
-+void *__kunit_get_static_stub_address_impl(struct kunit *test, void *real_fn_addr);
- 
- /* Code to set all of the function pointers. */
- static inline void kunit_install_hooks(void)
- {
- 	/* Install the KUnit hook functions. */
- 	kunit_hooks.fail_current_test = __kunit_fail_current_test_impl;
-+	kunit_hooks.get_static_stub_address = __kunit_get_static_stub_address_impl;
- }
- 
- #endif /* _KUNIT_HOOKS_IMPL_H */
-diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-index 66cc4e2365ec..cd8b7e51d02b 100644
---- a/lib/kunit/kunit-example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <kunit/test.h>
-+#include <kunit/static_stub.h>
- 
- /*
-  * This is the most fundamental element of KUnit, the test case. A test case
-@@ -130,6 +131,42 @@ static void example_all_expect_macros_test(struct kunit *test)
- 	KUNIT_ASSERT_GT_MSG(test, sizeof(int), 0, "Your ints are 0-bit?!");
- }
- 
-+/* This is a function we'll replace with static stubs. */
-+static int add_one(int i)
-+{
-+	/* This will trigger the stub if active. */
-+	KUNIT_STATIC_STUB_REDIRECT(add_one, i);
++Static stubs are a way of redirecting calls to one function (the "real"
++function) to another function (the "replacement" function).
 +
-+	return i + 1;
-+}
++It works by adding a macro to the "real" function which checks to see if a test
++is running, and if a replacement function is available. If so, that function is
++called in place of the original.
 +
-+/* This is used as a replacement for the above function. */
-+static int subtract_one(int i)
-+{
-+	/* We don't need to trigger the stub from the replacement. */
++Using static stubs is pretty straightforward:
 +
-+	return i - 1;
-+}
++1. Add the KUNIT_STATIC_STUB_REDIRECT() macro to the start of the "real"
++   function.
 +
-+/*
-+ * This test shows the use of static stubs.
-+ */
-+static void example_static_stub_test(struct kunit *test)
-+{
-+	/* By default, function is not stubbed. */
-+	KUNIT_EXPECT_EQ(test, add_one(1), 2);
++   This should be the first statement in the function, after any variable
++   declarations. KUNIT_STATIC_STUB_REDIRECT() takes the name of the
++   function, followed by all of the arguments passed to the real function.
 +
-+	/* Replace add_one() with subtract_one(). */
-+	kunit_activate_static_stub(test, add_one, subtract_one);
++   For example:
 +
-+	/* add_one() is now replaced. */
-+	KUNIT_EXPECT_EQ(test, add_one(1), 0);
++   .. code-block:: c
 +
-+	/* Return add_one() to normal. */
-+	kunit_deactivate_static_stub(test, add_one);
-+	KUNIT_EXPECT_EQ(test, add_one(1), 2);
-+}
-+
- /*
-  * Here we make a list of all the test cases we want to add to the test suite
-  * below.
-@@ -145,6 +182,7 @@ static struct kunit_case example_test_cases[] = {
- 	KUNIT_CASE(example_skip_test),
- 	KUNIT_CASE(example_mark_skipped_test),
- 	KUNIT_CASE(example_all_expect_macros_test),
-+	KUNIT_CASE(example_static_stub_test),
- 	{}
- };
- 
-diff --git a/lib/kunit/static_stub.c b/lib/kunit/static_stub.c
-new file mode 100644
-index 000000000000..92b2cccd5e76
---- /dev/null
-+++ b/lib/kunit/static_stub.c
-@@ -0,0 +1,123 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit function redirection (static stubbing) API.
-+ *
-+ * Copyright (C) 2022, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+#include <kunit/test.h>
-+#include <kunit/static_stub.h>
-+#include "hooks-impl.h"
-+
-+
-+/* Context for a static stub. This is stored in the resource data. */
-+struct kunit_static_stub_ctx {
-+	void *real_fn_addr;
-+	void *replacement_addr;
-+};
-+
-+static void __kunit_static_stub_resource_free(struct kunit_resource *res)
-+{
-+	kfree(res->data);
-+}
-+
-+/* Matching function for kunit_find_resource(). match_data is real_fn_addr. */
-+static bool __kunit_static_stub_resource_match(struct kunit *test,
-+						struct kunit_resource *res,
-+						void *match_real_fn_addr)
-+{
-+	/* This pointer is only valid if res is a static stub resource. */
-+	struct kunit_static_stub_ctx *ctx = res->data;
-+
-+	/* Make sure the resource is a static stub resource. */
-+	if (res->free != &__kunit_static_stub_resource_free)
-+		return false;
-+
-+	return ctx->real_fn_addr == match_real_fn_addr;
-+}
-+
-+/* Hook to return the address of the replacement function. */
-+void *__kunit_get_static_stub_address_impl(struct kunit *test, void *real_fn_addr)
-+{
-+	struct kunit_resource *res;
-+	struct kunit_static_stub_ctx *ctx;
-+	void *replacement_addr;
-+
-+	res = kunit_find_resource(test,
-+				  __kunit_static_stub_resource_match,
-+				  real_fn_addr);
-+
-+	if (!res)
-+		return NULL;
-+
-+	ctx = res->data;
-+	replacement_addr = ctx->replacement_addr;
-+	kunit_put_resource(res);
-+	return replacement_addr;
-+}
-+
-+void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr)
-+{
-+	struct kunit_resource *res;
-+
-+	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
-+				"Tried to deactivate a NULL stub.");
-+
-+	/* Look up the existing stub for this function. */
-+	res = kunit_find_resource(test,
-+				  __kunit_static_stub_resource_match,
-+				  real_fn_addr);
-+
-+	/* Error out if the stub doesn't exist. */
-+	KUNIT_ASSERT_PTR_NE_MSG(test, res, NULL,
-+				"Tried to deactivate a nonexistent stub.");
-+
-+	/* Free the stub. We 'put' twice, as we got a reference
-+	 * from kunit_find_resource()
-+	 */
-+	kunit_remove_resource(test, res);
-+	kunit_put_resource(res);
-+}
-+EXPORT_SYMBOL_GPL(kunit_deactivate_static_stub);
-+
-+/* Helper function for kunit_activate_static_stub(). The macro does
-+ * typechecking, so use it instead.
-+ */
-+void __kunit_activate_static_stub(struct kunit *test,
-+				  void *real_fn_addr,
-+				  void *replacement_addr)
-+{
-+	struct kunit_static_stub_ctx *ctx;
-+	struct kunit_resource *res;
-+
-+	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
-+				"Tried to activate a stub for function NULL");
-+
-+	/* If the replacement address is NULL, deactivate the stub. */
-+	if (!replacement_addr) {
-+		kunit_deactivate_static_stub(test, replacement_addr);
-+		return;
++	void send_data_to_hardware(const char *str)
++	{
++		KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
++		/* real implementation */
 +	}
 +
-+	/* Look up any existing stubs for this function, and replace them. */
-+	res = kunit_find_resource(test,
-+				  __kunit_static_stub_resource_match,
-+				  real_fn_addr);
-+	if (res) {
-+		ctx = res->data;
-+		ctx->replacement_addr = replacement_addr;
++2. Write one or more replacement functions.
 +
-+		/* We got an extra reference from find_resource(), so put it. */
-+		kunit_put_resource(res);
-+	} else {
-+		ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-+		ctx->real_fn_addr = real_fn_addr;
-+		ctx->replacement_addr = replacement_addr;
-+		res = kunit_alloc_resource(test, NULL,
-+				     &__kunit_static_stub_resource_free,
-+				     GFP_KERNEL, ctx);
++   These functions should have the same function signature as the real function.
++   In the event they need to access or modify test-specific state, they can use
++   kunit_get_current_test() to get a struct kunit pointer. This can then
++   be passed to the expectation/assertion macros, or used to look up KUnit
++   resources.
++
++   For example:
++
++   .. code-block:: c
++
++	void fake_send_data_to_hardware(const char *str)
++	{
++		struct kunit *test = kunit_get_current_test();
++		KUNIT_EXPECT_STREQ(test, str, "Hello World!");
 +	}
-+}
-+EXPORT_SYMBOL_GPL(__kunit_activate_static_stub);
++
++3. Activate the static stub from your test.
++
++   From within a test, the redirection can be enabled with
++   kunit_activate_static_stub(), which accepts a struct kunit pointer,
++   the real function, and the replacement function. You can call this several
++   times with different replacement functions to swap out implementations of the
++   function.
++
++   In our example, this would be
++
++   .. code-block:: c
++
++	kunit_activate_static_stub(test,
++				   send_data_to_hardware,
++				   fake_send_data_to_hardware);
++
++4. Call (perhaps indirectly) the real function.
++
++   Once the redirection is activated, any call to the real function will call
++   the replacement function instead. Such calls may be buried deep in the
++   implementation of another function, but must occur from the test's kthread.
++
++   For example:
++
++   .. code-block:: c
++
++	send_data_to_hardware("Hello World!"); /* Succeeds */
++	send_data_to_hardware("Something else"); /* Fails the test. */
++
++5. (Optionally) disable the stub.
++
++   When you no longer need it, disable the redirection (and hence resume the
++   original behaviour of the 'real' function) using
++   kunit_deactivate_static_stub(). Otherwise, it will be automatically disabled
++   when the test exits.
++
++   For example:
++
++   .. code-block:: c
++
++	kunit_deactivate_static_stub(test, send_data_to_hardware);
++
++
++It's also possible to use these replacement functions to test to see if a
++function is called at all, for example:
++
++.. code-block:: c
++
++	void send_data_to_hardware(const char *str)
++	{
++		KUNIT_STATIC_STUB_REDIRECT(send_data_to_hardware, str);
++		/* real implementation */
++	}
++
++	/* In test file */
++	int times_called = 0;
++	void fake_send_data_to_hardware(const char *str)
++	{
++		times_called++;
++	}
++	...
++	/* In the test case, redirect calls for the duration of the test */
++	kunit_activate_static_stub(test, send_data_to_hardware, fake_send_data_to_hardware);
++
++	send_data_to_hardware("hello");
++	KUNIT_EXPECT_EQ(test, times_called, 1);
++
++	/* Can also deactivate the stub early, if wanted */
++	kunit_deactivate_static_stub(test, send_data_to_hardware);
++
++	send_data_to_hardware("hello again");
++	KUNIT_EXPECT_EQ(test, times_called, 1);
++
++
++
++API Reference
++=============
++
++.. kernel-doc:: include/kunit/static_stub.h
++   :internal:
+diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
+index 45ce04823f9f..2d8f756aab56 100644
+--- a/Documentation/dev-tools/kunit/api/index.rst
++++ b/Documentation/dev-tools/kunit/api/index.rst
+@@ -4,17 +4,24 @@
+ API Reference
+ =============
+ .. toctree::
++	:hidden:
+ 
+ 	test
+ 	resource
++	functionredirection
+ 
+-This section documents the KUnit kernel testing API. It is divided into the
++
++This page documents the KUnit kernel testing API. It is divided into the
+ following sections:
+ 
+ Documentation/dev-tools/kunit/api/test.rst
+ 
+- - documents all of the standard testing API
++ - Documents all of the standard testing API
+ 
+ Documentation/dev-tools/kunit/api/resource.rst
+ 
+- - documents the KUnit resource API
++ - Documents the KUnit resource API
++
++Documentation/dev-tools/kunit/api/functionredirection.rst
++
++ - Documents the KUnit Function Redirection API
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
