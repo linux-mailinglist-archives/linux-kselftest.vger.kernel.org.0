@@ -2,171 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F01468322B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 17:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F90D683272
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 17:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbjAaQFD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 11:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
+        id S229608AbjAaQXK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 11:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjAaQFA (ORCPT
+        with ESMTP id S229458AbjAaQXJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:05:00 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877A0460B5;
-        Tue, 31 Jan 2023 08:04:42 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.165.226])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1817E6602EBA;
-        Tue, 31 Jan 2023 16:04:30 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675181080;
-        bh=bWKosL3FqQvGKVbLtHwh+SviC5G8f7DqaNQ3HiK29gg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=mwyaDxKJAgsiN57aH1NG+118IRW4nXqfCENped3PNLTVXscFLnCORdHU0Y7018s7e
-         a/xzkXGtIHGAUNgO92cQeor2oHe1iEjqRos1cyJficaxPOxybgB/Bjhe0dPuW34Ojv
-         RfCkTGF9ARvcNY02mCp8+ScZ37tkKNUjN3earw5U5qAt14LGzgw04cjRxx3vETcpyZ
-         fniY/yXMn+IR7xGkfAsUXwQlv23+37inwe6p7QcVaLxUy+32ig754ma4g7Bey4C9GK
-         /iTCphurFTH3Yge6p0oZDKvFe0WqqDdGrUEcjV8xRlYU8CF7wMDkT66ORWpS+w7SKF
-         C8TcyeBZH42KQ==
-Message-ID: <ef9c0a5a-4697-c21f-0da5-aa5698cdcb6b@collabora.com>
-Date:   Tue, 31 Jan 2023 21:04:26 +0500
+        Tue, 31 Jan 2023 11:23:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A1819D
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 08:22:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675182144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gbg+AzhWEGt3wVxcWkSCdqk5Y0vGygpbNeSX8uKNpq0=;
+        b=CcgAktEf+2xxnBOUgB++r+X8jf/15VMZL7Jz8s7x6e2YdiuE/IBxq0SvEE9kiD/maSEnLb
+        8dlV8WETiP0xYhM4mKijPXA80mXXJudwXpya+BJ5vNzcJAODOyXztw3R7wXrJ4EFw2NiDR
+        j5nn5Dyiz7Jjva2XffE3+8+EpJyhwtk=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-575-bpyp6gduOQaggMj2ePSeTA-1; Tue, 31 Jan 2023 11:22:20 -0500
+X-MC-Unique: bpyp6gduOQaggMj2ePSeTA-1
+Received: by mail-vk1-f197.google.com with SMTP id x22-20020a1f3116000000b003c67dc01d12so5378282vkx.17
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 08:22:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gbg+AzhWEGt3wVxcWkSCdqk5Y0vGygpbNeSX8uKNpq0=;
+        b=t1Bq6PxzQt0KrD8XlRo8DtyFtsVn6gm2tRBxsjIGyK9iWU5UJmaSawQh7pV1lwbn82
+         xJ4pJTeT6momVSAJKUxs2G/uFXnLSUK3vCUMpIUyiE+KupityxWU2f+l+pF/rRkQ4bT8
+         DYUgjhOiawq7TyZtoZP4MQlS0keHFD26QB6Oyh7Omw/B3gj/OeNtjFc20+3VQc4gObao
+         EMsg6iGQM6nVEQHH8jOm31rpIykzR7GkvqnvnKHxaxkvW4WpCU83pIs1rT5NydzVHimL
+         9zZncGVBveypxJnIQamWh2nlVpd7oXfWvci4ZOlhduKFekwbWDvuybKPNHh3vTDdZa2o
+         QfyA==
+X-Gm-Message-State: AFqh2kpWoK5d8pMOloU6lOj227fKQm/J7LWv2SGTA/UkZ3zcTtPWiJEd
+        N+lneuQL98glT/GCUPXVCUg6r0Scqq8hcOMCXsly5eBNilX3/e4TZurr5GPaEsWvPOzCYzuH437
+        JAL5PM5omt1eq+JzvNZKOAdCDpMoC
+X-Received: by 2002:a05:6102:334c:b0:3c8:bfe0:d5ec with SMTP id j12-20020a056102334c00b003c8bfe0d5ecmr7530690vse.0.1675182140147;
+        Tue, 31 Jan 2023 08:22:20 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXufopaXJrOQK8xf5PnImViVfo192XMgd8vmUeO5DkaGWebI8ksfnEA+4C/0qsZ9m08m5hlpTg==
+X-Received: by 2002:a05:6102:334c:b0:3c8:bfe0:d5ec with SMTP id j12-20020a056102334c00b003c8bfe0d5ecmr7530665vse.0.1675182139834;
+        Tue, 31 Jan 2023 08:22:19 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
+        by smtp.gmail.com with ESMTPSA id 136-20020a37068e000000b00719d9f823c4sm7765895qkg.34.2023.01.31.08.22.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 08:22:19 -0800 (PST)
+Message-ID: <17e062f077235b949090cba893c91f5637cc1f0e.camel@redhat.com>
+Subject: Re: [PATCH v2 4/4] selftests: net: udpgso_bench_tx: Cater for
+ pending datagrams zerocopy benchmarking
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 31 Jan 2023 17:22:16 +0100
+In-Reply-To: <Y9kvADcYZ18XFTXu@qwirkle>
+References: <20230131130412.432549-1-andrei.gherzan@canonical.com>
+         <20230131130412.432549-4-andrei.gherzan@canonical.com>
+         <d9ca623d01274889913001ce92f686652fa8fea8.camel@redhat.com>
+         <Y9kvADcYZ18XFTXu@qwirkle>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
-Subject: Re: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>
-References: <20230131083257.3302830-3-usama.anjum@collabora.com>
- <202301312359.8WtBkSkQ-lkp@intel.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <202301312359.8WtBkSkQ-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/31/23 8:52 PM, kernel test robot wrote:
-> Hi Muhammad,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on shuah-kselftest/fixes]
-> [also build test ERROR on linus/master v6.2-rc6 next-20230131]
-> [cannot apply to shuah-kselftest/next]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git fixes
-> patch link:    https://lore.kernel.org/r/20230131083257.3302830-3-usama.anjum%40collabora.com
-> patch subject: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about PTEs
-> config: arc-defconfig (https://download.01.org/0day-ci/archive/20230131/202301312359.8WtBkSkQ-lkp@intel.com/config)
-> compiler: arc-elf-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/11677b6b7fda958031115ea40aa219fc32c7dea4
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
->         git checkout 11677b6b7fda958031115ea40aa219fc32c7dea4
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    fs/proc/task_mmu.c: In function 'pagemap_scan_pmd_entry':
->>> fs/proc/task_mmu.c:1927:17: error: implicit declaration of function 'uffd_wp_range' [-Werror=implicit-function-declaration]
->     1927 |                 uffd_wp_range(walk->mm, vma, start, addr - start, true);
->          |                 ^~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
-I'll fix this by adding the following patch in next version:
+On Tue, 2023-01-31 at 15:08 +0000, Andrei Gherzan wrote:
+> On 23/01/31 03:51PM, Paolo Abeni wrote:
+> > On Tue, 2023-01-31 at 13:04 +0000, Andrei Gherzan wrote:
+> > > The test tool can check that the zerocopy number of completions value=
+ is
+> > > valid taking into consideration the number of datagram send calls. Th=
+is can
+> > > catch the system into a state where the datagrams are still in the sy=
+stem
+> > > (for example in a qdisk, waiting for the network interface to return =
+a
+> > > completion notification, etc).
+> > >=20
+> > > This change adds a retry logic of computing the number of completions=
+ up to
+> > > a configurable (via CLI) timeout (default: 2 seconds).
+> > >=20
+> > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > ---
+> > >  tools/testing/selftests/net/udpgso_bench_tx.c | 38 +++++++++++++++--=
+--
+> > >  1 file changed, 30 insertions(+), 8 deletions(-)
+> > >=20
+> > > diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/te=
+sting/selftests/net/udpgso_bench_tx.c
+> > > index b47b5c32039f..5a29b5f24023 100644
+> > > --- a/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > @@ -62,6 +62,7 @@ static int	cfg_payload_len	=3D (1472 * 42);
+> > >  static int	cfg_port	=3D 8000;
+> > >  static int	cfg_runtime_ms	=3D -1;
+> > >  static bool	cfg_poll;
+> > > +static int	cfg_poll_loop_timeout_ms =3D 2000;
+> > >  static bool	cfg_segment;
+> > >  static bool	cfg_sendmmsg;
+> > >  static bool	cfg_tcp;
+> > > @@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
+> > >  	}
+> > >  }
+> > > =20
+> > > -static void flush_errqueue(int fd, const bool do_poll)
+> > > +static void flush_errqueue(int fd, const bool do_poll,
+> > > +		unsigned long poll_timeout, const bool poll_err)
+> > >  {
+> > >  	if (do_poll) {
+> > >  		struct pollfd fds =3D {0};
+> > >  		int ret;
+> > > =20
+> > >  		fds.fd =3D fd;
+> > > -		ret =3D poll(&fds, 1, 500);
+> > > +		ret =3D poll(&fds, 1, poll_timeout);
+> > >  		if (ret =3D=3D 0) {
+> > > -			if (cfg_verbose)
+> > > +			if ((cfg_verbose) && (poll_err))
+> > >  				fprintf(stderr, "poll timeout\n");
+> > >  		} else if (ret < 0) {
+> > >  			error(1, errno, "poll");
+> > > @@ -254,6 +256,22 @@ static void flush_errqueue(int fd, const bool do=
+_poll)
+> > >  	flush_errqueue_recv(fd);
+> > >  }
+> > > =20
+> > > +static void flush_errqueue_retry(int fd, const bool do_poll, unsigne=
+d long num_sends)
+> > > +{
+> > > +	unsigned long tnow, tstop;
+> > > +	bool first_try =3D true;
+> > > +
+> > > +	tnow =3D gettimeofday_ms();
+> > > +	tstop =3D tnow + cfg_poll_loop_timeout_ms;
+> > > +	do {
+> > > +		flush_errqueue(fd, do_poll, tstop - tnow, first_try);
+> > > +		first_try =3D false;
+> > > +		if (!do_poll)
+> > > +			usleep(1000);  // a throttling delay if polling is enabled
+> >=20
+> > Even if the kernel codying style is not very strictly enforced for
+> > self-tests, please avoid c++ style comments.
+> >=20
+> > More importantly, as Willem noded, this function is always called with
+> > do_poll =3D=3D true. You should drop such argument and the related bran=
+ch
+> > above.
+>=20
+> Agreed. I will drop.
+>=20
+> >=20
+> > > +		tnow =3D gettimeofday_ms();
+> > > +	} while ((stat_zcopies !=3D num_sends) && (tnow < tstop));
+> > > +}
+> > > +
+> > >  static int send_tcp(int fd, char *data)
+> > >  {
+> > >  	int ret, done =3D 0, count =3D 0;
+> > > @@ -413,8 +431,9 @@ static int send_udp_segment(int fd, char *data)
+> > > =20
+> > >  static void usage(const char *filepath)
+> > >  {
+> > > -	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l sec=
+s] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
+> > > -		    filepath);
+> > > +	error(1, 0,
+> > > +			"Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-L sec=
+s] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
+> > > +			filepath);
+> >=20
+> > Please avoid introducing unnecessary white-space changes (no reason to
+> > move the usage text on a new line)
+>=20
+> The only reason why I've done this was to make scripts/checkpatch.pl
+> happy:
+>=20
+> WARNING: line length of 141 exceeds 100 columns
+> #83: FILE: tools/testing/selftests/net/udpgso_bench_tx.c:432:
+>=20
+> I can drop and ignore the warning, or maybe it would have been better to
+> just mention this in git message. What do you prefer?
 
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -190,6 +190,11 @@ static inline vm_fault_t handle_userfault(struct
-vm_fault *vmf,
-        return VM_FAULT_SIGBUS;
- }
+Long lines are allowed for (kernel) messages, to make them easily grep-
+able.
 
-+static inline void uffd_wp_range(struct mm_struct *dst_mm, struct
-vm_area_struct *vma,
-+                                unsigned long start, unsigned long len,
-bool enable_wp)
-+{
-+}
-+
+In this specific case you can either append the new text to the message
+without introducing that strange indentation or even better break the
+usage string alike:
 
+	"Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-L secs]"
+	" [-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]"
 
+Cheers,
 
+Paolo
 
-> 
-> 
-> vim +/uffd_wp_range +1927 fs/proc/task_mmu.c
-> 
->   1915	
->   1916		pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
->   1917		if (IS_GET_OP(p)) {
->   1918			for (addr = start; addr < end; pte++, addr += PAGE_SIZE) {
->   1919				ret = pagemap_scan_output(!is_pte_uffd_wp(*pte), vma->vm_file,
->   1920							  pte_present(*pte), is_swap_pte(*pte), p, addr, 1);
->   1921				if (ret)
->   1922					break;
->   1923			}
->   1924		}
->   1925		pte_unmap_unlock(pte - 1, ptl);
->   1926		if ((!ret || ret == -ENOSPC) && IS_WP_ENGAGE_OP(p) && (addr - start))
->> 1927			uffd_wp_range(walk->mm, vma, start, addr - start, true);
->   1928	
->   1929		cond_resched();
->   1930		return ret;
->   1931	}
->   1932	
-> 
-
--- 
-BR,
-Muhammad Usama Anjum
