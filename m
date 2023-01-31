@@ -2,240 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7AB683527
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 19:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DE868352D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 19:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjAaS1R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 13:27:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S230303AbjAaS2x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 13:28:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjAaS1Q (ORCPT
+        with ESMTP id S229767AbjAaS2w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:27:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7066146D45
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 10:26:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675189591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tPVr9VQU03eEXhGeiXbAtJeJqwMDVcfzCgJzhcu/FKQ=;
-        b=PjX8jO6i9vgN4x1HcbMwX0m1vMa7NKNFR3SAU6pP6lex1B/PdTNgDOlTV1wKi9FCReOmUx
-        5bk15yKGxEXUjoE++Bdgze/hLEZe7e6WfXtE8Cf+BYbATakjZThuSFTjiOm764UT8lZR5P
-        Wl6jVmtn+MlBGn3Qu1JP7mwBO2Xuxgc=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-509-8xlpxOR1OCifWkj_ldJ7ug-1; Tue, 31 Jan 2023 13:26:29 -0500
-X-MC-Unique: 8xlpxOR1OCifWkj_ldJ7ug-1
-Received: by mail-qk1-f200.google.com with SMTP id j10-20020a05620a288a00b0070630ecfd9bso9757900qkp.20
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 10:26:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tPVr9VQU03eEXhGeiXbAtJeJqwMDVcfzCgJzhcu/FKQ=;
-        b=WF7Il60NzF7hov41pK81L30neYbdSSCBm848S0KqoklnxsmZo2a8Mq90VeKU3nULag
-         Zty0z/IdCci+m/UsRSerA3RvsjahUGYQL9alQDnxzIwo+5EsqKZmbgwvVsk7Coz4XEm1
-         IjXr0qZ6fHXDE88vNVbIAXwkbRUTq0d7i0YcqyzSL8vgCH2nLnbfyiuATuH2g4NKnmso
-         SDM6y/q4aCI0wBWwexn5KcIhhIE6jP1lGfQrTIBjmqAQmigKvZ2UdrnECBQdiPLxxo97
-         UgEzYzEYwJW5kpufX5ieLeCLwWNjlVvTGGStgC2jIlTfXphTKbx1aVds19bDpI6KORjI
-         1Eaw==
-X-Gm-Message-State: AO0yUKUYVcoNoBsb/n/gsd4xx0O/fNRD7HZjUiYcZujhWFcKl/O0ZbgM
-        im89uxPYnXmviIpioElIQbTDY6vIdfHZgwTAhyZcWYCc3KLt9UDn21Bkvsaai9rznzGi0OeOz32
-        9XZtnbxgHnboHU4NucmBg5lgedYpH
-X-Received: by 2002:ac8:550a:0:b0:3b8:6d44:ca7e with SMTP id j10-20020ac8550a000000b003b86d44ca7emr5494710qtq.4.1675189589249;
-        Tue, 31 Jan 2023 10:26:29 -0800 (PST)
-X-Google-Smtp-Source: AK7set/erd8DGEec+uC8MBs3TmM38Y0xZXmeSbm8CsnlfLum7slDnCe96fqRFdeXFk8v8JRTLdgYcA==
-X-Received: by 2002:ac8:550a:0:b0:3b8:6d44:ca7e with SMTP id j10-20020ac8550a000000b003b86d44ca7emr5494682qtq.4.1675189588957;
-        Tue, 31 Jan 2023 10:26:28 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
-        by smtp.gmail.com with ESMTPSA id k14-20020ac8604e000000b003ab7aee56a0sm10161085qtm.39.2023.01.31.10.26.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 10:26:28 -0800 (PST)
-Message-ID: <58cefd5871c4901a6f9c0394891637fed170bb47.camel@redhat.com>
-Subject: Re: [PATCH v2 4/4] selftests: net: udpgso_bench_tx: Cater for
- pending datagrams zerocopy benchmarking
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 31 Jan 2023 19:26:25 +0100
-In-Reply-To: <Y9lCYT3XUgo4npox@qwirkle>
-References: <20230131130412.432549-1-andrei.gherzan@canonical.com>
-         <20230131130412.432549-4-andrei.gherzan@canonical.com>
-         <d9ca623d01274889913001ce92f686652fa8fea8.camel@redhat.com>
-         <Y9kvADcYZ18XFTXu@qwirkle>
-         <17e062f077235b949090cba893c91f5637cc1f0e.camel@redhat.com>
-         <Y9lCYT3XUgo4npox@qwirkle>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Tue, 31 Jan 2023 13:28:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A354AA61;
+        Tue, 31 Jan 2023 10:28:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F5AA6160B;
+        Tue, 31 Jan 2023 18:28:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56C06C433EF;
+        Tue, 31 Jan 2023 18:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675189730;
+        bh=AGlzssf36xL8VsGXJcqmepsel7PDFzSpp+uASAyVOVs=;
+        h=From:Date:Subject:To:Cc:From;
+        b=Yhy5OtyOi6AGdzbNiA2GBS9sXCLBOx2mCi5maNJq2OHe/cM0WpQynhqol1jvU1Tmc
+         nPRpBXDCz/ZKV4/ThO9xsf5iFTtruEHhjdfIxc+0WGECA2psWZTBXltgyFPlqVwXIu
+         Sb+Q4zHCZXk6BoRD+EQWZ3iNGcxCVYnfHJL4B8Wx1mJieuOOvAUVyb6vcrxaIVFJmE
+         AztXNvtJzwfN2Jt5+MckIdlPuNkYVjUKjdSvh7ZERunoFcqeQ0zNyAY/nn38rCdVJm
+         0f8tQrxq6r5l9bx7YhlmNsDN7lxS/ukO+JV/8gRaVF5G7LibNkregpXhlmZal+ezUf
+         ejFGF6KSRBNIA==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Tue, 31 Jan 2023 18:28:05 +0000
+Subject: [PATCH] kselftest/arm64: Don't require FA64 for streaming SVE
+ tests
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230131-arm64-kselfetest-ssve-fa64-v1-1-f418efcc2b60@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALRd2WMC/x2NwQ6CMBAFf4Xs2U1aSjz4K8bDUl6lQYvZJWBC+
+ HeLx5nDzE4GzTC6NTsp1mx5LhX8paE4SnmC81CZWtcG54Nn0fe148nwSlhgC5ut4CRVRsTWBT9
+ IFxLVQC8G7lVKHM/ENut06o8i5e//eX8cxw8ycQ1bgwAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1551; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=AGlzssf36xL8VsGXJcqmepsel7PDFzSpp+uASAyVOVs=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj2V3glQese4OPH5StSUZB8xEXxeXWdfrXKjvjxuI9
+ THezIDmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY9ld4AAKCRAk1otyXVSH0LfNB/
+ 0doo1N1doclNJ4OnQOs/J7cq1jWPNEQ6Jf/GYLlRq4px094SkWJ8IK+uKMFBiGVAVDNY4g2NSpWa9K
+ v9+axCv1shR+DiQZbT94GMS1nAka9LB2K44bk9HGEQr5t0uFsaE5QPYxYs4/klKdPD+9FbwOfEHX93
+ g53ZrNJW9xopn+Kx43Z2NeJWdQGRrPS9PGjiN2TgEf83w4fm4iETDwROR/yKbGVc26Vh5G8Hd7BPRQ
+ mKmI7NOPR/w8PrOnIbWOujo77LNVBzvGyxz2TvCoGUPL49aRJ+VXEwkehpCFKjFGoA1sOSE67h1u+M
+ 2DAxSitFfEjThqxPnDhEfnasQPHEFH
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2023-01-31 at 16:31 +0000, Andrei Gherzan wrote:
-> On 23/01/31 05:22PM, Paolo Abeni wrote:
-> > On Tue, 2023-01-31 at 15:08 +0000, Andrei Gherzan wrote:
-> > > On 23/01/31 03:51PM, Paolo Abeni wrote:
-> > > > On Tue, 2023-01-31 at 13:04 +0000, Andrei Gherzan wrote:
-> > > > > The test tool can check that the zerocopy number of completions v=
-alue is
-> > > > > valid taking into consideration the number of datagram send calls=
-. This can
-> > > > > catch the system into a state where the datagrams are still in th=
-e system
-> > > > > (for example in a qdisk, waiting for the network interface to ret=
-urn a
-> > > > > completion notification, etc).
-> > > > >=20
-> > > > > This change adds a retry logic of computing the number of complet=
-ions up to
-> > > > > a configurable (via CLI) timeout (default: 2 seconds).
-> > > > >=20
-> > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > > ---
-> > > > >  tools/testing/selftests/net/udpgso_bench_tx.c | 38 +++++++++++++=
-++----
-> > > > >  1 file changed, 30 insertions(+), 8 deletions(-)
-> > > > >=20
-> > > > > diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tool=
-s/testing/selftests/net/udpgso_bench_tx.c
-> > > > > index b47b5c32039f..5a29b5f24023 100644
-> > > > > --- a/tools/testing/selftests/net/udpgso_bench_tx.c
-> > > > > +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-> > > > > @@ -62,6 +62,7 @@ static int	cfg_payload_len	=3D (1472 * 42);
-> > > > >  static int	cfg_port	=3D 8000;
-> > > > >  static int	cfg_runtime_ms	=3D -1;
-> > > > >  static bool	cfg_poll;
-> > > > > +static int	cfg_poll_loop_timeout_ms =3D 2000;
-> > > > >  static bool	cfg_segment;
-> > > > >  static bool	cfg_sendmmsg;
-> > > > >  static bool	cfg_tcp;
-> > > > > @@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
-> > > > >  	}
-> > > > >  }
-> > > > > =20
-> > > > > -static void flush_errqueue(int fd, const bool do_poll)
-> > > > > +static void flush_errqueue(int fd, const bool do_poll,
-> > > > > +		unsigned long poll_timeout, const bool poll_err)
-> > > > >  {
-> > > > >  	if (do_poll) {
-> > > > >  		struct pollfd fds =3D {0};
-> > > > >  		int ret;
-> > > > > =20
-> > > > >  		fds.fd =3D fd;
-> > > > > -		ret =3D poll(&fds, 1, 500);
-> > > > > +		ret =3D poll(&fds, 1, poll_timeout);
-> > > > >  		if (ret =3D=3D 0) {
-> > > > > -			if (cfg_verbose)
-> > > > > +			if ((cfg_verbose) && (poll_err))
-> > > > >  				fprintf(stderr, "poll timeout\n");
-> > > > >  		} else if (ret < 0) {
-> > > > >  			error(1, errno, "poll");
-> > > > > @@ -254,6 +256,22 @@ static void flush_errqueue(int fd, const boo=
-l do_poll)
-> > > > >  	flush_errqueue_recv(fd);
-> > > > >  }
-> > > > > =20
-> > > > > +static void flush_errqueue_retry(int fd, const bool do_poll, uns=
-igned long num_sends)
-> > > > > +{
-> > > > > +	unsigned long tnow, tstop;
-> > > > > +	bool first_try =3D true;
-> > > > > +
-> > > > > +	tnow =3D gettimeofday_ms();
-> > > > > +	tstop =3D tnow + cfg_poll_loop_timeout_ms;
-> > > > > +	do {
-> > > > > +		flush_errqueue(fd, do_poll, tstop - tnow, first_try);
-> > > > > +		first_try =3D false;
-> > > > > +		if (!do_poll)
-> > > > > +			usleep(1000);  // a throttling delay if polling is enabled
-> > > >=20
-> > > > Even if the kernel codying style is not very strictly enforced for
-> > > > self-tests, please avoid c++ style comments.
-> > > >=20
-> > > > More importantly, as Willem noded, this function is always called w=
-ith
-> > > > do_poll =3D=3D true. You should drop such argument and the related =
-branch
-> > > > above.
-> > >=20
-> > > Agreed. I will drop.
-> > >=20
-> > > >=20
-> > > > > +		tnow =3D gettimeofday_ms();
-> > > > > +	} while ((stat_zcopies !=3D num_sends) && (tnow < tstop));
-> > > > > +}
-> > > > > +
-> > > > >  static int send_tcp(int fd, char *data)
-> > > > >  {
-> > > > >  	int ret, done =3D 0, count =3D 0;
-> > > > > @@ -413,8 +431,9 @@ static int send_udp_segment(int fd, char *dat=
-a)
-> > > > > =20
-> > > > >  static void usage(const char *filepath)
-> > > > >  {
-> > > > > -	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l=
- secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
-> > > > > -		    filepath);
-> > > > > +	error(1, 0,
-> > > > > +			"Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-L=
- secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
-> > > > > +			filepath);
-> > > >=20
-> > > > Please avoid introducing unnecessary white-space changes (no reason=
- to
-> > > > move the usage text on a new line)
-> > >=20
-> > > The only reason why I've done this was to make scripts/checkpatch.pl
-> > > happy:
-> > >=20
-> > > WARNING: line length of 141 exceeds 100 columns
-> > > #83: FILE: tools/testing/selftests/net/udpgso_bench_tx.c:432:
-> > >=20
-> > > I can drop and ignore the warning, or maybe it would have been better=
- to
-> > > just mention this in git message. What do you prefer?
-> >=20
-> > Long lines are allowed for (kernel) messages, to make them easily grep-
-> > able.
-> >=20
-> > In this specific case you can either append the new text to the message
-> > without introducing that strange indentation or even better break the
-> > usage string alike:
-> >=20
-> > 	"Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-L secs]"
-> > 	" [-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]"
->=20
-> Funny I went through this too but it also fails with:
->=20
-> WARNING: quoted string split across lines
-> #84: FILE: tools/testing/selftests/net/udpgso_bench_tx.c:433
->=20
-> This is how I usually do it but it seems like it's flagged too.
+During early development a dependedncy was added on having FA64
+available so we could use the full FPSIMD register set in the signal
+handler.  Subsequently the ABI was finialised so the handler is run with
+streaming mode disabled meaning this is redundant but the dependency was
+never removed, do so now.
 
-I'm all for ignoring this warning in this specific context. Among other
-things it will be consistent with other existing self-tests.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/signal/testcases/ssve_regs.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-Eventually the checkpatch script could be tuned (with an unrelated
-patch) to discriminate between kernel and self-tests code.
+diff --git a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+index d0a178945b1a..f0985da7936e 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
++++ b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+@@ -116,12 +116,7 @@ static int sme_regs(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
+ struct tdescr tde = {
+ 	.name = "Streaming SVE registers",
+ 	.descr = "Check that we get the right Streaming SVE registers reported",
+-	/*
+-	 * We shouldn't require FA64 but things like memset() used in the
+-	 * helpers might use unsupported instructions so for now disable
+-	 * the test unless we've got the full instruction set.
+-	 */
+-	.feats_required = FEAT_SME | FEAT_SME_FA64,
++	.feats_required = FEAT_SME,
+ 	.timeout = 3,
+ 	.init = sme_get_vls,
+ 	.run = sme_regs,
 
-Cheers,
+---
+base-commit: b7bfaa761d760e72a969d116517eaa12e404c262
+change-id: 20230131-arm64-kselfetest-ssve-fa64-cec2031da43f
 
-Paolo
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
