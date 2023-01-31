@@ -2,54 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07080682687
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 09:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D94768272E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Jan 2023 09:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjAaIe7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 03:34:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S231737AbjAaIpV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 03:45:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbjAaIeb (ORCPT
+        with ESMTP id S231694AbjAaIpF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 03:34:31 -0500
+        Tue, 31 Jan 2023 03:45:05 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FE246153;
-        Tue, 31 Jan 2023 00:33:58 -0800 (PST)
-Received: from localhost.localdomain (unknown [39.45.165.226])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B21A4A1F2;
+        Tue, 31 Jan 2023 00:40:50 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.165.226])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A9D5B6602EC6;
-        Tue, 31 Jan 2023 08:33:46 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 40F036602EB0;
+        Tue, 31 Jan 2023 08:40:20 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675154037;
-        bh=68xZW31obFvoJ25sPIl+1L0Gtk11LF4zLf5XQTsrphs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l3lbNBnG6PVtB2BMwmc8E7vVvo0X/p9xf0Vw6DiMbXWQDKWBvH1r3iEpJRqLgFoB6
-         cYCwN//D5t1E7HqRFPVK8wMhjPMF+39dZ+Rv7W8iSP37Z9OhOt6u+IVUfpjx9WENLc
-         RX7g5s+M9O66vKciqx7ey3xR8Yf/ywZeOg32P+MNgud0sZJV5wBIuDvY6ap44qkwqc
-         eNtF5BUEAfpZj4ci8beF4PuT9eSOOlGElMJLget7Fo/bo92826DZ9qKPANeydwkDWC
-         5mRFW3YGKnGM2HNPkvjjIcqXS1mdJVns+h1G3S02M73zZDlFZ/V+b513t02KIME8rX
-         oZgpSDKBfndxA==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        s=mail; t=1675154430;
+        bh=rgu7DTIg2yh3vlm4bDLiBc5n/dNTUucjeoIq3IaxRes=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=kYq80rrVyqb14gdPV8m4rokazQdVee0TJewpQ8ndOjQdIMMManRCPZ7I/rUAomJBl
+         TnK2kcah33Z5+ydN/qa4Hsp8NXXPioNzIVJX/fakke/hnDmU4ufKrvCs6qI+f4aflg
+         gMZrOdIX5CNWn3vzsmej9/GMR1jbvWU0/tabs9+mvDHRLBwWJzl3X69O0SdNeqpjNp
+         pmkqBP0aog2sNtThK0cxrzrt04ytFbNDQdU/V6mkkBHaxCcQICYKAxUD5DPnwuxSgs
+         s2bFeAkin24Lh440R2h8vxadA/PSQiXDmc4OEI+DBat6xxExN/+yC5kTiM3B4C39zm
+         75qbyyMFQESqg==
+Message-ID: <a85f5857-8a96-c55f-00f8-dc498f7be334@collabora.com>
+Date:   Tue, 31 Jan 2023 13:40:13 +0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
         Danylo Mocherniuk <mdanylo@google.com>,
         Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
         Christian Brauner <brauner@kernel.org>,
         Yang Shi <shy828301@gmail.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
         Yun Zhou <yun.zhou@windriver.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Matthew Wilcox <willy@infradead.org>,
         Pasha Tatashin <pasha.tatashin@soleen.com>,
         Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
@@ -59,1037 +63,219 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: [PATCH v9 3/3] selftests: vm: add pagemap ioctl tests
-Date:   Tue, 31 Jan 2023 13:32:57 +0500
-Message-Id: <20230131083257.3302830-4-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230131083257.3302830-1-usama.anjum@collabora.com>
-References: <20230131083257.3302830-1-usama.anjum@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v8 1/4] userfaultfd: Add UFFD WP Async support
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230124084323.1363825-1-usama.anjum@collabora.com>
+ <20230124084323.1363825-2-usama.anjum@collabora.com> <Y9MHM+RVzvigcTTk@x1n>
+ <1968dff9-f48a-3290-a15b-a8b739f31ed2@collabora.com> <Y9PtHUONh2ImQyKF@x1n>
+ <d8c30ea7-05a1-d53b-1391-472ff5b2a7fd@collabora.com> <Y9g2MAwycCJ3N2tf@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y9g2MAwycCJ3N2tf@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add pagemap ioctl tests. Add several different types of tests to judge
-the correction of the interface.
+On 1/31/23 2:27 AM, Peter Xu wrote:
+> On Mon, Jan 30, 2023 at 01:38:16PM +0500, Muhammad Usama Anjum wrote:
+>> On 1/27/23 8:32 PM, Peter Xu wrote:
+>>> On Fri, Jan 27, 2023 at 11:47:14AM +0500, Muhammad Usama Anjum wrote:
+>>>>>> diff --git a/mm/memory.c b/mm/memory.c
+>>>>>> index 4000e9f017e0..8c03b133d483 100644
+>>>>>> --- a/mm/memory.c
+>>>>>> +++ b/mm/memory.c
+>>>>>> @@ -3351,6 +3351,18 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>>>>>>  
+>>>>>>  	if (likely(!unshare)) {
+>>>>>>  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+>>>>>> +			if (userfaultfd_wp_async(vma)) {
+>>>>>> +				/*
+>>>>>> +				 * Nothing needed (cache flush, TLB invalidations,
+>>>>>> +				 * etc.) because we're only removing the uffd-wp bit,
+>>>>>> +				 * which is completely invisible to the user. This
+>>>>>> +				 * falls through to possible CoW.
+>>>>>
+>>>>> Here it says it falls through to CoW, but..
+>>>>>
+>>>>>> +				 */
+>>>>>> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
+>>>>>> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
+>>>>>> +					   pte_clear_uffd_wp(*vmf->pte));
+>>>>>> +				return 0;
+>>>>>
+>>>>> ... it's not doing so.  The original lines should do:
+>>>>>
+>>>>> https://lore.kernel.org/all/Y8qq0dKIJBshua+X@x1n/
+>>>
+>>> [1]
+>>>
+>>>>>
+>>>>> Side note: you cannot modify pgtable after releasing the pgtable lock.
+>>>>> It's racy.
+>>>> If I don't unlock and return after removing the UFFD_WP flag in case of
+>>>> async wp, the target just gets stuck. Maybe the pte lock is not unlocked in
+>>>> some path.
+>>>>
+>>>> If I unlock and don't return, the crash happens.
+>>>>
+>>>> So I'd put unlock and return from here. Please comment on the below patch
+>>>> and what do you think should be done. I've missed something.
+>>>
+>>> Have you tried to just use exactly what I suggested in [1]?  I'll paste
+>>> again:
+>>>
+>>> ---8<---
+>>> diff --git a/mm/memory.c b/mm/memory.c
+>>> index 4000e9f017e0..09aab434654c 100644
+>>> --- a/mm/memory.c
+>>> +++ b/mm/memory.c
+>>> @@ -3351,8 +3351,20 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>>>
+>>>         if (likely(!unshare)) {
+>>>                 if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+>>> -                       pte_unmap_unlock(vmf->pte, vmf->ptl);
+>>> -                       return handle_userfault(vmf, VM_UFFD_WP);
+>>> +                       if (userfaultfd_uffd_wp_async(vma)) {
+>>> +                               /*
+>>> +                                * Nothing needed (cache flush, TLB
+>>> +                                * invalidations, etc.) because we're only
+>>> +                                * removing the uffd-wp bit, which is
+>>> +                                * completely invisible to the user.
+>>> +                                * This falls through to possible CoW.
+>>> +                                */
+>>> +                               set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
+>>> +                                          pte_clear_uffd_wp(*vmf->pte));
+>>> +                       } else {
+>>> +                               pte_unmap_unlock(vmf->pte, vmf->ptl);
+>>> +                               return handle_userfault(vmf, VM_UFFD_WP);
+>>> +                       }
+>>>                 }
+>>> ---8<---
+>>>
+>>> Note that there's no "return", neither the unlock.  The lock is used in the
+>>> follow up write fault resolution and it's released later.
+>> I've tried out the exact patch above. This doesn't work. The pages keep
+>> their WP flag even after being resolved in do_wp_page() while is written on
+>> the page.
+>>
+>> So I'd added pte_unmap_unlock() and return 0 from here. This makes the
+>> patch to work. Maybe you can try this on your end to see what I'm seeing here?
+> 
+> Oh maybe it's because it didn't update orig_pte.  If you want, you can try
+> again with doing so by changing:
+> 
+>   set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
+>              pte_clear_uffd_wp(*vmf->pte));
+> 
+> into:
+> 
+>   pte_t pte = pte_clear_uffd_wp(*vmf->pte);
+>   set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
+>   /* Update this to be prepared for following up CoW handling */
+>   vmf->orig_pte = pte;
+> 
+It works.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Chages in v7:
-- Add and update all test cases
+>>
+>>>
+>>> Meanwhile please fully digest how pgtable lock is used in this path before
+>>> moving forward on any of such changes.
+>>>
+>>>>
+>>>>>
+>>>>>> +			}
+>>>>>>  			pte_unmap_unlock(vmf->pte, vmf->ptl);
+>>>>>>  			return handle_userfault(vmf, VM_UFFD_WP);
+>>>>>>  		}
+>>>>>> @@ -4812,8 +4824,21 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+>>>>>>  
+>>>>>>  	if (vma_is_anonymous(vmf->vma)) {
+>>>>>>  		if (likely(!unshare) &&
+>>>>>> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+>>>>>> -			return handle_userfault(vmf, VM_UFFD_WP);
+>>>>>> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
+>>>>>> +			if (userfaultfd_wp_async(vmf->vma)) {
+>>>>>> +				/*
+>>>>>> +				 * Nothing needed (cache flush, TLB invalidations,
+>>>>>> +				 * etc.) because we're only removing the uffd-wp bit,
+>>>>>> +				 * which is completely invisible to the user. This
+>>>>>> +				 * falls through to possible CoW.
+>>>>>> +				 */
+>>>>>> +				set_pmd_at(vmf->vma->vm_mm, vmf->address, vmf->pmd,
+>>>>>> +					   pmd_clear_uffd_wp(*vmf->pmd));
+>>>>>
+>>>>> This is for THP, not hugetlb.
+>>>>>
+>>>>> Clearing uffd-wp bit here for the whole pmd is wrong to me, because we
+>>>>> track writes in small page sizes only.  We should just split.
+>>>> By detecting if the fault is async wp, just splitting the PMD doesn't work.
+>>>> The below given snippit is working right now. But definately, the fault of
+>>>> the whole PMD is being resolved which if we can bypass by correctly
+>>>> splitting would be highly desirable. Can you please take a look on UFFD
+>>>> side and suggest the changes? It would be much appreciated. I'm attaching
+>>>> WIP v9 patches for you to apply on next(next-20230105) and pagemap_ioctl
+>>>> selftest can be ran to test things after making changes.
+>>>
+>>> Can you elaborate why thp split didn't work?  Or if you want, I can look
+>>> into this and provide the patch to enable uffd async mode.
+>> Sorry, I was doing the wrong way. Splitting the page does work. What do you
+>> think about the following:
+>>
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -3351,6 +3351,17 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>>
+>>  	if (likely(!unshare)) {
+>>  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+>> +			if (userfaultfd_wp_async(vma)) {
+>> +				/*
+>> +				 * Nothing needed (cache flush, TLB invalidations,
+>> +				 * etc.) because we're only removing the uffd-wp bit,
+>> +				 * which is completely invisible to the user.
+>> +				 */
+>> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
+>> +					   pte_clear_uffd_wp(*vmf->pte));
+>> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
+>> +				return 0;
+> 
+> Please give it a shot with above to see whether we can avoid the "return 0"
+> here.
+> 
+>> +			}
+>>  			pte_unmap_unlock(vmf->pte, vmf->ptl);
+>>  			return handle_userfault(vmf, VM_UFFD_WP);
+>>  		}
+>> @@ -4812,8 +4823,13 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault
+>> *vmf)
+>>
+>>  	if (vma_is_anonymous(vmf->vma)) {
+>>  		if (likely(!unshare) &&
+>> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+>> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
+>> +			if (userfaultfd_wp_async(vmf->vma)) {
+>> +				__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
+>> +				return 0;
+> 
+> Same here, I hope it'll work for you if you just goto __split_huge_pmd()
+> right below and return with VM_FAULT_FALLBACK.  It avoids one more round of
+> fault just like the pte case above.
+> 
+It works as well.
 
-Changes in v6:
-- Rename variables
+>> +			}
+>>  			return handle_userfault(vmf, VM_UFFD_WP);
+>> +		}
+>>  		return do_huge_pmd_wp_page(vmf);
+>>  	}
+> 
 
-Changes in v4:
-- Updated all the tests to conform to new IOCTL
-
-Changes in v3:
-- Add another test to do sanity of flags
-
-Changes in v2:
-- Update the tests to use the ioctl interface instead of syscall
-
-TAP version 13
-1..54
-ok 1 sanity_tests_sd wrong flag specified
-ok 2 sanity_tests_sd wrong mask specified
-ok 3 sanity_tests_sd wrong return mask specified
-ok 4 sanity_tests_sd mixture of correct and wrong flag
-ok 5 sanity_tests_sd Clear area with larger vec size
-ok 6 sanity_tests_sd Repeated pattern of dirty and non-dirty pages
-ok 7 sanity_tests_sd Repeated pattern of dirty and non-dirty pages in parts
-ok 8 sanity_tests_sd Two regions
-ok 9 Page testing: all new pages must be soft dirty
-ok 10 Page testing: all pages must not be soft dirty
-ok 11 Page testing: all pages dirty other than first and the last one
-ok 12 Page testing: only middle page dirty
-ok 13 Page testing: only two middle pages dirty
-ok 14 Page testing: only get 2 dirty pages and clear them as well
-ok 15 Page testing: Range clear only
-ok 16 Large Page testing: all new pages must be soft dirty
-ok 17 Large Page testing: all pages must not be soft dirty
-ok 18 Large Page testing: all pages dirty other than first and the last one
-ok 19 Large Page testing: only middle page dirty
-ok 20 Large Page testing: only two middle pages dirty
-ok 21 Large Page testing: only get 2 dirty pages and clear them as well
-ok 22 Large Page testing: Range clear only
-ok 23 Huge page testing: all new pages must be soft dirty
-ok 24 Huge page testing: all pages must not be soft dirty
-ok 25 Huge page testing: all pages dirty other than first and the last one
-ok 26 Huge page testing: only middle page dirty
-ok 27 Huge page testing: only two middle pages dirty
-ok 28 Huge page testing: only get 2 dirty pages and clear them as well
-ok 29 Huge page testing: Range clear only
-ok 30 hpage_unit_tests all new huge page must be dirty
-ok 31 hpage_unit_tests all the huge page must not be dirty
-ok 32 hpage_unit_tests all the huge page must be dirty and clear
-ok 33 hpage_unit_tests only middle page dirty
-ok 34 hpage_unit_tests clear first half of huge page
-ok 35 hpage_unit_tests clear first half of huge page with limited buffer
-ok 36 hpage_unit_tests clear second half huge page
-ok 37 Test test_simple
-ok 38 mprotect_tests Both pages dirty
-ok 39 mprotect_tests Both pages are not soft dirty
-ok 40 mprotect_tests Both pages dirty after remap and mprotect
-ok 41 mprotect_tests Clear and make the pages dirty
-ok 42 sanity_tests clear op can only be specified with PAGE_IS_WRITTEN
-ok 43 sanity_tests required_mask specified
-ok 44 sanity_tests anyof_mask specified
-ok 45 sanity_tests excluded_mask specified
-ok 46 sanity_tests required_mask and anyof_mask specified
-ok 47 sanity_tests Get sd and present pages with anyof_mask
-ok 48 sanity_tests Get all the pages with required_mask
-ok 49 sanity_tests Get sd and present pages with required_mask and anyof_mask
-ok 50 sanity_tests Don't get sd pages
-ok 51 sanity_tests Don't get present pages
-ok 52 sanity_tests Find dirty present pages with return mask
-ok 53 sanity_tests Memory mapped file
-ok 54 unmapped_region_tests Get status of pages
- # Totals: pass:54 fail:0 xfail:0 xpass:0 skip:0 error:0
----
- tools/testing/selftests/vm/.gitignore      |   1 +
- tools/testing/selftests/vm/Makefile        |   5 +-
- tools/testing/selftests/vm/pagemap_ioctl.c | 881 +++++++++++++++++++++
- 3 files changed, 885 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
-
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 1f8c36a9fa10..9e7e0ae26582 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -17,6 +17,7 @@ mremap_dontunmap
- mremap_test
- on-fault-limit
- transhuge-stress
-+pagemap_ioctl
- protection_keys
- protection_keys_32
- protection_keys_64
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 89c14e41bd43..54c074440a1b 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -24,9 +24,8 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
- # things despite using incorrect values such as an *occasionally* incomplete
- # LDLIBS.
- MAKEFLAGS += --no-builtin-rules
--
- CFLAGS = -Wall -I $(top_srcdir) -I $(top_srcdir)/usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
--LDLIBS = -lrt -lpthread
-+LDLIBS = -lrt -lpthread -lm
- TEST_GEN_FILES = cow
- TEST_GEN_FILES += compaction_test
- TEST_GEN_FILES += gup_test
-@@ -52,6 +51,7 @@ TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += userfaultfd
-+TEST_GEN_PROGS += pagemap_ioctl
- TEST_GEN_PROGS += soft-dirty
- TEST_GEN_PROGS += split_huge_page_test
- TEST_GEN_FILES += ksm_tests
-@@ -103,6 +103,7 @@ $(OUTPUT)/cow: vm_util.c
- $(OUTPUT)/khugepaged: vm_util.c
- $(OUTPUT)/ksm_functional_tests: vm_util.c
- $(OUTPUT)/madv_populate: vm_util.c
-+$(OUTPUT)/pagemap_ioctl: vm_util.c
- $(OUTPUT)/soft-dirty: vm_util.c
- $(OUTPUT)/split_huge_page_test: vm_util.c
- $(OUTPUT)/userfaultfd: vm_util.c
-diff --git a/tools/testing/selftests/vm/pagemap_ioctl.c b/tools/testing/selftests/vm/pagemap_ioctl.c
-new file mode 100644
-index 000000000000..09b676a626d8
---- /dev/null
-+++ b/tools/testing/selftests/vm/pagemap_ioctl.c
-@@ -0,0 +1,881 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <fcntl.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <errno.h>
-+#include <malloc.h>
-+#include "vm_util.h"
-+#include "../kselftest.h"
-+#include <linux/types.h>
-+#include <linux/userfaultfd.h>
-+#include <linux/fs.h>
-+#include <sys/ioctl.h>
-+#include <sys/stat.h>
-+#include <math.h>
-+#include <asm/unistd.h>
-+
-+#define PAGEMAP_BITS_ALL	(PAGE_IS_WRITTEN | PAGE_IS_FILE |	\
-+				 PAGE_IS_PRESENT | PAGE_IS_SWAPPED)
-+#define PAGEMAP_NON_WRITTEN_BITS	(PAGE_IS_FILE |	PAGE_IS_PRESENT |	\
-+				 PAGE_IS_SWAPPED)
-+
-+#define TEST_ITERATIONS 10
-+#define PAGEMAP "/proc/self/pagemap"
-+int pagemap_fd;
-+int uffd;
-+int page_size;
-+int hpage_size;
-+
-+static long pagemap_ioctl(void *start, int len, void *vec, int vec_len, int flag,
-+			  int max_pages, long required_mask, long anyof_mask, long excluded_mask,
-+			  long return_mask)
-+{
-+	struct pagemap_scan_arg arg;
-+	int ret;
-+
-+	arg.start = (uintptr_t)start;
-+	arg.len = len;
-+	arg.vec = (uintptr_t)vec;
-+	arg.vec_len = vec_len;
-+	arg.flags = flag;
-+	arg.max_pages = max_pages;
-+	arg.required_mask = required_mask;
-+	arg.anyof_mask = anyof_mask;
-+	arg.excluded_mask = excluded_mask;
-+	arg.return_mask = return_mask;
-+
-+	ret = ioctl(pagemap_fd, PAGEMAP_SCAN, &arg);
-+
-+	return ret;
-+}
-+
-+int init_uffd(void)
-+{
-+	struct uffdio_api uffdio_api;
-+
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-+	if (uffd == -1)
-+		ksft_exit_fail_msg("uffd syscall failed\n");
-+
-+	uffdio_api.api = UFFD_API;
-+	uffdio_api.features = UFFD_FEATURE_WP_ASYNC;
-+	if (ioctl(uffd, UFFDIO_API, &uffdio_api))
-+		ksft_exit_fail_msg("UFFDIO_API\n");
-+
-+	if (uffdio_api.api != UFFD_API)
-+		ksft_exit_fail_msg("UFFDIO_API error %llu\n", uffdio_api.api);
-+
-+	return 0;
-+}
-+
-+int wp_init(void *lpBaseAddress, int dwRegionSize)
-+{
-+	struct uffdio_register uffdio_register;
-+	struct uffdio_writeprotect wp;
-+
-+	/* TODO: can it be avoided? Write protect doesn't engage on the pages if they aren't
-+	 * present already. The pages can be made present by writing to them.
-+	 */
-+	memset(lpBaseAddress, -1, dwRegionSize);
-+
-+	uffdio_register.range.start = (unsigned long)lpBaseAddress;
-+	uffdio_register.range.len = dwRegionSize;
-+	uffdio_register.mode = UFFDIO_REGISTER_MODE_WP;
-+	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
-+		ksft_exit_fail_msg("ioctl(UFFDIO_REGISTER)\n");
-+
-+	if (!(uffdio_register.ioctls & UFFDIO_WRITEPROTECT))
-+		ksft_exit_fail_msg("ioctl set is incorrect\n");
-+
-+	if (rand() % 2) {
-+		wp.range.start = (unsigned long)lpBaseAddress;
-+		wp.range.len = dwRegionSize;
-+		wp.mode = UFFDIO_WRITEPROTECT_MODE_WP;
-+
-+		if (ioctl(uffd, UFFDIO_WRITEPROTECT, &wp) == -1)
-+			ksft_exit_fail_msg("ioctl(UFFDIO_WRITEPROTECT)\n");
-+	} else {
-+		if (pagemap_ioctl(lpBaseAddress, dwRegionSize, NULL, 0, PAGEMAP_WP_ENGAGE, 0,
-+				  0, 0, 0, 0) < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", 1, errno, strerror(errno));
-+	}
-+	return 0;
-+}
-+
-+int wp_free(void *lpBaseAddress, int dwRegionSize)
-+{
-+	struct uffdio_register uffdio_register;
-+
-+	uffdio_register.range.start = (unsigned long)lpBaseAddress;
-+	uffdio_register.range.len = dwRegionSize;
-+	uffdio_register.mode = UFFDIO_REGISTER_MODE_WP;
-+	if (ioctl(uffd, UFFDIO_UNREGISTER, &uffdio_register.range))
-+		ksft_exit_fail_msg("ioctl unregister failure\n");
-+	return 0;
-+}
-+
-+int clear_softdirty_wp(void *lpBaseAddress, int dwRegionSize)
-+{
-+	struct uffdio_writeprotect wp;
-+
-+	if (rand() % 2) {
-+		wp.range.start = (unsigned long)lpBaseAddress;
-+		wp.range.len = dwRegionSize;
-+		wp.mode = UFFDIO_WRITEPROTECT_MODE_WP;
-+
-+		if (ioctl(uffd, UFFDIO_WRITEPROTECT, &wp) == -1)
-+			ksft_exit_fail_msg("ioctl(UFFDIO_WRITEPROTECT)\n");
-+	} else {
-+		if (pagemap_ioctl(lpBaseAddress, dwRegionSize, NULL, 0, PAGEMAP_WP_ENGAGE, 0,
-+				  0, 0, 0, 0) < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", 1, errno, strerror(errno));
-+	}
-+	return 0;
-+}
-+
-+int sanity_tests_sd(void)
-+{
-+	char *mem, *m[2];
-+	int mem_size, vec_size, ret, ret2, ret3, i, num_pages = 10;
-+	struct page_region *vec;
-+
-+	vec_size = 100;
-+	mem_size = num_pages * page_size;
-+
-+	vec = malloc(sizeof(struct page_region) * vec_size);
-+	if (!vec)
-+		ksft_exit_fail_msg("error nomem\n");
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	wp_init(mem, mem_size);
-+
-+	/* 1. wrong operation */
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, -1,
-+				       0, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) < 0,
-+			 "%s wrong flag specified\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, 8,
-+				       0, 0x1111, 0, 0, PAGE_IS_WRITTEN) < 0,
-+			 "%s wrong mask specified\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, 0,
-+				       0, PAGE_IS_WRITTEN, 0, 0, 0x1000) < 0,
-+			 "%s wrong return mask specified\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size,
-+				       PAGEMAP_WP_ENGAGE | 0x32,
-+				       0, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) < 0,
-+			 "%s mixture of correct and wrong flag\n", __func__);
-+
-+	/* 2. Clear area with larger vec size */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, PAGEMAP_WP_ENGAGE, 0,
-+			    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	ksft_test_result(ret >= 0, "%s Clear area with larger vec size\n", __func__);
-+
-+	/* 3. Repeated pattern of dirty and non-dirty pages */
-+	for (i = 0; i < mem_size; i += 2 * page_size)
-+		mem[i]++;
-+
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0, PAGE_IS_WRITTEN, 0, 0,
-+			    PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == mem_size/(page_size * 2),
-+			 "%s Repeated pattern of dirty and non-dirty pages\n", __func__);
-+
-+	/* 4. Repeated pattern of dirty and non-dirty pages in parts */
-+	ret = pagemap_ioctl(mem, mem_size, vec, num_pages/5, PAGEMAP_WP_ENGAGE,
-+			    num_pages/2 - 2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ret2 = pagemap_ioctl(mem, mem_size, vec, 2, 0, 0, PAGE_IS_WRITTEN, 0, 0,
-+			     PAGE_IS_WRITTEN);
-+	if (ret2 < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret2, errno, strerror(errno));
-+
-+	ret3 = pagemap_ioctl(mem, mem_size, vec, num_pages/2, 0, 0, PAGE_IS_WRITTEN, 0, 0,
-+			     PAGE_IS_WRITTEN);
-+	if (ret3 < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret3, errno, strerror(errno));
-+
-+	ksft_test_result((ret + ret3) == num_pages/2 && ret2 == 2,
-+			 "%s Repeated pattern of dirty and non-dirty pages in parts\n", __func__);
-+
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 5. Two regions */
-+	m[0] = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (m[0] == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	m[1] = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (m[1] == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	wp_init(m[0], mem_size);
-+	wp_init(m[1], mem_size);
-+
-+	memset(m[0], 'a', mem_size);
-+	memset(m[1], 'b', mem_size);
-+
-+	ret = pagemap_ioctl(m[0], mem_size, NULL, 0, PAGEMAP_WP_ENGAGE, 0,
-+			    0, 0, 0, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ret = pagemap_ioctl(m[1], mem_size, vec, 1, 0, 0, PAGE_IS_WRITTEN, 0, 0,
-+			    PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec[0].len == mem_size/page_size,
-+			 "%s Two regions\n", __func__);
-+
-+	wp_free(m[0], mem_size);
-+	wp_free(m[1], mem_size);
-+	munmap(m[0], mem_size);
-+	munmap(m[1], mem_size);
-+
-+	free(vec);
-+	return 0;
-+}
-+
-+int base_tests(char *prefix, char *mem, int mem_size, int skip)
-+{
-+	int vec_size, ret, dirty, dirty2;
-+	struct page_region *vec, *vec2;
-+
-+	if (skip) {
-+		ksft_test_result_skip("%s all new pages must be soft dirty\n", prefix);
-+		ksft_test_result_skip("%s all pages must not be soft dirty\n", prefix);
-+		ksft_test_result_skip("%s all pages dirty other than first and the last one\n",
-+				      prefix);
-+		ksft_test_result_skip("%s only middle page dirty\n", prefix);
-+		ksft_test_result_skip("%s only two middle pages dirty\n", prefix);
-+		ksft_test_result_skip("%s only get 2 dirty pages and clear them as well\n", prefix);
-+		ksft_test_result_skip("%s Range clear only\n", prefix);
-+		return 0;
-+	}
-+
-+	vec_size = mem_size/page_size;
-+	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec2 = malloc(sizeof(struct page_region) * vec_size);
-+
-+	/* 1. all new pages must be not be soft dirty */
-+	dirty = pagemap_ioctl(mem, mem_size, vec, 1, PAGEMAP_WP_ENGAGE, vec_size - 2,
-+			      PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (dirty < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty, errno, strerror(errno));
-+
-+	dirty2 = pagemap_ioctl(mem, mem_size, vec2, 1, PAGEMAP_WP_ENGAGE, 0,
-+			       PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (dirty2 < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty2, errno, strerror(errno));
-+
-+	ksft_test_result(dirty == 0 && dirty2 == 0,
-+			 "%s all new pages must be soft dirty\n", prefix);
-+
-+	/* 2. all pages must not be soft dirty */
-+	dirty = pagemap_ioctl(mem, mem_size, vec, 1, 0, 0, PAGE_IS_WRITTEN, 0, 0,
-+			      PAGE_IS_WRITTEN);
-+	if (dirty < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty, errno, strerror(errno));
-+
-+	ksft_test_result(dirty == 0, "%s all pages must not be soft dirty\n", prefix);
-+
-+	/* 3. all pages dirty other than first and the last one */
-+	memset(mem + page_size, 0, mem_size - (2 * page_size));
-+
-+	dirty = pagemap_ioctl(mem, mem_size, vec, 1, 0, 0, PAGE_IS_WRITTEN, 0, 0,
-+			      PAGE_IS_WRITTEN);
-+	if (dirty < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty, errno, strerror(errno));
-+
-+	ksft_test_result(dirty == 1 && vec[0].len >= vec_size - 2 && vec[0].len <= vec_size,
-+			 "%s all pages dirty other than first and the last one\n", prefix);
-+
-+	/* 4. only middle page dirty */
-+	clear_softdirty_wp(mem, mem_size);
-+	mem[vec_size/2 * page_size]++;
-+
-+	dirty = pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0, PAGE_IS_WRITTEN, 0, 0,
-+			      PAGE_IS_WRITTEN);
-+	if (dirty < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty, errno, strerror(errno));
-+
-+	ksft_test_result(dirty == 1 && vec[0].len >= 1,
-+			 "%s only middle page dirty\n", prefix);
-+
-+	/* 5. only two middle pages dirty and walk over only middle pages */
-+	clear_softdirty_wp(mem, mem_size);
-+	mem[vec_size/2 * page_size]++;
-+	mem[(vec_size/2 + 1) * page_size]++;
-+
-+	dirty = pagemap_ioctl(&mem[vec_size/2 * page_size], 2 * page_size, vec, 1, 0, 0,
-+			      PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (dirty < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty, errno, strerror(errno));
-+
-+	ksft_test_result(dirty == 1 && vec[0].start == (uintptr_t)(&mem[vec_size/2 * page_size]) &&
-+			 vec[0].len == 2,
-+			 "%s only two middle pages dirty\n", prefix);
-+
-+	/* 6. only get 2 dirty pages and clear them as well */
-+	memset(mem, -1, mem_size);
-+
-+	/* get and clear second and third pages */
-+	ret = pagemap_ioctl(mem + page_size, 2 * page_size, vec, 1, PAGEMAP_WP_ENGAGE,
-+			    2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	dirty = pagemap_ioctl(mem, mem_size, vec2, vec_size, 0, 0,
-+			      PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (dirty < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec[0].len == 2 &&
-+			 vec[0].start == (uintptr_t)(mem + page_size) &&
-+			 dirty == 2 && vec2[0].len == 1 && vec2[0].start == (uintptr_t)mem &&
-+			 vec2[1].len == vec_size - 3 &&
-+			 vec2[1].start == (uintptr_t)(mem + 3 * page_size),
-+			 "%s only get 2 dirty pages and clear them as well\n", prefix);
-+
-+	/* 7. Range clear only */
-+	memset(mem, -1, mem_size);
-+
-+	dirty = pagemap_ioctl(mem, mem_size, NULL, 0, PAGEMAP_WP_ENGAGE, 0,
-+			      0, 0, 0, 0);
-+	if (dirty < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty, errno, strerror(errno));
-+
-+	dirty2 = pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+			       PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+	if (dirty2 < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty2, errno, strerror(errno));
-+
-+	ksft_test_result(dirty == 0 && dirty2 == 0, "%s Range clear only\n",
-+			 prefix);
-+
-+	free(vec);
-+	free(vec2);
-+	return 0;
-+}
-+
-+void *gethugepage(int map_size)
-+{
-+	int ret;
-+	char *map;
-+
-+	map = memalign(hpage_size, map_size);
-+	if (!map)
-+		ksft_exit_fail_msg("memalign failed %d %s\n", errno, strerror(errno));
-+
-+	ret = madvise(map, map_size, MADV_HUGEPAGE);
-+	if (ret)
-+		ksft_exit_fail_msg("madvise failed %d %d %s\n", ret, errno, strerror(errno));
-+
-+	wp_init(map, map_size);
-+
-+	if (check_huge_anon(map, map_size/hpage_size, hpage_size))
-+		return map;
-+
-+	free(map);
-+	return NULL;
-+
-+}
-+
-+int hpage_unit_tests(void)
-+{
-+	char *map;
-+	int ret;
-+	size_t num_pages = 10;
-+	int map_size = hpage_size * num_pages;
-+	int vec_size = map_size/page_size;
-+	struct page_region *vec, *vec2;
-+
-+	vec = malloc(sizeof(struct page_region) * vec_size);
-+	vec2 = malloc(sizeof(struct page_region) * vec_size);
-+	if (!vec || !vec2)
-+		ksft_exit_fail_msg("malloc failed\n");
-+
-+	map = gethugepage(map_size);
-+	if (map) {
-+		/* 1. all new huge page must not be dirty */
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PAGEMAP_WP_ENGAGE, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 0, "%s all new huge page must be dirty\n", __func__);
-+
-+		/* 2. all the huge page must not be dirty */
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, 0, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 0, "%s all the huge page must not be dirty\n", __func__);
-+
-+		/* 3. all the huge page must be dirty and clear dirty as well */
-+		memset(map, -1, map_size);
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PAGEMAP_WP_ENGAGE, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].start == (uintptr_t)map &&
-+				 vec[0].len == vec_size && vec[0].bitmap == PAGE_IS_WRITTEN,
-+				 "%s all the huge page must be dirty and clear\n", __func__);
-+
-+		/* 4. only middle page dirty */
-+		wp_free(map, map_size);
-+		free(map);
-+		map = gethugepage(map_size);
-+		wp_init(map, map_size);
-+		clear_softdirty_wp(map, map_size);
-+		map[vec_size/2 * page_size]++;
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, 0, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].len > 0,
-+				 "%s only middle page dirty\n", __func__);
-+
-+		wp_free(map, map_size);
-+		free(map);
-+	} else {
-+		ksft_test_result_skip("all new huge page must be dirty\n");
-+		ksft_test_result_skip("all the huge page must not be dirty\n");
-+		ksft_test_result_skip("all the huge page must be dirty and clear\n");
-+		ksft_test_result_skip("only middle page dirty\n");
-+	}
-+
-+	/* 5. clear first half of huge page */
-+	map = gethugepage(map_size);
-+	if (map) {
-+
-+		memset(map, 0, map_size);
-+
-+		ret = pagemap_ioctl(map, map_size/2, NULL, 0, PAGEMAP_WP_ENGAGE, 0,
-+				    0, 0, 0, 0);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, 0, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].len == vec_size/2 &&
-+				 vec[0].start == (uintptr_t)(map + map_size/2),
-+				 "%s clear first half of huge page\n", __func__);
-+		wp_free(map, map_size);
-+		free(map);
-+	} else {
-+		ksft_test_result_skip("clear first half of huge page\n");
-+	}
-+
-+	/* 6. clear first half of huge page with limited buffer */
-+	map = gethugepage(map_size);
-+	if (map) {
-+		memset(map, 0, map_size);
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, PAGEMAP_WP_ENGAGE,
-+				    vec_size/2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, 0, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].len == vec_size/2 &&
-+				 vec[0].start == (uintptr_t)(map + map_size/2),
-+				 "%s clear first half of huge page with limited buffer\n",
-+				 __func__);
-+		wp_free(map, map_size);
-+		free(map);
-+	} else {
-+		ksft_test_result_skip("clear first half of huge page with limited buffer\n");
-+	}
-+
-+	/* 7. clear second half of huge page */
-+	map = gethugepage(map_size);
-+	if (map) {
-+		memset(map, -1, map_size);
-+		ret = pagemap_ioctl(map + map_size/2, map_size/2, NULL, 0, PAGEMAP_WP_ENGAGE,
-+				    0, 0, 0, 0, 0);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ret = pagemap_ioctl(map, map_size, vec, vec_size, 0, 0,
-+				    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
-+		if (ret < 0)
-+			ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+		ksft_test_result(ret == 1 && vec[0].len == vec_size/2,
-+				 "%s clear second half huge page\n", __func__);
-+		wp_free(map, map_size);
-+		free(map);
-+	} else {
-+		ksft_test_result_skip("clear second half huge page\n");
-+	}
-+
-+	free(vec);
-+	free(vec2);
-+	return 0;
-+}
-+
-+int unmapped_region_tests(void)
-+{
-+	void *start = (void *)0x10000000;
-+	int dirty, len = 0x00040000;
-+	int vec_size = len / page_size;
-+	struct page_region *vec = malloc(sizeof(struct page_region) * vec_size);
-+
-+	/* 1. Get dirty pages */
-+	dirty = pagemap_ioctl(start, len, vec, vec_size, 0, 0, PAGEMAP_NON_WRITTEN_BITS, 0, 0,
-+			      PAGEMAP_NON_WRITTEN_BITS);
-+	if (dirty < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", dirty, errno, strerror(errno));
-+
-+	ksft_test_result(dirty >= 0, "%s Get status of pages\n", __func__);
-+
-+	free(vec);
-+	return 0;
-+}
-+
-+static void test_simple(void)
-+{
-+	int i;
-+	char *map;
-+	struct page_region vec;
-+
-+	map = aligned_alloc(page_size, page_size);
-+	if (!map)
-+		ksft_exit_fail_msg("aligned_alloc failed\n");
-+	wp_init(map, page_size);
-+
-+	clear_softdirty_wp(map, page_size);
-+
-+	for (i = 0 ; i < TEST_ITERATIONS; i++) {
-+		if (pagemap_ioctl(map, page_size, &vec, 1, 0, 0,
-+				  PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) == 1) {
-+			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-+			break;
-+		}
-+
-+		clear_softdirty_wp(map, page_size);
-+		/* Write something to the page to get the dirty bit enabled on the page */
-+		map[0]++;
-+
-+		if (pagemap_ioctl(map, page_size, &vec, 1, 0, 0,
-+				  PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN) == 0) {
-+			ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
-+			break;
-+		}
-+
-+		clear_softdirty_wp(map, page_size);
-+	}
-+	wp_free(map, page_size);
-+	free(map);
-+
-+	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
-+}
-+
-+int sanity_tests(void)
-+{
-+	char *mem, *fmem;
-+	int mem_size, vec_size, ret;
-+	struct page_region *vec;
-+
-+	/* 1. wrong operation */
-+	mem_size = 10 * page_size;
-+	vec_size = mem_size / page_size;
-+
-+	vec = malloc(sizeof(struct page_region) * vec_size);
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED || vec == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	wp_init(mem, mem_size);
-+
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, PAGEMAP_WP_ENGAGE, 0,
-+				       PAGEMAP_BITS_ALL, 0, 0, PAGEMAP_BITS_ALL) < 0,
-+			 "%s clear op can only be specified with PAGE_IS_WRITTEN\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+				       PAGEMAP_BITS_ALL, 0, 0, PAGEMAP_BITS_ALL) >= 0,
-+			 "%s required_mask specified\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+				       0, PAGEMAP_BITS_ALL, 0, PAGEMAP_BITS_ALL) >= 0,
-+			 "%s anyof_mask specified\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+				       0, 0, PAGEMAP_BITS_ALL, PAGEMAP_BITS_ALL) >= 0,
-+			 "%s excluded_mask specified\n", __func__);
-+	ksft_test_result(pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+				       PAGEMAP_BITS_ALL, PAGEMAP_BITS_ALL, 0,
-+				       PAGEMAP_BITS_ALL) >= 0,
-+			 "%s required_mask and anyof_mask specified\n", __func__);
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 2. Get sd and present pages with anyof_mask */
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, mem_size);
-+
-+	memset(mem, 0, mem_size);
-+
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+			    0, PAGEMAP_BITS_ALL, 0, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)mem && vec[0].len == vec_size &&
-+			 vec[0].bitmap == (PAGE_IS_WRITTEN | PAGE_IS_PRESENT),
-+			 "%s Get sd and present pages with anyof_mask\n", __func__);
-+
-+	/* 3. Get sd and present pages with required_mask */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+			    PAGEMAP_BITS_ALL, 0, 0, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)mem && vec[0].len == vec_size &&
-+			 vec[0].bitmap == (PAGE_IS_WRITTEN | PAGE_IS_PRESENT),
-+			 "%s Get all the pages with required_mask\n", __func__);
-+
-+	/* 4. Get sd and present pages with required_mask and anyof_mask */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+			    PAGE_IS_WRITTEN, PAGE_IS_PRESENT, 0, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)mem && vec[0].len == vec_size &&
-+			 vec[0].bitmap == (PAGE_IS_WRITTEN | PAGE_IS_PRESENT),
-+			 "%s Get sd and present pages with required_mask and anyof_mask\n",
-+			 __func__);
-+
-+	/* 5. Don't get sd pages */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+			    0, 0, PAGE_IS_WRITTEN, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret == 0, "%s Don't get sd pages\n", __func__);
-+
-+	/* 6. Don't get present pages */
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+			    0, 0, PAGE_IS_PRESENT, PAGEMAP_BITS_ALL);
-+	ksft_test_result(ret == 0, "%s Don't get present pages\n", __func__);
-+
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 8. Find dirty present pages with return mask */
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, mem_size);
-+
-+	memset(mem, 0, mem_size);
-+
-+	ret = pagemap_ioctl(mem, mem_size, vec, vec_size, 0, 0,
-+			    0, PAGEMAP_BITS_ALL, 0, PAGE_IS_WRITTEN);
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)mem && vec[0].len == vec_size &&
-+			 vec[0].bitmap == PAGE_IS_WRITTEN,
-+			 "%s Find dirty present pages with return mask\n", __func__);
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 9. Memory mapped file */
-+	int fd;
-+	struct stat sbuf;
-+
-+	fd = open(__FILE__, O_RDONLY);
-+	if (fd < 0) {
-+		ksft_test_result_skip("%s Memory mapped file\n");
-+		goto free_vec_and_return;
-+	}
-+
-+	ret = stat(__FILE__, &sbuf);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	fmem = mmap(NULL, sbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
-+	if (fmem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+
-+	ret = pagemap_ioctl(fmem, sbuf.st_size, vec, vec_size, 0, 0,
-+			    0, PAGEMAP_NON_WRITTEN_BITS, 0, PAGEMAP_NON_WRITTEN_BITS);
-+
-+	ksft_test_result(ret >= 0 && vec[0].start == (uintptr_t)fmem &&
-+			 vec[0].len == ceilf((float)sbuf.st_size/page_size) &&
-+			 vec[0].bitmap == PAGE_IS_FILE,
-+			 "%s Memory mapped file\n", __func__);
-+
-+	munmap(fmem, sbuf.st_size);
-+	close(fd);
-+
-+free_vec_and_return:
-+	free(vec);
-+	return 0;
-+}
-+
-+int mprotect_tests(void)
-+{
-+	int ret;
-+	char *mem, *mem2;
-+	struct page_region vec;
-+	int pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-+
-+	if (pagemap_fd < 0) {
-+		fprintf(stderr, "open() failed\n");
-+		exit(1);
-+	}
-+
-+	/* 1. Map two pages */
-+	mem = mmap(0, 2 * page_size, PROT_READ|PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, 2 * page_size);
-+
-+	/* Populate both pages. */
-+	memset(mem, 1, 2 * page_size);
-+
-+	ret = pagemap_ioctl(mem, 2 * page_size, &vec, 1, 0, 0, PAGE_IS_WRITTEN,
-+			    0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec.len == 2, "%s Both pages dirty\n", __func__);
-+
-+	/* 2. Start softdirty tracking. Clear VM_SOFTDIRTY and clear the softdirty PTE bit. */
-+	ret = pagemap_ioctl(mem, 2 * page_size, NULL, 0, PAGEMAP_WP_ENGAGE, 0,
-+			    0, 0, 0, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(pagemap_ioctl(mem, 2 * page_size, &vec, 1, 0, 0, PAGE_IS_WRITTEN,
-+			 0, 0, PAGE_IS_WRITTEN) == 0,
-+			 "%s Both pages are not soft dirty\n", __func__);
-+
-+	/* 3. Remap the second page */
-+	mem2 = mmap(mem + page_size, page_size, PROT_READ|PROT_WRITE,
-+		    MAP_PRIVATE|MAP_ANON|MAP_FIXED, -1, 0);
-+	if (mem2 == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem2, page_size);
-+
-+	/* Protect + unprotect. */
-+	mprotect(mem, 2 * page_size, PROT_READ);
-+	mprotect(mem, 2 * page_size, PROT_READ|PROT_WRITE);
-+
-+	/* Modify both pages. */
-+	memset(mem, 2, 2 * page_size);
-+
-+	ret = pagemap_ioctl(mem, 2 * page_size, &vec, 1, 0, 0, PAGE_IS_WRITTEN,
-+			    0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec.len == 2,
-+			 "%s Both pages dirty after remap and mprotect\n", __func__);
-+
-+	/* 4. Clear and make the pages dirty */
-+	ret = pagemap_ioctl(mem, 2 * page_size, NULL, 0, PAGEMAP_WP_ENGAGE, 0,
-+			    0, 0, 0, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	memset(mem, 'A', 2 * page_size);
-+
-+	ret = pagemap_ioctl(mem, 2 * page_size, &vec, 1, 0, 0, PAGE_IS_WRITTEN,
-+			    0, 0, PAGE_IS_WRITTEN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("error %d %d %s\n", ret, errno, strerror(errno));
-+
-+	ksft_test_result(ret == 1 && vec.len == 2,
-+			 "%s Clear and make the pages dirty\n", __func__);
-+
-+	wp_free(mem, 2 * page_size);
-+	munmap(mem, 2 * page_size);
-+	return 0;
-+}
-+
-+int main(void)
-+{
-+	char *mem, *map;
-+	int mem_size;
-+
-+	ksft_print_header();
-+	ksft_set_plan(54);
-+
-+	page_size = getpagesize();
-+	hpage_size = read_pmd_pagesize();
-+
-+	pagemap_fd = open(PAGEMAP, O_RDWR);
-+	if (pagemap_fd < 0)
-+		return -EINVAL;
-+
-+	if (init_uffd())
-+		ksft_exit_fail_msg("uffd init failed\n");
-+
-+	/*
-+	 * Soft-dirty PTE bit tests
-+	 */
-+
-+	/* 1. Sanity testing */
-+	sanity_tests_sd();
-+
-+	/* 2. Normal page testing */
-+	mem_size = 10 * page_size;
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, mem_size);
-+
-+	base_tests("Page testing:", mem, mem_size, 0);
-+
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 3. Large page testing */
-+	mem_size = 512 * 10 * page_size;
-+	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-+	if (mem == MAP_FAILED)
-+		ksft_exit_fail_msg("error nomem\n");
-+	wp_init(mem, mem_size);
-+
-+	base_tests("Large Page testing:", mem, mem_size, 0);
-+
-+	wp_free(mem, mem_size);
-+	munmap(mem, mem_size);
-+
-+	/* 4. Huge page testing */
-+	map = gethugepage(hpage_size);
-+	if (map) {
-+		base_tests("Huge page testing:", map, hpage_size, 0);
-+		wp_free(map, hpage_size);
-+		free(map);
-+	} else {
-+		base_tests("Huge page testing:", NULL, 0, 1);
-+	}
-+
-+	/* 6. Huge page tests */
-+	hpage_unit_tests();
-+
-+	/* 7. Iterative test */
-+	test_simple();
-+
-+	/* 8. Mprotect test */
-+	mprotect_tests();
-+
-+	/*
-+	 * Other PTE bit tests
-+	 */
-+
-+	/* 1. Sanity testing */
-+	sanity_tests();
-+
-+	/* 2. Unmapped address test */
-+	unmapped_region_tests();
-+
-+	close(pagemap_fd);
-+	return ksft_exit_pass();
-+}
 -- 
-2.30.2
-
+BR,
+Muhammad Usama Anjum
