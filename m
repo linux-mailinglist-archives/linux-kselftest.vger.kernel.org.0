@@ -2,208 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DF2685C1A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Feb 2023 01:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCDD685F24
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Feb 2023 06:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbjBAAT1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 19:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S229961AbjBAFqY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Feb 2023 00:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbjBAATU (ORCPT
+        with ESMTP id S229574AbjBAFqY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 19:19:20 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C535A370
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 16:19:10 -0800 (PST)
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 1 Feb 2023 00:46:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FE253E4E
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 21:45:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675230334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=13iyMrEPGqfJCvL2yfeb8yGxwtVrKuwJE/ODZ2h33NQ=;
+        b=KDIaRlKLibnjrUIzAkbkYu9iaQEdlJrzPOXQ8O1VXbx1z3shuNIj0ePAJOrLTLVgZ+eOWO
+        hS2Zae9YFTKfdeprs02BBOl8fDauqYRcNLFD4IWy21bo8HUjHoLS1J7Gs0A9YXrpSLAeqw
+        nLCen++X2/YJjROIIqBBg+3r9TMimjA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-319-Z_ToLan2PaSYDSt7Z0MoEA-1; Wed, 01 Feb 2023 00:45:33 -0500
+X-MC-Unique: Z_ToLan2PaSYDSt7Z0MoEA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8C48F442F0
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Feb 2023 00:19:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675210747;
-        bh=THqFl0me8Ks10Tkt9+ZckNKES+j+lzbfaB3495mdeRc=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=gNkK6m2mIF9bGJ+i8uFf+P1bGY+DuiGYkQ1viSA+MkPwWSXI3rdGPl4UTPCe3YSzc
-         sAa1bL6oXgp7JiArESTYZyRC+rr1eN2B4X5udax6I5uzlerizolApQHGuDgozlKAiC
-         XNh+NQkBTCbDwG0B+GfE07pRWwJYyKLM4xBpXAnnBhihgx2fJFA/2lJZQNggNutN/c
-         GaLL8/T+tpZqMrZ0/n9I+XgtiaaVnVQnLrme0HMMQ9tWorMB1Lpa44dDM8zZHBe/cS
-         P2CjJI3hAB19ltlLy9Opy0AS9Y/8nKsOMtgx1Ot9YkylvbydZSwwLAZIOGMVd5V/W8
-         b2Tvz7vhjvgKA==
-Received: by mail-wm1-f72.google.com with SMTP id k9-20020a05600c1c8900b003dc5dec2ac6so166587wms.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 16:19:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=THqFl0me8Ks10Tkt9+ZckNKES+j+lzbfaB3495mdeRc=;
-        b=8QQceDYUnREj62fKX1HgI9jDXChCMB9t5ulPytmNfWz8Zf3DVUbV/spitMW4L/sHw8
-         DlDSp7Ndiftu0G4bPJgIJSQSduq2Ck0JQXWwi95F5uKygw3SwuVkUwg+zjbfQI6ETrCj
-         /eOvqEDJehT7ZJlRZsmEHUdNkINqKx8EZ/6V1o3CPfZvbSwc/zvz0Qyv7hgDQwIRDlCr
-         7FlP/fP9f5NDQLupAwj8EG67ph48KT5eWw1rKgzkZzlu13W+cFwBUJyNC0myNPmf3xXn
-         SWiJrjn5ScLCxqaQWgpCfSevlrspYT2CaCL+rWrJbcb6FUItH1SE4zBrqwGOwBeoUte5
-         ZHPQ==
-X-Gm-Message-State: AO0yUKVGTt4WuukywAeXAqUeII18YWjC9M71YY1bl265VWK8eD257nWf
-        gD/RaqpYXBsAvun0hm1uBFFg54vFcDH0vyS0p0ZHl7i0zUe+jvkR4531+4dvKK+vHDusBRiOVXY
-        WzYCVJchahE2hkVjDmwn6tAMzQ64GXSmLznW2nBEGT805kg==
-X-Received: by 2002:a5d:6791:0:b0:2bd:bb5f:6a9f with SMTP id v17-20020a5d6791000000b002bdbb5f6a9fmr695841wru.67.1675210747131;
-        Tue, 31 Jan 2023 16:19:07 -0800 (PST)
-X-Google-Smtp-Source: AK7set9II6Vfu8dlIujX+EybQlwMJwMubFPOzNguQSRbDTV3j5xSGtpEYZbX4ult2qRMpsHsXInLmA==
-X-Received: by 2002:a5d:6791:0:b0:2bd:bb5f:6a9f with SMTP id v17-20020a5d6791000000b002bdbb5f6a9fmr695821wru.67.1675210746855;
-        Tue, 31 Jan 2023 16:19:06 -0800 (PST)
-Received: from qwirkle.internal ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003d237d60318sm108925wmi.2.2023.01.31.16.19.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 16:19:06 -0800 (PST)
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Fred Klassen <fklassen@appneta.com>
-Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
-        Willem de Bruijn <willemb@google.com>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net v4 4/4] selftests: net: udpgso_bench_tx: Cater for pending datagrams zerocopy benchmarking
-Date:   Wed,  1 Feb 2023 00:16:16 +0000
-Message-Id: <20230201001612.515730-4-andrei.gherzan@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230201001612.515730-1-andrei.gherzan@canonical.com>
-References: <20230201001612.515730-1-andrei.gherzan@canonical.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3FF932A59546;
+        Wed,  1 Feb 2023 05:45:33 +0000 (UTC)
+Received: from q.redhat.com (unknown [10.66.61.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 814DF401531B;
+        Wed,  1 Feb 2023 05:45:30 +0000 (UTC)
+From:   shahuang@redhat.com
+To:     kvm@vger.kernel.org
+Cc:     Shaoqin Huang <shahuang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] selftests: KVM: Replace optarg with arg in guest_modes_cmdline
+Date:   Wed,  1 Feb 2023 13:45:20 +0800
+Message-Id: <20230201054522.162611-1-shahuang@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test tool can check that the zerocopy number of completions value is
-valid taking into consideration the number of datagram send calls. This can
-catch the system into a state where the datagrams are still in the system
-(for example in a qdisk, waiting for the network interface to return a
-completion notification, etc).
+From: Shaoqin Huang <shahuang@redhat.com>
 
-This change adds a retry logic of computing the number of completions up to
-a configurable (via CLI) timeout (default: 2 seconds).
+The parameter arg in guest_modes_cmdline not being used now, and the
+optarg should be replaced with arg in guest_modes_cmdline.
 
-Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
-Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
 ---
- tools/testing/selftests/net/udpgso_bench_tx.c | 34 +++++++++++++++----
- 1 file changed, 27 insertions(+), 7 deletions(-)
+ tools/testing/selftests/kvm/lib/guest_modes.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-index b47b5c32039f..477392715a9a 100644
---- a/tools/testing/selftests/net/udpgso_bench_tx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-@@ -62,6 +62,7 @@ static int	cfg_payload_len	= (1472 * 42);
- static int	cfg_port	= 8000;
- static int	cfg_runtime_ms	= -1;
- static bool	cfg_poll;
-+static int	cfg_poll_loop_timeout_ms = 2000;
- static bool	cfg_segment;
- static bool	cfg_sendmmsg;
- static bool	cfg_tcp;
-@@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
+diff --git a/tools/testing/selftests/kvm/lib/guest_modes.c b/tools/testing/selftests/kvm/lib/guest_modes.c
+index 99a575bbbc52..1f2dca4520ab 100644
+--- a/tools/testing/selftests/kvm/lib/guest_modes.c
++++ b/tools/testing/selftests/kvm/lib/guest_modes.c
+@@ -127,7 +127,7 @@ void guest_modes_cmdline(const char *arg)
+ 		mode_selected = true;
  	}
+ 
+-	mode = strtoul(optarg, NULL, 10);
++	mode = strtoul(arg, NULL, 10);
+ 	TEST_ASSERT(mode < NUM_VM_MODES, "Guest mode ID %d too big", mode);
+ 	guest_modes[mode].enabled = true;
  }
- 
--static void flush_errqueue(int fd, const bool do_poll)
-+static void flush_errqueue(int fd, const bool do_poll,
-+			   unsigned long poll_timeout, const bool poll_err)
- {
- 	if (do_poll) {
- 		struct pollfd fds = {0};
- 		int ret;
- 
- 		fds.fd = fd;
--		ret = poll(&fds, 1, 500);
-+		ret = poll(&fds, 1, poll_timeout);
- 		if (ret == 0) {
--			if (cfg_verbose)
-+			if ((cfg_verbose) && (poll_err))
- 				fprintf(stderr, "poll timeout\n");
- 		} else if (ret < 0) {
- 			error(1, errno, "poll");
-@@ -254,6 +256,20 @@ static void flush_errqueue(int fd, const bool do_poll)
- 	flush_errqueue_recv(fd);
- }
- 
-+static void flush_errqueue_retry(int fd, unsigned long num_sends)
-+{
-+	unsigned long tnow, tstop;
-+	bool first_try = true;
-+
-+	tnow = gettimeofday_ms();
-+	tstop = tnow + cfg_poll_loop_timeout_ms;
-+	do {
-+		flush_errqueue(fd, true, tstop - tnow, first_try);
-+		first_try = false;
-+		tnow = gettimeofday_ms();
-+	} while ((stat_zcopies != num_sends) && (tnow < tstop));
-+}
-+
- static int send_tcp(int fd, char *data)
- {
- 	int ret, done = 0, count = 0;
-@@ -413,7 +429,8 @@ static int send_udp_segment(int fd, char *data)
- 
- static void usage(const char *filepath)
- {
--	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
-+	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
-+		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
- 		    filepath);
- }
- 
-@@ -423,7 +440,7 @@ static void parse_opts(int argc, char **argv)
- 	int max_len, hdrlen;
- 	int c;
- 
--	while ((c = getopt(argc, argv, "46acC:D:Hl:mM:p:s:PS:tTuvz")) != -1) {
-+	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
- 		switch (c) {
- 		case '4':
- 			if (cfg_family != PF_UNSPEC)
-@@ -452,6 +469,9 @@ static void parse_opts(int argc, char **argv)
- 		case 'l':
- 			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
- 			break;
-+		case 'L':
-+			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
-+			break;
- 		case 'm':
- 			cfg_sendmmsg = true;
- 			break;
-@@ -679,7 +699,7 @@ int main(int argc, char **argv)
- 			num_sends += send_udp(fd, buf[i]);
- 		num_msgs++;
- 		if ((cfg_zerocopy && ((num_msgs & 0xF) == 0)) || cfg_tx_tstamp)
--			flush_errqueue(fd, cfg_poll);
-+			flush_errqueue(fd, cfg_poll, 500, true);
- 
- 		if (cfg_msg_nr && num_msgs >= cfg_msg_nr)
- 			break;
-@@ -698,7 +718,7 @@ int main(int argc, char **argv)
- 	} while (!interrupted && (cfg_runtime_ms == -1 || tnow < tstop));
- 
- 	if (cfg_zerocopy || cfg_tx_tstamp)
--		flush_errqueue(fd, true);
-+		flush_errqueue_retry(fd, num_sends);
- 
- 	if (close(fd))
- 		error(1, errno, "close");
 -- 
-2.34.1
+2.39.0
 
