@@ -2,94 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7004568772A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Feb 2023 09:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DFA68798F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Feb 2023 10:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbjBBITk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Feb 2023 03:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
+        id S232335AbjBBJ4P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Feb 2023 04:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjBBITg (ORCPT
+        with ESMTP id S232245AbjBBJ4L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Feb 2023 03:19:36 -0500
-X-Greylist: delayed 512 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 00:19:34 PST
-Received: from out-169.mta1.migadu.com (out-169.mta1.migadu.com [IPv6:2001:41d0:203:375::a9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA258349A
-        for <linux-kselftest@vger.kernel.org>; Thu,  2 Feb 2023 00:19:34 -0800 (PST)
-Date:   Thu, 2 Feb 2023 09:10:57 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675325458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ie5uGvKIrofRgo6t7ShvhGoGSYw5hlV+UY54sbIh3c=;
-        b=MIMPAxDX5vZ3dkfPsO5DiRiiDEsk2io0Wb+spRESH22N1RK+B0qcCw5ySRYA0QYYrt5Wri
-        bXpfIvuVDvV7/qfqpo09eYrX55QilXOgEb8KPX+NUqADcozuYKIG89w6RHCe83648Y/LfS
-        XdJR7sQKJ9vwOovXTocnlEnILFFPTtE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Andrew Jones <andrew.jones@linux.dev>
-To:     shahuang@redhat.com
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] selftests: KVM: Replace optarg with arg in
- guest_modes_cmdline
-Message-ID: <20230202081057.nanfjavyy2l4pswc@orel>
-References: <20230202025716.216323-1-shahuang@redhat.com>
+        Thu, 2 Feb 2023 04:56:11 -0500
+X-Greylist: delayed 86695 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 01:56:00 PST
+Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB664233D8
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Feb 2023 01:56:00 -0800 (PST)
+Received: by mail.corrib.pl (Postfix, from userid 1001)
+        id 222D7A43C9; Wed,  1 Feb 2023 09:06:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
+        t=1675242427; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
+        h=Date:From:To:Subject:From;
+        b=y+4qmiZkzq0r1UBnA8mvGXDqVkjWPPyhxUAe/CkHNMPhT4B4bL0aO7JUefYYGvcDz
+         3fULdzWpt7Lw4hHAUeN5UpmhAIa8XkQ/cpgUbVnnvpc5iler0+dtpk3jsAa25Of/nP
+         c2koAM+jiGvYjz6BSyRKJ+nyXWt9JIn9UAo3SEfu/W9kHFATXvLJ5szmuVJJiJCkPY
+         lKCokYEvJm7pbLA/JtZveE4ggkUenTkHhPqCWCZm2V4Yipye4ccZbCoeOnI+p5J7Go
+         ffIQpvvWKSsmo5sHfimmOKpoTpcV1irqTNN4/gpot1ORq5DOKPsIzbXt5mzmjn1oPL
+         vTbRwOAqdtTgg==
+Received: by mail.corrib.pl for <linux-kselftest@vger.kernel.org>; Wed,  1 Feb 2023 09:06:19 GMT
+Message-ID: <20230201074500-0.1.58.fi1n.0.4od59o6mn1@corrib.pl>
+Date:   Wed,  1 Feb 2023 09:06:19 GMT
+From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
+        <szczepan.kielbasa@corrib.pl>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: Faktoring
+X-Mailer: mail.corrib.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202025716.216323-1-shahuang@redhat.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 10:57:15AM +0800, shahuang@redhat.com wrote:
-> From: Shaoqin Huang <shahuang@redhat.com>
-> 
-> The parameter arg in guest_modes_cmdline not being used now, and the
-> optarg should be replaced with arg in guest_modes_cmdline.
-> 
-> And this is the chance to change strtoul() to atoi_non_negative(), since
-> guest mode ID will never be negative.
+Dzie=C5=84 dobry,
 
-Fixes: e42ac777d661 ("KVM: selftests: Factor out guest mode code")
+rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
+ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
+wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
 
-> 
-> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
-> 
-> ---
-> Changes from v1:
->   - Change strtoul() to atoi_non_negative(). [Vipin]
-> 
-> ---
->  tools/testing/selftests/kvm/lib/guest_modes.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/guest_modes.c b/tools/testing/selftests/kvm/lib/guest_modes.c
-> index 99a575bbbc52..1df3ce4b16fd 100644
-> --- a/tools/testing/selftests/kvm/lib/guest_modes.c
-> +++ b/tools/testing/selftests/kvm/lib/guest_modes.c
-> @@ -127,7 +127,7 @@ void guest_modes_cmdline(const char *arg)
->  		mode_selected = true;
->  	}
->  
-> -	mode = strtoul(optarg, NULL, 10);
-> +	mode = atoi_non_negative("Guest mode ID", arg);
->  	TEST_ASSERT(mode < NUM_VM_MODES, "Guest mode ID %d too big", mode);
->  	guest_modes[mode].enabled = true;
->  }
-> -- 
-> 2.39.0
-> 
+Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
+stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
+z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
+ kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
+adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
+Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
 
-Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
+
+Pozdrawiam
+Szczepan Kie=C5=82basa
