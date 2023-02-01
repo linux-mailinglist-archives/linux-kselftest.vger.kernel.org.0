@@ -2,74 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFDD685C16
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Feb 2023 01:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DF2685C1A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Feb 2023 01:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjBAAS4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Jan 2023 19:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
+        id S231723AbjBAAT1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Jan 2023 19:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbjBAASw (ORCPT
+        with ESMTP id S231719AbjBAATU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Jan 2023 19:18:52 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEBE4FCE7
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 16:18:43 -0800 (PST)
+        Tue, 31 Jan 2023 19:19:20 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C535A370
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 16:19:10 -0800 (PST)
 Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F370F3F135
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Feb 2023 00:18:41 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8C48F442F0
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Feb 2023 00:19:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675210722;
-        bh=dgwEfLtKcE1+A8pxiJOsLVtOJAST1XtfQUhBF4j2P0E=;
+        s=20210705; t=1675210747;
+        bh=THqFl0me8Ks10Tkt9+ZckNKES+j+lzbfaB3495mdeRc=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=Mk9q9gT/t3SV/+f79dS17dKpOdn1qi08NaRnSl+ZUGjHh4VqAt0AzYZogp1dN8nYS
-         3M13wae16+HVtngSImLA3RIbfwusfoNHnYd4QpEOEAs9v9FRbPqgpGOKZxTi3o+Bv9
-         JiwS+/S/YdiR5lvnedkCKjoGLyZ9SzcecVxSRSIhCzy3LlkRr5chBSZqSlGxAwN5jN
-         1BnZqfW7jWPzZ+ftpCgXo95hsLMXoi49IOAVE1x12qTvtSMNtJ6hle+cmFsesDL1mX
-         ubr2hy1qQJeR4iJa4jAC25tS9jgMQbrM5mcX7jG9eoYXlWq3/OvoErpBNctUD7W/o+
-         qvAuFiNjeKmaA==
-Received: by mail-wm1-f72.google.com with SMTP id j37-20020a05600c1c2500b003deaf780ab6so16385wms.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 16:18:41 -0800 (PST)
+        b=gNkK6m2mIF9bGJ+i8uFf+P1bGY+DuiGYkQ1viSA+MkPwWSXI3rdGPl4UTPCe3YSzc
+         sAa1bL6oXgp7JiArESTYZyRC+rr1eN2B4X5udax6I5uzlerizolApQHGuDgozlKAiC
+         XNh+NQkBTCbDwG0B+GfE07pRWwJYyKLM4xBpXAnnBhihgx2fJFA/2lJZQNggNutN/c
+         GaLL8/T+tpZqMrZ0/n9I+XgtiaaVnVQnLrme0HMMQ9tWorMB1Lpa44dDM8zZHBe/cS
+         P2CjJI3hAB19ltlLy9Opy0AS9Y/8nKsOMtgx1Ot9YkylvbydZSwwLAZIOGMVd5V/W8
+         b2Tvz7vhjvgKA==
+Received: by mail-wm1-f72.google.com with SMTP id k9-20020a05600c1c8900b003dc5dec2ac6so166587wms.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Jan 2023 16:19:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dgwEfLtKcE1+A8pxiJOsLVtOJAST1XtfQUhBF4j2P0E=;
-        b=Uzjltllvht0QszhYMJOvojVeVycatlDJu/AedhnZz4mzA+vPNleo+USw398B0icBCY
-         LiLV1+uG5aZu+DBOgYbC4D1ps+WnnR5dIN8pRxX/f9UtL0+gzVG5dF5bgeAycgdj7ZpA
-         ENiP9C4/juodEOFLh7+bbq0Z+N8lKXP5jPwPEqlfwykpzfKbqakDok7NUvOpIpMNKmEi
-         DvT+cw+gQhRUDYor/tW0ePNC/res/b4FsXVajrBw4pbU3HdB0Li7P5I4ly/eE33/MJDa
-         L/SIU41xDc0JhQ2nFXosuuxtLP5hT6LL6ub1vaWLEXvRH6zhimfP00s1MYN0bFgMmlwb
-         UtWQ==
-X-Gm-Message-State: AO0yUKXGZizwn6bqcOrteQ2IuPIlz3U8gvY9kTCy2Kbo3Y9XjN2JoBpO
-        WcuSS1viLTsCntQdEnT2LzmVTs1xknRSNfl5UsvvT3ZW7XsS4uT9hR4QbUs6eJ8w2TQBGLUOPPR
-        Th3dnD+eD1esVajERD+YKExDDu1fTIah9MUlyQVw+C2pG4A==
-X-Received: by 2002:a05:600c:354c:b0:3db:1a41:6629 with SMTP id i12-20020a05600c354c00b003db1a416629mr105948wmq.22.1675210721715;
-        Tue, 31 Jan 2023 16:18:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set9LaXifnlkC7InO8/h7kccJP2n5FYY32pcHw9EtuXxE/QBheUoELSj8Zzng27BuKrGEsioHuA==
-X-Received: by 2002:a05:600c:354c:b0:3db:1a41:6629 with SMTP id i12-20020a05600c354c00b003db1a416629mr105937wmq.22.1675210721559;
-        Tue, 31 Jan 2023 16:18:41 -0800 (PST)
+        bh=THqFl0me8Ks10Tkt9+ZckNKES+j+lzbfaB3495mdeRc=;
+        b=8QQceDYUnREj62fKX1HgI9jDXChCMB9t5ulPytmNfWz8Zf3DVUbV/spitMW4L/sHw8
+         DlDSp7Ndiftu0G4bPJgIJSQSduq2Ck0JQXWwi95F5uKygw3SwuVkUwg+zjbfQI6ETrCj
+         /eOvqEDJehT7ZJlRZsmEHUdNkINqKx8EZ/6V1o3CPfZvbSwc/zvz0Qyv7hgDQwIRDlCr
+         7FlP/fP9f5NDQLupAwj8EG67ph48KT5eWw1rKgzkZzlu13W+cFwBUJyNC0myNPmf3xXn
+         SWiJrjn5ScLCxqaQWgpCfSevlrspYT2CaCL+rWrJbcb6FUItH1SE4zBrqwGOwBeoUte5
+         ZHPQ==
+X-Gm-Message-State: AO0yUKVGTt4WuukywAeXAqUeII18YWjC9M71YY1bl265VWK8eD257nWf
+        gD/RaqpYXBsAvun0hm1uBFFg54vFcDH0vyS0p0ZHl7i0zUe+jvkR4531+4dvKK+vHDusBRiOVXY
+        WzYCVJchahE2hkVjDmwn6tAMzQ64GXSmLznW2nBEGT805kg==
+X-Received: by 2002:a5d:6791:0:b0:2bd:bb5f:6a9f with SMTP id v17-20020a5d6791000000b002bdbb5f6a9fmr695841wru.67.1675210747131;
+        Tue, 31 Jan 2023 16:19:07 -0800 (PST)
+X-Google-Smtp-Source: AK7set9II6Vfu8dlIujX+EybQlwMJwMubFPOzNguQSRbDTV3j5xSGtpEYZbX4ult2qRMpsHsXInLmA==
+X-Received: by 2002:a5d:6791:0:b0:2bd:bb5f:6a9f with SMTP id v17-20020a5d6791000000b002bdbb5f6a9fmr695821wru.67.1675210746855;
+        Tue, 31 Jan 2023 16:19:06 -0800 (PST)
 Received: from qwirkle.internal ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003d237d60318sm108925wmi.2.2023.01.31.16.18.26
+        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003d237d60318sm108925wmi.2.2023.01.31.16.19.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 16:18:26 -0800 (PST)
+        Tue, 31 Jan 2023 16:19:06 -0800 (PST)
 From:   Andrei Gherzan <andrei.gherzan@canonical.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Willem de Bruijn <willemb@google.com>
+        Fred Klassen <fklassen@appneta.com>
 Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
+        Willem de Bruijn <willemb@google.com>,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net v4 3/4] selftests: net: udpgso_bench: Fix racing bug between the rx/tx programs
-Date:   Wed,  1 Feb 2023 00:16:14 +0000
-Message-Id: <20230201001612.515730-3-andrei.gherzan@canonical.com>
+Subject: [PATCH net v4 4/4] selftests: net: udpgso_bench_tx: Cater for pending datagrams zerocopy benchmarking
+Date:   Wed,  1 Feb 2023 00:16:16 +0000
+Message-Id: <20230201001612.515730-4-andrei.gherzan@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230201001612.515730-1-andrei.gherzan@canonical.com>
 References: <20230201001612.515730-1-andrei.gherzan@canonical.com>
@@ -77,76 +78,132 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-"udpgro_bench.sh" invokes udpgso_bench_rx/udpgso_bench_tx programs
-subsequently and while doing so, there is a chance that the rx one is not
-ready to accept socket connections. This racing bug could fail the test
-with at least one of the following:
+The test tool can check that the zerocopy number of completions value is
+valid taking into consideration the number of datagram send calls. This can
+catch the system into a state where the datagrams are still in the system
+(for example in a qdisk, waiting for the network interface to return a
+completion notification, etc).
 
-./udpgso_bench_tx: connect: Connection refused
-./udpgso_bench_tx: sendmsg: Connection refused
-./udpgso_bench_tx: write: Connection refused
+This change adds a retry logic of computing the number of completions up to
+a configurable (via CLI) timeout (default: 2 seconds).
 
-This change addresses this by making udpgro_bench.sh wait for the rx
-program to be ready before firing off the tx one - up to a 10s timeout.
-
-Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
 Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
 Cc: Willem de Bruijn <willemb@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
 ---
- tools/testing/selftests/net/udpgso_bench.sh | 24 +++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ tools/testing/selftests/net/udpgso_bench_tx.c | 34 +++++++++++++++----
+ 1 file changed, 27 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
-index dc932fd65363..640bc43452fa 100755
---- a/tools/testing/selftests/net/udpgso_bench.sh
-+++ b/tools/testing/selftests/net/udpgso_bench.sh
-@@ -7,6 +7,7 @@ readonly GREEN='\033[0;92m'
- readonly YELLOW='\033[0;33m'
- readonly RED='\033[0;31m'
- readonly NC='\033[0m' # No Color
-+readonly TESTPORT=8000
- 
- readonly KSFT_PASS=0
- readonly KSFT_FAIL=1
-@@ -56,11 +57,26 @@ trap wake_children EXIT
- 
- run_one() {
- 	local -r args=$@
-+	local nr_socks=0
-+	local i=0
-+	local -r timeout=10
-+
-+	./udpgso_bench_rx -p "$TESTPORT" &
-+	./udpgso_bench_rx -p "$TESTPORT" -t &
-+
-+	# Wait for the above test program to get ready to receive connections.
-+	while [ "$i" -lt "$timeout" ]; do
-+		nr_socks="$(ss -lnHi | grep -c "\*:${TESTPORT}")"
-+		[ "$nr_socks" -eq 2 ] && break
-+		i=$((i + 1))
-+		sleep 1
-+	done
-+	if [ "$nr_socks" -ne 2 ]; then
-+		echo "timed out while waiting for udpgso_bench_rx"
-+		exit 1
-+	fi
- 
--	./udpgso_bench_rx &
--	./udpgso_bench_rx -t &
--
--	./udpgso_bench_tx ${args}
-+	./udpgso_bench_tx -p "$TESTPORT" ${args}
+diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+index b47b5c32039f..477392715a9a 100644
+--- a/tools/testing/selftests/net/udpgso_bench_tx.c
++++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+@@ -62,6 +62,7 @@ static int	cfg_payload_len	= (1472 * 42);
+ static int	cfg_port	= 8000;
+ static int	cfg_runtime_ms	= -1;
+ static bool	cfg_poll;
++static int	cfg_poll_loop_timeout_ms = 2000;
+ static bool	cfg_segment;
+ static bool	cfg_sendmmsg;
+ static bool	cfg_tcp;
+@@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
+ 	}
  }
  
- run_in_netns() {
+-static void flush_errqueue(int fd, const bool do_poll)
++static void flush_errqueue(int fd, const bool do_poll,
++			   unsigned long poll_timeout, const bool poll_err)
+ {
+ 	if (do_poll) {
+ 		struct pollfd fds = {0};
+ 		int ret;
+ 
+ 		fds.fd = fd;
+-		ret = poll(&fds, 1, 500);
++		ret = poll(&fds, 1, poll_timeout);
+ 		if (ret == 0) {
+-			if (cfg_verbose)
++			if ((cfg_verbose) && (poll_err))
+ 				fprintf(stderr, "poll timeout\n");
+ 		} else if (ret < 0) {
+ 			error(1, errno, "poll");
+@@ -254,6 +256,20 @@ static void flush_errqueue(int fd, const bool do_poll)
+ 	flush_errqueue_recv(fd);
+ }
+ 
++static void flush_errqueue_retry(int fd, unsigned long num_sends)
++{
++	unsigned long tnow, tstop;
++	bool first_try = true;
++
++	tnow = gettimeofday_ms();
++	tstop = tnow + cfg_poll_loop_timeout_ms;
++	do {
++		flush_errqueue(fd, true, tstop - tnow, first_try);
++		first_try = false;
++		tnow = gettimeofday_ms();
++	} while ((stat_zcopies != num_sends) && (tnow < tstop));
++}
++
+ static int send_tcp(int fd, char *data)
+ {
+ 	int ret, done = 0, count = 0;
+@@ -413,7 +429,8 @@ static int send_udp_segment(int fd, char *data)
+ 
+ static void usage(const char *filepath)
+ {
+-	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
++	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
++		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
+ 		    filepath);
+ }
+ 
+@@ -423,7 +440,7 @@ static void parse_opts(int argc, char **argv)
+ 	int max_len, hdrlen;
+ 	int c;
+ 
+-	while ((c = getopt(argc, argv, "46acC:D:Hl:mM:p:s:PS:tTuvz")) != -1) {
++	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			if (cfg_family != PF_UNSPEC)
+@@ -452,6 +469,9 @@ static void parse_opts(int argc, char **argv)
+ 		case 'l':
+ 			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
+ 			break;
++		case 'L':
++			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
++			break;
+ 		case 'm':
+ 			cfg_sendmmsg = true;
+ 			break;
+@@ -679,7 +699,7 @@ int main(int argc, char **argv)
+ 			num_sends += send_udp(fd, buf[i]);
+ 		num_msgs++;
+ 		if ((cfg_zerocopy && ((num_msgs & 0xF) == 0)) || cfg_tx_tstamp)
+-			flush_errqueue(fd, cfg_poll);
++			flush_errqueue(fd, cfg_poll, 500, true);
+ 
+ 		if (cfg_msg_nr && num_msgs >= cfg_msg_nr)
+ 			break;
+@@ -698,7 +718,7 @@ int main(int argc, char **argv)
+ 	} while (!interrupted && (cfg_runtime_ms == -1 || tnow < tstop));
+ 
+ 	if (cfg_zerocopy || cfg_tx_tstamp)
+-		flush_errqueue(fd, true);
++		flush_errqueue_retry(fd, num_sends);
+ 
+ 	if (close(fd))
+ 		error(1, errno, "close");
 -- 
 2.34.1
 
