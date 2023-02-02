@@ -2,107 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22864687DFE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Feb 2023 13:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF8A6880D4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Feb 2023 15:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjBBM40 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Feb 2023 07:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S232156AbjBBO7p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Feb 2023 09:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjBBM4Z (ORCPT
+        with ESMTP id S232073AbjBBO7o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Feb 2023 07:56:25 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599E3402F6;
-        Thu,  2 Feb 2023 04:56:24 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id q8so1308709wmo.5;
-        Thu, 02 Feb 2023 04:56:24 -0800 (PST)
+        Thu, 2 Feb 2023 09:59:44 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5EB99
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Feb 2023 06:59:43 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id s24so2076156vsi.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Feb 2023 06:59:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dViUpgOu7xLc5fDN/SMu/8eP28LlUDsFZqiXHAAyROM=;
-        b=SNifHJ85O3o385JpXqVafvUJVG+BYvek0CVN/K+YRGWQtdvZYNHiq3r6wKYLW7Ujoh
-         vlQYrWILrjOLnc59cG6PaEf3yD+nuPRdum0niG99F9n3Y6JG5eLHaH3fY/WbpXyjTuIf
-         6gQo+432AmXXW6Ir8moAj/UPNUAo7Hqy7h8O2XV2qyZrs9e1fxdPTEJ5z3M2fHfbevaG
-         8aFO8Vungf6AUTjFrl4pi7CKk9912YgpsrZuf6T3eMKFnOvQFDHQ3ZtdbIStMkx7jrPJ
-         QIqQyaAdq4rkZfRMnTAS4D42/LC08AwVuDfD+ImOnNH8hCLvbwJ+opfR6ftYQCrQZuc1
-         c23A==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+oLCarSnbWm9l30IqXlSlJbB/Sspgw6Lli8fZQqOL3w=;
+        b=lR42T0OOHxZom/O2kIv5W9S/umO0DLaJuzIMSW1lHstX3IXJQKC4aY2Cdx7zkx1DyH
+         z/7Y7tLkZWBAHncNZcx0qJ0qd/+8PhEcBVTXgg691A7migWn0lvZiAw+WoS43M9yYAOF
+         pKgvsnCxdzXNJQZaeHx61h3hwrKL+kgcW0ylndtg2+iHNlQcgfQS7EZ1O9rKyuP+yl60
+         gYyNyfL3b7TMRhr7wJ5qIJH6uMrPkYwLGXEiu2UGAl3uDqHCHHJBK5nRqUFkSuPXQFmP
+         a6WEJ+6uz2xEjAdnYbRTViz88rdB1pDnEQYM8pAoVRPvA27pryAGHnM7j7PgkgmG7GZB
+         /CSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dViUpgOu7xLc5fDN/SMu/8eP28LlUDsFZqiXHAAyROM=;
-        b=bHC/pkW3ac76/UY7q2uRJAplL0Pe9yjy6HRSzx2sI4ASKKA3E94tUJrJsI8heBGrgK
-         D3hR/XVt4f1hQzCtHwzYm0y4pTiMcSgdIvoWnIPbKMDmZ7lBgg01n4xdi4+uHrb/ijqU
-         MRyGd8DPRjEiby0Yg1jr3ACPN7AgJPaDr5BTcF4FbWNH2TjAE0i9eHemGRaC5+mYh8Fg
-         lcF1UFG43qRVrHMbbsUkECQmiLqfpj1G1iJLR5bf8WwzJ7wdQNJNtqlI7WeaSAy3XM6c
-         zq9Nb7XO38YpK7N2GLaaeZjzCpzvZXKH2typIUBPdzY1i7EAHBLjpjf0pL+8+XgHZ9Xh
-         mapg==
-X-Gm-Message-State: AO0yUKWTlx/YVd/8Omyi7l2urnWJrzKguGWenTdHA9ILNIDOM67urysH
-        wig4VeuX27Es6Cw6rIMVJD8=
-X-Google-Smtp-Source: AK7set8TAyJmdcKU6pdmjsbdBHTK1M0kLQCgk3huo6MozWoV82H68n6cv/0c5RkdqWG5nHaeL8nyFQ==
-X-Received: by 2002:a1c:7c0e:0:b0:3dc:4548:abe6 with SMTP id x14-20020a1c7c0e000000b003dc4548abe6mr5671531wmc.12.1675342582679;
-        Thu, 02 Feb 2023 04:56:22 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id c3-20020a05600c0ac300b003db012d49b7sm8172691wmr.2.2023.02.02.04.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 04:56:22 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests: Fix spelling mistake "allright" -> "all right"
-Date:   Thu,  2 Feb 2023 12:56:21 +0000
-Message-Id: <20230202125621.286309-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        bh=+oLCarSnbWm9l30IqXlSlJbB/Sspgw6Lli8fZQqOL3w=;
+        b=Mt7/4rUmpBXI0C4FE+fiXStKU/TVjgGiU+til1Et1sqx/NBYhHp9s7oPujQ2cBseMV
+         aP6FcFrb9svpQj0dxJuG4gANp40yfdbeYqKv9CE1cGd4256aUGRYKFaUSiIGiIG5TA5x
+         7kORXZc4qGfnGjrlZYcfF6FcGuDpdRaRgd89xtYZnwH0VpdxkrOoTHhKzuwRXnNpodW+
+         AKATdDckVyX+dg9C+pnhQdbwZ04sGTrHgGNZ6aZqz6rDcHfidnLXhljHa1cMxBiAIxhB
+         Ez+F2HiL939Za6XvGwh62nAHqpv/9p9baXcEULdcTr+2W++6bFvi1Py3VjBelfRszH+j
+         Rl1Q==
+X-Gm-Message-State: AO0yUKXE+TvVuiWbUwSBgtAOB8P3MgCz6UALQHsKxElDyT19EsEcG98z
+        /vTrkNC2deiYPD3o8B/ao6DAIjN47xN9pIpXMp4TzA==
+X-Google-Smtp-Source: AK7set/1VTblN/hGaphDW8ItFDqXbRBBkClqYBuZ91ZzszVwUlVtqXARv4RqxlDHHu+pSqXWJ80Yrhc7dPyfKyi7MUk=
+X-Received: by 2002:a05:6102:3ce:b0:3f0:f82a:1f8c with SMTP id
+ n14-20020a05610203ce00b003f0f82a1f8cmr970844vsq.74.1675349982148; Thu, 02 Feb
+ 2023 06:59:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <CA+G9fYuei_Tr-vN9GS7SfFyU1y9hNysnf=PB7kT0=yv4MiPgVg@mail.gmail.com>
+ <Y9B4/pR5t2o51coY@monkey>
+In-Reply-To: <Y9B4/pR5t2o51coY@monkey>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 2 Feb 2023 20:29:31 +0530
+Message-ID: <CA+G9fYvC7RfM7Q+=S8N7dw9A88oa=HFyoDjz4=drSjBwXYYnLQ@mail.gmail.com>
+Subject: Re: selftests: memfd: run_hugetlbfs_test.sh - invalid opcode: 0000
+ [#1] PREEMPT SMP
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Pranith Kumar <bobby.prani@gmail.com>,
+        David Herrmann <dh.herrmann@gmail.com>
+Content-Type: multipart/mixed; boundary="0000000000009008a505f3b8d0e1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There are two spelling mistakes in the test messages. Fix them.
+--0000000000009008a505f3b8d0e1
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c | 2 +-
- tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+[Resending because logs.txt attachment was not successful ]
+Hi Mike,
 
-diff --git a/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c b/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c
-index 62a93cc61b7c..6d1a5ee8eb28 100644
---- a/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c
-+++ b/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c
-@@ -79,7 +79,7 @@ int main(void)
- {
- 	int n_tasks = 100, i;
- 
--	fprintf(stderr, "[No further output means we're allright]\n");
-+	fprintf(stderr, "[No further output means we're all right]\n");
- 
- 	for (i=0; i<n_tasks; i++)
- 		if (fork() == 0)
-diff --git a/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c b/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c
-index 79950f9a26fd..d39511eb9b01 100644
---- a/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c
-+++ b/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c
-@@ -83,7 +83,7 @@ int main(void)
- {
- 	int n_tasks = 100, i;
- 
--	fprintf(stderr, "[No further output means we're allright]\n");
-+	fprintf(stderr, "[No further output means we're all right]\n");
- 
- 	for (i=0; i<n_tasks; i++)
- 		if (fork() == 0)
--- 
-2.30.2
+On Wed, 25 Jan 2023 at 06:04, Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 01/05/23 15:14, Naresh Kamboju wrote:
+> > While running selftests: memfd: run_hugetlbfs_test.sh on qemu_i386 and i386 the
+> > following invalid opcode was noticed on stable-rc 6.1 and  6.0.
+> >
+> > This is always reproducible on stable-rc 6.1 and  6.0 with qemu_i386 and i386.
+> > Build, config and test log details provided in the below links [1].
+>
+> Hello Naresh,
+>
+> I have tried to create this issue a few times without success.  Since I
+> do not have i386 HW, I am using qemu_i386.  If I use the supplied config,
+> my kernel does not boot.  I then try to modify config options which I
+> think are not relevant.  By the time I get to a config that will boot, I
+> can not recreate the issue. :(
+>
+> Just curious if you have any suggestions?  Or, Wondering if anyone else has
+> suggestions on how to proceed?
 
+Please install tuxmake and run attached script to reproduce reported issues,
+$ pip3 install tuxmake
+$ ./memfd-crash-test-qemu-i386.sh
+
+This script downloads kernel Image and rootfs and runs run_hugetlbfs_test.sh.
+If you have any questions please get back to me.
+
+ref:
+https://tuxsuite.com/
+
+> --
+> Mike Kravetz
+
+--0000000000009008a505f3b8d0e1
+Content-Type: application/x-shellscript; 
+	name="memfd-crash-test-qemu-i386.sh"
+Content-Disposition: attachment; filename="memfd-crash-test-qemu-i386.sh"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ldn82ilt0>
+X-Attachment-Id: f_ldn82ilt0
+
+dHV4cnVuIC0tcnVudGltZSBwb2RtYW4gLS1kZXZpY2UgcWVtdS1pMzg2IC0ta2VybmVsIGh0dHBz
+Oi8vc3RvcmFnZS50dXhzdWl0ZS5jb20vcHVibGljL2xpbmFyby9sa2Z0L2J1aWxkcy8ySnJ6dlpj
+MjIzcGN0bEF4VmhDSWViSjhxMHcvYnpJbWFnZSAtLW1vZHVsZXMgaHR0cHM6Ly9zdG9yYWdlLnR1
+eHN1aXRlLmNvbS9wdWJsaWMvbGluYXJvL2xrZnQvYnVpbGRzLzJKcnp2WmMyMjNwY3RsQXhWaENJ
+ZWJKOHEwdy9tb2R1bGVzLnRhci54eiAtLXJvb3RmcyBodHRwczovL3N0b3JhZ2UudHV4Ym9vdC5j
+b20vZGViaWFuL2Jvb2t3b3JtL2kzODYvcm9vdGZzLmV4dDQueHogLS1wYXJhbWV0ZXJzIFNLSVBG
+SUxFPXNraXBmaWxlLWxrZnQueWFtbCAtLXNhdmUtb3V0cHV0IC0tbG9nLWZpbGUgLSAtLWJvb3Qt
+YXJncyBydyAtLW92ZXJsYXkgaHR0cHM6Ly9zdG9yYWdlLnR1eHN1aXRlLmNvbS9wdWJsaWMvbGlu
+YXJvL2xrZnQvYnVpbGRzLzJKcnp2WmMyMjNwY3RsQXhWaENJZWJKOHEwdy9rc2VsZnRlc3QudGFy
+Lnh6IC0tICdjZCAvbWVtZmQgJiYgLi9ydW5faHVnZXRsYmZzX3Rlc3Quc2gnCgo=
+--0000000000009008a505f3b8d0e1--
