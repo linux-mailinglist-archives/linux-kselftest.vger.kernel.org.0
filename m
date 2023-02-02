@@ -2,98 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6876468713F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Feb 2023 23:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E5468726E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Feb 2023 01:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjBAWwY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Feb 2023 17:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S230189AbjBBAiI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Feb 2023 19:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjBAWwX (ORCPT
+        with ESMTP id S229935AbjBBAhp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Feb 2023 17:52:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5846D28862
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Feb 2023 14:51:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675291900;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XSLskm6AR/RoEO7AKZfXBH2mjiqKgHPTYdoXGz36+6Y=;
-        b=QEa21kbNtStvvrwSiGuhXQuts+Mj6jWjb5eKYGNoso6l0lfjTL1hlxaufiwwtvgQwQ/6Ow
-        h8wFXsW0jF5FA5+88VaCxuXGqBXpwC/OIsUWjHdZlJUyuOMN8w0Uepx/jIaAPmKHdX7TTn
-        epSo+hLpl8ooEpg/xv+wlMq/H7ZJdZ4=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-669-nPZx-suTOpWFNQ1RjLUIeg-1; Wed, 01 Feb 2023 17:51:39 -0500
-X-MC-Unique: nPZx-suTOpWFNQ1RjLUIeg-1
-Received: by mail-qk1-f199.google.com with SMTP id v7-20020a05620a0f0700b006faffce43b2so238729qkl.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Feb 2023 14:51:39 -0800 (PST)
+        Wed, 1 Feb 2023 19:37:45 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0B4761DD
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Feb 2023 16:37:27 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so297222pjb.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Feb 2023 16:37:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8S8LkIIV+AlMHhYoTbGzsUKCLPIHbJN6C9VR4H2aVWg=;
+        b=FeiR69FdPNiRLfW96Ofno781eV28FxmGlOp8XPDNf6L0BTinviMc13f10S7fI/W1P+
+         R1L8l1shqsIxAtPuQkiUJG4i6ayhIAxtjKKelxXYcnr1aOS+ajBLm4disbJKsFTeGP8t
+         tCiHlHRdoKPw0c8RlxG5TVI75ek5iH3P93tQqNDuTqb5EdXS4Ti9V02sILs+XWTl7qWz
+         InrfsZxE5B7QLWlfxyt4xHVtsL4SOK924yuE6KWi9avFYTo3GgqCZSomSTU61xuFd3DC
+         My5qm/2a2aWVOaB7RjteivwXIbDPW5v4GzIBdvFCIz13iQYkpHrL8EsU/8i6Se+D0J8F
+         /k/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XSLskm6AR/RoEO7AKZfXBH2mjiqKgHPTYdoXGz36+6Y=;
-        b=T6w15hj4gUp2/zEIYSsbIYMYURClSAN/fcmeb1uCd9tBaeZHP8t/flhZovlMlbpxgG
-         AXbE1IOl0TuVg7vYoJ5ANPF0zbsXWNlEsVNaCbMo2gYa7LVt5+NTjm+lymiHZQYC3VdH
-         oDvtvQcLLe+FtANRJZsvjnHsq6LnO63vLW2ONmZGR7Sp2yqIim9DLDENEavDmGpREb+e
-         O8jWFue6prF1cpunGvuL/mZRyBkLQ/X8y6tPJpvnn0/55ltibqwFup+Gc4XUTuI9iByD
-         gne1fl1l9Cv8USVNIxTUJ1ah0m9MzxZqMLVXDryParFVADNcERHofe0Yk8ZTXxgQeNJV
-         b/Fg==
-X-Gm-Message-State: AO0yUKV/MhcsGtP1PVA1l+T1bj2K3NU/H2mejNXUqK4LPJ05xmDvRvro
-        DH9MCLnR2NNDtQfGLQjlsnqJnR4qoyyktZ8fDp4g8qKNq87awucuXzMYECtoKTJz0rDF8upassH
-        YaDEqh7RUN6mqeMrbAdGRSzpN2iXs
-X-Received: by 2002:ac8:4908:0:b0:3b8:6c6e:4949 with SMTP id e8-20020ac84908000000b003b86c6e4949mr6666842qtq.4.1675291898861;
-        Wed, 01 Feb 2023 14:51:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set9QU/pg3lX447cZDPT+ECjMCN9D89jwTNBjSZqxAR811W/xmquV+vVt3b6u8OCgqafcLR9zUg==
-X-Received: by 2002:ac8:4908:0:b0:3b8:6c6e:4949 with SMTP id e8-20020ac84908000000b003b86c6e4949mr6666813qtq.4.1675291898528;
-        Wed, 01 Feb 2023 14:51:38 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id a8-20020ac84348000000b003b86d8ad0c1sm5593624qtn.3.2023.02.01.14.51.36
+        bh=8S8LkIIV+AlMHhYoTbGzsUKCLPIHbJN6C9VR4H2aVWg=;
+        b=lhIyUlxQrptbfuxqVvez4D34Gg4eovB+/RtBVxxkJikt09raABeHG9c6z+7ZZnN802
+         nl1tGIdnJ79FKDMn4d8y9+d7WX1aO0XXGOIhrJtaESFJzyPEHuyWpLCJffgis1IUFUc/
+         eVypKp9Y/4/xG/dwEThPNrJvGOckabs5j5dnVmQsmOw9wL7WWc3gkr9VOdKM72uG3TES
+         a9SdWbv3E7BaGif9kjWS5pjky/0m8MEMEHGCiNdwbC1Nhci1qy67s6TrIqNt5+KmhP/l
+         YMQfxtjWUquIG1eGCa5+sUJbjMAllfoaUZ31tmR7FolFQg8WPqFCTqfWJzFzqYbbVn08
+         mQFQ==
+X-Gm-Message-State: AO0yUKWSc9fkbMxnuh+NSsZHbkkM31nxK2aBmNSyFiNzqM5fz1QoMI+j
+        Fl/9VD+t9oAQMvLpiVQtNiNn3g==
+X-Google-Smtp-Source: AK7set9qaZmHpUgiYk5goPmDLZfFaJSoQvNehVGDo9YWz1zOV7CvLxJuTAEvn3/yi7i8RkMr9S803g==
+X-Received: by 2002:a17:902:d903:b0:198:af4f:de0d with SMTP id c3-20020a170902d90300b00198af4fde0dmr133094plz.13.1675298247023;
+        Wed, 01 Feb 2023 16:37:27 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s2-20020a170902988200b001966eaf7365sm8312658plp.17.2023.02.01.16.37.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 14:51:37 -0800 (PST)
-Date:   Wed, 1 Feb 2023 17:51:35 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v9 1/3] userfaultfd: Add UFFD WP Async support
-Message-ID: <Y9rs93beOffPHlkt@x1n>
-References: <20230131083257.3302830-1-usama.anjum@collabora.com>
- <20230131083257.3302830-2-usama.anjum@collabora.com>
+        Wed, 01 Feb 2023 16:37:26 -0800 (PST)
+Date:   Thu, 2 Feb 2023 00:37:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Gautam Menghani <gautammenghani201@gmail.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] KVM: selftests: APIC_ID must be correctly
+ updated when disabling x2apic
+Message-ID: <Y9sFw0PkuR5EPm4l@google.com>
+References: <20230109130605.2013555-1-eesposit@redhat.com>
+ <20230109130605.2013555-3-eesposit@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230131083257.3302830-2-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20230109130605.2013555-3-eesposit@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,190 +82,190 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 01:32:55PM +0500, Muhammad Usama Anjum wrote:
-> Add new WP Async mode (UFFD_FEATURE_WP_ASYNC) which resolves the page
-> faults on its own. It can be used to track that which pages have been
-> written-to from the time the pages were write-protected. It is very
-> efficient way to track the changes as uffd is by nature pte/pmd based.
+On Mon, Jan 09, 2023, Emanuele Giuseppe Esposito wrote:
+> Make sure the APIC_ID is correctly shifted in the right bit positions
+> when disabling x2APIC via KVM_SET_MSRS.
 > 
-> UFFD synchronous WP sends the page faults to the userspace where the
-> pages which have been written-to can be tracked. But it is not efficient.
-> This is why this asynchronous version is being added. After setting the
-> WP Async, the pages which have been written to can be found in the pagemap
-> file or information can be obtained from the PAGEMAP_IOCTL.
-> 
-> Suggested-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 > ---
-> Changes in v9:
-> - Correct the fault resolution with code contributed by Peter
+>  .../selftests/kvm/x86_64/xapic_state_test.c   | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
 > 
-> Changes in v7:
-> - Remove UFFDIO_WRITEPROTECT_MODE_ASYNC_WP and add UFFD_FEATURE_WP_ASYNC
-> - Handle automatic page fault resolution in better way (thanks to Peter)
-> 
-> update to wp async
-> ---
->  fs/userfaultfd.c                 | 11 +++++++++++
->  include/linux/userfaultfd_k.h    |  6 ++++++
->  include/uapi/linux/userfaultfd.h |  8 +++++++-
->  mm/memory.c                      | 23 ++++++++++++++++++++---
->  4 files changed, 44 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index 15a5bf765d43..c17835a0e842 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -1867,6 +1867,10 @@ static int userfaultfd_writeprotect(struct userfaultfd_ctx *ctx,
->  	mode_wp = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_WP;
->  	mode_dontwake = uffdio_wp.mode & UFFDIO_WRITEPROTECT_MODE_DONTWAKE;
->  
-> +	/* The unprotection is not supported if in async WP mode */
-> +	if (!mode_wp && (ctx->features & UFFD_FEATURE_WP_ASYNC))
-> +		return -EINVAL;
-> +
->  	if (mode_wp && mode_dontwake)
->  		return -EINVAL;
->  
-> @@ -1950,6 +1954,13 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
->  	return ret;
+> diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> index d7d37dae3eeb..6ebda7162a25 100644
+> --- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> @@ -132,6 +132,62 @@ static void test_icr(struct xapic_vcpu *x)
+>  	__test_icr(x, -1ull & ~APIC_DM_FIXED_MASK);
 >  }
 >  
-> +int userfaultfd_wp_async(struct vm_area_struct *vma)
+> +static void _test_lapic_id
+
+There's no need for the underscore since this is "lapic" vs. "apic", though I would
+prefer to name them both "apic" and go with double underscores, i.e. __test_apic_id().
+
+> (struct kvm_vcpu *vcpu, bool x2apic_enabled,
+
+Pass the entire apic_base value to avoid magic booleans, and then that also lets
+this helper do the vcpu_set_msr().
+
+> +			   int expected_id)
+
+There's no need to pass the expected APIC ID, it can be derived from vcpu->id.
+
 > +{
-> +	struct userfaultfd_ctx *ctx = vma->vm_userfaultfd_ctx.ctx;
+> +	struct kvm_lapic_state xapic;
 > +
-> +	return (ctx && (ctx->features & UFFD_FEATURE_WP_ASYNC));
+> +	vcpu_ioctl(vcpu, KVM_GET_LAPIC, &xapic);
+> +	if (x2apic_enabled)
+> +		ASSERT_EQ(xapic.regs[APIC_ID], expected_id);
+> +	else
+> +		ASSERT_EQ(xapic.regs[0x23], expected_id);
+
+Oof.  It's gross (we need more helpers), but the APIC_ID should be read as a 32-bit
+value, both to fully validate x2APIC and to check that KVM doesn't leave bits set
+in the reserved portion of APIC_ID when in xAPIC mode.
+
+	apic_id = *((u32 *)&xapic.regs[APIC_ID]);
+
+And then shift the expected ID instead of the actual ID so that it's more obvious
+what went wrong on failure, e.g. generate errors like
+
+	APIC_ID not set back to xAPIC format; wanted = 1000000, got = 1
+
+versus just seeing '0' from the high byte.
+
 > +}
 > +
->  static inline unsigned int uffd_ctx_features(__u64 user_features)
+> +static void test_apic_id(struct kvm_vcpu *vcpu, int id)
+> +{
+> +	int ret;
+> +	struct {
+> +		struct kvm_msrs info;
+> +		struct kvm_msr_entry entries[1];
+> +	} msr_data = {
+> +		.info.nmsrs = 1,
+> +		.entries[0].index = MSR_IA32_APICBASE,
+> +	};
+> +
+> +	/* vcpu is initialized with xAPIC enabled */
+> +	ret = __vcpu_ioctl(vcpu, KVM_GET_MSRS, &msr_data.info);
+> +	TEST_ASSERT(ret == 1, __KVM_IOCTL_ERROR("__vcpu_ioctl", ret));
+
+Use vcpu_get_msr().
+
+> +	ASSERT_EQ(msr_data.entries[0].data & MSR_IA32_APICBASE_ENABLE,
+> +		  MSR_IA32_APICBASE_ENABLE);
+
+This is hard to read.  I get annoyed with TEST_ASSERT() requiring a message, but
+in this case using ASSERT_EQ() to avoid the message is a net negative (I blinked
+a few times to figure out what it was asserting).
+
+		TEST_ASSERT(apic_base & MSR_IA32_APICBASE_ENABLE,
+			    "APIC not in ENABLED state at vCPU RESET");
+		TEST_ASSERT(!(apic_base & X2APIC_ENABLE),
+			    "APIC not in xAPIC mode at vCPU RESET");
+
+> +	ASSERT_EQ(msr_data.entries[0].data & X2APIC_ENABLE, 0);
+> +	_test_lapic_id(vcpu, false, id);
+> +
+> +	/* enable x2APIC */
+> +	msr_data.entries[0].data |= X2APIC_ENABLE;
+> +	ret = __vcpu_ioctl(vcpu, KVM_SET_MSRS, &msr_data.info);
+> +	TEST_ASSERT(ret == 1, __KVM_IOCTL_ERROR("__vcpu_ioctl", ret));
+> +	ASSERT_EQ(msr_data.entries[0].data & MSR_IA32_APICBASE_ENABLE,
+> +		  MSR_IA32_APICBASE_ENABLE);
+> +	ASSERT_EQ(msr_data.entries[0].data & X2APIC_ENABLE, X2APIC_ENABLE);
+> +	_test_lapic_id(vcpu, true, id);
+> +
+> +	/*
+> +	 * Check that disabling x2APIC correctly updates the APIC ID to the
+> +	 * xAPIC format.
+> +	 */
+> +	msr_data.entries[0].data ^= X2APIC_ENABLE;
+
+XOR works, but it obfuscates the code.  AND ~, or just use the original value.
+
+> +	ret = __vcpu_ioctl(vcpu, KVM_SET_MSRS, &msr_data.info);
+> +	TEST_ASSERT(ret == 1, __KVM_IOCTL_ERROR("__vcpu_ioctl", ret));
+> +	ASSERT_EQ(msr_data.entries[0].data & MSR_IA32_APICBASE_ENABLE,
+> +		  MSR_IA32_APICBASE_ENABLE);
+> +	ASSERT_EQ(msr_data.entries[0].data & X2APIC_ENABLE, 0);
+> +	_test_lapic_id(vcpu, false, id);
+> +}
+> +
+> +#define NCPUS 3
+> +
+>  int main(int argc, char *argv[])
 >  {
->  	/*
-> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> index 9df0b9a762cc..94dcb4dc1b4a 100644
-> --- a/include/linux/userfaultfd_k.h
-> +++ b/include/linux/userfaultfd_k.h
-> @@ -179,6 +179,7 @@ extern int userfaultfd_unmap_prep(struct mm_struct *mm, unsigned long start,
->  				  unsigned long end, struct list_head *uf);
->  extern void userfaultfd_unmap_complete(struct mm_struct *mm,
->  				       struct list_head *uf);
-> +extern int userfaultfd_wp_async(struct vm_area_struct *vma);
->  
->  #else /* CONFIG_USERFAULTFD */
->  
-> @@ -274,6 +275,11 @@ static inline bool uffd_disable_fault_around(struct vm_area_struct *vma)
->  	return false;
->  }
->  
-> +static inline int userfaultfd_wp_async(struct vm_area_struct *vma)
-> +{
-> +	return false;
-> +}
+>  	struct xapic_vcpu x = {
+> @@ -139,6 +195,14 @@ int main(int argc, char *argv[])
+>  		.is_x2apic = true,
+>  	};
+>  	struct kvm_vm *vm;
+> +	struct kvm_vcpu *vcpus[NCPUS] = { 0 };
+> +	int i;
 > +
->  #endif /* CONFIG_USERFAULTFD */
->  
->  static inline bool pte_marker_entry_uffd_wp(swp_entry_t entry)
-> diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-> index 005e5e306266..f4252ef40071 100644
-> --- a/include/uapi/linux/userfaultfd.h
-> +++ b/include/uapi/linux/userfaultfd.h
-> @@ -38,7 +38,8 @@
->  			   UFFD_FEATURE_MINOR_HUGETLBFS |	\
->  			   UFFD_FEATURE_MINOR_SHMEM |		\
->  			   UFFD_FEATURE_EXACT_ADDRESS |		\
-> -			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM)
-> +			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM |	\
-> +			   UFFD_FEATURE_WP_ASYNC)
->  #define UFFD_API_IOCTLS				\
->  	((__u64)1 << _UFFDIO_REGISTER |		\
->  	 (__u64)1 << _UFFDIO_UNREGISTER |	\
-> @@ -203,6 +204,10 @@ struct uffdio_api {
->  	 *
->  	 * UFFD_FEATURE_WP_HUGETLBFS_SHMEM indicates that userfaultfd
->  	 * write-protection mode is supported on both shmem and hugetlbfs.
-> +	 *
-> +	 * UFFD_FEATURE_WP_ASYNC indicates that userfaultfd write-protection
-> +	 * asynchronous mode is supported in which the write fault is automatically
-> +	 * resolved and write-protection is un-set.
+> +	vm = vm_create_with_vcpus(NCPUS, NULL, vcpus);
+> +	vm_enable_cap(vm, KVM_CAP_X2APIC_API, KVM_X2APIC_API_USE_32BIT_IDS);
+> +	for (i = 0; i < NCPUS; i++)
+> +		test_apic_id(vcpus[i], i);
+> +	kvm_vm_free(vm);
 
-Please mention a few other things:
+I would prefer to put this in the helper, test_apic_id(), so that there isn't
+confusion between the number of vCPUs for that sub-test and the existing tests.
 
-  - It only supports anon and shmem (so hugetlb is not supported)
+This is what I ended up with:
 
-  - It will only take effect when any vma is registered with wr-protection
-    mode.  Otherwise the flag will be ignored.
+static void __test_apic_id(struct kvm_vcpu *vcpu, uint64_t apic_base)
+{
+	uint32_t apic_id, expected;
+	struct kvm_lapic_state xapic;
 
-In userfaultfd_register(), we need to fail the ioctl if anyone tries to
-register any hugetlb vma with this new flag set.
+	vcpu_set_msr(vcpu, MSR_IA32_APICBASE, apic_base);
 
->  	 */
->  #define UFFD_FEATURE_PAGEFAULT_FLAG_WP		(1<<0)
->  #define UFFD_FEATURE_EVENT_FORK			(1<<1)
-> @@ -217,6 +222,7 @@ struct uffdio_api {
->  #define UFFD_FEATURE_MINOR_SHMEM		(1<<10)
->  #define UFFD_FEATURE_EXACT_ADDRESS		(1<<11)
->  #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM		(1<<12)
-> +#define UFFD_FEATURE_WP_ASYNC			(1<<13)
->  	__u64 features;
->  
->  	__u64 ioctls;
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 4000e9f017e0..04843e35550e 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3351,8 +3351,21 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
->  
->  	if (likely(!unshare)) {
->  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
-> -			pte_unmap_unlock(vmf->pte, vmf->ptl);
-> -			return handle_userfault(vmf, VM_UFFD_WP);
-> +			if (userfaultfd_wp_async(vma)) {
-> +				/*
-> +				 * Nothing needed (cache flush, TLB invalidations,
-> +				 * etc.) because we're only removing the uffd-wp bit,
-> +				 * which is completely invisible to the user.
-> +				 */
-> +				pte_t pte = pte_clear_uffd_wp(*vmf->pte);
-> +
-> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
-> +				/* Update this to be prepared for following up CoW handling */
-> +				vmf->orig_pte = pte;
-> +			} else {
-> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
-> +				return handle_userfault(vmf, VM_UFFD_WP);
-> +			}
->  		}
->  
->  		/*
-> @@ -4812,8 +4825,11 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
->  
->  	if (vma_is_anonymous(vmf->vma)) {
->  		if (likely(!unshare) &&
-> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
-> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
-> +			if (userfaultfd_wp_async(vmf->vma))
-> +				goto split_and_return;
->  			return handle_userfault(vmf, VM_UFFD_WP);
-> +		}
->  		return do_huge_pmd_wp_page(vmf);
->  	}
->  
-> @@ -4825,6 +4841,7 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
->  		}
->  	}
->  
-> +split_and_return:
+	vcpu_ioctl(vcpu, KVM_GET_LAPIC, &xapic);
 
-The "and_return" is superfluous, IMHO.  Just make it "split"?
+	expected = apic_base & X2APIC_ENABLE ? vcpu->id : vcpu->id << 24;
+	apic_id = *((u32 *)&xapic.regs[APIC_ID]);
 
->  	/* COW or write-notify handled on pte level: split pmd. */
->  	__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
+	TEST_ASSERT(apic_id == expected,
+		    "APIC_ID not set back to %s format; wanted = %x, got = %x",
+		    (apic_base & X2APIC_ENABLE) ? "x2APIC" : "xAPIC",
+		    expected, apic_id);
+}
 
-Would you also update Documentation/admin-guide/mm/userfaultfd.rst in the
-same patch?
+/*
+ * Verify that KVM switches the APIC_ID between xAPIC and x2APIC when userspace
+ * stuffs MSR_IA32_APICBASE.  Setting the APIC_ID when x2APIC is enabled and
+ * when the APIC transitions for DISABLED to ENABLED is architectural behavior
+ * (on Intel), whereas the x2APIC => xAPIC transition behavior is KVM ABI since
+ * attempted to transition from x2APIC to xAPIC without disabling the APIC is
+ * architecturally disallowed.
+ */
+static void test_apic_id(void)
+{
+	const uint32_t NR_VCPUS = 3;
+	struct kvm_vcpu *vcpus[NR_VCPUS];
+	uint64_t apic_base;
+	struct kvm_vm *vm;
+	int i;
 
-Thanks,
+	vm = vm_create_with_vcpus(NR_VCPUS, NULL, vcpus);
+	vm_enable_cap(vm, KVM_CAP_X2APIC_API, KVM_X2APIC_API_USE_32BIT_IDS);
 
--- 
-Peter Xu
+	for (i = 0; i < NR_VCPUS; i++) {
+		apic_base = vcpu_get_msr(vcpus[i], MSR_IA32_APICBASE);
 
+		TEST_ASSERT(apic_base & MSR_IA32_APICBASE_ENABLE,
+			    "APIC not in ENABLED state at vCPU RESET");
+		TEST_ASSERT(!(apic_base & X2APIC_ENABLE),
+			    "APIC not in xAPIC mode at vCPU RESET");
+
+		__test_apic_id(vcpus[i], apic_base);
+		__test_apic_id(vcpus[i], apic_base | X2APIC_ENABLE);
+		__test_apic_id(vcpus[i], apic_base);
+	}
+
+	kvm_vm_free(vm);
+}
