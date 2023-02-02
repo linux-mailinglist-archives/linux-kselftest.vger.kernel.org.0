@@ -2,74 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA66687274
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Feb 2023 01:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA45C68733E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Feb 2023 03:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjBBAli (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Feb 2023 19:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S230287AbjBBCIE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Feb 2023 21:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBBAlh (ORCPT
+        with ESMTP id S229662AbjBBCID (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Feb 2023 19:41:37 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256EBBD
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Feb 2023 16:41:36 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id z2-20020a626502000000b0059085684b50so73998pfb.16
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Feb 2023 16:41:36 -0800 (PST)
+        Wed, 1 Feb 2023 21:08:03 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E5810FC
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Feb 2023 18:07:58 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id i17so244076ils.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Feb 2023 18:07:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ki4d1amc34jkc//m/AGYcKlSJMLDGM1z24weSMYegUw=;
-        b=lAC5IQfuVVYZaNvem1btGD4sQHpdFvpjfm/4DkyoF9BMpfeeI5F0VcT2jZAUkFMaCe
-         4VdU+GZgPVmB13xUo8iLbjX3ABIxkXK2/lWIlQSxSHf8EtjutPt/C3gvjZzZJdmMDU/P
-         YXG5xXahFBOHdPPcZCEfnIq4TGllzWQuFuksb5ELSwcqMPX+6777p6+oFR3sjQD90b9j
-         wvxEaiaIH/dBDz0xPRN1AYH4j1gxpYBYUWrspjKFoVF7xj32L4ln0+iRTt6zOIQXlKE4
-         8QuAFgecCfbKF+LsJYTqd9a8gO3j3Tcv2Hq/EOcCQqU3K9wTgU5uLJkIpkkp/Fvzpvrb
-         x+kg==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3+BzeSJVfgrSPd0MbuqsjRM9bEzGlx7ixViHWjjvE7s=;
+        b=LzWodT1eb5DCcVhR8b+EzMloXXDPgbgfg5yAdRijbYs5VrwQKJ5b4Xn3BrOcQv6ZHm
+         j/bfvWWLI1MwoyyRBH16YFEsS/RLHZmYDtrOK68OuhisrVKoWYrz8AY7DIZEDOe1gDZx
+         4OF2YnlUs2qkyWJbriJ9+QAh5N1DZRxJo+pdc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ki4d1amc34jkc//m/AGYcKlSJMLDGM1z24weSMYegUw=;
-        b=C6NWkQk+pc/n69/+GHOEpP2cBaZHzXCXBMLLZLr9FhcvjlusxVpAyPBGx1pXK0zdpC
-         oWwLLzvKrPw88+zVr+0Gl305oPoSsmJ8JwOHVppaYcY8pE/Sjl1SOAWWrrSsILWP32iU
-         SrljN/WpB9boUvy1xgC8/tHQe/8ri0mzIaDlgN2gTI4n+GN4TNwwOy3rJHJxh46qVj+c
-         WYMI8cE4ZBwOYT9Rec2OoUGhH0aPtvp8u1tt5nThWorCHLjHNQo01qrecCJE49Fb+edD
-         eBaNkdM9Fif/wAJbGKy9ld5YnS2fawCpE0DaBh59HdYuLEY6xXCGushAR8e94r1hJNsp
-         nT0Q==
-X-Gm-Message-State: AO0yUKWLS8Pe8NPwmP1ceSJI+aumsWc+nbVl+Ry9/195CVlHQInHsBvg
-        VJXosYDragyx8yFFSECrAgZx0DLRLUs=
-X-Google-Smtp-Source: AK7set/ibaTucj5S+2mLkylmGNw0rkLHvVYpLtEbd/aGJVXbT1V8ve15HpfxeHvJnLpTUO6Iehbx+4iuQrI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:14c2:b0:22b:fcb6:c7c9 with SMTP id
- k60-20020a17090a14c200b0022bfcb6c7c9mr173163pja.8.1675298495668; Wed, 01 Feb
- 2023 16:41:35 -0800 (PST)
-Date:   Thu,  2 Feb 2023 00:40:33 +0000
-In-Reply-To: <20230109130605.2013555-1-eesposit@redhat.com>
-Mime-Version: 1.0
-References: <20230109130605.2013555-1-eesposit@redhat.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <167529475172.840042.11178742445383557195.b4-ty@google.com>
-Subject: Re: [RFC PATCH 0/2] xapic: make sure x2APIC -> xapic transition correctly
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+BzeSJVfgrSPd0MbuqsjRM9bEzGlx7ixViHWjjvE7s=;
+        b=wZXuymSBOuOnwXtxNKDhK7MSZKkPkfTWLLG3YC9jEK4Yf5DtQaSQEQPnE9QhtN3rLK
+         Pk/1kn+gNJvuV2y8RpoY/wa1xlSKhJBR/zROMaukuII6nI3OPbFA/21e3xSgp5G6HPIZ
+         trqYlEY8P+u6Tppkr6OdABobtbDlgfClKfJCyvtJLG1yVu/4N1gRukajCpEj+PE5/fNi
+         lG5BxtP044WQiMjpKU8+E8QE1OJwCdHDVJpgxg3vt/c1qKyXuqr1gtn4NlI3vcMvMNmp
+         ls7nU44RrOOmpNLyrOM/jb3bj3RvIqf4qb4p48yfbtBukl0+gdDjulXLOQRwxEgsH36N
+         bcAA==
+X-Gm-Message-State: AO0yUKUVFo3zHMcHw3jGCb35JJFljtRBrbw5Ix0wSawQx6BPDLE/tJdj
+        Q/mAQvlDbrtE1M7fdvwFlsaysA==
+X-Google-Smtp-Source: AK7set885G9fsVi6nyk8fZGA4Ca40+OFghSuF3kmr1dqRUTOmqFNraoAAvKt0LfXBjQfFbwgGTGQkA==
+X-Received: by 2002:a92:d341:0:b0:310:a904:33ed with SMTP id a1-20020a92d341000000b00310a90433edmr2899734ilh.0.1675303677369;
+        Wed, 01 Feb 2023 18:07:57 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id d26-20020a05663802ba00b0039ea2dfebb3sm7259077jaq.24.2023.02.01.18.07.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 18:07:56 -0800 (PST)
+Message-ID: <799b87d9-af19-0e6a-01b7-419b4893a0df@linuxfoundation.org>
+Date:   Wed, 1 Feb 2023 19:07:55 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 00/34] selftests: Fix incorrect kernel headers search path
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+ <560824bd-da2d-044c-4f71-578fc34a47cd@linuxfoundation.org>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <560824bd-da2d-044c-4f71-578fc34a47cd@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,32 +77,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 09 Jan 2023 08:06:03 -0500, Emanuele Giuseppe Esposito wrote:
-> The root cause is kvm_lapic_set_base() failing to handle x2APIC -> xapic ID
-> switch, which is addressed by patch 1.
-> Patch 2 provides a selftest to verify this behavior.
-> 
-> This serie is an RFC because I think that commit ef40757743b47 already tries to
-> fix one such effect of the error made in kvm_lapic_set_base, but I am not sure
-> how such error described in the commit message is triggered, nor how to
-> reproduce it using a selftest. I don't think one can enable/disable x2APIC using
-> KVM_SET_LAPIC, and kvm_lapic_set_base() in kvm_apic_set_state() just takes care
-> of updating apic->base_address, since value == old_value.
-> The test in patch 2 fails with the fix in ef40757743b47.
-> 
-> [...]
+Hi Mathieu,
 
-Applied to kvm-x86 apic, with the tweak of only stuffing the APIC_ID if the
-APIC is enabled.  I also heavily reworked the testcase (see feedback on that
-patch).
+On 1/30/23 15:29, Shuah Khan wrote:
+> On 1/27/23 06:57, Mathieu Desnoyers wrote:
+>> Hi,
+>>
+>> This series fixes incorrect kernel header search path in kernel
+>> selftests.
+>>
+>> Near the end of the series, a few changes are not tagged as "Fixes"
+>> because the current behavior is to rely on the kernel sources uapi files
+>> rather than on the installed kernel header files. Nevertheless, those
+>> are updated for consistency.
+>>
+>> There are situations where "../../../../include/" was added to -I search
+>> path, which is bogus for userspace tests and caused issues with types.h.
+>> Those are removed.
+>>
 
-Thanks!
+Thanks again for taking care of this. I did out of tree build testing on
+x86 on linux-kselftest next with these patches below. I haven't seen
+any problems introduced by the patch set.
 
-[1/2] KVM: x86: Reinitialize xAPIC ID when userspace forces x2APIC => xAPIC
-      https://github.com/kvm-x86/linux/commit/052c3b99cbc8
-[2/2] KVM: selftests: Verify APIC_ID is set when forcing x2APIC=>xAPIC transition
-      https://github.com/kvm-x86/linux/commit/eb9819257631
+>>    selftests: dma: Fix incorrect kernel headers search path
+This one needs a change and I will send a patch on top of yours.
+Even with that this test depends on unexported header from the
+repo and won't build out of tree. This is not related to your
+change.
 
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+>>    selftests: mount_setattr: Fix incorrect kernel headers search path
+This one fails to build with our without patch - an existing error.
+
+I have to do cross-build tests on arm64 and other arch patches still.
+This will happen later this week.
+
+>>    selftests: arm64: Fix incorrect kernel headers search path
+
+drivers patch below had arch specific tests - testing todo
+
+The rest looks good. I will try to run bpf patches on my system.
+I do have clang, llvm installed on mine. TODO
+
+thanks,
+-- Shuah
