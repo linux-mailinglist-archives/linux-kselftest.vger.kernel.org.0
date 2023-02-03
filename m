@@ -2,137 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCD0688FDE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Feb 2023 07:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27C2689000
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Feb 2023 08:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjBCGxV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Feb 2023 01:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S231871AbjBCHAY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Feb 2023 02:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbjBCGw7 (ORCPT
+        with ESMTP id S230140AbjBCHAW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Feb 2023 01:52:59 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0754DBC4;
-        Thu,  2 Feb 2023 22:52:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675407178; x=1706943178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YLxRVqzdHX5DYPv0wz35Wx3HFUs0vyQTGtj2YwxzESM=;
-  b=TBvkBiCDb1YTBIsZZieknJJJrRDSxsmgENN6ch9Eysc8vPM5ZcZm8bFX
-   aGDgxNJMr9qh7rGtM3Vt1SzGGL8clPk6IY7vY64++fVf6VM2KBIH3Vpz4
-   wEk4RRG0XG7m/CacWtaKARevXr094RICAjFkcEpOIAx0FllEFqfNwsFHJ
-   nytk2ZU3bg1PXsrIcALWHuWKXHgCQFVuz2/9e9gwYvwQE+UZJVnxjh9OZ
-   9VLdcC2PJCq8uHmmkmQBvQ/Cl8nnqH7l5On1d6y9b8HDuB8lnQk3ryZuY
-   /ZrUvPvWJ7p9Hlmf7im9PQkD4jfb1aUvu3PLKrsJlBEX7vy8XRYcrVBOb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="328691399"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="328691399"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 22:52:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10609"; a="665605404"
-X-IronPort-AV: E=Sophos;i="5.97,269,1669104000"; 
-   d="scan'208";a="665605404"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Feb 2023 22:52:43 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNpwA-0000DV-2I;
-        Fri, 03 Feb 2023 06:52:42 +0000
-Date:   Fri, 3 Feb 2023 14:52:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-        davidgow@google.com, dlatypov@google.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Rae Moar <rmoar@google.com>
-Subject: Re: [PATCH v1 1/3] kunit: fix bug in debugfs logs of parameterized
- tests
-Message-ID: <202302031414.TsTAA8Dr-lkp@intel.com>
-References: <20230131220355.1603527-2-rmoar@google.com>
+        Fri, 3 Feb 2023 02:00:22 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021FF65EF0
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Feb 2023 23:00:18 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id k4so4430434vsc.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Feb 2023 23:00:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DbzT1FQNEmaS1Fq7BXjYIIpb2bUbkeqUBQhvRAmSRec=;
+        b=whqTS9KQ2Wx0JsJ5jPsmKM+AcLdS/Ub9HHrPlTlWifEnh6KZ32CmAy5QWJIMD4cTEV
+         jo2sk8IFKxARWQZWiv0oFzrA/KSjNVSIRWRKDTplJP6saYDN/5F/AYhE/Dt8j+MZImZy
+         DO4lWxdQpox/qdCKLYsC6PbkHo9+jftXkGCoNADF4gSD3HhhPQ8GJdY/Z+mJhYZxVn6c
+         6g6eFRA8L8zRzWlVWZMvHlOLqrgm7HqTwb+SBrODYteEyZIXhmPCDXVyR+QdXWZkyEbF
+         jIUSyQY2qqCgN5Ws89G8H4Y+UV7Xk9KO96f3/1CFXrWXTbGr64efj1yo74rn7IQ3j3ml
+         6hHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DbzT1FQNEmaS1Fq7BXjYIIpb2bUbkeqUBQhvRAmSRec=;
+        b=7grCrGzP03z21HvjGleveY7rKHQ+LDOK1uImlf+BLIhm1DG8YRuqe9kYGT5Z08g5Kb
+         c/AV3qY1LmQyTqDdWwv/r9ki4g9hFybDcGXrWTdJYw9QIUtUefJnvvtWV0xk0tkvhmI4
+         BcpOMhzINPth7WOSUGWTEydUskkCjL0ZgoGMWob9nIsfpgYrapoN+v5Sk+hH2CWwYBmp
+         OxGK9Eg021flSdFSjRay/dxKZJBNE8H7Mv55/Nj9Z6E2jbzvOAo8I2S+ViykZCBI5vyD
+         D/EjogVnD3QtJWj6BsC3Qju1R7/fiNRm17CkNZzbrS+kJFyIjF5tZfWa5glIPrFVIfaZ
+         YJxw==
+X-Gm-Message-State: AO0yUKW1Gp5aBj7rryqykTowOkoYEAfRoaH6dYJXbK7NJIVmlCtAID0P
+        wO8gbSNdBPbuGsi//234J9LzGPJWVYNad3zjmYu0Ww==
+X-Google-Smtp-Source: AK7set8sK6QtEx/EgR0ZDaA9xoQHrr2H7fiqNNEAhOBy0YYaXP+Xe/mRMgXpV2MsalMb5tGxstdPCWShv1CnuEJq++M=
+X-Received: by 2002:a05:6102:204d:b0:3f1:53d4:9e87 with SMTP id
+ q13-20020a056102204d00b003f153d49e87mr1316305vsr.34.1675407616935; Thu, 02
+ Feb 2023 23:00:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131220355.1603527-2-rmoar@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYuei_Tr-vN9GS7SfFyU1y9hNysnf=PB7kT0=yv4MiPgVg@mail.gmail.com>
+ <Y9B4/pR5t2o51coY@monkey> <CA+G9fYtt_FR54zwStiTguiyS0QDHe-x5+2Py9_hvxKAbYHM_fg@mail.gmail.com>
+ <CADYN=9+=p0cYu63feXfZVXZTGruJP_i5dA3AuP0G6Fh_rfQO0g@mail.gmail.com> <Y9wxD0ngdo832Az5@monkey>
+In-Reply-To: <Y9wxD0ngdo832Az5@monkey>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 3 Feb 2023 12:30:06 +0530
+Message-ID: <CA+G9fYs92bgdfYGj7uudnnnUA7hm82sggpWmSjwdKA9qjZvW7A@mail.gmail.com>
+Subject: Re: selftests: memfd: run_hugetlbfs_test.sh - invalid opcode: 0000
+ [#1] PREEMPT SMP
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Pranith Kumar <bobby.prani@gmail.com>,
+        David Herrmann <dh.herrmann@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Rae,
+On Fri, 3 Feb 2023 at 03:24, Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 02/02/23 16:29, Anders Roxell wrote:
+> > On Thu, 2 Feb 2023 at 15:54, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > Hi Mike,
+> > >
+> > > On Wed, 25 Jan 2023 at 06:04, Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> > > >
+> > > > On 01/05/23 15:14, Naresh Kamboju wrote:
+> > > > > While running selftests: memfd: run_hugetlbfs_test.sh on qemu_i386 and i386 the
+> > > > > following invalid opcode was noticed on stable-rc 6.1 and  6.0.
+> > > > >
+> > > > > This is always reproducible on stable-rc 6.1 and  6.0 with qemu_i386 and i386.
+> > > > > Build, config and test log details provided in the below links [1].
+> > > >
+> > > > Hello Naresh,
+> > > >
+> > > > I have tried to create this issue a few times without success.  Since I
+> > > > do not have i386 HW, I am using qemu_i386.  If I use the supplied config,
+> > > > my kernel does not boot.  I then try to modify config options which I
+> > > > think are not relevant.  By the time I get to a config that will boot, I
+> > > > can not recreate the issue. :(
+> > > >
+> > > > Just curious if you have any suggestions?  Or, Wondering if anyone else has
+> > > > suggestions on how to proceed?
+> > >
+> > > Please install tuxmake and run attached script to reproduce reported issues,
+> > > $ pip3 install tuxmake
+> >
+> > oops, a typo, should be 'tuxrun' not 'tuxmake'.
+> >
+> > https://tuxrun.org/
+> >
+> > Cheers,
+> > Anders
+> >
+> > > $ ./memfd-crash-test-qemu-i386.sh
+> > >
+> > > This script downloads kernel Image and rootfs and runs run_hugetlbfs_test.sh.
+> > > If you have any questions please get back to me.
+> > > For your reference I have attached logs.txt
+>
+> Sorry, I am still a bit confused.
+>
+> Was the intention to attach the script 'memfd-crash-test-qemu-i386.sh'?
 
-Thank you for the patch! Perhaps something to improve:
+Might be due to the emailer not allowing scripts files upload / download.
 
-[auto build test WARNING on 766f4f2514d2d18bcbd60a058188fb502dea5ddf]
+> The only attachment I have seen is 'logs.txt' which is the output of the run.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rae-Moar/kunit-fix-bug-in-debugfs-logs-of-parameterized-tests/20230201-060537
-base:   766f4f2514d2d18bcbd60a058188fb502dea5ddf
-patch link:    https://lore.kernel.org/r/20230131220355.1603527-2-rmoar%40google.com
-patch subject: [PATCH v1 1/3] kunit: fix bug in debugfs logs of parameterized tests
-config: hexagon-randconfig-r045-20230202 (https://download.01.org/0day-ci/archive/20230203/202302031414.TsTAA8Dr-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c8b669e1d139e1ee08121b184d859e45d7a02940
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rae-Moar/kunit-fix-bug-in-debugfs-logs-of-parameterized-tests/20230201-060537
-        git checkout c8b669e1d139e1ee08121b184d859e45d7a02940
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/kunit/
+I have sent you a private email with a reproducer script.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> lib/kunit/test.c:115:6: warning: stack frame size (1536) exceeds limit (1024) in 'kunit_log_append' [-Wframe-larger-than]
-   void kunit_log_append(char *log, const char *fmt, ...)
-        ^
-   12/1536 (0.78%) spills, 1524/1536 (99.22%) variables
-   1 warning generated.
-
-
-vim +/kunit_log_append +115 lib/kunit/test.c
-
-acd8e8407b8fcc David Gow    2021-08-03  110  
-e2219db280e3fe Alan Maguire 2020-03-26  111  /*
-e2219db280e3fe Alan Maguire 2020-03-26  112   * Append formatted message to log, size of which is limited to
-e2219db280e3fe Alan Maguire 2020-03-26  113   * KUNIT_LOG_SIZE bytes (including null terminating byte).
-e2219db280e3fe Alan Maguire 2020-03-26  114   */
-e2219db280e3fe Alan Maguire 2020-03-26 @115  void kunit_log_append(char *log, const char *fmt, ...)
-e2219db280e3fe Alan Maguire 2020-03-26  116  {
-e2219db280e3fe Alan Maguire 2020-03-26  117  	char line[KUNIT_LOG_SIZE];
-e2219db280e3fe Alan Maguire 2020-03-26  118  	va_list args;
-e2219db280e3fe Alan Maguire 2020-03-26  119  	int len_left;
-e2219db280e3fe Alan Maguire 2020-03-26  120  
-e2219db280e3fe Alan Maguire 2020-03-26  121  	if (!log)
-e2219db280e3fe Alan Maguire 2020-03-26  122  		return;
-e2219db280e3fe Alan Maguire 2020-03-26  123  
-e2219db280e3fe Alan Maguire 2020-03-26  124  	len_left = KUNIT_LOG_SIZE - strlen(log) - 1;
-e2219db280e3fe Alan Maguire 2020-03-26  125  	if (len_left <= 0)
-e2219db280e3fe Alan Maguire 2020-03-26  126  		return;
-e2219db280e3fe Alan Maguire 2020-03-26  127  
-e2219db280e3fe Alan Maguire 2020-03-26  128  	va_start(args, fmt);
-e2219db280e3fe Alan Maguire 2020-03-26  129  	vsnprintf(line, sizeof(line), fmt, args);
-e2219db280e3fe Alan Maguire 2020-03-26  130  	va_end(args);
-e2219db280e3fe Alan Maguire 2020-03-26  131  
-e2219db280e3fe Alan Maguire 2020-03-26  132  	strncat(log, line, len_left);
-e2219db280e3fe Alan Maguire 2020-03-26  133  }
-e2219db280e3fe Alan Maguire 2020-03-26  134  EXPORT_SYMBOL_GPL(kunit_log_append);
-e2219db280e3fe Alan Maguire 2020-03-26  135  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> --
+> Mike Kravetz
