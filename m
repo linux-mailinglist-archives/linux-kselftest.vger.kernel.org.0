@@ -2,139 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27981689C96
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Feb 2023 16:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC96689DFF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Feb 2023 16:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233362AbjBCPEa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Feb 2023 10:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S233766AbjBCPSy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Feb 2023 10:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbjBCPE3 (ORCPT
+        with ESMTP id S233769AbjBCPSd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Feb 2023 10:04:29 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65656A0EA5;
-        Fri,  3 Feb 2023 07:04:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D/TyiNWliEUnqrXH+oYCtCzHv52184YPwbjVHBry/HiTcmllboPSNVRZYwAN+bRx2ST1acWb9yreqjjkywrCcprAeNte+FD9gcgCrQ7MlM3la5e/iYzoRAAegLqs+DiKNRfQUclf2ZFhO6X7a1mWYwXU3s26RkGfS2nqWX3oBb3pKSCSwBDCZm8ZXIUBT44ULQmC2ZOpD9rRikKC72TA5E2Ns9WYNXpVmFUlmlVhT152Awypw+GheViZZvzcZuopiF/unQ+R+2ovCgvAsSc+jb/SDGcgzopIq2qHAjth/5TgE3BMDY4G6p7NY1L0jDwUZKtUOnZhelhUpAJEr0qQ5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mb4MNn1yqAaTwPuv5ew/Pbw/grgTgEC0T55qmbNQN5k=;
- b=LDowJgt78TahJy4FzIcD9Oi0EHr3rORvf5EKOA0gBFEkDEFzshSHqBqMjLBFje+CemR7BwKSY3oDwwQI0V0aiP4V1dNJF9bspACvIwbI6vgexva/1UPi76brkRT/bBi3kx+MIF5b2ywzyIa8jS9ONvLFWoBQdVP4rjh02NpYp+hQ8JA3xnPCnLs2CKF3vRw9izE8Xe/77LLvcackeTB4FjlgGjgptJMRSFNN2awXjCvjrxge47yJP0CyUADBWQuDGC7QAx2rB0b+NiZPZzYInlL41cikS44d3ZAK+OYZ8NjVYXD0m8y5djqBH0S6AcZBnn+4T2N4bFEwxFC1AOVXMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mb4MNn1yqAaTwPuv5ew/Pbw/grgTgEC0T55qmbNQN5k=;
- b=TuWssrVaOuqrqid9tOmF8tlyAoLJrghr4F0+JQpGyUZzV2kNwwqfvnHX67RLd6rniRtljS6yxfWToBDqKH3wafLpUiTsr5QasxdZTQDVTRcuYXZ+gAcrqUGE2mNn1jpUGK0fpSV8VPrGSJivvs2DIOu++TJ75hCiOElSjDudHWAnKP1aRQmUn3a5mGTrXgONg0XLciDPmMKdW42dimw+8GYCm8sIClgZZ8heDk1DCdJlmCiVaija/gV1NOYToF2jW9aqI1nnZOHt2ff1oy600Ce/gvbag8mwr24xQgOEeKvIv3QJpHxmfgbhYPhXMvnyoRZFUK+3FRozzXGbJfLM4g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SN7PR12MB7954.namprd12.prod.outlook.com (2603:10b6:806:344::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31; Fri, 3 Feb
- 2023 15:04:26 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6064.031; Fri, 3 Feb 2023
- 15:04:26 +0000
-Date:   Fri, 3 Feb 2023 11:04:25 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v1 0/8] Add IO page table replacement support
-Message-ID: <Y90ieTgl7I2GZfsX@ziepe.ca>
-References: <cover.1675320212.git.nicolinc@nvidia.com>
- <BN9PR11MB527680F63EC5443DD7A5E98A8CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB527680F63EC5443DD7A5E98A8CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1PR13CA0061.namprd13.prod.outlook.com
- (2603:10b6:208:2b8::6) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 3 Feb 2023 10:18:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0190FA2A4F;
+        Fri,  3 Feb 2023 07:15:47 -0800 (PST)
+Received: from [10.101.1.132] (ip-185-104-137-32.ptr.icomera.net [185.104.137.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 56E726602E87;
+        Fri,  3 Feb 2023 15:14:34 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675437319;
+        bh=3CNbHI7q6Lfu7dssxqhvzLTLrYHpsxuwToLdzclRMnQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eQVSlNKru3vlHuJ1ptAy2k9l4UzVBFuGai4d5h6wRbCh/IC+c9YEVMsFxdNQTGQMR
+         18Wb7H+U8I3eNzW9c57/pa7Dmmw2Oz/iF2qL7b2iuYRfynE9PGM/jQN/yWs6/B86aC
+         n4jgvOpsx2xLmm33LOWoQCdO9ql43bxNct/eiMO96sJIOOcdgyTykrlDQHCiWxxsHC
+         OwbUxjgWkdZoB1VcwOyMPB4JKpP0FptxelGewbQDDi2cDj8cUw4JHkdZzzCcX9NA6Q
+         sHIHFoX4DtgEUkO7JfKu45ErqqmXd7rsS5BB1GeUwMNknIHQhj0H3xqP4zYz/xkqhj
+         h7aC04yfmwjEw==
+Message-ID: <b18805b0-06ba-2b28-73e5-a1d54425a704@collabora.com>
+Date:   Fri, 3 Feb 2023 16:15:20 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB7954:EE_
-X-MS-Office365-Filtering-Correlation-Id: 00fe19f1-4114-4cf0-d3c0-08db05f7f106
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AP7MNSqI3JM39zf+poVx4LiGlpzMtt13NbJBejmbWii7xX2pN9siz0y7bZ+dZVclFlfXZES0R1fGnZObb28hlPum9gid+Mg89b+2f775/bYu11VOhyVVE/gqAKVumefsP4+uZy/kINIe7X/r0VF/dsv83SUVCccZIfqFPTNUkfR/UXxyJ+fbt5ASUPV/hsQQunME4G32BF0PrDhrkh+VLDj6d/HJGrm4PK0w2JyqMq0fPe2m1tniD0RS4/y30JsAwd5fT0PJoZpP/MSySPOdpy2PwiHgRXm96eRYQXr/4OPpci/D/jCPbZxFohugzIi1dh/odzxm5XUvNmN2ZVtQN2PvVR88E+F/RHqo7YxAG/iqHAPTwCRE1BRTeyR4SxDYzSgQkRN6SHn4mTi2OuutbnlcZnpECaGYP9EKhzoTnBlfhwwJWssL8HReXKpZ48Q1DBi5tv+VS+P4tHUSm4UMkTGJ4wICiyV0uxfV5vZiJYjRktE7VoKkZbBKzdZIo3uSqyiq/5rg6hj6ufUmQYRpC5uhntlKAyYCBNM8EWuJfxndZhmjv14D/353dJRoJ3BssaoYTUoKQKdyKcAzFyQ1aUZX2LZAwEmVzwLdOHFOq2gCQ1JYgGzdWt4EoByL1mTDeZTRL1F/9PyFW+N2ysbUpQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199018)(36756003)(86362001)(6506007)(186003)(26005)(54906003)(9686003)(6512007)(478600001)(6486002)(2906002)(4744005)(41300700001)(8936002)(5660300002)(7416002)(316002)(66946007)(66476007)(8676002)(6916009)(38100700002)(66556008)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HzGvuqghuUHsq/V1ljURSdWH8kikxKNpJiDEr+yQ+i8cek62dbBHNVAolcIB?=
- =?us-ascii?Q?O0jEAFgVGOEEsIKn0uP1FSvc+jlft4kfbId7q/jo0hN6WZv8Yb9Xdr3BoAF8?=
- =?us-ascii?Q?sO7BGwDZoYme+JIywz+oDCiT4jzH2tbu17wQiPcVnpj3UnjWIvW5trfD7nE0?=
- =?us-ascii?Q?B9ar1gy2IzafZ5WAitdfhFmBTcZFzUr8o5D07cBL3J0u4QcDbiFujdAGp7JV?=
- =?us-ascii?Q?z+K0bdf7xiofzW/20US/a+D4kXXBP4D95wHBtJ1lO4K3EoEoXqEcce20l70a?=
- =?us-ascii?Q?FXNUDObevohtaI4O57Eesk9yREHXWv+usoXISRXoqMJs6/orIOfXhfCbh+i4?=
- =?us-ascii?Q?T8MMIeulnulNvcCrdOpFzP1U6mK6pn8aPlf5hK64yU14kyouTtWg1bGtqINR?=
- =?us-ascii?Q?2UECtw0bc1XH6czh2HAypXejEq6Gez/9UEHOYXSp3ZlyJWQn1451HiBfWQOv?=
- =?us-ascii?Q?qQf3II5HI28lSCRyMqWAWlSdd6UqrJ2RBcPO5UTWV2uIeDwsG4SFvVdSqVh8?=
- =?us-ascii?Q?bEPSOEbHJ/fs9qVYX3CNHUpNjdfp3P6H9GNBFxAVHcEBQ8/nqALlu4mfSfvm?=
- =?us-ascii?Q?anGN4MoMabce6v26Jo8e+RYlThxAVlpL/qfgOw+2j5xZ3nYchZvLEMb0idVe?=
- =?us-ascii?Q?zaQPAoLkPnc0UIWvP3JrWx8NS0EB8iQzaccCa+kgWHN7wGd/KtJBKZEWS8ZQ?=
- =?us-ascii?Q?1+wDZOGiABDuKgIrY7VEhAwffJ+0i7f0R+XI4SdQhaTk7uACLMfHx3awZMqk?=
- =?us-ascii?Q?xzHTyfxKa8XXFu354pwrmeuuj3aGybvRWzfg9aRUKImE0vg6pUVB7zyBrEmX?=
- =?us-ascii?Q?8mdVMJhEPTG0SQHmoqRiVYHRH50dWOZ5QgUYxcLTvebcu1piX9cWbs3SjZQs?=
- =?us-ascii?Q?6QG6lH1oTubV/uZV4aDEuepIMqezNRNVVMQsj9hkOWgbiQldlK1GaLPzuwhh?=
- =?us-ascii?Q?gJg17eqG2UrTLUW1LBFjJ9iwUwzwmmNkKoFsCnznrvxRlpyW2XyIBXhie+dp?=
- =?us-ascii?Q?e87qG23CTjbg/mhlIyP6Gzo6HfXNHLq6Prw04mMLMLak9kvmrFPCBG4I4eKq?=
- =?us-ascii?Q?DGMUIQ9aIg9M1a52IAnWxGdyvDRHp251PkCLsRaaKeLdONhRVAPFRIB5S4nN?=
- =?us-ascii?Q?9VRJr01jbKhWDpfAqUA7tgGSEAw1A7T+XOj0QVAuu2NYUAddAzfk4P/N/jpo?=
- =?us-ascii?Q?ZIuJKJrCycjpnDl4C3/LpFVjqo5h6Ct5x5pzP9oAMNuNP+asM27ofdxcuNPr?=
- =?us-ascii?Q?fKXD5aoMIlutpgV1lECAg5pmLMdoJuHcXpOHuRIKQuQrKPeSfwNlGZeLLuHP?=
- =?us-ascii?Q?XXh4Lcq0JFN8MpzgOcdvPxiDF/x4dhDmKxK4qaFX191OgGbCBmGfkBesupNi?=
- =?us-ascii?Q?LIx36dd3OM6BYC75L9hDEvupMSIMuHEh0Eh0qLQkkZlCPoRk0FgpGPjm7vW2?=
- =?us-ascii?Q?HnotgElp0r4lMC3Bsvc/2ee51jKOmZTo3K3hZPgXG0sX9MIttDbWx/QeLSmY?=
- =?us-ascii?Q?BN3WKAklsazC6RV5BvkBNUOTtLVbFQeu38+CgO8HncZfaiTK2go+PZmXv8ut?=
- =?us-ascii?Q?UEqZZI2XlVdPAuYphZsDT60ySyGMEJiagf6NaP2v?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00fe19f1-4114-4cf0-d3c0-08db05f7f106
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2023 15:04:26.3749
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5taOQ6LC5x8cSf8RlqJoW35Htuc/zIhjxRd9GsG+cBLzz7J+UQ+bmYCTlRq9OvLi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7954
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] selftests: amd-pstate: Don't delete source files via
+ Makefile
+Content-Language: en-US
+To:     Doug Smythies <dsmythies@telus.net>,
+        'Huang Rui' <ray.huang@amd.com>, sedat.dilek@gmail.com,
+        li.meng@amd.com, skhan@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Collabora Kernel ML <kernel@collabora.com>
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
+ <000601d92db7$39e9d0b0$adbd7210$@telus.net>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <000601d92db7$39e9d0b0$adbd7210$@telus.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 08:09:30AM +0000, Tian, Kevin wrote:
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Thursday, February 2, 2023 3:05 PM
-> > 
-> > QEMU with this feature should have the vIOMMU maintain a cache of the
-> > guest io page table addresses and assign a unique IOAS to each unique
-> > guest page table.
+On 21/01/2023 17:41, Doug Smythies wrote:
+> Revert the portion of a recent Makefile change that incorrectly
+> deletes source files when doing "make clean".
 > 
-> I didn't get why we impose such requirement to userspace.
+> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+> ---
+> v2: fix address list.
+> ---
+>  tools/testing/selftests/amd-pstate/Makefile | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+> index 5f195ee756d6..5fd1424db37d 100644
+> --- a/tools/testing/selftests/amd-pstate/Makefile
+> +++ b/tools/testing/selftests/amd-pstate/Makefile
+> @@ -7,11 +7,6 @@ all:
+>  uname_M := $(shell uname -m 2>/dev/null || echo not)
+>  ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+> 
+> -ifeq (x86,$(ARCH))
+> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> -endif
+> -
 
-I read this as implementation guidance for qemu. qemu can do what it
-wants of course
 
-Jason
+The two lines above should also be removed as they're only used
+in the condition to include the Python files.
+
+I've also hit this issue and independently came up with an
+alternative solution, let me know if you want me to submit it as
+a patch on top of the previous fix; see below.
+
+The Python scripts appear to be used in gitsource.sh and
+tbench.sh so I guess they are needed for these kselftests
+although I haven't tried to run them or do anything with them.
+This is just to fix make clean.
+
+
+
+Author: Guillaume Tucker <guillaume.tucker@collabora.com>
+Date:   Fri Feb 3 11:23:50 2023 +0100
+
+    selftests: amd-pstate: fix TEST_FILES
+    
+    Replace TEST_GEN_FILES with TEST_FILES to avoid having them deleted
+    when doing a clean.  Also fix the way the architecture is being
+    determined as they should also be installed when ARCH=x86_64 is
+    provided explicitly.  Then also append extra files to TEST_FILES and
+    TEST_PROGS with += so they don't get discarded.
+    
+    Fixes: a2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+    Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+
+diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+index 5f195ee756d6..c382f579fe94 100644
+--- a/tools/testing/selftests/amd-pstate/Makefile
++++ b/tools/testing/selftests/amd-pstate/Makefile
+@@ -4,15 +4,15 @@
+ # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+ all:
+ 
+-uname_M := $(shell uname -m 2>/dev/null || echo not)
+-ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
++ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++ARCH := $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ 
+ ifeq (x86,$(ARCH))
+-TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+-TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
++TEST_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
++TEST_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+ endif
+ 
+-TEST_PROGS := run.sh
+-TEST_FILES := basic.sh tbench.sh gitsource.sh
++TEST_PROGS += run.sh
++TEST_FILES += basic.sh tbench.sh gitsource.sh
+ 
+ include ../lib.mk
+
