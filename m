@@ -2,71 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D689D689EF0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Feb 2023 17:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A44689F2C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Feb 2023 17:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjBCQO3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Feb 2023 11:14:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
+        id S232976AbjBCQ02 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Feb 2023 11:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjBCQO2 (ORCPT
+        with ESMTP id S232931AbjBCQ00 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Feb 2023 11:14:28 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2157619F23
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Feb 2023 08:14:27 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id r6so2142995ioj.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Feb 2023 08:14:27 -0800 (PST)
+        Fri, 3 Feb 2023 11:26:26 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FDFA6BB9
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Feb 2023 08:26:15 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id x6so2263589ilv.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Feb 2023 08:26:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EyKMqZX7EE7CxL21C7eba2cmOth7ee6mb5Yq4MzF8EQ=;
-        b=O0fiGrDkqFuagqtLcM00ppg/NwUz2NykghxgRpnRlM+72hB9A6kWSU95FHfAwp7hZ/
-         kVJqqFXi36WbxRXOIi1zt9DI8WUaxP8cqa/YVSuEuRxzNf2YoeVsAJ8drRrFsSPXBKX8
-         lcHV0o3wA5ASltbWk7g32sXfey23BdXKJHiVs=
+        bh=nLJfdGZP1BFzdtMPyFR2lu2ZIWict9PZQQBPFbTL6LU=;
+        b=gieRIzWJu047CZWPf6ziAjgqnA8W3Rf7kAuK2Ib0VqbZ/IbmwstCIKxv8mBZm8t9W+
+         tXpjDiSU9n5JitzEz1eK8TB8xE5wUrrHsAO5jI7Ia+ttLEqE4Emir3yzVRHYrDsylkDf
+         H7SLn2QA0EO9it4ehzCjBfJeufcYrqlLfaUek=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EyKMqZX7EE7CxL21C7eba2cmOth7ee6mb5Yq4MzF8EQ=;
-        b=PNf40tujuDRIw4H4V9SI8dKr9Tnjh1FaZib6BWjXXAYFdN7tjxkBHzL7ZIpTADoOBi
-         6Yc0qTEhXH2Uajs/IIWKBBCxBUNfwMQngCT1ar1DweWbYq0gNjYIW6+XzbEz9D7nglR/
-         ty+aJ/9AimiS6gpG720Ln+eKFapD3/KitOSJdGCeF3dliPxzLdDhM09CpNnMyEBXLSax
-         HhplaJaftqIWn73OBrJeSSFU9vGnTfqwI92+lctFoicAs7bY45j7faYlxEwni2N2zb7D
-         etNXbGeaBJxM6t0iOmzZ7vUlsAg2qWb5wsgqY9yq2OAIyRrBq/vJHtLGc5a9QQcAhco+
-         CLnw==
-X-Gm-Message-State: AO0yUKVLX1SaBQVyJJSCKSQtPNvXH+5I1p7YcKHkELYd9XPB5QZnOvZV
-        OMRKk4cEyC4coBJRF2CIJO6jKg==
-X-Google-Smtp-Source: AK7set8En1FVro1LkzK1YKxgCYbm0TuleNIbznxZe/VBuboTlZTCf9NJyy2f5f0x59Dy4/Sg6t7dKA==
-X-Received: by 2002:a05:6602:2acd:b0:6cc:8b29:9a73 with SMTP id m13-20020a0566022acd00b006cc8b299a73mr7346654iov.1.1675440866359;
-        Fri, 03 Feb 2023 08:14:26 -0800 (PST)
+        bh=nLJfdGZP1BFzdtMPyFR2lu2ZIWict9PZQQBPFbTL6LU=;
+        b=yhhS7pWVwM/S/AQylB3VOcYk9xC/OZg/+3uArV062JuujOfXKy7B3X2OJ63fbHLHmc
+         yZvxOJhVE8UtyArPC3KFTC1GLkCpRyzKteqM8yXnbf00zZYzsOI1Qmfg1etTaoh5dOhC
+         azY+hD9t3yHTwKYiKTa1qYxt1w2Tu2uwdg+dyojgkguBkuVm4LEe74kSXzGShMBtjl6c
+         eScW4eCp0IN5AAfWeTMEK1Oaf0qaCR6Run9vX+oVodcHcPNpvmxBOIPIbT2IPNBt3dny
+         S3OvGLOOyyZ52u71FMWwYOtf3gMhWNSQMxhi82xOz+hd9Vau3BmM14COJAGKBzlHAlwH
+         yu4A==
+X-Gm-Message-State: AO0yUKWUCTqjEy/m638WZEmVrXRcaRNkD9PJKjHVi84IE7YdMN4g4rlx
+        SoM+qe5BWiw01QDsrEcuHjn+UA==
+X-Google-Smtp-Source: AK7set/YR2hq7+Nc4g36sqYWklBKYz+K4Tgwg2cUX8s4j6YjRQY/P2l2EnUNN+w81E57FiOpNbT7Ag==
+X-Received: by 2002:a05:6e02:110f:b0:30e:f89b:6652 with SMTP id u15-20020a056e02110f00b0030ef89b6652mr5160955ilk.0.1675441575088;
+        Fri, 03 Feb 2023 08:26:15 -0800 (PST)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id l10-20020a6bd10a000000b0071db3975335sm835239iob.12.2023.02.03.08.14.25
+        by smtp.gmail.com with ESMTPSA id i18-20020a056e020ed200b0030ef2eedef5sm882064ilk.69.2023.02.03.08.26.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 08:14:25 -0800 (PST)
-Message-ID: <5aae3491-3d17-2880-90c9-864d45d7c455@linuxfoundation.org>
-Date:   Fri, 3 Feb 2023 09:14:24 -0700
+        Fri, 03 Feb 2023 08:26:14 -0800 (PST)
+Message-ID: <5f808c28-ef25-9923-86e1-b4555900c987@linuxfoundation.org>
+Date:   Fri, 3 Feb 2023 09:26:13 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH] selftests: add missing ')' in lib.mk
+Subject: Re: [PATCH v2] selftests: amd-pstate: Don't delete source files via
+ Makefile
 Content-Language: en-US
 To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Mark Brown <broonie@kernel.org>,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Doug Smythies <dsmythies@telus.net>,
+        'Huang Rui' <ray.huang@amd.com>, sedat.dilek@gmail.com,
+        li.meng@amd.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Collabora Kernel ML <kernel@collabora.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <7de08f7f11551d6b8195c3e5d801db2fae3f49a9.1660048017.git.guillaume.tucker@collabora.com>
- <YvKM/J5xO8gKto+p@dev-arch.thelio-3990X>
- <6a7db0df-4f91-293a-35a9-2af77fa36dff@collabora.com>
+References: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
+ <000601d92db7$39e9d0b0$adbd7210$@telus.net>
+ <b18805b0-06ba-2b28-73e5-a1d54425a704@collabora.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <6a7db0df-4f91-293a-35a9-2af77fa36dff@collabora.com>
+In-Reply-To: <b18805b0-06ba-2b28-73e5-a1d54425a704@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -79,26 +81,53 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/3/23 08:40, Guillaume Tucker wrote:
-> On 09/08/2022 18:36, Nathan Chancellor wrote:
->> On Tue, Aug 09, 2022 at 03:20:46PM +0200, Guillaume Tucker wrote:
->>> Add missing closing ')' in lib.mk in a call to $error().  This only
->>> affects LLVM / Clang builds.
->>>
->>> Fixes: 795285ef2425 ("selftests: Fix clang cross compilation")
->>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+On 2/3/23 08:15, Guillaume Tucker wrote:
+> On 21/01/2023 17:41, Doug Smythies wrote:
+>> Revert the portion of a recent Makefile change that incorrectly
+>> deletes source files when doing "make clean".
 >>
->> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
+>> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+>> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
+>> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
+>> Acked-by: Huang Rui <ray.huang@amd.com>
+>> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+>> ---
+>> v2: fix address list.
+>> ---
+>>   tools/testing/selftests/amd-pstate/Makefile | 5 -----
+>>   1 file changed, 5 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+>> index 5f195ee756d6..5fd1424db37d 100644
+>> --- a/tools/testing/selftests/amd-pstate/Makefile
+>> +++ b/tools/testing/selftests/amd-pstate/Makefile
+>> @@ -7,11 +7,6 @@ all:
+>>   uname_M := $(shell uname -m 2>/dev/null || echo not)
+>>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>>
+>> -ifeq (x86,$(ARCH))
+>> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+>> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+>> -endif
+>> -
 > 
-> Ha, I see Mark just came up with the same fix many months later :)
-> Shame this wasn't applied back then, for some reason...
+> 
+> The two lines above should also be removed as they're only used
+> in the condition to include the Python files.
+> 
+> I've also hit this issue and independently came up with an
+> alternative solution, let me know if you want me to submit it as
+> a patch on top of the previous fix; see below.
+> 
+> The Python scripts appear to be used in gitsource.sh and
+> tbench.sh so I guess they are needed for these kselftests
+> although I haven't tried to run them or do anything with them.
+> This is just to fix make clean.
+> 
 > 
 
-It might have gotten lost in my Inbox (looking at the dates - must have
-been while I was away on vacation). Sorry about that.
-
-It is fixed now.
+Please send me the patch.
 
 thanks,
 -- Shuah
-
