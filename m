@@ -2,304 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE7068A8F9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Feb 2023 09:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A6E68A8FF
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Feb 2023 09:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbjBDIbw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 4 Feb 2023 03:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        id S233034AbjBDIhV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 4 Feb 2023 03:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjBDIbv (ORCPT
+        with ESMTP id S230339AbjBDIhT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 4 Feb 2023 03:31:51 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA2C3B0CF
-        for <linux-kselftest@vger.kernel.org>; Sat,  4 Feb 2023 00:31:50 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id bs10so3743459vkb.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Feb 2023 00:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DaVyYh/c2Uk1dR1FJCUBHRJioL1G3oEqQyGFL1fwAH0=;
-        b=i0hpbL/CL19fMLx19G92LNWJYWoAbSEqhqJ/efjKlf5uJ2c3QQzCyOZM3Gf4svWW+1
-         vh8aexWV3PplB0zmX7iiif9lrt9tmascDCay02oBgYgiGsihdhpZ4c/Gq1VQ1SC547D2
-         2HdWsObgj2TP+Bv+ZV90k2DGRydX9M5AFe4xHanM88LVewb8CD3+pbp05PRqci8qhZYA
-         9v5D6LE4nMASWo0VfvGj4BqXLvsZMj/Vh484P9VwmTEcCzfVAdRiYOWjvsekkmJjMjvL
-         h/1yh2hjTFNiZOE5KQ/evJHFw6v+cffUFp3cePzR/Z/9/rRIbZUoxW8QH5LLVJJJ/0HN
-         Gyaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DaVyYh/c2Uk1dR1FJCUBHRJioL1G3oEqQyGFL1fwAH0=;
-        b=o/TSOfqOS6JXuMPBfwhlg/0ZMeAxiRMq4YfnQ2SroLsrn8AW8jyTHAXS2YFT2f2jW/
-         CS5DNimvX5pqtTfpfryKQZ2gzMnU75ndqQdHjMh3cqNRN3DOpbthO1qMcs4QgRYMO0T2
-         sKEbBxeM+zZ4a/izMzX/lq1ry3QH+fYc/owPtpUydzx3WAJ0I1AMl7LA2dUsxjOQL+od
-         jAFMfTuciE4iR8MO2Qr1pmUg7sldMuOMg4oZl4eSwtzJiIdkerhwOoyn8ERp9w5Fp6EK
-         fQscfpHf2gtjaCbYgXL59bY+gIarhs3MS0H1t3rRUpxR6YCU951dBcmH45NDFuR2OBmI
-         XerA==
-X-Gm-Message-State: AO0yUKX8q6J9cF8UAJoWHwdi+xC4pndh7Yzn5JKpCJE+AlXkGEUPZVKf
-        0XNcR5mLKeIXeZBGVtiuDPgGIML1O5voVyMyWWZKyg==
-X-Google-Smtp-Source: AK7set+DLDpSKuybnOXMTABXcXt7goMwbT25dpFRLnPPP6EIOafvTK8SB0vDC/TSdvC11RQ43YlUIjHahmkPciNNDgw=
-X-Received: by 2002:ac5:c1c1:0:b0:3e5:7064:1bf9 with SMTP id
- g1-20020ac5c1c1000000b003e570641bf9mr1939753vkk.30.1675499508949; Sat, 04 Feb
- 2023 00:31:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20230203101007.985835823@linuxfoundation.org>
-In-Reply-To: <20230203101007.985835823@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 4 Feb 2023 14:01:37 +0530
-Message-ID: <CA+G9fYsRZcCu986iGaqrRw7uDjdaX2NEbDs9P5QFr58ja5BnTA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/20] 5.15.92-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Kyle Huey <me@kylehuey.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 4 Feb 2023 03:37:19 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9F72A9B7;
+        Sat,  4 Feb 2023 00:37:18 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 87BD438269;
+        Sat,  4 Feb 2023 08:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675499837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RcLMsHWahnKCSaF9S8/IpKCRhGBLv3jN3QszBd2oUrE=;
+        b=OlK2dRKWt+azF90YkaeXIbGPBgQpN9AoCAuHLHSqchVc40cDyU4PaK/vO45OXl1ZPEWrAH
+        eYGihhb8BCiKcPL5Zga796MKkBsRilYWlvXhPBd14exdJDYO9Vzflu0oLanOwSXM3sO++n
+        Kaslvjsiq/Wz8P0HR/o9rSvjx1B5258=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675499837;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RcLMsHWahnKCSaF9S8/IpKCRhGBLv3jN3QszBd2oUrE=;
+        b=IN+7TwKwomq87Iez9hcudSyREJdmtMuUtMwSgGaEddwOYtSrNqJ19Xav1pmhzadjCM2v/2
+        oVqarOK0C5CuNNDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 59334133F5;
+        Sat,  4 Feb 2023 08:37:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XU+4FD0Z3mNqKwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 04 Feb 2023 08:37:17 +0000
+Date:   Sat, 04 Feb 2023 09:37:16 +0100
+Message-ID: <877cwxn7wj.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kselftest/alsa: Run PCM tests for multiple cards in parallel
+In-Reply-To: <20230203-alsa-pcm-test-card-thread-v1-1-59941640ebba@kernel.org>
+References: <20230203-alsa-pcm-test-card-thread-v1-1-59941640ebba@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 3 Feb 2023 at 15:54, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.92 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.92-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, 03 Feb 2023 20:52:47 +0100,
+Mark Brown wrote:
+> 
+> With each test taking 4 seconds the runtime of pcm-test can add up. Since
+> generally each card in the system is physically independent and will be
+> unaffected by what's going on with other cards we can mitigate this by
+> testing each card in parallel. Make a list of cards as we enumerate the
+> system and then start a thread for each, then join the threads to ensure
+> they have all finished. The threads each run the same tests we currently
+> run for each PCM on the card before exiting.
+> 
+> The list of PCMs is kept global since it helps with global operations
+> like working out our planned number of tests and identifying missing PCMs
+> and it seemed neater to check for PCMs on the right card in the card
+> thread than make every PCM loop iterate over cards as well.
+> 
+> We don't run per-PCM tests in parallel since in embedded systems it can
+> be the case that resources are shared between the PCMs and operations on
+> one PCM on a card may constrain what can be done on another PCM on the same
+> card leading to potentially unstable results.
+> 
+> We use a mutex to ensure that the reporting of results is serialised and we
+> don't have issues with anything like the current test number, we could do
+> this in the kselftest framework but it seems like this might cause problems
+> for other tests that are doing lower level testing and building in
+> constrained environments such as nolibc so this seems more sensible.
+> 
+> Note that the ordering of the tests can't be guaranteed as things stand,
+> this does not seem like a major problem since the numbering of tests often
+> changes as test programs are changed so results parsers are expected to
+> rely on the test name rather than the test numbers. We also now prefix the
+> machine generated test name when printing the description of the test since
+> this is logged before streaming starts.
+> 
+> On my two card desktop system this reduces the overall runtime by a
+> third.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+
+Thanks, applied now.
 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-NOTE:
-Following two commits causing build warnings with gcc-12 on arm64 and i386
-while building tools/testing/selftests.
-
-  selftests/vm: remove ARRAY_SIZE define from individual tests
-    commit e89908201e2509354c40158b517945bf3d645812 upstream.
-
-  tools: fix ARRAY_SIZE defines in tools and selftests hdrs
-    commit 066b34aa5461f6072dbbecb690f4fe446b736ebf upstream.
-
-## Build
-* kernel: 5.15.92-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: c8466dc0f6290e0ea087f808e9b4a29da36e82ca
-* git describe: v5.15.91-21-gc8466dc0f629
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.91-21-gc8466dc0f629
-
-## Test Regressions (compared to v5.15.90-205-g5605d15db022)
-
-## Metric Regressions (compared to v5.15.90-205-g5605d15db022)
-
-* arm64, build
-  - gcc-12-lkftconfig-kselftest-warnings
-
-Build warnings:
-    tools/testing/selftests/arm64/fp:
-    vec-syscfg.c:24: warning: "ARRAY_SIZE" redefined
-       24 | #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
-          |
-    In file included from vec-syscfg.c:21:
-    ../../kselftest.h:52: note: this is the location of the previous defini=
-tion
-       52 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-          |
-    vec-syscfg.c: In function 'get_child_rdvl':
-    vec-syscfg.c:112:33: warning: too many arguments for format
-[-Wformat-extra-args]
-      112 |                 fprintf(stderr, "execl(%s) failed: %d\n",
-          |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-    vec-syscfg.c: At top level:
-    vec-syscfg.c:326:13: warning: 'prctl_set_same' defined but not
-used [-Wunused-function]
-      326 | static void prctl_set_same(struct vec_data *data)
-          |             ^~~~~~~~~~~~~~
-    vec-syscfg.c: In function 'file_write_integer':
-    vec-syscfg.c:195:12: warning: 'ret' may be used uninitialized
-[-Wmaybe-uninitialized]
-      195 |         if (ret < 0) {
-          |            ^
-    vec-syscfg.c:183:13: note: 'ret' was declared here
-      183 |         int ret;
-          |             ^~~
-
-
-* i386, build
-  - gcc-12-lkftconfig-kselftest-warnings
-
-Build warnings:
-    tools/testing/selftests/vm
-    virtual_address_range.c:43:31: warning: left shift count >=3D width
-of type [-Wshift-count-overflow]
-    virtual_address_range.c:88:34: warning: left shift count >=3D width
-of type [-Wshift-count-overflow]
-    virtual_address_range.c:22:26: warning: conversion from 'long long
-unsigned int' to 'size_t' {aka 'unsigned int'} changes value from
-'17179869184' to '0' [-Woverflow]
-
-
-## Test Fixes (compared to v5.15.90-205-g5605d15db022)
-
-## Metric Fixes (compared to v5.15.90-205-g5605d15db022)
-
-## Test result summary
-total: 162736, pass: 133853, fail: 4290, skip: 24262, xfail: 331
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 49 total, 47 passed, 2 failed
-* i386: 39 total, 35 passed, 4 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 34 total, 32 passed, 2 failed
-* riscv: 14 total, 14 passed, 0 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-comman[
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Takashi
