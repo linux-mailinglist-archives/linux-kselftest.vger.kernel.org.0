@@ -2,116 +2,304 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4A768A810
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Feb 2023 05:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE7068A8F9
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Feb 2023 09:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbjBDEFV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Feb 2023 23:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S232338AbjBDIbw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 4 Feb 2023 03:31:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232895AbjBDEFQ (ORCPT
+        with ESMTP id S230118AbjBDIbv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Feb 2023 23:05:16 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06A993E2F
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Feb 2023 20:05:11 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id u8-20020a258408000000b00880a7cc9684so546299ybk.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Feb 2023 20:05:11 -0800 (PST)
+        Sat, 4 Feb 2023 03:31:51 -0500
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA2C3B0CF
+        for <linux-kselftest@vger.kernel.org>; Sat,  4 Feb 2023 00:31:50 -0800 (PST)
+Received: by mail-vk1-xa34.google.com with SMTP id bs10so3743459vkb.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Feb 2023 00:31:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=r5EFoFMVQYP17Xk0sb+cncV8M1YLnWiOANhXlugOkSU=;
-        b=BBJOOR76NkBgdtCg6usaleW4LsFx6vglyGlX8SyNwQPRg+rzfzIPIATi+uRucr4Sxy
-         o+6DJtjTZypV5HMQ78NBcz2zeCuaxNChyT+F+GSsiJG4BQmGKFf+fjUA8jaOwF/ZUDJD
-         wcDEKtRWNdWVI9bqhGTh6bOw/vR8Jul4cs1/sW5+pWWLe8o5bpDX6j06USstu0q1jQrj
-         tJs3EZxdipuWXbgYhLTjRmhFwbLUZnt0TXHThqgaSUc2tP7YCJRVQgYxWbunC/aJ6Ohi
-         QnpckY3xyGph3OKbe1AyuUv6nwtP1Pe19k9rcObeRTlBj3HGNuDejatA6ZqBntUVYfSO
-         lt1w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DaVyYh/c2Uk1dR1FJCUBHRJioL1G3oEqQyGFL1fwAH0=;
+        b=i0hpbL/CL19fMLx19G92LNWJYWoAbSEqhqJ/efjKlf5uJ2c3QQzCyOZM3Gf4svWW+1
+         vh8aexWV3PplB0zmX7iiif9lrt9tmascDCay02oBgYgiGsihdhpZ4c/Gq1VQ1SC547D2
+         2HdWsObgj2TP+Bv+ZV90k2DGRydX9M5AFe4xHanM88LVewb8CD3+pbp05PRqci8qhZYA
+         9v5D6LE4nMASWo0VfvGj4BqXLvsZMj/Vh484P9VwmTEcCzfVAdRiYOWjvsekkmJjMjvL
+         h/1yh2hjTFNiZOE5KQ/evJHFw6v+cffUFp3cePzR/Z/9/rRIbZUoxW8QH5LLVJJJ/0HN
+         Gyaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r5EFoFMVQYP17Xk0sb+cncV8M1YLnWiOANhXlugOkSU=;
-        b=NxVz09KnP97upoYMf5Qz8ZfeXUtWiXDrWnOP2RQY8/C9mFW+1njDAn38F+zTA95V1p
-         etXNeeAIYPuRPtF1kaE7+0hgpEcbO+keR9zhKuUTb3vIEECGtohNqq7k2Bcg4wNv4tf7
-         M6ut7Vokqy66VDVjblFD+jZeJR8rNlnGmL6/FVF0iFm6yzgGLRvtu+CFi9vktQ7hSOM+
-         fNlFvs0ZcKj+/thvJ+49OAi4JZSf++eRjVAV31gfbycqf+d2/XueaDpgkziFGfj21Spx
-         avaQDinnSgLXoWLxxiySeEMR6/r9M2s3ru8gR/abk2wsG3aQzhelOrU7UFMp6foGMJi/
-         2xRA==
-X-Gm-Message-State: AO0yUKWYHhR5lzRlZXAsX6AUZ0Ogicv5NmObvFfbZnjbtjhjMoBvdrlK
-        aUjd9rZUliJxxXNg1mX4OWhP9k5wn/arbQ==
-X-Google-Smtp-Source: AK7set9nTil8ICmyhj+V3pe2+QNKgnsFyALqgFyookFeO+kG8LStHKMMPIjFn+V1LpwsXEaqDePIqmvS3FUTZg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a0d:ef87:0:b0:524:3607:6034 with SMTP id
- y129-20020a0def87000000b0052436076034mr7ywe.7.1675483510477; Fri, 03 Feb 2023
- 20:05:10 -0800 (PST)
-Date:   Sat,  4 Feb 2023 12:04:53 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230204040452.3699111-1-davidgow@google.com>
-Subject: [PATCH] kunit: Add printf attribute to fail_current_test_impl
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>
-Cc:     David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DaVyYh/c2Uk1dR1FJCUBHRJioL1G3oEqQyGFL1fwAH0=;
+        b=o/TSOfqOS6JXuMPBfwhlg/0ZMeAxiRMq4YfnQ2SroLsrn8AW8jyTHAXS2YFT2f2jW/
+         CS5DNimvX5pqtTfpfryKQZ2gzMnU75ndqQdHjMh3cqNRN3DOpbthO1qMcs4QgRYMO0T2
+         sKEbBxeM+zZ4a/izMzX/lq1ry3QH+fYc/owPtpUydzx3WAJ0I1AMl7LA2dUsxjOQL+od
+         jAFMfTuciE4iR8MO2Qr1pmUg7sldMuOMg4oZl4eSwtzJiIdkerhwOoyn8ERp9w5Fp6EK
+         fQscfpHf2gtjaCbYgXL59bY+gIarhs3MS0H1t3rRUpxR6YCU951dBcmH45NDFuR2OBmI
+         XerA==
+X-Gm-Message-State: AO0yUKX8q6J9cF8UAJoWHwdi+xC4pndh7Yzn5JKpCJE+AlXkGEUPZVKf
+        0XNcR5mLKeIXeZBGVtiuDPgGIML1O5voVyMyWWZKyg==
+X-Google-Smtp-Source: AK7set+DLDpSKuybnOXMTABXcXt7goMwbT25dpFRLnPPP6EIOafvTK8SB0vDC/TSdvC11RQ43YlUIjHahmkPciNNDgw=
+X-Received: by 2002:ac5:c1c1:0:b0:3e5:7064:1bf9 with SMTP id
+ g1-20020ac5c1c1000000b003e570641bf9mr1939753vkk.30.1675499508949; Sat, 04 Feb
+ 2023 00:31:48 -0800 (PST)
+MIME-Version: 1.0
+References: <20230203101007.985835823@linuxfoundation.org>
+In-Reply-To: <20230203101007.985835823@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 4 Feb 2023 14:01:37 +0530
+Message-ID: <CA+G9fYsRZcCu986iGaqrRw7uDjdaX2NEbDs9P5QFr58ja5BnTA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/20] 5.15.92-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Kyle Huey <me@kylehuey.com>,
+        Will Deacon <will@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add the gnu_printf (__printf()) attribute to the
-kunit_fail_current_test() implementation in
-__kunit_fail_current_test_impl(). While it's not actually useful here,
-as this function is never called directly, it nevertheless was
-triggering -Wsuggest-attribute=format warnings, so we should add it to
-reduce the noise.
+On Fri, 3 Feb 2023 at 15:54, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.92 release.
+> There are 20 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.92-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Fixes: cc3ed2fe5c93 ("kunit: Add "hooks" to call into KUnit when it's built as a module")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
- lib/kunit/hooks-impl.h | 4 +++-
- lib/kunit/test.c       | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/lib/kunit/hooks-impl.h b/lib/kunit/hooks-impl.h
-index ec745a39832c..4e71b2d0143b 100644
---- a/lib/kunit/hooks-impl.h
-+++ b/lib/kunit/hooks-impl.h
-@@ -15,7 +15,9 @@
- #include <kunit/test-bug.h>
- 
- /* List of declarations. */
--void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...);
-+void __printf(3, 4) __kunit_fail_current_test_impl(const char *file,
-+						   int line,
-+						   const char *fmt, ...);
- void *__kunit_get_static_stub_address_impl(struct kunit *test, void *real_fn_addr);
- 
- /* Code to set all of the function pointers. */
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 51cae59d8aae..c9e15bb60058 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -24,7 +24,7 @@
- /*
-  * Hook to fail the current test and print an error message to the log.
-  */
--void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
-+void __printf(3, 4) __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
- {
- 	va_list args;
- 	int len;
--- 
-2.39.1.519.gcb327c4b5f-goog
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+NOTE:
+Following two commits causing build warnings with gcc-12 on arm64 and i386
+while building tools/testing/selftests.
+
+  selftests/vm: remove ARRAY_SIZE define from individual tests
+    commit e89908201e2509354c40158b517945bf3d645812 upstream.
+
+  tools: fix ARRAY_SIZE defines in tools and selftests hdrs
+    commit 066b34aa5461f6072dbbecb690f4fe446b736ebf upstream.
+
+## Build
+* kernel: 5.15.92-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: c8466dc0f6290e0ea087f808e9b4a29da36e82ca
+* git describe: v5.15.91-21-gc8466dc0f629
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.91-21-gc8466dc0f629
+
+## Test Regressions (compared to v5.15.90-205-g5605d15db022)
+
+## Metric Regressions (compared to v5.15.90-205-g5605d15db022)
+
+* arm64, build
+  - gcc-12-lkftconfig-kselftest-warnings
+
+Build warnings:
+    tools/testing/selftests/arm64/fp:
+    vec-syscfg.c:24: warning: "ARRAY_SIZE" redefined
+       24 | #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+          |
+    In file included from vec-syscfg.c:21:
+    ../../kselftest.h:52: note: this is the location of the previous defini=
+tion
+       52 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+          |
+    vec-syscfg.c: In function 'get_child_rdvl':
+    vec-syscfg.c:112:33: warning: too many arguments for format
+[-Wformat-extra-args]
+      112 |                 fprintf(stderr, "execl(%s) failed: %d\n",
+          |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+    vec-syscfg.c: At top level:
+    vec-syscfg.c:326:13: warning: 'prctl_set_same' defined but not
+used [-Wunused-function]
+      326 | static void prctl_set_same(struct vec_data *data)
+          |             ^~~~~~~~~~~~~~
+    vec-syscfg.c: In function 'file_write_integer':
+    vec-syscfg.c:195:12: warning: 'ret' may be used uninitialized
+[-Wmaybe-uninitialized]
+      195 |         if (ret < 0) {
+          |            ^
+    vec-syscfg.c:183:13: note: 'ret' was declared here
+      183 |         int ret;
+          |             ^~~
+
+
+* i386, build
+  - gcc-12-lkftconfig-kselftest-warnings
+
+Build warnings:
+    tools/testing/selftests/vm
+    virtual_address_range.c:43:31: warning: left shift count >=3D width
+of type [-Wshift-count-overflow]
+    virtual_address_range.c:88:34: warning: left shift count >=3D width
+of type [-Wshift-count-overflow]
+    virtual_address_range.c:22:26: warning: conversion from 'long long
+unsigned int' to 'size_t' {aka 'unsigned int'} changes value from
+'17179869184' to '0' [-Woverflow]
+
+
+## Test Fixes (compared to v5.15.90-205-g5605d15db022)
+
+## Metric Fixes (compared to v5.15.90-205-g5605d15db022)
+
+## Test result summary
+total: 162736, pass: 133853, fail: 4290, skip: 24262, xfail: 331
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 148 passed, 1 failed
+* arm64: 49 total, 47 passed, 2 failed
+* i386: 39 total, 35 passed, 4 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 34 total, 32 passed, 2 failed
+* riscv: 14 total, 14 passed, 0 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-comman[
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
