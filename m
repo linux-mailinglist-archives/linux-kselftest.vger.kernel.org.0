@@ -2,95 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D5768AA3A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Feb 2023 14:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF6B68AA38
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Feb 2023 14:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbjBDNg0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 4 Feb 2023 08:36:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
+        id S233722AbjBDNfz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 4 Feb 2023 08:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjBDNgZ (ORCPT
+        with ESMTP id S233713AbjBDNfx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:36:25 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1333769D;
-        Sat,  4 Feb 2023 05:36:12 -0800 (PST)
-Received: from tincan.fosdem.net (unknown [151.216.142.144])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sat, 4 Feb 2023 08:35:53 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8359F1A5;
+        Sat,  4 Feb 2023 05:35:52 -0800 (PST)
+Received: from [151.216.142.144] (unknown [151.216.142.144])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E86C166029A5;
-        Sat,  4 Feb 2023 13:36:10 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2503266029A5;
+        Sat,  4 Feb 2023 13:35:51 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675517771;
-        bh=FVDft7SSZZEp5VDB0W0zJGD6iA/FVHvD+bbKj9XTAnU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=c5Bw7M7gID98YlGOv2vScUbP9iVYqnhHu7W8H+u2ehQmKszgvywyzu9cuB+EuNPRH
-         rfjpc3l0/KZjgSMWGv/a8b1qbZAs3F5CD0YgwXEgTOYAXIUnjiPDGwwrVoHblpYbLg
-         11Qsx4LUeME6T47KgvI5+A1MQpdyk0fhunUJC7AFctP2BzXqAMRMc7ODLczUBHgLVJ
-         PZS1wOBByf5tTTT9pTkchlmGATvWIBf1GPuBWyrxCEv2C33IHPbRTgxfmfeZbztRd3
-         stboAjjRtF1T2WBTPES4/aO83nHdvIH+OfqcZNEoIjsJ1d6vGISVZQsrKY9wY2moIA
-         73nHd6PJSXHCw==
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Shuah Khan <shuah@kernel.org>, Huang Rui <ray.huang@amd.com>,
-        Meng Li <li.meng@amd.com>, Doug Smythies <dsmythies@telus.net>
-Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernelci@lists.linux.dev
-Subject: [PATCH] selftests: amd-pstate: fix TEST_FILES
-Date:   Sat,  4 Feb 2023 14:34:54 +0100
-Message-Id: <20230204133454.260066-1-guillaume.tucker@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        s=mail; t=1675517751;
+        bh=aazq/Vh7j/hkkupZJNXPInbf51BnuvyG/TWDf8xxa60=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=J8dDdOCno3fqx7hJxu5iKusckWXFbwz7wcV47HKXG2KxwSXk6X6FrDIzl+EktCBKs
+         gbogHAZPx4eQeoPHDkb6JO8UVw7OAM2zH7WydtwP16L1GpSQ9P8pWpsqn3E/grVbKC
+         2mscPF8P4QufvPRZ4uG22BnEXejckbh+Mr4YUE7eL24AkKVd7nnPAGYgvyXI9hXCWM
+         tiMQYr6NEuKWDzDoXnU+bC3E4OIxSN2IxJq+hHl5NycwikF8LolLEJoxrOB/OrAn9F
+         0Hzywro6+UyBDP8allsO1a7m1ZDhfGrR0v02w00a6Hcmn4OaNMDTCG3OY3hwmhHWSL
+         liViOuU6UELKg==
+Message-ID: <51e62348-9e8e-2769-6372-f217f894a917@collabora.com>
+Date:   Sat, 4 Feb 2023 14:36:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] selftests: find echo binary to use -ne options
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Shuah Khan <shuah@kernel.org>,
+        Gautam <gautammenghani201@gmail.com>
+Cc:     "kernel@collabora.com" <kernel@collabora.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>
+References: <20230203152603.11450-1-guillaume.tucker@collabora.com>
+ <90ace4f466ee4f79bf2dd94c5830e57a@AcuMS.aculab.com>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <90ace4f466ee4f79bf2dd94c5830e57a@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Bring back the Python scripts that were initially added with
-TEST_GEN_FILES but now with TEST_FILES to avoid having them deleted
-when doing a clean.  Also fix the way the architecture is being
-determined as they should also be installed when ARCH=x86_64 is
-provided explicitly.  Then also append extra files to TEST_FILES and
-TEST_PROGS with += so they don't get discarded.
+On 04/02/2023 14:04, David Laight wrote:
+> From: Guillaume Tucker
+>> Sent: 03 February 2023 15:26
+>>
+>> Find the actual echo binary using $(which echo) and use it for
+>> formatted output with -ne.  On some systems, the default echo command
+>> doesn't handle the -e option and the output looks like this (arm64
+>> build):
+>>
+>> -ne Emit Tests for alsa
+>>
+>> -ne Emit Tests for amd-pstate
+>>
+>> -ne Emit Tests for arm64
+> 
+> Nack.
+> There is no reason to suppose that /bin/echo is any different from
+> the version of echo builtin to the shell that make uses.
+> 
+> Not only that 'which' is a horrid shell script that is trying to
+> emulate csh builtin.
+> The bourne shell equivalent is 'type' and the posix one 'command'.
+> 
+> In any case the portable way to fix this is to use printf.
+> This is a well defined program and is bultin to all modern shells.
 
-Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
-Fixes: ac527cee87c9 ("selftests: amd-pstate: Don't delete source files via Makefile")
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
----
- tools/testing/selftests/amd-pstate/Makefile | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+Ah great, thanks for the review.  Will send a v2 with printf.
 
-diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
-index 5fd1424db37d..c382f579fe94 100644
---- a/tools/testing/selftests/amd-pstate/Makefile
-+++ b/tools/testing/selftests/amd-pstate/Makefile
-@@ -4,10 +4,15 @@
- # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
- all:
- 
--uname_M := $(shell uname -m 2>/dev/null || echo not)
--ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+ARCH := $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
--TEST_PROGS := run.sh
--TEST_FILES := basic.sh tbench.sh gitsource.sh
-+ifeq (x86,$(ARCH))
-+TEST_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
-+TEST_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-+endif
-+
-+TEST_PROGS += run.sh
-+TEST_FILES += basic.sh tbench.sh gitsource.sh
- 
- include ../lib.mk
--- 
-2.30.2
+Guillaume
+
+>> This is for example the case with the KernelCI Docker images
+>> e.g. kernelci/gcc-10:x86-kselftest-kernelci.  With the actual echo
+>> binary (e.g. in /bin/echo), the output is formatted as expected (x86
+>> build this time):
+>>
+>> Emit Tests for alsa
+>> Emit Tests for amd-pstate
+>> Skipping non-existent dir: arm64
+>>
+>> Only the install target is using "echo -ne" so keep the $ECHO variable
+>> local to it.
+>>
+>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+>> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
+>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+>> ---
+>>  tools/testing/selftests/Makefile | 5 +++--
+>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+>> index 41b649452560..9619d0f3b2ff 100644
+>> --- a/tools/testing/selftests/Makefile
+>> +++ b/tools/testing/selftests/Makefile
+>> @@ -234,10 +234,11 @@ ifdef INSTALL_PATH
+>>  	@# While building kselftest-list.text skip also non-existent TARGET dirs:
+>>  	@# they could be the result of a build failure and should NOT be
+>>  	@# included in the generated runlist.
+>> +	ECHO=`which echo`; \
+>>  	for TARGET in $(TARGETS); do \
+>>  		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>> -		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" &&
+>> continue; \
+>> -		echo -ne "Emit Tests for $$TARGET\n"; \
+>> +		[ ! -d $(INSTALL_PATH)/$$TARGET ] && $$ECHO "Skipping non-existent dir: $$TARGET" &&
+>> continue; \
+>> +		$$ECHO -ne "Emit Tests for $$TARGET\n"; \
+>>  		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
+>>  			-C $$TARGET emit_tests >> $(TEST_LIST); \
+>>  	done;
+>> --
+>> 2.30.2
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+> 
 
