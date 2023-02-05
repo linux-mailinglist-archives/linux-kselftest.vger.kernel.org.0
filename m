@@ -2,159 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9DD068ABD6
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Feb 2023 19:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0009F68B179
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Feb 2023 21:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjBDScy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 4 Feb 2023 13:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S229616AbjBEUIy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 5 Feb 2023 15:08:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDScx (ORCPT
+        with ESMTP id S229500AbjBEUIx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 4 Feb 2023 13:32:53 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA60D30E85
-        for <linux-kselftest@vger.kernel.org>; Sat,  4 Feb 2023 10:32:47 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id e19so425267plc.9
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Feb 2023 10:32:47 -0800 (PST)
+        Sun, 5 Feb 2023 15:08:53 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F321B57B;
+        Sun,  5 Feb 2023 12:08:52 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id p185so8271886oif.2;
+        Sun, 05 Feb 2023 12:08:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hWXqY6vkS6h8Vyi+cCa2wgxLlkbcE67+3y3A1NRgkP0=;
-        b=LExrl+KFcVf2/FYhWCQdYF32QGdh5UXA4AmcX728sSl4odYnnjrrZq16jx3MvQzFcv
-         dQ1H3oGKuIHaSgHT0VSFNVp+YJPAZdUO3p+/taza+s0XIXj0/FP1/7id8OINHB/DuB7T
-         W7YTVEPmQomTURqo0D25gEVKpsdipmXEZZJqw=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mvIsEYybWu8qfqSxC3SNCLsX1f2a8XyZ+ZzIZVE4ff4=;
+        b=FS2o67HoQ50grlACqBfjs7akK7vkBfdkIAsLQBrgfFho3YlVqkzuQiU8aMyJ/zP+Jy
+         XUBdMDKvT3wZ3rMjRslvmbaGHJovDP5ENMNjSr9wH42xMGvbJ/uLz7KWluzopcoxfFVm
+         0TZH/l0YAHuKXRmysAGEcUWQoAnuSB+s9LLju7juPS14nRGqX2+O8+rzeOdHv4ttAmKk
+         hAnWshRUkwKnwq3EegTYpaT6YEkv4puxnPDzWaXxQS8S/tdDsDzlcHH6Tl7AotBNRH1k
+         BxZPmNrqrwMUcD8tTD7ohxg1242rPv22vcXHE3CyRywCuhye1qQ9x0xQuUQj2ig17voH
+         kTSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hWXqY6vkS6h8Vyi+cCa2wgxLlkbcE67+3y3A1NRgkP0=;
-        b=z3tnsD7va2iTqA2QWVtQXMi8xJi35rTy5lX0hey+1ITwnRbh3ATjSNA9UN5IIiTdW3
-         BKThY8U9/vIfCDtBwMZk7Mn8imvNm4IHp1bDgH3mi5qbh072ow/txh8BqpX+jgRerd96
-         hutUGs7tcDnjZR6nenJVS9nRKpsc4ImkSB1hNa1628DWwHY74vQPQ3qIQrgYFIXMoRtc
-         1IjD06EzoHb2jYhUJn1dO7WvXlw0X0yIkYs9+XVz09xQM8S4SfFt4Al+yPHvrXKAod+7
-         RAwG205oajkRMatnVn8va8bZX1F2xN+xxDCT2gIhXbwZaAY4AJDXjWkhG6e+3OPwIiB3
-         jN+g==
-X-Gm-Message-State: AO0yUKVIoFK4oXbx1rSJvAMn9NuI12FYgyL388bV8KiaHpyFBlzk0IdZ
-        bHy3PHm5vCh+npqLks0NxXJ0dw==
-X-Google-Smtp-Source: AK7set8ndlru/LQXkvkAKjSEdQnGbFpts6hOxMVbgJ2BfEljDsnEQJjCuV1dzvs6hCZvsRjEvrk7gQ==
-X-Received: by 2002:a17:902:e0cd:b0:194:457d:6dca with SMTP id e13-20020a170902e0cd00b00194457d6dcamr11858096pla.44.1675535567229;
-        Sat, 04 Feb 2023 10:32:47 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id g21-20020a170902869500b00194a297cb8esm2109672plo.191.2023.02.04.10.32.46
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mvIsEYybWu8qfqSxC3SNCLsX1f2a8XyZ+ZzIZVE4ff4=;
+        b=juQ4CfdESwh5htRvPy9wyp1FSgWksXbdr4pfrBz/pp58zhLYu0/nbavrmAH26oB3mv
+         U/YqOxxGE8XK1uDjeC6K2zOABjkGPJL5Czwj6/g+x36Bxl4kc409y5/BFGfpQP+YyTi3
+         S4wOEcLmSlwM47n7Qn9oOaUqkAoOL2CH5Eh2Wi/FOFK3IXYkTRLE0bBkKrCwRdlk6AXO
+         EwiJznEQy8qpQhA/65s6lFkl3fBcDsORsF00jvmpALxhuD0Tk5YG7pHIxV7f8yifOopr
+         ggcWHoIwKZ2ugHcWbAdnOG/Hlh9B+hb/WQt1K7AawTJluVNLgcSyPn8yk8IgpibkGgQo
+         d/ew==
+X-Gm-Message-State: AO0yUKWZ/VQCBIHNCY+qqEnG8GayMSp4fG9NpZnwOqhPhnhW5CyXqbSs
+        Y1z9AKNZMJXpvv5xQniWU0g=
+X-Google-Smtp-Source: AK7set+eadtPZR2CC0SGrwp/7LLhs+kYqtEHVr0BtVMqUjTJF8NaoOWH6viBDXx/H5BrXYXlb+/6aA==
+X-Received: by 2002:a05:6808:a07:b0:378:2df5:49f5 with SMTP id n7-20020a0568080a0700b003782df549f5mr7983074oij.2.1675627731912;
+        Sun, 05 Feb 2023 12:08:51 -0800 (PST)
+Received: from localhost ([2600:1700:65a0:ab60:a80b:31f2:24c8:7c9a])
+        by smtp.gmail.com with ESMTPSA id g17-20020a9d6c51000000b0068d59d15a93sm4005797otq.40.2023.02.05.12.08.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Feb 2023 10:32:46 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        Sun, 05 Feb 2023 12:08:50 -0800 (PST)
+Date:   Sun, 5 Feb 2023 12:08:49 -0800
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with flexible array
-Date:   Sat,  4 Feb 2023 10:32:44 -0800
-Message-Id: <20230204183241.never.481-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Shuah Khan <shuah@kernel.org>,
+        Bobby Eshleman <bobbyeshleman@gmail.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        jakub@cloudflare.com, hdanton@sina.com, cong.wang@bytedance.com
+Subject: Re: [PATCH RFC net-next v2 0/3] vsock: add support for sockmap
+Message-ID: <Y+AM0VXW54YbvsRT@pop-os.localdomain>
+References: <20230118-support-vsock-sockmap-connectible-v2-0-58ffafde0965@bytedance.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3245; h=from:subject:message-id; bh=8UjW+Zy+1y3cIspI89jzw8FmWvL6uos84uq4mMimB0Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj3qTM1ht5vMIp0wFAnwtKlrGMR52OBqU2d1wGvknh p4xzmaKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY96kzAAKCRCJcvTf3G3AJvgYD/ 4gbPMJvXXbsBmYsUpuJKym76FsMyPeVmqDsr9eazRsJPrXYT/Cjf+wXXotjT1IukgBmNxSVbq3FsyI jnPq041qMY/zMM3NYurX38M6lIf9VeD7IPwUlsQrDpMOf3RYYrOA/WOCuFbfqW8FvgyQCGRAtW95Jb lW1DpWFeXkiMxxqtJhD7QS04V8887YQ0DkXwbM/t8JVaKudE9LMgVvTxcimzGPC1eBClzkIlw+5L2/ 2Tz50uOg1PRSd6F9LP0m56P3WtX2+0OMRTFg03CMcNcpHYOSQRpkRac8CZG2qRwtiHxVnj0ekeMAj2 c5+8xwXst7vWDPbVucMDYmX5s2JdpD3Qq+M8OWMFzLuHwgLWYevblaB4pF/35yTCbEnT00bS7rEDtI 8fNBCG558+bobc540bAFf4N8wEPwO+GvG2OsBpZWEBQpGoNaAOJywnklLtZgbDyVWuHsGTabmFLqK9 7Osq6wT3O4Z6+vMUvmIJOJnrvi2hPumoSbm0ihHeKhi1HLCVFQs7xgtRVWOOiTtIZTFmVL+Fm79Q+4 tfEMfE6U827t/hEy7qdSFawVFyO8QibSjlvSTDM2/mTRtW5CEHE9plbSRbEcIPVYftHWqn9tBzLWBO aPMvVw8tolEP/BXWNuXMvFT7TAgaVWSiLkd7jpuUNQAdCP85KusshqzXrVsQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230118-support-vsock-sockmap-connectible-v2-0-58ffafde0965@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace deprecated 0-length array in struct bpf_lpm_trie_key with
-flexible array. Found with GCC 13:
+On Mon, Jan 30, 2023 at 08:35:11PM -0800, Bobby Eshleman wrote:
+> Add support for sockmap to vsock.
+> 
+> We're testing usage of vsock as a way to redirect guest-local UDS requests to
+> the host and this patch series greatly improves the performance of such a
+> setup.
+> 
+> Compared to copying packets via userspace, this improves throughput by 121% in
+> basic testing.
+> 
+> Tested as follows.
+> 
+> Setup: guest unix dgram sender -> guest vsock redirector -> host vsock server
+> Threads: 1
+> Payload: 64k
+> No sockmap:
+> - 76.3 MB/s
+> - The guest vsock redirector was
+>   "socat VSOCK-CONNECT:2:1234 UNIX-RECV:/path/to/sock"
+> Using sockmap (this patch):
+> - 168.8 MB/s (+121%)
+> - The guest redirector was a simple sockmap echo server,
+>   redirecting unix ingress to vsock 2:1234 egress.
+> - Same sender and server programs
+> 
+> *Note: these numbers are from RFC v1
+> 
+> Only the virtio transport has been tested. The loopback transport was used in
+> writing bpf/selftests, but not thoroughly tested otherwise.
+> 
+> This series requires the skb patch.
+> 
 
-../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
-  207 |                                        *(__be16 *)&key->data[i]);
-      |                                                   ^~~~~~~~~~~~~
-../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
-  102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-      |                                                      ^
-../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
-   97 | #define be16_to_cpu __be16_to_cpu
-      |                     ^~~~~~~~~~~~~
-../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
-  206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-^
-      |                            ^~~~~~~~~~~
-In file included from ../include/linux/bpf.h:7:
-../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
-   82 |         __u8    data[0];        /* Arbitrary size */
-      |                 ^~~~
+Looks good to me. Definitely good to go as non-RFC.
 
-This includes fixing the selftest which was incorrectly using a
-variable length struct as a header, identified earlier[1]. Avoid this
-by just explicitly including the prefixlen member instead of struct
-bpf_lpm_trie_key.
-
-[1] https://lore.kernel.org/all/202206281009.4332AA33@keescook/
-
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mykola Lysenko <mykolal@fb.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/uapi/linux/bpf.h                         | 2 +-
- tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index ba0f0cfb5e42..5930bc5c7e2c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -79,7 +79,7 @@ struct bpf_insn {
- /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
- struct bpf_lpm_trie_key {
- 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
--	__u8	data[0];	/* Arbitrary size */
-+	__u8	data[];		/* Arbitrary size */
- };
- 
- struct bpf_cgroup_storage_key {
-diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-index db388f593d0a..543012deb349 100644
---- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-+++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-@@ -311,7 +311,7 @@ struct lpm_trie {
- } __attribute__((preserve_access_index));
- 
- struct lpm_key {
--	struct bpf_lpm_trie_key trie_key;
-+	__u32 prefixlen;
- 	__u32 data;
- };
- 
--- 
-2.34.1
-
+Thanks.
