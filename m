@@ -2,197 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A2368C60E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Feb 2023 19:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA2668C630
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Feb 2023 19:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjBFSpT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Feb 2023 13:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
+        id S229890AbjBFSzC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Feb 2023 13:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjBFSpS (ORCPT
+        with ESMTP id S229617AbjBFSzB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:45:18 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51365276
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Feb 2023 10:45:16 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id iy2so3001536plb.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Feb 2023 10:45:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=DkhDQDKT3oVXHbvXapcI5zTOXdH8Icb/ANsh1giobys=;
-        b=R/gvzAjpkUwIW2Ypz2voQVYC/0MAAoapXn89Mk0mzs1r9FBsjEjUzP53KbAdiKtEv+
-         nCHbrT375Kte2H7weMvqen9+Na7Dr06oH7ZK83AZshB8v0eIGE5Zvi/cZ+H1/C6WTs6u
-         oXgNjd6akjn1A46hqWw6X7Uzgjv4jxq/Fn6h4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DkhDQDKT3oVXHbvXapcI5zTOXdH8Icb/ANsh1giobys=;
-        b=Bu/mM5pRq8BMhl4KRrlEaUsy4MmZ4xw+05MZkoHwYX3l3Qr1iDgSuR1O3MF0ZLPTgc
-         VJD76ZMJ7jq++RizbWvvdvArxHIAP4iFGEIM690t764JIzokXt9h+fUfDqTnPQNcHeXC
-         0S3ggqRaTyam2y9UKWSMCqs7ytbLLjvOJaEQkNqr59lQPRURO8QbM0qMgtUB+lrcVLym
-         bPhJwPlwqoxEeqCqK5zNrn2ZSBNfjdpTI/S0imC0hnYcG0BX2NKTE62Czb+/iUWKsQ6u
-         H13js1W3E6nbGYrQqhp66TF2WVOkDnEONDqVZsRfcJbuY+awPT11zgSPo0tSLWqCNx6E
-         b3bA==
-X-Gm-Message-State: AO0yUKUO8niAJPEYbGc6d/x1lp2u5I82OcPzP9h9yPI5IpsWCKsLFFe/
-        wkaH/2NLRiWCtuy9Cdq+1mM84g==
-X-Google-Smtp-Source: AK7set8KFBZcJoyADEvCdNhzMHm/y5MIdXeUfrR90b/geFbtcc/C2jtV6qhmaO/gjfdwti36unuj5w==
-X-Received: by 2002:a17:902:f113:b0:196:7a96:cd82 with SMTP id e19-20020a170902f11300b001967a96cd82mr16617424plb.42.1675709116186;
-        Mon, 06 Feb 2023 10:45:16 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id e21-20020a170902d39500b0019601fbb963sm7225276pld.172.2023.02.06.10.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 10:45:15 -0800 (PST)
-Message-ID: <63e14abb.170a0220.ca425.b7bc@mx.google.com>
-X-Google-Original-Message-ID: <202302061040.@keescook>
-Date:   Mon, 6 Feb 2023 10:45:15 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with
- flexible array
-References: <20230204183241.never.481-kees@kernel.org>
- <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
+        Mon, 6 Feb 2023 13:55:01 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2087.outbound.protection.outlook.com [40.107.96.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EA72129A;
+        Mon,  6 Feb 2023 10:54:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pt1lBQi8XR9TMYuJxUjIWWY5yr9Jwyx9d1gtWhsNqi3gUUZ/I3Zq5d925R5nOSZ1JgK2YWrgKGfOdY4z/cq5ZxRDQdKCbslrtTgDyTBMwdKccPquc4hg9NZT4My+UkFBe0FsS89E7V4A1+VQSx9OkL0C9f7OJyZ48rCvuKgW1wqhIN/LF0FCajQGwVIonwnQQJdntngwzTSiwJ2eMV9yR12CV3cyL37eb5mFXOWjFcc8p9y25tUg27j4dUCmhBD7wASi73VmQMYBCeUjARNDki/hRHwedIIl//NidFOAE7+Yr45wpRGSVaKfCuIAujKa7hSdVgZtRgSBPInSu6sasA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TkO1woDYPm44X7pLPjZ/77UZ6tDWTYrKe7BOoZJBisw=;
+ b=es/oBoqzOi4fsEaBp/U89LXIS3UND/z0tQ+6lKXrBDpOlez2l9EDfSf3KPne3dQzhzBdXo/jVU1zdhwBsRfyMpagmaHrl0LtRmwtqw5ZDtKCrXYRHMRJ1gH7DZXs+na8qVv5BmrBWev3wvYbWq8RmLK3A5YHH01gga1LZoAP/WcC5VW1tcK+fVFbm8RIz1EljG6yH/TdQornCCGiSwaQZ536hCGRZ+3OiwWwGWsY6Ard+R8jR6ER/L/tIOG2ZS1Nh763Gi2lhGfkPGTwJaNt+jm822ed+HxI6lfMBdngXm1lwfZK0/Dae8XA9roPznL83JZYOjet5A9VKcJ6uN0AVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TkO1woDYPm44X7pLPjZ/77UZ6tDWTYrKe7BOoZJBisw=;
+ b=SmMPJWKu/hudDuYHyYY3vBnA/vVzmUO7XvtYcOQqnJLWMhL02NDGTUcuUBtVHrqn6socBCdyCVCAk7ulVAfwJAQaKjUtZYniG+J865uYRnS12ZHq+F7gYaC49ZOeer+lQt7XpbdTutzzgNHqip+/jBXtih2j0sGgeGygutDeC0y35XmeuebpXKzfxj8mbrURHqVYtK2tOYub1nVjtUhCPBcl9EQSUeASR+0iR0mLoeLi0m7iy+88ELqWIa5C+3Mepi+2a17l0xKrI8pnnc9kuga0BQICdXEBrmCikUw7MZeiehiMCnSe2iLMBNhf0Xjr+eWE3K8Fx07dsWduYm5KvQ==
+Received: from DM6PR08CA0053.namprd08.prod.outlook.com (2603:10b6:5:1e0::27)
+ by BL0PR12MB4884.namprd12.prod.outlook.com (2603:10b6:208:1ca::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.35; Mon, 6 Feb
+ 2023 18:54:56 +0000
+Received: from DS1PEPF0000B079.namprd05.prod.outlook.com
+ (2603:10b6:5:1e0:cafe::34) by DM6PR08CA0053.outlook.office365.com
+ (2603:10b6:5:1e0::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.35 via Frontend
+ Transport; Mon, 6 Feb 2023 18:54:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ DS1PEPF0000B079.mail.protection.outlook.com (10.167.17.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.17 via Frontend Transport; Mon, 6 Feb 2023 18:54:56 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 10:54:53 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 6 Feb 2023 10:54:52 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.180)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Mon, 6 Feb 2023 10:54:52 -0800
+Date:   Mon, 6 Feb 2023 10:54:50 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v1 8/8] vfio-iommufd: Support IO page table replacement
+Message-ID: <Y+FM+qRHLU6RSJ16@Asurada-Nvidia>
+References: <cover.1675320212.git.nicolinc@nvidia.com>
+ <a85ebe54c2fff9ca134a33cdf8744a7c1d66feef.1675320212.git.nicolinc@nvidia.com>
+ <BN9PR11MB527655AB356F73CA193300398CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <BN9PR11MB527655AB356F73CA193300398CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000B079:EE_|BL0PR12MB4884:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef8dd3c1-fa12-4a0f-84a8-08db0873a3d2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4yxM3zqbh+OSMgypQPcBLJOLOe/ufqHcfGgCVUTXvtsyyDrRxFUEnUa9S2sTDH7+xr19a7VEgfUB57ZGJFnNeCQ+WoOujKBmg2E42mZ6uwa6gHdnQIxHrX4x+AUJ0+RK9Q+vazslt2biMTJQy8w5j++1uzP1OI8y/fhHPLRaUOmWX3AWn3iR4tPjz3udlZs9rp6w3hn41zX/9JgHO0vFvXMOn+mnb94y5BrII+akYxDHS57KNRv/B4oFJHmnmon7tBGo0r/OEcC4yBc1wAASiAftihNoRieRQZsGqsv80Q01EwuFaBBNU9fd+zkf8q6wKIPH26JXLGfo5Z5ERcHevQ/1qvDJOFVHNqw6ZMRRUDIAltQ8aKl3v1sFwezTQqIBYfHvQDqcFIG9fiz3zrJQaRPS19ZsdYCTEhYuqFPMqanzfcQdd3etUCRjaKAwFQPFWhJhJnTKcDyBQrOWkI1rX8CBfQiiK0vyRggl8tx1N8pXPsT2OPlkyFN10yAjK6yFHSxhyFjpSvszoEG5ndgYus9ru2o/r8omnXqmERSwni0KsS1aVQS32T+S3kp6VyZf9BmlKrSJMeAE+EKWH9MgYDPfn5dkqtwVTpt+Cx/PqGcwxa5Ms4wePcVXSbgIzora/zXcw6s3hnkhW4WANbfld+3PxRzLLHXrn6aOAk/pcY4=
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(396003)(136003)(376002)(451199018)(46966006)(36840700001)(33716001)(82310400005)(356005)(36860700001)(82740400003)(7636003)(2906002)(26005)(478600001)(40480700001)(55016003)(86362001)(41300700001)(9686003)(186003)(5660300002)(83380400001)(336012)(426003)(47076005)(316002)(8936002)(7416002)(8676002)(6916009)(4326008)(70586007)(54906003)(70206006);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 18:54:56.4394
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef8dd3c1-fa12-4a0f-84a8-08db0873a3d2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B079.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4884
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 09:52:17AM -0800, Stanislav Fomichev wrote:
-> On Sat, Feb 4, 2023 at 10:32 AM Kees Cook <keescook@chromium.org> wrote:
+On Mon, Feb 06, 2023 at 08:49:16AM +0000, Tian, Kevin wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Thursday, February 2, 2023 3:05 PM
 > >
-> > Replace deprecated 0-length array in struct bpf_lpm_trie_key with
-> > flexible array. Found with GCC 13:
+> > Remove the vdev->iommufd_attached check, since the kernel can internally
+> > handle a replacement of the IO page table now.
 > >
-> > ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
-> >   207 |                                        *(__be16 *)&key->data[i]);
-> >       |                                                   ^~~~~~~~~~~~~
-> > ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
-> >   102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-> >       |                                                      ^
-> > ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
-> >    97 | #define be16_to_cpu __be16_to_cpu
-> >       |                     ^~~~~~~~~~~~~
-> > ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
-> >   206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-> > ^
-> >       |                            ^~~~~~~~~~~
-> > In file included from ../include/linux/bpf.h:7:
-> > ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
-> >    82 |         __u8    data[0];        /* Arbitrary size */
-> >       |                 ^~~~
-> >
-> > This includes fixing the selftest which was incorrectly using a
-> > variable length struct as a header, identified earlier[1]. Avoid this
-> > by just explicitly including the prefixlen member instead of struct
-> > bpf_lpm_trie_key.
-> >
-> > [1] https://lore.kernel.org/all/202206281009.4332AA33@keescook/
-> >
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > Cc: Song Liu <song@kernel.org>
-> > Cc: Yonghong Song <yhs@fb.com>
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: KP Singh <kpsingh@kernel.org>
-> > Cc: Stanislav Fomichev <sdf@google.com>
-> > Cc: Hao Luo <haoluo@google.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: Mykola Lysenko <mykolal@fb.com>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: Haowen Bai <baihaowen@meizu.com>
-> > Cc: bpf@vger.kernel.org
-> > Cc: linux-kselftest@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 > > ---
-> >  include/uapi/linux/bpf.h                         | 2 +-
-> >  tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >  drivers/vfio/iommufd.c | 3 ---
+> >  1 file changed, 3 deletions(-)
 > >
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index ba0f0cfb5e42..5930bc5c7e2c 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -79,7 +79,7 @@ struct bpf_insn {
-> >  /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-> >  struct bpf_lpm_trie_key {
-> >         __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
-> > -       __u8    data[0];        /* Arbitrary size */
-> > +       __u8    data[];         /* Arbitrary size */
-> >  };
+> > diff --git a/drivers/vfio/iommufd.c b/drivers/vfio/iommufd.c
+> > index 7e09defbcffe..f9e89b3eef69 100644
+> > --- a/drivers/vfio/iommufd.c
+> > +++ b/drivers/vfio/iommufd.c
+> > @@ -111,9 +111,6 @@ int vfio_iommufd_physical_attach_ioas(struct
+> > vfio_device *vdev, u32 *pt_id)
+> >               return 0;
+> >       }
+> >
+> > -     if (vdev->iommufd_attached)
+> > -             return -EBUSY;
+> > -
+> >       rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
+> >       if (rc)
+> >               return rc;
 > 
-> That's a UAPI change, can we do it? The safest option is probably just
-> to remove this field if it's causing any problems (and not do the
-> map_ptr_kern.c change below).
+> also update vfio uapi description to explain the replace semantics.
 
-The problem was seen because "data" is used by the kernel (see the
-compiler warning above). But if it can be removed, sure, that works too,
-and it much nicer since the resulting structs would have fixed sizes.
-
-> The usual use-case (at least that's what we do) is to define some new
-> struct over it:
-> 
-> struct my_key {
->   struct bpf_lpm_trie_key prefix;
->   int a, b, c;
-> };
-> 
-> So I really doubt that the 'data' is ever touched by any programs at all..
-
-Horrible alternative:
-
-struct my_key {
-    union {
-        struct bpf_lpm_trie_key trie;
-        struct {
-            u8 header[sizeof(struct bpf_lpm_trie_key)];
-            int a, b, c;
-        };
-    };
-};
-
-Perhaps better might be:
-
-struct bpf_lpm_trie_key {
-    __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
-};
-
-struct bpf_lpm_trie_key_raw {
-    struct bpf_lpm_trie_key_prefix prefix;
-    u8 data[];
-};
-
-struct my_key {
-    struct bpf_lpm_trie_key_prefix prefix;
-    int a, b, c;
-};
-
-Thoughts?
-
--- 
-Kees Cook
+Will add that. Thanks!
