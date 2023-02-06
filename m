@@ -2,161 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A11168B8BE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Feb 2023 10:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF57B68BBF0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Feb 2023 12:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjBFJb0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Feb 2023 04:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S229910AbjBFLpu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Feb 2023 06:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBFJbY (ORCPT
+        with ESMTP id S229678AbjBFLpt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Feb 2023 04:31:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD12A13DDB;
-        Mon,  6 Feb 2023 01:31:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6679D60DBB;
-        Mon,  6 Feb 2023 09:31:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0912C433EF;
-        Mon,  6 Feb 2023 09:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675675882;
-        bh=IbbdJxwExq/xgTnQ3QxlRR4vh7AQ7SmhFQ+DR+Lfkr4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=l4sAkd10OviU9F3grPZsiDbuKk78ANHZn8ZmpfVBK0ikMJji9AdN69CPqafp3VN2T
-         hN1OYKVDAIjkNKghPf3+slZTAvMUo5M0W3u/9h+ylr6KtuYY/G7WnUryDYXOPBCwI+
-         nNwWolcuaUhNe2Y/BKd2vOUCZUJnEDe+F6qk0rvCwAvVLSaopoOWiUyORbbEzt3Ziw
-         f/sFw55ITnc3rEymlnJdvFDLYIqNGynH+X/W2POarSvTxZ30hP9ZyXlHnX7uIA68EE
-         yuou4ZqcJ6ATDPgOSbWTEBItYQM1FRF6URqDBpjvqhcqH/Por5YgMgrlAfEJDTGMxX
-         2JwIh31X8N8NA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pOxqK-007wxh-Do;
-        Mon, 06 Feb 2023 09:31:20 +0000
-Date:   Mon, 06 Feb 2023 09:31:20 +0000
-Message-ID: <86y1pbywbb.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
+        Mon, 6 Feb 2023 06:45:49 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2178222035;
+        Mon,  6 Feb 2023 03:45:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675683948; x=1707219948;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=uR/HXzJZOonPBiXJlX7ofHHUBlPEq8VyuqMXpzZ/uKY=;
+  b=RTdFolDPaq9B9W4dW+/R0kgeIRbR5ItRmJwMTOM8qc7lrjwXyPEgthem
+   VVU2ssspD5HoyXGPVKjtkhl9W7sjotVIdtd50uShEp2Fvn4K3DYnBi7fr
+   BKWHTpF4Z6P3nJD6ZCbd+6jiRHzT+lw5w9itREaLkxStduIvknN4Q8t/C
+   avkS8fgU5Uxh0o+jKJnvQ+Xd2psecywXuTmrCQTRW6Df3MjwCWNTeNTKv
+   /Nta7g1swcN/UGSs39qTBBu+FR2zamP+viSOTLThIdvZryA4O97YK1yUx
+   qdjJ7wfFk4eKEtn1kOvzmfqeqnaIcqBz3P9mpL3NKqIsVeaC6gKS+9nPs
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="356544493"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="356544493"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 03:45:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="643999780"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="643999780"
+Received: from mjothix-mobl2.ger.corp.intel.com ([10.252.35.36])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 03:45:43 -0800
+Date:   Mon, 6 Feb 2023 13:45:40 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 07/21] arm64/sme: Enable host kernel to access ZT0
-In-Reply-To: <20221208-arm64-sme2-v4-7-f2fa0aef982f@kernel.org>
-References: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
-        <20221208-arm64-sme2-v4-7-f2fa0aef982f@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+In-Reply-To: <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com>
+Message-ID: <a9ab65a6-f750-7fd9-99ba-1cbd15427d2c@linux.intel.com>
+References: <20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com> <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oleg@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, shuah@kernel.org, alan.hayward@arm.com, luis.machado@arm.com, szabolcs.nagy@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 16 Jan 2023 16:04:42 +0000,
-Mark Brown <broonie@kernel.org> wrote:
->=20
-> The new register ZT0 introduced by SME2 comes with a new trap, disable it
-> for the host kernel so that we can implement support for it.
->=20
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+On Tue, 31 Jan 2023, Shaopeng Tan wrote:
+
+> After creating a child process with fork() in CAT test, if an error
+> occurs or a signal such as SIGINT is received, the parent process will
+> be terminated immediately, and therefor the child process will not
+> be killed and also resctrlfs is not unmounted.
+> 
+> There is a signal handler registered in CMT/MBM/MBA tests, which kills
+> child process, unmount resctrlfs, cleanups result files, etc., if a
+> signal such as SIGINT is received.
+>
+> Commonize the signal handler registered for CMT/MBM/MBA tests and reuse
+> it in CAT too.
+> 
+> To reuse the signal handler, make the child process in CAT wait to be
+> killed by parent process in any case (an error occurred or a signal was
+> received), and when killing child process use global bm_pid instead of
+> local bm_pid.
+> 
+> Also, since the MBA/MBA/CMT/CAT are run in order, unregister the signal
+> handler at the end of each test so that the signal handler cannot be
+> inherited by other tests.
+> 
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 > ---
->  arch/arm64/kernel/hyp-stub.S       | 6 ++++++
->  arch/arm64/kernel/idreg-override.c | 1 +
->  2 files changed, 7 insertions(+)
->=20
-> diff --git a/arch/arm64/kernel/hyp-stub.S b/arch/arm64/kernel/hyp-stub.S
-> index 2ee18c860f2a..d31d1acb170d 100644
-> --- a/arch/arm64/kernel/hyp-stub.S
-> +++ b/arch/arm64/kernel/hyp-stub.S
-> @@ -132,6 +132,12 @@ SYM_CODE_START_LOCAL(__finalise_el2)
->  	orr	x0, x0, SMCR_ELx_FA64_MASK
->  .Lskip_sme_fa64:
-> =20
-> +	// ZT0 available?
-> +	__check_override id_aa64smfr0 ID_AA64SMFR0_EL1_SMEver_SHIFT 4 .Linit_sm=
-e_zt0 .Lskip_sme_zt0
-> +.Linit_sme_zt0:
-> +	orr	x0, x0, SMCR_ELx_EZT0_MASK
-> +.Lskip_sme_zt0:
-> +
+>  tools/testing/selftests/resctrl/cat_test.c    | 28 ++++----
+>  tools/testing/selftests/resctrl/fill_buf.c    | 14 ----
+>  tools/testing/selftests/resctrl/resctrl.h     |  2 +
+>  tools/testing/selftests/resctrl/resctrl_val.c | 70 +++++++++++++------
+>  4 files changed, 68 insertions(+), 46 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> index 6a8306b0a109..3524fa88e3a4 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -103,7 +103,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>  	unsigned long l_mask, l_mask_1;
+>  	int ret, pipefd[2], sibling_cpu_no;
+>  	char pipe_message;
+> -	pid_t bm_pid;
+>  
+>  	cache_size = 0;
+>  
+> @@ -181,28 +180,31 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>  		strcpy(param.filename, RESULT_FILE_NAME1);
+>  		param.num_of_runs = 0;
+>  		param.cpu_no = sibling_cpu_no;
+> +	} else {
+> +		ret = signal_handler_register();
+> +		if (ret) {
+> +			kill(bm_pid, SIGKILL);
+> +			goto out;
+> +		}
+>  	}
+>  
+>  	remove(param.filename);
+>  
 
-I've been looking at this in order to solve a merge conflict in next,
-and couldn't convince myself that the above actually works.
+>  	ret = cat_val(&param);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = check_results(&param);
+> -	if (ret)
+> -		return ret;
+> +	if (ret == 0)
+> +		ret = check_results(&param);
 
-__check_override assumes that the ID_AA64SMFR0_EL1 value is in x1, and
-I guess that the intent of the code is to reuse value read a few lines
-above. But as the comment says at the beginning of the macro, x1 will
-be clobbered, and the checks always fails.
+It would be take this program flow fix out of the signal handler change
+into a separate change.
 
-I presume we're just lucky that sme2_kernel_enable() does the same
-thing unconditionally, which probably means this was only ever tested
-with a VHE kernel (it'd otherwise catch fire).
-
-The easiest fix is just to reload the id register before checking it,
-something like the patch below, compile-tested only.
-
-	M.
-
-=46rom a6c4aaccd33e453ffc8d8ea23a4dd4d9a263cc89 Mon Sep 17 00:00:00 2001
-From: Marc Zyngier <maz@kernel.org>
-Date: Mon, 6 Feb 2023 09:24:40 +0000
-Subject: [PATCH] arm64/sme: Fix __finalise_el2 SMEver check
-
-When checking for ID_AA64SMFR0_EL1.SMEver, __check_override assumes
-that the ID_AA64SMFR0_EL1 value is in x1, and the intent of the code
-is to reuse value read a few lines above.
-
-However, as the comment says at the beginning of the macro, x1 will
-be clobbered, and the checks always fails.
-
-The easiest fix is just to reload the id register before checking it.
-
-Fixes: f122576f3533 ("arm64/sme: Enable host kernel to access ZT0")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- arch/arm64/kernel/hyp-stub.S | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/kernel/hyp-stub.S b/arch/arm64/kernel/hyp-stub.S
-index d31d1acb170d..111ff33d93ee 100644
---- a/arch/arm64/kernel/hyp-stub.S
-+++ b/arch/arm64/kernel/hyp-stub.S
-@@ -133,6 +133,7 @@ SYM_CODE_START_LOCAL(__finalise_el2)
- .Lskip_sme_fa64:
-=20
- 	// ZT0 available?
-+	mrs_s	x1, SYS_ID_AA64SMFR0_EL1
- 	__check_override id_aa64smfr0 ID_AA64SMFR0_EL1_SMEver_SHIFT 4 .Linit_sme_=
-zt0 .Lskip_sme_zt0
- .Linit_sme_zt0:
- 	orr	x0, x0, SMCR_ELx_EZT0_MASK
---=20
-2.34.1
-
---=20
-Without deviation from the norm, progress is not possible.
+-- 
+ i.
