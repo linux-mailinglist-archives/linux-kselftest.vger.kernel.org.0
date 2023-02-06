@@ -2,95 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DAF68B886
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Feb 2023 10:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A11168B8BE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Feb 2023 10:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjBFJWd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Feb 2023 04:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S229561AbjBFJb0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Feb 2023 04:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjBFJWc (ORCPT
+        with ESMTP id S229448AbjBFJbY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Feb 2023 04:22:32 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6A64C2C;
-        Mon,  6 Feb 2023 01:22:32 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id h16so9671559wrz.12;
-        Mon, 06 Feb 2023 01:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BD90p+X206Tt8csl0mMp4SNnxg6nMR0oaLUQGe511sI=;
-        b=eCEhXIe6vHUbsv2ZS5k4osNE8CLLVAiIDoPfSRECMaiPEPNDsiYVUyc00TZ9vhN0IF
-         1qyeUTw2E7Qcc+F1qATEEbtKGsEfThQzDhkYtioIe9DxzMaJ0Y30gUk87AW+KEFWEwwf
-         LTeGpyATtgOErYw4hSmKy6i/hjBV2A2fOFOo+Yw6CWdd/kJYYTZITYzpNJ+Ibk1nsBod
-         iqliW/15mSGSXIFPkEQ6f+vuOatCjW7aAAZlaEUgNKjhO/h6E7yJh6K2wCtzNEBZa+6u
-         D8aSxzdmdSPNwqw/ExsgCshPZnzOGWDl2hwMOz9Jo5+2SgjQ0gPG6yHJRM/sMNC50icW
-         88Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BD90p+X206Tt8csl0mMp4SNnxg6nMR0oaLUQGe511sI=;
-        b=cT5hVb/yZyg/z/5wrpKPoNyxO4b7fSLVce4nkqDhcsDiVmOoaPnXsjFfUIUXqQEv2Y
-         Vc8YBrf0Po8co95q7pTkDCU5w/OxD9pxsOCTHWz/WlXD76QAeW+tybh86xyq/h/ltI/m
-         90Q2PtN6WwOUl+w1ba3HWyxgwcf19c9/2tp1YdY9o2dEnFjb0a5hG3wFkPuuKVIZCG53
-         qUVc4LX+aGAwuFEhw5BHmETu4HikGN4y5azJgeIYb/Eo1FD7pb2HEc6T0rcOOtYZes9g
-         Iqd85dSepyVvoc60S9JrrDTdH+vL0RdoplVDKw2bwEDUldd5eg77Iu1o6JprmlXJ68su
-         4//Q==
-X-Gm-Message-State: AO0yUKVK3uI1BTDWHAF2L+2dyb0gQIsbLzSrf4IYs0wQSul0Z+CsskvQ
-        YXSJC/MM5cHRkz/r6OXC/jdo8iBTA9j6WA==
-X-Google-Smtp-Source: AK7set8pXKNJVlEeOZ1sXarKDziiuN/UDiR+aCfWSmWxOP3jhobHWvWgD+7s9Mmp98J22VcUtpn1dA==
-X-Received: by 2002:a05:6000:a0e:b0:2bf:b389:ae6 with SMTP id co14-20020a0560000a0e00b002bfb3890ae6mr18940435wrb.42.1675675350565;
-        Mon, 06 Feb 2023 01:22:30 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id a17-20020a5d53d1000000b002c3ebbc9248sm1325248wrw.66.2023.02.06.01.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 01:22:30 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests/bpf: Fix spelling mistake "detecion" -> "detection"
-Date:   Mon,  6 Feb 2023 09:22:29 +0000
-Message-Id: <20230206092229.46416-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 04:31:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD12A13DDB;
+        Mon,  6 Feb 2023 01:31:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6679D60DBB;
+        Mon,  6 Feb 2023 09:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0912C433EF;
+        Mon,  6 Feb 2023 09:31:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675675882;
+        bh=IbbdJxwExq/xgTnQ3QxlRR4vh7AQ7SmhFQ+DR+Lfkr4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=l4sAkd10OviU9F3grPZsiDbuKk78ANHZn8ZmpfVBK0ikMJji9AdN69CPqafp3VN2T
+         hN1OYKVDAIjkNKghPf3+slZTAvMUo5M0W3u/9h+ylr6KtuYY/G7WnUryDYXOPBCwI+
+         nNwWolcuaUhNe2Y/BKd2vOUCZUJnEDe+F6qk0rvCwAvVLSaopoOWiUyORbbEzt3Ziw
+         f/sFw55ITnc3rEymlnJdvFDLYIqNGynH+X/W2POarSvTxZ30hP9ZyXlHnX7uIA68EE
+         yuou4ZqcJ6ATDPgOSbWTEBItYQM1FRF6URqDBpjvqhcqH/Por5YgMgrlAfEJDTGMxX
+         2JwIh31X8N8NA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pOxqK-007wxh-Do;
+        Mon, 06 Feb 2023 09:31:20 +0000
+Date:   Mon, 06 Feb 2023 09:31:20 +0000
+Message-ID: <86y1pbywbb.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 07/21] arm64/sme: Enable host kernel to access ZT0
+In-Reply-To: <20221208-arm64-sme2-v4-7-f2fa0aef982f@kernel.org>
+References: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
+        <20221208-arm64-sme2-v4-7-f2fa0aef982f@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oleg@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, shuah@kernel.org, alan.hayward@arm.com, luis.machado@arm.com, szabolcs.nagy@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is a spelling mistake in a literal string. Fix it.
+On Mon, 16 Jan 2023 16:04:42 +0000,
+Mark Brown <broonie@kernel.org> wrote:
+>=20
+> The new register ZT0 introduced by SME2 comes with a new trap, disable it
+> for the host kernel so that we can implement support for it.
+>=20
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/kernel/hyp-stub.S       | 6 ++++++
+>  arch/arm64/kernel/idreg-override.c | 1 +
+>  2 files changed, 7 insertions(+)
+>=20
+> diff --git a/arch/arm64/kernel/hyp-stub.S b/arch/arm64/kernel/hyp-stub.S
+> index 2ee18c860f2a..d31d1acb170d 100644
+> --- a/arch/arm64/kernel/hyp-stub.S
+> +++ b/arch/arm64/kernel/hyp-stub.S
+> @@ -132,6 +132,12 @@ SYM_CODE_START_LOCAL(__finalise_el2)
+>  	orr	x0, x0, SMCR_ELx_FA64_MASK
+>  .Lskip_sme_fa64:
+> =20
+> +	// ZT0 available?
+> +	__check_override id_aa64smfr0 ID_AA64SMFR0_EL1_SMEver_SHIFT 4 .Linit_sm=
+e_zt0 .Lskip_sme_zt0
+> +.Linit_sme_zt0:
+> +	orr	x0, x0, SMCR_ELx_EZT0_MASK
+> +.Lskip_sme_zt0:
+> +
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+I've been looking at this in order to solve a merge conflict in next,
+and couldn't convince myself that the above actually works.
+
+__check_override assumes that the ID_AA64SMFR0_EL1 value is in x1, and
+I guess that the intent of the code is to reuse value read a few lines
+above. But as the comment says at the beginning of the macro, x1 will
+be clobbered, and the checks always fails.
+
+I presume we're just lucky that sme2_kernel_enable() does the same
+thing unconditionally, which probably means this was only ever tested
+with a VHE kernel (it'd otherwise catch fire).
+
+The easiest fix is just to reload the id register before checking it,
+something like the patch below, compile-tested only.
+
+	M.
+
+=46rom a6c4aaccd33e453ffc8d8ea23a4dd4d9a263cc89 Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Mon, 6 Feb 2023 09:24:40 +0000
+Subject: [PATCH] arm64/sme: Fix __finalise_el2 SMEver check
+
+When checking for ID_AA64SMFR0_EL1.SMEver, __check_override assumes
+that the ID_AA64SMFR0_EL1 value is in x1, and the intent of the code
+is to reuse value read a few lines above.
+
+However, as the comment says at the beginning of the macro, x1 will
+be clobbered, and the checks always fails.
+
+The easiest fix is just to reload the id register before checking it.
+
+Fixes: f122576f3533 ("arm64/sme: Enable host kernel to access ZT0")
+Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- tools/testing/selftests/bpf/xdp_features.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/kernel/hyp-stub.S | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/bpf/xdp_features.c
-index 10fad1243573..fce12165213b 100644
---- a/tools/testing/selftests/bpf/xdp_features.c
-+++ b/tools/testing/selftests/bpf/xdp_features.c
-@@ -57,7 +57,7 @@ static void sig_handler(int sig)
- 
- const char *argp_program_version = "xdp-features 0.0";
- const char argp_program_doc[] =
--"XDP features detecion application.\n"
-+"XDP features detection application.\n"
- "\n"
- "XDP features application checks the XDP advertised features match detected ones.\n"
- "\n"
--- 
-2.30.2
+diff --git a/arch/arm64/kernel/hyp-stub.S b/arch/arm64/kernel/hyp-stub.S
+index d31d1acb170d..111ff33d93ee 100644
+--- a/arch/arm64/kernel/hyp-stub.S
++++ b/arch/arm64/kernel/hyp-stub.S
+@@ -133,6 +133,7 @@ SYM_CODE_START_LOCAL(__finalise_el2)
+ .Lskip_sme_fa64:
+=20
+ 	// ZT0 available?
++	mrs_s	x1, SYS_ID_AA64SMFR0_EL1
+ 	__check_override id_aa64smfr0 ID_AA64SMFR0_EL1_SMEver_SHIFT 4 .Linit_sme_=
+zt0 .Lskip_sme_zt0
+ .Linit_sme_zt0:
+ 	orr	x0, x0, SMCR_ELx_EZT0_MASK
+--=20
+2.34.1
 
+--=20
+Without deviation from the norm, progress is not possible.
