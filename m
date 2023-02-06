@@ -2,438 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795BF68B6E5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Feb 2023 08:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C34768B7A5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Feb 2023 09:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjBFHwb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Feb 2023 02:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57910 "EHLO
+        id S229526AbjBFIqO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Feb 2023 03:46:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjBFHwX (ORCPT
+        with ESMTP id S229458AbjBFIqN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Feb 2023 02:52:23 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20603.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::603])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C333D18AA0;
-        Sun,  5 Feb 2023 23:51:50 -0800 (PST)
+        Mon, 6 Feb 2023 03:46:13 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69521A6;
+        Mon,  6 Feb 2023 00:46:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675673171; x=1707209171;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=3y0dVOGudU1AIykUjR6rYiN03b8GPJxirNEfuorPo/0=;
+  b=A45Z95UNXuncPOdDBiGRK5SyHNBRahXFwrBDoN7IhhZiEFbCDRjJTFhc
+   EbOmOijdSijeMr3wJWiDv713pZWNLLqMr6UQmTtFtpkUKDkPzn+oFfpvs
+   aqP9CNLosOcFJlm++Dv7cxjyQcsWRs0Q4upF+zDKkER7Rg6VljMUWU24q
+   oIKtNds1LKdzvEKKG6hbwump1IQjZZKBMJOiYxZ+iASueRBvMFtuI83i2
+   uoqxFfi8I0+h1q7lHUWjGqsXq29yKDpGXSWRYZ5VQ4UtIGKLFLc70Fg5R
+   W6NDqxz8VossKfBD3ks5/OmVmk6UKeVi+ss4lApBOwXUmypLbvISnxss5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="317167670"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="317167670"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 00:46:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="755177993"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="755177993"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Feb 2023 00:46:06 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 6 Feb 2023 00:46:06 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 6 Feb 2023 00:46:06 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.48) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 6 Feb 2023 00:46:05 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Im7MEEVN4FWEx3zCb+jxDxt6oqesrmj8wEvyNhB6xZWYLmNr8YJXfqXWgxp0JvAIIXXdUnrO96MGX7+XrY25hIfkVOGBVsn2Figp5RwnKVNY70RpHmDwh8BhJCEQSoJDTvh9pWSRLJa9mJrdPdI3/timqioSJ2uD8tURUPv571Hfev7ZeKatRw7XEZcFN+Dfl08r4F0Uq+fqLnHaEKJnUOuE4ZGF8WR1sYqFACWL5xks82FH9i91x063H+8KsIGxTQVt0s+3RP9+X2Y+p8t8tPaFR4t/2KDfOMNGR3J+apzlJOvC2Uw8dS2ggut5XjsdygdkpqL6aIKTsa2gpiAu1A==
+ b=Wuf3m5k3E5Y5vjShV1QVlDglcd3J4rOEPKaEDoPkDwLu0qJFhNgJdjmgpQGXUh+RSfLfvoaK/e7q6sOQVZL+hrXGUg+SBvAUhq09ZIBEVIMqO/0WGO6BPOF7oKFxi7lbAdupXwAjLjW6HWWFJrfJeWs/u7rRKv0yIgIQTBGuz44PLm4128u5axZO48L90OS+zW//rrr21qHNcbsaIDVK0GEW7l6bgEi4q47Ikdv7GXExjQ4oJTRmSVnynu8VQ6fi7fNOfjN46m+fKeVDG4NUSVfjORead81oIjzoxz/534Zh4eaBK0rBa6kRTuN/TbuFhk5F3OU9DXjNwbEJLaxWLQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CGKTTJbiu7jo+yKcPAlQKTQIKt8ia+61r7AgkXzDJs4=;
- b=S3LRHDSF95Tx4J6VA9J6urDze9zWFzHyWsmZiwRPG8JJEaOQOgkPWyZ5TuEI+DHP5JB5ZZfiLSynKg9QXeRz8TyTGWmKjNNGQUdIIiMYxeVZ1rzPnTc6JYwghRZ2SJnqTaP/389fVUpnOhQO1l2UPFGisARyo2Lciofjl+XgzaAJ5k8NSgb/lkKZPNk1RoGyA+h1u8RQklqn3wTZqKzzB5iJ1NFS9ulU19AwzNJZ2p7UQI3DVv48+ewMlfv5bmRLtjhxtXIoQztM8uw2VDRC9ISCSrT8i5KMThjR49aeeUXL6LItBPZ6225fYLdJqNy5OzmqcSmToAQHw65KtyHO5Q==
+ bh=/Y4OtyLnWmMo2lea6DsXtzZXbzotkKB5cLO5UqXHT2o=;
+ b=Msxo6rXxTLYYxlbzcIOkPYZ3WWi2vsr5DjO7kDW6jYb6Yvfku84GhiGbrPXF6ZLuMppnBR6WuF3BMaZhjmz+1H2i/Z+JLNeyW4hUGqWj6WDU8dXyuHGNdsz8FeaNq6cPFeekpRf/PQeMvQE8PZBogQK6rRx6plarxsPhXjLmqXLzjjq6bCVtyIDldKXoAfl5rqc4i2C9+rZF01K9BGf9cyVllD9s9F2rulhmxZHypdlDasoOu5A/6bQs1hXrJ6qwZBVhssZw8LlQEzFa2RLGD/2Jszxm3nwhdPvUhk43I1VKzYGCIWfYu5IIYRz9LG6SKFWUiV7pK2XFjER79lsEyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CGKTTJbiu7jo+yKcPAlQKTQIKt8ia+61r7AgkXzDJs4=;
- b=kVvPNwBixSEKdOtpAfVIoKMGsQdXxYk24fgyI253NvLsXcQWCV9659gz3zqc7aYzWX6DrVJfCdezr5YAvVyZt8PlxpG2J5KbszClhFSkw8xAeADMD1gLKJGkafXE9BeTlOAp+Zxs1R6FuJ2t35g4NfxRBbK9CSX9qjPG/A1wkbHG4LJTYm26ACVEBwi/Zx2Co+3SluiTDJTpDHFJv9nk6iX+beV3QuD32Ls4HdQUj33P7Ug/q0oOHp0GypmRt3kaJM57nIfalsiCFYqHdotasEmSHOdlQoYneLf21VI0x26SYY3JMnc58Xfv9QOUq3r3EdpgI4/5wnxUBYQyd69aZw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by DS0PR12MB8573.namprd12.prod.outlook.com (2603:10b6:8:162::15) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by PH7PR11MB8035.namprd11.prod.outlook.com (2603:10b6:510:245::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Mon, 6 Feb
- 2023 07:50:20 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::4bd4:de67:b676:67df]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::4bd4:de67:b676:67df%6]) with mapi id 15.20.6064.032; Mon, 6 Feb 2023
- 07:50:20 +0000
-From:   Alistair Popple <apopple@nvidia.com>
-To:     linux-mm@kvack.org, cgroups@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
-        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH 19/19] selftests/vm: Add pins-cgroup selftest for mlock/mmap
-Date:   Mon,  6 Feb 2023 18:47:56 +1100
-Message-Id: <2bd6038b4a1571631e7797ce0f47a133f52acd9c.1675669136.git-series.apopple@nvidia.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
-References: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SYCPR01CA0045.ausprd01.prod.outlook.com
- (2603:10c6:10:e::33) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Mon, 6 Feb
+ 2023 08:46:04 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.034; Mon, 6 Feb 2023
+ 08:46:04 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: RE: [PATCH v1 7/8] iommufd/device: Use iommu_group_replace_domain()
+Thread-Topic: [PATCH v1 7/8] iommufd/device: Use iommu_group_replace_domain()
+Thread-Index: AQHZNtTLkB/Ugg11HEWfRX5kjXpVwK7BoBMw
+Date:   Mon, 6 Feb 2023 08:46:04 +0000
+Message-ID: <BN9PR11MB52760BBE37B65AAFA0CDCC708CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1675320212.git.nicolinc@nvidia.com>
+ <de1cec7698e9b4e2ad03b7d9414b25d655fe5a6e.1675320212.git.nicolinc@nvidia.com>
+In-Reply-To: <de1cec7698e9b4e2ad03b7d9414b25d655fe5a6e.1675320212.git.nicolinc@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB8035:EE_
+x-ms-office365-filtering-correlation-id: 6d4c031e-e0fd-4327-1d9f-08db081e94e3
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: knnrBB2LE5vTpzgJRGl3iIfmeehXua5KfPSGSEAFvB1lGuysKhanxRh2p60lmXJ+pvIqAKqNnr2xv515df+3gDz0YCrH2+f4BEIaxVfCW8UxLNmR2mDW+hWGLRzSEFSAcsWQ1GbYzAjOSllfMDEX5Oo4U95XlQho+NqCCeM1QczmYIei2o3/VJLitjHmogXFFeWzz/0EOKArl8D7vnBqrZ4PeIvNgc8wxXlvwZDn+tZig4veTPwk3+DM6zY6mkcw64S+1Up0eLNJ9IR2RkubNRtiejGY5XaTcn7P3JHaz+LbKiYEcqfyrgf7DrQgITnb7AYGXPGMlqlwRjQI68heXIWjdOkz+cJj/e5DTWcQhgXQQvwfihZuGc5peiirQOp7lBfqDw6cMsgicDRqCljWSJPa4pOgPpg+bqGH9BVVwYro1WcES/hzpQYMmQ0INXDlykjAH7pHwi4geCWW1pUKKFVBSMe8te+OWCD6XBqtZal86RAR/VaDudKYYcZLa9rFwrCQ4pjl/Vj0p9jMMEpIuk2eco0mIAJFxNMgGcCJ8OFn6P53cfP87lA86kV5EP4UkwSXUW9s/SxI1oUubwKb3Yf40I8rpYN54SpvTcTSZ1v7ALdcSsMCB9l13ZA9BYbLPzLn5Itpg3i0+wwchUkZR4kPjvuwPMYPYZq7whosRr1mLxije03t/IlW08+/ETiFCccnhtEnOSg6MoTz77Hrwg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(136003)(346002)(39860400002)(366004)(396003)(451199018)(7416002)(86362001)(4326008)(316002)(76116006)(83380400001)(66556008)(71200400001)(5660300002)(66446008)(66946007)(66476007)(64756008)(110136005)(33656002)(8676002)(41300700001)(82960400001)(38070700005)(38100700002)(54906003)(52536014)(478600001)(122000001)(2906002)(7696005)(8936002)(55016003)(26005)(9686003)(186003)(6506007)(4744005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jTvEdX/WxHtjKQ13d6dHrQu7QKkxhTc1l6empEQwu4/9yZtNyrBANZzUNYtj?=
+ =?us-ascii?Q?lgXSMfvvf+yPPy96H6XInOSkY4Kh4O4HIitXovjo1I9wPv8YVNDYg6qFCAva?=
+ =?us-ascii?Q?NLPyP5R0ytWvY3DBAGl1VvEm/rF2HQg8vB2ViBMA8rhN8+R10pmP2Ahb0Flb?=
+ =?us-ascii?Q?FUNznmsByJXzvl3ASrXIauKF0UyDsdUNoFaNnXOpAz6sOOZ8iI0bQU3hfNf+?=
+ =?us-ascii?Q?euOjQxxmwEtNS1/rDUFGIkePAdruzEKgQK1WOC5YHEh5+A6AVvMjDcn+Pw0n?=
+ =?us-ascii?Q?OCVKNmAu/a0D9xemVwji4gFrLdrkN4QkYb3D5PjaQExHJ7AAce2TDx3vdK7T?=
+ =?us-ascii?Q?CtsEy6ErzdizONao5lkpWK/nImlgAZX2ZnViw+olgl7sWSk6RCA9jXWhki9n?=
+ =?us-ascii?Q?t8VTUdsDBBH3cJtjnTkqQoirl+cGsCfOFE5iUZOjzGWK/xvLzBif6D/aONIx?=
+ =?us-ascii?Q?x3famHnh6OY+fTNKg9gWGsEexStU56vfHmwz6ad4tMkq+wFmQiWvzZlzQjvr?=
+ =?us-ascii?Q?QkWqHR2F6yvyIy/5XLgurewlrGOMgbVpFP3ns/6i6mv1xUKCZnAwE9cO4mJu?=
+ =?us-ascii?Q?09un6Z+81us1SOsOFgTFZRX/dim/eWIK3kZBb0OhcnWot/n8o3gDWvWAd+Gq?=
+ =?us-ascii?Q?ygde3ssISzdl2P2HPzp+hgGsmedWfntWcb9O8cLgLY/glYhUWNniv/tl9D5V?=
+ =?us-ascii?Q?HlbEpDg0v/2oNdF3tC254zu9ql6LN3ODIR0UGX66w0/GrkSvFEEIkdvM9KP1?=
+ =?us-ascii?Q?njkK5+pqNj545CiJi0BGMcuKXI8il5tEOQFVOYsCzNOszDThXIkqRUJP1wLX?=
+ =?us-ascii?Q?i5CNfuM0vLoRxKBjYZtEUJ8ZqTUApjEENx8ROiMQ7pzBt33Fcu8o3DzeKWTZ?=
+ =?us-ascii?Q?q1liPdBly5qpC34bKK9Bq9REzQqfCM1IT6qo1IllaOD19WR0v59IeI/vBIui?=
+ =?us-ascii?Q?dyitxEWxodACyi/4g3+uydI0Vya3BY7gHl3E8klroaKMe96wLGMEJ6GOceK6?=
+ =?us-ascii?Q?U5P/vR/yA5XqDS+KW8sqNRQoRv2k/cqGsAfAAoA4PuwvkCtvXxLqhpEJUq6Y?=
+ =?us-ascii?Q?2e0DBIm0ghY2JkXu9XJN1Unth6e1Tu8ds3KZSYclCKN9bqJhbjCuu+Raq7YY?=
+ =?us-ascii?Q?h9ro3G6ag1BMKWM2CN/8iCTzjxaD+0UVcy8VuuiNF+nTCvuEn2yv6U/Gwftt?=
+ =?us-ascii?Q?rA1PK0lkN4e0n/rSjaipHn7mS76n+IeG/Alw8I3vofDjyZ9rCJWjVruwtGkG?=
+ =?us-ascii?Q?7qwedS313FmJib6Gw4hG9at2EU7gdAp0yROaOQy23rDtvk8b0dwLNwRXL1uP?=
+ =?us-ascii?Q?xast6YlI2SckQmPtOj5DHv/GGBteM2G49Mgm8GdA1lMKjI/aUK8Wb5WFAfdE?=
+ =?us-ascii?Q?qBENggQqeR2dLYNOt8ghRSDc0JBy0V6f/yeYJJzt20XjyUDN1fqiVae4dZEq?=
+ =?us-ascii?Q?GtDiXuv4wWV5cHvOcKcu7riYJUqAMFElC/94sPpeU8FgYgiH8fbvyKiG4X11?=
+ =?us-ascii?Q?sjR1tnp7JK+ZWx7YKeJZcQ8YoeWPjyehVM3PP5HOXsdb301q8VcyttV811OA?=
+ =?us-ascii?Q?iEqnbcdj85R0/XDPG+3W85GBYTIyBaxPfSojvoFE?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|DS0PR12MB8573:EE_
-X-MS-Office365-Filtering-Correlation-Id: d11c3ca0-e577-4cea-9a76-08db0816cb58
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9dWZD2t/+Z7V9QOIUUWaxrSGi0KuhVSIbQ77D2ROgVKVnwxGP52AevErTClN4BqAy21B5fx21j6tBiYlt8u35F60dW8g90c/XKmkVbPhuynbVr6O+4Xghv14ztWgD/29bEkInSoVrxBkn/08YV1MUq9x4RChn3IkP6M+jIQLrUT1scnll48P/ztTwbl0IDBav8icxKqw3/RCPT+PO3kX4NT2mc7s04u7e7KLHTOhOIRxPsusGcYsL6+w1r3dUct98mhm++I1+CKwtb6dFisPWefIHJTICoX53HpZ2KoOnR7lz1J6Kw1jx/cAlLFdzoiygI++gsSkhWTSxui/Jq2ERMn/UjhQYNc3jWXKcgrbJmVfemrw0U84V3963AxNslhkPWNvP3VePQFbPXj+jpugf+QzEUMAZfDn5Uk989t65iJJpKzGdK5zckXmd99UeXwsRYPQXni1J8zzETrAWXnrF4mu2rGw7OHG+AUg4/v0QVWVildJ07/HpedRKRKNeZlmwp2KU+lQBys3n/Bkfu8X/mM/uCdM5GzA5C99yWLxorPDW4JhXFApebCvHSrCvJiQ19m6bFejTrOciu3q1zeRzrRIBNA7BHN+u3vu0JBMwY+JCVbXPHThQ70b+I8B6TaT9LxCml/0t/fhHwHV+NssoA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(136003)(39860400002)(366004)(346002)(451199018)(54906003)(316002)(86362001)(6666004)(6486002)(38100700002)(186003)(2616005)(6506007)(26005)(478600001)(6512007)(7416002)(5660300002)(83380400001)(2906002)(36756003)(66946007)(8936002)(4326008)(41300700001)(66476007)(8676002)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3j3ry8KiLXLZp8Riv1ALQgPDVgFrUuvNKw26OWlhJphF7+Hc8o5BbQbqnuN/?=
- =?us-ascii?Q?Nw3ZHBrpWrui2J+NXfFlizPM9vjj8Gkk8/nsxRcdCKXUPkmgg0o4NXntKMUj?=
- =?us-ascii?Q?VdiKtZDSUM7DVOfDJuzX++7b42gLeXteGJCy0kG5kM7z3oXOO++mXFnJ6ii5?=
- =?us-ascii?Q?BDy3tLAhDpWmXTz2ZQDLsDK6+xsmS9o4ZklXY9TxRAIn+bIc8tv8SXNFT/ed?=
- =?us-ascii?Q?9QCyK9PMb1t6a9AfxxeybPrD3Uii//c2x5XJBqhrgs64FkXT6WRwJauYz0Pa?=
- =?us-ascii?Q?PIe5k/PHr5DRpyyXagjbFWiQQXpIQP7jshIefUMXio4CnV1gNyFVfkuhYqAW?=
- =?us-ascii?Q?D/kcukf/vhibTuhuATZCdiJqPGD/ANt+tvqLMRy68GIE3JmimGZOsZPF/iVW?=
- =?us-ascii?Q?wLQAmhGJbzDAp4hDYsPqIyZs6lxGLj6kB6W3AsdFkJoDOcPmAmQtTYsoKZb5?=
- =?us-ascii?Q?DHKF4AGgM+PYmKrl93CqnaQGuuzFwHVNjiZeC1jmTwhdyTnZf4dY3XtV9l+6?=
- =?us-ascii?Q?39GAL/aeIYNjcTjtWDmiPjx/bxvLgQ9WpBc+xwx7dE1C8idBrHUWgr8fBqDY?=
- =?us-ascii?Q?5uFmcPBbvRZRs5HkBCMV7rSDfP6VoEENuNzqOZFoHcTrDBrCySdemrERJHMp?=
- =?us-ascii?Q?14VFyjPf3CoCfDRS9/B0ysJNz9yzSYy/OD0YeXupBzrQ+kuEY/c3alFStwFF?=
- =?us-ascii?Q?6UXLDiugpc2lJ4GotWmF2ANGl1WcCmD6oFbOXZ9Q4O8q6Y95ESbw7YCm5o0w?=
- =?us-ascii?Q?4ymlzSTtu5EitAYdGMIdGgLN725Mkl/D9Is60IXpS0+4GEwnN2tqwD9AzYDU?=
- =?us-ascii?Q?iXaetdkm+Nkd7z/YhkUs+wFMGXJDa27r7b/DPj32HyB8/r8mojOpUQzmZ7on?=
- =?us-ascii?Q?BYXMAC3cqh9KL4DjanR2idx1m3rZMlgP9+Lw/Trucb/WuwIh7SX6gUEZRqd0?=
- =?us-ascii?Q?qnUdwWJjpmt/AF5OkWoFp5F4cW8y4SsQYh5Igw+fN06vC36QFQyRvfkTfE0D?=
- =?us-ascii?Q?ABMGB/C+80//St3vH5q9oezb7vFYz2IQ1DIW8wt39149HssNvsH8iiIPh9eU?=
- =?us-ascii?Q?8KQc8eu9ixy+h1mrcjgNIk3mFI143yXkOwNCP98hh9o5R89QmczzB22Z9rRr?=
- =?us-ascii?Q?j3JQ1JIYTD3xVspAB92wOVC1J2mMc7eK+18NzVOq4I8cNdro+7fmvMnSD5ZA?=
- =?us-ascii?Q?RXPjWA4QkgIBxepfzCncVnjjXMka/EdSrtidSZSbzBDnjNMejFy3+ATZpC4v?=
- =?us-ascii?Q?r0j8/qxN9oc331BV6BUfbWengLNIjpcIq00lNuNsHqPqBg0xJfrjhOzbAILu?=
- =?us-ascii?Q?XT/pDp+V0+rY4mnIJ1er7y/HBolYTQevQz8MowdOUs6g0GSr9bzaOMnNI8ql?=
- =?us-ascii?Q?mADJFoRv50tYLDcfza44pzces2sluUAsK3NnRId7WaB8emV/AFIgHj1ITn4X?=
- =?us-ascii?Q?ornfziLewz5vPTuVaJBEYELm+dHxWkLvCdOt5Tc3gzv6VJg4zcuFKm8xJkag?=
- =?us-ascii?Q?wI2oYfvVuYw2xAuTF3s8AjlPTz3l/PVaWmw1kMtSC1O1S1z3eiQAuzB1e+Xq?=
- =?us-ascii?Q?4C3GcdolcN9UyabSP79S7wsrNNGC09EU0HhObYU9?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d11c3ca0-e577-4cea-9a76-08db0816cb58
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 07:50:19.9753
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d4c031e-e0fd-4327-1d9f-08db081e94e3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Feb 2023 08:46:04.2385
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KClDenTLQ/TczAn7Sbd3dGzzwGDXykfOgI4zkvGApKdmx3a7WPKSSGaevP2sFCVTgUe7bCPuUu4K9rn6fFxZFw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8573
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vOo6iSaIam76as4YaPVN2+CwBzJHTadxUE85XFHxXF0c4Wz6Un1kMIXxTAuM7V/5cXtweF+mUR2IC701DJL8aw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8035
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some basic tests of mlock/mmap cgroup accounting for pinned
-memory.
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Thursday, February 2, 2023 3:05 PM
+>
+> @@ -246,6 +249,18 @@ static int iommufd_device_do_attach(struct
+> iommufd_device *idev,
+>  		}
+>  	}
+>=20
+> +	if (cur_hwpt) {
+> +		/* Replace the cur_hwpt */
+> +		mutex_lock(&cur_hwpt->devices_lock);
+> +		if (cur_hwpt->ioas !=3D hwpt->ioas)
+> +			iopt_remove_reserved_iova(&cur_hwpt->ioas->iopt,
+> +						  idev->dev);
+> +		list_del(&cur_hwpt->hwpt_item);
 
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: cgroups@vger.kernel.org
----
- MAINTAINERS                              |   1 +-
- tools/testing/selftests/vm/Makefile      |   1 +-
- tools/testing/selftests/vm/pins-cgroup.c | 271 ++++++++++++++++++++++++-
- 3 files changed, 273 insertions(+)
- create mode 100644 tools/testing/selftests/vm/pins-cgroup.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f8526e2..4c4eed9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5387,6 +5387,7 @@ L:	cgroups@vger.kernel.org
- L:	linux-mm@kvack.org
- S:	Maintained
- F:	mm/pins_cgroup.c
-+F:	tools/testing/selftests/vm/pins-cgroup.c
- 
- CORETEMP HARDWARE MONITORING DRIVER
- M:	Fenghua Yu <fenghua.yu@intel.com>
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 89c14e4..0653720 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -56,6 +56,7 @@ TEST_GEN_PROGS += soft-dirty
- TEST_GEN_PROGS += split_huge_page_test
- TEST_GEN_FILES += ksm_tests
- TEST_GEN_PROGS += ksm_functional_tests
-+TEST_GEN_FILES += pins-cgroup
- 
- ifeq ($(MACHINE),x86_64)
- CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
-diff --git a/tools/testing/selftests/vm/pins-cgroup.c b/tools/testing/selftests/vm/pins-cgroup.c
-new file mode 100644
-index 0000000..c2eabc2
---- /dev/null
-+++ b/tools/testing/selftests/vm/pins-cgroup.c
-@@ -0,0 +1,271 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "../kselftest_harness.h"
-+
-+#define _GNU_SOURCE
-+#include <fcntl.h>
-+#include <assert.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <sys/ioctl.h>
-+#include <sys/prctl.h>
-+#include <sys/resource.h>
-+#include <sys/capability.h>
-+#include <unistd.h>
-+
-+#define CGROUP_TEMP "/sys/fs/cgroup/pins_XXXXXX"
-+#define PINS_MAX (-1UL)
-+
-+FIXTURE(pins_cg)
-+{
-+	char *cg_path;
-+	long page_size;
-+};
-+
-+static char *cgroup_new(void)
-+{
-+	char *cg;
-+
-+	cg = malloc(sizeof(CGROUP_TEMP));
-+	strcpy(cg, CGROUP_TEMP);
-+	if (!mkdtemp(cg)) {
-+		perror("Failed to create cgroup");
-+		return NULL;
-+	}
-+
-+	return cg;
-+}
-+
-+static int cgroup_add_proc(char *cg, pid_t pid)
-+{
-+	char *cg_proc;
-+	FILE *f;
-+	int ret = 0;
-+
-+	if (asprintf(&cg_proc, "%s/cgroup.procs", cg) < 0)
-+		return -1;
-+
-+	f = fopen(cg_proc, "w");
-+	free(cg_proc);
-+	if (!f)
-+		return -1;
-+
-+	if (fprintf(f, "%ld\n", (long) pid) < 0)
-+		ret = -1;
-+
-+	fclose(f);
-+	return ret;
-+}
-+
-+static int cgroup_set_limit(char *cg, unsigned long limit)
-+{
-+	char *cg_pins_max;
-+	FILE *f;
-+	int ret = 0;
-+
-+	if (asprintf(&cg_pins_max, "%s/pins.max", cg) < 0)
-+		return -1;
-+
-+	f = fopen(cg_pins_max, "w");
-+	free(cg_pins_max);
-+	if (!f)
-+		return -1;
-+
-+	if (limit != PINS_MAX) {
-+		if (fprintf(f, "%ld\n", limit) < 0)
-+			ret = -1;
-+	} else {
-+		if (fprintf(f, "max\n") < 0)
-+			ret = -1;
-+	}
-+
-+	fclose(f);
-+	return ret;
-+}
-+
-+FIXTURE_SETUP(pins_cg)
-+{
-+	char *cg_subtree_control;
-+	FILE *f;
-+
-+	if (asprintf(&cg_subtree_control,
-+			"/sys/fs/cgroup/cgroup.subtree_control") < 0)
-+		return;
-+
-+	f = fopen(cg_subtree_control, "w");
-+	free(cg_subtree_control);
-+	if (!f)
-+		return;
-+
-+	fprintf(f, "+pins\n");
-+	fclose(f);
-+
-+	self->cg_path = cgroup_new();
-+	self->page_size = sysconf(_SC_PAGE_SIZE);
-+}
-+
-+FIXTURE_TEARDOWN(pins_cg)
-+{
-+	cgroup_add_proc("/sys/fs/cgroup", getpid());
-+
-+	rmdir(self->cg_path);
-+	free(self->cg_path);
-+}
-+
-+static long cgroup_pins(char *cg)
-+{
-+	long pin_count;
-+	char *cg_pins_current;
-+	FILE *f;
-+	int ret;
-+
-+	if (asprintf(&cg_pins_current, "%s/pins.current", cg) < 0)
-+		return -1;
-+
-+	f = fopen(cg_pins_current, "r");
-+	if (!f) {
-+		printf("Can't open %s\n", cg_pins_current);
-+		getchar();
-+		free(cg_pins_current);
-+		return -2;
-+	}
-+
-+	free(cg_pins_current);
-+
-+	if (fscanf(f, "%ld", &pin_count) == EOF)
-+		ret = -3;
-+	else
-+		ret = pin_count;
-+
-+	fclose(f);
-+	return ret;
-+}
-+
-+static int set_rlim_memlock(unsigned long size)
-+{
-+	struct rlimit rlim_memlock = {
-+		.rlim_cur = size,
-+		.rlim_max = size,
-+	};
-+	cap_t cap;
-+	cap_value_t capability[1] = { CAP_IPC_LOCK };
-+
-+	/*
-+	 * Many of the rlimit checks are skipped if a process has
-+	 * CAP_IP_LOCK. As this test should be run as root we need to
-+	 * explicitly drop it.
-+	 */
-+	cap = cap_get_proc();
-+	if (!cap)
-+		return -1;
-+	if (cap_set_flag(cap, CAP_EFFECTIVE, 1, capability, CAP_CLEAR))
-+		return -1;
-+	if (cap_set_proc(cap))
-+		return -1;
-+	return setrlimit(RLIMIT_MEMLOCK, &rlim_memlock);
-+}
-+
-+TEST_F(pins_cg, basic)
-+{
-+	pid_t child_pid;
-+	long page_size = self->page_size;
-+	char *p;
-+
-+	ASSERT_EQ(cgroup_add_proc(self->cg_path, getpid()), 0);
-+	p = mmap(NULL, 32*page_size, PROT_READ | PROT_WRITE,
-+		MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(p, MAP_FAILED);
-+
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 0);
-+	memset(p, 0, 16*page_size);
-+	ASSERT_EQ(mlock(p, page_size), 0);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 1);
-+	ASSERT_EQ(mlock(p + page_size, page_size), 0);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 2);
-+	ASSERT_EQ(mlock(p, page_size), 0);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 2);
-+	ASSERT_EQ(mlock(p, 4*page_size), 0);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 4);
-+	ASSERT_EQ(munlock(p + 2*page_size, 2*page_size), 0);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 2);
-+	ASSERT_EQ(cgroup_set_limit(self->cg_path, 8), 0);
-+	ASSERT_EQ(mlock(p, 16*page_size), -1);
-+	ASSERT_EQ(errno, ENOMEM);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 2);
-+	ASSERT_EQ(cgroup_set_limit(self->cg_path, PINS_MAX), 0);
-+
-+	/* check mremap() a locked region correctly accounts locked pages */
-+	ASSERT_EQ(mlock(p, 32*page_size), 0);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 32);
-+	p = mremap(p, 32*page_size, 64*page_size, MREMAP_MAYMOVE);
-+	ASSERT_NE(p, MAP_FAILED);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 64);
-+	ASSERT_EQ(munmap(p + 32*page_size, 32*page_size), 0)
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 32);
-+	p = mremap(p, 32*page_size, 32*page_size, MREMAP_MAYMOVE | MREMAP_DONTUNMAP);
-+	ASSERT_NE(p, MAP_FAILED);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 32);
-+	ASSERT_EQ(munlock(p, 32*page_size), 0);
-+
-+	/* mremap() a locked region should fail if limit exceeded */
-+	ASSERT_EQ(set_rlim_memlock(32*page_size), 0);
-+	ASSERT_EQ(mlock(p, 32*page_size), 0);
-+	ASSERT_EQ(mremap(p, 32*page_size, 64*page_size, 0), MAP_FAILED);
-+	ASSERT_EQ(munlock(p, 32*page_size), 0);
-+
-+	/* Exceeds rlimit, expected to fail */
-+	ASSERT_EQ(set_rlim_memlock(16*page_size), 0);
-+	ASSERT_EQ(mlock(p, 32*page_size), -1);
-+	ASSERT_EQ(errno, ENOMEM);
-+
-+	/* memory in the child isn't locked so shouldn't increase pin_cg count */
-+	ASSERT_EQ(mlock(p, 16*page_size), 0);
-+	child_pid = fork();
-+	if (!child_pid) {
-+		ASSERT_EQ(cgroup_pins(self->cg_path), 16);
-+		ASSERT_EQ(mlock(p, 16*page_size), 0);
-+		ASSERT_EQ(cgroup_pins(self->cg_path), 32);
-+		return;
-+
-+	}
-+	waitpid(child_pid, NULL, 0);
-+
-+	/* check that child exit uncharged the pins */
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 16);
-+}
-+
-+TEST_F(pins_cg, mmap)
-+{
-+	char *p;
-+
-+	ASSERT_EQ(cgroup_add_proc(self->cg_path, getpid()), 0);
-+	p = mmap(NULL, 4*self->page_size, PROT_READ | PROT_WRITE,
-+		MAP_ANONYMOUS | MAP_PRIVATE | MAP_LOCKED, -1, 0);
-+	ASSERT_NE(p, MAP_FAILED);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 4);
-+}
-+
-+/*
-+ * Test moving to a different cgroup.
-+ */
-+TEST_F(pins_cg, move_cg)
-+{
-+	char *p, *new_cg;
-+
-+	ASSERT_EQ(cgroup_add_proc(self->cg_path, getpid()), 0);
-+	p = mmap(NULL, 16*self->page_size, PROT_READ | PROT_WRITE,
-+		MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(p, MAP_FAILED);
-+	memset(p, 0, 16*self->page_size);
-+	ASSERT_EQ(mlock(p, 16*self->page_size), 0);
-+	ASSERT_EQ(cgroup_pins(self->cg_path), 16);
-+	ASSERT_NE(new_cg = cgroup_new(), NULL);
-+	ASSERT_EQ(cgroup_add_proc(new_cg, getpid()), 0);
-+	ASSERT_EQ(cgroup_pins(new_cg), 16);
-+	ASSERT_EQ(cgroup_add_proc(self->cg_path, getpid()), 0);
-+	rmdir(new_cg);
-+}
-+TEST_HARNESS_MAIN
--- 
-git-series 0.9.1
+emmm shouldn't this be done only when the device is the last
+one attached to the hwpt? and if it's the last one you should
+also iopt_table_remove_domain() together with list_del, i.e.
+similar housekeeping as done in iommufd_device_detach().
