@@ -2,175 +2,195 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF56268D812
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Feb 2023 14:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E7768D881
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Feb 2023 14:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbjBGNFU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Feb 2023 08:05:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S232361AbjBGNKP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Feb 2023 08:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbjBGNFA (ORCPT
+        with ESMTP id S232331AbjBGNKO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:05:00 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DAC39B91
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Feb 2023 05:04:50 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id j25so9948627wrc.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Feb 2023 05:04:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hw9n2rz8EZk7Zwt4b/TCgbVGXyOC2ofikV1UOhbOy28=;
-        b=h0oK28sxWQ1yiqlMPhLdbuZWdEiu8VJlzmakwm4khsZ3Pcw3Uc4PYyty82iPHrAEBN
-         vmQhIRRuVpTpUsCLcNwLDmYy3SxIfS8mmABlz5UAWrfpaMFnQyb4LSaMX+inmt5oxUvs
-         PwtEBJZ7HK7TcRCALF0k84zaCwfjRDy6JN0rY0XSJg2aHb8jEpZ2Z1yufZn683gaSBrR
-         uqsB14inHMxquGjIF6L1biGZBTrtDsXUjps0gaBo2WBqT7WBGLknJhVA5n9IzvYhw0rM
-         xKPINz/lHHvwsETQ2x3V//PQGJAAvOhrgMiRwxNe2zf1NZjMXicjJj+YEehS8E4bsA5P
-         R8hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hw9n2rz8EZk7Zwt4b/TCgbVGXyOC2ofikV1UOhbOy28=;
-        b=ZOh12BY94XoS2/STSRN7E8D20k7FoB0QQb0AOb1vxrzPgJMdeB3vXBWuUp8gF1jC3b
-         EvZkluwDGp0FdIzUPNx+vEXPdSxBdgW2RWJ/HloOIIbr7yICf5RiTRNGDWoxfX55YZ/R
-         GAINlAsAlC5QXI8iwCWc8/wbPyZu8fCfB91d4k0F+f2U43KNau/ZKZwasSibI7N7+SZk
-         Saai+omuTAexSpteQ0m4oEBn8c7mTxJ29/b8K1+kHOMYDIiBRHlkLzYgpMEzgHuOc7Id
-         fKjbYFEoDIPnYljad+JF0hLLL9vtSM/urG1hRLNFt3GQgcxQfdP8pxLzOH2zCjWpJBvb
-         kH/g==
-X-Gm-Message-State: AO0yUKVl5JR6likkAumbiDhhf92A8/ugbU4a41cIr+muMVHw21p4pyoO
-        tTqFuTLSa9a0dmqHX5A5oqWlIw==
-X-Google-Smtp-Source: AK7set8r31gVm7sG7P21njAagUkRUkg13ZEgePjdspPbk83jINW58WYZkT0Yj4PsigiNCJj09jtAaA==
-X-Received: by 2002:adf:df83:0:b0:2bf:f027:3c30 with SMTP id z3-20020adfdf83000000b002bff0273c30mr2725354wrl.56.1675775088552;
-        Tue, 07 Feb 2023 05:04:48 -0800 (PST)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id n9-20020a5d5989000000b002bc7fcf08ddsm11645394wri.103.2023.02.07.05.04.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 05:04:48 -0800 (PST)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Tue, 07 Feb 2023 14:04:18 +0100
-Subject: [PATCH net 6/6] selftests: mptcp: stop tests earlier
+        Tue, 7 Feb 2023 08:10:14 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583193B0E8;
+        Tue,  7 Feb 2023 05:09:58 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317BOhL4030809;
+        Tue, 7 Feb 2023 13:09:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=eSqfTMcYmap6Rq2CFj8elWEtcqRfbRQlrMyq11yd7PE=;
+ b=cHWqwEXEmiSZuysi0XYCUSPHltUT6gITefzFDmfrADIIKPEzF7w4Z6SvtG0Z9y8yTS35
+ gQCPCEsm4BzREgIukFTZVF+3E+4A2df8dl1wXpwIqfAvd/lkId9hbTnIRAOHjslJbm4x
+ QcFrhP42gptAG3o990uZlNUjQiS9zePIcHUqUUpR5VDfwTCpIuS4a3O5jBK80fiXSiyN
+ AAAP9cZhf93LRKFgUPV1msQ44Kl32d5wMp6iWYvYQ0DLriD3nzkiVScV4dZ+aBGZT+BM
+ /aCbZxjPgE8CyCSgi9ftbdkYQWmvwNH+DPGwOJnhkSLBh1hXI421tkR3/PZVq/F3WaWd dQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nknr32kvy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 13:09:02 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317CrUxH023084;
+        Tue, 7 Feb 2023 13:09:01 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nknr32kvb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 13:09:01 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 316Dvnms015413;
+        Tue, 7 Feb 2023 13:08:59 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3nhf06tja7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 13:08:59 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 317D8ufq23855512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Feb 2023 13:08:56 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EFDE920043;
+        Tue,  7 Feb 2023 13:08:55 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11F7F20040;
+        Tue,  7 Feb 2023 13:08:55 +0000 (GMT)
+Received: from [9.171.52.227] (unknown [9.171.52.227])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Feb 2023 13:08:54 +0000 (GMT)
+Message-ID: <f37f0057-c872-4cb0-fd15-12d2ef280f49@linux.ibm.com>
+Date:   Tue, 7 Feb 2023 14:08:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v7 09/14] KVM: s390: Dispatch to implementing function at
+ top level of vm mem_op
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>
+References: <20230206164602.138068-1-scgl@linux.ibm.com>
+ <20230206164602.138068-10-scgl@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20230206164602.138068-10-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230207-upstream-net-20230207-various-fix-6-2-v1-6-2031b495c7cc@tessares.net>
-References: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
-In-Reply-To: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Benjamin Hesmans <benjamin.hesmans@tessares.net>,
-        Geliang Tang <geliangtang@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2465;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=KTY0Kro9lRunsEJq380yUjc2D3jyyLZ/WohBOjvZgO8=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBj4kxokI/kZwP6C9bNbWeMsWwDSDCb5JP9QFQRt
- trEDx7PjpGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY+JMaAAKCRD2t4JPQmmg
- c5NDEADmKOaYKUbBF/+HG67xP7kMvxCcOzFsp1s9zGzVvE0+pyXFA2MJIfp3qxHnYQBIuoIbQUf
- iyCFcfok/5Yqy6eKpWprWVXJ/u3i9GxXgGwDb2zpfqWBzCBrjy3l1Q9IZ/nrZZkO92tMC6BjEek
- KgTuYMdlTWZuSLP98K0jOGbgiUjZpqs8GVBv0IhV3ucjYowAq6PbZSqtGb6/y6Y9Nhf/Pd1V2ac
- bLxCSnJCHtqZEdM5iT2EnrTGQkffFuCyi7fSRklOQQ0WSdQ9/1Bahdz2JCVTfdO/QpptzX7UGnU
- 4GFvMlwy8E7tM3KMAekkq5Z60C059BwSfCFsr6npt/hnxebwWFQ41LMrWo6705cpUutECeYN3LN
- gWzH3zFXc9jFw3KZVvsiQWC+Oy0OUV6nXNb1NfkRbfzQMESWhbJlnnDX3QW0CaEg2eigLE/ciXw
- d32t/4ENVtroYL/bmKZMBRDGwPHM2g14GBpJ2Hq0bePkvhjUKfw5JHrTMu4coUHilTn1hS7E5Vr
- 2t6smyy1HHPGqAnc8bSpLTLILvvkEbVDW0881pcI59kM903uYKlseyU3kkk61kogi1dSXEmJF8j
- h0PN+ZF9XOlqQkhYiQYaSSSSNdDYy0meih/C8uPQKmD2fS9X1JZE2YLYzJAbrV2U2p/2nTZp/zZ
- cgAz6jAPYs9n+yA==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wv-J_tqsIw07YP7dJAYC3o8baXJGZUWU
+X-Proofpoint-ORIG-GUID: YlNFpg-Fkt1HeNAWRFKav-OQgJcr1cJW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-07_05,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 adultscore=0
+ phishscore=0 bulkscore=0 clxscore=1015 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302070116
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These 'endpoint' tests from 'mptcp_join.sh' selftest start a transfer in
-the background and check the status during this transfer.
+On 2/6/23 17:45, Janis Schoetterl-Glausch wrote:
+> Instead of having one function covering all mem_op operations,
+> have a function implementing absolute access and dispatch to that
+> function in its caller, based on the operation code.
+> This way additional future operations can be implemented by adding an
+> implementing function without changing existing operations.
+> 
+> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Reviewed-by: Thomas Huth <thuth@redhat.com>
 
-Once the expected events have been recorded, there is no reason to wait
-for the data transfer to finish. It can be stopped earlier to reduce the
-execution time by more than half.
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-For these tests, the exchanged data were not verified. Errors, if any,
-were ignored but that's fine, plenty of other tests are looking at that.
-It is then OK to mute stderr now that we are sure errors will be printed
-(and still ignored) because the transfer is stopped before the end.
-
-Fixes: e274f7154008 ("selftests: mptcp: add subflow limits test-cases")
-Cc: stable@vger.kernel.org
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index f8a969300ef4..079f8f46849d 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -498,6 +498,12 @@ kill_events_pids()
- 	kill_wait $evts_ns2_pid
- }
- 
-+kill_tests_wait()
-+{
-+	kill -SIGUSR1 $(ip netns pids $ns2) $(ip netns pids $ns1)
-+	wait
-+}
-+
- pm_nl_set_limits()
- {
- 	local ns=$1
-@@ -3055,7 +3061,7 @@ endpoint_tests()
- 		pm_nl_set_limits $ns1 2 2
- 		pm_nl_set_limits $ns2 2 2
- 		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
--		run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow &
-+		run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow 2>/dev/null &
- 
- 		wait_mpj $ns1
- 		pm_nl_check_endpoint 1 "creation" \
-@@ -3068,14 +3074,14 @@ endpoint_tests()
- 		pm_nl_add_endpoint $ns2 10.0.2.2 flags signal
- 		pm_nl_check_endpoint 0 "modif is allowed" \
- 			$ns2 10.0.2.2 id 1 flags signal
--		wait
-+		kill_tests_wait
- 	fi
- 
- 	if reset "delete and re-add"; then
- 		pm_nl_set_limits $ns1 1 1
- 		pm_nl_set_limits $ns2 1 1
- 		pm_nl_add_endpoint $ns2 10.0.2.2 id 2 dev ns2eth2 flags subflow
--		run_tests $ns1 $ns2 10.0.1.1 4 0 0 speed_20 &
-+		run_tests $ns1 $ns2 10.0.1.1 4 0 0 speed_20 2>/dev/null &
- 
- 		wait_mpj $ns2
- 		pm_nl_del_endpoint $ns2 2 10.0.2.2
-@@ -3085,7 +3091,7 @@ endpoint_tests()
- 		pm_nl_add_endpoint $ns2 10.0.2.2 dev ns2eth2 flags subflow
- 		wait_mpj $ns2
- 		chk_subflow_nr "" "after re-add" 2
--		wait
-+		kill_tests_wait
- 	fi
- }
- 
-
--- 
-2.38.1
+> ---
+>   arch/s390/kvm/kvm-s390.c | 38 ++++++++++++++++++++++++--------------
+>   1 file changed, 24 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 0367c1a7e69a..707967a296f1 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -2779,7 +2779,7 @@ static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 supported_fla
+>   	return 0;
+>   }
+>   
+> -static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+> +static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   {
+>   	void __user *uaddr = (void __user *)mop->buf;
+>   	void *tmpbuf = NULL;
+> @@ -2790,17 +2790,6 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   	if (r)
+>   		return r;
+>   
+> -	/*
+> -	 * This is technically a heuristic only, if the kvm->lock is not
+> -	 * taken, it is not guaranteed that the vm is/remains non-protected.
+> -	 * This is ok from a kernel perspective, wrongdoing is detected
+> -	 * on the access, -EFAULT is returned and the vm may crash the
+> -	 * next time it accesses the memory in question.
+> -	 * There is no sane usecase to do switching and a memop on two
+> -	 * different CPUs at the same time.
+> -	 */
+> -	if (kvm_s390_pv_get_handle(kvm))
+> -		return -EINVAL;
+>   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+>   		tmpbuf = vmalloc(mop->size);
+>   		if (!tmpbuf)
+> @@ -2841,8 +2830,6 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   		}
+>   		break;
+>   	}
+> -	default:
+> -		r = -EINVAL;
+>   	}
+>   
+>   out_unlock:
+> @@ -2852,6 +2839,29 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   	return r;
+>   }
+>   
+> +static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+> +{
+> +	/*
+> +	 * This is technically a heuristic only, if the kvm->lock is not
+> +	 * taken, it is not guaranteed that the vm is/remains non-protected.
+> +	 * This is ok from a kernel perspective, wrongdoing is detected
+> +	 * on the access, -EFAULT is returned and the vm may crash the
+> +	 * next time it accesses the memory in question.
+> +	 * There is no sane usecase to do switching and a memop on two
+> +	 * different CPUs at the same time.
+> +	 */
+> +	if (kvm_s390_pv_get_handle(kvm))
+> +		return -EINVAL;
+> +
+> +	switch (mop->op) {
+> +	case KVM_S390_MEMOP_ABSOLUTE_READ:
+> +	case KVM_S390_MEMOP_ABSOLUTE_WRITE:
+> +		return kvm_s390_vm_mem_op_abs(kvm, mop);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+>   long kvm_arch_vm_ioctl(struct file *filp,
+>   		       unsigned int ioctl, unsigned long arg)
+>   {
 
