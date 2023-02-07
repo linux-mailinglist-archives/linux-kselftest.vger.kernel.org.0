@@ -2,212 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2283B68D7D9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Feb 2023 14:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0011A68D803
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Feb 2023 14:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbjBGNDt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Feb 2023 08:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S232094AbjBGNEz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Feb 2023 08:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbjBGNDs (ORCPT
+        with ESMTP id S232143AbjBGNEu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:03:48 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63452B2BE;
-        Tue,  7 Feb 2023 05:03:47 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317CidBd008600;
-        Tue, 7 Feb 2023 13:03:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yZgO0eM8LcpQcrcCMa03LeA0r6BeUXFzzF3c5L8rSZk=;
- b=N78/AMnYkCf8/BELFlvs3tMYivbOHoz3Cla2Dd/HXN0a5N7RuwWQDH0CLLDhoRqOItSZ
- pWK9iIVST4CKNwxU/RUkx0bfY889L+zJfjJT2Wni64l2ipqkQ9U9RBU9YVflA24zoSiv
- KuIMYDIbOz1hpWIjq6YNzmUuvn+qSYo/CHHq0wC4aw/GgyBOMplyE2F/6dovX2ixUoVz
- 1ey9CQPvF2RiM6nUD7zWdDSCuV+W8xmoGJpguj48dKjCJWHoXzxVLRhM6BWtUjtD8BCZ
- fxZ6YV1mvb1fdOzD/fvprBO1EP62epZTQKF/zl7AEqBs+CIhqZj1F9pNj4FHE0CEhn5G 6A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkpwp0fnw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:03:40 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317CjDPN009890;
-        Tue, 7 Feb 2023 13:03:40 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkpwp0fmf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:03:40 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 316DmNTb017584;
-        Tue, 7 Feb 2023 13:03:37 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3nhemfjjyh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:03:37 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 317D3YrZ26083962
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Feb 2023 13:03:34 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07A122004B;
-        Tue,  7 Feb 2023 13:03:34 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 06CBA20043;
-        Tue,  7 Feb 2023 13:03:33 +0000 (GMT)
-Received: from [9.171.52.227] (unknown [9.171.52.227])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Feb 2023 13:03:32 +0000 (GMT)
-Message-ID: <ba65c1b9-910b-b298-926f-4a072f3de1e7@linux.ibm.com>
-Date:   Tue, 7 Feb 2023 14:03:32 +0100
+        Tue, 7 Feb 2023 08:04:50 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1E639CD2
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Feb 2023 05:04:43 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id h3so5644030wrp.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Feb 2023 05:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2LNCnTYQnKI2Qi+rIbkgnUL8Nmbo6Qz5VaHG00c9zYg=;
+        b=R6b16Anl58GF4Ndnmggam0JqBAZSqo0/T+bhnT/iYTRtuObc/dXZ6xloUhtLwWp9y+
+         UTJr92rFlrbCq+tzaHrs69ArfVTgoUR6PBj84O9mvc1/I1Exc0hMdlZGgTDvtwykl0Mt
+         IAX8Zic1dqgE42gMDp9jS6SSO/IL9ixdJoXYfBr4v5PBbsLwSy9yhHqt/9vY4ATmV22F
+         TPodadJqvEWI3SpF+/IqycXhFvTGxkOmBE5FiauyXH/rK6M+Lvo8f3W8t6OYeoKG60fV
+         dqB3sn4haHf/1mH9+XiRfXRDFqrw4o4xjICP9IXP2Yv0ka01Q52bcPpDKi+XDlW3l6rI
+         n2sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2LNCnTYQnKI2Qi+rIbkgnUL8Nmbo6Qz5VaHG00c9zYg=;
+        b=AeFCkvMh0tFvu4FMeCXf/ONIevJxA/AVxQ0aNnv84AZ+Ttmw3z1Hq4UlGCE8XvDOrb
+         11wNNUqkZUG3QJMCVXGxTCrYSMhgzrtc7rFtjFXeyfBDMdS70ADSsdcoH+22SGAy1p7c
+         0Zf/oIcUVw6adlH2+bXV1kJZhilC33uV14yZFdybrh8ehkw8tHBxJzxyZndhAiIyoASP
+         TxgpsHEESUn2ooaaTb7xbL7ANVoxIvxlSVCoIa2ileP7feKenEodtar4LFQaydJ/7fLd
+         sogKgcWqxI0bXx+HFbhMXQpruBa+7zsKcAnBW8jJMHzjYLBthN2UeSD4FDrqSsbS+lgW
+         T4PA==
+X-Gm-Message-State: AO0yUKW3y+xaVI74U8Ms3uTGitFPVPWum3CbWpNpKYVt65/6TOG2pA1l
+        7ZG/0NXAfX1Lz1Sx0Qq1HdqFow==
+X-Google-Smtp-Source: AK7set9YTo6jBw+wu7vaeuAeClfkKfkEd/2ijcXBN2UJsc6YhpTX+cpVF2pNclhOp4qg7ZOFKK1Euw==
+X-Received: by 2002:a5d:4806:0:b0:2c3:ea6b:ef83 with SMTP id l6-20020a5d4806000000b002c3ea6bef83mr2957523wrq.12.1675775081619;
+        Tue, 07 Feb 2023 05:04:41 -0800 (PST)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id n9-20020a5d5989000000b002bc7fcf08ddsm11645394wri.103.2023.02.07.05.04.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 05:04:41 -0800 (PST)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net 0/6] mptcp: fixes for v6.2
+Date:   Tue, 07 Feb 2023 14:04:12 +0100
+Message-Id: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v7 08/14] KVM: s390: Move common code of mem_op functions
- into function
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20230206164602.138068-1-scgl@linux.ibm.com>
- <20230206164602.138068-9-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230206164602.138068-9-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: walVhawWM1DOoQjL54-ed3g3x58xCvkh
-X-Proofpoint-GUID: 4mFalkmlk0Nj13Rb-lhcQpOBFluFKRL3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_04,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 priorityscore=1501 phishscore=0 impostorscore=0 malwarescore=0
- clxscore=1015 bulkscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070111
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAExM4mMC/z2OTQ6CQAyFr0K6tnEYFYhXMS46UKULBtLCxIRwd
+ 2dcuHx/X94OxipscK92UE5iMscs6lMF/UjxzShD1uCdvzjvWtwWW5Vpwsgr/t1EKvNm+JIPNui
+ x7q4dtbcQAjeQWYGMMSjFfiy0vB04FcR5IomlsSjn8e/Jo+TwPI4vG2YZcZ4AAAA=
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Benjamin Hesmans <benjamin.hesmans@tessares.net>,
+        Geliang Tang <geliangtang@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1639;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=2gwf1t1oLdLLnLS96VoPdbQ5z+6BonFJUbLHcasVbGo=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBj4kxofU3dUJPYLTFtKKn31mjpfvMSn+lCifKCJ
+ xo/SKVohx6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY+JMaAAKCRD2t4JPQmmg
+ c/UCD/9DpgQJ8kzrJ2KEQv1Xi/VGx2/EyabkZme7Vtis7wJFenjHLJAHALXsvAtTY/6mqc6YZ2+
+ 9KnFFKfL46SvYBIcrieYB1ryxDWGQlmOn+OculZ6VWyUgJZRLOzaFrLTi/LJ3iVgsfDXDMoyPWz
+ rtvyqO/nfdoeOQvPCjOuVAqHVkL7xK9lcZa27IyF1rPyLs3e80WmQ69DvcQuRkVXDTO9ZuxshV3
+ zm0LCL43YCYh8/Gjmup5/nOG0FjbuJNzzNNZyeer1y6JbrvkXv1fleuSMrYC2fJdpPpWXN8eEk3
+ 9PYliiKo2h7WT2p7jVe1L5dSZ5a46rNmuwXYiA3UKkkNJEGd5EGy09fhUBU3TuB9vHfZCiFaghk
+ kC4o+sS80nxzoJqab2g3YbcaL1Pudgzye5XvjiScEcP0CNO2dIjTWeL9zlA3968vYhE11imsGK4
+ yS8e8hDOb3meiFGAxQ4YcInNen9jFPsTIPU/1WjxZ6ciBBZL2rYZ7lwkIJlYVMYdeKjw7stSZar
+ TS07d6zvKETpCIc31rtuesf4OcCATbRBWueZx3aE6VDeavG04zAVWu7IeYEq3g3YTWZi8oDi5Yt
+ EilmNWGLySNbLcFgJhlcuTrsgZm1Y4Q1/wHOsdr4b0Qj8BT0g03A5QZDgODmLoZl1n6+knuogow
+ pe75W2YZdKn34vg==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/6/23 17:45, Janis Schoetterl-Glausch wrote:
-> The vcpu and vm mem_op ioctl implementations share some functionality.
-> Move argument checking into a function and call it from both
-> implementations. This allows code reuse in case of additional future
-> mem_op operations.
-> 
-> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Patch 1 clears resources earlier if there is no more reasons to keep
+MPTCP sockets alive.
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Patches 2 and 3 fix some locking issues visible in some rare corner
+cases: the linked issues should be quite hard to reproduce.
 
-> ---
->   arch/s390/kvm/kvm-s390.c | 52 +++++++++++++++++++---------------------
->   1 file changed, 24 insertions(+), 28 deletions(-)
-> 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index e4890e04b210..0367c1a7e69a 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2764,24 +2764,32 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
->   	return r;
->   }
->   
-> -static bool access_key_invalid(u8 access_key)
-> +static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 supported_flags)
->   {
-> -	return access_key > 0xf;
-> +	if (mop->flags & ~supported_flags || !mop->size)
-> +		return -EINVAL;
-> +	if (mop->size > MEM_OP_MAX_SIZE)
-> +		return -E2BIG;
-> +	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> +		if (mop->key > 0xf)
-> +			return -EINVAL;
-> +	} else {
-> +		mop->key = 0;
-> +	}
-> +	return 0;
->   }
->   
->   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
-> -	u64 supported_flags;
->   	void *tmpbuf = NULL;
->   	int r, srcu_idx;
->   
-> -	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
-> -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
-> -	if (mop->flags & ~supported_flags || !mop->size)
-> -		return -EINVAL;
-> -	if (mop->size > MEM_OP_MAX_SIZE)
-> -		return -E2BIG;
-> +	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_SKEY_PROTECTION |
-> +					KVM_S390_MEMOP_F_CHECK_ONLY);
-> +	if (r)
-> +		return r;
-> +
->   	/*
->   	 * This is technically a heuristic only, if the kvm->lock is not
->   	 * taken, it is not guaranteed that the vm is/remains non-protected.
-> @@ -2793,12 +2801,6 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   	 */
->   	if (kvm_s390_pv_get_handle(kvm))
->   		return -EINVAL;
-> -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> -		if (access_key_invalid(mop->key))
-> -			return -EINVAL;
-> -	} else {
-> -		mop->key = 0;
-> -	}
->   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
->   		tmpbuf = vmalloc(mop->size);
->   		if (!tmpbuf)
-> @@ -5250,23 +5252,17 @@ static long kvm_s390_vcpu_mem_op(struct kvm_vcpu *vcpu,
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
->   	void *tmpbuf = NULL;
-> -	int r = 0;
-> -	const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
-> -				    | KVM_S390_MEMOP_F_CHECK_ONLY
-> -				    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
-> +	int r;
->   
-> -	if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
-> +	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_INJECT_EXCEPTION |
-> +					KVM_S390_MEMOP_F_CHECK_ONLY |
-> +					KVM_S390_MEMOP_F_SKEY_PROTECTION);
-> +	if (r)
-> +		return r;
-> +	if (mop->ar >= NUM_ACRS)
->   		return -EINVAL;
-> -	if (mop->size > MEM_OP_MAX_SIZE)
-> -		return -E2BIG;
->   	if (kvm_s390_pv_cpu_is_protected(vcpu))
->   		return -EINVAL;
-> -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> -		if (access_key_invalid(mop->key))
-> -			return -EINVAL;
-> -	} else {
-> -		mop->key = 0;
-> -	}
->   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
->   		tmpbuf = vmalloc(mop->size);
->   		if (!tmpbuf)
+Patch 4 makes sure subflows are correctly cleaned after the end of a
+connection.
+
+Patch 5 and 6 improve the selftests stability when running in a slow
+environment by transfering data for a longer period on one hand and by
+stopping the tests when all expected events have been observed on the
+other hand.
+
+All these patches fix issues introduced before v6.2.
+
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Matthieu Baerts (1):
+      selftests: mptcp: stop tests earlier
+
+Paolo Abeni (5):
+      mptcp: do not wait for bare sockets' timeout
+      mptcp: fix locking for setsockopt corner-case
+      mptcp: fix locking for in-kernel listener creation
+      mptcp: be careful on subflow status propagation on errors
+      selftests: mptcp: allow more slack for slow test-case
+
+ net/mptcp/pm_netlink.c                          | 10 ++++++----
+ net/mptcp/protocol.c                            |  9 +++++++++
+ net/mptcp/sockopt.c                             | 11 +++++++++--
+ net/mptcp/subflow.c                             | 12 ++++++++++--
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 22 +++++++++++++++++-----
+ 5 files changed, 51 insertions(+), 13 deletions(-)
+---
+base-commit: 811d581194f7412eda97acc03d17fc77824b561f
+change-id: 20230207-upstream-net-20230207-various-fix-6-2-1848a75bbbe6
+
+Best regards,
+-- 
+Matthieu Baerts <matthieu.baerts@tessares.net>
 
