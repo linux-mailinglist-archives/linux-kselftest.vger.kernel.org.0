@@ -2,190 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DDA68D931
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Feb 2023 14:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9418268DA2D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Feb 2023 15:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjBGNWy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Feb 2023 08:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S231709AbjBGOJX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Feb 2023 09:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjBGNWx (ORCPT
+        with ESMTP id S232187AbjBGOJW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:22:53 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C0DB767;
-        Tue,  7 Feb 2023 05:22:52 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317DMMSS024107;
-        Tue, 7 Feb 2023 13:22:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=lTzwb3wPD/ahzgNvLMmcdWpvrliagOkCOoHNCzUnFRs=;
- b=B5fXnb8A4/5najHwGW0QH2YdrL83LmWrisYQuVqZnmct5QE5D2zh35FURWvDiarGaA1M
- 7/YtW2AX0Ny4gOVPu8UampIFlIx6QEw3mahJQroDtGzkmZKVv/9l3fzE73RqLqMos6rP
- NCvcgeb5GIPl3dSYfJZApiruVHsXa7c/ApdoZMK4r369WeEx785jklUUXg0kVtQobm1N
- Wzo7QvSA1IbaAwiw1oE6LDOnV/ODsGJkiUYwbBak4ziJG7MNB1AaZrFAH6DkzIbmhQ3R
- J8NXDHsxJ5zALaVPAf5DkK56FL8wdfo+mVNz6+PT/ZNRuJ35Mrm7ljHgBZQVgCfxrkk1 Yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkqfj807b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:22:49 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317DMhmc024516;
-        Tue, 7 Feb 2023 13:22:49 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkqfj806k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:22:49 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 317BjfKR001926;
-        Tue, 7 Feb 2023 13:22:47 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3nhf06kmqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:22:46 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 317DMhVt53084434
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Feb 2023 13:22:43 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 38BF52004B;
-        Tue,  7 Feb 2023 13:22:43 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 636A120043;
-        Tue,  7 Feb 2023 13:22:42 +0000 (GMT)
-Received: from [9.171.52.227] (unknown [9.171.52.227])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Feb 2023 13:22:42 +0000 (GMT)
-Message-ID: <30435adc-e86f-c96c-3795-bea6bca65c16@linux.ibm.com>
-Date:   Tue, 7 Feb 2023 14:22:42 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v7 10/14] KVM: s390: Refactor absolute vm mem_op function
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        Tue, 7 Feb 2023 09:09:22 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A7B61B8;
+        Tue,  7 Feb 2023 06:09:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675778961; x=1707314961;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=D+s+xJYNtyKUrNWPCUskYm55IKEKSH1iYwC7Lk3zkZk=;
+  b=SgSDFNDWoG71siBVVMLa39T0HSfCrAny+rX295IAN/33D+6RgPQ+4IgF
+   6yuqzHEslTj45oqS7/zus1EGs62HuqbLaB13zMc9qZg/aG4eX2lT8ymHZ
+   0ax9LCdHBg4pCsqRtjhX9cosbHdV1JnAaFVke4zNc/IcTxs2UEyTSViLZ
+   DT8sFX8/rZG6wgt/rMrF0YuNUIOgklAne5KVvq9zfa1Dd98hazUcYYdIJ
+   Nw4+K9vXZMmjZuSoDqYBn8xPmTC4go/NmyA/ZwRY37O3G7dT9A/b1IHbk
+   JYEIRNksrfB5EY8xPrpD/aUJGhoMNSSVe/Lh1B+AZ3xcmBHvqKgu6Aclo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="329531025"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="329531025"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 06:05:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="660240909"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="660240909"
+Received: from msharawy-mobl.ger.corp.intel.com ([10.249.37.46])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 06:05:10 -0800
+Date:   Tue, 7 Feb 2023 16:05:04 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>
-References: <20230206164602.138068-1-scgl@linux.ibm.com>
- <20230206164602.138068-11-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230206164602.138068-11-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bQ1obWv9uEwb0uJecL-8SBd-L_0GWt0T
-X-Proofpoint-GUID: Zf3yjCv-G_ao0ginpF6j-jRf5NrU_ewg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_05,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- malwarescore=0 lowpriorityscore=0 mlxlogscore=884 priorityscore=1501
- impostorscore=0 clxscore=1015 phishscore=0 spamscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070116
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+In-Reply-To: <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com>
+Message-ID: <83e1de31-b448-1a51-ba39-faec794694f@linux.intel.com>
+References: <20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com> <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/6/23 17:45, Janis Schoetterl-Glausch wrote:
-> Remove code duplication with regards to the CHECK_ONLY flag.
-> Decrease the number of indents.
-> No functional change indented.
+On Tue, 31 Jan 2023, Shaopeng Tan wrote:
+
+> After creating a child process with fork() in CAT test, if an error
+> occurs or a signal such as SIGINT is received, the parent process will
+> be terminated immediately, and therefor the child process will not
+> be killed and also resctrlfs is not unmounted.
 > 
-> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> Reviewed-by: Thomas Huth <thuth@redhat.com>
+> There is a signal handler registered in CMT/MBM/MBA tests, which kills
+> child process, unmount resctrlfs, cleanups result files, etc., if a
+> signal such as SIGINT is received.
+> 
+> Commonize the signal handler registered for CMT/MBM/MBA tests and reuse
+> it in CAT too.
+> 
+> To reuse the signal handler, make the child process in CAT wait to be
+> killed by parent process in any case (an error occurred or a signal was
+> received), and when killing child process use global bm_pid instead of
+> local bm_pid.
+> 
+> Also, since the MBA/MBA/CMT/CAT are run in order, unregister the signal
+> handler at the end of each test so that the signal handler cannot be
+> inherited by other tests.
+> 
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 > ---
-> 
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+>  	if (bm_pid == 0) {
+>  		/* Tell parent that child is ready */
+>  		close(pipefd[0]);
+>  		pipe_message = 1;
+>  		if (write(pipefd[1], &pipe_message, sizeof(pipe_message)) <
+> -		    sizeof(pipe_message)) {
+> -			close(pipefd[1]);
+> +		    sizeof(pipe_message))
+> +			/*
+> +			 * Just print the error message.
+> +			 * Let while(1) run and wait for itself to be killed.
+> +			 */
+>  			perror("# failed signaling parent process");
 
-> 
-> Cosmetic only, can be dropped
-> 
-> 
->   arch/s390/kvm/kvm-s390.c | 43 +++++++++++++++++-----------------------
->   1 file changed, 18 insertions(+), 25 deletions(-)
-> 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 707967a296f1..1f94b18f1cb5 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2782,6 +2782,7 @@ static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 supported_fla
->   static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
-> +	enum gacc_mode acc_mode;
->   	void *tmpbuf = NULL;
->   	int r, srcu_idx;
->   
-> @@ -2803,33 +2804,25 @@ static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   		goto out_unlock;
->   	}
->   
-> -	switch (mop->op) {
-> -	case KVM_S390_MEMOP_ABSOLUTE_READ: {
-> -		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> -			r = check_gpa_range(kvm, mop->gaddr, mop->size, GACC_FETCH, mop->key);
-> -		} else {
-> -			r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> -						      mop->size, GACC_FETCH, mop->key);
-> -			if (r == 0) {
-> -				if (copy_to_user(uaddr, tmpbuf, mop->size))
-> -					r = -EFAULT;
-> -			}
-> -		}
-> -		break;
-> +	acc_mode = mop->op == KVM_S390_MEMOP_ABSOLUTE_READ ? GACC_FETCH : GACC_STORE;
-> +	if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> +		r = check_gpa_range(kvm, mop->gaddr, mop->size, acc_mode, mop->key);
-> +		goto out_unlock;
->   	}
-> -	case KVM_S390_MEMOP_ABSOLUTE_WRITE: {
-> -		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> -			r = check_gpa_range(kvm, mop->gaddr, mop->size, GACC_STORE, mop->key);
-> -		} else {
-> -			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
-> -				r = -EFAULT;
-> -				break;
-> -			}
-> -			r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> -						      mop->size, GACC_STORE, mop->key);
-> +	if (acc_mode == GACC_FETCH) {
-> +		r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> +					      mop->size, GACC_FETCH, mop->key);
-> +		if (r)
-> +			goto out_unlock;
-> +		if (copy_to_user(uaddr, tmpbuf, mop->size))
-> +			r = -EFAULT;
-> +	} else {
-> +		if (copy_from_user(tmpbuf, uaddr, mop->size)) {
-> +			r = -EFAULT;
-> +			goto out_unlock;
->   		}
-> -		break;
-> -	}
-> +		r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> +					      mop->size, GACC_STORE, mop->key);
->   	}
->   
->   out_unlock:
+If the write error is ignored here, won't it just lead to parent hanging 
+forever waiting for the child to send the message through the pipe which 
+will never come?
+
+
+-- 
+ i.
 
