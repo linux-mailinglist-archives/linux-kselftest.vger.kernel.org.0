@@ -2,65 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C2968E2D2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Feb 2023 22:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4AE68E2CB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Feb 2023 22:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjBGVUv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Feb 2023 16:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        id S230094AbjBGVUk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Feb 2023 16:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjBGVUi (ORCPT
+        with ESMTP id S230039AbjBGVUh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Feb 2023 16:20:38 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2050.outbound.protection.outlook.com [40.107.244.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077603BD8A;
-        Tue,  7 Feb 2023 13:20:37 -0800 (PST)
+        Tue, 7 Feb 2023 16:20:37 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F833B3F3;
+        Tue,  7 Feb 2023 13:20:36 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QjCbtw77OMifqnvOFqP25HNSEupzmAJxJZ+KVeSy/2Dj/QS1KVWh5jyCTIfAPkQUomlFc4KEY613icfZ1eZ/gh39GbDzktn1Dsb5P0XG37A9tLYYtGGJIyk5P5MUkntHtpwlloHXycgm0p4MFSTZSVj3wChpY2wlW1n6wsWt6rM6n+0IuHXaiGTnQPZidlziv5zJ/QpOxKyEEEs6uwYUYHqH6afHHajJMvgF5/EMVUgwtrYQQ/TUI5+eGMf/BYiaMMpwduzbfddP2Lw12hLaPnY9zjtUSBMx+tPLLlnPfIW+uVyzc/Blda2b80BPpVezfG4tgc1p3HKfPvrAbY4Ddg==
+ b=LQ25lUF8evB/R5r6PR6G8PupEoPD79Xl/RFlxXa12YM+RwCcnfA61ZW1DGpmMCFmCYQkJXGK71gTCzLAeIaCXlSP5Wt7A97FLkDtVnxiOv1z3QypIVoatVfD2XOsPp7EHyf1dB3Py7f7ozwrCvpe2/aUtFDdA9fvxgwf6CTO/lnG6tMMgVTEWJ6/0D+ZIVYbAXaKjxKUY4oW4TY/d6cUii/gzzEVAqBmB8MUf0Rhbj/AaBe5U16JLnLneos9jjbjiwgRjj9VL5o+xF8CQMDfj6im8xr6HHmJOT/W2yuh/xATzigFgtML9hqbh5svHsNmtuxOIKv3cAgy3sLwg2zZ4w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4M7iekfihGGncrRbOBERG3QeRSGUe0DStydbRWS41RI=;
- b=GL7qwddgoKWLWxCQrrjSekuX+bVqLnq532SiBUq12KFspR9xy9mXOGiT27SyxNrWpHO/jCy9iQdc7tTipXKULYlO7TLvK3ROkpkXf59HHak781O0+Z24WDh6QbqAzYCUIKlvunBHkddVy1ZdbN0HGU4WOm7lqBpVSioRBEFLtzhyll+PSWmMTfcmc864Vy+KUTnezaeDKNeZ5C8/9SmMjmtsT62wIYjYDFciw1k83AOLN+BkN01NDw8jDGF2ISASJp4UBhwzJQ4QzW36Cwewk40YW8PpPvg1ib0wuYcv6IXtEEOW7c/HyR3iEy05W2f0daiUnaGh1hh+tjyr2DjsZg==
+ bh=+E0XL2i9iDoC3O3UWprErehOeHhirmrW+bX0N2PllXc=;
+ b=bRgo5MArW2uaXreZPGTj1mq1uGR3BIugHP3XB8rmhA/zZeVR1YmcsaUCRkMIs4c3uUFfyo/MbNuYJpKaGFSiWjqpxnPNplUT0Edzhfjqcw4P6It2G8axC08vwBKB/u9S3aqYnF80vZlJC7APigcTYTigsT/a3LqMPQD/Zpo9jyfTVdPlJcC09qE/NUfib6lQFnpVbmr4N5ibIZUHZylo3q1s6pQnps2eVYkveW7u9UEIinfvZ3VWIHIRLyhmwOHtqrTTqd2ug2kF0tFhIRANufrFfiVFll862y1rLrncm9e22wEUczlJZhOmA8pMxRET5eBQIK4i07OXvhuEzCwgQw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4M7iekfihGGncrRbOBERG3QeRSGUe0DStydbRWS41RI=;
- b=h8Rl9hTYB7CQEcUq4rEv9mgSJJalPWmzZg7Aa9aEMPQwegCuLp2a8BAAUNKwGSGuRoDEgs32OIxuuQ/IPYGXkLrsVjZ7qm4SlSbSnzenlGTuQNp5TlGbGrMdmuKFBV8NGg4pmW7FviwCjnKMQvlENlMVrxHMOnRyBAl/vDgnQ9bXhTdmO/MtQmBCNfWa7jySk0EqP+H3ZZvloZhBOr/n1wMNfod/V4jjidHk75FAmXYSxquR6KoZH4ukGRrUCU2kl/Aj4ZDlkSEygCBWcgQ6JORBW7Bwdc7ZNcAalRgG9++x2rGfbVDDaeYYON1OAdbx7tbdJ93QZ1IQxrIFPv8BKA==
-Received: from DS7PR07CA0019.namprd07.prod.outlook.com (2603:10b6:5:3af::7) by
- IA0PR12MB8225.namprd12.prod.outlook.com (2603:10b6:208:408::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.36; Tue, 7 Feb 2023 21:20:32 +0000
-Received: from DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3af:cafe::e6) by DS7PR07CA0019.outlook.office365.com
- (2603:10b6:5:3af::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.35 via Frontend
- Transport; Tue, 7 Feb 2023 21:20:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ bh=+E0XL2i9iDoC3O3UWprErehOeHhirmrW+bX0N2PllXc=;
+ b=dYJARupSSczwac8V+zquRpiJQeD8dSd73TbmC1JEwEa4tECHiXVzUYyEUG7vAv62AnY8vztAkJa3+Eq7O7DMO3fK0niqopXL13DOyDGLh5MzvZshymqoNZNlfULpn8+BZTIJaA1TRRT71iFHUK7FO17JH6TesOpN9P/koQGXTxUC2bNMBqijeyXaGhrSKEjGN79L4WG5BlY8UaOJxulPRvIoEkAMX1orObTrnSv3oupnep7wLvsQHviV+HbukWszAfg6+dj7te2lGuSCjrhAXxMEGOlAX7g9Uhf2rjj2Ee5UErtrHriqx5Hj8ywrJN1jT7AO6V+Mdrgdq/Z1mio5ZA==
+Received: from BN1PR13CA0006.namprd13.prod.outlook.com (2603:10b6:408:e2::11)
+ by PH7PR12MB8054.namprd12.prod.outlook.com (2603:10b6:510:27f::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Tue, 7 Feb
+ 2023 21:20:34 +0000
+Received: from BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e2:cafe::c9) by BN1PR13CA0006.outlook.office365.com
+ (2603:10b6:408:e2::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.16 via Frontend
+ Transport; Tue, 7 Feb 2023 21:20:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- DM6NAM11FT099.mail.protection.outlook.com (10.13.172.241) with Microsoft SMTP
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN8NAM11FT007.mail.protection.outlook.com (10.13.177.109) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.17 via Frontend Transport; Tue, 7 Feb 2023 21:20:32 +0000
+ 15.20.6086.16 via Frontend Transport; Tue, 7 Feb 2023 21:20:33 +0000
 Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 7 Feb 2023
- 13:20:25 -0800
+ 13:20:26 -0800
 Received: from drhqmail201.nvidia.com (10.126.190.180) by
  drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 7 Feb 2023 13:20:24 -0800
+ 15.2.986.36; Tue, 7 Feb 2023 13:20:25 -0800
 Received: from Asurada-Nvidia.nvidia.com (10.127.8.9) by mail.nvidia.com
  (10.126.190.180) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Tue, 7 Feb 2023 13:20:24 -0800
+ Transport; Tue, 7 Feb 2023 13:20:25 -0800
 From:   Nicolin Chen <nicolinc@nvidia.com>
 To:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
         <will@kernel.org>, <robin.murphy@arm.com>,
@@ -68,9 +69,9 @@ To:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
 CC:     <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
         <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <baolu.lu@linux.intel.com>
-Subject: [PATCH v2 06/10] iommufd/selftest: Add coverage for access->ioas replacement
-Date:   Tue, 7 Feb 2023 13:17:58 -0800
-Message-ID: <f84abf4c53b04a150b7823f5e5a53e41e78f972c.1675802050.git.nicolinc@nvidia.com>
+Subject: [PATCH v2 07/10] iommufd/device: Make hwpt_list list_add/del symmetric
+Date:   Tue, 7 Feb 2023 13:17:59 -0800
+Message-ID: <9d0d4f935c4972771f5aed4b4837d8ae35814e06.1675802050.git.nicolinc@nvidia.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1675802050.git.nicolinc@nvidia.com>
 References: <cover.1675802050.git.nicolinc@nvidia.com>
@@ -79,23 +80,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT099:EE_|IA0PR12MB8225:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69a10cfe-c5e7-4e72-45ff-08db09512568
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT007:EE_|PH7PR12MB8054:EE_
+X-MS-Office365-Filtering-Correlation-Id: 924b2dc4-e5e6-4ed4-62b1-08db0951261d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: btITJS+q1qOiFQkPoIqJteKx3sJ6No2kMH3pmAQWuBllhI2nvEMA0L8zJnRo8xx4H/hB/+1gqwO9L0550ov3HnljnPADWl95/rvFEn6S/rF1U189TpV/Jl/mBdW5ggbd0zr8vUSrRVj5Hnp8iYGOHJzdcrTL+6h2qL3OhZQwYGSucDOpsU/8foGUJcpjeujtJZ9c0q+YOs8aEyXXaFgjrcReLyx/FjrQ1haUWCvB38txK5evPyOWzJL/PP2J7HMVMslsUMn2NFXTHgypzFQGH89xAWtuO4ejCmjryzNJdEbrpKQGiM0uW1Xc7G63M6DmR1bPF7ynZ/z5BYsw01Qxnbra9rOKh7Yk7pSGr+i+e5mJwK6WVfiaL4Y2lqJwUuK2kOsmcVg6CnTM94xezME3ejSg3VfXrkTzWaV6FN6VSfGHwjrDCu2TocTnBqyqKfN6G9fesNRj5TOw0E5uaCwXSt0EXvbw8Yv4MdCllyxKgiEQh6Byw4Fv23ty2oqQaEpTpmCJlHFKJQObDAn5uBLvev9t5VRtQU4x7pl3zyYfnWq2Fb19Upxq4pA+TuF/KL9pLIJAS0JwcdSbwofPCijka+v9eM4DyVo6cchtsgRZBwfj1xXKKQliZGWRAFNBKYTjNxy+MWN+6ptRpsctbKCFV1GZ6moJdI0+vWTLFItjuKIEPgiGbYW4/yluZJdntC+F82D7cZDd1QkGuSWmGGlh0g==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199018)(46966006)(40470700004)(36840700001)(54906003)(110136005)(186003)(82310400005)(86362001)(47076005)(336012)(426003)(40480700001)(7696005)(36756003)(2906002)(8676002)(40460700003)(7416002)(36860700001)(5660300002)(70586007)(8936002)(4326008)(41300700001)(478600001)(26005)(2616005)(6666004)(82740400003)(83380400001)(316002)(356005)(70206006)(7636003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: zXifNj9JF2u8btnjwLhLkc/yJiQagoIuyzc60iUJ3OfQN79XbD4YRVnSK4AIbg+u+qttP4gCDyqy8rKQBgnTMTJPnkD+SoYHLftv2NA40S47aZv2H95lt58wuUzWnT2zHm1Lg3rYTdEukSGOPAXRTtZ740GP5Xuy/f9vOcA/l+A6wfWRKFJAwWiQddHhMbmVNdcrDPkYBUWF8Gq8oCfCwueHxxUxj+v8h/a0Ff/sM1fHLIIZdYHkKv2hCjqtCvS3XVvnLK3XWrH3Fb6aVQrnGPMOehr5wg5fIAeyaGkebztlvT/WFV1BAmDcmAiwEffNXuIMhRW5mvYIEDGiuHBwD/uYJgZuwpOdtD5cVcG6pEXvZPdjSGXJZPqSH/o+UGC/jHNV9gXNjPwfanFmvj6wtCmRcM3Iwqz2dp1Uim7KNq1sKMbMisIUA5Bkt+5ZxHqExIeXKfxH6bZudX6S3J8ji01WwRzy3igo6nHalwFPGgToyaeigrkcHSkPGHMxgpkrAhzQGOU8/XPdrbXu2kzwKTag0nQAwWfrrZ18V/8HT5+0Sadzxj/rHoqeajKohp0ZxEFG0Qi+7ga9E0LCI9WvFRM8bGaJcgq/CrmffDpy15RpRbgwxkhliDlxx4JjtoJrMqJrJhTOhQaFvIqa9Bh4Qqjn9qLWoC+Z2NiJeR32tdhMPOXX2Xfja49IxHh+olvnMmB8tYiJZkWvyJ+PydDoZQ==
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199018)(36840700001)(46966006)(40470700004)(86362001)(8936002)(7696005)(2906002)(478600001)(41300700001)(54906003)(356005)(110136005)(6666004)(82310400005)(316002)(70206006)(40480700001)(36860700001)(2616005)(70586007)(426003)(83380400001)(47076005)(186003)(36756003)(7416002)(336012)(40460700003)(4326008)(26005)(5660300002)(7636003)(8676002)(82740400003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 21:20:32.6242
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 21:20:33.7330
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69a10cfe-c5e7-4e72-45ff-08db09512568
+X-MS-Exchange-CrossTenant-Network-Message-Id: 924b2dc4-e5e6-4ed4-62b1-08db0951261d
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8225
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8054
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -106,65 +107,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add replace coverage as a part of user_copy test case. It basically
-repeats the copy test after replacing the old ioas with a new one.
+Because list_del() is together with iopt_table_remove_domain(), it makes
+sense to have list_add_tail() together with iopt_table_add_domain().
 
+Also place the mutex outside the iommufd_device_do_attach() call, similar
+to what's in the iommufd_device_auto_get_domain() function.
+
+Co-developed-by: Yi Liu <yi.l.liu@intel.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 ---
- tools/testing/selftests/iommu/iommufd.c | 29 +++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ drivers/iommu/iommufd/device.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index fa08209268c4..1e293950ac88 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -1239,7 +1239,13 @@ TEST_F(iommufd_mock_domain, user_copy)
- 		.dst_iova = MOCK_APERTURE_START,
- 		.length = BUFFER_SIZE,
- 	};
--	unsigned int ioas_id;
-+	struct iommu_ioas_unmap unmap_cmd = {
-+		.size = sizeof(unmap_cmd),
-+		.ioas_id = self->ioas_id,
-+		.iova = MOCK_APERTURE_START,
-+		.length = BUFFER_SIZE,
-+	};
-+	unsigned int new_ioas_id, ioas_id;
+diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+index 10ce47484ffa..b8c3e3baccb5 100644
+--- a/drivers/iommu/iommufd/device.c
++++ b/drivers/iommu/iommufd/device.c
+@@ -200,6 +200,8 @@ static int iommufd_device_do_attach(struct iommufd_device *idev,
+ 	phys_addr_t sw_msi_start = PHYS_ADDR_MAX;
+ 	int rc;
  
- 	/* Pin the pages in an IOAS with no domains then copy to an IOAS with domains */
- 	test_ioctl_ioas_alloc(&ioas_id);
-@@ -1257,11 +1263,30 @@ TEST_F(iommufd_mock_domain, user_copy)
- 	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_COPY, &copy_cmd));
- 	check_mock_iova(buffer, MOCK_APERTURE_START, BUFFER_SIZE);
- 
-+	/* Now replace the ioas with a new one */
-+	test_ioctl_ioas_alloc(&new_ioas_id);
-+	test_ioctl_ioas_map_id(new_ioas_id, buffer, BUFFER_SIZE,
-+			       &copy_cmd.src_iova);
-+	test_cmd_access_set_ioas(access_cmd.id, new_ioas_id);
++	lockdep_assert_held(&hwpt->ioas->mutex);
 +
-+	/* Destroy the old ioas and cleanup copied mapping */
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_UNMAP, &unmap_cmd));
-+	test_ioctl_destroy(ioas_id);
-+
-+	/* Then run the same test again with the new ioas */
-+	access_cmd.access_pages.iova = copy_cmd.src_iova;
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ACCESS_PAGES),
-+			&access_cmd));
-+	copy_cmd.src_ioas_id = new_ioas_id;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_COPY, &copy_cmd));
-+	check_mock_iova(buffer, MOCK_APERTURE_START, BUFFER_SIZE);
-+
- 	test_cmd_destroy_access_pages(
- 		access_cmd.id, access_cmd.access_pages.out_access_pages_id);
- 	test_cmd_destroy_access(access_cmd.id);
+ 	mutex_lock(&hwpt->devices_lock);
  
--	test_ioctl_destroy(ioas_id);
-+	test_ioctl_destroy(new_ioas_id);
- }
+ 	/*
+@@ -243,6 +245,7 @@ static int iommufd_device_do_attach(struct iommufd_device *idev,
+ 						   hwpt->domain);
+ 			if (rc)
+ 				goto out_detach;
++			list_add_tail(&hwpt->hwpt_item, &hwpt->ioas->hwpt_list);
+ 		}
+ 	}
  
- /* VFIO compatibility IOCTLs */
+@@ -304,7 +307,6 @@ static int iommufd_device_auto_get_domain(struct iommufd_device *idev,
+ 	rc = iommufd_device_do_attach(idev, hwpt);
+ 	if (rc)
+ 		goto out_abort;
+-	list_add_tail(&hwpt->hwpt_item, &ioas->hwpt_list);
+ 
+ 	mutex_unlock(&ioas->mutex);
+ 	iommufd_object_finalize(idev->ictx, &hwpt->obj);
+@@ -343,13 +345,11 @@ int iommufd_device_attach(struct iommufd_device *idev, u32 *pt_id)
+ 		struct iommufd_hw_pagetable *hwpt =
+ 			container_of(pt_obj, struct iommufd_hw_pagetable, obj);
+ 
++		mutex_lock(&hwpt->ioas->mutex);
+ 		rc = iommufd_device_do_attach(idev, hwpt);
++		mutex_unlock(&hwpt->ioas->mutex);
+ 		if (rc)
+ 			goto out_put_pt_obj;
+-
+-		mutex_lock(&hwpt->ioas->mutex);
+-		list_add_tail(&hwpt->hwpt_item, &hwpt->ioas->hwpt_list);
+-		mutex_unlock(&hwpt->ioas->mutex);
+ 		break;
+ 	}
+ 	case IOMMUFD_OBJ_IOAS: {
 -- 
 2.39.1
 
