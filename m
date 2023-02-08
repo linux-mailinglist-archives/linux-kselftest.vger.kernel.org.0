@@ -2,118 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4993E68F052
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Feb 2023 15:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E8E68F114
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Feb 2023 15:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjBHOFf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Feb 2023 09:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
+        id S230185AbjBHOqB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Feb 2023 09:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjBHOFX (ORCPT
+        with ESMTP id S229895AbjBHOqA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:05:23 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AA145BDF;
-        Wed,  8 Feb 2023 06:05:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675865117; x=1707401117;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=XmGzZhXPepON125DcD74aqMImYN6xSf3KTV3TFcSd1c=;
-  b=K6Q9chhVkFKsXoHZItmN70cxQH5yvo6HYbn2ramnoSJf/+yokJ2+LVQV
-   d/doZmJWU2HQHi6VXYuLakWM5cz2sNrdVZJvAowrOjIMlf5xBx0ZCPg4d
-   N8Uvy+6GsXPYPPpiEksyXk4Mx/g5ucpHsknoJCMKjGakDzA2xi3XZjkFH
-   Wkixb1nw64acXXAMN1PXL3sUGxqMxXf1tai25syKQ8HSXUMUQ4YRR+d0H
-   8ukxw9UxbLHXzlDtmPmdhn3gQEH/5bkmCCz4di2lFmZtVPosXaFbR0Dzt
-   A9Um1b90LPrMrgE9nE4/p1KndxZ6U2rI8o5F7cxUp4EfQ+NDvbT59YV3S
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331930886"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="331930886"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:04:31 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="660657667"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="660657667"
-Received: from jstelter-mobl.ger.corp.intel.com ([10.252.38.39])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:04:29 -0800
-Date:   Wed, 8 Feb 2023 16:04:27 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org
-cc:     LKML <linux-kernel@vger.kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 3/4] selftests/resctrl: Change name from CBM_MASK_PATH
- to INFO_PATH
-In-Reply-To: <20230208094026.22529-4-ilpo.jarvinen@linux.intel.com>
-Message-ID: <2078baac-27ea-096-3a13-b88fe10aa78@linux.intel.com>
-References: <20230208094026.22529-1-ilpo.jarvinen@linux.intel.com> <20230208094026.22529-4-ilpo.jarvinen@linux.intel.com>
+        Wed, 8 Feb 2023 09:46:00 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C2D227AC
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Feb 2023 06:45:59 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b5so19499423plz.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Feb 2023 06:45:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D9APWzIV+7Bk+eMZXMnkea/loMWDb0j2eNn6crGTD7M=;
+        b=ZzbZBQeo7ockhhPlfg9a2V8MeTjZhGsnS0ea5DXCkI5R6D6KgPTXGSbRky5Gb8AsJH
+         /2mudNx8wLHe69wFIzg4gDl7z+7+b25Phwl8RVR7ESGVMp2CMetkxW8omZe82SQoy9aO
+         L9KDhWNJLpAkJmabs93q1ajZOPMt+3ceuBQisTjtgkoMAN67A0SreAB01Z4HCNC71zrK
+         4VfLSzWfIofvrtSx+aCS7g5VsGfs9GyAkbToQYUPgmErKkpb5Hcb26jVG2/kk5XH6ObO
+         MfyAkQzXuRPDY42gCXtpbeJXR1ZVuj9bc7WGTyly0DMxK2uTOG9Y6F/mlci2/Mol8bPN
+         9unQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D9APWzIV+7Bk+eMZXMnkea/loMWDb0j2eNn6crGTD7M=;
+        b=7VJjwl32dNce7fZFhVfuIQQ1uwIegyK23DaLcdnl0L9qAZKD5W9HTrF1TTwr8qCzRN
+         +OuSQaEa/YQbE+GHKM77nJAQ2WDoZcokLSL6DwnnS8pXYJMqntvCo43IM1uSBdKFBqS8
+         TvyZXk7A5QZFWM2Gu2uG/WeM1nGDtr4+zRapui2YJ1oWPaJ2KU25Sq+qlRxeGUbxQt/l
+         y+D5W1xMgRlZVONOpJCRQlX/fdRk/ASiukX13qF+WMJtJwIZyTV687b3gt7APOOLdmRP
+         5bT+Wbrg4NzNbO03UHsvkhzV9grojlNHV/vVYENynQZyShhyO5VqCmCdCcSHb4YTKDKd
+         lxyw==
+X-Gm-Message-State: AO0yUKU47ixilHoxei6Mv4uXa9ANbZXzIyl/NgTiinQprVIKdQttJJXP
+        ryOctEl7RDHCrJw5mrdh8Yi49A==
+X-Google-Smtp-Source: AK7set/W/mntM9Gw7Sjb3X5zca5NiuZodd+vepBxl0Lxlr21DuWvj088eRFNvKzW4uTdJaxc1hQZAA==
+X-Received: by 2002:a17:903:404c:b0:198:af4f:de0d with SMTP id n12-20020a170903404c00b00198af4fde0dmr234228pla.13.1675867559188;
+        Wed, 08 Feb 2023 06:45:59 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d3-20020a170902b70300b00193020e8a90sm11052055pls.294.2023.02.08.06.45.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 06:45:58 -0800 (PST)
+Date:   Wed, 8 Feb 2023 14:45:55 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     kvm@vger.kernel.org, shahuang@redhat.com
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: KVM: Replace optarg with arg in
+ guest_modes_cmdline
+Message-ID: <Y+O1o4TvO1ajPsgi@google.com>
+References: <20230202025716.216323-1-shahuang@redhat.com>
+ <167582135972.455074.6960378545703076467.b4-ty@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1222304298-1675858401=:1843"
-Content-ID: <fe477438-ca74-4ef3-b1f8-6dd8b61b1fec@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167582135972.455074.6960378545703076467.b4-ty@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1222304298-1675858401=:1843
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <82134ad4-63e-60d-eaf4-11a6338ef031@linux.intel.com>
-
-On Wed, 8 Feb 2023, Ilpo Järvinen wrote:
-
-> From: "Signed-off-by: Fenghua Yu" <fenghua.yu@intel.com>
-
-I seem to have managed to do a little copy paste error there. I can 
-resubmit the series if needed.
-
--- 
- i.
-
-> CBM_MASK_PATH is actually the path to resctrl/info, so change the macro
-> name to correctly indicate what it represents.
+On Wed, Feb 08, 2023, Sean Christopherson wrote:
+> On Thu, 02 Feb 2023 10:57:15 +0800, shahuang@redhat.com wrote:
+> > The parameter arg in guest_modes_cmdline not being used now, and the
+> > optarg should be replaced with arg in guest_modes_cmdline.
+> > 
+> > And this is the chance to change strtoul() to atoi_non_negative(), since
+> > guest mode ID will never be negative.
+> > 
+> > 
+> > [...]
 > 
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> ---
->  tools/testing/selftests/resctrl/resctrl.h   | 2 +-
->  tools/testing/selftests/resctrl/resctrlfs.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Applied to kvm-x86 selftests, thanks!
 > 
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> index f0ded31fb3c7..4f0976f12634 100644
-> --- a/tools/testing/selftests/resctrl/resctrl.h
-> +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -28,7 +28,7 @@
->  #define MB			(1024 * 1024)
->  #define RESCTRL_PATH		"/sys/fs/resctrl"
->  #define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
-> -#define CBM_MASK_PATH		"/sys/fs/resctrl/info"
-> +#define INFO_PATH		"/sys/fs/resctrl/info"
->  #define L3_PATH			"/sys/fs/resctrl/info/L3"
->  #define MB_PATH			"/sys/fs/resctrl/info/MB"
->  #define L3_MON_PATH		"/sys/fs/resctrl/info/L3_MON"
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-> index 6f543e470ad4..cc6cf49e3129 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -210,7 +210,7 @@ int get_cbm_mask(char *cache_type, char *cbm_mask)
->  	if (!cbm_mask)
->  		return -1;
->  
-> -	sprintf(cbm_mask_path, "%s/%s/cbm_mask", CBM_MASK_PATH, cache_type);
-> +	sprintf(cbm_mask_path, "%s/%s/cbm_mask", INFO_PATH, cache_type);
->  
->  	fp = fopen(cbm_mask_path, "r");
->  	if (!fp) {
-> 
---8323329-1222304298-1675858401=:1843--
+> [1/1] selftests: KVM: Replace optarg with arg in guest_modes_cmdline
+>       https://github.com/kvm-x86/linux/commit/62f86202d76d
+
+I force pushed to selftests because of a goof on my end, new SHA-1 is:
+
+  https://github.com/kvm-x86/linux/commit/7ae69d7087a9
