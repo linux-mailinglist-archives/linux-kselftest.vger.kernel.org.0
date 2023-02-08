@@ -2,56 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C6168EBD2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Feb 2023 10:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD9E68EBD4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Feb 2023 10:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjBHJkm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Feb 2023 04:40:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
+        id S230362AbjBHJkp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Feb 2023 04:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBHJkl (ORCPT
+        with ESMTP id S229500AbjBHJko (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:40:41 -0500
+        Wed, 8 Feb 2023 04:40:44 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142B6977A;
-        Wed,  8 Feb 2023 01:40:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219D11BFF;
+        Wed,  8 Feb 2023 01:40:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675849241; x=1707385241;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=U5te91Tbq5bcJrl+9WOQqOi1osSLqIV0/0A3oSWetII=;
-  b=eArhFvezlXrIsHO7y4PCNZ3nY9GvP2UKsGsqRmtORWukG6edm31gjosI
-   ZXTlpjN/jWaYf20das9FYIE47qDdNl4V6LtzGtlKlCTelS9AljdlbeHTx
-   jGz5hd6wG19j2VmkFi6M9bMGFfzY6bp/DPfDni758uyDy23Npu24p4LPZ
-   U+8MQi0cYvj20A+BUmHzlg4Nwjuf2eBUEo/KKXvHq77+F93XpDCrrGrR3
-   mdjTEmkV7hZuLd4WwfESiCfb2q98YiROcODkTOfARowM3X0K5fcNRsZvz
-   aUFYInyGmfSR4Uk8PoKVwfxoZ5yu0oRZvIp1z0V0VcYGZ4lZAfUGAHaw9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="328410784"
+  t=1675849244; x=1707385244;
+  h=from:to:subject:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=fQj277y5B7yPRyeIaCrwNJtSSoMya5ytfa5/89NyjF4=;
+  b=jJVVSyJyaMw4j6Pwt7jbqbXRLFa4R4Tpqzs3aNEEDeh8WV7/hnflXBam
+   dZidFfeqIofJId9USTOkzNeXuNr3aFblAiWYBl317bRe7p89k22NFJC6I
+   lJXr0E5tP4BQ7s2JYlc4Cjvyco5ehScjob65E8bSBx6Zi3b8OSN6TjwaC
+   4UboAzekgd8T6cgSi9crdAxGl0Wmx/9rOU4Iob4BTDiNh7eJ+akFFABVF
+   bW2ePAX828Vo2ytro+yl/+r9eIu8uQGt9IOfsE6TjOCeklKpw07/GuuZT
+   9wr8mni/rSjTTdM/RPrkxtHVSH76R7jcgB5m1Nqi5bB1UDX5XlzX0Ks+0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="328410791"
 X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="328410784"
+   d="scan'208";a="328410791"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 01:40:40 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="617150253"
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 01:40:43 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="617150264"
 X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="617150253"
+   d="scan'208";a="617150264"
 Received: from jstelter-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.38.39])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 01:40:38 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 01:40:41 -0800
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Shuah Khan <shuah@kernel.org>
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 1/4] selftests/resctrl: Change initialize_llc_perf() return type to void
-Date:   Wed,  8 Feb 2023 11:40:23 +0200
-Message-Id: <20230208094026.22529-2-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 2/4] selftests/resctrl: Don't hard code divisor in MBM results
+Date:   Wed,  8 Feb 2023 11:40:24 +0200
+Message-Id: <20230208094026.22529-3-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230208094026.22529-1-ilpo.jarvinen@linux.intel.com>
 References: <20230208094026.22529-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -62,53 +60,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-initialize_llc_perf() unconditionally does return 0 so no point in
-having it's return type as int. Hence, change it's return type from int
-to void.
+From: Fenghua Yu <fenghua.yu@intel.com>
 
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
+Presently, while calculating MBM results, the divisor is hard coded as 4.
+It's hard coded to 4 because "NUM_OF_RUNS" is defined as 5 and the test
+does not count first result and hence 4. So, instead of hard coding the
+value to 4, change it to NUM_OF_RUNS - 1.
+
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/cache.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ tools/testing/selftests/resctrl/mbm_test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index 68ff856d36f0..4b8ee81aedae 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -48,7 +48,7 @@ static int perf_event_open_llc_miss(pid_t pid, int cpu_no)
- 	return 0;
- }
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 8392e5c55ed0..4f85cbbfd037 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -31,8 +31,8 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, int span)
+ 		sum_bw_resc += bw_resc[runs];
+ 	}
  
--static int initialize_llc_perf(void)
-+static void initialize_llc_perf(void)
- {
- 	memset(&pea_llc_miss, 0, sizeof(struct perf_event_attr));
- 	memset(&rf_cqm, 0, sizeof(struct read_format));
-@@ -59,8 +59,6 @@ static int initialize_llc_perf(void)
- 	pea_llc_miss.config = PERF_COUNT_HW_CACHE_MISSES;
+-	avg_bw_imc = sum_bw_imc / 4;
+-	avg_bw_resc = sum_bw_resc / 4;
++	avg_bw_imc = sum_bw_imc / (NUM_OF_RUNS - 1);
++	avg_bw_resc = sum_bw_resc / (NUM_OF_RUNS - 1);
+ 	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+ 	avg_diff_per = (int)(avg_diff * 100);
  
- 	rf_cqm.nr = 1;
--
--	return 0;
- }
- 
- static int reset_enable_llc_perf(pid_t pid, int cpu_no)
-@@ -234,11 +232,8 @@ int cat_val(struct resctrl_val_param *param)
- 	if (ret)
- 		return ret;
- 
--	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR))) {
--		ret = initialize_llc_perf();
--		if (ret)
--			return ret;
--	}
-+	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)))
-+		initialize_llc_perf();
- 
- 	/* Test runs until the callback setup() tells the test to stop. */
- 	while (1) {
 -- 
 2.30.2
 
