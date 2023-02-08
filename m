@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD9E68EBD4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Feb 2023 10:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5B568EBD6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Feb 2023 10:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjBHJkp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Feb 2023 04:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S229490AbjBHJky (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Feb 2023 04:40:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBHJko (ORCPT
+        with ESMTP id S229684AbjBHJkw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:40:44 -0500
+        Wed, 8 Feb 2023 04:40:52 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219D11BFF;
-        Wed,  8 Feb 2023 01:40:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C00F442C1;
+        Wed,  8 Feb 2023 01:40:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675849244; x=1707385244;
+  t=1675849247; x=1707385247;
   h=from:to:subject:date:message-id:in-reply-to:references:
    mime-version:content-transfer-encoding;
-  bh=fQj277y5B7yPRyeIaCrwNJtSSoMya5ytfa5/89NyjF4=;
-  b=jJVVSyJyaMw4j6Pwt7jbqbXRLFa4R4Tpqzs3aNEEDeh8WV7/hnflXBam
-   dZidFfeqIofJId9USTOkzNeXuNr3aFblAiWYBl317bRe7p89k22NFJC6I
-   lJXr0E5tP4BQ7s2JYlc4Cjvyco5ehScjob65E8bSBx6Zi3b8OSN6TjwaC
-   4UboAzekgd8T6cgSi9crdAxGl0Wmx/9rOU4Iob4BTDiNh7eJ+akFFABVF
-   bW2ePAX828Vo2ytro+yl/+r9eIu8uQGt9IOfsE6TjOCeklKpw07/GuuZT
-   9wr8mni/rSjTTdM/RPrkxtHVSH76R7jcgB5m1Nqi5bB1UDX5XlzX0Ks+0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="328410791"
+  bh=w+4SOYOHFtsPv6X601DdF2MZZiDyDeUy+9jXep2pHig=;
+  b=WSWvz7/DXP2tg7EQ624fMeamhszyTdDVkFBXkWqXFhNfKjJzRasw7gB5
+   AynA7Ldh6Qc9TUgPCTgYqRa4TCEbJG35f4oLoV+yGMowrX0aWeoOfaF/F
+   gzgfI1/z6wAOY/CrhAKcVqBsknFUr2H4PLkYU9MAew5STnfNFlInysQil
+   22AbPvGDWVrrD/0jv8qeiIATu8ZbI6AG1ime0Zci/yGPC2HI+6MP97pbs
+   pkdHePUYsTt0AsG2ZGFsSq5WHhjG7QFZ4pD3XyGFqSrEmpJ0BhOBmvT3u
+   hMLSKcs3h/gb8tAyqc5qLog8/SCCqmxlreUqKsriJgm+NiYrL74mmzIz+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="328410798"
 X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="328410791"
+   d="scan'208";a="328410798"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 01:40:43 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="617150264"
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 01:40:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="617150282"
 X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="617150264"
+   d="scan'208";a="617150282"
 Received: from jstelter-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.38.39])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 01:40:41 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 01:40:44 -0800
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Shuah Khan <shuah@kernel.org>
-Subject: [PATCH 2/4] selftests/resctrl: Don't hard code divisor in MBM results
-Date:   Wed,  8 Feb 2023 11:40:24 +0200
-Message-Id: <20230208094026.22529-3-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 3/4] selftests/resctrl: Change name from CBM_MASK_PATH to INFO_PATH
+Date:   Wed,  8 Feb 2023 11:40:25 +0200
+Message-Id: <20230208094026.22529-4-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230208094026.22529-1-ilpo.jarvinen@linux.intel.com>
 References: <20230208094026.22529-1-ilpo.jarvinen@linux.intel.com>
@@ -60,33 +60,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Fenghua Yu <fenghua.yu@intel.com>
+From: "Signed-off-by: Fenghua Yu" <fenghua.yu@intel.com>
 
-Presently, while calculating MBM results, the divisor is hard coded as 4.
-It's hard coded to 4 because "NUM_OF_RUNS" is defined as 5 and the test
-does not count first result and hence 4. So, instead of hard coding the
-value to 4, change it to NUM_OF_RUNS - 1.
+CBM_MASK_PATH is actually the path to resctrl/info, so change the macro
+name to correctly indicate what it represents.
 
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/resctrl/mbm_test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/resctrl/resctrl.h   | 2 +-
+ tools/testing/selftests/resctrl/resctrlfs.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 8392e5c55ed0..4f85cbbfd037 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -31,8 +31,8 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, int span)
- 		sum_bw_resc += bw_resc[runs];
- 	}
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index f0ded31fb3c7..4f0976f12634 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -28,7 +28,7 @@
+ #define MB			(1024 * 1024)
+ #define RESCTRL_PATH		"/sys/fs/resctrl"
+ #define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
+-#define CBM_MASK_PATH		"/sys/fs/resctrl/info"
++#define INFO_PATH		"/sys/fs/resctrl/info"
+ #define L3_PATH			"/sys/fs/resctrl/info/L3"
+ #define MB_PATH			"/sys/fs/resctrl/info/MB"
+ #define L3_MON_PATH		"/sys/fs/resctrl/info/L3_MON"
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 6f543e470ad4..cc6cf49e3129 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -210,7 +210,7 @@ int get_cbm_mask(char *cache_type, char *cbm_mask)
+ 	if (!cbm_mask)
+ 		return -1;
  
--	avg_bw_imc = sum_bw_imc / 4;
--	avg_bw_resc = sum_bw_resc / 4;
-+	avg_bw_imc = sum_bw_imc / (NUM_OF_RUNS - 1);
-+	avg_bw_resc = sum_bw_resc / (NUM_OF_RUNS - 1);
- 	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
- 	avg_diff_per = (int)(avg_diff * 100);
+-	sprintf(cbm_mask_path, "%s/%s/cbm_mask", CBM_MASK_PATH, cache_type);
++	sprintf(cbm_mask_path, "%s/%s/cbm_mask", INFO_PATH, cache_type);
  
+ 	fp = fopen(cbm_mask_path, "r");
+ 	if (!fp) {
 -- 
 2.30.2
 
