@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AA6690651
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 12:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3820690680
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 12:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjBILQM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 06:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S230355AbjBILRf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 06:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjBILPr (ORCPT
+        with ESMTP id S230336AbjBILRG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 06:15:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF95611FD;
-        Thu,  9 Feb 2023 03:15:32 -0800 (PST)
+        Thu, 9 Feb 2023 06:17:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C37B6D5C;
+        Thu,  9 Feb 2023 03:16:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C8E161A18;
-        Thu,  9 Feb 2023 11:15:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 885B2C433EF;
-        Thu,  9 Feb 2023 11:15:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA102B820F0;
+        Thu,  9 Feb 2023 11:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60DC4C433D2;
+        Thu,  9 Feb 2023 11:16:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675941331;
-        bh=AaIeNztZETm3XHMGdo+mMQ5+5jHu/pRFxpqdKXj9vvY=;
+        s=k20201202; t=1675941367;
+        bh=Un6JpB0UHci0qIBH1D+no3jpcc+8i6GyZ7154XvIZjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LVhd5O1A+cQHXlzU0PWhu8Tk0OrDrBaBeN51uHe8nQFyUznOB0lqy9vBWhw288wYa
-         sELO1e4OKqEev+9W4jwVu+CPwcgCzJh3V83Dtv4/r/bgbag9clTlraes+f+4npy0wX
-         AEL5HRDRqfYFHC4hiUV5uQiUoDhliM58lTpXayrJOzB1vfQlU6byFf8F7cPbKYRZtB
-         FaGQs1Avtu5+A4PCdImIP/w2N7HNKVZ/r1dzZeOj1kNS8Hyx2BPhto4G9xxLxSF8aV
-         hnuAVjfl5YG5RBgNLNGeVbwCmUI3RSJ3Rj6Zp31XvhhtkWtKZ9s+5zaG9FvjHyzitS
-         ZR1ZrUkpRJDaA==
+        b=KW0AFJO7mQuweGIFzlwCQzmgDRQXVUmeELvm1zAxWxgoc1S+UguwpA/WEDJZpx8l1
+         qWphYM1CVLsCZ1M0Tijmz4HcRnf+52MYlTfuewVSJjg3uy5L42NVsbdNjKEkfVU1FL
+         Uz7F7cc5d+WeYiRGFkhuQN/p5crKpas+Dw3NDZSnjmpSIU2j42H9LeT3tj/0BOTqhW
+         OwQyHtmXpZ11dzuVTS3wyifuhaz6BpOVq8/LcURDZQ+Tnz2gLH718VPKFYIH0wi3uc
+         mqdWcpnAGWTZusPB53UGp6kSATFMRfvPaSDaTO3hue3xuQh0XEA3+rU+IWq5cVINA5
+         hTOgRQiVPba1A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Eduard Zingerman <eddyz87@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
-        andrii@kernel.org, shuah@kernel.org, mykolal@fb.com,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 08/38] selftests/bpf: Verify copy_register_state() preserves parent/live fields
-Date:   Thu,  9 Feb 2023 06:14:27 -0500
-Message-Id: <20230209111459.1891941-8-sashal@kernel.org>
+Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 16/38] selftest: net: Improve IPV6_TCLASS/IPV6_HOPLIMIT tests apparmor compatibility
+Date:   Thu,  9 Feb 2023 06:14:35 -0500
+Message-Id: <20230209111459.1891941-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230209111459.1891941-1-sashal@kernel.org>
 References: <20230209111459.1891941-1-sashal@kernel.org>
@@ -58,65 +58,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Eduard Zingerman <eddyz87@gmail.com>
+From: Andrei Gherzan <andrei.gherzan@canonical.com>
 
-[ Upstream commit b9fa9bc839291020b362ab5392e5f18ba79657ac ]
+[ Upstream commit a6efc42a86c0c87cfe2f1c3d1f09a4c9b13ba890 ]
 
-A testcase to check that verifier.c:copy_register_state() preserves
-register parentage chain and livness information.
+"tcpdump" is used to capture traffic in these tests while using a random,
+temporary and not suffixed file for it. This can interfere with apparmor
+configuration where the tool is only allowed to read from files with
+'known' extensions.
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-Link: https://lore.kernel.org/r/20230106142214.1040390-3-eddyz87@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+The MINE type application/vnd.tcpdump.pcap was registered with IANA for
+pcap files and .pcap is the extension that is both most common but also
+aligned with standard apparmor configurations. See TCPDUMP(8) for more
+details.
+
+This improves compatibility with standard apparmor configurations by
+using ".pcap" as the file extension for the tests' temporary files.
+
+Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/bpf/verifier/search_pruning.c   | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ tools/testing/selftests/net/cmsg_ipv6.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/verifier/search_pruning.c b/tools/testing/selftests/bpf/verifier/search_pruning.c
-index 68b14fdfebdb1..d63fd8991b03a 100644
---- a/tools/testing/selftests/bpf/verifier/search_pruning.c
-+++ b/tools/testing/selftests/bpf/verifier/search_pruning.c
-@@ -225,3 +225,39 @@
- 	.result_unpriv = ACCEPT,
- 	.insn_processed = 15,
- },
-+/* The test performs a conditional 64-bit write to a stack location
-+ * fp[-8], this is followed by an unconditional 8-bit write to fp[-8],
-+ * then data is read from fp[-8]. This sequence is unsafe.
-+ *
-+ * The test would be mistakenly marked as safe w/o dst register parent
-+ * preservation in verifier.c:copy_register_state() function.
-+ *
-+ * Note the usage of BPF_F_TEST_STATE_FREQ to force creation of the
-+ * checkpoint state after conditional 64-bit assignment.
-+ */
-+{
-+	"write tracking and register parent chain bug",
-+	.insns = {
-+	/* r6 = ktime_get_ns() */
-+	BPF_EMIT_CALL(BPF_FUNC_ktime_get_ns),
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
-+	/* r0 = ktime_get_ns() */
-+	BPF_EMIT_CALL(BPF_FUNC_ktime_get_ns),
-+	/* if r0 > r6 goto +1 */
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_0, BPF_REG_6, 1),
-+	/* *(u64 *)(r10 - 8) = 0xdeadbeef */
-+	BPF_ST_MEM(BPF_DW, BPF_REG_FP, -8, 0xdeadbeef),
-+	/* r1 = 42 */
-+	BPF_MOV64_IMM(BPF_REG_1, 42),
-+	/* *(u8 *)(r10 - 8) = r1 */
-+	BPF_STX_MEM(BPF_B, BPF_REG_FP, BPF_REG_1, -8),
-+	/* r2 = *(u64 *)(r10 - 8) */
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_FP, -8),
-+	/* exit(0) */
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.flags = BPF_F_TEST_STATE_FREQ,
-+	.errstr = "invalid read from stack off -8+1 size 8",
-+	.result = REJECT,
-+},
+diff --git a/tools/testing/selftests/net/cmsg_ipv6.sh b/tools/testing/selftests/net/cmsg_ipv6.sh
+index 2d89cb0ad2889..330d0b1ceced3 100755
+--- a/tools/testing/selftests/net/cmsg_ipv6.sh
++++ b/tools/testing/selftests/net/cmsg_ipv6.sh
+@@ -6,7 +6,7 @@ ksft_skip=4
+ NS=ns
+ IP6=2001:db8:1::1/64
+ TGT6=2001:db8:1::2
+-TMPF=`mktemp`
++TMPF=$(mktemp --suffix ".pcap")
+ 
+ cleanup()
+ {
 -- 
 2.39.0
 
