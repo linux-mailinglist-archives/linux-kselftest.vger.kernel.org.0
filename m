@@ -2,374 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2900691142
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 20:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A0C69114E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 20:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBITXq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 14:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S229537AbjBIT1b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 14:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjBITXp (ORCPT
+        with ESMTP id S229450AbjBIT1a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:23:45 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B763469510
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Feb 2023 11:23:43 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id b1so2042482pft.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Feb 2023 11:23:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=95HxeBvzenu+ijIXFcOlNVKQdoWMdAneLWKscet2sE4=;
-        b=BDAO7jx7KdqPedFQPrdTWfuyEDJC1PN9Bysq2Xo5zyh/C+lhvMzeTx6RtclgYDrV3v
-         qSZgwQuXU+LzV2FHx/p3VYZ4Tvo+o1L6f/65gvupTIAsxwrBCt80sfQCf8tdZj7ipt6Z
-         e+3xQGYtck+pjDbwAKDRrzWTGUOg0rlRr8seo=
+        Thu, 9 Feb 2023 14:27:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F62F192
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Feb 2023 11:26:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675970805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x9cE6e+W76LeERGPHwI+bdvwZC6nPSTrvaIuldAklW4=;
+        b=TSnVYYYBqJsJJs7GqCO/jEG5PNrtTfYqUNtcVydn9pmNae0xN3Y4oU6Z7j6WRwF1TYWHqn
+        2ApylfXCOFCGWSebPPpsb51VpmxZj2XHN1Bb1m2K6cx3TRPoIe28JZ1RmLQbesU1aT3xuV
+        sJvmSmg3QZ0zBtS6cLlxu1eGa3qWf9M=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-288-XaiArPjyM1aLbtYyrvCWlg-1; Thu, 09 Feb 2023 14:26:44 -0500
+X-MC-Unique: XaiArPjyM1aLbtYyrvCWlg-1
+Received: by mail-qv1-f72.google.com with SMTP id jo26-20020a056214501a00b0053aa15f61d4so1819420qvb.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Feb 2023 11:26:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=95HxeBvzenu+ijIXFcOlNVKQdoWMdAneLWKscet2sE4=;
-        b=VKqQDI1A7d/vDA2rYNoDqMuQOX1GPIVorM4dbSH0pl5w/J4LG2zEqgEGCJKHUBBOCv
-         ok2jUMz7SoTKCF1TsejRG36wEX3TKcAPPvGJK7tbsRKFbzbmhAgWziMP99iZcrGJ1AvJ
-         jbcVSLXGASce7o11qOLFjN4wLul7scqwndgYo8yEvLKCpAApxwnlAiRwahCHb120yWDk
-         TEL82VdjvRmAzTKaKNRCPzUdpaavN2Zjv+3Pfe9e0tzW2pe6lpoj4v+sw6IuzR1SV1l7
-         b0pREChh0nINlY51DR9T0lZLZtykS/BJTmjEWVvoAeljQHhDnR7B2tCaS7oHmQ0JVDK+
-         3tXg==
-X-Gm-Message-State: AO0yUKVChAKPQ6bDB2x8V4NQt42HOME5fA7F+Z+seP34eDjgNhjk2MkE
-        pA6W/68DDUCDGePvzVF0m6w5lg==
-X-Google-Smtp-Source: AK7set/iKISfX4STDLBfTHgHasnaPFpDw/LhXElJRde7iIlzGSeOTIdimXbThAWtEzOwyjZEGwydtQ==
-X-Received: by 2002:a05:6a00:1d0a:b0:5a8:473e:2fdc with SMTP id a10-20020a056a001d0a00b005a8473e2fdcmr4503466pfx.12.1675970623175;
-        Thu, 09 Feb 2023 11:23:43 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id y19-20020a62b513000000b00589a7824703sm1784567pfe.194.2023.02.09.11.23.42
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x9cE6e+W76LeERGPHwI+bdvwZC6nPSTrvaIuldAklW4=;
+        b=pWgBIUTZxqyrMt0mAs9mlU0M0hCcA8LFr8Bm3tHb0A8qoKbPfTFBccqiaQLKhQ9d+9
+         Lu9Lxq0HP/8o69dMrx4Y5pAzI3mgXtqKh70T6NlHrZetqh7C3FHZYlYXqelPFv54KAlq
+         UcCwVf0DFX2DKgLC+FXZtGOEHm819yWwgsXo7L5SwJHi73J2flJHd+lH44EMTEQ4Q9PY
+         IU0vTPVZ65Vqg40I76rnq0ohsfqmpSn64LGS7zoV87Q8uDCioFy4wk5ORWnL6gg2GIqU
+         Wiv/nqy6Et1sY4ZnDVAYVeLc1GQGZXQn9eMiUnDoctlOnvcRtdeJdzct2eLlXGR8Cmcg
+         L//A==
+X-Gm-Message-State: AO0yUKUiDP6eqqzEk0JcpRxRYCGevhUk1gi8VjuydkMwEuXNXV47FqZ7
+        k/Y19m24XSsv0QC5Jk4aVMzgykOhBG2uuuO74cOuPYvEx6xiDMzuUwatzEw7/ebBrascubqjwBJ
+        G7dM2y7AsW7+9huweRQZ4+I6aMsQl
+X-Received: by 2002:a0c:f54e:0:b0:56c:2082:743d with SMTP id p14-20020a0cf54e000000b0056c2082743dmr9228473qvm.5.1675970803831;
+        Thu, 09 Feb 2023 11:26:43 -0800 (PST)
+X-Google-Smtp-Source: AK7set/Cz68ujEJJEwIYk1OtfltUrAU4LXBdHLuQ9itehZm0vTs8jvdCbtuAw+h5up7Jog7JfvKeyQ==
+X-Received: by 2002:a0c:f54e:0:b0:56c:2082:743d with SMTP id p14-20020a0cf54e000000b0056c2082743dmr9228433qvm.5.1675970803495;
+        Thu, 09 Feb 2023 11:26:43 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id t66-20020a374645000000b007203bbbbb31sm1994600qka.47.2023.02.09.11.26.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 11:23:42 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Thu, 09 Feb 2023 11:26:42 -0800 (PST)
+Date:   Thu, 9 Feb 2023 14:26:40 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
-Date:   Thu,  9 Feb 2023 11:23:41 -0800
-Message-Id: <20230209192337.never.690-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v10 5/6] mm/pagemap: add documentation of PAGEMAP_SCAN
+ IOCTL
+Message-ID: <Y+VI8HfM1k3uPA5t@x1n>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-6-usama.anjum@collabora.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12186; h=from:subject:message-id; bh=9CDGuuBIAFANWICcv8yRx8EyXbGptyp5vGwRbdTQpPU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj5Ug8X1KSIuD8fW/lSvneIGxbcZoZyQmf+3nRXvx3 xxj+pEGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY+VIPAAKCRCJcvTf3G3AJisCD/ oCjOJhcBmsEVwaEpp16vu0DTw3/9s26uvI/Ri4f37vZngY3Zbn5VwWed6ssOsXO3jnrBgPtWIO9uQa dN9FG7bECnVjRB2qUgvBbymFmpujN1SORfuIcRd8qUw/1iDSYE8oYDvY7aV+uI2sKIJphLnf9tLJdE AEoUaatVMuWqbAU1MgLYL3eSG2WiwudQ5cp9XC+6kLlwg3wUpuwUUgiPmwjk/pNqUJiUWoj3SBx5Dr 9AFbSVQgZUSRpN+4zhQoUp+1dbvJ8e8wAvttA0KAo87k8O92WiMIy6do0dAF02Ls5W3wnf3XgO5ICR wpZnqKtLOyy+CU13ShKoINTKLF4zE+tE/kf3nP5wHBDZY0GkWg0OhEspuAFR9Y/yXLTn2s0nr5Wt+X BYoh6rKN6OVjZ+iYW17FriuRLlKTBaJU45x6u0CT3EwWYO4lPfSCLgI4qULx8ByMbG9aytWrrwefo8 PaOYexquNLddZ+q7agEpbv4CSd1N2J5R0JkzarKExfwGC/dsBXz4R0UsVsSP6xNo7zjFDyZi+5FyOL 5UBeKokzuk5nn3LRvKMXiQtd70ravZpUrHd8rYFQYONnu764gxTG1xKonwrSduO9RehS+1ZUdiXtTd Ru0DBoTuUBIAVfnUwxK8m5poKfJMZbYIcA5QogC+VPWrdrEtHzZ1QWNZOxuA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230202112915.867409-6-usama.anjum@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kernel is globally removing the ambiguous 0-length and 1-element
-arrays in favor of flexible arrays, so that we can gain both compile-time
-and run-time array bounds checking[1]. Most cases of these changes are
-trivial, but this case in BPF is not. It faces some difficulties:
+On Thu, Feb 02, 2023 at 04:29:14PM +0500, Muhammad Usama Anjum wrote:
+> Add some explanation and method to use write-protection and written-to
+> on memory range.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  Documentation/admin-guide/mm/pagemap.rst | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
+> index 6e2e416af783..1cb2189e9a0d 100644
+> --- a/Documentation/admin-guide/mm/pagemap.rst
+> +++ b/Documentation/admin-guide/mm/pagemap.rst
+> @@ -230,3 +230,27 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
+>  always 12 at most architectures). Since Linux 3.11 their meaning changes
+>  after first clear of soft-dirty bits. Since Linux 4.2 they are used for
+>  flags unconditionally.
+> +
+> +Pagemap Scan IOCTL
+> +==================
+> +
+> +The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get and/or clear
+> +the info about page table entries. The following operations are supported in
+> +this IOCTL:
+> +- Get the information if the pages have been written-to (``PAGE_IS_WRITTEN``),
+> +  file mapped (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``) or swapped
+> +  (``PAGE_IS_SWAPPED``).
+> +- Write-protect the pages (``PAGEMAP_WP_ENGAGE``) to start finding which
+> +  pages have been written-to.
+> +- Find pages which have been written-to and write protect the pages
+> +  (atomic ``PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE``)
 
-1) struct bpf_lpm_trie_key is part of UAPI so changes can be fragile in
-   the sense that projects external to Linux may be impacted.
+Could we extend this section a bit more?  Some points for reference:
 
-2) The struct is intended to be used as a header, which means it may
-   be within another structure, resulting in the "data" array member
-   overlapping with the surrounding structure's following members. When
-   converting from [0]-style to []-style, this overlap elicits warnings
-   under Clang, and GCC considers it a deprecated extension (and similarly
-   warns under -pedantic): https://godbolt.org/z/vWzqs41h6
+  - The new struct you introduced, definitions of each of the fields, and
+    generic use cases for each of the field/ops.
 
-3) Both the kernel and userspace access the existing "data" member
-   for more than just static initializers and offsetof() calculations.
-   For example:
+  - It'll be nice to list the OPs the new interface supports (GET,
+    WP_ENGAGE, GET+WP_ENGAGE).
 
-      cilium:
-        struct egress_gw_policy_key in_key = {
-                .lpm_key = { 32 + 24, {} },
-                .saddr   = CLIENT_IP,
-                .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
-        };
+  - When should people use this rather than the old pagemap interface?
+    What's the major problems to solve / what's the major difference?
+    (Maybe nice to reference the Windows API too here)
 
-      systemd:
-        ipv6_map_fd = bpf_map_new(
-                        BPF_MAP_TYPE_LPM_TRIE,
-                        offsetof(struct bpf_lpm_trie_key, data) + sizeof(uint32_t)*4,
-                        sizeof(uint64_t), ...);
-	...
-        struct bpf_lpm_trie_key *key_ipv4, *key_ipv6;
-	...
-	memcpy(key_ipv4->data, &a->address, sizeof(uint32_t));
+> +
+> +To get information about which pages have been written-to and/or write protect
+> +the pages, following must be performed first in order:
+> + 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
+> + 2. The ``UFFD_FEATURE_WP_ASYNC`` feature is set by ``UFFDIO_API`` IOCTL.
+> + 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
+> +    through ``UFFDIO_REGISTER`` IOCTL.
+> +Then the any part of the registered memory or the whole memory region can be
+> +write protected using the ``UFFDIO_WRITEPROTECT`` IOCTL or ``PAGEMAP_SCAN``
+> +IOCTL.
 
-   Searching for other uses in Debian Code Search seem to be just copies
-   of UAPI headers:
-   https://codesearch.debian.net/search?q=struct+bpf_lpm_trie_key&literal=1&perpkg=1
+This part looks good.
 
-Introduce struct bpf_lpm_trie_key_u8 for the kernel (and future userspace)
-to use for walking the individual bytes following the header, and leave
-the "data" member of struct bpf_lpm_trie_key as-is (i.e. a [0]-style
-array). This will allow existing userspace code to continue to use "data"
-as a fake flexible array. The kernel (and future userspace code) building
-with -fstrict-flex-arrays=3 will see struct bpf_lpm_trie_key::data has
-having 0 bytes so there will be no overlap warnings, and can instead
-use struct bpf_lpm_trie_key_u8::data for accessing the actual byte
-array contents. The definition of struct bpf_lpm_trie_key_u8 uses a
-union with struct bpf_lpm_trie_key so that things like container_of()
-can be used instead of doing explicit casting, all while leaving the
-member names un-namespaced (i.e. key->prefixlen == key_u8->prefixlen,
-key->data == key_u8->data), allowing for trivial drop-in replacement
-without collateral member renaming.
+Thanks,
 
-This will avoid structure overlap warnings and array bounds warnings
-while enabling run-time array bounds checking under CONFIG_UBSAN_BOUNDS=y
-and -fstrict-flex-arrays=3.
-
-For reference, the current warning under GCC 13 with -fstrict-flex-arrays=3
-and -Warray-bounds is:
-
-../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
-  207 |                                        *(__be16 *)&key->data[i]);
-      |                                                   ^~~~~~~~~~~~~
-../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
-  102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-      |                                                      ^
-../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
-   97 | #define be16_to_cpu __be16_to_cpu
-      |                     ^~~~~~~~~~~~~
-../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
-  206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-^
-      |                            ^~~~~~~~~~~
-In file included from ../include/linux/bpf.h:7:
-../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
-   82 |         __u8    data[0];        /* Arbitrary size */
-      |                 ^~~~
-
-Additionally update the samples and selftests to use the new structure,
-for demonstrating best practices.
-
-[1] For lots of details, see both:
-    https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
-    https://people.kernel.org/kees/bounded-flexible-arrays-in-c
-
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mykola Lysenko <mykolal@fb.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/uapi/linux/bpf.h                   | 15 +++++++++++++--
- kernel/bpf/lpm_trie.c                      | 16 +++++++++-------
- samples/bpf/map_perf_test_user.c           |  2 +-
- samples/bpf/xdp_router_ipv4_user.c         |  2 +-
- tools/testing/selftests/bpf/test_lpm_map.c | 14 +++++++-------
- 5 files changed, 31 insertions(+), 18 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index ba0f0cfb5e42..f843a7582456 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -76,10 +76,21 @@ struct bpf_insn {
- 	__s32	imm;		/* signed immediate constant */
- };
- 
--/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-+/* Header for a key of a BPF_MAP_TYPE_LPM_TRIE entry */
- struct bpf_lpm_trie_key {
- 	__u32	prefixlen;	/* up to 32 for AF_INET, 128 for AF_INET6 */
--	__u8	data[0];	/* Arbitrary size */
-+	__u8	data[0];	/* Deprecated field: use struct bpf_lpm_trie_key_u8 */
-+};
-+
-+/* Raw (u8 byte array) key of a BPF_MAP_TYPE_LPM_TRIE entry */
-+struct bpf_lpm_trie_key_u8 {
-+	union {
-+		struct bpf_lpm_trie_key hdr;
-+		struct {
-+			__u32	prefixlen;
-+			__u8	data[];
-+		};
-+	};
- };
- 
- struct bpf_cgroup_storage_key {
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index d833496e9e42..3a93ace62c87 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -164,13 +164,15 @@ static inline int extract_bit(const u8 *data, size_t index)
-  */
- static size_t longest_prefix_match(const struct lpm_trie *trie,
- 				   const struct lpm_trie_node *node,
--				   const struct bpf_lpm_trie_key *key)
-+				   const struct bpf_lpm_trie_key_u8 *key)
- {
- 	u32 limit = min(node->prefixlen, key->prefixlen);
- 	u32 prefixlen = 0, i = 0;
- 
--	BUILD_BUG_ON(offsetof(struct lpm_trie_node, data) % sizeof(u32));
--	BUILD_BUG_ON(offsetof(struct bpf_lpm_trie_key, data) % sizeof(u32));
-+	BUILD_BUG_ON(offsetof(typeof(*node), data) % sizeof(u32));
-+	BUILD_BUG_ON(offsetof(typeof(*key), data) % sizeof(u32));
-+	BUILD_BUG_ON(offsetof(typeof(*key), data) !=
-+		     offsetof(typeof(key->hdr), data));
- 
- #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && defined(CONFIG_64BIT)
- 
-@@ -229,7 +231,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- {
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
- 	struct lpm_trie_node *node, *found = NULL;
--	struct bpf_lpm_trie_key *key = _key;
-+	struct bpf_lpm_trie_key_u8 *key = _key;
- 
- 	/* Start walking the trie from the root node ... */
- 
-@@ -306,7 +308,7 @@ static int trie_update_elem(struct bpf_map *map,
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
- 	struct lpm_trie_node *node, *im_node = NULL, *new_node = NULL;
- 	struct lpm_trie_node __rcu **slot;
--	struct bpf_lpm_trie_key *key = _key;
-+	struct bpf_lpm_trie_key_u8 *key = _key;
- 	unsigned long irq_flags;
- 	unsigned int next_bit;
- 	size_t matchlen = 0;
-@@ -434,7 +436,7 @@ static int trie_update_elem(struct bpf_map *map,
- static int trie_delete_elem(struct bpf_map *map, void *_key)
- {
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
--	struct bpf_lpm_trie_key *key = _key;
-+	struct bpf_lpm_trie_key_u8 *key = _key;
- 	struct lpm_trie_node __rcu **trim, **trim2;
- 	struct lpm_trie_node *node, *parent;
- 	unsigned long irq_flags;
-@@ -616,7 +618,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
- {
- 	struct lpm_trie_node *node, *next_node = NULL, *parent, *search_root;
- 	struct lpm_trie *trie = container_of(map, struct lpm_trie, map);
--	struct bpf_lpm_trie_key *key = _key, *next_key = _next_key;
-+	struct bpf_lpm_trie_key_u8 *key = _key, *next_key = _next_key;
- 	struct lpm_trie_node **node_stack = NULL;
- 	int err = 0, stack_ptr = -1;
- 	unsigned int next_bit;
-diff --git a/samples/bpf/map_perf_test_user.c b/samples/bpf/map_perf_test_user.c
-index d2fbcf963cdf..07ff471ed6ae 100644
---- a/samples/bpf/map_perf_test_user.c
-+++ b/samples/bpf/map_perf_test_user.c
-@@ -370,7 +370,7 @@ static void run_perf_test(int tasks)
- 
- static void fill_lpm_trie(void)
- {
--	struct bpf_lpm_trie_key *key;
-+	struct bpf_lpm_trie_key_u8 *key;
- 	unsigned long value = 0;
- 	unsigned int i;
- 	int r;
-diff --git a/samples/bpf/xdp_router_ipv4_user.c b/samples/bpf/xdp_router_ipv4_user.c
-index 9d41db09c480..266fdd0b025d 100644
---- a/samples/bpf/xdp_router_ipv4_user.c
-+++ b/samples/bpf/xdp_router_ipv4_user.c
-@@ -91,7 +91,7 @@ static int recv_msg(struct sockaddr_nl sock_addr, int sock)
- static void read_route(struct nlmsghdr *nh, int nll)
- {
- 	char dsts[24], gws[24], ifs[16], dsts_len[24], metrics[24];
--	struct bpf_lpm_trie_key *prefix_key;
-+	struct bpf_lpm_trie_key_u8 *prefix_key;
- 	struct rtattr *rt_attr;
- 	struct rtmsg *rt_msg;
- 	int rtm_family;
-diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
-index c028d621c744..e2e822759e13 100644
---- a/tools/testing/selftests/bpf/test_lpm_map.c
-+++ b/tools/testing/selftests/bpf/test_lpm_map.c
-@@ -211,7 +211,7 @@ static void test_lpm_map(int keysize)
- 	volatile size_t n_matches, n_matches_after_delete;
- 	size_t i, j, n_nodes, n_lookups;
- 	struct tlpm_node *t, *list = NULL;
--	struct bpf_lpm_trie_key *key;
-+	struct bpf_lpm_trie_key_u8 *key;
- 	uint8_t *data, *value;
- 	int r, map;
- 
-@@ -331,8 +331,8 @@ static void test_lpm_map(int keysize)
- static void test_lpm_ipaddr(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
--	struct bpf_lpm_trie_key *key_ipv4;
--	struct bpf_lpm_trie_key *key_ipv6;
-+	struct bpf_lpm_trie_key_u8 *key_ipv4;
-+	struct bpf_lpm_trie_key_u8 *key_ipv6;
- 	size_t key_size_ipv4;
- 	size_t key_size_ipv6;
- 	int map_fd_ipv4;
-@@ -423,7 +423,7 @@ static void test_lpm_ipaddr(void)
- static void test_lpm_delete(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
--	struct bpf_lpm_trie_key *key;
-+	struct bpf_lpm_trie_key_u8 *key;
- 	size_t key_size;
- 	int map_fd;
- 	__u64 value;
-@@ -532,7 +532,7 @@ static void test_lpm_delete(void)
- static void test_lpm_get_next_key(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_NO_PREALLOC);
--	struct bpf_lpm_trie_key *key_p, *next_key_p;
-+	struct bpf_lpm_trie_key_u8 *key_p, *next_key_p;
- 	size_t key_size;
- 	__u32 value = 0;
- 	int map_fd;
-@@ -693,7 +693,7 @@ static void *lpm_test_command(void *arg)
- {
- 	int i, j, ret, iter, key_size;
- 	struct lpm_mt_test_info *info = arg;
--	struct bpf_lpm_trie_key *key_p;
-+	struct bpf_lpm_trie_key_u8 *key_p;
- 
- 	key_size = sizeof(struct bpf_lpm_trie_key) + sizeof(__u32);
- 	key_p = alloca(key_size);
-@@ -717,7 +717,7 @@ static void *lpm_test_command(void *arg)
- 				ret = bpf_map_lookup_elem(info->map_fd, key_p, &value);
- 				assert(ret == 0 || errno == ENOENT);
- 			} else {
--				struct bpf_lpm_trie_key *next_key_p = alloca(key_size);
-+				struct bpf_lpm_trie_key_u8 *next_key_p = alloca(key_size);
- 				ret = bpf_map_get_next_key(info->map_fd, key_p, next_key_p);
- 				assert(ret == 0 || errno == ENOENT || errno == ENOMEM);
- 			}
 -- 
-2.34.1
+Peter Xu
 
