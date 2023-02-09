@@ -2,140 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E2F691272
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 22:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE821691277
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 22:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjBIVNF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 16:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
+        id S230040AbjBIVNc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 16:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjBIVNC (ORCPT
+        with ESMTP id S230034AbjBIVNb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 16:13:02 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E35E5A910
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Feb 2023 13:12:57 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id n2so2227916pfo.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Feb 2023 13:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=AqSTz/L2alBL8Zj/w06cTvAyC9XT2IgrPGAqFADFHi0=;
-        b=KdS+mAi5gsRaVPGoK617ANR5OX6QG8JRM3peX4uIGjprw1lEV7xVqfHIsOrhTS3Sn7
-         0JXXR72Jw3pkEk0FkcSWenr1w/jcYTbv29RMz55f4gnS4ENmATbGo7QXBczxBPJNb9x0
-         mBTc5Epwdz2sAdll0YC93N+M6LZmJgURKGETU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AqSTz/L2alBL8Zj/w06cTvAyC9XT2IgrPGAqFADFHi0=;
-        b=qIJYiA9uDhQOXki9gsqAs2wEbHmrSsDWpE4Yf16vIDMHm7uPGB1HA1ZReb6RpS0d8g
-         CsIrFE3HnMnOAOrPM8nnIDGg+8DNxKdroyQ7EkPkOI/6ewrFGrYHkrSp+KFBgcdOZjOD
-         qvJ+miLmlEJVp3QkvMgVTS8CB1Hcs1AjGL0LMhtmLRLK8sRlDDkgQ++h7GQfHHfWKh1P
-         yd5lMphIviSDfqmMkByA83ILtAvV3L7lEGYmiW01kXfmRRN8xn8w+/oTzrbDhs45ZETj
-         jmQOah8IYdyvSI3jFCiT4QwfFxu4BVnQlPhT5+HoM0yBN7FfZqMWQy2r3QjiJOklOxJJ
-         +u6Q==
-X-Gm-Message-State: AO0yUKWRejWtTovwSfyUDZr91GBCtxRQtxez9g7uQPQQfdZpHpjTJpUx
-        Bq5JxKHvqdrNtK7HDEEvSDDmSA==
-X-Google-Smtp-Source: AK7set/jpeO1CmdqClAOg42qN1DNmiq4fZbFjASTnEdfDr6YLfdRrL2Nv+VwLEIAjZL9+aVp7XiVvg==
-X-Received: by 2002:aa7:96b0:0:b0:5a8:65dd:2be with SMTP id g16-20020aa796b0000000b005a865dd02bemr1797059pfk.1.1675977176664;
-        Thu, 09 Feb 2023 13:12:56 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id z9-20020aa791c9000000b0059416691b64sm1961431pfa.19.2023.02.09.13.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 13:12:56 -0800 (PST)
-Message-ID: <63e561d8.a70a0220.250aa.3eb9@mx.google.com>
-X-Google-Original-Message-ID: <202302091310.@keescook>
-Date:   Thu, 9 Feb 2023 13:12:55 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
-References: <20230209192337.never.690-kees@kernel.org>
- <CAEf4BzZXrf48wsTP=2H2gkX6T+MM0B45o0WNswi50DQ_B-WG4Q@mail.gmail.com>
- <63e5521a.170a0220.297d7.3a80@mx.google.com>
- <CAADnVQKsB2n0=hShYpYnTr5yFYRt5MX2QMWo3V9SB9JrM6GhTg@mail.gmail.com>
+        Thu, 9 Feb 2023 16:13:31 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD89F5A938;
+        Thu,  9 Feb 2023 13:13:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yne6rBf3HjNzUJ+jGf+PUwWmHD1xFIYeEWAumOhMzjo6pCVpsYAOHt7xNoJANjctcVyL2cTv38WEPMst+oWjMJJQxIYh/ZW/PVEvaOzLMfoqV6gCm+e1qOYrLET0jFk+TOjg0jw5Ks5OUii+UVegD0ZerwpO9sIOQMjUALB+6gTzS+ZWsSTwLiIPe7HLo8e7A3+jqf7dYEHI8PvWuzBrVPutMY0i8ma7xjRuInR/uAPff8CMdK0fuvDdxW/qLB4EqvRFg+Rl+PCG1RphmJheoxhH/tkpcSY2Taw1y7jMxZhw3Df7k+umQpPDLKNWKNeV7q21up/vuNRp1oGPAebI2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JNycMroQNnZOKOs0he3it1PGl4KT1uZh44RjEsoHY3Q=;
+ b=GmqBycw65Ybvi0Fxr6eMUpJcuW+MBsW0Ad875Pe7id+m9SOAcxclrO3uFqhRccQWBEw4IJ2tS5H9/mN55eqtdUF5gDITEFFT4jvboeUvyzeVuth5ofRYLugS8SrCCDaWcoQ9nkfj50LxHi2ZNJaf5MY+9M2JvMwM2WhilFnPvGSc4SPYen0HPJe9OtuGmI8GUEoxnNohZR0edlA02rRk/DsPFmTlrVnTnYRVciDlnRqWYl10wJJ3rarQ9TWn494E7rAdWDODeuLp+94OOK6fDA++WcyGZ6UlYHq+SB/d+ki9B397s+3I5xVskcj+3gOA1ikeNRuvI+lRrFojysBNHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JNycMroQNnZOKOs0he3it1PGl4KT1uZh44RjEsoHY3Q=;
+ b=N+gLJn8OH44MaGu9Igls3Cyg0b7SDnJ6ayigLKqgBAeZ5kVgJXzvAp6qQGbaLSB/da8/kQ7ahEg/B9Gu0UsMjgua0mKcyqaqGwI60LNJQXDzXrLYVZyRblvtwEkhf03zwdmlaZXkzRo5+8RO8uPsdioSKCUxckTxUBDdk47WFZGd0wD8JgrJPCCxbtWHnYareTKirFMzqUtYzUDspAwZ0Vqrw75ug9urwzH1avE6hPSoeVEpeB6Ym/je3ldiWRwohHb05ITO2jiVzNm46K+XpYe2wMPDioNUP/kIsLUHaMbUSt/4dFwPVI7M8EXSyyz35NrOzWPrNUgdg1hMQNiDxg==
+Received: from DS7P222CA0018.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::33) by
+ DS0PR12MB8365.namprd12.prod.outlook.com (2603:10b6:8:f8::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.19; Thu, 9 Feb 2023 21:13:21 +0000
+Received: from DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2e:cafe::e2) by DS7P222CA0018.outlook.office365.com
+ (2603:10b6:8:2e::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.18 via Frontend
+ Transport; Thu, 9 Feb 2023 21:13:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT079.mail.protection.outlook.com (10.13.173.4) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.19 via Frontend Transport; Thu, 9 Feb 2023 21:13:21 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
+ 13:13:10 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
+ 13:13:10 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Thu, 9 Feb 2023 13:13:09 -0800
+Date:   Thu, 9 Feb 2023 13:13:07 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v2 08/10] iommufd/device: Use iommu_group_replace_domain()
+Message-ID: <Y+Vh479cDD7LX2x/@Asurada-Nvidia>
+References: <cover.1675802050.git.nicolinc@nvidia.com>
+ <4653f009c3dacae8ebf3a4865aaa944aa9c7cc7e.1675802050.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276C1807B710CAD3E5820D78CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAADnVQKsB2n0=hShYpYnTr5yFYRt5MX2QMWo3V9SB9JrM6GhTg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <BN9PR11MB5276C1807B710CAD3E5820D78CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT079:EE_|DS0PR12MB8365:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1454a543-9da0-46e8-5e7b-08db0ae27936
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xTdb5ajWVJLHfijLT+FQzhiNCdE2ZvzAhelQ8JEGfbjv2j1BTWBqYPonxDuUB3hvzPzlF+CGXqiVUEcqV/TKuBDrYR6o5tBaUdoSSQHFwT1vBPrIqJGaOF0C9LKjw2D6vCdt/hO9dodcZXDOSw1bO/QjEHowJS0wa8ddeKVzpz/85yEXxWSqLEyX3rTGJCbkxxXom19IJaoGAuaK6FrE6GuZzJeZqXZSRqsxVNQYQW3IBPBY2LE+/3GVzl7dfZxJif99HtT9xQ22828a/gB2w1CWsx5QCnNGWrpnqsR/qBg3ZTJNsgos4Gnxm8hW3yYkY50m9Mi/I2/GeOgVZ55dbvnHN92DCN1BUIxHznmFFiD/dNVhXaCPmVWmD47izpKc5MxHdzNWxP9OSIADRopoHlyNeKwJC/p69LLU9ZHrsNzeKcAOLhwq+tuCLBdgRPSav3uSZx7cXktqoQu5u6VDvNGtleK4ZMTEt6Wg+uChZ+4V9waIZ5QPaH8GdCk/yuuqfWI2uaMBHOQVLL9zYhmtaDD6bwv7jwaStQaAstZKQuPdKfDDCFqJc5mg8V3n3cKAuN/PkPp75ESg7HopHqw+UxHgFpTghhxJNTynFsroXHYPGyAhsF+kB6P9M5z5GLcWF04ahtzAQwIVfp2ffnGgw/k0MJZ3umE9EVJiSZEoGsK61nIVAp4a9o6Dzfgs2Cxn3pUxFakVVgGlkWjU5t2Drg==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(376002)(136003)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(86362001)(33716001)(478600001)(83380400001)(4326008)(70206006)(6916009)(9686003)(70586007)(82310400005)(186003)(336012)(26005)(47076005)(426003)(54906003)(316002)(356005)(7416002)(55016003)(41300700001)(8676002)(36860700001)(2906002)(40480700001)(5660300002)(7636003)(82740400003)(8936002)(40460700003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 21:13:21.4143
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1454a543-9da0-46e8-5e7b-08db0ae27936
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8365
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 12:50:28PM -0800, Alexei Starovoitov wrote:
-> On Thu, Feb 9, 2023 at 12:05 PM Kees Cook <keescook@chromium.org> wrote:
+On Thu, Feb 09, 2023 at 04:00:52AM +0000, Tian, Kevin wrote:
+ 
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Wednesday, February 8, 2023 5:18 AM
 > >
-> > On Thu, Feb 09, 2023 at 11:52:10AM -0800, Andrii Nakryiko wrote:
-> > > Do we need to add a new type to UAPI at all here? We can make this new
-> > > struct internal to kernel code (e.g. struct bpf_lpm_trie_key_kern) and
-> > > point out that it should match the layout of struct bpf_lpm_trie_key.
-> > > User-space can decide whether to use bpf_lpm_trie_key as-is, or if
-> > > just to ensure their custom struct has the same layout (I see some
-> > > internal users at Meta do just this, just make sure that they have
-> > > __u32 prefixlen as first member).
+> > iommu_group_replace_domain() is introduced to support use cases where
+> > an
+> > iommu_group can be attached to a new domain without getting detached
+> > from
+> > the old one. This replacement feature will be useful, for cases such as:
+> > 1) vPASID mode, when a guest wants to replace a single pasid (PASID=0)
+> >    table with a larger table (PASID=N)
+> > 2) Nesting mode, when switching the attaching device from an S2 domain
+> >    to an S1 domain, or when switching between relevant S1 domains.
+> > as it allows these cases to switch seamlessly without a DMA disruption.
 > >
-> > The uses outside the kernel seemed numerous enough to justify a new UAPI
-> > struct (samples, selftests, etc). It also paves a single way forward
-> > when the userspace projects start using modern compiler options (e.g.
-> > systemd is usually pretty quick to adopt new features).
+> > So, call iommu_group_replace_domain() in the iommufd_device_do_attach().
+> > And add a __iommmufd_device_detach helper to allow the replace routine
+> > to
+> > do a partial detach on the current hwpt that's being replaced. Though the
+> > updated locking logic is overcomplicated, it will be eased, once those
+> > iopt_table_add/remove_ioas and list_add/del calls are moved to hwpt's
+> > allocation/destroy() functions in the coming nesting series, as that'll
+> > depend on a new ->domain_alloc_user op in the iommu core.
 > 
-> I don't understand how the new uapi struct bpf_lpm_trie_key_u8 helps.
-> cilium progs and progs/map_ptr_kern.c
-> cannot do s/bpf_lpm_trie_key/bpf_lpm_trie_key_u8/.
-> They will fail to build, so they're stuck with bpf_lpm_trie_key.
+> then why not moving those changes into this series to make it simple?
 
-Right -- I'm proposing not changing bpf_lpm_trie_key. I'm proposing
-_adding_ bpf_lpm_trie_key_u8 for new users who will be using modern
-compiler options (i.e. where "data[0]" is nonsense).
+The simplification depends on the new ->domain_alloc_user op and
+its implementation in SMMU driver, which would be introduced by
+the nesting series of VT-d and SMMU respectively.
 
-> Can we do just
-> struct bpf_lpm_trie_key_kern {
->   __u32   prefixlen;
->   __u8    data[];
-> };
-> and use it in the kernel?
+At this point, it's hard to decide the best sequence of our three
+series. Putting this replace series first simply because it seems
+to be closer to get merged than the other two bigger series.
 
-Yeah, I can do that if that's preferred, but it leaves userspace hanging
-when they eventually trip over this in their code when they enable
--fstrict-flex-arrays=3 too.
+> > Also, block replace operations that are from/to auto_domains, i.e. only
+> > user-allocated hw_pagetables can be replaced or replaced with.
+> 
+> where does this restriction come from? iommu_group_replace_domain()
+> can switch between any two UNMANAGED domains. What is the extra
+> problem in iommufd to support from/to auto domains?
 
-> What is the disadvantage?
+It was my misunderstanding. We should have supported that.
+Will fix in v3 and add the corresponding support.
 
-It seemed better to give a working example of how to migrate this code.
+> > +/**
+> > + * __iommmufd_device_detach - Detach a device from idev->hwpt to
+> > new_hwpt
+> 
+> 'from ... to ...' means a replace semantics. then this should be called
+> iommufd_device_replace_hwpt().
 
-Regardless, I can just make this specific to the kernel code if that's
-what's wanted.
+Had a hard time to think about the naming, it's indeed a detach-
+only routine, but it takes a parameter named new_hwpt...
 
--- 
-Kees Cook
+Perhaps I should just follow Yi's suggestion by rephrasing the
+narrative of this function.
+
+> > +static void __iommmufd_device_detach(struct iommufd_device *idev,
+> > +                                  struct iommufd_hw_pagetable
+> > *new_hwpt,
+> > +                                  bool detach_group)
+> > +{
+> > +     struct iommufd_hw_pagetable *hwpt = idev->hwpt;
+> > +     struct iommufd_ioas *new_ioas = NULL;
+> > +
+> > +     if (new_hwpt)
+> > +             new_ioas = new_hwpt->ioas;
+> > +
+> > +     mutex_lock(&hwpt->devices_lock);
+> > +     list_del(&idev->devices_item);
+> > +     if (hwpt->ioas != new_ioas)
+> > +             mutex_lock(&hwpt->ioas->mutex);
+> 
+> I think new_ioas->mutext was meant here.
+
+new_hwpt is an input from an replace routine, where it holds the
+new_ioas->mutex already. Yi's right that the code here is a bit
+confusing. I will try to change it a bit for readability.
+ 
+> > +     if (!iommufd_hw_pagetable_has_group(hwpt, idev->group)) {
+> > +             if (list_empty(&hwpt->devices)) {
+> > +                     iopt_table_remove_domain(&hwpt->ioas->iopt,
+> > +                                              hwpt->domain);
+> > +                     list_del(&hwpt->hwpt_item);
+> > +             }
+> 
+> I'm not sure how this can be fully shared between detach and replace.
+> Here some work e.g. above needs to be done before calling
+> iommu_group_replace_domain() while others can be done afterwards.
+
+This iopt_table_remove_domain/list_del is supposed to be done in
+the hwpt's destroy() actually. We couldn't move it because it'd
+need the new domain_alloc_user op and its implementation in ARM
+driver. Overall, I think it should be safe to put it behind the
+iommu_group_replace_domain().
+
+Thanks
+Nic
