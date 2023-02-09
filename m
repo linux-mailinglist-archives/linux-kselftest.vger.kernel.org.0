@@ -2,58 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D694690490
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 11:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AA6690651
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 12:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjBIKYM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 05:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
+        id S230220AbjBILQM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 06:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjBIKYG (ORCPT
+        with ESMTP id S230223AbjBILPr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 05:24:06 -0500
+        Thu, 9 Feb 2023 06:15:47 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D379266EDB;
-        Thu,  9 Feb 2023 02:24:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF95611FD;
+        Thu,  9 Feb 2023 03:15:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A3016195B;
-        Thu,  9 Feb 2023 10:24:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5782CC433EF;
-        Thu,  9 Feb 2023 10:24:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675938243;
-        bh=qTSxkPD3QcM5DcX5h7N2ipkmgP1aWhs5Aq6TYFHj180=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nsXmbcx4rleMJ9bZigroeLRiTj7YHoQTL4XXqCL/duHufSN++c7/v42+Hp0ExknGW
-         kA2C5ZFZuB5hYyElhHe0MsgZE1+z0oVnMPRDyBd+YEzOYvxNLWbncpayuEmllkm8DU
-         Mw/7XGqONMA1m3LRpZo1POASFfs5GnMoBhALiyR0=
-Date:   Thu, 9 Feb 2023 11:24:01 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Jann Horn <jannh@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
-Message-ID: <Y+TJwTVFIYBxELwo@kroah.com>
-References: <20230207125634.292109991@linuxfoundation.org>
- <CA+G9fYtgJX507GJ3fG7-G+vGhG4BnU=kzu3fOH_a-_aMU0S_0w@mail.gmail.com>
- <Y+KJyTsiio0XMQJ+@x1n>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C8E161A18;
+        Thu,  9 Feb 2023 11:15:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 885B2C433EF;
+        Thu,  9 Feb 2023 11:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675941331;
+        bh=AaIeNztZETm3XHMGdo+mMQ5+5jHu/pRFxpqdKXj9vvY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LVhd5O1A+cQHXlzU0PWhu8Tk0OrDrBaBeN51uHe8nQFyUznOB0lqy9vBWhw288wYa
+         sELO1e4OKqEev+9W4jwVu+CPwcgCzJh3V83Dtv4/r/bgbag9clTlraes+f+4npy0wX
+         AEL5HRDRqfYFHC4hiUV5uQiUoDhliM58lTpXayrJOzB1vfQlU6byFf8F7cPbKYRZtB
+         FaGQs1Avtu5+A4PCdImIP/w2N7HNKVZ/r1dzZeOj1kNS8Hyx2BPhto4G9xxLxSF8aV
+         hnuAVjfl5YG5RBgNLNGeVbwCmUI3RSJ3Rj6Zp31XvhhtkWtKZ9s+5zaG9FvjHyzitS
+         ZR1ZrUkpRJDaA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Eduard Zingerman <eddyz87@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
+        andrii@kernel.org, shuah@kernel.org, mykolal@fb.com,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 08/38] selftests/bpf: Verify copy_register_state() preserves parent/live fields
+Date:   Thu,  9 Feb 2023 06:14:27 -0500
+Message-Id: <20230209111459.1891941-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230209111459.1891941-1-sashal@kernel.org>
+References: <20230209111459.1891941-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y+KJyTsiio0XMQJ+@x1n>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,70 +58,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 12:26:33PM -0500, Peter Xu wrote:
-> On Tue, Feb 07, 2023 at 10:35:19PM +0530, Naresh Kamboju wrote:
-> > On Tue, 7 Feb 2023 at 18:29, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 6.1.11 release.
-> > > There are 208 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.11-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> > 
-> > Results from Linaro’s test farm.
-> > Following build regressions noticed while building
-> > selftests/vm/hugetlb-madvise.c
-> > with kselftest-merge configs.
-> > 
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > 
-> > Build errors:
-> > ----------
-> > hugetlb-madvise.c:242:13: warning: implicit declaration of function
-> > 'fallocate'; did you mean 'alloca'? [-Wimplicit-function-declaration]
-> >   242 |         if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
-> >       |             ^~~~~~~~~
-> >       |             alloca
-> > hugetlb-madvise.c:289:27: error: 'FALLOC_FL_PUNCH_HOLE' undeclared
-> > (first use in this function)
-> >   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-> >       |                           ^~~~~~~~~~~~~~~~~~~~
-> > hugetlb-madvise.c:289:27: note: each undeclared identifier is reported
-> > only once for each function it appears in
-> > hugetlb-madvise.c:289:50: error: 'FALLOC_FL_KEEP_SIZE' undeclared
-> > (first use in this function)
-> >   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-> >       |                                                  ^~~~~~~~~~~~~~~~~~~
-> > make[3]: *** [../lib.mk:145:
-> > /home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/vm/hugetlb-madvise]
-> > Error 1
-> > 
-> > Build log:
-> > https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/3728198425#L1676
-> > https://storage.tuxsuite.com/public/linaro/lkft/builds/2LPeQeCIu0YEfltwqAFCvDaj29A/
-> 
-> I think we should drop the patch "[PATCH 6.1 012/208] selftests/vm: remove
-> __USE_GNU in hugetlb-madvise.c" from this merge.
-> 
-> That patch fixes commit 62f33fa22800 ("selftests/vm: use memfd for
-> hugetlb-madvise test"), but that's only in 6.2-rc1 and it's not in 6.1.
-> 
-> I don't really know why it got picked for 6.1 stable backport, because the
-> original patch doesn't contain "CC: stable".
+From: Eduard Zingerman <eddyz87@gmail.com>
 
-Now dropped, thanks!
+[ Upstream commit b9fa9bc839291020b362ab5392e5f18ba79657ac ]
 
-greg k-h
+A testcase to check that verifier.c:copy_register_state() preserves
+register parentage chain and livness information.
+
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Link: https://lore.kernel.org/r/20230106142214.1040390-3-eddyz87@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../selftests/bpf/verifier/search_pruning.c   | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/verifier/search_pruning.c b/tools/testing/selftests/bpf/verifier/search_pruning.c
+index 68b14fdfebdb1..d63fd8991b03a 100644
+--- a/tools/testing/selftests/bpf/verifier/search_pruning.c
++++ b/tools/testing/selftests/bpf/verifier/search_pruning.c
+@@ -225,3 +225,39 @@
+ 	.result_unpriv = ACCEPT,
+ 	.insn_processed = 15,
+ },
++/* The test performs a conditional 64-bit write to a stack location
++ * fp[-8], this is followed by an unconditional 8-bit write to fp[-8],
++ * then data is read from fp[-8]. This sequence is unsafe.
++ *
++ * The test would be mistakenly marked as safe w/o dst register parent
++ * preservation in verifier.c:copy_register_state() function.
++ *
++ * Note the usage of BPF_F_TEST_STATE_FREQ to force creation of the
++ * checkpoint state after conditional 64-bit assignment.
++ */
++{
++	"write tracking and register parent chain bug",
++	.insns = {
++	/* r6 = ktime_get_ns() */
++	BPF_EMIT_CALL(BPF_FUNC_ktime_get_ns),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	/* r0 = ktime_get_ns() */
++	BPF_EMIT_CALL(BPF_FUNC_ktime_get_ns),
++	/* if r0 > r6 goto +1 */
++	BPF_JMP_REG(BPF_JGT, BPF_REG_0, BPF_REG_6, 1),
++	/* *(u64 *)(r10 - 8) = 0xdeadbeef */
++	BPF_ST_MEM(BPF_DW, BPF_REG_FP, -8, 0xdeadbeef),
++	/* r1 = 42 */
++	BPF_MOV64_IMM(BPF_REG_1, 42),
++	/* *(u8 *)(r10 - 8) = r1 */
++	BPF_STX_MEM(BPF_B, BPF_REG_FP, BPF_REG_1, -8),
++	/* r2 = *(u64 *)(r10 - 8) */
++	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_FP, -8),
++	/* exit(0) */
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.flags = BPF_F_TEST_STATE_FREQ,
++	.errstr = "invalid read from stack off -8+1 size 8",
++	.result = REJECT,
++},
+-- 
+2.39.0
+
