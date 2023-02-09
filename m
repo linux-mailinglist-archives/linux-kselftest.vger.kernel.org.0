@@ -2,121 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF42690F83
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 18:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77903690FC2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 19:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBIRsW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 12:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S230170AbjBISAh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 13:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjBIRsV (ORCPT
+        with ESMTP id S230174AbjBISAg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 12:48:21 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE4D61B7
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Feb 2023 09:48:20 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id o13so2822232pjg.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Feb 2023 09:48:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=A7Fh9muBzjV/jBPZf9ed/gD/2z8b4VTj2N9ywQ7oXIE=;
-        b=hwOPnENsSTD1u7F/uN5KoqfQltMbhwaSs+OkwQg79Dc4fjX99RGerO4UFthenfYkKs
-         6FpKKnxFxQUoRynTJwF/qeh7UHDDQkZ235XiNRPYxKqtPCTN1hpLh0ORFcc27KauEwpN
-         vt8kUG9LcoB5X2Vtuov+VvBiW6PaaTflH1wP4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A7Fh9muBzjV/jBPZf9ed/gD/2z8b4VTj2N9ywQ7oXIE=;
-        b=ZbDPyhN8zmz6GBPqeQwM53vabC4aKI1pBSpbHTVsdLyl4Y1e2FMXhCZCdmCYiuSMqK
-         Rrii+oq5Szc7eAIKt1zk8fzGfEkQ5aR56nwxipnLeV8PYck2ExLB+ksLGS4HYYki3zp1
-         I54sAk6TPlmsUeugCf/YbkWTN7ztsFhBpuCn9HvJ/YDbJRs9f7tbXkU1Cg/JgHLzBji3
-         hLAlr+ElV4JcY6vPpHj7Bn6VLZKGfierfANcX1GJtkR+GoODDXkP1Q4yGeFlU/xrL/UT
-         6z2deBepuPEcsJG9TzYbjwMH3l6EVQST5RtANQ2YHbFl+P7Xz2eE8XOmAUpK/rXQpOct
-         W+gg==
-X-Gm-Message-State: AO0yUKUkqafiMOXATRH5GIrWsdbouUaaU3PIdT70IoLxebc440wRDCA5
-        6d414IiVncuKkgoTQmTG1yDvCw==
-X-Google-Smtp-Source: AK7set+vuTEpMUx524NdAoDq88GxFvcwbLo4pMMZw0NedqVHgpCM2khPDUn1V5m4Ngkb0Yhffnx97Q==
-X-Received: by 2002:a17:903:2344:b0:196:5d8d:2d6f with SMTP id c4-20020a170903234400b001965d8d2d6fmr13527570plh.13.1675964900125;
-        Thu, 09 Feb 2023 09:48:20 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id je5-20020a170903264500b00192fc9e8552sm1824914plb.0.2023.02.09.09.48.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 09:48:19 -0800 (PST)
-Message-ID: <63e531e3.170a0220.3a46a.3262@mx.google.com>
-X-Google-Original-Message-ID: <202302090900.@keescook>
-Date:   Thu, 9 Feb 2023 09:48:18 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with
- flexible array
-References: <20230204183241.never.481-kees@kernel.org>
- <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
- <63e14abb.170a0220.ca425.b7bc@mx.google.com>
- <CAKH8qBtX0HU4_YtnZ3hU4NhGHSQ9VU70niXFFoqf3k67a1+6aA@mail.gmail.com>
- <63e5210b.630a0220.c17be.27ff@mx.google.com>
- <CAADnVQK-sW51SsC7FYDqLaO8c5xj=MAgcu_6p8L-JN9kAsrzeA@mail.gmail.com>
+        Thu, 9 Feb 2023 13:00:36 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AB4C673;
+        Thu,  9 Feb 2023 10:00:36 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319HqhcO028667;
+        Thu, 9 Feb 2023 18:00:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Lmhy+u3RejciIgY5dlsFnZKTfGQ59GI+TbEPRgXUduo=;
+ b=gbyB8ZHwDWOAyJOISirMI4aqDc2HttPQgQEl7uYXvVOJw1CPnekFMwaDEgM/0mUhgGPO
+ Kl7pxpdny3t/3kuSajqfZu9H012AaIVBOgYMCISvBB4z+cbCq0+qeQEWspW9g5FsSzVI
+ mj8qwCrMs0m0djve2NuDzsUZ4JNpkVvQI8+GKTtQxv1cVeQijXj9GRoZq0FmkJR1xwDH
+ 4poDXQ5zPecJHyS+sd6q08vFOyr/RR+4sPSS0uyW9MkU9Felh+riJC86xL6/FeKOZUJ+
+ xwwyIUU1oTEIeU1fb24ImyiDMH2Gk77pgZTo7tgIwTXqxBSKxYJs4kwH5zRA4+8k9izy DA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nn5m9r5bk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:00:06 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 319HrLQh030488;
+        Thu, 9 Feb 2023 18:00:05 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nn5m9r5aq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:00:05 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 319GkF6t020070;
+        Thu, 9 Feb 2023 18:00:04 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3nhf07kfmu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:00:04 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 319I02Eg47448480
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Feb 2023 18:00:03 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD77058055;
+        Thu,  9 Feb 2023 18:00:02 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 22C125804B;
+        Thu,  9 Feb 2023 17:59:59 +0000 (GMT)
+Received: from [9.65.251.35] (unknown [9.65.251.35])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Feb 2023 17:59:58 +0000 (GMT)
+Message-ID: <25102c92-1831-be52-677d-60bbf2e11772@linux.ibm.com>
+Date:   Thu, 9 Feb 2023 12:59:58 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQK-sW51SsC7FYDqLaO8c5xj=MAgcu_6p8L-JN9kAsrzeA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 06/17] iommufd/hw_pagetable: Use domain_alloc_user op for
+ domain allocation
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, chao.p.peng@linux.intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        baolu.lu@linux.intel.com
+References: <20230209043153.14964-1-yi.l.liu@intel.com>
+ <20230209043153.14964-7-yi.l.liu@intel.com>
+Content-Language: en-US
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20230209043153.14964-7-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: MshAoLJBHiVQi2gxFXq8KhlzTdxvvaXT
+X-Proofpoint-GUID: Amz5GV-sdxrN2XmhGfjMFEdg5gLSMKzb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-09_13,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 adultscore=0 bulkscore=0 spamscore=0 mlxscore=0
+ mlxlogscore=999 clxscore=1011 phishscore=0 suspectscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302090166
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 08:55:23AM -0800, Alexei Starovoitov wrote:
-> On Thu, Feb 9, 2023 at 8:36 AM Kees Cook <keescook@chromium.org> wrote:
-> > This approach is, perhaps, the best way to go? Besides the selftest,
-> > what things in userspace consumes struct bpf_lpm_trie_key?
+On 2/8/23 11:31 PM, Yi Liu wrote:
+> This converts iommufd to use iommu_domain_alloc_user() for iommu_domain
+> creation.
 > 
-> Plenty of bpf progs use it:
-> https://github.com/cilium/cilium/blob/master/bpf/lib/common.h#L352
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> ---
+>  drivers/iommu/iommufd/hw_pagetable.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+> index 43d473989a06..08d963ee38c7 100644
+> --- a/drivers/iommu/iommufd/hw_pagetable.c
+> +++ b/drivers/iommu/iommufd/hw_pagetable.c
+> @@ -30,6 +30,7 @@ struct iommufd_hw_pagetable *
+>  iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+>  			   struct device *dev)
+>  {
+> +	const struct iommu_ops *ops;
+>  	struct iommufd_hw_pagetable *hwpt;
+>  	int rc;
+>  
+> @@ -37,7 +38,13 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+>  	if (IS_ERR(hwpt))
+>  		return hwpt;
+>  
+> -	hwpt->domain = iommu_domain_alloc(dev->bus);
+> +	ops = dev_iommu_ops(dev);
+> +	if (!ops || !ops->domain_alloc_user) {
+> +		rc = -EOPNOTSUPP;
+> +		goto out_abort;
+> +	}
 
-Thanks for the pointer! Yeah, it seems the "data" member is not
-directly used, but is expected to be there for static initializers and
-offsetof() use. For example:
+Hi Yi,
 
-cilium:
-        struct egress_gw_policy_key in_key = {
-                .lpm_key = { 32 + 24, {} },
-                .saddr   = CLIENT_IP,
-                .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
-        };
+This seems to break the iommufd vfio container support for any iommu that hasn't implemented domain_alloc_user yet.
 
-systemd:
-	ipv6_map_fd = bpf_map_new(
-			BPF_MAP_TYPE_LPM_TRIE,
-			offsetof(struct bpf_lpm_trie_key, data) + sizeof(uint32_t)*4,
-			sizeof(uint64_t),
-			...
+I noticed it using vfio-pci on s390 with
 
-All the others searches in Debian I could find were just copies of UAPI
-headers:
-https://codesearch.debian.net/search?q=struct+bpf_lpm_trie_key&literal=1&perpkg=1
+CONFIG_IOMMUFD=m
+CONFIG_IOMMUFD_VFIO_CONTAINER=y
+CONFIG_VFIO_GROUP=y
 
--- 
-Kees Cook
+Not sure if the intent is to make domain_alloc_user a hard requirement for using iommufd (if so then the commit description really should highlight that).  Otherwise, conditionally calling iommu_domain_alloc(dev->bus) when !ops->domain_alloc_user (instead of returning -EOPNOTSUPP) seems to restore the prior functionality for me.
+
+Thanks,
+Matt
