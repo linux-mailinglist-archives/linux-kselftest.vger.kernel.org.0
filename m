@@ -2,110 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25D7691092
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 19:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25F76910D6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 19:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjBISpQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 13:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
+        id S229510AbjBIS7O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 13:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjBISpO (ORCPT
+        with ESMTP id S229447AbjBIS7N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:45:14 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FE45AB07
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Feb 2023 10:45:13 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id a9so3129337ljr.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Feb 2023 10:45:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9Vua8LHA9JDjb46CzlFrnWZQdagkljpU9vsHTc0DF8=;
-        b=4Asl2/b/Hg5mXqTofzECxhuPfV/1ELQIDimYZFo5ccuAteJziSJW3pYDXsJDmq7Y+p
-         lpDDHNBVBIsZjuYrhT/8CO7je+D0yRIjnKBMx7GuQ3Iwx4I+G+nLehVUbH0TEajH6s3U
-         IGsZgyI4UYvCbVRF6nLgaIyeCV3hvJ8a2V3A2Vjy++cLtMJNGrdeWeSVfxiocHfTBnmv
-         cOjTcm/RJ8fTXs6aU7mjTOA1KODjFpjh2yfJC5p0X/XOKH0yKrgYtdSeuIdVkI7TSyDb
-         19CjtZZWizsZnlrnI2iIceIRDLtgL1q5rBjOWBiImMnlyVTMwktoAUn5RJDzF2BRDSRK
-         /9dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D9Vua8LHA9JDjb46CzlFrnWZQdagkljpU9vsHTc0DF8=;
-        b=lWzSqLjwcWriFgYpEeFa6kiy2FLKbEw1oKWOAZyfJgvpJnLVXYXFMhUho2BCyE2MZa
-         TamIl8nPhKBk4c3obByWmcWGJoALraYIPFW6XoLhPMoClvxnjmJ1Iwh59BXxGSdqeiim
-         6EeQO16auALFf6RlZKwy2I/TEwRCftf8d1az4k9M2edI818Ketf+e73lKPJ8DFDuQ/4k
-         15LV7IWRBk1NgpZf8zKxHG7murAbSd6/jClSry9sxWeL91mcULYYOYAnLV+JQxhz+ga7
-         IlSqFtsJV5Xs26nejyaCuHaHF8IPto8ucQHZ9fP1xFxmADm3+wZnVV6JfE9T41tOwNon
-         zf5w==
-X-Gm-Message-State: AO0yUKXYo8Q76NPpVJA9cbFfKuvu9b2jLhm7TXsginKhZjiTJ5gQRjfS
-        4zzcCTZf2bpwYsg9g8bai117HuUr5pleddoNu7TxEw==
-X-Google-Smtp-Source: AK7set9BEO75w+/zGEdYth0f1dUrFoFb09CZjL4/pITzFZUZHnpCtKSQrnmioh62h4aT4HugkczFG9LjIBQvWztIKT8=
-X-Received: by 2002:a2e:6f14:0:b0:293:125c:284f with SMTP id
- k20-20020a2e6f14000000b00293125c284fmr2100576ljc.148.1675968312327; Thu, 09
- Feb 2023 10:45:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20230206201455.1790329-1-evan@rivosinc.com> <20230206201455.1790329-7-evan@rivosinc.com>
- <Y+FwvI+xRg7zMhSx@sirena.org.uk>
-In-Reply-To: <Y+FwvI+xRg7zMhSx@sirena.org.uk>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Thu, 9 Feb 2023 10:44:36 -0800
-Message-ID: <CALs-HsvQiRm-guFMy-E4J+CTLoOMoxb=JiedbtFrdXwzz-oSoA@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] selftests: Test the new RISC-V hwprobe interface
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Conor Dooley <conor@kernel.org>, vineetg@rivosinc.com,
-        heiko@sntech.de, slewis@rivosinc.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+        Thu, 9 Feb 2023 13:59:13 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751705C88B;
+        Thu,  9 Feb 2023 10:59:12 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319ImTkb022928;
+        Thu, 9 Feb 2023 18:58:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=+hw88KhkYg10X+hLyjExuHRgBwHOAz02TbGNYO+1+N4=;
+ b=AyivhjVx+oHKAkfulQnAgMyKicVHYNc/fTiFsoyAQa8MnHP+GfrsuNxAtBRvFlBHE1jI
+ VsdfYzQDlphjNFhAYVUwS+nKAKjmWkU8O7UPh+0KONFLu2GH7/fhzAq/pPCpm3kaDheN
+ g5MeHsntB4PWDMYfc0yVi4f3f82nqY23irQQRBGg56SIqrAmk7ohFP2kRr7neMGWvgif
+ rcccsNquXaOGoSczpxOnw0gsp+roXOsoXJf51K6N+WMRGQTHkJBRlS3bGzO7FgO1Js+M
+ F0m4TcLonbdDMNMp41XI/I/drsWiPu+sM2TGDdNPn+wRoCNhZKrOjXDNyIy7Sxefj1cR 4g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nn6edg6a7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:58:52 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 319Ionx8031283;
+        Thu, 9 Feb 2023 18:58:51 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nn6edg69u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:58:51 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 319I15O0017625;
+        Thu, 9 Feb 2023 18:58:50 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3nhf082fy0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:58:50 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 319IwnwZ6423104
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Feb 2023 18:58:49 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5F26D58055;
+        Thu,  9 Feb 2023 18:58:49 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1FF8058043;
+        Thu,  9 Feb 2023 18:58:48 +0000 (GMT)
+Received: from li-479af74c-31f9-11b2-a85c-e4ddee11713b.ibm.com (unknown [9.65.242.162])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Feb 2023 18:58:48 +0000 (GMT)
+Message-ID: <c5f5b03420367dc4280cc54c36dbe03fb34fffa0.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 03/10] iommufd: Create access in
+ vfio_iommufd_emulated_bind()
+From:   Eric Farman <farman@linux.ibm.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
+        kevin.tian@intel.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, alex.williamson@redhat.com, shuah@kernel.org
+Cc:     yi.l.liu@intel.com, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, baolu.lu@linux.intel.com,
+        Matthew Rosato <mjrosato@linux.ibm.com>
+Date:   Thu, 09 Feb 2023 13:58:47 -0500
+In-Reply-To: <6083ba9a3c1d92baf1f324d4748333d80d3de830.1675802050.git.nicolinc@nvidia.com>
+References: <cover.1675802050.git.nicolinc@nvidia.com>
+         <6083ba9a3c1d92baf1f324d4748333d80d3de830.1675802050.git.nicolinc@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RM_Pp-M7EO8C3aKgve0my-uIuqw531jR
+X-Proofpoint-ORIG-GUID: YAbOYRxR286bxeE-y5Lp0HdiPDuZSnyx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-09_15,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ malwarescore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0 spamscore=0
+ bulkscore=0 phishscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302090174
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 1:27 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Mon, Feb 06, 2023 at 12:14:55PM -0800, Evan Green wrote:
->
-> > +int main(int argc, char **argv)
-> > +{
->
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/libc.S
->
-> > +.global _start
-> > +_start:
-> > +.option push
-> > +.option norelax
-> > +     la gp, __global_pointer$
-> > +.option pop
-> > +
-> > +     la sp, stack
-> > +
-> > +     la t0, heap
-> > +     la t1, brk
-> > +     REG_S t0, 0(t1)
-> > +
-> > +     li a0, 0
-> > +     li a1, 0
-> > +
-> > +     call main
->
-> This looks like it's just a standard program entry but I don't speak
-> RISC-V asm so I might be missing something.  If that's the case might it
-> make sense to use nolibc here?
+T24gVHVlLCAyMDIzLTAyLTA3IGF0IDEzOjE3IC0wODAwLCBOaWNvbGluIENoZW4gd3JvdGU6Ci4u
+LnNuaXAuLi4KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy92ZmlvL2lvbW11ZmQuYyBiL2RyaXZlcnMv
+dmZpby9pb21tdWZkLmMKPiBpbmRleCAwMjZmODFhODdkZDcuLmRjOWZlYWI3M2RiNyAxMDA2NDQK
+PiAtLS0gYS9kcml2ZXJzL3ZmaW8vaW9tbXVmZC5jCj4gKysrIGIvZHJpdmVycy92ZmlvL2lvbW11
+ZmQuYwo+IEBAIC0xNDEsMTAgKzE0MSwxOSBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGlvbW11ZmRf
+YWNjZXNzX29wcwo+IHZmaW9fdXNlcl9vcHMgPSB7Cj4gwqBpbnQgdmZpb19pb21tdWZkX2VtdWxh
+dGVkX2JpbmQoc3RydWN0IHZmaW9fZGV2aWNlICp2ZGV2LAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgaW9tbXVmZF9j
+dHggKmljdHgsIHUzMgo+ICpvdXRfZGV2aWNlX2lkKQo+IMKgewo+ICvCoMKgwqDCoMKgwqDCoHN0
+cnVjdCBpb21tdWZkX2FjY2VzcyAqdXNlcjsKPiArCj4gwqDCoMKgwqDCoMKgwqDCoGxvY2tkZXBf
+YXNzZXJ0X2hlbGQoJnZkZXYtPmRldl9zZXQtPmxvY2spOwo+IMKgCj4gLcKgwqDCoMKgwqDCoMKg
+dmRldi0+aW9tbXVmZF9pY3R4ID0gaWN0eDsKPiDCoMKgwqDCoMKgwqDCoMKgaW9tbXVmZF9jdHhf
+Z2V0KGljdHgpOwo+ICvCoMKgwqDCoMKgwqDCoHVzZXIgPSBpb21tdWZkX2FjY2Vzc19jcmVhdGUo
+dmRldi0+aW9tbXVmZF9pY3R4LAo+ICZ2ZmlvX3VzZXJfb3BzLCB2ZGV2KTsKPiArwqDCoMKgwqDC
+oMKgwqBpZiAoSVNfRVJSKHVzZXIpKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGlvbW11ZmRfY3R4X3B1dCh2ZGV2LT5pb21tdWZkX2ljdHgpOwoKTWF0dGhldyBub3RpY2VkIGEg
+dmZpby1jY3cgYW5kIC1hcCByZWdyZXNzaW9uIHRoYXQgYmxhbWVzIHRoaXMgcGF0Y2guCgpQcm9i
+YWJseSBib3RoIHRoZSBpb21tdWZkX2FjY2Vzc19jcmVhdGUoKSBhbmQgaW9tbXVmZF9jdHhfcHV0
+KCkgY2FsbHMKd2FudCB0aGUgaWN0eCB2YXJpYWJsZSBpdHNlbGYsIGluc3RlYWQgb2YgdGhlICh1
+bmluaXRpYWxpemVkKSBwb2ludGVyCmluIHRoZSB2ZmlvX2RldmljZS4gKEF0IGxlYXN0IHRoYXQg
+Z2V0cyAtY2N3IGFuZCAtYXAgd29ya2luZyBhZ2Fpbi4pCgpUaGFua3MsCkVyaWMKCj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBQVFJfRVJSKHVzZXIpOwo+ICvCoMKgwqDC
+oMKgwqDCoH0KPiArwqDCoMKgwqDCoMKgwqBpb21tdWZkX2FjY2Vzc19zZXRfaW9hcyh1c2VyLCAw
+KTsKPiArwqDCoMKgwqDCoMKgwqB2ZGV2LT5pb21tdWZkX2FjY2VzcyA9IHVzZXI7Cj4gK8KgwqDC
+oMKgwqDCoMKgdmRldi0+aW9tbXVmZF9pY3R4ID0gaWN0eDsKPiDCoMKgwqDCoMKgwqDCoMKgcmV0
+dXJuIDA7Cj4gwqB9Cj4gwqBFWFBPUlRfU1lNQk9MX0dQTCh2ZmlvX2lvbW11ZmRfZW11bGF0ZWRf
+YmluZCk7Cgo=
 
-I think I can just remove this file entirely along with -nostdlib, and
-just let the compiler add in this glue.
--Evan
