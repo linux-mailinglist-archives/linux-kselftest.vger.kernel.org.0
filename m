@@ -2,165 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A0C69114E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 20:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6409691196
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 20:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBIT1b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 14:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
+        id S229623AbjBITvq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 14:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBIT1a (ORCPT
+        with ESMTP id S229616AbjBITvp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:27:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F62F192
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Feb 2023 11:26:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675970805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x9cE6e+W76LeERGPHwI+bdvwZC6nPSTrvaIuldAklW4=;
-        b=TSnVYYYBqJsJJs7GqCO/jEG5PNrtTfYqUNtcVydn9pmNae0xN3Y4oU6Z7j6WRwF1TYWHqn
-        2ApylfXCOFCGWSebPPpsb51VpmxZj2XHN1Bb1m2K6cx3TRPoIe28JZ1RmLQbesU1aT3xuV
-        sJvmSmg3QZ0zBtS6cLlxu1eGa3qWf9M=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-288-XaiArPjyM1aLbtYyrvCWlg-1; Thu, 09 Feb 2023 14:26:44 -0500
-X-MC-Unique: XaiArPjyM1aLbtYyrvCWlg-1
-Received: by mail-qv1-f72.google.com with SMTP id jo26-20020a056214501a00b0053aa15f61d4so1819420qvb.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Feb 2023 11:26:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x9cE6e+W76LeERGPHwI+bdvwZC6nPSTrvaIuldAklW4=;
-        b=pWgBIUTZxqyrMt0mAs9mlU0M0hCcA8LFr8Bm3tHb0A8qoKbPfTFBccqiaQLKhQ9d+9
-         Lu9Lxq0HP/8o69dMrx4Y5pAzI3mgXtqKh70T6NlHrZetqh7C3FHZYlYXqelPFv54KAlq
-         UcCwVf0DFX2DKgLC+FXZtGOEHm819yWwgsXo7L5SwJHi73J2flJHd+lH44EMTEQ4Q9PY
-         IU0vTPVZ65Vqg40I76rnq0ohsfqmpSn64LGS7zoV87Q8uDCioFy4wk5ORWnL6gg2GIqU
-         Wiv/nqy6Et1sY4ZnDVAYVeLc1GQGZXQn9eMiUnDoctlOnvcRtdeJdzct2eLlXGR8Cmcg
-         L//A==
-X-Gm-Message-State: AO0yUKUiDP6eqqzEk0JcpRxRYCGevhUk1gi8VjuydkMwEuXNXV47FqZ7
-        k/Y19m24XSsv0QC5Jk4aVMzgykOhBG2uuuO74cOuPYvEx6xiDMzuUwatzEw7/ebBrascubqjwBJ
-        G7dM2y7AsW7+9huweRQZ4+I6aMsQl
-X-Received: by 2002:a0c:f54e:0:b0:56c:2082:743d with SMTP id p14-20020a0cf54e000000b0056c2082743dmr9228473qvm.5.1675970803831;
-        Thu, 09 Feb 2023 11:26:43 -0800 (PST)
-X-Google-Smtp-Source: AK7set/Cz68ujEJJEwIYk1OtfltUrAU4LXBdHLuQ9itehZm0vTs8jvdCbtuAw+h5up7Jog7JfvKeyQ==
-X-Received: by 2002:a0c:f54e:0:b0:56c:2082:743d with SMTP id p14-20020a0cf54e000000b0056c2082743dmr9228433qvm.5.1675970803495;
-        Thu, 09 Feb 2023 11:26:43 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id t66-20020a374645000000b007203bbbbb31sm1994600qka.47.2023.02.09.11.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 11:26:42 -0800 (PST)
-Date:   Thu, 9 Feb 2023 14:26:40 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v10 5/6] mm/pagemap: add documentation of PAGEMAP_SCAN
- IOCTL
-Message-ID: <Y+VI8HfM1k3uPA5t@x1n>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-6-usama.anjum@collabora.com>
+        Thu, 9 Feb 2023 14:51:45 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FE568AE4;
+        Thu,  9 Feb 2023 11:51:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BRYzh6kqqIO/y0UFtnUsi1+aNcpLs5/+p0zWNYN9kUbSMLtxFvxtaSv3UgwLOkSpOFJSNWzHh/DEdaIoClM7Nr16/JR/remnp8r18Uw1R1x1LsXBuOFpIrga+n8Q0xrgsALNbyUdIQAAUrTuhATtU1yfKv6lapSgyhcOecsQ9tiTUcvXb/Rmy6b2QU0ZHWn35/ZQaPZudMtkdkbimCoA3duNHBJbBMU3o2YwqZYPe9+kYRz3ot7evj22on2xIDTSZrbfk8Kdh5mLnPxQzh9y1KcsLLg25NHQyEIOh8UoSuHffWmuWgRCCXXQJ4xFAkL+fSrlLaBRJgPME5wiNS+uyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IE5TJvdAUMtxLKM23i8X8UnR5cCuC+VGKQL7WgvLMCU=;
+ b=ZZIUKFE82hw2jLdhK9jirCBvgy4z+pbyBsLxSTbDiU2R6CGP+Rgy8kyxdJYzzFOU4IlCALzlJbl0SmFOR+ece5Edi8EvqV/zCaj5wgZWwcoFOMWSJpDFfAOlJ4IitsOU8pM8Qpr4Thd2rdOAg4zb+62zNMVo0DS+JIKZt4FN6+ZYFT7aEAoL/GsreFc+VSMXtO8J91eot+Lsdx52wLD8YtA8EwblnG2wjXDp47EWAwxs/KHKSJcExtFngv0+tOu+qFqmSGeptDFIiW8ehPw7KNVhbBGYowy3+erqTMZHf187FNUzWoNmHSkT/St2hOU+ZN/sixobyqdExVAxowBYBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IE5TJvdAUMtxLKM23i8X8UnR5cCuC+VGKQL7WgvLMCU=;
+ b=Xxhmhemt/nPbjwOTqIoTcTbLrTuaG0njdtP10c0TRCZhRccrKxEzo/K/3sh1vs0Rw9JNI9ykOZD0uetPM6Euso9030NNGuYjUEhDLXAmlTlfqfjToKsE2qbJtiS9f+2bmufqWMacpgGnhVsk3qMYw0+J7ySJ+5rIeXqfZrHKWLFYEyjSGSXo0o/xMMRgZuYykWXaiWkB+i76RREA+FUpu3eji3WtQVACZztTHhdoFu4CbqnRCtGoTXfNDxRg9TO8yJupIc2L41mpH3K17PlPsigyZAXNrtXkANbzJu1H7sjqr+C5P/YuaXy0c0hakaZUCns8Ro4E1WaCd15Uz10C8A==
+Received: from MW4PR04CA0348.namprd04.prod.outlook.com (2603:10b6:303:8a::23)
+ by CY8PR12MB7415.namprd12.prod.outlook.com (2603:10b6:930:5d::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Thu, 9 Feb
+ 2023 19:51:43 +0000
+Received: from CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8a:cafe::f7) by MW4PR04CA0348.outlook.office365.com
+ (2603:10b6:303:8a::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19 via Frontend
+ Transport; Thu, 9 Feb 2023 19:51:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT072.mail.protection.outlook.com (10.13.174.106) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.19 via Frontend Transport; Thu, 9 Feb 2023 19:51:43 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
+ 11:51:34 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
+ 11:51:34 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Thu, 9 Feb 2023 11:51:32 -0800
+Date:   Thu, 9 Feb 2023 11:51:31 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+CC:     Matthew Rosato <mjrosato@linux.ibm.com>, <joro@8bytes.org>,
+        <alex.williamson@redhat.com>, <kevin.tian@intel.com>,
+        <robin.murphy@arm.com>, <cohuck@redhat.com>,
+        <eric.auger@redhat.com>, <kvm@vger.kernel.org>,
+        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
+        <peterx@redhat.com>, <jasowang@redhat.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
+        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH 06/17] iommufd/hw_pagetable: Use domain_alloc_user op for
+ domain allocation
+Message-ID: <Y+VOw6dTnGapMm9L@Asurada-Nvidia>
+References: <20230209043153.14964-1-yi.l.liu@intel.com>
+ <20230209043153.14964-7-yi.l.liu@intel.com>
+ <25102c92-1831-be52-677d-60bbf2e11772@linux.ibm.com>
+ <Y+U9QX4p5YX3/B3k@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230202112915.867409-6-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y+U9QX4p5YX3/B3k@nvidia.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT072:EE_|CY8PR12MB7415:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a3e9322-5ae7-41b7-57f2-08db0ad7118f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JwmwsP57xtleKg9U0eZ4oG/BnGO06cFCtIcV5MR2QUy/yDqMyMmaPf+8kxHAt3aeS0HMzH8wMCZs9vxN+zcgUJqnB47taUpSb7X+11ADMVoSTdj+M1LsdBG3gxY1tis6PUAhlRDblyChyJUrQvQyCcUMZ4M4KdsxZlB8DyoRdEWLWiwBBUhLNfExCxDcDuUKcK8T9I12eLd1a1wFE45DHkDlhRcPdofvavq3pcUxv33kHFftF+jE3LjtAzQNHvIO0Eslji0gAJMjNmQuVQPRISQn3qg4JZyBHtoX0vZMcQFJCJfqfo93IioK39+hjTPA1/TPBjUDIX2GJuDKEtwUemhWF5fgSch5B6mHPG5l9KiGl8B+THsfeF7fCW8zTbwwl2xL/Q0fMJZGFoRjVoEv58hI+vAkgBkNu/0/R6JLv8aMk5XMRCQK0lBTbdcrB3xyBaYXg1ZQAb46rFP7ks8eLDPUC96F+M6NvwRcaPvzPcWaQSctpelnyGJpsEQs6Gc/ZNGipInHBqrmYPAxXffN75ceVIyTuQgO/sgJaMHy64y4cl6CYfJUgnD24LJbx1ms0pyLJl5Ul0BZaolyo6naM4a6yKnMfxTdaXmN6VQOHt4SJVDcqex6bTgHgk1KvCkfVYtDacJQ5VXrARDP4F4wvXikNkRmZfMFtLC39oSrBF1ytcFbVgn4jpnNM7JkBc6LHhHCzt/Ti0zlLPVk/2oydfA6XKMv2dI/gTBxbNbgwtw=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(39860400002)(346002)(451199018)(40470700004)(46966006)(36840700001)(54906003)(110136005)(316002)(478600001)(186003)(26005)(5660300002)(40460700003)(8936002)(7416002)(9686003)(2906002)(70586007)(8676002)(4326008)(70206006)(41300700001)(7636003)(86362001)(82740400003)(40480700001)(55016003)(426003)(47076005)(336012)(82310400005)(36860700001)(356005)(33716001)(83380400001)(67856001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 19:51:43.0191
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a3e9322-5ae7-41b7-57f2-08db0ad7118f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7415
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 04:29:14PM +0500, Muhammad Usama Anjum wrote:
-> Add some explanation and method to use write-protection and written-to
-> on memory range.
+On Thu, Feb 09, 2023 at 02:36:49PM -0400, Jason Gunthorpe wrote:
+> On Thu, Feb 09, 2023 at 12:59:58PM -0500, Matthew Rosato wrote:
+> > really should highlight that).  Otherwise, conditionally calling
+> > iommu_domain_alloc(dev->bus) when !ops->domain_alloc_user (instead
+> > of returning -EOPNOTSUPP) seems to restore the prior functionality
+> > for me.
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  Documentation/admin-guide/mm/pagemap.rst | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
-> index 6e2e416af783..1cb2189e9a0d 100644
-> --- a/Documentation/admin-guide/mm/pagemap.rst
-> +++ b/Documentation/admin-guide/mm/pagemap.rst
-> @@ -230,3 +230,27 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
->  always 12 at most architectures). Since Linux 3.11 their meaning changes
->  after first clear of soft-dirty bits. Since Linux 4.2 they are used for
->  flags unconditionally.
-> +
-> +Pagemap Scan IOCTL
-> +==================
-> +
-> +The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get and/or clear
-> +the info about page table entries. The following operations are supported in
-> +this IOCTL:
-> +- Get the information if the pages have been written-to (``PAGE_IS_WRITTEN``),
-> +  file mapped (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``) or swapped
-> +  (``PAGE_IS_SWAPPED``).
-> +- Write-protect the pages (``PAGEMAP_WP_ENGAGE``) to start finding which
-> +  pages have been written-to.
-> +- Find pages which have been written-to and write protect the pages
-> +  (atomic ``PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE``)
+> Yes, that is right if the input user data is 0 length or full of 0s
+> then we should call the normal driver function
 
-Could we extend this section a bit more?  Some points for reference:
+Maybe I am wrong, yet I recall that doing ops->domain_alloc_user
+without a fallback was intentional to rule out drivers that don't
+support IOMMUFD?
 
-  - The new struct you introduced, definitions of each of the fields, and
-    generic use cases for each of the field/ops.
+To be backward-compatible and concern about SMMU, we can opt in
+ops->domain_alloc_user upon availability and then add a fallback:
 
-  - It'll be nice to list the OPs the new interface supports (GET,
-    WP_ENGAGE, GET+WP_ENGAGE).
+	if ((!ops || !ops->domain_alloc_user) && user_data) {
+		rc = -EOPNOTSUPP;
+		goto out_abort;
+	}
 
-  - When should people use this rather than the old pagemap interface?
-    What's the major problems to solve / what's the major difference?
-    (Maybe nice to reference the Windows API too here)
+	if (ops->domain_alloc_user)
+		hwpt->domain = ops->domain_alloc_user(dev, NULL, NULL);
+	else
+		hwpt->domain = iommu_domain_alloc(dev->bus);
+	if (!hwpt->domain) {
+		rc = -ENOMEM;
+		goto out_abort;
+	}
 
-> +
-> +To get information about which pages have been written-to and/or write protect
-> +the pages, following must be performed first in order:
-> + 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
-> + 2. The ``UFFD_FEATURE_WP_ASYNC`` feature is set by ``UFFDIO_API`` IOCTL.
-> + 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
-> +    through ``UFFDIO_REGISTER`` IOCTL.
-> +Then the any part of the registered memory or the whole memory region can be
-> +write protected using the ``UFFDIO_WRITEPROTECT`` IOCTL or ``PAGEMAP_SCAN``
-> +IOCTL.
+Yet, even by doing so, this series having the PATCH 07/17 that
+moves iopt_table_add_domain() would temporally break IOMMUFD on
+ARM platforms, until we add the ops->domain_alloc_user to SMMU
+drivers.
 
-This part looks good.
-
-Thanks,
-
--- 
-Peter Xu
-
+Thanks
+Nic
