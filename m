@@ -2,233 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EF669047B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 11:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D694690490
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 11:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjBIKLu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 05:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S229940AbjBIKYM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 05:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjBIKLt (ORCPT
+        with ESMTP id S229944AbjBIKYG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 05:11:49 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1491E2690;
-        Thu,  9 Feb 2023 02:11:46 -0800 (PST)
-Received: from lhrpeml100003.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PCCGd3Dh7z6J6Yh;
-        Thu,  9 Feb 2023 18:07:37 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- lhrpeml100003.china.huawei.com (7.191.160.210) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 9 Feb 2023 10:11:43 +0000
-Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
- lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2507.017;
- Thu, 9 Feb 2023 10:11:42 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Yi Liu <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "kevin.tian@intel.com" <kevin.tian@intel.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "zhangfei.gao@linaro.org" <zhangfei.gao@linaro.org>
-Subject: RE: [PATCH 00/17] Add Intel VT-d nested translation
-Thread-Topic: [PATCH 00/17] Add Intel VT-d nested translation
-Thread-Index: AQHZPD95hqLckmeZEk+opw51qnHtYq7GX1jw
-Date:   Thu, 9 Feb 2023 10:11:42 +0000
-Message-ID: <0bea6077f0634587b744ec2b421205e1@huawei.com>
-References: <20230209043153.14964-1-yi.l.liu@intel.com>
-In-Reply-To: <20230209043153.14964-1-yi.l.liu@intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.195.245.52]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 9 Feb 2023 05:24:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D379266EDB;
+        Thu,  9 Feb 2023 02:24:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A3016195B;
+        Thu,  9 Feb 2023 10:24:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5782CC433EF;
+        Thu,  9 Feb 2023 10:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675938243;
+        bh=qTSxkPD3QcM5DcX5h7N2ipkmgP1aWhs5Aq6TYFHj180=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nsXmbcx4rleMJ9bZigroeLRiTj7YHoQTL4XXqCL/duHufSN++c7/v42+Hp0ExknGW
+         kA2C5ZFZuB5hYyElhHe0MsgZE1+z0oVnMPRDyBd+YEzOYvxNLWbncpayuEmllkm8DU
+         Mw/7XGqONMA1m3LRpZo1POASFfs5GnMoBhALiyR0=
+Date:   Thu, 9 Feb 2023 11:24:01 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Jann Horn <jannh@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
+Message-ID: <Y+TJwTVFIYBxELwo@kroah.com>
+References: <20230207125634.292109991@linuxfoundation.org>
+ <CA+G9fYtgJX507GJ3fG7-G+vGhG4BnU=kzu3fOH_a-_aMU0S_0w@mail.gmail.com>
+ <Y+KJyTsiio0XMQJ+@x1n>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y+KJyTsiio0XMQJ+@x1n>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Feb 07, 2023 at 12:26:33PM -0500, Peter Xu wrote:
+> On Tue, Feb 07, 2023 at 10:35:19PM +0530, Naresh Kamboju wrote:
+> > On Tue, 7 Feb 2023 at 18:29, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 6.1.11 release.
+> > > There are 208 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.11-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> > 
+> > Results from Linaro’s test farm.
+> > Following build regressions noticed while building
+> > selftests/vm/hugetlb-madvise.c
+> > with kselftest-merge configs.
+> > 
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > 
+> > Build errors:
+> > ----------
+> > hugetlb-madvise.c:242:13: warning: implicit declaration of function
+> > 'fallocate'; did you mean 'alloca'? [-Wimplicit-function-declaration]
+> >   242 |         if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+> >       |             ^~~~~~~~~
+> >       |             alloca
+> > hugetlb-madvise.c:289:27: error: 'FALLOC_FL_PUNCH_HOLE' undeclared
+> > (first use in this function)
+> >   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+> >       |                           ^~~~~~~~~~~~~~~~~~~~
+> > hugetlb-madvise.c:289:27: note: each undeclared identifier is reported
+> > only once for each function it appears in
+> > hugetlb-madvise.c:289:50: error: 'FALLOC_FL_KEEP_SIZE' undeclared
+> > (first use in this function)
+> >   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+> >       |                                                  ^~~~~~~~~~~~~~~~~~~
+> > make[3]: *** [../lib.mk:145:
+> > /home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/vm/hugetlb-madvise]
+> > Error 1
+> > 
+> > Build log:
+> > https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/3728198425#L1676
+> > https://storage.tuxsuite.com/public/linaro/lkft/builds/2LPeQeCIu0YEfltwqAFCvDaj29A/
+> 
+> I think we should drop the patch "[PATCH 6.1 012/208] selftests/vm: remove
+> __USE_GNU in hugetlb-madvise.c" from this merge.
+> 
+> That patch fixes commit 62f33fa22800 ("selftests/vm: use memfd for
+> hugetlb-madvise test"), but that's only in 6.2-rc1 and it's not in 6.1.
+> 
+> I don't really know why it got picked for 6.1 stable backport, because the
+> original patch doesn't contain "CC: stable".
 
+Now dropped, thanks!
 
-> -----Original Message-----
-> From: Yi Liu [mailto:yi.l.liu@intel.com]
-> Sent: 09 February 2023 04:32
-> To: joro@8bytes.org; alex.williamson@redhat.com; jgg@nvidia.com;
-> kevin.tian@intel.com; robin.murphy@arm.com
-> Cc: cohuck@redhat.com; eric.auger@redhat.com; nicolinc@nvidia.com;
-> kvm@vger.kernel.org; mjrosato@linux.ibm.com;
-> chao.p.peng@linux.intel.com; yi.l.liu@intel.com; yi.y.sun@linux.intel.com;
-> peterx@redhat.com; jasowang@redhat.com; Shameerali Kolothum Thodi
-> <shameerali.kolothum.thodi@huawei.com>; lulu@redhat.com;
-> suravee.suthikulpanit@amd.com; iommu@lists.linux.dev;
-> linux-kernel@vger.kernel.org; linux-kselftest@vger.kernel.org;
-> baolu.lu@linux.intel.com
-> Subject: [PATCH 00/17] Add Intel VT-d nested translation
-> 
-> Nested translation has two stage address translations to get the final
-> physical addresses. Take Intel VT-d as an example, the first stage translation
-> structure is I/O page table. As the below diagram shows, guest I/O page
-> table pointer in GPA (guest physical address) is passed to host to do the
-> first stage translation. Along with it, guest modifications to present
-> mappings in the first stage page should be followed with an iotlb invalidation
-> to sync host iotlb.
-> 
->     .-------------.  .---------------------------.
->     |   vIOMMU    |  | Guest I/O page table      |
->     |             |  '---------------------------'
->     .----------------/
->     | PASID Entry |--- PASID cache flush --+
->     '-------------'                        |
->     |             |                        V
->     |             |           I/O page table pointer in GPA
->     '-------------'
-> Guest
-> ------| Shadow |--------------------------|--------
->       v        v                          v
-> Host
->     .-------------.  .------------------------.
->     |   pIOMMU    |  |  FS for GIOVA->GPA      |
->     |             |  '------------------------'
->     .----------------/  |
->     | PASID Entry |     V (Nested xlate)
->     '----------------\.----------------------------------.
->     |             |   | SS for GPA->HPA, unmanaged domain|
->     |             |   '----------------------------------'
->     '-------------'
-> Where:
->  - FS = First stage page tables
->  - SS = Second stage page tables
-> <Intel VT-d Nested translation>
-> 
-> Different platform vendors have different first stage translation formats,
-> so userspace should query the underlying iommu capability before setting
-> first stage translation structures to host.[1]
-> 
-> In iommufd subsystem, I/O page tables would be tracked by hw_pagetable
-> objects.
-> First stage page table is owned by userspace (guest), while second stage
-> page
-> table is owned by kernel for security. So First stage page tables are tracked
-> by user-managed hw_pagetable, second stage page tables are tracked by
-> kernel-
-> managed hw_pagetable.
-> 
-> This series first introduces new iommu op for allocating domains for
-> iommufd,
-> and op for syncing iotlb for first stage page table modifications, and then
-> add the implementation of the new ops in intel-iommu driver. After this
-> preparation, adds kernel-managed and user-managed hw_pagetable
-> allocation for
-> userspace. Last, add self-test for the new ioctls.
-> 
-> This series is based on "[PATCH 0/6] iommufd: Add iommu capability
-> reporting"[1]
-> and Nicolin's "[PATCH v2 00/10] Add IO page table replacement support"[2].
-> Complete
-> code can be found in[3]. Draft Qemu code can be found in[4].
-> 
-> Basic test done with DSA device on VT-d. Where the guest has a vIOMMU
-> built
-> with nested translation.
-
-Hi Yi Liu,
-
-Thanks for sending this out. Will go through this one. As I informed before we keep
-an internal branch based on your work and rebase few patches to get the ARM
-SMMUv3 nesting support. The recent one is based on your "iommufd-v6.2-rc4-nesting"
-branch and is here,
-
-https://github.com/hisilicon/kernel-dev/commits/iommufd-v6.2-rc4-nesting-arm
-
-Just wondering any chance the latest "Add SMMUv3 nesting support" series will
-be send out soon? Please let me know if you need any help with that.
-
-Thanks,
-Shameer
-> 
-> [1]
-> https://lore.kernel.org/linux-iommu/20230209041642.9346-1-yi.l.liu@intel.
-> com/
-> [2]
-> https://lore.kernel.org/linux-iommu/cover.1675802050.git.nicolinc@nvidia.c
-> om/
-> [3] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting_vtd_v1
-> [4] https://github.com/yiliu1765/qemu/tree/wip/iommufd_rfcv3%2Bnesting
-> 
-> Regards,
-> 	Yi Liu
-> 
-> Lu Baolu (5):
->   iommu: Add new iommu op to create domains owned by userspace
->   iommu: Add nested domain support
->   iommu/vt-d: Extend dmar_domain to support nested domain
->   iommu/vt-d: Add helper to setup pasid nested translation
->   iommu/vt-d: Add nested domain support
-> 
-> Nicolin Chen (6):
->   iommufd: Add/del hwpt to IOAS at alloc/destroy()
->   iommufd/device: Move IOAS attaching and detaching operations into
->     helpers
->   iommufd/selftest: Add IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE test
-> op
->   iommufd/selftest: Add coverage for IOMMU_HWPT_ALLOC ioctl
->   iommufd/selftest: Add IOMMU_TEST_OP_MD_CHECK_IOTLB test op
->   iommufd/selftest: Add coverage for IOMMU_HWPT_INVALIDATE ioctl
-> 
-> Yi Liu (6):
->   iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
->   iommufd: Split iommufd_hw_pagetable_alloc()
->   iommufd: Add kernel-managed hw_pagetable allocation for userspace
->   iommufd: Add infrastructure for user-managed hw_pagetable allocation
->   iommufd: Add user-managed hw_pagetable allocation
->   iommufd/device: Report supported stage-1 page table types
-> 
->  drivers/iommu/intel/Makefile                  |   2 +-
->  drivers/iommu/intel/iommu.c                   |  38 ++-
->  drivers/iommu/intel/iommu.h                   |  50 +++-
->  drivers/iommu/intel/nested.c                  | 143 +++++++++
->  drivers/iommu/intel/pasid.c                   | 142 +++++++++
->  drivers/iommu/intel/pasid.h                   |   2 +
->  drivers/iommu/iommufd/device.c                | 117 ++++----
->  drivers/iommu/iommufd/hw_pagetable.c          | 280
-> +++++++++++++++++-
->  drivers/iommu/iommufd/iommufd_private.h       |  23 +-
->  drivers/iommu/iommufd/iommufd_test.h          |  35 +++
->  drivers/iommu/iommufd/main.c                  |  11 +
->  drivers/iommu/iommufd/selftest.c              | 149 +++++++++-
->  include/linux/iommu.h                         |  11 +
->  include/uapi/linux/iommufd.h                  | 196 ++++++++++++
->  tools/testing/selftests/iommu/iommufd.c       | 124 +++++++-
->  tools/testing/selftests/iommu/iommufd_utils.h | 106 +++++++
->  16 files changed, 1329 insertions(+), 100 deletions(-)
->  create mode 100644 drivers/iommu/intel/nested.c
-> 
-> --
-> 2.34.1
-> 
-
+greg k-h
