@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DDB690CF0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 16:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62826690D82
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 16:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjBIP2M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 10:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
+        id S229953AbjBIPsX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 10:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjBIP2M (ORCPT
+        with ESMTP id S230411AbjBIPsW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:28:12 -0500
+        Thu, 9 Feb 2023 10:48:22 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF9F38B55;
-        Thu,  9 Feb 2023 07:28:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0308165682;
+        Thu,  9 Feb 2023 07:47:58 -0800 (PST)
 Received: from [192.168.10.12] (unknown [39.45.179.179])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E6F2766020B9;
-        Thu,  9 Feb 2023 15:28:01 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D07DE6600013;
+        Thu,  9 Feb 2023 15:47:46 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675956488;
-        bh=cVo2hwJA6ba+zxud5YmocaB8dvaCAIfmsd2BzN8RA7Y=;
+        s=mail; t=1675957676;
+        bh=DZlQ60CxgLl8n6XS8Qgeqipg0PlBKRTKHQKI1pQjHGI=;
         h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=SklvgmPzoikYluoyKD+usYENzjjeV8cXVAMyegngQGFdo8vYGHMhGAtc9g0sPwFVm
-         qdwkUAyCCJZlimtbYIKmGcc9y+g7Hdfdhay3/K+sjkynf9SZ15Usn5upd6ScJgwbVF
-         bdwKNx8K+4NUKkmv/ULlRig1TAMZKubdwBkf/rPkVM3HXq46LSV+Kl88Oa3MHsK4mP
-         WfEJnyD9NWdJJucrIeOw2ZTxlYbBxJAd5EYg9Ad7+bW6pY2W/wMvXedjWU6oNyh5JU
-         D0a+4G2OvcIihBvTMIqNXDsGtAM+IXztwbrpsd8XAPW6f7gGjrATBBlquvpI5Lcr9S
-         oWXwXk5kSmPbw==
-Message-ID: <eea000a2-b237-76f0-186c-6181762e34f1@collabora.com>
-Date:   Thu, 9 Feb 2023 20:27:58 +0500
+        b=a0yvuy7eszjWUVLqHWLpROKH/zxy11KfPX34pPiLc8JCDbGxHCvg9qy99rQuL0OhI
+         K97C/BTsW88Riniwr8O2TBZmJlM/XI/X3vtGD9D7a9iiI2aMs5xHyknhQsiDblF+vx
+         z8UX+xcux21XZ4IFxBNxDFqh4W578bvRPOwhawHAz1h+GX+HpGtPse1o1tXKgpFgQT
+         b7A6IZQjR7l1REdDbIitkGGsGWmnbwueoLdG5cZeer+QIQ5LaBIBR/w4ntJEwrvIg8
+         is9DhcEJ4+Sv+hIC7BbJpEYKoKL3K+UXYiSmVqX4ol9NUjz+bybkwvioYZdPg9FJHA
+         BopMV6BZ+VGiw==
+Message-ID: <37c563dc-18c0-6eb9-dfb8-fd0e89988075@collabora.com>
+Date:   Thu, 9 Feb 2023 20:47:42 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
@@ -63,13 +63,14 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v10 1/6] userfaultfd: Add UFFD WP Async support
+Subject: Re: [PATCH v10 2/6] userfaultfd: update documentation to describe
+ UFFD_FEATURE_WP_ASYNC
 Content-Language: en-US
 To:     Peter Xu <peterx@redhat.com>
 References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-2-usama.anjum@collabora.com> <Y+QQLNrhyiVwXI50@x1n>
+ <20230202112915.867409-3-usama.anjum@collabora.com> <Y+QUqrBCwQntpxFx@x1n>
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y+QQLNrhyiVwXI50@x1n>
+In-Reply-To: <Y+QUqrBCwQntpxFx@x1n>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,86 +82,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Peter,
-
-Thank you so much for reviewing!
-
-On 2/9/23 2:12 AM, Peter Xu wrote:
-> On Thu, Feb 02, 2023 at 04:29:10PM +0500, Muhammad Usama Anjum wrote:
->> Add new WP Async mode (UFFD_FEATURE_WP_ASYNC) which resolves the page
->> faults on its own. It can be used to track that which pages have been
->> written-to from the time the pages were write-protected. It is very
->> efficient way to track the changes as uffd is by nature pte/pmd based.
+On 2/9/23 2:31 AM, Peter Xu wrote:
+> On Thu, Feb 02, 2023 at 04:29:11PM +0500, Muhammad Usama Anjum wrote:
+>> Explain the difference created by UFFD_FEATURE_WP_ASYNC to the write
+>> protection (UFFDIO_WRITEPROTECT_MODE_WP) mode.
 >>
->> UFFD synchronous WP sends the page faults to the userspace where the
->> pages which have been written-to can be tracked. But it is not efficient.
->> This is why this asynchronous version is being added. After setting the
->> WP Async, the pages which have been written to can be found in the pagemap
->> file or information can be obtained from the PAGEMAP_IOCTL.
->>
->> Suggested-by: Peter Xu <peterx@redhat.com>
 >> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 >> ---
->> Changes in v10:
->> - Build fix
->> - Update comments and add error condition to return error from uffd
->>   register if hugetlb pages are present when wp async flag is set
+>>  Documentation/admin-guide/mm/userfaultfd.rst | 7 +++++++
+>>  1 file changed, 7 insertions(+)
 >>
->> Changes in v9:
->> - Correct the fault resolution with code contributed by Peter
->>
->> Changes in v7:
->> - Remove UFFDIO_WRITEPROTECT_MODE_ASYNC_WP and add UFFD_FEATURE_WP_ASYNC
->> - Handle automatic page fault resolution in better way (thanks to Peter)
->>
->> update to wp async
->>
->> uffd wp async
->> ---
->>  fs/userfaultfd.c                 | 20 ++++++++++++++++++--
->>  include/linux/userfaultfd_k.h    | 11 +++++++++++
->>  include/uapi/linux/userfaultfd.h | 10 +++++++++-
->>  mm/memory.c                      | 23 ++++++++++++++++++++---
->>  4 files changed, 58 insertions(+), 6 deletions(-)
->>
->> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
->> index 15a5bf765d43..422f2530c63e 100644
->> --- a/fs/userfaultfd.c
->> +++ b/fs/userfaultfd.c
->> @@ -1422,10 +1422,15 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
->>  			goto out_unlock;
+>> diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
+>> index 83f31919ebb3..4747e7bd5b26 100644
+>> --- a/Documentation/admin-guide/mm/userfaultfd.rst
+>> +++ b/Documentation/admin-guide/mm/userfaultfd.rst
+>> @@ -221,6 +221,13 @@ former will have ``UFFD_PAGEFAULT_FLAG_WP`` set, the latter
+>>  you still need to supply a page when ``UFFDIO_REGISTER_MODE_MISSING`` was
+>>  used.
 >>  
->>  		/*
->> -		 * Note vmas containing huge pages
->> +		 * Note vmas containing huge pages. Hugetlb isn't supported
->> +		 * with UFFD_FEATURE_WP_ASYNC.
->>  		 */
+>> +If ``UFFD_FEATURE_WP_ASYNC`` is set while calling ``UFFDIO_API`` ioctl, the
+>> +behaviour of ``UFFDIO_WRITEPROTECT_MODE_WP`` changes such that faults for
 > 
-> Need to set "ret = -EINVAL;" here.  Or..
-Will fix in next version.
-
+> UFFDIO_WRITEPROTECT_MODE_WP is only a flag in UFFDIO_WRITEPROTECT, while
+> it's forbidden only when not specified.
 > 
->> -		if (is_vm_hugetlb_page(cur))
->> +		if (is_vm_hugetlb_page(cur)) {
->> +			if (ctx->features & UFFD_FEATURE_WP_ASYNC)
->> +				goto out_unlock;
+>> +anon and shmem are resolved automatically by the kernel instead of sending
+>> +the message to the userfaultfd. The hugetlb isn't supported. The ``pagemap``
+>> +file can be read to find which pages have ``PM_UFFD_WP`` flag set which
+>> +means they are write-protected.
 > 
-> .. it'll return -EBUSY, which does not sound like the right errcode here.
+> Here's my version. Please feel free to do modifications on top.
 > 
->> +
+>   If the userfaultfd context (that has ``UFFDIO_REGISTER_MODE_WP``
+>   registered against) has ``UFFD_FEATURE_WP_ASYNC`` feature enabled, it
+>   will work in async write protection mode.  It can be seen as a more
+>   accurate version of soft-dirty tracking, meanwhile the results will not
+>   be easily affected by other operations like vma merging.
 > 
-> Drop this empty line?
+>   Comparing to the generic mode, the async mode will not generate any
+>   userfaultfd message when the protected memory range is written.  Instead,
+>   the kernel will automatically resolve the page fault immediately by
+>   dropping the uffd-wp bit in the pgtables.  The user app can collect the
+>   "written/dirty" status by looking up the uffd-wp bit for the pages being
+>   interested in /proc/pagemap.
 > 
->>  			basic_ioctls = true;
->> +		}
->>  
->>  		found = true;
->>  	}
+>   The page will be under track of uffd-wp async mode until the page is
+>   explicitly write-protected by ``UFFDIO_WRITEPROTECT`` ioctl with the mode
+>   flag ``UFFDIO_WRITEPROTECT_MODE_WP`` set.  Trying to resolve a page fault
+>   that was tracked by async mode userfaultfd-wp is invalid.
 > 
-> Other than that looks good, thanks.
-Thank you so much! This wouldn't have been possible without your help.
-
+>   Currently ``UFFD_FEATURE_WP_ASYNC`` only support anonymous and shmem.
+>   Hugetlb is not yet supported.
 > 
+It'll get replaced the documentation. I'll add a suggested by tag as well.
+Thanks.
 
 -- 
 BR,
