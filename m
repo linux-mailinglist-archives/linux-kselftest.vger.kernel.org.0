@@ -2,55 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF110690711
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 12:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C83A69074A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 12:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjBILXn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 06:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
+        id S231441AbjBIL1C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 06:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjBILWx (ORCPT
+        with ESMTP id S231220AbjBIL0b (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 06:22:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383AD60D61;
-        Thu,  9 Feb 2023 03:18:44 -0800 (PST)
+        Thu, 9 Feb 2023 06:26:31 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7EA55E75;
+        Thu,  9 Feb 2023 03:20:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3605361A2D;
-        Thu,  9 Feb 2023 11:18:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E483C433EF;
-        Thu,  9 Feb 2023 11:18:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 066E4CE246B;
+        Thu,  9 Feb 2023 11:19:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 298FBC433EF;
+        Thu,  9 Feb 2023 11:19:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675941519;
+        s=k20201202; t=1675941564;
         bh=z6P+nbavqPCCSnqZJNVDs0VWHj0jFLX6EBinl3xYbdc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qKrY6v/3ECCEIJHeYZw1S7qIWJRDGq6S37t91K5Wl2qPiHgnS36ytZT//HI+2YURV
-         PMR4nIC9Rtbgn6muQZLP/V3S+8RRsRZobx+5OaEQeJh2DDViu0tieq2uHH0DkYLGkh
-         Gg+b6DFFn+R8x0MqqF9tv7nlBXFKnv2+CQbUs1+K2vUVpvSGWgeKVJpIBiCfAViqoE
-         Z/ZKKQwgy7hHUXwv08uGO2G3TZT0iBt0iUA6QS8etdHtVcYa2jJJt9nw8USSv6fdHF
-         R8AmwpZHoPL9D3CmO5PMF6xZOyCHO8BaLk2qybT1O1L/eJWeuwPVM5Z5vQKxkUc1iY
-         9GAapN2/WenJw==
+        h=From:To:Cc:Subject:Date:From;
+        b=H4Enkuoxk/RcbC72ajOLgO4oxBPA07LOpEIQ2gggPqpugXT1v280lqCGFN1mKxIDO
+         q0rHfPGeqp2riGgECeBsO83KaTsJWh6wEqQ1wTsEsVPHQ+fgKa9WuWHB6IQVPOw/qq
+         vwNBg7mlL6iVy8pMAKzhsRdcoyB9MrQNyC6YL2xeS8yFDX0c+3ddWGjc7Sa0JHP241
+         fw4A7dpDegdLlcoZ2u9RbR8xQIlDZ+qGgGR9RHCWYKJWg06K50aDHn/KJ0AfxL5zoQ
+         H4LA+EcmeJcEHZ7Y7kV0NXOxt9l5UhU/ab2zjHQoUFykThtcQ/iYFhn2Z4dPMiQ+Hl
+         VZa//cepr5Pyw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Eduard Zingerman <eddyz87@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
-        andrii@kernel.org, shuah@kernel.org, mykolal@fb.com,
+        Sasha Levin <sashal@kernel.org>, andrii@kernel.org,
+        daniel@iogearbox.net, shuah@kernel.org, mykolal@fb.com,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 02/13] selftests/bpf: Verify copy_register_state() preserves parent/live fields
-Date:   Thu,  9 Feb 2023 06:18:20 -0500
-Message-Id: <20230209111833.1892896-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 01/10] selftests/bpf: Verify copy_register_state() preserves parent/live fields
+Date:   Thu,  9 Feb 2023 06:19:10 -0500
+Message-Id: <20230209111921.1893095-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230209111833.1892896-1-sashal@kernel.org>
-References: <20230209111833.1892896-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
