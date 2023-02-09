@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966E968FF2D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 05:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A731E68FF32
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 05:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjBIEeB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Feb 2023 23:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S229689AbjBIEeG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Feb 2023 23:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjBIEdl (ORCPT
+        with ESMTP id S230198AbjBIEdn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:33:41 -0500
+        Wed, 8 Feb 2023 23:33:43 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC8485A3;
-        Wed,  8 Feb 2023 20:32:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8584708B;
+        Wed,  8 Feb 2023 20:32:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675917152; x=1707453152;
+  t=1675917153; x=1707453153;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nuvtSsjfgtshayUX3b2mNkbueVkgFv+rHHiWUBqIZho=;
-  b=Z/2pjIg5vzJH3b+wMvIFX20mYab0sTf0MxAkHw8gvFgWKBklrn+IUw1M
-   4Cb5FCbspNEkeCBv+R7z7BqNAqAu2Syl67iwBwEhCA/V72JEL3Lisjgn8
-   P/F5/Yh+dzpgogokbvTvhuFytYSDtRxREn6V5AINTsW4idM0nqUR8MbKm
-   jvul+blZZ/U28cNr5VVYMDEkRo7mhKh0In1zfS1ZR64ndhsd4xWtjdEcw
-   4I6uyGHacjcPofLAbYwu6iYEuFSma0MGTy4B42nN0bg5TMJYTROCPwpD4
-   uevLjZQbG44flpWTCFfyF1yhcuuahgmWp1oThHQT0udOltuyYnAHlv1g9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298609"
+  bh=mpH4CQm84J9DnKJJMMRLFLLQ7LO+AHtC3nkTnQ/gZh4=;
+  b=jj79g6epTQ2lZ9dDjlE/ZjcZ8Sf0sXLTeM/zICy9a2/iNGyIXG7P0xcY
+   zTnonRraAqincubk0/EbClw9sCsM2ZD2zu6LAWNqFKIcQB6amR9p0i2v4
+   sbELWTniQVWHEwFwg9Og2eRYXDYrBjI0V23GJk0d83afovjGKff/3z9hy
+   PG54BDCb9fHMiXcP++BmsLc7w+YXBquEsJu4f/NiPkycS+Pyk8CObWRsh
+   xE4MI3if3UWNeByxQEHpLy0V4bws4EqHBUO869Ky5nRbeZq3zN9lNSl9G
+   /a7AUpkNaYTbwsPVCK6JWKOjVb56mrsGm1VqXOsUaavyLAxS3m8xeXsKg
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298631"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="331298609"
+   d="scan'208";a="331298631"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:01 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:03 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447449"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447457"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="669447449"
+   d="scan'208";a="669447457"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:00 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:02 -0800
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com
@@ -50,9 +50,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         baolu.lu@linux.intel.com
-Subject: [PATCH 02/17] iommu: Add nested domain support
-Date:   Wed,  8 Feb 2023 20:31:38 -0800
-Message-Id: <20230209043153.14964-3-yi.l.liu@intel.com>
+Subject: [PATCH 03/17] iommu/vt-d: Extend dmar_domain to support nested domain
+Date:   Wed,  8 Feb 2023 20:31:39 -0800
+Message-Id: <20230209043153.14964-4-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230209043153.14964-1-yi.l.liu@intel.com>
 References: <20230209043153.14964-1-yi.l.liu@intel.com>
@@ -70,66 +70,127 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Lu Baolu <baolu.lu@linux.intel.com>
 
-Introduce a new domain type for a user space I/O address, which is nested
-on top of another user space address represented by a UNMANAGED domain. The
-mappings of a nested domain are managed by user space software, therefore
-it's unnecessary to have map/unmap callbacks. But the updates of the PTEs
-in the nested domain page table must be propagated to the caches on both
-IOMMU (IOTLB) and devices (DevTLB).
-
-The nested domain is allocated by the domain_alloc_user op, and attached
-to the device through the existing iommu_attach_device/group() interfaces.
-
-An new domain op, named iotlb_sync_user is added for the userspace to flush
-the hardware caches for a nested domain through iommufd. No wrapper for it
-as it's only supposed to be used by iommufd.
+The nested domain fields are exclusive to those that used for a DMA
+remapping domain. Use union to avoid memory waste.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- include/linux/iommu.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/iommu/intel/iommu.h  | 35 ++++++++++++++++++++----
+ include/uapi/linux/iommufd.h | 53 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 82 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 214e3eb9bc86..f6db50f85a20 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -67,6 +67,9 @@ struct iommu_domain_geometry {
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index 2e70265d4ceb..4fe74f217696 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -541,15 +541,38 @@ struct dmar_domain {
+ 	spinlock_t lock;		/* Protect device tracking lists */
+ 	struct list_head devices;	/* all devices' list */
  
- #define __IOMMU_DOMAIN_SVA	(1U << 4)  /* Shared process address space */
- 
-+#define __IOMMU_DOMAIN_NESTED	(1U << 5)  /* User-managed IOVA nested on
-+					      a stage-2 translation        */
+-	struct dma_pte	*pgd;		/* virtual address */
+-	int		gaw;		/* max guest address width */
+-
+-	/* adjusted guest address width, 0 is level 2 30-bit */
+-	int		agaw;
+ 	int		iommu_superpage;/* Level of superpages supported:
+ 					   0 == 4KiB (no superpages), 1 == 2MiB,
+ 					   2 == 1GiB, 3 == 512GiB, 4 == 1TiB */
+-	u64		max_addr;	/* maximum mapped address */
++	union {
++		/* DMA remapping domain */
++		struct {
++			/* virtual address */
++			struct dma_pte	*pgd;
++			/* max guest address width */
++			int		gaw;
++			/*
++			 * adjusted guest address width:
++			 *   0: level 2 30-bit
++			 *   1: level 3 39-bit
++			 *   2: level 4 48-bit
++			 *   3: level 5 57-bit
++			 */
++			int		agaw;
++			/* maximum mapped address */
++			u64		max_addr;
++		};
 +
- /*
-  * This are the possible domain-types
-  *
-@@ -92,6 +95,7 @@ struct iommu_domain_geometry {
- 				 __IOMMU_DOMAIN_DMA_API |	\
- 				 __IOMMU_DOMAIN_DMA_FQ)
- #define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SVA)
-+#define IOMMU_DOMAIN_NESTED	(__IOMMU_DOMAIN_NESTED)
++		/* Nested user domain */
++		struct {
++			/* 2-level page table the user domain nested */
++			struct dmar_domain *s2_domain;
++			/* user page table pointer (in GPA) */
++			unsigned long s1_pgtbl;
++			/* page table attributes */
++			struct iommu_hwpt_intel_vtd s1_cfg;
++		};
++	};
  
- struct iommu_domain {
- 	unsigned type;
-@@ -321,6 +325,7 @@ struct iommu_ops {
-  * @iotlb_sync_map: Sync mappings created recently using @map to the hardware
-  * @iotlb_sync: Flush all queued ranges from the hardware TLBs and empty flush
-  *            queue
-+ * @iotlb_sync_user: Flush hardware TLBs caching user space IO mappings
-  * @iova_to_phys: translate iova to physical address
-  * @enforce_cache_coherency: Prevent any kind of DMA from bypassing IOMMU_CACHE,
-  *                           including no-snoop TLPs on PCIe or other platform
-@@ -350,6 +355,8 @@ struct iommu_domain_ops {
- 			       size_t size);
- 	void (*iotlb_sync)(struct iommu_domain *domain,
- 			   struct iommu_iotlb_gather *iotlb_gather);
-+	void (*iotlb_sync_user)(struct iommu_domain *domain,
-+				void *user_data);
- 
- 	phys_addr_t (*iova_to_phys)(struct iommu_domain *domain,
- 				    dma_addr_t iova);
+ 	struct iommu_domain domain;	/* generic domain data structure for
+ 					   iommu core */
+diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+index 6cfe102f26f3..0867900494c9 100644
+--- a/include/uapi/linux/iommufd.h
++++ b/include/uapi/linux/iommufd.h
+@@ -407,4 +407,57 @@ struct iommu_device_info {
+ 	__u32 __reserved;
+ };
+ #define IOMMU_DEVICE_GET_INFO _IO(IOMMUFD_TYPE, IOMMUFD_CMD_DEVICE_GET_INFO)
++
++/**
++ * enum iommu_hwpt_intel_vtd_flags - Intel VT-d stage-1 page
++ *				     table entry attributes
++ * @IOMMU_VTD_PGTBL_SRE: Supervisor request
++ * @IOMMU_VTD_PGTBL_EAFE: Extended access enable
++ * @IOMMU_VTD_PGTBL_PCD: Page-level cache disable
++ * @IOMMU_VTD_PGTBL_PWT: Page-level write through
++ * @IOMMU_VTD_PGTBL_EMTE: Extended mem type enable
++ * @IOMMU_VTD_PGTBL_CD: PASID-level cache disable
++ * @IOMMU_VTD_PGTBL_WPE: Write protect enable
++ */
++enum iommu_hwpt_intel_vtd_flags {
++	IOMMU_VTD_PGTBL_SRE = 1 << 0,
++	IOMMU_VTD_PGTBL_EAFE = 1 << 1,
++	IOMMU_VTD_PGTBL_PCD = 1 << 2,
++	IOMMU_VTD_PGTBL_PWT = 1 << 3,
++	IOMMU_VTD_PGTBL_EMTE = 1 << 4,
++	IOMMU_VTD_PGTBL_CD = 1 << 5,
++	IOMMU_VTD_PGTBL_WPE = 1 << 6,
++	IOMMU_VTD_PGTBL_LAST = 1 << 7,
++};
++
++/**
++ * struct iommu_hwpt_intel_vtd - Intel VT-d specific user-managed
++ *				 stage-1 page table info
++ * @flags: Combination of enum iommu_hwpt_intel_vtd_flags
++ * @pgtbl_addr: The base address of the user-managed stage-1 page table.
++ * @pat: Page attribute table data to compute effective memory type
++ * @emt: Extended memory type
++ * @addr_width: The address width of the untranslated addresses that are
++ *		subjected to the user-managed stage-1 page table.
++ * @__reserved: Must be 0
++ *
++ * The Intel VT-d specific data for creating hw_pagetable to represent
++ * the user-managed stage-1 page table that is used in nested translation.
++ *
++ * In nested translation, the stage-1 page table locates in the address
++ * space that defined by the corresponding stage-2 page table. Hence the
++ * stage-1 page table base address value should not be higher than the
++ * maximum untranslated address of stage-2 page table.
++ *
++ * The paging level of the stage-1 page table should be compataible with
++ * the hardware iommu. Otherwise, the allocation would be failed.
++ */
++struct iommu_hwpt_intel_vtd {
++	__u64 flags;
++	__u64 pgtbl_addr;
++	__u32 pat;
++	__u32 emt;
++	__u32 addr_width;
++	__u32 __reserved;
++};
+ #endif
 -- 
 2.34.1
 
