@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C4368FE6D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 05:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E690D68FF2C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 05:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjBIEVM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Feb 2023 23:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
+        id S230281AbjBIEeB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Feb 2023 23:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBIEVK (ORCPT
+        with ESMTP id S230184AbjBIEdk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:21:10 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A861DBCD;
-        Wed,  8 Feb 2023 20:20:14 -0800 (PST)
+        Wed, 8 Feb 2023 23:33:40 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0B53D924;
+        Wed,  8 Feb 2023 20:32:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675916414; x=1707452414;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vnj0cCi2ra/GTQprP6oGdeKLwYac70d/g6YVtvXPxLQ=;
-  b=ixHXGSQ98xLDq0naL4+db3i/9Jcs86tfL/LTZu/Pc8vW4DVHPukE9WCa
-   KK2fdLYwHMt7tNziWw8nCMYnxtJZX2omVnScKEETw/SjI44rrsOTn7JeS
-   OYzNBwSyockfncxU33pRhEPkF8AgMVFtQ7pplvLMaCOxmB/l0+eOjRdME
-   ZDzpU9BPos6LQW9OvilY92QYzqVebtT6Lx6AoSQZfg5gP8b0HjBitmZNV
-   6SRLuh+G7LvxiuSLbmJBWWyeBwzuHSZ9JvqOsgHFBJs/uDdNrQ+cpd95f
-   bR0sx6R3bhX5pKWMEKkuorDPg6E9MT5mO2vXMKvETgxmt5UgheAPxFFce
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="394600768"
+  t=1675917152; x=1707453152;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FxTu9xVn0q17LFAoBZGb5vcNT6+3d43snW3rZ3K2Mik=;
+  b=MnQ/FdYPY/nEYAzHhf1lZaHyg/Z0OC027yqQvGuFrPAaQyEFfDEV6kDD
+   ZNxvqoy7j6bpiHe3iPy4DTbycCyGwb118zh0PmXWIRxolIQTK8IV5XHaP
+   0MseU2yCtR6m4Ko5mxFDO1uunZr7+z8UshUBCZesQwdjpYOVqXmjQOz53
+   fK1MLMqNMXGtMdY/4zfvUmSYUKlGBcOQJ+qh4cHvEw1cNzxyKWHNQae+E
+   g3w1Wy04Yihg+my2bacA8ukVhi+A7u/vdO8iuscBbtHGo10AS/SFsnPJp
+   OV8pwMoH00j4mB4hUEycm8Kh1xcs/WWsdS2ODY+G5eBG5iMLt+d4J62nb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298571"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="394600768"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:16:57 -0800
+   d="scan'208";a="331298571"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:31:57 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="912982142"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447422"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="912982142"
+   d="scan'208";a="669447422"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Feb 2023 20:16:56 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:31:56 -0800
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com
@@ -50,192 +50,131 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         baolu.lu@linux.intel.com
-Subject: [PATCH 6/6] iommufd/selftest: Add coverage for IOMMU_DEVICE_GET_INFO ioctl
-Date:   Wed,  8 Feb 2023 20:16:42 -0800
-Message-Id: <20230209041642.9346-7-yi.l.liu@intel.com>
+Subject: [PATCH 00/17] Add Intel VT-d nested translation
+Date:   Wed,  8 Feb 2023 20:31:36 -0800
+Message-Id: <20230209043153.14964-1-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230209041642.9346-1-yi.l.liu@intel.com>
-References: <20230209041642.9346-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Nicolin Chen <nicolinc@nvidia.com>
+Nested translation has two stage address translations to get the final
+physical addresses. Take Intel VT-d as an example, the first stage translation
+structure is I/O page table. As the below diagram shows, guest I/O page
+table pointer in GPA (guest physical address) is passed to host to do the
+first stage translation. Along with it, guest modifications to present
+mappings in the first stage page should be followed with an iotlb invalidation
+to sync host iotlb.
 
-This allows to get info for the mock_dev, helps to run selftest to check
-IOMMU_DEVICE_GET_INFO in selftest.
+    .-------------.  .---------------------------.
+    |   vIOMMU    |  | Guest I/O page table      |
+    |             |  '---------------------------'
+    .----------------/
+    | PASID Entry |--- PASID cache flush --+
+    '-------------'                        |
+    |             |                        V
+    |             |           I/O page table pointer in GPA
+    '-------------'
+Guest
+------| Shadow |--------------------------|--------
+      v        v                          v
+Host
+    .-------------.  .------------------------.
+    |   pIOMMU    |  |  FS for GIOVA->GPA      |
+    |             |  '------------------------'
+    .----------------/  |
+    | PASID Entry |     V (Nested xlate)
+    '----------------\.----------------------------------.
+    |             |   | SS for GPA->HPA, unmanaged domain|
+    |             |   '----------------------------------'
+    '-------------'
+Where:
+ - FS = First stage page tables
+ - SS = Second stage page tables
+<Intel VT-d Nested translation>
 
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/iommufd/device.c                |  1 +
- drivers/iommu/iommufd/iommufd_test.h          | 15 +++++++++++
- drivers/iommu/iommufd/selftest.c              | 16 ++++++++++++
- tools/testing/selftests/iommu/iommufd.c       | 18 ++++++++++++-
- tools/testing/selftests/iommu/iommufd_utils.h | 26 +++++++++++++++++++
- 5 files changed, 75 insertions(+), 1 deletion(-)
+Different platform vendors have different first stage translation formats,
+so userspace should query the underlying iommu capability before setting
+first stage translation structures to host.[1]
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index 470838e6902d..0e5d2bde7b3c 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -8,6 +8,7 @@
- 
- #include "io_pagetable.h"
- #include "iommufd_private.h"
-+#include "iommufd_test.h"
- 
- MODULE_IMPORT_NS(IOMMUFD_INTERNAL);
- 
-diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-index f2c61a9500e7..1605ff2b1a90 100644
---- a/drivers/iommu/iommufd/iommufd_test.h
-+++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -94,4 +94,19 @@ struct iommu_test_cmd {
- };
- #define IOMMU_TEST_CMD _IO(IOMMUFD_TYPE, IOMMUFD_CMD_BASE + 32)
- 
-+/* Mock structs for IOMMU_DEVICE_GET_INFO ioctl */
-+#define IOMMU_DEVICE_DATA_SELFTEST		0xfeedbeef
-+#define IOMMU_DEVICE_INFO_SELFTEST_REGVAL	0xdeadbeef
-+
-+/**
-+ * struct iommu_device_info_selftest
-+ *
-+ * @flags: Must be set to 0
-+ * @test_reg: Pass IOMMU_DEVICE_INFO_SELFTEST_REGVAL to user selftest program
-+ */
-+struct iommu_device_info_selftest {
-+	__u32 flags;
-+	__u32 test_reg;
-+};
-+
- #endif
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index 5afed3fc30fe..5013c8757f4b 100644
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -104,6 +104,20 @@ struct selftest_obj {
- 	};
- };
- 
-+static void *mock_domain_hw_info(struct device *dev, u32 *length)
-+{
-+	struct iommu_device_info_selftest *info;
-+
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return ERR_PTR(-ENOMEM);
-+
-+	info->test_reg = IOMMU_DEVICE_INFO_SELFTEST_REGVAL;
-+	*length = sizeof(*info);
-+
-+	return info;
-+}
-+
- static struct iommu_domain *mock_domain_alloc(unsigned int iommu_domain_type)
- {
- 	struct mock_iommu_domain *mock;
-@@ -239,6 +253,8 @@ static phys_addr_t mock_domain_iova_to_phys(struct iommu_domain *domain,
- static const struct iommu_ops mock_ops = {
- 	.owner = THIS_MODULE,
- 	.pgsize_bitmap = MOCK_IO_PAGE_SIZE,
-+	.driver_type = IOMMU_DEVICE_DATA_SELFTEST,
-+	.hw_info = mock_domain_hw_info,
- 	.domain_alloc = mock_domain_alloc,
- 	.default_domain_ops =
- 		&(struct iommu_domain_ops){
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 1e293950ac88..8e1369451464 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -124,6 +124,7 @@ TEST_F(iommufd, cmd_length)
- 	TEST_LENGTH(iommu_ioas_unmap, IOMMU_IOAS_UNMAP);
- 	TEST_LENGTH(iommu_option, IOMMU_OPTION);
- 	TEST_LENGTH(iommu_vfio_ioas, IOMMU_VFIO_IOAS);
-+	TEST_LENGTH(iommu_device_info, IOMMU_DEVICE_GET_INFO);
- #undef TEST_LENGTH
- }
- 
-@@ -185,6 +186,7 @@ TEST_F(iommufd, global_options)
- FIXTURE(iommufd_ioas)
- {
- 	int fd;
-+	uint32_t dev_id;
- 	uint32_t ioas_id;
- 	uint32_t domain_id;
- 	uint64_t base_iova;
-@@ -212,7 +214,8 @@ FIXTURE_SETUP(iommufd_ioas)
- 	}
- 
- 	for (i = 0; i != variant->mock_domains; i++) {
--		test_cmd_mock_domain(self->ioas_id, NULL, &self->domain_id);
-+		test_cmd_mock_domain(self->ioas_id, &self->dev_id,
-+				     &self->domain_id);
- 		self->base_iova = MOCK_APERTURE_START;
- 	}
- }
-@@ -281,6 +284,19 @@ TEST_F(iommufd_ioas, ioas_area_auto_destroy)
- 	}
- }
- 
-+TEST_F(iommufd_ioas, device_get_info)
-+{
-+	struct iommu_device_info_selftest info;
-+
-+	if (self->dev_id) {
-+		test_cmd_device_get_info(self->dev_id, sizeof(info), &info);
-+		assert(info.test_reg == IOMMU_DEVICE_INFO_SELFTEST_REGVAL);
-+	} else {
-+		test_err_device_get_info(ENOENT, self->dev_id,
-+					 sizeof(info), &info);
-+	}
-+}
-+
- TEST_F(iommufd_ioas, area)
- {
- 	int i;
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index 67805afc620f..1807d29c05f8 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -294,3 +294,29 @@ static void teardown_iommufd(int fd, struct __test_metadata *_metadata)
- 	})
- 
- #endif
-+
-+static int _test_cmd_device_get_info(int fd, __u32 device_id,
-+				     __u32 data_len, void *data)
-+{
-+	struct iommu_device_info cmd = {
-+		.size = sizeof(cmd),
-+		.dev_id = device_id,
-+		.data_len = data_len,
-+		.data_ptr = (uint64_t)data,
-+	};
-+	int ret;
-+
-+	ret = ioctl(fd, IOMMU_DEVICE_GET_INFO, &cmd);
-+	if (ret)
-+		return ret;
-+	return 0;
-+}
-+
-+#define test_cmd_device_get_info(device_id, data_len, data)		\
-+	ASSERT_EQ(0, _test_cmd_device_get_info(self->fd, device_id,	\
-+					       data_len, data))
-+
-+#define test_err_device_get_info(_errno, device_id, data_len, data)	\
-+	EXPECT_ERRNO(_errno,						\
-+		     _test_cmd_device_get_info(self->fd, device_id,	\
-+					       data_len, data))
+In iommufd subsystem, I/O page tables would be tracked by hw_pagetable objects.
+First stage page table is owned by userspace (guest), while second stage page
+table is owned by kernel for security. So First stage page tables are tracked
+by user-managed hw_pagetable, second stage page tables are tracked by kernel-
+managed hw_pagetable.
+
+This series first introduces new iommu op for allocating domains for iommufd,
+and op for syncing iotlb for first stage page table modifications, and then
+add the implementation of the new ops in intel-iommu driver. After this
+preparation, adds kernel-managed and user-managed hw_pagetable allocation for
+userspace. Last, add self-test for the new ioctls.
+
+This series is based on "[PATCH 0/6] iommufd: Add iommu capability reporting"[1]
+and Nicolin's "[PATCH v2 00/10] Add IO page table replacement support"[2]. Complete
+code can be found in[3]. Draft Qemu code can be found in[4].
+
+Basic test done with DSA device on VT-d. Where the guest has a vIOMMU built
+with nested translation.
+
+[1] https://lore.kernel.org/linux-iommu/20230209041642.9346-1-yi.l.liu@intel.com/
+[2] https://lore.kernel.org/linux-iommu/cover.1675802050.git.nicolinc@nvidia.com/
+[3] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting_vtd_v1
+[4] https://github.com/yiliu1765/qemu/tree/wip/iommufd_rfcv3%2Bnesting
+
+Regards,
+	Yi Liu
+
+Lu Baolu (5):
+  iommu: Add new iommu op to create domains owned by userspace
+  iommu: Add nested domain support
+  iommu/vt-d: Extend dmar_domain to support nested domain
+  iommu/vt-d: Add helper to setup pasid nested translation
+  iommu/vt-d: Add nested domain support
+
+Nicolin Chen (6):
+  iommufd: Add/del hwpt to IOAS at alloc/destroy()
+  iommufd/device: Move IOAS attaching and detaching operations into
+    helpers
+  iommufd/selftest: Add IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE test op
+  iommufd/selftest: Add coverage for IOMMU_HWPT_ALLOC ioctl
+  iommufd/selftest: Add IOMMU_TEST_OP_MD_CHECK_IOTLB test op
+  iommufd/selftest: Add coverage for IOMMU_HWPT_INVALIDATE ioctl
+
+Yi Liu (6):
+  iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
+  iommufd: Split iommufd_hw_pagetable_alloc()
+  iommufd: Add kernel-managed hw_pagetable allocation for userspace
+  iommufd: Add infrastructure for user-managed hw_pagetable allocation
+  iommufd: Add user-managed hw_pagetable allocation
+  iommufd/device: Report supported stage-1 page table types
+
+ drivers/iommu/intel/Makefile                  |   2 +-
+ drivers/iommu/intel/iommu.c                   |  38 ++-
+ drivers/iommu/intel/iommu.h                   |  50 +++-
+ drivers/iommu/intel/nested.c                  | 143 +++++++++
+ drivers/iommu/intel/pasid.c                   | 142 +++++++++
+ drivers/iommu/intel/pasid.h                   |   2 +
+ drivers/iommu/iommufd/device.c                | 117 ++++----
+ drivers/iommu/iommufd/hw_pagetable.c          | 280 +++++++++++++++++-
+ drivers/iommu/iommufd/iommufd_private.h       |  23 +-
+ drivers/iommu/iommufd/iommufd_test.h          |  35 +++
+ drivers/iommu/iommufd/main.c                  |  11 +
+ drivers/iommu/iommufd/selftest.c              | 149 +++++++++-
+ include/linux/iommu.h                         |  11 +
+ include/uapi/linux/iommufd.h                  | 196 ++++++++++++
+ tools/testing/selftests/iommu/iommufd.c       | 124 +++++++-
+ tools/testing/selftests/iommu/iommufd_utils.h | 106 +++++++
+ 16 files changed, 1329 insertions(+), 100 deletions(-)
+ create mode 100644 drivers/iommu/intel/nested.c
+
 -- 
 2.34.1
 
