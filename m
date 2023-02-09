@@ -2,155 +2,242 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6409691196
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 20:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 588A86911A1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Feb 2023 20:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjBITvq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Feb 2023 14:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
+        id S230207AbjBITw2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Feb 2023 14:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjBITvp (ORCPT
+        with ESMTP id S230210AbjBITw1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:51:45 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FE568AE4;
-        Thu,  9 Feb 2023 11:51:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BRYzh6kqqIO/y0UFtnUsi1+aNcpLs5/+p0zWNYN9kUbSMLtxFvxtaSv3UgwLOkSpOFJSNWzHh/DEdaIoClM7Nr16/JR/remnp8r18Uw1R1x1LsXBuOFpIrga+n8Q0xrgsALNbyUdIQAAUrTuhATtU1yfKv6lapSgyhcOecsQ9tiTUcvXb/Rmy6b2QU0ZHWn35/ZQaPZudMtkdkbimCoA3duNHBJbBMU3o2YwqZYPe9+kYRz3ot7evj22on2xIDTSZrbfk8Kdh5mLnPxQzh9y1KcsLLg25NHQyEIOh8UoSuHffWmuWgRCCXXQJ4xFAkL+fSrlLaBRJgPME5wiNS+uyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IE5TJvdAUMtxLKM23i8X8UnR5cCuC+VGKQL7WgvLMCU=;
- b=ZZIUKFE82hw2jLdhK9jirCBvgy4z+pbyBsLxSTbDiU2R6CGP+Rgy8kyxdJYzzFOU4IlCALzlJbl0SmFOR+ece5Edi8EvqV/zCaj5wgZWwcoFOMWSJpDFfAOlJ4IitsOU8pM8Qpr4Thd2rdOAg4zb+62zNMVo0DS+JIKZt4FN6+ZYFT7aEAoL/GsreFc+VSMXtO8J91eot+Lsdx52wLD8YtA8EwblnG2wjXDp47EWAwxs/KHKSJcExtFngv0+tOu+qFqmSGeptDFIiW8ehPw7KNVhbBGYowy3+erqTMZHf187FNUzWoNmHSkT/St2hOU+ZN/sixobyqdExVAxowBYBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IE5TJvdAUMtxLKM23i8X8UnR5cCuC+VGKQL7WgvLMCU=;
- b=Xxhmhemt/nPbjwOTqIoTcTbLrTuaG0njdtP10c0TRCZhRccrKxEzo/K/3sh1vs0Rw9JNI9ykOZD0uetPM6Euso9030NNGuYjUEhDLXAmlTlfqfjToKsE2qbJtiS9f+2bmufqWMacpgGnhVsk3qMYw0+J7ySJ+5rIeXqfZrHKWLFYEyjSGSXo0o/xMMRgZuYykWXaiWkB+i76RREA+FUpu3eji3WtQVACZztTHhdoFu4CbqnRCtGoTXfNDxRg9TO8yJupIc2L41mpH3K17PlPsigyZAXNrtXkANbzJu1H7sjqr+C5P/YuaXy0c0hakaZUCns8Ro4E1WaCd15Uz10C8A==
-Received: from MW4PR04CA0348.namprd04.prod.outlook.com (2603:10b6:303:8a::23)
- by CY8PR12MB7415.namprd12.prod.outlook.com (2603:10b6:930:5d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Thu, 9 Feb
- 2023 19:51:43 +0000
-Received: from CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8a:cafe::f7) by MW4PR04CA0348.outlook.office365.com
- (2603:10b6:303:8a::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19 via Frontend
- Transport; Thu, 9 Feb 2023 19:51:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT072.mail.protection.outlook.com (10.13.174.106) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.19 via Frontend Transport; Thu, 9 Feb 2023 19:51:43 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
- 11:51:34 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
- 11:51:34 -0800
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Thu, 9 Feb 2023 11:51:32 -0800
-Date:   Thu, 9 Feb 2023 11:51:31 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-CC:     Matthew Rosato <mjrosato@linux.ibm.com>, <joro@8bytes.org>,
-        <alex.williamson@redhat.com>, <kevin.tian@intel.com>,
-        <robin.murphy@arm.com>, <cohuck@redhat.com>,
-        <eric.auger@redhat.com>, <kvm@vger.kernel.org>,
-        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
-        <peterx@redhat.com>, <jasowang@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
-        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH 06/17] iommufd/hw_pagetable: Use domain_alloc_user op for
- domain allocation
-Message-ID: <Y+VOw6dTnGapMm9L@Asurada-Nvidia>
-References: <20230209043153.14964-1-yi.l.liu@intel.com>
- <20230209043153.14964-7-yi.l.liu@intel.com>
- <25102c92-1831-be52-677d-60bbf2e11772@linux.ibm.com>
- <Y+U9QX4p5YX3/B3k@nvidia.com>
+        Thu, 9 Feb 2023 14:52:27 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA7612F2C;
+        Thu,  9 Feb 2023 11:52:24 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id m2so9731630ejb.8;
+        Thu, 09 Feb 2023 11:52:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EloPaQFnO4w90/UyCJV6KwoWQwdDOtOpIFoUpYCed/c=;
+        b=NEOnhm9l2PA9ZgjTe1XTMV92Tq+1y+ibYKkehqvB86tAG/feySkHZAsLgpQmIjDx4Q
+         xJ0E+ZOb74BFbGI3sEG8uojNbyLOS9AhwNAZcQQIOGdWekANjBtdH6pTxJ1j6y2iZVeD
+         3tn85/I8Q8H7c3k0EUz67hHqBHbo7kAPPSjkQvZs+8Zrey3JxejY8bTIWYX/pwpSYJij
+         +IadoEMe63a/TRcGOLlYYuUYe/ym4gPMoI9j/pQovZcODIGx0bvVErE4dRkUgpcVE3L/
+         YosMitUlKVuWsu01U16A4aIe8IHbM/ZoqWaxtF7c8NF9YCIKnghSxKvDRDjEtGU5STFn
+         QaZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EloPaQFnO4w90/UyCJV6KwoWQwdDOtOpIFoUpYCed/c=;
+        b=0dhxao7kZw4JrzodSUFAw50KZS4YjB7r8DOLRhMgaGqW/VKVjvSLRPQXycn8xN63l1
+         NKANOuFMwWsT7aj1Cuem8NvxO+wcT0NCThbnwNJ7QCKIwyUg9u2JM2IdPLCYFlnIUEdM
+         maoh7p2oV1uUOrzvmQcdEr/JRlHRW3pB3lb1jZg/8I164yZzWOqaAr1NtjiXQEU2WxYz
+         s6Zllp8P0xE0FAE9ZgsG/0Eydk/gRKp0GYCPh/Tl9KVlRg4byvpHz/PCqS7t+iKxhsBP
+         8RQSjpjSVviYMYBEkssIPrzLua5ITr/N3RI/O0JZc8+L602vOiz9aWHjJMWaeaeSaBqg
+         7kgg==
+X-Gm-Message-State: AO0yUKVKJEeR/3xYKzcCD4Jle/Enrpsq7IHvpLq6LAdIswHUvoaxBOmv
+        n9w0NXq2o1tAEnXBebKzanlW2o7UZX544A4V/iw=
+X-Google-Smtp-Source: AK7set93q4x6wCG804+tszb8kwkcrHCdhzsz4klOPlo5s3ZDF/jpWyHGjoysf7crWXJpeuayHJqhEBb1I3D8O2cW3LY=
+X-Received: by 2002:a17:906:5a60:b0:8aa:bdec:d9ae with SMTP id
+ my32-20020a1709065a6000b008aabdecd9aemr1869264ejc.12.1675972343370; Thu, 09
+ Feb 2023 11:52:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y+U9QX4p5YX3/B3k@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT072:EE_|CY8PR12MB7415:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7a3e9322-5ae7-41b7-57f2-08db0ad7118f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JwmwsP57xtleKg9U0eZ4oG/BnGO06cFCtIcV5MR2QUy/yDqMyMmaPf+8kxHAt3aeS0HMzH8wMCZs9vxN+zcgUJqnB47taUpSb7X+11ADMVoSTdj+M1LsdBG3gxY1tis6PUAhlRDblyChyJUrQvQyCcUMZ4M4KdsxZlB8DyoRdEWLWiwBBUhLNfExCxDcDuUKcK8T9I12eLd1a1wFE45DHkDlhRcPdofvavq3pcUxv33kHFftF+jE3LjtAzQNHvIO0Eslji0gAJMjNmQuVQPRISQn3qg4JZyBHtoX0vZMcQFJCJfqfo93IioK39+hjTPA1/TPBjUDIX2GJuDKEtwUemhWF5fgSch5B6mHPG5l9KiGl8B+THsfeF7fCW8zTbwwl2xL/Q0fMJZGFoRjVoEv58hI+vAkgBkNu/0/R6JLv8aMk5XMRCQK0lBTbdcrB3xyBaYXg1ZQAb46rFP7ks8eLDPUC96F+M6NvwRcaPvzPcWaQSctpelnyGJpsEQs6Gc/ZNGipInHBqrmYPAxXffN75ceVIyTuQgO/sgJaMHy64y4cl6CYfJUgnD24LJbx1ms0pyLJl5Ul0BZaolyo6naM4a6yKnMfxTdaXmN6VQOHt4SJVDcqex6bTgHgk1KvCkfVYtDacJQ5VXrARDP4F4wvXikNkRmZfMFtLC39oSrBF1ytcFbVgn4jpnNM7JkBc6LHhHCzt/Ti0zlLPVk/2oydfA6XKMv2dI/gTBxbNbgwtw=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(39860400002)(346002)(451199018)(40470700004)(46966006)(36840700001)(54906003)(110136005)(316002)(478600001)(186003)(26005)(5660300002)(40460700003)(8936002)(7416002)(9686003)(2906002)(70586007)(8676002)(4326008)(70206006)(41300700001)(7636003)(86362001)(82740400003)(40480700001)(55016003)(426003)(47076005)(336012)(82310400005)(36860700001)(356005)(33716001)(83380400001)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 19:51:43.0191
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a3e9322-5ae7-41b7-57f2-08db0ad7118f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7415
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230209192337.never.690-kees@kernel.org>
+In-Reply-To: <20230209192337.never.690-kees@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 9 Feb 2023 11:52:10 -0800
+Message-ID: <CAEf4BzZXrf48wsTP=2H2gkX6T+MM0B45o0WNswi50DQ_B-WG4Q@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 02:36:49PM -0400, Jason Gunthorpe wrote:
-> On Thu, Feb 09, 2023 at 12:59:58PM -0500, Matthew Rosato wrote:
-> > really should highlight that).  Otherwise, conditionally calling
-> > iommu_domain_alloc(dev->bus) when !ops->domain_alloc_user (instead
-> > of returning -EOPNOTSUPP) seems to restore the prior functionality
-> > for me.
-> 
-> Yes, that is right if the input user data is 0 length or full of 0s
-> then we should call the normal driver function
+On Thu, Feb 9, 2023 at 11:23 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> The kernel is globally removing the ambiguous 0-length and 1-element
+> arrays in favor of flexible arrays, so that we can gain both compile-time
+> and run-time array bounds checking[1]. Most cases of these changes are
+> trivial, but this case in BPF is not. It faces some difficulties:
+>
+> 1) struct bpf_lpm_trie_key is part of UAPI so changes can be fragile in
+>    the sense that projects external to Linux may be impacted.
+>
+> 2) The struct is intended to be used as a header, which means it may
+>    be within another structure, resulting in the "data" array member
+>    overlapping with the surrounding structure's following members. When
+>    converting from [0]-style to []-style, this overlap elicits warnings
+>    under Clang, and GCC considers it a deprecated extension (and similarly
+>    warns under -pedantic): https://godbolt.org/z/vWzqs41h6
+>
+> 3) Both the kernel and userspace access the existing "data" member
+>    for more than just static initializers and offsetof() calculations.
+>    For example:
+>
+>       cilium:
+>         struct egress_gw_policy_key in_key = {
+>                 .lpm_key = { 32 + 24, {} },
+>                 .saddr   = CLIENT_IP,
+>                 .daddr   = EXTERNAL_SVC_IP & 0Xffffff,
+>         };
+>
+>       systemd:
+>         ipv6_map_fd = bpf_map_new(
+>                         BPF_MAP_TYPE_LPM_TRIE,
+>                         offsetof(struct bpf_lpm_trie_key, data) + sizeof(uint32_t)*4,
+>                         sizeof(uint64_t), ...);
+>         ...
+>         struct bpf_lpm_trie_key *key_ipv4, *key_ipv6;
+>         ...
+>         memcpy(key_ipv4->data, &a->address, sizeof(uint32_t));
+>
+>    Searching for other uses in Debian Code Search seem to be just copies
+>    of UAPI headers:
+>    https://codesearch.debian.net/search?q=struct+bpf_lpm_trie_key&literal=1&perpkg=1
+>
+> Introduce struct bpf_lpm_trie_key_u8 for the kernel (and future userspace)
+> to use for walking the individual bytes following the header, and leave
+> the "data" member of struct bpf_lpm_trie_key as-is (i.e. a [0]-style
+> array). This will allow existing userspace code to continue to use "data"
+> as a fake flexible array. The kernel (and future userspace code) building
+> with -fstrict-flex-arrays=3 will see struct bpf_lpm_trie_key::data has
+> having 0 bytes so there will be no overlap warnings, and can instead
+> use struct bpf_lpm_trie_key_u8::data for accessing the actual byte
+> array contents. The definition of struct bpf_lpm_trie_key_u8 uses a
+> union with struct bpf_lpm_trie_key so that things like container_of()
+> can be used instead of doing explicit casting, all while leaving the
+> member names un-namespaced (i.e. key->prefixlen == key_u8->prefixlen,
+> key->data == key_u8->data), allowing for trivial drop-in replacement
+> without collateral member renaming.
+>
+> This will avoid structure overlap warnings and array bounds warnings
+> while enabling run-time array bounds checking under CONFIG_UBSAN_BOUNDS=y
+> and -fstrict-flex-arrays=3.
+>
+> For reference, the current warning under GCC 13 with -fstrict-flex-arrays=3
+> and -Warray-bounds is:
+>
+> ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
+>   207 |                                        *(__be16 *)&key->data[i]);
+>       |                                                   ^~~~~~~~~~~~~
+> ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
+>   102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>       |                                                      ^
+> ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
+>    97 | #define be16_to_cpu __be16_to_cpu
+>       |                     ^~~~~~~~~~~~~
+> ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
+>   206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
+> ^
+>       |                            ^~~~~~~~~~~
+> In file included from ../include/linux/bpf.h:7:
+> ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
+>    82 |         __u8    data[0];        /* Arbitrary size */
+>       |                 ^~~~
+>
+> Additionally update the samples and selftests to use the new structure,
+> for demonstrating best practices.
+>
+> [1] For lots of details, see both:
+>     https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
+>     https://people.kernel.org/kees/bounded-flexible-arrays-in-c
+>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Stanislav Fomichev <sdf@google.com>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Mykola Lysenko <mykolal@fb.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Haowen Bai <baihaowen@meizu.com>
+> Cc: bpf@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/uapi/linux/bpf.h                   | 15 +++++++++++++--
+>  kernel/bpf/lpm_trie.c                      | 16 +++++++++-------
+>  samples/bpf/map_perf_test_user.c           |  2 +-
+>  samples/bpf/xdp_router_ipv4_user.c         |  2 +-
+>  tools/testing/selftests/bpf/test_lpm_map.c | 14 +++++++-------
+>  5 files changed, 31 insertions(+), 18 deletions(-)
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index ba0f0cfb5e42..f843a7582456 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -76,10 +76,21 @@ struct bpf_insn {
+>         __s32   imm;            /* signed immediate constant */
+>  };
+>
+> -/* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
+> +/* Header for a key of a BPF_MAP_TYPE_LPM_TRIE entry */
+>  struct bpf_lpm_trie_key {
+>         __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
+> -       __u8    data[0];        /* Arbitrary size */
+> +       __u8    data[0];        /* Deprecated field: use struct bpf_lpm_trie_key_u8 */
+> +};
+> +
+> +/* Raw (u8 byte array) key of a BPF_MAP_TYPE_LPM_TRIE entry */
+> +struct bpf_lpm_trie_key_u8 {
+> +       union {
+> +               struct bpf_lpm_trie_key hdr;
+> +               struct {
+> +                       __u32   prefixlen;
+> +                       __u8    data[];
+> +               };
+> +       };
+>  };
 
-Maybe I am wrong, yet I recall that doing ops->domain_alloc_user
-without a fallback was intentional to rule out drivers that don't
-support IOMMUFD?
+Do we need to add a new type to UAPI at all here? We can make this new
+struct internal to kernel code (e.g. struct bpf_lpm_trie_key_kern) and
+point out that it should match the layout of struct bpf_lpm_trie_key.
+User-space can decide whether to use bpf_lpm_trie_key as-is, or if
+just to ensure their custom struct has the same layout (I see some
+internal users at Meta do just this, just make sure that they have
+__u32 prefixlen as first member).
 
-To be backward-compatible and concern about SMMU, we can opt in
-ops->domain_alloc_user upon availability and then add a fallback:
+This whole union work-around seems like just extra cruft that we don't
+really need in UAPI.
 
-	if ((!ops || !ops->domain_alloc_user) && user_data) {
-		rc = -EOPNOTSUPP;
-		goto out_abort;
-	}
+Or did I miss anything?
 
-	if (ops->domain_alloc_user)
-		hwpt->domain = ops->domain_alloc_user(dev, NULL, NULL);
-	else
-		hwpt->domain = iommu_domain_alloc(dev->bus);
-	if (!hwpt->domain) {
-		rc = -ENOMEM;
-		goto out_abort;
-	}
 
-Yet, even by doing so, this series having the PATCH 07/17 that
-moves iopt_table_add_domain() would temporally break IOMMUFD on
-ARM platforms, until we add the ops->domain_alloc_user to SMMU
-drivers.
-
-Thanks
-Nic
+[...]
