@@ -2,77 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D252D692788
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Feb 2023 20:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8669769278E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Feb 2023 21:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233537AbjBJT7q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Feb 2023 14:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S233005AbjBJUCn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Feb 2023 15:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbjBJT7o (ORCPT
+        with ESMTP id S229480AbjBJUCn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:59:44 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D597D3FE
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 11:59:35 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id 135so2610895qkh.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 11:59:35 -0800 (PST)
+        Fri, 10 Feb 2023 15:02:43 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0178D7715E
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 12:02:41 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-16dcb07b805so1540088fac.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 12:02:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+cXK0yN4PVvPYRxqzxPGR9rSHlqnym3PwTLPn4N4Qo=;
-        b=FPtXkgzKXuyODmOIzMBgoJqoSB8HG7+xWroxNgcZK10MT1vuDHcFilGYRNjVjmJF+G
-         6N3vQ3CJftv2PU+evl/ND/GQc6nQLwQ2cdlQlktnWlbcs6eaov9sjP81nyO8tC+9bOnY
-         yz35ewz2YDN7ViNCSigM4DMTNQsXO1TSxxwNL1RVGTpJxtczAvz8fS8vwMhwXNhzmUrq
-         z1Txu3KbeTtHQ7P1tsNLTuFKKqyykkgCQYAWwNFohn4Rf0an2kJpH8tDE7zoraq+LFmo
-         4H/7zwoXsXKtBSJMBSd22omEbjlLgaxkDjRv6YO97dhDjz+1PfnQR0v7xdPboMgv7kT7
-         l4cw==
+        bh=dn8jJUxmhSJCRQ2KeeXopMGGe8mROJR+FfacxxhkMFU=;
+        b=Z8n30FA5uUBtnkZJ7Z0lfxpwqmPAmBwoI63JhBNKnPQ58VTj0Mz/WS5sGb2XeOsSK8
+         axBbJJNTiYvwQtE91QFlz+a2cAcrifJiCdOhSMW0PvWiHmyQiTsqYxGck3b3lSdWsCI/
+         Vg9vmtBPodcU0+4PMi8CfJXftsyU+ZUaD0SHcy+lXf4oIkK5riR+FzGh+zFxhKxscMQU
+         OV8+rRq7RfrPD37O6pK2d6Q5nYKOcq0dtkggTZxD57s6ISLyHH6UqLQpHgJp6BhZhbGB
+         EbpYgrEUsBPgyzwAb/w5Nu1CUucw9IrISe3tRpYc40ZyGPhSoHjMmO0gwUYiNYLUX3ny
+         6oKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d+cXK0yN4PVvPYRxqzxPGR9rSHlqnym3PwTLPn4N4Qo=;
-        b=v9wSkEcVX+u2ZWtH8rGWk2NTmWKUIyBnu1Xq4soBDARTxEfSiGBHQpn8K1B+S26PHg
-         M4RdBzdgnCtOjcy4OuGXH0pEnmx3LFTpc0SZRpBn+HokHGLQlzbmcsRCNV7oP26hJ/q4
-         RHz0ZlymefZRg6A3KfihVe+hNMT7i3KUf7wTGvezXGRecbfPlzhzOZQp1Xo3o5NYWQpz
-         z9GE98hLH/3MV5SuBhVZVgNvgdepQvCcHHljJNw/8pgqdYFv9nsididhKTO1eFglAwKH
-         +1n25qqGZoIvQ5uY0/pjLWm1Fod/simVlRoUuix17g6t/3ajcWJGWZBgvau+OUdEs/uC
-         QhlA==
-X-Gm-Message-State: AO0yUKXtyKMpmhT9uVhDAlrXHc9QOvUjqsuE5TLsrbcOEsK2q+5tuDFi
-        aNpZKtBSZqYzALFRGhV01g7P22c7YSVaNtQdcoA1jw==
-X-Google-Smtp-Source: AK7set+lUXzv8lrHvcVBMrFCyzd7pF/BI691QOOFHgkZ8TV89SfokjQ+AyFxR7q2uzAIlzMSCQ2N1kGlVuG4qC6M3c4=
-X-Received: by 2002:a37:2f85:0:b0:71b:ae71:8eed with SMTP id
- v127-20020a372f85000000b0071bae718eedmr1348116qkh.204.1676059174528; Fri, 10
- Feb 2023 11:59:34 -0800 (PST)
+        bh=dn8jJUxmhSJCRQ2KeeXopMGGe8mROJR+FfacxxhkMFU=;
+        b=i1w7YsF6nOvgtysrmKJe/IIvkzDCOoqECEhUIbaGLi5HpXJq119eVwR8tNR4dAVBlD
+         NeP5R5J6wr4wb9vmkqExeEzYRdpGFUE2fwW76QAHybUePe1qo+bt3WkkLZNXUWOxILhu
+         N70gCmsBBFb5HQsb7RYFINOLflCZ/2VLRYvpfVRykD3+q14P065RIvAebH1u9AgTQQXS
+         jV71WNRmPwu4fBR6+t9U/5or+YISNgW/HpKNz7BzhI2Tb+ZA0pLdw7Kvm1RKGGIwoZ+4
+         paclB/BizYeB3yMiTMpcE6eB8DvXv+HC3w5ACHK+tdsClAwhB4WcDx8+ZNuNtN41Xoa7
+         OiiQ==
+X-Gm-Message-State: AO0yUKUVKngZADopIAstyMSfEDFPgUQNvLl0fX+3zXafTEIHJ9FB4BDt
+        0r6UBky52ys86KRJy+q6TaQRNIIEgofKjRwZ8B1uJw==
+X-Google-Smtp-Source: AK7set8VFB1oFgobXiEA8CwUJAHpFvhiVJut+0W/YtZUWF6VJL4Bv4kKXlyXkN8tNOaJ8XquuXlP5RSZa+U6UpBCWCQ=
+X-Received: by 2002:a05:6870:c211:b0:169:e996:9cb0 with SMTP id
+ z17-20020a056870c21100b00169e9969cb0mr2202181oae.122.1676059360188; Fri, 10
+ Feb 2023 12:02:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <Y8dG3WDxY2OCGPby@google.com> <CAGtprH_hsLPDzFREbSehsxQRj7piVC75xPXD7OsKLUULWiS1fw@mail.gmail.com>
-In-Reply-To: <CAGtprH_hsLPDzFREbSehsxQRj7piVC75xPXD7OsKLUULWiS1fw@mail.gmail.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Fri, 10 Feb 2023 11:59:23 -0800
-Message-ID: <CAGtprH9jAkCgsNHHK7um7drsLWsUTej+djLrdzv9rzcd5VdNTg@mail.gmail.com>
-Subject: Re: [V2 PATCH 0/6] KVM: selftests: selftests for fd-based private memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+References: <20230131220355.1603527-1-rmoar@google.com> <20230131220355.1603527-2-rmoar@google.com>
+ <CABVgOSmYmP+yO1BQ2m8nA+czTjQZrYeOWkn1b47UUiFKG3NUZA@mail.gmail.com>
+In-Reply-To: <CABVgOSmYmP+yO1BQ2m8nA+czTjQZrYeOWkn1b47UUiFKG3NUZA@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Fri, 10 Feb 2023 15:02:29 -0500
+Message-ID: <CA+GJov4kXQBgsxj8_4Z7bn=J16J5BJJcRL+YV=Vpe=TcgXzvoA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] kunit: fix bug in debugfs logs of parameterized tests
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -85,58 +70,107 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 7:11 PM Vishal Annapurve <vannapurve@google.com> wrote:
+On Thu, Feb 9, 2023 at 12:06 AM David Gow <davidgow@google.com> wrote:
 >
-> ...
-
-> > Last question, do you have a list of testcases that you consider "required" for
-> > UPM?  My off-the-cuff list of selftests I want to have before merging UPM is pretty
-> > short at this point:
+> On Wed, 1 Feb 2023 at 06:04, Rae Moar <rmoar@google.com> wrote:
 > >
-> >   - Negative testing of the memslot changes, e.g. bad alignment, bad fd,
-> >     illegal memslot updates, etc.
-> >   - Negative testing of restrictedmem, e.g. various combinations of overlapping
-> >     bindings of a single restrictedmem instance.
-> >   - Access vs. conversion stress, e.g. accessing a region in the guest while it's
-> >     concurrently converted by the host, maybe with fancy guest code to try and
-> >     detect TLB or ordering bugs?
+> > Fix bug in debugfs logs that causes parameterized results to not appear
+> > in the log because the log is reintialized (cleared) when each parameter is
 >
-> List of testcases that I was tracking (covered by the current
-> selftests) as required:
-> 1) Ensure private memory contents are not accessible to host userspace
-> using the HVA
-> 2) Ensure shared memory contents are visible/accessible from both host
-> userspace and the guest
-> 3) Ensure 1 and 2 holds across explicit memory conversions
-> 4) Exercise memory conversions with mixed shared/private memory pages
-> in a huge page to catch issues like [2]
-> 5) Ensure that explicit memory conversions don't affect nearby GPA ranges
->
-> Test Cases that will be covered by TDX/SNP selftests (in addition to
-> above scenarios):
-> 6) Ensure 1 and 2 holds across implicit memory conversions
-> 7) Ensure that implicit memory conversions don't affect nearby GPA ranges
->
-> Additional testcases possible:
-> 8) Running conversion tests for non-overlapping GPA ranges of
-> same/different memslots from multiple vcpus
->
-> [1] - https://github.com/sean-jc/linux/commit/7e536bf3c45c623425bc84e8a96634efc3a619ed
-> [2] - https://lore.kernel.org/linux-mm/CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com/
 
-List of additional testcases that could help increase basic coverage
-(including what sean mentioned earlier):
-1) restrictedmem functionality testing
-    - read/write/mmap should not work
-    - fstat/fallocate should work as expected
-2) restrictedmem registration/modification testing with:
-    - bad alignment, bad fd, modifying properties of existing memslot
-    - Installing multiple memslots with ranges within the same
-restricted mem files
-    - deleting memslots with restricted memfd while guests are being executed
-3) Runtime restricted mem testing:
-    - Access vs conversion testing from multiple vcpus
-    - conversion and access to non-overlapping ranges from multiple vcpus
+Hi David!
 
-Regards,
-Vishal
+> Nit: s/reintialized/reinitialized
+>
+
+Oops. Thanks for pointing this out. Will fix in v2.
+
+> > run.
+> >
+> > Ensure these results appear in the debugfs logs and increase log size to
+> > allow for the size of parameterized results.
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > ---
+>
+> This looks pretty good to me, but we may need to restrict the size of
+> a single log line separately from that of the whole log.
+>
+> (It'd also be nice to include a before/after in the commit description.)
+
+Yes, as mentioned in the other patches, I will add an individual
+"before and after" comparison to each of the patches in v2. This is
+much clearer than just the overall comparison in the cover letter.
+
+>
+> With the stack size issue fixed, though, this looks good to me:
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+> Cheers,
+> -- David
+>
+> >  include/kunit/test.h | 2 +-
+> >  lib/kunit/test.c     | 3 ++-
+> >  2 files changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 87ea90576b50..0a077a4c067c 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+> >  struct kunit;
+> >
+> >  /* Size of log associated with test. */
+> > -#define KUNIT_LOG_SIZE 512
+> > +#define KUNIT_LOG_SIZE 1500
+>
+> This is used both as the overall log size, and the size of a single
+> line in kunit_log_append.
+>
+> As the latter involves a local 'line' array, it can bloat out stack usage.
+>
+> Could we either restrict the maximum line length separately, or rework
+> kunit_log_append() to not use a local variable?
+> (I imagine we could just vsnprintf() directly into the log buffer. We
+> could make two sprintf calls to calculate the length required to
+> maintain some atomicity as well (this could open us up to
+> time-of-check/time-of-use vulnerabilities, but I think the
+> vulnerability ship has sailed if you're passing untrusted pointers
+> into the kunit_log macro anyway))
+>
+
+Thanks for your help here. I will play around with these two options.
+Although, I think I am leaning toward restricting the maximum line
+length separately.
+
+Thanks!
+
+-Rae
+
+> >
+> >  /* Maximum size of parameter description string. */
+> >  #define KUNIT_PARAM_DESC_SIZE 128
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index 51cae59d8aae..66ba93b8222c 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -437,7 +437,6 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+> >         struct kunit_try_catch_context context;
+> >         struct kunit_try_catch *try_catch;
+> >
+> > -       kunit_init_test(test, test_case->name, test_case->log);
+> >         try_catch = &test->try_catch;
+> >
+> >         kunit_try_catch_init(try_catch,
+> > @@ -533,6 +532,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+> >                 struct kunit_result_stats param_stats = { 0 };
+> >                 test_case->status = KUNIT_SKIPPED;
+> >
+> > +               kunit_init_test(&test, test_case->name, test_case->log);
+> > +
+> >                 if (!test_case->generate_params) {
+> >                         /* Non-parameterised test. */
+> >                         kunit_run_case_catch_errors(suite, test_case, &test);
+> > --
+> > 2.39.1.456.gfc5497dd1b-goog
+> >
