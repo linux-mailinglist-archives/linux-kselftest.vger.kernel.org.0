@@ -2,29 +2,29 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA1969299B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Feb 2023 22:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DAB6929A3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Feb 2023 22:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbjBJVyM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Feb 2023 16:54:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S233471AbjBJVyO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Feb 2023 16:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbjBJVxx (ORCPT
+        with ESMTP id S233729AbjBJVx5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:53:53 -0500
+        Fri, 10 Feb 2023 16:53:57 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696975ACF2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 13:53:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AEA366BB
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 13:53:56 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 849216BFC2D5; Fri, 10 Feb 2023 13:50:33 -0800 (PST)
+        id 88E346BFC2D7; Fri, 10 Feb 2023 13:50:33 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     kernel-team@fb.com
 Cc:     shr@devkernel.io, linux-mm@kvack.org, riel@surriel.com,
         mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org, akpm@linux-foundation.org
-Subject: [RFC PATCH v2 08/19] mm: expose general_profit metric
-Date:   Fri, 10 Feb 2023 13:50:12 -0800
-Message-Id: <20230210215023.2740545-9-shr@devkernel.io>
+Subject: [RFC PATCH v2 09/19] docs: document general_profit sysfs knob
+Date:   Fri, 10 Feb 2023 13:50:13 -0800
+Message-Id: <20230210215023.2740545-10-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230210215023.2740545-1-shr@devkernel.io>
 References: <20230210215023.2740545-1-shr@devkernel.io>
@@ -39,51 +39,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The documentation mentions a general profit metric, however this metric
-is not calculated. In addition the formula depends on the size of
-internal structures, which makes it more difficult for an administrator
-to make the calculation. Adding the metric for a better user experience.
+Document general_progit knob.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
 ---
- mm/ksm.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ Documentation/ABI/testing/sysfs-kernel-mm-ksm | 8 ++++++++
+ Documentation/admin-guide/mm/ksm.rst          | 2 ++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 7f3b28b7536e..a0b4611112c0 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -3301,6 +3301,21 @@ static ssize_t zero_pages_sharing_show(struct kobj=
-ect *kobj,
- }
- KSM_ATTR_RO(zero_pages_sharing);
+diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-ksm b/Documentatio=
+n/ABI/testing/sysfs-kernel-mm-ksm
+index d244674a9480..7768e90f7a8f 100644
+--- a/Documentation/ABI/testing/sysfs-kernel-mm-ksm
++++ b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+@@ -51,3 +51,11 @@ Description:	Control merging pages across different NU=
+MA nodes.
 =20
-+static ssize_t general_profit_show(struct kobject *kobj,
-+				   struct kobj_attribute *attr, char *buf)
-+{
-+	long general_profit;
-+	long all_rmap_items;
+ 		When it is set to 0 only pages from the same node are merged,
+ 		otherwise pages from all nodes can be merged together (default).
 +
-+	all_rmap_items =3D ksm_max_page_sharing + ksm_pages_shared +
-+				ksm_pages_unshared + pages_volatile();
-+	general_profit =3D ksm_pages_sharing * PAGE_SIZE -
-+				all_rmap_items * sizeof(struct ksm_rmap_item);
-+
-+	return sysfs_emit(buf, "%ld\n", general_profit);
-+}
-+KSM_ATTR_RO(general_profit);
-+
- static ssize_t stable_node_dups_show(struct kobject *kobj,
- 				     struct kobj_attribute *attr, char *buf)
- {
-@@ -3366,6 +3381,7 @@ static struct attribute *ksm_attrs[] =3D {
- 	&stable_node_dups_attr.attr,
- 	&stable_node_chains_prune_millisecs_attr.attr,
- 	&use_zero_pages_attr.attr,
-+	&general_profit_attr.attr,
- 	NULL,
- };
++What:		/sys/kernel/mm/ksm/general_profit
++Date:		January 2023
++KernelVersion:  6.1
++Contact:	Linux memory management mailing list <linux-mm@kvack.org>
++Description:	Measure how effective KSM is.
++		general_profit: how effective is KSM. The formula for the
++		calculation is in Documentation/admin-guide/mm/ksm.rst.
+diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-g=
+uide/mm/ksm.rst
+index f160f9487a90..5c4daf44d79d 100644
+--- a/Documentation/admin-guide/mm/ksm.rst
++++ b/Documentation/admin-guide/mm/ksm.rst
+@@ -159,6 +159,8 @@ stable_node_chains_prune_millisecs
 =20
+ The effectiveness of KSM and MADV_MERGEABLE is shown in ``/sys/kernel/mm=
+/ksm/``:
+=20
++general_profit
++        how effective is KSM. The calculation is explained below.
+ pages_shared
+         how many shared pages are being used
+ pages_sharing
 --=20
 2.30.2
 
