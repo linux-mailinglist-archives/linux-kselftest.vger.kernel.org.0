@@ -2,134 +2,229 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5266923C4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Feb 2023 17:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F591692652
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Feb 2023 20:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjBJQ4t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Feb 2023 11:56:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S232717AbjBJT27 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Feb 2023 14:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbjBJQ4s (ORCPT
+        with ESMTP id S229480AbjBJT26 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:56:48 -0500
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2471A655;
-        Fri, 10 Feb 2023 08:56:19 -0800 (PST)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4PD0HG2B7bzDrW9;
-        Fri, 10 Feb 2023 16:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1676048154; bh=7LVN0Tvz41/zBY9UM/sXCMf+UpGWNMgOWyrI3wquCP8=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=LaPaxfoTeQPcMlW74LzYbWaN8BC3jxoiyJaWcQMV+0yB6rrUdQULG3NlTbg1ShavA
-         bKlljjktaSkPC12B2NZ9a01mMvryMXfL7dgk4HZrMpxlVNSHyeUSj1qzaTBXXoCpof
-         WnZo796wf4X2I+JgLb0TwwiuhlRkcehlg4v+aNAs=
-X-Riseup-User-ID: 547A6DEB417079ABCF46AD6A6C88F2CA2B3872DFC3F7C4A8A0290186BCF3DB36
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4PD0H83Kh0z1y9M;
-        Fri, 10 Feb 2023 16:55:48 +0000 (UTC)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
-Subject: Re: [igt-dev] [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility
- for KUnit
-From:   Isabella Basso <isabbasso@riseup.net>
-In-Reply-To: <7621786.lvqk35OSZv@jkrzyszt-mobl1.ger.corp.intel.com>
-Date:   Fri, 10 Feb 2023 13:55:34 -0300
-Cc:     igt-dev@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Magali Lemes <magalilemes00@gmail.com>,
-        =?utf-8?Q?Ma=C3=ADra_Canal?= <maira.canal@usp.br>,
-        Daniel Latypov <dlatypov@google.com>, n@nfraprado.net,
-        kernel list <linux-kernel@vger.kernel.org>,
-        leandro.ribeiro@collabora.com,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        David Gow <davidgow@google.com>,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        =?utf-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Trevor Woerner <twoerner@gmail.com>,
-        Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F50369FC-2168-44EC-9BD9-53CF23A5EB97@riseup.net>
-References: <20220829000920.38185-1-isabbasso@riseup.net>
- <2101392.KlZ2vcFHjT@jkrzyszt-mobl1.ger.corp.intel.com>
- <66E07FE6-0FE1-4CDF-A346-CF23C7B9D073@riseup.net>
- <7621786.lvqk35OSZv@jkrzyszt-mobl1.ger.corp.intel.com>
-To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Feb 2023 14:28:58 -0500
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D4E63109
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 11:28:57 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-16346330067so7995006fac.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 11:28:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8QnFhEMcPPEP0O0xLg8j6PWrQGKllGaFswnof6Ao8II=;
+        b=obbP9CUsIN+o+GcuEdB6W00oWDZV3vrht/AeGKmWlLbavWt2/jmBX7clglJDbLVUbB
+         vDm0DtYpPFEJy1zIpI+RljlFwn4wPA+BKj5pf+UZmOFV1c+kRRz5or0COegws6Op8wrk
+         vN8thBQ4so/H9LAguljqEOuoV4RgCiBAY4Sc4zoALDE1ety5W8YiIjNw3QhSqTXxYL1s
+         W+OJmW7jC4+fYMpehgxuIexQNb14L3XhiQ66oeqqp2Gykpn8QC7+2HPZ6vIhUSxThHlz
+         0FaIw2u4CfdNCJ/Nfr8wKQTJSi4jTFrzL9+t3r+2BQEe+Lh6DrUYER5oD3HaW9DELj5y
+         DBXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8QnFhEMcPPEP0O0xLg8j6PWrQGKllGaFswnof6Ao8II=;
+        b=SYHrd7cNQR1fqdZGuHgKFah57C3S7hfOh2HjVVNeLrk4NS/G6vLwLYKhnOlLTQfVrl
+         NJiH0LEKAnKm7jfwZIjWy2KazUvPqInv7FJnAHoxzW1FF+xOLsYVvmwD9zssIhPEPCVO
+         nipeKeh6C5O9Jq8KzJrzvHHHuFPGaPxuUe3FWJrHh5B64s90eEUPHeEzkalRAc+i/cbR
+         1+uVR4sCi+05shdm6CdewCLzceNY1wsjuaS2gJo3TSZhSV+Z5YANEnHbPzyztDWvdhOq
+         Rk8U8hzqVAo5ad2bn/b6kVBkYhEMBb6iwnh/zeHzINpMwM8I8qhh6NbQOeH4OxJKiQ54
+         JWCQ==
+X-Gm-Message-State: AO0yUKWexbXaMJCrHFcD0cPjfOyghTQs5ufZ2V//wPEvEdNxTdL8VtNY
+        QMYN/08rEDvCCPZQyNAo7cHB0JkiXMlPAJmkj3vg9A==
+X-Google-Smtp-Source: AK7set9FhO6ODVeYpYuU7r3c1yFt4Ew4aZNMdHvKpMd8vVZ0g1n+1IPAOnp6pnOZxCZL6/VFGuMGQBZTcOb+kL8UJSU=
+X-Received: by 2002:a05:6870:c211:b0:169:e996:9cb0 with SMTP id
+ z17-20020a056870c21100b00169e9969cb0mr2176030oae.122.1676057336378; Fri, 10
+ Feb 2023 11:28:56 -0800 (PST)
+MIME-Version: 1.0
+References: <20230131220355.1603527-1-rmoar@google.com> <20230131220355.1603527-3-rmoar@google.com>
+ <CABVgOSk_jWzywAKASy1U2mQOC=SM_TDt753VyF1hUtwWzoszPw@mail.gmail.com>
+In-Reply-To: <CABVgOSk_jWzywAKASy1U2mQOC=SM_TDt753VyF1hUtwWzoszPw@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Fri, 10 Feb 2023 14:28:44 -0500
+Message-ID: <CA+GJov5OCM4VNZ4QsEEcH-V+S+sPoUN8B9b_stFD-r00RYF2hw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] kunit: fix bug in the order of lines in debugfs logs
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Janusz,
+On Thu, Feb 9, 2023 at 12:06 AM David Gow <davidgow@google.com> wrote:
+>
+> On Wed, 1 Feb 2023 at 06:04, Rae Moar <rmoar@google.com> wrote:
+> >
+> > Fix bug in debugfs logs that causes an incorrect order of lines in the
+> > debugfs log.
+> >
+> > Currently, any suite diagnostic lines, including the test counts lines
+> > that show the number of tests passed, failed, and skipped,
+> > appear prior to the individual results, which is a bug.
+> >
+> > Ensure the order of printing for the debugfs log is correct.
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > ---
+>
+> I think this is overall an improvement, but there are a few remaining
+> issues (some new, some old).
 
-> Am 2023-02-10 um 11:56 AM schrieb Janusz Krzysztofik =
-<janusz.krzysztofik@linux.intel.com>:
->=20
-> Hi Isabella,
->=20
-> On Monday, 19 September 2022 22:55:44 CET Isabella Basso wrote:
->> Hi, Janusz,
->>=20
->>> Am 09/09/2022 um 12:18 PM schrieb Janusz Krzysztofik =
-<janusz.krzysztofik@linux.intel.com>:
->>>=20
->>> ...
->>>=20
->>> Anyway, related to my comment about naming that function a parser, I =
-think the=20
->>> best approach would be for that parser to return a generic set of =
-results from=20
->>> kunit execution, then we could feed that data into an IGT specific =
-handler=20
->>> that would convert them to IGT results (SUCCESS, FAIL, or SKIP) as =
-if returned=20
->>> by a set of IGT dynamic subtests.
->>=20
->> That sounds like a good idea to me, I might take some extra time =
-before v3 to
->> do that, though.=20
->=20
-> Were you able to make any progress?  Do you need any help?
+Hi David!
 
-I=E2=80=99ve already handled most common cases but I still have to =
-address Chehab=E2=80=99s comments =E2=80=94 specifically in what =
-concerns crashes. I=E2=80=99ve been doing most of the development by =
-myself as GSoC has ended so I=E2=80=99m taking my time on this.
+Thanks for your comments.
 
-My most up-to-date work is available at [1], so if you have any =
-suggestions as to what might be done I=E2=80=99d love to hear them =
-before sending out v3 to the mailing list.
+>
+> First, as with the previous patches, could we have a before/after
+> comparison in the commit description?
 
-[1] - =
-https://gitlab.freedesktop.org/isinyaaa/igt-gpu-tools/-/merge_requests/1
+Yes, this sounds like a great idea. I originally thought the before
+and after comparison in the cover letter would be sufficient but an
+individual comparison for each patch is clearer. I will add this in
+v2.
 
-Cheers,
---
-Isabella Basso
+>
+> Secondly, I think it'd be nice to either add an extra KTAP header to
+> the start, so that each debugfs results file is a valid KTAP document
+> by itself, or at least document that you'll need to prepend one for
+> this to work.
+> I'm personally leaning towards the latter, even if it loses us the
+> ability to just concatenate result files together, because of the
+> third issue below.
+>
+> Finally, with this patch, the final result line's suite number is
+> recorded from its initial run, rather than always being '1'. This
+> means that if multiple suites are run (e.g. list-test.ko), then the
+> result file could contain a single suite, with "ok 2 ..." or similar
+> as a result line. This might help a bit if we were concatenating
+> result files, but otherwise leaves us with a parse error due to the
+> mismatched number.
+>
+> Personally, I'd prefer we change those to always use suite number 1,
+> and to add the KTAP header to the start. Adding the header should be
+> easy, the suite number perhaps less so...
 
-> Thanks,
-> Janusz
->=20
->=20
-> --=20
-> You received this message because you are subscribed to the Google =
-Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send =
-an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit =
-https://groups.google.com/d/msgid/kunit-dev/7621786.lvqk35OSZv%40jkrzyszt-=
-mobl1.ger.corp.intel.com.
+My intention was to match the logs with the exact KTAP output of the
+test to be consistent. But I see the value in ensuring the logs are
+easily parsable. In v2, I will add the KTAP header and change the test
+number to be 1 to allow the logs to be parsed without error.
 
+-Rae
+
+>
+> Cheers,
+> -- David
+>
+> >  lib/kunit/debugfs.c | 13 ++++++++-----
+> >  lib/kunit/test.c    | 24 ++++++++++++------------
+> >  2 files changed, 20 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+> > index de0ee2e03ed6..fbc645590701 100644
+> > --- a/lib/kunit/debugfs.c
+> > +++ b/lib/kunit/debugfs.c
+> > @@ -52,19 +52,22 @@ static void debugfs_print_result(struct seq_file *seq,
+> >  static int debugfs_print_results(struct seq_file *seq, void *v)
+> >  {
+> >         struct kunit_suite *suite = (struct kunit_suite *)seq->private;
+> > -       enum kunit_status success = kunit_suite_has_succeeded(suite);
+> >         struct kunit_case *test_case;
+> >
+> > -       if (!suite || !suite->log)
+> > +       if (!suite)
+> >                 return 0;
+> >
+> > -       seq_printf(seq, "%s", suite->log);
+> > +       /* Print suite header because it is not stored in the test logs. */
+> > +       seq_puts(seq, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+>
+> We probably want to print this twice, once without the indent, to
+> start the whole document, once with it.
+>
+> > +       seq_printf(seq, KUNIT_SUBTEST_INDENT "# Subtest: %s\n", suite->name);
+> > +       seq_printf(seq, KUNIT_SUBTEST_INDENT "1..%zd\n", kunit_suite_num_test_cases(suite));
+> >
+> >         kunit_suite_for_each_test_case(suite, test_case)
+> >                 debugfs_print_result(seq, suite, test_case);
+> >
+> > -       seq_printf(seq, "%s %d %s\n",
+> > -                  kunit_status_to_ok_not_ok(success), 1, suite->name);
+>
+> We probably still want to output the suite number as '1'...
+>
+> > +       if (suite->log)
+> > +               seq_printf(seq, "%s", suite->log);
+> > +
+> >         return 0;
+> >  }
+> >
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index 66ba93b8222c..27763f0b420c 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -147,10 +147,18 @@ EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
+> >
+> >  static void kunit_print_suite_start(struct kunit_suite *suite)
+> >  {
+> > -       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+> > -       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
+> > +       /*
+> > +        * We do not log the test suite header as doing so would
+> > +        * mean debugfs display would consist of the test suite
+> > +        * header prior to individual test results.
+> > +        * Hence directly printk the suite status, and we will
+> > +        * separately seq_printf() the suite header for the debugfs
+> > +        * representation.
+> > +        */
+> > +       pr_info(KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+> > +       pr_info(KUNIT_SUBTEST_INDENT "# Subtest: %s",
+> >                   suite->name);
+> > -       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "1..%zd",
+> > +       pr_info(KUNIT_SUBTEST_INDENT "1..%zd",
+> >                   kunit_suite_num_test_cases(suite));
+> >  }
+> >
+> > @@ -165,16 +173,8 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
+> >         struct kunit *test = is_test ? test_or_suite : NULL;
+> >         const char *directive_header = (status == KUNIT_SKIPPED) ? " # SKIP " : "";
+> >
+> > -       /*
+> > -        * We do not log the test suite results as doing so would
+> > -        * mean debugfs display would consist of the test suite
+> > -        * description and status prior to individual test results.
+> > -        * Hence directly printk the suite status, and we will
+> > -        * separately seq_printf() the suite status for the debugfs
+> > -        * representation.
+> > -        */
+> >         if (suite)
+> > -               pr_info("%s %zd %s%s%s\n",
+> > +               kunit_log(KERN_INFO, suite, "%s %zd %s%s%s\n",
+>
+> Changing this breaks the code to ensure the suite number is always '1'...
+>
+>
+> >                         kunit_status_to_ok_not_ok(status),
+> >                         test_number, description, directive_header,
+> >                         (status == KUNIT_SKIPPED) ? directive : "");
+> > --
+> > 2.39.1.456.gfc5497dd1b-goog
+> >
