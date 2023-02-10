@@ -2,30 +2,29 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F186929B3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Feb 2023 22:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611156929CC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Feb 2023 23:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbjBJV54 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Feb 2023 16:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S232883AbjBJWEC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Feb 2023 17:04:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbjBJV5z (ORCPT
+        with ESMTP id S232968AbjBJWEB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:57:55 -0500
+        Fri, 10 Feb 2023 17:04:01 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5387DD1F
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 13:57:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FA17E024
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 14:04:00 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 9EAD76BFC2E3; Fri, 10 Feb 2023 13:50:33 -0800 (PST)
+        id A31F86BFC2E5; Fri, 10 Feb 2023 13:50:33 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     kernel-team@fb.com
 Cc:     shr@devkernel.io, linux-mm@kvack.org, riel@surriel.com,
         mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [RFC PATCH v2 14/19] docs: document new procfs ksm knobs
-Date:   Fri, 10 Feb 2023 13:50:18 -0800
-Message-Id: <20230210215023.2740545-15-shr@devkernel.io>
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org
+Subject: [RFC PATCH v2 15/19] tools: add new prctl flags to prctl in tools dir
+Date:   Fri, 10 Feb 2023 13:50:19 -0800
+Message-Id: <20230210215023.2740545-16-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230210215023.2740545-1-shr@devkernel.io>
 References: <20230210215023.2740545-1-shr@devkernel.io>
@@ -40,47 +39,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Document both ksm_process_profit and ksm_merge_type proc settings.
+This adds the new prctl flags to the include file prct.h in the tools
+directory. This makes sure they are available for testing.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
-Reviewed-By: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/admin-guide/mm/ksm.rst | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ tools/include/uapi/linux/prctl.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-g=
-uide/mm/ksm.rst
-index 5c4daf44d79d..34f1d0396eee 100644
---- a/Documentation/admin-guide/mm/ksm.rst
-+++ b/Documentation/admin-guide/mm/ksm.rst
-@@ -218,7 +218,8 @@ several times, which are unprofitable memory consumed=
-.
- 			  ksm_rmap_items * sizeof(rmap_item).
+diff --git a/tools/include/uapi/linux/prctl.h b/tools/include/uapi/linux/=
+prctl.h
+index a5e06dcbba13..e4c629c1f1b0 100644
+--- a/tools/include/uapi/linux/prctl.h
++++ b/tools/include/uapi/linux/prctl.h
+@@ -284,4 +284,6 @@ struct prctl_mm_map {
+ #define PR_SET_VMA		0x53564d41
+ # define PR_SET_VMA_ANON_NAME		0
 =20
-    where ksm_merging_pages is shown under the directory ``/proc/<pid>/``=
-,
--   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``.
-+   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``. The process =
-profit
-+   is also shown in ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
-=20
- From the perspective of application, a high ratio of ``ksm_rmap_items`` =
-to
- ``ksm_merging_pages`` means a bad madvise-applied policy, so developers =
-or
-@@ -229,6 +230,9 @@ so if the ``ksm_rmap_items/ksm_merging_pages`` ratio =
-exceeds 64 on 64-bit CPU
- or exceeds 128 on 32-bit CPU, then the app's madvise policy should be dr=
-opped,
- because the ksm profit is approximately zero or negative.
-=20
-+The ksm_merge_type in ``/proc/<pid>/ksm_stat`` shows the merge type of t=
-he
-+process. Valid values are ``none``, ``madvise`` and ``process``.
-+
- Monitoring KSM events
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
++#define PR_SET_MEMORY_MERGE		67
++#define PR_GET_MEMORY_MERGE		68
+ #endif /* _LINUX_PRCTL_H */
 --=20
 2.30.2
 
