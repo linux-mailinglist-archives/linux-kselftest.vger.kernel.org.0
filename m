@@ -2,163 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5F1692BD6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Feb 2023 01:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBB9692BDA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Feb 2023 01:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbjBKAPr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Feb 2023 19:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
+        id S229745AbjBKAP4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Feb 2023 19:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBKAPq (ORCPT
+        with ESMTP id S229677AbjBKAPz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Feb 2023 19:15:46 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251AB82190
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 16:15:44 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id y2so2589666iot.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 16:15:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qbkcBCzqB6Bhnw08ObqB4UKeNk62tom/v69d4G2QaHo=;
-        b=ADJ+NDsgKyHyN8uoAdicRC4TZYYcp9IncDhQqJ/pK3xuapGF2kXR16aWyA3vBiCQp0
-         /sDAp9j9LtU1F707Vz870jS59vZ+QIvkPxitLoXLcGtzQhM5XeXyQjnpQRM1PF81gN39
-         qL/KvKn0G3q6tNs1860AZIEcQM0srawlAwoiA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qbkcBCzqB6Bhnw08ObqB4UKeNk62tom/v69d4G2QaHo=;
-        b=M9jXogqrJpix+hsrVN/ZyIp3n7k6X80Yol6GLKHgOPKvt2UHYaci+iukXHmuUf8Pe0
-         nW68jxE8Yyj5J5lod95ZPWIbejw71P6yNlA0LJvIL6Guqsjf6bsNlQLzFRIpfMVTyv29
-         cMzwVPJ80l32K+UWCqEfqFZF163nFVZVT3aZGP9C4Qr5eMaVoPVyyX7gQJJQ9Z+awUcQ
-         2XjmIk8cVW0OOH9xiVYuansUA/6ORhh+ROS28jJKsAFIsuV2Ms/07glYY7v1gd7Zec7V
-         yOsfXpMgbx2j4Wh35GtD3F7Sss4dgmsokDdLHlzuOTXVCqhDkFwDe7fiphRLAlT53AMc
-         BNmA==
-X-Gm-Message-State: AO0yUKUiRtdEGFDNusPsArPxbu7kLvVr8RsTpJIu1oGLhbsr5pYhzHfJ
-        6LscmP0VbViCZc/ujrI3guCECg==
-X-Google-Smtp-Source: AK7set/LYZ0DlptJM/8MELucz4/oGHkq3EnrHPTYhMfuT7mKai/9dPxEnYLdjBR81HUtP0VXeg3Zow==
-X-Received: by 2002:a5d:9046:0:b0:71d:63e5:7b5f with SMTP id v6-20020a5d9046000000b0071d63e57b5fmr11461339ioq.2.1676074543415;
-        Fri, 10 Feb 2023 16:15:43 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id n10-20020a5ed90a000000b0073a312aaae5sm1725931iop.36.2023.02.10.16.15.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 16:15:42 -0800 (PST)
-Message-ID: <dae27584-faf7-f132-1272-cb21248e5fa9@linuxfoundation.org>
-Date:   Fri, 10 Feb 2023 17:15:41 -0700
+        Fri, 10 Feb 2023 19:15:55 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2063.outbound.protection.outlook.com [40.107.220.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBCC84500;
+        Fri, 10 Feb 2023 16:15:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cKr2mXkdV2GtO2JuM5J0Fl7ULLaaJfpI4FeVR2zw7oPjpOwJRUHHfQDjyZs4vS3Mm+BBReUMHH1D/wUDjnBe671oJoZOZlpjh0F4F0RiNzO6wcQSg6c100FlJOgiJ1FCsAyPMiLumST11yDAuRAiWR9kCtMVmo9lWUyYP7Et7pkf4FSW833C2CWrgZ1yG8mmdnxeqP+dcDkXKNTPOPWiiNqqeWeDs9yxAeEBdbxg/ZsJOSiGsVzU2sxXPgwLe1GfurRNizms5nch7RQaNKyMxx+iQdHEGdzCYMcEZALFpRNodUwpPcRemPrFxfSmaNvRVtIIz9AWd/P3FMCP1qhQPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bROt+PZngeKtfR+cCAr+OPWc8LHp1E97cVuV/fq64S8=;
+ b=MG/0vl9mHG5gPLPfWSn6J+v128vRADRlChd8hR7GF/G2OuKX/JrG6bmcLCU8RWh92jUGqfIjQWizpPOiDl6UBFOMe5GpoaYsLXV/Wy4uvTGjeLV9sbPxtphM5Q1JL3htOgA1Zpf42zwyBJjXqoVZdK/sUVqFyje2XFj2OazAwdlwn8V+Ge++jUEuINoh1dre01PZE/FIQ8dAMs9RyJDH0ucWOhKUX1PQvo6mMJynTBWF5JmE3DjVR8fC4dkO4AlGTgfqCHk24g2e2xYSdDi5K5C2MpSkKojvTuellFPmFeYMm41aYLt/WTheLuSYRC6nJ7OyROZsdJuNxYHf4teGSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bROt+PZngeKtfR+cCAr+OPWc8LHp1E97cVuV/fq64S8=;
+ b=Fyxo6ttB0X3Om6+hEKJjkCwA2cFX4MsgXd6k8QdRGUzM3pPaBRVGLwIgfbTk7IL5AGE5vcXvMACWpqxVGzoJLfLD5/rS6Dx3cgf/sYeE1PS8aLTfuoI5pinJAKnE1xRWg9Uhh+m1eCitbjH/LYH5R8d0JOXoJRzrlACozxdBWvi3/T2UCFpaNYuDJ1vdOBioMmQWgAjNi1oB8JEDmtpf3TuT/61lwWv5ZgtU17MyJBTFwH3o94HlFcKC2pguZL4CKqrO65bVsNfv5MPTz8mt2htXN7f5FzPH1Fa7FucSsbNrnh5zxM5u+DSy0xVQELFXXUh7Y2HyAegu9HDhGAsO7g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by CY8PR12MB8298.namprd12.prod.outlook.com (2603:10b6:930:7c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Sat, 11 Feb
+ 2023 00:15:51 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6086.019; Sat, 11 Feb 2023
+ 00:15:51 +0000
+Date:   Fri, 10 Feb 2023 20:15:49 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org, kevin.tian@intel.com,
+        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        baolu.lu@linux.intel.com
+Subject: Re: [PATCH 2/6] iommu/vt-d: Implement hw_info for iommu capability
+ query
+Message-ID: <Y+beNa5LXUvZSaEb@nvidia.com>
+References: <20230209041642.9346-1-yi.l.liu@intel.com>
+ <20230209041642.9346-3-yi.l.liu@intel.com>
+ <20230210154410.2b3b8296.alex.williamson@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210154410.2b3b8296.alex.williamson@redhat.com>
+X-ClientProxiedBy: MN2PR08CA0026.namprd08.prod.outlook.com
+ (2603:10b6:208:239::31) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 00/34] selftests: Fix incorrect kernel headers search path
-Content-Language: en-US
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, linuxppc-dev@lists.ozlabs.org
-References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
- <560824bd-da2d-044c-4f71-578fc34a47cd@linuxfoundation.org>
- <799b87d9-af19-0e6a-01b7-419b4893a0df@linuxfoundation.org>
- <975995d6-366a-88e3-2321-f0728f7e22a7@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <975995d6-366a-88e3-2321-f0728f7e22a7@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY8PR12MB8298:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d9147d3-2442-4c1d-2f7c-08db0bc521d8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: e1F0qcP/3MRDHv3djKeoF+l2P1iWaUVyCORX0sTdgGOioeA6K20vZiTCaGHXgyTfSCE891pMw3mwPeDPs4dw25FlBx29puD+dbUWJ3YtOox7g8lc7v55Z69zoU+bXGAQahg+DuHbghk9M68NdsEmL9FtcNENG7Hkajk3RC+LhEWR5VMzqYbfaospr/yp+DQKzGzvst976FHpuwIYgf48TvzWCRZyoRQn6tuwV/B6MYHpP8EzWGw4fqm7+PouOLrfLf2GHwwJvRm2D3/yAMkBZ75abHhuFvjWUphqNTaRRuDhzj2huKO54KeqTme4hBMp/1iOZrOKIz/bwiNVkOaNxh6dKRzAGC1+VnJ0y1eBNAABHvqbJFcvsWULQYy18oYBLJwQYMHrdHO3HhzoH0SibndSmI6HSbiH0KFOM051SjXkMw6m4RdhYAoTF3MgVSP3yQTnRcrKTDYd0Gx9dikPMdhMPt2FhYGZ4jPWkgjeHtXYdpIHMjH5BKhE12LV5sRFd7JGCXVfCG/3b3K/pFScSLJVmtCT4MWRLy6CUYM6HPX7nSn5KyvndILpVbqFOT8Mu+tLUoYmv/ghOsu01Fn3ofboiXLlsdaPG4TtJmA3I2oiZfaDV96rWvFnnkmAp4zR8mf4YHupNFFggIUuaubEEAGHD3K7UbniJRgMNL7DZgK86O7i8kyMsOLn5mUFyO5x
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(39860400002)(396003)(346002)(376002)(451199018)(26005)(2616005)(83380400001)(6512007)(6486002)(478600001)(6506007)(5660300002)(7416002)(316002)(186003)(8676002)(66946007)(66556008)(66476007)(4326008)(6916009)(38100700002)(8936002)(41300700001)(36756003)(2906002)(86362001)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qcp1VG9ApHJ5SYBaId42tH4Ojw4j00bnhOg9GnSee7MDqA6phHcVrGjrGf1M?=
+ =?us-ascii?Q?39pYMErmy5qlDn0dD5ZTbL+8v265kGl2uVbxE3O5qRhHQaf3bVEegRsRGCfD?=
+ =?us-ascii?Q?xrJwfSmjFZH405qzeeVcEovESh3GYPAZajcyNnHXFlyW5UwBPW6uV2/MvJtT?=
+ =?us-ascii?Q?XeZ0CJfBkXOXXbKzofIObD76uEkQ2V8gn0jqR4vcc9LNUU7zYACnVDb2Dyup?=
+ =?us-ascii?Q?LI+8JcRlLkazz+7PwUbW28yh64NoQRNXMH4Io2w9ZxDRTZfng+CJ7p+6jID/?=
+ =?us-ascii?Q?4bjuW+Bk2ce19ybdkPwI41O84NRJ+f13QbngdAHm4hB2tr3t8aYwjAg+odyj?=
+ =?us-ascii?Q?GaYK/FCJvddX/hflGZBACWU/oGEJHwIn2hbnLxuk+ls+DrvVFxtnrQic4bZE?=
+ =?us-ascii?Q?5ugPQuwsBYeTNSHJCFbrLnPyh2v7M3r58ZbRzfOHWi0HvmZ0pIM3xlV8GI28?=
+ =?us-ascii?Q?i6n4XoUteWxGBBKsRecv5G8610HreNu+X11a2zLdzBFI6iB+/vpBkTAViM8d?=
+ =?us-ascii?Q?9xIQhVaNDxjd/+JE0KyQ3XrgsSaBaYa8xpl1zj/2BVaguAUElm5VTu2tY8sL?=
+ =?us-ascii?Q?IiXIy+T+FaaUzuRES8wwQXPDDUqNky+SolKQ1FE16Pn+haV+kBtWd0Djl7o0?=
+ =?us-ascii?Q?gmwjLnVezJExYCHwlTB8RattXeEH23tJOiIHk/R3F0IQxvV5FDydb+knxOAV?=
+ =?us-ascii?Q?BsNR6/3mpnQrEFer+rNV/3UvF1Q7RV9XpROGhY4nd8dnwpb1d+JE16R0B8FR?=
+ =?us-ascii?Q?8CkxYQwWlV0NkmIGPrPWFFc9t7J+X3a7Rzh6RT0Uxc+hTkQSISAT6Mzu6fvA?=
+ =?us-ascii?Q?TIdU7RCuchbJWd3imQcrEouE4XI1U/MJdFkScXvkm8Acp/gsfaqLQVNfZf4U?=
+ =?us-ascii?Q?GJkdZZc2XvwWwg6GAy703WYe680ih4FOUmJUiid0c4+F8JhlOzWaVi2JHMSu?=
+ =?us-ascii?Q?+ggnFp0fw2fqU3DZysOqm77oWd28Yu0YnMKq8W488HklEwI7zElbU+6Y/9wz?=
+ =?us-ascii?Q?C4a5+FV/rBiSNWk2epEdg+Usm5JzKQTnafM9cT5CJcSKHAG00mYkUykd7+gY?=
+ =?us-ascii?Q?WZi32xgN3QepvYWYmQHxBHtEyVJR4ERFLpW074VFVecH2HxFT2Gr0p1iQRh0?=
+ =?us-ascii?Q?PzuLwwyt7/OQFEfRNgmpwVRszqiJPvEitcMQEQfpRFJfntCvQawgZ5MhtDYk?=
+ =?us-ascii?Q?2z0RxPSOIkD44feyYdn9Wy1Yog4yywfQCoMnQlItvEXMjdBmhyl4quAyQE9I?=
+ =?us-ascii?Q?yrXf0r2eULkrpocbquB2oRbRaKyKiXbrkLVJnxMfsBz0clcDQDj+ZlzKx9Yf?=
+ =?us-ascii?Q?49o2ObackHSbx4SyWfhVwXWkgZOvR9GaOtHXukTszJIF2ehSrdVWziGBrppO?=
+ =?us-ascii?Q?t1WinebHqEqydOZBk3+krXNxg0myUs/uNqa5uKCD7w8wFyoM6K6Y6bkorDzm?=
+ =?us-ascii?Q?U+mfjudKUPlJ1yISfEMd/zXHNc4hmddbxwz2+0gqCLyfc/06kCPrjtzfJA/z?=
+ =?us-ascii?Q?c6GWS8oENmbGOZzpwpNd2C7fX6rHQrLWjNdHnS1sBF2TSWuSWOWaPVdJW2or?=
+ =?us-ascii?Q?PIT0Zf+GC2HC4pVdglVBoFdGnK6ltzaEK+11qUaW?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d9147d3-2442-4c1d-2f7c-08db0bc521d8
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2023 00:15:50.9679
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mxcjekogU4ogLb6t0sLPjBia17FehX0a7/NjOVzEugE6kSdrFYD6/dO3gJ4E7pkO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8298
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/3/23 18:06, Shuah Khan wrote:
-> On 2/1/23 19:07, Shuah Khan wrote:
->> Hi Mathieu,
->>
->> On 1/30/23 15:29, Shuah Khan wrote:
->>> On 1/27/23 06:57, Mathieu Desnoyers wrote:
->>>> Hi,
->>>>
->>>> This series fixes incorrect kernel header search path in kernel
->>>> selftests.
->>>>
->>>> Near the end of the series, a few changes are not tagged as "Fixes"
->>>> because the current behavior is to rely on the kernel sources uapi files
->>>> rather than on the installed kernel header files. Nevertheless, those
->>>> are updated for consistency.
->>>>
->>>> There are situations where "../../../../include/" was added to -I search
->>>> path, which is bogus for userspace tests and caused issues with types.h.
->>>> Those are removed.
->>>>
->>
->> Thanks again for taking care of this. I did out of tree build testing on
->> x86 on linux-kselftest next with these patches below. I haven't seen
->> any problems introduced by the patch set.
->>
->>>>    selftests: dma: Fix incorrect kernel headers search path
->> This one needs a change and I will send a patch on top of yours.
->> Even with that this test depends on unexported header from the
->> repo and won't build out of tree. This is not related to your
->> change.
->>
->>>>    selftests: mount_setattr: Fix incorrect kernel headers search path
->> This one fails to build with our without patch - an existing error.
->>
->> I have to do cross-build tests on arm64 and other arch patches still.
->> This will happen later this week.
+On Fri, Feb 10, 2023 at 03:44:10PM -0700, Alex Williamson wrote:
+> On Wed,  8 Feb 2023 20:16:38 -0800
+> Yi Liu <yi.l.liu@intel.com> wrote:
 > 
-> arm64, s390 patches look good.
+> > From: Lu Baolu <baolu.lu@linux.intel.com>
+> > 
+> > To support nested translation in the userspace, it should check the
+> > underlying hardware information for the capabilities.
+> > 
+> > Add intel_iommu_hw_info() to report cap_reg and ecap_reg information.
+> > 
+> > Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> > Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> > Signed-off-by: Yi Sun <yi.y.sun@linux.intel.com>
+> > ---
+> >  drivers/iommu/intel/iommu.c  | 19 +++++++++++++++++++
+> >  drivers/iommu/intel/iommu.h  |  1 +
+> >  include/uapi/linux/iommufd.h | 21 +++++++++++++++++++++
+> >  3 files changed, 41 insertions(+)
+> > 
+> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> > index 59df7e42fd53..929f600cc350 100644
+> > --- a/drivers/iommu/intel/iommu.c
+> > +++ b/drivers/iommu/intel/iommu.c
+> > @@ -4760,8 +4760,26 @@ static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+> >  	intel_pasid_tear_down_entry(iommu, dev, pasid, false);
+> >  }
+> >  
+> > +static void *intel_iommu_hw_info(struct device *dev, u32 *length)
+> > +{
+> > +	struct device_domain_info *info = dev_iommu_priv_get(dev);
+> > +	struct intel_iommu *iommu = info->iommu;
+> > +	struct iommu_device_info_vtd *vtd;
+> > +
+> > +	vtd = kzalloc(sizeof(*vtd), GFP_KERNEL);
+> > +	if (!vtd)
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	vtd->cap_reg = iommu->cap;
+> > +	vtd->ecap_reg = iommu->ecap;
 > 
+> Just a friendly reminder that these registers are already exposed to
+> userspace under /sys/class/iommu/ and each device has an iommu link
+> back to their iommu device there. 
 
-I am seeing problem with selftests/dma and selfttests/user_events.
+I think in cases of mdevs w/ PASID (eg SIOV) it is not general to get
+from vfio sysfs to the sysfs path for the iommu.
 
-1. selftests: dma: Fix incorrect kernel headers search path
+> This series doesn't really stand on its own without some discussion
+> of why that interface is not sufficient for this use case.
 
-dma test no longer builds. This test depends on linux/map_benchmark.h
-which is not included in uapi
+IMHO I don't really like the idea of mixing iommufd with sysfs, it
+should stand on its own.
 
-The order of include directorries -isystem followed by installed kernel
-headers, breaks the test build with the change to use KHDR_INCLUDES
+In particular there is no generic way to go from a iommufd dev_id to
+any sysfs path, userspace would need prior unique knowledge about the
+subsystem that is being bound to iommufd first.
 
+So, I think some of those explanations would be good in the commit
+message?
 
-I am going to revert this patch for now and figure a longer term fix.
-The problem is the dependency on a non-uapi file: linux/map_benchmark.h
+I would also add explanation about what userspace is supposed to do
+with these bits when it operates the nesting feature.
 
-Fixes: 8ddde07a3d28 ("dma-mapping: benchmark: extract a common
-header file for map_benchmark definition") change added this
-dependency on including linux/map_benchmark.h
-
-Christoph, Do you see this map_benchmark.h as part of uapi?
-
-
-2. selftests: user_events: Fix incorrect kernel headers search path
-This one depends on linux/user_events.h which has bee removed from
-uapi in this commit:
-
-commit 5cfff569cab8bf544bab62c911c5d6efd5af5e05
-Author: Steven Rostedt (Google) <rostedt@goodmis.org>
-Date:   Fri Apr 1 14:39:03 2022 -0400
-
-     tracing: Move user_events.h temporarily out of include/uapi
-
-This isn't a regression from 6.2 - this test stopped building once
-user_events.h has been removed from uapi. I will add a note that
-this test depends on a non-uapi header and can't be built at the
-moment.
-
-thanks,
--- Shuah
-
-
-
-
-
+Jason
