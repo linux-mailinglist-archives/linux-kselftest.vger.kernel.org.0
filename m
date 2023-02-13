@@ -2,93 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5FB6953E2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 23:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B4B695480
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Feb 2023 00:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjBMWaq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Feb 2023 17:30:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        id S229821AbjBMXIL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Feb 2023 18:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjBMWap (ORCPT
+        with ESMTP id S229558AbjBMXIL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:30:45 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BE81D93F
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 14:30:44 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id l128so5089851iof.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 14:30:44 -0800 (PST)
+        Mon, 13 Feb 2023 18:08:11 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3A41A674
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 15:08:10 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id a8-20020a17090a6d8800b002336b48f653so12443181pjk.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 15:08:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1676327444;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wx7rLgjo31q4aRFngZaMZvvBuOkUVt0KZOQkB/G6VhE=;
-        b=UGnugubJQHiQKh1fUKagWN0eCSxWHJnX1T8ppG3v25k5W1wMi/U77Ogm6zUSYdIMwE
-         JVZNqI6rULxN82YJIiKRYDlwSvs6NkCloq5/pDRHZBeDIGy3zk5h8wSSFKE+tC/SccLk
-         0obqZDHv4o+sPYpR53NnvVTYPtVg27RrHas80=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=uu8t0OCWa/u8RhU8pWoV0/sbt4BXzwTAIqj5SWRF4Ek=;
+        b=SwULZvGdfjMBAbGNom8I+c3XuIBeS4qMuYWPvNR9ALSf1u/7lH5jCUWoSZStH27RoV
+         QwIMyj7gjs3BWwt6EVP5YYbvf1pUX/FuCSG98DbRf1fMG+ukFHU2gGKn39MKHwf2numn
+         0Kkyt+VAt8vQ0Uzy+4wKyOD0KEvvyo3qg+gp5567PHdkg1UORx09KSGE/pAlwM9tnQ0C
+         Rfw5uq904JuiPIm+B3L/6/mkwkeMhlzZymWjYjqmApefC/RldJOjGRPh02dh3pPT74c1
+         MOF73Lt2AmuS2s3SgTNpVH5wIuaFyEZflDAJ5Lc6Jt5eG/8w6mjcWzsVa0epWJgixrEz
+         ba3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676327444;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wx7rLgjo31q4aRFngZaMZvvBuOkUVt0KZOQkB/G6VhE=;
-        b=PdbpY2NSrOwRsRoBkQUVVsyV9qgFiYGhb3HSs9xgyNlzrBzyfMLuoMbhn+9NjxRjL7
-         kie7RsHNUEQNNvD0qA4pahgWxZHcB5oTM7ldHA5//+zlZ3G1Id/EaOTKjaqZfLqxBtQx
-         +0v7MOOVEALEvfnVZ+m2Jl9fKCASnc0BuO0pAnLFmiAHLK5cdxxejISB6yQhcFW0amY8
-         s/FDM1RINaSMlw6JeZsdG74psJ6Ely/+bNgO1LbYtMF6EH6QfGAkdQlLDK8u2gD4j7g0
-         s9VOxPGHgxcI41WxrLeVofdzutikMNa401AQ+f/Yl26hOF08J352PnBVkrbMMl+KrmBh
-         A+ug==
-X-Gm-Message-State: AO0yUKXc3ow5/2b9gWr0I7qn4qCMxYoxaOl1w/QcvHUesapIKQjwuoUi
-        iqjJXAZ7Ei4H2TvmDe4PtcNuIw==
-X-Google-Smtp-Source: AK7set/qkONysWSWunirShm5nK5En++rvYEyBksmNjPhTvo9bFHNmDs1uU4A4iFH2F8UniVDWrIz3g==
-X-Received: by 2002:a6b:3bd8:0:b0:72c:f57a:a37b with SMTP id i207-20020a6b3bd8000000b0072cf57aa37bmr85672ioa.2.1676327443835;
-        Mon, 13 Feb 2023 14:30:43 -0800 (PST)
-Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id n17-20020a056638121100b003a9515b47ebsm4341806jas.68.2023.02.13.14.30.42
+        bh=uu8t0OCWa/u8RhU8pWoV0/sbt4BXzwTAIqj5SWRF4Ek=;
+        b=jqDpTdyp54+OUy4E2AKaIayLZks27UufmXlgR8Qkn+I2F5E6dVvIxl44C9huV2e9Io
+         b61mhifxwGvou7XYWEVICHXr6hb9dAsBVqQk14rWVmsajHa/txN6eCJa7n59cCRsK3TN
+         prqO378IjOM6EXGrYq1XV7eDMM98UVF4RYDOmSPA9d3jSCziibUUWFKhSGSIcpVt1+p2
+         QsErRZiRlw7qcBV4uPWZExzOYqBpMR1sK48dmUVm+hSLCdmekEQJxw6jAKzKGeM4qeX+
+         6HTvVy+G29sQwJ9Vk1sfIx8qyGMlz+TpOmoY399HWKg90mlbEzUeG4sfgZGTIlVS2dc3
+         uxIw==
+X-Gm-Message-State: AO0yUKXns1pPJ37OvvqzHK3nl0anla0eleJmrF/BEEeYVXZ8ce3G2vbN
+        4+juoEg0uP2rznnijnnqkFXpYA==
+X-Google-Smtp-Source: AK7set984fjWFpZZtD2pXKVocqGsX73uSqm6zro9lfnx+wcIhS6zwHieWoEGkPj1ADmb9EwbTsp+Kw==
+X-Received: by 2002:a17:903:2452:b0:199:30a6:376c with SMTP id l18-20020a170903245200b0019930a6376cmr561996pls.68.1676329689478;
+        Mon, 13 Feb 2023 15:08:09 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m13-20020a170902bb8d00b001990713589csm8731731pls.80.2023.02.13.15.08.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 14:30:43 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, brauner@kernel.org, sforshee@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/mount_setattr: fix to make run_tests failure
-Date:   Mon, 13 Feb 2023 15:30:41 -0700
-Message-Id: <20230213223041.242089-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 13 Feb 2023 15:08:09 -0800 (PST)
+Message-ID: <63eac2d9.170a0220.5574d.fe4a@mx.google.com>
+Date:   Mon, 13 Feb 2023 15:08:09 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.2-rc5-36-g6e81461b06b6
+X-Kernelci-Report-Type: build
+Subject: kselftest/next build: 7 builds: 0 failed, 7 passed,
+ 3 warnings (v6.2-rc5-36-g6e81461b06b6)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-make run_tests doesn't run the test. Fix Makefile to set TEST_GEN_PROGS
-instead of TEST_GEN_FILES to fix the problem.
+kselftest/next build: 7 builds: 0 failed, 7 passed, 3 warnings (v6.2-rc5-36=
+-g6e81461b06b6)
 
-run_tests runs TEST_GEN_PROGS, TEST_CUSTOM_PROGS, and TEST_PROGS.
-TEST_GEN_FILES is for files generated by tests.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.2-rc5-36-g6e81461b06b6/
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Tree: kselftest
+Branch: next
+Git Describe: v6.2-rc5-36-g6e81461b06b6
+Git Commit: 6e81461b06b6a4a24bf97fca37d9b89f72ce8126
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 3 warnings
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x144456
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x1445cb
+    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to =
+!ENDBR: native_write_cr4+0x4
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 3 w=
+arnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x1445cb
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x144456
+    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to !ENDB=
+R: native_write_cr4+0x4
+
 ---
- tools/testing/selftests/mount_setattr/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mount_setattr/Makefile b/tools/testing/selftests/mount_setattr/Makefile
-index fde72df01b11..0c0d7b1234c1 100644
---- a/tools/testing/selftests/mount_setattr/Makefile
-+++ b/tools/testing/selftests/mount_setattr/Makefile
-@@ -2,6 +2,6 @@
- # Makefile for mount selftests.
- CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2 -pthread
- 
--TEST_GEN_FILES += mount_setattr_test
-+TEST_GEN_PROGS := mount_setattr_test
- 
- include ../lib.mk
--- 
-2.37.2
-
+For more info write to <info@kernelci.org>
