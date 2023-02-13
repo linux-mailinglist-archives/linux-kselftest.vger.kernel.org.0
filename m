@@ -2,59 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9B5694D55
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 17:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F74B694E3D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 18:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjBMQwD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Feb 2023 11:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S229680AbjBMRk4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Feb 2023 12:40:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjBMQwD (ORCPT
+        with ESMTP id S229658AbjBMRkz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:52:03 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4D51A498
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 08:51:53 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id o1so4663523ioo.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 08:51:53 -0800 (PST)
+        Mon, 13 Feb 2023 12:40:55 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0BCB468
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 09:40:54 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id w13so5495852ilv.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 09:40:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=linuxfoundation.org; s=google; t=1676310054;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bmmLz8nohbcch6FxeAT3SlKM+5+qck2x1XsBsKmtgNI=;
-        b=PwoV3X3eyjemyEy2AWNYQFDQJ55zPWiCWjFMAJ5oriqnYvrq7qSQOQnTANnS+QVldc
-         u0Lhf3Ed4lk3WZ2QWHyiizxbJJfMvOhk2MMntY3u853PBH1vitkusNy86R8m5gD+YL3m
-         PcdXURAQaDOBE1ty02cvZN0STh5mRx7OvZ7j0=
+        bh=h+PWTa2pO4esPa5UD4RNk+GztWSuSz5/1ZS7yaWFz34=;
+        b=OuOhFSbIAn2tlb7Slyv6UN18a8sJqMQWcuvW8nT3HY/aZksKLVs0X8RG3C1ltfXbaw
+         rgXwAMA9rTUs/Q7DpU5s2HDCBBco5cHAhizz0X7EM5oMYjw6NVpXjFhtJ3M2I07s1M47
+         rTfsya7qJhWXnaMj4sUfypdUnLQryZSEgM8o0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
+        d=1e100.net; s=20210112; t=1676310054;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bmmLz8nohbcch6FxeAT3SlKM+5+qck2x1XsBsKmtgNI=;
-        b=mxt30sPIuyBpf0ZDQwJlFGyBpMGz5TWbAjAnUGI6oBm2i+U3PgfLj6eHnnOVKKin/G
-         Og2oAPhSIFVos5Wfa1E5ruNUVrHwCTcHACbUatH306S6lb8T3ahqDC95WJHjFXL4fvlb
-         TPLKejluJo+AAjxQi6PFE6ByqO4KWJIzLfu5jph5G9DpBGMts5atRw9Saurr8Tx+dAF7
-         BtiAQTHSDfguS57KFz/twVNH+WOhYz0GDuZyJMEFhIDBf9Ja1cX+vAcuylzdgtM64oVQ
-         dcE+UdNDmiyG58Pct30GFm2OetS5/IB99x3EUdO3XkPQw0cNHyM7MZR7zL2DBEzcuvm+
-         ei4w==
-X-Gm-Message-State: AO0yUKUnQcmWBYkt6K5FxrjraoGhQtsPCBbvi3CeeTzfBK64mGJXJX2K
-        pSCq4t3joTE0z2ctrHR4x8vyWw==
-X-Google-Smtp-Source: AK7set8jdWwcHS37THmZN5Wyabh6n9pOvmNz4ORIZKR+xxUYVMozNWiBEzoeBwsrHlz2Qu0zrfCqsw==
-X-Received: by 2002:a6b:ed05:0:b0:716:8f6a:f480 with SMTP id n5-20020a6bed05000000b007168f6af480mr18443243iog.0.1676307112355;
-        Mon, 13 Feb 2023 08:51:52 -0800 (PST)
+        bh=h+PWTa2pO4esPa5UD4RNk+GztWSuSz5/1ZS7yaWFz34=;
+        b=1jtbLwnUdo+u66uZpekbc8RfDrFiAbH5fv7Me2hgPOUFDykoWjwbNxTeScUZ0wWSh1
+         7mrSrRUFUo8bfIYWtVmO+3y2KJkDhEiMERtEww6bWMwQQGk1mRdQ/KbtR7f3dV7LtSmM
+         +NaryIUfE654Li5BV9d1stA/g0uCvUJigCdPqZmoUOVunW3pXw04zxj6z7c5noLxk+B6
+         LDHsbZNgMBOggNJuJK8j/Vz4yrLONDkTJj6T7E67Gy/el/GwIt2L/CFnIn/nmn55E9Q/
+         SrheOuT0NWp81q7gtE5V/Ps/gBNSY7x/XFYURzFas0Gwzt5Hiuw5YcsOThu/KDfhBwj6
+         z02w==
+X-Gm-Message-State: AO0yUKUfwS3nvgdQrajeWlXnJlECfFni95dLiIdE8tMUZ/ByE7uEfZVR
+        8eVm2KbgsmEyxhF1mbo7bHLSMA==
+X-Google-Smtp-Source: AK7set8DwLUUaMDcEM6NeFqYj6+evvtN1x27KLGM0BWds0Zq/GF3mwyErWkbqFJwo3flLk+QrDFXlA==
+X-Received: by 2002:a92:cd8d:0:b0:314:6968:ed8d with SMTP id r13-20020a92cd8d000000b003146968ed8dmr11072079ilb.3.1676310053964;
+        Mon, 13 Feb 2023 09:40:53 -0800 (PST)
 Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id r83-20020a6b8f56000000b00710a7bf7f7esm4300508iod.51.2023.02.13.08.51.51
+        by smtp.gmail.com with ESMTPSA id h16-20020a02cd30000000b003adb75f4aa6sm4169412jaq.108.2023.02.13.09.40.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 08:51:51 -0800 (PST)
+        Mon, 13 Feb 2023 09:40:53 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     shuah@kernel.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/ptp: Remove clean target from Makefile
-Date:   Mon, 13 Feb 2023 09:51:49 -0700
-Message-Id: <20230213165149.224527-1-skhan@linuxfoundation.org>
+Subject: [PATCH] selftests/sched: fix warn_unused_result build warns
+Date:   Mon, 13 Feb 2023 10:40:52 -0700
+Message-Id: <20230213174052.229104-1-skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -65,38 +66,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following build warn removing unnecessary clean target
-from the Makefile. lib.mk handles clean.
+Fix the following warns by adding return check and error handling.
 
-Makefile:10: warning: overriding recipe for target clean
-../lib.mk:124: warning: ignoring old recipe for target clean
-
-In addition, fix to use TEST_GEN_PROGS for generated test executables
-and TES_PROGS for the shell script. Ger rid of all target as lib.mk
-handles it.
+gcc -O2 -Wall -g -I./ -isystem .../tools/testing/selftests/../../../usr/include -Wl,-rpath=./      cs_prctl_test.c -lpthread -o .../tools/testing/selftests/sched/cs_prctl_test
+cs_prctl_test.c: In function ‘create_processes’:
+cs_prctl_test.c:187:17: warning: ignoring return value of ‘read’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  187 |                 read(proc[i].pfd[0], &proc[i].thr_tids, sizeof(int) * proc[i].num_threads);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cs_prctl_test.c: In function ‘child_func_process’:
+cs_prctl_test.c:159:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  159 |         write(ca->pfd[1], &ca->thr_tids, sizeof(int) * ca->num_threads);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/ptp/Makefile | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ tools/testing/selftests/sched/cs_prctl_test.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/ptp/Makefile b/tools/testing/selftests/ptp/Makefile
-index eeab44cc6863..8f57f88ecadd 100644
---- a/tools/testing/selftests/ptp/Makefile
-+++ b/tools/testing/selftests/ptp/Makefile
-@@ -1,10 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += $(KHDR_INCLUDES)
--TEST_PROGS := testptp
-+TEST_GEN_PROGS := testptp
- LDLIBS += -lrt
--all: $(TEST_PROGS)
-+TEST_PROGS = phc.sh
+diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
+index 8109b17dc764..25e0d95d3713 100644
+--- a/tools/testing/selftests/sched/cs_prctl_test.c
++++ b/tools/testing/selftests/sched/cs_prctl_test.c
+@@ -27,6 +27,7 @@
+ #include <sys/prctl.h>
+ #include <unistd.h>
+ #include <time.h>
++#include <errno.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -151,12 +152,17 @@ static void create_threads(int num_threads, int thr_tids[])
+ static int child_func_process(void *arg)
+ {
+ 	struct child_args *ca = (struct child_args *)arg;
++	int ret;
  
- include ../lib.mk
--
--clean:
--	rm -fr $(TEST_PROGS)
+ 	close(ca->pfd[0]);
+ 
+ 	create_threads(ca->num_threads, ca->thr_tids);
+ 
+-	write(ca->pfd[1], &ca->thr_tids, sizeof(int) * ca->num_threads);
++	ret = write(ca->pfd[1], &ca->thr_tids, sizeof(int) * ca->num_threads);
++	if (ret == -1)
++		printf("write failed on pfd[%d] - error (%s)\n",
++			ca->pfd[1], strerror(errno));
++
+ 	close(ca->pfd[1]);
+ 
+ 	while (1)
+@@ -169,7 +175,7 @@ static unsigned char child_func_process_stack[STACK_SIZE];
+ void create_processes(int num_processes, int num_threads, struct child_args proc[])
+ {
+ 	pid_t cpid;
+-	int i;
++	int i, ret;
+ 
+ 	for (i = 0; i < num_processes; ++i) {
+ 		proc[i].num_threads = num_threads;
+@@ -184,7 +190,10 @@ void create_processes(int num_processes, int num_threads, struct child_args proc
+ 	}
+ 
+ 	for (i = 0; i < num_processes; ++i) {
+-		read(proc[i].pfd[0], &proc[i].thr_tids, sizeof(int) * proc[i].num_threads);
++		ret = read(proc[i].pfd[0], &proc[i].thr_tids, sizeof(int) * proc[i].num_threads);
++		if (ret == -1)
++			printf("read failed on proc[%d].pfd[0] error (%s)\n",
++				i, strerror(errno));
+ 		close(proc[i].pfd[0]);
+ 	}
+ }
 -- 
 2.37.2
 
