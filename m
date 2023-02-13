@@ -2,57 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F74B694E3D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 18:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF546694F64
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 19:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjBMRk4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Feb 2023 12:40:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
+        id S230139AbjBMSb4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Feb 2023 13:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjBMRkz (ORCPT
+        with ESMTP id S229805AbjBMSb4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:40:55 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0BCB468
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 09:40:54 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id w13so5495852ilv.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 09:40:54 -0800 (PST)
+        Mon, 13 Feb 2023 13:31:56 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2DA1C5BC
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 10:31:52 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id a5so5544121ilk.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 10:31:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1676310054;
+        d=linuxfoundation.org; s=google; t=1676313111;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=h+PWTa2pO4esPa5UD4RNk+GztWSuSz5/1ZS7yaWFz34=;
-        b=OuOhFSbIAn2tlb7Slyv6UN18a8sJqMQWcuvW8nT3HY/aZksKLVs0X8RG3C1ltfXbaw
-         rgXwAMA9rTUs/Q7DpU5s2HDCBBco5cHAhizz0X7EM5oMYjw6NVpXjFhtJ3M2I07s1M47
-         rTfsya7qJhWXnaMj4sUfypdUnLQryZSEgM8o0=
+        bh=YhELXdf05zY7CUQbBTvzj+Gb4RqQa3WJ6RXbjMshAvY=;
+        b=NZV5uVS4lxJPp6p+1qBjsjYANGdxCjU7BFs2Bw5/LGTp+ssG20JBv/nuomJtaEkAar
+         kWcxozx9PDBw6h5DQipSxnERGEJfQHqgMPDd7uF3YZdckcLeIE/Rq8wnigt9JVrWqJxr
+         s9zdbhYDTE49SrvplNgADwzRqwTIFnNNmGRr4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676310054;
+        d=1e100.net; s=20210112; t=1676313111;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h+PWTa2pO4esPa5UD4RNk+GztWSuSz5/1ZS7yaWFz34=;
-        b=1jtbLwnUdo+u66uZpekbc8RfDrFiAbH5fv7Me2hgPOUFDykoWjwbNxTeScUZ0wWSh1
-         7mrSrRUFUo8bfIYWtVmO+3y2KJkDhEiMERtEww6bWMwQQGk1mRdQ/KbtR7f3dV7LtSmM
-         +NaryIUfE654Li5BV9d1stA/g0uCvUJigCdPqZmoUOVunW3pXw04zxj6z7c5noLxk+B6
-         LDHsbZNgMBOggNJuJK8j/Vz4yrLONDkTJj6T7E67Gy/el/GwIt2L/CFnIn/nmn55E9Q/
-         SrheOuT0NWp81q7gtE5V/Ps/gBNSY7x/XFYURzFas0Gwzt5Hiuw5YcsOThu/KDfhBwj6
-         z02w==
-X-Gm-Message-State: AO0yUKUfwS3nvgdQrajeWlXnJlECfFni95dLiIdE8tMUZ/ByE7uEfZVR
-        8eVm2KbgsmEyxhF1mbo7bHLSMA==
-X-Google-Smtp-Source: AK7set8DwLUUaMDcEM6NeFqYj6+evvtN1x27KLGM0BWds0Zq/GF3mwyErWkbqFJwo3flLk+QrDFXlA==
-X-Received: by 2002:a92:cd8d:0:b0:314:6968:ed8d with SMTP id r13-20020a92cd8d000000b003146968ed8dmr11072079ilb.3.1676310053964;
-        Mon, 13 Feb 2023 09:40:53 -0800 (PST)
+        bh=YhELXdf05zY7CUQbBTvzj+Gb4RqQa3WJ6RXbjMshAvY=;
+        b=1P8U6/zmG/hihc8OmiBV+H8FFdTb4rer8LR4tyVndoyLaUiQlYToE5xk0U9cTz57X7
+         Hlxqg5iONXQvvoS0fzA/gItWylMp12YokbwbJvWEWILSslcTejEXhVpMFUZRaVPHQWBM
+         X0H9cAFxrTTpvo6CrYfYdzbBasMotNnmxa3wWQQ222LR1PSV3Ity0Wz2OPrA+2sqzf6j
+         44TzT/fy411k0cnY21s03kRzvxej7yLDH9g5C+CAEfxObJINapkp3Y3NrVZTci4eCPs3
+         gAB/+TdV283qbwEr7j8NZLMfldsWFerxi73sKXMdu9Lt5XQvE4/oeTaDEarqHELAtk8z
+         aOdA==
+X-Gm-Message-State: AO0yUKXTxnisFVjhG51uNZ4iWN3cHz4gvdT8oIIHM8qkuJg9qM54fhan
+        q7raGlW5kT7RaxYFXgcIYadvNw==
+X-Google-Smtp-Source: AK7set8mpQPw2+GHtj5ZOfErydEdxIXuNq2fH1Iph/NA7mZTRndHLsb8zko5n9EIpwjE1fYaXs0icQ==
+X-Received: by 2002:a92:d7c4:0:b0:313:fb1b:2f86 with SMTP id g4-20020a92d7c4000000b00313fb1b2f86mr14498260ilq.0.1676313111559;
+        Mon, 13 Feb 2023 10:31:51 -0800 (PST)
 Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id h16-20020a02cd30000000b003adb75f4aa6sm4169412jaq.108.2023.02.13.09.40.53
+        by smtp.gmail.com with ESMTPSA id t25-20020a02ccb9000000b0036cc14af7adsm4148662jap.149.2023.02.13.10.31.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 09:40:53 -0800 (PST)
+        Mon, 13 Feb 2023 10:31:50 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org
+To:     shuah@kernel.org, brauner@kernel.org, sforshee@kernel.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/sched: fix warn_unused_result build warns
-Date:   Mon, 13 Feb 2023 10:40:52 -0700
-Message-Id: <20230213174052.229104-1-skhan@linuxfoundation.org>
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/mount_setattr: fix redefine struct mount_attr build error
+Date:   Mon, 13 Feb 2023 11:31:49 -0700
+Message-Id: <20230213183149.231779-1-skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -66,75 +67,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following warns by adding return check and error handling.
+Fix the following build error due to redefining struct mount_attr by
+removing duplicate define from mount_setattr_test.c
 
-gcc -O2 -Wall -g -I./ -isystem .../tools/testing/selftests/../../../usr/include -Wl,-rpath=./      cs_prctl_test.c -lpthread -o .../tools/testing/selftests/sched/cs_prctl_test
-cs_prctl_test.c: In function ‘create_processes’:
-cs_prctl_test.c:187:17: warning: ignoring return value of ‘read’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-  187 |                 read(proc[i].pfd[0], &proc[i].thr_tids, sizeof(int) * proc[i].num_threads);
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cs_prctl_test.c: In function ‘child_func_process’:
-cs_prctl_test.c:159:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-  159 |         write(ca->pfd[1], &ca->thr_tids, sizeof(int) * ca->num_threads);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+gcc -g -isystem .../tools/testing/selftests/../../../usr/include -Wall -O2 -pthread     mount_setattr_test.c  -o .../tools/testing/selftests/mount_setattr/mount_setattr_test
+mount_setattr_test.c:107:8: error: redefinition of ‘struct mount_attr’
+  107 | struct mount_attr {
+      |        ^~~~~~~~~~
+In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
+                 from mount_setattr_test.c:10:
+.../usr/include/linux/mount.h:129:8: note: originally defined here
+  129 | struct mount_attr {
+      |        ^~~~~~~~~~
+make: *** [../lib.mk:145: .../tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/sched/cs_prctl_test.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-index 8109b17dc764..25e0d95d3713 100644
---- a/tools/testing/selftests/sched/cs_prctl_test.c
-+++ b/tools/testing/selftests/sched/cs_prctl_test.c
-@@ -27,6 +27,7 @@
- #include <sys/prctl.h>
- #include <unistd.h>
- #include <time.h>
-+#include <errno.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -151,12 +152,17 @@ static void create_threads(int num_threads, int thr_tids[])
- static int child_func_process(void *arg)
- {
- 	struct child_args *ca = (struct child_args *)arg;
-+	int ret;
+diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+index 8c5fea68ae67..582669ca38e9 100644
+--- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
++++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+@@ -103,13 +103,6 @@
+ 	#else
+ 		#define __NR_mount_setattr 442
+ 	#endif
+-
+-struct mount_attr {
+-	__u64 attr_set;
+-	__u64 attr_clr;
+-	__u64 propagation;
+-	__u64 userns_fd;
+-};
+ #endif
  
- 	close(ca->pfd[0]);
- 
- 	create_threads(ca->num_threads, ca->thr_tids);
- 
--	write(ca->pfd[1], &ca->thr_tids, sizeof(int) * ca->num_threads);
-+	ret = write(ca->pfd[1], &ca->thr_tids, sizeof(int) * ca->num_threads);
-+	if (ret == -1)
-+		printf("write failed on pfd[%d] - error (%s)\n",
-+			ca->pfd[1], strerror(errno));
-+
- 	close(ca->pfd[1]);
- 
- 	while (1)
-@@ -169,7 +175,7 @@ static unsigned char child_func_process_stack[STACK_SIZE];
- void create_processes(int num_processes, int num_threads, struct child_args proc[])
- {
- 	pid_t cpid;
--	int i;
-+	int i, ret;
- 
- 	for (i = 0; i < num_processes; ++i) {
- 		proc[i].num_threads = num_threads;
-@@ -184,7 +190,10 @@ void create_processes(int num_processes, int num_threads, struct child_args proc
- 	}
- 
- 	for (i = 0; i < num_processes; ++i) {
--		read(proc[i].pfd[0], &proc[i].thr_tids, sizeof(int) * proc[i].num_threads);
-+		ret = read(proc[i].pfd[0], &proc[i].thr_tids, sizeof(int) * proc[i].num_threads);
-+		if (ret == -1)
-+			printf("read failed on proc[%d].pfd[0] error (%s)\n",
-+				i, strerror(errno));
- 		close(proc[i].pfd[0]);
- 	}
- }
+ #ifndef __NR_open_tree
 -- 
 2.37.2
 
