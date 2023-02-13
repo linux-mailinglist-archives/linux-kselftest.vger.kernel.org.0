@@ -2,50 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC0E6953A5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 23:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353506953A9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 23:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjBMWSr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Feb 2023 17:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
+        id S229581AbjBMWSv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Feb 2023 17:18:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBMWSq (ORCPT
+        with ESMTP id S229796AbjBMWSt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:18:46 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF591BAF6
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 14:18:45 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id h29so3928153ila.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 14:18:45 -0800 (PST)
+        Mon, 13 Feb 2023 17:18:49 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CFD1C317
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 14:18:46 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id b9so5580824ila.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 14:18:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vjm/Vc/deIEaH+aQF6B66KE0Ii8SzYI9sL4Ts+fG4eA=;
-        b=Gm/qU0V+m9CFby80dIGwz8Bvy4C+/h4E3Pu/RHB0UfUt/L7jEu+j2qIQDZJnf/40zR
-         avAY5BR+DMqDa51rkrD/u1dh/tm/17aDn4x98iSAcAEa0PP1EBGCCQcBDFvX/+zzdcl2
-         MKkXGM8djPSDHCCZUmMrXJKargpJhE+xKoNfw=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eRWQduPmN91iFAS5BBJCNCcuPyWFBW+Nj2BiZbIFrWo=;
+        b=cHwRGNoPEWFDIRtyTqHsxecvM7OojiMb4qU1yfogG5wYgk3a+8u4GK/+uwjhJinaSw
+         TwQw+90Cj+tjRsaZ0tRq8TdcUS+mt/pkVIjprDUpUan5qxlCWiLng+/WWHknceaVVIDk
+         Oo11X/cLi3F1fvUU983xzgJ/0lfpiU3Fr8UuM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vjm/Vc/deIEaH+aQF6B66KE0Ii8SzYI9sL4Ts+fG4eA=;
-        b=qpYS184jy3zIEdG9vLp7QnFAkn5EFUr8aQ8LpiVxg/ZR/7ZgNOs/nQ9gl1HHM3iKOe
-         Is2BUl6Lj+mWCRFioJlV0yHp8dyPyg16uWc1EYS5WQ2hju3hA0XqWWTRbS5Lf/VfpFHh
-         Fy9pE+WSskrIwiKBnjSlNes/ByXsB/JJOScJ4lPRj7G6vF23f7QHUx5mGrTBafox4/OL
-         QBVqcQGSZZl/csh75Ef84R68FgreipY+hFXuZrUpmHUp5sR7G3s1IeJBJs5Q8zsjvciL
-         cMXzM4FcZrTAu3XnDnRJGz1yav5KDZdu4rC3y/sM4GngP+oLX9wcer9K4ufY7K9SfR22
-         AiTA==
-X-Gm-Message-State: AO0yUKV4JebupPD9ney7Trilkt3EqHAADKhB8TrPAnb2aUY8wltQFYwt
-        u2dez15X+BMnz5OyY4Jgds71HA==
-X-Google-Smtp-Source: AK7set+gq2QLXYYprC0FQNPa5EjSAce6ZInOpbMokOscNfVCC3OFfj7XGoSHJvKkfSquDYOUM2VErg==
-X-Received: by 2002:a05:6e02:1c41:b0:315:415a:4e61 with SMTP id d1-20020a056e021c4100b00315415a4e61mr317985ilg.11.1676326724641;
-        Mon, 13 Feb 2023 14:18:44 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eRWQduPmN91iFAS5BBJCNCcuPyWFBW+Nj2BiZbIFrWo=;
+        b=vLu+bPPXWnwFWUOT361xmaA6glURocYm5XCl0Bspt7e7HloPA8h3W8udAw2QXPm/3C
+         f0Ga6oat3ng0tzkOascGBbGCA1wgKdK8ODVwMCvzOQ+jcrvyR7r9wbz2Rr22xgmd93JU
+         JSImCWu8EbnLY3OVqdzm+PPz6/ORZENTxWkjYibebDdK7UXWFwRwWSc8m1PcDeEqMxcz
+         8MVdXCgeS5EpvpS/4/Dy+aW2ZuJJliyD936RNmU+OQf4mCIfFdkX2/SJsiC97wKPvr2G
+         Mu8K5r0DsavKa+7I0aKCk30ONuD550DHbKlGsQ1c+/owX2Bn92qwu5/oCfMC+yXEQTS0
+         Uwew==
+X-Gm-Message-State: AO0yUKVhfdFMqhFYQQuolaKVvA3/jHhGWpfGVCV0lKGft/Vpyz2xkbMh
+        af0jBIjtyNNoQn+m9sVzgWUNKA==
+X-Google-Smtp-Source: AK7set89VlubTgzaLUf91OOFVU/glsOKFNCyHhNv+9INbUdipmkq/oitdjYBwf2S79zB5BALj4KMwQ==
+X-Received: by 2002:a92:c54f:0:b0:315:4b70:8376 with SMTP id a15-20020a92c54f000000b003154b708376mr221388ilj.29.1676326725758;
+        Mon, 13 Feb 2023 14:18:45 -0800 (PST)
 Received: from ravnica.bld.corp.google.com ([2620:15c:183:200:d644:5bf8:7c67:1ab8])
-        by smtp.gmail.com with ESMTPSA id s8-20020a02cc88000000b003a60e5a2638sm4233508jap.94.2023.02.13.14.18.43
+        by smtp.gmail.com with ESMTPSA id s8-20020a02cc88000000b003a60e5a2638sm4233508jap.94.2023.02.13.14.18.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 14:18:44 -0800 (PST)
+        Mon, 13 Feb 2023 14:18:45 -0800 (PST)
 From:   Ross Zwisler <zwisler@chromium.org>
 X-Google-Original-From: Ross Zwisler <zwisler@google.com>
 To:     linux-kernel@vger.kernel.org
@@ -67,10 +68,12 @@ Cc:     Ross Zwisler <zwisler@google.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         linux-trace-kernel@vger.kernel.org,
         "Michael S . Tsirkin" <mst@redhat.com>
-Subject: [PATCH bpf-next 1/2] bpf: use canonical ftrace path
-Date:   Mon, 13 Feb 2023 15:18:34 -0700
-Message-Id: <20230213221835.592763-1-zwisler@google.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: use canonical ftrace path
+Date:   Mon, 13 Feb 2023 15:18:35 -0700
+Message-Id: <20230213221835.592763-2-zwisler@google.com>
 X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+In-Reply-To: <20230213221835.592763-1-zwisler@google.com>
+References: <20230213221835.592763-1-zwisler@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -94,11 +97,8 @@ But, from Documentation/trace/ftrace.rst:
 
   /sys/kernel/debug/tracing
 
-Many comments and samples in the bpf code still refer to this older
-debugfs path, so let's update them to avoid confusion.  There are a few
-spots where the bpf code explicitly checks both tracefs and debugfs
-(tools/bpf/bpftool/tracelog.c and tools/lib/api/fs/fs.c) and I've left
-those alone so that the tools can continue to work with both paths.
+Many tests in the bpf selftest code still refer to this older debugfs
+path, so let's update them to avoid confusion.
 
 Signed-off-by: Ross Zwisler <zwisler@google.com>
 Acked-by: Michael S. Tsirkin <mst@redhat.com>
@@ -106,205 +106,185 @@ Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
 [ Per Alexei's request, resending towards bpf-next ]
 
- include/uapi/linux/bpf.h            | 8 ++++----
- samples/bpf/cpustat_kern.c          | 4 ++--
- samples/bpf/hbm.c                   | 4 ++--
- samples/bpf/ibumad_kern.c           | 4 ++--
- samples/bpf/lwt_len_hist.sh         | 2 +-
- samples/bpf/offwaketime_kern.c      | 2 +-
- samples/bpf/task_fd_query_user.c    | 4 ++--
- samples/bpf/test_lwt_bpf.sh         | 2 +-
- samples/bpf/test_overhead_tp_kern.c | 4 ++--
- tools/include/uapi/linux/bpf.h      | 8 ++++----
- 10 files changed, 21 insertions(+), 21 deletions(-)
+ tools/testing/selftests/bpf/get_cgroup_id_user.c          | 2 +-
+ .../testing/selftests/bpf/prog_tests/kprobe_multi_test.c  | 2 +-
+ tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c | 2 +-
+ tools/testing/selftests/bpf/prog_tests/tp_attach_query.c  | 2 +-
+ tools/testing/selftests/bpf/prog_tests/trace_printk.c     | 2 +-
+ tools/testing/selftests/bpf/prog_tests/trace_vprintk.c    | 2 +-
+ tools/testing/selftests/bpf/progs/test_stacktrace_map.c   | 2 +-
+ tools/testing/selftests/bpf/progs/test_tracepoint.c       | 2 +-
+ tools/testing/selftests/bpf/test_ftrace.sh                | 2 +-
+ tools/testing/selftests/bpf/test_tunnel.sh                | 8 ++++----
+ tools/testing/selftests/bpf/trace_helpers.c               | 4 ++--
+ 11 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 464ca3f01fe7..44387b31cbde 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1642,17 +1642,17 @@ union bpf_attr {
-  * 	Description
-  * 		This helper is a "printk()-like" facility for debugging. It
-  * 		prints a message defined by format *fmt* (of size *fmt_size*)
-- * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
-+ * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
-  * 		available. It can take up to three additional **u64**
-  * 		arguments (as an eBPF helpers, the total number of arguments is
-  * 		limited to five).
-  *
-  * 		Each time the helper is called, it appends a line to the trace.
-- * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
-- * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
-+ * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
-+ * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
-  * 		The format of the trace is customizable, and the exact output
-  * 		one will get depends on the options set in
-- * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
-+ * 		*\/sys/kernel/tracing/trace_options* (see also the
-  * 		*README* file under the same directory). However, it usually
-  * 		defaults to something like:
-  *
-diff --git a/samples/bpf/cpustat_kern.c b/samples/bpf/cpustat_kern.c
-index 5aefd19cdfa1..944f13fe164a 100644
---- a/samples/bpf/cpustat_kern.c
-+++ b/samples/bpf/cpustat_kern.c
-@@ -76,8 +76,8 @@ struct {
+diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+index 156743cf5870..478e080128be 100644
+--- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
++++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+@@ -87,7 +87,7 @@ int main(int argc, char **argv)
+ 	bpf_map_update_elem(pidmap_fd, &key, &pid, 0);
  
- /*
-  * The trace events for cpu_idle and cpu_frequency are taken from:
-- * /sys/kernel/debug/tracing/events/power/cpu_idle/format
-- * /sys/kernel/debug/tracing/events/power/cpu_frequency/format
-+ * /sys/kernel/tracing/events/power/cpu_idle/format
-+ * /sys/kernel/tracing/events/power/cpu_frequency/format
-  *
-  * These two events have same format, so define one common structure.
-  */
-diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
-index 516fbac28b71..ff58ec43f56a 100644
---- a/samples/bpf/hbm.c
-+++ b/samples/bpf/hbm.c
-@@ -65,7 +65,7 @@ static void Usage(void);
- static void read_trace_pipe2(void);
- static void do_error(char *msg, bool errno_flag);
+ 	snprintf(buf, sizeof(buf),
+-		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
++		 "/sys/kernel/tracing/events/%s/id", probe_name);
+ 	efd = open(buf, O_RDONLY, 0);
+ 	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+ 		goto close_prog;
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index c6f37e825f11..6f0f2d8984db 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -338,7 +338,7 @@ static int get_syms(char ***symsp, size_t *cntp)
+ 	 * Filtering out duplicates by using hashmap__add, which won't
+ 	 * add existing entry.
+ 	 */
+-	f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
++	f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
+ 	if (!f)
+ 		return -EINVAL;
  
--#define DEBUGFS "/sys/kernel/debug/tracing/"
-+#define TRACEFS "/sys/kernel/tracing/"
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+index c717741bf8b6..6d70559fc19b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+@@ -18,7 +18,7 @@ static void test_task_fd_query_tp_core(const char *probe_name,
+ 		goto close_prog;
  
- static struct bpf_program *bpf_prog;
- static struct bpf_object *obj;
-@@ -77,7 +77,7 @@ static void read_trace_pipe2(void)
- 	FILE *outf;
- 	char *outFname = "hbm_out.log";
+ 	snprintf(buf, sizeof(buf),
+-		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
++		 "/sys/kernel/tracing/events/%s/id", probe_name);
+ 	efd = open(buf, O_RDONLY, 0);
+ 	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+ 		goto close_prog;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+index a479080533db..4308e3a828d8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
++++ b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+@@ -17,7 +17,7 @@ void serial_test_tp_attach_query(void)
+ 		obj[i] = NULL;
  
--	trace_fd = open(DEBUGFS "trace_pipe", O_RDONLY, 0);
-+	trace_fd = open(TRACEFS "trace_pipe", O_RDONLY, 0);
- 	if (trace_fd < 0) {
- 		printf("Error opening trace_pipe\n");
+ 	snprintf(buf, sizeof(buf),
+-		 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
++		 "/sys/kernel/tracing/events/sched/sched_switch/id");
+ 	efd = open(buf, O_RDONLY, 0);
+ 	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
  		return;
-diff --git a/samples/bpf/ibumad_kern.c b/samples/bpf/ibumad_kern.c
-index 9b193231024a..f07474c72525 100644
---- a/samples/bpf/ibumad_kern.c
-+++ b/samples/bpf/ibumad_kern.c
-@@ -39,8 +39,8 @@ struct {
- /* Taken from the current format defined in
-  * include/trace/events/ib_umad.h
-  * and
-- * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_read/format
-- * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_write/format
-+ * /sys/kernel/tracing/events/ib_umad/ib_umad_read/format
-+ * /sys/kernel/tracing/events/ib_umad/ib_umad_write/format
-  */
- struct ib_umad_rw_args {
- 	u64 pad;
-diff --git a/samples/bpf/lwt_len_hist.sh b/samples/bpf/lwt_len_hist.sh
-index 0eda9754f50b..11fa0a087db6 100755
---- a/samples/bpf/lwt_len_hist.sh
-+++ b/samples/bpf/lwt_len_hist.sh
-@@ -5,7 +5,7 @@ NS1=lwt_ns1
- VETH0=tst_lwt1a
- VETH1=tst_lwt1b
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+index cade7f12315f..ff50a928cb98 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
++++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+@@ -5,7 +5,7 @@
  
--TRACE_ROOT=/sys/kernel/debug/tracing
-+TRACE_ROOT=/sys/kernel/tracing
+ #include "trace_printk.lskel.h"
  
- function cleanup {
- 	# To reset saved histogram, remove pinned map
-diff --git a/samples/bpf/offwaketime_kern.c b/samples/bpf/offwaketime_kern.c
-index eb4d94742e6b..23f12b47e9e5 100644
---- a/samples/bpf/offwaketime_kern.c
-+++ b/samples/bpf/offwaketime_kern.c
-@@ -110,7 +110,7 @@ static inline int update_counts(void *ctx, u32 pid, u64 delta)
- }
+-#define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
++#define TRACEBUF	"/sys/kernel/tracing/trace_pipe"
+ #define SEARCHMSG	"testing,testing"
  
- #if 1
+ void serial_test_trace_printk(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c b/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
+index 7a4e313e8558..e568d7f247ec 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
++++ b/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
+@@ -5,7 +5,7 @@
+ 
+ #include "trace_vprintk.lskel.h"
+ 
+-#define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
++#define TRACEBUF	"/sys/kernel/tracing/trace_pipe"
+ #define SEARCHMSG	"1,2,3,4,5,6,7,8,9,10"
+ 
+ void serial_test_trace_vprintk(void)
+diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
+index 728dbd39eff0..47568007b668 100644
+--- a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
++++ b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
+@@ -38,7 +38,7 @@ struct {
+ 	__type(value, stack_trace_t);
+ } stack_amap SEC(".maps");
+ 
 -/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
 +/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
  struct sched_switch_args {
  	unsigned long long pad;
  	char prev_comm[TASK_COMM_LEN];
-diff --git a/samples/bpf/task_fd_query_user.c b/samples/bpf/task_fd_query_user.c
-index a33d74bd3a4b..1e61f2180470 100644
---- a/samples/bpf/task_fd_query_user.c
-+++ b/samples/bpf/task_fd_query_user.c
-@@ -235,7 +235,7 @@ static int test_debug_fs_uprobe(char *binary_path, long offset, bool is_return)
- 	struct bpf_link *link;
- 	ssize_t bytes;
- 
--	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/%s_events",
-+	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/%s_events",
- 		 event_type);
- 	kfd = open(buf, O_WRONLY | O_TRUNC, 0);
- 	CHECK_PERROR_RET(kfd < 0);
-@@ -252,7 +252,7 @@ static int test_debug_fs_uprobe(char *binary_path, long offset, bool is_return)
- 	close(kfd);
- 	kfd = -1;
- 
--	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/events/%ss/%s/id",
-+	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/events/%ss/%s/id",
- 		 event_type, event_alias);
- 	efd = open(buf, O_RDONLY, 0);
- 	CHECK_PERROR_RET(efd < 0);
-diff --git a/samples/bpf/test_lwt_bpf.sh b/samples/bpf/test_lwt_bpf.sh
-index 65a976058dd3..db5691e6637f 100755
---- a/samples/bpf/test_lwt_bpf.sh
-+++ b/samples/bpf/test_lwt_bpf.sh
-@@ -19,7 +19,7 @@ IPVETH3="192.168.111.2"
- 
- IP_LOCAL="192.168.99.1"
- 
--TRACE_ROOT=/sys/kernel/debug/tracing
-+TRACE_ROOT=/sys/kernel/tracing
- 
- function lookup_mac()
- {
-diff --git a/samples/bpf/test_overhead_tp_kern.c b/samples/bpf/test_overhead_tp_kern.c
-index 80edadacb692..a1d53b0d8476 100644
---- a/samples/bpf/test_overhead_tp_kern.c
-+++ b/samples/bpf/test_overhead_tp_kern.c
-@@ -8,7 +8,7 @@
- #include <uapi/linux/bpf.h>
+diff --git a/tools/testing/selftests/bpf/progs/test_tracepoint.c b/tools/testing/selftests/bpf/progs/test_tracepoint.c
+index 43bd7a20cc50..4cb8bbb6a320 100644
+--- a/tools/testing/selftests/bpf/progs/test_tracepoint.c
++++ b/tools/testing/selftests/bpf/progs/test_tracepoint.c
+@@ -4,7 +4,7 @@
+ #include <vmlinux.h>
  #include <bpf/bpf_helpers.h>
  
--/* from /sys/kernel/debug/tracing/events/task/task_rename/format */
-+/* from /sys/kernel/tracing/events/task/task_rename/format */
- struct task_rename {
- 	__u64 pad;
- 	__u32 pid;
-@@ -22,7 +22,7 @@ int prog(struct task_rename *ctx)
- 	return 0;
- }
+-/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
++/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
+ struct sched_switch_args {
+ 	unsigned long long pad;
+ 	char prev_comm[TASK_COMM_LEN];
+diff --git a/tools/testing/selftests/bpf/test_ftrace.sh b/tools/testing/selftests/bpf/test_ftrace.sh
+index 20de7bb873bc..e3e2328a1b65 100755
+--- a/tools/testing/selftests/bpf/test_ftrace.sh
++++ b/tools/testing/selftests/bpf/test_ftrace.sh
+@@ -1,6 +1,6 @@
+ #!/bin/bash
  
--/* from /sys/kernel/debug/tracing/events/random/urandom_read/format */
-+/* from /sys/kernel/tracing/events/random/urandom_read/format */
- struct urandom_read {
- 	__u64 pad;
- 	int got_bits;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 464ca3f01fe7..44387b31cbde 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1642,17 +1642,17 @@ union bpf_attr {
-  * 	Description
-  * 		This helper is a "printk()-like" facility for debugging. It
-  * 		prints a message defined by format *fmt* (of size *fmt_size*)
-- * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
-+ * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
-  * 		available. It can take up to three additional **u64**
-  * 		arguments (as an eBPF helpers, the total number of arguments is
-  * 		limited to five).
-  *
-  * 		Each time the helper is called, it appends a line to the trace.
-- * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
-- * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
-+ * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
-+ * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
-  * 		The format of the trace is customizable, and the exact output
-  * 		one will get depends on the options set in
-- * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
-+ * 		*\/sys/kernel/tracing/trace_options* (see also the
-  * 		*README* file under the same directory). However, it usually
-  * 		defaults to something like:
-  *
+-TR=/sys/kernel/debug/tracing/
++TR=/sys/kernel/tracing/
+ clear_trace() { # reset trace output
+     echo > $TR/trace
+ }
+diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
+index 2eaedc1d9ed3..bbbd242f7cef 100755
+--- a/tools/testing/selftests/bpf/test_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tunnel.sh
+@@ -543,7 +543,7 @@ setup_xfrm_tunnel()
+ test_xfrm_tunnel()
+ {
+ 	config_device
+-	> /sys/kernel/debug/tracing/trace
++	> /sys/kernel/tracing/trace
+ 	setup_xfrm_tunnel
+ 	mkdir -p ${BPF_PIN_TUNNEL_DIR}
+ 	bpftool prog loadall ${BPF_FILE} ${BPF_PIN_TUNNEL_DIR}
+@@ -552,11 +552,11 @@ test_xfrm_tunnel()
+ 		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state
+ 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
+ 	sleep 1
+-	grep "reqid 1" /sys/kernel/debug/tracing/trace
++	grep "reqid 1" /sys/kernel/tracing/trace
+ 	check_err $?
+-	grep "spi 0x1" /sys/kernel/debug/tracing/trace
++	grep "spi 0x1" /sys/kernel/tracing/trace
+ 	check_err $?
+-	grep "remote ip 0xac100164" /sys/kernel/debug/tracing/trace
++	grep "remote ip 0xac100164" /sys/kernel/tracing/trace
+ 	check_err $?
+ 	cleanup
+ 
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 09a16a77bae4..d2816aa35a9b 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -12,7 +12,7 @@
+ #include <sys/mman.h>
+ #include "trace_helpers.h"
+ 
+-#define DEBUGFS "/sys/kernel/debug/tracing/"
++#define TRACEFS "/sys/kernel/tracing/"
+ 
+ #define MAX_SYMS 300000
+ static struct ksym syms[MAX_SYMS];
+@@ -136,7 +136,7 @@ void read_trace_pipe(void)
+ {
+ 	int trace_fd;
+ 
+-	trace_fd = open(DEBUGFS "trace_pipe", O_RDONLY, 0);
++	trace_fd = open(TRACEFS "trace_pipe", O_RDONLY, 0);
+ 	if (trace_fd < 0)
+ 		return;
+ 
 -- 
 2.39.1.581.gbfd45094c4-goog
 
