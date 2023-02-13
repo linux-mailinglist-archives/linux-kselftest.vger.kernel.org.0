@@ -2,188 +2,316 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C825D695259
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 21:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E33C169534F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 22:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjBMUxj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Feb 2023 15:53:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
+        id S231147AbjBMVnC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Feb 2023 16:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjBMUxh (ORCPT
+        with ESMTP id S229877AbjBMVnC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:53:37 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2398206A4
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 12:53:34 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id s13-20020a05600c45cd00b003ddca7a2bcbso4630506wmo.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 12:53:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LaxIPJZzleFPB+FCvH0z2XqB1K3RLroPUHxZ3KjEpmA=;
-        b=gUJIfxq6F+FfLgAsJkE0ZOlHmYvePe2+p+/ZhO67pFzJ+Dj96CbcbWfd3XiZ7E5MLe
-         tNO5BnsgiBo+tWinfkwPJ9acKvFyvWr1cFLWku/Urb/pxyBoYkAw05dYpdP47DTWwyRI
-         BdLTKP+xToEYNoufV0CgPme7MtQ+PR+epy5wJXmo/VTOG1HODcx9+kMOyHbRPu9Xp8HR
-         1T3njjuGsQgiHGNU1pd+4oSfiY2xTDWCahHAY09m7L3JCOgyfSYnYuGrDtikZPQUyQCS
-         BaBshJ4s+UoFe0hgegOjGubhOiWrGoeJ/11O+BH0bIes+FfCTXMOA6nR4aAt151c9NSh
-         5E9g==
+        Mon, 13 Feb 2023 16:43:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FED62118
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 13:42:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676324532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IAOGrIHROVWBHfLS+YnDTuX5cvviqED0/XTEnbV1xpM=;
+        b=Vmv7aEzNdB3sQi8WiLqLcWYPsLH2+YfDmD4rQk6QYBfhLapFgAN+KlF0cFBLj2IeArw/CM
+        oADzrjgRIfrlxC77MZdPdpOYUcvgmOb2oWt29kguOkbNXCXoLiveb1Mg5SzK88Xq251TFy
+        apmrBIzWsfeyH0PGClScvr4V7Eho0Y0=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-141-QdtPPSAPO6OjgeFB7xGG_w-1; Mon, 13 Feb 2023 16:42:11 -0500
+X-MC-Unique: QdtPPSAPO6OjgeFB7xGG_w-1
+Received: by mail-qt1-f198.google.com with SMTP id l3-20020a05622a174300b003b9b6101f65so8263311qtk.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 13:42:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LaxIPJZzleFPB+FCvH0z2XqB1K3RLroPUHxZ3KjEpmA=;
-        b=MeJUWUOhKVtYXTriiSUH5AZz0UQZpWzVcaUSt7pjssEsZ7hasJD1QEBeyOKNqRHRj/
-         cbdF5gCICy52/dRdILVmiRke9P31BY4DAmS9/I4cjpKVT4vWQgZ+y2F5EYg9vd0IB64V
-         q6RtEXMkI5OkSvz7ScX7yFirrj7GxmKTXVdK3YMxtCtCsDM4u8Jagoz9eCaASIGmewfP
-         xg6tvCXmk5VJLWeQ9GzwohsKDnF9c93O7qVg3iirhcA2PcyFAZb1dSZDPihsX4BArt3T
-         6TtaQaYk7pbj3guKg4ABGOGidlDaIb13PXQq813w8BR0mvYdEZRfb2w10h36G+BdQL3u
-         aBvw==
-X-Gm-Message-State: AO0yUKXPbdQJEgvuUYt855uBJyaeH5VQr7cAp0mMefdg4B2EYIzfJObt
-        PzCu6VPAIIl6OtOoMOBvyp3uGG58xnn0nO7ezxjRww==
-X-Google-Smtp-Source: AK7set9+Sz6Uw6jy832ItWl1p/mO5yIfJBbxxd8KPszlA0ag3Om0FPo//Q7zUUeGWC6aeU9T0M+bEQ==
-X-Received: by 2002:a05:600c:3596:b0:3df:d431:cf64 with SMTP id p22-20020a05600c359600b003dfd431cf64mr19721762wmq.39.1676321613227;
-        Mon, 13 Feb 2023 12:53:33 -0800 (PST)
-Received: from ?IPV6:2a02:8011:e80c:0:e444:af40:8c53:f900? ([2a02:8011:e80c:0:e444:af40:8c53:f900])
-        by smtp.gmail.com with ESMTPSA id az10-20020a05600c600a00b003dc3f07c876sm18593908wmb.46.2023.02.13.12.53.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 12:53:32 -0800 (PST)
-Message-ID: <44914e8a-c8c4-046e-155d-8d893660b417@isovalent.com>
-Date:   Mon, 13 Feb 2023 20:53:31 +0000
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IAOGrIHROVWBHfLS+YnDTuX5cvviqED0/XTEnbV1xpM=;
+        b=4FnvSZjF9IRA04pqoLGbMj6Bm8mbdei9PPKsudTrgF8473bCX8LVY3cugALDOTuCn3
+         WVfBDxhiHGHHu6y3EoNK4/9QUbEQvY1RhUPUg+UmvK4XCg2uk+GRjFQ61cdFbTh3AeV2
+         wbw4DCMki/tTySSfwxwHyj9qlXjGsbdc0kJBh0hLfAKh4bCs0N8DGth6oSMrK0xexclr
+         qg5XDTwdwDaNBbBQjNUgwgBfJgy9qLJm8u9SmZnz70++AH5Mh29hE+olgxqb/H3qcVIb
+         jC6xS3wqcr8EsqCWLPLw3moDXF6TGO/J6bnxDqPddBNVAnXsaTeV+sBmfOlzIUbKPMUd
+         higg==
+X-Gm-Message-State: AO0yUKUF//7aV7tzBkXUV2TFPNq1nUDEWAE08cHGZWXYI5VpdftyqSAu
+        peYoH31vzgiWyIdluEuFrN9yyqokwUv6OAlgLae/FDWy9PZRnBGICNlJj4lGcegWHenDRG4QJVM
+        LOvrZCYp/alGvPg1dyB7LHtWYFFiz
+X-Received: by 2002:a05:622a:1981:b0:3b8:695b:aad1 with SMTP id u1-20020a05622a198100b003b8695baad1mr50949935qtc.1.1676324530517;
+        Mon, 13 Feb 2023 13:42:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set9ssAPziIyB06p9/jd1fNqwXmEFiJFS1F+WtS7txqSELl2uM/hTDGmdTMxbgS3uqtH//pGScQ==
+X-Received: by 2002:a05:622a:1981:b0:3b8:695b:aad1 with SMTP id u1-20020a05622a198100b003b8695baad1mr50949888qtc.1.1676324530159;
+        Mon, 13 Feb 2023 13:42:10 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id p6-20020ac84086000000b003b9a573aec6sm10026617qtl.70.2023.02.13.13.42.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 13:42:09 -0800 (PST)
+Date:   Mon, 13 Feb 2023 16:42:07 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <Y+qur8iIUQTLyE8f@x1n>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <Y+QfDN4Y5Q10x8GQ@x1n>
+ <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH bpf-next] selftests/bpf: Cross-compile bpftool
-Content-Language: en-GB
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        linux-kselftest@vger.kernel.org
-References: <20230210084326.1802597-1-bjorn@kernel.org>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230210084326.1802597-1-bjorn@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2023-02-10 09:43 UTC+0100 ~ Björn Töpel <bjorn@kernel.org>
-> From: Björn Töpel <bjorn@rivosinc.com>
+On Mon, Feb 13, 2023 at 05:55:19PM +0500, Muhammad Usama Anjum wrote:
+> On 2/9/23 3:15 AM, Peter Xu wrote:
+> > On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
+> >> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+> >> the info about page table entries. The following operations are supported
+> >> in this ioctl:
+> >> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+> >>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+> >>   (PAGE_IS_SWAPPED).
+> >> - Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+> >>   pages have been written-to.
+> >> - Find pages which have been written-to and write protect the pages
+> >>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+> >>
+> >> To get information about which pages have been written-to and/or write
+> >> protect the pages, following must be performed first in order:
+> >> - The userfaultfd file descriptor is created with userfaultfd syscall.
+> >> - The UFFD_FEATURE_WP_ASYNC feature is set by UFFDIO_API IOCTL.
+> >> - The memory range is registered with UFFDIO_REGISTER_MODE_WP mode
+> >>   through UFFDIO_REGISTER IOCTL.
+> >> Then the any part of the registered memory or the whole memory region
+> >> can be write protected using the UFFDIO_WRITEPROTECT IOCTL or
+> >> PAGEMAP_SCAN IOCTL.
+> >>
+> >> struct pagemap_scan_args is used as the argument of the IOCTL. In this
+> >> struct:
+> >> - The range is specified through start and len.
+> >> - The output buffer of struct page_region array and size is specified as
+> >>   vec and vec_len.
+> >> - The optional maximum requested pages are specified in the max_pages.
+> >> - The flags can be specified in the flags field. The PAGEMAP_WP_ENGAGE
+> >>   is the only added flag at this time.
+> >> - The masks are specified in required_mask, anyof_mask, excluded_ mask
+> >>   and return_mask.
+> >>
+> >> This IOCTL can be extended to get information about more PTE bits. This
+> >> IOCTL doesn't support hugetlbs at the moment. No information about
+> >> hugetlb can be obtained. This patch has evolved from a basic patch from
+> >> Gabriel Krisman Bertazi.
+> >>
+> >> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> >> ---
+> >> Changes in v10:
+> >> - move changes in tools/include/uapi/linux/fs.h to separate patch
+> >> - update commit message
+> >>
+> >> Change in v8:
+> >> - Correct is_pte_uffd_wp()
+> >> - Improve readability and error checks
+> >> - Remove some un-needed code
+> >>
+> >> Changes in v7:
+> >> - Rebase on top of latest next
+> >> - Fix some corner cases
+> >> - Base soft-dirty on the uffd wp async
+> >> - Update the terminologies
+> >> - Optimize the memory usage inside the ioctl
+> >>
+> >> Changes in v6:
+> >> - Rename variables and update comments
+> >> - Make IOCTL independent of soft_dirty config
+> >> - Change masks and bitmap type to _u64
+> >> - Improve code quality
+> >>
+> >> Changes in v5:
+> >> - Remove tlb flushing even for clear operation
+> >>
+> >> Changes in v4:
+> >> - Update the interface and implementation
+> >>
+> >> Changes in v3:
+> >> - Tighten the user-kernel interface by using explicit types and add more
+> >>   error checking
+> >>
+> >> Changes in v2:
+> >> - Convert the interface from syscall to ioctl
+> >> - Remove pidfd support as it doesn't make sense in ioctl
+> >> ---
+> >>  fs/proc/task_mmu.c      | 290 ++++++++++++++++++++++++++++++++++++++++
+> >>  include/uapi/linux/fs.h |  50 +++++++
+> >>  2 files changed, 340 insertions(+)
+> >>
+> >> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> >> index e35a0398db63..c6bde19d63d9 100644
+> >> --- a/fs/proc/task_mmu.c
+> >> +++ b/fs/proc/task_mmu.c
+> >> @@ -19,6 +19,7 @@
+> >>  #include <linux/shmem_fs.h>
+> >>  #include <linux/uaccess.h>
+> >>  #include <linux/pkeys.h>
+> >> +#include <linux/minmax.h>
+> >>  
+> >>  #include <asm/elf.h>
+> >>  #include <asm/tlb.h>
+> >> @@ -1135,6 +1136,22 @@ static inline void clear_soft_dirty(struct vm_area_struct *vma,
+> >>  }
+> >>  #endif
+> >>  
+> >> +static inline bool is_pte_uffd_wp(pte_t pte)
+> >> +{
+> >> +	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
+> >> +	    (pte_swp_uffd_wp_any(pte)))
+> >> +		return true;
+> >> +	return false;
+> > 
+> > Sorry I should have mentioned this earlier: you can directly return here.
+> No problem at all. I'm replacing these two helper functions with following
+> in next version so that !present pages don't show as dirty:
 > 
-> When the BPF selftests are cross-compiled, only the a host version of
-> bpftool is built. This version of bpftool is used to generate various
-> intermediates, e.g., skeletons.
-> 
-> The test runners are also using bpftool. The Makefile will symlink
-> bpftool from the selftest/bpf root, where the test runners will look
-> for the tool:
-> 
->   | ...
->   | $(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/bootstrap/bpftool \
->   |    $(OUTPUT)/$(if $2,$2/)bpftool
-> 
-> There are two issues for cross-compilation builds:
-> 
->  1. There is no native (cross-compilation target) build of bpftool
->  2. The bootstrap variant of bpftool is never cross-compiled (by
->     design)
-> 
-> Make sure that a native/cross-compiled version of bpftool is built,
-> and if CROSS_COMPILE is set, symlink to the native/non-bootstrap
-> version.
-> 
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
-> ---
->  tools/testing/selftests/bpf/Makefile | 28 +++++++++++++++++++++++++---
->  1 file changed, 25 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index b2eb3201b85a..b706750f71e2 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -157,8 +157,9 @@ $(notdir $(TEST_GEN_PROGS)						\
->  	 $(TEST_CUSTOM_PROGS)): %: $(OUTPUT)/% ;
->  
->  # sort removes libbpf duplicates when not cross-building
-> -MAKE_DIRS := $(sort $(BUILD_DIR)/libbpf $(HOST_BUILD_DIR)/libbpf	       \
-> -	       $(HOST_BUILD_DIR)/bpftool $(HOST_BUILD_DIR)/resolve_btfids      \
-> +MAKE_DIRS := $(sort $(BUILD_DIR)/libbpf $(HOST_BUILD_DIR)/libbpf	\
-> +	       $(BUILD_DIR)/bpftool $(HOST_BUILD_DIR)/bpftool		\
-> +	       $(HOST_BUILD_DIR)/resolve_btfids				\
->  	       $(RUNQSLOWER_OUTPUT) $(INCLUDE_DIR))
->  $(MAKE_DIRS):
->  	$(call msg,MKDIR,,$@)
-> @@ -208,6 +209,14 @@ $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_tes
->  	$(Q)cp bpf_testmod/bpf_testmod.ko $@
->  
->  DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
-> +ifneq ($(CROSS_COMPILE),)
-> +CROSS_BPFTOOL := $(SCRATCH_DIR)/sbin/bpftool
-> +TRUNNER_BPFTOOL := $(CROSS_BPFTOOL)
-> +USE_BOOTSTRAP := ""
-> +else
-> +TRUNNER_BPFTOOL := $(DEFAULT_BPFTOOL)
-> +USE_BOOTSTRAP := "bootstrap"
-> +endif
->  
->  $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
->  	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower	       \
-> @@ -255,6 +264,18 @@ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
->  		    LIBBPF_DESTDIR=$(HOST_SCRATCH_DIR)/			       \
->  		    prefix= DESTDIR=$(HOST_SCRATCH_DIR)/ install-bin
->  
-> +ifneq ($(CROSS_COMPILE),)
-> +$(CROSS_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
-> +		    $(BPFOBJ) | $(BUILD_DIR)/bpftool
-> +	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
-> +		    ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE)			\
-> +		    EXTRA_CFLAGS='-g -O0'					\
-> +		    OUTPUT=$(BUILD_DIR)/bpftool/				\
-> +		    LIBBPF_OUTPUT=$(BUILD_DIR)/libbpf/				\
-> +		    LIBBPF_DESTDIR=$(SCRATCH_DIR)/				\
-> +		    prefix= DESTDIR=$(SCRATCH_DIR)/ install-bin
-> +endif
-> +
->  all: docs
->  
->  docs:
-> @@ -518,11 +539,12 @@ endif
->  $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
->  			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
->  			     $(RESOLVE_BTFIDS)				\
-> +			     $(TRUNNER_BPFTOOL)				\
->  			     | $(TRUNNER_BINARY)-extras
->  	$$(call msg,BINARY,,$$@)
->  	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) -o $$@
->  	$(Q)$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.o $$@
-> -	$(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/bootstrap/bpftool \
-> +	$(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/$(USE_BOOTSTRAP)/bpftool \
+> static inline bool is_pte_written(pte_t pte)
+> {
+> 	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
+> 	    (pte_swp_uffd_wp_any(pte)))
+> 		return false;
+> 	return (pte_present(pte) || is_swap_pte(pte));
+> }
 
-Nit: You'll have a double slash in this path when USE_BOOSTRAP is empty
-(.../tools/build/bpftool//bpftool), but it probably doesn't matter much.
+Could you explain why you don't want to return dirty for !present?  A page
+can be written then swapped out.  Don't you want to know that happened
+(from dirty tracking POV)?
 
->  		   $(OUTPUT)/$(if $2,$2/)bpftool
->  
->  endef
+The code looks weird to me too..  We only have three types of ptes: (1)
+present, (2) swap, (3) none.
+
+Then, "(pte_present() || is_swap_pte())" is the same as !pte_none().  Is
+that what you're really looking for?
+
 > 
-> base-commit: 06744f24696e1e7598412c3df61a538b57ebec22
+> static inline bool is_pmd_written(pmd_t pmd)
+> {
+> 	if ((pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
+> 	    (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd)))
+> 		return false;
+> 	return (pmd_present(pmd) || is_swap_pmd(pmd));
+> }
 
-The changes look good to me, thanks!
+[...]
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
+> >> +	bitmap = cur & p->return_mask;
+> >> +	if (cpy && bitmap) {
+> >> +		if ((prev->len) && (prev->bitmap == bitmap) &&
+> >> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
+> >> +			prev->len += len;
+> >> +			p->found_pages += len;
+> >> +		} else if (p->vec_index < p->vec_len) {
+> >> +			if (prev->len) {
+> >> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
+> >> +				p->vec_index++;
+> >> +			}
+> > 
+> > IIUC you can have:
+> > 
+> >   int pagemap_scan_deposit(p)
+> >   {
+> >         if (p->vec_index >= p->vec_len)
+> >                 return -ENOSPC;
+> > 
+> >         if (p->prev->len) {
+> >                 memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
+> >                 p->vec_index++;
+> >         }
+> > 
+> >         return 0;
+> >   }
+> > 
+> > Then call it here.  I think it can also be called below to replace
+> > export_prev_to_out().
+> No this isn't possible. We fill up prev until the next range doesn't merge
+> with it. At that point, we put prev into the output buffer and new range is
+> put into prev. Now that we have shifted to smaller page walks of <= 512
+> entries. We want to visit all ranges before finally putting the prev to
+> output. Sorry to have this some what complex method. The problem is that we
+> want to merge the consective matching regions into one entry in the output.
+> So to achieve this among multiple different page walks, the prev is being used.
+> 
+> Lets suppose we want to visit memory from 0x7FFF00000000 to 7FFF00400000
+> having length of 1024 pages and all of the memory has been written.
+> walk_page_range() will be called 2 times. In the first call, prev will be
+> set having length of 512. In second call, prev will be updated to 1024 as
+> the previous range stored in prev could be extended. After this, the prev
+> will be stored to the user output buffer consuming only 1 struct of page_range.
+> 
+> If we store prev back to output memory in every walk_page_range() call, we
+> wouldn't get 1 struct of page_range with length 1024. Instead we would get
+> 2 elements of page_range structs with half the length.
 
-Jean-Philippe, I know you do some cross-compiling with bpftool, how does
-this look from your side?
+I didn't mean to merge PREV for each pgtable walk.  What I meant is I think
+with such a pagemap_scan_deposit() you can rewrite it as:
+
+if (cpy && bitmap) {
+        if ((prev->len) && (prev->bitmap == bitmap) &&
+            (prev->start + prev->len * PAGE_SIZE == addr)) {
+                prev->len += len;
+                p->found_pages += len;
+        } else {
+                if (pagemap_scan_deposit(p))
+                        return -ENOSPC;
+                prev->start = addr;
+                prev->len = len;
+                prev->bitmap = bitmap;
+                p->found_pages += len;
+        }
+}
+
+Then you can reuse pagemap_scan_deposit() when before returning to
+userspace, just to flush PREV to p->vec properly in a single helper.
+It also makes the code slightly easier to read.
+
+-- 
+Peter Xu
+
