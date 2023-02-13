@@ -2,316 +2,309 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33C169534F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 22:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC0E6953A5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Feb 2023 23:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjBMVnC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Feb 2023 16:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S229956AbjBMWSr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Feb 2023 17:18:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjBMVnC (ORCPT
+        with ESMTP id S229539AbjBMWSq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:43:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FED62118
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 13:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676324532;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IAOGrIHROVWBHfLS+YnDTuX5cvviqED0/XTEnbV1xpM=;
-        b=Vmv7aEzNdB3sQi8WiLqLcWYPsLH2+YfDmD4rQk6QYBfhLapFgAN+KlF0cFBLj2IeArw/CM
-        oADzrjgRIfrlxC77MZdPdpOYUcvgmOb2oWt29kguOkbNXCXoLiveb1Mg5SzK88Xq251TFy
-        apmrBIzWsfeyH0PGClScvr4V7Eho0Y0=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-141-QdtPPSAPO6OjgeFB7xGG_w-1; Mon, 13 Feb 2023 16:42:11 -0500
-X-MC-Unique: QdtPPSAPO6OjgeFB7xGG_w-1
-Received: by mail-qt1-f198.google.com with SMTP id l3-20020a05622a174300b003b9b6101f65so8263311qtk.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 13:42:11 -0800 (PST)
+        Mon, 13 Feb 2023 17:18:46 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF591BAF6
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 14:18:45 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id h29so3928153ila.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 14:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vjm/Vc/deIEaH+aQF6B66KE0Ii8SzYI9sL4Ts+fG4eA=;
+        b=Gm/qU0V+m9CFby80dIGwz8Bvy4C+/h4E3Pu/RHB0UfUt/L7jEu+j2qIQDZJnf/40zR
+         avAY5BR+DMqDa51rkrD/u1dh/tm/17aDn4x98iSAcAEa0PP1EBGCCQcBDFvX/+zzdcl2
+         MKkXGM8djPSDHCCZUmMrXJKargpJhE+xKoNfw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IAOGrIHROVWBHfLS+YnDTuX5cvviqED0/XTEnbV1xpM=;
-        b=4FnvSZjF9IRA04pqoLGbMj6Bm8mbdei9PPKsudTrgF8473bCX8LVY3cugALDOTuCn3
-         WVfBDxhiHGHHu6y3EoNK4/9QUbEQvY1RhUPUg+UmvK4XCg2uk+GRjFQ61cdFbTh3AeV2
-         wbw4DCMki/tTySSfwxwHyj9qlXjGsbdc0kJBh0hLfAKh4bCs0N8DGth6oSMrK0xexclr
-         qg5XDTwdwDaNBbBQjNUgwgBfJgy9qLJm8u9SmZnz70++AH5Mh29hE+olgxqb/H3qcVIb
-         jC6xS3wqcr8EsqCWLPLw3moDXF6TGO/J6bnxDqPddBNVAnXsaTeV+sBmfOlzIUbKPMUd
-         higg==
-X-Gm-Message-State: AO0yUKUF//7aV7tzBkXUV2TFPNq1nUDEWAE08cHGZWXYI5VpdftyqSAu
-        peYoH31vzgiWyIdluEuFrN9yyqokwUv6OAlgLae/FDWy9PZRnBGICNlJj4lGcegWHenDRG4QJVM
-        LOvrZCYp/alGvPg1dyB7LHtWYFFiz
-X-Received: by 2002:a05:622a:1981:b0:3b8:695b:aad1 with SMTP id u1-20020a05622a198100b003b8695baad1mr50949935qtc.1.1676324530517;
-        Mon, 13 Feb 2023 13:42:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set9ssAPziIyB06p9/jd1fNqwXmEFiJFS1F+WtS7txqSELl2uM/hTDGmdTMxbgS3uqtH//pGScQ==
-X-Received: by 2002:a05:622a:1981:b0:3b8:695b:aad1 with SMTP id u1-20020a05622a198100b003b8695baad1mr50949888qtc.1.1676324530159;
-        Mon, 13 Feb 2023 13:42:10 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id p6-20020ac84086000000b003b9a573aec6sm10026617qtl.70.2023.02.13.13.42.08
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vjm/Vc/deIEaH+aQF6B66KE0Ii8SzYI9sL4Ts+fG4eA=;
+        b=qpYS184jy3zIEdG9vLp7QnFAkn5EFUr8aQ8LpiVxg/ZR/7ZgNOs/nQ9gl1HHM3iKOe
+         Is2BUl6Lj+mWCRFioJlV0yHp8dyPyg16uWc1EYS5WQ2hju3hA0XqWWTRbS5Lf/VfpFHh
+         Fy9pE+WSskrIwiKBnjSlNes/ByXsB/JJOScJ4lPRj7G6vF23f7QHUx5mGrTBafox4/OL
+         QBVqcQGSZZl/csh75Ef84R68FgreipY+hFXuZrUpmHUp5sR7G3s1IeJBJs5Q8zsjvciL
+         cMXzM4FcZrTAu3XnDnRJGz1yav5KDZdu4rC3y/sM4GngP+oLX9wcer9K4ufY7K9SfR22
+         AiTA==
+X-Gm-Message-State: AO0yUKV4JebupPD9ney7Trilkt3EqHAADKhB8TrPAnb2aUY8wltQFYwt
+        u2dez15X+BMnz5OyY4Jgds71HA==
+X-Google-Smtp-Source: AK7set+gq2QLXYYprC0FQNPa5EjSAce6ZInOpbMokOscNfVCC3OFfj7XGoSHJvKkfSquDYOUM2VErg==
+X-Received: by 2002:a05:6e02:1c41:b0:315:415a:4e61 with SMTP id d1-20020a056e021c4100b00315415a4e61mr317985ilg.11.1676326724641;
+        Mon, 13 Feb 2023 14:18:44 -0800 (PST)
+Received: from ravnica.bld.corp.google.com ([2620:15c:183:200:d644:5bf8:7c67:1ab8])
+        by smtp.gmail.com with ESMTPSA id s8-20020a02cc88000000b003a60e5a2638sm4233508jap.94.2023.02.13.14.18.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 13:42:09 -0800 (PST)
-Date:   Mon, 13 Feb 2023 16:42:07 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <Y+qur8iIUQTLyE8f@x1n>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com>
- <Y+QfDN4Y5Q10x8GQ@x1n>
- <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com>
+        Mon, 13 Feb 2023 14:18:44 -0800 (PST)
+From:   Ross Zwisler <zwisler@chromium.org>
+X-Google-Original-From: Ross Zwisler <zwisler@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ross Zwisler <zwisler@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-kernel@vger.kernel.org,
+        "Michael S . Tsirkin" <mst@redhat.com>
+Subject: [PATCH bpf-next 1/2] bpf: use canonical ftrace path
+Date:   Mon, 13 Feb 2023 15:18:34 -0700
+Message-Id: <20230213221835.592763-1-zwisler@google.com>
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 05:55:19PM +0500, Muhammad Usama Anjum wrote:
-> On 2/9/23 3:15 AM, Peter Xu wrote:
-> > On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
-> >> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
-> >> the info about page table entries. The following operations are supported
-> >> in this ioctl:
-> >> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
-> >>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
-> >>   (PAGE_IS_SWAPPED).
-> >> - Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
-> >>   pages have been written-to.
-> >> - Find pages which have been written-to and write protect the pages
-> >>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
-> >>
-> >> To get information about which pages have been written-to and/or write
-> >> protect the pages, following must be performed first in order:
-> >> - The userfaultfd file descriptor is created with userfaultfd syscall.
-> >> - The UFFD_FEATURE_WP_ASYNC feature is set by UFFDIO_API IOCTL.
-> >> - The memory range is registered with UFFDIO_REGISTER_MODE_WP mode
-> >>   through UFFDIO_REGISTER IOCTL.
-> >> Then the any part of the registered memory or the whole memory region
-> >> can be write protected using the UFFDIO_WRITEPROTECT IOCTL or
-> >> PAGEMAP_SCAN IOCTL.
-> >>
-> >> struct pagemap_scan_args is used as the argument of the IOCTL. In this
-> >> struct:
-> >> - The range is specified through start and len.
-> >> - The output buffer of struct page_region array and size is specified as
-> >>   vec and vec_len.
-> >> - The optional maximum requested pages are specified in the max_pages.
-> >> - The flags can be specified in the flags field. The PAGEMAP_WP_ENGAGE
-> >>   is the only added flag at this time.
-> >> - The masks are specified in required_mask, anyof_mask, excluded_ mask
-> >>   and return_mask.
-> >>
-> >> This IOCTL can be extended to get information about more PTE bits. This
-> >> IOCTL doesn't support hugetlbs at the moment. No information about
-> >> hugetlb can be obtained. This patch has evolved from a basic patch from
-> >> Gabriel Krisman Bertazi.
-> >>
-> >> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> >> ---
-> >> Changes in v10:
-> >> - move changes in tools/include/uapi/linux/fs.h to separate patch
-> >> - update commit message
-> >>
-> >> Change in v8:
-> >> - Correct is_pte_uffd_wp()
-> >> - Improve readability and error checks
-> >> - Remove some un-needed code
-> >>
-> >> Changes in v7:
-> >> - Rebase on top of latest next
-> >> - Fix some corner cases
-> >> - Base soft-dirty on the uffd wp async
-> >> - Update the terminologies
-> >> - Optimize the memory usage inside the ioctl
-> >>
-> >> Changes in v6:
-> >> - Rename variables and update comments
-> >> - Make IOCTL independent of soft_dirty config
-> >> - Change masks and bitmap type to _u64
-> >> - Improve code quality
-> >>
-> >> Changes in v5:
-> >> - Remove tlb flushing even for clear operation
-> >>
-> >> Changes in v4:
-> >> - Update the interface and implementation
-> >>
-> >> Changes in v3:
-> >> - Tighten the user-kernel interface by using explicit types and add more
-> >>   error checking
-> >>
-> >> Changes in v2:
-> >> - Convert the interface from syscall to ioctl
-> >> - Remove pidfd support as it doesn't make sense in ioctl
-> >> ---
-> >>  fs/proc/task_mmu.c      | 290 ++++++++++++++++++++++++++++++++++++++++
-> >>  include/uapi/linux/fs.h |  50 +++++++
-> >>  2 files changed, 340 insertions(+)
-> >>
-> >> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> >> index e35a0398db63..c6bde19d63d9 100644
-> >> --- a/fs/proc/task_mmu.c
-> >> +++ b/fs/proc/task_mmu.c
-> >> @@ -19,6 +19,7 @@
-> >>  #include <linux/shmem_fs.h>
-> >>  #include <linux/uaccess.h>
-> >>  #include <linux/pkeys.h>
-> >> +#include <linux/minmax.h>
-> >>  
-> >>  #include <asm/elf.h>
-> >>  #include <asm/tlb.h>
-> >> @@ -1135,6 +1136,22 @@ static inline void clear_soft_dirty(struct vm_area_struct *vma,
-> >>  }
-> >>  #endif
-> >>  
-> >> +static inline bool is_pte_uffd_wp(pte_t pte)
-> >> +{
-> >> +	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
-> >> +	    (pte_swp_uffd_wp_any(pte)))
-> >> +		return true;
-> >> +	return false;
-> > 
-> > Sorry I should have mentioned this earlier: you can directly return here.
-> No problem at all. I'm replacing these two helper functions with following
-> in next version so that !present pages don't show as dirty:
-> 
-> static inline bool is_pte_written(pte_t pte)
-> {
-> 	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
-> 	    (pte_swp_uffd_wp_any(pte)))
-> 		return false;
-> 	return (pte_present(pte) || is_swap_pte(pte));
-> }
+The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
 
-Could you explain why you don't want to return dirty for !present?  A page
-can be written then swapped out.  Don't you want to know that happened
-(from dirty tracking POV)?
+But, from Documentation/trace/ftrace.rst:
 
-The code looks weird to me too..  We only have three types of ptes: (1)
-present, (2) swap, (3) none.
+  Before 4.1, all ftrace tracing control files were within the debugfs
+  file system, which is typically located at /sys/kernel/debug/tracing.
+  For backward compatibility, when mounting the debugfs file system,
+  the tracefs file system will be automatically mounted at:
 
-Then, "(pte_present() || is_swap_pte())" is the same as !pte_none().  Is
-that what you're really looking for?
+  /sys/kernel/debug/tracing
 
-> 
-> static inline bool is_pmd_written(pmd_t pmd)
-> {
-> 	if ((pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
-> 	    (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd)))
-> 		return false;
-> 	return (pmd_present(pmd) || is_swap_pmd(pmd));
-> }
+Many comments and samples in the bpf code still refer to this older
+debugfs path, so let's update them to avoid confusion.  There are a few
+spots where the bpf code explicitly checks both tracefs and debugfs
+(tools/bpf/bpftool/tracelog.c and tools/lib/api/fs/fs.c) and I've left
+those alone so that the tools can continue to work with both paths.
 
-[...]
+Signed-off-by: Ross Zwisler <zwisler@google.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+---
 
-> >> +	bitmap = cur & p->return_mask;
-> >> +	if (cpy && bitmap) {
-> >> +		if ((prev->len) && (prev->bitmap == bitmap) &&
-> >> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
-> >> +			prev->len += len;
-> >> +			p->found_pages += len;
-> >> +		} else if (p->vec_index < p->vec_len) {
-> >> +			if (prev->len) {
-> >> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
-> >> +				p->vec_index++;
-> >> +			}
-> > 
-> > IIUC you can have:
-> > 
-> >   int pagemap_scan_deposit(p)
-> >   {
-> >         if (p->vec_index >= p->vec_len)
-> >                 return -ENOSPC;
-> > 
-> >         if (p->prev->len) {
-> >                 memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
-> >                 p->vec_index++;
-> >         }
-> > 
-> >         return 0;
-> >   }
-> > 
-> > Then call it here.  I think it can also be called below to replace
-> > export_prev_to_out().
-> No this isn't possible. We fill up prev until the next range doesn't merge
-> with it. At that point, we put prev into the output buffer and new range is
-> put into prev. Now that we have shifted to smaller page walks of <= 512
-> entries. We want to visit all ranges before finally putting the prev to
-> output. Sorry to have this some what complex method. The problem is that we
-> want to merge the consective matching regions into one entry in the output.
-> So to achieve this among multiple different page walks, the prev is being used.
-> 
-> Lets suppose we want to visit memory from 0x7FFF00000000 to 7FFF00400000
-> having length of 1024 pages and all of the memory has been written.
-> walk_page_range() will be called 2 times. In the first call, prev will be
-> set having length of 512. In second call, prev will be updated to 1024 as
-> the previous range stored in prev could be extended. After this, the prev
-> will be stored to the user output buffer consuming only 1 struct of page_range.
-> 
-> If we store prev back to output memory in every walk_page_range() call, we
-> wouldn't get 1 struct of page_range with length 1024. Instead we would get
-> 2 elements of page_range structs with half the length.
+[ Per Alexei's request, resending towards bpf-next ]
 
-I didn't mean to merge PREV for each pgtable walk.  What I meant is I think
-with such a pagemap_scan_deposit() you can rewrite it as:
+ include/uapi/linux/bpf.h            | 8 ++++----
+ samples/bpf/cpustat_kern.c          | 4 ++--
+ samples/bpf/hbm.c                   | 4 ++--
+ samples/bpf/ibumad_kern.c           | 4 ++--
+ samples/bpf/lwt_len_hist.sh         | 2 +-
+ samples/bpf/offwaketime_kern.c      | 2 +-
+ samples/bpf/task_fd_query_user.c    | 4 ++--
+ samples/bpf/test_lwt_bpf.sh         | 2 +-
+ samples/bpf/test_overhead_tp_kern.c | 4 ++--
+ tools/include/uapi/linux/bpf.h      | 8 ++++----
+ 10 files changed, 21 insertions(+), 21 deletions(-)
 
-if (cpy && bitmap) {
-        if ((prev->len) && (prev->bitmap == bitmap) &&
-            (prev->start + prev->len * PAGE_SIZE == addr)) {
-                prev->len += len;
-                p->found_pages += len;
-        } else {
-                if (pagemap_scan_deposit(p))
-                        return -ENOSPC;
-                prev->start = addr;
-                prev->len = len;
-                prev->bitmap = bitmap;
-                p->found_pages += len;
-        }
-}
-
-Then you can reuse pagemap_scan_deposit() when before returning to
-userspace, just to flush PREV to p->vec properly in a single helper.
-It also makes the code slightly easier to read.
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 464ca3f01fe7..44387b31cbde 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1642,17 +1642,17 @@ union bpf_attr {
+  * 	Description
+  * 		This helper is a "printk()-like" facility for debugging. It
+  * 		prints a message defined by format *fmt* (of size *fmt_size*)
+- * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
++ * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
+  * 		available. It can take up to three additional **u64**
+  * 		arguments (as an eBPF helpers, the total number of arguments is
+  * 		limited to five).
+  *
+  * 		Each time the helper is called, it appends a line to the trace.
+- * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
+- * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
++ * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
++ * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
+  * 		The format of the trace is customizable, and the exact output
+  * 		one will get depends on the options set in
+- * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
++ * 		*\/sys/kernel/tracing/trace_options* (see also the
+  * 		*README* file under the same directory). However, it usually
+  * 		defaults to something like:
+  *
+diff --git a/samples/bpf/cpustat_kern.c b/samples/bpf/cpustat_kern.c
+index 5aefd19cdfa1..944f13fe164a 100644
+--- a/samples/bpf/cpustat_kern.c
++++ b/samples/bpf/cpustat_kern.c
+@@ -76,8 +76,8 @@ struct {
+ 
+ /*
+  * The trace events for cpu_idle and cpu_frequency are taken from:
+- * /sys/kernel/debug/tracing/events/power/cpu_idle/format
+- * /sys/kernel/debug/tracing/events/power/cpu_frequency/format
++ * /sys/kernel/tracing/events/power/cpu_idle/format
++ * /sys/kernel/tracing/events/power/cpu_frequency/format
+  *
+  * These two events have same format, so define one common structure.
+  */
+diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
+index 516fbac28b71..ff58ec43f56a 100644
+--- a/samples/bpf/hbm.c
++++ b/samples/bpf/hbm.c
+@@ -65,7 +65,7 @@ static void Usage(void);
+ static void read_trace_pipe2(void);
+ static void do_error(char *msg, bool errno_flag);
+ 
+-#define DEBUGFS "/sys/kernel/debug/tracing/"
++#define TRACEFS "/sys/kernel/tracing/"
+ 
+ static struct bpf_program *bpf_prog;
+ static struct bpf_object *obj;
+@@ -77,7 +77,7 @@ static void read_trace_pipe2(void)
+ 	FILE *outf;
+ 	char *outFname = "hbm_out.log";
+ 
+-	trace_fd = open(DEBUGFS "trace_pipe", O_RDONLY, 0);
++	trace_fd = open(TRACEFS "trace_pipe", O_RDONLY, 0);
+ 	if (trace_fd < 0) {
+ 		printf("Error opening trace_pipe\n");
+ 		return;
+diff --git a/samples/bpf/ibumad_kern.c b/samples/bpf/ibumad_kern.c
+index 9b193231024a..f07474c72525 100644
+--- a/samples/bpf/ibumad_kern.c
++++ b/samples/bpf/ibumad_kern.c
+@@ -39,8 +39,8 @@ struct {
+ /* Taken from the current format defined in
+  * include/trace/events/ib_umad.h
+  * and
+- * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_read/format
+- * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_write/format
++ * /sys/kernel/tracing/events/ib_umad/ib_umad_read/format
++ * /sys/kernel/tracing/events/ib_umad/ib_umad_write/format
+  */
+ struct ib_umad_rw_args {
+ 	u64 pad;
+diff --git a/samples/bpf/lwt_len_hist.sh b/samples/bpf/lwt_len_hist.sh
+index 0eda9754f50b..11fa0a087db6 100755
+--- a/samples/bpf/lwt_len_hist.sh
++++ b/samples/bpf/lwt_len_hist.sh
+@@ -5,7 +5,7 @@ NS1=lwt_ns1
+ VETH0=tst_lwt1a
+ VETH1=tst_lwt1b
+ 
+-TRACE_ROOT=/sys/kernel/debug/tracing
++TRACE_ROOT=/sys/kernel/tracing
+ 
+ function cleanup {
+ 	# To reset saved histogram, remove pinned map
+diff --git a/samples/bpf/offwaketime_kern.c b/samples/bpf/offwaketime_kern.c
+index eb4d94742e6b..23f12b47e9e5 100644
+--- a/samples/bpf/offwaketime_kern.c
++++ b/samples/bpf/offwaketime_kern.c
+@@ -110,7 +110,7 @@ static inline int update_counts(void *ctx, u32 pid, u64 delta)
+ }
+ 
+ #if 1
+-/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
++/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
+ struct sched_switch_args {
+ 	unsigned long long pad;
+ 	char prev_comm[TASK_COMM_LEN];
+diff --git a/samples/bpf/task_fd_query_user.c b/samples/bpf/task_fd_query_user.c
+index a33d74bd3a4b..1e61f2180470 100644
+--- a/samples/bpf/task_fd_query_user.c
++++ b/samples/bpf/task_fd_query_user.c
+@@ -235,7 +235,7 @@ static int test_debug_fs_uprobe(char *binary_path, long offset, bool is_return)
+ 	struct bpf_link *link;
+ 	ssize_t bytes;
+ 
+-	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/%s_events",
++	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/%s_events",
+ 		 event_type);
+ 	kfd = open(buf, O_WRONLY | O_TRUNC, 0);
+ 	CHECK_PERROR_RET(kfd < 0);
+@@ -252,7 +252,7 @@ static int test_debug_fs_uprobe(char *binary_path, long offset, bool is_return)
+ 	close(kfd);
+ 	kfd = -1;
+ 
+-	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/events/%ss/%s/id",
++	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/events/%ss/%s/id",
+ 		 event_type, event_alias);
+ 	efd = open(buf, O_RDONLY, 0);
+ 	CHECK_PERROR_RET(efd < 0);
+diff --git a/samples/bpf/test_lwt_bpf.sh b/samples/bpf/test_lwt_bpf.sh
+index 65a976058dd3..db5691e6637f 100755
+--- a/samples/bpf/test_lwt_bpf.sh
++++ b/samples/bpf/test_lwt_bpf.sh
+@@ -19,7 +19,7 @@ IPVETH3="192.168.111.2"
+ 
+ IP_LOCAL="192.168.99.1"
+ 
+-TRACE_ROOT=/sys/kernel/debug/tracing
++TRACE_ROOT=/sys/kernel/tracing
+ 
+ function lookup_mac()
+ {
+diff --git a/samples/bpf/test_overhead_tp_kern.c b/samples/bpf/test_overhead_tp_kern.c
+index 80edadacb692..a1d53b0d8476 100644
+--- a/samples/bpf/test_overhead_tp_kern.c
++++ b/samples/bpf/test_overhead_tp_kern.c
+@@ -8,7 +8,7 @@
+ #include <uapi/linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-/* from /sys/kernel/debug/tracing/events/task/task_rename/format */
++/* from /sys/kernel/tracing/events/task/task_rename/format */
+ struct task_rename {
+ 	__u64 pad;
+ 	__u32 pid;
+@@ -22,7 +22,7 @@ int prog(struct task_rename *ctx)
+ 	return 0;
+ }
+ 
+-/* from /sys/kernel/debug/tracing/events/random/urandom_read/format */
++/* from /sys/kernel/tracing/events/random/urandom_read/format */
+ struct urandom_read {
+ 	__u64 pad;
+ 	int got_bits;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 464ca3f01fe7..44387b31cbde 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1642,17 +1642,17 @@ union bpf_attr {
+  * 	Description
+  * 		This helper is a "printk()-like" facility for debugging. It
+  * 		prints a message defined by format *fmt* (of size *fmt_size*)
+- * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
++ * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
+  * 		available. It can take up to three additional **u64**
+  * 		arguments (as an eBPF helpers, the total number of arguments is
+  * 		limited to five).
+  *
+  * 		Each time the helper is called, it appends a line to the trace.
+- * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
+- * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
++ * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
++ * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
+  * 		The format of the trace is customizable, and the exact output
+  * 		one will get depends on the options set in
+- * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
++ * 		*\/sys/kernel/tracing/trace_options* (see also the
+  * 		*README* file under the same directory). However, it usually
+  * 		defaults to something like:
+  *
 -- 
-Peter Xu
+2.39.1.581.gbfd45094c4-goog
 
