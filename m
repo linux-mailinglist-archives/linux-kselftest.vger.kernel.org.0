@@ -2,135 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89872696AD3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Feb 2023 18:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8DF696D0D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Feb 2023 19:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbjBNRKH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Feb 2023 12:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
+        id S232471AbjBNShO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Feb 2023 13:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjBNRKG (ORCPT
+        with ESMTP id S231269AbjBNShN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:10:06 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CB98A70
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 09:10:03 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id o1so6094765ioo.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 09:10:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1676394603;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x7Okgp0g5sZnhGVN5BSnDnYNcSRWmBw2rpZ3KAUXn5g=;
-        b=AjZXgc0lko9anBMaicDsIcZOqqI9sBHS8srbZa6cDKAX5Y7XGZvR6UHeciQZdhPX2W
-         R06xkNvQ2J2e+okTq5abS/hIqUG0WmjcLxJM3qXk0Sdrf9MHKVJhf/YcQlyqHoCUY31h
-         Ro7Pk525hprGLIaQDV0XNdG5HAtQifsGVlFpo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676394603;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x7Okgp0g5sZnhGVN5BSnDnYNcSRWmBw2rpZ3KAUXn5g=;
-        b=5VLFzfQn3iiI9Rqpf2/wGQUZuG05TZZ/OQOaKo+yBxbLRVTDwDee7xzslPyp0iTra6
-         1hfZ46TzGc/DOXMXlhIi9QZISyuMaH7jDjQk74Drobza70fvb/ezA3XCoLO9UEz3qY9o
-         uTrIQHUmzTYY8peab2nKAlPd4nOGfNvKWNsaBuv/hHHS6NjLlA7P9OKqYu8SaIKnbPwT
-         PQlwAipAw6F2BWDhgt4YNdeQyBwfMB0uWgRm6f2O9nzxZX39NGfBJg0apPPt5YO5V/Jn
-         pXs5YscU6RwUN5AUYsmTt1Dvs4zAHJ5BBmfqmNojuYremsNzAi6lIWamdSxmJF28PRxI
-         XB+g==
-X-Gm-Message-State: AO0yUKUz7+Or1qIkxulgQK4P2vSTF+iVlsVSCeyy8KFrfFWA0R73Yzms
-        /sxowKuSQ4t5EBockOkli4Ow9g==
-X-Google-Smtp-Source: AK7set+xYio7oOhkTrsxXJaynXVcnsv0plfLgn6aQ+0eK8Tft/oqVrIzd3qqTEkzqTfs0t4N9Sgfxw==
-X-Received: by 2002:a05:6602:380f:b0:6cc:8b29:9a73 with SMTP id bb15-20020a056602380f00b006cc8b299a73mr2461287iob.1.1676394603149;
-        Tue, 14 Feb 2023 09:10:03 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id s26-20020a6bdc1a000000b00740710c0a65sm427519ioc.47.2023.02.14.09.10.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 09:10:01 -0800 (PST)
-Message-ID: <f536ecc2-1889-6df6-43d3-1a04dc8f1b14@linuxfoundation.org>
-Date:   Tue, 14 Feb 2023 10:10:00 -0700
+        Tue, 14 Feb 2023 13:37:13 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706201F924;
+        Tue, 14 Feb 2023 10:37:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e76GOVDVrwck+QqfT+F91cwCLZAnhA+J1MiATbawaf7WRCa/ktLYeOZkF3zFoQwou0tjvhyFHtWLs9RPJe9XPTEuBU0Ftb2JzOvgeggSk+KqvrQPe75NPgI3p77uyAYyHYHG/kLLNHeTdjSNA8CqY/AFbt/ebdGr9d1Qzyaarvy0kGb+qZduxA/QUell8uiizlGViazg7ZHqHJue5UYhUy2GQd2cHBiyX4uBS5CNsyX6X8KM3VysRz0ZbCKGmQ2zbLj/QJ/r6xx4W6fDF3mu9LLCgoeDGEZWoU36Ov9TKBc65vuYxU4YzU343fKlWQMCS9k2DgOkxva6/h06CD9Pgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4S4OHTMP2JYEUWEmdmIsWjBZa01f3Ih5UlK/HIXNOkg=;
+ b=UMhwxug3E7X4CWGcc6pmJcvwLZSNtXISTCa94dYbCSV34dHSvS3ocMhCLLuiL6lGfDeCmzXZJ8ueq/gq+2H4yMlskkHYP8DTJ2IjFHGUTqFpkUEkQsPUVwIoJWKuMyDjfmDn9CH3sO7InjV+hAb8+F8lE6sXMGY5nui0wNYvRhFHVQNBZGzPdjxVRDcuW+xWfrKkbOm40E2DYgozEpc0RWiakaELDD//n6ols9To0Zajg50Oo1kWNyjl3dVUamokv3LKn9nylORhP1p0wGq4H6qpolMyZ/uzlF+rO0tbFRt0ssclKn+23yx5Bl5iPT/eb4I3iwhp+0LtnCJx0vjhtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4S4OHTMP2JYEUWEmdmIsWjBZa01f3Ih5UlK/HIXNOkg=;
+ b=EAPFaNJALH/Aa6dPmi5Go+gfNkTy/zHGz8/yhoJABIFX9Z5028g1VtVLMB9pgYnWDiryM+nKa5pxaeQdEMcFeFAav2MX+SyL+tCy5q/s5hFkkgdZBNZoY5+Az66yqcxbILqy+3zajXgYXHM6ldRcjNF8g3Oq3sAzn/6gQjhx+1dTtSePSSOUQpcihPyikLvP2xAQNTgL9U/5CZTAbPb0rPJ8jCUScWFICqpfKq1rnOsVQuh+zB9OSwf2Uc3C8bzC+8TE8rlsJcJRSw0Hy48Mbqre2XAkMOLYFKWjPovZ7wUMVsF7FEXlowysMsp/ct24sNp4ckEHbESi3USeT2as4Q==
+Received: from BN9PR03CA0660.namprd03.prod.outlook.com (2603:10b6:408:13b::35)
+ by BL1PR12MB5318.namprd12.prod.outlook.com (2603:10b6:208:31d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
+ 2023 18:37:10 +0000
+Received: from BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13b:cafe::ee) by BN9PR03CA0660.outlook.office365.com
+ (2603:10b6:408:13b::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26 via Frontend
+ Transport; Tue, 14 Feb 2023 18:37:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN8NAM11FT033.mail.protection.outlook.com (10.13.177.149) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6111.10 via Frontend Transport; Tue, 14 Feb 2023 18:37:09 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
+ 2023 10:37:00 -0800
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 14 Feb 2023 10:36:59 -0800
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Tue, 14 Feb 2023 10:36:59 -0800
+Date:   Tue, 14 Feb 2023 10:36:57 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Yi Liu <yi.l.liu@intel.com>
+CC:     <joro@8bytes.org>, <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+        <kevin.tian@intel.com>, <robin.murphy@arm.com>,
+        <cohuck@redhat.com>, <eric.auger@redhat.com>,
+        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
+        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
+        <peterx@redhat.com>, <jasowang@redhat.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
+        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH 14/17] iommufd/selftest: Add
+ IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE test op
+Message-ID: <Y+vUycZDiddxfSO+@Asurada-Nvidia>
+References: <20230209043153.14964-1-yi.l.liu@intel.com>
+ <20230209043153.14964-15-yi.l.liu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] selftests/mount_setattr: fix redefine struct mount_attr
- build error
-To:     Seth Forshee <sforshee@kernel.org>
-Cc:     shuah@kernel.org, brauner@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230213183149.231779-1-skhan@linuxfoundation.org>
- <Y+rMtlvx31w7eWCA@do-x1extreme>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <Y+rMtlvx31w7eWCA@do-x1extreme>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230209043153.14964-15-yi.l.liu@intel.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT033:EE_|BL1PR12MB5318:EE_
+X-MS-Office365-Filtering-Correlation-Id: ffd6ea8d-13f0-43d3-9ffd-08db0eba7b7e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hcGIiBPfXr7m84X7qT6O3yZ2hYycfeiohbz9z121t1DC8a92+qcIkiYskVhKNs74BGIz2xXOwkgsEHqWqFjqBYA6+SK4PRhA427ob9jDjSvw5FnmKvhfkAKatRbxPxzUzhOzkB+JLEQtUDzmFC43GpYdW84nRDQDJ1JwnvVDAuf81YX9Uz46kfE1qi10ptb31n1kZILtYGXccSeRdUERpsTTKNdg2kyvaUMC0iqBd30gXuG17zU3UPqvdAfoSp40WndBL6H6TPqbg1EvRSLd6z9yXcjnZDQTjEsFlj+1TKE03cKWtcBT3qxxov64ofEGxSEAA7vt/IAjPtatQ4JOLvTD8mDcFRgEwFIQRb73lKyEEmwBxmNYsDjYRQ0gdgTRX/E3hJDmRMglKGV8CAETbJTIF2XuMmeKfWWlsb/B0qX09F/MkyeAO0Ikre1Waj/rKTAqsYUWOKnbtldZmMDzMlCuhsWtKkorJGzkNm+l9EnjeSQl4LL6KeebH6i+e1KIJWLueth1M5TdtSuaUP0ErBBSWe+kqjYWiQD07yo32aK1VNTIEMyaeNpM163CdjGtutbIw5gkuBOeLUJ4fXAqImcbryDw7+r4g7nWJVj7mpjkZkTREGPW5mXYTQ90aqi49KHYowqqsdy2JCspBn/SzTwABhtc/ab9VqaOBrt75CEvoLg4/cfHGS/mShmbVuPykpB3TZiPk+E9Uv91emNmDsvQ4+Zsul+edia/y+0EFRifBXJVM4Qobc3hOD+dlv29
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(136003)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(82310400005)(40460700003)(9686003)(478600001)(55016003)(26005)(40480700001)(41300700001)(7636003)(6916009)(70206006)(186003)(70586007)(8676002)(356005)(316002)(8936002)(4326008)(86362001)(82740400003)(47076005)(83380400001)(36860700001)(426003)(54906003)(33716001)(5660300002)(7416002)(2906002)(336012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 18:37:09.9628
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ffd6ea8d-13f0-43d3-9ffd-08db0eba7b7e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5318
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/13/23 16:50, Seth Forshee wrote:
-> On Mon, Feb 13, 2023 at 11:31:49AM -0700, Shuah Khan wrote:
->> Fix the following build error due to redefining struct mount_attr by
->> removing duplicate define from mount_setattr_test.c
->>
->> gcc -g -isystem .../tools/testing/selftests/../../../usr/include -Wall -O2 -pthread     mount_setattr_test.c  -o .../tools/testing/selftests/mount_setattr/mount_setattr_test
->> mount_setattr_test.c:107:8: error: redefinition of ‘struct mount_attr’
->>    107 | struct mount_attr {
->>        |        ^~~~~~~~~~
->> In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
->>                   from mount_setattr_test.c:10:
->> .../usr/include/linux/mount.h:129:8: note: originally defined here
->>    129 | struct mount_attr {
->>        |        ^~~~~~~~~~
->> make: *** [../lib.mk:145: .../tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
->> ---
->>   tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
->>   1 file changed, 7 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
->> index 8c5fea68ae67..582669ca38e9 100644
->> --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
->> +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
->> @@ -103,13 +103,6 @@
->>   	#else
->>   		#define __NR_mount_setattr 442
->>   	#endif
->> -
->> -struct mount_attr {
->> -	__u64 attr_set;
->> -	__u64 attr_clr;
->> -	__u64 propagation;
->> -	__u64 userns_fd;
->> -};
->>   #endif
+On Wed, Feb 08, 2023 at 08:31:50PM -0800, Yi Liu wrote:
+> From: Nicolin Chen <nicolinc@nvidia.com>
 > 
-> The difficulty with this is that whether or not you need this definition
-> depends on your system headers. My laptop doesn't have definitions for
-> either __NR_mount_setattr or struct mount_attr, so for me the build
-> works without this patch but fails with it.
+> This allows to detach/attach the mock_dev to a specified domain/hwpt.
 > 
-
-The header search looks up system headers followed by installed headers in
-the repo (both in-tree and out-of-tree builds). kselftest builds do depend
-on headers_install. Did you building after running headers_install?
-
-> I suppose we could fix this universally by using a different name for
-> the struct in the test, e.g.:
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> ---
+>  drivers/iommu/iommufd/device.c       |  1 -
+>  drivers/iommu/iommufd/iommufd_test.h |  5 +++
+>  drivers/iommu/iommufd/selftest.c     | 54 ++++++++++++++++++++++++++++
+>  3 files changed, 59 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+> index 826441c6005d..bf803975062c 100644
+> --- a/drivers/iommu/iommufd/device.c
+> +++ b/drivers/iommu/iommufd/device.c
+> @@ -964,7 +964,6 @@ EXPORT_SYMBOL_NS_GPL(iommufd_access_rw, IOMMUFD);
+>   * Creating a real iommufd_device is too hard, bypass creating a iommufd_device
+>   * and go directly to attaching a domain.
+>   */
+> -
+>  int iommufd_device_selftest_attach(struct iommufd_ctx *ictx,
+>                                    struct iommufd_hw_pagetable *hwpt)
+>  {
 
-This is not a good way to for a couple of reasons. This masks any problems
-due to incompatibility between these defines.
+Just found last night that I forgot to drop this line removal.
 
-thanks,
--- Shuah
+Let's fix it in v2 :)
 
+Thanks
+Nic
