@@ -2,187 +2,305 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11191695901
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Feb 2023 07:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423EA695B7F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Feb 2023 08:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjBNGQx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Feb 2023 01:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S229930AbjBNH5u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Feb 2023 02:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBNGQw (ORCPT
+        with ESMTP id S231575AbjBNH5f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Feb 2023 01:16:52 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6374611EB7
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 22:16:51 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id v23so16026525plo.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Feb 2023 22:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nAySxquq1s3jzJAwcjF683sKayihoZDN4RvDCMUZnxk=;
-        b=t9hnTuTMc0o0A48ejbMSJrJMrxV9zbsWWp+1cGI8A+Rn+XzXuBDSNmLJoTNDZOqY6t
-         8raWs/9jDz9xEPeliZ8boknHo2Dt+FLWoXArj6sPXfaFgnbjNRXGRuqZOo5RQZhyal7Y
-         qkqzhXL+oTzMIq51/wbuQw7ASvMjoPK8lQyxudgrN7orIlMVrH4jk36RwFbx9DHR1aQK
-         Rrsdow7N/f5/7q29v3+i605yZPJmkqONBHva+S8XnhpJtojsF7Yk1ej55KwgO67w7dcN
-         S9WuyEw3m4SUZSZ/DiHFSvey5GHaqzLiYjmsKMRQUtPXWncZTLNyjtS/o6Yl1Z3JmlUe
-         qghg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nAySxquq1s3jzJAwcjF683sKayihoZDN4RvDCMUZnxk=;
-        b=alXoCfW4ergr5chYpCGSgOUgm/jPo9YAJ7HFicbXVdFMerti3YEcRtK7ggnuF9Ly3m
-         fn+1aJoa3Oe8d5yrjFn2tesp8Uxrkp8Ld61jUDmIXrgpx/ufvOVLdSLS8+wyX4RkZ51V
-         UkFZWHhAieuJhKmJzrMR2vkw72nU08DTrb7dZc8oiWwPSO2LQo4b3wTtza1nEVUFUKTk
-         q5l50BdCgNMWsxrSUDq/z1agt8oyFmG+izkAD0zzeO3eFY/Kmus7EvToXHFlGHqLrnzs
-         yFZ1bbAfPhbqHL80dHShTp/hqn5EAYBBjAkZ7UgqeAjlLP54f6o5s0f8qOmXD/VchnKb
-         9aaA==
-X-Gm-Message-State: AO0yUKUGANtJI/Pk0gjdPp39L8DKE9JrOVfvmhXggl+5KNIImhWsYrAA
-        8F3p81GAYv79mE9/x1zjaRSP
-X-Google-Smtp-Source: AK7set9V9GcVet7QADdGuqEsRF0qBGSbEsRt+cuHuWHHlZ1mey0l95xHqFDVRrRIG6U+1+6TIyOueg==
-X-Received: by 2002:a17:902:f30b:b0:196:8445:56be with SMTP id c11-20020a170902f30b00b00196844556bemr1057726ple.42.1676355410714;
-        Mon, 13 Feb 2023 22:16:50 -0800 (PST)
-Received: from thinkpad ([117.217.182.252])
-        by smtp.gmail.com with ESMTPSA id v12-20020a1709029a0c00b0019339f3368asm9322235plp.3.2023.02.13.22.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 22:16:50 -0800 (PST)
-Date:   Tue, 14 Feb 2023 11:46:43 +0530
-From:   'Manivannan Sadhasivam' <manivannan.sadhasivam@linaro.org>
-To:     Aman Gupta/FDS SW /SSIR/Engineer/Samsung Electronics 
-        <aman1.gupta@samsung.com>
-Cc:     'Shuah Khan' <skhan@linuxfoundation.org>, shradha.t@samsung.com,
-        pankaj.dubey@samsung.com, kishon@ti.com, lpieralisi@kernel.org,
-        kw@linux.com, shuah@kernel.org,
-        'Bjorn Helgaas' <helgaas@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        'Padmanabhan Rajanbabu' <p.rajanbabu@samsung.com>
-Subject: Re: [PATCH] selftests: pci: pci-selftest: add support for PCI
- endpoint driver test
-Message-ID: <20230214061643.GA4981@thinkpad>
-References: <CGME20221007053726epcas5p357c35abb79327fee6327bc6493e0178c@epcas5p3.samsung.com>
- <20221007053934.5188-1-aman1.gupta@samsung.com>
- <641d1e50-a9d0-dc15-be76-07b8ace25dae@linuxfoundation.org>
- <20221222174532.GA59500@thinkpad>
- <b2a5db97-dc59-33ab-71cd-f591e0b1b34d@linuxfoundation.org>
- <20221223150211.GC4587@thinkpad>
- <7dcefe25-d31c-bc26-4910-e53bed6eb01c@linuxfoundation.org>
- <003d01d919b2$3c7d54a0$b577fde0$@samsung.com>
+        Tue, 14 Feb 2023 02:57:35 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D772C21A25;
+        Mon, 13 Feb 2023 23:57:33 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.179.179])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EECDE660216F;
+        Tue, 14 Feb 2023 07:57:25 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676361452;
+        bh=bLuH3JNMnvAE/sd8bnRNmS8hADblvHZLNhfCr4oCcs0=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=ok3IRdMKvUkFcuLuDpafb/xmh9qr1fWMpvlJCB9RJ37YXB1qHtxPPzQJBmrpYhXGb
+         aUEnFVi4PZCGRImQcghZRjXGN4C1VYoLrv+mopvvN5yUn1XRKNKgzMvTbmVngYGGZN
+         T6dv5VOmBAwkkde4WCYfqhU8xnu6VTRXL6kpa5AYGNFpsjDVHtoUob5yZBRWC7hqIJ
+         Wo4bV6ZwlQcKRCih0/JMbH42HY826QLorvWUQOsD7jI0LXmLV6oHe9VnzepM7WifWL
+         SAGOqaa2X3WXuQEoQtknmsZaAJZ3P35wR2zCczus7cm14240bL+hM+/JZvqKl/iuWn
+         TqvN+F4jTROjA==
+Message-ID: <39217d9a-ed7e-f1ff-59b9-4cbffa464999@collabora.com>
+Date:   Tue, 14 Feb 2023 12:57:21 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Peter Xu <peterx@redhat.com>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com> <Y+QfDN4Y5Q10x8GQ@x1n>
+ <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com> <Y+qur8iIUQTLyE8f@x1n>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y+qur8iIUQTLyE8f@x1n>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <003d01d919b2$3c7d54a0$b577fde0$@samsung.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 10:45:26AM +0530, Aman Gupta/FDS SW /SSIR/Engineer/Samsung Electronics wrote:
+On 2/14/23 2:42 AM, Peter Xu wrote:
+> On Mon, Feb 13, 2023 at 05:55:19PM +0500, Muhammad Usama Anjum wrote:
+>> On 2/9/23 3:15 AM, Peter Xu wrote:
+>>> On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
+>>>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+>>>> the info about page table entries. The following operations are supported
+>>>> in this ioctl:
+>>>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>>>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>>>>   (PAGE_IS_SWAPPED).
+>>>> - Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+>>>>   pages have been written-to.
+>>>> - Find pages which have been written-to and write protect the pages
+>>>>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+>>>>
+>>>> To get information about which pages have been written-to and/or write
+>>>> protect the pages, following must be performed first in order:
+>>>> - The userfaultfd file descriptor is created with userfaultfd syscall.
+>>>> - The UFFD_FEATURE_WP_ASYNC feature is set by UFFDIO_API IOCTL.
+>>>> - The memory range is registered with UFFDIO_REGISTER_MODE_WP mode
+>>>>   through UFFDIO_REGISTER IOCTL.
+>>>> Then the any part of the registered memory or the whole memory region
+>>>> can be write protected using the UFFDIO_WRITEPROTECT IOCTL or
+>>>> PAGEMAP_SCAN IOCTL.
+>>>>
+>>>> struct pagemap_scan_args is used as the argument of the IOCTL. In this
+>>>> struct:
+>>>> - The range is specified through start and len.
+>>>> - The output buffer of struct page_region array and size is specified as
+>>>>   vec and vec_len.
+>>>> - The optional maximum requested pages are specified in the max_pages.
+>>>> - The flags can be specified in the flags field. The PAGEMAP_WP_ENGAGE
+>>>>   is the only added flag at this time.
+>>>> - The masks are specified in required_mask, anyof_mask, excluded_ mask
+>>>>   and return_mask.
+>>>>
+>>>> This IOCTL can be extended to get information about more PTE bits. This
+>>>> IOCTL doesn't support hugetlbs at the moment. No information about
+>>>> hugetlb can be obtained. This patch has evolved from a basic patch from
+>>>> Gabriel Krisman Bertazi.
+>>>>
+>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>> ---
+>>>> Changes in v10:
+>>>> - move changes in tools/include/uapi/linux/fs.h to separate patch
+>>>> - update commit message
+>>>>
+>>>> Change in v8:
+>>>> - Correct is_pte_uffd_wp()
+>>>> - Improve readability and error checks
+>>>> - Remove some un-needed code
+>>>>
+>>>> Changes in v7:
+>>>> - Rebase on top of latest next
+>>>> - Fix some corner cases
+>>>> - Base soft-dirty on the uffd wp async
+>>>> - Update the terminologies
+>>>> - Optimize the memory usage inside the ioctl
+>>>>
+>>>> Changes in v6:
+>>>> - Rename variables and update comments
+>>>> - Make IOCTL independent of soft_dirty config
+>>>> - Change masks and bitmap type to _u64
+>>>> - Improve code quality
+>>>>
+>>>> Changes in v5:
+>>>> - Remove tlb flushing even for clear operation
+>>>>
+>>>> Changes in v4:
+>>>> - Update the interface and implementation
+>>>>
+>>>> Changes in v3:
+>>>> - Tighten the user-kernel interface by using explicit types and add more
+>>>>   error checking
+>>>>
+>>>> Changes in v2:
+>>>> - Convert the interface from syscall to ioctl
+>>>> - Remove pidfd support as it doesn't make sense in ioctl
+>>>> ---
+>>>>  fs/proc/task_mmu.c      | 290 ++++++++++++++++++++++++++++++++++++++++
+>>>>  include/uapi/linux/fs.h |  50 +++++++
+>>>>  2 files changed, 340 insertions(+)
+>>>>
+>>>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+>>>> index e35a0398db63..c6bde19d63d9 100644
+>>>> --- a/fs/proc/task_mmu.c
+>>>> +++ b/fs/proc/task_mmu.c
+>>>> @@ -19,6 +19,7 @@
+>>>>  #include <linux/shmem_fs.h>
+>>>>  #include <linux/uaccess.h>
+>>>>  #include <linux/pkeys.h>
+>>>> +#include <linux/minmax.h>
+>>>>  
+>>>>  #include <asm/elf.h>
+>>>>  #include <asm/tlb.h>
+>>>> @@ -1135,6 +1136,22 @@ static inline void clear_soft_dirty(struct vm_area_struct *vma,
+>>>>  }
+>>>>  #endif
+>>>>  
+>>>> +static inline bool is_pte_uffd_wp(pte_t pte)
+>>>> +{
+>>>> +	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
+>>>> +	    (pte_swp_uffd_wp_any(pte)))
+>>>> +		return true;
+>>>> +	return false;
+>>>
+>>> Sorry I should have mentioned this earlier: you can directly return here.
+>> No problem at all. I'm replacing these two helper functions with following
+>> in next version so that !present pages don't show as dirty:
+>>
+>> static inline bool is_pte_written(pte_t pte)
+>> {
+>> 	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
+>> 	    (pte_swp_uffd_wp_any(pte)))
+>> 		return false;
+>> 	return (pte_present(pte) || is_swap_pte(pte));
+>> }
 > 
+> Could you explain why you don't want to return dirty for !present?  A page
+> can be written then swapped out.  Don't you want to know that happened
+> (from dirty tracking POV)?
 > 
-> > -----Original Message-----
-> > From: Shuah Khan [mailto:skhan@linuxfoundation.org]
-> > Sent: 23 December 2022 22:01
-> > To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Cc: Aman Gupta <aman1.gupta@samsung.com>; shradha.t@samsung.com;
-> > pankaj.dubey@samsung.com; kishon@ti.com; lpieralisi@kernel.org;
-> > kw@linux.com; shuah@kernel.org; Bjorn Helgaas <helgaas@kernel.org>;
-> > linux-pci@vger.kernel.org; linux-kselftest@vger.kernel.org; Padmanabhan
-> > Rajanbabu <p.rajanbabu@samsung.com>; Shuah Khan
-> > <skhan@linuxfoundation.org>
-> > Subject: Re: [PATCH] selftests: pci: pci-selftest: add support for PCI endpoint
-> > driver test
-> > 
-> > On 12/23/22 08:02, Manivannan Sadhasivam wrote:
-> > > On Thu, Dec 22, 2022 at 10:49:48AM -0700, Shuah Khan wrote:
-> > >> On 12/22/22 10:45, Manivannan Sadhasivam wrote:
-> > >>> On Thu, Dec 22, 2022 at 09:58:30AM -0700, Shuah Khan wrote:
-> > >>>> On 10/6/22 23:39, Aman Gupta wrote:
-> > >>>>> This patch enables the support to perform selftest on PCIe
-> > >>>>> endpoint driver present in the system. The following tests are
-> > >>>>> currently performed by the selftest utility
-> > >>>>>
-> > >>>>> 1. BAR Tests (BAR0 to BAR5)
-> > >>>>> 2. MSI Interrupt Tests (MSI1 to MSI32) 3. Read Tests (For 1, 1024,
-> > >>>>> 1025, 1024000, 1024001 Bytes) 4. Write Tests (For 1, 1024, 1025,
-> > >>>>> 1024000, 1024001 Bytes) 5. Copy Tests (For 1, 1024, 1025, 1024000,
-> > >>>>> 1024001 Bytes)
-> > >>>>>
-> > >>>>> Signed-off-by: Aman Gupta <aman1.gupta@samsung.com>
-> > >>>>> Signed-off-by: Padmanabhan Rajanbabu
-> > <p.rajanbabu@samsung.com>
-> > >>>>
-> > >>>> Adding Bjorn Helgaas to the thread.
-> > >>>>
-> > >>>> Adding pcit test under selftests is good. There is another pcitest
-> > >>>> under tools/pci. I would like to see if the existing code in
-> > >>>> tools/pci/pcitest.c can be leveraged.
-> > >>>>
-> > >>>> As part of this test work, also look into removing tools/pci so we
-> > >>>> don't have to maintain duplicate code in two places.
-> > >>>>
-> > >>>
-> > >>> It has been agreed in a thread with Greg [1] to {re}move the tests
-> > >>> under tools/pci and utilize the kselftest.
-> > >>>
-> > >>
-> > >> Inline with what I am suggesting. However, I don't see either move or
-> > >> delete of tools/pci in the patch?
-> > >>
-> > >> The first patch could start with git mv of the existing files and
-> > >> then make changes to preserver the history.
-> > >>
-> > >
-> > > Right. This patch was posted independently of the series [1] that I
-> > > submitted to fix the return values of IOCTL calls used in
-> > > drivers/misc/pci_endpoint_test.c driver.
-> > >
-> > > Then in that series, it was decided to move the existing test to
-> > > kselftest. So, I suggested Aman Gupta [2] to integrate my latest
-> > > patches, add the kselftest patch on top, then remove the existing test
-> > under tools/pci.
-> > >
-> > > The kselftest patch can also move the driver first and then make the
-> > > change as you suggested. Either way it is fine by me.
-> > >
-> > 
-> > As I mentioned in my previous email, I prefer to see the move as the first
-> > patch and then changes on top. This preserves the history and cleaner.
-> > 
-> > thanks,
-> > -- Shuah
-> > 
+> The code looks weird to me too..  We only have three types of ptes: (1)
+> present, (2) swap, (3) none.
 > 
-> Hi Shuah,
-> 
-> Thanks for review and suggestion. I understand that we would like to reuse and preserve the history of tools/pci/pcietest.c. So we have two approaches:
-> 
-> 1: Using git mv command move existing code from tools/pci/ to tools/testing/selftest/drivers/pci/ and then update the file to convert to kselftest framework. I thought about this but after movement, when we move it to kselftest format it is going to be huge churn and we will be having modification in almost all lines.
-> 
-> 2: Develop kselftest based driver in tools/testing/selftest/drivers/pci/ and eventually delete existing file from tools/pci/ folder providing justification in commit message.
-> 
-> From my viewpoint, going with the second approach makes more sense because if almost complete file is getting modified, and it will make the review process complex and anyways there is not much code reusability.  
-> Please let me know if you have any other thought process or if I am missing anything to understand your approach.
-> 
+> Then, "(pte_present() || is_swap_pte())" is the same as !pte_none().  Is
+> that what you're really looking for?
+Yes, this is what I've been trying to do. I'll use !pte_none() to make it
+simpler.
 
-As Bjorn and Shuah said, I presume you are working on option 1.
-
-Thanks,
-Mani
-
-> Thanks,
-> Aman Gupta
-> > 
 > 
+>>
+>> static inline bool is_pmd_written(pmd_t pmd)
+>> {
+>> 	if ((pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
+>> 	    (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd)))
+>> 		return false;
+>> 	return (pmd_present(pmd) || is_swap_pmd(pmd));
+>> }
+> 
+> [...]
+> 
+>>>> +	bitmap = cur & p->return_mask;
+>>>> +	if (cpy && bitmap) {
+>>>> +		if ((prev->len) && (prev->bitmap == bitmap) &&
+>>>> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
+>>>> +			prev->len += len;
+>>>> +			p->found_pages += len;
+>>>> +		} else if (p->vec_index < p->vec_len) {
+>>>> +			if (prev->len) {
+>>>> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
+>>>> +				p->vec_index++;
+>>>> +			}
+>>>
+>>> IIUC you can have:
+>>>
+>>>   int pagemap_scan_deposit(p)
+>>>   {
+>>>         if (p->vec_index >= p->vec_len)
+>>>                 return -ENOSPC;
+>>>
+>>>         if (p->prev->len) {
+>>>                 memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
+>>>                 p->vec_index++;
+>>>         }
+>>>
+>>>         return 0;
+>>>   }
+>>>
+>>> Then call it here.  I think it can also be called below to replace
+>>> export_prev_to_out().
+>> No this isn't possible. We fill up prev until the next range doesn't merge
+>> with it. At that point, we put prev into the output buffer and new range is
+>> put into prev. Now that we have shifted to smaller page walks of <= 512
+>> entries. We want to visit all ranges before finally putting the prev to
+>> output. Sorry to have this some what complex method. The problem is that we
+>> want to merge the consective matching regions into one entry in the output.
+>> So to achieve this among multiple different page walks, the prev is being used.
+>>
+>> Lets suppose we want to visit memory from 0x7FFF00000000 to 7FFF00400000
+>> having length of 1024 pages and all of the memory has been written.
+>> walk_page_range() will be called 2 times. In the first call, prev will be
+>> set having length of 512. In second call, prev will be updated to 1024 as
+>> the previous range stored in prev could be extended. After this, the prev
+>> will be stored to the user output buffer consuming only 1 struct of page_range.
+>>
+>> If we store prev back to output memory in every walk_page_range() call, we
+>> wouldn't get 1 struct of page_range with length 1024. Instead we would get
+>> 2 elements of page_range structs with half the length.
+> 
+> I didn't mean to merge PREV for each pgtable walk.  What I meant is I think
+> with such a pagemap_scan_deposit() you can rewrite it as:
+> 
+> if (cpy && bitmap) {
+>         if ((prev->len) && (prev->bitmap == bitmap) &&
+>             (prev->start + prev->len * PAGE_SIZE == addr)) {
+>                 prev->len += len;
+>                 p->found_pages += len;
+>         } else {
+>                 if (pagemap_scan_deposit(p))
+>                         return -ENOSPC;
+>                 prev->start = addr;
+>                 prev->len = len;
+>                 prev->bitmap = bitmap;
+>                 p->found_pages += len;
+>         }
+> }
+> 
+> Then you can reuse pagemap_scan_deposit() when before returning to
+> userspace, just to flush PREV to p->vec properly in a single helper.
+> It also makes the code slightly easier to read.
+Yeah, this would have worked as you have described. But in
+pagemap_scan_output(), we are flushing prev to p->vec. But later in
+export_prev_to_out() we need to flush prev to user_memory directly.
+
+
 > 
 
 -- 
-மணிவண்ணன் சதாசிவம்
+BR,
+Muhammad Usama Anjum
