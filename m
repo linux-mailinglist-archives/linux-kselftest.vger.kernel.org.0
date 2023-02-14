@@ -2,105 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3449A696EC2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Feb 2023 22:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBD8697012
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Feb 2023 22:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbjBNVAC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Feb 2023 16:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S232169AbjBNVvJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Feb 2023 16:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjBNVAB (ORCPT
+        with ESMTP id S232437AbjBNVvH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:00:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF97E28235
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 12:59:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676408352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mfuzKjmoSRpLcXDaEl9+5VeGQAXurXdK+Oya4sttb9I=;
-        b=Qrb0/aBsF46VH66wmzAl9d55Vz2sWtSLDJ9+StuemM0MNkvqIetybIR6kvfe+m09ZfTBpm
-        h6clFC9UHm8drNL6y+8Qwt82WW0frfAbfn2LdPvphMhql/ZbZfMkb34vWcFGNdo4PlnywV
-        Iw/fPd4GyObtD7bYRDhJYoA1cOVJMLU=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-518-Q8kcu0kAPKiEmfhoMswNyA-1; Tue, 14 Feb 2023 15:59:11 -0500
-X-MC-Unique: Q8kcu0kAPKiEmfhoMswNyA-1
-Received: by mail-qk1-f200.google.com with SMTP id q13-20020a37f70d000000b007283b33bfb3so10129727qkj.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 12:59:11 -0800 (PST)
+        Tue, 14 Feb 2023 16:51:07 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EE0305EB
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 13:51:04 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-507aac99fdfso173897507b3.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 13:51:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VrgLkKrYUH3+BU0ozO5nBkWnsOlphXvzXFHB65nAJd8=;
+        b=Qay9NGY+kevbOhpcduj2lxzQEFadpk9SFQFC5/rXdXofLs8NttK/CIfoXhs3/rw/3n
+         Vl49iXVxwZJBdFcIsvmEvl4woJWIh/PEKJeFx1F8R7n36raTS6dU9ChEZ20cFXj2XEl+
+         uFls14nOLrDtGKC9fYuu08xrafCrSunlP0gV22d0ze3+Rd8M+6n0UAbxUdXoX5FGeYT0
+         CsICm7fVCo1u+7WOby0MsJphWSOwBfnVcq78xI3TiXzZjr6sychzLaS77OlPYYxxR7Mb
+         lZc/KrUYjyfoSnOAlJ01fR1vqNTPBjqUc1KjU8GfjkjNWfUzWa7nwI5CwvXerVfqyo+N
+         OyPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676408351;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mfuzKjmoSRpLcXDaEl9+5VeGQAXurXdK+Oya4sttb9I=;
-        b=flw2Oq8s6sEEomSX5cbFKjT6ScIo5li35QSiOkIblfCxiA0RdRT2Fhl85dbq86ywPn
-         BZvnutsNjFx6bz3MMI8OEF3v1YXYRRwBhfcsiyRZppRJ8iRq4LpyS31eWmY//dDwjncm
-         y+HPM311y527inT91BxG+YelCFxzGHKApB24VOkRRnaPEQ/QXvder9bC88zVqer/cknL
-         nZyy6k/Yjn1htfFfpXX6xznehXtynKaLbQ5rDzsi8N9kM15LyjRymSbizYgHMGjl/8wo
-         sG4LJWlzprKDgN5drHvRwzwgjwHpE+oTmukfycNTgOC3vJhud8DegR6oZvqdVfO0kQIa
-         OpMQ==
-X-Gm-Message-State: AO0yUKUnC6tQLMFSmLzmIHoCCz52n0IBitupMwXrgmeYlMLcFoZkNYuA
-        aXWvNyIuQuJM8rSoUZvruDkbfKejBYlGFlIR23GJ+cRCuQsuQ2A3SJQ6IhuQ9PngZc3d/Oeyltw
-        lk+Sdo8xL/jmgISz74ZGfeytzx8fI
-X-Received: by 2002:ac8:7f0d:0:b0:3bb:75c7:9326 with SMTP id f13-20020ac87f0d000000b003bb75c79326mr5479667qtk.0.1676408351139;
-        Tue, 14 Feb 2023 12:59:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set9LNpg+CvDm+Cv9K2lVqtbOVq3Scb602R4WLGjtiPz+w3b2yTIlyRP6NJy1Lyicueb6H5Z+3A==
-X-Received: by 2002:ac8:7f0d:0:b0:3bb:75c7:9326 with SMTP id f13-20020ac87f0d000000b003bb75c79326mr5479635qtk.0.1676408350703;
-        Tue, 14 Feb 2023 12:59:10 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id 192-20020a3707c9000000b007090f7a4f2asm6009677qkh.82.2023.02.14.12.59.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 12:59:09 -0800 (PST)
-Date:   Tue, 14 Feb 2023 15:59:08 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VrgLkKrYUH3+BU0ozO5nBkWnsOlphXvzXFHB65nAJd8=;
+        b=Sdlf4NICyxCXoCQEW/9jcOFGg4xecRgGSQ5O546deR2w+7k7TO24Bdnn1Ue8n5OZpE
+         gF9vUGOoYNvX41qTG67yB+1nX0dCwlvOVIdMirUAC4Zo8vM1Gj3Mm6jmGqvKgT5yaLvs
+         1gE+rTerL4R5MkoQoyt6fGMpuwXWF3hv5OJxQynghmokHUf5SRVF8ABDuc6tse3f6SyX
+         1JmeOGmeCvgNyYDGOarUcOgg2oN01/hI9a8tNgQntyyV7XV/AiqP72R8ymlwrFOV/qIj
+         AarExtAV5ZfWw6i5KqjQEb1Tp+EBzgt16dEqYrcupXJs0fiChELNP08raWVUKmwxdofW
+         xhAQ==
+X-Gm-Message-State: AO0yUKXf1fgL345SoUpRzZZccMbzPlKtya9vNI/r2DtAJFeLq5nvSNMI
+        q7j/5SK1ry7csXqsHMMloSkBv8B2Kh7kcV+Iu+ld
+X-Google-Smtp-Source: AK7set/UuWwz2D+btTN2iVANQS92vAVf1LCQRG6th9IPcVzzaqtIi31Q6ChM3iY+rl8IW8bGj44vP7BuxGgl1GRldWoW
+X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:2483:e0be:d4cf:3b41])
+ (user=axelrasmussen job=sendgmr) by 2002:a05:6902:3c7:b0:8fe:5e0f:9712 with
+ SMTP id g7-20020a05690203c700b008fe5e0f9712mr1ybs.5.1676411463637; Tue, 14
+ Feb 2023 13:51:03 -0800 (PST)
+Date:   Tue, 14 Feb 2023 13:50:46 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+Message-ID: <20230214215046.1187635-1-axelrasmussen@google.com>
+Subject: [PATCH] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to install WP PTEs
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
         Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>, Shuah Khan <shuah@kernel.org>,
+        Peter Xu <peterx@redhat.com>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <Y+v2HJ8+3i/KzDBu@x1n>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com>
- <Y+QfDN4Y5Q10x8GQ@x1n>
- <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com>
- <Y+qur8iIUQTLyE8f@x1n>
- <39217d9a-ed7e-f1ff-59b9-4cbffa464999@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <39217d9a-ed7e-f1ff-59b9-4cbffa464999@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        James Houghton <jthoughton@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,256 +75,343 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 12:57:21PM +0500, Muhammad Usama Anjum wrote:
-> On 2/14/23 2:42 AM, Peter Xu wrote:
-> > On Mon, Feb 13, 2023 at 05:55:19PM +0500, Muhammad Usama Anjum wrote:
-> >> On 2/9/23 3:15 AM, Peter Xu wrote:
-> >>> On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
-> >>>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
-> >>>> the info about page table entries. The following operations are supported
-> >>>> in this ioctl:
-> >>>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
-> >>>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
-> >>>>   (PAGE_IS_SWAPPED).
-> >>>> - Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
-> >>>>   pages have been written-to.
-> >>>> - Find pages which have been written-to and write protect the pages
-> >>>>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
-> >>>>
-> >>>> To get information about which pages have been written-to and/or write
-> >>>> protect the pages, following must be performed first in order:
-> >>>> - The userfaultfd file descriptor is created with userfaultfd syscall.
-> >>>> - The UFFD_FEATURE_WP_ASYNC feature is set by UFFDIO_API IOCTL.
-> >>>> - The memory range is registered with UFFDIO_REGISTER_MODE_WP mode
-> >>>>   through UFFDIO_REGISTER IOCTL.
-> >>>> Then the any part of the registered memory or the whole memory region
-> >>>> can be write protected using the UFFDIO_WRITEPROTECT IOCTL or
-> >>>> PAGEMAP_SCAN IOCTL.
-> >>>>
-> >>>> struct pagemap_scan_args is used as the argument of the IOCTL. In this
-> >>>> struct:
-> >>>> - The range is specified through start and len.
-> >>>> - The output buffer of struct page_region array and size is specified as
-> >>>>   vec and vec_len.
-> >>>> - The optional maximum requested pages are specified in the max_pages.
-> >>>> - The flags can be specified in the flags field. The PAGEMAP_WP_ENGAGE
-> >>>>   is the only added flag at this time.
-> >>>> - The masks are specified in required_mask, anyof_mask, excluded_ mask
-> >>>>   and return_mask.
-> >>>>
-> >>>> This IOCTL can be extended to get information about more PTE bits. This
-> >>>> IOCTL doesn't support hugetlbs at the moment. No information about
-> >>>> hugetlb can be obtained. This patch has evolved from a basic patch from
-> >>>> Gabriel Krisman Bertazi.
-> >>>>
-> >>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> >>>> ---
-> >>>> Changes in v10:
-> >>>> - move changes in tools/include/uapi/linux/fs.h to separate patch
-> >>>> - update commit message
-> >>>>
-> >>>> Change in v8:
-> >>>> - Correct is_pte_uffd_wp()
-> >>>> - Improve readability and error checks
-> >>>> - Remove some un-needed code
-> >>>>
-> >>>> Changes in v7:
-> >>>> - Rebase on top of latest next
-> >>>> - Fix some corner cases
-> >>>> - Base soft-dirty on the uffd wp async
-> >>>> - Update the terminologies
-> >>>> - Optimize the memory usage inside the ioctl
-> >>>>
-> >>>> Changes in v6:
-> >>>> - Rename variables and update comments
-> >>>> - Make IOCTL independent of soft_dirty config
-> >>>> - Change masks and bitmap type to _u64
-> >>>> - Improve code quality
-> >>>>
-> >>>> Changes in v5:
-> >>>> - Remove tlb flushing even for clear operation
-> >>>>
-> >>>> Changes in v4:
-> >>>> - Update the interface and implementation
-> >>>>
-> >>>> Changes in v3:
-> >>>> - Tighten the user-kernel interface by using explicit types and add more
-> >>>>   error checking
-> >>>>
-> >>>> Changes in v2:
-> >>>> - Convert the interface from syscall to ioctl
-> >>>> - Remove pidfd support as it doesn't make sense in ioctl
-> >>>> ---
-> >>>>  fs/proc/task_mmu.c      | 290 ++++++++++++++++++++++++++++++++++++++++
-> >>>>  include/uapi/linux/fs.h |  50 +++++++
-> >>>>  2 files changed, 340 insertions(+)
-> >>>>
-> >>>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> >>>> index e35a0398db63..c6bde19d63d9 100644
-> >>>> --- a/fs/proc/task_mmu.c
-> >>>> +++ b/fs/proc/task_mmu.c
-> >>>> @@ -19,6 +19,7 @@
-> >>>>  #include <linux/shmem_fs.h>
-> >>>>  #include <linux/uaccess.h>
-> >>>>  #include <linux/pkeys.h>
-> >>>> +#include <linux/minmax.h>
-> >>>>  
-> >>>>  #include <asm/elf.h>
-> >>>>  #include <asm/tlb.h>
-> >>>> @@ -1135,6 +1136,22 @@ static inline void clear_soft_dirty(struct vm_area_struct *vma,
-> >>>>  }
-> >>>>  #endif
-> >>>>  
-> >>>> +static inline bool is_pte_uffd_wp(pte_t pte)
-> >>>> +{
-> >>>> +	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
-> >>>> +	    (pte_swp_uffd_wp_any(pte)))
-> >>>> +		return true;
-> >>>> +	return false;
-> >>>
-> >>> Sorry I should have mentioned this earlier: you can directly return here.
-> >> No problem at all. I'm replacing these two helper functions with following
-> >> in next version so that !present pages don't show as dirty:
-> >>
-> >> static inline bool is_pte_written(pte_t pte)
-> >> {
-> >> 	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
-> >> 	    (pte_swp_uffd_wp_any(pte)))
-> >> 		return false;
-> >> 	return (pte_present(pte) || is_swap_pte(pte));
-> >> }
-> > 
-> > Could you explain why you don't want to return dirty for !present?  A page
-> > can be written then swapped out.  Don't you want to know that happened
-> > (from dirty tracking POV)?
-> > 
-> > The code looks weird to me too..  We only have three types of ptes: (1)
-> > present, (2) swap, (3) none.
-> > 
-> > Then, "(pte_present() || is_swap_pte())" is the same as !pte_none().  Is
-> > that what you're really looking for?
-> Yes, this is what I've been trying to do. I'll use !pte_none() to make it
-> simpler.
+UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
+PTE to resolve a missing fault, one can install a write-protected one.
+This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
+combination.
 
-Ah I think I see what you wanted to do now.. But I'm afraid it won't work
-for all cases.
+So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
+but for *minor* faults.
 
-So IIUC the problem is anon pte can be empty, but since uffd-wp bit doesn't
-persist on anon (but none) ptes, then we got it lost and we cannot identify
-it from pages being written.  Your solution will solve problem for
-anonymous, but I think it'll break file memories.
+Rename "wp_copy" arguments to "wp_mode", since the mode now applies
+more widely than just to the copy operation.
 
-Example:
+Update the selftest to do some very basic exercising of the new flag.
 
-Consider one shmem page that got mapped, write protected (using UFFDIO_WP
-ioctl), written again (removing uffd-wp bit automatically), then zapped.
-The pte will be pte_none() but it's actually written, afaiu.
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ fs/userfaultfd.c                         |  6 ++-
+ include/linux/userfaultfd_k.h            |  3 +-
+ include/uapi/linux/userfaultfd.h         |  7 ++++
+ mm/hugetlb.c                             |  6 +--
+ mm/shmem.c                               |  4 +-
+ mm/userfaultfd.c                         | 49 ++++++++++++++----------
+ tools/testing/selftests/vm/userfaultfd.c |  4 ++
+ 7 files changed, 51 insertions(+), 28 deletions(-)
 
-Maybe it's time we should introduce UFFD_FEATURE_WP_ZEROPAGE, so we'll need
-to install pte markers for anonymous too (then it will work similarly like
-shmem/hugetlbfs, that we'll report writting to zero pages), then you'll
-need to have the new UFFD_FEATURE_WP_ASYNC depend on it.  With that I think
-you can keep using the old check and it should start to work.
-
-Please let me know if my understanding is correct above.
-
-I'll see whether I can quickly play with UFFD_FEATURE_WP_ZEROPAGE with some
-patch at the meantime.  That's something we wanted before too, when the app
-cares about zero pages on anon.  We used to populate the pages before doing
-ioctl(UFFDIO_WP) to make sure zero pages will be repoted too, but that flag
-should be more efficient.
-
-> 
-> > 
-> >>
-> >> static inline bool is_pmd_written(pmd_t pmd)
-> >> {
-> >> 	if ((pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
-> >> 	    (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd)))
-> >> 		return false;
-> >> 	return (pmd_present(pmd) || is_swap_pmd(pmd));
-> >> }
-> > 
-> > [...]
-> > 
-> >>>> +	bitmap = cur & p->return_mask;
-> >>>> +	if (cpy && bitmap) {
-> >>>> +		if ((prev->len) && (prev->bitmap == bitmap) &&
-> >>>> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
-> >>>> +			prev->len += len;
-> >>>> +			p->found_pages += len;
-> >>>> +		} else if (p->vec_index < p->vec_len) {
-> >>>> +			if (prev->len) {
-> >>>> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
-> >>>> +				p->vec_index++;
-> >>>> +			}
-> >>>
-> >>> IIUC you can have:
-> >>>
-> >>>   int pagemap_scan_deposit(p)
-> >>>   {
-> >>>         if (p->vec_index >= p->vec_len)
-> >>>                 return -ENOSPC;
-> >>>
-> >>>         if (p->prev->len) {
-> >>>                 memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
-> >>>                 p->vec_index++;
-> >>>         }
-> >>>
-> >>>         return 0;
-> >>>   }
-> >>>
-> >>> Then call it here.  I think it can also be called below to replace
-> >>> export_prev_to_out().
-> >> No this isn't possible. We fill up prev until the next range doesn't merge
-> >> with it. At that point, we put prev into the output buffer and new range is
-> >> put into prev. Now that we have shifted to smaller page walks of <= 512
-> >> entries. We want to visit all ranges before finally putting the prev to
-> >> output. Sorry to have this some what complex method. The problem is that we
-> >> want to merge the consective matching regions into one entry in the output.
-> >> So to achieve this among multiple different page walks, the prev is being used.
-> >>
-> >> Lets suppose we want to visit memory from 0x7FFF00000000 to 7FFF00400000
-> >> having length of 1024 pages and all of the memory has been written.
-> >> walk_page_range() will be called 2 times. In the first call, prev will be
-> >> set having length of 512. In second call, prev will be updated to 1024 as
-> >> the previous range stored in prev could be extended. After this, the prev
-> >> will be stored to the user output buffer consuming only 1 struct of page_range.
-> >>
-> >> If we store prev back to output memory in every walk_page_range() call, we
-> >> wouldn't get 1 struct of page_range with length 1024. Instead we would get
-> >> 2 elements of page_range structs with half the length.
-> > 
-> > I didn't mean to merge PREV for each pgtable walk.  What I meant is I think
-> > with such a pagemap_scan_deposit() you can rewrite it as:
-> > 
-> > if (cpy && bitmap) {
-> >         if ((prev->len) && (prev->bitmap == bitmap) &&
-> >             (prev->start + prev->len * PAGE_SIZE == addr)) {
-> >                 prev->len += len;
-> >                 p->found_pages += len;
-> >         } else {
-> >                 if (pagemap_scan_deposit(p))
-> >                         return -ENOSPC;
-> >                 prev->start = addr;
-> >                 prev->len = len;
-> >                 prev->bitmap = bitmap;
-> >                 p->found_pages += len;
-> >         }
-> > }
-> > 
-> > Then you can reuse pagemap_scan_deposit() when before returning to
-> > userspace, just to flush PREV to p->vec properly in a single helper.
-> > It also makes the code slightly easier to read.
-> Yeah, this would have worked as you have described. But in
-> pagemap_scan_output(), we are flushing prev to p->vec. But later in
-> export_prev_to_out() we need to flush prev to user_memory directly.
-
-I think there's a loop to copy_to_user().  Could you use the new helper so
-the copy_to_user() loop will work without export_prev_to_out()?
-
-I really hope we can get rid of export_prev_to_out().  Thanks,
-
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index cc694846617a..545dc033eec8 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -1910,13 +1910,15 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
+ 	    uffdio_continue.range.start) {
+ 		goto out;
+ 	}
+-	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
++	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
++				     UFFDIO_CONTINUE_MODE_WP))
+ 		goto out;
+ 
+ 	if (mmget_not_zero(ctx->mm)) {
+ 		ret = mcopy_continue(ctx->mm, uffdio_continue.range.start,
+ 				     uffdio_continue.range.len,
+-				     &ctx->mmap_changing);
++				     &ctx->mmap_changing,
++				     uffdio_continue.mode);
+ 		mmput(ctx->mm);
+ 	} else {
+ 		return -ESRCH;
+diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+index 9df0b9a762cc..a53aa56e78ad 100644
+--- a/include/linux/userfaultfd_k.h
++++ b/include/linux/userfaultfd_k.h
+@@ -69,7 +69,8 @@ extern ssize_t mfill_zeropage(struct mm_struct *dst_mm,
+ 			      unsigned long len,
+ 			      atomic_t *mmap_changing);
+ extern ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long dst_start,
+-			      unsigned long len, atomic_t *mmap_changing);
++			      unsigned long len, atomic_t *mmap_changing,
++			      __u64 mode);
+ extern int mwriteprotect_range(struct mm_struct *dst_mm,
+ 			       unsigned long start, unsigned long len,
+ 			       bool enable_wp, atomic_t *mmap_changing);
+diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+index 005e5e306266..14059a0861bf 100644
+--- a/include/uapi/linux/userfaultfd.h
++++ b/include/uapi/linux/userfaultfd.h
+@@ -297,6 +297,13 @@ struct uffdio_writeprotect {
+ struct uffdio_continue {
+ 	struct uffdio_range range;
+ #define UFFDIO_CONTINUE_MODE_DONTWAKE		((__u64)1<<0)
++	/*
++	 * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
++	 * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
++	 * write protected ioctl is implemented for the range
++	 * according to the uffdio_register.ioctls.
++	 */
++#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
+ 	__u64 mode;
+ 
+ 	/*
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index bdbfeb6fb393..a1bd0b0c6c43 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6169,7 +6169,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 			    unsigned long src_addr,
+ 			    enum mcopy_atomic_mode mode,
+ 			    struct page **pagep,
+-			    bool wp_copy)
++			    bool wp_mode)
+ {
+ 	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
+ 	struct hstate *h = hstate_vma(dst_vma);
+@@ -6306,7 +6306,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	 * For either: (1) CONTINUE on a non-shared VMA, or (2) UFFDIO_COPY
+ 	 * with wp flag set, don't set pte write bit.
+ 	 */
+-	if (wp_copy || (is_continue && !vm_shared))
++	if (wp_mode || (is_continue && !vm_shared))
+ 		writable = 0;
+ 	else
+ 		writable = dst_vma->vm_flags & VM_WRITE;
+@@ -6321,7 +6321,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	_dst_pte = huge_pte_mkdirty(_dst_pte);
+ 	_dst_pte = pte_mkyoung(_dst_pte);
+ 
+-	if (wp_copy)
++	if (wp_mode)
+ 		_dst_pte = huge_pte_mkuffd_wp(_dst_pte);
+ 
+ 	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 0005ab2c29af..725e5d5d85ab 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -2402,7 +2402,7 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+ 			   struct vm_area_struct *dst_vma,
+ 			   unsigned long dst_addr,
+ 			   unsigned long src_addr,
+-			   bool zeropage, bool wp_copy,
++			   bool zeropage, bool wp_mode,
+ 			   struct page **pagep)
+ {
+ 	struct inode *inode = file_inode(dst_vma->vm_file);
+@@ -2493,7 +2493,7 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+ 		goto out_release;
+ 
+ 	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-				       &folio->page, true, wp_copy);
++				       &folio->page, true, wp_mode);
+ 	if (ret)
+ 		goto out_delete_from_cache;
+ 
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 0499907b6f1a..2ad4dcf72968 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -58,7 +58,7 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
+ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 			     struct vm_area_struct *dst_vma,
+ 			     unsigned long dst_addr, struct page *page,
+-			     bool newly_allocated, bool wp_copy)
++			     bool newly_allocated, bool wp_mode)
+ {
+ 	int ret;
+ 	pte_t _dst_pte, *dst_pte;
+@@ -79,7 +79,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 	 * Always mark a PTE as write-protected when needed, regardless of
+ 	 * VM_WRITE, which the user might change.
+ 	 */
+-	if (wp_copy) {
++	if (wp_mode) {
+ 		_dst_pte = pte_mkuffd_wp(_dst_pte);
+ 		writable = false;
+ 	}
+@@ -147,7 +147,7 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 			    unsigned long dst_addr,
+ 			    unsigned long src_addr,
+ 			    struct page **pagep,
+-			    bool wp_copy)
++			    bool wp_mode)
+ {
+ 	void *page_kaddr;
+ 	int ret;
+@@ -208,7 +208,7 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 		goto out_release;
+ 
+ 	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-				       page, true, wp_copy);
++				       page, true, wp_mode);
+ 	if (ret)
+ 		goto out_release;
+ out:
+@@ -258,7 +258,7 @@ static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
+ 				pmd_t *dst_pmd,
+ 				struct vm_area_struct *dst_vma,
+ 				unsigned long dst_addr,
+-				bool wp_copy)
++				bool wp_mode)
+ {
+ 	struct inode *inode = file_inode(dst_vma->vm_file);
+ 	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
+@@ -284,7 +284,7 @@ static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
+ 	}
+ 
+ 	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-				       page, false, wp_copy);
++				       page, false, wp_mode);
+ 	if (ret)
+ 		goto out_release;
+ 
+@@ -330,7 +330,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 					      unsigned long src_start,
+ 					      unsigned long len,
+ 					      enum mcopy_atomic_mode mode,
+-					      bool wp_copy)
++					      bool wp_mode)
+ {
+ 	int vm_shared = dst_vma->vm_flags & VM_SHARED;
+ 	ssize_t err;
+@@ -427,7 +427,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 
+ 		err = hugetlb_mcopy_atomic_pte(dst_mm, dst_pte, dst_vma,
+ 					       dst_addr, src_addr, mode, &page,
+-					       wp_copy);
++					       wp_mode);
+ 
+ 		hugetlb_vma_unlock_read(dst_vma);
+ 		mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+@@ -483,7 +483,7 @@ extern ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 				      unsigned long src_start,
+ 				      unsigned long len,
+ 				      enum mcopy_atomic_mode mode,
+-				      bool wp_copy);
++				      bool wp_mode);
+ #endif /* CONFIG_HUGETLB_PAGE */
+ 
+ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+@@ -493,13 +493,13 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+ 						unsigned long src_addr,
+ 						struct page **page,
+ 						enum mcopy_atomic_mode mode,
+-						bool wp_copy)
++						bool wp_mode)
+ {
+ 	ssize_t err;
+ 
+ 	if (mode == MCOPY_ATOMIC_CONTINUE) {
+ 		return mcontinue_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-					    wp_copy);
++					    wp_mode);
+ 	}
+ 
+ 	/*
+@@ -516,7 +516,7 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+ 		if (mode == MCOPY_ATOMIC_NORMAL)
+ 			err = mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma,
+ 					       dst_addr, src_addr, page,
+-					       wp_copy);
++					       wp_mode);
+ 		else
+ 			err = mfill_zeropage_pte(dst_mm, dst_pmd,
+ 						 dst_vma, dst_addr);
+@@ -524,12 +524,21 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+ 		err = shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
+ 					     dst_addr, src_addr,
+ 					     mode != MCOPY_ATOMIC_NORMAL,
+-					     wp_copy, page);
++					     wp_mode, page);
+ 	}
+ 
+ 	return err;
+ }
+ 
++static inline bool wp_mode_enabled(enum mcopy_atomic_mode mcopy_mode, __u64 mode)
++{
++	switch (mode) {
++	case MCOPY_ATOMIC_NORMAL: return mode & UFFDIO_COPY_MODE_WP;
++	case MCOPY_ATOMIC_CONTINUE: return mode & UFFDIO_CONTINUE_MODE_WP;
++	default: return false;
++	}
++}
++
+ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 					      unsigned long dst_start,
+ 					      unsigned long src_start,
+@@ -544,7 +553,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 	unsigned long src_addr, dst_addr;
+ 	long copied;
+ 	struct page *page;
+-	bool wp_copy;
++	bool wp_mode;
+ 
+ 	/*
+ 	 * Sanitize the command parameters:
+@@ -594,8 +603,8 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 	 * validate 'mode' now that we know the dst_vma: don't allow
+ 	 * a wrprotect copy if the userfaultfd didn't register as WP.
+ 	 */
+-	wp_copy = mode & UFFDIO_COPY_MODE_WP;
+-	if (wp_copy && !(dst_vma->vm_flags & VM_UFFD_WP))
++	wp_mode = wp_mode_enabled(mcopy_mode, mode);
++	if (wp_mode && !(dst_vma->vm_flags & VM_UFFD_WP))
+ 		goto out_unlock;
+ 
+ 	/*
+@@ -604,7 +613,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 	if (is_vm_hugetlb_page(dst_vma))
+ 		return  __mcopy_atomic_hugetlb(dst_mm, dst_vma, dst_start,
+ 					       src_start, len, mcopy_mode,
+-					       wp_copy);
++					       wp_mode);
+ 
+ 	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
+ 		goto out_unlock;
+@@ -656,7 +665,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 		BUG_ON(pmd_trans_huge(*dst_pmd));
+ 
+ 		err = mfill_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-				       src_addr, &page, mcopy_mode, wp_copy);
++				       src_addr, &page, mcopy_mode, wp_mode);
+ 		cond_resched();
+ 
+ 		if (unlikely(err == -ENOENT)) {
+@@ -718,10 +727,10 @@ ssize_t mfill_zeropage(struct mm_struct *dst_mm, unsigned long start,
+ }
+ 
+ ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long start,
+-		       unsigned long len, atomic_t *mmap_changing)
++		       unsigned long len, atomic_t *mmap_changing, __u64 mode)
+ {
+ 	return __mcopy_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_CONTINUE,
+-			      mmap_changing, 0);
++			      mmap_changing, mode);
+ }
+ 
+ void uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *dst_vma,
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 7f22844ed704..41c1f9abc481 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -585,6 +585,8 @@ static void continue_range(int ufd, __u64 start, __u64 len)
+ 	req.range.start = start;
+ 	req.range.len = len;
+ 	req.mode = 0;
++	if (test_uffdio_wp)
++		req.mode |= UFFDIO_CONTINUE_MODE_WP;
+ 
+ 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
+ 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
+@@ -1332,6 +1334,8 @@ static int userfaultfd_minor_test(void)
+ 	uffdio_register.range.start = (unsigned long)area_dst_alias;
+ 	uffdio_register.range.len = nr_pages * page_size;
+ 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
++	if (test_uffdio_wp)
++		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
+ 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
+ 		err("register failure");
+ 
 -- 
-Peter Xu
+2.39.1.581.gbfd45094c4-goog
 
