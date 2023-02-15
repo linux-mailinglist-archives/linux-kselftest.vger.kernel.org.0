@@ -2,85 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A929769824E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 18:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CBD698353
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 19:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjBORjM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Feb 2023 12:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S229505AbjBOSbU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Feb 2023 13:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjBORjM (ORCPT
+        with ESMTP id S229836AbjBOSbT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Feb 2023 12:39:12 -0500
-Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967A539B8F
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Feb 2023 09:39:11 -0800 (PST)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-JGpUwvYAMS617XiSpLG6dQ-1; Wed, 15 Feb 2023 12:38:51 -0500
-X-MC-Unique: JGpUwvYAMS617XiSpLG6dQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 397183C0D873;
-        Wed, 15 Feb 2023 17:38:50 +0000 (UTC)
-Received: from hog (ovpn-195-113.brq.redhat.com [10.40.195.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4A9622026D4B;
-        Wed, 15 Feb 2023 17:38:48 +0000 (UTC)
-Date:   Wed, 15 Feb 2023 18:37:00 +0100
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
-        Frantisek Krenzelok <fkrenzel@redhat.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Apoorv Kothari <apoorvko@amazon.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: Re: [PATCH net-next v2 2/5] tls: block decryption when a rekey is
- pending
-Message-ID: <Y+0YPEXNsvjUqBij@hog>
-References: <cover.1676052788.git.sd@queasysnail.net>
- <4a9a82a0eaa47319e0e7a7fe525bd37f25b61cb5.1676052788.git.sd@queasysnail.net>
- <20230214210925.23c005b1@kernel.org>
+        Wed, 15 Feb 2023 13:31:19 -0500
+X-Greylist: delayed 564 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Feb 2023 10:31:18 PST
+Received: from out-21.mta1.migadu.com (out-21.mta1.migadu.com [95.215.58.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5AF30E85
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Feb 2023 10:31:18 -0800 (PST)
+Message-ID: <c810373e-9fa5-9b2f-9425-af557c6dcbae@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1676485310;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P3EnbBpqpBBiBVNpqBNvmk9cmi5eIaCDPOxnBf2SQYo=;
+        b=V4bleHn3JDXgPGWdY7gd20mrrWGCwE6u/lAb/X5OH5sSdGE7+/j/jyF8PdwJpgGJk0975F
+        S170MERyKDdkhtOvybSt7M/43vJvodkyFJix0S50LhP42LCmQUU9o4vhMGKFoAoGK5V38g
+        vKPWc32vZlgxMjmDDfGBJXwjnXflDGI=
+Date:   Wed, 15 Feb 2023 10:21:44 -0800
 MIME-Version: 1.0
-In-Reply-To: <20230214210925.23c005b1@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: queasysnail.net
-Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] fixed typos on selftests/bpf
+Content-Language: en-US
+To:     Taichi Nishimura <awkrail01@gmail.com>
+Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, deso@posteo.net, haoluo@google.com,
+        hawk@kernel.org, joannelkoong@gmail.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        llvm@lists.linux.dev, mykolal@fb.com, nathan@kernel.org,
+        ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com,
+        shuah@kernel.org, song@kernel.org, trix@redhat.com, yhs@fb.com,
+        ytcoode@gmail.com, rdunlap@infradead.org
+References: <f8f3e8df-f707-28f3-ab0f-eec21686c940@infradead.org>
+ <20230215032122.417515-1-awkrail01@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20230215032122.417515-1-awkrail01@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2023-02-14, 21:09:25 -0800, Jakub Kicinski wrote:
-> On Tue, 14 Feb 2023 12:17:39 +0100 Sabrina Dubroca wrote:
-> > @@ -2141,6 +2178,12 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
-> >  	if (err < 0)
-> >  		return err;
-> >  
-> > +	/* a rekey is pending, let userspace deal with it */
-> > +	if (unlikely(ctx->key_update_pending)) {
-> > +		err = -EKEYEXPIRED;
-> > +		goto splice_read_end;
-> > +	}
+On 2/14/23 7:21 PM, Taichi Nishimura wrote:
+> Hi Randy,
 > 
-> This will prevent splicing peek()'ed data.
-> Just put the check in tls_rx_rec_wait().
+> Thank you for your reviewing.
+> I fixed costant and it's to constant and its, respectively.
+> 
+> Best regards,
+> Taichi Nishimura
+> 
+> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+> ---
+>   tools/testing/selftests/bpf/progs/test_cls_redirect.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> index a8ba39848bbf..66b304982245 100644
+> --- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> +++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> @@ -610,8 +610,8 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+>    *
+>    *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
+>    *
+> - * clang will substitute a costant for sizeof, which allows the verifier
+> - * to track it's value. Based on this, it can figure out the constant
+> + * clang will substitute a constant for sizeof, which allows the verifier
+> + * to track its value. Based on this, it can figure out the constant
 
-Ok, I'll do that and add a selftest for this sequence of syscalls.
-
--- 
-Sabrina
+This does not apply. Ensure the diff is generated by git, and against the 
+bpf-next tree. Please include everything in v1 also, resubmit and tag for 
+bpf-next in the subject.
 
