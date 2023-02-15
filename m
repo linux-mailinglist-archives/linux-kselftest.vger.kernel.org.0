@@ -2,101 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD276974E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 04:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F276975AF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 06:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjBOD0C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Feb 2023 22:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S229493AbjBOFIP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Feb 2023 00:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBOD0B (ORCPT
+        with ESMTP id S231966AbjBOFIO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Feb 2023 22:26:01 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE216192;
-        Tue, 14 Feb 2023 19:25:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=25j3Cvtb3jyrlYLarvQrJDhy0gbj6s2LEEygL5odKS0=; b=RiwKIz4S5XpRyhYA3uSNdol4ed
-        zlnyv4sG0dgDhSJSR4+aPGbR1wac3nx+20O/vaLfTiIi2np8Nk2eGq8TJf90fJt9mZ09+pcv+9Xu6
-        VrYnTbperpk7xYWw6W80mgDkZm3VUGrUk/tA6qtraS3J9MnxD52KBxIToMlhtD4vgHRSLanKHxLlq
-        y5zoaYzhkwEqc6WwyUyZcJm8xxgIIEAcXowoYkJhTJWGlVXPOvJOSrSe/fk4+gTAyptH7mOQHRVmY
-        aF7nAjL9Qi6KmMY4gI0Inyk2ra+RIVUuiFN/oqsI58HbDRKC5yr+T9xSVZ5k6XscnqrAXs8dRwwBH
-        vByOZhlQ==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pS8QT-004Vwc-BZ; Wed, 15 Feb 2023 03:25:45 +0000
-Message-ID: <ca611ede-3797-b7b1-6261-80c7e8adde3f@infradead.org>
-Date:   Tue, 14 Feb 2023 19:25:44 -0800
+        Wed, 15 Feb 2023 00:08:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8A91F925;
+        Tue, 14 Feb 2023 21:08:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A13B619E9;
+        Wed, 15 Feb 2023 05:08:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69DDFC433D2;
+        Wed, 15 Feb 2023 05:08:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676437693;
+        bh=txQFU+mkGFEDL/QxegrZDVvPijAlVVXT0neyiOBDIEQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pVL/4E/HYpsDCAnkcuYEO4UyDWxgMDlTMaLnfZ2m7+F8yegDt6s6E+tQyu3KC9vNq
+         r09iFVa0cMVkTXhRrQUzpcVmiOriXOYqPr3FXMIFW96BasAMlfzsLJDjHXUi8uoWOS
+         AwT1X2Cbjv8sLMVn06Lx943lInRHRG136Ix+mXdZ95/5TEGvg0lxFYzoHKLycX6XGq
+         39xlRVyr74OjAXtpEYZISo9Jxu4nek2L4OYB/LT99Ccykmvrt5dPq3OsVA634Sx3j0
+         xlbtmscj7D1bEHh2mFOZBowrk5dadgA16O7bUATKtj5z36u4aYinHn6jZj6dYhr6pw
+         3jOaSdCA4suiA==
+Date:   Tue, 14 Feb 2023 21:08:11 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sabrina Dubroca <sd@queasysnail.net>
+Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
+        Frantisek Krenzelok <fkrenzel@redhat.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Apoorv Kothari <apoorvko@amazon.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: Re: [PATCH net-next v2 0/5] tls: implement key updates for TLS1.3
+Message-ID: <20230214210811.448b5ec4@kernel.org>
+In-Reply-To: <cover.1676052788.git.sd@queasysnail.net>
+References: <cover.1676052788.git.sd@queasysnail.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] fixed typos on selftests/bpf
-Content-Language: en-US
-To:     Taichi Nishimura <awkrail01@gmail.com>
-Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, deso@posteo.net, haoluo@google.com,
-        hawk@kernel.org, joannelkoong@gmail.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, martin.lau@linux.dev, mykolal@fb.com,
-        nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
-        sdf@google.com, shuah@kernel.org, song@kernel.org, trix@redhat.com,
-        yhs@fb.com, ytcoode@gmail.com
-References: <f8f3e8df-f707-28f3-ab0f-eec21686c940@infradead.org>
- <20230215032122.417515-1-awkrail01@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230215032122.417515-1-awkrail01@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 2/14/23 19:21, Taichi Nishimura wrote:
-> Hi Randy,
+On Tue, 14 Feb 2023 12:17:37 +0100 Sabrina Dubroca wrote:
+> Changes in v2
+> use reverse xmas tree ordering in tls_set_sw_offload and
+> do_tls_setsockopt_conf
+> turn the alt_crypto_info into an else if
+> selftests: add rekey_fail test
 > 
-> Thank you for your reviewing.
-> I fixed costant and it's to constant and its, respectively.
+> Vadim suggested simplifying tls_set_sw_offload by copying the new
+> crypto_info in the context in do_tls_setsockopt_conf, and then
+> detecting the rekey in tls_set_sw_offload based on whether the iv was
+> already set, but I don't think we can have a common error path
+> (otherwise we'd free the aead etc on rekey failure). I decided instead
+> to reorganize tls_set_sw_offload so that the context is unmodified
+> until we know the rekey cannot fail. Some fields will be touched
+> during the rekey, but they will be set to the same value they had
+> before the rekey (prot->rec_seq_size, etc).
 > 
-> Best regards,
-> Taichi Nishimura
+> Apoorv suggested to name the struct tls_crypto_info_keys "tls13"
+> rather than "tls12". Since we're using the same crypto_info data for
+> TLS1.3 as for 1.2, even if the tests only run for TLS1.3, I'd rather
+> keep the "tls12" name, in case we end up adding a
+> "tls13_crypto_info_aes_gcm_128" type in the future.
 > 
-> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+> Kuniyuki and Apoorv also suggested preventing rekeys on RX when we
+> haven't received a matching KeyUpdate message, but I'd rather let
+> userspace handle this and have a symmetric API between TX and RX on
+> the kernel side. It's a bit of a foot-gun, but we can't really stop a
+> broken userspace from rolling back the rec_seq on an existing
+> crypto_info either, and that seems like a worse possible breakage.
 
-Looks good. Thanks.
+And how will we handle re-keying in offload?
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+>  include/net/tls.h                 |   4 +
+>  net/tls/tls.h                     |   3 +-
+>  net/tls/tls_device.c              |   2 +-
+>  net/tls/tls_main.c                |  37 +++-
+>  net/tls/tls_sw.c                  | 189 +++++++++++++----
+>  tools/testing/selftests/net/tls.c | 336 +++++++++++++++++++++++++++++-
 
-
-> ---
->  tools/testing/selftests/bpf/progs/test_cls_redirect.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-> index a8ba39848bbf..66b304982245 100644
-> --- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-> +++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-> @@ -610,8 +610,8 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
->   *
->   *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
->   *
-> - * clang will substitute a costant for sizeof, which allows the verifier
-> - * to track it's value. Based on this, it can figure out the constant
-> + * clang will substitute a constant for sizeof, which allows the verifier
-> + * to track its value. Based on this, it can figure out the constant
->   * return value, and calling code works while still being "generic" to
->   * IPv4 and IPv6.
->   */
-
--- 
-~Randy
+Documentation please.
