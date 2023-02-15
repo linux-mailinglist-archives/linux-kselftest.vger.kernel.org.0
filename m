@@ -2,52 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E2E6983BD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 19:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5768369842F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 20:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBOSqI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Feb 2023 13:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        id S229761AbjBOTK2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Feb 2023 14:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjBOSqH (ORCPT
+        with ESMTP id S229808AbjBOTK0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Feb 2023 13:46:07 -0500
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AFE3CE39;
-        Wed, 15 Feb 2023 10:45:29 -0800 (PST)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1pSMlf-000305-3p; Wed, 15 Feb 2023 19:44:35 +0100
-Message-ID: <f3c1ea27-ba90-171b-a336-8da86ec98900@maciej.szmigiero.name>
-Date:   Wed, 15 Feb 2023 19:44:28 +0100
+        Wed, 15 Feb 2023 14:10:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE022A6F7;
+        Wed, 15 Feb 2023 11:10:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB17761D2D;
+        Wed, 15 Feb 2023 19:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94D95C433EF;
+        Wed, 15 Feb 2023 19:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676488222;
+        bh=aRpikr0zsyyqLLytek0o654D7o3kNoTfCOtRIn/lAIY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AU6Kqdu0qJNMmg5XdZnTRngJGdkSGECgLNlTocJLz37k9CmvHiuT4RZJeEdSyFdVi
+         qNKlEBLVo7sHRExul5yrmEBVeSvK1j2TdPvm24Z+PyCoE/4ZaSEYEpQMq1nl7Fj+JC
+         bGTlwyfynUGn1XoI+cuvw27kXcGbVrQ2chHrrEtKGKcv0AoU06Z67J+SgZjZJwzBio
+         ygsDRBKgLcIgUKgVgySJpaWoNzHs9q+joP2QwQ0CAW6UV83M2WSoY94kXOjKI1BChi
+         znBl3+4qjIawnCiWTuVay1jgFhBta+Z2I942GWbYBu/Dp4b3vBj2+qtA1wUfuBrNxl
+         yPRT2XSWl0v5w==
+Date:   Wed, 15 Feb 2023 11:10:20 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sabrina Dubroca <sd@queasysnail.net>
+Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
+        Frantisek Krenzelok <fkrenzel@redhat.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Apoorv Kothari <apoorvko@amazon.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: Re: [PATCH net-next v2 0/5] tls: implement key updates for TLS1.3
+Message-ID: <20230215111020.0c843384@kernel.org>
+In-Reply-To: <Y+0Wjrc9shLkH+Gg@hog>
+References: <cover.1676052788.git.sd@queasysnail.net>
+        <20230214210811.448b5ec4@kernel.org>
+        <Y+0Wjrc9shLkH+Gg@hog>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     erdemaktas@google.com, linux-kselftest@vger.kernel.org,
-        pbonzini@redhat.com, isaku.yamahata@intel.com, sagis@google.com,
-        afranji@google.com, runanwang@google.com, shuah@kernel.org,
-        drjones@redhat.com, maz@kernel.org, bgardon@google.com,
-        jmattson@google.com, dmatlack@google.com, peterx@redhat.com,
-        oupton@google.com, ricarkol@google.com, yang.zhong@intel.com,
-        wei.w.wang@intel.com, xiaoyao.li@intel.com, pgonda@google.com,
-        marcorr@google.com, eesposit@redhat.com, borntraeger@de.ibm.com,
-        eric.auger@redhat.com, wangyanan55@huawei.com,
-        aaronlewis@google.com, vkuznets@redhat.com, pshier@google.com,
-        axelrasmussen@google.com, zhenzhong.duan@intel.com,
-        like.xu@linux.intel.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>
-References: <diqzlekzkazq.fsf@ackerleytng-cloudtop.c.googlers.com>
-Content-Language: en-US, pl-PL
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [RFC PATCH v3 08/31] KVM: selftests: Require GCC to realign
- stacks on function entry
-In-Reply-To: <diqzlekzkazq.fsf@ackerleytng-cloudtop.c.googlers.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,77 +62,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 15.02.2023 01:50, Ackerley Tng wrote:
+On Wed, 15 Feb 2023 18:29:50 +0100 Sabrina Dubroca wrote:
+> > And how will we handle re-keying in offload?  
 > 
->> On Mon, Jan 23, 2023, Erdem Aktas wrote:
->> > On Mon, Jan 23, 2023 at 10:53 AM Sean Christopherson <seanjc@google.com> wrote:
->> > >
->> > > On Mon, Jan 23, 2023, Maciej S. Szmigiero wrote:
->> > > > On 23.01.2023 19:30, Erdem Aktas wrote:
->> > > > > On Fri, Jan 20, 2023 at 4:28 PM Sean Christopherson <seanjc@google.com> wrote:
->> > > > > >
->> > > > > > On Sat, Jan 21, 2023, Ackerley Tng wrote:
->> > > > > > > Some SSE instructions assume a 16-byte aligned stack, and GCC compiles
->> > > > > > > assuming the stack is aligned:
->> > > > > > > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40838. This combination
->> > > > > > > results in a #GP in guests.
->> > > > > > >
->> > > > > > > Adding this compiler flag will generate an alternate prologue and
->> > > > > > > epilogue to realign the runtime stack, which makes selftest code
->> > > > > > > slower and bigger, but this is okay since we do not need selftest code
->> > > > > > > to be extremely performant.
->> > > > > >
->> > > > > > Huh, I had completely forgotten that this is why SSE is problematic.  I ran into
->> > > > > > this with the base UPM selftests and just disabled SSE.  /facepalm.
->> > > > > >
->> > > > > > We should figure out exactly what is causing a misaligned stack.  As you've noted,
->> > > > > > the x86-64 ABI requires a 16-byte aligned RSP.  Unless I'm misreading vm_arch_vcpu_add(),
->> > > > > > the starting stack should be page aligned, which means something is causing the
->> > > > > > stack to become unaligned at runtime.  I'd rather hunt down that something than
->> > > > > > paper over it by having the compiler force realignment.
->> > > > >
->> > > > > Is not it due to the 32bit execution part of the guest code at boot
->> > > > > time. Any push/pop of 32bit registers might make it a 16-byte
->> > > > > unaligned stack.
->> > > >
->> > > > 32-bit stack needs to be 16-byte aligned, too (at function call boundaries) -
->> > > > see [1] chapter 2.2.2 "The Stack Frame"
->> > >
->> > > And this showing up in the non-TDX selftests rules that out as the sole problem;
->> > > the selftests stuff 64-bit mode, i.e. don't have 32-bit boot code.
->> >
->> > Thanks Maciej and Sean for the clarification. I was suspecting the
->> > hand-coded assembly part that we have for TDX tests but  it being
->> > happening in the non-TDX selftests disproves it.
-> 
->> Not necessarily, it could be both.  Goofs in the handcoded assembly and PEBKAC
->> on my end :-)
-> 
-> I figured it out!
-> 
-> GCC assumes that the stack is 16-byte aligned **before** the call
-> instruction. Since call pushes rip to the stack, GCC will compile code
-> assuming that on entrance to the function, the stack is -8 from a
-> 16-byte aligned address.
-> 
-> Since for TDs we do a ljmp to guest code, providing a function's
-> address, the stack was not modified by a call instruction pushing rip to
-> the stack, so the stack is 16-byte aligned when the guest code starts
-> running, instead of 16-byte aligned -8 that GCC expects.
-> 
-> For VMs, we set rip to a function pointer, and the VM starts running
-> with a 16-byte algined stack too.
-> 
-> To fix this, I propose that in vm_arch_vcpu_add(), we align the
-> allocated stack address and then subtract 8 from that:
-> 
+> Sorry for the stupid question... do you mean that I need to solve that
+> problem before this series can progress, or that the cover letter
+> should summarize the state of the discussion?
 
-Note that if this code is ever used to launch a vCPU with 32-bit entry
-point it will need to subtract 4 bytes instead of 8 bytes.
+I maintain that 1.3 offload is much more important than rekeying.
+Offloads being available for 1.2 may be stalling adoption of 1.3
+(just a guess, I run across this article mentioning 1.2 being used
+in Oracle cloud for instance:
+https://blogs.oracle.com/cloudsecurity/post/how-oci-helps-you-protect-data-with-default-encryption
+could be because MITM requirements, or maybe they have HW which
+can only do 1.2? Dunno).
 
-I think it would be worthwhile to at least place a comment mentioning
-this near the stack aligning expression so nobody misses this fact.
+But I'm willing to compromise, we just need a solid plan of how to
+handle the inevitable. I'm worried that how this will pay out is:
+ - you don't care about offload and add rekey
+ - vendors don't care about rekey and add 1.3
+  ... time passes ...
+ - both you and the vendors have moved on
+ - users run into issues, waste their time debugging and
+   eventually report the problem upstream
+ - it's on me to fix?
 
-Thanks,
-Maciej
-
+:(
