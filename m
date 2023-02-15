@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2262E697CC5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 14:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03EC697CC7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 14:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234096AbjBONHL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Feb 2023 08:07:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S234098AbjBONHN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Feb 2023 08:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234098AbjBONG6 (ORCPT
+        with ESMTP id S234133AbjBONHD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Feb 2023 08:06:58 -0500
+        Wed, 15 Feb 2023 08:07:03 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014C339286;
-        Wed, 15 Feb 2023 05:06:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D2B392A0;
+        Wed, 15 Feb 2023 05:06:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676466404; x=1708002404;
+  t=1676466406; x=1708002406;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FJytfcP4W/Nd+1A+HEFfRfK2SHfSGE7vjyPsbBrbJmY=;
-  b=TRZAIE167DY/ZC9oRyUKjguxo6j6BTcOueb8naUcUYop9qcV98ssqpar
-   opte8qj9wCCOSKfBsNOBbLYzxz4o+bbxP1nRq+zmGwnqYe4C5pkJUwpag
-   uvoYfnSDfhA+ztayGE1HQJN74VPpHdfeAfp7l4wEMIWHNYS44xUyq815U
-   35pgbUMQHwJhnGWN2RmTNXuOe4z7gOZ3PwV+0Fsk+KcBHVqaQd93Z4BvL
-   GFxcRkknCwBLbTzF2vKTR0KBMhT+OHccPqxeT40Pu0+3p69DXuiDMKEOc
-   ftBjKNepqCFz+4NFDSbzA9uVq2/j8U98hCs+BAGZNWWQZEezmkvw6uiPm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="319456307"
+  bh=Rbo6pbyWbXZwebkS7BOf6e5/MHJ+u2ASUXfLqvQcmlA=;
+  b=kEjPQe4iPiSiRMDjdgTjNDOG6OZZqPXGYSc1bl14ISwicuSd+2f8/Ck1
+   KtH8/QNL0p6OqIB4AUayWoIK92kWEHgrTiVoU6qefOwox622hOVbD7V9s
+   eyJ3AEN6BQVc/3mJz6Sw4zTP+4JNjdsrPM+/nZPb0CoFYMzp1tpL9lgOt
+   urVI3av/oY3pqvWQSH20wiDNIl1/St/AywNYba6bTXA6CpDcmIYLBBcHu
+   pz9SL21v+SRH34NgOT8hSCZhy/eha19oohtBfPH6dCL84zkMNcCraICx6
+   EfZxT8BC6M3UMoHs74gHj8tDmUc+MyIOoBEwGrF8t1TrqKeaQf1Bk6s5q
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="319456342"
 X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="319456307"
+   d="scan'208";a="319456342"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 05:06:42 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="812436095"
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 05:06:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="812436105"
 X-IronPort-AV: E=Sophos;i="5.97,299,1669104000"; 
-   d="scan'208";a="812436095"
+   d="scan'208";a="812436105"
 Received: from hshannan-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.49.120])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 05:06:40 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 05:06:43 -0800
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 7/9] selftests/resctrl: Change name from CBM_MASK_PATH to INFO_PATH
-Date:   Wed, 15 Feb 2023 15:06:03 +0200
-Message-Id: <20230215130605.31583-8-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 8/9] selftests/resctrl: Use remount_resctrlfs() consistently with boolean
+Date:   Wed, 15 Feb 2023 15:06:04 +0200
+Message-Id: <20230215130605.31583-9-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230215130605.31583-1-ilpo.jarvinen@linux.intel.com>
 References: <20230215130605.31583-1-ilpo.jarvinen@linux.intel.com>
@@ -63,47 +63,103 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Fenghua Yu <fenghua.yu@intel.com>
+remount_resctrlfs() accepts a boolean value as an argument. Some tests
+pass 0/1 and some tests pass true/false.
 
-CBM_MASK_PATH is actually the path to resctrl/info.
+Make all the callers of remount_resctrlfs() use true/false so that the
+parameter usage is consistent across tests.
 
-Change the macro name to correctly indicate what it represents.
-
-[ ij: Tweaked the changelog. ]
-
+Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl.h   | 2 +-
- tools/testing/selftests/resctrl/resctrlfs.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c | 2 +-
+ tools/testing/selftests/resctrl/cmt_test.c | 7 +++----
+ tools/testing/selftests/resctrl/mba_test.c | 2 +-
+ tools/testing/selftests/resctrl/mbm_test.c | 2 +-
+ tools/testing/selftests/resctrl/resctrl.h  | 2 +-
+ 5 files changed, 7 insertions(+), 8 deletions(-)
 
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 2d3c7c77ab6c..08070d4fa735 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -145,7 +145,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 	struct resctrl_val_param param = {
+ 		.resctrl_val	= CAT_STR,
+ 		.cpu_no		= cpu_no,
+-		.mum_resctrlfs	= 0,
++		.mum_resctrlfs	= false,
+ 		.setup		= cat_setup,
+ 	};
+ 
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index 3b0454e7fc82..47cde5c02b7f 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -82,12 +82,11 @@ void cmt_test_cleanup(void)
+ 
+ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+ {
+-	int ret, mum_resctrlfs;
++	int ret;
+ 
+ 	cache_size = 0;
+-	mum_resctrlfs = 1;
+ 
+-	ret = remount_resctrlfs(mum_resctrlfs);
++	ret = remount_resctrlfs(true);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -118,7 +117,7 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+ 		.ctrlgrp	= "c1",
+ 		.mongrp		= "m1",
+ 		.cpu_no		= cpu_no,
+-		.mum_resctrlfs	= 0,
++		.mum_resctrlfs	= false,
+ 		.filename	= RESULT_FILE_NAME,
+ 		.mask		= ~(long_mask << n) & long_mask,
+ 		.span		= cache_size * n / count_of_bits,
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index 97dc98c0c949..7defb32ad0de 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -154,7 +154,7 @@ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd)
+ 		.ctrlgrp	= "c1",
+ 		.mongrp		= "m1",
+ 		.cpu_no		= cpu_no,
+-		.mum_resctrlfs	= 1,
++		.mum_resctrlfs	= true,
+ 		.filename	= RESULT_FILE_NAME,
+ 		.bw_report	= bw_report,
+ 		.setup		= mba_setup
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 280187628054..c9dfa54af42f 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -122,7 +122,7 @@ int mbm_bw_change(int span, int cpu_no, char *bw_report, char **benchmark_cmd)
+ 		.mongrp		= "m1",
+ 		.span		= span,
+ 		.cpu_no		= cpu_no,
+-		.mum_resctrlfs	= 1,
++		.mum_resctrlfs	= true,
+ 		.filename	= RESULT_FILE_NAME,
+ 		.bw_report	=  bw_report,
+ 		.setup		= mbm_setup
 diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index f44fa2de4d98..20aaa7c0e784 100644
+index 20aaa7c0e784..9555a6f683f7 100644
 --- a/tools/testing/selftests/resctrl/resctrl.h
 +++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -28,7 +28,7 @@
- #define MB			(1024 * 1024)
- #define RESCTRL_PATH		"/sys/fs/resctrl"
- #define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
--#define CBM_MASK_PATH		"/sys/fs/resctrl/info"
-+#define INFO_PATH		"/sys/fs/resctrl/info"
- #define L3_PATH			"/sys/fs/resctrl/info/L3"
- #define MB_PATH			"/sys/fs/resctrl/info/MB"
- #define L3_MON_PATH		"/sys/fs/resctrl/info/L3_MON"
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 6f543e470ad4..cc6cf49e3129 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -210,7 +210,7 @@ int get_cbm_mask(char *cache_type, char *cbm_mask)
- 	if (!cbm_mask)
- 		return -1;
- 
--	sprintf(cbm_mask_path, "%s/%s/cbm_mask", CBM_MASK_PATH, cache_type);
-+	sprintf(cbm_mask_path, "%s/%s/cbm_mask", INFO_PATH, cache_type);
- 
- 	fp = fopen(cbm_mask_path, "r");
- 	if (!fp) {
+@@ -64,7 +64,7 @@ struct resctrl_val_param {
+ 	char		mongrp[64];
+ 	int		cpu_no;
+ 	unsigned long	span;
+-	int		mum_resctrlfs;
++	bool		mum_resctrlfs;
+ 	char		filename[64];
+ 	char		*bw_report;
+ 	unsigned long	mask;
 -- 
 2.30.2
 
