@@ -2,93 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BB8697795
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 08:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8B769784A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Feb 2023 09:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbjBOHvR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Feb 2023 02:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S233737AbjBOIgl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Feb 2023 03:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbjBOHvQ (ORCPT
+        with ESMTP id S233099AbjBOIgk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Feb 2023 02:51:16 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB793769C;
-        Tue, 14 Feb 2023 23:51:14 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.231])
-        by gnuweeb.org (Postfix) with ESMTPSA id 91863830B9;
-        Wed, 15 Feb 2023 07:51:08 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1676447474;
-        bh=4xu8nGWzIVAPVRMQcoYys7aWOHBc3DMFrZEQxIY6qhY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XT3Vca4/rTY3BkZ5u9/RSK+ReBut+uMgsiLoRlLiu8IWdKvU4veubHXqKDXq9ZSz9
-         AkxqsN6qg/bkfitCw+Tju4eIplrpJ+VE7N0/MaKay6kRPKmhhjFJ3+7mSndn7yfXb8
-         FjKqCzPYnPQBzJYkw11RoZMJg5/ElK5kIzWq6GaW5ekcBmYtoOlp38SfJ6meoecIx1
-         K6VZuJOnCo7LR9Ybt/bqyjKY3TbTw+m8G50M8DjcAXP1DDJIDyirKNlrmBNwsRu34+
-         Q5zL5dnW3u6yNQCyyU0ltMUJ4WIQyV8nB1Bof8WurmjhfdkrTnUbuz1r3KzVQLQzPy
-         P1w5uIwbZCFNw==
-Date:   Wed, 15 Feb 2023 14:51:04 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        x86 Mailing List <x86@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v5 0/2] sysret_rip update for the Intel FRED
- architecture
-Message-ID: <Y+yO6Da4t0+pQQ03@biznet-home.integral.gnuweeb.org>
-References: <BC632CA8-D2CB-4781-82E5-9810347293B0@zytor.com>
- <Y8+hGxVpgFVcm15g@biznet-home.integral.gnuweeb.org>
- <20230125034958.734527-1-ammarfaizi2@gnuweeb.org>
- <SA1PR11MB67345C4DFEE720C08D30D93DA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <Y9DpNG+jb8G/lhA1@biznet-home.integral.gnuweeb.org>
- <SA1PR11MB673480C4129F7A7EA9DFAF4AA8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <A5C220D5-BCE6-42DC-8115-ED41CD011993@zytor.com>
- <Y9FpxEz2+LJc7vJP@biznet-home.integral.gnuweeb.org>
- <SA1PR11MB673454F82DEBD8A1C7009C79A8CE9@SA1PR11MB6734.namprd11.prod.outlook.com>
- <SA1PR11MB67342D0472C023619BDEFB26A8A39@SA1PR11MB6734.namprd11.prod.outlook.com>
+        Wed, 15 Feb 2023 03:36:40 -0500
+Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29BB25B9C;
+        Wed, 15 Feb 2023 00:36:38 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="86108417"
+X-IronPort-AV: E=Sophos;i="5.97,299,1669042800"; 
+   d="scan'208";a="86108417"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 17:36:37 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 2127CD3EA0;
+        Wed, 15 Feb 2023 17:36:34 +0900 (JST)
+Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 766BBD35E1;
+        Wed, 15 Feb 2023 17:36:33 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om3.fujitsu.com (Postfix) with ESMTP id 531B0400C0298;
+        Wed, 15 Feb 2023 17:36:33 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v8 0/6] Some improvements of resctrl selftest
+Date:   Wed, 15 Feb 2023 17:32:24 +0900
+Message-Id: <20230215083230.3155897-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SA1PR11MB67342D0472C023619BDEFB26A8A39@SA1PR11MB6734.namprd11.prod.outlook.com>
-X-Bpl:  hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 07:42:47AM +0000, Li, Xin3 wrote:
-> Hi Faizi,
-> 
-> Any update on this patch set?
+Hello,
 
-Xin,
+The aim of this patch series is to improve the resctrl selftest.
+Without these fixes, some unnecessary processing will be executed
+and test results will be confusing. 
+There is no behavior change in test themselves.
 
-Before I send the next version, I need an answer for this one:
-https://lore.kernel.org/lkml/Y9LfmQ%2Fr1%2FpEP+uv@biznet-home.integral.gnuweeb.org/
+[patch 1] Make write_schemata() run to set up shemata with 100% allocation
+	  on first run in MBM test.
+[patch 2] The MBA test result message is always output as "ok",
+	  make output message to be "not ok" if MBA check result is failed.
+[patch 3] When a child process is created by fork(), the buffer of the 
+	  parent process is also copied. Flush the buffer before
+	  executing fork().
+[patch 4] An error occurs whether in parents process or child process,
+	  the parents process always kills child process and runs
+	  umount_resctrlfs(), and the child process always waits to be
+	  killed by the parent process.
+[patch 5] If a signal received, to cleanup properly before exiting the
+	  parent process, commonize the signal handler registered for 
+	  CMT/MBM/MBA tests and reuse it in CAT, also unregister the 
+	  signal handler at the end of each test.
+[patch 6] Before exiting each test CMT/CAT/MBM/MBA, clear test result 
+	  files function cat/cmt/mbm/mba_test_cleanup() are called
+	  twice. Delete once.
 
-I don't think the redzone problem is handled correctly here. Using
-"+r" (rsp) constraint doesn't solve the redzone problem.
+This patch series is based on Linux v6.2-rc7.
 
-HPA, Andrew, anybody?
+Difference from v7:
+[patch 4] 
+  - Fix commitlog.
+[patch 5]
+  - Fix commitlog.
+
+Pervious versions of this series:
+[v1] https://lore.kernel.org/lkml/20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com/
+[v2] https://lore.kernel.org/lkml/20221005013933.1486054-1-tan.shaopeng@jp.fujitsu.com/
+[v3] https://lore.kernel.org/lkml/20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com/
+[v4] https://lore.kernel.org/lkml/20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com/
+[v5] https://lore.kernel.org/lkml/20230111075802.3556803-1-tan.shaopeng@jp.fujitsu.com/
+[v6] https://lore.kernel.org/lkml/20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com/
+[v7] https://lore.kernel.org/lkml/20230213062428.1721572-1-tan.shaopeng@jp.fujitsu.com/
+
+Shaopeng Tan (6):
+  selftests/resctrl: Fix set up schemata with 100% allocation on first
+    run in MBM test
+  selftests/resctrl: Return MBA check result and make it to output
+    message
+  selftests/resctrl: Flush stdout file buffer before executing fork()
+  selftests/resctrl: Cleanup properly when an error occurs in CAT test
+  selftests/resctrl: Commonize the signal handler register/unregister
+    for all tests
+  selftests/resctrl: Remove duplicate codes that clear each test result
+    file
+
+ tools/testing/selftests/resctrl/cat_test.c    | 29 ++++----
+ tools/testing/selftests/resctrl/cmt_test.c    |  7 +-
+ tools/testing/selftests/resctrl/fill_buf.c    | 14 ----
+ tools/testing/selftests/resctrl/mba_test.c    | 23 +++----
+ tools/testing/selftests/resctrl/mbm_test.c    | 20 +++---
+ tools/testing/selftests/resctrl/resctrl.h     |  2 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  4 --
+ tools/testing/selftests/resctrl/resctrl_val.c | 67 ++++++++++++++-----
+ tools/testing/selftests/resctrl/resctrlfs.c   |  5 +-
+ 9 files changed, 96 insertions(+), 75 deletions(-)
 
 -- 
-Ammar Faizi
+2.27.0
 
