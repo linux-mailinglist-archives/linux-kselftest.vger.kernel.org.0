@@ -2,157 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820B46988C0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Feb 2023 00:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39136698993
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Feb 2023 02:01:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjBOXZP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Feb 2023 18:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
+        id S229524AbjBPBBc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Feb 2023 20:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBOXZO (ORCPT
+        with ESMTP id S229487AbjBPBBb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Feb 2023 18:25:14 -0500
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29BA11647
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Feb 2023 15:25:12 -0800 (PST)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-488-_bKElc76P1KgmCX_2MWQIA-1; Wed, 15 Feb 2023 18:25:02 -0500
-X-MC-Unique: _bKElc76P1KgmCX_2MWQIA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 679A4101A55E;
-        Wed, 15 Feb 2023 23:25:01 +0000 (UTC)
-Received: from hog (ovpn-195-113.brq.redhat.com [10.40.195.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E83032026D4B;
-        Wed, 15 Feb 2023 23:24:58 +0000 (UTC)
-Date:   Thu, 16 Feb 2023 00:23:11 +0100
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
-        Frantisek Krenzelok <fkrenzel@redhat.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Apoorv Kothari <apoorvko@amazon.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: Re: [PATCH net-next v2 0/5] tls: implement key updates for TLS1.3
-Message-ID: <Y+1pX/vL8t2nU00c@hog>
-References: <cover.1676052788.git.sd@queasysnail.net>
- <20230214210811.448b5ec4@kernel.org>
- <Y+0Wjrc9shLkH+Gg@hog>
- <20230215111020.0c843384@kernel.org>
+        Wed, 15 Feb 2023 20:01:31 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035902A6EA;
+        Wed, 15 Feb 2023 17:01:30 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id lf10so1434121ejc.5;
+        Wed, 15 Feb 2023 17:01:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RburLBFwxhjygNh1BoK3XjfnjeRQncGDEMOMbUDq08A=;
+        b=HZP4+wBtWumoF1mfLhkJlQu5LnNYOOfdFH8yxMQNSpyPDmSYiLpZZ28iMguN6zjDvH
+         xl30mVzo0oK31cPGFOPPuUqnuRkNqnxrkxmIyNFr61vDawRV4u7pt1OyR6lhuX1XiHU6
+         QQXlzne2cb8dtww7LnLnfk4B3G+Jyv1tE3G1oliYwY46AdFAwfhyOWHotg8dWdtu98JT
+         pjy5Foae6xZ+sAUcLh3QghiggH4tQOB/Wen/fH/k3CJMgq5F9rG3QHEcTxbuwfShmn7Z
+         gXB4gKJTKyHyRv/cGioiNGozmamEUkBaF3dH7dPN2Wz0xFLVdHAVukYPwbOrDbJl4fQK
+         sJGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RburLBFwxhjygNh1BoK3XjfnjeRQncGDEMOMbUDq08A=;
+        b=uaBYrRSdZKsHBRd0TRAAUKTOIyccH152qwHplsLfYQ5sa3cssQkHqgeKGXRuD1glA/
+         ieNI4sm6+6Wisi0h+gi+VQzSyhCKQ4S2SSwqINcUHhQY4BC6KzNX9fUL1NiL9lIcAbvr
+         TDAXkgq/kaid7z3zLKTOkjTXlo+rSjnMiWVoaiQ7x0DV7lCRV28UbfvQWOMKibdRJI/h
+         HloX4wzocQ9BiGL+KhFVkzFwRP+6P47UNJbSnZjAII/G+ZvLEX3rrdUgohTZ75OKPKSm
+         jWjsofjfu9x3Y9ZC+1cvukXjgdaZP4CiP+oMzCYh6GFSaOgtqcXEUCku8G8OAze+NGEW
+         CQBA==
+X-Gm-Message-State: AO0yUKXxeCpErNpM3+K5DYP+UjxSEO/2hLJFGhw9vgs6SzIFQrWur/s1
+        p+ADJB2HyR8xKCRCPr9ZcNKhLqet/7zpRYRJ
+X-Google-Smtp-Source: AK7set+HcDpMaQGBx0fdo+qgfhZYfy084qaENQjiAGK8z1s3y4vX+5VJOapeSAvj1wo4u8UQiD/fGw==
+X-Received: by 2002:a17:906:b352:b0:8b1:315c:be04 with SMTP id cd18-20020a170906b35200b008b1315cbe04mr3597680ejb.27.1676509288321;
+        Wed, 15 Feb 2023 17:01:28 -0800 (PST)
+Received: from smurf (80.71.142.58.ipv4.parknet.dk. [80.71.142.58])
+        by smtp.gmail.com with ESMTPSA id jw12-20020a17090776ac00b008b14bb505eesm84947ejc.30.2023.02.15.17.01.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 17:01:27 -0800 (PST)
+Date:   Thu, 16 Feb 2023 02:01:05 +0100 (CET)
+From:   Jesper Juhl <jesperjuhl76@gmail.com>
+To:     linux-kernel@vger.kernel.org
+cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        wireguard@lists.zx2c4.com, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>
+Subject: [Patch] [testing][wireguard] Remove unneeded version.h include
+ pointed out by 'make versioncheck'
+Message-ID: <83474b0e-9e44-642f-10c9-2e0ff94b06ca@gmail.com>
+User-Agent: Alpine 2.26 (LNX 649 2022-06-02)
 MIME-Version: 1.0
-In-Reply-To: <20230215111020.0c843384@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: queasysnail.net
-Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; format=flowed; charset=US-ASCII
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,MALFORMED_FREEMAIL,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2023-02-15, 11:10:20 -0800, Jakub Kicinski wrote:
-> On Wed, 15 Feb 2023 18:29:50 +0100 Sabrina Dubroca wrote:
-> > > And how will we handle re-keying in offload?  
-> > 
-> > Sorry for the stupid question... do you mean that I need to solve that
-> > problem before this series can progress, or that the cover letter
-> > should summarize the state of the discussion?
-> 
-> I maintain that 1.3 offload is much more important than rekeying.
+From e2fa4955c676960d0809e4afe8273075c94451c9 Mon Sep 17 00:00:00 2001
+From: Jesper Juhl <jesperjuhl76@gmail.com>
+Date: Mon, 13 Feb 2023 02:58:36 +0100
+Subject: [PATCH 06/12] [testing][wireguard] Remove unneeded version.h include
+  pointed out by 'make versioncheck'
 
-Sure, it'd be great if we had 1.3 offload (and it should also support
-rekeying, because you can't force the peer to not rekey). But I can't
-implement offload.
+Signed-off-by: Jesper Juhl <jesperjuhl76@gmail.com>
+---
+  tools/testing/selftests/wireguard/qemu/init.c | 1 -
+  1 file changed, 1 deletion(-)
 
-> Offloads being available for 1.2 may be stalling adoption of 1.3
-> (just a guess, I run across this article mentioning 1.2 being used
-> in Oracle cloud for instance:
-> https://blogs.oracle.com/cloudsecurity/post/how-oci-helps-you-protect-data-with-default-encryption
-> could be because MITM requirements, or maybe they have HW which
-> can only do 1.2? Dunno).
-> 
-> But I'm willing to compromise, we just need a solid plan of how to
-> handle the inevitable. I'm worried that how this will pay out is:
->  - you don't care about offload and add rekey
+diff --git a/tools/testing/selftests/wireguard/qemu/init.c b/tools/testing/selftests/wireguard/qemu/init.c
+index 3e49924dd77e..20d8d3192f75 100644
+--- a/tools/testing/selftests/wireguard/qemu/init.c
++++ b/tools/testing/selftests/wireguard/qemu/init.c
+@@ -24,7 +24,6 @@
+  #include <sys/sysmacros.h>
+  #include <sys/random.h>
+  #include <linux/random.h>
+-#include <linux/version.h>
 
-I think that's a bit unfair. Not having to deal with offload at all
-would make things easier for me, sure, but I'm open to the discussion,
-even if I don't have a good understanding of the offloading side.
-
-I'd just like to avoid holding this feature (arguably a bug fix) until
-the vendors finally decide that they care about 1.3, if possible. If
-not, so be it.
-
-I wasn't trying to force you to accept this series. Sorry if that's
-what it sounded like. I really wanted to understand what you were
-asking for, because your question wasn't clear to me. Now it makes
-sense.
-
->  - vendors don't care about rekey and add 1.3
->   ... time passes ...
->  - both you and the vendors have moved on
->  - users run into issues, waste their time debugging and
->    eventually report the problem upstream
->  - it's on me to fix?
-> 
-> :(
-
-Yeah, I see. If the rekey already exists in SW, I think it'll be a bit
-harder for them to just not care about it, but maybe I'm being
-optimistic.
-
-I'm not sure we can come up with the correct uAPI/rekey design without
-trying to implement rekey with offload and seeing how that blows up
-(and possibly in different ways with different devices).
-
-Picking up from where the discussion died off in the previous thread:
-
-On transmit, I think the software fallback for retransmits will be
-needed, whether we can keep two generations of keys on the device or
-just one. We could have 2 consecutive rekeys, without even worrying
-about a broken peer spamming key updates for both sides (or the local
-user's library doing that). If devices can juggle 3 generations of
-keys, then maybe we don't have to worry too much about software
-fallback, but we'll need to define an API to set the extra keys ahead
-of time and then advance to the next one. Will all devices support
-installing 2 or 3 keys?
-
-On receive, we also have the problem of more than one rekey arriving,
-so if we can't feed enough keys to the device in advance, we'll have
-to decrypt some records in software. The host will have to survive the
-burst of software decryption while we wait until the device config
-catches up.
-
-One option might be to do the key derivation in the kernel following
-section 7.2 of the RFC [1]. I don't know how happy crypto/security
-people would be with that. We'd have to introduce new crypto_info
-structs, and new cipher types (or a flag in the upper bits of the
-cipher type) to go with them. Then the kernel processes incoming key
-update messages on its own, and emits its own key update messages when
-its current key is expiring. On transmit we also need to inject a
-Finished message before the KeyUpdate [2]. That's bringing a lot of
-TLS logic in the kernel. At that point we might as well do the whole
-handshake... but I really hope it doesn't come to that.
-
-It's hard, but I don't think "let's just kill the connection" is a
-nice solution. It's definitely easier for the kernel.
-
-[1] https://www.rfc-editor.org/rfc/rfc8446#section-7.2
-[2] https://www.rfc-editor.org/rfc/rfc8446#section-4.6.3
-
+  __attribute__((noreturn)) static void poweroff(void)
+  {
 -- 
-Sabrina
+2.39.2
 
