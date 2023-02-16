@@ -2,63 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A66698CA3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Feb 2023 07:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19961698E42
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Feb 2023 09:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBPGKJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Feb 2023 01:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
+        id S229692AbjBPIF0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Feb 2023 03:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjBPGKI (ORCPT
+        with ESMTP id S229478AbjBPIFZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Feb 2023 01:10:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF7B17151;
-        Wed, 15 Feb 2023 22:10:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 761D2B825BC;
-        Thu, 16 Feb 2023 06:10:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5B40C433D2;
-        Thu, 16 Feb 2023 06:10:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676527804;
-        bh=j2J9W4rzZwcQLbEsIJOPioIcassDMrR/FlkwwIOQNeI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=t9cu7vFQXBLThkz7Qf0ETh6RyZ5WXapx+N6CUr2ExiIHdTo6Q+YwOevuZiX0Cfdfm
-         9MeVVlmNvNmemnrE9nlLUYib+C8JHiINX3bBhTiLHR9u7HgjKJVEwZlZgH1iG1GiLj
-         6pEw0m0vIYsOrW4XuPbzyC5KBRRACEEWuEAVrmIMwgJ0AANQJEQY9JXUwIr1ynLNH5
-         WmQIbtxNdMj4YmyqlHZvUgYuNGD7A/I1hNqKnqCqLZRrl7Wxcz3W7rce2ZRubeGQOq
-         SPZfvoNIii4hTANaC1pmgzZwaKSuk+4Wql0qzxDtKkhfoEq42fG5sXngp2k6saMlKo
-         3ghcpOuU0nsFw==
-Message-ID: <95a5c1ba-10f3-13c3-3982-cee38b093227@kernel.org>
-Date:   Wed, 15 Feb 2023 23:10:03 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [net-next 3/3] selftests: seg6: add selftest for PSP flavor in
- SRv6 End behavior
-Content-Language: en-US
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Thu, 16 Feb 2023 03:05:25 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0FD193F0;
+        Thu, 16 Feb 2023 00:05:24 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id o8so1228408pls.11;
+        Thu, 16 Feb 2023 00:05:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XEQzmnVecLTob0AWJCV+IJlL7tCqU6c5uGFQJ2KJd/U=;
+        b=MZnMEao1Zfl9Y5XPKCJEpUVzIhjZL3PhctsE8M4xoNl5IiB3jB1BLxuXF+W2aGvxhL
+         RMpqOzRBJx50hcxxUY3KVAPxIeA4Auq40z0xNzwh8ENhWtMaaQ/a+e5m+qgODussSE5i
+         dKd02XfsKf5nA5KFkyoFeMQAIXKRlHTRZ7tQmMA71lMJ6ZELGrpO6t+dPjgc/aYhAi66
+         qLR64StZCZXCbJSDf3qq7TV62vYjKBQsfRI4JBHrtBZJS7g9QVMI7EJQGOknbeThJVr9
+         lYY9FkMq7M3lOKzYkVy4dj72Pv+LTKxAcDB4qFFOjkcXTJx1V0FEeHvtRMw15hET8mJ8
+         +85Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XEQzmnVecLTob0AWJCV+IJlL7tCqU6c5uGFQJ2KJd/U=;
+        b=u5UwNXRPIMXzjDe2AswQM+I1Di3EvQkK+BxpTCLRE/nKzhZuxcXma91V/sOwWWtbY8
+         fwifh7qq4mzgZ7mlc9peJN3I8w7KsxtjG0Zo7TmvFJJnnV8UROQmirdNqFwQAKtWxnle
+         fJX3Exu2LkPmM9coDyme3vHF/La3or0yiICFbPXc8Rcvs9tovQz8nNEgCXwU7+Qw9LTy
+         /1cPdKcGRAOPM9zPIxsa2JjuC0PvmoN5R+OYETXh0oHdIyMCmujbAIQlhnJIOF+Ehusa
+         0V6xL3r/I4rMxqW1kNoqBqHh1uq4gKSQSwboTjvBN4Dk2O6W/ZarvTX91dCHWRj72jNX
+         3kng==
+X-Gm-Message-State: AO0yUKX4MtFboWJ1AsyU8ECpal04UD9s+llbvGXNQKERmzhthZYSXGuQ
+        CKvPX7TaO3bdv5d/uYMNfO0=
+X-Google-Smtp-Source: AK7set9QjAWo6ZsPoG5UsOoD0zM7kanys0r0aqw196lzVZxzI5TtWYVwnvBvEPPdqwwBpDYKNz0Z4g==
+X-Received: by 2002:a05:6a20:7fa2:b0:c7:166d:686 with SMTP id d34-20020a056a207fa200b000c7166d0686mr2138453pzj.26.1676534723882;
+        Thu, 16 Feb 2023 00:05:23 -0800 (PST)
+Received: from localhost.localdomain (arc.lsta.media.kyoto-u.ac.jp. [130.54.10.65])
+        by smtp.gmail.com with ESMTPSA id ij21-20020a170902ab5500b00174f61a7d09sm626742plb.247.2023.02.16.00.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 00:05:23 -0800 (PST)
+From:   Taichi Nishimura <awkrail01@gmail.com>
+To:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        shuah@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, awkrail01@gmail.com, iii@linux.ibm.com,
+        ytcoode@gmail.com, deso@posteo.net, memxor@gmail.com,
+        joannelkoong@gmail.com, rdunlap@infradead.org
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
-References: <20230215134659.7613-1-andrea.mayer@uniroma2.it>
- <20230215134659.7613-4-andrea.mayer@uniroma2.it>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230215134659.7613-4-andrea.mayer@uniroma2.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        llvm@lists.linux.dev
+Subject: [PATCH bpf-next] Fix typos in selftest/bpf files
+Date:   Thu, 16 Feb 2023 17:04:23 +0900
+Message-Id: <20230216080423.513746-1-awkrail01@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,244 +78,180 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/15/23 6:46 AM, Andrea Mayer wrote:
-> This selftest is designed for testing the PSP flavor in SRv6 End behavior.
-> It instantiates a virtual network composed of several nodes: hosts and
-> SRv6 routers. Each node is realized using a network namespace that is
-> properly interconnected to others through veth pairs.
-> The test makes use of the SRv6 End behavior and of the PSP flavor needed
-> for removing the SRH from the IPv6 header at the penultimate node.
-> 
-> The correct execution of the behavior is verified through reachability
-> tests carried out between hosts.
-> 
-> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-> Signed-off-by: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
-> ---
->  tools/testing/selftests/net/Makefile          |   1 +
->  .../selftests/net/srv6_end_flavors_test.sh    | 869 ++++++++++++++++++
->  2 files changed, 870 insertions(+)
->  create mode 100755 tools/testing/selftests/net/srv6_end_flavors_test.sh
-> 
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index 3364c548a23b..6cd8993454d7 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -38,6 +38,7 @@ TEST_PROGS += srv6_end_dt6_l3vpn_test.sh
->  TEST_PROGS += srv6_hencap_red_l3vpn_test.sh
->  TEST_PROGS += srv6_hl2encap_red_l2vpn_test.sh
->  TEST_PROGS += srv6_end_next_csid_l3vpn_test.sh
-> +TEST_PROGS += srv6_end_flavors_test.sh
->  TEST_PROGS += vrf_strict_mode_test.sh
->  TEST_PROGS += arp_ndisc_evict_nocarrier.sh
->  TEST_PROGS += ndisc_unsolicited_na_test.sh
-> diff --git a/tools/testing/selftests/net/srv6_end_flavors_test.sh b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> new file mode 100755
-> index 000000000000..50563443a4ad
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/srv6_end_flavors_test.sh
-> @@ -0,0 +1,869 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# author: Andrea Mayer <andrea.mayer@uniroma2.it>
-> +# author: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
-> +#
-> +# This script is designed to test the support for "flavors" in the SRv6 End
-> +# behavior.
-> +#
-> +# Flavors defined in RFC8986 [1] represent additional operations that can modify
-> +# or extend the existing SRv6 End, End.X and End.T behaviors. For the sake of
-> +# convenience, we report the list of flavors described in [1] hereafter:
-> +#   - Penultimate Segment Pop (PSP);
-> +#   - Ultimate Segment Pop (USP);
-> +#   - Ultimate Segment Decapsulation (USD).
-> +#
-> +# The End, End.X, and End.T behaviors can support these flavors either
-> +# individually or in combinations.
-> +# Currently in this selftest we consider only the PSP flavor for the SRv6 End
-> +# behavior. However, it is possible to extend the script as soon as other
-> +# flavors will be supported in the kernel.
-> +#
-> +# The purpose of the PSP flavor consists in instructing the penultimate node
-> +# listed in the SRv6 policy to remove (i.e. pop) the outermost SRH from the IPv6
-> +# header.
-> +# A PSP enabled SRv6 End behavior instance processes the SRH by:
-> +#  - decrementing the Segment Left (SL) value from 1 to 0;
-> +#  - copying the last SID from the SID List into the IPv6 Destination Address
-> +#    (DA);
-> +#  - removing the SRH from the extension headers following the IPv6 header.
-> +#
-> +# Once the SRH is removed, the IPv6 packet is forwarded to the destination using
-> +# the IPv6 DA updated during the PSP operation (i.e. the IPv6 DA corresponding
-> +# to the last SID carried by the removed SRH).
-> +#
-> +# Although the PSP flavor can be set for any SRv6 End behavior instance on any
-> +# SR node, it will be active only on such behaviors bound to a penultimate SID
-> +# for a given SRv6 policy.
-> +#                                                SL=2 SL=1 SL=0
-> +#                                                  |    |    |
-> +# For example, given the SRv6 policy (SID List := <X,   Y,   Z>):
-> +#  - a PSP enabled SRv6 End behavior bound to SID Y will apply the PSP operation
-> +#    as Segment Left (SL) is 1, corresponding to the Penultimate Segment of the
-> +#    SID List;
-> +#  - a PSP enabled SRv6 End behavior bound to SID X will *NOT* apply the PSP
-> +#    operation as the Segment Left is 2. This behavior instance will apply the
-> +#    "standard" End packet processing, ignoring the configured PSP flavor at
-> +#    all.
-> +#
-> +# [1] RFC8986: https://datatracker.ietf.org/doc/html/rfc8986
-> +#
-> +# Network topology
-> +# ================
-> +#
-> +# The network topology used in this selftest is depicted hereafter, composed by
-> +# two hosts (hs-1, hs-2) and four routers (rt-1, rt-2, rt-3, rt-4).
-> +# Hosts hs-1 and hs-2 are connected to routers rt-1 and rt-2, respectively,
-> +# allowing them to communicate with each other.
-> +# Traffic exchanged between hs-1 and hs-2 can follow different network paths.
-> +# The network operator, through specific SRv6 Policies can steer traffic to one
-> +# path rather than another. In this selftest this is implemented as follows:
-> +#
-> +#   i) The SRv6 H.Insert behavior applies SRv6 Policies on traffic received by
-> +#      connected hosts. It pushes the Segment Routing Header (SRH) after the
-> +#      IPv6 header. The SRH contains the SID List (i.e. SRv6 Policy) needed for
-> +#      steering traffic across the segments/waypoints specified in that list;
-> +#
-> +#  ii) The SRv6 End behavior advances the active SID in the SID List carried by
-> +#      the SRH;
-> +#
-> +# iii) The PSP enabled SRv6 End behavior is used to remove the SRH when such
-> +#      behavior is configured on a node bound to the Penultimate Segment carried
-> +#      by the SID List.
-> +#
-> +#                cafe::1                      cafe::2
-> +#              +--------+                   +--------+
-> +#              |        |                   |        |
-> +#              |  hs-1  |                   |  hs-2  |
-> +#              |        |                   |        |
-> +#              +---+----+                   +--- +---+
-> +#     cafe::/64    |                             |      cafe::/64
-> +#                  |                             |
-> +#              +---+----+                   +----+---+
-> +#              |        |  fcf0:0:1:2::/64  |        |
-> +#              |  rt-1  +-------------------+  rt-2  |
-> +#              |        |                   |        |
-> +#              +---+----+                   +----+---+
-> +#                  |      .               .      |
-> +#                  |  fcf0:0:1:3::/64   .        |
-> +#                  |          .       .          |
-> +#                  |            .   .            |
-> +#  fcf0:0:1:4::/64 |              .              | fcf0:0:2:3::/64
-> +#                  |            .   .            |
-> +#                  |          .       .          |
-> +#                  |  fcf0:0:2:4::/64   .        |
-> +#                  |      .               .      |
-> +#              +---+----+                   +----+---+
-> +#              |        |                   |        |
-> +#              |  rt-4  +-------------------+  rt-3  |
-> +#              |        |  fcf0:0:3:4::/64  |        |
-> +#              +---+----+                   +----+---+
-> +#
-> +# Every fcf0:0:x:y::/64 network interconnects the SRv6 routers rt-x with rt-y in
-> +# the IPv6 operator network.
-> +#
-> +#
-> +# Local SID table
-> +# ===============
-> +#
-> +# Each SRv6 router is configured with a Local SID table in which SIDs are
-> +# stored. Considering the given SRv6 router rt-x, at least two SIDs are
-> +# configured in the Local SID table:
-> +#
-> +#   Local SID table for SRv6 router rt-x
-> +#   +---------------------------------------------------------------------+
-> +#   |fcff:x::e is associated with the SRv6 End behavior                   |
-> +#   |fcff:x::ef1 is associated with the SRv6 End behavior with PSP flavor |
-> +#   +---------------------------------------------------------------------+
-> +#
-> +# The fcff::/16 prefix is reserved by the operator for the SIDs. Reachability of
-> +# SIDs is ensured by proper configuration of the IPv6 operator's network and
-> +# SRv6 routers.
-> +#
-> +#
-> +# SRv6 Policies
-> +# =============
-> +#
-> +# An SRv6 ingress router applies different SRv6 Policies to the traffic received
-> +# from connected hosts on the basis of the destination addresses.
-> +# In case of SRv6 H.Insert behavior, the SRv6 Policy enforcement consists of
-> +# pushing the SRH (carrying a given SID List) after the existing IPv6 header.
-> +# Note that in the inserting mode, there is no encapsulation at all.
-> +#
-> +#   Before applying an SRv6 Policy using the SRv6 H.Insert behavior
-> +#   +------+---------+
-> +#   | IPv6 | Payload |
-> +#   +------+---------+
-> +#
-> +#   After applying an SRv6 Policy using the SRv6 H.Insert behavior
-> +#   +------+-----+---------+
-> +#   | IPv6 | SRH | Payload |
-> +#   +------+-----+---------+
-> +#
-> +# Traffic from hs-1 to hs-2
-> +# -------------------------
-> +#
-> +# Packets generated from hs-1 and directed towards hs-2 are
-> +# handled by rt-1 which applies the following SRv6 Policy:
-> +#
-> +#   i.a) IPv6 traffic, SID List=fcff:3::e,fcff:4::ef1,fcff:2::ef1,cafe::2
-> +#
-> +# Router rt-1 is configured to enforce the Policy (i.a) through the SRv6
-> +# H.Insert behavior which pushes the SRH after the existing IPv6 header. This
-> +# Policy steers the traffic from hs-1 across rt-3, rt-4, rt-2 and finally to the
-> +# destination hs-2.
-> +#
-> +# As the packet reaches the router rt-3, the SRv6 End behavior bound to SID
-> +# fcff:3::e is triggered. The behavior updates the Segment Left (from SL=3 to
-> +# SL=2) in the SRH, the IPv6 DA with fcff:4::ef1 and forwards the packet to the
-> +# next router on the path, i.e. rt-4.
-> +#
-> +# When router rt-4 receives the packet, the PSP enabled SRv6 End behavior bound
-> +# to SID fcff:4::ef1 is executed. Since the SL=2, the PSP operation is *NOT*
-> +# kicked in and the behavior applies the default End processing: the Segment
-> +# Left is decreased (from SL=2 to SL=1), the IPv6 DA is updated with the SID
-> +# fcff:2::ef1 and the packet is forwarded to router rt-2.
-> +#
-> +# The PSP enabled SRv6 End behavior on rt-2 is associated with SID fcff:2::ef1
-> +# and is executed as the packet is received. Because SL=1, the behavior applies
-> +# the PSP processing on the packet as follows: i) SL is decreased, i.e. from
-> +# SL=1 to SL=0; ii) last SID (cafe::2) is copied into the IPv6 DA; iii) the
-> +# outermost SRH is removed from the extension headers following the IPv6 header.
-> +# Once the PSP processing is completed, the packet is forwarded to the host hs-2
-> +# (destination).
-> +#
-> +# Traffic from hs-2 to hs-1
-> +# -------------------------
-> +#
-> +# Packets generated from hs-2 and directed to hs-1 are handled by rt-2 which
-> +# applies the following SRv6 Policy:
-> +#
-> +#   i.b) IPv6 traffic, SID List=fcff:1::ef1,cafe::1
-> +#
-> +# Router rt-2 is configured to enforce the Policy (i.b) through the SRv6
-> +# H.Insert behavior which pushes the SRH after the existing IPv6 header. This
-> +# Policy steers the traffic from hs-2 across rt-1 and finally to the
-> +# destination hs-1
-> +#
-> +#
-> +# When the router rt-1 receives the packet, the PSP enabled SRv6 End behavior
-> +# associated with the SID fcff:1::ef1 is triggered. Since the SL=1,
-> +# the PSP operation takes place: i) the SL is decremented; ii) the IPv6 DA is
-> +# set with the last SID; iii) the SRH is removed from the extension headers
-> +# after the IPv6 header. At this point, the packet with IPv6 DA=cafe::1 is sent
-> +# to the destination, i.e. hs-1.
-> +
+This patch is a re-submitting patch.
+I cloned bpf-next repo, run spell checker, and fixed typos.
+Included v1 and v2 patches to this one.
 
-Once again, thank you for taking the time to write a detailed
-description of the test and its setup. Documenting intent is such an
-important part of the tests.
+Could you review it again? 
+Let me know if I have any mistakes.
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+Best regards,
+Taichi Nishimura
 
+Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c  | 2 +-
+ tools/testing/selftests/bpf/prog_tests/trampoline_count.c   | 2 +-
+ .../testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
+ tools/testing/selftests/bpf/progs/dynptr_fail.c             | 2 +-
+ tools/testing/selftests/bpf/progs/strobemeta.h              | 2 +-
+ tools/testing/selftests/bpf/progs/test_cls_redirect.c       | 6 +++---
+ tools/testing/selftests/bpf/progs/test_subprogs.c           | 2 +-
+ tools/testing/selftests/bpf/progs/test_xdp_vlan.c           | 2 +-
+ tools/testing/selftests/bpf/test_cpp.cpp                    | 2 +-
+ tools/testing/selftests/bpf/veristat.c                      | 4 ++--
+ 10 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+index eb2feaac81fe..653b0a20fab9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+@@ -488,7 +488,7 @@ static void run_test(struct migrate_reuseport_test_case *test_case,
+ 			goto close_servers;
+ 	}
+ 
+-	/* Tie requests to the first four listners */
++	/* Tie requests to the first four listeners */
+ 	err = start_clients(test_case);
+ 	if (!ASSERT_OK(err, "start_clients"))
+ 		goto close_clients;
+diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+index 8fd4c0d78089..e91d0d1769f1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
++++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+@@ -79,7 +79,7 @@ void serial_test_trampoline_count(void)
+ 	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
+ 		goto cleanup;
+ 
+-	/* and finaly execute the probe */
++	/* and finally execute the probe */
+ 	prog_fd = bpf_program__fd(prog);
+ 	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
+ 		goto cleanup;
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 26fffb02ed10..ad21ee8c7e23 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -84,7 +84,7 @@ typedef void (*printf_fn_t)(const char *, ...);
+  *	typedef int (*fn_t)(int);
+  *	typedef char * const * (*fn_ptr2_t)(s_t, fn_t);
+  *
+- * - `fn_complext_t`: pointer to a function returning struct and accepting
++ * - `fn_complex_t`: pointer to a function returning struct and accepting
+  *   union and struct. All structs and enum are anonymous and defined inline.
+  *
+  * - `signal_t: pointer to a function accepting a pointer to a function as an
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index 5950ad6ec2e6..aa5b69354b91 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -630,7 +630,7 @@ static int release_twice_callback_fn(__u32 index, void *data)
+ }
+ 
+ /* Test that releasing a dynptr twice, where one of the releases happens
+- * within a calback function, fails
++ * within a callback function, fails
+  */
+ SEC("?raw_tp")
+ __failure __msg("arg 1 is an unacquired reference")
+diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
+index 753718595c26..e562be6356f3 100644
+--- a/tools/testing/selftests/bpf/progs/strobemeta.h
++++ b/tools/testing/selftests/bpf/progs/strobemeta.h
+@@ -135,7 +135,7 @@ struct strobe_value_loc {
+ 	 * tpidr_el0 for aarch64).
+ 	 * TLS_IMM_EXEC: absolute address of GOT entry containing offset
+ 	 * from thread pointer;
+-	 * TLS_GENERAL_DYN: absolute addres of double GOT entry
++	 * TLS_GENERAL_DYN: absolute address of double GOT entry
+ 	 * containing tls_index_t struct;
+ 	 */
+ 	int64_t offset;
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+index 2833ad722cb7..66b304982245 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+@@ -600,7 +600,7 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+ 		return TC_ACT_SHOT;
+ 	}
+ 
+-	/* Skip the remainig next hops (may be zero). */
++	/* Skip the remaining next hops (may be zero). */
+ 	return skip_next_hops(pkt, encap->unigue.hop_count -
+ 					   encap->unigue.next_hop - 1);
+ }
+@@ -610,8 +610,8 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+  *
+  *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
+  *
+- * clang will substitue a costant for sizeof, which allows the verifier
+- * to track it's value. Based on this, it can figure out the constant
++ * clang will substitute a constant for sizeof, which allows the verifier
++ * to track its value. Based on this, it can figure out the constant
+  * return value, and calling code works while still being "generic" to
+  * IPv4 and IPv6.
+  */
+diff --git a/tools/testing/selftests/bpf/progs/test_subprogs.c b/tools/testing/selftests/bpf/progs/test_subprogs.c
+index f8e9256cf18d..a8d602d7c88a 100644
+--- a/tools/testing/selftests/bpf/progs/test_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/test_subprogs.c
+@@ -47,7 +47,7 @@ static __noinline int sub5(int v)
+ 	return sub1(v) - 1; /* compensates sub1()'s + 1 */
+ }
+ 
+-/* unfortunately verifier rejects `struct task_struct *t` as an unkown pointer
++/* unfortunately verifier rejects `struct task_struct *t` as an unknown pointer
+  * type, so we need to accept pointer as integer and then cast it inside the
+  * function
+  */
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
+index cdf3c48d6cbb..4ddcb6dfe500 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
+@@ -98,7 +98,7 @@ bool parse_eth_frame(struct ethhdr *eth, void *data_end, struct parse_pkt *pkt)
+ 	return true;
+ }
+ 
+-/* Hint, VLANs are choosen to hit network-byte-order issues */
++/* Hint, VLANs are chosen to hit network-byte-order issues */
+ #define TESTVLAN 4011 /* 0xFAB */
+ // #define TO_VLAN  4000 /* 0xFA0 (hint 0xOA0 = 160) */
+ 
+diff --git a/tools/testing/selftests/bpf/test_cpp.cpp b/tools/testing/selftests/bpf/test_cpp.cpp
+index 0bd9990e83fa..f4936834f76f 100644
+--- a/tools/testing/selftests/bpf/test_cpp.cpp
++++ b/tools/testing/selftests/bpf/test_cpp.cpp
+@@ -91,7 +91,7 @@ static void try_skeleton_template()
+ 
+ 	skel.detach();
+ 
+-	/* destructor will destory underlying skeleton */
++	/* destructor will destroy underlying skeleton */
+ }
+ 
+ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index f961b49b8ef4..83231456d3c5 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -144,7 +144,7 @@ static struct env {
+ 	struct verif_stats *prog_stats;
+ 	int prog_stat_cnt;
+ 
+-	/* baseline_stats is allocated and used only in comparsion mode */
++	/* baseline_stats is allocated and used only in comparison mode */
+ 	struct verif_stats *baseline_stats;
+ 	int baseline_stat_cnt;
+ 
+@@ -882,7 +882,7 @@ static int process_obj(const char *filename)
+ 		 * that BPF object file is incomplete and has to be statically
+ 		 * linked into a final BPF object file; instead of bailing
+ 		 * out, report it into stderr, mark it as skipped, and
+-		 * proceeed
++		 * proceed
+ 		 */
+ 		fprintf(stderr, "Failed to open '%s': %d\n", filename, -errno);
+ 		env.files_skipped++;
+-- 
+2.25.1
 
