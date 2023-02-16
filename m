@@ -2,90 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3726997A1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Feb 2023 15:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A986997DE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Feb 2023 15:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjBPOkY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Feb 2023 09:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
+        id S230257AbjBPOwT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Feb 2023 09:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjBPOkY (ORCPT
+        with ESMTP id S230246AbjBPOwS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Feb 2023 09:40:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67522311C3;
-        Thu, 16 Feb 2023 06:40:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0381060EC0;
-        Thu, 16 Feb 2023 14:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B152C433EF;
-        Thu, 16 Feb 2023 14:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676558422;
-        bh=HOpcvbihO1wM9wl0npQyoYRB+fMquamFRbYEfFcVv+Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lbbDU0u+8cphkIEh9l2u4kET+FuefVPHSlioXqWcClJk0opi2PWU6hQos03XLgZ3g
-         69p6En+FTP0lGNfYtPFrWpntYaqX25xOb6X5nqomgvJHNKeqr8d9mkG7C5SD02LlIL
-         4r/TPZw/uC/SyKmeDrkP3om+43bu8tf0+8nPtQfvrXinM4/Ye5EFXZBZQygiVkRaFj
-         jwYyBu//4R+MMwxYSTpBgdjG9tJLBSBRgdlefZYt5+Mq7QGehGvdaM6B9awoaEzt+d
-         2AqavL1joTLYDPTPgySTC2hQG6zHSFqFrFRE8KL71UOVM2EW3ArbeXW3GKnMkmPzsx
-         N+DSLDy2Vnj5g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2B9D1E21EC4;
-        Thu, 16 Feb 2023 14:40:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 16 Feb 2023 09:52:18 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1029521F5;
+        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso6344715pju.0;
+        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vwy/nvSACPs3saFn3MC2GpZOqXyVXmgpysdDNeISxL4=;
+        b=cwz68VlmDebluJTDd3kSMGJs+22jJVLh0Fv0bcrZcbxWMLknLTS+Tig93Lq9LNTuwY
+         V5SiifT7xi1tRId07N0GCnnM4k3LCV4L7xKXbW8uFDrmLNNXcErsIb8FkXig368+U8IB
+         gwH2+13ufQE7YAbNisWxG/gB4r1KN0MAw8jCMwuAkmZcpZ5SUmMOhPUUT4OizXTOOKUu
+         2c9a4jwgTkeHUBZ73M4rJWvghAt/bBReKj25J4ixRMSVPADaSpbbQL6/CBnR8+fpnv1N
+         kk77iJW7wxWjk6/XNHa1gBmb0yXMD6kiD2jinSUPkYeQ6Y2GPG5/5r4thQ7xTjtYro0k
+         tQ2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vwy/nvSACPs3saFn3MC2GpZOqXyVXmgpysdDNeISxL4=;
+        b=PdxDr/xGkZOANSM1jBIjXDBYlPnBc81KQZqMVQZXZzHDEdMElf/Mytiw+sGXkOKAUj
+         DHKGN9EO+L5QDLH/QNmVv0yIRGxHgyRxC5POSbJ7SFcREsMG457I890ygUTSTDKPvj+e
+         h7WEo6V1csyuaf9Xnc27eMk1/4loHSrgUGrlRfo4m1wuqn+JTHPmKytlsbnqB3NNIAeL
+         q2IfAdutoG1LEtVQhgMypt+u5QXNKrggjMuuOorxbK69b1cW3KaY7vAqSzrxrEHXEbCQ
+         /vMs9huEeQtjYhgPfWv+ebVpS28e9To4UIjtJLjxdNdXICGpywz7ObGrWmI+fxWP9y9H
+         /5BQ==
+X-Gm-Message-State: AO0yUKUxuEfW+Sp+XPOwwStvbLUHBuMtUubohpnygRmACgTqeklIzd2W
+        FIxKDh44ZMgLU2JNQMTw9x4=
+X-Google-Smtp-Source: AK7set+7/LSgLUnPubFXxsFw4TXLoT5TlodOzauYcx+mvORzOE91ehJg5BdcehvsXAQ3G3HCcHMguA==
+X-Received: by 2002:a17:90a:c782:b0:233:ab9b:f86a with SMTP id gn2-20020a17090ac78200b00233ab9bf86amr7033557pjb.8.1676559137218;
+        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
+Received: from awkrail.localdomain.jp (p182177-ipngn200503kyoto.kyoto.ocn.ne.jp. [58.90.106.177])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090abd1700b00233db0db3dfsm3388472pjr.7.2023.02.16.06.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 06:52:16 -0800 (PST)
+From:   Taichi Nishimura <awkrail01@gmail.com>
+To:     rdunlap@infradead.org
+Cc:     andrii@kernel.org, ast@kernel.org, awkrail01@gmail.com,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        deso@posteo.net, haoluo@google.com, hawk@kernel.org,
+        iii@linux.ibm.com, joannelkoong@gmail.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        martin.lau@linux.dev, memxor@gmail.com, mykolal@fb.com,
+        nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
+        sdf@google.com, shuah@kernel.org, song@kernel.org, trix@redhat.com,
+        yhs@fb.com, ytcoode@gmail.com, gregkh@linuxfoundation.org
+Subject: [Re: PATCH bpf-next] Fix typos in selftest/bpf files
+Date:   Thu, 16 Feb 2023 23:51:45 +0900
+Message-Id: <20230216145145.548183-1-awkrail01@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <4753a724-2fd4-3672-c7ce-0164fe759eea@infradead.org>
+References: <4753a724-2fd4-3672-c7ce-0164fe759eea@infradead.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next 0/3] seg6: add PSP flavor support for SRv6 End behavior
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167655842216.23013.1967734576952648169.git-patchwork-notify@kernel.org>
-Date:   Thu, 16 Feb 2023 14:40:22 +0000
-References: <20230215134659.7613-1-andrea.mayer@uniroma2.it>
-In-Reply-To: <20230215134659.7613-1-andrea.mayer@uniroma2.it>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, stefano.salsano@uniroma2.it,
-        paolo.lungaroni@uniroma2.it, ahabdels.dev@gmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+> This text is not needed in the changelog for a patch, please read the
+> section entitled "The canonical patch format" in the kernel file,
+> Documentation/process/submitting-patches.rst for what is needed in order
+> to properly describe the change.
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+> thanks,
 
-On Wed, 15 Feb 2023 14:46:56 +0100 you wrote:
-> Segment Routing for IPv6 (SRv6 in short) [1] is the instantiation of the
-> Segment Routing (SR) [2] architecture on the IPv6 dataplane.
-> In SRv6, the segment identifiers (SID) are IPv6 addresses and the segment list
-> (SID List) is carried in the Segment Routing Header (SRH). A segment may be
-> bound to a specific packet processing operation called "behavior". The RFC8986
-> [3] defines and standardizes the most common/relevant behaviors for network
-> operators, e.g., End, End.X and End.T and so on.
-> 
-> [...]
+> greg k-h
 
-Here is the summary with links:
-  - [net-next,1/3] seg6: factor out End lookup nexthop processing to a dedicated function
-    https://git.kernel.org/netdev/net-next/c/525c65ff5696
-  - [net-next,2/3] seg6: add PSP flavor support for SRv6 End behavior
-    https://git.kernel.org/netdev/net-next/c/bdf3c0b9c10b
-  - [net-next,3/3] selftests: seg6: add selftest for PSP flavor in SRv6 End behavior
-    https://git.kernel.org/netdev/net-next/c/5198cb408fcf
+> Hi,
+> The corrections all look good.
+> Of course, you need to fix what Greg mentioned, then you can resubmit
+> the patch with this added:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
+> Thanks.
 
+Thank you for your reviewing and advices.
+I am a beginner so they are helpful.
+
+I read the docs and re-sent a patch.
+After sending it, I found forgetting to reply to this thread...
+Sorry in advance.
