@@ -2,108 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA8A69AF56
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Feb 2023 16:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C126669AF5B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Feb 2023 16:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjBQPSw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Feb 2023 10:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
+        id S230290AbjBQPTH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Feb 2023 10:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjBQPSu (ORCPT
+        with ESMTP id S230299AbjBQPTF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Feb 2023 10:18:50 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C776F3CB
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 07:18:46 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id bt27so982649wrb.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 07:18:45 -0800 (PST)
+        Fri, 17 Feb 2023 10:19:05 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456DB718D7
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 07:19:01 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id co2so5032333edb.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 07:19:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GHpElbdT8yGvO2G+2wK7hH12e2y8DO+zHXf7OVoJ8YY=;
-        b=Xw/ILqWdiTi7Y5ML8FZgvK/UJFdWtP/qoxwRrlczOKWdxKZ3ltZr09E7i7Kb6hx3pg
-         CwaTCoeenVJmC58suWT4k7NVsQCIPpNt6mwkWd6wlcRVqP+3xr/wF+u8asvJYhM8SHCH
-         Y+ExaTAObLFUuT0b0f1DMpW/t+f20533EBThc=
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FU0XLrtzMAKjlRYy7HgclTRxusFFqyOt4HUxHYauwNc=;
+        b=ClA2++cyEmWIvrCX/JLkk1qEq68q05a7YodtcNV8zGQp1BNgn63XDxPeGO7ySUcDYu
+         d/BePzI2UZKdbMBHeF/uusiEID2WsgF/lI0ZO0877Ps7RzA86sMfjjc1Z3Khofm4S0v8
+         KkPGTDYEIR3Dxr25JpZ4QoJAXrpm2d2qU343QGPZOx/rqhd+s5q4LvOrP06XV3EobMI4
+         Y0Y5hq1fKFB9aU2sdTAL7uSoo9pGWeekuKrycc5FhIEWiP/VLCsAayu90Nvtw+OYrhBN
+         L8xmKmDLgZpok4Nfhs2ZMXm6azC0AeyitLgDGNi3iJS2nEB4vZskhWphpKChMmYyxShV
+         RLMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GHpElbdT8yGvO2G+2wK7hH12e2y8DO+zHXf7OVoJ8YY=;
-        b=moOC3HNGtzM8zjG/ibAXOr7hb4k6vubBUer6mAEEV9J5hWNMpy9WTnZt78057Ob3FM
-         zZyz8rZEf9SItWBj+1L/KuHq6LoGriPjb+8IFxTHuSh+2V3kPUUfUHKJUJLmP5+hK3S6
-         +GQ7kR4I1JcjjNNkkivHvIC+hwJ2oXdDGU1WGufbSQDE6EUH9QQSxnkx6Z6gUz/pKea6
-         RDDdNit9m8GF83O5tIuSmwvxDuThnKZhWQs4zPBiiZsN/r5MoOtUimRGwsJG1wdc/YJB
-         2Zz3MNEW0RTGd/4SYkxxb7GwquT8wQZRcIII4BiTxgpy8YF7gtUVWuK/hPh/t6uvd3WD
-         +LOA==
-X-Gm-Message-State: AO0yUKXp1TEurfsAqj0pMqJ/JQNI6/2XtPwSFscX6cnvaP5IgINk3i0M
-        mGq5CzxUIYDWSswxhWZ2MIZs/Q==
-X-Google-Smtp-Source: AK7set9HOYCXPZnIl+FQkYUmovMzzNM5k0/e/5wKgplxSmbKJ77s6EqPKIFEntOkCwkD9eyurmqsYA==
-X-Received: by 2002:adf:f646:0:b0:2c6:e87f:f19 with SMTP id x6-20020adff646000000b002c6e87f0f19mr1491310wrp.57.1676647124414;
-        Fri, 17 Feb 2023 07:18:44 -0800 (PST)
-Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:1704:c044:3b31:aaca])
-        by smtp.gmail.com with ESMTPSA id 26-20020a05600c229a00b003dc49e0132asm1166420wmf.1.2023.02.17.07.18.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Feb 2023 07:18:43 -0800 (PST)
-From:   Florent Revest <revest@chromium.org>
-To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kbuild@vger.kernel.org
-Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, kpsingh@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com,
-        Florent Revest <revest@chromium.org>
-Subject: [PATCH bpf-next] selftests/bpf: Fix cross compilation with CLANG_CROSS_FLAGS
-Date:   Fri, 17 Feb 2023 16:18:32 +0100
-Message-Id: <20230217151832.27784-1-revest@chromium.org>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FU0XLrtzMAKjlRYy7HgclTRxusFFqyOt4HUxHYauwNc=;
+        b=ZZKHQ5ZraLHBcmFGecrpFiCm0MLaPKtrDt2kNhnHlcmW1RfB2PqQkfFBq9x582p7Va
+         asKGTTO40wMuHux/VvUr1ndhd1SrYwcOYLSEpHAYmnM2F8YCiXyRtZH0wPsl8beVca95
+         MAY2OEN4xyrVMClyIjgBRzJTivVi5s9E2jC8PWgK4MfsJqH1uO1rTXV8vGRXmZSN3T9c
+         9+PnSLYRmh7Qz8GANMHtBTP59fVhGFDvCioX8D2Yz4itD74C1eo+ZtbRzhg9AGVkxYpq
+         +lJ2S9G/YcC18+bfoEG6hEjAOBvsqNJ2//w1FZ6zdfEL4bsJmBn2BCE/ni3kws2h1iQv
+         LFYA==
+X-Gm-Message-State: AO0yUKXMsayM0J6hel2IC7r396UsCONMxXQY5sGTEOqZ/TMzz9iDYDVq
+        p+NSRHDWjfszP1G+qk4xhLHF4Br3VCxt4EmXNnoAog==
+X-Google-Smtp-Source: AK7set+sX96S/Lh1UKWLv7UWH9jx5/d5nrpnfKpxlGGC/JiPWb4tlRxD5PVoIjiClVPuLTYAaerKW4sYVYIH/ehhHR0=
+X-Received: by 2002:a17:906:48c9:b0:8ae:9f1e:a1c5 with SMTP id
+ d9-20020a17090648c900b008ae9f1ea1c5mr525133ejt.3.1676647139268; Fri, 17 Feb
+ 2023 07:18:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230202112915.867409-1-usama.anjum@collabora.com> <20230202112915.867409-4-usama.anjum@collabora.com>
+In-Reply-To: <20230202112915.867409-4-usama.anjum@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Fri, 17 Feb 2023 16:18:47 +0100
+Message-ID: <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I cross-compile my BPF selftests with the following command:
+On Thu, 2 Feb 2023 at 12:30, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+[...]
+> - The masks are specified in required_mask, anyof_mask, excluded_ mask
+>   and return_mask.
+[...]
 
-CLANG_CROSS_FLAGS="--target=aarch64-linux-gnu --sysroot=/sysroot/" \
-  make LLVM=1 CC=clang CROSS_COMPILE=aarch64-linux-gnu- SRCARCH=arm64
+May I suggest a slightly modified interface for the flags?
 
-(Note the use of CLANG_CROSS_FLAGS to specify a custom sysroot instead
-of letting clang use gcc's default sysroot)
+As I understand, the return_mask is what is applied to page flags to
+aggregate the list.
+This is a separate thing, and I think it doesn't need changes except
+maybe an improvement
+in the documentation and visual distinction.
 
-However, CLANG_CROSS_FLAGS gets propagated to host tools builds (libbpf
-and bpftool) and because they reference it directly in their Makefiles,
-they end up cross-compiling host objects which results in linking
-errors.
+For the page-selection mechanism, currently required_mask and
+excluded_mask have conflicting
+responsibilities. I suggest to rework that to:
+1. negated_flags: page flags which are to be negated before applying
+the page selection using following masks;
+2. required_flags: flags which all have to be set in the
+(negation-applied) page flags;
+3. anyof_flags: flags of which at least one has to be set in the
+(negation-applied) page flags;
 
-This patch ensures that CLANG_CROSS_FLAGS is reset if CROSS_COMPILE
-isn't set (for example when reaching a BPF host tool build).
+IOW, the resulting algorithm would be:
 
-Signed-off-by: Florent Revest <revest@chromium.org>
----
- tools/scripts/Makefile.include | 2 ++
- 1 file changed, 2 insertions(+)
+tested_flags =3D page_flags ^ negated_flags;
+if (~tested_flags & required_flags)
+  skip page;
+if (!(tested_flags & anyof_flags))
+  skip_page;
 
-diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index 0efb8f2b33ce..ff527ac065cf 100644
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -108,6 +108,8 @@ endif # GCC_TOOLCHAIN_DIR
- endif # CLANG_CROSS_FLAGS
- CFLAGS += $(CLANG_CROSS_FLAGS)
- AFLAGS += $(CLANG_CROSS_FLAGS)
-+else
-+CLANG_CROSS_FLAGS :=
- endif # CROSS_COMPILE
- 
- # Hack to avoid type-punned warnings on old systems such as RHEL5:
--- 
-2.39.2.637.g21b0678d19-goog
+aggregate_on(page_flags & return_flags);
 
+Best Regards
+Micha=C5=82 Miros=C5=82aw
