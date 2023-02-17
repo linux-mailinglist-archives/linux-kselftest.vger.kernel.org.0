@@ -2,66 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC9269B2B2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Feb 2023 19:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 764C769B2BE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Feb 2023 19:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBQSzJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Feb 2023 13:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
+        id S229763AbjBQS57 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Feb 2023 13:57:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjBQSzG (ORCPT
+        with ESMTP id S229761AbjBQS56 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Feb 2023 13:55:06 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E385FC7A
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 10:54:23 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id l7-20020a17090b078700b0020a71040b4cso777559pjz.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 10:54:23 -0800 (PST)
+        Fri, 17 Feb 2023 13:57:58 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787AE27D41
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 10:57:56 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id q10-20020a056902150a00b0091b90b20cd9so1011103ybu.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 10:57:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8XXhCOstGxwm90421DAyoKAej/4Z8mcoi6Wlc8kCjdk=;
-        b=IZ3Z+JoTISDUXkmeFG7QKBn0PDd2RpeSIuii7wzSU5FWqFqD3YKNG+p6S1JpwaSlDh
-         ew0RNKAwlChjbJqhc/GPqNf1onzwQRLDT2pQHAmZ9z13N1rsH4zlD4C/iBORwtcy/7Vs
-         4LWY2bmqvD+7WPRfYO9LYJkUalQmHeupmZPVU/uJPEn2jjlzI2fHZUFBGgx89uIFNeR8
-         GQMoxJZ7eN704Skwx87dhfoA1hN1zix01/rqgIEYeAej1Xo5VgUaA7c3+8n9lORAovk5
-         e/+NnegHzJPw0GpOp+WnX4Iu6JmfT99u3ZWkFj74cIzcI7JpajVc87uUCNr9hx7bRq9F
-         xGug==
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ysoRUQ2NmWRIM1ClHrF/cO9hSIq1YGVMNf9jCB9BrVw=;
+        b=XAPGbj1IByG6uK7uszQdQg3mPW1GPtzcnx3PltocNfok0FAlbTJlsiDAtzlIeANIPf
+         fO2PGyc+1Yrrr2iQHRJW1uG6plUGdQdUFZdCoMktOdc0lrM4jZTG1ohm/QcXXfI0hadv
+         GtSjObwkGPmR/5cmQDt3zcFhFwX/rJosVDD0EAT9ImJR7gmAI+3gxCVTZ8M0qdxRwYC3
+         mpYa/AmsasfbqcrLw0gP5GIq3H/m/nm1y44alb3SATCtSy/9O92SkQhlDKNyD8yPY2fZ
+         mzRt1yhz3anLtW7OUvVwGK6v/mqys+iSrS1zfYC1LaCUTjwjWjv1z5EvAE4H0uNtGHXv
+         1Zhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8XXhCOstGxwm90421DAyoKAej/4Z8mcoi6Wlc8kCjdk=;
-        b=yMrSrgBG6/AdRrkNT3agO2+8yb7TmhoMmVuyLHLY88sAhcdn9/Om2bqn3iNqww0kxu
-         kFkZQD9u+UXBJYvDcu75pt8PIRkwx7OEwJE/6a+Z7ESdulUO9jfj+T2/VqzssoDbuOdR
-         xadoucS/5J0jCeau/hVyf85qFlcGspYa746txXhk7J+8CORUdIhzKX77blN2LucMfayB
-         6gHNBGs/GCB1waPNo7u+ATvLyPZpnRa5Q9dh7VEbY9WsFrXnK3DIi9kl8i3KQiEpE8r8
-         vwgHT6H2qjYcDqI6zFu9hapnQkhJrNtj7WsIVBwJOd83t193nM8SRYYjfWbgiO4VK+si
-         XZKQ==
-X-Gm-Message-State: AO0yUKV9ffb5QbCzo53U44yASm7uKm0TCTA7/MZJ690t2Qx97XTVhZW4
-        lOU0DXOW2YajhERBHcpedmfzNiMZ1ZW6n2zXMw==
-X-Google-Smtp-Source: AK7set+1XTTWB/DeE9M0hPnAQqoc9pw6PJXf/6VSbMIu1YTy+8tDk8uVwsQF3gP8eC2DNG7keUDHRWLwMUFcysx2TA==
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ysoRUQ2NmWRIM1ClHrF/cO9hSIq1YGVMNf9jCB9BrVw=;
+        b=zsdSHcSYm3WpyJf2x9r3xluUk6ntlBJZp9JiawqpmapbfujAYVNurci5kF7OoHIpNd
+         NPljRGaZRfwa0Jyi6uAp8mtSeSrkOvElBIMk8tO1/cqdW66LGdUPa7RvYI9EPEV11P0L
+         LIuJKirVlbzov95Zf6DWhgl5HB+tHyxGqGnBa3wi1geSBWeYPpdROXlbmhBZVAislBDP
+         r3GsAlcLVZuEhxUcT/woMoNdSqlEXOUzqkjei4eEkbGN5wPfgPeo2h0L3nINN3mMbeis
+         MB6xG6kzYgWslEL/xzGb2evygZIK/kIlvYLFqnl32M1h84whKLex0vedLfIoBcGGb+gc
+         /WsQ==
+X-Gm-Message-State: AO0yUKXCiQPQkwG/AomTly1dmxuUDhXIlrr0mdWq2nBjokQkjGcAWtlg
+        cYQZbS0qqpFB4ub8oUXfLycYOOi70i5ifTOQRA==
+X-Google-Smtp-Source: AK7set/7cglHBHgHgMHXJGb2yqkYii4BdyONKgmYXXDpOWww80xi2p3bOZiV1Yk3Wn70LTN5dPgXnzFYFaZNy7W5Iw==
 X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a62:1d41:0:b0:5a8:dc92:109f with SMTP
- id d62-20020a621d41000000b005a8dc92109fmr303430pfd.3.1676660059492; Fri, 17
- Feb 2023 10:54:19 -0800 (PST)
-Date:   Fri, 17 Feb 2023 18:54:05 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:1443:b0:8bd:4ab5:18f4 with
+ SMTP id a3-20020a056902144300b008bd4ab518f4mr497438ybv.6.1676660275638; Fri,
+ 17 Feb 2023 10:57:55 -0800 (PST)
+Date:   Fri, 17 Feb 2023 18:57:54 +0000
+In-Reply-To: <Y+1bom6CMFeNGWmm@google.com> (message from Sean Christopherson
+ on Wed, 15 Feb 2023 14:24:34 -0800)
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <32866e5d00174697730d6231d2fb81f6b8d98c8a.1676659352.git.ackerleytng@google.com>
-Subject: [PATCH 1/1] KVM: selftests: Adjust VM's initial stack address to
- align with SysV ABI spec
+Message-ID: <diqzy1owjf0t.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [RFC PATCH v3 08/31] KVM: selftests: Require GCC to realign
+ stacks on function entry
 From:   Ackerley Tng <ackerleytng@google.com>
-To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
-        dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     erdemaktas@google.com, vannapurve@google.com, sagis@google.com,
-        mail@maciej.szmigiero.name, Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     erdemaktas@google.com, mail@maciej.szmigiero.name,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        isaku.yamahata@intel.com, sagis@google.com, afranji@google.com,
+        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
+        maz@kernel.org, bgardon@google.com, jmattson@google.com,
+        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
+        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
+        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
+        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
+        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
+        pshier@google.com, axelrasmussen@google.com,
+        zhenzhong.duan@intel.com, like.xu@linux.intel.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,94 +79,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Align stack to match calling sequence requirements in section "The
-Stack Frame" of the System V ABI AMD64 Architecture Processor
-Supplement, which requires the value (%rsp + 8) to be a multiple of 16
-when control is transferred to the function entry point.
 
-This is required because GCC is already aligned with the SysV ABI
-spec, and compiles code resulting in (%rsp + 8) being a multiple of 16
-when control is transferred to the function entry point.
+> > I figured it out!
+> >
+> > GCC assumes that the stack is 16-byte aligned **before** the call
+> > instruction. Since call pushes rip to the stack, GCC will compile code
+> > assuming that on entrance to the function, the stack is -8 from a
+> > 16-byte aligned address.
+> >
+> > Since for TDs we do a ljmp to guest code, providing a function's
+> > address, the stack was not modified by a call instruction pushing rip to
+> > the stack, so the stack is 16-byte aligned when the guest code starts
+> > running, instead of 16-byte aligned -8 that GCC expects.
+> >
+> > For VMs, we set rip to a function pointer, and the VM starts running
+> > with a 16-byte algined stack too.
+> >
+> > To fix this, I propose that in vm_arch_vcpu_add(), we align the
+> > allocated stack address and then subtract 8 from that:
+> >
+> > @@ -573,10 +573,13 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm  
+> *vm,
+> > uint32_t vcpu_id,
+> >         vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+> >         vcpu_setup(vm, vcpu);
+> >
+> > +       stack_vaddr += (DEFAULT_STACK_PGS * getpagesize());
+> > +       stack_vaddr = ALIGN_DOWN(stack_vaddr, 16) - 8;
 
-This fixes guest crashes when compiled guest code contains certain SSE
-instructions, because thes SSE instructions expect memory
-references (including those on the stack) to be 16-byte-aligned.
+> The ALIGN_DOWN should be unnecessary, we've got larger issues if  
+> getpagesize() isn't
+> 16-byte aligned and/or if __vm_vaddr_alloc() returns anything but a  
+> page-aligned
+> address.  Maybe add a TEST_ASSERT() sanity check that stack_vaddr is  
+> page-aligned
+> at this point?
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
+> And in addition to the comment suggested by Maciej, can you also add a  
+> comment
+> explaining the -8 adjust?  Yeah, someone can go read the changelog, but I  
+> think
+> this is worth explicitly documenting in code.
 
-This patch is a follow-up from discussions at
-https://lore.kernel.org/lkml/20230121001542.2472357-9-ackerleytng@google.com/
+> Lastly, can you post it as a standalone patch?
 
----
- .../selftests/kvm/include/linux/align.h        | 15 +++++++++++++++
- .../selftests/kvm/lib/x86_64/processor.c       | 18 +++++++++++++++++-
- 2 files changed, 32 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/kvm/include/linux/align.h
+> Many thanks!
 
-diff --git a/tools/testing/selftests/kvm/include/linux/align.h b/tools/testing/selftests/kvm/include/linux/align.h
-new file mode 100644
-index 000000000000..2b4acec7b95a
---- /dev/null
-+++ b/tools/testing/selftests/kvm/include/linux/align.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_ALIGN_H
-+#define _LINUX_ALIGN_H
-+
-+#include <linux/const.h>
-+
-+/* @a is a power of 2 value */
-+#define ALIGN(x, a)		__ALIGN_KERNEL((x), (a))
-+#define ALIGN_DOWN(x, a)	__ALIGN_KERNEL((x) - ((a) - 1), (a))
-+#define __ALIGN_MASK(x, mask)	__ALIGN_KERNEL_MASK((x), (mask))
-+#define PTR_ALIGN(p, a)		((typeof(p))ALIGN((unsigned long)(p), (a)))
-+#define PTR_ALIGN_DOWN(p, a)	((typeof(p))ALIGN_DOWN((unsigned long)(p), (a)))
-+#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
-+
-+#endif	/* _LINUX_ALIGN_H */
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index acfa1d01e7df..09b48ae96fdd 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2018, Google LLC.
-  */
-
-+#include "linux/align.h"
- #include "test_util.h"
- #include "kvm_util.h"
- #include "processor.h"
-@@ -569,6 +570,21 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
- 				       DEFAULT_GUEST_STACK_VADDR_MIN,
- 				       MEM_REGION_DATA);
-
-+	stack_vaddr += DEFAULT_STACK_PGS * getpagesize();
-+
-+	/*
-+	 * Align stack to match calling sequence requirements in section "The
-+	 * Stack Frame" of the System V ABI AMD64 Architecture Processor
-+	 * Supplement, which requires the value (%rsp + 8) to be a multiple of
-+	 * 16 when control is transferred to the function entry point.
-+	 *
-+	 * If this code is ever used to launch a vCPU with 32-bit entry point it
-+	 * may need to subtract 4 bytes instead of 8 bytes.
-+	 */
-+	TEST_ASSERT(IS_ALIGNED(stack_vaddr, PAGE_SIZE),
-+		"stack_vaddr must be page aligned for stack adjustment of -8 to work");
-+	stack_vaddr -= 8;
-+
- 	vcpu = __vm_vcpu_add(vm, vcpu_id);
- 	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
- 	vcpu_setup(vm, vcpu);
-@@ -576,7 +592,7 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
- 	/* Setup guest general purpose registers */
- 	vcpu_regs_get(vcpu, &regs);
- 	regs.rflags = regs.rflags | 0x2;
--	regs.rsp = stack_vaddr + (DEFAULT_STACK_PGS * getpagesize());
-+	regs.rsp = stack_vaddr;
- 	regs.rip = (unsigned long) guest_code;
- 	vcpu_regs_set(vcpu, &regs);
-
---
-2.39.2.637.g21b0678d19-goog
+Thanks Maciej and Sean, I've made the changes you requested and posted
+it as a standalone patch at
+https://lore.kernel.org/lkml/32866e5d00174697730d6231d2fb81f6b8d98c8a.1676659352.git.ackerleytng@google.com/
