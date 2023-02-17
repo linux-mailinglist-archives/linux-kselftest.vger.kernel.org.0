@@ -2,110 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90ABB69B533
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Feb 2023 23:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DB169B55C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Feb 2023 23:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjBQWEs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Feb 2023 17:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S229689AbjBQWR3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Feb 2023 17:17:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjBQWEr (ORCPT
+        with ESMTP id S229477AbjBQWR3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Feb 2023 17:04:47 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C345F252
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 14:04:46 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id u2so1900781wrs.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 14:04:46 -0800 (PST)
+        Fri, 17 Feb 2023 17:17:29 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536F75A3B6;
+        Fri, 17 Feb 2023 14:17:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cFO3DV470+NGJj/IZweUNO04rAsuRCnZaCote7lstUs=;
-        b=CB8vEGuOcAxfRiPnS7ZUouUxUHYsgmY57COOoQ6rBiI5//bUWP07ysURjI1t/3m2Ye
-         JmzZT7MO9nPE+akjzWxM513Jz3evYlKh1L6Anuc12P8tgYvQ8qZXhvSJHALp0ZlTLl0C
-         8BKAAv7qZJfenUCNXrowkvJl1ewUjYzpUqbtHUzimK/gaaBwdEIQdZQkS2ZD+05aARhm
-         Qc/Qmtg0XE1ZU/T43aNHvX3R7mnYIaOA2I4CphVHl3Zuct9SbFtb9RY82DSUSWBmrFO+
-         h7A1A7oUmo88IVtdCFbto54zXECIU/c0l7fuFrEJZxwlzTXrb3wFcbHq6sZzIgn0APDP
-         bsuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cFO3DV470+NGJj/IZweUNO04rAsuRCnZaCote7lstUs=;
-        b=SIt7tmx8yy3WINOzQMv5DzzO49QtH3v4MV02JUHTnPZV3qRxNVPfoKXIuYbg8f3nlu
-         63ucYg8xV6ScacpjNpW3Wwb8DF5esnVfkVCBRSaKg+1t6646nyfevErAzIB35PBwnuR2
-         7utH/lvMsL8m7GyqW0kmtIoy3X6fIKg4brZcwwJQRNlmdEaufzbeCMdwak7Op/qr0BTr
-         vvPmnyDPkqVw6eTLJ9CDqkeWDXkjqvctyvzbrz6qK3xPGb+RB1zcGnOd+4XJGUBLjfUB
-         vpSTQoRIgWmJxBzalrnBm4QjZjUmt6nNaZillv/gitWjKaK4e2mAIf7tLX3/qShW9e3/
-         Dmcg==
-X-Gm-Message-State: AO0yUKX7Mi1x9T8p2h8qH49YSNZsJ+BYZ5IeOKrB9NvtnSxKtfcwGgWS
-        bkQp5JnWwwQQDBY1NvnLqNFALneybqPwhmY5SJcQYA==
-X-Google-Smtp-Source: AK7set+PpkDJ+DrM8hLJnDbpSrM13HnkBpytZ8jrm5/0MahuhoduBDt6imKQwWlC8cefBCvyMHJo/ifma8jHbR2HtqY=
-X-Received: by 2002:a5d:640e:0:b0:2c4:dbc:8e34 with SMTP id
- z14-20020a5d640e000000b002c40dbc8e34mr229934wru.123.1676671484761; Fri, 17
- Feb 2023 14:04:44 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1676672248; x=1708208248;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ERQol1L+FhZXlEPdKYpI7+OtNPCVRnj9iAT1/PZiMj8=;
+  b=IOAIwuXfsKuJFKDUgarosZUYQH6sx8CqCFvGyilW2lWdWOm7P0Tlvmje
+   xEc1cSF1NAFgK9nUhZgJjIAYUgfmtEWlx3IogSikvq8s9S0BXTQyHsyc2
+   6p6FdnhohdqpxU00thP9oiTy0Xo4PMAdC8s+MRODPD6iQIIhIYNU5K77I
+   4=;
+X-IronPort-AV: E=Sophos;i="5.97,306,1669075200"; 
+   d="scan'208";a="183147594"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-32fb4f1a.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 22:17:26 +0000
+Received: from EX13D43EUB003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-32fb4f1a.us-west-2.amazon.com (Postfix) with ESMTPS id 1F762C0632;
+        Fri, 17 Feb 2023 22:17:25 +0000 (UTC)
+Received: from EX19D026EUB004.ant.amazon.com (10.252.61.64) by
+ EX13D43EUB003.ant.amazon.com (10.43.166.195) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.46; Fri, 17 Feb 2023 22:17:23 +0000
+Received: from uc3ecf78c6baf56.ant.amazon.com (10.88.197.97) by
+ EX19D026EUB004.ant.amazon.com (10.252.61.64) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.24; Fri, 17 Feb 2023 22:17:22 +0000
+From:   Andrew Paniakin <apanyaki@amazon.com>
+To:     <stable@vger.kernel.org>
+CC:     <luizcap@amazon.com>, <keescook@chromium.org>, <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <apanyaki@amazon.com>
+Subject: [5.15] Please apply 'selftest/lkdtm: Skip stack-entropy test if lkdtm is not available'
+Date:   Fri, 17 Feb 2023 14:17:05 -0800
+Message-ID: <20230217221705.2525177-1-apanyaki@amazon.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230214184606.510551-1-mizhang@google.com>
-In-Reply-To: <20230214184606.510551-1-mizhang@google.com>
-From:   Aaron Lewis <aaronlewis@google.com>
-Date:   Fri, 17 Feb 2023 22:04:33 +0000
-Message-ID: <CAAAPnDF9qKq5+PpqjN+1g8=zn0tkQ=aPQupwM+gJiuSE12zb4Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] Overhauling amx_test
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Venkatesh Srinivas <venkateshs@google.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.88.197.97]
+X-ClientProxiedBy: EX19D039UWB001.ant.amazon.com (10.13.138.119) To
+ EX19D026EUB004.ant.amazon.com (10.252.61.64)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 6:46 PM Mingwei Zhang <mizhang@google.com> wrote:
->
-> AMX architecture involves several entities such as xstate, XCR0,
-> IA32_XFD. This series add several missing checks on top of the existing
-> amx_test.
->
-> v1 -> v2:
->  - Add a working xstate data structure suggested by seanjc.
->  - Split the checking of CR0.TS from the checking of XFD.
->  - Fix all the issues pointed by in review.
->
-> v1:
-> https://lore.kernel.org/all/20230110185823.1856951-1-mizhang@google.com/
->
-> Mingwei Zhang (7):
->   KVM: selftests: x86: Fix an error in comment of amx_test
->   KVM: selftests: x86: Add a working xstate data structure
->   KVM: selftests: x86: Add check of CR0.TS in the #NM handler in
->     amx_test
->   KVM: selftests: Add the XFD check to IA32_XFD in #NM handler
->   KVM: selftests: Fix the checks to XFD_ERR using and operation
->   KVM: selftests: x86: Enable checking on xcomp_bv in amx_test
->   KVM: selftests: x86: Repeat the checking of xheader when
->     IA32_XFD[XTILEDATA] is set in amx_test
->
->  .../selftests/kvm/include/x86_64/processor.h  | 12 ++++
->  tools/testing/selftests/kvm/x86_64/amx_test.c | 59 ++++++++++---------
->  2 files changed, 43 insertions(+), 28 deletions(-)
->
-> --
-> 2.39.1.581.gbfd45094c4-goog
->
+commit 90091c367e74d5b58d9ebe979cc363f7468f58d3 upstream.
 
-Would you be open to adding my series to the end of this one?  That
-way we have one series that's overhauling amx_test.
+This patch fixes the stack-entropy.sh test to exit gracefully when the LKDTM is
+not available. Test will hang otherwise as reported in [1].
 
-https://lore.kernel.org/kvm/20230217215959.1569092-1-aaronlewis@google.com/
+Applicability of this fix to other LTS kernels:
+- 4.14: No lkdtm selftest
+- 4.19: No lkdtm selftest
+- 5.4:  No lkdtm selftests
+- 5.10: Inital selftest version introduced in 46d1a0f03d661 ("selftests/lkdtm:
+  Add tests for LKDTM targets") is a single script which has the LKDTM
+  availability check
+- 6.1: Fix applied
+
+This patch applies cleanly to stable-5.15 tree. Updated test was executed in
+Qemu VM with different kernels:
+- CONFIG_LKDTM not enabled. Test finished with status SKIP.
+- CONFIG_LKDTM enabled. Test failed (but not hanged) with error 'Stack entropy
+  is low'.
+- CONFIG_LKDTM enabled and randomize_kstack_offset=on boot argument provided.
+  Test succeed.
+
+[1] https://lore.kernel.org/lkml/2836f48a-d4e2-7f00-f06c-9f556fbd6332@linuxfoundation.org
