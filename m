@@ -2,146 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30F669B24F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Feb 2023 19:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC9269B2B2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Feb 2023 19:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjBQSUo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Feb 2023 13:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
+        id S229670AbjBQSzJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Feb 2023 13:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBQSUn (ORCPT
+        with ESMTP id S229755AbjBQSzG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Feb 2023 13:20:43 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2066.outbound.protection.outlook.com [40.107.96.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6044B5959B;
-        Fri, 17 Feb 2023 10:20:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oF/xnsRZ26KYGrvB19BuSQW1BHisolr5hbC9fzBX/ZKa8Flj2WjY54IaRdTIjQaOYkRa76flkx4H+ZJ7owZfXQJKbHpxh+wK1yP78/yn4eX7ilGxEbzbUXEVe+cu5yhfAsMYpVe0myntkR8l85QHhPeXobAJUlGA4VHLnQ0exv5dcgueawiS+eXEyjtkjU+krdok9gbX0lhSPP1ye1WpcK4TBL3pbA7RQ8CuuTbt0BcTNKuPWKPiY9fD32PEtQ046SyOVD4sBNHFo35frKh5f5+CD1PiS0cmkLHtfSw6Zq952I580UbRkVT5+d2+e7soU/ZvaRYJsMEC4350nG+5IA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SNWbJ2BKiILDAR5ZaJTsujZ0+6hY/AgEr44XX2lA7Ic=;
- b=itFzZmwy0cM7N2NZxVkGbS3pfoI4bKMTaXOdWHIKzY61rWNpohzuqI9aT6Gb1IQ5HZRgBNbSpF++Q9aLAwmbIAqA6ZVF0WQY9bunfxLQFot2avxf8QE3R9nWnbl4JtQD/NrO3W1/gf+6EV9+UeKhwXPH8RVeaa7Ks0TpzOg2nJate/V7riJ2anSNtSBz/B5M4zIC0Q7hJ5oIBM0G284XYbrItCOhDsvknAO5z0YezXcnjsbXzzw3JHlNTiFcXEU41ftJ1LRc+o3Lzn92emjIowxIC8IKPEMywXXstHnAm3mbGJdYvVdA89//i39o1fC271rIGsRApydOdnarISsXKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SNWbJ2BKiILDAR5ZaJTsujZ0+6hY/AgEr44XX2lA7Ic=;
- b=aohbWF3oDrgSPqZAwpeyLXx4XHDjj/bySdGEDkZCgkPNzI0E5YTULqp2f2JQkdBO5Qof+aWORrfMa963QA0DP8EZqfhchioJb+tndq4C7U8eNNoAkocUYVvTBjDQ2zDLHQxiHQZw9LpOALxBv3bnIAaA/VgpQu6WAfgFei3DmlOXcMQu7g60xxReQnpYupa4yZQ9MR1sPVDsWO0Ma/HADk2drflv7hYPtTEpThfZbpoHIXV27zc+oxfr4w+P0L8Aq4ZoGugybp6gWTYk5X8cWSU+HlzkbOe+FRPSrvkoprQS8Q8KCUuMh9WvFHoPSh0fFdoGxrx+ZVf92Cq8QEDRNA==
-Received: from DM6PR02CA0091.namprd02.prod.outlook.com (2603:10b6:5:1f4::32)
- by BL1PR12MB5159.namprd12.prod.outlook.com (2603:10b6:208:318::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13; Fri, 17 Feb
- 2023 18:20:40 +0000
-Received: from DM6NAM11FT109.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1f4:cafe::d) by DM6PR02CA0091.outlook.office365.com
- (2603:10b6:5:1f4::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.17 via Frontend
- Transport; Fri, 17 Feb 2023 18:20:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT109.mail.protection.outlook.com (10.13.173.178) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.17 via Frontend Transport; Fri, 17 Feb 2023 18:20:40 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 17 Feb
- 2023 10:20:28 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 17 Feb
- 2023 10:20:28 -0800
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Fri, 17 Feb 2023 10:20:27 -0800
-Date:   Fri, 17 Feb 2023 10:20:25 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-CC:     <joro@8bytes.org>, <alex.williamson@redhat.com>, <jgg@nvidia.com>,
-        <kevin.tian@intel.com>, <robin.murphy@arm.com>,
-        <cohuck@redhat.com>, <eric.auger@redhat.com>,
-        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
-        <peterx@redhat.com>, <jasowang@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
-        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH 00/17] Add Intel VT-d nested translation
-Message-ID: <Y+/FOar7KXKAb2VQ@Asurada-Nvidia>
-References: <20230209043153.14964-1-yi.l.liu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230209043153.14964-1-yi.l.liu@intel.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT109:EE_|BL1PR12MB5159:EE_
-X-MS-Office365-Filtering-Correlation-Id: edb699f7-016a-4a35-bdd7-08db1113acbf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q/YMYLR3ANt46mT2XH2GZ5d/kMu2vA/OhJdj2leOMdMA2iuU4N6wk1jsTxLslm7/4ojKdQPHFS3dGNCibf2e2txv2ebG3GHscF4vjy1Ng2yneAF2siUTMM/70PZyHeHL4zq1E2T9iqsxda5FFbfT0PT175fdDR0sT+u8JVuOltE6BNMUVbhzpLpwb7iTkPbVi3n6JbmcaCN4un7C4PooEVi2KRCy6RSGc67SOj7+gUjMKIz/VIrd74Zc28b/5RGzklnsImp7yLidUnFS8/EOrU+Ijyvh/PoiwvfebLfmbm6gzdmKF/04oS+EmgWgWQ2/f62asEk5Lie42ZM/l1o0JBJia3YFGNeg2h/LNwQX/EbxXHlc8nrTX/7wjnk5iNVVcM9jyuBNhQ2FNZQIsIZMiGk5dyFXrn+qW8CwxFgrfA0j2ajcRbvPeMKfBpJiNuWbbyvK5qFT94+SWanotf0iGH0D+j9v7IuyctP5l/wVHbh0Aq9qPC5T7lZLT6nLq0eExy76dsFdmfrTLD9tef+liY/gBckt79sfXTp/8cFL9OzA2tXoWtbw3lvcOO+SupwxwBaX+MRS6ctGfrIot6Hm31jiDEHtAAD9CIwyu9fAN7ZrOiFim91ysac8fk14V9QigtdYmkEIF+Ay40M9ukEA2QXqylkSoT45ZNBaeOfs5cCcRRTKxBD/gMT6mEProeT9WPAok1npyBpionRCrrbSFnxHRMnURrpj8Y1srpJYOUstwGsBj1Ng7B0QqVyl2ud/
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199018)(40470700004)(36840700001)(46966006)(2906002)(54906003)(8936002)(82740400003)(316002)(7416002)(5660300002)(40460700003)(70206006)(356005)(70586007)(8676002)(41300700001)(6916009)(426003)(4326008)(47076005)(336012)(33716001)(86362001)(7636003)(40480700001)(83380400001)(36860700001)(966005)(55016003)(478600001)(82310400005)(26005)(9686003)(186003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 18:20:40.1948
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: edb699f7-016a-4a35-bdd7-08db1113acbf
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT109.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5159
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 17 Feb 2023 13:55:06 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E385FC7A
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 10:54:23 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id l7-20020a17090b078700b0020a71040b4cso777559pjz.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Feb 2023 10:54:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8XXhCOstGxwm90421DAyoKAej/4Z8mcoi6Wlc8kCjdk=;
+        b=IZ3Z+JoTISDUXkmeFG7QKBn0PDd2RpeSIuii7wzSU5FWqFqD3YKNG+p6S1JpwaSlDh
+         ew0RNKAwlChjbJqhc/GPqNf1onzwQRLDT2pQHAmZ9z13N1rsH4zlD4C/iBORwtcy/7Vs
+         4LWY2bmqvD+7WPRfYO9LYJkUalQmHeupmZPVU/uJPEn2jjlzI2fHZUFBGgx89uIFNeR8
+         GQMoxJZ7eN704Skwx87dhfoA1hN1zix01/rqgIEYeAej1Xo5VgUaA7c3+8n9lORAovk5
+         e/+NnegHzJPw0GpOp+WnX4Iu6JmfT99u3ZWkFj74cIzcI7JpajVc87uUCNr9hx7bRq9F
+         xGug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8XXhCOstGxwm90421DAyoKAej/4Z8mcoi6Wlc8kCjdk=;
+        b=yMrSrgBG6/AdRrkNT3agO2+8yb7TmhoMmVuyLHLY88sAhcdn9/Om2bqn3iNqww0kxu
+         kFkZQD9u+UXBJYvDcu75pt8PIRkwx7OEwJE/6a+Z7ESdulUO9jfj+T2/VqzssoDbuOdR
+         xadoucS/5J0jCeau/hVyf85qFlcGspYa746txXhk7J+8CORUdIhzKX77blN2LucMfayB
+         6gHNBGs/GCB1waPNo7u+ATvLyPZpnRa5Q9dh7VEbY9WsFrXnK3DIi9kl8i3KQiEpE8r8
+         vwgHT6H2qjYcDqI6zFu9hapnQkhJrNtj7WsIVBwJOd83t193nM8SRYYjfWbgiO4VK+si
+         XZKQ==
+X-Gm-Message-State: AO0yUKV9ffb5QbCzo53U44yASm7uKm0TCTA7/MZJ690t2Qx97XTVhZW4
+        lOU0DXOW2YajhERBHcpedmfzNiMZ1ZW6n2zXMw==
+X-Google-Smtp-Source: AK7set+1XTTWB/DeE9M0hPnAQqoc9pw6PJXf/6VSbMIu1YTy+8tDk8uVwsQF3gP8eC2DNG7keUDHRWLwMUFcysx2TA==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a62:1d41:0:b0:5a8:dc92:109f with SMTP
+ id d62-20020a621d41000000b005a8dc92109fmr303430pfd.3.1676660059492; Fri, 17
+ Feb 2023 10:54:19 -0800 (PST)
+Date:   Fri, 17 Feb 2023 18:54:05 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <32866e5d00174697730d6231d2fb81f6b8d98c8a.1676659352.git.ackerleytng@google.com>
+Subject: [PATCH 1/1] KVM: selftests: Adjust VM's initial stack address to
+ align with SysV ABI spec
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
+        dmatlack@google.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     erdemaktas@google.com, vannapurve@google.com, sagis@google.com,
+        mail@maciej.szmigiero.name, Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Yi,
+Align stack to match calling sequence requirements in section "The
+Stack Frame" of the System V ABI AMD64 Architecture Processor
+Supplement, which requires the value (%rsp + 8) to be a multiple of 16
+when control is transferred to the function entry point.
 
-On Wed, Feb 08, 2023 at 08:31:36PM -0800, Yi Liu wrote:
+This is required because GCC is already aligned with the SysV ABI
+spec, and compiles code resulting in (%rsp + 8) being a multiple of 16
+when control is transferred to the function entry point.
 
-> Nicolin Chen (6):
->   iommufd: Add/del hwpt to IOAS at alloc/destroy()
->   iommufd/device: Move IOAS attaching and detaching operations into
->     helpers
->   iommufd/selftest: Add IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE test op
->   iommufd/selftest: Add coverage for IOMMU_HWPT_ALLOC ioctl
->   iommufd/selftest: Add IOMMU_TEST_OP_MD_CHECK_IOTLB test op
->   iommufd/selftest: Add coverage for IOMMU_HWPT_INVALIDATE ioctl
-> 
-> Yi Liu (6):
->   iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
->   iommufd: Split iommufd_hw_pagetable_alloc()
->   iommufd: Add kernel-managed hw_pagetable allocation for userspace
->   iommufd: Add infrastructure for user-managed hw_pagetable allocation
->   iommufd: Add user-managed hw_pagetable allocation
+This fixes guest crashes when compiled guest code contains certain SSE
+instructions, because thes SSE instructions expect memory
+references (including those on the stack) to be 16-byte-aligned.
 
-Just want to let you know that Jason made some major changes
-in device/hw_pagetable and selftest (mock_domain):
-https://github.com/jgunthorpe/linux/commits/iommufd_hwpt
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+---
 
-So most of changes above need to be redone. I am now rebasing
-the replace and the nesting series, and probably will finish
-by early next week.
+This patch is a follow-up from discussions at
+https://lore.kernel.org/lkml/20230121001542.2472357-9-ackerleytng@google.com/
 
-If you are reworking this series, perhaps can hold for a few
-days at these changes.
+---
+ .../selftests/kvm/include/linux/align.h        | 15 +++++++++++++++
+ .../selftests/kvm/lib/x86_64/processor.c       | 18 +++++++++++++++++-
+ 2 files changed, 32 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/kvm/include/linux/align.h
 
-Thanks
-Nic
+diff --git a/tools/testing/selftests/kvm/include/linux/align.h b/tools/testing/selftests/kvm/include/linux/align.h
+new file mode 100644
+index 000000000000..2b4acec7b95a
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/linux/align.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_ALIGN_H
++#define _LINUX_ALIGN_H
++
++#include <linux/const.h>
++
++/* @a is a power of 2 value */
++#define ALIGN(x, a)		__ALIGN_KERNEL((x), (a))
++#define ALIGN_DOWN(x, a)	__ALIGN_KERNEL((x) - ((a) - 1), (a))
++#define __ALIGN_MASK(x, mask)	__ALIGN_KERNEL_MASK((x), (mask))
++#define PTR_ALIGN(p, a)		((typeof(p))ALIGN((unsigned long)(p), (a)))
++#define PTR_ALIGN_DOWN(p, a)	((typeof(p))ALIGN_DOWN((unsigned long)(p), (a)))
++#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
++
++#endif	/* _LINUX_ALIGN_H */
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index acfa1d01e7df..09b48ae96fdd 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2018, Google LLC.
+  */
+
++#include "linux/align.h"
+ #include "test_util.h"
+ #include "kvm_util.h"
+ #include "processor.h"
+@@ -569,6 +570,21 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+ 				       DEFAULT_GUEST_STACK_VADDR_MIN,
+ 				       MEM_REGION_DATA);
+
++	stack_vaddr += DEFAULT_STACK_PGS * getpagesize();
++
++	/*
++	 * Align stack to match calling sequence requirements in section "The
++	 * Stack Frame" of the System V ABI AMD64 Architecture Processor
++	 * Supplement, which requires the value (%rsp + 8) to be a multiple of
++	 * 16 when control is transferred to the function entry point.
++	 *
++	 * If this code is ever used to launch a vCPU with 32-bit entry point it
++	 * may need to subtract 4 bytes instead of 8 bytes.
++	 */
++	TEST_ASSERT(IS_ALIGNED(stack_vaddr, PAGE_SIZE),
++		"stack_vaddr must be page aligned for stack adjustment of -8 to work");
++	stack_vaddr -= 8;
++
+ 	vcpu = __vm_vcpu_add(vm, vcpu_id);
+ 	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+ 	vcpu_setup(vm, vcpu);
+@@ -576,7 +592,7 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+ 	/* Setup guest general purpose registers */
+ 	vcpu_regs_get(vcpu, &regs);
+ 	regs.rflags = regs.rflags | 0x2;
+-	regs.rsp = stack_vaddr + (DEFAULT_STACK_PGS * getpagesize());
++	regs.rsp = stack_vaddr;
+ 	regs.rip = (unsigned long) guest_code;
+ 	vcpu_regs_set(vcpu, &regs);
+
+--
+2.39.2.637.g21b0678d19-goog
