@@ -2,58 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A2A69C1C0
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Feb 2023 18:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE8769C1C3
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Feb 2023 18:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjBSR5O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Feb 2023 12:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S230362AbjBSR6r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Feb 2023 12:58:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjBSR5O (ORCPT
+        with ESMTP id S230270AbjBSR6p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Feb 2023 12:57:14 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6AD10256
-        for <linux-kselftest@vger.kernel.org>; Sun, 19 Feb 2023 09:57:12 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-536a22c6224so9414107b3.11
-        for <linux-kselftest@vger.kernel.org>; Sun, 19 Feb 2023 09:57:12 -0800 (PST)
+        Sun, 19 Feb 2023 12:58:45 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A299011168
+        for <linux-kselftest@vger.kernel.org>; Sun, 19 Feb 2023 09:58:44 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id f8-20020a17090ac28800b00233d7314c1cso1013087pjt.5
+        for <linux-kselftest@vger.kernel.org>; Sun, 19 Feb 2023 09:58:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sscneNe11LR3WffkFyUD3z+Ja4W5fhnimf00dL+tzak=;
-        b=WftmOx8+im1S7FRJ5eHmM1GLa3IimgiHInS2RR0fhJV5qHCEX0LMJ8YmJdAiHU3R84
-         BVEJRRQz+YleupKdWZtxqzXlgvzgIfBHE91bxS8w40mxAIE9PC5fWc7r1mdAm4a3jciH
-         TLOxb2i5aBOVkmSoeb6erf2TA7JsQEqVdV2d7LcMLLTUqGCia5bfvE6ZO/nc6d9OTrmV
-         OzPT9Rwim/drYpF5ygMCVZ9UGYlDTv/I2Hn+6/wciZcgvBdcvpqpsCkMvRAogUD9jbwY
-         TRVdNkOVX4ohiTVperjU+YwvJanbdE2Qc4EzE20VsKhljdjs+hnVqOnMQ45Bnpf0x4xN
-         waBg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=b2rY0fDePvZ3ge2mp7FGjGIShiKV6CSswgiMPgCf5uY=;
+        b=Q2fsYk+/ips79nToDdZaIQ5r56O5hTmDZv3zAog+oerEoHeUZzBmJzPUcIy20tmDC5
+         1SEo9LyX8X/p9GYsrp+XhAIWeiqCtJtxDlkn+JIWn7Y92zjaDN1paBCzaKUrAfnATJls
+         3Halcrnd18gcRkC4O+CvdstDiXB0kt8jZ3SYmlu+pMiydGNMCu3LHtkfPO4DcT/AHBzt
+         M/oBDwuDxujTAFg5pjGOc6eBBsGC5WexDg/5p8fnWhZ+JCuPUWYWfYuihESbRZLhvai5
+         ZJgxRRCgKbyeBlDVTen8QBA9NjPdkxXzbNUm2Mtkh03xemzQuS+gk80AD2dVZ2rOc8VF
+         +WAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sscneNe11LR3WffkFyUD3z+Ja4W5fhnimf00dL+tzak=;
-        b=OCgw7PbPdNKfNhDWZK3YyR64YXPGprNX5jdNjBGPpsvjPmyMH1btP4YpRT/ZM9U/ap
-         bsXeX1M7NZST8qryC1GU9w0aU/AKFDX9gyyt3AVi55ABIIlwD0O+NZPetPZWxAzbxbhd
-         sVjoX+P0xpBwTGbgsmF/VM2utwTG2BR1T5tP92fwyY6T9kFLVD5Fa0s4/fZRKNgnAZ02
-         M91UBKpQMQxiq2dCuy72bTNP+xuCwVHn23DS6/PTcGVNUzzvBGEIdoRdj7EFNIA4qlXU
-         diQei0gVjGPdPUSo+gOknGis9AhGr02+8SODGanaWii3pcMUSfjbIAVLNzdKsraPKzre
-         aQKQ==
-X-Gm-Message-State: AO0yUKUi5Qud4gO0JLbZUTkUD3pvrmDeVadQSzAVX7QvUKexld3uf4oT
-        FiyuBRB31NOJHpifvjqPPZOAoivXQc4u84zMHrUrCA==
-X-Google-Smtp-Source: AK7set+65qfecMTYI0Ahz8F1uyux6Ma918+90Z7sXd1YIA5huooyLk5OpQDe0rfdJlYabaYOSaW9Udk1FdvuioaoOvc=
-X-Received: by 2002:a81:7302:0:b0:527:9fc2:66a3 with SMTP id
- o2-20020a817302000000b005279fc266a3mr11464ywc.83.1676829431453; Sun, 19 Feb
- 2023 09:57:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20230214184606.510551-1-mizhang@google.com> <20230214184606.510551-2-mizhang@google.com>
- <Y/He1Sro3hb7Hn0h@gao-cwp>
-In-Reply-To: <Y/He1Sro3hb7Hn0h@gao-cwp>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b2rY0fDePvZ3ge2mp7FGjGIShiKV6CSswgiMPgCf5uY=;
+        b=lJStTNonVtRGijJXrof6j/lt0v74LAHCjEvmgOh/hzqMxLtfPR3oLeF58Y9jQWIYtP
+         bJSqc4T6Yx872OHrZu7RIuma764jquA8MTsxGxXGtKf1PmtQ/ig9qPLSqAQKayLxolVC
+         VPlELd73Rojp59h7YCKQcjrOowQYEUieuJ6kTMTgLSthLGSaMijZIIDUimRXjxq6u8aY
+         T62fDj9CojSBvqwcrCf7ruPbFEDYUo0JOSk1Q/1r/jXn2AsBf0ktwcnbCOeamHKa2s1L
+         Tb55Rxf+nZNPm6cNLzu8+AC7sE7QA6msu+LpAFD3JLGtnmHlgUTBTr5Phe3/ixPLXkdQ
+         UbRw==
+X-Gm-Message-State: AO0yUKWhSfp1flgZKkJwakDdirxcO2O+EXkyoZZRjXX2TjLRMAiW4SnM
+        ctSYRT96hjUuE8QDXMF9FEeulg==
+X-Google-Smtp-Source: AK7set+GY3ybl/QsgojsDaqcMFssxRzRsKYU44N6hTtKw+of4RSi58cpzxDTb55Udub1Sz3I5DYV/Q==
+X-Received: by 2002:a17:902:d2cb:b0:19a:ad90:4223 with SMTP id n11-20020a170902d2cb00b0019aad904223mr660008plc.48.1676829523868;
+        Sun, 19 Feb 2023 09:58:43 -0800 (PST)
+Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170902744800b0019a8468cbe7sm18392plt.224.2023.02.19.09.58.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Feb 2023 09:58:43 -0800 (PST)
+Date:   Sun, 19 Feb 2023 17:58:40 +0000
 From:   Mingwei Zhang <mizhang@google.com>
-Date:   Sun, 19 Feb 2023 09:56:35 -0800
-Message-ID: <CAL715WJx1bjm21JnGzbsre+OQQnsKZ+rXQDqNAp9NwixZ_zEow@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] KVM: selftests: x86: Add a working xstate data structure
 To:     Chao Gao <chao.gao@intel.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
@@ -62,7 +59,16 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         Venkatesh Srinivas <venkateshs@google.com>,
         Aaron Lewis <aaronlewis@google.com>,
         "Chang S. Bae" <chang.seok.bae@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 2/7] KVM: selftests: x86: Fix an error in comment of
+ amx_test
+Message-ID: <Y/JjUEiIizj98hZb@google.com>
+References: <20230214184606.510551-1-mizhang@google.com>
+ <20230214184606.510551-3-mizhang@google.com>
+ <Y/Hh31GLftx3eZJY@gao-cwp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/Hh31GLftx3eZJY@gao-cwp>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -74,17 +80,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Feb 19, 2023 at 12:33 AM Chao Gao <chao.gao@intel.com> wrote:
->
-> On Tue, Feb 14, 2023 at 06:46:00PM +0000, Mingwei Zhang wrote:
-> >-      /* xsave data for guest_code */
-> >-      xsavedata = vm_vaddr_alloc_pages(vm, 3);
-> >-      memset(addr_gva2hva(vm, xsavedata), 0, 3 * getpagesize());
-> >-      vcpu_args_set(vcpu, 3, amx_cfg, tiledata, xsavedata);
-> >+      /* XSAVE state for guest_code */
-> >+      xstate = vm_vaddr_alloc_pages(vm, DIV_ROUND_UP(XSAVE_SIZE, PAGE_SIZE));
-> >+      memset(addr_gva2hva(vm, xstate), 0, DIV_ROUND_UP(XSAVE_SIZE, PAGE_SIZE));
->
->                                             ^ this should be the size in bytes instead of in pages. Right?
+On Sun, Feb 19, 2023, Chao Gao wrote:
+> On Tue, Feb 14, 2023 at 06:46:01PM +0000, Mingwei Zhang wrote:
+> >After the execution of __tilerelease(), AMX component will be in INIT
+> >state. Therefore, execution of XSAVEC saving the AMX state into memory will
+> >cause the xstate_bv[18] cleared in xheader. However, the xcomp_bv[18] will
+> >remain set. Fix the error in comment. Also, update xsavec() to XSAVEC
+> >because xcomp_bv[18] is set due to the instruction, not the function.
+> >Finally, use XTILEDATA instead 'bit 18' in comments.
+> >
+> >Cc: Jim Mattson <jmattson@google.com>
+> >Cc: Venkatesh Srinivas <venkateshs@google.com>
+> >Cc: Aaron Lewis <aaronlewis@google.com>
+> >Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> >---
+> > tools/testing/selftests/kvm/x86_64/amx_test.c | 5 ++++-
+> > 1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> >diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> >index d506821a5a26..aac727ff7cf8 100644
+> >--- a/tools/testing/selftests/kvm/x86_64/amx_test.c
+> >+++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> >@@ -190,7 +190,10 @@ static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
+> > 	GUEST_SYNC(4);
+> > 	__tilerelease();
+> > 	GUEST_SYNC(5);
+> >-	/* bit 18 not in the XCOMP_BV after xsavec() */
+> >+	/*
+> >+	 * After XSAVEC, XTILEDATA is cleared in the xstate_bv but is set in
+> >+	 * the xcomp_bv.
+> >+	 */
+> > 	xstate->header.xstate_bv = XFEATURE_MASK_XTILEDATA;
+> > 	__xsavec(xstate, XFEATURE_MASK_XTILEDATA);
+> > 	GUEST_ASSERT(!(xstate->header.xstate_bv & XFEATURE_MASK_XTILEDATA));
+> 
+> maybe it would be better to add another GUEST_ASSERT() to enforce that
+> XTILEDATA is set in the xcomp_bv.
 
-Right, thanks for catching that. I will fix it in the next version.
+yeah. The check has been added in the 6th patch of the series, but I
+think it is hard to see. I will reorder the change next to this one in
+the next version.
+> 
+> >-- 
+> >2.39.1.581.gbfd45094c4-goog
+> >
