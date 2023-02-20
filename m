@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B302C69C44F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Feb 2023 04:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 881E969C451
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Feb 2023 04:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBTDDo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Feb 2023 22:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S229985AbjBTDD4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Feb 2023 22:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjBTDDn (ORCPT
+        with ESMTP id S229981AbjBTDDy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Feb 2023 22:03:43 -0500
+        Sun, 19 Feb 2023 22:03:54 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1317ABDEB;
-        Sun, 19 Feb 2023 19:03:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0E1E3AA;
+        Sun, 19 Feb 2023 19:03:42 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.183.169])
-        by gnuweeb.org (Postfix) with ESMTPSA id E8A3583130;
-        Mon, 20 Feb 2023 03:03:27 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 738E683133;
+        Mon, 20 Feb 2023 03:03:35 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1676862214;
-        bh=Hke7N4a3CN0c5boF6cakkDs3zb+KxALxVpws4FxKUhQ=;
+        s=default; t=1676862222;
+        bh=8+ewo69UeU0rHb78uAAPEiHOOweqFJBmdi5nkVAJieo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HZLrDE/2AZQbdHvSmD8pEes8Vh7voDhgqtC0DzC6HiRiw11GaF62rZWZ3CAZMKDOk
-         7P8adfTgqrfGksaa/jT/4Rf9QzSzL2XeEglEtoeMrArF9Qa40+pXkDFI2EJBSvt3k1
-         yXKt0b1sIERSVr04IH7huzS232xTMaEMA7f3qMoVjVgOkrvlIDKPphQ/EP5BBv1c8Q
-         NwCTaHHhh25uVPxjKGlT83SESgmGbTy/TEsyj70+bPhbxpfJqg526dYSsXcv6LhFYw
-         5JK2bbXmdRewCJ6hasUjhstFl8Y7uzKpqoQyFeCwjkGWgjr49c7WyMN7gfvAhEJtq/
-         P6A+ZEcyclQeQ==
+        b=fQb5MRbcGzKs+xDyXwlIuAgQUmuMECY9c8DDzj3txjNOnHftopsZgnGd91RKcuon6
+         BtjA39ED7RNJuUYINZOUaFjbckKzCMjzZq9c7WUPK6Llqe0hvCE3Cfaitxfa+hnaKE
+         /n2akSAu0xyDw/UUuKBpo17/eBMQgY5/Of10RRh3WI0/ITYauIviRI28b64iMM2yZl
+         x/81Aoc1yzeQ/6rxnnK6//2RhTPS4TZZX1xDclsvztmk33tYTsX7Nqy5sJXjKT7RF0
+         vUKXlQKwvsaNBNYVPnen9DlLn8fSDRV3riPlA7xLXiN3SwNufu6TQwsvTt4meG5Ob8
+         GmH5D6E6lAFRw==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
         Dave Hansen <dave.hansen@intel.com>, Xin Li <xin3.li@intel.com>
@@ -46,9 +46,9 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Linux Kselftest Mailing List 
         <linux-kselftest@vger.kernel.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [RFC PATCH v8 2/3] selftests/x86: sysret_rip: Add more tests to verify the 'syscall' behavior
-Date:   Mon, 20 Feb 2023 10:02:43 +0700
-Message-Id: <20230220030244.115808-3-ammarfaizi2@gnuweeb.org>
+Subject: [RFC PATCH v8 3/3] selftests/x86: sysret_rip: Test SYSRET with a signal handler
+Date:   Mon, 20 Feb 2023 10:02:44 +0700
+Message-Id: <20230220030244.115808-4-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230220030244.115808-1-ammarfaizi2@gnuweeb.org>
 References: <20230220030244.115808-1-ammarfaizi2@gnuweeb.org>
@@ -63,80 +63,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There are two cases:
+The current test_sigreturn_to() goes to the slow-path syscall with
+IRET due to non-canonical addresses. It uses the SIGUSR1 signal to
+perform the test.
+
+Add a similar test that goes to the SYSRET path instead of IRET using
+the SIGUSR2 signal. There are two cases:
 
   A) 'syscall' in a FRED system preserves %rcx and %r11.
 
   B) 'syscall' in a non-FRED system sets %rcx=%rip and %r11=%rflags.
 
-When the do_syscall() function is called for the first time, it will
-memorize the behavior, either (A) or (B). Then, the next do_syscall()
-call will verify that the 'syscall' behavior is the same.
-
-Test them with trivial system calls like __NR_getppid and friends, which
-are highly likely to return with SYSRET on an IDT system.
-
-The purposes of this test are:
-
-  - Ensure that the syscall behavior is consistent. It must always be
-    (A) or always be (B). Not a mix of them.
-
-  - Ensure that the kernel doesn't leak its internal data when returning
-    to userspace.
+The __raise(SIGUSR2) call verifies the 'syscall' behavior consistency
+when dealing with a signal handler. It must always be (A) or always be
+(B). Not a mix of them.
 
 Cc: Xin Li <xin3.li@intel.com>
-Link: https://lore.kernel.org/lkml/25b96960-a07e-a952-5c23-786b55054126@zytor.com
-Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Link: https://lore.kernel.org/lkml/8770815f-0f23-d0c5-e56a-d401827842c9@zytor.com
+Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- tools/testing/selftests/x86/sysret_rip.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ tools/testing/selftests/x86/sysret_rip.c | 30 ++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 300104900192d396..1531593b50d02150 100644
+index 1531593b50d02150..746801675fe77e9c 100644
 --- a/tools/testing/selftests/x86/sysret_rip.c
 +++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -266,8 +266,21 @@ static void test_syscall_fallthrough_to(unsigned long ip)
- 	printf("[OK]\tWe survived\n");
+@@ -274,6 +274,28 @@ static void test_syscall_rcx_r11_consistent(void)
+ 	do_syscall(__NR_getppid, 0, 0, 0, 0, 0, 0);
  }
  
-+/* See the comment in do_syscall(). */
-+static void test_syscall_rcx_r11_consistent(void)
++static unsigned long usr2_rcx;
++static unsigned long usr2_r11;
++
++static void sigusr2(int sig, siginfo_t *info, void *ctx_void)
 +{
-+	do_syscall(__NR_getpid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_gettid, 0, 0, 0, 0, 0, 0);
-+	do_syscall(__NR_getppid, 0, 0, 0, 0, 0, 0);
++	ucontext_t *ctx = (ucontext_t*)ctx_void;
++
++	usr2_r11 = ctx->uc_mcontext.gregs[REG_R11];
++	usr2_rcx = ctx->uc_mcontext.gregs[REG_RCX];
++
++	check_regs_result(ctx->uc_mcontext.gregs[REG_R11],
++			  ctx->uc_mcontext.gregs[REG_RCX],
++			  ctx->uc_mcontext.gregs[REG_RBX]);
++}
++
++static void test_sysret_consistent(void)
++{
++	printf("[RUN]\ttest_sysret_consistent\n");
++	__raise(SIGUSR2);
++	printf("[OK]\tRCX = %#lx;  R11 = %#lx\n", usr2_rcx, usr2_r11);
 +}
 +
  int main()
  {
-+	int i;
-+
-+	for (i = 0; i < 32; i++)
-+		test_syscall_rcx_r11_consistent();
-+
- 	/*
- 	 * When the kernel returns from a slow-path syscall, it will
- 	 * detect whether SYSRET is appropriate.  If it incorrectly
-@@ -275,7 +288,7 @@ int main()
- 	 * it'll crash on Intel CPUs.
- 	 */
- 	sethandler(SIGUSR1, sigusr1, 0);
--	for (int i = 47; i < 64; i++)
-+	for (i = 47; i < 64; i++)
+ 	int i;
+@@ -291,6 +313,14 @@ int main()
+ 	for (i = 47; i < 64; i++)
  		test_sigreturn_to(1UL<<i);
  
++	/*
++	 * test_sigreturn_to() above will test the IRET path. Now test
++	 * the SYSRET path.
++	 */
++	sethandler(SIGUSR2, sigusr2, 0);
++	for (i = 0; i < 32; i++)
++		test_sysret_consistent();
++
  	clearhandler(SIGUSR1);
-@@ -286,7 +299,7 @@ int main()
- 	test_syscall_fallthrough_to((1UL << 47) - 2*PAGE_SIZE);
  
- 	/* These are the interesting cases. */
--	for (int i = 47; i < 64; i++) {
-+	for (i = 47; i < 64; i++) {
- 		test_syscall_fallthrough_to((1UL<<i) - PAGE_SIZE);
- 		test_syscall_fallthrough_to(1UL<<i);
- 	}
+ 	sethandler(SIGSEGV, sigsegv_for_fallthrough, 0);
 -- 
 Ammar Faizi
 
