@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881E969C451
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Feb 2023 04:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18ED169C45E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Feb 2023 04:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjBTDD4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Feb 2023 22:03:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        id S229652AbjBTDKQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Feb 2023 22:10:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjBTDDy (ORCPT
+        with ESMTP id S229572AbjBTDKP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Feb 2023 22:03:54 -0500
+        Sun, 19 Feb 2023 22:10:15 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0E1E3AA;
-        Sun, 19 Feb 2023 19:03:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0149DC147;
+        Sun, 19 Feb 2023 19:10:13 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.183.169])
-        by gnuweeb.org (Postfix) with ESMTPSA id 738E683133;
-        Mon, 20 Feb 2023 03:03:35 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 3571083127;
+        Mon, 20 Feb 2023 03:10:06 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1676862222;
-        bh=8+ewo69UeU0rHb78uAAPEiHOOweqFJBmdi5nkVAJieo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fQb5MRbcGzKs+xDyXwlIuAgQUmuMECY9c8DDzj3txjNOnHftopsZgnGd91RKcuon6
-         BtjA39ED7RNJuUYINZOUaFjbckKzCMjzZq9c7WUPK6Llqe0hvCE3Cfaitxfa+hnaKE
-         /n2akSAu0xyDw/UUuKBpo17/eBMQgY5/Of10RRh3WI0/ITYauIviRI28b64iMM2yZl
-         x/81Aoc1yzeQ/6rxnnK6//2RhTPS4TZZX1xDclsvztmk33tYTsX7Nqy5sJXjKT7RF0
-         vUKXlQKwvsaNBNYVPnen9DlLn8fSDRV3riPlA7xLXiN3SwNufu6TQwsvTt4meG5Ob8
-         GmH5D6E6lAFRw==
+        s=default; t=1676862613;
+        bh=uMnGCk1LjhkcOqlZi4n4FjfUb/hJZvPJ4KZ7CjBby/I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N9q5INGfCoqCLCKsHeKuDGThktG/Hs3zHpS8j6zfmGOR77mjZc5EvTQP8jWeLS9BO
+         uPIZZSHE2i/IUE2q0JskLOavL9/reZUTlU8Z0tplePRkSif4zVXNJww+HcOhwjreUz
+         5v9Zx9Bx7u5d/G7pFcRmmv8XidlYujD2164t+08JMbCHuUGdRnZkX9FH7Y7FMWI+V8
+         wwWrChIGALo3JqZcrCzk52t5Hdy5X+KYdWnO6iKFATOBqwamI8D3T4FdU6JNzbn5I4
+         WPtyiAawbE9B9SoJXZ8ZngQBnTUeijKXdIy2dOWZTgvoId4NvKILw5smEKmgBua2pq
+         Hn0y0w/Cl6/nw==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>, Xin Li <xin3.li@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, Xin Li <xin3.li@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Andrew Cooper <Andrew.Cooper3@citrix.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -41,17 +41,14 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Peter Zijlstra <peterz@infradead.org>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         x86 Mailing List <x86@kernel.org>,
-        Linux x86-64 Mailing List <linux-x86_64@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Kselftest Mailing List 
         <linux-kselftest@vger.kernel.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [RFC PATCH v8 3/3] selftests/x86: sysret_rip: Test SYSRET with a signal handler
-Date:   Mon, 20 Feb 2023 10:02:44 +0700
-Message-Id: <20230220030244.115808-4-ammarfaizi2@gnuweeb.org>
+Subject: [RESEND RFC PATCH v8 0/3] Intel FRED architecture support for the sysret_rip selftest
+Date:   Mon, 20 Feb 2023 10:09:56 +0700
+Message-Id: <20230220030959.119222-1-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230220030244.115808-1-ammarfaizi2@gnuweeb.org>
-References: <20230220030244.115808-1-ammarfaizi2@gnuweeb.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -63,77 +60,89 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The current test_sigreturn_to() goes to the slow-path syscall with
-IRET due to non-canonical addresses. It uses the SIGUSR1 signal to
-perform the test.
+[ 
+   RESEND, get rid of: Linux x86-64 Mailing List <linux-x86_64@vger.kernel.org>
+   from the CC list. It bounces and makes noise. Sorry for the wrong address.
+]
 
-Add a similar test that goes to the SYSRET path instead of IRET using
-the SIGUSR2 signal. There are two cases:
+Hi,
+
+This is an RFC v8. Based on the x86/cpu branch in the tip tree.
+
+The 'syscall' instruction on the Intel FRED architecture does not
+clobber %rcx and %r11. This behavior leads to an assertion failure in
+the sysret_rip selftest because it asserts %r11 = %rflags.
+
+In the previous discussion, we agreed that there are two cases for
+'syscall':
 
   A) 'syscall' in a FRED system preserves %rcx and %r11.
 
   B) 'syscall' in a non-FRED system sets %rcx=%rip and %r11=%rflags.
 
-The __raise(SIGUSR2) call verifies the 'syscall' behavior consistency
-when dealing with a signal handler. It must always be (A) or always be
-(B). Not a mix of them.
+This series fixes the selftest. Make it work on the Intel FRED
+architecture. Also, add more tests to ensure the syscall behavior is
+consistent. It must always be (A) or always be (B). Not a mix of them.
 
-Cc: Xin Li <xin3.li@intel.com>
-Link: https://lore.kernel.org/lkml/8770815f-0f23-d0c5-e56a-d401827842c9@zytor.com
-Suggested-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+See the previous discussion here:
+https://lore.kernel.org/lkml/5d4ad3e3-034f-c7da-d141-9c001c2343af@intel.com
+
+## Changelog revision
+
+v8:
+  - Stop using "+r"(rsp) to avoid the red zone problem because it
+    generates the wrong Assembly code (Ammar).
+    See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108799
+
+  - Update commit message (Ammar).
+
+v7:
+  - Fix comment, REGS_ERROR no longer exists in the enum (Ammar).
+
+  - Update commit message (Ammar).
+
+v6:
+  - Move the check-regs assertion in sigusr1() to check_regs_result() (HPA).
+
+  - Add a new test just like sigusr1(), but don't modify REG_RCX and
+    REG_R11. This is used to test SYSRET behavior consistency (HPA).
+
+v5:
+  - Fix do_syscall() return value (Ammar).
+
+v4:
+  - Fix the assertion condition inside the SIGUSR1 handler (Xin Li).
+
+  - Explain the purpose of patch #2 in the commit message (HPA).
+
+  - Update commit message (Ammar).
+
+  - Repeat test_syscall_rcx_r11_consistent() 32 times to be more sure
+    that the result is really consistent (Ammar).
+
+v3:
+  - Test that we don't get a mix of REGS_SAVED and REGS_SYSRET, which
+    is a major part of the point (HPA).
+
+v2:
+  - Use "+r"(rsp) as the right way to avoid redzone problems per
+    Andrew's comment (HPA).
+
+Co-developed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- tools/testing/selftests/x86/sysret_rip.c | 30 ++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
 
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 1531593b50d02150..746801675fe77e9c 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -274,6 +274,28 @@ static void test_syscall_rcx_r11_consistent(void)
- 	do_syscall(__NR_getppid, 0, 0, 0, 0, 0, 0);
- }
- 
-+static unsigned long usr2_rcx;
-+static unsigned long usr2_r11;
-+
-+static void sigusr2(int sig, siginfo_t *info, void *ctx_void)
-+{
-+	ucontext_t *ctx = (ucontext_t*)ctx_void;
-+
-+	usr2_r11 = ctx->uc_mcontext.gregs[REG_R11];
-+	usr2_rcx = ctx->uc_mcontext.gregs[REG_RCX];
-+
-+	check_regs_result(ctx->uc_mcontext.gregs[REG_R11],
-+			  ctx->uc_mcontext.gregs[REG_RCX],
-+			  ctx->uc_mcontext.gregs[REG_RBX]);
-+}
-+
-+static void test_sysret_consistent(void)
-+{
-+	printf("[RUN]\ttest_sysret_consistent\n");
-+	__raise(SIGUSR2);
-+	printf("[OK]\tRCX = %#lx;  R11 = %#lx\n", usr2_rcx, usr2_r11);
-+}
-+
- int main()
- {
- 	int i;
-@@ -291,6 +313,14 @@ int main()
- 	for (i = 47; i < 64; i++)
- 		test_sigreturn_to(1UL<<i);
- 
-+	/*
-+	 * test_sigreturn_to() above will test the IRET path. Now test
-+	 * the SYSRET path.
-+	 */
-+	sethandler(SIGUSR2, sigusr2, 0);
-+	for (i = 0; i < 32; i++)
-+		test_sysret_consistent();
-+
- 	clearhandler(SIGUSR1);
- 
- 	sethandler(SIGSEGV, sigsegv_for_fallthrough, 0);
+Ammar Faizi (3):
+  selftests/x86: sysret_rip: Handle syscall on the Intel FRED architecture
+  selftests/x86: sysret_rip: Add more tests to verify the 'syscall' behavior
+  selftests/x86: sysret_rip: Test SYSRET with a signal handler
+
+ tools/testing/selftests/x86/sysret_rip.c | 169 +++++++++++++++++++++--
+ 1 file changed, 160 insertions(+), 9 deletions(-)
+
+
+base-commit: e067248949e3de7fbeae812b0ccbbee7a401e7aa
 -- 
 Ammar Faizi
 
