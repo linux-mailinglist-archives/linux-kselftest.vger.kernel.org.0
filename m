@@ -2,115 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6426269D109
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Feb 2023 17:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9792D69DADD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Feb 2023 08:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjBTQDS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Feb 2023 11:03:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        id S233035AbjBUHCd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Feb 2023 02:02:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjBTQDS (ORCPT
+        with ESMTP id S232589AbjBUHCd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Feb 2023 11:03:18 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D196A7B;
-        Mon, 20 Feb 2023 08:03:17 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j2-20020a05600c1c0200b003e1e754657aso1513151wms.2;
-        Mon, 20 Feb 2023 08:03:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1676908996;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3pGXihfz169wq8vbQ55A6qeCeAolkvlGTPS+YPqxvGk=;
-        b=lKBmSTvu26BgzUl2Zzjw/98dkPyHLiKxGTyeDbp1SD5AMbvNgDFAtbbSfC9rsLJxtR
-         A9yP0mPzhzgQibvFy+ZhiyAj7VFh2kVO2/l1Vdp76wlnoYWLTASI7/qQo6kOd/Yc3IP7
-         CsLLAAhkcf371t4bwSf5prmw2UrRCBusdkHqKlnuNClA9unxqwsNgH8QgnEXx+Ot5lSb
-         RGg0SPf1AhNgltPUEiedqp1LeJX+uvRUDRdprJRnOMr9jw07jwyAMnb4ZQDTQQgibjlZ
-         WGldx9Nq8Inh7xF3OPbiMT9IacbibYsY+wzjiUtA2I2DZK93keZ5WtEhCaVCik8b0rQ2
-         AFKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676908996;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3pGXihfz169wq8vbQ55A6qeCeAolkvlGTPS+YPqxvGk=;
-        b=cwikCaiXX6aX8uSXwdo2jHLBj7gNxzUYd0pLssAxb14bTushxP/+fpKUIIRBVd+oKC
-         /R/ObEKWxUcRDK2s7qcdSpt/vzRmG3UwKEklbmn8iIASzn2+TvhNaxKmOnji9DBF6wzC
-         PkjmySCx5dUCf55YUYOrs9EynvOye2Qh9RccI/aIMPytoWp1YB/9UdYUT2eEDx648yu1
-         O81Z/D2U5EtmntV+WdlcyFFQRisYpiyyDA6B4EuUOR6fAPSlcDXoobVrLmWPTWIOzF4s
-         X+SkeNL/euakHnHg3AZ1zwUfmZZG3C+JI+uyNmSgL4qp95TvcW4NghA2ibOFQ5KuoNkc
-         qPZg==
-X-Gm-Message-State: AO0yUKU9MK8BQr3eo8EM/E8QbYfkGBTmYs/OjInq9iDR8I690HMMFhaQ
-        TdsQokn+CI7A+5D1ZEFe0JP4oNueHX0jBQ==
-X-Google-Smtp-Source: AK7set+B7Vk1SliuOLcO86rQuSrYfVzTWswcPjiN1gE7Qv213tLM4+k/E8RXN4++r8zWq42guPEcYw==
-X-Received: by 2002:a05:600c:2318:b0:3df:f7ba:14f8 with SMTP id 24-20020a05600c231800b003dff7ba14f8mr1426028wmo.1.1676908995694;
-        Mon, 20 Feb 2023 08:03:15 -0800 (PST)
-Received: from mineorpe-virtual-machine.localdomain ([37.252.81.68])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003dfe8c4c497sm438528wmc.39.2023.02.20.08.03.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 08:03:15 -0800 (PST)
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-To:     shuah@kernel.org
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Refactor 'peeksiginfo' ptrace test part
-Date:   Mon, 20 Feb 2023 19:03:02 +0300
-Message-Id: <20230220160302.4679-1-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 21 Feb 2023 02:02:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7653720059;
+        Mon, 20 Feb 2023 23:02:31 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BEA1D6602122;
+        Tue, 21 Feb 2023 07:02:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676962949;
+        bh=q1iXczc30PAPRbZTcDYbH7vJbpyxeUSIqxAjfl8Qb6g=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=ZPCyihoR9qUJFNmmKid0RyywCmvk3wS08sLKOUNc/Tr9LnRLG7a5rMwTJxq1x9bEs
+         fHuXI2zg4g15roQmUyI/cnbRQjaZQZ8y0jikf72DfaeOL9BKldffuIzHsNpqLCGHtp
+         17/9fZjkhBLm9vcM2zcsRa5X7H0vAhQFiDJlFRO11e/q+OlIS/qSky7z+jnsH7ZvxH
+         H8QAkl4/NDjB/a0p0FeZFjXVaVwwcvXj6X7Dal93/sYqdGhCYjCE1Lde4dvgSXGfvE
+         Lx2lz0oDIfEYjqGBWjU0oLEEpOe3AO9XXys1kbR7DvHKSr+waWtnMJBsQH35oBukEp
+         xOdVh5jwH9xKw==
+Message-ID: <af55d3d8-31d8-0deb-d76f-b6d464ad7262@collabora.com>
+Date:   Tue, 21 Feb 2023 12:02:17 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <Y/N1EnEEE9y0qp/n@kernel.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y/N1EnEEE9y0qp/n@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-peeksiginfo creates an array of 10 instances of 'siginfo_t',
-but actually uses only one. This patch will reduce amount
-of memory on the stack used by the peeksiginfo test.
+On 2/20/23 6:26 PM, Mike Rapoport wrote:
+> Hi,
+> 
+> On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
+>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+>> the info about page table entries. The following operations are supported
+>> in this ioctl:
+>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>>   (PAGE_IS_SWAPPED).
+>> - Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+>>   pages have been written-to.
+>> - Find pages which have been written-to and write protect the pages
+>>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+>>
+>> +/*
+>> + * struct pagemap_scan_arg - Pagemap ioctl argument
+>> + * @start:		Starting address of the region
+>> + * @len:		Length of the region (All the pages in this length are included)
+>> + * @vec:		Address of page_region struct array for output
+>> + * @vec_len:		Length of the page_region struct array
+>> + * @max_pages:		Optional max return pages
+>> + * @flags:		Flags for the IOCTL
+>> + * @required_mask:	Required mask - All of these bits have to be set in the PTE
+>> + * @anyof_mask:		Any mask - Any of these bits are set in the PTE
+>> + * @excluded_mask:	Exclude mask - None of these bits are set in the PTE
+>> + * @return_mask:	Bits that are to be reported in page_region
+>> + */
+>> +struct pagemap_scan_arg {
+>> +	__u64 start;
+>> +	__u64 len;
+>> +	__u64 vec;
+>> +	__u64 vec_len;
+>> +	__u32 max_pages;
+>> +	__u32 flags;
+>> +	__u64 required_mask;
+>> +	__u64 anyof_mask;
+>> +	__u64 excluded_mask;
+>> +	__u64 return_mask;
+>> +};
+> 
+> After Nadav's comment I've realized I missed the API part :)
+> 
+> A few quick notes for now:
+> * The arg struct is fixed, so it would be impossible to extend the API
+> later. Following the clone3() example, I'd add 'size' field to the
+> pagemam_scan_arg so that it would be possible to add new fields afterwards.
+> * Please make flags __u64, just in case
+> * Put size and flags at the beginning of the struct, e.g.
+> 
+> strucr pagemap_scan_arg {
+> 	size_t size;
+> 	__u64 flags;
+> 	/* all the rest */
+> };
+Updated. Thank you so much!
 
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- tools/testing/selftests/ptrace/peeksiginfo.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+>> +
+>> +/* Special flags */
+>> +#define PAGEMAP_WP_ENGAGE	(1 << 0)
+>> +
+>>  #endif /* _UAPI_LINUX_FS_H */
+>> -- 
+>> 2.30.2
+>>
+> 
 
-diff --git a/tools/testing/selftests/ptrace/peeksiginfo.c b/tools/testing/selftests/ptrace/peeksiginfo.c
-index 54900657eb44..a6884f66dc01 100644
---- a/tools/testing/selftests/ptrace/peeksiginfo.c
-+++ b/tools/testing/selftests/ptrace/peeksiginfo.c
-@@ -151,7 +151,7 @@ int check_direct_path(pid_t child, int shared, int nr)
- 
- int main(int argc, char *argv[])
- {
--	siginfo_t siginfo[SIGNR];
-+	siginfo_t siginfo;
- 	int i, exit_code = 1;
- 	sigset_t blockmask;
- 	pid_t child;
-@@ -176,13 +176,13 @@ int main(int argc, char *argv[])
- 
- 	/* Send signals in process-wide and per-thread queues */
- 	for (i = 0; i < SIGNR; i++) {
--		siginfo->si_code = TEST_SICODE_SHARE;
--		siginfo->si_int = i;
--		sys_rt_sigqueueinfo(child, SIGRTMIN, siginfo);
-+		siginfo.si_code = TEST_SICODE_SHARE;
-+		siginfo.si_int = i;
-+		sys_rt_sigqueueinfo(child, SIGRTMIN, &siginfo);
- 
--		siginfo->si_code = TEST_SICODE_PRIV;
--		siginfo->si_int = i;
--		sys_rt_tgsigqueueinfo(child, child, SIGRTMIN, siginfo);
-+		siginfo.si_code = TEST_SICODE_PRIV;
-+		siginfo.si_int = i;
-+		sys_rt_tgsigqueueinfo(child, child, SIGRTMIN, &siginfo);
- 	}
- 
- 	if (sys_ptrace(PTRACE_ATTACH, child, NULL, NULL) == -1)
 -- 
-2.34.1
-
+BR,
+Muhammad Usama Anjum
