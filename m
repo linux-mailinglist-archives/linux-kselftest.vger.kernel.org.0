@@ -2,151 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D41F69DAEE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Feb 2023 08:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352C469DDE0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Feb 2023 11:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjBUHIr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Feb 2023 02:08:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S232813AbjBUK3E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Feb 2023 05:29:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjBUHIr (ORCPT
+        with ESMTP id S233396AbjBUK3D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Feb 2023 02:08:47 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA62A27B
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Feb 2023 23:08:45 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id e9so3256355ljn.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Feb 2023 23:08:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sW5OTipyHanuMGGEr19+SfAUNI4fh6TQoQ0SKxiVbds=;
-        b=xPFad2O3o2T7JjjqimSZr5bDzhsCKNA/ZkT84IvIGWjisfYMVY8ez3JcB+xGEpxfzH
-         gzirFObAQN+Ea1riiRgJJHdkV60VszkVhQ5ytQBgoncx5bHNah9foz2MkmgJvH9rJoiN
-         d6tn2jmty0h7uLUWzB07Njf46FAaTlNyEzn9BLtanEX3CXGHtAMFNsW1ruwFyhQ+KwDd
-         ygE+DhlYQOCkxiy7y5GaQpMsQYTHikXVAIBNl0xtMndF5GNCHqKtF9YGZzi0KBl+t0lG
-         bHzSDsMIdnKH9n22w8OfOrLDZgR4nTLts+MKO+3nKWe575Ub2BfB5D+IwyVIcN864IWy
-         i/iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sW5OTipyHanuMGGEr19+SfAUNI4fh6TQoQ0SKxiVbds=;
-        b=e2+51p+A6Nsy0jPvo3CySk0WyA14Wmt49rug2IOD0BA3JY/0PdE/G9K9augqrC88Yf
-         NGx5klty8MtfreVNBwGVqMrKhYE3fA9u7LtRwjAiQ0pGCz5v0PP8BEt3lwIH7OKEXTFd
-         lcVetysQpomuQc0czh+JeAfCxHb6wzUNbsNx526gAZW63EsVuDj6Ajc8ifN6tGvMypai
-         /aWRSB3P8JXHisWErKKjAL1XF7pk/8G185aFdIOoTfVdqGMEKCrjuL9tGPmn9mHt/ENE
-         3UClus2jWkaiPUvG+up5LREWqzoYdr8E38jn8+bbUOBmYqczLnnZFG6BT6GUHjhi7iui
-         GkJQ==
-X-Gm-Message-State: AO0yUKX4Yk27lFV1LaZXuG3qLpbjCJrLy3F5X65r7MNeVQEGOh11Iewq
-        w/EhXryVnbtPRhnG+QTfgtY/dQ==
-X-Google-Smtp-Source: AK7set9MVl9dE0Gqmud9UHGJXFGDa+7JeOO8MZD8yAHqxQi9OKB89/YMGpoENiqGS13QSoc5sBuOfQ==
-X-Received: by 2002:a05:651c:1214:b0:293:5359:79e5 with SMTP id i20-20020a05651c121400b00293535979e5mr1539070lja.45.1676963323899;
-        Mon, 20 Feb 2023 23:08:43 -0800 (PST)
-Received: from localhost (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
-        by smtp.gmail.com with ESMTPSA id v17-20020a2e9611000000b002934ed148afsm1809964ljh.52.2023.02.20.23.08.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 23:08:43 -0800 (PST)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     sj@kernel.org, shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 2/2] selftests: damon: change scripts to be executable
-Date:   Tue, 21 Feb 2023 08:08:37 +0100
-Message-Id: <20230221070837.1502935-2-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230221070837.1502935-1-anders.roxell@linaro.org>
-References: <20230221070837.1502935-1-anders.roxell@linaro.org>
+        Tue, 21 Feb 2023 05:29:03 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D28AD2D;
+        Tue, 21 Feb 2023 02:29:01 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.217.110])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E8FAB66021CA;
+        Tue, 21 Feb 2023 10:28:50 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676975338;
+        bh=fxVmTBekLEao3S5bXJ02H7r4cVQUYDNCck3NzQOmT6Y=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=ZWkarKD+DUtaUi/POrJUturQZo0lgaUlOmMYr4PykO1GcCPQAJp7VVfql9GSK3sEs
+         1tw9rDjfq7uN8Dn4gacFid7lQzpRtR3MfQprnDJ1e0r3WT9LSdQ3fpHHUB72VS53zO
+         UYu0c46+iuprdeZh5O4b1OHcN8NL+1nwKFwXFLoJfcOAduwM7NZrxAgPOXwI0DnIMI
+         ZJX32mQekwmA1GV08U+D1V+C9H3vTsocHJesWWFhOoMXurRGZMVNB1bzITHONbU2VX
+         oLYUn3Hpft+uiO5rfFb9riWjedupvOHr6IQy8gnNlIj0q8iyIBGQ6dgDAhRmZKOZjo
+         QYTOpzL4QEnwA==
+Message-ID: <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
+Date:   Tue, 21 Feb 2023 15:28:46 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Peter Xu <peterx@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Danylo Mocherniuk <mdanylo@google.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When running kselftest-damon The following issues shows up:
+Hi Michał,
 
-'# Warning: file debugfs_attrs.sh is not executable'
+Thank you so much for comment!
 
-Changing the scripts so they are executable.
+On 2/17/23 8:18 PM, Michał Mirosław wrote:
+> On Thu, 2 Feb 2023 at 12:30, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+> [...]
+>> - The masks are specified in required_mask, anyof_mask, excluded_ mask
+>>   and return_mask.
+> [...]
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- tools/testing/selftests/damon/_chk_dependency.sh                  | 0
- tools/testing/selftests/damon/_debugfs_common.sh                  | 0
- tools/testing/selftests/damon/debugfs_attrs.sh                    | 0
- .../testing/selftests/damon/debugfs_duplicate_context_creation.sh | 0
- tools/testing/selftests/damon/debugfs_empty_targets.sh            | 0
- tools/testing/selftests/damon/debugfs_huge_count_read_write.sh    | 0
- tools/testing/selftests/damon/debugfs_rm_non_contexts.sh          | 0
- tools/testing/selftests/damon/debugfs_schemes.sh                  | 0
- tools/testing/selftests/damon/debugfs_target_ids.sh               | 0
- tools/testing/selftests/damon/lru_sort.sh                         | 0
- tools/testing/selftests/damon/reclaim.sh                          | 0
- tools/testing/selftests/damon/sysfs.sh                            | 0
- tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh  | 0
- 13 files changed, 0 insertions(+), 0 deletions(-)
- mode change 100644 => 100755 tools/testing/selftests/damon/_chk_dependency.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/_debugfs_common.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_attrs.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_duplicate_context_creation.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_empty_targets.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_schemes.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/lru_sort.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/reclaim.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/sysfs.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
+The interface was suggested by Andrei back on the review of v3 [1]:
+> I mean we should be able to specify for what pages we need to get info
+> for. An ioctl argument can have these four fields:
+> * required bits (rmask & mask == mask) - all bits from this mask have to
+be set.
+> * any of these bits (amask & mask != 0) - any of these bits is set.
+> * exclude masks (emask & mask == 0) = none of these bits are set.
+> * return mask - bits that have to be reported to user.
 
-diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/_debugfs_common.sh b/tools/testing/selftests/damon/_debugfs_common.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_duplicate_context_creation.sh b/tools/testing/selftests/damon/debugfs_duplicate_context_creation.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_empty_targets.sh b/tools/testing/selftests/damon/debugfs_empty_targets.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_rm_non_contexts.sh b/tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_schemes.sh b/tools/testing/selftests/damon/debugfs_schemes.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_target_ids.sh b/tools/testing/selftests/damon/debugfs_target_ids.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/lru_sort.sh b/tools/testing/selftests/damon/lru_sort.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/reclaim.sh b/tools/testing/selftests/damon/reclaim.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh b/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
-old mode 100644
-new mode 100755
+> 
+> May I suggest a slightly modified interface for the flags?
+I've added everyone who may be interested in making interface better.
+
+> 
+> As I understand, the return_mask is what is applied to page flags to
+> aggregate the list.
+> This is a separate thing, and I think it doesn't need changes except
+> maybe an improvement
+> in the documentation and visual distinction.
+> 
+> For the page-selection mechanism, currently required_mask and
+> excluded_mask have conflicting
+They are opposite of each other:
+All the set bits in required_mask must be set for the page to be selected.
+All the set bits in excluded_mask must _not_ be set for the page to be
+selected.
+
+> responsibilities. I suggest to rework that to:
+> 1. negated_flags: page flags which are to be negated before applying
+> the page selection using following masks;
+Sorry I'm unable to understand the negation (which is XOR?). Lets look at
+the truth table:
+Page Flag	negated_flags		
+0		0			0
+0		1			1
+1		0			1
+1		1			0
+
+If a page flag is 0 and negated_flag is 1, the result would be 1 which has
+changed the page flag. It isn't making sense to me. Why the page flag bit
+is being fliped?
+
+When Anrdei had proposed these masks, they seemed like a fancy way of
+filtering inside kernel and it was straight forward to understand. These
+masks would help his use cases for CRIU. So I'd included it. Please can you
+elaborate what is the purpose of negation?
+
+> 2. required_flags: flags which all have to be set in the
+> (negation-applied) page flags;
+> 3. anyof_flags: flags of which at least one has to be set in the
+> (negation-applied) page flags;
+> 
+> IOW, the resulting algorithm would be:
+> 
+> tested_flags = page_flags ^ negated_flags;
+> if (~tested_flags & required_flags)
+>   skip page;
+> if (!(tested_flags & anyof_flags))
+>   skip_page;
+> 
+> aggregate_on(page_flags & return_flags);
+> 
+> Best Regards
+> Michał Mirosław
+
+[1] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com
+
 -- 
-2.39.1
-
+BR,
+Muhammad Usama Anjum
