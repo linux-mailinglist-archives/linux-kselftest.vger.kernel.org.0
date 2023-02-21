@@ -2,167 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352C469DDE0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Feb 2023 11:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B4C69DE9F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Feb 2023 12:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbjBUK3E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Feb 2023 05:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
+        id S233534AbjBULUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Feb 2023 06:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbjBUK3D (ORCPT
+        with ESMTP id S233439AbjBULUV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Feb 2023 05:29:03 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D28AD2D;
-        Tue, 21 Feb 2023 02:29:01 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.217.110])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 21 Feb 2023 06:20:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017221C5A9;
+        Tue, 21 Feb 2023 03:20:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E8FAB66021CA;
-        Tue, 21 Feb 2023 10:28:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676975338;
-        bh=fxVmTBekLEao3S5bXJ02H7r4cVQUYDNCck3NzQOmT6Y=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=ZWkarKD+DUtaUi/POrJUturQZo0lgaUlOmMYr4PykO1GcCPQAJp7VVfql9GSK3sEs
-         1tw9rDjfq7uN8Dn4gacFid7lQzpRtR3MfQprnDJ1e0r3WT9LSdQ3fpHHUB72VS53zO
-         UYu0c46+iuprdeZh5O4b1OHcN8NL+1nwKFwXFLoJfcOAduwM7NZrxAgPOXwI0DnIMI
-         ZJX32mQekwmA1GV08U+D1V+C9H3vTsocHJesWWFhOoMXurRGZMVNB1bzITHONbU2VX
-         oLYUn3Hpft+uiO5rfFb9riWjedupvOHr6IQy8gnNlIj0q8iyIBGQ6dgDAhRmZKOZjo
-         QYTOpzL4QEnwA==
-Message-ID: <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
-Date:   Tue, 21 Feb 2023 15:28:46 +0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A87BB80EA3;
+        Tue, 21 Feb 2023 11:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1CD25C4339B;
+        Tue, 21 Feb 2023 11:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676978418;
+        bh=z3v0BkjXRNKDmfVmm9V7eZM46F9Q2Kbmj0LCyBxPig0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=STkzzgKE0hS3nI2M8pjI5MyjVuyqEAts+05JyV82btqYZvKLbWBP9hcbk2UmQmqn0
+         W6ZOpqLW76LUY6pO94GyGGcdL9sFs3Zo2kxhtr3fICAeAGtIcMOpZNXIxansPq4Ej8
+         Hl8YBybW9HjMG3j4RC1an2EDYcBQ85WdvVNe1xYaA8tDuBHvxfWXIz0TBsOAPhmI3i
+         gZwpdDYHrSslibgGTGO14KuhE3LhtB4H0tO/zLxTL+NG7o+0s/OaqJ1bB6tb4KWffj
+         TwBakV90H3PINEGG6uu3/ayGPWQ6qKfcjw9XnBEGZeUk+ml7300Xwy4E6Q2aMVB+8/
+         +CR9HkXkbUK4A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03052C43159;
+        Tue, 21 Feb 2023 11:20:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Danylo Mocherniuk <mdanylo@google.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com>
- <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 0/1] selftest: fib_tests: Always cleanup before exit
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167697841800.23862.3511124706194686998.git-patchwork-notify@kernel.org>
+Date:   Tue, 21 Feb 2023 11:20:18 +0000
+References: <20230220110400.26737-1-roxana.nicolescu@canonical.com>
+In-Reply-To: <20230220110400.26737-1-roxana.nicolescu@canonical.com>
+To:     Roxana Nicolescu <roxana.nicolescu@canonical.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Michał,
+Hello:
 
-Thank you so much for comment!
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On 2/17/23 8:18 PM, Michał Mirosław wrote:
-> On Thu, 2 Feb 2023 at 12:30, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
+On Mon, 20 Feb 2023 12:03:59 +0100 you wrote:
+> Usually when a subtest is executed, setup and cleanup functions
+> are linearly called at the beginning and end of it.
+> In some of them, `set -e` is used before executing commands.
+> If one of the commands returns a non zero code, the whole script exists
+> without cleaning up the resources allocated at setup.
+> This can affect the next tests that use the same resources,
+> leading to a chain of failures.
+> 
 > [...]
->> - The masks are specified in required_mask, anyof_mask, excluded_ mask
->>   and return_mask.
-> [...]
 
-The interface was suggested by Andrei back on the review of v3 [1]:
-> I mean we should be able to specify for what pages we need to get info
-> for. An ioctl argument can have these four fields:
-> * required bits (rmask & mask == mask) - all bits from this mask have to
-be set.
-> * any of these bits (amask & mask != 0) - any of these bits is set.
-> * exclude masks (emask & mask == 0) = none of these bits are set.
-> * return mask - bits that have to be reported to user.
+Here is the summary with links:
+  - [1/1] selftest: fib_tests: Always cleanup before exit
+    https://git.kernel.org/netdev/net/c/b60417a9f2b8
 
-> 
-> May I suggest a slightly modified interface for the flags?
-I've added everyone who may be interested in making interface better.
-
-> 
-> As I understand, the return_mask is what is applied to page flags to
-> aggregate the list.
-> This is a separate thing, and I think it doesn't need changes except
-> maybe an improvement
-> in the documentation and visual distinction.
-> 
-> For the page-selection mechanism, currently required_mask and
-> excluded_mask have conflicting
-They are opposite of each other:
-All the set bits in required_mask must be set for the page to be selected.
-All the set bits in excluded_mask must _not_ be set for the page to be
-selected.
-
-> responsibilities. I suggest to rework that to:
-> 1. negated_flags: page flags which are to be negated before applying
-> the page selection using following masks;
-Sorry I'm unable to understand the negation (which is XOR?). Lets look at
-the truth table:
-Page Flag	negated_flags		
-0		0			0
-0		1			1
-1		0			1
-1		1			0
-
-If a page flag is 0 and negated_flag is 1, the result would be 1 which has
-changed the page flag. It isn't making sense to me. Why the page flag bit
-is being fliped?
-
-When Anrdei had proposed these masks, they seemed like a fancy way of
-filtering inside kernel and it was straight forward to understand. These
-masks would help his use cases for CRIU. So I'd included it. Please can you
-elaborate what is the purpose of negation?
-
-> 2. required_flags: flags which all have to be set in the
-> (negation-applied) page flags;
-> 3. anyof_flags: flags of which at least one has to be set in the
-> (negation-applied) page flags;
-> 
-> IOW, the resulting algorithm would be:
-> 
-> tested_flags = page_flags ^ negated_flags;
-> if (~tested_flags & required_flags)
->   skip page;
-> if (!(tested_flags & anyof_flags))
->   skip_page;
-> 
-> aggregate_on(page_flags & return_flags);
-> 
-> Best Regards
-> Michał Mirosław
-
-[1] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com
-
+You are awesome, thank you!
 -- 
-BR,
-Muhammad Usama Anjum
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
