@@ -2,82 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E389269E6BD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Feb 2023 19:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310CF69E802
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Feb 2023 20:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjBUSDg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Feb 2023 13:03:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
+        id S229694AbjBUTJU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Feb 2023 14:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjBUSDf (ORCPT
+        with ESMTP id S229484AbjBUTJT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Feb 2023 13:03:35 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F68EFBF;
-        Tue, 21 Feb 2023 10:03:32 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 14BBF5C00EE;
-        Tue, 21 Feb 2023 13:03:29 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 21 Feb 2023 13:03:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1677002609; x=1677089009; bh=ZH9OeA2FvC
-        aJR9ZdNyNOKK8xdZTHpoN/UMcS3ejigug=; b=uFm3OuqiNjZk1Pp1VcYl+B4GLI
-        LHh0AzdprYYpC0NdWU4lBklhoeaUyj8Ky/y48Su+7draK6ujiDqll6TAHxuTTvVE
-        e58ql/Hott1vljDoBYKN/P+cgMOQsAvatGq9i0/dLBmBCdZIo5IGOrDPNISTITrG
-        Kz01+aqAf4LzyCQKvaqvQFmRYKFhEsfqEfYIM+tBqafPCpGuGNM8lLYKX/fwbd53
-        8ak3vPCjL4xHJzBgOi4zdvDpJLMTF0z7sK4VhVf2Pu1dA0QpKzgj2Vx948kMk8Mv
-        XRgznh0CTgY3I8BUuNBoCT5T9Ao2ACFibsD7UsDtVyvIUIqv9EsVPMTxv85g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677002609; x=1677089009; bh=ZH9OeA2FvCaJR9ZdNyNOKK8xdZTH
-        poN/UMcS3ejigug=; b=AaTB+z0pCAZE5fWJg+tXQ9XobiP2hdb4zrZw2akHB+Oq
-        /qN7mH5X2STy4YUeJKdrmAVcWwKMBS3Sa8GuvfgjwhNSOAenm+aLhc7bmzGwK6Tp
-        BA1ZycvGfZc5z/r9Q2D1JXAitRXeKOWlVYi7RNVLBki4+c3c8fy28zWF1K6ev4L8
-        fsfVrceQ3CHhYx+6fta5ib+QtTtwyNct0wCVGoIyNHJJLR/wky9b410Oy6SRH2Ou
-        67cUxgssYFu/RWi7E/7yieo3p0/iaD3kKriy1VD1GvbhDEBuB1e9njUg2amd8XaC
-        woBK0CSqBTzVKLeGaUTTvgalkjFDHf21CTqq9a6fEA==
-X-ME-Sender: <xms:cAf1YykvX83DCS4cVcdGyEkdQgZp3fI-veIRAsihNug-EF_k4IkjeQ>
-    <xme:cAf1Y50GqEVO49TkBN3lihfG-6z5AY0goeofFZdYOmEIW2SrGyb7-ubHzz2Jmz8W1
-    Brn1C1gBLayXK4xp9A>
-X-ME-Received: <xmr:cAf1Ywo3mNSv7UEEqZXh5QXdyHlHyhM3sjeqiHIdATJHMR2w2KjLtbVsdDtGDZUeaKl31uXs-jLVGacAt5VqelNxwSEWhOkBk3t_4Qo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejjedguddtiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfhgfhffvvefuffgjkfggtgesth
-    dtofdttdertdenucfhrhhomhepufhtvghfrghnucftohgvshgthhcuoehshhhrseguvghv
-    khgvrhhnvghlrdhioheqnecuggftrfgrthhtvghrnhepfeeludefhfegvdffieeuhfdvud
-    etvdetfefgieegffduhfegffeuudevkeeiuedunecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomhepshhhrhesuggvvhhkvghrnhgvlhdrihho
-X-ME-Proxy: <xmx:cAf1Y2nXXfRrqcLzVDk7NnExbFZQ8trl5HsmurfFrc52XTZWYfWNWQ>
-    <xmx:cAf1Yw3SjDo4olDVlF0KNzjU493iZpZpa1WkdTgLUEu13i-JcArJmw>
-    <xmx:cAf1Y9u5j932q5El25kyBFiDlpkY9o4N6PWILAtPc3GbT8ZiFMO_5g>
-    <xmx:cQf1YxlyRNGOiANfBZCF4ez6YfBJ3r6tIYOuQI2kvS95FZIqnHxzCQ>
-Feedback-ID: i84614614:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Feb 2023 13:03:27 -0500 (EST)
-References: <20230210215023.2740545-1-shr@devkernel.io>
- <Y/TtBc9DAkUKRHnV@cmpxchg.org>
-User-agent: mu4e 1.6.11; emacs 28.2.50
-From:   Stefan Roesch <shr@devkernel.io>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org
-Subject: Re: [RFC PATCH v2 00/19] mm: process/cgroup ksm support
-Date:   Tue, 21 Feb 2023 09:59:59 -0800
-In-reply-to: <Y/TtBc9DAkUKRHnV@cmpxchg.org>
-Message-ID: <qvqwttzevqtx.fsf@dev0134.prn3.facebook.com>
+        Tue, 21 Feb 2023 14:09:19 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AD028D3E
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Feb 2023 11:09:16 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id ky4so7344928plb.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Feb 2023 11:09:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FjKINbb63v5SLh2fBO1WTFDjRXNgIY1VQjz6bVZHQms=;
+        b=3sslWOyxPhymcC8neUnCMcsS0pPBKNktRr8N7hI+3KXZAOnhnwU1AXnitKO5EqgTVk
+         BBplfBFBHKG8oJb7NI0iwMFrnmlirBn5mAY2eAMcHdo3ObPlY4A6D83fOueZxL2ck4YU
+         jUYE/7VPXqR3dL74ogM/WgK4XJDWYVNStASCx97NSCQYqmSJafq1VbhrxhG5X9uPHPGU
+         wjc79uXtBsJjCGNZ0ZzRwJ2VAJu3KybR8zTSbiag35wyFgSGIsLoReSXjLtrwnNfNnaV
+         xtyjEcPNSra+qVmlNi0qvBZMnzNpSYfnljwa/vvxx1gq/jmeFcJTqBfv8e2qIFvyhWLy
+         TG4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FjKINbb63v5SLh2fBO1WTFDjRXNgIY1VQjz6bVZHQms=;
+        b=2Qde2+1OuMbWKJHMzL1I8YW03TAzy+JcFD04zQcjilXpKCdr0zUMHLYsbJnRQVOOJr
+         m/O9AOGw4xbW3tuQJniLB8YbSxm0agK1KQr/mBVU4HTxN9UCs5ja6vJHboazMocYMpW1
+         L2r5q8AXfDnStUQP2tffyxDX9dthvIJFZpgoc7bhMdmp5ygWKeQS0LxyxL1qvbceYHI5
+         JeodzBpzzlU3Xsq2OB6HZq77kGQb8LERY7VzOXfa9OF8M+//FyVQOJnn17ywqGlfAfTj
+         jXkc2hQFmYFRsvQZh4W286SN3o7cOfnBaP28bJogvG7pgOmA+PvDLDXeE0PTe7hhzyx3
+         76Cw==
+X-Gm-Message-State: AO0yUKVm8OTqhIeRnGrsG8o/XANYTkCGEe7XANZ03frCKOWbGE9yTaLH
+        eblUFFYcUQ9XNLhpbCu4gwBcCw==
+X-Google-Smtp-Source: AK7set/LLBBxVlCKn8oUpZpNpFvej+FyNPldkLZd8dQFU6qsq6oAUKleyiQQ6a/2mujUE8g4N0Q9Ug==
+X-Received: by 2002:a17:902:c941:b0:196:5b76:8e6e with SMTP id i1-20020a170902c94100b001965b768e6emr6609924pla.1.1677006555431;
+        Tue, 21 Feb 2023 11:09:15 -0800 (PST)
+Received: from evan.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id b16-20020a170902b61000b0019602b2c00csm1583863pls.175.2023.02.21.11.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Feb 2023 11:09:14 -0800 (PST)
+From:   Evan Green <evan@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     heiko@sntech.de, Conor Dooley <conor@kernel.org>,
+        slewis@rivosinc.com, vineetg@rivosinc.com,
+        Evan Green <evan@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ruizhe Pan <c141028@gmail.com>, Shuah Khan <shuah@kernel.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v3 0/7] RISC-V Hardware Probing User Interface
+Date:   Tue, 21 Feb 2023 11:08:51 -0800
+Message-Id: <20230221190858.3159617-1-evan@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,83 +99,164 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-Johannes Weiner <hannes@cmpxchg.org> writes:
+There's been a bunch of off-list discussions about this, including at
+Plumbers.  The original plan was to do something involving providing an
+ISA string to userspace, but ISA strings just aren't sufficient for a
+stable ABI any more: in order to parse an ISA string users need the
+version of the specifications that the string is written to, the version
+of each extension (sometimes at a finer granularity than the RISC-V
+releases/versions encode), and the expected use case for the ISA string
+(ie, is it a U-mode or M-mode string).  That's a lot of complexity to
+try and keep ABI compatible and it's probably going to continue to grow,
+as even if there's no more complexity in the specifications we'll have
+to deal with the various ISA string parsing oddities that end up all
+over userspace.
 
-> Hi Stefan,
->
-> On Fri, Feb 10, 2023 at 01:50:04PM -0800, Stefan Roesch wrote:
->> So far KSM can only be enabled by calling madvise for memory regions. What is
->> required to enable KSM for more workloads is to enable / disable it at the
->> process / cgroup level.
->>
->> Use case:
->> The madvise call is not available in the programming language. An example for
->> this are programs with forked workloads using a garbage collected language without
->> pointers. In such a language madvise cannot be made available.
->>
->> In addition the addresses of objects get moved around as they are garbage
->> collected. KSM sharing needs to be enabled "from the outside" for these type of
->> workloads.
->
-> It would be good to expand on the argument that Rik made about the
-> interpreter being used for things were there are no merging
-> opportunities, and the KSM scanning overhead isn't amortized.
->
-> There is a fundamental mismatch in scopes. madvise() is a
-> workload-local decision, whereas sizable sharing opportunities may or
-> may not exist across multiple workloads. Only a higher-level entity
-> like a job scheduler can know for certain whether it's running one or
-> more instances of a job. That job scheduler in turn doesn't have the
-> necessary knowledge of the workload's internals to make targeted and
-> well-timed advise calls with, say, process_madvise().
->
-> This also applies to the security concerns brought up in previous
-> threads. An individual workload doesn't know what else is running on
-> the machine, so it needs to be highly conservative about what it can
-> give up for system-wide merging. However, if the system is dedicated
-> to running multiple jobs within the same security domain, it's the job
-> scheduler that knows that sharing isn't a problem, and even desirable.
->
-> So I think this series makes sense, but it would be good to expand a
-> bit on the reasoning and address the security aspect in the cover/doc.
->
+Instead this patch set takes a very different approach and provides a set
+of key/value pairs that encode various bits about the system.  The big
+advantage here is that we can clearly define what these mean so we can
+ensure ABI stability, but it also allows us to encode information that's
+unlikely to ever appear in an ISA string (see the misaligned access
+performance, for example).  The resulting interface looks a lot like
+what arm64 and x86 do, and will hopefully fit well into something like
+ACPI in the future.
 
-These are good points Johannes, I'll elaborate on them with the next
-version of the patch.
+The actual user interface is a syscall, with a vDSO function in front of
+it. The vDSO function can answer some queries without a syscall at all,
+and falls back to the syscall for cases it doesn't have answers to.
+Currently we prepopulate it with an array of answers for all keys and
+a CPU set of "all CPUs". This can be adjusted as necessary to provide
+fast answers to the most common queries.
 
->> Stefan Roesch (19):
->>   mm: add new flag to enable ksm per process
->>   mm: add flag to __ksm_enter
->>   mm: add flag to __ksm_exit call
->>   mm: invoke madvise for all vmas in scan_get_next_rmap_item
->>   mm: support disabling of ksm for a process
->>   mm: add new prctl option to get and set ksm for a process
->
-> The implementation looks sound to me as well.
->
-> I think it would be a bit easier to review if you folded these ^^^
-> patches, the tools patch below, and the prctl selftests, all into one
-> single commit. It's one logical change. This way the new flags and
-> helper functions can be reviewed against the new users and callsites
-> without having to jump back and forth between emails.
->
+An example series in glibc exposing this syscall and using it in an
+ifunc selector for memcpy can be found at [1]. I'm about to send a v2
+of that series out that incorporates the vDSO function.
 
-I'll fold them in the next version.
+I was asked about the performance delta between this and something like
+sysfs. I created a small test program [2] and ran it on a riscv64 qemu
+instance. Doing each operation 100000 times and dividing, these
+operations take the following amount of time:
+ - open()+read()+close() of /sys/kernel/cpu_byteorder: 114us
+ - access("/sys/kernel/cpu_byteorder", R_OK): 69us
+ - riscv_hwprobe() vDSO and syscall: 13us
+ - riscv_hwprobe() vDSO with no syscall: 0.07us
 
->>   mm: split off pages_volatile function
->>   mm: expose general_profit metric
->>   docs: document general_profit sysfs knob
->>   mm: calculate ksm process profit metric
->>   mm: add ksm_merge_type() function
->>   mm: expose ksm process profit metric in ksm_stat
->>   mm: expose ksm merge type in ksm_stat
->>   docs: document new procfs ksm knobs
->
-> Same with the new knobs/stats and their documentation.
->
+These numbers get farther apart if we query multiple keys, as sysfs will
+scale linearly with the number of keys, where the dedicated syscall
+stays the same. To frame these numbers, I also did a tight
+fork/exec/wait loop, which I measured as 23ms. So doing 4
+open/read/close operations is a delta of about 2%, versus a single vDSO
+call is a delta of 0.0003%.
 
-I'll fold them in the next version.
+This being qemu rather than real hardware, the numbers
+themselves are somewhat inaccurate, though the relative orders of
+magnitude are probably good enough.
 
-> Logical splitting is easier to follow than geographical splitting.
->
-> Thanks!
+[1] https://public-inbox.org/libc-alpha/20230206194819.1679472-1-evan@rivosinc.com/T/#t
+[2] https://pastebin.com/x84NEKaS
+
+Changes in v3:
+ - Updated copyright date in cpufeature.h
+ - Fixed typo in cpufeature.h comment (Conor)
+ - Refactored functions so that kernel mode can query too, in
+   preparation for the vDSO data population.
+ - Changed the vendor/arch/imp IDs to return a value of -1 on mismatch
+   rather than failing the whole call.
+ - Const cpumask pointer in hwprobe_mid()
+ - Embellished documentation WRT cpu_set and the returned values.
+ - Renamed hwprobe_mid() to hwprobe_arch_id() (Conor)
+ - Fixed machine ID doc warnings, changed elements to c:macro:.
+ - Completed dangling unistd.h comment (Conor)
+ - Fixed line breaks and minor logic optimization (Conor).
+ - Use riscv_cached_mxxxid() (Conor)
+ - Refactored base ISA behavior probe to allow kernel probing as well,
+   in prep for vDSO data initialization.
+ - Fixed doc warnings in IMA text list, use :c:macro:.
+ - Added | to description: to make dt-checker happy.
+ - Have hwprobe_misaligned return int instead of long.
+ - Constify cpumask pointer in hwprobe_misaligned()
+ - Fix warnings in _PERF_O list documentation, use :c:macro:.
+ - Move include cpufeature.h to misaligned patch.
+ - Fix documentation mismatch for RISCV_HWPROBE_KEY_CPUPERF_0 (Conor)
+ - Use for_each_possible_cpu() instead of NR_CPUS (Conor)
+ - Break early in misaligned access iteration (Conor)
+ - Increase MISALIGNED_MASK from 2 bits to 3 for possible UNSUPPORTED future
+   value (Conor)
+ - Introduced vDSO function
+
+Changes in v2:
+ - Factored the move of struct riscv_cpuinfo to its own header
+ - Changed the interface to look more like poll(). Rather than supplying
+   key_offset and getting back an array of values with numerically
+   contiguous keys, have the user pre-fill the key members of the array,
+   and the kernel will fill in the corresponding values. For any key it
+   doesn't recognize, it will set the key of that element to -1. This
+   allows usermode to quickly ask for exactly the elements it cares
+   about, and not get bogged down in a back and forth about newer keys
+   that older kernels might not recognize. In other words, the kernel
+   can communicate that it doesn't recognize some of the keys while
+   still providing the data for the keys it does know.
+ - Added a shortcut to the cpuset parameters that if a size of 0 and
+   NULL is provided for the CPU set, the kernel will use a cpu mask of
+   all online CPUs. This is convenient because I suspect most callers
+   will only want to act on a feature if it's supported on all CPUs, and
+   it's a headache to dynamically allocate an array of all 1s, not to
+   mention a waste to have the kernel loop over all of the offline bits.
+ - Fixed logic error in if(of_property_read_string...) that caused crash
+ - Include cpufeature.h in cpufeature.h to avoid undeclared variable
+   warning.
+ - Added a _MASK define
+ - Fix random checkpatch complaints
+ - Updated the selftests to the new API and added some more.
+ - Fixed indentation, comments in .S, and general checkpatch complaints.
+
+Evan Green (6):
+  RISC-V: Move struct riscv_cpuinfo to new header
+  RISC-V: Add a syscall for HW probing
+  RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
+  RISC-V: hwprobe: Support probing of misaligned access performance
+  selftests: Test the new RISC-V hwprobe interface
+  RISC-V: Add hwprobe vDSO function and data
+
+Palmer Dabbelt (1):
+  dt-bindings: Add RISC-V misaligned access performance
+
+ .../devicetree/bindings/riscv/cpus.yaml       |  15 ++
+ Documentation/riscv/hwprobe.rst               |  74 ++++++
+ Documentation/riscv/index.rst                 |   1 +
+ arch/riscv/Kconfig                            |   1 +
+ arch/riscv/include/asm/cpufeature.h           |  23 ++
+ arch/riscv/include/asm/hwprobe.h              |  13 +
+ arch/riscv/include/asm/smp.h                  |  11 +
+ arch/riscv/include/asm/syscall.h              |   3 +
+ arch/riscv/include/asm/vdso/data.h            |  17 ++
+ arch/riscv/include/uapi/asm/hwprobe.h         |  36 +++
+ arch/riscv/include/uapi/asm/unistd.h          |   9 +
+ arch/riscv/kernel/cpu.c                       |  11 +-
+ arch/riscv/kernel/cpufeature.c                |  31 ++-
+ arch/riscv/kernel/sys_riscv.c                 | 222 +++++++++++++++++-
+ arch/riscv/kernel/vdso/Makefile               |   2 +
+ arch/riscv/kernel/vdso/hwprobe.c              |  47 ++++
+ arch/riscv/kernel/vdso/sys_hwprobe.S          |  15 ++
+ arch/riscv/kernel/vdso/vdso.lds.S             |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/riscv/Makefile        |  58 +++++
+ .../testing/selftests/riscv/hwprobe/Makefile  |  10 +
+ .../testing/selftests/riscv/hwprobe/hwprobe.c |  89 +++++++
+ .../selftests/riscv/hwprobe/sys_hwprobe.S     |  12 +
+ 23 files changed, 692 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/riscv/hwprobe.rst
+ create mode 100644 arch/riscv/include/asm/cpufeature.h
+ create mode 100644 arch/riscv/include/asm/hwprobe.h
+ create mode 100644 arch/riscv/include/asm/vdso/data.h
+ create mode 100644 arch/riscv/include/uapi/asm/hwprobe.h
+ create mode 100644 arch/riscv/kernel/vdso/hwprobe.c
+ create mode 100644 arch/riscv/kernel/vdso/sys_hwprobe.S
+ create mode 100644 tools/testing/selftests/riscv/Makefile
+ create mode 100644 tools/testing/selftests/riscv/hwprobe/Makefile
+ create mode 100644 tools/testing/selftests/riscv/hwprobe/hwprobe.c
+ create mode 100644 tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
+
+-- 
+2.25.1
+
