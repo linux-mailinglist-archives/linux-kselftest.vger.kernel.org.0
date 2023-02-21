@@ -2,175 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B4469E096
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Feb 2023 13:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C981969E28D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Feb 2023 15:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbjBUMmo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Feb 2023 07:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S234570AbjBUOkp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Feb 2023 09:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbjBUMmn (ORCPT
+        with ESMTP id S234583AbjBUOke (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Feb 2023 07:42:43 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C678252AA
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Feb 2023 04:42:42 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o12so17082328edb.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Feb 2023 04:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O6el+9joKyAhVr+TDn79fkuxzTiKR+SX0MO09engIhY=;
-        b=cLZLuL/REYI8EX3PmLJFdaF2YUd4XwINhRSVuCvmFL4aG05j7eoj6hTO6HsBms6J64
-         jI1aSNDMwXJlv7vMhzZCU57mo5E8++tN0wcL8Cp41JslegPSild6F+BHDEw87m7rLbEd
-         U2e/JwxkCaFBy2Wd5fsup2SUZJLAAQ9sQSgQQlRq2fkj0iZmeJnegXko/ihX0PNFLSWt
-         56urgBxOBm/Nqy0l4t3vVRSZ0GnyJ43fsmC2tam2hSOi32ZWoe/HgEX0sPnqpynLUEyv
-         fj0sbsXVvjHQ8Vh4esfPA0zpanqX1wvttZbt9RUFwrDvpKYVPp92lo7MQwxzTAdK/3p+
-         nTgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O6el+9joKyAhVr+TDn79fkuxzTiKR+SX0MO09engIhY=;
-        b=c2jxYvjDaIDLYpz1qW+SLfmC+ccpS4rFgZp+KctgPtviauDodDhawTSSsBlGwlijWk
-         xff5fegx5dM5Y50fzUpyUBCm6bR5m50jsIXoX/+GA4lAW+aU/oPNQg4NZeVqgudsPJZB
-         +YeUt0VM/H7oxwtXWhbcFELxX0VjzD9Ekj4CdHdXcw1NCky4vzdRdCDm1Cp6ER4mt54y
-         bA5lYHpcVfCNheBragxQH+IelavRKmBo25B7ntpKQISiILC+tbgL9dKwqWxI135pUPto
-         ldLqXTfNUL8e0u6jNYomA5LsspTmBuO456tpCXeHbsQW5WfNDm/tfo5Be5fCzxng+pUU
-         ppgg==
-X-Gm-Message-State: AO0yUKX8pHNSCJkFaTkg9LcuDEKMMpT1HJhddJSZjZ5L4aVRt20UXxW0
-        2SWuTAgz1KTA8UU+qD2WJgjRhd6NwCwVsiGsc0wW4A==
-X-Google-Smtp-Source: AK7set98YYMMSbNx2hRGaTKAwlPc630Vw/Ga3pJmq4lzKkS4okWIZvm2EzW2kFQ7OPb7yFK5K2hy0cNe5M/5DCpxx9U=
-X-Received: by 2002:a17:906:9499:b0:8b1:79ef:6923 with SMTP id
- t25-20020a170906949900b008b179ef6923mr6794210ejx.15.1676983360819; Tue, 21
- Feb 2023 04:42:40 -0800 (PST)
+        Tue, 21 Feb 2023 09:40:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3D02B63E;
+        Tue, 21 Feb 2023 06:40:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5E90B80EF7;
+        Tue, 21 Feb 2023 14:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 65439C433EF;
+        Tue, 21 Feb 2023 14:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676990417;
+        bh=98RTAS5I3GOhN4YHxK4PZb4nfDpKcjj1Kgt+v1jX2YE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VnTFAdH6m0SOIgkzc/UBLhbL/8w1d6ubvNlR0nVQazVbn7ik5yn+ehDbbBVzV3Ef7
+         Z3LWo7iDwZ8iiTpux43sbXYnRTFL8ma8OlPEICfB9jGBhVqpJxwTbxMP4au/fSey6L
+         3Jh8pOw7FTrVbajybSuxwzXp4ZScjvlo2liL4P59dgzBueZNFkNkiP4XhiG2to2uh0
+         nL9pyr2GE6XF39HeGw1pd8NI5QQQdCR7oolZNk+LcNhQDqPBmfpkyACLYNyqSsi2FZ
+         VjT3FmEJu+4fmJzFX1dGoGgtA/+jKSSHWqd4OH/oh9S2e8/Sx8HNY/72X3fHrIfJQd
+         CI06grkC27V/g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4F16FC43158;
+        Tue, 21 Feb 2023 14:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
- <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
-In-Reply-To: <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Tue, 21 Feb 2023 13:42:29 +0100
-Message-ID: <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Mike Rapoport <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Danylo Mocherniuk <mdanylo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [patch net] sefltests: netdevsim: wait for devlink instance after
+ netns removal
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167699041732.3034.4066968173144089634.git-patchwork-notify@kernel.org>
+Date:   Tue, 21 Feb 2023 14:40:17 +0000
+References: <20230220132336.198597-1-jiri@resnulli.us>
+In-Reply-To: <20230220132336.198597-1-jiri@resnulli.us>
+To:     Jiri Pirko <jiri@resnulli.us>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        amirtz@nvidia.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 21 Feb 2023 at 11:28, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> Hi Micha=C5=82,
->
-> Thank you so much for comment!
->
-> On 2/17/23 8:18=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-[...]
-> > For the page-selection mechanism, currently required_mask and
-> > excluded_mask have conflicting
-> They are opposite of each other:
-> All the set bits in required_mask must be set for the page to be selected=
-.
-> All the set bits in excluded_mask must _not_ be set for the page to be
-> selected.
->
-> > responsibilities. I suggest to rework that to:
-> > 1. negated_flags: page flags which are to be negated before applying
-> > the page selection using following masks;
-> Sorry I'm unable to understand the negation (which is XOR?). Lets look at
-> the truth table:
-> Page Flag       negated_flags
-> 0               0                       0
-> 0               1                       1
-> 1               0                       1
-> 1               1                       0
->
-> If a page flag is 0 and negated_flag is 1, the result would be 1 which ha=
-s
-> changed the page flag. It isn't making sense to me. Why the page flag bit
-> is being fliped?
->
-> When Anrdei had proposed these masks, they seemed like a fancy way of
-> filtering inside kernel and it was straight forward to understand. These
-> masks would help his use cases for CRIU. So I'd included it. Please can y=
-ou
-> elaborate what is the purpose of negation?
+Hello:
 
-The XOR is a way to invert the tested value of a flag (from positive
-to negative and the other way) without having the API with invalid
-values (with required_flags and excluded_flags you need to define a
-rule about what happens if a flag is present in both of the masks -
-either prioritise one mask over the other or reject the call).
-(Note: the XOR is applied only to the value of the flags for the
-purpose of testing page-selection criteria.)
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-So:
-1. if a flag is not set in negated_flags, but set in required_flags,
-then it means "this flag must be one" - equivalent to it being set in
-required_flag (in your current version of the API).
-2. if a flag is set in negated_flags and also in required_flags, then
-it means "this flag must be zero" - equivalent to it being set in
-excluded_flags.
+On Mon, 20 Feb 2023 14:23:36 +0100 you wrote:
+> From: Jiri Pirko <jiri@nvidia.com>
+> 
+> When devlink instance is put into network namespace and that network
+> namespace gets deleted, devlink instance is moved back into init_ns.
+> This is done as a part of cleanup_net() routine. Since cleanup_net()
+> is called asynchronously from workqueue, there is no guarantee that
+> the devlink instance move is done after "ip netns del" returns.
+> 
+> [...]
 
-The same thing goes for anyof_flags: if a flag is set in anyof_flags,
-then for it to be considered matched:
-1. it must have a value of 1 if it is not set in negated_flags
-2. it must have a value of 0 if it is set in negated_flags
+Here is the summary with links:
+  - [net] sefltests: netdevsim: wait for devlink instance after netns removal
+    https://git.kernel.org/netdev/net/c/f922c7b1c1c4
 
-BTW, I think I assumed that both conditions (all flags in
-required_flags and at least one in anyof_flags is present) need to be
-true for the page to be selected - is this your intention? The example
-code has a bug though, in that if anyof_flags is zero it will never
-match. Let me fix the selection part:
-
-// calc. a mask of flags that have expected ("active") values
-tested_flags =3D page_flags ^ negated_flags;
-// are all required flags in "active" state? [=3D=3D all zero when negated]
-if (~tested_flags & required_mask)
-  skip page;
-// is any extra flag "active"?
-if (anyof_flags && !(tested_flags & anyof_flags))
-  skip page;
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
