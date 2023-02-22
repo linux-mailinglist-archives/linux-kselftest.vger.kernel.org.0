@@ -2,107 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1719F69FD57
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Feb 2023 22:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9100F69FD7E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Feb 2023 22:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjBVVCw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Feb 2023 16:02:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        id S232834AbjBVVIP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Feb 2023 16:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjBVVCv (ORCPT
+        with ESMTP id S232867AbjBVVII (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Feb 2023 16:02:51 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062.outbound.protection.outlook.com [40.107.93.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1F12A999
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Feb 2023 13:02:47 -0800 (PST)
+        Wed, 22 Feb 2023 16:08:08 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F2546150;
+        Wed, 22 Feb 2023 13:07:43 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TdyInJ1SDWKVIwOVBgGUQFuY8SDDfJrJtgV3ce9P8nnYGbj6JOieiUMtGHjtofOl1tpka+sOL7bMTgo1KfnexZSiJEQvwgpKD8eyIeMOLopgFngDpNXoS4B/dPF5qavoXVbcCYHoNCgMG/ZLNVPBTiaT8sucTAl8+zqijNvYV+U0jsBL83u3GuiQQ2cXdm9c2AYPcPf11RdcuPMX/ZPG2aDD5PI6pZjueVly26zKuhnr7EDKAq9qHFi85eVOcZsUVkFEONbW97R9PMyw6IDHTV7+PHHNMXITxQ0UClPyXIV0LmggAo7jrgw5G9x9ILkcvyZboTehW2a9zpOzogixaQ==
+ b=IEws8k0OXV/S37b5ei7BAGE81kVR60XH+GR1Y1PLsVy8dZbto3/iP3rL754A5jJb/9tPJcitwYUBUB4phq6QI1zhkMWw6jrsg5WehYKJY9ft2qUHzZv0yhOda4zMyTfQRrwBqRh4gD0A6HfCYeQLHB6BOCB707RfUYIEK6INF1QVvT4lYVcVX27T4tOJicZwriAu4XWO14QKKyKK61qEmxCWA3z0boD14J2KDv0enEKXIBrk2lN1He1NfNGSBctu/BLrbWOXsM+cLYFrFz7UyjuW4JtDDWVLZlh1pGKffPJonJEIc/Koa0QjeQqPfDeeXuM3JbNyP+Gaj+OIOys6mg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cHDOod6wc4BoYe9V10lD/rg7/WdZq7f9tpS/HuxZuGU=;
- b=KnZAk/f5wu9XSqqSFx6jAYX6vHdM6cmdF8FpYjvTDKPtbj5fJ11aIafmZPTn9q3VY+ztKhQHnCCEbiyg8W5b5BXpJzx+w/av0NgwMIbFhc280Wq3oUpXdMDckxUOXJAMiZlOeqyCHpRQ+TEKtNZXiZLtkpaHUzyl/IxbW3fUX+C38hhTwZmjw4qt33LF3+YNpuFRPu77DWcvW4/gyao8GL304wED4BCsyOv4VnTLY/q3NjB+E82hfxfvKYxCbLg8jFeiO8dWIOf44GDrkGePeE3rLgDWjWoJgeS4uduQFAiZiyRhBRao4AlJ4qHmgwVC2WypyEPWoRXdtu9FgTofCg==
+ bh=dQRZ6Nl22+3XdCRB5n88HRIDKaDRFW5MHEYwCdnJJHU=;
+ b=AVe1MGo/bHX1NtBLWGdcezcqxjy+7CK1ToaV9jw0Pc28XpwhHFjE7/R3su2SEYZpU26IL0lZdi03MgGY2Lu5et52ZGIrlz3C3UMaZVrdj3pjwb1hfNe80QIJ3TF+0JWe+jsS17W/M2lFudlGy9JUGDPod7AoiMfKkmMrBbWiO3MHmLt7lc59OtW7k9wzzxURWcTv7EkbC5aUlzwZtxOwIuqMXXz8ZDR/NFGpRl6VK19d37oHKvHqqotniq2v1PIIkEi15sl/NSzBDNLNo1CbC1vLsaf2auXIdKhpOM9Jr6Psp6MURsZRcJB6G1t/3g8k7xoJFQhB9G8KevNylSSVeg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cHDOod6wc4BoYe9V10lD/rg7/WdZq7f9tpS/HuxZuGU=;
- b=nw8gk3ci7HDJMF8g+Lm/P/fmkG1dhysCAhTTobnbvtgFkhR+IwAYZABfe4P5XMICLbnwrwO6f4bvTOzLDQ7lGziijxASNlywMON1oBWh/RvGr9yHVlNDr8WrMj80N9rC91eLdAtgbHQAIDyBFgF6f41zl52lI4PUUeiyDI6HNtNPlJcEMuX1HKBXSz6ueNd76JalW0T9M18+mLFTj9fic+Ql91jFnBvu8tanXsunev4BLm7rS87czcV/s6y03qnbwjo7qDjZcVVKCB/zcIqz+xNkvdaq1sahYf/HvzM6Ejx/sOPg5VzThmjPi9ROWhRH7s7LmakBYwcBZTaHOHgVPw==
+ bh=dQRZ6Nl22+3XdCRB5n88HRIDKaDRFW5MHEYwCdnJJHU=;
+ b=GrWz1mbgHbOcFVXd5nt4e3WFuos7oWEI8Zifo0A7DYRVzs3MpIO81Rbsr/o+yrxgk3YDcEIn8BJJkX1084p4DM5MpkvjdEnd/ycFe05nFo07xunoUGQbcvMlUYVw3wGpQWmRXVCHD9Iwlb/yZL97P53C61ps4GfIZjdF3A+tUii4TLeHss/swjl14+neKIRyRdtf+H0cftYhc1R9RKIpG4ww1nTSdIDsjELL+woqdnHvAxBb7XUKqPMn8wz5WqVFohMrJT6VoFlcNCmL6MqLEMmL0u3vdcLTTYTRkB7JSyxKHn8LnrwFFXIjJJGoT/QwPeZGCBfAdKH8RULrlebrbg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CO6PR12MB5395.namprd12.prod.outlook.com (2603:10b6:303:13a::14) with
+ by DS7PR12MB6213.namprd12.prod.outlook.com (2603:10b6:8:97::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.21; Wed, 22 Feb
- 2023 21:02:45 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.19; Wed, 22 Feb
+ 2023 21:07:21 +0000
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6111.021; Wed, 22 Feb 2023
- 21:02:45 +0000
+ 21:07:21 +0000
+Date:   Wed, 22 Feb 2023 17:07:20 -0400
 From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: [PATCH v2 7/7] iommufd/selftest: Add a selftest for iommufd_device_attach() with a hwpt argument
-Date:   Wed, 22 Feb 2023 17:02:40 -0400
-Message-Id: <7-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com>
-In-Reply-To: <0-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com>
-References: 
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR10CA0010.namprd10.prod.outlook.com
- (2603:10b6:208:120::23) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+To:     Yi Liu <yi.l.liu@intel.com>
+Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        baolu.lu@linux.intel.com
+Subject: Re: [PATCH 0/6] iommufd: Add iommu capability reporting
+Message-ID: <Y/aECHpCo4LJ1Rw2@nvidia.com>
+References: <20230209041642.9346-1-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209041642.9346-1-yi.l.liu@intel.com>
+X-ClientProxiedBy: MN2PR01CA0010.prod.exchangelabs.com (2603:10b6:208:10c::23)
+ To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CO6PR12MB5395:EE_
-X-MS-Office365-Filtering-Correlation-Id: 76069f90-58bb-4830-6fb6-08db15182429
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB6213:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a33f696-4aed-45f9-5ac3-08db1518c9e7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RrnShVhadC2khrKLPDJrToVPhgrnrHMi5/FSRkBmySTdnutc1v35t435wXVvqxWjtlMKaRqEOroUzJgzKdL6H2bxwsf3ifRTIMMIO7J+kAJfsOt/VLRZTw1CMtflwXKhtkZb4K2JO/OW5mesoOLHWuHzWPoap82kaKq9dB0E+Vg3adxDvdQHEZfwMFZflbAh36uEhV1wjHNkJthvvKk+S7v5XVvtCUGK7SXp/4eE+UQEekPsw2+IprwXbJKZBhXP/ZSjFLStJA3SCxgnZ8S47PlghdhDt9ni4ZcmC6hjA+mEg9HRfZH1zclNKdDb3hLcw/hpExlVJWCKgZVIndFYlmRfVgV3eJ890Vivw+qs0mzvETdIB9tpLvZnAkUo+znvH6WEkOo7j7Pvcs1G5iS/VlNDeuURfcZDSNgNBxpYev38VeEVYR8U/2r3PfNaCFXra+ij1hAebwVuW9aYP6xGyOStyAnfVbKarNeigkBHfEDStK3H33WaYCOdRW60NTC91ff8fyalLCf2EAFafQI8ruAb3GuPF3whOElF0KFFHmDGnbCKiZ3VlWoOQL0L+iH3QvYUFpS+4c5VXsyMhsdoe6VODmji3cA9EsgC/YJ7dA4AUlrkC8rysIm7M2K0wdqA1FdoNavFDPnEAjJANADr5IB/ZkjMj3dLkIrYFDOFFQgEzKMox+MCkuABppZbnjot
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(366004)(396003)(39860400002)(346002)(451199018)(478600001)(38100700002)(5660300002)(6486002)(2906002)(8936002)(41300700001)(2616005)(110136005)(54906003)(186003)(6666004)(8676002)(66556008)(66476007)(26005)(66946007)(6506007)(6512007)(316002)(86362001)(4326008)(36756003)(83380400001)(4216001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: RfMB3HoQIHqWkk5iqyBTcOfNwp91L24gsps2ZLe5wN/X5QZ5v+Mqp2XCdzqvkKtOsp+JCGD+gFDCoh5Obla6IFvnBoZLVqIYoUldFZQl0Q99zWZzZ30YhgiSK0F8f4Q6GbmyjBBtaXy9uJRbmH5e7/t05NKeohcltNUCg3NevskgRGBd73MBmftA8kpQ12XLrlY4Enjfv6kH8DaK1jTMKCNWNhlQxnmSjfCRFMWLZ6Py5adKtXq2smfh2ltiVE90GZhF0rWMnTYy7lKRmSdSxobEtiP6gHvWNi0HwzK8SaQd1v4jg5aOZQ7y9c97ItSsnevdtHuHuVVTpCjUB0/GFuTQToObEZ2An5G7++lhu3cpYJH+TdsLG/mxcsntAqADRlw3T5EhuhI8TNTj0tMaICwKDFnRCaLBb4dEL+c/lJAWrB/0cv3UdXbnt3pFnX3oNiDCzsiGklXWW4vLz40UdF4dLyK2+yU3mmJwFoQLUAvgOjS/faM7HfxTKWB/gRgpWrKRh4Pq9V2nC8T6eHu0+ggMuCujXBWW9XTZbuuziML5RFiNLLB3V4W0yMFOg/nEdY7Oy52R0PiAaJ6yrizzihvF3+whfgibibu3nv7dTB1VRMn5nP9NjVNh/xBD+oTH9mXIGRjcmPza9B1QsiXXSRzcV76KRLwdcwJN6SrRnskz+JmgK0AmcxJuxfxAighjux3FwQnIsIPweiiqzJJRNvkDCyFDtnrC5fkcwxEB2lA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(396003)(136003)(376002)(39860400002)(451199018)(38100700002)(2906002)(2616005)(83380400001)(36756003)(186003)(6506007)(6512007)(41300700001)(5660300002)(316002)(26005)(966005)(4326008)(6916009)(8676002)(66946007)(6486002)(66476007)(66556008)(86362001)(478600001)(7416002)(8936002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Eqn+rLJypVcWMcg50OJjRJIbrYC/oYv0kER4tyLbIXPv/Do2FOFGXSp84jDi?=
- =?us-ascii?Q?qxj05Vfj5VXjl9ntg/yjRxfURpq8OhMNl2RJyMeGuTxQoCU/RtBSkJlQdUfA?=
- =?us-ascii?Q?/lZbuWnRk+zDFM41otQBZthn+o1PasQfkw2v6K2TZQhawvhLNy6bI/g/xExX?=
- =?us-ascii?Q?5WsOfTBIk8bhJt4pOffTxnIDp9rdSyNNkikMcE2CXJgF06M5I57FNrzYdXem?=
- =?us-ascii?Q?WiY1A+TkP0RT++msF1x+u+zDFKE0Ded+byScyV96u1mIaGjC4wnWfb6RvPbI?=
- =?us-ascii?Q?A+FjRIVuNMxyNpTrERK6kCDPLyr8XvnCn0BuibMCCK+2pkjBZOsv3ULJNGWn?=
- =?us-ascii?Q?qaK6I/Td3SAOJl0OP64do4OeVqm7qc//osEHVyJY1C8POixrQGRJf6FQi+lt?=
- =?us-ascii?Q?9H0tP8F3V+F+WaXgovn0S4kfawxM2eXZmOCbgTv9R/o0JJ2zOX0TgehuPncp?=
- =?us-ascii?Q?inR8CUTfEmvqfM9LSock0fEDpzWwAChILMaNK0xuVxeFV/nSQ2MB8bxePB6+?=
- =?us-ascii?Q?6f8sQPGpp8i1+o9zbij+QvmK4ptYQ0uSUcHXYTsVqvmDWXqrRgSUtB8sovJi?=
- =?us-ascii?Q?C2DLImjDYr7MJURoSk2pxGpM6Re9GQnnI8nesbY4neey4W06p0RkV1w9ARZr?=
- =?us-ascii?Q?dk0Nri7OllqvUqSyw60pOtTcY6uuE9VmjVN8nXDOmqd0TNticRsTCOZQ3v36?=
- =?us-ascii?Q?em2ly60WfXYBObBUFE7SaGfV05nG8XSssa6srMowF5+N6jiSAyYoNuDkGMta?=
- =?us-ascii?Q?KSp2BRCviM2/OWG71Pg0pU10lCA3rLZG2l8CFl0mADdZGbswB6OUj8Nq6Kmo?=
- =?us-ascii?Q?OXigvbw/Uf3JH9Q0ACVohmP1qudZ/UFdL1tj9yCvkphAAixMHtTfNtoCSg5t?=
- =?us-ascii?Q?ZdzlpilmzBm/aaZKy3cfRqjYWQPMx4UJ+d2Tpcbd7/iGfmDtGx0+Os7RajFi?=
- =?us-ascii?Q?uos5MmL8a0yqwImA/8Wce8jMVtyh+bh8Fp5QzzvY+mBrhiHTVJlSV7fQAXpq?=
- =?us-ascii?Q?tM17EJTM0mXcen0ie6i9M0gEiMJ/Ua+ygPnWv8yRy9QyKoV744SqJP1COLDb?=
- =?us-ascii?Q?n6jz832u1aDT2gAg1hrvotihcXRlGH2HYzLrhwBk5vzsswGqNzzbnigtt6WM?=
- =?us-ascii?Q?LgrHGQqucO76+cUoJ9Pe58fVF9x1rZzUuyf1ub+A3UxW9kxiMMBwdH8AhAHT?=
- =?us-ascii?Q?Klf7J6w2DnJF8VRA0UTs4gTQr5dPHI5h4UsKD4jZWKxq6r33JVzMqyjWN0Wz?=
- =?us-ascii?Q?6cH/kNhKC+CDLUb9ZrA5OZPa66Wwv6hOXn0EgIBqzuNDMdlYHVK8dBdXe62v?=
- =?us-ascii?Q?A9RrR7+EBAmzNLZJyPPNwUf0GwqYgk56f91iY1rkz3McGX4oW8HC9tQB2ksv?=
- =?us-ascii?Q?Bwv4Lx4X8WGYOnhOTsCKZgWQBHWWRuURvGfbZcaFePCO+ZEj8rjJOfkkhxBW?=
- =?us-ascii?Q?To6LUKP4HXu8WU4HHYyKEEmkQoAinS0xwQ6TGdcQnlUyyQBLJdamiWipnMY9?=
- =?us-ascii?Q?hCmY+Dl2+csMtUWCqapENFYvBaQLn80SHbTVunKoSg9OJnto4nx512RlVh8p?=
- =?us-ascii?Q?LiUTIljsVwAaVv/oF09uugF+QldFN2ay9+svJD1k?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9z3qYQyJZrsGPV/Mm+iOAqscA+4JAa02np99J3Zc/lW7gGNJeN5TXHiQEsCh?=
+ =?us-ascii?Q?hXi/5XGZCUWCG1lRyQ+hmp2HVkkfrPwGEViosfsK+qP0BCg9l58AsSYU69lr?=
+ =?us-ascii?Q?4fhL2BhaYGV434asPpoL91U/cD2QUbfx+cGDAkbIWoV1jadjyfGCecCEs/9k?=
+ =?us-ascii?Q?4FZZ49OfCrwK9/HX3OdcdV8DyUWMdfmR0FN/T+euy202BL2XDNQbMwEaD0w/?=
+ =?us-ascii?Q?9pFZwvKID4Rnn3mH+QsonwCAZH2ys5g9pm9DIcd51MRC1o7fRZQF+MNGhQe5?=
+ =?us-ascii?Q?MOcETgdoMB2N16ezgAAlroJcU1PLmJglsY2lOrPOMUqeLJ/oZwAPxnFBEfYU?=
+ =?us-ascii?Q?kxATM+CvbTEDxhb6IqxqWIqm3j90cDAYiz7R0wmppCZqOVlSNlSHnRrZUnNy?=
+ =?us-ascii?Q?oOGXms9CIb4CXzqhWxNTt3H9isWs6ynUrN+a7yyL3B8NHhDBuZOaAIJeUrNu?=
+ =?us-ascii?Q?k+hLBtm3af6O2lkxz6fGlArSlXKzz1GWTjb/XLaEuTCCQp+wrhDSHwUoWpjY?=
+ =?us-ascii?Q?2AB9oUhFm9yNbcKVNvXHkoEQjEAQN4xfRms+PkfvzPDcFQWjFk/DECjbNXKQ?=
+ =?us-ascii?Q?ktIaLsPdeCKx1mnQtGicLhC0TnXRu60WjmXDQmN6yHSbJ6VKHNO/Xq4uKxig?=
+ =?us-ascii?Q?sjqq+zDtCj+vjGGyqKoJKX3CeeBPbNNkL1UKj/2lJfcF4YVDCoRjzHvhyAvE?=
+ =?us-ascii?Q?WG9ZLjnCnlru9R0YGzxH/kIEuUDuZ1Gr1v14Bp+MmQFP6X2uepL10C9PyrRI?=
+ =?us-ascii?Q?206HSb15n27YgAS8tCGyKV3qMpki4DHm9ZgrX9v+sn3eC3rByVsBcbkMgD02?=
+ =?us-ascii?Q?gZmVkKn9QfNcGL06DhBLz0Foz2C6kjWeA87ofqtRTNaGTDclgRfVwaLvRz2C?=
+ =?us-ascii?Q?eU1akJvyqj3KEJJALLGu8r1qF1N+XwfzoAk5RRv78nx/iIKnPv0kZJRw32W7?=
+ =?us-ascii?Q?cCGwMHCcPsAK1KlNxy0hTQDKkzJcmoMGPZJIdTY9Bk08atOtvbc2phlNH0EI?=
+ =?us-ascii?Q?s4qTnKUmVKOYnrRDic+YTkqCVFwh8wqtmFUGgE5niUb+JvSJL7vczZ7DikPl?=
+ =?us-ascii?Q?LEHM/X328Q2yrIzBeAZLwP/3yfkBfsT/xn9r4OXVx/kiqv28uJkmz0jMNAxl?=
+ =?us-ascii?Q?lBWYTMULqUnZ7pY3nWAy+NtKbtkmBiIdCwtFf3ooZVBAJ/k45EWJr9DL4vsM?=
+ =?us-ascii?Q?isREGogY5o4zeOWrKjVea56+r2RD2QOJplWDLo+eC/PNq0pGqqrZyfXJ8Cbg?=
+ =?us-ascii?Q?GBFotNwZWZ16d1fKkLe3ZaxJ8lD2oVO3IeiMep9GkKwoyVjylLLAcrxci5y7?=
+ =?us-ascii?Q?jO3yhsW5yT9azq/PYv2OYJGoSAmNxKz+8b6NIhNFHcytCxVUP6D49RUhrFS9?=
+ =?us-ascii?Q?2h0pRF9r6t6Ler2BSBeX0PcK7q+Pq9xsnZJK30XikPkuHzovCkgKJONT84jq?=
+ =?us-ascii?Q?d8+NLjS7DkgqCtH4MX4ZPOaIiXJ8xtPZsKIvUsLe9YmsmqFW5N4mhK5XTLcS?=
+ =?us-ascii?Q?9bnwKY3Z0FnlS5+6mH92YOQKzm4QctjQSHYrcvtHF9GhPLin+gTPTIZMkDeq?=
+ =?us-ascii?Q?bng5HVOdcwyuWzW2bp06QvDHPcTn+XZDZ6A9iSoi?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76069f90-58bb-4830-6fb6-08db15182429
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a33f696-4aed-45f9-5ac3-08db1518c9e7
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 21:02:43.4899
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2023 21:07:21.6337
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jGtJVhHjscg3IvlLc7jkio2tghY4oYyehjp+ozgwl8/tw6/Km0iur/hKCeRgxVfd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5395
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6L1aL4UDdMaUSvtAc/IXpqeoBxoXI/CUxFCriodd6SKW8sjYR4yhpatblU8vIIC2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6213
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -113,51 +119,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This can now be covered since we have a full struct device.
+On Wed, Feb 08, 2023 at 08:16:36PM -0800, Yi Liu wrote:
+> iommufd gives userspace the capabilty to manipulating iommu subsytem.
+> e.g. DMA map/unmap etc. In the near future, it will also support iommu
+> nested translation. Different platform vendors have different implementation
+> for the nested translation. So before set up nested translation, userspace
+> needs to know the hardware iommu capabilities. For example, Intel platform
+> supports guest I/O page table to be the first stage translation structure.
+> 
+> This series reports the iommu capability for a given iommufd_device which
+> has been bound to iommufd. It is a preparation work for nested translation
+> support[1]. In this series, Intel VT-d capability reporting is added. Other
+> vendors may add their own reporting based on this series.
+> 
+> [1] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting_vtd_v1
 
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
----
- tools/testing/selftests/iommu/iommufd.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Let's have the comments addressed and this rebased on top of
+ https://github.com/jgunthorpe/linux/commits/iommufd_hwpt
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 0c4bbd4079a425..69cb79d6a0711d 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -187,6 +187,7 @@ FIXTURE(iommufd_ioas)
- 	int fd;
- 	uint32_t ioas_id;
- 	uint32_t domain_id;
-+	uint32_t hwpt_id;
- 	uint64_t base_iova;
- };
- 
-@@ -212,7 +213,7 @@ FIXTURE_SETUP(iommufd_ioas)
- 	}
- 
- 	for (i = 0; i != variant->mock_domains; i++) {
--		test_cmd_mock_domain(self->ioas_id, NULL, &self->domain_id);
-+		test_cmd_mock_domain(self->ioas_id, &self->domain_id, &self->hwpt_id);
- 		self->base_iova = MOCK_APERTURE_START;
- 	}
- }
-@@ -259,6 +260,16 @@ TEST_F(iommufd_ioas, ioas_destroy)
- 	}
- }
- 
-+TEST_F(iommufd_ioas, hwpt_attach)
-+{
-+	/* Create a device attached directly to a hwpt */
-+	if (self->domain_id) {
-+		test_cmd_mock_domain(self->hwpt_id, NULL, NULL);
-+	} else {
-+		test_err_mock_domain(ENOENT, self->hwpt_id, NULL, NULL);
-+	}
-+}
-+
- TEST_F(iommufd_ioas, ioas_area_destroy)
- {
- 	/* Adding an area does not change ability to destroy */
--- 
-2.39.1
+Which should address eg the selftest issue
 
+I want to start chipping away at bits of the nesting patch pile and
+this part looks close
+
+Thanks,
+Jason
