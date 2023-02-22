@@ -2,95 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0541A69F39D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Feb 2023 12:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D4669FAF8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Feb 2023 19:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbjBVLsa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Feb 2023 06:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S231835AbjBVS1q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Feb 2023 13:27:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbjBVLs3 (ORCPT
+        with ESMTP id S229515AbjBVS1p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Feb 2023 06:48:29 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED5C311F8
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Feb 2023 03:48:27 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id f13so28684791edz.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Feb 2023 03:48:27 -0800 (PST)
+        Wed, 22 Feb 2023 13:27:45 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BCE3A878
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Feb 2023 10:27:43 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536eace862cso46903977b3.16
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Feb 2023 10:27:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u0SkOKRxQb31uA959ab+LjFmT74FnfTe8YzbdQveaiY=;
-        b=UqDS+6tqNYyjqohkN0RYnKWLUOdzlgyc8hyv0ooxuSLy2PIILQb1K4desrZLIb09DP
-         MZVlPweGs4gOkRLk8WL/QYenJ4HLb3H7CtMPHKaTcuBXkzLmXH1Qa+wDP0wsqhAcRzco
-         r1K2i0iPhcZbgToPRI4vyBH6sO8JggrUXhuS5ISy03nEazNH9t/MQRFYmU7lkHV2E0rL
-         KoOgG2YEoYcAptDBxjJCyy1TDAo8OXHo/Q/mPZ7YncRmGQL/quWx3FlKCvlr8IZ/2oCX
-         OjsCCtkkOKtFrAR6GvA//DLeDNTUotumhmaBWsa2KXYn9wcuEvePHKi20W1yQXRLwOiv
-         tGbg==
+        d=google.com; s=20210112; t=1677090463;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ECEz/+b65D8RZ8bM86UASeK3RrWrrS5RnSaZwV8Aew=;
+        b=AgmMM7BMAyeEwaW+48Be0D9gac3TMDOHMWcDO7+zLMtyHX+7Z8Yb6rX84Pi+cPiqCu
+         lKIxHDjW1G+WYvGjGXRW3+0sxcv/zNlwv5sEmnWGfmldfdjgdi8VyPt3nzEttNWezEXR
+         HHpIJ3Wy4IxLt73ooZXxZ/B4PRBVonGngSvSdlATbnurVb8TiMdXKOhi7ZnQy0KBsUgk
+         QJLH6fB0QbGO9Zthqj6Maj17PQWrTUnXTjJXamvaWCWcXDuH0LCHFkwiPgHSQISMABMo
+         0dngXcIs/cvOK+y771eChnh7LvBbgnWrScY6YKlN8okHBvvx2/GnnPCl6xZrLbSB5NUI
+         XgzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u0SkOKRxQb31uA959ab+LjFmT74FnfTe8YzbdQveaiY=;
-        b=tfcCfv3KoDXABp6g85nNpbtcvuv09wuYrI0rSnPigWMi8Is4RN8sTr/BiMBPHWjlMI
-         VL57c0ikjHWkygu0dICIL6gQLKfT42kKbQ7m+xXOKLWAPlm7q74gKWVsZ0jkYYSF19Ss
-         rB+NF05gbVUFRBx641NzEmbN7vCRB/APsDqR5q1WJb5YURaETRb+nQdO6gAXhpiJEcy+
-         3tge2PTKNinJoTsFccGj+Qgok4dWf/OsG4aQZOjOL4anHO2POkJSldKyg8pF7EalNj4u
-         uX2oq0vlh28pJZvk4JKfPJMTJEyynXbylQOq/3KXjA3VJaJ/hekzfsAExRqj2YbWgxca
-         5tFg==
-X-Gm-Message-State: AO0yUKWApTdWaUDAywSi15a1qNlSSBxPDNKTBSaJeIZOzWHTSD2vRz0C
-        oyTFxONvRLiWY+3g9NAPQMFO76Z174lIYbYXP64tlQ==
-X-Google-Smtp-Source: AK7set+7jDBY525NdRoBeszWKhBVRicR26iUfAdJlIK3aE5RKh3n+8X38UCVRCGGxqOdSWAvqZonp5dnF09jL/p8IDM=
-X-Received: by 2002:a17:906:eb4d:b0:87b:dce7:c245 with SMTP id
- mc13-20020a170906eb4d00b0087bdce7c245mr7249278ejb.3.1677066505580; Wed, 22
- Feb 2023 03:48:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
- <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com> <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
- <6d2b40c6-bed9-69a6-e198-537b50953acd@collabora.com> <CABb0KFF+AEKijaXMjDpQLKyAdueJ93kf9QLfOouKHaPPwvfw_w@mail.gmail.com>
- <a212c91e-b22a-c080-40ac-d2e909bb51c2@collabora.com>
-In-Reply-To: <a212c91e-b22a-c080-40ac-d2e909bb51c2@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 22 Feb 2023 12:48:13 +0100
-Message-ID: <CABb0KFEBpJTNF7V0XfuvbtaHUiN0Zpx6FqD+BRyXf2gjxiVgTA@mail.gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Mike Rapoport <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Danylo Mocherniuk <mdanylo@google.com>
+        d=1e100.net; s=20210112; t=1677090463;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/ECEz/+b65D8RZ8bM86UASeK3RrWrrS5RnSaZwV8Aew=;
+        b=7z10p/+lTqTKM66djRw8QJKHrOUewMb0IT8hAmOahrwWyX/7CKu5Q+OheOcnqlAB2U
+         LK07N9hsKN9J+/c2VZx/C++2iD2DDtwpIlmUwT/1XcrWsWXKYUmZ9ngdbD1d9pdbXLM7
+         dQWRnV38tqq/0XB1dwIL/JCaNx3mbL5JMESqsfttujqEukIUJNRLc+kk4hnrBKzHwwOI
+         huu4Z0TlGEtIVe+h3ENiV4h0OpvDQ0O0i54k2w/+6EeRWV2QtGY/pP1j+JA+8SUW8Uko
+         g5R4VLwurtCzvXjCDNDhiqGy0jEf7UObX0sbfy/Ifx571x6rEiDTChhL15VP34Je2+Rt
+         WAfQ==
+X-Gm-Message-State: AO0yUKW3BohoTRiueT33lc32gG5gRtzdyOamXvVB1kMcxMHIiCv8T74W
+        tnIvnDz7mYAbWA3qEAzLJNtFMuyzDg==
+X-Google-Smtp-Source: AK7set9UWQHkv2LUpJiGAJqnpUB7r7YUh6QfonRA2PX1lLmv/mNzzbBMhmVyDmX1AVnwi44AAtHI4ePG3g==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a81:61d4:0:b0:52e:e6ed:30ac with SMTP id
+ v203-20020a8161d4000000b0052ee6ed30acmr519461ywb.556.1677090463033; Wed, 22
+ Feb 2023 10:27:43 -0800 (PST)
+Date:   Wed, 22 Feb 2023 18:27:38 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
+Message-ID: <20230222182740.254087-1-rmoar@google.com>
+Subject: [PATCH v2 1/3] kunit: fix bug in debugfs logs of parameterized tests
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,135 +69,129 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 22 Feb 2023 at 12:06, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> On 2/22/23 3:44=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Wed, 22 Feb 2023 at 11:11, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >> On 2/21/23 5:42=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> On Tue, 21 Feb 2023 at 11:28, Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-> >>>>
-> >>>> Hi Micha=C5=82,
-> >>>>
-> >>>> Thank you so much for comment!
-> >>>>
-> >>>> On 2/17/23 8:18=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> [...]
-> >>>>> For the page-selection mechanism, currently required_mask and
-> >>>>> excluded_mask have conflicting
-> >>>> They are opposite of each other:
-> >>>> All the set bits in required_mask must be set for the page to be sel=
-ected.
-> >>>> All the set bits in excluded_mask must _not_ be set for the page to =
-be
-> >>>> selected.
-> >>>>
-> >>>>> responsibilities. I suggest to rework that to:
-> >>>>> 1. negated_flags: page flags which are to be negated before applyin=
-g
-> >>>>> the page selection using following masks;
-> >>>> Sorry I'm unable to understand the negation (which is XOR?). Lets lo=
-ok at
-> >>>> the truth table:
-> >>>> Page Flag       negated_flags
-> >>>> 0               0                       0
-> >>>> 0               1                       1
-> >>>> 1               0                       1
-> >>>> 1               1                       0
-> >>>>
-> >>>> If a page flag is 0 and negated_flag is 1, the result would be 1 whi=
-ch has
-> >>>> changed the page flag. It isn't making sense to me. Why the page fla=
-g bit
-> >>>> is being fliped?
-> >>>>
-> >>>> When Anrdei had proposed these masks, they seemed like a fancy way o=
-f
-> >>>> filtering inside kernel and it was straight forward to understand. T=
-hese
-> >>>> masks would help his use cases for CRIU. So I'd included it. Please =
-can you
-> >>>> elaborate what is the purpose of negation?
-> >>>
-> >>> The XOR is a way to invert the tested value of a flag (from positive
-> >>> to negative and the other way) without having the API with invalid
-> >>> values (with required_flags and excluded_flags you need to define a
-> >>> rule about what happens if a flag is present in both of the masks -
-> >>> either prioritise one mask over the other or reject the call).
-> >> At minimum, one mask (required, any or excluded) must be specified. Fo=
-r a
-> >> page to get selected, the page flags must fulfill the criterion of all=
- the
-> >> specified masks.
-> >
-> > [Please see the comment below.]
-> >
-> > [...]
-> >> Lets translate words into table:
-> > [Yes, those tables captured the intent correctly.]
-> >
-> >>> BTW, I think I assumed that both conditions (all flags in
-> >>> required_flags and at least one in anyof_flags is present) need to be
-> >>> true for the page to be selected - is this your intention?
-> >> All the masks are optional. If all or any of the 3 masks are specified=
-, the
-> >> page flags must pass these masks to get selected.
-> >
-> > This explanation contradicts in part the introductory paragraph, but
-> > this version seems more useful as you can pass all masks zero to have
-> > all pages selected.
-> Sorry, I wrote it wrongly. (All the masks are not optional.) Let me
-> rephrase. All or at least any 1 of the 3 masks (required, any, exclude)
-> must be specified. The return_mask must always be specified. Error is
-> returned if all 3 masks (required, anyof, exclude) are zero or return_mas=
-k
-> is zero.
+Fix bug in debugfs logs that causes individual parameterized results to not
+appear because the log is reinitialized (cleared) when each parameter is
+run.
 
-Why do you need those restrictions? I'd guess it is valid to request a
-list of all pages with zero return_mask - this will return a compact
-list of used ranges of the virtual address space.
+Ensure these results appear in the debugfs logs and increase log size to
+allow for the size of parameterized results. As a result, append lines to
+the log directly rather than using an intermediate variable that can cause
+stack size warnings due to the increased log size.
 
-> >> After taking a while to understand this and compare with already prese=
-nt
-> >> flag system, `negated flags` is comparatively difficult to understand =
-while
-> >> already present flags seem easier.
-> >
-> > Maybe replacing negated_flags in the API with matched_values =3D
-> > ~negated_flags would make this better?
-> >
-> > We compare having to understand XOR vs having to understand ordering
-> > of required_flags and excluded_flags.
-> There is no ordering in current masks scheme. No mask is preferable. For =
-a
-> page to get selected, all the definitions of the masks must be fulfilled.
-> You have come up with good example that what if required_mask =3D
-> exclude_mask. In this case, no page will fulfill the criterion and hence =
-no
-> page would be selected. It is user's fault that he isn't understanding th=
-e
-> definitions of these masks correctly.
->
-> Now thinking about it, I can add a error check which would return error i=
-f
-> a bit in required and excluded masks matches. Would you like it? Lets put
-> this check in place.
-> (Previously I'd left it for user's wisdom not to do this. If he'll specif=
-y
-> same masks in them, he'll get no addresses out of the syscall.)
+Here is the debugfs log of ext4_inode_test which uses parameterized tests
+before the fix:
 
-This error case is (one of) the problems I propose avoiding. You also
-need much more text to describe the requred/excluded flags
-interactions and edge cases than saying that a flag must have a value
-equal to corresponding bit in ~negated_flags to be matched by
-requried/anyof masks.
+     KTAP version 1
 
-> > IOW my proposal is to replace branches in the masks interpretation (if
-> > in one set then matches but if in another set then doesn't; if flags
-> > match ... ) with plain calculation (flag is matching when equals
-> > ~negated_flags; if flags match the masks ...).
+     # Subtest: ext4_inode_test
+     1..1
+ # Totals: pass:16 fail:0 skip:0 total:16
+ ok 1 ext4_inode_test
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+As you can see, this log does not include any of the individual
+parametrized results.
+
+After (in combination with the next two fixes to remove extra empty line
+and ensure KTAP valid format):
+
+ KTAP version 1
+ 1..1
+     KTAP version 1
+     # Subtest: ext4_inode_test
+     1..1
+        KTAP version 1
+         # Subtest: inode_test_xtimestamp_decoding
+	 ok 1 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
+	 =E2=80=A6 (the rest of the individual parameterized tests)
+         ok 16 2446-05-10 Upper bound of 32bit >=3D0 timestamp. All extra
+     # inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16
+     ok 1 inode_test_xtimestamp_decoding
+ # Totals: pass:16 fail:0 skip:0 total:16
+ ok 1 ext4_inode_test
+
+Signed-off-by: Rae Moar <rmoar@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+
+Changes from v1 -> v2:
+- Remove the use of the line variable in kunit_log_append that was causing
+  stack size warnings.
+- Add before and after to the commit message.
+
+ include/kunit/test.h |  2 +-
+ lib/kunit/test.c     | 17 +++++++++++------
+ 2 files changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 08d3559dd703..0668d29f3453 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ struct kunit;
+=20
+ /* Size of log associated with test. */
+-#define KUNIT_LOG_SIZE	512
++#define KUNIT_LOG_SIZE 1500
+=20
+ /* Maximum size of parameter description string. */
+ #define KUNIT_PARAM_DESC_SIZE 128
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c9e15bb60058..c406aa07d875 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -114,22 +114,26 @@ static void kunit_print_test_stats(struct kunit *test=
+,
+  */
+ void kunit_log_append(char *log, const char *fmt, ...)
+ {
+-	char line[KUNIT_LOG_SIZE];
+ 	va_list args;
+-	int len_left;
++	int len, log_len, len_left;
+=20
+ 	if (!log)
+ 		return;
+=20
+-	len_left =3D KUNIT_LOG_SIZE - strlen(log) - 1;
++	log_len =3D strlen(log);
++	len_left =3D KUNIT_LOG_SIZE - log_len - 1;
+ 	if (len_left <=3D 0)
+ 		return;
+=20
++	/* Evaluate length of line to add to log */
+ 	va_start(args, fmt);
+-	vsnprintf(line, sizeof(line), fmt, args);
++	len =3D vsnprintf(NULL, 0, fmt, args);
+ 	va_end(args);
+=20
+-	strncat(log, line, len_left);
++	/* Print formatted line to the log */
++	va_start(args, fmt);
++	vsnprintf(log + log_len, min(len, len_left), fmt, args);
++	va_end(args);
+ }
+ EXPORT_SYMBOL_GPL(kunit_log_append);
+=20
+@@ -437,7 +441,6 @@ static void kunit_run_case_catch_errors(struct kunit_su=
+ite *suite,
+ 	struct kunit_try_catch_context context;
+ 	struct kunit_try_catch *try_catch;
+=20
+-	kunit_init_test(test, test_case->name, test_case->log);
+ 	try_catch =3D &test->try_catch;
+=20
+ 	kunit_try_catch_init(try_catch,
+@@ -533,6 +536,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 		struct kunit_result_stats param_stats =3D { 0 };
+ 		test_case->status =3D KUNIT_SKIPPED;
+=20
++		kunit_init_test(&test, test_case->name, test_case->log);
++
+ 		if (!test_case->generate_params) {
+ 			/* Non-parameterised test. */
+ 			kunit_run_case_catch_errors(suite, test_case, &test);
+
+base-commit: 82649c7c0da431d147a75c6ae768ee42c1053f53
+--=20
+2.39.2.637.g21b0678d19-goog
+
