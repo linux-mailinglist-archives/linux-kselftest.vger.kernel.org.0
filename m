@@ -2,240 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262136A0E3D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Feb 2023 17:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E34D6A0E63
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Feb 2023 18:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjBWQwi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Feb 2023 11:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        id S229572AbjBWRLR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Feb 2023 12:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBWQwh (ORCPT
+        with ESMTP id S229445AbjBWRLQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Feb 2023 11:52:37 -0500
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54684EFAD;
-        Thu, 23 Feb 2023 08:52:35 -0800 (PST)
-Received: by mail-qt1-f170.google.com with SMTP id d7so11446976qtr.12;
-        Thu, 23 Feb 2023 08:52:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5OmSVuAip9wO3Gha1ZZSovxIPIgEgsLE50VtSIFDnNA=;
-        b=QEWVuELWX2lZN/h6cmnqGhG9MKNuQt9dufAjWqDDX1NEYjFg7QkH2WYV8h8eGatut2
-         /gRSZHXSP7UcHx2tG6U7VbUhs40YRXT2sNNOw0sDw5a7zHsgIYB9BEzovsbXpz8D+sYz
-         OJeNmsMfz7m3EDq+GlA0sIR4XDP8y5r/gJOeNTvkUGtldmMJS/I576UKVuApnH9F5yWF
-         ldr4fb0Nx8QcM6XrY5K6y2FYxeaK3XfD/duda4AA0uSYTh0XSoPjujaNwtf9a7rLgT6d
-         bCGZj7jeXTTGfIc9KM9JLhrl5JB4Wz2W3ieP5BdiOI6Zv19lr5P1DrIjkwmU0CTIhnif
-         AEDQ==
-X-Gm-Message-State: AO0yUKXFQWR2sRc1FZ+iGLlmZiZuyDoudfUn5kNu0XKnZ3wpeGHdy8WV
-        nlSP5jubfm8hgtF0OY5zLWcoMEw6G1vYWA==
-X-Google-Smtp-Source: AK7set+6v47knkpkuaI9NmXmWmrhSYqNdCUwlqphFO8IhAP6UtFmp7RPOLw8D8wxEHvtXZZLhIg3wQ==
-X-Received: by 2002:a05:622a:13:b0:3b6:36a0:adbe with SMTP id x19-20020a05622a001300b003b636a0adbemr8661556qtw.6.1677171153631;
-        Thu, 23 Feb 2023 08:52:33 -0800 (PST)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id d20-20020ac85454000000b003a530a32f67sm6833848qtq.65.2023.02.23.08.52.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 08:52:33 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-536c02eea4dso198121337b3.4;
-        Thu, 23 Feb 2023 08:52:33 -0800 (PST)
-X-Received: by 2002:a5b:68c:0:b0:9a0:d4d:5462 with SMTP id j12-20020a5b068c000000b009a00d4d5462mr2374659ybq.7.1677171152895;
- Thu, 23 Feb 2023 08:52:32 -0800 (PST)
+        Thu, 23 Feb 2023 12:11:16 -0500
+Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11012004.outbound.protection.outlook.com [52.101.63.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8FB55C34;
+        Thu, 23 Feb 2023 09:11:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I+uDAI2i5UPksJvCvL0RrnwjWCTYW9ZKtrbwlf1LwRA35gj6Hj6Nz50HbLlMaoZKgwWjZoQ+1r6rTKyC5KXyCAVYPjVImNJU4xnYDkOPHk8ymg9YC9Kk0yarUA88HFXw3KYuNTy6F3Dxq+iazlDyc68Or2EsrbH3wxbCXbkQ0uohoBVsWUUXFYpJDGMRSDx3e20Rze2Fzw0gY6h0Ebj8fZO8nh3IrFK03wSTBdbZfHNyGxcI02PlWiG40c+ioxs0fOhSGKxdsZH3Rfz6yc3B8SPjztzeTllEXR9gdd/C3W3Zhdc7nMUYam1H3h9J31EbKzwVVmx08GHTcH+J70AtAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3maXaJ5h9AdwM7zlzbJILiDJ+2zPAG0uRv0unIKjUUY=;
+ b=l8L9Tsru9BpYF53mpp39gCGNEf3KvO1uMSxQSjY930GuZ4SYQw2epqi3Ywr8Vc46KWAxEkcDHGdv474I33eAIzL7Q9RDIMbTvYS/RrN8e5YgvzS0PWLzbqzAI/0ARFzi3la6zv+8I4KWKQwwdJx50UdIASO/Cygm0gFnr5O/Vju+hqkX2o/naHBTpvstkbBSt1f+yPvi7cgfIB8hETqX/cynU7OCDY8uDG+bG52pJfbRDn0ysR7uQjdxTq0lPP9ULhimW8lL5hC/HnBlTBLgmFY0j6SfdpFtb2226Xq7Z//Ad0NjDDIORjRHZg3zl0ICnh6pzVppVo6J1ZVK2LOn6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3maXaJ5h9AdwM7zlzbJILiDJ+2zPAG0uRv0unIKjUUY=;
+ b=mXwvpH+wSMuD9BgSvuojg2EQJRBdt9hpqOdoCm1mn3UiBjEWKr6zImJBf/XZdoFv91uLX8QmAIstuytjmqx3EtDJfpV5HE0+N6DhunXzM2yODN0l/19vY3yLurizL6iR8LoQ368Fro+F/ty7nJJz14MhKtAEnzz/yLZKIlbw1io=
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
+ by BY3PR05MB8291.namprd05.prod.outlook.com (2603:10b6:a03:3b6::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Thu, 23 Feb
+ 2023 17:11:12 +0000
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::e9bd:ef2f:b71:8084]) by BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::e9bd:ef2f:b71:8084%9]) with mapi id 15.20.6134.021; Thu, 23 Feb 2023
+ 17:11:12 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+CC:     Mike Rapoport <rppt@kernel.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Thread-Topic: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Thread-Index: AQHZNvnMjIrwR8b570Ch3VOm2txWlq7WZLkAgAGKnwCAA4VRAIAAyUIAgACnuwA=
+Date:   Thu, 23 Feb 2023 17:11:11 +0000
+Message-ID: <F73885A1-14AE-4820-876B-A8E6DC6D19CC@vmware.com>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <cf36b6ea-6268-deff-d9ed-6782de2bd0a7@gmail.com>
+ <2fe790e5-89e0-d660-79cb-15160dffd907@collabora.com>
+ <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
+ <c15446c5-eedd-690f-9dae-2bc12ee9eb78@collabora.com>
+In-Reply-To: <c15446c5-eedd-690f-9dae-2bc12ee9eb78@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.400.51.1.1)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY3PR05MB8531:EE_|BY3PR05MB8291:EE_
+x-ms-office365-filtering-correlation-id: b0fbf43d-5c5d-4488-44fd-08db15c0f69a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RAeGpzd+hzRShHnQTW8dYyqCUuntfOKkyZiY+K7cV+L9uOu32LXpk/cb4qSlJjraeGkz1s1w44diPE+Yy6rGzRN63FWPH1RA4pZtZIL71kXCRW3qEQhAfZTesuy6ogWOI6CDKVzQxAadajy0KTCJLkX6wleGufGWdiEHDXSJhdhR+LbgbfSpcseN7Q9NOlgnz8nMAov4ymmHd4Ip32nZFhU5dVG3ngQVZ3EYcjA81+K2v3P+Eudoyjb80thGgkhGf2s37dRJYsEffOvQvGNwLTSh2deBXS9F39duvkXyTtuy+LyTLQLSIDAJCe41UtmS8UjB/cZUvz4Vw0h1z5plWTcXLDQdNeIQdEtGEPTHeymm0S5nsutVql2THvcvmqoAE2mID3iWbINNT6ocDIf7EM3PqjaDTwwCjXWZDXAQ+1592NMrs6rEtUo9or3o/vQ1V/n63iPo0gF6DQUicA55SzxdOVkAkUapN3ixNh1IVJZe9Y0CYUClyPKRMh+U8QkWlw+ZdkN9ukq7/wIu5FCKD8EGvwkccDuXg/PzjpQE+YlT6z3yTdQVBXiKM8QLpROn3ENfg2Ra8DVdwZOL0oCfIWz/E28lLA6xhSXFsS+nIDCHyPtm1ILXtu8tkAP0Ilvr6/QbdNR8sK3yM6//GOY2A4E3CI3Ij8u02pBng8lS5Gq65R1HYs830qZgqOrqL5irrmjOUy81N6zmH+qJLTD5WvzElkyE+lcSsQ84uGWI38HXLFTD8hcs9NoHeJ+FUINM5Jx/sgAOcabLRK06y92IFw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(451199018)(64756008)(66556008)(66446008)(66476007)(66946007)(54906003)(76116006)(83380400001)(316002)(8676002)(8936002)(5660300002)(4326008)(6916009)(41300700001)(6506007)(2616005)(53546011)(26005)(186003)(6512007)(478600001)(6486002)(71200400001)(38070700005)(33656002)(36756003)(86362001)(7416002)(7406005)(2906002)(122000001)(38100700002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TzIvcUFoTDd6VnJndS9IeWRMWEI4TkZXN0tGQmI0ODdjTjdPQkNibHdvVjhG?=
+ =?utf-8?B?RG13QVFDR3o4OStPdnhlNG5NYVRGaU1OOW01dzJiR1AwUHVxVWRSV1NrR1Qw?=
+ =?utf-8?B?dzBXcXZYYmVrUWFScURSUlRyUzZ3dE8xek1BWGJCangrZDlwbGRsYjVqdDI2?=
+ =?utf-8?B?emZwV0hkYkJqdXMrQVUyeEVrejA5SVowZEFFMUhZcldjMWgwTTh1Y1JlSlRL?=
+ =?utf-8?B?VTJUK3d5NHNmUmRBazBibG5tcUFrM2hRV2RrTVdOeTVwWUxJMHNocU9jdXR0?=
+ =?utf-8?B?VjZ0NnhTZXlsZWdSTFlsMFpmcUVRUnJVRmx3NWNIdm16OUNwTzdUOUVSdXha?=
+ =?utf-8?B?YVhmeFVrRVhrZ3dPOE1Sb25yVTlodndQSzVoMHpVVlNYWlJ6aElQMnNOeHlk?=
+ =?utf-8?B?L3l5SGlUeTFIYlRwWjhOMnFuUXRjU1RyZlhxN2poWnprK25MbnNudlB0S3ZF?=
+ =?utf-8?B?bHplUU9mUlpvbmt3RUxwT2FyRUVGRStEQ0txU1hGbFNRam5YeHBkdVVPTVo1?=
+ =?utf-8?B?UE5pNXRPcTkxVVhvQjhIYzFjdUhqd2xOV1p4dmFLSXpySTdBUVh0Z0haZUQz?=
+ =?utf-8?B?T09XaWNwOERoMy9vOHJtUkpMSFJ3bm9jWkhBdEcxcnpjZFNKWDZVcGNCK0NW?=
+ =?utf-8?B?MUlNM3ZXbjBUd0NidEdmSndDcjhQRi8xRGgvY1RpMVIyZGlGT3dVOUZzeGZD?=
+ =?utf-8?B?M2UvNWkxVmRrcnMzdVFkVnk0OENKT2U0cVR3L05ZeTNrcjlQWHFCc0tibFN0?=
+ =?utf-8?B?SVZVV0N4SjlhK1ZsUkFzVWpnUG1hcjAxck8zQjBvREk1ajNtNEVXU2VLclhM?=
+ =?utf-8?B?TjRDekRIVHdJVDZCUDNodlI2NzR2ZmRQNDNETHVkZEJKR1BWVmdkK3I0Q25k?=
+ =?utf-8?B?RWdoYUh4NUd3UEZZWmVWRWZzNkovRzg4UXJIK1c0QnE5OEJVWjBCdUFpV2Fa?=
+ =?utf-8?B?aTZOaTEzQXpqazJlVDMrZGdEWXlOMExnTnl0c0dTMHIraUFJcVRGc2U2UUQr?=
+ =?utf-8?B?S2FCNnh4UElCaDFGVUFQSmU0RDJPVUlzcXZWZ1M3bzh3bDJMcGxuQmx6Q1Fq?=
+ =?utf-8?B?ZEFIbndUT1RtTUxCTWdJc0NUWXliMHRWU3hROXRsWWMxUG10QkpLdFpaREE0?=
+ =?utf-8?B?UTNuN1M3S2U4T3MyOUpYb2k0NmdJVlBLQlEybThEaGZXZHppbW1KUHlHTWJD?=
+ =?utf-8?B?bkxEZ0U4bkMrK1Q0aXRodmJhbkZvREVxT09GcWcrYm14a1ovSzlJTGk5aGc5?=
+ =?utf-8?B?Y0tiTFp1QmwvdkloWDdYNzFyYWd5VXh3eUtOT3E4ZlRuVXJGTWY2bDBSbkZt?=
+ =?utf-8?B?Q1JzRlBxQ0h2U1JlNGtvejBlYjUwTzF2MEM3NDRnRENGaExoUE5VbytuTmFw?=
+ =?utf-8?B?VWhUTGR5RGU4b05NN0hoMUFXZTZiK1ErVGlySzlZUkkxOGQ5WmtJYW8xaXd4?=
+ =?utf-8?B?OEpTMTh0RHZtUHJ2b2pmMGFpMDdLQWVzZUp4MTBkZTQxSnZMNWNUem1pY0hD?=
+ =?utf-8?B?cEpJVThmMFcvUUtaZjhpZTVFSnBkUHhiaU1McXJiL2ZSSjUvSXA2VTJDbE4z?=
+ =?utf-8?B?b2V5RGhpa3BJV1JrZzBtV090eXZNa0RLWnF5cWVObEhWNkpPOEw0TElKMlZD?=
+ =?utf-8?B?bTdRYVNMRDJnTUhFU01HZk5NL3hSaVdVL3M5SXBielZMZzB6cWlMSFdaWnlq?=
+ =?utf-8?B?Q29rYTFFYmQ0MURweUdiQS9xQ1BsVHpLbUJ5bm9jYWNmQW9BZ2tBWTJDM1hn?=
+ =?utf-8?B?N2s1TUVXaWY1dFZFdXBJRVRBMGVPeEltME96Q09ocXo2OEEvN3BEZnZiUzRJ?=
+ =?utf-8?B?dG5ISERQY3pzaElmNzBYL3ZYaUNOSVVxSWFZSUZLNVhyWUc4TWlnb1F3TFFp?=
+ =?utf-8?B?VHZrY2RZL0V4WXVMNkthWk9tcEN0RnRPekpvci93ZkMzQ0ZMTTY5b3c0Ry9j?=
+ =?utf-8?B?cUg2SUw5ai9tNDZKZ2ttODJLMkQvRktzWDloUTlsa3puN0RnMjVDR2VMdWRn?=
+ =?utf-8?B?cTRpdEFCS2hPZnE3MCt5Rk81dTFQZklzbGoxYkVWRG9FeU1FYWhyNVhQbGsz?=
+ =?utf-8?B?YlVvR3hpbWFGOWI5ZUlyR1plMDZ2L2FGaUxHejhFTlZ6cDYrOGU1NHU5eFRI?=
+ =?utf-8?Q?oSegZ8tPdmKOrJsXf+lFdx0Ex?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <71F1611A5C09ED46A63A584976D74854@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
- <b3e0b5e6-1d0-cdb2-186c-6b4f50e0a3aa@linux-m68k.org> <D5221DC2-2A9C-43DC-AC21-FA96E7F76E5B@oracle.com>
- <CAMuHMdVtsZ-jU5foR7V_4XeXT_0f3Nx5vfoJo5pH2jMga0SpWA@mail.gmail.com> <58CCF033-58C3-4AF0-B958-BE1AAF1695F3@oracle.com>
-In-Reply-To: <58CCF033-58C3-4AF0-B958-BE1AAF1695F3@oracle.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 23 Feb 2023 17:52:20 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUG5cthYp3u6GeYqTqMaNgW0Ernq_ce0AZ22rgFQ5J24A@mail.gmail.com>
-Message-ID: <CAMuHMdUG5cthYp3u6GeYqTqMaNgW0Ernq_ce0AZ22rgFQ5J24A@mail.gmail.com>
-Subject: Re: [PATCH v2 00/41] RPCSEC GSS krb5 enhancements
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Chuck Lever <cel@kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        "simo@redhat.com" <simo@redhat.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0fbf43d-5c5d-4488-44fd-08db15c0f69a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 17:11:11.4829
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jhXsBp+owu7k3qFnGqvZJ4tPnm5H1et60pg9MiVBN6QRyczR6pgkC7QCx3/ojvCDS/P9cRoPEuq6suPKHkA4Sg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR05MB8291
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Chuck,
-
-On Thu, Feb 23, 2023 at 5:19 PM Chuck Lever III <chuck.lever@oracle.com> wrote:
-> > On Feb 23, 2023, at 10:16 AM, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Thu, Feb 23, 2023 at 3:00 PM Chuck Lever III <chuck.lever@oracle.com> wrote:
-> >>> On Feb 23, 2023, at 8:05 AM, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >>> On Sun, 15 Jan 2023, Chuck Lever wrote:
-> >>>> The purpose of this series is to improve/harden the security
-> >>>> provided by the Linux kernel's RPCSEC GSS Kerberos 5 mechanism.
-> >>>> There are lots of clean-ups in this series, but the pertinent
-> >>>> feature is the addition of a clean deprecation path for the DES-
-> >>>> and SHA1-based encryption types in accordance with Internet BCPs.
-> >>>>
-> >>>> This series disables DES-based enctypes by default, provides a
-> >>>> mechanism for disabling SHA1-based enctypes, and introduces two
-> >>>> modern enctypes that do not use deprecated crypto algorithms.
-> >>>>
-> >>>> Not only does that improve security for Kerberos 5 users, but it
-> >>>> also prepares SunRPC for eventually switching to a shared common
-> >>>> kernel Kerberos 5 implementation, which surely will not implement
-> >>>> any deprecated encryption types (in particular, DES-based ones).
-> >>>>
-> >>>> Today, MIT supports both of the newly-introduced enctypes, but
-> >>>> Heimdal does not appear to. Thus distributions can enable and
-> >>>> disable kernel enctype support to match the set of enctypes
-> >>>> supported in their user space Kerberos libraries.
-> >>>>
-> >>>> Scott has been kicking the tires -- we've found no regressions with
-> >>>> the current SHA1-based enctypes, while the new ones are disabled by
-> >>>> default until we have an opportunity for interop testing. The KUnit
-> >>>> tests for the new enctypes pass and this implementation successfully
-> >>>> interoperates with itself using these enctypes. Therefore I believe
-> >>>> it to be safe to merge.
-> >>>>
-> >>>> When this series gets merged, the Linux NFS community should select
-> >>>> and announce a date-certain for removal of SunRPC's DES-based
-> >>>> enctype code.
-> >>>
-> >>> As this is now upstream, I gave it a try on m68k (on the ARAnyM
-> >>> emulator), using a config based on atari_defconfig:
-> >>>
-> >>>   KTAP version 1
-> >>>   # Subtest: RFC 3961 tests
-> >>>   1..3
-> >>>       KTAP version 1
-> >>>       # Subtest: RFC 3961 n-fold
-> >>>       ok 1 64-fold("012345")
-> >>>       ok 2 56-fold("password")
-> >>>       ok 3 64-fold("Rough Consensus, and Running Code")
-> >>>       ok 4 168-fold("password")
-> >>>       ok 5 192-fold("MASSACHVSETTS INSTITVTE OF TECHNOLOGY")
-> >>>       ok 6 168-fold("Q")
-> >>>       ok 7 168-fold("ba")
-> >>>       ok 8 64-fold("kerberos")
-> >>>       ok 9 128-fold("kerberos")
-> >>>       ok 10 168-fold("kerberos")
-> >>>       ok 11 256-fold("kerberos")
-> >>>   # RFC 3961 n-fold: pass:11 fail:0 skip:0 total:11
-> >>>   ok 1 RFC 3961 n-fold
-> >>>       KTAP version 1
-> >>>       # Subtest: RFC 3961 key derivation
-> >>>   # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
-> >>>   Expected gk5e != ((void *)0), but
-> >>>       gk5e == 00000000
-> >>>       ((void *)0) == 00000000
-> >>>       not ok 1 des3-hmac-sha1 key derivation case 1
-> >>
-> >> Geert, thanks for testing GSS on m68k.
-> >>
-> >> This assertion failure means that support for the encryption types
-> >> specified in RFC 3961 is not built into your kernel.
-> >>
-> >> The new Kunit tests don't work unless everything is built in --
-> >>
-> >> there's a net/sunrpc/.kunitconfig that provides the supported
-> >> build configuration for running them. I typically use a command
-> >> line similar to this:
-> >>
-> >> ./tools/testing/kunit/kunit.py run --raw_output=all --kunitconfig ./net/sunrpc/.kunitconfig
-> >
-> > Aren't modular crypto algorithms auto-loaded when needed?
->
-> The ciphers and digests are handled via the kernel's crypto
-> manager. They will indeed get auto-loaded by SunRPC's GSS on
-> demand, but of course, the set of algorithms used by GSS
-> has to be enabled by Kconfig options first.
->
-> SunRPC GSS has a set of Kerberos encryption types that make
-> use of individual ciphers and digests. Those have never been
-> modularized, and they are each enabled by Kconfig options,
-> as explained below.
->
->
-> > In general, it's a good idea to make the tests test only functionality
-> > that is available, either through "depends on" in Kconfig, or "#if
-> > IS_ENABLED(...)".
->
-> An earlier version of this patch set did just that. It became
-> quite a mess. That's why I chose the .kunitconfig approach.
->
->
-> > Of course that does not preclude providing a
-> > .kunitconfig to enable and test everything.
->
-> The suite should test every Kerberos encryption type that
-> SunRPC GSS has support for. There's no reason to disable a
-> particular encryption type when running the unit tests...
-> unless I'm missing something?
-
-That depends: do you want to test everything, or do you want to test
-(only) the functionality you enabled for your product?
-I tend to enable all modular tests, so I can use insmod to run any
-relevant test when needed.  If a test suddenly needs something that
-is not enabled, you can not run the test without enabling extra
-functionality (which you may not want to enable).
-
-> > Note that net/sunrpc/.kunitconfig has
-> >
-> >    CONFIG_RPCSEC_GSS_KRB5_KUNIT_TEST=y
-> >
-> > which needs KUNIT_ALL_TESTS=y, else it will still be modular.
-> >
-> > First, I tried getting my modular setup working.
-> > After enabling:
-> >    CONFIG_RPCSEC_GSS_KRB5_ENCTYPES_DES=y
->
-> And CONFIG_RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA1=y ??
-
-Sure, I had that enabled, thanks to "default y".
-
-> > Third, with net/sunrpc/.kunitconfig, and
-> > CONFIG_RPCSEC_GSS_KRB5_KUNIT_TEST=y:
-
-[...]
-
-> > Unable to handle kernel access at virtual address af06da84
-
-> > I.e. a slightly different crash.
-> > As the difference between the two crashes is modular vs. builtin,
-> > this looks like an out-of-bound access in the test.
->
-> Why not run the test suite just as I suggested?
-
-I don't think I can use tools/testing/kunit/kunit.py to run the tests
-when cross-compiling my kernel?
-
-My third case (adding options from net/sunrpc/.kunitconfig, and
-setting CONFIG_RPCSEC_GSS_KRB5_KUNIT_TEST=y) should be equivalent to
-that, right?
-
-> Since I cannot reproduce this crash and do not have an m68k
-> platform available to me, I will need you to continue to
-> pursue the issue. I'll help as much as I can.
->
-> I would very much like to see successful test results on
-> non-x86 platforms.
-
-Thanks, I'll give it a try on some other platforms, later...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+DQo+IE9uIEZlYiAyMiwgMjAyMywgYXQgMTE6MTAgUE0sIE11aGFtbWFkIFVzYW1hIEFuanVtIDx1
+c2FtYS5hbmp1bUBjb2xsYWJvcmEuY29tPiB3cm90ZToNCj4gDQo+IEhpIE5hZGF2LCBNaWtlLCBN
+aWNoYcWCLA0KPiANCj4gQ2FuIHlvdSBwbGVhc2Ugc2hhcmUgeW91ciB0aG91Z2h0cyBhdCBbQV0g
+YmVsb3c/DQoNCkkgcHJvbWlzZWQgSSB3b24ndCB0YWxrIGFib3V0IHRoZSBBUEksIGJ1dCB3YXMg
+cGVyc3VhZGVkIHRvIHJlY29uc2lkZXIuIEkgaGF2ZSBhDQpnZW5lcmFsIHF1ZXN0aW9uIHJlZ2Fy
+ZGluZyB0aGUgc3VpdGFibGl0eSBvZiBjdXJyZW50bHkgcHJvcG9zZWQgaGlnaC1sZXZlbCBBUEku
+DQpUbyBleHBsb3JlIHNvbWUgYWx0ZXJuYXRpdmVzLCBJJ2QgbGlrZSB0byBzdWdnZXN0IGFuIGFs
+dGVybmF0aXZlIHRoYXQgbWF5IGhhdmUNCnNvbWUgYWR2YW50YWdlcy4gSWYgdGhlc2UgaGF2ZSBh
+bHJlYWR5IGJlZW4gY29uc2lkZXJlZCBhbmQgZGlzbWlzc2VkLCBmZWVsIGZyZWUNCnRvIGlnbm9y
+ZS4NCg0KSSBiZWxpZXZlIHdlIGhhdmUgdHdvIGRpc3RpbmN0IHVzYWdlIHNjZW5hcmlvczogKDEp
+IHZlY3RvcmVkIHJlYWRzIGZyb20gcGFnZW1hcCwNCmFuZCAoMikgYXRvbWljIFVGRkQgV1AtcmVh
+ZC9wcm90ZWN0LiBJdCdzIHBvc3NpYmxlIHRoYXQgdGhlc2UgcmVxdWlyZSBzZXBhcmF0ZQ0KaW50
+ZXJmYWNlcw0KDQpSZWdhcmRpbmcgdmVjdG9yZWQgcmVhZHMsIEkgYmVsaWV2ZSB0aGUgc2ltcGxl
+c3Qgc29sdXRpb24gaXMgdG8gbWFpbnRhaW4gdGhlDQpjdXJyZW50IHBhZ2VtYXAgZW50cnkgZm9y
+bWF0IGZvciBvdXRwdXQgYW5kIGV4dGVuZCBpdCBpZiBuZWNlc3NhcnkuIFRoZSBpbnB1dA0KY2Fu
+IGJlIGEgdmVjdG9yIG9mIHJhbmdlcy4gSSdtIHVuY2VydGFpbiBhYm91dCB0aGUgcHVycG9zZSBv
+ZiBmaWVsZHMgc3VjaA0KYXMgJ2FueW9mX21hc2snIGluICdwYWdlbWFwX3NjYW5fYXJnJywgc28g
+SSBjYW4ndCBjb25maXJtIHRoZWlyIG5lY2Vzc2l0eSBhbmQNCndoZXRoZXIgdGhlIGlucHV0IG5l
+ZWQgdG8gYmUgbWFkZS4gbW9yZSBjb21wbGljYXRlZC4gVGhlcmUgaXMgYSBwb3NzaWJpbGl0eQ0K
+dGhhdCBmaWVsZHMgc3VjaCBhcyAnYW55b2ZfbWFzaycgbWlnaHQgZXhwb3NlIGludGVybmFsIEFQ
+SXMsIHNvIEkgaG9wZSB0aGV54oCZcmUNCm5vdCByZXF1aXJlZC4NCg0KRm9yIHRoZSBhdG9taWMg
+b3BlcmF0aW9uIG9mICdQQUdFX0lTX1dSSVRURU4nICsgJ1BBR0VNQVBfV1BfRU5HQUdFJywgYSBk
+aWZmZXJlbnQNCm1lY2hhbmlzbSBtaWdodCBiZSBuZWNlc3NhcnkuIFRoaXMgZnVuY3Rpb24gYXBw
+ZWFycyB0byBiZSBVRkZELXNwZWNpZmljLg0KSW5zdGVhZCBvZiB0aGUgcHJvcG9zZWQgSU9DVEws
+IGFuIGFsdGVybmF0aXZlIG9wdGlvbiBpcyB0bw0KdXNlICdVRkZEX0ZFQVRVUkVfV1BfQVNZTkMn
+IHRvIGxvZyB0aGUgcGFnZXMgdGhhdCB3ZXJlIHdyaXR0ZW4sIHNpbWlsYXIgdG8NCnBhZ2UtbW9k
+aWZpY2F0aW9uIGxvZ2dpbmcgb24gSW50ZWwuIFNpbmNlIHRoaXMgZmVhdHVyZSBhcHBlYXJzIHRv
+IGJlIHNwZWNpZmljDQp0byBVRkZELCBJIGJlbGlldmUgaXQgd291bGQgYmUgbW9yZSBhcHByb3By
+aWF0ZSB0byBpbmNsdWRlIHRoZSBsb2cgYXMgcGFydCBvZg0KdGhlIFVGRkQgbWVjaGFuaXNtIHJh
+dGhlciB0aGFuIHRoZSBwYWdlbWFwLg0KDQpGcm9tIG15IGV4cGVyaWVuY2Ugd2l0aCBVRkZELCBw
+cm9wZXIgb3JkZXJpbmcgb2YgZXZlbnRzICBpcyBjcnVjaWFsLCBhbHRob3VnaCBpdA0KaXMgbm90
+IGFsd2F5cyBkb25lIHdlbGwuIFRoZXJlZm9yZSwgd2Ugc2hvdWxkIGFpbSBmb3IgaW1wcm92ZW1l
+bnQsIG5vdA0KcmVncmVzc2lvbi4gSSBiZWxpZXZlIHRoYXQgdXRpbGl6aW5nIHRoZSBwYWdlbWFw
+LWJhc2VkIG1lY2hhbmlzbSBmb3IgV1AnaW5nDQptaWdodCBiZSBhIHN0ZXAgaW4gdGhlIHdyb25n
+IGRpcmVjdGlvbi4gSSB0aGluayB0aGF0IGl0IHdvdWxkIGhhdmUgYmVlbiBiZXR0ZXINCnRvIGVt
+aXQgYSAnVUZGRF9GRUFUVVJFX1dQX0FTWU5DJyBXUC1sb2cgKGFuZCBvcmRlcmVkKSB3aXRoIFVG
+RkQgI1BGIGFuZA0KZXZlbnRzLiBUaGUgJ1VGRkRfRkVBVFVSRV9XUF9BU1lOQyctbG9nIG1heSBu
+b3QgbmVlZCB0byB3YWtlIHdhaXRlcnMgb24gdGhlDQpmaWxlIGRlc2NyaXB0b3IgdW5sZXNzIHRo
+ZSBsb2cgaXMgZnVsbC4NCg0KSSBhbSBzb3JyeSB0aGF0IEkgY2hpbWUgaW4gdGhhdCBsYXRlLCBi
+dXQgSSB0aGluayB0aGUgY29tcGxpY2F0aW9ucyB0aGF0IHRoZQ0KcHJvcG9zZWQgbWVjaGFuaXNt
+IG1pZ2h0IHJhaXNlIGFyZSBub3QgbmVnbGlnaWJsZS4gQW5kIGFueWhvdyB0aGlzIHBhdGNoLXNl
+dA0Kc3RpbGwgcmVxdWlyZXMgcXVpdGUgYSBiaXQgb2Ygd29yayBiZWZvcmUgaXQgY2FuIGJlIG1l
+cmdlZC4NCg0K
