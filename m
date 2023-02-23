@@ -2,193 +2,240 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B55D6A0E05
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Feb 2023 17:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262136A0E3D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Feb 2023 17:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234398AbjBWQ2v convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Feb 2023 11:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
+        id S229476AbjBWQwi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Feb 2023 11:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBWQ2p (ORCPT
+        with ESMTP id S229379AbjBWQwh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Feb 2023 11:28:45 -0500
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477E03019C
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Feb 2023 08:28:06 -0800 (PST)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-142-V-k9s7lBO7WH4bLt11rOrg-1; Thu, 23 Feb 2023 11:27:44 -0500
-X-MC-Unique: V-k9s7lBO7WH4bLt11rOrg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9993C3806739;
-        Thu, 23 Feb 2023 16:27:43 +0000 (UTC)
-Received: from hog (unknown [10.39.192.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A05CD404BEC0;
-        Thu, 23 Feb 2023 16:27:41 +0000 (UTC)
-Date:   Thu, 23 Feb 2023 17:27:40 +0100
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
-        Frantisek Krenzelok <fkrenzel@redhat.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Apoorv Kothari <apoorvko@amazon.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: Re: [PATCH net-next v2 0/5] tls: implement key updates for TLS1.3
-Message-ID: <Y/eT/M+b6jUtTdng@hog>
-References: <cover.1676052788.git.sd@queasysnail.net>
- <20230214210811.448b5ec4@kernel.org>
- <Y+0Wjrc9shLkH+Gg@hog>
- <20230215111020.0c843384@kernel.org>
- <Y+1pX/vL8t2nU00c@hog>
- <20230215195748.23a6da87@kernel.org>
- <Y+5Yd/8tjCQNOF31@hog>
- <20230221191944.4d162ec7@kernel.org>
+        Thu, 23 Feb 2023 11:52:37 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54684EFAD;
+        Thu, 23 Feb 2023 08:52:35 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id d7so11446976qtr.12;
+        Thu, 23 Feb 2023 08:52:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5OmSVuAip9wO3Gha1ZZSovxIPIgEgsLE50VtSIFDnNA=;
+        b=QEWVuELWX2lZN/h6cmnqGhG9MKNuQt9dufAjWqDDX1NEYjFg7QkH2WYV8h8eGatut2
+         /gRSZHXSP7UcHx2tG6U7VbUhs40YRXT2sNNOw0sDw5a7zHsgIYB9BEzovsbXpz8D+sYz
+         OJeNmsMfz7m3EDq+GlA0sIR4XDP8y5r/gJOeNTvkUGtldmMJS/I576UKVuApnH9F5yWF
+         ldr4fb0Nx8QcM6XrY5K6y2FYxeaK3XfD/duda4AA0uSYTh0XSoPjujaNwtf9a7rLgT6d
+         bCGZj7jeXTTGfIc9KM9JLhrl5JB4Wz2W3ieP5BdiOI6Zv19lr5P1DrIjkwmU0CTIhnif
+         AEDQ==
+X-Gm-Message-State: AO0yUKXFQWR2sRc1FZ+iGLlmZiZuyDoudfUn5kNu0XKnZ3wpeGHdy8WV
+        nlSP5jubfm8hgtF0OY5zLWcoMEw6G1vYWA==
+X-Google-Smtp-Source: AK7set+6v47knkpkuaI9NmXmWmrhSYqNdCUwlqphFO8IhAP6UtFmp7RPOLw8D8wxEHvtXZZLhIg3wQ==
+X-Received: by 2002:a05:622a:13:b0:3b6:36a0:adbe with SMTP id x19-20020a05622a001300b003b636a0adbemr8661556qtw.6.1677171153631;
+        Thu, 23 Feb 2023 08:52:33 -0800 (PST)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id d20-20020ac85454000000b003a530a32f67sm6833848qtq.65.2023.02.23.08.52.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Feb 2023 08:52:33 -0800 (PST)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-536c02eea4dso198121337b3.4;
+        Thu, 23 Feb 2023 08:52:33 -0800 (PST)
+X-Received: by 2002:a5b:68c:0:b0:9a0:d4d:5462 with SMTP id j12-20020a5b068c000000b009a00d4d5462mr2374659ybq.7.1677171152895;
+ Thu, 23 Feb 2023 08:52:32 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20230221191944.4d162ec7@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: queasysnail.net
-Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
+ <b3e0b5e6-1d0-cdb2-186c-6b4f50e0a3aa@linux-m68k.org> <D5221DC2-2A9C-43DC-AC21-FA96E7F76E5B@oracle.com>
+ <CAMuHMdVtsZ-jU5foR7V_4XeXT_0f3Nx5vfoJo5pH2jMga0SpWA@mail.gmail.com> <58CCF033-58C3-4AF0-B958-BE1AAF1695F3@oracle.com>
+In-Reply-To: <58CCF033-58C3-4AF0-B958-BE1AAF1695F3@oracle.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 23 Feb 2023 17:52:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUG5cthYp3u6GeYqTqMaNgW0Ernq_ce0AZ22rgFQ5J24A@mail.gmail.com>
+Message-ID: <CAMuHMdUG5cthYp3u6GeYqTqMaNgW0Ernq_ce0AZ22rgFQ5J24A@mail.gmail.com>
+Subject: Re: [PATCH v2 00/41] RPCSEC GSS krb5 enhancements
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Chuck Lever <cel@kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        "simo@redhat.com" <simo@redhat.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2023-02-21, 19:19:44 -0800, Jakub Kicinski wrote:
-> Sorry for the delay, long weekend + merge window.
+Hi Chuck,
 
-No worries, I wasn't expecting much activity on this from you during
-the merge window.
+On Thu, Feb 23, 2023 at 5:19 PM Chuck Lever III <chuck.lever@oracle.com> wrote:
+> > On Feb 23, 2023, at 10:16 AM, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Thu, Feb 23, 2023 at 3:00 PM Chuck Lever III <chuck.lever@oracle.com> wrote:
+> >>> On Feb 23, 2023, at 8:05 AM, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >>> On Sun, 15 Jan 2023, Chuck Lever wrote:
+> >>>> The purpose of this series is to improve/harden the security
+> >>>> provided by the Linux kernel's RPCSEC GSS Kerberos 5 mechanism.
+> >>>> There are lots of clean-ups in this series, but the pertinent
+> >>>> feature is the addition of a clean deprecation path for the DES-
+> >>>> and SHA1-based encryption types in accordance with Internet BCPs.
+> >>>>
+> >>>> This series disables DES-based enctypes by default, provides a
+> >>>> mechanism for disabling SHA1-based enctypes, and introduces two
+> >>>> modern enctypes that do not use deprecated crypto algorithms.
+> >>>>
+> >>>> Not only does that improve security for Kerberos 5 users, but it
+> >>>> also prepares SunRPC for eventually switching to a shared common
+> >>>> kernel Kerberos 5 implementation, which surely will not implement
+> >>>> any deprecated encryption types (in particular, DES-based ones).
+> >>>>
+> >>>> Today, MIT supports both of the newly-introduced enctypes, but
+> >>>> Heimdal does not appear to. Thus distributions can enable and
+> >>>> disable kernel enctype support to match the set of enctypes
+> >>>> supported in their user space Kerberos libraries.
+> >>>>
+> >>>> Scott has been kicking the tires -- we've found no regressions with
+> >>>> the current SHA1-based enctypes, while the new ones are disabled by
+> >>>> default until we have an opportunity for interop testing. The KUnit
+> >>>> tests for the new enctypes pass and this implementation successfully
+> >>>> interoperates with itself using these enctypes. Therefore I believe
+> >>>> it to be safe to merge.
+> >>>>
+> >>>> When this series gets merged, the Linux NFS community should select
+> >>>> and announce a date-certain for removal of SunRPC's DES-based
+> >>>> enctype code.
+> >>>
+> >>> As this is now upstream, I gave it a try on m68k (on the ARAnyM
+> >>> emulator), using a config based on atari_defconfig:
+> >>>
+> >>>   KTAP version 1
+> >>>   # Subtest: RFC 3961 tests
+> >>>   1..3
+> >>>       KTAP version 1
+> >>>       # Subtest: RFC 3961 n-fold
+> >>>       ok 1 64-fold("012345")
+> >>>       ok 2 56-fold("password")
+> >>>       ok 3 64-fold("Rough Consensus, and Running Code")
+> >>>       ok 4 168-fold("password")
+> >>>       ok 5 192-fold("MASSACHVSETTS INSTITVTE OF TECHNOLOGY")
+> >>>       ok 6 168-fold("Q")
+> >>>       ok 7 168-fold("ba")
+> >>>       ok 8 64-fold("kerberos")
+> >>>       ok 9 128-fold("kerberos")
+> >>>       ok 10 168-fold("kerberos")
+> >>>       ok 11 256-fold("kerberos")
+> >>>   # RFC 3961 n-fold: pass:11 fail:0 skip:0 total:11
+> >>>   ok 1 RFC 3961 n-fold
+> >>>       KTAP version 1
+> >>>       # Subtest: RFC 3961 key derivation
+> >>>   # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+> >>>   Expected gk5e != ((void *)0), but
+> >>>       gk5e == 00000000
+> >>>       ((void *)0) == 00000000
+> >>>       not ok 1 des3-hmac-sha1 key derivation case 1
+> >>
+> >> Geert, thanks for testing GSS on m68k.
+> >>
+> >> This assertion failure means that support for the encryption types
+> >> specified in RFC 3961 is not built into your kernel.
+> >>
+> >> The new Kunit tests don't work unless everything is built in --
+> >>
+> >> there's a net/sunrpc/.kunitconfig that provides the supported
+> >> build configuration for running them. I typically use a command
+> >> line similar to this:
+> >>
+> >> ./tools/testing/kunit/kunit.py run --raw_output=all --kunitconfig ./net/sunrpc/.kunitconfig
+> >
+> > Aren't modular crypto algorithms auto-loaded when needed?
+>
+> The ciphers and digests are handled via the kernel's crypto
+> manager. They will indeed get auto-loaded by SunRPC's GSS on
+> demand, but of course, the set of algorithms used by GSS
+> has to be enabled by Kconfig options first.
+>
+> SunRPC GSS has a set of Kerberos encryption types that make
+> use of individual ciphers and digests. Those have never been
+> modularized, and they are each enabled by Kconfig options,
+> as explained below.
+>
+>
+> > In general, it's a good idea to make the tests test only functionality
+> > that is available, either through "depends on" in Kconfig, or "#if
+> > IS_ENABLED(...)".
+>
+> An earlier version of this patch set did just that. It became
+> quite a mess. That's why I chose the .kunitconfig approach.
+>
+>
+> > Of course that does not preclude providing a
+> > .kunitconfig to enable and test everything.
+>
+> The suite should test every Kerberos encryption type that
+> SunRPC GSS has support for. There's no reason to disable a
+> particular encryption type when running the unit tests...
+> unless I'm missing something?
 
-> On Thu, 16 Feb 2023 17:23:19 +0100 Sabrina Dubroca wrote:
-> > 2023-02-15, 19:57:48 -0800, Jakub Kicinski wrote:
-> > > I think we could try to switch to SW crypto on Tx until all data using
-> > > old key is ACK'ed, drivers can look at skb->decrypted to skip touching
-> > > the transitional skbs. Then remove old key, install new one, resume
-> > > offload.  
-> > 
-> > "all data using the old key" needs to be one list of record per old
-> > key, since we can have multiple rekeys.
-> 
-> No fully parsing this bit.
+That depends: do you want to test everything, or do you want to test
+(only) the functionality you enabled for your product?
+I tend to enable all modular tests, so I can use insmod to run any
+relevant test when needed.  If a test suddenly needs something that
+is not enabled, you can not run the test without enabling extra
+functionality (which you may not want to enable).
 
-We can have multiple rekeys in the time it takes to get an ACK for the
-first KeyUpdate message to be ACK'ed. I'm not sure why I talked about
-a "list of records".
+> > Note that net/sunrpc/.kunitconfig has
+> >
+> >    CONFIG_RPCSEC_GSS_KRB5_KUNIT_TEST=y
+> >
+> > which needs KUNIT_ALL_TESTS=y, else it will still be modular.
+> >
+> > First, I tried getting my modular setup working.
+> > After enabling:
+> >    CONFIG_RPCSEC_GSS_KRB5_ENCTYPES_DES=y
+>
+> And CONFIG_RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA1=y ??
 
-But we could have this sequence of records:
+Sure, I had that enabled, thanks to "default y".
 
-  recN(k1,hwenc)
-  KeyUpdate(k1,hwenc)
-  // switch to k2 and sw crypto
-
-  rec0(k2,swenc)
-  rec1(k2,swenc)
-  KeyUpdate(k2,swenc)
-  rec0(k3,swenc)
-  // receive ACK for KU1, don't enable HW offload for k2 or k3 because we've already switched off k2
-
-  rec1(k3,swenc)
-  // receive ACK for KU2, now enable HW offload for k3
-
-  rec2(k3,hwenc)
-
-So we'll need to record the most recent TX rekey, and wait until the
-corresponding KU record is ACK'ed, before we resume offload using the
-most recent key (and skip possible intermediate keys).
-
-Installing the key in HW and re-enabling the offload will need to
-happen via the icsk_clean_acked callback. We'll need a workqueue so
-that we don't actually talk to the driver from softirq.
-
-Then, we have to handle a failure to install the key. Since we're not
-installing it in HW immediately during setsockopt, notifying userspace
-of a rekey failure is more complicated. Maybe we can do a
-rekey_prepare during the setsocktopt, and then the actual rekey is an
-operation that cannot fail?
-
-> > Could we install the new key in HW a bit earlier? Keep the old key as
-> > SW fallback for rtx, but the driver installs the new key when the
-> > corresponding KeyUpdate record has gone through and tells the stack to
-> > stop doing SW crypto? I'm not sure that'd be a significant improvement
-> > in the standard case, though.
-> 
-> Important consideration is making the non-rekey path as fast as
-> possible (given rekeying is extremely rare). Looking at skb->decrypted
-> should be very fast but we can possibly fit some other indication of
-> "are we rekeying" into another already referenced cache line.
-> We definitely don't want to have to look up the record to know what
-> state we're in.
-> 
-> The fallback can't use AES-NI (it's in sirq context) so it's slower 
-> than SW encrypt before queuing to TCP. Hence my first thought is using
-> SW crypto for new key and let the traffic we already queued with old
-> key drain leveraging HW crypto. But as I said the impact on performance
-> when not rekeying is more important, and so is driver simplicity.
-
-Right, sorry, full tls_sw path and not the existing fallback.
-
-Changing the socket ops back and forth between the HW and SW variants
-worries me, because we only lock the socket once we have entered
-tls_{device,sw}_sendmsg. So I think we have to stay on the _device ops
-even during the SW crypto phase of the rekey, and let that call into
-the SW variant after locking the socket and making sure we're in a
-rekey.
-
-> > > We may need special care to make sure we don't try to encrypt the same
-> > > packet with both keys. In case a rtx gets stuck somewhere and comes to
-> > > the NIC after it's already acked (happens surprisingly often).  
-> > 
-> > Don't we have that already? If there's a retransmit while we're
-> > setting the TX key in HW, data that was queued on the socket before
-> > (and shouldn't be encrypted at all) would also be encrypted
-> > otherwise. Or is it different with rekey?
-> 
-> We have a "start marker" record which is supposed to indicate that
-> anything before it has already been encrypted. The driver is programmed
-> with the start seq no, when it sees a packet from before this seq no
-> it checks if a record exists, finds its before the start marker and
-> sends the data as is.
-
-Yes, I was looking into that earlier this week. I think we could reuse
-a similar mechanism for rekeying. tls_dev_add takes tcp_sk->write_seq,
-we could have a tls_dev_rekey op passing the new key and new write_seq
-to the driver. I think we can also reuse the ->eor trick from
-tls_set_device_offload, and we wouldn't have to look at
-skb->decrypted. Close and push the current SW record, mark ->eor, pass
-write_seq to the driver along with the key. Also pretty close to what
-tls_device_resync_tx does.
+> > Third, with net/sunrpc/.kunitconfig, and
+> > CONFIG_RPCSEC_GSS_KRB5_KUNIT_TEST=y:
 
 [...]
-> > This makes me wonder again if we should have fake offloads on veth
-> > (still calling the kernel's crypto library to simulate a device doing
-> > the encryption and/or decryption), to make it easy to play with the
-> > software bits, without requiring actual hardware that can offload
-> > TLS/IPsec/MACsec. But maybe it's too complex to be useful and we'd
-> > just waste our time fixing bugs in the fake offload rather than
-> > improving the stack.
-> 
-> It should be quite useful. I also usually just hack up veth, but 
-> I reckon adding support to netdevsim would be a better fit.
-> We just need a way to tell two netdevsim ports to "connect to each
-> other".
 
-Oh, nice idea. I'll add that to my todo list.
+> > Unable to handle kernel access at virtual address af06da84
+
+> > I.e. a slightly different crash.
+> > As the difference between the two crashes is modular vs. builtin,
+> > this looks like an out-of-bound access in the test.
+>
+> Why not run the test suite just as I suggested?
+
+I don't think I can use tools/testing/kunit/kunit.py to run the tests
+when cross-compiling my kernel?
+
+My third case (adding options from net/sunrpc/.kunitconfig, and
+setting CONFIG_RPCSEC_GSS_KRB5_KUNIT_TEST=y) should be equivalent to
+that, right?
+
+> Since I cannot reproduce this crash and do not have an m68k
+> platform available to me, I will need you to continue to
+> pursue the issue. I'll help as much as I can.
+>
+> I would very much like to see successful test results on
+> non-x86 platforms.
+
+Thanks, I'll give it a try on some other platforms, later...
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Sabrina
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
