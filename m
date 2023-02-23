@@ -2,281 +2,217 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C596A0527
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Feb 2023 10:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743A96A095E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Feb 2023 14:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbjBWJmn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Feb 2023 04:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S234284AbjBWNFZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Feb 2023 08:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234035AbjBWJmi (ORCPT
+        with ESMTP id S233338AbjBWNFY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Feb 2023 04:42:38 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E2A515CB
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Feb 2023 01:42:22 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id i34so14636095eda.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Feb 2023 01:42:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ecq76MOyjJbouEEYrBGWIv8bJtN500LoCU0lJZ9XGak=;
-        b=eXToJJmIw51YrtYOygLqqPIeSzpSM2S5WHaK56xWG2I5QDaQToqq4NX0NdYMb7Mi4t
-         OTuIpaLudTWPja/vdYRVEQ/DHBiZXUYRn4TyHtBYnKTAu3jCl+HXCEzaSdhGaLMxrqXN
-         JxA1Kbg5ci1GgbgwOg4TdrG9eIG8QWEEJJToBCxOERyrzw/8A9UPr+1uU+dSQoFPNwUG
-         qiPMUZ6YNEXHglgKz9Y/A3lHwr/ctbmo5BvuxwnpWPf4Bsbg+e9qO98dFXYhJeC6Dt0P
-         joA2xZpxkvrrfbJvFygOKt7iF6gvn8k2BNfONQxjHmYS8nrlgzY6NjMMFuPvBezUYfGQ
-         jigw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ecq76MOyjJbouEEYrBGWIv8bJtN500LoCU0lJZ9XGak=;
-        b=2wpG650vcq0oleeE5fVO7txcjgmUtBGIFJJ3SORke0i4PjQkJ8LPT+LMoKQHXgWksF
-         sK2iBF92qUVBzQ+nIMOwzNem0ZRPowHpZUpEL+6pmjN9i0xmM/jzs5YqvOikUGccioji
-         51tnJh+mq51wU8+Ca32GOcYxYD0ZWaML3Vv+/F8vcfGnAq2+otf09ij1TQYNJLZ55mX4
-         PRlfeNR4JrENfYWifmGPjEr3QHhU/52ckypj7WdIPdRg8vRhV50aZO1Loj7sRniXf3XA
-         zPRqf6SGz/w8C97vM53y/NXxsxqCV6Dlr3kNl24Ab/QGEwiHZxQGEP1CzCYpjFZnHfUM
-         bSTg==
-X-Gm-Message-State: AO0yUKVEI3yf9etYSkRjIntnoAGs3az2gICpCysYxcCtJ7ZTC4QZREqN
-        tX+oRQUHWL29N0LJyZhi2WHxMOgT6bHx/JfoscbkVA==
-X-Google-Smtp-Source: AK7set8g3+NL8qMaNsG/P3D3VCYixxEJX8SEXwcgNz0g/mt9FnFBM8cKN/Y+zJ2o4H4P8mxzDQH5vHGQgfvmedL5IRA=
-X-Received: by 2002:a50:d086:0:b0:4ad:72b2:cf57 with SMTP id
- v6-20020a50d086000000b004ad72b2cf57mr4996730edd.0.1677145340537; Thu, 23 Feb
- 2023 01:42:20 -0800 (PST)
+        Thu, 23 Feb 2023 08:05:24 -0500
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B057D51FBC
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Feb 2023 05:05:15 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:bcd1:971c:dc94:f8b5])
+        by xavier.telenet-ops.be with bizsmtp
+        id Qd5C2900G0HkUFX01d5C9t; Thu, 23 Feb 2023 14:05:12 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pVBHc-009oV5-E3;
+        Thu, 23 Feb 2023 14:05:12 +0100
+Date:   Thu, 23 Feb 2023 14:05:12 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Chuck Lever <cel@kernel.org>
+cc:     linux-nfs@vger.kernel.org, dhowells@redhat.com, simo@redhat.com,
+        linux-kselftest@vger.kernel.org, linux-m68k@lists.linux-m68k.org
+Subject: Re: [PATCH v2 00/41] RPCSEC GSS krb5 enhancements
+In-Reply-To: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
+Message-ID: <b3e0b5e6-1d0-cdb2-186c-6b4f50e0a3aa@linux-m68k.org>
+References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
 MIME-Version: 1.0
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
- <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com> <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
- <6d2b40c6-bed9-69a6-e198-537b50953acd@collabora.com> <CABb0KFF+AEKijaXMjDpQLKyAdueJ93kf9QLfOouKHaPPwvfw_w@mail.gmail.com>
- <a212c91e-b22a-c080-40ac-d2e909bb51c2@collabora.com> <CABb0KFEBpJTNF7V0XfuvbtaHUiN0Zpx6FqD+BRyXf2gjxiVgTA@mail.gmail.com>
- <473b32fd-24f9-88fd-602f-3ba11d725472@collabora.com> <CABb0KFFSUeu76O9K_Q7PTQVEXJaauyOc0yF-T1uubWsYAq8cOg@mail.gmail.com>
- <324564ba-2cdc-258e-1f57-d0a1d27e9da5@collabora.com>
-In-Reply-To: <324564ba-2cdc-258e-1f57-d0a1d27e9da5@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Thu, 23 Feb 2023 10:42:08 +0100
-Message-ID: <CABb0KFEcTpdUW9q8AVyyTu0erPdd8w4T+P8zV+T=wDk1x7fGqw@mail.gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 23 Feb 2023 at 10:23, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+ 	Hi Chuck,
+
+On Sun, 15 Jan 2023, Chuck Lever wrote:
+> The purpose of this series is to improve/harden the security
+> provided by the Linux kernel's RPCSEC GSS Kerberos 5 mechanism.
+> There are lots of clean-ups in this series, but the pertinent
+> feature is the addition of a clean deprecation path for the DES-
+> and SHA1-based encryption types in accordance with Internet BCPs.
 >
-> On 2/23/23 1:41=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Thu, 23 Feb 2023 at 07:44, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >>
-> >> On 2/22/23 4:48=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> On Wed, 22 Feb 2023 at 12:06, Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-> > [...]
-> >>>>>>> BTW, I think I assumed that both conditions (all flags in
-> >>>>>>> required_flags and at least one in anyof_flags is present) need t=
-o be
-> >>>>>>> true for the page to be selected - is this your intention?
-> >>>>>> All the masks are optional. If all or any of the 3 masks are speci=
-fied, the
-> >>>>>> page flags must pass these masks to get selected.
-> >>>>>
-> >>>>> This explanation contradicts in part the introductory paragraph, bu=
-t
-> >>>>> this version seems more useful as you can pass all masks zero to ha=
-ve
-> >>>>> all pages selected.
-> >>>> Sorry, I wrote it wrongly. (All the masks are not optional.) Let me
-> >>>> rephrase. All or at least any 1 of the 3 masks (required, any, exclu=
-de)
-> >>>> must be specified. The return_mask must always be specified. Error i=
-s
-> >>>> returned if all 3 masks (required, anyof, exclude) are zero or retur=
-n_mask
-> >>>> is zero.
-> >>>
-> >>> Why do you need those restrictions? I'd guess it is valid to request =
-a
-> >>> list of all pages with zero return_mask - this will return a compact
-> >>> list of used ranges of the virtual address space.
-> >> At the time, we are supporting 4 flags (PAGE_IS_WRITTEN, PAGE_IS_FILE,
-> >> PAGE_IS_PRESENT and PAGE_IS_SWAPPED). The idea is that user mention hi=
-s
-> >> flags of interest in the return_mask. If he wants only 1 flag, he'll
-> >> specify it. Definitely if user wants only 1 flag, initially it doesn't=
- make
-> >> any sense to mention in the return mask. But we want uniformity. If us=
-er
-> >> want, 2 or more flags in returned, return_mask becomes compulsory. So =
-to
-> >> keep things simple and generic for any number of flags of interest
-> >> returned, the return_mask must be specified even if the flag of intere=
-st is
-> >> only 1.
-> >
-> > I'm not sure why do we want uniformity in the case of 1 flag? If a
-> > user specifies a single required flag, I'd expect he doesn't need to
-> > look at the flags returned as those will duplicate the information
-> > from mere presence of a page. A user might also require a single flag,
-> > but want all of them returned. Both requests - return 1 flag and
-> > return 0 flags would give meaningful output, so why force one way or
-> > the other? Allowing two will also enable users to express the intent:
-> > they need either just a list of pages, or they need a list with
-> > per-page flags - the need would follow from the code structure or
-> > other factors.
-> We can add as much flexibility as much people ask by keeping code simple.
-> But it is going to be dirty to add error check which detects if return_ma=
-sk
-> =3D 0 and if there is only 1 flag of interest mentioned by the user. The
-> following mentioned error check is essential to return deterministic
-> output. Do you think this case is worth it to support and we don't want t=
-o
-> go with the generality for both 1 or more flag cases?
+> This series disables DES-based enctypes by default, provides a
+> mechanism for disabling SHA1-based enctypes, and introduces two
+> modern enctypes that do not use deprecated crypto algorithms.
 >
-> if (return_mask =3D=3D 0 && hweight_long(required_mask | any_mask) !=3D 1=
-)
->         return error;
+> Not only does that improve security for Kerberos 5 users, but it
+> also prepares SunRPC for eventually switching to a shared common
+> kernel Kerberos 5 implementation, which surely will not implement
+> any deprecated encryption types (in particular, DES-based ones).
+>
+> Today, MIT supports both of the newly-introduced enctypes, but
+> Heimdal does not appear to. Thus distributions can enable and
+> disable kernel enctype support to match the set of enctypes
+> supported in their user space Kerberos libraries.
+>
+> Scott has been kicking the tires -- we've found no regressions with
+> the current SHA1-based enctypes, while the new ones are disabled by
+> default until we have an opportunity for interop testing. The KUnit
+> tests for the new enctypes pass and this implementation successfully
+> interoperates with itself using these enctypes. Therefore I believe
+> it to be safe to merge.
+>
+> When this series gets merged, the Linux NFS community should select
+> and announce a date-certain for removal of SunRPC's DES-based
+> enctype code.
 
-Why would you want to add this error check? If a user requires
-multiple flags but cares only about a list of matching pages, then it
-would be natural to express this intent as return_mask =3D 0.
+As this is now upstream, I gave it a try on m68k (on the ARAnyM
+emulator), using a config based on atari_defconfig:
 
-> >>>>>> After taking a while to understand this and compare with already p=
-resent
-> >>>>>> flag system, `negated flags` is comparatively difficult to underst=
-and while
-> >>>>>> already present flags seem easier.
-> >>>>>
-> >>>>> Maybe replacing negated_flags in the API with matched_values =3D
-> >>>>> ~negated_flags would make this better?
-> >>>>>
-> >>>>> We compare having to understand XOR vs having to understand orderin=
-g
-> >>>>> of required_flags and excluded_flags.
-> >>>> There is no ordering in current masks scheme. No mask is preferable.=
- For a
-> >>>> page to get selected, all the definitions of the masks must be fulfi=
-lled.
-> >>>> You have come up with good example that what if required_mask =3D
-> >>>> exclude_mask. In this case, no page will fulfill the criterion and h=
-ence no
-> >>>> page would be selected. It is user's fault that he isn't understandi=
-ng the
-> >>>> definitions of these masks correctly.
-> >>>>
-> >>>> Now thinking about it, I can add a error check which would return er=
-ror if
-> >>>> a bit in required and excluded masks matches. Would you like it? Let=
-s put
-> >>>> this check in place.
-> >>>> (Previously I'd left it for user's wisdom not to do this. If he'll s=
-pecify
-> >>>> same masks in them, he'll get no addresses out of the syscall.)
-> >>>
-> >>> This error case is (one of) the problems I propose avoiding. You also
-> >>> need much more text to describe the requred/excluded flags
-> >>> interactions and edge cases than saying that a flag must have a value
-> >>> equal to corresponding bit in ~negated_flags to be matched by
-> >>> requried/anyof masks.
-> >> I've found excluded_mask very intuitive as compared to negated_mask wh=
-ich
-> >> is so difficult to understand that I don't know how to use it correctl=
-y.
-> >> Lets take an example, I want pages which are PAGE_IS_WRITTEN and are n=
-ot
-> >> PAGE_IS_FILE. In addition, the pages must be PAGE_IS_PRESENT or
-> >> PAGE_IS_SWAPPED. This can be specified as:
-> >>
-> >> required_mask =3D PAGE_IS_WRITTEN
-> >> excluded_mask =3D PAGE_IS_FILE
-> >> anyof_mask =3D PAGE_IS_PRESETNT | PAGE_IS_SWAP
-> >>
-> >> (a) assume page_flags =3D 0b1111
-> >> skip page as 0b1111 & 0b0010 =3D true
-> >>
-> >> (b) assume page_flags =3D 0b1001
-> >> select page as 0b1001 & 0b0010 =3D false
-> >>
-> >> It seemed intuitive. Right? How would you achieve same thing with nega=
-ted_mask?
-> >>
-> >> required_mask =3D PAGE_IS_WRITTEN
-> >> negated_mask =3D PAGE_IS_FILE
-> >> anyof_mask =3D PAGE_IS_PRESETNT | PAGE_IS_SWAP
-> >>
-> >> (1) assume page_flags =3D 0b1111
-> >> tested_flags =3D 0b1111 ^ 0b0010 =3D 0b1101
-> >>
-> >> (2) assume page_flags =3D 0b1001
-> >> tested_flags =3D 0b1001 ^ 0b0010 =3D 0b1011
-> >>
-> >> In (1), we wanted to skip pages which have PAGE_IS_FILE set. But
-> >> negated_mask has just masked it and page is still getting tested if it
-> >> should be selected and it would get selected. It is wrong.
-> >>
-> >> In (2), the PAGE_IS_FILE bit of page_flags was 0 and got updated to 1 =
-or
-> >> PAGE_IS_FILE in tested_flags.
-> >
-> > I require flags PAGE_IS_WRITTEN=3D1, PAGE_IS_FILE=3D0, so:
-> >
-> > required_mask =3D PAGE_IS_WRITTEN | PAGE_IS_FILE;
-> > negated_flags =3D PAGE_IS_FILE; // flags I want zero
-> You want PAGE_IS_FILE to be zero and at the same time you are requiring t=
-he
-> PAGE_IS_FILE. It is confusing.
+     KTAP version 1
+     # Subtest: RFC 3961 tests
+     1..3
+         KTAP version 1
+         # Subtest: RFC 3961 n-fold
+         ok 1 64-fold("012345")
+         ok 2 56-fold("password")
+         ok 3 64-fold("Rough Consensus, and Running Code")
+         ok 4 168-fold("password")
+         ok 5 192-fold("MASSACHVSETTS INSTITVTE OF TECHNOLOGY")
+         ok 6 168-fold("Q")
+         ok 7 168-fold("ba")
+         ok 8 64-fold("kerberos")
+         ok 9 128-fold("kerberos")
+         ok 10 168-fold("kerberos")
+         ok 11 256-fold("kerberos")
+     # RFC 3961 n-fold: pass:11 fail:0 skip:0 total:11
+     ok 1 RFC 3961 n-fold
+         KTAP version 1
+         # Subtest: RFC 3961 key derivation
+     # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+     Expected gk5e != ((void *)0), but
+         gk5e == 00000000
+         ((void *)0) == 00000000
+         not ok 1 des3-hmac-sha1 key derivation case 1
+     # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+     Expected gk5e != ((void *)0), but
+         gk5e == 00000000
+         ((void *)0) == 00000000
+         not ok 2 des3-hmac-sha1 key derivation case 2
+     # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+     Expected gk5e != ((void *)0), but
+         gk5e == 00000000
+         ((void *)0) == 00000000
+         not ok 3 des3-hmac-sha1 key derivation case 3
+     # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+     Expected gk5e != ((void *)0), but
+         gk5e == 00000000
+         ((void *)0) == 00000000
+         not ok 4 des3-hmac-sha1 key derivation case 4
+     # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+     Expected gk5e != ((void *)0), but
+         gk5e == 00000000
+         ((void *)0) == 00000000
+         not ok 5 des3-hmac-sha1 key derivation case 5
+     # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+     Expected gk5e != ((void *)0), but
+         gk5e == 00000000
+         ((void *)0) == 00000000
+         not ok 6 des3-hmac-sha1 key derivation case 6
+     # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+     Expected gk5e != ((void *)0), but
+         gk5e == 00000000
+         ((void *)0) == 00000000
+         not ok 7 des3-hmac-sha1 key derivation case 7
+     # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+     Expected gk5e != ((void *)0), but
+         gk5e == 00000000
+         ((void *)0) == 00000000
+         not ok 8 des3-hmac-sha1 key derivation case 8
+     # RFC 3961 key derivation: ASSERTION FAILED at net/sunrpc/auth_gss/gss_krb5_test.c:52
+     Expected gk5e != ((void *)0), but
+         gk5e == 00000000
+         ((void *)0) == 00000000
+         not ok 9 des3-hmac-sha1 key derivation case 9
+     # RFC 3961 key derivation: pass:0 fail:9 skip:0 total:9
+     not ok 2 RFC 3961 key derivation
+*** CHK ***   FORMAT=2
+Current process id is 794
+BAD KERNEL TRAP: 00000000
+Modules linked in: gss_krb5_test rpcsec_gss_krb5 auth_rpcgss oid_registry kunit
+PC: [<1188975a>] rfc6803_suite+0x2/0xffffc688 [gss_krb5_test]
+SR: 2200  SP: 93025120  a2: 01b6f700
+d0: 00000002    d1: 00000010    d2: 00000014    d3: 01aebcc4
+d4: 01aebc44    d5: 00000009    a0: 11889754    a1: 01aebc44
+Process insmod (pid: 794, task=c42c6bea)
+Frame format=2 instr addr=1188975a
+Stack from 01aebbd8:
+         11963860 00000000 01aebc44 00000000 00000005 00000001 00000000 00000000
+         11889e5c 11889e34 11889be8 119644d8 1196356e 00000001 00000009 00000000
+         00000000 0000000b 01aebcfc 00000001 00000000 00000001 00000002 00000000
+         00000000 00000000 00000000 00657333 2d686d61 632d7368 6131206b 65792064
+         65726976 6174696f 6e206361 73652039 00000000 484e4f4c 4f475922 29000000
+         00000801 000c729c 005b9c58 00000000 00040cc0 00040cc0 00000000 00000000
+Call Trace: [<11963860>] kunit_run_tests+0x2f2/0x3d2 [kunit]
+  [<119644d8>] kunit_debugfs_create_suite+0x0/0x54 [kunit]
+  [<1196356e>] kunit_run_tests+0x0/0x3d2 [kunit]
+  [<000c729c>] get_page_from_freelist+0x176/0x48a
+  [<00040cc0>] __finish_swait+0x1a/0x1c
+  [<00040cc0>] __finish_swait+0x1a/0x1c
+  [<00040cc0>] __finish_swait+0x1a/0x1c
+  [<000c7126>] get_page_from_freelist+0x0/0x48a
+  [<00009752>] ssincosnan+0x10/0x26
+  [<000c6f00>] __putback_isolated_page+0x62/0x7c
+  [<119639e2>] __kunit_test_suites_init+0xa2/0xfa [kunit]
+  [<000405ea>] __wake_up+0x0/0x1c
+  [<00037774>] blocking_notifier_call_chain+0x0/0x46
+  [<11963a5a>] kunit_module_notify+0x20/0x34 [kunit]
+  [<00037404>] notifier_call_chain+0x34/0x48
+  [<0004e3b4>] module_put+0x0/0x50
+  [<000377a0>] blocking_notifier_call_chain+0x2c/0x46
+  [<0004ebd4>] do_init_module+0xd6/0x1a2
+  [<0036ec50>] memset+0x0/0x8c
+  [<00005b94>] flush_icache_range+0x0/0x30
+  [<0005009c>] load_module+0x1304/0x1368
+  [<0000eb60>] zer_rm2+0x1c/0x24
+  [<0036ed04>] __generic_copy_from_user+0x0/0x40
+  [<00010000>] EXPTBL+0x1c8/0x400
+  [<0036ec50>] memset+0x0/0x8c
+  [<003762ac>] __cond_resched+0x0/0x46
+  [<000501d4>] sys_init_module+0xd4/0xda
+  [<0000eb60>] zer_rm2+0x1c/0x24
+  [<0000536e>] buserr_c+0xc6/0x49a
+  [<00002962>] syscall+0x8/0xc
+  [<0000eb60>] zer_rm2+0x1c/0x24
+  [<0000eb60>] zer_rm2+0x1c/0x24
+  [<00010000>] EXPTBL+0x1c8/0x400
+  [<0018c00b>] nfs_direct_write_schedule_iovec+0xe3/0x1d6
 
-Ok, I believe the misunderstanding comes from the naming. I "require"
-the flag to be a particular value - hence include it in
-"required_flags" and specify the required value in ~negated_flags. You
-"require" the flag to be set (equal 1) and so include it in
-"required_flags" and you "require" the flag to be clear (equal to 0)
-so include it in "excluded_flags". Both approaches are correct, but I
-would not consider one "easier" than the other. The former is more
-general, though - makes any_of also able to match on flags cleared and
-removes the possibility of a conflicting case of a flag present in
-both sets.
+Code: 646b 1188 42f6 0000 0000 0000 0000 5246 <4320> 3638 3033 2073 7569 7465 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+Disabling lock debugging due to kernel taint
 
-Maybe considered_flags or matched_flags then would make the field
-better understandable?
+All of gss_krb5_test, rpcsec_gss_krb5, auth_rpcgss, oid_registry, and
+kunit are modular.
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+Thanks!
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
