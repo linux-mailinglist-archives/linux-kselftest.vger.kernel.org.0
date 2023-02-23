@@ -2,200 +2,248 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9316A0333
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Feb 2023 08:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C684F6A0407
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Feb 2023 09:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233205AbjBWHKy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Feb 2023 02:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        id S233240AbjBWImO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Feb 2023 03:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjBWHKx (ORCPT
+        with ESMTP id S233366AbjBWImN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Feb 2023 02:10:53 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991304A1D2;
-        Wed, 22 Feb 2023 23:10:52 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.217.110])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5A5D366021EE;
-        Thu, 23 Feb 2023 07:10:44 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677136250;
-        bh=l/p5o6Wgs9SQqz6XM6V90URqUHPwWct0pb1tZfq2qT8=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=jXxbccMkuSbQ+H0cNGv5LnGxMywISsVIclNBnzIYcGl/abV5K/IO87gZ9YKhN9rKS
-         Ld/QTGNc6sMW8SwKqk+sQAFtffKPP53Yp+tQZCvgePK8Oa4gI6FPlge1jetOe+0Bt8
-         rxidSPecRM2vLvm8Khloj5UfIEd0mFSPieVa1VzFUNGXmrMAsBdEezU3I+sL9o9sTW
-         z6Qmee2QXBwWbVfxr6n4KnbkKpO4A9heQ7n9fD0BeGu7nsUFvTIoo51fcyaHl9fY2O
-         vqv4Ed4Iv0fwynrOvQVtaEuzUKKkrvMqX5s4kHvFydWBJeqgRw/ZOrn9qcBDdF52Wc
-         QcvwF/s72GgyA==
-Message-ID: <c15446c5-eedd-690f-9dae-2bc12ee9eb78@collabora.com>
-Date:   Thu, 23 Feb 2023 12:10:40 +0500
+        Thu, 23 Feb 2023 03:42:13 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2864AFFB
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Feb 2023 00:42:11 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id s26so39451317edw.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Feb 2023 00:42:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U9SuIbp75g+UlIghsWi+4N5mCZqO2tDPQ4lhx9i41C0=;
+        b=Sql1dwoABX35nY3bSJPdFEkz/lY1Wf1brUMaBci/7FtKBzXn/BMxeek+zyRyomMiWY
+         5dupSdb3TGw5OO224ZAGfMvyusV7BQdQeO88uNW0NV3NDIaWw+uSogw0k8VAHmQEKMed
+         zo86n9U3eXIGSgrxncXPuhKKUjfGnpATX1tvGtK6AMuus63fGGorBVMxhOmT3Ond2XfR
+         mHAI9ZH9vObqAwvvnBht2HdGwRfzsMZNXznLZ+j5m0UlujSqxW75Xk/XSOpRiHV1P97q
+         ao5BfNXrTeBJZdKNKUDMf5n6sY2o2qsHlmG3VwhhybYJpkEuFpQnQ6gZBJJsQFHtzKwV
+         y4bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U9SuIbp75g+UlIghsWi+4N5mCZqO2tDPQ4lhx9i41C0=;
+        b=apeViPYa9KjVVohXySFXSkVUS2okJ/44nIcHGgA7nkrIl6ozfBHeF71KV0NdMLjy8q
+         yjAOTasmqPyFoqsZI4GNKjJuFMTTRXrfh5qJ7RROm0slutZkho7aGe+xW2pU17R0Cp7y
+         /ARWtEw3xOc9tENHZZ/P9gPwJktmaqravAHch1Q4YYsEfZ9VbZSYfRgnYp2lzTFkE1tN
+         fTztO2irK/N+T4GdMTL2RGazZMIUlxSZazrmU8LCZ7soI9b/lxgq/t3MjsOeNTNkF1T7
+         MHYFgwV0khmWE+WjcDjU6zNcJfIlvYywTscEwkKp5M5G7JQKGuH2AmXrSCxImkcTax8a
+         3Aag==
+X-Gm-Message-State: AO0yUKWTAwJpI1Qpm1RW0eneHQ8ukFAIT32YRXGm4tMspaSt12SCzxEM
+        1RUXwlxIAeZFZyOPfVv0ZmRM3jk9F8026q5xANfJ7A==
+X-Google-Smtp-Source: AK7set+0RrEHvhjbLGutaoQmuwIf40OYH9vAIuKbdgW+AtlRh/s1sKEeENFlG0624jU6i4TLccJorj7cYb6fcTRAwOA=
+X-Received: by 2002:a50:8a92:0:b0:4ae:e606:432f with SMTP id
+ j18-20020a508a92000000b004aee606432fmr6080742edj.0.1677141729090; Thu, 23 Feb
+ 2023 00:42:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com> <CABb0KFEgsk+YidSXBYQ9mM8nVV6PuEOQf=bbNn7hsoG1hUeLZg@mail.gmail.com>
+ <36ddfd75-5c58-197b-16c9-9f819099ea6d@collabora.com> <CABb0KFGWi0dtgXZ-AeUuHb55EgnwTu3JfJ9cW3ftCqezKi8dAQ@mail.gmail.com>
+ <6d2b40c6-bed9-69a6-e198-537b50953acd@collabora.com> <CABb0KFF+AEKijaXMjDpQLKyAdueJ93kf9QLfOouKHaPPwvfw_w@mail.gmail.com>
+ <a212c91e-b22a-c080-40ac-d2e909bb51c2@collabora.com> <CABb0KFEBpJTNF7V0XfuvbtaHUiN0Zpx6FqD+BRyXf2gjxiVgTA@mail.gmail.com>
+ <473b32fd-24f9-88fd-602f-3ba11d725472@collabora.com>
+In-Reply-To: <473b32fd-24f9-88fd-602f-3ba11d725472@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Thu, 23 Feb 2023 09:41:57 +0100
+Message-ID: <CABb0KFFSUeu76O9K_Q7PTQVEXJaauyOc0yF-T1uubWsYAq8cOg@mail.gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>, Mike Rapoport <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Cyrill Gorcunov <gorcunov@gmail.com>,
         Paul Gofman <pgofman@codeweavers.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
         Christian Brauner <brauner@kernel.org>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Yang Shi <shy828301@gmail.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
         Yun Zhou <yun.zhou@windriver.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Alex Sierra <alex.sierra@amd.com>,
+        Peter Xu <peterx@redhat.com>,
         Matthew Wilcox <willy@infradead.org>,
         Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>,
         Axel Rasmussen <axelrasmussen@google.com>,
         "Gustavo A . R . Silva" <gustavoars@kernel.org>,
         Dan Williams <dan.j.williams@intel.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Content-Language: en-US
-To:     Nadav Amit <namit@vmware.com>, Mike Rapoport <rppt@kernel.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com>
- <cf36b6ea-6268-deff-d9ed-6782de2bd0a7@gmail.com>
- <2fe790e5-89e0-d660-79cb-15160dffd907@collabora.com>
- <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Danylo Mocherniuk <mdanylo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Nadav, Mike, Michał,
+On Thu, 23 Feb 2023 at 07:44, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> On 2/22/23 4:48=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Wed, 22 Feb 2023 at 12:06, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+[...]
+> >>>>> BTW, I think I assumed that both conditions (all flags in
+> >>>>> required_flags and at least one in anyof_flags is present) need to =
+be
+> >>>>> true for the page to be selected - is this your intention?
+> >>>> All the masks are optional. If all or any of the 3 masks are specifi=
+ed, the
+> >>>> page flags must pass these masks to get selected.
+> >>>
+> >>> This explanation contradicts in part the introductory paragraph, but
+> >>> this version seems more useful as you can pass all masks zero to have
+> >>> all pages selected.
+> >> Sorry, I wrote it wrongly. (All the masks are not optional.) Let me
+> >> rephrase. All or at least any 1 of the 3 masks (required, any, exclude=
+)
+> >> must be specified. The return_mask must always be specified. Error is
+> >> returned if all 3 masks (required, anyof, exclude) are zero or return_=
+mask
+> >> is zero.
+> >
+> > Why do you need those restrictions? I'd guess it is valid to request a
+> > list of all pages with zero return_mask - this will return a compact
+> > list of used ranges of the virtual address space.
+> At the time, we are supporting 4 flags (PAGE_IS_WRITTEN, PAGE_IS_FILE,
+> PAGE_IS_PRESENT and PAGE_IS_SWAPPED). The idea is that user mention his
+> flags of interest in the return_mask. If he wants only 1 flag, he'll
+> specify it. Definitely if user wants only 1 flag, initially it doesn't ma=
+ke
+> any sense to mention in the return mask. But we want uniformity. If user
+> want, 2 or more flags in returned, return_mask becomes compulsory. So to
+> keep things simple and generic for any number of flags of interest
+> returned, the return_mask must be specified even if the flag of interest =
+is
+> only 1.
 
-Can you please share your thoughts at [A] below?
+I'm not sure why do we want uniformity in the case of 1 flag? If a
+user specifies a single required flag, I'd expect he doesn't need to
+look at the flags returned as those will duplicate the information
+from mere presence of a page. A user might also require a single flag,
+but want all of them returned. Both requests - return 1 flag and
+return 0 flags would give meaningful output, so why force one way or
+the other? Allowing two will also enable users to express the intent:
+they need either just a list of pages, or they need a list with
+per-page flags - the need would follow from the code structure or
+other factors.
 
-On 2/23/23 12:10 AM, Nadav Amit wrote:
-> 
-> 
->> On Feb 20, 2023, at 5:24 AM, Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
->>
->>>> +static inline int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
->>>> +                     unsigned long end, struct mm_walk *walk)
->>>> +{
->>>> +    struct pagemap_scan_private *p = walk->private;
->>>> +    struct vm_area_struct *vma = walk->vma;
->>>> +    unsigned long addr = end;
->>>> +    spinlock_t *ptl;
->>>> +    int ret = 0;
->>>> +    pte_t *pte;
->>>> +
->>>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->>>> +    ptl = pmd_trans_huge_lock(pmd, vma);
->>>> +    if (ptl) {
->>>> +        bool pmd_wt;
->>>> +
->>>> +        pmd_wt = !is_pmd_uffd_wp(*pmd);
->>>> +        /*
->>>> +         * Break huge page into small pages if operation needs to be
->>>> performed is
->>>> +         * on a portion of the huge page.
->>>> +         */
->>>> +        if (pmd_wt && IS_WP_ENGAGE_OP(p) && (end - start < HPAGE_SIZE)) {
->>>> +            spin_unlock(ptl);
->>>> +            split_huge_pmd(vma, pmd, start);
->>>> +            goto process_smaller_pages;
->>> I think that such goto's are really confusing and should be avoided. And
->>> using 'else' (could have easily prevented the need for goto). It is not the
->>> best solution though, since I think it would have been better to invert the
->>> conditions.
->> Yeah, else can be used here. But then we'll have to add a tab to all the
->> code after adding else. We have already so many tabs and very less space to
->> right code. Not sure which is better.
-> 
-> goto’s are usually not the right solution. You can extract things into a different
-> function if you have to.
-> 
-> I’m not sure why IS_GET_OP(p) might be false and what’s the meaning of taking the
-> lock and dropping it in such a case. I think that the code can be simplified and
-> additional condition nesting can be avoided.
-Lock is taken and we check if pmd has UFFD_WP set or not. In the next
-version, the GET check has been removed as we have dropped WP_ENGAGE + !GET
-operation. So get is always specified and condition isn't needed.
+> >>>> After taking a while to understand this and compare with already pre=
+sent
+> >>>> flag system, `negated flags` is comparatively difficult to understan=
+d while
+> >>>> already present flags seem easier.
+> >>>
+> >>> Maybe replacing negated_flags in the API with matched_values =3D
+> >>> ~negated_flags would make this better?
+> >>>
+> >>> We compare having to understand XOR vs having to understand ordering
+> >>> of required_flags and excluded_flags.
+> >> There is no ordering in current masks scheme. No mask is preferable. F=
+or a
+> >> page to get selected, all the definitions of the masks must be fulfill=
+ed.
+> >> You have come up with good example that what if required_mask =3D
+> >> exclude_mask. In this case, no page will fulfill the criterion and hen=
+ce no
+> >> page would be selected. It is user's fault that he isn't understanding=
+ the
+> >> definitions of these masks correctly.
+> >>
+> >> Now thinking about it, I can add a error check which would return erro=
+r if
+> >> a bit in required and excluded masks matches. Would you like it? Lets =
+put
+> >> this check in place.
+> >> (Previously I'd left it for user's wisdom not to do this. If he'll spe=
+cify
+> >> same masks in them, he'll get no addresses out of the syscall.)
+> >
+> > This error case is (one of) the problems I propose avoiding. You also
+> > need much more text to describe the requred/excluded flags
+> > interactions and edge cases than saying that a flag must have a value
+> > equal to corresponding bit in ~negated_flags to be matched by
+> > requried/anyof masks.
+> I've found excluded_mask very intuitive as compared to negated_mask which
+> is so difficult to understand that I don't know how to use it correctly.
+> Lets take an example, I want pages which are PAGE_IS_WRITTEN and are not
+> PAGE_IS_FILE. In addition, the pages must be PAGE_IS_PRESENT or
+> PAGE_IS_SWAPPED. This can be specified as:
+>
+> required_mask =3D PAGE_IS_WRITTEN
+> excluded_mask =3D PAGE_IS_FILE
+> anyof_mask =3D PAGE_IS_PRESETNT | PAGE_IS_SWAP
+>
+> (a) assume page_flags =3D 0b1111
+> skip page as 0b1111 & 0b0010 =3D true
+>
+> (b) assume page_flags =3D 0b1001
+> select page as 0b1001 & 0b0010 =3D false
+>
+> It seemed intuitive. Right? How would you achieve same thing with negated=
+_mask?
+>
+> required_mask =3D PAGE_IS_WRITTEN
+> negated_mask =3D PAGE_IS_FILE
+> anyof_mask =3D PAGE_IS_PRESETNT | PAGE_IS_SWAP
+>
+> (1) assume page_flags =3D 0b1111
+> tested_flags =3D 0b1111 ^ 0b0010 =3D 0b1101
+>
+> (2) assume page_flags =3D 0b1001
+> tested_flags =3D 0b1001 ^ 0b0010 =3D 0b1011
+>
+> In (1), we wanted to skip pages which have PAGE_IS_FILE set. But
+> negated_mask has just masked it and page is still getting tested if it
+> should be selected and it would get selected. It is wrong.
+>
+> In (2), the PAGE_IS_FILE bit of page_flags was 0 and got updated to 1 or
+> PAGE_IS_FILE in tested_flags.
 
-Please comment on next version if you want anything more optimized.
+I require flags PAGE_IS_WRITTEN=3D1, PAGE_IS_FILE=3D0, so:
 
-> 
->>>> --- a/include/uapi/linux/fs.h
->>>> +++ b/include/uapi/linux/fs.h
->>>> @@ -305,4 +305,54 @@ typedef int __bitwise __kernel_rwf_t;
->>>>  #define RWF_SUPPORTED    (RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
->>>>               RWF_APPEND)
->>>>  +/* Pagemap ioctl */
->>>> +#define PAGEMAP_SCAN    _IOWR('f', 16, struct pagemap_scan_arg)
->>>> +
->>>> +/* Bits are set in the bitmap of the page_region and masks in
->>>> pagemap_scan_args */
->>>> +#define PAGE_IS_WRITTEN        (1 << 0)
->>>> +#define PAGE_IS_FILE        (1 << 1)
->>>> +#define PAGE_IS_PRESENT        (1 << 2)
->>>> +#define PAGE_IS_SWAPPED        (1 << 3)
->>>
->>> These names are way too generic and are likely to be misused for the wrong
->>> purpose. The "_IS_" part seems confusing as well. So I think the naming
->>> needs to be fixed and some new type (using typedef) or enum should be
->>> introduced to hold these flags. I understand it is part of uapi and it is
->>> less common there, but it is not unheard of and does make things clearer.
->> Do you think PM_SCAN_PAGE_IS_* work here?
-> 
-> Can we lose the IS somehow?
-[A] Do you think these names would work better: PM_SCAN_WRITTEN_PAGE,
-PM_SCAN_FILE_PAGE, PM_SCAN_SWAP_PAGE, PM_SCAN_PRESENT_PAGE?
+required_mask =3D PAGE_IS_WRITTEN | PAGE_IS_FILE;
+negated_flags =3D PAGE_IS_FILE; // flags I want zero
 
-> 
->>
->>>
->>>
->>>> +
->>>> +/*
->>>> + * struct page_region - Page region with bitmap flags
->>>> + * @start:    Start of the region
->>>> + * @len:    Length of the region
->>>> + * bitmap:    Bits sets for the region
->>>> + */
->>>> +struct page_region {
->>>> +    __u64 start;
->>>> +    __u64 len;
->>>
->>> I presume in bytes. Would be useful to mention.
->> Length of region in pages.
-> 
-> Very unintuitive to me I must say. If the start is an address, I would expect
-> the len to be in bytes.
-The PAGEMAP_SCAN ioctl is working on page granularity level. We tell the
-user if a page has certain flags are not. Keeping length in bytes doesn't
-makes sense.
+I also require one of PAGE_IS_PRESENT=3D1 or PAGE_IS_SWAP=3D1, so:
 
-> 
+anyof_mask =3D PAGE_IS_PRESENT | PAGE_IS_SWAP;
 
--- 
-BR,
-Muhammad Usama Anjum
+Another case: I want to analyse a process' working set:
+
+required_mask =3D 0;
+negated_flags =3D PAGE_IS_FILE;
+anyof_mask =3D PAGE_IS_FILE | PAGE_IS_WRITTEN;
+
+-> gathering pages modified [WRITTEN=3D1] or not backed by a file [FILE=3D0=
+].
+
+To clarify a bit: negated_flags doesn't mask anything: the field
+inverts values of the flags (marks some "active low", if you consider
+electronic signal analogy).
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
