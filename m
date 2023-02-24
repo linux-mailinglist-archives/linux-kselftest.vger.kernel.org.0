@@ -2,190 +2,186 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E683C6A16A6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Feb 2023 07:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5E16A16AA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Feb 2023 07:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjBXGf1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Feb 2023 01:35:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        id S229669AbjBXGjI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Feb 2023 01:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjBXGf0 (ORCPT
+        with ESMTP id S229462AbjBXGjH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Feb 2023 01:35:26 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BCC3BD81
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Feb 2023 22:35:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677220525; x=1708756525;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=oRUYWWwRUu5V10Xvr20H5etU/HMr+1ZIrjJDaVlxwn8=;
-  b=Lxlj0g8GC808CsoSV+U9VaYYgPztuCkdj2KBaLnUMnzZr+cW+l/Dhjsi
-   i/LnlSF868uY4vo+Uhtgx/ZNhgJVKCjHLJjYIQsUn2OcgKdA3gBafJATt
-   cwctrhA9qoHQcVlvbbkk/NAB/oOIsWXoYWj0fxt76zF9HYZGRa7qmT61X
-   yejduzhrUeR8fYFRUfPBQ6V+G7UCsiusxFyL8+8KlBgteH04hNucvLwNy
-   OHZh1VR/EANDd6OG7qGu1QHAguXC+X4K8f9P4fTERACuD9PckSs/Gv8QO
-   ZE4yB2C/UC3PmAzi7FcN0PLKEfFR5qLNyDSMtuy9KA1uFFUylqSXwrEBm
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="398143482"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="398143482"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 22:35:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="846846626"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="846846626"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga005.jf.intel.com with ESMTP; 23 Feb 2023 22:35:24 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 23 Feb 2023 22:35:24 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 23 Feb 2023 22:35:24 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 23 Feb 2023 22:35:24 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b8JVrrYgEvQRgVZzx4mR4QAgnw6vDCJ3pkTEjQkwotSQomDvwftdrpTrV5iYF7ZnPoNQmgsvnGddk5a7dg3PNiqgvgRQ/5it1VgZ8wNNm1rndOGiEFSHCwDwQ+Ksegs9Pi7NR4kz+Tb4tcGWZuyvfVQgbSqzncAq7PC5arIi3i073KeWAn2WdTDsRmPocl+wsTvwKl7WQWzPhsH3zF3hIPRtX005AnkRbyk1z6GXtYxxy9IxRnrePspXXPZO5uQDbddcb3nIqlRXZsLbPZbb02cEVCT8rHbutrJ3MVruHM2aTX4koaqo8kyI/OpqIK71oKt4j1DoAS3mANiURCuEug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xXSVUSXmvYAe7QqmCpAwUztj/bsMYIgU01zh2AavjkY=;
- b=VmUj0MpPX4wR90gXjVpa79CdY15dpeKu21UA3iPyitA9laFhdGHnmmDn47wb5Ovc7397ILHZDlmuV8S3VIPyNpIbrQWKZ0MJIl0C0AZXhR1+O8wlc0ioFLVgTHD6PbxxdSBzsz6YpLg2JsCPRSx/krL1NxmZE/LzWysIr8wsDhvi66nWUBbqf6j89hKNhxkvqavAyhtDQ9mwPgPEQSXWmMl+eOU5TSMD5RnFEc1tKRaAVIusoegg1kCBeF2cX6rxecRgKxPw9qNoNsZaaJeywgXWvwsmpuOWuJAF602W1+10SIDyxiIi/FVFoGecvIHfzRuohXVlcNYaric4SFiRgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SA0PR11MB4750.namprd11.prod.outlook.com (2603:10b6:806:9d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.21; Fri, 24 Feb
- 2023 06:35:22 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac%8]) with mapi id 15.20.6134.024; Fri, 24 Feb 2023
- 06:35:22 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-CC:     Nicolin Chen <nicolinc@nvidia.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: RE: [PATCH v2 5/7] iommufd: Make iommufd_hw_pagetable_alloc() do
- iopt_table_add_domain()
-Thread-Topic: [PATCH v2 5/7] iommufd: Make iommufd_hw_pagetable_alloc() do
- iopt_table_add_domain()
-Thread-Index: AQHZRwEJjmcTUIufy0K/NtdPAAEd4K7dpBHw
-Date:   Fri, 24 Feb 2023 06:35:22 +0000
-Message-ID: <BN9PR11MB527686A5ECB8DB6B34E07BAC8CA89@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <0-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com>
- <5-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com>
-In-Reply-To: <5-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SA0PR11MB4750:EE_
-x-ms-office365-filtering-correlation-id: 4bc0ed3a-c4fb-4a96-8280-08db16314e45
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: u2FhD93esNI4WNKcqiiEcDAL4CS08V/eHEVDtZ6cLvXrOsqegWv/o6l5ohccmUcQb4ctldUpa5K3YGNUNYe2eyhrG1Yj1OeHbA2BUgiSfvfmmI0OKdWlZWbMqcNf/fFoNTDJHYI0Elye08ps4eDAVQvyIHIkccY/esFCwcnwc2rxuljPn+AF7jW3kgwoRz2zT5m787frzc7+ZrGXlcWCaWDbxmmWpHzAKsa3/pYewIezfD5FpQJeB7yHivYIsKDVAdBAD196NLevsbvj70QVlIMpT2zAiNoxY6f6GzhXhunRu9K94AxpLqQve3OhVtcWWczAGIIAr9fiz5W3XxunGHNb/+37F09wwmeXjhc7zTtLwlE8XuUbB9p5++mLKXPKqG8FSo0RX+r+7ot2Efgjdxdgdhz3+qthZS/zhWT1hfabNgE7MumWNoU9Srd5rhALSRlfcm9mpEjPb4TL3bGKmP7WClVyR274yMcTkHHDgCfe9vq4psZUGZtRcaI3bcE/LMDpb9YtYkVKHVJYZiJfDO/YYZI6GHtsF4/r/ttiU5h3kP9sNDqQx4PidQpNoAkhR2ra6qDpZTd+SEd8FkWim671LAv/9FE6GCi5mBuhLYZ31IcFJr3rwUInKg3+lD8miY67txwr6atHi1i1dBHqt6+QxiBrx52eDe3wnBRhYx27hRcCOOKTm/hWk8xCPffywS2DSmjCdlzGclqv/16l5kwe8QAt0bcUE7dPe+FISo8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(39860400002)(366004)(346002)(136003)(451199018)(86362001)(82960400001)(2906002)(38100700002)(122000001)(33656002)(9686003)(478600001)(7696005)(71200400001)(186003)(26005)(66946007)(55016003)(38070700005)(66476007)(66446008)(76116006)(66556008)(54906003)(83380400001)(110136005)(64756008)(4326008)(107886003)(6506007)(316002)(41300700001)(8936002)(52536014)(8676002)(5660300002)(21314003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fTJvsOP0K6mmE3CVCquRuqNAX1UQqClOZ2RDxfwMPXRN6DnIebENrggRTG8A?=
- =?us-ascii?Q?oogNXks4Zw/lb9fISCkrzbQu8wOK/MxGBuIw0Y52uWBhtbm67MTFld/0LKuF?=
- =?us-ascii?Q?yMFnGzCvjCGgiiweWaJ8s4ZYtWTD/9kxlymhgZdgt5UNES8TPVqZgA1B8tPe?=
- =?us-ascii?Q?dqm22UIcIUuU/SwBLjgnwp4NCJl9AkL8f6d4Nmsq4RdBDH5xTUXZLTwc47PU?=
- =?us-ascii?Q?EqJ1gdPpKQ5jjdSEnL4/1/n64holh2Egjl/tuZf6uM4tK3/iOlx9Rnssf1/L?=
- =?us-ascii?Q?9bBic16Sk6LDp8tAG4F/2olFuPLJ1+bwZYe1dQRNN4gFZKp7XLnc2MbfvDpP?=
- =?us-ascii?Q?BAgHD/7dtRJkjZrhBDOcZNbCZO1NCXv4Mu3Wk3lHeng3ybWMhCexr12h0KIn?=
- =?us-ascii?Q?tLnWUcs5laBG9GzOqfhSnGxTD2zdWtZGLCZyLWnfSe8yndY1Hm2tg5z0mi9k?=
- =?us-ascii?Q?rA2k/FVrW6pkHUsSNZLqtE0JOmVvY457hOlu3aE/zvYhEDmA1xxhUEr7JrYu?=
- =?us-ascii?Q?F29RpkrdcIGU7Bidz+9WLB/UooTxjFWkRqegVCoXtMvikTzObdgYH7q7eIly?=
- =?us-ascii?Q?Z8nix6iSMNQXzR4YYkXa15CnY3JBT080C8OIyAYguhi03YZPuEgaJcSK+f2I?=
- =?us-ascii?Q?bCjqBFKY9g2eT78mW9E0o75IqfTP7cZZJ0zGkjyVgKCT1xL/8g9ztGZ4Ad9p?=
- =?us-ascii?Q?ceIOQn1+4mceFqrZn+XrrUJsUgQ6McoLRTiGUJfcVPvrTtChmOdFTFKD7iNX?=
- =?us-ascii?Q?68f+JdmNtl/DyyGCplyyPI9UD0xlTy+hMyXf7V+zRS36EysnA2SJqdELccOG?=
- =?us-ascii?Q?QVHR3phZ0FTT0YFuyHW45piwEkNgBSh60lgW2GvJ6XvuWJCwQIdVyvagfyF+?=
- =?us-ascii?Q?FdEBzlYiplkJBFqRJtmeglLhaO9y6uCTz854rZmn35nRgSpUi1iHoC86IVjJ?=
- =?us-ascii?Q?8Bv83OaftZF7QXD2k5NmPgp1jTl+cwOfyp2I72HDEmtxYYPBzVExyGopeFF7?=
- =?us-ascii?Q?cA8RPJEk+v8VygrtTVPG+RSm/Z0bNdyrj0IiqtQ/MSJjhWkNk/HOg+FcImmF?=
- =?us-ascii?Q?tk2C0CWhCftc62cRsUxm2MMsV0Qa6UHQf8AM4VzzHRGzeJL/GhSENGio8D7C?=
- =?us-ascii?Q?CkuGAxCNKhXuN1ZqLltP6MoN5CMqZuVtCEw16nZMWuEgjF+9xQAFvd7UPJfw?=
- =?us-ascii?Q?En06ANWaiUgn8lF/ClKemuqCvw+fYTOPJRz4TAGc8IEJ/1PilLV9H7OlVQDn?=
- =?us-ascii?Q?n9DuhqOm+mHVYT/X/Fqc9iWO+hX8Lip5dimPk5ySZVJBbxftFqmiM7HUErZd?=
- =?us-ascii?Q?OPhq1sw+DHsuw2yhv3EnSX6UZUQniZ4f4yWF6veLbaRDKt1zvxmMMOZEi6YL?=
- =?us-ascii?Q?E64Ibjc9wLdW0kcnk7ZeMyNS4gxZLQJG6pFYRW2GSUIavHwsQNxLV+H18tcX?=
- =?us-ascii?Q?gvmHMjBzhjPQNwTYcUG8csbM2gSRKg0CFxWDr/aDYXLS0P45hNC4VdoYwKpj?=
- =?us-ascii?Q?on7YeCXyBK3YAl/qy+qFMgkhhumZaazMfsnCILIj8OPKGDVcek+p8Scr6/l2?=
- =?us-ascii?Q?ksixzl5MX6rI+QvVF0BgUq3BwwuQ41rvEtwN8igl?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4bc0ed3a-c4fb-4a96-8280-08db16314e45
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 06:35:22.4819
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: s2ZC0ssqRsrAHGUqlA8sXfNqmF12mtRrlgHzdfQGu9yGn2wARQdJypZd8rvRf+Ps4Wh6ZLWf/U56lTNiBB8jFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4750
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 24 Feb 2023 01:39:07 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C50A60D78;
+        Thu, 23 Feb 2023 22:39:05 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PNKx26CWfz501RX;
+        Fri, 24 Feb 2023 14:39:02 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl1.zte.com.cn with SMTP id 31O6cpsx044681;
+        Fri, 24 Feb 2023 14:38:51 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Fri, 24 Feb 2023 14:38:53 +0800 (CST)
+Date:   Fri, 24 Feb 2023 14:38:53 +0800 (CST)
+X-Zmail-TransId: 2b0363f85b7d4e2e0d35
+X-Mailer: Zmail v1.0
+Message-ID: <202302241438536013777@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <davem@davemloft.net>
+Cc:     <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <shuah@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhang.yunkai@zte.com.cn>, <xu.xin16@zte.com.cn>,
+        <jiang.xuexin@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNlbGZ0ZXN0czogbmV0OiB1ZHBnc29fYmVuY2hfdHg6IEFkZCB0ZXN0IGZvciBJUCBmcmFnbWVudGF0aW9uIG9mIFVEUCBwYWNrZXRz?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 31O6cpsx044681
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63F85B86.002/4PNKx26CWfz501RX
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Thursday, February 23, 2023 5:03 AM
->=20
-> +static int iommufd_device_do_attach(struct iommufd_device *idev,
-> +				    struct iommufd_hw_pagetable *hwpt)
-> +{
-> +	int rc;
-> +
-> +	mutex_lock(&hwpt->devices_lock);
-> +	rc =3D iommufd_hw_pagetable_attach(hwpt, idev);
-> +	if (rc)
-> +		goto out_unlock;
->=20
->  	idev->hwpt =3D hwpt;
->  	refcount_inc(&hwpt->obj.users);
-> +	/* hwpt->devices is all domains that have been attached */
->  	list_add(&idev->devices_item, &hwpt->devices);
+From: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
 
-s/domains/devices/
+The UDP GSO bench only tests the performance of userspace payload splitting
+and UDP GSO. But we are also concerned about the performance comparing
+with IP fragmentation and UDP GSO. In other words comparing IP fragmentation 
+and segmentation.
 
-but I didn't see what additional info this comment actually
-give in this place. It's there in a function name xxx_attach then
-certainly every device in that list has been attached.
+So we add testcase of IP fragmentation of UDP packets, then user would easy
+to get to know the performance promotion of UDP GSO compared with IP 
+fragmentation. We add a new option "-f", which is to send big data using 
+IP fragmentation instead of using UDP GSO or userspace payload splitting.
 
-> +
-> +	rc =3D iopt_table_add_domain(&hwpt->ioas->iopt, hwpt->domain);
-> +	if (rc)
-> +		goto out_detach;
-> +
-> +	/* ioas->hwpt_list is hwpts after iopt_table_add_domain() */
-> +	list_add_tail(&hwpt->hwpt_item, &hwpt->ioas->hwpt_list);
+In the QEMU environment we could see obvious promotion of UDP GSO.
+The first test is to get the performance of userspace payload splitting.
+bash# udpgso_bench_tx -l 4 -4 -D "$DST"
+udp tx:     10 MB/s     7812 calls/s    186 msg/s
+udp tx:     10 MB/s     7392 calls/s    176 msg/s
+udp tx:     11 MB/s     7938 calls/s    189 msg/s
+udp tx:     11 MB/s     7854 calls/s    187 msg/s
 
-again the comment is meaningless
+The second test is to get the performance of IP fragmentation.
+bash# udpgso_bench_tx -l 4 -4 -D "$DST" -f
+udp tx:     33 MB/s      572 calls/s    572 msg/s
+udp tx:     33 MB/s      563 calls/s    563 msg/s
+udp tx:     31 MB/s      540 calls/s    540 msg/s
+udp tx:     33 MB/s      571 calls/s    571 msg/s
 
-otherwise looks good to me,
+The third test is to get the performance of UDP GSO.
+bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
+udp tx:     46 MB/s      795 calls/s    795 msg/s
+udp tx:     49 MB/s      845 calls/s    845 msg/s
+udp tx:     49 MB/s      847 calls/s    847 msg/s
+udp tx:     45 MB/s      774 calls/s    774 msg/s
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+Reviewed-by: xu xin (CGEL ZTE) <xu.xin16@zte.com.cn>
+Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
+Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
+---
+ tools/testing/selftests/net/udpgso_bench_tx.c | 33 ++++++++++++++++++++++-----
+ 1 file changed, 27 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+index 477392715a9a..025e706b594b 100644
+--- a/tools/testing/selftests/net/udpgso_bench_tx.c
++++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+@@ -64,6 +64,7 @@ static int	cfg_runtime_ms	= -1;
+ static bool	cfg_poll;
+ static int	cfg_poll_loop_timeout_ms = 2000;
+ static bool	cfg_segment;
++static bool	cfg_fragment;
+ static bool	cfg_sendmmsg;
+ static bool	cfg_tcp;
+ static uint32_t	cfg_tx_ts = SOF_TIMESTAMPING_TX_SOFTWARE;
+@@ -375,6 +376,21 @@ static int send_udp_sendmmsg(int fd, char *data)
+ 	return ret;
+ }
+
++static int send_udp_fragment(int fd, char *data)
++{
++	int ret;
++
++	ret = sendto(fd, data, cfg_payload_len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
++			cfg_connected ? NULL : (void *)&cfg_dst_addr,
++			cfg_connected ? 0 : cfg_alen);
++	if (ret == -1)
++		error(1, errno, "write");
++	if (ret != cfg_payload_len)
++		error(1, errno, "write: %uB != %uB\n", ret, cfg_payload_len);
++
++	return 1;
++}
++
+ static void send_udp_segment_cmsg(struct cmsghdr *cm)
+ {
+ 	uint16_t *valp;
+@@ -429,7 +445,7 @@ static int send_udp_segment(int fd, char *data)
+
+ static void usage(const char *filepath)
+ {
+-	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
++	error(1, 0, "Usage: %s [-46acfmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
+ 		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
+ 		    filepath);
+ }
+@@ -440,7 +456,7 @@ static void parse_opts(int argc, char **argv)
+ 	int max_len, hdrlen;
+ 	int c;
+
+-	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
++	while ((c = getopt(argc, argv, "46acC:D:fHl:L:mM:p:s:PS:tTuvz")) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			if (cfg_family != PF_UNSPEC)
+@@ -469,6 +485,9 @@ static void parse_opts(int argc, char **argv)
+ 		case 'l':
+ 			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
+ 			break;
++		case 'f':
++			cfg_fragment = true;
++			break;
+ 		case 'L':
+ 			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
+ 			break;
+@@ -527,10 +546,10 @@ static void parse_opts(int argc, char **argv)
+ 		error(1, 0, "must pass one of -4 or -6");
+ 	if (cfg_tcp && !cfg_connected)
+ 		error(1, 0, "connectionless tcp makes no sense");
+-	if (cfg_segment && cfg_sendmmsg)
+-		error(1, 0, "cannot combine segment offload and sendmmsg");
+-	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg))
+-		error(1, 0, "Options -T and -H require either -S or -m option");
++	if ((cfg_segment + cfg_sendmmsg + cfg_fragment) > 1)
++		error(1, 0, "cannot combine segment offload , fragment and sendmmsg");
++	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg || cfg_fragment))
++		error(1, 0, "Options -T and -H require either -S or -m or -f option");
+
+ 	if (cfg_family == PF_INET)
+ 		hdrlen = sizeof(struct iphdr) + sizeof(struct udphdr);
+@@ -695,6 +714,8 @@ int main(int argc, char **argv)
+ 			num_sends += send_udp_segment(fd, buf[i]);
+ 		else if (cfg_sendmmsg)
+ 			num_sends += send_udp_sendmmsg(fd, buf[i]);
++		else if (cfg_fragment)
++			num_sends += send_udp_fragment(fd, buf[i]);
+ 		else
+ 			num_sends += send_udp(fd, buf[i]);
+ 		num_msgs++;
+-- 
+2.15.2
