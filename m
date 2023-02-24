@@ -2,45 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D16D6A1DEC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Feb 2023 16:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9856A1E5C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Feb 2023 16:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjBXPCV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Feb 2023 10:02:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
+        id S229456AbjBXPS4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Feb 2023 10:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjBXPCU (ORCPT
+        with ESMTP id S229736AbjBXPSy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Feb 2023 10:02:20 -0500
+        Fri, 24 Feb 2023 10:18:54 -0500
 Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C8A3C79E;
-        Fri, 24 Feb 2023 07:02:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61EA682BF;
+        Fri, 24 Feb 2023 07:18:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1677250932;
-        bh=LA4afhPqupsD7v+QF/v/WvgrLpshZrcgnJ7mYrdvPCY=;
+        s=s201512; t=1677251925;
+        bh=2DxjrJyKKTqbJ2x4ZMA0QnmzjpPwL2ed1Fn0QoMGueQ=;
         h=From:To:Cc:Subject:Date;
-        b=CyL/ZXbSZFuHTRJVrQlcYyrmYpVaZbwP3ZOMPF+j807EMfTM2ryH08zfEg2WHvOZ7
-         gvvoKMI8xFc/vTzGP2NrLoEy+x8pmOpOVD6FJiwAm/7RjCqZh+rijlzWYr4FNQ2tyy
-         8Swr4gSX2BRG6odgNeWtqFWaa/DKCMgKvDsIR9IE=
+        b=w23xj9HzMuNVIKIvBoWVHYhq2h2pvg+N7/TxZBN1lihdjFWLx/UPmj7KpuUizXLuM
+         ciUnxU3WgKrrcdkjE1EvlL+IVlSkzKe2QrYQsYEvbuPlL+2yzgI14mjU85NZWEYbyX
+         2vuS1lCBby/upGErpEnVNJ461Mr7hW9Nelzey9oY=
 Received: from rtoax.. ([111.199.188.149])
-        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
-        id 37AC28C; Fri, 24 Feb 2023 23:00:55 +0800
-X-QQ-mid: xmsmtpt1677250855t1v5n31m6
-Message-ID: <tencent_FC8827062142CF5936974B2A30AF6CA3C408@qq.com>
-X-QQ-XMAILINFO: OaoBA5NOFC/jERj4t5+z6sdop7oR02lO5ZckqqdwgX1XuRFNP3eTf8Fp+lqg+f
-         yjVrxMa33pgNJ7ZIBverHzbd/hwdvWggezH91axqw3mP33myBT0K3+8UWiVCaiL35OKM6jMjAUjz
-         P1JAYSCviK+SYHFpuX1NrQ6tzqL5ScUmX/WyhMFOXsgdZYwJ2WQdFSVffDVE5W0T0njT2BrFkBOh
-         P2hB5DE6QVdp+HyPmfyYJCPCollqnbKvMQRy0t7h4a6wLRYODjtUZe4lmwftvhukx8J5nh3pmPZ3
-         wujjBlfpxmEj4nJvADeyAOzL0xqZKOnNuaLOOJ543hKe9jQiRLduBwi5eg/nRuN3FDQPN1xd4sVL
-         rKnvO0Ae0Ck/dDWqyyoMdiNzLd4vTG1MMPmymtp9FHLDopBA46DGhzkvcYyxtpePFZOT6qCgzCUl
-         6jc7E/Du0jqIYHHLLRyPbaz9/RHusbT/hOodhQ4q9nlCmEvTsw8xjhwSC/ZbxQlASbZDVm6WW3ji
-         G9pmDoUIxgF4jiClNS/Yxfg1ZegkCjPsL8hcChDwbHwQ4NO9v5nc2s8qurrpTkl3T2laxsAq1jUB
-         XKrJmy0u4CKx6crhSpJ3MmHyiH37hTShxTEUSyxf7cXePuDw0Dfd2jSlMT0oaTF1iMR8rVBTNMYG
-         wsfFk1TOftHR9/4C6MgrfzQCuA92sRiGVGo4sUav7J2GbGb3L33HT0D6MGi/x+myC81qF4/h5a//
-         bVIs2VkoN+a4Wj6GfTsESNRdY64T7BbUMMOjNYXJ6pLBRvOgaRCKhCrBUE8uHQ7BEzEWiCXZAyGh
-         Qxrv82uh2+QVfgOMl3lMapy1JyO4Bg0piSHarWxbLo2mRZLH7/MAJ/SV/w499sCsyjktPhYKQQOh
-         2dMPuAhvwgv6zP+QN4hI8Xmv8wCKRASIOZPGmjndtFm9JD+yybxWRN6K15yFL9Fa0qYoawVQwpSw
-         bYo9yor5tgbc1MGCPwGDQZAOpnBH6vW81JNq3SlYwHivClTPEL7Q==
+        by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+        id 28421E7C; Fri, 24 Feb 2023 23:10:04 +0800
+X-QQ-mid: xmsmtpt1677251404tc788u33m
+Message-ID: <tencent_CB281722B3C1BD504C16CDE586CACC2BE706@qq.com>
+X-QQ-XMAILINFO: MaJhvnnz6ISsTeBvp4SdkfRgmLru8HT4dYD59XQa9InsFMrFkQCik7T6o584SR
+         HrxnPWpBq7Q4iIIr6E+ZL3rBbfKFwE2UQu6L/bC+A1IQa4nFwqlwuHLS25Dto0/BycZ0upk449pR
+         j9GB8EbSD1y/+T1VQceIjHmoPYBQgg3xK96JnaGLHErglPV2/uSD5Mhw5VmUJQlHsp3pfl9NNQ6X
+         zAtzONR7dKRExHozzjUYfcAAOxetFZ0wxrAqzxVFmOZAxetpsNuPmQAv6N2R7zsHIOpz/BJo+heK
+         w2+xrA9088q9tg63I8eYAHObwonvgWNNax6RlWKjcDHsLXrjY03gY32y29+auQpP0YWhYR6JDZ0K
+         84rNRW/AhPleRO4uW/xrIdGOcHFpbZnd8BZmQEtkES/cjY24KhAwvS9T8zSxV2e6IhOkju4Mh8Ia
+         iNDyz2VlE37TOjD0VdbU9U52HJbxNux6oA4YHY8cxjfRTtJoH5r2msar7L+W4fAy0HHYwGT+b9fO
+         V8GKnjlhIxJmJwdE4nyQJRnVJGERijCSTedQWIX31EnCxG1VTBtoACMSjH5Xgzj5Ctt2zfpdqiTK
+         NpWbj7in1ChjsHKdwmB1L5kwKp9t0n+USxbRPN78rfLTqs8bqKN8qSgwYsSPHPHYCo7PXwB1nhs4
+         IP4hm04ujclsHRDTeVmVbj+CvLiOYtWJLVm7CtuHp8/tI0YX0AcM3RqkrjKeDbaZvDM/x6RnWxLK
+         T5Qz95OvNAr0Hsn4XL/gN1sLPJwkzZzKQ9NFcxa0lmmjBhypZN4/FOOwLE6kVfionaD899bMX4Cs
+         e7psJpvwIFVcFRLixdh5u/gmcw5Kb96+U7Gr0foDW/wC68X2DdMkKes616m5qAQzwmz6DwIwgdks
+         lhF8/LimktzrJbWUsMX3DxqaTfyGH71uhghgX+Ofl3eNMtpkuq/VkLpZByVyr1y2lYYNHhLEELDP
+         JSAZWWuEENoa9HTY175BDWnH9NHSueUvggdhVxjhWHdoppjAA3ZgC5tUlgnZkUjHOyPr3vG07BSn
+         UUXrTTIVMm1FS3Yf3w
 From:   Rong Tao <rtoax@foxmail.com>
 To:     ast@kernel.org
 Cc:     Rong Tao <rongtao@cestc.cn>,
@@ -57,9 +58,9 @@ Cc:     Rong Tao <rongtao@cestc.cn>,
         Tools)),
         linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH bpf-next] selftests/bpf: Fix compilation errors: assign a value to a constant
-Date:   Fri, 24 Feb 2023 23:00:53 +0800
-X-OQ-MSGID: <20230224150054.577617-1-rtoax@foxmail.com>
+Subject: [PATCH bpf-next v2] selftests/bpf: Fix compilation errors: assign a value to a constant
+Date:   Fri, 24 Feb 2023 23:10:02 +0800
+X-OQ-MSGID: <20230224151002.579037-1-rtoax@foxmail.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,6 +75,9 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Rong Tao <rongtao@cestc.cn>
+
+commit bc292ab00f6c("mm: introduce vma->vm_flags wrapper functions")
+turns the vm_flags into a const variable.
 
 Added bpf_find_vma test in commit f108662b27c9("selftests/bpf: Add tests
 for bpf_find_vma") to assign values to variables that declare const in
@@ -95,6 +99,9 @@ with 'unsigned long vm_start' for testing.
 
 Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
+v2: Add more useful commit information
+v1: https://lore.kernel.org/lkml/tencent_FC8827062142CF5936974B2A30AF6CA3C408@qq.com/
+---
  tools/testing/selftests/bpf/progs/find_vma_fail1.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
@@ -113,5 +120,4 @@ index b3b326b8e2d1..47d5dedff554 100644
  }
 -- 
 2.39.2
-
 
