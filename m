@@ -2,186 +2,193 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5E16A16AA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Feb 2023 07:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D9F6A16C2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Feb 2023 07:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjBXGjI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Feb 2023 01:39:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S229562AbjBXGvG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Feb 2023 01:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBXGjH (ORCPT
+        with ESMTP id S229639AbjBXGvF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Feb 2023 01:39:07 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C50A60D78;
-        Thu, 23 Feb 2023 22:39:05 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PNKx26CWfz501RX;
-        Fri, 24 Feb 2023 14:39:02 +0800 (CST)
-Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
-        by mse-fl1.zte.com.cn with SMTP id 31O6cpsx044681;
-        Fri, 24 Feb 2023 14:38:51 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp01[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Fri, 24 Feb 2023 14:38:53 +0800 (CST)
-Date:   Fri, 24 Feb 2023 14:38:53 +0800 (CST)
-X-Zmail-TransId: 2b0363f85b7d4e2e0d35
-X-Mailer: Zmail v1.0
-Message-ID: <202302241438536013777@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <davem@davemloft.net>
-Cc:     <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <shuah@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhang.yunkai@zte.com.cn>, <xu.xin16@zte.com.cn>,
-        <jiang.xuexin@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNlbGZ0ZXN0czogbmV0OiB1ZHBnc29fYmVuY2hfdHg6IEFkZCB0ZXN0IGZvciBJUCBmcmFnbWVudGF0aW9uIG9mIFVEUCBwYWNrZXRz?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 31O6cpsx044681
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63F85B86.002/4PNKx26CWfz501RX
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 24 Feb 2023 01:51:05 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542C856794
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Feb 2023 22:51:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677221460; x=1708757460;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=oMKSA6RQ368M0Bt13WalEocrFCQ92Rw64G3JIRzlqU0=;
+  b=DyCyWniwhKA9qUExAf5xCZxEVuIcvySQkKoBHc4GxcPtM2xpxW9nVG3w
+   DRM5NuLmV4Rv+cvvJRzwpvzX8Yik+QdFVekkmDfDqPx7TAAGksqNrO4UL
+   x+5/OTO6CLXOgF5vs0lswbv2nHU4lF6Oa4zi1/NNy8DHbXePtF7gDWrbP
+   KrOm1jpR6N7NCHGHx8oaBvbtnYwyGxCNt50CYGtCGB0OW5YJVrFAWtU6s
+   xO7HxUJjGqOxjZoY7hPMwpqTPWLHivp9NSCcFlIRMjIiWr0DNqd3g5YmF
+   JjgKUZD+db2FXKQAT9jcx7p8qT4MJwtivZjnAKXiXKIM09IMHUg0NlBHp
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="395920601"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="395920601"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 22:50:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="918325028"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="918325028"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2023 22:50:46 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 23 Feb 2023 22:50:45 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 23 Feb 2023 22:50:45 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 23 Feb 2023 22:50:45 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 23 Feb 2023 22:50:45 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mjgt+InloH4ienusUPAuDRwf+oQ/LnxTcD2fSoNNhDKbORBEezpAezXisVE3wy0HADg6esUUWbI3Yc8X6/KAic7oMWh9usVvqNWLePJMHdziORrLn5pZkvqFQvZDoR3JNImgdCIvU9PRrEureaUoGabmNmr7D5f9TnxsITpfEClLb5Vm8+A+bCJDW4mPynQAJqYYIpGnhQQ1Bs7JwVoEefek/9UeGXv7hiuqU4x1CiT/76QSTMhEs4KdMzIaVmrzYDpkgJosOxOzbLIIRFktQtEof4VIMklLzj12b1yzMGlJR22DieYIB1D7Ny/TFMzjHhRHCVQQU0y06WXdAuVDKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mID4Bktnb1wYjMd8kiPMPZ/HCU7KlA09N+Z75fkeSTg=;
+ b=ggfBN89fAdUHaZ9UhckkgqlLeKteJ0Ss834l5X2U0tWlv/XIz5O9rldVNOlXN55pRuNu2CQxIIZiBWvuYyCCPoad+F5GsasTnXQclkDCmTFsZ+WYc6zYGSLYVTzAhtyTTTh30MN0VhSgzA6r3ftEsxmAoVpd8GMeZRBM4m20cdMIs3+unCBhi/NUf7anfubJGMqRvFcrd7ArPFHk1/N3pjcu5b7eBiLZUWx9bG3O8/yVQvnWsBkPPSDdLMoYS8NgTawQAx7SdgnR5wdryOeYYlYCyOM4bdV11nqFoFUpVq7Gxaj93mdI3EVXeNsgljwD4r5JPua1Po4ct5H5Ngleyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BL1PR11MB5272.namprd11.prod.outlook.com (2603:10b6:208:30a::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Fri, 24 Feb
+ 2023 06:50:43 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac%8]) with mapi id 15.20.6134.024; Fri, 24 Feb 2023
+ 06:50:43 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+CC:     Nicolin Chen <nicolinc@nvidia.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: RE: [PATCH v2 6/7] iommufd/selftest: Make selftest create a more
+ complete mock device
+Thread-Topic: [PATCH v2 6/7] iommufd/selftest: Make selftest create a more
+ complete mock device
+Thread-Index: AQHZRwERzGSsZ5jNi0qdnN/0SmHgha7dpllw
+Date:   Fri, 24 Feb 2023 06:50:43 +0000
+Message-ID: <BN9PR11MB527674E485D533D57A9965888CA89@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <0-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com>
+ <6-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com>
+In-Reply-To: <6-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BL1PR11MB5272:EE_
+x-ms-office365-filtering-correlation-id: 0d97c6f9-42b7-4b0e-bf78-08db1633732b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Th9I8tl8HjwCWJ0bWhStqxomtNSfl6jTCERuecjceiVD8VggncZZm56Ez/9qKqC0D54I3AXLFaWH6MeLy3/yXIDqWCqeMgmn05a8DYQyXPGH1wtMzpF8547zhS2ssC1bUedBCpj/JbDtaCHI9QfllQ1HBwHvRBhOrChovt+MctUpPHDl0erNXiW+UMfPeJeO4f3r4bXQjuACNA2W3cmUTTOulywkAW51akmrjF/2nQRul+RZFLFVPX+LTWUpd7HV84u1MzhIOrwAp40LM63UmpHtKLTB5NJ6F5so575i0s6hI9un2nll16/2J2MxAElOw8RkRC8CjNfeetztBwLc6Jwd/Iq+YVuPBdFQosEU5Tyn6gie6wR438x5yzPx233pPPoPRtoAIFLhmqCsrcKk43PdE7nCeRmDJla6EaOiBZfEtTRYetxs4K1Eog11jtuORjTLaFNb9pjXRxt8ZdRNDKsgLQGPU9uVrBlnqofDhVkSchlVLx9BFwxchFz8dZu0Wx0IgzVER+WaPkBkT8P9momT/jXRfj2xLeWvY/VsTtsgfj8icoPMwiak+iGK1wbP6H2v8FojxxgBW17mVz1oJBE517SIKV1/l9PzNshbAvKOMYeRPNskvB1yCDZ/1pNjj4xzeS4Ci16SJXkTsTGw7V+72zboMhbhmo8dL562vHiKHlPwWgWdxy4xPUZc+zBfkF4mf8g8HwQN4TfX5ezi/A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(366004)(376002)(396003)(39860400002)(451199018)(54906003)(66556008)(66476007)(110136005)(66446008)(8676002)(5660300002)(76116006)(66946007)(52536014)(316002)(478600001)(64756008)(8936002)(4326008)(41300700001)(2906002)(71200400001)(7696005)(55016003)(107886003)(6506007)(9686003)(26005)(186003)(83380400001)(33656002)(122000001)(38100700002)(82960400001)(86362001)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hew/OX+eZpUMA3PLmPDDkuFmf/uIpaPXu1/1Y+vRzHarSdPumPvpA2ZRU81l?=
+ =?us-ascii?Q?PWvn9rVSwaWLn5fNp1ovGtAYNKw77KjUHPIndCqfBV1yKxaZBGNsm0xlmwPS?=
+ =?us-ascii?Q?Z1iAvhLlK4JF4mxrCvaWGLef6bvaOpu+gBeZ1PnLNRJr6OkHHF4WpiWPk0ly?=
+ =?us-ascii?Q?MoFai0g60E266HAdOdBmA907JGJf0w+WwA7XEsgqlQnLCL2oGj7CfZTH5xUz?=
+ =?us-ascii?Q?LNNIZs6yYvXHnx22ffUlcDikvqFYoqcEGZuENLnHP0/aQt/uJ67iju1f8BGP?=
+ =?us-ascii?Q?v/rAa3TjlN6iB4FUM6FKkZ8IIsXwM2d9DXEAEfeTqjuP2JwM2CBmtSP5A95T?=
+ =?us-ascii?Q?3NaX/6xmvnuh7z9ik71FfDDDRA6qJOdZ2CAkaYuQ3jyEnPyIkmVwJMPx9IuL?=
+ =?us-ascii?Q?wd7jfexC7TYLQ0TyvEf5N2R6lNa0h1Z7RdSdpv2Sj6VpErJtcGK2JSSwobEa?=
+ =?us-ascii?Q?70uYaS+4gucjOqdTg5r31YAdBp60GcxX5/Xlz9RhyJ/MmvHz6VgMb4jb42h3?=
+ =?us-ascii?Q?c2fkLtLrxcYD9Q9qd8ZPC/RX+VpOaPEy7Og6QcoPvC0RaqlRXOAfr+MSKbCx?=
+ =?us-ascii?Q?1ULIpCBLRJTXay4JUSUU4ZWeGwvOcF3LlaHR7Am0+siPZHeaNou+i0eDQMEI?=
+ =?us-ascii?Q?m742KGpVDU7w//iHazIIYEUAoSauYkIAN6QjRQao5+ZKfv5szj0RdcdFHlxV?=
+ =?us-ascii?Q?NDSVO5c3Zj9JbAPfaMDFkShd6MBtTL/CUUIve1GLoCQCC3ONA21IpXYfBq2u?=
+ =?us-ascii?Q?m332B3xTrsPj2LdoxNvkIMXpyApFzs/xpBbYLxjJGysBBMwg+y6IuDo5BaVy?=
+ =?us-ascii?Q?QC8WsESEpXCI/V4u9f6sRUMDxU8NpfINvbRruBdLLg1UlrmI7yvFNN5IBM4b?=
+ =?us-ascii?Q?BScRK3DjRYqDSgCrJ8EyOY2tnmjxEWNBDsKCHBdetwrWjueirexk6CmOc7g2?=
+ =?us-ascii?Q?82ZGMssUfV0BFz0t1tSWTSrcj0uel2IPxqsLyMG2BNQf2ls1EnkM9TF2NSYL?=
+ =?us-ascii?Q?B5CwavUxEj2Iitw6Qxjnzqhcl3SAcaSDXysHvWt8eyT7PNAvvt/7qBKZaL1M?=
+ =?us-ascii?Q?siCj9MzviXmryp8QSm2xhEQrJjFfLPjF+8Nj8wknXYMi0jm/awh6sj3E4njM?=
+ =?us-ascii?Q?Bo+n8M2rjK+xVc5rSlA1Hm7eUrIKZf/kQqYO9wmd8QHLtNlXjTtJY96kvgq/?=
+ =?us-ascii?Q?2medMtYQyXpaFWME36QSqygijPBTO8erb80+NN7j/3Ndq6ZuNQ9p6S/CKTqo?=
+ =?us-ascii?Q?1U78gJ/N5zlVih7Ah5EOAceepJRncW6K/3TsZAGTbW8USbY/kj4lpwDh8r/h?=
+ =?us-ascii?Q?5WqE5LPPkF9imfCqSP8gbLNzR0ccMO2nf2HF/YycqkHGfjcNVD+b47iGWbhr?=
+ =?us-ascii?Q?75aeGZqMvaQKx43OeEU+gE3RytyGek7q1QjeICmKcOtLZtn8yCiTTBChYnMI?=
+ =?us-ascii?Q?UKr3Gc88yyyAExCJt+0KJog9qrcHrWdQ8/mhT0d8QRn8hdQ5EUsJQEfRcHVr?=
+ =?us-ascii?Q?axzQ713c81jlwdULEuHckuUH2/XRvOmZ52kAw2fYtFys7RM1GwEku7qSfM/3?=
+ =?us-ascii?Q?Ek+erI9UpWpyp/lMskZT45x+r45bV2LnEHxYzTMP?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d97c6f9-42b7-4b0e-bf78-08db1633732b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2023 06:50:43.3979
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: V7z7S59Z0hChGx/EM0nIwUYlT/zzpyYiY6D+tGlCHc9O24SQjH+SlQxPqwsHqUQjvjI9w1wAcq6REqqfN8soTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5272
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Thursday, February 23, 2023 5:03 AM
+>=20
+> iommufd wants to use more infrastructure, like the iommu_group, that the
+> mock device does not support. Create a more complete mock device that can
+> go through the whole cycle of ownership, blocking domain, and has an
+> iommu_group.
 
-The UDP GSO bench only tests the performance of userspace payload splitting
-and UDP GSO. But we are also concerned about the performance comparing
-with IP fragmentation and UDP GSO. In other words comparing IP fragmentation 
-and segmentation.
+this is a nice move! Presumable with a real struct device we can further
+extend the mock device to test nested, pasid attach/alloc, etc. in the
+future.
 
-So we add testcase of IP fragmentation of UDP packets, then user would easy
-to get to know the performance promotion of UDP GSO compared with IP 
-fragmentation. We add a new option "-f", which is to send big data using 
-IP fragmentation instead of using UDP GSO or userspace payload splitting.
+> +
+> +	/*
+> +	 * The iommu core has no way to associate a single device with an
+> iommu
+> +	 * driver (heck currently it can't even support two iommu_drivers
+> +	 * registering). Hack it together with an open coded dev_iommu_get().
+> +	 * Notice that the normal notifier triggered iommu release process
+> also
+> +	 * does not work here because this bus is not in iommu_buses.
+> +	 */
+> +	mdev->dev.iommu =3D kzalloc(sizeof(*dev_iommu), GFP_KERNEL);
+> +	if (!mdev->dev.iommu) {
+> +		rc =3D -ENOMEM;
+> +		goto err_group;
+> +	}
+> +	mutex_init(&mdev->dev.iommu->lock);
+> +	mdev->dev.iommu->iommu_dev =3D &mock_iommu_device;
 
-In the QEMU environment we could see obvious promotion of UDP GSO.
-The first test is to get the performance of userspace payload splitting.
-bash# udpgso_bench_tx -l 4 -4 -D "$DST"
-udp tx:     10 MB/s     7812 calls/s    186 msg/s
-udp tx:     10 MB/s     7392 calls/s    176 msg/s
-udp tx:     11 MB/s     7938 calls/s    189 msg/s
-udp tx:     11 MB/s     7854 calls/s    187 msg/s
+I understand how this hack works but didn't get why in this case
+dev_iommu_get() cannot be reused...
 
-The second test is to get the performance of IP fragmentation.
-bash# udpgso_bench_tx -l 4 -4 -D "$DST" -f
-udp tx:     33 MB/s      572 calls/s    572 msg/s
-udp tx:     33 MB/s      563 calls/s    563 msg/s
-udp tx:     31 MB/s      540 calls/s    540 msg/s
-udp tx:     33 MB/s      571 calls/s    571 msg/s
+but this is minor.
 
-The third test is to get the performance of UDP GSO.
-bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
-udp tx:     46 MB/s      795 calls/s    795 msg/s
-udp tx:     49 MB/s      845 calls/s    845 msg/s
-udp tx:     49 MB/s      847 calls/s    847 msg/s
-udp tx:     45 MB/s      774 calls/s    774 msg/s
-
-Signed-off-by: zhang yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
-Reviewed-by: xu xin (CGEL ZTE) <xu.xin16@zte.com.cn>
-Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
-Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
----
- tools/testing/selftests/net/udpgso_bench_tx.c | 33 ++++++++++++++++++++++-----
- 1 file changed, 27 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-index 477392715a9a..025e706b594b 100644
---- a/tools/testing/selftests/net/udpgso_bench_tx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-@@ -64,6 +64,7 @@ static int	cfg_runtime_ms	= -1;
- static bool	cfg_poll;
- static int	cfg_poll_loop_timeout_ms = 2000;
- static bool	cfg_segment;
-+static bool	cfg_fragment;
- static bool	cfg_sendmmsg;
- static bool	cfg_tcp;
- static uint32_t	cfg_tx_ts = SOF_TIMESTAMPING_TX_SOFTWARE;
-@@ -375,6 +376,21 @@ static int send_udp_sendmmsg(int fd, char *data)
- 	return ret;
- }
-
-+static int send_udp_fragment(int fd, char *data)
-+{
-+	int ret;
-+
-+	ret = sendto(fd, data, cfg_payload_len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
-+			cfg_connected ? NULL : (void *)&cfg_dst_addr,
-+			cfg_connected ? 0 : cfg_alen);
-+	if (ret == -1)
-+		error(1, errno, "write");
-+	if (ret != cfg_payload_len)
-+		error(1, errno, "write: %uB != %uB\n", ret, cfg_payload_len);
-+
-+	return 1;
-+}
-+
- static void send_udp_segment_cmsg(struct cmsghdr *cm)
- {
- 	uint16_t *valp;
-@@ -429,7 +445,7 @@ static int send_udp_segment(int fd, char *data)
-
- static void usage(const char *filepath)
- {
--	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
-+	error(1, 0, "Usage: %s [-46acfmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
- 		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
- 		    filepath);
- }
-@@ -440,7 +456,7 @@ static void parse_opts(int argc, char **argv)
- 	int max_len, hdrlen;
- 	int c;
-
--	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
-+	while ((c = getopt(argc, argv, "46acC:D:fHl:L:mM:p:s:PS:tTuvz")) != -1) {
- 		switch (c) {
- 		case '4':
- 			if (cfg_family != PF_UNSPEC)
-@@ -469,6 +485,9 @@ static void parse_opts(int argc, char **argv)
- 		case 'l':
- 			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
- 			break;
-+		case 'f':
-+			cfg_fragment = true;
-+			break;
- 		case 'L':
- 			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
- 			break;
-@@ -527,10 +546,10 @@ static void parse_opts(int argc, char **argv)
- 		error(1, 0, "must pass one of -4 or -6");
- 	if (cfg_tcp && !cfg_connected)
- 		error(1, 0, "connectionless tcp makes no sense");
--	if (cfg_segment && cfg_sendmmsg)
--		error(1, 0, "cannot combine segment offload and sendmmsg");
--	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg))
--		error(1, 0, "Options -T and -H require either -S or -m option");
-+	if ((cfg_segment + cfg_sendmmsg + cfg_fragment) > 1)
-+		error(1, 0, "cannot combine segment offload , fragment and sendmmsg");
-+	if (cfg_tx_tstamp && !(cfg_segment || cfg_sendmmsg || cfg_fragment))
-+		error(1, 0, "Options -T and -H require either -S or -m or -f option");
-
- 	if (cfg_family == PF_INET)
- 		hdrlen = sizeof(struct iphdr) + sizeof(struct udphdr);
-@@ -695,6 +714,8 @@ int main(int argc, char **argv)
- 			num_sends += send_udp_segment(fd, buf[i]);
- 		else if (cfg_sendmmsg)
- 			num_sends += send_udp_sendmmsg(fd, buf[i]);
-+		else if (cfg_fragment)
-+			num_sends += send_udp_fragment(fd, buf[i]);
- 		else
- 			num_sends += send_udp(fd, buf[i]);
- 		num_msgs++;
--- 
-2.15.2
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
