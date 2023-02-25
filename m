@@ -2,78 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEDD6A253C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Feb 2023 00:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCD86A2577
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Feb 2023 01:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjBXX4L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Feb 2023 18:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S229547AbjBYAZ1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Feb 2023 19:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjBXX4K (ORCPT
+        with ESMTP id S229497AbjBYAZ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Feb 2023 18:56:10 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B664988A
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Feb 2023 15:56:09 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id s18so544707pgq.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Feb 2023 15:56:09 -0800 (PST)
+        Fri, 24 Feb 2023 19:25:27 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04A56F03A
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Feb 2023 16:25:23 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536c02eea4dso24701607b3.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Feb 2023 16:25:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=roI2102NVn8tZj8AT0mqQAS15kZ5FO9em57hIeDNwj0=;
-        b=QB5cj7QKPC4eETDdYpgWnv3fyPKxoD9KZMEpY6QM0fHRGhMhDE4uxjfcIAoTovvyd6
-         h+ff9uW223/aV2TtJYDG4H6O5DdJAERUpY6e/VUR8g2Xbvv7rG6lSk2Zft5rgHL4mPqi
-         nnEugeB85k/jI5MnwhOTyqWPfmvxztT6Aj8C4yKN8OcWw4L+GP1tAnKhiSLAKgq49Co4
-         GljDwHscPWZ7fNKEpdlUBZ4r2+JKDNTJ4H/B3enW9G2Cw5JmeLX1Ftn3pzzBDR1u9A3t
-         Ihqm3IYqgD5EuUqKgbBYpq6HyScjibA9/wo5+/onFYXHUBFrrgKD/WYgI0F2XJrs76+B
-         wnMg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=G10G+2me8jWFCtUR2TsWKtrzVtOB9z/KQCFeBqx3WZs=;
+        b=SmUzAwfxei85wnPtFanS/PoR05mKkU6KxsFWRKPaLmlQsWkjdiptM0qfwu7tVifIrg
+         1RE/fZrs0oFl3V0yHcbwCx731CdqGB1pdu95B93CV2MxcACcsxe0dT4VzBsXY9cZn4H0
+         py3FQAurdJ152X6rbhQd2TMZeOAqIItH2BeIvhrr863huWWBblVEYnu4dAf8r6JnLtKU
+         pFq9672hWwg+BoS/5tjw0WQCjeXiM1QGsB+lkEd0dHOeaj2sHj4tXNyIplzFudghpnW4
+         yWO3mrrBeyXNPw8uSF+sNZC0CuIPxaQ0XN0/Dj24OsjiSd8ifpsFFPg//TzCIziMnsmm
+         kINA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=roI2102NVn8tZj8AT0mqQAS15kZ5FO9em57hIeDNwj0=;
-        b=kxoFfWj6zrRhf4npmVVMShcpr/QS3f2jP2bYhbbBHQAPvpmRLk1WIA3+q8fK4UaTCY
-         hzxCSX0HzVoA6Jra8y5UyUe2jMZlTsIO202fQErh33vnPJ1l36u1OfMV0ZtHaYCG12ds
-         qh4FA2JSIC37ewvjZo7jHpckRlz16u8MpG9l88rtRMnkuoU+NLgMAvjBrCO5mPpd5oeb
-         qVTv642bHRM5al5IdzmnXHSNiXEhxF0viGYCtZjnTTSBG4Fqf5tiUujNCSjSN1QWiqM8
-         ecMLX8i1gbVfh7um76k64Y27cb8eMh8VZrzRateATJ3Vho5rvDcEZdEZS3Oxc6PCFtg6
-         QrSQ==
-X-Gm-Message-State: AO0yUKX7x/mGu5gf5QONhxxrLEKtR0Uh1+H8zB+m2XuOFj0Ti4Bo5wmw
-        eYMPuDeAcVqnkEqnt5VKfUhJZg==
-X-Google-Smtp-Source: AK7set91H8uZuErh0/LuDjee/awTv2DYiHBWv4zGyaBtHG2f3acLLiXNiqNVrCCS2NWZB/r598n+iw==
-X-Received: by 2002:aa7:9ed2:0:b0:5e3:2f9b:b5e8 with SMTP id r18-20020aa79ed2000000b005e32f9bb5e8mr3480281pfq.4.1677282968888;
-        Fri, 24 Feb 2023 15:56:08 -0800 (PST)
-Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
-        by smtp.gmail.com with ESMTPSA id s25-20020a63af59000000b004f1cb6ffe81sm45530pgo.64.2023.02.24.15.56.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 15:56:08 -0800 (PST)
-Date:   Fri, 24 Feb 2023 23:56:04 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Venkatesh Srinivas <venkateshs@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Chao Gao <chao.gao@intel.com>
-Subject: Re: [PATCH v3 01/13] x86/fpu/xstate: Avoid getting xstate address of
- init_fpstate if fpstate contains the component
-Message-ID: <Y/lOlBWTNgROPl0P@google.com>
-References: <20230221163655.920289-1-mizhang@google.com>
- <20230221163655.920289-2-mizhang@google.com>
- <e91b9172-8a2e-e299-a84f-1e9331c51cb7@intel.com>
- <87ilfum6xh.ffs@tglx>
- <CAL715WKLQxxeyFqiKbKsUmQ8bZf2f=rwADyKj1ftgROA+dhpXg@mail.gmail.com>
- <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G10G+2me8jWFCtUR2TsWKtrzVtOB9z/KQCFeBqx3WZs=;
+        b=VJ6ABxiLWunkb6orhs8b/ujE2KBYQ0MgNVmOBcN2B3T5fsPI/RTRQJ6xjGacSP8X0E
+         8rQgomlrBOVuZ5WCFm+w8BvahSfWtH9mt0XpmFgmZTD3uocx8lZnRft8/iKoz1lFkA4n
+         GcLDFyTb2ChJ3eVivhGxeQZYk7Q27D0KiqPmfLEsCcJnPCq1RSaSSeKymLikZZuO6YIo
+         +V60TEBqRBsUaT1CvX5F2dTIhOepk1K7TEOloGvQxfsfaKsGi0l47CA1KjEPPjRUAgHy
+         jHqnfwBUEC4KsVI5ozyvrvizCAN9D3TfNJtGfsBrcLXJzg94KLTUs3KCSMaV7DfbSA9m
+         ZM5Q==
+X-Gm-Message-State: AO0yUKWFtCmYNnfxiIHgkQDKHBI8C2yABKCpa6SroRdDouT3o4tp9YwC
+        6UPiaqjUAjhSyhiF1zxKKjY79oZztlLssdBKlKbwtQ==
+X-Google-Smtp-Source: AK7set9/s6MqiL5vrYzNlW80C1p9m82ZTZ7l6K+tReN5z/8pigW+XUSm6O293ENFGUsTUi1mssyjE4IKHzYx7ehFHuI=
+X-Received: by 2002:a81:4425:0:b0:52f:69d:cc75 with SMTP id
+ r37-20020a814425000000b0052f069dcc75mr5532545ywa.6.1677284722871; Fri, 24 Feb
+ 2023 16:25:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
+References: <02cf36b9-6526-576b-1fd3-a59b67c8c123@linuxfoundation.org> <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 25 Feb 2023 08:25:11 +0800
+Message-ID: <CABVgOSnqZAuWZJpER4B_hPHorj3DZSpv+ygudC-wSVZ5-o14uQ@mail.gmail.com>
+Subject: Re: [GIT PULL] KUnit next update for Linux 6.3-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000001e161005f57b48d4"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -85,206 +70,170 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 22, 2023, Chang S. Bae wrote:
-> On 2/22/2023 10:40 AM, Mingwei Zhang wrote:
-> > > > We have this [1]:
-> > > > 
-> > > >        if (fpu_state_size_dynamic())
-> > > >                mask &= (header.xfeatures | xinit->header.xcomp_bv);
-> > > > 
-> > > > If header.xfeatures[18] = 0 then mask[18] = 0 because
-> > > > xinit->header.xcomp_bv[18] = 0. Then, it won't hit that code. So, I'm
-> > > > confused about the problem that you described here.
-> > > 
-> > > Read the suggested changelog I wrote in my reply to Mingwei.
-> > > 
-> > > TLDR:
-> > > 
-> > >          xsave.header.xfeatures[18] = 1
-> > >          xinit.header.xfeatures[18] = 0
-> > >      ->  mask[18] = 1
-> > >      ->  __raw_xsave_addr(xsave, 18)     <- Success
-> > >      ->  __raw_xsave_addr(xinit, 18)     <- WARN
-> 
-> Oh, sigh.. This should be caught last time.
-> 
-> Hmm, then since we store init state for legacy ones [1], unless it is too
-> aggressive, perhaps the loop can be simplified like this:
-> 
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index 714166cc25f2..2dac6f5f3ade 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -1118,21 +1118,13 @@ void __copy_xstate_to_uabi_buf(struct membuf to,
-> struct fpstate *fpstate,
->         zerofrom = offsetof(struct xregs_state, extended_state_area);
-> 
->         /*
-> -        * The ptrace buffer is in non-compacted XSAVE format.  In
-> -        * non-compacted format disabled features still occupy state space,
-> -        * but there is no state to copy from in the compacted
-> -        * init_fpstate. The gap tracking will zero these states.
-> +        * Indicate which states to copy from fpstate. When not present in
-> +        * fpstate, those extended states are either initialized or
-> +        * disabled. They are also known to have an all zeros init state.
-> +        * Thus, remove them from 'mask' to zero those features in the user
-> +        * buffer instead of retrieving them from init_fpstate.
->          */
-> -       mask = fpstate->user_xfeatures;
+--0000000000001e161005f57b48d4
+Content-Type: text/plain; charset="UTF-8"
 
-Do we need to change this line and the comments? I don't see any of
-these was relevant to this issue. The original code semantic is to
-traverse all user_xfeatures, if it is available in fpstate, copy it from
-there; otherwise, copy it from init_fpstate. We do not assume the
-component in init_fpstate (but not in fpstate) are all zeros, do we? If
-it is safe to assume that, then it might be ok. But at least in this
-patch, I want to keep the original semantics as is without the
-assumption.
-> -
-> -       /*
-> -        * Dynamic features are not present in init_fpstate. When they are
-> -        * in an all zeros init state, remove those from 'mask' to zero
-> -        * those features in the user buffer instead of retrieving them
-> -        * from init_fpstate.
-> -        */
-> -       if (fpu_state_size_dynamic())
-> -               mask &= (header.xfeatures | xinit->header.xcomp_bv);
-> +       mask = header.xfeatures;
+On Sat, 25 Feb 2023 at 07:23, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Feb 21, 2023 at 5:51 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >
+> > This KUnit update for Linux 6.3-rc1 consists of cleanups, new features,
+> > and documentation updates:
+>
+> Hmm. I have not actually bisected this or tried to otherwise figure
+> out exactly what is wrong, but the kunit code ends up being really
+> annoying for my build testing.
 
-Same here. Let's not adding this optimization in this patch.
+This will be due to 7170b7ed6acb ("kunit: Add "hooks" to call into
+KUnit when it's built as a module").
+
+The "hooks.o" file is special in that it needs to be built-in even
+when the other KUnit files are built as a module, and clearly the
+kbuild hackery for that has fallen apart.
 
 >
->         for_each_extended_xfeature(i, mask) {
->                 /*
-> @@ -1151,9 +1143,8 @@ void __copy_xstate_to_uabi_buf(struct membuf to,
-> struct fpstate *fpstate,
->                         pkru.pkru = pkru_val;
->                         membuf_write(&to, &pkru, sizeof(pkru));
->                 } else {
-> -                       copy_feature(header.xfeatures & BIT_ULL(i), &to,
-> +                       membuf_write(&to,
->                                      __raw_xsave_addr(xsave, i),
-> -                                    __raw_xsave_addr(xinit, i),
->                                      xstate_sizes[i]);
->                 }
->                 /*
-> 
-> > Chang: to reproduce this issue, you can simply run the amx_test in the
-> > kvm selftest directory.
-> 
-> Yeah, I was able to reproduce it with this ptrace test:
-> 
-> diff --git a/tools/testing/selftests/x86/amx.c
-> b/tools/testing/selftests/x86/amx.c
-> index 625e42901237..ae02bc81846d 100644
-> --- a/tools/testing/selftests/x86/amx.c
-> +++ b/tools/testing/selftests/x86/amx.c
-> @@ -14,8 +14,10 @@
->  #include <sys/auxv.h>
->  #include <sys/mman.h>
->  #include <sys/shm.h>
-> +#include <sys/ptrace.h>
->  #include <sys/syscall.h>
->  #include <sys/wait.h>
-> +#include <sys/uio.h>
-> 
->  #include "../kselftest.h" /* For __cpuid_count() */
-> 
-> @@ -826,6 +828,76 @@ static void test_context_switch(void)
->         free(finfo);
->  }
-> 
-> +/* Ptrace test */
-> +
-> +static bool inject_tiledata(pid_t target)
-> +{
-> +       struct xsave_buffer *xbuf;
-> +       struct iovec iov;
-> +
-> +       xbuf = alloc_xbuf();
-> +       if (!xbuf)
-> +               fatal_error("unable to allocate XSAVE buffer");
-> +
-> +       load_rand_tiledata(xbuf);
-> +
-> +       memcpy(&stashed_xsave->bytes[xtiledata.xbuf_offset],
-> +              &xbuf->bytes[xtiledata.xbuf_offset],
-> +              xtiledata.size);
-> +
-> +       iov.iov_base = xbuf;
-> +       iov.iov_len = xbuf_size;
-> +
-> +       if (ptrace(PTRACE_SETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-> +               fatal_error("PTRACE_SETREGSET");
-> +
-> +       if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-> +               err(1, "PTRACE_GETREGSET");
-> +
-> +       if (!memcmp(&stashed_xsave->bytes[xtiledata.xbuf_offset],
-> +                   &xbuf->bytes[xtiledata.xbuf_offset],
-> +                   xtiledata.size))
-> +               return true;
-> +       else
-> +               return false;
-> +}
-> +
-> +static void test_ptrace(void)
-> +{
-> +       pid_t child;
-> +       int status;
-> +
-> +       child = fork();
-> +       if (child < 0) {
-> +               err(1, "fork");
-> +       } else if (!child) {
-> +               if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
-> +                       err(1, "PTRACE_TRACEME");
-> +
-> +               /* Use the state to expand the kernel buffer */
-> +               load_rand_tiledata(stashed_xsave);
-> +
-> +               raise(SIGTRAP);
-> +               _exit(0);
-> +       }
-> +
-> +       do {
-> +               wait(&status);
-> +       } while (WSTOPSIG(status) != SIGTRAP);
-> +
-> +       printf("\tInject tile data via ptrace()\n");
-> +
-> +       if (inject_tiledata(child))
-> +               printf("[OK]\tTile data was written on ptracee.\n");
-> +       else
-> +               printf("[FAIL]\tTile data was not written on ptracee.\n");
-> +
-> +       ptrace(PTRACE_DETACH, child, NULL, NULL);
-> +       wait(&status);
-> +       if (!WIFEXITED(status) || WEXITSTATUS(status))
-> +               err(1, "ptrace test");
-> +}
-> +
->  int main(void)
->  {
->         /* Check hardware availability at first */
-> @@ -846,6 +918,8 @@ int main(void)
->         ctxtswtest_config.num_threads = 5;
->         test_context_switch();
-> 
-> +       test_ptrace();
-> +
->         clearhandler(SIGILL);
->         free_stashed_xsave();
-> 
-> Thanks,
-> Chang
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/fpu/xstate.c#n386
-> 
+> In particular, if I do
+>
+>      make
+>
+> repeatedly - ie with no other changes in between - the kunit code ends
+> up re-building itself for no apparent reason.
+>
+> Which then causes a re-link and makes it all really slow.
+>
+> Maybe I'm barking up the wrong tree, but just do
+>
+>    make allmodconfig
+>
+> and then do two plain "make"s in succession (feel free to add "-jXYZ"
+> to make it go much faster ;).
+>
+> The second build - that shouldn't have to re-build anything - still does this:
+>
+>   CALL    scripts/checksyscalls.sh
+>   DESCEND objtool
+>   CHK     kernel/kheaders_data.tar.xz
+>   CC      lib/kunit/hooks.o
+>   AR      lib/built-in.a
+>   CC      lib/kunit/hooks.o
+>   AR      lib/kunit/lib.a
+>   AR      built-in.a
+>   AR      vmlinux.a
+>   LD      vmlinux.o
+>   ...
+>
+> and it all takes much longer than an empty kernel build _should_ take.
 
-Nice one. Yeah both ptrace and KVM are calling this function so the above
-code would also be enough to trigger the bug.
+As best I can tell, this is kbuild getting very confused by the way
+we're adding lib/kunit/hooks.o directly in lib/Makefile (rather than
+going through lib/kunit/Makefile).
 
+Moving lib/kunit/hooks.c -> lib/kunit_hooks.c and adjusting the
+makefile to match _seems_ to fix it here:
+---
+diff --git a/lib/Makefile b/lib/Makefile
+index 469be6240523..bb87df427cff 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -131,10 +131,8 @@ obj-$(CONFIG_KUNIT) += kunit/
+# Include the KUnit hooks unconditionally. They'll compile to nothing if
+# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
+# function pointers) which need to be built-in even when KUnit is a module.
+-ifeq ($(CONFIG_KUNIT), m)
+-obj-y += kunit/hooks.o
+-else
+-obj-$(CONFIG_KUNIT) += kunit/hooks.o
++ifdef CONFIG_KUNIT
++obj-y += kunit_hooks.o
+endif
+---
 
-Thanks.
--Mingwei
+Splitting the KUnit code up like that is a little bit ugly, so I'm
+open to any suggestions of how better to structure it.
+
+Regardless, I'll play around a bit and see if I can come up with
+anything better before sending that out.
+
+Sorry for the inconvenience!
+
+-- David
+
+--0000000000001e161005f57b48d4
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCp
+qKvRNH0Rzmfp2fP9sc+jV9m0OX00tN7SSCUhn2J5kTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAyMjUwMDI1MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAPeDStx3iAnpH5IKWR4Mc
+OspuWCLheUSawkXqD06iO+1oRJDBQglNwSaiMXC9EmcdybOadEn4g83TRNSRWl4x1PTOcn/3FrVb
+yac78QAE/+VTmRhjaW4CQFbu/LzZuOLmLTscbe8tUhwBUH0uRQauWWjI2QrbB/9+9WbkZDbtw4Ie
+9fTpzwy0lp9MOt4wDY6TlO3+63eqJNlgxG7ct8Z7kJPg1/43pXy7Snwy6d1nVaO1DdxFI6Luvvjh
+NaIrASDpa7UA8EQ8uRxB/2yCak66Oha8zmDYMhjZKl6N3H9bwSpJeS/2oiwDwoUkxyrkTSPsSFfb
+A/GROgIbdvI3m2bd7w==
+--0000000000001e161005f57b48d4--
