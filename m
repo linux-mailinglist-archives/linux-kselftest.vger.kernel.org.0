@@ -2,218 +2,235 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A7F6A2590
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Feb 2023 01:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D03156A25F6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Feb 2023 01:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjBYA2R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Feb 2023 19:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
+        id S229486AbjBYAro (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Feb 2023 19:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjBYA2O (ORCPT
+        with ESMTP id S229452AbjBYArn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Feb 2023 19:28:14 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB4B1BAEB;
-        Fri, 24 Feb 2023 16:28:12 -0800 (PST)
+        Fri, 24 Feb 2023 19:47:43 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B32F6C8F9;
+        Fri, 24 Feb 2023 16:47:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677286062; x=1708822062;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=werNeX47U6f+Uoh2po3o5Bp9PbPoyBOmx+X1r7hHkas=;
+  b=g+Qp+dwtSI6upm4AUWmHonDgLYIE/jUblYs9rdtqlUxEw9ajFqGxUji5
+   bs4FTIJJ8BH2KDHjlyaujpEFdjTVdU2IKUCFcK3JlVgrvX/Je1hs5dskq
+   4SDjJPgIJ0GODe94jmawgq5pohJ89lrgDbZeQvjteFUYBqwBvEXGXE1H8
+   MI2lswK9KeYOLDrqsH2QbMHwQ7EqUU8z3HnFfpsBp/52kdeHuS4LYNZfc
+   cH0uWTF2fqOmQE9Bg/Z2Jt2MND4EHllyTJKla/IogGXHBkKZeQjRQE95I
+   bF4bpQLBm6DwmzYTKVr/YryglZr+TkSLO6058DI7rb3+nN6/009UqrECG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="314001449"
+X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
+   d="scan'208";a="314001449"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 16:47:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="703360145"
+X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
+   d="scan'208";a="703360145"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga008.jf.intel.com with ESMTP; 24 Feb 2023 16:47:41 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 24 Feb 2023 16:47:41 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 24 Feb 2023 16:47:41 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 24 Feb 2023 16:47:40 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m8OfYasEZUjO/6OpQjFtrFZPfNuJy25NohqrS6nF/1Sm9NWIUCUG1jmd7KQ07cz9gogwp8OAUgVdUGYkzZMbAYZ5bQNmPEk8+FU2ckRdmxOPoebqjW2n3gZJCZRFJcdcD+xTI2owuSBRxYKMjktlaPhbijuZgfK6YjknCITqL5ELviJCdEpGZbVDV9/m83DP63FdK01i0belTUCO37ghVEfur83CH/kh3ML2Q/8b3Gx/qHUeUSAVcty3BxgI3L7nn3+JeDbSWkLGsbJ6ZCWjPhwMB5V4PNtDca2ONYv4rVpFW+3Z1pr8CFyZlq79+qjubVuJBX4rM+dbTRMiJKZj/A==
+ b=EvuxHLzhCX3hkgKjBsTc8Wglv751QMZ40iVcShavvcgwlTsMMrxJthKSgab8gnyd/PdMEGhibcPRNjd9vL9UvbGwDg/MWBXZAX19b+KjtujaAZR3UEheijj+bRQwhyZDD9uND7Com3XTwX8Uy8AdLjUIhUPFscRSm6PKL3uwTTYLxaxTC5DnhitmxIPmQrQxDMpdHCNedMjK1mIJQg+vv86gmIBOp6tPJPpB7AvAon8bnA81oVe3ptGqK0JGmu9i2tt+v0hPw6TRZvE0QpeHncQHo3QU8KIBJPUcZAuD6I2hwdPQRnQ1eL6H8wJTMpwn85cDB+XUUtPNWxShUO955w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=swjuu6Z5wkpRyJTkrod1mEtKh0a9mnBCrV1OjTmR1SA=;
- b=j9/ZZsu3wz73jwa4v9xkhPSK9kn5QNW3Wd+hWCumsGSN06CsRqISznaHfdXKoVucFE9z52esMEzKbgUHeWGO5SCskxBSy6X0+k4+bj6Tdh7nuvMiYBWGPNQEca5n1l28sQGR22/sc5gtRlKaYwYC2zicMOh3AmT0KSh6VC0JYYQigVmrF9istbdQZLb36nfXLAT2UmtwRPn/fyGkwlXQ10nQtrgIC+xkd1ljZxc98IdosIIycLkDovsvm0ykNctnuoEN8EUNqKn8EL7gEigfIY3EkiUCW8w4zC/uq+BgkmVfL2fu2li9ZYqhFSjKgl2SSvlTh0wSausZbNouQEtZrw==
+ bh=rOZ9x4ZNWU5zMbMuqUFa7Bwf2/Bjs43b75TxsbKkfHA=;
+ b=kwhRDvNQGroTr3UYqdKlFS9JUmWFTvtrr4tJfv4Zl2Blm0EAgbZ6d1d7ZeIhU63wlVgkN8f8bIvQERGp1CO5IQQ+LJ/uQGJk2soFL1gBAgp4N/qMfeOwQuCHz4ClXFEWxK0/BoudRudAjp1fnwmDQhB0QKR0fzdq+5RVv9rImT6TUuz+qWdgisb5KXIsAWf2R8E/nw1rn8We8lMhRf5ksVlloAOXwLYC2S5P0JEKiDe/Sr1MrNBH3z66Kxgv7+xyIbs7NUvDq605W8TCcoSa1oENPyX0pu1PI6S+BarkH+KbP6YUWR3GlzNaq5OKoVOeum3hMz51UdczuotnCTfu9g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=swjuu6Z5wkpRyJTkrod1mEtKh0a9mnBCrV1OjTmR1SA=;
- b=qvxZvSfQVE8suaAjTpXmDqWB/2Y2cqL4+qZJkrTCDakuGBBSwIIhQc5YzE642M43v/tnh+E3ksG2eHW8+H1suot4J6+mzrvPw/3gZC6+8VPT3rbtCitSSxdsZM9vCpcRN/pwn3aKK7W6g2TxFug3/nOJWQmmSFxZllZIS6QmDzcBTMVOrNTx4NZ9Ngbyq3BaO4D9sq33wPjahWx2Ud3VWUcs9+ncl4mlX81iKyVyW+D3TfDmex0vP+SfTS5zRnhhxsj9Wwz5nNPSOVKG2O2voNkREqHU2CL573Vls6x2omQZkM8rH2512Yhcn4gc+pqFlMw+2BlfFaStU9G0r8RKRA==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL0PR12MB5507.namprd12.prod.outlook.com (2603:10b6:208:1c4::20) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by DS0PR11MB7736.namprd11.prod.outlook.com (2603:10b6:8:f1::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.24; Sat, 25 Feb
- 2023 00:28:07 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.021; Sat, 25 Feb 2023
- 00:28:07 +0000
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kvm@vger.kernel.org, Nicolin Chen <nicolinc@nvidia.com>,
-        Yi Liu <yi.l.liu@intel.com>
-Subject: [PATCH 14/14] iommufd/selftest: Add a selftest for IOMMU_HWPT_ALLOC
-Date:   Fri, 24 Feb 2023 20:27:59 -0400
-Message-Id: <14-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
-In-Reply-To: <0-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
-References: 
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR07CA0025.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::35) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+ 2023 00:47:37 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::f8d2:a65:2549:e36e]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::f8d2:a65:2549:e36e%3]) with mapi id 15.20.6134.025; Sat, 25 Feb 2023
+ 00:47:36 +0000
+Message-ID: <691106c3-b339-578b-6e43-77f737f127f9@intel.com>
+Date:   Fri, 24 Feb 2023 16:47:33 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 01/13] x86/fpu/xstate: Avoid getting xstate address of
+ init_fpstate if fpstate contains the component
+To:     Mingwei Zhang <mizhang@google.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Jim Mattson <jmattson@google.com>,
+        Venkatesh Srinivas <venkateshs@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Chao Gao <chao.gao@intel.com>
+References: <20230221163655.920289-1-mizhang@google.com>
+ <20230221163655.920289-2-mizhang@google.com>
+ <e91b9172-8a2e-e299-a84f-1e9331c51cb7@intel.com> <87ilfum6xh.ffs@tglx>
+ <CAL715WKLQxxeyFqiKbKsUmQ8bZf2f=rwADyKj1ftgROA+dhpXg@mail.gmail.com>
+ <ea9d7394-73dd-23c0-ea05-d0ec4fcebb55@intel.com>
+ <Y/lOlBWTNgROPl0P@google.com>
+Content-Language: en-US
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+In-Reply-To: <Y/lOlBWTNgROPl0P@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR03CA0022.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::32) To PH0PR11MB4855.namprd11.prod.outlook.com
+ (2603:10b6:510:41::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL0PR12MB5507:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3e9273bb-a72e-4bf7-fa9f-08db16c727f3
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4855:EE_|DS0PR11MB7736:EE_
+X-MS-Office365-Filtering-Correlation-Id: 55c6b0ba-b726-454a-3d98-08db16c9e390
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K+IFwpLN3lATH/pNxLG7+w61zEpOk871Pef+24N5aUMN5Zg0abs0D7/AB/sv4CHKf4LA91eaRjCJlZmgAWtPryjbmdI/pcLMexcgqZuys0Bptkh0HAYryt56cU8KRWBB9bUgJjLyXyslZg4G9Ys/OyVFcADqAzCHBkTeQMoUGMKT6KWk1iAGw9tYDDZ5MgApzT8mCeU8WByMoKDpMX2ZHZPlWmoQQbSGhOWuFYoch48fT78ki1Sd7wb4na/pkWGfU2eRkOOWNuvV45EXpZM8AaLeMliVgnea0nIXEZFFQDtlDD55mRYZR3DBPXYYhgCJVrlFQwreMYNy/JLVEZhrV40PUPAUfR7P02iQ1HznNvwWwCMOaw2WjvO3i4cyGkXs4tEBZBGyabAkXAF/G4zbttiW/2S96wIQKUP6HpP/rPR4U3Fb2FX0k1KBzulIAROvNDOPpbJwYrTzjI7NqEwZ/GnLDD62D4a/9J2ODFR+wD3BVSCaxZa0uUqZ8482/aHODd+GKJTvTNw4GXJEA6RIzba67dYw/WlanRNYyyfMWphdTS/fb6PhblpfBm7B2G+yhkhmIAzme54yu6uEA+314glKK9lEAWOEtVP5R9z/MU1rzS21AW00N1dNTcSDcwMbB97wlkkNJ12xHLt/d2wbhg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(396003)(39860400002)(376002)(366004)(451199018)(26005)(6506007)(186003)(6512007)(6666004)(41300700001)(83380400001)(86362001)(36756003)(38100700002)(2616005)(66476007)(66946007)(66556008)(8676002)(4326008)(2906002)(8936002)(5660300002)(6486002)(54906003)(478600001)(316002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: cT/PJOSsuO4bendiTQrMDESdkNuxorJhz1t8pECc0a/AugTEm11qXdeFFBWA5yEZAZBcr/vb92SIZof1SfIEUK6dKOU2st79t552+regHma68MU/hxljtIVwACRShuSSV8r9cUrO5NiiSHZtCyiGDZFD8ep7Zzl4kMxkXk6nod7V65kQMBwY5qQN1QQLeUZRgZb0g0P6tt0BhkSUGIRLwpf59iYwTncMsr4a/OVHWDGdEhDo3YIYdv99d/WjjRsrRgoq+vOlv/uPhgdUQKYAM9sgfBaWEdFXB3/neKup/u78gmSaYmrT2lPriYj8Z5kbBKg9C8+GocuhWwvce/DKRQHoox6YNHeD1dcczzQXvA+UD1DUxDKBkoioiXilcdmQaY0WbZBK+NKilCZ++vwO0zyAKnuLwxY4v+6UzixQMusJymx88mogkbuvfkAsZP3dHYwN6IvE9gXfP4iHF7OmKge7UBQrwkAf19LSZx+vf+zaGjtwDmjMTxuNWkbHxAgbPAPuoQhnaKLKVQESeU2Lep/CB8BCwzx9yqfbzvvWna+JORF7vxi6S/+QpXBzrRw7ft9jOLV3+Rhu6/4prmBVU6E8Xo2zPM1aYEvr2941iEL+JAc7chdDsRTBbnXPdFuotYqCZh9kadD1819Bx+QuPK8Z10yqlbQxLESYRDkjY7pkV1J5XDhRXfIuw1SAPxYXfCxSFN55llnxN39T+rnYsTxjM/6BJx//K8Bk5J0mTTY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(136003)(376002)(396003)(346002)(366004)(451199018)(8936002)(316002)(53546011)(107886003)(6666004)(31696002)(41300700001)(8676002)(186003)(6916009)(4326008)(54906003)(66476007)(26005)(66946007)(66556008)(7416002)(2616005)(5660300002)(86362001)(31686004)(966005)(6486002)(478600001)(6506007)(6512007)(2906002)(36756003)(38100700002)(83380400001)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RTxWt1FHw28ZJcQTVQU4gC9UhzqvYgteNJVpQrMkj4hbWzdohL8vhRLgfGBa?=
- =?us-ascii?Q?C59bHTTvy74FLvE7MgVYkSdJShSw+d0lUk8nCStc0Z0Sh9HwnR4ue8OhD9WC?=
- =?us-ascii?Q?gxQ2gLdh2GQzfHxTNVH+SJ0SYyj6tPTE5BxnNHI22zNauQmvgUA92W42nZ0C?=
- =?us-ascii?Q?tCZ8bGWoxcz7WrrhBCNQdsfALHuGRCidk37sOuT060Jg+F7GxOeyQrSzDNA3?=
- =?us-ascii?Q?niBrHu3eCtEV0lShfi9m12nJAezAZn7mrIBiitLhZj0KFjaP1aKiKvuRgdz8?=
- =?us-ascii?Q?sg8rfSDlIsTp4nXYHXqc8XGOQLtuAqO9Udp8YwLcVjaUNUQzjHLsnv75Hbcj?=
- =?us-ascii?Q?aY+J+Gh0VV0E33QtLxNr5xyGtRilVvwtR9BGu5c/uTOuFyULFK++8gkEj21H?=
- =?us-ascii?Q?dhs1oAv3GiRHsEHoS+HxaMlkMWshJHiIpENx4UNuLtS3eoWQQ7eNTBJUVeYc?=
- =?us-ascii?Q?7k299T4w7TRt744M0VcqPEDueMon0+LUJbOOfhzbZRrm8XBAjv2AgsOdukrr?=
- =?us-ascii?Q?kPSavvh4yzhvyHtD8WqRBCPRv1mH9uqLQSfoZl3qfDLPp9/C735ZTuLzbrSc?=
- =?us-ascii?Q?AMP6lh6F7pQWpSbm26Z1a4kDK4ZMPHuQ8nSCeTymb3F65kKm4O3Yi6KmiaOR?=
- =?us-ascii?Q?L0wN4dgjeZTABQkHB69pBV+ShNBX/EuTMpSN6feypVxO7P0E9jvPjPBEvy6L?=
- =?us-ascii?Q?bWqKGY8I/YAoMSwpuAqRgbnPQ2N5SQgv+tVsDeQMkYB9aTMdCZWSMfqhtR1p?=
- =?us-ascii?Q?H0dwobeVQkIln/R55Iw5JqyM4/u1cuVelNe4BzL6eZv/2Yyalgb1qIDgGBJA?=
- =?us-ascii?Q?n5W93vENFMZPaxx4dKuRcaJeCmZmLjjR5xfnWYY/SSNvZlTqpjOEIVUdAwLZ?=
- =?us-ascii?Q?7DR1f+G4ej94OuI+1arULJR49xaDHq6eVJE151y+7llawt3ax5y8SCcZ3L+m?=
- =?us-ascii?Q?PQW2HDZDVtZrIg+q3rK6Gku49ymbgmVQriPgsA2cglY7kBbAH+0gUb6yFkCJ?=
- =?us-ascii?Q?X4m7bc0vpbk+RN6Jfqmi2f5p7x6ZK/7YCOw3ZqHBNDa96AJ4V54XysYXBLSX?=
- =?us-ascii?Q?ctonkk+0s5qRy5L5ZE/cxBOtGeJWAm2nmd+Ytis0XfAuxcPQVNvRZwuNXyHQ?=
- =?us-ascii?Q?W1kbQyB0qP09IN75pRqQ6QmOYqOd11I4g8iasJqnbcZ2Be4zO/eFqqz69dyg?=
- =?us-ascii?Q?iJCYOhMbTQnS++ThVtjMuuA474X/E/UoOpT6+Q8xwMluytMuj5QBHYIAVXRW?=
- =?us-ascii?Q?taurtjIzOrWrUkJkGsZ4nraiwB/iLcG9lERtaYuXgCfYA9cIgSWCkONpr7PR?=
- =?us-ascii?Q?mNZau4Q08ArYCMv2LOi8gUmyBpY6BVZ1H4ERjzxeLr8LdexCXvZ4shecRSXN?=
- =?us-ascii?Q?miRUI9DHkL8HkS/1lQEmLc6SBVyXvqaa+x8KgnoqH5vpHLQUsxuv+XL5f0Kp?=
- =?us-ascii?Q?Fbeu/GbExON6vqEvKhPSRR8rVUjhpU8es/3aVqwDFpy3XEA3gyT9AvCxJ589?=
- =?us-ascii?Q?EbsFUWvePeN0U44sKCnfu4HoO4DYJDeSIwd0poVWgTgbrXYYzhhUyGlB5tKL?=
- =?us-ascii?Q?nlHa/5rloYHjP/JoX/rB1hta+KD4Rcdm5erVmT7f?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e9273bb-a72e-4bf7-fa9f-08db16c727f3
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dU9VUzB6UkRYcmxNbVBsbkNDWk1EZkIrQjFUSFBtaGZZZnd4WmlBeWtGM2FS?=
+ =?utf-8?B?eHUvN3lpZjZTckJuUFVocHRlWk05NnVmcHdXNlN1WHZadjV4R3dXanU5RU95?=
+ =?utf-8?B?eitQcTE1b2UxcXQ2b3lwT2FVdmN0TjZFODJhY2xsdHhXYmFyaHNXN0YrRTU0?=
+ =?utf-8?B?RSttZDRNYzMzbXgxcmFSZXN3aFBPYzRCS2hVVERvSkZsUlkxSEpzb2x1TXZV?=
+ =?utf-8?B?cEhmUDhMdEg1ZGZtQ0xRbGJOZUZzeUR5SU16OHpaOHdSdlprV2ZKUUVYZVRp?=
+ =?utf-8?B?Z21yZXBSSVByM2dzRjQrd2ZZOHVIMjNuTktqbFJNejZPbHdMbFFNMWpTdEFm?=
+ =?utf-8?B?TVQwa3FkTWhrOXhVaGxpY2czcDJjaUl3eDhqaGo3U3VINnpmU0RKbHAwYzdG?=
+ =?utf-8?B?SEhPK0dkZHlzdEFadjNyL3p6ck4zVzFBdnRMUjhYc0FSTHNScjF2OU9HbFAz?=
+ =?utf-8?B?QXFpaU9NRmViamxvd2ZmVFBxRkNjQmVnR0hKazJCR3MzUlZVN2JTelEvRHBo?=
+ =?utf-8?B?UW92ZEtGbkdaSlBIOTdFdmZEZzdaQkdkYmRzd3pCRDFUSUZML0JkOWJZRGk5?=
+ =?utf-8?B?MVR6M1VIUGdlQW1TaE4vMHgyVUhFRW9pY0FoVmJhcU5Fdjh1aVJLN2UwMzdi?=
+ =?utf-8?B?ZHlHWllTcXpOY2Q3ZWNZVDZvaDRuT0RTbGt2QXZxNXUzVyttUTJ2TGFUdjFm?=
+ =?utf-8?B?YVloYlpUUDBER2FVdm9Md3FvSFZkNU9kQ1FRK0wrcGxoSHp6dHJaZExYTkM1?=
+ =?utf-8?B?bTBWQ2srQ2p0Umk3eWFsVlFlTWV1MXhNSmQrVEVqMlowNU85RGVjZGdxVVFK?=
+ =?utf-8?B?enRsM3JhQVlnaEUvWUhqYzFDMXV4TWhrZjltU2hTbzNTek9hRkZIL01xWkdj?=
+ =?utf-8?B?c2ZPQno2UElYa2FiWHNPMGloR0NOSHNLRjlZWDRPc2QwWVBSZjJNcUorc2Vy?=
+ =?utf-8?B?cFNreVZ1NVJpaFEyTzEwWEQ0ME1DdTdSeFM0TjNIanFuNnBQTWFTRUdBcFli?=
+ =?utf-8?B?b3ZYSjI1WkN6UWRmT3NvSnBlMzRWWGdITXB1cG9EeVl4dUJrK0QrdndkaFRD?=
+ =?utf-8?B?ZWxnMlJRdkJEUXd1bEtYVXJKMHAvZ3pPQ0RLbWNUTmRCdlVjMmlhWWNTOFV1?=
+ =?utf-8?B?aUNnRU14aDcyZG9UeC9YVnlrb0c2S2xJSHNtY0I0YVQ5UTVxTVZhbXI4VElJ?=
+ =?utf-8?B?VGZyTVlzWmsray9IMi9FaWNiTllSNkFjZGVrQ0FoWHR4TytOOFIyeUduc01R?=
+ =?utf-8?B?cmpSSFRKY1RKcm5QZU1YNDN6eWZkalNQOUlNVTlTRHpCNlI0a2ZzNUVyR0NK?=
+ =?utf-8?B?UUZJNGxmWnF2L0NSZTJWY0ptT2VkbzBOSG9KTVFKRThjUDdSY3NRSjRXRUJI?=
+ =?utf-8?B?S1YzUitGY0tkQzBGc2JBS0RldmJnWlBmVmxrZkovbXFqYnUwVTVqQ2laTUNj?=
+ =?utf-8?B?QXZtRG90K1JtV1huNUJoQjdDeHVJWGM1TVJPZGdWblllK09LQ0paSEVIbzFx?=
+ =?utf-8?B?UEJKV3dkSXhHYzE1eldlWmQrRlBES3U3V1NLdktZY3dYN3BkUGRyb0tKeE10?=
+ =?utf-8?B?eFNueDRzQi80TTg4TVZJanJCVDNyRVRNQm9SdTg1ZmNUbVAzczdsZkx2MzlW?=
+ =?utf-8?B?czhmTkhmbzZ3ZitsVDllUzMzZGp6ckNDQjJHcC9kV09MeFNGaHNPOHcxT1J1?=
+ =?utf-8?B?QUxyS1h3UURua001TDl5aWJmeU94RktGU1JrQmNxU09jZVZDek5sNWdtVU4r?=
+ =?utf-8?B?WnFBeW8rMFlwR2VwVnVNTVJncDVSbEc5RFFEVnBqbU9QQk1tL2xMcUZyWDhx?=
+ =?utf-8?B?SVlaMGt2WDJjbVl2Y3c5OCtYa1dsaXRINEJBNW5HZUx3NnQ0Tk5GcFZJZFdV?=
+ =?utf-8?B?SUFXU1FGMk43Q3kvVVN0T2h4ckdmSXJLY3drdUtCUk5zVGFBVWpPNzRnRVgy?=
+ =?utf-8?B?SVZiT1VvQnJyUGVzVGRsSEdUOVQwUkh0SDRiVEY1dWd6L21IRzBtempJTlQv?=
+ =?utf-8?B?WSs4U3IzcXBTZUtZWUxRTlhsWE1UcHFTZUZnTklNbldKeDk1VEVjQ01tZExv?=
+ =?utf-8?B?R2hINGR2cTVOOEdocHMrb3ZsSlVGQTh1TlVvUkxHVDdMWjE0bFRBanRIVUJp?=
+ =?utf-8?B?YzFuU0pXZG1ybjR2VGVYWTAramh6Si8vbjNTR1l6STJkd2tSS3pwQm1DYWVB?=
+ =?utf-8?B?OHc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55c6b0ba-b726-454a-3d98-08db16c9e390
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2023 00:28:02.9203
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2023 00:47:36.7206
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dTCj+qZFnEi8QkcDXfoN/ZOom6CRAlTQmhQf22f8szfWjyAFQx/MdZCo0KWbzUzb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5507
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4SQlvG23WOYEtzkkTvmHp+svqQpCX9MRMTNrt+sYzYaMMF9EUJp/XB3uHSE35Dd+Gac/DXFjsavAwi5mN+WXVzvH+lX9rLeei8feQubjGy0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7736
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test the basic flow.
+On 2/24/2023 3:56 PM, Mingwei Zhang wrote:
+> On Wed, Feb 22, 2023, Chang S. Bae wrote:
+>>
+>>          /*
+>> -        * The ptrace buffer is in non-compacted XSAVE format.  In
+>> -        * non-compacted format disabled features still occupy state space,
+>> -        * but there is no state to copy from in the compacted
+>> -        * init_fpstate. The gap tracking will zero these states.
+>> +        * Indicate which states to copy from fpstate. When not present in
+>> +        * fpstate, those extended states are either initialized or
+>> +        * disabled. They are also known to have an all zeros init state.
+>> +        * Thus, remove them from 'mask' to zero those features in the user
+>> +        * buffer instead of retrieving them from init_fpstate.
+>>           */
+>> -       mask = fpstate->user_xfeatures;
+> 
+> Do we need to change this line and the comments? I don't see any of
+> these was relevant to this issue. The original code semantic is to
+> traverse all user_xfeatures, if it is available in fpstate, copy it from
+> there; otherwise, copy it from init_fpstate. We do not assume the
+> component in init_fpstate (but not in fpstate) are all zeros, do we? If
+> it is safe to assume that, then it might be ok. But at least in this
+> patch, I want to keep the original semantics as is without the
+> assumption.
 
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
----
- tools/testing/selftests/iommu/iommufd.c       | 15 +++++++++++++
- .../selftests/iommu/iommufd_fail_nth.c        | 11 +++++++++-
- tools/testing/selftests/iommu/iommufd_utils.h | 21 +++++++++++++++++++
- 3 files changed, 46 insertions(+), 1 deletion(-)
+Here it has [1]:
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 7e6fe263e1b62e..65f1847de5a542 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -1307,6 +1307,21 @@ TEST_F(iommufd_mock_domain, replace)
- 	test_ioctl_destroy(ioas_id);
- }
- 
-+TEST_F(iommufd_mock_domain, alloc_hwpt)
-+{
-+	int i;
-+
-+	for (i = 0; i != variant->mock_domains; i++) {
-+		uint32_t hwpt_id;
-+		uint32_t device_id;
-+
-+		test_cmd_hwpt_alloc(self->idev_ids[0], self->ioas_id, &hwpt_id);
-+		test_cmd_mock_domain(hwpt_id, &device_id, NULL, NULL);
-+		test_ioctl_destroy(device_id);
-+		test_ioctl_destroy(hwpt_id);
-+	}
-+}
-+
- /* VFIO compatibility IOCTLs */
- 
- TEST_F(iommufd, simple_ioctls)
-diff --git a/tools/testing/selftests/iommu/iommufd_fail_nth.c b/tools/testing/selftests/iommu/iommufd_fail_nth.c
-index f2012db43fbc16..5f293825fc37a0 100644
---- a/tools/testing/selftests/iommu/iommufd_fail_nth.c
-+++ b/tools/testing/selftests/iommu/iommufd_fail_nth.c
-@@ -582,6 +582,8 @@ TEST_FAIL_NTH(basic_fail_nth, device)
- 	uint32_t ioas_id;
- 	uint32_t ioas_id2;
- 	uint32_t device_id;
-+	uint32_t idev_id;
-+	uint32_t hwpt_id;
- 
- 	self->fd = open("/dev/iommu", O_RDWR);
- 	if (self->fd == -1)
-@@ -595,11 +597,18 @@ TEST_FAIL_NTH(basic_fail_nth, device)
- 
- 	fail_nth_enable();
- 
--	if (_test_cmd_mock_domain(self->fd, ioas_id, &device_id, NULL, NULL))
-+	if (_test_cmd_mock_domain(self->fd, ioas_id, &device_id, NULL,
-+				  &idev_id))
-+		return -1;
-+
-+	if (_test_cmd_hwpt_alloc(self->fd, idev_id, ioas_id, &hwpt_id))
- 		return -1;
- 
- 	if (_test_cmd_mock_domain_replace(self->fd, device_id, ioas_id2, NULL))
- 		return -1;
-+
-+	if (_test_cmd_mock_domain_replace(self->fd, device_id, hwpt_id, NULL))
-+		return -1;
- 	return 0;
- }
- 
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index 807a2421121b51..bc0ca8973e7951 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -96,6 +96,27 @@ static int _test_cmd_mock_domain_replace(int fd, __u32 device_id, __u32 pt_id,
- 	EXPECT_ERRNO(_errno, _test_cmd_mock_domain_replace(    \
- 				     self->fd, device_id, pt_id, NULL))
- 
-+static int _test_cmd_hwpt_alloc(int fd, __u32 device_id, __u32 pt_id,
-+					 __u32 *hwpt_id)
-+{
-+	struct iommu_hwpt_alloc cmd = {
-+		.size = sizeof(cmd),
-+		.dev_id = device_id,
-+		.pt_id = pt_id,
-+	};
-+	int ret;
-+
-+	ret = ioctl(fd, IOMMU_HWPT_ALLOC, &cmd);
-+	if (ret)
-+		return ret;
-+	if (hwpt_id)
-+		*hwpt_id = cmd.out_hwpt_id;
-+	return 0;
-+}
-+
-+#define test_cmd_hwpt_alloc(device_id, pt_id, hwpt_id) \
-+	ASSERT_EQ(0, _test_cmd_hwpt_alloc(self->fd, device_id, pt_id, hwpt_id))
-+
- static int _test_cmd_create_access(int fd, unsigned int ioas_id,
- 				   __u32 *access_id, unsigned int flags)
- {
--- 
-2.39.1
+	 *
+	 * XSAVE could be used, but that would require to reshuffle the
+	 * data when XSAVEC/S is available because XSAVEC/S uses xstate
+	 * compaction. But doing so is a pointless exercise because most
+	 * components have an all zeros init state except for the legacy
+	 * ones (FP and SSE). Those can be saved with FXSAVE into the
+	 * legacy area. Adding new features requires to ensure that init
+	 * state is all zeroes or if not to add the necessary handling
+	 * here.
+	 */
+	fxsave(&init_fpstate.regs.fxsave);
+
+Thus, init_fpstate has zeros for those extended states. Then, copying 
+from init_fpstate is the same as membuf_zero() by the gap tracking. But, 
+we have two ways to do the same thing here.
+
+So I think it works that simply copying the state from fpstate only for 
+those present there, then letting the gap tracking zero out for the rest 
+of the userspace buffer for features that are either disabled or 
+initialized.
+
+Then, we can remove accessing init_fpstate in the copy loop and which is 
+the source of the problem. So I think this line change is relevant and 
+also makes the code simple.
+
+I guess I'm fine if you don't want to do this. Then, let me follow up 
+with something like this at first. Something like yours could be a 
+fallback option for other good reasons, otherwise.
+
+Thanks,
+Chang
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/fpu/xstate.c#n386
+
 
