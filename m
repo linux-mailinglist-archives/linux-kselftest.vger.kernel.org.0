@@ -2,146 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97C06A4DB1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 23:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 706B76A4EB9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 23:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjB0WEM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 17:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S229662AbjB0Whl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Feb 2023 17:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjB0WEK (ORCPT
+        with ESMTP id S230237AbjB0WhL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:04:10 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C326857;
-        Mon, 27 Feb 2023 14:04:09 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id EA43332009A2;
-        Mon, 27 Feb 2023 17:04:08 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 27 Feb 2023 17:04:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677535448; x=1677621848; bh=BH7D1uVe+U
-        vXxR2ch7fmh4n2whiW+tHnGTL+k/yaf4k=; b=ia2r8Ur9f4UChidSH9WsvSJC8f
-        McuH62e6yJszVW7lU5TuvZ4wouqBMnydIoU1+Jqx7r/MGzD1hEV1gcstDOXsF8uL
-        RYHSaSIwN1j/yULFJpC3UiUr1CpiV8gtxpc1vRh0iXt+gw9OfnoXk9VBxpfMIktN
-        ipBPFO2Gy95ckscu+48IBTV2zW2JAqvSy48egtVkmJYdSNNqB1KghZQ2AwdGQilC
-        ESYsPiMDByJDvT/qi5/ItGlW7Tf/KvAMtiqMG6oPP1Z0QYaPD+6NTcZydsNphhJK
-        DupgWZvxytH124UQEieOs1aS6D+xg5YTaCZ4D1QDhjpU6v9hvG+GEIYx34rQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677535448; x=1677621848; bh=BH7D1uVe+UvXxR2ch7fmh4n2whiW
-        +tHnGTL+k/yaf4k=; b=CctWlY8a8UTVKyYFiF22Kwg9kr79rdbggh1333KcSlPx
-        m/hJGLKTrt1+bM0oanS3aMZciOCiL+JudiO9G8u6xQqQG3M48mWVPG26HGI626qW
-        bksoUtiijiWTRrIwHHlMOaTVlX0hgV1BMWkoXinkvZBYlMndFV9L15xONjeK79rB
-        HsjJt0szDTpMEG3FIS0CV0kCjzDalNN7dc/VUFWJRPJUQAZfvOoJ0ViziEJ6NPGp
-        PPOCCEV7DlQKGZijtVO+YYczzHk8Sm2/BdPZPJlyiAieXeAm0Fk6vgoI0J4+dCqY
-        Zkf8ZKCGRkQfqyZuYGuGSF5ATe62R/Qkd4NCzK1lVw==
-X-ME-Sender: <xms:2Cj9Yz1CB0es4Kv3rPybFqO0kTfP652fR9bCBhqRFPu6UO2bTxuDsg>
-    <xme:2Cj9YyEezAFpxERaGtfwIcAWjQ99SZia54F6y5XFiFlnGevhq2AG6xKpEaJwvFMTI
-    Urx_36url7HVGTogQ>
-X-ME-Received: <xmr:2Cj9Yz7SxoLXnawA_clG6n6BzZ0zkqbCfOnc9dXWNhZkhFrj7qvbfyhUux2RbUYY6IIechcxtS1WsJWwJ_5ikVqY8Mp3m2fez1n1TMc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddgudehvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhepff
-    fhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepffgrnhhivghlucgiuhcu
-    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeevuddugeeihfdtff
-    ehgffgudeggeegheetgfevhfekkeeileeuieejleekiedvgfenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:2Cj9Y42klikwa-jznNgKW_MBKnkM_LoLfcWpmrDFSdOxA8NvYUAeAQ>
-    <xmx:2Cj9Y2GCOkGvIX49d1B3nIJwhs-T701Qf0CXh1BjmWOCNf6Am8bdqg>
-    <xmx:2Cj9Y59FXyfXkKZFM6-ih1vWL3XVIxa4iyWG1pm1HDo5DZzZFmtnyA>
-    <xmx:2Cj9YygNc_gARHIahPExwCt3fh3IHobAg1L3360sjATyPp0tiVWqRw>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Feb 2023 17:04:07 -0500 (EST)
-Date:   Mon, 27 Feb 2023 15:04:06 -0700
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Edward Cree <ecree.xilinx@gmail.com>
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets
- in BPF
-Message-ID: <20230227220406.4x45jcigpnjjpdfy@kashmir.localdomain>
-References: <cover.1677526810.git.dxu@dxuuu.xyz>
- <cf49a091-9b14-05b8-6a79-00e56f3019e1@gmail.com>
+        Mon, 27 Feb 2023 17:37:11 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BCE1027A
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 14:33:05 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id z5so5251442ilq.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 14:33:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1677537172;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T3Cu6m8epvNA3UH0d8Dsxgstk0bjTjSw6TnY3URCJJo=;
+        b=AL/xWpTQxYIWU2CQdF9m3fgKqRfcbDNwa9X3KuJd+7vuCknxuhMILoHf8Qyoz6hxSP
+         93dAcrC0+I68Uh7ASzQCB4hqpQegSYXghxbM0ulujSZPY9tnaqq3qHJuTo5xVT9PKEzc
+         DCpulpc4GycrvelfquQkgO7NaudZ+MniqwvQo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677537172;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T3Cu6m8epvNA3UH0d8Dsxgstk0bjTjSw6TnY3URCJJo=;
+        b=w7anLkMAaCY1Imbdvgr3DPle+N5YI5s6+FpVZCj9jl53GhMB1V4V24uroXHhUgyzyZ
+         rF01poofXupE6P9myuMl/k2q96R3EluabkLX2qJ5DRyf0NH5xUKAwS7ja9EdNEAVpVxj
+         YaqZGJgxClq2azDUgzGm1MZZdBmTTfkjwCVgIgFOJquaxaf0b9voDZQC0yUuW6cU0+CT
+         zQVbn647oPGs1i/tKv/xoAZ1+MVeqxKU8agNY7qn82frWNeWmgcWbeVYh6wThQeKdXIf
+         CN3VGYK2kQIb5KfQPvuTC37bkI59hkk7anUMSXa/M9zZoYLiZoJPN9a4pdKQACxZbgVr
+         DJ4g==
+X-Gm-Message-State: AO0yUKUW0UFjwFG5v5ASOLVv4mHN35iqBtKWD99bYgVDBS4KJzZc2fip
+        4vRkhzWEr20d8S3IpkorbAA4bQ==
+X-Google-Smtp-Source: AK7set8U1d+59mHvSc7yWPEluziqNi1JNCxZke/Kq4W9ZnHwWbidQmuEkdyZ3SQBsry4cHKjKFfPvw==
+X-Received: by 2002:a05:6e02:1a8d:b0:317:1ca3:f518 with SMTP id k13-20020a056e021a8d00b003171ca3f518mr965058ilv.0.1677537171811;
+        Mon, 27 Feb 2023 14:32:51 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v15-20020a92c80f000000b003158ac24ccfsm2259873iln.38.2023.02.27.14.32.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 14:32:51 -0800 (PST)
+Message-ID: <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
+Date:   Mon, 27 Feb 2023 15:32:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf49a091-9b14-05b8-6a79-00e56f3019e1@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
+ 165
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, keescook@chromium.org,
+        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230206234344.2433950-1-mcgrof@kernel.org>
+ <20230206234344.2433950-2-mcgrof@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230206234344.2433950-2-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ed,
-
-Thanks for giving this a look.
-
-On Mon, Feb 27, 2023 at 08:38:41PM +0000, Edward Cree wrote:
-> On 27/02/2023 19:51, Daniel Xu wrote:
-> > However, when policy is enforced through BPF, the prog is run before the
-> > kernel reassembles fragmented packets. This leaves BPF developers in a
-> > awkward place: implement reassembly (possibly poorly) or use a stateless
-> > method as described above.
+On 2/6/23 16:43, Luis Chamberlain wrote:
+> The default sefltests timeout is 45 seconds. If you run the kmod
+> selftests on your own with say:
 > 
-> Just out of curiosity - what stops BPF progs using the middle ground of
->  stateful validation?  I'm thinking of something like:
-> First-frag: run the usual checks on L4 headers etc, if we PASS then save
->  IPID and maybe expected next frag-offset into a map.  But don't try to
->  stash the packet contents anywhere for later reassembly, just PASS it.
-> Subsequent frags: look up the IPID in the map.  If we find it, validate
->  and update the frag-offset in the map; if this is the last fragment then
->  delete the map entry.  If the frag-offset was bogus or the IPID wasn't
->  found in the map, DROP; otherwise PASS.
-> (If re-ordering is prevalent then use something more sophisticated than
->  just expected next frag-offset, but the principle is the same. And of
->  course you might want to put in timers for expiry etc.)
-> So this avoids the need to stash the packet data and modify/consume SKBs,
->  because you're not actually doing reassembly; the down-side is that the
->  BPF program can't so easily make decisions about the application-layer
->  contents of the fragmented datagram, but for the common case (we just
->  care about the 5-tuple) it's simple enough.
-> But I haven't actually tried it, so maybe there's some obvious reason why
->  it can't work this way.
+> ./tools/testings/selftests/kmod.sh
+> 
+> Then the default timeout won't be in effect.
+> 
+> I've never ran kmod selftests using the generic make wrapper
+> (./tools/testing/selftests/run_kselftest.sh -s) util now
+> that I have support for it on kdevops [0]. And with that the
+> test is limitted to the default timeout which we quickly run
+> into. Bump this up to what I see is required on 8GiB / 8 vcpu
+> libvirt q35 guest as can be easily created now with kdevops.
+> 
+> To run selftests with kdevops:
+> 
+> make menuconfig # enable dedicated selftests and kmod test
+> make
+> make bringup
+> make linux
+> make selftests-kmod
+> 
+> This ends up taking about 280 seconds now, give or take add
+> 50 seconds more more and we end up with 350. Document the
+> rationale.
+> 
+> [0] https://github.com/linux-kdevops/kdevops
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>   tools/testing/selftests/kmod/settings | 4 ++++
+>   1 file changed, 4 insertions(+)
+>   create mode 100644 tools/testing/selftests/kmod/settings
+> 
+> diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
+> new file mode 100644
+> index 000000000000..6fca0f1a4594
+> --- /dev/null
+> +++ b/tools/testing/selftests/kmod/settings
+> @@ -0,0 +1,4 @@
+> +# measured from a manual run:
+> +# time ./tools/testing/selftests/kmod/kmod.sh
+> +# Then add ~50 seconds more gracetime.
+> +timeout=350
 
-I don't believe full L4 headers are required in the first fragment.
-Sufficiently sneaky attackers can, I think, send a byte at a time to
-subvert your proposed algorithm. Storing skb data seems inevitable here.
-Someone can correct me if I'm wrong here.
+Adding timeouts like this for individual tests increases the overall kselftest
+run-time. I am not in favor of adding timeouts.
 
-Reordering like you mentioned is another attack vector. Perhaps there
-are more sophisticated semi-stateful algorithms that can solve the
-problem, but it leads me to my next point.
+We have to find a better way to do this.
 
-A semi-stateful method like you are proposing is concerning to me from a
-reliability and correctness stand point. Such a method can suffer from
-impedance mismatches with the rest of the system. For example, whatever
-map sizes you choose should probably be aligned with sysfs conntrack
-values otherwise you may get some very interesting and unexpected pkt
-drops. I think cilium had a talk about debugging a related conntrack
-issue in the same vein a while ago. Furthermore, the debugging and
-troubleshooting facilities will be different (counters, logs, etc).
-
-Unless someone has had lots of experience writing an ip stack from
-the ground up, I suspect there are quite a few more unknown-unknowns
-here. What I find valuable about this patch series is that we can
-leverage the well understood and battle hardened kernel facilities. So
-avoid all the correctness and security issues that the kernel has spent
-20+ years fixing. And make it trivial for the next person that comes
-along to do the right thing.
-
-Hopefully this all makes sense.
-
-Thanks,
-Daniel
+thanks,
+-- Shuah
