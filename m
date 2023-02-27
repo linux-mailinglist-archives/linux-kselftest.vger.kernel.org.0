@@ -2,104 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CE66A4C55
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 21:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E80596A4CF1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 22:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjB0Uir (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 15:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S229723AbjB0VQp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Feb 2023 16:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0Uiq (ORCPT
+        with ESMTP id S229515AbjB0VQp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 15:38:46 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63ED1BBB4;
-        Mon, 27 Feb 2023 12:38:44 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id v16so4763507wrn.0;
-        Mon, 27 Feb 2023 12:38:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hE1FHM1U2zm1erfLjZRxZpbmVUkLBg3sA/DLB4dzuBo=;
-        b=qj4arBGe+jk9mWesxN2xwdEoJ6DAJDdkL4ptrKn8esZCMAbN95b4ax50iWLja43blW
-         zwy5fZF4ncEeD9WSs5Hmj+ikaGqh3ET88l0Rsd1/MFpgUfTe5c1kscjJ5S2JveA/QgB3
-         wZRg/PHlUv15pMlCr838F+NcvSQvWFB3d/oSxvvzrKZsnyUGaLwmTd3cGfwVPFUqa2UM
-         b3L2oydkQgj6LfZTlOkDBX4QbkkVHbl03L6f+sKweTxhfM1dJodOWiXkozWihNe8X1K6
-         FVqBA+MdbrMQZyt70TOD9mbYwwNkXJdftUiy1evANJNa3LVdviNhVu4NBBsl+9gX9/Tu
-         Dncw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hE1FHM1U2zm1erfLjZRxZpbmVUkLBg3sA/DLB4dzuBo=;
-        b=nuvF9WSDHgcttmXJ2hVQnP1D2arcatkkoZyAtn6qM5qE8ilf9LRiJ0VJDJik6EESxG
-         PqCnXkS9Jgh7EsO1JBT2y2pnr5PSFXu6VshFU8Yxelp0pj7aTZxOP7irjLz4c0ZNv3Vq
-         2BjdaLeWQGQDATtgc3oNGArgpTA/euILlD+PNDJ80soU6JPc8tz8thbdGiz92HoDgcDJ
-         8Ju/1SqEJgVhk+NMDCYNDgrpdF1i7O57jwRYLfBEs+d5OXfc4kjON0t1GRA3a+HuB8Lw
-         gtorFl37m8/vd3eSFS2MhHJiU4o8N7hiXuJ5Vm2gGYC6fBLDX7/e/TZ4BwHGmOCB83Ts
-         hh/w==
-X-Gm-Message-State: AO0yUKXz3Th5xnfS/COVRKYwjFyIUBCSyg2fEjLTg8pw7NGPSC41lF+c
-        WxBgraBHIbfFLirenEaGyQIccZa6JYQ=
-X-Google-Smtp-Source: AK7set9V3tdK/RYak+pa1dRZ1YYwxGzKCQiX+KQ3sP4NGLhdDLjKb6HD//k7/hhgNrsfda6ZAV1btQ==
-X-Received: by 2002:a5d:4cc7:0:b0:2bf:94ea:67ca with SMTP id c7-20020a5d4cc7000000b002bf94ea67camr369325wrt.25.1677530322739;
-        Mon, 27 Feb 2023 12:38:42 -0800 (PST)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id i14-20020a5d55ce000000b002c559405a1csm7849754wrw.20.2023.02.27.12.38.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 12:38:42 -0800 (PST)
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in
- BPF
-To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1677526810.git.dxu@dxuuu.xyz>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <cf49a091-9b14-05b8-6a79-00e56f3019e1@gmail.com>
-Date:   Mon, 27 Feb 2023 20:38:41 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <cover.1677526810.git.dxu@dxuuu.xyz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 16:16:45 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1853274BA;
+        Mon, 27 Feb 2023 13:16:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677532602; x=1709068602;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=6gsyWpdMmpV/kHoDflhj1iFUs6nUQtkpERK0c6Cpd4o=;
+  b=l5VQLXZnI9HBm3sow10z1sC4Nrppqu07BDXipKkoaFDbL1YKDp1MX8x2
+   R1j6oBSNWsblYwEMCUiXf3Zn84Gj3Cd+Om5WzMktDdVgWbMcV9MSiUkZ0
+   XU1hK5fA9//MTBBMARpVpWusjOQtKEoaGPnVZ2h8ilCZQAnr1OmGDHb15
+   OIC5KYVCCH+7SobkLlUptsllXyrAscJCSsgKEb3dg1z8YpG1ZEsA8jefz
+   DKsUQT2Pn9mC8NV1Y3Bxzb2LB0q6Xbo+SMFG3qMuVc/pal4lGhBo+Xa6S
+   b7EX8qxvKhgUUDCho07qGYQvPvwL9jGq7CN/fNx/S+riyfPtpHCTEkLRr
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="322216363"
+X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
+   d="scan'208";a="322216363"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 13:16:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="651372901"
+X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
+   d="scan'208";a="651372901"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by orsmga006.jf.intel.com with ESMTP; 27 Feb 2023 13:16:41 -0800
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, dave.hansen@intel.com, hpa@zytor.com,
+        linux-kselftest@vger.kernel.org, mizhang@google.com,
+        chang.seok.bae@intel.com
+Subject: [PATCH 0/2] x86/fpu/xstate: Follow up on the init_fpstate fallout again
+Date:   Mon, 27 Feb 2023 13:05:02 -0800
+Message-Id: <20230227210504.18520-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221018221349.4196-1-chang.seok.bae@intel.com>
+References: <20221018221349.4196-1-chang.seok.bae@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 27/02/2023 19:51, Daniel Xu wrote:
-> However, when policy is enforced through BPF, the prog is run before the
-> kernel reassembles fragmented packets. This leaves BPF developers in a
-> awkward place: implement reassembly (possibly poorly) or use a stateless
-> method as described above.
+Dear maintainers,
 
-Just out of curiosity - what stops BPF progs using the middle ground of
- stateful validation?  I'm thinking of something like:
-First-frag: run the usual checks on L4 headers etc, if we PASS then save
- IPID and maybe expected next frag-offset into a map.  But don't try to
- stash the packet contents anywhere for later reassembly, just PASS it.
-Subsequent frags: look up the IPID in the map.  If we find it, validate
- and update the frag-offset in the map; if this is the last fragment then
- delete the map entry.  If the frag-offset was bogus or the IPID wasn't
- found in the map, DROP; otherwise PASS.
-(If re-ordering is prevalent then use something more sophisticated than
- just expected next frag-offset, but the principle is the same. And of
- course you might want to put in timers for expiry etc.)
-So this avoids the need to stash the packet data and modify/consume SKBs,
- because you're not actually doing reassembly; the down-side is that the
- BPF program can't so easily make decisions about the application-layer
- contents of the fragmented datagram, but for the common case (we just
- care about the 5-tuple) it's simple enough.
-But I haven't actually tried it, so maybe there's some obvious reason why
- it can't work this way.
+This series is following up on the last fix [2]. I thought I could
+forget about it with that. But, I was wrong because now this was
+realized as an incomplete solution -- my bad. Here is some context for
+this series:
 
--ed
+The last fix [3] has resolved the case when copying the initialized
+dynamic state from init_fpstate to the user buffer in
+__copy_xstate_to_uabi_buf(). (This was intended to resolve the fallout
+of the init_fpstate fix [1].)
+
+But, when copying the *non-initialized* dynamic state from the task
+xstate, the code [4] unconditionally retrieves the address in
+init_fpstate which is needless. Consequently, this triggers a
+false-positive warning as shown in [5] which meaninglessly confuses
+users.
+
+With these repetitive surgeries, a more solid and comprehensive
+solution is more helpful I thought. Considerably removing init_fpstate
+from this loop is not impossible here because dynamic states have an
+all-zeros init state. Then, zeroing the user buffer instead of
+retrieving init_fpstate resolves the issue and simplifies the code.
+
+These issues were discovered from the KVM execution with launching a
+guest and running the KVM self-test as __copy_xstate_to_uabi_buf() was
+called. But, the negligibly missing ptrace test could have disclosed
+them too. So that case is included here.
+
+Thanks,
+Chang
+
+[1] https://lore.kernel.org/lkml/20220824191223.1248-1-chang.seok.bae@intel.com/
+[2] https://lore.kernel.org/lkml/20221018221349.4196-1-chang.seok.bae@intel.com/
+[3] https://lore.kernel.org/lkml/20221021185844.13472-1-chang.seok.bae@intel.com/
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/fpu/xstate.c#n1156
+[5] https://lore.kernel.org/kvm/20230221163655.920289-2-mizhang@google.com/
+
+Chang S. Bae (2):
+  x86/fpu/xstate: Prevent false-positive warning in
+    __copy_xstate_uabi_buf()
+  selftests/x86/amx: Add a ptrace test
+
+ arch/x86/kernel/fpu/xstate.c      |  30 ++++-----
+ tools/testing/selftests/x86/amx.c | 108 +++++++++++++++++++++++++++++-
+ 2 files changed, 119 insertions(+), 19 deletions(-)
+
+
+base-commit: 7fa08de735e41001a70c8ca869b2b159d74c2339
+-- 
+2.17.1
+
