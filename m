@@ -2,121 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799236A47DC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 18:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2E96A47E8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 18:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjB0RYm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 12:24:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S229777AbjB0RaA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Feb 2023 12:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjB0RYl (ORCPT
+        with ESMTP id S229529AbjB0R37 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 12:24:41 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FF23A9D;
-        Mon, 27 Feb 2023 09:24:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1677518676;
-        bh=kqedls7n+o6QG8VejTM8JnAG+1eSNSyby6S4US6Cpfs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=tES/6QtoQl83J5Rr0jOIRyKljECGrMDBYIyDuDnHUPhhMLdzQvDuhoJDT78ftlEyt
-         33QIlmgPMWq+ln5tl3z2JT2pZnZHZn8QyPRHLRx1XwZIvpvqqUDU2ZjLPZ8FgHe/DQ
-         L8+bb0kLAhFfdbkLajx4LRXZIyc6VpXvrDRttDBnwB9slP3zlS6+wMgmUf0SDGMRiW
-         cPZ4j1WdJ+OtZGNJsFBhpMZvcZAYoaGe7D5K4xjUIgsAzhBrB3RX43714OPf3UhGlh
-         P9F/rXOaERw4ns2bmkM+EBRYIHlBZB56lLjrtXCPnE48xx16jxJLUVERYScdp08DAA
-         +UK2DuOgqTH3A==
-Received: from [172.16.0.188] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PQS6X4YZYznNt;
-        Mon, 27 Feb 2023 12:24:36 -0500 (EST)
-Message-ID: <e2132ff7-51de-b91f-37b5-b0c182ea86fb@efficios.com>
-Date:   Mon, 27 Feb 2023 12:24:39 -0500
+        Mon, 27 Feb 2023 12:29:59 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57F51C7CF
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 09:29:56 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id j2so7042367wrh.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 09:29:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lMbMZcHUrrYgIjxQ3ommUoIZSbNpJdzQ8dTTJi4pkT0=;
+        b=jiiraGod+mfy/gSH21dqocUcdQ9K+XriznRtZj/Yp8iFBMLEpvs8qu8NIFdlXRXi9/
+         Xxd5PTKNIq9x3PlxEHqn63yxlrWm2YgviOTkbH2LmUOhFlfXdqBIH3ad7M0uViIjlTwJ
+         1uvKoaLYTjb/h53j5WJ1Wtr+r6zI+Az/OC1HfCjns7iBMNoxWr0JX/0+5uaXMXVyXX6O
+         1smTgZpggDCkCVm1/rJb5IwdnevsqL16jJcQxn5PCe3bSUONJM3h/VEmFisrrlWx8E3N
+         Qrn5siz951ot0Ku+aCJmlPSPc4PBbC+ImtqD6G5BF0yOsBLNc328C/wC1M6nRYbkhZ7K
+         wVZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lMbMZcHUrrYgIjxQ3ommUoIZSbNpJdzQ8dTTJi4pkT0=;
+        b=wI7HAdifrcp3gT7cqtdaa5JLGUXKs6qi7K7BrinMuXBP7SdfdD741S8Wtx9JwOHRd9
+         oFOd6M7rCQv1u04tGQYpG9oxMwTatjxugCKqwX4ExAG1rrNpJRC6F/AIGb9RL99TMsje
+         jh/BhebsFsz9X+r8s9wwmUmkHoJf2siMXJCKMfmfkXvttZtV7QlfrvjOPwLi0S9eXWlf
+         Vf9JhsEfnpsczFwAkQxmdiGpUdhOTx3X96AC/9cWBvr4SfWlBr4bld8dvmtHi6NIf9vi
+         Z/kt8kg4XKUX7nBbsrOkMd17x8QmutQcNDWWc0zBZJQRbjJRJ6V0mmAMisujNeP95Do6
+         AzLA==
+X-Gm-Message-State: AO0yUKWd3eP4kAEp6vgAq7wjaVLdnvjo0N2UYH4q2IK+7WViRkNENaRn
+        scWfEeW+fWieIZ8yZdtMgWDA9WQRfiC+dTl0yVI=
+X-Google-Smtp-Source: AK7set9RL2ni8PZMkaWcgkVMsYYhLc8cLUuhLTJLSFxiQWfMPyjBHe5vgRo+5Mzot049KcV626nCvQ==
+X-Received: by 2002:adf:fb8f:0:b0:2c5:6182:5f6b with SMTP id a15-20020adffb8f000000b002c561825f6bmr21630310wrr.18.1677518995376;
+        Mon, 27 Feb 2023 09:29:55 -0800 (PST)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id t1-20020a5d6a41000000b002c70a68111asm7763689wrw.83.2023.02.27.09.29.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 09:29:54 -0800 (PST)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net 0/7] mptcp: fixes for 6.3
+Date:   Mon, 27 Feb 2023 18:29:23 +0100
+Message-Id: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 3/3] selftests/mm: add new selftests for KSM
-Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, hannes@cmpxchg.org
-References: <20230224044000.3084046-1-shr@devkernel.io>
- <20230224044000.3084046-4-shr@devkernel.io>
- <20230225213027.69c27e7790898c32e66312ea@linux-foundation.org>
- <qvqwa60zhvpw.fsf@dev0134.prn3.facebook.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <qvqwa60zhvpw.fsf@dev0134.prn3.facebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAHPo/GMC/z2MQQ7CMAwEv1L5jEVxhYr4CuLgpA71ISGK2wqp6
+ t9JOHCc3Z3dwaSoGNy7HYpsavpOFS6nDvzM6SWoU2WgnoaeaMQ121KEIyZZ8J/GvPiMQT9i6P1
+ 4CwNTuDqC+uPYBF3h5Of2VL1JtqafI2tqi1zkp9b60Xp4HscXOIU5L5oAAAA=
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>,
+        Shuah Khan <shuah@kernel.org>, Florian Westphal <fw@strlen.de>,
+        Jiang Biao <benbjiang@tencent.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org, Christoph Paasch <cpaasch@apple.com>,
+        Geliang Tang <geliang.tang@suse.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2123;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=Bt1cusZoNgmgHT2JSLsa0gsxCy4BA3wwvkYRFU/ply4=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBj/OiR/VSGNNE1zEgw63i7JHZ0WBzAWg/eVk+C2
+ euxS097MPOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY/zokQAKCRD2t4JPQmmg
+ c0ZXD/9ci9xPaOkpjJruTQZp3P0oJR9Q2ZHrODLyjX83LIqXB5okUaWTyQ77XBNtghYxrcImBkC
+ K0oQ6kY0eLlKlC732AM5vKczlA/vUgYvCHAI7rU7YXHwJGN24gIBm0hWQSqmFb0cm+Ft9/tT+aE
+ yj8koskniQKSIql95wXX5o0yD3XVkMknt44vf/rwZUX7SyEoKGhwzsm8lq1QfgVX8zSku+zczmw
+ XM+KtHRw8jqk/K2MhXYJ9LRvmcmv+N68wqaY1e0tBKRhf6D/9zTmXDeN9sszFK8t7ygk/xLtJTm
+ S0Ms5Kh6y7OaEZd2BsQRRUqQgEeX+U0yq716EP7URHIHA+QSX9OqrUml6BLa40Zk8bDaYj0mdMa
+ gxPe9XkJ0MaJ3CUwLlNfL8giGfvX0kludEcGyi0r31WnpOyyRpR6QQSUTlcwTBORv3Z3KTR/elC
+ Vb2/dKXV35cUcKYDN8Jj4Wb52tL3HJMmvke+QWgXETiqLucbVJoJYhCeQ5a8QtgH/528TgeRZMm
+ keiyutzuEQvdNRWptr3T9Fm5C7kQzsTVKk+dutflMn8NWLnleznPWG7H8GRTWHKuryST6/EcMEr
+ CuHvwDboc4tufiPleLrCz2JFH8nS56QEOYWlaJ8eoNo7nW6jzL3RP3Uvg9b+RiCa2mZIhomWmcP
+ DHHINGid4/5xENA==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-02-27 12:19, Stefan Roesch wrote:
-> 
-> Andrew Morton <akpm@linux-foundation.org> writes:
-> 
->> On Thu, 23 Feb 2023 20:40:00 -0800 Stefan Roesch <shr@devkernel.io> wrote:
->>
->>> This adds three new tests to the selftests for KSM. These tests use the
->>> new prctl API's to enable and disable KSM.
->>>
->>> ...
->>>
->>> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
->>> index d90cdc06aa59..507cb22bdebd 100644
->>> --- a/tools/testing/selftests/mm/Makefile
->>> +++ b/tools/testing/selftests/mm/Makefile
->>> @@ -29,7 +29,8 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
->>>   # LDLIBS.
->>>   MAKEFLAGS += --no-builtin-rules
->>>
->>> -CFLAGS = -Wall -I $(top_srcdir) -I $(top_srcdir)/usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
->>> +CFLAGS = -Wall -I $(top_srcdir)/tools/include/uapi
->>> +CFLAGS += -I $(top_srcdir) -I $(top_srcdir)/usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
->>>   LDLIBS = -lrt -lpthread
->>>   TEST_GEN_FILES = cow
->>>   TEST_GEN_FILES += compaction_test
->>
->> This change runs afoul of the recently merged 8eb3751c73bec
->> ("selftests: vm: Fix incorrect kernel headers search path").
->>
->> I did this:
->>
->> --- a/tools/testing/selftests/mm/Makefile~selftests-mm-add-new-selftests-for-ksm
->> +++ b/tools/testing/selftests/mm/Makefile
->> @@ -29,7 +29,7 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
->>   # LDLIBS.
->>   MAKEFLAGS += --no-builtin-rules
->>
->> -CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
->> +CFLAGS = -Wall -I $(top_srcdir) -I $(top_srcdir)/tools/include/uapi $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
->>   LDLIBS = -lrt -lpthread
->>   TEST_GEN_FILES = cow
->>   TEST_GEN_FILES += compaction_test
->> _
->>
->> But I expect it's a bit wrong.  Please check?
-> This change looks good.
+Patch 1 fixes a possible deadlock in subflow_error_report() reported by
+lockdep. The report was in fact a false positive but the modification
+makes sense and silences lockdep to allow syzkaller to find real issues.
+The regression has been introduced in v5.12.
 
-As the content of tools/include/uapi is indeed part of the kernel 
-sources and not generated as the result of 'make headers' in an output 
-directory which can be overridden by O=<...>, referring to it from 
-$(top_srcdir) seems appropriate.
+Patch 2 is a refactoring needed to be able to fix the two next issues.
+It improves the situation and can be backported up to v6.0.
 
-lgtm
+Patches 3 and 4 fix UaF reported by KASAN. It fixes issues potentially
+visible since v5.7 and v5.19 but only reproducible until recently
+(v6.0). These two patches depend on patch 2/7.
 
-Thanks,
+Patch 5 fixes the order of the printed values: expected vs seen values.
+The regression has been introduced recently: present in Linus' tree but
+not in a tagged version yet.
 
-Mathieu
+Patch 6 adds missing ro_after_init flags. A previous patch added them
+for other functions but these two have been missed. This previous patch
+has been backported to stable versions (up to v5.12) so probably better
+to do the same here.
 
+Patch 7 fixes tcp_set_state() being called twice in a row since v5.10.
+
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Geliang Tang (1):
+      mptcp: add ro_after_init for tcp{,v6}_prot_override
+
+Matthieu Baerts (2):
+      selftests: mptcp: userspace pm: fix printed values
+      mptcp: avoid setting TCP_CLOSE state twice
+
+Paolo Abeni (4):
+      mptcp: fix possible deadlock in subflow_error_report
+      mptcp: refactor passive socket initialization
+      mptcp: use the workqueue to destroy unaccepted sockets
+      mptcp: fix UaF in listener shutdown
+
+ net/mptcp/protocol.c                              |  44 +++-----
+ net/mptcp/protocol.h                              |   4 +-
+ net/mptcp/subflow.c                               | 122 +++++++---------------
+ tools/testing/selftests/net/mptcp/userspace_pm.sh |   2 +-
+ 4 files changed, 59 insertions(+), 113 deletions(-)
+---
+base-commit: aaa3c08ee0653beaa649d4adfb27ad562641cfd8
+change-id: 20230227-upstream-net-20230227-mptcp-fixes-cc78f3a2f5b2
+
+Best regards,
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Matthieu Baerts <matthieu.baerts@tessares.net>
 
