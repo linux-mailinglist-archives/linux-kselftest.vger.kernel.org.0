@@ -2,230 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6186A4CF4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 22:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B566A4D0A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 22:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjB0VQs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 16:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
+        id S229515AbjB0VTx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Feb 2023 16:19:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjB0VQq (ORCPT
+        with ESMTP id S229974AbjB0VTu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 16:16:46 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A190826CD8;
-        Mon, 27 Feb 2023 13:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677532605; x=1709068605;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=ELF9ow2F2OB1PVfHYSLDbv3bTw6H8vE2SYqZsSwjkOI=;
-  b=Av7DlEKWHs9UKsugYPSjxZDflSYd9qlDx5h/hxLKXiO7XbwWT8Bd9YSf
-   Uyehc3+dpFBlx7drCVG1/raygCDOV4SybGpFToWFpPOkCxq5G0DwBdLWM
-   rkqh5SkeUTG4NIEhk8dVTMw1YcXANMlkKVHR4wZdSSo6z1tAOj7uaBDgs
-   2yEFIgZtliQd4AXImCmjoTdYN+X+W+RIyGiUAWEREtrmeoQqaWhRAEOPP
-   u7sPAv/vxBcc8HQX1v6ZR8S8K/1g7TtKfDUhaQF02OM3lolu2/sw4kJi3
-   QcTd/hu3zck4Nrtsoy96xG9YuKD8/QckY7I46QBOzevTisGTxkYRPjiB5
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="322216377"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="322216377"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 13:16:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="651372913"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="651372913"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga006.jf.intel.com with ESMTP; 27 Feb 2023 13:16:42 -0800
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, dave.hansen@intel.com, hpa@zytor.com,
-        linux-kselftest@vger.kernel.org, mizhang@google.com,
-        chang.seok.bae@intel.com
-Subject: [PATCH 2/2] selftests/x86/amx: Add a ptrace test
-Date:   Mon, 27 Feb 2023 13:05:04 -0800
-Message-Id: <20230227210504.18520-3-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230227210504.18520-1-chang.seok.bae@intel.com>
-References: <20221018221349.4196-1-chang.seok.bae@intel.com>
- <20230227210504.18520-1-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Feb 2023 16:19:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CB82735
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 13:18:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677532712;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GHSRojRxVE6zC17aax0uBR9kKGNj5ie6daOM2pf7ZMM=;
+        b=YI6Lz6BNGkY2cgy0vkdzf86qpuLOqVA0vyEx8BqHFKzBw5/TBtKmIfta8D4qnojDFr08Yh
+        Ec12lb+hsD0vElsZGw67I5flr4LdCHWAgyQ5nFfQKkyFLHLSS5T1GfPTGfH5yKUwSVQqMe
+        775bs0JsGBL7kYtgxxeft8UlX81NBXM=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-398-Zh5gfNDOOhuB4R59kXf1uQ-1; Mon, 27 Feb 2023 16:18:29 -0500
+X-MC-Unique: Zh5gfNDOOhuB4R59kXf1uQ-1
+Received: by mail-io1-f71.google.com with SMTP id p188-20020a6b8dc5000000b0074c96ca271bso4874382iod.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 13:18:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GHSRojRxVE6zC17aax0uBR9kKGNj5ie6daOM2pf7ZMM=;
+        b=M+0gzpYeh6ySgpm/4QCJoFcqFh0d+fPdEIzGU/qsnU1uM28lySGnmmGnZQLWeOh62T
+         GfZFP9WI0jPZE31yW/YFvl6siWG5s9fdkgrmkmI/pqInFnNRftu59G+WUWENIwuCEviW
+         TvGwdA52pWNjFEfSUx4nS+FmR00jnNA5+YDZJuAluVcBe0EkD6NO0UT3HOsJuAiQSzJY
+         NM7d4HXSwxw1ysVPFv89GLSNKPeHYW/dftjE5HzZLovEUuy8DMDdsAF4qS07UvjOoSWe
+         2abNv/2fNCh6JOF9LG1wiNzJRJAPqnP6Kt0Z/WrubetA3zeJsQx4/g4U6XPXOUNGquCc
+         97AQ==
+X-Gm-Message-State: AO0yUKVrB157yHNYfb896paKxhmG1RzKuooi7Gk8Ue8dCosIJ/yPwUgy
+        m9fClX1nD3Bv9sAB76HuT5hXjPU1XPHf95xMlHd4J3SjWxFKv/4y6dMq/sxpw2lwXG8bXv15FQH
+        4cwsVd49RIxMvR9c3M1qcML/MbexU
+X-Received: by 2002:a05:6e02:1a0c:b0:316:ef1e:5e1f with SMTP id s12-20020a056e021a0c00b00316ef1e5e1fmr688425ild.1.1677532708524;
+        Mon, 27 Feb 2023 13:18:28 -0800 (PST)
+X-Google-Smtp-Source: AK7set/84o635Z+vKrcRkh21erP0lfLznxR99YMjOmgvY/p96dgESRiSUUmj+XE/9aVJEr7p0zVQmg==
+X-Received: by 2002:a05:6e02:1a0c:b0:316:ef1e:5e1f with SMTP id s12-20020a056e021a0c00b00316ef1e5e1fmr688396ild.1.1677532708247;
+        Mon, 27 Feb 2023 13:18:28 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id i24-20020a02b698000000b003a484df1652sm2296207jam.55.2023.02.27.13.18.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Feb 2023 13:18:27 -0800 (PST)
+Date:   Mon, 27 Feb 2023 16:18:25 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <Y/0eIUIh81jK9w2i@x1n>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <cf36b6ea-6268-deff-d9ed-6782de2bd0a7@gmail.com>
+ <2fe790e5-89e0-d660-79cb-15160dffd907@collabora.com>
+ <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
+ <c15446c5-eedd-690f-9dae-2bc12ee9eb78@collabora.com>
+ <F73885A1-14AE-4820-876B-A8E6DC6D19CC@vmware.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <F73885A1-14AE-4820-876B-A8E6DC6D19CC@vmware.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Include a test case to validate the XTILEDATA injection to the target.
+On Thu, Feb 23, 2023 at 05:11:11PM +0000, Nadav Amit wrote:
+> From my experience with UFFD, proper ordering of events  is crucial, although it
+> is not always done well. Therefore, we should aim for improvement, not
+> regression. I believe that utilizing the pagemap-based mechanism for WP'ing
+> might be a step in the wrong direction. I think that it would have been better
+> to emit a 'UFFD_FEATURE_WP_ASYNC' WP-log (and ordered) with UFFD #PF and
+> events. The 'UFFD_FEATURE_WP_ASYNC'-log may not need to wake waiters on the
+> file descriptor unless the log is full.
 
-Also, it ensures the kernel's ability to copy states between different
-XSAVE formats.
+Yes this is an interesting question to think about..
 
-Refactor the memcmp() code to be usable for the state validation.
+Keeping the data in the pgtable has one good thing that it doesn't need any
+complexity on maintaining the log, and no possibility of "log full".
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- tools/testing/selftests/x86/amx.c | 108 +++++++++++++++++++++++++++++-
- 1 file changed, 105 insertions(+), 3 deletions(-)
+If there's possible "log full" then the next question is whether we should
+let the worker wait the monitor if the monitor is not fast enough to
+collect those data.  It adds some slight dependency on the two threads, I
+think it can make the tracking harder or impossible in latency sensitive
+workloads.
 
-diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
-index 625e42901237..d884fd69dd51 100644
---- a/tools/testing/selftests/x86/amx.c
-+++ b/tools/testing/selftests/x86/amx.c
-@@ -14,8 +14,10 @@
- #include <sys/auxv.h>
- #include <sys/mman.h>
- #include <sys/shm.h>
-+#include <sys/ptrace.h>
- #include <sys/syscall.h>
- #include <sys/wait.h>
-+#include <sys/uio.h>
- 
- #include "../kselftest.h" /* For __cpuid_count() */
- 
-@@ -583,6 +585,13 @@ static void test_dynamic_state(void)
- 	_exit(0);
- }
- 
-+static inline int __compare_tiledata_state(struct xsave_buffer *xbuf1, struct xsave_buffer *xbuf2)
-+{
-+	return memcmp(&xbuf1->bytes[xtiledata.xbuf_offset],
-+		      &xbuf2->bytes[xtiledata.xbuf_offset],
-+		      xtiledata.size);
-+}
-+
- /*
-  * Save current register state and compare it to @xbuf1.'
-  *
-@@ -599,9 +608,7 @@ static inline bool __validate_tiledata_regs(struct xsave_buffer *xbuf1)
- 		fatal_error("failed to allocate XSAVE buffer\n");
- 
- 	xsave(xbuf2, XFEATURE_MASK_XTILEDATA);
--	ret = memcmp(&xbuf1->bytes[xtiledata.xbuf_offset],
--		     &xbuf2->bytes[xtiledata.xbuf_offset],
--		     xtiledata.size);
-+	ret = __compare_tiledata_state(xbuf1, xbuf2);
- 
- 	free(xbuf2);
- 
-@@ -826,6 +833,99 @@ static void test_context_switch(void)
- 	free(finfo);
- }
- 
-+/* Ptrace test */
-+
-+/*
-+ * Make sure the ptracee has the expanded kernel buffer on the first
-+ * use. Then, initialize the state before performing the state
-+ * injection from the ptracer.
-+ */
-+static inline void ptracee_firstuse_tiledata(void)
-+{
-+	load_rand_tiledata(stashed_xsave);
-+	init_xtiledata();
-+}
-+
-+/*
-+ * Ptracer injects the randomized tile data state. It also reads
-+ * before and after that, which will execute the kernel's state copy
-+ * functions. So, the tester is advised to double-check any emitted
-+ * kernel messages.
-+ */
-+static void ptracer_inject_tiledata(pid_t target)
-+{
-+	struct xsave_buffer *xbuf;
-+	struct iovec iov;
-+
-+	xbuf = alloc_xbuf();
-+	if (!xbuf)
-+		fatal_error("unable to allocate XSAVE buffer");
-+
-+	printf("\tRead the init'ed tiledata via ptrace().\n");
-+
-+	iov.iov_base = xbuf;
-+	iov.iov_len = xbuf_size;
-+
-+	memset(stashed_xsave, 0, xbuf_size);
-+
-+	if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-+		fatal_error("PTRACE_GETREGSET");
-+
-+	if (!__compare_tiledata_state(stashed_xsave, xbuf))
-+		printf("[OK]\tThe init'ed tiledata was read from ptracee.\n");
-+	else
-+		printf("[FAIL]\tThe init'ed tiledata was not read from ptracee.\n");
-+
-+	printf("\tInject tiledata via ptrace().\n");
-+
-+	load_rand_tiledata(xbuf);
-+
-+	memcpy(&stashed_xsave->bytes[xtiledata.xbuf_offset],
-+	       &xbuf->bytes[xtiledata.xbuf_offset],
-+	       xtiledata.size);
-+
-+	if (ptrace(PTRACE_SETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-+		fatal_error("PTRACE_SETREGSET");
-+
-+	if (ptrace(PTRACE_GETREGSET, target, (uint32_t)NT_X86_XSTATE, &iov))
-+		fatal_error("PTRACE_GETREGSET");
-+
-+	if (!__compare_tiledata_state(stashed_xsave, xbuf))
-+		printf("[OK]\tTiledata was correctly written to ptracee.\n");
-+	else
-+		printf("[FAIL]\tTiledata was not correctly written to ptracee.\n");
-+}
-+
-+static void test_ptrace(void)
-+{
-+	pid_t child;
-+	int status;
-+
-+	child = fork();
-+	if (child < 0) {
-+		err(1, "fork");
-+	} else if (!child) {
-+		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
-+			err(1, "PTRACE_TRACEME");
-+
-+		ptracee_firstuse_tiledata();
-+
-+		raise(SIGTRAP);
-+		_exit(0);
-+	}
-+
-+	do {
-+		wait(&status);
-+	} while (WSTOPSIG(status) != SIGTRAP);
-+
-+	ptracer_inject_tiledata(child);
-+
-+	ptrace(PTRACE_DETACH, child, NULL, NULL);
-+	wait(&status);
-+	if (!WIFEXITED(status) || WEXITSTATUS(status))
-+		err(1, "ptrace test");
-+}
-+
- int main(void)
- {
- 	/* Check hardware availability at first */
-@@ -846,6 +946,8 @@ int main(void)
- 	ctxtswtest_config.num_threads = 5;
- 	test_context_switch();
- 
-+	test_ptrace();
-+
- 	clearhandler(SIGILL);
- 	free_stashed_xsave();
- 
+The other thing is we can also make the log "never gonna full" by making it
+a bitmap covering any registered ranges, but I don't either know whether
+it'll be worth it for the effort.
+
+Thanks,
+
 -- 
-2.17.1
+Peter Xu
 
