@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000636A4694
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 16:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EA76A474D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 17:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjB0P6q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 10:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S230174AbjB0QxF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Feb 2023 11:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjB0P6o (ORCPT
+        with ESMTP id S229910AbjB0QxE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 10:58:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2391F915;
-        Mon, 27 Feb 2023 07:58:38 -0800 (PST)
+        Mon, 27 Feb 2023 11:53:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F522B46F;
+        Mon, 27 Feb 2023 08:53:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC4FEB80D38;
-        Mon, 27 Feb 2023 15:58:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E66C433EF;
-        Mon, 27 Feb 2023 15:58:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10ED8B80D78;
+        Mon, 27 Feb 2023 16:53:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6931BC433D2;
+        Mon, 27 Feb 2023 16:53:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677513515;
-        bh=gEEVoOt1hFZHp8YuqiIBgYgz6TP8vkteCT03OdVERyk=;
+        s=k20201202; t=1677516780;
+        bh=OYmyRiD0A+BqV+mfTn2kCuA6YJl03zygH/UZ7pYtlTg=;
         h=Subject:From:To:Cc:Date:From;
-        b=pb+l9PX/kc9eSPb9N7fz1lsQ2HHXlYouVkkHEHt7jySpzky95+Rj2wiUtgopMm0C9
-         dISMI503FMORGn2X18f6lez2ymEIHGmDJJHJaEB1zrWqU9RGiIT74EyFIEDcxRNNyx
-         tlho7KRoos1HmgcM+aJoLavmZw2YKZvvfZhNMWQW6FVYZ8UIUpq8O0BypDM1QbjjK6
-         6MCLQ/1w/pg3HUvfBDpKPieuhmZDR90zRPR7FDV7fXkWUP5jiei5tIBl67sg3BADj5
-         jKfHsgjZN9ZKwQii0xseNe/+2wCRp6qeJU31O6tCQg5Z5n1PsD03MwmFVMECnd3Xst
-         6ENyW0nXuTACw==
-Subject: [PATCH] SUNRPC: Let Kunit tests run with some enctypes compiled out
+        b=dttdgN8GHdNtgfOLKRxZqcOjyH4yNDcr59n7uh1LCWQVWGZowhE5DYs8p6jR8zXQC
+         Tjl60VEVWQ0Kq3868WtbWpK5hbVqZbOxqvX8cCmOieDZY1RPeLJRSwsMVNrSQgstTg
+         4Bf+yoT1nK6Q+Yx6pZDjTvjxzGvPycJVH0ZinKixWcsVuI2uu8Ycj/JgVYSqJDckx9
+         5ujLEKqJZCZFVf7VoZNY7uGQjmtVgKAC04B7+pTMb9F2Cw16MXzkFgZQ80pP8CGSVu
+         DRYMGkQB/kIOKrl5HkocWEhRrU9U5CEC+QOSYKc4Qhf825R32Pl/hp9XxxWD3WZ+Zz
+         I4+11D2nx1y5g==
+Subject: [PATCH] SUNRPC: Ensure test case arrays are properly terminated
 From:   Chuck Lever <cel@kernel.org>
 To:     geert@linux-m68k.org
 Cc:     linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-m68k@lists.linux-m68k.org
-Date:   Mon, 27 Feb 2023 10:58:34 -0500
-Message-ID: <167751329962.149247.12935751231288858919.stgit@bazille.1015granger.net>
+Date:   Mon, 27 Feb 2023 11:52:59 -0500
+Message-ID: <167751664019.187639.5290505948970809072.stgit@bazille.1015granger.net>
 User-Agent: StGit/1.5
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,88 +55,81 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Chuck Lever <chuck.lever@oracle.com>
 
-Allow the new GSS Kerberos encryption type test suites to run
-outside of the kunit infrastructure. Replace the assertion that
-fires when lookup_enctype() so that the case is skipped instead of
-failing outright.
+Geert Uytterhoeven reports:
+
+...
+        ok 9 Encrypt 13 bytes with camellia256-cts-cmac
+        ok 10 Encrypt 30 bytes with camellia256-cts-cmac
+    # RFC 6803 encryption: pass:0 fail:0 skip:10 total:10
+    ok 3 RFC 6803 encryption # SKIP Encryption type is not available
+8<--- cut here ---
+Unable to handle kernel paging request at virtual address 73657420 when execute
+[73657420] *pgd=00000000
+Internal error: Oops: 80000005 [#1] ARM
+CPU: 0 PID: 1 Comm: swapper Tainted: G                 N 6.2.0-rc7-00133-g373f26a81164-dirty #9
+Hardware name: Generic DT based system
+PC is at 0x73657420
+LR is at kunit_run_tests+0x3e0/0x5f4
+
+On x86 with GCC 12, the missing array terminators did not seem to
+matter. Other platforms appear to be more picky.
 
 Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 ---
+ net/sunrpc/auth_gss/gss_krb5_test.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-Hey Geert -
+Hi Geert -
 
-This patch addresses part of your concern: with this patch applied,
-you should be able to run only the tests that target the encryption
-types that are enabled in your kernel. The other tests will be
-skipped rather than fail outright.
+Finally able to reproduce. This simple patch seems to address the
+crashes for me. If this patch fixes it for you I can push it to
+Linus before the v6.3 merge window closes.
 
- net/sunrpc/auth_gss/gss_krb5_test.c |   18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/net/sunrpc/auth_gss/gss_krb5_test.c b/net/sunrpc/auth_gss/gss_krb5_test.c
-index c287ce15c419..0a7c5280e4e3 100644
+index 0a7c5280e4e3..ce0541e32fc9 100644
 --- a/net/sunrpc/auth_gss/gss_krb5_test.c
 +++ b/net/sunrpc/auth_gss/gss_krb5_test.c
-@@ -49,7 +49,8 @@ static void kdf_case(struct kunit *test)
+@@ -519,6 +519,7 @@ static struct kunit_case rfc3961_test_cases[] = {
+ 		.run_case		= kdf_case,
+ 		.generate_params	= rfc3961_kdf_gen_params,
+ 	},
++	{}
+ };
  
- 	/* Arrange */
- 	gk5e = gss_krb5_lookup_enctype(param->enctype);
--	KUNIT_ASSERT_NOT_NULL(test, gk5e);
-+	if (!gk5e)
-+		kunit_skip(test, "Encryption type is not available");
+ static struct kunit_suite rfc3961_suite = {
+@@ -780,6 +781,7 @@ static struct kunit_case rfc3962_test_cases[] = {
+ 		.run_case		= rfc3962_encrypt_case,
+ 		.generate_params	= rfc3962_encrypt_gen_params,
+ 	},
++	{}
+ };
  
- 	derivedkey.data = kunit_kzalloc(test, param->expected_result->len,
- 					GFP_KERNEL);
-@@ -83,7 +84,8 @@ static void checksum_case(struct kunit *test)
+ static struct kunit_suite rfc3962_suite = {
+@@ -1415,6 +1417,7 @@ static struct kunit_case rfc6803_test_cases[] = {
+ 		.run_case		= rfc6803_encrypt_case,
+ 		.generate_params	= rfc6803_encrypt_gen_params,
+ 	},
++	{}
+ };
  
- 	/* Arrange */
- 	gk5e = gss_krb5_lookup_enctype(param->enctype);
--	KUNIT_ASSERT_NOT_NULL(test, gk5e);
-+	if (!gk5e)
-+		kunit_skip(test, "Encryption type is not available");
+ static struct kunit_suite rfc6803_suite = {
+@@ -1907,6 +1910,7 @@ static struct kunit_case rfc8009_test_cases[] = {
+ 		.run_case		= rfc8009_encrypt_case,
+ 		.generate_params	= rfc8009_encrypt_gen_params,
+ 	},
++	{}
+ };
  
- 	Kc.len = gk5e->Kc_length;
- 	Kc.data = kunit_kzalloc(test, Kc.len, GFP_KERNEL);
-@@ -725,7 +727,8 @@ static void rfc3962_encrypt_case(struct kunit *test)
+ static struct kunit_suite rfc8009_suite = {
+@@ -2029,6 +2033,7 @@ static struct kunit_case encryption_test_cases[] = {
+ 		.run_case		= encrypt_selftest_case,
+ 		.generate_params	= encrypt_selftest_gen_params,
+ 	},
++	{}
+ };
  
- 	/* Arrange */
- 	gk5e = gss_krb5_lookup_enctype(param->enctype);
--	KUNIT_ASSERT_NOT_NULL(test, gk5e);
-+	if (!gk5e)
-+		kunit_skip(test, "Encryption type is not available");
- 
- 	cbc_tfm = crypto_alloc_sync_skcipher(gk5e->aux_cipher, 0, 0);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, cbc_tfm);
-@@ -1319,7 +1322,8 @@ static void rfc6803_encrypt_case(struct kunit *test)
- 
- 	/* Arrange */
- 	gk5e = gss_krb5_lookup_enctype(param->enctype);
--	KUNIT_ASSERT_NOT_NULL(test, gk5e);
-+	if (!gk5e)
-+		kunit_skip(test, "Encryption type is not available");
- 
- 	usage.data[3] = param->constant;
- 
-@@ -1810,7 +1814,8 @@ static void rfc8009_encrypt_case(struct kunit *test)
- 
- 	/* Arrange */
- 	gk5e = gss_krb5_lookup_enctype(param->enctype);
--	KUNIT_ASSERT_NOT_NULL(test, gk5e);
-+	if (!gk5e)
-+		kunit_skip(test, "Encryption type is not available");
- 
- 	*(__be32 *)usage.data = cpu_to_be32(2);
- 
-@@ -1975,7 +1980,8 @@ static void encrypt_selftest_case(struct kunit *test)
- 
- 	/* Arrange */
- 	gk5e = gss_krb5_lookup_enctype(param->enctype);
--	KUNIT_ASSERT_NOT_NULL(test, gk5e);
-+	if (!gk5e)
-+		kunit_skip(test, "Encryption type is not available");
- 
- 	cbc_tfm = crypto_alloc_sync_skcipher(gk5e->aux_cipher, 0, 0);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, cbc_tfm);
+ static struct kunit_suite encryption_test_suite = {
 
 
