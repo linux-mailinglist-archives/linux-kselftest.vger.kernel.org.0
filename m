@@ -2,134 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EA76A474D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 17:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8550E6A476D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 18:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjB0QxF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 11:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S230320AbjB0RAJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Feb 2023 12:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjB0QxE (ORCPT
+        with ESMTP id S230056AbjB0RAG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 11:53:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F522B46F;
-        Mon, 27 Feb 2023 08:53:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10ED8B80D78;
-        Mon, 27 Feb 2023 16:53:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6931BC433D2;
-        Mon, 27 Feb 2023 16:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677516780;
-        bh=OYmyRiD0A+BqV+mfTn2kCuA6YJl03zygH/UZ7pYtlTg=;
-        h=Subject:From:To:Cc:Date:From;
-        b=dttdgN8GHdNtgfOLKRxZqcOjyH4yNDcr59n7uh1LCWQVWGZowhE5DYs8p6jR8zXQC
-         Tjl60VEVWQ0Kq3868WtbWpK5hbVqZbOxqvX8cCmOieDZY1RPeLJRSwsMVNrSQgstTg
-         4Bf+yoT1nK6Q+Yx6pZDjTvjxzGvPycJVH0ZinKixWcsVuI2uu8Ycj/JgVYSqJDckx9
-         5ujLEKqJZCZFVf7VoZNY7uGQjmtVgKAC04B7+pTMb9F2Cw16MXzkFgZQ80pP8CGSVu
-         DRYMGkQB/kIOKrl5HkocWEhRrU9U5CEC+QOSYKc4Qhf825R32Pl/hp9XxxWD3WZ+Zz
-         I4+11D2nx1y5g==
-Subject: [PATCH] SUNRPC: Ensure test case arrays are properly terminated
-From:   Chuck Lever <cel@kernel.org>
-To:     geert@linux-m68k.org
-Cc:     linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org
-Date:   Mon, 27 Feb 2023 11:52:59 -0500
-Message-ID: <167751664019.187639.5290505948970809072.stgit@bazille.1015granger.net>
-User-Agent: StGit/1.5
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 27 Feb 2023 12:00:06 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699D11CAFA
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 09:00:04 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id x9-20020a1709028ec900b0019cad25ecf5so3912443plo.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 09:00:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=75A0gEwys1mFY3sJ5wHScJ9ljDVthV3+ryRrHEENcQo=;
+        b=cLtWhUG9qsA4Sg24ae9fYUU4+Jizp49jqXT9Sfy+9fByadRsDkot02jjzzg5b2L5Xs
+         4p31MmnUIDIGwI0i/YSZGLRpX+ovsl39jJqI4PvJvxCbjeEQ+Qgawa2WEoiPTofV4BDa
+         RlEha9mid0gYgb6ZrswEsykY7taZ9zgYENPxcCJgUDJ5aCXp4DYkULEQrtgAF7HwaDWD
+         47tC1GMc9jX+XOMQrLfWidvs+Ppgw0lAJ2qMjRHZWhSqHcDOV9Sp1X96Cqel9TG8FKCt
+         XUDU2HOvl03Pnq2Ioq1hngvzmArdOS/tf8YuPsxB5FNETBKRe5UoIcOan7vC6M/xITna
+         zm9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=75A0gEwys1mFY3sJ5wHScJ9ljDVthV3+ryRrHEENcQo=;
+        b=vSywIn46ygoUP9obEl7JCeQDfkRNvIANJbMVncS/iCxi+xl5gtfvAwCw15TmdFS401
+         zdVegKMJeS2tpsvoLmm11PtXLvjIzFtatqCCYk5vYygbWSFM2sJr6nalgKXaIHdRJ2qn
+         DNAffVGDzh1KkHlz7cWZEh3P5StRTOSmIdl7JKMe6gSwn5LrNXUUvWTJLbK592iYOhjn
+         N3BVURnxudkl6idsML881GJV+C8v154loFH8D09/ERPfRVPQx5+dvfB1Rq1VH3lxocrR
+         TezxBvbYL8Llgxcr5GIQngc2SvqqeuWjOX5jzb5h1txReCIH0n2UJHz8NH1Ca9kAzOPI
+         iPOg==
+X-Gm-Message-State: AO0yUKWoJInCEdZxSGvlsDr9XKt2U5WkrHJIApYh5f1QLIbu5x3Wgl9A
+        Hz7hEcx9t62j0Bmca3SWOP74A/JJYBqKhQ==
+X-Google-Smtp-Source: AK7set8zQAXFt4iHWata/ORsoMm97Yi3POewWVMQEsZw5ZAOjhhfqfG2Q9XR/zpLBeiPml9TRrLMz6WNMVoAkQ==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a17:90a:8a0f:b0:236:67f4:e575 with SMTP
+ id w15-20020a17090a8a0f00b0023667f4e575mr4352155pjn.3.1677517203795; Mon, 27
+ Feb 2023 09:00:03 -0800 (PST)
+Date:   Mon, 27 Feb 2023 17:00:01 +0000
+In-Reply-To: <20230226131634.34366-1-ivan.orlov0322@gmail.com>
+Mime-Version: 1.0
+References: <20230226131634.34366-1-ivan.orlov0322@gmail.com>
+Message-ID: <20230227170001.ka5eyfscvdypc2oc@google.com>
+Subject: Re: [PATCH] selftests: cgroup: Add 'malloc' failures checks in test_memcontrol
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        muchun.song@linux.dev, tj@kernel.org, lizefan.x@bytedance.com,
+        shuah@kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+On Sun, Feb 26, 2023 at 04:16:33PM +0300, Ivan Orlov wrote:
+> There are several 'malloc' calls in test_memcontrol, which can be
+> unsuccessful. This patch will add 'malloc' failures checking to
+> give more details about test's fail reasons and avoid possible
+> undefined behavior during the future null dereference (like the
+> one in alloc_anon_50M_check_swap function).
+> 
+> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 
-Geert Uytterhoeven reports:
-
-...
-        ok 9 Encrypt 13 bytes with camellia256-cts-cmac
-        ok 10 Encrypt 30 bytes with camellia256-cts-cmac
-    # RFC 6803 encryption: pass:0 fail:0 skip:10 total:10
-    ok 3 RFC 6803 encryption # SKIP Encryption type is not available
-8<--- cut here ---
-Unable to handle kernel paging request at virtual address 73657420 when execute
-[73657420] *pgd=00000000
-Internal error: Oops: 80000005 [#1] ARM
-CPU: 0 PID: 1 Comm: swapper Tainted: G                 N 6.2.0-rc7-00133-g373f26a81164-dirty #9
-Hardware name: Generic DT based system
-PC is at 0x73657420
-LR is at kunit_run_tests+0x3e0/0x5f4
-
-On x86 with GCC 12, the missing array terminators did not seem to
-matter. Other platforms appear to be more picky.
-
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
----
- net/sunrpc/auth_gss/gss_krb5_test.c |    5 +++++
- 1 file changed, 5 insertions(+)
-
-Hi Geert -
-
-Finally able to reproduce. This simple patch seems to address the
-crashes for me. If this patch fixes it for you I can push it to
-Linus before the v6.3 merge window closes.
-
-
-diff --git a/net/sunrpc/auth_gss/gss_krb5_test.c b/net/sunrpc/auth_gss/gss_krb5_test.c
-index 0a7c5280e4e3..ce0541e32fc9 100644
---- a/net/sunrpc/auth_gss/gss_krb5_test.c
-+++ b/net/sunrpc/auth_gss/gss_krb5_test.c
-@@ -519,6 +519,7 @@ static struct kunit_case rfc3961_test_cases[] = {
- 		.run_case		= kdf_case,
- 		.generate_params	= rfc3961_kdf_gen_params,
- 	},
-+	{}
- };
- 
- static struct kunit_suite rfc3961_suite = {
-@@ -780,6 +781,7 @@ static struct kunit_case rfc3962_test_cases[] = {
- 		.run_case		= rfc3962_encrypt_case,
- 		.generate_params	= rfc3962_encrypt_gen_params,
- 	},
-+	{}
- };
- 
- static struct kunit_suite rfc3962_suite = {
-@@ -1415,6 +1417,7 @@ static struct kunit_case rfc6803_test_cases[] = {
- 		.run_case		= rfc6803_encrypt_case,
- 		.generate_params	= rfc6803_encrypt_gen_params,
- 	},
-+	{}
- };
- 
- static struct kunit_suite rfc6803_suite = {
-@@ -1907,6 +1910,7 @@ static struct kunit_case rfc8009_test_cases[] = {
- 		.run_case		= rfc8009_encrypt_case,
- 		.generate_params	= rfc8009_encrypt_gen_params,
- 	},
-+	{}
- };
- 
- static struct kunit_suite rfc8009_suite = {
-@@ -2029,6 +2033,7 @@ static struct kunit_case encryption_test_cases[] = {
- 		.run_case		= encrypt_selftest_case,
- 		.generate_params	= encrypt_selftest_gen_params,
- 	},
-+	{}
- };
- 
- static struct kunit_suite encryption_test_suite = {
-
-
+Acked-by: Shakeel Butt <shakeelb@google.com>
