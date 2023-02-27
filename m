@@ -2,78 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62FE6A4ED8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 23:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A796A4F09
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 23:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjB0WpJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 17:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S229727AbjB0W6w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Feb 2023 17:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjB0WpH (ORCPT
+        with ESMTP id S229486AbjB0W6w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 17:45:07 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C83469F
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 14:44:30 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id cy6so32305768edb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 14:44:30 -0800 (PST)
+        Mon, 27 Feb 2023 17:58:52 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD7765B4;
+        Mon, 27 Feb 2023 14:58:50 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so8315091wms.2;
+        Mon, 27 Feb 2023 14:58:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UQjk/PZKU2DKght8FRlaLknd5PbdlPsKTaWJTtSom5E=;
-        b=Z4xnRTpH7LFm1OILM4uiVABZNuvqC1QrsSYJIARQFL78bwuG4XRSWhE7Enp6fOSluw
-         rdHYa9x1Z+cn3fVGbmBxKZykE4bE6SsUwmzaGCyD3JjLg8I9RZNPBlqwL6m/+6a4U3er
-         TbBcOL2ICWaKgVdJdGyY8tz7u6pVjwfsiVyAA=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H6xWs38kFFRDAh0TFymIbiQKfi/uzaXf1tagUWDeIW0=;
+        b=Dq6vHEXxVniMMEpmWwFKAkW+Zc2x83TVWydAdMc3glHrI0mwLUgp5yzfANsu0QEKnG
+         0ZJJB7b3+19u/s77805CpMG5TsShphc7wFKJT/uLFtdr+rLRcn5vPShcCUMl8BtQa6h0
+         wh3KHNSIR3xfINBdaKRCRkFdAl3FwskI63Ce4H5ctJ2IN9CHLiW6zcDo+Nsl8yxlvbIX
+         rfmGaWz118gk//ZxJH61pp3BJavGZqsOaIIsP3ULVvPl6vKXrrrXzp4CuzUp75AlP8Qp
+         FD8xHmsXNDy5M2Vv1It+2zuUFcry8wOmxxXcKeneRJmMIEatx+qeDSJO92on4CEDbNPT
+         dpTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UQjk/PZKU2DKght8FRlaLknd5PbdlPsKTaWJTtSom5E=;
-        b=LAsCSmIcrlQY+Bm/K0yEMEN1pKZ8mw0u2Mray4NGFDodM55zjndMX4cVA13RUcZ35y
-         bdRBgBnujob7Fk4qqXdf4OowXF0WFmBTmRRi1Bi5ivtZL2GIokgWwKhwJWlQ1UQJggH8
-         /3NhQbrR/0etQ3H8JjACbAg3WgsMvt5DJJ46/XX89puGmJyuMZs1hD07/Ad8QQBZOWdQ
-         AAMEJ3aozn5QVqheds6BuPWgKqm3Y0GGJ9JMHbJdwSdbUQs48t6PTVw2M2YsjACSGaba
-         rDHn5ACQRG+eUxY/7yzPcjGqbQnCXgCPJ+kpiHfZZh6x/nyVXMI6+rSwUWxzidPGAC0x
-         5onQ==
-X-Gm-Message-State: AO0yUKWZfD13IxuX+GnCZGDNolfj5drWieO5MYlhFEGOKptzR1BCtTYd
-        Dbsv+AntOiB5j2lh0UH6ya+pwOpxtjMd/pSVmhQ=
-X-Google-Smtp-Source: AK7set/zEh73sv4uEG8fK1ZtqInbtZgFF3SCT0Nc+wNuFlNqilAvJe9wjwg5TtgI/773UoX963A5Vw==
-X-Received: by 2002:a05:6402:1154:b0:4af:70a6:e841 with SMTP id g20-20020a056402115400b004af70a6e841mr1209245edw.12.1677537825674;
-        Mon, 27 Feb 2023 14:43:45 -0800 (PST)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id os6-20020a170906af6600b008f7f6943d1dsm3678953ejb.42.2023.02.27.14.43.44
-        for <linux-kselftest@vger.kernel.org>
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H6xWs38kFFRDAh0TFymIbiQKfi/uzaXf1tagUWDeIW0=;
+        b=CLet/afrIdZN5qn3YzDUNjk1kqhq8Ak6kDNQWTrcc2qg7L6xCuVl6SpQJ1pZyl6fcB
+         Xr8FCKrVGNKq1h8b4EzGWNJxGKbTO0vL+/cXl9APRwGoUJLPZ5iyBnQKilKUoDXBkQY0
+         RvGul4cDVj5QwxyKkp72UHtFQlVmMZ9MKdLTSACW6DJYRNGHuSeRw/v2FgqM9ngdc0on
+         zH+nLMoAZ/AEZQ+6zqdbZSJgWyMeAg16gZUN60vtV90A+qtkAyNL2MhWPAfY2orGKYbw
+         mAvTScJbKQRvnmhLAgqpnj+Yd5WIxSu0pywzNpzicMpO7rCMHHNSPq0ra45gLv8IPgTk
+         h1Og==
+X-Gm-Message-State: AO0yUKVfimPOzmZf5RVNVIrxezY+0xkUxEfcQu7kZJwdDLK3R0/WLokf
+        g/lTVtPR7uNScw8A+b9aEEhhVopwmq4=
+X-Google-Smtp-Source: AK7set8xecthH7WDnyqAS2Sx3sy62KG6JBF5aaG2pGLKBeVULhlH0EvAwOxFgOkVbSAZcaYZav/yQQ==
+X-Received: by 2002:a05:600c:3b28:b0:3eb:3104:efe7 with SMTP id m40-20020a05600c3b2800b003eb3104efe7mr606906wms.23.1677538728724;
+        Mon, 27 Feb 2023 14:58:48 -0800 (PST)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id u17-20020adff891000000b002c553e061fdsm8115016wrp.112.2023.02.27.14.58.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 14:43:45 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id o12so32207946edb.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 14:43:44 -0800 (PST)
-X-Received: by 2002:a50:c351:0:b0:4af:70a5:4408 with SMTP id
- q17-20020a50c351000000b004af70a54408mr607608edb.5.1677537824536; Mon, 27 Feb
- 2023 14:43:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20230225014529.2259752-1-davidgow@google.com>
-In-Reply-To: <20230225014529.2259752-1-davidgow@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 27 Feb 2023 14:43:27 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgK07PQ_DBBbAbSJ41t__6de1xZ6q7RRu-JS=2SU0wqLQ@mail.gmail.com>
-Message-ID: <CAHk-=wgK07PQ_DBBbAbSJ41t__6de1xZ6q7RRu-JS=2SU0wqLQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix 'hooks.o' build by recursing into kunit
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Mon, 27 Feb 2023 14:58:48 -0800 (PST)
+Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in
+ BPF
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <cover.1677526810.git.dxu@dxuuu.xyz>
+ <cf49a091-9b14-05b8-6a79-00e56f3019e1@gmail.com>
+ <20230227220406.4x45jcigpnjjpdfy@kashmir.localdomain>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <cc4712f7-c723-89fc-dc9c-c8db3ff8c760@gmail.com>
+Date:   Mon, 27 Feb 2023 22:58:47 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20230227220406.4x45jcigpnjjpdfy@kashmir.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,51 +79,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 5:45=E2=80=AFPM David Gow <davidgow@google.com> wro=
-te:
->
-> +# Some KUnit files (hooks.o) need to be built-in even when KUnit is a mo=
-dule,
-> +# so we can't just use obj-$(CONFIG_KUNIT).
-> +ifdef CONFIG_KUNIT
-> +obj-y +=3D kunit/
->  endif
+On 27/02/2023 22:04, Daniel Xu wrote:
+> I don't believe full L4 headers are required in the first fragment.
+> Sufficiently sneaky attackers can, I think, send a byte at a time to
+> subvert your proposed algorithm. Storing skb data seems inevitable here.
+> Someone can correct me if I'm wrong here.
 
-We actually have a pattern for this, although I guess it's rare enough
-that "pattern" isn't necessarily the right word.
+My thinking was that legitimate traffic would never do this and thus if
+ your first fragment doesn't have enough data to make a determination
+ then you just DROP the packet.
 
-But you can find things like the Hyper-V drivers having similar
-issues, and so the driver Makefile has
+> What I find valuable about this patch series is that we can
+> leverage the well understood and battle hardened kernel facilities. So
+> avoid all the correctness and security issues that the kernel has spent
+> 20+ years fixing.
 
-    obj-$(subst m,y,$(CONFIG_HYPERV))       +=3D hv/
+I can certainly see the argument here.  I guess it's a question of are
+ you more worried about the DoS from tricking the validator into thinking
+ good fragments are bad (the reverse is irrelevant because if you can
+ trick a validator into thinking your bad fragment belongs to a previously
+ seen good packet, then you can equally trick a reassembler into stitching
+ your bad fragment into that packet), or are you more worried about the
+ DoS from tying lots of memory down in the reassembly cache.
+Even with reordering handling, a data structure to record which ranges of
+ a packet have been seen takes much less memory than storing the complete
+ fragment bodies.  (Just a simple bitmap of 8-byte blocks — the resolution
+ of iph->frag_off — reduces size by a factor of 64, not counting all the
+ overhead of a struct sk_buff for each fragment in the queue.  Or you
+ could re-use the rbtree-based code from the reassembler, just with a
+ freshly allocated node containing only offset & length, instead of the
+ whole SKB.)
+And having a BPF helper effectively consume the skb is awkward, as you
+ noted; someone is likely to decide that skb_copy() is too slow, try to
+ add ctx invalidation, and thereby create a whole new swathe of potential
+ correctness and security issues.
+Plus, imagine trying to support this in a hardware-offload XDP device.
+ They'd have to reimplement the entire frag cache, which is a much bigger
+ attack surface than just a frag validator, and they couldn't leverage
+ the battle-hardened kernel implementation.
 
-See a few other cases with
+> And make it trivial for the next person that comes
+> along to do the right thing.
 
-    git grep "subst m,y,"
+Fwiw the validator approach could *also* be a helper, it doesn't have to
+ be something the BPF developer writes for themselves.
 
-but I guess the "ifdef CONFIG_KUNIT" thing works too. I can only find
-one case of that (in arch/mips/Kbuild).
+But if after thinking about the possibility you still prefer your way, I
+ won't try to stop you — I just wanted to ensure it had been considered.
 
-Another way of dealing with this - that is more common for individual
-object files rather than directories - is to just do
-
-    kunit-dir-$(CONFIG_KUNIT) :=3D kunit/
-    obj-y +=3D $(kunit-dir-y) $(kunit-dir-m)
-
-which admittedly is also not a hugely common pattern, but does exist
-in various places (see for example the 'sfp-bus.o' file and CONFIG_SFP
-in drivers/net/phy/Makefile.
-
-That last pattern is probably most common in scripts/Makefile.lib,
-where we have things like
-
-       hostprogs +=3D $(hostprogs-always-y) $(hostprogs-always-m)
-
-which is similar but not the exact same thing.
-
-Anyway, I guess I'll just apply that patch as-is, I just wanted to
-point out that the particular pattern it uses may be simple, but we've
-generally tried to just do our Makefile evaluations with "arithmetic"
-rather than conditionals.
-
-              Linus
+-ed
