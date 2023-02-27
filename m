@@ -2,109 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D919B6A4B5B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 20:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 397D86A4B86
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Feb 2023 20:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjB0Tnl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 14:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        id S229988AbjB0TuW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Feb 2023 14:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjB0Tnk (ORCPT
+        with ESMTP id S229542AbjB0TuV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 14:43:40 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D8C23C70;
-        Mon, 27 Feb 2023 11:43:38 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id ev13so5238385qvb.10;
-        Mon, 27 Feb 2023 11:43:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yKY+VbY0FCl1BqoxDKxydDXKFwBbKHMwhMyu/F0WRtQ=;
-        b=UTQFCucOBd2JrvE8P1M7K0WBL2Tuf8YRyKZwGZl7ReNmqgHVLL+hmitCniE8SvtLLy
-         czCb5+JJvRCF47nWOHjvf4lEXbvIbWI3BO4/MMeyri04xLr8x7A0JglrlWiaM61NQQ4M
-         kvfja83M+gBc3T7RdAGx1JI6iUwTfcLeOA2YvsKsjtSkhUkcSqCgrDFgOPJnwiA9KOVe
-         1twI8SgN0kZSZLlmpxOJD4N8PZysV1Eyj8kfquAc3+jssuJxL7DjkUOf836O37veYXZQ
-         +UjMgACMIKktroPSTrB6WZVI4y3Ya9dNxaj29+uQlU8kvCwkMsqH0Tv5+sPw0f9EwIMO
-         YHug==
-X-Gm-Message-State: AO0yUKU70MF2pAAWOtJMHrGabJm59sr7dJINwOgiS8PQLyQXscPKjBYL
-        C5WdpVYhXxA5itwzPxP+hFjbwIoHa3+rzA==
-X-Google-Smtp-Source: AK7set/mZgNy3RcEHjGRvdXejRBRSSW1YDYM93ryIFUo4mcucJwkYAqz4z/TtSATtwrdkeySiorUDA==
-X-Received: by 2002:a05:6214:262d:b0:572:2aa2:6dfa with SMTP id gv13-20020a056214262d00b005722aa26dfamr1254056qvb.28.1677527017090;
-        Mon, 27 Feb 2023 11:43:37 -0800 (PST)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id 135-20020a37068d000000b006ff8a122a1asm5503601qkg.78.2023.02.27.11.43.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Feb 2023 11:43:36 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-536af432ee5so208705497b3.0;
-        Mon, 27 Feb 2023 11:43:36 -0800 (PST)
-X-Received: by 2002:a81:b603:0:b0:533:99bb:c296 with SMTP id
- u3-20020a81b603000000b0053399bbc296mr10724897ywh.5.1677527016482; Mon, 27 Feb
- 2023 11:43:36 -0800 (PST)
+        Mon, 27 Feb 2023 14:50:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB75C23C6F;
+        Mon, 27 Feb 2023 11:50:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4507BB80D9A;
+        Mon, 27 Feb 2023 19:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C6C8AC4339C;
+        Mon, 27 Feb 2023 19:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677527417;
+        bh=lKFcvEtIcSmjm5Rgotyf8NEeyKWAtt2iEvljqX6yX4M=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=j7VfAh5vjIUDzHs1dPVBU0Bvcagl3w7NtGpKOI6DjOVXt3vyFiEnpcxwSrcoEq8y1
+         9kegsrJ2Qni3OoeuIdSRZt0yWAeVnbXcP1DQ9nvuvQkx8vHrsVa9gGEb8dlDXTIc9H
+         MT/eDkol5xKm47LmvPwdfX1D2H85xX6DcM9h4cbvZ2YYRX/5a5tdjP/XG77dTNFWmb
+         BUiCMu/J34Si7bUKg/SIzTenYF0H9t+x84hOWI73hyFAqbqfgKYNjG032XpSM9aSv3
+         TVJglS2L0AtIOo9pO0Z6FqDsJxXVpzvaHOY7DucULULHNiUlK9wuz5DUHE0C3/hVKz
+         gqNFTaR9ZYHEw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9DBA9E1CF31;
+        Mon, 27 Feb 2023 19:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <167751664019.187639.5290505948970809072.stgit@bazille.1015granger.net>
-In-Reply-To: <167751664019.187639.5290505948970809072.stgit@bazille.1015granger.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Feb 2023 20:43:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW7mKmji6yyd2w+TrX0toyMN5r=hWvyxtM8D=qdBLcdww@mail.gmail.com>
-Message-ID: <CAMuHMdW7mKmji6yyd2w+TrX0toyMN5r=hWvyxtM8D=qdBLcdww@mail.gmail.com>
-Subject: Re: [PATCH] SUNRPC: Ensure test case arrays are properly terminated
-To:     Chuck Lever <cel@kernel.org>
-Cc:     linux-nfs@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix compilation errors: assign a
+ value to a constant
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167752741762.17622.17095700621282527889.git-patchwork-notify@kernel.org>
+Date:   Mon, 27 Feb 2023 19:50:17 +0000
+References: <tencent_CB281722B3C1BD504C16CDE586CACC2BE706@qq.com>
+In-Reply-To: <tencent_CB281722B3C1BD504C16CDE586CACC2BE706@qq.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     ast@kernel.org, rongtao@cestc.cn, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        mykolal@fb.com, shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Chuck,
+Hello:
 
-On Mon, Feb 27, 2023 at 5:53 PM Chuck Lever <cel@kernel.org> wrote:
-> From: Chuck Lever <chuck.lever@oracle.com>
->
-> Geert Uytterhoeven reports:
->
-> ...
->         ok 9 Encrypt 13 bytes with camellia256-cts-cmac
->         ok 10 Encrypt 30 bytes with camellia256-cts-cmac
->     # RFC 6803 encryption: pass:0 fail:0 skip:10 total:10
->     ok 3 RFC 6803 encryption # SKIP Encryption type is not available
-> 8<--- cut here ---
-> Unable to handle kernel paging request at virtual address 73657420 when execute
-> [73657420] *pgd=00000000
-> Internal error: Oops: 80000005 [#1] ARM
-> CPU: 0 PID: 1 Comm: swapper Tainted: G                 N 6.2.0-rc7-00133-g373f26a81164-dirty #9
-> Hardware name: Generic DT based system
-> PC is at 0x73657420
-> LR is at kunit_run_tests+0x3e0/0x5f4
->
-> On x86 with GCC 12, the missing array terminators did not seem to
-> matter. Other platforms appear to be more picky.
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-Doesn't gcc on x86 align all arrays to a 16-byte boundary, hence
-adding zero-padding here?
+On Fri, 24 Feb 2023 23:10:02 +0800 you wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> commit bc292ab00f6c("mm: introduce vma->vm_flags wrapper functions")
+> turns the vm_flags into a const variable.
+> 
+> Added bpf_find_vma test in commit f108662b27c9("selftests/bpf: Add tests
+> for bpf_find_vma") to assign values to variables that declare const in
+> find_vma_fail1.c programs, which is an error to the compiler and does not
+> test BPF verifiers. It is better to replace 'const vm_flags_t vm_flags'
+> with 'unsigned long vm_start' for testing.
+> 
+> [...]
 
->
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Here is the summary with links:
+  - [bpf-next,v2] selftests/bpf: Fix compilation errors: assign a value to a constant
+    https://git.kernel.org/bpf/bpf-next/c/11e456cae91e
 
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+You are awesome, thank you!
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
