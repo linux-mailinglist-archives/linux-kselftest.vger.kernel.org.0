@@ -2,90 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C0B6A56C9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 11:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CD96A5814
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 12:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjB1Kbn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Feb 2023 05:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
+        id S231192AbjB1L3j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Feb 2023 06:29:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjB1Kbm (ORCPT
+        with ESMTP id S231569AbjB1L3g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:31:42 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FF06EB4
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 02:31:37 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:9202:974e:f0e0:414c])
-        by michel.telenet-ops.be with bizsmtp
-        id SaXZ2900M1hKVeJ06aXZ5Z; Tue, 28 Feb 2023 11:31:35 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pWxGC-00ANGo-KM;
-        Tue, 28 Feb 2023 11:31:33 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pWxGf-00FbNQ-5O;
-        Tue, 28 Feb 2023 11:31:33 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-sh@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 2/2] kunit: tool: Add support for SH under QEMU
-Date:   Tue, 28 Feb 2023 11:31:03 +0100
-Message-Id: <c72e5884711da51424ad2f9c7933bb294129aef3.1677579750.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1677579750.git.geert+renesas@glider.be>
-References: <cover.1677579750.git.geert+renesas@glider.be>
+        Tue, 28 Feb 2023 06:29:36 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EA0526C
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 03:29:12 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id o15so35967832edr.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 03:29:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GBj/GGcssUIPclJb9OaTVZJj6GUgJJTT+lDCTo9rCgQ=;
+        b=ev4Uj0zM8CDLMvFJ9N89gY8s6bTexBCziLfJ9y93h0GjAvOdGgRLYhyM7EWKpGSG/c
+         uBBFYWpQ+ShDHjIhAMAbtmkRcPG4oU1w/LTk+Xr4H+V/ZfQfiOsJm6yk5r2BuJ15vlic
+         wQiodG7MheSxV25r7YFRcY9iC1qE2jrqtB3l03dLuU8KG0QcEaJvbntY1ecSLelsUB6F
+         Z7Q3nrhzvpDTr0apjMYNKcvvhwD+geZ8bmraNLTfVIY2NphLF5ntsu0sIRC+8QB7Z+nB
+         fVaQ4mzqOaH5FDJQRt757SZpNXAlTZJ/iNhFbhpQbSdIJM0+QDLF5Ul/EQJq6KYRdE5h
+         gOVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GBj/GGcssUIPclJb9OaTVZJj6GUgJJTT+lDCTo9rCgQ=;
+        b=Ugpgzbw/FCOyr2R3e3R5IqQKoXiDWWf32zQU4MpRpB6Hzar/v0InqnjV1ZLCdHwBYl
+         gVBZ0xLBPuJn4aQH/6Y/+9gIiy5jn3fpYVoxgzRi0Jpec8D2rMBferiUtLmfMYTkCQCy
+         s0dch5xEMR9MCvBoHDmRpXU93QXq8ijeXskZrWfxmFwrPnJYHUAi9nmXWmvT9Vur846k
+         udp3sZGf2rSU9GGbFfCwIkx8xyPkv3o3v/MDn3rcTVcWVmoQL2Ech1PTpP8kv/7rKbAC
+         nWe2b1QIbRhvAzIHb3EXuSsqcfhBpP6Ddjd+qYnRS2S3sIEBkFXCMaWKdb8pxJmeHOZ6
+         /1bg==
+X-Gm-Message-State: AO0yUKU8CrjCFi2QnRA0/BS2VyraVDHAjqFDdoB1q7x9q4SNLj2k/Uhc
+        3cXQlRvIrtyVd1W4gSK0/Oc4SwafUA+Zlm3mXVo=
+X-Google-Smtp-Source: AK7set8RZDJ6WdOsfg3RtQ3zH7fB6FvZdtq4hk6RJEmyFYlX71IvTbbNpXsS2JtDUgI3CjxqD9hTNg==
+X-Received: by 2002:a17:907:ca14:b0:8b0:26b6:3f2b with SMTP id uk20-20020a170907ca1400b008b026b63f2bmr2016682ejc.53.1677583722973;
+        Tue, 28 Feb 2023 03:28:42 -0800 (PST)
+Received: from ?IPV6:2a02:578:8593:1200:5848:64ae:8a99:312a? ([2a02:578:8593:1200:5848:64ae:8a99:312a])
+        by smtp.gmail.com with ESMTPSA id r22-20020a50aad6000000b004af6a7e9131sm4223979edc.64.2023.02.28.03.28.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 03:28:42 -0800 (PST)
+Message-ID: <a0a76c20-4fd9-476b-3e32-06f7cc2bbf1b@tessares.net>
+Date:   Tue, 28 Feb 2023 12:28:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net 0/7] mptcp: fixes for 6.3
+Content-Language: en-GB
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>,
+        Shuah Khan <shuah@kernel.org>, Florian Westphal <fw@strlen.de>,
+        Jiang Biao <benbjiang@tencent.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Christoph Paasch <cpaasch@apple.com>,
+        Geliang Tang <geliang.tang@suse.com>
+References: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add basic support to run SH under QEMU via kunit_tool using the
-virtualized r2d platform.
+Hello,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-All tests succeed, except for the usual suspects.
-drivers/clk/.kunitconfig cannot be run as CONFIG_COMMON_CLK is not
-available.
----
- tools/testing/kunit/qemu_configs/sh.py | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
- create mode 100644 tools/testing/kunit/qemu_configs/sh.py
+On 27/02/2023 18:29, Matthieu Baerts wrote:
+> Patch 1 fixes a possible deadlock in subflow_error_report() reported by
+> lockdep. The report was in fact a false positive but the modification
+> makes sense and silences lockdep to allow syzkaller to find real issues.
+> The regression has been introduced in v5.12.
+> 
+> Patch 2 is a refactoring needed to be able to fix the two next issues.
+> It improves the situation and can be backported up to v6.0.
+> 
+> Patches 3 and 4 fix UaF reported by KASAN. It fixes issues potentially
+> visible since v5.7 and v5.19 but only reproducible until recently
+> (v6.0). These two patches depend on patch 2/7.
+> 
+> Patch 5 fixes the order of the printed values: expected vs seen values.
+> The regression has been introduced recently: present in Linus' tree but
+> not in a tagged version yet.
+> 
+> Patch 6 adds missing ro_after_init flags. A previous patch added them
+> for other functions but these two have been missed. This previous patch
+> has been backported to stable versions (up to v5.12) so probably better
+> to do the same here.
+> 
+> Patch 7 fixes tcp_set_state() being called twice in a row since v5.10.
 
-diff --git a/tools/testing/kunit/qemu_configs/sh.py b/tools/testing/kunit/qemu_configs/sh.py
-new file mode 100644
-index 0000000000000000..78a474a5b95f3a7d
---- /dev/null
-+++ b/tools/testing/kunit/qemu_configs/sh.py
-@@ -0,0 +1,17 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+from ..qemu_config import QemuArchParams
-+
-+QEMU_ARCH = QemuArchParams(linux_arch='sh',
-+			   kconfig='''
-+CONFIG_CPU_SUBTYPE_SH7751R=y
-+CONFIG_MEMORY_START=0x0c000000
-+CONFIG_SH_RTS7751R2D=y
-+CONFIG_RTS7751R2D_PLUS=y
-+CONFIG_SERIAL_SH_SCI=y''',
-+			   qemu_arch='sh4',
-+			   kernel_path='arch/sh/boot/zImage',
-+			   kernel_command_line='console=ttySC1',
-+			   serial='null',
-+			   extra_qemu_params=[
-+					    '-machine', 'r2d',
-+					    '-serial', 'mon:stdio'])
+I'm sorry to ask for that but is it possible not to apply these patches?
+
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+> Geliang Tang (1):
+>       mptcp: add ro_after_init for tcp{,v6}_prot_override
+> 
+> Matthieu Baerts (2):
+>       selftests: mptcp: userspace pm: fix printed values
+>       mptcp: avoid setting TCP_CLOSE state twice
+> 
+> Paolo Abeni (4):
+>       mptcp: fix possible deadlock in subflow_error_report
+>       mptcp: refactor passive socket initialization
+>       mptcp: use the workqueue to destroy unaccepted sockets
+
+After 3 weeks of validation, syzkaller found an issue with this patch:
+
+  https://github.com/multipath-tcp/mptcp_net-next/issues/366
+
+We then need to NAK this series. We will send a v2 with a fix for that.
+
+>       mptcp: fix UaF in listener shutdown
+
+The other patches of the series are either not very important or are
+linked to the "faulty" one: they can all wait as well.
+
+Cheers,
+Matt
 -- 
-2.34.1
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
