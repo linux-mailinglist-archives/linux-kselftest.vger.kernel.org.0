@@ -2,322 +2,308 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DF66A5F41
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 20:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C27D6A5FAF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 20:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjB1THB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Feb 2023 14:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
+        id S229568AbjB1TcM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Feb 2023 14:32:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjB1TGv (ORCPT
+        with ESMTP id S229613AbjB1TcL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Feb 2023 14:06:51 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5502311FE
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 11:06:15 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id nv15so7599480qvb.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 11:06:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1677611175;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UIPShpwFBCYz5smR+qhCdj+vTupAZLYJ+BSAmGqlhiA=;
-        b=BtxvQit9noeByVyBx0JmiXyj/L0uIJJje5Qqs/ohmI35v9Tl/Y6799SyAWXhF+NhPz
-         LdoxtWwZvysaMcGE4PH5sRIRNgHP0B3GQLqpPsiexw+Af1LQpPJaSLwqfkdK4Yq4M2xx
-         1lZ+6duN4JDzvQz7hMMXLyBdkWVdkSMHGMH6YjJnDZS0nSNpTNFY7PqrmM31yimbawK6
-         5lvWs9ItqZzH13d24JkQU64NJiy4MqQJeiQaQl8P6+aUEV4mW9uGwrkhgfEF1uwV1r5Q
-         Qi0ENeXXnmSRsxuH1oaFpJb+aj0dl/3AS8x/xTemPQWNqqdDOqAdrlzt/TUMBkhTxvg8
-         CTHw==
+        Tue, 28 Feb 2023 14:32:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492B31DB8B
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 11:31:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677612690;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ugqqZhF3NdZnSGhbQkL8EKwtOca9623ykRgIup6NQM0=;
+        b=bKT2OUSnarBPVdydH7esKQAOYzc6CWmiHiAE5KpgQDARa1R8cQWVVUg/Yv4i/ojWhLcWrI
+        m6IyTM2Ng8G4fg7L6oJUuJ89oSoi7M29OdfB3tU3EdKUlr8s7vS8HRoj8cZwdutqq1Jxvr
+        ZPNt+iKtURPmHd+b347rDhrU4XLSWc8=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-534-LNQ0vEeCMimsdQ4vcnHdKA-1; Tue, 28 Feb 2023 14:31:29 -0500
+X-MC-Unique: LNQ0vEeCMimsdQ4vcnHdKA-1
+Received: by mail-qv1-f70.google.com with SMTP id x18-20020ad44592000000b00571bb7cdc42so5704079qvu.23
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 11:31:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677611175;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UIPShpwFBCYz5smR+qhCdj+vTupAZLYJ+BSAmGqlhiA=;
-        b=U46hf196d2NJwmXcbPt5v9WKfVJ4oQJW9YbdfivxqLiyWV+CDhzzeUsfV6dYATCFAS
-         gYvKRuMLfd8Hk3NA+PrE/G6amAUhKD78lqdmB/FEZpPRQ2m+UAWp+rnODP3seAtXCV7V
-         Z0/wetDj7DNdZ5P4ch/R6MR54R0vDq0qL5bSzx5STPf/jEy/uwEx6BQPIDL1I6P89yFg
-         8e5E8mmmvyvHlkAfW9hqk8lawuk1FykB07l/xUK9BRMm6vr6Lkv8yvP4d7OxRY6r7caE
-         oPwnj6eJh8PHOaRE/AFK5Gld9xV9ohv4cUPXR+1C1AKQb1F3kmo2gS+AEgtlp/7ij1uR
-         Ot3A==
-X-Gm-Message-State: AO0yUKUEs8/2eWqPhbxgIk9jm8JPFMkWYkr5q1+L3SeG2UiTPI1z0Wnf
-        hV5VNVdB/y7f12csjSZemxxmKA==
-X-Google-Smtp-Source: AK7set/TlONdvgMrNTXddW8UdHq+iPD5BWKnDFq4DIQ2SlQL6Ufke1meOiRMU7e2h5UhWhxt1A2/Lw==
-X-Received: by 2002:a05:6214:f09:b0:537:727f:ac28 with SMTP id gw9-20020a0562140f0900b00537727fac28mr8403727qvb.27.1677611174879;
-        Tue, 28 Feb 2023 11:06:14 -0800 (PST)
-Received: from n217-072-012.byted.org ([130.44.212.123])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05620a15ed00b006fed58fc1a3sm7242810qkm.119.2023.02.28.11.06.13
+        d=1e100.net; s=20210112; t=1677612689;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ugqqZhF3NdZnSGhbQkL8EKwtOca9623ykRgIup6NQM0=;
+        b=lkRuniycy05JwuiAgfxp79wr1ezKiCg4GfJh4PyuepXWPhZbTsZ1ctiPEc/u4EDtbz
+         7UHLpOouJYngXzZvkk/MTtF+R0MartRPnljO8JSembWJgOVJH7r9fcIahvb2bKpu51jb
+         ilQ7sFFUkoYbngIx+i3T0EGXAqfHdjAK74joWfWAHxNsxDF84RLIV0IAPSuzDcRbhT8f
+         y0xwUEvvLEoq7C79wcjKGw4lwUMPoMZCmt3iXTZ1dvFrzCVSwyEKEGwUSz/w7zuZkyax
+         7B+Z5EFKdwncdY5ruBgWSPWDg58i/shwOuZO+iBHsSl+/s3KY/075ZVdekQAKKglhkyk
+         Iltw==
+X-Gm-Message-State: AO0yUKVHRuLCs2mRvMyCAidrBg3SVKUYjeI5ENmo0HRF1C+CJi0M8XbJ
+        ckv2G57NUErZQyYzGCuDCIRz/+A9G9/hjEASUKn/bX9Re/OfxokzF0gM4aK+saVC1n2vTT5EbW3
+        kqshT8trnoyfgDCfXd/kyFodHzNTk
+X-Received: by 2002:a05:622a:15d4:b0:3b9:a4d4:7f37 with SMTP id d20-20020a05622a15d400b003b9a4d47f37mr7373431qty.3.1677612688595;
+        Tue, 28 Feb 2023 11:31:28 -0800 (PST)
+X-Google-Smtp-Source: AK7set9dU/RRxNhm5XoDCcnR56WP4+VRAVbJVAUIK8DiKGJ0dtx1DeIPjYkCBpkqIAEwSF9CFsLK2w==
+X-Received: by 2002:a05:622a:15d4:b0:3b9:a4d4:7f37 with SMTP id d20-20020a05622a15d400b003b9a4d47f37mr7373372qty.3.1677612688196;
+        Tue, 28 Feb 2023 11:31:28 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id h9-20020ac85489000000b003b62e9c82ebsm6974586qtq.48.2023.02.28.11.31.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 11:06:14 -0800 (PST)
-From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-Date:   Tue, 28 Feb 2023 19:04:36 +0000
-Subject: [PATCH net-next v3 3/3] selftests/bpf: add a test case for vsock
- sockmap
+        Tue, 28 Feb 2023 11:31:27 -0800 (PST)
+Date:   Tue, 28 Feb 2023 14:31:25 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <Y/5WjdXJ+56Kud3u@x1n>
+References: <20230202112915.867409-4-usama.anjum@collabora.com>
+ <cf36b6ea-6268-deff-d9ed-6782de2bd0a7@gmail.com>
+ <2fe790e5-89e0-d660-79cb-15160dffd907@collabora.com>
+ <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
+ <c15446c5-eedd-690f-9dae-2bc12ee9eb78@collabora.com>
+ <F73885A1-14AE-4820-876B-A8E6DC6D19CC@vmware.com>
+ <Y/0eIUIh81jK9w2i@x1n>
+ <5D5DEEED-55EB-457B-9EB7-C6D5B326FE99@vmware.com>
+ <Y/4j/Nu1vp9sVI7N@x1n>
+ <C96B273F-31EE-4784-A614-B03DEE680462@vmware.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230227-vsock-sockmap-upstream-v3-3-7e7f4ce623ee@bytedance.com>
-References: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
-In-Reply-To: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <C96B273F-31EE-4784-A614-B03DEE680462@vmware.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test case testing the redirection from connectible AF_VSOCK
-sockets to connectible AF_UNIX sockets.
+On Tue, Feb 28, 2023 at 05:21:20PM +0000, Nadav Amit wrote:
+> 
+> 
+> > On Feb 28, 2023, at 7:55 AM, Peter Xu <peterx@redhat.com> wrote:
+> > 
+> > !! External Email
+> > 
+> > On Mon, Feb 27, 2023 at 11:09:12PM +0000, Nadav Amit wrote:
+> >> 
+> >> 
+> >>> On Feb 27, 2023, at 1:18 PM, Peter Xu <peterx@redhat.com> wrote:
+> >>> 
+> >>> !! External Email
+> >>> 
+> >>> On Thu, Feb 23, 2023 at 05:11:11PM +0000, Nadav Amit wrote:
+> >>>> From my experience with UFFD, proper ordering of events  is crucial, although it
+> >>>> is not always done well. Therefore, we should aim for improvement, not
+> >>>> regression. I believe that utilizing the pagemap-based mechanism for WP'ing
+> >>>> might be a step in the wrong direction. I think that it would have been better
+> >>>> to emit a 'UFFD_FEATURE_WP_ASYNC' WP-log (and ordered) with UFFD #PF and
+> >>>> events. The 'UFFD_FEATURE_WP_ASYNC'-log may not need to wake waiters on the
+> >>>> file descriptor unless the log is full.
+> >>> 
+> >>> Yes this is an interesting question to think about..
+> >>> 
+> >>> Keeping the data in the pgtable has one good thing that it doesn't need any
+> >>> complexity on maintaining the log, and no possibility of "log full".
+> >> 
+> >> I understand your concern, but I think that eventually it might be simpler
+> >> to maintain, since the logic of how to process the log is moved to userspace.
+> >> 
+> >> At the same time, handling inputs from pagemap and uffd handlers and sync’ing
+> >> them would not be too easy for userspace.
+> > 
+> > I do not expect a common uffd-wp async user to provide a fault handler at
+> > all.  In my imagination it's in most cases used standalone from other uffd
+> > modes; it means all the faults will still be handled by the kernel.  Here
+> > we only leverage the accuracy of userfaultfd comparing to soft-dirty, so
+> > not really real "user"-faults.
+> 
+> If that is the only use-case, it might make sense. But I guess most users would
+> most likely use some library (and not syscalls directly). So slightly
+> complicating the API for better generality may be reasonable.
+> 
+> > 
+> >> 
+> >> But yes, allocation on the heap for userfaultfd_wait_queue-like entries would
+> >> be needed, and there are some issues of ordering the events (I think all #PF
+> >> and other events should be ordered regardless) and how not to traverse all
+> >> async-userfaultfd_wait_queue’s (except those that block if the log is full)
+> >> when a wakeup is needed.
+> > 
+> > Will there be an ordering requirement for an async mode?  Considering it
+> > should be async to whatever else, I would think it's not a problem, but
+> > maybe I missed something.
+> 
+> You may be right, but I am not sure. I am still not sure what use-cases are
+> targeted in this patch-set. For CRIU checkpoint use-case (when the app is
+> not running), I guess the current interface makes sense. But if there are
+> use-cases in which this you do care about UFFD-events this can become an
+> issue.
+> 
+> But even in some obvious use-cases, this might be the wrong interface for
+> major performance issues. If we think about some incremental copying of
+> modified pages (a-la pre-copy live-migration or to create point-in-time
+> snapshots), it seems to me much more efficient for application to have a
+> log than traversing all the page-tables.
 
-Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
----
- .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++++
- 1 file changed, 163 insertions(+)
+IMHO snapshots may not need a log at all - it needs CoW before the write
+happens.  Nor is the case for swapping with userfaults, IIUC.  IOW in those
+cases people don't care which page got dirtied, but care on data not being
+modified until the app allows it to.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 2cf0c7a3fe23..8b5a2e09c9ed 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -18,6 +18,7 @@
- #include <string.h>
- #include <sys/select.h>
- #include <unistd.h>
-+#include <linux/vm_sockets.h>
- 
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
-@@ -249,6 +250,16 @@ static void init_addr_loopback6(struct sockaddr_storage *ss, socklen_t *len)
- 	*len = sizeof(*addr6);
- }
- 
-+static void init_addr_loopback_vsock(struct sockaddr_storage *ss, socklen_t *len)
-+{
-+	struct sockaddr_vm *addr = memset(ss, 0, sizeof(*ss));
-+
-+	addr->svm_family = AF_VSOCK;
-+	addr->svm_port = VMADDR_PORT_ANY;
-+	addr->svm_cid = VMADDR_CID_LOCAL;
-+	*len = sizeof(*addr);
-+}
-+
- static void init_addr_loopback(int family, struct sockaddr_storage *ss,
- 			       socklen_t *len)
- {
-@@ -259,6 +270,9 @@ static void init_addr_loopback(int family, struct sockaddr_storage *ss,
- 	case AF_INET6:
- 		init_addr_loopback6(ss, len);
- 		return;
-+	case AF_VSOCK:
-+		init_addr_loopback_vsock(ss, len);
-+		return;
- 	default:
- 		FAIL("unsupported address family %d", family);
- 	}
-@@ -1434,6 +1448,8 @@ static const char *family_str(sa_family_t family)
- 		return "IPv6";
- 	case AF_UNIX:
- 		return "Unix";
-+	case AF_VSOCK:
-+		return "VSOCK";
- 	default:
- 		return "unknown";
- 	}
-@@ -1644,6 +1660,151 @@ static void test_unix_redir(struct test_sockmap_listen *skel, struct bpf_map *ma
- 	unix_skb_redir_to_connected(skel, map, sotype);
- }
- 
-+/* Returns two connected loopback vsock sockets */
-+static int vsock_socketpair_connectible(int sotype, int *v0, int *v1)
-+{
-+	struct sockaddr_storage addr;
-+	socklen_t len = sizeof(addr);
-+	int s, p, c;
-+
-+	s = socket_loopback(AF_VSOCK, sotype);
-+	if (s < 0)
-+		return -1;
-+
-+	c = xsocket(AF_VSOCK, sotype | SOCK_NONBLOCK, 0);
-+	if (c == -1)
-+		goto close_srv;
-+
-+	if (getsockname(s, sockaddr(&addr), &len) < 0)
-+		goto close_cli;
-+
-+	if (connect(c, sockaddr(&addr), len) < 0 && errno != EINPROGRESS) {
-+		FAIL_ERRNO("connect");
-+		goto close_cli;
-+	}
-+
-+	len = sizeof(addr);
-+	p = accept_timeout(s, sockaddr(&addr), &len, IO_TIMEOUT_SEC);
-+	if (p < 0)
-+		goto close_cli;
-+
-+	*v0 = p;
-+	*v1 = c;
-+
-+	return 0;
-+
-+close_cli:
-+	close(c);
-+close_srv:
-+	close(s);
-+
-+	return -1;
-+}
-+
-+static void vsock_unix_redir_connectible(int sock_mapfd, int verd_mapfd,
-+					 enum redir_mode mode, int sotype)
-+{
-+	const char *log_prefix = redir_mode_str(mode);
-+	char a = 'a', b = 'b';
-+	int u0, u1, v0, v1;
-+	int sfd[2];
-+	unsigned int pass;
-+	int err, n;
-+	u32 key;
-+
-+	zero_verdict_count(verd_mapfd);
-+
-+	if (socketpair(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0, sfd))
-+		return;
-+
-+	u0 = sfd[0];
-+	u1 = sfd[1];
-+
-+	err = vsock_socketpair_connectible(sotype, &v0, &v1);
-+	if (err) {
-+		FAIL("vsock_socketpair_connectible() failed");
-+		goto close_uds;
-+	}
-+
-+	err = add_to_sockmap(sock_mapfd, u0, v0);
-+	if (err) {
-+		FAIL("add_to_sockmap failed");
-+		goto close_vsock;
-+	}
-+
-+	n = write(v1, &a, sizeof(a));
-+	if (n < 0)
-+		FAIL_ERRNO("%s: write", log_prefix);
-+	if (n == 0)
-+		FAIL("%s: incomplete write", log_prefix);
-+	if (n < 1)
-+		goto out;
-+
-+	n = recv(mode == REDIR_INGRESS ? u0 : u1, &b, sizeof(b), MSG_DONTWAIT);
-+	if (n < 0)
-+		FAIL("%s: recv() err, errno=%d", log_prefix, errno);
-+	if (n == 0)
-+		FAIL("%s: incomplete recv", log_prefix);
-+	if (b != a)
-+		FAIL("%s: vsock socket map failed, %c != %c", log_prefix, a, b);
-+
-+	key = SK_PASS;
-+	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
-+	if (err)
-+		goto out;
-+	if (pass != 1)
-+		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
-+out:
-+	key = 0;
-+	bpf_map_delete_elem(sock_mapfd, &key);
-+	key = 1;
-+	bpf_map_delete_elem(sock_mapfd, &key);
-+
-+close_vsock:
-+	close(v0);
-+	close(v1);
-+
-+close_uds:
-+	close(u0);
-+	close(u1);
-+}
-+
-+static void vsock_unix_skb_redir_connectible(struct test_sockmap_listen *skel,
-+					     struct bpf_map *inner_map,
-+					     int sotype)
-+{
-+	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-+	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
-+	int sock_map = bpf_map__fd(inner_map);
-+	int err;
-+
-+	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
-+	if (err)
-+		return;
-+
-+	skel->bss->test_ingress = false;
-+	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_EGRESS, sotype);
-+	skel->bss->test_ingress = true;
-+	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_INGRESS, sotype);
-+
-+	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
-+}
-+
-+static void test_vsock_redir(struct test_sockmap_listen *skel, struct bpf_map *map)
-+{
-+	const char *family_name, *map_name;
-+	char s[MAX_TEST_NAME];
-+
-+	family_name = family_str(AF_VSOCK);
-+	map_name = map_type_str(map);
-+	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
-+	if (!test__start_subtest(s))
-+		return;
-+
-+	vsock_unix_skb_redir_connectible(skel, map, SOCK_STREAM);
-+	vsock_unix_skb_redir_connectible(skel, map, SOCK_SEQPACKET);
-+}
-+
- static void test_reuseport(struct test_sockmap_listen *skel,
- 			   struct bpf_map *map, int family, int sotype)
- {
-@@ -2015,12 +2176,14 @@ void serial_test_sockmap_listen(void)
- 	run_tests(skel, skel->maps.sock_map, AF_INET6);
- 	test_unix_redir(skel, skel->maps.sock_map, SOCK_DGRAM);
- 	test_unix_redir(skel, skel->maps.sock_map, SOCK_STREAM);
-+	test_vsock_redir(skel, skel->maps.sock_map);
- 
- 	skel->bss->test_sockmap = false;
- 	run_tests(skel, skel->maps.sock_hash, AF_INET);
- 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
- 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_DGRAM);
- 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_STREAM);
-+	test_vsock_redir(skel, skel->maps.sock_hash);
- 
- 	test_sockmap_listen__destroy(skel);
- }
+But I get the point, and I agree collecting by scanning is slower.
+
+> 
+> 
+> >> 
+> >>> 
+> >>> If there's possible "log full" then the next question is whether we should
+> >>> let the worker wait the monitor if the monitor is not fast enough to
+> >>> collect those data.  It adds some slight dependency on the two threads, I
+> >>> think it can make the tracking harder or impossible in latency sensitive
+> >>> workloads.
+> >> 
+> >> Again, I understand your concern. But this model that I propose is not new.
+> >> It is used with PML (page-modification logging) and KVM, and IIRC there is
+> >> a similar interface between KVM and QEMU to provide this information. There
+> >> are endless other examples for similar producer-consumer mechanisms that
+> >> might lead to stall in extreme cases.
+> > 
+> > Yes, I'm not against thinking of using similar structures here.  It's just
+> > that it's definitely more complicated on the interface, at least we need
+> > yet one more interface to setup the rings and define its interfaces.
+> > 
+> > Note that although Muhammud is defining another new interface here too for
+> > pagemap, I don't think it's strictly needed for uffd-wp async mode.  One
+> > can use uffd-wp async mode with PM_UFFD_WP which is with current pagemap
+> > interface already.
+> > 
+> > So what Muhammud is proposing here are two things to me: (1) uffd-wp async,
+> > plus (2) a new pagemap interface (which will closely work with (1) only if
+> > we need atomicity on get-dirty and reprotect).
+> > 
+> > Defining new interface for uffd-wp async mode will be something extra, so
+> > IMHO besides the heap allocation on the rings, we need to also justify
+> > whether that is needed.  That's why I think it's fine to go with what
+> > Muhammud proposed, because it's a minimum changeset at least for userfault
+> > to support an async mode, and anything else can be done on top if necessary.
+> > 
+> > Going a bit back to the "lead to stall in extreme cases" above, just also
+> > want to mention that the VM use case is slightly different - dirty tracking
+> > is only heavily used during migration afaict, and it's a short period.  Not
+> > a lot of people will complain performance degrades during that period
+> > because that's just rare.  And, even without the ring the perf is really
+> > bad during migration anyway... Especially when huge pages are used to back
+> > the guest RAM.
+> > 
+> > Here it's slightly different to me: it's about tracking dirty pages during
+> > any possible workload, and it can be monitored periodically and frequently.
+> > So IMHO stricter than a VM use case where migration is the only period to
+> > use it.
+> 
+> I still don’t get the use-cases. "monitored periodically and frequently” is
+> not a use-case. And as I said before, actually, monitoring frequently is
+> more performant with a log than with scanning all the page-tables.
+
+Feel free to ignore this part if we're not taking about using a ring
+structure.  My previous comment was mostly for that.  Bitmaps won't have
+this issue.  Here I see a bitmap as one way to implement a log, where it's
+recorded by one bit per page.  My comment was that we should be careful on
+using rings.
+
+Side note: actually kvm dirty ring is even trickier; see the soft-full
+(kvm_dirty_ring.soft_limit) besides the hard-full event to make sure
+hard-full won't really trigger (or we're prone to lose dirty bits).  I
+don't think we'll have the same issue here so we can trigger hard-full, but
+it's still unwanted to halt the threads being tracked for dirty pages.  I
+don't know whether there'll be other side effects by the ring, though..
+
+> 
+> > 
+> >> 
+> >>> 
+> >>> The other thing is we can also make the log "never gonna full" by making it
+> >>> a bitmap covering any registered ranges, but I don't either know whether
+> >>> it'll be worth it for the effort.
+> >> 
+> >> I do not see a benefit of half-log half-scan. It tries to take the
+> >> data-structure of one format and combine it with another.
+> > 
+> > What I'm saying here is not half-log / half-scan, but use a single bitmap
+> > to store what page is dirty, just like KVM_GET_DIRTY_LOG.  I think it
+> > avoids any above "stall" issue.
+> 
+> Oh, I never went into the KVM details before - stupid me. If that’s what
+> eventually was proven to work for KVM/QEMU, then it really sounds like
+> the pagemap solution that Muhammad proposed.
+> 
+> But still not convoluting pagemap with userfaultfd (and especially
+> uffd-wp) can be beneficial. Linus already threw some comments here and
+> there about disliking uffd-wp, and I’m not sure adding uffd-wp specific
+> stuff to pagemap would be welcomed.
+
+Yes I also don't know..  As I mentioned I'm not super happy with the
+interface either, but that's the simplest I can think of so far.
+
+IOW, from an "userfaultfd-side reviewer" POV I'm fine if someone wants to
+leverage the concepts of uffd-wp and its internals using a separate but
+very light weighted patch just to impl async mode of uffd-wp.  But I'm
+always open to any suggestions too.  It's just that when there're multiple
+options and when we're not confident on either way, I normally prefer the
+simplest and cleanest (even if less efficient).
+
+> Anyhow, thanks for all the explanations. Eventually, I understand that
+> using bitmaps can be more efficient than a log if the bits are condensed.
+
+Note that I think what Muhammad (sorry, Muhammad! I think I spelled your
+name wrongly before starting from some email..) proposed is not a bitmap,
+but an array of ranges that can coalesce the result into very condensed
+form.  Pros and cons.
+
+Again, I can't comment much on that API, but since there're a bunch of
+other developers looking at that and they're also potential future users,
+I'll trust their judgement and just focus more on the other side of things.
+
+Thanks,
 
 -- 
-2.30.2
+Peter Xu
 
