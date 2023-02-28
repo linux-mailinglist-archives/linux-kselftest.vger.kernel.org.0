@@ -2,226 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5296A4FE0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 00:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5FF6A5019
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 01:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjB0X4S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 18:56:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S229672AbjB1ASD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Feb 2023 19:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjB0X4R (ORCPT
+        with ESMTP id S229481AbjB1ASD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 18:56:17 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B7D2A150
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 15:56:15 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id f13so14095070vsg.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Feb 2023 15:56:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f+O532VNa5uuYXas5j7oG3WEYjZ7tPSlzdcE1yYbUO0=;
-        b=XgIzquBU0Xz35R9KT9aptB/ZybA2zIMJ8FULzhtg16cR82S26JSWjwXHlVwni5XJq7
-         9iMbhX8yuF36UyJFVXD/v5UZwR604lZ89oIKHIaDU+ArmXBs3httR6FOTZT+8gbD1Vuk
-         LO6mBBmr0UbmhoqJ9DLU1RzUNXP0jLJ3Ha9wUx+hk5bWlEeGuddalAdl7X3DuSrGKpKl
-         zC2oJzIXaWRAPT2VHNCRmczwB/z9ZZMCmRrBPe3G9cTLBZSF5TjVgij//NvcMtW3YE9y
-         ZQRhv574xnp5tkYI9TkK4evuz3ZaobW/dqHIQeFOGZFUo+X0SDU6GiC7KIXjnt/Dp17c
-         WdCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f+O532VNa5uuYXas5j7oG3WEYjZ7tPSlzdcE1yYbUO0=;
-        b=j/5sOzMwOWa074FpL7KL3EO/k0l/PRJIRfEeLzcs1b+5BnJ/WcBHlevp/MqR7DJVBz
-         vHIkV8kH3TFaLm/Tu9WqWPDnrICFPJi/M+0sKPuHL7MYqvcL65YV77R9hhkZeeb9MstE
-         MdwJHPvYTXwfnji8LcTXhAvmwJgQ6rbAUEpiI5BHsKh8pX/j4Omvqpmwg040wFtbFd/f
-         y1numYfB3JdT+QxX1renlJ8JZGiibxurBiPaPho+4hWKJUhj42J1w5CeSKYVD46M4siq
-         adOAv/52zSsYyVgG+EVvKK/GlEoy6Vt/q1Fczmrsyyg7wojzIxtrWPDi01gjuDZLVc+X
-         8Xig==
-X-Gm-Message-State: AO0yUKVoxlriQgMqE1/M3zZFCoJsm3FsAJPR/HHxvRMC/c62C1+QNl7R
-        KCz9bKowlfj8zD5xetEybFXvlSQD4DfyrnzOD3RNfw==
-X-Google-Smtp-Source: AK7set8y0Y3l6/xEaklbRICO0tAX2Cya8iDz1v1N7AO1WXjXiiKZor160np96QQ7F2hdJ29vIWCO2stZGj+UxhPQ3GY=
-X-Received: by 2002:a05:6102:504:b0:414:2344:c353 with SMTP id
- l4-20020a056102050400b004142344c353mr843081vsa.5.1677542173953; Mon, 27 Feb
- 2023 15:56:13 -0800 (PST)
+        Mon, 27 Feb 2023 19:18:03 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2064.outbound.protection.outlook.com [40.107.237.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D55B13DE5;
+        Mon, 27 Feb 2023 16:18:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D+4LgMc0zhpNNDELfc2xlf8fo6tCijsZTg3NyIH0wQhVWvLqRKXoji7xv1FCeER3Hjssx4D1o8w4Ifmambe17sRtC2HgkdhQJqHd/EujcoQZBrVMKjOrpa1ykMalD9LKor+2BpibKpj4H+IBMingkOQNPtmFu3MwGwKEqs/U5d2gCSs9odUULpxN8VNdA03qMGMffJZ78oT+ZGUM9FoHo3vLU6htCPJ7aZdeGUvlEbdCn8TPB9pQuZJzy40GqccE87LTMtdeT5bhZq7j0liStGq64UpNOtl8gSHxnVLSCtCRvUma3fkO6RtmI9aUNGx3Cy6FkAx+KGDQWRnSkiFaWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H15CRLyaxYSA/YU5L0tz8pFa9Y0L+wefwgiVMwnOx2M=;
+ b=U7LUVjsyJw/zyX6kGxrOKX9BH5HPCfrQt+gip2EKR0COh0YKGWsLw8tX/Bpm9SYoRhvGjzMbUK5/ecibp7ZeBdfmKNwXhXAsfrT4JbRuU3puha3Y0Kt5eTUOHbVpp1zYJ2rofmnXHbxE+ZekdqEeAOkNeXK3u5J7BB1oZvG2AOHTsBzcDgPFTAyCB+QPg+5gnoUQaPELFE4FJi4JFEU2UqV0m4LEyd9LqS0KckLdJORPqTeay/fxYP2qss2Y/n015+J3XZu3P7hIk5Oi/ZVpAj1iJtlgT/s2x38wMU/jxw5iWu9IlPb5ySMTybgqEyAHERqeEyMARJUe9RYAFQKWFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H15CRLyaxYSA/YU5L0tz8pFa9Y0L+wefwgiVMwnOx2M=;
+ b=DrIPrBnvXtBbBJqSD9tcQdKO5sk42wj+YyfTLg0zjMLOd1HHPEb7t/qUhQvH3IT/39c/EjYJuqGeDnSZt5RbkDuKHIh0nHAEnJHKi90EmJYz0l4FlkcxL9pwS+mbpihVvchVrOEeAZwgc+CvIxAJF2hvgicgOWw2lMHG9Uiv1iLuCKXsaFgo9EBjzrHx5eMS/TzpafipW8y0PTVLHFUbQW/lqDD/GZAMtKxKuqirezduTb47nxjlYAaPpnKzLP67viG1Ddu6qiScBdlYgj1nxOoH4i+cQcqHmemn4Brd/c62d9XwXJAXvdNb919NYpc5g9OVdpnuYZtgLCdju4W4Wg==
+Received: from CY5P221CA0073.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:9::10) by
+ DM4PR12MB5940.namprd12.prod.outlook.com (2603:10b6:8:6b::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.26; Tue, 28 Feb 2023 00:17:59 +0000
+Received: from CY4PEPF0000C970.namprd02.prod.outlook.com
+ (2603:10b6:930:9:cafe::3e) by CY5P221CA0073.outlook.office365.com
+ (2603:10b6:930:9::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29 via Frontend
+ Transport; Tue, 28 Feb 2023 00:17:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000C970.mail.protection.outlook.com (10.167.242.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.12 via Frontend Transport; Tue, 28 Feb 2023 00:17:58 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 27 Feb 2023
+ 16:17:49 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 27 Feb
+ 2023 16:17:49 -0800
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
+ Transport; Mon, 27 Feb 2023 16:17:48 -0800
+Date:   Mon, 27 Feb 2023 16:17:47 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     <iommu@lists.linux.dev>, Kevin Tian <kevin.tian@intel.com>,
+        <linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
+        Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH 14/14] iommufd/selftest: Add a selftest for
+ IOMMU_HWPT_ALLOC
+Message-ID: <Y/1IK4kVz07xiY8G@Asurada-Nvidia>
+References: <0-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
+ <14-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
+ <Y/uzM8PD/XY0WI7f@Asurada-Nvidia>
+ <Y/zGCLb5aGmxWPHu@nvidia.com>
 MIME-Version: 1.0
-References: <20230225014529.2259752-1-davidgow@google.com> <CAHk-=wgK07PQ_DBBbAbSJ41t__6de1xZ6q7RRu-JS=2SU0wqLQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgK07PQ_DBBbAbSJ41t__6de1xZ6q7RRu-JS=2SU0wqLQ@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 28 Feb 2023 07:56:02 +0800
-Message-ID: <CABVgOSnkfmj5FXN5176g5J7Sjef8e+2w--3F52SWqtb34QCXEg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix 'hooks.o' build by recursing into kunit
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000064c68d05f5b739d0"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y/zGCLb5aGmxWPHu@nvidia.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C970:EE_|DM4PR12MB5940:EE_
+X-MS-Office365-Filtering-Correlation-Id: b27cf57c-f0c4-4912-f496-08db19213f55
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8DmRfPG+Fhqx4nYO1u0/RbvIFmCfKktUyQkQQGo5jSqQCNG/qgbvj+VcTEB+sW56Qb9fKfbRC8aNZeGs4fMJkqOz2SiMkn+W7xdBCYEC+dXc+kIFlwTxwNUPfzQbYLZV7tgMs7PI8ezzv6Oct9Fd+Q+Rxf2TX2qKAVdVoAghMnzfF6XpXuYLWypghagxOco5fgpGYRuxjQyAYPLicJao4qc5G4kb4W7lDWdI+ISeWnH85lz/hek4FPxz8TsVN+oXuqkEqYtGJwQgOo11f9yaUydsF4yd+s3GMabBGQIJMatVT/gKLC9mtFkx/65LWtbRLSDpWgISkKsErF5LREwtu65TYMOCRLWeKkr8pVP105LEDp8E0JBDj5ujFm0cqWhPfWPZQ1JKEy8+emfEqi9E/or/904wEvdYlgqPLq8Ocm1sJQGljF/7LXb3WfcSGS7thQikq/6Ty+k5sXJYCbiStXvV/4Du7kLFan3JbOJOb4gYIap4j7V3Ju+RCS+x2xq2qZOul0iuknzinxL93Gwrmje+TxoS5vqO00nfDCSwqdd9bPi5msHL/V1so9zad+jwyPaV8N/9kMFP2Pr61C5Otdlio3+Zs6TE05ckhr4urg9NX1m15KezSpCfvgUX+YGYQAkLHjNjboRUqduvUAPdMIAWC0C2REcepjRKPsEPJPiVo1+Wp/gm4ybbbteG3tKKGy4l2VjSnV6OKx8pMit2PQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(39860400002)(136003)(451199018)(36840700001)(46966006)(40470700004)(9686003)(26005)(36860700001)(186003)(426003)(47076005)(82310400005)(356005)(7636003)(55016003)(86362001)(82740400003)(40460700003)(40480700001)(336012)(33716001)(70206006)(4326008)(8676002)(70586007)(6862004)(8936002)(4744005)(5660300002)(478600001)(41300700001)(54906003)(2906002)(6636002)(316002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 00:17:58.9177
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b27cf57c-f0c4-4912-f496-08db19213f55
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C970.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5940
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000064c68d05f5b739d0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Mon, Feb 27, 2023 at 11:02:32AM -0400, Jason Gunthorpe wrote:
+> On Sun, Feb 26, 2023 at 11:29:55AM -0800, Nicolin Chen wrote:
+> > On Fri, Feb 24, 2023 at 08:27:59PM -0400, Jason Gunthorpe wrote:
+> >   
+> > > +static int _test_cmd_hwpt_alloc(int fd, __u32 device_id, __u32 pt_id,
+> > > +					 __u32 *hwpt_id)
+> > > +{
+> > > +	struct iommu_hwpt_alloc cmd = {
+> > > +		.size = sizeof(cmd),
+> > > +		.dev_id = device_id,
+> > > +		.pt_id = pt_id,
+> > > +	};
+> > > +	int ret;
+> > 
+> > Can we do "s/device_id/idev_id" to differentiate it from the
+> > "device_id" being used for a selftest device object?
+> 
+> I renamed the selftest device object to 'stdev_id' instead
 
-On Tue, 28 Feb 2023 at 06:43, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Feb 24, 2023 at 5:45=E2=80=AFPM David Gow <davidgow@google.com> w=
-rote:
-> >
-> > +# Some KUnit files (hooks.o) need to be built-in even when KUnit is a =
-module,
-> > +# so we can't just use obj-$(CONFIG_KUNIT).
-> > +ifdef CONFIG_KUNIT
-> > +obj-y +=3D kunit/
-> >  endif
->
-> We actually have a pattern for this, although I guess it's rare enough
-> that "pattern" isn't necessarily the right word.
->
-> But you can find things like the Hyper-V drivers having similar
-> issues, and so the driver Makefile has
->
->     obj-$(subst m,y,$(CONFIG_HYPERV))       +=3D hv/
->
-> See a few other cases with
->
->     git grep "subst m,y,"
->
-> but I guess the "ifdef CONFIG_KUNIT" thing works too. I can only find
-> one case of that (in arch/mips/Kbuild).
->
-> Another way of dealing with this - that is more common for individual
-> object files rather than directories - is to just do
->
->     kunit-dir-$(CONFIG_KUNIT) :=3D kunit/
->     obj-y +=3D $(kunit-dir-y) $(kunit-dir-m)
->
-> which admittedly is also not a hugely common pattern, but does exist
-> in various places (see for example the 'sfp-bus.o' file and CONFIG_SFP
-> in drivers/net/phy/Makefile.
->
-> That last pattern is probably most common in scripts/Makefile.lib,
-> where we have things like
->
->        hostprogs +=3D $(hostprogs-always-y) $(hostprogs-always-m)
->
-> which is similar but not the exact same thing.
->
-> Anyway, I guess I'll just apply that patch as-is, I just wanted to
-> point out that the particular pattern it uses may be simple, but we've
-> generally tried to just do our Makefile evaluations with "arithmetic"
-> rather than conditionals.
->
->               Linus
+Cool. I will pull-rebase.
 
-Thanks, Linus.
-
-(And also thanks to Mikhail Gavrilov and Thorsten Leemhuis for testing
-this change as well.)
-
-It's certainly been an educational experience!
-
-Of those other options, personally I find the "subst m,y" one most
-obvious, but I'll probably leave it as the conditional for now, unless
-you think trying to make it more consistent is worth the extra churn.
-
-Regardless, I'll look into adding a note about this to
-Documentation/kbuild/makefiles.rst.
-
-Cheers,
--- David
-
---00000000000064c68d05f5b739d0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCY
-up7un/4fsaRdJmzjxQ9she6JNXjjCCCCchDedpOwMDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAyMjcyMzU2MTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAbLg19iNSdiIdMl3gVASW
-AEvEAzMa6hFFIZM/vSdxlz0YAwB9HX20x/erS0eRbGoLHoFtT1+7YAdDnFBh97LwP3b/mZhDPys2
-jigxGg2njYZunPkSdPL0E5BvXWtrpQhEwolKkGYAK2jVmDUFlJMJuByLMno6w7+veGELqb4sZs0o
-nz3RdUdbh/kIKTjgdWfW67T0MWdfUGTFrCiYO6dAwG8RTAAW/DnK94dW9iro3KNg8jd80yYSfij8
-Br6POUzsgpElt4rR6E5Yxv99p3BWJ91WOtJr8Iwv4QpDFBExPMqMNklpGo9dwsP6ifQBh3diaU8K
-rTJlWKltwbnCtw5SAw==
---00000000000064c68d05f5b739d0--
+Thanks
+Nic
