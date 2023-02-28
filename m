@@ -2,154 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373B26A5A16
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 14:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1360E6A5A5F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 14:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjB1Nnb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Feb 2023 08:43:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
+        id S229635AbjB1Nvq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Feb 2023 08:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB1Nnb (ORCPT
+        with ESMTP id S229690AbjB1Nvp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:43:31 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841D325B9F;
-        Tue, 28 Feb 2023 05:43:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=2YufEiSw26yUxGvxbvEcxh/qT0bL7Zfm+eeVmdJnJkM=; b=T/sgNzMZ8+UIner/PUcMgOg0r1
-        zQFvgCVN9l9b9eWUqLPajIEg7GxjjPqq3otpSJRj9gin0diwflv6ia8ZCPL04YQABg2bdTernyi89
-        ooFAaYDR6yXfIrMHL8UHBE18j8nG2rjqjGPvVxg0HTse1XpYp33aRiCrXUeN7LsRsnC8aF8IqhmOf
-        Eh2TxqwlxGimqD8PkcJjOoKbHU9BUQtsMHE3NZ4XZD2QFMaU3McaXEIW8qApfUB5PnksxSSvwoZTs
-        We2Y4z1gmxzeic23kKSYEQq1sgcrobW3UHb9fMAOmr4IwMr8NWA1U/LdljFfr92RsUSKXudXvL9nN
-        IbGKeqSA==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pX0GN-000Dyo-8m; Tue, 28 Feb 2023 14:43:27 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pX0GN-000H1f-0N; Tue, 28 Feb 2023 14:43:27 +0100
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in
- BPF
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, quentin@isovalent.com
-References: <cover.1677526810.git.dxu@dxuuu.xyz>
- <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
- <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain>
- <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <fbf869c6-29ac-4dbe-dd1c-85c6c3c10670@iogearbox.net>
-Date:   Tue, 28 Feb 2023 14:43:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 28 Feb 2023 08:51:45 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2044.outbound.protection.outlook.com [40.107.93.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773282E823;
+        Tue, 28 Feb 2023 05:51:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WjY0DV6hJANjpgjg8Xzyk83MwzvqutRbdPr732DnRBSwtJoGF9nJRz3hEeNYR7i1LUBi6MT+zgYHTsZ43q4tphqFjfAB8/1iPqjTJCqD3anZTk/EyX/lljjfbAnAAax6//N+LX6LmM0fMlhFiFtqYle3OkAG1OSDffZWzTIm/xd/JlTw7/07WZPr7C5cqVITKFg/h5DgYn0pHnW2KQkM0LNpLwdgPsY0pLRtsW/v1SErBJ+FJAeCD9PcvrTMUTcsaO/O0oLxFdVWbXUgHaCcHilnbEPAq7xhIuY/XiBstsd7Neeh+t9ubr+QI0yu46pUOFupvO4k62aQnYHXpwNV9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RaEdYdBoDeFT+foGpKiiGNSSKyYzYE+28xfVk9m/Zxw=;
+ b=ZUHTv6gbLfUk5RqHMsRufVGV6RWCjXHl19oUrq04Ibo9Mu2yN5imyZQ9n1AoU8XlXifWhXmXPdpTo/TziPpzvn80RFQ7oTWH7Zv+6/f9SVTFJVUnnaeiujLh7qoqWyKhw9jWu7w6U/KF6vDggwjJ6iKZ5vEMFjVF9dbckJxIE1V+JtlTqzxcrFdG1EMQWxs0BoRR1Q3qLkL5Sr/Mp0NI8qB+Gf9f3El5ahSg8LvYBuNWzS9edltbnEijwd8cD9pLJG/LO99k0ZFh7KhjAntjtc9WyaJFCXHX5jHRNwbpa4aBdZV2jHp+lfsroSB1lgNEwZIGQydFfrEqGxH63YnomQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RaEdYdBoDeFT+foGpKiiGNSSKyYzYE+28xfVk9m/Zxw=;
+ b=HKg0p4Kmx0CbTtfOWeo/z8hKExtYg4IngD3jy6gRPzLm1CGbgGKqGjR+IQd9D3aarMs1wW7oOUZnYLYIek3VkI742RxVxLIPFIYETUYG05txyaxRACvfcDNfPjxrKNCHeB1cezPU1eiE2Qtry4pNRKdlPCUCGWZRrLqNbuYJgZTkRSuL8mAxhweL3elUXLkaXGN3MHE6kzbhdHuYCviRbs/UvTdagkP5Gw0mTi20w3MI4TsXKkvPvWcx+OxZGr8n6K+c/+c6jrjz8Y+wQaebZHvI1M7qlZAJtcMrjTdO0Tnyi8sRQaJfQ767n9ZzmgLKE38OF+qkfuOUq5/4jHrpAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM4PR12MB6541.namprd12.prod.outlook.com (2603:10b6:8:88::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Tue, 28 Feb
+ 2023 13:51:32 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
+ 13:51:32 +0000
+Date:   Tue, 28 Feb 2023 09:51:30 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH 09/14] iommufd: Add iommufd_device_replace()
+Message-ID: <Y/4G4u/uYA3eg7OY@nvidia.com>
+References: <9-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
+ <cdbc3707-d326-26d4-3adc-ff2ed80aa2ba@linux.intel.com>
+ <Y/y3A4LJqunT0ZwS@nvidia.com>
+ <adfd78d1-006e-5e7c-236b-cc00e8afb8c0@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <adfd78d1-006e-5e7c-236b-cc00e8afb8c0@linux.intel.com>
+X-ClientProxiedBy: MN2PR16CA0012.namprd16.prod.outlook.com
+ (2603:10b6:208:134::25) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26826/Tue Feb 28 09:32:16 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB6541:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6b314296-ed69-4779-2686-08db1992e63d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AYrSkDhQNPl/NGN080NFRH7s+1+WrLDmvbnHQcLqmEyUPXyOgEdk77bYYYDwcd1Gt7gQAuMEjNUr1xmKoYg2HCkakdpcfhLGQ3chWPBi4LdRGYdTJs0XfRhIEfKzrnehvJ9DFF1ZYrOBS/DjK2E0+5CmVKScWMpLcGdlGWnRFGqFarpZ2Jy0ScGRJ+iJQwQSh3EGb7s4dm2qRSFzehv/9ziHC1TORG55YaZef2bhSEYWnLh2tpExy0AaDtV9jOI/Z4ocRQaAbaxJMOf94tqP52ul5wZe6lT8BLmYVyC+SxjeO7NNilxhxAqh3mLi2lKGwadINJQtNA9eE1vZ+rtu71wXycYNOnsvWtVkVsI61x5F8wg6SUqhQBn7n3a4c1ngC7E9iottsi3b+lGW7pqfVtqeiO1sZRKUffQTVgCTVZnAb9za9n1jzLclmrsy0jeb9bWasbOZjnyenhTKIXEOS8vqt0i8fFfmMh7uq5KzS1JxWDjGmYefujGy4wQSgB6igq2hbxtrvwrvvBJhl7rVDc0lxpVAOwnc+UJHDGHccJy4eYcHZD3A1M1rwjv6uzp6Upw5wHEQQYSnuLPFwDHr6YrSgOPSeO8AM62StAyZdbNAbB2EDSKBNe8nRT9zvP0QdGzoU1sUplyYNljX9oKJfY1+iOVdmBV5qncGcPE/EGSfB/tGej58Wq14vcDq1dGT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199018)(83380400001)(2616005)(6506007)(66946007)(38100700002)(4326008)(41300700001)(2906002)(6916009)(8676002)(66556008)(66476007)(8936002)(26005)(186003)(5660300002)(6512007)(53546011)(6486002)(966005)(478600001)(316002)(36756003)(86362001)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1JpM0iA3RiQXkAb/Zi+WNNxOMHD41mk47Ctt0Z4CCyVyrtpK5GHb9MSmV8kV?=
+ =?us-ascii?Q?4LolAqLEjTqWmoXFZGDkp9oj/DxS+a3GP4bIcupd6LyjFJel+S6gFi6cvN1n?=
+ =?us-ascii?Q?wuamMsj1ZtPw/zzPOuEQHDUbXDAEg7evO1D05UdtgCS4PkCxNsxHKSh/nisB?=
+ =?us-ascii?Q?Dg2He2c9WO/nHRB8F0RNfzcjuH+6w+CKeUrB+SsLdwYpfChehCTriU/agX8z?=
+ =?us-ascii?Q?240EKc1becZL9GvW8+MjCcnW7BcqVkLDopcGwEABb3kFOSEwp2AzndNh5CaV?=
+ =?us-ascii?Q?AioUiqweFqnCElZJE4nC2sU0vXAyYzobT495h3WWMcsozdGqTedlWgKFVF3k?=
+ =?us-ascii?Q?IrJEnM9iHlwE2/IxkRbNaa/M1pIpAxJWdr0MBBzAONrXgPVSXVLGm+KJErwB?=
+ =?us-ascii?Q?y+oGuFbS3kT3r8YKrGThnZ5EOx0Oe0nM0e3KayGyEKhCy5GXBoym4P8U5Aud?=
+ =?us-ascii?Q?gfHqI9Tg5KvEimEe0sNBoW/jFj9snZM6LlPD4ocugg5dYvcmtVJpMCSaAWbL?=
+ =?us-ascii?Q?tHGqO514IizC6/X3Mp/NwttcfdEp74difk3CKau7bYcXgtBVj4rsZkg2KRbg?=
+ =?us-ascii?Q?4H22xtNq/gzvDz5H4FJ0hgiBoRkDD2b8lqpZCFLDBcKMwHeyWSHPrNLofznn?=
+ =?us-ascii?Q?c98te300lel51YdrRtfzN2Wt0/DyQMTimIgAxC6hbYtEpJfJ6rduSQeUcSES?=
+ =?us-ascii?Q?m5s5N8I8AjetkqWJW0YxhDspswPXFFsrLzXBKrr501ReaTxDKD8SgF9zVutt?=
+ =?us-ascii?Q?GMV3HEE6VpwADNBpOlOGJCsl+GeClPQgcXwMsC8QtpnQTZFyreh8TSTZEf52?=
+ =?us-ascii?Q?S4itnTgcutM5oh+RAu2d3TUNduyB22Isxt6YssF7HKIIUFWKQJRxKXatFv+K?=
+ =?us-ascii?Q?VHYokbBsCPQ3DODF7172B77zLZjDBB/GLOSqFJoxl5U6tpE68wgiwodc8O3K?=
+ =?us-ascii?Q?f1nnBPJjcJVZme2oQl+06J2l6hHCuIuTDGd9AT+1jtULkj2qxWeED+YxdOxi?=
+ =?us-ascii?Q?M/Zy62gupHzRoS414FPdorg2Q9VIHCZ3S+Jzs9Ibj4Oq81RRWgZQyRyqk0/l?=
+ =?us-ascii?Q?7sh42T1ctCjvYzXQfDz4KV50sWfgSA25tOXfBmzP7l758vIh9TOczcs8IxuW?=
+ =?us-ascii?Q?KBHlkSEsWZBhlvw83fFEq9bz+EmVG940Li3rRKhqkFkJ7Ylk+1NkAd/fkHfE?=
+ =?us-ascii?Q?7QpL6qbWdUxopuI6vP+CHmGjE5iD89hK72TFzFlKxtU0hKOeeB+BId8awxCc?=
+ =?us-ascii?Q?EVTaxujWC3DK71bxXcRx9O5QKSXi1oLDnkhowWQP916rww6WK0mVlP2lebkA?=
+ =?us-ascii?Q?IsbwuqbkftA3l1YN/U5y2rFWrfJBuLsze/ltXKLr8WPxVRhpShXZ5yveAf4E?=
+ =?us-ascii?Q?SXZhLLzoDiWKHnSaerGinl/jkMrNVk/MfRu3M3F3V/QugIXVvhRuPigIrn7z?=
+ =?us-ascii?Q?C6mVxs9uMc5vvEFhzTT/VJXR+DOTgZ+1HRdiJ9zvM2AasUBgymKNkXsIsAXq?=
+ =?us-ascii?Q?qTCn9l2I0wN0i0gMFYi1pL17Zc8Ei64600CQP2zg5ljhcbCdbvSm2K70E8fx?=
+ =?us-ascii?Q?r8ranz1iqbt28o+dIJZIYoJXReiw2VEH9vO+1Wd1?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b314296-ed69-4779-2686-08db1992e63d
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 13:51:32.3931
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aNl/uphbtlxYqjG5JL/QQAEWdVBZnxFN7kMDG2owcj3URxqZdj5BjWW3nhTyTrcm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6541
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/28/23 5:56 AM, Alexei Starovoitov wrote:
-> On Mon, Feb 27, 2023 at 5:57 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
->> On Mon, Feb 27, 2023 at 03:03:38PM -0800, Alexei Starovoitov wrote:
->>> On Mon, Feb 27, 2023 at 12:51:02PM -0700, Daniel Xu wrote:
->>>> === Context ===
->>>>
->>>> In the context of a middlebox, fragmented packets are tricky to handle.
->>>> The full 5-tuple of a packet is often only available in the first
->>>> fragment which makes enforcing consistent policy difficult. There are
->>>> really only two stateless options, neither of which are very nice:
->>>>
->>>> 1. Enforce policy on first fragment and accept all subsequent fragments.
->>>>     This works but may let in certain attacks or allow data exfiltration.
->>>>
->>>> 2. Enforce policy on first fragment and drop all subsequent fragments.
->>>>     This does not really work b/c some protocols may rely on
->>>>     fragmentation. For example, DNS may rely on oversized UDP packets for
->>>>     large responses.
->>>>
->>>> So stateful tracking is the only sane option. RFC 8900 [0] calls this
->>>> out as well in section 6.3:
->>>>
->>>>      Middleboxes [...] should process IP fragments in a manner that is
->>>>      consistent with [RFC0791] and [RFC8200]. In many cases, middleboxes
->>>>      must maintain state in order to achieve this goal.
->>>>
->>>> === BPF related bits ===
->>>>
->>>> However, when policy is enforced through BPF, the prog is run before the
->>>> kernel reassembles fragmented packets. This leaves BPF developers in a
->>>> awkward place: implement reassembly (possibly poorly) or use a stateless
->>>> method as described above.
->>>>
->>>> Fortunately, the kernel has robust support for fragmented IP packets.
->>>> This patchset wraps the existing defragmentation facilities in kfuncs so
->>>> that BPF progs running on middleboxes can reassemble fragmented packets
->>>> before applying policy.
->>>>
->>>> === Patchset details ===
->>>>
->>>> This patchset is (hopefully) relatively straightforward from BPF perspective.
->>>> One thing I'd like to call out is the skb_copy()ing of the prog skb. I
->>>> did this to maintain the invariant that the ctx remains valid after prog
->>>> has run. This is relevant b/c ip_defrag() and ip_check_defrag() may
->>>> consume the skb if the skb is a fragment.
->>>
->>> Instead of doing all that with extra skb copy can you hook bpf prog after
->>> the networking stack already handled ip defrag?
->>> What kind of middle box are you doing? Why does it have to run at TC layer?
->>
->> Unless I'm missing something, the only other relevant hooks would be
->> socket hooks, right?
->>
->> Unfortunately I don't think my use case can do that. We are running the
->> kernel as a router, so no sockets are involved.
+On Tue, Feb 28, 2023 at 09:50:52AM +0800, Baolu Lu wrote:
+> On 2/27/23 9:58 PM, Jason Gunthorpe wrote:
+> > On Sun, Feb 26, 2023 at 11:01:59AM +0800, Baolu Lu wrote:
+> > > On 2/25/23 8:27 AM, Jason Gunthorpe wrote:
+> > > > @@ -437,25 +517,77 @@ int iommufd_device_attach(struct iommufd_device *idev, u32 *pt_id)
+> > > >    		struct iommufd_ioas *ioas =
+> > > >    			container_of(pt_obj, struct iommufd_ioas, obj);
+> > > > -		rc = iommufd_device_auto_get_domain(idev, ioas, pt_id);
+> > > > -		if (rc)
+> > > > +		destroy_hwpt = iommufd_device_auto_get_domain(idev, ioas, pt_id,
+> > > > +							      do_attach);
+> > > > +		if (IS_ERR(destroy_hwpt))
+> > > >    			goto out_put_pt_obj;
+> > > >    		break;
+> > > >    	}
+> > > >    	default:
+> > > > -		rc = -EINVAL;
+> > > > +		destroy_hwpt = ERR_PTR(-EINVAL);
+> > > >    		goto out_put_pt_obj;
+> > > >    	}
+> > > > +	iommufd_put_object(pt_obj);
+> > > > -	refcount_inc(&idev->obj.users);
+> > > > -	rc = 0;
+> > > > +	/* This destruction has to be after we unlock everything */
+> > > > +	if (destroy_hwpt)
+> > > Should this be
+> > > 
+> > > 	if (!IS_ERR_OR_NULL(destroy_hwpt))
+> > > 
+> > > ?
+> > Never use IS_ERR_OR_NULL ..
 > 
-> Are you using bpf_fib_lookup and populating kernel routing
-> table and doing everything on your own including neigh ?
-> 
-> Have you considered to skb redirect to another netdev that does ip defrag?
-> Like macvlan does it under some conditions. This can be generalized.
-> 
-> Recently Florian proposed to allow calling bpf progs from all existing
-> netfilter hooks.
-> You can pretend to local deliver and hook in NF_INET_LOCAL_IN ?
-> I feel it would be so much cleaner if stack does ip_defrag normally.
-> The general issue of skb ownership between bpf prog and defrag logic
-> isn't really solved with skb_copy. It's still an issue.
+> Can you please elaborate a bit on this? I can still see a lot of use of
+> it in the tree.
 
-I do like this series and we would also use it for Cilium case, so +1 on the
-tc BPF integration. Today we have in Cilium what Ed [0] hinted in his earlier
-mail where we extract information from first fragment and store the meta data
-in a BPF map for subsequent packets based on ipid [1], but limitations apply
-e.g. service load-balancing won't work. Redirecting to a different device
-or moving higher up the stack is cumbersome since we then need to go and
-recirculate back into tc BPF layer where all the business logic is located and
-handling the regular (non-fragmented) path, too. Wrt skb ownership, can you
-elaborate what is a concrete issue exactly? Anything that comes to mind with
-this approach that could crash the kernel?
+Yes, sadly. It is usually some signal of toxic confusion about what
+things mean.
 
-   [0] https://lore.kernel.org/bpf/cf49a091-9b14-05b8-6a79-00e56f3019e1@gmail.com/
-   [1] https://github.com/cilium/cilium/pull/10264
+A function that returns an ERR_PTR should very rarely return NULL, and
+if it does return NULL then NULL wasn't an error.
+
+Further you should never store an ERR_PTR in some structure and then
+later try to test it, that is madness.
+
+So with properly structured code the need should not exist.
+
+https://lore.kernel.org/all/20130109150427.GL3931@n2100.arm.linux.org.uk/
+
+Jason
