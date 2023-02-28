@@ -2,161 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F2D6A5277
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 05:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8596A564D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 11:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjB1E4y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Feb 2023 23:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        id S230145AbjB1KHH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Feb 2023 05:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjB1E4x (ORCPT
+        with ESMTP id S230257AbjB1KGl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Feb 2023 23:56:53 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E59241E8;
-        Mon, 27 Feb 2023 20:56:51 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id o12so34875061edb.9;
-        Mon, 27 Feb 2023 20:56:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=okmRvyXBxZ0o8pbO3WLuRK922SzNzOQvPgzOOLIl67E=;
-        b=gSacQg7cDaOiW6jQCpRlFI10wyEfBq78p4/bhMVdXjdiA5bYHn09KjKUY19IaRQOoK
-         Jk1re5nnDSOX3VfSfCUc37yo5MN+r9aWfQm63pKXchcSx0e2REhyK6fjF/hfdE9bXz3D
-         6VHS+E43e8+nCP9ptO2xzW0pWUZ42q01IxMw1QygL5DSzN/nLt5Nx0LO7+m9bphhw6zO
-         o5hE47+gdT/Oxrdz5V8JhRtD6mRrO933W8q1CLh8v+zT5V/vS59Di8xXOn9QRMREe+MY
-         J0r2dGzq5O74iGvOdme5MZzbhbhieJaofrNJZlo0mNrgco1+cPZyvrcvWnEDzLVzsiM/
-         FRFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=okmRvyXBxZ0o8pbO3WLuRK922SzNzOQvPgzOOLIl67E=;
-        b=zQSWuPlVNRY7A7K1OMV26LOA+v3P4oK72wnbYUk/v7wRgXszCly5q4QECvWmcVZNUQ
-         nWWVrcijWYuet0drEbXiXkE4hpCicDs4ISl5v1BgZqaah6mwRxpmqT+MkzswJ0iLOhGf
-         Nq6BFKNcXjThslJFTUQ79/tXuUh23S5c7EToC7zXj+Ek7jRTPJzIOoMJJw3y86JD2qH+
-         vEEXCK1AE13dOX+R/3egArAQW7tdreUUVbZd8pP3D8ZgDiZSepNFlh2LNwlTsWOJjMoQ
-         kU7Kpk2I4VbRWUHJIRJXsAYqPqDM33Fw7EfEFpPm7DCdzXFZfXbc5RQzsry4fnJOQPjF
-         07+w==
-X-Gm-Message-State: AO0yUKXWfKIQNC038xETu7kMb/Z1NMQ+v7wMxOkSgtJGUCpPk8h/cx0R
-        qXcVyUURiIok9usoHAKjBWnEtu6aqGv35bIJz8Vs1q/1b5M=
-X-Google-Smtp-Source: AK7set8gKY0GodjAmaFttAkUsYsfQgC1w7nWfqds+hu0p1TYhtkpsjEvbYRSk15cuQj4d3XVGPZqlZhuAjW5SFAtD1Y=
-X-Received: by 2002:a17:906:a46:b0:895:58be:963 with SMTP id
- x6-20020a1709060a4600b0089558be0963mr576673ejf.3.1677560209655; Mon, 27 Feb
- 2023 20:56:49 -0800 (PST)
+        Tue, 28 Feb 2023 05:06:41 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E764820550;
+        Tue, 28 Feb 2023 02:06:29 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31S9UHV0002540;
+        Tue, 28 Feb 2023 10:06:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=DC9JyX/aZ76UEG07OM6Yh20Kp+9JipCq1FCKnvIfMS8=;
+ b=nXYFCRtljWpPuSTPwP4dt7aBa9tV3qvaRUjbp8EDFAKwqducPafqrGHFpRtegwtyFou3
+ SXB/nHZwZ7ic4eSrbVE+bFiWyf5n9ZNZmGcxmkCOI0tHmCmTGG9AYBLTadBiwDVTiX3q
+ cTsvb4MmlZIuSFxKKmvEk7108UQKNI2yeaNG/wEHzwG7BDgiuaW4t9V7cH3L9GmUq3M2
+ YXWDtio/jnA2m+utf7moSn+YZliUgi/Xtuuj7TWwVQ0O55XN4MQELVGFuIeWwQOtfPSv
+ E5r9AQLOBmbt5HDl1NXN6EG+tbLBpKDIHw8Oz15lr1kSRXtvTpVo5ReIVXqZXuhYYQfg mw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p1f1rru05-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 10:06:17 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31S9kiRf008101;
+        Tue, 28 Feb 2023 10:06:16 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p1f1rrty2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 10:06:16 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31S4cRNl027360;
+        Tue, 28 Feb 2023 10:06:13 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3nybb4jx5b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Feb 2023 10:06:13 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31SA6BSG63111512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Feb 2023 10:06:11 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 51C2C20078;
+        Tue, 28 Feb 2023 10:06:11 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E7BBA20087;
+        Tue, 28 Feb 2023 10:06:09 +0000 (GMT)
+Received: from [9.43.45.146] (unknown [9.43.45.146])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Feb 2023 10:06:09 +0000 (GMT)
+Message-ID: <d989254a-a3c4-615e-59cb-96667d0a63b3@linux.ibm.com>
+Date:   Tue, 28 Feb 2023 15:36:09 +0530
 MIME-Version: 1.0
-References: <cover.1677526810.git.dxu@dxuuu.xyz> <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
- <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain>
-In-Reply-To: <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 27 Feb 2023 20:56:38 -0800
-Message-ID: <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in BPF
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: Possible bug in
+ linux-6.2/tools/testing/selftests/powerpc/pmu/sampling_tests/mmcra_thresh_marked_sample_test.c
+Content-Language: en-US
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        David Binderman <dcb314@hotmail.com>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <DB6P189MB0568CF002762C6C43AF6DF169CA89@DB6P189MB0568.EURP189.PROD.OUTLOOK.COM>
+ <87ttz7vfva.fsf@mpe.ellerman.id.au>
+From:   kajoljain <kjain@linux.ibm.com>
+In-Reply-To: <87ttz7vfva.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: EMjlDNBoysmWaiMjZQp-kx9JEn3zS6dK
+X-Proofpoint-GUID: 6GEeOT3WAZFnXJYgNfezphSvxdiUCQKO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-28_06,2023-02-28_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 lowpriorityscore=0 suspectscore=0 clxscore=1011 mlxscore=0
+ malwarescore=0 priorityscore=1501 spamscore=0 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302280080
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 5:57=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> Hi Alexei,
->
-> On Mon, Feb 27, 2023 at 03:03:38PM -0800, Alexei Starovoitov wrote:
-> > On Mon, Feb 27, 2023 at 12:51:02PM -0700, Daniel Xu wrote:
-> > > =3D=3D=3D Context =3D=3D=3D
-> > >
-> > > In the context of a middlebox, fragmented packets are tricky to handl=
-e.
-> > > The full 5-tuple of a packet is often only available in the first
-> > > fragment which makes enforcing consistent policy difficult. There are
-> > > really only two stateless options, neither of which are very nice:
-> > >
-> > > 1. Enforce policy on first fragment and accept all subsequent fragmen=
-ts.
-> > >    This works but may let in certain attacks or allow data exfiltrati=
-on.
-> > >
-> > > 2. Enforce policy on first fragment and drop all subsequent fragments=
-.
-> > >    This does not really work b/c some protocols may rely on
-> > >    fragmentation. For example, DNS may rely on oversized UDP packets =
-for
-> > >    large responses.
-> > >
-> > > So stateful tracking is the only sane option. RFC 8900 [0] calls this
-> > > out as well in section 6.3:
-> > >
-> > >     Middleboxes [...] should process IP fragments in a manner that is
-> > >     consistent with [RFC0791] and [RFC8200]. In many cases, middlebox=
-es
-> > >     must maintain state in order to achieve this goal.
-> > >
-> > > =3D=3D=3D BPF related bits =3D=3D=3D
-> > >
-> > > However, when policy is enforced through BPF, the prog is run before =
-the
-> > > kernel reassembles fragmented packets. This leaves BPF developers in =
-a
-> > > awkward place: implement reassembly (possibly poorly) or use a statel=
-ess
-> > > method as described above.
-> > >
-> > > Fortunately, the kernel has robust support for fragmented IP packets.
-> > > This patchset wraps the existing defragmentation facilities in kfuncs=
- so
-> > > that BPF progs running on middleboxes can reassemble fragmented packe=
-ts
-> > > before applying policy.
-> > >
-> > > =3D=3D=3D Patchset details =3D=3D=3D
-> > >
-> > > This patchset is (hopefully) relatively straightforward from BPF pers=
-pective.
-> > > One thing I'd like to call out is the skb_copy()ing of the prog skb. =
-I
-> > > did this to maintain the invariant that the ctx remains valid after p=
-rog
-> > > has run. This is relevant b/c ip_defrag() and ip_check_defrag() may
-> > > consume the skb if the skb is a fragment.
-> >
-> > Instead of doing all that with extra skb copy can you hook bpf prog aft=
-er
-> > the networking stack already handled ip defrag?
-> > What kind of middle box are you doing? Why does it have to run at TC la=
-yer?
->
-> Unless I'm missing something, the only other relevant hooks would be
-> socket hooks, right?
->
-> Unfortunately I don't think my use case can do that. We are running the
-> kernel as a router, so no sockets are involved.
 
-Are you using bpf_fib_lookup and populating kernel routing
-table and doing everything on your own including neigh ?
 
-Have you considered to skb redirect to another netdev that does ip defrag?
-Like macvlan does it under some conditions. This can be generalized.
+On 2/27/23 10:56, Michael Ellerman wrote:
+> David Binderman <dcb314@hotmail.com> writes:
+>> Hello there,
+>>
+>> I ran the static analyser cppcheck over the linux-6.2 source code and got this:
+>>
+>> linux-6.2/tools/testing/selftests/powerpc/pmu/sampling_tests/mmcra_thresh_marked_sample_test.c:68:10: style: Same expression '0x3' found multiple times in chain of '&' operators. [duplicateExpression]
 
-Recently Florian proposed to allow calling bpf progs from all existing
-netfilter hooks.
-You can pretend to local deliver and hook in NF_INET_LOCAL_IN ?
-I feel it would be so much cleaner if stack does ip_defrag normally.
-The general issue of skb ownership between bpf prog and defrag logic
-isn't really solved with skb_copy. It's still an issue.
+Hi,
+  Thanks David for reporting it.
+
+> 
+> Thanks.
+> 
+>> Source code is
+>>
+>>     FAIL_IF(EV_CODE_EXTRACT(event.attr.config, sample & 0x3) !=
+>>             get_mmcra_sample_mode(get_reg_value(intr_regs, "MMCRA"), 4));
+>>
+>> but
+>>
+>> #define EV_CODE_EXTRACT(x, y)   \
+>>     ((x >> ev_shift_##y) & ev_mask_##y)
+>>
+>>
+>> Given the token pasting, I very much doubt an expression like "sample & 0x3"
+>> will work correctly. Same thing on the line above 
+>>
+>>     FAIL_IF(EV_CODE_EXTRACT(event.attr.config, sample >> 2) !=
+>>             get_mmcra_rand_samp_elig(get_reg_value(intr_regs, "MMCRA"), 4));
+>>
+>> "sample >> 2" doesn't look like a valid token to me.
+> 
+> It expands to:
+> 
+>  if ((((event.attr.config >> ev_shift_sample >> 2) & ev_mask_sample >> 2) != get_mmcra_rand_samp_elig(get_reg_value(intr_regs, "MMCRA"), 4))) 
+> 
+> Which AFAICS is valid, and does compile.
+> 
+> Whether it's what the author actually intended is less clear.
+> 
+> And the other example with & 0x3 seems obviously wrong, it expands to:
+> 
+>   if ((((event.attr.config >> ev_shift_sample & 0x3) & ev_mask_sample & 0x3) != get_mmcra_sample_mode(get_reg_value(intr_regs, "MMCRA"), 4)))
+> 
+> The shift is 24, so bitwise anding it with 0x3 gets 0 which doesn't seem
+> likely to be what was intended.
+> 
+
+Hi Michael,
+   Thanks for checking it. The intention is to check 3 bits of
+rand_samp_elig field and 2 bits of rand_samp_mode field from the
+sampling bits. Basically we first want to extract that sample field
+using EV_CODE_EXTRACT macro and then fetch required value of
+rand_samp_elig and rand_samp_mode, to compare it with MMCRA bits.
+
+Right approach to do that would be:
+
+ FAIL_IF((EV_CODE_EXTRACT(event.attr.config, sample) >> 2) !=
+get_mmcra_rand_samp_elig(get_reg_value(intr_regs, "MMCRA"), 4));
+
+ FAIL_IF((EV_CODE_EXTRACT(event.attr.config, sample) & 0x3) !=
+get_mmcra_rand_samp_elig(get_reg_value(intr_regs, "MMCRA"), 4));
+
+I will send a fix patch for same.
+
+Thanks,
+Kajol Jain
+
+> cheers
