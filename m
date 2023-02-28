@@ -2,130 +2,261 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C43C6A5A64
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 14:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF636A5C7D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Feb 2023 16:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjB1Nwe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Feb 2023 08:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
+        id S230223AbjB1P4k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Feb 2023 10:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjB1Nw2 (ORCPT
+        with ESMTP id S230170AbjB1P4i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Feb 2023 08:52:28 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2044.outbound.protection.outlook.com [40.107.93.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F592E823;
-        Tue, 28 Feb 2023 05:52:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GvpPnOnlZSVI1w7K77A68CleyB4uos1db96GoeFP89bAlf+J7XUrgptUycic/A/cKAKmfjnYaNReboRq2lxVEu++1bJe8Smma/G7zxvMffqnqL/fO0L9xxyd1cnKp5DCsetOIkgXqtC4cQDpOr/4WNcZK+br4w+4NZ9utmaW4oCV4WMeh8fxBTS96B4Alxw12Gf0bOfznx9KkGecudG6PK6JdCd3oeJktdD3qU5wlOZY9sgWElygEKnhx6nEHX+UR/IW7H4DFZTgFWXzlW7x/Zze/jUTQ1vPPLhy5k6OvT4lHNXQT7BkzLVr7nm/hX3iM+zXL1VXzjvV7a9bSsZ6mQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iJ6LqF+h3A6Gb2rqvtIujvuohfPhK+OmYw2pXTO/YLo=;
- b=Kq+7IuplYAjPzCwKEggA7pVd51iMSuRiWG23F10L16Wxr4lVkT+vvO9m0XCS/axoCkyH0fhLpccwrLRyytkB3+CCGyaeVgEy7pBkXboahKtcmaTzcjvHq013Xbn5XPIzK2r1w7VGJsb72CIBMlq4H/x7YKGjzWDprIhT4dooZunuo10+OVLaKD9jm2QMhuir3Pnl7b+DsQAQz0xBNZP499ZX+mgY127lQTzek1pVynXwJO/EmCrlMrkX9WqHrM21jC8Bk49SiYNoLY4cJ0R1dDGSnOeBsgO2WXNLBv8dTFbNb6uwKO/DgOoNzBNBHfJznC3NQt0eRzJD86v29EB1tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iJ6LqF+h3A6Gb2rqvtIujvuohfPhK+OmYw2pXTO/YLo=;
- b=qFVqbJIFGGtsfvzuXpFb7fnATtv8KN22Kabx6zL1Od6rn1fel4QyGheXrZWiWu4ZMaYfI8wher+qloyN1z6wXcdgRzmCaovizWWJvjWmUThdffbCpH6bpJiQWRy1PROKF/qkY2TbIlNjNvAtPa85bFG5SOZa2VEl3V0WF56RGuXNMBY7IhbmEFtbRq1J7UuzLhlFJiy3mSUV0AGDAYdEP0/MMwUKDL8oqKWYtzrLDjDIsgHkPqRcH0g+k0wZxyhDzlMivdXlO8RokGh2ES1FUt7fROLX57jY9kck/3Nir2v+vDM9I/XNmG4LklM26IwqFL1vuirqA34mMvf0KudjYw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DM4PR12MB6541.namprd12.prod.outlook.com (2603:10b6:8:88::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.25; Tue, 28 Feb
- 2023 13:52:24 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.029; Tue, 28 Feb 2023
- 13:52:24 +0000
-Date:   Tue, 28 Feb 2023 09:52:23 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH 09/14] iommufd: Add iommufd_device_replace()
-Message-ID: <Y/4HF2bc/uBydmgG@nvidia.com>
-References: <9-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
- <909ee61a-9cbd-eda1-89a2-349348eeb735@linux.intel.com>
- <Y/y3fnSJZB7QhAKM@nvidia.com>
- <322462b2-a3e2-31a3-d520-34fe1467b26e@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <322462b2-a3e2-31a3-d520-34fe1467b26e@linux.intel.com>
-X-ClientProxiedBy: BLAPR05CA0031.namprd05.prod.outlook.com
- (2603:10b6:208:335::12) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Tue, 28 Feb 2023 10:56:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B21411EAB
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 07:55:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677599745;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v6M2ykteJBFwPdE4Fc5PB7vibFCXhoU/gll1/xu6zk0=;
+        b=c2smdjL2+tzaw+6hUS/wk60sFKSDz0zzqmDWZ7APSzLq+28VcK7UJ2qLDGry+k5iptivB1
+        9wnPgPW/KHtvLvu+8RvdBlLREVXi1HMrccta5OoJq5cvwmgUQGhfzcOU+8ryDEtsNnK3e3
+        pF0qit0175zHVrSPFz/HgCgC0oU9NU4=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-228-nXzr8PiiNUeXadxkOjo6RA-1; Tue, 28 Feb 2023 10:55:44 -0500
+X-MC-Unique: nXzr8PiiNUeXadxkOjo6RA-1
+Received: by mail-qt1-f198.google.com with SMTP id o10-20020a05622a138a00b003bfdabf3b89so3127003qtk.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 07:55:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677599744;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v6M2ykteJBFwPdE4Fc5PB7vibFCXhoU/gll1/xu6zk0=;
+        b=w5MYFLC9b1eN5VyA4nhBmcTvvVjjklAzA8R5yW/jczPSFi9qulYWA9pzhCu7hhezfB
+         /qMKQkk7QGHWOe2ViCdNpW+l9LYKEsggsiQO6Vo0YFRLKYjPOh8iHygyezZ3zY+hon/E
+         I//lulMoLVuuCVmQu4NglTG02KP5tN//YP7fMdXdmZv8Ft0gx/8NlnA/Z5Vt3hhBPpCe
+         hxIAsl65IXCcR/EmooN9DVNVFBZZ+9zr6bvB1TXomtMgBtOWdlFuqi+/AyL2Jxou8AJ1
+         bu8a0CZSrOgJD/prnrON3/dHYeDD2Mx7PN5LRB1hnxOP2lOoTBTYCHQjMyYpFJTIlNVY
+         eaLQ==
+X-Gm-Message-State: AO0yUKVbCnpuVEiXdrKwoXQV67l64h6S7+CR6No3VvjyrxilncKbkE+h
+        iVqhKUoWGUtKdW3K5TMp49jM77XnNs/8DMBDOr5Aukv0FbHxD3RnWCx3UzCK4QKoDkqc8yE/+rg
+        N9xpYoccBZ5LJHUNmdF00NdxJpvHM
+X-Received: by 2002:ac8:580f:0:b0:3bf:daa8:cacc with SMTP id g15-20020ac8580f000000b003bfdaa8caccmr6872038qtg.3.1677599743728;
+        Tue, 28 Feb 2023 07:55:43 -0800 (PST)
+X-Google-Smtp-Source: AK7set/XPVjIGEfnKjmfSsCn1612xPeb/JaaDAmV6dwmY5PblZQ38Qj9ElM25ukoj3dLGb0rICpZcw==
+X-Received: by 2002:ac8:580f:0:b0:3bf:daa8:cacc with SMTP id g15-20020ac8580f000000b003bfdaa8caccmr6871879qtg.3.1677599742772;
+        Tue, 28 Feb 2023 07:55:42 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id x21-20020a376315000000b007419eb86df0sm7080654qkb.127.2023.02.28.07.55.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 07:55:42 -0800 (PST)
+Date:   Tue, 28 Feb 2023 10:55:40 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <Y/4j/Nu1vp9sVI7N@x1n>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <cf36b6ea-6268-deff-d9ed-6782de2bd0a7@gmail.com>
+ <2fe790e5-89e0-d660-79cb-15160dffd907@collabora.com>
+ <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
+ <c15446c5-eedd-690f-9dae-2bc12ee9eb78@collabora.com>
+ <F73885A1-14AE-4820-876B-A8E6DC6D19CC@vmware.com>
+ <Y/0eIUIh81jK9w2i@x1n>
+ <5D5DEEED-55EB-457B-9EB7-C6D5B326FE99@vmware.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB6541:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b84aff8-1972-4aa0-a6a5-08db19930576
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +bOpsMJSAlNrL2FzOapWaiDOOMWUtGRLyH17JxwAbJLI41vdjV75Ov93GmmI0Tmi4C18Xj4Lgs1YhvMY0speS7U8H7Ois0f8LDNAvsa6ChdQyeIFksNL5J91R+FjrFLxJyZtUVlU7U8GzF1o42Yu/z78S/F/8EtQ0ePxQDToFTDnsmC35KvgLRI2qombjobXY86l8oZOVzS8ow0AOrcb4XBofyeGLDTvCZFiYk/ke17EajGF21miwV4f09AjcaKtqnBpVYEHxYZj9/deFif5MejTkNjJXJ/DcGvsibON4tXdaUUqQWfJs0HMJt6MjZ6ANcRDHCgGUgUE06g9W0DaDDUQdyw+jBF36BNTZ5PwCx5YSHLfcUgreAHRZob498rJ4MXfakYlpq353+wSYcyEbWjdCvj370asZX20mKWF4hR1IbKtEQUSTUrVG7tcQ2BhpzellJmMjFK3p8zCyzTDxRL9YHhborFO5vOMfQAzrSUUUtuiFUcQSEsSXpGw3t8HGUvddRlqQR/4QLeOdCuMwUaQLgb58iPtWckpika/sTssTS2rAQ+zBWMwx9Ia56krtJmvy58bzt2ZcIMVVJlCjr66yBciyH7Hfki2R2XUv5qJmZ0ZUeXWYsvVcSkCeOIuNVymX94RaBWzCh+BZLGePg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199018)(2616005)(6506007)(66946007)(38100700002)(4326008)(41300700001)(2906002)(6916009)(8676002)(66556008)(66476007)(4744005)(8936002)(26005)(186003)(5660300002)(6512007)(6486002)(478600001)(316002)(36756003)(86362001)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FK9pCDRhJnNVXnPShQzRlsQjDBrij+u97IT8XGaR6jrRa/pwzjO2A2lGO62D?=
- =?us-ascii?Q?KqebP/p9ozgCj7btrklCg/jFnKnrl4Kas4OlELYEtzUbA/y4zpBOwiBglO7h?=
- =?us-ascii?Q?tq6fRQS/mfi7bCxlFJCG/09LrwzlLI2GZYIRY2Vy7J4oiRcoctLEspItiO8I?=
- =?us-ascii?Q?CxCs5U1/RVp3svmx6BGUwvulEjxc/2Tn6xpPsyfMbHpfcgcm6GO7/OlA8Hza?=
- =?us-ascii?Q?hlK0Y7dk4qsIpIa02Zy1XdIbUD4X5qSAp/gcNnRtaPVz2Xlf4KGRvEf3twNy?=
- =?us-ascii?Q?ex5DY11j6lmMqnFrBNELYUohFxOS0oulHuuNvL2cMJn0gC7XK3kjKXWGyy51?=
- =?us-ascii?Q?/HRdNfQL1q0PTroivavwOpJRlQacDcaNXCYYnHsy+n377c/W71UiFAgpB8sC?=
- =?us-ascii?Q?786btn+7kGl7CnyrizRYigNyYrPreUj4+lv/ZwW5uJYyaNZ8FOw+16MlNqu5?=
- =?us-ascii?Q?H4c4d+BnFb6sbtAKMjGeTpbx5h8Ewm6eUfkAsAi5A2L2lc7aK0YoDUr4Vqzb?=
- =?us-ascii?Q?twTYXX0vnOM6n3TL2x7KI8Hv+QrPpVIln++kd1Ie+ckmGquAzHPkaNhwpTr8?=
- =?us-ascii?Q?Ue4EhcEjI+bZx68Ntq6BqmZzAdYoRH7TWMU8sX3LtiT6Dz5w1xq8cu5fa6eT?=
- =?us-ascii?Q?ZQtp9/y6thqhYPthAbIGVW+BqO99oAS82GXc9GX6pYNMaYjC2dLQOR8VUOlR?=
- =?us-ascii?Q?TEAggid/oyBCzmYk+Zej97QE/Qdxr3OQsKNEkhXMxoLTpKEbG6m4OuSyKJAK?=
- =?us-ascii?Q?ez7ODTRKpYXSPHAu7OSsGcjSE6x1ZRGiQCS/+qYapNdF87fTB1GhvP5h5rGQ?=
- =?us-ascii?Q?dZfPq8YcZCMmaGfTmXpeNA1zOf0BOazRKI5SGEtLjxOYkvSImhoEKymtOF9z?=
- =?us-ascii?Q?Ps5hjGAI0ZqODGAMS5RHXAKedD6GimktC10oyltcE0gXz8YDtPw/BwNzXjDy?=
- =?us-ascii?Q?TPvYT3BmIzQSZpwJHmsIDK+PGYhW6IuePhLiWNWP5v2YBFbsLaoa6EvHt8/z?=
- =?us-ascii?Q?zDgdeT9UstHVwbm8GOW49swk0r8B0MhhQMvVqlYv/w1gonCB+3ni/tMtp325?=
- =?us-ascii?Q?+twbpghJNPFsREg/Qkv8lqA8TqDqHEP0bPdBtwLWOSigDTlhPTtue2btU/c8?=
- =?us-ascii?Q?IPQGHq22DbtJJCfQiv9j0GhLJPB0Rk+0WmqQKvo0su1usjCppJWsawfBQ4iF?=
- =?us-ascii?Q?sWhpQnzydJBNMR/qEjcCOdZ0MVUcT3BNYWgxR+TJApqTde2Gb4C/l7WQmU70?=
- =?us-ascii?Q?OB7uS6HyZg9HY3O11CBtC1DggWS5eAgVgdLbvsNwUaBPKxggCscYHEG2inYM?=
- =?us-ascii?Q?as3QrT19zwgUe/RnMg76IaPz7Q0bKiqHJu5Fa4UMO8Tc6IN3xmJQTjKoc5x9?=
- =?us-ascii?Q?XOZiHnjshGdCbwtXo6iFV+sPVWeBlZ/poDCua5pBZe1Lv/XfiAc0Ks8ClHtn?=
- =?us-ascii?Q?F5SuHAha363zYaFxpZVG382Nz3cGhfnxbvFFts0JMCYP9Ka5bqB71fYJr1Y6?=
- =?us-ascii?Q?Ktibn1TfHWFX+stKFAa1InLXkg79YgUHdgTLmwiFaPlzani1YGLLD0EJMyLL?=
- =?us-ascii?Q?WkVO+RCjBzqoMkoL13O8Ga/LODxP9d009ZhFSNXE?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b84aff8-1972-4aa0-a6a5-08db19930576
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2023 13:52:24.7324
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NqHULe/bBgBgR6jOZBbNU4Bu9QAmB24Mk2MlaMy/DwCblbBx9bmfeiktQk0u3GTX
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6541
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5D5DEEED-55EB-457B-9EB7-C6D5B326FE99@vmware.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 10:10:41AM +0800, Baolu Lu wrote:
-
-> > If a HWPT was passed in then it just leaves it unchanged which is also
-> > correct.
+On Mon, Feb 27, 2023 at 11:09:12PM +0000, Nadav Amit wrote:
 > 
-> Functionally right. Above I just want to make the comment matches what
-> the real code does.
+> 
+> > On Feb 27, 2023, at 1:18 PM, Peter Xu <peterx@redhat.com> wrote:
+> > 
+> > !! External Email
+> > 
+> > On Thu, Feb 23, 2023 at 05:11:11PM +0000, Nadav Amit wrote:
+> >> From my experience with UFFD, proper ordering of events  is crucial, although it
+> >> is not always done well. Therefore, we should aim for improvement, not
+> >> regression. I believe that utilizing the pagemap-based mechanism for WP'ing
+> >> might be a step in the wrong direction. I think that it would have been better
+> >> to emit a 'UFFD_FEATURE_WP_ASYNC' WP-log (and ordered) with UFFD #PF and
+> >> events. The 'UFFD_FEATURE_WP_ASYNC'-log may not need to wake waiters on the
+> >> file descriptor unless the log is full.
+> > 
+> > Yes this is an interesting question to think about..
+> > 
+> > Keeping the data in the pgtable has one good thing that it doesn't need any
+> > complexity on maintaining the log, and no possibility of "log full".
+> 
+> I understand your concern, but I think that eventually it might be simpler
+> to maintain, since the logic of how to process the log is moved to userspace.
+> 
+> At the same time, handling inputs from pagemap and uffd handlers and sync’ing
+> them would not be too easy for userspace.
 
-It does, on output the pt_id is always the IOMMUFD_OBJ_HW_PAGETABLE ID
-of the attached HWPT.
+I do not expect a common uffd-wp async user to provide a fault handler at
+all.  In my imagination it's in most cases used standalone from other uffd
+modes; it means all the faults will still be handled by the kernel.  Here
+we only leverage the accuracy of userfaultfd comparing to soft-dirty, so
+not really real "user"-faults.
 
-Jason
+> 
+> But yes, allocation on the heap for userfaultfd_wait_queue-like entries would
+> be needed, and there are some issues of ordering the events (I think all #PF
+> and other events should be ordered regardless) and how not to traverse all
+> async-userfaultfd_wait_queue’s (except those that block if the log is full)
+> when a wakeup is needed.
+
+Will there be an ordering requirement for an async mode?  Considering it
+should be async to whatever else, I would think it's not a problem, but
+maybe I missed something.
+
+> 
+> > 
+> > If there's possible "log full" then the next question is whether we should
+> > let the worker wait the monitor if the monitor is not fast enough to
+> > collect those data.  It adds some slight dependency on the two threads, I
+> > think it can make the tracking harder or impossible in latency sensitive
+> > workloads.
+> 
+> Again, I understand your concern. But this model that I propose is not new.
+> It is used with PML (page-modification logging) and KVM, and IIRC there is
+> a similar interface between KVM and QEMU to provide this information. There
+> are endless other examples for similar producer-consumer mechanisms that
+> might lead to stall in extreme cases. 
+
+Yes, I'm not against thinking of using similar structures here.  It's just
+that it's definitely more complicated on the interface, at least we need
+yet one more interface to setup the rings and define its interfaces.
+
+Note that although Muhammud is defining another new interface here too for
+pagemap, I don't think it's strictly needed for uffd-wp async mode.  One
+can use uffd-wp async mode with PM_UFFD_WP which is with current pagemap
+interface already.
+
+So what Muhammud is proposing here are two things to me: (1) uffd-wp async,
+plus (2) a new pagemap interface (which will closely work with (1) only if
+we need atomicity on get-dirty and reprotect).
+
+Defining new interface for uffd-wp async mode will be something extra, so
+IMHO besides the heap allocation on the rings, we need to also justify
+whether that is needed.  That's why I think it's fine to go with what
+Muhammud proposed, because it's a minimum changeset at least for userfault
+to support an async mode, and anything else can be done on top if necessary.
+
+Going a bit back to the "lead to stall in extreme cases" above, just also
+want to mention that the VM use case is slightly different - dirty tracking
+is only heavily used during migration afaict, and it's a short period.  Not
+a lot of people will complain performance degrades during that period
+because that's just rare.  And, even without the ring the perf is really
+bad during migration anyway... Especially when huge pages are used to back
+the guest RAM.
+
+Here it's slightly different to me: it's about tracking dirty pages during
+any possible workload, and it can be monitored periodically and frequently.
+So IMHO stricter than a VM use case where migration is the only period to
+use it.
+
+> 
+> > 
+> > The other thing is we can also make the log "never gonna full" by making it
+> > a bitmap covering any registered ranges, but I don't either know whether
+> > it'll be worth it for the effort.
+> 
+> I do not see a benefit of half-log half-scan. It tries to take the
+> data-structure of one format and combine it with another.
+
+What I'm saying here is not half-log / half-scan, but use a single bitmap
+to store what page is dirty, just like KVM_GET_DIRTY_LOG.  I think it
+avoids any above "stall" issue.
+
+> 
+> Anyhow, I was just giving my 2 cents. Admittedly, I did not follow the
+> threads of previous versions and I did not see userspace components that
+> use the API to say something smart.
+
+Actually similar here. :) So I'm probably not the best one to describe what
+is the best to look as API.
+
+What I know is I think the new pagemap interface is welcomed by CRIU
+developers, so it may be something good with/without userfaultfd getting
+involved already.  I see this as "let's add one more bit for uffd-wp" in
+the new interface only.
+
+Quotting some link I got from Muhammud before with CRIU usage:
+
+https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com
+https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com
+
+> Personally, I do not find the current API proposal to be very consistent
+> and simple, and it seems to me that it lets pagemap do
+> userfaultfd-related tasks, which might be considered inappropriate and
+> non-intuitive.
+
+Yes, I agree.  I just don't know what's the best way to avoid this.
+
+The issue here IIUC is Muhammud needs one operation to do what Windows does
+with getWriteWatch() API.  It means we need to mix up GET and PROTECT in a
+single shot.  If we want to use pagemap as GET, then no choice to PROTECT
+also here to me.
+
+I think it'll be the same to soft-dirty if it's used, it means we'll extend
+soft-dirty modifications from clear_refs to pagemap too which I also don't
+think it's as clean.
+
+> 
+> If I derailed the discussion, I apologize.
+
+Not at all.  I just wished you joined earlier!
+
+-- 
+Peter Xu
+
