@@ -2,195 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3FD86A63BF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Mar 2023 00:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B856A6526
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Mar 2023 02:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjB1XRX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Feb 2023 18:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        id S229437AbjCAB6Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Feb 2023 20:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjB1XRW (ORCPT
+        with ESMTP id S229470AbjCAB6P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Feb 2023 18:17:22 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF2D199EA;
-        Tue, 28 Feb 2023 15:17:20 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3DF4C5C00E3;
-        Tue, 28 Feb 2023 18:17:18 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 28 Feb 2023 18:17:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1677626238; x=
-        1677712638; bh=4KxBwKlTQZ05BLQjRzeOs8wp458o4ENpyLmhm8kBBF8=; b=q
-        It9z9OGTfT94KurTW4r2++HlnWTc8ppcw1U+1ih0whaZl6edWoV9KPzg8INNTYn6
-        FBYu4PTKD683Q6ECPPajA6YKA49dl8IZjs3RcyDO8EicxiOFx+vRbBnArog7rHW0
-        Lb0t6H0CFTiu0DEsVHD7eYNI0+8JZEwo3surYKWn6IWamPJzlDUZAiIuRhIwIq36
-        TB0xh+ohbtrljb+cyOmxY2onCtN8WPjEirsLA80yWPPMN3L5vuzYw1ruX8wpb8lN
-        +drsO4OmCHM+KzxZYtfoS3YCxFoRiYoMlPGwm8kH7H0LlhlaWr1hq1MIgp9jFmVE
-        PhNyOzuT8X8oGbmuQna+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677626238; x=
-        1677712638; bh=4KxBwKlTQZ05BLQjRzeOs8wp458o4ENpyLmhm8kBBF8=; b=c
-        HAVbbPs9z2GHoY4/QDROnKFhCYOJs2wzYftlUdsHeEk/ev3022oV0jNHeTFZKmb5
-        1smXhbHJk9VnsiIzmQEGL4mAan2x1NGdnoprT2i7/b7K2uGz0mqXQ7eTF+B+1OgU
-        7rRUiZ4Zs5fcKf2vVce+mcntH8eJsENYS4z5qise3UMJWotY9tlYh6RI8THR9KeQ
-        3S0trnYqxEtTA+/SM9L5tdUq2ExTGEbIg5fq4bNz9VhTdkcn3+kyoCP4YSVlMLTk
-        lKs9QRF/rTxS2hlBun27pHmCDQyOhRIGXfjCeSJNB6V0nsv68SeEcBx5ZbIRZO6m
-        u50EOp8uvlYjPdHhonMDA==
-X-ME-Sender: <xms:fov-Y1eZpVuDQqsZ_pjMAWdBtHUI_O1njFoxzzdrvYuwkiPAsEWbaA>
-    <xme:fov-YzOQcOMwCfmpwQ3dB9tGAcwPPHqgc2no9BcB01X0Gsi0x3KNULFRAM1_3eDap
-    8wsiY04osQ5VhqV2w>
-X-ME-Received: <xmr:fov-Y-iP3xjX-FWkmLiHGa1T2kVLs5AH_mI7_1h3HpeGncCB_VdrSwLtGvTPgwpKAwdUAjI2zxhEmiji6kGvbBoC9Mco1RSh-VfckH3vUXI6Noiyd3sxiYhh>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgedgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtugfgjgesthekredt
-    tddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpefgteejiedthfdvvedujeetudeugeetieejfeegvefhjeeg
-    keevheehvefgiefhgeenucffohhmrghinhepkhgvrhhnvghlnhgvfigsihgvshdrohhrgh
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihu
-    segugihuuhhurdighiii
-X-ME-Proxy: <xmx:fov-Y-8hPpH8zQx9qO2xtThrBhTnf5ybansu7bER3xcs1JSxwv46ZQ>
-    <xmx:fov-YxvxiHD-6hHwC72z_fN5-Qq9xHtseKAhmUuyHc-yKLlKD5v5WQ>
-    <xmx:fov-Y9GGtyJE5r_k47X3ZLtk7i_LhiPd9IRpexT5FbhsaS7Z3TQ9Yw>
-    <xmx:fov-Y7J6eXorEBy_ZCD_RAMed2tx2XpIbu6JS_moLO6iA4622CNM7w>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Feb 2023 18:17:17 -0500 (EST)
-Date:   Tue, 28 Feb 2023 16:17:16 -0700
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets
- in BPF
-Message-ID: <20230228231716.a5uwc4tdo3kjlkg7@aviatrix-fedora.tail1b9c7.ts.net>
-References: <cover.1677526810.git.dxu@dxuuu.xyz>
- <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
- <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain>
- <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
+        Tue, 28 Feb 2023 20:58:15 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E233AA5;
+        Tue, 28 Feb 2023 17:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677635894; x=1709171894;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JvUgqcrgfQlznLASCJxhJivg+YLodSnLHw0JHLUxNf0=;
+  b=c7eVIA4S6o/WJReO3+yIlWpTvW2sZgAl8Dut15dnWHFYgoU61m2CX/lg
+   Osym+AnUNZjjWcVReWqOcnnKtDXbOn+C2n9X6neLUuRtRScVc+y3x/m03
+   57dcVBbV6PFyiii2ha43lPrOdkFWvKD5l2ju7cN9JcnrGUvgj5ORjgj25
+   q9TAsQbSuyFxspsAkz/jaW8+UwYg+ouGq2VI4326BGLBckv6YG1J8C6Of
+   T3tsTVBJx1lTOVZcCokUIdYTXAiZ/7+EkRCqALGozjUnigLTQ8taVoi01
+   gqTgwTpFsLwzqRVc4wlfBVWrmSGK5JGeHDaxmDDo95pFYIJFZJ2bZdSO6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="336590406"
+X-IronPort-AV: E=Sophos;i="5.98,223,1673942400"; 
+   d="scan'208";a="336590406"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 17:56:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="651828038"
+X-IronPort-AV: E=Sophos;i="5.98,223,1673942400"; 
+   d="scan'208";a="651828038"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga006.jf.intel.com with ESMTP; 28 Feb 2023 17:56:12 -0800
+Message-ID: <91e8d0ee-ee28-0866-85c9-2b499a5dcc38@linux.intel.com>
+Date:   Wed, 1 Mar 2023 09:55:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        Kevin Tian <kevin.tian@intel.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH 09/14] iommufd: Add iommufd_device_replace()
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <9-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
+ <cdbc3707-d326-26d4-3adc-ff2ed80aa2ba@linux.intel.com>
+ <Y/y3A4LJqunT0ZwS@nvidia.com>
+ <adfd78d1-006e-5e7c-236b-cc00e8afb8c0@linux.intel.com>
+ <Y/4G4u/uYA3eg7OY@nvidia.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Y/4G4u/uYA3eg7OY@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Alexei,
-
-On Mon, Feb 27, 2023 at 08:56:38PM -0800, Alexei Starovoitov wrote:
-> On Mon, Feb 27, 2023 at 5:57 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> >
-> > Hi Alexei,
-> >
-> > On Mon, Feb 27, 2023 at 03:03:38PM -0800, Alexei Starovoitov wrote:
-> > > On Mon, Feb 27, 2023 at 12:51:02PM -0700, Daniel Xu wrote:
-> > > > === Context ===
-> > > >
-> > > > In the context of a middlebox, fragmented packets are tricky to handle.
-> > > > The full 5-tuple of a packet is often only available in the first
-> > > > fragment which makes enforcing consistent policy difficult. There are
-> > > > really only two stateless options, neither of which are very nice:
-> > > >
-> > > > 1. Enforce policy on first fragment and accept all subsequent fragments.
-> > > >    This works but may let in certain attacks or allow data exfiltration.
-> > > >
-> > > > 2. Enforce policy on first fragment and drop all subsequent fragments.
-> > > >    This does not really work b/c some protocols may rely on
-> > > >    fragmentation. For example, DNS may rely on oversized UDP packets for
-> > > >    large responses.
-> > > >
-> > > > So stateful tracking is the only sane option. RFC 8900 [0] calls this
-> > > > out as well in section 6.3:
-> > > >
-> > > >     Middleboxes [...] should process IP fragments in a manner that is
-> > > >     consistent with [RFC0791] and [RFC8200]. In many cases, middleboxes
-> > > >     must maintain state in order to achieve this goal.
-> > > >
-> > > > === BPF related bits ===
-> > > >
-> > > > However, when policy is enforced through BPF, the prog is run before the
-> > > > kernel reassembles fragmented packets. This leaves BPF developers in a
-> > > > awkward place: implement reassembly (possibly poorly) or use a stateless
-> > > > method as described above.
-> > > >
-> > > > Fortunately, the kernel has robust support for fragmented IP packets.
-> > > > This patchset wraps the existing defragmentation facilities in kfuncs so
-> > > > that BPF progs running on middleboxes can reassemble fragmented packets
-> > > > before applying policy.
-> > > >
-> > > > === Patchset details ===
-> > > >
-> > > > This patchset is (hopefully) relatively straightforward from BPF perspective.
-> > > > One thing I'd like to call out is the skb_copy()ing of the prog skb. I
-> > > > did this to maintain the invariant that the ctx remains valid after prog
-> > > > has run. This is relevant b/c ip_defrag() and ip_check_defrag() may
-> > > > consume the skb if the skb is a fragment.
-> > >
-> > > Instead of doing all that with extra skb copy can you hook bpf prog after
-> > > the networking stack already handled ip defrag?
-> > > What kind of middle box are you doing? Why does it have to run at TC layer?
-> >
-> > Unless I'm missing something, the only other relevant hooks would be
-> > socket hooks, right?
-> >
-> > Unfortunately I don't think my use case can do that. We are running the
-> > kernel as a router, so no sockets are involved.
+On 2/28/23 9:51 PM, Jason Gunthorpe wrote:
+> On Tue, Feb 28, 2023 at 09:50:52AM +0800, Baolu Lu wrote:
+>> On 2/27/23 9:58 PM, Jason Gunthorpe wrote:
+>>> On Sun, Feb 26, 2023 at 11:01:59AM +0800, Baolu Lu wrote:
+>>>> On 2/25/23 8:27 AM, Jason Gunthorpe wrote:
+>>>>> @@ -437,25 +517,77 @@ int iommufd_device_attach(struct iommufd_device *idev, u32 *pt_id)
+>>>>>     		struct iommufd_ioas *ioas =
+>>>>>     			container_of(pt_obj, struct iommufd_ioas, obj);
+>>>>> -		rc = iommufd_device_auto_get_domain(idev, ioas, pt_id);
+>>>>> -		if (rc)
+>>>>> +		destroy_hwpt = iommufd_device_auto_get_domain(idev, ioas, pt_id,
+>>>>> +							      do_attach);
+>>>>> +		if (IS_ERR(destroy_hwpt))
+>>>>>     			goto out_put_pt_obj;
+>>>>>     		break;
+>>>>>     	}
+>>>>>     	default:
+>>>>> -		rc = -EINVAL;
+>>>>> +		destroy_hwpt = ERR_PTR(-EINVAL);
+>>>>>     		goto out_put_pt_obj;
+>>>>>     	}
+>>>>> +	iommufd_put_object(pt_obj);
+>>>>> -	refcount_inc(&idev->obj.users);
+>>>>> -	rc = 0;
+>>>>> +	/* This destruction has to be after we unlock everything */
+>>>>> +	if (destroy_hwpt)
+>>>> Should this be
+>>>>
+>>>> 	if (!IS_ERR_OR_NULL(destroy_hwpt))
+>>>>
+>>>> ?
+>>> Never use IS_ERR_OR_NULL ..
+>> Can you please elaborate a bit on this? I can still see a lot of use of
+>> it in the tree.
+> Yes, sadly. It is usually some signal of toxic confusion about what
+> things mean.
 > 
-> Are you using bpf_fib_lookup and populating kernel routing
-> table and doing everything on your own including neigh ?
+> A function that returns an ERR_PTR should very rarely return NULL, and
+> if it does return NULL then NULL wasn't an error.
 
-We're currently not doing any routing things in BPF yet. All the routing
-manipulation has been done in iptables / netfilter so far. I'm not super
-familiar with routing stuff but from what I understand there is some
-relatively complicated stuff going on with BGP and ipsec tunnels at the
-moment. Not sure if that answers your question.
+That's true.
 
-> Have you considered to skb redirect to another netdev that does ip defrag?
-> Like macvlan does it under some conditions. This can be generalized.
+> Further you should never store an ERR_PTR in some structure and then
+> later try to test it, that is madness.
+> 
+> So with properly structured code the need should not exist.
+> 
+> https://lore.kernel.org/all/20130109150427.GL3931@n2100.arm.linux.org.uk/
 
-I had not considered that yet. Are you suggesting adding a new
-passthrough netdev thing that'll defrags? I looked at the macvlan driver
-and it looks like it defrags to handle some multicast corner case.
+It's clear to me now. Thanks a lot for the explanation.
 
-> Recently Florian proposed to allow calling bpf progs from all existing
-> netfilter hooks.
-> You can pretend to local deliver and hook in NF_INET_LOCAL_IN ?
-
-Does that work for forwarding cases? I'm reading through [0] and it
-seems to suggest that it'll only defrag for locally destined packets:
-
-    If the destination IP address is matches with
-    local NIC's IP address, the dst_input() function will brings the packets
-    into the ip_local_deliver(), which will defrag the packet and pass it
-    to the NF_IP_LOCAL_IN hook
-
-Faking local delivery seems kinda ugly -- maybe I don't know any clean
-ways.
-
-[...]
-
-[0]: https://kernelnewbies.org/Networking?action=AttachFile&do=get&target=hacking_the_wholism_of_linux_net.txt
-
-
-Thanks,
-Daniel
+Best regards,
+baolu
