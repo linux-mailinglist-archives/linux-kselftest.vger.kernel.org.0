@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3716A78F0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Mar 2023 02:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACEC6A7900
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Mar 2023 02:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjCBBic (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Mar 2023 20:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S229749AbjCBBiq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Mar 2023 20:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjCBBia (ORCPT
+        with ESMTP id S229701AbjCBBin (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:38:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF9B2313F;
-        Wed,  1 Mar 2023 17:38:26 -0800 (PST)
+        Wed, 1 Mar 2023 20:38:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C74366AD;
+        Wed,  1 Mar 2023 17:38:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE89A61544;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91BC2B811E9;
+        Thu,  2 Mar 2023 01:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A2AC433A4;
         Thu,  2 Mar 2023 01:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2CCFC4339E;
-        Thu,  2 Mar 2023 01:38:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677721105;
-        bh=kuvw9W5FZhpfWvxyQ40xAiL1cU8qQButV6bl0j/U8CY=;
+        s=k20201202; t=1677721106;
+        bh=3k+YvMdWMsnOAG6Xbljbz1eZOpgJZtilmS9lPO8bApY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hvFYRxNcF/h2bnEXB525WG0BYTbbsmT9V2JIlTtAcKJCeL3H6/rVztATelYl8ioT3
-         0ofMBzrOcsfG3jfXxGqc7LCrD2YNMMqIo5SpU+i/A79tZVpSEFRDLLKMZQ5jfrZUev
-         dprzZA6j8c+VRmLyzIqz+Aj5eJ6Hf5T0TMd66jeOhvQd1SCzBrHTNYpVxjHrHdwFI/
-         Ckz1aUqKMUxLyWqWvE9UqkclchocVqKZEl54ZtQ07ngMVTH2WbRcyQvM1XmvXVDW5S
-         rY/yDUvP8okVyFHcE6u2F4m1kE7bY6HMkrOETWHIC0QqFzla4Ox7fUfV6VJvu82m6r
-         Pz3tBMtJCmjGg==
+        b=U1tDZTB8oHaK4uGxcnbievgIEFFJPTmIrMhXBoFMFjvGUjrIl2802ciDrN52ep62A
+         AVE9HbAZGEFxf0hNkdfxmi+B/8Z34RfMeP2bCn8SNnGQPyMGnJTvsCKqXC3SffE0kf
+         mIGMLE+9tsSXw0OjOu5K2+NQwZw4tTL7y1+VRyFbrlzIfBUWAt4i7i63Thxc3L4imN
+         jMkVsQvjRn/tsxOs/e4dmcYHMzbxRay9MCSSp9oj+kPuudtdFQJzTVPOpP2Pf9S9HL
+         lTXsCpRx4boL3rL4bAp59OIe9HFqUAPV1kiB1nJb9NLeVE6wklKducBO79kdyLbtGk
+         aXitEVYhkrAuw==
 From:   Stephen Boyd <sboyd@kernel.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -51,9 +51,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-um@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH 2/8] of: Enable DTB loading on UML for KUnit tests
-Date:   Wed,  1 Mar 2023 17:38:15 -0800
-Message-Id: <20230302013822.1808711-3-sboyd@kernel.org>
+Subject: [PATCH 3/8] kunit: Add test managed platform_device/driver APIs
+Date:   Wed,  1 Mar 2023 17:38:16 -0800
+Message-Id: <20230302013822.1808711-4-sboyd@kernel.org>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
 In-Reply-To: <20230302013822.1808711-1-sboyd@kernel.org>
 References: <20230302013822.1808711-1-sboyd@kernel.org>
@@ -68,256 +68,411 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To fully exercise common clk framework code in KUnit we need to
-associate 'struct device' pointers with 'struct device_node' pointers so
-that things like clk_get() can parse DT nodes for 'clocks' and so that
-clk providers can use DT to provide clks; the most common mode of
-operation for clk providers.
+Introduce KUnit resource wrappers around platform_driver_register(),
+platform_device_alloc(), and platform_device_add() so that test authors
+can register platform drivers/devices from their tests and have the
+drivers/devices automatically be unregistered when the test is done.
 
-Adding support to KUnit so that it loads a DTB is fairly simple after
-commit b31297f04e86 ("um: Add devicetree support"). We can simply pass a
-pre-compiled deviectree blob (DTB) on the kunit.py commandline and UML
-will load it. The problem is that tests won't know that the commandline
-has been modified, nor that a DTB has been loaded. Take a different
-approach so that tests can skip if a DTB hasn't been loaded.
+This makes test setup code simpler when a platform driver or platform
+device is needed. Add a few test cases at the same time to make sure the
+APIs work as intended.
 
-Reuse the Makefile logic from the OF unittests to build a DTB into the
-kernel. This DTB will be for the mythical machine "linux,kunit", i.e.
-the devicetree for the KUnit "board". In practice, it is a dtsi file
-that will gather includes for kunit tests that rely in part on a
-devicetree being loaded. The devicetree should only be loaded if
-CONFIG_OF_KUNIT=y. Make that a choice config parallel to the existing
-CONFIG_OF_UNITTEST so that only one devicetree can be loaded in the
-system at a time. Similarly, the kernel commandline option to load a
-DTB is ignored if CONFIG_OF_KUNIT is enabled so that only one DTB is
-loaded at a time.
-
-Add a simple unit test to confirm that the DTB loading worked. Future
-tests will add to the kunit.dtsi file to include their specific test
-nodes.
-
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
- arch/um/kernel/dtb.c            | 29 +++++++++++++++--
- drivers/of/Kconfig              | 26 ++++++++++++++++
- drivers/of/Makefile             |  1 +
- drivers/of/kunit/.kunitconfig   |  4 +++
- drivers/of/kunit/Makefile       |  4 +++
- drivers/of/kunit/kunit.dtsi     |  8 +++++
- drivers/of/kunit/kunit.dtso     |  4 +++
- drivers/of/kunit/uml_dtb_test.c | 55 +++++++++++++++++++++++++++++++++
- 8 files changed, 128 insertions(+), 3 deletions(-)
- create mode 100644 drivers/of/kunit/.kunitconfig
- create mode 100644 drivers/of/kunit/Makefile
- create mode 100644 drivers/of/kunit/kunit.dtsi
- create mode 100644 drivers/of/kunit/kunit.dtso
- create mode 100644 drivers/of/kunit/uml_dtb_test.c
 
-diff --git a/arch/um/kernel/dtb.c b/arch/um/kernel/dtb.c
-index 484141b06938..ee63951b12df 100644
---- a/arch/um/kernel/dtb.c
-+++ b/arch/um/kernel/dtb.c
-@@ -15,9 +15,32 @@ void uml_dtb_init(void)
- 	long long size;
- 	void *area;
+Should this be moved to drivers/base/ and called platform_kunit.c?
+The include/kunit/platform_driver.h could also be
+kunit/platform_device.h to match linux/platform_device.h if that is more
+familiar.
+
+And I'm not super certain about allocating a driver structure and
+embedding it in a wrapper struct. Maybe the code should just use
+kunit_get_current_test() instead?
+
+ include/kunit/platform_driver.h  |  15 +++
+ lib/kunit/Makefile               |   6 +
+ lib/kunit/platform_driver-test.c | 107 ++++++++++++++++
+ lib/kunit/platform_driver.c      | 207 +++++++++++++++++++++++++++++++
+ 4 files changed, 335 insertions(+)
+ create mode 100644 include/kunit/platform_driver.h
+ create mode 100644 lib/kunit/platform_driver-test.c
+ create mode 100644 lib/kunit/platform_driver.c
+
+diff --git a/include/kunit/platform_driver.h b/include/kunit/platform_driver.h
+new file mode 100644
+index 000000000000..dc211ff8f893
+--- /dev/null
++++ b/include/kunit/platform_driver.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _KUNIT_PLATFORM_DRIVER_H
++#define _KUNIT_PLATFORM_DRIVER_H
++
++struct kunit;
++struct platform_device;
++struct platform_driver;
++
++struct platform_device *
++kunit_platform_device_alloc(struct kunit *test, const char *name, int id);
++int kunit_platform_device_add(struct kunit *test, struct platform_device *pdev);
++
++int kunit_platform_driver_register(struct kunit *test, struct platform_driver *drv);
++
++#endif
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 29aff6562b42..5964d8231ff5 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -1,5 +1,6 @@
+ obj-$(CONFIG_KUNIT) +=			kunit.o
  
--	area = uml_load_file(dtb, &size);
--	if (!area)
--		return;
-+	if (IS_ENABLED(CONFIG_OF_KUNIT)) {
-+		/*
-+		 * __dtbo_kunit_begin[] and __dtbo_kunit_end[] are magically
-+		 * created by cmd_dt_S_dtbo in scripts/Makefile.lib from the
-+		 * drivers/of/kunit/kunit.dtsi file.
-+		 */
-+		extern uint8_t __dtbo_kunit_begin[];
-+		extern uint8_t __dtbo_kunit_end[];
-+
-+		size = __dtbo_kunit_end - __dtbo_kunit_begin;
-+		if (!size) {
-+			pr_warn("%s: kunit testcases is empty\n", __func__);
-+			return;
-+		}
-+
-+		/* creating copy */
-+		area = memblock_alloc(size, 8);
-+		if (!area)
-+			return;
-+
-+		memcpy(area, __dtbo_kunit_begin, size);
-+	} else {
-+		area = uml_load_file(dtb, &size);
-+		if (!area)
-+			return;
-+	}
- 
- 	if (!early_init_dt_scan(area)) {
- 		pr_err("invalid DTB %s\n", dtb);
-diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-index 80b5fd44ab1c..1f968b6a3dde 100644
---- a/drivers/of/Kconfig
-+++ b/drivers/of/Kconfig
-@@ -12,6 +12,20 @@ menuconfig OF
- 
- if OF
- 
-+choice
-+	prompt "Devicetree Runtime Tests"
-+	default OF_UNITTEST
-+
-+config OF_KUNIT
-+	bool "Devicetree KUnit support" if KUNIT
-+	depends on UML
-+	select IRQ_DOMAIN
-+	select OF_EARLY_FLATTREE
-+	help
-+	  This option builds in KUnit test cases that rely on device tree infrastructure.
-+	  A fake Device Tree Blob (DTB) is loaded on the UML kernel running KUnit so that
-+	  KUnit tests can test device tree dependent code.
-+
- config OF_UNITTEST
- 	bool "Device Tree runtime unit tests"
- 	depends on !SPARC
-@@ -25,6 +39,18 @@ config OF_UNITTEST
- 
- 	  If unsure, say N here, but this option is safe to enable.
- 
-+endchoice
-+
-+config OF_DTB_KUNIT_TEST
-+	tristate "Devicetree KUnit DTB Test" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option builds unit tests for the "linux,kunit" DTB built into
-+	  the UML kernel image.
-+
-+	  If unsure, say N here, but this option is safe to enable.
-+
- config OF_ALL_DTBS
- 	bool "Build all Device Tree Blobs"
- 	depends on COMPILE_TEST
-diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-index e0360a44306e..16eef3fdf60a 100644
---- a/drivers/of/Makefile
-+++ b/drivers/of/Makefile
-@@ -19,4 +19,5 @@ obj-y	+= kexec.o
- endif
++# Core KUnit code
+ kunit-objs +=				test.o \
+ 					resource.o \
+ 					string-stream.o \
+@@ -11,7 +12,12 @@ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
+ kunit-objs +=				debugfs.o
  endif
  
-+obj-y += kunit/
- obj-$(CONFIG_OF_UNITTEST) += unittest-data/
-diff --git a/drivers/of/kunit/.kunitconfig b/drivers/of/kunit/.kunitconfig
-new file mode 100644
-index 000000000000..1def0ad30d29
---- /dev/null
-+++ b/drivers/of/kunit/.kunitconfig
-@@ -0,0 +1,4 @@
-+CONFIG_KUNIT=y
-+CONFIG_OF=y
-+CONFIG_OF_KUNIT=y
-+CONFIG_OF_DTB_KUNIT_TEST=y
-diff --git a/drivers/of/kunit/Makefile b/drivers/of/kunit/Makefile
-new file mode 100644
-index 000000000000..ffe0447e1ac7
---- /dev/null
-+++ b/drivers/of/kunit/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_OF_KUNIT) += kunit.dtbo.o
++# KUnit helpers
++kunit-objs +=				platform_driver.o
 +
-+obj-$(CONFIG_OF_DTB_KUNIT_TEST) += uml_dtb_test.o
-diff --git a/drivers/of/kunit/kunit.dtsi b/drivers/of/kunit/kunit.dtsi
++# KUnit tests
+ obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
++obj-$(CONFIG_KUNIT_TEST) +=		platform_driver-test.o
+ 
+ # string-stream-test compiles built-in only.
+ ifeq ($(CONFIG_KUNIT_TEST),y)
+diff --git a/lib/kunit/platform_driver-test.c b/lib/kunit/platform_driver-test.c
 new file mode 100644
-index 000000000000..82f6c3e2b8d5
+index 000000000000..c926fe01b40a
 --- /dev/null
-+++ b/drivers/of/kunit/kunit.dtsi
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/ {
-+	model = "KUnit UML";
-+	compatible = "linux,kunit";
-+};
-+
-+/* Include testcase dtsi files below */
-diff --git a/drivers/of/kunit/kunit.dtso b/drivers/of/kunit/kunit.dtso
-new file mode 100644
-index 000000000000..50187e8d1422
---- /dev/null
-+++ b/drivers/of/kunit/kunit.dtso
-@@ -0,0 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+
-+#include "kunit.dtsi"
-diff --git a/drivers/of/kunit/uml_dtb_test.c b/drivers/of/kunit/uml_dtb_test.c
-new file mode 100644
-index 000000000000..8966c9ebf51f
---- /dev/null
-+++ b/drivers/of/kunit/uml_dtb_test.c
-@@ -0,0 +1,55 @@
++++ b/lib/kunit/platform_driver-test.c
+@@ -0,0 +1,107 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * KUnit tests for DTB loading on UML
++ * KUnit test for platform driver infrastructure.
 + */
-+#include <linux/kconfig.h>
-+#include <linux/of.h>
-+#include <linux/of_fdt.h>
 +
++#include <linux/platform_device.h>
++
++#include <kunit/platform_driver.h>
 +#include <kunit/test.h>
 +
 +/*
-+ * Test that of_machine_is_compatible() returns positive int when loaded DTB
-+ * matches.
++ * Test that kunit_platform_device_alloc() creates a platform device.
 + */
-+static void uml_dtb_of_machine_compatible_test(struct kunit *test)
++static void kunit_platform_device_alloc_test(struct kunit *test)
 +{
-+	KUNIT_EXPECT_GT(test, of_machine_is_compatible("linux,kunit"), 0);
++	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
++			kunit_platform_device_alloc(test, "kunit-platform", 1));
 +}
 +
 +/*
-+ * Test that of_flat_dt_get_machine_name() returns the expected 'model' from the
-+ * loaded DTB.
++ * Test that kunit_platform_device_add() registers a platform device on the
++ * platform bus with the proper name and id.
 + */
-+static void uml_dtb_of_flat_dt_get_machine_name_test(struct kunit *test)
++static void kunit_platform_device_add_test(struct kunit *test)
 +{
-+	KUNIT_EXPECT_STREQ(test, of_flat_dt_get_machine_name(), "KUnit UML");
++	struct platform_device *pdev;
++	const char *name = "kunit-platform";
++	const int id = -1;
++
++	pdev = kunit_platform_device_alloc(test, name, id);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	KUNIT_EXPECT_EQ(test, 0, kunit_platform_device_add(test, pdev));
++	KUNIT_EXPECT_TRUE(test, dev_is_platform(&pdev->dev));
++	KUNIT_EXPECT_STREQ(test, pdev->name, name);
++	KUNIT_EXPECT_EQ(test, pdev->id, id);
 +}
 +
-+static struct kunit_case uml_dtb_test_cases[] = {
-+	KUNIT_CASE(uml_dtb_of_machine_compatible_test),
-+	KUNIT_CASE(uml_dtb_of_flat_dt_get_machine_name_test),
++static struct kunit_case kunit_platform_device_test_cases[] = {
++	KUNIT_CASE(kunit_platform_device_alloc_test),
++	KUNIT_CASE(kunit_platform_device_add_test),
 +	{}
 +};
 +
-+static int uml_dtb_test_init(struct kunit *test)
++static struct kunit_suite kunit_platform_device_suite = {
++	.name = "kunit_platform_device",
++	.test_cases = kunit_platform_device_test_cases,
++};
++
++struct kunit_platform_driver_test_context {
++	struct platform_driver pdrv;
++	const char *data;
++};
++
++static inline struct kunit_platform_driver_test_context *
++to_test_context(struct platform_device *pdev)
 +{
-+	if (!IS_ENABLED(CONFIG_OF_KUNIT))
-+		kunit_skip(test, "requires CONFIG_OF_KUNIT");
++	return container_of(to_platform_driver(pdev->dev.driver),
++			    struct kunit_platform_driver_test_context,
++			    pdrv);
++}
++
++static int kunit_platform_driver_probe(struct platform_device *pdev)
++{
++	struct kunit_platform_driver_test_context *ctx;
++
++	ctx = to_test_context(pdev);
++	ctx->data = "test data";
 +
 +	return 0;
 +}
 +
-+/*
-+ * Test suite to confirm DTB is loaded on UML.
-+ */
-+static struct kunit_suite uml_dtb_suite = {
-+	.name = "uml_dtb",
-+	.init = uml_dtb_test_init,
-+	.test_cases = uml_dtb_test_cases,
++/* Test that kunit_platform_driver_register() registers a driver that probes. */
++static void kunit_platform_driver_register_test(struct kunit *test)
++{
++	struct platform_device *pdev;
++	struct kunit_platform_driver_test_context *ctx;
++
++	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
++
++	pdev = kunit_platform_device_alloc(test, "kunit-platform", -1);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++	KUNIT_ASSERT_EQ(test, 0, kunit_platform_device_add(test, pdev));
++
++	ctx->pdrv.probe = kunit_platform_driver_probe;
++	ctx->pdrv.driver.name = "kunit-platform";
++	ctx->pdrv.driver.owner = THIS_MODULE;
++
++	KUNIT_EXPECT_EQ(test, 0, kunit_platform_driver_register(test, &ctx->pdrv));
++	KUNIT_EXPECT_STREQ(test, ctx->data, "test data");
++}
++
++static struct kunit_case kunit_platform_driver_test_cases[] = {
++	KUNIT_CASE(kunit_platform_driver_register_test),
++	{}
 +};
 +
-+kunit_test_suites(
-+	&uml_dtb_suite,
-+);
++static struct kunit_suite kunit_platform_driver_suite = {
++	.name = "kunit_platform_driver",
++	.test_cases = kunit_platform_driver_test_cases,
++};
++
++kunit_test_suites(&kunit_platform_device_suite,
++		  &kunit_platform_driver_suite);
++
 +MODULE_LICENSE("GPL");
+diff --git a/lib/kunit/platform_driver.c b/lib/kunit/platform_driver.c
+new file mode 100644
+index 000000000000..11d155114936
+--- /dev/null
++++ b/lib/kunit/platform_driver.c
+@@ -0,0 +1,207 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test managed platform driver
++ */
++
++#include <linux/device/driver.h>
++#include <linux/platform_device.h>
++
++#include <kunit/resource.h>
++
++struct kunit_platform_device_alloc_params {
++	const char *name;
++	int id;
++};
++
++static int kunit_platform_device_alloc_init(struct kunit_resource *res, void *context)
++{
++	struct kunit_platform_device_alloc_params *params = context;
++	struct platform_device *pdev;
++
++	pdev = platform_device_alloc(params->name, params->id);
++	if (!pdev)
++		return -ENOMEM;
++
++	res->data = pdev;
++
++	return 0;
++}
++
++static void kunit_platform_device_alloc_exit(struct kunit_resource *res)
++{
++	struct platform_device *pdev = res->data;
++
++	platform_device_put(pdev);
++}
++
++/**
++ * kunit_platform_device_alloc() - Allocate a KUnit test managed platform device
++ * @test: test context
++ * @dev: platform device to alloc
++ *
++ * Register a test managed platform device. The device is put when the test completes.
++ *
++ * Returns: 0 on success, negative errno on failure.
++ */
++struct platform_device *
++kunit_platform_device_alloc(struct kunit *test, const char *name, int id)
++{
++	struct platform_device *pdev;
++	struct kunit_platform_device_alloc_params params = {
++		.name = name,
++		.id = id,
++	};
++
++	pdev = kunit_alloc_resource(test,
++				   kunit_platform_device_alloc_init,
++				   kunit_platform_device_alloc_exit,
++				   GFP_KERNEL, &params);
++	if (!pdev)
++		return ERR_PTR(-ENOMEM);
++
++	return pdev;
++}
++EXPORT_SYMBOL_GPL(kunit_platform_device_alloc);
++
++static int kunit_platform_device_add_init(struct kunit_resource *res, void *context)
++{
++	struct platform_device *pdev = context;
++	int ret;
++
++	ret = platform_device_add(pdev);
++	if (ret) {
++		platform_device_put(pdev);
++		return ret;
++	}
++	res->data = pdev;
++
++	return 0;
++}
++
++static void kunit_platform_device_add_exit(struct kunit_resource *res)
++{
++	struct platform_device *pdev = res->data;
++
++	platform_device_unregister(pdev);
++}
++
++/**
++ * kunit_platform_device_add() - Register a KUnit test managed platform device
++ * @test: test context
++ * @dev: platform device to add
++ *
++ * Register a test managed platform device. The device is unregistered when the
++ * test completes.
++ *
++ * Returns: 0 on success, negative errno on failure.
++ */
++int kunit_platform_device_add(struct kunit *test, struct platform_device *pdev)
++{
++	struct platform_device *res;
++
++	res = kunit_alloc_resource(test,
++				   kunit_platform_device_add_init,
++				   kunit_platform_device_add_exit,
++				   GFP_KERNEL, pdev);
++	if (!res)
++		return -EINVAL;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(kunit_platform_device_add);
++
++static int kunit_platform_driver_register_init(struct kunit_resource *res, void *context)
++{
++	struct platform_driver *drv = context;
++	int ret;
++
++	ret = platform_driver_register(drv);
++	if (ret)
++		return ret;
++	res->data = drv;
++
++	/*
++	 * Wait for the driver to probe (or at least flush out of the deferred
++	 * workqueue)
++	 */
++	wait_for_device_probe();
++
++	return 0;
++}
++
++static void kunit_platform_driver_register_exit(struct kunit_resource *res)
++{
++	struct platform_driver *drv = res->data;
++
++	platform_driver_unregister(drv);
++}
++
++/**
++ * kunit_platform_driver_register() - Register a KUnit test managed platform driver
++ * @test: test context
++ * @drv: platform driver to register
++ *
++ * Register a test managed platform driver. This allows callers to embed the
++ * @drv in a container structure and use container_of() in the probe function
++ * to pass information to kunit tests. It can be assumed that the driver has
++ * probed when this function returns.
++ *
++ * Example:
++ *
++ * .. code-block:: c
++ *
++ *	struct kunit_test_context {
++ *		struct platform_driver pdrv;
++ *		const char *data;
++ *	};
++ *
++ *	static inline struct kunit_test_context *
++ *	to_test_context(struct platform_device *pdev)
++ *	{
++ *		return container_of(to_platform_driver(pdev->dev.driver),
++ *				    struct kunit_test_context,
++ *				    pdrv);
++ *	}
++ *
++ *	static int kunit_platform_driver_probe(struct platform_device *pdev)
++ *	{
++ *		struct kunit_test_context *ctx;
++ *
++ *		ctx = to_test_context(pdev);
++ *		ctx->data = "test data";
++ *
++ *		return 0;
++ *	}
++ *
++ *	static void kunit_platform_driver_test(struct kunit *test)
++ *	{
++ *		struct kunit_test_context *ctx;
++ *
++ *		ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++ *		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
++ *
++ *		ctx->pdrv.probe = kunit_platform_driver_probe;
++ *		ctx->pdrv.driver.name = "kunit-platform";
++ *		ctx->pdrv.driver.owner = THIS_MODULE;
++ *
++ *		KUNIT_EXPECT_EQ(test, 0, kunit_platform_driver_register(test, &ctx->pdrv));
++ *		KUNIT_EXPECT_STREQ(test, ctx->data, "test data");
++ *	}
++ *
++ * Returns: 0 on success, negative errno on failure.
++ */
++int kunit_platform_driver_register(struct kunit *test,
++				   struct platform_driver *drv)
++{
++	struct platform_driver *res;
++
++	res = kunit_alloc_resource(test,
++				   kunit_platform_driver_register_init,
++				   kunit_platform_driver_register_exit,
++				   GFP_KERNEL, drv);
++	if (!res)
++		return -EINVAL;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(kunit_platform_driver_register);
 -- 
 https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
