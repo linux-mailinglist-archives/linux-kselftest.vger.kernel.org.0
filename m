@@ -2,185 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0BC6A8A17
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Mar 2023 21:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD286A8D5C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Mar 2023 00:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCBUSy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Mar 2023 15:18:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S229447AbjCBXxV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Mar 2023 18:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCBUSw (ORCPT
+        with ESMTP id S229486AbjCBXxU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Mar 2023 15:18:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7CF1B33B;
-        Thu,  2 Mar 2023 12:18:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FE1AB815BB;
-        Thu,  2 Mar 2023 20:18:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E00C433D2;
-        Thu,  2 Mar 2023 20:18:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677788327;
-        bh=/Yn3UcMdQ1GXWH06I63xFkYGrZyXxsIhd8sDdU/N+rU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=S3pI84K0PNBtKG1nQ9HGZ6kbE153E/SPIRWB3OJArdOlrjEGtVCXZ3xXkoOEj86On
-         TxM99XZA4Mj88eHESIOKaet/GYTAVuYwP6NLi6JEayM2rWcTJsp3Kefqm9UGQDg681
-         4p2iTjbJ1sc+bKGIknarjbzBDsubDF67/wgUez3qtElsuJFSxHyiQ1MdJ4vmsIbgXT
-         ufMQpB3K2m2YZLE1n4IodBAM0uYyxQcKgdpWKKuy7uo1/n7xiYxc4HaKYo7tyN+YJP
-         7WcTrrCyQYFTNy/Fie+Yl2vjzW1mtAnwhoJV+mmymjLkmlK+akoh1+AnsRKclhdZcS
-         6UnxrOQTGDjGQ==
-Received: by mail-vs1-f54.google.com with SMTP id m10so453290vso.4;
-        Thu, 02 Mar 2023 12:18:47 -0800 (PST)
-X-Gm-Message-State: AO0yUKWFf1vjlYP8r4XNtk2fF9gXU7q/KSH1OIL+AH/5yjB/uR6xdTwQ
-        iqnjeLWKmbe3WPN0LIZcB9/0obhCcLyAPUWzkw==
-X-Google-Smtp-Source: AK7set8CdZkV4nzAcxJAbmUjGudJ4PuiuPCHsE83ibLSseGKCb8fkRaEA/lrtnQAVCyfd8eCj0HxtuGm3QHjodqLBCw=
-X-Received: by 2002:a05:6102:184:b0:414:4ef2:b607 with SMTP id
- r4-20020a056102018400b004144ef2b607mr7202543vsq.6.1677788326407; Thu, 02 Mar
- 2023 12:18:46 -0800 (PST)
+        Thu, 2 Mar 2023 18:53:20 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2081.outbound.protection.outlook.com [40.107.212.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8AFEFB0;
+        Thu,  2 Mar 2023 15:53:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JKqe2Q5tmiCXT2UkAEb+PXmg2IViUKQrSxy3uit7FrRnqzNkJjmSLS+OMKz3pQuAXIGefjmfepMEOWrVkjTzNc9IvVMfAJpcN0pazwqf+aXIHTGYfAOIBgM/Qoj9C6C5kcKGmzh1P6bFfCw5UkFmJn/LhHMOBFn3tlKo5//fw6RZhhqKIotxIwxI/qSXOT+WW6u4rMtoBL5fkchb0jkdKRRVRXaj/ddNAzDKUdEb45KreQI6VB3cBqSMSoXj0h73gDNLaLBHOpnqpsKjoRpNsIzBiDAh1uXZczvoVuMemXHHHlvsVIMtdbj0YVMGMd+x9yB5aKWGxDceT63VNeTd2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=moWfVH4QsSUw7vyFEjfh1cCM8dMMOBnh7IGFqGrTElU=;
+ b=PxXIWrblxNBJdQdaNaPOb26kovv0TVa9v8y+prl9fipk28dkKkHhW/l56o9oyEguzid7vFOBX8HuQXeCTmTLKVHHfM3a5A1TVkWqS2Q5XNQRzMPKE+38HiDCa6XevZPAjoJfMALYCsSaJkdW1mcQ4SfFQAJQvF1leavRL+8I8NqPMD+j1gCpnQxKY3oTk3cM4I7zVzkRNnoIq4RhKZFvb9xMicLuTRFMIx4W9+d5GSQ1v6DtpODQGsZlq/hkzN5J9x3IhRhbgw69qBeFYGTCVe/DEAhTSEQAB8Fo4jfb5vcYIIVH0P8E1mGHaHdnc/GFQov6lJKqoj5g/LpN0SAU7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=moWfVH4QsSUw7vyFEjfh1cCM8dMMOBnh7IGFqGrTElU=;
+ b=nuhzwNAe5hnFCxQ1+4XoXVwg4vKz84oseQq0/U4GQKeH23Yjkm1hvECG7V5FnKYcFNcRIQkFknvxRFw1KJur5jm6y7JrRdd5pyYenRBh9NfphtzRNPrzj0QZ6z5mTGFmU5P/GP3Lt3q2Cwy0y2VFusDdbjPAbtGzacrqep/umSnGvpwECHhmPvQELPk/2aeoSeOH80dP6VzlXMm8FDWC8Eknjz8ylAfNqKKi0aPD7EmQgrr7/Fpy6uHXiqSjbqcHczwIAQkapLx8yUh1/S76MZfrD6KEj98WbswAlDiHx13IF4dmbWVPdEGjBf3TojKCwRyExhLpaa0NsPXTHvTkpg==
+Received: from DS7PR03CA0105.namprd03.prod.outlook.com (2603:10b6:5:3b7::20)
+ by SJ0PR12MB6783.namprd12.prod.outlook.com (2603:10b6:a03:44e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.20; Thu, 2 Mar
+ 2023 23:53:13 +0000
+Received: from DS1PEPF0000E63B.namprd02.prod.outlook.com
+ (2603:10b6:5:3b7:cafe::85) by DS7PR03CA0105.outlook.office365.com
+ (2603:10b6:5:3b7::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19 via Frontend
+ Transport; Thu, 2 Mar 2023 23:53:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF0000E63B.mail.protection.outlook.com (10.167.17.73) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.12 via Frontend Transport; Thu, 2 Mar 2023 23:53:13 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 2 Mar 2023
+ 15:53:11 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 2 Mar 2023
+ 15:53:10 -0800
+Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
+ Transport; Thu, 2 Mar 2023 15:53:09 -0800
+Date:   Thu, 2 Mar 2023 15:53:08 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>
+Subject: Re: [PATCH v3 4/5] iommufd: Add replace support in
+ iommufd_access_set_ioas()
+Message-ID: <ZAE25M7ZhKmk6CIY@Asurada-Nvidia>
+References: <cover.1677288789.git.nicolinc@nvidia.com>
+ <a104b334d3cc148620ac1f2aa465fc14be556e63.1677288789.git.nicolinc@nvidia.com>
+ <BN9PR11MB527636AE29756D8A188912998CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230302013822.1808711-1-sboyd@kernel.org> <CAL_JsqLVQVZhYTSZgrvA-V-xOUbiBdyDxqPOZk=89YS33EahBQ@mail.gmail.com>
- <093867df6137ad9e964b7dd90fb58f1a.sboyd@kernel.org>
-In-Reply-To: <093867df6137ad9e964b7dd90fb58f1a.sboyd@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 2 Mar 2023 14:18:34 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLdPWRLu8TNqCG+dw9Pz2cS798QwGX=C5X18KKqAXwjSQ@mail.gmail.com>
-Message-ID: <CAL_JsqLdPWRLu8TNqCG+dw9Pz2cS798QwGX=C5X18KKqAXwjSQ@mail.gmail.com>
-Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB527636AE29756D8A188912998CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E63B:EE_|SJ0PR12MB6783:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6be67238-4029-43e8-c026-08db1b794906
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1gpQlQ9ILSuC2/gknpDS1S1a0/ID5xScbv01SWP6UmrVhyDhFJ+/Z7auzn1Qs28FUbMkxHLj9ft9WqPfyxPvZF2z/LXiQBQh7+LiZnpfqJK46R2piCwxBqvJqgXNFVQrdbh0Ak8ucW8cm3xBOJjVncmHYxXBzvtUfTDag5wTGtXkLc2Xjw7uGDzMRjo8a25P9xvUPak5Puh2tHn9PU3n+WQy6IMwo9ysstbz6LVZOXVjsBkGWJdWaYc6VrqcugFugXG2gdN3iQ66JOQaBhv5ncsjnBPvFgVXpzOifnKx0ot/jIDZuKIfCS2xBrO7/Szv1myyEAOcZKjh+IjNMe85sOcScYAm7DhNQlk1+oQImW61KGKuBZT1I0Y+fXKv7DfnCRbLdGuZtMyD03TZzqZAYNqhUtqDi8eZlIWD3dzfKuTFRXzUWUkzeQoPl+sIsdDgIe5GX3mNAt1OmsJXKazIfN+vnRG9FW3j9upeUnZZrbvjzLxXRiZAHV36vZC+lbgEU3/KQFrCDBor1/0vWmYGFY/w7/H2OqBPhdhfGyDVEKIRcXK9fsVGJyFoaI85K2A++d1HFuJ1ePits1pRs96B9bswVxgnjHOmSf4STaDqYbg4Z3UlJek7xlA7aC8sAa7JCoxH9GR/bFAcVN9yokAouScXafIo41LMRl+z+w65bu6uq23GfZd2YeuY9TndAFMS/wPWx45SCnecvuOICq6z9w==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199018)(36840700001)(40470700004)(46966006)(83380400001)(36860700001)(426003)(47076005)(40460700003)(478600001)(7636003)(82740400003)(7416002)(5660300002)(356005)(40480700001)(86362001)(82310400005)(55016003)(8936002)(336012)(9686003)(186003)(26005)(33716001)(8676002)(70586007)(2906002)(4326008)(4744005)(6916009)(70206006)(316002)(41300700001)(54906003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 23:53:13.1822
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6be67238-4029-43e8-c026-08db1b794906
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E63B.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6783
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 1:44=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wrot=
-e:
->
-> Quoting Rob Herring (2023-03-02 09:13:59)
-> > On Wed, Mar 1, 2023 at 7:38=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> =
-wrote:
-> > >
-> > > This patch series adds unit tests for the clk fixed rate basic type a=
-nd
-> > > the clk registration functions that use struct clk_parent_data. To ge=
-t
-> > > there, we add support for loading a DTB into the UML kernel that's
-> > > running the unit tests along with probing platform drivers to bind to
-> > > device nodes specified in DT.
-> > >
-> > > With this series, we're able to exercise some of the code in the comm=
-on
-> > > clk framework that uses devicetree lookups to find parents and the fi=
-xed
-> > > rate clk code that scans devicetree directly and creates clks. Please
-> > > review.
-> > >
-> > > I Cced everyone to all the patches so they get the full context. I'm
-> > > hoping I can take the whole pile through the clk tree as they almost =
-all
-> > > depend on each other. In the future I imagine it will be easy to add
-> > > more test nodes to the clk.dtsi file and not need to go across variou=
-s
-> > > maintainer trees like this series does.
-> > >
-> > > Stephen Boyd (8):
-> > >   dt-bindings: Add linux,kunit binding
-> > >   of: Enable DTB loading on UML for KUnit tests
-> > >   kunit: Add test managed platform_device/driver APIs
-> > >   clk: Add test managed clk provider/consumer APIs
-> > >   dt-bindings: kunit: Add fixed rate clk consumer test
-> > >   clk: Add KUnit tests for clk fixed rate basic type
-> > >   dt-bindings: clk: Add KUnit clk_parent_data test
-> > >   clk: Add KUnit tests for clks registered with struct clk_parent_dat=
-a
+On Thu, Mar 02, 2023 at 08:23:54AM +0000, Tian, Kevin wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Saturday, February 25, 2023 9:52 AM
 > >
-> > Good to see bindings for this. I've been meaning to do something about
-> > the DT unittest ones being undocumented, but I hadn't really decided
-> > whether it was worth writing schemas for them. The compatibles at
-> > least show up with 'make dt_compatible_check'. Perhaps we want to just
-> > define some vendor (not 'linux') that's an exception rather than
-> > requiring schemas (actually, that already works for 'foo').
->
-> Sure. Maybe "kunit" should be the vendor prefix? Or "dtbunit"?
+> > +     /*
+> > +      * Set ioas to NULL to block any further iommufd_access_pin_pages().
+> > +      * iommufd_access_unpin_pages() can continue using access-
+> > >ioas_unpin.
+> > +      */
+> > +     access->ioas = NULL;
+> > +
+> > +     mutex_unlock(&access->ioas_lock);
+> > +     access->ops->unmap(access->data, 0, ULONG_MAX);
+> > +     mutex_lock(&access->ioas_lock);
+> 
+> This should check whether @unmap is valid.
 
-We'd want to use the same thing on the DT unittests or anything else
-potentially. How about just 'test'?
+Will change to 
++	if (access->ops->unmap) {
++		mutex_unlock(&access->ioas_lock);
++		access->ops->unmap(access->data, 0, ULONG_MAX);
++		mutex_lock(&access->ioas_lock);
++	}
 
-> > It's
-> > likely that we want test DTs that fail normal checks and schemas get
-> > in the way of that as we don't have a way to turn off checks.
->
-> Having the schemas is nice to make sure tests that are expecting some
-> binding are actually getting that. But supporting broken bindings is
-> also important to test any error paths in functions that parse
-> properties. Maybe we keep the schema and have it enforce that incorrect
-> properties are being set?
-
-I wasn't suggesting throwing them out. More why I hadn't written any I gues=
-s.
-
-> Do we really need to test incorrect bindings? Doesn't the
-> dt_bindings_check catch these problems so we don't have to write DTB
-> verifiers in the kernel?
-
-Fair enough. Using my frequently stated position against me. :)
-
-I do have a secret plan to implement (debug) type checks into the
-of_property_* APIs by extracting the type information from schemas
-into C.
-
-
-> > We already have GPIO tests in the DT unittests, so why is clocks
-> > different? Or should the GPIO tests be moved out (yes, please!)?
->
-> Ah I didn't notice the GPIO tests in there. There are i2c tests too,
-> right? All I can say is clks are using kunit, that's the difference ;-)
-
-Yeah, they should perhaps all move to the subsystems.
-
-> > What happens when/if the DT unittest is converted to kunit? I think
-> > that would look confusing from the naming. My initial thought is
-> > 'kunit' should be dropped from the naming of a lot of this. Note that
-> > the original kunit submission converted the DT unittests. I would
-> > still like to see that happen. Frank disagreed over what's a unit test
-> > or not, then agreed, then didn't... I don't really care. If there's a
-> > framework to use, then we should use it IMO.
->
-> Honestly I don't want to get involved in migrating the existing DT
-> unittest code to kunit. I'm aware that it was attempted years ago when
-> kunit was introduced. Maybe if the overlay route works well enough I can
-> completely sidestep introducing any code in drivers/of/ besides some
-> kunit wrappers for this. I'll cross my fingers!
-
-Yeah, I wasn't expecting you to. I just want to make sure this meshes
-with any future conversion to kunit.
-
-There's also some plans to always populate the DT root node if not
-present. That may help here. Or not. There's been a few versions
-posted with Frank's in the last week or 2.
-
-Rob
+Thanks!
+Nic
