@@ -2,165 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321B46A78D8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Mar 2023 02:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9932A6A78F6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Mar 2023 02:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjCBB0J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Mar 2023 20:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        id S229719AbjCBBie (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Mar 2023 20:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCBB0I (ORCPT
+        with ESMTP id S229701AbjCBBib (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:26:08 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E7C498A1
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Mar 2023 17:26:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677720367; x=1709256367;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=dO9CxC0Z5aPkRso4XUnc472BsT9LvKhXVST19izyeHY=;
-  b=a4cw5nrWTSoevUIfjrFr4qmH8QlaVt1iUbornczXtMmJnGRBWauUYpqH
-   7SDVvsg8e8m993zQUn51FtEeIOxnnKJbTXaTSxQPWad5EiSNeuK4pkPjB
-   oW2vm3wjno1lvZNCJyEoFrDKokLMyws42NmX3kY4Fp2B3HTW8DV9Dw91a
-   uBVoWpHluTs5VyIvKEbgFMwVxOR2r/8RhSVjyAz3+JB48XG7B8a24fUbJ
-   9+ECO0kQLCk/d1ZSkq5KErbap37pJFjv7zJxqEY2bH6TPw4gM2tZCsffo
-   cNynE3fQ2OOKAr9t8ijFW7jq6ALMv+vWeJyOjldZWWDkkFJ8oaL07RACz
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="334611719"
-X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
-   d="scan'208";a="334611719"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 17:26:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="674772417"
-X-IronPort-AV: E=Sophos;i="5.98,226,1673942400"; 
-   d="scan'208";a="674772417"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga002.jf.intel.com with ESMTP; 01 Mar 2023 17:26:06 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 1 Mar 2023 17:26:07 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 1 Mar 2023 17:26:05 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Wed, 1 Mar 2023 17:26:05 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 1 Mar 2023 17:26:05 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KOdT9K6EJbF13zDumoO64kURBYsT9Z5sEc+pyNIadyKKomeyg5sMClBLJvhoNdHmf5nMceIR8c0kNu5bQEi32QP6YDZuWDSAC+c5YtKvu/rWPFd6VOhPbBWMMiRDSP3oPQUj6lu3/zN4bCtYnggk7osn28s8QIPwqpgxRCBUcHArDdhwbvBKiC3Uc3PVbCu4ZlOxxPyoY3RsZih0Sw+Bk0RCji6A7DYIKDgwfw7ZjfTo580DCfn2ycM0YEd3Ef+Y3oiEZLo9EP+ByTAZz0vIvW1Z8qo7ZvgSpMiazgpJR09AYCieLKuOrSfB+usU2DntxM2Mqj5nOOn4Lojhk/7Acw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dO9CxC0Z5aPkRso4XUnc472BsT9LvKhXVST19izyeHY=;
- b=Rxo6Ax1oe7QhW1SrM4Hsmbvj09b/qImbEBN6Rlq0tBlycNcGoPbiNTVhARhV1aRpROioGGqHw8C84f7+oft8O1khY8zNeX/V56daVl15kSCxV8LZEAxSqdbgpVB4RWFMQCbM+b9VP7EWY3vO/ZJO+OfHbWGnQY0tIsOl8OBUlZuWw/NbgTpzsOdopQWQdEnqo8K99RqSn7kB1YBmNMCkZB3sNKZB+0A2+wrAswAQTpeyb5isj4//s9YMhZy1T1uAkfoiSxNSRkosmkVQbWJCrj3NE5WM5bETJBNCRtjELFFUV7RKvrxxywcXNQ4r2jnEkd1pAogiKQC1nKk0ik2x8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CH0PR11MB8233.namprd11.prod.outlook.com (2603:10b6:610:183::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Thu, 2 Mar
- 2023 01:26:04 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac%9]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
- 01:26:04 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-CC:     Nicolin Chen <nicolinc@nvidia.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: RE: [PATCH v3 12/12] iommufd/selftest: Add a selftest for
- iommufd_device_attach() with a hwpt argument
-Thread-Topic: [PATCH v3 12/12] iommufd/selftest: Add a selftest for
- iommufd_device_attach() with a hwpt argument
-Thread-Index: AQHZTHRaLvT/FFHSpkmm/irE5CNQIa7msuiw
-Date:   Thu, 2 Mar 2023 01:26:03 +0000
-Message-ID: <BN9PR11MB52769A95CFBDDD5940F6F78C8CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <0-v3-ae9c2975a131+2e1e8-iommufd_hwpt_jgg@nvidia.com>
- <12-v3-ae9c2975a131+2e1e8-iommufd_hwpt_jgg@nvidia.com>
-In-Reply-To: <12-v3-ae9c2975a131+2e1e8-iommufd_hwpt_jgg@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CH0PR11MB8233:EE_
-x-ms-office365-filtering-correlation-id: fe7db46d-b6a9-4233-1af9-08db1abd16f4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: D9GHHSDLCDBQZfD1D17nmdf5YgWERlOBCs9iBlrM9pjkg767lAX+nIjlhCZpYLLugvYEqrYAOie/XY6mffLhTzBRaUxCqD2u5Mr/fqiXva15zBzbdNM3MG0g7osVmtGSyLruSSkJ4jYogRsZSyrEquSdQoN3qvSkilSe9tP/fgayeZxc8jon177MrllGP7fQ5q9mSbK8houDE//8Txk5qKOyIgYzdcSxmh3aiJI0+unUiCRy2l17DcXaS2kwAwwMSXmsGvSXppDj0ktwPeI/cCPaCBuSM34kpTZTiP27kKs5see/kdC70ImvulXV9a9aUwLHmEOcu/HnJOs5ARpRXw+ns5vbFUxXRGBL9eBrjW4haQgNZ+kgBEeDUsQli4R5HgdvOYDRrA+YpTOE3LFMk1nv6kCORF/Zuja/eK2wtZlE1bu1a02GhhwdhxoShskzUZ9Cm9DBPI4ps9ZDM1SLaFbpY5T1EDSlT+k90j0G+SmZo16236JJZhpnYPbZ2gl4GB823nyEGTLXDsrDrtgFq0TNlfl2QNw4tbd4yvvAYO9+76GVUmpTWzzoe+nd7sY9NWD1pv2nO/9ytS0vckbPOM7fmG7lI0IIUl8yF/0mCSsx9zpOE9MaOd0YQ8tulN96IaHmoGaRcc3vE/L0Vvc/BKDY8FQRrBHtmP2C5j1gq5AGe7VClRnmED+sfcf/xJwkU0dMvIKjuhzXqqqEVcOmvA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(376002)(39860400002)(396003)(136003)(451199018)(55016003)(76116006)(82960400001)(8676002)(122000001)(38100700002)(8936002)(4326008)(66556008)(478600001)(66946007)(5660300002)(66476007)(71200400001)(66446008)(41300700001)(38070700005)(7696005)(54906003)(558084003)(86362001)(33656002)(2906002)(64756008)(107886003)(110136005)(316002)(6506007)(52536014)(26005)(9686003)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?e+f5oUuf/+MK3HFIWseFrlugvViP97itsODQWVfdVprf7u4R48Hx5t12MqNr?=
- =?us-ascii?Q?nDwGgxU272dwDW+1QeFH9JqH+f7aRHjJ3MZ1zJHaGhYri5hy5lYet7Ysfmly?=
- =?us-ascii?Q?FCP/zfSC4tfMooRKlLLlCCfPcnxFjZ+zf64MKdQRH0/CH8uKohuD7/tPMn8z?=
- =?us-ascii?Q?UzjlAmDPXAxFgk89QMg7ru8UAk55/lyFP/S6GJX3eoy4sELRpiuHu7skvZYs?=
- =?us-ascii?Q?KbqZwya2T0IgeJ7cod9OMau0eZ8Yvh/iQk1mdGHOGhPKgu74T5UHbtu3vyCM?=
- =?us-ascii?Q?DdgwlAKnHeWBE0sbA4TXQLVBHXNiyuQKNnnJ/jrzCuDSaDQmQh9batHju/DO?=
- =?us-ascii?Q?IFfPWv0WSwPhA1sgzAhbONCisRe84H1uiNfk74Mdm/aKQENxTaWghLMWya57?=
- =?us-ascii?Q?QHykfK1Hqp1ZwSeCZT/aVuKY8eQYwQNqM1sATUqaW0YDgHNsFVDU5whBc8Kb?=
- =?us-ascii?Q?xxesOZ2xa4UWUaVBViAh2Z/E7ucrCzkqftNj8zJ9m7p844u+h66al+0YokN3?=
- =?us-ascii?Q?rEhLw/pnmtMr8WoSpmQdAN2TbJfDHST3HtDbhhmrk1KsZsC+JXMIk+T7/0BV?=
- =?us-ascii?Q?l9WcBM4pm5D9yxnRtUgg7Uu4KC+DcDPssjs11cbN8dyT+IG7BntFpiGstoOf?=
- =?us-ascii?Q?ji6zrGfMyQUPF/+1F/nrScCN6DwRNQZca3CacT3oAeeUzu0fl3v9FWBHGU+v?=
- =?us-ascii?Q?KcNvkdbAi8m9w2uX6GbMhv+rmPMb5xCLsJ5/xkAzmMcpJpqy7+WQQMGL0KWM?=
- =?us-ascii?Q?ULpVSCK1Lpxc5HN6xdGmmUhIQh5jYKTWjjWCe7LOckRZ3IsKJWf/LzDIebqw?=
- =?us-ascii?Q?f2w/bYJqhB8IHBC9tWXdzVtiFmQ6bgdtoOrxdtcjtyEEifkNI74Rhim5jiBk?=
- =?us-ascii?Q?CX6omFCOJ+Cj9r1WSRZpSdMnsy6RlUVIEiTh3WcJWQMQs2Bg3MTk6GGx9+dU?=
- =?us-ascii?Q?zAoDRnUwxVOjNxux58pTteCwr58Dqy4SU78fKYUR6POeAkqTRkcH2+Dc2UUK?=
- =?us-ascii?Q?57yg7IDfVaMlYInHg5Dff1fMjrBnINjltAi5azQxow8QIG1VlgapcUV/ueIe?=
- =?us-ascii?Q?FHmVh//826R0GGr5oRfsqqoflKJDyLmrwjYd7DvSs4mK+HYILKuu0c6Jhoyz?=
- =?us-ascii?Q?8qn74mwhOfcQrsAvV2kBc16Xu0iIZiTcEeKbOhxL2ErrNX+CgyeMKccfZ1kV?=
- =?us-ascii?Q?bMOxyzr4EW1hCi83J0xigv5PUgdvqRyQHXCxer6DhHZhTaCHoN2Qp5G/zYZi?=
- =?us-ascii?Q?2zKSYrxy9fOUPZ6JtO+qkXq9/MSKuyoZ+prClIaWjT0TdIiBkCx3SeAyJ1Em?=
- =?us-ascii?Q?23a9WrjSvFaG/ygTiHMgJxdim7kYLOoji4yLn5FRyx/bK+wUHt/iYBJetkjR?=
- =?us-ascii?Q?ia4YE3QpK+fp2QwXidL5uj1StDkI/g2eLEzfQW8exUIOkCLSZMXiWu7Ywmfw?=
- =?us-ascii?Q?0y6yPzhwT+4yXZPMJOj0qUyayGQhyqxfTayZr9rc24914JZ6/B3hc0XSL0HV?=
- =?us-ascii?Q?GirH5BIWTf66P45YX165e+EIC0EYIJfstVwaVVGSeH36yfoc4sm6QgoNx3YE?=
- =?us-ascii?Q?lPwqvKP0gy/61QUGgrz+IG8T0RlxTw6IXfQWlINr?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 1 Mar 2023 20:38:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E76305C4;
+        Wed,  1 Mar 2023 17:38:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13DCDB811EC;
+        Thu,  2 Mar 2023 01:38:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EACC433D2;
+        Thu,  2 Mar 2023 01:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677721103;
+        bh=rKtcHDStlDpmev0wSqFyH2j1eZ3mNsvHeJTuTDd60rk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Oq0iRiKSGI3z/jJpMgBfNOss+Xzar8RB/Cw11ZHp3oGjPiMZ8vs68LTw4qreqA/VI
+         BpgpwOQ7uCgJEavC3zsKuuWBqfeTXaf9ydAm/THAWCV3L/MnQaQRKF4K2PxQx38FMG
+         jcAYlN7XG4iU1l4mUBLFCEkHlxhkRocvuUyFc+j6o0KrZPtq1MmHjxUqW90wYKbbFj
+         I5Uj9I+R30xd5TSwLaH39w3rJcKu8h482yW5Uh/XW/XHjBt9QXk2l5oOjQujJuMQYg
+         RXaTU21Its7pzaW8Z11gOGGd1A3RixrpdaW0goxxiLK0qu400p2dBU8NcuE0fOYvSB
+         rCqxUyZLJZKUg==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
+Date:   Wed,  1 Mar 2023 17:38:13 -0800
+Message-Id: <20230302013822.1808711-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe7db46d-b6a9-4233-1af9-08db1abd16f4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2023 01:26:03.8826
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: L92z8bIfer9IR95553M/Qq8y2lBBBBe/apzYydecm0RMIHgL9Jq5C4X4R2IhnoDOL7ORmjewzVEN9CM2rxmTkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB8233
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Thursday, March 2, 2023 3:30 AM
->=20
-> This can now be covered since we have a full struct device.
->=20
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+This patch series adds unit tests for the clk fixed rate basic type and
+the clk registration functions that use struct clk_parent_data. To get
+there, we add support for loading a DTB into the UML kernel that's
+running the unit tests along with probing platform drivers to bind to
+device nodes specified in DT.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+With this series, we're able to exercise some of the code in the common
+clk framework that uses devicetree lookups to find parents and the fixed
+rate clk code that scans devicetree directly and creates clks. Please
+review.
+
+I Cced everyone to all the patches so they get the full context. I'm
+hoping I can take the whole pile through the clk tree as they almost all
+depend on each other. In the future I imagine it will be easy to add
+more test nodes to the clk.dtsi file and not need to go across various
+maintainer trees like this series does.
+
+Stephen Boyd (8):
+  dt-bindings: Add linux,kunit binding
+  of: Enable DTB loading on UML for KUnit tests
+  kunit: Add test managed platform_device/driver APIs
+  clk: Add test managed clk provider/consumer APIs
+  dt-bindings: kunit: Add fixed rate clk consumer test
+  clk: Add KUnit tests for clk fixed rate basic type
+  dt-bindings: clk: Add KUnit clk_parent_data test
+  clk: Add KUnit tests for clks registered with struct clk_parent_data
+
+ .../clock/linux,clk-kunit-parent-data.yaml    |  47 ++
+ .../kunit/linux,clk-kunit-fixed-rate.yaml     |  35 ++
+ .../bindings/kunit/linux,kunit.yaml           |  24 +
+ arch/um/kernel/dtb.c                          |  29 +-
+ drivers/clk/.kunitconfig                      |   3 +
+ drivers/clk/Kconfig                           |   7 +
+ drivers/clk/Makefile                          |   6 +
+ drivers/clk/clk-fixed-rate_test.c             | 296 ++++++++++++
+ drivers/clk/clk-kunit.c                       | 204 ++++++++
+ drivers/clk/clk-kunit.h                       |  28 ++
+ drivers/clk/clk_test.c                        | 456 +++++++++++++++++-
+ drivers/of/Kconfig                            |  26 +
+ drivers/of/Makefile                           |   1 +
+ drivers/of/kunit/.kunitconfig                 |   4 +
+ drivers/of/kunit/Makefile                     |   4 +
+ drivers/of/kunit/clk.dtsi                     |  30 ++
+ drivers/of/kunit/kunit.dtsi                   |   9 +
+ drivers/of/kunit/kunit.dtso                   |   4 +
+ drivers/of/kunit/uml_dtb_test.c               |  55 +++
+ include/kunit/platform_driver.h               |  15 +
+ lib/kunit/Makefile                            |   6 +
+ lib/kunit/platform_driver-test.c              | 107 ++++
+ lib/kunit/platform_driver.c                   | 207 ++++++++
+ 23 files changed, 1599 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/linux,clk-kunit-parent-data.yaml
+ create mode 100644 Documentation/devicetree/bindings/kunit/linux,clk-kunit-fixed-rate.yaml
+ create mode 100644 Documentation/devicetree/bindings/kunit/linux,kunit.yaml
+ create mode 100644 drivers/clk/clk-fixed-rate_test.c
+ create mode 100644 drivers/clk/clk-kunit.c
+ create mode 100644 drivers/clk/clk-kunit.h
+ create mode 100644 drivers/of/kunit/.kunitconfig
+ create mode 100644 drivers/of/kunit/Makefile
+ create mode 100644 drivers/of/kunit/clk.dtsi
+ create mode 100644 drivers/of/kunit/kunit.dtsi
+ create mode 100644 drivers/of/kunit/kunit.dtso
+ create mode 100644 drivers/of/kunit/uml_dtb_test.c
+ create mode 100644 include/kunit/platform_driver.h
+ create mode 100644 lib/kunit/platform_driver-test.c
+ create mode 100644 lib/kunit/platform_driver.c
+
+
+base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+
