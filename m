@@ -2,71 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71DA6A962C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Mar 2023 12:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A80D6A987D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Mar 2023 14:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjCCL2S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Mar 2023 06:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
+        id S230042AbjCCNfb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Mar 2023 08:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjCCL2Q (ORCPT
+        with ESMTP id S230269AbjCCNfa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:28:16 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB195F224
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Mar 2023 03:27:46 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id e13so1891040wro.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Mar 2023 03:27:46 -0800 (PST)
+        Fri, 3 Mar 2023 08:35:30 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8455A11EBE;
+        Fri,  3 Mar 2023 05:35:06 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id op8so1691181qvb.11;
+        Fri, 03 Mar 2023 05:35:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677842859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1677850505;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZxPuuniW5TWRFly+k8ILkMkCWp9YOR4sj0SnUtoUE4g=;
-        b=HoAVB6xHxGj8IEzGpBJAaJXk504T1tN2SwCIGSoK/JwlO+aI401se+Ae+vt58AbBif
-         6PYdSyy/KcxRUgKJbbYxdPtGVkrbiO8F903aEfWszhwTu7jRy9Q3RwrioQT1XjWZPN33
-         pnM90l3M6is5wSOwfW78l49fZcw886KU4N4hKYm27Co+d6GQpxF/gjIEdHWQ7xJp2APD
-         UEIDHMxuA2xDW2nkpiYJQtcTDzQXwj6WT14H2oi+boV01LqJ82UNWX4HwTNO2MAXZinr
-         GJQzUnVgz3tSPKsPCrFLUkG+Zfo8ovCKs/Ze92M7viyFz+6A0wFSEpH0BbNPH2vaVgAv
-         K9zQ==
+        bh=BbXs2fZaKoFkmjOodJTnYZc2+KCsXlSJCimzVT2u6S4=;
+        b=bvq7SEl2D6im3baHpRlR+E+4GPJ70ejdpQegc97pfTMcELCZSvPK0m4s/qeQh45xOk
+         0rarSn3mjXrNbKmOnzl1OV6cWui8Ls41TPg+RBksGBtoABzamlcri7YiAqUGjG9ZZBRx
+         1OiUWB6X2+PFdT7DKWNO1vw+Q1kqFCEoxGIKNLD8Ne8Q67A9cFT93yTcM6kqmiLoGKlK
+         3QMAdjul7RTf3Gn2lgEv0hvW8R58gPZTtzqboIVWP4t/5lIj+lraIXgTcZSFXK9/Fk6Q
+         6Rp0rmSK1m2m9yQgAJJHLrq+3fBRqJYjBHDXVVZ23U7gqqbISVePmzuPNNuRksbp51uP
+         kYRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677842859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZxPuuniW5TWRFly+k8ILkMkCWp9YOR4sj0SnUtoUE4g=;
-        b=ci5QpGSAvBvM1T25g6Uub8cesV62Gqu8TAHJUFk+h/XiCu3JZ5cVOLlGto5nt5YnPw
-         az/GPWaleuBR3/c2Ib2cqgLXiY8tyQxnTGBnsuL4HflGUtnuV0H6O63NnUB28P95Wr8K
-         qwI1xa083lomEnXZ0y71/Z41vIaaaWXDLn6U4O///t652lJWExxQWkUlOYiBWdH7ev8X
-         MxK6h7LorBRK92nBF344CmpfuejcvSdvjIvtbuXiGVS8x8+OubIBslKc5D+WONjtx00J
-         H11FmgvtAhJyOBGrEzMUToVCZho+wj4NZkY/JlxeEUMGP5/++ymptBzEmvAyvJj1UY6D
-         PFUA==
-X-Gm-Message-State: AO0yUKX1W9Lewkg+GO2krM9edZvvuTdZIIwejjdlHduKoc2AbxdLiwsq
-        TdA5pn0js50F7OZE9eTrX95SMXEHL9DdFPycdZku6g==
-X-Google-Smtp-Source: AK7set9IyxwsOE4zaroUwF21kh+w0ILC8LFBSifcD0HyMJaQgH9lW13dGEVOFOQif3SD7Jkyf8tceVF0WHzVmaBBqcI=
-X-Received: by 2002:adf:f584:0:b0:2cb:80af:e8ab with SMTP id
- f4-20020adff584000000b002cb80afe8abmr363614wro.11.1677842858480; Fri, 03 Mar
- 2023 03:27:38 -0800 (PST)
-MIME-Version: 1.0
-References: <6400bd699f568_20743e2082b@willemb.c.googlers.com.notmuch> <202303031900454292466@zte.com.cn>
-In-Reply-To: <202303031900454292466@zte.com.cn>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 3 Mar 2023 12:27:26 +0100
-Message-ID: <CANn89iK3frwxddhSbbi5cvmuSjr2TqPbD_mTgBa3k4ESDQnrHA@mail.gmail.com>
-Subject: Re: [PATCH linux-next v2] selftests: net: udpgso_bench_tx: Add test
- for IP fragmentation of UDP packets
-To:     yang.yang29@zte.com.cn
+        d=1e100.net; s=20210112; t=1677850505;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BbXs2fZaKoFkmjOodJTnYZc2+KCsXlSJCimzVT2u6S4=;
+        b=mETNkHPFWdoBhsW/s4OieLK/+iIep+l+QNXPo8p6ROeHT6hA9bNImRXr0ZJLoo/P+q
+         MZnMFlRxhlBiyFlJ5QPIToBheMSf8pE2YRoeDIzT+1rVxDvDOSICanhcobJgvxphm1c+
+         5smRLCqKzHWHB1+vOsf8FLqv2rncbr6NjfxAQT/ONqeVbzqANFn7xh6mBIZ9B/6P7x/H
+         Y3qV4zdMAUX+ZKVW1XbXPj4w52fiw0niLOhhzfHz7eMwFeSAAOUc3J0H7dvw0sFxVkoX
+         ZNhUVWJdxK/Xyja+3W5+1APCYMgiYtdPB4sgBNbJW0LQ+Jj5z4orRRoatnZddLmLwY0F
+         YNbw==
+X-Gm-Message-State: AO0yUKV7EkCS7WC1Hy6fINIuUdFfARYzeR2Ikjl5imDqqoKlbqBC9/mT
+        7tiBpSWJQHEZZ+ToAVv22Us=
+X-Google-Smtp-Source: AK7set8wZw4wyYSi99cpQrM7MGeiYJDE5bxRIgW5ZI+mg/+AH1NYAye2Pwf2iCNx81sMyc/PZ/plzQ==
+X-Received: by 2002:ad4:5de8:0:b0:571:d69:da8c with SMTP id jn8-20020ad45de8000000b005710d69da8cmr2660804qvb.19.1677850505572;
+        Fri, 03 Mar 2023 05:35:05 -0800 (PST)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id o5-20020a374105000000b007429ee9482dsm1630833qka.134.2023.03.03.05.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 05:35:04 -0800 (PST)
+Date:   Fri, 03 Mar 2023 08:35:04 -0500
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>, yang.yang29@zte.com.cn
 Cc:     willemdebruijn.kernel@gmail.com, davem@davemloft.net,
         kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, zhang.yunkai@zte.com.cn,
         xu.xin16@zte.com.cn, jiang.xuexin@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <6401f7889e959_3f6dc82084b@willemb.c.googlers.com.notmuch>
+In-Reply-To: <CANn89iK3frwxddhSbbi5cvmuSjr2TqPbD_mTgBa3k4ESDQnrHA@mail.gmail.com>
+References: <6400bd699f568_20743e2082b@willemb.c.googlers.com.notmuch>
+ <202303031900454292466@zte.com.cn>
+ <CANn89iK3frwxddhSbbi5cvmuSjr2TqPbD_mTgBa3k4ESDQnrHA@mail.gmail.com>
+Subject: Re: [PATCH linux-next v2] selftests: net: udpgso_bench_tx: Add test
+ for IP fragmentation of UDP packets
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,34 +79,82 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 12:03=E2=80=AFPM <yang.yang29@zte.com.cn> wrote:
->
-> > Did you actually observe a difference in behavior with this change?
->
-> The test of UDP only cares about sending, and does not much need to
-> consider the problem of PMTU, we configure it to IP_PMTUDISC_DONT.
->     IP_PMTUDISC_DONT: turn off pmtu detection.
->     IP_PMTUDISC_OMIT: the same as DONT, but in some scenarios, DF will
-> be ignored. I did not construct such a scene, presumably when forwarding.
-> Any way, in this test, is the same as DONT.
->
-> We have a question, what is the point of this test if it is not compared =
-to
-> UDP GSO and IP fragmentation. No user or tool will segment in user mode,
-> UDP GSO should compare performance with IP fragmentation.
+Eric Dumazet wrote:
+> On Fri, Mar 3, 2023 at 12:03=E2=80=AFPM <yang.yang29@zte.com.cn> wrote:=
 
-I think it is misleading to think the cost of IP fragmentation matters
-at the sender side.
+> >
+> > > Did you actually observe a difference in behavior with this change?=
 
-Major issue is the receiving side, with many implications of memory
-and cpu costs,
-not counting amplifications of potential packet losses.
+> >
+> > The test of UDP only cares about sending, and does not much need to
+> > consider the problem of PMTU, we configure it to IP_PMTUDISC_DONT.
+> >     IP_PMTUDISC_DONT: turn off pmtu detection.
+> >     IP_PMTUDISC_OMIT: the same as DONT, but in some scenarios, DF wil=
+l
+> > be ignored. I did not construct such a scene, presumably when forward=
+ing.
+> > Any way, in this test, is the same as DONT.
 
-So your patch would make sense if you also change
-tools/testing/selftests/net/udpgso_bench_rx.c accordingly.
+My points was not to compare IP_PMTUDISC_OMIT to .._DONT but to .._DO,
+which is what the existing UDP GSO test is setting.
 
-If you send UDP packets to a receiver, then you should not receive
-ICMP errors, unless a reassembly error occured.
+USO should generate segments that meet MTU rules. The test forces
+the DF bit (IP_PMTUDISC_DO).
 
-About ICMP packets being disruptive, you can always ignore errors at
-sendmsg() time and retry the syscall.
+UFO instead requires local fragmentation, must enter the path for this
+in ip_output.c. It should fail if IP_PMTUDISC_DO is set:
+
+        /* Unless user demanded real pmtu discovery (IP_PMTUDISC_DO), we =
+allow
+         * to fragment the frame generated here. No matter, what transfor=
+ms
+         * how transforms change size of the packet, it will come out.
+         */
+        skb->ignore_df =3D ip_sk_ignore_df(sk);
+
+        /* DF bit is set when we want to see DF on outgoing frames.
+         * If ignore_df is set too, we still allow to fragment this frame=
+
+         * locally. */
+        if (inet->pmtudisc =3D=3D IP_PMTUDISC_DO ||
+            inet->pmtudisc =3D=3D IP_PMTUDISC_PROBE ||
+            (skb->len <=3D dst_mtu(&rt->dst) &&
+             ip_dont_fragment(sk, &rt->dst)))
+                df =3D htons(IP_DF);
+ =
+
+> >
+> > We have a question, what is the point of this test if it is not compa=
+red to
+> > UDP GSO and IP fragmentation. No user or tool will segment in user mo=
+de,
+
+Are you saying no process will use UDP_SEGMENT?
+
+The local protocol stack removed UFO in series d9d30adf5677.
+USO can be offloaded to hardware by quite a few devices (NETIF_F_GSO_UDP_=
+L4).
+> > UDP GSO should compare performance with IP fragmentation.
+> =
+
+> I think it is misleading to think the cost of IP fragmentation matters
+> at the sender side.
+> =
+
+> Major issue is the receiving side, with many implications of memory
+> and cpu costs,
+> not counting amplifications of potential packet losses.
+> =
+
+> So your patch would make sense if you also change
+> tools/testing/selftests/net/udpgso_bench_rx.c accordingly.
+> =
+
+> If you send UDP packets to a receiver, then you should not receive
+> ICMP errors, unless a reassembly error occured.
+> =
+
+> About ICMP packets being disruptive, you can always ignore errors at
+> sendmsg() time and retry the syscall.
+
+
