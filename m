@@ -2,76 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B376A918E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Mar 2023 08:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8236A91B0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Mar 2023 08:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjCCHPv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Mar 2023 02:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S229713AbjCCH0w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Mar 2023 02:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCCHPt (ORCPT
+        with ESMTP id S229661AbjCCH0v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Mar 2023 02:15:49 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A69D360A8
-        for <linux-kselftest@vger.kernel.org>; Thu,  2 Mar 2023 23:15:47 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id bx14so1064712uab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Mar 2023 23:15:47 -0800 (PST)
+        Fri, 3 Mar 2023 02:26:51 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31DC2FCD2
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Mar 2023 23:26:49 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id o6so1565862vsq.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Mar 2023 23:26:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677827747;
+        d=google.com; s=20210112; t=1677828409;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M+14TDPDSR+38RF97tCoIIIN5U8Nevq2YL+GWcPP/u4=;
-        b=AO7tRfrB6FLQW/c/8G+8MiOY/TdQgZYPMx4apgbYS1bJnVqP1pYtnNjCk+4PLWxMf+
-         sd+j3c0hS3XdjhPP3Mse7/Lv2b1PJ9nhTYc6tkfXu99osgyi49ZJlNakfLHCCm2WkQno
-         GmeLgrdRU/6CuxlLw1BzQwl6+0L8Q4scy//BeIwVRKKEv3qO+iniCLyS1WPNtps2jb9w
-         12YxHiC8Z6UZckSc/a3AddfcIGfP/Z08pOQidbqY9TRmEP7kxE8XVOFGs4UbIPzwAb5U
-         gfh8jWfq64Isbof9+13gyieeFuXYgftz8YPh0mmGNv3MU/qw+QzbBljpU8kAWm6r0xXZ
-         r2Fw==
+        bh=2gfeTaLQrB6vh8Us3fEozphDKk5aa5ny0RhHnUk9iuE=;
+        b=J8WmSebaDqACjLlZ4SYIRwujXvUzBJd8F6NWBEmwZUhCJuwcvTO+QGbOADK8Gppapr
+         fHI5a3VkUi6tvai4uePUUWZN21dI3ACKEV9lYI+b5SY93UQ/7J3ZjMFC5n/Y276CLekS
+         LVZyxUsKodvVYR9dU3RYw5VlBUasrB63AvCJ+gscdTSExG6UG5bzufb8oyQXWk0E3Gv2
+         zzcG896fpduDaQA5DYa2s4XtcucCXv2NNDp/KU6+wqDvuHBonogXWduKGxd5SWTJ87s9
+         kInTglIsjZC9T9bD93ridQ0XiKSS0KHMJBBQWRB8sMpCjZe97RNnDvLQnMLhHhShm088
+         tvew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677827747;
+        d=1e100.net; s=20210112; t=1677828409;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=M+14TDPDSR+38RF97tCoIIIN5U8Nevq2YL+GWcPP/u4=;
-        b=w0xJvdmlRRZ1vWK5k4CN1goniZ4Y9EfficnPeglYVi/90ZBhrEWcoYT82HrbxW8HpA
-         3ydJtsYBZwZAmZ/Nt3eFYs0k7p8HCFdzKBEUn5vB6ROtkB9GtBaYnv+2gZjIekDDQDlQ
-         0hZCsRTu0IM2HSgT928rmrhwFdwlF5GaypQbbfRGhPTdP+8oNByVNU6LQkVn2tRJcnsp
-         IvYfxyqIbG8O8TEiIVgWhBhWnl9VuZnV4dL4QVT7PE+qDj1ShWO3oTrYcvNXGuDuzmvI
-         u9TtFSLOw6vQbcql5y5HvJgBB96+3Fqgy5GJA5Br2yH3daBqFwK82oAMtcm5fyVCKItq
-         LOYQ==
-X-Gm-Message-State: AO0yUKXQgrSlgTKMaUFz91OHTtNYebqUQaL97AqSGuuApOYrivGE7gqh
-        FwSEAhb7kTCIh9s5BUpz1o6gn0T4OSIHdeNAgXBsyA==
-X-Google-Smtp-Source: AK7set/bN9C6HBcxnjApEpQsg3NaD3xIN+2ANP4rH5d9w2F1VZi+ht+kHalYAc57BAdtUaXkq/R/04pPHLyCSsnNFZM=
-X-Received: by 2002:a1f:3f8f:0:b0:3ea:b7e1:fb29 with SMTP id
- m137-20020a1f3f8f000000b003eab7e1fb29mr394575vka.0.1677827746715; Thu, 02 Mar
- 2023 23:15:46 -0800 (PST)
+        bh=2gfeTaLQrB6vh8Us3fEozphDKk5aa5ny0RhHnUk9iuE=;
+        b=P4jw3QobuX/NZxEStkS3+XjrKOijdQtOYJsCZWmC/c+YAodCld1hqojJTh/lzo7A/b
+         3IuVPsP/oHA4Qk6a54FKhQY0apg5fhv+0gmPG1PLwQGmGnoB2EjqXEfKEtq/1BaFogFp
+         0XU8HjHomVnn1ZMo02LjGI3pRhW/x1aMQUrX7ZsGnVH26i6Jc6JGBNhVsg3vd0rzGJS1
+         cPfAXc4xqDldTcgqjhvZtG4el1cASbapOcWlBsPvMvlt1jKqO1P8jp/d3g0sKp35BnlM
+         0aeUcLSO+nwDynu7K8zZRmJEaJkoyGqiExe3arZ/PmEHCIdgnqVqJY45fDeFPUO5Y5/h
+         i6ZQ==
+X-Gm-Message-State: AO0yUKVY6akP7vRSjvqDF2Ml8klTDUVwmwoDLU2pNEgdHuXi6cIDBm3N
+        eIN6mz6a9pxTLG3N/T4p3qVYMnacwLyG0WEUAFdSdQ==
+X-Google-Smtp-Source: AK7set/dqhegsYsR1jgvCeZY2ASfYt9gTAF3iFtsa2f52nhtUhe4yfCtTCGf9LkkEb1igfPmcrmIfrracyBNo11YG8k=
+X-Received: by 2002:a05:6102:2743:b0:412:25b3:10f3 with SMTP id
+ p3-20020a056102274300b0041225b310f3mr546641vsu.7.1677828408700; Thu, 02 Mar
+ 2023 23:26:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20230302013822.1808711-1-sboyd@kernel.org> <20230302013822.1808711-5-sboyd@kernel.org>
-In-Reply-To: <20230302013822.1808711-5-sboyd@kernel.org>
+References: <cover.1677579750.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1677579750.git.geert+renesas@glider.be>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 3 Mar 2023 15:15:35 +0800
-Message-ID: <CABVgOSkahumU6T+rCVx+k7Y9=iMszveseVYE0wfKjXwkNJpFxQ@mail.gmail.com>
-Subject: Re: [PATCH 4/8] clk: Add test managed clk provider/consumer APIs
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Date:   Fri, 3 Mar 2023 15:26:37 +0800
+Message-ID: <CABVgOS=vXSuqrJ=6rbAZ1vT3Y=SR69T9EFikXKPY_hmv25riwQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] kunit: tool: Add support for SH under QEMU
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-sh@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000db548405f5f9b6ca"
+        boundary="0000000000005066c305f5f9de43"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -83,322 +70,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000db548405f5f9b6ca
+--0000000000005066c305f5f9de43
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
+On Tue, 28 Feb 2023 at 18:31, Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
 >
-> Unit tests are more ergonomic and simpler to understand if they don't
-> have to hoist a bunch of code into the test harness init and exit
-> functions. Add some test managed wrappers for the clk APIs so that clk
-> unit tests can write more code in the actual test and less code in the
-> harness.
+>         Hi all,
 >
-> Only add APIs that are used for now. More wrappers can be added in the
-> future as necessary.
+> This patch series adds support to run tests via kunit_tool on the
+> SuperH-based virtualized r2d platform.  As r2d uses the second serial
+> port as the console, this needs a small modification of the core
+> infrastructure.
 >
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: David Gow <davidgow@google.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
+> Thanks for your comments!
 
-Looks good, modulo bikeshedding below.
+This series looks good to me, but I've not been able to successfully
+get qemu to boot anything on SuperH (it just seems to hang with no
+output).
 
->  drivers/clk/Makefile    |   5 +
->  drivers/clk/clk-kunit.c | 204 ++++++++++++++++++++++++++++++++++++++++
->  drivers/clk/clk-kunit.h |  28 ++++++
->  3 files changed, 237 insertions(+)
->  create mode 100644 drivers/clk/clk-kunit.c
->  create mode 100644 drivers/clk/clk-kunit.h
+Is there anything like magic config or firmware images (I didn't think
+so for r2d: shix prints out an error, though) required to get this
+going?
+
+The qemu command KUnit is using seems correct (and none of the obvious
+permutations, particularly around the serial ports seem to help):
+qemu-system-sh4 -nodefaults -m 1024 -kernel .kunit/arch/sh/boot/zImage
+-append 'kunit.enable=1 console=ttySC1 kunit_shutdown=reboot'
+-no-reboot -nographic -serial null -machine r2d -serial mon:stdio
+
+Cheers,
+-- David
+
 >
-> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-> index e3ca0d058a25..7efce649b0d3 100644
-> --- a/drivers/clk/Makefile
-> +++ b/drivers/clk/Makefile
-> @@ -17,6 +17,11 @@ ifeq ($(CONFIG_OF), y)
->  obj-$(CONFIG_COMMON_CLK)       += clk-conf.o
->  endif
+> Geert Uytterhoeven (2):
+>   kunit: tool: Add support for overriding the QEMU serial port
+>   kunit: tool: Add support for SH under QEMU
 >
-> +# KUnit specific helpers
-> +ifeq ($(CONFIG_COMMON_CLK), y)
-> +obj-$(CONFIG_KUNIT)            += clk-kunit.o
-
-Do we want to compile these in whenever KUnit is enabled, or only when
-we're building clk tests specifically? I suspect this would be served
-better by being under a CLK_KUNIT config option, which all of the
-tests then depend on. (Whether that's the existing
-CONFIG_CLK_KUNIT_TEST, and all of the clk tests live under the same
-config option, or a separate parent option would be up to you).
-
-Equally, this could be a bit interesting if CONFIG_KUNIT=m. Given
-CONFIG_COMMON_CLK=y, this would end up as a clk-kunit module, no?
-
-> +endif
-> +
->  # hardware specific clock types
->  # please keep this section sorted lexicographically by file path name
->  obj-$(CONFIG_COMMON_CLK_APPLE_NCO)     += clk-apple-nco.o
-> diff --git a/drivers/clk/clk-kunit.c b/drivers/clk/clk-kunit.c
-> new file mode 100644
-> index 000000000000..78d85b3a7a4a
-> --- /dev/null
-> +++ b/drivers/clk/clk-kunit.c
-> @@ -0,0 +1,204 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit helpers for clk tests
-> + */
-> +#include <linux/clk.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/err.h>
-> +#include <linux/kernel.h>
-> +#include <linux/slab.h>
-> +
-> +#include <kunit/resource.h>
-> +
-> +#include "clk-kunit.h"
-> +
-> +static void kunit_clk_disable_unprepare(struct kunit_resource *res)
-
-We need to decide on the naming scheme of these, and in particular if
-they should be kunit_clk or clk_kunit (or something else).
-
-I'd lean to clk_kunit, if only to match DRM's KUnit helpers being
-drm_kunit_helper better, and so that these are more tightly bound to
-the subsystem being tested.
-(i.e., so I don't have to scroll through every subsystem's helpers
-when autocompleting kunit_).
-
-
-> +{
-> +       struct clk *clk = res->data;
-> +
-> +       clk_disable_unprepare(clk);
-> +}
-> +
-> +/**
-> + * kunit_clk_prepare_enable() - Test managed clk_prepare_enable()
-> + * @test: The test context
-> + * @clk: clk to prepare and enable
-> + *
-> + * Returns: 0 on success, or negative errno on failure.
-> + */
-> +int kunit_clk_prepare_enable(struct kunit *test, struct clk *clk)
-> +{
-> +       if (!kunit_alloc_resource(test, NULL, kunit_clk_disable_unprepare,
-> +                                 GFP_KERNEL, clk))
-> +               return -EINVAL;
-> +
-> +       return clk_prepare_enable(clk);
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_clk_prepare_enable);
-> +
-> +static void kunit_clk_put(struct kunit_resource *res)
-> +{
-> +       struct clk *clk = res->data;
-> +
-> +       clk_put(clk);
-> +}
-> +
-> +/**
-> + * kunit_clk_get() - Test managed clk_get()
-> + * @test: The test context
-> + * @dev: device for clock "consumer"
-> + * @id: clock consumer ID
-> + *
-> + * Returns: new clk consumer or ERR_PTR on failure
-> + */
-> +struct clk *
-> +kunit_clk_get(struct kunit *test, struct device *dev, const char *con_id)
-> +{
-> +       struct clk *clk;
-> +
-> +       clk = clk_get(dev, con_id);
-> +       if (IS_ERR(clk))
-> +               return clk;
-> +
-> +       if (!kunit_alloc_resource(test, NULL, kunit_clk_put, GFP_KERNEL, clk)) {
-> +               clk_put(clk);
-> +               return ERR_PTR(-EINVAL);
-> +       }
-> +
-> +       return clk;
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_clk_get);
-> +
-> +/**
-> + * kunit_of_clk_get() - Test managed of_clk_get()
-> + * @test: The test context
-> + * @np: device_node for clock "consumer"
-> + * @index: index in 'clocks' property of @np
-> + *
-> + * Returns: new clk consumer or ERR_PTR on failure
-> + */
-> +struct clk *
-> +kunit_of_clk_get(struct kunit *test, struct device_node *np, int index)
-> +{
-> +       struct clk *clk;
-> +
-> +       clk = of_clk_get(np, index);
-> +       if (IS_ERR(clk))
-> +               return clk;
-> +
-> +       if (!kunit_alloc_resource(test, NULL, kunit_clk_put, GFP_KERNEL, clk)) {
-> +               clk_put(clk);
-> +               return ERR_PTR(-EINVAL);
-> +       }
-> +
-> +       return clk;
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_of_clk_get);
-> +
-> +/**
-> + * kunit_clk_hw_get_clk() - Test managed clk_hw_get_clk()
-> + * @test: The test context
-> + * @hw: clk_hw associated with the clk being consumed
-> + * @con_id: connection ID string on device
-> + *
-> + * Returns: new clk consumer or ERR_PTR on failure
-> + */
-> +struct clk *
-> +kunit_clk_hw_get_clk(struct kunit *test, struct clk_hw *hw, const char *con_id)
-> +{
-> +       struct clk *clk;
-> +
-> +       clk = clk_hw_get_clk(hw, con_id);
-> +       if (IS_ERR(clk))
-> +               return clk;
-> +
-> +       if (!kunit_alloc_resource(test, NULL, kunit_clk_put, GFP_KERNEL, clk)) {
-> +               clk_put(clk);
-> +               return ERR_PTR(-EINVAL);
-> +       }
-> +
-> +       return clk;
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_clk_hw_get_clk);
-> +
-> +/**
-> + * kunit_clk_hw_get_clk_prepared_enabled() - Test managed clk_hw_get_clk() + clk_prepare_enable()
-> + * @test: The test context
-> + * @hw: clk_hw associated with the clk being consumed
-> + * @con_id: connection ID string on device
-> + *
-> + * Returns: new clk consumer that is prepared and enabled or ERR_PTR on failure
-> + */
-> +struct clk *
-> +kunit_clk_hw_get_clk_prepared_enabled(struct kunit *test, struct clk_hw *hw,
-> +                                     const char *con_id)
-> +{
-> +       int ret;
-> +       struct clk *clk;
-> +
-> +       clk = kunit_clk_hw_get_clk(test, hw, con_id);
-> +       if (IS_ERR(clk))
-> +               return clk;
-> +
-> +       ret = kunit_clk_prepare_enable(test, clk);
-> +       if (ret)
-> +               return ERR_PTR(ret);
-> +
-> +       return clk;
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_clk_hw_get_clk_prepared_enabled);
-> +
-> +static void kunit_clk_hw_unregister(struct kunit_resource *res)
-> +{
-> +       struct clk_hw *hw = res->data;
-> +
-> +       clk_hw_unregister(hw);
-> +}
-> +
-> +/**
-> + * kunit_clk_hw_register() - Test managed clk_hw_register()
-> + * @test: The test context
-> + * @dev: device that is registering this clock
-> + * @hw: link to hardware-specific clock data
-> + *
-> + * Returns: 0 on success or a negative errno value on failure
-> + */
-> +int kunit_clk_hw_register(struct kunit *test, struct device *dev, struct clk_hw *hw)
-> +{
-> +       int ret;
-> +
-> +       ret = clk_hw_register(dev, hw);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (!kunit_alloc_resource(test, NULL, kunit_clk_hw_unregister, GFP_KERNEL, hw)) {
-> +               clk_hw_unregister(hw);
-> +               return -EINVAL;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +/**
-> + * kunit_of_clk_hw_register() - Test managed of_clk_hw_register()
-> + * @test: The test context
-> + * @node: device_node of device that is registering this clock
-> + * @hw: link to hardware-specific clock data
-> + *
-> + * Returns: 0 on success or a negative errno value on failure
-> + */
-> +int kunit_of_clk_hw_register(struct kunit *test, struct device_node *node, struct clk_hw *hw)
-> +{
-> +       int ret;
-> +
-> +       ret = of_clk_hw_register(node, hw);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (!kunit_alloc_resource(test, NULL, kunit_clk_hw_unregister, GFP_KERNEL, hw)) {
-> +               clk_hw_unregister(hw);
-> +               return -EINVAL;
-> +       }
-> +
-> +       return 0;
-> +}
-> diff --git a/drivers/clk/clk-kunit.h b/drivers/clk/clk-kunit.h
-> new file mode 100644
-> index 000000000000..153597d69269
-> --- /dev/null
-> +++ b/drivers/clk/clk-kunit.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _CLK_KUNIT_H
-> +#define _CLK_KUNIT_H
-> +
-> +struct clk;
-> +struct clk_hw;
-> +struct device;
-> +struct device_node;
-> +struct kunit;
-> +
-> +struct clk *
-> +kunit_clk_get(struct kunit *test, struct device *dev, const char *con_id);
-> +struct clk *
-> +kunit_of_clk_get(struct kunit *test, struct device_node *np, int index);
-> +
-> +struct clk *
-> +kunit_clk_hw_get_clk(struct kunit *test, struct clk_hw *hw, const char *con_id);
-> +struct clk *
-> +kunit_clk_hw_get_clk_prepared_enabled(struct kunit *test, struct clk_hw *hw,
-> +                                     const char *con_id);
-> +
-> +int kunit_clk_prepare_enable(struct kunit *test, struct clk *clk);
-> +
-> +int kunit_clk_hw_register(struct kunit *test, struct device *dev, struct clk_hw *hw);
-> +int kunit_of_clk_hw_register(struct kunit *test, struct device_node *node,
-> +                            struct clk_hw *hw);
-> +
-> +#endif
+>  tools/testing/kunit/kunit_kernel.py    |  3 ++-
+>  tools/testing/kunit/qemu_config.py     |  1 +
+>  tools/testing/kunit/qemu_configs/sh.py | 17 +++++++++++++++++
+>  3 files changed, 20 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/kunit/qemu_configs/sh.py
+>
 > --
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+> 2.34.1
 >
+> Gr{oetje,eeting}s,
+>
+>                                                 Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                                             -- Linus Torvalds
 
---000000000000db548405f5f9b6ca
+--0000000000005066c305f5f9de43
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -465,14 +194,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD5
-86CIRULPEMwUWZV/a7qUqBMFmJMb3MpZWMzCa1wifzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMDMwNzE1NDdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD2
+/jVHvKzkc9h6mIts+GHlgh8v3+WmAffC0tZMA7jqWTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMDMwNzI2NDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAXg8QKWbCmPKSbx9mAPkg
-XSGrxqlvX0RljB4aUIXjGIeX3QMo3YK5BPWT5c14xEOxCef6Bd9CEPmd23gYoo7Be2vL/x5CDFLZ
-YrAohFVv6eDqxkkZdGhScJ5Bj+PN53MGatRg6+eSG9tXepY+AY8LdFil5Jv9UClQOA57IvUnuwBt
-Kwkasd/3WK9AJv+VECcUX6TeTTYoEnysvaZj6sqiPs2mLBZKsP0WcdrR2izwfA+0R2VRJmr6FmFP
-8PZw6Ns1MZBVwS3unAdfThhssW+8OFzQ4LO38ydVM7cV9gapSDskNEK2snM5aSvHb0aP8ym1jszl
-7lD94kHm/oTww4GACg==
---000000000000db548405f5f9b6ca--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEArTfyNqbkyoyQFebdPpAN
+qRFYrnVuC6v4CxTjkHGCTGfxb9Nt+7Lc/4DtiwxRa4k0sKBzhuvQIF2rOIEKu+Rk70Y620lYRgzP
+lBHEK8sVhh1uag1sMc251FwPEa+xWoEZQzTOzpNN3nVoFkZQvF3ZS1P/he26YGOfeP5PviEVEVD9
+JnJh6vUyPijyPm/e0MtGsUjb14TSLRlPJoQMUdBl7lb/R/IA6hvPcS9o7M/KV3e2K8SG3X1M2uCZ
+qvvVDkXb1h5KapbqH/JzwX+8LRwoeZ4Skb1RWqtyQhq0C0OcwAueCeF0XZAAQmthJpFc/C4o20DT
+WjlOEUP//aAtArDlPw==
+--0000000000005066c305f5f9de43--
