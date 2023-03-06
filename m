@@ -2,129 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4EB6AB71A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 08:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37506AB7E3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 09:04:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjCFHbp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Mar 2023 02:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S229770AbjCFIEH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Mar 2023 03:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjCFHbo (ORCPT
+        with ESMTP id S229759AbjCFIEG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Mar 2023 02:31:44 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4366B1E1F6;
-        Sun,  5 Mar 2023 23:31:41 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id kb15so8881335pjb.1;
-        Sun, 05 Mar 2023 23:31:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cEeWSamPP//pxy4lKPrymNEPE0BRaQvyhxLQGg4BK5U=;
-        b=M/9ysp0aPgRd5Hv7DtjFq2u/tYGPIqFtie6zb+B5GsgkpE60amgnHgcn1YbCBs1bDE
-         ft930AYKVL1xBSUEkIAP/FiQxJiawMuQRSd4RFQhn38YQ1AnEW2xcceLkHjrvmLBM2zw
-         pCMMd2tRxI0e9tgkC28oNUU42o9BmTRanuyiQdq50wuKfg4PJ9iWwK7f53+eeqr2rz1P
-         8Lj1xkOdp7gs8NmfbhIEXLopt2nId2/zBEiNfnfaLZ5ws4hmNCW5hBq/SXXi4CdHMui5
-         MpNQBLTEyZ1a83VGF7/ih2mDAQhwSkrV4FwJ4J9iToExpJs+whCfowAatqV4pXwuk43X
-         ixxw==
+        Mon, 6 Mar 2023 03:04:06 -0500
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86ACB4C18;
+        Mon,  6 Mar 2023 00:03:43 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id a25so35068892edb.0;
+        Mon, 06 Mar 2023 00:03:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cEeWSamPP//pxy4lKPrymNEPE0BRaQvyhxLQGg4BK5U=;
-        b=v1c2t50WlY4n2n57O2MwvHc53K3brMAb0SVN8WveZwjAIc6rtVGrglChJ40vNCRuPR
-         zaJEieoS8KLkKe5FJCQGm5mojR3TI+k3R48dc1fvMOsU4dqS23adfnH0t0rtl2jKhXVn
-         3KpUB2LEhplvtsHApciRbt9WNx4Vd5u4+yijMGAelkmkDhTtT58Z54Kjt1QT6xJpzN77
-         cCwMW++sOqtE/aAuOjYKpxD+wkQaruwE/eaGcgbs/49gAh5UkCaZsTQ/pvh8O1NfyZlw
-         DI8sN2jz+oNIAjZm71yAI8ucrBy7FAUi8u1aig6sQjddauTLrKE7AHINU5T4oACnHfXZ
-         Hhrw==
-X-Gm-Message-State: AO0yUKVeW+CLTaKmjfE2oREf2hDvGB6mQwniw/OV0uDo39nUa8Erodjj
-        g7+7uXeWjkRE1KiqoCtw9mg=
-X-Google-Smtp-Source: AK7set8njaPB/Dn186/pV5Shti/LPXxBpbHPjFtyC7LUjTP4mz8XnBpyH1kO30LqkNJnQG0TxzLD7Q==
-X-Received: by 2002:a17:902:c951:b0:19e:9807:de48 with SMTP id i17-20020a170902c95100b0019e9807de48mr10403129pla.23.1678087900742;
-        Sun, 05 Mar 2023 23:31:40 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170902e9c400b0019c61616f82sm5930857plk.230.2023.03.05.23.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Mar 2023 23:31:40 -0800 (PST)
-From:   xu xin <xu.xin.sc@gmail.com>
-X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
-To:     willemdebruijn.kernel@gmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, jiang.xuexin@zte.com.cn,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, xu.xin16@zte.com.cn,
-        yang.yang29@zte.com.cn, zhang.yunkai@zte.com.cn
-Subject: RE: [PATCH linux-next v2] selftests: net: udpgso_bench_tx: Add test for IP fragmentation of UDP packets
-Date:   Mon,  6 Mar 2023 07:31:36 +0000
-Message-Id: <20230306073136.155697-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <6401f7889e959_3f6dc82084b@willemb.c.googlers.com.notmuch>
-References: <6401f7889e959_3f6dc82084b@willemb.c.googlers.com.notmuch>
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=83wzMZDza94KzRdG9ihv12wmiVlHYRIDlbhLRowmSAw=;
+        b=NoYiJejnzoloQ2z2TSC/wM21iRq2BlaSq4X93repMOHXD+DcK1FjLBLHOuEHZrvUq2
+         KIKvYFaOyQV8voJ90yvboEgLA9IJB0lbZCkeeVZ4xYtTdHywKKIkwn0u/CmFXX7w4wFL
+         rdICuzvHofJrRe/OYcjoJYrcoh68EDK2BLcjDa3fNk5WgZbco3RRBHiBS9W3yBVVw3fz
+         JgW9iiBGzQeAVd5KSJT74jTQit3kiat/yVx7WdGogRJ2HOjmg217MaIbmRL/jtBhMRLu
+         1dWrxOzXCmDhyeK01vCUQ7BZuMSnLYPLEc0oLU6L7dncInRykai4k60vhBbnmtLYyE1d
+         eG3g==
+X-Gm-Message-State: AO0yUKUKiV2+k8DIXyjxq46xwNw5uC8Ta00F2oYxHI8Nw6hS/BKS2m4w
+        Xi4FjYT0Ejj5Tmoprzrz81/xLCuEB2xKlw==
+X-Google-Smtp-Source: AK7set+KX0I+SESEOXUeE7xIsnVvh8ozH7/v3/FI16dEFBlyuDwrxD5H4VuQj/OzQtB3gGVxkV/1xg==
+X-Received: by 2002:a17:907:a0d5:b0:8b1:319c:c29e with SMTP id hw21-20020a170907a0d500b008b1319cc29emr12397792ejc.74.1678089817808;
+        Mon, 06 Mar 2023 00:03:37 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id e7-20020a170906c00700b008cff300cf47sm4184241ejz.72.2023.03.06.00.03.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 00:03:37 -0800 (PST)
+Message-ID: <c91c458e-58d0-f13a-9adb-a48a19f82107@kernel.org>
+Date:   Mon, 6 Mar 2023 09:03:36 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Michal Sekletar <msekleta@redhat.com>, gregkh@linuxfoundation.org
+Cc:     arozansk@redhat.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230303133606.227934-1-msekleta@redhat.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 1/2] tty: tty_io: update timestamps on all device nodes
+In-Reply-To: <20230303133606.227934-1-msekleta@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->> >     IP_PMTUDISC_DONT: turn off pmtu detection.
->> >     IP_PMTUDISC_OMIT: the same as DONT, but in some scenarios, DF will
->> > be ignored. I did not construct such a scene, presumably when forwarding.
->> > Any way, in this test, is the same as DONT.
->
->My points was not to compare IP_PMTUDISC_OMIT to .._DONT but to .._DO,
->which is what the existing UDP GSO test is setting.
-
-Yeah, we got your point, but the result was as the patch showed, which hadn't
-changed much (patch v2 V.S patch v1), because the fragmentation option of 'patch v1'
-used the default PMTU discovery strategy(IP_PMTUDISC_DONT, because the code didn't
-setting PMTU explicitly by setsockopt() when use './udpgso_bench_tx -f' ), which is
-not much different from the 'patch v2' using IP_PMTUDISC_OMIT.
-
->
->USO should generate segments that meet MTU rules. The test forces
->the DF bit (IP_PMTUDISC_DO).
->
->UFO instead requires local fragmentation, must enter the path for this
->in ip_output.c. It should fail if IP_PMTUDISC_DO is set:
->
->        /* Unless user demanded real pmtu discovery (IP_PMTUDISC_DO), we allow
->         * to fragment the frame generated here. No matter, what transforms
->         * how transforms change size of the packet, it will come out.
->         */
->        skb->ignore_df = ip_sk_ignore_df(sk);
->
->        /* DF bit is set when we want to see DF on outgoing frames.
->         * If ignore_df is set too, we still allow to fragment this frame
->         * locally. */
->        if (inet->pmtudisc == IP_PMTUDISC_DO ||
->            inet->pmtudisc == IP_PMTUDISC_PROBE ||
->            (skb->len <= dst_mtu(&rt->dst) &&
->             ip_dont_fragment(sk, &rt->dst)))
->                df = htons(IP_DF);
+On 03. 03. 23, 14:36, Michal Sekletar wrote:
+> User space applications watch for timestamp changes on character device
+> files in order to determine idle time of a given terminal session. For
+> example, "w" program uses this information to populate the IDLE column
+> of its output [1]. Similarly, systemd-logind has optional feature where
+> it uses atime of the tty character device to determine if there was
+> activity on the terminal associated with the logind's session object. If
+> there was no activity for a configured period of time then logind will
+> terminate such session [2].
 > 
->> >
->> > We have a question, what is the point of this test if it is not compared to
->> > UDP GSO and IP fragmentation. No user or tool will segment in user mode,
->
->Are you saying no process will use UDP_SEGMENT?
->
-No, we are saying "user-space payload splitting", in other words, use ./udpgso_bench_tx
-without '-f' or '-S'.
+> Now, usually (e.g. bash running on the terminal) the use of the terminal
+> will update timestamps (atime and mtime) on the corresponding terminal
+> character device. However, if access to the terminal, e.g. /dev/pts/0,
+> is performed through magic character device /dev/tty then such access
+> obviously changes the state of the terminal, however timestamps on the
+> device that correspond to the terminal (/dev/pts/0) are not updated.
+> 
+> This patch makes sure that we update timestamps on *all* character
+> devices that correspond to the given tty, because outside observers (w,
+> systemd-logind) are maybe checking these timestamps. Obviously, they can
+> not check timestamps on /dev/tty as that has per-process meaning.
+> 
+> [1] https://gitlab.com/procps-ng/procps/-/blob/v4.0.0/w.c#L286
+> [2] https://github.com/systemd/systemd/blob/v252/NEWS#L477
+> 
+> Signed-off-by: Michal Sekletar <msekleta@redhat.com>
+> ---
+>   drivers/tty/tty_io.c | 32 +++++++++++++++++++++-----------
+>   1 file changed, 21 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+> index 36fb945fdad4..48e0148b0f3e 100644
+> --- a/drivers/tty/tty_io.c
+> +++ b/drivers/tty/tty_io.c
+> @@ -101,6 +101,7 @@
+>   #include <linux/compat.h>
+>   #include <linux/uaccess.h>
+>   #include <linux/termios_internal.h>
+> +#include <linux/fs.h>
+>   
+>   #include <linux/kbd_kern.h>
+>   #include <linux/vt_kern.h>
+> @@ -811,18 +812,27 @@ void start_tty(struct tty_struct *tty)
+>   }
+>   EXPORT_SYMBOL(start_tty);
+>   
+> -static void tty_update_time(struct timespec64 *time)
+> +static void tty_update_time(struct tty_struct *tty, int tstamp)
 
-Sincerely.
+Why not enum file_time_flags then?
 
->The local protocol stack removed UFO in series d9d30adf5677.
->USO can be offloaded to hardware by quite a few devices (NETIF_F_GSO_UDP_L4).
->> > UDP GSO should compare performance with IP fragmentation.
->> 
->> I think it is misleading to think the cost of IP fragmentation matters
+And "tstamp" sounds weird for what it is. It should be something like 
+"time" or "time_flag". Or make it simply "bool mtime". And call it with 
+true/false.
+
+>   {
+> +	struct tty_file_private *priv;
+>   	time64_t sec = ktime_get_real_seconds();
+
+Likely should be switched to have a reverse xmas tree.
+
+>   
+> -	/*
+> -	 * We only care if the two values differ in anything other than the
+> -	 * lower three bits (i.e every 8 seconds).  If so, then we can update
+> -	 * the time of the tty device, otherwise it could be construded as a
+> -	 * security leak to let userspace know the exact timing of the tty.
+> -	 */
+> -	if ((sec ^ time->tv_sec) & ~7)
+> -		time->tv_sec = sec;
+> +	spin_lock(&tty->files_lock);
+
+Note: this should be fine wrt write lock. Have you tried running w/ 
+lockdep enabled?
+
+> +	list_for_each_entry(priv, &tty->tty_files, list) {
+> +		struct file *filp = priv->file;
+
+I think you can inline the above ^^ to the bellow vv.
+
+> +		struct inode *inode = file_inode(filp);
+> +		struct timespec64 *time = tstamp == S_MTIME ? &inode->i_mtime : &inode->i_atime;
+
+So you'd have:
+struct inode *inode = file_inode(priv->file);
+struct timespec64 *time = mtime ? &inode->i_mtime : &inode->i_atime;
+
+> +
+> +		/*
+> +		 * We only care if the two values differ in anything other than the
+> +		 * lower three bits (i.e every 8 seconds).  If so, then we can update
+> +		 * the time of the tty device, otherwise it could be construded as a
+> +		 * security leak to let userspace know the exact timing of the tty.
+> +		 */
+> +		if ((sec ^ time->tv_sec) & ~7)
+> +			time->tv_sec = sec;
+> +	}
+> +	spin_unlock(&tty->files_lock);
+>   }
+>   
+>   /*
+> @@ -928,7 +938,7 @@ static ssize_t tty_read(struct kiocb *iocb, struct iov_iter *to)
+>   	tty_ldisc_deref(ld);
+>   
+>   	if (i > 0)
+> -		tty_update_time(&inode->i_atime);
+> +		tty_update_time(tty, S_ATIME);
+>   
+>   	return i;
+>   }
+> @@ -1036,7 +1046,7 @@ static inline ssize_t do_tty_write(
+>   		cond_resched();
+>   	}
+>   	if (written) {
+> -		tty_update_time(&file_inode(file)->i_mtime);
+> +		tty_update_time(tty, S_MTIME);
+>   		ret = written;
+>   	}
+>   out:
+
+-- 
+js
+suse labs
+
