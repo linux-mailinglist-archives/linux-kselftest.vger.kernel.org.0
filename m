@@ -2,130 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFACD6AC31D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 15:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285C76AC36C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 15:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjCFOXA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Mar 2023 09:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S230244AbjCFOgo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Mar 2023 09:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjCFOWn (ORCPT
+        with ESMTP id S230088AbjCFOgm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:22:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95FC3527C
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Mar 2023 06:21:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF4F9B80E5C
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Mar 2023 14:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76301C4339B;
-        Mon,  6 Mar 2023 14:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678112410;
-        bh=60Dvz40Apg10LIVR8Wrt138EIQKfoVEnTzRBhbCLHFI=;
-        h=From:Date:Subject:To:Cc:From;
-        b=S7nnSoDSoKXpiOB6Qmp8N5oxo6tY7Www6cRJRu0n4D4B6MiOgJEZBkuHhUc0ohjpR
-         9rTTSgyyx/oIgUsRcgrWsuzcLozZnx/GoJPxmxue3q93OD5d9cgXA2gNhabHMKDCqk
-         DOklSGO65SeDhynJeOsHOyM4BjY8eYH5KvROvD5wOkRlVj+JZ504YANdRMXWNCN9Q5
-         VH8VaOgD3tGgVaVG85h3DzDvGTjNO8WB7ofXVrTmFn0rgK2fMqYiFbmAWPia4Wzwct
-         c224AjqJguq5gAd2zmjsII0W+vwlqYe+K6bxW5BZmLEAPX5qrxv8irBb8RwdnhAjjf
-         CyuqmQQ3CKejA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 06 Mar 2023 14:20:03 +0000
-Subject: [PATCH] kselftest/alsa - mixer-test: Don't fail tests if we can't
- restore default
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Mon, 6 Mar 2023 09:36:42 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531A12331C;
+        Mon,  6 Mar 2023 06:36:14 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id l13so10672083qtv.3;
+        Mon, 06 Mar 2023 06:36:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678113323;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yDK95qUmtK7rh4BRcl+d6FS8ceWw89ds2nqEahTwuz0=;
+        b=UxOtsg7RxUDG4Xjoo+aHR/G2P6QbDE51VloPKiDakUKx8jC2b+3P7Of6qjanYrsZIG
+         RlaHNFQNDmSSEdWjyF479uEEbwsmwH+ct4w0L/JdPkfazg+bpzGI+jd19Y3mqp29Tj2l
+         +ZzPJTXy6cXhzIajxllL0ef38Bno0pK+AW5h0ZBPmllMTLKQulu12v/tN5l5ezkJBT42
+         3/+FKfgJHbMB4ptKkBo+qQ+treW6IZuQohQYKWF5N1aaLFBCJrKtPY9WKY9Ne3gENFYp
+         Bta53p17MHw/P2dAD0JwFUu5Ip3PUEcZySM9P0yce8j/QNZMMXZIA2DnOe0W/GrQMlmn
+         JyaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678113323;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yDK95qUmtK7rh4BRcl+d6FS8ceWw89ds2nqEahTwuz0=;
+        b=gBtiFx0tYPI3oLwN23lNxn7xSR3nF13kSd8319HacXouVY8adqQxY9WYat8/eIe9Sc
+         +4Jjwg3UJv2lyjljmTDkvR65OMXqGxb568rKDQQiNUtlwPK7JoeoaKaqWC3nFgtUUuNr
+         K2nCe7SWZ2R8TYKcKILjMiaQD8mWu2f42IZcUmJeC4NHZG1M7UpcuUd4R2Ujw1RAFJA4
+         0us1t5gOWZ3vgR3MX8pq4FdmbTD0f3pItlFvbupKATF8bPBCI/NCq6Za92w4o3isowdK
+         TyRJNHJNwYQTpFDJTve08KJ/qRXqgsmLl89ajzljuktk8I3UYXyj9PcWUXDlW1SLL5jb
+         +zCw==
+X-Gm-Message-State: AO0yUKUdaVII2auXkogO+HHghYpf7QloxO5Pu0BR/IHg3r+ptCsWwT3u
+        57ht+Y6W84/kRj6lRCfjRmU=
+X-Google-Smtp-Source: AK7set+n57WUuNR+qYBo3bFZ13IGkIiD5yt+MG1lXujWHqHI8rUS/QMChjkzpn2uvAv1TLOhSXWfLA==
+X-Received: by 2002:ac8:5c02:0:b0:3bf:dc2e:ce5d with SMTP id i2-20020ac85c02000000b003bfdc2ece5dmr20367194qti.4.1678113323074;
+        Mon, 06 Mar 2023 06:35:23 -0800 (PST)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id 191-20020a370cc8000000b007416c11ea03sm7606527qkm.26.2023.03.06.06.35.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 06:35:22 -0800 (PST)
+Date:   Mon, 06 Mar 2023 09:35:22 -0500
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     xu xin <xu.xin.sc@gmail.com>, willemdebruijn.kernel@gmail.com
+Cc:     davem@davemloft.net, edumazet@google.com, jiang.xuexin@zte.com.cn,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, xu.xin16@zte.com.cn,
+        yang.yang29@zte.com.cn, zhang.yunkai@zte.com.cn
+Message-ID: <6405fa2a80577_bb2242089c@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230306073136.155697-1-xu.xin16@zte.com.cn>
+References: <6401f7889e959_3f6dc82084b@willemb.c.googlers.com.notmuch>
+ <20230306073136.155697-1-xu.xin16@zte.com.cn>
+Subject: RE: [PATCH linux-next v2] selftests: net: udpgso_bench_tx: Add test
+ for IP fragmentation of UDP packets
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-alsa-mixer-test-restore-invalid-v1-1-454f0f1f2c4b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAJL2BWQC/xWNwQqDQAxEf0VybsBuK7b9leIhq7GG2t2SiC2I/
- 272MvCG4c0Gxips8Kg2UF7FJCeH86mCfqL0YpTBGUIdLnUIV6TZCD/yZ8WFbUH1yOqztNIsAwZ
- q2ni/Ecd2BLdEMsaolPqpeH5Z36X+Ko8uKcfPbt8PwYovk4gAAAA=
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-bd1bf
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2369; i=broonie@kernel.org;
- h=from:subject:message-id; bh=60Dvz40Apg10LIVR8Wrt138EIQKfoVEnTzRBhbCLHFI=;
- b=owGbwMvMwMWocq27KDak/QLjabUkhhTWbzMk0yMaz7BaGZ+t4mMOsI6NqtV8y2WtbzHft6dpgcY+
- kR2djMYsDIxcDLJiiixrn2WsSg+X2Dr/0fxXMINYmUCmMHBxCsBEFIPY/3C+c/Qyn8lw9lXn8mf1D1
- 80errkit3MkBDU/dDcL/xQ0F/yz+RFR70k1c9fdm3d66bZaPZq24b2iNuV91O2mjHIZJ70c4sWmlop
- dPVWiLHejPkC0n6htVteMRfcrFm10zozYePdboMHUYYaaRcFf/5+37t7ypN7O+S/tTnrl22wbj3adH
- KylLN3irDxXc9nFcpZefMYnXQV3n84Pff2gpx35551bu7YzdN168MUpjwzndCm4FWXvZSPv1fN/M+u
- e9J+Mlui15+lOZprPPylNQIvRa/IUsm3z5nWXC52w7P+tsaMqnWP+qNmWW//8eH5fbOlhX4T5nDeuV
- kXkTxJMHZm66r65GpJCwbbiwX1AA==
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If a control has an invalid default value then we might fail to set it
-when restoring the default value after our write tests, for example due to
-correctly implemented range checks in put() operations. Currently this
-causes us to report the tests we were running as failed even when the
-operation we were trying to test is successful, making it look like there
-are problems where none really exist. Stop doing this, only reporting any
-issues during the actual test.
+xu xin wrote:
+> >> >     IP_PMTUDISC_DONT: turn off pmtu detection.
+> >> >     IP_PMTUDISC_OMIT: the same as DONT, but in some scenarios, DF will
+> >> > be ignored. I did not construct such a scene, presumably when forwarding.
+> >> > Any way, in this test, is the same as DONT.
+> >
+> >My points was not to compare IP_PMTUDISC_OMIT to .._DONT but to .._DO,
+> >which is what the existing UDP GSO test is setting.
+> 
+> Yeah, we got your point, but the result was as the patch showed, which hadn't
+> changed much (patch v2 V.S patch v1), because the fragmentation option of 'patch v1'
+> used the default PMTU discovery strategy(IP_PMTUDISC_DONT, because the code didn't
+> setting PMTU explicitly by setsockopt() when use './udpgso_bench_tx -f' ), which is
+> not much different from the 'patch v2' using IP_PMTUDISC_OMIT.
 
-We already have validation for the initial readback being in spec and for
-writing the default value back so failed tests will be reported for these
-controls, and we log an error on the operation that failed when we write so
-there will be a diagnostic warning the user that there is a problem.
+Or IP_PMTUDISC_WANT unless sysctl_ip_no_pmtu_disc is set.
+But fair point. Explicitly disabling pmtu is not needed.
+ 
+> >
+> >USO should generate segments that meet MTU rules. The test forces
+> >the DF bit (IP_PMTUDISC_DO).
+> >
+> >UFO instead requires local fragmentation, must enter the path for this
+> >in ip_output.c. It should fail if IP_PMTUDISC_DO is set:
+> >
+> >        /* Unless user demanded real pmtu discovery (IP_PMTUDISC_DO), we allow
+> >         * to fragment the frame generated here. No matter, what transforms
+> >         * how transforms change size of the packet, it will come out.
+> >         */
+> >        skb->ignore_df = ip_sk_ignore_df(sk);
+> >
+> >        /* DF bit is set when we want to see DF on outgoing frames.
+> >         * If ignore_df is set too, we still allow to fragment this frame
+> >         * locally. */
+> >        if (inet->pmtudisc == IP_PMTUDISC_DO ||
+> >            inet->pmtudisc == IP_PMTUDISC_PROBE ||
+> >            (skb->len <= dst_mtu(&rt->dst) &&
+> >             ip_dont_fragment(sk, &rt->dst)))
+> >                df = htons(IP_DF);
+> > 
+> >> >
+> >> > We have a question, what is the point of this test if it is not compared to
+> >> > UDP GSO and IP fragmentation. No user or tool will segment in user mode,
+> >
+> >Are you saying no process will use UDP_SEGMENT?
+> >
+> No, we are saying "user-space payload splitting", in other words, use ./udpgso_bench_tx
+> without '-f' or '-S'.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/alsa/mixer-test.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+I see. I guess you heard the arguments why the test does not compare
+udp segmentation with udp fragmentation:
 
-diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
-index 05f1749ae19d..ac5efa42d488 100644
---- a/tools/testing/selftests/alsa/mixer-test.c
-+++ b/tools/testing/selftests/alsa/mixer-test.c
-@@ -755,7 +755,6 @@ static bool test_ctl_write_valid_enumerated(struct ctl_data *ctl)
- static void test_ctl_write_valid(struct ctl_data *ctl)
- {
- 	bool pass;
--	int err;
- 
- 	/* If the control is turned off let's be polite */
- 	if (snd_ctl_elem_info_is_inactive(ctl->info)) {
-@@ -797,9 +796,7 @@ static void test_ctl_write_valid(struct ctl_data *ctl)
- 	}
- 
- 	/* Restore the default value to minimise disruption */
--	err = write_and_verify(ctl, ctl->def_val, NULL);
--	if (err < 0)
--		pass = false;
-+	write_and_verify(ctl, ctl->def_val, NULL);
- 
- 	ksft_test_result(pass, "write_valid.%d.%d\n",
- 			 ctl->card->card, ctl->elem);
-@@ -1015,9 +1012,7 @@ static void test_ctl_write_invalid(struct ctl_data *ctl)
- 	}
- 
- 	/* Restore the default value to minimise disruption */
--	err = write_and_verify(ctl, ctl->def_val, NULL);
--	if (err < 0)
--		pass = false;
-+	write_and_verify(ctl, ctl->def_val, NULL);
- 
- 	ksft_test_result(pass, "write_invalid.%d.%d\n",
- 			 ctl->card->card, ctl->elem);
+- fragmentation is particularly expensive on the receiver side
+- fragmentation cannot be offloaded, while segmentation can
 
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230224-alsa-mixer-test-restore-invalid-2a57b98aeb7f
+> Sincerely.
+> 
+> >The local protocol stack removed UFO in series d9d30adf5677.
+> >USO can be offloaded to hardware by quite a few devices (NETIF_F_GSO_UDP_L4).
+> >> > UDP GSO should compare performance with IP fragmentation.
+> >> 
+> >> I think it is misleading to think the cost of IP fragmentation matters
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
 
