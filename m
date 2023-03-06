@@ -2,300 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344886AC5DE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 16:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 332FB6AC75F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 17:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjCFPtB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Mar 2023 10:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
+        id S230474AbjCFQMQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Mar 2023 11:12:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCFPtA (ORCPT
+        with ESMTP id S232796AbjCFQL7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:49:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75525EFB1;
-        Mon,  6 Mar 2023 07:48:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BADA3B80EB6;
-        Mon,  6 Mar 2023 15:35:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E72E5C4339C;
-        Mon,  6 Mar 2023 15:35:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678116918;
-        bh=E1zhjZsDqXu7ZcjyxWAVSvVSVDz46CeGhHGsz7thqLI=;
-        h=From:Date:Subject:To:Cc:From;
-        b=hlTmLm7y8VUxMPt3pQ2B4PM7gP7qLLiK9VgfvLrfs+ib0At9J6chvKhAmk1T0wAxZ
-         PHoJ0lwvKIKmsudt7jZ4cDJjbswtbWw57Ld7iucs5xLEvESdR7pvXthDkbKE5SLYLN
-         +d/QwXrLMXv9xhioXq++cH2TN8dyUeUSA900ERAtH3TM8ZkiDSQZ0ofRM5GKDh8pDI
-         XqrIa8P09N029Xuk1owE5NEpN6Baa1eCsH9wP5g8KSvFav02x34W1BRl2+IHGF/12k
-         op6FM4S7lkrfdKf/oSYieLhMt98Y8a3BjJj7YZ6BeYhzHqFwtNNKROaaaxRQJbD0MM
-         M0HRZCQz+aKXg==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 06 Mar 2023 15:35:10 +0000
-Subject: [PATCH] selftests/ftrace: Improve integration with kselftest
- runner
+        Mon, 6 Mar 2023 11:11:59 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E76B4FA88
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Mar 2023 08:08:38 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id 76so4207636iou.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Mar 2023 08:08:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1678118803;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e7dAgDboD1nwP5+XX6Gpi6cj6HuqQDphe3J0S8kZqwA=;
+        b=cmwkGk0sfDxLR0/c/zD8q+CxEYBkWnqe2zJi29SN0wR76WgMhwakXUaUDgl+/ibRRX
+         ybb2Glc9vdkT/k60sZoh/0wLZ3lRUumuJxyopfVdDHEJ+Qx0jnEkS92eZO3JvSRRAeCP
+         B+TDlfkL84dD5TD1LRW6wSEU+RnRARQbRa9OU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678118803;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e7dAgDboD1nwP5+XX6Gpi6cj6HuqQDphe3J0S8kZqwA=;
+        b=OZtkheTwi6NCr3MNvefzfMXR11Vq/HiLSzDKHQUf9U3qo3tjM2ExK12mXt6yNaZk/r
+         CPcEfQlChyCCB9bmIPBmveL7Bs2FVU8+HLvGS5zKKkokuoAgWc5QFJ2Bg7by7QtkpEcZ
+         YCH6dD8T+mA23+cCS9kG2B+di2XA0tyPljrOoB6KdKRHKrahRffv87fxIz0dLtktCSAN
+         TvaVOv+lXveLnjyZYbWh+i+nZ6fBAR43KEE50Z7IBGtc3mlAgzrsh1t6JDBNRK0vJ87q
+         T3s+Ice5i2osn/tzC8HKLuYvWWIlu9zQxjo45+Gt2GKr9edY8LIkUQvzz6KXqUYJ83eE
+         7AWQ==
+X-Gm-Message-State: AO0yUKWe/jlZzJ7Ww1eLObPrVTS26Rh1GhsXCDNmO5lxckXfnlBsZkrh
+        B/+xMHkfOIsBrocLSuC/rDGY4Q==
+X-Google-Smtp-Source: AK7set/5wMHvgBGYNORNTLIQc8lg5UH9pESn3evMck0I8U2TUY+aFX1R4Mnp6ivgn4D8wf8+cM17Hw==
+X-Received: by 2002:a6b:5a0e:0:b0:72c:f57a:a37b with SMTP id o14-20020a6b5a0e000000b0072cf57aa37bmr6270225iob.2.1678118802712;
+        Mon, 06 Mar 2023 08:06:42 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id y6-20020a6bc406000000b00743fe29dd56sm3442423ioa.4.2023.03.06.08.06.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 08:06:42 -0800 (PST)
+Message-ID: <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
+Date:   Mon, 6 Mar 2023 09:06:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
+ 165
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, keescook@chromium.org,
+        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230206234344.2433950-1-mcgrof@kernel.org>
+ <20230206234344.2433950-2-mcgrof@kernel.org>
+ <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
+ <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
+ <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
+ <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAC0IBmQC/x2NQQqDMBAAvyJ77kKM2Gi/UjyscVMX2zRkQymIf
- 2/scQaG2UE5Cyvcmh0yf0TlHSu0lwb8SvHBKEtlsMZ2pjMWQ8nkGTflZyisBbdCCcfFDW64jm3
- fO6jtTMo4Z4p+PevySqdNmYN8/7f7dBw/2Gm7Qn0AAAA=
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-bd1bf
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7335; i=broonie@kernel.org;
- h=from:subject:message-id; bh=E1zhjZsDqXu7ZcjyxWAVSvVSVDz46CeGhHGsz7thqLI=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBggzd4EQZ3hP+Sh8BpOa6YTt+Rb3/1RhhG8bpdMl
- 397Zj6yJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAYIMwAKCRAk1otyXVSH0F1xB/
- 4woKElb4OOUeLfozI9QUnS1XAcTVHMM9KWK1/dAN51t7DpXa+ke2Uv2Kf/7PCz/fa0Fjb1rAWNG6x4
- 6OyO5U7kW/l2WjWk8DTTg/xxRhuIlQlEdU2fEouwR6qR5ZbzmiAnTEgh2O0KdwOIR58idPTWjqplKM
- Z/s80rUU0J1HB6EqgHybxnnbIZtBF87DcjAYkxYfMT9JbzoUwyr18QfRVxQtZDMJQAXjY6opok4+4d
- feevuhJWMpOCyYV5GsRyGZHn5Xspa8DhjfBjm26DMzDpPPTtflKyCgx5hGst3PXFFnbJAU4NyeYTLW
- b4Iyk4xhdssW4aTpIvu6xIEjuvNE4u
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ftrace selftests do not currently produce KTAP output, they produce a
-custom format much nicer for human consumption. This means that when run in
-automated test systems we just get a single result for the suite as a whole
-rather than recording results for individual test cases, making it harder
-to look at the test data and masking things like inappropriate skips.
+On 3/3/23 14:48, Luis Chamberlain wrote:
+> On Fri, Mar 03, 2023 at 01:35:10PM -0700, Shuah Khan wrote:
+>> On 2/27/23 15:42, Luis Chamberlain wrote:
+>>> On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
+>>>> On 2/6/23 16:43, Luis Chamberlain wrote:
+>>>>> The default sefltests timeout is 45 seconds. If you run the kmod
+>>>>> selftests on your own with say:
+>>>>>
+>>>>> ./tools/testings/selftests/kmod.sh
+>>>>>
+>>>>> Then the default timeout won't be in effect.
+>>>>>
+>>>>> I've never ran kmod selftests using the generic make wrapper
+>>>>> (./tools/testing/selftests/run_kselftest.sh -s) util now
+>>>>> that I have support for it on kdevops [0]. And with that the
+>>>>> test is limitted to the default timeout which we quickly run
+>>>>> into. Bump this up to what I see is required on 8GiB / 8 vcpu
+>>>>> libvirt q35 guest as can be easily created now with kdevops.
+>>>>>
+>>>>> To run selftests with kdevops:
+>>>>>
+>>>>> make menuconfig # enable dedicated selftests and kmod test
+>>>>> make
+>>>>> make bringup
+>>>>> make linux
+>>>>> make selftests-kmod
+>>>>>
+>>>>> This ends up taking about 280 seconds now, give or take add
+>>>>> 50 seconds more more and we end up with 350. Document the
+>>>>> rationale.
+>>>>>
+>>>>> [0] https://github.com/linux-kdevops/kdevops
+>>>>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+>>>>> ---
+>>>>>     tools/testing/selftests/kmod/settings | 4 ++++
+>>>>>     1 file changed, 4 insertions(+)
+>>>>>     create mode 100644 tools/testing/selftests/kmod/settings
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
+>>>>> new file mode 100644
+>>>>> index 000000000000..6fca0f1a4594
+>>>>> --- /dev/null
+>>>>> +++ b/tools/testing/selftests/kmod/settings
+>>>>> @@ -0,0 +1,4 @@
+>>>>> +# measured from a manual run:
+>>>>> +# time ./tools/testing/selftests/kmod/kmod.sh
+>>>>> +# Then add ~50 seconds more gracetime.
+>>>>> +timeout=350
+>>>>
+>>>> Adding timeouts like this for individual tests increases the overall kselftest
+>>>> run-time. I am not in favor of adding timeouts.
+>>>>
+>>>> We have to find a better way to do this.
+>>>
+>>> Well if folks don't have this the test will fail, and so a false
+>>> positive. If the goal is to have a low time timeout for "do not run
+>>> tests past this time and do not fail if we stopped the test" then
+>>> that seems to be likely one way to go and each test may need to be
+>>> modified to not fail fatally in case of a special signal.
+>>>
+>>
+>> We are finding more and more that timeout values are requiring
+>> tweaks. I am in favor of coming up a way to exit the test with
+>> a timeout condition.
+> 
+> OK so do we use the existing timeout as a "optional, I don't want my
+> test to take longer than this" or "if this test takes longer than
+> this amount this is a fatal issue"?
 
-Address this by adding support for KTAP output to the ftracetest script and
-providing a trivial wrapper which will be invoked by the kselftest runner
-to generate output in this format by default, users using ftracetest
-directly will continue to get the existing output.
+It isn't a fatal issue. So I wouldn't call it one. I would add a
+message saying test timed out.
 
-This is not the most elegant solution but it is simple and effective. I
-did consider implementing this by post processing the existing output
-format but that felt more complex and likely to result in all output being
-lost if something goes seriously wrong during the run which would not be
-helpful. I did also consider just writing a separate runner script but
-there's enough going on with things like the signal handling for that to
-seem like it would be duplicating too much.
+One way to handle this is:
+- Add a test run-time option and have user tune it as needed.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/ftrace/Makefile        |  3 +-
- tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
- tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
- 3 files changed, 70 insertions(+), 4 deletions(-)
+Make the timeout an option so users can set it based on their
+environments.
 
-diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-index d6e106fbce11..a1e955d2de4c 100644
---- a/tools/testing/selftests/ftrace/Makefile
-+++ b/tools/testing/selftests/ftrace/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- all:
- 
--TEST_PROGS := ftracetest
-+TEST_PROGS_EXTENDED := ftracetest
-+TEST_PROGS := ftracetest-ktap
- TEST_FILES := test.d settings
- EXTRA_CLEAN := $(OUTPUT)/logs/*
- 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index c3311c8c4089..539c8d6d5d71 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
- echo " Options:"
- echo "		-h|--help  Show help message"
- echo "		-k|--keep  Keep passed test logs"
-+echo "		-K|--KTAP  Output in KTAP format"
- echo "		-v|--verbose Increase verbosity of test messages"
- echo "		-vv        Alias of -v -v (Show all results in stdout)"
- echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
-@@ -85,6 +86,10 @@ parse_opts() { # opts
-       KEEP_LOG=1
-       shift 1
-     ;;
-+    --ktap|-K)
-+      KTAP=1
-+      shift 1
-+    ;;
-     --verbose|-v|-vv|-vvv)
-       if [ $VERBOSE -eq -1 ]; then
- 	usage "--console can not use with --verbose"
-@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
- TEST_CASES=`find_testcases $TEST_DIR`
- LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
- KEEP_LOG=0
-+KTAP=0
- DEBUG=0
- VERBOSE=0
- UNSUPPORTED_RESULT=0
-@@ -229,7 +235,7 @@ prlog() { # messages
-     newline=
-     shift
-   fi
--  printf "$*$newline"
-+  [ "$KTAP" != "1" ] && printf "$*$newline"
-   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
- }
- catlog() { #file
-@@ -260,11 +266,11 @@ TOTAL_RESULT=0
- 
- INSTANCE=
- CASENO=0
-+CASENAME=
- 
- testcase() { # testfile
-   CASENO=$((CASENO+1))
--  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
--  prlog -n "[$CASENO]$INSTANCE$desc"
-+  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
- }
- 
- checkreq() { # testfile
-@@ -277,40 +283,68 @@ test_on_instance() { # testfile
-   grep -q "^#[ \t]*flags:.*instance" $1
- }
- 
-+ktaptest() { # result comment
-+  if [ "$KTAP" != "1" ]; then
-+    return
-+  fi
-+
-+  local result=
-+  if [ "$1" = "1" ]; then
-+    result="ok"
-+  else
-+    result="not ok"
-+  fi
-+  shift
-+
-+  local comment=$*
-+  if [ "$comment" != "" ]; then
-+    comment="# $comment"
-+  fi
-+
-+  echo $CASENO $result $INSTANCE$CASENAME $comment
-+}
-+
- eval_result() { # sigval
-   case $1 in
-     $PASS)
-       prlog "	[${color_green}PASS${color_reset}]"
-+      ktaptest 1
-       PASSED_CASES="$PASSED_CASES $CASENO"
-       return 0
-     ;;
-     $FAIL)
-       prlog "	[${color_red}FAIL${color_reset}]"
-+      ktaptest 0
-       FAILED_CASES="$FAILED_CASES $CASENO"
-       return 1 # this is a bug.
-     ;;
-     $UNRESOLVED)
-       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-+      ktaptest 0 UNRESOLVED
-       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
-       return $UNRESOLVED_RESULT # depends on use case
-     ;;
-     $UNTESTED)
-       prlog "	[${color_blue}UNTESTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
-       return 0
-     ;;
-     $UNSUPPORTED)
-       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
-+      ktaptest 1 SKIP
-       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
-       return $UNSUPPORTED_RESULT # depends on use case
-     ;;
-     $XFAIL)
-       prlog "	[${color_green}XFAIL${color_reset}]"
-+      ktaptest 1 XFAIL
-       XFAILED_CASES="$XFAILED_CASES $CASENO"
-       return 0
-     ;;
-     *)
-       prlog "	[${color_blue}UNDEFINED${color_reset}]"
-+      ktaptest 0 error
-       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
-       return 1 # this must be a test bug
-     ;;
-@@ -371,6 +405,7 @@ __run_test() { # testfile
- run_test() { # testfile
-   local testname=`basename $1`
-   testcase $1
-+  prlog -n "[$CASENO]$INSTANCE$CASENAME"
-   if [ ! -z "$LOG_FILE" ] ; then
-     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
-   else
-@@ -405,6 +440,17 @@ run_test() { # testfile
- # load in the helper functions
- . $TEST_DIR/functions
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo "TAP version 13"
-+
-+  casecount=`echo $TEST_CASES | wc -w`
-+  for t in $TEST_CASES; do
-+    test_on_instance $t || continue
-+    casecount=$((casecount+1))
-+  done
-+  echo "1..${casecount}"
-+fi
-+
- # Main loop
- for t in $TEST_CASES; do
-   run_test $t
-@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
- 
-+if [ "$KTAP" = "1" ]; then
-+  echo -n "# Totals:"
-+  echo -n " pass:"`echo $PASSED_CASES | wc -w`
-+  echo -n " faii:"`echo $FAILED_CASES | wc -w`
-+  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
-+  echo -n " xpass:0"
-+  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
-+  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
-+  echo
-+fi
-+
- cleanup
- 
- # if no error, return 0
-diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
-new file mode 100755
-index 000000000000..b3284679ef3a
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/ftracetest-ktap
-@@ -0,0 +1,8 @@
-+#!/bin/sh -e
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
-+#
-+# Copyright (C) Arm Ltd., 2023
-+
-+./ftracetest -K
+> 
+> I ask because right now we can't override it even with an environment
+> variable. If we had such support we can let test runners (like kdevops)
+> use selftests with its own set of qualified / verified timeouts for the
+> VMs it uses.
+> 
+> For instance, Iw ant to soon start asking 0day to enable my kdevops
+> 0-day tests for the subsystems I maintain, but I can't do that yet as
+> the timeout is not correct.
 
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
+This test isn't part of the default run, so day has to run this as a
+special case and it would make prefect sense to provide a tunable
+timeout option.
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+thanks,
+-- Shuah
+> 
+>    Luis
 
