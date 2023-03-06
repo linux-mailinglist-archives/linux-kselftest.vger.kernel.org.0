@@ -2,71 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225AF6ACBF8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 19:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345106ACC5C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 19:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjCFSHV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Mar 2023 13:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
+        id S229819AbjCFSWN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Mar 2023 13:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjCFSHF (ORCPT
+        with ESMTP id S229587AbjCFSWL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:07:05 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A431FC4;
-        Mon,  6 Mar 2023 10:06:42 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17683b570b8so9549212fac.13;
-        Mon, 06 Mar 2023 10:06:42 -0800 (PST)
+        Mon, 6 Mar 2023 13:22:11 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DC472B26
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Mar 2023 10:21:35 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536d63d17dbso111749737b3.22
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Mar 2023 10:21:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678126886;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9iEqL1sRXXUUipU89KopP3jfSXVAkpl87qkI08UTI3E=;
+        b=oB0wnaSJtwX+0lcCU9DW4qu6SjJ1JI0DguqXoY3vPHGGujQ02oQLJq+hUSkQBgFjlC
+         ddIDOXyB9pt59N553ad71OzTXCkY66CF8gALlRKze+iiXAuTJ38OyJid5bcu49Hr6uIt
+         z+vy068vZGYiAm98THcBOSWUFJusrdIItAov1xCL7WeliApGopYhxftgFerMJM622gaV
+         EodhmpnC78AULzLQndudO1kW3Qb+DfcX0PtHI0Pj8Q4i2TF1luzXwZun8hQE8KY6/+n1
+         BGfxFfbLImCOnhkKhQZhgHt6Dj8sbH8dlxX1Eaohr6+flF8nrofYhzRdUKJTQVywWPsj
+         8UTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678125700;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cTLypR7XgARTJbCy5jf1iSb8cf8N3ZXFx7hGaEE6omA=;
-        b=2eIbzFV3T3fIDqYMSQ83JJQU2+SlXjTxyHMjV40CGFSu1b85LqtNemMxHTa5/ZtBon
-         IIx/pJrGXRFyz8YThxHhIpiW6ybdw+TdfS6/hBfYIQMfzJ2Cruf6Rwj9Ak/bMC31sMpI
-         kZZls3nEKLjt5aepqUVSHLXc+MYqnuUw4b90zNlVNRyzdonBqATsDteaH/nBuhQQTe9E
-         +/G3c4OI3RQI6I0sG3oBqocrk7stwAxQWhER/Id7pvs2izK5KygO4/ZeTWlnCr0Q2mEz
-         SjSoIyB70jaYCFIGqOJSJ7BxvbKRMxF+ojOLMjJ0UVHz75MS/7DKdSR8JHA0wb4G5CWg
-         AkAQ==
-X-Gm-Message-State: AO0yUKUIyII8SoLDDMDsFZHvtZNeu109jZac9qHH0v3LSCbdcevXStdE
-        wWUxl7hSwB/jmdKk1Nrx/nsm63Lz9EnYwA==
-X-Google-Smtp-Source: AK7set/2SJdpIFEa+3IDgzJOc67ijCh1FFNgJgfDShpVt773WWwEzKRmSB1H3oSpYRIsaM9mzzpsJA==
-X-Received: by 2002:a05:6870:e0c6:b0:176:8f34:2609 with SMTP id a6-20020a056870e0c600b001768f342609mr5636400oab.58.1678125700280;
-        Mon, 06 Mar 2023 10:01:40 -0800 (PST)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id d199-20020ae9efd0000000b007423e52f9d2sm7866627qkg.71.2023.03.06.10.01.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 10:01:39 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id x12so9034073ybt.7;
-        Mon, 06 Mar 2023 10:01:39 -0800 (PST)
-X-Received: by 2002:a05:6902:208:b0:a98:bd27:91de with SMTP id
- j8-20020a056902020800b00a98bd2791demr6926193ybs.7.1678125699092; Mon, 06 Mar
- 2023 10:01:39 -0800 (PST)
-MIME-Version: 1.0
-References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
- <167380331214.10651.11224254824457738270.stgit@bazille.1015granger.net>
- <1331f5b4-66cb-4afa-4e81-64cf4bc696d@linux-m68k.org> <D157AE63-73DD-4CCE-B43E-AC0D92F35038@oracle.com>
-In-Reply-To: <D157AE63-73DD-4CCE-B43E-AC0D92F35038@oracle.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Mar 2023 19:01:27 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVUMV0grWS7c5N4wCZn+MuN4ysCBqY3zDJjW9q5siBFsQ@mail.gmail.com>
-Message-ID: <CAMuHMdVUMV0grWS7c5N4wCZn+MuN4ysCBqY3zDJjW9q5siBFsQ@mail.gmail.com>
-Subject: Re: [PATCH v2 15/41] SUNRPC: Enable rpcsec_gss_krb5.ko to be built
- without CRYPTO_DES
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Chuck Lever <cel@kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Simo Sorce <simo@redhat.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        d=1e100.net; s=20210112; t=1678126886;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9iEqL1sRXXUUipU89KopP3jfSXVAkpl87qkI08UTI3E=;
+        b=VRF2zzNa2EHv8hWDcckPhDZ0PNihoZIXU1Qp4dSz6wM4dtTMKgyCImfyFpO63QTk1l
+         OXiYXD+XXv01Jr5cW6XFf0mkux2xy4aVEFRzn9dWeuwHtJ/BP3C4qRXcvBFk+MXIfXsL
+         S2M5aZkMIXJouC+UvIFV7yatdhZLnhuSI0nV3MpPZbBx9fWnZliXdhlM/dAPXWfvPG+y
+         g1aNtVsSye9cvXTWCSiL6b11/pCDwPKlhNNSQUgToDtcrO6b4HPRWlbnx549LsjmQn10
+         p+OzC1eO3coQOTHFa8Q3TknDwKKuXh45K3Uzjfwr1cleNdC99M971Go7+eMIuewBNenG
+         iXcw==
+X-Gm-Message-State: AO0yUKUaNCnshH93wJHX8pU9WSwRDqcGadwoQKdFNEZ/k9Y9FbyzY1hj
+        OEB77w+4g5JZLl3gsN1PhrgGPYI+Niy1s9KRsA==
+X-Google-Smtp-Source: AK7set9VjUIQRKUfKhl5EAU+AC5+yYORLd3u85S1Godj8ayXMTQd2dJ73n9uq3LQ+12XZzFslj/aPvyghSFUNeCo+g==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:145:b0:afd:2ef2:33c2 with
+ SMTP id p5-20020a056902014500b00afd2ef233c2mr4905957ybh.2.1678126886154; Mon,
+ 06 Mar 2023 10:21:26 -0800 (PST)
+Date:   Mon, 06 Mar 2023 18:21:24 +0000
+In-Reply-To: <20230222025019.GA1628054@chaop.bj.intel.com> (message from Chao
+ Peng on Wed, 22 Feb 2023 10:50:19 +0800)
+Mime-Version: 1.0
+Message-ID: <diqzlek9spuj.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [V2 PATCH 0/6] KVM: selftests: selftests for fd-based private memory
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     vannapurve@google.com, seanjc@google.com, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, diviness@google.com,
+        maz@kernel.org, dmatlack@google.com, axelrasmussen@google.com,
+        maciej.szmigiero@oracle.com, mizhang@google.com, bgardon@google.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,115 +83,91 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Chuck,
+Chao Peng <chao.p.peng@linux.intel.com> writes:
 
-On Mon, Mar 6, 2023 at 5:17 PM Chuck Lever III <chuck.lever@oracle.com> wrote:
-> > On Mar 6, 2023, at 3:16 AM, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Sun, 15 Jan 2023, Chuck Lever wrote:
-> >> From: Chuck Lever <chuck.lever@oracle.com>
-> >>
-> >> Because the DES block cipher has been deprecated by Internet
-> >> standard, highly secure configurations might require that DES
-> >> support be blacklisted or not installed. NFS Kerberos should still
-> >> be able to work correctly with only the AES-based enctypes in that
-> >> situation.
-> >>
-> >> Also note that MIT Kerberos has begun a deprecation process for DES
-> >> encryption types. Their README for 1.19.3 states:
-> >>
-> >>> Beginning with the krb5-1.19 release, a warning will be issued
-> >>> if initial credentials are acquired using the des3-cbc-sha1
-> >>> encryption type.  In future releases, this encryption type will
-> >>> be disabled by default and eventually removed.
-> >>>
-> >>> Beginning with the krb5-1.18 release, single-DES encryption
-> >>> types have been removed.
-> >>
-> >> Aside from the CONFIG option name change, there are two important
-> >> policy changes:
-> >>
-> >> 1. The 'insecure enctype' group is now disabled by default.
-> >>  Distributors have to take action to enable support for deprecated
-> >>  enctypes. Implementation of these enctypes will be removed in a
-> >>  future kernel release.
-> >>
-> >> 2. des3-cbc-sha1 is now considered part of the 'insecure enctype'
-> >>  group, having been deprecated by RFC 8429, and is thus disabled
-> >>  by default
-> >>
-> >> After this patch is applied, SunRPC support can be built with
-> >> Kerberos 5 support but without CRYPTO_DES enabled in the kernel.
-> >> And, when these enctypes are disabled, the Linux kernel's SunRPC
-> >> RPCSEC GSS implementation fully complies with BCP 179 / RFC 6649
-> >> and BCP 218 / RFC 8429.
-> >>
-> >> Tested-by: Scott Mayhew <smayhew@redhat.com>
-> >> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-> >
-> > Thanks for your patch, which is now commit dfe9a123451a6e73 ("SUNRPC:
-> > Enable rpcsec_gss_krb5.ko to be built without CRYPTO_DES") in v6.3-rc1.
-> >
-> >> --- a/net/sunrpc/Kconfig
-> >> +++ b/net/sunrpc/Kconfig
-> >> @@ -19,10 +19,10 @@ config SUNRPC_SWAP
-> >> config RPCSEC_GSS_KRB5
-> >>      tristate "Secure RPC: Kerberos V mechanism"
-> >>      depends on SUNRPC && CRYPTO
-> >> -    depends on CRYPTO_MD5 && CRYPTO_DES && CRYPTO_CBC && CRYPTO_CTS
-> >> -    depends on CRYPTO_ECB && CRYPTO_HMAC && CRYPTO_SHA1 && CRYPTO_AES
-> >>      default y
-> >>      select SUNRPC_GSS
-> >> +    select CRYPTO_SKCIPHER
-> >> +    select CRYPTO_HASH
-> >>      help
-> >>        Choose Y here to enable Secure RPC using the Kerberos version 5
-> >>        GSS-API mechanism (RFC 1964).
-> >
-> > While updating my defconfigs for v6.3-rc1, I noticed this change has an
-> > interesting side-effect: if any of the CRYPTO_* algorithms were modular
-> > before, RPCSEC_GSS_KRB5 was modular, too.
-> > After this change, RPCSEC_GSS_KRB5 is promoted to builtin.
->
-> I'm not following. Which CRYPTO_ options trigger the behavior?
-> On my test system, CONFIG_RPCSEC_GSS_KRB5=m and the CRYPTO stuff
-> is all =y.
+> On Fri, Feb 10, 2023 at 11:59:23AM -0800, Vishal Annapurve wrote:
+>> On Tue, Jan 17, 2023 at 7:11 PM Vishal Annapurve <vannapurve@google.com>  
+>> wrote:
+>> >
+>> > ...
 
-On v6.2, "make ARCH=m68k defconfig" gives you
-CONFIG_RPCSEC_GSS_KRB5=m
-On v6.3, it became builtin, due to dropping the dependencies on
-the individual crypto modules.
+>> > > Last question, do you have a list of testcases that you  
+>> consider "required" for
+>> > > UPM?  My off-the-cuff list of selftests I want to have before  
+>> merging UPM is pretty
+>> > > short at this point:
+>> > >
+>> > >   - Negative testing of the memslot changes, e.g. bad alignment, bad  
+>> fd,
+>> > >     illegal memslot updates, etc.
+>> > >   - Negative testing of restrictedmem, e.g. various combinations of  
+>> overlapping
+>> > >     bindings of a single restrictedmem instance.
+>> > >   - Access vs. conversion stress, e.g. accessing a region in the  
+>> guest while it's
+>> > >     concurrently converted by the host, maybe with fancy guest code  
+>> to try and
+>> > >     detect TLB or ordering bugs?
+>> >
+>> > List of testcases that I was tracking (covered by the current
+>> > selftests) as required:
+>> > 1) Ensure private memory contents are not accessible to host userspace
+>> > using the HVA
+>> > 2) Ensure shared memory contents are visible/accessible from both host
+>> > userspace and the guest
+>> > 3) Ensure 1 and 2 holds across explicit memory conversions
+>> > 4) Exercise memory conversions with mixed shared/private memory pages
+>> > in a huge page to catch issues like [2]
+>> > 5) Ensure that explicit memory conversions don't affect nearby GPA  
+>> ranges
+>> >
+>> > Test Cases that will be covered by TDX/SNP selftests (in addition to
+>> > above scenarios):
+>> > 6) Ensure 1 and 2 holds across implicit memory conversions
+>> > 7) Ensure that implicit memory conversions don't affect nearby GPA  
+>> ranges
+>> >
+>> > Additional testcases possible:
+>> > 8) Running conversion tests for non-overlapping GPA ranges of
+>> > same/different memslots from multiple vcpus
+>> >
+>> > [1] -  
+>> https://github.com/sean-jc/linux/commit/7e536bf3c45c623425bc84e8a96634efc3a619ed
+>> > [2] -  
+>> https://lore.kernel.org/linux-mm/CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com/
 
-$ grep -E "CRYPTO_(MD5|DES|CBC|CTS|ECB|HMAC|SHA1|AES)" .config
-CONFIG_CRYPTO_AES=y
-CONFIG_CRYPTO_AES_TI=m
-CONFIG_CRYPTO_DES=m
-CONFIG_CRYPTO_CBC=m
-CONFIG_CRYPTO_CTS=m
-CONFIG_CRYPTO_ECB=m
-CONFIG_CRYPTO_HMAC=m
-CONFIG_CRYPTO_MD5=m
-CONFIG_CRYPTO_SHA1=m
+>> List of additional testcases that could help increase basic coverage
+>> (including what sean mentioned earlier):
+>> 1) restrictedmem functionality testing
+>>      - read/write/mmap should not work
+>>      - fstat/fallocate should work as expected
+>> 2) restrictedmem registration/modification testing with:
+>>      - bad alignment, bad fd, modifying properties of existing memslot
+>>      - Installing multiple memslots with ranges within the same
+>> restricted mem files
+>>      - deleting memslots with restricted memfd while guests are being  
+>> executed
 
-> > This is not necessarily bad in-se, but you might want to be aware of it,
-> > and perhaps change the "default y".
->
-> Well that might be there to address the need for GSS to be
-> enabled if NFSv4 support is built. See commit df486a25900f
-> ("NFS: Fix the selection of security flavours in Kconfig")
->
-> I'm not claiming I understand exactly how that fix works.
+> In case you havn't started, I will work on 1) and 2) for the following
+> days. As a start, I will first add restrictedmem tests (without KVM) then
+> move to new memslots related tests.
 
-And that was changed again a little bit later in commit
-e3b2854faabd1043 ("SUNRPC: Fix the SUNRPC Kerberos V RPCSEC_GSS
-module dependencies").
+> Chao
 
-Gr{oetje,eeting}s,
+>> 3) Runtime restricted mem testing:
+>>      - Access vs conversion testing from multiple vcpus
+>>      - conversion and access to non-overlapping ranges from multiple vcpus
 
-                        Geert
+>> Regards,
+>> Vishal
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Chao, I'll work on
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
++ Running conversion tests for non-overlapping GPA ranges of
+   same/different memslots from multiple vcpus
++ Deleting memslots with restricted memfd while guests are being
+   executed
++ Installing multiple memslots with ranges within the same restricted
+   mem files
+
+this week.
