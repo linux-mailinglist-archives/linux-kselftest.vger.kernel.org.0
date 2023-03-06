@@ -2,61 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FE46AC555
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 16:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C326AC55A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 16:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjCFPeh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Mar 2023 10:34:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S231327AbjCFPei (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Mar 2023 10:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjCFPeU (ORCPT
+        with ESMTP id S229785AbjCFPeU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 6 Mar 2023 10:34:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33533A264;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6AA4ECF;
         Mon,  6 Mar 2023 07:33:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C4D96100E;
-        Mon,  6 Mar 2023 15:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B04AC433EF;
-        Mon,  6 Mar 2023 15:33:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFF7261012;
+        Mon,  6 Mar 2023 15:33:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA15C433A7;
+        Mon,  6 Mar 2023 15:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678116816;
-        bh=JGgYx/uI5aY9ZoGSaizxDs76bAvvcZ+rsvaHP2l/hnY=;
-        h=From:Subject:Date:To:Cc:From;
-        b=LwYuWAnpqQgRgelz7boHiqr3Sces2Cd41NLDNo1Och4MKs8LZOjb5bJPKeXjppJUH
-         4E2Ndruc0fxC/CysWs5vRHEtM2LzqYbtSEzD2Z+6XDjI854M5QKEu4oxwQd9+wyHsI
-         CcbzO8EMRbb25s1MFxuZhR7O9Ii47TE94L2KkXls64WfmU/KZCVIzM3aePDqaKzhJS
-         GmweDb4JI2d4dwMexWLB035B+h5SztguGsWyXda92PdgnWIE0X/6q1m/IYfOZ9/FX8
-         qCL/y8ZEqv4pmwu2ponKCn2i3lIqwlLxUXwwhBCTKx/ZMpcHoRcXiiiVomPg2gdLtN
-         PsGQqtlDu8U4g==
+        s=k20201202; t=1678116818;
+        bh=7+nAtHf2/40sJdNDudrlb9sywI5p24XSs9r4jtaXcho=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=swgC7WJo+uPv82x70+Bo9D1vcq7rpG+Bp3FC2WVZCMnru14hGHhSmUpuNvozX5O5C
+         0mVzx2BpmJ8kY47FTsnMdaYyNvnBq5yAeJuAsf/lJcAouob+vErhxr6YooyhDTgXRr
+         /WZx18ciPEirdlqH80ylft6mTuitZzAjUdZNf86DZtZHEzAgCbaHqE9izbqHFnQtXX
+         slSQxP5oPY0PvFizyZ5dpcNHU7CW9JcRvoO1yDpLWKwXXW4294ABbc8pJ2jAmWor4j
+         QowkisyLZcUvhqd5wg5gMYVaTv+b9ZXX0G+Rg+IPsQjrlk/UgsSO3QKxANNtbMM45r
+         l/F1L54KBmVAg==
 From:   Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/2] kselftest/alsa: Log card and control information
- during startup
-Date:   Mon, 06 Mar 2023 15:33:27 +0000
-Message-Id: <20230223-alsa-log-ctl-name-v1-0-ac0f10cc4db2@kernel.org>
+Date:   Mon, 06 Mar 2023 15:33:28 +0000
+Subject: [PATCH 1/2] kselftest/alsa - mixer: Always log control names
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMcHBmQC/x2NQQqDMBAAvyJ77kLcHAL9SulhEze6EKNkpRTEv
- zf2OAPDnGDSVAyewwlNPmq61Q7jY4C0cJ0FdeoM5Mg7Io9cjLFsM6ajYOVVMEcXsndToDFA7yK
- bYGxc03KXx7rfdm+S9fs/vd7X9QOQ+aiueQAAAA==
+Message-Id: <20230223-alsa-log-ctl-name-v1-1-ac0f10cc4db2@kernel.org>
+References: <20230223-alsa-log-ctl-name-v1-0-ac0f10cc4db2@kernel.org>
+In-Reply-To: <20230223-alsa-log-ctl-name-v1-0-ac0f10cc4db2@kernel.org>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-bd1bf
-X-Developer-Signature: v=1; a=openpgp-sha256; l=706; i=broonie@kernel.org;
- h=from:subject:message-id; bh=JGgYx/uI5aY9ZoGSaizxDs76bAvvcZ+rsvaHP2l/hnY=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBgfMGM9Zy2R7dyT5RvU9J/0EKw3gazoO6qRFaOOG
- V79NVtiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAYHzAAKCRAk1otyXVSH0FqBB/
- 9m/MqSkHSNGCQbNj6OnpHOoWQzC+I3KKuUQQKkAw/SfEqz5y2paOZxo1Eju/Bnj2jB6DcipbFoWMWZ
- +2246qEGBTxtOSY59v7LqdrheVOl8GJcKgDpD+tStISYVtCFFhDdqqnfSLXNDlvAXVM5r5cVinkbz0
- k4z8LmJlOE4ACjsIqvCqwyaiLkE9wa8Uwql1cHOLKlSk3MNkXEZDUrG7f19+9DMBMcitnyNhoOE1Kw
- jY5S5XRysl71ZFydgtEWsJyqAA0ymvUpCRN6HVyh+7yXadQpR0GxlR/dLLYqLd88nv+O1wTSqRin4D
- JI4db7Y3aZl6buRkuT75FHCQjrtEru
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1108; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=7+nAtHf2/40sJdNDudrlb9sywI5p24XSs9r4jtaXcho=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBgfNsxpvllJ20MQSB8Ro22PZttfPXnQqWNYGee+C
+ JodG21iJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAYHzQAKCRAk1otyXVSH0EF2B/
+ 9Kpuja8aY4ykr8vAYRIXEzSKrLR3yhtIg2OPQ/XSUdv7+E+UvHmfF+8dZocSRsFZU5+VpFJ8qF8n2X
+ o+ASKKAdLxmBHBN2Ob89qTbSbM8fYFxzE0E1OifWoXVOrSfkcJK+zcSiYezsQU/2vtlzPzVPzRqFHe
+ aa5gN6X119dqj2G3KIqNQB1m0/k+im4ktAi6RPtk9KLlC3u8SWDs3zAJaUE6id9b7vgl8nKV70wpwt
+ TCiZUjCsAkRGy6qhSS/WSy/Yo74qbolAJ5ongTq/XEfeV61L11ZZMGH1YoYLg2DDJs3CZmkhmwjxt1
+ yydw2lis3VywnxrUHi8srI+AsNCefm
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,24 +66,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These patches help make the logs a bit more friendly to work with by
-adding human readable names for cards and controls alongside the numbers
-assigned to them even when things are working well.
+Currently we only log the names of controls on error but it can be useful
+to know what control we're testing (for example, when looking at why the
+tests are taking a while to run). People looking at test logs may not have
+direct access to the target system. This will increase the amount we write
+to the console, hopefully that's buffered.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Mark Brown (2):
-      kselftest/alsa - mixer: Always log control names
-      kselftest/alsa: Log card names during startup
+ tools/testing/selftests/alsa/mixer-test.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- tools/testing/selftests/alsa/mixer-test.c | 13 +++++++++++++
- tools/testing/selftests/alsa/pcm-test.c   | 10 ++++++++++
- 2 files changed, 23 insertions(+)
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230223-alsa-log-ctl-name-fb07f30d7217
+diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+index 05f1749ae19d..12f58c9c17ab 100644
+--- a/tools/testing/selftests/alsa/mixer-test.c
++++ b/tools/testing/selftests/alsa/mixer-test.c
+@@ -422,6 +422,9 @@ static void test_ctl_name(struct ctl_data *ctl)
+ 	bool name_ok = true;
+ 	bool check;
+ 
++	ksft_print_msg("%d.%d %s\n", ctl->card->card, ctl->elem,
++		       ctl->name);
++
+ 	/* Only boolean controls should end in Switch */
+ 	if (strend(ctl->name, " Switch")) {
+ 		if (snd_ctl_elem_info_get_type(ctl->info) != SND_CTL_ELEM_TYPE_BOOLEAN) {
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
