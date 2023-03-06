@@ -2,188 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37506AB7E3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 09:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D056AB812
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Mar 2023 09:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjCFIEH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Mar 2023 03:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S229651AbjCFIQY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Mar 2023 03:16:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjCFIEG (ORCPT
+        with ESMTP id S229545AbjCFIQX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:04:06 -0500
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86ACB4C18;
-        Mon,  6 Mar 2023 00:03:43 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id a25so35068892edb.0;
-        Mon, 06 Mar 2023 00:03:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=83wzMZDza94KzRdG9ihv12wmiVlHYRIDlbhLRowmSAw=;
-        b=NoYiJejnzoloQ2z2TSC/wM21iRq2BlaSq4X93repMOHXD+DcK1FjLBLHOuEHZrvUq2
-         KIKvYFaOyQV8voJ90yvboEgLA9IJB0lbZCkeeVZ4xYtTdHywKKIkwn0u/CmFXX7w4wFL
-         rdICuzvHofJrRe/OYcjoJYrcoh68EDK2BLcjDa3fNk5WgZbco3RRBHiBS9W3yBVVw3fz
-         JgW9iiBGzQeAVd5KSJT74jTQit3kiat/yVx7WdGogRJ2HOjmg217MaIbmRL/jtBhMRLu
-         1dWrxOzXCmDhyeK01vCUQ7BZuMSnLYPLEc0oLU6L7dncInRykai4k60vhBbnmtLYyE1d
-         eG3g==
-X-Gm-Message-State: AO0yUKUKiV2+k8DIXyjxq46xwNw5uC8Ta00F2oYxHI8Nw6hS/BKS2m4w
-        Xi4FjYT0Ejj5Tmoprzrz81/xLCuEB2xKlw==
-X-Google-Smtp-Source: AK7set+KX0I+SESEOXUeE7xIsnVvh8ozH7/v3/FI16dEFBlyuDwrxD5H4VuQj/OzQtB3gGVxkV/1xg==
-X-Received: by 2002:a17:907:a0d5:b0:8b1:319c:c29e with SMTP id hw21-20020a170907a0d500b008b1319cc29emr12397792ejc.74.1678089817808;
-        Mon, 06 Mar 2023 00:03:37 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id e7-20020a170906c00700b008cff300cf47sm4184241ejz.72.2023.03.06.00.03.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 00:03:37 -0800 (PST)
-Message-ID: <c91c458e-58d0-f13a-9adb-a48a19f82107@kernel.org>
-Date:   Mon, 6 Mar 2023 09:03:36 +0100
+        Mon, 6 Mar 2023 03:16:23 -0500
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3636211670
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Mar 2023 00:16:21 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:b745:671d:a946:57fa])
+        by albert.telenet-ops.be with bizsmtp
+        id UwGJ2900H4LuvSS06wGJm6; Mon, 06 Mar 2023 09:16:18 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pZ614-00AzHa-FV;
+        Mon, 06 Mar 2023 09:16:18 +0100
+Date:   Mon, 6 Mar 2023 09:16:18 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Chuck Lever <cel@kernel.org>
+cc:     linux-nfs@vger.kernel.org, dhowells@redhat.com, simo@redhat.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 15/41] SUNRPC: Enable rpcsec_gss_krb5.ko to be built
+ without CRYPTO_DES
+In-Reply-To: <167380331214.10651.11224254824457738270.stgit@bazille.1015granger.net>
+Message-ID: <1331f5b4-66cb-4afa-4e81-64cf4bc696d@linux-m68k.org>
+References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net> <167380331214.10651.11224254824457738270.stgit@bazille.1015granger.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Michal Sekletar <msekleta@redhat.com>, gregkh@linuxfoundation.org
-Cc:     arozansk@redhat.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20230303133606.227934-1-msekleta@redhat.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 1/2] tty: tty_io: update timestamps on all device nodes
-In-Reply-To: <20230303133606.227934-1-msekleta@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03. 03. 23, 14:36, Michal Sekletar wrote:
-> User space applications watch for timestamp changes on character device
-> files in order to determine idle time of a given terminal session. For
-> example, "w" program uses this information to populate the IDLE column
-> of its output [1]. Similarly, systemd-logind has optional feature where
-> it uses atime of the tty character device to determine if there was
-> activity on the terminal associated with the logind's session object. If
-> there was no activity for a configured period of time then logind will
-> terminate such session [2].
-> 
-> Now, usually (e.g. bash running on the terminal) the use of the terminal
-> will update timestamps (atime and mtime) on the corresponding terminal
-> character device. However, if access to the terminal, e.g. /dev/pts/0,
-> is performed through magic character device /dev/tty then such access
-> obviously changes the state of the terminal, however timestamps on the
-> device that correspond to the terminal (/dev/pts/0) are not updated.
-> 
-> This patch makes sure that we update timestamps on *all* character
-> devices that correspond to the given tty, because outside observers (w,
-> systemd-logind) are maybe checking these timestamps. Obviously, they can
-> not check timestamps on /dev/tty as that has per-process meaning.
-> 
-> [1] https://gitlab.com/procps-ng/procps/-/blob/v4.0.0/w.c#L286
-> [2] https://github.com/systemd/systemd/blob/v252/NEWS#L477
-> 
-> Signed-off-by: Michal Sekletar <msekleta@redhat.com>
-> ---
->   drivers/tty/tty_io.c | 32 +++++++++++++++++++++-----------
->   1 file changed, 21 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-> index 36fb945fdad4..48e0148b0f3e 100644
-> --- a/drivers/tty/tty_io.c
-> +++ b/drivers/tty/tty_io.c
-> @@ -101,6 +101,7 @@
->   #include <linux/compat.h>
->   #include <linux/uaccess.h>
->   #include <linux/termios_internal.h>
-> +#include <linux/fs.h>
->   
->   #include <linux/kbd_kern.h>
->   #include <linux/vt_kern.h>
-> @@ -811,18 +812,27 @@ void start_tty(struct tty_struct *tty)
->   }
->   EXPORT_SYMBOL(start_tty);
->   
-> -static void tty_update_time(struct timespec64 *time)
-> +static void tty_update_time(struct tty_struct *tty, int tstamp)
+ 	Hi Chuck,
 
-Why not enum file_time_flags then?
+On Sun, 15 Jan 2023, Chuck Lever wrote:
+> From: Chuck Lever <chuck.lever@oracle.com>
+>
+> Because the DES block cipher has been deprecated by Internet
+> standard, highly secure configurations might require that DES
+> support be blacklisted or not installed. NFS Kerberos should still
+> be able to work correctly with only the AES-based enctypes in that
+> situation.
+>
+> Also note that MIT Kerberos has begun a deprecation process for DES
+> encryption types. Their README for 1.19.3 states:
+>
+>> Beginning with the krb5-1.19 release, a warning will be issued
+>> if initial credentials are acquired using the des3-cbc-sha1
+>> encryption type.  In future releases, this encryption type will
+>> be disabled by default and eventually removed.
+>>
+>> Beginning with the krb5-1.18 release, single-DES encryption
+>> types have been removed.
+>
+> Aside from the CONFIG option name change, there are two important
+> policy changes:
+>
+> 1. The 'insecure enctype' group is now disabled by default.
+>   Distributors have to take action to enable support for deprecated
+>   enctypes. Implementation of these enctypes will be removed in a
+>   future kernel release.
+>
+> 2. des3-cbc-sha1 is now considered part of the 'insecure enctype'
+>   group, having been deprecated by RFC 8429, and is thus disabled
+>   by default
+>
+> After this patch is applied, SunRPC support can be built with
+> Kerberos 5 support but without CRYPTO_DES enabled in the kernel.
+> And, when these enctypes are disabled, the Linux kernel's SunRPC
+> RPCSEC GSS implementation fully complies with BCP 179 / RFC 6649
+> and BCP 218 / RFC 8429.
+>
+> Tested-by: Scott Mayhew <smayhew@redhat.com>
+> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 
-And "tstamp" sounds weird for what it is. It should be something like 
-"time" or "time_flag". Or make it simply "bool mtime". And call it with 
-true/false.
+Thanks for your patch, which is now commit dfe9a123451a6e73 ("SUNRPC:
+Enable rpcsec_gss_krb5.ko to be built without CRYPTO_DES") in v6.3-rc1.
 
->   {
-> +	struct tty_file_private *priv;
->   	time64_t sec = ktime_get_real_seconds();
+> --- a/net/sunrpc/Kconfig
+> +++ b/net/sunrpc/Kconfig
+> @@ -19,10 +19,10 @@ config SUNRPC_SWAP
+> config RPCSEC_GSS_KRB5
+> 	tristate "Secure RPC: Kerberos V mechanism"
+> 	depends on SUNRPC && CRYPTO
+> -	depends on CRYPTO_MD5 && CRYPTO_DES && CRYPTO_CBC && CRYPTO_CTS
+> -	depends on CRYPTO_ECB && CRYPTO_HMAC && CRYPTO_SHA1 && CRYPTO_AES
+> 	default y
+> 	select SUNRPC_GSS
+> +	select CRYPTO_SKCIPHER
+> +	select CRYPTO_HASH
+> 	help
+> 	  Choose Y here to enable Secure RPC using the Kerberos version 5
+> 	  GSS-API mechanism (RFC 1964).
 
-Likely should be switched to have a reverse xmas tree.
+While updating my defconfigs for v6.3-rc1, I noticed this change has an
+interesting side-effect: if any of the CRYPTO_* algorithms were modular
+before, RPCSEC_GSS_KRB5 was modular, too.
+After this change, RPCSEC_GSS_KRB5 is promoted to builtin.
 
->   
-> -	/*
-> -	 * We only care if the two values differ in anything other than the
-> -	 * lower three bits (i.e every 8 seconds).  If so, then we can update
-> -	 * the time of the tty device, otherwise it could be construded as a
-> -	 * security leak to let userspace know the exact timing of the tty.
-> -	 */
-> -	if ((sec ^ time->tv_sec) & ~7)
-> -		time->tv_sec = sec;
-> +	spin_lock(&tty->files_lock);
+This is not necessarily bad in-se, but you might want to be aware of it,
+and perhaps change the "default y".
 
-Note: this should be fine wrt write lock. Have you tried running w/ 
-lockdep enabled?
+Gr{oetje,eeting}s,
 
-> +	list_for_each_entry(priv, &tty->tty_files, list) {
-> +		struct file *filp = priv->file;
+ 						Geert
 
-I think you can inline the above ^^ to the bellow vv.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> +		struct inode *inode = file_inode(filp);
-> +		struct timespec64 *time = tstamp == S_MTIME ? &inode->i_mtime : &inode->i_atime;
-
-So you'd have:
-struct inode *inode = file_inode(priv->file);
-struct timespec64 *time = mtime ? &inode->i_mtime : &inode->i_atime;
-
-> +
-> +		/*
-> +		 * We only care if the two values differ in anything other than the
-> +		 * lower three bits (i.e every 8 seconds).  If so, then we can update
-> +		 * the time of the tty device, otherwise it could be construded as a
-> +		 * security leak to let userspace know the exact timing of the tty.
-> +		 */
-> +		if ((sec ^ time->tv_sec) & ~7)
-> +			time->tv_sec = sec;
-> +	}
-> +	spin_unlock(&tty->files_lock);
->   }
->   
->   /*
-> @@ -928,7 +938,7 @@ static ssize_t tty_read(struct kiocb *iocb, struct iov_iter *to)
->   	tty_ldisc_deref(ld);
->   
->   	if (i > 0)
-> -		tty_update_time(&inode->i_atime);
-> +		tty_update_time(tty, S_ATIME);
->   
->   	return i;
->   }
-> @@ -1036,7 +1046,7 @@ static inline ssize_t do_tty_write(
->   		cond_resched();
->   	}
->   	if (written) {
-> -		tty_update_time(&file_inode(file)->i_mtime);
-> +		tty_update_time(tty, S_MTIME);
->   		ret = written;
->   	}
->   out:
-
--- 
-js
-suse labs
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
