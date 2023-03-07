@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAA06AD3A5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 02:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8806AD3AC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 02:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjCGBB3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Mar 2023 20:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S229636AbjCGBES (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Mar 2023 20:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjCGBB2 (ORCPT
+        with ESMTP id S229486AbjCGBER (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Mar 2023 20:01:28 -0500
+        Mon, 6 Mar 2023 20:04:17 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A489D2ED7F
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Mar 2023 17:00:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A493B64A
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Mar 2023 17:03:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678150839;
+        s=mimecast20190719; t=1678151009;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=VHFntejT56JbD/rUEQWs9tWFnUbRv9RbZFyVXVHrMio=;
-        b=dj2/2ErKB18ReCVgFiujYVsWFdllbOvi5wMkY2PhU5AaXJ3ufzhDlAw42w858fC2AsdA/C
-        rGrcaA4As8C2qT1dlTTJUVTOX+vcbotG7xS1WUEGsNjRlwBQU4BQplZN4IuAezWKek1Vbg
-        SlNQAphxPEw0WJZBiklwgpzyAVTw6bM=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=NI0AfExXKMh7a49g+DwlRMu0IoSbzcVjYg7rYfHlygc=;
+        b=eNyiQfNpZBkAw3lmef1rBkLCWZvFFqDXH++h46Y6Q8NT+6cvCMlt0e6c5Y8FBNRnCvmxL4
+        1sC5FexbSkZHdeiqRBrWz/y3iSrTkRm+MC/C5B5owvC9jlH3kWhOF/7QSpf7wOJFdu9Uvx
+        th29px9MN11+gGvPCwf7CnfBTf1J+wE=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-321-9S9xLFgzOniwmppg7cbPRw-1; Mon, 06 Mar 2023 20:00:38 -0500
-X-MC-Unique: 9S9xLFgzOniwmppg7cbPRw-1
-Received: by mail-qv1-f71.google.com with SMTP id s13-20020ad44b2d000000b00570ccb820abso6561951qvw.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Mar 2023 17:00:38 -0800 (PST)
+ us-mta-491-bxnYgAv1NhaYfXxo4PG2LQ-1; Mon, 06 Mar 2023 20:03:28 -0500
+X-MC-Unique: bxnYgAv1NhaYfXxo4PG2LQ-1
+Received: by mail-qt1-f200.google.com with SMTP id t22-20020ac86a16000000b003bd1c0f74cfso6256963qtr.20
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Mar 2023 17:03:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678150838;
+        d=1e100.net; s=20210112; t=1678151008;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VHFntejT56JbD/rUEQWs9tWFnUbRv9RbZFyVXVHrMio=;
-        b=HRmkBgciW5otWtRif7NhpfisNgxIT+ZbQjSyLE5eaWsC5LRQkY2zW3wCmgDuYhobPv
-         jjG7Z/jBBny8efTFiACpdiEHgYUnjakZlMIyIm+uHDf5SC+vZnCxpbDvciDY9RCFfVDj
-         ke8W28FSphvB9eNXIXGfd3yRHEO3Tu2QNjqiek2jIulQf05byx++Ohbs11Ib+Ow+3jH9
-         ErLR97FfzenUl1wfATA8ZM5/iqXRZ21EyDksJKwtkAEzoy8S7Isb7v2TND8pQRU2dmc3
-         VS45q05IFFdFvn+FUsV6H00Pl9QVNY0zwnSI5owVF3tCaldSSbAYky+FQgn40QuFqSfc
-         vFhw==
-X-Gm-Message-State: AO0yUKUBfAs0HhiAqTRT4X7TTZZYdAzzKmceh5XLBKmRVM0pCEfCABL1
-        hnMFTanMnUyBchAZSVtVGaeT6oJJld+q/97zQiVlwYI3P3PEgQuEhB99F4i3DAuPrTbfHU+Gj7y
-        DCjVec4YjdlDylu5fm8WRkcahB3QR
-X-Received: by 2002:ac8:4e49:0:b0:3bf:a564:573b with SMTP id e9-20020ac84e49000000b003bfa564573bmr22624847qtw.0.1678150837977;
-        Mon, 06 Mar 2023 17:00:37 -0800 (PST)
-X-Google-Smtp-Source: AK7set9mNewiLEJ/Qcl0fkXX58JVHG+qYCqPmSyNkMCeEvogUl0mdbdtpfbHSmtHHB3rrhxwI1DA3g==
-X-Received: by 2002:ac8:4e49:0:b0:3bf:a564:573b with SMTP id e9-20020ac84e49000000b003bfa564573bmr22624808qtw.0.1678150837670;
-        Mon, 06 Mar 2023 17:00:37 -0800 (PST)
+        bh=NI0AfExXKMh7a49g+DwlRMu0IoSbzcVjYg7rYfHlygc=;
+        b=QmAZNP9Ly65X0LDmYhJ9l//xoN3hCnH60rRq5UqpmU1DC/dHse810S0ru936sJ63vL
+         QQ0dogQSQjHw4agpCnHoBAFIqLobuCzanvhBgGv/7BKJX1O61FSj64ymxrOyfvAOdPgn
+         aUSBB38GrpYJ/hGuEZcYmHN0FE5cH6AhMygoWdF3AxOgRgKKKsDmYZSWgvOhh6+tPDC6
+         h6gz0GHGs/O1INb/xlCnAgqXe96fn9caUZPGr1gxlf5Wf/OhP6VDlE3MXBRxOgZvj5nz
+         ccZUgWE5Jhejxfj7yfLpwZypme+aFnYW7mQvtoca6wZ62zhJyb4TJu3YhIIYfTubD98F
+         YEzg==
+X-Gm-Message-State: AO0yUKVMDGR4XEnXz7f88n0LcQDN93uieCDMNwFxPcAQrurP1/6t+PoK
+        NtSlBtTOknbKRS6BHH2mG+Sx7vDImdjA2PxP2OERhjPaYI1bvTLgCmP6yRneFmEosqOkGnAVaA9
+        dH1ZHXf2Re3+8kAA3T1I/Q/yYol4A
+X-Received: by 2002:ac8:5fc3:0:b0:3bf:f7d0:9ba9 with SMTP id k3-20020ac85fc3000000b003bff7d09ba9mr23992941qta.5.1678151008061;
+        Mon, 06 Mar 2023 17:03:28 -0800 (PST)
+X-Google-Smtp-Source: AK7set99I84w/Sr8J0eBicwEQ2kHrVuPgeQl4yek18dUhhAijl5ItKvc0oafFq106NiKNmjfPX03mw==
+X-Received: by 2002:ac8:5fc3:0:b0:3bf:f7d0:9ba9 with SMTP id k3-20020ac85fc3000000b003bff7d09ba9mr23992906qta.5.1678151007736;
+        Mon, 06 Mar 2023 17:03:27 -0800 (PST)
 Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id v25-20020ac873d9000000b003c033b23a9asm1407231qtp.12.2023.03.06.17.00.36
+        by smtp.gmail.com with ESMTPSA id t64-20020ae9df43000000b007430d280879sm8701313qkf.35.2023.03.06.17.03.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 17:00:37 -0800 (PST)
-Date:   Mon, 6 Mar 2023 20:00:35 -0500
+        Mon, 06 Mar 2023 17:03:27 -0800 (PST)
+Date:   Mon, 6 Mar 2023 20:03:25 -0500
 From:   Peter Xu <peterx@redhat.com>
 To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -70,15 +70,14 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         James Houghton <jthoughton@google.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 3/5] mm: userfaultfd: combine 'mode' and 'wp_copy'
- arguments
-Message-ID: <ZAaMs44nspRQJmrk@x1n>
+Subject: Re: [PATCH v3 2/5] mm: userfaultfd: don't pass around both mm and vma
+Message-ID: <ZAaNXTXs5ey4QYTl@x1n>
 References: <20230306225024.264858-1-axelrasmussen@google.com>
- <20230306225024.264858-4-axelrasmussen@google.com>
+ <20230306225024.264858-3-axelrasmussen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230306225024.264858-4-axelrasmussen@google.com>
+In-Reply-To: <20230306225024.264858-3-axelrasmussen@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -89,123 +88,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 02:50:22PM -0800, Axel Rasmussen wrote:
-> Many userfaultfd ioctl functions take both a 'mode' and a 'wp_copy'
-> argument. In future commits we plan to plumb the flags through to more
-> places, so we'd be proliferating the very long argument list even
-> further.
+On Mon, Mar 06, 2023 at 02:50:21PM -0800, Axel Rasmussen wrote:
+> Quite a few userfaultfd functions took both mm and vma pointers as
+> arguments. Since the mm is trivially accessible via vma->vm_mm, there's
+> no reason to pass both; it just needlessly extends the already long
+> argument list.
 > 
-> Let's take the time to simplify the argument list. Combine the two
-> arguments into one - and generalize, so when we add more flags in the
-> future, it doesn't imply more function arguments.
+> Get rid of the mm pointer, where possible, to shorten the argument list.
 > 
-> Since the modes (copy, zeropage, continue) are mutually exclusive, store
-> them as an integer value (0, 1, 2) in the low bits. Place combine-able
-> flag bits in the high bits.
-> 
-> This is quite similar to an earlier patch proposed by Nadav Amit
-> ("userfaultfd: introduce uffd_flags" - for some reason Lore no longer
-> has a copy of the patch). The main difference is that patch only handled
-
-Lore has. :)
-
-https://lore.kernel.org/all/20220619233449.181323-2-namit@vmware.com
-
-And btw sorry to review late.
-
-> flags, whereas this patch *also* combines the "mode" argument into the
-> same type to shorten the argument list.
-> 
-> Acked-by: James Houghton <jthoughton@google.com>
 > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-Mostly good to me, a few nitpicks below.
+Acked-by: Peter Xu <peterx@redhat.com>
 
-[...]
+One nit below:
 
-> +/* A combined operation mode + behavior flags. */
-> +typedef unsigned int __bitwise uffd_flags_t;
-> +
-> +/* Mutually exclusive modes of operation. */
-> +enum mfill_atomic_mode {
-> +	MFILL_ATOMIC_COPY = (__force uffd_flags_t) 0,
-> +	MFILL_ATOMIC_ZEROPAGE = (__force uffd_flags_t) 1,
-> +	MFILL_ATOMIC_CONTINUE = (__force uffd_flags_t) 2,
-> +	NR_MFILL_ATOMIC_MODES,
->  };
-
-I never used enum like this.  I had a feeling that this will enforce
-setting the enum entries but would the enforce applied to later
-assignments?  I'm not sure.
-
-I had a quick test and actually I found sparse already complains about
-calculating the last enum entry:
-
----8<---
-$ cat a.c
-typedef unsigned int __attribute__((bitwise)) flags_t;
-
-enum {
-    FLAG1 = (__attribute__((force)) flags_t) 0,
-    FLAG_NUM,
-};
-
-void main(void)
-{
-    uffd_flags_t flags = FLAG1;
-}
-$ sparse a.c
-a.c:5:5: error: can't increment the last enum member
----8<---
-
-Maybe just use the simple "#define"s?
-
+> @@ -6277,7 +6276,7 @@ int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
+>  		folio_in_pagecache = true;
+>  	}
 >  
-> +#define MFILL_ATOMIC_MODE_BITS (const_ilog2(NR_MFILL_ATOMIC_MODES - 1) + 1)
+> -	ptl = huge_pte_lock(h, dst_mm, dst_pte);
+> +	ptl = huge_pte_lock(h, dst_vma->vm_mm, dst_pte);
+>  
+>  	ret = -EIO;
+>  	if (folio_test_hwpoison(folio))
+> @@ -6319,9 +6318,9 @@ int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
+>  	if (wp_copy)
+>  		_dst_pte = huge_pte_mkuffd_wp(_dst_pte);
+>  
+> -	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+> +	set_huge_pte_at(dst_vma->vm_mm, dst_addr, dst_pte, _dst_pte);
+>  
+> -	hugetlb_count_add(pages_per_huge_page(h), dst_mm);
+> +	hugetlb_count_add(pages_per_huge_page(h), dst_vma->vm_mm);
 
-Here IIUC it should be "const_ilog2(NR_MFILL_ATOMIC_MODES) + 1", but
-maybe..  we don't bother and define every bit explicitly?
+When vm_mm referenced multiple times (say, >=3?), let's still cache it in a
+temp var?
 
-> +#define MFILL_ATOMIC_BIT(nr) ((__force uffd_flags_t) BIT(MFILL_ATOMIC_MODE_BITS + (nr)))
-> +#define MFILL_ATOMIC_MODE_MASK (MFILL_ATOMIC_BIT(0) - 1)
-> +
-> +/* Flags controlling behavior. */
-> +#define MFILL_ATOMIC_WP MFILL_ATOMIC_BIT(0)
-
-[...]
-
-> @@ -312,9 +312,9 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
->  					      unsigned long dst_start,
->  					      unsigned long src_start,
->  					      unsigned long len,
-> -					      enum mcopy_atomic_mode mode,
-> -					      bool wp_copy)
-> +					      uffd_flags_t flags)
->  {
-> +	int mode = flags & MFILL_ATOMIC_MODE_MASK;
->  	struct mm_struct *dst_mm = dst_vma->vm_mm;
->  	int vm_shared = dst_vma->vm_flags & VM_SHARED;
->  	ssize_t err;
-> @@ -333,7 +333,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
->  	 * by THP.  Since we can not reliably insert a zero page, this
->  	 * feature is not supported.
->  	 */
-> -	if (mode == MCOPY_ATOMIC_ZEROPAGE) {
-> +	if (mode == MFILL_ATOMIC_ZEROPAGE) {
-
-The mode comes from "& MFILL_ATOMIC_MODE_MASK" but it doesn't quickly tell
-whether there's a shift for the mask.
-
-Would it look better we just have a helper to fetch the mode?  The function
-tells that whatever it returns must be the mode:
-
-       if (uffd_flags_get_mode(flags) == MFILL_ATOMIC_ZEROPAGE)
-
-We also avoid quite a few "mode" variables.  All the rest bits will be fine
-to use "flags & FLAG1" if it's a boolean (so only this "mode" is slightly
-tricky).
-
-What do you think?
+I'm not sure whether compiler is smart enough to already do that with a
+reg, even if so it may slightly improve readability too, imho, by avoiding
+the multiple but same indirection for the reader.
 
 Thanks,
 
