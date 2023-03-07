@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9067E6AF266
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 19:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973536AF253
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 19:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbjCGSwz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 13:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
+        id S231359AbjCGSwa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 13:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233398AbjCGSwX (ORCPT
+        with ESMTP id S233325AbjCGSwL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:52:23 -0500
+        Tue, 7 Mar 2023 13:52:11 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FC5C8097;
-        Tue,  7 Mar 2023 10:40:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54163ABB1E;
+        Tue,  7 Mar 2023 10:40:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8526B8184E;
-        Tue,  7 Mar 2023 18:39:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0208BC433EF;
-        Tue,  7 Mar 2023 18:39:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7481FB818EB;
+        Tue,  7 Mar 2023 18:39:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6065C433D2;
+        Tue,  7 Mar 2023 18:39:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678214371;
-        bh=BjwGdaLYs0pdsmZf0YX6ZKPmNaoc52KbJ38cJ8yp6KQ=;
+        s=korg; t=1678214374;
+        bh=B9SXSPHOZ8dmNNiuXWw1/8WcmeIEgRI7oLH4wukwo9k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S2xJTObO3d2GE+vZ/ocmzidMz/vsXpKEMt4QfnZ61kSC7zW6k/sEf2iA4fBYDiIe9
-         PtFmXrzdgH4bsUwrC7dARHyTLZFJxUXxEDmhLsr55g5XanFbBQ88ARgU0FtPyJOUnx
-         SZsQGPE1BZLaql9lY4bssiMjXuzUgaDoMkmTVNik=
+        b=zvFnbB1Tsb2iTD8em+PuvF/uXUI4KqeQTbgdrEpV0bNwSWydxw+XNyAhwKKsxOgKe
+         R1Z8ZlhFcBgbijmXX1AJnC8Ckd5SYULyvKE+ocaiAIlXi+4bkGbdscn7wG61lksSu3
+         tPAPMugPHtqmftzYh6hkQsBYG6JgjecgRfWtTE+Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 6.1 770/885] selftests: drivers: Fix incorrect kernel headers search path
-Date:   Tue,  7 Mar 2023 18:01:44 +0100
-Message-Id: <20230307170035.414295107@linuxfoundation.org>
+Subject: [PATCH 6.1 771/885] selftests: dmabuf-heaps: Fix incorrect kernel headers search path
+Date:   Tue,  7 Mar 2023 18:01:45 +0100
+Message-Id: <20230307170035.460890194@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
 References: <20230307170001.594919529@linuxfoundation.org>
@@ -59,7 +59,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit 07f0148aafe8c95a3a76cd59e9e75b4d78d1d31d upstream.
+commit f80f09b59fdd45753dd80ac623981ad00ece4c2d upstream.
 
 Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
 building against kernel headers from the build environment in scenarios
@@ -74,32 +74,32 @@ Cc: <stable@vger.kernel.org>  # 5.18+
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/drivers/dma-buf/Makefile        |    2 +-
- tools/testing/selftests/drivers/s390x/uvdevice/Makefile |    3 +--
+ tools/testing/selftests/dmabuf-heaps/Makefile      |    2 +-
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c |    3 +--
  2 files changed, 2 insertions(+), 3 deletions(-)
 
---- a/tools/testing/selftests/drivers/dma-buf/Makefile
-+++ b/tools/testing/selftests/drivers/dma-buf/Makefile
+--- a/tools/testing/selftests/dmabuf-heaps/Makefile
++++ b/tools/testing/selftests/dmabuf-heaps/Makefile
 @@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--CFLAGS += -I../../../../../usr/include/
-+CFLAGS += $(KHDR_INCLUDES)
+ # SPDX-License-Identifier: GPL-2.0
+-CFLAGS += -static -O3 -Wl,-no-as-needed -Wall
++CFLAGS += -static -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
  
- TEST_GEN_PROGS := udmabuf
+ TEST_GEN_PROGS = dmabuf-heap
  
---- a/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-+++ b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-@@ -11,10 +11,9 @@ else
- TEST_GEN_PROGS := test_uvdevice
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -13,10 +13,9 @@
+ #include <sys/types.h>
  
- top_srcdir ?= ../../../../../..
--khdr_dir = $(top_srcdir)/usr/include
- LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
+ #include <linux/dma-buf.h>
++#include <linux/dma-heap.h>
+ #include <drm/drm.h>
  
--CFLAGS += -Wall -Werror -static -I$(khdr_dir) -I$(LINUX_TOOL_ARCH_INCLUDE)
-+CFLAGS += -Wall -Werror -static $(KHDR_INCLUDES) -I$(LINUX_TOOL_ARCH_INCLUDE)
+-#include "../../../../include/uapi/linux/dma-heap.h"
+-
+ #define DEVPATH "/dev/dma_heap"
  
- include ../../../lib.mk
- 
+ static int check_vgem(int fd)
 
 
