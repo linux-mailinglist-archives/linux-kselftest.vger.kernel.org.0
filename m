@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4A06AF203
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 19:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 077D76AF1EA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 19:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjCGStg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 13:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
+        id S232917AbjCGSs2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 13:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbjCGStN (ORCPT
+        with ESMTP id S233263AbjCGSsI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:49:13 -0500
+        Tue, 7 Mar 2023 13:48:08 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFBEBE5E7;
-        Tue,  7 Mar 2023 10:37:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB418BC6E4;
+        Tue,  7 Mar 2023 10:37:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6F378CE1CA1;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5408ECE1CA0;
+        Tue,  7 Mar 2023 18:36:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DD72C43329;
         Tue,  7 Mar 2023 18:36:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22CFDC433D2;
-        Tue,  7 Mar 2023 18:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678214210;
-        bh=XpzhoalVVCwrw3ou+mCujUyRNexW3OJJx1ZZztCmxnI=;
+        s=korg; t=1678214213;
+        bh=5HPV5A2n+wX8FaESr1ESZ5sZPXmSk506fMceRtKFuNE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IVPYiUBptXbGNbJAlLu5kqe6l0vRftmEf2W7kkMkcB4S3w6ZwQjEn5BpyvYqUrlkd
-         ONXubK0x5CUwbSc7gaDNXqZDQHsGe4ZLnwKkR47w0V1mRUye0GebTGLEIS6uSGxYBp
-         Ddi5RCrx3wh0A9qqRTb6g60mZcnHtgTCuvGELHXY=
+        b=h4L8/HS/NUi8HpkqwJtp2kHRhZ/RIeGyEQOKZzyK30mmEsSR3QLzvKnY9631joonB
+         INAwTEGe9y/FOHm9+1d5Ur5qEC0Sve6BVM8BEGNLQJsnFtLh0FsSM0TueAx0RXIuHG
+         TT5BeqwK0jK30Up//iTiV2OfDFgWXc28yZrvrcdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 6.1 758/885] selftests: media_tests: Fix incorrect kernel headers search path
-Date:   Tue,  7 Mar 2023 18:01:32 +0100
-Message-Id: <20230307170034.874638165@linuxfoundation.org>
+Subject: [PATCH 6.1 759/885] selftests: gpio: Fix incorrect kernel headers search path
+Date:   Tue,  7 Mar 2023 18:01:33 +0100
+Message-Id: <20230307170034.917655007@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
 References: <20230307170001.594919529@linuxfoundation.org>
@@ -59,7 +59,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit f2f9592b736087f695230410fb8dc1afd3cafbbb upstream.
+commit 8bb9c1808628babcc7b99ec2439bf102379bd4ac upstream.
 
 Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
 building against kernel headers from the build environment in scenarios
@@ -70,21 +70,21 @@ Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
-Cc: <stable@vger.kernel.org> # 5.18+
+Cc: <stable@vger.kernel.org>  # 5.18+
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/media_tests/Makefile |    2 +-
+ tools/testing/selftests/gpio/Makefile |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/testing/selftests/media_tests/Makefile
-+++ b/tools/testing/selftests/media_tests/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- #
--CFLAGS += -I../ -I../../../../usr/include/
-+CFLAGS += -I../ $(KHDR_INCLUDES)
- TEST_GEN_PROGS := media_device_test media_device_open video_device_test
+--- a/tools/testing/selftests/gpio/Makefile
++++ b/tools/testing/selftests/gpio/Makefile
+@@ -3,6 +3,6 @@
+ TEST_PROGS := gpio-mockup.sh gpio-sim.sh
+ TEST_FILES := gpio-mockup-sysfs.sh
+ TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info gpio-line-name
+-CFLAGS += -O2 -g -Wall -I../../../../usr/include/ $(KHDR_INCLUDES)
++CFLAGS += -O2 -g -Wall $(KHDR_INCLUDES)
  
  include ../lib.mk
 
