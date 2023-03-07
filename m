@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D279B6AF21F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 19:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 475166AF22F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 19:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbjCGSuh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 13:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S233362AbjCGSvL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 13:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233328AbjCGSuR (ORCPT
+        with ESMTP id S231516AbjCGSuo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:50:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD67A3B7B;
-        Tue,  7 Mar 2023 10:38:42 -0800 (PST)
+        Tue, 7 Mar 2023 13:50:44 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7410FBE5FE;
+        Tue,  7 Mar 2023 10:39:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B676B819BF;
-        Tue,  7 Mar 2023 18:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5614BC433D2;
-        Tue,  7 Mar 2023 18:38:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EBA52CE1C8B;
+        Tue,  7 Mar 2023 18:39:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0B9C433EF;
+        Tue,  7 Mar 2023 18:39:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678214317;
-        bh=uESjakl0vzarE1AfjPMIlkdXwkxJNd7KG0ZTREvj56g=;
+        s=korg; t=1678214353;
+        bh=OdR0SnU//r0C2769peoKvBncLS04a8g6uhuhQAWfadk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mCGWyaSzqoiA2JIoy1XTtBd4IS0Xb90scXpC15szxforaKaxp9NLeCCckZ5OTOwyY
-         Rgb/YMMaAmRv7VxRoCx7Pb9d/Byz15vSA/F/TRliWGX/+iO60KPJtdhJEk5R7RiYZq
-         RhkKP7im9stJ2Yw8K9cXQK2Tk1WMZTT5ZhrB8rXI=
+        b=IMmVxIs8sR4GZHDFs0NO3oeInyAo9WTmt5859hm7Kt7uiBE6eTPKta1MY5dfIEn11
+         mcV5M/w6M8w8uwfTlgTmWWuctAP7SeC0YTjWr5QnEmIFc/yJjVeZy6jh4i5ai8VHHr
+         WRfaucAyKfjjvbHXXMRU6QM5wmEafrqeZSS/tvWI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 6.1 766/885] selftests: mount_setattr: Fix incorrect kernel headers search path
-Date:   Tue,  7 Mar 2023 18:01:40 +0100
-Message-Id: <20230307170035.222002629@linuxfoundation.org>
+Subject: [PATCH 6.1 767/885] selftests: perf_events: Fix incorrect kernel headers search path
+Date:   Tue,  7 Mar 2023 18:01:41 +0100
+Message-Id: <20230307170035.271065272@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
 References: <20230307170001.594919529@linuxfoundation.org>
@@ -59,7 +59,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit 5d11f2d0eb39d2b5c5e8f05e1f650c4a4de69918 upstream.
+commit 465cbb1b9a9fd5f6907adb2d761facaf1a46bfbe upstream.
 
 Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
 building against kernel headers from the build environment in scenarios
@@ -74,18 +74,17 @@ Cc: <stable@vger.kernel.org>  # 5.18+
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/mount_setattr/Makefile |    2 +-
+ tools/testing/selftests/perf_events/Makefile |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/testing/selftests/mount_setattr/Makefile
-+++ b/tools/testing/selftests/mount_setattr/Makefile
-@@ -1,6 +1,6 @@
+--- a/tools/testing/selftests/perf_events/Makefile
++++ b/tools/testing/selftests/perf_events/Makefile
+@@ -1,5 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0
- # Makefile for mount selftests.
--CFLAGS = -g -I../../../../usr/include/ -Wall -O2 -pthread
-+CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2 -pthread
+-CFLAGS += -Wl,-no-as-needed -Wall -I../../../../usr/include
++CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+ LDFLAGS += -lpthread
  
- TEST_GEN_FILES += mount_setattr_test
- 
+ TEST_GEN_PROGS := sigtrap_threads remove_on_exec
 
 
