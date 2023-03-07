@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F576AF208
+	by mail.lfdr.de (Postfix) with ESMTP id A5A876AF20A
 	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 19:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjCGSt5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 13:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S231402AbjCGSt6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 13:49:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbjCGSt2 (ORCPT
+        with ESMTP id S233234AbjCGSt3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:49:28 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649971E9FF;
-        Tue,  7 Mar 2023 10:38:00 -0800 (PST)
+        Tue, 7 Mar 2023 13:49:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FCC2A153;
+        Tue,  7 Mar 2023 10:38:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 53F0DCE1C9B;
-        Tue,  7 Mar 2023 18:36:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF1BC4339B;
-        Tue,  7 Mar 2023 18:36:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7898C61553;
+        Tue,  7 Mar 2023 18:37:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA69C43445;
+        Tue,  7 Mar 2023 18:37:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678214216;
-        bh=HXq/6ZjXuusXiycdbXpA5n7j8u0nZx0cU+AyOrSbcWs=;
+        s=korg; t=1678214222;
+        bh=BPrBCowJ/Hebpao303tbhxCldRDfHqhD7j4e3HQsHsw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MCE7F0J2/8S2Qgnc9zFDKQk1HegdAqAKhdfPDvpa+lvZshXXk3emdFsvfiNHfmQ5p
-         PtAys/yI8oyZCyEMKBEFGJtaJKFGp192PvU9FGqer3uXz4mzMxaclTlVHZjGyB49yy
-         ZLwyCxC4ZJD46MOX17ZYVzFHlCAR1gMpGwH5Ojt4=
+        b=ejT7JmU6rii4K4m0yhlBokOWtOByLm+8uwQOV9yZGa7Mg4comt8F81jfWTb6fz+2d
+         S1Z7cY9WZxFTp6W3wkvqPCh4MRqCsyaKevQu0q/2Zz2XBB+2tUa3gZ18QTozOI98Wq
+         e/lZjJytmMQWcm7xyUOaWDt47Hcl+bqeAd9rKS3w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 6.1 760/885] selftests: filesystems: Fix incorrect kernel headers search path
-Date:   Tue,  7 Mar 2023 18:01:34 +0100
-Message-Id: <20230307170034.955326718@linuxfoundation.org>
+Subject: [PATCH 6.1 761/885] selftests: user_events: Fix incorrect kernel headers search path
+Date:   Tue,  7 Mar 2023 18:01:35 +0100
+Message-Id: <20230307170034.994717547@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
 References: <20230307170001.594919529@linuxfoundation.org>
@@ -59,7 +59,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit c2d3cf3653a8ff6e4b402d55e7f84790ac08a8ad upstream.
+commit f3886fd28987c119a98493f625cb9940b5f1c9a0 upstream.
 
 Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
 building against kernel headers from the build environment in scenarios
@@ -74,40 +74,17 @@ Cc: <stable@vger.kernel.org> # 5.18+
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/filesystems/Makefile          |    2 +-
- tools/testing/selftests/filesystems/binderfs/Makefile |    2 +-
- tools/testing/selftests/filesystems/epoll/Makefile    |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/user_events/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/testing/selftests/filesystems/Makefile
-+++ b/tools/testing/selftests/filesystems/Makefile
-@@ -1,6 +1,6 @@
+--- a/tools/testing/selftests/user_events/Makefile
++++ b/tools/testing/selftests/user_events/Makefile
+@@ -1,5 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0
+-CFLAGS += -Wl,-no-as-needed -Wall -I../../../../usr/include
++CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+ LDLIBS += -lrt -lpthread -lm
  
--CFLAGS += -I../../../../usr/include/
-+CFLAGS += $(KHDR_INCLUDES)
- TEST_GEN_PROGS := devpts_pts
- TEST_GEN_PROGS_EXTENDED := dnotify_test
- 
---- a/tools/testing/selftests/filesystems/binderfs/Makefile
-+++ b/tools/testing/selftests/filesystems/binderfs/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--CFLAGS += -I../../../../../usr/include/ -pthread
-+CFLAGS += $(KHDR_INCLUDES) -pthread
- TEST_GEN_PROGS := binderfs_test
- 
- binderfs_test: binderfs_test.c ../../kselftest.h ../../kselftest_harness.h
---- a/tools/testing/selftests/filesystems/epoll/Makefile
-+++ b/tools/testing/selftests/filesystems/epoll/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--CFLAGS += -I../../../../../usr/include/
-+CFLAGS += $(KHDR_INCLUDES)
- LDLIBS += -lpthread
- TEST_GEN_PROGS := epoll_wakeup_test
- 
+ TEST_GEN_PROGS = ftrace_test dyn_test perf_test
 
 
