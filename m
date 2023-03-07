@@ -2,66 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3616AF906
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 23:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B10F26AFA4E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 00:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjCGWkr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 17:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S229750AbjCGX2B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 18:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCGWk0 (ORCPT
+        with ESMTP id S229748AbjCGX17 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:40:26 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0205B1ED7
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Mar 2023 14:39:49 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536a4eba107so151245437b3.19
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Mar 2023 14:39:49 -0800 (PST)
+        Tue, 7 Mar 2023 18:27:59 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDD2DBC8
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Mar 2023 15:27:56 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id by8so14879295ljb.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Mar 2023 15:27:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678228785;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NPX3cxodGS2Dc0VrA/PnDnNc9kLb5Ie4SBR9qAvBwBk=;
-        b=JuW4e0zJ7LWcIDQ1r3p8OPCfsa5GhzqxmW4ikjVk/XqlHPtyrKKETzfvTkNSllQMDD
-         xA7z4NPlifzfeScOaspoCzI/SkTrj8j6wq5IO4Fq4DmTL/kOW5fsI4zJKG3u5clWEhPW
-         iGLIdFLSUfUd/GglPISOOIcpFs3GQnp55ekQM3A9nd8qywdx8g1kqr+K6pPJf/LZK748
-         VD0hsptrlrfiGpJDV9vSpUmiraiW5g4YnRNADYP/5FAceTKQfFqrhgIRh8SiJtvKvIHC
-         82Ljos0F+GBbb/KlLCA4xnKErM+R01PkGPJnoWZ/NCVph4s7wZrQlDU+h7lhfUizAno9
-         gdOg==
+        d=google.com; s=20210112; t=1678231675;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dgM5UWACpA1ziJGubEWxyksAdshP8CY52eV8GhV8Gkg=;
+        b=TGT2yqt1nWpJRPljNttb9FcVv36E/Jt8A84ByzTR4qfutxQ7fHbpdB+EgF/6Hu8QEA
+         lGav8SrhhYCem9wRNTeicDzl5ewmc3qyFq1vE8KfXRp3zg47pIamj2eOLTILU7cqykpP
+         eIRethLM6K4/tMKQANyi6ZEnJZjZRMB/OCTP+DWXQsvO2zKmMTsPyQD8swSXLVTS2D5g
+         zpu9uzYUHyfgWtbbJ7XEYTACwoPmJeHTPKHV/ad884DyulUXcTRi/oc/IJ8NR/H3zqZs
+         tKa1AESMTbEZ0h1SvjwaE/87vK4azcWvVNgcCANUEXMYEwcMUPSMOuu0EJJvRrTgBIy/
+         aRPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678228785;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NPX3cxodGS2Dc0VrA/PnDnNc9kLb5Ie4SBR9qAvBwBk=;
-        b=5Q/HaJlwXDKvQFnIXBqh689mhwi6LjHOuGUFBNi/p0FMuErIjHQPrkSTxXqDTFiOTR
-         /dpUdF7jx0Gte0kX9hJTb3tN40aiAjXcnk3ddSP8vnXAMLveEs7gR/PQxfNk9BOlB23e
-         Yu3kr3iDZqwJavDCcOkOFu4JMS2ds3k5bkiDvbWH9IlOUMLYCb7CsruJJ4SXDhJ35/j6
-         89GPavwDsy2dL2YTseHNVWLR8ivDhCAv5oYoo7JiMVvxvcQ0skCl7W3j5X918uxdRpKV
-         8+S8YMGKl/uaYIU4lz5iRAwZFp8Y9DCQ5tHiVcw+YarOwaez5DB/ahKSOKMk2TH9Q/7m
-         FIWw==
-X-Gm-Message-State: AO0yUKXzr0VboJMofdplIKATq45zhWy6PBbgh6FHbXweemDH79gj6O1u
-        e7aZjQVg71yQDEA4V9embDYKYvXZEA==
-X-Google-Smtp-Source: AK7set+FeF0Y+wpOZ7SlPykfCAb/MgoW4ZZ2WrxC173fHKbmeEXKuSFbUdimvAEI9KQouGmoo2I0UIWxUw==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a5b:b52:0:b0:a24:6aaa:9640 with SMTP id
- b18-20020a5b0b52000000b00a246aaa9640mr1ybr.378.1678228785263; Tue, 07 Mar
- 2023 14:39:45 -0800 (PST)
-Date:   Tue,  7 Mar 2023 22:39:37 +0000
-In-Reply-To: <20230307223937.2892762-1-rmoar@google.com>
-Mime-Version: 1.0
-References: <20230307223937.2892762-1-rmoar@google.com>
-X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-Message-ID: <20230307223937.2892762-3-rmoar@google.com>
-Subject: [PATCH v3 3/3] kunit: fix bug of extra newline characters in debugfs logs
-From:   Rae Moar <rmoar@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
-Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Rae Moar <rmoar@google.com>
+        d=1e100.net; s=20210112; t=1678231675;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dgM5UWACpA1ziJGubEWxyksAdshP8CY52eV8GhV8Gkg=;
+        b=vFwpt/Gaji+49DinR+hFCcVOBh6eJ7rTQ1pKSBpdXks8i0B5I7KuN/Sn2Eh9iwlCTe
+         8kEJuibICQv3GG9K5O52zRjD2BDRQeiqC52sPLSucuaje5AGGwMQTfOSvOiFNldLN/5x
+         oVsZO43fxPK38Hp6x+nLcGhFGiITBiqrFQ4Z1uApwbpmh4NMIvHC8QvE3Kv+LxkkDMF7
+         karKhxcrboNuG7kQZiMJ5u9IVK2nu9VNc1ZspqSZOboMtAP4tEpbEhdB7B4xGu1cd1qg
+         Ek4Av4xCODF4krtxjJwr02boUdlodyztGi8rccbWSE/9RpJxJgYQiH+DLzDxbS5LZ6nY
+         Byiw==
+X-Gm-Message-State: AO0yUKXqttXIVGK5WHx/rJpDSTZzFJzOeV06hlRkPevxIyHPHL18uDCP
+        3mwLSz6nrGKvkovNzRd2t+lWZUUZdfympX4PsufPAA==
+X-Google-Smtp-Source: AK7set9qzhTKfHxML+MgHqsSuJRnPMnUneATXidb0+SUYjXa+h00K/U7lnIkoXpbPJNdsASUF+bM31GH9FkDBDE6CkE=
+X-Received: by 2002:a05:651c:11c6:b0:295:d460:5a2d with SMTP id
+ z6-20020a05651c11c600b00295d4605a2dmr4907216ljo.2.1678231674431; Tue, 07 Mar
+ 2023 15:27:54 -0800 (PST)
+MIME-Version: 1.0
+References: <20230306225024.264858-1-axelrasmussen@google.com>
+ <20230306225024.264858-4-axelrasmussen@google.com> <ZAaMs44nspRQJmrk@x1n>
+In-Reply-To: <ZAaMs44nspRQJmrk@x1n>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Tue, 7 Mar 2023 15:27:17 -0800
+Message-ID: <CAJHvVciQWctUoZtrPga-fhgBf2dtc+6ypwE3FYe8ApQWpQyL0Q@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] mm: userfaultfd: combine 'mode' and 'wp_copy' arguments
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
+        James Houghton <jthoughton@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,160 +81,170 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix bug of the extra newline characters in debugfs logs. When a
-line is added to debugfs with a newline character at the end,
-an extra line appears in the debugfs log.
+On Mon, Mar 6, 2023 at 5:00=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Mon, Mar 06, 2023 at 02:50:22PM -0800, Axel Rasmussen wrote:
+> > Many userfaultfd ioctl functions take both a 'mode' and a 'wp_copy'
+> > argument. In future commits we plan to plumb the flags through to more
+> > places, so we'd be proliferating the very long argument list even
+> > further.
+> >
+> > Let's take the time to simplify the argument list. Combine the two
+> > arguments into one - and generalize, so when we add more flags in the
+> > future, it doesn't imply more function arguments.
+> >
+> > Since the modes (copy, zeropage, continue) are mutually exclusive, stor=
+e
+> > them as an integer value (0, 1, 2) in the low bits. Place combine-able
+> > flag bits in the high bits.
+> >
+> > This is quite similar to an earlier patch proposed by Nadav Amit
+> > ("userfaultfd: introduce uffd_flags" - for some reason Lore no longer
+> > has a copy of the patch). The main difference is that patch only handle=
+d
+>
+> Lore has. :)
+>
+> https://lore.kernel.org/all/20220619233449.181323-2-namit@vmware.com
+>
+> And btw sorry to review late.
+>
+> > flags, whereas this patch *also* combines the "mode" argument into the
+> > same type to shorten the argument list.
+> >
+> > Acked-by: James Houghton <jthoughton@google.com>
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+>
+> Mostly good to me, a few nitpicks below.
+>
+> [...]
+>
+> > +/* A combined operation mode + behavior flags. */
+> > +typedef unsigned int __bitwise uffd_flags_t;
+> > +
+> > +/* Mutually exclusive modes of operation. */
+> > +enum mfill_atomic_mode {
+> > +     MFILL_ATOMIC_COPY =3D (__force uffd_flags_t) 0,
+> > +     MFILL_ATOMIC_ZEROPAGE =3D (__force uffd_flags_t) 1,
+> > +     MFILL_ATOMIC_CONTINUE =3D (__force uffd_flags_t) 2,
+> > +     NR_MFILL_ATOMIC_MODES,
+> >  };
+>
+> I never used enum like this.  I had a feeling that this will enforce
+> setting the enum entries but would the enforce applied to later
+> assignments?  I'm not sure.
+>
+> I had a quick test and actually I found sparse already complains about
+> calculating the last enum entry:
+>
+> ---8<---
+> $ cat a.c
+> typedef unsigned int __attribute__((bitwise)) flags_t;
+>
+> enum {
+>     FLAG1 =3D (__attribute__((force)) flags_t) 0,
+>     FLAG_NUM,
+> };
+>
+> void main(void)
+> {
+>     uffd_flags_t flags =3D FLAG1;
+> }
+> $ sparse a.c
+> a.c:5:5: error: can't increment the last enum member
+> ---8<---
+>
+> Maybe just use the simple "#define"s?
 
-This is due to a discrepancy between how the lines are printed and how they
-are added to the logs. Remove this discrepancy by checking if a newline
-character is present before adding a newline character. This should closely
-match the printk behavior.
+Agreed, if sparse isn't happy with this then using the force macros is
+pointless.
 
-Add kunit_log_newline_test to provide test coverage for this issue.  (Also,
-move kunit_log_test above suite definition to remove the unnecessary
-declaration prior to the suite definition)
+The enum is valuable because it lets us get the # of modes; assuming
+we agree that's useful below ...
 
-As an example, say we add these two lines to the log:
+>
+> >
+> > +#define MFILL_ATOMIC_MODE_BITS (const_ilog2(NR_MFILL_ATOMIC_MODES - 1)=
+ + 1)
+>
+> Here IIUC it should be "const_ilog2(NR_MFILL_ATOMIC_MODES) + 1", but
+> maybe..  we don't bother and define every bit explicitly?
 
-kunit_log(..., "KTAP version 1\n");
-kunit_log(..., "1..1");
+If my reading of const_ilog2's definition is correct, then:
 
-The debugfs log before this fix:
+const_ilog2(4) =3D 2
+const_ilog2(3) =3D 1
+const_ilog2(2) =3D 1
 
- KTAP version 1
+For either 3 or 4 modes, we need 2 bits to represent them (0, 1, 2,
+3), i.e. we want MFILL_ATOMIC_MODE_BITS =3D 2. I think this is correct
+as is, because const_ilog2(4 - 1) + 1 =3D 2, and const_ilog2(3 - 1) + 1
+=3D 2.
 
- 1..1
+In other words, I think const_ilog2 is defined as floor(log2()),
+whereas what we want is ceil(log2()).
 
-The debugfs log after this fix:
+The benefit of doing this vs. just doing defines with fixed values is,
+if we ever added a new mode, we wouldn't have to do bit twiddling and
+update the mask, flag bits, etc. - it would happen "automatically". I
+prefer it this way, but I agree it is a matter of opinion / taste. :)
+If you or others feel strongly this is overcomplicated, I can take the
+other approach.
 
- KTAP version 1
- 1..1
+>
+> > +#define MFILL_ATOMIC_BIT(nr) ((__force uffd_flags_t) BIT(MFILL_ATOMIC_=
+MODE_BITS + (nr)))
+> > +#define MFILL_ATOMIC_MODE_MASK (MFILL_ATOMIC_BIT(0) - 1)
+> > +
+> > +/* Flags controlling behavior. */
+> > +#define MFILL_ATOMIC_WP MFILL_ATOMIC_BIT(0)
+>
+> [...]
+>
+> > @@ -312,9 +312,9 @@ static __always_inline ssize_t mfill_atomic_hugetlb=
+(
+> >                                             unsigned long dst_start,
+> >                                             unsigned long src_start,
+> >                                             unsigned long len,
+> > -                                           enum mcopy_atomic_mode mode=
+,
+> > -                                           bool wp_copy)
+> > +                                           uffd_flags_t flags)
+> >  {
+> > +     int mode =3D flags & MFILL_ATOMIC_MODE_MASK;
+> >       struct mm_struct *dst_mm =3D dst_vma->vm_mm;
+> >       int vm_shared =3D dst_vma->vm_flags & VM_SHARED;
+> >       ssize_t err;
+> > @@ -333,7 +333,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb=
+(
+> >        * by THP.  Since we can not reliably insert a zero page, this
+> >        * feature is not supported.
+> >        */
+> > -     if (mode =3D=3D MCOPY_ATOMIC_ZEROPAGE) {
+> > +     if (mode =3D=3D MFILL_ATOMIC_ZEROPAGE) {
+>
+> The mode comes from "& MFILL_ATOMIC_MODE_MASK" but it doesn't quickly tel=
+l
+> whether there's a shift for the mask.
+>
+> Would it look better we just have a helper to fetch the mode?  The functi=
+on
+> tells that whatever it returns must be the mode:
+>
+>        if (uffd_flags_get_mode(flags) =3D=3D MFILL_ATOMIC_ZEROPAGE)
+>
+> We also avoid quite a few "mode" variables.  All the rest bits will be fi=
+ne
+> to use "flags & FLAG1" if it's a boolean (so only this "mode" is slightly
+> tricky).
 
-Signed-off-by: Rae Moar <rmoar@google.com>
----
+Agreed, this is simpler. I'll make this change.
 
-Changes from v2 -> v3:
-- Changes to commit message.
-
-Changes from v1 -> v2:
-- Changed the way extra newlines are removed. Instead of removing extra
-  newline characters, add a newline if one is not present. This is a bit
-  cleaner.
-- Note: I looked into using KERN_CONT to match the printk behavior
-  to vsnprintf but this could cause issues with KTAP printing on the same
-  line as interrupting kernel messages. I also looked at just adding
-  KERN_CONT functionality to kunit_log and I did get this to work but it
-  was a bit messy because it required a few calls to kunit_log_newline in
-  kunit_run_tests. If this is very desired functionality, happy to add this
-  to version 3.
-
- include/kunit/test.h   |  2 +-
- lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++------------
- lib/kunit/test.c       | 18 ++++++++++++++++++
- 3 files changed, 42 insertions(+), 13 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 0668d29f3453..bd9dbae5e48d 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -420,7 +420,7 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
- #define kunit_log(lvl, test_or_suite, fmt, ...)				\
- 	do {								\
- 		printk(lvl fmt, ##__VA_ARGS__);				\
--		kunit_log_append((test_or_suite)->log,	fmt "\n",	\
-+		kunit_log_append((test_or_suite)->log,	fmt,	\
- 				 ##__VA_ARGS__);			\
- 	} while (0)
- 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 4df0335d0d06..b63595d3e241 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite = {
- 	.test_cases = kunit_resource_test_cases,
- };
- 
--static void kunit_log_test(struct kunit *test);
--
--static struct kunit_case kunit_log_test_cases[] = {
--	KUNIT_CASE(kunit_log_test),
--	{}
--};
--
--static struct kunit_suite kunit_log_test_suite = {
--	.name = "kunit-log-test",
--	.test_cases = kunit_log_test_cases,
--};
--
- static void kunit_log_test(struct kunit *test)
- {
- 	struct kunit_suite suite;
-@@ -481,6 +469,29 @@ static void kunit_log_test(struct kunit *test)
- #endif
- }
- 
-+static void kunit_log_newline_test(struct kunit *test)
-+{
-+	kunit_info(test, "Add newline\n");
-+	if (test->log) {
-+		KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
-+			"Missing log line, full log:\n%s", test->log);
-+		KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
-+	} else {
-+		kunit_skip(test, "only useful when debugfs is enabled");
-+	}
-+}
-+
-+static struct kunit_case kunit_log_test_cases[] = {
-+	KUNIT_CASE(kunit_log_test),
-+	KUNIT_CASE(kunit_log_newline_test),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_log_test_suite = {
-+	.name = "kunit-log-test",
-+	.test_cases = kunit_log_test_cases,
-+};
-+
- static void kunit_status_set_failure_test(struct kunit *test)
- {
- 	struct kunit fake;
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 811fcc376d2f..e2910b261112 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -108,6 +108,22 @@ static void kunit_print_test_stats(struct kunit *test,
- 		  stats.total);
- }
- 
-+/**
-+ * kunit_log_newline() - Add newline to the end of log if one is not
-+ * already present.
-+ * @log: The log to add the newline to.
-+ */
-+static void kunit_log_newline(char *log)
-+{
-+	int log_len, len_left;
-+
-+	log_len = strlen(log);
-+	len_left = KUNIT_LOG_SIZE - log_len - 1;
-+
-+	if (log_len > 0 && log[log_len - 1] != '\n')
-+		strncat(log, "\n", len_left);
-+}
-+
- /*
-  * Append formatted message to log, size of which is limited to
-  * KUNIT_LOG_SIZE bytes (including null terminating byte).
-@@ -135,6 +151,8 @@ void kunit_log_append(char *log, const char *fmt, ...)
- 	vsnprintf(log + log_len, min(len, len_left), fmt, args);
- 	va_end(args);
- 
-+	/* Add newline to end of log if not already present. */
-+	kunit_log_newline(log);
- }
- EXPORT_SYMBOL_GPL(kunit_log_append);
- 
--- 
-2.40.0.rc0.216.gc4246ad0f0-goog
-
+>
+> What do you think?
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>
