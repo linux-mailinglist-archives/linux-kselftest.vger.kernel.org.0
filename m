@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDBA6AF903
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 23:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3616AF906
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 23:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbjCGWko (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 17:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S229918AbjCGWkr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 17:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbjCGWkW (ORCPT
+        with ESMTP id S229885AbjCGWk0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:40:22 -0500
+        Tue, 7 Mar 2023 17:40:26 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F98AF6AC
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Mar 2023 14:39:44 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5395c8fc4a1so149244767b3.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Mar 2023 14:39:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0205B1ED7
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Mar 2023 14:39:49 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536a4eba107so151245437b3.19
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Mar 2023 14:39:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678228781;
+        d=google.com; s=20210112; t=1678228785;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G0m+wgNwyQXDx71cttjdoVBrepsYMSw6ffiKtUf2MHw=;
-        b=X5LqbGXdAvEU2czHYh9xftsHEmkuGBvVMsrFKGr2asWHYaXTTKDIIrlqzsh4MpFMYN
-         82Gxjwh4AbB12injns+I421TdTrhMfTXWVSdz8XGyTB8qlvEfSphOvp7UsLF3cVTjpSo
-         V6xDyKZefw8y/a30mo/RuuLvRW9AZrk4M/zpBjehQvuGg2L+v3l6UnKB5CZDm/NTYwZU
-         gOfHcSNpTOOsEvKXdQXK0CTAGpdbztQouCraAsvcSYQxcX+5E7hXqAtmG6vWf/JTUn81
-         PM8tBzEB4jEgacL5x5/rswdnxaXjLzg7Rs2UEMHeKRVAk9P82a53io2iz7tcaaN+o4Xd
-         O2nQ==
+        bh=NPX3cxodGS2Dc0VrA/PnDnNc9kLb5Ie4SBR9qAvBwBk=;
+        b=JuW4e0zJ7LWcIDQ1r3p8OPCfsa5GhzqxmW4ikjVk/XqlHPtyrKKETzfvTkNSllQMDD
+         xA7z4NPlifzfeScOaspoCzI/SkTrj8j6wq5IO4Fq4DmTL/kOW5fsI4zJKG3u5clWEhPW
+         iGLIdFLSUfUd/GglPISOOIcpFs3GQnp55ekQM3A9nd8qywdx8g1kqr+K6pPJf/LZK748
+         VD0hsptrlrfiGpJDV9vSpUmiraiW5g4YnRNADYP/5FAceTKQfFqrhgIRh8SiJtvKvIHC
+         82Ljos0F+GBbb/KlLCA4xnKErM+R01PkGPJnoWZ/NCVph4s7wZrQlDU+h7lhfUizAno9
+         gdOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678228781;
+        d=1e100.net; s=20210112; t=1678228785;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G0m+wgNwyQXDx71cttjdoVBrepsYMSw6ffiKtUf2MHw=;
-        b=pfK65LVyuVvL/Vt5Bg6Bg6E8cA5SNLqniRmjJdSLGApIDCZrXlCUiEBXhV86rHOKqA
-         LnyCiNbATDonymmDBdO8+UI9lqo7kA9FnvRuTCfMOd7D+0QzTkFw2TLeOuUm6D5Wwm9W
-         w+lbVQRu3fZl57RPR+QHuT95v4AXqf24pv/ggAFQ5jzd0Da4ye42r+MjvEZOIW2lG9wX
-         SQXpx84gYM6icXUlk5DdW145/+KhGH9WAB1sKtF8tVpuwPZzHXO3IbaK0AH8FxGh7fRz
-         EoJadEZnxfK3Ii32tFHrrIV1z380unDMfdLrXXS3Ztvn2DmVW734k8DAJBMIdz2TgXKK
-         eh7A==
-X-Gm-Message-State: AO0yUKXFRfJoi7we1xNckyr1vOCCdiL8mY5Hhq33Pj9dSxQjbEgpcuUh
-        TgraG0ccotMhId8d6Vlq8oo31U9nDw==
-X-Google-Smtp-Source: AK7set9kt1uBOs8bMB9x0Vq/3t+fesVjkHI8ZUicbegBT8Cs19J1QQ+SzYxQeiDiF6SewIJ3PeBf4QxgZQ==
+        bh=NPX3cxodGS2Dc0VrA/PnDnNc9kLb5Ie4SBR9qAvBwBk=;
+        b=5Q/HaJlwXDKvQFnIXBqh689mhwi6LjHOuGUFBNi/p0FMuErIjHQPrkSTxXqDTFiOTR
+         /dpUdF7jx0Gte0kX9hJTb3tN40aiAjXcnk3ddSP8vnXAMLveEs7gR/PQxfNk9BOlB23e
+         Yu3kr3iDZqwJavDCcOkOFu4JMS2ds3k5bkiDvbWH9IlOUMLYCb7CsruJJ4SXDhJ35/j6
+         89GPavwDsy2dL2YTseHNVWLR8ivDhCAv5oYoo7JiMVvxvcQ0skCl7W3j5X918uxdRpKV
+         8+S8YMGKl/uaYIU4lz5iRAwZFp8Y9DCQ5tHiVcw+YarOwaez5DB/ahKSOKMk2TH9Q/7m
+         FIWw==
+X-Gm-Message-State: AO0yUKXzr0VboJMofdplIKATq45zhWy6PBbgh6FHbXweemDH79gj6O1u
+        e7aZjQVg71yQDEA4V9embDYKYvXZEA==
+X-Google-Smtp-Source: AK7set+FeF0Y+wpOZ7SlPykfCAb/MgoW4ZZ2WrxC173fHKbmeEXKuSFbUdimvAEI9KQouGmoo2I0UIWxUw==
 X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a5b:70c:0:b0:a30:38fb:a0b8 with SMTP id
- g12-20020a5b070c000000b00a3038fba0b8mr9743184ybq.9.1678228781719; Tue, 07 Mar
- 2023 14:39:41 -0800 (PST)
-Date:   Tue,  7 Mar 2023 22:39:36 +0000
+ (user=rmoar job=sendgmr) by 2002:a5b:b52:0:b0:a24:6aaa:9640 with SMTP id
+ b18-20020a5b0b52000000b00a246aaa9640mr1ybr.378.1678228785263; Tue, 07 Mar
+ 2023 14:39:45 -0800 (PST)
+Date:   Tue,  7 Mar 2023 22:39:37 +0000
 In-Reply-To: <20230307223937.2892762-1-rmoar@google.com>
 Mime-Version: 1.0
 References: <20230307223937.2892762-1-rmoar@google.com>
 X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-Message-ID: <20230307223937.2892762-2-rmoar@google.com>
-Subject: [PATCH v3 2/3] kunit: fix bug in the order of lines in debugfs logs
+Message-ID: <20230307223937.2892762-3-rmoar@google.com>
+Subject: [PATCH v3 3/3] kunit: fix bug of extra newline characters in debugfs logs
 From:   Rae Moar <rmoar@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
 Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
@@ -69,128 +69,160 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix bug in debugfs logs that causes an incorrect order of lines in the
-debugfs log.
+Fix bug of the extra newline characters in debugfs logs. When a
+line is added to debugfs with a newline character at the end,
+an extra line appears in the debugfs log.
 
-Currently, the test counts lines that show the number of tests passed,
-failed, and skipped, as well as any suite diagnostic lines,
-appear prior to the individual results, which is a bug.
+This is due to a discrepancy between how the lines are printed and how they
+are added to the logs. Remove this discrepancy by checking if a newline
+character is present before adding a newline character. This should closely
+match the printk behavior.
 
-Ensure the order of printing for the debugfs log is correct. Additionally,
-add a KTAP header to so the debugfs logs can be valid KTAP.
+Add kunit_log_newline_test to provide test coverage for this issue.  (Also,
+move kunit_log_test above suite definition to remove the unnecessary
+declaration prior to the suite definition)
 
-This is an example of a log prior to these fixes:
+As an example, say we add these two lines to the log:
 
-     KTAP version 1
+kunit_log(..., "KTAP version 1\n");
+kunit_log(..., "1..1");
 
-     # Subtest: kunit_status
-     1..2
- # kunit_status: pass:2 fail:0 skip:0 total:2
- # Totals: pass:2 fail:0 skip:0 total:2
-     ok 1 kunit_status_set_failure_test
-     ok 2 kunit_status_mark_skipped_test
- ok 1 kunit_status
+The debugfs log before this fix:
 
-Note the two lines with stats are out of order. This is the same debugfs
-log after the fixes (in combination with the third patch to remove the
-extra line):
+ KTAP version 1
+
+ 1..1
+
+The debugfs log after this fix:
 
  KTAP version 1
  1..1
-     KTAP version 1
-     # Subtest: kunit_status
-     1..2
-     ok 1 kunit_status_set_failure_test
-     ok 2 kunit_status_mark_skipped_test
- # kunit_status: pass:2 fail:0 skip:0 total:2
- # Totals: pass:2 fail:0 skip:0 total:2
- ok 1 kunit_status
 
 Signed-off-by: Rae Moar <rmoar@google.com>
 ---
 
 Changes from v2 -> v3:
-- No changes.
+- Changes to commit message.
 
 Changes from v1 -> v2:
-- Add KTAP header.
-- Ensure test result number is 1.
+- Changed the way extra newlines are removed. Instead of removing extra
+  newline characters, add a newline if one is not present. This is a bit
+  cleaner.
+- Note: I looked into using KERN_CONT to match the printk behavior
+  to vsnprintf but this could cause issues with KTAP printing on the same
+  line as interrupting kernel messages. I also looked at just adding
+  KERN_CONT functionality to kunit_log and I did get this to work but it
+  was a bit messy because it required a few calls to kunit_log_newline in
+  kunit_run_tests. If this is very desired functionality, happy to add this
+  to version 3.
 
- lib/kunit/debugfs.c | 14 ++++++++++++--
- lib/kunit/test.c    | 21 ++++++++++++++-------
- 2 files changed, 26 insertions(+), 9 deletions(-)
+ include/kunit/test.h   |  2 +-
+ lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++------------
+ lib/kunit/test.c       | 18 ++++++++++++++++++
+ 3 files changed, 42 insertions(+), 13 deletions(-)
 
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index de0ee2e03ed6..b08bb1fba106 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -55,14 +55,24 @@ static int debugfs_print_results(struct seq_file *seq, void *v)
- 	enum kunit_status success = kunit_suite_has_succeeded(suite);
- 	struct kunit_case *test_case;
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 0668d29f3453..bd9dbae5e48d 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -420,7 +420,7 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+ #define kunit_log(lvl, test_or_suite, fmt, ...)				\
+ 	do {								\
+ 		printk(lvl fmt, ##__VA_ARGS__);				\
+-		kunit_log_append((test_or_suite)->log,	fmt "\n",	\
++		kunit_log_append((test_or_suite)->log,	fmt,	\
+ 				 ##__VA_ARGS__);			\
+ 	} while (0)
  
--	if (!suite || !suite->log)
-+	if (!suite)
- 		return 0;
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index 4df0335d0d06..b63595d3e241 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite = {
+ 	.test_cases = kunit_resource_test_cases,
+ };
  
--	seq_printf(seq, "%s", suite->log);
-+	/* Print KTAP header so the debugfs log can be parsed as valid KTAP. */
-+	seq_puts(seq, "KTAP version 1\n");
-+	seq_puts(seq, "1..1\n");
-+
-+	/* Print suite header because it is not stored in the test logs. */
-+	seq_puts(seq, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
-+	seq_printf(seq, KUNIT_SUBTEST_INDENT "# Subtest: %s\n", suite->name);
-+	seq_printf(seq, KUNIT_SUBTEST_INDENT "1..%zd\n", kunit_suite_num_test_cases(suite));
- 
- 	kunit_suite_for_each_test_case(suite, test_case)
- 		debugfs_print_result(seq, suite, test_case);
- 
-+	if (suite->log)
-+		seq_printf(seq, "%s", suite->log);
-+
- 	seq_printf(seq, "%s %d %s\n",
- 		   kunit_status_to_ok_not_ok(success), 1, suite->name);
- 	return 0;
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index c4d6304edd61..811fcc376d2f 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -152,10 +152,18 @@ EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
- 
- static void kunit_print_suite_start(struct kunit_suite *suite)
+-static void kunit_log_test(struct kunit *test);
+-
+-static struct kunit_case kunit_log_test_cases[] = {
+-	KUNIT_CASE(kunit_log_test),
+-	{}
+-};
+-
+-static struct kunit_suite kunit_log_test_suite = {
+-	.name = "kunit-log-test",
+-	.test_cases = kunit_log_test_cases,
+-};
+-
+ static void kunit_log_test(struct kunit *test)
  {
--	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
--	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
-+	/*
-+	 * We do not log the test suite header as doing so would
-+	 * mean debugfs display would consist of the test suite
-+	 * header prior to individual test results.
-+	 * Hence directly printk the suite status, and we will
-+	 * separately seq_printf() the suite header for the debugfs
-+	 * representation.
-+	 */
-+	pr_info(KUNIT_SUBTEST_INDENT "KTAP version 1\n");
-+	pr_info(KUNIT_SUBTEST_INDENT "# Subtest: %s\n",
- 		  suite->name);
--	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "1..%zd",
-+	pr_info(KUNIT_SUBTEST_INDENT "1..%zd\n",
- 		  kunit_suite_num_test_cases(suite));
+ 	struct kunit_suite suite;
+@@ -481,6 +469,29 @@ static void kunit_log_test(struct kunit *test)
+ #endif
  }
  
-@@ -172,10 +180,9 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
++static void kunit_log_newline_test(struct kunit *test)
++{
++	kunit_info(test, "Add newline\n");
++	if (test->log) {
++		KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
++			"Missing log line, full log:\n%s", test->log);
++		KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
++	} else {
++		kunit_skip(test, "only useful when debugfs is enabled");
++	}
++}
++
++static struct kunit_case kunit_log_test_cases[] = {
++	KUNIT_CASE(kunit_log_test),
++	KUNIT_CASE(kunit_log_newline_test),
++	{}
++};
++
++static struct kunit_suite kunit_log_test_suite = {
++	.name = "kunit-log-test",
++	.test_cases = kunit_log_test_cases,
++};
++
+ static void kunit_status_set_failure_test(struct kunit *test)
+ {
+ 	struct kunit fake;
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 811fcc376d2f..e2910b261112 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -108,6 +108,22 @@ static void kunit_print_test_stats(struct kunit *test,
+ 		  stats.total);
+ }
  
- 	/*
- 	 * We do not log the test suite results as doing so would
--	 * mean debugfs display would consist of the test suite
--	 * description and status prior to individual test results.
--	 * Hence directly printk the suite status, and we will
--	 * separately seq_printf() the suite status for the debugfs
-+	 * mean debugfs display would consist of an incorrect test
-+	 * number. Hence directly printk the suite result, and we will
-+	 * separately seq_printf() the suite results for the debugfs
- 	 * representation.
- 	 */
- 	if (suite)
++/**
++ * kunit_log_newline() - Add newline to the end of log if one is not
++ * already present.
++ * @log: The log to add the newline to.
++ */
++static void kunit_log_newline(char *log)
++{
++	int log_len, len_left;
++
++	log_len = strlen(log);
++	len_left = KUNIT_LOG_SIZE - log_len - 1;
++
++	if (log_len > 0 && log[log_len - 1] != '\n')
++		strncat(log, "\n", len_left);
++}
++
+ /*
+  * Append formatted message to log, size of which is limited to
+  * KUNIT_LOG_SIZE bytes (including null terminating byte).
+@@ -135,6 +151,8 @@ void kunit_log_append(char *log, const char *fmt, ...)
+ 	vsnprintf(log + log_len, min(len, len_left), fmt, args);
+ 	va_end(args);
+ 
++	/* Add newline to end of log if not already present. */
++	kunit_log_newline(log);
+ }
+ EXPORT_SYMBOL_GPL(kunit_log_append);
+ 
 -- 
 2.40.0.rc0.216.gc4246ad0f0-goog
 
