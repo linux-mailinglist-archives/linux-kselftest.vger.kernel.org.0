@@ -2,117 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1CD6AF762
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 22:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF746AF889
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 23:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjCGVSk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 16:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54100 "EHLO
+        id S231183AbjCGWXd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 17:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbjCGVSi (ORCPT
+        with ESMTP id S231324AbjCGWW6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:18:38 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F23099D65;
-        Tue,  7 Mar 2023 13:18:37 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id ec29so27021601edb.6;
-        Tue, 07 Mar 2023 13:18:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678223915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bT9FiASK1DB4QbD0wXIRsqFb1t5m7/WMXyE4zipQBgs=;
-        b=XZRUHZNlOVWWar8OmQxc4l18Ns4Ay3zk1r5/iP0nGgvrTarrD1WtX4t7ZDUeAU+Kmn
-         y3gux0xqokeG1SF1sfRK8kH6Fs4eK/RB3DJDFJateRr3aPzJO/rdAB33D1DxBCmMvug1
-         2+t/rOZmMi9aCK9I8RXUjUslBeJtPNIejQlHCpUdxA/6eyfbUFM9w37VUA1uKho+LTWc
-         CC6uwViT8Xbi5YfZ5sxgklTr+38MZrlyneYHCqEEFrcAi/gzGISimm7UQJKVDiZYkpcn
-         8L4DjJ3sPxFDMWliMIZaLeEF/uitLcKCkMjVzBypmiqjyFBvfKhUi2jAGDUpLX9HbWYf
-         1h1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678223915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bT9FiASK1DB4QbD0wXIRsqFb1t5m7/WMXyE4zipQBgs=;
-        b=F+lbrUxRtBxt4NZRLnH5iJsbhQQBfN120YX2ExOnMQXLymfoPa7sOm+LT2CmedHG+l
-         2PfaUHUrLPiGnuTB9ThcFu0I3miBbQGE1bNVF4rHCoLetN+l7XAU2ALTF/M97CGmaWJ5
-         ODN3XT9sD+5KIQEvdcAN2PB+iMeUxPsTshxQcQCFPADOIfjljIjRZ94AmXIwPAUcVWo3
-         yBgLJTpqxJk8m1/Zp7I23tDtWKjqxBYcbu7b4YQbngqY6JpZi019ORtphKV6dZM4BoZq
-         VeJSMpNfOWq785+ONJNGp/tk3sRyYJ2oVfDQoeOJr1cqaJA0qlFkZTfwnmFsajPdhTdJ
-         hFSg==
-X-Gm-Message-State: AO0yUKUj72GNPDC19RdZn+Cx8brRvDRrelUQpdn4jn/hZEBuAADeH/V8
-        FGYZ86zONEsMpSxhf30FhSm7zOgkVHudPLvKshqeQ1r2HzY=
-X-Google-Smtp-Source: AK7set+Se0iunflJpZCYnoGyjZ2gQplgrdTsGwS0vBTFJC6JhbRPQsBREQBt88sd9cj+dWd/Nc5Ban1xnd1TF7pS/ps=
-X-Received: by 2002:a17:906:948:b0:8b1:2898:2138 with SMTP id
- j8-20020a170906094800b008b128982138mr7898708ejd.3.1678223915375; Tue, 07 Mar
- 2023 13:18:35 -0800 (PST)
+        Tue, 7 Mar 2023 17:22:58 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC24A4B2D;
+        Tue,  7 Mar 2023 14:22:44 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1678227762;
+        bh=kgcKp/6qGiFaqBrzwsbN0tNUCKiKFuSQnGedC4rFcio=;
+        h=From:Subject:Date:To:Cc:From;
+        b=naW7o5lCeB/nUleImnp+h+9gLyPBxPTao9FDtTbr/86omhIELCgYKidsfqduXQWLO
+         33V8jHAzuTvCfGz+sU2CPYnjN8CeERJkBukYdjfAYfIdDgbDeoQq4Dfe08l72qiY0F
+         kVjyLBf1isto0e1OdQIGZWt8zrE8O6pAGuMiHNvk=
+Subject: [PATCH RFC 0/5] tools/nolibc: add support for stack protector
+Date:   Tue, 07 Mar 2023 22:22:29 +0000
+Message-Id: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
 MIME-Version: 1.0
-References: <cover.1677526810.git.dxu@dxuuu.xyz> <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
- <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain> <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
- <20230228231716.a5uwc4tdo3kjlkg7@aviatrix-fedora.tail1b9c7.ts.net>
- <CAADnVQKK+a_0effQW5qBSq1AXoQOJg5-79q3d1NWJ2Vv8SHvOw@mail.gmail.com>
- <20230307194801.mopwvidrkrybm7h5@kashmir.localdomain> <20230307201156.GF13059@breakpoint.cc>
-In-Reply-To: <20230307201156.GF13059@breakpoint.cc>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 7 Mar 2023 13:18:23 -0800
-Message-ID: <CAADnVQJXpkzic+v-TTn2o8hAu94S2ARq86DUamKiMEqmJ1zy+g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in BPF
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIACW5B2QC/x2NywrCMBAAf6Xs2UCbVipeBT/Aq3jIY2MXw6Zso
+ gil/+7icQaG2aCiEFY4dxsIfqhSYYXh0EFYHD/RUFQG29uxt3Y0XDL5YGpz4bVKaRhaEROneEz
+ TKaV5HkBb7yoaL47DojW/c1a5Cib6/md3uF0v8Nj3H9Cwt9GBAAAA
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678227756; l=1747;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=kgcKp/6qGiFaqBrzwsbN0tNUCKiKFuSQnGedC4rFcio=;
+ b=HtG6zEnZMq7VZz5FJquxBBgSKoVo0gRsHMBytoj17uzdaG0886ia0VLA4zZnAEvxC+fz3l7Gf
+ Lm0Ir34BdYUAbVku8YsBaxrOn1Aj5WflVv3/6LKjy5i5swV5+GOw8kY
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 12:11=E2=80=AFPM Florian Westphal <fw@strlen.de> wro=
-te:
->
-> Daniel Xu <dxu@dxuuu.xyz> wrote:
-> > From my reading (I'll run some tests later) it looks like netfilter
-> > will defrag all ipv4/ipv6 packets in any netns with conntrack enabled.
-> > It appears to do so in NF_INET_PRE_ROUTING.
->
-> Yes, and output.
->
-> > One thing we would need though are (probably kfunc) wrappers around
-> > nf_defrag_ipv4_enable() and nf_defrag_ipv6_enable() to ensure BPF progs
-> > are not transitively depending on defrag support from other netfilter
-> > modules.
-> >
-> > The exact mechanism would probably need some thinking, as the above
-> > functions kinda rely on module_init() and module_exit() semantics. We
-> > cannot make the prog bump the refcnt every time it runs -- it would
-> > overflow.  And it would be nice to automatically free the refcnt when
-> > prog is unloaded.
->
-> Probably add a flag attribute that is evaluated at BPF_LINK time, so
-> progs can say they need defrag enabled.  Same could be used to request
-> conntrack enablement.
->
-> Will need some glue on netfilter side to handle DEFRAG=3Dm, but we alread=
-y
-> have plenty of those.
+Stack protection is a feature to detect and handle stack buffer
+overflows at runtime.
+For this to work the compiler and libc have to collaborate.
 
-All makes perfect sense to me.
-It's cleaner than a special netdevice.
-ipv4_conntrack_defrag() is pretty neat. I didn't know about it.
-If we can reuse it as-is that would be ideal.
-Conceptually it fits perfectly.
-If we cannot reuse it (for whatever unlikely reason) I would
-argue that TC hook should gain similar functionality.
+This patch adds the following parts to nolibc that are required by the
+compiler:
+
+* __stack_chk_guard: random sentinel value
+* __stack_chk_fail: handler for detected stack smashes
+
+In addition an initialization function is added that randomizes the
+sentinel value.
+
+Only support for global guards is implemented.
+Register guards are useful in multi-threaded context which nolibc does
+not provide support for.
+
+Link: https://lwn.net/Articles/584225/
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (5):
+      tools/nolibc: add definitions for standard fds
+      tools/nolibc: add helpers for wait() signal exits
+      tools/nolibc: tests: constify test_names
+      tools/nolibc: add support for stack protector
+      tools/nolibc: tests: add test for -fstack-protector
+
+ tools/include/nolibc/Makefile                |  4 +-
+ tools/include/nolibc/arch-i386.h             |  8 ++-
+ tools/include/nolibc/arch-x86_64.h           |  5 ++
+ tools/include/nolibc/nolibc.h                |  1 +
+ tools/include/nolibc/stackprotector.h        | 48 ++++++++++++++++++
+ tools/include/nolibc/types.h                 |  2 +
+ tools/include/nolibc/unistd.h                |  5 ++
+ tools/testing/selftests/nolibc/Makefile      | 12 +++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 76 ++++++++++++++++++++++++++--
+ 9 files changed, 155 insertions(+), 6 deletions(-)
+---
+base-commit: b7453ccfdbe0b9e95b488814c53e8cbf8966aae4
+change-id: 20230223-nolibc-stackprotector-d4d5f48ff771
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
