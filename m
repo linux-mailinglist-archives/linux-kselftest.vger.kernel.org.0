@@ -2,179 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE55C6AE170
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 14:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969976AE3F0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 16:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjCGNye (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 08:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S229927AbjCGPIQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 10:08:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjCGNy3 (ORCPT
+        with ESMTP id S229978AbjCGPH6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:54:29 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7787719F17;
-        Tue,  7 Mar 2023 05:54:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j37bgBE4//8RVByzycO63y3HYNC3u/6Jgs3fCIgfPTJzD8Ms73fT/05PJppyGPB2lJFa6EDOSz9V06D14kQoVaRwZcUN4VUK64rlT8DiqJNsob2sWFyt4ELL/ePCNV82KRz31UDeKtvg6yycNvULSVft87NHDf89JJDnqLDvIIATfEfVjac9Sv5tgm/V0TRyqi/fWWqQclNrKlcMm7M0xQPCviDchVhRhKCDFYQl28HO/mFJJuJeQSXcomrNENxdfoEXHspOle061FGwOPWWOZVX65xF0KwIXVWyjGyn1DMHNCgdg25wjg2wLXpoxGJmHt/KOItjgas+vdMSV6ZdqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZGXDqOIrq92RR+PjnA9uAkH6v8ybKan+JYHpJm8m4x0=;
- b=YTzeuZThmTxcSIE1c9MXi2k4mgJ1VuE3299yti/UlFj3SADZPXOEkVO8ukqgvUGg/7vCFOG6y+08AME2p5XfgmVgUio3BmD3de/e8TedMLR/2l8yJZLLiohWV6YlKvrbEM6eale40A1zkg3NNs9nVE6eEfYpUuMIhXryCM+huQE6E/lulG27fjfRsrBEIrdGOqJoiuCsyPP/Cn4IXdCeYKmzMruhyHk98whyoZDmD4waXQcilXyDD+jZeSo852LMnr4lUaFA8Ug3f4WI2qJxuaT8bgPRhssX3vHa3Pp0gUR5s2A9zDj/CjMaqjvDd7G0hejDJ2/BQmwNSS6Cg/9H4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZGXDqOIrq92RR+PjnA9uAkH6v8ybKan+JYHpJm8m4x0=;
- b=P67tJYOQDonjv8dS97lFYCRCZj9GjRrZoNbGLQMhe+zjmErDMgOuOW4yMhoT7e9S4sGuw+xkWhzpgT5JZaTUUdKLI5cC9R92O2jPLhXjbHnRRbWLFdjYEOD2Jk6E0RYOd/M69YCojwYkt77+dTz/sR44mAr7e75GnZ49bsocchZH4wOJvF/r1tb1Edn4/KfVJQUEBJLTzmGYLZznBDs9M2GDtaSzW1cDq19VGhLjTxp/uJfLlTUmV89k3buXMYwtlKbesgW3sZ63VNQCTCP7QlYIz2bm5gifMv9QVK2OfaGw2P58VREV0GGBDJOhGAhfVJRH5dVbv1bx3XAao/Wo9g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA1PR12MB7590.namprd12.prod.outlook.com (2603:10b6:208:42a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.27; Tue, 7 Mar
- 2023 13:54:23 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%5]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
- 13:54:23 +0000
-Date:   Tue, 7 Mar 2023 09:54:21 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: Re: [PATCH 09/14] iommufd: Add iommufd_device_replace()
-Message-ID: <ZAdCDWzkKqWZPxno@nvidia.com>
-References: <0-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
- <9-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
- <BN9PR11MB527622B6031FDB540D2820138CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZAZQtNE7aPpzv5RX@nvidia.com>
- <BN9PR11MB5276E3418B829505626E43798CB79@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276E3418B829505626E43798CB79@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BLAPR03CA0108.namprd03.prod.outlook.com
- (2603:10b6:208:32a::23) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Tue, 7 Mar 2023 10:07:58 -0500
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8F994755;
+        Tue,  7 Mar 2023 07:01:37 -0800 (PST)
+Received: from localhost.localdomain (1.general.phlin.uk.vpn [10.172.194.38])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 5FABC41ABE;
+        Tue,  7 Mar 2023 15:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678201277;
+        bh=Tktkkrpcs3rSHZyoHsHQYEN7vp4v2hInvSY2NkAVAZ8=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=YEqiMoqSGXa5WR4yWutTRqV1u1RHpO5RjhhR/aEpBnzSg1e01EnSibDyiHOuTSNd6
+         /mUdCu/1Y52GGupLdEnX1iSFxXPuKUVnIYMgRZLxDb8CYgSrRZz1VLCditKb5q95u1
+         7YdPBF/Gi3LIvfNwh5gAT/bs2CD6HpidH4DqQgrDfqWzNAkAk5XRn3ow2Xf7WYh6xC
+         nXnR5No1eD3p/H0M9fc2/irHCFQuE6WwJubCK5WMzYOw59Gf/oxzg7yKYnoncXGrfq
+         ru3dsUMUK5vDYLVSqE/OzRegxwaPXGYprB6mK1Ab731QSQUNIBYkSykhUOrNZSEWKe
+         Cv5tNENRvvASg==
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     idosch@mellanox.com, danieller@mellanox.com, petrm@mellanox.com,
+        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net, po-hsu.lin@canonical.com
+Subject: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no suitable device available
+Date:   Tue,  7 Mar 2023 23:00:30 +0800
+Message-Id: <20230307150030.527726-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB7590:EE_
-X-MS-Office365-Filtering-Correlation-Id: b60b4c4b-b89a-4a0c-a937-08db1f1374f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TAZ0ZOImQ4AgIsSpTdqX4QujhF7zpgZ1HKVZN0qCaN4WBoabFTHWkRk7a6kB6XYi/K6muRFP6LQZ69lq1Y87XBNWigGlEABReTrqSTKtTBuIdtRmvv/DMbmASVkaZwpS7YQWlclw/6Wzv7CVdm1NUDvlGUXum7JQrgkR0IJweb+yiud9x8MUoB0eKU0naHZ/sZBsINbNsEvmzKkRM1mogFQuLBbDfvGuZqm7g/ATZJU6QOvcjIPIkCTFjbcxvQraaAwSUkfMfGcOKPxrPJGOBqwkTQMxqxzsm6kbuyQXxyoxxjlRnq2wDAilTMFbKyS+Kn12jpkJOyhM+OOQo+w3JKQX/nPIKNerMRDZZU8Cui+fBgI9KZsdw5UW6TU0gaQADcqi9mjcTi1B1MFECaKR5L9LuSQrKVfqObgXbvOsIEkMGUm1wY9E7grbkb2RQ+eyjyzNdE0BJY07vXlX3aJy26ULE25ltQV/QxRJ/uFvgF7mhEsO7UkEY9hlexOV3n7fgVfXu8ljH9hEGYg7fm0eXCrddr7UL5bWZBjeZHzPaRQc1/SBjWCOPUxCkRBEKRmMKtH199R52fi/H1UxcYByvtsrxZ0mZuTPPxIp9mxjg97HzfGS1y6KRON7guseVVk18T6gdXEFw9G1gW082DO05Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(346002)(376002)(39860400002)(396003)(451199018)(36756003)(41300700001)(8676002)(83380400001)(54906003)(8936002)(316002)(66556008)(66476007)(478600001)(4326008)(66946007)(86362001)(6916009)(5660300002)(2906002)(6486002)(186003)(2616005)(6506007)(6512007)(26005)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YEqlPTfjK7FTwbdNluCyWuVXRrfRF+PoHBw72jO8cACKmk1WIvHO8LJjNmI8?=
- =?us-ascii?Q?PO+CJzWWJ15zuuDmPBiyGgtzliPmc5KnZzVHIgUzHaqJ4uqIApjxZKz+6uH4?=
- =?us-ascii?Q?2k+FTyE5t4e76bMGinq+XewQ+XwlwNeiChlNzCkkdErLa6gUMpyNKDlfRzwl?=
- =?us-ascii?Q?/LlCElmiOjJHpndr+fDWL11qkTNSySRJD0XdldkmKwD9iYXoKyEOo0Rnw0nw?=
- =?us-ascii?Q?o8wSe9fRA0M6FneGus/e0ICAAdYe/2QdKBKRHf/io+FTpRF0JsKI7Mk4mG8Y?=
- =?us-ascii?Q?DUqHd3BLOSuiMsxVomBWxHqigGUxe0qIFVGEu1+2vkL9BLWu9VjwrMbpkvL3?=
- =?us-ascii?Q?7lgGVVNA+TwegkkJXK/i8b1tzsWX++r2HIKJsFQu5ikaPJPWiBeUf65CgBbF?=
- =?us-ascii?Q?+OWe8/jWTU9W6ThkxbUSpn/AYA0h855tYeR/7kMtA0MLi9KL7jbCQt9rxhI9?=
- =?us-ascii?Q?favhNSMWunmhSNjZfHpyXWxkz1fNEd0CQD4qdfqL/Frwb9wSzLRek+viwPlj?=
- =?us-ascii?Q?Uo390vzX5c3f3dXNQRyVJHqq+iisUE47rgqTBCMUG8q3HXjQcmCW2dbtBSks?=
- =?us-ascii?Q?oh7P1rRBjjGneVMjUVvVd7vVzLzNcVOvJTi8jXp+LZQPGcOeLimpJjWB485E?=
- =?us-ascii?Q?lAPe/j3evGB+JHrKvDnZY2gEKM7XmoNrbnUwitZNLaApj0TmJmLR2uJGR5YG?=
- =?us-ascii?Q?wzYbx5+mCT9gTcl8JgEuvucSpfxiWS6NXMP8WeMCNpHAol/y6MjCnTLw5Y81?=
- =?us-ascii?Q?8yyAFxJmyft9SEabl3QQE4DKPzd2tr9N8xa2Yn7Yftf8o7b51eCDvfHsgRrD?=
- =?us-ascii?Q?ZR1ZjzxYqWT2K7jxk0RKjEcQVLZ9ThuPQxArIF2jJzwC87jqGA+DqVOZ33Ag?=
- =?us-ascii?Q?GQOMrJhEu+wAneyzQ3tenmNKy5fRmRXMsPqxOKK+kAez9OHvJsekV1ZhOgAK?=
- =?us-ascii?Q?CZWMFQ6+wL0ZMnD6MJoIyZC0kRdPbTMyX8Ffwrv/AU6z7tRrLd61+dPPDGZu?=
- =?us-ascii?Q?GuSfwHkR5L4cKfpdF5K2JPYPA7lOEPwNQmjzg8f7c+Agh2bE2Q0iqXYpghd8?=
- =?us-ascii?Q?BK0dBf6BizNp4AKmHLnr5VeiXxdoaMDDFWCs1v2OxAYUfnpFppP7tdc8gfKg?=
- =?us-ascii?Q?keZDk0wa82183tmdjAxeDoTSc1WV1D1Gzq+dG5dlW4+oYmuZjyII+MikE2M+?=
- =?us-ascii?Q?rTakDdukcDZzKf1JLhbBt63aMNsrCJQnT0PPKVo9ehCXX4oBPP3+LL0oUfUR?=
- =?us-ascii?Q?N4apn8hgIzC8Gm2LFYdC2A8jjE4oO3u5YOIKPXL2GlIYFz/sWgBm4XMjXpy3?=
- =?us-ascii?Q?ALbQQSIPkIceVNNilm/DogSAAwyh1qcCIbNUE6GKEP5578UC2tKRHS+PyZ15?=
- =?us-ascii?Q?UDX0oCAPqAb+JPA0T/SPzU0OUGpIk0VyGa8lUihg7YnSmfAeLeK5kkzkWYik?=
- =?us-ascii?Q?1mc0ih9Q5NG8Venqz/oasXtThd18G5KbG0bdPfANdQFdZPcvL/LbPFHkmLpS?=
- =?us-ascii?Q?5+h8pE8lIx0Hxx2UTh7cyKZLuMmF4ck9KyxGjH1FiN3CxW1CsHsGXUZNMCCY?=
- =?us-ascii?Q?tlEXIupwbm8vUqEXQUY+esvYAtLDeQTzcFV0pThF?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b60b4c4b-b89a-4a0c-a937-08db1f1374f6
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 13:54:23.1937
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oFGIHk6i/q0KFWJCj0Dq0qc2aRhWP5XnRKPIlVa4+drarUP4eytl+VFWVhdaDSwp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7590
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 02:42:23AM +0000, Tian, Kevin wrote:
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Tuesday, March 7, 2023 4:45 AM
-> > 
-> > On Thu, Mar 02, 2023 at 08:20:05AM +0000, Tian, Kevin wrote:
-> > > > From: Jason Gunthorpe <jgg@nvidia.com>
-> > > > Sent: Saturday, February 25, 2023 8:28 AM
-> > > >
-> > > > +static struct iommufd_hw_pagetable *
-> > > > +iommufd_device_do_replace_locked(struct iommufd_device *idev,
-> > > > +				 struct iommufd_hw_pagetable *hwpt)
-> > > > +{
-> > > > +	struct iommufd_hw_pagetable *old_hwpt;
-> > > > +	int rc;
-> > > > +
-> > > > +	lockdep_assert_held(&idev->igroup->lock);
-> > > > +
-> > > > +	/* Try to upgrade the domain we have */
-> > > > +	if (idev->enforce_cache_coherency) {
-> > > > +		rc = iommufd_hw_pagetable_enforce_cc(hwpt);
-> > > > +		if (rc)
-> > > > +			return ERR_PTR(-EINVAL);
-> > > > +	}
-> > > > +
-> > > > +	rc = iommufd_device_setup_msi(idev, hwpt);
-> > > > +	if (rc)
-> > > > +		return ERR_PTR(rc);
-> > > > +
-> > > > +	old_hwpt = idev->igroup->hwpt;
-> > > > +	if (hwpt->ioas != old_hwpt->ioas) {
-> > > > +		rc = iopt_table_enforce_group_resv_regions(
-> > > > +			&hwpt->ioas->iopt, idev->igroup->group, NULL);
-> > > > +		if (rc)
-> > > > +			return ERR_PTR(rc);
-> > > > +	}
-> > >
-> > > This is inconsistent with the earlier cleanup in the attach path
-> > > where setup_msi/enforce_group_resv_region are done only
-> > > once per group (if that is the right thing to do).
-> > 
-> > Logically replace is 'detach every device in the group' - which makes
-> > devices 0 - then 'reattach them all' to the new ioas.
-> > 
-> > So at this point it is still being done only once per group.
-> > 
-> > The 2nd idevs to call this function will see hwpt->ioas ==
-> > old_hwpt->ioas
-> > 
-> 
-> but setup_msi() is still done for every device which is inconsistent
-> with what patch5 does.
+The `devlink -j port show` command output may not contain the "flavour"
+key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic),
+iproute2-5.15.0:
+  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
+           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
+           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
+           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
 
-There is a missing check to do nothing if the hwpt is already set
+This will cause a KeyError exception.
 
-If the hwpt is not set and the ioas is the same then we still have to
-do the setup_msi
+Create a validate_devlink_output() to check for this "flavour" from
+devlink command output to avoid this KeyError exception. Also let
+it handle the check for `devlink -j dev show` output in main().
 
-Jason
+Apart from this, if the test was not started because of any reason
+(e.g. "lanes" does not exist, max lanes is 0 or the flavour of the
+designated device is not "physical" and etc.) The script will still
+return 0 and thus causing a false-negative test result.
+
+Use a test_ran flag to determine if these tests were skipped and
+return KSFT_SKIP to make it more clear.
+
+V2: factor out the skip logic from main(), update commit message and
+    skip reasons accordingly.
+Link: https://bugs.launchpad.net/bugs/1937133
+Fixes: f3348a82e727 ("selftests: net: Add port split test")
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/devlink_port_split.py | 36 +++++++++++++++++++----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/net/devlink_port_split.py b/tools/testing/selftests/net/devlink_port_split.py
+index 2b5d6ff..749606c 100755
+--- a/tools/testing/selftests/net/devlink_port_split.py
++++ b/tools/testing/selftests/net/devlink_port_split.py
+@@ -59,6 +59,8 @@ class devlink_ports(object):
+         assert stderr == ""
+         ports = json.loads(stdout)['port']
+ 
++        validate_devlink_output(ports, 'flavour')
++
+         for port in ports:
+             if dev in port:
+                 if ports[port]['flavour'] == 'physical':
+@@ -220,6 +222,27 @@ def split_splittable_port(port, k, lanes, dev):
+     unsplit(port.bus_info)
+ 
+ 
++def validate_devlink_output(devlink_data, target_property=None):
++    """
++    Determine if test should be skipped by checking:
++      1. devlink_data contains values
++      2. The target_property exist in devlink_data
++    """
++    skip_reason = None
++    if any(devlink_data.values()):
++        if target_property:
++            skip_reason = "{} not found in devlink output, test skipped".format(target_property)
++            for key in devlink_data:
++                if target_property in devlink_data[key]:
++                    skip_reason = None
++    else:
++        skip_reason = 'devlink output is empty, test skipped'
++
++    if skip_reason:
++        print(skip_reason)
++        sys.exit(KSFT_SKIP)
++
++
+ def make_parser():
+     parser = argparse.ArgumentParser(description='A test for port splitting.')
+     parser.add_argument('--dev',
+@@ -231,6 +254,7 @@ def make_parser():
+ 
+ 
+ def main(cmdline=None):
++    test_ran = False
+     parser = make_parser()
+     args = parser.parse_args(cmdline)
+ 
+@@ -240,12 +264,9 @@ def main(cmdline=None):
+         stdout, stderr = run_command(cmd)
+         assert stderr == ""
+ 
++        validate_devlink_output(json.loads(stdout))
+         devs = json.loads(stdout)['dev']
+-        if devs:
+-            dev = list(devs.keys())[0]
+-        else:
+-            print("no devlink device was found, test skipped")
+-            sys.exit(KSFT_SKIP)
++        dev = list(devs.keys())[0]
+ 
+     cmd = "devlink dev show %s" % dev
+     stdout, stderr = run_command(cmd)
+@@ -277,6 +298,11 @@ def main(cmdline=None):
+                 split_splittable_port(port, lane, max_lanes, dev)
+ 
+                 lane //= 2
++        test_ran = True
++
++    if not test_ran:
++        print("Test not started, no suitable device for the test")
++        sys.exit(KSFT_SKIP)
+ 
+ 
+ if __name__ == "__main__":
+-- 
+2.7.4
+
