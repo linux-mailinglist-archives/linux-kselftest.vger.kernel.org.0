@@ -2,146 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E666ADBBD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 11:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9506AD9D2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 10:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCGKXU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 05:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        id S230190AbjCGJFV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 04:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbjCGKXL (ORCPT
+        with ESMTP id S230157AbjCGJFU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:23:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7B81ACF3
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Mar 2023 02:22:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678184540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H/IPZqHOoz7jiojxziiZXAo+iRRmEKFV9o6Kto64+sI=;
-        b=f81QqDRLBdd/FiX+7iosalrrfkwgHQRileyQsbAlWoCR1WmKAY4U/r6sWukc79WS5JrUuw
-        4uPHCveMBZ7VEDybQ99w8Qa6I9FHB+wLTgB+j7jHpgdoxIlVTWArI+tagXYMSNGkGK5iS8
-        FKXglHPgiameAOEpmp/uQEgKSZd0RFM=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-286-J-ph8L4yM0yfdKj6PS4YCQ-1; Tue, 07 Mar 2023 05:22:19 -0500
-X-MC-Unique: J-ph8L4yM0yfdKj6PS4YCQ-1
-Received: by mail-wr1-f72.google.com with SMTP id by11-20020a056000098b00b002ce45687cbdso1680795wrb.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Mar 2023 02:22:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678184538;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H/IPZqHOoz7jiojxziiZXAo+iRRmEKFV9o6Kto64+sI=;
-        b=T+zz50FtXsP7q44xtxeWOTeq3t7X7trso2Liwwy3pNqOJuXtfxmUs5z/Q+VCNUsOkG
-         9uCajo/2CuAyibu/a9GPvsfTtoTDLdrlVUPybPgWh9Tivms7VwY7bXGylLHs+PhOO42E
-         o3fawjuL9eBE2Z8yAIf8bdgExppavxxupzADCyT5/MWiCB8AZtGYLCjXsrTgVXcj7V1L
-         wZJPhVKIkR/KKxmNEFmqx4Po0DUmsJE4p+8uB5nVldJQ0MS2oC62xspy8neI2fQyzzBE
-         JlNg5WIVB9rTqb5Mc64PO4SpO+NtkyQqNXmbj3/uuSeEd713+HIf+wX7SoLiAU2jBVaX
-         Xx9A==
-X-Gm-Message-State: AO0yUKVs6kLGWJA56qGTIWhd13tKRbOuSLqMoxhbzF0p+Y4qf1gmpMWg
-        ZZohOYJxoqg1C/ySLTkl81YXylE6nkbKP+OAi5z+XSKZsanN+h9WWtmbGNi4WPOQk2iLYy/sibE
-        iEha8Vj/CgHSBg6mKqK5GQ5Iu19cI
-X-Received: by 2002:a5d:5452:0:b0:2ce:50a9:6d8e with SMTP id w18-20020a5d5452000000b002ce50a96d8emr6603683wrv.20.1678184537904;
-        Tue, 07 Mar 2023 02:22:17 -0800 (PST)
-X-Google-Smtp-Source: AK7set/i5Nv1U3NOAuCbE4btJ9ZAiOioRnHyw6o9C90eWaBZTs9BfvSsigkdVvJPs3CCoLRzMZNrMw==
-X-Received: by 2002:a5d:5452:0:b0:2ce:50a9:6d8e with SMTP id w18-20020a5d5452000000b002ce50a96d8emr6603670wrv.20.1678184537566;
-        Tue, 07 Mar 2023 02:22:17 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:a100:e20:41da:c49b:8974? (p200300cbc707a1000e2041dac49b8974.dip0.t-ipconnect.de. [2003:cb:c707:a100:e20:41da:c49b:8974])
-        by smtp.gmail.com with ESMTPSA id a17-20020a056000101100b002c553e061fdsm12270849wrx.112.2023.03.07.02.22.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 02:22:17 -0800 (PST)
-Message-ID: <9ce5434e-4c19-cb34-d3fa-99738c265b03@redhat.com>
-Date:   Tue, 7 Mar 2023 11:22:16 +0100
+        Tue, 7 Mar 2023 04:05:20 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F139932524;
+        Tue,  7 Mar 2023 01:05:19 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PW8fg20jHz4f3jZC;
+        Tue,  7 Mar 2023 17:05:15 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgDXia1L_gZkc5mfEw--.53857S2;
+        Tue, 07 Mar 2023 17:05:17 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: [PATCH bpf-next 0/2] update 32-bit bounds when the lower 32-bit value is not wrapping
+Date:   Tue,  7 Mar 2023 17:04:47 -0500
+Message-Id: <20230307220449.2933650-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] selftests/mm: fix split huge page tests
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Zach O'Keefe <zokeefe@google.com>
-References: <20230306160907.16804-1-zi.yan@sent.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230306160907.16804-1-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgDXia1L_gZkc5mfEw--.53857S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY-7kC6x804xWl14x267AKxVW8JVW5JwAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62
+        vIxIIY0VW8XVW5AwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xII
+        jxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjc
+        xK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IY
+        c4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI
+        0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY
+        0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+        IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+        MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+        WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWU
+        JVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+        1UYxBIdaVFxhVjvjDU0xZFpf9x07joksgUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        KHOP_HELO_FCRDNS,MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 06.03.23 17:09, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> Fixed two inputs to check_anon_huge() and one if condition, so the tests
-> work as expected.
-> 
-> Fixes: c07c343cda8e ("selftests/vm: dedup THP helpers")
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> Cc: Zach O'Keefe <zokeefe@google.com>
-> ---
->   tools/testing/selftests/mm/split_huge_page_test.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> index 76e1c36dd9e5..b8558c7f1a39 100644
-> --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> @@ -106,7 +106,7 @@ void split_pmd_thp(void)
->   	for (i = 0; i < len; i++)
->   		one_page[i] = (char)i;
->   
-> -	if (!check_huge_anon(one_page, 1, pmd_pagesize)) {
-> +	if (!check_huge_anon(one_page, 4, pmd_pagesize)) {
->   		printf("No THP is allocated\n");
->   		exit(EXIT_FAILURE);
->   	}
-> @@ -122,7 +122,7 @@ void split_pmd_thp(void)
->   		}
->   
->   
-> -	if (check_huge_anon(one_page, 0, pmd_pagesize)) {
-> +	if (!check_huge_anon(one_page, 0, pmd_pagesize)) {
->   		printf("Still AnonHugePages not split\n");
->   		exit(EXIT_FAILURE);
->   	}
-> @@ -169,7 +169,7 @@ void split_pte_mapped_thp(void)
->   	for (i = 0; i < len; i++)
->   		one_page[i] = (char)i;
->   
-> -	if (!check_huge_anon(one_page, 1, pmd_pagesize)) {
-> +	if (!check_huge_anon(one_page, 4, pmd_pagesize)) {
->   		printf("No THP is allocated\n");
->   		exit(EXIT_FAILURE);
->   	}
+This patchset updates __reg_combine_64_into_32 function to set 32-bit bounds
+when lower 32-bit value is not wrapping, and add cases to for it.
 
-Hard to read. It should probably be "get_huge_anon()" to then check for 
-the value in the caller manually. Negative value could be used as an 
-indicator for an error obtaining the value.
+Xu Kuohai (2):
+  bpf: update 32-bit bounds when the lower 32-bit value is not wrapping
+  selftests/bpf: check bounds not in the 32-bit range
 
-Anyhow, was briefly confused about the 4 ("magic value" also apprearing 
-in "size_t len = 4 * pmd_pagesize;") but it seems to be the right thing 
-to do.
-
-Acked-by: David Hildenbrand <david@redhat.com>
+ kernel/bpf/verifier.c                         |  27 ++--
+ tools/testing/selftests/bpf/verifier/bounds.c | 121 ++++++++++++++++++
+ 2 files changed, 132 insertions(+), 16 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.30.2
 
