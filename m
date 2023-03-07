@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909C06AECD3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 18:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AFF6AEC91
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 18:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjCGR6L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 12:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        id S230361AbjCGR4W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 12:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjCGR5z (ORCPT
+        with ESMTP id S230151AbjCGRz4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:57:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE79FA17CA;
-        Tue,  7 Mar 2023 09:52:23 -0800 (PST)
+        Tue, 7 Mar 2023 12:55:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809F7A2C16;
+        Tue,  7 Mar 2023 09:50:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A160614B2;
-        Tue,  7 Mar 2023 17:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78EF7C433EF;
-        Tue,  7 Mar 2023 17:52:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16E1661516;
+        Tue,  7 Mar 2023 17:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C440C433EF;
+        Tue,  7 Mar 2023 17:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678211542;
-        bh=HXq/6ZjXuusXiycdbXpA5n7j8u0nZx0cU+AyOrSbcWs=;
+        s=korg; t=1678211451;
+        bh=BPrBCowJ/Hebpao303tbhxCldRDfHqhD7j4e3HQsHsw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r9U/qEKVdfsf6JHS6+68ydwCErN6mTZLyy6k1K5SXUs5NknHxbYZ4D1g0OQdWulO2
-         4WqxcL5NARQrJCJB5DsZJMOjx0w1KJzieNnp7Js0nBZfZFz2ZTBpG58hli8/oWpSuz
-         ei3Nj8hlSE+X2YkB0E0eqgG+8PEaqYeh+YKWRR9g=
+        b=penyHn3YKlsMd45o/moa1AbH1Ih/d8KCO4g8u2uu5I/sigaHbSVnL0GcAP+bP/q4i
+         OYyr4KLk+cVQrNWn/LVoIOKOfyWTp92DIqHB/a5TKU187Fu4fZqcfVnL1NbgxMWOte
+         9HoUwMX9NEksWmaH7flRa5mu548npngLxp5BrfBs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 6.2 0866/1001] selftests: filesystems: Fix incorrect kernel headers search path
-Date:   Tue,  7 Mar 2023 18:00:38 +0100
-Message-Id: <20230307170059.451584358@linuxfoundation.org>
+Subject: [PATCH 6.2 0867/1001] selftests: user_events: Fix incorrect kernel headers search path
+Date:   Tue,  7 Mar 2023 18:00:39 +0100
+Message-Id: <20230307170059.497249975@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
 References: <20230307170022.094103862@linuxfoundation.org>
@@ -47,8 +47,8 @@ User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,7 +59,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit c2d3cf3653a8ff6e4b402d55e7f84790ac08a8ad upstream.
+commit f3886fd28987c119a98493f625cb9940b5f1c9a0 upstream.
 
 Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
 building against kernel headers from the build environment in scenarios
@@ -74,40 +74,17 @@ Cc: <stable@vger.kernel.org> # 5.18+
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/filesystems/Makefile          |    2 +-
- tools/testing/selftests/filesystems/binderfs/Makefile |    2 +-
- tools/testing/selftests/filesystems/epoll/Makefile    |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/user_events/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/testing/selftests/filesystems/Makefile
-+++ b/tools/testing/selftests/filesystems/Makefile
-@@ -1,6 +1,6 @@
+--- a/tools/testing/selftests/user_events/Makefile
++++ b/tools/testing/selftests/user_events/Makefile
+@@ -1,5 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0
+-CFLAGS += -Wl,-no-as-needed -Wall -I../../../../usr/include
++CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+ LDLIBS += -lrt -lpthread -lm
  
--CFLAGS += -I../../../../usr/include/
-+CFLAGS += $(KHDR_INCLUDES)
- TEST_GEN_PROGS := devpts_pts
- TEST_GEN_PROGS_EXTENDED := dnotify_test
- 
---- a/tools/testing/selftests/filesystems/binderfs/Makefile
-+++ b/tools/testing/selftests/filesystems/binderfs/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--CFLAGS += -I../../../../../usr/include/ -pthread
-+CFLAGS += $(KHDR_INCLUDES) -pthread
- TEST_GEN_PROGS := binderfs_test
- 
- binderfs_test: binderfs_test.c ../../kselftest.h ../../kselftest_harness.h
---- a/tools/testing/selftests/filesystems/epoll/Makefile
-+++ b/tools/testing/selftests/filesystems/epoll/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--CFLAGS += -I../../../../../usr/include/
-+CFLAGS += $(KHDR_INCLUDES)
- LDLIBS += -lpthread
- TEST_GEN_PROGS := epoll_wakeup_test
- 
+ TEST_GEN_PROGS = ftrace_test dyn_test perf_test
 
 
