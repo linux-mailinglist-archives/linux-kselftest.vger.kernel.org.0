@@ -2,186 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5966ADA28
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 10:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E666ADBBD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 11:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjCGJVo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 04:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        id S229976AbjCGKXU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 05:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjCGJVk (ORCPT
+        with ESMTP id S230079AbjCGKXL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:21:40 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CD753704;
-        Tue,  7 Mar 2023 01:21:15 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PW9123tKNz4f3m6v;
-        Tue,  7 Mar 2023 17:21:10 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-        by APP4 (Coremail) with SMTP id gCh0CgD3qa0HAgdkG0+gEw--.54420S2;
-        Tue, 07 Mar 2023 17:21:12 +0800 (CST)
-Message-ID: <1d1cb28f-c587-2359-b298-23766de66138@huaweicloud.com>
-Date:   Tue, 7 Mar 2023 17:21:11 +0800
+        Tue, 7 Mar 2023 05:23:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7B81ACF3
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Mar 2023 02:22:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678184540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H/IPZqHOoz7jiojxziiZXAo+iRRmEKFV9o6Kto64+sI=;
+        b=f81QqDRLBdd/FiX+7iosalrrfkwgHQRileyQsbAlWoCR1WmKAY4U/r6sWukc79WS5JrUuw
+        4uPHCveMBZ7VEDybQ99w8Qa6I9FHB+wLTgB+j7jHpgdoxIlVTWArI+tagXYMSNGkGK5iS8
+        FKXglHPgiameAOEpmp/uQEgKSZd0RFM=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-286-J-ph8L4yM0yfdKj6PS4YCQ-1; Tue, 07 Mar 2023 05:22:19 -0500
+X-MC-Unique: J-ph8L4yM0yfdKj6PS4YCQ-1
+Received: by mail-wr1-f72.google.com with SMTP id by11-20020a056000098b00b002ce45687cbdso1680795wrb.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Mar 2023 02:22:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678184538;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H/IPZqHOoz7jiojxziiZXAo+iRRmEKFV9o6Kto64+sI=;
+        b=T+zz50FtXsP7q44xtxeWOTeq3t7X7trso2Liwwy3pNqOJuXtfxmUs5z/Q+VCNUsOkG
+         9uCajo/2CuAyibu/a9GPvsfTtoTDLdrlVUPybPgWh9Tivms7VwY7bXGylLHs+PhOO42E
+         o3fawjuL9eBE2Z8yAIf8bdgExppavxxupzADCyT5/MWiCB8AZtGYLCjXsrTgVXcj7V1L
+         wZJPhVKIkR/KKxmNEFmqx4Po0DUmsJE4p+8uB5nVldJQ0MS2oC62xspy8neI2fQyzzBE
+         JlNg5WIVB9rTqb5Mc64PO4SpO+NtkyQqNXmbj3/uuSeEd713+HIf+wX7SoLiAU2jBVaX
+         Xx9A==
+X-Gm-Message-State: AO0yUKVs6kLGWJA56qGTIWhd13tKRbOuSLqMoxhbzF0p+Y4qf1gmpMWg
+        ZZohOYJxoqg1C/ySLTkl81YXylE6nkbKP+OAi5z+XSKZsanN+h9WWtmbGNi4WPOQk2iLYy/sibE
+        iEha8Vj/CgHSBg6mKqK5GQ5Iu19cI
+X-Received: by 2002:a5d:5452:0:b0:2ce:50a9:6d8e with SMTP id w18-20020a5d5452000000b002ce50a96d8emr6603683wrv.20.1678184537904;
+        Tue, 07 Mar 2023 02:22:17 -0800 (PST)
+X-Google-Smtp-Source: AK7set/i5Nv1U3NOAuCbE4btJ9ZAiOioRnHyw6o9C90eWaBZTs9BfvSsigkdVvJPs3CCoLRzMZNrMw==
+X-Received: by 2002:a5d:5452:0:b0:2ce:50a9:6d8e with SMTP id w18-20020a5d5452000000b002ce50a96d8emr6603670wrv.20.1678184537566;
+        Tue, 07 Mar 2023 02:22:17 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:a100:e20:41da:c49b:8974? (p200300cbc707a1000e2041dac49b8974.dip0.t-ipconnect.de. [2003:cb:c707:a100:e20:41da:c49b:8974])
+        by smtp.gmail.com with ESMTPSA id a17-20020a056000101100b002c553e061fdsm12270849wrx.112.2023.03.07.02.22.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 02:22:17 -0800 (PST)
+Message-ID: <9ce5434e-4c19-cb34-d3fa-99738c265b03@redhat.com>
+Date:   Tue, 7 Mar 2023 11:22:16 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next 1/2] bpf: update 32-bit bounds when the lower
- 32-bit value is not wrapping
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] selftests/mm: fix split huge page tests
 Content-Language: en-US
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20230307220449.2933650-1-xukuohai@huaweicloud.com>
- <20230307220449.2933650-2-xukuohai@huaweicloud.com>
-In-Reply-To: <20230307220449.2933650-2-xukuohai@huaweicloud.com>
+To:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Zach O'Keefe <zokeefe@google.com>
+References: <20230306160907.16804-1-zi.yan@sent.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230306160907.16804-1-zi.yan@sent.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: gCh0CgD3qa0HAgdkG0+gEw--.54420S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrW3Kr4DXw4fWw47Wr13CFg_yoWrAry3pr
-        W5GF1DGF4kX348C3yxtws8t34vyF18Aa1xWFWUury8ArnIg34qvr17Kry5KasayFyxZa1I
-        q3ZrX3yUK3yUt3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUrR6zUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/8/2023 6:04 AM, Xu Kuohai wrote:
-> The following XDP prog is accepted by verifier.
+On 06.03.23 17:09, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
 > 
-> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
-> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
-> 2: (bf) r1 = r2
-> 3: (07) r1 += 1
-> 4: (2d) if r1 > r3 goto pc+6
-> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
-> 6: (b4) w0 = 0x7fffff10
-> 7: (0c) w1 += w0                      ; R1_w=scalar(umin=0x7fffff10,umax=0x8000000f,var_off=(0x0; 0xffffffff))
-> 8: (b4) w0 = 0x80000000
-> 9: (04) w0 += 1
-> 10: (ae) if w0 < w1 goto pc-2
-> 11: (b7) r0 = 0
-> 12: (95) exit
+> Fixed two inputs to check_anon_huge() and one if condition, so the tests
+> work as expected.
 > 
-> while the following 64-bit version is rejected.
-> 
-> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
-> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
-> 2: (bf) r1 = r2
-> 3: (07) r1 += 1
-> 4: (2d) if r1 > r3 goto pc+8
-> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
-> 6: (18) r0 = 0x7fffffffffffff10
-> 8: (0f) r1 += r0                      ; R1_w=scalar(umin=0x7fffffffffffff10,umax=0x800000000000000f)
-> 9: (18) r0 = 0x8000000000000000
-> 11: (07) r0 += 1
-> 12: (ad) if r0 < r1 goto pc-2
-> 13: (b7) r0 = 0
-> 14: (95) exit
-> 
-> The verifier log says:
-> 
-> [...]
-> 
-> from 12 to 11: R0_w=-9223372036854775794 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
-> 11: (07) r0 += 1                      ; R0_w=-9223372036854775793
-> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
-> 13: safe
-> 
-> from 12 to 11: R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
-> 11: (07) r0 += 1                      ; R0_w=-9223372036854775792
-> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775792 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
-> 13: safe
-> 
-> [...]
-> 
-> The loop crosses termination condition r0 == r1.umax, and does not stop.
-> 
-> The reason is that when the verifier enumerates to r1.umin == r1.umax, the value
-> 0x800000000000000f of r1.umin is greater than U32_MAX, so __reg_combine_64_into_32
-> sets the u32 range of r1 to [0, U32_MAX] instead of marking r1 as a constant,
-> making is_branch_taken() in check_cond_jmp_op() be skipped.
-> 
-> To fix it, update 32-bit bounds when the lower 32-bit value is not wrapping,
-> even if the 64-bit value is beyond the range of [0, U32_MAX] or [S32_MIN, S32_MAX].
-> 
-> Signed-off-by: Xu Kuohai <xukuohai@huaweicloud.com>
-
-Oops, missing fixes tag, will resend
-
+> Fixes: c07c343cda8e ("selftests/vm: dedup THP helpers")
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> Cc: Zach O'Keefe <zokeefe@google.com>
 > ---
->   kernel/bpf/verifier.c | 27 +++++++++++----------------
->   1 file changed, 11 insertions(+), 16 deletions(-)
+>   tools/testing/selftests/mm/split_huge_page_test.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b2116ca78d9a..64c9ee3857ec 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -2013,26 +2013,21 @@ static void __reg_combine_32_into_64(struct bpf_reg_state *reg)
->   	reg_bounds_sync(reg);
->   }
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index 76e1c36dd9e5..b8558c7f1a39 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -106,7 +106,7 @@ void split_pmd_thp(void)
+>   	for (i = 0; i < len; i++)
+>   		one_page[i] = (char)i;
 >   
-> -static bool __reg64_bound_s32(s64 a)
-> -{
-> -	return a >= S32_MIN && a <= S32_MAX;
-> -}
-> -
-> -static bool __reg64_bound_u32(u64 a)
-> -{
-> -	return a >= U32_MIN && a <= U32_MAX;
-> -}
-> -
->   static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
->   {
-> +	s64 smin = reg->smin_value;
-> +	s64 smax = reg->smax_value;
-> +	u64 umin = reg->umin_value;
-> +	u64 umax = reg->umax_value;
-> +
->   	__mark_reg32_unbounded(reg);
-> -	if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->smax_value)) {
-> -		reg->s32_min_value = (s32)reg->smin_value;
-> -		reg->s32_max_value = (s32)reg->smax_value;
-> +	if ((u64)(smax - smin) <= (u64)U32_MAX && (s32)smin <= (s32)smax) {
-> +		reg->s32_min_value = (s32)smin;
-> +		reg->s32_max_value = (s32)smax;
+> -	if (!check_huge_anon(one_page, 1, pmd_pagesize)) {
+> +	if (!check_huge_anon(one_page, 4, pmd_pagesize)) {
+>   		printf("No THP is allocated\n");
+>   		exit(EXIT_FAILURE);
 >   	}
-> -	if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->umax_value)) {
-> -		reg->u32_min_value = (u32)reg->umin_value;
-> -		reg->u32_max_value = (u32)reg->umax_value;
-> +	if (umax - umin <= U32_MAX && (u32)umin <= (u32)umax) {
-> +		reg->u32_min_value = (u32)umin;
-> +		reg->u32_max_value = (u32)umax;
+> @@ -122,7 +122,7 @@ void split_pmd_thp(void)
+>   		}
+>   
+>   
+> -	if (check_huge_anon(one_page, 0, pmd_pagesize)) {
+> +	if (!check_huge_anon(one_page, 0, pmd_pagesize)) {
+>   		printf("Still AnonHugePages not split\n");
+>   		exit(EXIT_FAILURE);
 >   	}
->   	reg_bounds_sync(reg);
->   }
+> @@ -169,7 +169,7 @@ void split_pte_mapped_thp(void)
+>   	for (i = 0; i < len; i++)
+>   		one_page[i] = (char)i;
+>   
+> -	if (!check_huge_anon(one_page, 1, pmd_pagesize)) {
+> +	if (!check_huge_anon(one_page, 4, pmd_pagesize)) {
+>   		printf("No THP is allocated\n");
+>   		exit(EXIT_FAILURE);
+>   	}
+
+Hard to read. It should probably be "get_huge_anon()" to then check for 
+the value in the caller manually. Negative value could be used as an 
+indicator for an error obtaining the value.
+
+Anyhow, was briefly confused about the 4 ("magic value" also apprearing 
+in "size_t len = 4 * pmd_pagesize;") but it seems to be the right thing 
+to do.
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
 
