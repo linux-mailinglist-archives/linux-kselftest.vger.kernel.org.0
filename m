@@ -2,269 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0458B6AF5F3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 20:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91ADD6AF62D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Mar 2023 20:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233364AbjCGTmV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 14:42:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S231699AbjCGT4N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 14:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233838AbjCGTlp (ORCPT
+        with ESMTP id S229889AbjCGTzy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:41:45 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7D8AD010;
-        Tue,  7 Mar 2023 11:28:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678217327; x=1709753327;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=o5x4qVav8xPaeplG5M/+TO1baMp4gRCSsS9rn7nwblY=;
-  b=Y4KMuI/NggJ+9y9AOuGybwAByMVkIfxAXC6bvxwcU3pa1oOMVa+2m/yr
-   s4uK/o6pw+0WFD9IHte5gBwvzL+37sJNYnDG2WeZSv0HLObrgaFyf1W15
-   uYPhh8y3N65KiYkxXzjbfjESS7xmumwFXS6X9TJ6s2UR5jIDXRzLo68Te
-   s+ssImBrLktbCMWmGxwA7v3ZY1zDl5dXK6+BisBVpuPzdDgndZTzo6sW4
-   eK+XRNSGjLcJ7W8IpSdtvEX3+1wnbauFUP+pK+GwVJq1neOTONNS4HXqp
-   LehqzymYhhp7R91UM9ut2lshVPqdr1xWFpUk82CcoirZb29P/MGb9PSDG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="319779720"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="319779720"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 11:28:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="819889816"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="819889816"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Mar 2023 11:28:46 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 7 Mar 2023 11:28:45 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 7 Mar 2023 11:28:45 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 7 Mar 2023 11:28:45 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lqx2ckziUb5u73xLmdc8p/GUpA8Hwfc5+g8mTRHmI4cv+uDrQ5ze2XjwYiy2kaZdk0iyN6eY76KEE5TP1+nhtouFuZ0MgTaB/4nEhJO6cXhBMqJgFdyTF0eyw60ThpN9YGR8Fplr+PNTBk2eXVTaGosMRKn1sZ2GzSGhhmbMWtRkqA2bk28V2GvY6Rf2xQhCN+Wfb+ZGXPf8YmjNufQzjutrA2wUAetVA6Q0vb56wmh9H3pXsnsTLX+5tsrzliyXdYrl254uTrYiA7LqjC4qabAEi8968F+FOGZsphuuqb8SppNeovOjgSHM4NNhfIfbII+4aYPxrKkqELfe6BPjuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n5b/uwk2KQFamXRGMywffoyYxUMTw0DhrANUfCiOebs=;
- b=P2xURpqGGYliyBZWUWUHEInrAu7U1O8AqaHxe9iYmPNMJq6xvSzbxuRL2gOJ1VNHMNilYip2jhSCaOPz5vLmUMfEhaUnZD8W17bFaaLzparsclhy6WEiomsnD/Y9sRtV8Sg1O9tFgMf0JFE5M32c/r/c/iOccjwZydhWjP6/5zvoIIKEx822jddcN0lURkwhxU8x+fcI1gVs62P3hs4YhZQpe9Ct9Y2frNGGL+76rBagVLZJXZx5pG4HV45OQVmXtO3WjQ4qseU3Q1Rimyq8X+e9RZqMFo0HsquJcQ0blFuRb8fY6j41h2z5HBeN367LqCZlAvwmO0JpspwNnZHNpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
- by IA1PR11MB6171.namprd11.prod.outlook.com (2603:10b6:208:3e9::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 19:28:43 +0000
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::e002:4146:dfae:ba77]) by PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::e002:4146:dfae:ba77%3]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
- 19:28:42 +0000
-Message-ID: <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com>
-Date:   Tue, 7 Mar 2023 11:28:39 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: selftests: sigaltstack: sas # exit=1 - # Bail out! SP is not on
- sigaltstack - on clang build
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Tue, 7 Mar 2023 14:55:54 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C4656525;
+        Tue,  7 Mar 2023 11:48:06 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 0D1C43200AA7;
+        Tue,  7 Mar 2023 14:48:04 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 07 Mar 2023 14:48:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1678218484; x=1678304884; bh=i2XAzD+F4/rjBbe17O/XOpaCPV7I5BfH1Rg
+        lNA7lUi0=; b=Lo9Iu5zqQqfT+CrUx2U9KYmBN53OFppA0fHYIv4c4NUG+VJIWHY
+        Z2Lu+rat5ugeSyi8xih5NzAOWeoN7jDaELUQX3qbztx9BMvrZbHuhG3ILGpilbfr
+        uS5gAD74/ZFpfrIxDfE69ztQ9w/bL4s2podjo7XccSIHPB7DwT3cBvihMBPwabtN
+        6QGksZnbWtHq4QcnA+91wn4FJ5Xye3L/rsr5+WKE+e5aK7JPsJWjlfZB6ZSckOho
+        3nOtYv8keAAOX2xu2+vizQpbrfEth3/i5f0WZ7nvxPB87/JIBohZG1k5rkFAnwa2
+        G2K/1Op1/wYpJG0gIGVr0HoE/cZni2SKj7A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1678218484; x=1678304884; bh=i2XAzD+F4/rjBbe17O/XOpaCPV7I5BfH1Rg
+        lNA7lUi0=; b=ehYxmA7iows/9kAaBcYRKzjJ70llC8MXYDIk3Q7EFV2F8k1t6Tt
+        yUsxY6vuDgnMSPZRxoRmA4CSBqbF4KqzRlILWmaF1k3KA1gG5v6B5+DD0dLDLJxK
+        k3duU/N/K+Sb09c3WE+p3pVzMYK8TPzoL5f3AFS5V2RMOIXDfDwmmyY0XTNh/7Vi
+        AVJQQUI48iOk0C68uejz8g2WeKCdI0OMAxSb1nTXx963V/Ec6ymzAMhPZiVygRzh
+        8oMVVQpK5txcV1SYlrGRgNLpV/HHdIj0quDUy0zRXo9cEr5ISNgKbg2SPUt5CqVE
+        2OEsCS7uUo2Dg8WDAGkY+5fKwhjmL2wvLWA==
+X-ME-Sender: <xms:85QHZFSfG05a9c4zR34InWpCmeUE6cLoSEQ_10XdnGITc984F_huUg>
+    <xme:85QHZOxqThSjpl1CjMu8iBRSHmuHGHG29_gChVXj5Lq9k8Wpbe15uh_6pjXNPx4zb
+    KCDI_HKb5ldFqo43g>
+X-ME-Received: <xmr:85QHZK3mY0oDbR5TVdTM3qp385Z9X8n2MkHtNUDiHmrVgy3Lt8F2m6KnVn0kl1Evf8Udg7YOA0hLCgdbM-9yDm3No-ReNKYao1dGTIE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddutddguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeer
+    tddttdejnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihii
+    eqnecuggftrfgrthhtvghrnheptdeugfelvdelffegleduleffudfhgfdvfeduiefhgfdu
+    uddukeeggfelheeiueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:85QHZNARKGAj8iiGyDSChYDz4pNoZUa2jPqDOJIoVPKreATWVPsVwg>
+    <xmx:85QHZOg5FPk7jYZyAxiff0TOGTQPbwO_-qWx2V81HkX6Pi8mbVEbRQ>
+    <xmx:85QHZBq0aUwBOYjL27j5-BwC6TFXC1hP_YwMPmUShIPZoUc19UFXXQ>
+    <xmx:9JQHZHXUPUmaAijkzlMvw47fCAdPWmNxUS6G0FxEywTIOROshz2zZQ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 7 Mar 2023 14:48:02 -0500 (EST)
+Date:   Tue, 7 Mar 2023 12:48:01 -0700
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        <lkft-triage@lists.linaro.org>
-CC:     Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Len Brown" <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
-        Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-References: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-In-Reply-To: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR03CA0022.namprd03.prod.outlook.com
- (2603:10b6:303:8f::27) To PH0PR11MB4855.namprd11.prod.outlook.com
- (2603:10b6:510:41::12)
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, pablo@netfilter.org,
+        kadlec@netfilter.org, fw@strlen.de, daniel@iogearbox.net
+Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets
+ in BPF
+Message-ID: <20230307194801.mopwvidrkrybm7h5@kashmir.localdomain>
+References: <cover.1677526810.git.dxu@dxuuu.xyz>
+ <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
+ <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain>
+ <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
+ <20230228231716.a5uwc4tdo3kjlkg7@aviatrix-fedora.tail1b9c7.ts.net>
+ <CAADnVQKK+a_0effQW5qBSq1AXoQOJg5-79q3d1NWJ2Vv8SHvOw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4855:EE_|IA1PR11MB6171:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd43c213-df25-4fe9-0440-08db1f422944
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h3q29H5CGQhtPyUtHVeIQqlvwmSlnuFy13yQt847rSE92Ke28pV1qwDmpL3/ULvsNmJdtWB/e1CqhaqrdWdO5l3OYbGYpjMpWLPRGHxrOOVxFRQAutV5em0jxFYs0vPcGFJqJHs6EnVGhz0hnDFHTp3VFq58cNcoxKkBrvJvVzCVU0FhO6rlTT1J8dlFLqjfNyvTISpxSxWCeE7Brsz6NzE+e0T5/mswWxezC6SnHwDhczlqJ6SQ/qk3+FZ5Qa7au2sZvLqgB3yHHN+ZVN+lsLu7/JJdxFn5ZLw1wwZ5dW8pU1aYBCsKlfG9990Ie4Zo1kv5tkyNt0R2nZb+tNIRZ5ML7dMWuabkUOofneXT6AwGEGLJYAIPx2ZdDCehBOIAYuPWc6hVAWQjPyCLV//OWEczHAqvWkLRkjZlW/csvO7BCqUM3k4KhjXtHduXnsG6zWXVMFI+mJKkpj4GqakX5AL8DrkwzCYgcNp7LQnLBnhTr09dqzDn/maJy/wJV9nXgnmaiBUIr6Vr4xLauVrXtyCDjn41TSa8UD8vbAar/tddUDpjX8Rwg/0hW8Ry6pqphWL9Dym4KL6Zyl/7e8DLveGvO1W8nWMUyGiciFFBTwAIMOVzmi4jhP8SQa5KkHkw026eKBObbqxqHwleCCr9L/0MiT85Lwbmf+33lR92dNuQEY+PGsRoDFaUT4lpBrZgfW6jVgNc3J4mMmB89bm5ltiIsMip/1l7M3+v/PO8KOw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(366004)(396003)(346002)(39860400002)(376002)(451199018)(66556008)(66476007)(66946007)(4326008)(8676002)(2616005)(6666004)(31696002)(36756003)(6486002)(7416002)(5660300002)(316002)(86362001)(83380400001)(110136005)(54906003)(8936002)(478600001)(38100700002)(186003)(2906002)(82960400001)(41300700001)(31686004)(6506007)(53546011)(26005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1dwL1dnVDV3MmZNQXM1ZFVEK2s1RmxXQW55dnZzR3dwZjh3T1hraHJNRXdN?=
- =?utf-8?B?UkpqTE5ibjkreUdldktZRDk1ejkyOVVrU1B0ZVZNd3k4U20zNEdKTUJaRUo2?=
- =?utf-8?B?ZHhlY2g5WkQweWxLclFjSjI2SXRDSCt4N0dvTVVJL0xtY2Iwa29lVGkvQ2I0?=
- =?utf-8?B?RndLN2NxV2t1Sko4cXczNWZIQzVpbDZYOTJzNEVaUWNhb0dMOG1KL21NMEN4?=
- =?utf-8?B?MmI2UENIdHl5WFRXZFJPeWtHTUJQSWhJSEVwc0s2dWg4ZG9oL3ZiaUZ2WW50?=
- =?utf-8?B?UllleXVGTXNKZ3JRNEE5MklXQjdpc3dHczE4TnZyYVZQNGpMUFV0OHI1eVdI?=
- =?utf-8?B?M3ZYdGV2WHlMRWpLd2hnaG85OTR1V0FUazh0RGlKNHh3c1hQYVM1M1FwaEFv?=
- =?utf-8?B?Wm5lNGZadUJaQUhMczlYK2FPREFNWUZxRTIrekE3czFJYzNqMFNsazEyQm03?=
- =?utf-8?B?elp4UnQ2bm5pMnBpdmxrcytlbVZyUkc5WTZFNTh6TXRUR2VoV0k3ejFrbzd5?=
- =?utf-8?B?U2UrckJPNkp6aWhvNW82cEN2L0l5U3QwT2ZGTWszQXhkbzdqVnJteWU5UVI0?=
- =?utf-8?B?by9aVlNYeFk0cm0yTnQwZTZOYURIVzc1bTV1MEF4N0hzMWlldXZkd3IzVUd5?=
- =?utf-8?B?NC9NS0VYNFJFNVF1ckVESHJyaG41T2UzNTRObzB3N2JCakJQOGcvLzV4TW1l?=
- =?utf-8?B?VUtBMWFNbnZrNkQ1d0x5RnRxdE1QdytoRzlhS3pSVUFMTlV3VGZQYmJoNGVV?=
- =?utf-8?B?SUo5ZEFZZ09ZOXJwWmM5dUJBQ0o5ZnVmcm1UajF0b1Q3c3JZdWVaN3dKRmNj?=
- =?utf-8?B?NTB3Rzc0Qkh3cjExaE52QSt1eG9xWVF6L2VEaUhHQjBkMVNmNWgvN24xTTR2?=
- =?utf-8?B?WmpPSnQvUEdNWGlGQ3FzV2gyakJZM04zL0NKa3JLMDBxZzNCcUo1V2s5VDBw?=
- =?utf-8?B?elFpZTcrbFdGcUJ4OTZMY21IeStNbjJvQVlOcGF2QTdueld5bEJ5d1QvOWw0?=
- =?utf-8?B?UjhRNnZ5eXBkSGFZMFkwQXZuQnVlSzJQUG03ZG5HS2xRZmFjOG5VVU9HRk53?=
- =?utf-8?B?NTZwUmtBRFlROFJGRHV4NWZWazZuaURqYlBuM2tkWHlFU0ZZdmFwZTg3N2tj?=
- =?utf-8?B?TG9ab1BGcjRhVkIxZlBCVE5JbmJoamdGMEJ4aGxCL25Sd1cxaTc3MkVJY201?=
- =?utf-8?B?dlRhck83emVDeXJDREszQS9FblU3TlJBSnYrSk5tY1JYZVNjcFdPOGhvUUlI?=
- =?utf-8?B?Z0RsaWx4b3QrS0N5Tk0vUkRPQW5aZFFuUWpHQm9DcFdHYjJZOXBIZUN3SExo?=
- =?utf-8?B?S1NONjRQLzg0emV2REV0Y0ZrY2pERXpRZ0ZEajVtM1p6bnVXSjB1WWlZc3JD?=
- =?utf-8?B?Z0xBbGFKeHpGUnRSWTlZL1owcWFrZ3NlNUtHcWpHSHV5aUhUZEpIYzFabXlq?=
- =?utf-8?B?cXU0d3NsODRHYzAvU3hDSUtaWlYvcGpzMkpYdEVLNC9zZG9QN2oxNmIwOE9Y?=
- =?utf-8?B?OHNwVnZlclYxVXpaZ2JDQUJwL09wTkR1NjVwdzhNLzAxYkR2aG1wYW84N3Vv?=
- =?utf-8?B?eU5Ed2pKeW5IWm1vZjhLRCtZV0FqUVpiS1N6a2xBZXk3RnRTeitoZ1pIWDFR?=
- =?utf-8?B?T1pZUGJHb29xRTlrWjJ0ODh6YXVIWjBTM3RCbkRFUCtmb21lS0JFeFBxZjMz?=
- =?utf-8?B?a2x1QmpldUZ2U1R2ajF3RGYxUGVGNTdFUi9VMDFCWWhUVHB0dURKUm9HTXZS?=
- =?utf-8?B?RVJPeWpXSVZLQ2p0dEVrUGNpSHhOdlBXRysrSWtIeFBQMlg1R25CLzZYdHhQ?=
- =?utf-8?B?ejJMWHh3OXNYdmlBT2RqcS9FVVlBMEhoWm5DbndDcnVsaEZSdWYrUmkrME1y?=
- =?utf-8?B?QmRUenYwTFFCVWsrcitPdTZMeDQ4b2J0eDVOeTFHMGJWODZRVFpXSCtuYUxa?=
- =?utf-8?B?WXd0VFdyVjVpeFY5cVhVcHhjVDlBS2k4azUya2k2WTQycHBmclNqY0NJWlNW?=
- =?utf-8?B?MnIzSHNsTVRKWjc5TUx6Wkp5cGtDaUZaVllmMFFRUmhmbklCTXZ2RUlDeHht?=
- =?utf-8?B?YkVscWJUdDBnRnBISnpkQWVTY3lISGZoYlVYM1ZZV2Z4M3M4ZEdlZzkxWU9v?=
- =?utf-8?B?eTVRNDBhZ0tZaUJib3BiREdaQmhXOU1xa3pXRDk1cWMxS3RSb0tPU3o4Mzlh?=
- =?utf-8?B?NkE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd43c213-df25-4fe9-0440-08db1f422944
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 19:28:42.6026
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 20LyCwNNnXo0lkyQJ0JR58p4lOUgQ4jwu7iETayLF2lUBva5F9KnPnTuNEu+0vWG/OTxKyb/25r+8FUJit6ABya2Pjjo0Bm/YReG5vy/TEc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6171
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQKK+a_0effQW5qBSq1AXoQOJg5-79q3d1NWJ2Vv8SHvOw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/6/2023 10:57 PM, Naresh Kamboju wrote:
-> kselftest: sigaltstack built with clang-16 getting failed but passed with
-> gcc-12 build. Please find more details about test logs on clang-16 and
-> gcc-12 and steps to reproduce locally on your machine by using tuxrun.
+Hi Alexei,
+
+(cc netfilter maintainers)
+
+On Mon, Mar 06, 2023 at 08:17:20PM -0800, Alexei Starovoitov wrote:
+> On Tue, Feb 28, 2023 at 3:17 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> >
+> > > Have you considered to skb redirect to another netdev that does ip defrag?
+> > > Like macvlan does it under some conditions. This can be generalized.
+> >
+> > I had not considered that yet. Are you suggesting adding a new
+> > passthrough netdev thing that'll defrags? I looked at the macvlan driver
+> > and it looks like it defrags to handle some multicast corner case.
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Something like that. A netdev that bpf prog can redirect too.
+> It will consume ip frags and eventually will produce reassembled skb.
 > 
-> Test log:
-> ----------
-> 
-> Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake) (Debian clang
-> version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.41),
-> Debian LLD 16.0.0) #1 SMP PREEMPT @1678159722
-> ...
-> kselftest: Running tests in sigaltstack
-> TAP version 13
-> 1..1
-> # selftests: sigaltstack: sas
-> # # [NOTE] the stack size is 21104
-> # TAP version 13
-> # 1..3
-> # ok 1 Initial sigaltstack state was SS_DISABLE
-> # Bail out! SP is not on sigaltstack
-> # # Planned tests != run tests (3 != 1)
-> # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> not ok 1 selftests: sigaltstack: sas # exit=1
-<snip>
+> The kernel ip_defrag logic has timeouts, counters, rhashtable
+> with thresholds, etc. All of them are per netns.
+> Just another ip_defrag_user will still share rhashtable
+> with its limits. The kernel can even do icmp_send().
+> ip_defrag is not a kfunc. It's a big block with plenty of kernel
+> wide side effects.
+> I really don't think we can alloc_skb, copy_skb, and ip_defrag it.
+> It messes with the stack too much.
+> It's also not clear to me when skb is reassembled and how bpf sees it.
+> "redirect into reassembling netdev" and attaching bpf prog to consume
+> that skb is much cleaner imo.
+> May be there are other ways to use ip_defrag, but certainly not like
+> synchronous api helper.
 
-> Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake)
-> (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils
-> for Debian) 2.40) #1 SMP PREEMPT @1678159736
-> ...
-> kselftest: Running tests in sigaltstack
-> TAP version 13
-> 1..1
-> # selftests: sigaltstack: sas
-> # # [NOTE] the stack size is 50080
-> # TAP version 13
-> # 1..3
-> # ok 1 Initial sigaltstack state was SS_DISABLE
-> # # [RUN] signal USR1
-> # ok 2 sigaltstack is disabled in sighandler
-> # # [RUN] switched to user ctx
-> # # [RUN] signal USR2
-> # # [OK] Stack preserved
-> # ok 3 sigaltstack is still SS_AUTODISARM after signal
-> # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> ok 1 selftests: sigaltstack: sas
+I was giving the virtual netdev idea some thought this morning and I
+thought I'd give the netfilter approach a deeper look.
 
-At glance, the log shows the altstack size difference between LLVM and GCC.
+From my reading (I'll run some tests later) it looks like netfilter
+will defrag all ipv4/ipv6 packets in any netns with conntrack enabled.
+It appears to do so in NF_INET_PRE_ROUTING.
 
-But, when I tried with the LLVM that I have,
+Unfortunately that does run after tc hooks. But fortunately with the
+new BPF netfilter hooks I think we can make defrag work outside of BPF
+kfuncs like you want. And the NF_IP_FORWARD hook works well for my
+router use case.
 
-     $ clang --version
-     clang version 13.0.0 ...
+One thing we would need though are (probably kfunc) wrappers around
+nf_defrag_ipv4_enable() and nf_defrag_ipv6_enable() to ensure BPF progs
+are not transitively depending on defrag support from other netfilter
+modules.
 
-it failed only with this compiler:
+The exact mechanism would probably need some thinking, as the above
+functions kinda rely on module_init() and module_exit() semantics. We
+cannot make the prog bump the refcnt every time it runs -- it would
+overflow.  And it would be nice to automatically free the refcnt when
+prog is unloaded. 
 
-     $ rm sas;clang -o sas sas.c;./sas
-     # [NOTE]        the stack size is 8192
-     TAP version 13
-     1..3
-     ok 1 Initial sigaltstack state was SS_DISABLE
-     Bail out! SP is not on sigaltstack
-     # Planned tests != run tests (3 != 1)
-     # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-     $ rm sas;gcc -o sas sas.c;./sas
-     # [NOTE]        the stack size is 8192
-     TAP version 13
-     1..3
-     ok 1 Initial sigaltstack state was SS_DISABLE
-     # [RUN] signal USR1
-     ok 2 sigaltstack is disabled in sighandler
-     # [RUN] switched to user ctx
-     # [RUN] signal USR2
-     # [OK]  Stack preserved
-     ok 3 sigaltstack is still SS_AUTODISARM after signal
-     # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-The same is true with some old versions -- e.g. the one that came with 
-commit 0c49ad415512 ("tools/testing/selftests/sigaltstack/sas.c: improve 
-output of sigaltstack testcase"):
-
-     $ rm sas;clang -o sas sas.c;./sas
-     [OK]    Initial sigaltstack state was SS_DISABLE
-     [FAIL]  SP is not on sigaltstack
-
-     $ rm sas;gcc -o sas sas.c;./sas
-     [OK]    Initial sigaltstack state was SS_DISABLE
-     [RUN]   signal USR1
-     [OK]    sigaltstack is disabled in sighandler
-     [RUN]   switched to user ctx
-     [RUN]   signal USR2
-     [OK]    Stack preserved
-     [OK]    sigaltstack is still SS_AUTODISARM after signal
-     [OK]    Test passed
-
-So, this test failure appears to have been there for a while. I think 
-the LLVM folks need to take a look at it.
+Once the netfilter prog type series lands I can get that discussion
+started. Unless Daniel feels strongly that we should continue with
+the approach in this patchset, I am leaning towards dropping in favor
+of netfilter approach.
 
 Thanks,
-Chang
+Daniel
