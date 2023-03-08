@@ -2,121 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08ED6AFD1B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 03:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600D16AFD48
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 04:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCHC4h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 21:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
+        id S229887AbjCHDO2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 22:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjCHC4f (ORCPT
+        with ESMTP id S229817AbjCHDOZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:56:35 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067ADA42C7;
-        Tue,  7 Mar 2023 18:56:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678244192; x=1709780192;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=77QN2i2yZdUO/+6hL9TXXMuujJSXaX/G0JyFEyUwuBI=;
-  b=JnKmbcc/DDP+SpPAG9scSBATM+0KuVNJTNQpM/ay3tyYuoVsuTDqroxu
-   J2P1/SXWk/c7lOnsbGyI2yg6T3YRJhA8CCsFAi0SCjgJKtGNqlty5e567
-   6ysM26fqGnpiJKEliNnMM4pIMjvboOoV+WUkk0MwythSI9H1+lrh3daI1
-   0aMaHeK2rFqOVbvdzGX0XnchLu14O9ZeehFXbGX4JUlA6pqUGzHWNQhAG
-   awRKNta8AOyTGNTX7GqxLVW+RC7AaNiMkxPS7XKoO4QssFb9QU66Xp6bT
-   3U1RtF/bnq3iB+xI9Puw34eOZnvGDqqzZgF7bc5Zb/uV+yl+b5xe3Eb06
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="336060472"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="336060472"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 18:56:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="800598186"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="800598186"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga004.jf.intel.com with ESMTP; 07 Mar 2023 18:56:29 -0800
-Message-ID: <b2a3ebf2-272d-2f4f-2489-253c4973a6db@linux.intel.com>
-Date:   Wed, 8 Mar 2023 10:55:31 +0800
+        Tue, 7 Mar 2023 22:14:25 -0500
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946F593E3E
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Mar 2023 19:14:23 -0800 (PST)
+Received: by mail-ua1-x931.google.com with SMTP id bx14so10399753uab.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Mar 2023 19:14:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678245262;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mVQyhGIjzGLxG0mBx3cK6dRChw0rYjuOJl9Yewk2Iic=;
+        b=k2gCpJqtOzFfNKBru2PISKZD5J7z/Yd8lvw5EmCazQhKxv951ImyV7L3NY94ZtyCnT
+         XlxiliDpvy4zQPN9gVWADWQP7tDBdwjJuNvCZ2+XAT45zuDKT240p7SrcdphGj1EG/sr
+         cHKErcHfCqD7beV+QhGxxEYMMsQv+D06LV22WwO1g1Vx3LNTgZKQP4N7ji8NstSt/Y5p
+         bG04eoOSnSHDdBczkNtcs10ldfpxmbt2EQdYgDccH2g/0B1UpADqUEuRKWW/KompCjBt
+         icToITfI5eqZpLmpR70MnQ0x3FSUxn181JvMG0/hqFQF0M3oBvV88UonpZOhrybYr/cp
+         5ldw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678245262;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mVQyhGIjzGLxG0mBx3cK6dRChw0rYjuOJl9Yewk2Iic=;
+        b=AaUsgp9GJ1xNm5HcOsSr21M7sz2Defkcxtd42Eb7v1Qt4LwWXR/VGDEvqirGuE1tGe
+         S7bE1Fa3GzkArgFgrKs5E4liTUArQVxvtIegxGbBUmz1hWzyUfSOHtLtPaBzyEk1ordE
+         xGKP9o9ZhYFbUBA4M/liXmG15xyb06KPFP+fW/P6Am3/LQ87DU5p3iMJtOa1noOAdNCN
+         Xz4sqpf+etxaztolMl8TET6DqzkmG4JQHm0WoQQHmyPzG6RsnRo2NMXkd2IMxtF7+HyK
+         ekgPNsv2RFIEk2svXivw2vwb25byNUTyjnGmx+3kJaYzSGGnggPwtS+kklns6h2azzIl
+         quWw==
+X-Gm-Message-State: AO0yUKVLKjhVW1hdJi0RrTGQFpPu3nbSMm7SKnLeAqXa6QA2TThlRGRJ
+        KkcTWm2MXg5Tk/tjUZcr1ng3wmi3jrpXGuD+E9Dklw==
+X-Google-Smtp-Source: AK7set/0/9etugk4EWZ98upUdsyc4nR6XB+TVtxbVyTOH/Lpo635BbFq4IcB7zz/qJzVU9FvaVcfJAH/EldwKai1paA=
+X-Received: by 2002:a9f:3149:0:b0:68b:923a:d6f4 with SMTP id
+ n9-20020a9f3149000000b0068b923ad6f4mr10765290uab.2.1678245262385; Tue, 07 Mar
+ 2023 19:14:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com, kvm@vger.kernel.org,
-        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH v2 01/17] iommufd: Move isolated msi enforcement to
- iommufd_device_bind()
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
-        Kevin Tian <kevin.tian@intel.com>,
-        linux-kselftest@vger.kernel.org
-References: <1-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <1-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
+ <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com>
+In-Reply-To: <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 8 Mar 2023 08:44:11 +0530
+Message-ID: <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
+Subject: Re: selftests: sigaltstack: sas # exit=1 - # Bail out! SP is not on
+ sigaltstack - on clang build
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>, llvm@lists.linux.dev
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
+        Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/8/23 8:35 AM, Jason Gunthorpe wrote:
-> With the recent rework this no longer needs to be done at domain
-> attachment time, we know if the device is usable by iommufd when we bind
-> it.
-> 
-> The value of msi_device_has_isolated_msi() is not allowed to change while
-> a driver is bound.
-> 
-> Reviewed-by: Kevin Tian<kevin.tian@intel.com>
-> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
-> ---
->   drivers/iommu/iommufd/device.c | 38 ++++++++++++++++++----------------
->   1 file changed, 20 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> index c6f4852a8a0c08..63b65cdfe97f29 100644
-> --- a/drivers/iommu/iommufd/device.c
-> +++ b/drivers/iommu/iommufd/device.c
-> @@ -60,6 +60,26 @@ struct iommufd_device *iommufd_device_bind(struct iommufd_ctx *ictx,
->   	if (!group)
->   		return ERR_PTR(-ENODEV);
->   
-> +	/*
-> +	 * For historical compat with VFIO the insecure interrupt path is
-> +	 * allowed if the module parameter is set. Insecure means that a MemWr
-> +	 * operation from the device (eg a simple DMA) cannot trigger an
++ LLVM
 
-Nit:
-
-"... cannot trigger an ..." or "... can trigger an ..."?
-
-> +	 * interrupt outside this iommufd context.
-> +	 */
-> +	if (!iommufd_selftest_is_mock_dev(dev) &&
-> +	    !iommu_group_has_isolated_msi(group)) {
-> +		if (!allow_unsafe_interrupts) {
-> +			rc = -EPERM;
-> +			goto out_group_put;
-> +		}
-> +
-> +		dev_warn(
-> +			dev,
-> +			"MSI interrupts are not secure, they cannot be isolated by the platform. "
-> +			"Check that platform features like interrupt remapping are enabled. "
-> +			"Use the \"allow_unsafe_interrupts\" module parameter to override\n");
-> +	}
-
-Anyway,
-
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-
-Best regards,
-baolu
+On Wed, 8 Mar 2023 at 00:58, Chang S. Bae <chang.seok.bae@intel.com> wrote:
+>
+> On 3/6/2023 10:57 PM, Naresh Kamboju wrote:
+> > kselftest: sigaltstack built with clang-16 getting failed but passed with
+> > gcc-12 build. Please find more details about test logs on clang-16 and
+> > gcc-12 and steps to reproduce locally on your machine by using tuxrun.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Test log:
+> > ----------
+> >
+> > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake) (Debian clang
+> > version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.41),
+> > Debian LLD 16.0.0) #1 SMP PREEMPT @1678159722
+> > ...
+> > kselftest: Running tests in sigaltstack
+> > TAP version 13
+> > 1..1
+> > # selftests: sigaltstack: sas
+> > # # [NOTE] the stack size is 21104
+> > # TAP version 13
+> > # 1..3
+> > # ok 1 Initial sigaltstack state was SS_DISABLE
+> > # Bail out! SP is not on sigaltstack
+> > # # Planned tests != run tests (3 != 1)
+> > # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > not ok 1 selftests: sigaltstack: sas # exit=1
+> <snip>
+>
+> > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake)
+> > (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils
+> > for Debian) 2.40) #1 SMP PREEMPT @1678159736
+> > ...
+> > kselftest: Running tests in sigaltstack
+> > TAP version 13
+> > 1..1
+> > # selftests: sigaltstack: sas
+> > # # [NOTE] the stack size is 50080
+> > # TAP version 13
+> > # 1..3
+> > # ok 1 Initial sigaltstack state was SS_DISABLE
+> > # # [RUN] signal USR1
+> > # ok 2 sigaltstack is disabled in sighandler
+> > # # [RUN] switched to user ctx
+> > # # [RUN] signal USR2
+> > # # [OK] Stack preserved
+> > # ok 3 sigaltstack is still SS_AUTODISARM after signal
+> > # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > ok 1 selftests: sigaltstack: sas
+>
+> At glance, the log shows the altstack size difference between LLVM and GCC.
+>
+> But, when I tried with the LLVM that I have,
+>
+>      $ clang --version
+>      clang version 13.0.0 ...
+>
+> it failed only with this compiler:
+>
+>      $ rm sas;clang -o sas sas.c;./sas
+>      # [NOTE]        the stack size is 8192
+>      TAP version 13
+>      1..3
+>      ok 1 Initial sigaltstack state was SS_DISABLE
+>      Bail out! SP is not on sigaltstack
+>      # Planned tests != run tests (3 != 1)
+>      # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>
+>      $ rm sas;gcc -o sas sas.c;./sas
+>      # [NOTE]        the stack size is 8192
+>      TAP version 13
+>      1..3
+>      ok 1 Initial sigaltstack state was SS_DISABLE
+>      # [RUN] signal USR1
+>      ok 2 sigaltstack is disabled in sighandler
+>      # [RUN] switched to user ctx
+>      # [RUN] signal USR2
+>      # [OK]  Stack preserved
+>      ok 3 sigaltstack is still SS_AUTODISARM after signal
+>      # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+>
+> The same is true with some old versions -- e.g. the one that came with
+> commit 0c49ad415512 ("tools/testing/selftests/sigaltstack/sas.c: improve
+> output of sigaltstack testcase"):
+>
+>      $ rm sas;clang -o sas sas.c;./sas
+>      [OK]    Initial sigaltstack state was SS_DISABLE
+>      [FAIL]  SP is not on sigaltstack
+>
+>      $ rm sas;gcc -o sas sas.c;./sas
+>      [OK]    Initial sigaltstack state was SS_DISABLE
+>      [RUN]   signal USR1
+>      [OK]    sigaltstack is disabled in sighandler
+>      [RUN]   switched to user ctx
+>      [RUN]   signal USR2
+>      [OK]    Stack preserved
+>      [OK]    sigaltstack is still SS_AUTODISARM after signal
+>      [OK]    Test passed
+>
+> So, this test failure appears to have been there for a while. I think
+> the LLVM folks need to take a look at it.
+>
+> Thanks,
+> Chang
