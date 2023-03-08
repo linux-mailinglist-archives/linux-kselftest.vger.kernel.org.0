@@ -2,226 +2,269 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671556B03A0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 11:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72ADE6B03B4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 11:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjCHKDP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 05:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
+        id S230328AbjCHKG0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 05:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCHKDO (ORCPT
+        with ESMTP id S230353AbjCHKGU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:03:14 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A1A1D91C
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 02:03:07 -0800 (PST)
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com [209.85.160.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4F62D41B66
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 10:03:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678269786;
-        bh=TcoqL65GM7xxmY0Iiy4skPLD0tnvFATDCwzBl50q5+I=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Detcu/W1H/u66gtLzFKJ3OwXxNZAYTNW5tTCYi+Xu6Jl+THS3kklSPPSfcTgx9HJE
-         n7u2FSC/IR58we9/yISPut0h5IIhI1oVwkTs8LFR6O+4mrmMv28iD7Dcr703lhJd1K
-         4D84Zmc9IYQ6RgGAiMaI85/LwadfvcF4K3/rWEtfBHGEOL5CU3CFqJ9nfco+7RIfk+
-         9U7MSwTKfAoVEYYSC0+mLVGfiKwvFMdUTTtf2GbRzkVW0PhY75dOGZbT4pV6+LXBzP
-         etPF1MGmKqqxPlLBLYQP0R8cnbJvSNjYG3fne3Hcy5e4RR4ht6qFZrxnr7r902rmq+
-         LcFrP5bZyFXvQ==
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-17679dc6e16so8763719fac.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 02:03:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678269785;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TcoqL65GM7xxmY0Iiy4skPLD0tnvFATDCwzBl50q5+I=;
-        b=HLYTeK3o+Rg+3P7BACqpHM2GufLIWEW+z3IwY1hJmcQ1n76ofYkf2Uq+V4ax3pP+v0
-         onMs5cNrGzj2VrCMehznp2qUKz/UqcRFiLOrTPS5T1tvSASJu6dJT19u3wxfGDwhdx5i
-         EbZgse6x5W55UfSM8Wlu+yZnbQEMASBUM+pwI2tSyMBDhZbILlkdDBPaPWl8VCalZlvZ
-         lob9WNFV2bCPBEAEEok3ZDW0V2du9kN1PNGNgQqdnHY6pArDXaJIKKfZJ2BlhB0ECELN
-         FalAiLYYabqIcB7jWcjz0LLt+Rg/p7N0twPZZO4A5AuJTTRHBCsKaigI6hEbwpsfAFSl
-         tZBg==
-X-Gm-Message-State: AO0yUKX1cBrDXG9XUKQ+37D1uCxjf2gOQVMy/J8Eab9NGBjYZgde6Ajk
-        JXRa2AhsEhKv5yABYBoWEUnDX+6I/yc/4SEn3OM12NUU5UsXPth5bXC8RcZR9DHl73C27LSLRSZ
-        /gpFfF4NM0Qe6HVoM3TtMzUfTtyIdjNdstXrq3sL0uo5ddpOcc4kiyU9UXJWwJvTUrrhi
-X-Received: by 2002:a05:6870:d346:b0:176:42a5:a544 with SMTP id h6-20020a056870d34600b0017642a5a544mr5041317oag.2.1678269785263;
-        Wed, 08 Mar 2023 02:03:05 -0800 (PST)
-X-Google-Smtp-Source: AK7set/rrxkpYmldQbkjsH+aqtmbvnADinYJ3IA6vjRlLPTAKktc6w1MXBujxHZsR32pBxuvK3COpwN6xQq6zhKYfmk=
-X-Received: by 2002:a05:6870:d346:b0:176:42a5:a544 with SMTP id
- h6-20020a056870d34600b0017642a5a544mr5041308oag.2.1678269784978; Wed, 08 Mar
- 2023 02:03:04 -0800 (PST)
+        Wed, 8 Mar 2023 05:06:20 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57710900B2;
+        Wed,  8 Mar 2023 02:05:54 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PWnvc0Ff9zKqCv;
+        Wed,  8 Mar 2023 18:03:40 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 8 Mar 2023 18:05:39 +0800
+Message-ID: <3600f642-a15e-b817-bca0-612233d18416@huawei.com>
+Date:   Wed, 8 Mar 2023 18:05:39 +0800
 MIME-Version: 1.0
-References: <20230307150030.527726-1-po-hsu.lin@canonical.com> <20230307170219.4699af9b@kernel.org>
-In-Reply-To: <20230307170219.4699af9b@kernel.org>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Wed, 8 Mar 2023 18:02:26 +0800
-Message-ID: <CAMy_GT8fdX2uUAM1j9Lzje+K5BnLH82dmx3CE=mGV9UqSRBWAg@mail.gmail.com>
-Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no
- suitable device available
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, idosch@mellanox.com,
-        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
-        pabeni@redhat.com, edumazet@google.com, davem@davemloft.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next 1/2] bpf: update 32-bit bounds when the lower
+ 32-bit value is not wrapping
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Xu Kuohai <xukuohai@huaweicloud.com>
+CC:     bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+References: <20230307220449.2933650-1-xukuohai@huaweicloud.com>
+ <20230307220449.2933650-2-xukuohai@huaweicloud.com>
+ <CAADnVQLDmP0A7Pr7628nH8YSo3-xTjzAr5-x-0YCZvuS8xu09A@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <CAADnVQLDmP0A7Pr7628nH8YSo3-xTjzAr5-x-0YCZvuS8xu09A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 9:02=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
-te:
->
-> On Tue,  7 Mar 2023 23:00:30 +0800 Po-Hsu Lin wrote:
-> > The `devlink -j port show` command output may not contain the "flavour"
-> > key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic),
-> > iproute2-5.15.0:
-> >   {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
-> >            "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
-> >            "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
-> >            "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
-> >
-> > This will cause a KeyError exception.
->
-> I looked closer and I don't understand why the key is not there.
-> Both 5.19 kernel should always put this argument out, and 5.15
-> iproute2 should always interpret it.
->
-> Am I looking wrong? Do you see how we can get a dump with no flavor?
->
-> I worry that this is some endianness problem, and we just misreport
-> stuff on big-endian.
->
-> > Create a validate_devlink_output() to check for this "flavour" from
-> > devlink command output to avoid this KeyError exception. Also let
-> > it handle the check for `devlink -j dev show` output in main().
-> >
-> > Apart from this, if the test was not started because of any reason
-> > (e.g. "lanes" does not exist, max lanes is 0 or the flavour of the
-> > designated device is not "physical" and etc.) The script will still
-> > return 0 and thus causing a false-negative test result.
-> >
-> > Use a test_ran flag to determine if these tests were skipped and
-> > return KSFT_SKIP to make it more clear.
-> >
-> > V2: factor out the skip logic from main(), update commit message and
-> >     skip reasons accordingly.
-> > Link: https://bugs.launchpad.net/bugs/1937133
-> > Fixes: f3348a82e727 ("selftests: net: Add port split test")
-> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> > ---
-> >  tools/testing/selftests/net/devlink_port_split.py | 36 +++++++++++++++=
-++++----
-> >  1 file changed, 31 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/net/devlink_port_split.py b/tools/=
-testing/selftests/net/devlink_port_split.py
-> > index 2b5d6ff..749606c 100755
-> > --- a/tools/testing/selftests/net/devlink_port_split.py
-> > +++ b/tools/testing/selftests/net/devlink_port_split.py
-> > @@ -59,6 +59,8 @@ class devlink_ports(object):
-> >          assert stderr =3D=3D ""
-> >          ports =3D json.loads(stdout)['port']
-> >
-> > +        validate_devlink_output(ports, 'flavour')
->
-> If it's just a matter of kernel/iproute2 version we shouldn't need to
-> check here again?
->
-> >          for port in ports:
-> >              if dev in port:
-> >                  if ports[port]['flavour'] =3D=3D 'physical':
-> > @@ -220,6 +222,27 @@ def split_splittable_port(port, k, lanes, dev):
-> >      unsplit(port.bus_info)
-> >
-> >
-> > +def validate_devlink_output(devlink_data, target_property=3DNone):
-> > +    """
-> > +    Determine if test should be skipped by checking:
-> > +      1. devlink_data contains values
-> > +      2. The target_property exist in devlink_data
-> > +    """
-> > +    skip_reason =3D None
-> > +    if any(devlink_data.values()):
-> > +        if target_property:
-> > +            skip_reason =3D "{} not found in devlink output, test skip=
-ped".format(target_property)
-> > +            for key in devlink_data:
-> > +                if target_property in devlink_data[key]:
-> > +                    skip_reason =3D None
-> > +    else:
-> > +        skip_reason =3D 'devlink output is empty, test skipped'
-> > +
-> > +    if skip_reason:
-> > +        print(skip_reason)
-> > +        sys.exit(KSFT_SKIP)
->
-> Looks good, so..
->
-> >  def make_parser():
-> >      parser =3D argparse.ArgumentParser(description=3D'A test for port =
-splitting.')
-> >      parser.add_argument('--dev',
-> > @@ -231,6 +254,7 @@ def make_parser():
-> >
-> >
-> >  def main(cmdline=3DNone):
-> > +    test_ran =3D False
->
-> I don't think we need the test_ran tracking any more?
-We still need this here to check if the test was actually started.
+On 3/8/2023 1:22 AM, Alexei Starovoitov wrote:
+> On Tue, Mar 7, 2023 at 1:05 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+>>
+>> The following XDP prog is accepted by verifier.
+>>
+>> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
+>> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
+>> 2: (bf) r1 = r2
+>> 3: (07) r1 += 1
+>> 4: (2d) if r1 > r3 goto pc+6
+>> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
+>> 6: (b4) w0 = 0x7fffff10
+>> 7: (0c) w1 += w0                      ; R1_w=scalar(umin=0x7fffff10,umax=0x8000000f,var_off=(0x0; 0xffffffff))
+>> 8: (b4) w0 = 0x80000000
+>> 9: (04) w0 += 1
+>> 10: (ae) if w0 < w1 goto pc-2
+>> 11: (b7) r0 = 0
+>> 12: (95) exit
+>>
+>> while the following 64-bit version is rejected.
+>>
+>> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
+>> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
+>> 2: (bf) r1 = r2
+>> 3: (07) r1 += 1
+>> 4: (2d) if r1 > r3 goto pc+8
+>> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
+>> 6: (18) r0 = 0x7fffffffffffff10
+>> 8: (0f) r1 += r0                      ; R1_w=scalar(umin=0x7fffffffffffff10,umax=0x800000000000000f)
+>> 9: (18) r0 = 0x8000000000000000
+>> 11: (07) r0 += 1
+>> 12: (ad) if r0 < r1 goto pc-2
+>> 13: (b7) r0 = 0
+>> 14: (95) exit
+> 
+> These two programs are not equivalent.
+> Not clear how apples to oranges comparison explains anything.
+> 
 
-Take the following output for example (ARM64 server with Mellanox
-Ethernet controller, running Ubuntu 22.10 5.19.0-35):
-$ devlink port show
-pci/0000:01:00.0/65535: type eth netdev enp1s0f0 flavour physical port
-0 splittable false
-pci/0000:01:00.1/131071: type eth netdev enp1s0f1 flavour physical
-port 1 splittable false
-There is no "lanes" attribute here, thus the max_lanes in main() will
-be 0. The test won't be started at all but returns 0.
+Yes, they are not equivalent. I assumed the 32-bit prog being accepted
+implies it is unreasonable for the 64-bit prog to be rejected. Regardless
+of this assumption and the 32-bit prog, the above 64-bit prog is expected
+to be accepted, right?
 
+>> The verifier log says:
+>>
+>> [...]
+>>
+>> from 12 to 11: R0_w=-9223372036854775794 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
+>> 11: (07) r0 += 1                      ; R0_w=-9223372036854775793
+>> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
+>> 13: safe
+>>
+>> from 12 to 11: R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
+> 
+> First thing to debug is why umin is higher than umax.
+> 
 
+Well, it's because the loop does not stop, when r0 increases to -9223372036854775793,
+the following code in reg_set_min_max() sets umin_value to 9223372036854775824:
+
+case BPF_JGT:
+{
+         if (is_jmp32) {
+                 [...]
+         } else {
+                 u64 false_umax = opcode == BPF_JGT ? val    : val - 1;
+                 u64 true_umin = opcode == BPF_JGT ? val + 1 : val;
+
+                 false_reg->umax_value = min(false_reg->umax_value, false_umax);
+                 true_reg->umin_value = max(true_reg->umin_value, true_umin);
+         }
+         break;
+}
+
+To avoid umin > umax, it could be changed it to:
+
+case BPF_JGT:
+{
+         if (is_jmp32) {
+                 [...]
+         } else {
+                 u64 false_umax = opcode == BPF_JGT ? val    : val - 1;
+                 u64 true_umin = opcode == BPF_JGT ? val + 1 : val;
+
+                 false_reg->umax_value = min(false_reg->umax_value, false_umax);
+                 false_reg->umax_value = max(false_reg->umax_value, false_reg->umin_value);
+
+                 true_reg->umin_value = max(true_reg->umin_value, true_umin);
+                 true_reg->umin_value = min(true_reg->umax_value, true_reg->umin_value);
+         }
+         break;
+}
+
+The problem is that the loop still does not stop because tnum_is_const(src_reg->var_off)
+always returns false and is_branch_taken() is skipped:
+
+         if (BPF_SRC(insn->code) == BPF_K) {
+                 [...]
+         } else if (src_reg->type == SCALAR_VALUE &&
+                    is_jmp32 && tnum_is_const(tnum_subreg(src_reg->var_off))) {
+                 [...]
+         } else if (src_reg->type == SCALAR_VALUE &&
+                    !is_jmp32 && tnum_is_const(src_reg->var_off)) {
+                 pred = is_branch_taken(dst_reg,   // could not reach here
+                                        src_reg->var_off.value,
+                                        opcode,
+                                        is_jmp32);
+         } else if (reg_is_pkt_pointer_any(dst_reg) &&
+                    reg_is_pkt_pointer_any(src_reg) &&
+                    !is_jmp32) {
+                 [...]
+         }
+
+Why tnum_is_const(src_reg->var_off) returns false is because the lower 32-bit
+is not constant since the lower 32-bit range is [U32_MIN, U32_MAX].
+
+>> 11: (07) r0 += 1                      ; R0_w=-9223372036854775792
+>> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775792 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
+>> 13: safe
+>>
+>> [...]
+>>
+>> The loop crosses termination condition r0 == r1.umax, and does not stop.
+>>
+>> The reason is that when the verifier enumerates to r1.umin == r1.umax, the value
+>> 0x800000000000000f of r1.umin is greater than U32_MAX, so __reg_combine_64_into_32
+>> sets the u32 range of r1 to [0, U32_MAX] instead of marking r1 as a constant,
+>> making is_branch_taken() in check_cond_jmp_op() be skipped.
+> 
+> And it's fine. The verifier is conservative.
+> 
+>>
+>> To fix it, update 32-bit bounds when the lower 32-bit value is not wrapping,
+>> even if the 64-bit value is beyond the range of [0, U32_MAX] or [S32_MIN, S32_MAX].
+> 
+> That's not safe in general.
 >
-> >      parser =3D make_parser()
-> >      args =3D parser.parse_args(cmdline)
-> >
-> > @@ -240,12 +264,9 @@ def main(cmdline=3DNone):
-> >          stdout, stderr =3D run_command(cmd)
-> >          assert stderr =3D=3D ""
-> >
-> > +        validate_devlink_output(json.loads(stdout))
-> >          devs =3D json.loads(stdout)['dev']
-> > -        if devs:
-> > -            dev =3D list(devs.keys())[0]
-> > -        else:
-> > -            print("no devlink device was found, test skipped")
-> > -            sys.exit(KSFT_SKIP)
-> > +        dev =3D list(devs.keys())[0]
-> >
-> >      cmd =3D "devlink dev show %s" % dev
-> >      stdout, stderr =3D run_command(cmd)
-> > @@ -277,6 +298,11 @@ def main(cmdline=3DNone):
-> >                  split_splittable_port(port, lane, max_lanes, dev)
-> >
-> >                  lane //=3D 2
-> > +        test_ran =3D True
-> > +
-> > +    if not test_ran:
-> > +        print("Test not started, no suitable device for the test")
-> > +        sys.exit(KSFT_SKIP)
-> >
-> >
-> >  if __name__ =3D=3D "__main__":
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huaweicloud.com>
+>> ---
+>>   kernel/bpf/verifier.c | 27 +++++++++++----------------
+>>   1 file changed, 11 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index b2116ca78d9a..64c9ee3857ec 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -2013,26 +2013,21 @@ static void __reg_combine_32_into_64(struct bpf_reg_state *reg)
+>>          reg_bounds_sync(reg);
+>>   }
+>>
+>> -static bool __reg64_bound_s32(s64 a)
+>> -{
+>> -       return a >= S32_MIN && a <= S32_MAX;
+>> -}
+>> -
+>> -static bool __reg64_bound_u32(u64 a)
+>> -{
+>> -       return a >= U32_MIN && a <= U32_MAX;
+>> -}
+>> -
+>>   static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
+>>   {
+>> +       s64 smin = reg->smin_value;
+>> +       s64 smax = reg->smax_value;
+>> +       u64 umin = reg->umin_value;
+>> +       u64 umax = reg->umax_value;
+>> +
+>>          __mark_reg32_unbounded(reg);
+>> -       if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->smax_value)) {
+>> -               reg->s32_min_value = (s32)reg->smin_value;
+>> -               reg->s32_max_value = (s32)reg->smax_value;
+>> +       if ((u64)(smax - smin) <= (u64)U32_MAX && (s32)smin <= (s32)smax) {
+>> +               reg->s32_min_value = (s32)smin;
+>> +               reg->s32_max_value = (s32)smax;
+>>          }
+>> -       if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->umax_value)) {
+>> -               reg->u32_min_value = (u32)reg->umin_value;
+>> -               reg->u32_max_value = (u32)reg->umax_value;
+>> +       if (umax - umin <= U32_MAX && (u32)umin <= (u32)umax) {
+>> +               reg->u32_min_value = (u32)umin;
+>> +               reg->u32_max_value = (u32)umax;
+> 
+> This looks like a workaround for umin > umax issue.
+> Please debug that instead.
 >
+
+"__reg64_bound_u32(umin) && __reg64_bound_u32(max)" is a special case of
+"umax - umin <= U32_MAX && (u32)umin <= (u32)umax " when umax <= U32_MAX.
+
+If it's only safe to set lower 32-bit range to [U32_MIN, U32_MAX] when
+umax > U32_MAX, could we infer the 64-bit value is a constant from umin == umax?
+
+>>          }
+>>          reg_bounds_sync(reg);
+>>   }
+>> --
+>> 2.30.2
+>>
+> .
+
