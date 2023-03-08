@@ -2,59 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5F16B130E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 21:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CA96B133A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 21:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjCHUaE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 15:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        id S229949AbjCHUkA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 15:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbjCHU34 (ORCPT
+        with ESMTP id S229798AbjCHUj7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:29:56 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3A1C7098;
-        Wed,  8 Mar 2023 12:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dvCkjjYwO17HVXXGgXGIfvRQwtfB+tdv9ar+/qRdD60=; b=mbYG4wipENwBxUMDMPCi6fD1OS
-        NXf7fDtDwsknzveTVzfIIOu68tlpxAoRUth8S8IUxso0P4BRdhbYsjzdfV2B27j2R1scEtv067fZM
-        l3yNdfSZ4YEDvoHjNqgR+k2Oe64i7DosZbzt6kgJm3ZvEz4G1IuWeDA+8XPr6OT3NXh7p5mabpozu
-        XE2UJqSvjN0/tkBjfmEa+GOZE1L0jiRwQr91cAIQECf74yxrA4Gk/pPUf+VqX+ooVYYqEAGCNmpyz
-        iZKpgc2Q4WMlMi4NjKn+VOQHdlVcFdIy3JWsjzBjBZej6D+8ECzwrjaSAcDXxXh9UAaODzEsfZoM9
-        BpNwGBNQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pa0Q4-006g1H-Tg; Wed, 08 Mar 2023 20:29:52 +0000
-Date:   Wed, 8 Mar 2023 12:29:52 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, keescook@chromium.org,
-        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
- 165
-Message-ID: <ZAjwQKwZgT+UcZHq@bombadil.infradead.org>
-References: <20230206234344.2433950-1-mcgrof@kernel.org>
- <20230206234344.2433950-2-mcgrof@kernel.org>
- <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
- <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
- <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
- <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
- <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        Wed, 8 Mar 2023 15:39:59 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6A9BBB06
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 12:39:57 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-53700262a47so178027557b3.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 12:39:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678307996;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XhemoCGkjfimbQttrNXjqCx4q4XXWm2P3IE9aNxV0Ao=;
+        b=UdO6+fi5nMMmDymcYlh0h0YFaMxt0sdCFQ60J0jGfIqLkO51bwO4eRagZ1Q0mwICcO
+         Q88cMMueFP22vKYxzyU3CrNwFQsSjhoobMlNLHWtpuAYfTzAmuWo9yBumN3RZW+JRsdL
+         ZFYGog6kbywxL/X4ygdHs9GRUhbJ9KAnSRhL6btq83J6mNwjBJ0Xc74QRPLlEnJX2T/D
+         DhFyMBXNvNNTiHgUayimeS0tgorrMTTWDlxW65AKCDKg9ozg2OivwDa1FdfP7RV8afRi
+         +EAH2yIp7afJbWxFckFGum54jsEt0u13KkiykSmMtKg+vSvwVrYqg2gRRPqHQqAB/Q7G
+         4oRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678307996;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XhemoCGkjfimbQttrNXjqCx4q4XXWm2P3IE9aNxV0Ao=;
+        b=r2FCX4uHHpJ42m7qXR0LvQBEEK9hR2TPr0IaoYJndyeKq4MWsGOswBhDQ1F8QHLrvN
+         FEiV5lOv6V5vYGvFVF9iqgzkqo4g3XWOcJiy6aRpYqai6tSURKq23X5PbCNd4MNtj3Yd
+         ETbjTrL4syJIWRF5eTlIuRi68bpKYT0cJdiCaBpjv7YAXXFrP+R83vN9+TNHIW2CiaXy
+         3RDLwQDgJ2dtw+U1KDOWFjUob845D2ocaqV+ext8erv06dfyokfDx4CMO1ggYl4p3kBC
+         Hl3o5dPhgWWRLCzU195s4S0PCA/EjLqSm/s+VSFArHWXVBSSyuWeRl6R6C2SxurRhu/W
+         Nn8g==
+X-Gm-Message-State: AO0yUKWyCyvNg1A1K8cNgIqJfOu3x/7t5aCUJOW+fWEvlEC1iL8X1Or+
+        oYAt697C9K0M5FVg/UUzQIfuI4HHPw==
+X-Google-Smtp-Source: AK7set9xWrCKF1fDWyXTChtuvjg/LRtLnOCLyXhXcxqUUu96L+Lj+knEFA1NVZjkgb5WUH4fGiLhGaX4lQ==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a05:6902:185:b0:acd:7374:f15b with SMTP id
+ t5-20020a056902018500b00acd7374f15bmr11814350ybh.13.1678307996377; Wed, 08
+ Mar 2023 12:39:56 -0800 (PST)
+Date:   Wed,  8 Mar 2023 20:39:50 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Message-ID: <20230308203952.3060546-1-rmoar@google.com>
+Subject: [PATCH v4 1/3] kunit: fix bug in debugfs logs of parameterized tests
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,114 +67,134 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 09:06:41AM -0700, Shuah Khan wrote:
-> On 3/3/23 14:48, Luis Chamberlain wrote:
-> > On Fri, Mar 03, 2023 at 01:35:10PM -0700, Shuah Khan wrote:
-> > > On 2/27/23 15:42, Luis Chamberlain wrote:
-> > > > On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
-> > > > > On 2/6/23 16:43, Luis Chamberlain wrote:
-> > > > > > The default sefltests timeout is 45 seconds. If you run the kmod
-> > > > > > selftests on your own with say:
-> > > > > > 
-> > > > > > ./tools/testings/selftests/kmod.sh
-> > > > > > 
-> > > > > > Then the default timeout won't be in effect.
-> > > > > > 
-> > > > > > I've never ran kmod selftests using the generic make wrapper
-> > > > > > (./tools/testing/selftests/run_kselftest.sh -s) util now
-> > > > > > that I have support for it on kdevops [0]. And with that the
-> > > > > > test is limitted to the default timeout which we quickly run
-> > > > > > into. Bump this up to what I see is required on 8GiB / 8 vcpu
-> > > > > > libvirt q35 guest as can be easily created now with kdevops.
-> > > > > > 
-> > > > > > To run selftests with kdevops:
-> > > > > > 
-> > > > > > make menuconfig # enable dedicated selftests and kmod test
-> > > > > > make
-> > > > > > make bringup
-> > > > > > make linux
-> > > > > > make selftests-kmod
-> > > > > > 
-> > > > > > This ends up taking about 280 seconds now, give or take add
-> > > > > > 50 seconds more more and we end up with 350. Document the
-> > > > > > rationale.
-> > > > > > 
-> > > > > > [0] https://github.com/linux-kdevops/kdevops
-> > > > > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > > > > ---
-> > > > > >     tools/testing/selftests/kmod/settings | 4 ++++
-> > > > > >     1 file changed, 4 insertions(+)
-> > > > > >     create mode 100644 tools/testing/selftests/kmod/settings
-> > > > > > 
-> > > > > > diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
-> > > > > > new file mode 100644
-> > > > > > index 000000000000..6fca0f1a4594
-> > > > > > --- /dev/null
-> > > > > > +++ b/tools/testing/selftests/kmod/settings
-> > > > > > @@ -0,0 +1,4 @@
-> > > > > > +# measured from a manual run:
-> > > > > > +# time ./tools/testing/selftests/kmod/kmod.sh
-> > > > > > +# Then add ~50 seconds more gracetime.
-> > > > > > +timeout=350
-> > > > > 
-> > > > > Adding timeouts like this for individual tests increases the overall kselftest
-> > > > > run-time. I am not in favor of adding timeouts.
-> > > > > 
-> > > > > We have to find a better way to do this.
-> > > > 
-> > > > Well if folks don't have this the test will fail, and so a false
-> > > > positive. If the goal is to have a low time timeout for "do not run
-> > > > tests past this time and do not fail if we stopped the test" then
-> > > > that seems to be likely one way to go and each test may need to be
-> > > > modified to not fail fatally in case of a special signal.
-> > > > 
-> > > 
-> > > We are finding more and more that timeout values are requiring
-> > > tweaks. I am in favor of coming up a way to exit the test with
-> > > a timeout condition.
-> > 
-> > OK so do we use the existing timeout as a "optional, I don't want my
-> > test to take longer than this" or "if this test takes longer than
-> > this amount this is a fatal issue"?
-> 
-> It isn't a fatal issue. So I wouldn't call it one. I would add a
-> message saying test timed out.
-> 
-> One way to handle this is:
-> - Add a test run-time option and have user tune it as needed.
-> 
-> Make the timeout an option so users can set it based on their
-> environments.
-> 
-> > 
-> > I ask because right now we can't override it even with an environment
-> > variable. If we had such support we can let test runners (like kdevops)
-> > use selftests with its own set of qualified / verified timeouts for the
-> > VMs it uses.
-> > 
-> > For instance, Iw ant to soon start asking 0day to enable my kdevops
-> > 0-day tests for the subsystems I maintain, but I can't do that yet as
-> > the timeout is not correct.
-> 
-> This test isn't part of the default run, so day has to run this as a
-> special case and it would make prefect sense to provide a tunable
-> timeout option.
+Fix bug in debugfs logs that causes individual parameterized results to not
+appear because the log is reinitialized (cleared) when each parameter is
+run.
 
-That's the thing, I *want* it to be part of *my runs* for my git trees
-on git.kernel.org for modules-testing and modules-next. That allows me
-to have 0day run whatever things I need. Long term it will be through
-kdevops with just:
+Ensure these results appear in the debugfs logs, increase log size to
+allow for the size of parameterized results. As a result, append lines to
+the log directly rather than using an intermediate variable that can cause
+stack size warnings due to the increased log size.
 
-make linux
-make selftests-kmod
-make kmod
-make kmod-check
+Here is the debugfs log of ext4_inode_test which uses parameterized tests
+before the fix:
 
-Vincenzo expressed interest to help, I think he may be interested in
-helping with this configurable timeout for selftests as some initial
-low hanging fruit.
+     KTAP version 1
 
-Then on the kdevops front we'd set what we know is right for a typical
-libvirt use case for our current default VM target.
+     # Subtest: ext4_inode_test
+     1..1
+ # Totals: pass:16 fail:0 skip:0 total:16
+ ok 1 ext4_inode_test
 
-  Luis
+As you can see, this log does not include any of the individual
+parametrized results.
+
+After (in combination with the next two fixes to remove extra empty line
+and ensure KTAP valid format):
+
+ KTAP version 1
+ 1..1
+     KTAP version 1
+     # Subtest: ext4_inode_test
+     1..1
+        KTAP version 1
+         # Subtest: inode_test_xtimestamp_decoding
+         ok 1 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
+         ... (the rest of the individual parameterized tests)
+         ok 16 2446-05-10 Upper bound of 32bit >=0 timestamp. All extra
+     # inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16
+     ok 1 inode_test_xtimestamp_decoding
+ # Totals: pass:16 fail:0 skip:0 total:16
+ ok 1 ext4_inode_test
+
+Signed-off-by: Rae Moar <rmoar@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+
+Changes from v3 -> v4:
+- No changes.
+
+Changes from v2 -> v3:
+- Fix a off-by-one bug in the kunit_log_append method.
+
+Changes from v1 -> v2:
+- Remove the use of the line variable in kunit_log_append that was
+  causing stack size warnings.
+- Add before and after to the commit message.
+
+ include/kunit/test.h |  2 +-
+ lib/kunit/test.c     | 18 ++++++++++++------
+ 2 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 08d3559dd703..0668d29f3453 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+-#define KUNIT_LOG_SIZE	512
++#define KUNIT_LOG_SIZE 1500
+ 
+ /* Maximum size of parameter description string. */
+ #define KUNIT_PARAM_DESC_SIZE 128
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c9e15bb60058..c4d6304edd61 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -114,22 +114,27 @@ static void kunit_print_test_stats(struct kunit *test,
+  */
+ void kunit_log_append(char *log, const char *fmt, ...)
+ {
+-	char line[KUNIT_LOG_SIZE];
+ 	va_list args;
+-	int len_left;
++	int len, log_len, len_left;
+ 
+ 	if (!log)
+ 		return;
+ 
+-	len_left = KUNIT_LOG_SIZE - strlen(log) - 1;
++	log_len = strlen(log);
++	len_left = KUNIT_LOG_SIZE - log_len - 1;
+ 	if (len_left <= 0)
+ 		return;
+ 
++	/* Evaluate length of line to add to log */
+ 	va_start(args, fmt);
+-	vsnprintf(line, sizeof(line), fmt, args);
++	len = vsnprintf(NULL, 0, fmt, args) + 1;
++	va_end(args);
++
++	/* Print formatted line to the log */
++	va_start(args, fmt);
++	vsnprintf(log + log_len, min(len, len_left), fmt, args);
+ 	va_end(args);
+ 
+-	strncat(log, line, len_left);
+ }
+ EXPORT_SYMBOL_GPL(kunit_log_append);
+ 
+@@ -437,7 +442,6 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	struct kunit_try_catch_context context;
+ 	struct kunit_try_catch *try_catch;
+ 
+-	kunit_init_test(test, test_case->name, test_case->log);
+ 	try_catch = &test->try_catch;
+ 
+ 	kunit_try_catch_init(try_catch,
+@@ -533,6 +537,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 		struct kunit_result_stats param_stats = { 0 };
+ 		test_case->status = KUNIT_SKIPPED;
+ 
++		kunit_init_test(&test, test_case->name, test_case->log);
++
+ 		if (!test_case->generate_params) {
+ 			/* Non-parameterised test. */
+ 			kunit_run_case_catch_errors(suite, test_case, &test);
+
+base-commit: 60684c2bd35064043360e6f716d1b7c20e967b7d
+-- 
+2.40.0.rc0.216.gc4246ad0f0-goog
+
