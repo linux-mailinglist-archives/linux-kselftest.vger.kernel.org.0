@@ -2,343 +2,241 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23476B1150
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 19:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1D86B115C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 19:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjCHSsx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 13:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S230283AbjCHSuK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 13:50:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbjCHSsw (ORCPT
+        with ESMTP id S229866AbjCHSt7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:48:52 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB91DBAD10
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 10:48:49 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id h9so17600766ljq.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 10:48:49 -0800 (PST)
+        Wed, 8 Mar 2023 13:49:59 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE13EC1C17
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 10:49:53 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id h8so18552924plf.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 10:49:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678301328;
+        d=google.com; s=20210112; t=1678301393;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bv1akr0dZXtnui0AYhF/JTPAEZAhJzReOkFX7K2EQXI=;
-        b=bI0aX4HcMMrcRBC/bfaC9yUDlvK7mWA/9x10juYKdxQHmvafOcldF6qHv38hhBvrxd
-         4GO1Hff5ZHy4/lJFvPvRCUcXShF77kux8dYMbazkGTpy5Kx0D5Vt3gcnfac1KLfHXqFA
-         jy+qPpGPPF6IPX5/gagGXrvDGWe8zrQNVTM7f3mfVd6vZGOStmsYUtE3mh7gjCz0eI9Q
-         WjS/swu5Z82D81cE2R0uxuh3yjKjiok448C8Juam+UXcCKfjAzTKs+EJFuTw0O0rjp4Q
-         8tM+FBYTKdBd5X5LHLF86AuQiZVqoLdrYWdtxlHXFtn7xlKesWRHkF/yxHciGxMNATh2
-         Cc6w==
+        bh=gDSGMnsH4iLzycmIWjYuFo4vdBUomtvXvRZ+aBAg2KM=;
+        b=FzogeeILd8HnwKeT2ZvFT2CYiOLNldXbC1nJeLKihK+Huxaq+nYiDMwlLcnYK/EEDo
+         kf2fTN+UR19AaMmOiyNMrdWHoNjxZbYJZRpVMep1Amx9brsHRlaldlqqkOd0aUQvK/Bi
+         WBLM4B7YHznpL3mU3fxdcRh46KOMOtlYXzoxTumMdkHS55+95OpqQFJO5mitOu5hMOjA
+         OqWLrRDNqNjAbzaAwo4x9B3ymuqbt0+l1h1F9d8iOuH8UWi6TyquaJJuxgTLMB4gorb3
+         qZrN5yi8fEEBhU2L91bYnb4cO2E+MCPDCJJ1R6IlUl5+h4FzBrLehLklDLE4Hk9+lJSn
+         8hdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678301328;
+        d=1e100.net; s=20210112; t=1678301393;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bv1akr0dZXtnui0AYhF/JTPAEZAhJzReOkFX7K2EQXI=;
-        b=J7SZ4uc5iv3HBEdpYxxGe9Egd7dC9CxrFaaWVpg6gCx5kRZklBFf9+a1l/BBgs1Hti
-         b1W2e+NZNBlMXa8SSM/3CskQmasbpSH4bvxkXk09uToizbSvqrxy3a0SdB88LIH24DRD
-         dqbgJtYWqnOVKWV1zhvKyeFQZnqNWpk7auT6eRJ1MyJ0SRfE5NLFbox/pzlQ7YKXF4j+
-         wctgphoFExV+wHTyl/xa7UNMgBaAgse2jY58wvepC8VnVHyXoYpWtWaX1kXTqVfRLj2t
-         h8/kksu9BX0ykYdBHpRgabH5Ytueg8aPKorMgdQ1fRM9wjGNmV+I15a+SiOxodqxYT+b
-         Mwzw==
-X-Gm-Message-State: AO0yUKUpns9Hy6a3Bb3t2B0948KuOK/0FqXXi6yFBPV9qpzOa4mJILRF
-        ZKM7pR34yA/erq4ookIMx2uWZSkfvVioFzktr7c5Hw==
-X-Google-Smtp-Source: AK7set8PLn02wnWoSUWxQIWomi2iCtDNFADbqKGcA05FOKTzYMA7/Qhpj7WLdjLjE3q+UKaTpvUPM2Jznr4RY5wfm84=
-X-Received: by 2002:a2e:b8d2:0:b0:295:b0cd:522 with SMTP id
- s18-20020a2eb8d2000000b00295b0cd0522mr6167764ljp.2.1678301327684; Wed, 08 Mar
- 2023 10:48:47 -0800 (PST)
+        bh=gDSGMnsH4iLzycmIWjYuFo4vdBUomtvXvRZ+aBAg2KM=;
+        b=tjXUhVX/cF/ah6C9wBVfih97T2oArpyn9Maqrm282+KlHW+pn1bWWVaEFjXkqXyWd6
+         JPHkFNdMlUXqN9XKS3OYpbOmWoMHhKoi2NxZd9KRI6ViKZI7Ken8CxvAziJQL2+TB5ep
+         G2WMu3wg65fNMU1KR5uUSmGJoqOCsABlJh6F3ET5R+nFyqI9q1qguHLfbigcyDMM4AKp
+         Y1r6CFG4SEAh8s5mi8DwMbqsRv5QdyPmtKdvr2Kg94zK35n5ZtuZaX3PbWC/0tU9tUqQ
+         YmRk0u38OZUc4A0NV57u2RluIo+ikCTMEmYls5TlG6YJjD2K31dV2jpQwi3PcRGjZLNB
+         Igdg==
+X-Gm-Message-State: AO0yUKUcPIYlEQ9rYq1wQRWcMW6RrWBj71XCDD3n6pq5FhT2a4H80ef4
+        jDZoyA35YqwaB+bb4PGBGvXMOwfyJvCzZXe1JiKOnw==
+X-Google-Smtp-Source: AK7set+nFVT3xiGjx+/Yc43iwIrku80Ndj0a/ne77ymYRpAbVEvBr3ZASV5TY0s6WbACCk+/DGqIYFBDKboF6fgit5I=
+X-Received: by 2002:a17:903:280f:b0:19e:f660:81ee with SMTP id
+ kp15-20020a170903280f00b0019ef66081eemr1301893plb.2.1678301392881; Wed, 08
+ Mar 2023 10:49:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20230306225024.264858-5-axelrasmussen@google.com> <202303081703.nwxAgIVH-lkp@intel.com>
-In-Reply-To: <202303081703.nwxAgIVH-lkp@intel.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 8 Mar 2023 10:48:11 -0800
-Message-ID: <CAJHvVciSP9QyF33GFveESFW3o7vyxbydq2vR4t7tnunJLJNjWg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len arguments
-To:     kernel test robot <lkp@intel.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+References: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
+ <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com> <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
+ <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
+In-Reply-To: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 8 Mar 2023 10:49:41 -0800
+Message-ID: <CAKwvOdnjtqOKDOpnL2nNOjGTvsoojpP--=TLhehjGTc0XckhcA@mail.gmail.com>
+Subject: Re: selftests: sigaltstack: sas # exit=1 - # Bail out! SP is not on
+ sigaltstack - on clang build
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>, llvm@lists.linux.dev,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
+        Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 1:52=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
+On Wed, Mar 8, 2023 at 8:23=E2=80=AFAM Andy Lutomirski <luto@kernel.org> wr=
 ote:
 >
-> Hi Axel,
+> On Tue, Mar 7, 2023 at 7:14=E2=80=AFPM Naresh Kamboju <naresh.kamboju@lin=
+aro.org> wrote:
+> >
+> > + LLVM
 >
-> Thank you for the patch! Yet something to improve:
+> The offending code seems to be:
 >
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.3-rc1]
-> [cannot apply to akpm-mm/mm-everything next-20230308]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> #if __s390x__
+>         register unsigned long sp asm("%15");
+> #else
+>         register unsigned long sp asm("sp");
+> #endif
 >
-> url:    https://github.com/intel-lab-lkp/linux/commits/Axel-Rasmussen/mm-=
-userfaultfd-rename-functions-for-clarity-consistency/20230307-065203
-> patch link:    https://lore.kernel.org/r/20230306225024.264858-5-axelrasm=
-ussen%40google.com
-> patch subject: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len =
-arguments
-> config: x86_64-randconfig-a011-20230306 (https://download.01.org/0day-ci/=
-archive/20230308/202303081703.nwxAgIVH-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
-006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/cee642b93be3ae01c=
-7cc737c0176cbc16074a25a
->         git remote add linux-review https://github.com/intel-lab-lkp/linu=
-x
->         git fetch --no-tags linux-review Axel-Rasmussen/mm-userfaultfd-re=
-name-functions-for-clarity-consistency/20230307-065203
->         git checkout cee642b93be3ae01c7cc737c0176cbc16074a25a
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash
+>         if (sp < (unsigned long)sstack ||
+>                         sp >=3D (unsigned long)sstack + stack_size) {
+>                 ksft_exit_fail_msg("SP is not on sigaltstack\n");
+>         }
 >
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303081703.nwxAgIVH-lkp@i=
-ntel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> mm/userfaultfd.c:577:52: error: passing 'const struct uffdio_range *' =
-to parameter of incompatible type 'struct uffdio_range'
->                    return  mfill_atomic_hugetlb(dst_vma, src_start, dst, =
-flags);
->                                                                     ^~~
->    mm/userfaultfd.c:463:29: note: passing argument to parameter 'dst' her=
-e
->                                        struct uffdio_range dst,
->                                                            ^
->    1 error generated.
+> Is that actually expected to work?  asm("sp") is a horrible hack.  I
+> would, maybe naively, expect a compiler to analyze this code, think
+> "sp is unconditionally uninitialized", and treat the comparison as
+> always-UB and thus generate whatever code seems convenient.
 
-Whoops. :) I admittedly didn't test with !CONFIG_HUGETLB_PAGE.
+Spot-on. -Wuninitialized should warn about that.
+https://godbolt.org/z/do9Kqa3cG
 
-The next version of this series will drop this patch as per discussion
-though, so the issue is moot.
+Kees mentioned we should be using `current_stack_pointer`. I'll whip
+up a patch using that.
 
 >
+> --Andy
 >
-> vim +577 mm/userfaultfd.c
->
->    508
->    509  static __always_inline ssize_t mfill_atomic(struct mm_struct *dst=
-_mm,
->    510                                              unsigned long src_sta=
-rt,
->    511                                              const struct uffdio_r=
-ange *dst,
->    512                                              atomic_t *mmap_changi=
-ng,
->    513                                              uffd_flags_t flags)
->    514  {
->    515          struct vm_area_struct *dst_vma;
->    516          ssize_t err;
->    517          pmd_t *dst_pmd;
->    518          unsigned long src_addr, dst_addr;
->    519          long copied;
->    520          struct page *page;
->    521
->    522          /*
->    523           * Sanitize the command parameters:
->    524           */
->    525          BUG_ON(dst->start & ~PAGE_MASK);
->    526          BUG_ON(dst->len & ~PAGE_MASK);
->    527
->    528          /* Does the address range wrap, or is the span zero-sized=
-? */
->    529          BUG_ON(src_start + dst->len <=3D src_start);
->    530          BUG_ON(dst->start + dst->len <=3D dst->start);
->    531
->    532          src_addr =3D src_start;
->    533          dst_addr =3D dst->start;
->    534          copied =3D 0;
->    535          page =3D NULL;
->    536  retry:
->    537          mmap_read_lock(dst_mm);
->    538
->    539          /*
->    540           * If memory mappings are changing because of non-coopera=
-tive
->    541           * operation (e.g. mremap) running in parallel, bail out =
+> >
+> > On Wed, 8 Mar 2023 at 00:58, Chang S. Bae <chang.seok.bae@intel.com> wr=
+ote:
+> > >
+> > > On 3/6/2023 10:57 PM, Naresh Kamboju wrote:
+> > > > kselftest: sigaltstack built with clang-16 getting failed but passe=
+d with
+> > > > gcc-12 build. Please find more details about test logs on clang-16 =
 and
->    542           * request the user to retry later
->    543           */
->    544          err =3D -EAGAIN;
->    545          if (mmap_changing && atomic_read(mmap_changing))
->    546                  goto out_unlock;
->    547
->    548          /*
->    549           * Make sure the vma is not shared, that the dst range is
->    550           * both valid and fully within a single existing vma.
->    551           */
->    552          err =3D -ENOENT;
->    553          dst_vma =3D find_dst_vma(dst_mm, dst);
->    554          if (!dst_vma)
->    555                  goto out_unlock;
->    556
->    557          err =3D -EINVAL;
->    558          /*
->    559           * shmem_zero_setup is invoked in mmap for MAP_ANONYMOUS|=
-MAP_SHARED but
->    560           * it will overwrite vm_ops, so vma_is_anonymous must ret=
-urn false.
->    561           */
->    562          if (WARN_ON_ONCE(vma_is_anonymous(dst_vma) &&
->    563              dst_vma->vm_flags & VM_SHARED))
->    564                  goto out_unlock;
->    565
->    566          /*
->    567           * validate 'mode' now that we know the dst_vma: don't al=
-low
->    568           * a wrprotect copy if the userfaultfd didn't register as=
- WP.
->    569           */
->    570          if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM=
-_UFFD_WP))
->    571                  goto out_unlock;
->    572
->    573          /*
->    574           * If this is a HUGETLB vma, pass off to appropriate rout=
-ine
->    575           */
->    576          if (is_vm_hugetlb_page(dst_vma))
->  > 577                  return  mfill_atomic_hugetlb(dst_vma, src_start, =
-dst, flags);
->    578
->    579          if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
->    580                  goto out_unlock;
->    581          if (!vma_is_shmem(dst_vma) &&
->    582              (flags & MFILL_ATOMIC_MODE_MASK) =3D=3D MFILL_ATOMIC_=
-CONTINUE)
->    583                  goto out_unlock;
->    584
->    585          /*
->    586           * Ensure the dst_vma has a anon_vma or this page
->    587           * would get a NULL anon_vma when moved in the
->    588           * dst_vma.
->    589           */
->    590          err =3D -ENOMEM;
->    591          if (!(dst_vma->vm_flags & VM_SHARED) &&
->    592              unlikely(anon_vma_prepare(dst_vma)))
->    593                  goto out_unlock;
->    594
->    595          while (src_addr < src_start + dst->len) {
->    596                  pmd_t dst_pmdval;
->    597
->    598                  BUG_ON(dst_addr >=3D dst->start + dst->len);
->    599
->    600                  dst_pmd =3D mm_alloc_pmd(dst_mm, dst_addr);
->    601                  if (unlikely(!dst_pmd)) {
->    602                          err =3D -ENOMEM;
->    603                          break;
->    604                  }
->    605
->    606                  dst_pmdval =3D pmdp_get_lockless(dst_pmd);
->    607                  /*
->    608                   * If the dst_pmd is mapped as THP don't
->    609                   * override it and just be strict.
->    610                   */
->    611                  if (unlikely(pmd_trans_huge(dst_pmdval))) {
->    612                          err =3D -EEXIST;
->    613                          break;
->    614                  }
->    615                  if (unlikely(pmd_none(dst_pmdval)) &&
->    616                      unlikely(__pte_alloc(dst_mm, dst_pmd))) {
->    617                          err =3D -ENOMEM;
->    618                          break;
->    619                  }
->    620                  /* If an huge pmd materialized from under us fail=
- */
->    621                  if (unlikely(pmd_trans_huge(*dst_pmd))) {
->    622                          err =3D -EFAULT;
->    623                          break;
->    624                  }
->    625
->    626                  BUG_ON(pmd_none(*dst_pmd));
->    627                  BUG_ON(pmd_trans_huge(*dst_pmd));
->    628
->    629                  err =3D mfill_atomic_pte(dst_pmd, dst_vma, dst_ad=
-dr,
->    630                                         src_addr, &page, flags);
->    631                  cond_resched();
->    632
->    633                  if (unlikely(err =3D=3D -ENOENT)) {
->    634                          void *page_kaddr;
->    635
->    636                          mmap_read_unlock(dst_mm);
->    637                          BUG_ON(!page);
->    638
->    639                          page_kaddr =3D kmap_local_page(page);
->    640                          err =3D copy_from_user(page_kaddr,
->    641                                               (const void __user *=
-) src_addr,
->    642                                               PAGE_SIZE);
->    643                          kunmap_local(page_kaddr);
->    644                          if (unlikely(err)) {
->    645                                  err =3D -EFAULT;
->    646                                  goto out;
->    647                          }
->    648                          flush_dcache_page(page);
->    649                          goto retry;
->    650                  } else
->    651                          BUG_ON(page);
->    652
->    653                  if (!err) {
->    654                          dst_addr +=3D PAGE_SIZE;
->    655                          src_addr +=3D PAGE_SIZE;
->    656                          copied +=3D PAGE_SIZE;
->    657
->    658                          if (fatal_signal_pending(current))
->    659                                  err =3D -EINTR;
->    660                  }
->    661                  if (err)
->    662                          break;
->    663          }
->    664
->    665  out_unlock:
->    666          mmap_read_unlock(dst_mm);
->    667  out:
->    668          if (page)
->    669                  put_page(page);
->    670          BUG_ON(copied < 0);
->    671          BUG_ON(err > 0);
->    672          BUG_ON(!copied && !err);
->    673          return copied ? copied : err;
->    674  }
->    675
+> > > > gcc-12 and steps to reproduce locally on your machine by using tuxr=
+un.
+> > > >
+> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > >
+> > > > Test log:
+> > > > ----------
+> > > >
+> > > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake) (Debian cla=
+ng
+> > > > version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525=
+.41),
+> > > > Debian LLD 16.0.0) #1 SMP PREEMPT @1678159722
+> > > > ...
+> > > > kselftest: Running tests in sigaltstack
+> > > > TAP version 13
+> > > > 1..1
+> > > > # selftests: sigaltstack: sas
+> > > > # # [NOTE] the stack size is 21104
+> > > > # TAP version 13
+> > > > # 1..3
+> > > > # ok 1 Initial sigaltstack state was SS_DISABLE
+> > > > # Bail out! SP is not on sigaltstack
+> > > > # # Planned tests !=3D run tests (3 !=3D 1)
+> > > > # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > > > not ok 1 selftests: sigaltstack: sas # exit=3D1
+> > > <snip>
+> > >
+> > > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake)
+> > > > (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binut=
+ils
+> > > > for Debian) 2.40) #1 SMP PREEMPT @1678159736
+> > > > ...
+> > > > kselftest: Running tests in sigaltstack
+> > > > TAP version 13
+> > > > 1..1
+> > > > # selftests: sigaltstack: sas
+> > > > # # [NOTE] the stack size is 50080
+> > > > # TAP version 13
+> > > > # 1..3
+> > > > # ok 1 Initial sigaltstack state was SS_DISABLE
+> > > > # # [RUN] signal USR1
+> > > > # ok 2 sigaltstack is disabled in sighandler
+> > > > # # [RUN] switched to user ctx
+> > > > # # [RUN] signal USR2
+> > > > # # [OK] Stack preserved
+> > > > # ok 3 sigaltstack is still SS_AUTODISARM after signal
+> > > > # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > > > ok 1 selftests: sigaltstack: sas
+> > >
+> > > At glance, the log shows the altstack size difference between LLVM an=
+d GCC.
+> > >
+> > > But, when I tried with the LLVM that I have,
+> > >
+> > >      $ clang --version
+> > >      clang version 13.0.0 ...
+> > >
+> > > it failed only with this compiler:
+> > >
+> > >      $ rm sas;clang -o sas sas.c;./sas
+> > >      # [NOTE]        the stack size is 8192
+> > >      TAP version 13
+> > >      1..3
+> > >      ok 1 Initial sigaltstack state was SS_DISABLE
+> > >      Bail out! SP is not on sigaltstack
+> > >      # Planned tests !=3D run tests (3 !=3D 1)
+> > >      # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > >
+> > >      $ rm sas;gcc -o sas sas.c;./sas
+> > >      # [NOTE]        the stack size is 8192
+> > >      TAP version 13
+> > >      1..3
+> > >      ok 1 Initial sigaltstack state was SS_DISABLE
+> > >      # [RUN] signal USR1
+> > >      ok 2 sigaltstack is disabled in sighandler
+> > >      # [RUN] switched to user ctx
+> > >      # [RUN] signal USR2
+> > >      # [OK]  Stack preserved
+> > >      ok 3 sigaltstack is still SS_AUTODISARM after signal
+> > >      # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > >
+> > > The same is true with some old versions -- e.g. the one that came wit=
+h
+> > > commit 0c49ad415512 ("tools/testing/selftests/sigaltstack/sas.c: impr=
+ove
+> > > output of sigaltstack testcase"):
+> > >
+> > >      $ rm sas;clang -o sas sas.c;./sas
+> > >      [OK]    Initial sigaltstack state was SS_DISABLE
+> > >      [FAIL]  SP is not on sigaltstack
+> > >
+> > >      $ rm sas;gcc -o sas sas.c;./sas
+> > >      [OK]    Initial sigaltstack state was SS_DISABLE
+> > >      [RUN]   signal USR1
+> > >      [OK]    sigaltstack is disabled in sighandler
+> > >      [RUN]   switched to user ctx
+> > >      [RUN]   signal USR2
+> > >      [OK]    Stack preserved
+> > >      [OK]    sigaltstack is still SS_AUTODISARM after signal
+> > >      [OK]    Test passed
+> > >
+> > > So, this test failure appears to have been there for a while. I think
+> > > the LLVM folks need to take a look at it.
+> > >
+> > > Thanks,
+> > > Chang
 >
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+
+
+--=20
+Thanks,
+~Nick Desaulniers
