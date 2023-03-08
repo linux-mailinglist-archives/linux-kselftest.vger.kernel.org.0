@@ -2,138 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426BC6AFCB6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 03:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08ED6AFD1B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 03:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjCHCJH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Mar 2023 21:09:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        id S229814AbjCHC4h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Mar 2023 21:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjCHCJG (ORCPT
+        with ESMTP id S229832AbjCHC4f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 21:09:06 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518FA9CFE6;
-        Tue,  7 Mar 2023 18:09:04 -0800 (PST)
+        Tue, 7 Mar 2023 21:56:35 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067ADA42C7;
+        Tue,  7 Mar 2023 18:56:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678241345; x=1709777345;
+  t=1678244192; x=1709780192;
   h=message-id:date:mime-version:cc:subject:to:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=woVR2ZD8eombgINcedIWUBQofWyG0b8s7gkpgdn6/0E=;
-  b=AnKlAapxTh5JlnSs6BGKdPCx7vsppchmH8WlWsL75uA9MzQz1Vrghhcq
-   nbRFPjgAydPZKPkMhJLiuJcZgf7ifoQsaDoUv832cpuyTGtc7KdBcb900
-   8QSyhDeXcJNCJDfY+fAQIQ4Vtnr7mFJ4pBx6qSsa64hUuGHO00yw+/mKd
-   j7b1BGKZZyt22JidsSYrxTfOq5OjQSWZuePbR3SjHJOtTy61le64THi/9
-   QjIq4GaSZk2/219SYDjRNVVP1/Db0YSMW+IQ/PW6Esibilbk/4t0crnbT
-   o34XsDlwgqJCdX1e5tRS73TtzEN8p77QKYoNwLB81uUnxIy9qjAWhtgng
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="324344069"
+  bh=77QN2i2yZdUO/+6hL9TXXMuujJSXaX/G0JyFEyUwuBI=;
+  b=JnKmbcc/DDP+SpPAG9scSBATM+0KuVNJTNQpM/ay3tyYuoVsuTDqroxu
+   J2P1/SXWk/c7lOnsbGyI2yg6T3YRJhA8CCsFAi0SCjgJKtGNqlty5e567
+   6ysM26fqGnpiJKEliNnMM4pIMjvboOoV+WUkk0MwythSI9H1+lrh3daI1
+   0aMaHeK2rFqOVbvdzGX0XnchLu14O9ZeehFXbGX4JUlA6pqUGzHWNQhAG
+   awRKNta8AOyTGNTX7GqxLVW+RC7AaNiMkxPS7XKoO4QssFb9QU66Xp6bT
+   3U1RtF/bnq3iB+xI9Puw34eOZnvGDqqzZgF7bc5Zb/uV+yl+b5xe3Eb06
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="336060472"
 X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="324344069"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 18:09:04 -0800
+   d="scan'208";a="336060472"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 18:56:31 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="740941933"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="800598186"
 X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="740941933"
+   d="scan'208";a="800598186"
 Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Mar 2023 18:09:02 -0800
-Message-ID: <d441b9bb-e9b2-190d-981b-1fdc288b0a07@linux.intel.com>
-Date:   Wed, 8 Mar 2023 10:08:04 +0800
+  by orsmga004.jf.intel.com with ESMTP; 07 Mar 2023 18:56:29 -0800
+Message-ID: <b2a3ebf2-272d-2f4f-2489-253c4973a6db@linux.intel.com>
+Date:   Wed, 8 Mar 2023 10:55:31 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: Re: [PATCH 00/14] Add iommufd physical device operations for replace
- and alloc hwpt
+Cc:     baolu.lu@linux.intel.com, kvm@vger.kernel.org,
+        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH v2 01/17] iommufd: Move isolated msi enforcement to
+ iommufd_device_bind()
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-References: <0-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
- <BN9PR11MB52764E0C994D6B2519BD6F9B8CB79@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZAcyEzN4102gPsWC@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
+        Kevin Tian <kevin.tian@intel.com>,
+        linux-kselftest@vger.kernel.org
+References: <1-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
 From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <ZAcyEzN4102gPsWC@nvidia.com>
+In-Reply-To: <1-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/7/23 8:46 PM, Jason Gunthorpe wrote:
-> On Tue, Mar 07, 2023 at 08:42:06AM +0000, Tian, Kevin wrote:
->>> From: Jason Gunthorpe<jgg@nvidia.com>
->>> Sent: Saturday, February 25, 2023 8:28 AM
->>>
->> [...]
->>> The implementation is complicated because we have to introduce some
->>> per-iommu_group memory in iommufd and redo how we think about multi-
->>> device
->>> groups to be more explicit. This solves all the locking problems in the
->>> prior attempts.
->>>
->> Now think about the pasid case.
->>
->> pasid attach is managed as a device operation today:
->> 	iommu_attach_device_pasid()
->>
->> Following it naturally we'll have a pasid array per iommufd_device to
->> track attached HWPT per pasid.
->>
->> But internally there is only one pasid table per iommu group. i.e. same
->> story as RID attach that once dev1 replaces hwpt on pasid1 then it takes
->> effect on all other devices in the same group.
-> IMHO I can't belive that any actual systems that support PASID have a
-> RID aliasing problem too.
+On 3/8/23 8:35 AM, Jason Gunthorpe wrote:
+> With the recent rework this no longer needs to be done at domain
+> attachment time, we know if the device is usable by iommufd when we bind
+> it.
 > 
-> I think we should fix the iommu core to make PASID per-device and
-> require systems that have a RID aliasing problem to block PASID.
+> The value of msi_device_has_isolated_msi() is not allowed to change while
+> a driver is bound.
 > 
-> This is a bigger picture, if drivers have to optionally share their
-> PASID tables with other drivers then we can't have per-driver PASID
-> allocators at all either.
+> Reviewed-by: Kevin Tian<kevin.tian@intel.com>
+> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
+> ---
+>   drivers/iommu/iommufd/device.c | 38 ++++++++++++++++++----------------
+>   1 file changed, 20 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+> index c6f4852a8a0c08..63b65cdfe97f29 100644
+> --- a/drivers/iommu/iommufd/device.c
+> +++ b/drivers/iommu/iommufd/device.c
+> @@ -60,6 +60,26 @@ struct iommufd_device *iommufd_device_bind(struct iommufd_ctx *ictx,
+>   	if (!group)
+>   		return ERR_PTR(-ENODEV);
+>   
+> +	/*
+> +	 * For historical compat with VFIO the insecure interrupt path is
+> +	 * allowed if the module parameter is set. Insecure means that a MemWr
+> +	 * operation from the device (eg a simple DMA) cannot trigger an
 
-This is actually required in PCI and IOMMU core. pci_enable_pasid()
-requires full ACS support on device's upstream path:
+Nit:
 
-        if (!pci_acs_path_enabled(pdev, NULL, PCI_ACS_RR | PCI_ACS_UF))
-                 return -EINVAL;
+"... cannot trigger an ..." or "... can trigger an ..."?
 
-and, for such PCI topology, iommu core always allocates an exclusive
-iommu group.
+> +	 * interrupt outside this iommufd context.
+> +	 */
+> +	if (!iommufd_selftest_is_mock_dev(dev) &&
+> +	    !iommu_group_has_isolated_msi(group)) {
+> +		if (!allow_unsafe_interrupts) {
+> +			rc = -EPERM;
+> +			goto out_group_put;
+> +		}
+> +
+> +		dev_warn(
+> +			dev,
+> +			"MSI interrupts are not secure, they cannot be isolated by the platform. "
+> +			"Check that platform features like interrupt remapping are enabled. "
+> +			"Use the \"allow_unsafe_interrupts\" module parameter to override\n");
+> +	}
 
-The only place where seems to be a little messy is,
+Anyway,
 
-static int __iommu_set_group_pasid(struct iommu_domain *domain,
-                                    struct iommu_group *group, ioasid_t 
-pasid)
-{
-         struct group_device *device;
-         int ret = 0;
-
-         list_for_each_entry(device, &group->devices, list) {
-                 ret = domain->ops->set_dev_pasid(domain, device->dev, 
-pasid);
-                 if (ret)
-                         break;
-         }
-
-         return ret;
-}
-
-Perhaps we need a check on singleton group?
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 
 Best regards,
 baolu
