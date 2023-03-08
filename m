@@ -2,109 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856FF6B0630
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 12:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A47C6B0672
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 12:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjCHLmH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 06:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        id S229635AbjCHL4i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 06:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjCHLmD (ORCPT
+        with ESMTP id S230321AbjCHL4V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:42:03 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87C2BCFEE
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 03:41:53 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id ay14so60817753edb.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 03:41:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112; t=1678275712;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Is/quSvT3TJIPDFEbm6RZXsFk8WJ06IX2kfE6yYnF3I=;
-        b=JoY9f/gwPqh8ulZsXsSOQ87r7ihrjL+906w9miXHgutvS5nyPCiFKX70IK/SUfoLAD
-         7AsGePMghdxXk/wRT85Ed0ildPaEq5dxDhiG467t0qbymo7y97hEIWkipeoGYaKZmTmj
-         iVZa6VHrf/1NS0zoKobiWAHPILBCjjXxE/rfkVpnYtGK1mPhfcFamEB0n1k05ekB/g76
-         65L7yatB5sUWUuU1iz+Yf4mDSVn9mBT5fRUSqQmgfKjMEmaZmW4PDhppk7jQGlOPj0bD
-         Ix2tPXz4k7s+tbki526dAWHYuvF74O3H2unqXz/RN5d9AF/UDS2IPqEweJve7ExeFNKg
-         3tFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678275712;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Is/quSvT3TJIPDFEbm6RZXsFk8WJ06IX2kfE6yYnF3I=;
-        b=XCavgPeGYDbBi+xPAAlC/cU6O2vphKmxh98/leZjBt1N9bDplGmk8cUuykva28rjOC
-         Y4iGPkcYww90TIRox2IvxRQvPOpLEQO/AdDd0CVKylNQdi/R3NaikbzHNRVk7zfnoKyT
-         FqeAxgCarW+HcV8DMIEG6fuckyn3vFI96J7KkuRJNENaM0/FsK6S1W197UKepq7WkIu3
-         ZpsxEDSnRKxvIx81GdJR86N86OgVcsCIVG79fAFpJnfdV0qzcQn3SYHHM+U8NbQceXK+
-         reUKHjKYEGXSPX1p0nBeGbeSPWhaP5/0Qz/SBnIMdfWQSrCGDSlGghNwFCG6cdNDCT/r
-         AOSQ==
-X-Gm-Message-State: AO0yUKUXLGo0rayLpXwNj5eks4pjtGiexki+460L2bbAHFQZfEvdSX2z
-        KrIa/7VzxKL1NXSqcpCLbS5AIA==
-X-Google-Smtp-Source: AK7set/1uwA+p1HHny45n37ykgfDDSeAWNPouc1UdQ7cJxYi4nqXIkMr1mgaN97QuJjYiLj4BlfjJw==
-X-Received: by 2002:a17:906:1c13:b0:896:427b:148 with SMTP id k19-20020a1709061c1300b00896427b0148mr16362789ejg.1.1678275712179;
-        Wed, 08 Mar 2023 03:41:52 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id y7-20020a170906470700b008ef13127b5fsm7380758ejq.29.2023.03.08.03.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 03:41:51 -0800 (PST)
-Date:   Wed, 8 Mar 2023 12:41:49 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, idosch@mellanox.com,
-        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net
-Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no
- suitable device available
-Message-ID: <ZAh0fY4XoNcLTIOI@nanopsycho>
-References: <20230307150030.527726-1-po-hsu.lin@canonical.com>
- <ZAhV8nKuLVAQHQGl@nanopsycho>
- <CAMy_GT92sg4_JLPHvRpH542DPLbxOEYYoCMa2cnET1g8bz_R9Q@mail.gmail.com>
+        Wed, 8 Mar 2023 06:56:21 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3251E5F523;
+        Wed,  8 Mar 2023 03:56:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678276576; x=1709812576;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UBfvujX3Iv1nkdf7mtzG3zRFRnM9X/VsZJIweX1gv7k=;
+  b=ep0Q6si5JKEfsZew5VY1268wARFarjOYol6juPJFUIMvALcr7nDZKAP5
+   LV7pYaVkaT06CZVute837lnbfz287ge8QT+dYdYRF7ENe2NpTi0rz+oBh
+   PmAGhHuR8dsy8SqqTan0uN4oz60EseICtcITvdt3yNDDMbiK8NA9QOJJK
+   ykFFFKqi/Z2LnnyS7W6EEJAan0udlK2CXRZK6/M4XmZMoDuFTwlPN98cr
+   yZgvWj23OBE59dC2deXSntXL4jKqhSaksDvnwkAWX/WeWormH5842oCMv
+   No7wrXWQsLzdpCvvumBpaJWd3hspSJARDd82eg0RV+Jo2U0it9zYxTJIt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422403763"
+X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
+   d="scan'208";a="422403763"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 03:56:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="820186565"
+X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
+   d="scan'208";a="820186565"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.208.136]) ([10.254.208.136])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 03:56:14 -0800
+Message-ID: <cdf987df-87b5-0d03-7099-2d8569dcb8cc@linux.intel.com>
+Date:   Wed, 8 Mar 2023 19:56:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMy_GT92sg4_JLPHvRpH542DPLbxOEYYoCMa2cnET1g8bz_R9Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     baolu.lu@linux.intel.com, kvm@vger.kernel.org,
+        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH v2 03/17] iommufd: Replace the hwpt->devices list with
+ iommufd_group
+To:     Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
+        Kevin Tian <kevin.tian@intel.com>,
+        linux-kselftest@vger.kernel.org
+References: <3-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <3-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Wed, Mar 08, 2023 at 11:21:57AM CET, po-hsu.lin@canonical.com wrote:
->On Wed, Mar 8, 2023 at 5:31 PM Jiri Pirko <jiri@resnulli.us> wrote:
->>
->> Tue, Mar 07, 2023 at 04:00:30PM CET, po-hsu.lin@canonical.com wrote:
->> >The `devlink -j port show` command output may not contain the "flavour"
->> >key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic),
->> >iproute2-5.15.0:
->> >  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
->> >           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
->> >           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
->> >           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
->>
->> As Jakub wrote, this is odd. Could you debug if kernel sends the flavour
->> attr and if not why? Also, could you try with most recent kernel?
->
->I did a quick check on another s390x LPAR instance which is running
->with Ubuntu 23.04 (6.1.0-16-generic) iproute2-6.1.0, there is still no
->"flavour" attribute.
->$ devlink port show
->pci/0001:00:00.0/1: type eth netdev ens301
->pci/0001:00:00.0/2: type eth netdev ens301d1
->pci/0002:00:00.0/1: type eth netdev ens317
->pci/0002:00:00.0/2: type eth netdev ens317d1
->
->The behaviour didn't change with iproute2 built from source [1]
+On 2023/3/8 8:35, Jason Gunthorpe wrote:
+> The devices list was used as a simple way to avoid having per-group
+> information. Now that this seems to be unavoidable, just commit to
+> per-group information fully and remove the devices list from the HWPT.
+> 
+> The iommufd_group stores the currently assigned HWPT for the entire group
+> and we can manage the per-device attach/detach with a list in the
+> iommufd_group.
+> 
+> For destruction the flow is organized to make the following patches
+> easier, the actual call to iommufd_object_destroy_user() is done at the
+> top of the call chain without holding any locks. The HWPT to be destroyed
+> is returned out from the locked region to make this possible. Later
+> patches create locking that requires this.
+> 
+> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
 
-Could you paste output of "devlink dev info"?
-Looks like something might be wrong in the kernel devlink/driver code.
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-
+Best regards,
+baolu
