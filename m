@@ -2,213 +2,296 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B64C6B0E89
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 17:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48DB6B0F26
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 17:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjCHQXS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 11:23:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
+        id S229480AbjCHQr5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 11:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCHQXQ (ORCPT
+        with ESMTP id S229691AbjCHQrz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:23:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DF8193CE
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 08:23:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61DBCB81BF0
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 16:23:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2544AC433B3
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 16:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678292591;
-        bh=wtbSZIjnuVouf3TNMqbx2fEORr7Wb2sFxFP0LJArqos=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HHMvccU6j87lRjL4E7fcoWtU43PEayhFPDixHhIYkN3HRzmGcR8WQR9+fxolKOQwX
-         5CV8zsiRjp0VEXE4Yr/1JYS8DRKHi2dYfQVcNUm6o8SdBinkt+25yecIcPLi7lSktI
-         CF997R8QMc4O4MDgOQ7F51vWFcF7sldDLCI85gsoa5jGkk5/6Jkjn69rXuVqrxB3PU
-         HZF4CUJHSAU+OFsSvaMtl+6rsMxgia5YHivnasNjttbI8fgv4+FsNSvV5owJdm7Qs5
-         kI5UfQ++ndCum/2do06Yiv0j0kBiVmGKWHqaKVGgL28P3H5B+Ftnlta+JgA9l0r7b3
-         HHRyaCigHRj9Q==
-Received: by mail-ed1-f41.google.com with SMTP id u9so68085686edd.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 08:23:11 -0800 (PST)
-X-Gm-Message-State: AO0yUKU3QJqonTfkuDKx6qaAAoK2k5GUQp5FnyI6bDpSMkr0ehuP0DOH
-        NIKFE4IZp2LB3fNXO57KEha4bmSexFLBln6ZAXp1OQ==
-X-Google-Smtp-Source: AK7set8xrdBJlgLKcZJ8Ls9Cykn3HUp+jJMyiUPKHEnnwDi6Pc1f0Gubr89vOkRYF6mpOiNQedaKihAX1ERLrU1kUOo=
-X-Received: by 2002:a17:906:b10d:b0:878:561c:6665 with SMTP id
- u13-20020a170906b10d00b00878561c6665mr9467953ejy.0.1678292589161; Wed, 08 Mar
- 2023 08:23:09 -0800 (PST)
+        Wed, 8 Mar 2023 11:47:55 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D773ECB062
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 08:47:48 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id d7so18675546qtr.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 08:47:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1678294068;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KxydbB3uyyn9bCiMvWGSHt2Z+kQttveOlsssE2ak6kI=;
+        b=cgodqzhqamLdzp7EQPagtF1gYGWqDLN3V7I2zEYyuR3gRxt7mr8Akkw5zcmCOvBK69
+         jj9g+fiGERJm/1MkvMYDfyG7+MrQnrN1DY3MCaUmitsvLqtLAvua6+EdYkZDsIOWJyPB
+         Hy8kx66XXapoIqDmKQeTXgvQEl3WTmJ6IdrD7WGZIVBMsCoEpYMHzvL64dcU/AesBRNR
+         SpVaNdkWzfz4TylRjWIImpxOVhEZytCAFIn2TPlLVzTRe1vbo60sf4qOhcufF17hpJIE
+         LLpKCOc4w8iFIQbzzpb4tXlHnRkvNV2pbZ1b1lfoPU+f9fcOLj1JAopL5qTZJKILuEPC
+         sfbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678294068;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KxydbB3uyyn9bCiMvWGSHt2Z+kQttveOlsssE2ak6kI=;
+        b=Lm+36XJXoIoiYUQfa4EH5NxDT/0k0Z4SeT6aRgR9AIr1TunhRTkBoyRxxJMEdx+wE2
+         vkQOI4mRZMDPAZXRxWKc7chlZWsC7ovfgszcnEr+ek++1nHqmcsb++kmAL6oFR59igNL
+         s6v+GVq6MvmGVE8dhYLUKGjGA8suN2+THm33toQwBxYqhYgMCMwWKOBBGeej9y5fDmha
+         +mshI6n+tZ5UwYelcp9q9sxD3VEgKwiSxJiy75k7zSse6Aj1+QBYUK+9sbjTq8GmYUUE
+         3DPFdL8+xtwIMWifj5EoxHGKBG/Swz9fFo/waZDer5sXnQT5GSKyg2jgW/JLyPJSNh68
+         l45w==
+X-Gm-Message-State: AO0yUKVp7rk9qndQHP2I1wPF55ic7Cwl2/Yh063HQ+c8feSMbveEooMt
+        PD9ho+hxPMWe6Qcg2Tb3H+2VVA==
+X-Google-Smtp-Source: AK7set97fg/D+XxANClcUJyVA0x8gZg5tcID6He26QN4715WeGw5XZyQfVlTn+sZ1wXRnsBx0LOWlQ==
+X-Received: by 2002:a05:622a:1106:b0:3b9:bd05:bde1 with SMTP id e6-20020a05622a110600b003b9bd05bde1mr31825069qty.8.1678294067979;
+        Wed, 08 Mar 2023 08:47:47 -0800 (PST)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id 29-20020a05620a041d00b0073b8745fd39sm3215975qkp.110.2023.03.08.08.47.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 08:47:47 -0800 (PST)
+Date:   Wed, 8 Mar 2023 11:47:46 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Stefan Roesch <shr@devkernel.io>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org
+Subject: Re: [PATCH v3 1/3] mm: add new api to enable ksm per process
+Message-ID: <20230308164746.GA473363@cmpxchg.org>
+References: <20230224044000.3084046-1-shr@devkernel.io>
+ <20230224044000.3084046-2-shr@devkernel.io>
 MIME-Version: 1.0
-References: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
- <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com> <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
-In-Reply-To: <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Wed, 8 Mar 2023 08:22:57 -0800
-X-Gmail-Original-Message-ID: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
-Message-ID: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
-Subject: Re: selftests: sigaltstack: sas # exit=1 - # Bail out! SP is not on
- sigaltstack - on clang build
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>, llvm@lists.linux.dev,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
-        Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224044000.3084046-2-shr@devkernel.io>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 7:14=E2=80=AFPM Naresh Kamboju <naresh.kamboju@linar=
-o.org> wrote:
->
-> + LLVM
+On Thu, Feb 23, 2023 at 08:39:58PM -0800, Stefan Roesch wrote:
+> This adds a new prctl to API to enable and disable KSM on a per process
+> basis instead of only at the VMA basis (with madvise).
+> 
+> 1) Introduce new MMF_VM_MERGE_ANY flag
+> 
+> This introduces the new flag MMF_VM_MERGE_ANY flag. When this flag is
+> set, kernel samepage merging (ksm) gets enabled for all vma's of a
+> process.
+> 
+> 2) add flag to __ksm_enter
+> 
+> This change adds the flag parameter to __ksm_enter. This allows to
+> distinguish if ksm was called by prctl or madvise.
+> 
+> 3) add flag to __ksm_exit call
+> 
+> This adds the flag parameter to the __ksm_exit() call. This allows to
+> distinguish if this call is for an prctl or madvise invocation.
+> 
+> 4) invoke madvise for all vmas in scan_get_next_rmap_item
+> 
+> If the new flag MMF_VM_MERGE_ANY has been set for a process, iterate
+> over all the vmas and enable ksm if possible. For the vmas that can be
+> ksm enabled this is only done once.
+> 
+> 5) support disabling of ksm for a process
+> 
+> This adds the ability to disable ksm for a process if ksm has been
+> enabled for the process.
+> 
+> 6) add new prctl option to get and set ksm for a process
+> 
+> This adds two new options to the prctl system call
+> - enable ksm for all vmas of a process (if the vmas support it).
+> - query if ksm has been enabled for a process.
+> 
+> Signed-off-by: Stefan Roesch <shr@devkernel.io>
 
-The offending code seems to be:
+Hey Stefan, thanks for merging the patches into one. I found it much
+easier to review.
 
-#if __s390x__
-        register unsigned long sp asm("%15");
-#else
-        register unsigned long sp asm("sp");
-#endif
+Overall this looks straight-forward to me. A few comments below:
 
-        if (sp < (unsigned long)sstack ||
-                        sp >=3D (unsigned long)sstack + stack_size) {
-                ksft_exit_fail_msg("SP is not on sigaltstack\n");
-        }
+> @@ -2659,6 +2660,34 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+>  	case PR_SET_VMA:
+>  		error = prctl_set_vma(arg2, arg3, arg4, arg5);
+>  		break;
+> +#ifdef CONFIG_KSM
+> +	case PR_SET_MEMORY_MERGE:
+> +		if (!capable(CAP_SYS_RESOURCE))
+> +			return -EPERM;
+> +
+> +		if (arg2) {
+> +			if (mmap_write_lock_killable(me->mm))
+> +				return -EINTR;
+> +
+> +			if (test_bit(MMF_VM_MERGEABLE, &me->mm->flags))
+> +				error = -EINVAL;
 
-Is that actually expected to work?  asm("sp") is a horrible hack.  I
-would, maybe naively, expect a compiler to analyze this code, think
-"sp is unconditionally uninitialized", and treat the comparison as
-always-UB and thus generate whatever code seems convenient.
+So if the workload has already madvised specific VMAs the
+process-enablement will fail. Why is that? Shouldn't it be possible to
+override a local decision from an outside context that has more
+perspective on both sharing opportunities and security aspects?
 
---Andy
+If there is a good reason for it, the -EINVAL should be addressed in
+the manpage. And maybe add a comment here as well.
 
->
-> On Wed, 8 Mar 2023 at 00:58, Chang S. Bae <chang.seok.bae@intel.com> wrot=
-e:
-> >
-> > On 3/6/2023 10:57 PM, Naresh Kamboju wrote:
-> > > kselftest: sigaltstack built with clang-16 getting failed but passed =
-with
-> > > gcc-12 build. Please find more details about test logs on clang-16 an=
-d
-> > > gcc-12 and steps to reproduce locally on your machine by using tuxrun=
-.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > Test log:
-> > > ----------
-> > >
-> > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake) (Debian clang
-> > > version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.4=
-1),
-> > > Debian LLD 16.0.0) #1 SMP PREEMPT @1678159722
-> > > ...
-> > > kselftest: Running tests in sigaltstack
-> > > TAP version 13
-> > > 1..1
-> > > # selftests: sigaltstack: sas
-> > > # # [NOTE] the stack size is 21104
-> > > # TAP version 13
-> > > # 1..3
-> > > # ok 1 Initial sigaltstack state was SS_DISABLE
-> > > # Bail out! SP is not on sigaltstack
-> > > # # Planned tests !=3D run tests (3 !=3D 1)
-> > > # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > not ok 1 selftests: sigaltstack: sas # exit=3D1
-> > <snip>
-> >
-> > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake)
-> > > (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutil=
-s
-> > > for Debian) 2.40) #1 SMP PREEMPT @1678159736
-> > > ...
-> > > kselftest: Running tests in sigaltstack
-> > > TAP version 13
-> > > 1..1
-> > > # selftests: sigaltstack: sas
-> > > # # [NOTE] the stack size is 50080
-> > > # TAP version 13
-> > > # 1..3
-> > > # ok 1 Initial sigaltstack state was SS_DISABLE
-> > > # # [RUN] signal USR1
-> > > # ok 2 sigaltstack is disabled in sighandler
-> > > # # [RUN] switched to user ctx
-> > > # # [RUN] signal USR2
-> > > # # [OK] Stack preserved
-> > > # ok 3 sigaltstack is still SS_AUTODISARM after signal
-> > > # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > ok 1 selftests: sigaltstack: sas
-> >
-> > At glance, the log shows the altstack size difference between LLVM and =
-GCC.
-> >
-> > But, when I tried with the LLVM that I have,
-> >
-> >      $ clang --version
-> >      clang version 13.0.0 ...
-> >
-> > it failed only with this compiler:
-> >
-> >      $ rm sas;clang -o sas sas.c;./sas
-> >      # [NOTE]        the stack size is 8192
-> >      TAP version 13
-> >      1..3
-> >      ok 1 Initial sigaltstack state was SS_DISABLE
-> >      Bail out! SP is not on sigaltstack
-> >      # Planned tests !=3D run tests (3 !=3D 1)
-> >      # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> >
-> >      $ rm sas;gcc -o sas sas.c;./sas
-> >      # [NOTE]        the stack size is 8192
-> >      TAP version 13
-> >      1..3
-> >      ok 1 Initial sigaltstack state was SS_DISABLE
-> >      # [RUN] signal USR1
-> >      ok 2 sigaltstack is disabled in sighandler
-> >      # [RUN] switched to user ctx
-> >      # [RUN] signal USR2
-> >      # [OK]  Stack preserved
-> >      ok 3 sigaltstack is still SS_AUTODISARM after signal
-> >      # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> >
-> > The same is true with some old versions -- e.g. the one that came with
-> > commit 0c49ad415512 ("tools/testing/selftests/sigaltstack/sas.c: improv=
-e
-> > output of sigaltstack testcase"):
-> >
-> >      $ rm sas;clang -o sas sas.c;./sas
-> >      [OK]    Initial sigaltstack state was SS_DISABLE
-> >      [FAIL]  SP is not on sigaltstack
-> >
-> >      $ rm sas;gcc -o sas sas.c;./sas
-> >      [OK]    Initial sigaltstack state was SS_DISABLE
-> >      [RUN]   signal USR1
-> >      [OK]    sigaltstack is disabled in sighandler
-> >      [RUN]   switched to user ctx
-> >      [RUN]   signal USR2
-> >      [OK]    Stack preserved
-> >      [OK]    sigaltstack is still SS_AUTODISARM after signal
-> >      [OK]    Test passed
-> >
-> > So, this test failure appears to have been there for a while. I think
-> > the LLVM folks need to take a look at it.
-> >
-> > Thanks,
-> > Chang
+> +			else if (!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags))
+> +				error = __ksm_enter(me->mm, MMF_VM_MERGE_ANY);
+> +			mmap_write_unlock(me->mm);
+> +		} else {
+> +			__ksm_exit(me->mm, MMF_VM_MERGE_ANY);
+> +		}
+> +		break;
+> +	case PR_GET_MEMORY_MERGE:
+> +		if (!capable(CAP_SYS_RESOURCE))
+> +			return -EPERM;
+> +
+> +		if (arg2 || arg3 || arg4 || arg5)
+> +			return -EINVAL;
+> +
+> +		error = !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+> +		break;
+> +#endif
+>  	default:
+>  		error = -EINVAL;
+>  		break;
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 56808e3bfd19..23d6944f78ad 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -1063,6 +1063,7 @@ static int unmerge_and_remove_all_rmap_items(void)
+>  
+>  			mm_slot_free(mm_slot_cache, mm_slot);
+>  			clear_bit(MMF_VM_MERGEABLE, &mm->flags);
+> +			clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
+>  			mmdrop(mm);
+>  		} else
+>  			spin_unlock(&ksm_mmlist_lock);
+> @@ -2329,6 +2330,17 @@ static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
+>  	return rmap_item;
+>  }
+>  
+> +static bool vma_ksm_mergeable(struct vm_area_struct *vma)
+> +{
+> +	if (vma->vm_flags & VM_MERGEABLE)
+> +		return true;
+> +
+> +	if (test_bit(MMF_VM_MERGE_ANY, &vma->vm_mm->flags))
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+>  static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
+>  {
+>  	struct mm_struct *mm;
+> @@ -2405,8 +2417,20 @@ static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
+>  		goto no_vmas;
+>  
+>  	for_each_vma(vmi, vma) {
+> -		if (!(vma->vm_flags & VM_MERGEABLE))
+> +		if (!vma_ksm_mergeable(vma))
+>  			continue;
+> +		if (!(vma->vm_flags & VM_MERGEABLE)) {
+
+IMO, the helper obscures the interaction between the vma flag and the
+per-process flag here. How about:
+
+		if (!(vma->vm_flags & VM_MERGEABLE)) {
+			if (!test_bit(MMF_VM_MERGE_ANY, &vma->vm_mm->flags))
+				continue;
+
+			/*
+			 * With per-process merging enabled, have the MM scan
+			 * enroll any existing and new VMAs on the fly.
+			 * 
+			ksm_madvise();
+		}
+
+> +			unsigned long flags = vma->vm_flags;
+> +
+> +			/* madvise failed, use next vma */
+> +			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &flags))
+> +				continue;
+> +			/* vma, not supported as being mergeable */
+> +			if (!(flags & VM_MERGEABLE))
+> +				continue;
+> +
+> +			vm_flags_set(vma, VM_MERGEABLE);
+
+I don't understand the local flags. Can't it pass &vma->vm_flags to
+ksm_madvise()? It'll set VM_MERGEABLE on success. And you know it
+wasn't set before because the whole thing is inside the !set
+branch. The return value doesn't seem super useful, it's only the flag
+setting that matters:
+
+			ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &vma->vm_flags);
+			/* madvise can fail, and will skip special vmas (pfnmaps and such) */
+			if (!(vma->vm_flags & VM_MERGEABLE))
+				continue;
+
+> +		}
+>  		if (ksm_scan.address < vma->vm_start)
+>  			ksm_scan.address = vma->vm_start;
+>  		if (!vma->anon_vma)
+> @@ -2491,6 +2515,7 @@ static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
+>  
+>  		mm_slot_free(mm_slot_cache, mm_slot);
+>  		clear_bit(MMF_VM_MERGEABLE, &mm->flags);
+> +		clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
+>  		mmap_read_unlock(mm);
+>  		mmdrop(mm);
+>  	} else {
+
+> @@ -2664,12 +2690,39 @@ int __ksm_enter(struct mm_struct *mm)
+>  	return 0;
+>  }
+>  
+> -void __ksm_exit(struct mm_struct *mm)
+> +static void unmerge_vmas(struct mm_struct *mm)
+> +{
+> +	struct vm_area_struct *vma;
+> +	struct vma_iterator vmi;
+> +
+> +	vma_iter_init(&vmi, mm, 0);
+> +
+> +	mmap_read_lock(mm);
+> +	for_each_vma(vmi, vma) {
+> +		if (vma->vm_flags & VM_MERGEABLE) {
+> +			unsigned long flags = vma->vm_flags;
+> +
+> +			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_UNMERGEABLE, &flags))
+> +				continue;
+> +
+> +			vm_flags_clear(vma, VM_MERGEABLE);
+
+ksm_madvise() tests and clears VM_MERGEABLE, so AFAICS
+
+	for_each_vma(vmi, vma)
+		ksm_madvise();
+
+should do it...
+
+> +		}
+> +	}
+> +	mmap_read_unlock(mm);
+> +}
+> +
+> +void __ksm_exit(struct mm_struct *mm, int flag)
+>  {
+>  	struct ksm_mm_slot *mm_slot;
+>  	struct mm_slot *slot;
+>  	int easy_to_free = 0;
+>  
+> +	if (!(current->flags & PF_EXITING) && flag == MMF_VM_MERGE_ANY &&
+> +		test_bit(MMF_VM_MERGE_ANY, &mm->flags)) {
+> +		clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
+> +		unmerge_vmas(mm);
+
+...and then it's short enough to just open-code it here and drop the
+unmerge_vmas() helper.
