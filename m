@@ -2,243 +2,343 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53ED86B1137
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 19:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23476B1150
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 19:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjCHSmY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 13:42:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
+        id S230187AbjCHSsx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 13:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjCHSmS (ORCPT
+        with ESMTP id S230183AbjCHSsw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:42:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D66CAF28A
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 10:41:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678300890;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DWZnH/S2SSsps7LCJKfYBHl/qAsBXwWRiKVfSsyg8WE=;
-        b=hLKqKm/FfiVp/sgcBs3MjsIY/eZt1wlwMPZSh5MkP+8wKR6F3G1h94u22GGgq2Kvj+ABsE
-        TYWTqubhSZjzLUARRNS/sQywI4wRkIJzQNW87x31bu26gkqpzZxvt41Y2AJ0/gtnDOm65v
-        FpAmdrTqstmk7VtsFkGjsPYNJbmcK0Q=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-630-c1c_n-vJOYOdApyagPtKxQ-1; Wed, 08 Mar 2023 13:41:29 -0500
-X-MC-Unique: c1c_n-vJOYOdApyagPtKxQ-1
-Received: by mail-wm1-f69.google.com with SMTP id bi21-20020a05600c3d9500b003e836e354e0so1150761wmb.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 10:41:28 -0800 (PST)
+        Wed, 8 Mar 2023 13:48:52 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB91DBAD10
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 10:48:49 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id h9so17600766ljq.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 10:48:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678301328;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bv1akr0dZXtnui0AYhF/JTPAEZAhJzReOkFX7K2EQXI=;
+        b=bI0aX4HcMMrcRBC/bfaC9yUDlvK7mWA/9x10juYKdxQHmvafOcldF6qHv38hhBvrxd
+         4GO1Hff5ZHy4/lJFvPvRCUcXShF77kux8dYMbazkGTpy5Kx0D5Vt3gcnfac1KLfHXqFA
+         jy+qPpGPPF6IPX5/gagGXrvDGWe8zrQNVTM7f3mfVd6vZGOStmsYUtE3mh7gjCz0eI9Q
+         WjS/swu5Z82D81cE2R0uxuh3yjKjiok448C8Juam+UXcCKfjAzTKs+EJFuTw0O0rjp4Q
+         8tM+FBYTKdBd5X5LHLF86AuQiZVqoLdrYWdtxlHXFtn7xlKesWRHkF/yxHciGxMNATh2
+         Cc6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678300888;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DWZnH/S2SSsps7LCJKfYBHl/qAsBXwWRiKVfSsyg8WE=;
-        b=i9e84PvgNtrst4W709iFykiKUzJaDAFvGH2qQbZITT6fH6Tc8n4QeX1wtcf7MDN/3i
-         dfhEhIBNXjji9m8EmlnIWbYtJ7RmvVszIKbjhad8G/uLPFKzipytuUqHX8AsJJlqFLT/
-         L8zFfROSgB4+c7KJMfLvKkUk0m/VP6lhRy+Lb1cI6XmTjb9C1BnesSDSOj6wllFQKbMz
-         XdPriLvBHtj3xXYR4n3gM+yuNKmbIrH2n8a5wTg2WWSIdyYw8lBaeLZ2cF9DTDGzjUZV
-         zvbKvZmYIa1DuCr+dhf1q1IwxBlIJm3DxxhXXxX2IQzQvpFvW8lXkSoM7NQW4bn4lZ/5
-         ZzlA==
-X-Gm-Message-State: AO0yUKVxARaS72hPU/lDvHLlvaRAYli7M1N/ppuHltMSHI5HXXmQ7LiV
-        8LabQ+iadZIwOpBD6wsD8C0AwcNeS+zZ3HjBd437HkcJeSzi3rSZMWLqk9Btzsy7d8DDaCAgI2n
-        hyprlrHEeff6opfv/coEYdzT9UWuD
-X-Received: by 2002:adf:f58b:0:b0:2c3:f8ea:da26 with SMTP id f11-20020adff58b000000b002c3f8eada26mr16652260wro.32.1678300887902;
-        Wed, 08 Mar 2023 10:41:27 -0800 (PST)
-X-Google-Smtp-Source: AK7set93OfqYv05KREWPRO+0DybPoGhN1GL8gAnuaMlfcRqFfsvDFgS21mzSjowtRSl6fzupzlTwMQ==
-X-Received: by 2002:adf:f58b:0:b0:2c3:f8ea:da26 with SMTP id f11-20020adff58b000000b002c3f8eada26mr16652246wro.32.1678300887477;
-        Wed, 08 Mar 2023 10:41:27 -0800 (PST)
-Received: from ?IPV6:2003:cb:c71b:cb00:d372:1da8:9e9e:422d? (p200300cbc71bcb00d3721da89e9e422d.dip0.t-ipconnect.de. [2003:cb:c71b:cb00:d372:1da8:9e9e:422d])
-        by smtp.gmail.com with ESMTPSA id p13-20020a056000018d00b002c5691f13eesm15692031wrx.50.2023.03.08.10.41.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 10:41:27 -0800 (PST)
-Message-ID: <f531ab1e-5fc0-c47a-b3e9-2e9c2f76ab81@redhat.com>
-Date:   Wed, 8 Mar 2023 19:41:26 +0100
+        d=1e100.net; s=20210112; t=1678301328;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bv1akr0dZXtnui0AYhF/JTPAEZAhJzReOkFX7K2EQXI=;
+        b=J7SZ4uc5iv3HBEdpYxxGe9Egd7dC9CxrFaaWVpg6gCx5kRZklBFf9+a1l/BBgs1Hti
+         b1W2e+NZNBlMXa8SSM/3CskQmasbpSH4bvxkXk09uToizbSvqrxy3a0SdB88LIH24DRD
+         dqbgJtYWqnOVKWV1zhvKyeFQZnqNWpk7auT6eRJ1MyJ0SRfE5NLFbox/pzlQ7YKXF4j+
+         wctgphoFExV+wHTyl/xa7UNMgBaAgse2jY58wvepC8VnVHyXoYpWtWaX1kXTqVfRLj2t
+         h8/kksu9BX0ykYdBHpRgabH5Ytueg8aPKorMgdQ1fRM9wjGNmV+I15a+SiOxodqxYT+b
+         Mwzw==
+X-Gm-Message-State: AO0yUKUpns9Hy6a3Bb3t2B0948KuOK/0FqXXi6yFBPV9qpzOa4mJILRF
+        ZKM7pR34yA/erq4ookIMx2uWZSkfvVioFzktr7c5Hw==
+X-Google-Smtp-Source: AK7set8PLn02wnWoSUWxQIWomi2iCtDNFADbqKGcA05FOKTzYMA7/Qhpj7WLdjLjE3q+UKaTpvUPM2Jznr4RY5wfm84=
+X-Received: by 2002:a2e:b8d2:0:b0:295:b0cd:522 with SMTP id
+ s18-20020a2eb8d2000000b00295b0cd0522mr6167764ljp.2.1678301327684; Wed, 08 Mar
+ 2023 10:48:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Stefan Roesch <shr@devkernel.io>, kernel-team@fb.com,
-        linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        akpm@linux-foundation.org
-References: <20230224044000.3084046-1-shr@devkernel.io>
- <d9727ac4-4976-0de7-2d16-676ad7db5e89@redhat.com>
- <20230308173006.GA476158@cmpxchg.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 0/3] mm: process/cgroup ksm support
-In-Reply-To: <20230308173006.GA476158@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230306225024.264858-5-axelrasmussen@google.com> <202303081703.nwxAgIVH-lkp@intel.com>
+In-Reply-To: <202303081703.nwxAgIVH-lkp@intel.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Wed, 8 Mar 2023 10:48:11 -0800
+Message-ID: <CAJHvVciSP9QyF33GFveESFW3o7vyxbydq2vR4t7tnunJLJNjWg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len arguments
+To:     kernel test robot <lkp@intel.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        James Houghton <jthoughton@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, Mar 8, 2023 at 1:52=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
+ote:
+>
+> Hi Axel,
+>
+> Thank you for the patch! Yet something to improve:
+>
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.3-rc1]
+> [cannot apply to akpm-mm/mm-everything next-20230308]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Axel-Rasmussen/mm-=
+userfaultfd-rename-functions-for-clarity-consistency/20230307-065203
+> patch link:    https://lore.kernel.org/r/20230306225024.264858-5-axelrasm=
+ussen%40google.com
+> patch subject: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len =
+arguments
+> config: x86_64-randconfig-a011-20230306 (https://download.01.org/0day-ci/=
+archive/20230308/202303081703.nwxAgIVH-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
+006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/cee642b93be3ae01c=
+7cc737c0176cbc16074a25a
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review Axel-Rasmussen/mm-userfaultfd-re=
+name-functions-for-clarity-consistency/20230307-065203
+>         git checkout cee642b93be3ae01c7cc737c0176cbc16074a25a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Dx86_64 SHELL=3D/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303081703.nwxAgIVH-lkp@i=
+ntel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> mm/userfaultfd.c:577:52: error: passing 'const struct uffdio_range *' =
+to parameter of incompatible type 'struct uffdio_range'
+>                    return  mfill_atomic_hugetlb(dst_vma, src_start, dst, =
+flags);
+>                                                                     ^~~
+>    mm/userfaultfd.c:463:29: note: passing argument to parameter 'dst' her=
+e
+>                                        struct uffdio_range dst,
+>                                                            ^
+>    1 error generated.
 
->> One point that popped up in the past and that I raised on the last RFC: we
->> should think about letting processes *opt out/disable* KSM on their own.
->> Either completely, or for selected VMAs.
->>
->> Reasoning is, that if you have an application that really doesn't want some
->> memory regions to be applicable to KSM (memory de-duplication attacks?
->> Knowing that KSM on some regions will be counter-productive)
->>
->> For example, remembering if MADV_UNMERGEABLE was called and not only
->> clearing the VMA flag. So even if KSM would be force-enabled by some tooling
->> after the process started, such regions would not get considered for KSM.
->>
->> It would a bit like how we handle THP.
-> 
-> I'm not sure the THP comparison is apt. THP is truly a local
-> optimization that depends on the workload's access patterns. The
-> environment isn't a true factor. It makes some sense that if there is
-> a global policy to generally use THP the workload be able to opt out
-> based on known sparse access patterns. At least until THP allocation
-> strategy inside the kernel becomes smarter!
+Whoops. :) I admittedly didn't test with !CONFIG_HUGETLB_PAGE.
 
-Yes, and some features really don't want THP, at least for some period 
-of time (e.g., userfaultfd), because they are to some degree 
-incompatible with the idea of THP populating more memory than was accessed.
+The next version of this series will drop this patch as per discussion
+though, so the issue is moot.
 
-Page pinning + KSM was one of the remaining cases where force-enabling 
-KSM could have made a real difference (IOW buggy) that we discussed the 
-last time this was proposed. That should be fixed now. I guess besides 
-that, most features should be compatible with KSM nowadays. So 
-force-enabling it should not result in actual issues I guess.
-
-> 
-> Merging opportunities and security questions are trickier. The
-> application might know which data is sensitive, but it doesn't know
-> whether its environment is safe or subject do memory attacks, so it
-> cannot make that decision purely from inside.
-
-I agree regarding security. Regarding merging opportunities, I am not so 
-sure. There are certainly examples where an application knows best that 
-memory deduplication is mostly a lost bet (if a lot of randomization or 
-pointers are involved most probably).
-
-> 
-> There is a conceivable usecase where multiple instances of the same
-> job are running inside a safe shared security domain and using the
-> same sensitive data.
-
-Yes. IMHO, such special applications could just enable KSM manually, 
-though, instead of enabling it for each and every last piece of 
-anonymous memory that doesn't make sense to get deduplciated :)
-
-But of course, I see the simplicity in just enabling it globally.
-
-> 
-> There is a conceivable usecase where the system and the workload
-> collaborate to merge insensitive data across security domains.
-> 
-> I'm honestly not sure which usecase is more likely. My gut feeling is
-> the first one, simply because of broader concerns of multiple security
-> domains sharing kernel instances or physical hardware.
-> 
-
-See my side note below.
-
->> On 24.02.23 05:39, Stefan Roesch wrote:
->>> So far KSM can only be enabled by calling madvise for memory regions. To
->>> be able to use KSM for more workloads, KSM needs to have the ability to be
->>> enabled / disabled at the process / cgroup level.
->>>
->>> Use case 1:
->>> The madvise call is not available in the programming language. An example for
->>> this are programs with forked workloads using a garbage collected language without
->>> pointers. In such a language madvise cannot be made available.
->>>
->>> In addition the addresses of objects get moved around as they are garbage
->>> collected. KSM sharing needs to be enabled "from the outside" for these type of
->>> workloads.
->>>
->>> Use case 2:
->>> The same interpreter can also be used for workloads where KSM brings no
->>> benefit or even has overhead. We'd like to be able to enable KSM on a workload
->>> by workload basis.
->>>
->>> Use case 3:
->>> With the madvise call sharing opportunities are only enabled for the current
->>> process: it is a workload-local decision. A considerable number of sharing
->>> opportuniites may exist across multiple workloads or jobs. Only a higler level
->>> entity like a job scheduler or container can know for certain if its running
->>> one or more instances of a job. That job scheduler however doesn't have
->>> the necessary internal worklaod knowledge to make targeted madvise calls.
->>>
->>> Security concerns:
->>> In previous discussions security concerns have been brought up. The problem is
->>> that an individual workload does not have the knowledge about what else is
->>> running on a machine. Therefore it has to be very conservative in what memory
->>> areas can be shared or not. However, if the system is dedicated to running
->>> multiple jobs within the same security domain, its the job scheduler that has
->>> the knowledge that sharing can be safely enabled and is even desirable.
->>
->> Note that there are some papers about why limiting memory deduplciation
->> attacks to single security domains is not sufficient. Especially, the remote
->> deduplication attacks fall into that category IIRC.
-> 
-> I think it would be good to elaborate on that and include any caveats
-> in the documentation.
-
-Yes. The main point I would make is that we should encourage eventual 
-users to think twice instead of blindly enabling this feature. Good 
-documentation is certainly helpful.
-
-> 
-> Ultimately, the bar isn't whether there are attack vectors on a subset
-> of possible usecases, but whether there are usecases where this can be
-> used safely, which is obviously true.
-
-I agree. But still I have to raise that the security implications might 
-be rather subtle and surprising (e.g., single security domain). Sure, 
-there are setups that certainly don't care, I totally agree.
-
-
-
-Side note:
-
-
-Of course, I wonder how many workloads would place identical data into 
-anonymous memory where it would have to get deduplicated instead, say, 
-mmaping a file instead.
-
-In the VM world it all makes sense to me, because the kernel, libraries, 
-...executables may be identical and loaded into guest memory (-> 
-anonymous memory) where we'd just wish to deduplciate them. In ordinary 
-process, I'm not so sure how much deduplication potential there really 
-is once pointers etc. are involved and memory allocators go crazy on 
-placing unrelated data into the same page. There is one prime example, 
-though, that might be different, which is the shared zeropage I guess.
-
-
-I'd be curious which data the mentioned 20% actually deduplicate: 
-according to [1], some workloads mostly only deduplicate the shared 
-zeropage (in their Microsoft Edge scenario, 84% -- 93% of all 
-deduplicated pages are zeropage). Deduplicating the shared zeropage is 
-obviously "less security" relevant and one could optimize KSM easily to 
-only try deduplicating that and avoid a lot of unstable nodes.
-
-Of course, just a thought on memory deduplication on process level.
-
-
-[1] https://ieeexplore.ieee.org/document/7546546
-
--- 
-Thanks,
-
-David / dhildenb
-
+>
+>
+> vim +577 mm/userfaultfd.c
+>
+>    508
+>    509  static __always_inline ssize_t mfill_atomic(struct mm_struct *dst=
+_mm,
+>    510                                              unsigned long src_sta=
+rt,
+>    511                                              const struct uffdio_r=
+ange *dst,
+>    512                                              atomic_t *mmap_changi=
+ng,
+>    513                                              uffd_flags_t flags)
+>    514  {
+>    515          struct vm_area_struct *dst_vma;
+>    516          ssize_t err;
+>    517          pmd_t *dst_pmd;
+>    518          unsigned long src_addr, dst_addr;
+>    519          long copied;
+>    520          struct page *page;
+>    521
+>    522          /*
+>    523           * Sanitize the command parameters:
+>    524           */
+>    525          BUG_ON(dst->start & ~PAGE_MASK);
+>    526          BUG_ON(dst->len & ~PAGE_MASK);
+>    527
+>    528          /* Does the address range wrap, or is the span zero-sized=
+? */
+>    529          BUG_ON(src_start + dst->len <=3D src_start);
+>    530          BUG_ON(dst->start + dst->len <=3D dst->start);
+>    531
+>    532          src_addr =3D src_start;
+>    533          dst_addr =3D dst->start;
+>    534          copied =3D 0;
+>    535          page =3D NULL;
+>    536  retry:
+>    537          mmap_read_lock(dst_mm);
+>    538
+>    539          /*
+>    540           * If memory mappings are changing because of non-coopera=
+tive
+>    541           * operation (e.g. mremap) running in parallel, bail out =
+and
+>    542           * request the user to retry later
+>    543           */
+>    544          err =3D -EAGAIN;
+>    545          if (mmap_changing && atomic_read(mmap_changing))
+>    546                  goto out_unlock;
+>    547
+>    548          /*
+>    549           * Make sure the vma is not shared, that the dst range is
+>    550           * both valid and fully within a single existing vma.
+>    551           */
+>    552          err =3D -ENOENT;
+>    553          dst_vma =3D find_dst_vma(dst_mm, dst);
+>    554          if (!dst_vma)
+>    555                  goto out_unlock;
+>    556
+>    557          err =3D -EINVAL;
+>    558          /*
+>    559           * shmem_zero_setup is invoked in mmap for MAP_ANONYMOUS|=
+MAP_SHARED but
+>    560           * it will overwrite vm_ops, so vma_is_anonymous must ret=
+urn false.
+>    561           */
+>    562          if (WARN_ON_ONCE(vma_is_anonymous(dst_vma) &&
+>    563              dst_vma->vm_flags & VM_SHARED))
+>    564                  goto out_unlock;
+>    565
+>    566          /*
+>    567           * validate 'mode' now that we know the dst_vma: don't al=
+low
+>    568           * a wrprotect copy if the userfaultfd didn't register as=
+ WP.
+>    569           */
+>    570          if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM=
+_UFFD_WP))
+>    571                  goto out_unlock;
+>    572
+>    573          /*
+>    574           * If this is a HUGETLB vma, pass off to appropriate rout=
+ine
+>    575           */
+>    576          if (is_vm_hugetlb_page(dst_vma))
+>  > 577                  return  mfill_atomic_hugetlb(dst_vma, src_start, =
+dst, flags);
+>    578
+>    579          if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
+>    580                  goto out_unlock;
+>    581          if (!vma_is_shmem(dst_vma) &&
+>    582              (flags & MFILL_ATOMIC_MODE_MASK) =3D=3D MFILL_ATOMIC_=
+CONTINUE)
+>    583                  goto out_unlock;
+>    584
+>    585          /*
+>    586           * Ensure the dst_vma has a anon_vma or this page
+>    587           * would get a NULL anon_vma when moved in the
+>    588           * dst_vma.
+>    589           */
+>    590          err =3D -ENOMEM;
+>    591          if (!(dst_vma->vm_flags & VM_SHARED) &&
+>    592              unlikely(anon_vma_prepare(dst_vma)))
+>    593                  goto out_unlock;
+>    594
+>    595          while (src_addr < src_start + dst->len) {
+>    596                  pmd_t dst_pmdval;
+>    597
+>    598                  BUG_ON(dst_addr >=3D dst->start + dst->len);
+>    599
+>    600                  dst_pmd =3D mm_alloc_pmd(dst_mm, dst_addr);
+>    601                  if (unlikely(!dst_pmd)) {
+>    602                          err =3D -ENOMEM;
+>    603                          break;
+>    604                  }
+>    605
+>    606                  dst_pmdval =3D pmdp_get_lockless(dst_pmd);
+>    607                  /*
+>    608                   * If the dst_pmd is mapped as THP don't
+>    609                   * override it and just be strict.
+>    610                   */
+>    611                  if (unlikely(pmd_trans_huge(dst_pmdval))) {
+>    612                          err =3D -EEXIST;
+>    613                          break;
+>    614                  }
+>    615                  if (unlikely(pmd_none(dst_pmdval)) &&
+>    616                      unlikely(__pte_alloc(dst_mm, dst_pmd))) {
+>    617                          err =3D -ENOMEM;
+>    618                          break;
+>    619                  }
+>    620                  /* If an huge pmd materialized from under us fail=
+ */
+>    621                  if (unlikely(pmd_trans_huge(*dst_pmd))) {
+>    622                          err =3D -EFAULT;
+>    623                          break;
+>    624                  }
+>    625
+>    626                  BUG_ON(pmd_none(*dst_pmd));
+>    627                  BUG_ON(pmd_trans_huge(*dst_pmd));
+>    628
+>    629                  err =3D mfill_atomic_pte(dst_pmd, dst_vma, dst_ad=
+dr,
+>    630                                         src_addr, &page, flags);
+>    631                  cond_resched();
+>    632
+>    633                  if (unlikely(err =3D=3D -ENOENT)) {
+>    634                          void *page_kaddr;
+>    635
+>    636                          mmap_read_unlock(dst_mm);
+>    637                          BUG_ON(!page);
+>    638
+>    639                          page_kaddr =3D kmap_local_page(page);
+>    640                          err =3D copy_from_user(page_kaddr,
+>    641                                               (const void __user *=
+) src_addr,
+>    642                                               PAGE_SIZE);
+>    643                          kunmap_local(page_kaddr);
+>    644                          if (unlikely(err)) {
+>    645                                  err =3D -EFAULT;
+>    646                                  goto out;
+>    647                          }
+>    648                          flush_dcache_page(page);
+>    649                          goto retry;
+>    650                  } else
+>    651                          BUG_ON(page);
+>    652
+>    653                  if (!err) {
+>    654                          dst_addr +=3D PAGE_SIZE;
+>    655                          src_addr +=3D PAGE_SIZE;
+>    656                          copied +=3D PAGE_SIZE;
+>    657
+>    658                          if (fatal_signal_pending(current))
+>    659                                  err =3D -EINTR;
+>    660                  }
+>    661                  if (err)
+>    662                          break;
+>    663          }
+>    664
+>    665  out_unlock:
+>    666          mmap_read_unlock(dst_mm);
+>    667  out:
+>    668          if (page)
+>    669                  put_page(page);
+>    670          BUG_ON(copied < 0);
+>    671          BUG_ON(err > 0);
+>    672          BUG_ON(!copied && !err);
+>    673          return copied ? copied : err;
+>    674  }
+>    675
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
