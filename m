@@ -2,159 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BA36B0B0D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 15:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9686B0B6A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 15:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbjCHO0s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 09:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S231658AbjCHOif (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 09:38:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbjCHO0o (ORCPT
+        with ESMTP id S229676AbjCHOie (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:26:44 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060.outbound.protection.outlook.com [40.107.92.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F85C3E27;
-        Wed,  8 Mar 2023 06:26:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BLS42hZ38uSCszISFzAVaFGuW6+L1Dmor9OOPzGwMZBnBtWhcOUuD+PeHvQHwYPzwqCkwinST6UgHElvVv1EbTJbQlSP8jDoRPqRzl/vJAzBHIgqRMk2hcmP2Yg5iQPGTEkvi4Kiil9IGrlBiNAaspWq2THnmPiG7lAI3c06//v5o/wtWY2GJqDSMepSyKBtNA3SF3NhA6KDgiYJX1pVPfANc83JOlm4Q1VDjFr2R8vfdTFFWh4Val0l/ge86g9hilBDtCWv/u+FdmDXlwrvJdcLFmBnbDUY58f5ydNlk+oE4hOIdr2VPqsKB/bipZC1Hedn2PshZEM7LPo4LnfNFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lEHEiva0AInWLMPGMorLpy6fr1b2GpNjaBysPbPcCOw=;
- b=fklRz0ibqsHhU+/guB5tHro+6CChQQlnkabJM+Xhq5hqjCZ+oMxt3jyy4zQAk43LQ4jEIrwN2nWl6QFQ4pB6/UQbTZ4F7B1NNW4S4HxI3j19FqlQxYAt3MXjl6mQlUYJt22irIefyz31Kn9+330DDyXDIHXkpRDPSOVs2GqiCYdITfdSj0hX0ZJAa2uF6H68ydTxyioxFihC4VBo6MALD2ugyX5E2VYOsHc5cAHY0/RrCmJY/nWLbi0uOvDK/Cz52iwbXmNrXUOVXyhs3IUqYLMzgVcyhNBTJgOExiTqyFRELJfxBnQckgDutDxZCAi3ULUn48bnRVGMPHeZBYK7Lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lEHEiva0AInWLMPGMorLpy6fr1b2GpNjaBysPbPcCOw=;
- b=DIvSE+xLdvyru41ugUp6dqeRkL9D+9y4JixJYNZm5Xs4ODVrU9ENFGdB8/U8xpRhs0mWT5vPwV1KjT1LiSNzYrr/C/xtU2i18BrVgLivBLoRso7IziBvJXxQoaaho1OHCHKYEUBMj1v954606thj2nfaDnnTZSi8mBj8s/BIfKSUMjlLsK2zwNeVl6ud9cii50F3cMesxCVfmM0q3nll7HAlJy+w3LHbWbhMt0O2So6592C8kBTB5aJPbB8rKh9pl6dpQOQtBo6+kiN5uAQzGBVtfeDb2J9CUVABInJhY/WEcnVX+p8jNkYHw+zDJlza+R2WRZ1XgC7bKelri0nNBQ==
-Received: from BN9PR03CA0532.namprd03.prod.outlook.com (2603:10b6:408:131::27)
- by CY8PR12MB7611.namprd12.prod.outlook.com (2603:10b6:930:9b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Wed, 8 Mar
- 2023 14:26:36 +0000
-Received: from BN8NAM11FT060.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:131:cafe::c4) by BN9PR03CA0532.outlook.office365.com
- (2603:10b6:408:131::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17 via Frontend
- Transport; Wed, 8 Mar 2023 14:26:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BN8NAM11FT060.mail.protection.outlook.com (10.13.177.211) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.18 via Frontend Transport; Wed, 8 Mar 2023 14:26:36 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 8 Mar 2023
- 06:26:24 -0800
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 8 Mar 2023 06:26:23 -0800
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.11) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.5 via Frontend
- Transport; Wed, 8 Mar 2023 06:26:23 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <robin.murphy@arm.com>,
-        <alex.williamson@redhat.com>, <shuah@kernel.org>
-CC:     <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <farman@linux.ibm.com>
-Subject: [PATCH v4 5/5] vfio: Support IO page table replacement
-Date:   Wed, 8 Mar 2023 06:26:02 -0800
-Message-ID: <600343ffb282ff3bed5eb98a9255c0084d01a859.1678284812.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1678284812.git.nicolinc@nvidia.com>
-References: <cover.1678284812.git.nicolinc@nvidia.com>
+        Wed, 8 Mar 2023 09:38:34 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA6E39B80
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 06:38:22 -0800 (PST)
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 57CF43F597
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 14:38:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678286301;
+        bh=TLXbWgCSumBQHNJIEiKWgsAVxLokeDk3mverzNy4nO4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=LcjVJL5Xu+c7VDQygsgAoMQXFFHQ7BCuiGxLBAKYpi7GkVDIM5yHDfyv02/46KQbe
+         tpUU9GTC33BlrQuPZlwzOnQ3puRTDtTh42fpf4d1e6cXKbNdeHitUiwB/HiBbxeXZd
+         Yq59/ZrmLaAPASL8fRTQHi5euYvpRg3D9F7udCdF6acHApaWhArWiBn0kWGWpGa6Cb
+         GJi3rFbakC181OmdDaGU6+RWE9g366/8zJ/BU88El0YefeLk6sn1ncmy4hctUqXWXq
+         suk3NJlXq7EGl/C5DOw21GDolzPHcic9suvca/UBiaYuSeLH7lLHlawccXlgCzR0EB
+         0ec8CQBOLS4yA==
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1767ec35ce2so8824370fac.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 06:38:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678286300;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TLXbWgCSumBQHNJIEiKWgsAVxLokeDk3mverzNy4nO4=;
+        b=BOMyLuWltV3eIG7iIwXbPZxqh8xgesDPUXZzk/O9VRlx9vMu3wA6m6PEVX5WuHc/q3
+         bUvzUAM3IVtS7SlBAnzMYXtIasFwObRYNvb9Ojg7DsIksfGem+MFeEOv75KDDAQmDKTN
+         1m2r27lBzF4vceVK50P0ulZTCkxxgTyT2WN83mjcAYKQKN+BLat4gMi7GU4PEXS2qlKX
+         IG2ylSfwF682w/x35CrrOYIOE/TskdDIsAwMnN+A+obbeKQbJ8FMXTZr4WHQh4iTs4fs
+         fD2+ke9u+w0Se5g+OdBQps3n+7N9w8kUBZ6y4YCgYPI/9x2IzYyVFdFxnNJpz1D8YHYP
+         HDfg==
+X-Gm-Message-State: AO0yUKWMh1z7IVpGTjWUmg5yT4zTXdkoGmZaTTl94UlzZzGxGTWerAJp
+        M1ZUPjHbVUh0vXB1u5i2Gnwthu9M/KaQuRC6BMt0RgxhV2rgNe50MLCDDSOfOMV1MXCNOj/evqF
+        c5G65TuvJEWeGA1IY01H0TCgX11PbXfuH8AvIgvS1uS1vw9xjm2PjMeFtcskb
+X-Received: by 2002:a05:6830:334c:b0:690:f4b3:2e30 with SMTP id l12-20020a056830334c00b00690f4b32e30mr6444446ott.1.1678286300213;
+        Wed, 08 Mar 2023 06:38:20 -0800 (PST)
+X-Google-Smtp-Source: AK7set8CbYqlLLaLD244VOn17v7HLJivmm7bmVIFY938Bnf4+RvnLS3VZ4SIkK1X3tytbIUaLC2Bkh8F169/l5atnKY=
+X-Received: by 2002:a05:6830:334c:b0:690:f4b3:2e30 with SMTP id
+ l12-20020a056830334c00b00690f4b32e30mr6444442ott.1.1678286299931; Wed, 08 Mar
+ 2023 06:38:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT060:EE_|CY8PR12MB7611:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7324f2f7-7edc-407e-802e-08db1fe11fc9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FRhummsE804Gc78CWoI49EcOI8MS97zKCxpieW8/j+2qLBz6ClZnNbz6bkP3iIoujrQb0p8uSDDUFEAb3svwlu6zZAjfeurseFfwzGboT8tjL1CC0ddSH6RlCPzxpDuaY7UUuSw2qpyu+BbIESD/wsCoYAlAfExjL+5LH0rl2vbPt64HMJ4VDryseDhvfFtKyg4IYF07i0dTZC30Qo0domzr47QdLvVog2j6DTMEXJwakvWKMNta1mOK/sHdlH8Qsy0Cin9yZRvoc2ZRN/YXQdJWwaYQ1g/r1zAZTuW79YMwJyXOih++zAe+QPZeM+om1bNw1sINstiazQvod5SXvt6LfR6Aph3ZoKgfE+qJFjuwDLYf4o5q4/gBeybnxz1FrNE3+RaeJNxQydBq6APzeZegz7YBF9LaRtd+ckcQXChUgyP+zjRxG1TO2DnE7ZDOf7CxU8A7sAa5voFhzTuoC/sCeFEMvE2FFNc8LWjMedlnr8mwqMthMvbLkB18jbnmK2Jrty4ukrxHuAJMcri66hG/4OIii2NPanGlANIdbJT1pQr2TXIGEU1XjGctgVVDDKndGf2b08BiAAS0BxMLRw1m9LKN3pAzMRCwIUqwDSzCyNyrzYGCeZdEr91BeJoW00LSrXuYjPOJbUnXaDRHuyEqplakdRTon8gdoZpjfPFsGHCjg3AgzO923JFIn5z2oL5vzywihA4Fxq3hiskOwg==
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199018)(36840700001)(40470700004)(46966006)(8676002)(36756003)(356005)(8936002)(41300700001)(4326008)(7416002)(70206006)(5660300002)(70586007)(7636003)(86362001)(82740400003)(36860700001)(7696005)(6666004)(478600001)(110136005)(54906003)(316002)(83380400001)(47076005)(40460700003)(82310400005)(2906002)(426003)(2616005)(186003)(336012)(26005)(40480700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 14:26:36.2584
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7324f2f7-7edc-407e-802e-08db1fe11fc9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT060.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7611
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230307150030.527726-1-po-hsu.lin@canonical.com>
+ <ZAhV8nKuLVAQHQGl@nanopsycho> <CAMy_GT92sg4_JLPHvRpH542DPLbxOEYYoCMa2cnET1g8bz_R9Q@mail.gmail.com>
+ <ZAh0fY4XoNcLTIOI@nanopsycho>
+In-Reply-To: <ZAh0fY4XoNcLTIOI@nanopsycho>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Wed, 8 Mar 2023 22:37:41 +0800
+Message-ID: <CAMy_GT_mLedbejcyTYkhEbuneuEvWycVi2orB82kC9ymXx0rng@mail.gmail.com>
+Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no
+ suitable device available
+To:     Jiri Pirko <jiri@resnulli.us>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, idosch@mellanox.com,
+        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
+        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now both the physical path and the emulated path should support an IO page
-table replacement.
+On Wed, Mar 8, 2023 at 7:41=E2=80=AFPM Jiri Pirko <jiri@resnulli.us> wrote:
+>
+> Wed, Mar 08, 2023 at 11:21:57AM CET, po-hsu.lin@canonical.com wrote:
+> >On Wed, Mar 8, 2023 at 5:31=E2=80=AFPM Jiri Pirko <jiri@resnulli.us> wro=
+te:
+> >>
+> >> Tue, Mar 07, 2023 at 04:00:30PM CET, po-hsu.lin@canonical.com wrote:
+> >> >The `devlink -j port show` command output may not contain the "flavou=
+r"
+> >> >key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic)=
+,
+> >> >iproute2-5.15.0:
+> >> >  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
+> >> >           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
+> >> >           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
+> >> >           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
+> >>
+> >> As Jakub wrote, this is odd. Could you debug if kernel sends the flavo=
+ur
+> >> attr and if not why? Also, could you try with most recent kernel?
+> >
+> >I did a quick check on another s390x LPAR instance which is running
+> >with Ubuntu 23.04 (6.1.0-16-generic) iproute2-6.1.0, there is still no
+> >"flavour" attribute.
+> >$ devlink port show
+> >pci/0001:00:00.0/1: type eth netdev ens301
+> >pci/0001:00:00.0/2: type eth netdev ens301d1
+> >pci/0002:00:00.0/1: type eth netdev ens317
+> >pci/0002:00:00.0/2: type eth netdev ens317d1
+> >
+> >The behaviour didn't change with iproute2 built from source [1]
+>
+> Could you paste output of "devlink dev info"?
+> Looks like something might be wrong in the kernel devlink/driver code.
+>
+The `devlink dev info` output is empty. The following output is from
+that Ubuntu 23.04 s390x LPAR, run as root:
+# devlink dev show
+pci/0001:00:00.0
+pci/0002:00:00.0
+# devlink dev show pci/0001:00:00.0
+pci/0001:00:00.0
+# devlink dev info
+# devlink dev info pci/0001:00:00.0
+kernel answers: Operation not supported
 
-Call iommufd_device_replace() when vdev->iommufd_attached is true.
-
-Also update the VFIO_DEVICE_ATTACH_IOMMUFD_PT kdoc in the uAPI header.
-
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- drivers/vfio/iommufd.c    | 6 +++---
- include/uapi/linux/vfio.h | 6 ++++++
- 2 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/vfio/iommufd.c b/drivers/vfio/iommufd.c
-index 8a9457d0a33c..a245a8e0c8ab 100644
---- a/drivers/vfio/iommufd.c
-+++ b/drivers/vfio/iommufd.c
-@@ -145,9 +145,9 @@ int vfio_iommufd_physical_attach_ioas(struct vfio_device *vdev, u32 *pt_id)
- 		return -EINVAL;
- 
- 	if (vdev->iommufd_attached)
--		return -EBUSY;
--
--	rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
-+		rc = iommufd_device_replace(vdev->iommufd_device, pt_id);
-+	else
-+		rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
- 	if (rc)
- 		return rc;
- 	vdev->iommufd_attached = true;
-diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-index 692156a708bb..14375826a25b 100644
---- a/include/uapi/linux/vfio.h
-+++ b/include/uapi/linux/vfio.h
-@@ -243,6 +243,12 @@ struct vfio_device_bind_iommufd {
-  *
-  * Undo by VFIO_DEVICE_DETACH_IOMMUFD_PT or device fd close.
-  *
-+ * If a vfio device is currently attached to a valid hw_pagetable, without doing
-+ * a VFIO_DEVICE_DETACH_IOMMUFD_PT, a second VFIO_DEVICE_ATTACH_IOMMUFD_PT ioctl
-+ * passing in another hw_pagetable (hwpt) id is allowed. This action, also known
-+ * as a hw_pagetable replacement, will replace the device's currently attached
-+ * hw_pagetable with a new hw_pagetable corresponding to the given pt_id.
-+ *
-  * @argsz:	user filled size of this data.
-  * @flags:	must be 0.
-  * @pt_id:	Input the target id which can represent an ioas or a hwpt
--- 
-2.39.2
-
+>
