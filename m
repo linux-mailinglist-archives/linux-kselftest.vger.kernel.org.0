@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990E86B057F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 12:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E496B0582
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 12:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjCHLKX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 06:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S230013AbjCHLKY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 06:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbjCHLKT (ORCPT
+        with ESMTP id S229943AbjCHLKU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:10:19 -0500
+        Wed, 8 Mar 2023 06:10:20 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D12D9E066
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 03:10:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F1A39E67A
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 03:10:19 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A504611FB;
-        Wed,  8 Mar 2023 03:11:01 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D88AE168F;
+        Wed,  8 Mar 2023 03:11:02 -0800 (PST)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 39D933F71A;
-        Wed,  8 Mar 2023 03:10:17 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C84D3F71A;
+        Wed,  8 Mar 2023 03:10:18 -0800 (PST)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     Oliver Upton <oliver.upton@linux.dev>
 Cc:     Ryan Roberts <ryan.roberts@arm.com>, Marc Zyngier <maz@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         kvmarm@lists.linux.dev
-Subject: [PATCH v2 2/3] KVM: selftests: arm64: Fix pte encode/decode for PA bits > 48
-Date:   Wed,  8 Mar 2023 11:09:47 +0000
-Message-Id: <20230308110948.1820163-3-ryan.roberts@arm.com>
+Subject: [PATCH v2 3/3] KVM: selftests: arm64: Fix ttbr0_el1 encoding for PA bits > 48
+Date:   Wed,  8 Mar 2023 11:09:48 +0000
+Message-Id: <20230308110948.1820163-4-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230308110948.1820163-1-ryan.roberts@arm.com>
 References: <20230308110948.1820163-1-ryan.roberts@arm.com>
@@ -43,84 +43,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The high bits [51:48] of a physical address should appear at [15:12] in
-a 64K pte, not at [51:48] as was previously being programmed. Fix this
-with new helper functions that do the conversion correctly. This also
-sets us up nicely for adding LPA2 encodings in future.
+Bits [51:48] of the pgd address are stored at bits [5:2] of ttbr0_el1.
+page_table_test stores its page tables at the far end of IPA space so
+was tripping over this when run on a system that supports FEAT_LPA (or
+FEAT_LPA2).
 
-Fixes: 7a6629ef746d ("kvm: selftests: add virt mem support for aarch64")
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- .../selftests/kvm/lib/aarch64/processor.c     | 32 ++++++++++++++-----
- 1 file changed, 24 insertions(+), 8 deletions(-)
+ tools/testing/selftests/kvm/lib/aarch64/processor.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-index 5972a23b2765..c413085d58b7 100644
+index c413085d58b7..233357d2f1cc 100644
 --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
 +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-@@ -58,10 +58,27 @@ static uint64_t pte_index(struct kvm_vm *vm, vm_vaddr_t gva)
- 	return (gva >> vm->page_shift) & mask;
- }
- 
--static uint64_t pte_addr(struct kvm_vm *vm, uint64_t entry)
-+static uint64_t addr_pte(struct kvm_vm *vm, uint64_t pa, uint64_t attrs)
+@@ -242,7 +242,7 @@ void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
  {
--	uint64_t mask = ((1UL << (vm->va_bits - vm->page_shift)) - 1) << vm->page_shift;
--	return entry & mask;
-+	uint64_t pte;
-+
-+	pte = pa & GENMASK(47, vm->page_shift);
-+	if (vm->page_shift == 16)
-+		pte |= FIELD_GET(GENMASK(51, 48), pa) << 12;
-+	pte |= attrs;
-+
-+	return pte;
-+}
-+
-+static uint64_t pte_addr(struct kvm_vm *vm, uint64_t pte)
-+{
-+	uint64_t pa;
-+
-+	pa = pte & GENMASK(47, vm->page_shift);
-+	if (vm->page_shift == 16)
-+		pa |= FIELD_GET(GENMASK(15, 12), pte) << 48;
-+
-+	return pa;
- }
+ 	struct kvm_vcpu_init default_init = { .target = -1, };
+ 	struct kvm_vm *vm = vcpu->vm;
+-	uint64_t sctlr_el1, tcr_el1;
++	uint64_t sctlr_el1, tcr_el1, ttbr0_el1;
  
- static uint64_t ptrs_per_pgd(struct kvm_vm *vm)
-@@ -110,18 +127,18 @@ static void _virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- 
- 	ptep = addr_gpa2hva(vm, vm->pgd) + pgd_index(vm, vaddr) * 8;
- 	if (!*ptep)
--		*ptep = vm_alloc_page_table(vm) | 3;
-+		*ptep = addr_pte(vm, vm_alloc_page_table(vm), 3);
- 
- 	switch (vm->pgtable_levels) {
- 	case 4:
- 		ptep = addr_gpa2hva(vm, pte_addr(vm, *ptep)) + pud_index(vm, vaddr) * 8;
- 		if (!*ptep)
--			*ptep = vm_alloc_page_table(vm) | 3;
-+			*ptep = addr_pte(vm, vm_alloc_page_table(vm), 3);
- 		/* fall through */
- 	case 3:
- 		ptep = addr_gpa2hva(vm, pte_addr(vm, *ptep)) + pmd_index(vm, vaddr) * 8;
- 		if (!*ptep)
--			*ptep = vm_alloc_page_table(vm) | 3;
-+			*ptep = addr_pte(vm, vm_alloc_page_table(vm), 3);
- 		/* fall through */
- 	case 2:
- 		ptep = addr_gpa2hva(vm, pte_addr(vm, *ptep)) + pte_index(vm, vaddr) * 8;
-@@ -130,8 +147,7 @@ static void _virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- 		TEST_FAIL("Page table levels must be 2, 3, or 4");
+ 	if (!init)
+ 		init = &default_init;
+@@ -293,10 +293,13 @@ void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
+ 		TEST_FAIL("Unknown guest mode, mode: 0x%x", vm->mode);
  	}
  
--	*ptep = paddr | 3;
--	*ptep |= (attr_idx << 2) | (1 << 10) /* Access Flag */;
-+	*ptep = addr_pte(vm, paddr, (attr_idx << 2) | (1 << 10) | 3);  /* AF */
++	ttbr0_el1 = vm->pgd & GENMASK(47, vm->page_shift);
++
+ 	/* Configure output size */
+ 	switch (vm->mode) {
+ 	case VM_MODE_P52V48_64K:
+ 		tcr_el1 |= 6ul << 32; /* IPS = 52 bits */
++		ttbr0_el1 |= FIELD_GET(GENMASK(51, 48), vm->pgd) << 2;
+ 		break;
+ 	case VM_MODE_P48V48_4K:
+ 	case VM_MODE_P48V48_16K:
+@@ -326,7 +329,7 @@ void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
+ 	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_SCTLR_EL1), sctlr_el1);
+ 	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TCR_EL1), tcr_el1);
+ 	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MAIR_EL1), DEFAULT_MAIR_EL1);
+-	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL1), vm->pgd);
++	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TTBR0_EL1), ttbr0_el1);
+ 	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_TPIDR_EL1), vcpu->id);
  }
  
- void virt_arch_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
 -- 
 2.25.1
 
