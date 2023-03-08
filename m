@@ -2,77 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F5F6B14F2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 23:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E136B1569
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 23:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjCHWT6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 17:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
+        id S229798AbjCHWoc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 17:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjCHWTy (ORCPT
+        with ESMTP id S229800AbjCHWob (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:19:54 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F7497FE3
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 14:19:49 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536a4eba107so184482117b3.19
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 14:19:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678313989;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSBFx52RvXhjtM1Ms4suwV92HKajMqVhV7t5r8e9JsE=;
-        b=eDQwE03ssVefKuCHB5TW/9cRNCO3i1U9pzf4Ycjg91bvG1agIDtj0QTDE2eFmvjKVx
-         fxVClPeOZeCKq1qpEHM10j3+vzTxm44vqdZdGCiDVrHAvZXHmxYM4g8g7ee6/gIHO4RV
-         03sVypQgd6aKkvssDe9MhchkPxSpvN6scQQTzDvldztsTNuwXJ25oes+JdaaWvEgW/vh
-         Ks2aJ38BOoW1g1SD7qNi3QXAOQ0/ZHcfW8uPrpQnxFE88qQ6reh6KQ7yHElvT2u7uvjc
-         Kakf4FsYCP6sbS07URRagbKBCEzMwfQV1R7J01ZCBx0pl/NWDzpaG7SW0ucedJET5wuC
-         9P6A==
+        Wed, 8 Mar 2023 17:44:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3806505B
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 14:43:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678315423;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jUpec8k3TuIoHkhdWuDgw2GYbAPkkhYheZa+lxQbkK0=;
+        b=cmaQEjZIrCRnjXrCHu0deOC73CBs7yt24Wy6ffxgB/4ZHscLP7E265dnZAuUpERw3V1Tie
+        SV/CMYT4ECovlXrcshPsp5Rv5Q2S+o4BTuENGZQNTZdS6d3UZRTm5gK7NApdhAQPi67wBC
+        JJRUiL9enMssq4uMVKSlTnfObBoHkrg=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-91-3R_gxJBDM-GzZnqSBM2lAQ-1; Wed, 08 Mar 2023 17:43:42 -0500
+X-MC-Unique: 3R_gxJBDM-GzZnqSBM2lAQ-1
+Received: by mail-qt1-f198.google.com with SMTP id w16-20020ac843d0000000b003bfe50a4105so42397qtn.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 14:43:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678313989;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSBFx52RvXhjtM1Ms4suwV92HKajMqVhV7t5r8e9JsE=;
-        b=0RIliqOVeYMDpPVofiuTMY2RM0y8vMwcB749EEhbEcCis5EufNaK0CigY+Jq+KXN4V
-         xMiq/Wll8g4p25Xo1t/+kwbEnVJvQk3TKUXvO7jm4EfOo5zTPyE5BzO0p4XBdWxOGGcb
-         uiKFBWDnK3Ya2TpqtATcOARrXaEs6OeG0yW6o/nqShJqzC42i6cuQuValvEz0mP1g+rI
-         ArWUwl6XoSxt3AB+Bgf1yJiopS6ithWHyJSLoR1DxZuN37Ax7flctNBnXxMyXwE2IFYJ
-         7nK3n8+K5LloFNA+5w1QQuBAl9+Ak6qEZsdzULem+FRN0oR3BiZegAPfizYGoCRj2K6X
-         uklA==
-X-Gm-Message-State: AO0yUKXeEaf2Iwt6QO+Tv6yaFxHAL7spnq70AUH/lqltTObjZnRTwCcK
-        KJEOSIiKwXXrNCgTX3tO5obe9UDJWnJqDuX4BALY
-X-Google-Smtp-Source: AK7set/Y8V4CBFECi0ndhD/iIYsa8Ih564aUc0de91ZFzdsRCTCZqdn0UCRIo/zFP9QU38jh/ZHPKYk13T3u2uxCOIk3
-X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:96cb:1c04:7322:78a4])
- (user=axelrasmussen job=sendgmr) by 2002:a81:ad5a:0:b0:536:4d58:54b2 with
- SMTP id l26-20020a81ad5a000000b005364d5854b2mr13032103ywk.4.1678313988783;
- Wed, 08 Mar 2023 14:19:48 -0800 (PST)
-Date:   Wed,  8 Mar 2023 14:19:32 -0800
-In-Reply-To: <20230308221932.1548827-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230308221932.1548827-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230308221932.1548827-5-axelrasmussen@google.com>
-Subject: [PATCH v4 4/4] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to
- install WP PTEs
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        d=1e100.net; s=20210112; t=1678315422;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jUpec8k3TuIoHkhdWuDgw2GYbAPkkhYheZa+lxQbkK0=;
+        b=g9ySXZRHdequdNfhFQZ/XxK58zvxUDhYejVCmbJOfYtPLd9Nyg4W9Hjz2jw6JoxyD+
+         UmEbqHVCPTn7XgFPOXqahNPfslLmoy96gzY1TdY0iLlhlL/2WkbPdEhi8ttgynOYhYdl
+         QTbIszN2Rg23ttooD9WYBF3Ox/dVXsbL6kSxCL7zXGMQu5LXU1Lqar0DuMlwNjiWsjiX
+         eKoh98X0xgDbjSoEmlDmx16NdrZPqruWg34WCNWUly3ltZ+XDrLdn61UPYhZb7egXeZQ
+         DASIr9MVA3RERXJCRoT2IKo8HiKpWifmpHcDAteT/9P4acbC0tJDxypYYPMIg80JVuBV
+         AVWg==
+X-Gm-Message-State: AO0yUKVBNY3s9uHJ+Zh99b3sDBscwWLvmoyFTbOs5eo9enJyUaN8eAxY
+        S6RkA50CHTCmWSbmaC3L7u1z4BuNvOi8PUjlprS4lC4bROA2xshFzb1WMO3uvOg1jzBE9UeCGxw
+        jVmw/q177lQ2IKjOnTIhK/J12nwk2
+X-Received: by 2002:a05:622a:4c7:b0:3bf:be4b:8094 with SMTP id q7-20020a05622a04c700b003bfbe4b8094mr39961479qtx.0.1678315422278;
+        Wed, 08 Mar 2023 14:43:42 -0800 (PST)
+X-Google-Smtp-Source: AK7set/svpcFN7oyLd26+MN7LVXbPhQYslhKV53Vi4XzGLt4t3d/JLaXvYRZ51X7BFbuHcnLETSjqQ==
+X-Received: by 2002:a05:622a:4c7:b0:3bf:be4b:8094 with SMTP id q7-20020a05622a04c700b003bfbe4b8094mr39961450qtx.0.1678315422037;
+        Wed, 08 Mar 2023 14:43:42 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id r25-20020ac87959000000b003bfc1f49ad1sm12255401qtt.87.2023.03.08.14.43.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 14:43:41 -0800 (PST)
+Date:   Wed, 8 Mar 2023 17:43:39 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
         Matthew Wilcox <willy@infradead.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Mike Rapoport <rppt@kernel.org>,
         Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     James Houghton <jthoughton@google.com>,
+        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
+        James Houghton <jthoughton@google.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] mm: userfaultfd: combine 'mode' and 'wp_copy'
+ arguments
+Message-ID: <ZAkPmy0EqcW6Mfvn@x1n>
+References: <20230308221932.1548827-1-axelrasmussen@google.com>
+ <20230308221932.1548827-4-axelrasmussen@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230308221932.1548827-4-axelrasmussen@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,137 +89,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
-PTE to resolve a missing fault, one can install a write-protected one.
-This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
-combination.
+All nitpicks below.
 
-This was motivated by testing HugeTLB HGM [1], and in particular its
-interaction with userfaultfd features. Existing userfaultfd code
-supports using WP and MINOR modes together (i.e. you can register an
-area with both enabled), but without this CONTINUE flag the combination
-is in practice unusable.
+On Wed, Mar 08, 2023 at 02:19:31PM -0800, Axel Rasmussen wrote:
+> +static inline bool uffd_flags_has_mode(uffd_flags_t flags, enum mfill_atomic_mode expected)
+> +{
+> +	return (flags & MFILL_ATOMIC_MODE_MASK) == ((__force uffd_flags_t) expected);
+> +}
 
-So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
-as UFFDIO_COPY_MODE_WP, but for *minor* faults.
+I would still call it uffd_flags_get_mode() or uffd_flags_mode(), "has"
+sounds a bit like there can be >1 modes set but it's not.
 
-Update the selftest to do some very basic exercising of the new flag.
+> +
+> +static inline uffd_flags_t uffd_flags_set_mode(uffd_flags_t flags, enum mfill_atomic_mode mode)
+> +{
+> +	return flags | ((__force uffd_flags_t) mode);
+> +}
 
-[1]: https://patchwork.kernel.org/project/linux-mm/cover/20230218002819.1486479-1-jthoughton@google.com/
+IIUC this __force mostly won't work in any way because it protects
+e.g. illegal math ops upon it (to only allow bitops, iiuc) but here it's an
+OR so it's always legal..
+
+So I'd just drop it and also clear the mode mask to be very clear it sets
+the mode right, rather than any chance of messing up when set twice:
+
+    flags &= ~MFILL_ATOMIC_MODE_MASK;
+    return flags | mode;
+
+But feel free to ignore this if there's no other reason to repost, I don't
+think it matters a huge deal.
 
 Acked-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- fs/userfaultfd.c                         | 8 ++++++--
- include/linux/userfaultfd_k.h            | 3 ++-
- include/uapi/linux/userfaultfd.h         | 7 +++++++
- mm/userfaultfd.c                         | 5 +++--
- tools/testing/selftests/mm/userfaultfd.c | 4 ++++
- 5 files changed, 22 insertions(+), 5 deletions(-)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 56e54e50414e..664019381e04 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1878,6 +1878,7 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	struct uffdio_continue uffdio_continue;
- 	struct uffdio_continue __user *user_uffdio_continue;
- 	struct userfaultfd_wake_range range;
-+	uffd_flags_t flags = 0;
- 
- 	user_uffdio_continue = (struct uffdio_continue __user *)arg;
- 
-@@ -1902,13 +1903,16 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	    uffdio_continue.range.start) {
- 		goto out;
- 	}
--	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
-+	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
-+				     UFFDIO_CONTINUE_MODE_WP))
- 		goto out;
-+	if (uffdio_continue.mode & UFFDIO_CONTINUE_MODE_WP)
-+		flags |= MFILL_ATOMIC_WP;
- 
- 	if (mmget_not_zero(ctx->mm)) {
- 		ret = mfill_atomic_continue(ctx->mm, uffdio_continue.range.start,
- 					    uffdio_continue.range.len,
--					    &ctx->mmap_changing);
-+					    &ctx->mmap_changing, flags);
- 		mmput(ctx->mm);
- 	} else {
- 		return -ESRCH;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index 4d7425684171..9499cfcf83fa 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -82,7 +82,8 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
- 				     unsigned long len,
- 				     atomic_t *mmap_changing);
- extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
--				     unsigned long len, atomic_t *mmap_changing);
-+				     unsigned long len, atomic_t *mmap_changing,
-+				     uffd_flags_t flags);
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
- 			       unsigned long start, unsigned long len,
- 			       bool enable_wp, atomic_t *mmap_changing);
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 005e5e306266..14059a0861bf 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -297,6 +297,13 @@ struct uffdio_writeprotect {
- struct uffdio_continue {
- 	struct uffdio_range range;
- #define UFFDIO_CONTINUE_MODE_DONTWAKE		((__u64)1<<0)
-+	/*
-+	 * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
-+	 * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
-+	 * write protected ioctl is implemented for the range
-+	 * according to the uffdio_register.ioctls.
-+	 */
-+#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
- 	__u64 mode;
- 
- 	/*
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index dd807924446f..2f64e0a9b234 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -693,10 +693,11 @@ ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm, unsigned long start,
- }
- 
- ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
--			      unsigned long len, atomic_t *mmap_changing)
-+			      unsigned long len, atomic_t *mmap_changing,
-+			      uffd_flags_t flags)
- {
- 	return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
--			    uffd_flags_set_mode(0, MFILL_ATOMIC_CONTINUE));
-+			    uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTINUE));
- }
- 
- long uffd_wp_range(struct vm_area_struct *dst_vma,
-diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/selftests/mm/userfaultfd.c
-index 7f22844ed704..41c1f9abc481 100644
---- a/tools/testing/selftests/mm/userfaultfd.c
-+++ b/tools/testing/selftests/mm/userfaultfd.c
-@@ -585,6 +585,8 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	req.range.start = start;
- 	req.range.len = len;
- 	req.mode = 0;
-+	if (test_uffdio_wp)
-+		req.mode |= UFFDIO_CONTINUE_MODE_WP;
- 
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
-@@ -1332,6 +1334,8 @@ static int userfaultfd_minor_test(void)
- 	uffdio_register.range.start = (unsigned long)area_dst_alias;
- 	uffdio_register.range.len = nr_pages * page_size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	if (test_uffdio_wp)
-+		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
+Thanks,
+
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+Peter Xu
 
