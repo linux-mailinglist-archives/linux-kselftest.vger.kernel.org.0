@@ -2,45 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4C76B05AF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 12:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5D46B0609
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 12:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjCHLS0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 06:18:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S229482AbjCHLfC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 06:35:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjCHLSZ (ORCPT
+        with ESMTP id S230430AbjCHLe6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:18:25 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B7AF50FBB
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 03:18:23 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97735106F;
-        Wed,  8 Mar 2023 03:19:06 -0800 (PST)
-Received: from [10.57.64.31] (unknown [10.57.64.31])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 393BD3F71A;
-        Wed,  8 Mar 2023 03:18:22 -0800 (PST)
-Message-ID: <77c34767-7c54-276c-d06d-fc3af10f269d@arm.com>
-Date:   Wed, 8 Mar 2023 11:18:20 +0000
+        Wed, 8 Mar 2023 06:34:58 -0500
+X-Greylist: delayed 2489 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Mar 2023 03:34:55 PST
+Received: from sym2.noone.org (sym.noone.org [IPv6:2a01:4f8:120:4161::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBD2984CA;
+        Wed,  8 Mar 2023 03:34:54 -0800 (PST)
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 4PWqwr1gvfzvjfm; Wed,  8 Mar 2023 12:34:52 +0100 (CET)
+Date:   Wed, 8 Mar 2023 12:34:51 +0100
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Dmitry Safonov <dima@arista.com>,
+        linux-kselftest@vger.kernel.org, Andrey Vagin <avagin@openvz.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/clone3: test clone3 with CLONE_NEWTIME
+Message-ID: <20230308113451.a23d7rxbrsuacd6t@distanz.ch>
+References: <20230308105126.10107-1-tklauser@distanz.ch>
+ <20230308105320.10685-1-tklauser@distanz.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/2] KVM: selftests: arm64: Fix pte encode/decode for
- PA bits > 48
-Content-Language: en-US
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        kvmarm@lists.linux.dev
-References: <20230228170756.769461-1-ryan.roberts@arm.com>
- <20230228170756.769461-3-ryan.roberts@arm.com> <ZAd4CyBM79JzqkEu@linux.dev>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <ZAd4CyBM79JzqkEu@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308105320.10685-1-tklauser@distanz.ch>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,60 +45,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 07/03/2023 17:44, Oliver Upton wrote:
-> Hi Ryan,
-> 
-> Thanks for fixing this. Couple of nits:
-> 
-> On Tue, Feb 28, 2023 at 05:07:56PM +0000, Ryan Roberts wrote:
->> The high bits [51:48] of a physical address should appear at [15:12] in
->> a 64K pte, not at [51:48] as was previously being programmed. Fix this
->> with new helper functions that do the conversion correctly. This also
->> sets us up nicely for adding LPA2 encodings in future.
->>
->> Fixes: 7a6629ef746d ("kvm: selftests: add virt mem support for aarch64")
->>
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> 
-> nit: no whitespace between footers.
+On 2023-03-08 at 11:53:20 +0100, Tobias Klauser <tklauser@distanz.ch> wrote:
+> Verify that clone3 can be called successfully with CLONE_NEWTIME in
+> flags.
 
-Sorry my bad; I'm slowly learning the conventions - I'll get there eventually!
+Appologies, I somehow messed up the recepient list in this patch leading
+to it not being sent to LKML. Please let me know in case you want me to
+send it again.
 
+> Cc: Andrey Vagin <avagin@openvz.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+> ---
+>  tools/testing/selftests/clone3/clone3.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
->> ---
->>  .../selftests/kvm/lib/aarch64/processor.c     | 32 ++++++++++++++-----
->>  1 file changed, 24 insertions(+), 8 deletions(-)
->>
->> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
->> index 5972a23b2765..13f28d96521c 100644
->> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
->> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
->> @@ -58,10 +58,27 @@ static uint64_t pte_index(struct kvm_vm *vm, vm_vaddr_t gva)
->>  	return (gva >> vm->page_shift) & mask;
->>  }
->>  
->> -static uint64_t pte_addr(struct kvm_vm *vm, uint64_t entry)
->> +static uint64_t addr_pte(struct kvm_vm *vm, uint64_t pa, uint64_t attrs)
->>  {
->> -	uint64_t mask = ((1UL << (vm->va_bits - vm->page_shift)) - 1) << vm->page_shift;
->> -	return entry & mask;
->> +	uint64_t pte;
->> +
->> +	pte = pa & GENMASK(47, vm->page_shift);
->> +	if (vm->page_shift == 16)
->> +		pte |= (pa & GENMASK(51, 48)) >> (48 - 12);
+> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+> index cd4582129c7d..4fce46afe6db 100644
+> --- a/tools/testing/selftests/clone3/clone3.c
+> +++ b/tools/testing/selftests/clone3/clone3.c
+> @@ -195,5 +195,8 @@ int main(int argc, char *argv[])
+>  	test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
+>  			CLONE3_ARGS_NO_TEST);
+>  
+> +	/* Do a clone3() in a new time namespace */
+> +	test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
+> +
+>  	return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
+>  }
+> -- 
+> 2.39.1
 > 
-> nit: this is a bit of an odd transformation, of course courtesy of the
-> architecture. FIELD_GET() might make it a bit more readable:
-> 
-> 		pte |= FIELD_GET(GENMASK(51, 48), pa) << 12;
-> 
-
-Ahh yes, that does look better. I did consider this originally, but thought I
-would also need FIELD_PREP() which selftests is not currently using anywhere. So
-thought I would steer clear entirely. Anyway, on review, I don't need
-FIELD_PREP(), so I've just sent you a respun series using FIELD_GET() in all the
-sensible places. I hope I'm not jumping the gun by respinning so quickly - I
-didn't think the series was particularly controversial so unlikely to get any
-more comments.
-
