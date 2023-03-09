@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7C96B1D05
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 08:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC3E6B1D16
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 08:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjCIHyn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Mar 2023 02:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S229827AbjCIHyt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Mar 2023 02:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjCIHyZ (ORCPT
+        with ESMTP id S229628AbjCIHy0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:54:25 -0500
+        Thu, 9 Mar 2023 02:54:26 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB43ADBB55;
-        Wed,  8 Mar 2023 23:54:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305B0DCA7D;
+        Wed,  8 Mar 2023 23:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678348441; x=1709884441;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=RubhDtHOvvhIgkBGxFBQdeW6R2z9yWM3cIPSs3aY9iw=;
-  b=nkkGstrxwwtqJoCvoxxS+n+y2H+PssOy3NbrLqz9PGikjwBmtzwxjF8Q
-   r5MCqrmI0FHjCDUYXLudUSyrSEHmG8th6RLPQPxfgf/a6V8KYTPEB2hlP
-   0ZjflleKo7RHk2pLlSNZYYfP/WW6ftCWB9PFdXLnRO12LHZoA8Cj3Egpb
-   SfJb1bF83F7jakg6zFBU8mAuve0CHwVqWwj/IT3xH1IZD02qurjAdg2gc
-   4CfR0naz8EmOprmdCa+q9ooKdeu2gEu1jqLIYagib51lmIEk/s16to5EP
-   O2B0EJjqlVonULNm/S729k64HTnJTMY5pMjd8rob36hAmtb/5wSLJ2U1x
+  t=1678348443; x=1709884443;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9puZucPj6fLkrWz4CurcGtcInzi+r97NtNBrr/RGepA=;
+  b=Z8kSTJ07SglkAH7mh7QBm4FdAvoyIcXwN3H0j4hkgbyZxlBClQtM7Agc
+   gB+/+VBpkv7qKTNY6Y8YPPgixp4jHscEVYzllTa0izkvEr4CbOMKhEwnN
+   3xHVjm+t1b4nwbaYMDAe/9A38gstPPrSu4zZWyXhvslUTsRSKwhaQW4hd
+   7bSCDhI5ansqzRTmL/8orpm+rwg+BMQynyorktBUgG9L8+xztghJHGiX4
+   LaipAIp72+qVnH3zH6ZwR7T5NhflkqYmFxy4Xn85bzPXou1OUaJbbRasR
+   yfMemBWSiHXTGmbRy3CA1TU5aSrTgiNAGiY1m/cLkMNfoTVjFWvphFV/b
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="422652827"
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="422652835"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="422652827"
+   d="scan'208";a="422652835"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 23:54:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="851432734"
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="851432742"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="851432734"
+   d="scan'208";a="851432742"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2023 23:54:00 -0800
+  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2023 23:54:01 -0800
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -50,10 +50,12 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 0/4] iommufd: Add iommu hardware info reporting
-Date:   Wed,  8 Mar 2023 23:53:54 -0800
-Message-Id: <20230309075358.571567-1-yi.l.liu@intel.com>
+Subject: [PATCH v2 1/4] iommu: Move dev_iommu_ops() to private header
+Date:   Wed,  8 Mar 2023 23:53:55 -0800
+Message-Id: <20230309075358.571567-2-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230309075358.571567-1-yi.l.liu@intel.com>
+References: <20230309075358.571567-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -65,64 +67,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-iommufd gives userspace the capability to manipulate iommu subsytem.
-e.g. DMA map/unmap etc. In the near future, it will support iommu nested
-translation. Different platform vendors have different implementation for
-the nested translation. So before set up nested translation, userspace
-needs to know the hardware iommu information. For example, Intel VT-d
-supports using guest I/O page table as the stage-1 translation table. This
-requires guest I/O page table be compatible with hardware IOMMU.
+dev_iommu_ops() is essentially only used in iommu subsystem, so
+move to a private header to avoid being abused by other drivers.
 
-This series reports the iommu hardware information for a given iommufd_device
-which has been bound to iommufd. It is preparation work for userspace to
-allocate hwpt for given device. Like the nested translation support[1].
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+---
+ drivers/iommu/iommu-priv.h | 11 +++++++++++
+ drivers/iommu/iommu.c      |  2 ++
+ include/linux/iommu.h      | 11 -----------
+ 3 files changed, 13 insertions(+), 11 deletions(-)
 
-This series introduces an iommu op to report the iommu hardware info,
-and an ioctl IOMMU_DEVICE_GET_HW_INFO is added to report such hardware
-info to user. enum iommu_hw_info_type is defined to differentiate the
-iommu hardware info reported to user hence user can decode them. This
-series only adds the framework for iommu hw info reporting, the complete
-reporting path needs vendor specific definition and driver support. The
-full picture is available in [1] as well.
-
-base-commit: 4c7e97cb6e65eab02991f60a5cc7a4fed5498c7a
-
-[1] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting
-
-Change log:
-
-v2:
- - Drop patch 05 of v1 as it is already covered by other series
- - Rename the capability info to be iommu hardware info
-
-v1: https://lore.kernel.org/linux-iommu/20230209041642.9346-1-yi.l.liu@intel.com/
-
-Regards,
-	Yi Liu
-
-Lu Baolu (1):
-  iommu: Add new iommu op to get iommu hardware information
-
-Nicolin Chen (1):
-  iommufd/selftest: Add coverage for IOMMU_DEVICE_GET_HW_INFO ioctl
-
-Yi Liu (2):
-  iommu: Move dev_iommu_ops() to private header
-  iommufd: Add IOMMU_DEVICE_GET_HW_INFO
-
- drivers/iommu/iommu-priv.h                    | 11 +++
- drivers/iommu/iommu.c                         |  2 +
- drivers/iommu/iommufd/device.c                | 75 +++++++++++++++++++
- drivers/iommu/iommufd/iommufd_private.h       |  1 +
- drivers/iommu/iommufd/iommufd_test.h          | 15 ++++
- drivers/iommu/iommufd/main.c                  |  3 +
- drivers/iommu/iommufd/selftest.c              | 16 ++++
- include/linux/iommu.h                         | 24 +++---
- include/uapi/linux/iommufd.h                  | 47 ++++++++++++
- tools/testing/selftests/iommu/iommufd.c       | 17 ++++-
- tools/testing/selftests/iommu/iommufd_utils.h | 26 +++++++
- 11 files changed, 225 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/iommu/iommu-priv.h b/drivers/iommu/iommu-priv.h
+index 7c8011bfd153..a6e694f59f64 100644
+--- a/drivers/iommu/iommu-priv.h
++++ b/drivers/iommu/iommu-priv.h
+@@ -4,6 +4,17 @@
+ 
+ #include <linux/iommu.h>
+ 
++static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
++{
++	/*
++	 * Assume that valid ops must be installed if iommu_probe_device()
++	 * has succeeded. The device ops are essentially for internal use
++	 * within the IOMMU subsystem itself, so we should be able to trust
++	 * ourselves not to misuse the helper.
++	 */
++	return dev->iommu->iommu_dev->ops;
++}
++
+ int iommu_group_replace_domain(struct iommu_group *group,
+ 			       struct iommu_domain *new_domain);
+ 
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index fd8fe2cd7303..437476c36de5 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -37,6 +37,8 @@
+ 
+ #include "iommu-sva.h"
+ 
++#include "iommu-priv.h"
++
+ static struct kset *iommu_group_kset;
+ static DEFINE_IDA(iommu_group_ida);
+ 
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 6595454d4f48..7202d8ece343 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -444,17 +444,6 @@ static inline void iommu_iotlb_gather_init(struct iommu_iotlb_gather *gather)
+ 	};
+ }
+ 
+-static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
+-{
+-	/*
+-	 * Assume that valid ops must be installed if iommu_probe_device()
+-	 * has succeeded. The device ops are essentially for internal use
+-	 * within the IOMMU subsystem itself, so we should be able to trust
+-	 * ourselves not to misuse the helper.
+-	 */
+-	return dev->iommu->iommu_dev->ops;
+-}
+-
+ extern int bus_iommu_probe(struct bus_type *bus);
+ extern bool iommu_present(struct bus_type *bus);
+ extern bool device_iommu_capable(struct device *dev, enum iommu_cap cap);
 -- 
 2.34.1
 
