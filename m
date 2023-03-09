@@ -2,144 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F142F6B1A86
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 05:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7C96B1D05
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 08:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjCIE7O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 23:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S229717AbjCIHyn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Mar 2023 02:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjCIE7N (ORCPT
+        with ESMTP id S230039AbjCIHyZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 23:59:13 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871635D8B0
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 20:59:12 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id l18so893423qtp.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 20:59:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1678337951;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u7Q758EVgylTs75aXHGbh2DNnGqg/9Af+1g3WINt/FU=;
-        b=3ync1xHxY/YBYVd3IxyroCZqUb/GWTTYzZ8PELadIq/fDhfg2coxb7kzHgPX5H2uPP
-         97pkKNtMLAIOTy7KS4xl8BRtfUTfXZGTeXaz1eBkHfQ3hxiYVeZapniGPMiCkLtQU+UI
-         4tnBNI9JVwxGld8T5h4FbOXrAb6MEZNKErtmlCLZ8E70PlymYUVVc0NsaHhvuScDNh1v
-         Vrh+7q08WKE5N2tu3HCooIUlv4S+HbzlXxPH9sgA/QXQqTGHU3pP30GAG8Zj9Un8j7Ok
-         IFsGCaZxpEkqJyH3FoaLxlQuiLQCVIevF1e8yH5CK5GwI+Jdv0siKEat2sGj4lVTA1kd
-         uetA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678337951;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u7Q758EVgylTs75aXHGbh2DNnGqg/9Af+1g3WINt/FU=;
-        b=MGHJfRIKQU0s9zXRIAMA3ovqxwN96VyDMRjdvUJlr/mDkgALoaFuuAwX8VJGSwRBwz
-         KCffW5xcHndskdismTsBXiXTC8avRRgZ5DMsyic/jTd0iyRziTZPBMTktV49PePlUuhf
-         U7maC+SVz+WtTpBdIeUNutUDi5HZSvEC1PvdAg/Bh09LRFhLAYnacFVFuY4jEAoB/ENm
-         eFKln3cz4s0NFSr5f6Vk2PkqMy2Z6n0T4ZYq9NsTUnOcojjNZPWRDYwUjsQnJ332nuB9
-         gB+E/4UvVWqAXdfzB2HyRZra2NBkAfbj8N8zBE1N/nBjA9Ur2MsvUTlS4g0H5EG2iCV1
-         Ltxg==
-X-Gm-Message-State: AO0yUKW3cUsWmp6cHlrnE2R2Y5RetANRehAZ3d3w8pigoJkEPokJuZ5M
-        sl4Q8AbsG7wqwUWP7fQj20pM9w==
-X-Google-Smtp-Source: AK7set8HRIUSrbF4IGC24O6vqnaFTBCTpfvzE95pYf2T5AMVM0aMH3GWnuSEGSNHcoiK/ACjtMjm7w==
-X-Received: by 2002:a05:622a:170b:b0:3b8:58d0:b4e4 with SMTP id h11-20020a05622a170b00b003b858d0b4e4mr2431886qtk.33.1678337951507;
-        Wed, 08 Mar 2023 20:59:11 -0800 (PST)
-Received: from localhost ([2620:10d:c091:400::5:d32c])
-        by smtp.gmail.com with ESMTPSA id e8-20020ac80108000000b003b9a6d54b6csm12913588qtg.59.2023.03.08.20.59.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 20:59:11 -0800 (PST)
-Date:   Wed, 8 Mar 2023 23:59:10 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org
-Subject: Re: [PATCH v3 1/3] mm: add new api to enable ksm per process
-Message-ID: <20230309045910.GD476158@cmpxchg.org>
-References: <20230224044000.3084046-1-shr@devkernel.io>
- <20230224044000.3084046-2-shr@devkernel.io>
- <20230308164746.GA473363@cmpxchg.org>
- <qvqwbkl2zxui.fsf@dev0134.prn3.facebook.com>
+        Thu, 9 Mar 2023 02:54:25 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB43ADBB55;
+        Wed,  8 Mar 2023 23:54:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678348441; x=1709884441;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RubhDtHOvvhIgkBGxFBQdeW6R2z9yWM3cIPSs3aY9iw=;
+  b=nkkGstrxwwtqJoCvoxxS+n+y2H+PssOy3NbrLqz9PGikjwBmtzwxjF8Q
+   r5MCqrmI0FHjCDUYXLudUSyrSEHmG8th6RLPQPxfgf/a6V8KYTPEB2hlP
+   0ZjflleKo7RHk2pLlSNZYYfP/WW6ftCWB9PFdXLnRO12LHZoA8Cj3Egpb
+   SfJb1bF83F7jakg6zFBU8mAuve0CHwVqWwj/IT3xH1IZD02qurjAdg2gc
+   4CfR0naz8EmOprmdCa+q9ooKdeu2gEu1jqLIYagib51lmIEk/s16to5EP
+   O2B0EJjqlVonULNm/S729k64HTnJTMY5pMjd8rob36hAmtb/5wSLJ2U1x
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="422652827"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="422652827"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 23:54:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="851432734"
+X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
+   d="scan'208";a="851432734"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2023 23:54:00 -0800
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com,
+        baolu.lu@linux.intel.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/4] iommufd: Add iommu hardware info reporting
+Date:   Wed,  8 Mar 2023 23:53:54 -0800
+Message-Id: <20230309075358.571567-1-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <qvqwbkl2zxui.fsf@dev0134.prn3.facebook.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 02:16:36PM -0800, Stefan Roesch wrote:
-> Johannes Weiner <hannes@cmpxchg.org> writes:
-> > On Thu, Feb 23, 2023 at 08:39:58PM -0800, Stefan Roesch wrote:
-> >> @@ -2405,8 +2417,20 @@ static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
-> >>  		goto no_vmas;
-> >>
-> >>  	for_each_vma(vmi, vma) {
-> >> -		if (!(vma->vm_flags & VM_MERGEABLE))
-> >> +		if (!vma_ksm_mergeable(vma))
-> >>  			continue;
-> >> +		if (!(vma->vm_flags & VM_MERGEABLE)) {
-> >
-> > IMO, the helper obscures the interaction between the vma flag and the
-> > per-process flag here. How about:
-> >
-> > 		if (!(vma->vm_flags & VM_MERGEABLE)) {
-> > 			if (!test_bit(MMF_VM_MERGE_ANY, &vma->vm_mm->flags))
-> > 				continue;
-> >
-> > 			/*
-> > 			 * With per-process merging enabled, have the MM scan
-> > 			 * enroll any existing and new VMAs on the fly.
-> > 			 *
-> > 			ksm_madvise();
-> > 		}
-> >
-> >> +			unsigned long flags = vma->vm_flags;
-> >> +
-> >> +			/* madvise failed, use next vma */
-> >> +			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &flags))
-> >> +				continue;
-> >> +			/* vma, not supported as being mergeable */
-> >> +			if (!(flags & VM_MERGEABLE))
-> >> +				continue;
-> >> +
-> >> +			vm_flags_set(vma, VM_MERGEABLE);
-> >
-> > I don't understand the local flags. Can't it pass &vma->vm_flags to
-> > ksm_madvise()? It'll set VM_MERGEABLE on success. And you know it
-> > wasn't set before because the whole thing is inside the !set
-> > branch. The return value doesn't seem super useful, it's only the flag
-> > setting that matters:
-> >
-> > 			ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &vma->vm_flags);
-> > 			/* madvise can fail, and will skip special vmas (pfnmaps and such) */
-> > 			if (!(vma->vm_flags & VM_MERGEABLE))
-> > 				continue;
-> >
-> 
-> vm_flags is defined as const. I cannot pass it directly inside the
-> function, this is the reason, I'm using a local variable for it.
+iommufd gives userspace the capability to manipulate iommu subsytem.
+e.g. DMA map/unmap etc. In the near future, it will support iommu nested
+translation. Different platform vendors have different implementation for
+the nested translation. So before set up nested translation, userspace
+needs to know the hardware iommu information. For example, Intel VT-d
+supports using guest I/O page table as the stage-1 translation table. This
+requires guest I/O page table be compatible with hardware IOMMU.
 
-Oops, good catch.
+This series reports the iommu hardware information for a given iommufd_device
+which has been bound to iommufd. It is preparation work for userspace to
+allocate hwpt for given device. Like the nested translation support[1].
 
-However, while looking at the flag helpers, I'm also realizing that
-modifications requires the mmap_sem in write mode, which this code
-doesn't. This function might potentially scan the entire process
-address space, so you can't just change the lock mode, either.
+This series introduces an iommu op to report the iommu hardware info,
+and an ioctl IOMMU_DEVICE_GET_HW_INFO is added to report such hardware
+info to user. enum iommu_hw_info_type is defined to differentiate the
+iommu hardware info reported to user hence user can decode them. This
+series only adds the framework for iommu hw info reporting, the complete
+reporting path needs vendor specific definition and driver support. The
+full picture is available in [1] as well.
 
-Staring more at this, do you actually need to set VM_MERGEABLE on the
-individual vmas? There are only a few places that check VM_MERGEABLE,
-and AFAICS they can all just check for MMF_VM_MERGE_ANY also.
+base-commit: 4c7e97cb6e65eab02991f60a5cc7a4fed5498c7a
 
-You'd need to factor out the vma compatibility checks from
-ksm_madvise(), and skip over special vmas during the mm scan. But
-those tests are all stable under the read lock, so that's fine.
+[1] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting
 
-The other thing ksm_madvise() does is ksm_enter() - but that's
-obviously not needed from inside the loop over ksm_enter'd mms. :)
+Change log:
+
+v2:
+ - Drop patch 05 of v1 as it is already covered by other series
+ - Rename the capability info to be iommu hardware info
+
+v1: https://lore.kernel.org/linux-iommu/20230209041642.9346-1-yi.l.liu@intel.com/
+
+Regards,
+	Yi Liu
+
+Lu Baolu (1):
+  iommu: Add new iommu op to get iommu hardware information
+
+Nicolin Chen (1):
+  iommufd/selftest: Add coverage for IOMMU_DEVICE_GET_HW_INFO ioctl
+
+Yi Liu (2):
+  iommu: Move dev_iommu_ops() to private header
+  iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+
+ drivers/iommu/iommu-priv.h                    | 11 +++
+ drivers/iommu/iommu.c                         |  2 +
+ drivers/iommu/iommufd/device.c                | 75 +++++++++++++++++++
+ drivers/iommu/iommufd/iommufd_private.h       |  1 +
+ drivers/iommu/iommufd/iommufd_test.h          | 15 ++++
+ drivers/iommu/iommufd/main.c                  |  3 +
+ drivers/iommu/iommufd/selftest.c              | 16 ++++
+ include/linux/iommu.h                         | 24 +++---
+ include/uapi/linux/iommufd.h                  | 47 ++++++++++++
+ tools/testing/selftests/iommu/iommufd.c       | 17 ++++-
+ tools/testing/selftests/iommu/iommufd_utils.h | 26 +++++++
+ 11 files changed, 225 insertions(+), 12 deletions(-)
+
+-- 
+2.34.1
+
