@@ -2,466 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5720C6B2B9B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 18:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECED6B2BE8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 18:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjCIRIQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Mar 2023 12:08:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        id S229892AbjCIRVL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Mar 2023 12:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjCIRH7 (ORCPT
+        with ESMTP id S230437AbjCIRVF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:07:59 -0500
-X-Greylist: delayed 534 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Mar 2023 09:04:35 PST
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADC0E8CCF
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Mar 2023 09:04:34 -0800 (PST)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PXb0Z5v12zMqTk6;
-        Thu,  9 Mar 2023 17:55:42 +0100 (CET)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PXb0Z2ZCbz27QL;
-        Thu,  9 Mar 2023 17:55:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1678380942;
-        bh=D/SJzCuAEJ8jqyGV6E5asgWCFAoi/yPQquf1T6hFdN8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oNKx2IZ7BG6qpMGWocfERavGFU9+KrA6b7MZA77jbm4P9jDHLM/eoa/+AE/yBKw7J
-         P8u2Ty9GLIwu7K84kUStWpHEyvkv0zjjNsOTI8DSu6Ku4pQuDhR9lVqcxdwaX4Ym4z
-         /D2/LUce6YvK9Ks6+mm+iA5Wyy5TlFBP+3kEhOLk=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        James Morris <jmorris@namei.org>, Jeff Xu <jeffxu@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Ritesh Raj Sarraf <ritesh@collabora.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sjoerd Simons <sjoerd@collabora.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v1 5/5] selftests/landlock: Add tests for pseudo filesystems
-Date:   Thu,  9 Mar 2023 17:54:55 +0100
-Message-Id: <20230309165455.175131-6-mic@digikod.net>
-In-Reply-To: <20230309165455.175131-1-mic@digikod.net>
-References: <20230309165455.175131-1-mic@digikod.net>
+        Thu, 9 Mar 2023 12:21:05 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83B661312;
+        Thu,  9 Mar 2023 09:21:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=deOa48gyN54cotpHu4RmrMDdC0YT1d+w8D2tkGJXqb++mFbRna7aqJFGMU38zjU0XowR/psrS5kS6hIQ7Rxj3uYowGxfM9KZY8eQ1yKMaBmnKsD2b/ejUvFDuBo7rbOOJnkEV+hZDaj4pf0LD+C9yN1p9U/Yf1zf8lhtla9PmUOtDmQDV4mJlcboQj9OPVt4lbYFcDAemG8pz8KXwQ1SanoggNjlHFdI6/XzQujkGb/NChAuDIvTkE6CNq6cEyAig/YJuKZg/+Rvi70YfGBXmr3LXVKqzc1HTOHBPtcY4c8YNZTHITzJ4fGorVp0Y9g+6k0nsCihKuDYoKuv6ReWRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I2ColwMjueZ+u0KnqnMFLSfhm2F+7iidraEBEVbTypw=;
+ b=L7/4jxxxzn863xeVnTtq48kgzKWGmMO63OmJ2DjW0vg9H0dtuOj9Ss8GjCEg8AApNo8OGIuh0Ji8gwtSvwm52a+QVAdNMOg2ja5gFm395xyEUO6hqUwaNT1e5oEBvQ101B3PmnYuXR/eVyDmvQON5mWPzZces1Jy4Rbth2fjbN/C++qe2wfrX0k1ZFt7+3NBrz2BxiiIjTDwAzPt57IFPzKxLCcwCbDscUDlkPN0x5BDAXcRjqdZOi2X1bBzEvHM8031IIkkz5LHuBTIWEyMmjYKfOcl9PmT1gkK11yen01mFwyxKYQiABJJOaNoUq6cR9jHpZSzX6+tPUwniShvNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I2ColwMjueZ+u0KnqnMFLSfhm2F+7iidraEBEVbTypw=;
+ b=cEVx0kUnpa6PHUxikye8ju8uO2xU+ekdi/eL3SPfotyy7Q6WxN2ZwoddlnZakmBkMpcFaiff1zyEHm3wEJVPsz3sEmaX4SCPtFyectO1OVOlVyE33hD4K4gjaKRN3dAhNoqY8aNkNHci+2WF8e5sCSukXigkBIT1A19mXbsCA3KITD7FVFDzdPegDDlMKXLghg9UfstxN6iGy926a0Jw68n7MaRTBO+qnPDl9Cnp4UTiVxqimhs9z/7pVKyHF5ON9ts5ERKXJN6Rq6g6jOpW8MftVkOqAdIo3cLqS/g6uAqMmwBbZGAGYvOS8CszuK/kRUIkBS3a+RmnASfo23+3ow==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS7PR12MB6166.namprd12.prod.outlook.com (2603:10b6:8:99::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
+ 2023 17:21:01 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.017; Thu, 9 Mar 2023
+ 17:21:01 +0000
+Date:   Thu, 9 Mar 2023 13:20:58 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+Message-ID: <ZAoVemZoGpx16P9E@nvidia.com>
+References: <20230309075358.571567-1-yi.l.liu@intel.com>
+ <20230309075358.571567-4-yi.l.liu@intel.com>
+ <6c1b221e-df8d-4b82-10e5-aa3027819d45@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c1b221e-df8d-4b82-10e5-aa3027819d45@linux.intel.com>
+X-ClientProxiedBy: SJ0PR05CA0141.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::26) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB6166:EE_
+X-MS-Office365-Filtering-Correlation-Id: 13dbb63c-e221-44e6-94a1-08db20c2a7da
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VT1nl0c+OvHMYgMlqI+4AS39leT1VGIN7iENUds09JmQIqfL6dwmhgqger0+pm1b/9z6/8p5Rery0UIbVb8rU+zvrjQX0S80aYg2yo9sZRobU7KIcdR4TZWHtHknD9EQXwAL8MzP0Ofqm2XhpHLLEGQrJFJ9nWa+Ar318V9CXQfUHEtPpaTN3on04hrAWlH0+eFw7Mts3iM7agyaGD3K33iq+VcogmCPkDIkAOkW+0g5T1G45Ih2Aj/ael8GP8c+TD0Sez4tZsmpJzeHVirIdeq4z/SYy4IUdNgh8egWckIMS0JgLYeLXOIEKhiwHZfOW9BDsLhrQQK43pKDmKm5xrpM0feDBVjN68aWs4sVRBBg1cgr7MNBWChwKV9p5iFHXQbkUEmI+MaDPkaslJtWLI3xM4CnsNEnWSdaN7t5jOeqVyGYBiZmnkAx6PGl0esWk56w+5h0XNa35OBMSOZyyUW4C2aHhSlw5vEJTDrQE3bMIRieue4FZXHgJQSrx44ctmIsKanqk/FmVebWijd21o1bz84VqIaM93vzIja3pKgklDzucyx+NjYGxP1WQyPeDR9EmZpKufti10ysNoN2KIQHU4Rh+spah+S2Mi6IiOs+ni4FuWsF7w7e/fAAH3re1txX0fY4uwlxO8mzxoh7aQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199018)(36756003)(6486002)(316002)(6916009)(5660300002)(7416002)(2906002)(8936002)(66476007)(66946007)(8676002)(66556008)(4744005)(41300700001)(4326008)(26005)(86362001)(186003)(6666004)(2616005)(478600001)(6512007)(6506007)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?giTJ0eotKAMxQIF7wp1ZUApxmz5yMAew0KcHZTLWr/sIGrAmyUq4Nt7Iep2q?=
+ =?us-ascii?Q?VIRb+hvU/kUJ/pyDh+BLX86wLAOo7kc0x+jzQQS/8kgjdOzbm4Uz0aqYYHy9?=
+ =?us-ascii?Q?UVAMSOlfQNb/Gqlcgs21oGJvwqDu8FBOim6a+8lA7R1oyQl+zUxNEtfq+wtW?=
+ =?us-ascii?Q?g4CucP0l2PmpMXMKBLfEHUmxFDvLtdk2KZwNrsREgb6CVHCctvCO4AnxeJZ5?=
+ =?us-ascii?Q?Qfb8892r6oK4gNQgaKpMu5/2Roprouh9Ay8l2nk6EXlYdqzfjNmreNBO2GtN?=
+ =?us-ascii?Q?y/R4hu4FnB0AXkQWx/p8GdAbZhcDybTEcYHEBFvD6w+pkddLB0YOGuXgVKlM?=
+ =?us-ascii?Q?MY5hQv1qHscNdQJf873X3/ISP9F6PGgu0mOpMGm4Jrgcsoce/P3T+Sauhbcw?=
+ =?us-ascii?Q?UIhAPPWefz8ah/LLIfX5IkZzzIyMq+wL+eMyKX3Tolk5QMK8KycyXMFUpkiw?=
+ =?us-ascii?Q?l6ogq+Q0VEdkCZ1mQh/KToy/k+ekSS+96v/+fC91eMbFIuY5wsgeXZT9fR3B?=
+ =?us-ascii?Q?f17iYH2XoxykM/pYzFg7n/UcCfSpQjAs9TtWEz6LBfpvIN85O7omJODCBzlx?=
+ =?us-ascii?Q?u7nCPFtCcHRJccOYRIJIARdftJZKx2sSBqsqYKm2CkfvMEM7qK6nTc+0FsWk?=
+ =?us-ascii?Q?mo+93kNk9YXz1XcllsbsMyMvvzef9dim/Dr+2OalNy1ZxeJH/kGw2DK3cWYr?=
+ =?us-ascii?Q?CLTzwRQqfX0fllTLwFvVYVL+u6qCW94lTWm44PXwyCyu1raSej1sS9rRaV4S?=
+ =?us-ascii?Q?vV94w2Ip2g0oS0rEol+T+phmLLUAqdS3EboLe38zhx7yWXMcuallun7choiE?=
+ =?us-ascii?Q?Q3blllUhOfjdyZr7p40oWi5+TJ8JLSeAmliDtAV7Imb38NRfhoj2fbaZW4GB?=
+ =?us-ascii?Q?5EMRgXD/JttfQUO2Kp/daLeEucp+/kSyQQXPRWTspz/2aZSgdjG+HQw2nzdG?=
+ =?us-ascii?Q?J8F4hh6+q+7+SN7U8L8rfJ9rESXCI1D6TeoL757pMmgnO44D2GAD0Npwgx72?=
+ =?us-ascii?Q?IUPJiGXY12uaG2ffoX+lGoVtm+4Vxht4hE0Sm9kkw4J9nUbgFnrIwwtfqhYO?=
+ =?us-ascii?Q?ylATfeRAfCyI+etZ89CJz3mwbq3SWt8P5RvON0WQrg3nEtPGMXDN0b131uiH?=
+ =?us-ascii?Q?0GGG7N8h5KVAxVvh6QJcgslrw7yobB20ZxcmDXsimNc/VQiSFoAt66RTQVgc?=
+ =?us-ascii?Q?BuzKOmyYROdlh3wmZcYqZfUB/y7dPoLrs3RXrfhteIy/Aym+HoU56hiSRy2t?=
+ =?us-ascii?Q?HyKcFjmEAJa1qRSo0yKiqb45MNouHE7hxD2KY13XI9Xd9gJM99FfKsPEkz1S?=
+ =?us-ascii?Q?NIMK4YiSl2QhxhfS7DAjjIe5gLnI4biwEtc9cJ57WBONC/g+koOrKsemf0Fs?=
+ =?us-ascii?Q?QqO40jC/K2r0y5pD5pHZ2udur/nag3wF84E6DKYvU8EeY7RBDoY2UvHQtMvJ?=
+ =?us-ascii?Q?OIh07oIpTD1ztND7gWmV9BUw1mZc7C8zLJpOE6gPndKNaFK6j5rnfub3uApi?=
+ =?us-ascii?Q?PJrc/cVFz9+dEputYfi7GlyBDsRkdD0Ht8c4PK3h2JWpGKWVGn0xXbnUP615?=
+ =?us-ascii?Q?9y0BN2dW35AD8jIlmMwLeLgq4jDlglVRm4Bhb1tG?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13dbb63c-e221-44e6-94a1-08db20c2a7da
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 17:21:01.7577
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gv61OLbGV0junHtjKKjf8Px7pNcISTq5M+T33gFlGN+xJHeH+WWst7skgqF3ugmW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6166
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add generic and read-only tests for 7 pseudo filesystems to make sure
-they have a consistent inode management, which is required for
-Landlock's file hierarchy identification:
-- ramfs
-- tmpfs
-- cgroup
-- cgroup2
-- proc
-- sysfs
-- hostfs
+On Thu, Mar 09, 2023 at 09:50:18PM +0800, Baolu Lu wrote:
 
-Update related kernel configuration to support these new filesystems,
-and sort all entries.  If these filesystems are not supported by the
-kernel running tests, the related tests are skipped.
+> > +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	idev = iommufd_get_device(ucmd, cmd->dev_id);
+> > +	if (IS_ERR(idev))
+> > +		return PTR_ERR(idev);
+> > +
+> > +	ops = dev_iommu_ops(idev->dev);
+> > +	if (!ops || !ops->hw_info) {
+> 
+> dev_iommu_ops() will never return a NULL.
+> 
+> Need below check
+> 
+> 	dev->iommu && dev->iommu->iommu_dev
+> 
+> before dev_iommu_ops(). Perhaps something like below?
+> 
+> 	if (!dev->iommu || !dev->iommu->iommu_dev)
+> 		return -EINVAL;
 
-Expanding variants, this adds 35 new tests for layout3_fs:
-- tag_inode_dir_parent
-- tag_inode_dir_mnt
-- tag_inode_dir_child
-- tag_inode_dir_file
-- release_inodes
+At this point the device has become owned through the ownership API,
+it absolutely has to have an iommu and an ops. No need to check
+anything.
 
-The hostfs filesystem, only available for an User-Mode Linux kernel, is
-special because we cannot explicitly mount it.  The layout3_fs.hostfs
-variant tests are skipped if the current test directory is not backed by
-this filesystem.
-
-The layout3_fs.hostfs.tag_inode_dir_child and
-layout3_fs.hostfs.tag_inode_file tests pass thanks to a previous
-commit fixing hostfs inode management.  Without this fix, the
-deny-by-default policy would apply and all access requests would be
-denied.
-
-Cc: <stable@vger.kernel.org> # 5.15.x: 63e6b2a42342: selftests/harness: Run TEARDOWN for ASSERT failures
-Cc: <stable@vger.kernel.org> # 5.15.x: 79ee8aa31d51: selftests/harness: Pass variant to teardown
-Cc: <stable@vger.kernel.org> # 5.15+
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20230309165455.175131-6-mic@digikod.net
----
- tools/testing/selftests/landlock/config    |   8 +-
- tools/testing/selftests/landlock/fs_test.c | 285 +++++++++++++++++++++
- 2 files changed, 291 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/landlock/config b/tools/testing/selftests/landlock/config
-index 0f0a65287bac..5501108d00b7 100644
---- a/tools/testing/selftests/landlock/config
-+++ b/tools/testing/selftests/landlock/config
-@@ -1,7 +1,11 @@
-+CONFIG_CGROUPS=y
-+CONFIG_CGROUP_SCHED=y
- CONFIG_OVERLAY_FS=y
-+CONFIG_PROC_FS=y
-+CONFIG_SECURITY=y
- CONFIG_SECURITY_LANDLOCK=y
- CONFIG_SECURITY_PATH=y
--CONFIG_SECURITY=y
- CONFIG_SHMEM=y
--CONFIG_TMPFS_XATTR=y
-+CONFIG_SYSFS=y
- CONFIG_TMPFS=y
-+CONFIG_TMPFS_XATTR=y
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index de29c8c9e194..f6a80ad738e1 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -10,6 +10,7 @@
- #define _GNU_SOURCE
- #include <fcntl.h>
- #include <linux/landlock.h>
-+#include <linux/magic.h>
- #include <sched.h>
- #include <stdio.h>
- #include <string.h>
-@@ -19,6 +20,7 @@
- #include <sys/sendfile.h>
- #include <sys/stat.h>
- #include <sys/sysmacros.h>
-+#include <sys/vfs.h>
- #include <unistd.h>
- 
- #include "common.h"
-@@ -121,6 +123,10 @@ static bool supports_filesystem(const char *const filesystem)
- 	if (!inf)
- 		return true;
- 
-+	/* filesystem can be null for bind mounts. */
-+	if (!filesystem)
-+		return true;
-+
- 	len = snprintf(str, sizeof(str), "nodev\t%s\n", filesystem);
- 	if (len >= sizeof(str))
- 		/* Ignores too-long filesystem names. */
-@@ -131,6 +137,19 @@ static bool supports_filesystem(const char *const filesystem)
- 	return res;
- }
- 
-+static bool cwd_matches_fs(unsigned int fs_magic)
-+{
-+	struct statfs statfs_buf;
-+
-+	if (!fs_magic)
-+		return true;
-+
-+	if (statfs(".", &statfs_buf))
-+		return true;
-+
-+	return statfs_buf.f_type == fs_magic;
-+}
-+
- static void mkdir_parents(struct __test_metadata *const _metadata,
- 			  const char *const path)
- {
-@@ -307,11 +326,13 @@ static void remove_layout1(struct __test_metadata *const _metadata)
- 	EXPECT_EQ(0, remove_path(file1_s1d3));
- 	EXPECT_EQ(0, remove_path(file1_s1d2));
- 	EXPECT_EQ(0, remove_path(file1_s1d1));
-+	EXPECT_EQ(0, remove_path(dir_s1d3));
- 
- 	EXPECT_EQ(0, remove_path(file2_s2d3));
- 	EXPECT_EQ(0, remove_path(file1_s2d3));
- 	EXPECT_EQ(0, remove_path(file1_s2d2));
- 	EXPECT_EQ(0, remove_path(file1_s2d1));
-+	EXPECT_EQ(0, remove_path(dir_s2d2));
- 
- 	EXPECT_EQ(0, remove_path(file1_s3d1));
- 	EXPECT_EQ(0, remove_path(dir_s3d3));
-@@ -4471,4 +4492,268 @@ TEST_F_FORK(layout2_overlay, same_content_different_file)
- 	}
- }
- 
-+FIXTURE(layout3_fs)
-+{
-+	bool has_created_dir;
-+	bool has_created_file;
-+	char *dir_path;
-+	bool skip_test;
-+};
-+
-+FIXTURE_VARIANT(layout3_fs)
-+{
-+	const struct mnt_opt mnt;
-+	const char *const file_path;
-+	unsigned int cwd_fs_magic;
-+};
-+
-+/* clang-format off */
-+FIXTURE_VARIANT_ADD(layout3_fs, tmpfs) {
-+	/* clang-format on */
-+	.mnt = mnt_tmp,
-+	.file_path = file1_s1d1,
-+};
-+
-+FIXTURE_VARIANT_ADD(layout3_fs, ramfs) {
-+	.mnt = {
-+		.type = "ramfs",
-+		.data = "mode=700",
-+	},
-+	.file_path = TMP_DIR "/dir/file",
-+};
-+
-+FIXTURE_VARIANT_ADD(layout3_fs, cgroup) {
-+	.mnt = {
-+		.type = "cgroup",
-+	},
-+	.file_path = TMP_DIR "/test/tasks",
-+};
-+
-+FIXTURE_VARIANT_ADD(layout3_fs, cgroup2) {
-+	.mnt = {
-+		.type = "cgroup2",
-+	},
-+	.file_path = TMP_DIR "/test/cgroup.procs",
-+};
-+
-+FIXTURE_VARIANT_ADD(layout3_fs, proc) {
-+	.mnt = {
-+		.type = "proc",
-+	},
-+	.file_path = TMP_DIR "/self/status",
-+};
-+
-+FIXTURE_VARIANT_ADD(layout3_fs, sysfs) {
-+	.mnt = {
-+		.type = "sysfs",
-+	},
-+	.file_path = TMP_DIR "/kernel/notes",
-+};
-+
-+FIXTURE_VARIANT_ADD(layout3_fs, hostfs) {
-+	.mnt = {
-+		.source = TMP_DIR,
-+		.flags = MS_BIND,
-+	},
-+	.file_path = TMP_DIR "/dir/file",
-+	.cwd_fs_magic = HOSTFS_SUPER_MAGIC,
-+};
-+
-+FIXTURE_SETUP(layout3_fs)
-+{
-+	struct stat statbuf;
-+	const char *slash;
-+	size_t dir_len;
-+
-+	if (!supports_filesystem(variant->mnt.type) ||
-+	    !cwd_matches_fs(variant->cwd_fs_magic)) {
-+		self->skip_test = true;
-+		SKIP(return, "this filesystem is not supported (setup)");
-+	}
-+
-+	slash = strrchr(variant->file_path, '/');
-+	ASSERT_NE(slash, NULL);
-+	dir_len = (size_t)slash - (size_t)variant->file_path;
-+	ASSERT_LT(0, dir_len);
-+	self->dir_path = malloc(dir_len + 1);
-+	self->dir_path[dir_len] = '\0';
-+	strncpy(self->dir_path, variant->file_path, dir_len);
-+
-+	prepare_layout_opt(_metadata, &variant->mnt);
-+
-+	/* Creates directory when required. */
-+	if (stat(self->dir_path, &statbuf)) {
-+		set_cap(_metadata, CAP_DAC_OVERRIDE);
-+		EXPECT_EQ(0, mkdir(self->dir_path, 0700))
-+		{
-+			TH_LOG("Failed to create directory \"%s\": %d %s",
-+			       self->dir_path, errno, strerror(errno));
-+			free(self->dir_path);
-+			self->dir_path = NULL;
-+		}
-+		self->has_created_dir = true;
-+		clear_cap(_metadata, CAP_DAC_OVERRIDE);
-+	}
-+
-+	/* Creates file when required. */
-+	if (stat(variant->file_path, &statbuf)) {
-+		int fd;
-+
-+		set_cap(_metadata, CAP_DAC_OVERRIDE);
-+		fd = creat(variant->file_path, 0600);
-+		EXPECT_LE(0, fd)
-+		{
-+			TH_LOG("Failed to create file \"%s\": %d %s",
-+			       variant->file_path, errno, strerror(errno));
-+		}
-+		EXPECT_EQ(0, close(fd));
-+		self->has_created_file = true;
-+		clear_cap(_metadata, CAP_DAC_OVERRIDE);
-+	}
-+}
-+
-+FIXTURE_TEARDOWN(layout3_fs)
-+{
-+	if (self->skip_test)
-+		SKIP(return, "this filesystem is not supported (teardown)");
-+
-+	if (self->has_created_file) {
-+		set_cap(_metadata, CAP_DAC_OVERRIDE);
-+		/*
-+		 * Don't check for error because the file might already
-+		 * have been removed (cf. release_inode test).
-+		 */
-+		unlink(variant->file_path);
-+		clear_cap(_metadata, CAP_DAC_OVERRIDE);
-+	}
-+
-+	if (self->has_created_dir) {
-+		set_cap(_metadata, CAP_DAC_OVERRIDE);
-+		/*
-+		 * Don't check for error because the directory might already
-+		 * have been removed (cf. release_inode test).
-+		 */
-+		rmdir(self->dir_path);
-+		clear_cap(_metadata, CAP_DAC_OVERRIDE);
-+	}
-+	free(self->dir_path);
-+	self->dir_path = NULL;
-+
-+	cleanup_layout(_metadata);
-+}
-+
-+static void layer3_fs_tag_inode(struct __test_metadata *const _metadata,
-+				FIXTURE_DATA(layout3_fs) * self,
-+				const FIXTURE_VARIANT(layout3_fs) * variant,
-+				const char *const rule_path)
-+{
-+	const struct rule layer1_allow_read_file[] = {
-+		{
-+			.path = rule_path,
-+			.access = LANDLOCK_ACCESS_FS_READ_FILE,
-+		},
-+		{},
-+	};
-+	const struct landlock_ruleset_attr layer2_deny_everything_attr = {
-+		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_FILE,
-+	};
-+	const char *const dev_null_path = "/dev/null";
-+	int ruleset_fd;
-+
-+	if (self->skip_test)
-+		SKIP(return, "this filesystem is not supported (test)");
-+
-+	/* Checks without Landlock. */
-+	EXPECT_EQ(0, test_open(dev_null_path, O_RDONLY | O_CLOEXEC));
-+	EXPECT_EQ(0, test_open(variant->file_path, O_RDONLY | O_CLOEXEC));
-+
-+	ruleset_fd = create_ruleset(_metadata, LANDLOCK_ACCESS_FS_READ_FILE,
-+				    layer1_allow_read_file);
-+	EXPECT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	EXPECT_EQ(0, close(ruleset_fd));
-+
-+	EXPECT_EQ(EACCES, test_open(dev_null_path, O_RDONLY | O_CLOEXEC));
-+	EXPECT_EQ(0, test_open(variant->file_path, O_RDONLY | O_CLOEXEC));
-+
-+	/* Forbids directory reading. */
-+	ruleset_fd =
-+		landlock_create_ruleset(&layer2_deny_everything_attr,
-+					sizeof(layer2_deny_everything_attr), 0);
-+	EXPECT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	EXPECT_EQ(0, close(ruleset_fd));
-+
-+	/* Checks with Landlock and forbidden access. */
-+	EXPECT_EQ(EACCES, test_open(dev_null_path, O_RDONLY | O_CLOEXEC));
-+	EXPECT_EQ(EACCES, test_open(variant->file_path, O_RDONLY | O_CLOEXEC));
-+}
-+
-+/* Matrix of tests to check file hierarchy evaluation. */
-+
-+TEST_F_FORK(layout3_fs, tag_inode_dir_parent)
-+{
-+	/* The current directory must not be the root for this test. */
-+	layer3_fs_tag_inode(_metadata, self, variant, ".");
-+}
-+
-+TEST_F_FORK(layout3_fs, tag_inode_dir_mnt)
-+{
-+	layer3_fs_tag_inode(_metadata, self, variant, TMP_DIR);
-+}
-+
-+TEST_F_FORK(layout3_fs, tag_inode_dir_child)
-+{
-+	layer3_fs_tag_inode(_metadata, self, variant, self->dir_path);
-+}
-+
-+TEST_F_FORK(layout3_fs, tag_inode_file)
-+{
-+	layer3_fs_tag_inode(_metadata, self, variant, variant->file_path);
-+}
-+
-+/* Light version of layout1.release_inodes */
-+TEST_F_FORK(layout3_fs, release_inodes)
-+{
-+	const struct rule layer1[] = {
-+		{
-+			.path = TMP_DIR,
-+			.access = LANDLOCK_ACCESS_FS_READ_DIR,
-+		},
-+		{},
-+	};
-+	int ruleset_fd;
-+
-+	if (self->skip_test)
-+		SKIP(return, "this filesystem is not supported (test)");
-+
-+	/* Clean up for the teardown to not fail. */
-+	if (self->has_created_file)
-+		EXPECT_EQ(0, remove_path(variant->file_path));
-+
-+	if (self->has_created_dir)
-+		/* Don't check for error because of cgroup specificities. */
-+		remove_path(self->dir_path);
-+
-+	ruleset_fd =
-+		create_ruleset(_metadata, LANDLOCK_ACCESS_FS_READ_DIR, layer1);
-+	ASSERT_LE(0, ruleset_fd);
-+
-+	/* Unmount the filesystem while it is being used by a ruleset. */
-+	set_cap(_metadata, CAP_SYS_ADMIN);
-+	ASSERT_EQ(0, umount(TMP_DIR));
-+	clear_cap(_metadata, CAP_SYS_ADMIN);
-+
-+	/* Replaces with a new mount point to simplify FIXTURE_TEARDOWN. */
-+	set_cap(_metadata, CAP_SYS_ADMIN);
-+	ASSERT_EQ(0, mount("tmp", TMP_DIR, "tmpfs", 0, "size=4m,mode=700"));
-+	clear_cap(_metadata, CAP_SYS_ADMIN);
-+
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	ASSERT_EQ(0, close(ruleset_fd));
-+
-+	/* Checks that access to the new mount point is denied. */
-+	ASSERT_EQ(EACCES, test_open(TMP_DIR, O_RDONLY));
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.39.2
-
+Jason
