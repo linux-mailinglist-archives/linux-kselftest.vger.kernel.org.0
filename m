@@ -2,168 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E8F6B27F4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 15:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8467C6B2816
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 16:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjCIOzK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Mar 2023 09:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
+        id S231280AbjCIPCd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Mar 2023 10:02:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232212AbjCIOyF (ORCPT
+        with ESMTP id S232222AbjCIPBq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 09:54:05 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AF1F4B52
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Mar 2023 06:51:29 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1763e201bb4so2567841fac.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Mar 2023 06:51:29 -0800 (PST)
+        Thu, 9 Mar 2023 10:01:46 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F58E3CD8
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Mar 2023 06:58:39 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536c8bcae3bso22364307b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Mar 2023 06:58:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1678373488;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hmy3PkPHQ2u3OS0v9qWvPRQmIDrYZcauNq0B9Zz8Ptw=;
-        b=75S4M1/anGft2wOuhmMfIB2P5gXujxapU5TSo4ZG6/cMhcGqvW3htpmJHpBs8faCf8
-         W4TXN3jKZ7vKY46xq/Ohqw0jSxPPZTD8w70DIs3L4p0fhlcZj4v4LYNBKkFBU1mIlYiA
-         CB/CwRmr8041sLXRxpxhIV2l3YdAExY4pOTQYpZA/k6zymLu3myyjK/Jml2Zj+caFWoG
-         jUX6HUTKv6LRJGCEQRlwJX5jIoaWxoM34y6OEmrbyr7CupjCRi/R7n+YQhC3wtERhr1c
-         1+gUKRo+U4UjkGLTZMeT6WtWFAr1CC+l9MgiwsDtNvO1MRp4AKnYAywf0JMcmZrhf/IU
-         rogw==
+        d=google.com; s=20210112; t=1678373919;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bEFeJ9xyxhy0W7bJZiAq/kKy1WMrrLIg7OiI+XOB/AI=;
+        b=AECFctgy1Pb6vzSBgJ5svnQmNInplL1FiLFI2a2aQW8hYY0ThUh2VXXfsjbvTYbuxp
+         8bYTu6CJ5iozTv5Q1hZT/09unkP8ISm2HYkFp8SM9xTFypTEUXFmzIS+yWoNWdtpiBRQ
+         f20CjjG1vOvbxVh1dWew0Z11D4PAp1XilSYSNoSSJSrRs19Mi8uqELGYfgXwZCjfswiB
+         nc+ASgKzk7rzNu8E3BELtDZggkPQ2Mp7dcaGHHoUAeZaxn+HtSuyeFKjFTJCEbOJT2w6
+         R6C96lohFpiGLEfxtvwzPM6D2Ox5o45l6dH/w8a/m+X9qtAbR7tlPegUZcOvFr8sj3XO
+         G90A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678373488;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hmy3PkPHQ2u3OS0v9qWvPRQmIDrYZcauNq0B9Zz8Ptw=;
-        b=gY8X8fwCTrYrU8FDVgbHzhkC/V2vvg3t8Eg3rAYptcXPbi0CG6fQ9WuQNLP1XnN9pj
-         w2Sr6VkFow3EPstoAvBsmQOlwHG4NoPpQXiPQJ0kfiQyidnE6OyIP4odymwHzsr7ogJ2
-         fz/bhgEokvfm0L3moIgyX4KpCwseGg8lO4aGMOYu3cg4PHwq4a0oqFYUzsnde9HcrZOV
-         c8B0ACX2/klOlvz64x6sP7n5Qdu/8fKGTxVCSxuzqxgzSR7IUzmQPLIC4HV15EUYUtoT
-         P1N8QS6olCxf+W+8/TU3dAzMaryAdjUEWmJVvE4eFfN/EBRI1MJPQ3iMF4di4Q7w+kq/
-         /nUQ==
-X-Gm-Message-State: AO0yUKWVL6lFH7i5pq9eqM9QL78+SaIugGztwdxxgy6BIMaxuAAbf1ok
-        +Hh5xVB+sH9z8ju7kDOuapTxcg==
-X-Google-Smtp-Source: AK7set/Q93gXpFgSkUWy+boYAiBLU/suM/9YdzeWXiBdvjgFNz3JrdgnlUBcu4Cy6bJL/cS+yvNOfA==
-X-Received: by 2002:a05:6870:63a7:b0:163:58e8:77e5 with SMTP id t39-20020a05687063a700b0016358e877e5mr13797510oap.52.1678373487398;
-        Thu, 09 Mar 2023 06:51:27 -0800 (PST)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id ax39-20020a05687c022700b0016b0369f08fsm7351116oac.15.2023.03.09.06.51.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 06:51:27 -0800 (PST)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 09 Mar 2023 15:50:04 +0100
-Subject: [PATCH net v2 8/8] mptcp: fix lockdep false positive in
- mptcp_pm_nl_create_listen_socket()
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230227-upstream-net-20230227-mptcp-fixes-v2-8-47c2e95eada9@tessares.net>
-References: <20230227-upstream-net-20230227-mptcp-fixes-v2-0-47c2e95eada9@tessares.net>
-In-Reply-To: <20230227-upstream-net-20230227-mptcp-fixes-v2-0-47c2e95eada9@tessares.net>
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <martineau@kernel.org>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>,
-        Shuah Khan <shuah@kernel.org>, Florian Westphal <fw@strlen.de>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org, Christoph Paasch <cpaasch@apple.com>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2460;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=hqAM0Pg1CL8N6FLTp05rrsEa/m98vr/X4KK/h6eveNg=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkCfIhlczjyma02ViYKD6MJ5M1VuWVHNyx+4BGF
- d/hvmQ7fwqJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZAnyIQAKCRD2t4JPQmmg
- c31kEACurErU6ZCLhi48hHRrQ9GNdmdYCPgJTdZYIMLZ7iV3AAq4Z2knWKWnK7+hx2YiFszPJ/P
- hYvLL71GwNTWFGKHmnhR+aGBx1ZREpAS65kS8/p5vnBRiTwFI1q7LnFDDNa80czfsBCFpR0XXgf
- 2fZjQRKIl/Dhw7FBdCZ2wezTqAPmGmQdRQxRtzofrlhdK2wpqerqMeqRPKLiggC3ftK7nsdcpG+
- uWC/9v4WamN0SsjGPdmbgnS5i8L+Fdcr03Ynfa+5YYRYcpaMjsCFMryP+J4+ku7OnUaKV8+W4/P
- G2odQbe8ZsjFUiWPwp5Af1f9Zjd4A1oNYxl+IiL1pm7oTFICdecr1YvLlG7/HmodFaU4JRsGj/y
- XiiJps3ZdQqQneTAeEKdI459qkvYklb+7HpOUR3y8Gsj3zQzvC76nR/W8iuvDa1BeKVWAWoSMp5
- Yy+IbUKK5ZMf7WFtnXoPBIkLfHjmi9XXRgA/o4o1/ADAE9aGzCs4aMxv6oxYHfzb33AT2cHb0SJ
- N7xXmEJujU/9pTGfCGukRGZxFehB5IPqNiRB+rqAB57yXmq7svmCpxp2uzHGAtgVRfNvjGRkIxT
- MusvZ77L+pYpvPpoTrOHS5RVypXW/W5l9cuyUFA+nPnYepl2BcEd5HQvPc1+U/TG85cWI/2t8SZ
- Y0EKjBYvBQ+BYkw==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1678373919;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bEFeJ9xyxhy0W7bJZiAq/kKy1WMrrLIg7OiI+XOB/AI=;
+        b=iDVxvQoh48U/YthziQdfh2LOYCLGZAWcF1TYT+nYRMOBbKwSjWYqtxeFtRn0ax/3bH
+         AxoFNtbKoknwplif7/WW1PnG/t5l/S7WbXA8eEZb1qnlv66qrrPPOJR9CVxqtlQx/6rd
+         9CbC18Y/N2q3uJCBK70rVxhp3ihIBLznVU8MvFqvJE3PLI6tPwLdQ6TJKTAvX0oEc77G
+         nn54YJ0ufafHl5nzl/uk+zhjOnj8MTSv4MQ9d3lfE8FFaYw7JXB8/cu0nPJXXxR7DSAG
+         8y9n7Q1VLz/Y8y/0OboOMOrmA01AQkXQvttAGfrZTkIbHcaNpEMQAVcXDQOPCEWuQCZF
+         rU3A==
+X-Gm-Message-State: AO0yUKWTpmvd6lVh81w7eiCeQFKApqbjsAe9wimAs75q0+13TACkIR34
+        8jYAPzDAP1kqLqAabeg48CaeFVblqtQkjoJUkw==
+X-Google-Smtp-Source: AK7set/l9cs7UWAKSKs9FQRi78JWaUa6FnoB45C4CsKXxl/oHSoKLAbKTacFmQ3+lOqkO4R7DQQ2r7vi/X0tpx7d7w==
+X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:9c2a:d34f:579c:b74e])
+ (user=peternewman job=sendgmr) by 2002:a25:9f84:0:b0:8ac:72e3:c743 with SMTP
+ id u4-20020a259f84000000b008ac72e3c743mr3566181ybq.9.1678373918808; Thu, 09
+ Mar 2023 06:58:38 -0800 (PST)
+Date:   Thu,  9 Mar 2023 15:57:57 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230309145757.2280518-1-peternewman@google.com>
+Subject: [PATCH] selftests/resctrl: Use correct exit code when tests fail
+From:   Peter Newman <peternewman@google.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        eranian@google.com, Peter Newman <peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+Use ksft_finished() after running tests so that resctrl_tests doesn't
+return exit code 0 when tests fail.
 
-Christoph reports a lockdep splat in the mptcp_subflow_create_socket()
-error path, when such function is invoked by
-mptcp_pm_nl_create_listen_socket().
+Consequently, report the MBA and MBM tests as skipped when running on
+non-Intel hardware, otherwise resctrl_tests will exit with a failure
+code.
 
-Such code path acquires two separates, nested socket lock, with the
-internal lock operation lacking the "nested" annotation. Adding that
-in sock_release() for mptcp's sake only could be confusing.
-
-Instead just add a new lockclass to the in-kernel msk socket,
-re-initializing the lockdep infra after the socket creation.
-
-Fixes: ad2171009d96 ("mptcp: fix locking for in-kernel listener creation")
-Cc: stable@vger.kernel.org
-Reported-by: Christoph Paasch <cpaasch@apple.com>
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/354
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Tested-by: Christoph Paasch <cpaasch@apple.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Peter Newman <peternewman@google.com>
 ---
- net/mptcp/pm_netlink.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ tools/testing/selftests/resctrl/resctrl_tests.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index 56628b52d100..5c8dea49626c 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -997,9 +997,13 @@ static int mptcp_pm_nl_append_new_local_addr(struct pm_nl_pernet *pernet,
- 	return ret;
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index df0d8d8526fc..69ebb0d7fff6 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -77,7 +77,7 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
+ 
+ 	ksft_print_msg("Starting MBM BW change ...\n");
+ 
+-	if (!validate_resctrl_feature_request(MBM_STR)) {
++	if (!validate_resctrl_feature_request(MBM_STR) || (get_vendor() != ARCH_INTEL)) {
+ 		ksft_test_result_skip("Hardware does not support MBM or MBM is disabled\n");
+ 		return;
+ 	}
+@@ -98,7 +98,7 @@ static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
+ 
+ 	ksft_print_msg("Starting MBA Schemata change ...\n");
+ 
+-	if (!validate_resctrl_feature_request(MBA_STR)) {
++	if (!validate_resctrl_feature_request(MBA_STR) || (get_vendor() != ARCH_INTEL)) {
+ 		ksft_test_result_skip("Hardware does not support MBA or MBA is disabled\n");
+ 		return;
+ 	}
+@@ -258,10 +258,10 @@ int main(int argc, char **argv)
+ 
+ 	ksft_set_plan(tests ? : 4);
+ 
+-	if ((get_vendor() == ARCH_INTEL) && mbm_test)
++	if (mbm_test)
+ 		run_mbm_test(has_ben, benchmark_cmd, span, cpu_no, bw_report);
+ 
+-	if ((get_vendor() == ARCH_INTEL) && mba_test)
++	if (mba_test)
+ 		run_mba_test(has_ben, benchmark_cmd, span, cpu_no, bw_report);
+ 
+ 	if (cmt_test)
+@@ -272,5 +272,5 @@ int main(int argc, char **argv)
+ 
+ 	umount_resctrlfs();
+ 
+-	return ksft_exit_pass();
++	ksft_finished();
  }
- 
-+static struct lock_class_key mptcp_slock_keys[2];
-+static struct lock_class_key mptcp_keys[2];
-+
- static int mptcp_pm_nl_create_listen_socket(struct sock *sk,
- 					    struct mptcp_pm_addr_entry *entry)
- {
-+	bool is_ipv6 = sk->sk_family == AF_INET6;
- 	int addrlen = sizeof(struct sockaddr_in);
- 	struct sockaddr_storage addr;
- 	struct socket *ssock;
-@@ -1016,6 +1020,18 @@ static int mptcp_pm_nl_create_listen_socket(struct sock *sk,
- 	if (!newsk)
- 		return -EINVAL;
- 
-+	/* The subflow socket lock is acquired in a nested to the msk one
-+	 * in several places, even by the TCP stack, and this msk is a kernel
-+	 * socket: lockdep complains. Instead of propagating the _nested
-+	 * modifiers in several places, re-init the lock class for the msk
-+	 * socket to an mptcp specific one.
-+	 */
-+	sock_lock_init_class_and_name(newsk,
-+				      is_ipv6 ? "mlock-AF_INET6" : "mlock-AF_INET",
-+				      &mptcp_slock_keys[is_ipv6],
-+				      is_ipv6 ? "msk_lock-AF_INET6" : "msk_lock-AF_INET",
-+				      &mptcp_keys[is_ipv6]);
-+
- 	lock_sock(newsk);
- 	ssock = __mptcp_nmpc_socket(mptcp_sk(newsk));
- 	release_sock(newsk);
 
+base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
 -- 
-2.39.2
+2.40.0.rc1.284.g88254d51c5-goog
 
