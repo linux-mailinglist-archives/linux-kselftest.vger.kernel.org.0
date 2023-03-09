@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE696B1892
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 02:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A066B18A8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 02:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjCIBPe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 20:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
+        id S229582AbjCIBWF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 20:22:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjCIBPd (ORCPT
+        with ESMTP id S229468AbjCIBWE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 20:15:33 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292D0CC309;
-        Wed,  8 Mar 2023 17:15:32 -0800 (PST)
+        Wed, 8 Mar 2023 20:22:04 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AE3B06E4;
+        Wed,  8 Mar 2023 17:22:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678324532; x=1709860532;
+  t=1678324923; x=1709860923;
   h=message-id:date:mime-version:cc:subject:to:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=n9/BFx00bk/6jqChuJmuyNT87149Jg6frqDApKRvQhA=;
-  b=iiHSHgB6MuU0ptIw93KOaHcilpMqRhcuYf2wnWIJVPsWvN8EcB24HxQc
-   xz/v8gVrxReTf4xvpi4jv2XO/+VqmzVwFD/tzTLre9HGcn5YJdhgCxSdZ
-   64RW8DVO1ZVqeq88AQr4tTVTol/sgzAsRtZVb9PM7YCkrGpwUa4h89g72
-   D2lUl4SD2GiTNL27naDySWR2TyvvLc9ykMJULGRgSVyYWMljMQrIjfClj
-   O0MNoladuW/Rk3H3QniR9hmSxr3EZ/Wxu30otATTLLrnrH1CaiZrp1Yov
-   0MgAoayXForA+nICYN7Zbf/RQuxeH/XzHTPL7z621px3UsWW46lEb9FdP
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="401156729"
+  bh=q1aDAPWSfqWw8MzeFLZh49l8q8u0K/Yqd7U27/xelmY=;
+  b=IcHxGlu/SRw73r/DtAOV0UqOFMuhlpSh8b1tr5ear+97pXwuLpVOj9vK
+   CiL7aRQp6+G1HnsvMzBSmviShJlCYYYfJeiAJh8XK3cvZxZMj+CbR6x4d
+   SbKMQaF1EFawJ7Dk10Xo7CeGyt5HTa2CndEdBEnM/TXB2qS/AyLaw5gv6
+   I473Gp2JXEVM4zG78avMvLTk3bOHEV+gyK79HNXP0ncqnOTBrQmNUUF94
+   84htsY4/BbA1TYHhtFSFZogNEE/q1RmpPNQCiwM4l6b/llFIQBF3cGrgQ
+   AEE2XHQqPk0wGJiJkpqwKLvoWz5t9/PlKOOIL1fBXR4tVfMoEKE7N1vhe
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="337850699"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="401156729"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 17:15:30 -0800
+   d="scan'208";a="337850699"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 17:22:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="766224010"
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="851333022"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="766224010"
+   d="scan'208";a="851333022"
 Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 17:15:28 -0800
-Message-ID: <94a68384-0541-affb-fb52-9644312c4b95@linux.intel.com>
-Date:   Thu, 9 Mar 2023 09:14:29 +0800
+  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2023 17:22:00 -0800
+Message-ID: <604a840b-ab12-5cd3-e41a-f481aafeaeed@linux.intel.com>
+Date:   Thu, 9 Mar 2023 09:21:01 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
 Cc:     baolu.lu@linux.intel.com, kvm@vger.kernel.org,
         Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH v2 12/17] iommufd: Add iommufd_device_replace()
+Subject: Re: [PATCH v2 15/17] iommufd: Add IOMMU_HWPT_ALLOC
 Content-Language: en-US
 To:     Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
         Kevin Tian <kevin.tian@intel.com>,
         linux-kselftest@vger.kernel.org
-References: <12-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
+References: <15-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
 From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <12-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
+In-Reply-To: <15-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,17 +67,11 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 3/8/23 8:35 AM, Jason Gunthorpe wrote:
-> Replace allows all the devices in a group to move in one step to a new
-> HWPT. Further, the HWPT move is done without going through a blocking
-> domain so that the IOMMU driver can implement some level of
-> non-distruption to ongoing DMA if that has meaning for it (eg for future
-> special driver domains)
+> This allows userspace to manually create HWPTs on IOAS's and then use
+> those HWPTs as inputs to iommufd_device_attach/replace().
 > 
-> Replace uses a lot of the same logic as normal attach, except the actual
-> domain change over has different restrictions, and we are careful to
-> sequence things so that failure is going to leave everything the way it
-> was, and not get trapped in a blocking domain or something if there is
-> ENOMEM.
+> Following series will extend this to allow creating iommu_domains with
+> driver specific parameters.
 > 
 > Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
 
