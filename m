@@ -2,127 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E136B1569
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Mar 2023 23:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C446B1782
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 01:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjCHWoc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Mar 2023 17:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
+        id S229955AbjCIAFt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Mar 2023 19:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjCHWob (ORCPT
+        with ESMTP id S229997AbjCIAF0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:44:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3806505B
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 14:43:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678315423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jUpec8k3TuIoHkhdWuDgw2GYbAPkkhYheZa+lxQbkK0=;
-        b=cmaQEjZIrCRnjXrCHu0deOC73CBs7yt24Wy6ffxgB/4ZHscLP7E265dnZAuUpERw3V1Tie
-        SV/CMYT4ECovlXrcshPsp5Rv5Q2S+o4BTuENGZQNTZdS6d3UZRTm5gK7NApdhAQPi67wBC
-        JJRUiL9enMssq4uMVKSlTnfObBoHkrg=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-91-3R_gxJBDM-GzZnqSBM2lAQ-1; Wed, 08 Mar 2023 17:43:42 -0500
-X-MC-Unique: 3R_gxJBDM-GzZnqSBM2lAQ-1
-Received: by mail-qt1-f198.google.com with SMTP id w16-20020ac843d0000000b003bfe50a4105so42397qtn.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 14:43:42 -0800 (PST)
+        Wed, 8 Mar 2023 19:05:26 -0500
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA95ECCE93
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 16:03:51 -0800 (PST)
+Received: by mail-pj1-f42.google.com with SMTP id y2so505455pjg.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 16:03:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678320108;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nTISrXpO300lpFWqqY1St1bGS5UZ70h7TsS28CdZuhA=;
+        b=OSHH/be/3Um8HQAHWPBTdCCQkmWHtcATgC8xhii7OXWNi7XnAxDWlso2vnezj1oCRR
+         5suxGvWvoS/Q68mCSQJ3vvc93sSz0jPiiYonwvsevz4GN0DlS4rpvw4AHXClpVG5f5RS
+         YspWn/WIXzmuMTSuJ5mnrymiR8ukn/CimiMBc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678315422;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20210112; t=1678320108;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jUpec8k3TuIoHkhdWuDgw2GYbAPkkhYheZa+lxQbkK0=;
-        b=g9ySXZRHdequdNfhFQZ/XxK58zvxUDhYejVCmbJOfYtPLd9Nyg4W9Hjz2jw6JoxyD+
-         UmEbqHVCPTn7XgFPOXqahNPfslLmoy96gzY1TdY0iLlhlL/2WkbPdEhi8ttgynOYhYdl
-         QTbIszN2Rg23ttooD9WYBF3Ox/dVXsbL6kSxCL7zXGMQu5LXU1Lqar0DuMlwNjiWsjiX
-         eKoh98X0xgDbjSoEmlDmx16NdrZPqruWg34WCNWUly3ltZ+XDrLdn61UPYhZb7egXeZQ
-         DASIr9MVA3RERXJCRoT2IKo8HiKpWifmpHcDAteT/9P4acbC0tJDxypYYPMIg80JVuBV
-         AVWg==
-X-Gm-Message-State: AO0yUKVBNY3s9uHJ+Zh99b3sDBscwWLvmoyFTbOs5eo9enJyUaN8eAxY
-        S6RkA50CHTCmWSbmaC3L7u1z4BuNvOi8PUjlprS4lC4bROA2xshFzb1WMO3uvOg1jzBE9UeCGxw
-        jVmw/q177lQ2IKjOnTIhK/J12nwk2
-X-Received: by 2002:a05:622a:4c7:b0:3bf:be4b:8094 with SMTP id q7-20020a05622a04c700b003bfbe4b8094mr39961479qtx.0.1678315422278;
-        Wed, 08 Mar 2023 14:43:42 -0800 (PST)
-X-Google-Smtp-Source: AK7set/svpcFN7oyLd26+MN7LVXbPhQYslhKV53Vi4XzGLt4t3d/JLaXvYRZ51X7BFbuHcnLETSjqQ==
-X-Received: by 2002:a05:622a:4c7:b0:3bf:be4b:8094 with SMTP id q7-20020a05622a04c700b003bfbe4b8094mr39961450qtx.0.1678315422037;
-        Wed, 08 Mar 2023 14:43:42 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id r25-20020ac87959000000b003bfc1f49ad1sm12255401qtt.87.2023.03.08.14.43.40
+        bh=nTISrXpO300lpFWqqY1St1bGS5UZ70h7TsS28CdZuhA=;
+        b=sHHx6pSf5De8wCtRFMtBhsdOadw3T5avAOnj5nuZJH+zRwdhLjxtuRAYsbHY2goNd1
+         Ho7F1KQO7jub3E9db30b1/GC57FoXh8u/5GnJpalxAGgofQq3tOcRTyxKZdbHPcWO2hq
+         RCDw6k2cZ7maWtpp6QW++VJ2m+K5yhZE1XuLgloqGB7WxNzGwDm6OGfOU45ccz3Ttk3O
+         vt0J1C1cjUMUHgrOGg/ptrY5V0qtfks666dPGzgDW2BPik7Mh2huJ27eTo++93a7QTSo
+         amK1khOgazAzwUJst+UCyJ33Ff+1iuFKWI863HTkkzo4huaFg9n+LWQOOZ0cs9CtDYWd
+         I0XQ==
+X-Gm-Message-State: AO0yUKWVg9alpr0f7e62ULBpy4nwVURjXru9ZHwoZbv/kH54SSZ//MiO
+        7h5g4G7jkQcEQp6Hcdzz1MhkBg==
+X-Google-Smtp-Source: AK7set8ApWx6kr+SfAyfzkE3zoJmXnq6ygcwKo6GPYa61JZgMWxU/LDFmiGNI9zIm/KYlrc1vCUDPA==
+X-Received: by 2002:a17:903:18d:b0:19a:eb93:6165 with SMTP id z13-20020a170903018d00b0019aeb936165mr27011036plg.22.1678320108014;
+        Wed, 08 Mar 2023 16:01:48 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t18-20020a170902d21200b00185402cfedesm10299288ply.246.2023.03.08.16.01.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 14:43:41 -0800 (PST)
-Date:   Wed, 8 Mar 2023 17:43:39 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
-        James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] mm: userfaultfd: combine 'mode' and 'wp_copy'
- arguments
-Message-ID: <ZAkPmy0EqcW6Mfvn@x1n>
-References: <20230308221932.1548827-1-axelrasmussen@google.com>
- <20230308221932.1548827-4-axelrasmussen@google.com>
+        Wed, 08 Mar 2023 16:01:47 -0800 (PST)
+Message-ID: <640921eb.170a0220.28e72.38c8@mx.google.com>
+X-Google-Original-Message-ID: <202303081601.@keescook>
+Date:   Wed, 8 Mar 2023 16:01:46 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lkft-triage@lists.linaro.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
+        Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests: sigaltstack: fix -Wuninitialized
+References: <20230308195933.806917-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308221932.1548827-4-axelrasmussen@google.com>
+In-Reply-To: <20230308195933.806917-1-ndesaulniers@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-All nitpicks below.
+On Wed, Mar 08, 2023 at 11:59:33AM -0800, Nick Desaulniers wrote:
+> Building sigaltstack with clang via:
+> $ ARCH=x86 make LLVM=1 -C tools/testing/selftests/sigaltstack/
+> 
+> produces the following warning:
+>   warning: variable 'sp' is uninitialized when used here [-Wuninitialized]
+>   if (sp < (unsigned long)sstack ||
+>       ^~
+> 
+> Clang expects these to be declared at global scope; we've fixed this in
+> the kernel proper by using the macro `current_stack_pointer`. This is
+> defined in different headers for different target architectures, so just
+> create a new header that defines the arch-specific register names for
+> the stack pointer register, and define it for more targets (at least the
+> ones that support current_stack_pointer/ARCH_HAS_CURRENT_STACK_POINTER).
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Link: https://lore.kernel.org/lkml/CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com/
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-On Wed, Mar 08, 2023 at 02:19:31PM -0800, Axel Rasmussen wrote:
-> +static inline bool uffd_flags_has_mode(uffd_flags_t flags, enum mfill_atomic_mode expected)
-> +{
-> +	return (flags & MFILL_ATOMIC_MODE_MASK) == ((__force uffd_flags_t) expected);
-> +}
+Looks good!
 
-I would still call it uffd_flags_get_mode() or uffd_flags_mode(), "has"
-sounds a bit like there can be >1 modes set but it's not.
-
-> +
-> +static inline uffd_flags_t uffd_flags_set_mode(uffd_flags_t flags, enum mfill_atomic_mode mode)
-> +{
-> +	return flags | ((__force uffd_flags_t) mode);
-> +}
-
-IIUC this __force mostly won't work in any way because it protects
-e.g. illegal math ops upon it (to only allow bitops, iiuc) but here it's an
-OR so it's always legal..
-
-So I'd just drop it and also clear the mode mask to be very clear it sets
-the mode right, rather than any chance of messing up when set twice:
-
-    flags &= ~MFILL_ATOMIC_MODE_MASK;
-    return flags | mode;
-
-But feel free to ignore this if there's no other reason to repost, I don't
-think it matters a huge deal.
-
-Acked-by: Peter Xu <peterx@redhat.com>
-
-Thanks,
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-Peter Xu
-
+Kees Cook
