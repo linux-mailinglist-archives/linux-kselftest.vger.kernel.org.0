@@ -2,404 +2,456 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACAE86B1DF4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 09:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2E36B1E6C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 09:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjCIIZJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Mar 2023 03:25:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
+        id S230309AbjCIImP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Mar 2023 03:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjCIIYU (ORCPT
+        with ESMTP id S229798AbjCIIlo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:24:20 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BE214EAB;
-        Thu,  9 Mar 2023 00:23:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678350183; x=1709886183;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/mmYgR+89ByI+p2Zr/OCn4pE2TGeXtXXbNuoqCFUfCE=;
-  b=YHz2A9Olouj6Zdn/uHh1CNiozWJ9aHR+/ysxavHGibpEqqpsScHkWezP
-   GIJORlUs99UFYhP/NEsaMVozatW4Prabk5hjM6shGmvFYK7Soeem0tncn
-   ssyL98RvKFIZekLqht1LkGx5fAazsBcWFrnMbTdtEeMp1DFjAzXgefv5F
-   5f1uzdplw3golqEh4c6vPDE2T+tLhpFtVfX1KFyBKuxrw4qjBYQi/IdGL
-   1g8sNLRfot61zplo8+vzuOLx/RNyENtqOi5nf+Y2BDcBKi0zkxQ3sUqN7
-   EcKqCpxZK5yYFTZXQalwFlGmYDkLlOjjMeirMWiWmoxjFaGtCVYD7afgI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="364026232"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="364026232"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:22:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787474161"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="787474161"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2023 00:22:14 -0800
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH v2 5/5] iommu/vt-d: Add nested domain support
-Date:   Thu,  9 Mar 2023 00:22:07 -0800
-Message-Id: <20230309082207.612346-6-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230309082207.612346-1-yi.l.liu@intel.com>
-References: <20230309082207.612346-1-yi.l.liu@intel.com>
+        Thu, 9 Mar 2023 03:41:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636C846B2;
+        Thu,  9 Mar 2023 00:41:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB59BB81E63;
+        Thu,  9 Mar 2023 08:41:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E546C433D2;
+        Thu,  9 Mar 2023 08:41:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678351268;
+        bh=QVGrAEtEA20jSeeD9CYXL6jdG4tabAcxzwnTUP5BMlg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EdYNbpG/+Nq9F1Woli1k/IuiCtejepOr25REBHdGQz0eu/d74qtjfh79hyqbkNxe/
+         HeFortKEo6ivgk2X+Ortda/3fAHwzKmF1MK6uAsTIcHx3U4p/e7tIzDA1Hx3kUGL/G
+         yGpOOd7lWk8i7rGFGd7e9R1+9u++tfIqXUbh0d4mORh5iO/LwD8AOfE5GS1iGrWV2z
+         mK4LWi0hANfJo46zVWm6tXDLoLgIjyaqNrslZWPVYWhgUPZuvoKRU9zcgf7mr0qEl3
+         AF6o1/sA5cKL9ywTOxZDAp6e36WxLz1epm0oLluEpzhld/1ZFlxHMOvuSYqyqu/Fy8
+         AS7ZzBUWPTghQ==
+Date:   Thu, 9 Mar 2023 10:40:52 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        James Houghton <jthoughton@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] mm: userfaultfd: rename functions for clarity +
+ consistency
+Message-ID: <ZAmblL3irV1CRiKs@kernel.org>
+References: <20230308221932.1548827-1-axelrasmussen@google.com>
+ <20230308221932.1548827-2-axelrasmussen@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308221932.1548827-2-axelrasmussen@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+On Wed, Mar 08, 2023 at 02:19:29PM -0800, Axel Rasmussen wrote:
+> The basic problem is, over time we've added new userfaultfd ioctls, and
+> we've refactored the code so functions which used to handle only one
+> case are now re-used to deal with several cases. While this happened, we
+> didn't bother to rename the functions.
+> 
+> Similarly, as we added new functions, we cargo-culted pieces of the
+> now-inconsistent naming scheme, so those functions too ended up with
+> names that don't make a lot of sense.
+> 
+> A key point here is, "copy" in most userfaultfd code refers specifically
+> to UFFDIO_COPY, where we allocate a new page and copy its contents from
+> userspace. There are many functions with "copy" in the name that don't
+> actually do this (at least in some cases).
+> 
+> So, rename things into a consistent scheme. The high level idea is that
+> the call stack for userfaultfd ioctls becomes:
+> 
+> userfaultfd_ioctl
+>   -> userfaultfd_(particular ioctl)
+>     -> mfill_atomic_(particular kind of fill operation)
+>       -> mfill_atomic    /* loops over pages in range */
+>         -> mfill_atomic_pte    /* deals with single pages */
+>           -> mfill_atomic_pte_(particular kind of fill operation)
+>             -> mfill_atomic_install_pte
+> 
+> There are of course some special cases (shmem, hugetlb), but this is the
+> general structure which all function names now adhere to.
+> 
+> Acked-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-This adds nested domain support in the Intel IOMMU driver. It allows to
-allocate and free a nested domain, set the nested domain to a device,
-and synchronize the caches when the userspace managed page tables are
-updated.
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/intel/Makefile |   2 +-
- drivers/iommu/intel/iommu.c  |  38 ++++++----
- drivers/iommu/intel/iommu.h  |  15 ++++
- drivers/iommu/intel/nested.c | 143 +++++++++++++++++++++++++++++++++++
- 4 files changed, 182 insertions(+), 16 deletions(-)
- create mode 100644 drivers/iommu/intel/nested.c
+> ---
+>  fs/userfaultfd.c              | 18 +++----
+>  include/linux/hugetlb.h       | 30 +++++------
+>  include/linux/userfaultfd_k.h | 18 +++----
+>  mm/hugetlb.c                  | 20 +++----
+>  mm/userfaultfd.c              | 98 +++++++++++++++++------------------
+>  5 files changed, 92 insertions(+), 92 deletions(-)
+> 
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 44d1ee429eb0..365bf00dd8dd 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -1741,9 +1741,9 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
+>  	if (uffdio_copy.mode & ~(UFFDIO_COPY_MODE_DONTWAKE|UFFDIO_COPY_MODE_WP))
+>  		goto out;
+>  	if (mmget_not_zero(ctx->mm)) {
+> -		ret = mcopy_atomic(ctx->mm, uffdio_copy.dst, uffdio_copy.src,
+> -				   uffdio_copy.len, &ctx->mmap_changing,
+> -				   uffdio_copy.mode);
+> +		ret = mfill_atomic_copy(ctx->mm, uffdio_copy.dst, uffdio_copy.src,
+> +					uffdio_copy.len, &ctx->mmap_changing,
+> +					uffdio_copy.mode);
+>  		mmput(ctx->mm);
+>  	} else {
+>  		return -ESRCH;
+> @@ -1793,9 +1793,9 @@ static int userfaultfd_zeropage(struct userfaultfd_ctx *ctx,
+>  		goto out;
+>  
+>  	if (mmget_not_zero(ctx->mm)) {
+> -		ret = mfill_zeropage(ctx->mm, uffdio_zeropage.range.start,
+> -				     uffdio_zeropage.range.len,
+> -				     &ctx->mmap_changing);
+> +		ret = mfill_atomic_zeropage(ctx->mm, uffdio_zeropage.range.start,
+> +					   uffdio_zeropage.range.len,
+> +					   &ctx->mmap_changing);
+>  		mmput(ctx->mm);
+>  	} else {
+>  		return -ESRCH;
+> @@ -1903,9 +1903,9 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
+>  		goto out;
+>  
+>  	if (mmget_not_zero(ctx->mm)) {
+> -		ret = mcopy_continue(ctx->mm, uffdio_continue.range.start,
+> -				     uffdio_continue.range.len,
+> -				     &ctx->mmap_changing);
+> +		ret = mfill_atomic_continue(ctx->mm, uffdio_continue.range.start,
+> +					    uffdio_continue.range.len,
+> +					    &ctx->mmap_changing);
+>  		mmput(ctx->mm);
+>  	} else {
+>  		return -ESRCH;
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 7c977d234aba..8f0467bf1cbd 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -158,13 +158,13 @@ unsigned long hugetlb_total_pages(void);
+>  vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+>  			unsigned long address, unsigned int flags);
+>  #ifdef CONFIG_USERFAULTFD
+> -int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
+> -				struct vm_area_struct *dst_vma,
+> -				unsigned long dst_addr,
+> -				unsigned long src_addr,
+> -				enum mcopy_atomic_mode mode,
+> -				struct page **pagep,
+> -				bool wp_copy);
+> +int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
+> +			     struct vm_area_struct *dst_vma,
+> +			     unsigned long dst_addr,
+> +			     unsigned long src_addr,
+> +			     enum mcopy_atomic_mode mode,
+> +			     struct page **pagep,
+> +			     bool wp_copy);
+>  #endif /* CONFIG_USERFAULTFD */
+>  bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
+>  						struct vm_area_struct *vma,
+> @@ -393,14 +393,14 @@ static inline void hugetlb_free_pgd_range(struct mmu_gather *tlb,
+>  }
+>  
+>  #ifdef CONFIG_USERFAULTFD
+> -static inline int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+> -						pte_t *dst_pte,
+> -						struct vm_area_struct *dst_vma,
+> -						unsigned long dst_addr,
+> -						unsigned long src_addr,
+> -						enum mcopy_atomic_mode mode,
+> -						struct page **pagep,
+> -						bool wp_copy)
+> +static inline int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
+> +					   pte_t *dst_pte,
+> +					   struct vm_area_struct *dst_vma,
+> +					   unsigned long dst_addr,
+> +					   unsigned long src_addr,
+> +					   enum mcopy_atomic_mode mode,
+> +					   struct page **pagep,
+> +					   bool wp_copy)
+>  {
+>  	BUG();
+>  	return 0;
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index 3767f18114ef..468080125612 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -61,15 +61,15 @@ extern int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  				    unsigned long dst_addr, struct page *page,
+>  				    bool newly_allocated, bool wp_copy);
+>  
+> -extern ssize_t mcopy_atomic(struct mm_struct *dst_mm, unsigned long dst_start,
+> -			    unsigned long src_start, unsigned long len,
+> -			    atomic_t *mmap_changing, __u64 mode);
+> -extern ssize_t mfill_zeropage(struct mm_struct *dst_mm,
+> -			      unsigned long dst_start,
+> -			      unsigned long len,
+> -			      atomic_t *mmap_changing);
+> -extern ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long dst_start,
+> -			      unsigned long len, atomic_t *mmap_changing);
+> +extern ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long dst_start,
+> +				 unsigned long src_start, unsigned long len,
+> +				 atomic_t *mmap_changing, __u64 mode);
+> +extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
+> +				     unsigned long dst_start,
+> +				     unsigned long len,
+> +				     atomic_t *mmap_changing);
+> +extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
+> +				     unsigned long len, atomic_t *mmap_changing);
+>  extern int mwriteprotect_range(struct mm_struct *dst_mm,
+>  			       unsigned long start, unsigned long len,
+>  			       bool enable_wp, atomic_t *mmap_changing);
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 07abcb6eb203..4c9276549394 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6154,17 +6154,17 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+>  
+>  #ifdef CONFIG_USERFAULTFD
+>  /*
+> - * Used by userfaultfd UFFDIO_COPY.  Based on mcopy_atomic_pte with
+> - * modifications for huge pages.
+> + * Used by userfaultfd UFFDIO_* ioctls. Based on userfaultfd's mfill_atomic_pte
+> + * with modifications for hugetlb pages.
+>   */
+> -int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+> -			    pte_t *dst_pte,
+> -			    struct vm_area_struct *dst_vma,
+> -			    unsigned long dst_addr,
+> -			    unsigned long src_addr,
+> -			    enum mcopy_atomic_mode mode,
+> -			    struct page **pagep,
+> -			    bool wp_copy)
+> +int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
+> +			     pte_t *dst_pte,
+> +			     struct vm_area_struct *dst_vma,
+> +			     unsigned long dst_addr,
+> +			     unsigned long src_addr,
+> +			     enum mcopy_atomic_mode mode,
+> +			     struct page **pagep,
+> +			     bool wp_copy)
+>  {
+>  	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
+>  	struct hstate *h = hstate_vma(dst_vma);
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index 53c3d916ff66..84db5b2fad3a 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -127,13 +127,13 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  	return ret;
+>  }
+>  
+> -static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+> -			    pmd_t *dst_pmd,
+> -			    struct vm_area_struct *dst_vma,
+> -			    unsigned long dst_addr,
+> -			    unsigned long src_addr,
+> -			    struct page **pagep,
+> -			    bool wp_copy)
+> +static int mfill_atomic_pte_copy(struct mm_struct *dst_mm,
+> +				 pmd_t *dst_pmd,
+> +				 struct vm_area_struct *dst_vma,
+> +				 unsigned long dst_addr,
+> +				 unsigned long src_addr,
+> +				 struct page **pagep,
+> +				 bool wp_copy)
+>  {
+>  	void *page_kaddr;
+>  	int ret;
+> @@ -204,10 +204,10 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+>  	goto out;
+>  }
+>  
+> -static int mfill_zeropage_pte(struct mm_struct *dst_mm,
+> -			      pmd_t *dst_pmd,
+> -			      struct vm_area_struct *dst_vma,
+> -			      unsigned long dst_addr)
+> +static int mfill_atomic_pte_zeropage(struct mm_struct *dst_mm,
+> +				     pmd_t *dst_pmd,
+> +				     struct vm_area_struct *dst_vma,
+> +				     unsigned long dst_addr)
+>  {
+>  	pte_t _dst_pte, *dst_pte;
+>  	spinlock_t *ptl;
+> @@ -240,11 +240,11 @@ static int mfill_zeropage_pte(struct mm_struct *dst_mm,
+>  }
+>  
+>  /* Handles UFFDIO_CONTINUE for all shmem VMAs (shared or private). */
+> -static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
+> -				pmd_t *dst_pmd,
+> -				struct vm_area_struct *dst_vma,
+> -				unsigned long dst_addr,
+> -				bool wp_copy)
+> +static int mfill_atomic_pte_continue(struct mm_struct *dst_mm,
+> +				     pmd_t *dst_pmd,
+> +				     struct vm_area_struct *dst_vma,
+> +				     unsigned long dst_addr,
+> +				     bool wp_copy)
+>  {
+>  	struct inode *inode = file_inode(dst_vma->vm_file);
+>  	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
+> @@ -307,10 +307,10 @@ static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address)
+>  
+>  #ifdef CONFIG_HUGETLB_PAGE
+>  /*
+> - * __mcopy_atomic processing for HUGETLB vmas.  Note that this routine is
+> + * mfill_atomic processing for HUGETLB vmas.  Note that this routine is
+>   * called with mmap_lock held, it will release mmap_lock before returning.
+>   */
+> -static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+> +static __always_inline ssize_t mfill_atomic_hugetlb(struct mm_struct *dst_mm,
+>  					      struct vm_area_struct *dst_vma,
+>  					      unsigned long dst_start,
+>  					      unsigned long src_start,
+> @@ -411,7 +411,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+>  			goto out_unlock;
+>  		}
+>  
+> -		err = hugetlb_mcopy_atomic_pte(dst_mm, dst_pte, dst_vma,
+> +		err = hugetlb_mfill_atomic_pte(dst_mm, dst_pte, dst_vma,
+>  					       dst_addr, src_addr, mode, &page,
+>  					       wp_copy);
+>  
+> @@ -463,7 +463,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+>  }
+>  #else /* !CONFIG_HUGETLB_PAGE */
+>  /* fail at build time if gcc attempts to use this */
+> -extern ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+> +extern ssize_t mfill_atomic_hugetlb(struct mm_struct *dst_mm,
+>  				      struct vm_area_struct *dst_vma,
+>  				      unsigned long dst_start,
+>  				      unsigned long src_start,
+> @@ -484,8 +484,8 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+>  	ssize_t err;
+>  
+>  	if (mode == MCOPY_ATOMIC_CONTINUE) {
+> -		return mcontinue_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+> -					    wp_copy);
+> +		return mfill_atomic_pte_continue(dst_mm, dst_pmd, dst_vma,
+> +						 dst_addr, wp_copy);
+>  	}
+>  
+>  	/*
+> @@ -500,11 +500,11 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+>  	 */
+>  	if (!(dst_vma->vm_flags & VM_SHARED)) {
+>  		if (mode == MCOPY_ATOMIC_NORMAL)
+> -			err = mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma,
+> -					       dst_addr, src_addr, page,
+> -					       wp_copy);
+> +			err = mfill_atomic_pte_copy(dst_mm, dst_pmd, dst_vma,
+> +						    dst_addr, src_addr, page,
+> +						    wp_copy);
+>  		else
+> -			err = mfill_zeropage_pte(dst_mm, dst_pmd,
+> +			err = mfill_atomic_pte_zeropage(dst_mm, dst_pmd,
+>  						 dst_vma, dst_addr);
+>  	} else {
+>  		err = shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
+> @@ -516,13 +516,13 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+>  	return err;
+>  }
+>  
+> -static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+> -					      unsigned long dst_start,
+> -					      unsigned long src_start,
+> -					      unsigned long len,
+> -					      enum mcopy_atomic_mode mcopy_mode,
+> -					      atomic_t *mmap_changing,
+> -					      __u64 mode)
+> +static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
+> +					    unsigned long dst_start,
+> +					    unsigned long src_start,
+> +					    unsigned long len,
+> +					    enum mcopy_atomic_mode mcopy_mode,
+> +					    atomic_t *mmap_changing,
+> +					    __u64 mode)
+>  {
+>  	struct vm_area_struct *dst_vma;
+>  	ssize_t err;
+> @@ -588,9 +588,9 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+>  	 * If this is a HUGETLB vma, pass off to appropriate routine
+>  	 */
+>  	if (is_vm_hugetlb_page(dst_vma))
+> -		return  __mcopy_atomic_hugetlb(dst_mm, dst_vma, dst_start,
+> -					       src_start, len, mcopy_mode,
+> -					       wp_copy);
+> +		return  mfill_atomic_hugetlb(dst_mm, dst_vma, dst_start,
+> +					     src_start, len, mcopy_mode,
+> +					     wp_copy);
+>  
+>  	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
+>  		goto out_unlock;
+> @@ -688,26 +688,26 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+>  	return copied ? copied : err;
+>  }
+>  
+> -ssize_t mcopy_atomic(struct mm_struct *dst_mm, unsigned long dst_start,
+> -		     unsigned long src_start, unsigned long len,
+> -		     atomic_t *mmap_changing, __u64 mode)
+> +ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long dst_start,
+> +			  unsigned long src_start, unsigned long len,
+> +			  atomic_t *mmap_changing, __u64 mode)
+>  {
+> -	return __mcopy_atomic(dst_mm, dst_start, src_start, len,
+> -			      MCOPY_ATOMIC_NORMAL, mmap_changing, mode);
+> +	return mfill_atomic(dst_mm, dst_start, src_start, len,
+> +			    MCOPY_ATOMIC_NORMAL, mmap_changing, mode);
+>  }
+>  
+> -ssize_t mfill_zeropage(struct mm_struct *dst_mm, unsigned long start,
+> -		       unsigned long len, atomic_t *mmap_changing)
+> +ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm, unsigned long start,
+> +			      unsigned long len, atomic_t *mmap_changing)
+>  {
+> -	return __mcopy_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_ZEROPAGE,
+> -			      mmap_changing, 0);
+> +	return mfill_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_ZEROPAGE,
+> +			    mmap_changing, 0);
+>  }
+>  
+> -ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long start,
+> -		       unsigned long len, atomic_t *mmap_changing)
+> +ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
+> +			      unsigned long len, atomic_t *mmap_changing)
+>  {
+> -	return __mcopy_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_CONTINUE,
+> -			      mmap_changing, 0);
+> +	return mfill_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_CONTINUE,
+> +			    mmap_changing, 0);
+>  }
+>  
+>  long uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *dst_vma,
+> -- 
+> 2.40.0.rc1.284.g88254d51c5-goog
+> 
 
-diff --git a/drivers/iommu/intel/Makefile b/drivers/iommu/intel/Makefile
-index 7af3b8a4f2a0..5dabf081a779 100644
---- a/drivers/iommu/intel/Makefile
-+++ b/drivers/iommu/intel/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_DMAR_TABLE) += dmar.o
--obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o
-+obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o nested.o
- obj-$(CONFIG_DMAR_TABLE) += trace.o cap_audit.o
- obj-$(CONFIG_DMAR_PERF) += perf.o
- obj-$(CONFIG_INTEL_IOMMU_DEBUGFS) += debugfs.o
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 004406209793..89cc7095afed 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -277,7 +277,6 @@ static LIST_HEAD(dmar_satc_units);
- #define for_each_rmrr_units(rmrr) \
- 	list_for_each_entry(rmrr, &dmar_rmrr_units, list)
- 
--static void device_block_translation(struct device *dev);
- static void intel_iommu_domain_free(struct iommu_domain *domain);
- 
- int dmar_disabled = !IS_ENABLED(CONFIG_INTEL_IOMMU_DEFAULT_ON);
-@@ -555,7 +554,7 @@ static unsigned long domain_super_pgsize_bitmap(struct dmar_domain *domain)
- }
- 
- /* Some capabilities may be different across iommus */
--static void domain_update_iommu_cap(struct dmar_domain *domain)
-+void domain_update_iommu_cap(struct dmar_domain *domain)
- {
- 	domain_update_iommu_coherency(domain);
- 	domain->iommu_superpage = domain_update_iommu_superpage(domain, NULL);
-@@ -1498,10 +1497,10 @@ static void iommu_flush_dev_iotlb(struct dmar_domain *domain,
- 	spin_unlock_irqrestore(&domain->lock, flags);
- }
- 
--static void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
--				  struct dmar_domain *domain,
--				  unsigned long pfn, unsigned int pages,
--				  int ih, int map)
-+void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
-+			   struct dmar_domain *domain,
-+			   unsigned long pfn, unsigned int pages,
-+			   int ih, int map)
- {
- 	unsigned int aligned_pages = __roundup_pow_of_two(pages);
- 	unsigned int mask = ilog2(aligned_pages);
-@@ -1573,7 +1572,7 @@ static inline void __mapping_notify_one(struct intel_iommu *iommu,
- 		iommu_flush_write_buffer(iommu);
- }
- 
--static void intel_flush_iotlb_all(struct iommu_domain *domain)
-+void intel_flush_iotlb_all(struct iommu_domain *domain)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	struct iommu_domain_info *info;
-@@ -1765,8 +1764,7 @@ static struct dmar_domain *alloc_domain(unsigned int type)
- 	return domain;
- }
- 
--static int domain_attach_iommu(struct dmar_domain *domain,
--			       struct intel_iommu *iommu)
-+int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
- {
- 	struct iommu_domain_info *info, *curr;
- 	unsigned long ndomains;
-@@ -1815,8 +1813,7 @@ static int domain_attach_iommu(struct dmar_domain *domain,
- 	return ret;
- }
- 
--static void domain_detach_iommu(struct dmar_domain *domain,
--				struct intel_iommu *iommu)
-+void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
- {
- 	struct iommu_domain_info *info;
- 
-@@ -4103,7 +4100,7 @@ static void dmar_remove_one_dev_info(struct device *dev)
-  * all DMA requests without PASID from the device are blocked. If the page
-  * table has been set, clean up the data structures.
-  */
--static void device_block_translation(struct device *dev)
-+void device_block_translation(struct device *dev)
- {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct intel_iommu *iommu = info->iommu;
-@@ -4204,14 +4201,24 @@ static struct iommu_domain *intel_iommu_domain_alloc(unsigned type)
- 	return NULL;
- }
- 
-+static struct iommu_domain *
-+intel_iommu_domain_alloc_user(struct device *dev, struct iommu_domain *parent,
-+			      const void *user_data)
-+{
-+	if (parent)
-+		return intel_nested_domain_alloc(parent, user_data);
-+	else
-+		return iommu_domain_alloc(dev->bus);
-+}
-+
- static void intel_iommu_domain_free(struct iommu_domain *domain)
- {
- 	if (domain != &si_domain->domain && domain != &blocking_domain)
- 		domain_exit(to_dmar_domain(domain));
- }
- 
--static int prepare_domain_attach_device(struct iommu_domain *domain,
--					struct device *dev)
-+int prepare_domain_attach_device(struct iommu_domain *domain,
-+				 struct device *dev)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	struct intel_iommu *iommu;
-@@ -4450,7 +4457,7 @@ static void domain_set_force_snooping(struct dmar_domain *domain)
- 						     PASID_RID2PASID);
- }
- 
--static bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain)
-+bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	unsigned long flags;
-@@ -4801,6 +4808,7 @@ const struct iommu_ops intel_iommu_ops = {
- 	.capable		= intel_iommu_capable,
- 	.hw_info		= intel_iommu_hw_info,
- 	.domain_alloc		= intel_iommu_domain_alloc,
-+	.domain_alloc_user	= intel_iommu_domain_alloc_user,
- 	.probe_device		= intel_iommu_probe_device,
- 	.probe_finalize		= intel_iommu_probe_finalize,
- 	.release_device		= intel_iommu_release_device,
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 9446e17dd202..661fb5050e2d 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -848,6 +848,19 @@ void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did, u64 granu,
- 
- int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
- 		   unsigned int count, unsigned long options);
-+int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
-+void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
-+void device_block_translation(struct device *dev);
-+int prepare_domain_attach_device(struct iommu_domain *domain,
-+				 struct device *dev);
-+bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain);
-+void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
-+			   struct dmar_domain *domain,
-+			   unsigned long pfn, unsigned int pages,
-+			   int ih, int map);
-+void intel_flush_iotlb_all(struct iommu_domain *domain);
-+void domain_update_iommu_cap(struct dmar_domain *domain);
-+
- /*
-  * Options used in qi_submit_sync:
-  * QI_OPT_WAIT_DRAIN - Wait for PRQ drain completion, spec 6.5.2.8.
-@@ -860,6 +873,8 @@ void *alloc_pgtable_page(int node, gfp_t gfp);
- void free_pgtable_page(void *vaddr);
- void iommu_flush_write_buffer(struct intel_iommu *iommu);
- struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
-+struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
-+					       const void *data);
- 
- #ifdef CONFIG_INTEL_IOMMU_SVM
- extern void intel_svm_check(struct intel_iommu *iommu);
-diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
-new file mode 100644
-index 000000000000..64441d11a84d
---- /dev/null
-+++ b/drivers/iommu/intel/nested.c
-@@ -0,0 +1,143 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * nested.c - nested mode translation support
-+ *
-+ * Copyright (C) 2023 Intel Corporation
-+ *
-+ * Author: Lu Baolu <baolu.lu@linux.intel.com>
-+ *         Jacob Pan <jacob.jun.pan@linux.intel.com>
-+ */
-+
-+#define pr_fmt(fmt)	"DMAR: " fmt
-+
-+#include <linux/iommu.h>
-+#include <linux/pci.h>
-+#include <linux/pci-ats.h>
-+
-+#include "iommu.h"
-+#include "pasid.h"
-+
-+static int intel_nested_attach_dev(struct iommu_domain *domain,
-+				   struct device *dev)
-+{
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-+	struct intel_iommu *iommu = info->iommu;
-+	unsigned long flags;
-+	int ret = 0;
-+
-+	if (info->domain)
-+		device_block_translation(dev);
-+
-+	/* Is s2_domain compatible with this IOMMU? */
-+	ret = prepare_domain_attach_device(&dmar_domain->s2_domain->domain, dev);
-+	if (ret) {
-+		dev_err_ratelimited(dev, "s2 domain is not compatible\n");
-+		return ret;
-+	}
-+
-+	ret = domain_attach_iommu(dmar_domain, iommu);
-+	if (ret) {
-+		dev_err_ratelimited(dev, "Failed to attach domain to iommu\n");
-+		return ret;
-+	}
-+
-+	ret = intel_pasid_setup_nested(iommu, dev,
-+				       PASID_RID2PASID, dmar_domain);
-+	if (ret) {
-+		domain_detach_iommu(dmar_domain, iommu);
-+		dev_err_ratelimited(dev, "Failed to setup pasid entry\n");
-+		return ret;
-+	}
-+
-+	info->domain = dmar_domain;
-+	spin_lock_irqsave(&dmar_domain->lock, flags);
-+	list_add(&info->link, &dmar_domain->devices);
-+	spin_unlock_irqrestore(&dmar_domain->lock, flags);
-+	domain_update_iommu_cap(dmar_domain);
-+
-+	return 0;
-+}
-+
-+static void intel_nested_domain_free(struct iommu_domain *domain)
-+{
-+	kfree(to_dmar_domain(domain));
-+}
-+
-+static void intel_nested_invalidate(struct device *dev,
-+				    struct dmar_domain *domain,
-+				    void *user_data)
-+{
-+	struct iommu_hwpt_invalidate_intel_vtd *inv_info = user_data;
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+	struct intel_iommu *iommu = info->iommu;
-+
-+	if (WARN_ON(!user_data))
-+		return;
-+
-+	switch (inv_info->granularity) {
-+	case IOMMU_VTD_QI_GRAN_ADDR:
-+		if (inv_info->granule_size != VTD_PAGE_SIZE ||
-+		    !IS_ALIGNED(inv_info->addr, VTD_PAGE_SIZE)) {
-+			dev_err_ratelimited(dev, "Invalid invalidation address 0x%llx\n",
-+					    inv_info->addr);
-+			return;
-+		}
-+
-+		iommu_flush_iotlb_psi(iommu, domain,
-+				      inv_info->addr >> VTD_PAGE_SHIFT,
-+				      inv_info->nb_granules, 1, 0);
-+		break;
-+	case IOMMU_VTD_QI_GRAN_DOMAIN:
-+		intel_flush_iotlb_all(&domain->domain);
-+		break;
-+	default:
-+		dev_err_ratelimited(dev, "Unsupported IOMMU invalidation type %d\n",
-+				    inv_info->granularity);
-+		break;
-+	}
-+}
-+
-+static void intel_nested_cache_invalidate_user(struct iommu_domain *domain,
-+					       void *user_data)
-+{
-+	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-+	struct device_domain_info *info;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&dmar_domain->lock, flags);
-+	list_for_each_entry(info, &dmar_domain->devices, link)
-+		intel_nested_invalidate(info->dev, dmar_domain,
-+					user_data);
-+	spin_unlock_irqrestore(&dmar_domain->lock, flags);
-+}
-+
-+static const struct iommu_domain_ops intel_nested_domain_ops = {
-+	.attach_dev		= intel_nested_attach_dev,
-+	.cache_invalidate_user	= intel_nested_cache_invalidate_user,
-+	.free			= intel_nested_domain_free,
-+	.enforce_cache_coherency = intel_iommu_enforce_cache_coherency,
-+};
-+
-+struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
-+					       const void *user_data)
-+{
-+	const struct iommu_hwpt_intel_vtd *vtd = user_data;
-+	struct dmar_domain *domain;
-+
-+	domain = kzalloc(sizeof(*domain), GFP_KERNEL_ACCOUNT);
-+	if (!domain)
-+		return NULL;
-+
-+	domain->use_first_level = true;
-+	domain->s2_domain = to_dmar_domain(s2_domain);
-+	domain->s1_pgtbl = vtd->pgtbl_addr;
-+	domain->s1_cfg = *vtd;
-+	domain->domain.ops = &intel_nested_domain_ops;
-+	domain->domain.type = IOMMU_DOMAIN_NESTED;
-+	INIT_LIST_HEAD(&domain->devices);
-+	spin_lock_init(&domain->lock);
-+	xa_init(&domain->iommu_array);
-+
-+	return &domain->domain;
-+}
 -- 
-2.34.1
-
+Sincerely yours,
+Mike.
