@@ -2,306 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7726D6B25E5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 14:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9EB6B260B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 15:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjCINxJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Mar 2023 08:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
+        id S231490AbjCIOAZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Mar 2023 09:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjCINwn (ORCPT
+        with ESMTP id S231657AbjCIN76 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:52:43 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CD619109;
-        Thu,  9 Mar 2023 05:52:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678369940; x=1709905940;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ip+6Qn6pHtw8f5LnG0WQBpWF3slJzUO6nkNpuzd32f8=;
-  b=mWih5aCxCmTumWemjlBVROPuPI/+Jgfg19d6G+fRvwpE6Sd6KtID5Blq
-   O+WY+immxEh3jcQFklsFfM0/Cx14PPBa7Z+npqWYac0WqK+n5pqDbqJhW
-   qvSiLNu527moe7Yo7KwR1FHDmBP24jyun3nYiS8hz/LWXOCY4wlvFAJr/
-   Opyhyr8l2v087hB+dxfb2WcOj7wCjKuzoInCyGlm5XHT8sX34Af6P3djw
-   sfV7nfX97auXAt8esitAHKMOIZxgCF4pYHO2DPhUTyFNQRdfo3hE07o4i
-   2cd3+nV+nTMtNY5K6FW+WgBSGl5YG6WFv3JSzvMqEihKBlH4hKBW48JJQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="338783674"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="338783674"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 05:50:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="670731316"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="670731316"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.210.74]) ([10.254.210.74])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 05:50:20 -0800
-Message-ID: <6c1b221e-df8d-4b82-10e5-aa3027819d45@linux.intel.com>
-Date:   Thu, 9 Mar 2023 21:50:18 +0800
+        Thu, 9 Mar 2023 08:59:58 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB78DD369;
+        Thu,  9 Mar 2023 05:57:38 -0800 (PST)
+Received: from localhost.localdomain (unknown [39.45.145.7])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 315DB660302F;
+        Thu,  9 Mar 2023 13:57:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678370256;
+        bh=UaUIMl6MjswHfwBbA5lFzdwWz//seTzFcyEUoT9+TRI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YsCI1ry3x1PRroOtS4+zcq353ETgtVQJ6lRBij0S6jyvS+SiEKQk+oRF8OPNvbChN
+         PQg8zVJLaAcD01quMKibipn7OcPbRk3NX/CzRVhJD8I3EufhOmJ9WDPYhS0A+ddVQK
+         VVxlDDaPJQPisl646RMtMDwS3MRcXDqV9YGue8I1RTCzIj3KHkGHhcsB1DKoXaubra
+         PSM3Kyh9cD65rx9nBWftM6hIIHmc+/IDA8soeUsEdrsxVqWj5tuNPYSOP+uWA+RDBM
+         SJ7l3UT7Fe4u8gZFwhPm5tX7tmokU5GzFRf00UrWW729EWJQ0MYnV7drctiohBuxfe
+         FAOQK2OJxmoPQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: [PATCH v11 0/7] Implement IOCTL to get and optionally clear info about PTEs
+Date:   Thu,  9 Mar 2023 18:57:11 +0500
+Message-Id: <20230309135718.1490461-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
-        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-        peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
-Content-Language: en-US
-To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
-        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
-        robin.murphy@arm.com
-References: <20230309075358.571567-1-yi.l.liu@intel.com>
- <20230309075358.571567-4-yi.l.liu@intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230309075358.571567-4-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/3/9 15:53, Yi Liu wrote:
-> Under nested IOMMU translation, userspace owns the stage-1 translation
-> table (e.g. the stage-1 page table of Intel VT-d or the context table
-> of ARM SMMUv3, and etc.). Stage-1 translation tables are vendor specific,
-> and needs to be compatiable with the underlying IOMMU hardware. Hence,
-> userspace should know the IOMMU hardware capability before creating and
-> configuring the stage-1 translation table to kernel.
-> 
-> This adds IOMMU_DEVICE_GET_HW_INFO to query the IOMMU hardware information
-> for a given device. The returned data is vendor specific, userspace needs
-> to decode it with the structure mapped by the @out_data_type field.
-> 
-> As only physical devices have IOMMU hardware, so this will return error
-> if the given device is not a physical device.
-> 
-> Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> ---
->   drivers/iommu/iommufd/device.c          | 74 +++++++++++++++++++++++++
->   drivers/iommu/iommufd/iommufd_private.h |  1 +
->   drivers/iommu/iommufd/main.c            |  3 +
->   include/uapi/linux/iommufd.h            | 40 +++++++++++++
->   4 files changed, 118 insertions(+)
-> 
-> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> index c10e02f6a0be..6948539488a5 100644
-> --- a/drivers/iommu/iommufd/device.c
-> +++ b/drivers/iommu/iommufd/device.c
-> @@ -257,6 +257,80 @@ struct iommufd_ctx *iommufd_device_to_ictx(struct iommufd_device *idev)
->   }
->   EXPORT_SYMBOL_NS_GPL(iommufd_device_to_ictx, IOMMUFD);
->   
-> +static int iommufd_zero_fill_user(u64 ptr, int bytes)
-> +{
-> +	int index = 0;
-> +
-> +	for (; index < bytes; index++) {
-> +		if (put_user(0, (uint8_t __user *)(ptr + index)))
-> +			return -EFAULT;
-> +	}
-> +	return 0;
-> +}
-> +
-> +int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd)
-> +{
-> +	struct iommu_hw_info *cmd = ucmd->cmd;
-> +	struct iommufd_device *idev;
-> +	const struct iommu_ops *ops;
-> +	void *data;
-> +	unsigned int length, data_len;
-> +	int rc;
+These patches are based on next-20230307 and UFFD_FEATURE_WP_UNPOPULATED
+patches from Peter.
 
-Reverse christmas tree order for declarations.
+*Changes in v11*
+- Rebase on top of next-20230307
+- Base patches on UFFD_FEATURE_WP_UNPOPULATED (https://lore.kernel.org/all/20230306213925.617814-1-peterx@redhat.com)
+- Do a lot of cosmetic changes and review updates
+- Remove ENGAGE_WP + ! GET operation as it can be performed with UFFDIO_WRITEPROTECT
 
-> +
-> +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
-> +		return -EOPNOTSUPP;
-> +
-> +	idev = iommufd_get_device(ucmd, cmd->dev_id);
-> +	if (IS_ERR(idev))
-> +		return PTR_ERR(idev);
-> +
-> +	ops = dev_iommu_ops(idev->dev);
-> +	if (!ops || !ops->hw_info) {
+*Changes in v10*
+- Add specific condition to return error if hugetlb is used with wp
+  async
+- Move changes in tools/include/uapi/linux/fs.h to separate patch
+- Add documentation
 
-dev_iommu_ops() will never return a NULL.
+*Changes in v9:*
+- Correct fault resolution for userfaultfd wp async
+- Fix build warnings and errors which were happening on some configs
+- Simplify pagemap ioctl's code
 
-Need below check
+*Changes in v8:*
+- Update uffd async wp implementation
+- Improve PAGEMAP_IOCTL implementation
 
-	dev->iommu && dev->iommu->iommu_dev
+*Changes in v7:*
+- Add uffd wp async
+- Update the IOCTL to use uffd under the hood instead of soft-dirty
+  flags
 
-before dev_iommu_ops(). Perhaps something like below?
+Hello,
 
-	if (!dev->iommu || !dev->iommu->iommu_dev)
-		return -EINVAL;
+Note:
+Soft-dirty pages and pages which have been written-to are synonyms. As
+kernel already has soft-dirty feature inside which we have given up to
+use, we are using written-to terminology while using UFFD async WP under
+the hood.
 
-	ops = dev_iommu_ops(idev->dev);
-	if (!ops->hw_info)
-		return -ENODEV;
+This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+the info about page table entries. The following operations are
+supported in this ioctl:
+- Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+  file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+  (PAGE_IS_SWAPPED).
+- Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+  pages have been written-to.
+- Find pages which have been written-to and write protect the pages
+  (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
 
-> +		rc = -EOPNOTSUPP;
-> +		goto out_put;
-> +	}
-> +
-> +	/* driver has hw_info callback should have a unique driver_type */
-> +	if (WARN_ON(ops->driver_type == IOMMU_HW_INFO_TYPE_DEFAULT)) {
+It is possible to find and clear soft-dirty pages entirely in userspace.
+But it isn't efficient:
+- The mprotect and SIGSEGV handler for bookkeeping
+- The userfaultfd wp (synchronous) with the handler for bookkeeping
 
-If so, perhaps IOMMU_HW_INFO_TYPE_INVALID is more readable?
+Some benchmarks can be seen here[1]. This series adds features that weren't
+present earlier:
+- There is no atomic get soft-dirty/Written-to status and clear present in
+  the kernel.
+- The pages which have been written-to can not be found in accurate way.
+  (Kernel's soft-dirty PTE bit + sof_dirty VMA bit shows more soft-dirty
+  pages than there actually are.)
 
-I'm not sure if a calltrace is really necessary here. If not, perhaps,
+Historically, soft-dirty PTE bit tracking has been used in the CRIU
+project. The procfs interface is enough for finding the soft-dirty bit
+status and clearing the soft-dirty bit of all the pages of a process.
+We have the use case where we need to track the soft-dirty PTE bit for
+only specific pages on-demand. We need this tracking and clear mechanism
+of a region of memory while the process is running to emulate the
+getWriteWatch() syscall of Windows.
 
-	if (ops->driver_type == IOMMU_HW_INFO_TYPE_DEFAULT) {
-		pr_warn_ratelimited("iommu driver set an invalid type\n");
-		rc = -ENODEV;
-		goto out_put;
-	}
+*(Moved to using UFFD instead of soft-dirtyi feature to find pages which
+have been written-to from v7 patch series)*:
+Stop using the soft-dirty flags for finding which pages have been
+written to. It is too delicate and wrong as it shows more soft-dirty
+pages than the actual soft-dirty pages. There is no interest in
+correcting it [2][3] as this is how the feature was written years ago.
+It shouldn't be updated to changed behaviour. Peter Xu has suggested
+using the async version of the UFFD WP [4] as it is based inherently
+on the PTEs.
 
-> +		rc = -EOPNOTSUPP;
-> +		goto out_put;
-> +	}
-> +
-> +	data = ops->hw_info(idev->dev, &data_len);
-> +	if (IS_ERR(data)) {
-> +		rc = PTR_ERR(data);
-> +		goto out_put;
-> +	}
-> +
-> +	length = min(cmd->data_len, data_len);
-> +	if (copy_to_user(u64_to_user_ptr(cmd->data_ptr), data, length)) {
-> +		rc = -EFAULT;
-> +		goto out_free_data;
-> +	}
-> +
-> +	/*
-> +	 * Zero the trailing bytes if the user buffer is bigger than the
-> +	 * data size kernel actually has.
-> +	 */
-> +	if (length < cmd->data_len) {
-> +		rc = iommufd_zero_fill_user(cmd->data_ptr + length,
-> +					    cmd->data_len - length);
-> +		if (rc)
-> +			goto out_free_data;
-> +	}
-> +
-> +	cmd->out_data_type = ops->driver_type;
-> +	cmd->data_len = length;
-> +
-> +	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-> +
-> +out_free_data:
-> +	kfree(data);
-> +out_put:
-> +	iommufd_put_object(&idev->obj);
-> +	return rc;
-> +}
-> +
->   static int iommufd_group_setup_msi(struct iommufd_group *igroup,
->   				   struct iommufd_hw_pagetable *hwpt)
->   {
-> diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-> index b18f843ad6a4..05b5ad66f716 100644
-> --- a/drivers/iommu/iommufd/iommufd_private.h
-> +++ b/drivers/iommu/iommufd/iommufd_private.h
-> @@ -307,6 +307,7 @@ iommufd_get_device(struct iommufd_ucmd *ucmd, u32 id)
->   }
->   
->   void iommufd_device_destroy(struct iommufd_object *obj);
-> +int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd);
->   
->   struct iommufd_access {
->   	struct iommufd_object obj;
-> diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-> index 694da191e4b1..f079c0bda46b 100644
-> --- a/drivers/iommu/iommufd/main.c
-> +++ b/drivers/iommu/iommufd/main.c
-> @@ -262,6 +262,7 @@ static int iommufd_option(struct iommufd_ucmd *ucmd)
->   union ucmd_buffer {
->   	struct iommu_destroy destroy;
->   	struct iommu_hwpt_alloc hwpt;
-> +	struct iommu_hw_info info;
->   	struct iommu_ioas_alloc alloc;
->   	struct iommu_ioas_allow_iovas allow_iovas;
->   	struct iommu_ioas_copy ioas_copy;
-> @@ -295,6 +296,8 @@ static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
->   	IOCTL_OP(IOMMU_DESTROY, iommufd_destroy, struct iommu_destroy, id),
->   	IOCTL_OP(IOMMU_HWPT_ALLOC, iommufd_hwpt_alloc, struct iommu_hwpt_alloc,
->   		 __reserved),
-> +	IOCTL_OP(IOMMU_DEVICE_GET_HW_INFO, iommufd_device_get_hw_info,
-> +		 struct iommu_hw_info, __reserved),
->   	IOCTL_OP(IOMMU_IOAS_ALLOC, iommufd_ioas_alloc_ioctl,
->   		 struct iommu_ioas_alloc, out_ioas_id),
->   	IOCTL_OP(IOMMU_IOAS_ALLOW_IOVAS, iommufd_ioas_allow_iovas,
-> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-> index 955cbef640da..4ac525897b82 100644
-> --- a/include/uapi/linux/iommufd.h
-> +++ b/include/uapi/linux/iommufd.h
-> @@ -46,6 +46,7 @@ enum {
->   	IOMMUFD_CMD_OPTION,
->   	IOMMUFD_CMD_VFIO_IOAS,
->   	IOMMUFD_CMD_HWPT_ALLOC,
-> +	IOMMUFD_CMD_DEVICE_GET_HW_INFO,
->   };
->   
->   /**
-> @@ -377,4 +378,43 @@ struct iommu_hwpt_alloc {
->   enum iommu_hw_info_type {
->   	IOMMU_HW_INFO_TYPE_DEFAULT,
->   };
-> +
-> +/**
-> + * struct iommu_hw_info - ioctl(IOMMU_DEVICE_GET_HW_INFO)
-> + * @size: sizeof(struct iommu_hw_info)
-> + * @flags: Must be 0
-> + * @dev_id: The device being attached to the iommufd
-> + * @data_len: Input the length of the user buffer in bytes. Output the
-> + *            length of data filled to the user buffer.
-> + * @data_ptr: Pointer to the type specific structure
-> + * @out_data_type: Output the iommu hardware info type, it is one of
-> + *                 enum iommu_hw_info_type.
-> + * @__reserved: Must be 0
-> + *
-> + * Query the hardware iommu information for given device which has been
-> + * bound to iommufd. @data_len is the size of the buffer which captures
-> + * iommu type specific data and the data will be filled. Trailing bytes
-> + * are zeroed if the user buffer is larger than the data kernel has.
-> + *
-> + * The type specific data would be used to sync capability between the
-> + * vIOMMU and the hardware IOMMU. e.g. nested translation requires to
-> + * check the hardware IOMMU capability, since a stage-1 translation table
-> + * is owned by user but used by hardware IOMMU.
-> + *
-> + * The @out_data_type will be filled if the ioctl succeeds. It would
-> + * be used to decode the data filled in the buffer pointed by @data_ptr.
-> + *
-> + * This is only available for the physical devices bound to iommufd as
-> + * only physical devices can have hardware IOMMU.
-> + */
-> +struct iommu_hw_info {
-> +	__u32 size;
-> +	__u32 flags;
-> +	__u32 dev_id;
-> +	__u32 data_len;
-> +	__aligned_u64 data_ptr;
-> +	__u32 out_data_type;
-> +	__u32 __reserved;
-> +};
-> +#define IOMMU_DEVICE_GET_HW_INFO _IO(IOMMUFD_TYPE, IOMMUFD_CMD_DEVICE_GET_HW_INFO)
->   #endif
+So in this patch series, I've added a new mode to the UFFD which is
+asynchronous version of the write protect. When this variant of the
+UFFD WP is used, the page faults are resolved automatically by the
+kernel. The pages which have been written-to can be found by reading
+pagemap file (!PM_UFFD_WP). This feature can be used successfully to
+find which pages have been written to from the time the pages were
+write protected. This works just like the soft-dirty flag without
+showing any extra pages which aren't soft-dirty in reality.
 
-Other look good to me.
+The information related to pages if the page is file mapped, present and
+swapped is required for the CRIU project [5][6]. The addition of the
+required mask, any mask, excluded mask and return masks are also required
+for the CRIU project [5].
 
-Best regards,
-baolu
+The IOCTL returns the addresses of the pages which match the specific
+masks. The page addresses are returned in struct page_region in a compact
+form. The max_pages is needed to support a use case where user only wants
+to get a specific number of pages. So there is no need to find all the
+pages of interest in the range when max_pages is specified. The IOCTL
+returns when the maximum number of the pages are found. The max_pages is
+optional. If max_pages is specified, it must be equal or greater than the
+vec_size. This restriction is needed to handle worse case when one
+page_region only contains info of one page and it cannot be compacted.
+This is needed to emulate the Windows getWriteWatch() syscall.
+
+The patch series include the detailed selftest which can be used as an
+example for the uffd async wp test and PAGEMAP_IOCTL. It shows the
+interface usages as well.
+
+[1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+[2] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+[3] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+[4] https://lore.kernel.org/all/Y6Hc2d+7eTKs7AiH@x1n
+[5] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com/
+[6] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com/
+
+Regards,
+Muhammad Usama Anjum
+
+Muhammad Usama Anjum (7):
+  userfaultfd: Add UFFD WP Async support
+  userfaultfd: Define dummy uffd_wp_range()
+  userfaultfd: update documentation to describe UFFD_FEATURE_WP_ASYNC
+  fs/proc/task_mmu: Implement IOCTL to get and optionally clear info
+    about PTEs
+  tools headers UAPI: Update linux/fs.h with the kernel sources
+  mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
+  selftests: mm: add pagemap ioctl tests
+
+ Documentation/admin-guide/mm/pagemap.rst     |  56 ++
+ Documentation/admin-guide/mm/userfaultfd.rst |  21 +
+ fs/proc/task_mmu.c                           | 366 ++++++++
+ fs/userfaultfd.c                             |  25 +-
+ include/linux/userfaultfd_k.h                |  14 +
+ include/uapi/linux/fs.h                      |  53 ++
+ include/uapi/linux/userfaultfd.h             |  11 +-
+ mm/memory.c                                  |  27 +-
+ tools/include/uapi/linux/fs.h                |  53 ++
+ tools/testing/selftests/mm/.gitignore        |   1 +
+ tools/testing/selftests/mm/Makefile          |   4 +-
+ tools/testing/selftests/mm/config            |   1 +
+ tools/testing/selftests/mm/pagemap_ioctl.c   | 920 +++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh    |   4 +
+ 14 files changed, 1549 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/pagemap_ioctl.c
+ mode change 100644 => 100755 tools/testing/selftests/mm/run_vmtests.sh
+
+-- 
+2.39.2
+
