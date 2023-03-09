@@ -2,103 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17AF6B2C59
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 18:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD08D6B2E02
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 20:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCIRuo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Mar 2023 12:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S229801AbjCIT6Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Mar 2023 14:58:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjCIRuh (ORCPT
+        with ESMTP id S229606AbjCIT6Y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:50:37 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4537F6B43;
-        Thu,  9 Mar 2023 09:50:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678384235; x=1709920235;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ogVypCdkPt8E5X9bDUGx7JSe5g2+nmoHHjkYAcaFWFg=;
-  b=nUHKITiAJVDNLlPabHZzAzGakVZaLNBYVATMvCMy/VQYQ5c556EjDgk5
-   kThnEpGQhS0KjVDgeMwN0Lp2UEvJelKHVcMA61FTMldUTcxYGt8M4vd2S
-   Osd0iTjrnJjTvCiy9iFzVZBxCtv0Kc6vNAk/+Hu2MVWr2Ie0qx4/d2dKe
-   hZA1/ck+HBlPt3DZOyJG1i0JtwFrrPkMGDTB76FZ91uVvoX6C70hYfz0z
-   cbgVhsIYumm2pMGQCl+t1FUETTcGW0NCCN9aJDSDdYjc6iWy3PV/zZ28z
-   r2n5HQusIrnh920a0s3Fcjrtqn343eoRxlOQMudp9GKDY/sn3kHc2qSaq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="324855414"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="324855414"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:50:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="677462919"
-X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="677462919"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 09 Mar 2023 09:50:32 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1paKPO-000Sb6-0d;
-        Thu, 09 Mar 2023 19:50:30 +0200
-Date:   Thu, 9 Mar 2023 19:50:29 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
+        Thu, 9 Mar 2023 14:58:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D4A7A92B;
+        Thu,  9 Mar 2023 11:58:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB397B82084;
+        Thu,  9 Mar 2023 19:58:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2C5C433EF;
+        Thu,  9 Mar 2023 19:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1678391900;
+        bh=/5mhEH+0jhy2TFRF2A3QBp1K1QEz/XCD8K1TWQPSe08=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nkzkF3VK95mW2LePnZ6lDNSOg5uGxOS2iIFJhkOnYlWwwsFGiQXzCTQD70rerpX7I
+         O6jvZg07cywqdslFUFZUeCPJ6lZWTGW8ZXDx0mcroxS5kPUkMS3QBaYucRPL6fmwdN
+         jLBI4YFnm9eNZVOUb41pBaBIezxPKUPNb6apsPi4=
+Date:   Thu, 9 Mar 2023 11:58:18 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        =?UTF-8?Q?Micha=C5=82_Miros=C5=82aw?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: selftests: gpio: crash on arm64
-Message-ID: <ZAocZRZh4FQRH3lc@smile.fi.intel.com>
-References: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v11 0/7] Implement IOCTL to get and optionally clear
+ info about PTEs
+Message-Id: <20230309115818.170dd5ef2cde7b58b9354ecd@linux-foundation.org>
+In-Reply-To: <20230309135718.1490461-1-usama.anjum@collabora.com>
+References: <20230309135718.1490461-1-usama.anjum@collabora.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 09:33:29PM +0530, Naresh Kamboju wrote:
-> Following kernel warnings and crash notices on arm64 Rpi4 device while
-> running selftests: gpio on Linux mainline 6.3.0-rc1 kernel and Linux next.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Thu,  9 Mar 2023 18:57:11 +0500 Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
 
-...
+> The information related to pages if the page is file mapped, present and
+> swapped is required for the CRIU project [5][6]. The addition of the
+> required mask, any mask, excluded mask and return masks are also required
+> for the CRIU project [5].
 
-> [   61.177432]  *** DEADLOCK ***
-> [   61.177432]
-> [   61.177434] 3 locks held by modprobe/510:
-> [   61.177436] #0: ffff000040000698 (&n->list_lock){-.-.}-{2:2}, at:
-> get_partial_node.part.0 (mm/slub.c:2271)
-> [   61.177448] #1: ffff80000b227f18 (console_lock){+.+.}-{0:0}, at:
-> vprintk_emit (kernel/printk/printk.c:1936 kernel/printk/printk.c:2315)
-> [   61.177460] #2: ffff80000b228388 (console_srcu){....}-{0:0}, at:
-> console_flush_all (include/linux/srcu.h:200 kernel/printk/printk.c:290
-> kernel/printk/printk.c:2934)
+It's a ton of new code and what I'm not seeing in here (might have
+missed it?) is a clear statement of the value of this feature to our
+users.
 
-How is it related to the GPIO?
-Can you bisect if it's a regression somewhere?
+I see hints that CRIU would like it, but no description of how valuable
+this is to CRIU's users.
 
--- 
-With Best Regards,
-Andy Shevchenko
+So please spend some time preparing this info.
 
+Also, are any other applications of this feature anticipated?  If so,
+what are they?
 
+IOW, please sell this stuff to us!
