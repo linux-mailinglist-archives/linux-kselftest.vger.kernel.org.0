@@ -2,154 +2,168 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EA96B3097
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 23:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7508D6B3111
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 23:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjCIW2O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Mar 2023 17:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
+        id S231401AbjCIWia (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Mar 2023 17:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbjCIW2L (ORCPT
+        with ESMTP id S231266AbjCIWiP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:28:11 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DED5A909
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Mar 2023 14:28:06 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id k14so4232701lfj.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Mar 2023 14:28:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678400884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=29CZKSnro71XuZ/X2KIXin8EzPbyFRqqtGaiLs6Be54=;
-        b=ticBqftLOEJj1O6T3FL+5n3IsSOfX3ueB2Y43c8FDQ4uOap3RiQmFGRUOH0CB76bmW
-         N4BGaFG13x1VB9kT7Z8vnkrRrGYaw77ky/ykS/Jmwl71i3RmTDV4O+xeeuwHr4iE1dgv
-         JAIyFgMl9jpJ+0UVxiYjYFnwr670JmKMbOVIwPKo69cU7FGny9TbyTP+gLuuGLQLE3Zv
-         fzD3zBQe5tY7651xIBF57WbqmhFJ4mUepK3lQQ0vSdYk9sw/A2m4DRm7oq0l+v72ZL69
-         eL7guQznFBOxwk8BviPN0K1jHCUmLQTgJCAAjCSb0wk3j4VK5EL/MjbBQnCJSWtqCsuC
-         JtSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678400884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=29CZKSnro71XuZ/X2KIXin8EzPbyFRqqtGaiLs6Be54=;
-        b=x58pi4S1Juuv7KZGfMWuqOO0DGvD1IsERHoa90XMje1QcRj0iAXUoOtwPVWo258ZEb
-         SIVhlpERsx2qDo+QcD167RTT7kfktXPeRBzI4097sTv4zdkFQqUYgpdN1RL87gEzLLFd
-         xC34oMihMLCrPwvLnrEH/eOwLeDIA/12Yx/TS0dpSwXH5Uw0954riXELcUyF77yUxtV7
-         p8f936So9hmXRajMOtWJnujPIUJp4fQkE21fmsq6fw6SWtbM3x8mLEscN+LfbGJM5muC
-         5GZNnPVIWjXcyh2xIe3gcRo6CeMkkLkh8+DMiOFSw3BMk25qoStsvgpvWCSNDzkpyoSg
-         4tOA==
-X-Gm-Message-State: AO0yUKWlt18z1vKhBsFinxjZ/mHg1U02MuBCQvU90u7FjW2PkRCs/m0N
-        kKozvxEEQ5TKeAg1cCUsBdbBuTbDFNWcjtleojoqog==
-X-Google-Smtp-Source: AK7set8XKEHB+Eqae38HNHUfYvdzRQBggEBNTeVTBQ831nGlT2poOPKyEfQFXV6pveIx4Q21go/izYSd6MSOZsP2EmI=
-X-Received: by 2002:ac2:53aa:0:b0:4dc:807a:d140 with SMTP id
- j10-20020ac253aa000000b004dc807ad140mr7177100lfh.10.1678400884282; Thu, 09
- Mar 2023 14:28:04 -0800 (PST)
+        Thu, 9 Mar 2023 17:38:15 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A2A2332D;
+        Thu,  9 Mar 2023 14:38:06 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 166145C0166;
+        Thu,  9 Mar 2023 17:38:06 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 09 Mar 2023 17:38:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1678401486; x=1678487886; bh=Ze
+        3+pxMevBT00ZvMFDroeTtBvnMDSJcEIMQQMq34NOo=; b=TapyiyUjWS8nJHLJYu
+        K4MTpsfTjdpBVaVfg5m8PuG+bJIKFuCHys4P79nNp7gXznmRyzk9AiTLkqzdscPA
+        fxF230oU/MLcftTC0gddvvDRIJmuHWo5inXinR9Z1NZ0NbEcJf5OZOG9dcqbWXT3
+        up4CvBTawMj4f5XGY/6z3y/9GaOYH++zCNfRQXTCHp/2ImTqxuANBTsV0UJ4xc4z
+        vxwjiAILFey1ZBZ5J/02MfJ25MSwNvDaKBzc2BRxMdHNkAx+X+U8PmIj7sLh1gzN
+        WXkAWcEa3HB9dH+MPBFh8N02TaKWjZipOhwf2v6owgRyDeCFj0mIi+Jx75D+f+oi
+        kliA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678401486; x=1678487886; bh=Ze3+pxMevBT00
+        ZvMFDroeTtBvnMDSJcEIMQQMq34NOo=; b=VAbCLuqQDWyXb8usdEton5pImuh9i
+        p66rVmg5ehzX8siKz7T3v41LDXIEOqvIfhJueXXpPa2KX+T6dpHGgNK8n8zbcU87
+        NoxYnTzqdiOPaEv2X/YiKJgnTJFS3v+GkhxYQp1RlvqoXzavsjvlKMnRVL96kw2M
+        MEl1Iz51kvYyK2VTtMG0iMtQ7LaeFf+2lVlj1xOVlmjMq+QytPCZeRSniktwBcYK
+        UicLAutRmf/7nyvdXb+I60L3fpQ8RK88gAd/R8YNsyCkMeAOmHfhWP3zDQimTd/3
+        1fNT/AzBiXRZjqBQ+Dn0NfUF+EHKZsdVmfJ6jpOrCzGkP/OeFJl0M/A+w==
+X-ME-Sender: <xms:zV8KZAe-Zme8q5S4ny4RbCCed1YXr8U7CkIj3f1utlD9PqyWpM2lCQ>
+    <xme:zV8KZCNP493OBGOyiFjGqsihAY368iyHHMofrSvCmN0IWxGEyZIUOfZv_3HRBi5J-
+    E2KMBjRu5UaLZ3G5Os>
+X-ME-Received: <xmr:zV8KZBh8hvgtNng4nhLNn2w3vpLAfhQ5WM2MIWEns-Pa7DgmuYs95I-LxhucvN3EBth9aGJOQuE-VvslxoZ3sbisXS8U8upxhtaKdEL91w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduiedgudeitdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfhgfhffvvefuffgjkfggtgesth
+    dtredttdertdenucfhrhhomhepufhtvghfrghnucftohgvshgthhcuoehshhhrseguvghv
+    khgvrhhnvghlrdhioheqnecuggftrfgrthhtvghrnhepveelgffghfehudeitdehjeevhe
+    dthfetvdfhledutedvgeeikeeggefgudeguedtnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepshhhrhesuggvvhhkvghrnhgvlhdrihho
+X-ME-Proxy: <xmx:zV8KZF_Swx-XM29kVkFQT1q-1w6agdm6W97i3cBajf7GwkJuM5RelQ>
+    <xmx:zV8KZMuwOQM-xma202l1hBRrUDxXAA2Xw6LwlRvqHlqS48EZJ0pW9Q>
+    <xmx:zV8KZMFEcbpragtMT_uRyPllREZ54U1sUeCfY6sP9tBp70Ddi8BwDA>
+    <xmx:zl8KZB_omguko8VdelLIuBAHIwgBGj9FhUk7-_ThsfWX7JZVNvtN4w>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 9 Mar 2023 17:38:04 -0500 (EST)
+References: <20230224044000.3084046-1-shr@devkernel.io>
+ <20230224044000.3084046-2-shr@devkernel.io>
+ <20230308164746.GA473363@cmpxchg.org>
+ <qvqwbkl2zxui.fsf@dev0134.prn3.facebook.com>
+ <20230309045910.GD476158@cmpxchg.org>
+User-agent: mu4e 1.6.11; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org
+Subject: Re: [PATCH v3 1/3] mm: add new api to enable ksm per process
+Date:   Thu, 09 Mar 2023 14:33:10 -0800
+In-reply-to: <20230309045910.GD476158@cmpxchg.org>
+Message-ID: <qvqwa60lo8j8.fsf@dev0134.prn3.facebook.com>
 MIME-Version: 1.0
-References: <20230308221932.1548827-1-axelrasmussen@google.com>
- <20230308221932.1548827-5-axelrasmussen@google.com> <ZAmikuHeF3hhqZlD@kernel.org>
-In-Reply-To: <ZAmikuHeF3hhqZlD@kernel.org>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 9 Mar 2023 14:27:27 -0800
-Message-ID: <CAJHvVchQF+9=TbhzJFhnwmfeT7e42=ReoFhqV_p+r-aOxifTXw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to
- install WP PTEs
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 1:11=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
-e:
->
-> On Wed, Mar 08, 2023 at 02:19:32PM -0800, Axel Rasmussen wrote:
-> > UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
-> > PTE to resolve a missing fault, one can install a write-protected one.
-> > This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
-> > combination.
-> >
-> > This was motivated by testing HugeTLB HGM [1], and in particular its
-> > interaction with userfaultfd features. Existing userfaultfd code
-> > supports using WP and MINOR modes together (i.e. you can register an
-> > area with both enabled), but without this CONTINUE flag the combination
-> > is in practice unusable.
-> >
-> > So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
-> > as UFFDIO_COPY_MODE_WP, but for *minor* faults.
-> >
-> > Update the selftest to do some very basic exercising of the new flag.
-> >
-> > [1]: https://patchwork.kernel.org/project/linux-mm/cover/20230218002819=
-.1486479-1-jthoughton@google.com/
-> >
-> > Acked-by: Peter Xu <peterx@redhat.com>
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
->
-> > ---
-> >  fs/userfaultfd.c                         | 8 ++++++--
-> >  include/linux/userfaultfd_k.h            | 3 ++-
-> >  include/uapi/linux/userfaultfd.h         | 7 +++++++
-> >  mm/userfaultfd.c                         | 5 +++--
-> >  tools/testing/selftests/mm/userfaultfd.c | 4 ++++
-> >  5 files changed, 22 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/user=
-faultfd.h
-> > index 005e5e306266..14059a0861bf 100644
-> > --- a/include/uapi/linux/userfaultfd.h
-> > +++ b/include/uapi/linux/userfaultfd.h
-> > @@ -297,6 +297,13 @@ struct uffdio_writeprotect {
-> >  struct uffdio_continue {
-> >       struct uffdio_range range;
-> >  #define UFFDIO_CONTINUE_MODE_DONTWAKE                ((__u64)1<<0)
-> > +     /*
-> > +      * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
-> > +      * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
-> > +      * write protected ioctl is implemented for the range
-> > +      * according to the uffdio_register.ioctls.
-> > +      */
-> > +#define UFFDIO_CONTINUE_MODE_WP                      ((__u64)1<<1)
->
-> Please add the description of the new flag to Documentation/ and to the
-> userfaultfd man pages.
 
-Funny enough, neither flag is mentioned in Documentation/ today - I'll
-add a short passage about both.
+Johannes Weiner <hannes@cmpxchg.org> writes:
 
-Happy to update the man pages as well, I'll send that patch separately.
-
-Thanks for reviewing!
-
+> On Wed, Mar 08, 2023 at 02:16:36PM -0800, Stefan Roesch wrote:
+>> Johannes Weiner <hannes@cmpxchg.org> writes:
+>> > On Thu, Feb 23, 2023 at 08:39:58PM -0800, Stefan Roesch wrote:
+>> >> @@ -2405,8 +2417,20 @@ static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
+>> >>  		goto no_vmas;
+>> >>
+>> >>  	for_each_vma(vmi, vma) {
+>> >> -		if (!(vma->vm_flags & VM_MERGEABLE))
+>> >> +		if (!vma_ksm_mergeable(vma))
+>> >>  			continue;
+>> >> +		if (!(vma->vm_flags & VM_MERGEABLE)) {
+>> >
+>> > IMO, the helper obscures the interaction between the vma flag and the
+>> > per-process flag here. How about:
+>> >
+>> > 		if (!(vma->vm_flags & VM_MERGEABLE)) {
+>> > 			if (!test_bit(MMF_VM_MERGE_ANY, &vma->vm_mm->flags))
+>> > 				continue;
+>> >
+>> > 			/*
+>> > 			 * With per-process merging enabled, have the MM scan
+>> > 			 * enroll any existing and new VMAs on the fly.
+>> > 			 *
+>> > 			ksm_madvise();
+>> > 		}
+>> >
+>> >> +			unsigned long flags = vma->vm_flags;
+>> >> +
+>> >> +			/* madvise failed, use next vma */
+>> >> +			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &flags))
+>> >> +				continue;
+>> >> +			/* vma, not supported as being mergeable */
+>> >> +			if (!(flags & VM_MERGEABLE))
+>> >> +				continue;
+>> >> +
+>> >> +			vm_flags_set(vma, VM_MERGEABLE);
+>> >
+>> > I don't understand the local flags. Can't it pass &vma->vm_flags to
+>> > ksm_madvise()? It'll set VM_MERGEABLE on success. And you know it
+>> > wasn't set before because the whole thing is inside the !set
+>> > branch. The return value doesn't seem super useful, it's only the flag
+>> > setting that matters:
+>> >
+>> > 			ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &vma->vm_flags);
+>> > 			/* madvise can fail, and will skip special vmas (pfnmaps and such) */
+>> > 			if (!(vma->vm_flags & VM_MERGEABLE))
+>> > 				continue;
+>> >
+>>
+>> vm_flags is defined as const. I cannot pass it directly inside the
+>> function, this is the reason, I'm using a local variable for it.
 >
-> >       __u64 mode;
-> >
-> >       /*
+> Oops, good catch.
 >
-> --
-> Sincerely yours,
-> Mike.
+> However, while looking at the flag helpers, I'm also realizing that
+> modifications requires the mmap_sem in write mode, which this code
+> doesn't. This function might potentially scan the entire process
+> address space, so you can't just change the lock mode, either.
+>
+> Staring more at this, do you actually need to set VM_MERGEABLE on the
+> individual vmas? There are only a few places that check VM_MERGEABLE,
+> and AFAICS they can all just check for MMF_VM_MERGE_ANY also.
+>
+> You'd need to factor out the vma compatibility checks from
+> ksm_madvise(), and skip over special vmas during the mm scan. But
+> those tests are all stable under the read lock, so that's fine.
+>
+> The other thing ksm_madvise() does is ksm_enter() - but that's
+> obviously not needed from inside the loop over ksm_enter'd mms. :)
+
+The check alone for MMF_VM_MERGE_ANY is not sufficient. We also
+need to check if the respective VMA is mergeable. I'll split off the
+checks in ksm_madvise to its own function, so it can be called from
+where VM_MERGEABLE is currently checked.
+
+With the above change, the function unmerge_vmas is no longer needed.
