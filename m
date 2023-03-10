@@ -2,229 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA106B37AE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Mar 2023 08:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE836B37B8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Mar 2023 08:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjCJHqg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Mar 2023 02:46:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S229523AbjCJHsu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Mar 2023 02:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjCJHqJ (ORCPT
+        with ESMTP id S229544AbjCJHsq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Mar 2023 02:46:09 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2069.outbound.protection.outlook.com [40.107.96.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4714F3666;
-        Thu,  9 Mar 2023 23:45:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OlVayWDFneWKrkpcPinjRrwgp3JXLXmrWmZODPLRIElhCrCQItP1xK0ekRwf0y+B9iiz3zxV5WL81qU8NNbG/7DN6+obZrBebHg91mTj7T+0p4jJL2PXk/3vgNYDA1RX1CPQmw2E7PfwJBoRkPk8cCaLuPePRHF+LSXGoNlKVnZuCZFE6t10dN8ZXSqA8GyuhJF4Ak7qjxht0xXdmeEP8MY2h7Z2TR7zeEvKGhhi9M06LYzvapiNCCgRhm9t53ZojaPoNiB0pDG+0WULsaV5nrHLKdxMh1qCP0sEsu5tGjxveBTB17f/xje61XE1T6ng/WJZKoBf74fd8L/m6xVxuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=acYj37/N/6xhwiCDhiNkEw/UkveQOPubMQHq0d4nzx8=;
- b=eaK2ijE/fimhUOd/57kOuda1eVN2y1j7u7lLecoa2NJSTxG9OsaNaSZdDsPUPMzMmDltv5h0+WEzRiFYBGHRWwPIOK+YERJzgv/EDxAS+jW3pjvLIteOEILmxRuumGTHwueRwUXkTDNsgRevFMXRGVqNCE/KgrgF+Lt+54W5uCPcVqFSDyFzJHd6WRPIfsbtu3CXRECP8QTc5ph4siWCSnj6Jo2ffJQqFnGl4ByVMDQ3BuJV/cz/ilQLJlThLjPrq091Ig4WoTP6cyUsjJNWR6ngWHxDKn4ny0zRxxYgZcQJKO+ypUL7W+2DAp4mPqD1o8Hxd9+LMwh4LpsrZbb+mQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=acYj37/N/6xhwiCDhiNkEw/UkveQOPubMQHq0d4nzx8=;
- b=ceUO5D1FK3T63nXsQFbPJIfabaTNOHVc61PMTWD0nR3sL7mVXwn51fxX1/BY0TNsmczN1boAOo/rmGCm8yNTSlUq2zOwiPI6SKAnLgwyfGpcSL1JQ1VA8AbXCNzzeVKhUMwgQtw4sRwwAaWdSKkuHsyeDXpjJ/bnBxjdHchR/7w3aIOYa2jsYmU/SeLcEa09nkJeUWYDaQFGaR1DsTSgEelHmJUx4CK4RhZmm2qD5OOea6nz3kJdTmRX0Rn2PMdGYBkbGGr3aD+2CZeULOb6axKDOoTCnvYAktlt+H0pWx553aKK/HhC1sJfytV6kpdr3wUkq8Z4KSJfdRDegvcLjA==
-Received: from BL1P223CA0024.NAMP223.PROD.OUTLOOK.COM (2603:10b6:208:2c4::29)
- by SJ0PR12MB5673.namprd12.prod.outlook.com (2603:10b6:a03:42b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Fri, 10 Mar
- 2023 07:45:23 +0000
-Received: from BL02EPF000100D0.namprd05.prod.outlook.com
- (2603:10b6:208:2c4:cafe::7c) by BL1P223CA0024.outlook.office365.com
- (2603:10b6:208:2c4::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.20 via Frontend
- Transport; Fri, 10 Mar 2023 07:45:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF000100D0.mail.protection.outlook.com (10.167.241.204) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.17 via Frontend Transport; Fri, 10 Mar 2023 07:45:22 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 9 Mar 2023
- 23:45:08 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 9 Mar 2023
- 23:45:08 -0800
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
- Transport; Thu, 9 Mar 2023 23:45:07 -0800
-Date:   Thu, 9 Mar 2023 23:45:05 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Liu, Yi L" <yi.l.liu@intel.com>
-CC:     Baolu Lu <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 08/12] iommufd/device: Report supported hwpt_types
-Message-ID: <ZArgAXMUpNjDfFgZ@Asurada-Nvidia>
-References: <20230309080910.607396-1-yi.l.liu@intel.com>
- <20230309080910.607396-9-yi.l.liu@intel.com>
- <f0076d6a-d764-b018-7442-08a6293f9553@linux.intel.com>
- <ZArXyj3iiPa95aCu@Asurada-Nvidia>
- <DS0PR11MB752928ECB7D395C601F14246C3BA9@DS0PR11MB7529.namprd11.prod.outlook.com>
+        Fri, 10 Mar 2023 02:48:46 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16134D623
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Mar 2023 23:48:29 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id ay29-20020a05600c1e1d00b003e9f4c2b623so5321901wmb.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Mar 2023 23:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678434508;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BUDFtqMWsthDMffvpAoMPW6y3w7gutRliueCUvQ1lFA=;
+        b=c6uhtTrlFvX2BM8B+Ij5mKWKymjeCvxSSmfGjwYSjVIxzqXYqP0SfOHZbK741oT7wk
+         NlxxCK1gj7+WYqCqxLHjNmwHAMPxA6AdgeB34pBQHICdqg1jH8WCuE4H/e5ROaw9ND1T
+         lZbnKpoTm/BtattMX8rP3s1T8PlvxgJdWJYSXe72miYt/JQjJlsJYXa50BRfatV47R9O
+         Gj7MjEHfW8ERZcfYLfJgqMxXPMaKRnWz+oh2dAzB+dKNrKPuBzWIXA51XCcNivWXyxQB
+         tbumrMp/BpwZfMBTg35Td7IcZXcaxrc8+FwhutpNMfHGfg+X7LRU/BcJh0hT3SqXoEvo
+         weGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678434508;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BUDFtqMWsthDMffvpAoMPW6y3w7gutRliueCUvQ1lFA=;
+        b=buuYFtgDWgauodzzinNkjEwFPLKBBGdRpzu9aFSU8P2kISpYPVAdx551sVJGeWBaQK
+         AEY19Dh5tY+1OrEVaogF7XrFjgcEP5PhZXihN9BJrE6zGUmB3eNCbPEl3Q2ZbBPpE+aL
+         31LiHYvJ0VYgIcCYD2Hy06ma7lirCLZBWuDhnlFvQO3nH9JQ48nGNrn1B9b5cHnrR2X5
+         jHK+l/qj6mYwD2eps9TbENYGT5ENKfFyCiR6k1KLjrd29NvzaIlwintNSiu3eX3kJWt9
+         3iwWoC+TwjLr0OiBvbRcqwpRBqSwMB2B0V2GGasXfh6JU1x2UsJYi8tThCFKZcduv/zl
+         I3dQ==
+X-Gm-Message-State: AO0yUKXiLpKAceNlCk1f0I+YWxKaoP8BjBm/5p/Txf6Xmui+rQnIPEQg
+        y+xS1nVsPk0Scb5Sge+4PKnoZUttnMmqT4lzop15xQ==
+X-Google-Smtp-Source: AK7set94tVYBFQ1almKq6L6E58IH8EKll1s7tduKC7DwGESChOPVpHL44fz+HerWj+MZWnIFNyPsKsUfV78uSRoksBg=
+X-Received: by 2002:a1c:7910:0:b0:3eb:4cbe:1e87 with SMTP id
+ l16-20020a1c7910000000b003eb4cbe1e87mr290872wme.3.1678434508065; Thu, 09 Mar
+ 2023 23:48:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <DS0PR11MB752928ECB7D395C601F14246C3BA9@DS0PR11MB7529.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000100D0:EE_|SJ0PR12MB5673:EE_
-X-MS-Office365-Filtering-Correlation-Id: ad5ac482-369d-48c1-f86d-08db213b678f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pec43Qjf4gwf4dcRHFdy8zTOXgiSHyxtldeghF/bfvOEmY3+2YK0XkO6a48ewwLd/s0Aqeyk2MnHB727/inINZPRreugmVwiRChz28xn0spZ+Tmu+zlYO8G+9zN8JZbum/brtx0SKW2snlTA5RkbzFUiqn6K0eFAOgvIxeyyM8LEkf0KnE93yZwpRTme0prXXWkOvhAiNwfeck+f4xPe2HPzZ6R3NsQPWe6M2R2LRQyEdBGJN5+VpCXtR3y5AW2h3CvdtSHQuS8lj5RTi2gHZjmhXvQVptGa9wItvO7x0YPy1tWzBH5I5IjMbFzW2BMvuTHKvwF/ZyXmpYyxaoE/SM95ccj3SCQYNFiubs0mF4UtZk3JQwldzXs3UAQAkRorZ4jbcYRY4C5tWYvBVRKnH7DaonAW6ZLwcCxU+UUc2P+MEu/2k/u/8SoBfj0PkNgnD8U7emcKnVHsUC7mbK4qYByc6TKMRORQUxv4Q2V1mG0Wcz3JiELNPgf9vmr0+Rj0VCSLElyVzXTRGHoZOe/2U+Zl6VQ+IkyqAu9eDAnDY6qT1pT5aHzYVGbozUv7fxzCSLsd0q9U9T7QyUrZkkDeFmDck92/e47GRPgC+SpGHEfrV6tdHwpB1tQgo3CQPVvmquqlqIod70jVkRx34hmn1RfNiS7FKptt52rq2IW6+wdRsdBqxjDWO6Vqne+IKEY3O0Lh3GGyk2tQE5c9qtoUQYOudb4G1o1gh79CCGZtv7ciO6cv/7bjT/tsrhS312MZsN/QhrP99XqyVHboCqVw3S62gxXvhdG7iRxg5Ni/Xu8=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(136003)(346002)(451199018)(46966006)(40470700004)(36840700001)(70586007)(70206006)(36860700001)(316002)(47076005)(41300700001)(83380400001)(8676002)(6916009)(33716001)(426003)(82740400003)(54906003)(7636003)(4326008)(186003)(336012)(8936002)(82310400005)(356005)(2906002)(9686003)(5660300002)(40460700003)(478600001)(7416002)(53546011)(86362001)(55016003)(40480700001)(966005)(26005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 07:45:22.5301
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ad5ac482-369d-48c1-f86d-08db213b678f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000100D0.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5673
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302013822.1808711-1-sboyd@kernel.org> <2ce31cd1-7a0e-18ac-8a5b-ed09d6539241@gmail.com>
+In-Reply-To: <2ce31cd1-7a0e-18ac-8a5b-ed09d6539241@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 10 Mar 2023 15:48:15 +0800
+Message-ID: <CABVgOS=6mLLYDr3ZOmv6iBQKPdFxTGDFP+uy9xgTHvdc03=vPw@mail.gmail.com>
+Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 07:39:00AM +0000, Liu, Yi L wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Friday, March 10, 2023 3:10 PM
+On Sat, 4 Mar 2023 at 23:50, Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> On 3/1/23 19:38, Stephen Boyd wrote:
+> > This patch series adds unit tests for the clk fixed rate basic type and
+> > the clk registration functions that use struct clk_parent_data. To get
+> > there, we add support for loading a DTB into the UML kernel that's
+> > running the unit tests along with probing platform drivers to bind to
+> > device nodes specified in DT.
 > >
-> > On Fri, Mar 10, 2023 at 11:30:04AM +0800, Baolu Lu wrote:
-> > > External email: Use caution opening links or attachments
-> > >
-> > >
-> > > On 3/9/23 4:09 PM, Yi Liu wrote:
-> > > > This provides a way for userspace to probe the supported hwpt data
-> > > > types by kernel. Currently, kernel only supports
-> > IOMMU_HWPT_TYPE_DEFAULT,
-> > > > new types would be added per vendor drivers' extension.
-> > > >
-> > > > Userspace that wants to allocate hw_pagetable with user data should
-> > check
-> > > > this. While for the allocation without user data, no need for it. It is
-> > > > supported by default.
-> > > >
-> > > > Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-> > > > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> > > > Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> > > > ---
-> > > >   drivers/iommu/iommufd/device.c          |  1 +
-> > > >   drivers/iommu/iommufd/hw_pagetable.c    | 18 +++++++++++++++---
-> > > >   drivers/iommu/iommufd/iommufd_private.h |  2 ++
-> > > >   drivers/iommu/iommufd/main.c            |  2 +-
-> > > >   include/uapi/linux/iommufd.h            |  8 ++++++++
-> > > >   5 files changed, 27 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/iommu/iommufd/device.c
-> > b/drivers/iommu/iommufd/device.c
-> > > > index 19cd6df46c6a..0328071dcac1 100644
-> > > > --- a/drivers/iommu/iommufd/device.c
-> > > > +++ b/drivers/iommu/iommufd/device.c
-> > > > @@ -322,6 +322,7 @@ int iommufd_device_get_hw_info(struct
-> > iommufd_ucmd *ucmd)
-> > > >
-> > > >       cmd->out_data_type = ops->driver_type;
-> > > >       cmd->data_len = length;
-> > > > +     cmd->out_hwpt_type_bitmap =
-> > iommufd_hwpt_type_bitmaps[ops->driver_type];
-> > > >
-> > > >       rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-> > > >
-> > > > diff --git a/drivers/iommu/iommufd/hw_pagetable.c
-> > b/drivers/iommu/iommufd/hw_pagetable.c
-> > > > index 67facca98de1..160712256c64 100644
-> > > > --- a/drivers/iommu/iommufd/hw_pagetable.c
-> > > > +++ b/drivers/iommu/iommufd/hw_pagetable.c
-> > > > @@ -173,6 +173,14 @@ static const size_t
-> > iommufd_hwpt_alloc_data_size[] = {
-> > > >       [IOMMU_HWPT_TYPE_DEFAULT] = 0,
-> > > >   };
-> > > >
-> > > > +/*
-> > > > + * bitmaps of supported hwpt types of by underlying iommu, indexed
-> > > > + * by ops->driver_type which is one of enum iommu_hw_info_type.
-> > > > + */
-> > > > +const u64 iommufd_hwpt_type_bitmaps[] =  {
-> > > > +     [IOMMU_HW_INFO_TYPE_DEFAULT] =
-> > BIT_ULL(IOMMU_HWPT_TYPE_DEFAULT),
-> > > > +};
-> > >
-> > > I am a bit confused here. Why do you need this array? What I read is
-> > > that you want to convert ops->driver_type to a bit position in
-> > > cmd->out_hwpt_type_bitmap.
-> > >
-> > > Am I getting it right?
-> > >
-> > > If so, why not just
-> > >        cmd->out_hwpt_type_bitmap = BIT_ULL(ops->driver_type);
-> > >
-> > > ?
-> 
-> The reason is for future extensions. If future usages need different types
-> of user data to allocate hwpt,  it can define a new type and corresponding
-> data structure. Such new usages may be using new vendor-specific page
-> tables or vendor-agnostic usages like Re-use of the KVM page table in
-> the IOMMU mentioned by IOMMUFD basic series.
-> 
-> https://lore.kernel.org/kvm/0-v6-a196d26f289e+11787-iommufd_jgg@nvidia.com/
-> 
-> > A driver_type would be IOMMUFD_HW_INFO_TYPExx. What's inside the
-> > BIT_ULL is IOMMUFD_HWPT_TYPE_*. It seems to get a bit confusing
-> > after several rounds of renaming though. And they do seem to be
-> > a bit of duplications at the actual values, at least for now.
-> 
-> For now, vendor drivers only have one stage-1 page table format.
-> But in the future, it may change per new page table format
-> introduction and new usage.
+> > With this series, we're able to exercise some of the code in the common
+> > clk framework that uses devicetree lookups to find parents and the fixed
+> > rate clk code that scans devicetree directly and creates clks. Please
+> > review.
+>
+> I would _really_ like to _not_ have devicetree tests in two locations:
+> DT unittests and kunit tests.
+>
 
-Yea, that's what I thought too. Yet, I am wondering a bit if
-it'd be better to have an ops->hwpt_type in the drivers, v.s.
-maintaining a potentially big chunk of the array here.
+I agree we don't want to split things up needlessly, but I think there
+is a meaningful distinction between:
+- Testing the DT infrastructure itself (with DT unittests)
+- Testing a driver which may have some interaction with DT (via KUnit)
 
-Thanks
-Nic
+So, rather than going for a "devicetree" KUnit suite (unless we wanted
+to port OF_UNITTEST to KUnit, which as you point out, would involve a
+fair bit of reworking), I think the goal is for there to be lots of
+driver test suites, each of which may verify that their specific
+properties can be loaded from the devicetree correctly.
+
+This is also why I prefer the overlay method, if we can get it to
+work: it makes it clearer that the organisational hierarchy for these
+tests is [driver]->[devicetree], not [devicetree]->[drvier].
+
+> For my testing, I already build and boot four times on real hardware:
+>
+>   1) no DT unittests
+>   2) CONFIG_OF_UNITTEST
+>   3) CONFIG_OF_UNITTEST
+>      CONFIG_OF_DYNAMIC
+>   4) CONFIG_OF_UNITTEST
+>      CONFIG_OF_DYNAMIC
+>      CONFIG_OF_OVERLAY
+>
+> I really should also be testing the four configurations on UML, but at
+> the moment I am not.
+>
+> I also check for new compile warnings at various warn levels for all
+> four configurations.
+>
+> If I recall correctly, the kunit framework encourages more (many more?)
+> kunit config options to select which test(s) are build for a test run.
+> Someone please correct this paragraph if I am mis-stating.
+
+We do tend to suggest that there is a separate kconfig option for each
+area being tested (usually one per test suite, but if there are
+several closely related suites, sticking them under a single config
+option isn't a problem.)
+
+That being said:
+- It's possible (and encouraged) to just test once with all of those
+tests enabled, rather than needing to test every possible combination
+of configs enabled/disabled.
+- (Indeed, this is what we do with .kunitconfig files a lot: they're
+collections of related configs, so you can quickly run, e.g., all DRM
+tests)
+- Because a KUnit test being run is an independent action from it
+being built-in, it's possible to build the tests once and then just
+run different subsets anyway, or possibly run them after boot if
+they're compiled as modules.
+- This of course, depends on two test configs not conflicting with
+each other: obviously if there were some tests which relied on
+OF_OVERLAY=n, and others which require OF_OVERLAY=y, you'd need two
+builds.
+
+The bigger point is that, if the KUnit tests are focused on individual
+drivers, rather than the devicetree infrastructure itself, then these
+probably aren't as critical to run on every devicetree change (the DT
+unittests should hopefully catch anything which affects devicetree as
+a whole), but only on tests which affect a specific driver (as they're
+really intended to make sure the drivers are accessing / interacting
+with the DT properly, not that the DT infrastructure functions).
+
+And obviously if this KUnit/devicetree support ends up depending on
+overlays, that means there's no need to test them with overlays
+disabled. :-)
+
+>
+> Adding devicetree tests to kunit adds additional build and boot cycles
+> and additional test output streams to verify.
+>
+> Are there any issues with DT unittests that preclude adding clk tests
+> into the DT unittests?
+>
+
+I think at least part of it is that there are already some clk KUnit
+tests, so it's easier to have all of the clk tests behave similarly
+(for the same reasons, alas, as using DT unittests makes it easier to
+keep all of the DT tests in the same place).
+
+Of course, as DT unittests move to KTAP, and possibly in the future
+are able to make use of more KUnit infrastructure, this should get
+simpler for everyone.
+
+
+Does that seem sensible?
+
+-- David
