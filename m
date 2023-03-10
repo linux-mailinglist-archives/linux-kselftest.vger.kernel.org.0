@@ -2,239 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC746B543E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Mar 2023 23:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252506B55A5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Mar 2023 00:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjCJWZs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Mar 2023 17:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
+        id S230203AbjCJXcJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Mar 2023 18:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjCJWZr (ORCPT
+        with ESMTP id S231196AbjCJXcG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Mar 2023 17:25:47 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2234CD30A;
-        Fri, 10 Mar 2023 14:25:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678487146; x=1710023146;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=0lIQm8VsD3Y2A1uW0iCCmeAjU2APEVyea4MjGoQ5EUw=;
-  b=JjcCEFKNTnv5GpZX72pnfnLgvGTne75Y/kfwD+ipV5Qeaa/RSS3RDV3s
-   obkmUWz8Frdmlfiz+0n9MdbEqw/w8716px3bNSOz32Cf564Flp2ej5hvj
-   sCCfaAwOdkPvcdhEnNDhLjqwHy7a2bp8nPmOsOTBHuJgiqILmlxDWjrTg
-   clhC6MukcxclZWkLnoXQyaTuUWsjvMVi0Jxsxjc4lymjppQZp2eiOoI/s
-   Ev9oZsbQzK/NwFTqpau9wInISHGbANCkaLcRpPrSPboXRR3qXIt1E+FyB
-   XgQygW7rO5JJ1YCJMag5h6vtKrVtCnBdWrD5nYr3aKJ95JTZb970lP2cE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="336865328"
-X-IronPort-AV: E=Sophos;i="5.98,251,1673942400"; 
-   d="scan'208";a="336865328"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 14:25:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="655329395"
-X-IronPort-AV: E=Sophos;i="5.98,251,1673942400"; 
-   d="scan'208";a="655329395"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga006.jf.intel.com with ESMTP; 10 Mar 2023 14:25:36 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 10 Mar 2023 14:25:36 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 10 Mar 2023 14:25:35 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 10 Mar 2023 14:25:35 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 10 Mar 2023 14:25:35 -0800
+        Fri, 10 Mar 2023 18:32:06 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C4113B974;
+        Fri, 10 Mar 2023 15:32:04 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YRQzkyn6CjuR/KbNnufggj0uh1UXIuoGvSiPKSriHxyn7S8xaz2UhyG5913vfpaXgKzuJ366kwDw+/S+X0WIF4Hj+NivdQ5wV/hrq3VpgM3BsupoKXlzVaGjLAsjLsuOdNvsrjIVmDSkp7X3OpR8k04jqOE2q8FNdTam8cHD76n8LmKgvE1nKV8qdFtjKPm4mC5MOmKHglSCgnBSH31b2MjgLERnbaXh0fkSiJkoQ8+ReyV8dQXaRhEh2AcIuerq6qaEL5ez77LTJBUmptE4bOCSZJlCGho6KQ7aDeTOV28leuTAf6eMvweFM+ONG7AHuPVnwiC+nNwkf6Kpmag5LA==
+ b=QPIyCttCYdiE9zENEkXtWXl6KLSIp8Lc+I5x94TcUNF7m6GGgEnBmWT0Sj86DbdwuNhqLa3FLBxMfN8OcB4lhiApf/MPuqPLs+4oefJCaK35D5/Ld3Y54DBAcH8Ad7LjlkuSzL3JV9HNuX3daFN5yXoNIFeGzPKAQ2/SfSKbJzZB8E/v39TFvDjwe2b5uBE8Ew0rSE2imX3sICgJ06NHj1wat/qQbVpWmZ3wSvAQrYH0a8pQZTZfnS0DbP7WJhuUlQYE09inFw2D2BC5Xa0PHEnK/NvMpzuMQuNJEHS9nbrkREr81jxQrSLi8A7EjWMSTYF/eWWwc8EtTJ9yQIQIvw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uJ+w966GUW01xz0rtXSZLT4UeGNpYWDFkMa7DG7qu3E=;
- b=T7SUtxQxVwUxZATkRl5J4tyyN3MD0jb7WvED4dIKwfxfBnY65V7IOuNj0EORaMXQY+M6Bi7Grz/wsjH/X3KZAH0uey/XoyEriodCRhot0zmstu1bVexhbEpZnITuuzgPSba8FfHgq08ajMfI6GmYtU97AD/ecMk6rj3trBfxe62wXxlY6myxbm5GUbgDGcXUPS8Pu62FvVtDtNzMM/CyWnlhvAzd3CJAklpxGJawb/qMfbJCrsK8c0Cvqi8ibCPz2E9eMeSFJ+IpO0kF91xm/4O09tlxSVFyB6EHGDjH+XTjSW0pv4v8dqU3Ca6oRTww9+qLlLvKo9RZIzuZACDTJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1867.namprd11.prod.outlook.com (2603:10b6:3:10c::13)
- by SA1PR11MB5779.namprd11.prod.outlook.com (2603:10b6:806:232::22) with
+ bh=ze65Qvscn1qoKbFtWyDwfgI901QDZEwf8egpz6sTk3g=;
+ b=JEUdt243DL8aasWguhIwnhrUt4lPBdguT7ospnqYxe5+qWND9sTzALv1nVtn7M1PnjM9jPFyJIHgh2Pu1XQqV63XTyQSeP/3yi+2OmLTQCRAvHXUqD94WYnaUqYKqx8vOWyxQWwU4UmSDN00Vg3qw2yW0avJS+imv3ZIlZpwrmGN3Bvp/kXPbbFr5R6+nxC/fSVlNwFRaucYph0MHZQVJAqrfYC1oB7kz5SF+7gaNngFOo5UYwEYVUO7yGH62+rS6FA6/WyvICU8bFJavClodA3hbhjOZmCnxSC36AvsyOwLdQDn82mlQ0gUkNJzJOjCDDk6RqNKFZ0OD2y3axcZZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ze65Qvscn1qoKbFtWyDwfgI901QDZEwf8egpz6sTk3g=;
+ b=ZOOYkaQe7dRqEhIeIGxdcoOYbaYqWtWSnQdk7khfYcoPwH8Sq7wEIACvzwud7YX66ItCcjzqGhLLVav08qt57hMHD7eTSYBfibPo6bnzDn2bIr374C7EsdU4QLeQN+tJzYmzolJ7IgGJepCzYlRobiP6FJ/SAWEkn7wvqG4UA1iNxAvv9PeeWS5Sh3Mm6FHCf3VP9635bPC2eeMf5/aytHI1HHkOGhxyFtjOsNWbzXIKhmnhxci5DpYdx/xSi2yyHXQbRAZMkJV1ob9s8d1aTIWtFG6Z8IA43U3HdWVezNdEK9rxF3oUYZkgY3vamSSlI25qBgWgerdvWmrzcupxFg==
+Received: from MW2PR16CA0059.namprd16.prod.outlook.com (2603:10b6:907:1::36)
+ by PH7PR12MB7892.namprd12.prod.outlook.com (2603:10b6:510:27e::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.18; Fri, 10 Mar
- 2023 22:25:33 +0000
-Received: from DM5PR11MB1867.namprd11.prod.outlook.com
- ([fe80::41a7:eb5c:741a:e84a]) by DM5PR11MB1867.namprd11.prod.outlook.com
- ([fe80::41a7:eb5c:741a:e84a%8]) with mapi id 15.20.6178.019; Fri, 10 Mar 2023
- 22:25:33 +0000
-Message-ID: <7dcfc21e-9a17-65b1-6206-374cadb79973@intel.com>
-Date:   Fri, 10 Mar 2023 14:25:30 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.2
-Subject: Re: [PATCH v8 0/6] Some improvements of resctrl selftest
-Content-Language: en-US
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20230215083230.3155897-1-tan.shaopeng@jp.fujitsu.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230215083230.3155897-1-tan.shaopeng@jp.fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0077.namprd05.prod.outlook.com
- (2603:10b6:a03:332::22) To DM5PR11MB1867.namprd11.prod.outlook.com
- (2603:10b6:3:10c::13)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
+ 2023 23:32:02 +0000
+Received: from CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:907:1:cafe::88) by MW2PR16CA0059.outlook.office365.com
+ (2603:10b6:907:1::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.20 via Frontend
+ Transport; Fri, 10 Mar 2023 23:32:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ CO1NAM11FT015.mail.protection.outlook.com (10.13.175.130) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.20 via Frontend Transport; Fri, 10 Mar 2023 23:32:02 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 10 Mar 2023
+ 15:31:47 -0800
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Fri, 10 Mar 2023 15:31:46 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.181)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
+ Transport; Fri, 10 Mar 2023 15:31:45 -0800
+Date:   Fri, 10 Mar 2023 15:31:44 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     Yi Liu <yi.l.liu@intel.com>, <joro@8bytes.org>,
+        <alex.williamson@redhat.com>, <kevin.tian@intel.com>,
+        <robin.murphy@arm.com>, <baolu.lu@linux.intel.com>,
+        <cohuck@redhat.com>, <eric.auger@redhat.com>,
+        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
+        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
+        <peterx@redhat.com>, <jasowang@redhat.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
+        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 05/12] iommufd/hw_pagetable: Do not populate user-managed
+ hw_pagetables
+Message-ID: <ZAu94B2sEw45qPHC@Asurada-Nvidia>
+References: <20230309080910.607396-1-yi.l.liu@intel.com>
+ <20230309080910.607396-6-yi.l.liu@intel.com>
+ <ZAtMyrAOyWV1mDlx@nvidia.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZAtMyrAOyWV1mDlx@nvidia.com>
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR11MB1867:EE_|SA1PR11MB5779:EE_
-X-MS-Office365-Filtering-Correlation-Id: 980d09be-9a20-4c3b-6e85-08db21b65d12
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT015:EE_|PH7PR12MB7892:EE_
+X-MS-Office365-Filtering-Correlation-Id: ed195440-7f18-42e6-4ca9-08db21bfa69f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oAM8qiYxr/I6qjjGA0nYhjG3sCF5L5y6UF/Qu17fXElDln+6nIVZrtfpH2d0VqUWEJg6NZsPj9umxawPqbDH5qlMJVFZtHbt95z73ofl5oljpK1Muul0L02YusPoQRKF8ZdxRdEUY/IXcqy0QdHI7ut6ywChOlmM1wblTbe+hWNrU8APdwMRJ/MnCt8EdUtgLzu+iU+LIXIk+iINiBlcHkknElXzelZ4GHNAsmsKFYoOozaCNgennfpiTSswjhnuKXlpkV+SPOPz06ata9HdPBCWu6UA3ffO3XV8kuITeb+gU+JJpdTrxe1dgkkKw8f9kEbtua6fyT8VR4tAExcRxsWG6DUL4BA+z9FcxCtsdqCUbS9+KLPAA59R9MojikJfm+3IbpU63mloey3RqusYWk13ZuM/94Exboluc3gr9busWWotzSzADhAtFtO8oiXcY5rROFVxy66JzxjMQhgHAKLg08KdnCP+Bk7sR4Yiw+5uR277ZSnrlABESfgkIs+TqYa6bG8mW/RPeyzxKjp7I2AvohV5B9OZDYx/nGYR1pmZcpPbP75F7eFFKEaLfhQXtx28FWrgyj5HYSjy6SMKDBszEK04FDn4gr6I3lNwfJOUzu4sHfNP0eY/fQhxA1ElRX2gaUTzvIoWFneT9bclPXIIcRhIQNkIHuLbUetA0EcLF5CXXAdp7k3AEISZBCU9Ed8AkZEyLcr/ehtpZhKPQSArL8AVKtCCALhYCTwcO1lzBYybFdgerCAKpWGU2jIr
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1867.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39860400002)(346002)(396003)(366004)(136003)(451199018)(31686004)(82960400001)(83380400001)(36756003)(478600001)(38100700002)(316002)(110136005)(2616005)(6486002)(8936002)(6512007)(186003)(26005)(53546011)(966005)(6506007)(5660300002)(41300700001)(44832011)(2906002)(31696002)(8676002)(66476007)(66556008)(4326008)(66946007)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UmtPeCtFZkNzK054YTRQQjZ0cUc0eUh6V1ptWkd5S1RKRCtlem85c0lYTW9Y?=
- =?utf-8?B?MkV4TzVMRXJMczVUYVVyOU1oSGRTUjN1ZWp3YVdDdnhIN2loZFUvWXp6N0Nl?=
- =?utf-8?B?ZTVtKzNxWnBLNDVNVEI2WkxEZTJCNVEyQ09wU3ZJQWoyS044WENUZGtNMkQ3?=
- =?utf-8?B?ekpra2N4Z09raldFOWxOa3RGdnA2Qm1adFpUL3djejFVMnFTOFdDVTNuZmhO?=
- =?utf-8?B?aFpzb3RtbW93YXdKUTY1QWc3TUZFQjZ6RmhDV0lEVXRZTFZHL0ZqNUoyb1Vm?=
- =?utf-8?B?REd0Ny9qQk1rbnNBRHRYRjE3ZnRxNGVMeDRWYTU3UTUxbEhaYm01aEgvZzBh?=
- =?utf-8?B?V1FmWFc4ZVBEZjlTVFgyNWVNQ0VHNXNhUVh2WVZoT2JkRTZGZ1hSN1pZMFF5?=
- =?utf-8?B?ME42bDJHWTlKZzIvREJ4czA5L0JzeXEzYUdySUR5Yk5ITjcweGpWZUx0dnRB?=
- =?utf-8?B?NVRWa3FEb2d3b0ZPd2hGRG41RElyblVWR3Rra3hoR2srN2ZFbDU1ZGR4QmxS?=
- =?utf-8?B?QkdqUmtTeVFIMWRWcHZpTEVrVUNrSHNDRkdTdmQyTU55dk9VYytBMnRkQWNa?=
- =?utf-8?B?MytmNUFXV3VmK3lMcTRwZVMwMGhCSVFIQmpGVVM2YzVKUUlFWkQvaWpmNHI0?=
- =?utf-8?B?dG1uV1hrSCtzUEhod3BhS2hFY3N0T2hQME5xYW51Wk5QRmI1eGN3dWhFNWJh?=
- =?utf-8?B?YmhtbW1JVnhQeEFnOU90ZnVwYnF1MFFjQWdZRUJpdlcvY1YwUHFiS3JHQjRU?=
- =?utf-8?B?eStKUDQ2ZEJaTU0zT2F3Mi8vMG5tTkJEbkIweGpXd29SY1JZU0lVUXltUmJ1?=
- =?utf-8?B?Z0dKVmF3VXEyZ1FueVJ3R1I4Nk8yQ1R3MlBtNjFFR3plblViRStuc2ZLVnhq?=
- =?utf-8?B?V3EvVlYzQVpMZ25QVFE1QzFjQUx2N243YWxiUHI5L2ZURGI4K0s5cTVEaVZX?=
- =?utf-8?B?dXUvY3JjdG9xK3ZlaXhKUFVjU3krblRBSVNQQWlqa1JSTlY2bXd3NExNVURG?=
- =?utf-8?B?c2VBd0RVT3EvMjlWVXUwR2NZOWZGNUVEYzZ5dGYya2d6bGwrQ0xwaXhUeG1X?=
- =?utf-8?B?bFgrcUlTeVFCdUo3eXZoVGVoUysrNWIvbTZOT2E0eVZESXZEM2NWa0xuNmRu?=
- =?utf-8?B?NkxvQkd0RWo4bys1eXNWYzcyZXk0WGtOOHI2dmlNQTJkTkJXZlJ0MC9rdnYz?=
- =?utf-8?B?V1RqaXI2SUtMVldQMnpYemtzcDNMeG8wQkVxd2RCejQwYXhrNTY5TVhrTDRL?=
- =?utf-8?B?RUNvRUNhcGNRN0dNQ0xtZE8wSENDSFM2VUl5UExVTWRvN2xlTTc3SjhFY3Av?=
- =?utf-8?B?SjJuMHh0YmN5bmVhbmg5a250S2l1MFdWblMwTW8yMlZZdmdNWVhET3AzSm5J?=
- =?utf-8?B?YVBvMU1tVE1qOTRVZ21XYTBicXBwN2o4SXArQkh4eWx4U3VLaFljMDlGeUxi?=
- =?utf-8?B?eGtmYVVrZXVyQUJyd1BsdnlURGZOekNrano3WnpwZzdTRWJKLzlCWkIvcm80?=
- =?utf-8?B?bnYxNmVOcDZjQWJpVUNscFk5S2s1MzVtVTRLdzY3cDl3OTVTQVJJWmhIRVNL?=
- =?utf-8?B?bkFCeVpzS3RBM3pzNVFzWlA2WThRN1lGNFVkMjlOU1cwY25PdWlzMHlUSk52?=
- =?utf-8?B?a1NWUUdsSkMrT0doRkQzYkhPai9WNmE3MUNGejhQSTRUU0dMYjJjc2NMTDJ5?=
- =?utf-8?B?VXJOU1lnc0dlb01FV2trOXIzUHJjVFJoQTRwQ2M2K3ZSdURndnBLeWNxYXc2?=
- =?utf-8?B?a2o2M0JHNWk1MHRwMFg2dldFNHJOb2U0dVRYNm5WN1ZwRnlpQnRUOVpqNXlT?=
- =?utf-8?B?ZFZrbk1kT2p3RFFmNU5QbHRpOElRZnVLQWIvMUxqNXFhSW5SRGFyblg5U0hD?=
- =?utf-8?B?cU53QUlveHBhMEljMTlsR2c0dzZXOVF2SFNHMW1CNmRzd08zWFB5Tk00Sy90?=
- =?utf-8?B?WloxamhReEVKN09WcU9aTzgzS0wzSE5Ga2NjbGkxUUdtOExFcWdaVzdqbGh5?=
- =?utf-8?B?SGtyTzBFMGkxRjNUMC9WZHYrTlJMSDRaeHZ4enhINGxGSFdnbXVGM05hcXdJ?=
- =?utf-8?B?aHNheHh3ZUpkeC8zcFZJcWdya1pqbkpqbnVCV3FHaWFJTk9CanJVUFc1SmdK?=
- =?utf-8?B?b1pyNlBvcDYzb0tvVGpINkJnUXdaMkUzS3lXVjd2RDh1a2FIeWcyMEFvcTgz?=
- =?utf-8?B?b3c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 980d09be-9a20-4c3b-6e85-08db21b65d12
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1867.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 22:25:33.5749
+X-Microsoft-Antispam-Message-Info: 8+F1GMzWEnU6cuZ3TPiuNP5Je0bnFBC8ND6YURhaJKQ8sz2Fbtd1+I3+nAfujXYf0+mVpQjHYes5ksuvm8ginceSe7O/EbYrN1mRAfYoTFMnphcd21TyFs029x8OTH9TrYi2HPxeMy6oacLruMdZAvVtwINTxLszJxGeZzZKaPHatDHIdK0y8mf5gCYTW+pFQDq198MotHqOpWoLam5SiCytSnmz9twdKX0Cn8/Mg4mLGVXxCCFgi/i7Q1jbynJgNWCAT7b1Pjciu6IUI8Q9fNkUuK35RL3zSi+T8lyMIPRYPbF5sxo833gjKQdb5ppjFjE1C/gt3rV7tfyN3K/wa2FRDMmwx71oqvU4Hb9AZnY8Xk7MBZ8hwx3AdIVqVqLR1t8Ykgx32QwKGuN5V+fGeyZhx1Xz0/QeT1fAc4Oyc35MWj+OQRrSG+Jqo/f36mI4iUw1qEk6q1a2P9G8QjPoO/f7x6FaUsJZ48NIG0ELTov+ChnLNYUWit8sCBUwIWyxKzjMlJOyhfd6YkXqXDxnVENg62JzTqUuS4WGyK1pTFmtpDJXNflWNgB4o1aLycMEMkL+KjTL8I2gWJLwqt3wwH+s9YbLpg34vpqB2jjJjlf2DK6akv3Vx3nlIiQ1RkToPv4RKBSvmGT8R8phZt4bV2SrV5ZWZMKyZ7lVM8wi5XjWM9D/uEICsK5Ci0FH4O3pBQEUaCl+6JaTbmTdJuKqarmcDu5EGk1tG2FRjkGV3NF7pptfKQDAzvinCTwENHYX
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(39860400002)(136003)(376002)(451199018)(40470700004)(46966006)(36840700001)(40460700003)(55016003)(356005)(6636002)(54906003)(478600001)(5660300002)(7416002)(316002)(6862004)(8936002)(2906002)(70206006)(8676002)(70586007)(4326008)(41300700001)(7636003)(82740400003)(36860700001)(9686003)(40480700001)(86362001)(186003)(33716001)(26005)(82310400005)(83380400001)(426003)(47076005)(336012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 23:32:02.0203
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Y1lW6L3F04NmrFnHLxe7LEM3YHMDzpr1F46BZINscjDpholKV2q8yWjkVsIKESt1gzCQDjjd9Fy4SgalS/XAhzWE/sIr9uNHfbFkTLx30yc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB5779
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed195440-7f18-42e6-4ca9-08db21bfa69f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7892
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+On Fri, Mar 10, 2023 at 11:29:14AM -0400, Jason Gunthorpe wrote:
+> On Thu, Mar 09, 2023 at 12:09:03AM -0800, Yi Liu wrote:
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > 
+> > A user-managed hw_pagetable does not need to get populated, since it is
+> > managed by a guest OS. Move the iopt_table_add_domain and list_add_tail
+> > calls into a helper, where the hwpt pointer will be redirected to its
+> > hwpt->parent if it's available.
+> > 
+> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> > Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> > ---
+> >  drivers/iommu/iommufd/hw_pagetable.c | 20 ++++++++++++++++++--
+> >  1 file changed, 18 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+> > index 16e92a1c150b..6e45ec0a66fa 100644
+> > --- a/drivers/iommu/iommufd/hw_pagetable.c
+> > +++ b/drivers/iommu/iommufd/hw_pagetable.c
+> > @@ -43,6 +43,23 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+> >  	return 0;
+> >  }
+> >  
+> > +static int iommufd_hw_pagetable_link_ioas(struct iommufd_hw_pagetable *hwpt)
+> > +{
+> > +	int rc;
+> > +
+> > +	if (hwpt->parent)
+> 
+> This should be:
+> 
+>    hwpt->domain->type != IOMMU_DOMAIN_UNMANAGED
+> 
+> Ie if we asked the driver to alloc a domain and it allocated an
+> UNMANAGED domain then it means IOMMUFD manages the mappings and it
+> should be populated from the IOAS.
 
-Could you please consider taking this series in via the 
-linux-kselftest tree?
+OK. That looks better to me.
 
-Thank you very much
+> Arguably drivers should EOPNOTSUPP if presented with a parent in this
+> situation, but still this code should be clear about the purpose.
+> 
+> > +		hwpt = hwpt->parent;
+> 
+> And we definately shouldn't touch the parent. That is already setup
+> and owned by someone else. Just return and don't do anything.
 
-Reinette
+Yes.
 
-On 2/15/2023 12:32 AM, Shaopeng Tan wrote:
-> Hello,
-> 
-> The aim of this patch series is to improve the resctrl selftest.
-> Without these fixes, some unnecessary processing will be executed
-> and test results will be confusing. 
-> There is no behavior change in test themselves.
-> 
-> [patch 1] Make write_schemata() run to set up shemata with 100% allocation
-> 	  on first run in MBM test.
-> [patch 2] The MBA test result message is always output as "ok",
-> 	  make output message to be "not ok" if MBA check result is failed.
-> [patch 3] When a child process is created by fork(), the buffer of the 
-> 	  parent process is also copied. Flush the buffer before
-> 	  executing fork().
-> [patch 4] An error occurs whether in parents process or child process,
-> 	  the parents process always kills child process and runs
-> 	  umount_resctrlfs(), and the child process always waits to be
-> 	  killed by the parent process.
-> [patch 5] If a signal received, to cleanup properly before exiting the
-> 	  parent process, commonize the signal handler registered for 
-> 	  CMT/MBM/MBA tests and reuse it in CAT, also unregister the 
-> 	  signal handler at the end of each test.
-> [patch 6] Before exiting each test CMT/CAT/MBM/MBA, clear test result 
-> 	  files function cat/cmt/mbm/mba_test_cleanup() are called
-> 	  twice. Delete once.
-> 
-> This patch series is based on Linux v6.2-rc7.
-> 
-> Difference from v7:
-> [patch 4] 
->   - Fix commitlog.
-> [patch 5]
->   - Fix commitlog.
-> 
-> Pervious versions of this series:
-> [v1] https://lore.kernel.org/lkml/20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com/
-> [v2] https://lore.kernel.org/lkml/20221005013933.1486054-1-tan.shaopeng@jp.fujitsu.com/
-> [v3] https://lore.kernel.org/lkml/20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com/
-> [v4] https://lore.kernel.org/lkml/20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com/
-> [v5] https://lore.kernel.org/lkml/20230111075802.3556803-1-tan.shaopeng@jp.fujitsu.com/
-> [v6] https://lore.kernel.org/lkml/20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com/
-> [v7] https://lore.kernel.org/lkml/20230213062428.1721572-1-tan.shaopeng@jp.fujitsu.com/
-> 
-> Shaopeng Tan (6):
->   selftests/resctrl: Fix set up schemata with 100% allocation on first
->     run in MBM test
->   selftests/resctrl: Return MBA check result and make it to output
->     message
->   selftests/resctrl: Flush stdout file buffer before executing fork()
->   selftests/resctrl: Cleanup properly when an error occurs in CAT test
->   selftests/resctrl: Commonize the signal handler register/unregister
->     for all tests
->   selftests/resctrl: Remove duplicate codes that clear each test result
->     file
-> 
->  tools/testing/selftests/resctrl/cat_test.c    | 29 ++++----
->  tools/testing/selftests/resctrl/cmt_test.c    |  7 +-
->  tools/testing/selftests/resctrl/fill_buf.c    | 14 ----
->  tools/testing/selftests/resctrl/mba_test.c    | 23 +++----
->  tools/testing/selftests/resctrl/mbm_test.c    | 20 +++---
->  tools/testing/selftests/resctrl/resctrl.h     |  2 +
->  .../testing/selftests/resctrl/resctrl_tests.c |  4 --
->  tools/testing/selftests/resctrl/resctrl_val.c | 67 ++++++++++++++-----
->  tools/testing/selftests/resctrl/resctrlfs.c   |  5 +-
->  9 files changed, 96 insertions(+), 75 deletions(-)
-> 
+Nic
