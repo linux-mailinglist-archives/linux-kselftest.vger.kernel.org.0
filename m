@@ -2,168 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D79C6B38C0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Mar 2023 09:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B9E6B3968
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Mar 2023 10:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjCJIcu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Mar 2023 03:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S230209AbjCJJBW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Mar 2023 04:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCJIcp (ORCPT
+        with ESMTP id S231346AbjCJJAy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Mar 2023 03:32:45 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FEAD8856
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Mar 2023 00:32:43 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h11so4272645wrm.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Mar 2023 00:32:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112; t=1678437161;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TJuMsbXXouOd2PyFNr2a5FEYKDBDh0dbVzmPDa8uuXQ=;
-        b=6+h/WlJ0+9r4Au83MEnq08/8w4U5tFlUpoxuVfhP4Hk/GWhpYzxXmNNgZhNhkHAy7V
-         Go95mYvJZRjJVPyBI9/+NGmsXycp6zYkWisxJjsPkSKjePoMinbUGa8KMWjN5q60BbLb
-         XZvOk9ldHhsDmEMgz8riqM09kql7jQtFWpPZztQ8dpEFyCFccuoh9PbWTbF5Cng/YEUO
-         1aCnmcoclaXl5eihxDibgxo6i659ZnQx9q3gZWmaWzIJMU/xfXgEefFiTfeRsLr8uQBi
-         u5FBcIPdWTyeZb9ATBWG93GguBCwiKJIkUSfizgXSgP91lB5iHKDlRCnXzUsb8dQPfv1
-         5JHQ==
+        Fri, 10 Mar 2023 04:00:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04089EF8E
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Mar 2023 00:53:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678438430;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nyujGqY6hbL21R7JvgsLqfIPq6KmX0JyLo05ppN+aX0=;
+        b=XYBvXd3PS4xRNpM4J3WvtQwxYS0ssYTMubR9E3eI6ZeJ0Us/jALBsTlVcx5qeAZtxKkafB
+        IYqQWeIbU0RuMG3gUn4S9DgFPwqqVe5OVI5hhFGEvf//nHoFDHJWAxHFEFwTYBE32USqRa
+        /gnhe6BWv1U97SUcq76TIx0BjLLnggs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-583-UG7KFhcPO-KA-YJFp8yu8w-1; Fri, 10 Mar 2023 03:53:45 -0500
+X-MC-Unique: UG7KFhcPO-KA-YJFp8yu8w-1
+Received: by mail-wm1-f72.google.com with SMTP id m28-20020a05600c3b1c00b003e7d4662b83so3588071wms.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Mar 2023 00:53:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678437161;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TJuMsbXXouOd2PyFNr2a5FEYKDBDh0dbVzmPDa8uuXQ=;
-        b=BoRvRhApVZmvR1eX/l327Yaajh3AL3Lcv5rPZnJhmthLt37Gm+uUVp/z2aXSYGytAC
-         wiem1IAwmBKZAxzkKFR2N4UcTi+97y/ClBstB3hOJGQfyhiRi6Di2ER4ONqKs8lb/1tq
-         +42p8rowTyd8HSqd3N9Bx1sszqEKS5p529YQcOrq9s5fAi/d/m3p+pfFW81k8utRZFZu
-         qOjI7i7iQdbgKtkzQfYJfn1ozSGipZfUByvmq5nuvvJddDCyCRxKa6i9CRdKnrzEoHzV
-         pZm8uXlPGGHb6PIcRa8ZPdmiLYYVfOdwNaNjR/LxnlOktI92/my4TzdDgebJDmDP0kMe
-         IT5Q==
-X-Gm-Message-State: AO0yUKX7N709m5PdmVQuM0gQvvof0zQdViIVMLaB8wMxvQnZaj6KJ9xc
-        lPxt7scH/A68HA0FSdM/sIagkA==
-X-Google-Smtp-Source: AK7set+NEnHYypfu69kmiSLZweSL5tkrj3BZK84GJmGNGQJAwL7B8Mj0bU8BqRExNd0LzOwqQIdlYw==
-X-Received: by 2002:a5d:4b04:0:b0:2c5:3cfa:f7dc with SMTP id v4-20020a5d4b04000000b002c53cfaf7dcmr18236799wrq.7.1678437161334;
-        Fri, 10 Mar 2023 00:32:41 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id j3-20020a5d6043000000b002c5534db60bsm1508941wrt.71.2023.03.10.00.32.40
+        d=1e100.net; s=20210112; t=1678438425;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nyujGqY6hbL21R7JvgsLqfIPq6KmX0JyLo05ppN+aX0=;
+        b=Bovx6pnwnIHvuxQODtfGAAScFWoiuNeQqRsVfoXVCw/vynJsnEjRZ5lZc5588oWo7h
+         0VnrYEKsT0S+gMpSPhqO88hSzWCJNbhIWCZLlhaGoxz2L5KwBQnhMDfAN/c9ZOf/4Yj3
+         J2bIxYqtA5xZNnEO5u8PhtuLK95ih3GWJFidLa+V1Z/Nh7Lm1Fb/LAQYOxu5iTBufwcp
+         UY7thrLXFqu0gSYZzh5nrWX1fJpPyhTQh0m5/5simyH6QOHVKtyTIyOy4yWK1npNalEL
+         Rd8oqBh8dMTRdip6B5+C+53G+Judg/P/bJi6LnTc7OjWIn2hI+Tpx2iL8p1pJAXOHDO7
+         cjnA==
+X-Gm-Message-State: AO0yUKWpfoFYvaE3NgkTTWcZW0ZOrHdDDiYQmjXdvGGaKSjfWnVJdCXy
+        XxTrPlKJ/i0muO6wdjDlC2biDTvFEnUs/XXftdhrCRnbPtncJJxzbVG9FhvngaWN8jKfKp9asjY
+        omJ2rQsV2zKWMXckTTFj1vJv4lK5m
+X-Received: by 2002:a05:600c:1c17:b0:3dc:557f:6123 with SMTP id j23-20020a05600c1c1700b003dc557f6123mr1946404wms.1.1678438424829;
+        Fri, 10 Mar 2023 00:53:44 -0800 (PST)
+X-Google-Smtp-Source: AK7set82MkObAZdWQPCWwT+eXdPJoKLSsejspunYV9KZmp0T6Zmmx7jMIADOEHFaY00hmbmSF3ENFw==
+X-Received: by 2002:a05:600c:1c17:b0:3dc:557f:6123 with SMTP id j23-20020a05600c1c1700b003dc557f6123mr1946371wms.1.1678438424470;
+        Fri, 10 Mar 2023 00:53:44 -0800 (PST)
+Received: from redhat.com ([2.52.9.88])
+        by smtp.gmail.com with ESMTPSA id y6-20020a5d6146000000b002c54fb024b2sm1553272wrt.61.2023.03.10.00.53.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 00:32:40 -0800 (PST)
-Date:   Fri, 10 Mar 2023 09:32:39 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, idosch@mellanox.com,
-        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net
-Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no
- suitable device available
-Message-ID: <ZArrJ4NJsBO6cmqA@nanopsycho>
-References: <20230307150030.527726-1-po-hsu.lin@canonical.com>
- <ZAhV8nKuLVAQHQGl@nanopsycho>
- <CAMy_GT92sg4_JLPHvRpH542DPLbxOEYYoCMa2cnET1g8bz_R9Q@mail.gmail.com>
- <ZAh0fY4XoNcLTIOI@nanopsycho>
- <CAMy_GT_mLedbejcyTYkhEbuneuEvWycVi2orB82kC9ymXx0rng@mail.gmail.com>
- <ZAjS8OAFd++ThaHV@nanopsycho>
- <CAMy_GT-5DTTyXQsyHO8YX+NANeu-XvQgHG_PwQ3AeGt93CzSPg@mail.gmail.com>
+        Fri, 10 Mar 2023 00:53:43 -0800 (PST)
+Date:   Fri, 10 Mar 2023 03:53:37 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH net-next v3 0/3] vsock: add support for sockmap
+Message-ID: <20230310035307-mutt-send-email-mst@kernel.org>
+References: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMy_GT-5DTTyXQsyHO8YX+NANeu-XvQgHG_PwQ3AeGt93CzSPg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thu, Mar 09, 2023 at 04:44:10PM CET, po-hsu.lin@canonical.com wrote:
->On Thu, Mar 9, 2023 at 2:24 AM Jiri Pirko <jiri@resnulli.us> wrote:
->>
->> Wed, Mar 08, 2023 at 03:37:41PM CET, po-hsu.lin@canonical.com wrote:
->> >On Wed, Mar 8, 2023 at 7:41 PM Jiri Pirko <jiri@resnulli.us> wrote:
->> >>
->> >> Wed, Mar 08, 2023 at 11:21:57AM CET, po-hsu.lin@canonical.com wrote:
->> >> >On Wed, Mar 8, 2023 at 5:31 PM Jiri Pirko <jiri@resnulli.us> wrote:
->> >> >>
->> >> >> Tue, Mar 07, 2023 at 04:00:30PM CET, po-hsu.lin@canonical.com wrote:
->> >> >> >The `devlink -j port show` command output may not contain the "flavour"
->> >> >> >key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic),
->> >> >> >iproute2-5.15.0:
->> >> >> >  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
->> >> >> >           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
->> >> >> >           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
->> >> >> >           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
->> >> >>
->> >> >> As Jakub wrote, this is odd. Could you debug if kernel sends the flavour
->> >> >> attr and if not why? Also, could you try with most recent kernel?
->> >> >
->> >> >I did a quick check on another s390x LPAR instance which is running
->> >> >with Ubuntu 23.04 (6.1.0-16-generic) iproute2-6.1.0, there is still no
->> >> >"flavour" attribute.
->> >> >$ devlink port show
->> >> >pci/0001:00:00.0/1: type eth netdev ens301
->> >> >pci/0001:00:00.0/2: type eth netdev ens301d1
->> >> >pci/0002:00:00.0/1: type eth netdev ens317
->> >> >pci/0002:00:00.0/2: type eth netdev ens317d1
->> >> >
->> >> >The behaviour didn't change with iproute2 built from source [1]
->> >>
->> >> Could you paste output of "devlink dev info"?
->> >> Looks like something might be wrong in the kernel devlink/driver code.
->> >>
->> >The `devlink dev info` output is empty. The following output is from
->> >that Ubuntu 23.04 s390x LPAR, run as root:
->> ># devlink dev show
->> >pci/0001:00:00.0
->> >pci/0002:00:00.0
->> ># devlink dev show pci/0001:00:00.0
->> >pci/0001:00:00.0
->> ># devlink dev info
->> ># devlink dev info pci/0001:00:00.0
->>
->> Interesting, could you try ethtool -i to get the driver name?
->>
->Hi,
->
->Here you go:
->$ ethtool -i ens301
->driver: mlx4_en
->version: 4.0-0
->firmware-version: 2.35.5100
->expansion-rom-version:
->bus-info: 0001:00:00.0
->supports-statistics: yes
->supports-test: yes
->supports-eeprom-access: no
->supports-register-dump: no
->supports-priv-flags: yes
->
->$ ethtool -i ens317
->driver: mlx4_en
-
-mlx4 is indeed not setting attrs. So you patch is needed.
+On Tue, Feb 28, 2023 at 07:04:33PM +0000, Bobby Eshleman wrote:
+> Add support for sockmap to vsock.
+> 
+> We're testing usage of vsock as a way to redirect guest-local UDS
+> requests to the host and this patch series greatly improves the
+> performance of such a setup.
+> 
+> Compared to copying packets via userspace, this improves throughput by
+> 121% in basic testing.
 
 
->version: 4.0-0
->firmware-version: 2.35.5100
->expansion-rom-version:
->bus-info: 0002:00:00.0
->supports-statistics: yes
->supports-test: yes
->supports-eeprom-access: no
->supports-register-dump: no
->supports-priv-flags: yes
->
->HTH
->
->
->>
->> >kernel answers: Operation not supported
->> >
->> >>
+besides the small comment, looks ok. Feel free to include my ack
+in v4:
+
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+
+> Tested as follows.
+> 
+> Setup: guest unix dgram sender -> guest vsock redirector -> host vsock
+>        server
+> Threads: 1
+> Payload: 64k
+> No sockmap:
+> - 76.3 MB/s
+> - The guest vsock redirector was
+>   "socat VSOCK-CONNECT:2:1234 UNIX-RECV:/path/to/sock"
+> Using sockmap (this patch):
+> - 168.8 MB/s (+121%)
+> - The guest redirector was a simple sockmap echo server,
+>   redirecting unix ingress to vsock 2:1234 egress.
+> - Same sender and server programs
+> 
+> *Note: these numbers are from RFC v1
+> 
+> Only the virtio transport has been tested. The loopback transport was
+> used in writing bpf/selftests, but not thoroughly tested otherwise.
+> 
+> This series requires the skb patch.
+> 
+> Changes in v3:
+> - vsock/bpf: Refactor wait logic in vsock_bpf_recvmsg() to avoid
+>   backwards goto
+> - vsock/bpf: Check psock before acquiring slock
+> - vsock/bpf: Return bool instead of int of 0 or 1
+> - vsock/bpf: Wrap macro args __sk/__psock in parens
+> - vsock/bpf: Place comment trailer */ on separate line
+> 
+> Changes in v2:
+> - vsock/bpf: rename vsock_dgram_* -> vsock_*
+> - vsock/bpf: change sk_psock_{get,put} and {lock,release}_sock() order
+>   to minimize slock hold time
+> - vsock/bpf: use "new style" wait
+> - vsock/bpf: fix bug in wait log
+> - vsock/bpf: add check that recvmsg sk_type is one dgram, seqpacket, or
+>   stream.  Return error if not one of the three.
+> - virtio/vsock: comment __skb_recv_datagram() usage
+> - virtio/vsock: do not init copied in read_skb()
+> - vsock/bpf: add ifdef guard around struct proto in dgram_recvmsg()
+> - selftests/bpf: add vsock loopback config for aarch64
+> - selftests/bpf: add vsock loopback config for s390x
+> - selftests/bpf: remove vsock device from vmtest.sh qemu machine
+> - selftests/bpf: remove CONFIG_VIRTIO_VSOCKETS=y from config.x86_64
+> - vsock/bpf: move transport-related (e.g., if (!vsk->transport)) checks
+>   out of fast path
+> 
+> Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> ---
+> Bobby Eshleman (3):
+>       vsock: support sockmap
+>       selftests/bpf: add vsock to vmtest.sh
+>       selftests/bpf: Add a test case for vsock sockmap
+> 
+>  drivers/vhost/vsock.c                              |   1 +
+>  include/linux/virtio_vsock.h                       |   1 +
+>  include/net/af_vsock.h                             |  17 ++
+>  net/vmw_vsock/Makefile                             |   1 +
+>  net/vmw_vsock/af_vsock.c                           |  55 ++++++-
+>  net/vmw_vsock/virtio_transport.c                   |   2 +
+>  net/vmw_vsock/virtio_transport_common.c            |  24 +++
+>  net/vmw_vsock/vsock_bpf.c                          | 175 +++++++++++++++++++++
+>  net/vmw_vsock/vsock_loopback.c                     |   2 +
+>  tools/testing/selftests/bpf/config.aarch64         |   2 +
+>  tools/testing/selftests/bpf/config.s390x           |   3 +
+>  tools/testing/selftests/bpf/config.x86_64          |   3 +
+>  .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++
+>  13 files changed, 443 insertions(+), 6 deletions(-)
+> ---
+> base-commit: d83115ce337a632f996e44c9f9e18cadfcf5a094
+> change-id: 20230118-support-vsock-sockmap-connectible-2e1297d2111a
+> 
+> Best regards,
+> --
+> Bobby Eshleman <bobby.eshleman@bytedance.com>
+> 
+> ---
+> Bobby Eshleman (3):
+>       vsock: support sockmap
+>       selftests/bpf: add vsock to vmtest.sh
+>       selftests/bpf: add a test case for vsock sockmap
+> 
+>  drivers/vhost/vsock.c                              |   1 +
+>  include/linux/virtio_vsock.h                       |   1 +
+>  include/net/af_vsock.h                             |  17 ++
+>  net/vmw_vsock/Makefile                             |   1 +
+>  net/vmw_vsock/af_vsock.c                           |  55 ++++++-
+>  net/vmw_vsock/virtio_transport.c                   |   2 +
+>  net/vmw_vsock/virtio_transport_common.c            |  25 +++
+>  net/vmw_vsock/vsock_bpf.c                          | 174 +++++++++++++++++++++
+>  net/vmw_vsock/vsock_loopback.c                     |   2 +
+>  tools/testing/selftests/bpf/config.aarch64         |   2 +
+>  tools/testing/selftests/bpf/config.s390x           |   3 +
+>  tools/testing/selftests/bpf/config.x86_64          |   3 +
+>  .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++
+>  13 files changed, 443 insertions(+), 6 deletions(-)
+> ---
+> base-commit: c2ea552065e43d05bce240f53c3185fd3a066204
+> change-id: 20230227-vsock-sockmap-upstream-9d65c84174a2
+> 
+> Best regards,
+> -- 
+> Bobby Eshleman <bobby.eshleman@bytedance.com>
+
