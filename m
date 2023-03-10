@@ -2,159 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5D56B3135
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Mar 2023 23:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8416B32F8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Mar 2023 01:56:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjCIWmv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Mar 2023 17:42:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
+        id S229895AbjCJA41 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Mar 2023 19:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbjCIWma (ORCPT
+        with ESMTP id S229872AbjCJA4Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 17:42:30 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C6B20A1C
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Mar 2023 14:41:45 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id s22so4252810lfi.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Mar 2023 14:41:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678401610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QbAikeIdL+omb6y11NKt1vr7KucGsxizbqoLplhFCoo=;
-        b=DkAi09PuPVTp0hxHpLSz4t87TRBgGLDjZ9W4eKqEWOosoh7NEt2ji+IrV4y/BdgcY9
-         skLeabsKW4jeG2GzdbXYXwyO+MsKjGqXldrPeDdFRmTSd/uFUS8ec7Bn2+AjYHuCaESx
-         weJLsbQ1qHUJ5RAtAOYTNaviRtR1X+0QPCY9OhbKxhB5nDmp5wOWw4UBRzy/bMgQNQBr
-         dPgZGHl4IojX9goLytD6PJVC92GxsOh2TfNXEjmmQDB3qTrtDDjxUPQM2+DUAJiE1LLR
-         YFdepkGF4YX3sbCfx6WYuiNAH/RneZ17WAP7RBd1anbeQX0C5MJ+HkeqWIRf3rAB6pZx
-         /djw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678401610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QbAikeIdL+omb6y11NKt1vr7KucGsxizbqoLplhFCoo=;
-        b=k1dVoOY592qEVLk3NFevsD48kkXkF12aWSge65UnXTRzdtKj3e5ZgFuo2echRaPQ0b
-         /czt9tomaYatJSUnG+cFMdrtF7ztjUuzKZUCD3CiBU35Hl1Vhn/S139DYi4KkaG4QaLm
-         67dy0w5QDRJ0gjRzhS3nZ1CbcUm6FO9ie6gilJYM8UNH/H8f/mxkWhro+ODHGMy7NWjl
-         Q6jv9FyTHkdC2swMsswMMnFMhcGdAd4/X6Ys/IKHXCJbimYBQhPtSQqGDo29Pvj9PK9p
-         7NOZOZobndNafbxLfhHpafIhd5e8vw7YvX8tzoydCCz76MbZc1Gx7r9PYL0J4CSjaajd
-         VHdg==
-X-Gm-Message-State: AO0yUKWIL6CD+BlUvfgB1C32hz7iXr1cGAwQbpuA4eLl6IiIVYY2W0VM
-        lK9ZoC2TXH2Puhv25+U9Wv9w1DaPvN7VtNPtXd2Skw==
-X-Google-Smtp-Source: AK7set9wPQ7n+O+qozP441kYgMXEWRqd09XR/uf9pCcC+fLMi9lyfYb5jxqy2HTgbAi1e6AGJJ6CFWpaMh2S7PfTWlM=
-X-Received: by 2002:a05:6512:3c99:b0:4d8:86c2:75ea with SMTP id
- h25-20020a0565123c9900b004d886c275eamr149481lfv.3.1678401609928; Thu, 09 Mar
- 2023 14:40:09 -0800 (PST)
+        Thu, 9 Mar 2023 19:56:25 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D011CF34DB;
+        Thu,  9 Mar 2023 16:56:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BwUwSi4dWfVK+YGBpsvXPzpIYuJLE8Y3H4196m1j58P7Lw3Bob/Zre39QavP4MUsNRvBuNXJiTZBkHGe66W5iJVdWtYrloK/V8ULldne8xtAUf2t8xytI7xpngQkmep+WJ+XiFS3V2fjqCk27p1ceZgAvvtt6vYgfAvgIIOLKvvO5SOkF07nXzfO9vYevHG3/606EI1710w2b8+Jeu8Uo2pEAELR30ErwlFYdknqInjeyjss9QG94qEzBs4WeOLqt/XOXzs0qMvbRfp79rwn8NP200S42VaWHX/P00fGgUKaGpf9nN0jU2RPlyCpp346s7gMkPAoUCytHlL+lo4riQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=16nKaIX3IhG7u+LlTSDYRgjathcc6N6nTWoFEkdZdoM=;
+ b=b7FrEnHQjn/pqZxUxfj94XLS9ShZRNIj6iUf0UG44ieNVliBZHP43HXpODzz/46RwJ+D9rAqEycLoV/Ndzx0cQtVSCHGxnaYI0E2fN6kirFstaOWOOuc1Vse7WDjx7+F9/eDJoGOnHcNSegQKdLuCRG0cTDS46Eh4ziOJgmyQmDhHHuNROiHAmQMd+OJ+i0lFAyiDWwJDW/peLfFOepIbHugTcvx9T5zDas2xypjseDVIxi7G7YtTmVcu0v0PM8tiZ/Dwhs49XrdoOs46KHX5PBTbOu+srLixpmMs0SGNcTgpZebqIUzYrSe2DCI1actaRlI8IpkQSykTM3rkaxGag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=16nKaIX3IhG7u+LlTSDYRgjathcc6N6nTWoFEkdZdoM=;
+ b=NsZg6xpRMNfxc38eDjSzVCaoxFlILb9teEQvCxRz1gU98mdXNlyHWQk1fs9qZcovT11g5LJnebOCkk/l1y/FrwFlmmIoID8Uw1nCIpUMTB4x+x5T3VEXEnpOq0Qk6CFhQN1P/3QFPm+b8cljpjXS5HKI8P/vG/C4vBpzUg2hWOI9Kx8Bb/a5v2r1ZuNrtJhvytHgqrJNsKTDX1nfl1pbqFd4ZNwYT/nmE6A/Sq1ig0RGzINeezfpRy9WLRtQxZgKVRaQ5oOacyQFvzJjtg301oxzV4t/YE4VN+9gEiwrwTsWYYeCdFpJdfbAvUiy4n2Kd3jsj1rK43WsxhewZPKkuA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH7PR12MB5998.namprd12.prod.outlook.com (2603:10b6:510:1da::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
+ 2023 00:56:10 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.017; Fri, 10 Mar 2023
+ 00:56:10 +0000
+Date:   Thu, 9 Mar 2023 20:56:06 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Yi Liu <yi.l.liu@intel.com>
+Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
+        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
+        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 01/12] iommu: Add new iommu op to create domains owned by
+ userspace
+Message-ID: <ZAqAJgoQ3f0L2Gfo@nvidia.com>
+References: <20230309080910.607396-1-yi.l.liu@intel.com>
+ <20230309080910.607396-2-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309080910.607396-2-yi.l.liu@intel.com>
+X-ClientProxiedBy: SJ0PR03CA0352.namprd03.prod.outlook.com
+ (2603:10b6:a03:39c::27) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20230308221932.1548827-1-axelrasmussen@google.com>
- <20230308221932.1548827-4-axelrasmussen@google.com> <ZAkPmy0EqcW6Mfvn@x1n>
-In-Reply-To: <ZAkPmy0EqcW6Mfvn@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 9 Mar 2023 14:39:33 -0800
-Message-ID: <CAJHvVcjDtt0CEEyihViUeQYHr8zV97kZEr+zPFBRVmqwMXZzSg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] mm: userfaultfd: combine 'mode' and 'wp_copy' arguments
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
-        James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB5998:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85ff04f1-d0f2-4602-db6e-08db21023cf2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /trdMB+F0CJE5kqwHrLVbrmNpTHjnc5B+DkWAKeo4iUVwyweBgn0jXXvuzEDntZSfJ/sC5v+Frn8zNedzjX9iq0d2HjV8+ge+jjfNrnFw4jZgwahDlyG75cFjQOXi1oe5LUOKaG2P8CcNIhrDcDqY46juVgiE1Nv2hEcaNfm5cyo5E6unfW3mvginBCxwIpxacLzJ2gyI3bUtYuygaaCLGLTBAVJE5zp2uiOzuM8nLcC7QY3e3lhx2O8SVfMXtA2ZN87q+W8rJC1epHiqevjUIsiSDJn7oEyLBDtSDyTLvL+iIFJLbXDllZ5gUEVdA3a0qaRxJT+khIAhx7UGphhZ8yPK45+w8KJ8hoNvefaUxyl1Nq7v4s2nZevoVaXn8HwhHvurFRHKqWVqXzPK3dBqGDT/+BGQXYv5EbJqHlnTAR4BYOiLen8wpRNnWdcs7HcFlgolHbRRHMf+NeicRW4+vLlRUt2P27G6CRqaHbyeSkTkZU68Ng2RKoTAX7UxSYsFlIMmhARnIboOVQ+5keJnswFDlEJkZwLu/ghRm3CzdqaC6O4QvDU4X8/uqbcYe1sscNylsYdqzikz/tDb4kc5mhsYAcLO+eYLPLb6cMBljRfPLUkr+JPLYOPHt3zASX50tR1R5Ylsbzvlm2psYBNgQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(396003)(366004)(376002)(346002)(451199018)(8936002)(36756003)(7416002)(5660300002)(26005)(6506007)(6512007)(6666004)(38100700002)(83380400001)(186003)(2616005)(316002)(86362001)(66556008)(41300700001)(66476007)(6916009)(66946007)(8676002)(4326008)(6486002)(478600001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VuYE+qWekGncWIKOYYoBFLODEN5RmI/Xn26/s8HpkUQQ9+rZ7bpK2j18bWIs?=
+ =?us-ascii?Q?kvAVci4wiMyG60sKT9awwdALzUkKUYvLfZrS0A96lS4YYy7i4lSH5gqG2NFr?=
+ =?us-ascii?Q?9CRosK3qSL4okBJ49ehlJe5QtezcJG0StjjOMZ/yZzOGWFdQcM8aWRCFvKRm?=
+ =?us-ascii?Q?pxQlWFf7OjoLbHHJwhJRM2wLNqrSZ+mWWu+Z8b+FCJOq+1wSVZehSnGK1hWu?=
+ =?us-ascii?Q?/u8sw4iJfV5AHU+O9FHOJN+JFZL+e6jWUbmqi6JEAUidCqb6c55uG/tDAZv7?=
+ =?us-ascii?Q?IGgYziSs+PffH5oZCPaYFHEMayHq8SwAO4qroadMN+fismqRMoRzm70r7a9W?=
+ =?us-ascii?Q?WUx00blNua2Q+vcGNxF6FRzAjZcqRv3qbKOZvLh/wFXrZpAnu0YcYG3jop60?=
+ =?us-ascii?Q?hIpu90Su8PgDggf/aoJRbzwFw9qDCs7iIkrzBMFNbbE8uoQEE8sGCqzsaan9?=
+ =?us-ascii?Q?cR5OZjTSuEZzKi5vSulXcZfNiNme///FLYRQwskIlUvgQQ81c+jRpiYsaBEV?=
+ =?us-ascii?Q?YylzRMdrjbfJICyX+OpQfe1f3+kC0dMWeDgPVw55E1WXrDLt5wl4CaRdEy6h?=
+ =?us-ascii?Q?3rY7T+rjaSOdZZnL1+bRdpILWilYmHK10f6UciAsrCjVwgR9d+xiNDe4vQzE?=
+ =?us-ascii?Q?uOyMBqfi7nuM0qbPXQn9q/vFJ8WDRHPVrvv0uaZfRnI7AfckEnEzFZGPLopq?=
+ =?us-ascii?Q?3TVz8wbuln7GZBRuhXEdCZgukjaq6lZ8E61H9qBaHWQrztgvQ93uG8WEJyYy?=
+ =?us-ascii?Q?B3jYoQx9DEF7X3iYwaL0dYVibs6MD8FaKnp0WZZAMmnV93iibqXaG+jbGELz?=
+ =?us-ascii?Q?MCRmiE3B2ngt43KapMebwCdBuWaIt08/nbMYWBNwL+KW0KeHEfWStTSeor6k?=
+ =?us-ascii?Q?VuZnex5Kj1D28rMG8SbELmeR7xVK6FIEIkO33++YusYADsa0q42TAprSwSg8?=
+ =?us-ascii?Q?xhTDHBNQfAyxGNYT6gUmc/5dPMHGUMJD1aohcR/GfmTju0+/qvSZ650NFcad?=
+ =?us-ascii?Q?2U754bCob5T5Gx4uy5VcUuBO1M1tUZhQ/pNAZYGJHzm7t6N/U8gzBuvjFd7e?=
+ =?us-ascii?Q?XkQD43GqGVRdDbmk6zCWrkMMgZ3GBExQFmPYCORMf9Z77byIzfUUpk2xBiaj?=
+ =?us-ascii?Q?KjKRU43VgfiEi9Ykr46hclB4PV858x7ftvZKU9bZJO1OAsopUeLwLM6He2A2?=
+ =?us-ascii?Q?aIvGcPH/wXGpovhj5vgQf3Oz/Ciym2yip0ZBIrPaR2mndcsj0j8AI68ZCp56?=
+ =?us-ascii?Q?WtdHjeO2AInV9ymNUyAfqDUeSj+P3o4qFXcLjqClB/RG150a3Vv/hhjCFjrH?=
+ =?us-ascii?Q?mqGLiSH1vrjCdquFGnWB9s6uIBDhV4vo2tC2DVc4xiBoxezVxpPrFMnx324u?=
+ =?us-ascii?Q?Qxop+HP8ElSJ4NMJB5Nev1iFQyvUVybFze4CLtVdn4IWPxHE6iQ3dDUvMY4d?=
+ =?us-ascii?Q?IH/oysfdyiiedMLf8ZxnjfueeRmPvwGYPc6nslzvRdn0NqESPGxHF0eIzMH/?=
+ =?us-ascii?Q?7VWHcGT8o6Cm8/BxwYRX4t22ryK2mEWCmH907BB5vXN3zIX9xjvWRo1rg80L?=
+ =?us-ascii?Q?loaWcv69GgKuCVUlTBw9Qjm+L0CsW5OpRRqlsdua?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85ff04f1-d0f2-4602-db6e-08db21023cf2
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 00:56:10.1770
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: j1d0Dyw6W7YYTERLH+gxuRmV9PC86lCNEY9zjkkhWybB+a08+k9e58qZs5MqsvdQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5998
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 2:43=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
->
-> All nitpicks below.
->
-> On Wed, Mar 08, 2023 at 02:19:31PM -0800, Axel Rasmussen wrote:
-> > +static inline bool uffd_flags_has_mode(uffd_flags_t flags, enum mfill_=
-atomic_mode expected)
-> > +{
-> > +     return (flags & MFILL_ATOMIC_MODE_MASK) =3D=3D ((__force uffd_fla=
-gs_t) expected);
-> > +}
->
-> I would still call it uffd_flags_get_mode() or uffd_flags_mode(), "has"
-> sounds a bit like there can be >1 modes set but it's not.
+On Thu, Mar 09, 2023 at 12:08:59AM -0800, Yi Liu wrote:
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 3ef84ee359d2..a269bc62a31c 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -229,6 +229,7 @@ struct iommu_iotlb_gather {
+>   *           after use. Return the data buffer if success, or ERR_PTR on
+>   *           failure.
+>   * @domain_alloc: allocate iommu domain
+> + * @domain_alloc_user: allocate user iommu domain
+>   * @probe_device: Add device to iommu driver handling
+>   * @release_device: Remove device from iommu driver handling
+>   * @probe_finalize: Do final setup work after the device is added to an IOMMU
+> @@ -266,6 +267,9 @@ struct iommu_ops {
+>  
+>  	/* Domain allocation and freeing by the iommu driver */
+>  	struct iommu_domain *(*domain_alloc)(unsigned iommu_domain_type);
+> +	struct iommu_domain *(*domain_alloc_user)(struct device *dev,
+> +						  struct iommu_domain *parent,
+> +						  const void *user_data);
 
-I want a helper which does the comparison, instead of just returning
-the mode, because it avoids all callers needing to do the __force cast
-themselves to appease sparse.
+Since the kernel does the copy from user and manages the zero fill
+compat maybe this user_data have a union like Robin suggested.
 
-How about uffd_flags_mode_is() ?
+But yes, this is the idea.
 
->
-> > +
-> > +static inline uffd_flags_t uffd_flags_set_mode(uffd_flags_t flags, enu=
-m mfill_atomic_mode mode)
-> > +{
-> > +     return flags | ((__force uffd_flags_t) mode);
-> > +}
->
-> IIUC this __force mostly won't work in any way because it protects
-> e.g. illegal math ops upon it (to only allow bitops, iiuc) but here it's =
-an
-> OR so it's always legal..
->
-> So I'd just drop it and also clear the mode mask to be very clear it sets
-> the mode right, rather than any chance of messing up when set twice:
->
->     flags &=3D ~MFILL_ATOMIC_MODE_MASK;
->     return flags | mode;
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Without this __force, "make C=3D1" gives errors like this:
-
-./include/linux/userfaultfd_k.h:66:16: warning: restricted
-uffd_flags_t degrades to integer
-./include/linux/userfaultfd_k.h:66:22: warning: incorrect type in
-return expression (different base types)
-./include/linux/userfaultfd_k.h:66:22:    expected restricted uffd_flags_t
-./include/linux/userfaultfd_k.h:66:22:    got unsigned int
-
-This is because the mode being passed in is effectively an integer, so
-the | expression loses the restricted type. Casting the mode first
-like this appeases sparse.
-
-An alternative would be to do the cast in the definition of the mode
-values up-front; but as we noticed before, we can't really usefully do
-that with it still being an enum (so we'd have to hard-code things
-like the mode mask, etc.)
-
-I do completely agree about clearing the mask bits first, to avoid
-mistakes. I'll send an updated version with that change. If we're
-going to have an inline helper anyway to do that, for me it makes less
-sense to switch away from the num approach (basically the benefit of
-that would be to avoid needing this cast, and therefore the helper;
-but if we want the helper anyway for other reasons ...).
-
->
-> But feel free to ignore this if there's no other reason to repost, I don'=
-t
-> think it matters a huge deal.
->
-> Acked-by: Peter Xu <peterx@redhat.com>
->
-> Thanks,
->
-> --
-> Peter Xu
->
+Jason
