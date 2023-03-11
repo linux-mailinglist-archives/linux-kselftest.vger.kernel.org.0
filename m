@@ -2,190 +2,385 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD986B590C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Mar 2023 07:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AD36B5BEA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Mar 2023 13:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjCKGml (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 11 Mar 2023 01:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S229809AbjCKMnV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 11 Mar 2023 07:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCKGmk (ORCPT
+        with ESMTP id S229872AbjCKMnU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 11 Mar 2023 01:42:40 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA2C11CD5D
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Mar 2023 22:42:38 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id k37so4769874wms.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Mar 2023 22:42:38 -0800 (PST)
+        Sat, 11 Mar 2023 07:43:20 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954211B2CA;
+        Sat, 11 Mar 2023 04:43:16 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so12513419pjg.4;
+        Sat, 11 Mar 2023 04:43:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678516956;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rLCDgBE2CpEpsYEH2GzNb2mRA3Ov/LpZ5EV9ph3pyrE=;
-        b=GJw9guvyr0s5eebXuJrA9NOkpl95WPNpiig/eTGB5Oom88V/Zp6f+dhqK5P/TXiP9I
-         +lME1MquTJSG6dt2pPa57FLIAwj/biU0Qf962U4moIZrFm+oWItD8o5l+Y34iS4LOMOj
-         Dljq872LDn+dRGWMQtNJuQE+g+5Is0J8POfj2Gl0v+5e1j5IJ4rbjOzgMWHRGEgZhsNE
-         3RL/kxG3uz2rxtrTqxJwBzbtg4LSrZ/ZL9Mg/las7shVi1Poyt9Yz6xxm/+04xdFR1jG
-         IrkPMxmJ5nttDheyrDkTehYfgNS+FJF4Ruv0PMXdmNsYgh1gpy9TOUQ9fl6wHqu01k3y
-         HK0g==
+        d=gmail.com; s=20210112; t=1678538596;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/URByzqP1aUTYLEipKgTcG3HOFzvXYot7o9SpxbTOlE=;
+        b=anAVM2Ae2uZcmt8X+H59rsDiMnnCsJmdVMnD1T8W1mxw8HI/ZZRRRxPw82iJGKclUK
+         DddJARY5haa66j+toGHtE2JxdGhX7QLSz2thDKIAx2u6X8RyWLAyXgpJsMGm9W1P7Z9+
+         woGDdAw99FUGgf5Ig4DA5PJgDhGNKhOrcSZUDUfdOPxR1mz1sqFEd088+ajpMqb+952Z
+         MFYk7mFI6PNu77sIsSGpFz5YE4u9tVdnRdvyDy4NJ+q8iTnuktvb8rUjfAo9TFnNHTYp
+         QVINIBEX6BS8kcq5Zup6S6waeuR2pUVmwi0C4hYF3ddY/dpJeDCg6RqRJWsdes7C3Glc
+         gF3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678516956;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678538596;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rLCDgBE2CpEpsYEH2GzNb2mRA3Ov/LpZ5EV9ph3pyrE=;
-        b=LYjhLbB/YG7LMXHkX3I/PNP/UNTh1b0+P2w763xOmHMTJipJ3DZTXL4pwWYDXloRRf
-         37N4u77C+RCiX2C45u9deoYxdB5C52RCGk61fMDUMIhj2ba3TgQm6pF0c9H7cGv/Bfah
-         geUEY+NuUQj5VjSBfjAGvSMBiVWhhCOPtFBIecFJVxPQvy62hO5xHkeucudKnMqC/8me
-         hBgE17VuhOyWnyMvHZrEotPSfTlsuSjhTWvlZ11xs10Megd2DttxwFN5G+iHXzC6ajcW
-         7HQAPUcALR9wV7iVWKpvm8EO+FfrJ+OdH3NeLXnhG9GzBsgvqtYe4iR55xOetOshTott
-         aoFw==
-X-Gm-Message-State: AO0yUKVLvXl5vAV8SitVdqMLB7eIFM2g7MSMdr7EID39BkHz8w6Ejvtg
-        wkCe5WguK/gf+eOA9oRrYYV/G+B4xTA8sFcrL+rmkA==
-X-Google-Smtp-Source: AK7set9wYQn7im6e0NM13fx/mhFULhLhun1pudfxqWhKunmEGg+fxkJOhN9RKEAuwsiPqa/qDohJi4l7xBDedI9OZmU=
-X-Received: by 2002:a05:600c:a382:b0:3eb:2e68:5c76 with SMTP id
- hn2-20020a05600ca38200b003eb2e685c76mr1461577wmb.3.1678516956022; Fri, 10 Mar
- 2023 22:42:36 -0800 (PST)
+        bh=/URByzqP1aUTYLEipKgTcG3HOFzvXYot7o9SpxbTOlE=;
+        b=byUBN4F+tGIVWzyzQFv9HSj+7/cA+2nLm7sIT18L+RoRfeUi8dVjM388lUS1QCv09S
+         7DPnJhj1SmNXZLATki/tTCfgeCorfbwcrVV52lgWJ//vRaZIL+fltyG6ujR9EMKkmDIk
+         N4p0oo89JqsjmqnChmp4ueBa/+EFB5s9knuR1/AIHgzKk/FpMIWcbzXRMg8vlmA+07eD
+         Fbrwrt52dMGnEysaj/nlm0TJWJQlhVYvCKDmN7mfNdqMBra3o2vBNpV9KcVuIM2S+dNl
+         5VIwIO3M8Mkm2CQES2Mb6rUmhH9GYIBh3exzfETs2oB3ocpn20K6vMRZhfcBGqvTtFiZ
+         J+ag==
+X-Gm-Message-State: AO0yUKWkM1pUHUclaZw6mvWKWg9eCDjlwTSGr1OnDSEgTpUZoZFQluWF
+        TfdZFbb94efomJYrSKawtro=
+X-Google-Smtp-Source: AK7set9yFv7U1+UrHZRVxNZ32hwkK3YXG3P+9BDW+0E3ExWh/KdX1qLwZ0phw0UOKHhA6JMPz+o89A==
+X-Received: by 2002:a17:902:d492:b0:19c:b7da:fbdf with SMTP id c18-20020a170902d49200b0019cb7dafbdfmr36118827plg.26.1678538595873;
+        Sat, 11 Mar 2023 04:43:15 -0800 (PST)
+Received: from kim-GL702ZC.. ([118.32.98.101])
+        by smtp.gmail.com with ESMTPSA id ka3-20020a170903334300b0019d1f42b00csm1538734plb.17.2023.03.11.04.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 04:43:15 -0800 (PST)
+From:   paranlee <p4ranlee@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, paranlee <p4ranlee@gmail.com>
+Subject: [PATCH] selftests/ftrace: Update comment and clean up
+Date:   Sat, 11 Mar 2023 21:41:53 +0900
+Message-Id: <20230311124151.43691-1-p4ranlee@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230302013822.1808711-1-sboyd@kernel.org> <20230302013822.1808711-3-sboyd@kernel.org>
- <CABVgOSkomwwgKZ9N0_0YMDL--QaZiTV7ONgSRABU2Ph1Z0CG-g@mail.gmail.com>
- <a97c9bb3a5addfb34af8ccabaa513026.sboyd@kernel.org> <CABVgOSkJ4mw_DtFzn5EwcsuYixWY_j13YotxEYqWhO+ZCL1KPg@mail.gmail.com>
- <d64a086ddcb7c5ca5abecab0ca654259.sboyd@kernel.org>
-In-Reply-To: <d64a086ddcb7c5ca5abecab0ca654259.sboyd@kernel.org>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 11 Mar 2023 14:42:24 +0800
-Message-ID: <CABVgOSk9gqRe_5yQZweBA2Qg2aGx8rUJtOHywGeT4x7TEyBH0A@mail.gmail.com>
-Subject: Re: [PATCH 2/8] of: Enable DTB loading on UML for KUnit tests
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 11 Mar 2023 at 07:34, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting David Gow (2023-03-10 00:09:48)
-> > On Fri, 10 Mar 2023 at 07:19, Stephen Boyd <sboyd@kernel.org> wrote:
-> > >
-> > >
-> > > Hmm. I think you're suggesting that the unit test data be loaded
-> > > whenever CONFIG_OF=y and CONFIG_KUNIT=y. Then tests can check for
-> > > CONFIG_OF and skip if it isn't enabled?
-> > >
-> >
-> > More of the opposite: that we should have some way of supporting tests
-> > which might want to use a DTB other than the built-in one. Mostly for
-> > non-UML situations where an actual devicetree is needed to even boot
-> > far enough to get test output (so we wouldn't be able to override it
-> > with a compiled-in test one).
->
-> Ok, got it.
->
-> >
-> > I think moving to overlays probably will render this idea obsolete:
-> > but the thought was to give test code a way to check for the required
-> > devicetree nodes at runtime, and skip the test if they weren't found.
-> > That way, the failure mode for trying to boot this on something which
-> > required another device tree for, e.g., serial, would be "these tests
-> > are skipped because the wrong device tree is loaded", not "I get no
-> > output because serial isn't working".
-> >
-> > Again, though, it's only really needed for non-UML, and just loading
-> > overlays as needed should be much more sensible anyway.
->
-> I still have one niggle here. Loading overlays requires
-> CONFIG_OF_OVERLAY, and the overlay loading API returns -ENOTSUPP when
-> CONFIG_OF_OVERLAY=n. For now I'm checking for the config being enabled
-> in each test, but I'm thinking it may be better to simply call
-> kunit_skip() from the overlay loading function if the config is
-> disabled. This way tests can simply call the overlay loading function
-> and we'll halt the test immediately if the config isn't enabled.
->
+Update renamed function comment
+and clean up indent from 4 space to tab.
 
-That sounds sensible, though there is a potential pitfall. If
-kunit_skip() is called directly from overlay code, might introduce a
-dependency on kunit.ko from the DT overlay, which we might not want.
-The solution there is either to have a kunit wrapper function (so the
-call is already in kunit.ko), or to have a hook to skip the current
-test (which probably makes sense to do anyway, but I think the wrapper
-is the better option).
+Signed-off-by: Paran Lee <p4ranlee@gmail.com>
+---
+ .../testing/selftests/ftrace/test.d/functions | 202 +++++++++---------
+ 1 file changed, 101 insertions(+), 101 deletions(-)
 
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index 779f3e62ec90..d0946cccb8f0 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -1,195 +1,195 @@
+ clear_trace() { # reset trace output
+-    echo > trace
++	echo > trace
+ }
+ 
+ disable_tracing() { # stop trace recording
+-    echo 0 > tracing_on
++	echo 0 > tracing_on
+ }
+ 
+ enable_tracing() { # start trace recording
+-    echo 1 > tracing_on
++	echo 1 > tracing_on
+ }
+ 
+ reset_tracer() { # reset the current tracer
+-    echo nop > current_tracer
++	echo nop > current_tracer
+ }
+ 
+ reset_trigger_file() {
+-    # remove action triggers first
+-    grep -H ':on[^:]*(' $@ |
+-    while read line; do
+-        cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
++	# remove action triggers first
++	grep -H ':on[^:]*(' $@ |
++	while read line; do
++		cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
+ 	file=`echo $line | cut -f1 -d:`
+ 	echo "!$cmd" >> $file
+-    done
+-    grep -Hv ^# $@ |
+-    while read line; do
+-        cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
++	done
++	grep -Hv ^# $@ |
++	while read line; do
++		cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
+ 	file=`echo $line | cut -f1 -d:`
+ 	echo "!$cmd" > $file
+-    done
++	done
+ }
+ 
+ reset_trigger() { # reset all current setting triggers
+-    if [ -d events/synthetic ]; then
+-        reset_trigger_file events/synthetic/*/trigger
+-    fi
+-    reset_trigger_file events/*/*/trigger
++	if [ -d events/synthetic ]; then
++		reset_trigger_file events/synthetic/*/trigger
++	fi
++	reset_trigger_file events/*/*/trigger
+ }
+ 
+ reset_events_filter() { # reset all current setting filters
+-    grep -v ^none events/*/*/filter |
+-    while read line; do
++	grep -v ^none events/*/*/filter |
++	while read line; do
+ 	echo 0 > `echo $line | cut -f1 -d:`
+-    done
++	done
+ }
+ 
+ reset_ftrace_filter() { # reset all triggers in set_ftrace_filter
+-    if [ ! -f set_ftrace_filter ]; then
+-      return 0
+-    fi
+-    echo > set_ftrace_filter
+-    grep -v '^#' set_ftrace_filter | while read t; do
++	if [ ! -f set_ftrace_filter ]; then
++	  return 0
++	fi
++	echo > set_ftrace_filter
++	grep -v '^#' set_ftrace_filter | while read t; do
+ 	tr=`echo $t | cut -d: -f2`
+ 	if [ "$tr" = "" ]; then
+-	    continue
++		continue
+ 	fi
+ 	if ! grep -q "$t" set_ftrace_filter; then
+ 		continue;
+ 	fi
+ 	name=`echo $t | cut -d: -f1 | cut -d' ' -f1`
+ 	if [ $tr = "enable_event" -o $tr = "disable_event" ]; then
+-	    tr=`echo $t | cut -d: -f2-4`
+-	    limit=`echo $t | cut -d: -f5`
++		tr=`echo $t | cut -d: -f2-4`
++		limit=`echo $t | cut -d: -f5`
+ 	else
+-	    tr=`echo $t | cut -d: -f2`
+-	    limit=`echo $t | cut -d: -f3`
++		tr=`echo $t | cut -d: -f2`
++		limit=`echo $t | cut -d: -f3`
+ 	fi
+ 	if [ "$limit" != "unlimited" ]; then
+-	    tr="$tr:$limit"
++		tr="$tr:$limit"
+ 	fi
+ 	echo "!$name:$tr" > set_ftrace_filter
+-    done
++	done
+ }
+ 
+ disable_events() {
+-    echo 0 > events/enable
++	echo 0 > events/enable
+ }
+ 
+ clear_synthetic_events() { # reset all current synthetic events
+-    grep -v ^# synthetic_events |
+-    while read line; do
+-        echo "!$line" >> synthetic_events
+-    done
++	grep -v ^# synthetic_events |
++	while read line; do
++		echo "!$line" >> synthetic_events
++	done
+ }
+ 
+ clear_dynamic_events() { # reset all current dynamic events
+-    again=1
+-    stop=1
+-    # loop mulitple times as some events require other to be removed first
+-    while [ $again -eq 1 ]; do
++	again=1
++	stop=1
++	# loop mulitple times as some events require other to be removed first
++	while [ $again -eq 1 ]; do
+ 	stop=$((stop+1))
+ 	# Prevent infinite loops
+ 	if [ $stop -gt 10 ]; then
+-	    break;
++		break;
+ 	fi
+ 	again=2
+ 	grep -v '^#' dynamic_events|
+ 	while read line; do
+-	    del=`echo $line | sed -e 's/^.\([^ ]*\).*/-\1/'`
+-	    if ! echo "$del" >> dynamic_events; then
++		del=`echo $line | sed -e 's/^.\([^ ]*\).*/-\1/'`
++		if ! echo "$del" >> dynamic_events; then
+ 		again=1
+-	    fi
++		fi
++	done
+ 	done
+-    done
+ }
+ 
+ initialize_ftrace() { # Reset ftrace to initial-state
+ # As the initial state, ftrace will be set to nop tracer,
+ # no events, no triggers, no filters, no function filters,
+ # no probes, and tracing on.
+-    disable_tracing
+-    reset_tracer
+-    reset_trigger
+-    reset_events_filter
+-    reset_ftrace_filter
+-    disable_events
+-    clear_dynamic_events
+-    [ -f set_event_pid ] && echo > set_event_pid
+-    [ -f set_ftrace_pid ] && echo > set_ftrace_pid
+-    [ -f set_ftrace_notrace ] && echo > set_ftrace_notrace
+-    [ -f set_graph_function ] && echo | tee set_graph_*
+-    [ -f stack_trace_filter ] && echo > stack_trace_filter
+-    [ -f kprobe_events ] && echo > kprobe_events
+-    [ -f uprobe_events ] && echo > uprobe_events
+-    [ -f synthetic_events ] && echo > synthetic_events
+-    [ -f snapshot ] && echo 0 > snapshot
++	disable_tracing
++	reset_tracer
++	reset_trigger
++	reset_events_filter
++	reset_ftrace_filter
++	disable_events
++	clear_dynamic_events
++	[ -f set_event_pid ] && echo > set_event_pid
++	[ -f set_ftrace_pid ] && echo > set_ftrace_pid
++	[ -f set_ftrace_notrace ] && echo > set_ftrace_notrace
++	[ -f set_graph_function ] && echo | tee set_graph_*
++	[ -f stack_trace_filter ] && echo > stack_trace_filter
++	[ -f kprobe_events ] && echo > kprobe_events
++	[ -f uprobe_events ] && echo > uprobe_events
++	[ -f synthetic_events ] && echo > synthetic_events
++	[ -f snapshot ] && echo 0 > snapshot
+ 
+ # Stop tracing while reading the trace file by default, to prevent
+ # the test results while checking it and to avoid taking a long time
+ # to check the result.
+-    [ -f options/pause-on-trace ] && echo 1 > options/pause-on-trace
++	[ -f options/pause-on-trace ] && echo 1 > options/pause-on-trace
+ 
+-    clear_trace
+-    enable_tracing
++	clear_trace
++	enable_tracing
+ }
+ 
+ finish_ftrace() {
+-    initialize_ftrace
++	initialize_ftrace
+ # And recover it to default.
+-    [ -f options/pause-on-trace ] && echo 0 > options/pause-on-trace
++	[ -f options/pause-on-trace ] && echo 0 > options/pause-on-trace
+ }
+ 
+ check_requires() { # Check required files and tracers
+-    for i in "$@" ; do
++	for i in "$@" ; do
+ 	p=${i%:program}
+-        r=${i%:README}
+-        t=${i%:tracer}
++		r=${i%:README}
++		t=${i%:tracer}
+ 	if [ $p != $i ]; then
+-	    if ! which $p ; then
+-                echo "Required program $p is not found."
+-                exit_unresolved
+-	    fi
+-        elif [ $t != $i ]; then
+-            if ! grep -wq $t available_tracers ; then
+-                echo "Required tracer $t is not configured."
+-                exit_unsupported
+-            fi
+-        elif [ "$r" != "$i" ]; then
+-            if ! grep -Fq "$r" README ; then
+-                echo "Required feature pattern \"$r\" is not in README."
+-                exit_unsupported
+-            fi
+-        elif [ ! -e $i ]; then
+-            echo "Required feature interface $i doesn't exist."
+-            exit_unsupported
+-        fi
+-    done
++		if ! which $p ; then
++				echo "Required program $p is not found."
++				exit_unresolved
++		fi
++		elif [ $t != $i ]; then
++			if ! grep -wq $t available_tracers ; then
++				echo "Required tracer $t is not configured."
++				exit_unsupported
++			fi
++		elif [ "$r" != "$i" ]; then
++			if ! grep -Fq "$r" README ; then
++				echo "Required feature pattern \"$r\" is not in README."
++				exit_unsupported
++			fi
++		elif [ ! -e $i ]; then
++			echo "Required feature interface $i doesn't exist."
++			exit_unsupported
++		fi
++	done
+ }
+ 
+ LOCALHOST=127.0.0.1
+ 
+ yield() {
+-    ping $LOCALHOST -c 1 || sleep .001 || usleep 1 || sleep 1
++	ping $LOCALHOST -c 1 || sleep .001 || usleep 1 || sleep 1
+ }
+ 
+ # The fork function in the kernel was renamed from "_do_fork" to
+-# "kernel_fork". As older tests should still work with older kernels
++# "kernel_clone". As older tests should still work with older kernels
+ # as well as newer kernels, check which version of fork is used on this
+ # kernel so that the tests can use the fork function for the running kernel.
+ FUNCTION_FORK=`(if grep '\bkernel_clone\b' /proc/kallsyms > /dev/null; then
+-                echo kernel_clone; else echo '_do_fork'; fi)`
++				echo kernel_clone; else echo '_do_fork'; fi)`
+ 
+ # Since probe event command may include backslash, explicitly use printf "%s"
+ # to NOT interpret it.
+ ftrace_errlog_check() { # err-prefix command-with-error-pos-by-^ command-file
+-    pos=$(printf "%s" "${2%^*}" | wc -c) # error position
+-    command=$(printf "%s" "$2" | tr -d ^)
+-    echo "Test command: $command"
+-    echo > error_log
+-    (! printf "%s" "$command" >> "$3" ) 2> /dev/null
+-    grep "$1: error:" -A 3 error_log
+-    N=$(tail -n 1 error_log | wc -c)
+-    # "  Command: " and "^\n" => 13
+-    test $(expr 13 + $pos) -eq $N
++	pos=$(printf "%s" "${2%^*}" | wc -c) # error position
++	command=$(printf "%s" "$2" | tr -d ^)
++	echo "Test command: $command"
++	echo > error_log
++	(! printf "%s" "$command" >> "$3" ) 2> /dev/null
++	grep "$1: error:" -A 3 error_log
++	N=$(tail -n 1 error_log | wc -c)
++	# "  Command: " and "^\n" => 13
++	test $(expr 13 + $pos) -eq $N
+ }
+-- 
+2.34.1
 
-> >
-> > > >
-> > > > That being said, I do think that there's probably some sense in
-> > > > supporting the compiled-in DTB as well (it's definitely simpler than
-> > > > patching kunit.py to always pass the extra command-line option in, for
-> > > > example).
-> > > > But maybe it'd be nice to have the command-line option override the
-> > > > built-in one if present.
-> > >
-> > > Got it. I need to test loading another DTB on the commandline still, but
-> > > I think this won't be a problem. We'll load the unittest-data DTB even
-> > > with KUnit on UML, so assuming that works on UML right now it should be
-> > > unchanged by this series once I resend.
-> >
-> > Again, moving to overlays should render this mostly obsolete, no? Or
-> > am I misunderstanding how the overlay stuff will work?
->
-> Right, overlays make it largely a moot issue. The way the OF unit tests
-> work today is by grafting a DTB onto the live tree. I'm reusing that
-> logic to graft a container node target for kunit tests to add their
-> overlays too. It will be clearer once I post v2.
->
-> >
-> > One possible future advantage of being able to test with custom DTs at
-> > boot time would be for fuzzing (provide random DT properties, see what
-> > happens in the test). We've got some vague plans to support a way of
-> > passing custom data to tests to support this kind of case (though, if
-> > we're using overlays, maybe the test could just patch those if we
-> > wanted to do that).
->
-> Ah ok. I can see someone making a fuzzer that modifies devicetree
-> properties randomly, e.g. using different strings for clock-names.
->
-> This reminds me of another issue I ran into. I wanted to test adding the
-> same platform device to the platform bus twice to confirm that the
-> second device can't be added. That prints a warning, which makes
-> kunit.py think that the test has failed because it printed a warning. Is
-> there some way to avoid that? I want something like
->
->         KUNIT_EXPECT_WARNING(test, <call some function>)
->
-> so I can test error cases.
-
-Hmm... I'd've thought that shouldn't be a problem: kunit.py should
-ignore most messages during a test, unless it can't find a valid
-result line. What does the raw KTAP output look like? (You can get it
-from kunit.py by passing the --raw_output option).
-
-That being said, a KUNIT_EXPECT_LOG_MESSAGE() or similar is something
-we've wanted for a while. I think that the KASAN folks have been
-working on something similar using console tracepoints:
-https://lore.kernel.org/all/ebf96ea600050f00ed567e80505ae8f242633640.1666113393.git.andreyknvl@google.com/
-
-Cheers,
--- David
