@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228D56B6308
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Mar 2023 04:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3602D6B6313
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Mar 2023 04:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjCLDZU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 11 Mar 2023 22:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S229469AbjCLDwd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 11 Mar 2023 22:52:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjCLDZT (ORCPT
+        with ESMTP id S229437AbjCLDwc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 11 Mar 2023 22:25:19 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A287734C27;
-        Sat, 11 Mar 2023 19:25:18 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id f1so6208338qvx.13;
-        Sat, 11 Mar 2023 19:25:18 -0800 (PST)
+        Sat, 11 Mar 2023 22:52:32 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470A85CECE;
+        Sat, 11 Mar 2023 19:52:31 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id nf5so6258399qvb.5;
+        Sat, 11 Mar 2023 19:52:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678591518;
+        d=gmail.com; s=20210112; t=1678593149;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZTsOdnsvMxiOI8KCSWCWvqwNEx3WV3fzPTdy2hJfLfc=;
-        b=IXbho/A067RQWbtV+0EKK1uUxtq0mrwr8d7K4vHSJOzT+4+fcTHZv4qVIhUNc5itJZ
-         CCWDas23QLX4Kb8N8AqYCsQGHgfExajdAteUv36qcbSeV3XAuBhugdr8nsezHgOmw+lQ
-         1haphD4KIkssvc4FzFjnqa4o/X9BpDmU6yrnO1nYQks3oT6WeutV3pRe2fmIsAsC2KuT
-         Uekk6nqJi551pPXKOhgJccQ9DmK95Cy4M1XCoNWwgP9iplNDhW0DXWeSLACD55a41Uxb
-         4kTpob86gY3eVIbXDIO1/s8VwfbPT8WfPUZrGp9USVHefw7fCE0EYrgcAMBF5lksktJ+
-         1Qzw==
+        bh=6GxSSWG7fTQKIRuUDTT1ahYRQmQaqbN8UiIjRR5fH70=;
+        b=Ciew6JzH7o9zpzZYIIB2bwZt1hfdux+6MVNd5o6Qqczsx7uOko8ymcib/FxaqMgNZL
+         iGiEYw2zOhOvsG+FUCU0I105Gx+Wx8B++iEaUX6vg+fFDWCvm5hh0YtoMEHHvt73MzFr
+         fc+ruIO6oOZipRAO3e1w+f84pC3D0gzvUa0/otmFpCLAc5+BTAAdRQ3yi2yeqk4kGeDe
+         NngYxZtK1NsDmoakvn2dZCK8uO2Ms6RARyubFOwhsGUaEAHk4fpzJkCs6szlJsXKwG2H
+         cbYoY4bSvgD9BGCwJFoO3fGQF08SZ2T+GR6t0owIvTT25rtlP1vct5O3bJSHR29RXFMi
+         jPHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678591518;
+        d=1e100.net; s=20210112; t=1678593149;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZTsOdnsvMxiOI8KCSWCWvqwNEx3WV3fzPTdy2hJfLfc=;
-        b=XgXa3yrzOdw9LDqwBvqUUHQaUyU7eljigwvJ7vqgSGXobo+n6sy/v8GALZeGsH15MI
-         YYK96IqMIc6K691LmHogmzTkiAxnJgJz3LCLPqv2TakNAQhvfn1gFZQgvhx2lu/H9h3c
-         Yq98nNHjazSCzhE+kj46Or3A/lHP1Gi9dYgAfCh3UO4FFWgr3oFVx1TnqXm7CaswCWiq
-         XDmbysyolFysvnmEQGiokfGWZH3Du8YTBMiCbHXmqPjXl3fzDEfzdsKVi5mCMOMWCubz
-         2BTjBYM+xCvuseImjQYZ0F0APv2qinRneBq+qFaAgH1vMR5GMqmhG2OWvvSa+9y80Dm9
-         LaZQ==
-X-Gm-Message-State: AO0yUKXSK2V4Iw+rPOpMNj0qb9d2SbKCuCQYdLzOfLB0cVNV+U8ls35/
-        v12D7K8EGS5PPaK0ixlV/zk=
-X-Google-Smtp-Source: AK7set+ZTONShD161Z3hYDMnAUKx5ZFFIrvmYAfdOsHGfVO7SsObksCHTnYksl95mbjXIXU88CqY4Q==
-X-Received: by 2002:a05:6214:5182:b0:56e:f1fd:f16c with SMTP id kl2-20020a056214518200b0056ef1fdf16cmr10579267qvb.20.1678591517694;
-        Sat, 11 Mar 2023 19:25:17 -0800 (PST)
+        bh=6GxSSWG7fTQKIRuUDTT1ahYRQmQaqbN8UiIjRR5fH70=;
+        b=i7Xv5w1t4i+NSXijNBRViLCvLoRjGLITk5tqILC3eD42pIdMUIWSbpcz/grhBOSa6u
+         p2m/J3vJxGCksb2VMq5EKgJeDqNdbTv8qyyDcDgsREmWd8gEDzuh7eI0gJChqxjdjzHS
+         OM+y9fghbk04SzQ4OFn7A4Vv6N1OuZnZoZ1JThJCBzryIzn/bzs24FF7zjlSDqNtT6WN
+         p4cPTmasGopGYaY3xMOdBOsau8R+t6IAcXytj7/ieOiuFiqNk9FrL4xJFJdNZQftPFDl
+         wAoZRq1og1rVayYtG10GwJUavuiydgEnjikaI/mjg5bQROtD0uBz8spuNfbtePZ+DbQs
+         3AUg==
+X-Gm-Message-State: AO0yUKUOmXgefPx+k/YqpOhN6LhY4KDkiEIcuCT3O+wqKiYJZUp882iN
+        qdyPKouNe3UQAdxPWy8he3w=
+X-Google-Smtp-Source: AK7set/IPwXVnEZqhcnIkzhye9GTxH/oGXfVOo2vY+S+DyaHWEIi/Qzx/Gfu5Omsc38rtziaAJOKIQ==
+X-Received: by 2002:a05:6214:1c49:b0:56e:b427:819b with SMTP id if9-20020a0562141c4900b0056eb427819bmr7918409qvb.16.1678593149420;
+        Sat, 11 Mar 2023 19:52:29 -0800 (PST)
 Received: from ?IPV6:2600:1700:2442:6db0:147a:a472:2165:1ae5? ([2600:1700:2442:6db0:147a:a472:2165:1ae5])
-        by smtp.gmail.com with ESMTPSA id n73-20020a37404c000000b0074374e2b630sm2100164qka.119.2023.03.11.19.25.16
+        by smtp.gmail.com with ESMTPSA id j6-20020ac86646000000b003bfb820f17csm2911595qtp.63.2023.03.11.19.52.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 19:25:17 -0800 (PST)
-Message-ID: <7180be2d-60c7-0d99-338e-b818771b310f@gmail.com>
-Date:   Sat, 11 Mar 2023 21:25:16 -0600
+        Sat, 11 Mar 2023 19:52:28 -0800 (PST)
+Message-ID: <490271eb-1429-2217-6e38-837c6e5e328b@gmail.com>
+Date:   Sat, 11 Mar 2023 21:52:28 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
@@ -117,11 +117,109 @@ On 3/10/23 16:20, Rae Moar wrote:
 > Link: https://kunit-review.googlesource.com/c/linux/+/5689
 > 
 > Signed-off-by: Rae Moar <rmoar@google.com>
-> ---
+> ---> 
+> Note: this patch is based on Frank's ktap_spec_version_2 branch.
+> 
+>  Documentation/dev-tools/ktap.rst | 27 ++++++++++++++++++---------
+>  1 file changed, 18 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+> index ff77f4aaa6ef..f48aa00db8f0 100644
+> --- a/Documentation/dev-tools/ktap.rst
+> +++ b/Documentation/dev-tools/ktap.rst
+> @@ -74,7 +74,8 @@ They are required and must have the format:
+>  	<result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
+>  
+>  The result can be either "ok", which indicates the test case passed,
+> -or "not ok", which indicates that the test case failed.
+> +"not ok", which indicates that the test case failed, or "skip", which indicates
+> +the test case did not run.
+>  
+>  <number> represents the number of the test being performed. The first test must
+>  have the number 1 and the number then must increase by 1 for each additional
+> @@ -91,12 +92,13 @@ A directive is a keyword that indicates a different outcome for a test other
+>  than passed and failed. The directive is optional, and consists of a single
+>  keyword preceding the diagnostic data. In the event that a parser encounters
+>  a directive it doesn't support, it should fall back to the "ok" / "not ok"
+> -result.
+> +/ "skip" result.
+>  
+>  Currently accepted directives are:
+>  
+> -- "SKIP", which indicates a test was skipped (note the result of the test case
+> -  result line can be either "ok" or "not ok" if the SKIP directive is used)
 
-< snip >
+> +- "SKIP", which indicates a test was skipped (note this is an alternative to
+> +  the "skip" result type and if the SKIP directive is used, the
+> +  result can be any type - "ok", "not ok", or "skip")
 
-Another reason to add the "skip" result is that there was disagreement in previous
-discussions as to whether the "#SKIP" directive should be used in an "ok" result
-or a "not_ok" result.
+For the "SKIP" directive, result type of either "ok", or "not ok" reflects the
+current real world usage, which is mixed.  I agree is makes sense to also
+allow the result type of "skip" with the "SKIP directive.
+
+I think it would be good to deprecate the "SKIP" directive, with a scheduled
+removal in the V3 specification - that would allow plenty of time for test
+parsers to process both V1 and V2 data, before removing processing of V1 data.
+
+If so, the deprecation plan should be documented.
+
+>  - "TODO", which indicates that a test is not expected to pass at the moment,
+>    e.g. because the feature it is testing is known to be broken. While this>    directive is inherited from TAP, its use in the kernel is discouraged.
+> @@ -110,7 +112,7 @@ Currently accepted directives are:
+>  
+>  The diagnostic data is a plain-text field which contains any additional details
+>  about why this result was produced. This is typically an error message for ERROR
+> -or failed tests, or a description of missing dependencies for a SKIP result.
+> +or failed tests, or a description of missing dependencies for a skipped test.
+>  
+>  The diagnostic data field is optional, and results which have neither a
+>  directive nor any diagnostic data do not need to include the "#" field
+> @@ -130,11 +132,18 @@ The test "test_case_name" failed.
+>  
+>  ::
+>  
+> -	ok 1 test # SKIP necessary dependency unavailable
+> +	skip 1 test # necessary dependency unavailable
+
+Maybe add a note that the "skip" result method is preferred over the below
+"ok ... # SKIP..." example below.
+
+>  
+> -The test "test" was SKIPPED with the diagnostic message "necessary dependency
+> +The test "test" was skipped with the diagnostic message "necessary dependency
+>  unavailable".
+>  
+> +::
+> +
+> +	ok 1 test_2 # SKIP this test should not run
+> +
+> +The test "test_2" was skipped with the diagnostic message "this test
+> +should not run".
+
+Maybe add a deprecation note here.
+
+> +
+>  ::
+>  
+>  	not ok 1 test # TIMEOUT 30 seconds
+> @@ -225,7 +234,7 @@ An example format with multiple levels of nested testing:
+>  	    not ok 1 test_1
+>  	    ok 2 test_2
+>  	  not ok 1 test_3
+> -	  ok 2 test_4 # SKIP
+> +	  skip 2 test_4
+>  	not ok 1 example_test_1
+>  	ok 2 example_test_2
+>  
+> @@ -262,7 +271,7 @@ Example KTAP output
+>  	  ok 1 example_test_1
+>  	    KTAP version 2
+>  	    1..2
+> -	    ok 1 test_1 # SKIP test_1 skipped
+> +	    skip 1 test_1 # test_1 skipped
+>  	    ok 2 test_2
+>  	  ok 2 example_test_2
+>  	    KTAP version 2
+> 
+> base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
 
