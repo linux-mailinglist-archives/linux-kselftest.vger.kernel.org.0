@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975206B6C62
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 00:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9016B6C6B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 00:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjCLXHF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 Mar 2023 19:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S229499AbjCLXM5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 12 Mar 2023 19:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCLXHE (ORCPT
+        with ESMTP id S229450AbjCLXM5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 Mar 2023 19:07:04 -0400
+        Sun, 12 Mar 2023 19:12:57 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4086C17171;
-        Sun, 12 Mar 2023 16:07:03 -0700 (PDT)
-Date:   Sun, 12 Mar 2023 23:06:58 +0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFBB33465;
+        Sun, 12 Mar 2023 16:12:54 -0700 (PDT)
+Date:   Sun, 12 Mar 2023 23:12:50 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1678662420;
-        bh=5dEBzzp91jUe7QOaIJDo+f1xSfiM90NXcZjIcBmzSb8=;
+        s=mail; t=1678662772;
+        bh=f2hA0znNnx4bQ3m0gdWCcRf0cdgpNIASL6F5yqS84h8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dBu9n+33MZYj5fNLhH7dWNCWRVDrODRgzCxilFLbryM+kyaPoV9IMEgGINZcvZhvB
-         Ckhf4rHGZLS4GXVU/6+qypywkZ7aPXT4uaqiPeAmkToYM9d64tt5Fj4arb84Bid2ZO
-         CGsxZenH5a5pySV3bGQe7afPVw6IX4Eq9DEJV62o=
+        b=D7xyCnWkRp2Zp7iJ+/uV8vz4olwVbr7ed3ldjqRPt7HGThGoxNEoCwyyfUR7evrZX
+         AleLzG/nkFA3RF4+R4DLKkVmSK345YpyTmhvG3zmjAdJ3vmWuCO+gO3OZwe5ZiClx1
+         88lpWm0hW0THwqd44XWLU4wGTlHUDzTOi75hMAYQ=
 From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 4/5] tools/nolibc: add support for stack protector
-Message-ID: <68b4b33d-711b-4b5d-b932-6beceffbcf28@t-8ch.de>
+Subject: Re: [PATCH RFC 5/5] tools/nolibc: tests: add test for
+ -fstack-protector
+Message-ID: <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
 References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
- <20230223-nolibc-stackprotector-v1-4-3e74d81b3f21@weissschuh.net>
- <ZA3MC89PEq058cdo@1wt.eu>
+ <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
+ <ZA3OhLBmUz3fui+f@1wt.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZA3MC89PEq058cdo@1wt.eu>
+In-Reply-To: <ZA3OhLBmUz3fui+f@1wt.eu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -46,87 +47,171 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 01:56:43PM +0100, Willy Tarreau wrote:
-> Hi Thomas,
+On Sun, Mar 12, 2023 at 02:07:16PM +0100, Willy Tarreau wrote:
+> On Tue, Mar 07, 2023 at 10:22:34PM +0000, Thomas Weißschuh wrote:
+> > Test the previously introduce stack protector functionality in nolibc.
 > 
-> thanks for this patchset. I must confess it's not very clear to me which
-> class of programs using nolibc could benefit from stack protection, but
-> if you think it can improve the overall value (even if just by allowing
-> to test more combinations), I'm fine with this given that it doesn't
-> remove anything.
-
-I forgot the rationale, will add it properly to the next revision:
-
-This is useful when using nolibc for security-critical tools.
-Using nolibc has the advantage that the code is easily auditable and
-sandboxable with seccomp as no unexpected syscalls are used.
-Using compiler-assistent stack protection provides another security
-mechanism.
-
-> I'm having a few comments below:
+> s/introduce/introduced/
 > 
-> On Tue, Mar 07, 2023 at 10:22:33PM +0000, Thomas Weißschuh wrote:
-> > diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
-> > new file mode 100644
-> > index 000000000000..ca1360b7afd8
-> > --- /dev/null
-> > +++ b/tools/include/nolibc/stackprotector.h
-> > @@ -0,0 +1,48 @@
-> > +/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-> > +/*
-> > + * Stack protector support for NOLIBC
-> > + * Copyright (C) 2023 Thomas Weißschuh <linux@weissschuh.net>
-> > + */
-> > +
-> > +#ifndef _NOLIBC_STACKPROTECTOR_H
-> > +#define _NOLIBC_STACKPROTECTOR_H
-> > +
-> > +#include "arch.h"
-> > +
-> > +#if defined(NOLIBC_STACKPROTECTOR)
-> > +
-> > +#if !defined(__ARCH_SUPPORTS_STACK_PROTECTOR)
-> > +#error "nolibc does not support stack protectors on this arch"
+> (I can adjust it myself when merging to avoid a respin if you want).
+
+I respin is necessary anways.
+I'll change it.
+
+FYI there is also another patch to make nolibc-test buildable with
+compilers that enable -fstack-protector by default.
+Maybe this can be picked up until the proper stack-protector support is
+hashed out.
+Maybe even for 6.3:
+
+https://lore.kernel.org/lkml/20230221-nolibc-no-stack-protector-v1-1-4e6a42f969e2@weissschuh.net/
+
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> >  tools/testing/selftests/nolibc/nolibc-test.c | 74 +++++++++++++++++++++++++++-
+> >  1 file changed, 72 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > index fb2d4872fac9..4990b2750279 100644
+> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > @@ -45,6 +45,7 @@ char **environ;
+> >  struct test {
+> >  	const char *name;              // test name
+> >  	int (*func)(int min, int max); // handler
+> > +	char skip_by_default;         // don't run by default
+> 
+> Just a tiny detail but that comment is misaligned by one char on the left.
+
+Ack.
+
+> >  };
+> >  
+> >  #ifndef _NOLIBC_STDLIB_H
+> > @@ -667,6 +668,70 @@ int run_stdlib(int min, int max)
+> >  	return ret;
+> >  }
+> >  
+> > +#if defined(__clang__)
+> > +__attribute__((optnone))
+> > +#elif defined(__GNUC__)
+> > +__attribute__((optimize("O0")))
 > > +#endif
-> > +
-> > +#include "sys.h"
-> > +#include "stdlib.h"
-> > +
-> > +__attribute__((weak,noreturn,section(".text.nolibc_stack_chk")))
-> > +void __stack_chk_fail(void)
+> > +static int run_smash_stack(int min, int max)
 > > +{
-> > +	write(STDERR_FILENO, "!!Stack smashing detected!!\n", 28);
-> > +	abort();
+> > +	char buf[100];
+> > +
+> > +	for (size_t i = 0; i < 200; i++)
+> > +		buf[i] = 15;
+> 
+> If the goal is to make it easy to spot in a crash dump, I suggest
+> that you use a readable ASCII letter that's easy to recognize. 0xF
+> will usually not be printed in hex dumps, making it less evident
+> when scrolling quickly. For example I often use 'P' when poisoning
+> memory but you get the idea.
+
+Ack.
+
+> > +int run_stackprotector(int min, int max)
+> > +{
+> > +	int llen = 0;
+> > +
+> > +	llen += printf("0 ");
+> > +
+> > +#if !defined(NOLIBC_STACKPROTECTOR)
+> > +	llen += printf("stack smashing detection not supported");
+> > +	pad_spc(llen, 64, "[SKIPPED]\n");
+> > +	return 0;
+> > +#endif
+> 
+> Shouldn't the whole function be enclosed instead ? I know it's more of
+> a matter of taste, but avoiding to build and link it for archs that
+> will not use it may be better.
+
+The goal was to print a [SKIPPED] message if it's not supported.
+The overhead of doing this should be neglectable.
+
+> 
+> > +
+> > +	pid_t pid = fork();
+> 
+> Please avoid variable declarations after statements, for me these
+> are really horrible to deal with when editing the code later, because
+> instead of having to look up only the beginning of each containing
+> block (i.e. in O(log(N))) you have to visually parse every single line
+> (i.e. O(N)).
+
+Ack.
+
+> > +	switch (pid) {
+> > +	case -1:
+> > +		llen += printf("fork()");
+> > +		pad_spc(llen, 64, "[FAIL]\n");
+> > +		return 1;
+> > +
+> > +	case 0:
+> > +		close(STDOUT_FILENO);
+> > +		close(STDERR_FILENO);
+> > +
+> > +		char *const argv[] = {
+> > +			"/proc/self/exe",
+> > +			"_smash_stack",
+> > +			NULL,
+> > +		};
+> 
+> Same here.
+
+Ack.
+
+> > +		execve("/proc/self/exe", argv, NULL);
+> > +		return 1;
+> > +
+> > +	default: {
+> > +		int status;
+> 
+> And here by moving "status" upper in the function you can even
+> get rid of the braces.
+
+Ack.
+
+> > +		pid = waitpid(pid, &status, 0);
+> > +
+> > +		if (pid == -1 || !WIFSIGNALED(status) || WTERMSIG(status) != SIGABRT) {
+> > +			llen += printf("waitpid()");
+> > +			pad_spc(llen, 64, "[FAIL]\n");
+> > +			return 1;
+> > +		}
+> > +		llen += printf("stack smashing detected");
+> > +		pad_spc(llen, 64, " [OK]\n");
+> > +		return 0;
+> > +	}
+> > +	}
 > > +}
+> > +
+> >  /* prepare what needs to be prepared for pid 1 (stdio, /dev, /proc, etc) */
+> >  int prepare(void)
+> >  {
+> > @@ -719,8 +784,11 @@ int prepare(void)
+> >  /* This is the definition of known test names, with their functions */
+> >  static const struct test test_names[] = {
+> >  	/* add new tests here */
+> > -	{ .name = "syscall",   .func = run_syscall  },
+> > -	{ .name = "stdlib",    .func = run_stdlib   },
+> > +	{ .name = "syscall",        .func = run_syscall         },
+> > +	{ .name = "stdlib",         .func = run_stdlib          },
+> > +	{ .name = "stackprotector", .func = run_stackprotector, },
+> > +	{ .name = "_smash_stack",   .func = run_smash_stack,
 > 
-> Don't you think you should call the syscall directly here like you
-> did for __stack_chk_init() and/or declare the function with the
-> no_stackprotector attribute ? I'm wondering if there could be a
-> risk that it fails again if called from a bad condition. If you're
-> certain it cannot, maybe just explain it in a 2-line comment above
-> the function so that others don't ask the same in the future.
+> I think it would be better to keep the number of categories low
+> and probably you should add just one called "protection" or so,
+> and implement your various tests in it as is done for other
+> categories. The goal is to help developers quickly spot and select
+> the few activities they're interested in at a given moment. 
 
-Good point. It probably works because the compiler decided to inline the
-call. But syscalls are more robust, I'll change that.
-
-> > +__attribute__((weak,no_stack_protector,section(".text.nolibc_stack_chk")))
-> > +void __stack_chk_init(void)
-> > +{
-> > +	// raw syscall assembly as calling a function would trigger the
-> > +	// stackprotector itself
-> > +	my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
-> 
-> For full-line comments, the regular C-style "/* */" is preferred (and
-> please also use the multi-line format when needed). "//" tends to be
-> reserved for short ones at the end of a line.
-
-Of course, will be changed.
-
-> > +	// a bit more randomness in case getrandom() fails
-> > +	__stack_chk_guard |= (uintptr_t) &__stack_chk_guard;
-> 
-> Using |= will in fact remove randomness rather than add, because it
-> will turn some zero bits to ones but not the opposite. Maybe you'd
-> want to use "^=" or "+=" instead ?
-
-Indeed, will change that.
+I'm not sure how this would be done. The goal here is that
+"stackprotector" is the user-visible category. It can be changed to
+"protection".
+"_smash_stack" however is just an entrypoint that is used by the forked
+process to call the crashing code.
+We need the fork+exec+special entrypoint to avoid crashing the test
+process itself.
