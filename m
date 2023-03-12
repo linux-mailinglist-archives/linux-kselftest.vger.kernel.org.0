@@ -2,39 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC79B6B672D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Mar 2023 15:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B546B678D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Mar 2023 16:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjCLOf3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 Mar 2023 10:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
+        id S229734AbjCLPhr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 12 Mar 2023 11:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjCLOf2 (ORCPT
+        with ESMTP id S229585AbjCLPhq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 Mar 2023 10:35:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C33431E34;
-        Sun, 12 Mar 2023 07:35:19 -0700 (PDT)
+        Sun, 12 Mar 2023 11:37:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C623843441;
+        Sun, 12 Mar 2023 08:37:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F686B80B74;
-        Sun, 12 Mar 2023 14:35:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCEFC433D2;
-        Sun, 12 Mar 2023 14:35:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3DFC5CE0B11;
+        Sun, 12 Mar 2023 15:37:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A7DC433EF;
+        Sun, 12 Mar 2023 15:37:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678631717;
-        bh=FjumaEd5lBdbEo9vAB2lM8nRQNWRaIFGslU/L7zQyJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V1JZOzbwpDRVLPZJp8TzeZo9if42+a9X4XNSDGxbpuCyv8jAx7901ecH1dj20xZyJ
-         8Kdz8ognOq+68U1AKKKLmTbxqHGylMOSHhoLJnWDhnMrZC/i24jKmLnyJBX/uWpmKO
-         QssDbFc4M9hMkQmScuGGjL1lZX5ufG0/hO/HNqQuVBZ829jcqqTqts0Zqw1nODOx4f
-         EVVHOHbR8vQrdA1eb4qNDBSyj7vjvP0snAJa8TFhQeRFSirrR6rfUeE5734xo4oHHc
-         IBN3kxIjsWySMhRx8GwEWNLDk99O/yv/knCFRHr2mGs0rh7WASgmHSdMUo6vJNKTSR
-         Z6WKump+3RvSQ==
-Date:   Sun, 12 Mar 2023 14:35:13 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
+        s=k20201202; t=1678635461;
+        bh=R1AumEUR0bc6e6nMbU15hmjqwiC8LvwLAyZqPz0mE0U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W/0MwonhwuYJslF0MxV5sr6QvoeUmcoCR/F03L2q1FNbcozZDvTMWPOCerg6k1Sjx
+         b2Fqd/TvWbEBvXCyVGfFGM2NWQXdSZ5E122LadxT+TTouRN2eBsZEVqJ+7kOsB97bJ
+         ekO9KUdqnhgxpvqEBYc3ZdZuJOfNxroy9CqHds5/RNUfQZu6vhFd0vOCdVOCcz1Mjz
+         hr9W4NBMFmMgEKzF3xqV5TNsRsnWCGgXtGaZE+RFZYLED7beFTvoS5bELjQaetjnog
+         +/RgQWWhsISiRg6ZQYRGHv+jrnNYGy87z9obJEiTttGVA2iZ8wAvIlIALz9RU2JNCo
+         ZbipuVX/Dcpcg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pbNlT-00H1EO-BT;
+        Sun, 12 Mar 2023 15:37:39 +0000
+Date:   Sun, 12 Mar 2023 15:37:39 +0000
+Message-ID: <87v8j63rr0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Oliver Upton <oliver.upton@linux.dev>,
         James Morse <james.morse@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -45,15 +52,19 @@ Cc:     Oliver Upton <oliver.upton@linux.dev>,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] KVM: selftests: Add coverage of MTE system registers
-Message-ID: <ZA3jISc0DH+7swbI@sirena.org.uk>
+In-Reply-To: <ZA3jISc0DH+7swbI@sirena.org.uk>
 References: <20230308-kvm-arm64-test-mte-regs-v1-1-f92a377e486f@kernel.org>
- <87edpu5klk.wl-maz@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1j3wi4VN8b1yeJc2"
-Content-Disposition: inline
-In-Reply-To: <87edpu5klk.wl-maz@kernel.org>
-X-Cookie: Single tasking: Just Say No.
+        <87edpu5klk.wl-maz@kernel.org>
+        <ZA3jISc0DH+7swbI@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,70 +74,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Sun, 12 Mar 2023 14:35:13 +0000,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> On Sun, Mar 12, 2023 at 10:29:11AM +0000, Marc Zyngier wrote:
+> > Mark Brown <broonie@kernel.org> wrote:
+> 
+> > >  static struct vcpu_config *vcpu_configs[] = {
+> > >  	&vregs_config,
+> > > @@ -1131,5 +1163,6 @@ static struct vcpu_config *vcpu_configs[] = {
+> > >  	&sve_pmu_config,
+> > >  	&pauth_config,
+> > >  	&pauth_pmu_config,
+> > > +	&mte_config,
+> > >  };
+> > >  static int vcpu_configs_n = ARRAY_SIZE(vcpu_configs);
+> 
+> > Is there any reason why we sidestep the combinations of MTE with PAuth
+> > and PMU? I know this leads to an exponential set growth, but this is
+> > the very purpose of this test, and we found bugs related to this in
+> > the past.
+> 
+> The test is already not bothering with the combinations of SVE
+> and pointer auth, it appeared that the intent of the test was
+> only to test specific combinations.  From what's there it looks
+> more like there's something with PMU interacting specially with
+> things (it's all X and X+PMU) that needs coverage.  I couldn't
+> see anything between it and MTE, though I nearly added a MTE+PMU
+> combination just for the sake of it.  It's one of those areas
+> where it's hard to determine if there's an intent behind the
+> implementation choices made or if they're just whatever someone
+> happened to write and not particularly important or desired.
 
---1j3wi4VN8b1yeJc2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It *is* desired. We've had cases of flags being reset at the wrong
+time and leading to issues that would be detected by this test. The
+PMU stuff is indeed one example, but similar things could happen
+between SVE+MTE, for example.
 
-On Sun, Mar 12, 2023 at 10:29:11AM +0000, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+> 
+> > A good first step would be to be able to build these combinations
+> > dynamically, and only then add new sublists to the mix.
+> 
+> That would certainly be a good idea, if we were heading in that
+> direction I'd also expect negative tests checking that for
+> example pointer authentication registers don't appear when that's
+> not enabled.  I'm not sure that it's worth blocking all new
+> coverage for that though, there is still value in having a bit of
+> basic coverage even if not all the combinations are covered yet.
 
-> >  static struct vcpu_config *vcpu_configs[] = {
-> >  	&vregs_config,
-> > @@ -1131,5 +1163,6 @@ static struct vcpu_config *vcpu_configs[] = {
-> >  	&sve_pmu_config,
-> >  	&pauth_config,
-> >  	&pauth_pmu_config,
-> > +	&mte_config,
-> >  };
-> >  static int vcpu_configs_n = ARRAY_SIZE(vcpu_configs);
+Then where is the incentive to get it fixed? People will just keep
+piling stuff, and the coverage will increasingly become worse.
 
-> Is there any reason why we sidestep the combinations of MTE with PAuth
-> and PMU? I know this leads to an exponential set growth, but this is
-> the very purpose of this test, and we found bugs related to this in
-> the past.
+We have to do it as some point, and now is as good a time as any.
 
-The test is already not bothering with the combinations of SVE
-and pointer auth, it appeared that the intent of the test was
-only to test specific combinations.  From what's there it looks
-more like there's something with PMU interacting specially with
-things (it's all X and X+PMU) that needs coverage.  I couldn't
-see anything between it and MTE, though I nearly added a MTE+PMU
-combination just for the sake of it.  It's one of those areas
-where it's hard to determine if there's an intent behind the
-implementation choices made or if they're just whatever someone
-happened to write and not particularly important or desired.
+	M.
 
-> A good first step would be to be able to build these combinations
-> dynamically, and only then add new sublists to the mix.
-
-That would certainly be a good idea, if we were heading in that
-direction I'd also expect negative tests checking that for
-example pointer authentication registers don't appear when that's
-not enabled.  I'm not sure that it's worth blocking all new
-coverage for that though, there is still value in having a bit of
-basic coverage even if not all the combinations are covered yet.
-
-The test is also going to want extension for more gracefully
-handling registers that appear based on architecture extensions
-with no control over their exposure to the guest, potentially
-with tie in to handling based on configurable ID registers when
-that goes in.  The way this test is written was also part of why
-I was wondering if PIE should be configurable.
-
---1j3wi4VN8b1yeJc2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQN4x4ACgkQJNaLcl1U
-h9BC1Qf+PeXvTRiVGWbVVDpsv6dV6cOogE3gY2qfIvo61y3DCKHWs7R/Fvk4+UnZ
-SIK9Zr2SK18GFRUiFXY8SuWo9biw8euRztyjNUNkYAxd1RUvQ9JfBryR4x0StJp4
-Sgpsu6OK5nVv5vy6YQuIi8jSs733XU3r+m8yHnJy/0yqZMxr+sdBpEz/n/nNQMuQ
-OeaLK3ePzQD9hEmSNNHLGwLZrwWIZfaRhj58n2q07UPWri/GS6iBPKPQKvPhqzze
-mcDhSmL11cnfL0qKW9acWQWo24ER1ggobOd3GJmP9CcU66dBLFYD+15QU9YkVNrk
-wyHZNaMST7FfofgJRnjt0Y715QoLXA==
-=0SaC
------END PGP SIGNATURE-----
-
---1j3wi4VN8b1yeJc2--
+-- 
+Without deviation from the norm, progress is not possible.
