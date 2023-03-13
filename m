@@ -2,91 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CCD6B7CF7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 17:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D9D6B7CFD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 17:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjCMQCW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Mar 2023 12:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
+        id S230008AbjCMQCs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Mar 2023 12:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCMQCV (ORCPT
+        with ESMTP id S229516AbjCMQCr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:02:21 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECE573039;
-        Mon, 13 Mar 2023 09:02:20 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id bp19so9777701oib.4;
-        Mon, 13 Mar 2023 09:02:20 -0700 (PDT)
+        Mon, 13 Mar 2023 12:02:47 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D322B77C9F
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Mar 2023 09:02:44 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x3so50667254edb.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Mar 2023 09:02:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678723340;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I/6PvWUDuv53qnbJtOkZQhGybbLEXAVya4Qm9G8Vtvo=;
-        b=GdGBH+Ouq7KE3mt/AVtpyLvF4XSzkJ3AtuVurjc/HPmPyokqzoPZnz29r2tk97xJbU
-         B9s6333fcIxEWsr9wG5UkFROvGQQYansTHyx9nJ+quJ6UMvafVGX4CYwStizbj3gzR5P
-         5K2nM6HXyZfH+nWVZ35xtZk+zXOsIzpeGX6JUHnc8AIbCqffnyfk1Qcv2wDLRPqITmA+
-         OA0EEW9uZI/PIbNPilOuef5DdvKEp4uPRosjt3ggH0W7t7/TcP5GXKZAyh3BFFFW75cV
-         6fRM59w3nJngnEhL2gPZBYHRz82Rjhs1nCoYmsnPRluVhbO4MxElv4UX+WepKB0BQhFL
-         2ETA==
+        d=google.com; s=20210112; t=1678723363;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MkU9+rg+FaRyUupHYORQX8BbE2RrPEICMxJRoJVfvFo=;
+        b=MiDzxKECXYsz7Vc7qEoQ7bXhFO4W+YjZzmcEY5iAoaL1eXTMVUQF4F1lQaDREFfS1M
+         sknlms1uu9+4/V6XioIqniozMsbPaFOzmKMH5AkOzTF6T9KWWkH1tvppOOy8vgMNiYib
+         6KsvQrtQf9kxIRhpDZVYCc19dCsgYuEDhoiW+sk2qQj9Aadb3izlzYGgDxgHp22KiZBb
+         xHGhY4o6VADwlsAxAd4u8qKfrQ/PSqkX+KFwbcmwQY4xACNcZ6yTTmAvsXHaU1zVPb8e
+         1SD5U3yvCGyzuwsWlZ5xIB7q6fNF8cd/Cvc1PMyduwp91o4OwNiM08gMRR+mtDi9kqwW
+         NSQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678723340;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/6PvWUDuv53qnbJtOkZQhGybbLEXAVya4Qm9G8Vtvo=;
-        b=OlV5fQRdSA+5bfpmuIr5IgNcGxJpKcRZBC+p1zDBA2FUF4fay5CKrfoP545hp8NrM4
-         q3sldqDm5e/dDTyGt08eB1kSL47AvDIOPYoXG9e6csg2YSZCUkTc4GTQ0NojiEWKg7tX
-         x4XVXVwqAKL+u8yPyXl89tqm3cNh56i5IEHY5I0CsifnrnDoZRonOlSuvvCtILHEyP//
-         5dXsQ9l0CwGfF0PJ0/3lvXdYST4T9qj7ZjwKMbbClB64URcMD25MUAyiisVyXjlNy0J3
-         7pFtAsnjmgfD+ZoEYm1pSZBAV0yv2YpJlIJoMqOWdaCCpzvQTHXTh0SxR7HKxX2bReTa
-         MUvA==
-X-Gm-Message-State: AO0yUKV0FlYZMOpZehQtOHowz13/lse/mBPWj4VMMsu9Unam0eSVHZkl
-        63l1SaP+Kyvaqnc9Ft6eIBk=
-X-Google-Smtp-Source: AK7set+N0wOTI76y8UHvscc0qXf14XK3qcBgvXnMlVBphtxrzHOYdVI/03vvei4uaZzfqxoU1YbJow==
-X-Received: by 2002:aca:1006:0:b0:384:38f1:e7fb with SMTP id 6-20020aca1006000000b0038438f1e7fbmr16570676oiq.53.1678723339751;
-        Mon, 13 Mar 2023 09:02:19 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:6822:a477:b6d1:664a? ([2600:1700:2442:6db0:6822:a477:b6d1:664a])
-        by smtp.gmail.com with ESMTPSA id x203-20020acae0d4000000b00383eaea5e88sm3266425oig.38.2023.03.13.09.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 09:02:19 -0700 (PDT)
-Message-ID: <40299ee6-c518-5505-0dc5-874deef03d19@gmail.com>
-Date:   Mon, 13 Mar 2023 11:02:17 -0500
+        d=1e100.net; s=20210112; t=1678723363;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MkU9+rg+FaRyUupHYORQX8BbE2RrPEICMxJRoJVfvFo=;
+        b=zBvXzU1CPwAMOAtwUxTmxADTy2GO2tLNQIRZwo/FiumLwl3MTuVKSRlCYrTCjX0koZ
+         SW1Ni4dZNvrfx6gGvs6sNfPPFLVen7yJrrRM+YS61NO/3pUfGiumt2hxaG2QSReJQRjy
+         Dts/c6LLmV0qfrWtgP6TF+BikSgv+K86dK6sH4RbNm0ErHNCPUyW52KmU8/Hq0yNIoR9
+         5qTso31PDSR5sO8axrPqE3bonBeazb/KVVYuUd5ohxR/Rr4EpKxkMxnNPXUXCxFQYbVv
+         1jDvvTSJJ7VbamT+mjnH7/LkLOHRpKJyjRGTwckINV5q+R32/tzqYeSDR2U5jyxBSy1Z
+         mQ+w==
+X-Gm-Message-State: AO0yUKWPhos1cx2QZgVeI55rhiKoA08H5U4wnkm3Rf/VWeYDxcXUPq/S
+        2omFjvJeOqJ3mGTCxHT0+pw3mcmYPQ3wmFd5CWTs/Q==
+X-Google-Smtp-Source: AK7set+Tf5fqrMlgNw+pAprEUb/BMxVKzUkSnCfZOA6NQUYbPR16SUZjkCTRhYi4EBuptcbBAz7S/e81Y2a0OCHM90c=
+X-Received: by 2002:a50:d4d7:0:b0:4fa:5b7d:ebb4 with SMTP id
+ e23-20020a50d4d7000000b004fa5b7debb4mr4098470edj.7.1678723363145; Mon, 13 Mar
+ 2023 09:02:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/8] of: Enable DTB loading on UML for KUnit tests
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>, Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20230302013822.1808711-1-sboyd@kernel.org>
- <20230302013822.1808711-3-sboyd@kernel.org>
- <CABVgOSkomwwgKZ9N0_0YMDL--QaZiTV7ONgSRABU2Ph1Z0CG-g@mail.gmail.com>
- <a97c9bb3a5addfb34af8ccabaa513026.sboyd@kernel.org>
- <CABVgOSkJ4mw_DtFzn5EwcsuYixWY_j13YotxEYqWhO+ZCL1KPg@mail.gmail.com>
- <d64a086ddcb7c5ca5abecab0ca654259.sboyd@kernel.org>
- <CABVgOSk9gqRe_5yQZweBA2Qg2aGx8rUJtOHywGeT4x7TEyBH0A@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CABVgOSk9gqRe_5yQZweBA2Qg2aGx8rUJtOHywGeT4x7TEyBH0A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230309135718.1490461-1-usama.anjum@collabora.com> <20230309135718.1490461-5-usama.anjum@collabora.com>
+In-Reply-To: <20230309135718.1490461-5-usama.anjum@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Mon, 13 Mar 2023 17:02:31 +0100
+Message-ID: <CABb0KFGU-jn4pCgmTK2zw0J-1-AVert4JsWF2CxgZ7LxckmWCA@mail.gmail.com>
+Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,131 +91,482 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/11/23 00:42, David Gow wrote:
-> On Sat, 11 Mar 2023 at 07:34, Stephen Boyd <sboyd@kernel.org> wrote:
->>
->> Quoting David Gow (2023-03-10 00:09:48)
->>> On Fri, 10 Mar 2023 at 07:19, Stephen Boyd <sboyd@kernel.org> wrote:
->>>>
->>>>
->>>> Hmm. I think you're suggesting that the unit test data be loaded
->>>> whenever CONFIG_OF=y and CONFIG_KUNIT=y. Then tests can check for
->>>> CONFIG_OF and skip if it isn't enabled?
->>>>
->>>
->>> More of the opposite: that we should have some way of supporting tests
->>> which might want to use a DTB other than the built-in one. Mostly for
->>> non-UML situations where an actual devicetree is needed to even boot
->>> far enough to get test output (so we wouldn't be able to override it
->>> with a compiled-in test one).
->>
->> Ok, got it.
->>
->>>
->>> I think moving to overlays probably will render this idea obsolete:
->>> but the thought was to give test code a way to check for the required
->>> devicetree nodes at runtime, and skip the test if they weren't found.
->>> That way, the failure mode for trying to boot this on something which
->>> required another device tree for, e.g., serial, would be "these tests
->>> are skipped because the wrong device tree is loaded", not "I get no
->>> output because serial isn't working".
->>>
->>> Again, though, it's only really needed for non-UML, and just loading
->>> overlays as needed should be much more sensible anyway.
->>
->> I still have one niggle here. Loading overlays requires
->> CONFIG_OF_OVERLAY, and the overlay loading API returns -ENOTSUPP when
->> CONFIG_OF_OVERLAY=n. For now I'm checking for the config being enabled
->> in each test, but I'm thinking it may be better to simply call
->> kunit_skip() from the overlay loading function if the config is
->> disabled. This way tests can simply call the overlay loading function
->> and we'll halt the test immediately if the config isn't enabled.
->>
-> 
-> That sounds sensible, though there is a potential pitfall. If
-> kunit_skip() is called directly from overlay code, might introduce a
-> dependency on kunit.ko from the DT overlay, which we might not want.
-> The solution there is either to have a kunit wrapper function (so the
-> call is already in kunit.ko), or to have a hook to skip the current
-> test (which probably makes sense to do anyway, but I think the wrapper
-> is the better option).
-> 
-> 
->>>
->>>>>
->>>>> That being said, I do think that there's probably some sense in
->>>>> supporting the compiled-in DTB as well (it's definitely simpler than
->>>>> patching kunit.py to always pass the extra command-line option in, for
->>>>> example).
->>>>> But maybe it'd be nice to have the command-line option override the
->>>>> built-in one if present.
->>>>
->>>> Got it. I need to test loading another DTB on the commandline still, but
->>>> I think this won't be a problem. We'll load the unittest-data DTB even
->>>> with KUnit on UML, so assuming that works on UML right now it should be
->>>> unchanged by this series once I resend.
->>>
->>> Again, moving to overlays should render this mostly obsolete, no? Or
->>> am I misunderstanding how the overlay stuff will work?
->>
->> Right, overlays make it largely a moot issue. The way the OF unit tests
->> work today is by grafting a DTB onto the live tree. I'm reusing that
->> logic to graft a container node target for kunit tests to add their
->> overlays too. It will be clearer once I post v2.
->>
->>>
->>> One possible future advantage of being able to test with custom DTs at
->>> boot time would be for fuzzing (provide random DT properties, see what
->>> happens in the test). We've got some vague plans to support a way of
->>> passing custom data to tests to support this kind of case (though, if
->>> we're using overlays, maybe the test could just patch those if we
->>> wanted to do that).
->>
->> Ah ok. I can see someone making a fuzzer that modifies devicetree
->> properties randomly, e.g. using different strings for clock-names.
->>
->> This reminds me of another issue I ran into. I wanted to test adding the
->> same platform device to the platform bus twice to confirm that the
->> second device can't be added. That prints a warning, which makes
->> kunit.py think that the test has failed because it printed a warning. Is
->> there some way to avoid that? I want something like
->>
->>         KUNIT_EXPECT_WARNING(test, <call some function>)
->>
->> so I can test error cases.
+On Thu, 9 Mar 2023 at 14:58, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+> the info about page table entries. The following operations are supported
+> in this ioctl:
+> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>   (PAGE_IS_SWAPPED).
+> - Find pages which have been written-to and write protect the pages
+>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+[...]
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/shmem_fs.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/pkeys.h>
+> +#include <linux/minmax.h>
+>
+>  #include <asm/elf.h>
+>  #include <asm/tlb.h>
+> @@ -1132,6 +1133,18 @@ static inline void clear_soft_dirty(struct vm_area_struct *vma,
+>  }
+>  #endif
+>
+> +static inline bool is_pte_uffd_wp(pte_t pte)
+> +{
+> +       return ((pte_present(pte) && pte_uffd_wp(pte)) ||
+> +               (pte_swp_uffd_wp_any(pte)));
 
-DT unittests already have a similar concept.  A test can report that a
-kernel warning (or any other specific text) either (1) must occur for the
-test to pass or (2) must _not_ occur for the test to pass.  The check
-for the kernel warning is done by the test output parsing program
-scripts/dtc/of_unittest_expect.
+Parentheses around pte_swp_uffd_wp_any() are redundant. Please remove
+here and in all following if()s. (Nit: those extra parentheses are
+used inconsistently in the patch anyway.)
 
-The reporting by a test of an expected error in drivers/of/unittest.c
-is done by EXPECT_BEGIN() and EXPECT_END().  These have been in
-unittest for a long time.
+[...]
+> +static inline bool pagemap_scan_is_wt_required(struct pagemap_scan_private *p)
 
-The reporting by a test of a not expected to occur error is done
-by EXPECT_NOT_BEGIN() and EXPECT_NOT_END().  These are added to
-unittest in linux 6.3-rc1.
+This seems to check if the PAGE_IS_WRITTEN flag is tested, so
+"pagemap_scan_needs_wp_checks()"? Or maybe document/expand the "wt"
+acronym as it seems used also on following code.
 
-I discussed this concept in one of the early TAP / KTAP discussion
-threads and expect to start a discussion thread on this specific
-topic in the KTAP Specification V2 context.  I expect the discussion
-to result in a different implementation than what DT unittests are
-using (bike shedding likely to ensue) but whatever is agreed to
-should be easy for DT to switch to.
+> +{
+> +       return  ((p->required_mask & PAGE_IS_WRITTEN) ||
+> +                (p->anyof_mask & PAGE_IS_WRITTEN) ||
+> +                (p->excluded_mask & PAGE_IS_WRITTEN));
 
-> 
-> Hmm... I'd've thought that shouldn't be a problem: kunit.py should
-> ignore most messages during a test, unless it can't find a valid
-> result line. What does the raw KTAP output look like? (You can get it
-> from kunit.py by passing the --raw_output option).
-> 
-> That being said, a KUNIT_EXPECT_LOG_MESSAGE() or similar is something
-> we've wanted for a while. I think that the KASAN folks have been
-> working on something similar using console tracepoints:
-> https://lore.kernel.org/all/ebf96ea600050f00ed567e80505ae8f242633640.1666113393.git.andreyknvl@google.com/
-> 
-> Cheers,
-> -- David
+Nit: It looks like it should answer "do any of the masks contain
+PAGE_IS_WRITTEN?" so maybe:
 
+return (p->required_mask | p->anyof_mask | p->excluded_mask) & PAGE_IS_WRITTEN;
+
+[...]
+
+> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+> +                              struct pagemap_scan_private *p,
+> +                              unsigned long addr, unsigned int n_pages)
+> +{
+> +       unsigned long bitmap = PM_SCAN_BITMAP(wt, file, pres, swap);
+> +       struct page_region *cur = &p->cur;
+> +       bool cpy = true;
+> +
+> +       if (p->max_pages && (p->found_pages == p->max_pages))
+> +               return -ENOSPC;
+> +
+> +       if (!n_pages)
+> +               return -EINVAL;
+> +
+> +       if (p->required_mask)
+> +               cpy = ((p->required_mask & bitmap) == p->required_mask);
+> +       if (cpy && p->anyof_mask)
+> +               cpy = (p->anyof_mask & bitmap);
+> +       if (cpy && p->excluded_mask)
+> +               cpy = !(p->excluded_mask & bitmap);
+
+Since the rest of the code is executed only when `cpy` is true, this
+could just return early for easier understanding.
+
+BTW, some of the tests are redundant. Eg: if required_mask == 0, then
+`required_mask & x == required_mask` will always hold. Same for
+`excluded_mask & x == 0`.
+
+> +
+> +       bitmap = bitmap & p->return_mask;
+
+Nit: bitmap &= p->return_mask;
+
+> +       if (cpy && bitmap) {
+
+Assuming early returns on `!cpy` are done earlier:
+
+if (!bitmap)
+  return 0;
+
+> +               if ((cur->len) && (cur->bitmap == bitmap) &&
+> +                   (cur->start + cur->len * PAGE_SIZE == addr)) {
+
+I'd recommend removing the extra parentheses as they make the code
+less readable for me (too many parentheses to match visually).
+The `cur->len` test seems redundant: is it possible to have
+`cur->start == addr` in that case (I guess it would have to get
+`n_pages == 0` in an earlier invocation)?
+
+> +
+> +                       cur->len += n_pages;
+> +                       p->found_pages += n_pages;
+
+Please add an early return so that 'else' chaining won't be necessary.
+
+> +               } else if ((!p->vec_index) ||
+> +                          ((p->vec_index + 1) < p->vec_len)) {
+
+Can you explain this test? Why not just `p->vec_index < p->vec_len`? Or better:
+
+if (vec_index >= p->vec_len)
+    return -ENOSPC;
+
+> +                       if (cur->len) {
+> +                               memcpy(&p->vec[p->vec_index], cur,
+> +                                      sizeof(struct page_region));
+> +                               p->vec_index++;
+> +                       }
+> +
+> +                       cur->start = addr;
+> +                       cur->len = n_pages;
+> +                       cur->bitmap = bitmap;
+> +                       p->found_pages += n_pages;
+> +               } else {
+> +                       return -ENOSPC;
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+[...]
+
+> +static int pagemap_scan_deposit(struct pagemap_scan_private *p,
+> +                               struct page_region __user *vec,
+> +                               unsigned long *vec_index)
+> +{
+> +       struct page_region *cur = &p->cur;
+> +
+> +       if (cur->len) {
+
+if (!cur->len)
+  return 0;
+
+> +               if (copy_to_user(&vec[*vec_index], cur,
+> +                                sizeof(struct page_region)))
+> +                       return -EFAULT;
+> +
+> +               p->vec_index++;
+> +               (*vec_index)++;
+> +       }
+> +
+> +       return 0;
+> +}
+
+> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> +                                 unsigned long end, struct mm_walk *walk)
+> +{
+> +       struct pagemap_scan_private *p = walk->private;
+> +       struct vm_area_struct *vma = walk->vma;
+> +       bool is_writ, is_file, is_pres, is_swap;
+> +       unsigned long addr = end;
+> +       spinlock_t *ptl;
+> +       int ret = 0;
+> +       pte_t *pte;
+> +
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+
+Is the `#ifdef` needed? `pmd_trans_huge_lock()` will always return
+NULL if transparent hugepages are not compiled in. OTOH I see
+BUILD_BUG() is possible in HPAGE_SIZE definition (irrelevant in this
+case), so that would need to be worked around first.
+
+> +       ptl = pmd_trans_huge_lock(pmd, vma);
+> +       if (ptl) {
+> +               unsigned long n_pages;
+> +
+> +               is_writ = !is_pmd_uffd_wp(*pmd);
+
+`is_written`?
+
+> +               /*
+> +                * Break huge page into small pages if operation needs to be
+> +                * performed is on a portion of the huge page.
+> +                */
+> +               if (is_writ && PM_SCAN_OP_IS_WP(p) &&
+> +                   (end - start < HPAGE_SIZE)) {
+> +                       spin_unlock(ptl);
+> +
+> +                       split_huge_pmd(vma, pmd, start);
+> +                       goto process_smaller_pages;
+> +               }
+> +
+> +               n_pages = (end - start)/PAGE_SIZE;
+> +               if (p->max_pages &&
+> +                   p->found_pages + n_pages >= p->max_pages)
+
+Nit: greater-than is also correct and avoids no-op assignment.
+
+> +                       n_pages = p->max_pages - p->found_pages;
+> +
+> +               ret = pagemap_scan_output(is_writ, vma->vm_file,
+> +                                         pmd_present(*pmd), is_swap_pmd(*pmd),
+> +                                         p, start, n_pages);
+> +               spin_unlock(ptl);
+
+if (ret || !is_written)
+  return ret;
+
+This will avoid those tests in the following if().
+
+> +
+> +               if (!ret && is_writ && PM_SCAN_OP_IS_WP(p) &&
+> +                   uffd_wp_range(walk->mm, vma, start, HPAGE_SIZE, true) < 0)
+> +                       ret = -EINVAL;
+> +
+> +               return ret;
+
+After above early returns, this will be always `return 0;`.
+
+> +       }
+> +process_smaller_pages:
+> +       if (pmd_trans_unstable(pmd))
+> +               return 0;
+> +#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+> +
+> +       for (addr = start; !ret && addr < end; pte++, addr += PAGE_SIZE) {
+
+The `!ret` can be removed if the EINVAL case was to `break` by itself.
+
+> +               pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+> +
+> +               is_writ = !is_pte_uffd_wp(*pte);
+> +               is_file = vma->vm_file;
+> +               is_pres = pte_present(*pte);
+> +               is_swap = is_swap_pte(*pte);
+> +
+> +               pte_unmap_unlock(pte, ptl);
+> +
+> +               ret = pagemap_scan_output(is_writ, is_file, is_pres, is_swap,
+> +                                         p, addr, 1);
+> +               if (ret)
+> +                       break;
+> +
+> +               if (PM_SCAN_OP_IS_WP(p) && is_writ &&
+> +                   uffd_wp_range(walk->mm, vma, addr, PAGE_SIZE, true) < 0)
+> +                       ret = -EINVAL;
+> +       }
+> +
+> +       cond_resched();
+> +       return ret;
+> +}
+> +
+> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
+> +                                int depth, struct mm_walk *walk)
+> +{
+> +       struct pagemap_scan_private *p = walk->private;
+> +       struct vm_area_struct *vma = walk->vma;
+> +       unsigned long n_pages;
+> +       int ret = 0;
+> +
+> +       if (vma) {
+
+if (!vma) return 0;
+
+> +               n_pages = (end - addr)/PAGE_SIZE;
+> +               if (p->max_pages &&
+> +                   p->found_pages + n_pages >= p->max_pages)
+> +                       n_pages = p->max_pages - p->found_pages;
+> +
+> +               ret = pagemap_scan_output(false, vma->vm_file, false, false, p,
+> +                                         addr, n_pages);
+> +       }
+> +
+> +       return ret;
+> +}
+
+
+> +/* No hugetlb support is present. */
+
+"FIXME: hugetlb support is not implemented."? (There seems to be no
+#ifdef CONFIG_HUGETLB or similar, so I guess the comment is about the
+current implementation.)
+
+> +static const struct mm_walk_ops pagemap_scan_ops = {
+> +       .test_walk = pagemap_scan_test_walk,
+> +       .pmd_entry = pagemap_scan_pmd_entry,
+> +       .pte_hole = pagemap_scan_pte_hole,
+> +};
+> +
+> +static bool pagemap_scan_args_valid(struct pm_scan_arg *arg,
+> +                                   struct page_region __user *vec,
+> +                                   unsigned long start)
+> +{
+> +       /* Detect illegal size, flags and masks */
+> +       if (arg->size != sizeof(struct pm_scan_arg))
+> +               return false;
+> +       if (arg->flags & ~PM_SCAN_OPS)
+> +               return false;
+> +       if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
+> +            arg->return_mask) & ~PM_SCAN_BITS_ALL)
+> +               return false;
+
+> +       if (!arg->required_mask && !arg->anyof_mask &&
+> +           !arg->excluded_mask)
+> +               return false;
+
+Is there an assumption in the code that those checks are needed? I'd
+expect that no selection criteria makes a valid page set?
+
+> +       if (!arg->return_mask)
+> +               return false;
+> +
+> +       /* Validate memory ranges */
+> +       if (!(arg->flags & PM_SCAN_OP_GET))
+> +               return false;
+> +       if (!arg->vec)
+> +               return false;
+> +       if (arg->vec_len == 0)
+> +               return false;
+
+> +       if (!access_ok((void __user *)vec,
+> +                      arg->vec_len * sizeof(struct page_region)))
+> +               return false;
+
+Is there a provision that userspace threads are all blocked from
+manipulating mmaps during this ioctl()? If not, this is a TOCTOU bug
+and the writes should be checked each time as another userspace thread
+could remap the memory while the ioctl() is working. Anyway, the
+return should be EFAULT for this case.
+
+> +       if (!IS_ALIGNED(start, PAGE_SIZE))
+> +               return false;
+> +       if (!access_ok((void __user *)start, arg->len))
+> +               return false;
+
+This I guess want's to check if the range to be scanned is mapped -
+but isn't this what the ioctl() should do during the scan? (But, also
+see above.)
+
+> +       if (PM_SCAN_OP_IS_WP(arg)) {
+
+if (!...IS_WP) return true;
+
+> +               if (arg->required_mask & PM_SCAN_NON_WT_BITS)
+> +                       return false;
+> +               if (arg->anyof_mask & PM_SCAN_NON_WT_BITS)
+> +                       return false;
+> +               if (arg->excluded_mask & PM_SCAN_NON_WT_BITS)
+> +                       return false;
+
+Please see: pagemap_scan_is_wt_required comment. Also, it seems this
+constant is used only here, so ~PAGE_IS_WRITTEN might be enough?
+
+[...]
+> +static long do_pagemap_cmd(struct mm_struct *mm, struct pm_scan_arg *arg)
+> +{
+> +       unsigned long start, end, walk_start, walk_end;
+> +       unsigned long empty_slots, vec_index = 0;
+> +       struct page_region __user *vec;
+> +       struct pagemap_scan_private p;
+> +       int ret = 0;
+> +
+> +       start = (unsigned long)untagged_addr(arg->start);
+> +       vec = (struct page_region *)(unsigned long)untagged_addr(arg->vec);
+> +
+> +       if (!pagemap_scan_args_valid(arg, vec, start))
+> +               return -EINVAL;
+> +
+> +       end = start + arg->len;
+> +       p.max_pages = arg->max_pages;
+> +       p.found_pages = 0;
+> +       p.flags = arg->flags;
+> +       p.required_mask = arg->required_mask;
+> +       p.anyof_mask = arg->anyof_mask;
+> +       p.excluded_mask = arg->excluded_mask;
+> +       p.return_mask = arg->return_mask;
+> +       p.cur.len = 0;
+> +       p.vec = NULL;
+> +       p.vec_len = (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
+> +
+> +       /*
+> +        * Allocate smaller buffer to get output from inside the page walk
+> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+> +        * we want to return output to user in compact form where no two
+> +        * consecutive regions should be continuous and have the same flags.
+> +        * So store the latest element in p.cur between different walks and
+> +        * store the p.cur at the end of the walk to the user buffer.
+> +        */
+> +       p.vec = kmalloc_array(p.vec_len, sizeof(struct page_region),
+> +                             GFP_KERNEL);
+> +       if (!p.vec)
+> +               return -ENOMEM;
+> +
+> +       walk_start = walk_end = start;
+> +       while (walk_end < end) {
+> +               p.vec_index = 0;
+> +
+> +               empty_slots = arg->vec_len - vec_index;
+> +               p.vec_len = min(p.vec_len, empty_slots);
+> +
+> +               walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+> +               if (walk_end > end)
+> +                       walk_end = end;
+> +
+> +               mmap_read_lock(mm);
+> +               ret = walk_page_range(mm, walk_start, walk_end,
+> +                                     &pagemap_scan_ops, &p);
+> +               mmap_read_unlock(mm);
+> +
+> +               if (!(!ret || ret == -ENOSPC))
+
+if (ret && ret != -ENOSPC)
+
+> +                       goto free_data;
+> +
+> +               walk_start = walk_end;
+> +               if (p.vec_index) {
+> +                       if (copy_to_user(&vec[vec_index], p.vec,
+> +                                        p.vec_index *
+> +                                        sizeof(struct page_region))) {
+> +                               ret = -EFAULT;
+> +                               goto free_data;
+> +                       }
+> +                       vec_index += p.vec_index;
+> +               }
+> +       }
+> +       ret = pagemap_scan_deposit(&p, vec, &vec_index);
+> +       if (!ret)
+> +               ret = vec_index;
+> +free_data:
+> +       kfree(p.vec);
+> +
+> +       return ret;
+> +}
+> +
+> +static long pagemap_scan_ioctl(struct file *file, unsigned int cmd,
+> +                              unsigned long arg)
+> +{
+> +       struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)arg;
+> +       struct mm_struct *mm = file->private_data;
+> +       struct pm_scan_arg argument;
+> +
+> +       if (cmd == PAGEMAP_SCAN) {
+
+switch() for easier expansion later?
+
+> +               if (copy_from_user(&argument, uarg,
+> +                                  sizeof(struct pm_scan_arg)))
+
+sizeof(*argument);
+
+Could you push this to do_pagemap_cmd()? In case this file gets more
+ioctl() commands there won't be need to add more command-specific
+structures in this function.
+
+> +                       return -EFAULT;
+> +               return do_pagemap_cmd(mm, &argument);
+> +       }
+> +
+> +       return -EINVAL;
+> +}
+> +
+>  const struct file_operations proc_pagemap_operations = {
+>         .llseek         = mem_lseek, /* borrow this */
+>         .read           = pagemap_read,
+>         .open           = pagemap_open,
+>         .release        = pagemap_release,
+> +       .unlocked_ioctl = pagemap_scan_ioctl,
+> +       .compat_ioctl   = pagemap_scan_ioctl,
+
+Is this correct? Would the code need a different userspace pointer
+handling for 32-bit userspace on 64-bit kernel?
+
+>  };
+>  #endif /* CONFIG_PROC_PAGE_MONITOR */
