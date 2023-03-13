@@ -2,67 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDD96B7C39
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 16:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CCD6B7CF7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 17:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjCMPmD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Mar 2023 11:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S229922AbjCMQCW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Mar 2023 12:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjCMPmB (ORCPT
+        with ESMTP id S229516AbjCMQCV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:42:01 -0400
-Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF173CE0E
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Mar 2023 08:41:58 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-cZ6hFkaTPp2gw_6VnXUfeA-1; Mon, 13 Mar 2023 11:41:41 -0400
-X-MC-Unique: cZ6hFkaTPp2gw_6VnXUfeA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 455781C08789;
-        Mon, 13 Mar 2023 15:41:40 +0000 (UTC)
-Received: from hog (unknown [10.39.192.141])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 41CD6406AA66;
-        Mon, 13 Mar 2023 15:41:38 +0000 (UTC)
-Date:   Mon, 13 Mar 2023 16:41:36 +0100
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
-        Frantisek Krenzelok <fkrenzel@redhat.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Apoorv Kothari <apoorvko@amazon.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: Re: [PATCH net-next v2 0/5] tls: implement key updates for TLS1.3
-Message-ID: <ZA9EMJgoNsxfOhwV@hog>
-References: <cover.1676052788.git.sd@queasysnail.net>
- <20230214210811.448b5ec4@kernel.org>
- <Y+0Wjrc9shLkH+Gg@hog>
- <20230215111020.0c843384@kernel.org>
- <Y+1pX/vL8t2nU00c@hog>
- <20230215195748.23a6da87@kernel.org>
- <Y+5Yd/8tjCQNOF31@hog>
- <20230221191944.4d162ec7@kernel.org>
- <Y/eT/M+b6jUtTdng@hog>
- <20230223092945.435b10ea@kernel.org>
+        Mon, 13 Mar 2023 12:02:21 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECE573039;
+        Mon, 13 Mar 2023 09:02:20 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id bp19so9777701oib.4;
+        Mon, 13 Mar 2023 09:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678723340;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I/6PvWUDuv53qnbJtOkZQhGybbLEXAVya4Qm9G8Vtvo=;
+        b=GdGBH+Ouq7KE3mt/AVtpyLvF4XSzkJ3AtuVurjc/HPmPyokqzoPZnz29r2tk97xJbU
+         B9s6333fcIxEWsr9wG5UkFROvGQQYansTHyx9nJ+quJ6UMvafVGX4CYwStizbj3gzR5P
+         5K2nM6HXyZfH+nWVZ35xtZk+zXOsIzpeGX6JUHnc8AIbCqffnyfk1Qcv2wDLRPqITmA+
+         OA0EEW9uZI/PIbNPilOuef5DdvKEp4uPRosjt3ggH0W7t7/TcP5GXKZAyh3BFFFW75cV
+         6fRM59w3nJngnEhL2gPZBYHRz82Rjhs1nCoYmsnPRluVhbO4MxElv4UX+WepKB0BQhFL
+         2ETA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678723340;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I/6PvWUDuv53qnbJtOkZQhGybbLEXAVya4Qm9G8Vtvo=;
+        b=OlV5fQRdSA+5bfpmuIr5IgNcGxJpKcRZBC+p1zDBA2FUF4fay5CKrfoP545hp8NrM4
+         q3sldqDm5e/dDTyGt08eB1kSL47AvDIOPYoXG9e6csg2YSZCUkTc4GTQ0NojiEWKg7tX
+         x4XVXVwqAKL+u8yPyXl89tqm3cNh56i5IEHY5I0CsifnrnDoZRonOlSuvvCtILHEyP//
+         5dXsQ9l0CwGfF0PJ0/3lvXdYST4T9qj7ZjwKMbbClB64URcMD25MUAyiisVyXjlNy0J3
+         7pFtAsnjmgfD+ZoEYm1pSZBAV0yv2YpJlIJoMqOWdaCCpzvQTHXTh0SxR7HKxX2bReTa
+         MUvA==
+X-Gm-Message-State: AO0yUKV0FlYZMOpZehQtOHowz13/lse/mBPWj4VMMsu9Unam0eSVHZkl
+        63l1SaP+Kyvaqnc9Ft6eIBk=
+X-Google-Smtp-Source: AK7set+N0wOTI76y8UHvscc0qXf14XK3qcBgvXnMlVBphtxrzHOYdVI/03vvei4uaZzfqxoU1YbJow==
+X-Received: by 2002:aca:1006:0:b0:384:38f1:e7fb with SMTP id 6-20020aca1006000000b0038438f1e7fbmr16570676oiq.53.1678723339751;
+        Mon, 13 Mar 2023 09:02:19 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:6822:a477:b6d1:664a? ([2600:1700:2442:6db0:6822:a477:b6d1:664a])
+        by smtp.gmail.com with ESMTPSA id x203-20020acae0d4000000b00383eaea5e88sm3266425oig.38.2023.03.13.09.02.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 09:02:19 -0700 (PDT)
+Message-ID: <40299ee6-c518-5505-0dc5-874deef03d19@gmail.com>
+Date:   Mon, 13 Mar 2023 11:02:17 -0500
 MIME-Version: 1.0
-In-Reply-To: <20230223092945.435b10ea@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: queasysnail.net
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/8] of: Enable DTB loading on UML for KUnit tests
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>, Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20230302013822.1808711-1-sboyd@kernel.org>
+ <20230302013822.1808711-3-sboyd@kernel.org>
+ <CABVgOSkomwwgKZ9N0_0YMDL--QaZiTV7ONgSRABU2Ph1Z0CG-g@mail.gmail.com>
+ <a97c9bb3a5addfb34af8ccabaa513026.sboyd@kernel.org>
+ <CABVgOSkJ4mw_DtFzn5EwcsuYixWY_j13YotxEYqWhO+ZCL1KPg@mail.gmail.com>
+ <d64a086ddcb7c5ca5abecab0ca654259.sboyd@kernel.org>
+ <CABVgOSk9gqRe_5yQZweBA2Qg2aGx8rUJtOHywGeT4x7TEyBH0A@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <CABVgOSk9gqRe_5yQZweBA2Qg2aGx8rUJtOHywGeT4x7TEyBH0A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,93 +94,131 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2023-02-23, 09:29:45 -0800, Jakub Kicinski wrote:
-> On Thu, 23 Feb 2023 17:27:40 +0100 Sabrina Dubroca wrote:
-> > Installing the key in HW and re-enabling the offload will need to
-> > happen via the icsk_clean_acked callback. We'll need a workqueue so
-> > that we don't actually talk to the driver from softirq.
+On 3/11/23 00:42, David Gow wrote:
+> On Sat, 11 Mar 2023 at 07:34, Stephen Boyd <sboyd@kernel.org> wrote:
+>>
+>> Quoting David Gow (2023-03-10 00:09:48)
+>>> On Fri, 10 Mar 2023 at 07:19, Stephen Boyd <sboyd@kernel.org> wrote:
+>>>>
+>>>>
+>>>> Hmm. I think you're suggesting that the unit test data be loaded
+>>>> whenever CONFIG_OF=y and CONFIG_KUNIT=y. Then tests can check for
+>>>> CONFIG_OF and skip if it isn't enabled?
+>>>>
+>>>
+>>> More of the opposite: that we should have some way of supporting tests
+>>> which might want to use a DTB other than the built-in one. Mostly for
+>>> non-UML situations where an actual devicetree is needed to even boot
+>>> far enough to get test output (so we wouldn't be able to override it
+>>> with a compiled-in test one).
+>>
+>> Ok, got it.
+>>
+>>>
+>>> I think moving to overlays probably will render this idea obsolete:
+>>> but the thought was to give test code a way to check for the required
+>>> devicetree nodes at runtime, and skip the test if they weren't found.
+>>> That way, the failure mode for trying to boot this on something which
+>>> required another device tree for, e.g., serial, would be "these tests
+>>> are skipped because the wrong device tree is loaded", not "I get no
+>>> output because serial isn't working".
+>>>
+>>> Again, though, it's only really needed for non-UML, and just loading
+>>> overlays as needed should be much more sensible anyway.
+>>
+>> I still have one niggle here. Loading overlays requires
+>> CONFIG_OF_OVERLAY, and the overlay loading API returns -ENOTSUPP when
+>> CONFIG_OF_OVERLAY=n. For now I'm checking for the config being enabled
+>> in each test, but I'm thinking it may be better to simply call
+>> kunit_skip() from the overlay loading function if the config is
+>> disabled. This way tests can simply call the overlay loading function
+>> and we'll halt the test immediately if the config isn't enabled.
+>>
 > 
-> Installing from icsk_clean_acked won't win us anything, right?
-> We'll only need the key once the next sendmsg() comes, what's
-> pushed to TCP with swenc is already out of our hands.
-
-Avoiding an unpredictable slowdown on the sendmsg() call? We can deal
-with that later if it turns out to be an issue. I simply didn't think
-of deferring to the next sendmsg().
-
-> > Then, we have to handle a failure to install the key. Since we're not
-> > installing it in HW immediately during setsockopt, notifying userspace
-> > of a rekey failure is more complicated. Maybe we can do a
-> > rekey_prepare during the setsocktopt, and then the actual rekey is an
-> > operation that cannot fail?
+> That sounds sensible, though there is a potential pitfall. If
+> kunit_skip() is called directly from overlay code, might introduce a
+> dependency on kunit.ko from the DT overlay, which we might not want.
+> The solution there is either to have a kunit wrapper function (so the
+> call is already in kunit.ko), or to have a hook to skip the current
+> test (which probably makes sense to do anyway, but I think the wrapper
+> is the better option).
 > 
-> TLS offload silently falls back to SW on any errors. So that's fine.
-> Just bump a counter. User/infra must be tracking error counters in 
-> our current design already.
-
-True. User might be a bit surprised by "well it was offloaded and now
-it's not", but ok.
-
-> > > Important consideration is making the non-rekey path as fast as
-> > > possible (given rekeying is extremely rare). Looking at skb->decrypted
-> > > should be very fast but we can possibly fit some other indication of
-> > > "are we rekeying" into another already referenced cache line.
-> > > We definitely don't want to have to look up the record to know what
-> > > state we're in.
-> > > 
-> > > The fallback can't use AES-NI (it's in sirq context) so it's slower 
-> > > than SW encrypt before queuing to TCP. Hence my first thought is using
-> > > SW crypto for new key and let the traffic we already queued with old
-> > > key drain leveraging HW crypto. But as I said the impact on performance
-> > > when not rekeying is more important, and so is driver simplicity.  
-> > 
-> > Right, sorry, full tls_sw path and not the existing fallback.
-> > 
-> > Changing the socket ops back and forth between the HW and SW variants
-> > worries me, because we only lock the socket once we have entered
-> > tls_{device,sw}_sendmsg. So I think we have to stay on the _device ops
-> > even during the SW crypto phase of the rekey, and let that call into
-> > the SW variant after locking the socket and making sure we're in a
-> > rekey.
 > 
-> Fair point :S
+>>>
+>>>>>
+>>>>> That being said, I do think that there's probably some sense in
+>>>>> supporting the compiled-in DTB as well (it's definitely simpler than
+>>>>> patching kunit.py to always pass the extra command-line option in, for
+>>>>> example).
+>>>>> But maybe it'd be nice to have the command-line option override the
+>>>>> built-in one if present.
+>>>>
+>>>> Got it. I need to test loading another DTB on the commandline still, but
+>>>> I think this won't be a problem. We'll load the unittest-data DTB even
+>>>> with KUnit on UML, so assuming that works on UML right now it should be
+>>>> unchanged by this series once I resend.
+>>>
+>>> Again, moving to overlays should render this mostly obsolete, no? Or
+>>> am I misunderstanding how the overlay stuff will work?
+>>
+>> Right, overlays make it largely a moot issue. The way the OF unit tests
+>> work today is by grafting a DTB onto the live tree. I'm reusing that
+>> logic to graft a container node target for kunit tests to add their
+>> overlays too. It will be clearer once I post v2.
+>>
+>>>
+>>> One possible future advantage of being able to test with custom DTs at
+>>> boot time would be for fuzzing (provide random DT properties, see what
+>>> happens in the test). We've got some vague plans to support a way of
+>>> passing custom data to tests to support this kind of case (though, if
+>>> we're using overlays, maybe the test could just patch those if we
+>>> wanted to do that).
+>>
+>> Ah ok. I can see someone making a fuzzer that modifies devicetree
+>> properties randomly, e.g. using different strings for clock-names.
+>>
+>> This reminds me of another issue I ran into. I wanted to test adding the
+>> same platform device to the platform bus twice to confirm that the
+>> second device can't be added. That prints a warning, which makes
+>> kunit.py think that the test has failed because it printed a warning. Is
+>> there some way to avoid that? I want something like
+>>
+>>         KUNIT_EXPECT_WARNING(test, <call some function>)
+>>
+>> so I can test error cases.
+
+DT unittests already have a similar concept.  A test can report that a
+kernel warning (or any other specific text) either (1) must occur for the
+test to pass or (2) must _not_ occur for the test to pass.  The check
+for the kernel warning is done by the test output parsing program
+scripts/dtc/of_unittest_expect.
+
+The reporting by a test of an expected error in drivers/of/unittest.c
+is done by EXPECT_BEGIN() and EXPECT_END().  These have been in
+unittest for a long time.
+
+The reporting by a test of a not expected to occur error is done
+by EXPECT_NOT_BEGIN() and EXPECT_NOT_END().  These are added to
+unittest in linux 6.3-rc1.
+
+I discussed this concept in one of the early TAP / KTAP discussion
+threads and expect to start a discussion thread on this specific
+topic in the KTAP Specification V2 context.  I expect the discussion
+to result in a different implementation than what DT unittests are
+using (bike shedding likely to ensue) but whatever is agreed to
+should be easy for DT to switch to.
+
 > 
-> > > > Don't we have that already? If there's a retransmit while we're
-> > > > setting the TX key in HW, data that was queued on the socket before
-> > > > (and shouldn't be encrypted at all) would also be encrypted
-> > > > otherwise. Or is it different with rekey?  
-> > > 
-> > > We have a "start marker" record which is supposed to indicate that
-> > > anything before it has already been encrypted. The driver is programmed
-> > > with the start seq no, when it sees a packet from before this seq no
-> > > it checks if a record exists, finds its before the start marker and
-> > > sends the data as is.  
-> > 
-> > Yes, I was looking into that earlier this week. I think we could reuse
-> > a similar mechanism for rekeying. tls_dev_add takes tcp_sk->write_seq,
-> > we could have a tls_dev_rekey op passing the new key and new write_seq
-> > to the driver. I think we can also reuse the ->eor trick from
-> > tls_set_device_offload, and we wouldn't have to look at
-> > skb->decrypted. Close and push the current SW record, mark ->eor, pass
-> > write_seq to the driver along with the key. Also pretty close to what
-> > tls_device_resync_tx does.
+> Hmm... I'd've thought that shouldn't be a problem: kunit.py should
+> ignore most messages during a test, unless it can't find a valid
+> result line. What does the raw KTAP output look like? (You can get it
+> from kunit.py by passing the --raw_output option).
 > 
-> That sounds like you'd expose the rekeying logic to the drivers?
-> New op, having to track seq#...
-
-Well, we have to call into the drivers to install the key, whether
-that's a new rekey op, or adding an update argument to ->tls_dev_add,
-or letting the driver guess that it's a rekey (or ignore that and just
-install the key if rekey vs initial key isn't a meaningful
-distinction).
-
-We already feed drivers the seq# with ->tls_dev_add, so passing it for
-rekeys as well is not a big change.
-
-Does that seem problematic? Adding a rekey op seemed more natural to
-me than simply using the existing _del + _add ops, but maybe we can
-get away with just using those two ops.
-
--- 
-Sabrina
+> That being said, a KUNIT_EXPECT_LOG_MESSAGE() or similar is something
+> we've wanted for a while. I think that the KASAN folks have been
+> working on something similar using console tracepoints:
+> https://lore.kernel.org/all/ebf96ea600050f00ed567e80505ae8f242633640.1666113393.git.andreyknvl@google.com/
+> 
+> Cheers,
+> -- David
 
