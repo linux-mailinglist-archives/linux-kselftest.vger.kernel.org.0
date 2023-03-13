@@ -2,88 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F2E6B7BF4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 16:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDD96B7C39
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 16:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjCMPaq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Mar 2023 11:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
+        id S229792AbjCMPmD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Mar 2023 11:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjCMPap (ORCPT
+        with ESMTP id S229723AbjCMPmB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:30:45 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBDE5CC26;
-        Mon, 13 Mar 2023 08:30:44 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-177b78067ffso2951575fac.7;
-        Mon, 13 Mar 2023 08:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678721443;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0b3TgdJ99fVHE7Fi3WYmDiYFJwk0+grVkre963bfbbA=;
-        b=TLjhRn9e0FF/cUyXqMyPGtTdJCz4IM3iq5yrjZGeOltpRLs+yJKQkEJy9Ma2FonAvu
-         uibvAujnKZT0u79hixIX2oFeCy0f9tVW1kPWD5U0FtZDK3qAk4U+dAWbPmBCzBU4Ol3s
-         DOrcdvKlhAYMRFVx/OK6YWH7mfk7W81J4IcgQbuAPSQBe0tPTxXK2OdK6J2tNGTbxbXR
-         HWMMkWPOAoG8RNgQTjMrq5dn+oKgHzGOo/Ky8ASqMk5kQEknCNg04K4pvyqARzVdkbKU
-         7L0yhzJldp1+mqnmhlHFTFXWB88dSPDNMxszYe7dQnBMnxnvvO9HnMODGfVccqSL3Yu+
-         SmDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678721443;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0b3TgdJ99fVHE7Fi3WYmDiYFJwk0+grVkre963bfbbA=;
-        b=gLdYu2Q4P3x3wbf83qv/YDSSY1lAk/HITVRPH+L9fqtipe23O9XKhKmPrEHwa/Oi24
-         9yANb3TrJnLpLD3Pc0Rls4Nzdj3AOl0QlX1tpkjjlc2s3k6w+gv0ikgn+bWPLQ+Zl9n0
-         TlKCBzdxgovFGekRFJZODm/SMec5UFDtqbHRKuNV0fao2KawUmRyG/N9fPfRsXhpiHjm
-         gmz/drPGHOQ0fcMpEvf3nQIGRbujdqyPqqGXu6hj3T3KM+5xNfVWmLFtsG5wNqgHaHMp
-         OaVnUdG6rwvORUOZcHOEN8zWAx7iqq7/xydS1MwONihgCBwsIeJV9LC4JcOt0wkNL3Nq
-         ZuXA==
-X-Gm-Message-State: AO0yUKUkGh2gKFM1LiBf5YJK2FYwvIzU0xOvY24BWlyJCARkLxznuiff
-        3TtIM0ijUANd6fLEqZgr1xs=
-X-Google-Smtp-Source: AK7set+6TyCLAMTfeShf5HNW6nlU+nm0GqRZLIhFOXlUEPx7J4wa/cjRQ9htKmprms8TICxiBi9pzw==
-X-Received: by 2002:a05:6870:9591:b0:177:8219:ad62 with SMTP id k17-20020a056870959100b001778219ad62mr6346081oao.50.1678721443239;
-        Mon, 13 Mar 2023 08:30:43 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:6822:a477:b6d1:664a? ([2600:1700:2442:6db0:6822:a477:b6d1:664a])
-        by smtp.gmail.com with ESMTPSA id n185-20020acaefc2000000b00383e305597dsm3235820oih.23.2023.03.13.08.30.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 08:30:42 -0700 (PDT)
-Message-ID: <8ab5b110-2f46-fb39-894e-64d59669c02a@gmail.com>
-Date:   Mon, 13 Mar 2023 10:30:40 -0500
+        Mon, 13 Mar 2023 11:42:01 -0400
+Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF173CE0E
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Mar 2023 08:41:58 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-cZ6hFkaTPp2gw_6VnXUfeA-1; Mon, 13 Mar 2023 11:41:41 -0400
+X-MC-Unique: cZ6hFkaTPp2gw_6VnXUfeA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 455781C08789;
+        Mon, 13 Mar 2023 15:41:40 +0000 (UTC)
+Received: from hog (unknown [10.39.192.141])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 41CD6406AA66;
+        Mon, 13 Mar 2023 15:41:38 +0000 (UTC)
+Date:   Mon, 13 Mar 2023 16:41:36 +0100
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
+        Frantisek Krenzelok <fkrenzel@redhat.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Apoorv Kothari <apoorvko@amazon.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: Re: [PATCH net-next v2 0/5] tls: implement key updates for TLS1.3
+Message-ID: <ZA9EMJgoNsxfOhwV@hog>
+References: <cover.1676052788.git.sd@queasysnail.net>
+ <20230214210811.448b5ec4@kernel.org>
+ <Y+0Wjrc9shLkH+Gg@hog>
+ <20230215111020.0c843384@kernel.org>
+ <Y+1pX/vL8t2nU00c@hog>
+ <20230215195748.23a6da87@kernel.org>
+ <Y+5Yd/8tjCQNOF31@hog>
+ <20230221191944.4d162ec7@kernel.org>
+ <Y/eT/M+b6jUtTdng@hog>
+ <20230223092945.435b10ea@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20230302013822.1808711-1-sboyd@kernel.org>
- <2ce31cd1-7a0e-18ac-8a5b-ed09d6539241@gmail.com>
- <CABVgOS=6mLLYDr3ZOmv6iBQKPdFxTGDFP+uy9xgTHvdc03=vPw@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CABVgOS=6mLLYDr3ZOmv6iBQKPdFxTGDFP+uy9xgTHvdc03=vPw@mail.gmail.com>
+In-Reply-To: <20230223092945.435b10ea@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: queasysnail.net
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,141 +70,93 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/10/23 01:48, David Gow wrote:
-> On Sat, 4 Mar 2023 at 23:50, Frank Rowand <frowand.list@gmail.com> wrote:
->>
->> On 3/1/23 19:38, Stephen Boyd wrote:
->>> This patch series adds unit tests for the clk fixed rate basic type and
->>> the clk registration functions that use struct clk_parent_data. To get
->>> there, we add support for loading a DTB into the UML kernel that's
->>> running the unit tests along with probing platform drivers to bind to
->>> device nodes specified in DT.
->>>
->>> With this series, we're able to exercise some of the code in the common
->>> clk framework that uses devicetree lookups to find parents and the fixed
->>> rate clk code that scans devicetree directly and creates clks. Please
->>> review.
->>
->> I would _really_ like to _not_ have devicetree tests in two locations:
->> DT unittests and kunit tests.
->>
+2023-02-23, 09:29:45 -0800, Jakub Kicinski wrote:
+> On Thu, 23 Feb 2023 17:27:40 +0100 Sabrina Dubroca wrote:
+> > Installing the key in HW and re-enabling the offload will need to
+> > happen via the icsk_clean_acked callback. We'll need a workqueue so
+> > that we don't actually talk to the driver from softirq.
 > 
+> Installing from icsk_clean_acked won't win us anything, right?
+> We'll only need the key once the next sendmsg() comes, what's
+> pushed to TCP with swenc is already out of our hands.
 
-This:
+Avoiding an unpredictable slowdown on the sendmsg() call? We can deal
+with that later if it turns out to be an issue. I simply didn't think
+of deferring to the next sendmsg().
 
-> I agree we don't want to split things up needlessly, but I think there
-> is a meaningful distinction between:
-> - Testing the DT infrastructure itself (with DT unittests)
-> - Testing a driver which may have some interaction with DT (via KUnit)
-
+> > Then, we have to handle a failure to install the key. Since we're not
+> > installing it in HW immediately during setsockopt, notifying userspace
+> > of a rekey failure is more complicated. Maybe we can do a
+> > rekey_prepare during the setsocktopt, and then the actual rekey is an
+> > operation that cannot fail?
 > 
-> So, rather than going for a "devicetree" KUnit suite (unless we wanted
-> to port OF_UNITTEST to KUnit, which as you point out, would involve a
-> fair bit of reworking), I think the goal is for there to be lots of
-> driver test suites, each of which may verify that their specific
-> properties can be loaded from the devicetree correctly.
-> 
-> This is also why I prefer the overlay method, if we can get it to
-> work: it makes it clearer that the organisational hierarchy for these
-> tests is [driver]->[devicetree], not [devicetree]->[drvier].
-> 
->> For my testing, I already build and boot four times on real hardware:
->>
->>   1) no DT unittests
->>   2) CONFIG_OF_UNITTEST
->>   3) CONFIG_OF_UNITTEST
->>      CONFIG_OF_DYNAMIC
->>   4) CONFIG_OF_UNITTEST
->>      CONFIG_OF_DYNAMIC
->>      CONFIG_OF_OVERLAY
->>
->> I really should also be testing the four configurations on UML, but at
->> the moment I am not.
->>
->> I also check for new compile warnings at various warn levels for all
->> four configurations.
->>
->> If I recall correctly, the kunit framework encourages more (many more?)
->> kunit config options to select which test(s) are build for a test run.
->> Someone please correct this paragraph if I am mis-stating.
-> 
-> We do tend to suggest that there is a separate kconfig option for each
-> area being tested (usually one per test suite, but if there are
-> several closely related suites, sticking them under a single config
-> option isn't a problem.)
-> 
-> That being said:
-> - It's possible (and encouraged) to just test once with all of those
-> tests enabled, rather than needing to test every possible combination
-> of configs enabled/disabled.
-> - (Indeed, this is what we do with .kunitconfig files a lot: they're
-> collections of related configs, so you can quickly run, e.g., all DRM
-> tests)
-> - Because a KUnit test being run is an independent action from it
-> being built-in, it's possible to build the tests once and then just
-> run different subsets anyway, or possibly run them after boot if
-> they're compiled as modules.
-> - This of course, depends on two test configs not conflicting with
-> each other: obviously if there were some tests which relied on
-> OF_OVERLAY=n, and others which require OF_OVERLAY=y, you'd need two
-> builds.
-> 
+> TLS offload silently falls back to SW on any errors. So that's fine.
+> Just bump a counter. User/infra must be tracking error counters in 
+> our current design already.
 
-And this:
+True. User might be a bit surprised by "well it was offloaded and now
+it's not", but ok.
 
-> The bigger point is that, if the KUnit tests are focused on individual
-> drivers, rather than the devicetree infrastructure itself, then these
-> probably aren't as critical to run on every devicetree change (the DT
-> unittests should hopefully catch anything which affects devicetree as
-> a whole), but only on tests which affect a specific driver (as they're
-> really intended to make sure the drivers are accessing / interacting
-> with the DT properly, not that the DT infrastructure functions).
-
-Those two paragraphs are correct, and my original assumption was wrong.
-
-These tests appear to mostly be clock related and only minimally and
-indirectly test devicetree functionality.  In more generic terms,
-they are driver tests, not devicetree tests.
-
-Thus I withdraw my concern of making the devicetree test environment
-more complicated.
-
+> > > Important consideration is making the non-rekey path as fast as
+> > > possible (given rekeying is extremely rare). Looking at skb->decrypted
+> > > should be very fast but we can possibly fit some other indication of
+> > > "are we rekeying" into another already referenced cache line.
+> > > We definitely don't want to have to look up the record to know what
+> > > state we're in.
+> > > 
+> > > The fallback can't use AES-NI (it's in sirq context) so it's slower 
+> > > than SW encrypt before queuing to TCP. Hence my first thought is using
+> > > SW crypto for new key and let the traffic we already queued with old
+> > > key drain leveraging HW crypto. But as I said the impact on performance
+> > > when not rekeying is more important, and so is driver simplicity.  
+> > 
+> > Right, sorry, full tls_sw path and not the existing fallback.
+> > 
+> > Changing the socket ops back and forth between the HW and SW variants
+> > worries me, because we only lock the socket once we have entered
+> > tls_{device,sw}_sendmsg. So I think we have to stay on the _device ops
+> > even during the SW crypto phase of the rekey, and let that call into
+> > the SW variant after locking the socket and making sure we're in a
+> > rekey.
 > 
-> And obviously if this KUnit/devicetree support ends up depending on
-> overlays, that means there's no need to test them with overlays
-> disabled. :-)
+> Fair point :S
 > 
->>
->> Adding devicetree tests to kunit adds additional build and boot cycles
->> and additional test output streams to verify.
->>
->> Are there any issues with DT unittests that preclude adding clk tests
->> into the DT unittests?
->>
+> > > > Don't we have that already? If there's a retransmit while we're
+> > > > setting the TX key in HW, data that was queued on the socket before
+> > > > (and shouldn't be encrypted at all) would also be encrypted
+> > > > otherwise. Or is it different with rekey?  
+> > > 
+> > > We have a "start marker" record which is supposed to indicate that
+> > > anything before it has already been encrypted. The driver is programmed
+> > > with the start seq no, when it sees a packet from before this seq no
+> > > it checks if a record exists, finds its before the start marker and
+> > > sends the data as is.  
+> > 
+> > Yes, I was looking into that earlier this week. I think we could reuse
+> > a similar mechanism for rekeying. tls_dev_add takes tcp_sk->write_seq,
+> > we could have a tls_dev_rekey op passing the new key and new write_seq
+> > to the driver. I think we can also reuse the ->eor trick from
+> > tls_set_device_offload, and we wouldn't have to look at
+> > skb->decrypted. Close and push the current SW record, mark ->eor, pass
+> > write_seq to the driver along with the key. Also pretty close to what
+> > tls_device_resync_tx does.
 > 
-> I think at least part of it is that there are already some clk KUnit
-> tests, so it's easier to have all of the clk tests behave similarly
-> (for the same reasons, alas, as using DT unittests makes it easier to
-> keep all of the DT tests in the same place).
-> 
+> That sounds like you'd expose the rekeying logic to the drivers?
+> New op, having to track seq#...
 
-> Of course, as DT unittests move to KTAP, and possibly in the future
-> are able to make use of more KUnit infrastructure, this should get
-> simpler for everyone.
+Well, we have to call into the drivers to install the key, whether
+that's a new rekey op, or adding an update argument to ->tls_dev_add,
+or letting the driver guess that it's a rekey (or ignore that and just
+install the key if rekey vs initial key isn't a meaningful
+distinction).
 
-I hope to move DT unitests to create KTAP V2 compatible data as a
-first step.
+We already feed drivers the seq# with ->tls_dev_add, so passing it for
+rekeys as well is not a big change.
 
-I highly doubt that DT unittests fit the kunit model, but that would
-be a question that could be considered after DT unittests move to the
-KTAP V2 data format.
+Does that seem problematic? Adding a rekey op seemed more natural to
+me than simply using the existing _del + _add ops, but maybe we can
+get away with just using those two ops.
 
-> 
-> 
-> Does that seem sensible?
-
-Yes, thanks for the extra explanations.
-
-> 
-> -- David
+-- 
+Sabrina
 
