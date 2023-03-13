@@ -2,109 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315326B80D6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 19:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 732916B82FA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Mar 2023 21:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjCMShb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Mar 2023 14:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S229516AbjCMUlc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Mar 2023 16:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjCMShQ (ORCPT
+        with ESMTP id S229482AbjCMUlb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:37:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC7E86DF6;
-        Mon, 13 Mar 2023 11:36:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3035361468;
-        Mon, 13 Mar 2023 18:35:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A01C4339B;
-        Mon, 13 Mar 2023 18:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678732511;
-        bh=83rGdz49K5sFglwLL3OYaBkD8n6tZwCy7h+0mUdPCW4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X84fjntKJVXpUrxP7JSq6Nruco0it2mhsgBZwOO0t8DlsRbar0aKwnZRK86Wsy1aM
-         0nQTa1zTms2lsA4fC8/uULZ2jm6fpo6fcPwB+5KHnL4qr/InI9HRIAXi+JcWAXRW31
-         mX0OFiFLB4BesSc2I+e6eo3GwLCQq+z345oroNgTN8zT5SJh2+BV5+3UtSUsy2PDiH
-         ZChBP2TG89TfCDlEPMu/IDX7PVSDX7pbKGQJBV4zbt61A9I2v1oGJL1RrxTZke7nah
-         XJB5mN5HwuGQu6qQ5bWi92Uk5Xy46w3Oj3y5K4zvSNqkgqeuVYKtZR8F2o/WsIZ1tj
-         CKvWIQ0K32CsQ==
-Date:   Mon, 13 Mar 2023 11:35:10 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Sabrina Dubroca <sd@queasysnail.net>
-Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
-        Frantisek Krenzelok <fkrenzel@redhat.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Apoorv Kothari <apoorvko@amazon.com>,
-        Boris Pismenny <borisp@nvidia.com>,
+        Mon, 13 Mar 2023 16:41:31 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1894AE189
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Mar 2023 13:40:58 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id k17so5561389iob.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Mar 2023 13:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678740054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0T+Km9cavSQaDYPpPQXfU9zdS3Tn01gJlo4SYSaGTsQ=;
+        b=TQATrXuUbv73UnY+1AoZezSFrjnoWb6XBb4KKmy55Dz6xoRMZMU5Lk5mVbE/yBcLoS
+         uielXBVD5Xil2P2hsyGwgq3sdGc01SpHIjc9oWqTjvvue5SLYFhijuaVnRJjZY8gDNOh
+         ZTvdnJYkRVLx6HpXv7gMdi7CWdOgEwoykKcbtHLrJZ8A/WwLPpcEoLzGE7malfTUYJjd
+         iSVCqvSgQAD7jOwK0C0ecMYOFtRxx6gjS8WryAOQFoPuQV79KsFJoh8X2QvDhTcPIfs9
+         qELFz6z7V3giyT7opexr6QgITwDZrGVqYPaijuP+BS4ZDSv/mCQxNh03E+/46usgG7CZ
+         zZrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678740054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0T+Km9cavSQaDYPpPQXfU9zdS3Tn01gJlo4SYSaGTsQ=;
+        b=hFQDnL1CuSG+1NUMUojHfJjyeI8OzQX3+LcbefdUOzWH0rVCa8tS62Ft+ViSiVIJ3u
+         CL483PuORrA/Pi+nEdWFw/H/TKCR9zxCTmQ5NAr920jjyq0cUAEov77G7hB7rSArbEj8
+         8MorvNH33qFW2P/f1W6WWIBKdbaqMbECP23Jod2i6pGq0rRrgGHlfqZqy0u86oI6Ql4u
+         mYIhtydgiWr/ONT1BvfOsIECUmSfUWAKoiTbmHk6akdlmE45X6RUwACq5k3mdRzQaDRz
+         eGioG+1WisrosehO+Gi1vdH+J5OiigNtf1uUc/0q8jeV+ZNYvNNGubALLHXnzuLuVgTg
+         b+LA==
+X-Gm-Message-State: AO0yUKWQ9OxFH5XxCzq4GRmyObMqnRTZ1a9ARnSMUlte+T8KsZ7boNRh
+        0enh83+RBhp0vIHnlXJEnaU5KQ==
+X-Google-Smtp-Source: AK7set/xW8ytFvQ8KfIVjFvFDObW2b6jVdvNOP69AGFe4AmpmWOEiHtIGspIfm9vNvggXDisP45jHw==
+X-Received: by 2002:a5e:8819:0:b0:74d:114c:832b with SMTP id l25-20020a5e8819000000b0074d114c832bmr24055572ioj.20.1678740054335;
+        Mon, 13 Mar 2023 13:40:54 -0700 (PDT)
+Received: from google.com ([2620:15c:183:200:a33c:9b70:2c95:9544])
+        by smtp.gmail.com with ESMTPSA id h14-20020a0566380f8e00b003c4e3ecb02dsm189549jal.24.2023.03.13.13.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 13:40:54 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 14:40:50 -0600
+From:   Ross Zwisler <zwisler@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     zwisler@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jiri Olsa <jolsa@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: Re: [PATCH net-next v2 0/5] tls: implement key updates for TLS1.3
-Message-ID: <20230313113510.02c107b3@kernel.org>
-In-Reply-To: <ZA9EMJgoNsxfOhwV@hog>
-References: <cover.1676052788.git.sd@queasysnail.net>
-        <20230214210811.448b5ec4@kernel.org>
-        <Y+0Wjrc9shLkH+Gg@hog>
-        <20230215111020.0c843384@kernel.org>
-        <Y+1pX/vL8t2nU00c@hog>
-        <20230215195748.23a6da87@kernel.org>
-        <Y+5Yd/8tjCQNOF31@hog>
-        <20230221191944.4d162ec7@kernel.org>
-        <Y/eT/M+b6jUtTdng@hog>
-        <20230223092945.435b10ea@kernel.org>
-        <ZA9EMJgoNsxfOhwV@hog>
+        KP Singh <kpsingh@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yonghong Song <yhs@fb.com>, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        "Michael S . Tsirkin" <mst@redhat.com>
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: use canonical ftrace path
+Message-ID: <20230313204050.GA592900@google.com>
+References: <20230310175209.2130880-1-zwisler@kernel.org>
+ <20230310175209.2130880-2-zwisler@kernel.org>
+ <20230310183352.2943e633@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310183352.2943e633@gandalf.local.home>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 13 Mar 2023 16:41:36 +0100 Sabrina Dubroca wrote:
-> > > Yes, I was looking into that earlier this week. I think we could reuse
-> > > a similar mechanism for rekeying. tls_dev_add takes tcp_sk->write_seq,
-> > > we could have a tls_dev_rekey op passing the new key and new write_seq
-> > > to the driver. I think we can also reuse the ->eor trick from
-> > > tls_set_device_offload, and we wouldn't have to look at
-> > > skb->decrypted. Close and push the current SW record, mark ->eor, pass
-> > > write_seq to the driver along with the key. Also pretty close to what
-> > > tls_device_resync_tx does.  
-> > 
-> > That sounds like you'd expose the rekeying logic to the drivers?
-> > New op, having to track seq#...  
+On Fri, Mar 10, 2023 at 06:33:52PM -0500, Steven Rostedt wrote:
+> On Fri, 10 Mar 2023 10:52:09 -0700
+> zwisler@kernel.org wrote:
 > 
-> Well, we have to call into the drivers to install the key, whether
-> that's a new rekey op, or adding an update argument to ->tls_dev_add,
-> or letting the driver guess that it's a rekey (or ignore that and just
-> install the key if rekey vs initial key isn't a meaningful
-> distinction).
+> > diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+> > index 156743cf5870..4fa61ac8a0ee 100644
+> > --- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
+> > +++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+> > @@ -86,8 +86,12 @@ int main(int argc, char **argv)
+> >  	pid = getpid();
+> >  	bpf_map_update_elem(pidmap_fd, &key, &pid, 0);
+> >  
+> > -	snprintf(buf, sizeof(buf),
+> > -		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+> > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/tracing/events/%s/id", probe_name);
+> > +	else
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
 > 
-> We already feed drivers the seq# with ->tls_dev_add, so passing it for
-> rekeys as well is not a big change.
+> I don't know how the BPF folks feel, but I do know some kernel developers
+> prefer that if you need to break a single command into multiple lines that
+> you then need to add brackets around it. As it makes it easier to read.
 > 
-> Does that seem problematic? Adding a rekey op seemed more natural to
-> me than simply using the existing _del + _add ops, but maybe we can
-> get away with just using those two ops.
+> 	if (access("/sys/kernel/tracing/trace", F_OK) == 0) {
+> 		snprintf(buf, sizeof(buf),
+> 			 "/sys/kernel/tracing/events/%s/id", probe_name);
+> 	} else {
+> 		snprintf(buf, sizeof(buf),
+> 			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+> 	}
+> 
+> 
+> 
+> >  	efd = open(buf, O_RDONLY, 0);
+> >  	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+> >  		goto close_prog;
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > index 113dba349a57..22be0a9a5a0a 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > @@ -338,7 +338,12 @@ static int get_syms(char ***symsp, size_t *cntp, bool kernel)
+> >  	 * Filtering out duplicates by using hashmap__add, which won't
+> >  	 * add existing entry.
+> >  	 */
+> > -	f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
+> > +
+> > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+> > +		f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
+> > +	else
+> > +		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
+> > +
+> >  	if (!f)
+> >  		return -EINVAL;
+> >  
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+> > index c717741bf8b6..60f92fd3c37a 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+> > @@ -17,8 +17,12 @@ static void test_task_fd_query_tp_core(const char *probe_name,
+> >  	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
+> >  		goto close_prog;
+> >  
+> > -	snprintf(buf, sizeof(buf),
+> > -		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+> > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/tracing/events/%s/id", probe_name);
+> > +	else
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+> 
+> Same here.
+> 
+> >  	efd = open(buf, O_RDONLY, 0);
+> >  	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+> >  		goto close_prog;
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+> > index 770fcc3bb1ba..d3e377fa8e9b 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+> > @@ -16,8 +16,12 @@ void serial_test_tp_attach_query(void)
+> >  	for (i = 0; i < num_progs; i++)
+> >  		obj[i] = NULL;
+> >  
+> > -	snprintf(buf, sizeof(buf),
+> > -		 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
+> > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/tracing/events/sched/sched_switch/id");
+> > +	else
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
+> 
+> and here.
+> 
+> But perhaps the BPF folks don't care?
 
-Theoretically a rekey op is nicer and cleaner. Practically the quality
-of the driver implementations will vary wildly*, and it's a significant
-time investment to review all of them. So for non-technical reasons my
-intuition is that we'd deliver a better overall user experience if we
-handled the rekey entirely in the core.
-
-Wait for old key to no longer be needed, _del + _add, start using the
-offload again.
-
-* One vendor submitted a driver claiming support for TLS 1.3, when 
-  TLS 1.3 offload was rejected by the core. So this is the level of
-  testing and diligence we're working with :(
+Sure, I agree that this is more readable.  I'll gather your Reviewed-by for
+patch #1, make this change, rebase to the current bpf/bpf-next and send out
+v4.
