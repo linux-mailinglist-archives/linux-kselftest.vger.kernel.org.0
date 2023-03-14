@@ -2,240 +2,272 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E422B6BA229
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Mar 2023 23:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BE96BA265
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Mar 2023 23:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjCNWPT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Mar 2023 18:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S229682AbjCNWVk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Mar 2023 18:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjCNWOv (ORCPT
+        with ESMTP id S229866AbjCNWVh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:14:51 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61711580F8
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:14:12 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-544570e6d82so48676027b3.23
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:14:12 -0700 (PDT)
+        Tue, 14 Mar 2023 18:21:37 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0064D2B1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:20:58 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id r1so4653698ybu.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:20:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678831993;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pTQknU0yyvhsrgkZGBBdxk3ve6H2jxjb5KB6cR7GsY=;
-        b=R5pck/04mfxPmIVBB9o4uaUAo15/ZfMIMU4zBBeiy60dN3PkzfG+pL2Jk8ShQx/wnT
-         tu1lgw8s51UeJbNP7Jq1JSaDKFmENaAF8z1goiVAAzBIHtPHaXkByRIiol+yJE5/YgnQ
-         hW5qdRTIt9H9xpPdA02kwFo7Rk+Ynt1+wYVf34T5VMzeBtBNZvPPA5O3aC3D91D0RNtm
-         mSJ+v1/gDC92H9jo4qw/x0rtVNP40bPesp90xC2s/8DWp1y16hh7VG0pXJdfZGwPx2Bb
-         3g6PFtXcDzEpd66sHf07DdrXtn5FXRMWyPg2Jsy3ULZKlqOp9KCEKjeIRXmZa8Bhn/E3
-         nxaA==
+        d=google.com; s=20210112; t=1678832454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=prmEhq3NQgLd3x/54m3N/hnamRPai5NrclABlw05kvc=;
+        b=W+qNZdRIotMleNE57r9jiKwraAWhd5MwTIvahen0WEkE5PzTRfmpRXWqkUhrPuXIJq
+         iOnlW0h/sR5EQYT1noYI5h5qxP67NxcyQAYUBvPIaBiOTQ6INBGE5VpUu4nLVv1ZgT02
+         UaGlJgByAVV73JGmEHYNz/tvTczs8bNZngZHMdpmlwhzd0aMyKtTskgYYO5Z069HIK2B
+         cVaMa5F5P19meeZJc60/mXF3AP4vN/fYubS4IlRxhs0oMqcLwh8BqCqcUp6kNhSOb7DB
+         40YDvH/qdQ3IsnL5+jzoJFLVvdy1p1rDNpZ2WNL95MejPc/m90zkXXi/+fyynxXl5xwJ
+         oY5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678831993;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pTQknU0yyvhsrgkZGBBdxk3ve6H2jxjb5KB6cR7GsY=;
-        b=5reooc6RfMUd/TMB+B5KqKnxbicdTf6wuf1x9+YsUg22vwg9ktMRpFBIecFY/QStvQ
-         aBPDeIbF/x0TKsFUmRfqDj8uDd9oz8fbrBHzL8x1wkGTh68h9cDkd1ZM9XKKl0g1pKEo
-         FJAZg9OhgEUgFSe43SexUBkr1GYyLieotJMNfqiFj73dGqMlZxbKn2iuauJwK5/KXR9a
-         eIvc6/BMmxqeNZwA2AtzCgwATemq5Yrf60hNd6zeyqPy4RZhCAz/pS+kbFDR6w7FjdIG
-         11y3HmCLRlCiB2xygjIZlrOHTjzZ2QpeLtcOAg4IwDF6ihIwkQj04gWAYHfhJWtgZkXg
-         N+Nw==
-X-Gm-Message-State: AO0yUKVPRGmghWl0vyWmIzh4n7G7MRaWvpvNBM7LKmxH/fpM8bLpSS8y
-        FDsm0gqdvNHiVCGN4d70r+KDCRxL7At8aY7kqyd9
-X-Google-Smtp-Source: AK7set+CfovE4o2SVuha7KE903+E9XdVfmvAi2JH8R4Sr+s1e8IgI0cxifkuT5NnCB1X9zPcFkujhBDANx40mexrV28r
-X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:21ce:bab3:17ec:2276])
- (user=axelrasmussen job=sendgmr) by 2002:a81:ac52:0:b0:541:9b2b:8240 with
- SMTP id z18-20020a81ac52000000b005419b2b8240mr6114708ywj.6.1678831992903;
- Tue, 14 Mar 2023 15:13:12 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 15:12:50 -0700
-In-Reply-To: <20230314221250.682452-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230314221250.682452-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230314221250.682452-5-axelrasmussen@google.com>
-Subject: [PATCH v5 4/4] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to
- install WP PTEs
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
+        d=1e100.net; s=20210112; t=1678832454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=prmEhq3NQgLd3x/54m3N/hnamRPai5NrclABlw05kvc=;
+        b=cl8zZ+lV7Q52MAAPEwq3zwEJHMqN5V7IKFrU5MZ9cvxEtWTJKA/B8wgwi/2HHrfdVV
+         lmgMc7AWg6HBhI0naUHF2DNKGIW318iYoPCMh41I77PctvxAkABAUj/gTLGcDKoy5u+e
+         N1YHWP9NM39rNy/Rl5WKSbdiAJ1l3AmOJGyotZFEjleVo2Gx2YT/3JtQxLE8cVCu5spG
+         WNcnRodGmI/2SBCc0VyW1S7Rs/DYBeCdYTgLr+6YGc4Qsi4ZRUCeixqDOFvEB+fJVilt
+         hZLPLt5HA/o1GSQ+okpI25f2Gn0Iy6x8dkeFMjNHGv0e1qBSk4QHZI7Nwvg45dYpPfZL
+         lB+A==
+X-Gm-Message-State: AO0yUKXRugxB0E5M3jyxkqeFHgOCpZDCz7lzRDtbK/04yPKungto0Gk5
+        1+7BjECkJZKTgP639pbvpR/N6JWMzUrq6h/VxUmg0A==
+X-Google-Smtp-Source: AK7set8SkYGNcFnfYPsMfzR9x36zzygYapNbW6uZiul45TDLPJiNPfU+4GRchnUtuOZ+roEgbEeaRI7iP32Bln9WT6o=
+X-Received: by 2002:a5b:38a:0:b0:ac9:cb97:bd0e with SMTP id
+ k10-20020a5b038a000000b00ac9cb97bd0emr19406415ybp.5.1678832453903; Tue, 14
+ Mar 2023 15:20:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230310222002.3633162-1-rmoar@google.com> <490271eb-1429-2217-6e38-837c6e5e328b@gmail.com>
+In-Reply-To: <490271eb-1429-2217-6e38-837c6e5e328b@gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Tue, 14 Mar 2023 18:20:42 -0400
+Message-ID: <CA+GJov4hw7yDRo2_uYWWe0chmBEtUh+t8aYhxSDXp2zch9cYvg@mail.gmail.com>
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add skip test result
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     davidgow@google.com, skhan@linuxfoundation.org,
+        keescook@chromium.org, Tim.Bird@sony.com,
+        brendanhiggins@google.com, corbet@lwn.net,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
-PTE to resolve a missing fault, one can install a write-protected one.
-This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
-combination.
+On Sat, Mar 11, 2023 at 10:52=E2=80=AFPM Frank Rowand <frowand.list@gmail.c=
+om> wrote:
+>
+> On 3/10/23 16:20, Rae Moar wrote:
+> > Add the test result "skip" to KTAP version 2 as an alternative way to
+> > indicate a test was skipped.
+> >
+> > The current spec uses the "#SKIP" directive to indicate that a test was
+> > skipped. However, the "#SKIP" directive is not always evident when quic=
+kly
+> > skimming through KTAP results.
+> >
+> > The "skip" result would provide an alternative that could make it clear=
+er
+> > that a test has not successfully passed because it was skipped.
+> >
+> > Before:
+> >
+> >  KTAP version 1
+> >  1..1
+> >    KTAP version 1
+> >    1..2
+> >    ok 1 case_1
+> >    ok 2 case_2 #SKIP
+> >  ok 1 suite
+> >
+> > After:
+> >
+> >  KTAP version 2
+> >  1..1
+> >    KTAP version 2
+> >    1..2
+> >    ok 1 case_1
+> >    skip 2 case_2
+> >  ok 1 suite
+> >
+> > Here is a link to a version of the KUnit parser that is able to parse
+> > the skip test result for KTAP version 2. Note this parser is still able
+> > to parse the "#SKIP" directive.
+> >
+> > Link: https://kunit-review.googlesource.com/c/linux/+/5689
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > --->
+> > Note: this patch is based on Frank's ktap_spec_version_2 branch.
+> >
+> >  Documentation/dev-tools/ktap.rst | 27 ++++++++++++++++++---------
+> >  1 file changed, 18 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools=
+/ktap.rst
+> > index ff77f4aaa6ef..f48aa00db8f0 100644
+> > --- a/Documentation/dev-tools/ktap.rst
+> > +++ b/Documentation/dev-tools/ktap.rst
+> > @@ -74,7 +74,8 @@ They are required and must have the format:
+> >       <result> <number> [<description>][ # [<directive>] [<diagnostic d=
+ata>]]
+> >
+> >  The result can be either "ok", which indicates the test case passed,
+> > -or "not ok", which indicates that the test case failed.
+> > +"not ok", which indicates that the test case failed, or "skip", which =
+indicates
+> > +the test case did not run.
+> >
+> >  <number> represents the number of the test being performed. The first =
+test must
+> >  have the number 1 and the number then must increase by 1 for each addi=
+tional
+> > @@ -91,12 +92,13 @@ A directive is a keyword that indicates a different=
+ outcome for a test other
+> >  than passed and failed. The directive is optional, and consists of a s=
+ingle
+> >  keyword preceding the diagnostic data. In the event that a parser enco=
+unters
+> >  a directive it doesn't support, it should fall back to the "ok" / "not=
+ ok"
+> > -result.
+> > +/ "skip" result.
+> >
+> >  Currently accepted directives are:
+> >
+> > -- "SKIP", which indicates a test was skipped (note the result of the t=
+est case
+> > -  result line can be either "ok" or "not ok" if the SKIP directive is =
+used)
+>
+> > +- "SKIP", which indicates a test was skipped (note this is an alternat=
+ive to
+> > +  the "skip" result type and if the SKIP directive is used, the
+> > +  result can be any type - "ok", "not ok", or "skip")
+>
+> For the "SKIP" directive, result type of either "ok", or "not ok" reflect=
+s the
+> current real world usage, which is mixed.  I agree is makes sense to also
+> allow the result type of "skip" with the "SKIP directive.
+>
+> I think it would be good to deprecate the "SKIP" directive, with a schedu=
+led
+> removal in the V3 specification - that would allow plenty of time for tes=
+t
+> parsers to process both V1 and V2 data, before removing processing of V1 =
+data.
+>
+> If so, the deprecation plan should be documented.
+>
 
-This was motivated by testing HugeTLB HGM [1], and in particular its
-interaction with userfaultfd features. Existing userfaultfd code
-supports using WP and MINOR modes together (i.e. you can register an
-area with both enabled), but without this CONTINUE flag the combination
-is in practice unusable.
+Hi Frank!
 
-So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
-as UFFDIO_COPY_MODE_WP, but for *minor* faults.
+This is a great point. I think it is necessary to add specifications
+on how the SKIP directive will be deprecated. I will be taking all of
+these suggestions when I make a v2.
 
-Update the selftest to do some very basic exercising of the new flag.
+Also, just letting you know I am planning on sending out two more KTAP
+v2 proposals in the next few days.
 
-Update Documentation/ to describe how these flags are used (neither the
-COPY nor the new CONTINUE versions of this mode flag were described
-there before).
+Thanks for your insight.
+-Rae
 
-[1]: https://patchwork.kernel.org/project/linux-mm/cover/20230218002819.1486479-1-jthoughton@google.com/
+> >  - "TODO", which indicates that a test is not expected to pass at the m=
+oment,
+> >    e.g. because the feature it is testing is known to be broken. While =
+this>    directive is inherited from TAP, its use in the kernel is discoura=
+ged.
+> > @@ -110,7 +112,7 @@ Currently accepted directives are:
+> >
+> >  The diagnostic data is a plain-text field which contains any additiona=
+l details
+> >  about why this result was produced. This is typically an error message=
+ for ERROR
+> > -or failed tests, or a description of missing dependencies for a SKIP r=
+esult.
+> > +or failed tests, or a description of missing dependencies for a skippe=
+d test.
+> >
+> >  The diagnostic data field is optional, and results which have neither =
+a
+> >  directive nor any diagnostic data do not need to include the "#" field
+> > @@ -130,11 +132,18 @@ The test "test_case_name" failed.
+> >
+> >  ::
+> >
+> > -     ok 1 test # SKIP necessary dependency unavailable
+> > +     skip 1 test # necessary dependency unavailable
+>
+> Maybe add a note that the "skip" result method is preferred over the belo=
+w
+> "ok ... # SKIP..." example below.
+>
 
-Acked-by: Peter Xu <peterx@redhat.com>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- Documentation/admin-guide/mm/userfaultfd.rst | 8 ++++++++
- fs/userfaultfd.c                             | 8 ++++++--
- include/linux/userfaultfd_k.h                | 3 ++-
- include/uapi/linux/userfaultfd.h             | 7 +++++++
- mm/userfaultfd.c                             | 5 +++--
- tools/testing/selftests/mm/userfaultfd.c     | 4 ++++
- 6 files changed, 30 insertions(+), 5 deletions(-)
+Will add this to v2.
 
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 7dc823b56ca4..0ce400f8da93 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -219,6 +219,14 @@ former will have ``UFFD_PAGEFAULT_FLAG_WP`` set, the latter
- you still need to supply a page when ``UFFDIO_REGISTER_MODE_MISSING`` was
- used.
- 
-+When using ``UFFDIO_REGISTER_MODE_WP`` in combination with either
-+``UFFDIO_REGISTER_MODE_MISSING`` or ``UFFDIO_REGISTER_MODE_MINOR``, when
-+resolving missing / minor faults with ``UFFDIO_COPY`` or ``UFFDIO_CONTINUE``
-+respectively, it may be desirable for the new page / mapping to be
-+write-protected (so future writes will also result in a WP fault). These ioctls
-+support a mode flag (``UFFDIO_COPY_MODE_WP`` or ``UFFDIO_CONTINUE_MODE_WP``
-+respectively) to configure the mapping this way.
-+
- QEMU/KVM
- ========
- 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 56e54e50414e..664019381e04 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1878,6 +1878,7 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	struct uffdio_continue uffdio_continue;
- 	struct uffdio_continue __user *user_uffdio_continue;
- 	struct userfaultfd_wake_range range;
-+	uffd_flags_t flags = 0;
- 
- 	user_uffdio_continue = (struct uffdio_continue __user *)arg;
- 
-@@ -1902,13 +1903,16 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	    uffdio_continue.range.start) {
- 		goto out;
- 	}
--	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
-+	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
-+				     UFFDIO_CONTINUE_MODE_WP))
- 		goto out;
-+	if (uffdio_continue.mode & UFFDIO_CONTINUE_MODE_WP)
-+		flags |= MFILL_ATOMIC_WP;
- 
- 	if (mmget_not_zero(ctx->mm)) {
- 		ret = mfill_atomic_continue(ctx->mm, uffdio_continue.range.start,
- 					    uffdio_continue.range.len,
--					    &ctx->mmap_changing);
-+					    &ctx->mmap_changing, flags);
- 		mmput(ctx->mm);
- 	} else {
- 		return -ESRCH;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index a948d92154f5..fd6d7d80b6ea 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -83,7 +83,8 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
- 				     unsigned long len,
- 				     atomic_t *mmap_changing);
- extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
--				     unsigned long len, atomic_t *mmap_changing);
-+				     unsigned long len, atomic_t *mmap_changing,
-+				     uffd_flags_t flags);
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
- 			       unsigned long start, unsigned long len,
- 			       bool enable_wp, atomic_t *mmap_changing);
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 005e5e306266..14059a0861bf 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -297,6 +297,13 @@ struct uffdio_writeprotect {
- struct uffdio_continue {
- 	struct uffdio_range range;
- #define UFFDIO_CONTINUE_MODE_DONTWAKE		((__u64)1<<0)
-+	/*
-+	 * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
-+	 * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
-+	 * write protected ioctl is implemented for the range
-+	 * according to the uffdio_register.ioctls.
-+	 */
-+#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
- 	__u64 mode;
- 
- 	/*
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 9202c1fc79ba..048beb5d0edd 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -693,10 +693,11 @@ ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm, unsigned long start,
- }
- 
- ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
--			      unsigned long len, atomic_t *mmap_changing)
-+			      unsigned long len, atomic_t *mmap_changing,
-+			      uffd_flags_t flags)
- {
- 	return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
--			    uffd_flags_set_mode(0, MFILL_ATOMIC_CONTINUE));
-+			    uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTINUE));
- }
- 
- long uffd_wp_range(struct vm_area_struct *dst_vma,
-diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/selftests/mm/userfaultfd.c
-index 7f22844ed704..41c1f9abc481 100644
---- a/tools/testing/selftests/mm/userfaultfd.c
-+++ b/tools/testing/selftests/mm/userfaultfd.c
-@@ -585,6 +585,8 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	req.range.start = start;
- 	req.range.len = len;
- 	req.mode = 0;
-+	if (test_uffdio_wp)
-+		req.mode |= UFFDIO_CONTINUE_MODE_WP;
- 
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
-@@ -1332,6 +1334,8 @@ static int userfaultfd_minor_test(void)
- 	uffdio_register.range.start = (unsigned long)area_dst_alias;
- 	uffdio_register.range.len = nr_pages * page_size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	if (test_uffdio_wp)
-+		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
--- 
-2.40.0.rc1.284.g88254d51c5-goog
+> >
+> > -The test "test" was SKIPPED with the diagnostic message "necessary dep=
+endency
+> > +The test "test" was skipped with the diagnostic message "necessary dep=
+endency
+> >  unavailable".
+> >
+> > +::
+> > +
+> > +     ok 1 test_2 # SKIP this test should not run
+> > +
+> > +The test "test_2" was skipped with the diagnostic message "this test
+> > +should not run".
+>
+> Maybe add a deprecation note here.
+>
 
+WIll add this to v2.
+
+> > +
+> >  ::
+> >
+> >       not ok 1 test # TIMEOUT 30 seconds
+> > @@ -225,7 +234,7 @@ An example format with multiple levels of nested te=
+sting:
+> >           not ok 1 test_1
+> >           ok 2 test_2
+> >         not ok 1 test_3
+> > -       ok 2 test_4 # SKIP
+> > +       skip 2 test_4
+> >       not ok 1 example_test_1
+> >       ok 2 example_test_2
+> >
+> > @@ -262,7 +271,7 @@ Example KTAP output
+> >         ok 1 example_test_1
+> >           KTAP version 2
+> >           1..2
+> > -         ok 1 test_1 # SKIP test_1 skipped
+> > +         skip 1 test_1 # test_1 skipped
+> >           ok 2 test_2
+> >         ok 2 example_test_2
+> >           KTAP version 2
+> >
+> > base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
+>
