@@ -2,200 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEA16B8A46
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Mar 2023 06:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5607D6B8BFC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Mar 2023 08:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjCNF1h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Mar 2023 01:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
+        id S229695AbjCNHfR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Mar 2023 03:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCNF1f (ORCPT
+        with ESMTP id S229624AbjCNHfQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Mar 2023 01:27:35 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A4F8F529;
-        Mon, 13 Mar 2023 22:27:34 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so6518350pjb.0;
-        Mon, 13 Mar 2023 22:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678771654;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4D03rED555IfCoQrbUz4ZWLp8DNJPBkSCZrRpWNZxMU=;
-        b=PHK/eH6cxnMBDS+FpMlgzW09AXUjOoOlj8ASxxz2aTuLTVeKSUp7xKHTxKB7/Vcnkl
-         CwrVvnjVsspQikiPLvqlnnjBDOxS40eWdvJsSUGxDU9E81cNPnOowcX7tvis4axPax1e
-         vSywQecGqxKImEGF0uFw76T+kBlaJxqgol80grFJZkUz5kLNctM8vh3mtCgSko4Br0zB
-         XYfcFPVNVBkNm0OVf5Gv+KmHUfO9wlIw6xyR7Qh9BkdAGnnE+V6K5jyl3saNZFDyiF2U
-         BQBfFni82qvs4AvD+UDTygqlI33Uc561jC+hN2hOzrWdEFbRj8XdWiOJvOYvh9ZCYTSI
-         vyTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678771654;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4D03rED555IfCoQrbUz4ZWLp8DNJPBkSCZrRpWNZxMU=;
-        b=DlsHwLFi6G4pF6Bh7cnD+PkE3ygxTqhqwtepAkiFWzjy58spAdQGK+D0Xhcs/pvguT
-         BM141plrOlYp7gPDh151BxpbH+vrlTHbE8N2Msed0zEhVmSgC59v7y1t3VO9lOeahOQU
-         ZlYQJA5a30l/0mDwBLCAkosaI3g3MkmlxThsbib7bkvp7AosCPo5gfbH+vaaRwZQXBFB
-         TBDuhg8EPS2oXRxkMieRdX429l4Lf/mCSKDX3P22EjzJWxqXFHVuZx+peTVJx2nMvrQq
-         Wu8xD2g1EEiE6lA+PVXY76NJs1SbhY5bdSvsVvaVasYmB/JKMgMKROSsGE/GAbBTxGSz
-         PFbg==
-X-Gm-Message-State: AO0yUKURnHXDkAOK+QAwPsf7wcNMPBO+mSCqMAvi6BcHUEu/sznu74HC
-        fxCSZzihvXAMBpuQd+wJuLY=
-X-Google-Smtp-Source: AK7set/4mOlSqk9UfChalfQ+S/QeZHZ3bmvtWmPxEpzecYyp26RBTvUEq8a4As4Nzv6DpHtOhUGiNw==
-X-Received: by 2002:a17:902:d54f:b0:19e:73a9:c21b with SMTP id z15-20020a170902d54f00b0019e73a9c21bmr34729856plf.45.1678771654019;
-        Mon, 13 Mar 2023 22:27:34 -0700 (PDT)
-Received: from localhost ([98.97.116.12])
-        by smtp.gmail.com with ESMTPSA id jx2-20020a170903138200b0019a7d6a9a76sm758621plb.111.2023.03.13.22.27.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 22:27:33 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 22:27:32 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Ross Zwisler <zwisler@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     zwisler@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        Tue, 14 Mar 2023 03:35:16 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173F87E7A6;
+        Tue, 14 Mar 2023 00:35:15 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PbQKV0nZqz4f3l80;
+        Tue, 14 Mar 2023 15:35:10 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgBnF6utIxBk_rhhFQ--.63403S2;
+        Tue, 14 Mar 2023 15:35:10 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jiri Olsa <jolsa@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Song Liu <song@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Yonghong Song <yhs@fb.com>, linux-kselftest@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        "Michael S . Tsirkin" <mst@redhat.com>
-Message-ID: <641005c453661_4258120826@john.notmuch>
-In-Reply-To: <20230313204050.GA592900@google.com>
-References: <20230310175209.2130880-1-zwisler@kernel.org>
- <20230310175209.2130880-2-zwisler@kernel.org>
- <20230310183352.2943e633@gandalf.local.home>
- <20230313204050.GA592900@google.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: use canonical ftrace path
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: [PATCH bpf-next v2 0/2] bpf: Fix a umin > umax reg bound error
+Date:   Tue, 14 Mar 2023 16:34:22 -0400
+Message-Id: <20230314203424.4015351-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBnF6utIxBk_rhhFQ--.63403S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrXr1kCFyxGFWrZF1Dtw4DCFg_yoWxGFXEya
+        y8tas8JFnrXFy5Ja97KF17XrZrGrs09ryfAF1DtrWUJr1UZr18GFs5GF4Fqa4DXa18JrZ7
+        Jr90ya97Ar4agjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_Grv_XF1l8c
+        AvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq
+        3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gc
+        CE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxI
+        r21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87
+        Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIE
+        c7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07joksgUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ross Zwisler wrote:
-> On Fri, Mar 10, 2023 at 06:33:52PM -0500, Steven Rostedt wrote:
-> > On Fri, 10 Mar 2023 10:52:09 -0700
-> > zwisler@kernel.org wrote:
-> > 
-> > > diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
-> > > index 156743cf5870..4fa61ac8a0ee 100644
-> > > --- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
-> > > +++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
-> > > @@ -86,8 +86,12 @@ int main(int argc, char **argv)
-> > >  	pid = getpid();
-> > >  	bpf_map_update_elem(pidmap_fd, &key, &pid, 0);
-> > >  
-> > > -	snprintf(buf, sizeof(buf),
-> > > -		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
-> > > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
-> > > +		snprintf(buf, sizeof(buf),
-> > > +			 "/sys/kernel/tracing/events/%s/id", probe_name);
-> > > +	else
-> > > +		snprintf(buf, sizeof(buf),
-> > > +			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
-> > 
-> > I don't know how the BPF folks feel, but I do know some kernel developers
-> > prefer that if you need to break a single command into multiple lines that
-> > you then need to add brackets around it. As it makes it easier to read.
-> > 
-> > 	if (access("/sys/kernel/tracing/trace", F_OK) == 0) {
-> > 		snprintf(buf, sizeof(buf),
-> > 			 "/sys/kernel/tracing/events/%s/id", probe_name);
-> > 	} else {
-> > 		snprintf(buf, sizeof(buf),
-> > 			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
-> > 	}
-> > 
-> > 
-> > 
-> > >  	efd = open(buf, O_RDONLY, 0);
-> > >  	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
-> > >  		goto close_prog;
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> > > index 113dba349a57..22be0a9a5a0a 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> > > @@ -338,7 +338,12 @@ static int get_syms(char ***symsp, size_t *cntp, bool kernel)
-> > >  	 * Filtering out duplicates by using hashmap__add, which won't
-> > >  	 * add existing entry.
-> > >  	 */
-> > > -	f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
-> > > +
-> > > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
-> > > +		f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
-> > > +	else
-> > > +		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
-> > > +
-> > >  	if (!f)
-> > >  		return -EINVAL;
-> > >  
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
-> > > index c717741bf8b6..60f92fd3c37a 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
-> > > @@ -17,8 +17,12 @@ static void test_task_fd_query_tp_core(const char *probe_name,
-> > >  	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
-> > >  		goto close_prog;
-> > >  
-> > > -	snprintf(buf, sizeof(buf),
-> > > -		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
-> > > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
-> > > +		snprintf(buf, sizeof(buf),
-> > > +			 "/sys/kernel/tracing/events/%s/id", probe_name);
-> > > +	else
-> > > +		snprintf(buf, sizeof(buf),
-> > > +			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
-> > 
-> > Same here.
-> > 
-> > >  	efd = open(buf, O_RDONLY, 0);
-> > >  	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
-> > >  		goto close_prog;
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-> > > index 770fcc3bb1ba..d3e377fa8e9b 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-> > > @@ -16,8 +16,12 @@ void serial_test_tp_attach_query(void)
-> > >  	for (i = 0; i < num_progs; i++)
-> > >  		obj[i] = NULL;
-> > >  
-> > > -	snprintf(buf, sizeof(buf),
-> > > -		 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
-> > > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
-> > > +		snprintf(buf, sizeof(buf),
-> > > +			 "/sys/kernel/tracing/events/sched/sched_switch/id");
-> > > +	else
-> > > +		snprintf(buf, sizeof(buf),
-> > > +			 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
-> > 
-> > and here.
-> > 
-> > But perhaps the BPF folks don't care?
-> 
-> Sure, I agree that this is more readable.  I'll gather your Reviewed-by for
-> patch #1, make this change, rebase to the current bpf/bpf-next and send out
-> v4.
+From: Xu Kuohai <xukuohai@huawei.com>
 
+This patchset fixes a umin > umax reg bound error and adds cases for it.
 
-Also for the patch. LGTM
+v2:
+1. add bound check to avoid min > max 
+2. update 32-bit reg min/max when 64-bit reg value is a constant
+3. add Fixes tag
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+v1: https://lore.kernel.org/bpf/20230307220449.2933650-1-xukuohai@huaweicloud.com/
+
+Xu Kuohai (2):
+  bpf: Fix a umin > umax reg bound error
+  selftests/bpf: check bounds not in the 32-bit range
+
+ kernel/bpf/verifier.c                         | 143 ++++++++++++------
+ tools/testing/selftests/bpf/verifier/bounds.c | 121 +++++++++++++++
+ 2 files changed, 214 insertions(+), 50 deletions(-)
+
+-- 
+2.30.2
+
