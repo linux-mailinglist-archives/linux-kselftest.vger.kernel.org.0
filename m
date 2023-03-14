@@ -2,111 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2B56B9A8C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Mar 2023 17:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E486B9C1A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Mar 2023 17:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbjCNQD3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Mar 2023 12:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
+        id S230256AbjCNQug (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Mar 2023 12:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjCNQDN (ORCPT
+        with ESMTP id S229885AbjCNQue (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:03:13 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F4BB3710
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 09:03:09 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-540cb2fb5b9so209176237b3.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 09:03:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678809788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i6YTlXkTcSY/lOWk5MFxXiktxYqqn/77NC3wi3iPQ7o=;
-        b=iwOEnLdh8l5o8+zMmWNefw2TcVAWJdZwkuXbSuGVsf6Yii3dnuiV+X/BUGk4yIB73g
-         UCMiJclXfbUq97SAbV71ro6OTPniDZDDz8GCCXe/P9iaQsbI/KUvlVWQ+fCJ7hnDAEcM
-         ja/TuBSmFn+I4YHGxz93yxzaII9HiotlYnZRmatsGYbrO0xtuIYwiszim7pIDZIumQF6
-         cNc/PjvKorq6a3zJyqK0oJI+F/cEGsdk9KyTgt9JJ7t/8Uca/vj3oA3JW9o/XUxRFOw9
-         yAj6w39bk9lTPPUFbd3st6rm+ZyjJJgSBYYZ663+eNAPiJFQ0vCXzhYMyHm13RB06/C1
-         +Arg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678809788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i6YTlXkTcSY/lOWk5MFxXiktxYqqn/77NC3wi3iPQ7o=;
-        b=hLFuTVv9PbBBrZtGSwWhsaSiiohX4jON68aZQdfDkuulVXFF8A5um6UVDZKsYezSIJ
-         HmtJ3L0/xsMJHJyTOSixCapSjOpjFYHHFGO0VBxxNQSa5peCHdoX7RcTKA81iKQiZpnj
-         s9c0aQ4hmJo8OZwarS3g5ekUO86CbhmTJWn05nzd/zTkT+tAi5Q6GF9cFV0LvvqExyvd
-         9etTQwnX1BkQ43D6HrOJtzgIL+twPThk4y5IKl6llcdnCygB7gyad9KWJ7RzKW3ID4Mc
-         Ux2fAuK04AsBxthZkOz2hc6sP0r5mv+d29M10jrhxTo6KyYluTRUe9RTBZSfMBcUxHBJ
-         1b3A==
-X-Gm-Message-State: AO0yUKU2z7jkfUL2QWEdemWYIGscNZL3G4aTfC8bSv1q++g35Aszjirv
-        gW3JXY3Vcdu3xARp5N+89myafEhv19QEGjniDHc26g==
-X-Google-Smtp-Source: AK7set/FG4sRkcaSN3cSyLA5qL/1YpZ76JsEPYBQAEKJ5H0umEU4hT1QCqnSbDDR6G0qYWJzGbGYrMexvBc3G0S3MxQ=
-X-Received: by 2002:a81:a946:0:b0:52b:fd10:4809 with SMTP id
- g67-20020a81a946000000b0052bfd104809mr26140095ywh.0.1678809788468; Tue, 14
- Mar 2023 09:03:08 -0700 (PDT)
+        Tue, 14 Mar 2023 12:50:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0D49E301;
+        Tue, 14 Mar 2023 09:50:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9057E1F8A6;
+        Tue, 14 Mar 2023 16:50:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678812631; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6k/rQNu/3JyQ0BkZUFMKmdlCm0FllNjLs/p7eJHqbcg=;
+        b=qAycucas010i4uea/GBqMOUweebj+BqtWiQY5kdCyAyeeC5Nq4Jd4YxHpuyx/9ulQeHhxQ
+        5ZXX+V+S7NJjDJiPZ52HRgXL4afacwBG2RW/BtBSsdsIaf8n47HyAhXn4eYhv2C4Bvg4y7
+        S1ZnBDCq6m40G47JaT0JjlCoN0PL8FY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 615C113A26;
+        Tue, 14 Mar 2023 16:50:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id otCyFtelEGRscQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 14 Mar 2023 16:50:31 +0000
+Date:   Tue, 14 Mar 2023 17:50:30 +0100
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 1/5] cgroup/cpuset: Skip task update if hotplug doesn't
+ affect current cpuset
+Message-ID: <20230314165030.beu2ywtvqa3p45ta@blackpad>
+References: <20230306200849.376804-1-longman@redhat.com>
+ <20230306200849.376804-2-longman@redhat.com>
 MIME-Version: 1.0
-References: <a0734a6b-9491-b43a-6dff-4d3498faee2e@alu.unizg.hr>
- <d7a64812-73db-feb2-e6d6-e1d8c09a6fed@alu.unizg.hr> <27769d34-521c-f0ef-b6c2-6bd452e4f9bf@alu.unizg.hr>
-In-Reply-To: <27769d34-521c-f0ef-b6c2-6bd452e4f9bf@alu.unizg.hr>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 14 Mar 2023 09:02:56 -0700
-Message-ID: <CANn89iKi67YScgt5R0nHNAobjnSubBK6KsR9Ryoqu5ai4Opyrw@mail.gmail.com>
-Subject: Re: BUG: selftest/net/tun: Hang in unregister_netdevice
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="unrarqlmrlmuhj23"
+Content-Disposition: inline
+In-Reply-To: <20230306200849.376804-2-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 9:01=E2=80=AFAM Mirsad Todorovac
-<mirsad.todorovac@alu.unizg.hr> wrote:
 
-> After a while, kernel message start looping:
->
->   kernel:unregister_netdevice: waiting for tap0 to become free. Usage cou=
-nt =3D 3
->
-> Message from syslogd@pc-mtodorov at Mar 14 16:57:15 ...
->   kernel:unregister_netdevice: waiting for tap0 to become free. Usage cou=
-nt =3D 3
->
-> Message from syslogd@pc-mtodorov at Mar 14 16:57:24 ...
->   kernel:unregister_netdevice: waiting for tap0 to become free. Usage cou=
-nt =3D 3
->
-> Message from syslogd@pc-mtodorov at Mar 14 16:57:26 ...
->   kernel:unregister_netdevice: waiting for tap0 to become free. Usage cou=
-nt =3D 3
->
-> This hangs processes until very late stage of shutdown.
->
-> I can confirm that CONFIG_DEBUG_{KOBJECT,KOBJECT_RELEASE}=3Dy were the on=
-ly changes
-> to .config in between builds.
->
-> Best regards,
-> Mirsad
->
+--unrarqlmrlmuhj23
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Try adding in your config
+On Mon, Mar 06, 2023 at 03:08:45PM -0500, Waiman Long <longman@redhat.com> =
+wrote:
+> If a hotplug event doesn't affect the current cpuset, there is no point
+> to call hotplug_update_tasks() or hotplug_update_tasks_legacy(). So
+> just skip it.
 
-CONFIG_NET_DEV_REFCNT_TRACKER=3Dy
-CONFIG_NET_NS_REFCNT_TRACKER=3Dy
+This skips "insane" modification of cs->cpus_allowed in
+hotplug_update_tasks_legacy() but assuming cs->cpus_allowed is kept in
+sync with cs->effective_cpus on v1, it is OK to skip the update based
+only on effective_cpus check.
 
-Thanks.
+Hence,
+
+>  kernel/cgroup/cpuset.c | 3 +++
+>  1 file changed, 3 insertions(+)
+
+Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
+
+--unrarqlmrlmuhj23
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZBCl1AAKCRAkDQmsBEOq
+ub7vAQDuvydF9uT/t92mbXmbdJFDwYtaoBzZSBR7muvk51dYZAD/VflSkqUiEoJf
+DK7RTVV/JCWxbff4B8Ud16JHw7PsfQU=
+=Phpc
+-----END PGP SIGNATURE-----
+
+--unrarqlmrlmuhj23--
