@@ -2,222 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D856BBDAD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Mar 2023 20:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08856BBDC0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Mar 2023 21:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbjCOTzK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Mar 2023 15:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S232804AbjCOUEz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Mar 2023 16:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbjCOTym (ORCPT
+        with ESMTP id S230036AbjCOUEy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:54:42 -0400
+        Wed, 15 Mar 2023 16:04:54 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6311631C
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 12:53:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E9654CA1
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 13:04:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678910031;
+        s=mimecast20190719; t=1678910642;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=woVT10ZvTBDEkwPsfEHU2WbSYTau3o/cURF+myIHKzc=;
-        b=TpqTdQMSgOY7x4sKrwOIaL6S7in5EiQMh1eHGnqBT5tV80QVfA6ozhVrdOJ6P4U0Pc5ZH7
-        nDOVnssiFCP0bM6qsMaIC/PDCJZhFZC/5GJaOZAPNPAWBhP3C4zuWwGcOhzFEPtRaIdZtO
-        vYDCU9iW+dnAd+In/ssR9GTwq4QRkCU=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=NSv6En10ufoKiHLROyorHfxCgUmhUTCq5rCSmqtwV+g=;
+        b=VVYBuAQlNeYDZ3JPoaYcZu/dADY8xHL58pL+dWnJVpEWpQ48TDBlg47tIDZ1WKY9LMvpfJ
+        FbrWMGZQ8vsQ6cudxwrqeqJiLBkr6b+yCRMWToYs6EFFksHr/tRm6u89AOf7NJ/tBnKhQ/
+        x+sn444a1mKJnA2Ff/aQtanSY8pm6vs=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-295-Qyx2Fyy7MCWiN5XsJF2uyQ-1; Wed, 15 Mar 2023 15:53:50 -0400
-X-MC-Unique: Qyx2Fyy7MCWiN5XsJF2uyQ-1
-Received: by mail-qv1-f72.google.com with SMTP id f8-20020a0cbec8000000b005b14a30945cso1223993qvj.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 12:53:50 -0700 (PDT)
+ us-mta-193-m0tjXCvYPpylpj0qwy_rig-1; Wed, 15 Mar 2023 16:04:00 -0400
+X-MC-Unique: m0tjXCvYPpylpj0qwy_rig-1
+Received: by mail-wr1-f70.google.com with SMTP id 15-20020a056000156f00b002ca79db6d42so3488195wrz.18
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 13:04:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678910030; x=1681502030;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=woVT10ZvTBDEkwPsfEHU2WbSYTau3o/cURF+myIHKzc=;
-        b=6R3PRFdt8HZMNYDyEOfzNkYEusrQqKB0DF5QPXxK/QHtGNJW1k/2akAkzHPfV8rkXD
-         rKPBYRleVeXse5AuSun6gpqAeChMK8Pmlw1mCLa74ySDVvXcXlBRhQO63OZ8M1oXk4Wz
-         Vtl4VJveYzZwynP5V3sNaJfozZWyB7xI9vKOXBsZpo7BeZ4nzoiZl0Lv/R1QeW9uV75c
-         VdbLiExHE6fDLmGojDxm6g4FTfzTTOgWUjSJNPUMQWHY7ijFXAY75eWn41hbC+rdL3pL
-         LqysavXz1kzpMfAzD/VDuT64RYVSd9A29Gz6uOYyQFHNOEgXh35xJaU0NPngKqeLnAJ3
-         n/1g==
-X-Gm-Message-State: AO0yUKWfyFtqUjS2XiPjW+FLn8upZghISAhtdrl4/whS0+2v3tDK9GFt
-        JSmgCJ9/c8p26kQ794nbJdmXDkCY81nHX9n5kYokDZLaPYqoPUF9AlbLUx3alFNFtIx50qEIMxl
-        DmX28WrVX9RkkKC7g1RIOQRb0K0U9
-X-Received: by 2002:a05:622a:64f:b0:3bf:a564:573b with SMTP id a15-20020a05622a064f00b003bfa564573bmr8006363qtb.0.1678910030277;
-        Wed, 15 Mar 2023 12:53:50 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+YTOsYq99xGXjreXVl31GgX6FpNk3Wo+WVqNbF2kHRbcCNbb1E4jkD9EHxOg3lsUoFTmcIMw==
-X-Received: by 2002:a05:622a:64f:b0:3bf:a564:573b with SMTP id a15-20020a05622a064f00b003bfa564573bmr8006333qtb.0.1678910029944;
-        Wed, 15 Mar 2023 12:53:49 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id p22-20020a374216000000b0074374e2b630sm4309024qka.119.2023.03.15.12.53.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 12:53:49 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 15:53:47 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <ZBIiSwmbOsuaImIf@x1n>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-5-usama.anjum@collabora.com>
- <ZBHqjBjj6nn1xeTM@x1n>
- <3d2d1ba4-bfab-6b3d-f0d6-ae0920ebdcb0@collabora.com>
+        d=1e100.net; s=20210112; t=1678910639;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NSv6En10ufoKiHLROyorHfxCgUmhUTCq5rCSmqtwV+g=;
+        b=ViRgCgEpoTfbCC1I4SH2RPAFwCZsKnli7Wq3+Pvn9lmsjmkGskVcw526mB/Y8o76ei
+         k3I34eMClQwE0srEoMA9df1d8HijoPag6RnGE+orFrYVfGg9T8v8TyAU534178Vom1z3
+         5quO8I37KD6YePRBkHdMFC8JQyWbmsFYy8TRbKOkj7XfGr5PHkk7K98xLxtGsZO7DvH5
+         3JYYn0hjiWEUAQUpimB7tda3yJhqBwPDrr3KZwTNBYTb4CzGlBm9R875eZ1s0RWlPKdO
+         1Tl0Fp/d3h6MF5OMMFlGCw5OqRGbtLUVnSKfiiNgV8ntR7YPdQ0Z/O9yB1oAOS4ujPyZ
+         8RPA==
+X-Gm-Message-State: AO0yUKWv58w9uHZnH31BChhRtUuTgPNYjjgTOj8WBeMKWEsXZJ6fJpbJ
+        2J23KnS8qw9+T3/E6IPK2cd+6rN8NznnJPu51kog79uzTp1A5hHBjKXGZwv8PyQgFaSX/fbHVrA
+        pIaIIqO/4jjKdArHuIbDKAP+fm2luMcWCIiVn
+X-Received: by 2002:a5d:5913:0:b0:2cf:e449:1a9e with SMTP id v19-20020a5d5913000000b002cfe4491a9emr3337064wrd.30.1678910639402;
+        Wed, 15 Mar 2023 13:03:59 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8jbsZ/lktzSE96GY2vi72nsu08J4PQCvtujDalLrYzPL/tXRo3i0vfV9CbR6FW+MilGp1Xyg==
+X-Received: by 2002:a5d:5913:0:b0:2cf:e449:1a9e with SMTP id v19-20020a5d5913000000b002cfe4491a9emr3337032wrd.30.1678910639032;
+        Wed, 15 Mar 2023 13:03:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:2f00:2038:213d:e59f:7d44? (p200300cbc7022f002038213de59f7d44.dip0.t-ipconnect.de. [2003:cb:c702:2f00:2038:213d:e59f:7d44])
+        by smtp.gmail.com with ESMTPSA id c18-20020a5d4cd2000000b002ce9f0e4a8fsm5479753wrt.84.2023.03.15.13.03.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 13:03:58 -0700 (PDT)
+Message-ID: <273a2f82-928f-5ad1-0988-1a886d169e83@redhat.com>
+Date:   Wed, 15 Mar 2023 21:03:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3d2d1ba4-bfab-6b3d-f0d6-ae0920ebdcb0@collabora.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Stefan Roesch <shr@devkernel.io>, kernel-team@fb.com
+Cc:     linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        akpm@linux-foundation.org, hannes@cmpxchg.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Rik van Riel <riel@surriel.com>
+References: <20230310182851.2579138-1-shr@devkernel.io>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v4 0/3] mm: process/cgroup ksm support
+In-Reply-To: <20230310182851.2579138-1-shr@devkernel.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 09:54:40PM +0500, Muhammad Usama Anjum wrote:
-> On 3/15/23 8:55 PM, Peter Xu wrote:
-> > On Thu, Mar 09, 2023 at 06:57:15PM +0500, Muhammad Usama Anjum wrote:
-> >> +	for (addr = start; !ret && addr < end; pte++, addr += PAGE_SIZE) {
-> >> +		pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-> >> +
-> >> +		is_writ = !is_pte_uffd_wp(*pte);
-> >> +		is_file = vma->vm_file;
-> >> +		is_pres = pte_present(*pte);
-> >> +		is_swap = is_swap_pte(*pte);
-> >> +
-> >> +		pte_unmap_unlock(pte, ptl);
-> >> +
-> >> +		ret = pagemap_scan_output(is_writ, is_file, is_pres, is_swap,
-> >> +					  p, addr, 1);
-> >> +		if (ret)
-> >> +			break;
-> >> +
-> >> +		if (PM_SCAN_OP_IS_WP(p) && is_writ &&
-> >> +		    uffd_wp_range(walk->mm, vma, addr, PAGE_SIZE, true) < 0)
-> >> +			ret = -EINVAL;
-> >> +	}
-> > 
-> > This is not real atomic..
-> > 
-> > Taking the spinlock for eacy pte is not only overkill but wrong in
-> > atomicity because the pte can change right after spinlock unlocked.
-> Let me explain. It seems like wrong, but it isn't. In my rigorous testing,
-> it didn't show any side-effect.  Here we are finding out if a page is
-> written. If page is written, only then we clear it. Lets look at the
-> different possibilities here:
-> - If a page isn't written, we'll not clear it.
-> - If a page is written and there isn't any race, we'll clear written-to
-> flag by write protecting it.
-> - If a page is written but before clearing it, data is written again to the
-> page. The page would remain written and we'll clear it.
-> - If a page is written but before clearing it, it gets write protected,
-> we'll still write protected it. There is double right protection here, but
-> no side-effect.
+On 10.03.23 19:28, Stefan Roesch wrote:
+> So far KSM can only be enabled by calling madvise for memory regions. To
+> be able to use KSM for more workloads, KSM needs to have the ability to be
+> enabled / disabled at the process / cgroup level.
 > 
-> Lets turn this into a truth table for easier understanding. Here first
-> coulmn and thrid column represents this above code. 2nd column represents
-> any other thread interacting with the page.
+> Use case 1:
+> The madvise call is not available in the programming language. An example for
+> this are programs with forked workloads using a garbage collected language without
+> pointers. In such a language madvise cannot be made available.
 > 
-> If page is written/dirty	some other task interacts	wp_page
-> no				does nothing			no
-> no				writes to page			no
-> no				wp the page			no
-> yes				does nothing			yes
-> yes				write to page			yes
-> yes				wp the page			yes
+> In addition the addresses of objects get moved around as they are garbage
+> collected. KSM sharing needs to be enabled "from the outside" for these type of
+> workloads.
 > 
-> As you can see there isn't any side-effect happening. We aren't over doing
-> the wp or under-doing the write-protect.
+> Use case 2:
+> The same interpreter can also be used for workloads where KSM brings no
+> benefit or even has overhead. We'd like to be able to enable KSM on a workload
+> by workload basis.
 > 
-> Even if we were doing something wrong here and I bring the lock over all of
-> this, the pages get become written or wp just after unlocking. It is
-> expected. This current implementation doesn't seem to be breaking this.
+> Use case 3:
+> With the madvise call sharing opportunities are only enabled for the current
+> process: it is a workload-local decision. A considerable number of sharing
+> opportuniites may exist across multiple workloads or jobs. Only a higler level
+> entity like a job scheduler or container can know for certain if its running
+> one or more instances of a job. That job scheduler however doesn't have
+> the necessary internal worklaod knowledge to make targeted madvise calls.
 > 
-> Is my understanding wrong somewhere here? Can you point out?
-
-Yes you're right.  With is_writ check it looks all fine.
-
+> Security concerns:
+> In previous discussions security concerns have been brought up. The problem is
+> that an individual workload does not have the knowledge about what else is
+> running on a machine. Therefore it has to be very conservative in what memory
+> areas can be shared or not. However, if the system is dedicated to running
+> multiple jobs within the same security domain, its the job scheduler that has
+> the knowledge that sharing can be safely enabled and is even desirable.
 > 
-> Previous to this current locking design were either buggy or slower when
-> multiple threads were working on same pages. Current implementation removes
-> the limitations:
-> - The memcpy inside pagemap_scan_output is happening with pte unlocked.
+> Performance:
+> Experiments with using UKSM have shown a capacity increase of around 20%.
 
-Why this has anything to worry?  Isn't that memcpy only applies to a
-page_region struct?
+Stefan, can you do me a favor and investigate which pages we end up 
+deduplicating -- especially if it's mostly only the zeropage and if it's 
+still that significant when disabling THP?
 
-> - We are only wp a page if we have noted this page to be dirty
-> - No mm write lock is required. Only read lock works fine just like
-> userfaultfd_writeprotect() takes only read lock.
 
-I didn't even notice you used to use write lock.  Yes I think read lock is
-suffice here.
+I'm currently investigating with some engineers on playing with enabling 
+KSM on some selected processes (enabling it blindly on all VMAs of that 
+process via madvise() ).
 
-> 
-> There is only one con here that we are locking and unlocking the pte lock
-> again and again.
-> 
-> Please have a look at my explanation and let me know what do you think.
+One thing we noticed is that such (~50 times) 20MiB processes end up 
+saving ~2MiB of memory per process. That made me suspicious, because 
+it's the THP size.
 
-I think this is fine as long as the semantics is correct, which I believe
-is the case.  The spinlock can be optimized, but it can be done on top if
-needs more involved changes.
+What I think happens is that we have a 2 MiB area (stack?) and only 
+touch a single page. We get a whole 2 MiB THP populated. Most of that 
+THP is zeroes.
 
-> 
-> > 
-> > Unfortunately you also cannot reuse uffd_wp_range() because that's not
-> > atomic either, my fault here.  Probably I was thinking mostly from
-> > soft-dirty pov on batching the collect+reset.
-> > 
-> > You need to take the spin lock, collect whatever bits, set/clear whatever
-> > bits, only until then release the spin lock.
-> > 
-> > "Not atomic" means you can have some page got dirtied but you could miss
-> > it.  Depending on how strict you want, I think it'll break apps like CRIU
-> > if strict atomicity needed for migrating a process.  If we want to have a
-> > new interface anyway, IMHO we'd better do that in the strict way.
-> In my rigorous multi-threaded testing where a lots of threads are working
-> on same set of pages, we aren't losing even a single update. I can share
-> the test if you want.
+KSM somehow ends up splitting that THP and deduplicates all resulting 
+zeropages. Thus, we "save" 2 MiB. Actually, it's more like we no longer 
+"waste" 2 MiB. I think the processes with KSM have less (none) THP than 
+the processes with THP enabled, but I only took a look at a sample of 
+the process' smaps so far.
 
-Good to have tests covering that.  I'd say you can add the test into
-selftests along with the series when you repost if it's convenient.  It can
-be part of an existing test or it can be a new one under mm/.
+I recall that there was a proposal to split underutilized THP and free 
+up the zeropages (IIRC Rik was involved).
 
-Thanks,
+I also recall that Mike reported memory waste due to THP.
 
 -- 
-Peter Xu
+Thanks,
+
+David / dhildenb
 
