@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9362E6BC1D4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 00:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7D26BC1D6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 00:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjCOXzV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Mar 2023 19:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
+        id S233181AbjCOXzY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Mar 2023 19:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbjCOXzU (ORCPT
+        with ESMTP id S233089AbjCOXzX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:55:20 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944465BCAB;
-        Wed, 15 Mar 2023 16:55:11 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id x1so61479qtr.7;
-        Wed, 15 Mar 2023 16:55:11 -0700 (PDT)
+        Wed, 15 Mar 2023 19:55:23 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF38D61A95;
+        Wed, 15 Mar 2023 16:55:12 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d7so42839qtr.12;
+        Wed, 15 Mar 2023 16:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678924510;
+        d=gmail.com; s=20210112; t=1678924512;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=JCvB485GQ0XREMndIlrLRmgekVvCXd6HiowEyGZFy4o=;
-        b=Ou0NnoPpifgW2UaPywVGXVz3jKjPBJWxsqhVOo/WYojsl5oVx1KF3tqixZx6Zv/D+g
-         LBFXYGror1hh5gH9be2pD/N0TLIejIoJ61eLkf13MREI2TBpKPYjmsdT4k0SBs7y6nGA
-         2Qp2PSYdIvrvCVVdCYnk5V9PKwFWFVSMTPeEmehdxLz5bEtrqZPUdQowdebyp/gy/76A
-         XXaJXe7lxs8mpNG2RkQ1LyEDtrqmrkazA85ClhzrjJ+LyrjuunO0mvFAyjsfEG+l/ajn
-         0Z5lWda/lR+zRZ1AwzZVLvpVr67lPww0/e24JgCQvCokEKrvL0izeI4SC1In6c4LYFRL
-         NQIg==
+        bh=4dXDYH8FjRjj8ivrQgv2T5n0d4h+aXiv+bXsNJ1LcT4=;
+        b=lha7OIlC9a0DJrlduqH7O3SbwIOA/SButloLbUu9GJe3sA+IEMTuwh4drlilo7DNLv
+         KtM+qNJFZekXDCj7eIqDp7dngeyU9PbsHrNR1Fi9kI1a+zk6Nhk7cnxyf2vFcwwEtCiV
+         g1TOHsCREwcmXXRFKwe6dfBdLe3ENhQmfkmOXOshrN9aM7HC/ScPI4NKbezUyWwOBi5l
+         xEC4/1rDXsnBV+ywVnx6720A0cbv7TQyCQGSst/G84eyrlneoBLnFBo0kr5lBQAJWJdU
+         u3NLRoXFEUZqrn/zN5QclmHVegguksfVzalaral9hInzcljgaC2L2b0o1rB5FVoZr5wy
+         3V/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678924510;
+        d=1e100.net; s=20210112; t=1678924512;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JCvB485GQ0XREMndIlrLRmgekVvCXd6HiowEyGZFy4o=;
-        b=SgpN6Sp/yDfWPqRpFNnT+3vNocokDrREdRGuSbhHXUTrfvZQUeGWOBmyq2EYnv/k6t
-         zZJzBPj2i+E3Qh/xITWhZrwDeo6b/95ZKfzLTKaq4//DuoKnDHo5Q3PJ/EO5kR/EbEPa
-         44OeHwv1yK3Co6qDu3LJpsfkgxxR39XZGswicE7Waha6dn9V3q87WRdwKYJHNRl7Ypk3
-         XQmeTiSB074qAQZG+pQT0QTFR931ZMFOCBIdPLJTlhkI5EUK3lBlDz6PkujtlKO1L55r
-         fcGx+OzB3Z9ezSUX/fxxuViAs3AyCeOjmEfz23kfi0Y1uhFkfWu7zB+sm7uoKR32i8Es
-         mmPg==
-X-Gm-Message-State: AO0yUKVDyUToBDgFy2eUz0kFEjdQ0G6CI6IGm76EqMHwv5mDVnfNTroa
-        u9TCNVn4QhZEt88JwW6h2/U=
-X-Google-Smtp-Source: AK7set9NKKzAVilHub3b76RDBTBtCkNheYs6ZY9GNVYFJN92hlvByHj+NdGGJHF2Fwydh5upgmEyqw==
-X-Received: by 2002:a05:622a:60b:b0:3bf:d258:4a85 with SMTP id z11-20020a05622a060b00b003bfd2584a85mr2754375qta.66.1678924510572;
-        Wed, 15 Mar 2023 16:55:10 -0700 (PDT)
+        bh=4dXDYH8FjRjj8ivrQgv2T5n0d4h+aXiv+bXsNJ1LcT4=;
+        b=DDNBDhAz/OIh/avbCkFkMSRUeboaL91x+dGQJ0RZj08Mg9IqH7N/Kgq01SHCTEH4/j
+         aC/bu+XvqFYXl4EmU06RgKxRxuayudNakT41o2WiB5MfL5Jv24D/tvm2kxsD3Av80CPV
+         8a1fplLWjyXdgv3XG5AgXv+vCBu08RQkWaQySyuHkIY/cf4l2JOMAczzgSErZGbYe307
+         QqplTkQVGulQxkxZK0rgTsz1BIXjdr0/uEv7JvwS/PV7LytzKPHSIVcYvc5n9Jr8g79g
+         IBYvhM8Gn/MVW7wlz1u7koMiGGFPn3qeFdqpgOge67e+BR+OJGDvDLDBlzJaY6kmKV5i
+         HiCA==
+X-Gm-Message-State: AO0yUKVld0h0RyQqGLebsVyakSHzWJFjHQIN4hlO9PyFBzEfMVr1Wj8L
+        UhOr2Jsb+vyg/UDxSUjUqj0=
+X-Google-Smtp-Source: AK7set9WcH9VotUZ1llfk+guVzJgXSnD72/JNcvA345ZQCkEhQeAIDyxz5UrhTBxvh9HMd6Szg4KWA==
+X-Received: by 2002:ac8:5f53:0:b0:3bf:da97:87dd with SMTP id y19-20020ac85f53000000b003bfda9787ddmr3268273qta.38.1678924512020;
+        Wed, 15 Mar 2023 16:55:12 -0700 (PDT)
 Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id p19-20020ac84093000000b003bfaae103f6sm4778033qtl.89.2023.03.15.16.55.09
+        by smtp.gmail.com with ESMTPSA id fp15-20020a05622a508f00b003bfa66b7484sm4707782qtb.35.2023.03.15.16.55.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 16:55:10 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id B783627C0054;
-        Wed, 15 Mar 2023 19:55:09 -0400 (EDT)
+        Wed, 15 Mar 2023 16:55:11 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 10EC327C0054;
+        Wed, 15 Mar 2023 19:55:11 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 15 Mar 2023 19:55:09 -0400
-X-ME-Sender: <xms:3VoSZLk3UcG710dymAZt5PQ10NLpeXkiyq3U1TyS98NJUN43UHT-VQ>
-    <xme:3VoSZO0LJ1ywZv4GYr2GusB3oRNZmYq7RZFCsSkEwBa-OrsbEk9AUxzO6rxj5wUKf
-    dHUeVsP9bSTMuxZKg>
-X-ME-Received: <xmr:3VoSZBpaM81MbMi5PlyPRbl0zWVI0IiwfHtdQuk18KPeJzXP1nHUtFbpekw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvledgudeiucetufdoteggodetrfdotf
+  by compute1.internal (MEProxy); Wed, 15 Mar 2023 19:55:11 -0400
+X-ME-Sender: <xms:3loSZAlc4cv2SfmwYdnTlzlAizpPSvRw-zsYwrwfOucgcaU5hK23Ow>
+    <xme:3loSZP1h5jUj6LeswHYfFCE2Aef3vn3KVQ-l5DdBEgwzJ-JpvFkzySjP_RJFGBQd9
+    NltgrcYhUIBZ_SsQQ>
+X-ME-Received: <xmr:3loSZOpevaFLxVvzsy3Ba8Os6DMX59NfGMxf27tJpU-yVT_KprtzbN78flY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvledgudehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhu
@@ -69,13 +69,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvledgudeiucetufdoteggod
     gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
     gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
     igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:3VoSZDklrGIf_nodWXS8-9MRLC6w890EOfWOV4q4zoTPs1799nhgPQ>
-    <xmx:3VoSZJ3TjKdRwXtn21rzk-NftxSK6TSV4ks5dIg2BCF5CrO4bkXO7g>
-    <xmx:3VoSZCvEt5hHtIYd7-BDi3xWeO5mb_6bBec4UZSyu7RZgDje81TxWw>
-    <xmx:3VoSZI1j7x3NbA0-oV_CcYU8HVTRX6bv1tUEYtzSigjM4ya7dbnblQ>
+X-ME-Proxy: <xmx:3loSZMkRg7EAJFWFjowlit9Ni0zriSwCEB8jqVZBnHwRVdLGjoDa-Q>
+    <xmx:3loSZO3sWEbN5zYHE0ZH-VqPr1JgdraKeOU4NW6db__jSUNwLw1U1Q>
+    <xmx:3loSZDtrHEq6I0se_BovtQYHDedOJ58lr29XAfS1xQx661HE8YF0qw>
+    <xmx:31oSZIMkMoliDV2bRXAqSiSswfKs0tfsWWYBHllsvo4bR5B1kzkVMQ>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Mar 2023 19:55:09 -0400 (EDT)
+ 15 Mar 2023 19:55:10 -0400 (EDT)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     rcu@vger.kernel.org
 Cc:     Davidlohr Bueso <dave@stgolabs.net>,
@@ -90,10 +90,11 @@ Cc:     Davidlohr Bueso <dave@stgolabs.net>,
         Shuah Khan <shuah@kernel.org>,
         Bhaskar Chowdhury <unixbhaskar@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH rcu 1/8] rcutorture: Add test_nmis module parameter
-Date:   Wed, 15 Mar 2023 16:54:47 -0700
-Message-Id: <20230315235454.2993-2-boqun.feng@gmail.com>
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Subject: [PATCH rcu 2/8] rcutorture: Set CONFIG_BOOTPARAM_HOTPLUG_CPU0 to offline CPU 0
+Date:   Wed, 15 Mar 2023 16:54:48 -0700
+Message-Id: <20230315235454.2993-3-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230315235454.2993-1-boqun.feng@gmail.com>
 References: <20230315235454.2993-1-boqun.feng@gmail.com>
@@ -111,92 +112,26 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-This commit adds a test_nmis module parameter to generate the
-specified number of NMI stack backtraces 15 seconds apart.  This module
-parameter can be used to test NMI delivery and accompanying diagnostics.
-Note that this parameter is ignored when rcutorture is a module rather
-than built into the kernel.  This could be changed with the addition of
-an EXPORT_SYMBOL_GPL().
+There is now a BOOTPARAM_HOTPLUG_CPU0 Kconfig option that allows CPU 0
+to be offlined on x86 systems.  This commit therefore sets this option in
+the TREE01 rcutorture scenario in order to regularly test this capability.
 
-[ paulmck: Apply kernel test robot feedback. ]
-
+Reported-by: "Zhang, Qiang1" <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- kernel/rcu/rcutorture.c | 32 ++++++++++++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
+ tools/testing/selftests/rcutorture/configs/rcu/TREE01 | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 8e6c023212cb..480bba142e3a 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -119,6 +119,7 @@ torture_param(int, stutter, 5, "Number of seconds to run/halt test");
- torture_param(int, test_boost, 1, "Test RCU prio boost: 0=no, 1=maybe, 2=yes.");
- torture_param(int, test_boost_duration, 4, "Duration of each boost test, seconds.");
- torture_param(int, test_boost_interval, 7, "Interval between boost tests, seconds.");
-+torture_param(int, test_nmis, 0, "End-test NMI tests, 0 to disable.");
- torture_param(bool, test_no_idle_hz, true, "Test support for tickless idle CPUs");
- torture_param(int, verbose, 1, "Enable verbose debugging printk()s");
- 
-@@ -2358,7 +2359,8 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
- 		 "n_barrier_cbs=%d "
- 		 "onoff_interval=%d onoff_holdoff=%d "
- 		 "read_exit_delay=%d read_exit_burst=%d "
--		 "nocbs_nthreads=%d nocbs_toggle=%d\n",
-+		 "nocbs_nthreads=%d nocbs_toggle=%d "
-+		 "test_nmis=%d\n",
- 		 torture_type, tag, nrealreaders, nfakewriters,
- 		 stat_interval, verbose, test_no_idle_hz, shuffle_interval,
- 		 stutter, irqreader, fqs_duration, fqs_holdoff, fqs_stutter,
-@@ -2369,7 +2371,8 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
- 		 n_barrier_cbs,
- 		 onoff_interval, onoff_holdoff,
- 		 read_exit_delay, read_exit_burst,
--		 nocbs_nthreads, nocbs_toggle);
-+		 nocbs_nthreads, nocbs_toggle,
-+		 test_nmis);
- }
- 
- static int rcutorture_booster_cleanup(unsigned int cpu)
-@@ -3273,6 +3276,29 @@ static void rcu_torture_read_exit_cleanup(void)
- 	torture_stop_kthread(rcutorture_read_exit, read_exit_task);
- }
- 
-+static void rcutorture_test_nmis(int n)
-+{
-+#if IS_BUILTIN(CONFIG_RCU_TORTURE_TEST)
-+	int cpu;
-+	int dumpcpu;
-+	int i;
-+
-+	for (i = 0; i < n; i++) {
-+		preempt_disable();
-+		cpu = smp_processor_id();
-+		dumpcpu = cpu + 1;
-+		if (dumpcpu >= nr_cpu_ids)
-+			dumpcpu = 0;
-+		pr_alert("%s: CPU %d invoking dump_cpu_task(%d)\n", __func__, cpu, dumpcpu);
-+		dump_cpu_task(dumpcpu);
-+		preempt_enable();
-+		schedule_timeout_uninterruptible(15 * HZ);
-+	}
-+#else // #if IS_BUILTIN(CONFIG_RCU_TORTURE_TEST)
-+	WARN_ONCE(n, "Non-zero rcutorture.test_nmis=%d permitted only when rcutorture is built in.\n", test_nmis);
-+#endif // #else // #if IS_BUILTIN(CONFIG_RCU_TORTURE_TEST)
-+}
-+
- static enum cpuhp_state rcutor_hp;
- 
- static void
-@@ -3297,6 +3323,8 @@ rcu_torture_cleanup(void)
- 		return;
- 	}
- 
-+	rcutorture_test_nmis(test_nmis);
-+
- 	if (cur_ops->gp_kthread_dbg)
- 		cur_ops->gp_kthread_dbg();
- 	rcu_torture_read_exit_cleanup();
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE01 b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+index 8ae41d5f81a3..04831ef1f9b5 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TREE01
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+@@ -15,3 +15,4 @@ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
++CONFIG_BOOTPARAM_HOTPLUG_CPU0=y
 -- 
 2.39.2
 
