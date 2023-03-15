@@ -2,165 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4492A6BBA43
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Mar 2023 17:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BA66BBA49
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Mar 2023 17:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjCOQye (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Mar 2023 12:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S231859AbjCOQzL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Mar 2023 12:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbjCOQyd (ORCPT
+        with ESMTP id S229751AbjCOQzL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:54:33 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF8E3756F;
-        Wed, 15 Mar 2023 09:54:29 -0700 (PDT)
-Received: from localhost.localdomain (1.general.phlin.uk.vpn [10.172.194.38])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 15 Mar 2023 12:55:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B595A193;
+        Wed, 15 Mar 2023 09:54:54 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [39.37.168.222])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id CACE13F266;
-        Wed, 15 Mar 2023 16:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678899267;
-        bh=7Gpkd6P+6YNkelCqQOhn5hB0lRXFLPaQ6/DNa54+FU8=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=svXy0sEbbMZjulAkZzWtfH7WicxBtyfQqoCKE09ye6b3iDbNQAbHjzTDQr8ESjXJA
-         H4YS2i3cLDkqEcFehIrehhSZUg8AaIU2lYYcPJ3fe5AzEaFui3+gDx8yNCUqdZq/rn
-         uyUvtcCj+It1AXMLV9oJ8DrThCmFRtjYsJ4gMVq8pok2RTvAoY+XcsN1ZmGAVd06yS
-         H2ttQTESTYbr93E/KbCZvzK3F8FD7SEwORepAEeRoAXnTpBZtpZbrh2WETpzj3axsM
-         bg/mU7hyjZTPlYuqPRCqZzwPzFdb5Su5UrkC+DRWXak+TTBLVMh4t9OEyJ55rlyYHo
-         eXi/8jQs846GQ==
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     danieller@mellanox.com, petrm@mellanox.com, idosch@mellanox.com,
-        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net, jiri@resnulli.us,
-        po-hsu.lin@canonical.com
-Subject: [PATCHv3] selftests: net: devlink_port_split.py: skip test if no suitable device available
-Date:   Thu, 16 Mar 2023 00:53:53 +0800
-Message-Id: <20230315165353.229590-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3BBA56602065;
+        Wed, 15 Mar 2023 16:54:46 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678899292;
+        bh=EyXR2YxwFVjBAcx1rUVLdzVeq5GifyBb6Z8dID0brCk=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=SHQ3SHGgunZCD9CQKxkcMrkNu82y/hn/LXDp+BkqMXc7hJnD5qh+gIhMIMTiEOxR7
+         EkaldNLGjTXTymZH3QmhQwWDCVW4Jeb9n47yKYEdRiLYkghf+cXEAC/nsxUXsFOU2Y
+         m/EqUEI/mHPFRT+cSK436ppqmBN5zq99BRVK8+99lGAz0dYSBatwE8U9psqRXg6OLB
+         XOXxGInAuGnjbKNFohYXlKgAy4J29WtLirHCECYN9Iz1eno/uOz+mTJgqF8rDdp3F6
+         UevrNe3irtE7kpeBmhfQ8nWRofKmCdG/rCgthAST7DOfk8vKWFLJRi7wtbLiQFdarr
+         GzoyGjH6cfBCw==
+Message-ID: <3d2d1ba4-bfab-6b3d-f0d6-ae0920ebdcb0@collabora.com>
+Date:   Wed, 15 Mar 2023 21:54:40 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230309135718.1490461-1-usama.anjum@collabora.com>
+ <20230309135718.1490461-5-usama.anjum@collabora.com> <ZBHqjBjj6nn1xeTM@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZBHqjBjj6nn1xeTM@x1n>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The `devlink -j port show` command output may not contain the "flavour"
-key, an example from Ubuntu 22.10 s390x LPAR(5.19.0-37-generic), with
-mlx4 driver and iproute2-5.15.0:
-  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
-           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
-           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
-           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
+On 3/15/23 8:55 PM, Peter Xu wrote:
+> On Thu, Mar 09, 2023 at 06:57:15PM +0500, Muhammad Usama Anjum wrote:
+>> +	for (addr = start; !ret && addr < end; pte++, addr += PAGE_SIZE) {
+>> +		pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+>> +
+>> +		is_writ = !is_pte_uffd_wp(*pte);
+>> +		is_file = vma->vm_file;
+>> +		is_pres = pte_present(*pte);
+>> +		is_swap = is_swap_pte(*pte);
+>> +
+>> +		pte_unmap_unlock(pte, ptl);
+>> +
+>> +		ret = pagemap_scan_output(is_writ, is_file, is_pres, is_swap,
+>> +					  p, addr, 1);
+>> +		if (ret)
+>> +			break;
+>> +
+>> +		if (PM_SCAN_OP_IS_WP(p) && is_writ &&
+>> +		    uffd_wp_range(walk->mm, vma, addr, PAGE_SIZE, true) < 0)
+>> +			ret = -EINVAL;
+>> +	}
+> 
+> This is not real atomic..
+> 
+> Taking the spinlock for eacy pte is not only overkill but wrong in
+> atomicity because the pte can change right after spinlock unlocked.
+Let me explain. It seems like wrong, but it isn't. In my rigorous testing,
+it didn't show any side-effect.  Here we are finding out if a page is
+written. If page is written, only then we clear it. Lets look at the
+different possibilities here:
+- If a page isn't written, we'll not clear it.
+- If a page is written and there isn't any race, we'll clear written-to
+flag by write protecting it.
+- If a page is written but before clearing it, data is written again to the
+page. The page would remain written and we'll clear it.
+- If a page is written but before clearing it, it gets write protected,
+we'll still write protected it. There is double right protection here, but
+no side-effect.
 
-This will cause a KeyError exception.
+Lets turn this into a truth table for easier understanding. Here first
+coulmn and thrid column represents this above code. 2nd column represents
+any other thread interacting with the page.
 
-Create a validate_devlink_output() to check for this "flavour" from
-devlink command output to avoid this KeyError exception. Also let
-it handle the check for `devlink -j dev show` output in main().
+If page is written/dirty	some other task interacts	wp_page
+no				does nothing			no
+no				writes to page			no
+no				wp the page			no
+yes				does nothing			yes
+yes				write to page			yes
+yes				wp the page			yes
 
-Apart from this, if the test was not started because the max lanes of
-the designated device is 0. The script will still return 0 and thus
-causing a false-negative test result.
+As you can see there isn't any side-effect happening. We aren't over doing
+the wp or under-doing the write-protect.
 
-Use a found_max_lanes flag to determine if these tests were skipped
-due to this reason and return KSFT_SKIP to make it more clear.
+Even if we were doing something wrong here and I bring the lock over all of
+this, the pages get become written or wp just after unlocking. It is
+expected. This current implementation doesn't seem to be breaking this.
 
-V2: factor out the skip logic from main(), update commit message and
-    skip reasons accordingly.
-V3: rename flag as Jakub suggested, update commit message
-Link: https://bugs.launchpad.net/bugs/1937133
-Fixes: f3348a82e727 ("selftests: net: Add port split test")
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/net/devlink_port_split.py | 36 +++++++++++++++++++----
- 1 file changed, 31 insertions(+), 5 deletions(-)
+Is my understanding wrong somewhere here? Can you point out?
 
-diff --git a/tools/testing/selftests/net/devlink_port_split.py b/tools/testing/selftests/net/devlink_port_split.py
-index 2b5d6ff..2d84c7a 100755
---- a/tools/testing/selftests/net/devlink_port_split.py
-+++ b/tools/testing/selftests/net/devlink_port_split.py
-@@ -59,6 +59,8 @@ class devlink_ports(object):
-         assert stderr == ""
-         ports = json.loads(stdout)['port']
- 
-+        validate_devlink_output(ports, 'flavour')
-+
-         for port in ports:
-             if dev in port:
-                 if ports[port]['flavour'] == 'physical':
-@@ -220,6 +222,27 @@ def split_splittable_port(port, k, lanes, dev):
-     unsplit(port.bus_info)
- 
- 
-+def validate_devlink_output(devlink_data, target_property=None):
-+    """
-+    Determine if test should be skipped by checking:
-+      1. devlink_data contains values
-+      2. The target_property exist in devlink_data
-+    """
-+    skip_reason = None
-+    if any(devlink_data.values()):
-+        if target_property:
-+            skip_reason = "{} not found in devlink output, test skipped".format(target_property)
-+            for key in devlink_data:
-+                if target_property in devlink_data[key]:
-+                    skip_reason = None
-+    else:
-+        skip_reason = 'devlink output is empty, test skipped'
-+
-+    if skip_reason:
-+        print(skip_reason)
-+        sys.exit(KSFT_SKIP)
-+
-+
- def make_parser():
-     parser = argparse.ArgumentParser(description='A test for port splitting.')
-     parser.add_argument('--dev',
-@@ -240,12 +263,9 @@ def main(cmdline=None):
-         stdout, stderr = run_command(cmd)
-         assert stderr == ""
- 
-+        validate_devlink_output(json.loads(stdout))
-         devs = json.loads(stdout)['dev']
--        if devs:
--            dev = list(devs.keys())[0]
--        else:
--            print("no devlink device was found, test skipped")
--            sys.exit(KSFT_SKIP)
-+        dev = list(devs.keys())[0]
- 
-     cmd = "devlink dev show %s" % dev
-     stdout, stderr = run_command(cmd)
-@@ -255,6 +275,7 @@ def main(cmdline=None):
- 
-     ports = devlink_ports(dev)
- 
-+    found_max_lanes = False
-     for port in ports.if_names:
-         max_lanes = get_max_lanes(port.name)
- 
-@@ -277,6 +298,11 @@ def main(cmdline=None):
-                 split_splittable_port(port, lane, max_lanes, dev)
- 
-                 lane //= 2
-+        found_max_lanes = True
-+
-+    if not found_max_lanes:
-+        print(f"Test not started, no port of device {dev} reports max_lanes")
-+        sys.exit(KSFT_SKIP)
- 
- 
- if __name__ == "__main__":
+Previous to this current locking design were either buggy or slower when
+multiple threads were working on same pages. Current implementation removes
+the limitations:
+- The memcpy inside pagemap_scan_output is happening with pte unlocked.
+- We are only wp a page if we have noted this page to be dirty
+- No mm write lock is required. Only read lock works fine just like
+userfaultfd_writeprotect() takes only read lock.
+
+There is only one con here that we are locking and unlocking the pte lock
+again and again.
+
+Please have a look at my explanation and let me know what do you think.
+
+> 
+> Unfortunately you also cannot reuse uffd_wp_range() because that's not
+> atomic either, my fault here.  Probably I was thinking mostly from
+> soft-dirty pov on batching the collect+reset.
+> 
+> You need to take the spin lock, collect whatever bits, set/clear whatever
+> bits, only until then release the spin lock.
+> 
+> "Not atomic" means you can have some page got dirtied but you could miss
+> it.  Depending on how strict you want, I think it'll break apps like CRIU
+> if strict atomicity needed for migrating a process.  If we want to have a
+> new interface anyway, IMHO we'd better do that in the strict way.
+In my rigorous multi-threaded testing where a lots of threads are working
+on same set of pages, we aren't losing even a single update. I can share
+the test if you want.
+
+> 
+> Same comment applies to the THP handling (where I cut from the context).
+> 
+
 -- 
-2.7.4
-
+BR,
+Muhammad Usama Anjum
