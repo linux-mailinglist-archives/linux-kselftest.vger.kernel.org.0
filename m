@@ -2,179 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BA66BBA49
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Mar 2023 17:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553C96BBA56
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Mar 2023 18:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbjCOQzL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Mar 2023 12:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S230248AbjCORAD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Mar 2023 13:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjCOQzL (ORCPT
+        with ESMTP id S232473AbjCOQ77 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:55:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B595A193;
-        Wed, 15 Mar 2023 09:54:54 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [39.37.168.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 15 Mar 2023 12:59:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15B11B32C
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 09:59:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678899557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mo4/ufj5aP4JcG4WHWN3/PJ1VlRuoKnOT1MocwMtouQ=;
+        b=J4N5cFfLr2jlvXuYByslcuUTpqJXoMV5U8+k+VBbpOI1MP62K7NMiBhbwAy0y402DQTwyc
+        TRa1x+qs0szNBXK1qxmVf0jWw2kKhBxH1/iZAq376yv/eqxRnPSOtJGYbhmO8UsVBNqhme
+        XB+Y/0DJyHXuzDxTplsOq8ukqgwCxHw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-486-k0Oy4AX3PwuBr33IhirytA-1; Wed, 15 Mar 2023 12:59:14 -0400
+X-MC-Unique: k0Oy4AX3PwuBr33IhirytA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3BBA56602065;
-        Wed, 15 Mar 2023 16:54:46 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678899292;
-        bh=EyXR2YxwFVjBAcx1rUVLdzVeq5GifyBb6Z8dID0brCk=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=SHQ3SHGgunZCD9CQKxkcMrkNu82y/hn/LXDp+BkqMXc7hJnD5qh+gIhMIMTiEOxR7
-         EkaldNLGjTXTymZH3QmhQwWDCVW4Jeb9n47yKYEdRiLYkghf+cXEAC/nsxUXsFOU2Y
-         m/EqUEI/mHPFRT+cSK436ppqmBN5zq99BRVK8+99lGAz0dYSBatwE8U9psqRXg6OLB
-         XOXxGInAuGnjbKNFohYXlKgAy4J29WtLirHCECYN9Iz1eno/uOz+mTJgqF8rDdp3F6
-         UevrNe3irtE7kpeBmhfQ8nWRofKmCdG/rCgthAST7DOfk8vKWFLJRi7wtbLiQFdarr
-         GzoyGjH6cfBCw==
-Message-ID: <3d2d1ba4-bfab-6b3d-f0d6-ae0920ebdcb0@collabora.com>
-Date:   Wed, 15 Mar 2023 21:54:40 +0500
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E836A805F76;
+        Wed, 15 Mar 2023 16:59:13 +0000 (UTC)
+Received: from [10.22.34.146] (unknown [10.22.34.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3FE4B492B02;
+        Wed, 15 Mar 2023 16:59:13 +0000 (UTC)
+Message-ID: <bba0ed25-1130-d272-45cf-b14c95aa991f@redhat.com>
+Date:   Wed, 15 Mar 2023 12:59:13 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/5] cgroup/cpuset: Miscellaneous updates
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-5-usama.anjum@collabora.com> <ZBHqjBjj6nn1xeTM@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZBHqjBjj6nn1xeTM@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+To:     Will Deacon <will@kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230306200849.376804-1-longman@redhat.com>
+ <20230315162436.GA19015@willie-the-truck>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230315162436.GA19015@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/15/23 8:55 PM, Peter Xu wrote:
-> On Thu, Mar 09, 2023 at 06:57:15PM +0500, Muhammad Usama Anjum wrote:
->> +	for (addr = start; !ret && addr < end; pte++, addr += PAGE_SIZE) {
->> +		pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
->> +
->> +		is_writ = !is_pte_uffd_wp(*pte);
->> +		is_file = vma->vm_file;
->> +		is_pres = pte_present(*pte);
->> +		is_swap = is_swap_pte(*pte);
->> +
->> +		pte_unmap_unlock(pte, ptl);
->> +
->> +		ret = pagemap_scan_output(is_writ, is_file, is_pres, is_swap,
->> +					  p, addr, 1);
->> +		if (ret)
->> +			break;
->> +
->> +		if (PM_SCAN_OP_IS_WP(p) && is_writ &&
->> +		    uffd_wp_range(walk->mm, vma, addr, PAGE_SIZE, true) < 0)
->> +			ret = -EINVAL;
->> +	}
-> 
-> This is not real atomic..
-> 
-> Taking the spinlock for eacy pte is not only overkill but wrong in
-> atomicity because the pte can change right after spinlock unlocked.
-Let me explain. It seems like wrong, but it isn't. In my rigorous testing,
-it didn't show any side-effect.  Here we are finding out if a page is
-written. If page is written, only then we clear it. Lets look at the
-different possibilities here:
-- If a page isn't written, we'll not clear it.
-- If a page is written and there isn't any race, we'll clear written-to
-flag by write protecting it.
-- If a page is written but before clearing it, data is written again to the
-page. The page would remain written and we'll clear it.
-- If a page is written but before clearing it, it gets write protected,
-we'll still write protected it. There is double right protection here, but
-no side-effect.
 
-Lets turn this into a truth table for easier understanding. Here first
-coulmn and thrid column represents this above code. 2nd column represents
-any other thread interacting with the page.
+On 3/15/23 12:24, Will Deacon wrote:
+> Hi Waiman,
+>
+> On Mon, Mar 06, 2023 at 03:08:44PM -0500, Waiman Long wrote:
+>> This patch series includes miscellaneous update to the cpuset and its
+>> testing code.
+>>
+>> Patch 2 is actually a follow-up of commit 3fb906e7fabb ("cgroup/cpuset:
+>> Don't filter offline CPUs in cpuset_cpus_allowed() for top cpuset tasks").
+>>
+>> Patches 3-4 are for handling corner cases when dealing with
+>> task_cpu_possible_mask().
+> Thanks for cc'ing me on these. I ran my arm64 asymmetric tests and, fwiw,
+> I get the same results as vanilla -rc2, so that's good.
+>
+> One behaviour that persists (and which I thought might be addressed by this
+> series) is the following. Imagine a 4-CPU system with CPUs 0-1 being 64-bit
+> only. If I configure a parent cpuset with 'cpuset.cpus' of "0-2" and a
+> child cpuset with 'cpuset.cpus' of "0-1", then attaching a 32-bit task
+> to the child cpuset will result in an affinity mask of 4. If I then change
+> 'cpuset.cpus' of the parent cpuset to "0-1,3", the affinity mask of the
+> task remains at '4' whereas it might be nice to update it to '8', in-line
+> with the new affinity mask of the parent cpuset.
+>
+> Anyway, I'm not complaining (this is certainly _not_ a regression), but
+> I thought I'd highlight it in case you were aiming to address this with
+> your changes.
 
-If page is written/dirty	some other task interacts	wp_page
-no				does nothing			no
-no				writes to page			no
-no				wp the page			no
-yes				does nothing			yes
-yes				write to page			yes
-yes				wp the page			yes
+I believe it is because changes in parent cpuset only won't cause the 
+tasks in the child cpuset to be re-evaluated unless it causes a change 
+in the effective_cpus of the child cpuset. This is the case here. We 
+currently don't track how many tasks in the child cpusets are using 
+parent's cpumask due to lacking runnable CPUs in the child cpuset. We 
+can only fix this if we track those special tasks. It can be fixable, 
+but I don't know if it is a problem that is worth fixing.
 
-As you can see there isn't any side-effect happening. We aren't over doing
-the wp or under-doing the write-protect.
+Cheers,
+Longman
 
-Even if we were doing something wrong here and I bring the lock over all of
-this, the pages get become written or wp just after unlocking. It is
-expected. This current implementation doesn't seem to be breaking this.
-
-Is my understanding wrong somewhere here? Can you point out?
-
-Previous to this current locking design were either buggy or slower when
-multiple threads were working on same pages. Current implementation removes
-the limitations:
-- The memcpy inside pagemap_scan_output is happening with pte unlocked.
-- We are only wp a page if we have noted this page to be dirty
-- No mm write lock is required. Only read lock works fine just like
-userfaultfd_writeprotect() takes only read lock.
-
-There is only one con here that we are locking and unlocking the pte lock
-again and again.
-
-Please have a look at my explanation and let me know what do you think.
-
-> 
-> Unfortunately you also cannot reuse uffd_wp_range() because that's not
-> atomic either, my fault here.  Probably I was thinking mostly from
-> soft-dirty pov on batching the collect+reset.
-> 
-> You need to take the spin lock, collect whatever bits, set/clear whatever
-> bits, only until then release the spin lock.
-> 
-> "Not atomic" means you can have some page got dirtied but you could miss
-> it.  Depending on how strict you want, I think it'll break apps like CRIU
-> if strict atomicity needed for migrating a process.  If we want to have a
-> new interface anyway, IMHO we'd better do that in the strict way.
-In my rigorous multi-threaded testing where a lots of threads are working
-on same set of pages, we aren't losing even a single update. I can share
-the test if you want.
-
-> 
-> Same comment applies to the THP handling (where I cut from the context).
-> 
-
--- 
-BR,
-Muhammad Usama Anjum
