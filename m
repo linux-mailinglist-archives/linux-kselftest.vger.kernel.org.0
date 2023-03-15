@@ -2,106 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092C86BAD6B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Mar 2023 11:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C906BB3AA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Mar 2023 13:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbjCOKSx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Mar 2023 06:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S233116AbjCOMxy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Mar 2023 08:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232396AbjCOKSq (ORCPT
+        with ESMTP id S233112AbjCOMxw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:18:46 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794702B2BB
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 03:18:20 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id e9-20020a056830200900b00694651d19f6so9861555otp.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 03:18:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678875499;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C+D7r5o17V7MbRD4rEUKPxc+NqVXUsVJyVbcYC8a9Kg=;
-        b=S9ioBUKruxchmg3LqAudFc5ju0v74S+G2v8jifnB0w5xwCOnD6bo5HwiMEGVvvhtWt
-         xOKv/QYtcSIYBbChJeN9eARRFm7yTOzF0t3UAG2BdzYj2fVsNc8CXajNTVjLNGqaYFR9
-         Ibrq+xcAq43xU7TGCcaH7ppyCH0BUBAOBP7Xd+YI8wdsPkB4Fmey04ezFJQ1FL85ZaBj
-         k+u0wGaZvCsg/8JAg3e2H9TN0Ed1zncjKbIciLhW0b07lSsDxY1AFoiNn8HCC3V3hgtU
-         PXwiWgbbQ/katmwNBeHKfYuxyMfhXu8w4YrUH/gFLO+eStAlHE056Z7P23iMsHpiJQ9V
-         uQqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678875499;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+D7r5o17V7MbRD4rEUKPxc+NqVXUsVJyVbcYC8a9Kg=;
-        b=nkQBD9n1BTydPt0WDP1XVe9lPI9rcHnQ9mjo96SSFzXQlVzuKdn5e0LAPmp/oXmifB
-         ZnXUtxF9I30eJvgbg9D5TU33TUkmTH4me1V8c+5hka48X1fP4ECVH8s4n5j3NF3dUc5Y
-         eqLLkWZV7YwADftsEMYBIVvtSLOtlpfUqvJ8WUmByzsO7LMH0nUDHBGaDEmJ3J+Dyfkn
-         vtg6o84eyuCq96jOUM1i7C6iuHmlAMb5MQBPbdiZ5LpnGOGEtk3Z8bt6BrMHs+mkpwwz
-         AXvuO3iFulhaKPjSuZpeIiaYp00DIDSAY2MTPgORmYCpXUVLf28KzttuNKO7FZyOU/sy
-         bBeQ==
-X-Gm-Message-State: AO0yUKXsk/beZsLgHzRArdYR/X9ZCjJev4F41Z5APMJEsb6Yy3YQdNAi
-        ppPz4UiPvEWyXpxw6HJ6791nrzNrgogz9SssDEA=
-X-Google-Smtp-Source: AK7set9hAcqB9bV08yCjwuKfpN9GF7jmVeh9cFKZbN+u/RKFOqemYCQ+gAPPK/1AM053BBuV22jkYDQH36/YBt7/UVI=
-X-Received: by 2002:a9d:7194:0:b0:68b:d3f1:aa1b with SMTP id
- o20-20020a9d7194000000b0068bd3f1aa1bmr13818045otj.3.1678875499558; Wed, 15
- Mar 2023 03:18:19 -0700 (PDT)
+        Wed, 15 Mar 2023 08:53:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEFB95441;
+        Wed, 15 Mar 2023 05:53:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B33AB81DF4;
+        Wed, 15 Mar 2023 12:53:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7799C433D2;
+        Wed, 15 Mar 2023 12:53:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678884815;
+        bh=73YQjdWBQ7W+f1WTCO1fpecJQkpb+JY7Fg21petFwTM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VtfzCLi+N05uMJ+YAB5G3kk5X3kxSCSkY4mPoYpyahE2ZFPIHIX2nMF4ECQZ/XVSw
+         CDCEmggVKj6b9a5Q4ZpikbxfrMgpuDOe2weeOqdkb7UwRHNC6JMmZwSRmsKt1tqnmq
+         cRAi8oetJn7F5TUwM5skyJUFSSZukvXeJdELQD42mkk17JZAhORKYWhIc5/fdPpLJf
+         uO0QU//JVCfvvf0Wb05vtlAU1KZZz9JL1bPRW7wN21uf1PlkDRFc+l+2nTuF9KQHST
+         YWfH4JPKFfgpRV+bAajeo3oMfETA8bdKeAm38lQa+poREA/eFWXxoHTpJBB/RnzOWR
+         hDP4i8LNXMAgQ==
+Date:   Wed, 15 Mar 2023 12:53:29 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     kernelci@groups.io, rmoar@google.com
+Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
+        "frowand.list@gmail.com" <frowand.list@gmail.com>,
+        "davidgow@google.com" <davidgow@google.com>,
+        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "brendanhiggins@google.com" <brendanhiggins@google.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "guillaume.tucker@collabora.com" <guillaume.tucker@collabora.com>,
+        "dlatypov@google.com" <dlatypov@google.com>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add skip test result
+Message-ID: <4568b302-2a5a-4499-b2f7-12f89c031495@sirena.org.uk>
+References: <20230310222002.3633162-1-rmoar@google.com>
+ <BYAPR13MB2503C590A2AE6FEF6BCAC529FDBB9@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <CA+GJov5O6hGdjYMXjRd34MEZuyBuukyJCOsS=HeO30h43eLQbQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:1a9c:b0:f6:c472:2ab1 with HTTP; Wed, 15 Mar 2023
- 03:18:19 -0700 (PDT)
-Reply-To: hitnodeby23@yahoo.com
-From:   Hinda Itno Deby <rebender6@gmail.com>
-Date:   Wed, 15 Mar 2023 03:18:19 -0700
-Message-ID: <CAJ1QMTea23VDpCSQf-Tc+T7y_zE0U_MvyiPYVbfb2-1izuhm-g@mail.gmail.com>
-Subject: Reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY,
-        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:333 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [rebender6[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [rebender6[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [hitnodeby23[at]yahoo.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.6 URG_BIZ Contains urgent matter
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="U7vq7nqwbMFIlUmg"
+Content-Disposition: inline
+In-Reply-To: <CA+GJov5O6hGdjYMXjRd34MEZuyBuukyJCOsS=HeO30h43eLQbQ@mail.gmail.com>
+X-Cookie: "Speed is subsittute fo accurancy."
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
--- 
-Hello
 
-My name is Hinda Itno Deby Please I want us to discuss Urgent Business
-Proposal, if you are interested kindly reply to me so i can give you
-all the details
+--U7vq7nqwbMFIlUmg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-.Thanks and God Bless You.
-Ms Hinda Itno Deby
+On Tue, Mar 14, 2023 at 06:03:59PM -0400, Rae Moar via groups.io wrote:
+
+> One thing to note on the created churn: I have noticed a proportion of
+> kselftests currently implement skipped tests in a way that does not
+> use the SKIP directive. They use a comment of the format "# [SKIP]"
+> prior to a test result line with no SKIP directive. Thus, in order to
+> reach KTAP compliance the way skip tests are handled would need to be
+> changed in these cases anyways.
+
+This is the documented way of reporting a skip in KTAP:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/dev-tools/ktap.rst#n97
+
+TBH I'm finding it really hard to summon much enthusiasm for changing
+this except as part of some other incompatible update - the current
+format isn't ideal but deploying a change would be a bunch of hassle for
+the existing test automation systems.
+
+--U7vq7nqwbMFIlUmg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQRv8gACgkQJNaLcl1U
+h9BmFQf/Q1nCvItoW2dwIKw8OMB17PPv988cXqqaciRnl2GNIvXW1BEgAZ02WipH
+iUO+5wSKsyyoZWEwRewPEdbrRjCuXyXRUDFkBJ7kmaqwMrJqLTV9Ittf7LsNbAt3
+eekzRFG1+ksmERKtJtVnKQ047Ed49o6/vYJmt3URAvLKZ3jRrPVMgFrANuQG6Zw2
+J3hjbS/EumCa0GwzP2/gFbwAWyZQUbwYlFXDeBH7ckZyr5PZULj76CiBtxmbj/dG
+VE2i4aQPhWDa8rPpjJFQnPtTCCddE6AIh4f8JUhxLmd86Kx2f710G7b7OYeqFcLD
+uHh7g8vAalv15HB5imHnxf8Gzu9C5w==
+=nDd6
+-----END PGP SIGNATURE-----
+
+--U7vq7nqwbMFIlUmg--
