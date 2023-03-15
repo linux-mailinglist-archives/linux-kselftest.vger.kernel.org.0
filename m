@@ -2,153 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94BE6BC1E0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 00:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1416BC1F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 00:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbjCOXzi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Mar 2023 19:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
+        id S230266AbjCOX7r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Mar 2023 19:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233283AbjCOXzb (ORCPT
+        with ESMTP id S231889AbjCOX7p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:55:31 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F74F6133C;
-        Wed, 15 Mar 2023 16:55:21 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id s12so47047qtq.11;
-        Wed, 15 Mar 2023 16:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678924520;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DQk4FNj9cOXKf/N0Z5hVCFZioIfls/69/wUewAHZC/M=;
-        b=naU5Ws3oqw/MkLMhTrA04D/YEuE7vXr2frvrjxwvzMIRypxyWkaf0NSdXHEe9qN9kc
-         YT2+u8/rRu3qhrKlBgOO1gTk/lK18DBMMzoC24sRbWnb3cKUxk92EHdJ0W1P6O/GXpUn
-         zREX2zNcsl80me6KgGxAumFSIG6Ttq2H9guZKDOZWaVNeLnUCPIpbOrCPQgzoQlcAN6l
-         UhYxqpU8WwkkTIziztibY0LZ6+A5Es91ps4ED6+7YLFMOmk1RW5vYhOk5OXkfWPtYQCL
-         b8v2SzNqnEMOJNOkqVHuoJau5pmRkOu+gpXz3CNYsQXZM9wJ7TbpWZln71YjZTfSfk4Y
-         ammg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678924520;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DQk4FNj9cOXKf/N0Z5hVCFZioIfls/69/wUewAHZC/M=;
-        b=gP4URi8zDWGEbipDdXcMCiBwPOCrDdfL7+hpqxajy+LhBI0QogV7ihRvCyBT7/PSMv
-         T8I9HEHoZtaOyAnbP4hSq9UqKS7tgHB0wV7YNqhdq54BWkbs/0Z3MQ98VII882kueTIf
-         jQ7w0v5ZllKVovIaEeDBvx+Y30buhBlM0NiyrIf3CnhVvJw3qIS1WSI2kiPP3osqWJ+6
-         /9E3iqXm3/xqHq/qtHuV8MRQ8pBO0iz33FJRIqemc5FPr5q2furD3mjk0vFNPaMBEiCR
-         QRw/byXxXNCVer58J0r/TFM+5jPzX2DjOWKbOnjVdQxxFEo0nm6SVd0cbmAbE7lHoFne
-         PZtw==
-X-Gm-Message-State: AO0yUKWxWHAqx7uFuxq3+EoXIWZBC3dK7sSscxLVA9MpuTunGXECtvWp
-        2JkY0AfdyoCggN/lJmlhGNE=
-X-Google-Smtp-Source: AK7set9O7a5+ONaI894j9lnNQHVWEM2zEhOG7CQhyZ66os9aGL+8ntoiOIq00QTyD0ynhze3jxYEKA==
-X-Received: by 2002:ac8:57cd:0:b0:3b8:4951:57b8 with SMTP id w13-20020ac857cd000000b003b8495157b8mr3160892qta.15.1678924520385;
-        Wed, 15 Mar 2023 16:55:20 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id x1-20020ac87ec1000000b003bfb6ddc49dsm4608990qtj.1.2023.03.15.16.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 16:55:19 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 7FCE227C0054;
-        Wed, 15 Mar 2023 19:55:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 15 Mar 2023 19:55:19 -0400
-X-ME-Sender: <xms:51oSZB0Yp9rRGujxgX3wxwIupL6Ry0EmZHDi0nyR6KUr-NAXhQCpWA>
-    <xme:51oSZIFugeF8YUrIGHPTaAX3YAqSnXeVfrdav6SnO3UkP0C87QOxDxl8-O_t9VHgf
-    ihBMauDtEHrAZGCXA>
-X-ME-Received: <xmr:51oSZB5LsAHEjlNQ24C2F1nU8qkxQp7i_FQ75y9uZ5_Qso2Q4HlHJtYD8EU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvledgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeegleejiedthedvheeggfejveefjeejkefgveffieeujefhueeigfegueeh
-    geeggfenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:51oSZO1bGKRfzyn_uCizR6-9tWSs6HCxRZA79G9gHq4uBSkO91pV7A>
-    <xmx:51oSZEHWtUFDYuaBhVvI9Ef5V_FoVvC79R_70JIXx8UM2tGA6s5nTA>
-    <xmx:51oSZP87vbu1qCnJ5Mz0rdKgUI8Px2hN_IAoZ1khwNMCj0g_LeOl0w>
-    <xmx:51oSZBecM5bJJHwJhgMAQ5Tytc5IyMcxgo18G4c2VOWzhSlYP-AjWw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Mar 2023 19:55:19 -0400 (EDT)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     rcu@vger.kernel.org
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
+        Wed, 15 Mar 2023 19:59:45 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C900D1FC3;
+        Wed, 15 Mar 2023 16:59:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678924783; x=1710460783;
+  h=message-id:date:subject:to:references:from:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=+qd8bA/4V/pc6/XrWhzeEhLSaP1ytFJbdPenDTdPs+E=;
+  b=ThjpB/Y2gOcyuFRl7+nWXMNewaGMve3Hs7jeTiNxZ+w0uU0MmyFWg2wn
+   pOBJ9dKynK6citVLdlsR69zQnrIS3nTAYFDKlxvUPWoIdfi3S9TbSqwaA
+   PU7vlZhGFLxtxDOKU4Gzc6k755hi7Q6e1cwqrndRlrseLADPOveLw0Xh8
+   BKq2S8gX4QUVaujjYSrityi+pxZwovVzEwUYaEr1izCszoTsHGgBWg1+p
+   j52aWyKadw4iPNCh0pTPNWRXI6rJSaQo7RudJ4WQFK6vU08YYqCVHzpRy
+   O4nfWbPsiGljIUlwyqqg1v4tBo9QuazUEptJa75QcK1tElPASaoFoe4Tl
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="321688864"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="321688864"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 16:59:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="853794542"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="853794542"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 15 Mar 2023 16:59:42 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 16:59:42 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 16:59:42 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.103)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 15 Mar 2023 16:59:42 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bkYJnr6RXJfj267i4wV/TiqcBE3uJTHs9rroj7Q7KaRClbVVfl+iad/u/DwNFjbBIoft6S0NN1TiSIss10E+O39bSxUT7gH1DhBumtF82pJ3WiyC0oW41TBLzUBYc8BLZIDgrO2rGXpBNSJ5sQGR3Ey50Um77ecIZ516XWHZa4FyOCMwRRXr+Xtn7f1Djion3sbMnXytBYmr+awQhHWE6XRdp/5KhOoVwnhmT8z6UDRCpYhFlsJ45B/b6t/cX4xTDtnFh/bvMu04zApJiBe/MbIJzRt1JL5pxcJhY4hMWV8CeL8PxRlly0YeZ0BPmhe+4mD1t3p2lR7Wa21PaGpGMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pMQ0S3qIX0m6jNMdq82+4dYH3hyZhIw8feb/m9XGFRU=;
+ b=PM9CX9cCvbSRG4PmiFnb2DmytQplE9Hma97E0SCk1l0ytayj5fZNHNs7R+84hsj3tAXW7CUASkuKY06zVpjxOiMzTfTcxpRRUg2B0DMbGaXYOJ/a1nLiDr4EwDy/fCx3pLefSqJroD5xvjXhuGGLulAI6ULN+3+xk8P2rU3QXUk8KnhsfewiZTed9DIf2pEI+3OEZaiXijnh94OZGgA8iSFUxcrGEn0oCFrmJioaC5N4/yBv/al5tdHdSnuTTeCQI7JvM1V3qV1cMScIRshEkxAsOk0rQDPiuOxH6mVWWWiegQZiObIH3p6Z9lOcN9z7hrsYpwFRVptLPSaGhVLs6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by CY8PR11MB7083.namprd11.prod.outlook.com (2603:10b6:930:51::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
+ 2023 23:59:40 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f%12]) with mapi id 15.20.6178.029; Wed, 15 Mar
+ 2023 23:59:40 +0000
+Message-ID: <5c160cba-4104-996f-04bc-df2a59acf7ea@intel.com>
+Date:   Wed, 15 Mar 2023 16:59:38 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/9] selftests/resctrl: Return NULL if
+ malloc_and_init_memory() did not alloc mem
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
         Shuah Khan <shuah@kernel.org>,
-        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Zqiang <qiang1.zhang@intel.com>
-Subject: [PATCH rcu 8/8] rcutorture: Create nocb kthreads only when testing rcu in CONFIG_RCU_NOCB_CPU=y kernels
-Date:   Wed, 15 Mar 2023 16:54:54 -0700
-Message-Id: <20230315235454.2993-9-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230315235454.2993-1-boqun.feng@gmail.com>
-References: <20230315235454.2993-1-boqun.feng@gmail.com>
-MIME-Version: 1.0
+        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        Babu Moger <babu.moger@amd.com>
+References: <20230215130605.31583-1-ilpo.jarvinen@linux.intel.com>
+ <20230215130605.31583-2-ilpo.jarvinen@linux.intel.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20230215130605.31583-2-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SJ0PR13CA0074.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::19) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|CY8PR11MB7083:EE_
+X-MS-Office365-Filtering-Correlation-Id: 57feb5b0-ceee-4349-2049-08db25b1571b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uu7pfxRbHjSGTOYBroRYqb6y0blBSi2Xbm5RNEHAauy96REs6eHa6ztSLQVoQKiQZCiL2iDU7bPNOxwCodJeABpTTGQSoLFMmKCMmRCmdIT+IWX5QY72nZuN1ZG/A1yW3OwUJTSjvdhV40fwdb6nOkRLfRw5nzu2JxOLf4HvLRwTdeB6TXXjdjSO2iMTNOD9o+NiTeZsB0H+xq72RvjyJneM6/B/hYbgQaPhtZKau5xBhlw4dpuENrKyw6EaHyTmZmVf7+hWRwwpqGg201mWR7IXCxXqLIgiSqzr10qu6Qz3aTTnE4vvEF7xEmvIkwlslTVNrVHMcjjgFNGhGT5wXXJNflUp4TFiZ/qa/0AJhR81cQkWxOBahaVbs/m3Y3xUgSHH6l+GwA4isAgSqx0ksZDvJXH+HPZLUxrDJfYvcJBdRuoby/9Ex4wn5njXCCQNHc7UaTfppXYtjwK73GEHfvocNBZI4uqztR5z4tXkAzQUCZa4YPv8ACB5aSxAYGDfjfqahIdIgbutG8vOUnedMjynb7akz5ta9iX1Et4de7ky8e6Sm/RoYv5p9YYJCi2SvL3EZlS75q60ePFN0xgNZNDYCNNiuVWOOluzRx5aqP69CqxUDzcQvWrpE4Tlg77xO9bwn6rVRGFSNZ+23p64kMI0sNk8RmOEJcQygv753cP+zjOjPFuu+pZxYNhlHIIMvdGHi2sR7OoO8whX8M2INmmeKFWtJs2TUKBKKVzVRg4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(136003)(396003)(376002)(39860400002)(451199018)(31686004)(41300700001)(8936002)(5660300002)(44832011)(38100700002)(31696002)(36756003)(86362001)(4744005)(82960400001)(2906002)(478600001)(6486002)(66476007)(66556008)(8676002)(66946007)(2616005)(83380400001)(110136005)(316002)(6512007)(186003)(26005)(53546011)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFVGMUREUFd1MlVHUkEwWDdNZzJDcDVBU2wrYXlkcGVsOWRQN2h2MC95Ni9S?=
+ =?utf-8?B?VU1xUGpWTUhHWnpiWnJseGlmZmRNT1VmR2JjY3RZTEU5SmtZa3FYbFYxZTBL?=
+ =?utf-8?B?bXVpdEdCalZia2xEWTlMWUJ6cWVzcXlQb3VDZ1ljcjkxY0llWmUvTzB0cDFx?=
+ =?utf-8?B?bk9WajlZSHVVbVd5Yzg1bWdicjdhRm9URmNoYVVhWDl0ME5PbHZPckxOWUg2?=
+ =?utf-8?B?QzltVm1YRnZaSnE1ajVZL3dwbkpKRzJlMUs2M1I2RHUvMXFHN3dTenFJNWl2?=
+ =?utf-8?B?RHJhSVZTNHFuR1UxRWlya2htNTY4RTRBaVk0QWVCbEZqV29ya3o3VDdETXhl?=
+ =?utf-8?B?RExYRGFpOTZhU3lJbHdOYXhzd0tnRlN2OGd3L3FMVVhzR2xTeFV1d0QyRUlI?=
+ =?utf-8?B?SnUyMlRFNXQwd2hJSHB2ZnVSayt2MzBESDJIK2ZmWGx2Y3lWMFdlbnFWZzdQ?=
+ =?utf-8?B?ZmJCUDN5MXV2ZTRFR1hWUVVUTWlyQjBPZWxJcXY0YXVBWjFoRFpDLzdWY2dR?=
+ =?utf-8?B?Tk1UT25PQUYxbk9jVTg3UWh3L2pHY211c1NaVk42aDlTb0RoVWZ2c1dWWHA4?=
+ =?utf-8?B?dWNON3I4ZkpCOHhMbXRLajJEc09FWWd0ZHM0QXlOdUxncWhLTC9UdEJJOE80?=
+ =?utf-8?B?TDk0SXcveDNJOXRSak9CV1FjTmVVcFh1ai9sUWF0RjN3SGZQL1hxQ0k4QlV0?=
+ =?utf-8?B?Qm1GWWp4RWIwcGNwemc4dmxxdUFEeG1nalVJMzczbEJNUHNCRkl6Vk5mSTUx?=
+ =?utf-8?B?TVJ0QUNWVW5qVDdmMms0eGlIYnV5YUlEWGl0aUVwMkpsdmFQWEhGdWl6TW91?=
+ =?utf-8?B?aGt1K0IzeittSG5HcVE5VWNPU2Y2dlVvdEtqQ1BoNnFWN0plUWFNaytjNWFW?=
+ =?utf-8?B?bEN1RlV0N1d4YWFEYUdjU1lRVVdTYTVHdmNtV2ZUWForWFFKVzRwd2hFQVg1?=
+ =?utf-8?B?aFV4UWE1MGt5dFF4ZkZnUTVMWWw2dnFOV3V0N3pLZ2VoQXpYQ0xxbXFSM0Fs?=
+ =?utf-8?B?SFdSMjRMcjN6WEhhZjdieUMxVU1kSkg0RW4rODNsUzlIbEJDRjZxT1FiYlp3?=
+ =?utf-8?B?RGhuWWJteVphTTFRTWJlbkNzQ0ZidEhvU1JZVjBQdEZJOEdjQjhDeFMwaGQ5?=
+ =?utf-8?B?RFhJakprbDJsOWVmTWROcHFYUi8xYTREeUdWWkxkZVhpU2Q2L3B1M3pkc2sy?=
+ =?utf-8?B?OHh5cGNDeGJDRFMrUHhINGQ4MGl2bVd2TXoxOC8yTDhENzJMdUVWN3BjMVZE?=
+ =?utf-8?B?dGVKT1U2K2pZS0VMNXJWQ2wxOUphVU5xQU85V3RzdU9RQzNmRXh4c0J5VjdG?=
+ =?utf-8?B?TjErMTVyUG9nK0xjNUVrUU9Hb0trNldYcWJNK2ZYUW1MaWNuRTl1NHhSSTVa?=
+ =?utf-8?B?YnNhTExvc01iQkxYeEtpaGFUWlhKenlLNjFtYUllOGhnNEZ6SzVFdlBPS000?=
+ =?utf-8?B?OXo5NjR1TWp5azQ2Sm1UOUJMUVdPOEhRVXBYWVJPbUZBeFVpazliWHZ4czVx?=
+ =?utf-8?B?REVzSDlONUh6cnJlMzdWblRFak54U2FLL1FOWHloaGROSHBiS012UHV4bzQ4?=
+ =?utf-8?B?S3FjRlI0dnRiRmxPcDVSYy92RXMyaC9xc3VKWVBNMExIWkRwanZRc0dxMW1J?=
+ =?utf-8?B?K29jZ281cjdiV25LOVl5cEtnWEFSM1ZMR3RWLzAwa3d3YzR4M2lOUjZFdCtX?=
+ =?utf-8?B?N1dHRERObXRGYXhWWEFnc3R3WktWQ1hUcnFnbEs1RzJYMHlQb2liL2tMN1ZK?=
+ =?utf-8?B?am1lTVo0YTBLQkkrazNoaS9RZmIveERydDVDRmY5TmZuZFFIMXRlZCtldlVY?=
+ =?utf-8?B?TnFETzJRbHRzRElMTU1MaDNBVTVGazlJZUxRRUVVcXNRMmQ5VnZJYi91Mmcz?=
+ =?utf-8?B?a3lIVC9RVGEvVTBySjlpVFBnKyt0OUpuUVA3WEcwOGw5ZmFpSUFxVDV1R3A1?=
+ =?utf-8?B?WXF6Mk5FUmNmNUpFWUoycy9jazV0ZDV5VERnTG1RQVpnY051dFR6aG1vRG1V?=
+ =?utf-8?B?UTFLNjRKQzFrODZnditxS3NhQnl6UjVWMEVJQVE5L0VCRUsrRmMvOFNiU0Zn?=
+ =?utf-8?B?azFCTllaTW9zakJCc2N3NXovUHpqa0dJeHRkL0tCTEQ3RjMrejV2OG15dVVr?=
+ =?utf-8?B?em1yTWFpbHd2WWJvTThhZEUvNUVOb3RCcEdGd1p5NGxRN0YvVnlvN0hiemRu?=
+ =?utf-8?B?a0E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57feb5b0-ceee-4349-2049-08db25b1571b
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 23:59:40.6235
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hx2cBC6HTusZh5Mrkv6KRQE1e27MC8lsBRSRgiIxIkSeKTzWvHJiVMkcDxHRXp8wd2Ye2KdroWDXOJcCp0zlVdm5qsRGe1PJrrVeJk6pTPM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7083
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zqiang <qiang1.zhang@intel.com>
+Hi Ilpo,
 
-Given a non-zero rcutorture.nocbs_nthreads module parameter, the specified
-number of nocb kthreads will be created, regardless of whether or not
-the RCU implementation under test is capable of offloading callbacks.
-Please note that even vanilla RCU is incapable of offloading in kernels
-built with CONFIG_RCU_NOCB_CPU=n.  And when the RCU implementation is
-incapable of offloading callbacks, there is no point in creating those
-kthreads.
+On 2/15/2023 5:05 AM, Ilpo Järvinen wrote:
+> malloc_and_init_memory() in fill_buf isn't checking if memalign()
+> successfully allocated memory or not before accessing the memory.
+> 
+> Check the return value of memalign() and return NULL if allocating
+> aligned memory fails.
+> 
+> Fixes: a2561b12fe39 ("selftests/resctrl: Add built in benchmark")
+> Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
+> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
 
-This commit therefore checks the cur_ops.torture_type module parameter and
-CONFIG_RCU_NOCB_CPU Kconfig option in order to avoid creating unnecessary
-nocb tasks.
+Thank you.
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
- kernel/rcu/rcutorture.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index c0b2fd687bbb..2d1c7e15cd72 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -3525,6 +3525,12 @@ rcu_torture_init(void)
- 		pr_alert("rcu-torture: ->fqs NULL and non-zero fqs_duration, fqs disabled.\n");
- 		fqs_duration = 0;
- 	}
-+	if (nocbs_nthreads != 0 && (cur_ops != &rcu_ops ||
-+					!IS_ENABLED(CONFIG_RCU_NOCB_CPU))) {
-+		pr_alert("rcu-torture types: %s and CONFIG_RCU_NOCB_CPU=%d, nocb toggle disabled.\n",
-+				cur_ops->name, IS_ENABLED(CONFIG_RCU_NOCB_CPU));
-+		nocbs_nthreads = 0;
-+	}
- 	if (cur_ops->init)
- 		cur_ops->init();
- 
--- 
-2.39.2
-
+Reinette
