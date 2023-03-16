@@ -2,166 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F636BDB18
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 22:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD5E6BDB42
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 23:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCPVnw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Mar 2023 17:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S229814AbjCPWHH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Mar 2023 18:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjCPVnv (ORCPT
+        with ESMTP id S229494AbjCPWHH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Mar 2023 17:43:51 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2D012CE6
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 14:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=SKNoYFirFCOXZA7Jn7GJ5f5e7Q1W7w5Fgg2sBk/EQZE=;
-        t=1679003026; x=1680212626; b=JEWDARjq3ek7gw3hJYo6v6lrIUnChpDUyBw4nx3YcpFG0FR
-        6kfVtIvcCUK/059xwCH3F9lGvkzP9fYigcBIwOAWQK+4/MpWBRZsr3WiRuHpYm6kZapjlw9FCM00F
-        yyC+aOZYOf1HD6zFdor8s4ScrXtZrpExeJZhCFA5ZA+YNs1Zz1MwaT5SKrycf28K2L7twiQ8jjFUH
-        aLfOToGBEAJF90uhrCzVfaUPgUB7KTJF4bjpvU6GlmDjW96mhh0X8VrfhUqT6VYHHOqse1GNUaY3P
-        KjiXM6YTWtpPs2l5eb8hBFQ4RJZbtDyGemIDrpq4mkdPY20RLlc3NRS3yXf/pDcg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1pcvNw-005Nn2-25;
-        Thu, 16 Mar 2023 22:43:44 +0100
-Message-ID: <2d5004a0bb1c5737652b54a9d072957281e08796.camel@sipsolutions.net>
-Subject: Re: [PATCH] kunit: tool: fix type annotation for IO
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Date:   Thu, 16 Mar 2023 22:43:43 +0100
-In-Reply-To: <CAGS_qxqQd5t1gB4PZCBBYBG2fy8977i5_CcA2aCTyp7x4DKUvw@mail.gmail.com>
-References: <20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid>
-         <CAGS_qxrJ53EyQaf5WqfSBYhOF0+LvWgvKL4gExu9vCPxRb7ipw@mail.gmail.com>
-         <e028d27b3e998eaba2d71b6e224eb707015f8edf.camel@sipsolutions.net>
-         <CAGS_qxpYEnzWM=nPXDAbebuQERN4ijb0FKFbtmX5hK9qwVn12A@mail.gmail.com>
-         <9a172b50457f4074af41fe1dc8e55dcaf4795d7e.camel@sipsolutions.net>
-         <CAGS_qxoEOW+FN33czFOhJ7xgPeKjGsj=BMc4iF-aP53TfyiyEQ@mail.gmail.com>
-         <e4d5d03d37335e7e9ceb0333749a7fac1545f7e6.camel@sipsolutions.net>
-         <CAGS_qxqQd5t1gB4PZCBBYBG2fy8977i5_CcA2aCTyp7x4DKUvw@mail.gmail.com>
+        Thu, 16 Mar 2023 18:07:07 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86ED787A2C
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 15:06:47 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 62-20020a630241000000b004fb3343142dso793256pgc.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 15:06:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679004407;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5w/bUTaQvv0dE6Z9kgV2X6M6GsXpoWgjbDaqKfzvjzU=;
+        b=rIZGB5soI+YB2bwAFuUr9c+JWOpF0HrtgYe3XbqVePLIx5T7nAyu6sQkhvFb9ikBQo
+         uFClwlCH26lx8vZzECJagMZ6U4LSE1qPlJW30AN2ao4CJ1fuFznQS06bR8Bm0RnSqNLs
+         wYU7l/meIRfAoJGOe3R6K7zG9/xz+efX5pu0hxL4ei087YNIi/m8pAX03ul+Xt7Q+AjD
+         4DyGkhls6+O8D5kD7nRnFqprRdqELs0uJnLd6uV6/H5HUFtZ0tGmwFSeYhbzBPkqU9i/
+         mT/xyNImWDH4rmzcoZm942ZfNEU40kmejnt1+Xhh1wVM7wbpKI94Zm/l2SnrGI6R8LPj
+         NsXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679004407;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5w/bUTaQvv0dE6Z9kgV2X6M6GsXpoWgjbDaqKfzvjzU=;
+        b=oCHyJef0VlCVzPTH6/bR9ojaNDak/0jEvRcWzuKOGPnsrQ9y9s2DOvIppzu6ZlIaZq
+         vf4E79+4VsnNhz7muY1J5akjf/ncvG4xmdqgrANBS7Ln+g+kjr31r60hkGQGtHPcFWH5
+         g013VFLqr24iz5lScKYFA9+NHzlBHSXDNx+pAOaLCG0GqLvlQLSlNZGqezkjdH01QNmm
+         PXl3Yt2Y/W0xo941Vvr/D9ebCewK1rSWFVX6Z5F7BJVvyf17R+4fjK8B74zuJ9OUrXqe
+         q6O1YRzf/iTAD/DSMg3Jq3qZGHXkpPaKM2QUoA8FJADx8xC2piaUFWSfsEr6Gez36DKX
+         d1WQ==
+X-Gm-Message-State: AO0yUKWrBbRJGJsw297hkylzoMWqLeMt9DkXZyFyug2DqYL9J6v1570x
+        ks0aByggIaBliONw93ZrSMqDIi3qfA5VCw==
+X-Google-Smtp-Source: AK7set9G6xXgo9CVemOXGZSkb5l3LS0mB5VByXQai+nWomUeRMTKgZEe9bkPqW1cEceZEM3CoC6AxKvIwSYRdg==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a17:902:d2c7:b0:1a0:4664:319c with SMTP
+ id n7-20020a170902d2c700b001a04664319cmr2318672plc.6.1679004406964; Thu, 16
+ Mar 2023 15:06:46 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 15:06:36 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230316220638.983743-1-dlatypov@google.com>
+Subject: [PATCH v2 1/3] kunit: tool: add subscripts for type annotations where appropriate
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, johannes@sipsolutions.net,
+        Daniel Latypov <dlatypov@google.com>,
+        Johannes Berg <johannes.berg@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2023-03-16 at 14:30 -0700, Daniel Latypov wrote:
->=20
-> 100% agree, just the concern is about trying to keep two different
-> checkers happy when they might have conflicting demands.
-> Pytype has been able to catch some relatively subtle errors, so I've
-> prioritized it.
+E.g. for subprocess.Popen, it can be opened in `text=True` mode where it
+returns strings, or `text=False` where it returns bytes.
+To differentiate, you can annotate types as `Popen[str]` or
+`Popen[bytes]`.
 
-Sure. Maybe I'll just switch to pytype too ;-)
+This patch should add subscripts in all the places we were missing them.
 
+Reported-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://lore.kernel.org/linux-kselftest/20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid/
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+Note: this is unchanged, just added a 3rd patch to this series.
+---
+ tools/testing/kunit/kunit_kernel.py  | 6 +++---
+ tools/testing/kunit/kunit_printer.py | 2 +-
+ tools/testing/kunit/run_checks.py    | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-> But since commit b7e0b983ff13 ("kunit: tool: fix pre-existing python
-> type annotation errors") onwards, I've been trying to fix up all the
-> issues we've had with either.
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 53e90c335834..e6fc8fcb071a 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -92,7 +92,7 @@ class LinuxSourceTreeOperations:
+ 		if stderr:  # likely only due to build warnings
+ 			print(stderr.decode())
+ 
+-	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
++	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+ 		raise RuntimeError('not implemented!')
+ 
+ 
+@@ -112,7 +112,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+ 		kconfig.merge_in_entries(base_kunitconfig)
+ 		return kconfig
+ 
+-	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
++	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+ 		kernel_path = os.path.join(build_dir, self._kernel_path)
+ 		qemu_command = ['qemu-system-' + self._qemu_arch,
+ 				'-nodefaults',
+@@ -141,7 +141,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+ 		kconfig.merge_in_entries(base_kunitconfig)
+ 		return kconfig
+ 
+-	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
++	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+ 		"""Runs the Linux UML binary. Must be named 'linux'."""
+ 		linux_bin = os.path.join(build_dir, 'linux')
+ 		params.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+diff --git a/tools/testing/kunit/kunit_printer.py b/tools/testing/kunit/kunit_printer.py
+index 5f1cc55ecdf5..015adf87dc2c 100644
+--- a/tools/testing/kunit/kunit_printer.py
++++ b/tools/testing/kunit/kunit_printer.py
+@@ -15,7 +15,7 @@ _RESET = '\033[0;0m'
+ class Printer:
+ 	"""Wraps a file object, providing utilities for coloring output, etc."""
+ 
+-	def __init__(self, output: typing.IO):
++	def __init__(self, output: typing.IO[str]):
+ 		self._output = output
+ 		self._use_color = output.isatty()
+ 
+diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
+index 066e6f938f6d..61cece1684df 100755
+--- a/tools/testing/kunit/run_checks.py
++++ b/tools/testing/kunit/run_checks.py
+@@ -37,7 +37,7 @@ def main(argv: Sequence[str]) -> None:
+ 	if argv:
+ 		raise RuntimeError('This script takes no arguments')
+ 
+-	future_to_name: Dict[futures.Future, str] = {}
++	future_to_name: Dict[futures.Future[None], str] = {}
+ 	executor = futures.ThreadPoolExecutor(max_workers=len(commands))
+ 	for name, argv in commands.items():
+ 		if name in necessary_deps and shutil.which(necessary_deps[name]) is None:
 
-OK.
+base-commit: 2c6a96dad5797e57b4cf04101d6c8d5c7a571603
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
-> One footgun I ran into was that mypy seemed like it wasn't even
-> touching functions if they didn't have an argument or the return type
-> annotated.
-> See 09641f7c7d8f ("kunit: tool: surface and address more typing issues")
-> Maybe --strict is better.
-
-It might not be, I have no idea.
-
-> Pytype takes a lot longer and caught issues that normal `mypy` didn't.
-> I haven't compared them w/ strict --strict. But given pytype is still
-> a lot slower, I assume (hope) it's doing more work.
-
-Hehe :-)
-
-> > think both tools will insist that you place the comment on the same lin=
-e
-> > as the error, and that doesn't really work since you can only have one
-> > comment on that line :-) However, it looks like pytype would also accep=
-t
-> > "# type: ignore" according to the docs.
->=20
-> That's true, but `type: ignore` disables all type checking on the line.
->=20
-> In this case, I think it's moot given the whole line is just
->   sys.stdin.reconfigure(errors=3D'backslashreplace')
-> so I'd basically turned off all type-checking already.
-
-Right, pytype looks a bit more controlled there.
-
-> > I think you got that annotation wrong, at least as far as mypy is
-> > concerned?
-> >=20
-> > >                 sys.stdin.reconfigure(errors=3D'backslashreplace')  #=
-pytype: disable=3Dattribute-error
-> > > -               kunit_output =3D sys.stdin
-> > > +               kunit_output =3D sys.stdin  # type[Iterable[str]]
-> >=20
-> > Doing
-> >=20
-> >  kunit_output: Iterable[str] =3D sys.stdin
-> >=20
-> > actually fixes it for me, and you don't even need the second one:
->=20
-> D'oh, I forgot the ": "  Ugh, magic comments :)
-> Doing "# type: Iterable[str]` on just the first one works for me.
-
-Right, not sure I like the magic comments better than the inline type in
-the code, but YMMV.
-
-> Note: we'd been avoiding the `var: T =3D 42` syntax to try and be more
-> compatible with old versions of python.
-
-Well, OK, I gave up on non-controlled versions of python long ago. In my
-case it's all running in a nix-shell environment so I control it very
-precisely :-)
-
-> Ack, yeah, the fact it dumps anything directly to stdout is annoying.
->=20
-> The argument is that
-> * it wants to print in real time
-> * it needs access to the tty to know if it should include colors or not
-
-Right.
-
-> This patch might be of interest to you:
-> https://kunit-review.git.corp.google.com/c/linux/+/5730/1
-> With that, you could pass in a kunit_printer.BufferPrinter to
-> parse_tests() and keep stdout pristine.
-
-Heh. Sounds like a useful patch but I can't see that link given the lack
-of corp.google.com login :P
-
-> I could split out the concurrency support from that patch and try to
-> get submitted.
-> There just wasn't motivation to do so since there was no use case for
-> suppressing output yet.
-> Given you're using it, that might be sufficient.
-
-I honestly don't care much now. Basically decided that redirecting
-stdout to /dev/null was sufficient, since anyway the real output I need
-happens to a file. I might've designed it to print the JSON on stdout
-instead if it wasn't getting all that output from kunit, but it really
-doesn't matter now.
-
-Anyway, thanks for the discussion! I've been playing with kunit only for
-like 48 hours now, so we'll see where I can go from here :-)
-
-johannes
