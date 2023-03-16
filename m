@@ -2,70 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EE36BC45E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 04:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0039C6BC4C7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 04:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCPDR5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Mar 2023 23:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S229552AbjCPDgh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Mar 2023 23:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjCPDRy (ORCPT
+        with ESMTP id S229482AbjCPDgg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:17:54 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02D797FEF;
-        Wed, 15 Mar 2023 20:17:52 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso4779237pjc.1;
-        Wed, 15 Mar 2023 20:17:52 -0700 (PDT)
+        Wed, 15 Mar 2023 23:36:36 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8115A6CC
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 20:36:34 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id s1so380822vsk.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 20:36:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678936672;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LYb17I8BCPb2EFCzQSFjEgo4PHKuxc2T5i8Z/xiebA4=;
-        b=E8U5/GZGqf3PByeid13InXXn4yaA6mYkYAaRr4fA6KmG/G4JAE1adzFwf2wj3BZvTY
-         /yXaHRsZ5jOtgGU1d6kX96WbE/YW29boqiX5kjWkwqD+nFVvsIJBEZa7b87TwspDREfL
-         cbVDg09EGwfBvveCQMmUARNe3neGAOlN0yjCCP3IFsdlOGycMynTi1Y0Fje7qDJ/NKCk
-         DFgkh/MmTxTfQopkqbPvE6Jr/h6416FFHcX/7jESbvqqRMGEQk/Gnlw24etaowuVqrBX
-         yFHUVeaHbZLczegrZWCRaNt4RNmNX9DVxHFXsCIjbezLkrhtVv849ftT9SVWGqsOCWzr
-         pYdw==
+        d=google.com; s=20210112; t=1678937794;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BXSH/yoWfsrLqNfkUF2NMuimy0RM4qCIW78S7ixlAKw=;
+        b=M+qNo4w0MGj1yeMsDOJugbpMy179xcKU0e8TnHwTEPRV/3/hSzi7fbeZ7DKu4oGjRu
+         CBhlsSNV6aaFd6I139JV/Y7INXHpFjtQgGCi/e/gr1xzfOyDbgLROFRg5kYEYFuTMy4j
+         EhnXxKsqqAEU05GxxbR9A0pfc6QGIBS16oJ1SUCusHjvrFx61mlodfu5mYsYUTw3uJHU
+         qjEI3m+eJtR2LLlMJGhN4l9Nql2qPLkoL1Uj+wG55/cHWzdMEJUP4ZdEIjwcoSilpRNC
+         7qhEMuU44Us4ptS2M6Dek/wczCUHaRGRlVqLhCB0iy4/QW0BXgo3W4ZM5JQMb5zGueUh
+         7QfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678936672;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LYb17I8BCPb2EFCzQSFjEgo4PHKuxc2T5i8Z/xiebA4=;
-        b=JBY2QIOyl40auFnQOH60IyXybBaAKjdX2P/qR/+O7dRKtrKFVwYPU2wR5txwErZAnP
-         V1uS5Wro9wgvJ4iA8X4PKR0ipLdx4zqZdL7UTaLyE4x0F+JkXd48wYPL/rlc3rpCXWrv
-         A+n7CeWEgtJLBbCwnLGscUl19qWF5kVCTTYXoy94jjJUXsrCHx58gMWpKAlW+vwQdOzl
-         PX8q6YLHDIRFZtkC3xf+oljOBAtqUu2BnOdNUyIlxMoFyRKWzF5JxvgCkwKOJI7cmlwN
-         9lDcb0HYrfehrGziQZNVZysmqlCDpNQLXwO9BgrVuNTbwkzDnVN56UsuJMMV5OWGiNSf
-         1pCQ==
-X-Gm-Message-State: AO0yUKUrgYhE0HiJqiVFhFXYr4kIrqWuCKx/HEkZfQTWp2cux3AdkeEr
-        EfiVamOaZFHaiU0xS7Khtdo=
-X-Google-Smtp-Source: AK7set880WVudiccd4PFvawdxw6XmcT4cOtGB44ikAvMX6mjuioU29HtYJF9WCF6J4D6e35ixwEY3g==
-X-Received: by 2002:a17:903:41d2:b0:1a0:57df:864f with SMTP id u18-20020a17090341d200b001a057df864fmr2268728ple.16.1678936672140;
-        Wed, 15 Mar 2023 20:17:52 -0700 (PDT)
-Received: from bobo.ozlabs.ibm.com (121-44-69-75.tpgi.com.au. [121.44.69.75])
-        by smtp.gmail.com with ESMTPSA id b7-20020a1709027e0700b0019a7bb18f98sm4331859plm.48.2023.03.15.20.17.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 20:17:51 -0700 (PDT)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/2] KVM: PPC: Add basic framework tests for kvm selftests
-Date:   Thu, 16 Mar 2023 13:17:32 +1000
-Message-Id: <20230316031732.3591455-3-npiggin@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230316031732.3591455-1-npiggin@gmail.com>
-References: <20230316031732.3591455-1-npiggin@gmail.com>
+        d=1e100.net; s=20210112; t=1678937794;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BXSH/yoWfsrLqNfkUF2NMuimy0RM4qCIW78S7ixlAKw=;
+        b=dx9iNc5GrkWB9yYkvKs+M540Wf4sDYUCbk1J6SAZoEsGHa33RoURSkX0lpRLQ+1TkD
+         3MhYvsnYnLpzbbv6CO3oGbgTiP7k/cBQAR+8u+7uSuKPqsv3ZNjuQVlmM23l+YJ7yNwq
+         bghjBHwymW2aCJc/xRwLlNTlK9yx6vazqfMbgASer7D/h0v0+q1se255QIMX52bf4gPN
+         UrOwXmh1uRcnZ7LfJezcj2bdVCCOxDuGyUndgJJN0QAqPV2TA8vmum1mIw51kZIZlm4y
+         /+7xK16llcjYMrecXGvxJW++9DPKX0iK3RcfTHThACgrvEOP61LRybyJTtyHYmOWQDql
+         Jjxg==
+X-Gm-Message-State: AO0yUKXRYJr60y+dKhAi4tVE/2NVaPiVqOZjrXj7GWJKdbXjj/+gtuFF
+        fWPMlbFiifysIMhQ6ne54zQnXD3e3/LKoIZOCKpC6w==
+X-Google-Smtp-Source: AK7set8TiXK3p8I3EjglHW1NF1uK55sBs3C2dvjrsHFypim38FSpKwuJ1zp43KXWOkKxFrc+ss7CikmPwYJzLmId1k0=
+X-Received: by 2002:a67:fd7a:0:b0:416:f1ea:1001 with SMTP id
+ h26-20020a67fd7a000000b00416f1ea1001mr27946120vsa.5.1678937793674; Wed, 15
+ Mar 2023 20:36:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230315233925.2416516-1-sboyd@kernel.org>
+In-Reply-To: <20230315233925.2416516-1-sboyd@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 16 Mar 2023 11:36:21 +0800
+Message-ID: <CABVgOSn9n+b-oD72yPiYXW8=ZnPt5xcgtAwWqgSah4hTh1mg=w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Use gfp in kunit_alloc_resource() kernel-doc
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000cfa62105f6fc2a63"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,395 +70,123 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some tests that exercise basic functions of the kvm selftests
-framework, guest creation, ucalls, hcalls, copying data between guest
-and host, interrupts and page faults.
+--000000000000cfa62105f6fc2a63
+Content-Type: text/plain; charset="UTF-8"
 
-These don't test KVM so much, but were useful when developing the
-selftests support for powerpc.
+On Thu, 16 Mar 2023 at 07:39, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Copy/pasting the code from the kernel-doc here doesn't compile because
+> kunit_alloc_resource() takes a gfp flags argument. Pass the gfp
+> argument from the caller to complete the example.
+>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
 
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- tools/testing/selftests/kvm/Makefile          |   2 +
- .../selftests/kvm/include/powerpc/hcall.h     |   4 +-
- .../testing/selftests/kvm/powerpc/null_test.c | 186 ++++++++++++++++++
- .../selftests/kvm/powerpc/rtas_hcall.c        | 146 ++++++++++++++
- 4 files changed, 337 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/kvm/powerpc/null_test.c
- create mode 100644 tools/testing/selftests/kvm/powerpc/rtas_hcall.c
+Nice catch!
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 081cee3ecc0c..1d9eb4f3284d 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -180,6 +180,8 @@ TEST_GEN_PROGS_riscv += kvm_page_table_test
- TEST_GEN_PROGS_riscv += set_memory_region_test
- TEST_GEN_PROGS_riscv += kvm_binary_stats_test
- 
-+TEST_GEN_PROGS_powerpc += powerpc/null_test
-+TEST_GEN_PROGS_powerpc += powerpc/rtas_hcall
- TEST_GEN_PROGS_powerpc += demand_paging_test
- TEST_GEN_PROGS_powerpc += dirty_log_test
- TEST_GEN_PROGS_powerpc += kvm_create_max_vcpus
-diff --git a/tools/testing/selftests/kvm/include/powerpc/hcall.h b/tools/testing/selftests/kvm/include/powerpc/hcall.h
-index bbad5904f37a..cbcaf180c427 100644
---- a/tools/testing/selftests/kvm/include/powerpc/hcall.h
-+++ b/tools/testing/selftests/kvm/include/powerpc/hcall.h
-@@ -11,7 +11,9 @@
- #define H_UCALL	0
- #define UCALL_R4_UCALL	0x5715 // regular ucall, r5 contains ucall pointer
- #define UCALL_R4_EXCPT	0x1b0f // other exception, r5 contains vector, r6,7 SRRs
--			       // R4==0 is a simple asm exit
-+#define UCALL_R4_SIMPLE	0x0000 // simple exit usable by asm with no ucall data
-+
-+#define H_RTAS		0xf000
- 
- int64_t hcall0(uint64_t token);
- int64_t hcall1(uint64_t token, uint64_t arg1);
-diff --git a/tools/testing/selftests/kvm/powerpc/null_test.c b/tools/testing/selftests/kvm/powerpc/null_test.c
-new file mode 100644
-index 000000000000..ee3cf20a5cf3
---- /dev/null
-+++ b/tools/testing/selftests/kvm/powerpc/null_test.c
-@@ -0,0 +1,186 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Tests for guest creation, run, ucall, interrupt, and vm dumping.
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "kselftest.h"
-+#include "processor.h"
-+
-+extern void guest_code_asm(void);
-+asm(".global guest_code_asm");
-+asm(".balign 4");
-+asm("guest_code_asm:");
-+asm("li 3,0"); // H_UCALL
-+asm("li 4,0"); // UCALL_R4_SIMPLE
-+asm("sc 1");
-+
-+static void guest_code_ucall(void)
-+{
-+	GUEST_DONE();
-+}
-+
-+static void guest_code_trap(void)
-+{
-+	asm volatile("trap");
-+}
-+
-+static void guest_code_dsi(void)
-+{
-+	*(volatile int *)0;
-+}
-+
-+static void test_asm(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	int ret;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code_asm);
-+
-+	ret = _vcpu_run(vcpu);
-+
-+	TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-+	TEST_ASSERT(get_ucall(vcpu, NULL) == UCALL_NONE,
-+		    "Invalid guest done status: exit_reason=%s\n",
-+		    exit_reason_str(vcpu->run->exit_reason));
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static void test_ucall(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	int ret;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code_ucall);
-+
-+	ret = _vcpu_run(vcpu);
-+
-+	TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-+	TEST_ASSERT(get_ucall(vcpu, NULL) == UCALL_DONE,
-+		    "Invalid guest done status: exit_reason=%s\n",
-+		    exit_reason_str(vcpu->run->exit_reason));
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static bool got_trap;
-+static bool trap_handler(struct kvm_vcpu *vcpu, unsigned trap)
-+{
-+	if (trap == 0x700) {
-+		got_trap = true;
-+		return true;
-+	}
-+	return false;
-+}
-+
-+static void test_trap(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	int ret;
-+
-+	interrupt_handler = trap_handler;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code_trap);
-+
-+	ret = _vcpu_run(vcpu);
-+
-+	TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-+	TEST_ASSERT(got_trap,
-+		    "Invalid guest done status: exit_reason=%s\n",
-+		    exit_reason_str(vcpu->run->exit_reason));
-+
-+	kvm_vm_free(vm);
-+
-+	interrupt_handler = NULL;
-+}
-+
-+static bool got_dsi;
-+static bool dsi_handler(struct kvm_vcpu *vcpu, unsigned trap)
-+{
-+	if (trap == 0x300) {
-+		got_dsi = true;
-+		return true;
-+	}
-+	return false;
-+}
-+
-+static void test_dsi(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	int ret;
-+
-+	interrupt_handler = dsi_handler;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code_dsi);
-+
-+	ret = _vcpu_run(vcpu);
-+
-+	TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-+	TEST_ASSERT(got_dsi,
-+		    "Invalid guest done status: exit_reason=%s\n",
-+		    exit_reason_str(vcpu->run->exit_reason));
-+
-+	vm_dump(stderr, vm, 2);
-+
-+	kvm_vm_free(vm);
-+
-+	interrupt_handler = NULL;
-+}
-+
-+static void test_dump(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	int ret;
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code_ucall);
-+
-+	ret = _vcpu_run(vcpu);
-+	TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-+
-+	printf("Testing vm_dump...\n");
-+	vm_dump(stderr, vm, 2);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+
-+struct testdef {
-+	const char *name;
-+	void (*test)(void);
-+} testlist[] = {
-+	{ "null asm test", test_asm},
-+	{ "null ucall test", test_ucall},
-+	{ "trap test", test_trap},
-+	{ "page fault test", test_dsi},
-+	{ "vm dump test", test_dump},
-+};
-+
-+int main(int argc, char *argv[])
-+{
-+	int idx;
-+
-+	ksft_print_header();
-+
-+	ksft_set_plan(ARRAY_SIZE(testlist));
-+
-+	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
-+		testlist[idx].test();
-+		ksft_test_result_pass("%s\n", testlist[idx].name);
-+	}
-+
-+	ksft_finished();	/* Print results and exit() accordingly */
-+}
-diff --git a/tools/testing/selftests/kvm/powerpc/rtas_hcall.c b/tools/testing/selftests/kvm/powerpc/rtas_hcall.c
-new file mode 100644
-index 000000000000..17a580d7fa55
---- /dev/null
-+++ b/tools/testing/selftests/kvm/powerpc/rtas_hcall.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Test the KVM H_RTAS hcall and copying buffers between guest and host.
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "kselftest.h"
-+#include "hcall.h"
-+
-+struct rtas_args {
-+	__be32 token;
-+	__be32 nargs;
-+	__be32 nret;
-+	__be32 args[16];
-+        __be32 *rets;     /* Pointer to return values in args[]. */
-+};
-+
-+static void guest_code(void)
-+{
-+	struct rtas_args r;
-+	int64_t rc;
-+
-+	r.token = cpu_to_be32(0xdeadbeef);
-+	r.nargs = cpu_to_be32(3);
-+	r.nret = cpu_to_be32(2);
-+	r.rets = &r.args[3];
-+	r.args[0] = cpu_to_be32(0x1000);
-+	r.args[1] = cpu_to_be32(0x1001);
-+	r.args[2] = cpu_to_be32(0x1002);
-+	rc = hcall1(H_RTAS, (uint64_t)&r);
-+	GUEST_ASSERT(rc == 0);
-+	GUEST_ASSERT_1(be32_to_cpu(r.rets[0]) == 0xabc, be32_to_cpu(r.rets[0]));
-+	GUEST_ASSERT_1(be32_to_cpu(r.rets[1]) == 0x123, be32_to_cpu(r.rets[1]));
-+
-+	GUEST_DONE();
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_regs regs;
-+	struct rtas_args *r;
-+	vm_vaddr_t rtas_vaddr;
-+	struct ucall uc;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	uint64_t tmp;
-+	int ret;
-+
-+	ksft_print_header();
-+
-+	ksft_set_plan(1);
-+
-+	/* Create VM */
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+
-+	printf("Running H_RTAS guest vcpu.\n");
-+
-+	ret = _vcpu_run(vcpu);
-+	TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-+	switch ((tmp = get_ucall(vcpu, &uc))) {
-+	case UCALL_NONE:
-+		break; // good
-+	case UCALL_DONE:
-+		TEST_FAIL("Unexpected final guest exit %lu\n", tmp);
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT_N(uc, "values: %lu (0x%lx)\n",
-+				      GUEST_ASSERT_ARG(uc, 0),
-+				      GUEST_ASSERT_ARG(uc, 0));
-+		break;
-+	default:
-+		TEST_FAIL("Unexpected guest exit %lu\n", tmp);
-+	}
-+
-+	TEST_ASSERT(vcpu->run->exit_reason == KVM_EXIT_PAPR_HCALL,
-+		    "Expected PAPR_HCALL exit, got %s\n",
-+		    exit_reason_str(vcpu->run->exit_reason));
-+	TEST_ASSERT(vcpu->run->papr_hcall.nr == H_RTAS,
-+		    "Expected H_RTAS exit, got %lld\n",
-+		    vcpu->run->papr_hcall.nr);
-+
-+	printf("Got H_RTAS exit.\n");
-+
-+	vcpu_regs_get(vcpu, &regs);
-+	rtas_vaddr = regs.gpr[4];
-+	printf("H_RTAS rtas_args at gEA=0x%lx\n", rtas_vaddr);
-+
-+	r = addr_gva2hva(vm, rtas_vaddr);
-+
-+	TEST_ASSERT(r->token == cpu_to_be32(0xdeadbeef),
-+		    "Expected RTAS token 0xdeadbeef, got 0x%x\n",
-+		    be32_to_cpu(r->token));
-+	TEST_ASSERT(r->nargs == cpu_to_be32(3),
-+		    "Expected RTAS nargs 3, got %u\n",
-+		    be32_to_cpu(r->nargs));
-+	TEST_ASSERT(r->nret == cpu_to_be32(2),
-+		    "Expected RTAS nret 2, got %u\n",
-+		    be32_to_cpu(r->nret));
-+	TEST_ASSERT(r->args[0] == cpu_to_be32(0x1000),
-+		    "Expected args[0] to be 0x1000, got 0x%x\n",
-+		    be32_to_cpu(r->args[0]));
-+	TEST_ASSERT(r->args[1] == cpu_to_be32(0x1001),
-+		    "Expected args[1] to be 0x1001, got 0x%x\n",
-+		    be32_to_cpu(r->args[1]));
-+	TEST_ASSERT(r->args[2] == cpu_to_be32(0x1002),
-+		    "Expected args[2] to be 0x1002, got 0x%x\n",
-+		    be32_to_cpu(r->args[2]));
-+
-+	printf("Guest rtas_args is correct, setting rets.\n");
-+
-+	r->args[3] = cpu_to_be32(0xabc);
-+	r->args[4] = cpu_to_be32(0x123);
-+
-+	regs.gpr[3] = 0;
-+	vcpu_regs_set(vcpu, &regs);
-+
-+	printf("Running H_RTAS guest vcpu again (hcall return H_SUCCESS).\n");
-+
-+	ret = _vcpu_run(vcpu);
-+	TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-+	switch ((tmp = get_ucall(vcpu, &uc))) {
-+	case UCALL_DONE:
-+		printf("Got final guest exit.\n");
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT_N(uc, "values: %lu (0x%lx)\n",
-+				      GUEST_ASSERT_ARG(uc, 0),
-+				      GUEST_ASSERT_ARG(uc, 0));
-+		break;
-+	default:
-+		TEST_FAIL("Unexpected guest exit %lu\n", tmp);
-+	}
-+
-+	kvm_vm_free(vm);
-+
-+	ksft_test_result_pass("%s\n", "null test");
-+	ksft_finished();	/* Print results and exit() accordingly */
-+}
--- 
-2.37.2
+Reviewed-by: David Gow <davidgow@google.com>
 
+Cheers,
+-- David
+
+>  include/kunit/resource.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> index cf6fb8f2ac1b..c0d88b318e90 100644
+> --- a/include/kunit/resource.h
+> +++ b/include/kunit/resource.h
+> @@ -72,7 +72,7 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+>   *             params.gfp = gfp;
+>   *
+>   *             return kunit_alloc_resource(test, kunit_kmalloc_init,
+> - *                     kunit_kmalloc_free, &params);
+> + *                     kunit_kmalloc_free, gfp, &params);
+>   *     }
+>   *
+>   * Resources can also be named, with lookup/removal done on a name
+>
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> --
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+>
+
+--000000000000cfa62105f6fc2a63
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA0
+7ksPCT/k+hAcs7HDKlxI80naFa8I9oH2kFouIXwnpzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMTYwMzM2MzNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEArJcnlncEbX2D9weeOVxj
+fL/NYvIqU/c+QlhAYWWIVCIhFO3zzLaFXQz1fQYX/4z6s5q3qq/jQnLxhZnvC+kX0OxrW/N+CN+z
+MuUD4gVRi+RgceLmLenb7/WERhSF8JPMhX/IYEkk9eMJhyXrPNYFnegUYRq6+MXBL48//MILz9Mc
+NYl2qeKfyyLEvTCsYeVagKxn2W2VZ1AXp9i/vbw5sk94UiPxmFHQ+2mH4DnWy0orR290KGG+3oAc
+8AhRys7cAF4KtMREMjwXp6/BhfW2cREwx8fple70hHabbE6qo1uVUnWJEHqERKuvT6/APk1TittS
+0VWLjbTy16jwS8nNRg==
+--000000000000cfa62105f6fc2a63--
