@@ -2,208 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0DB6BC589
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 06:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1426BC5BC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 06:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjCPFRb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Mar 2023 01:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S229701AbjCPFjP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Mar 2023 01:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCPFRb (ORCPT
+        with ESMTP id S229487AbjCPFjO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Mar 2023 01:17:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5AFA3B62;
-        Wed, 15 Mar 2023 22:17:28 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [39.37.168.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 259AF6603080;
-        Thu, 16 Mar 2023 05:17:15 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678943846;
-        bh=M2Z2/iT5OeTZwq4KV/ZUqlsT5FpvCp+6Ly3f9Y3ZLkE=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=KXnEm+eScqZ6ev+nTGspMoKauD7BVBd17dPh9L/zb3HSaE6jgNeULO2m7TuHW2l20
-         7LlbgiOgCsFuwpVaBBxTqMO3btyHel0uppBJFfYy3iooW/mBAVt2hw4Xp4/RDEbsSh
-         3IM3VJhPwdD33JvIApOSRqw6M/zLCY0z8k2xyZvsGIn8m/ntFZhSo+KlhpDiL9l2gD
-         BMbR8lQj6Nw9qlX1/LEYS3EZxPzn3gRjSZ8zEI33m2Sk5MzNM2rsxCWtXMMzVqJil7
-         Dtv4e4tWAvKVkQSu5r1Nzvwav1Ffu8+rJF4Us58cuXOfDJZVQ9JpO8BI0R6yxptRL7
-         E7dnbjHbF+AmA==
-Message-ID: <1947fb8d-a307-ac47-a66b-d2dcdce9e850@collabora.com>
-Date:   Thu, 16 Mar 2023 10:17:10 +0500
+        Thu, 16 Mar 2023 01:39:14 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2089.outbound.protection.outlook.com [40.107.101.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6F15941B;
+        Wed, 15 Mar 2023 22:39:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KUw7WsFn4Fvmmk2PJUvL1A8nNjQz8G27JUl4dYBqC9DC88SwUs0pj4ImMceH5SXHc2q9Qe2KAIEkLHwtp4/kY8drJfhzqnYC5TB6YCdceG+tsLvjfyI45llugetq7fWz+lABZDFsBunTjtcagj+ZFovyuh9bEeLl8aktrAYPkLaiwlQ3TCueZG10tv72jEvl+SgvU/JHnBaN8pMBf5jvprOIakR7QpJGdoYAqhQvMdHue0+3D+pv9Lq3RYpG6M85126bZaIYaNzazjrtcB5LmrqHRmKGBPCn9WulIwuBUAUB/aJDnSvQ5sJgCjkPtpfkBOvXC4oPb1YeIYxzA1JZEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HPVyLdym2nbtLnalNUEeWN7wSTrF802cUPbot7Or9XI=;
+ b=H5QCXJ2KX4aLQDIzkejpv3aWcaZxH6glQHM1GAHtmVbmcwZTGHOO2gJQzItN40h7pInGVUBpkvOqvLsOPltEeuHaeT64USjDG4PQjebNW35vaaNXn7GA7OLgijeR+eoGYpwPTaMbVFHr8bJIxoVY7DrkSeTupBGz2+xSaZqFYvO8vFN12V/lf7Xv6YFMnDhZXcnACg0/E5quNg5PibyxEtXKJKFruu+oTtJfBCiKZOoHblDwbGZVl4Fjspq5cJfDVKiDnrzDj4s4fu+F/h4EjFJp8l13r+MXCCfArTLSsWyO4Aoa42A4TtzLmXaAVP90xGJDNgcMQQFsZypvEH+CdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HPVyLdym2nbtLnalNUEeWN7wSTrF802cUPbot7Or9XI=;
+ b=EgoREAZcp99nQ8zahiGv3IUYpxTB90OD9Sblnve/e0SZtyO2tRRNAjVIHxv1KWDWnQBFQO1MJfPmieXfKIuh3mgc9Q3sE9kReVTJD4wPeDvSvX+uJ2i73ECkb2RvyVMiZZXVL5S1/xzthFgP9VtepKBeQPc8ingjeHi08ZZgsLLrWzCxgaMbbuIMM1ufIPepTkNvvTNBtCtjVvWR3ncMtXr4ojivSuhzOQTKlhKFFrToorLiRt9du1YvOQ0I96yCPhuhyd2YrJdcz3Jw43/RbvkV8qwZcYf9fGKwWjMCczJ8dTuPmmkdKlk1lLeSygxxRS+SQYZIhNumf3t6onQfGQ==
+Received: from BN9PR03CA0854.namprd03.prod.outlook.com (2603:10b6:408:13d::19)
+ by MN2PR12MB4320.namprd12.prod.outlook.com (2603:10b6:208:15f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
+ 2023 05:39:06 +0000
+Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13d:cafe::6d) by BN9PR03CA0854.outlook.office365.com
+ (2603:10b6:408:13d::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29 via Frontend
+ Transport; Thu, 16 Mar 2023 05:39:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6199.18 via Frontend Transport; Thu, 16 Mar 2023 05:39:06 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 15 Mar 2023
+ 22:38:56 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Wed, 15 Mar 2023 22:38:56 -0700
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.181)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
+ Transport; Wed, 15 Mar 2023 22:38:55 -0700
+Date:   Wed, 15 Mar 2023 22:38:54 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     <kevin.tian@intel.com>, <joro@8bytes.org>, <will@kernel.org>,
+        <robin.murphy@arm.com>, <alex.williamson@redhat.com>,
+        <shuah@kernel.org>, <yi.l.liu@intel.com>,
+        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <mjrosato@linux.ibm.com>, <farman@linux.ibm.com>
+Subject: Re: [PATCH v4 2/5] iommufd/selftest: Add
+ IOMMU_TEST_OP_ACCESS_SET_IOAS coverage
+Message-ID: <ZBKrboUWBsmmbP6Q@Asurada-Nvidia>
+References: <cover.1678284812.git.nicolinc@nvidia.com>
+ <08a875b83daf7047c3cc67ed0da23045b6dc6fb9.1678284812.git.nicolinc@nvidia.com>
+ <ZAuP5ewmDwql8Pn5@nvidia.com>
+ <ZAvGGc5Jt0uSkN8M@Asurada-Nvidia>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-5-usama.anjum@collabora.com> <ZBHqjBjj6nn1xeTM@x1n>
- <3d2d1ba4-bfab-6b3d-f0d6-ae0920ebdcb0@collabora.com> <ZBIiSwmbOsuaImIf@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZBIiSwmbOsuaImIf@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZAvGGc5Jt0uSkN8M@Asurada-Nvidia>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT016:EE_|MN2PR12MB4320:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a03d597-316a-49c8-a930-08db25e0c21b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vwiR7o3+O8ixMwkBkaksc+wB0JIwWi8eH8UWnh8v2QmdCdj7LstSl6jPvluvTb9Qz7foHwKAq1fL5gcmwh+YZeNRjwS1Wkd5KqjYR3/KuSiWOZiEXy8X1qNkaOK6tp1//+y9Du2w+8jCW1dEOU9TpyDp+8SkNA54jICJGC3AI8l6EfCeu4kCtnmLBY/Wzq0WmNi7oNprQPyNqOC57Sd6U4b/DZDR3b4CM5V1IEAr7S11ael7iv7WHPuqrBDyID5BSyYgY/+f49EIFLx0kyI6x0Cn2vcgz/DekQVGFRPSTfTwcSdWgMmtlSdn1LDWKcSJjC0MUTyMTrevf/6T78kWmqiLdf30Q3lf7MGzZxSrnjHXMTOIrlqSuHneRZ/u9OFOIu6am2HK9oggTlCe3wzBCIoptiNVls3qPm+/R60A8tMr+C9FNKiri47kc2QsAKVLlL30E/0Dky8TSq7kpcHb+t3W++OUqjzwcdUFdgaTJlfS4uhb5PqRQb462alhyqmoB90gRdB09xMIqpDOkLiz8drDzp4kVNdyZfdS36UGx7eYwOIkEq9kQNqwTG7lHQ4WQ9JW1oQzn5AtKeDerx11Y+gW28c9zV7uJ1hJ4Am0LJDt4xPjavIp0NfJ6y+yU7pww/bxN/OLnhN2gnOBeOxf51YvbYwIT8rddlGLWPtK8wC0zMelMx8oonVZuagIwwC4xTCRS/bH1KUDyM9/xJUUE18lWbGtf5J7Av7F6J9/6OS0rd5wmLqReeIFXWA8ELYl
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199018)(40470700004)(46966006)(36840700001)(8936002)(186003)(6862004)(336012)(7416002)(5660300002)(316002)(26005)(9686003)(47076005)(426003)(40460700003)(41300700001)(83380400001)(8676002)(4326008)(33716001)(70206006)(70586007)(36860700001)(356005)(40480700001)(86362001)(7636003)(82740400003)(55016003)(82310400005)(478600001)(6636002)(54906003)(2906002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 05:39:06.0364
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a03d597-316a-49c8-a930-08db25e0c21b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4320
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/16/23 12:53 AM, Peter Xu wrote:
-> On Wed, Mar 15, 2023 at 09:54:40PM +0500, Muhammad Usama Anjum wrote:
->> On 3/15/23 8:55 PM, Peter Xu wrote:
->>> On Thu, Mar 09, 2023 at 06:57:15PM +0500, Muhammad Usama Anjum wrote:
->>>> +	for (addr = start; !ret && addr < end; pte++, addr += PAGE_SIZE) {
->>>> +		pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
->>>> +
->>>> +		is_writ = !is_pte_uffd_wp(*pte);
->>>> +		is_file = vma->vm_file;
->>>> +		is_pres = pte_present(*pte);
->>>> +		is_swap = is_swap_pte(*pte);
->>>> +
->>>> +		pte_unmap_unlock(pte, ptl);
->>>> +
->>>> +		ret = pagemap_scan_output(is_writ, is_file, is_pres, is_swap,
->>>> +					  p, addr, 1);
->>>> +		if (ret)
->>>> +			break;
->>>> +
->>>> +		if (PM_SCAN_OP_IS_WP(p) && is_writ &&
->>>> +		    uffd_wp_range(walk->mm, vma, addr, PAGE_SIZE, true) < 0)
->>>> +			ret = -EINVAL;
->>>> +	}
->>>
->>> This is not real atomic..
->>>
->>> Taking the spinlock for eacy pte is not only overkill but wrong in
->>> atomicity because the pte can change right after spinlock unlocked.
->> Let me explain. It seems like wrong, but it isn't. In my rigorous testing,
->> it didn't show any side-effect.  Here we are finding out if a page is
->> written. If page is written, only then we clear it. Lets look at the
->> different possibilities here:
->> - If a page isn't written, we'll not clear it.
->> - If a page is written and there isn't any race, we'll clear written-to
->> flag by write protecting it.
->> - If a page is written but before clearing it, data is written again to the
->> page. The page would remain written and we'll clear it.
->> - If a page is written but before clearing it, it gets write protected,
->> we'll still write protected it. There is double right protection here, but
->> no side-effect.
->>
->> Lets turn this into a truth table for easier understanding. Here first
->> coulmn and thrid column represents this above code. 2nd column represents
->> any other thread interacting with the page.
->>
->> If page is written/dirty	some other task interacts	wp_page
->> no				does nothing			no
->> no				writes to page			no
->> no				wp the page			no
->> yes				does nothing			yes
->> yes				write to page			yes
->> yes				wp the page			yes
->>
->> As you can see there isn't any side-effect happening. We aren't over doing
->> the wp or under-doing the write-protect.
->>
->> Even if we were doing something wrong here and I bring the lock over all of
->> this, the pages get become written or wp just after unlocking. It is
->> expected. This current implementation doesn't seem to be breaking this.
->>
->> Is my understanding wrong somewhere here? Can you point out?
+On Fri, Mar 10, 2023 at 04:06:52PM -0800, Nicolin Chen wrote:
+> On Fri, Mar 10, 2023 at 04:15:33PM -0400, Jason Gunthorpe wrote:
+> > On Wed, Mar 08, 2023 at 06:25:59AM -0800, Nicolin Chen wrote:
+> > > Add a new IOMMU_TEST_OP_ACCESS_SET_IOAS to allow setting access->ioas
+> > > individually, corresponding to the iommufd_access_set_ioas() helper.
+> > > 
+> > > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> > > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> > > ---
+> > >  drivers/iommu/iommufd/iommufd_test.h          |  4 +++
+> > >  drivers/iommu/iommufd/selftest.c              | 26 +++++++++++++++----
+> > >  tools/testing/selftests/iommu/iommufd_utils.h | 22 ++++++++++++++--
+> > >  3 files changed, 45 insertions(+), 7 deletions(-)
+> > 
+> > I'd prefer we keep it so that the IOAS can be setup with an argument,
+> > this will greatly help syzkaller
+> > 
+> > Lets have it so a 0 ioas will avoid the setup so the second call can
+> > happen
 > 
-> Yes you're right.  With is_writ check it looks all fine.
-> 
->>
->> Previous to this current locking design were either buggy or slower when
->> multiple threads were working on same pages. Current implementation removes
->> the limitations:
->> - The memcpy inside pagemap_scan_output is happening with pte unlocked.
-> 
-> Why this has anything to worry?  Isn't that memcpy only applies to a
-> page_region struct?
-Yeah, correct. I'm just saying that memcpy without pte lock is better than
-memcpy with pte locked. :)
+> I assume that you mean the iommufd_access_set_ioas() call and
+> the "unsigned int ioas_id" input of iommufd_test_create_access?
 
-> 
->> - We are only wp a page if we have noted this page to be dirty
->> - No mm write lock is required. Only read lock works fine just like
->> userfaultfd_writeprotect() takes only read lock.
-> 
-> I didn't even notice you used to use write lock.  Yes I think read lock is
-> suffice here.
-> 
->>
->> There is only one con here that we are locking and unlocking the pte lock
->> again and again.
->>
->> Please have a look at my explanation and let me know what do you think.
-> 
-> I think this is fine as long as the semantics is correct, which I believe
-> is the case.  The spinlock can be optimized, but it can be done on top if
-> needs more involved changes.
-> 
->>
->>>
->>> Unfortunately you also cannot reuse uffd_wp_range() because that's not
->>> atomic either, my fault here.  Probably I was thinking mostly from
->>> soft-dirty pov on batching the collect+reset.
->>>
->>> You need to take the spin lock, collect whatever bits, set/clear whatever
->>> bits, only until then release the spin lock.
->>>
->>> "Not atomic" means you can have some page got dirtied but you could miss
->>> it.  Depending on how strict you want, I think it'll break apps like CRIU
->>> if strict atomicity needed for migrating a process.  If we want to have a
->>> new interface anyway, IMHO we'd better do that in the strict way.
->> In my rigorous multi-threaded testing where a lots of threads are working
->> on same set of pages, we aren't losing even a single update. I can share
->> the test if you want.
-> 
-> Good to have tests covering that.  I'd say you can add the test into
-> selftests along with the series when you repost if it's convenient.  It can
-> be part of an existing test or it can be a new one under mm/.
-Sure, I'll add it to the selftests.
+I changed it to keep the id in iommufd_test_create_access().
+Instead, I renamed the IOMMU_TEST_OP_ACCESS_SET_IOAS ioctl to
+IOMMU_TEST_OP_ACCESS_REPLACE_IOAS. So an access can be created
+by the original ioctl, and then be replaced using the new one.
 
-Thank you for reviewing and asking the questions.
-
-> 
-> Thanks,
-> 
-
--- 
-BR,
-Muhammad Usama Anjum
+Thanks
+Nic
