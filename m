@@ -2,160 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13956BC5EB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 07:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EBB6BC66F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 08:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjCPGC4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Mar 2023 02:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S229829AbjCPHCe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Mar 2023 03:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCPGCz (ORCPT
+        with ESMTP id S229542AbjCPHCd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Mar 2023 02:02:55 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D9E4A1F6
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 23:02:54 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id ix20so640128plb.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 23:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678946574;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q4N/acoeONMeU2uIZEvkbnhE87qN//0NSzB356Hql8M=;
-        b=k0fvzVV61mIjU3/tXTWjnwBpKsG8c5sE6bCeStyJkGXk3TR9adIm4C2uHbGoiKlFnV
-         /6k444DudbAgRp7Ii59wdt5Ir2pcwATIlu8uxOrTPyzfyeh75RyerT8RI0au99NCULwY
-         DCkxUMpMr4atvHjKg8BEqZRBtP9d1iqFs1C21XKX7QeokEdw0LM8Wr9Dx4/j94jmkrc7
-         mlLiK5A817P9HT0EAqrIQwMM2oDeXDMh9fL8trupUEM2OwO+ELtkn6ff47bQ9oVgg4M9
-         K1TVWCI1IbDg1dGAIfFq4H4NzPjvTJfYPHOfWn9wn9zjG4YJa5thpnz5+rt33sqBPrll
-         8cJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678946574;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q4N/acoeONMeU2uIZEvkbnhE87qN//0NSzB356Hql8M=;
-        b=CX7B+EVainjk4H/m2EL6UT1OWnBrXMyCm5hsD+Gbaxx/RW0hH8hzHQ/1J+0eSC6VMG
-         4WIL5Cw6yVVDAF2QxVPb6qmXg7olvJaRKTX/laVAD2hk3DeRYeV7qGpHoeuRYeXTFknP
-         g/+HJD9JRos4a0nBFG54j+QYhuEyipK1NyGW5qevb87sV3HXi4FdCJ5wp08yy9nsBeh1
-         lQt11vlqJ02nf5Es5zyQzQEGI6GXvNLHy4MrRaZa7oV0zIpzOk8uD28n8gucHVmKi4q2
-         rQAqN2+zWlJEtdjiqmNZ4vHc/A9DlmwtD4xirTa1tiQ82Wd2IH6APDDgrdgb974W+L33
-         0+Pg==
-X-Gm-Message-State: AO0yUKUL2Z3JcdgsLS8kI5Yhb6Kq38K1/VpAUWO7Znc/1StDfOuINTEa
-        5HXA+DB9Ulxj7MdPFDLXKElWW2LVST49FEeavmpnYA==
-X-Google-Smtp-Source: AK7set/vNo2lUgV6dmOXYw2tW4JBAGz0RLufXR8NjXlMkSPl0J1RRn84ek4/Qk1YT71fX4BFOXd2lMKZDkRlNDspBQ0=
-X-Received: by 2002:a17:902:f544:b0:199:7d2:d9da with SMTP id
- h4-20020a170902f54400b0019907d2d9damr906568plf.11.1678946573698; Wed, 15 Mar
- 2023 23:02:53 -0700 (PDT)
+        Thu, 16 Mar 2023 03:02:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB5B30293;
+        Thu, 16 Mar 2023 00:02:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE00D61F2F;
+        Thu, 16 Mar 2023 07:02:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B9C8C433D2;
+        Thu, 16 Mar 2023 07:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678950151;
+        bh=oyu2Kf+xnN2T5vtUW9pLhUslgU39oPBN51+0UsfURbU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TNPhUyiQBTLe3keDiMxW0p2heZwA4vnfSWQXtHqxNbeyoRSzAFnJzhOYHUNbm1Evw
+         7VdQxZlbitsH9VSYqA+ANSm4J4B6VAUQphiQdFheBNAufgnq5golNODuG4Gw37Ca5+
+         kxGnpfvElDO3y/WwxvrIKmimKAFpqvzzuYkqaWLWBLewa/GeNP2ld9UbjFRXbQz2uv
+         qI7t0D6iuIs2k3TJdXDF9/wAS7a6khdqb/6z+l1NIj80z2Hdjh9QCxZI9oEiMeTFwO
+         Nt/jaVWtBwdkoX8zOUG+d8YsyEsOy81/D1OYEoBiZ7jAdHj3DyRLZDna4H3LFXBXmH
+         svsGf3H6sTuEQ==
+Date:   Thu, 16 Mar 2023 09:02:11 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v11 2/7] userfaultfd: Define dummy uffd_wp_range()
+Message-ID: <ZBK+86eMMazwfhdx@kernel.org>
+References: <20230309135718.1490461-1-usama.anjum@collabora.com>
+ <20230309135718.1490461-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
-References: <20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid>
-In-Reply-To: <20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 15 Mar 2023 23:02:42 -0700
-Message-ID: <CAGS_qxrJ53EyQaf5WqfSBYhOF0+LvWgvKL4gExu9vCPxRb7ipw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: fix type annotation for IO
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Johannes Berg <johannes.berg@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309135718.1490461-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 10:57=E2=80=AFPM Johannes Berg
-<johannes@sipsolutions.net> wrote:
->
-> From: Johannes Berg <johannes.berg@intel.com>
->
-> This should be IO[str], since we use it for printing strings.
+Hi,
 
-This is a good catch, thanks.
-But we also have a few more bare generic types that warrant attention.
+On Thu, Mar 09, 2023 at 06:57:13PM +0500, Muhammad Usama Anjum wrote:
+> Define uffd_wp_range() for the cases when CONFIG_USERFAULTFD isn't set.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  include/linux/userfaultfd_k.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index b680c0ec8b85..fd1a1ecdb5f6 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -182,6 +182,14 @@ extern int userfaultfd_wp_async(struct vm_area_struct *vma);
+>  
+>  #else /* CONFIG_USERFAULTFD */
+>  
+> +extern inline long uffd_wp_range(struct mm_struct *dst_mm,
 
-I think the diff below [1] should fix the others as well.
-I can send it out as a formal patch and add your name for the Reported-by?
+static inline
 
+> +				 struct vm_area_struct *vma,
+> +				 unsigned long start, unsigned long len,
+> +				 bool enable_wp)
+> +{
+> +	return 0;
+> +}
+> +
 
-[1]
-diff --git a/tools/testing/kunit/kunit_kernel.py
-b/tools/testing/kunit/kunit_kernel.py
-index 53e90c335834..e6fc8fcb071a 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -92,7 +92,7 @@ class LinuxSourceTreeOperations:
-                if stderr:  # likely only due to build warnings
-                        print(stderr.decode())
+I didn't see uffd_wp_range() defined in the previous patch.
+Could be a rebase issue?
 
--       def start(self, params: List[str], build_dir: str) -> subprocess.Po=
-pen:
-+       def start(self, params: List[str], build_dir: str) ->
-subprocess.Popen[str]:
-                raise RuntimeError('not implemented!')
+In any case, the stub should be defined in the same patch as the actual
+function in order not to break bisectability.
 
+>  /* mm helpers */
+>  static inline vm_fault_t handle_userfault(struct vm_fault *vmf,
+>  				unsigned long reason)
+> -- 
+> 2.39.2
+> 
 
-@@ -112,7 +112,7 @@ class
-LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
-                kconfig.merge_in_entries(base_kunitconfig)
-                return kconfig
-
--       def start(self, params: List[str], build_dir: str) -> subprocess.Po=
-pen:
-+       def start(self, params: List[str], build_dir: str) ->
-subprocess.Popen[str]:
-                kernel_path =3D os.path.join(build_dir, self._kernel_path)
-                qemu_command =3D ['qemu-system-' + self._qemu_arch,
-                                '-nodefaults',
-@@ -141,7 +141,7 @@ class
-LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
-                kconfig.merge_in_entries(base_kunitconfig)
-                return kconfig
-
--       def start(self, params: List[str], build_dir: str) -> subprocess.Po=
-pen:
-+       def start(self, params: List[str], build_dir: str) ->
-subprocess.Popen[str]:
-                """Runs the Linux UML binary. Must be named 'linux'."""
-                linux_bin =3D os.path.join(build_dir, 'linux')
-                params.extend(['mem=3D1G', 'console=3Dtty', 'kunit_shutdown=
-=3Dhalt'])
-diff --git a/tools/testing/kunit/kunit_printer.py
-b/tools/testing/kunit/kunit_printer.py
-index 5f1cc55ecdf5..015adf87dc2c 100644
---- a/tools/testing/kunit/kunit_printer.py
-+++ b/tools/testing/kunit/kunit_printer.py
-@@ -15,7 +15,7 @@ _RESET =3D '\033[0;0m'
- class Printer:
-        """Wraps a file object, providing utilities for coloring output, et=
-c."""
-
--       def __init__(self, output: typing.IO):
-+       def __init__(self, output: typing.IO[str]):
-                self._output =3D output
-                self._use_color =3D output.isatty()
-
-diff --git a/tools/testing/kunit/run_checks.py
-b/tools/testing/kunit/run_checks.py
-index 066e6f938f6d..61cece1684df 100755
---- a/tools/testing/kunit/run_checks.py
-+++ b/tools/testing/kunit/run_checks.py
-@@ -37,7 +37,7 @@ def main(argv: Sequence[str]) -> None:
-        if argv:
-                raise RuntimeError('This script takes no arguments')
-
--       future_to_name: Dict[futures.Future, str] =3D {}
-+       future_to_name: Dict[futures.Future[None], str] =3D {}
-        executor =3D futures.ThreadPoolExecutor(max_workers=3Dlen(commands)=
-)
-        for name, argv in commands.items():
-                if name in necessary_deps and
-shutil.which(necessary_deps[name]) is None:
+-- 
+Sincerely yours,
+Mike.
