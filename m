@@ -2,105 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433BD6BCCA4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 11:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA186BCE44
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 12:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjCPKXZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Mar 2023 06:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        id S229769AbjCPLeN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Mar 2023 07:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjCPKXC (ORCPT
+        with ESMTP id S230058AbjCPLd4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:23:02 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F755C4884;
-        Thu, 16 Mar 2023 03:22:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678962134; x=1710498134;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=AXs+v9unQsT/CL6RnBbNTPiJoA+wNOgUNKpFs1nzhco=;
-  b=APqbcU3wMJJ/acYChCPwffM542lOsZCORkpUvWphhzbp7ub1nj4t0gzi
-   pc/OPxtyxXBKDf87E4qSEb79mxJ7wcj6aadqZJZQCXZcJFIEImoWWxcs0
-   jSrPZl72MkCp7VeeVc2ckwzRgmsqwni77c2Z7k0N5Q23q4D9a6webyQcY
-   71/HZQbhveZQoFYP3c9pUvu4cYtVAbgypBE4RcIJS1+2qjHegYwA4cXmd
-   ZGX0AMumBNcWbyrYB2xtogJMnunQECdTW7hFNzJExX0lCm51VTht2weis
-   +pXLC4vR3IwTmZ6+Cr+TEqqN6MO8ZIkBLsga4TPzj3luQ+xLmlH7rZjOh
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="424220849"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="424220849"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:21:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="679848802"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="679848802"
-Received: from trybicki-mobl1.ger.corp.intel.com ([10.252.63.119])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:21:37 -0700
-Date:   Thu, 16 Mar 2023 12:21:35 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-cc:     linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v2 9/9] selftests/resctrl: Correct get_llc_perf() param
- in function comment
-In-Reply-To: <50d0e974-478f-ea60-9b7b-50982697ef96@intel.com>
-Message-ID: <4830705e-212f-6dd1-e8e9-7a35cc886d5@linux.intel.com>
-References: <20230215130605.31583-1-ilpo.jarvinen@linux.intel.com> <20230215130605.31583-10-ilpo.jarvinen@linux.intel.com> <50d0e974-478f-ea60-9b7b-50982697ef96@intel.com>
+        Thu, 16 Mar 2023 07:33:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E55184;
+        Thu, 16 Mar 2023 04:33:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4261BB820FA;
+        Thu, 16 Mar 2023 11:33:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC0F0C433D2;
+        Thu, 16 Mar 2023 11:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678966431;
+        bh=vDocdycxCF3x/Zn1u1sFhrHTw1xj9HPiv64qQnogRfI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Va//pdWzxmhiRpESjcfRBT4poZCpE+2tUIpYFsg9B2uN5d45SqlrhmBmKo0GZswmr
+         t/9z2Oq0/dDgKHf2a+s9KlVJ3Zox8u8SO6IYCqkgla3EAmqFq1HrlktdbtcGZNf2ko
+         lOLIIPUVQwc5RNuSiHaDcWZKChhAPW1MVZ9eSvIj8ioKHngMSj7spdSkVpPVhfaruR
+         EyBbGvSqu9xW8iOEjwm8xcn+9QWFoR2I5IA1YBmrwmE7oGclZQR7xvIeLOCi+liIJp
+         HRCVatfvJhlURLSV/68Pqebpl+fI9LTE2EVeWi1Z/zbXMW9Z2ArMYTtZuOji6GS+N5
+         eoG9QuIIwlLSg==
+Date:   Thu, 16 Mar 2023 11:33:45 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     kernelci@groups.io, rmoar@google.com,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        "davidgow@google.com" <davidgow@google.com>,
+        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "brendanhiggins@google.com" <brendanhiggins@google.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "guillaume.tucker@collabora.com" <guillaume.tucker@collabora.com>,
+        "dlatypov@google.com" <dlatypov@google.com>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add skip test result
+Message-ID: <ad7e6e40-6542-4439-8199-d46a6fc91364@sirena.org.uk>
+References: <20230310222002.3633162-1-rmoar@google.com>
+ <BYAPR13MB2503C590A2AE6FEF6BCAC529FDBB9@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <CA+GJov5O6hGdjYMXjRd34MEZuyBuukyJCOsS=HeO30h43eLQbQ@mail.gmail.com>
+ <4568b302-2a5a-4499-b2f7-12f89c031495@sirena.org.uk>
+ <155efcdb-2be6-16c4-42bc-37930639060a@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-709021613-1678956358=:2328"
-Content-ID: <20644a1f-8a3a-3710-d252-7214cb778879@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UVwe1GSxcWtU1Vyf"
+Content-Disposition: inline
+In-Reply-To: <155efcdb-2be6-16c4-42bc-37930639060a@gmail.com>
+X-Cookie: ... I have read the INSTRUCTIONS ...
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-709021613-1678956358=:2328
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <da49d149-2086-13e1-7fdb-89f8a95812c9@linux.intel.com>
+--UVwe1GSxcWtU1Vyf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 15 Mar 2023, Reinette Chatre wrote:
+On Wed, Mar 15, 2023 at 04:45:29PM -0500, Frank Rowand wrote:
 
-> Hi Ilpo,
-> 
-> On 2/15/2023 5:06 AM, Ilpo Järvinen wrote:
-> > get_llc_perf() function comment refers to cpu_no parameter that does
-> > not exist.
-> > 
-> > Correct get_llc_perf() the comment to document llc_perf_miss instead.
-> 
-> "Correct the get_llc_perf() comment"?
+> Yes, there is no need to do a single specification change that results
+> in incompatibility.  But given the previous discussions there seem to
+> be plenty of other desired changes that will result in incompatibility.
 
-Yes. No matter how many times I read my own changelogs through, my mind 
-goes to auto-correction mode and I often fail to spot obvious errors such 
-as this.
+Do you have a pointer to that previous discussion?
 
-Thanks for reviewing.
+--UVwe1GSxcWtU1Vyf
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
- i.
+-----BEGIN PGP SIGNATURE-----
 
-> This is so minor and I do not think a reason to resubmit whole series.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQS/pgACgkQJNaLcl1U
+h9DAGQf9H5cCQVE7wWovMynfMODIpOC7+Z6SXi1+MsZtWfm+bRqBeAyvOqp80/tj
+9K+0b5XET1aaQhEtvOZN4RdDT044i/4n/AaDc+nNK/M7R8pukbbPInu65zfKv1rc
+TLbFvO7RyoyiBVLl/DckezLT5MfNA5rEfgDZLSh7VYAjrk797YQi2jsG2wavrt6H
+hik9XI91StSnc0kzntjL3b22bkhwTYT5X87pHIgP9XzMj4jzyPXN6b8kQ+nWLd9g
+jC+kx2/zOVMTX9rDY+YtRjepLGoSeXhoUxwXUdVW0WEwOAloD99V5ohd13fuL5lu
+FEwgs+MvZ+ijQME9jtxY+4oo5kiFqA==
+=Pym2
+-----END PGP SIGNATURE-----
 
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> 
-> Thank you
-> 
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> 
-> Reinette
-> 
---8323329-709021613-1678956358=:2328--
+--UVwe1GSxcWtU1Vyf--
