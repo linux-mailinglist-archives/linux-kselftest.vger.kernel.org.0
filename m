@@ -2,143 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1426BC5BC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 06:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C13956BC5EB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 07:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjCPFjP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Mar 2023 01:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        id S229616AbjCPGC4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Mar 2023 02:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCPFjO (ORCPT
+        with ESMTP id S229525AbjCPGCz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Mar 2023 01:39:14 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2089.outbound.protection.outlook.com [40.107.101.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6F15941B;
-        Wed, 15 Mar 2023 22:39:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KUw7WsFn4Fvmmk2PJUvL1A8nNjQz8G27JUl4dYBqC9DC88SwUs0pj4ImMceH5SXHc2q9Qe2KAIEkLHwtp4/kY8drJfhzqnYC5TB6YCdceG+tsLvjfyI45llugetq7fWz+lABZDFsBunTjtcagj+ZFovyuh9bEeLl8aktrAYPkLaiwlQ3TCueZG10tv72jEvl+SgvU/JHnBaN8pMBf5jvprOIakR7QpJGdoYAqhQvMdHue0+3D+pv9Lq3RYpG6M85126bZaIYaNzazjrtcB5LmrqHRmKGBPCn9WulIwuBUAUB/aJDnSvQ5sJgCjkPtpfkBOvXC4oPb1YeIYxzA1JZEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HPVyLdym2nbtLnalNUEeWN7wSTrF802cUPbot7Or9XI=;
- b=H5QCXJ2KX4aLQDIzkejpv3aWcaZxH6glQHM1GAHtmVbmcwZTGHOO2gJQzItN40h7pInGVUBpkvOqvLsOPltEeuHaeT64USjDG4PQjebNW35vaaNXn7GA7OLgijeR+eoGYpwPTaMbVFHr8bJIxoVY7DrkSeTupBGz2+xSaZqFYvO8vFN12V/lf7Xv6YFMnDhZXcnACg0/E5quNg5PibyxEtXKJKFruu+oTtJfBCiKZOoHblDwbGZVl4Fjspq5cJfDVKiDnrzDj4s4fu+F/h4EjFJp8l13r+MXCCfArTLSsWyO4Aoa42A4TtzLmXaAVP90xGJDNgcMQQFsZypvEH+CdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HPVyLdym2nbtLnalNUEeWN7wSTrF802cUPbot7Or9XI=;
- b=EgoREAZcp99nQ8zahiGv3IUYpxTB90OD9Sblnve/e0SZtyO2tRRNAjVIHxv1KWDWnQBFQO1MJfPmieXfKIuh3mgc9Q3sE9kReVTJD4wPeDvSvX+uJ2i73ECkb2RvyVMiZZXVL5S1/xzthFgP9VtepKBeQPc8ingjeHi08ZZgsLLrWzCxgaMbbuIMM1ufIPepTkNvvTNBtCtjVvWR3ncMtXr4ojivSuhzOQTKlhKFFrToorLiRt9du1YvOQ0I96yCPhuhyd2YrJdcz3Jw43/RbvkV8qwZcYf9fGKwWjMCczJ8dTuPmmkdKlk1lLeSygxxRS+SQYZIhNumf3t6onQfGQ==
-Received: from BN9PR03CA0854.namprd03.prod.outlook.com (2603:10b6:408:13d::19)
- by MN2PR12MB4320.namprd12.prod.outlook.com (2603:10b6:208:15f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
- 2023 05:39:06 +0000
-Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13d:cafe::6d) by BN9PR03CA0854.outlook.office365.com
- (2603:10b6:408:13d::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29 via Frontend
- Transport; Thu, 16 Mar 2023 05:39:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6199.18 via Frontend Transport; Thu, 16 Mar 2023 05:39:06 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 15 Mar 2023
- 22:38:56 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 15 Mar 2023 22:38:56 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.181)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
- Transport; Wed, 15 Mar 2023 22:38:55 -0700
-Date:   Wed, 15 Mar 2023 22:38:54 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     <kevin.tian@intel.com>, <joro@8bytes.org>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <alex.williamson@redhat.com>,
-        <shuah@kernel.org>, <yi.l.liu@intel.com>,
-        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <mjrosato@linux.ibm.com>, <farman@linux.ibm.com>
-Subject: Re: [PATCH v4 2/5] iommufd/selftest: Add
- IOMMU_TEST_OP_ACCESS_SET_IOAS coverage
-Message-ID: <ZBKrboUWBsmmbP6Q@Asurada-Nvidia>
-References: <cover.1678284812.git.nicolinc@nvidia.com>
- <08a875b83daf7047c3cc67ed0da23045b6dc6fb9.1678284812.git.nicolinc@nvidia.com>
- <ZAuP5ewmDwql8Pn5@nvidia.com>
- <ZAvGGc5Jt0uSkN8M@Asurada-Nvidia>
+        Thu, 16 Mar 2023 02:02:55 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D9E4A1F6
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 23:02:54 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id ix20so640128plb.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Mar 2023 23:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678946574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q4N/acoeONMeU2uIZEvkbnhE87qN//0NSzB356Hql8M=;
+        b=k0fvzVV61mIjU3/tXTWjnwBpKsG8c5sE6bCeStyJkGXk3TR9adIm4C2uHbGoiKlFnV
+         /6k444DudbAgRp7Ii59wdt5Ir2pcwATIlu8uxOrTPyzfyeh75RyerT8RI0au99NCULwY
+         DCkxUMpMr4atvHjKg8BEqZRBtP9d1iqFs1C21XKX7QeokEdw0LM8Wr9Dx4/j94jmkrc7
+         mlLiK5A817P9HT0EAqrIQwMM2oDeXDMh9fL8trupUEM2OwO+ELtkn6ff47bQ9oVgg4M9
+         K1TVWCI1IbDg1dGAIfFq4H4NzPjvTJfYPHOfWn9wn9zjG4YJa5thpnz5+rt33sqBPrll
+         8cJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678946574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q4N/acoeONMeU2uIZEvkbnhE87qN//0NSzB356Hql8M=;
+        b=CX7B+EVainjk4H/m2EL6UT1OWnBrXMyCm5hsD+Gbaxx/RW0hH8hzHQ/1J+0eSC6VMG
+         4WIL5Cw6yVVDAF2QxVPb6qmXg7olvJaRKTX/laVAD2hk3DeRYeV7qGpHoeuRYeXTFknP
+         g/+HJD9JRos4a0nBFG54j+QYhuEyipK1NyGW5qevb87sV3HXi4FdCJ5wp08yy9nsBeh1
+         lQt11vlqJ02nf5Es5zyQzQEGI6GXvNLHy4MrRaZa7oV0zIpzOk8uD28n8gucHVmKi4q2
+         rQAqN2+zWlJEtdjiqmNZ4vHc/A9DlmwtD4xirTa1tiQ82Wd2IH6APDDgrdgb974W+L33
+         0+Pg==
+X-Gm-Message-State: AO0yUKUL2Z3JcdgsLS8kI5Yhb6Kq38K1/VpAUWO7Znc/1StDfOuINTEa
+        5HXA+DB9Ulxj7MdPFDLXKElWW2LVST49FEeavmpnYA==
+X-Google-Smtp-Source: AK7set/vNo2lUgV6dmOXYw2tW4JBAGz0RLufXR8NjXlMkSPl0J1RRn84ek4/Qk1YT71fX4BFOXd2lMKZDkRlNDspBQ0=
+X-Received: by 2002:a17:902:f544:b0:199:7d2:d9da with SMTP id
+ h4-20020a170902f54400b0019907d2d9damr906568plf.11.1678946573698; Wed, 15 Mar
+ 2023 23:02:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZAvGGc5Jt0uSkN8M@Asurada-Nvidia>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT016:EE_|MN2PR12MB4320:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a03d597-316a-49c8-a930-08db25e0c21b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vwiR7o3+O8ixMwkBkaksc+wB0JIwWi8eH8UWnh8v2QmdCdj7LstSl6jPvluvTb9Qz7foHwKAq1fL5gcmwh+YZeNRjwS1Wkd5KqjYR3/KuSiWOZiEXy8X1qNkaOK6tp1//+y9Du2w+8jCW1dEOU9TpyDp+8SkNA54jICJGC3AI8l6EfCeu4kCtnmLBY/Wzq0WmNi7oNprQPyNqOC57Sd6U4b/DZDR3b4CM5V1IEAr7S11ael7iv7WHPuqrBDyID5BSyYgY/+f49EIFLx0kyI6x0Cn2vcgz/DekQVGFRPSTfTwcSdWgMmtlSdn1LDWKcSJjC0MUTyMTrevf/6T78kWmqiLdf30Q3lf7MGzZxSrnjHXMTOIrlqSuHneRZ/u9OFOIu6am2HK9oggTlCe3wzBCIoptiNVls3qPm+/R60A8tMr+C9FNKiri47kc2QsAKVLlL30E/0Dky8TSq7kpcHb+t3W++OUqjzwcdUFdgaTJlfS4uhb5PqRQb462alhyqmoB90gRdB09xMIqpDOkLiz8drDzp4kVNdyZfdS36UGx7eYwOIkEq9kQNqwTG7lHQ4WQ9JW1oQzn5AtKeDerx11Y+gW28c9zV7uJ1hJ4Am0LJDt4xPjavIp0NfJ6y+yU7pww/bxN/OLnhN2gnOBeOxf51YvbYwIT8rddlGLWPtK8wC0zMelMx8oonVZuagIwwC4xTCRS/bH1KUDyM9/xJUUE18lWbGtf5J7Av7F6J9/6OS0rd5wmLqReeIFXWA8ELYl
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199018)(40470700004)(46966006)(36840700001)(8936002)(186003)(6862004)(336012)(7416002)(5660300002)(316002)(26005)(9686003)(47076005)(426003)(40460700003)(41300700001)(83380400001)(8676002)(4326008)(33716001)(70206006)(70586007)(36860700001)(356005)(40480700001)(86362001)(7636003)(82740400003)(55016003)(82310400005)(478600001)(6636002)(54906003)(2906002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 05:39:06.0364
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a03d597-316a-49c8-a930-08db25e0c21b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4320
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid>
+In-Reply-To: <20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 15 Mar 2023 23:02:42 -0700
+Message-ID: <CAGS_qxrJ53EyQaf5WqfSBYhOF0+LvWgvKL4gExu9vCPxRb7ipw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix type annotation for IO
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Johannes Berg <johannes.berg@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 04:06:52PM -0800, Nicolin Chen wrote:
-> On Fri, Mar 10, 2023 at 04:15:33PM -0400, Jason Gunthorpe wrote:
-> > On Wed, Mar 08, 2023 at 06:25:59AM -0800, Nicolin Chen wrote:
-> > > Add a new IOMMU_TEST_OP_ACCESS_SET_IOAS to allow setting access->ioas
-> > > individually, corresponding to the iommufd_access_set_ioas() helper.
-> > > 
-> > > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> > > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> > > ---
-> > >  drivers/iommu/iommufd/iommufd_test.h          |  4 +++
-> > >  drivers/iommu/iommufd/selftest.c              | 26 +++++++++++++++----
-> > >  tools/testing/selftests/iommu/iommufd_utils.h | 22 ++++++++++++++--
-> > >  3 files changed, 45 insertions(+), 7 deletions(-)
-> > 
-> > I'd prefer we keep it so that the IOAS can be setup with an argument,
-> > this will greatly help syzkaller
-> > 
-> > Lets have it so a 0 ioas will avoid the setup so the second call can
-> > happen
-> 
-> I assume that you mean the iommufd_access_set_ioas() call and
-> the "unsigned int ioas_id" input of iommufd_test_create_access?
+On Wed, Mar 15, 2023 at 10:57=E2=80=AFPM Johannes Berg
+<johannes@sipsolutions.net> wrote:
+>
+> From: Johannes Berg <johannes.berg@intel.com>
+>
+> This should be IO[str], since we use it for printing strings.
 
-I changed it to keep the id in iommufd_test_create_access().
-Instead, I renamed the IOMMU_TEST_OP_ACCESS_SET_IOAS ioctl to
-IOMMU_TEST_OP_ACCESS_REPLACE_IOAS. So an access can be created
-by the original ioctl, and then be replaced using the new one.
+This is a good catch, thanks.
+But we also have a few more bare generic types that warrant attention.
 
-Thanks
-Nic
+I think the diff below [1] should fix the others as well.
+I can send it out as a formal patch and add your name for the Reported-by?
+
+
+[1]
+diff --git a/tools/testing/kunit/kunit_kernel.py
+b/tools/testing/kunit/kunit_kernel.py
+index 53e90c335834..e6fc8fcb071a 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -92,7 +92,7 @@ class LinuxSourceTreeOperations:
+                if stderr:  # likely only due to build warnings
+                        print(stderr.decode())
+
+-       def start(self, params: List[str], build_dir: str) -> subprocess.Po=
+pen:
++       def start(self, params: List[str], build_dir: str) ->
+subprocess.Popen[str]:
+                raise RuntimeError('not implemented!')
+
+
+@@ -112,7 +112,7 @@ class
+LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+                kconfig.merge_in_entries(base_kunitconfig)
+                return kconfig
+
+-       def start(self, params: List[str], build_dir: str) -> subprocess.Po=
+pen:
++       def start(self, params: List[str], build_dir: str) ->
+subprocess.Popen[str]:
+                kernel_path =3D os.path.join(build_dir, self._kernel_path)
+                qemu_command =3D ['qemu-system-' + self._qemu_arch,
+                                '-nodefaults',
+@@ -141,7 +141,7 @@ class
+LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+                kconfig.merge_in_entries(base_kunitconfig)
+                return kconfig
+
+-       def start(self, params: List[str], build_dir: str) -> subprocess.Po=
+pen:
++       def start(self, params: List[str], build_dir: str) ->
+subprocess.Popen[str]:
+                """Runs the Linux UML binary. Must be named 'linux'."""
+                linux_bin =3D os.path.join(build_dir, 'linux')
+                params.extend(['mem=3D1G', 'console=3Dtty', 'kunit_shutdown=
+=3Dhalt'])
+diff --git a/tools/testing/kunit/kunit_printer.py
+b/tools/testing/kunit/kunit_printer.py
+index 5f1cc55ecdf5..015adf87dc2c 100644
+--- a/tools/testing/kunit/kunit_printer.py
++++ b/tools/testing/kunit/kunit_printer.py
+@@ -15,7 +15,7 @@ _RESET =3D '\033[0;0m'
+ class Printer:
+        """Wraps a file object, providing utilities for coloring output, et=
+c."""
+
+-       def __init__(self, output: typing.IO):
++       def __init__(self, output: typing.IO[str]):
+                self._output =3D output
+                self._use_color =3D output.isatty()
+
+diff --git a/tools/testing/kunit/run_checks.py
+b/tools/testing/kunit/run_checks.py
+index 066e6f938f6d..61cece1684df 100755
+--- a/tools/testing/kunit/run_checks.py
++++ b/tools/testing/kunit/run_checks.py
+@@ -37,7 +37,7 @@ def main(argv: Sequence[str]) -> None:
+        if argv:
+                raise RuntimeError('This script takes no arguments')
+
+-       future_to_name: Dict[futures.Future, str] =3D {}
++       future_to_name: Dict[futures.Future[None], str] =3D {}
+        executor =3D futures.ThreadPoolExecutor(max_workers=3Dlen(commands)=
+)
+        for name, argv in commands.items():
+                if name in necessary_deps and
+shutil.which(necessary_deps[name]) is None:
