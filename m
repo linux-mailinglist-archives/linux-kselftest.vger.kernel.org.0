@@ -2,92 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A1C6BDAFA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 22:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2A66BDAFF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Mar 2023 22:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjCPV3T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Mar 2023 17:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        id S230027AbjCPVai (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Mar 2023 17:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCPV3S (ORCPT
+        with ESMTP id S230051AbjCPVad (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Mar 2023 17:29:18 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECD5E63DA
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 14:28:35 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id w9so13132304edc.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 14:28:35 -0700 (PDT)
+        Thu, 16 Mar 2023 17:30:33 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9839D14EBE
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 14:30:31 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id u20so1526079pfk.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 14:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679002113;
+        d=google.com; s=20210112; t=1679002231;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0ZZFvbISuU7Kr5YocwlUzhfQ0l5aMSfz79cHUjUmeKc=;
-        b=RM/DAqsOWAj/zxIueQcKaAT7b/EK2lMTEaKAdjsqua7qiTsxOVylyThfsLzZ1UqU6z
-         LvVHtbXXp4PK7o/Fzp4FJvft0BdWOP5vGIswCIddc5iZNkxRKR248bn49hPmAViJHTSA
-         z5SQqSMWpzyrMwQC1NlINfevbnFR3oqMBew7UicRBwWKpnfaxew4EKZykteMCqYM7Jh6
-         51/+FdPFciJS9F8dKQa7n5TPpZmOouo9qZSdFw2LNK4PQVLn9RyGEfpWkxh2Pwqcz8NM
-         9wvbX7b8VsgYTn6KY780z5lVoOWrNxDA98aHlEA6804XQdbGgBHWgkwdy+LuwV1XLogE
-         VwJw==
+        bh=nVBfZk9IhLyojr7S0cW3MDKZWKdpa05ifTd+H5zbJ5Y=;
+        b=Z1c7P/j70nM2A/22YusO9NiDAoakIAZ8ygAFRnzb6XslgwHrxGav3kt18LCmB/XL9/
+         pUFM3bDWk2TyBUy4qgNsQLzk4rL8z9ZnjiguVCWOp8Adqp3Wyiogdxq0P/b1brHv+YRu
+         VLZE1BTX1u1cesGha4Sr3d/zXzYcBrCQ1ic2YchzchC3QzhuH15WIiLv5lievz5XeTOI
+         zJiaWIqDdxKbFvd7yuClBJ73EiPVN8WdP6LbGGyu80xHq49xyWFls/E7kpumuiSH5POE
+         lzP3ZuVdt/v3zfNctJDpokbhKYhQ0P3ifTm2FKtkg410oLPQCFzoWYm0xY0HN42owBvI
+         8vTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679002113;
+        d=1e100.net; s=20210112; t=1679002231;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0ZZFvbISuU7Kr5YocwlUzhfQ0l5aMSfz79cHUjUmeKc=;
-        b=cg4xxP8cENaCdwRVEN5a3d5vFZaEfcvTnaCG1gzxza8I0K6l6RUWW06OvaWyaL/lEk
-         8yzOCMMMP6dnFEmKsuc6qerDK4S+JzgmjMtHulKw8th1jZwotnMOuvgDzTawenCEsfu+
-         wBAJA40LPKJLMPfz9sgZM7JD7vdK4DDZrG30Rp6wIo22N8OMSFiKCsAsOkFhbdL0Ffj9
-         FURsrDac94qpuyMHMfsVhaN9mq+yLm3ZSY3bdyzDj/NDJ0YfkKkIwiKRVbQB9sy7G/s8
-         Mb5Bhhqr5gfn/omWcD0KgkxYQ4JScblBoyM6w9vwmX1T2kqdIxG0a/JsHsm5lbdh5suS
-         vdtA==
-X-Gm-Message-State: AO0yUKXkgX5ypzEcy601gCh6Gq41dGsxDWXruroAc5j1iZS2NFJIOeSq
-        Ad708+fL8nGjOZDes+tlPSqyi5sVlTmkiQZYemqJog==
-X-Google-Smtp-Source: AK7set+1IXe6CyS+omuMTDBc+TM0ZSQ18QgINWOoxCmC8BVZSzV9r2xMBN928A6LqGe6I1PNdQEZl3IFCy5g7h9iilU=
-X-Received: by 2002:a17:907:6e9f:b0:920:3bf5:7347 with SMTP id
- sh31-20020a1709076e9f00b009203bf57347mr476944ejc.0.1679002113272; Thu, 16 Mar
- 2023 14:28:33 -0700 (PDT)
+        bh=nVBfZk9IhLyojr7S0cW3MDKZWKdpa05ifTd+H5zbJ5Y=;
+        b=wobwiRVcSAvTTxMdXi0ipJUwFuLBsFuxP1o4dwB5hmR82LvTzsdbduSgc1Ys4ig8Wc
+         1jaHophw71tYc/5XjwRAGaHUtXuwir4IMT/PhCj1nVHPkBZxbASE7u8UQWdql7h08iso
+         Vqd53iWgionhH+LqoPD1mLpXx27WCHGxu1AuSaBzfnPH7vQR+aXYERu8JsYEukITQjUl
+         D+NdITs45/rzU6aUg86oMeK7jkpjNYguG/XPI62n6oJHdn3bXUo3lBTpaJgzT/DtB8Zx
+         fFtR0R0SG71AQ6MEcKUQUIJw9wfOz0LLxrH8X79EPd/sGcLyEf7Mtp8BTkB4VhJXez+r
+         3E6g==
+X-Gm-Message-State: AO0yUKWESO8DnH5GbO5KpPJd9VWaWbUQSRFEEbmwQdsm9/waPg1351Rm
+        NntT269BrS7A3BAsUBVLnG8SFOmkbyLEG0afsbZ5vA==
+X-Google-Smtp-Source: AK7set/SrWaBUicV0CRLoFlGM8zMV4zGW5bFicYMSRgglWLkA4PDkwpXDdoUiNq/FmBF9uocvqohg2sGJfuSna4fDog=
+X-Received: by 2002:a63:bd41:0:b0:50c:6cd:cac8 with SMTP id
+ d1-20020a63bd41000000b0050c06cdcac8mr359482pgp.2.1679002230795; Thu, 16 Mar
+ 2023 14:30:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-5-usama.anjum@collabora.com> <CABb0KFGU-jn4pCgmTK2zw0J-1-AVert4JsWF2CxgZ7LxckmWCA@mail.gmail.com>
- <3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@collabora.com>
-In-Reply-To: <3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Thu, 16 Mar 2023 22:28:21 +0100
-Message-ID: <CABb0KFGru9xFCxyVHBcE+dkXe58=5wiCbvZGSWhuTfr4gn=MRQ@mail.gmail.com>
-Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+References: <20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid>
+ <CAGS_qxrJ53EyQaf5WqfSBYhOF0+LvWgvKL4gExu9vCPxRb7ipw@mail.gmail.com>
+ <e028d27b3e998eaba2d71b6e224eb707015f8edf.camel@sipsolutions.net>
+ <CAGS_qxpYEnzWM=nPXDAbebuQERN4ijb0FKFbtmX5hK9qwVn12A@mail.gmail.com>
+ <9a172b50457f4074af41fe1dc8e55dcaf4795d7e.camel@sipsolutions.net>
+ <CAGS_qxoEOW+FN33czFOhJ7xgPeKjGsj=BMc4iF-aP53TfyiyEQ@mail.gmail.com> <e4d5d03d37335e7e9ceb0333749a7fac1545f7e6.camel@sipsolutions.net>
+In-Reply-To: <e4d5d03d37335e7e9ceb0333749a7fac1545f7e6.camel@sipsolutions.net>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 16 Mar 2023 14:30:19 -0700
+Message-ID: <CAGS_qxqQd5t1gB4PZCBBYBG2fy8977i5_CcA2aCTyp7x4DKUvw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix type annotation for IO
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,285 +76,157 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 16 Mar 2023 at 18:53, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+On Thu, Mar 16, 2023 at 2:03=E2=80=AFPM Johannes Berg <johannes@sipsolution=
+s.net> wrote:
 >
-> Hi,
+> On Thu, 2023-03-16 at 10:58 -0700, Daniel Latypov wrote:
+> > Yikes.
+> > I either forgot or never knew about --strict, thanks for pointing it ou=
+t.
+> >
+> > Looking into it, I don't think it's worth using for kunit.py, details b=
+elow.
 >
-> Thank you so much for reviewing.
+> Oh, no argument, whatever works for you. I don't really even remember
+> why I/we settled on mypy vs. pytypes, I don't remember really doing any
+> comparison.
 >
-> On 3/13/23 9:02=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Thu, 9 Mar 2023 at 14:58, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-[...]
-> >> --- a/fs/proc/task_mmu.c
-> >> +++ b/fs/proc/task_mmu.c
-[...]
-> >> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool sw=
-ap,
-> >> +                              struct pagemap_scan_private *p,
-> >> +                              unsigned long addr, unsigned int n_page=
-s)
-> >> +{
-> >> +       unsigned long bitmap =3D PM_SCAN_BITMAP(wt, file, pres, swap);
-> >> +       struct page_region *cur =3D &p->cur;
-> >> +       bool cpy =3D true;
-> >> +
-> >> +       if (p->max_pages && (p->found_pages =3D=3D p->max_pages))
-> >> +               return -ENOSPC;
-> >> +
-> >> +       if (!n_pages)
-> >> +               return -EINVAL;
-> >> +
-> >> +       if (p->required_mask)
-> >> +               cpy =3D ((p->required_mask & bitmap) =3D=3D p->require=
-d_mask);
-> >> +       if (cpy && p->anyof_mask)
-> >> +               cpy =3D (p->anyof_mask & bitmap);
-> >> +       if (cpy && p->excluded_mask)
-> >> +               cpy =3D !(p->excluded_mask & bitmap);
-> >
-> > Since the rest of the code is executed only when `cpy` is true, this
-> > could just return early for easier understanding.
-> Hmm... I'll do the following:
->         if (!cpy || !bitmap)
->                 return 0;
-> > BTW, some of the tests are redundant. Eg: if required_mask =3D=3D 0, th=
-en
-> > `required_mask & x =3D=3D required_mask` will always hold. Same for
-> > `excluded_mask & x =3D=3D 0`.
-> Correct. This is why I'm checking if required_mask is set and then
-> comparing bitmap with it. required_mask may be 0 if not set. This if will
-> ignore the subsequent check.
+> I do find the whole type-checking, if occasionally a bit painful, to be
+> of benefit though, at least for larger code bases (and by larger I think
+> I probably would say "more than a single file that you can keep in your
+> head entirely" :-)
+
+100% agree, just the concern is about trying to keep two different
+checkers happy when they might have conflicting demands.
+Pytype has been able to catch some relatively subtle errors, so I've
+prioritized it.
+
+But since commit b7e0b983ff13 ("kunit: tool: fix pre-existing python
+type annotation errors") onwards, I've been trying to fix up all the
+issues we've had with either.
+
 >
->         if (p->required_mask)
->                 cpy =3D ((p->required_mask & bitmap) =3D=3D p->required_m=
-ask);
+> > Hmm, the untyped stuff is not too important since we also use pytype,
+> > which is a lot smarter in that it infers types where not specified.
 >
-> I don't see any redundancy here. Please let me know otherwise?
-[...]
-> >> +       if (cpy && bitmap) {
-> >
-> > Assuming early returns on `!cpy` are done earlier:
-> >
-> > if (!bitmap)
-> >   return 0;
-> I've posted condition above which would better suit here.
-[...]
+> Hmm, mypy normally does a bunch of inference too, but yeah might be less
+> smart here, or maybe --strict just insists on more precision.
 
-Since the `cpy` condition is updated and passed to each new branch
-(IOW: after setting cpy =3D 0 for whatever reason all the further code
-is skipped) you can drop the variable and do early returns everywhere.
-E.g.:
+One footgun I ran into was that mypy seemed like it wasn't even
+touching functions if they didn't have an argument or the return type
+annotated.
+See 09641f7c7d8f ("kunit: tool: surface and address more typing issues")
+Maybe --strict is better.
 
-if ((bitmap & p->required_mask) !=3D p->required_mask)
-  return 0;
-if (p->anyof_mask && !(bitmap & p->anyof_mask))
-  return 0;
-if (bitmap & p->excluded_mask)
-  return 0;
-if (!bitmap)
-  return 0;
+Pytype takes a lot longer and caught issues that normal `mypy` didn't.
+I haven't compared them w/ strict --strict. But given pytype is still
+a lot slower, I assume (hope) it's doing more work.
 
-Also you can take the "special" effect of masking with zero to be
-always zero (and in C - false) to avoid testing for an empty mask
-separately in most cases.
-
-> Just for my knowledge, what does "Nit" signify if a comment is marked wit=
-h it?
-
-A low priority / cosmetic item that you might consider ignoring if a
-fix is too expensive or controversial.
-
->> +               if ((cur->len) && (cur->bitmap =3D=3D bitmap) &&
->> +                   (cur->start + cur->len * PAGE_SIZE =3D=3D addr)) {
 >
-> I'd recommend removing the extra parentheses as they make the code
-> less readable for me (too many parentheses to match visually).
-I'll remove parenthesis.
-
-[...]
->> The `cur->len` test seems redundant: is it possible to have
->> `cur->start =3D=3D addr` in that case (I guess it would have to get
->> `n_pages =3D=3D 0` in an earlier invocation)?
-> No, both wouldn't work. cur->len =3D=3D 0 means that it has only garbage.=
- It is
-> essential to check the validity from cur->len before performing other
-> checks. Also cur->start can never be equal to addr as we are walking over
-> page addressing in serial manner. We want to see here if the current
-> address matches the previous data by finding the ending address of last
-> stored data (cur->start + cur->len * PAGE_SIZE).
-
-If cur->len =3D=3D 0, then it doesn't matter if it gets merged or not - it
-can be filtered out during the flush (see below).
-
-[...]
-> >> +               } else if ((!p->vec_index) ||
-> >> +                          ((p->vec_index + 1) < p->vec_len)) {
-> >
-> > Can you explain this test? Why not just `p->vec_index < p->vec_len`? Or=
- better:
-> >
-> > if (vec_index >=3D p->vec_len)
-> >     return -ENOSPC;
+> > The other two though warrant some attention
+> > * attr-defined: we don't care about this. We have a directive to
+> > squash this "error" for pytype. Ugh, do we need another one for
+> > pytype?
 >
-> No, it'll not work. Lets leave it as it is. :)
+> You mean mypy? I guess yes, you'd need "# type: ignore". But funnily, I
+
+Ah yes, I meant mypy.
+
+> think both tools will insist that you place the comment on the same line
+> as the error, and that doesn't really work since you can only have one
+> comment on that line :-) However, it looks like pytype would also accept
+> "# type: ignore" according to the docs.
+
+That's true, but `type: ignore` disables all type checking on the line.
+
+In this case, I think it's moot given the whole line is just
+  sys.stdin.reconfigure(errors=3D'backslashreplace')
+so I'd basically turned off all type-checking already.
+
 >
-> It has gotten somewhat complex, but I don't have any other way to make it
-> simpler which works. First note the following points:
-> 1) We walk over 512 page or 1 thp at a time to not over allocate memory i=
-n
-> kernel (p->vec).
-> 2) We also want to merge the consecutive pages with the same flags into o=
-ne
-> struct page_region. p->vec of current walk may merge with next walk. So w=
-e
-> cannot write to user memory until we find the results of the next walk.
 >
-> So most recent data is put into p->cur. When non-intersecting or mergeabl=
-e
-> data is found, we move p->cur to p->vec[p->index] inside the page walk.
-> After the page walk, p->vec[0 to p->index] is moved to arg->vec. After al=
-l
-> the walks are over. We move the p->cur to arg->vec. It completes the data
-> transfer to user buffer.
-[...]
-> I'm so sorry that it has gotten this much complex. It was way simpler whe=
-n
-> we were walking over all the memory in one go. But then we needed an
-> unbounded memory from the kernel which we don't want.
-[...]
-
-I've gone through and hopefully understood the code. I'm not sure this
-needs to be so complicated: when traversing a single PMD you can
-always copy p->cur to p->vec[p->vec_index++] because you can have at
-most pages_per_PMD non-merges (in the worst case the last page always
-is left in p->cur and whole p->vec is used). After each PMD p->vec
-needs a flush if p->vec_index > 0, skipping the dummy entry at front
-(len =3D=3D 0; if present). (This is mostly how it is implemented now, but
-I propose to remove the "overflow" check and do the starting guard
-removal only every PMD.)
-
-BTW, the pagemap_scan_deposit() got me a bit confused: it seems that
-it is just a copy of the p->vec flush to userspace. Please either use
-it for both p->vec and p->cur flushing or inline.
-
-BTW#2, I think the ENOSPC return in pagemap_scan_output() should
-happen later - only if the pages would match and that caused the count
-to exceed the limit. For THP n_pages should be truncated to the limit
-(and ENOSPC returned right away) only after the pages were verified to
-match.
-
-[...]
-> >> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
-> >> +                                 unsigned long end, struct mm_walk *w=
-alk)
-> >> +{
-> >> +       struct pagemap_scan_private *p =3D walk->private;
-> >> +       struct vm_area_struct *vma =3D walk->vma;
-> >> +       bool is_writ, is_file, is_pres, is_swap;
-> >> +       unsigned long addr =3D end;
-> >> +       spinlock_t *ptl;
-> >> +       int ret =3D 0;
-> >> +       pte_t *pte;
-> >> +
-> >> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > * assignment: not actually a real error, it points to our type
+> > annotations being a bit sloppy
+>
+> Not sure what you meant by this, but maybe I just don't see it with my
+> version of mypy.
+>
+> >   tools/testing/kunit/kunit.py:459: error: Incompatible types in
+> > assignment (expression has type "List[str]", variable has type
+> > "TextIO")  [assignment]
 > >
-> > Is the `#ifdef` needed? `pmd_trans_huge_lock()` will always return
-> > NULL if transparent hugepages are not compiled in. OTOH I see
-> > BUILD_BUG() is possible in HPAGE_SIZE definition (irrelevant in this
-> > case), so that would need to be worked around first.
-> I'd got the build error [1]. So I'd added these. I've tested it again wit=
-h
-> the same config. We don't need these #ifdef now. I'll remove these.
-
-I mean that there are cases like [1] that actually need the #ifdef at
-least to wrap HPAGE_SIZE usage. But maybe just this constant can be
-wrapped so that we keep the code always compile-tested?
-
-[1] https://elixir.bootlin.com/linux/v6.3-rc2/source/arch/mips/include/asm/=
-page.h#L66
-
-[...]
-> >> +       if (!arg->required_mask && !arg->anyof_mask &&
-> >> +           !arg->excluded_mask)
-> >> +               return false;
+> > So it doesn't like that we assign a list[str] or a IO[str] to `kunit_ou=
+tput`.
+> > But we're passing it in as Iterable[str], which both work as.
 > >
-> > Is there an assumption in the code that those checks are needed? I'd
-> > expect that no selection criteria makes a valid page set?
-> In my view, selection criterion must be specified for the ioctl to work. =
-If
-> there is no criterio, user should go and read pagemap file directly. So t=
-he
-> assumption is that at least one selection criterion must be specified.
+> > Even explicitly annotating it as an Iterable[str] doesn't make it happy=
+ [1].
+> > I'll ignore this, then.
+>
+> I think you got that annotation wrong, at least as far as mypy is
+> concerned?
+>
+> >                 sys.stdin.reconfigure(errors=3D'backslashreplace')  #py=
+type: disable=3Dattribute-error
+> > -               kunit_output =3D sys.stdin
+> > +               kunit_output =3D sys.stdin  # type[Iterable[str]]
+>
+> Doing
+>
+>  kunit_output: Iterable[str] =3D sys.stdin
+>
+> actually fixes it for me, and you don't even need the second one:
 
-Yes. I'm not sure we need to prevent multiple ways of doing the same
-thing. But doesn't pagemap reading lack the range aggregation feature?
+D'oh, I forgot the ": "  Ugh, magic comments :)
+Doing "# type: Iterable[str]` on just the first one works for me.
 
-[...]
-> >> +       if (!access_ok((void __user *)vec,
-> >> +                      arg->vec_len * sizeof(struct page_region)))
-> >> +               return false;
+Thanks!
+
+Note: we'd been avoiding the `var: T =3D 42` syntax to try and be more
+compatible with old versions of python.
+But since we formally added a check that it's running python>3.7, I
+guess we can switch to that syntax now too.
+
+>
+> >         else:
+> >                 with open(cli_args.file, 'r', errors=3D'backslashreplac=
+e') as f:
+> > -                       kunit_output =3D f.read().splitlines()
+> > +                       kunit_output =3D f.read().splitlines()  #type[I=
+terable[str]]
 > >
-> > Is there a provision that userspace threads are all blocked from
-> > manipulating mmaps during this ioctl()? If not, this is a TOCTOU bug
-> > and the writes should be checked each time as another userspace thread
-> > could remap the memory while the ioctl() is working.
-> mincore() syscall is doing in the same way. It checks the validity in the
-> start only. What provision should I add? Isn't it obvious that the user
-> should not remap such memory?
+>
+> which I think is because it assigned the type as Iterable[str] after the
+> first one, and then was happy since splitlines() is Iterable[str] after
+> all. So maybe pytypes is smarter about finding the best common type.
+>
+>
+>
+> Anyway ... I don't really care so much. I just noticed this, and had it
+> been any more complex I'd probably have gone and just ignored kunit from
+> my project.
+>
+> Oh, another unrelated thing: it kind of bothered me that even with
+> kunit_parser.py you automatically get some output on stdout, it felt
+> like kunit_parser.py was or should be more of a library, but in the end
+> I don't really care so much since I needed to write a JSON file for our
+> internal system and could just suppress the stdout entirely :)
 
-On the second look, I think the code already checks that while doing
-copy_to_user(), so this check is redundant and can be removed.
+Ack, yeah, the fact it dumps anything directly to stdout is annoying.
 
-> >
-> >> +       if (!IS_ALIGNED(start, PAGE_SIZE))
-> >> +               return false;
-> >> +       if (!access_ok((void __user *)start, arg->len))
-> >> +               return false;
-> >
-> > This I guess wants to check if the range to be scanned is mapped -
-> > but isn't this what the ioctl() should do during the scan? (But, also
-> > see above.)
-> No, start represents the memory which the user wants to watch. User must
-> allocate this memory first and then pass the address to this ioctl to fin=
-d
-> out the flags per page.
+The argument is that
+* it wants to print in real time
+* it needs access to the tty to know if it should include colors or not
 
-From:
-+ * struct pm_scan_arg - Pagemap ioctl argument
-+ * @size:              Size of the structure
-+ * @flags:             Flags for the IOCTL
-+ * @start:             Starting address of the region
-+ * @len:               Length of the region (All the pages in this
-length are included)
-...
+This patch might be of interest to you:
+https://kunit-review.git.corp.google.com/c/linux/+/5730/1
+With that, you could pass in a kunit_printer.BufferPrinter to
+parse_tests() and keep stdout pristine.
 
-I'd expect the `start` field to just be a virtual address to start
-scanning from. Does it need to be mapped? For CRIU usecase I'd start
-with "start =3D 0" to find out all mappings, but 0 is (always) not
-mapped. Is this supposed to only work on already discovered page
-ranges? Anyway, I'd expect the code should be tolerant of another
-thread changing the mappings while this ioctl() is walking the page
-tables - is it so? If yes, then this check serves at most as an
-optimization used only for an invalid call.
+I could split out the concurrency support from that patch and try to
+get submitted.
+There just wasn't motivation to do so since there was no use case for
+suppressing output yet.
+Given you're using it, that might be sufficient.
 
-> >>  const struct file_operations proc_pagemap_operations =3D {
-> >>         .llseek         =3D mem_lseek, /* borrow this */
-> >>         .read           =3D pagemap_read,
-> >>         .open           =3D pagemap_open,
-> >>         .release        =3D pagemap_release,
-> >> +       .unlocked_ioctl =3D pagemap_scan_ioctl,
-> >> +       .compat_ioctl   =3D pagemap_scan_ioctl,
-> >
-> > Is this correct? Would the code need a different userspace pointer
-> > handling for 32-bit userspace on 64-bit kernel?
-> Yeah, it is needed for 32-bit application to run on 64-bit kernel.
-
-I mean is using the same function for both entry points correct? Don't
-the pointers to userspace memory (e.g. arg->vec) need to be mapped for
-32-bit process?
-
-Best Regards
-
-Micha=C5=82 Miros=C5=82aw
+Daniel
