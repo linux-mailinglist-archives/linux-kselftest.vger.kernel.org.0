@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F916BDF63
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 04:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C25DC6BDF6A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 04:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjCQDPT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Mar 2023 23:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
+        id S229934AbjCQDP0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Mar 2023 23:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjCQDOJ (ORCPT
+        with ESMTP id S229611AbjCQDOJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 16 Mar 2023 23:14:09 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC2E1CAE2;
-        Thu, 16 Mar 2023 20:13:54 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id r16so4338587qtx.9;
-        Thu, 16 Mar 2023 20:13:54 -0700 (PDT)
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA851CAEF;
+        Thu, 16 Mar 2023 20:13:56 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id i24so4358126qtm.6;
+        Thu, 16 Mar 2023 20:13:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679022834;
+        d=gmail.com; s=20210112; t=1679022835;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=lr+K/uboeCkCqHfD20mrlauFmTp3I14TicVqGgSXV88=;
-        b=CCWsmXAZCxxzokyLycN9oF7fEn9KVBXw90UAFywsrDulUO+iiFO8duc63LMqPmW6CJ
-         qxLqNzkNtWbQ4UuW1j05BAqZrfSFlMrHWDo7OwyiFyuYeuaJwBvVdHb5uDf+7kT4Koiv
-         mmZM9lgaHCByu5UzloMekKPOBYRJVDVU7HM1rcs5X1qkXI2Zgf4AOv8VCfj5r/sdeF5/
-         cbrQcik2TmDCk4ok945ocXtZNCJL1CuK1dwLESXvsl9frGCDuXElUW5zE7TUNJ7CLmft
-         3rVX3p6PXQotiNjGdkR9NKXPDGaCNgL+UadZvfANcXeFWw9pOY+hIYUplIT0L5rysaqN
-         2Uow==
+        bh=0IIu5Yi5LuAls+pJ/ShpvT4cQhYjefLMDzlyAtUzY2M=;
+        b=m+zgzFjXwbdVq8oriwEEmqgtBN1LLiRL+9JjmhytNN0SF3YFVo2Vi8LlvYHglF50VM
+         e2yN/UshjMiKk0Or3cWkHnHYvpWJuHSzPSozs71pP+QjiRkIAX5kxnKEpVhx1aUTcAQg
+         OzOox798eW7VxQdIP313YmzIhXSWFfMrf639rrvvj2AINdeENb899UYdJAoZYtGWV0dg
+         3hKoIouUO6YjafexNiisB6pdUbhjas6qu7NOk59J9+AzhbuNbR03+U+Ylp368aMWBDk5
+         DtALnRnFDEdijM30ef1G3R5QF1O11V4QXQlwLn9JOb9TgJ5Liq20bqD9Gl9uea/j1A9P
+         AKpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679022834;
+        d=1e100.net; s=20210112; t=1679022835;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lr+K/uboeCkCqHfD20mrlauFmTp3I14TicVqGgSXV88=;
-        b=NDTC+htSPKQCyxN6DISA+q+8FAyzzlW0iNdifKf6xF5zBQ56Yrwz1xHcF9yii3VGy3
-         roHuxJCax5eGTmLaR42sHxYxBh4umAiRvL6cIH5XzNs+whnobbppA++MH4X3yE9HYJNu
-         nnmjjkc7npGfaRVxC8RaSMuB7jz9XzD0SCswK5geZ2Me8rqHQ3SBUE5A1I3Yn6Of8J18
-         KsAM/fsPB/silc9oXQOirMLu5fmX0iRlvlZdNBiBR7ke2kPTPwY9vy0Fqsx5ZJ5LgLrX
-         u/pTZdTYAFaYyPVE45LF4YYEZkwMTDQ7NBSjvROhcWEGDF6b+ZFwuSq7STiN/zsfsUmr
-         yZEg==
-X-Gm-Message-State: AO0yUKXQ6MDHOaqVprI3wXYb0lx2Mfy5Uf+UnBYFSKXcKMf5tyvbBMO8
-        vrbzW+QPpgD3fqdflkeZyYk=
-X-Google-Smtp-Source: AK7set9GMbqn9Qc3NwBg/WGH3yAz/kg582FuwtZLIWUD1V59erPO6l0iBDXQx8kiJ4DiaRsBsWtdHg==
-X-Received: by 2002:a05:622a:1714:b0:3bf:cb70:8a4f with SMTP id h20-20020a05622a171400b003bfcb708a4fmr10161511qtk.41.1679022833868;
-        Thu, 16 Mar 2023 20:13:53 -0700 (PDT)
+        bh=0IIu5Yi5LuAls+pJ/ShpvT4cQhYjefLMDzlyAtUzY2M=;
+        b=zdfB+IgA7eXAGsTJSTAcqIEnIBcm3jBGKMt8LaJVelyx7T5R4XxSRJjim6qQ0TxANP
+         70JtDMIPXqV09YGuEJCKLxuvU6CkUqZBp2z3kggA74YoItkLT63sv8TtW2yJtKMfdBjd
+         5ng0P372z6oD1JX9j5slf2yDBgNiZjd6Hde7Sfef64CMonnztXcb21Cu73A/E0TkCQEB
+         ACqLvVc3AzG2zMFHSnCVACxdrGIwQHyGLy78TXesfbLT5w+tdUkYDExCB+VitSqwk89/
+         dcxAgifgkHWToee3qXMbP1ZDdXqNIchI01+5kiEbsQIaPCLjS6o2GgTy3vzSTO5jjgRd
+         Lekg==
+X-Gm-Message-State: AO0yUKVV6CHARZQSLxxUDowN64NLd5bytAuMzcF7vIDlyyaTqnCJqoMJ
+        cbGueXFxbgEoK47LwxhoZ+U=
+X-Google-Smtp-Source: AK7set/bz+3OIzw1dnNbFrUKZvoDlrzcBSmpVgyEfWc4/E6RcfAUuT7Uvnwt9sz6dLhl52Q8mqt/HQ==
+X-Received: by 2002:ac8:594f:0:b0:3b9:bc8c:c1fa with SMTP id 15-20020ac8594f000000b003b9bc8cc1famr3055942qtz.5.1679022835153;
+        Thu, 16 Mar 2023 20:13:55 -0700 (PDT)
 Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id c2-20020a379a02000000b007436d0e9408sm786165qke.127.2023.03.16.20.13.53
+        by smtp.gmail.com with ESMTPSA id p11-20020a05620a22ab00b0074357fa9e15sm829282qkh.42.2023.03.16.20.13.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 20:13:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id D941027C0054;
-        Thu, 16 Mar 2023 23:13:52 -0400 (EDT)
+        Thu, 16 Mar 2023 20:13:54 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 345CE27C0054;
+        Thu, 16 Mar 2023 23:13:54 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 16 Mar 2023 23:13:52 -0400
-X-ME-Sender: <xms:8NoTZOO5k028cHguxszDO3GhZvM4I4peTKSoBWKTtpBrT12YgiIkDQ>
-    <xme:8NoTZM8zIkDH1PsW-os1KPZdTd8tcNk5u5p33YwdFXN8EmPylIE3ND_3KQ_GaElOH
-    53PIl4Vz8uiaKf8qg>
-X-ME-Received: <xmr:8NoTZFRhUEUhPs5PvHT9G1t6XDi3ZRv7ri_JlnFDqcgELsM5sOx4mcyaslk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefuddgheekucetufdoteggodetrfdotf
+  by compute2.internal (MEProxy); Thu, 16 Mar 2023 23:13:54 -0400
+X-ME-Sender: <xms:8toTZB7jZCXZwj36DNFrvw6gePT6M4GoLUIejUCzWn6CrXdiEF7Uaw>
+    <xme:8toTZO7DnztCuv-a5FiT7cUhOQJTQJk7gmC6KyfX6M1vhqD5DeL6QOOXCougUwbO-
+    mIY4qXtM3hlODb_jQ>
+X-ME-Received: <xmr:8toTZIeY1uemKKbna27jzNQpFDK0cCpgk8mTC8G3rZy_IG_BgciwceOGEoM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefuddgheejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhu
@@ -69,13 +69,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefuddgheekucetufdoteggod
     gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
     gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
     igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:8NoTZOtU_pDYK7KujkKDBABOdwRfYf86kq0GRQtdvMacBSUF-b_RVg>
-    <xmx:8NoTZGcOfYvoFwn8LiDjmBy-Z_Cmb9f1Xo4RV_SRgAc9Mk4t2F518g>
-    <xmx:8NoTZC1ICtlw7jLJzKRPTuFMhvPD0C4xnsZzaDPm_Gjd36d5S6x_Rw>
-    <xmx:8NoTZE9EXLe7NDONShRw-dY6BuzNewjPcwjVwIslW-yyxGVtD_Jk4Q>
+X-ME-Proxy: <xmx:8toTZKKnv3aIxfp68Xdg-5h-wDt12DNYe4nPPd-5l_1ZVNWMwSyRLA>
+    <xmx:8toTZFKw0QGRaghQbYSZisz9OlaB7iYIfBUaowTs6sHlTktTE-d0YA>
+    <xmx:8toTZDxbMFMyHtnriPcdRy7VWXVHNRctcxkfu4vn8RRqVVE094Bx2g>
+    <xmx:8toTZNL76-OaaLhoDSgloZeKJ0vBbByYYODswkcPGqjdNWKnoXI0Sg>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Mar 2023 23:13:52 -0400 (EDT)
+ 16 Mar 2023 23:13:53 -0400 (EDT)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     rcu@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -96,9 +96,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         seanjc@google.com, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH rcu 4/7] locking/lockdep: Improve the deadlock scenario print for sync and read lock
-Date:   Thu, 16 Mar 2023 20:13:36 -0700
-Message-Id: <20230317031339.10277-5-boqun.feng@gmail.com>
+Subject: [PATCH rcu 5/7] rcutorture: Add SRCU deadlock scenarios
+Date:   Thu, 16 Mar 2023 20:13:37 -0700
+Message-Id: <20230317031339.10277-6-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317031339.10277-1-boqun.feng@gmail.com>
 References: <20230317031339.10277-1-boqun.feng@gmail.com>
@@ -114,202 +114,206 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Lock scenario print is always a weak spot of lockdep splats. Improvement
-can be made if we rework the dependency search and the error printing.
+From: "Paul E. McKenney" <paulmck@kernel.org>
 
-However without touching the graph search, we can improve a little for
-the circular deadlock case, since we have the to-be-added lock
-dependency, and know whether these two locks are read/write/sync.
+In order to test the new SRCU-lockdep functionality, this commit adds
+an rcutorture.test_srcu_lockdep module parameter that, when non-zero,
+selects an SRCU deadlock scenario to execute.  This parameter is a
+five-digit number formatted as DNNL, where "D" is 1 to force a deadlock
+and 0 to avoid doing so; "NN" is the test number, 0 for SRCU-based, 1
+for SRCU/mutex-based, and 2 for SRCU/rwsem-based; and "L" is the number
+of steps in the deadlock cycle.
 
-In order to know whether a held_lock is sync or not, a bit was
-"stolen" from ->references, which reduce our limit for the same lock
-class nesting from 2^12 to 2^11, and it should still be good enough.
+Note that rcutorture.test_srcu_lockdep=1 will also force a hard hang.
 
-Besides, since we now have bit in held_lock for sync, we don't need the
-"hardirqoffs being 1" trick, and also we can avoid the __lock_release()
-if we jump out of __lock_acquire() before the held_lock stored.
+If a non-zero value of rcutorture.test_srcu_lockdep does not select a
+deadlock scenario, a console message is printed and testing continues.
 
-With these changes, a deadlock case evolved with read lock and sync gets
-a better print-out from:
+[ paulmck: Apply kernel test robot feedback, add rwsem support. ]
+[ paulmck: Apply Dan Carpenter feedback. ]
 
-	[...]  Possible unsafe locking scenario:
-	[...]
-	[...]        CPU0                    CPU1
-	[...]        ----                    ----
-	[...]   lock(srcuA);
-	[...]                                lock(srcuB);
-	[...]                                lock(srcuA);
-	[...]   lock(srcuB);
-
-to
-
-	[...]  Possible unsafe locking scenario:
-	[...]
-	[...]        CPU0                    CPU1
-	[...]        ----                    ----
-	[...]   rlock(srcuA);
-	[...]                                lock(srcuB);
-	[...]                                lock(srcuA);
-	[...]   sync(srcuB);
-
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- include/linux/lockdep.h  |  3 ++-
- kernel/locking/lockdep.c | 48 ++++++++++++++++++++++++++--------------
- 2 files changed, 34 insertions(+), 17 deletions(-)
+ kernel/rcu/rcutorture.c | 151 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 151 insertions(+)
 
-diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index 14d9dbedc6c1..b32256e9e944 100644
---- a/include/linux/lockdep.h
-+++ b/include/linux/lockdep.h
-@@ -134,7 +134,8 @@ struct held_lock {
- 	unsigned int read:2;        /* see lock_acquire() comment */
- 	unsigned int check:1;       /* see lock_acquire() comment */
- 	unsigned int hardirqs_off:1;
--	unsigned int references:12;					/* 32 bits */
-+	unsigned int sync:1;
-+	unsigned int references:11;					/* 32 bits */
- 	unsigned int pin_count;
- };
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 8e6c023212cb..80ff9a743d31 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -120,6 +120,7 @@ torture_param(int, test_boost, 1, "Test RCU prio boost: 0=no, 1=maybe, 2=yes.");
+ torture_param(int, test_boost_duration, 4, "Duration of each boost test, seconds.");
+ torture_param(int, test_boost_interval, 7, "Interval between boost tests, seconds.");
+ torture_param(bool, test_no_idle_hz, true, "Test support for tickless idle CPUs");
++torture_param(int, test_srcu_lockdep, 0, "Test specified SRCU deadlock scenario.");
+ torture_param(int, verbose, 1, "Enable verbose debugging printk()s");
  
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 36430cf8e407..dcd1d5bfc1e0 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -1881,6 +1881,8 @@ print_circular_lock_scenario(struct held_lock *src,
- 	struct lock_class *source = hlock_class(src);
- 	struct lock_class *target = hlock_class(tgt);
- 	struct lock_class *parent = prt->class;
-+	int src_read = src->read;
-+	int tgt_read = tgt->read;
+ static char *torture_type = "rcu";
+@@ -3463,6 +3464,154 @@ static void rcutorture_sync(void)
+ 		cur_ops->sync();
+ }
  
- 	/*
- 	 * A direct locking problem where unsafe_class lock is taken
-@@ -1908,7 +1910,10 @@ print_circular_lock_scenario(struct held_lock *src,
- 	printk(" Possible unsafe locking scenario:\n\n");
- 	printk("       CPU0                    CPU1\n");
- 	printk("       ----                    ----\n");
--	printk("  lock(");
-+	if (tgt_read != 0)
-+		printk("  rlock(");
-+	else
-+		printk("  lock(");
- 	__print_lock_name(target);
- 	printk(KERN_CONT ");\n");
- 	printk("                               lock(");
-@@ -1917,7 +1922,12 @@ print_circular_lock_scenario(struct held_lock *src,
- 	printk("                               lock(");
- 	__print_lock_name(target);
- 	printk(KERN_CONT ");\n");
--	printk("  lock(");
-+	if (src_read != 0)
-+		printk("  rlock(");
-+	else if (src->sync)
-+		printk("  sync(");
-+	else
-+		printk("  lock(");
- 	__print_lock_name(source);
- 	printk(KERN_CONT ");\n");
- 	printk("\n *** DEADLOCK ***\n\n");
-@@ -4531,7 +4541,13 @@ mark_usage(struct task_struct *curr, struct held_lock *hlock, int check)
- 					return 0;
- 		}
- 	}
--	if (!hlock->hardirqs_off) {
++static DEFINE_MUTEX(mut0);
++static DEFINE_MUTEX(mut1);
++static DEFINE_MUTEX(mut2);
++static DEFINE_MUTEX(mut3);
++static DEFINE_MUTEX(mut4);
++static DEFINE_MUTEX(mut5);
++static DEFINE_MUTEX(mut6);
++static DEFINE_MUTEX(mut7);
++static DEFINE_MUTEX(mut8);
++static DEFINE_MUTEX(mut9);
 +
-+	/*
-+	 * For lock_sync(), don't mark the ENABLED usage, since lock_sync()
-+	 * creates no critical section and no extra dependency can be introduced
-+	 * by interrupts
-+	 */
-+	if (!hlock->hardirqs_off && !hlock->sync) {
- 		if (hlock->read) {
- 			if (!mark_lock(curr, hlock,
- 					LOCK_ENABLED_HARDIRQ_READ))
-@@ -4910,7 +4926,7 @@ static int __lock_is_held(const struct lockdep_map *lock, int read);
- static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
- 			  int trylock, int read, int check, int hardirqs_off,
- 			  struct lockdep_map *nest_lock, unsigned long ip,
--			  int references, int pin_count)
-+			  int references, int pin_count, int sync)
++static DECLARE_RWSEM(rwsem0);
++static DECLARE_RWSEM(rwsem1);
++static DECLARE_RWSEM(rwsem2);
++static DECLARE_RWSEM(rwsem3);
++static DECLARE_RWSEM(rwsem4);
++static DECLARE_RWSEM(rwsem5);
++static DECLARE_RWSEM(rwsem6);
++static DECLARE_RWSEM(rwsem7);
++static DECLARE_RWSEM(rwsem8);
++static DECLARE_RWSEM(rwsem9);
++
++DEFINE_STATIC_SRCU(srcu0);
++DEFINE_STATIC_SRCU(srcu1);
++DEFINE_STATIC_SRCU(srcu2);
++DEFINE_STATIC_SRCU(srcu3);
++DEFINE_STATIC_SRCU(srcu4);
++DEFINE_STATIC_SRCU(srcu5);
++DEFINE_STATIC_SRCU(srcu6);
++DEFINE_STATIC_SRCU(srcu7);
++DEFINE_STATIC_SRCU(srcu8);
++DEFINE_STATIC_SRCU(srcu9);
++
++static int srcu_lockdep_next(const char *f, const char *fl, const char *fs, const char *fu, int i,
++			     int cyclelen, int deadlock)
++{
++	int j = i + 1;
++
++	if (j >= cyclelen)
++		j = deadlock ? 0 : -1;
++	if (j >= 0)
++		pr_info("%s: %s(%d), %s(%d), %s(%d)\n", f, fl, i, fs, j, fu, i);
++	else
++		pr_info("%s: %s(%d), %s(%d)\n", f, fl, i, fu, i);
++	return j;
++}
++
++// Test lockdep on SRCU-based deadlock scenarios.
++static void rcu_torture_init_srcu_lockdep(void)
++{
++	int cyclelen;
++	int deadlock;
++	bool err = false;
++	int i;
++	int j;
++	int idx;
++	struct mutex *muts[] = { &mut0, &mut1, &mut2, &mut3, &mut4,
++				 &mut5, &mut6, &mut7, &mut8, &mut9 };
++	struct rw_semaphore *rwsems[] = { &rwsem0, &rwsem1, &rwsem2, &rwsem3, &rwsem4,
++					  &rwsem5, &rwsem6, &rwsem7, &rwsem8, &rwsem9 };
++	struct srcu_struct *srcus[] = { &srcu0, &srcu1, &srcu2, &srcu3, &srcu4,
++					&srcu5, &srcu6, &srcu7, &srcu8, &srcu9 };
++	int testtype;
++
++	if (!test_srcu_lockdep)
++		return;
++
++	deadlock = test_srcu_lockdep / 1000;
++	testtype = (test_srcu_lockdep / 10) % 100;
++	cyclelen = test_srcu_lockdep % 10;
++	WARN_ON_ONCE(ARRAY_SIZE(muts) != ARRAY_SIZE(srcus));
++	if (WARN_ONCE(deadlock != !!deadlock,
++		      "%s: test_srcu_lockdep=%d and deadlock digit %d must be zero or one.\n",
++		      __func__, test_srcu_lockdep, deadlock))
++		err = true;
++	if (WARN_ONCE(cyclelen <= 0,
++		      "%s: test_srcu_lockdep=%d and cycle-length digit %d must be greater than zero.\n",
++		      __func__, test_srcu_lockdep, cyclelen))
++		err = true;
++	if (err)
++		goto err_out;
++
++	if (testtype == 0) {
++		pr_info("%s: test_srcu_lockdep = %05d: SRCU %d-way %sdeadlock.\n",
++			__func__, test_srcu_lockdep, cyclelen, deadlock ? "" : "non-");
++		if (deadlock && cyclelen == 1)
++			pr_info("%s: Expect hang.\n", __func__);
++		for (i = 0; i < cyclelen; i++) {
++			j = srcu_lockdep_next(__func__, "srcu_read_lock", "synchronize_srcu",
++					      "srcu_read_unlock", i, cyclelen, deadlock);
++			idx = srcu_read_lock(srcus[i]);
++			if (j >= 0)
++				synchronize_srcu(srcus[j]);
++			srcu_read_unlock(srcus[i], idx);
++		}
++		return;
++	}
++
++	if (testtype == 1) {
++		pr_info("%s: test_srcu_lockdep = %05d: SRCU/mutex %d-way %sdeadlock.\n",
++			__func__, test_srcu_lockdep, cyclelen, deadlock ? "" : "non-");
++		for (i = 0; i < cyclelen; i++) {
++			pr_info("%s: srcu_read_lock(%d), mutex_lock(%d), mutex_unlock(%d), srcu_read_unlock(%d)\n",
++				__func__, i, i, i, i);
++			idx = srcu_read_lock(srcus[i]);
++			mutex_lock(muts[i]);
++			mutex_unlock(muts[i]);
++			srcu_read_unlock(srcus[i], idx);
++
++			j = srcu_lockdep_next(__func__, "mutex_lock", "synchronize_srcu",
++					      "mutex_unlock", i, cyclelen, deadlock);
++			mutex_lock(muts[i]);
++			if (j >= 0)
++				synchronize_srcu(srcus[j]);
++			mutex_unlock(muts[i]);
++		}
++		return;
++	}
++
++	if (testtype == 2) {
++		pr_info("%s: test_srcu_lockdep = %05d: SRCU/rwsem %d-way %sdeadlock.\n",
++			__func__, test_srcu_lockdep, cyclelen, deadlock ? "" : "non-");
++		for (i = 0; i < cyclelen; i++) {
++			pr_info("%s: srcu_read_lock(%d), down_read(%d), up_read(%d), srcu_read_unlock(%d)\n",
++				__func__, i, i, i, i);
++			idx = srcu_read_lock(srcus[i]);
++			down_read(rwsems[i]);
++			up_read(rwsems[i]);
++			srcu_read_unlock(srcus[i], idx);
++
++			j = srcu_lockdep_next(__func__, "down_write", "synchronize_srcu",
++					      "up_write", i, cyclelen, deadlock);
++			down_write(rwsems[i]);
++			if (j >= 0)
++				synchronize_srcu(srcus[j]);
++			up_write(rwsems[i]);
++		}
++		return;
++	}
++
++err_out:
++	pr_info("%s: test_srcu_lockdep = %05d does nothing.\n", __func__, test_srcu_lockdep);
++	pr_info("%s: test_srcu_lockdep = DNNL.\n", __func__);
++	pr_info("%s: D: Deadlock if nonzero.\n", __func__);
++	pr_info("%s: NN: Test number, 0=SRCU, 1=SRCU/mutex, 2=SRCU/rwsem.\n", __func__);
++	pr_info("%s: L: Cycle length.\n", __func__);
++}
++
+ static int __init
+ rcu_torture_init(void)
  {
- 	struct task_struct *curr = current;
- 	struct lock_class *class = NULL;
-@@ -4961,7 +4977,8 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
+@@ -3504,6 +3653,8 @@ rcu_torture_init(void)
+ 	if (cur_ops->init)
+ 		cur_ops->init();
  
- 	class_idx = class - lock_classes;
- 
--	if (depth) { /* we're holding locks */
-+	if (depth && !sync) {
-+		/* we're holding locks and the new held lock is not a sync */
- 		hlock = curr->held_locks + depth - 1;
- 		if (hlock->class_idx == class_idx && nest_lock) {
- 			if (!references)
-@@ -4995,6 +5012,7 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
- 	hlock->trylock = trylock;
- 	hlock->read = read;
- 	hlock->check = check;
-+	hlock->sync = !!sync;
- 	hlock->hardirqs_off = !!hardirqs_off;
- 	hlock->references = references;
- #ifdef CONFIG_LOCK_STAT
-@@ -5056,6 +5074,10 @@ static int __lock_acquire(struct lockdep_map *lock, unsigned int subclass,
- 	if (!validate_chain(curr, hlock, chain_head, chain_key))
- 		return 0;
- 
-+	/* For lock_sync(), we are done here since no actual critical section */
-+	if (hlock->sync)
-+		return 1;
++	rcu_torture_init_srcu_lockdep();
 +
- 	curr->curr_chain_key = chain_key;
- 	curr->lockdep_depth++;
- 	check_chain_key(curr);
-@@ -5197,7 +5219,7 @@ static int reacquire_held_locks(struct task_struct *curr, unsigned int depth,
- 				    hlock->read, hlock->check,
- 				    hlock->hardirqs_off,
- 				    hlock->nest_lock, hlock->acquire_ip,
--				    hlock->references, hlock->pin_count)) {
-+				    hlock->references, hlock->pin_count, 0)) {
- 		case 0:
- 			return 1;
- 		case 1:
-@@ -5667,7 +5689,7 @@ void lock_acquire(struct lockdep_map *lock, unsigned int subclass,
- 
- 	lockdep_recursion_inc();
- 	__lock_acquire(lock, subclass, trylock, read, check,
--		       irqs_disabled_flags(flags), nest_lock, ip, 0, 0);
-+		       irqs_disabled_flags(flags), nest_lock, ip, 0, 0, 0);
- 	lockdep_recursion_finish();
- 	raw_local_irq_restore(flags);
- }
-@@ -5700,11 +5722,6 @@ EXPORT_SYMBOL_GPL(lock_release);
-  * APIs are used to wait for one or multiple critical sections (on other CPUs
-  * or threads), and it means that calling these APIs inside these critical
-  * sections is potential deadlock.
-- *
-- * This annotation acts as an acqurie+release anontation pair with hardirqoff
-- * being 1. Since there's no critical section, no interrupt can create extra
-- * dependencies "inside" the annotation, hardirqoff == 1 allows us to avoid
-- * false positives.
-  */
- void lock_sync(struct lockdep_map *lock, unsigned subclass, int read,
- 	       int check, struct lockdep_map *nest_lock, unsigned long ip)
-@@ -5718,10 +5735,9 @@ void lock_sync(struct lockdep_map *lock, unsigned subclass, int read,
- 	check_flags(flags);
- 
- 	lockdep_recursion_inc();
--	__lock_acquire(lock, subclass, 0, read, check, 1, nest_lock, ip, 0, 0);
--
--	if (__lock_release(lock, ip))
--		check_chain_key(current);
-+	__lock_acquire(lock, subclass, 0, read, check,
-+		       irqs_disabled_flags(flags), nest_lock, ip, 0, 0, 1);
-+	check_chain_key(current);
- 	lockdep_recursion_finish();
- 	raw_local_irq_restore(flags);
- }
+ 	if (nreaders >= 0) {
+ 		nrealreaders = nreaders;
+ 	} else {
 -- 
 2.39.2
 
