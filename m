@@ -2,64 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252D66BE0BE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 06:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFAF6BE0CA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 06:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjCQFrl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Mar 2023 01:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
+        id S229523AbjCQFux (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Mar 2023 01:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjCQFrk (ORCPT
+        with ESMTP id S229489AbjCQFux (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Mar 2023 01:47:40 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDAA2BF15
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 22:47:36 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id c1so815524vsk.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 22:47:36 -0700 (PDT)
+        Fri, 17 Mar 2023 01:50:53 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C3267019
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 22:50:41 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id x14so3555524vso.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 22:50:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679032055;
+        d=google.com; s=20210112; t=1679032240;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qqyMKVLiw5ozZTt6n8jJx/6bBTe2Tol2z3utiS2wWfI=;
-        b=MpWRGZ9TA3O3Cv5IYXG3HADkhf0N+iXPDw+SP5SGyWRJuR9lq4qiyLkv7+BNuIrqsi
-         NxSt4eogUmpfqEhECG4Sz2+9ZUd3qTCD7OFx4tUoVPFlsYVj9C5IUvE0o9zI5aLlb1Yn
-         M3FjSIAVmk5xmEkcQdxxn2jrPDkK1kh6hQFy6Pa2po4VWDHZcZ8+m25O9lRae83CZug2
-         m5iKwKyVmbt6b8ZiZYca+ObrLUhvehtnJodcV73rgbDTQ0TWRjwSYsS5aUg/NXkeMmoc
-         Z+jHmr1uhQG61qhKScZ7rP84CyG8KCg1L1HkDULTzamYNxgK+jSDxY0XqYy6MM45FD+3
-         cc2A==
+        bh=M1TdgtGtQnI7Fcq9FdiCbp7EdqdSwRhoi6Bg1VFKPwE=;
+        b=aTwUgVIUvPVsOrcFG9z9n4WsFG6pJURJXNJCx+ND0KC+hMnQsAEVrP7Y/7F+/O+pzI
+         PhCLZBVScFcUQ/7ZbtZ94zHie0CArmitKU1ZsWzumWeE7UjzGmVvRfNlErIZr+0Bx1ks
+         C1fBOoTn31cPvZXn1ZfhBmAuA3Y53c8v8c+RYHwPfZ79uXWvjezNyg4Z2GOrqVfidrSo
+         vDPXFAErtPaxfKmu0e90sw2CqS5HtxdVeGB59/DHXMEvYYYUzUdDIBONnXOIO41cSi3U
+         hW9bUSsS7KCxDFpg90qiFfhZbkefwaGKaRUazIuLmY/gvlC2dqNRdzgnaYEKpwU+iWPN
+         6QAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679032055;
+        d=1e100.net; s=20210112; t=1679032240;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qqyMKVLiw5ozZTt6n8jJx/6bBTe2Tol2z3utiS2wWfI=;
-        b=er8bq3mvSJm260sCcWtpE3n3C5RmbbiBrzyUQcfUNxXajyVfVJsUJ1AYlPHqF7EqHW
-         bCloxTlW0DUfTNInS7DO4SuvYKdwJ8+OsgWI4JIfaa2XKZv+ds7FmNp+mVPZnOhmvzar
-         qEVsEZCn9HW69R2FLpfMUABO2ju1WKMogJRtnauBcHszDZwCQwS9VRafFpb9YYiQOoyn
-         GNMcut0Whwn3WXLK3Ex198KrI96enKsQRPD2cBPiVPRnHuGvYsLE8GPy640H19XzLhj5
-         gobPGxx8QRROwn9HqIBPv0lwYXj4f4ArniSsx6MMllQ+Nd9UKzBNL/JVnFz95OTInmI+
-         XI3g==
-X-Gm-Message-State: AO0yUKXhF/AxePFKFaCWwjpJAhBs0pmF1hGzA1ZvJhzGK9lPs6RfndZd
-        ncJ9+4WVlwYgKOacH0dmWLNKbvWPMTu82E6WfTQeBA==
-X-Google-Smtp-Source: AK7set9auaedY47x9XhulJotGnjmD3QCOlItuX1CQyuC/eJwFDMkCPLLKn0EzBIpDlClf+qwDO4fcUAgQ01bNid48/8=
+        bh=M1TdgtGtQnI7Fcq9FdiCbp7EdqdSwRhoi6Bg1VFKPwE=;
+        b=ETBJvunlJMOqn3XzTWhbMT2sdp9vVeYIx5v0c0Nr5CPCHGUlf+2GmbR2BBjBTaF+mD
+         oBgVEaEtm7G4aEvKRToVphxCzV1Cxr/mjrEWmfnUh8FtfCgudLuEU1KIcv+xgfMWyxFP
+         Dy3JSPRRw2ryoHWsXmSV/hTt/wJI/BXTZkGVwH+G+NcdE96HXwQfsZt3BltzOCajjVXJ
+         z60r+rYckxXYcDXFkHgdhDUFmWyy5lhydcRWKe6R7yturWCuzkLhn5J9tFAE+++a9+oE
+         1kjahy9ighzxB/aa38PuMVwG9Hn/nivdoAUvCBY8XPa6FxCbK9j0PTbUZPWU+OHAiDJ/
+         qcaQ==
+X-Gm-Message-State: AO0yUKUZYACb1+ve1dGVzWv2OEbVz1Tkj+R65vXgvDMvTVIx2jn3SaoB
+        +A9k0JUFvcS4FSa2VD2bnqpJaeGOijYTdOS6X+65Yg==
+X-Google-Smtp-Source: AK7set/pknchOt6GCI5H8Bu87UK8KURx1NUaIfY4InP1m65Sx/uf0WqoAiGuY2ibGFJc+IPlfQGXQM7+P4WyMRSfTYk=
 X-Received: by 2002:a67:b748:0:b0:425:bbc6:aa64 with SMTP id
- l8-20020a67b748000000b00425bbc6aa64mr5424769vsh.5.1679032055357; Thu, 16 Mar
- 2023 22:47:35 -0700 (PDT)
+ l8-20020a67b748000000b00425bbc6aa64mr5428301vsh.5.1679032240378; Thu, 16 Mar
+ 2023 22:50:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230316220638.983743-1-dlatypov@google.com> <20230316220638.983743-2-dlatypov@google.com>
-In-Reply-To: <20230316220638.983743-2-dlatypov@google.com>
+References: <20230316220638.983743-1-dlatypov@google.com> <20230316220638.983743-3-dlatypov@google.com>
+In-Reply-To: <20230316220638.983743-3-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 17 Mar 2023 13:47:24 +0800
-Message-ID: <CABVgOSk3BOyNsV77YohgV5L8cN+j67m7PNa36HFhdb5vN2SRtQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] kunit: tool: remove unused imports and variables
+Date:   Fri, 17 Mar 2023 13:50:29 +0800
+Message-ID: <CABVgOSn12OvyrmpED5Q5PEPfHCZNc1dqgct9m0L-TjNGMnwA5Q@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] kunit: tool: fix pre-existing `mypy --strict`
+ errors and update run_checks.py
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     brendanhiggins@google.com, rmoar@google.com,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        johannes@sipsolutions.net
+        johannes@sipsolutions.net, Johannes Berg <johannes.berg@intel.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003fdf0905f7121d2d"
+        boundary="000000000000494e5505f7122829"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,103 +72,310 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000003fdf0905f7121d2d
+--000000000000494e5505f7122829
 Content-Type: text/plain; charset="UTF-8"
 
 On Fri, 17 Mar 2023 at 06:06, Daniel Latypov <dlatypov@google.com> wrote:
 >
-> We don't run a linter regularly over kunit.py code (the default settings
-> on most don't like kernel style, e.g. tabs) so some of these imports
-> didn't get removed when they stopped being used.
+> Basically, get this command to be happy and make run_checks.py happy
+>  $ mypy --strict --exclude '_test.py$' --exclude qemu_configs/ ./tools/testing/kunit/
 >
+> Primarily the changes are
+> * add `-> None` return type annotations
+> * add all the missing argument type annotations
+>
+> Previously, we had false positives from mypy in `main()`, see commit
+> 09641f7c7d8f ("kunit: tool: surface and address more typing issues").
+> But after commit 2dc9d6ca52a4 ("kunit: kunit.py extract handlers")
+> refactored things, the variable name reuse mypy hated is gone.
+>
+> Note: mypy complains we don't annotate the types the unused args in our
+> signal handler. That's silly.
+> But to make it happy, I've copy-pasted an appropriate annotation from
+> https://github.com/python/typing/discussions/1042#discussioncomment-2013595.
+>
+> Reported-by: Johannes Berg <johannes.berg@intel.com>
+> Link: https://lore.kernel.org/linux-kselftest/9a172b50457f4074af41fe1dc8e55dcaf4795d7e.camel@sipsolutions.net/
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
-While personally, I don't lose sleep over the occasional unused
-variable, these (and particularly the imports) seem sensible.
+While I suspect we're pretty rapidly approaching the point of
+diminishing returns with some of these (like the signal handler
+annotation), I don't think there's any real harm in fixing them and
+enabling strict mode.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-Cheers,
 -- David
 
-> Note: this is unchanged, just added a 3rd patch to this series.
-> ---
->  tools/testing/kunit/kunit.py           | 2 +-
->  tools/testing/kunit/kunit_config.py    | 2 +-
->  tools/testing/kunit/kunit_kernel.py    | 1 -
->  tools/testing/kunit/kunit_parser.py    | 1 -
->  tools/testing/kunit/kunit_tool_test.py | 2 +-
->  5 files changed, 3 insertions(+), 5 deletions(-)
+>  tools/testing/kunit/kunit.py        | 24 ++++++++++++------------
+>  tools/testing/kunit/kunit_config.py |  4 ++--
+>  tools/testing/kunit/kunit_kernel.py | 29 +++++++++++++++--------------
+>  tools/testing/kunit/run_checks.py   |  4 ++--
+>  4 files changed, 31 insertions(+), 30 deletions(-)
 >
 > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 741f15420467..52853634ba23 100755
+> index 52853634ba23..3905c43369c3 100755
 > --- a/tools/testing/kunit/kunit.py
 > +++ b/tools/testing/kunit/kunit.py
-> @@ -123,7 +123,7 @@ def _suites_from_test_list(tests: List[str]) -> List[str]:
->                 parts = t.split('.', maxsplit=2)
->                 if len(parts) != 2:
->                         raise ValueError(f'internal KUnit error, test name should be of the form "<suite>.<test>", got "{t}"')
-> -               suite, case = parts
-> +               suite, _ = parts
->                 if not suites or suites[-1] != suite:
->                         suites.append(suite)
->         return suites
+> @@ -269,7 +269,7 @@ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
+>  def get_default_jobs() -> int:
+>         return len(os.sched_getaffinity(0))
+>
+> -def add_common_opts(parser) -> None:
+> +def add_common_opts(parser: argparse.ArgumentParser) -> None:
+>         parser.add_argument('--build_dir',
+>                             help='As in the make command, it specifies the build '
+>                             'directory.',
+> @@ -320,13 +320,13 @@ def add_common_opts(parser) -> None:
+>                             help='Additional QEMU arguments, e.g. "-smp 8"',
+>                             action='append', metavar='')
+>
+> -def add_build_opts(parser) -> None:
+> +def add_build_opts(parser: argparse.ArgumentParser) -> None:
+>         parser.add_argument('--jobs',
+>                             help='As in the make command, "Specifies  the number of '
+>                             'jobs (commands) to run simultaneously."',
+>                             type=int, default=get_default_jobs(), metavar='N')
+>
+> -def add_exec_opts(parser) -> None:
+> +def add_exec_opts(parser: argparse.ArgumentParser) -> None:
+>         parser.add_argument('--timeout',
+>                             help='maximum number of seconds to allow for all tests '
+>                             'to run. This does not include time taken to build the '
+> @@ -351,7 +351,7 @@ def add_exec_opts(parser) -> None:
+>                             type=str,
+>                             choices=['suite', 'test'])
+>
+> -def add_parse_opts(parser) -> None:
+> +def add_parse_opts(parser: argparse.ArgumentParser) -> None:
+>         parser.add_argument('--raw_output', help='If set don\'t parse output from kernel. '
+>                             'By default, filters to just KUnit output. Use '
+>                             '--raw_output=all to show everything',
+> @@ -386,7 +386,7 @@ def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree
+>                         extra_qemu_args=qemu_args)
+>
+>
+> -def run_handler(cli_args):
+> +def run_handler(cli_args: argparse.Namespace) -> None:
+>         if not os.path.exists(cli_args.build_dir):
+>                 os.mkdir(cli_args.build_dir)
+>
+> @@ -405,7 +405,7 @@ def run_handler(cli_args):
+>                 sys.exit(1)
+>
+>
+> -def config_handler(cli_args):
+> +def config_handler(cli_args: argparse.Namespace) -> None:
+>         if cli_args.build_dir and (
+>                         not os.path.exists(cli_args.build_dir)):
+>                 os.mkdir(cli_args.build_dir)
+> @@ -421,7 +421,7 @@ def config_handler(cli_args):
+>                 sys.exit(1)
+>
+>
+> -def build_handler(cli_args):
+> +def build_handler(cli_args: argparse.Namespace) -> None:
+>         linux = tree_from_args(cli_args)
+>         request = KunitBuildRequest(build_dir=cli_args.build_dir,
+>                                         make_options=cli_args.make_options,
+> @@ -434,7 +434,7 @@ def build_handler(cli_args):
+>                 sys.exit(1)
+>
+>
+> -def exec_handler(cli_args):
+> +def exec_handler(cli_args: argparse.Namespace) -> None:
+>         linux = tree_from_args(cli_args)
+>         exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
+>                                         build_dir=cli_args.build_dir,
+> @@ -450,10 +450,10 @@ def exec_handler(cli_args):
+>                 sys.exit(1)
+>
+>
+> -def parse_handler(cli_args):
+> +def parse_handler(cli_args: argparse.Namespace) -> None:
+>         if cli_args.file is None:
+> -               sys.stdin.reconfigure(errors='backslashreplace')  # pytype: disable=attribute-error
+> -               kunit_output = sys.stdin
+> +               sys.stdin.reconfigure(errors='backslashreplace')  # type: ignore
+> +               kunit_output = sys.stdin  # type: Iterable[str]
+>         else:
+>                 with open(cli_args.file, 'r', errors='backslashreplace') as f:
+>                         kunit_output = f.read().splitlines()
+> @@ -475,7 +475,7 @@ subcommand_handlers_map = {
+>  }
+>
+>
+> -def main(argv):
+> +def main(argv: Sequence[str]) -> None:
+>         parser = argparse.ArgumentParser(
+>                         description='Helps writing and running KUnit tests.')
+>         subparser = parser.add_subparsers(dest='subcommand')
 > diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-> index 48b5f34b2e5d..9f76d7b89617 100644
+> index 9f76d7b89617..eb5dd01210b1 100644
 > --- a/tools/testing/kunit/kunit_config.py
 > +++ b/tools/testing/kunit/kunit_config.py
 > @@ -8,7 +8,7 @@
 >
 >  from dataclasses import dataclass
 >  import re
-> -from typing import Dict, Iterable, List, Set, Tuple
-> +from typing import Dict, Iterable, List, Tuple
+> -from typing import Dict, Iterable, List, Tuple
+> +from typing import Any, Dict, Iterable, List, Tuple
 >
 >  CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
 >  CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
+> @@ -34,7 +34,7 @@ class Kconfig:
+>         def __init__(self) -> None:
+>                 self._entries = {}  # type: Dict[str, str]
+>
+> -       def __eq__(self, other) -> bool:
+> +       def __eq__(self, other: Any) -> bool:
+>                 if not isinstance(other, self.__class__):
+>                         return False
+>                 return self._entries == other._entries
 > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index e6fc8fcb071a..775842b912d8 100644
+> index 775842b912d8..a3321a991f11 100644
 > --- a/tools/testing/kunit/kunit_kernel.py
 > +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -18,7 +18,6 @@ import threading
+> @@ -16,6 +16,7 @@ import shutil
+>  import signal
+>  import threading
 >  from typing import Iterator, List, Optional, Tuple
+> +from types import FrameType
 >
 >  import kunit_config
-> -from kunit_printer import stdout
 >  import qemu_config
+> @@ -56,7 +57,7 @@ class LinuxSourceTreeOperations:
+>         def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
+>                 return base_kunitconfig
 >
->  KCONFIG_PATH = '.config'
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index a225799f6b1b..fbc094f0567e 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -12,7 +12,6 @@
->  from __future__ import annotations
->  from dataclasses import dataclass
->  import re
-> -import sys
->  import textwrap
+> -       def make_olddefconfig(self, build_dir: str, make_options) -> None:
+> +       def make_olddefconfig(self, build_dir: str, make_options: Optional[List[str]]) -> None:
+>                 command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, 'olddefconfig']
+>                 if self._cross_compile:
+>                         command += ['CROSS_COMPILE=' + self._cross_compile]
+> @@ -70,7 +71,7 @@ class LinuxSourceTreeOperations:
+>                 except subprocess.CalledProcessError as e:
+>                         raise ConfigError(e.output.decode())
 >
->  from enum import Enum, auto
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 0c2190514103..be35999bb84f 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -328,7 +328,7 @@ class KUnitParserTest(unittest.TestCase):
->         def test_parse_subtest_header(self):
->                 ktap_log = test_data_path('test_parse_subtest_header.log')
->                 with open(ktap_log) as file:
-> -                       result = kunit_parser.parse_run_tests(file.readlines())
-> +                       kunit_parser.parse_run_tests(file.readlines())
->                 self.print_mock.assert_any_call(StrContains('suite (1 subtest)'))
+> -       def make(self, jobs, build_dir: str, make_options) -> None:
+> +       def make(self, jobs: int, build_dir: str, make_options: Optional[List[str]]) -> None:
+>                 command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, '--jobs=' + str(jobs)]
+>                 if make_options:
+>                         command.extend(make_options)
+> @@ -132,7 +133,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>  class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>         """An abstraction over command line operations performed on a source tree."""
 >
->         def test_show_test_output_on_failure(self):
+> -       def __init__(self, cross_compile=None):
+> +       def __init__(self, cross_compile: Optional[str]=None):
+>                 super().__init__(linux_arch='um', cross_compile=cross_compile)
+>
+>         def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
+> @@ -215,7 +216,7 @@ def _get_qemu_ops(config_path: str,
+>
+>         if not hasattr(config, 'QEMU_ARCH'):
+>                 raise ValueError('qemu_config module missing "QEMU_ARCH": ' + config_path)
+> -       params: qemu_config.QemuArchParams = config.QEMU_ARCH  # type: ignore
+> +       params: qemu_config.QemuArchParams = config.QEMU_ARCH
+>         if extra_qemu_args:
+>                 params.extra_qemu_params.extend(extra_qemu_args)
+>         return params.linux_arch, LinuxSourceTreeOperationsQemu(
+> @@ -229,10 +230,10 @@ class LinuxSourceTree:
+>               build_dir: str,
+>               kunitconfig_paths: Optional[List[str]]=None,
+>               kconfig_add: Optional[List[str]]=None,
+> -             arch=None,
+> -             cross_compile=None,
+> -             qemu_config_path=None,
+> -             extra_qemu_args=None) -> None:
+> +             arch: Optional[str]=None,
+> +             cross_compile: Optional[str]=None,
+> +             qemu_config_path: Optional[str]=None,
+> +             extra_qemu_args: Optional[List[str]]=None) -> None:
+>                 signal.signal(signal.SIGINT, self.signal_handler)
+>                 if qemu_config_path:
+>                         self._arch, self._ops = _get_qemu_ops(qemu_config_path, extra_qemu_args, cross_compile)
+> @@ -275,7 +276,7 @@ class LinuxSourceTree:
+>                 logging.error(message)
+>                 return False
+>
+> -       def build_config(self, build_dir: str, make_options) -> bool:
+> +       def build_config(self, build_dir: str, make_options: Optional[List[str]]) -> bool:
+>                 kconfig_path = get_kconfig_path(build_dir)
+>                 if build_dir and not os.path.exists(build_dir):
+>                         os.mkdir(build_dir)
+> @@ -303,7 +304,7 @@ class LinuxSourceTree:
+>                 old_kconfig = kunit_config.parse_file(old_path)
+>                 return old_kconfig != self._kconfig
+>
+> -       def build_reconfig(self, build_dir: str, make_options) -> bool:
+> +       def build_reconfig(self, build_dir: str, make_options: Optional[List[str]]) -> bool:
+>                 """Creates a new .config if it is not a subset of the .kunitconfig."""
+>                 kconfig_path = get_kconfig_path(build_dir)
+>                 if not os.path.exists(kconfig_path):
+> @@ -319,7 +320,7 @@ class LinuxSourceTree:
+>                 os.remove(kconfig_path)
+>                 return self.build_config(build_dir, make_options)
+>
+> -       def build_kernel(self, jobs, build_dir: str, make_options) -> bool:
+> +       def build_kernel(self, jobs: int, build_dir: str, make_options: Optional[List[str]]) -> bool:
+>                 try:
+>                         self._ops.make_olddefconfig(build_dir, make_options)
+>                         self._ops.make(jobs, build_dir, make_options)
+> @@ -328,7 +329,7 @@ class LinuxSourceTree:
+>                         return False
+>                 return self.validate_config(build_dir)
+>
+> -       def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
+> +       def run_kernel(self, args: Optional[List[str]]=None, build_dir: str='', filter_glob: str='', timeout: Optional[int]=None) -> Iterator[str]:
+>                 if not args:
+>                         args = []
+>                 if filter_glob:
+> @@ -339,7 +340,7 @@ class LinuxSourceTree:
+>                 assert process.stdout is not None  # tell mypy it's set
+>
+>                 # Enforce the timeout in a background thread.
+> -               def _wait_proc():
+> +               def _wait_proc() -> None:
+>                         try:
+>                                 process.wait(timeout=timeout)
+>                         except Exception as e:
+> @@ -365,6 +366,6 @@ class LinuxSourceTree:
+>                         waiter.join()
+>                         subprocess.call(['stty', 'sane'])
+>
+> -       def signal_handler(self, unused_sig, unused_frame) -> None:
+> +       def signal_handler(self, unused_sig: int, unused_frame: Optional[FrameType]) -> None:
+>                 logging.error('Build interruption occurred. Cleaning console.')
+>                 subprocess.call(['stty', 'sane'])
+> diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
+> index 61cece1684df..8208c3b3135e 100755
+> --- a/tools/testing/kunit/run_checks.py
+> +++ b/tools/testing/kunit/run_checks.py
+> @@ -23,7 +23,7 @@ commands: Dict[str, Sequence[str]] = {
+>         'kunit_tool_test.py': ['./kunit_tool_test.py'],
+>         'kunit smoke test': ['./kunit.py', 'run', '--kunitconfig=lib/kunit', '--build_dir=kunit_run_checks'],
+>         'pytype': ['/bin/sh', '-c', 'pytype *.py'],
+> -       'mypy': ['/bin/sh', '-c', 'mypy *.py'],
+> +       'mypy': ['mypy', '--strict', '--exclude', '_test.py$', '--exclude', 'qemu_configs/', '.'],
+>  }
+>
+>  # The user might not have mypy or pytype installed, skip them if so.
+> @@ -73,7 +73,7 @@ def main(argv: Sequence[str]) -> None:
+>                 sys.exit(1)
+>
+>
+> -def run_cmd(argv: Sequence[str]):
+> +def run_cmd(argv: Sequence[str]) -> None:
+>         subprocess.check_output(argv, stderr=subprocess.STDOUT, cwd=ABS_TOOL_PATH, timeout=TIMEOUT)
+>
+>
 > --
 > 2.40.0.rc1.284.g88254d51c5-goog
 >
 
---0000000000003fdf0905f7121d2d
+--000000000000494e5505f7122829
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -234,14 +442,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBz
-qgtaRvVmahVCeZq/8wMFZtfPpRIhv8K8iqswYvdloTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMTcwNTQ3MzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDq
+lnG8A/HN+S7BsbuHpVxtvvBwMKdppdOe0y4SfwpfSjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMTcwNTUwNDBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAA9T94saO5ApKMJv2QLsO
-n/JOStodq0yYU9Ji7TgPchnbfyS9esYSbNZ41fFClXFvJ9M5OYk0viVGbF+0BtxHiJb6JKmp016W
-R5Pw8AsL9at1Jeu7WGe0hXMnatfaiDBH2fNx6YcCf2ub1oF+ltJM3wtTHh8j7FyNMViKnauQTHY9
-5pXLksrHothg8CmU+hHxYgweXrt4K0q20OQbkn+TH4zkamqWP+AnxdPwpUrz92VDOS82UbB6/xJ+
-1hf9zdmuJB5Ew1C57MA2ny9hWuOxEM0aMUBRcjny2AwyRpIeVtsW7qIfWkh5hPyZ4X51NWD63DCh
-XxTgY8QL8RVVmd8qHQ==
---0000000000003fdf0905f7121d2d--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAsI+10/1b2n9RZPTZ2JTb
+o9UY2Vm+GfwheNfq8xL081MX8/XhtKhymtXE43MVQb/+gKGLRYrjblAhteK51W0JrWxIrlzKbmPO
+uTTKvLS2ysRmzytsmOXQFuIZdhVkGP60r586lwC0cPtkYqq98kKBZVjWn9U8b+hmXpOCHkcN6arg
+Qv5Vu5ECHDqi4WK6b09moZe8ou4057zfB7OmgYUZDPUkRhhem+JkMIFK4/pSp/JEmE4F0BWcOTfM
+sNS57jy2Op5O3mu4LGFmJe4y9IJgRk3tylvBdzsQbiEBI4JK3VFCkcAJbViv87tpGpz+rDYusIIg
+VkKPtsDEwVgM0+4/Kw==
+--000000000000494e5505f7122829--
