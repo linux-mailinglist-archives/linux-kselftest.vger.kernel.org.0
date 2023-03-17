@@ -2,216 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565266BEBD7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 15:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C45C6BEC08
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 16:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjCQOzD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Mar 2023 10:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S231328AbjCQPAS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Mar 2023 11:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjCQOzC (ORCPT
+        with ESMTP id S229850AbjCQPAR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:55:02 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6C6559C1;
-        Fri, 17 Mar 2023 07:54:53 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PdRl72Zggz9xqck;
-        Fri, 17 Mar 2023 22:45:55 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBnOWDafhRkaQemAQ--.41316S7;
-        Fri, 17 Mar 2023 15:54:29 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org,
-        brauner@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, ebiederm@xmission.com,
-        mcgrof@kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 5/5] doc: Add documentation for the User Mode Driver management library
-Date:   Fri, 17 Mar 2023 15:52:40 +0100
-Message-Id: <20230317145240.363908-6-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
-References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
+        Fri, 17 Mar 2023 11:00:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A074FC8880
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Mar 2023 07:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679065173;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4YPRVQy+Pd/j5om95dzW9EJX+zmYVWMbcmqZaHwhRU0=;
+        b=Fiq9NFlM73Pjce6ytzF/UamNVziKJayjjQJhdCBGr2MiQ2EJgUElgGqgiD0KNGu6+wBezx
+        W5juWQ1SCoWY80AOzTUcnz9DeozBXys3z5/X9s8YU/ZDFHqAcjAhCyTkiH6cvkkSEXRVaG
+        kHjTcNviEr/gQ87j6qRid8FoTdZqOss=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-443-zQy0-OLHMeOhtnlpIQk9fw-1; Fri, 17 Mar 2023 10:59:28 -0400
+X-MC-Unique: zQy0-OLHMeOhtnlpIQk9fw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 91F7D88B77F;
+        Fri, 17 Mar 2023 14:59:27 +0000 (UTC)
+Received: from [10.22.10.238] (unknown [10.22.10.238])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B0A1C15BA0;
+        Fri, 17 Mar 2023 14:59:27 +0000 (UTC)
+Message-ID: <ca664da8-0f47-06b2-a94c-82b2f9a1c3aa@redhat.com>
+Date:   Fri, 17 Mar 2023 10:59:26 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 3/5] cgroup/cpuset: Find another usable CPU if none found
+ in current cpuset
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230306200849.376804-1-longman@redhat.com>
+ <20230306200849.376804-4-longman@redhat.com>
+ <20230314181749.5b4k6selbgdhl3up@blackpad>
+ <58a1a878-fa0b-285d-3e43-2b5103d3c770@redhat.com>
+ <20230317122708.ax3m2d4zijkfdzjq@blackpad>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230317122708.ax3m2d4zijkfdzjq@blackpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBnOWDafhRkaQemAQ--.41316S7
-X-Coremail-Antispam: 1UD129KBjvJXoW3Gw4Utr4kKFWrKrWrGw18AFb_yoW7AFW8pF
-        Z3JrWft3WkJryavr1fJw17uryrZas7Ja15GFn3Kw1rZwn8Zrn0yr1Ut3WFqFyUGryFyrW5
-        tr15Jr1UCw1DAr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
-        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
-        v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-        pf9x07jIPfQUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4qqgQAAsG
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On 3/17/23 08:27, Michal Koutný wrote:
+> On Tue, Mar 14, 2023 at 04:22:06PM -0400, Waiman Long <longman@redhat.com> wrote:
+>> Some arm64 systems can have asymmetric CPUs where certain tasks are only
+>> runnable on a selected subset of CPUs.
+> Ah, I'm catching up.
+>
+>> This information is not captured in the cpuset. As a result,
+>> task_cpu_possible_mask() may return a mask that have no overlap with
+>> effective_cpus causing new_cpus to become empty.
+> I can see that historically, there was an approach of terminating
+> unaccomodable tasks:
+>     94f9c00f6460 ("arm64: Remove logic to kill 32-bit tasks on 64-bit-only cores")
+> the removal of killing had been made possible with
+>     df950811f4a8 ("arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched system").
+>
+> That gives two other alternatives to affinity modification:
+> 2) kill such tasks (not unlike OOM upon memory.max reduction),
+> 3) reject cpuset reduction (violates cgroup v2 delegation).
+>
+> What do you think about 2)?
 
-Add a documentation, to explain the motivation behind the new component, to
-describe the software architecture, the API and an example used for
-testing.
+Yes, killing it is one possible solution.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- Documentation/driver-api/index.rst    |  1 +
- Documentation/driver-api/umd_mgmt.rst | 99 +++++++++++++++++++++++++++
- MAINTAINERS                           |  1 +
- 3 files changed, 101 insertions(+)
- create mode 100644 Documentation/driver-api/umd_mgmt.rst
+(3) doesn't work if the affinity change is due to hot cpu removal. So 
+that leaves this patch or (2) as the only alternative. I would like to 
+hear what Will and Tejun thinks about it.
 
-diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
-index ff9aa1afdc6..ad42cd968dc 100644
---- a/Documentation/driver-api/index.rst
-+++ b/Documentation/driver-api/index.rst
-@@ -113,6 +113,7 @@ available subsections can be seen below.
-    xillybus
-    zorro
-    hte/index
-+   umd_mgmt
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/driver-api/umd_mgmt.rst b/Documentation/driver-api/umd_mgmt.rst
-new file mode 100644
-index 00000000000..7dbb50b3643
---- /dev/null
-+++ b/Documentation/driver-api/umd_mgmt.rst
-@@ -0,0 +1,99 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+===================================
-+User Mode Driver Management Library
-+===================================
-+
-+:Author: Roberto Sassu, Huawei Technologies Duesseldorf GmbH
-+:Date:   2023-03-16
-+
-+Introduction
-+============
-+
-+The idea of moving code away from the kernel and running it in user space
-+is not new. For example, the User Space I/O driver model allows developers
-+to implement most of the driver logic in user space, and keep only a small
-+part in a kernel module, for example to handle interrupts.
-+
-+The User Mode Driver (UMD) is a more specialized solution, primarily used
-+by bpfilter, consisting of a user space process running from code embedded
-+in a kernel module, communicating only through a pipe with the kernel.
-+
-+The kernel makes a request, possibly originated by the user of the system,
-+and sends it to the user space process. The latter handles the kernel
-+request, and sends the response back to the kernel. Finally, the kernel
-+eventually forwards the result to the user.
-+
-+This usage model is particularly interesting for security. The kernel can
-+offload to user space workloads that could introduce possible threats, for
-+example parsing unknown and possibly malicious data. While the kernel
-+already does that, it is important to limit to the minimum the chances of
-+an attacker to exploit a vulnerability in the kernel code.
-+
-+If a user space process becomes corrupted, it can still send malicious data
-+to the kernel, but it won't be able to directly corrupt the kernel memory.
-+In addition, if the communication protocol between the user space process
-+and the kernel is simple enough, malicious data can be effectively
-+sanitized.
-+
-+The purpose of this library is simply to facilitate developers to create
-+UMDs and to help them customize the UMDs to their needs.
-+
-+
-+
-+Architecture
-+============
-+
-+The architecture of the UMD library is as follows:
-+
-+::
-+
-+ +-----------+                    +---------------+
-+ |    UMD    | 2. request module  |   UMD Loader  |
-+ |  Manager  |------------------->| (kmod +       |
-+ |           |------+             |  user binary) |
-+ +-----------+      |             +---------------+
-+       ^            |                    |                     kernel space
-+ --------------------------------------------------------------------------
-+       |            | 4. send/           v 3. fork/execve/pipe   user space
-+       |            |    receive  +-------------+
-+ 1. user request    +------------>| UMD Handler |
-+                                  | (exec user  |
-+                                  |  binary)    |
-+                                  +-------------+
-+
-+The `UMD Manager` is the frontend interface to any user or
-+kernel-originated request. It invokes the `UMD Loader` to start the
-+`UMD Handler`, and communicates with the latter to satisfy the request.
-+
-+The `UMD Loader` is merely responsible to extract the `user binary` from
-+the kernel module, copy it to a tmpfs filesystem, fork the current process,
-+start the `UMD Handler`, and create a pipe for the communication between
-+the `UMD Manager` and the `UMD Handler`.
-+
-+The `UMD Handler` reads requests from the `UMD Manager`, processes them
-+internally, and sends the response to it.
-+
-+
-+API
-+===
-+
-+.. kernel-doc:: include/linux/usermode_driver_mgmt.h
-+
-+.. kernel-doc:: kernel/usermode_driver_mgmt.c
-+
-+
-+Example
-+=======
-+
-+An example of usage of the UMD management library can be found in
-+tools/testing/selftests/umd_mgmt/sample_umd.
-+
-+sample_mgr.c implements the `UMD Manager`, sample_loader.c implements the
-+`UMD Loader` and, finally, sample_handler.c implements the `UMD Handler`.
-+
-+The `UMD Manager` exposes /sys/kernel/security/sample_umd and accepts a
-+number between 0-128K intended as an offset in the response buffer, at
-+which the `UMD Handler` sets the byte to 1. The `UMD Manager` verifies
-+that. If the byte is not set to 1, the `UMD Manager` rejects the write, so
-+that the failure can be reported by the test.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a0cd161843e..4b9d251259d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11249,6 +11249,7 @@ KERNEL USERMODE DRIVER MANAGEMENT
- M:	Roberto Sassu <roberto.sassu@huawei.com>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
-+F:	Documentation/driver-api/umd_mgmt.rst
- F:	include/linux/usermode_driver_mgmt.h
- F:	kernel/usermode_driver_mgmt.c
- F:	tools/testing/selftests/umd_mgmt/*
--- 
-2.25.1
+I am going to remove this patch from the series for the time being.
+
+Thanks,
+Longman
 
