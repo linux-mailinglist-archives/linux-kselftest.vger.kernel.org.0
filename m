@@ -2,240 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDAE6BEAD9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 15:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E8C6BEBC5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 15:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjCQOP4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Mar 2023 10:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
+        id S230188AbjCQOxz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Mar 2023 10:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjCQOPz (ORCPT
+        with ESMTP id S229772AbjCQOxy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:15:55 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E79C41B6B
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Mar 2023 07:15:53 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id x3so20876393edb.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Mar 2023 07:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679062552;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5tBpag1M9/QK3J44nio5y/z0shlcd59R/V5AkvISOo0=;
-        b=W4zjRDSR1VwMi34d268bsm/oghzr1RPH1PKphPT5eretqaJvJLC5v2Oppto80nguAm
-         CXmyOlupS0vT2fYXp6aHhdMZQBWNoOUK+qj9g8VspYuwvYytNlmF63RfTenZRCv0Ai+1
-         CnYRAF63jCEiSXqiOUouDtYZ7TKtEEF4zUEF4fRa9AecrI9Rq5NcwC+M/HuZV0qoOrXc
-         lXsDcg/r0c/TxjriLZ0dku0sirbVxAlCKPVLRzDSl18++YjunB/KcM/mKGzv+v6kpThi
-         wsC1C6QYWmSs2IOKBiPgpd5I4Mw94bbhddwbLAvet35CcKxC3TfBP4xSxq6p1J/cQTof
-         AA7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679062552;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5tBpag1M9/QK3J44nio5y/z0shlcd59R/V5AkvISOo0=;
-        b=HIXsXaj5DcuslfeXVt7iA4T6Dsp6BtVxT0Q6AC0vXEfOjieujpgRTS/YCuVEUnJoYK
-         S7ths2Hs6ZB6K6RYP4N8bBfo1nE4nS1fSXCGnQW09kj3GtlFCum9Vr28lfCZDjuMyatO
-         RgAWjUI+sCEhDQ12f1aH9CvQsNNTfwb8unlElBgDcZ38+tKgHq9P2orSmzT2i6POZ9TC
-         dza1wnVjcInylootILDr5l9z5PKD7kanhFn3Q1kWzTgAV5Kr+HA8FaTKI0JSvp+BNJVu
-         u2m/8+8Np1DJtZx63OLNaldV4s4v3dQJ1i81U32O7DSp1zdWH8+Rr/N/Ogg9I/s61yzh
-         WHIQ==
-X-Gm-Message-State: AO0yUKWc0UuFX9zL7WxICPp6qeWP9S4YaUkB2J/DR0oZIsND3Gvjzwh7
-        ymK2hc1LToH3HotbEJZCfxG0q/KmziDOqeoUHVU0ag==
-X-Google-Smtp-Source: AK7set+DTtXSR9Avk0Jn6IT86sdVUC8+M9HffKHHDzCIBOtRhHD0v7nzpuzVOguMSBd6PF9nH5JdX241VByBNqeyCvk=
-X-Received: by 2002:a17:907:8dce:b0:931:99b5:67a4 with SMTP id
- tg14-20020a1709078dce00b0093199b567a4mr1593357ejc.15.1679062551783; Fri, 17
- Mar 2023 07:15:51 -0700 (PDT)
+        Fri, 17 Mar 2023 10:53:54 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83133D0AA;
+        Fri, 17 Mar 2023 07:53:52 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PdRjy46Pnz9v7gg;
+        Fri, 17 Mar 2023 22:44:54 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBnOWDafhRkaQemAQ--.41316S2;
+        Fri, 17 Mar 2023 15:53:29 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org,
+        brauner@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, ebiederm@xmission.com,
+        mcgrof@kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 0/5] usermode_driver: Add management library and API
+Date:   Fri, 17 Mar 2023 15:52:35 +0100
+Message-Id: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-5-usama.anjum@collabora.com> <CABb0KFGU-jn4pCgmTK2zw0J-1-AVert4JsWF2CxgZ7LxckmWCA@mail.gmail.com>
- <3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@collabora.com> <CABb0KFGru9xFCxyVHBcE+dkXe58=5wiCbvZGSWhuTfr4gn=MRQ@mail.gmail.com>
- <44d3f94e-fb9f-49df-7460-75dcee61802f@collabora.com>
-In-Reply-To: <44d3f94e-fb9f-49df-7460-75dcee61802f@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Fri, 17 Mar 2023 15:15:40 +0100
-Message-ID: <CABb0KFH+Ho+grc5DXT7iWjnQH7T_o4y3BQj8ri5-wxcOvu12Bg@mail.gmail.com>
-Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwBnOWDafhRkaQemAQ--.41316S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF13Wr4xXw18KFyxZry3twb_yoW7JF18pa
+        yrJry3GrnYqF12yFZ3JF17ua4rXan7JF4Ykr1SqrWUZw1IvrySvr1xtr13GFZxKrWftFnI
+        yrn3K3W5Cws8AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+        n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
+        ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07jxCztUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4asxgABsJ
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 17 Mar 2023 at 13:44, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 3/17/23 2:28=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Thu, 16 Mar 2023 at 18:53, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >> On 3/13/23 9:02=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> On Thu, 9 Mar 2023 at 14:58, Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-> > [...]
-> >>>> --- a/fs/proc/task_mmu.c
-> >>>> +++ b/fs/proc/task_mmu.c
-> > [...]
-> >>>> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool =
-swap,
-> > [...]
-> >>> The `cur->len` test seems redundant: is it possible to have
-> >>> `cur->start =3D=3D addr` in that case (I guess it would have to get
-> >>> `n_pages =3D=3D 0` in an earlier invocation)?
-> >> No, both wouldn't work. cur->len =3D=3D 0 means that it has only garba=
-ge. It is
-> >> essential to check the validity from cur->len before performing other
-> >> checks. Also cur->start can never be equal to addr as we are walking o=
-ver
-> >> page addressing in serial manner. We want to see here if the current
-> >> address matches the previous data by finding the ending address of las=
-t
-> >> stored data (cur->start + cur->len * PAGE_SIZE).
-> >
-> > If cur->len =3D=3D 0, then it doesn't matter if it gets merged or not -=
- it
-> > can be filtered out during the flush (see below).
-> > [...]
-> >>>> +               } else if ((!p->vec_index) ||
-> >>>> +                          ((p->vec_index + 1) < p->vec_len)) {
-> >>>
-> >>> Can you explain this test? Why not just `p->vec_index < p->vec_len`? =
-Or better:
-> >>>
-> >>> if (vec_index >=3D p->vec_len)
-> >>>     return -ENOSPC;
-> >>
-> >> No, it'll not work. Lets leave it as it is. :)
-> >>
-> >> It has gotten somewhat complex, but I don't have any other way to make=
- it
-> >> simpler which works. First note the following points:
-> >> 1) We walk over 512 page or 1 thp at a time to not over allocate memor=
-y in
-> >> kernel (p->vec).
-> >> 2) We also want to merge the consecutive pages with the same flags int=
-o one
-> >> struct page_region. p->vec of current walk may merge with next walk. S=
-o we
-> >> cannot write to user memory until we find the results of the next walk=
-.
-> >>
-> >> So most recent data is put into p->cur. When non-intersecting or merge=
-able
-> >> data is found, we move p->cur to p->vec[p->index] inside the page walk=
-.
-> >> After the page walk, p->vec[0 to p->index] is moved to arg->vec. After=
- all
-> >> the walks are over. We move the p->cur to arg->vec. It completes the d=
-ata
-> >> transfer to user buffer.
-> > [...]
-> >> I'm so sorry that it has gotten this much complex. It was way simpler =
-when
-> >> we were walking over all the memory in one go. But then we needed an
-> >> unbounded memory from the kernel which we don't want.
-> > [...]
-> >
-> > I've gone through and hopefully understood the code. I'm not sure this
-> > needs to be so complicated: when traversing a single PMD you can
-> > always copy p->cur to p->vec[p->vec_index++] because you can have at
-> > most pages_per_PMD non-merges (in the worst case the last page always
-> > is left in p->cur and whole p->vec is used). After each PMD p->vec
-> > needs a flush if p->vec_index > 0, skipping the dummy entry at front
-> > (len =3D=3D 0; if present). (This is mostly how it is implemented now, =
-but
-> > I propose to remove the "overflow" check and do the starting guard
-> > removal only every PMD.)
-> Sorry, unable to understand where to remove the guard?
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Instead of checking for it in pagemap_scan_output() for each page you
-can skip it in do_pagemap_cmd() when doing the flush.
+A User Mode Driver (UMD) is a specialization of a User Mode Helper (UMH),
+which runs a user space process from a binary blob, and creates a
+bidirectional pipe, so that the kernel can make a request to that process,
+and the latter provides its response. It is currently used by bpfilter,
+although it does not seem to do any useful work.
 
-> > BTW#2, I think the ENOSPC return in pagemap_scan_output() should
-> > happen later - only if the pages would match and that caused the count
-> > to exceed the limit. For THP n_pages should be truncated to the limit
-> > (and ENOSPC returned right away) only after the pages were verified to
-> > match.
-> We have 2 counters here:
-> * the p->max_pages optionally can be set to find out only N pages of
-> interest. So p->found_pages is counting this. We need to return early if
-> the page limit is complete.
-> * the p->vec_index keeps track of output buffer array size
+The problem is, if other users would like to implement a UMD similar to
+bpfilter, they would have to duplicate the code. Instead, make an UMD
+management library and API from the existing bpfilter and sockopt code,
+and move it to common kernel code.
 
-I think I get how the limits are supposed to work, but I also think
-the implementation is not optimal. An example (assuming max_pages =3D 1
-and vec_len =3D 1):
- - a matching page has been found
- - a second - non-matching - is tried but results in immediate -ENOSPC.
--> In this case I'd expect the early return to happen just after the
-first page is found so that non
-A similar problem occurs for hugepage: when the limit is hit (we found
->=3D max_pages, n_pages is possibly truncated), but the scan continues
-until next page / PMD.
+Also, define the software architecture and the main components of the
+library: the UMD Manager, running in the kernel, acting as the frontend
+interface to any user or kernel-originated request; the UMD Loader, also
+running in the kernel, responsible to load the UMD Handler; the UMD
+Handler, running in user space, responsible to handle requests from the UMD
+Manager and to send to it the response.
 
-[...]
-> >>>> +       if (!arg->required_mask && !arg->anyof_mask &&
-> >>>> +           !arg->excluded_mask)
-> >>>> +               return false;
-> >>>
-> >>> Is there an assumption in the code that those checks are needed? I'd
-> >>> expect that no selection criteria makes a valid page set?
-> >> In my view, selection criterion must be specified for the ioctl to wor=
-k. If
-> >> there is no criterio, user should go and read pagemap file directly. S=
-o the
-> >> assumption is that at least one selection criterion must be specified.
-> >
-> > Yes. I'm not sure we need to prevent multiple ways of doing the same
-> > thing. But doesn't pagemap reading lack the range aggregation feature?
-> Yeah, correct. But note that we are supporting only selective 4 flags in
-> this ioctl, not all pagemap flags. So it is useful for only those users w=
-ho
-> depend only on these 4 flags. Out pagemap_ioctl interface is not so much
-> generic that we can cater anyone. Its interface is specific and we are
-> adding only those cases which are of our interest. So if someone wants
-> range aggregation from pagemap_ioctl, he'll need to add that flag in the
-> IOCTL first. When IOCTL support is added, he can specify the selection
-> criterion etc.
+I have two use cases, but for sake of brevity I will propose one.
 
-The available flag set is not a problem. An example usecase: dumping
-the memory state for debugging: ioctl(return_mask=3DALL) returns a
-conveniently compact vector of ranges of pages that are actually used
-by the process (not only having reserved the virtual space). This is
-actually something that helps dumping processes with using tools like
-AddressSanitizer that create huge sparse mappings.
+I would like to add support for PGP keys and signatures in the kernel, so
+that I can extend secure boot to applications, and allow/deny code
+execution based on the signed file digests included in RPM headers.
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+While I proposed a patch set a while ago (based on a previous work of David
+Howells), the main objection was that the PGP packet parser should not run
+in the kernel.
+
+That makes a perfect example for using a UMD. If the PGP parser is moved to
+user space (UMD Handler), and the kernel (UMD Manager) just instantiates
+the key and verifies the signature on already parsed data, this would
+address the concern.
+
+Patch 1 moves the function bpfilter_send_req() to usermode_driver.c and
+makes the pipe between the kernel and the user space process suitable for
+larger quantity of data (> 64K).
+
+Patch 2 introduces the management library and API.
+
+Patch 3 replaces the existing bpfilter and sockopt code with calls
+to the management API. To use the new mechanism, sockopt itself (acts as
+UMD Manager) now sends/receives messages to/from bpfilter_umh (acts as UMD
+Handler), instead of bpfilter (acts as UMD Loader).
+
+Patch 4 introduces a sample UMD, useful for other implementors, and uses it
+for testing.
+
+Patch 5 introduces the documentation of the new management library and API.
+
+Roberto Sassu (5):
+  usermode_driver: Introduce umd_send_recv() from bpfilter
+  usermode_driver_mgmt: Introduce management of user mode drivers
+  bpfilter: Port to user mode driver management API
+  selftests/umd_mgmt: Add selftests for UMD management library
+  doc: Add documentation for the User Mode Driver management library
+
+ Documentation/driver-api/index.rst            |   1 +
+ Documentation/driver-api/umd_mgmt.rst         |  99 +++++++++++++
+ MAINTAINERS                                   |   9 ++
+ include/linux/bpfilter.h                      |  12 +-
+ include/linux/usermode_driver.h               |   2 +
+ include/linux/usermode_driver_mgmt.h          |  35 +++++
+ kernel/Makefile                               |   2 +-
+ kernel/usermode_driver.c                      |  47 +++++-
+ kernel/usermode_driver_mgmt.c                 | 137 ++++++++++++++++++
+ net/bpfilter/bpfilter_kern.c                  | 120 +--------------
+ net/ipv4/bpfilter/sockopt.c                   |  67 +++++----
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/umd_mgmt/.gitignore   |   1 +
+ tools/testing/selftests/umd_mgmt/Makefile     |  14 ++
+ tools/testing/selftests/umd_mgmt/config       |   1 +
+ .../selftests/umd_mgmt/sample_umd/Makefile    |  22 +++
+ .../selftests/umd_mgmt/sample_umd/msgfmt.h    |  13 ++
+ .../umd_mgmt/sample_umd/sample_binary_blob.S  |   7 +
+ .../umd_mgmt/sample_umd/sample_handler.c      |  81 +++++++++++
+ .../umd_mgmt/sample_umd/sample_loader.c       |  28 ++++
+ .../umd_mgmt/sample_umd/sample_mgr.c          | 124 ++++++++++++++++
+ tools/testing/selftests/umd_mgmt/umd_mgmt.sh  |  40 +++++
+ 22 files changed, 707 insertions(+), 156 deletions(-)
+ create mode 100644 Documentation/driver-api/umd_mgmt.rst
+ create mode 100644 include/linux/usermode_driver_mgmt.h
+ create mode 100644 kernel/usermode_driver_mgmt.c
+ create mode 100644 tools/testing/selftests/umd_mgmt/.gitignore
+ create mode 100644 tools/testing/selftests/umd_mgmt/Makefile
+ create mode 100644 tools/testing/selftests/umd_mgmt/config
+ create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/Makefile
+ create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/msgfmt.h
+ create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/sample_binary_blob.S
+ create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/sample_handler.c
+ create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/sample_loader.c
+ create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/sample_mgr.c
+ create mode 100755 tools/testing/selftests/umd_mgmt/umd_mgmt.sh
+
+-- 
+2.25.1
+
