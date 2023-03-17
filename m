@@ -2,80 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CEDB6BDF60
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 04:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08736BDF5F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Mar 2023 04:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjCQDPS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Mar 2023 23:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
+        id S229704AbjCQDPQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Mar 2023 23:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjCQDOI (ORCPT
+        with ESMTP id S229974AbjCQDOI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 16 Mar 2023 23:14:08 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CB81C339;
-        Thu, 16 Mar 2023 20:13:50 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id hf2so204249qtb.3;
-        Thu, 16 Mar 2023 20:13:50 -0700 (PDT)
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C671199E4;
+        Thu, 16 Mar 2023 20:13:52 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id t9so4342717qtx.8;
+        Thu, 16 Mar 2023 20:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679022830;
+        d=gmail.com; s=20210112; t=1679022831;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=Q+Fb5i+KhMbej/UhF/LB5X6VMJfIWLMpGYs1y3tWWv4=;
-        b=QdFw3No4mVBPGSZdFjoNnjdIHSCvthanqz5n2Cay9Plf87sC4+Ox3yHR5H/oBIHmNq
-         09yKcQ5BVYyCIifXea+wTDSdIMwTLv5BgggmamjAzK/evTvezu9G1amjuesxzdOEwcHU
-         n2wTIw7KMHQ6HFN3hRxB4WsCqHB3no87UjIS2OpVIhaFMObq9vgvtBlQCXORJheumO7o
-         tru7zdAZ0qd52b8bh41/H8lxYPobqcQ5bCgswsmqmSYa1a1GRQIkyrv2jZ2FKvR1bwsE
-         13odczsjmAhx4R5XTFBX0qPvjaAhHXNqw5uiok7Au0cZK5pt8mYnijsK/gCi25bCd96F
-         1LDw==
+        bh=VFu2nJ/kDFjy9nqyBBnnV/lGTlGF4Iik/2gAIOS9wFc=;
+        b=PeDKkb0bWFdP+vxrmnBVoOFvvuX8dLqoIgUIzFst41Odhh1tURjZDv+sp/iJ7ImqaO
+         E/5o3UksTEKaIqCW0ToJoYr1bq66RLqG7KK52IZJeLvaSgZogeSlsL+1b4OhoLzai2RF
+         eULC+VKyoF9hWbMUpU3tApg915c1a49oXc1L5tj5CgMLSRvJTIyryqZSVMOX60PDqPJX
+         GMotkoULhkdDn5aCQfRZTdkEVK6RKxJZqBaYZgnAcVmOb/cemrwL56ZLI7rK70g3JXzL
+         uL/exVYYcXSzODcRuBgTYpSS/e0p7eYjEu9xnbuNFb3ajdSl0DjoF8BYDE4VbGL6auUT
+         lOpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679022830;
+        d=1e100.net; s=20210112; t=1679022831;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+Fb5i+KhMbej/UhF/LB5X6VMJfIWLMpGYs1y3tWWv4=;
-        b=DpkNX3r8iVHYb8bKE89opkChHXWzqwD4QKjWJVeMRuo0SOeXDMkFLP2pVs7xmjTBr1
-         sMmk6v0w05PkVKVfILnQ5x+M2qiIIhYugCf8P8LuafIV5JakDdQCaugAPeh9ny/l3/Nx
-         tyhom7K8Bp25rRbnY+rsB3byg40xzvMeeqAQ2h1vgayr1d6a8dNn62LWG2g0kgwrBk6v
-         KP1jY/jKMJKGE43FBOh0pyq2GjWIpjzHW9rPl69cuqObMqpfu2foc6L3/CCDRokp1qLY
-         HrZLbUzWE2VAtUdCB9AT3WAzCIQOu10PGy4Tj0bTxvaHVNmiQ+ledrq1V7M9pdPFyoDp
-         Sq1A==
-X-Gm-Message-State: AO0yUKWL5zCDcash0ie7AjXG/HNAXAEeAWLunf2wJnM2mF+zRpgCc+ot
-        YToxbYBR2ghquajvHwY75+Q=
-X-Google-Smtp-Source: AK7set+6qVfjpzivz6voyblrqOQEKvOxRAoZ26YKlShivCb0mGwq59WAMnhuCDGfdjBBXkdORI+nqg==
-X-Received: by 2002:a05:622a:1787:b0:3bf:ca3d:673c with SMTP id s7-20020a05622a178700b003bfca3d673cmr8036401qtk.2.1679022829828;
-        Thu, 16 Mar 2023 20:13:49 -0700 (PDT)
+        bh=VFu2nJ/kDFjy9nqyBBnnV/lGTlGF4Iik/2gAIOS9wFc=;
+        b=PryxtU4BzFvzP/SEYtmQPBbd9Exjs+1lQtXyf03kOEVK3hFHD3/L6osEo5YdIj6VrW
+         zt4m1yd3u2t/yaNORVHcuKaqS6mfQng/1I5MqU1QD7Qw697WDGmAxA1UfOQL97DOcC0p
+         lK34Q2dd7abhKz4CNOshiFAz7CMja5kNSMVBQezNSH5XZXh3FpX0QTMQjR6gQYUMqVce
+         YEDvOq1531doXpRw7dFrt7pU2ZbgPWbJno53DQo5FQunWIZe3VE79Ny4HBjzO19sYv9b
+         QtFx5z6H/VMDzYxIv+WzC2FxP8Yjgn0j6Bpp4Px3piFvUTDdZYFIbXxXQClqGE2R70W3
+         21MQ==
+X-Gm-Message-State: AO0yUKXB52B6uCykJfxOqTXkkBUaAHxDnVh8ytU8vOPFzx1gpNiSQyOQ
+        29QA/ua9+Jb+AMTFRZSWa0w=
+X-Google-Smtp-Source: AK7set9jlEF0UNqCheoWT+BgNq3Oc0khKLZvofMB2I+Ik0uFsxoCNSVwVU9YUA3G8KLkw1pLtl+2hA==
+X-Received: by 2002:ac8:5f4e:0:b0:3d9:6266:86d9 with SMTP id y14-20020ac85f4e000000b003d9626686d9mr4247033qta.10.1679022831237;
+        Thu, 16 Mar 2023 20:13:51 -0700 (PDT)
 Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id v4-20020ac87484000000b003bffe7fdc38sm828766qtq.9.2023.03.16.20.13.48
+        by smtp.gmail.com with ESMTPSA id 71-20020a370b4a000000b0074240840c25sm810235qkl.108.2023.03.16.20.13.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 20:13:49 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8E8D827C005A;
-        Thu, 16 Mar 2023 23:13:48 -0400 (EDT)
+        Thu, 16 Mar 2023 20:13:50 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 36F8D27C0054;
+        Thu, 16 Mar 2023 23:13:50 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 16 Mar 2023 23:13:48 -0400
-X-ME-Sender: <xms:7NoTZI5pOewUcdor5Nk3ldiI43Zt9GSzs_z7Oguc3YawVGUGC9A3Uw>
-    <xme:7NoTZJ6hJeTFfE-tRFLQWB6CWOYKmYA8s9eyHR32abv2tJjQXHRY319vvkAD5f8FK
-    2tM2hjkB-cscalm7Q>
-X-ME-Received: <xmr:7NoTZHccQuxTmWHDmvZr9vv2ASuXYaccuigOUYJrpVWcAIv-mygU60sHlHM>
+  by compute4.internal (MEProxy); Thu, 16 Mar 2023 23:13:50 -0400
+X-ME-Sender: <xms:7doTZLA_ZwnQzabtand_tczK6TaqVCSE8r4C2aI_Y1j0LnGGTEN8mA>
+    <xme:7doTZBhaZGKtTxbqaIFJgq0CfIVWYh67yjuNGaVxtfRuGtvEQEWA1niLTfgCxJ6S7
+    7KTnP0V4TmGc7samA>
+X-ME-Received: <xmr:7doTZGlELOOxD2r19cVfWRQhLgLqdHxAIiqrmpgA9_L01dR7qL1vPcmUtvo>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefuddgheekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhu
     nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpefghfffvefhhfdvgfejgfekvdelgfekgeevueehlefhiedvgeffjefgteeu
-    gfehieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
-    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
-    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:7NoTZNJ0ULKKtOcet_qOSDIZH1EfMGDJCsm5Grz-vDCdAJbS0dJKDQ>
-    <xmx:7NoTZMItEj8UMGEfC-ozriydS4EIGv9_BIUYNbtYQkUcPYTJXMfxlQ>
-    <xmx:7NoTZOxjmBubx2uf73JnhiWIS4zO7bEl4B7421FEKjcdlrrTgFE93w>
-    <xmx:7NoTZMJYRYEJ2R5xrKHk8IcHQ67z81YvGtzK4Xp1OKUTodiWDv6xyQ>
+    htthgvrhhnpeegleejiedthedvheeggfejveefjeejkefgveffieeujefhueeigfegueeh
+    geeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:7doTZNzi_uIpK5feE2PPEIxF7G1Yt_FBWcYwGuUKoj30Fsh4FjTO8A>
+    <xmx:7doTZAQEbM2Fgqt7IGMERlGs6ZTha3jHdmPMzBty6osuN0AQcEP-cg>
+    <xmx:7doTZAbqLy8E0cNgP732LfKNBxX6E6NANyvCXt1GQTapiIuidLEMug>
+    <xmx:7toTZJSWv1SZF8fpp12orbhMDRJnteyhbvSBA7gTUAGHfhUaC5t9Mg>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Mar 2023 23:13:48 -0400 (EDT)
+ 16 Mar 2023 23:13:49 -0400 (EDT)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     rcu@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -96,9 +96,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         seanjc@google.com, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH rcu 1/7] locking/lockdep: Introduce lock_sync()
-Date:   Thu, 16 Mar 2023 20:13:33 -0700
-Message-Id: <20230317031339.10277-2-boqun.feng@gmail.com>
+Subject: [PATCH rcu 2/7] rcu: Annotate SRCU's update-side lockdep dependencies
+Date:   Thu, 16 Mar 2023 20:13:34 -0700
+Message-Id: <20230317031339.10277-3-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317031339.10277-1-boqun.feng@gmail.com>
 References: <20230317031339.10277-1-boqun.feng@gmail.com>
@@ -114,116 +114,128 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, functions like synchronize_srcu() do not have lockdep
-annotations resembling those of other write-side locking primitives.
-Such annotations might look as follows:
+Although all flavors of RCU readers are annotated correctly with
+lockdep as recursive read locks, they do not set the lock_acquire
+'check' parameter.  This means that RCU read locks are not added to
+the lockdep dependency graph, which in turn means that lockdep cannot
+detect RCU-based deadlocks.  This is not a problem for RCU flavors having
+atomic read-side critical sections because context-based annotations can
+catch these deadlocks, see for example the RCU_LOCKDEP_WARN() statement
+in synchronize_rcu().  But context-based annotations are not helpful
+for sleepable RCU, especially given that it is perfectly legal to do
+synchronize_srcu(&srcu1) within an srcu_read_lock(&srcu2).
 
-	lock_acquire();
-	lock_release();
+However, we can detect SRCU-based by: (1) Making srcu_read_lock() a
+'check'ed recursive read lock and (2) Making synchronize_srcu() a empty
+write lock critical section.  Even better, with the newly introduced
+lock_sync(), we can avoid false positives about irq-unsafe/safe.
+This commit therefore makes it so.
 
-Such annotations would tell lockdep that synchronize_srcu() acts like
-an empty critical section that waits for other (read-side) critical
-sections to finish.  This would definitely catch some deadlock, but
-as pointed out by Paul Mckenney [1], this could also introduce false
-positives because of irq-safe/unsafe detection.  Of course, there are
-tricks could help with this:
-
-	might_sleep(); // Existing statement in __synchronize_srcu().
-	if (IS_ENABLED(CONFIG_PROVE_LOCKING)) {
-		local_irq_disable();
-		lock_acquire();
-		lock_release();
-		local_irq_enable();
-	}
-
-But it would be better for lockdep to provide a separate annonation for
-functions like synchronize_srcu(), so that people won't need to repeat
-the ugly tricks above.
-
-Therefore introduce lock_sync(), which is simply an lock+unlock
-pair with no irq safe/unsafe deadlock check.  This works because the
-to-be-annontated functions do not create real critical sections, and
-there is therefore no way that irq can create extra dependencies.
-
-[1]: https://lore.kernel.org/lkml/20180412021233.ewncg5jjuzjw3x62@tardis/
+Note that NMI-safe SRCU read side critical sections are currently not
+annotated, but might be annotated in the future.
 
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Acked-by: Waiman Long <longman@redhat.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+[ boqun: Add comments for annotation per Waiman's suggestion ]
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- include/linux/lockdep.h  |  5 +++++
- kernel/locking/lockdep.c | 34 ++++++++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
+ include/linux/srcu.h  | 34 ++++++++++++++++++++++++++++++++--
+ kernel/rcu/srcutiny.c |  2 ++
+ kernel/rcu/srcutree.c |  2 ++
+ 3 files changed, 36 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index 1023f349af71..14d9dbedc6c1 100644
---- a/include/linux/lockdep.h
-+++ b/include/linux/lockdep.h
-@@ -268,6 +268,10 @@ extern void lock_acquire(struct lockdep_map *lock, unsigned int subclass,
- 
- extern void lock_release(struct lockdep_map *lock, unsigned long ip);
- 
-+extern void lock_sync(struct lockdep_map *lock, unsigned int subclass,
-+		      int read, int check, struct lockdep_map *nest_lock,
-+		      unsigned long ip);
-+
- /* lock_is_held_type() returns */
- #define LOCK_STATE_UNKNOWN	-1
- #define LOCK_STATE_NOT_HELD	0
-@@ -554,6 +558,7 @@ do {									\
- #define lock_map_acquire_read(l)		lock_acquire_shared_recursive(l, 0, 0, NULL, _THIS_IP_)
- #define lock_map_acquire_tryread(l)		lock_acquire_shared_recursive(l, 0, 1, NULL, _THIS_IP_)
- #define lock_map_release(l)			lock_release(l, _THIS_IP_)
-+#define lock_map_sync(l)			lock_sync(l, 0, 0, 1, NULL, _THIS_IP_)
- 
- #ifdef CONFIG_PROVE_LOCKING
- # define might_lock(lock)						\
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 50d4863974e7..36430cf8e407 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -5693,6 +5693,40 @@ void lock_release(struct lockdep_map *lock, unsigned long ip)
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index 74796cd7e7a9..7a745169b79a 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -102,6 +102,32 @@ static inline int srcu_read_lock_held(const struct srcu_struct *ssp)
+ 	return lock_is_held(&ssp->dep_map);
  }
- EXPORT_SYMBOL_GPL(lock_release);
  
-+/*
-+ * lock_sync() - A special annotation for synchronize_{s,}rcu()-like API.
++/**
++ * Annotations provide deadlock detection for SRCU.
 + *
-+ * No actual critical section is created by the APIs annotated with this: these
-+ * APIs are used to wait for one or multiple critical sections (on other CPUs
-+ * or threads), and it means that calling these APIs inside these critical
-+ * sections is potential deadlock.
-+ *
-+ * This annotation acts as an acqurie+release anontation pair with hardirqoff
-+ * being 1. Since there's no critical section, no interrupt can create extra
-+ * dependencies "inside" the annotation, hardirqoff == 1 allows us to avoid
-+ * false positives.
++ * Similar to other lockdep annotations, except there is an additional
++ * srcu_lock_sync(), which is basically an empty *write*-side critical section,
++ * see lock_sync() for more information.
 + */
-+void lock_sync(struct lockdep_map *lock, unsigned subclass, int read,
-+	       int check, struct lockdep_map *nest_lock, unsigned long ip)
++
++/* Annotates a srcu_read_lock() */
++static inline void srcu_lock_acquire(struct lockdep_map *map)
 +{
-+	unsigned long flags;
-+
-+	if (unlikely(!lockdep_enabled()))
-+		return;
-+
-+	raw_local_irq_save(flags);
-+	check_flags(flags);
-+
-+	lockdep_recursion_inc();
-+	__lock_acquire(lock, subclass, 0, read, check, 1, nest_lock, ip, 0, 0);
-+
-+	if (__lock_release(lock, ip))
-+		check_chain_key(current);
-+	lockdep_recursion_finish();
-+	raw_local_irq_restore(flags);
++	lock_map_acquire_read(map);
 +}
-+EXPORT_SYMBOL_GPL(lock_sync);
 +
- noinstr int lock_is_held_type(const struct lockdep_map *lock, int read)
++/* Annotates a srcu_read_lock() */
++static inline void srcu_lock_release(struct lockdep_map *map)
++{
++	lock_map_release(map);
++}
++
++/* Annotates a synchronize_srcu() */
++static inline void srcu_lock_sync(struct lockdep_map *map)
++{
++	lock_map_sync(map);
++}
++
+ #else /* #ifdef CONFIG_DEBUG_LOCK_ALLOC */
+ 
+ static inline int srcu_read_lock_held(const struct srcu_struct *ssp)
+@@ -109,6 +135,10 @@ static inline int srcu_read_lock_held(const struct srcu_struct *ssp)
+ 	return 1;
+ }
+ 
++#define srcu_lock_acquire(m) do { } while (0)
++#define srcu_lock_release(m) do { } while (0)
++#define srcu_lock_sync(m) do { } while (0)
++
+ #endif /* #else #ifdef CONFIG_DEBUG_LOCK_ALLOC */
+ 
+ #define SRCU_NMI_UNKNOWN	0x0
+@@ -182,7 +212,7 @@ static inline int srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp)
+ 
+ 	srcu_check_nmi_safety(ssp, false);
+ 	retval = __srcu_read_lock(ssp);
+-	rcu_lock_acquire(&(ssp)->dep_map);
++	srcu_lock_acquire(&(ssp)->dep_map);
+ 	return retval;
+ }
+ 
+@@ -254,7 +284,7 @@ static inline void srcu_read_unlock(struct srcu_struct *ssp, int idx)
  {
- 	unsigned long flags;
+ 	WARN_ON_ONCE(idx & ~0x1);
+ 	srcu_check_nmi_safety(ssp, false);
+-	rcu_lock_release(&(ssp)->dep_map);
++	srcu_lock_release(&(ssp)->dep_map);
+ 	__srcu_read_unlock(ssp, idx);
+ }
+ 
+diff --git a/kernel/rcu/srcutiny.c b/kernel/rcu/srcutiny.c
+index b12fb0cec44d..336af24e0fe3 100644
+--- a/kernel/rcu/srcutiny.c
++++ b/kernel/rcu/srcutiny.c
+@@ -197,6 +197,8 @@ void synchronize_srcu(struct srcu_struct *ssp)
+ {
+ 	struct rcu_synchronize rs;
+ 
++	srcu_lock_sync(&ssp->dep_map);
++
+ 	RCU_LOCKDEP_WARN(lockdep_is_held(ssp) ||
+ 			lock_is_held(&rcu_bh_lock_map) ||
+ 			lock_is_held(&rcu_lock_map) ||
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index ab4ee58af84b..c541b82646b6 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -1307,6 +1307,8 @@ static void __synchronize_srcu(struct srcu_struct *ssp, bool do_norm)
+ {
+ 	struct rcu_synchronize rcu;
+ 
++	srcu_lock_sync(&ssp->dep_map);
++
+ 	RCU_LOCKDEP_WARN(lockdep_is_held(ssp) ||
+ 			 lock_is_held(&rcu_bh_lock_map) ||
+ 			 lock_is_held(&rcu_lock_map) ||
 -- 
 2.39.2
 
