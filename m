@@ -2,127 +2,291 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16C46BFBA5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Mar 2023 17:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6926BFC67
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Mar 2023 20:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjCRQtT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Mar 2023 12:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S229588AbjCRT2H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Mar 2023 15:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjCRQtS (ORCPT
+        with ESMTP id S229502AbjCRT2G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Mar 2023 12:49:18 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2B915560;
-        Sat, 18 Mar 2023 09:49:16 -0700 (PDT)
-Date:   Sat, 18 Mar 2023 16:49:12 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1679158155;
-        bh=jUndyEGI41yuBBLinBp9JUiyX98HMOvPekqhJDwQZs4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gudItqpjoDfkhJAXjmfgVh5IcLprEj1gdeGDqrF/OyrJBC0j2QCLorb/XZS46cILP
-         F/7dOuVG1++BurHRvV0RG4cfR//I7+mc0tAndyBRIcA+WJSBLALaFRKPulzPqM7tpG
-         WN4MRbVCnmm7Stmwh6qnCDVTF2zj7w4dndemseos=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 5/5] tools/nolibc: tests: add test for
- -fstack-protector
-Message-ID: <4d2b4237-48dc-4d78-ab42-47f78cb76ab8@t-8ch.de>
-References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
- <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
- <ZA3OhLBmUz3fui+f@1wt.eu>
- <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
- <ZA6TmjtAJ5lvFCeF@1wt.eu>
+        Sat, 18 Mar 2023 15:28:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146F56A58;
+        Sat, 18 Mar 2023 12:28:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00EED60AE2;
+        Sat, 18 Mar 2023 19:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B1FAC4339C;
+        Sat, 18 Mar 2023 19:27:58 +0000 (UTC)
+Date:   Sat, 18 Mar 2023 15:27:56 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/ftrace: Improve integration with kselftest
+ runner
+Message-ID: <20230318152756.13600e98@rorschach.local.home>
+In-Reply-To: <20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org>
+References: <20230302-ftrace-kselftest-ktap-v1-1-a84a0765b7ad@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZA6TmjtAJ5lvFCeF@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 04:08:10AM +0100, Willy Tarreau wrote:
-> On Sun, Mar 12, 2023 at 11:12:50PM +0000, Thomas Weißschuh wrote:
-> > FYI there is also another patch to make nolibc-test buildable with
-> > compilers that enable -fstack-protector by default.
-> > Maybe this can be picked up until the proper stack-protector support is
-> > hashed out.
-> > Maybe even for 6.3:
-> > 
-> > https://lore.kernel.org/lkml/20230221-nolibc-no-stack-protector-v1-1-4e6a42f969e2@weissschuh.net/
-> 
-> Ah thanks, it seems I indeed missed it. It looks good, I'll take it.
+On Mon, 06 Mar 2023 15:35:10 +0000
+Mark Brown <broonie@kernel.org> wrote:
 
-Do you have a tree with this published?
-So I can make sure the next revision of this patchset does not lead to
-conflicts.
- 
-> > > > +int run_stackprotector(int min, int max)
-> > > > +{
-> > > > +	int llen = 0;
-> > > > +
-> > > > +	llen += printf("0 ");
-> > > > +
-> > > > +#if !defined(NOLIBC_STACKPROTECTOR)
-> > > > +	llen += printf("stack smashing detection not supported");
-> > > > +	pad_spc(llen, 64, "[SKIPPED]\n");
-> > > > +	return 0;
-> > > > +#endif
-> > > 
-> > > Shouldn't the whole function be enclosed instead ? I know it's more of
-> > > a matter of taste, but avoiding to build and link it for archs that
-> > > will not use it may be better.
-> > 
-> > The goal was to print a [SKIPPED] message if it's not supported.
+> The ftrace selftests do not currently produce KTAP output, they produce a
+> custom format much nicer for human consumption. This means that when run in
+> automated test systems we just get a single result for the suite as a whole
+> rather than recording results for individual test cases, making it harder
+> to look at the test data and masking things like inappropriate skips.
 > 
-> Ah indeed makes sense.
+> Address this by adding support for KTAP output to the ftracetest script and
+> providing a trivial wrapper which will be invoked by the kselftest runner
+> to generate output in this format by default, users using ftracetest
+> directly will continue to get the existing output.
 > 
-> > The overhead of doing this should be neglectable.
+> This is not the most elegant solution but it is simple and effective. I
+> did consider implementing this by post processing the existing output
+> format but that felt more complex and likely to result in all output being
+> lost if something goes seriously wrong during the run which would not be
+> helpful. I did also consider just writing a separate runner script but
+> there's enough going on with things like the signal handling for that to
+> seem like it would be duplicating too much.
 > 
-> It was not the overhead (that's only a regtest program after all), I
-> was more thinking about the difficulty to maintain this function over
-> time for other archs if it starts to rely on optional support. But for
-> now it's not a problem, it it would ever become one we could simply
-> change that to have a function just print SKIPPED. So I'm fine with
-> your option.
-> 
-> > > > @@ -719,8 +784,11 @@ int prepare(void)
-> > > >  /* This is the definition of known test names, with their functions */
-> > > >  static const struct test test_names[] = {
-> > > >  	/* add new tests here */
-> > > > -	{ .name = "syscall",   .func = run_syscall  },
-> > > > -	{ .name = "stdlib",    .func = run_stdlib   },
-> > > > +	{ .name = "syscall",        .func = run_syscall         },
-> > > > +	{ .name = "stdlib",         .func = run_stdlib          },
-> > > > +	{ .name = "stackprotector", .func = run_stackprotector, },
-> > > > +	{ .name = "_smash_stack",   .func = run_smash_stack,
-> > > 
-> > > I think it would be better to keep the number of categories low
-> > > and probably you should add just one called "protection" or so,
-> > > and implement your various tests in it as is done for other
-> > > categories. The goal is to help developers quickly spot and select
-> > > the few activities they're interested in at a given moment. 
-> > 
-> > I'm not sure how this would be done. The goal here is that
-> > "stackprotector" is the user-visible category. It can be changed to
-> > "protection".
-> > "_smash_stack" however is just an entrypoint that is used by the forked
-> > process to call the crashing code.
-> 
-> Ah I didn't realize that, I now understand how that can be useful,
-> indeed. Then maybe just rename your .skip_by_default field to .hidden
-> so that it becomes more generic (i.e. if one day we permit enumeration
-> we don't want such tests to be listed either), and assign the field on
-> the same line so that it's easily visible with a grep.
 
-Actually this works fine with a plain fork() and the exec() is not
-needed. So the dedicated entrypoint is not needed anymore.
-No idea what I tested before.
+This looks all OK to me, but I would feel more comfortable if Masami
+acks it, as he's written most of the selftests.
+
+Shuah, could you take this after Masami gives his ack?
+
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
+
+
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/ftrace/Makefile        |  3 +-
+>  tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
+>  tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
+>  3 files changed, 70 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+> index d6e106fbce11..a1e955d2de4c 100644
+> --- a/tools/testing/selftests/ftrace/Makefile
+> +++ b/tools/testing/selftests/ftrace/Makefile
+> @@ -1,7 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  all:
+>  
+> -TEST_PROGS := ftracetest
+> +TEST_PROGS_EXTENDED := ftracetest
+> +TEST_PROGS := ftracetest-ktap
+>  TEST_FILES := test.d settings
+>  EXTRA_CLEAN := $(OUTPUT)/logs/*
+>  
+> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+> index c3311c8c4089..539c8d6d5d71 100755
+> --- a/tools/testing/selftests/ftrace/ftracetest
+> +++ b/tools/testing/selftests/ftrace/ftracetest
+> @@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+>  echo " Options:"
+>  echo "		-h|--help  Show help message"
+>  echo "		-k|--keep  Keep passed test logs"
+> +echo "		-K|--KTAP  Output in KTAP format"
+>  echo "		-v|--verbose Increase verbosity of test messages"
+>  echo "		-vv        Alias of -v -v (Show all results in stdout)"
+>  echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
+> @@ -85,6 +86,10 @@ parse_opts() { # opts
+>        KEEP_LOG=1
+>        shift 1
+>      ;;
+> +    --ktap|-K)
+> +      KTAP=1
+> +      shift 1
+> +    ;;
+>      --verbose|-v|-vv|-vvv)
+>        if [ $VERBOSE -eq -1 ]; then
+>  	usage "--console can not use with --verbose"
+> @@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
+>  TEST_CASES=`find_testcases $TEST_DIR`
+>  LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
+>  KEEP_LOG=0
+> +KTAP=0
+>  DEBUG=0
+>  VERBOSE=0
+>  UNSUPPORTED_RESULT=0
+> @@ -229,7 +235,7 @@ prlog() { # messages
+>      newline=
+>      shift
+>    fi
+> -  printf "$*$newline"
+> +  [ "$KTAP" != "1" ] && printf "$*$newline"
+>    [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
+>  }
+>  catlog() { #file
+> @@ -260,11 +266,11 @@ TOTAL_RESULT=0
+>  
+>  INSTANCE=
+>  CASENO=0
+> +CASENAME=
+>  
+>  testcase() { # testfile
+>    CASENO=$((CASENO+1))
+> -  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+> -  prlog -n "[$CASENO]$INSTANCE$desc"
+> +  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+>  }
+>  
+>  checkreq() { # testfile
+> @@ -277,40 +283,68 @@ test_on_instance() { # testfile
+>    grep -q "^#[ \t]*flags:.*instance" $1
+>  }
+>  
+> +ktaptest() { # result comment
+> +  if [ "$KTAP" != "1" ]; then
+> +    return
+> +  fi
+> +
+> +  local result=
+> +  if [ "$1" = "1" ]; then
+> +    result="ok"
+> +  else
+> +    result="not ok"
+> +  fi
+> +  shift
+> +
+> +  local comment=$*
+> +  if [ "$comment" != "" ]; then
+> +    comment="# $comment"
+> +  fi
+> +
+> +  echo $CASENO $result $INSTANCE$CASENAME $comment
+> +}
+> +
+>  eval_result() { # sigval
+>    case $1 in
+>      $PASS)
+>        prlog "	[${color_green}PASS${color_reset}]"
+> +      ktaptest 1
+>        PASSED_CASES="$PASSED_CASES $CASENO"
+>        return 0
+>      ;;
+>      $FAIL)
+>        prlog "	[${color_red}FAIL${color_reset}]"
+> +      ktaptest 0
+>        FAILED_CASES="$FAILED_CASES $CASENO"
+>        return 1 # this is a bug.
+>      ;;
+>      $UNRESOLVED)
+>        prlog "	[${color_blue}UNRESOLVED${color_reset}]"
+> +      ktaptest 0 UNRESOLVED
+>        UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
+>        return $UNRESOLVED_RESULT # depends on use case
+>      ;;
+>      $UNTESTED)
+>        prlog "	[${color_blue}UNTESTED${color_reset}]"
+> +      ktaptest 1 SKIP
+>        UNTESTED_CASES="$UNTESTED_CASES $CASENO"
+>        return 0
+>      ;;
+>      $UNSUPPORTED)
+>        prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
+> +      ktaptest 1 SKIP
+>        UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
+>        return $UNSUPPORTED_RESULT # depends on use case
+>      ;;
+>      $XFAIL)
+>        prlog "	[${color_green}XFAIL${color_reset}]"
+> +      ktaptest 1 XFAIL
+>        XFAILED_CASES="$XFAILED_CASES $CASENO"
+>        return 0
+>      ;;
+>      *)
+>        prlog "	[${color_blue}UNDEFINED${color_reset}]"
+> +      ktaptest 0 error
+>        UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
+>        return 1 # this must be a test bug
+>      ;;
+> @@ -371,6 +405,7 @@ __run_test() { # testfile
+>  run_test() { # testfile
+>    local testname=`basename $1`
+>    testcase $1
+> +  prlog -n "[$CASENO]$INSTANCE$CASENAME"
+>    if [ ! -z "$LOG_FILE" ] ; then
+>      local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
+>    else
+> @@ -405,6 +440,17 @@ run_test() { # testfile
+>  # load in the helper functions
+>  . $TEST_DIR/functions
+>  
+> +if [ "$KTAP" = "1" ]; then
+> +  echo "TAP version 13"
+> +
+> +  casecount=`echo $TEST_CASES | wc -w`
+> +  for t in $TEST_CASES; do
+> +    test_on_instance $t || continue
+> +    casecount=$((casecount+1))
+> +  done
+> +  echo "1..${casecount}"
+> +fi
+> +
+>  # Main loop
+>  for t in $TEST_CASES; do
+>    run_test $t
+> @@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
+>  prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
+>  prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
+>  
+> +if [ "$KTAP" = "1" ]; then
+> +  echo -n "# Totals:"
+> +  echo -n " pass:"`echo $PASSED_CASES | wc -w`
+> +  echo -n " faii:"`echo $FAILED_CASES | wc -w`
+> +  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
+> +  echo -n " xpass:0"
+> +  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
+> +  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
+> +  echo
+> +fi
+> +
+>  cleanup
+>  
+>  # if no error, return 0
+> diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
+> new file mode 100755
+> index 000000000000..b3284679ef3a
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/ftracetest-ktap
+> @@ -0,0 +1,8 @@
+> +#!/bin/sh -e
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
+> +#
+> +# Copyright (C) Arm Ltd., 2023
+> +
+> +./ftracetest -K
+> 
+> ---
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> change-id: 20230302-ftrace-kselftest-ktap-9d7878691557
+> 
+> Best regards,
+
