@@ -2,101 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAABE6BF900
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Mar 2023 09:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F05C96BFAC5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Mar 2023 15:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjCRIey (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Mar 2023 04:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        id S229900AbjCROYg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Mar 2023 10:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjCRIex (ORCPT
+        with ESMTP id S229809AbjCROYe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Mar 2023 04:34:53 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8408090B;
-        Sat, 18 Mar 2023 01:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679128490; x=1710664490;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cF6OACTGETpdCpNE9ogXPkHWW2QM4YLy7vWuh9G3Jv0=;
-  b=R+nAQOk2jLT9gccjhN7yg2x7iD5z50sKuBS5sK46DlWwuGKjuB9RGXS2
-   eioh5QPnzDar1D/DbiBt6u7yCF8yqC0EUwTbsrlG6nZtgN9B5ZLsrBwJr
-   gar0CYLuB2sCNjovo7vj7UfCoOrQx9MjKz4qfhTFstbRdQ0xhrOoPvPn1
-   m4NZnApY0FbnCMOu7sYrEMh17NP5qnfDRUaFHew084+Zb5RE2tQgMYokF
-   Mjm1cwKafsXYkTFECBZv0GoNn5GRDpCLbCqICITuSgasBonhNXoxRtQmm
-   bGorkQ4IL+sFMCc9TxAxgk+It4RmekbVXWPiwJLzbDkyKRY8RLNAMGtfG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="424693792"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="424693792"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 01:34:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="769637754"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="769637754"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.210.252]) ([10.254.210.252])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 01:34:45 -0700
-Message-ID: <89ae04a9-bba3-c93e-c8ec-92e8afaf6316@linux.intel.com>
-Date:   Sat, 18 Mar 2023 16:34:42 +0800
+        Sat, 18 Mar 2023 10:24:34 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD2235246;
+        Sat, 18 Mar 2023 07:24:29 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id B7F2918838A8;
+        Sat, 18 Mar 2023 14:12:42 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 9E47E25002BC;
+        Sat, 18 Mar 2023 14:12:42 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 929E49B403E4; Sat, 18 Mar 2023 14:12:42 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id D42DE91201E3;
+        Sat, 18 Mar 2023 14:12:41 +0000 (UTC)
+From:   "Hans J. Schultz" <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com (maintainer:MICROCHIP KSZ SERIES ETHERNET
+        SWITCH DRIVER), Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support),
+        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support),
+        linux-renesas-soc@vger.kernel.org (open list:RENESAS RZ/N1 A5PSW SWITCH
+        DRIVER),
+        bridge@lists.linux-foundation.org (moderated list:ETHERNET BRIDGE),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH v2 net-next 0/6] ATU and FDB synchronization on locked ports
+Date:   Sat, 18 Mar 2023 15:10:04 +0100
+Message-Id: <20230318141010.513424-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 02/12] iommu: Add nested domain support
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-References: <20230309080910.607396-1-yi.l.liu@intel.com>
- <20230309080910.607396-3-yi.l.liu@intel.com>
- <BN9PR11MB5276265987486AC84D2039818CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276265987486AC84D2039818CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Organization: Westermo Network Technologies AB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/3/17 18:25, Tian, Kevin wrote:
->> From: Liu, Yi L <yi.l.liu@intel.com>
->> Sent: Thursday, March 9, 2023 4:09 PM
->>
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->>
->> Introduce a new domain type for a user space I/O address, which is nested
-> 
-> 'a ... address'? let's call it 'user I/O page table'.
-> 
+This patch set makes it possible to have synchronized dynamic ATU and FDB
+entries on locked ports. As locked ports are not able to automatically
+learn, they depend on userspace added entries, where userspace can add
+static or dynamic entries. The lifetime of static entries are completely
+dependent on userspace intervention, and thus not of interest here. We
+are only concerned with dynamic entries, which can be added with a
+command like:
 
-Okay, sure.
+bridge fdb replace ADDR dev <DEV> master dynamic
 
-Best regards,
-baolu
+We choose only to support this feature on locked ports, as it involves
+utilizing the CPU to handle ATU related switchcore events (typically
+interrupts) and thus can result in significant performance loss if
+exposed to heavy traffic.
+
+On locked ports it is important for userspace to know when an authorized
+station has become silent, hence not breaking the communication of a
+station that has been authorized based on the MAC-Authentication Bypass
+(MAB) scheme. Thus if the station keeps being active after authorization,
+it will continue to have an open port as long as it is active. Only after
+a silent period will it have to be reauthorized. As the ageing process in
+the ATU is dependent on incoming traffic to the switchcore port, it is
+necessary for the ATU to signal that an entry has aged out, so that the
+FDB can be updated at the correct time.
+
+This patch set includes a solution for the Marvell mv88e6xxx driver, where
+for this driver we use the Hold-At-One feature so that an age-out
+violation interrupt occurs when a station has been silent for the
+system-set age time. The age out violation interrupt allows the switchcore
+driver to remove both the ATU and the FDB entry at the same time.
+
+It is up to the maintainers of other switchcore drivers to implement the
+feature for their specific driver.
+
+LOG:
+	V2:	Ensure the port is locked when using the feature as we
+		must ensure that learning is enabled at all times for
+		the interrupts to occur. This was missed in the previous
+		version.
+
+		Instead of ignoring unsupported flags, ensure that
+		drivers are only called when supporting the feature.
+		As 'dynamic' flag is legacy, all drivers support it at
+		least by their previous handling.
+
+Hans J. Schultz (6):
+  net: bridge: add dynamic flag to switchdev notifier
+  net: dsa: propagate flags down towards drivers
+  drivers: net: dsa: add fdb entry flags incoming to switchcore drivers
+  net: bridge: ensure FDB offloaded flag is handled as needed
+  net: dsa: mv88e6xxx: implementation of dynamic ATU entries
+  selftests: forwarding: add dynamic FDB test
+
+ drivers/net/dsa/b53/b53_common.c              |  4 +-
+ drivers/net/dsa/b53/b53_priv.h                |  4 +-
+ drivers/net/dsa/hirschmann/hellcreek.c        |  4 +-
+ drivers/net/dsa/lan9303-core.c                |  4 +-
+ drivers/net/dsa/lantiq_gswip.c                |  4 +-
+ drivers/net/dsa/microchip/ksz_common.c        |  6 +-
+ drivers/net/dsa/mt7530.c                      |  4 +-
+ drivers/net/dsa/mv88e6xxx/chip.c              | 20 ++++--
+ drivers/net/dsa/mv88e6xxx/chip.h              |  9 ++-
+ drivers/net/dsa/mv88e6xxx/global1_atu.c       | 21 +++++++
+ drivers/net/dsa/mv88e6xxx/port.c              |  6 +-
+ drivers/net/dsa/mv88e6xxx/switchdev.c         | 61 +++++++++++++++++++
+ drivers/net/dsa/mv88e6xxx/switchdev.h         |  5 ++
+ drivers/net/dsa/mv88e6xxx/trace.h             |  5 ++
+ drivers/net/dsa/ocelot/felix.c                |  4 +-
+ drivers/net/dsa/qca/qca8k-common.c            |  4 +-
+ drivers/net/dsa/qca/qca8k.h                   |  4 +-
+ drivers/net/dsa/rzn1_a5psw.c                  |  4 +-
+ drivers/net/dsa/sja1105/sja1105_main.c        | 11 ++--
+ include/net/dsa.h                             |  9 ++-
+ include/net/switchdev.h                       |  1 +
+ net/bridge/br_fdb.c                           |  5 +-
+ net/bridge/br_switchdev.c                     |  1 +
+ net/dsa/dsa.c                                 |  6 ++
+ net/dsa/port.c                                | 28 +++++----
+ net/dsa/port.h                                |  8 +--
+ net/dsa/slave.c                               | 20 ++++--
+ net/dsa/switch.c                              | 26 +++++---
+ net/dsa/switch.h                              |  1 +
+ .../net/forwarding/bridge_locked_port.sh      | 36 +++++++++++
+ 30 files changed, 258 insertions(+), 67 deletions(-)
+
+-- 
+2.34.1
+
