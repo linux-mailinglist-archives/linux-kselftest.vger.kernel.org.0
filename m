@@ -2,154 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4746A6BFAC6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Mar 2023 15:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F16C46BFBA5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Mar 2023 17:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjCROYf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Mar 2023 10:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S229787AbjCRQtT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Mar 2023 12:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCROYd (ORCPT
+        with ESMTP id S229590AbjCRQtS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Mar 2023 10:24:33 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C608F34F74;
-        Sat, 18 Mar 2023 07:24:29 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E41D018839C7;
-        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id DB0C325002BC;
-        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id D13B49B403E2; Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 1B3E49B403E1;
-        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
-From:   "Hans J. Schultz" <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        "Hans J. Schultz" <netdev@kapio-technology.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com (maintainer:MICROCHIP KSZ SERIES ETHERNET
-        SWITCH DRIVER), Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-renesas-soc@vger.kernel.org (open list:RENESAS RZ/N1 A5PSW SWITCH
-        DRIVER),
-        bridge@lists.linux-foundation.org (moderated list:ETHERNET BRIDGE),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB test
-Date:   Sat, 18 Mar 2023 15:10:10 +0100
-Message-Id: <20230318141010.513424-7-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230318141010.513424-1-netdev@kapio-technology.com>
-References: <20230318141010.513424-1-netdev@kapio-technology.com>
+        Sat, 18 Mar 2023 12:49:18 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2B915560;
+        Sat, 18 Mar 2023 09:49:16 -0700 (PDT)
+Date:   Sat, 18 Mar 2023 16:49:12 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1679158155;
+        bh=jUndyEGI41yuBBLinBp9JUiyX98HMOvPekqhJDwQZs4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gudItqpjoDfkhJAXjmfgVh5IcLprEj1gdeGDqrF/OyrJBC0j2QCLorb/XZS46cILP
+         F/7dOuVG1++BurHRvV0RG4cfR//I7+mc0tAndyBRIcA+WJSBLALaFRKPulzPqM7tpG
+         WN4MRbVCnmm7Stmwh6qnCDVTF2zj7w4dndemseos=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 5/5] tools/nolibc: tests: add test for
+ -fstack-protector
+Message-ID: <4d2b4237-48dc-4d78-ab42-47f78cb76ab8@t-8ch.de>
+References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
+ <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
+ <ZA3OhLBmUz3fui+f@1wt.eu>
+ <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
+ <ZA6TmjtAJ5lvFCeF@1wt.eu>
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZA6TmjtAJ5lvFCeF@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test FDB ageing of user entry created by
+On Mon, Mar 13, 2023 at 04:08:10AM +0100, Willy Tarreau wrote:
+> On Sun, Mar 12, 2023 at 11:12:50PM +0000, Thomas Weißschuh wrote:
+> > FYI there is also another patch to make nolibc-test buildable with
+> > compilers that enable -fstack-protector by default.
+> > Maybe this can be picked up until the proper stack-protector support is
+> > hashed out.
+> > Maybe even for 6.3:
+> > 
+> > https://lore.kernel.org/lkml/20230221-nolibc-no-stack-protector-v1-1-4e6a42f969e2@weissschuh.net/
+> 
+> Ah thanks, it seems I indeed missed it. It looks good, I'll take it.
 
-bridge fdb replace ADDR dev <DEV> master dynamic
-
-Use LOW_AGEING_TIME variable in forwarding.config to set a low ageing time.
-Beware, DSA might not accept the ageing time you want. Check the
-age_time_coeff value for your driver.
-
-Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
----
- .../net/forwarding/bridge_locked_port.sh      | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
-
-diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-index dc92d32464f6..dbc7017fd45d 100755
---- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-@@ -14,6 +14,7 @@ ALL_TESTS="
- NUM_NETIFS=4
- CHECK_TC="no"
- source lib.sh
-+source tc_common.sh
+Do you have a tree with this published?
+So I can make sure the next revision of this patchset does not lead to
+conflicts.
  
- h1_create()
- {
-@@ -319,6 +320,41 @@ locked_port_mab_flush()
- 	log_test "Locked port MAB FDB flush"
- }
- 
-+# Test of dynamic FDB entries.
-+locked_port_dyn_fdb()
-+{
-+	local mac=00:01:02:03:04:05
-+	local ageing_time
-+
-+	RET=0
-+	ageing_time=$(bridge_ageing_time_get br0)
-+	tc qdisc add dev $swp2 clsact
-+	ip link set dev br0 type bridge ageing_time $LOW_AGEING_TIME
-+	bridge link set dev $swp1 learning on locked on
-+
-+	bridge fdb replace $mac dev $swp1 master dynamic
-+	tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
-+		dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
-+
-+	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_err $? "Packet not seen on egress after adding dynamic FDB"
-+
-+	sleep $((LOW_AGEING_TIME / 100 + 10))
-+
-+	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_fail $? "Dynamic FDB entry did not age out"
-+
-+	ip link set dev br0 type bridge ageing_time $ageing_time
-+	bridge link set dev $swp1 learning off locked off
-+	tc qdisc del dev $swp2 clsact
-+
-+	log_test "Locked port dyn FDB"
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
--- 
-2.34.1
+> > > > +int run_stackprotector(int min, int max)
+> > > > +{
+> > > > +	int llen = 0;
+> > > > +
+> > > > +	llen += printf("0 ");
+> > > > +
+> > > > +#if !defined(NOLIBC_STACKPROTECTOR)
+> > > > +	llen += printf("stack smashing detection not supported");
+> > > > +	pad_spc(llen, 64, "[SKIPPED]\n");
+> > > > +	return 0;
+> > > > +#endif
+> > > 
+> > > Shouldn't the whole function be enclosed instead ? I know it's more of
+> > > a matter of taste, but avoiding to build and link it for archs that
+> > > will not use it may be better.
+> > 
+> > The goal was to print a [SKIPPED] message if it's not supported.
+> 
+> Ah indeed makes sense.
+> 
+> > The overhead of doing this should be neglectable.
+> 
+> It was not the overhead (that's only a regtest program after all), I
+> was more thinking about the difficulty to maintain this function over
+> time for other archs if it starts to rely on optional support. But for
+> now it's not a problem, it it would ever become one we could simply
+> change that to have a function just print SKIPPED. So I'm fine with
+> your option.
+> 
+> > > > @@ -719,8 +784,11 @@ int prepare(void)
+> > > >  /* This is the definition of known test names, with their functions */
+> > > >  static const struct test test_names[] = {
+> > > >  	/* add new tests here */
+> > > > -	{ .name = "syscall",   .func = run_syscall  },
+> > > > -	{ .name = "stdlib",    .func = run_stdlib   },
+> > > > +	{ .name = "syscall",        .func = run_syscall         },
+> > > > +	{ .name = "stdlib",         .func = run_stdlib          },
+> > > > +	{ .name = "stackprotector", .func = run_stackprotector, },
+> > > > +	{ .name = "_smash_stack",   .func = run_smash_stack,
+> > > 
+> > > I think it would be better to keep the number of categories low
+> > > and probably you should add just one called "protection" or so,
+> > > and implement your various tests in it as is done for other
+> > > categories. The goal is to help developers quickly spot and select
+> > > the few activities they're interested in at a given moment. 
+> > 
+> > I'm not sure how this would be done. The goal here is that
+> > "stackprotector" is the user-visible category. It can be changed to
+> > "protection".
+> > "_smash_stack" however is just an entrypoint that is used by the forked
+> > process to call the crashing code.
+> 
+> Ah I didn't realize that, I now understand how that can be useful,
+> indeed. Then maybe just rename your .skip_by_default field to .hidden
+> so that it becomes more generic (i.e. if one day we permit enumeration
+> we don't want such tests to be listed either), and assign the field on
+> the same line so that it's easily visible with a grep.
 
+Actually this works fine with a plain fork() and the exec() is not
+needed. So the dedicated entrypoint is not needed anymore.
+No idea what I tested before.
