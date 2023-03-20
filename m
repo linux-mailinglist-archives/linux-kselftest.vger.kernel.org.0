@@ -2,56 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145766C07C9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 02:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730A96C0877
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 02:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjCTBBI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Mar 2023 21:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
+        id S230183AbjCTB2N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Mar 2023 21:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjCTBA2 (ORCPT
+        with ESMTP id S229705AbjCTB1v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Mar 2023 21:00:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF0922CAE;
-        Sun, 19 Mar 2023 17:56:49 -0700 (PDT)
+        Sun, 19 Mar 2023 21:27:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C61425294;
+        Sun, 19 Mar 2023 18:20:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E802B80D59;
-        Mon, 20 Mar 2023 00:56:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F31C4339C;
-        Mon, 20 Mar 2023 00:56:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45588B80D44;
+        Mon, 20 Mar 2023 00:54:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F13C4339B;
+        Mon, 20 Mar 2023 00:54:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679273807;
-        bh=gbU0/p+naJTF87VAq0Y+j/X26qPrBHaLhiOF58Btm+k=;
+        s=k20201202; t=1679273673;
+        bh=CDjeeZ1RdIAASgt1N4rP5Uw1t49BKchPFbEVdT+waE4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sAjMJVWGC4HwqWtJsXPCWKtr8Ydwb/zdp6qvKNqRgyFev5cVByXfzME0JxOA7PHjA
-         +WBIbMKjg7aG1qGgNZ/fgaKYzKFQc3nE2BBiXAyFr8i0VodJHRaOz9r6HyjbetsqUI
-         F0Sa4ns++ea9q7Du8X0Vaxmjex4QayL9yvDki3zQVMQ7gSPaOZDkNtwmRXsvXEfj+G
-         0/FUL/p/hL2P/l4BXw5mNPi9q8tg6JLWX24j7U8qzMpBpgg3DKYRBw29ajowEftjH6
-         a21pceToSN2zITQU1tCYFov0qcIAHhcGEEtQvMw2RyQmHFe96n8CDdx6OH8KT6yMsG
-         zjzK+X2r/EN3A==
+        b=r5y4CKs3V+8WgmqXqAe/I0++CZp4cSyz2Re4sPQoMItV71RNuNCNAhegk2/G/HmhC
+         aim2RP3+H9pPCL+6ZIGBovnEyrIL0JXIhmp3OZPMH574U1CW0cFzJqglFo39bt6gdv
+         Q1LVtSlSZO7bRj/FLITcRmnRMkRMWY6a9NmM1kqzQYVE25Ds58H08wDQyldnIBZAOn
+         GOicYer4OV3I1UryzRV+6ETArIv1Y0+pUkCJOEbyWUqM92Cpx6e13yp3d+bpWVoK1Z
+         f0+E1VrQ1ueZSZb03SbHA51SvdV9jnkOoNaj5as1jtBrZM57xTIrOP4MuXgeqg22Zy
+         OfkSY1OVQkHVQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Lorenz Bauer <lorenz.bauer@isovalent.com>,
         Lorenz Bauer <lmb@isovalent.com>,
         Martin KaFai Lau <martin.lau@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, shuah@kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 05/12] selftests/bpf: check that modifier resolves after pointer
-Date:   Sun, 19 Mar 2023 20:56:28 -0400
-Message-Id: <20230320005636.1429242-5-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, andrii@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, shuah@kernel.org, yhs@fb.com,
+        eddyz87@gmail.com, sdf@google.com, iii@linux.ibm.com,
+        memxor@gmail.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 08/29] selftests/bpf: check that modifier resolves after pointer
+Date:   Sun, 19 Mar 2023 20:53:50 -0400
+Message-Id: <20230320005413.1428452-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320005636.1429242-1-sashal@kernel.org>
-References: <20230320005636.1429242-1-sashal@kernel.org>
+In-Reply-To: <20230320005413.1428452-1-sashal@kernel.org>
+References: <20230320005413.1428452-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,14 +74,14 @@ Link: https://lore.kernel.org/r/20230306112138.155352-3-lmb@isovalent.com
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_btf.c | 28 ++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/btf.c | 28 ++++++++++++++++++++
  1 file changed, 28 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
-index 996eca57bc977..f641eb292a885 100644
---- a/tools/testing/selftests/bpf/test_btf.c
-+++ b/tools/testing/selftests/bpf/test_btf.c
-@@ -920,6 +920,34 @@ static struct btf_raw_test raw_tests[] = {
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index 24dd6214394e0..d711f4bea98ea 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -879,6 +879,34 @@ static struct btf_raw_test raw_tests[] = {
  	.btf_load_err = true,
  	.err_str = "Invalid elem",
  },
