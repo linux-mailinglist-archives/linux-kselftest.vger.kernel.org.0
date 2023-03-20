@@ -2,172 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230766C1CD3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 17:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F026C1E98
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 18:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbjCTQwd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Mar 2023 12:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S230345AbjCTRwZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Mar 2023 13:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232913AbjCTQwP (ORCPT
+        with ESMTP id S230375AbjCTRvo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Mar 2023 12:52:15 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015A73A8A;
-        Mon, 20 Mar 2023 09:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=WyT5pk+JdnVwgOoOQiKG7pJHdKl0DzzKPRLhy5H2GH0=; b=R9vXyQqav0Qp5+OFU6PGanrsAw
-        XtTDDqXQ0q2NlSoz85EE+nc/RSVBwvlSaVG3bMe30ilZptvlzwodBALhuoXxTJtmMLO+tETZ3Mo85
-        jQOddePwuWVpYCEiNSbxo7LMsj8f7/jTQpEM+rZo4Bqr3V6b9lGcPiisqLKKhSnLL0BCIxxwcMfGJ
-        BmuJpieSb0f63HnwgfkeJomgW2GXu/98Ji/mkShDs41lkKdSZs6wFA3fKqXaZS8XWquR0PwEFqckO
-        BoZaz5KmMSzGelq4mrbZKr6lZuNpj2tYp0UYhKdivG/BPKIRTS77cZ1HRRLVdUSBmE8pwmRDZ+yIB
-        BfrG4oEQ==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1peIaX-000A2h-7W; Mon, 20 Mar 2023 17:42:25 +0100
-Received: from [81.6.34.132] (helo=localhost.localdomain)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1peIaW-0009Og-M2; Mon, 20 Mar 2023 17:42:24 +0100
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Fix a umin > umax reg bound error
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20230314203424.4015351-1-xukuohai@huaweicloud.com>
- <20230314203424.4015351-2-xukuohai@huaweicloud.com>
- <1331dd9c-4fb0-5347-6519-2b8d2dfea93d@iogearbox.net>
-Message-ID: <9c4c6052-974d-dbea-42dd-42a02c23ba01@iogearbox.net>
-Date:   Mon, 20 Mar 2023 17:42:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 20 Mar 2023 13:51:44 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472B131E22;
+        Mon, 20 Mar 2023 10:46:02 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 64594541B01;
+        Mon, 20 Mar 2023 17:36:03 +0000 (UTC)
+Received: from pdx1-sub0-mail-a273.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id AC63D541B75;
+        Mon, 20 Mar 2023 17:36:02 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1679333762; a=rsa-sha256;
+        cv=none;
+        b=PIAShpVwyvpJZnCyPWAogg0YGrBqfZEm4Q+ZadyqsY3jqC+TKlBiW7CiNi8HDs199z0HhL
+        UZDTTWMybXaSZdlpfS+b4rFyWxrRztP3AN3eA8eiNRYbCiUdeLGMf1i2JAQabBOv3zONQf
+        zqbcqYK6hJpBZc4l3ktthB66XdXX58AEkOatFAt4Xl9BlNMy7YEfCA9yRU5ZN0kXvF307a
+        KShaNtSfMOqOwbLTW+ati2ek3euuO5WO4Iu2Mjhq/l7JLRH/wJqsasnO4JEGOmvAlBNxvS
+        E0sXrMTkgDtlkxoH+RmDoRBvv+RPfUOtNIFSLO9OcqwL7jWFDJLrpgsKU4cG/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1679333762;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=6cUWCy5BondAFKhr1G1eG0K7rK06l9QCNh+5bql75bQ=;
+        b=n2tZs5125yPkZ3CNlnlmBdUkXF+A6S55sIFIf1EIqfNvNGAwTVqkgl1tbc7k9PeZP0kXal
+        Qzd4+wzB8mc2cbswJjOJhKMOxUhCRt+mY8c6E2ef6iGeSf49rEYdYqDG/36qdnHFGQcjwf
+        /53eS7QniZWeYhUNWAgyYRRW2NwNIXzEpTosK1soXulqq7LSG/BKtUATMO4bUE7kHodfpi
+        QTaolxWC/XVJvnMhhyP9pH1q+HO2sd8ygbAMr3NhyjMD1yhIG/7rr1Ud1n7DyZWieKYC9O
+        uoz4OvRlwJ9010bLz6bjkMSvRmfEpa//K57cqegAgbxpu/y3oJgJDzNICU0PSA==
+ARC-Authentication-Results: i=1;
+        rspamd-59dbd69698-w6jh5;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Shelf-Vacuous: 42b4d09114e22d43_1679333763159_1412504491
+X-MC-Loop-Signature: 1679333763159:3813855172
+X-MC-Ingress-Time: 1679333763159
+Received: from pdx1-sub0-mail-a273.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.126.30.4 (trex/6.7.2);
+        Mon, 20 Mar 2023 17:36:03 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a273.dreamhost.com (Postfix) with ESMTPSA id 4PgMN11nK7z6n;
+        Mon, 20 Mar 2023 10:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1679333762;
+        bh=6cUWCy5BondAFKhr1G1eG0K7rK06l9QCNh+5bql75bQ=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=CwnkROYHSiF5vVjQxFm7PpBoKPLNDkWQ8TJ8eA7pIPE9Ucf0bc7rCMQwdsA9Wc2GW
+         MA3tMlJHZDdgqu5b6L+jlt2vZrwjZjLobaVg3Oetf3YaAE02W8lkNrhG63cbe1PRTl
+         yfZz/dB1D6oborELmDZLut8DQzgzx62Op6iFr6LSZ50rdai861KsrG5lwMaQYR3UzD
+         4GyA3XrQ2WhwCd/yNRXBVEzlJ/88/M43JoEWy2N9nQdIYoNGzG4OGcSUh9Ugqp+r2S
+         59ZjxvZrI5EuU/Zzyh5BIcHoN8LSFsK2LZ89+7u24DEfxDtK4WtX+TmfQcbvxwSS0L
+         bAKXtXDEneEWQ==
+Date:   Mon, 20 Mar 2023 10:06:14 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        seanjc@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH rcu 1/7] locking/lockdep: Introduce lock_sync()
+Message-ID: <20230320170614.ttnqyhemnelgmzgd@offworld>
+References: <20230317031339.10277-1-boqun.feng@gmail.com>
+ <20230317031339.10277-2-boqun.feng@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1331dd9c-4fb0-5347-6519-2b8d2dfea93d@iogearbox.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26849/Mon Mar 20 08:24:18 2023)
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230317031339.10277-2-boqun.feng@gmail.com>
+User-Agent: NeoMutt/20220429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/17/23 11:24 PM, Daniel Borkmann wrote:
-> On 3/14/23 9:34 PM, Xu Kuohai wrote:
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> After commit 3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking"),
->> the following bpf prog is rejected:
->>
->> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
->> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
->> 2: (bf) r1 = r2
->> 3: (07) r1 += 1
->> 4: (2d) if r1 > r3 goto pc+8
->> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
->> 6: (18) r0 = 0x7fffffffffffff10
->> 8: (0f) r1 += r0                      ; R1_w=scalar(umin=0x7fffffffffffff10,umax=0x800000000000000f)
->> 9: (18) r0 = 0x8000000000000000
->> 11: (07) r0 += 1
->> 12: (ad) if r0 < r1 goto pc-2
->> 13: (b7) r0 = 0
->> 14: (95) exit
->>
->> And the verifier log says:
->>
->> [...]
->>
->> from 12 to 11: R0_w=-9223372036854775794 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 11: (07) r0 += 1                      ; R0_w=-9223372036854775793
->> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 13: safe
->>
->> from 12 to 11: R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 11: (07) r0 += 1                      ; R0_w=-9223372036854775792
->> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775792 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
->> 13: safe
->>
->> [...]
->>
->> What can be seen here is that r1->umin grows blindly and becomes bigger
->> than r1->umax. The reason is because the loop does not terminate, when
->> r0 increases to r1->umax_value, the following code in reg_set_min_max()
->> sets r1->umin_value to r1->umax_value + 1 blindly:
->>
->> case BPF_JGT:
->> {
->>          if (is_jmp32) {
->>                  [...]
->>          } else {
->>                  u64 false_umax = opcode == BPF_JGT ? val    : val - 1;
->>                  u64 true_umin = opcode == BPF_JGT ? val + 1 : val;
->>
->>                  false_reg->umax_value = min(false_reg->umax_value, false_umax);
->>                  true_reg->umin_value = max(true_reg->umin_value, true_umin);
->>          }
->>          break;
->> }
->>
->> Why the loop does not terminate is because tnum_is_const(src_reg->var_off)
->> always returns false, causing is_branch_taken() to be skipped:
->>
->> if (src_reg->type == SCALAR_VALUE &&
->>        !is_jmp32 && tnum_is_const(src_reg->var_off)) {
->>     pred = is_branch_taken(dst_reg,   // could not reach here
->>                    src_reg->var_off.value,
->>                    opcode,
->>                    is_jmp32);
->> }
->>
->> Why tnum_is_const(src_reg->var_off) always returns false is because
->> r1->umin_value starts increasing from 0x7fffffffffffff10, always bigger
->> than U32_MAX, causing the __reg_combine_64_into_32() to mark the lower
->> 32 bits unbounded, i.e. not a constant.
->>
->> To fix it:
->> 1. avoid increasing reg lower bound to a value bigger than the upper bound,
->>     or decreasing reg upper bound to a value smaller than the lower bound.
->> 2. set 32-bit min/max values to the lower 32 bits of the 64-bit min/max values
->>     when the 64-bit min/max values are equal.
-> 
-> Should both these be separate patches, meaning are both of them strictly
-> required as one logical entity or not? From your description it's not really
-> clear wrt reg_{inc,dec}_{u32,u64}_{min,max} and if this is mainly defensive
-> or required.
+On Thu, 16 Mar 2023, Boqun Feng wrote:
 
-Fyi, I'm working on the below draft patch which passes all of test_verifier and
-your test cases as well from patch 2. Will cook a proper patch once I'm through
-with further analysis:
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d517d13878cf..8bef2ed89e87 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1823,7 +1823,7 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
-         struct tnum var64_off = tnum_intersect(reg->var_off,
-                                                tnum_range(reg->umin_value,
-                                                           reg->umax_value));
--       struct tnum var32_off = tnum_intersect(tnum_subreg(reg->var_off),
-+       struct tnum var32_off = tnum_intersect(tnum_subreg(var64_off),
-                                                 tnum_range(reg->u32_min_value,
-                                                            reg->u32_max_value));
+>+/*
+>+ * lock_sync() - A special annotation for synchronize_{s,}rcu()-like API.
+>+ *
+>+ * No actual critical section is created by the APIs annotated with this: these
+>+ * APIs are used to wait for one or multiple critical sections (on other CPUs
+>+ * or threads), and it means that calling these APIs inside these critical
+>+ * sections is potential deadlock.
+>+ *
+>+ * This annotation acts as an acqurie+release anontation pair with hardirqoff
+				^acquire
