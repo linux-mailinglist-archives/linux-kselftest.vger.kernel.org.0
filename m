@@ -2,286 +2,207 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF496C0BCA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 09:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 126696C0C6A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 09:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjCTIKd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Mar 2023 04:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S230469AbjCTIpK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Mar 2023 04:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjCTIKc (ORCPT
+        with ESMTP id S229931AbjCTIpC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Mar 2023 04:10:32 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2397816AD3
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Mar 2023 01:10:25 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id 187so9694661vsq.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Mar 2023 01:10:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679299824;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XyruMyeoD+hrWXP8aDdbCTVKCXuiXs+daA9a2pDM12k=;
-        b=ynVAXvIGlNpjGEyh/kYClKuTqQkEgSZ7zHbBrLpI5ZkIL4ORHXlZJ3796YVEzCXM+g
-         xDsDx5pbHCaW3oN2YULIE00GbTeZMcO9294GxPxRiydvYbAwp23bzz+y0LpdGuxKXbhY
-         b8YEj9mvGS8qhVFk46FQ1mkpkWsTZsXCSYkDHiAiBVdUx+6uP+bXVALGtgSRuWE8QhFU
-         X8KIR337W/H+9FX57g2JpCakwic8on7BhmnY24l60LgopVr9rgR+meJ/lQc7TVrBQUzH
-         s3biSp3b4YgNeb/T6TG0K7tJBI6Y/OLiS72ygEF5BOOcyS/U9urQxMAaKgq8i0ZJgtdV
-         Ij/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679299824;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XyruMyeoD+hrWXP8aDdbCTVKCXuiXs+daA9a2pDM12k=;
-        b=AM98765xa0iPWHhR8xfDAGXzE9isrBjYHdc5IvLxdyCkmepEZy2p9LCGE0KMVCmhbr
-         nLRfzsB5EdSf9qPvJEZ2/5cDgV3aw/gDIdeY/WgCh/T3/k3b+UDu9lHh4IO/usH6SpFs
-         9ssPKOwCk/QppabN8b+IgqBhcwBLPi+tTnHROatI675KqSITDhjV99foml79gkq/Gdsc
-         zM2vsIu6hgLgviUmmLWPK30dqppdMpovmtPl23k9YF2rW290dVRuXDa0+ZxygrIjMuRP
-         Fkft15IhMBj0O4HkDNjI2xOswUkbJJ1rm9bopNBKjYplk6VSpJ+0X3K0xd1atIfTlE8w
-         MeTQ==
-X-Gm-Message-State: AO0yUKWW/LZEusbAxAXX5MAi0Ot289d5Nxztwr8Tg+liXl9cR8rtkb7W
-        840letY+ZrS6XKrS86ZjeesW9opzCywF+/QW/AYhxw==
-X-Google-Smtp-Source: AK7set8eaj+BB0+NPpCjh6wmE7Sdv1oJ2Y69yRfbA/3vCmoCvkwdIZBtg50RWciS9RvhwDbSwZGM3gsqSgFSmaahUKE=
-X-Received: by 2002:a67:c19d:0:b0:425:f1d7:79f7 with SMTP id
- h29-20020a67c19d000000b00425f1d779f7mr3493910vsj.1.1679299823993; Mon, 20 Mar
- 2023 01:10:23 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 20 Mar 2023 13:40:13 +0530
-Message-ID: <CA+G9fYstgoa7jsO9rTmdDR4ZDUFQXdDqax8SongkOCZxFmX3Og@mail.gmail.com>
-Subject: selftests: arm64: list of test failures
-To:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Mon, 20 Mar 2023 04:45:02 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3B726B3;
+        Mon, 20 Mar 2023 01:44:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UIy01UiGmgosPuAckLAcB679R7cy5TKFxVjHXQ0ZuoPtYqP4L666Qxgfkwk9j9TjB1eAMGiJ1CZz2uhxe234hMQWG1c+UP/uS0oYBtXHZbBRMSauIr+Uj/6uOyhXsSFQ85Eg/RyKFXZ+/O2WkMZ9fXyjbkp7CGfOXgqkKQUJL5LDP3csdheq6SwIx1cAXOhRaPxhunTsZkFh5xe9pq05fUw0RMR6x9z9XpyonTDMN4I/EVrFQq9R0YOEbgjqp29tf6HVCYHDfalISNI5nnqCgsPdKsUjHjaTMT+z0lLjyoNpkT+NbFB+Kk+Ogz+I2QRDIfXna+bCyol9bsDiLG2/mQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RNHsRfmOCpTOUJJ3RortJNyQmr3iYJrRJ6vNvwZYvpo=;
+ b=bcQl3M4bthcpozpwqgpIv57t2FrbMg/0e4OnBqKYKiU5tF2ZlLvJcUTfBLE78LApMz9lHQG8sI1yh5jnqgDDzn9ursdasi0rJuOmK9OCHDbQYxi+oug8NhiK5RTnqf5W1hCW84HCCWTfcBILaDl7zF/BI/UoqauneyOh2vqrkUN5kee6j8jWzHyqQQbvP1DXDDAJWP/C1vUL10q4QFmxgA90YwLLUvD68vTfg/zRHyAEwCJr4WWMRmaG7q98xLyHzYpJIePbMPJhjvHc6e0s3i28IvxvoeQsWWHhhz7lvBN0ONYj+cGjNlu81T24VnG7VKyjoXLDEVL5UTOOc2DKKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RNHsRfmOCpTOUJJ3RortJNyQmr3iYJrRJ6vNvwZYvpo=;
+ b=o1xXadDApB5d05IJmgInzmpNSAxPLlNxGU+TfY4tfDsukX8TsB93whV5JKrwxXvwqJjzrzkbj3h3mX0wLurgbjvDZ/rm0Cq2dSseLGZ6VnqyzG4RQ0t1tnJ8HA/YdaV4B8EkkCfduyVvxOujvJsIsVTdjFQVc27vEB5zHBV+k7RsGajBT1H9zv9pCv68wNDWgmtyTbFReDY8qQSO/wJwXH2cSfyMthON12ztjvTvm6oNt5EtbVvUpoqUQTToymi/gxl0sAvJXquM/CUIprO+mLxkDssQ+N4+4CQSWoYjiAo4Y1hAy4HWsWKOYu84bCoJL7Sbv5H2bXA7mvfCu0Ztqw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by CH0PR12MB8531.namprd12.prod.outlook.com (2603:10b6:610:181::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Mon, 20 Mar
+ 2023 08:44:57 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::d228:dfe5:a8a8:28b3]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::d228:dfe5:a8a8:28b3%5]) with mapi id 15.20.6178.037; Mon, 20 Mar 2023
+ 08:44:57 +0000
+Date:   Mon, 20 Mar 2023 10:44:50 +0200
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     "Hans J. Schultz" <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
         open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+Message-ID: <ZBgdAo8mxwnl+pEE@shredder>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230318141010.513424-7-netdev@kapio-technology.com>
+X-ClientProxiedBy: LO2P265CA0087.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:8::27) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|CH0PR12MB8531:EE_
+X-MS-Office365-Filtering-Correlation-Id: b9cc5b87-968a-4ed7-1e27-08db291f61dc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YYoQC0SxTlxaBHxscBGAyrcTfQ/OlGDQmapvCINoJmoeCfKgxU1yU/DUAmPVJakh6Mf3Mgu7n49D2EbqNhGOV0cPJ4r9S4Zd1vgGJu5oriYMGip+/FXts5NLnQt7QqdmY4H96yJDDF3Bd+mGgQD4HkVJkT/pYiWrze+apMMvD49fqT9By6eA0WZ05NVhEnOpZgc9UVYH0clyEFSMOleTRiKoIBeaaj4JYBzd0dfX+ef2EtWS8QJe3eQeBgCLzjOP07HzA7xJDkuJLWr9I2E7X+CULbV2W7KFcdAQ7dikqgFNkoAaPbvv+SGPHUvQ6r+bYGR7t2e5G00TAsHQNC6i1X60I1LczHxfkMHwwiR1cmaehhrdZizAHF2lqVCXAjRr3zPr9Ba4u+1E/JsvPLemXyqXg1lJellPsC10R2rp11lJrjJn0IBiaUC8qG9HgSFoIXl2acnMLo521fQTrMNOAYDbwq39qT7Yx7IwjiYrAioVpWHU83G418KfDFVrxM+Z22Ed1nqxUYltm5Tkzbyfdw3m3q68bxMxJrQuwQrMOhsVVHIOjaOcrd+fS0PbpBfM22Yb33soAEcHlyZZwpK3xhwzPzwTtNhTq7QL/N9sfCnqnT36o+b1g1fBF+Y1fSjhgecgqQGUUD1Idsq06ZDei7e2R25J32T3IUx0UZzXsL2BbJLZ6LtAjkcxkO5FpRdn
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(376002)(136003)(396003)(346002)(39860400002)(366004)(451199018)(316002)(54906003)(6666004)(38100700002)(66946007)(6916009)(8676002)(4326008)(478600001)(66476007)(66556008)(2906002)(6486002)(41300700001)(186003)(26005)(86362001)(6512007)(8936002)(9686003)(6506007)(83380400001)(33716001)(5660300002)(7416002)(7406005)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IKetyVk8zcyac8H0S29+lnJnYYD3ofwYNB7uP4H3QxFj3KqwxU+z4eq2GUuR?=
+ =?us-ascii?Q?BKQK/ZCCVMRx+V1JED1yg8b5iC5PCosHS+3S+v3VMR85JoJioQ7XpABAIaYA?=
+ =?us-ascii?Q?jW5lRwLdMhcjou49j4Ovy/hj9GUXGHL2rbfCDxnXSNYVieux/I++k3W5zmtU?=
+ =?us-ascii?Q?GSC0SIh5zclQS2aOdwAkas5aFttUtDzl1FvAz+qFk4snv8fSfsbbv6JaondD?=
+ =?us-ascii?Q?6l2YjmowmiRqqDCAgBlWpVhmkw0PqTFpiox1wiFf1IriTZUA84kNvt1J/MpS?=
+ =?us-ascii?Q?H+15RVs9CRC6O+C/4yrZ/jWs2i3v27CyeWDbB5t9PBA7fAlmt9Ainv2G0RWw?=
+ =?us-ascii?Q?SeBdMyQ70zUujFdUSqOdFIwvWll76mTNQjbjyMR4oFoU9edPf2KBO5EceTSH?=
+ =?us-ascii?Q?mc7Q3OQT99RVGHkL74+k2tX957aKFyaEbRUxUJ7AXXV+kvpTi44jKx5n02ld?=
+ =?us-ascii?Q?4fUcNqot5dpfLS2sNP5ynNUNFjs2qNqHRBLzGQvhxX89VQkx7k7Bm15EtCSR?=
+ =?us-ascii?Q?gViYKBJgDszUsEWTspZ5GR11q5WaaLIhQP+fcR0iDR43xWwv3Gy68aTVrSFk?=
+ =?us-ascii?Q?6pFEY5KEqW+hxPUQ9CfJB1ecyCk059Wh/zUgyZ06QlJT7U5ac8zyzNcqkL66?=
+ =?us-ascii?Q?weu671pYLybps8ezb/4pslEr8i7ygkPxHGQszyufpQ/lf8m+Z8a/k3Vgjrhh?=
+ =?us-ascii?Q?5RQRNzj5g0ol/EtVBwYXXRupgBZtbxlpdCVlp6UI9qwY58iBnQKqqxrMZFL0?=
+ =?us-ascii?Q?DpSRKz2ic0i+abgp7sRal8O1FP41lytXfXNNM9/orflOsi7pxUmMfvjtITO6?=
+ =?us-ascii?Q?YA2Q5UhkAh7o6o1nsNiZs8d/bVniQVEv008AnnUDADDpojhrOTsQqUJxfzNH?=
+ =?us-ascii?Q?FjShJdPqe0dYkCzUp1mlQ9JYj8n8OOMoXouJrHwpAuyz62lxWlYL32BXGv/O?=
+ =?us-ascii?Q?18R4hJO9bvmPyzGT+cYlvhaaqmfilzgdIPzBo0hpyQ3YOpCWH6XJCE39RC+G?=
+ =?us-ascii?Q?Pb6Tgv8G57myWFGDWRJiHZXD4q9rirRU+/8kSu1rnvDLu7R+ZU+gqLjlYuWt?=
+ =?us-ascii?Q?6/QwB8h1eJvY5dZgJDrvCRCPqLFi/WQazy8UU21ckuX84BOZrBd0OE5iL57+?=
+ =?us-ascii?Q?d3jeij/Dfvvqk1noLBtrXxi0ysgE0Os2xX1ZdjIAOBbrhtKBrkpw0eiKqHcc?=
+ =?us-ascii?Q?qQ1wTJRXB3/X96D8T0NlrgJTkP2slk/FP+6uKb2EpkBrDKtPZIj16Efdo1T9?=
+ =?us-ascii?Q?ks3GMAXCsfco6usXb1OzBv2au3KLdcxzuEnPGXdcZXJudoiG3C4cKOqVZRks?=
+ =?us-ascii?Q?tZCcR+oisiAkEz8c43HUCsTZl8JxwlcczicNI1mI6fhW0lS1kbDbsPoWTEZI?=
+ =?us-ascii?Q?rLfnxqHCI4QQFo1oOTMC0JuDHJFzfWyUqQ8psukLavweOQ6QxIUrmDoc3c83?=
+ =?us-ascii?Q?sC2oTeQnNt1HBwS6fx7IJa658q9s31MPpBXD6MhiNe8jIxAyxQyoELCnRRsr?=
+ =?us-ascii?Q?f1sjo+0JvUv4WhI+V43WpoG3OBa4GJ2JWDi70X0Log/AxI1KpYX0+HZC6yR6?=
+ =?us-ascii?Q?rp90rzW8Tt8oq7bd/w6mSGb7IC5R2tN9cYLoM2MC?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9cc5b87-968a-4ed7-1e27-08db291f61dc
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2023 08:44:56.8409
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GIA23Qtqed83+/XulBUn4FGcAiOHHBDE1UqUAoik/rxLo1pe+yVrTZT/o0lwoZu8ja0yUOW7E1pheVvMDDnwJw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8531
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-selftests: arm64 below list of test cases fails on Linux next and
-Linux mainline builds with clang-16 and gcc-12 kernel booted on
-recently configured tuxrun qemu-arm64 (v7.2) enabled with MTE=on.
+On Sat, Mar 18, 2023 at 03:10:10PM +0100, Hans J. Schultz wrote:
+> +# Test of dynamic FDB entries.
+> +locked_port_dyn_fdb()
+> +{
+> +	local mac=00:01:02:03:04:05
+> +	local ageing_time
+> +
+> +	RET=0
+> +	ageing_time=$(bridge_ageing_time_get br0)
+> +	tc qdisc add dev $swp2 clsact
+> +	ip link set dev br0 type bridge ageing_time $LOW_AGEING_TIME
+> +	bridge link set dev $swp1 learning on locked on
+> +
+> +	bridge fdb replace $mac dev $swp1 master dynamic
+> +	tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
+> +		dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
+> +
+> +	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+> +		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
 
-Am I missing anything on test configs / environment ?
+Packets should be injected via $h1, not $swp1. See other test cases in
+this file.
 
-List of selftests: arm64 test failures,
- - not ok 38 selftests: arm64: check_buffer_fill # exit=1
- - not ok 39 selftests: arm64: check_child_memory # exit=1
- - not ok 41 selftests: arm64: check_ksm_options # exit=1
- - not ok 42 selftests: arm64: check_mmap_options # exit=1
- - not ok 44 selftests: arm64: check_tags_inclusion # exit=1
+> +	tc_check_packets "dev $swp2 egress" 1 1
+> +	check_err $? "Packet not seen on egress after adding dynamic FDB"
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Does this actually work? The packet is transmitted via $swp1, I don't
+understand how it can arrive at the egress of $swp2.
 
-Test log:
---------
-[    0.000000] Linux version 6.3.0-rc3-next-20230320 (tuxmake@tuxmake)
-(Debian clang version 16.0.0
-(++20230314094206+fce3e75e01ba-1~exp1~20230314094258.55), Debian LLD
-16.0.0) #1 SMP PREEMPT @1679285968
-..
-[    0.000000] CPU features: detected: Memory Tagging Extension
-..
+> +
+> +	sleep $((LOW_AGEING_TIME / 100 + 10))
+> +
+> +	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+> +		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+> +	tc_check_packets "dev $swp2 egress" 1 1
+> +	check_fail $? "Dynamic FDB entry did not age out"
 
+Shouldn't this be check_err()? After the FDB entry was aged you want to
+make sure that packets received via $swp1 with SMAC being $mac are no
+longer forwarded by the bridge.
 
-# selftests: arm64: check_buffer_fill
-# 1..20
-# not ok 1 Check buffer correctness by byte with sync err mode and mmap memory
-# not ok 2 Check buffer correctness by byte with async err mode and mmap memory
-# not ok 3 Check buffer correctness by byte with sync err mode and
-mmap/mprotect memory
-# not ok 4 Check buffer correctness by byte with async err mode and
-mmap/mprotect memory
-# not ok 5 Check buffer write underflow by byte with sync mode and mmap memory
-# not ok 6 Check buffer write underflow by byte with async mode and mmap memory
-# ok 7 Check buffer write underflow by byte with tag check fault
-ignore and mmap memory
-# ok 8 Check buffer write underflow by byte with sync mode and mmap memory
-# ok 9 Check buffer write underflow by byte with async mode and mmap memory
-# ok 10 Check buffer write underflow by byte with tag check fault
-ignore and mmap memory
-# not ok 11 Check buffer write overflow by byte with sync mode and mmap memory
-# not ok 12 Check buffer write overflow by byte with async mode and mmap memory
-# ok 13 Check buffer write overflow by byte with tag fault ignore mode
-and mmap memory
-# not ok 14 Check buffer write correctness by block with sync mode and
-mmap memory
-# not ok 15 Check buffer write correctness by block with async mode
-and mmap memory
-# ok 16 Check buffer write correctness by block with tag fault ignore
-and mmap memory
-# ok 17 Check initial tags with private mapping, sync error mode and mmap memory
-# ok 18 Check initial tags with private mapping, sync error mode and
-mmap/mprotect memory
-# ok 19 Check initial tags with shared mapping, sync error mode and mmap memory
-# ok 20 Check initial tags with shared mapping, sync error mode and
-mmap/mprotect memory
-# # Totals: pass:10 fail:10 xfail:0 xpass:0 skip:0 error:0
-not ok 38 selftests: arm64: check_buffer_fill # exit=1
+Also, I suggest executing 'bridge fdb get' to make sure the entry is no
+longer present in the bridge FDB.
 
-
-# selftests: arm64: check_child_memory
-# 1..12
-# not ok 1 Check child anonymous memory with private mapping, precise
-mode and mmap memory
-# not ok 2 Check child anonymous memory with shared mapping, precise
-mode and mmap memory
-# not ok 3 Check child anonymous memory with private mapping,
-imprecise mode and mmap memory
-# not ok 4 Check child anonymous memory with shared mapping, imprecise
-mode and mmap memory
-# not ok 5 Check child anonymous memory with private mapping, precise
-mode and mmap/mprotect memory
-# not ok 6 Check child anonymous memory with shared mapping, precise
-mode and mmap/mprotect memory
-# not ok 7 Check child file memory with private mapping, precise mode
-and mmap memory
-# not ok 8 Check child file memory with shared mapping, precise mode
-and mmap memory
-# not ok 9 Check child file memory with private mapping, imprecise
-mode and mmap memory
-# not ok 10 Check child file memory with shared mapping, imprecise
-mode and mmap memory
-# not ok 11 Check child file memory with private mapping, precise mode
-and mmap/mprotect memory
-# not ok 12 Check child file memory with shared mapping, precise mode
-and mmap/mprotect memory
-# # Totals: pass:0 fail:12 xfail:0 xpass:0 skip:0 error:0
-not ok 39 selftests: arm64: check_child_memory # exit=1
-
-# selftests: arm64: check_ksm_options
-# 1..4
-# # Invalid MTE synchronous exception caught!
-not ok 41 selftests: arm64: check_ksm_options # exit=1
-
-# selftests: arm64: check_mmap_options
-# 1..22
-# ok 1 Check anonymous memory with private mapping, sync error mode,
-mmap memory and tag check off
-# ok 2 Check file memory with private mapping, sync error mode,
-mmap/mprotect memory and tag check off
-# ok 3 Check anonymous memory with private mapping, no error mode,
-mmap memory and tag check off
-# ok 4 Check file memory with private mapping, no error mode,
-mmap/mprotect memory and tag check off
-# not ok 5 Check anonymous memory with private mapping, sync error
-mode, mmap memory and tag check on
-# not ok 6 Check anonymous memory with private mapping, sync error
-mode, mmap/mprotect memory and tag check on
-# not ok 7 Check anonymous memory with shared mapping, sync error
-mode, mmap memory and tag check on
-# not ok 8 Check anonymous memory with shared mapping, sync error
-mode, mmap/mprotect memory and tag check on
-# not ok 9 Check anonymous memory with private mapping, async error
-mode, mmap memory and tag check on
-# not ok 10 Check anonymous memory with private mapping, async error
-mode, mmap/mprotect memory and tag check on
-# not ok 11 Check anonymous memory with shared mapping, async error
-mode, mmap memory and tag check on
-# not ok 12 Check anonymous memory with shared mapping, async error
-mode, mmap/mprotect memory and tag check on
-# not ok 13 Check file memory with private mapping, sync error mode,
-mmap memory and tag check on
-# not ok 14 Check file memory with private mapping, sync error mode,
-mmap/mprotect memory and tag check on
-# not ok 15 Check file memory with shared mapping, sync error mode,
-mmap memory and tag check on
-# not ok 16 Check file memory with shared mapping, sync error mode,
-mmap/mprotect memory and tag check on
-# not ok 17 Check file memory with private mapping, async error mode,
-mmap memory and tag check on
-# not ok 18 Check file memory with private mapping, async error mode,
-mmap/mprotect memory and tag check on
-# not ok 19 Check file memory with shared mapping, async error mode,
-mmap memory and tag check on
-# not ok 20 Check file memory with shared mapping, async error mode,
-mmap/mprotect memory and tag check on
-# not ok 21 Check clear PROT_MTE flags with private mapping, sync
-error mode and mmap memory
-# not ok 22 Check clear PROT_MTE flags with private mapping and sync
-error mode and mmap/mprotect memory
-# # Totals: pass:4 fail:18 xfail:0 xpass:0 skip:0 error:0
-not ok 42 selftests: arm64: check_mmap_options # exit=1
-
-# selftests: arm64: check_tags_inclusion
-# 1..4
-# # Unexpected fault recorded for 0xb00ffff97724000-0xb00ffff97724050 in mode 1
-# not ok 1 Check an included tag value with sync mode
-# # Unexpected fault recorded for 0xc00ffff97724000-0xc00ffff97724050 in mode 1
-# not ok 2 Check different included tags value with sync mode
-# ok 3 Check none included tags value with sync mode
-# # Unexpected fault recorded for 0xc00ffff97724000-0xc00ffff97724050 in mode 1
-# not ok 4 Check all included tags value with sync mode
-# # Totals: pass:1 fail:3 xfail:0 xpass:0 skip:0 error:0
-not ok 44 selftests: arm64: check_tags_inclusion # exit=1
-
-
-steps to reproduce:
--------
-
-# To install tuxrun on your system globally:
-# sudo pip3 install -U tuxrun==0.38.1
-#
-# See https://tuxrun.org/ for complete documentation.
-
-tuxrun  \
- --runtime podman  \
- --device qemu-arm64  \
- --boot-args rw  \
- --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2NGM7Z86D9eB4UfDbhPFzJ0q6qa/Image.gz
- \
- --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2NGM7Z86D9eB4UfDbhPFzJ0q6qa/modules.tar.xz
- \
- --rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4.xz  \
- --parameters SKIPFILE=skipfile-lkft.yaml  \
- --parameters KSELFTEST=https://storage.tuxsuite.com/public/linaro/lkft/builds/2NGM7Z86D9eB4UfDbhPFzJ0q6qa/kselftest.tar.xz
- \
- --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f  \
- --tests kselftest-arm64  \
- --timeouts boot=30 kselftest-arm64=60
-
-
-Boot command:
-......
-/usr/bin/qemu-system-aarch64  \
- -cpu max,pauth-impdef=on  \
- -machine virt,gic-version=3,mte=on  \
- -nographic  \
- -nic none  \
- -m 4G  \
- -monitor none  \
- -no-reboot  \
- -smp 2  \
- -kernel Image  \
- -append \"console=ttyAMA0,115200 rootwait root=/dev/vda debug verbose
-console_msg_format=syslog rw earlycon\"  \
- -drive file=/debian_bookworm_arm64_rootfs.ext4,if=none,format=raw,id=hd0  \
- -device virtio-blk-device,drive=hd0
-
-
-Test log links,
-Linux next:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230320/testrun/15730813/suite/kselftest-arm64/test/arm64_check_buffer_fill/log
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230320/testrun/15730813/suite/kselftest-arm64/test/arm64_check_buffer_fill/details/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230320/testrun/15731016/suite/kselftest-arm64/test/arm64_check_buffer_fill/details/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230320/testrun/15731016/suite/kselftest-arm64/test/arm64_check_buffer_fill/log
-
-mainline:
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.3-rc3/testrun/15724690/suite/kselftest-arm64/test/arm64_check_buffer_fill/details/
-https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.3-rc3/testrun/15724690/suite/kselftest-arm64/test/arm64_check_buffer_fill/log
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> +
+> +	ip link set dev br0 type bridge ageing_time $ageing_time
+> +	bridge link set dev $swp1 learning off locked off
+> +	tc qdisc del dev $swp2 clsact
+> +
+> +	log_test "Locked port dyn FDB"
+> +}
+> +
+>  trap cleanup EXIT
+>  
+>  setup_prepare
+> -- 
+> 2.34.1
+> 
