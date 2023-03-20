@@ -2,108 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCEA6C1FA9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 19:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5F06C200F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 19:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbjCTS1G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Mar 2023 14:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S230010AbjCTSio (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Mar 2023 14:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjCTS0p (ORCPT
+        with ESMTP id S230127AbjCTSiX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Mar 2023 14:26:45 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945782F045;
-        Mon, 20 Mar 2023 11:19:23 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id x1so14186435qtr.7;
-        Mon, 20 Mar 2023 11:19:23 -0700 (PDT)
+        Mon, 20 Mar 2023 14:38:23 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF285B8A;
+        Mon, 20 Mar 2023 11:30:14 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so9754409wmb.5;
+        Mon, 20 Mar 2023 11:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679336362;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1679337012;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u7SGt6ewy4QpyyXpB8gIh5m2EuN+scGEW+i/GxtvTBQ=;
-        b=p2mcp5FgF8qi5F4m0kaETbVJn96x9JFsij//ka36qLR33Q87pGCyvr/L0AWPt1Mft1
-         Y3la7Y3Ak9p8recnj9MuWsNFdxlSj8NThUmhYDU5rZvrxSvZopXpoePBaz561lHTws8Q
-         waXIHZ6M2BkE0FW1mRcYtz5EOXG0FitAKshMfysNFZiVaBWLhAqJY4R0WnSWzVMcOnmX
-         PeG3rIwi+Tk9mJxhRZAnRSeBz/ULuGA1TC/K2YH0QC6txV04v1UI9MxA6Ul8uXvcR0m9
-         TZcF8vyAxJigGIppHrGFoFKftDX4oDtNbmUyJJ14/37IMoM+kiOBo4SjbA7HGyxgGTXl
-         GHnA==
+        bh=DaE8Cq+3HD566AAS3cNbL9kU0VpoY/kWeisZ30TMTT8=;
+        b=oA4w6+dDqA8sdlaThxyc3zs7OVUqGgIdMPfb9hG5XtPf9mEQy3/Wr7hm0EwAzKZaIe
+         vuOEuEz0WcVfDc00RZMe4OittNI9xbDVeefvoHWrkwHdE8H1IsoKsA8mi8/dq6axQC7u
+         FWNEuGqvHzOPhL5WviP7vZvv8DnMrRSxul589MhW/wLoEVNt5hqhMKHt4FWNAnv7TV9l
+         QxP/meyuVlI3A9mZ4O4T4nr2SHGTwch1+9hs4D86dh8onYJfn3dpqFX+5B4n/PlqsOAW
+         wzRaFP6iKCLKWaVmcUwGbGVLRYwN6+fKF9/jET2Ox/Dz3f//3dVz8WOW/kPj4xi79ipr
+         gMug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679336362;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679337012;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u7SGt6ewy4QpyyXpB8gIh5m2EuN+scGEW+i/GxtvTBQ=;
-        b=CxVg7lcAkppEFm6oqbUHA/CyaIa7ZGlYIcrnGPHrZ0vfb/otsjwBE+2Uqc6WwCUd51
-         fGZ8w0rgOkvv7mTARl6CarDA7vyLkzFEzykUaVVC+XAhQMg1G7BdJ79dsNeORkeKGITD
-         6h6eNtWMdDj1s7NgSww3iGhTn4mO08wBvX6GI2xNfXYqD2jFEzZJDrFIyjuGQW8a+5hy
-         XzCpx+MnVYVxoW6Q5Jyr2gQw/5MA5YYnxRTId8m6+dGnVbHEVCFczNujj3EhAUaJKcLO
-         KNYEv2lklUftzK9gNm83/nJj5zgn23+XYQY1x8FrHV8UhsvQe5zduTSJlbt6KKgrxaLD
-         PyzQ==
-X-Gm-Message-State: AO0yUKX6lTy1dxq5mdWdD7Y2jBHRbsx9rNIviFu1Gh/h/WQTwkfnjyPD
-        VyTj4M31SMZvKnWW1Nw2Qsk=
-X-Google-Smtp-Source: AK7set++ETVq5GzrgGjrmpd/i6tixAfyGPb810touxsUo1OlfAB3y1s5qt4PVmudKLhbTlNc8vr5nw==
-X-Received: by 2002:ac8:5f8b:0:b0:3bd:1a07:2086 with SMTP id j11-20020ac85f8b000000b003bd1a072086mr124163qta.36.1679336362542;
-        Mon, 20 Mar 2023 11:19:22 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id m6-20020a05620a24c600b00745ba217187sm7805279qkn.3.2023.03.20.11.19.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 11:19:21 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 2456E27C005B;
-        Mon, 20 Mar 2023 14:19:21 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 20 Mar 2023 14:19:21 -0400
-X-ME-Sender: <xms:qKMYZHl_jHbMPC76phPqQFBBzdH7GTNRhVDgFSd6t7loBWP85kTKhA>
-    <xme:qKMYZK0Y2225S3QaQ8hyBSjJP2eOMkh_lQb__zJNClrbiH7BxQGRMgK8GT1VKuiPV
-    TuB43dkodNib8wWPw>
-X-ME-Received: <xmr:qKMYZNpHUVuJ2kz5MIPftwdbUtuP0z_fxMmtuSoVTjdTFffGx3PtMpE9SJuP6Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefkedguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:qKMYZPnfBHamQzApCPLRRJKPTIGn4NkIyqzijhDo4bfLhgKMmGgucg>
-    <xmx:qKMYZF3XHEW6X6-StQ9QiEgJW07EMh2Mu7li8r6pwKYMgVfRjLnFlg>
-    <xmx:qKMYZOvcZwe9QGD0oR7sAOUYtBqyVVCsCCrCiIWBAF55uYmOYp7xHw>
-    <xmx:qaMYZHV5nMGsjihCrLXSZIhvyG8BdgFUqRJb3Cz-jR5YWXG1BmFyxg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Mar 2023 14:19:20 -0400 (EDT)
-Date:   Mon, 20 Mar 2023 11:19:05 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     rcu@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Shuah Khan <shuah@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        seanjc@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH rcu 7/7] rcutorture: Add srcu_lockdep.sh
-Message-ID: <ZBijmdz2ucql+BSb@boqun-archlinux>
-References: <20230317031339.10277-1-boqun.feng@gmail.com>
- <20230317031339.10277-8-boqun.feng@gmail.com>
+        bh=DaE8Cq+3HD566AAS3cNbL9kU0VpoY/kWeisZ30TMTT8=;
+        b=wmYyTPll8EiYsC+3LUxUWXpbVxkVaL/ApsQQR13ok4G/fxE8Q4CT7QQPwBC3jnHReK
+         I8dsiTL5hdxoFar/BkUij6wbCY7HOhb5Dr/SjD1x9KpFfqHG84zJ654Ltfjbk0ZyqfH9
+         0eyiDP+N/H377NFcLf7hwr/+wXqHhqgnyFTlb3vcmuywukeGrBRkMQt6IgocxDOR+IyC
+         Oh2Btiqn+/VLdw5XuOwnyommmFrALGgx6pFOAoV3hktg93cClRa8hJOgWkS7wue6keUV
+         xMcA0RaYf6xSRLA9RVxrAwCfWXpbVsJhkirFCw2WRTX9Qu//9Q0J/yaQFqSXQoj5Gwux
+         yElw==
+X-Gm-Message-State: AO0yUKVAWeD/rly567DHUbFNs6TVOPz1WdLwWDHz1V/iBkdKgVvPNdbp
+        7+qoqsMhLU3BLGNY/Tb3/WXAQWvmYx+IW5OKSG8=
+X-Google-Smtp-Source: AK7set9Bgwg8JCn7J8ExtyKaKDVaOjrbw73S5bkBKD7eM6hgwNYtQl/5KNokOmDyTHs3W6NUlNefJfPgnBqv6sOyhQU=
+X-Received: by 2002:a7b:c7c6:0:b0:3ed:ce50:435a with SMTP id
+ z6-20020a7bc7c6000000b003edce50435amr394181wmk.10.1679337011724; Mon, 20 Mar
+ 2023 11:30:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317031339.10277-8-boqun.feng@gmail.com>
+References: <20230309135718.1490461-1-usama.anjum@collabora.com> <20230309115818.170dd5ef2cde7b58b9354ecd@linux-foundation.org>
+In-Reply-To: <20230309115818.170dd5ef2cde7b58b9354ecd@linux-foundation.org>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Mon, 20 Mar 2023 11:30:00 -0700
+Message-ID: <CANaxB-wGLbM9U_dK=kzs+r5Xy358aKZ0=J_zODiLOcng+dbXog@mail.gmail.com>
+Subject: Re: [PATCH v11 0/7] Implement IOCTL to get and optionally clear info
+ about PTEs
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -114,110 +93,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Paul,
+On Thu, Mar 9, 2023 at 11:58=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Thu,  9 Mar 2023 18:57:11 +0500 Muhammad Usama Anjum <usama.anjum@coll=
+abora.com> wrote:
+>
+> > The information related to pages if the page is file mapped, present an=
+d
+> > swapped is required for the CRIU project [5][6]. The addition of the
+> > required mask, any mask, excluded mask and return masks are also requir=
+ed
+> > for the CRIU project [5].
+>
+> It's a ton of new code and what I'm not seeing in here (might have
+> missed it?) is a clear statement of the value of this feature to our
+> users.
+>
+> I see hints that CRIU would like it, but no description of how valuable
+> this is to CRIU's users.
 
-On Thu, Mar 16, 2023 at 08:13:39PM -0700, Boqun Feng wrote:
-> From: "Paul E. McKenney" <paulmck@kernel.org>
-> 
-> This commit adds an srcu_lockdep.sh script that checks whether lockdep
-> correctly classifies SRCU-based, SRCU/mutex-based, and SRCU/rwsem-based
-> deadlocks.
-> 
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> [ boqun: Fix "RCUTORTURE" with "$RCUTORTURE" ]
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->  .../selftests/rcutorture/bin/srcu_lockdep.sh  | 73 +++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
-> 
-> diff --git a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
-> new file mode 100755
-> index 000000000000..961932754684
-> --- /dev/null
-> +++ b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
 
-Could you provide the SPDX header and copyright bits for this newly
-added file? For small changes I can do it myself, however this is about
-licenses and copyright, so I need it from you, thanks!
+Hi Andrew,
 
-Regards,
-Boqun
+The current interface works for CRIU, and I can't say we have anything
+critical with it right now.
 
-> @@ -0,0 +1,73 @@
-> +#!/bin/bash
-> +#
-> +# Run SRCU-lockdep tests and report any that fail to meet expectations.
-> +
-> +usage () {
-> +	echo "Usage: $scriptname optional arguments:"
-> +	echo "       --datestamp string"
-> +	exit 1
-> +}
-> +
-> +ds=`date +%Y.%m.%d-%H.%M.%S`-srcu_lockdep
-> +scriptname="$0"
-> +
-> +T="`mktemp -d ${TMPDIR-/tmp}/srcu_lockdep.sh.XXXXXX`"
-> +trap 'rm -rf $T' 0
-> +
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
-> +. functions.sh
-> +
-> +while test $# -gt 0
-> +do
-> +	case "$1" in
-> +	--datestamp)
-> +		checkarg --datestamp "(relative pathname)" "$#" "$2" '^[a-zA-Z0-9._/-]*$' '^--'
-> +		ds=$2
-> +		shift
-> +		;;
-> +	*)
-> +		echo Unknown argument $1
-> +		usage
-> +		;;
-> +	esac
-> +	shift
-> +done
-> +
-> +err=
-> +nerrs=0
-> +for d in 0 1
-> +do
-> +	for t in 0 1 2
-> +	do
-> +		for c in 1 2 3
-> +		do
-> +			err=
-> +			val=$((d*1000+t*10+c))
-> +			tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 5s --configs "SRCU-P" --bootargs "rcutorture.test_srcu_lockdep=$val" --trust-make --datestamp "$ds/$val" > "$T/kvm.sh.out" 2>&1
-> +			ret=$?
-> +			mv "$T/kvm.sh.out" "$RCUTORTURE/res/$ds/$val"
-> +			if test "$d" -ne 0 && test "$ret" -eq 0
-> +			then
-> +				err=1
-> +				echo -n Unexpected success for > "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-> +			fi
-> +			if test "$d" -eq 0 && test "$ret" -ne 0
-> +			then
-> +				err=1
-> +				echo -n Unexpected failure for > "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-> +			fi
-> +			if test -n "$err"
-> +			then
-> +				grep "rcu_torture_init_srcu_lockdep: test_srcu_lockdep = " "$RCUTORTURE/res/$ds/$val/SRCU-P/console.log" | sed -e 's/^.*rcu_torture_init_srcu_lockdep://' >> "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-> +				cat "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-> +				nerrs=$((nerrs+1))
-> +			fi
-> +		done
-> +	done
-> +done
-> +if test "$nerrs" -ne 0
-> +then
-> +	exit 1
-> +fi
-> +exit 0
-> -- 
-> 2.39.2
-> 
+On the other hand, the new interface has a number of significant improvemen=
+ts:
+
+* it is more granular and allows us to track changed pages more
+  effectively. The current interface can clear dirty bits for the entire
+  process only. In addition, reading info about pages is a separate
+  operation. It means we must freeze the process to read information
+  about all its pages, reset dirty bits, only then we can start dumping
+  pages. The information about pages becomes more and more outdated,
+  while we are processing pages. The new interface solves both these
+  downsides. First, it allows us to read pte bits and clear the
+  soft-dirty bit atomically. It means that CRIU will not need to freeze
+  processes to pre-dump their memory. Second, it clears soft-dirty bits
+  for a specified region of memory. It means CRIU will have actual info
+  about pages to the moment of dumping them.
+
+* The new interface has to be much faster because basic page filtering
+  is happening in the kernel. With the old interface, we have to read
+  pagemap for each page.
+
+
+Thanks,
+Andrei
+
+>
+> So please spend some time preparing this info.
+>
+> Also, are any other applications of this feature anticipated?  If so,
+> what are they?
+>
+> IOW, please sell this stuff to us!
