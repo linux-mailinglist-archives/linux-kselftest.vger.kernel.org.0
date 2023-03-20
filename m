@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C626C1A49
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 16:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652DD6C1A47
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 16:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbjCTPub (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Mar 2023 11:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
+        id S231954AbjCTPu1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Mar 2023 11:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbjCTPts (ORCPT
+        with ESMTP id S233339AbjCTPts (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 20 Mar 2023 11:49:48 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ADB2FCEC;
-        Mon, 20 Mar 2023 08:41:24 -0700 (PDT)
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF79126E7;
+        Mon, 20 Mar 2023 08:41:25 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1679326882;
-        bh=JyOrsnSClXzOy2qb2h3WcW0lX0xzEzpyA/yocZM6rxk=;
+        bh=ALZVNlFzQbWC29byVLfkuxfsVLHyQCL0ajAaJz9Wghg=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=ATWiycxwuKiBrIWlMK6qq40IkPG4fH++buyOoo6EGOYoFOtSIGAzoZsAqXb+2dGJQ
-         ZEsaZVM8N7TMR8AO7nan8A8YlRSv4SuFmUL/dpDSXCBUDA7W2CYyCUYR8urCh5DKeO
-         //bGbQYqU1BLQYufbCKrxNIL1vihCbzzHJHDHQpo=
-Date:   Mon, 20 Mar 2023 15:41:06 +0000
-Subject: [PATCH v2 6/8] tools/nolibc: tests: add test for -fstack-protector
+        b=mJXCmWqS/4IZFQHCr46z0tZvRa9YXKQ4aUQNimmk4UpuirJ0BT03sbDdhpmMC90m1
+         rGSdZU9Q4HAVm00YEnR1cHqRKQA5USjJ1EynQgafORZqb9q1sywlB7ffbHIymSttrS
+         0jgV3+/Bi0nPpSoLuqwL9pUVncmhdtVy+ir3V3uQ=
+Date:   Mon, 20 Mar 2023 15:41:07 +0000
+Subject: [PATCH v2 7/8] tools/nolibc: i386: add stackprotector support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230223-nolibc-stackprotector-v2-6-4c938e098d67@weissschuh.net>
+Message-Id: <20230223-nolibc-stackprotector-v2-7-4c938e098d67@weissschuh.net>
 References: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
 In-Reply-To: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326878; l=2836;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326878; l=1952;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=JyOrsnSClXzOy2qb2h3WcW0lX0xzEzpyA/yocZM6rxk=;
- b=a8YNdJ/4b1JkbNuPWAJxJ2gYEKeTzYJ/KBfT3JFHFpkMiK7scEvSx+YJxAFnH7vcPBtu7lnN1
- 1oEQfg/daTYBQT1LG3XdxgmNwz9NXGeuhjVPrKHGPlSaeDbU9zJpMMv
+ bh=ALZVNlFzQbWC29byVLfkuxfsVLHyQCL0ajAaJz9Wghg=;
+ b=El8yLqzdmLyDrDEodwNEvkP2cW1baetn4H+tMOSptTv+otrxoY/5EA9EDstQjzRl1YDgSNyIs
+ XHuoOMWg2rrA9Ax1QVdNjRVKKf5ulR5Z/fYy6JotvCSIeRh4TwMMdnp
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -51,108 +51,53 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test the previously introduce stack protector functionality in nolibc.
+Enable the new stackprotector support for i386.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/Makefile      |  3 ++
- tools/testing/selftests/nolibc/nolibc-test.c | 62 +++++++++++++++++++++++++++-
- 2 files changed, 63 insertions(+), 2 deletions(-)
+ tools/include/nolibc/arch-i386.h        | 7 ++++++-
+ tools/testing/selftests/nolibc/Makefile | 1 +
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index e8d0cf545bf1..2d98d78fd3f3 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -181,6 +181,8 @@ struct sys_stat_struct {
+ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
++#define __ARCH_SUPPORTS_STACK_PROTECTOR
++
+ /* startup code */
+ /*
+  * i386 System V ABI mandates:
+@@ -188,9 +190,12 @@ const unsigned long *_auxv __attribute__((weak));
+  * 2) The deepest stack frame should be set to zero
+  *
+  */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
++void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
+ {
+ 	__asm__ volatile (
++#ifdef NOLIBC_STACKPROTECTOR
++		"call __stack_chk_init\n"   // initialize stack protector
++#endif
+ 		"pop %eax\n"                // argc   (first arg, %eax)
+ 		"mov %esp, %ebx\n"          // argv[] (second arg, %ebx)
+ 		"lea 4(%ebx,%eax,4),%ecx\n" // then a NULL then envp (third arg, %ecx)
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 236c0364f5fb..b4f818547f35 100644
+index b4f818547f35..8f069ebdd124 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -76,6 +76,9 @@ else
- Q=@
- endif
- 
-+CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
-+			$(call cc-option,-mstack-protector-guard=global) \
-+			$(call cc-option,-fstack-protector-all)
+@@ -79,6 +79,7 @@ endif
+ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+ 			$(call cc-option,-mstack-protector-guard=global) \
+ 			$(call cc-option,-fstack-protector-all)
++CFLAGS_i386 = $(CFLAGS_STACKPROTECTOR)
  CFLAGS_s390 = -m64
  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables \
  		$(call cc-option,-fno-stack-protector) \
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index fb2d4872fac9..21bacc928bf7 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -667,6 +667,63 @@ int run_stdlib(int min, int max)
- 	return ret;
- }
- 
-+#if defined(__clang__)
-+__attribute__((optnone))
-+#elif defined(__GNUC__)
-+__attribute__((optimize("O0")))
-+#endif
-+static int smash_stack(void)
-+{
-+	char buf[100];
-+
-+	for (size_t i = 0; i < 200; i++)
-+		buf[i] = 'P';
-+
-+	return 1;
-+}
-+
-+static int run_protection(int min, int max)
-+{
-+	pid_t pid;
-+	int llen = 0, status;
-+
-+	llen += printf("0 -fstackprotector ");
-+
-+#if !defined(NOLIBC_STACKPROTECTOR)
-+	llen += printf("not supported");
-+	pad_spc(llen, 64, "[SKIPPED]\n");
-+	return 0;
-+#endif
-+
-+	pid = -1;
-+	pid = fork();
-+
-+	switch (pid) {
-+	case -1:
-+		llen += printf("fork()");
-+		pad_spc(llen, 64, "[FAIL]\n");
-+		return 1;
-+
-+	case 0:
-+		close(STDOUT_FILENO);
-+		close(STDERR_FILENO);
-+
-+		smash_stack();
-+		return 1;
-+
-+	default:
-+		pid = waitpid(pid, &status, 0);
-+
-+		if (pid == -1 || !WIFSIGNALED(status) || WTERMSIG(status) != SIGABRT) {
-+			llen += printf("waitpid()");
-+			pad_spc(llen, 64, "[FAIL]\n");
-+			return 1;
-+		}
-+		pad_spc(llen, 64, " [OK]\n");
-+		return 0;
-+	}
-+}
-+
- /* prepare what needs to be prepared for pid 1 (stdio, /dev, /proc, etc) */
- int prepare(void)
- {
-@@ -719,8 +776,9 @@ int prepare(void)
- /* This is the definition of known test names, with their functions */
- static const struct test test_names[] = {
- 	/* add new tests here */
--	{ .name = "syscall",   .func = run_syscall  },
--	{ .name = "stdlib",    .func = run_stdlib   },
-+	{ .name = "syscall",    .func = run_syscall    },
-+	{ .name = "stdlib",     .func = run_stdlib     },
-+	{ .name = "protection", .func = run_protection },
- 	{ 0 }
- };
- 
 
 -- 
 2.40.0
