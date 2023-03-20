@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F6E6C07DD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 02:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517D86C07B6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 02:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjCTBCa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Mar 2023 21:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
+        id S230444AbjCTBA5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Mar 2023 21:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbjCTBAi (ORCPT
+        with ESMTP id S231142AbjCTA7z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Mar 2023 21:00:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D6422DE0;
-        Sun, 19 Mar 2023 17:57:01 -0700 (PDT)
+        Sun, 19 Mar 2023 20:59:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D992200E;
+        Sun, 19 Mar 2023 17:56:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C14AB80D40;
-        Mon, 20 Mar 2023 00:55:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA03C433EF;
-        Mon, 20 Mar 2023 00:55:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA9B3611F8;
+        Mon, 20 Mar 2023 00:56:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8716BC433D2;
+        Mon, 20 Mar 2023 00:56:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679273737;
-        bh=jfPyCCKendxLqJk2r+uV5NPBT4BiH9aNkh+tn6Z/fqY=;
+        s=k20201202; t=1679273774;
+        bh=x3kzMz32e+WMSIugB4PjBa5dkR3f0MBTkoGHz9n+y4A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OU/cp+7GXNm9UD7XH5KMVcBgSv/3/Kqcv1r9pqiGUA2KajT3wpADfHgek+ROSmXPr
-         nN8JhKVw6v332tktTZilyIJNIiWCa4+z7gKXxbF14Lu1jfqQCNzIFFYMoQi3oYfizr
-         m+RaoGjhSdHuXPUrFbYWqqyNM4myHFZeqWryj1Xy8lNpyv3SZIvKfNlX855VnvUClx
-         FiPFym/mIJplYObR3rwVZNs27mZe2K0jveVDbrF/ID/ifZwgpsw0J9LJcue4YMJIK+
-         Zv+pUNC9ikgXb+Y8GGxnM9A65l4xeH+9wgKpa99EbGO1fOST0hY+R0Da/WNrOBH+IJ
-         ivEQUj6vzS1Nw==
+        b=IyI5YMepEUVl47d0BZV7Mmiv0jxEp6x7ZZi4eP1oxCJiK+LKA1LhW21xEWqLPDx3E
+         zNmAQJkcweaFqOS6MHpJI1adYKXpdvfwhDqp/MuhOsAtJ4UmqpKHswgsj/5Lp8RnMi
+         cO9HkNMF4fird+Gxv3FyTUphbOivHARRGmwo9h07bgMkqTrUUjDUd3ID8zAoUeU2R9
+         yPcqv+ONxwDkvrjhu1dLnqmwXt4s0tu1pZKGwF3vcnAOIaeL3QN0FPXCRP7XX/QFbW
+         vJIl5WIvRBw+b73pNZeOoi4XKGxG4L0McgCMJAjmy48A4zHNyryG+HFcWoANAG3F0D
+         xus16FmLBZdwg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Lorenz Bauer <lorenz.bauer@isovalent.com>,
@@ -39,21 +39,21 @@ Cc:     Lorenz Bauer <lorenz.bauer@isovalent.com>,
         Martin KaFai Lau <martin.lau@kernel.org>,
         Sasha Levin <sashal@kernel.org>, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, shuah@kernel.org,
-        yhs@fb.com, eddyz87@gmail.com, sdf@google.com,
-        laoar.shao@gmail.com, memxor@gmail.com, iii@linux.ibm.com,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 07/17] selftests/bpf: check that modifier resolves after pointer
-Date:   Sun, 19 Mar 2023 20:55:09 -0400
-Message-Id: <20230320005521.1428820-7-sashal@kernel.org>
+        yhs@fb.com, eddyz87@gmail.com, sdf@google.com, iii@linux.ibm.com,
+        laoar.shao@gmail.com, memxor@gmail.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 06/15] selftests/bpf: check that modifier resolves after pointer
+Date:   Sun, 19 Mar 2023 20:55:50 -0400
+Message-Id: <20230320005559.1429040-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320005521.1428820-1-sashal@kernel.org>
-References: <20230320005521.1428820-1-sashal@kernel.org>
+In-Reply-To: <20230320005559.1429040-1-sashal@kernel.org>
+References: <20230320005559.1429040-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,7 +78,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 28 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index 50afa75bd45b1..2a04dbec510de 100644
+index 48b01150e703f..28d22265b8253 100644
 --- a/tools/testing/selftests/bpf/prog_tests/btf.c
 +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
 @@ -882,6 +882,34 @@ static struct btf_raw_test raw_tests[] = {
