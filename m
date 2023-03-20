@@ -2,99 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7DA6C19FB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 16:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A5D6C1A46
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 16:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbjCTPkp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Mar 2023 11:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
+        id S231889AbjCTPu0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Mar 2023 11:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233262AbjCTPkT (ORCPT
+        with ESMTP id S233114AbjCTPtp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:40:19 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864C6A5E3
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Mar 2023 08:32:01 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t5so11515309edd.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Mar 2023 08:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1679326314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ONCoqAuPFAdxcHJlJkmwpKMX/MPlR6FkYHZLYnTGWGA=;
-        b=ZAG07fjd1pGdKzK6v1r6GnVVdTiwCGVdbZgvimV0oMBbMrtpEp7Vf5VtfChYznrOc6
-         H0M5oKF/oqkK+eiujHnj4RkGkHe1EGUWGTj5spGvroIRSc0RunHN0DZeywnFEy+ELW3g
-         I1IsObzaSbYO7aYSdtbhiiuZyLfr04luFU8Ju/hnMT9QRQjo3bnL3xU12gKF8bXKVocG
-         wPSKeMuXRncMIA08YpSBxkh35gUR42GYCP/ZSehhvMNiZVSOhSd24vgR4AsLaeCwcD26
-         mQChHP13oK+HLvVovVvuVvI/Re5PiAqBU2KoYz0eW9Tb3NAQLfevbE9pwLetC1J9bp4O
-         FRPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679326314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ONCoqAuPFAdxcHJlJkmwpKMX/MPlR6FkYHZLYnTGWGA=;
-        b=Br/ukjqBPzciJeOHTPLbUrxgZnnfCQYiRsSsJzAL5WOIsXQJwzeJJ1BBtHQ7L3ON+F
-         /X9/vbrDLPtbt5wnECfwemwnlqFA5eSm+RCxKk/Hh4C6H/HbVKZVktV0hzX2f+RKkvGt
-         YpVCvdSVeBY0TEzIC/6Pvycm1duAyV1uZnYx5ckUVjFkUYD5LfCmeMdTvpDIASRPPKcx
-         3x/TNRmgCxkTFRzraI6zSdDoB4nkiq6heDDdOa/IjM6Q5e4LzikGjI9lQDBs5PkOxB9e
-         Ty6T54WBXcAh6Y8jrPh74DlqsqraUyXXEmf4uhquQzVULCCjXgTQYX+XelXCx8oEaSXF
-         xnKQ==
-X-Gm-Message-State: AO0yUKXkCwnTeRhKy1nkUO3p3Bw/7FJXe78Q4c9mSzD8M8P6/63UiH+Z
-        WczZUUBNfudIYvJ9AxKXowVHK2d1MNS/TVeuwF+kOQ==
-X-Google-Smtp-Source: AK7set9zRda+HOBbyE1RH7U3Q5LdXAIFkGANo3ucDxxjiF5CtJ+awwn6fl76qqAqukfOF4oE95J6aFnk+XfPYhz4GPU=
-X-Received: by 2002:a17:906:cf8d:b0:930:310:abef with SMTP id
- um13-20020a170906cf8d00b009300310abefmr4344539ejb.3.1679326313919; Mon, 20
- Mar 2023 08:31:53 -0700 (PDT)
+        Mon, 20 Mar 2023 11:49:45 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2B94484;
+        Mon, 20 Mar 2023 08:41:22 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1679326880;
+        bh=HEy3v+RR70w+a7+c3eh2YZR6p30gJnTpTFORFe8VIEI=;
+        h=From:Subject:Date:To:Cc:From;
+        b=nGNOK8CeDsVx2fMzR+QypyAeX6isAJW7ZjyX3OWtR6Zt0CXKLgYQNvKucKvm1gZM8
+         7pdBSFp7MfsmKZe8XqBhT86Npi4pleyFjS04hbfsmfQe1z8yQD6knjz+yw3tpoTbe0
+         mnWZAcanh6CsnlytO3h++ZCBkz5lRREs06ZdAAqw=
+Subject: [PATCH v2 0/8] tools/nolibc: add support for stack protector
+Date:   Mon, 20 Mar 2023 15:41:00 +0000
+Message-Id: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
 MIME-Version: 1.0
-References: <20230320005258.1428043-1-sashal@kernel.org> <20230320005258.1428043-8-sashal@kernel.org>
-In-Reply-To: <20230320005258.1428043-8-sashal@kernel.org>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Mon, 20 Mar 2023 15:31:42 +0000
-Message-ID: <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
- resolves after pointer
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@kernel.org>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, shuah@kernel.org,
-        yhs@fb.com, eddyz87@gmail.com, sdf@google.com, error27@gmail.com,
-        iii@linux.ibm.com, memxor@gmail.com, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAI1+GGQC/4WNSwrCMBQAr1KyNtIklRZX3kO6yOfFPCxJyUurU
+ np3Yy/gcgaG2RhBRiB2bTaWYUXCFCvIU8Ns0PEBHF1lJlupWikVj2lCYzkVbZ9zTgVsSZm7zl1
+ 8N3jf94LV1mgCbrKONtQ6LtNU5ZzB4/uY3cfKAam2n+O9ip/9t1kFb7mCvnODMMpLcXsBEpENS
+ zhHKGzc9/0LwWy0GNQAAAA=
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326877; l=2615;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=HEy3v+RR70w+a7+c3eh2YZR6p30gJnTpTFORFe8VIEI=;
+ b=C7AOi+lgXBPeINSgzKlo1KMxZgZHKMecHalkVsYS98wdSkCFiyVkexc3v2Acluzpa/vAC5tIq
+ +ptBs7+Jz4RC+4+wrSW4he5ZEMh9+hmR4fArciX6Xb53Yi2hp3VegHk
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 12:53=E2=80=AFAM Sasha Levin <sashal@kernel.org> wr=
-ote:
->
-> From: Lorenz Bauer <lorenz.bauer@isovalent.com>
->
-> [ Upstream commit dfdd608c3b365f0fd49d7e13911ebcde06b9865b ]
->
-> Add a regression test that ensures that a VAR pointing at a
-> modifier which follows a PTR (or STRUCT or ARRAY) is resolved
-> correctly by the datasec validator.
->
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-> Link: https://lore.kernel.org/r/20230306112138.155352-3-lmb@isovalent.com
-> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+This is useful when using nolibc for security-critical tools.
+Using nolibc has the advantage that the code is easily auditable and
+sandboxable with seccomp as no unexpected syscalls are used.
+Using compiler-assistent stack protection provides another security
+mechanism.
 
-Hi Sasha,
+For this to work the compiler and libc have to collaborate.
 
-Can you explain why this patch was selected? I'd prefer to not
-backport the test, since it frequently leads to breakage when trying
-to build selftests/bpf on stable kernels.
+This patch adds the following parts to nolibc that are required by the
+compiler:
 
-Thanks
-Lorenz
+* __stack_chk_guard: random sentinel value
+* __stack_chk_fail: handler for detected stack smashes
+
+In addition an initialization function is added that randomizes the
+sentinel value.
+
+Only support for global guards is implemented.
+Register guards are useful in multi-threaded context which nolibc does
+not provide support for.
+
+Link: https://lwn.net/Articles/584225/
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v2:
+- Code and comments style fixes
+- Only use raw syscalls in stackprotector functions
+- Remove need for dedicated entrypoint and exec() during tests
+- Add more rationale
+- Shuffle some code around between commits
+- Provide compatibility with the -fno-stack-protector patch
+- Remove RFC status
+- Link to v1: https://lore.kernel.org/r/20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net
+
+This series is based on the current rcu/dev branch of Pauls rcu tree.
+
+---
+Thomas Weißschuh (8):
+      tools/nolibc: add definitions for standard fds
+      tools/nolibc: add helpers for wait() signal exits
+      tools/nolibc: tests: constify test_names
+      tools/nolibc: add support for stack protector
+      tools/nolibc: tests: fold in no-stack-protector cflags
+      tools/nolibc: tests: add test for -fstack-protector
+      tools/nolibc: i386: add stackprotector support
+      tools/nolibc: x86_64: add stackprotector support
+
+ tools/include/nolibc/Makefile                |  4 +-
+ tools/include/nolibc/arch-i386.h             |  7 ++-
+ tools/include/nolibc/arch-x86_64.h           |  5 +++
+ tools/include/nolibc/nolibc.h                |  1 +
+ tools/include/nolibc/stackprotector.h        | 53 +++++++++++++++++++++++
+ tools/include/nolibc/types.h                 |  2 +
+ tools/include/nolibc/unistd.h                |  5 +++
+ tools/testing/selftests/nolibc/Makefile      | 11 ++++-
+ tools/testing/selftests/nolibc/nolibc-test.c | 64 ++++++++++++++++++++++++++--
+ 9 files changed, 144 insertions(+), 8 deletions(-)
+---
+base-commit: a9b8406e51603238941dbc6fa1437f8915254ebb
+change-id: 20230223-nolibc-stackprotector-d4d5f48ff771
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
