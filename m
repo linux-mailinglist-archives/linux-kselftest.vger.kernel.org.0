@@ -2,146 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360EF6C049A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Mar 2023 20:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AA06C0708
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Mar 2023 01:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjCST6d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Mar 2023 15:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
+        id S229798AbjCTAyG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Mar 2023 20:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjCST6a (ORCPT
+        with ESMTP id S229448AbjCTAxu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Mar 2023 15:58:30 -0400
-Received: from mail-wm1-x363.google.com (mail-wm1-x363.google.com [IPv6:2a00:1450:4864:20::363])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907C017162
-        for <linux-kselftest@vger.kernel.org>; Sun, 19 Mar 2023 12:58:29 -0700 (PDT)
-Received: by mail-wm1-x363.google.com with SMTP id g6-20020a05600c4ec600b003ed8826253aso2185361wmq.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 19 Mar 2023 12:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1679255908;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ugxvd8UKF7NxIIzphZkT6ey/EusNfyQo98VW+VJFOiI=;
-        b=KVi2bUlaxkySvVdD7fhFj3qNpgz5FCFnpwYkhvQvB+1g/8EtZhSYaen0b7yYjGGYuF
-         NL0NWeX+eOgD6zmL90OXF54N7JhNozKky3ouuw3FVLEWT+DtvaQIE+/cqM2OPjCaqy2V
-         FHmk9p2o9CBGvChm+kdqqvbXoFs5/aQnY3voQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679255908;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ugxvd8UKF7NxIIzphZkT6ey/EusNfyQo98VW+VJFOiI=;
-        b=wANxVgzpFs/azJkUfIowPwKgbq9nlZoNY5f4DsnJjn2sT9BwahMsXWDmfMwcwsxl52
-         sH+RI8IkSyUOYSGhKV2l5/mE/wKs5jjUp6OgACXH0CniVK0GyD9D55FxmjV94Eq1JD75
-         Nyxt8BvpXFW1xbSSKqIJhtCOkZOrvPrVFRrYEvcXz+4NqNHdIWMsaNsXm68uCXXSkfsx
-         s/TEIyH0mGUoZVelce3q3Hw1+yn/psJNjbqJMPF/pmzijpngj9HuX8a1wokNVK2tFsip
-         4zSemvilv8Ts+NLDkQLeR4R+Sy8chIduWGnLaFBNQzSbkLowbAoyczPEDTifXAf6XZE3
-         Mh8g==
-X-Gm-Message-State: AO0yUKVyYOxgRiphVHWQYCoJGi8cGF5rCbVdCDanyMKs4KoFzhGhU21Y
-        zvUaev2nKQ2kfDZQvcyGwMIYut+GxXALbeDxFjT8G0f7qgh3
-X-Google-Smtp-Source: AK7set+3PKHJJmz3XmMQAw6iCJpB6/q2hhXE/qAPOBhgn9qUnFXl5SWdKtZpa8Pn+dkZw+C8wHGU2K+Wzh2w
-X-Received: by 2002:a1c:ed16:0:b0:3ed:a45d:aee9 with SMTP id l22-20020a1ced16000000b003eda45daee9mr4993314wmh.39.1679255908000;
-        Sun, 19 Mar 2023 12:58:28 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id m26-20020a7bca5a000000b003b499f88f52sm2728807wml.7.2023.03.19.12.58.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 12:58:27 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] selftests: xsk: Add tests for 8K and 9K frame sizes
-Date:   Sun, 19 Mar 2023 20:56:56 +0100
-Message-Id: <20230319195656.326701-4-kal.conley@dectris.com>
+        Sun, 19 Mar 2023 20:53:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281431F5F3;
+        Sun, 19 Mar 2023 17:53:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 232E4611E3;
+        Mon, 20 Mar 2023 00:53:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBD44C433EF;
+        Mon, 20 Mar 2023 00:53:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679273598;
+        bh=kd3I86PrIC7k51nBbmX2aqW4UrtqO59BZXYJM5ujk2o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BJfOiwsReJqn/oUBA4MM20lt3UeoMWcKKcr6u5O8QuTSqP2KJGD5NBTXtcWeGKjIq
+         JYIcYao4aEUPOb8f8Ys/BFve/zFlHAXx6KUKV1yNeNfe6/VyyW/G/WFc/pQ+YkXfj4
+         MWXHXTOFhn10SC+BHwxwlMXk7/w+23W3dRxzVThmHVI1JQb4XC6d9CNFNttdywaUWD
+         18hjwL/gXHrHaYBM8bwDsNVSbG+3KL2iB5PC66C9KXvDmGx1zHwtKMCaNLXOtCA060
+         rkN8zRKRrVF05CJ9AlAhXVXZt86KOlk4VNg5Qez7b8rngs/xlTelwsT8D1yrda56gq
+         3xvf3BzrVPIBQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Lorenz Bauer <lorenz.bauer@isovalent.com>,
+        Lorenz Bauer <lmb@isovalent.com>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, shuah@kernel.org,
+        yhs@fb.com, eddyz87@gmail.com, sdf@google.com, error27@gmail.com,
+        iii@linux.ibm.com, memxor@gmail.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier resolves after pointer
+Date:   Sun, 19 Mar 2023 20:52:33 -0400
+Message-Id: <20230320005258.1428043-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230319195656.326701-1-kal.conley@dectris.com>
-References: <20230319195656.326701-1-kal.conley@dectris.com>
+In-Reply-To: <20230320005258.1428043-1-sashal@kernel.org>
+References: <20230320005258.1428043-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests:
-- RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
-- RUN_TO_COMPLETION_9K_FRAME_SIZE: frame_size=9000 (unaligned)
+From: Lorenz Bauer <lorenz.bauer@isovalent.com>
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
+[ Upstream commit dfdd608c3b365f0fd49d7e13911ebcde06b9865b ]
+
+Add a regression test that ensures that a VAR pointing at a
+modifier which follows a PTR (or STRUCT or ARRAY) is resolved
+correctly by the datasec validator.
+
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+Link: https://lore.kernel.org/r/20230306112138.155352-3-lmb@isovalent.com
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 24 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.h |  2 ++
- 2 files changed, 26 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 28 ++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 7a47ef28fbce..f10ff8c5e9c5 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1789,6 +1789,30 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
- 		testapp_validate_traffic(test);
- 		break;
-+	case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 8192;
-+		test->ifobj_rx->umem->frame_size = 8192;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		testapp_validate_traffic(test);
-+		break;
-+	case TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "RUN_TO_COMPLETION_9K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 9000;
-+		test->ifobj_rx->umem->frame_size = 9000;
-+		test->ifobj_tx->umem->unaligned_mode = true;
-+		test->ifobj_rx->umem->unaligned_mode = true;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_RX_POLL:
- 		test->ifobj_rx->use_poll = true;
- 		test_spec_set_name(test, "POLL_RX");
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index 3e8ec7d8ec32..ff723b6d7852 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -70,6 +70,8 @@ enum test_mode {
- enum test_type {
- 	TEST_TYPE_RUN_TO_COMPLETION,
- 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-+	TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
-+	TEST_TYPE_RUN_TO_COMPLETION_9K_FRAME,
- 	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
- 	TEST_TYPE_RX_POLL,
- 	TEST_TYPE_TX_POLL,
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index de1b5b9eb93a8..d8d1292e73b53 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -879,6 +879,34 @@ static struct btf_raw_test raw_tests[] = {
+ 	.btf_load_err = true,
+ 	.err_str = "Invalid elem",
+ },
++{
++	.descr = "var after datasec, ptr followed by modifier",
++	.raw_types = {
++		/* .bss section */				/* [1] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2),
++			sizeof(void*)+4),
++		BTF_VAR_SECINFO_ENC(4, 0, sizeof(void*)),
++		BTF_VAR_SECINFO_ENC(6, sizeof(void*), 4),
++		/* int */					/* [2] */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),
++		/* int* */					/* [3] */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 2),
++		BTF_VAR_ENC(NAME_TBD, 3, 0),			/* [4] */
++		/* const int */					/* [5] */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_CONST, 0, 0), 2),
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0a\0b\0c\0",
++	.str_sec_size = sizeof("\0a\0b\0c\0"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = sizeof(void*)+4,
++	.key_type_id = 0,
++	.value_type_id = 1,
++	.max_entries = 1,
++},
+ /* Test member exceeds the size of struct.
+  *
+  * struct A {
 -- 
 2.39.2
 
