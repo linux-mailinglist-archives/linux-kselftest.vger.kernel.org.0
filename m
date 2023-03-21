@@ -2,146 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540CF6C3B71
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 21:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7DA6C3BDB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 21:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjCUUPe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Mar 2023 16:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
+        id S229487AbjCUUd2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Mar 2023 16:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCUUPd (ORCPT
+        with ESMTP id S230294AbjCUUd1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:15:33 -0400
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276C0F967;
-        Tue, 21 Mar 2023 13:14:51 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id m20-20020a9d6094000000b0069caf591747so9233914otj.2;
-        Tue, 21 Mar 2023 13:14:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679429688;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1iyMeXtw28xdDxjAf1Mr9Ugy13ikhgamAMQijRmwaUg=;
-        b=6OkJ4+pUu3bht0dqT0Z2vRb2Wb2eUuWyLNQ9TKY48crEJxlmbHrAjOFLttMiZFnpM+
-         z2aJ7ZaX0v4ZRNhtLJD2twjQsOksLs8dHkbOQOcX/1Uqg7MyfKPb6AsH+5sHfxba4klb
-         lzFEUOqwhkJ2qJAwBH4emz0y41AgTVDOxyx7ksu7ODBf/Y6p3RvJhvdCbvy2iREu7g3/
-         jKCNqAM7jrXf546Wob9eD/KttFLuaCFPXi6MdptA/FMrUISanpnoXSGqTmq2S0Zd6FE0
-         nL2FwL2bH42Y2aVvsbgPS92Jsy4l1XkdESs/RrG1hdvgt6EeNDMVTV7GmLkrZaH+pu1E
-         8dcg==
-X-Gm-Message-State: AO0yUKV0GjouBUJbQFXy7olhpDxRreea2HBMIawhOuXNRstEI8XrHwJ3
-        VFTYnP7iZPIeUGgYtP5/4Q==
-X-Google-Smtp-Source: AK7set9I74btpUJ+yTSu/rYcbUzo5Thb6TU9525KAhdsVfwO1Eocyf9B4D4yAB3OlE5rvi7eizLHvg==
-X-Received: by 2002:a9d:6654:0:b0:69f:8d0f:9a1e with SMTP id q20-20020a9d6654000000b0069f8d0f9a1emr276389otm.7.1679429688137;
-        Tue, 21 Mar 2023 13:14:48 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v8-20020a9d69c8000000b0069f951899e1sm223475oto.24.2023.03.21.13.14.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 13:14:47 -0700 (PDT)
-Received: (nullmailer pid 1434710 invoked by uid 1000);
-        Tue, 21 Mar 2023 20:14:46 -0000
-Date:   Tue, 21 Mar 2023 15:14:46 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH v2 07/11] dt-bindings: kunit: Add fixed rate clk consumer
- test
-Message-ID: <20230321201446.GA1401650-robh@kernel.org>
-References: <20230315183729.2376178-1-sboyd@kernel.org>
- <20230315183729.2376178-8-sboyd@kernel.org>
+        Tue, 21 Mar 2023 16:33:27 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB2AA5DD;
+        Tue, 21 Mar 2023 13:33:13 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1peif5-00045p-1e; Tue, 21 Mar 2023 21:32:51 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Evan Green <evan@rivosinc.com>
+Cc:     slewis@rivosinc.com, Conor Dooley <conor@kernel.org>,
+        vineetg@rivosinc.com, Evan Green <evan@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dao Lu <daolu@rivosinc.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Guo Ren <guoren@kernel.org>, Jann Horn <jannh@google.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Wei Fu <wefu@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 0/6] RISC-V Hardware Probing User Interface
+Date:   Tue, 21 Mar 2023 21:32:49 +0100
+Message-ID: <6291488.MhkbZ0Pkbq@diego>
+In-Reply-To: <20230314183220.513101-1-evan@rivosinc.com>
+References: <20230314183220.513101-1-evan@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315183729.2376178-8-sboyd@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 11:37:24AM -0700, Stephen Boyd wrote:
-> Describe a binding for a device that consumes a fixed rate clk in DT so
-> that a KUnit test can get the clk registered by of_fixed_clk_setup() and
-> test that it is setup properly.
+Am Dienstag, 14. März 2023, 19:32:14 CET schrieb Evan Green:
 > 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: David Gow <davidgow@google.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->  .../kunit/test,clk-kunit-fixed-rate.yaml      | 35 +++++++++++++++++++
-
-Some stuff in test and some in kunit? I prefer 'test'.
-
->  1 file changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/kunit/test,clk-kunit-fixed-rate.yaml
+> There's been a bunch of off-list discussions about this, including at
+> Plumbers.  The original plan was to do something involving providing an
+> ISA string to userspace, but ISA strings just aren't sufficient for a
+> stable ABI any more: in order to parse an ISA string users need the
+> version of the specifications that the string is written to, the version
+> of each extension (sometimes at a finer granularity than the RISC-V
+> releases/versions encode), and the expected use case for the ISA string
+> (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
+> try and keep ABI compatible and it's probably going to continue to grow,
+> as even if there's no more complexity in the specifications we'll have
+> to deal with the various ISA string parsing oddities that end up all
+> over userspace.
 > 
-> diff --git a/Documentation/devicetree/bindings/kunit/test,clk-kunit-fixed-rate.yaml b/Documentation/devicetree/bindings/kunit/test,clk-kunit-fixed-rate.yaml
-> new file mode 100644
-> index 000000000000..58d7826d9c14
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/kunit/test,clk-kunit-fixed-rate.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/kunit/test,clk-kunit-fixed-rate.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: KUnit clk fixed rate test clk consumer
-> +
-> +maintainers:
-> +  - Stephen Boyd <sboyd@kernel.org>
-> +
-> +description: |
-
-Drop '|'
-
-> +  A clk consumer of a fixed rate clk used to test the fixed rate clk
-> +  implementation in the Linux kernel.
-> +
-> +properties:
-> +  compatible:
-> +    const: test,clk-kunit-fixed-rate
-
-I tend to think we should drop 'kunit' from these bindings. You could 
-use this for different test frameworks. 
-
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clock-consumer {
-> +      compatible = "test,clk-kunit-fixed-rate";
-> +      clocks = <&fixed_clk>;
-> +    };
-> +...
-> -- 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+> Instead this patch set takes a very different approach and provides a set
+> of key/value pairs that encode various bits about the system.  The big
+> advantage here is that we can clearly define what these mean so we can
+> ensure ABI stability, but it also allows us to encode information that's
+> unlikely to ever appear in an ISA string (see the misaligned access
+> performance, for example).  The resulting interface looks a lot like
+> what arm64 and x86 do, and will hopefully fit well into something like
+> ACPI in the future.
 > 
+> The actual user interface is a syscall, with a vDSO function in front of
+> it. The vDSO function can answer some queries without a syscall at all,
+> and falls back to the syscall for cases it doesn't have answers to.
+> Currently we prepopulate it with an array of answers for all keys and
+> a CPU set of "all CPUs". This can be adjusted as necessary to provide
+> fast answers to the most common queries.
+
+I've built myself a small test-program [see below], to check the feature
+on the d1-nezha board. Which is how I found the tiny c-extension issue.
+
+Series works as expected there, so patches 1-4 on a d1-nezha:
+
+Tested-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+
+
+
+hwprobe.c:
+----------------
+#include <linux/types.h>
+#include <sys/syscall.h>
+#include <stdio.h>
+#include <unistd.h>
+
+#define __NR_riscv_hwprobe 258
+
+struct riscv_hwprobe {
+        __s64 key;
+        __u64 value;
+};
+
+#define RISCV_HWPROBE_KEY_MVENDORID     0
+#define RISCV_HWPROBE_KEY_MARCHID       1
+#define RISCV_HWPROBE_KEY_MIMPID        2
+#define RISCV_HWPROBE_KEY_BASE_BEHAVIOR 3
+#define         RISCV_HWPROBE_BASE_BEHAVIOR_IMA (1 << 0)
+#define RISCV_HWPROBE_KEY_IMA_EXT_0     4
+#define         RISCV_HWPROBE_IMA_FD            (1 << 0)
+#define         RISCV_HWPROBE_IMA_C             (1 << 1)
+#define RISCV_HWPROBE_KEY_CPUPERF_0     5
+#define         RISCV_HWPROBE_MISALIGNED_UNKNOWN        (0 << 0)
+#define         RISCV_HWPROBE_MISALIGNED_EMULATED       (1 << 0)
+#define         RISCV_HWPROBE_MISALIGNED_SLOW           (2 << 0)
+#define         RISCV_HWPROBE_MISALIGNED_FAST           (3 << 0)
+#define         RISCV_HWPROBE_MISALIGNED_UNSUPPORTED    (4 << 0)
+#define         RISCV_HWPROBE_MISALIGNED_MASK           (7 << 0)
+
+int __riscv_hwprobe (struct riscv_hwprobe *pairs, long pair_count,
+  long cpu_count, unsigned long *cpus, unsigned long flags)
+{
+
+        return syscall(__NR_riscv_hwprobe, pairs, pair_count, cpu_count, cpus, flags);
+}
+
+int main(void)
+{
+        struct riscv_hwprobe pairs[3];
+
+        pairs[0].key = RISCV_HWPROBE_KEY_MVENDORID;
+        pairs[1].key = RISCV_HWPROBE_KEY_MARCHID;
+        pairs[2].key = RISCV_HWPROBE_KEY_MIMPID;
+        if (__riscv_hwprobe(pairs, 3, 0, NULL, 0) != 0) {
+                printf("syscall failed");
+                return -1;
+        }
+
+        printf("vendorid 0x%x, archid 0x%x, impid 0x%x\n",
+               pairs[0].value, pairs[1].value, pairs[2].value);
+
+
+        pairs[0].key = RISCV_HWPROBE_KEY_CPUPERF_0;
+        pairs[1].key = RISCV_HWPROBE_KEY_BASE_BEHAVIOR;
+        pairs[2].key = RISCV_HWPROBE_KEY_IMA_EXT_0;
+        if (__riscv_hwprobe(&pairs[0], 3, 0, NULL, 0) != 0) {
+                printf("syscall failed");
+                return -1;
+        }
+
+        printf("ima-behavior %d, f+d %d, c %d, misaligned access: %s\n",
+        ((pairs[1].value & RISCV_HWPROBE_BASE_BEHAVIOR_IMA) == RISCV_HWPROBE_BASE_BEHAVIOR_IMA),
+        ((pairs[2].value & RISCV_HWPROBE_IMA_FD) == RISCV_HWPROBE_IMA_FD),
+        ((pairs[2].value & RISCV_HWPROBE_IMA_C) == RISCV_HWPROBE_IMA_C),
+        ((pairs[0].value & RISCV_HWPROBE_MISALIGNED_FAST) == RISCV_HWPROBE_MISALIGNED_FAST) ? "fast" : "not-fast"
+        );
+
+        return 0;
+}
+
+
+
