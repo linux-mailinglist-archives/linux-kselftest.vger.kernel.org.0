@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DB06C2DBA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 10:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3320A6C2E90
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 11:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjCUJU5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Mar 2023 05:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S229572AbjCUKTt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Mar 2023 06:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCUJU5 (ORCPT
+        with ESMTP id S229826AbjCUKTs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Mar 2023 05:20:57 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8D812594
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Mar 2023 02:20:55 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so19530085pjt.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Mar 2023 02:20:55 -0700 (PDT)
+        Tue, 21 Mar 2023 06:19:48 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985C9769E
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Mar 2023 03:19:37 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso19536188pjb.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Mar 2023 03:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679390455;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679393977;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=t5Z67uZsyl/BsAt0oeK422Bk1itxBKJHdeJ8kmGmx6g=;
-        b=g0uXymeIlt7w92q7c4Y65fWB5YcFbw0QTLmaDH9MxqNbhiJIQWyjTXkleaDrLvBUB5
-         NgJSr/QPy27dyk2LdxWCcFqPkdnRxFaVxpqWKq48/9vsrM9+yjeZ2GNNWSPoe5BibmhC
-         FxhhnSjKN4D1PW53Sav76GvxYHq2QWDimEn0qlifreR01RGFi0tqgb1vdXCLLRy2eD8h
-         hxJ7qjme0CuHyrUM32VXsdsDYIomqSGVq1SEp4+ArAI/EcH8/irRi2RRegzzWfbhYOPo
-         z+hLPi18rXvY+OzTLOkBv6pG6YZzwAzzUz0GMDnodFirH31OEJ1OCNd6RfsOwVB3q0fG
-         TleA==
+        bh=Rl+FwRGh4hvoziO8pK9liQQ805PYz4OYfydTOH82AJk=;
+        b=x1BC9xOWjkWXWCvodiNUX2daSdsqEAQk0+LEj1pVENRJ7EjeZ3YOukuLsrIsue3fMP
+         ZjwquLoeizwUmxPLPb9dzpJYD57TKkRsdevIgonrcEGHbqE6keZGZ2bPJ+jOn3u6wD17
+         VkSnRM/JzsAI1sTnZuoozRBU+EdUpamqE1g/GSCPqXMH80cZATcKVZ+W8uYVi7pIXkdO
+         GWsDzKrNck/uxcDcpkFcW1OPq3t3++WE/0C1eshS2ZVqMK5qxAKGBXHeSgWDa0lo0NXd
+         dM5mv3UsnWN2bd39l3CZR/3+ScAwu0tzI32pw0+qO4D+40ABoJUjG3FMGCzhDX7Bv/Tu
+         SBPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679390455;
+        d=1e100.net; s=20210112; t=1679393977;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=t5Z67uZsyl/BsAt0oeK422Bk1itxBKJHdeJ8kmGmx6g=;
-        b=e7APRHPhrpG/0rWvewA2/yKdf3kV1cnKyEmO4q1+QJqM/P0LAJaX0SgNv7ez2J8zE3
-         9u8rkox5gra9uk5Fj5HX4vW85pRWoScKRr/YZIwGhkoLzHWK4HhEF2CMSDChr8xTagKp
-         4zyoglbeLMYkLgaTZsqnQTzhGQa3chlrc6Jg1bqSen0CvDyZoOLOnBDDalE4kSVtIDqT
-         HE6Nku0ZLI3RnewY9gXnsFxgwb6yrUO+dRe1h5K+FtXJz52cUkq82fCjbYX+mo4t32WT
-         as/0hQ2j4A+npElLrSsrWhlDcyJ0KJ5GD9w++MIK8G8IcK99GaLYsdIFfveqafBta1N1
-         Yodw==
-X-Gm-Message-State: AO0yUKX0zX8gelhbd3qxS9vRt5cNeAw8b/2w4kfsHepjZMk9leTnLBYy
-        bFR1vz/65J//B//zpxE3I/PRYDeCGHNeW2i4gVYhRQ==
-X-Google-Smtp-Source: AK7set/DD6fbohFjMBPOxWmsZVjmCKjOWMRsdznMNq6CsP6Qc8noZVByIGtqF8VE/hxSlAmC8PU5jQ==
-X-Received: by 2002:a17:902:ca83:b0:1a1:db10:7ba3 with SMTP id v3-20020a170902ca8300b001a1db107ba3mr1406807pld.2.1679390455185;
-        Tue, 21 Mar 2023 02:20:55 -0700 (PDT)
+        bh=Rl+FwRGh4hvoziO8pK9liQQ805PYz4OYfydTOH82AJk=;
+        b=c+NsXXMsgfeW0PN2DDwalHAhSjHamzQa61voYCu5CuxvntMaDJrUkjsjvJRCmq0TkZ
+         YZ1zj9ohqkDdkvHKbDJ8XUDU9tI9FXoHtbHD+CuNlLl0U9M30R+8KRLcXdAdjvlVCAon
+         zgoptH43IsmJPjo9po0KvpvYwMcvijtwsogwl0AjuS7GKfSaM0A8acFG6ZLG2Ms6utRC
+         MDl7cpth2rqzewdMWXL27DyisqgiqRQbVii8qaUdshdC1dVZJIrTuvH97+QjjUltFmRo
+         eBkOupD+PglVXxGGcbOnICR85Z59sAKc5dRyV78oAEjFvpBtQugoFfJtccJVPuljPxAx
+         dLhA==
+X-Gm-Message-State: AO0yUKVGjyl1xzvbET8IQIld9ZO0bo+Eivs2G/BqjGptrlmONecSmfOG
+        +bLpvBfCKMZyrJdve0MYPlbJWg==
+X-Google-Smtp-Source: AK7set+4ZvyY19jX27JvFSrWErzyOOKYbWekU6FsASdvWCe0tusT1IlFHZ/YjhwQxvJ8AG2Fzul94A==
+X-Received: by 2002:a17:90b:4d05:b0:23f:2757:ce99 with SMTP id mw5-20020a17090b4d0500b0023f2757ce99mr1882060pjb.49.1679393977103;
+        Tue, 21 Mar 2023 03:19:37 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902c15500b0019f9fd10f62sm8274416plj.70.2023.03.21.02.20.54
+        by smtp.gmail.com with ESMTPSA id y6-20020a170902b48600b001a1ea1d6d6esm197678plr.290.2023.03.21.03.19.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 02:20:54 -0700 (PDT)
-Message-ID: <641976f6.170a0220.f8919.e318@mx.google.com>
-Date:   Tue, 21 Mar 2023 02:20:54 -0700 (PDT)
+        Tue, 21 Mar 2023 03:19:36 -0700 (PDT)
+Message-ID: <641984b8.170a0220.ebdc2.038e@mx.google.com>
+Date:   Tue, 21 Mar 2023 03:19:36 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Branch: fixes
 X-Kernelci-Tree: kselftest
-X-Kernelci-Report-Type: build
+X-Kernelci-Report-Type: test
 X-Kernelci-Kernel: linux-kselftest-fixes-6.3-rc3-1-g05107edc91013
-Subject: kselftest/fixes build: 5 builds: 0 failed, 5 passed,
- 3 warnings (linux-kselftest-fixes-6.3-rc3-1-g05107edc91013)
+Subject: kselftest/fixes kselftest-cpufreq: 4 runs,
+ 1 regressions (linux-kselftest-fixes-6.3-rc3-1-g05107edc91013)
 To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
         shuah@kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -72,80 +72,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes build: 5 builds: 0 failed, 5 passed, 3 warnings (linux-ksel=
-ftest-fixes-6.3-rc3-1-g05107edc91013)
+kselftest/fixes kselftest-cpufreq: 4 runs, 1 regressions (linux-kselftest-f=
+ixes-6.3-rc3-1-g05107edc91013)
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/linux-kselftest-fixes-6.3-rc3-1-g05107edc91013/
+Regressions Summary
+-------------------
 
-Tree: kselftest
-Branch: fixes
-Git Describe: linux-kselftest-fixes-6.3-rc3-1-g05107edc91013
-Git Commit: 05107edc910135d27fe557267dc45be9630bf3dd
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
-
-Warnings Detected:
-
-arm64:
-
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 3 warnings
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
 
 
-Warnings summary:
+  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
+ux-kselftest-fixes-6.3-rc3-1-g05107edc91013/plan/kselftest-cpufreq/
 
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
- !ENDBR: .text+0x1463d6
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
- !ENDBR: .text+0x14654b
-    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to =
-!ENDBR: native_write_cr4+0x4
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   fixes
+  Describe: linux-kselftest-fixes-6.3-rc3-1-g05107edc91013
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      05107edc910135d27fe557267dc45be9630bf3dd =
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
 
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
+Test Regressions
+---------------- =
 
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 3 w=
-arnings, 0 section mismatches
 
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
-BR: .text+0x14654b
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
-BR: .text+0x1463d6
-    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to !ENDB=
-R: native_write_cr4+0x4
+  Details:     https://kernelci.org/test/plan/id/6419754bdbcd9d64ef9c9591
 
----
-For more info write to <info@kernelci.org>
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-6.3-rc3-1-g05107edc91013/arm64/defconfig+kselftest+arm64-chromebook=
+/gcc-10/lab-collabora/kselftest-cpufreq-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-6.3-rc3-1-g05107edc91013/arm64/defconfig+kselftest+arm64-chromebook=
+/gcc-10/lab-collabora/kselftest-cpufreq-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20230317.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/6419754bdbcd=
+9d64ef9c9592
+        failing since 153 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
+irst fail: v6.1-rc1-5-gcb05c81ada76) =
+
+ =20
