@@ -2,157 +2,471 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D750D6C3804
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 18:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AD46C3839
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 18:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjCURQs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Mar 2023 13:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S229736AbjCURdQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Mar 2023 13:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbjCURQq (ORCPT
+        with ESMTP id S229941AbjCURdP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Mar 2023 13:16:46 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2041.outbound.protection.outlook.com [40.107.220.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77912188;
-        Tue, 21 Mar 2023 10:16:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OWOAQ4OXo/oVFyxKNQpwYlBSiQup1+1p4/Y9nBAbClmr/Ctt9BQ5CdNDJowrykxfsCyzsnvIF8xDkdZ+GMxRmYHGRm9jR2ncbub6YZP5eyA5tPP2yPHaHAf8Hfn3Zj2RV9fC1EU8qTpHDiI62UDYhhbDzzl15bsZI7S860Pvli17XFX98ZPEmuNeSQL/khyQmGlbyOxCFCCgm6XEAk+EdZG1esqey8QuQ+PqCEhv2myALhoRkR34ug0U3e3Qnv8NnwnekNxeh9bxZw+zDzbb2GN/3WfI1GmSjTBqvGET2DKBchA50zxrHwG/PkXUxbPVS+FfX7EaEe5VBCCdfVdkYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qkRLqS+soNV3Elv6K4KWbg5/tBxEmGRFUcUOr6PvtdI=;
- b=OJ0yV/gncjonhQccqmC6FI2asAvH5TGr8ENxiT3HPGtnjZtOv1TT/aV/WIZpVXU432mwrUlWA9AsMqKiXxHBB/AmbFAjNdwIsZwsl87Nm5K+5ELYyO2onysube/OreT/jEG1Wv9i5pzcjEyjW3RF26L7K31+SRUv9JD+oQJ3acR13lQL4ultoaWXv9IiX9uC9oP9Z5szhJLsiU5kxZ4pxYutnX1OPLNX46oIVUn1XNd3vSn6UbnkxZlj3OoFY3ygQcYiJ883BgVQ5HeVo8pBAU6jaMeVOiQvLb8RX9XUQLdstZkZa+/9zI6Ycaa5W7tziR3oDxRilfpNf3giQllFJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qkRLqS+soNV3Elv6K4KWbg5/tBxEmGRFUcUOr6PvtdI=;
- b=bFag8B/uv0DnmfUgL1OYoLjI1BKnI/S2zhTus6Huh4R691vYUMfOhtfHtc7/wHLAYkD+qpuMD/OT35VJItwRGxMlTklVq2JOODoQtXLBPZGclZWi4GGyYsYfeshwCQG4/ikraIPk4I2U3kb5IOc1x1gRkSGKTR+BSjFXMkqF9WR0G4fMq6etwQskNbolG9EvnBtrNs0D96tFTkTtKkUZHql/FYjR3v1rAxyciWfNchVGEy/Lc30F9jIOj9GCf8qXJ5fGbKqL6yrpcijVcZ+0T6S5ULj9iH0Ay8gFBrgIkNyGe795sgA4jyKx6j7bfOM9J8gFFh94QZsRQfxoU2D7NA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MW4PR12MB6707.namprd12.prod.outlook.com (2603:10b6:303:1ee::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
- 2023 17:16:37 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
- 17:16:37 +0000
-Date:   Tue, 21 Mar 2023 14:16:35 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: Re: [PATCH 12/14] iommufd: Add IOMMU_HWPT_ALLOC
-Message-ID: <ZBnmc5HELXkNEe8n@nvidia.com>
-References: <0-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
- <12-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
- <BN9PR11MB5276AD6D42FA8FEFE3B69C878CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Tue, 21 Mar 2023 13:33:15 -0400
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABB1166E7;
+        Tue, 21 Mar 2023 10:33:05 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id f5-20020a4ad805000000b005399cfd276bso1876773oov.6;
+        Tue, 21 Mar 2023 10:33:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679419984;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2CnL7hgvPnni7trOuk9467gN9OsVhQvyHsDFM8C85TE=;
+        b=erKzFFARO+2sBeW5xA3ifXL+hbLFsauWD0I612nh3ZqpFHQUn5hcazqIm2ZVoC8rpd
+         HUPwe4tllkl7H5QiTeuAalMF2g7HGCrjN5H8KSwOh9QaHH4lpsdnvQRSB7MLiGVCmpiQ
+         zDRhtAtmtr0prA07NurpdNtx49i8Zw0vU1btnd7UnoVUMSmkIXsL8eRu5UpH9jWzLOtZ
+         Fp0e6YxxGygI4B4pIAWC/vErJwGVsQZFgP53grEsUFnlrSsKiyGRlawN3tk5UFLxmOcx
+         rxlKPPDwaIEqlf87HBAkFvdgRtC/vPGEGKcSs452u4JrEkxHhXSwjtQvgHv+zOGBNX2H
+         NIYQ==
+X-Gm-Message-State: AO0yUKVAc8qcTsk/aU9HY9GidmD8da4UIg/gaohpGG3SltfY4DMY0X6E
+        +kKHxafOGrP75IlOyMdypw==
+X-Google-Smtp-Source: AK7set94YgcKGUBqS/jmcEyCGuFJ245hmQff358C8dqQKs6OobLo4j5MwstfAkhefwZM+zU1beaMRw==
+X-Received: by 2002:a4a:3307:0:b0:53b:68bf:ada3 with SMTP id q7-20020a4a3307000000b0053b68bfada3mr704104ooq.3.1679419984314;
+        Tue, 21 Mar 2023 10:33:04 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y13-20020a4ad64d000000b0053b5271f030sm1204741oos.39.2023.03.21.10.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 10:33:04 -0700 (PDT)
+Received: (nullmailer pid 990808 invoked by uid 1000);
+        Tue, 21 Mar 2023 17:33:03 -0000
+Date:   Tue, 21 Mar 2023 12:33:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH v2 01/11] of: Load KUnit DTB from of_core_init()
+Message-ID: <20230321173303.GA950598-robh@kernel.org>
+References: <20230315183729.2376178-1-sboyd@kernel.org>
+ <20230315183729.2376178-2-sboyd@kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276AD6D42FA8FEFE3B69C878CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL0PR02CA0075.namprd02.prod.outlook.com
- (2603:10b6:208:51::16) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB6707:EE_
-X-MS-Office365-Filtering-Correlation-Id: 995cc97f-abac-4944-4a7d-08db2a300741
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 83YtRx6Ay26MKAsqSfM1YOUrZU39GWK7BQ/M9dcB+kxKPnCjH2Z3pZgjYWcYv+o8lVFLx+Hf47Dttqndili0uL4nzyhQfP0YqLy6+fALFceR+xoj9f8jEeN/8DQVYGfabTjxpvynno2r6BqIkyFhYL3C4WYk4jSZQN6PIhtDKF8/FIXiN+g3T4vew6wkQKvlteyMsa6/7dFp5dmb6w6v/LSlY3AFc/wWBsah7UzNXxB68Tut2yR4omKqxrxkdaM+66XqLtibo/0mAVyo+k1iZ9ZGyZk/ngY88LwVUFUx5roNaNgxuDjNP7lzBUrrjNm1eoY20fTfhdtz2b9Bw/AnzO6tVjwKHt92nRb2V6S+/d6hkCv7KrTLVzHwXe2JMEiq4DRix6HfFsiOnzQKGKexIK06BObZnaVdBQHgd9bREJTJMfgflNPKNtMKXqgB6Ua3T04wTO+cYOk4T4wDaHq/YviyivryxNwtbXd28iw8OsvpaPE/+HWKC+I7wbiDONPPqy4szkkZFqZ2alKoVF5bPQsnzFAYRWrHizK+ge1jthUwI41F8Qe3uRXlYzYAmbrNWYlNC5rykc3/cuABocMMIAMno01FoG/lv8iveuy0RgtTFt4eczjt+66e3VsLEuFQ9o44D/NDVBlGGzryVo1ehA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39860400002)(346002)(136003)(396003)(451199018)(38100700002)(54906003)(8676002)(316002)(66946007)(66476007)(36756003)(66556008)(8936002)(4326008)(6916009)(5660300002)(41300700001)(2906002)(478600001)(86362001)(2616005)(6506007)(26005)(186003)(6512007)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?z0rF3HqmrU5V+23BIOh/xRQh7t9BZ8x2MCJr/H81Ge4FhYW5PZ6U8StVk9IR?=
- =?us-ascii?Q?w/WZSfYRWmmP3+WKOPUc+gk2K+jhf9IS7VzFFBd+EPRea3ho+iueExTzKPhQ?=
- =?us-ascii?Q?9H8LMS+SQsmNyrRAHHiWOCbgunzG6B9UiI4dJtYM+Lbjaq8799Dqe/D43VSs?=
- =?us-ascii?Q?rezYKOag09P/8uLR4gvW+GxdsEsjQQxhrbMve2dJcGSQc2u32jO0bPWRUNk5?=
- =?us-ascii?Q?How6QhjFNNnZzMSGL06IpD209i/zW3lUiYmlNYz0ea7kizMXGQArhR6AONae?=
- =?us-ascii?Q?BKFN3F5BDpSsoBPP+h6quNKSbyH7oX+UlCWu61UayqHTj/LS+kUq9bQVg9+A?=
- =?us-ascii?Q?DDFutCJq4tOtltu+sWdVq1TgVLTWOBOGAaJfxTn30sSIH60ylwI9RzzVqs8Y?=
- =?us-ascii?Q?4WWvLQ+GJ6VnvVX/Jijho91ruKoiIWD31fmzcXDPTS/yh2CKo6IY60zK56aI?=
- =?us-ascii?Q?32oexzwfz8/lXSlaulQO2ey0NXlfXQaq5/JcGlIXfpR3lGyUM3BfdURvqX/A?=
- =?us-ascii?Q?RdLe8M6NQNsu8qV7DAll+kxuCc5plE208l/KlvT7aMVN61/iqNLYOv2e9420?=
- =?us-ascii?Q?CS3h9cOwCLVh2AthBxukwOFw85Hq2YPQmrhEodUljPM39mcbKW0AjbyJv2n4?=
- =?us-ascii?Q?pPPKGhlD2HpcytRTKF9f26dbiQeKpWjfL7Ph9INB7wAOSU+EXgC8ED1W51Wx?=
- =?us-ascii?Q?0rFbnOyB8tkbgTuqWpOIfGLy+3aUXYoPgiEi00Q7nfAWU9YLA4WiQ3/5sL9A?=
- =?us-ascii?Q?hoQmEc1nGTWmFEokHmP/s60g5tH7WfMID3ok4k91YtdzDg5mhfa2GfFJrOyg?=
- =?us-ascii?Q?10p59JfOznVVlhGkA3uP6DhO3v3Cx8uHo240tEflNt20IrOf+gXDueC9c45N?=
- =?us-ascii?Q?a4sNO5hNYbUqJNZVl2mScKPpCbVToGN9M+SpLWM0jykZOWdb0KJeQtDB8Z7J?=
- =?us-ascii?Q?e9EJgEKW588lHYz8VXsnexOunRPqyhR87mMRFS4o/6nz8HFAZwl7JcQVGZRm?=
- =?us-ascii?Q?b4BYIUcZpIYpdbCbFLtE/NbYmlEWZ0Aq7okXSkcogZrKnHX981gxJkEOLOAb?=
- =?us-ascii?Q?Br3AWq8+FrGxfPhcbgzr7Je1XoYvQURUS0inmDpGLt36Gd9EBtUAfPH+jef7?=
- =?us-ascii?Q?r4Nm5I9f+zADSoqU38T7F2Wn0WfiUCLsIqXmsbI0LkjiyDYa1kq4+EdInFgq?=
- =?us-ascii?Q?Ymqz6GdmibhJWXYW7UiWoX6xn2ncVu4uzq7+X1BnbfKJaMtCKwaOLAlnhrXg?=
- =?us-ascii?Q?BUJYLy+LGrs1F9T+92s5xyKYxLlVEzczGvhN+iX1woKf8DkwRfgwmoQxcIVR?=
- =?us-ascii?Q?IV1/igm5fwS4pVDv5dhDJVWPiiV7r9Bc6/pEB0amFutQx7U7yu0U1WgsHa2e?=
- =?us-ascii?Q?qz0c1Wuyn4qFIX80igWlDpoM8H1fuFQg6g1mG+OAo/ZV+mmAa+2sx6MzGzWV?=
- =?us-ascii?Q?EqJ71VeHxMI6/qWDQsFOmsG4tSs7Lae3YX0ilCZZmbDEXj8mF+Z8FA6CoMu2?=
- =?us-ascii?Q?jd3bLu6NDu5+MHE4b6+4QKX9ZnGRgV5ru6ravqt/8UQKeuEakjJGvTFZepxO?=
- =?us-ascii?Q?zYHkd/2K+ms1A5OM5ItCbdEkOgNo/YEIsWApml6k?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 995cc97f-abac-4944-4a7d-08db2a300741
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 17:16:37.2979
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: As4D0Io1lvuI0c+9HUCnrdAMVTvgjsXsNdgjTMOAd8FvcQEWffc+hNrUr6txdg2C
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6707
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230315183729.2376178-2-sboyd@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 03:02:26AM +0000, Tian, Kevin wrote:
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Saturday, February 25, 2023 8:28 AM
-> > +
-> > +int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
-> > +{
-> > +	struct iommu_hwpt_alloc *cmd = ucmd->cmd;
-> > +	struct iommufd_hw_pagetable *hwpt;
-> > +	struct iommufd_device *idev;
-> > +	struct iommufd_ioas *ioas;
-> > +	int rc;
-> > +
-> > +	if (cmd->flags)
-> > +		return -EOPNOTSUPP;
+On Wed, Mar 15, 2023 at 11:37:18AM -0700, Stephen Boyd wrote:
+> Load a small DTB for KUnit from of_core_init() as long as CONFIG_OF=y
+> and CONFIG_KUNIT=y/m. This allows KUnit tests to load overlays into the
+> running system. It also allows KUnit tests to run on any architecture
+> that supports it so that devicetree can be used while unit testing
+> architecture specific code.
 > 
-> miss a check on the __reserved field.
+> Overlays need a target node to apply their overlays to, so make a fake
+> bus called 'kunit-bus' in the root node to allow this. Make the node a
+> simple-bus so that platform devices are automatically created for nodes
+> added as children of this node. Unit test overlays can target this node
+> via the label 'kunit_bus'.
 > 
-> > +/**
-> > + * struct iommu_hwpt_alloc - ioctl(IOMMU_HWPT_ALLOC)
-> > + * @size: sizeof(struct iommu_hwpt_alloc)
-> > + * @flags: Must be 0
-> > + * @dev_id: The device to allocate this HWPT for
-> > + * @pt_id: The IOAS to connect this HWPT to
-> > + * @out_hwpt_id: The ID of the new HWPT
-> > + * @__reserved: Must be 0
-> > + *
-> > + * Explicitly allocate a hardware page table object. This is the same object
-> > + * type that is returned by iommufd_device_attach() and represents the
-> > + * underlying iommu driver's iommu_domain kernel object.
-> > + *
-> > + * A normal HWPT will be created with the mappings from the given IOAS.
-> > + */
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>  drivers/of/.kunitconfig |   3 +
+>  drivers/of/Kconfig      |  13 +++
+>  drivers/of/Makefile     |   4 +
+>  drivers/of/base.c       | 182 ++++++++++++++++++++++++++++++++++++++++
+>  drivers/of/kunit.dtso   |  10 +++
+>  drivers/of/of_private.h |   6 ++
+>  drivers/of/of_test.c    |  43 ++++++++++
+>  drivers/of/unittest.c   | 101 +---------------------
+>  8 files changed, 262 insertions(+), 100 deletions(-)
+>  create mode 100644 drivers/of/.kunitconfig
+>  create mode 100644 drivers/of/kunit.dtso
+>  create mode 100644 drivers/of/of_test.c
 > 
-> 'normal' is a confusing word in this context.
+> diff --git a/drivers/of/.kunitconfig b/drivers/of/.kunitconfig
+> new file mode 100644
+> index 000000000000..5a8fee11978c
+> --- /dev/null
+> +++ b/drivers/of/.kunitconfig
+> @@ -0,0 +1,3 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_OF=y
+> +CONFIG_OF_KUNIT_TEST=y
+> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> index 644386833a7b..f6739b9560c5 100644
+> --- a/drivers/of/Kconfig
+> +++ b/drivers/of/Kconfig
+> @@ -37,6 +37,19 @@ config OF_UNITTEST
+>  
+>  	  If unsure, say N here. This option is not safe to enable.
+>  
+> +config OF_KUNIT
+> +	def_bool KUNIT
+> +	select OF_RESOLVE
+> +
+> +config OF_KUNIT_TEST
+> +	tristate "Devicetree KUnit DTB Test" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  This option builds KUnit unit tests for device tree infrastructure.
+> +
+> +	  If unsure, say N here, but this option is safe to enable.
+> +
+>  config OF_ALL_DTBS
+>  	bool "Build all Device Tree Blobs"
+>  	depends on COMPILE_TEST
+> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> index e0360a44306e..cf6ee7ba6350 100644
+> --- a/drivers/of/Makefile
+> +++ b/drivers/of/Makefile
+> @@ -19,4 +19,8 @@ obj-y	+= kexec.o
+>  endif
+>  endif
+>  
+> +DTC_FLAGS_kunit += -@
+> +obj-$(CONFIG_OF_KUNIT) += kunit.dtbo.o
+> +obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
+> +
+>  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+> diff --git a/drivers/of/base.c b/drivers/of/base.c
+> index ac6fde53342f..090c5d7925e4 100644
+> --- a/drivers/of/base.c
+> +++ b/drivers/of/base.c
+> @@ -16,13 +16,16 @@
+>  
+>  #define pr_fmt(fmt)	"OF: " fmt
+>  
+> +#include <linux/align.h>
+>  #include <linux/console.h>
+>  #include <linux/ctype.h>
+>  #include <linux/cpu.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_fdt.h>
 
-Got it, thanks
+base.c deals with unflattened trees. There shouldn't be anything FDT 
+related in it.
 
-Jason
+>  #include <linux/of_graph.h>
+> +#include <linux/printk.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/slab.h>
+>  #include <linux/string.h>
+> @@ -163,10 +166,90 @@ void __of_phandle_cache_inv_entry(phandle handle)
+>  		phandle_cache[handle_hash] = NULL;
+>  }
+>  
+> +#ifdef CONFIG_OF_KUNIT
+
+base.c is already quite big. This should probably be its own file. 
+Perhaps in kunit code because that's what we do for everything else 
+(e.g. DT clock code goes in drivers/clk/). (My goal is to eliminate 
+drivers/of/. That's easier than finding maintainers. ;) )
+
+> +static int __init of_kunit_add_data(void)
+> +{
+> +	void *kunit_fdt;
+> +	void *kunit_fdt_align;
+> +	struct device_node *kunit_node = NULL, *np;
+> +	/*
+> +	 * __dtbo_kunit_begin[] and __dtbo_kunit_end[] are magically
+> +	 * created by cmd_dt_S_dtbo in scripts/Makefile.lib
+> +	 */
+> +	extern uint8_t __dtbo_kunit_begin[];
+> +	extern uint8_t __dtbo_kunit_end[];
+> +	const int size = __dtbo_kunit_end - __dtbo_kunit_begin;
+> +	int rc;
+> +	void *ret;
+> +
+> +	if (!size) {
+> +		pr_warn("kunit.dtbo is empty\n");
+> +		return -ENODATA;
+> +	}
+> +
+> +	kunit_fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
+> +	if (!kunit_fdt)
+> +		return -ENOMEM;
+> +
+> +	kunit_fdt_align = PTR_ALIGN(kunit_fdt, FDT_ALIGN_SIZE);
+> +	memcpy(kunit_fdt_align, __dtbo_kunit_begin, size);
+> +
+> +	ret = of_fdt_unflatten_tree(kunit_fdt_align, NULL, &kunit_node);
+
+I don't understand why this doesn't use of_overlay_fdt_apply(). Your 
+test(s) shouldn't be any different than any other overlay user (granted, 
+there aren't many). You apply the overlay, run your test, then remove 
+the overlay.
+
+> +	if (!ret) {
+> +		pr_warn("unflatten KUnit tree failed\n");
+> +		kfree(kunit_fdt);
+> +		return -ENODATA;
+> +	}
+> +	if (!kunit_node) {
+> +		pr_warn("KUnit tree is empty\n");
+> +		kfree(kunit_fdt);
+> +		return -ENODATA;
+> +	}
+> +
+> +	of_overlay_mutex_lock();
+> +	rc = of_resolve_phandles(kunit_node);
+> +	if (rc) {
+> +		pr_err("Failed to resolve KUnit phandles (rc=%i)\n", rc);
+> +		of_overlay_mutex_unlock();
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!of_root) {
+
+There's patches from Frank and others under review which will always 
+create and empty DT if the bootloader/arch didn't provide one. This 
+series should rely on that. (Or just assume that when that happens, your 
+tests will run in more environments)
+
+> +		of_root = kunit_node;
+> +		of_chosen = of_find_node_by_path("/chosen");
+> +	} else {
+> +		/* attach the sub-tree to live tree */
+> +		np = kunit_node->child;
+> +		while (np) {
+> +			struct device_node *next = np->sibling;
+> +
+> +			np->parent = of_root;
+> +			of_test_attach_node_and_children(np);
+> +			np = next;
+> +		}
+> +	}
+> +
+> +	if (!of_aliases)
+> +		of_aliases = of_find_node_by_path("/aliases");
+> +
+> +	of_overlay_mutex_unlock();
+> +
+> +	return 0;
+> +}
+> +#else
+> +static inline int __init of_kunit_add_data(void) { return 0; }
+> +#endif
+> +
+>  void __init of_core_init(void)
+>  {
+>  	struct device_node *np;
+> +	int ret;
+>  
+> +	ret = of_kunit_add_data();
+> +	if (ret) {
+> +		pr_err("failed to add kunit test data\n");
+> +		return;
+> +	}
+>  
+>  	/* Create the kset, and register existing nodes */
+>  	mutex_lock(&of_mutex);
+> @@ -1879,6 +1962,105 @@ int of_update_property(struct device_node *np, struct property *newprop)
+>  	return rc;
+>  }
+>  
+> +#if defined(CONFIG_OF_UNITTEST) || defined (CONFIG_KUNIT)
+> +/**
+> + * update_node_properties - adds the properties of np into dup node (present in
+> + * live tree) and updates parent of children of np to dup.
+> + *
+> + * @np: node whose properties are being added to the live tree
+> + * @dup: node present in live tree to be updated
+> + */
+> +static void __init update_node_properties(struct device_node *np,
+> +					struct device_node *dup)
+
+Please split any moving of code to separate patches.
+
+I'm not remembering why we need these test functions vs. just applying 
+overlays. Frank? Perhaps because it's trying to test the overlay code 
+itself. But you should just be a user of the overlay API and not need to 
+do anything special.
+
+> +{
+> +	struct property *prop;
+> +	struct property *save_next;
+> +	struct device_node *child;
+> +	int ret;
+> +
+> +	for_each_child_of_node(np, child)
+> +		child->parent = dup;
+> +
+> +	/*
+> +	 * "unittest internal error: unable to add testdata property"
+> +	 *
+> +	 *    If this message reports a property in node '/__symbols__' then
+> +	 *    the respective unittest overlay contains a label that has the
+> +	 *    same name as a label in the live devicetree.  The label will
+> +	 *    be in the live devicetree only if the devicetree source was
+> +	 *    compiled with the '-@' option.  If you encounter this error,
+> +	 *    please consider renaming __all__ of the labels in the unittest
+> +	 *    overlay dts files with an odd prefix that is unlikely to be
+> +	 *    used in a real devicetree.
+> +	 */
+> +
+> +	/*
+> +	 * open code for_each_property_of_node() because of_add_property()
+> +	 * sets prop->next to NULL
+> +	 */
+> +	for (prop = np->properties; prop != NULL; prop = save_next) {
+> +		save_next = prop->next;
+> +		ret = of_add_property(dup, prop);
+> +		if (ret) {
+> +			if (ret == -EEXIST && !strcmp(prop->name, "name"))
+> +				continue;
+> +			pr_err("unittest internal error: unable to add testdata property %pOF/%s",
+> +			       np, prop->name);
+> +		}
+> +	}
+> +}
+> +
+> +/**
+> + * of_test_attach_node_and_children - attaches nodes and its children to live tree.
+> + * @np:	Node to attach to live tree
+> + *
+> + * CAUTION: misleading function name - if node @np already exists in
+> + * the live tree then children of @np are *not* attached to the live
+> + * tree.  This works for the current test devicetree nodes because such
+> + * nodes do not have child nodes.
+> + */
+> +void __init of_test_attach_node_and_children(struct device_node *np)
+> +{
+> +	struct device_node *next, *dup, *child;
+> +	unsigned long flags;
+> +	const char *full_name;
+> +
+> +	full_name = kasprintf(GFP_KERNEL, "%pOF", np);
+> +
+> +	if (!strcmp(full_name, "/__local_fixups__") ||
+> +	    !strcmp(full_name, "/__fixups__")) {
+> +		kfree(full_name);
+> +		return;
+> +	}
+> +
+> +	dup = of_find_node_by_path(full_name);
+> +	kfree(full_name);
+> +	if (dup) {
+> +		update_node_properties(np, dup);
+> +		return;
+> +	}
+> +
+> +	child = np->child;
+> +	np->child = NULL;
+> +
+> +	mutex_lock(&of_mutex);
+> +	raw_spin_lock_irqsave(&devtree_lock, flags);
+> +	np->sibling = np->parent->child;
+> +	np->parent->child = np;
+> +	of_node_clear_flag(np, OF_DETACHED);
+> +	raw_spin_unlock_irqrestore(&devtree_lock, flags);
+> +
+> +	__of_attach_node_sysfs(np);
+> +	mutex_unlock(&of_mutex);
+> +
+> +	while (child) {
+> +		next = child->sibling;
+> +		of_test_attach_node_and_children(child);
+> +		child = next;
+> +	}
+> +}
+> +#endif
+> +
+>  static void of_alias_add(struct alias_prop *ap, struct device_node *np,
+>  			 int id, const char *stem, int stem_len)
+>  {
+> diff --git a/drivers/of/kunit.dtso b/drivers/of/kunit.dtso
+> new file mode 100644
+> index 000000000000..d512057df98d
+> --- /dev/null
+> +++ b/drivers/of/kunit.dtso
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +/ {
+> +	/* Container node where KUnit tests can load overlays */
+> +	kunit_bus: kunit-bus {
+> +		compatible = "simple-bus";
+> +	};
+> +};
+
+Why do we need an overlay to apply overlays to? 
+
+
+> diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+> index fb6792d381a6..2151a28ca234 100644
+> --- a/drivers/of/of_private.h
+> +++ b/drivers/of/of_private.h
+> @@ -96,6 +96,12 @@ static inline void of_overlay_mutex_lock(void) {};
+>  static inline void of_overlay_mutex_unlock(void) {};
+>  #endif
+>  
+> +#if defined(CONFIG_OF_UNITTEST) || defined (CONFIG_KUNIT)
+> +void __init of_test_attach_node_and_children(struct device_node *np);
+> +#else
+> +static inline void __init of_test_attach_node_and_children(struct device_node *np) {}
+> +#endif
+> +
+>  #if defined(CONFIG_OF_UNITTEST) && defined(CONFIG_OF_OVERLAY)
+>  extern void __init unittest_unflatten_overlay_base(void);
+>  #else
+> diff --git a/drivers/of/of_test.c b/drivers/of/of_test.c
+> new file mode 100644
+> index 000000000000..a4d70ac344ad
+> --- /dev/null
+> +++ b/drivers/of/of_test.c
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit tests for OF APIs
+> + */
+> +#include <linux/kconfig.h>
+> +#include <linux/of.h>
+> +
+> +#include <kunit/test.h>
+> +
+> +/*
+> + * Test that the root node / exists.
+> + */
+> +static void dtb_root_node_exists(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/"));
+> +}
+> +
+> +/*
+> + * Test that the /__symbols__ node exists.
+> + */
+> +static void dtb_symbols_node_exists(struct kunit *test)
+> +{
+> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, of_find_node_by_path("/__symbols__"));
+> +}
+
+Many base DTs will not have this. And the kunit tests themselves 
+shouldn't need it because they should be independent of the base tree.
+
+Rob
