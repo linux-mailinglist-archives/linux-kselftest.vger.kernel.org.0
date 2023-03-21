@@ -2,70 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7DA6C3BDB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 21:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B886C3C80
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 22:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjCUUd2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Mar 2023 16:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S229668AbjCUVSY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Mar 2023 17:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjCUUd1 (ORCPT
+        with ESMTP id S229663AbjCUVSX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Mar 2023 16:33:27 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB2AA5DD;
-        Tue, 21 Mar 2023 13:33:13 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1peif5-00045p-1e; Tue, 21 Mar 2023 21:32:51 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>
-Cc:     slewis@rivosinc.com, Conor Dooley <conor@kernel.org>,
-        vineetg@rivosinc.com, Evan Green <evan@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dao Lu <daolu@rivosinc.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Guo Ren <guoren@kernel.org>, Jann Horn <jannh@google.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Wei Fu <wefu@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 0/6] RISC-V Hardware Probing User Interface
-Date:   Tue, 21 Mar 2023 21:32:49 +0100
-Message-ID: <6291488.MhkbZ0Pkbq@diego>
-In-Reply-To: <20230314183220.513101-1-evan@rivosinc.com>
-References: <20230314183220.513101-1-evan@rivosinc.com>
+        Tue, 21 Mar 2023 17:18:23 -0400
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [IPv6:2001:1600:3:17::42a9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466241026F;
+        Tue, 21 Mar 2023 14:18:21 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Ph4G3236kzMqrrH;
+        Tue, 21 Mar 2023 22:18:19 +0100 (CET)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Ph4G037PKzMtb2b;
+        Tue, 21 Mar 2023 22:18:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1679433499;
+        bh=AgKPiy7F5VngjyGIL3NQ14WbEEGl71phtnGYVDOOFK4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=C0SINHKlnr2CqFRxb6HMxLhGImy5difrGWxbhH8duWG3iWaChE7HA1oFO2TuZJfTI
+         Ihf7M4LpPe8520IBXV5Hlqq/H2ILhWOEF21p8F0uULkAVIvY7/7WH9IG1fBwpNDRqm
+         ZqasefLB8Rh8VocFhNJnv+wKXBI0wwt55E3rRCSU=
+Message-ID: <cb7e6a4b-63d9-ddba-e0fc-d6352df2b3b6@digikod.net>
+Date:   Tue, 21 Mar 2023 22:18:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+User-Agent: 
+Subject: Re: [PATCH v1 0/5] Landlock support for UML
+Content-Language: en-US
+To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Richard Weinberger <richard@nod.at>
+Cc:     Christopher Obbard <chris.obbard@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        James Morris <jmorris@namei.org>, Jeff Xu <jeffxu@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Ritesh Raj Sarraf <ritesh@collabora.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sjoerd Simons <sjoerd@collabora.com>,
+        Willem de Bruijn <willemb@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>
+References: <20230309165455.175131-1-mic@digikod.net>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20230309165455.175131-1-mic@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,116 +67,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Am Dienstag, 14. M�rz 2023, 19:32:14 CET schrieb Evan Green:
+Richard, Anton, Johannes, what do you think about these UML changes?
+
+
+On 09/03/2023 17:54, Mickaël Salaün wrote:
+> Hi,
 > 
-> There's been a bunch of off-list discussions about this, including at
-> Plumbers.  The original plan was to do something involving providing an
-> ISA string to userspace, but ISA strings just aren't sufficient for a
-> stable ABI any more: in order to parse an ISA string users need the
-> version of the specifications that the string is written to, the version
-> of each extension (sometimes at a finer granularity than the RISC-V
-> releases/versions encode), and the expected use case for the ISA string
-> (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
-> try and keep ABI compatible and it's probably going to continue to grow,
-> as even if there's no more complexity in the specifications we'll have
-> to deal with the various ISA string parsing oddities that end up all
-> over userspace.
+> Commit cb2c7d1a1776 ("landlock: Support filesystem access-control")
+> introduced a new ARCH_EPHEMERAL_INODES configuration, only enabled for
+> User-Mode Linux.  The reason was that UML's hostfs managed inodes in an
+> ephemeral way: from the kernel point of view, the same inode struct
+> could be created several times while being used by user space because
+> the kernel didn't hold references to inodes.  Because Landlock (and
+> probably other subsystems) ties properties (i.e. access rights) to inode
+> objects, it wasn't possible to create rules that match inodes and then
+> allow specific accesses.
 > 
-> Instead this patch set takes a very different approach and provides a set
-> of key/value pairs that encode various bits about the system.  The big
-> advantage here is that we can clearly define what these mean so we can
-> ensure ABI stability, but it also allows us to encode information that's
-> unlikely to ever appear in an ISA string (see the misaligned access
-> performance, for example).  The resulting interface looks a lot like
-> what arm64 and x86 do, and will hopefully fit well into something like
-> ACPI in the future.
+> This patch series fixes the way UML manages inodes according to the
+> underlying filesystem.  They are now properly handles as for other
+> filesystems, which enables to support Landlock (and probably other
+> features).
 > 
-> The actual user interface is a syscall, with a vDSO function in front of
-> it. The vDSO function can answer some queries without a syscall at all,
-> and falls back to the syscall for cases it doesn't have answers to.
-> Currently we prepopulate it with an array of answers for all keys and
-> a CPU set of "all CPUs". This can be adjusted as necessary to provide
-> fast answers to the most common queries.
-
-I've built myself a small test-program [see below], to check the feature
-on the d1-nezha board. Which is how I found the tiny c-extension issue.
-
-Series works as expected there, so patches 1-4 on a d1-nezha:
-
-Tested-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
-
-
-
-hwprobe.c:
-----------------
-#include <linux/types.h>
-#include <sys/syscall.h>
-#include <stdio.h>
-#include <unistd.h>
-
-#define __NR_riscv_hwprobe 258
-
-struct riscv_hwprobe {
-        __s64 key;
-        __u64 value;
-};
-
-#define RISCV_HWPROBE_KEY_MVENDORID     0
-#define RISCV_HWPROBE_KEY_MARCHID       1
-#define RISCV_HWPROBE_KEY_MIMPID        2
-#define RISCV_HWPROBE_KEY_BASE_BEHAVIOR 3
-#define         RISCV_HWPROBE_BASE_BEHAVIOR_IMA (1 << 0)
-#define RISCV_HWPROBE_KEY_IMA_EXT_0     4
-#define         RISCV_HWPROBE_IMA_FD            (1 << 0)
-#define         RISCV_HWPROBE_IMA_C             (1 << 1)
-#define RISCV_HWPROBE_KEY_CPUPERF_0     5
-#define         RISCV_HWPROBE_MISALIGNED_UNKNOWN        (0 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_EMULATED       (1 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_SLOW           (2 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_FAST           (3 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_UNSUPPORTED    (4 << 0)
-#define         RISCV_HWPROBE_MISALIGNED_MASK           (7 << 0)
-
-int __riscv_hwprobe (struct riscv_hwprobe *pairs, long pair_count,
-  long cpu_count, unsigned long *cpus, unsigned long flags)
-{
-
-        return syscall(__NR_riscv_hwprobe, pairs, pair_count, cpu_count, cpus, flags);
-}
-
-int main(void)
-{
-        struct riscv_hwprobe pairs[3];
-
-        pairs[0].key = RISCV_HWPROBE_KEY_MVENDORID;
-        pairs[1].key = RISCV_HWPROBE_KEY_MARCHID;
-        pairs[2].key = RISCV_HWPROBE_KEY_MIMPID;
-        if (__riscv_hwprobe(pairs, 3, 0, NULL, 0) != 0) {
-                printf("syscall failed");
-                return -1;
-        }
-
-        printf("vendorid 0x%x, archid 0x%x, impid 0x%x\n",
-               pairs[0].value, pairs[1].value, pairs[2].value);
-
-
-        pairs[0].key = RISCV_HWPROBE_KEY_CPUPERF_0;
-        pairs[1].key = RISCV_HWPROBE_KEY_BASE_BEHAVIOR;
-        pairs[2].key = RISCV_HWPROBE_KEY_IMA_EXT_0;
-        if (__riscv_hwprobe(&pairs[0], 3, 0, NULL, 0) != 0) {
-                printf("syscall failed");
-                return -1;
-        }
-
-        printf("ima-behavior %d, f+d %d, c %d, misaligned access: %s\n",
-        ((pairs[1].value & RISCV_HWPROBE_BASE_BEHAVIOR_IMA) == RISCV_HWPROBE_BASE_BEHAVIOR_IMA),
-        ((pairs[2].value & RISCV_HWPROBE_IMA_FD) == RISCV_HWPROBE_IMA_FD),
-        ((pairs[2].value & RISCV_HWPROBE_IMA_C) == RISCV_HWPROBE_IMA_C),
-        ((pairs[0].value & RISCV_HWPROBE_MISALIGNED_FAST) == RISCV_HWPROBE_MISALIGNED_FAST) ? "fast" : "not-fast"
-        );
-
-        return 0;
-}
-
-
-
+> Backporting these patches requires some selftest harness patches
+> backports too.
+> 
+> Regards,
+> 
+> Mickaël Salaün (5):
+>    hostfs: Fix ephemeral inodes
+>    selftests/landlock: Don't create useless file layouts
+>    selftests/landlock: Add supports_filesystem() helper
+>    selftests/landlock: Make mounts configurable
+>    selftests/landlock: Add tests for pseudo filesystems
+> 
+>   arch/Kconfig                               |   7 -
+>   arch/um/Kconfig                            |   1 -
+>   fs/hostfs/hostfs.h                         |   1 +
+>   fs/hostfs/hostfs_kern.c                    | 213 ++++++------
+>   fs/hostfs/hostfs_user.c                    |   1 +
+>   security/landlock/Kconfig                  |   2 +-
+>   tools/testing/selftests/landlock/config    |   8 +-
+>   tools/testing/selftests/landlock/fs_test.c | 381 +++++++++++++++++++--
+>   8 files changed, 472 insertions(+), 142 deletions(-)
+> 
+> 
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
