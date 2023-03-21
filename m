@@ -2,483 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810CD6C3969
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 19:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A98136C3A11
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Mar 2023 20:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjCUSqF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Mar 2023 14:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S230229AbjCUTPL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Mar 2023 15:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjCUSp4 (ORCPT
+        with ESMTP id S229846AbjCUTPJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Mar 2023 14:45:56 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A1656158
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Mar 2023 11:45:43 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 744D144519
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Mar 2023 18:45:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1679424339;
-        bh=mKoRo4SwM93Mj0Ez4DVaUZmdns1DfPb0shyS9HBPsf4=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=fxZ/ixPRAetr+XHrra6y7egDV42SKLO++BOruMicdkCWM0AbApzk0u8CulUZ1VswX
-         DdO0+8PBNu5rUjM85eH9xjlnsCVSZYHxw68YHz5ObXeyEso9/LyKddKWLZG8LySOES
-         WUNvOB88YJV5vBiGoaoPjPustqm/D3wK9zUdruixC0vq3A92XAz+EIxC0g4WIfQrTV
-         r5AuerXeBSoIYWcwpakzLeMjeUpDVNJhBU2PjD13p7wapzRaRt5D5PLUAi3uHZOt1l
-         BQs4oQ34ahKfZ1FMB8914kFVl2GVji5ULZr8A+4cwRar5s/VNnYjbJ0hHBnbAz0AFO
-         sn843nLXawRZA==
-Received: by mail-ed1-f72.google.com with SMTP id m18-20020a50d7d2000000b00501dfd867a4so3377091edj.20
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Mar 2023 11:45:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679424339;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mKoRo4SwM93Mj0Ez4DVaUZmdns1DfPb0shyS9HBPsf4=;
-        b=zEtnewMaJk4dG9Vcpr9KjAooI3wcyxBglgVoAeo6i58Cw3HjoiR3FdER8vYcPflC/r
-         /7/Qv8I0Enqnvqa8OMkkrVlFGBiWrKJ9QqsCoM5Nh/oD75HpzZMqU8JeelJRuLUBF6zo
-         TExq+LrRG7/HOUcE+y8oWuZnPRswM4WW1mDyw9180eVUMCU0scibm74ZBljK9yY/3tLQ
-         7i+QH2y1c0fTpXnzo4/y8tb2CgLMrchzfjPHsr8lPCBuvTphxynhtHi6eAThwykSZ+Jr
-         eTUR3cLTrdaxQRQCIl1VZIMQqyVA6aGX1Xenc8fN6Vk9ugu26wXhFD5YnJdqRZoBAGzg
-         6DDw==
-X-Gm-Message-State: AO0yUKUEIijRjBygRMqZJKQzPWNu/eogDbFJA/xvqxdmQYRWIC6GQ0TZ
-        SYYm6BNEYcyg3kfN/GfuqZPNJ7F+WynwRIKW7T7aI0LgYl4iL1JAvUnJHrSedJEL9O5L+6xGUkl
-        2b3HXvEgZBEBvyPFmaRAP68Bj4lG1JTXOzggaN4o8nJ1ayg==
-X-Received: by 2002:a17:907:7647:b0:932:2874:cc5 with SMTP id kj7-20020a170907764700b0093228740cc5mr4141459ejc.16.1679424339287;
-        Tue, 21 Mar 2023 11:45:39 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9Dngg+gPnBWZqqoRjRjUQQkY7S4sfbaHgBZ3OmnG0RLm9qURvQ5HvtMQ1eyoXN4HSuIWkB8w==
-X-Received: by 2002:a17:907:7647:b0:932:2874:cc5 with SMTP id kj7-20020a170907764700b0093228740cc5mr4141443ejc.16.1679424338987;
-        Tue, 21 Mar 2023 11:45:38 -0700 (PDT)
-Received: from amikhalitsyn.. (ip5f5bd076.dynamic.kabel-deutschland.de. [95.91.208.118])
-        by smtp.gmail.com with ESMTPSA id p9-20020a1709060e8900b0093313f4fc3csm4928194ejf.70.2023.03.21.11.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 11:45:38 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     davem@davemloft.net
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2 3/3] selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
-Date:   Tue, 21 Mar 2023 19:33:42 +0100
-Message-Id: <20230321183342.617114-4-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
-References: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
-MIME-Version: 1.0
+        Tue, 21 Mar 2023 15:15:09 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2058.outbound.protection.outlook.com [40.107.96.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E216E92;
+        Tue, 21 Mar 2023 12:14:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l8un91b4sPZ3Z2m46svOQGPfO9h8d49FRwfhN1GEBCazBLXD4LwdYsDM/TXruyWJhVs1Tm2b8qXBWJAiEa4Bl8M8uYR1SfhimmMz72RqbfWQCdwz9ibjcv486bfwnBONhfr6TTFYMPPcisrrI4f/x3y88WGczArClGFzLpl8IF/nPxjY3DgedtNy1127F/qCArFQjacwFV33rv32Sc9KCmc5YNmC7Nl5yvc9oau0wIvVooPrJiHymWtDsIhjoy4K5OKj82aNQ99Xp2Cflbz9goDu9QzKEU0DvMqGgBQ2vxazt8nEjQnlvdc6ozM37YfeGWqc2yNH2Z6p3AW/7xRAyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yl6Q9ElGv0qsh+jn0Vo3f74UZLIIdua4N3S71p8h1DA=;
+ b=K913myb9Kury1biwZyeRf2Bsn34dXDnZCeVrMZOnljop+jgrTcSLJDQ5NpdnfBZl4VFfULZSwNiIu2OA3c2k0rhBoyOaGYWf+vh0LvpDPJhpFDla1X7Ed7BmXlWv7Q4m7UzjbjcfBWNRIZQzbnIfEIrRZEE38ZknXX+k2JcmndjN54Qy5reFhKQD/LuJLXLeeiyQhmqYZ5XltANftCu3tcpyq4hc8+GkDFVB90/h40ccrViksC4QSqE4pIbEXfwq05jCtrD5gsYv0KrrR/+a9iuFh9/ScwVmh+dlAGPkkgG9PfEVoR7MBcMBxGe3IC/zlJ3nU3KuLK47bHtLnV8bPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yl6Q9ElGv0qsh+jn0Vo3f74UZLIIdua4N3S71p8h1DA=;
+ b=CXXyqw4lmHli3Jr2v/X9aItEiZrae+hUBN7riDlBP7T767GaJBRMN+R8uXVrvuvWbvGkEy7njzgRyZbgX8wf/1GO+MAweIfslmV8e5uHv6qfOl8N5MEIeu7ofsI403Q6vT6Gj9lSMFT1BWlov88BrKeo/5btZ+Kzg9jyShJIL/FsfIulqjYviT8jWnAVfIM9gHDRwKMPB9segeE8Rk9I6RSFNcTUsOyZv91JqAj4lK26c5ChNHxtohZ3dltHWfy4rhGznKza30etCPrs1AltfRT4v6g+1mS+y1wSJLIXUTZ2Gjn1peYI08rl6AeAgN8/U1QNrE1oOM86khu6JP9w3Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by IA1PR12MB6604.namprd12.prod.outlook.com (2603:10b6:208:3a0::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 19:14:52 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 19:14:52 +0000
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>, kvm@vger.kernel.org,
+        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: [PATCH v3 00/17] Add iommufd physical device operations for replace and alloc hwpt
+Date:   Tue, 21 Mar 2023 16:14:34 -0300
+Message-Id: <0-v3-61d41fd9e13e+1f5-iommufd_alloc_jgg@nvidia.com>
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR16CA0050.namprd16.prod.outlook.com
+ (2603:10b6:208:234::19) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB6604:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3e30fafd-ffa3-49a3-548f-08db2a408c48
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ARpsxhSg+rjPBfAR9+T2kjBjg4j4BGuKfGyjfFMTfuj7rZ9+DTnIaDXgd21iv0Wpk99TUTqm24pBlQpgH+nuIgEDOGEYLhQ2/48Y4z3Qc59OOy1AreHdDEZyptJWpkycRIhM5+gb0qJn19JU5hgWYg2x6oz+b3WeIXC3ciwj5OLwW/X5GzRXLHV9FWxE4iQpB5UGHq+cH333b/y468aeBqWwj8Uq+RiJE9Bs0lHyzC47ChBH6sg/xf4KOzzWDe4DPCezuUOIg7S1cYYtyIaokf5/4uNPOpGBIVGxNqS4QZnXSnPdICfm8+8UN1OCo24AQGMENjM2Pm0rUk8zEmiFiAjqdrjP0m4HBtW6pCzWFpt9ZsSilkHF+dcHCD74BFgxO7JMu5EKtYbmc+eo4LvhHskwf1EhFQs3dda4YhcZ6QVja7kvsnRAB+uzd+GKzVhcSgY1EGEre5Xv/k7mqI8tncLKfhAZjZU4p3mXgfmTQOZBip2SlvhcVs+YjhUZiilGTzDmBphFjyZskGDzld5banW11P++EYlnF8bOLJcHUU9WDrhyXrfqdi/9dNjuwLv0hNdfAWs22wIquY5KqQhNxXri/Kc6FN/slyj+uwAbFyMNxP0Vlt+Z3+pqhCgjFt1MB8h2W5+x4U/pIZtorU5HaqulXWEZMC1m22F7RgrdoVYsO+7LA+cd3TTrvX4WR5OnHb8kd9ZUEWsCMsBD9EhwdeqIxNzmcemeEuTDr/2rn6JbWFQOr/Irrf/H5s6sMMC49Dhx1dmEIeZ14C8F1uWpYg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(346002)(366004)(39860400002)(451199018)(478600001)(86362001)(83380400001)(26005)(186003)(966005)(54906003)(316002)(6486002)(6666004)(6512007)(8676002)(2616005)(6506007)(38100700002)(2906002)(8936002)(66556008)(66476007)(66946007)(5660300002)(4326008)(41300700001)(36756003)(4216001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VjcpZQKH6V87TtPGeHLxOWczWxnUrxR+VgG357k72CwIxFfkAITWwYu7+xFO?=
+ =?us-ascii?Q?Q3ZMRIZHgAa86EEWGYKAw3cpHa5pHi77JQL+tocg/pJBxGPGD0mqRd/LupGY?=
+ =?us-ascii?Q?k43lWXF8yroDDiRYitGNEtGl145pVx7tu+wl2TlkuPEYwGjqmGPExgZCqCnz?=
+ =?us-ascii?Q?EVd+2o+I6lSf3W4NDr3rFPbQS9WwRUVbRgPtkFq8uMhFRA69A0vgLeWD3qNB?=
+ =?us-ascii?Q?6gkIyBoj1/U/L2k5aSl3thfjBsP2hq0m2V3zJ+GWJk2vrrsw2ejxO4XO20Ua?=
+ =?us-ascii?Q?tA/truWDvbYxFm/v/sTTGo2s/h8RwCt9YcVRqbh/M2h1cPDq3K1evkxv8Mg/?=
+ =?us-ascii?Q?qWBAimu3keE0J22mKfl99+7vBbnk3ZGqUAJCZHLnM+XaMsuHkRW1nSGy1WXf?=
+ =?us-ascii?Q?308blxm2dO2xCg9olbPaz3am/EBt6x425K35oMSprcju9f2g5nKdhvUJJ9Go?=
+ =?us-ascii?Q?ziwPO+YxasYcsNaDpaFfAKCLuXjUchJrmcKTh8DcxrroJGEVQhOTMpae3ilq?=
+ =?us-ascii?Q?HdiG8R6AlhOLKWmMNDhEZNqpaYxR1JEfYaWmbN+/o6YJCvCYOe4Ct33UkCBH?=
+ =?us-ascii?Q?irronPj4F7B3sUFb4BQfYcfCWN4EjWp8IBAvbHdvBqiu+PB2it7Ftjkbj4wv?=
+ =?us-ascii?Q?miJr4GOA+jxWLdp71xQUuraTN070nvFgH0ZjgDsLdtsKTYVTBeXNmBDTyQaa?=
+ =?us-ascii?Q?YxhxNJZTzoEkq72Den30RbcaJXCB7fCMhaHZRMTFBIghIkBtNiuR3/1rVoiL?=
+ =?us-ascii?Q?lZ7JRXwcEQ5w4BmnNEl3OliE6AxpuT4TxWeduoL54X3Q7h1IF6znhFFiSiZK?=
+ =?us-ascii?Q?Hs90iu01oAFor5PoFzcTlOAHOMa06mfSNES7JtAePpZL83nEZEs0LpueuVYk?=
+ =?us-ascii?Q?Yg8TMMHvQ8DRWmzNDlo3kkp4iKlVzRfEgJqe0kk3CS0fTCSwhItWdCaqvJDn?=
+ =?us-ascii?Q?w3euS8UKe4/GuS/Cw7HXuQN8Cv7gQrMz61ZiM6kL0NXB45N0b3OzNr2yjD0V?=
+ =?us-ascii?Q?lmTrozfAnph1ijfET8ranqxFGG0Xl08tp2duy02ukBvuYlbo2kTiU1FuyVLC?=
+ =?us-ascii?Q?NNpc8U17GPqLkQOF65JcXO9hRb7xpKxwHoLK1iX98+rjimwSc49lVUe4CNHf?=
+ =?us-ascii?Q?+YDdBlfZl2aB0mK+dto4pZM0byiJfCzLwoXaWRJar1h8TgKWgDLP63u0Ff1j?=
+ =?us-ascii?Q?oGm+hZ0CW561ClrHcjL7UIk2RA9VQPveNlA43kbALm+vTjwYqvSdL52GfwUg?=
+ =?us-ascii?Q?5r9ihIy/IhtohOoWp2mwApt43/OoLNza2fydEqwLZkzrEdbVWMVaPqOvP24v?=
+ =?us-ascii?Q?02P5b1uLjFIANy0ipn5hzvhe+QEJjX9g8z8k78uZKh03G9kvWXKKXMs4hzsR?=
+ =?us-ascii?Q?7xtpAhp95+Cvfs+gQnYbFJE+7VhSOyNT0MOxLLTQf5oOBoJ7jh7YeVVrKxb4?=
+ =?us-ascii?Q?I92dBRjHsAVFepzLMpy0HLkcP/C/jGsAZRXb8Ws/UHSLbU64mo3vzT6plciR?=
+ =?us-ascii?Q?21Br9v0+kDyjcDRTkBGGzPdpwSbrRnhmvXCPHercmjAZfkKbI5zT+OBc2dvh?=
+ =?us-ascii?Q?dRh5WQAAoKu0luwjUPbV31weBlBg2LPc5dDDgQqr?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e30fafd-ffa3-49a3-548f-08db2a408c48
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2023 19:14:52.4755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2k1E6v87dOKdgTlzK/SA8OtPbQEaSlJwO/YyiEsjl/4MVtbgarJ/8uXxl1oOs5JF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6604
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Basic test to check consistency between:
-- SCM_CREDENTIALS and SCM_PIDFD
-- SO_PEERCRED and SO_PEERPIDFD
+This is the basic functionality for iommufd to support
+iommufd_device_replace() and IOMMU_HWPT_ALLOC for physical devices.
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
----
- tools/testing/selftests/net/.gitignore        |   1 +
- tools/testing/selftests/net/af_unix/Makefile  |   3 +-
- .../testing/selftests/net/af_unix/scm_pidfd.c | 336 ++++++++++++++++++
- 3 files changed, 339 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/net/af_unix/scm_pidfd.c
+iommufd_device_replace() allows changing the HWPT associated with the
+device to a new IOAS or HWPT. Replace does this in way that failure leaves
+things unchanged, and utilizes the iommu iommu_group_replace_domain() API
+to allow the iommu driver to perform an optional non-disruptive change.
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index a6911cae368c..f2d23a1df596 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -25,6 +25,7 @@ reuseport_bpf_cpu
- reuseport_bpf_numa
- reuseport_dualstack
- rxtimestamp
-+scm_pidfd
- sk_bind_sendto_listen
- sk_connect_zero_addr
- socket
-diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing/selftests/net/af_unix/Makefile
-index 1e4b397cece6..221c387a7d7f 100644
---- a/tools/testing/selftests/net/af_unix/Makefile
-+++ b/tools/testing/selftests/net/af_unix/Makefile
-@@ -1,3 +1,4 @@
--TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect
-+CFLAGS += $(KHDR_INCLUDES)
-+TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect scm_pidfd
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/net/af_unix/scm_pidfd.c b/tools/testing/selftests/net/af_unix/scm_pidfd.c
-new file mode 100644
-index 000000000000..fa502510ee9e
---- /dev/null
-+++ b/tools/testing/selftests/net/af_unix/scm_pidfd.c
-@@ -0,0 +1,336 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <error.h>
-+#include <limits.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/socket.h>
-+#include <linux/socket.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <sys/un.h>
-+#include <sys/signal.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+
-+#define clean_errno() (errno == 0 ? "None" : strerror(errno))
-+#define log_err(MSG, ...)                                                   \
-+	fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", __FILE__, __LINE__, \
-+		clean_errno(), ##__VA_ARGS__)
-+
-+#ifndef SCM_PIDFD
-+#define SCM_PIDFD 0x04
-+#endif
-+
-+static pid_t client_pid;
-+static char sock_name[32];
-+
-+static void die(int status)
-+{
-+	unlink(sock_name);
-+	kill(client_pid, SIGTERM);
-+	exit(status);
-+}
-+
-+static void child_die()
-+{
-+	kill(getppid(), SIGTERM);
-+	exit(1);
-+}
-+
-+static int safe_int(const char *numstr, int *converted)
-+{
-+	char *err = NULL;
-+	long sli;
-+
-+	errno = 0;
-+	sli = strtol(numstr, &err, 0);
-+	if (errno == ERANGE && (sli == LONG_MAX || sli == LONG_MIN))
-+		return -ERANGE;
-+
-+	if (errno != 0 && sli == 0)
-+		return -EINVAL;
-+
-+	if (err == numstr || *err != '\0')
-+		return -EINVAL;
-+
-+	if (sli > INT_MAX || sli < INT_MIN)
-+		return -ERANGE;
-+
-+	*converted = (int)sli;
-+	return 0;
-+}
-+
-+static int char_left_gc(const char *buffer, size_t len)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < len; i++) {
-+		if (buffer[i] == ' ' || buffer[i] == '\t')
-+			continue;
-+
-+		return i;
-+	}
-+
-+	return 0;
-+}
-+
-+static int char_right_gc(const char *buffer, size_t len)
-+{
-+	int i;
-+
-+	for (i = len - 1; i >= 0; i--) {
-+		if (buffer[i] == ' ' || buffer[i] == '\t' ||
-+		    buffer[i] == '\n' || buffer[i] == '\0')
-+			continue;
-+
-+		return i + 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static char *trim_whitespace_in_place(char *buffer)
-+{
-+	buffer += char_left_gc(buffer, strlen(buffer));
-+	buffer[char_right_gc(buffer, strlen(buffer))] = '\0';
-+	return buffer;
-+}
-+
-+/* borrowed (with all helpers) from pidfd/pidfd_open_test.c */
-+static pid_t get_pid_from_fdinfo_file(int pidfd, const char *key, size_t keylen)
-+{
-+	int ret;
-+	char path[512];
-+	FILE *f;
-+	size_t n = 0;
-+	pid_t result = -1;
-+	char *line = NULL;
-+
-+	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", pidfd);
-+
-+	f = fopen(path, "re");
-+	if (!f)
-+		return -1;
-+
-+	while (getline(&line, &n, f) != -1) {
-+		char *numstr;
-+
-+		if (strncmp(line, key, keylen))
-+			continue;
-+
-+		numstr = trim_whitespace_in_place(line + 4);
-+		ret = safe_int(numstr, &result);
-+		if (ret < 0)
-+			goto out;
-+
-+		break;
-+	}
-+
-+out:
-+	free(line);
-+	fclose(f);
-+	return result;
-+}
-+
-+static int cmsg_check(int fd)
-+{
-+	struct msghdr msg = { 0 };
-+	struct cmsghdr *cmsg;
-+	struct iovec iov;
-+	struct ucred *ucred = NULL;
-+	int data = 0;
-+	char control[CMSG_SPACE(sizeof(struct ucred)) +
-+		     CMSG_SPACE(sizeof(int))] = { 0 };
-+	int *pidfd = NULL;
-+	pid_t parent_pid;
-+	int err;
-+
-+	iov.iov_base = &data;
-+	iov.iov_len = sizeof(data);
-+
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = control;
-+	msg.msg_controllen = sizeof(control);
-+
-+	err = recvmsg(fd, &msg, 0);
-+	if (err < 0) {
-+		log_err("recvmsg");
-+		return 1;
-+	}
-+
-+	if (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC)) {
-+		log_err("recvmsg: truncated");
-+		return 1;
-+	}
-+
-+	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL;
-+	     cmsg = CMSG_NXTHDR(&msg, cmsg)) {
-+		if (cmsg->cmsg_level == SOL_SOCKET &&
-+		    cmsg->cmsg_type == SCM_PIDFD) {
-+			if (cmsg->cmsg_len < sizeof(*pidfd)) {
-+				log_err("CMSG parse: SCM_PIDFD wrong len");
-+				return 1;
-+			}
-+
-+			pidfd = (void *)CMSG_DATA(cmsg);
-+		}
-+
-+		if (cmsg->cmsg_level == SOL_SOCKET &&
-+		    cmsg->cmsg_type == SCM_CREDENTIALS) {
-+			if (cmsg->cmsg_len < sizeof(*ucred)) {
-+				log_err("CMSG parse: SCM_CREDENTIALS wrong len");
-+				return 1;
-+			}
-+
-+			ucred = (void *)CMSG_DATA(cmsg);
-+		}
-+	}
-+
-+	/* send(pfd, "x", sizeof(char), 0) */
-+	if (data != 'x') {
-+		log_err("recvmsg: data corruption");
-+		return 1;
-+	}
-+
-+	if (!pidfd) {
-+		log_err("CMSG parse: SCM_PIDFD not found");
-+		return 1;
-+	}
-+
-+	if (!ucred) {
-+		log_err("CMSG parse: SCM_CREDENTIALS not found");
-+		return 1;
-+	}
-+
-+	/* pidfd from SCM_PIDFD should point to the parent process PID */
-+	parent_pid =
-+		get_pid_from_fdinfo_file(*pidfd, "Pid:", sizeof("Pid:") - 1);
-+	if (parent_pid != getppid()) {
-+		log_err("wrong SCM_PIDFD %d != %d", parent_pid, getppid());
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+void client(struct sockaddr_un *listen_addr)
-+{
-+	int cfd;
-+	socklen_t len;
-+	struct ucred peer_cred;
-+	int peer_pidfd;
-+	pid_t peer_pid;
-+	int on = 0;
-+
-+	cfd = socket(AF_UNIX, SOCK_STREAM, 0);
-+	if (cfd < 0) {
-+		log_err("socket");
-+		child_die();
-+	}
-+
-+	if (connect(cfd, (struct sockaddr *)listen_addr,
-+		    sizeof(*listen_addr)) != 0) {
-+		log_err("connect");
-+		child_die();
-+	}
-+
-+	on = 1;
-+	if (setsockopt(cfd, SOL_SOCKET, SO_PASSCRED, &on, sizeof(on))) {
-+		log_err("Failed to set SO_PASSCRED");
-+		child_die();
-+	}
-+
-+	if (setsockopt(cfd, SOL_SOCKET, SO_PASSPIDFD, &on, sizeof(on))) {
-+		log_err("Failed to set SO_PASSPIDFD");
-+		child_die();
-+	}
-+
-+	if (cmsg_check(cfd)) {
-+		log_err("cmsg_check failed");
-+		child_die();
-+	}
-+
-+	len = sizeof(peer_cred);
-+	if (getsockopt(cfd, SOL_SOCKET, SO_PEERCRED, &peer_cred, &len)) {
-+		log_err("Failed to get SO_PEERCRED");
-+		child_die();
-+	}
-+
-+	len = sizeof(peer_pidfd);
-+	if (getsockopt(cfd, SOL_SOCKET, SO_PEERPIDFD, &peer_pidfd, &len)) {
-+		log_err("Failed to get SO_PEERPIDFD");
-+		child_die();
-+	}
-+
-+	/* pid from SO_PEERCRED should point to the parent process PID */
-+	if (peer_cred.pid != getppid()) {
-+		log_err("Failed to get SO_PEERPIDFD");
-+		child_die();
-+	}
-+
-+	peer_pid = get_pid_from_fdinfo_file(peer_pidfd,
-+					    "Pid:", sizeof("Pid:") - 1);
-+	if (peer_pid != peer_cred.pid) {
-+		log_err("Failed to get SO_PEERPIDFD");
-+		child_die();
-+	}
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int lfd, pfd;
-+	int child_status = 0;
-+	struct sockaddr_un listen_addr;
-+
-+	lfd = socket(AF_UNIX, SOCK_STREAM, 0);
-+	if (lfd < 0) {
-+		perror("socket");
-+		exit(1);
-+	}
-+
-+	memset(&listen_addr, 0, sizeof(listen_addr));
-+	listen_addr.sun_family = AF_UNIX;
-+	sprintf(sock_name, "scm_pidfd_%d", getpid());
-+	unlink(sock_name);
-+	strcpy(listen_addr.sun_path, sock_name);
-+
-+	if ((bind(lfd, (struct sockaddr *)&listen_addr, sizeof(listen_addr))) !=
-+	    0) {
-+		perror("socket bind failed");
-+		exit(1);
-+	}
-+
-+	if (listen(lfd, 1) < 0) {
-+		perror("listen");
-+		exit(1);
-+	}
-+
-+	client_pid = fork();
-+	if (client_pid < 0) {
-+		perror("fork");
-+		exit(1);
-+	}
-+
-+	if (client_pid == 0) {
-+		client(&listen_addr);
-+		exit(0);
-+	}
-+
-+	pfd = accept(lfd, NULL, NULL);
-+	if (pfd < 0) {
-+		perror("accept");
-+		die(1);
-+	}
-+
-+	if (send(pfd, "x", sizeof(char), 0) < 0) {
-+		perror("send");
-+		die(1);
-+	}
-+
-+	waitpid(client_pid, &child_status, 0);
-+	die(WIFEXITED(child_status) ? WEXITSTATUS(child_status) : 1);
-+	die(0);
-+}
-\ No newline at end of file
+IOMMU_HWPT_ALLOC allows HWPTs to be explicitly allocated by the user and
+used by attach or replace. At this point it isn't very useful since the
+HWPT is the same as the automatically managed HWPT from the IOAS. However
+a following series will allow userspace to customize the created HWPT.
+
+The implementation is complicated because we have to introduce some
+per-iommu_group memory in iommufd and redo how we think about multi-device
+groups to be more explicit. This solves all the locking problems in the
+prior attempts.
+
+This series is infrastructure work for the following series which:
+ - Add replace for attach
+ - Expose replace through VFIO APIs
+ - Implement driver parameters for HWPT creation (nesting)
+
+Once review of this is complete I will keep it on a side branch and
+accumulate the following series when they are ready so we can have a
+stable base and make more incremental progress. When we have all the parts
+together to get a full implementation it can go to Linus.
+
+I have this on github:
+
+https://github.com/jgunthorpe/linux/commits/iommufd_hwpt
+
+v3:
+ - Refine comments and commit messages
+ - Adjust the flow in iommufd_device_auto_get_domain() so pt_id is only
+   set on success
+ - Reject replace on non-attached devices
+ - Add missing __reserved check for IOMMU_HWPT_ALLOC
+v2: https://lore.kernel.org/r/0-v2-51b9896e7862+8a8c-iommufd_alloc_jgg@nvidia.com
+ - Use WARN_ON for the igroup->group test and move that logic to a
+   function iommufd_group_try_get()
+ - Change igroup->devices to igroup->device list
+   Replace will need to iterate over all attached idevs
+ - Rename to iommufd_group_setup_msi()
+ - New patch to export iommu_get_resv_regions()
+ - New patch to use per-device reserved regions instead of per-group
+   regions
+ - Split out the reorganizing of iommufd_device_change_pt() from the
+   replace patch
+ - Replace uses the per-dev reserved regions
+ - Use stdev_id in a few more places in the selftest
+ - Fix error handling in IOMMU_HWPT_ALLOC
+ - Clarify comments
+ - Rebase on v6.3-rc1
+v1: https://lore.kernel.org/all/0-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com/
+
+Jason Gunthorpe (15):
+  iommufd: Move isolated msi enforcement to iommufd_device_bind()
+  iommufd: Add iommufd_group
+  iommufd: Replace the hwpt->devices list with iommufd_group
+  iommu: Export iommu_get_resv_regions()
+  iommufd: Keep track of each device's reserved regions instead of
+    groups
+  iommufd: Use the iommufd_group to avoid duplicate MSI setup
+  iommufd: Make sw_msi_start a group global
+  iommufd: Move putting a hwpt to a helper function
+  iommufd: Add enforced_cache_coherency to iommufd_hw_pagetable_alloc()
+  iommufd: Reorganize iommufd_device_attach into
+    iommufd_device_change_pt
+  iommufd: Add iommufd_device_replace()
+  iommufd: Make destroy_rwsem use a lock class per object type
+  iommufd: Add IOMMU_HWPT_ALLOC
+  iommufd/selftest: Return the real idev id from selftest mock_domain
+  iommufd/selftest: Add a selftest for IOMMU_HWPT_ALLOC
+
+Nicolin Chen (2):
+  iommu: Introduce a new iommu_group_replace_domain() API
+  iommufd/selftest: Test iommufd_device_replace()
+
+ drivers/iommu/iommu-priv.h                    |  10 +
+ drivers/iommu/iommu.c                         |  41 +-
+ drivers/iommu/iommufd/device.c                | 512 +++++++++++++-----
+ drivers/iommu/iommufd/hw_pagetable.c          |  96 +++-
+ drivers/iommu/iommufd/io_pagetable.c          |  27 +-
+ drivers/iommu/iommufd/iommufd_private.h       |  51 +-
+ drivers/iommu/iommufd/iommufd_test.h          |   6 +
+ drivers/iommu/iommufd/main.c                  |  17 +-
+ drivers/iommu/iommufd/selftest.c              |  40 ++
+ include/linux/iommufd.h                       |   1 +
+ include/uapi/linux/iommufd.h                  |  26 +
+ tools/testing/selftests/iommu/iommufd.c       |  64 ++-
+ .../selftests/iommu/iommufd_fail_nth.c        |  52 +-
+ tools/testing/selftests/iommu/iommufd_utils.h |  61 ++-
+ 14 files changed, 804 insertions(+), 200 deletions(-)
+ create mode 100644 drivers/iommu/iommu-priv.h
+
+
+base-commit: fd8c1a4aee973e87d890a5861e106625a33b2c4e
 -- 
-2.34.1
+2.40.0
 
