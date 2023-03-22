@@ -2,176 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A7F6C546D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 20:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6EA6C551A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 20:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbjCVS77 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Mar 2023 14:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
+        id S229656AbjCVTnf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Mar 2023 15:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbjCVS6z (ORCPT
+        with ESMTP id S229997AbjCVTnT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Mar 2023 14:58:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942B169CCD;
-        Wed, 22 Mar 2023 11:57:49 -0700 (PDT)
+        Wed, 22 Mar 2023 15:43:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF8B6A60;
+        Wed, 22 Mar 2023 12:43:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E776CB81DB5;
-        Wed, 22 Mar 2023 18:57:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FB8C433EF;
-        Wed, 22 Mar 2023 18:57:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679511432;
-        bh=/imnV0x8iGBAk5tPyVtciG7NBjjG0y02B1qw0YmV2Yc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wnz6xohsZpdBarPAm4bU+cZ6XESC6K7V9uQqtrnOP0bxjU1Mvh98bPHJ61lb3g7x2
-         WxV7ToBC8kwblA27wHEHT8zodzSgsE4p8cE1mw8gBCswLp5rVNctyHSu+pJXGfPBdf
-         giRiuA5LFAoMZI2wrPLXaDAkbRHcH2nRwCwD7Zzk=
-Date:   Wed, 22 Mar 2023 19:57:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <ZBtPhoelZo4U5jwC@kroah.com>
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com>
- <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07EB4622AC;
+        Wed, 22 Mar 2023 19:43:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA44C433EF;
+        Wed, 22 Mar 2023 19:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679514197;
+        bh=0eJ2wDPpolg0zMqmBJUTxiE/iCB4f1LEy3GHs5WagXA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XTA7LVqUnLiV1V0ZjkTJHyeM0+HmxziRcvpmW294zoiErgPkcFpbwAmMwEmSEc+6Y
+         +yUoLdBiZUOiCJwr5qzT4lSwL+HEPYS9XbZjhHaORsfpouXEWfKloUz6q0xO1Xx9Qp
+         dh5o54W9Dy3Slm50HKKtHaZRGHt0hK2am+bnFssu0EpM4cdmNqQVVwv/6A8ajkTpE8
+         FXq6pQgsIN6Pnxrl3QaAQrpmS5vRmKFcDT7mGj13A6MI3H1El9AJ8BZ1AhcvqORS0m
+         HpsjvxBN4q8oKQDpTBwGmW3MxHmkorTG0fjAA+Vztu+7Y8YWK/p7nWY0sIDZeQDSCd
+         ZX5D9aD3dFImg==
+Date:   Wed, 22 Mar 2023 12:43:16 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sabrina Dubroca <sd@queasysnail.net>
+Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
+        Frantisek Krenzelok <fkrenzel@redhat.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Apoorv Kothari <apoorvko@amazon.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: Re: [PATCH net-next v2 0/5] tls: implement key updates for TLS1.3
+Message-ID: <20230322124316.7a174e3d@kernel.org>
+In-Reply-To: <ZBsocdkUBlEuAU+I@hog>
+References: <Y+0Wjrc9shLkH+Gg@hog>
+        <20230215111020.0c843384@kernel.org>
+        <Y+1pX/vL8t2nU00c@hog>
+        <20230215195748.23a6da87@kernel.org>
+        <Y+5Yd/8tjCQNOF31@hog>
+        <20230221191944.4d162ec7@kernel.org>
+        <Y/eT/M+b6jUtTdng@hog>
+        <20230223092945.435b10ea@kernel.org>
+        <ZA9EMJgoNsxfOhwV@hog>
+        <20230313113510.02c107b3@kernel.org>
+        <ZBsocdkUBlEuAU+I@hog>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 03:48:00PM +0200, Matti Vaittinen wrote:
-> Hi Greg,
+On Wed, 22 Mar 2023 17:10:25 +0100 Sabrina Dubroca wrote:
+> > Theoretically a rekey op is nicer and cleaner. Practically the quality
+> > of the driver implementations will vary wildly*, and it's a significant
+> > time investment to review all of them. So for non-technical reasons my
+> > intuition is that we'd deliver a better overall user experience if we
+> > handled the rekey entirely in the core.
+> > 
+> > Wait for old key to no longer be needed, _del + _add, start using the
+> > offload again.
+> > 
+> > * One vendor submitted a driver claiming support for TLS 1.3, when 
+> >   TLS 1.3 offload was rejected by the core. So this is the level of
+> >   testing and diligence we're working with :(  
 > 
-> Thanks for looking at this.
+> :(
 > 
-> On 3/22/23 14:07, Greg Kroah-Hartman wrote:
-> > On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
-> > > --- /dev/null
-> > > +++ b/drivers/base/test/test_kunit_device.c
-> > > @@ -0,0 +1,83 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * These helpers have been extracted from drm test code at
-> > > + * drm_kunit_helpers.c which was authored by
-> > > + * Maxime Ripard <maxime@cerno.tech>
-> > > + */
-> > > +
-> > > +#include <linux/device.h>
-> > > +#include <linux/platform_device.h>
-> > > +
-> > > +#include <kunit/platform_device.h>
-> > > +
-> > > +#define KUNIT_DEVICE_NAME	"test-kunit-mock-device"
-> > > +
-> > > +static int fake_probe(struct platform_device *pdev)
-> > 
-> > Please do not abuse platform devices and drivers for things that are not
-> > actually platform devices and drivers.
-> > 
-> > > +{
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int fake_remove(struct platform_device *pdev)
-> > > +{
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static struct platform_driver fake_platform_driver = {
-> > > +	.probe	= fake_probe,
-> > > +	.remove	= fake_remove,
-> > > +	.driver = {
-> > > +		.name	= KUNIT_DEVICE_NAME,
-> > > +	},
-> > > +};
-> > 
-> > Why do you need this fake platform driver at all?
-> > 
-> > Why not just use a virtual device?
+> Ok, _del + _add then.
 > 
-> I can only answer on my behalf. In my case the answer to why I used
-> platform_devices is practicality. I wanted to test devm_ APIs using KUnit
-> tests and I was pointed to an existing implementation in DRM (seen in these
-> patches). It didn't seem to make any sense to re-invent the wheel by writing
-> another implementation for the existing in-tree functionality.
-
-That's fine, but please, let's do this right if it's going to be in the
-driver core, that way we can actually test the driver core code as well.
-
-> > > +/**
-> > > + * test_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
-> > > + * @test: The test context object
-> > > + *
-> > > + * This allocates a fake struct &device to create a mock for a KUnit
-> > > + * test. The device will also be bound to a fake driver. It will thus be
-> > > + * able to leverage the usual infrastructure and most notably the
-> > > + * device-managed resources just like a "real" device.
-> > 
-> > What specific "usual infrastructure" are you wanting to access here?
-> > 
-> > And again, if you want a fake device, make a virtual one, by just
-> > calling device_create().
-> > 
-> > Or are you wanting to do "more" with that device pointer than
-> > device_create() can give you?
 > 
-> Personally, I was (am) only interested in devm_ unwinding. I guess the
-> device_create(), device_add(), device_remove()... (didn't study this
-> sequence in details so sorry if there is errors) could've been sufficient
-> for me. I haven't looked how much of the code that there is for 'platform
-> devices' should be duplicated to support that sequence for testability
-> purposes.
+> I went over the thread to summarize what we've come up with so far:
+> 
+> RX
+>  - The existing SW path will handle all records between the KeyUpdate
+>    message signaling the change of key and the new key becoming known
+>    to the kernel -- those will be queued encrypted, and decrypted in
+>    SW as they are read by userspace (once the key is provided, ie same
+>    as this patchset)
+>  - Call ->tls_dev_del + ->tls_dev_add immediately during
+>    setsockopt(TLS_RX)
+> 
+> TX
+>  - After setsockopt(TLS_TX), switch to the existing SW path (not the
+>    current device_fallback) until we're able to re-enable HW offload
+>    - tls_device_{sendmsg,sendpage} will call into
+>      tls_sw_{sendmsg,sendpage} under lock_sock to avoid changing
+>      socket ops during the rekey while another thread might be waiting
+>      on the lock
+>  - We only re-enable HW offload (call ->tls_dev_add to install the new
+>    key in HW) once all records sent with the old key have been
+>    ACKed. At this point, all unacked records are SW-encrypted with the
+>    new key, and the old key is unused by both HW and retransmissions.
+>    - If there are no unacked records when userspace does
+>      setsockopt(TLS_TX), we can (try to) install the new key in HW
+>      immediately.
+>    - If yet another key has been provided via setsockopt(TLS_TX), we
+>      don't install intermediate keys, only the latest.
+>    - TCP notifies ktls of ACKs via the icsk_clean_acked callback. In
+>      case of a rekey, tls_icsk_clean_acked will record when all data
+>      sent with the most recent past key has been sent. The next call
+>      to sendmsg/sendpage will install the new key in HW.
+>    - We close and push the current SW record before reenabling
+>      offload.
+> 
+> If ->tls_dev_add fails to install the new key in HW, we stay in SW
+> mode. We can add a counter to keep track of this.
 
-Any device can access devm_ code, there's no need for it to be a
-platform device at all.
+SG!
 
-> The biggest thing for me is that I don't like the idea of creating own 'test
-> device' in <add subsystem here> while we already have some in DRM (or
-> others). Thus, I do see value in adding generic helpers for supporting
-> running KUnit tests on devm_* APIs. Hence it'd be good to have _some_
-> support for it.
+> In addition:
+> 
+> Because we can't change socket ops during a rekey, we'll also have to
+> modify do_tls_setsockopt_conf to check ctx->tx_conf and only call
+> either tls_set_device_offload or tls_set_sw_offload. RX already uses
+> the same ops for both TLS_HW and TLS_SW, so we could switch between HW
+> and SW mode on rekey.
+> 
+> An alternative would be to have a common sendmsg/sendpage which locks
+> the socket and then calls the correct implementation. We'll need that
+> anyway for the offload under rekey case, so that would only add a test
+> to the SW path's ops (compared to the current code). That should allow
+> us to make build_protos a lot simpler.
 
-I agree, let's use a virtual device and a virtual bus (you can use the
-auxbus code for this as that's all there for this type of thing) and
-then you can test the devm_* code, _AND_ you can test the driver core at
-the same time.
-
-> And having them in drivers/base/test seemed like a correct
-> place to me. What I really don't know is if there are legitimate use-cases
-> for using platform_devices in DRM tests. Perhaps Maxime can shed light on
-> that.
-
-I agree that this could be in drivers/base/test/ but then let's test the
-driver core, not just provide a dummy platform device.
-
-If you want to test the platform driver/device api, that would be great
-too, that can be plaform device/driver specific, but don't use one for
-some other random driver core functionality please.
-
-thanks,
-
-greg k-h
+No preference assuming perf is the same.
