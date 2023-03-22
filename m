@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1F56C49DB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 13:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01D06C49E5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 13:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCVMEb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Mar 2023 08:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S229918AbjCVMHi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Mar 2023 08:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjCVMEa (ORCPT
+        with ESMTP id S229727AbjCVMHh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:04:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0FC2C646;
-        Wed, 22 Mar 2023 05:04:29 -0700 (PDT)
+        Wed, 22 Mar 2023 08:07:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8C1199D4;
+        Wed, 22 Mar 2023 05:07:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CA68B81C29;
-        Wed, 22 Mar 2023 12:04:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB29EC433EF;
-        Wed, 22 Mar 2023 12:04:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2EC162066;
+        Wed, 22 Mar 2023 12:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B714AC433D2;
+        Wed, 22 Mar 2023 12:07:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679486667;
-        bh=8BY+CocL+shpE3CRqBHzJbs8TrkWQc6FVacFEoPl5tw=;
+        s=korg; t=1679486856;
+        bh=mEJBZcKnQmCiiCvxN31byXP3FWkhhpXgi2bleto/pZY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EMokyUJpGFQXmYE6VEQMDgoiQJSNhgQDO+rLWEmxMcB38aaDFBwFMA9LE0NpIcUUg
-         p/Yubm1RFX9PgowsfOPS52OdTQN0U6avmtSXhg4/+5ZYXetKDHVy6/IYMu9DEV9JS5
-         ae30MTAudgUGW+xHSjIhtMJeCwwbwxAg4oo7updA=
-Date:   Wed, 22 Mar 2023 13:04:24 +0100
+        b=oVvHbdtIrceHMsNsG1JliX1Imp2jpxAyB/7iKh6TAQO8mXt5KOMRLzmxLzzL10QLR
+         d04cpbbZPQJNxSY4glIF7yKTzHJj0nrruhfXM5nfoLymMbB6IKaxeMmYQbz1ymPSIE
+         f0cZTDrkreVxliUPoQqB0NzaEvaB8MqLF/edGU5U=
+Date:   Wed, 22 Mar 2023 13:07:33 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
@@ -44,15 +44,15 @@ Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
 Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
  creation
-Message-ID: <ZBruyLl8w8+daAoa@kroah.com>
+Message-ID: <ZBrvhfX/NNrJefgt@kroah.com>
 References: <cover.1679474247.git.mazziesaccount@gmail.com>
  <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,24 +63,69 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
 > --- /dev/null
-> +++ b/include/kunit/platform_device.h
-> @@ -0,0 +1,13 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+> +++ b/drivers/base/test/test_kunit_device.c
+> @@ -0,0 +1,83 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * These helpers have been extracted from drm test code at
+> + * drm_kunit_helpers.c which was authored by
+> + * Maxime Ripard <maxime@cerno.tech>
+> + */
 > +
-> +#ifndef __KUNIT_PLATFORM_DEVICE__
-> +#define __KUNIT_PLATFORM_DEVICE__
+> +#include <linux/device.h>
+> +#include <linux/platform_device.h>
 > +
-> +#include <kunit/test.h>
+> +#include <kunit/platform_device.h>
 > +
-> +struct device;
+> +#define KUNIT_DEVICE_NAME	"test-kunit-mock-device"
 > +
-> +struct device *test_kunit_helper_alloc_device(struct kunit *test);
-> +void test_kunit_helper_free_device(struct kunit *test, struct device *dev);
+> +static int fake_probe(struct platform_device *pdev)
 
-Why are you calling this a "platform_device" when it isn't a platform
-device at all?
+Please do not abuse platform devices and drivers for things that are not
+actually platform devices and drivers.
 
-Why not just say "device.h" here?
+> +{
+> +	return 0;
+> +}
+> +
+> +static int fake_remove(struct platform_device *pdev)
+> +{
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver fake_platform_driver = {
+> +	.probe	= fake_probe,
+> +	.remove	= fake_remove,
+> +	.driver = {
+> +		.name	= KUNIT_DEVICE_NAME,
+> +	},
+> +};
+
+Why do you need this fake platform driver at all?
+
+Why not just use a virtual device?
+
+> +
+> +/**
+> + * test_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
+> + * @test: The test context object
+> + *
+> + * This allocates a fake struct &device to create a mock for a KUnit
+> + * test. The device will also be bound to a fake driver. It will thus be
+> + * able to leverage the usual infrastructure and most notably the
+> + * device-managed resources just like a "real" device.
+
+What specific "usual infrastructure" are you wanting to access here?
+
+And again, if you want a fake device, make a virtual one, by just
+calling device_create().
+
+Or are you wanting to do "more" with that device pointer than
+device_create() can give you?
+
+Again, please do not abuse the platform device infrastructure for things
+it was never ment to do (i.e. create fake devices that are not really a
+platform device.)
 
 thanks,
 
