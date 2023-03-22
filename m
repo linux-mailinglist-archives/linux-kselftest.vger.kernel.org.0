@@ -2,130 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97836C4AAA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 13:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439486C4C43
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 14:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCVMeX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Mar 2023 08:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
+        id S229767AbjCVNst (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Mar 2023 09:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCVMeW (ORCPT
+        with ESMTP id S230115AbjCVNss (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:34:22 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1FC52F7B;
-        Wed, 22 Mar 2023 05:34:21 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id q23so5166627pfs.2;
-        Wed, 22 Mar 2023 05:34:21 -0700 (PDT)
+        Wed, 22 Mar 2023 09:48:48 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6ED5A6E7;
+        Wed, 22 Mar 2023 06:48:13 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id q16so12660452lfe.10;
+        Wed, 22 Mar 2023 06:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679488461;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i5V9xwXeXLLD+KrCDhZHNlARjVnQzbrA2drRGNTtvTM=;
-        b=CDVrPbquHqM6HszFxuFUX2B3vFLX7cGGnLlzfIXA9zqINFHXAUX5B+u28t/1ETgD5R
-         3vSi6wpz1ys/mGkAntVqxg1ARpmJv+WgcckV7eE0GHqspgLihaH0YU4Xgy/v4hD4ZslS
-         Baa7r/FR4OlY7SXjweixs0l2H6uf3IKdKOnYctTpB65NUohQ+7qRHMoBqzQqzxYuo0pJ
-         5BHh8jE+OszzoW7tR9gseN4sJG6ia4Co/um2Lg4SzHGF3HMm2LVlzQpOY6mpGG6leV8N
-         l13+6azf0a2F2vwpZCO9TkY5LA1uMuvzs3NhP4rhyk5xAxbAj0mAEj/oex9MEq3cKtms
-         QNAw==
+        d=gmail.com; s=20210112; t=1679492892;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=92oTNP+sKoipbZFz7skaTllICxMbhqwCfT6iOU7a8rc=;
+        b=cCPyYH9pJ1b9o0ofAqIlqifdD12pUu1NQwYP9kb8lXRzfL4HmGVqyGma3L5K3RXifB
+         inMJCpIgXEXhLtUjonU+VlUmg4st6QF7DI2JB5dw0urxuQiL8g+O6GWrtDt88+ZSgGXo
+         Pnbd03wYUq1i3wpe4uA8IwDnHdMpoimsBnAbV+DgFkoVGfnz05X+m81o0Ghab6d/sd9r
+         z70Fg6v5MTR4WCX7JEhpzzLlKZo40T2ebswSQSC7BY2O3SvljC6N5qRbmZhpifbCaZik
+         y/7pETxnAeXnqqKeLUL/TAaMESuQmzmci8xgkQ99u44b9EwFabcI/Sr2xsq5d60uQLbg
+         zi6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679488461;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i5V9xwXeXLLD+KrCDhZHNlARjVnQzbrA2drRGNTtvTM=;
-        b=eQUEuHVsUbAix8ECTQ4KT+LqkSa9CzNYxlqW+Eu1gW0bE/Tlwu14NXu38kIHhDzQ1S
-         5OUluSyy652E+HdLm7WfdBvu+JW6wGkCQAZJDnN24ZnFgemppOST6adbHgj1KqbjwRhu
-         mmPWWjzcSyU4r9zQBk92JHu++S4lC9bKTgvtqCzfIk8Mplf9unp2HHOGdeQ7CDavNtV8
-         qZTNoSmjTG/VHrDjBQfH40IcUhPRlxUeh6BLJycD4LgCnZgRdrX0GVeIb4eQf2yxtog7
-         oV86vX1PCOmugGwJWhhgJbwKpGax9XetwVCmjNAs97H9dJLV5Gw7BEE7WSqVOU1sJxtr
-         Pf9g==
-X-Gm-Message-State: AO0yUKVaPPZ4TEZHU+kxJube2G7wpXr534eaJyHPPiE6j5FMJ68YpXam
-        bHl7I+RtWsz3PnnZNQQ5WV4=
-X-Google-Smtp-Source: AK7set+SjG5SfufUMJ0PRkkAShlqktMKpQsqeCGtZJxdP7AhsNBXop2LwGx6eAvpMjdX7Qk4ANsA+w==
-X-Received: by 2002:a62:2581:0:b0:622:ec07:c6bc with SMTP id l123-20020a622581000000b00622ec07c6bcmr2946097pfl.15.1679488460857;
-        Wed, 22 Mar 2023 05:34:20 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-12.three.co.id. [180.214.232.12])
-        by smtp.gmail.com with ESMTPSA id b11-20020aa7870b000000b005ac419804d5sm1038423pfo.98.2023.03.22.05.34.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 05:34:20 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id D6A611065AA; Wed, 22 Mar 2023 19:34:16 +0700 (WIB)
-Date:   Wed, 22 Mar 2023 19:34:16 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        dsahern@kernel.org, shuah@kernel.org, brauner@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, ebiederm@xmission.com,
-        mcgrof@kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH 5/5] doc: Add documentation for the User Mode Driver
- management library
-Message-ID: <ZBr1yGQtNIXsgRYS@debian.me>
-References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
- <20230317145240.363908-6-roberto.sassu@huaweicloud.com>
+        d=1e100.net; s=20210112; t=1679492892;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=92oTNP+sKoipbZFz7skaTllICxMbhqwCfT6iOU7a8rc=;
+        b=zy2I2LqdzUkhdlUwX60ps+LLV9IAjPIegu7w1IzejxDTTm6hBtmWq38bphx5ibvBGp
+         HXDhAelkLyQvOt/uOqy4qDXjYU8LfCxGVpjrCr7dO9tXchduji1Rj1uUFJdp3ZwM166Z
+         cJfdd0wd+dnC6pJ5ZCK13LRJp3UbKMEx5lu0D1txU9wJayIOUMqEIMEVkhseuV9I/Lc3
+         PqqwauMHf2pVpy+jK0/sUqBQo3UyLr9dScNVaz/PDUODGuNF9pKNUh9QWpycGa0/jjpb
+         jkWunttGtq2iMj1s2sfTGq1gFRlwkqjqmyt7G6lrbjw8AV+mxGRXgK3CASuwCuSFUsBb
+         9TSw==
+X-Gm-Message-State: AO0yUKXZFICd/vlrrHK8V7kQjZkfcsb+juKBm2QP45Qt8TmPKkGUYCrv
+        9lOoQHqFu7ru0RNPOnBbsTo=
+X-Google-Smtp-Source: AK7set/DsbRSjiFXY1QVWeKBJ5mRkh2cXJeChEojpUx0NG2pipiDPmSEh3CZhu7PWl8H4ITE4/x62Q==
+X-Received: by 2002:a19:c206:0:b0:4e8:3f1f:3646 with SMTP id l6-20020a19c206000000b004e83f1f3646mr1898313lfc.55.1679492891602;
+        Wed, 22 Mar 2023 06:48:11 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id t18-20020ac25492000000b004d58bf6a61asm2545811lfk.230.2023.03.22.06.48.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Mar 2023 06:48:11 -0700 (PDT)
+Message-ID: <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+Date:   Wed, 22 Mar 2023 15:48:00 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="n/OawJ+UwZzJM60M"
-Content-Disposition: inline
-In-Reply-To: <20230317145240.363908-6-roberto.sassu@huaweicloud.com>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+In-Reply-To: <ZBrvhfX/NNrJefgt@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi Greg,
 
---n/OawJ+UwZzJM60M
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for looking at this.
 
-On Fri, Mar 17, 2023 at 03:52:40PM +0100, Roberto Sassu wrote:
-> +The `UMD Manager` is the frontend interface to any user or
-> +kernel-originated request. It invokes the `UMD Loader` to start the
-> +`UMD Handler`, and communicates with the latter to satisfy the request.
-> +
-> +The `UMD Loader` is merely responsible to extract the `user binary` from
-> +the kernel module, copy it to a tmpfs filesystem, fork the current proce=
-ss,
-> +start the `UMD Handler`, and create a pipe for the communication between
-> +the `UMD Manager` and the `UMD Handler`.
-> +
-> +The `UMD Handler` reads requests from the `UMD Manager`, processes them
-> +internally, and sends the response to it.
+On 3/22/23 14:07, Greg Kroah-Hartman wrote:
+> On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
+>> --- /dev/null
+>> +++ b/drivers/base/test/test_kunit_device.c
+>> @@ -0,0 +1,83 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * These helpers have been extracted from drm test code at
+>> + * drm_kunit_helpers.c which was authored by
+>> + * Maxime Ripard <maxime@cerno.tech>
+>> + */
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +#include <kunit/platform_device.h>
+>> +
+>> +#define KUNIT_DEVICE_NAME	"test-kunit-mock-device"
+>> +
+>> +static int fake_probe(struct platform_device *pdev)
+> 
+> Please do not abuse platform devices and drivers for things that are not
+> actually platform devices and drivers.
+> 
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static int fake_remove(struct platform_device *pdev)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static struct platform_driver fake_platform_driver = {
+>> +	.probe	= fake_probe,
+>> +	.remove	= fake_remove,
+>> +	.driver = {
+>> +		.name	= KUNIT_DEVICE_NAME,
+>> +	},
+>> +};
+> 
+> Why do you need this fake platform driver at all?
+> 
+> Why not just use a virtual device?
 
-I think you can write out the full forms (UMD manager, UMD loader, and
-UMD handler) once and for subsequent mentions of these, UMD can be
-omitted, since the manager/loader/handler will obviously refers to the
-UMD one.
+I can only answer on my behalf. In my case the answer to why I used 
+platform_devices is practicality. I wanted to test devm_ APIs using 
+KUnit tests and I was pointed to an existing implementation in DRM (seen 
+in these patches). It didn't seem to make any sense to re-invent the 
+wheel by writing another implementation for the existing in-tree 
+functionality.
 
-Otherwise LGTM, thanks!
+Maybe Maxime had a better reason to go with the platform devices.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>> +/**
+>> + * test_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
+>> + * @test: The test context object
+>> + *
+>> + * This allocates a fake struct &device to create a mock for a KUnit
+>> + * test. The device will also be bound to a fake driver. It will thus be
+>> + * able to leverage the usual infrastructure and most notably the
+>> + * device-managed resources just like a "real" device.
+> 
+> What specific "usual infrastructure" are you wanting to access here?
+> 
+> And again, if you want a fake device, make a virtual one, by just
+> calling device_create().
+> 
+> Or are you wanting to do "more" with that device pointer than
+> device_create() can give you?
 
---=20
-An old man doll... just what I always wanted! - Clara
+Personally, I was (am) only interested in devm_ unwinding. I guess the
+device_create(), device_add(), device_remove()... (didn't study this 
+sequence in details so sorry if there is errors) could've been 
+sufficient for me. I haven't looked how much of the code that there is 
+for 'platform devices' should be duplicated to support that sequence for 
+testability purposes.
 
---n/OawJ+UwZzJM60M
-Content-Type: application/pgp-signature; name="signature.asc"
+The biggest thing for me is that I don't like the idea of creating own 
+'test device' in <add subsystem here> while we already have some in DRM 
+(or others). Thus, I do see value in adding generic helpers for 
+supporting running KUnit tests on devm_* APIs. Hence it'd be good to 
+have _some_ support for it. And having them in drivers/base/test seemed 
+like a correct place to me. What I really don't know is if there are 
+legitimate use-cases for using platform_devices in DRM tests. Perhaps 
+Maxime can shed light on that.
 
------BEGIN PGP SIGNATURE-----
+Yours,
+	-- Matti
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBr1wwAKCRD2uYlJVVFO
-o2XjAP98cKjwFVj5tKztgFgnpo2hMzFfJttUJXQOZJllxh9/PAEAziMVaUg2INAl
-TElZ2NEmhAMWDKyYC7XmwIioKYn8HAI=
-=kqxF
------END PGP SIGNATURE-----
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
---n/OawJ+UwZzJM60M--
+~~ When things go utterly wrong vim users can always type :help! ~~
+
