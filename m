@@ -2,104 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4876C57FC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 21:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D22CB6C5968
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 23:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjCVUoo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Mar 2023 16:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        id S229645AbjCVW1t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Mar 2023 18:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjCVUo1 (ORCPT
+        with ESMTP id S229487AbjCVW1s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Mar 2023 16:44:27 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50DB3E1E2;
-        Wed, 22 Mar 2023 13:37:31 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id ew6so15090399edb.7;
-        Wed, 22 Mar 2023 13:37:31 -0700 (PDT)
+        Wed, 22 Mar 2023 18:27:48 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAFC23A50;
+        Wed, 22 Mar 2023 15:27:46 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b20so46137863edd.1;
+        Wed, 22 Mar 2023 15:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679517450;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=17Wjze2y6t8a4zjcKa53kmqOgCJMw9ntTYn+G4muZxo=;
-        b=GUepQa4FzpVnJdj3SwadimZqcabtTzoGmqFjHse67Uu4gkiGslqm6j9V07lBXolcOw
-         r4qeHpPt5iGDTtqcul1BUlmiefkYFe/dxTn86OG3OIwWpfwxIfaQ33DwBXXT7dAMgwIB
-         IpFOTnS8OofaLs15P51FTOSfr8QY9h3t6AAGjlOLh3FuZQmKqvuN5y4xNiVmFM2jLpdJ
-         gVpQqIp43nAwNYTVz8BMmLKFUo6Xku8y3WQIlVOVYGVRweI/aUXPHIzTwogs+v0ogPnl
-         Y+rQVDJ8dpScuVUIII53iUNnxyEkw9N2bG2DbC0nghJH8p8RD6SAT57hpC3AoZSpgFfM
-         mDUw==
+        d=gmail.com; s=20210112; t=1679524065;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e/Wjm0b8Ik7+X2MQf3m3hky1zdDJvNFJ4agRqoB9mA0=;
+        b=JQUJQb9gDALwd6Y7wgUsxJSfzD42gRcFCBl+E45QH5FnfzpRHlivPXbtU6vl/Go/yc
+         z/o6VwbUuEs2rsAmGDsfIRwoKU+G5hvXOOKpjvk8mm9iCZFfAHNkwtfyM+9CuOZ8ZYV1
+         z2ef2J+von7Wvbkr+dMh4qaRJmRq6pXhDiFs/Dyol8PVYRTOR86kWd1gtPPFAfo/JkPd
+         2ug/1DAdmXCXrcsot3W+oG9URJn506AB14fh6d557cKSfBI2lrpeL1CcmC2fuNKhbBcO
+         xkcCKNHzFsfSFqsudAw2cKVs5sNkhqp+gLSQhsmdQXfA7NnfZCPXZ+DZeia6spYkSrFV
+         OKUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679517450;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=17Wjze2y6t8a4zjcKa53kmqOgCJMw9ntTYn+G4muZxo=;
-        b=SXyIfRFrEvEwHkdf/ilhzB0PlUu5FFhY17GhOieekNkGOpiZdqCnIcYS3Cu+cQdzPA
-         7Wr7rWBd4Fii7QZ+ETtTsJka0SsPSWU4a7L4/qm93WTHaWB8aYkEJSe0lfDWmba4o57H
-         Kkh2GaIBGhgoS4N/xpWa1k/W74i3lO2JtL7rQowgi3QlV/En8JMUwOYkx+vpMWclkMxc
-         18miwzGYTvrmVF3dCsB4SYPxii1hoo+3l9hcN38WHsumA64Bx73ilptWOwFLPvGXl7Pq
-         M8ZxpCgHfBfSo5AMXTQCT/KWdH+5azAMJcnuawlSRj7o8KJEv9h9MYfJi52qaDbhpMe+
-         G6vw==
-X-Gm-Message-State: AAQBX9dPjMzWBiY6YrA1e87HoCmesOL+Qwiu9XAeQ319zPPde3RFG5P8
-        rO2It8uZ5LM7+Et9vhmD+Vw=
-X-Google-Smtp-Source: AK7set/OL6xIAJnNOtJzYybsbaA8EkueTTd9ranGekne3VZDLQzuxhHshbuJ98MDBcimsyp0ApUgsA==
-X-Received: by 2002:a05:6402:268e:b0:502:465:28d4 with SMTP id w14-20020a056402268e00b00502046528d4mr563537edd.1.1679517450319;
-        Wed, 22 Mar 2023 13:37:30 -0700 (PDT)
-Received: from ivan-HLYL-WXX9.. ([37.252.81.68])
-        by smtp.gmail.com with ESMTPSA id qh7-20020a170906eca700b0092bea699124sm7671936ejb.106.2023.03.22.13.37.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 13:37:30 -0700 (PDT)
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-To:     shuah@kernel.org
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        himadrispandya@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH] selftests: sched: Add more core schedule prctl calls
-Date:   Thu, 23 Mar 2023 00:37:24 +0400
-Message-Id: <20230322203724.4757-1-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20210112; t=1679524065;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e/Wjm0b8Ik7+X2MQf3m3hky1zdDJvNFJ4agRqoB9mA0=;
+        b=aBNdNFfRGByk9hTTMREUP1rj0JCdMvFjiJ77nwlv+VhpNxG7zk0nTtwAtq5lUMnkI3
+         Oyh6o3gj58CPpDJtm27C4NAdWRSRgzqCHbKc1GsE3CpN37MpLrs2uhYqjo2vX7xGdeT0
+         Fi6ZzEpeVlhb/wUt7vTYonnZs0V++GQQ0GeEW8rUxryBLeNlje7zbBQHA+eL7Rggt0Uw
+         ldKaXxtsW++f20lzAfe77kU2z2hHcWIEkRiJGrH6Q3sHYmFdQ6vMmokpR1PnmGcfGbOo
+         k+E3/q0KrbVFLByubSzuVoUbaOFOsHiU2uoVpcXR9cmsT1JdrJlqiKPWS2DKhwkjEcwp
+         PPQw==
+X-Gm-Message-State: AO0yUKVcHMeYqM9Z2WcB3KsJIjrIt//U1jAv7TZQ8luZm/ckRRAT6QmB
+        Plc7fHxZYz/7BUBTuS/OplYvII7MIzM/GP9kzS4=
+X-Google-Smtp-Source: AK7set8gUyy1sCqRru6eNQSGWAYy+Eqil0jvDXyYXA+sgAPfrL/BhDbBOzzjpcL26JACm1NBn4cQczKuSSkzdJN/AzA=
+X-Received: by 2002:a50:c3cf:0:b0:4fb:2593:846 with SMTP id
+ i15-20020a50c3cf000000b004fb25930846mr4193269edf.3.1679524064488; Wed, 22 Mar
+ 2023 15:27:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
+ <CAADnVQLKONwKwkJMopRq-dzcV2ZejrjGzyuzW_5QX=0BY=Z4jw@mail.gmail.com> <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
+In-Reply-To: <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 22 Mar 2023 15:27:33 -0700
+Message-ID: <CAADnVQJC0h7rtuntt0tqS5BbxWsmyWs3ZSbboZMmUKetMG2VhA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] usermode_driver: Add management library and API
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The core sched kselftest makes prctl calls only with correct
-parameters. This patch will extend this test with more core
-schedule prctl calls with wrong parameters to increase code
-coverage.
+On Wed, Mar 22, 2023 at 5:08=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> On Tue, 2023-03-21 at 19:23 -0700, Alexei Starovoitov wrote:
+> > On Fri, Mar 17, 2023 at 7:53=E2=80=AFAM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > >
+> > > A User Mode Driver (UMD) is a specialization of a User Mode Helper (U=
+MH),
+> > > which runs a user space process from a binary blob, and creates a
+> > > bidirectional pipe, so that the kernel can make a request to that pro=
+cess,
+> > > and the latter provides its response. It is currently used by bpfilte=
+r,
+> > > although it does not seem to do any useful work.
+> >
+> > FYI the new home for bpfilter is here:
+> > https://github.com/facebook/bpfilter
+>
+> Thanks. I just ensured that it worked, by doing:
+>
+> getsockopt(fd, SOL_IP, IPT_SO_GET_INFO, &info, &optlen);
+>
+> and accepting IPT_SO_GET_INFO in main.c.
+>
+> > > The problem is, if other users would like to implement a UMD similar =
+to
+> > > bpfilter, they would have to duplicate the code. Instead, make an UMD
+> > > management library and API from the existing bpfilter and sockopt cod=
+e,
+> > > and move it to common kernel code.
+> > >
+> > > Also, define the software architecture and the main components of the
+> > > library: the UMD Manager, running in the kernel, acting as the fronte=
+nd
+> > > interface to any user or kernel-originated request; the UMD Loader, a=
+lso
+> > > running in the kernel, responsible to load the UMD Handler; the UMD
+> > > Handler, running in user space, responsible to handle requests from t=
+he UMD
+> > > Manager and to send to it the response.
+> >
+> > That doesn't look like a generic interface for UMD.
+>
+> What would make it more generic? I made the API message format-
+> independent. It has the capability of starting the user space process
+> as required, when there is a communication.
+>
+> > It was a quick hack to get bpfilter off the ground, but certainly
+> > not a generic one.
+>
+> True, it is not generic in the sense that it can accomodate any
+> possible use case. The main goal is to move something that was running
+> in the kernel to user space, with the same isolation guarantees as if
+> the code was executed in the kernel.
 
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- tools/testing/selftests/sched/cs_prctl_test.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+They are not the same guarantees.
+UMD is exactly equivalent to root process running in user space.
+Meaning it can be killed, ptraced, priority inverted, etc
 
-diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-index 25e0d95d3713..df8e4629b3b5 100644
---- a/tools/testing/selftests/sched/cs_prctl_test.c
-+++ b/tools/testing/selftests/sched/cs_prctl_test.c
-@@ -334,6 +334,14 @@ int main(int argc, char *argv[])
- 	validate(get_cs_cookie(pid) != 0);
- 	validate(get_cs_cookie(pid) == get_cs_cookie(procs[pidx].thr_tids[0]));
- 
-+	printf("\n## Try to pass wrong subcommand PR_SCHED_CORE_MAX = %d to prctl (shouldn't succeed)\n", PR_SCHED_CORE_MAX);
-+	validate(_prctl(PR_SCHED_CORE, PR_SCHED_CORE_MAX, 0, PIDTYPE_PGID, 0) < 0
-+		&& errno == EINVAL);
-+
-+	printf("\n## Try to pass not-null uaddr with forbidden command (shouldn't succeed)\n");
-+	validate(_prctl(PR_SCHED_CORE, PR_SCHED_CORE_SHARE_TO, 0, PIDTYPE_PGID, 1) < 0
-+		&& errno == EINVAL);
-+
- 	if (errors) {
- 		printf("TESTS FAILED. errors: %d\n", errors);
- 		res = 10;
--- 
-2.34.1
+> > > I have two use cases, but for sake of brevity I will propose one.
+> > >
+> > > I would like to add support for PGP keys and signatures in the kernel=
+, so
+> > > that I can extend secure boot to applications, and allow/deny code
+> > > execution based on the signed file digests included in RPM headers.
+> > >
+> > > While I proposed a patch set a while ago (based on a previous work of=
+ David
+> > > Howells), the main objection was that the PGP packet parser should no=
+t run
+> > > in the kernel.
+> > >
+> > > That makes a perfect example for using a UMD. If the PGP parser is mo=
+ved to
+> > > user space (UMD Handler), and the kernel (UMD Manager) just instantia=
+tes
+> > > the key and verifies the signature on already parsed data, this would
+> > > address the concern.
+> >
+> > I don't think PGP parser belongs to UMD either.
+> > Please do it as a normal user space process and define a proper
+> > protocol for communication between kernel and user space.
+>
+> UMD is better in the sense that it establishes a bidirectional pipe
+> between the kernel and the user space process. With that, there is no
+> need to further restrict the access to a sysfs file, for example.
 
+If a simple pipe is good enough then you can have a kernel module
+that creates it and interacts with the user space process.
+Out-of-tree bpftiler can do that, so can you.
+PGP is not suitable for kernel git repo either as kernel code or as UMD.
