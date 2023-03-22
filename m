@@ -2,170 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B616C49E8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 13:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 844346C49EE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 13:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjCVMIW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Mar 2023 08:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S229823AbjCVMIy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Mar 2023 08:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCVMIV (ORCPT
+        with ESMTP id S229861AbjCVMIx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Mar 2023 08:08:21 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A077CEB71;
-        Wed, 22 Mar 2023 05:08:19 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PhRpY0Y3Fz9v7Nc;
-        Wed, 22 Mar 2023 19:59:17 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBn6QSL7xpkVHG9AQ--.51830S2;
-        Wed, 22 Mar 2023 13:07:54 +0100 (CET)
-Message-ID: <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
-Subject: Re: [PATCH 0/5] usermode_driver: Add management library and API
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 22 Mar 2023 13:07:37 +0100
-In-Reply-To: <CAADnVQLKONwKwkJMopRq-dzcV2ZejrjGzyuzW_5QX=0BY=Z4jw@mail.gmail.com>
-References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
-         <CAADnVQLKONwKwkJMopRq-dzcV2ZejrjGzyuzW_5QX=0BY=Z4jw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 22 Mar 2023 08:08:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0CE1B565;
+        Wed, 22 Mar 2023 05:08:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EA89B81C6C;
+        Wed, 22 Mar 2023 12:08:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A569DC433D2;
+        Wed, 22 Mar 2023 12:08:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679486930;
+        bh=sJgqKtzzq3ORWa9DfGXW323DtqlfE2Drg0E8BukAMlg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eLjSCToO82eR1amnA3qQHvVMdhrGc2jiFxdfFo85O9HqsaVg5qqg24nywG8tW1PfS
+         iEENAPBQ+K2SzSX6DQRAnhJzUB1m7n5y6N5JFz1mO/2kLffrVgOD5nXpaTkDK1ZbTD
+         zos8rNaRYxgUf8Hlts4Ik9t//juUasJLBG9s3xEY=
+Date:   Wed, 22 Mar 2023 13:08:47 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <ZBrvzypQoNu7SD27@kroah.com>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBn6QSL7xpkVHG9AQ--.51830S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF47uw1rWFyrGFWUZw4DXFb_yoWrGF18pF
-        4YkFW7K3WkJF17Crn7Zw48Ca4I9397J3y3Grn3try5Zwn0kFySkr1IvF13uF1DGr4fKw1a
-        qrW5X34jg34DZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4bRvQACsb
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2023-03-21 at 19:23 -0700, Alexei Starovoitov wrote:
-> On Fri, Mar 17, 2023 at 7:53 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > A User Mode Driver (UMD) is a specialization of a User Mode Helper (UMH),
-> > which runs a user space process from a binary blob, and creates a
-> > bidirectional pipe, so that the kernel can make a request to that process,
-> > and the latter provides its response. It is currently used by bpfilter,
-> > although it does not seem to do any useful work.
+On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
+> The creation of a dummy device in order to test managed interfaces is a
+> generally useful test feature. The drm test helpers
+> drm_kunit_helper_alloc_device() and drm_kunit_helper_free_device()
+> are doing exactly this. It makes no sense that each and every component
+> which intends to be testing managed interfaces will create similar
+> helpers so stole these for more generic use.
 > 
-> FYI the new home for bpfilter is here:
-> https://github.com/facebook/bpfilter
-
-Thanks. I just ensured that it worked, by doing:
-
-getsockopt(fd, SOL_IP, IPT_SO_GET_INFO, &info, &optlen);
-
-and accepting IPT_SO_GET_INFO in main.c.
-
-> > The problem is, if other users would like to implement a UMD similar to
-> > bpfilter, they would have to duplicate the code. Instead, make an UMD
-> > management library and API from the existing bpfilter and sockopt code,
-> > and move it to common kernel code.
-> > 
-> > Also, define the software architecture and the main components of the
-> > library: the UMD Manager, running in the kernel, acting as the frontend
-> > interface to any user or kernel-originated request; the UMD Loader, also
-> > running in the kernel, responsible to load the UMD Handler; the UMD
-> > Handler, running in user space, responsible to handle requests from the UMD
-> > Manager and to send to it the response.
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 > 
-> That doesn't look like a generic interface for UMD.
-
-What would make it more generic? I made the API message format-
-independent. It has the capability of starting the user space process
-as required, when there is a communication.
-
-> It was a quick hack to get bpfilter off the ground, but certainly
-> not a generic one.
-
-True, it is not generic in the sense that it can accomodate any
-possible use case. The main goal is to move something that was running
-in the kernel to user space, with the same isolation guarantees as if
-the code was executed in the kernel.
-
-> > I have two use cases, but for sake of brevity I will propose one.
-> > 
-> > I would like to add support for PGP keys and signatures in the kernel, so
-> > that I can extend secure boot to applications, and allow/deny code
-> > execution based on the signed file digests included in RPM headers.
-> > 
-> > While I proposed a patch set a while ago (based on a previous work of David
-> > Howells), the main objection was that the PGP packet parser should not run
-> > in the kernel.
-> > 
-> > That makes a perfect example for using a UMD. If the PGP parser is moved to
-> > user space (UMD Handler), and the kernel (UMD Manager) just instantiates
-> > the key and verifies the signature on already parsed data, this would
-> > address the concern.
+> ---
+> Changes:
+> v4 => v5:
+> - Add accidentally dropped header and email recipients
+> - do not rename + move helpers from DRM but add temporary dublicates to
+>   simplify merging. (This patch does not touch DRM and can be merged
+>   separately. DRM patch and IIO test patch still depend on this one).
 > 
-> I don't think PGP parser belongs to UMD either.
-> Please do it as a normal user space process and define a proper
-> protocol for communication between kernel and user space.
+> Please note that there's something similar ongoing in the CCF:
+> https://lore.kernel.org/all/20230302013822.1808711-1-sboyd@kernel.org/
+> 
+> I do like the simplicity of these DRM-originated helpers so I think
+> they're worth. I do equally like the Stephen's idea of having the
+> "dummy platform device" related helpers under drivers/base and the
+> header being in include/kunit/platform_device.h which is similar to real
+> platform device under include/linux/platform_device.h
+> ---
+>  drivers/base/test/Kconfig             |  5 ++
+>  drivers/base/test/Makefile            |  2 +
+>  drivers/base/test/test_kunit_device.c | 83 +++++++++++++++++++++++++++
 
-UMD is better in the sense that it establishes a bidirectional pipe
-between the kernel and the user space process. With that, there is no
-need to further restrict the access to a sysfs file, for example.
+By putting files in this directory, you are asking me to maintain this
+code, and right now, I can't agree with that, sorry.  See my review
+comments on it for why.
 
-The UMD mechanism is much more effective: the pipe is already
-established with the right process, whose code was integrity-checked
-because embedded in the kernel module.
+thanks,
 
-In addition to that, I'm using seccomp to further restrict what the
-user space process can do (read, write, exit, ...). That process cannot
-open new communication channels, even if corrupted. It is expected to
-send to the kernel simple data structures, that the kernel can
-effectively sanitize.
-
-The last step to achieve full isolation would be to deny ptrace/kill on
-the user space process created by the UMD management library so that,
-in lockdown mode, not even root can interfer with that process.
-
-Roberto
-
+greg k-h
