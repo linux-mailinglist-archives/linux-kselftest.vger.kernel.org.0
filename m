@@ -2,94 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15DF6C4590
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 10:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9403B6C459A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 10:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCVJFk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Mar 2023 05:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S229584AbjCVJGM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Mar 2023 05:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVJFj (ORCPT
+        with ESMTP id S229843AbjCVJGJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Mar 2023 05:05:39 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD505ADCD;
-        Wed, 22 Mar 2023 02:05:37 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id g17so22431404lfv.4;
-        Wed, 22 Mar 2023 02:05:37 -0700 (PDT)
+        Wed, 22 Mar 2023 05:06:09 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740595D775;
+        Wed, 22 Mar 2023 02:06:02 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id t14so18124485ljd.5;
+        Wed, 22 Mar 2023 02:06:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679475936;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4HCX+NjuvEDiCam36kuOldECJBLz4oWChtfDZZsztTM=;
-        b=M5X3roTomAEwrvjIC/wm86YgNxOVfLsDvQYMSQ/RBqZf3oh29sZco5fC11isiy03eP
-         kE28E9OFX3UsNNM56Y/L8RznVwQr+AQt72HVpJ0/b22U4AniCzDZWfxpxEAmZ4ptnA7P
-         cPPuMgMYY8XUjc6aW4GX1XZc+ltrnq3ZDrc1XhcEY2Dp1S+tU0F0VS7/7gtXacGYR0Ey
-         yPPQiv6bUF/slNiztpWmG+cpUhkpjYQ63G/AA779Qu6//KuAxGuLk1vQqXAk54uTKFL0
-         PXL3HFlNoOoIFYgWGcqs3teq4JyrGXDsgmLtmwIpj95xHgAcTZcGU6yr8dseaBTCUsfa
-         RT0w==
+        d=gmail.com; s=20210112; t=1679475960;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gq1TQHfWKhCrqGdGRD8hzy5/NcSDrQPMb1arOqhfVgM=;
+        b=qt8Ow0LupAc8J7pqLyfFJvRzn7iL+L0UYEve8dbTMxLjWp+NrG9Q/+fa92tEyVybIB
+         NQ4mqmTD/hfcjje+SsJueuo3QzszpJVuGza0YnuJFHEUiNPU2pYGw+h9vDV5Vc9hYjPc
+         n+NLbxeJ6FcBCGU2E1pq2PEZ/JV50Khep5ds0vYGi9TBcKBxiXGNQh7UiL+k0cIW/a+k
+         nEEBfpwpPCChMIdizBTEakEzmPnqspAI0Zs9GdamcWs4K24ykWU6lUBrd6Wk9bCrJbrI
+         cgj6ksSSCFMgIt2AR3w5DplRN22O768w22aHEiAz9YXrP4YqytMXslwZr3gT6d9J18fp
+         pkyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679475936;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4HCX+NjuvEDiCam36kuOldECJBLz4oWChtfDZZsztTM=;
-        b=UjqyRRivdnRCGZ1DS0nhiUb9kyJEAQ2jC4VhnNLl5fX5VR4IILbSXCdjkICeqtKOl1
-         PJV+n413F6rPDyxpAPEyNAUj3l7OMOUomdIe1Mr3hZZ5oVOERqHi3KKhXG8I9yHRX5/E
-         kXkmWCXdOSNfP29ah8VpYHSZRSHPC19/EXndB/85iHmrSl8lqgiqTUrzqrfdbyPKW0cb
-         Z2QHMQabzcFcxzwg+Iz/QT4MEJ+1oBfpSQai/KbBfO8lELMgQIVH/mr9qnIRm1j1elHV
-         tBkJ16Ru53epzuAYPEyUMUrMOGX6BZ7O/p8mjQIBJLQi7a8sDwfIhtz4GllZzRyi5b5m
-         5z7g==
-X-Gm-Message-State: AO0yUKVBZ/bzufdVk7dxWvgW6pzZRCN9mhP0Qk0EEGCiyuuOBM/0Z/wm
-        dB3rK9WJpjBQZr/KWftmJZw=
-X-Google-Smtp-Source: AK7set+Tz4Zu06sTtrbGwQYxbP29qhTWLqnRysRnIoB6WMQBbr1QC7PqKwUn9ufzNltQZOtVRt37WA==
-X-Received: by 2002:ac2:4145:0:b0:4dc:790c:910b with SMTP id c5-20020ac24145000000b004dc790c910bmr373300lfi.20.1679475935549;
-        Wed, 22 Mar 2023 02:05:35 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679475960;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gq1TQHfWKhCrqGdGRD8hzy5/NcSDrQPMb1arOqhfVgM=;
+        b=T/b4hCFFe3vX4abCYeUm9F5C1e6WoSShBc0Qzw2MpxTEWnZlAyLJpQfBsFbVUsKHH+
+         mjTFpahcKZ/L/9ii7WdwMmrE+VuL0IqURJRgjM5nLxKt/ylplz8E/uSNWAmZfHpaWrwN
+         1ZOa5yrYknrMrTeGP/1TV3OZMcmoiBr/80G1PL6V8B/h4C1I5hdiJhpXRx0uiixipOG2
+         llYMMe0fSXolygXqDVyFsSRSlGhijM7j5xrANPWqJFK8+M5Ouzjvd6D9EpO/sPKwfvRp
+         6Ha4TsEkPjn6sYOe/tp8nUrcGMuxpM4wr91fATkoKOohzS7UeRLLAGvWH8Y6BrUfIbeY
+         XXOw==
+X-Gm-Message-State: AO0yUKUH/ThbURFHf9FiDyuU08/A+LS4M+MmLOFXPBy/19648mV6jC62
+        IcMo29IE6w6QQWTTlScABwE=
+X-Google-Smtp-Source: AK7set8KtyLZHcy7e7+Wd58E7Eu6RdJQ9K322A/O70YDqechrKygXuB/WJWEwLnY4qm7x1+ErAz6Qg==
+X-Received: by 2002:a2e:2408:0:b0:2a0:202c:93a7 with SMTP id k8-20020a2e2408000000b002a0202c93a7mr955036ljk.14.1679475960386;
+        Wed, 22 Mar 2023 02:06:00 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id j3-20020a19f503000000b004d6ebbad989sm2524321lfb.1.2023.03.22.02.05.32
+        by smtp.gmail.com with ESMTPSA id a17-20020a2eb171000000b0029bcfada416sm1927935ljm.138.2023.03.22.02.05.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 02:05:34 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 11:05:23 +0200
+        Wed, 22 Mar 2023 02:05:59 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 11:05:55 +0200
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        devicetree@vger.kernel.org, Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Emma Anholt <emma@anholt.net>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Gow <davidgow@google.com>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Brendan Higgins <brendan.higgins@linux.dev>,
-        David Airlie <airlied@gmail.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 0/8] Support ROHM BU27034 ALS sensor
-Message-ID: <cover.1679474247.git.mazziesaccount@gmail.com>
+        David Gow <davidgow@google.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5aSVe1hd+07V2+BA"
+        protocol="application/pgp-signature"; boundary="PnFkEcwLXzlaHWqn"
 Content-Disposition: inline
+In-Reply-To: <cover.1679474247.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -101,221 +84,181 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---5aSVe1hd+07V2+BA
+--PnFkEcwLXzlaHWqn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Support ROHM BU27034 ALS sensor
+The creation of a dummy device in order to test managed interfaces is a
+generally useful test feature. The drm test helpers
+drm_kunit_helper_alloc_device() and drm_kunit_helper_free_device()
+are doing exactly this. It makes no sense that each and every component
+which intends to be testing managed interfaces will create similar
+helpers so stole these for more generic use.
 
-This series adds support for ROHM BU27034 Ambient Light Sensor.
-
-The BU27034 has configurable gain and measurement (integration) time
-settings. Both of these have inversely proportional relation to the
-sensor's intensity channel scale.
-
-Many users only set the scale, which means that many drivers attempt to
-'guess' the best gain+time combination to meet the scale. Usually this
-is the biggest integration time which allows setting the requested
-scale. Typically, increasing the integration time has better accuracy
-than increasing the gain, which often amplifies the noise as well as the
-real signal.
-
-However, there may be cases where more responsive sensors are needed.
-So, in some cases the longest integration times may not be what the user
-prefers. The driver has no way of knowing this.
-
-Hence, the approach taken by this series is to allow user to set both
-the scale and the integration time with following logic:
-
-1. When scale is set, the existing integration time is tried to be
-   maintained as a first priority.
-   1a) If the requested scale can't be met by current time, then also
-       other time + gain combinations are searched. If scale can be met
-       by some other integration time, then the new time may be applied.
-       If the time setting is common for all channels, then also other
-       channels must be able to maintain their scale with this new time
-       (by changing their gain). The new times are scanned in the order
-       of preference (typically the longest times first).
-   1b) If the requested scale can be met using current time, then only
-       the gain for the channel is changed.
-
-2. When the integration time change - scale is tried to be maintained.
-   When integration time change is requested also gain for all impacted
-   channels is adjusted so that the scale is not changed, or is chaned
-   as little as possible. This is different from the RFCv1 where the
-   request was rejected if suitable gain couldn't be found for some
-   channel(s).
-
-This logic is simple. When total gain (either caused by time or hw-gain)
-is doubled, the scale gets halved. Also, the supported times are given a
-'multiplier' value which tells how much they increase the total gain.
-
-However, when I wrote this logic in bu27034 driver, I made quite a few
-errors on the way - and driver got pretty big. As I am writing drivers
-for two other sensors (RGB C/IR + flicker BU27010 and RGB C/IR BU27008)
-with similar gain-time-scale logic I thought that adding common helpers
-for these computations might be wise. I hope this way all the bugs will
-be concentrated in one place and not in every individual driver ;)
-
-Hence, this series also intriduces IIO gain-time-scale helpers
-(abbreviated as gts-helpers) + a couple of KUnit tests for the most
-hairy parts.
-
-Speaking of which - testing the devm interfaces requires a 'dummy
-device'. There were neat helpers in DRM tests for creating and freeing
-such a device. This series moves those helpers to more generic location.
-What is worth noting is that there is something similar ongoing in the
-CCF territory:
-https://lore.kernel.org/all/20230302013822.1808711-1-sboyd@kernel.org/
-These efforts should be somehow coordinated in order to avoid any avoid
-conflicts.
-
-Finally, these added helpers do provide some value also for drivers
-which only:
- a) allow gain change
-  or
- b) allow changing both the time and gain while trying to maintain the
-    scale.
-
-For a) we provide the gain - selector (register value) table format +
-selector to gain look-ups, gain <-> scale conversions and the available
-scales helpers.
-
-For latter case we also provide the time-tables, and actually all the
-APIs should be usable by setting the time multiplier to 1. (not testeted
-thoroughly though).
-
-The patch 1/8 introduces the helpers for creating/dropping a test device
-for devm-tests. It can be applied alone.
-
-The patches 2/8 (convert DRM tests to use new helper) depends on patch
-1/8 but is othervice not part of this series. It can be applied to DRM
-tree after the dependency to 1/8 is handled.
-
-The patch 5/8 (IIO GTS tests) also depends on the patch 1/8 (and also
-other patches in the series).
-
-Rest of the series should be Ok to be applied with/without the patches
-1/8, 2/8, 5/8 - although the 5/8 would be "nice to have" together with
-the rest of the series for the testability reasons.
-
-Revision history:
-v4 =3D> v5: Mostly fixes to review comments from Andy and Jonathan.
-- more accurate change-log in individual patches
-- copy code from DRM test helper instead of moving it to simplify
-  merging
-- document all exported GTS helpers.
-- inline a few GTS helpers
-- use again Milli lux for the bu27034 with RAW IIO_LIGHT channel and scale
-- Fix bug from added in v4 bu27034 time setting.
-
-v3 =3D> v4: (Still mostly fixes to review comments from Andy and Jonathan)
-- more accurate change-log in individual patches
-- dt-binding and maintainer patches unchanged.
-- dropped unused helpers and converted ones currently used only internally
-  to static.
-- extracted "dummy device" creation helpers from DRM tests.
-- added tests for devm APIs
-- dropped scale for PROCESSED channel in BU27034 and converted mLux
-  values to luxes
-- dropped channel 2 GAIN setting which can't be done due to HW
-  limitations.
-
-v2 =3D> v3: (Mostly fixes to review comments from Andy and Jonathan)
-- dt-binding and maintainer patches unchanged.
-- iio-gts-helper tests: Use namespaces
-- iio-gts-helpers + bu27034 plenty of changes. See more comprehensive
-  changelog in individual patches.
-
-RFCv1 =3D> v2:
-  dt-bindings:
-	- Fix binding file name and id by using comma instead of a hyphen to
-	  separate the vendor and part names.
-  gts-helpers:
-	- fix include guardian
-	- Improve kernel doc for iio_init_iio_gts.
-	- Add iio_gts_scale_to_total_gain
-	- Add iio_gts_total_gain_to_scale
-	- Fix review comments from Jonathan
-	  - add documentation to few functions
-	  - replace 0xffffffffffffffffLLU by U64_MAX
-	  - some styling fixes
-	  - drop unnecessary NULL checks
-	  - order function arguments by  in / out purpose
-	  - drop GAIN_SCALE_ITIME_MS()
-	- Add helpers for available scales and times
-	- Rename to iio-gts-helpers
-  gts-tests:
-	- add tests for available scales/times helpers
-	- adapt to renamed iio-gts-helpers.h header
-  bu27034-driver:
-	- (really) protect read-only registers
-	- fix get and set gain
-	- buffered mode
-	- Protect the whole sequences including meas_en/meas_dis to avoid messing
-	  up the enable / disable order
-	- typofixes / doc improvements
-	- change dropped GAIN_SCALE_ITIME_MS() to GAIN_SCALE_ITIME_US()
-	- use more accurate scale for lux channel (milli lux)
-	- provide available scales / integration times (using helpers).
-	- adapt to renamed iio-gts-helpers.h file
-	- bu27034 - longer lines in Kconfig
-	- Drop bu27034_meas_en and bu27034_meas_dis wrappers.
-	- Change device-name from bu27034-als to bu27034
-  MAINTAINERS:
-	- Add iio-list
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
 ---
+Changes:
+v4 =3D> v5:
+- Add accidentally dropped header and email recipients
+- do not rename + move helpers from DRM but add temporary dublicates to
+  simplify merging. (This patch does not touch DRM and can be merged
+  separately. DRM patch and IIO test patch still depend on this one).
 
-Matti Vaittinen (8):
-  drivers: kunit: Generic helpers for test device creation
-  drm/tests: helpers: Use generic helpers
-  dt-bindings: iio: light: Support ROHM BU27034
-  iio: light: Add gain-time-scale helpers
-  iio: test: test gain-time-scale helpers
-  MAINTAINERS: Add IIO gain-time-scale helpers
-  iio: light: ROHM BU27034 Ambient Light Sensor
-  MAINTAINERS: Add ROHM BU27034
+Please note that there's something similar ongoing in the CCF:
+https://lore.kernel.org/all/20230302013822.1808711-1-sboyd@kernel.org/
 
- .../bindings/iio/light/rohm,bu27034.yaml      |   46 +
- MAINTAINERS                                   |   14 +
- drivers/base/test/Kconfig                     |    5 +
- drivers/base/test/Makefile                    |    2 +
- drivers/base/test/test_kunit_device.c         |   83 +
- drivers/gpu/drm/Kconfig                       |    2 +
- .../gpu/drm/tests/drm_client_modeset_test.c   |    5 +-
- drivers/gpu/drm/tests/drm_kunit_helpers.c     |   69 -
- drivers/gpu/drm/tests/drm_managed_test.c      |    5 +-
- drivers/gpu/drm/tests/drm_modes_test.c        |    5 +-
- drivers/gpu/drm/tests/drm_probe_helper_test.c |    5 +-
- drivers/gpu/drm/vc4/Kconfig                   |    1 +
- drivers/gpu/drm/vc4/tests/vc4_mock.c          |    3 +-
- .../gpu/drm/vc4/tests/vc4_test_pv_muxing.c    |    9 +-
- drivers/iio/Kconfig                           |    3 +
- drivers/iio/Makefile                          |    1 +
- drivers/iio/industrialio-gts-helper.c         | 1064 ++++++++++++
- drivers/iio/light/Kconfig                     |   14 +
- drivers/iio/light/Makefile                    |    1 +
- drivers/iio/light/rohm-bu27034.c              | 1482 +++++++++++++++++
- drivers/iio/test/Kconfig                      |   14 +
- drivers/iio/test/Makefile                     |    1 +
- drivers/iio/test/iio-test-gts.c               |  542 ++++++
- include/drm/drm_kunit_helpers.h               |    7 +-
- include/kunit/platform_device.h               |   13 +
- include/linux/iio/iio-gts-helper.h            |  206 +++
- 26 files changed, 3515 insertions(+), 87 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/iio/light/rohm,bu2703=
-4.yaml
+I do like the simplicity of these DRM-originated helpers so I think
+they're worth. I do equally like the Stephen's idea of having the
+"dummy platform device" related helpers under drivers/base and the
+header being in include/kunit/platform_device.h which is similar to real
+platform device under include/linux/platform_device.h
+---
+ drivers/base/test/Kconfig             |  5 ++
+ drivers/base/test/Makefile            |  2 +
+ drivers/base/test/test_kunit_device.c | 83 +++++++++++++++++++++++++++
+ include/kunit/platform_device.h       | 13 +++++
+ 4 files changed, 103 insertions(+)
  create mode 100644 drivers/base/test/test_kunit_device.c
- create mode 100644 drivers/iio/industrialio-gts-helper.c
- create mode 100644 drivers/iio/light/rohm-bu27034.c
- create mode 100644 drivers/iio/test/iio-test-gts.c
  create mode 100644 include/kunit/platform_device.h
- create mode 100644 include/linux/iio/iio-gts-helper.h
 
-
-base-commit: eeac8ede17557680855031c6f305ece2378af326
+diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+index 610a1ba7a467..642b5b183c10 100644
+--- a/drivers/base/test/Kconfig
++++ b/drivers/base/test/Kconfig
+@@ -1,4 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0
++
++config TEST_KUNIT_DEVICE_HELPERS
++	depends on KUNIT
++	tristate
++
+ config TEST_ASYNC_DRIVER_PROBE
+ 	tristate "Build kernel module to test asynchronous driver probing"
+ 	depends on m
+diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
+index 7f76fee6f989..49926524ec6f 100644
+--- a/drivers/base/test/Makefile
++++ b/drivers/base/test/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+=3D test_async_driver_probe.o
+=20
++obj-$(CONFIG_TEST_KUNIT_DEVICE_HELPERS) +=3D test_kunit_device.o
++
+ obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) +=3D property-entry-test.o
+ CFLAGS_property-entry-test.o +=3D $(DISABLE_STRUCTLEAK_PLUGIN)
+diff --git a/drivers/base/test/test_kunit_device.c b/drivers/base/test/test=
+_kunit_device.c
+new file mode 100644
+index 000000000000..75790e15b85c
+--- /dev/null
++++ b/drivers/base/test/test_kunit_device.c
+@@ -0,0 +1,83 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * These helpers have been extracted from drm test code at
++ * drm_kunit_helpers.c which was authored by
++ * Maxime Ripard <maxime@cerno.tech>
++ */
++
++#include <linux/device.h>
++#include <linux/platform_device.h>
++
++#include <kunit/platform_device.h>
++
++#define KUNIT_DEVICE_NAME	"test-kunit-mock-device"
++
++static int fake_probe(struct platform_device *pdev)
++{
++	return 0;
++}
++
++static int fake_remove(struct platform_device *pdev)
++{
++	return 0;
++}
++
++static struct platform_driver fake_platform_driver =3D {
++	.probe	=3D fake_probe,
++	.remove	=3D fake_remove,
++	.driver =3D {
++		.name	=3D KUNIT_DEVICE_NAME,
++	},
++};
++
++/**
++ * test_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
++ * @test: The test context object
++ *
++ * This allocates a fake struct &device to create a mock for a KUnit
++ * test. The device will also be bound to a fake driver. It will thus be
++ * able to leverage the usual infrastructure and most notably the
++ * device-managed resources just like a "real" device.
++ *
++ * Callers need to make sure test_kunit_helper_free_device() on the
++ * device when done.
++ *
++ * Returns:
++ * A pointer to the new device, or an ERR_PTR() otherwise.
++ */
++struct device *test_kunit_helper_alloc_device(struct kunit *test)
++{
++	struct platform_device *pdev;
++	int ret;
++
++	ret =3D platform_driver_register(&fake_platform_driver);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	pdev =3D platform_device_alloc(KUNIT_DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	return &pdev->dev;
++}
++EXPORT_SYMBOL_GPL(test_kunit_helper_alloc_device);
++
++/**
++ * test_kunit_helper_free_device - Frees a mock device
++ * @test: The test context object
++ * @dev: The device to free
++ *
++ * Frees a device allocated with test_kunit_helper_alloc_device().
++ */
++void test_kunit_helper_free_device(struct kunit *test, struct device *dev)
++{
++	struct platform_device *pdev =3D to_platform_device(dev);
++
++	platform_device_unregister(pdev);
++	platform_driver_unregister(&fake_platform_driver);
++}
++EXPORT_SYMBOL_GPL(test_kunit_helper_free_device);
++
++MODULE_AUTHOR("Matti Vaittinen <mazziesaccount@gmail.com>");
++MODULE_LICENSE("GPL");
+diff --git a/include/kunit/platform_device.h b/include/kunit/platform_devic=
+e.h
+new file mode 100644
+index 000000000000..2a9c7bdd75eb
+--- /dev/null
++++ b/include/kunit/platform_device.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __KUNIT_PLATFORM_DEVICE__
++#define __KUNIT_PLATFORM_DEVICE__
++
++#include <kunit/test.h>
++
++struct device;
++
++struct device *test_kunit_helper_alloc_device(struct kunit *test);
++void test_kunit_helper_free_device(struct kunit *test, struct device *dev);
++
++#endif
 --=20
 2.39.2
 
@@ -332,19 +275,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---5aSVe1hd+07V2+BA
+--PnFkEcwLXzlaHWqn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQaxMwACgkQeFA3/03a
-ocWoVAf9Hpj8DZ50KlFPdCGusUd2U3MpZkQbNYsJubT900uIdDnIkA0U3Rh8BOiu
-tFMC6vyGjRFlp84IJ9r3aaykzdp6TPuXs/XsLemweHx1rDuujltVs6zCGCk6olTS
-+ykog3CcDw3zFb5/BywoDfwZo940tO9BC9VENAyNYCtMVNEdHe6fWWWpMSqxTAnj
-pB30f/rbKwZVQ3ZpFtkw3eTYG04ENbVBNVUHCWvPjDGftlJw9Do13MLZUc1qNxtR
-qWUTsgSi/bOmYl8ws1p67hIA3oBjlAoia58bLvU9M9JXxI9NqGW1QHpoRQRFhVJl
-0EZAtlyzzVlANb3SaL0hb2u8gmt6KQ==
-=CaDv
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQaxPMACgkQeFA3/03a
+ocWP3Qf9G+hEI+GF8Dp3g9kqEFdxDErT6sRacv2WVhpDZfSirkjAfP2l/6uJhJ/9
+E9cGtwhpSQL1Pas1GPd1lrvcQ94H90LTGKfPz3cTtLKUeo8k71AJoiQBP5u28AJm
+1fRIs8yVx/ZXCiIm53HSfnxNXEIX5PSuGL3D+NFCTSgA4jONrfYKxu5h/ek0X9Sv
+C161xouvReo+j9xMmyNVf0muxdyou1iJikTyEXEuX+dDuv3w4ldkKFtUl72Jzyrj
+pO7kPGmGIdzUoNlnQR4O6wLZM7cbLLk4G9eTFlXt5zm5DLIo7TCkLatcyXpWvn61
+8zVqdf1fcILCW1gyKOUboTO4YmTcTA==
+=bmmE
 -----END PGP SIGNATURE-----
 
---5aSVe1hd+07V2+BA--
+--PnFkEcwLXzlaHWqn--
