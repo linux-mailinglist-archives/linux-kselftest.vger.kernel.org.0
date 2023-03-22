@@ -2,94 +2,246 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C26D6C408A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 03:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3406C4475
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Mar 2023 08:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjCVCxl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Mar 2023 22:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
+        id S230022AbjCVHzY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Mar 2023 03:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjCVCxk (ORCPT
+        with ESMTP id S229927AbjCVHzX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Mar 2023 22:53:40 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4714A51CA4
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Mar 2023 19:53:39 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id r7so11719604uaj.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Mar 2023 19:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679453618;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kx/OpxV6VOoLDtUhC9fECZmWcMTho0USpZSQQL+Q51k=;
-        b=daLZBrDc7aBxr4Pb2qto79H9KLnVze3M6lHlbs8qBYPbr7Xvq1Y/qtk1Zcj04wxn2C
-         NXGXkIAiebBOdQAn09EqOr9eSIouvGRxlxKolsg3+iGutpyCdEZtfh36lfUqvEA9/Ipv
-         /HhIPjS9hFr9WHG35YkEpIY9wtoVPVVNQdtXo5F3Oui6KU+KJE+lWhQczT8X+xKp0kEh
-         tLrrmJ29NPtI0/b0HThHyBS5KJdjgGnxMDYv7n2O3yC+2rw7sJ9KNwhijs+gGHQ/oO1E
-         05TVFmjvkdczA++nubjU6a1ngQ0gKVbdSYQav8LSBSGayJCGHwYp0oTDfDDQW2HIeFOK
-         CHfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679453618;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kx/OpxV6VOoLDtUhC9fECZmWcMTho0USpZSQQL+Q51k=;
-        b=vFdFbIinWFbTEdh8N4reDozZsJ3PLxu+MEq6QKzXIPZf5LqsOvgMOp9/Gx3MXtdGFt
-         H2wBibL1t1tLjil8AqscN2ZX3Bh3KPA8MsZR59Ne5eyhqb53UGcUz7f3uKW2kueClPIV
-         e8Y83q+fEwMSMVaO8grl0Lqj6mIX3/fPzzetIDRCw7P2gCkk61XycjYGk+QuYvJ/Jty7
-         BtqfabUqUVFfZf7ksIei9+juEQ2cQKd66zxxlL3Z6FaNhoOLGHvSDEkVChqvMqyyqHgs
-         d8PGFQoGK5JdiTRzq8Uoa3Ie18VZlW0QW9zLtL5AFWH384GMTJTSN+lfrZj4gVkqFcSh
-         3xDQ==
-X-Gm-Message-State: AO0yUKXevCK0+eboR/FLW4634/mIayyXmoYap8mpwDnQf7OJD5KuzIJv
-        as1iULybElJ/vTDw5qDtAgJhIq2iHb+QMTxJQwxOa9HZJr7VdSDbzFuEtg==
-X-Google-Smtp-Source: AK7set9tZiZ39YazK6WtbzwhehVwcqHUfPMgMZ0lFWwuSuyWA0rQRGsz+4yinB712DA+fRYfk2Pp/YO2XWusIcHeEMQ=
-X-Received: by 2002:a1f:aa15:0:b0:432:6b9b:bbd8 with SMTP id
- t21-20020a1faa15000000b004326b9bbbd8mr2607394vke.1.1679453618156; Tue, 21 Mar
- 2023 19:53:38 -0700 (PDT)
+        Wed, 22 Mar 2023 03:55:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5C495BC9D;
+        Wed, 22 Mar 2023 00:55:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D7984B3;
+        Wed, 22 Mar 2023 00:56:05 -0700 (PDT)
+Received: from [10.57.65.162] (unknown [10.57.65.162])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE8C93F766;
+        Wed, 22 Mar 2023 00:55:19 -0700 (PDT)
+Message-ID: <e8352d76-29e4-5e4a-063b-60e279e0b070@arm.com>
+Date:   Wed, 22 Mar 2023 07:55:18 +0000
 MIME-Version: 1.0
-References: <20230321081202.2370275-1-lixiaoyan@google.com>
-In-Reply-To: <20230321081202.2370275-1-lixiaoyan@google.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 21 Mar 2023 19:53:26 -0700
-Message-ID: <CANn89i+S9T9+s+_Gdnkz18d9rkKT6bZsK9DhB86zj4ec1qWzdg@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/2] net-zerocopy: Reduce compound page head access
-To:     Coco Li <lixiaoyan@google.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, netdev@vger.kernel.org,
-        inux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH 3/5] mm: thp: split huge page to any lower order pages.
+Content-Language: en-US
+To:     Zi Yan <ziy@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230321004829.2012847-1-zi.yan@sent.com>
+ <20230321004829.2012847-4-zi.yan@sent.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230321004829.2012847-4-zi.yan@sent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 1:12=E2=80=AFAM Coco Li <lixiaoyan@google.com> wrot=
-e:
->
-> From: Xiaoyan Li <lixiaoyan@google.com>
->
-> When compound pages are enabled, although the mm layer still
-> returns an array of page pointers, a subset (or all) of them
-> may have the same page head since a max 180kb skb can span 2
-> hugepages if it is on the boundary, be a mix of pages and 1 hugepage,
-> or fit completely in a hugepage. Instead of referencing page head
-> on all page pointers, use page length arithmetic to only call page
-> head when referencing a known different page head to avoid touching
-> a cold cacheline.
+Hi,
+
+I'm working to enable large, variable-order folios for anonymous memory (see
+RFC, replete with bugs at [1]). This patch set is going to be very useful to me.
+But I have a few questions that I wonder if you can answer, below? I wonder if
+they might relate to the bugs I'm seeing at [1].
+
+[1] https://lore.kernel.org/linux-mm/20230317105802.2634004-1-ryan.roberts@arm.com/
 
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+
+On 21/03/2023 00:48, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> To split a THP to any lower order pages, we need to reform THPs on
+> subpages at given order and add page refcount based on the new page
+> order. Also we need to reinitialize page_deferred_list after removing
+> the page from the split_queue, otherwise a subsequent split will see
+> list corruption when checking the page_deferred_list again.
+> 
+> It has many uses, like minimizing the number of pages after
+> truncating a huge pagecache page. For anonymous THPs, we can only split
+> them to order-0 like before until we add support for any size anonymous
+> THPs.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  include/linux/huge_mm.h |  10 ++--
+>  mm/huge_memory.c        | 103 +++++++++++++++++++++++++++++-----------
+>  2 files changed, 82 insertions(+), 31 deletions(-)
+> 
+> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> index 20284387b841..32c91e1b59cd 100644
+> --- a/include/linux/huge_mm.h
+> +++ b/include/linux/huge_mm.h
+> @@ -147,10 +147,11 @@ void prep_transhuge_page(struct page *page);
+>  void free_transhuge_page(struct page *page);
+>  
+>  bool can_split_folio(struct folio *folio, int *pextra_pins);
+> -int split_huge_page_to_list(struct page *page, struct list_head *list);
+> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +		unsigned int new_order);
+>  static inline int split_huge_page(struct page *page)
+>  {
+> -	return split_huge_page_to_list(page, NULL);
+> +	return split_huge_page_to_list_to_order(page, NULL, 0);
+>  }
+>  void deferred_split_folio(struct folio *folio);
+>  
+> @@ -297,7 +298,8 @@ can_split_folio(struct folio *folio, int *pextra_pins)
+>  	return false;
+>  }
+>  static inline int
+> -split_huge_page_to_list(struct page *page, struct list_head *list)
+> +split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +		unsigned int new_order)
+>  {
+>  	return 0;
+>  }
+> @@ -397,7 +399,7 @@ static inline bool thp_migration_supported(void)
+>  static inline int split_folio_to_list(struct folio *folio,
+>  		struct list_head *list)
+>  {
+> -	return split_huge_page_to_list(&folio->page, list);
+> +	return split_huge_page_to_list_to_order(&folio->page, list, 0);
+>  }
+>  
+>  static inline int split_folio(struct folio *folio)
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 710189885402..f119b9be33f2 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2359,11 +2359,13 @@ void vma_adjust_trans_huge(struct vm_area_struct *vma,
+>  
+>  static void unmap_folio(struct folio *folio)
+>  {
+> -	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
+> -		TTU_SYNC;
+> +	enum ttu_flags ttu_flags = TTU_RMAP_LOCKED | TTU_SYNC;
+>  
+>  	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>  
+> +	if (folio_order(folio) >= HPAGE_PMD_ORDER)
+> +		ttu_flags |= TTU_SPLIT_HUGE_PMD;
+> +
+
+Why have you changed the code so that this flag is added conditionally on the
+folio being large enough? I've previously looked at this in the context of my
+bug, and concluded that the consumer would ignore the flag if the folio wasn't
+PMD mapped. Did I conclude incorrectly?
+
+
+>  	/*
+>  	 * Anon pages need migration entries to preserve them, but file
+>  	 * pages can simply be left unmapped, then faulted back on demand.
+> @@ -2395,7 +2397,6 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
+>  		struct lruvec *lruvec, struct list_head *list)
+>  {
+>  	VM_BUG_ON_PAGE(!PageHead(head), head);
+> -	VM_BUG_ON_PAGE(PageCompound(tail), head);
+>  	VM_BUG_ON_PAGE(PageLRU(tail), head);
+>  	lockdep_assert_held(&lruvec->lru_lock);
+>  
+> @@ -2416,9 +2417,10 @@ static void lru_add_page_tail(struct page *head, struct page *tail,
+>  }
+>  
+
+[...]
+
+> -int split_huge_page_to_list(struct page *page, struct list_head *list)
+> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +				     unsigned int new_order)
+>  {
+>  	struct folio *folio = page_folio(page);
+>  	struct deferred_split *ds_queue = get_deferred_split_queue(folio);
+> -	XA_STATE(xas, &folio->mapping->i_pages, folio->index);
+> +	/* reset xarray order to new order after split */
+> +	XA_STATE_ORDER(xas, &folio->mapping->i_pages, folio->index, new_order);
+>  	struct anon_vma *anon_vma = NULL;
+>  	struct address_space *mapping = NULL;
+>  	int extra_pins, ret;
+> @@ -2649,6 +2676,18 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>  	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+>  	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>  
+> +	/* Cannot split THP to order-1 (no order-1 THPs) */
+> +	if (new_order == 1) {
+> +		VM_WARN_ONCE(1, "Cannot split to order-1 folio");
+> +		return -EINVAL;
+> +	}
+
+Why can't you split to order-1? I vaguely understand that some data is kept in
+the first 3 struct pages, but I would naively expect the allocator to fail to
+allocate compound pages of order-1 if it was a problem? My large anon folios
+patch is currently allocating order-1 in some circumstances. Perhaps its related
+to my bug?
+
+
+> +
+> +	/* Split anonymous folio to non-zero order not support */
+> +	if (folio_test_anon(folio) && new_order) {
+> +		VM_WARN_ONCE(1, "Split anon folio to non-0 order not support");
+> +		return -EINVAL;
+> +	}
+
+Why don't you support this? What is special about anon folios that means this
+code doesn't work for them?
+
+
+Thanks,
+Ryan
+
+
+
+> +
+>  	is_hzp = is_huge_zero_page(&folio->page);
+>  	VM_WARN_ON_ONCE_FOLIO(is_hzp, folio);
+>  	if (is_hzp)
+> @@ -2744,7 +2783,13 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>  	if (folio_ref_freeze(folio, 1 + extra_pins)) {
+>  		if (!list_empty(&folio->_deferred_list)) {
+>  			ds_queue->split_queue_len--;
+> -			list_del(&folio->_deferred_list);
+> +			/*
+> +			 * Reinitialize page_deferred_list after removing the
+> +			 * page from the split_queue, otherwise a subsequent
+> +			 * split will see list corruption when checking the
+> +			 * page_deferred_list.
+> +			 */
+> +			list_del_init(&folio->_deferred_list);
+>  		}
+>  		spin_unlock(&ds_queue->split_queue_lock);
+>  		if (mapping) {
+> @@ -2754,14 +2799,18 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>  			if (folio_test_swapbacked(folio)) {
+>  				__lruvec_stat_mod_folio(folio, NR_SHMEM_THPS,
+>  							-nr);
+> -			} else {
+> +			} else if (!new_order) {
+> +				/*
+> +				 * Decrease THP stats only if split to normal
+> +				 * pages
+> +				 */
+>  				__lruvec_stat_mod_folio(folio, NR_FILE_THPS,
+>  							-nr);
+>  				filemap_nr_thps_dec(mapping);
+>  			}
+>  		}
+>  
+> -		__split_huge_page(page, list, end);
+> +		__split_huge_page(page, list, end, new_order);
+>  		ret = 0;
+>  	} else {
+>  		spin_unlock(&ds_queue->split_queue_lock);
+
