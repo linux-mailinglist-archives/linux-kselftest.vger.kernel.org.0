@@ -2,79 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7614E6C6C7C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 16:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB1F6C6DDB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 17:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbjCWPnz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Mar 2023 11:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S232304AbjCWQja (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Mar 2023 12:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjCWPnw (ORCPT
+        with ESMTP id S232369AbjCWQjL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Mar 2023 11:43:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0A420576;
-        Thu, 23 Mar 2023 08:43:49 -0700 (PDT)
-Received: from [192.168.10.28] (unknown [39.37.168.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1255366030F9;
-        Thu, 23 Mar 2023 15:43:40 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679586227;
-        bh=fqcMKt1oBSR5L6Q8opsI63fwItnsnZyiV5drCHsNuLI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=eNbPAtfwrGZFe7FIs6NljH+Y1y7/jks83wQi/OH9fQ0zixOK+wI9UClTwQVKgnOGr
-         19s+YgE9ZDx1bwb/p6VvFqAJ6+9pmfSO9CaE5q6VXmA0bA91I1S1c7EwTkNvDiUsk2
-         nNd22mJ30PPDaPc3iO+aBQxrgpIpCwI5rVZV2z8+2wccfYlXzhop17Rrxf0FyUUtuP
-         qQ3nrOkV8K53MEiJGKaDU4YjuO9Ejv5ic9Yzdwi+7RZss6u97Mc+Sgpj2qVh7Akp8x
-         m0RAN3N7TOqFKofqXaGy8nTgauWoeZKf5ABJ/GURFa9ahLP4PpXOO3s7PjE6LWpvQg
-         HWq1+QR76EXzQ==
-Message-ID: <996c14d4-6dcc-7d14-cf76-d8fbea0a9040@collabora.com>
-Date:   Thu, 23 Mar 2023 20:43:36 +0500
+        Thu, 23 Mar 2023 12:39:11 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EF835EF8;
+        Thu, 23 Mar 2023 09:37:23 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id EDCF75C00BA;
+        Thu, 23 Mar 2023 12:36:41 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 23 Mar 2023 12:36:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679589401; x=1679675801; bh=E4
+        if9a3f9X77bOqnOjkoI5r0nXevqMRV38iVxaTmEaw=; b=g6/3/dAPpfW7mZxRyV
+        jPOpRzoyHXVPTKrALp/6Zwe9xO10hFRBcAvyZBM2dEjgYOK6hbiHF9bjSYJnWIT1
+        wylR3m+93h12OQAGpv5Lf9/gNEFez2Ptzd3HIC3pDoU1s8GC31LpE0CfmszvhIv0
+        3OklsofQDnBz3CGwMygcgs2lBOiGnJP1PJYGbkxemSIEP43Cx+YTeYD0rS3reD1k
+        rWyJfDhqc3JllW5a4/Lpe16UFPI2P0qEWXgH/niYJG8NKDsm0FLs7nBSEM7OLiO7
+        UQ9BGLry/ceQugSHSnjRSQ7Zd/QFs6mso1RWbMSe06G4yAXWripOvAWfCPI1W0KW
+        /1Ng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679589401; x=1679675801; bh=E4if9a3f9X77b
+        OqnOjkoI5r0nXevqMRV38iVxaTmEaw=; b=f7pdvdHCS5EL5R+baqKkwkuQa5f8G
+        UOzxn6XsttwT0bX91cNI16WTUD787PcZ9N+MZW8lmNjSpExH/MG1c5aT0BfV8bFY
+        76kmdLfLewjpc8fBRmVWsCZKmpUXC7Oor0co5mTlQh8slQdyE3EaMQMlB9RYC0iC
+        qoiCAa4PxGNmLjPFP7PqGarH+xJufg8s3kAg9DD4EzD4XxRaCSnz6J3iSH7iXp46
+        hPuSmcarS7w7EHjMzgMpdRlfGZ42A7IHEMcD91M9rHJJdmIZzvcNI/NdsLOIcCd7
+        gQ07OG+n6yDvxH8zhK1a5HAY9tFk22A21HB5YJFC4kPoPN+bFEuKAeU/w==
+X-ME-Sender: <xms:GYAcZHvRlh92ce2nlDK0uguK8ZvXANlPy5NmN5XVfxPIA0zCxeI8mQ>
+    <xme:GYAcZIfPxQKW2_xqbBciptLp86l3JI4Ynzf8TCd4QBAqdK7bjEEe_a6zIlxmpBJep
+    cMIvgYFfz_6ZcRK0cE>
+X-ME-Received: <xmr:GYAcZKz-gEDOXL1E_Za4TxYfMWnklLV1yHT2dpRtjl9Lyd0IH7WQDlN4YI9RfPpO2I60B6_K2ZrYQKDVvR3SpeOmBM9KIug>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:GYAcZGNjLo9mhGVw_9lWJto-Wf-giSOmya4wa_v8DmRdrG1QdnpXBA>
+    <xmx:GYAcZH8Hk1nukBpZy9jJv0BsViw9_scgz8WFJvDIi3GB32EGrGhGUQ>
+    <xmx:GYAcZGXnUMjfr3ZrNmfcYsbzQCldaNTfXKlHc4J5Nfet_9nAACwjtQ>
+    <xmx:GYAcZLQWr1de6_fr9of5v4tTBxCm-YoY7V_mgoCHwc5kZ3NR8y1TlA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Mar 2023 12:36:41 -0400 (EDT)
+Date:   Thu, 23 Mar 2023 17:36:39 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <20230323163639.xtwpid2uunwnzai4@houat>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com>
+ <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com>
+ <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com>
+ <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+ <20230323122925.kqdnomr7i46qnyo4@houat>
+ <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 1/7] userfaultfd: Add UFFD WP Async support
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-2-usama.anjum@collabora.com> <ZBNr4nohj/Tw4Zhw@x1n>
- <1b78ee32-003d-5645-c223-619b66d41733@collabora.com> <ZBoEpkq66ZxHFr8A@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZBoEpkq66ZxHFr8A@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="siftfz462ycziuwe"
+Content-Disposition: inline
+In-Reply-To: <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,106 +103,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/22/23 12:25 AM, Peter Xu wrote:
-> Hi, Muhammad,
-> 
-> On Tue, Mar 21, 2023 at 05:21:15PM +0500, Muhammad Usama Anjum wrote:
->> Thank you so much for the patch. I've tested hugetlb mem. This patch is
->> working fine for hugetlb shmem:
->> *shmid = shmget(2, size, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
->> mem = shmat(*shmid, 0, 0);
->>
->> I've found slight issue with hugetlb mem which has been mmaped:
->> mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
->> 	   MAP_ANONYMOUS | MAP_HUGETLB | MAP_PRIVATE, -1, 0);
->> The issue is that even after witting to this memory, the wp flag is still
->> present there and memory doesn't appear to be dirty when it should have
->> been dirty. The temporary fix is to write to memory and write protect the
->> memory one extra time.
-> 
-> I looked into this today and found it's an existing bug that can trigger
-> with sync mode too.. as long as protection applied to unpopulated hugetlb
-> private mappings, then write to it.
-> 
-> I've sent a fix for it here and have you copied:
-> 
-> https://lore.kernel.org/linux-mm/20230321191840.1897940-1-peterx@redhat.com/T/#u
-> 
-> Please have a look and see whether it also fixes your issue.
-Thanks for sending the patch. I've replied on the sent patch.
 
-> 
-> PS: recently I added a warning in commit c2da319c2e2789 and that can indeed
-> capture this one when verifying using pagemap.  I'd guess your dmesg should
-> also contain something dumped.
-I didn't had debug_vm config enabled. I've enabled it now. I'm getting only
-the following stack trace in failure scenario:
+--siftfz462ycziuwe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-ok 1 Hugetlb shmem testing: all new pages must not be written (dirty) 0
-ok 2 Hugetlb shmem testing: all pages must be written (dirty) 1 512 0 512
-ok 3 Hugetlb mem testing: all new pages must not be written (dirty) 0
-[   10.086540] ------------[ cut here ]------------
-[   10.087758] WARNING: CPU: 0 PID: 175 at
-arch/x86/include/asm/pgtable.h:313 pagemap_scan_hugetlb_entry+0x19c/0x230
-[   10.090208] Modules linked in:
-[   10.091059] CPU: 0 PID: 175 Comm: pagemap_ioctl Not tainted
-6.3.0-rc3-next-20230320-00010-gdc395ccf1882 #88
-[   10.093224] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.16.0-debian-1.16.0-5 04/01/2014
-[   10.095879] RIP: 0010:pagemap_scan_hugetlb_entry+0x19c/0x230
-[   10.097497] Code: 89 ca 41 89 c2 29 c8 4c 01 c2 49 39 d2 41 0f 43 c0 e9
-53 ff ff ff 48 83 e2 9f 89 c7 31 ed 49 89 d1 83 e7 02 0f 84 30 ff ff ff
-<0f> 0b 31 ff e9 27 ff ff ff 48 83 e2 9f 44 89 c0 bf 01 00 00 00 bd
-[   10.102528] RSP: 0018:ffffb6cd80303d10 EFLAGS: 00010202
-[   10.104002] RAX: 8000000000000ce7 RBX: 00007fcc84000000 RCX:
-0000000000200000
-[   10.105989] RDX: 80000002f7c00c87 RSI: 0000000000000001 RDI:
-0000000000000002
-[   10.108043] RBP: 0000000000000000 R08: 0000000000000200 R09:
-80000002f7c00c87
-[   10.110004] R10: ffffa08541e3220c R11: 0000000000000000 R12:
-ffffa08541562420
-[   10.112335] R13: ffffb6cd80303e70 R14: 00007fcc84000000 R15:
-ffffffff8eae1520
-[   10.114688] FS:  00007fcc8454b740(0000) GS:ffffa0886fc00000(0000)
-knlGS:0000000000000000
-[   10.116960] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   10.118187] CR2: 00007fcc84000000 CR3: 0000000102838000 CR4:
-0000000000750ef0
-[   10.119628] PKRU: 55555554
-[   10.120184] Call Trace:
-[   10.120730]  <TASK>
-[   10.121206]  __walk_page_range+0xbe/0x1b0
-[   10.122048]  walk_page_range+0x15f/0x1a0
-[   10.122869]  do_pagemap_cmd+0x239/0x390
-[   10.123672]  __x64_sys_ioctl+0x8b/0xc0
-[   10.124462]  do_syscall_64+0x3a/0x90
-[   10.125227]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   10.126326] RIP: 0033:0x7fcc8464bbab
-[   10.127066] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00
-00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05
-<89> c2 3d 00 f0 ff ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28 00 00
-[   10.130868] RSP: 002b:00007fff9b864240 EFLAGS: 00000246 ORIG_RAX:
-0000000000000010
-[   10.132412] RAX: ffffffffffffffda RBX: 0000000000001000 RCX:
-00007fcc8464bbab
-[   10.133880] RDX: 00007fff9b8642c0 RSI: 00000000c0586610 RDI:
-0000000000000003
-[   10.135328] RBP: 00007fff9b864320 R08: 0000000000000001 R09:
-0000000000000000
-[   10.136790] R10: 00007fff9b864217 R11: 0000000000000246 R12:
-0000000000000000
-[   10.138285] R13: 00007fff9b8644f8 R14: 0000000000409df0 R15:
-00007fcc84862020
-[   10.139729]  </TASK>
-[   10.140197] ---[ end trace 0000000000000000 ]---
-not ok 4 Hugetlb mem testing: all pages must be written (dirty) 0
--2072900416 0 512
+On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
+> On 3/23/23 14:29, Maxime Ripard wrote:
+> > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+> >=20
+> > This is the description of what was happening:
+> > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
+>
+> Thanks Maxime. Do I read this correcty. The devm_ unwinding not being done
+> when root_device_register() is used is not because root_device_unregister=
+()
+> would not trigger the unwinding - but rather because DRM code on top of t=
+his
+> device keeps the refcount increased?
 
-> 
-> Thanks,
-> 
+There's a difference of behaviour between a root_device and any device
+with a bus: the root_device will only release the devm resources when
+it's freed (in device_release), but a bus device will also do it in
+device_del (through bus_remove_device() -> device_release_driver() ->
+device_release_driver_internal() -> __device_release_driver() ->
+device_unbind_cleanup(), which are skipped (in multiple places) if
+there's no bus and no driver attached to the device).
 
--- 
-BR,
-Muhammad Usama Anjum
+It does affect DRM, but I'm pretty sure it will affect any framework
+that deals with device hotplugging by deferring the framework structure
+until the last (userspace) user closes its file descriptor. So I'd
+assume that v4l2 and cec at least are also affected, and most likely
+others.
+
+> If this is the case, then it sounds like a DRM specific issue to me.
+
+I mean, I guess. One could also argue that it's because IIO doesn't
+properly deal with hotplugging. I'm not sure how that helps. Those are
+common helpers which should accommodate every framework, and your second
+patch breaks the kunit tests for DRM anyway.
+
+> Whether it is a feature or bug is beyond my knowledge. Still, I would
+> not say using the root_device_[un]register() in generic code is not
+> feasible - unless all other subsytems have similar refcount handling.
+>=20
+> Sure thing using root_device_register() root_device_unregister() in DRM d=
+oes
+> not work as such. This, however, does not mean the generic kunit helpers
+> should use platform_devices to force unwinding?
+
+platform_devices were a quick way to get a device that would have a bus
+and a driver bound to fall into the right patch above. We probably
+shouldn't use platform_devices and a kunit_device sounds like the best
+idea, but the test linked in the original mail I pointed you to should
+work with whatever we come up with. It works with multiple (platform,
+PCI, USB, etc) buses, so the mock we create should behave like their
+real world equivalents.
+
+Maxime
+
+--siftfz462ycziuwe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZByAFwAKCRDj7w1vZxhR
+xZYoAQD0EfI8ZCSq1KpU73P+V49HUzeC9ingQ95MQn3oUWcu3wD9HQRLsSfxvM7A
+K3Xa8SyESe39WCse9VZjO2fd9YvqoQM=
+=9U43
+-----END PGP SIGNATURE-----
+
+--siftfz462ycziuwe--
