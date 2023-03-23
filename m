@@ -2,173 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEBA6C6322
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 10:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1CC6C63D0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 10:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjCWJUj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Mar 2023 05:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S229672AbjCWJir (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Mar 2023 05:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjCWJUi (ORCPT
+        with ESMTP id S231150AbjCWJiA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Mar 2023 05:20:38 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0173C10;
-        Thu, 23 Mar 2023 02:20:36 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id s8so26545716lfr.8;
-        Thu, 23 Mar 2023 02:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679563235;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u9HIeaE6YfreA7aFslVWmFTHAzUEzJTO0gNYWp3d2YA=;
-        b=TO5alSmo69AjSE9DKZP3tSaKo7PRxjYPwRHpPVTcAtnfANEWJNxUoW7l0yTVePyqun
-         +f8lh2WkvYbY8gTIomK20r+TibXI7BIlDOZZ34mokv2W/gbLwxmyFp/UCgOTWqqQLwuZ
-         HFjfL32aF9kXg2/yLYmfg5F3kftV1Vt0IAAedwYV8hPNREzZA0ey21fJT7TWG8ZxJ7T6
-         fri9eKvIOUovyzx9yFP3VpcSXUZJxFIXn18kYrPL4Ths1+QQ4AbuAvXQ+UckSacRrptS
-         tJS75t1c959qI3o7Xl7+stwDn1AJ/JANJri36WH0srVA5eGdRx618VMdFAgjTft3MHs+
-         KkwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679563235;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u9HIeaE6YfreA7aFslVWmFTHAzUEzJTO0gNYWp3d2YA=;
-        b=vC50tCY0zJQ72PYcfc1tFFDnQXwqlz9Sm8lCKAMQSshYJqBchGD5w/DwTFJSa9yvtn
-         SqY9u4BgDFM84yR9kLHy5XO54iyypBfdSrY9qaQn5Xzz5dl54gDjhJXuD7L+wtCt+LNz
-         u5wwvJaQaKFjmniTrI6Aj6+E04v4tEzDBTJL08qBycAGYgXCT/xStlbou9UVht56h7DX
-         XxfAuZ7FIPrHJu82/I0H6ttQTkxgjH9JwCiEFqpFem9nems61Sv3i4DQUgRpYZXI2aC1
-         +WfUgxWPxholmrWq/ZnopCe+ZFcTj4syqfyed9FKw6Ax4Mzs+r1Nc4vmxPTlTqeMDUWo
-         npvw==
-X-Gm-Message-State: AAQBX9dDX6XpYVGQHh6jyRHGZM0hJYMU70/gPsp/tIoCVtL22QpGVqwr
-        83c9iffVaJVsMRiH9OGJcZTdrCH6BDs=
-X-Google-Smtp-Source: AKy350bePlJ4Diz4wfTBgsfrngsnQ7KDKc8lQ70DmTlV6RWdUCm23wjZJvNaZXUBpp+/8hzng8/b7g==
-X-Received: by 2002:ac2:51dd:0:b0:4e8:3d24:de6f with SMTP id u29-20020ac251dd000000b004e83d24de6fmr3139121lfm.14.1679563234716;
-        Thu, 23 Mar 2023 02:20:34 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id y26-20020ac2447a000000b004cc82b7080bsm2872706lfl.200.2023.03.23.02.20.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 02:20:34 -0700 (PDT)
-Message-ID: <3c09bda1-330d-6d49-ade5-aab567b3a0c4@gmail.com>
-Date:   Thu, 23 Mar 2023 11:20:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
+        Thu, 23 Mar 2023 05:38:00 -0400
+X-Greylist: delayed 440 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Mar 2023 02:35:52 PDT
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B7822036;
+        Thu, 23 Mar 2023 02:35:52 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 85BD22B0681D;
+        Thu, 23 Mar 2023 05:28:22 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 23 Mar 2023 05:28:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679563702; x=1679570902; bh=D+
+        6uZuc9G8Cokr6D/ZuPojKuYrWzIuh3IXwIRgnmVHA=; b=Grd14zRIvsJco7ab2/
+        EJppZ6ZNhgtslECuLaA5r9XEO8okGkzdmEuF1h4mkA7fvqNHyJbX1PMqYWo8Rtwx
+        X5ataRWTesx2mnefGO8VnZhl34tj9QLV6h4HBnhuC7VGeianQ5Vf6j8MpK0asBmu
+        LBg5t3uuwyzq/WkBCDRNIn77XW7mqFoZAe2rFL30HoSMFEUX/QNw6eCicRx+HMT2
+        4526yveHRgi1cryfZVVNV+L6gAwXfBpDWUdeGI9HtJYwc/BOkOKnFllfopMKKha9
+        XhcbeV+GTxShxnK9HxfMXvp0pejBmIcuSwUJjve96I2Nvsq0DlggDwPFwzJ3vuST
+        ku8Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679563702; x=1679570902; bh=D+6uZuc9G8Cok
+        r6D/ZuPojKuYrWzIuh3IXwIRgnmVHA=; b=Ai0ccEckw5DnS+8GQfsYqpXuWpFGB
+        ttQLPWjSKlnP2tyns81XXlCFD0Q3xCeGff5rzdlC/6fX8JQ+4kiJDnn1U75c53bw
+        3N6GGfyyybi+Oc1hH+quCZw/v4mKnLiAwdLBGbsgKsp24nDseAFy6LSW9eugCmVb
+        +KWHJcUBGeH/Xl9DeNU/1942HFw577G7yPJsIuuQ1YmES20O/zI4WxZkMh2fgyvE
+        a++ZfjFMGS7aM9uIVZ7hwQRJ5mpW9rkPe/CqQE4TXKbCH/6yyeyeHBBofsebtprR
+        HWH8eNTjFX/5jiVQ+ZZg+2Wzp8v4NHUZ9+PfVsCpbk2QaiHtJw9Vu6qrg==
+X-ME-Sender: <xms:tBscZNYU0sYr-0l50Yk4duLxqaae1ei9hUNtbliJx9BdbCtXahbacg>
+    <xme:tBscZEY_aXclh9vdqLqnl4wru2s6kxPDvdXjMxVMjjpPUds2kh_VV4YfON44u9ijp
+    eN3I--qqDpHqT8kqb8>
+X-ME-Received: <xmr:tBscZP8skWawj0kRdUZp0NZnNW7iLg1bpc9apnCh3xEamIO3DRctlsv_Do8_iUT-3gjsZHLbhGlaCwh_7I23TS4fALDfcrQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:tBscZLquNPybogS3zNBGkVjdxMrFA_wmROPfMRKE76tl3-jPfie6VA>
+    <xmx:tBscZIpFJVMEV1zDSpLQ5e2Og2-mS-3BlS-BryqQYSpE93anFPLqpA>
+    <xmx:tBscZBQ0dyta-7zR6gLyviIlJ54-XWhFYU9iBu9fMXL9ozk-HdFNNg>
+    <xmx:thscZEeaobicffGMWazNsg-Qr4l9xbsovbY_2Ck1BEPfHDBnfTOBrqEaAAY>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Mar 2023 05:28:19 -0400 (EDT)
+Date:   Thu, 23 Mar 2023 10:28:16 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Cameron <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+        devicetree@vger.kernel.org, Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Gazzillo <paul@pgazz.com>,
+        =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
+        Liam Beguin <liambeguin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Gow <davidgow@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Airlie <airlied@gmail.com>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 0/8] Support ROHM BU27034 ALS sensor
+Message-ID: <20230323092816.eemjbfez6wxbumx7@houat>
 References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com>
- <12ea1d68-2a3c-0aa7-976c-7bd3eef35239@fi.rohmeurope.com>
- <ZBwUp/fRIjQZtjF7@kroah.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-In-Reply-To: <ZBwUp/fRIjQZtjF7@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+ <ZBrSCYp+QrHK47dS@smile.fi.intel.com>
+ <87edphnkg1.fsf@minerva.mail-host-address-is-not-set>
+ <8fe9fea1-b7b8-ee46-9534-de7e2b1726f9@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ihwqacloxsmu5zbe"
+Content-Disposition: inline
+In-Reply-To: <8fe9fea1-b7b8-ee46-9534-de7e2b1726f9@gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/23/23 10:58, Greg Kroah-Hartman wrote:
-> On Thu, Mar 23, 2023 at 07:17:40AM +0000, Vaittinen, Matti wrote:
->> On 3/22/23 20:57, Greg Kroah-Hartman wrote:
->>> On Wed, Mar 22, 2023 at 03:48:00PM +0200, Matti Vaittinen wrote:
->>>> Hi Greg,
->>>>
->>>> Thanks for looking at this.
->>>>
->>>> On 3/22/23 14:07, Greg Kroah-Hartman wrote:
->>>>> On Wed, Mar 22, 2023 at 11:05:55AM +0200, Matti Vaittinen wrote:
 
->> I am very conservative what comes to adding unit tests due to the huge
->> inertia they add to any further development. I usually only add tests to
->> APIs which I know won't require changing (I don't know such in-kernel
->> APIs)
-> 
-> So anything that is changing doesn't get a test? 
+--ihwqacloxsmu5zbe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No. I think you misread me. I didn't say I don't like adding tests to 
-code which changes. I said, I don't like adding tests to APIs which change.
+On Wed, Mar 22, 2023 at 12:59:33PM +0200, Matti Vaittinen wrote:
+> > I agree with Maxime that a little bit of duplication (that can be clean=
+ed
+> > up by each subsystem at their own pace) is the path of least resistance.
+>=20
+> I'd say this depends. It probably is the path of least resistance for peo=
+ple
+> maintaining the trees. It can also be the path of least resistance in
+> general - but it depends on if there will be no new users for those DRM
+> helpers while waiting the new APIs being merged in DRM tree. More users we
+> see in DRM, more effort the clean-up requires.
 
-  If you only test
-> things that don't change then no tests fail, and so, why have the test
-> at all?
+So far there's one user in DRM, and I'm not aware of any current work
+using it at the moment. Even if some show up in the short-term future,
+it's not going to be overwhelming.
 
-Because implementation cascading into functions below an API may change 
-even if the API stays unchanged.
+Maxime
 
-> On the contrary, tests should be used to verify things that are changing
-> all the time, to ensure that we don't break things.
+--ihwqacloxsmu5zbe
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This is only true when your test code stays valid. Problem with 
-excessive amount of tests is that more we have callers for an API, 
-harder changing that API becomes. I've seen a point where people stop 
-fixing "unimportant" things just because the amount of work fixing all 
-impacted UT-cases would take. I know that many things went wrong before 
-that project ended up to the point - but what I picked up with me is 
-that carelessly added UTs do really hinder further development.
+-----BEGIN PGP SIGNATURE-----
 
-  That's why we need
-> them, not to just validate that old code still is going ok.
-> 
-> The driver core is changing, and so, I would love to see tests for it to
-> ensure that I don't break anything over time.  That should NOT slow down
-> development but rather, speed it up as it ensures that things still work
-> properly.
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBwbsAAKCRDj7w1vZxhR
+xaHTAP0eX38oKDx4w+f18p920Z65wm1LMJZUsTQTKppqDXkAgAEA+oBatGCMd3iz
+2GkL2vZla5OIIAXWxReh2dxN+LliWA0=
+=5iWi
+-----END PGP SIGNATURE-----
 
-I agree that there are cases where UTs are very handy and can add 
-confidence that things work as intended. Still, my strong opinion is 
-that people should consider what parts of code are really worth testing 
-- and how to do the tests so that the amount of maintenance required by 
-the tests stays low. It's definitely _not fun_ to do refactoring for 
-minor improvement when 400+ unit-test cases break. It's a point when 
-many developers start seeing fixing this minor culprit much less 
-important... And when people stop fixing minor things ... major things 
-start to be just around the corner.
-
-> 
->> - or to functions which I think are error-prone. So, I am probably
->> one of the last persons adding UTs to code I don't know :)
-> 
-> That's fine, you don't have to add test code for stuff you don't know.
-> 
-> But again, do NOT abuse a platform device for this, that's not ok, and
-> the in-kernel code that does do this should be fixed up.
-
-As suggested by David in another mail - I'll go with the 
-root_device_[un]register(). I'll drop this patch entirely. Thanks for 
-help, this was once again very educating :)
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+--ihwqacloxsmu5zbe--
