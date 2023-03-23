@@ -2,83 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CD36C69A6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 14:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE866C6AD7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 15:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjCWNhG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Mar 2023 09:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S229563AbjCWOYA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Mar 2023 10:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjCWNhF (ORCPT
+        with ESMTP id S231161AbjCWOX4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Mar 2023 09:37:05 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C7018A9F;
-        Thu, 23 Mar 2023 06:37:01 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pj5jc1mmTz9xHM1;
-        Thu, 23 Mar 2023 21:27:16 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCHCATRVRxk2BbCAQ--.54288S2;
-        Thu, 23 Mar 2023 14:36:34 +0100 (CET)
-Message-ID: <e0b828d994a8427ad48b7b514f75d751ea791b47.camel@huaweicloud.com>
-Subject: Re: [PATCH 0/5] usermode_driver: Add management library and API
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 23 Mar 2023 14:36:17 +0100
-In-Reply-To: <CAADnVQJC0h7rtuntt0tqS5BbxWsmyWs3ZSbboZMmUKetMG2VhA@mail.gmail.com>
-References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
-         <CAADnVQLKONwKwkJMopRq-dzcV2ZejrjGzyuzW_5QX=0BY=Z4jw@mail.gmail.com>
-         <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
-         <CAADnVQJC0h7rtuntt0tqS5BbxWsmyWs3ZSbboZMmUKetMG2VhA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 23 Mar 2023 10:23:56 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2080.outbound.protection.outlook.com [40.107.94.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9E776B1;
+        Thu, 23 Mar 2023 07:23:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=btOv8IbwaMekG6LUgeMDXMUG5pnJgom8NafM+vIIg1OgIgIPoesA8iBs0xi9Rw+FJUyQf9SpIkxD/AvGIa3hF7fKzky6Qx2Mi2RWHHU+9kGhy5Ba5wdvjDS+gjOczfLSvwAACykD3KxHUQgieVDIamCFc8BNOBlEYcr91Mx9D/MUI1jxxUMy/rGiMIxDAcoKUDmSW50gEbNYbHE7XrHq5Di//hT1FxmIWqXwKvB7aoMgBuXHeeiJLP9LS2977teXzC9+++ch2RMm6whYvN0Kqs9AtWaIIkLnS59LBW1HcnkuspQCHmW9WPfZ8JVEYfVamsEaIjN0eFRyW6/TaYtLwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UU6W+wSeltgEW1C8Si10KCwShBpy9oJZo5Nwqmius+8=;
+ b=Z3eRKAQQ/TnwLVbY8Sgth3KSXm8YE9IO3MEhV2PYVX76JaGi2BHQqVg9Q0xN4YKsaebTonXqrskVdEN55cGX34oFpGaf31XzQ5gHogYQmtr3PtLGdHH7uMc+LKklYbc2Xb5pE71EPBbK3egv5pKuXUNf09DnemdAqZDjWVDpzAZ5NTiqGheoQ4po/wuwOcX3bRcw9+Gco715zigsj85jE3irgKna0CN/xW0panrnYMXTh+AIwie2UAz4chXdAuGQ0EPh6gWTnnvTNauQn9QnE813fA+fDL6UT0hqRjtmBpR13Ga3GEZ0X248SnpxbtwTJ9Nf44L+GnGyiY8fz+lCLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UU6W+wSeltgEW1C8Si10KCwShBpy9oJZo5Nwqmius+8=;
+ b=hDgDGDdR5qZcWYanAZ7T7e9b20xrl8qX39Rw3KbiSwmbEZJjDLsJhaOPa21f07tCDHBYM+k63FoQCGBYgGBbJby4C6Wlnp8k/epD/BNDHs8cJKT/PVeD7jctQMh5/bY2hqPEgA9NEglRg+LUmpRhoA5UPsE2/vEKpaVyKNmmNE9IB23TZm1bEFG5/mTL05yRmrOt8GeZnoTkoB7u3mOTROp24wq9gT1GZYG0+LVg/fRNbW7suc30oGAdJ4WfrDyQvPDfW3Uj33luLQtlTrMQquIieaXeYeNUd6fTUE4MVvdE6IU5QPwI2rCCUxAD5+BuE+sQ3OYkOap65EF819vHnA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH7PR12MB6787.namprd12.prod.outlook.com (2603:10b6:510:1ad::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
+ 2023 14:23:52 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Thu, 23 Mar 2023
+ 14:23:51 +0000
+Date:   Thu, 23 Mar 2023 11:23:49 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: Re: [PATCH v3 03/17] iommufd: Replace the hwpt->devices list with
+ iommufd_group
+Message-ID: <ZBxg9cRIpsozB15G@nvidia.com>
+References: <0-v3-61d41fd9e13e+1f5-iommufd_alloc_jgg@nvidia.com>
+ <3-v3-61d41fd9e13e+1f5-iommufd_alloc_jgg@nvidia.com>
+ <BN9PR11MB5276E42B629C3E5AF019B6748C879@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276E42B629C3E5AF019B6748C879@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: YT3PR01CA0001.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:86::27) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCHCATRVRxk2BbCAQ--.54288S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3AryktFy7tFyktr48CrWxWFg_yoWxXr4DpF
-        WrCFWjka1DJF17ArZ2vw18Ca409397tw43WrnrGryfZ3Z09FyIkr1I9F4a9FnrGr4Skw1Y
-        qr4jya4293Z8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj4sTwwAAsq
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB6787:EE_
+X-MS-Office365-Filtering-Correlation-Id: e8a6c945-0cb7-492d-3ea4-08db2baa39a0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: n8n7YU7tYt9vYyZaiIH4HEtwKAV1lGz54YOMZcXa9karHABH9F7FGFTDTw32g4v0+rlokhVlYWGwSQ4fD5PjGNeWPKBCpnjbaFVfT5RwlHA8HGZlcesQ8fkc2zgbZ0wz2NfCovC7SViVjsgcKsvPOpzvvH+9V4nqNFKtgtZLiVFhU/BgFWPfs67n9k0xbUfgzzo940uZKpPXfkZAwhv7X3DGcs0J8PAoZWQb9IS7xBIXZChl5BgQp95eMxgyvarWI1iPq8vZCEgeH+X7Qd5+UYZMiCcA6Gfv4naDl58KFbeHrhwcZ6+lsCbGFSlV2w2cSfAYxydobBHEe+kEk/kW3MdNe/S/3iqQ+U0EJiJYwA/rfCnfUlmSLMoYcKikvqmZBJZArdnhx8UPfM4gO28B2suolrwm55nyZV7rMr6ec2ZkBLWuy0oCqRsPLbAtc0kDbmaRIfoqVNVqBXqZ9dRBY53WLpu2iuv9X9qwlVpACkPmuk1lpg8coSCryFh8b8xC1/FfTTOQzffHt+ek2G4FXZ2i94Wjd+BZFpXAV2LTmC0i0ekabf1DG82Jv7Ts3IfyKgcKMTobMmVCSuSA+NT/YWykgNfA4q4lPRU+PR4o7gBVKe08cyDv3xVcMNz0phgzMkGKKZxby3TID1W6Q05ZKA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(136003)(346002)(396003)(366004)(451199018)(6916009)(4326008)(66556008)(66946007)(66476007)(8676002)(316002)(54906003)(5660300002)(41300700001)(8936002)(26005)(6512007)(6506007)(2616005)(186003)(478600001)(83380400001)(6486002)(86362001)(36756003)(38100700002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vyPmwftLx5aVCp51gy2wc1Y+sBcuRFXpMcIlyg5BR6BkHCly6px22C0goBgN?=
+ =?us-ascii?Q?wYng/29X/bnnBkCUWyvPO4cOogZkrqRZmN4THqXgbwse8+FZaoMef+Y/Vf5Y?=
+ =?us-ascii?Q?8wIEUPxtyQFfk7BritXs/Bas2+SDLHeQdlIDc3fgJr4W/Maetc+ZDmIqQJ8C?=
+ =?us-ascii?Q?7mjhYInvytC8fHg2Bl3j/hlo2s8UKxe61WMRv2gkd4U/inraGaeMUFu/MRkT?=
+ =?us-ascii?Q?A5Zl6eWlPL2P48aCVfJgUSyyL0AUKqJS7inpWoeNCqYv+N3U15VCFcQ19LIZ?=
+ =?us-ascii?Q?ckRtJvPLRUFWBwkwJQReV8XOe3JAhUPOM3ncZoLoowSTr4ewxxWmfOnAGngd?=
+ =?us-ascii?Q?XVOarpWVaC4wRxrkZEdoZZLpJEIAIn3MUpPeyjutAbybDeXRwcO2VJnHewKm?=
+ =?us-ascii?Q?Ge8c3e1RAj6Fnp8vydM+UWabYw4symvMofyHQOUEvPFLFQWQo8zAJd1konwW?=
+ =?us-ascii?Q?2wNuakXcjc+Q1phGY38xSM52SJkuxbri0jivg9lrZhuHMErkg2yyT0jpogxF?=
+ =?us-ascii?Q?fmqGIX3RCkLvxXUr8SGrcFbJURORuCq0SfQXUJ+Rxv0lRVNLk7xZ2VE8+SPB?=
+ =?us-ascii?Q?L5efio1R3mgs7H54Q4Sd0iEVzHzApPXAmCN/bUfVs869ZPrpSLIS96dA7DOp?=
+ =?us-ascii?Q?sShCXFQKWSST8sWNII/9UIHfwh52P9Y6lSbhxIdet5RtMQ07IjJwRhZ2w9tY?=
+ =?us-ascii?Q?WorTzSgjzpqaDK/nvKDUsP9YanMnSKBGuQPExVrXQ4xpTfXCE9DEk8t1u/Zk?=
+ =?us-ascii?Q?jxmrAzREfqzjFYucl0LUg8VSs7fVvaiNDuhi/BF7IIi93qVVWYLB1IceFzys?=
+ =?us-ascii?Q?BXl0SnVAfDmGRaH6ipRyJwvJFlqI6IshmHr7OrSY9te8XnL3Oe5wP93zcTgh?=
+ =?us-ascii?Q?k8Iv4Id/8xXv6ir4wZYw3A8oLFIA6BObqTy2sIBbOwe+wFqwQWBSNJly6FNO?=
+ =?us-ascii?Q?b/kBcY89H4Y9mdA3zaVMRJ4x8EgdNfQcqwSQTGvB2EPgL1AsYHhzmCq9qh4h?=
+ =?us-ascii?Q?MJyUq/3ES2d+jYu6ugRDP20thGSwBJVptx/CZ9D2CCG6R1Qt8hqqlzievVmx?=
+ =?us-ascii?Q?5VDxAh9c8iAeTEnkS+MRgSHPa3hi7IvxcW3bPC/+9NZ+WJiQGV0d4yPtF7jO?=
+ =?us-ascii?Q?K8bxZx8dsTh9VLM0nk/yPsbLawnTytxLXubivSrYZ18RkKWZPdodK8hyPtPe?=
+ =?us-ascii?Q?ZX3M+NGf6pxSH5hyYCqJC7ZH4LMGOwKGiDlGbopaajyw9KpB40OgXh/l4aa5?=
+ =?us-ascii?Q?VJ5hsbFylWPEsG6hSW4NGS2kVxGuikjvvuxQ081SdSUV8gC6ZMh0TDD+E2HF?=
+ =?us-ascii?Q?OOO8sVMhun3diL41FoKjbNk5/S2vIK5ofMJmQgSee5VHgpo8ePGj245pBwlX?=
+ =?us-ascii?Q?Eteo07pfX4aZSn41M/7e81SU0zr7thzOsic1S4qN+gP9cHDJ61lmNrmaYqDn?=
+ =?us-ascii?Q?4hXDIYfStNzCRgJuOK6PktGjlFd59640Z5Z8uj4t7v5vBqkA39TcbVAzeT2Y?=
+ =?us-ascii?Q?lftlEg1mFw7dgx1Fv7aT2d3O3pW7G6g31SCOa0RiHwWX4yroWvP7gFOfd6Dt?=
+ =?us-ascii?Q?3C+J0iNItEL7cLz9K6CrCNsagRKiFxEKbwkTyXYw?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8a6c945-0cb7-492d-3ea4-08db2baa39a0
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 14:23:51.6482
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Rkb0LwkMxOryaKDzpspIcxb7PJ8i4fER8xBGn4TuyWZ83pxgUEk5L36FRp/ybOGM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6787
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,144 +120,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2023-03-22 at 15:27 -0700, Alexei Starovoitov wrote:
-> On Wed, Mar 22, 2023 at 5:08 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Tue, 2023-03-21 at 19:23 -0700, Alexei Starovoitov wrote:
-> > > On Fri, Mar 17, 2023 at 7:53 AM Roberto Sassu
-> > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > 
-> > > > A User Mode Driver (UMD) is a specialization of a User Mode Helper (UMH),
-> > > > which runs a user space process from a binary blob, and creates a
-> > > > bidirectional pipe, so that the kernel can make a request to that process,
-> > > > and the latter provides its response. It is currently used by bpfilter,
-> > > > although it does not seem to do any useful work.
-> > > 
-> > > FYI the new home for bpfilter is here:
-> > > https://github.com/facebook/bpfilter
+On Thu, Mar 23, 2023 at 07:21:42AM +0000, Tian, Kevin wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > Sent: Wednesday, March 22, 2023 3:15 AM
 > > 
-> > Thanks. I just ensured that it worked, by doing:
-> > 
-> > getsockopt(fd, SOL_IP, IPT_SO_GET_INFO, &info, &optlen);
-> > 
-> > and accepting IPT_SO_GET_INFO in main.c.
-> > 
-> > > > The problem is, if other users would like to implement a UMD similar to
-> > > > bpfilter, they would have to duplicate the code. Instead, make an UMD
-> > > > management library and API from the existing bpfilter and sockopt code,
-> > > > and move it to common kernel code.
-> > > > 
-> > > > Also, define the software architecture and the main components of the
-> > > > library: the UMD Manager, running in the kernel, acting as the frontend
-> > > > interface to any user or kernel-originated request; the UMD Loader, also
-> > > > running in the kernel, responsible to load the UMD Handler; the UMD
-> > > > Handler, running in user space, responsible to handle requests from the UMD
-> > > > Manager and to send to it the response.
-> > > 
-> > > That doesn't look like a generic interface for UMD.
-> > 
-> > What would make it more generic? I made the API message format-
-> > independent. It has the capability of starting the user space process
-> > as required, when there is a communication.
-> > 
-> > > It was a quick hack to get bpfilter off the ground, but certainly
-> > > not a generic one.
-> > 
-> > True, it is not generic in the sense that it can accomodate any
-> > possible use case. The main goal is to move something that was running
-> > in the kernel to user space, with the same isolation guarantees as if
-> > the code was executed in the kernel.
+> >  	/*
+> > -	 * FIXME: Hack around missing a device-centric iommu api, only
+> > attach to
+> > -	 * the group once for the first device that is in the group.
+> > +	 * Only attach to the group once for the first device that is in the
+> > +	 * group. All the other devices will follow this attachment. The user
+> > +	 * should attach every device individually to as the per-device
+> > reserved
 > 
-> They are not the same guarantees.
-> UMD is exactly equivalent to root process running in user space.
-> Meaning it can be killed, ptraced, priority inverted, etc
+> "individually to the hwpt"
 
-That is the starting point.
+Done
 
-I suppose you can remove any privilege from the UMD process, it just
-needs to read/write from/to a pipe (and in my case to use socket() with
-AF_ALG to interact with the Crypto API).
-
-Also, as I mentioned, you can enforce a very strict seccomp profile,
-which forces the UMD process to use a very limited number of system
-calls.
-
-For the interactions of the rest of the system to the UMD process, you
-could deny with an LSM all the operations that you mentioned. The rest
-of the system would not be affected, only operations which have the UMD
-process as target are denied.
-
-> > > > I have two use cases, but for sake of brevity I will propose one.
-> > > > 
-> > > > I would like to add support for PGP keys and signatures in the kernel, so
-> > > > that I can extend secure boot to applications, and allow/deny code
-> > > > execution based on the signed file digests included in RPM headers.
-> > > > 
-> > > > While I proposed a patch set a while ago (based on a previous work of David
-> > > > Howells), the main objection was that the PGP packet parser should not run
-> > > > in the kernel.
-> > > > 
-> > > > That makes a perfect example for using a UMD. If the PGP parser is moved to
-> > > > user space (UMD Handler), and the kernel (UMD Manager) just instantiates
-> > > > the key and verifies the signature on already parsed data, this would
-> > > > address the concern.
-> > > 
-> > > I don't think PGP parser belongs to UMD either.
-> > > Please do it as a normal user space process and define a proper
-> > > protocol for communication between kernel and user space.
-> > 
-> > UMD is better in the sense that it establishes a bidirectional pipe
-> > between the kernel and the user space process. With that, there is no
-> > need to further restrict the access to a sysfs file, for example.
+> I thought about whether holding igroup->lock is necessary here.
 > 
-> If a simple pipe is good enough then you can have a kernel module
-> that creates it and interacts with the user space process.
+> The caller should avoid racing attach/detach/replace on the same device.
 
-Few points I forgot to mention.
+I think even if the caller races we should be fine
 
-With the UMD approach, the binary blob is embedded in the kernel
-module, which means that no external dependencies are needed for
-integrity verification. The binary is statically compiled, and the
-kernel write-protects it at run-time.
+The point of the lock scope was the capture these lines:
 
-Second, since DIGLIM would check the integrity of any executable,
-including init, the PGP signature verification needs to occur before.
-So, the PGP UMD should be already started by then. That is not going to
-be a problem, since the binary is copied to a private tmpfs mount.
+	rc = iopt_table_add_domain(&hwpt->ioas->iopt, hwpt->domain);
+	if (rc)
+		goto out_detach;
+	list_add_tail(&hwpt->hwpt_item, &hwpt->ioas->hwpt_list);
 
-> Out-of-tree bpftiler can do that, so can you.
+But based on the current arrangement none of them rely on the igroup
+mutex so it does seem we can narrow it
 
-As far as I can see, the out-of-tree bpfilter works exactly in the same
-way as the in-tree counterpart. The binary blob is embedded in the
-kernel module.
-
-> PGP is not suitable for kernel git repo either as kernel code or as UMD.
-
-Well, the asymmetric key type can be extended with new parsers, so this
-possibility was already taken into account. The objection that the PGP
-parser should not run in kernel space is fair, but I think the UMD
-approach fully addresses that.
-
-Also, I agree with you that we should not just take any code and
-pretend that it is part of the kernel. However, in this particular
-case, the purpose of the PGP UMD would be simply to extract very few
-information from the PGP packets. The asymmetric key type and the
-signature verification infrastructure already take care of the rest.
-
-PGP keys and signatures would act as an additional system trust anchor
-for verifying critical system data (for DIGLIM, which executables are
-allowed to run), similarly to how X.509 certificates are used for
-verifying kernel modules. RPM headers, executables digests are taken
-from, are signed with PGP, so there is no other way than adding this
-functionality.
-
-And unfortunately, especially for features impacting the entire system,
-out-of-tree drivers are not really an option:
-
-https://docs.fedoraproject.org/en-US/quick-docs/kernel/overview/#_out_of_tree_drivers
-
-Thanks
-
-Roberto
-
+Thanks,
+Jason
