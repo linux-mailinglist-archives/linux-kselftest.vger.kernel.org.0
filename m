@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABE86C5DFA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 05:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4826C5DFD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 05:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjCWE1X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Mar 2023 00:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S230355AbjCWE1e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Mar 2023 00:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjCWE0v (ORCPT
+        with ESMTP id S230004AbjCWE07 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Mar 2023 00:26:51 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10C1305F1;
-        Wed, 22 Mar 2023 21:26:40 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id c19so25317338qtn.13;
-        Wed, 22 Mar 2023 21:26:40 -0700 (PDT)
+        Thu, 23 Mar 2023 00:26:59 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721462E818;
+        Wed, 22 Mar 2023 21:26:43 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id t13so13509687qvn.2;
+        Wed, 22 Mar 2023 21:26:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679545599;
+        d=gmail.com; s=20210112; t=1679545602;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=WzsyULtazmFb2jKIFNYV9uE4W8xKZbiZDJOPAFxYjgM=;
-        b=WhIMxPfgXxfuHsLzM9FcCFgkhjyF8sP8aj+v7gJdxFhN/RSlmsh2wy9HaP3axczsF3
-         cy67zWTqaNnmuRAkISOnDAR6iIAVbW5zItHZsSefMuyJSxdmmV+N8rHmHok9cFSzDHO3
-         zN/Q1rmkeNjSSfvA6Svu+FKQXfK4qghGJt7Ps0Nq2pCxGM5lKwb9/jjXnr4rAUXS3jZw
-         LdThvFiDzjOSd/K8GSUos+Wjb59cCEJpE9v1b8/nujlC9/BgHpqZED+kCU4oi5GYTWJ5
-         FqNHG6x2W/h3ZvwVW/eLl6S6T18gLnWSxxqhFFFk4Jq73gZRz7BLQVDA0En6K/dzH0MJ
-         BHdQ==
+        bh=efDV6U2zyYsMsWuuNQGofNGAB5NUHCq/yzKFmIivv8E=;
+        b=EuoSntJP+ybxGT+2QlpkWUO0yz8DQ7K1K3tKDrgYb2xjx7IqM+H8njWpp0xFMyYrxf
+         g9G4vjKNb1lHKQ5vWJpj5sM/R2hQWNJfQnsJBFRz9u/8qvzQRaetLGhwOGC1t5fXM/Dn
+         lnhrLq4M/6b8pINZ9LmA1WK9rVrOxvqwa4jDSL6NxXFG0U8Xvjjl4koVv8qGChG0+798
+         xx09cls9eGo0Pvj6PuVzgKTj14Kug/Y6Mh3pLqEHI8eAf22CUB1ZT5tZGaMcjGmPSlTM
+         KNcrwxrhkvAshQuv6B/iyamjy0ERhEGbSddIr4WwIeiTfIM0yMlrIpGhVyWVlrPmZrCU
+         ZK3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679545599;
+        d=1e100.net; s=20210112; t=1679545602;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=WzsyULtazmFb2jKIFNYV9uE4W8xKZbiZDJOPAFxYjgM=;
-        b=ji75W33l+SbBkT5esvUx9EscRqK8u+qVu1fbtkr/prYnONbrdCRqlzzqprsSD20Dmm
-         GBFg0QcnpZOfQZIrEiz7PWHCNDGaOAJCwv3uNvULzj3b/kRiEhiMPU1d+WIPXGvxJ+5u
-         7RBt3vjtmIttLmMA65+/B20CG/JuCA4/IEhstuYU+NHUKpmOtduEdHKDvFgv6nlX7+ar
-         1Drm9VSStvwhfqt3JsnXL8BgKOh+75WoUZimb7CfE7B10yt44IC99Ah5DBNbtGPsZc5r
-         Gb23rbd/5BwiYKlfWdPtlwQoHDm76wHxSJL4TJGZ6FUFmpfJzgCIrYxUd1ZjtIfCgblT
-         wacQ==
-X-Gm-Message-State: AO0yUKURhErPZ1L/b3MmRZpSFvQY7UXiLCARvnoyr1VfpTpKATu1EyLh
-        ROvum5e6ymkur9vHWJiY0h0=
-X-Google-Smtp-Source: AK7set/raKqzjGHjunNvK5pLnQ0xax0GEFydogpsAe+KgbZy963pN3sZydhhbLrxGpoKbLtjwPpOzw==
-X-Received: by 2002:ac8:5782:0:b0:3bf:d9f3:debe with SMTP id v2-20020ac85782000000b003bfd9f3debemr8686777qta.59.1679545599328;
-        Wed, 22 Mar 2023 21:26:39 -0700 (PDT)
+        bh=efDV6U2zyYsMsWuuNQGofNGAB5NUHCq/yzKFmIivv8E=;
+        b=2YuGO6yw+piarOfZsL1e0xTZlhF287ZUQERBYRaiY7+JNmmeW3a7C9hktHohgMlRBC
+         jnCSMaYeODFkLG/PvtZxeey5gyVbdFvNKsVMwI0mXDyLc5WDFqkIiqYSQxQPKdOjSyDH
+         5BiLcwm8OlgTnVhvv8RHq0akBe6Vm02gKnb1fNVPuQDTgF3SOHQzWrWeQDS6DjPAT0Gd
+         Z5DPdVAQOCcm+Js9Mh+XXTPkx/Z7PTG8ZbCGIyoGGugBxnQmdu2Bd9NPbhcNE01wI4k8
+         gOtQSoMWDxbmzdXAycT1oYzrglxGTueyHoSnO2ByKP0r5v43emu3cVontlWIZL8fBGd7
+         1/mw==
+X-Gm-Message-State: AO0yUKU5y2YyIlkrDRug/3rwl5m9M/+jQ0egqGzWD1sm8Qd3VLzoiDJY
+        zbkflv8T/nCT36xElUUBFEA=
+X-Google-Smtp-Source: AK7set+H2pOotiMoDnvduIG03T6vAWGX7brsAgDlEd1lYq2+3HpbybydQ59Yn31yibXBlpO3hSqbNg==
+X-Received: by 2002:a05:6214:1d2f:b0:5c2:3e10:53e4 with SMTP id f15-20020a0562141d2f00b005c23e1053e4mr10947113qvd.15.1679545601710;
+        Wed, 22 Mar 2023 21:26:41 -0700 (PDT)
 Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id v26-20020ac8729a000000b003e2e919bcf7sm5700880qto.78.2023.03.22.21.26.38
+        by smtp.gmail.com with ESMTPSA id 11-20020a05620a040b00b007468733cd1fsm1690872qkp.58.2023.03.22.21.26.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 21:26:38 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 5974A27C0054;
-        Thu, 23 Mar 2023 00:26:38 -0400 (EDT)
+        Wed, 22 Mar 2023 21:26:41 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id AF41B27C0054;
+        Thu, 23 Mar 2023 00:26:40 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 23 Mar 2023 00:26:38 -0400
-X-ME-Sender: <xms:_tQbZIW5MOpLO3H-JLi7jRFOKw9lpSTR0ibxXgEWn5NifKRxqe-3AA>
-    <xme:_tQbZMmX_iHTR4-N1_zmKOqggvboQzPpy0bno1rx_xHl0msaXaLDUg3bscsi2ND_k
-    Tmwsz6LCEafhZzzzQ>
-X-ME-Received: <xmr:_tQbZMaOcWg-ydpk_osHxgpzf4RHpJ0mecbe1917eM8JF_apUhilLowZqOXsYjUkMdts7zg2S3rxc0gFX09_J0ZHxaPlGox5LTE>
+  by compute4.internal (MEProxy); Thu, 23 Mar 2023 00:26:40 -0400
+X-ME-Sender: <xms:ANUbZD7kC798jLkomc-3c5kSiXxKgYs2sAjPRI2I2agB_UB-sFoCGg>
+    <xme:ANUbZI7-PXxDTtD8UQSRdXtuOAOSC38V0lEyDu8eT2R0V5cz7Q8WX0HWkQ7la2YDA
+    B3CZMosC9gtGcBcqQ>
+X-ME-Received: <xmr:ANUbZKdOYV_vP--40pTAKFMxKHrf24CpIQ89UqLyFn4hx6jOd-Aar7_lNcM7zbFJdh4DcjfGi-UDxQr_wsSqVHuqFL1RYmEyxG4>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegfedgieelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -69,13 +69,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegfedgieelucetufdoteggod
     gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
     gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
     igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:_tQbZHUaCxb6610_a6sEKTOocRHTe1fbreBzSWiiss8Tw8R9u5XkmQ>
-    <xmx:_tQbZCkmn3I4W2DUk7cEe5sq4TAfY0vZmyCxqMPCdH_BaHNXzdjNxg>
-    <xmx:_tQbZMexvgbdwFJaA0Bchthx7CV9wZ9HRqo_-9Sx4szJ4YOPVtfv0w>
-    <xmx:_tQbZKHv9MdqfLjjGYKGbapAg4RDRy4Tdj0rRi9K2FRjv2SLqSn42g>
+X-ME-Proxy: <xmx:ANUbZELz76GVtqN7TX5wcqCIGd7zCO-dpY5ToByzklPEh5Xbcdp7VQ>
+    <xmx:ANUbZHKj00AWKhu9Vk4rjOMbAdb2QONAYWOm60T2hSRsmMssxHGhdA>
+    <xmx:ANUbZNyf88gUgbYVjhWk9PDAr78rEBWsNVR6oY7tvwJ-k8FwZotiqg>
+    <xmx:ANUbZPIfYj57KUAOPoIfyCQJ0kHXea_3pf5bnqwSrxdZCk2gRh2Rsg>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Mar 2023 00:26:37 -0400 (EDT)
+ 23 Mar 2023 00:26:40 -0400 (EDT)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     rcu@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -96,9 +96,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         seanjc@google.com, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH rcu v2 6/7] rcutorture: Add RCU Tasks Trace and SRCU deadlock scenarios
-Date:   Wed, 22 Mar 2023 21:26:13 -0700
-Message-Id: <20230323042614.1191120-7-boqun.feng@gmail.com>
+Subject: [PATCH rcu v2 7/7] rcutorture: Add srcu_lockdep.sh
+Date:   Wed, 22 Mar 2023 21:26:14 -0700
+Message-Id: <20230323042614.1191120-8-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230323042614.1191120-1-boqun.feng@gmail.com>
 References: <20230323042614.1191120-1-boqun.feng@gmail.com>
@@ -116,73 +116,102 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-Add a test number 3 that creates deadlock cycles involving one RCU
-Tasks Trace step and L-1 SRCU steps.  Please note that lockdep will not
-detect these deadlocks until synchronize_rcu_tasks_trace() is marked
-with lockdep's new "sync" annotation, which will probably not happen
-until some time after these markings prove their worth on SRCU.
-
-Please note that these tests are available only in kernels built with
-CONFIG_TASKS_TRACE_RCU=y.
+This commit adds an srcu_lockdep.sh script that checks whether lockdep
+correctly classifies SRCU-based, SRCU/mutex-based, and SRCU/rwsem-based
+deadlocks.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+[ boqun: Fix "RCUTORTURE" with "$RCUTORTURE" ]
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- kernel/rcu/rcutorture.c | 36 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 35 insertions(+), 1 deletion(-)
+ .../selftests/rcutorture/bin/srcu_lockdep.sh  | 78 +++++++++++++++++++
+ 1 file changed, 78 insertions(+)
+ create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 80ff9a743d31..9efb8258a272 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -3604,12 +3604,46 @@ static void rcu_torture_init_srcu_lockdep(void)
- 		return;
- 	}
- 
-+#ifdef CONFIG_TASKS_TRACE_RCU
-+	if (testtype == 3) {
-+		pr_info("%s: test_srcu_lockdep = %05d: SRCU and Tasks Trace RCU %d-way %sdeadlock.\n",
-+			__func__, test_srcu_lockdep, cyclelen, deadlock ? "" : "non-");
-+		if (deadlock && cyclelen == 1)
-+			pr_info("%s: Expect hang.\n", __func__);
-+		for (i = 0; i < cyclelen; i++) {
-+			char *fl = i == 0 ? "rcu_read_lock_trace" : "srcu_read_lock";
-+			char *fs = i == cyclelen - 1 ? "synchronize_rcu_tasks_trace"
-+						     : "synchronize_srcu";
-+			char *fu = i == 0 ? "rcu_read_unlock_trace" : "srcu_read_unlock";
+diff --git a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+new file mode 100755
+index 000000000000..2e63ef009d59
+--- /dev/null
++++ b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+@@ -0,0 +1,78 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Run SRCU-lockdep tests and report any that fail to meet expectations.
++#
++# Copyright (C) 2021 Meta Platforms, Inc.
++#
++# Authors: Paul E. McKenney <paulmck@kernel.org>
 +
-+			j = srcu_lockdep_next(__func__, fl, fs, fu, i, cyclelen, deadlock);
-+			if (i == 0)
-+				rcu_read_lock_trace();
-+			else
-+				idx = srcu_read_lock(srcus[i]);
-+			if (j >= 0) {
-+				if (i == cyclelen - 1)
-+					synchronize_rcu_tasks_trace();
-+				else
-+					synchronize_srcu(srcus[j]);
-+			}
-+			if (i == 0)
-+				rcu_read_unlock_trace();
-+			else
-+				srcu_read_unlock(srcus[i], idx);
-+		}
-+		return;
-+	}
-+#endif // #ifdef CONFIG_TASKS_TRACE_RCU
++usage () {
++	echo "Usage: $scriptname optional arguments:"
++	echo "       --datestamp string"
++	exit 1
++}
 +
- err_out:
- 	pr_info("%s: test_srcu_lockdep = %05d does nothing.\n", __func__, test_srcu_lockdep);
- 	pr_info("%s: test_srcu_lockdep = DNNL.\n", __func__);
- 	pr_info("%s: D: Deadlock if nonzero.\n", __func__);
--	pr_info("%s: NN: Test number, 0=SRCU, 1=SRCU/mutex, 2=SRCU/rwsem.\n", __func__);
-+	pr_info("%s: NN: Test number, 0=SRCU, 1=SRCU/mutex, 2=SRCU/rwsem, 3=SRCU/Tasks Trace RCU.\n", __func__);
- 	pr_info("%s: L: Cycle length.\n", __func__);
-+	if (!IS_ENABLED(CONFIG_TASKS_TRACE_RCU))
-+		pr_info("%s: NN=3 disallowed because kernel is built with CONFIG_TASKS_TRACE_RCU=n\n", __func__);
- }
- 
- static int __init
++ds=`date +%Y.%m.%d-%H.%M.%S`-srcu_lockdep
++scriptname="$0"
++
++T="`mktemp -d ${TMPDIR-/tmp}/srcu_lockdep.sh.XXXXXX`"
++trap 'rm -rf $T' 0
++
++RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
++PATH=${RCUTORTURE}/bin:$PATH; export PATH
++. functions.sh
++
++while test $# -gt 0
++do
++	case "$1" in
++	--datestamp)
++		checkarg --datestamp "(relative pathname)" "$#" "$2" '^[a-zA-Z0-9._/-]*$' '^--'
++		ds=$2
++		shift
++		;;
++	*)
++		echo Unknown argument $1
++		usage
++		;;
++	esac
++	shift
++done
++
++err=
++nerrs=0
++for d in 0 1
++do
++	for t in 0 1 2
++	do
++		for c in 1 2 3
++		do
++			err=
++			val=$((d*1000+t*10+c))
++			tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 5s --configs "SRCU-P" --bootargs "rcutorture.test_srcu_lockdep=$val" --trust-make --datestamp "$ds/$val" > "$T/kvm.sh.out" 2>&1
++			ret=$?
++			mv "$T/kvm.sh.out" "$RCUTORTURE/res/$ds/$val"
++			if test "$d" -ne 0 && test "$ret" -eq 0
++			then
++				err=1
++				echo -n Unexpected success for > "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
++			fi
++			if test "$d" -eq 0 && test "$ret" -ne 0
++			then
++				err=1
++				echo -n Unexpected failure for > "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
++			fi
++			if test -n "$err"
++			then
++				grep "rcu_torture_init_srcu_lockdep: test_srcu_lockdep = " "$RCUTORTURE/res/$ds/$val/SRCU-P/console.log" | sed -e 's/^.*rcu_torture_init_srcu_lockdep://' >> "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
++				cat "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
++				nerrs=$((nerrs+1))
++			fi
++		done
++	done
++done
++if test "$nerrs" -ne 0
++then
++	exit 1
++fi
++exit 0
 -- 
 2.38.1
 
