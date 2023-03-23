@@ -2,152 +2,228 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437936C6B33
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 15:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CD36C69A6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 14:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjCWOiq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Mar 2023 10:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
+        id S231274AbjCWNhG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Mar 2023 09:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCWOio (ORCPT
+        with ESMTP id S231229AbjCWNhF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Mar 2023 10:38:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5D6E062;
-        Thu, 23 Mar 2023 07:38:41 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NEJ0Kx012528;
-        Thu, 23 Mar 2023 14:38:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=gDXwwDTli8az66jfGCLHiYuLr5u5tT6/V28b/Ru4pc4=;
- b=nxqpuzEurfoJ18b/h0aFL7mQkU4ccuKH4f2jgVswS5ysRoIrQKE/D47orwhHc+9aCewW
- HUz8z0rdljhxCdpflvO7O5bbGEt3fO87bfEKKakq1snewdBa0IK7SnyDzjgj7az8+sLT
- /YwjLT97t/UKDrNt7/cKff+2E14dwZ2mvqCJusXfM1TxY7MsNNKKhewgffP2nf1txWev
- DC+2zq/8MDsj8V7XrnUposnlaZV9XU/QcTTEhPT5vf40uhmMC34GaY7cOzwSygYrgTfX
- dp7VIeLBHDotGVoi1IE47Gc08MzB/MsZO8vTHIrgCLiPpyf6fCq8R/PD2Zmib2lmE1MS gg== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgmc2qb9u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 14:38:38 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32N9QcNj017248;
-        Thu, 23 Mar 2023 14:38:35 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pd4x6ffrw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Mar 2023 14:38:35 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NEcW3549545700
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Mar 2023 14:38:32 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41B742004D;
-        Thu, 23 Mar 2023 14:38:32 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EFE0A2004B;
-        Thu, 23 Mar 2023 14:38:31 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.56])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 23 Mar 2023 14:38:31 +0000 (GMT)
-Date:   Thu, 23 Mar 2023 13:36:17 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Nico Boehr <nrb@linux.ibm.com>
-Cc:     borntraeger@linux.ibm.com, frankja@linux.ibm.com, shuah@kernel.org,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] KVM: s390: fix KVM_S390_GET_CMMA_BITS for GFNs
- in memslot holes
-Message-ID: <20230323133617.4e8b3696@p-imbrenda>
-In-Reply-To: <20230208144827.131300-2-nrb@linux.ibm.com>
-References: <20230208144827.131300-1-nrb@linux.ibm.com>
-        <20230208144827.131300-2-nrb@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Thu, 23 Mar 2023 09:37:05 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C7018A9F;
+        Thu, 23 Mar 2023 06:37:01 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pj5jc1mmTz9xHM1;
+        Thu, 23 Mar 2023 21:27:16 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCHCATRVRxk2BbCAQ--.54288S2;
+        Thu, 23 Mar 2023 14:36:34 +0100 (CET)
+Message-ID: <e0b828d994a8427ad48b7b514f75d751ea791b47.camel@huaweicloud.com>
+Subject: Re: [PATCH 0/5] usermode_driver: Add management library and API
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 23 Mar 2023 14:36:17 +0100
+In-Reply-To: <CAADnVQJC0h7rtuntt0tqS5BbxWsmyWs3ZSbboZMmUKetMG2VhA@mail.gmail.com>
+References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
+         <CAADnVQLKONwKwkJMopRq-dzcV2ZejrjGzyuzW_5QX=0BY=Z4jw@mail.gmail.com>
+         <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
+         <CAADnVQJC0h7rtuntt0tqS5BbxWsmyWs3ZSbboZMmUKetMG2VhA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: hywSHiTFg4IWfvS6A2D_GFKVnTb6sZ1p
-X-Proofpoint-ORIG-GUID: hywSHiTFg4IWfvS6A2D_GFKVnTb6sZ1p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-22_21,2023-03-23_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- bulkscore=0 impostorscore=0 mlxscore=0 spamscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=999 phishscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303230109
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwCHCATRVRxk2BbCAQ--.54288S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3AryktFy7tFyktr48CrWxWFg_yoWxXr4DpF
+        WrCFWjka1DJF17ArZ2vw18Ca409397tw43WrnrGryfZ3Z09FyIkr1I9F4a9FnrGr4Skw1Y
+        qr4jya4293Z8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj4sTwwAAsq
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed,  8 Feb 2023 15:48:26 +0100
-Nico Boehr <nrb@linux.ibm.com> wrote:
+On Wed, 2023-03-22 at 15:27 -0700, Alexei Starovoitov wrote:
+> On Wed, Mar 22, 2023 at 5:08 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Tue, 2023-03-21 at 19:23 -0700, Alexei Starovoitov wrote:
+> > > On Fri, Mar 17, 2023 at 7:53 AM Roberto Sassu
+> > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > 
+> > > > A User Mode Driver (UMD) is a specialization of a User Mode Helper (UMH),
+> > > > which runs a user space process from a binary blob, and creates a
+> > > > bidirectional pipe, so that the kernel can make a request to that process,
+> > > > and the latter provides its response. It is currently used by bpfilter,
+> > > > although it does not seem to do any useful work.
+> > > 
+> > > FYI the new home for bpfilter is here:
+> > > https://github.com/facebook/bpfilter
+> > 
+> > Thanks. I just ensured that it worked, by doing:
+> > 
+> > getsockopt(fd, SOL_IP, IPT_SO_GET_INFO, &info, &optlen);
+> > 
+> > and accepting IPT_SO_GET_INFO in main.c.
+> > 
+> > > > The problem is, if other users would like to implement a UMD similar to
+> > > > bpfilter, they would have to duplicate the code. Instead, make an UMD
+> > > > management library and API from the existing bpfilter and sockopt code,
+> > > > and move it to common kernel code.
+> > > > 
+> > > > Also, define the software architecture and the main components of the
+> > > > library: the UMD Manager, running in the kernel, acting as the frontend
+> > > > interface to any user or kernel-originated request; the UMD Loader, also
+> > > > running in the kernel, responsible to load the UMD Handler; the UMD
+> > > > Handler, running in user space, responsible to handle requests from the UMD
+> > > > Manager and to send to it the response.
+> > > 
+> > > That doesn't look like a generic interface for UMD.
+> > 
+> > What would make it more generic? I made the API message format-
+> > independent. It has the capability of starting the user space process
+> > as required, when there is a communication.
+> > 
+> > > It was a quick hack to get bpfilter off the ground, but certainly
+> > > not a generic one.
+> > 
+> > True, it is not generic in the sense that it can accomodate any
+> > possible use case. The main goal is to move something that was running
+> > in the kernel to user space, with the same isolation guarantees as if
+> > the code was executed in the kernel.
+> 
+> They are not the same guarantees.
+> UMD is exactly equivalent to root process running in user space.
+> Meaning it can be killed, ptraced, priority inverted, etc
 
-> The KVM_S390_GET_CMMA_BITS ioctl may return incorrect values when userspace
-> specifies a start_gfn outside of memslots.
-> 
-> This can occur when a VM has multiple memslots with a hole in between:
-> 
-> +-----+----------+--------+--------+
-> | ... | Slot N-1 | <hole> | Slot N |
-> +-----+----------+--------+--------+
->       ^          ^        ^        ^
->       |          |        |        |
-> GFN   A          A+B      |        |
->                           A+B+C    |
-> 			           A+B+C+D
-> 
-> When userspace specifies a GFN in [A+B, A+B+C), it would expect to get the
-> CMMA values of the first dirty page in Slot N. However, userspace may get a
-> start_gfn of A+B+C+D with a count of 0, hence completely skipping over any
-> dirty pages in slot N.
-> 
-> The error is in kvm_s390_next_dirty_cmma(), which assumes
-> gfn_to_memslot_approx() will return the memslot _below_ the specified GFN
-> when the specified GFN lies outside a memslot. In reality it may return
-> either the memslot below or above the specified GFN.
-> 
-> When a memslot above the specified GFN is returned this happens:
-> 
-> - ofs is calculated, but since the memslot's base_gfn is larger than the
->   specified cur_gfn, ofs will underflow to a huge number.
-> - ofs is passed to find_next_bit(). Since ofs will exceed the memslot's
->   number of pages, the number of pages in the memslot is returned,
->   completely skipping over all bits in the memslot userspace would be
->   interested in.
-> 
-> Fix this by resetting ofs to zero when a memslot _above_ cur_gfn is
-> returned (cur_gfn < ms->base_gfn).
-> 
-> Signed-off-by: Nico Boehr <nrb@linux.ibm.com>
+That is the starting point.
 
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+I suppose you can remove any privilege from the UMD process, it just
+needs to read/write from/to a pipe (and in my case to use socket() with
+AF_ALG to interact with the Crypto API).
 
-> ---
->  arch/s390/kvm/kvm-s390.c | 4 ++++
->  1 file changed, 4 insertions(+)
+Also, as I mentioned, you can enforce a very strict seccomp profile,
+which forces the UMD process to use a very limited number of system
+calls.
+
+For the interactions of the rest of the system to the UMD process, you
+could deny with an LSM all the operations that you mentioned. The rest
+of the system would not be affected, only operations which have the UMD
+process as target are denied.
+
+> > > > I have two use cases, but for sake of brevity I will propose one.
+> > > > 
+> > > > I would like to add support for PGP keys and signatures in the kernel, so
+> > > > that I can extend secure boot to applications, and allow/deny code
+> > > > execution based on the signed file digests included in RPM headers.
+> > > > 
+> > > > While I proposed a patch set a while ago (based on a previous work of David
+> > > > Howells), the main objection was that the PGP packet parser should not run
+> > > > in the kernel.
+> > > > 
+> > > > That makes a perfect example for using a UMD. If the PGP parser is moved to
+> > > > user space (UMD Handler), and the kernel (UMD Manager) just instantiates
+> > > > the key and verifies the signature on already parsed data, this would
+> > > > address the concern.
+> > > 
+> > > I don't think PGP parser belongs to UMD either.
+> > > Please do it as a normal user space process and define a proper
+> > > protocol for communication between kernel and user space.
+> > 
+> > UMD is better in the sense that it establishes a bidirectional pipe
+> > between the kernel and the user space process. With that, there is no
+> > need to further restrict the access to a sysfs file, for example.
 > 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index e4890e04b210..a171a66681b4 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2158,6 +2158,10 @@ static unsigned long kvm_s390_next_dirty_cmma(struct kvm_memslots *slots,
->  		ms = container_of(mnode, struct kvm_memory_slot, gfn_node[slots->node_idx]);
->  		ofs = 0;
->  	}
-> +
-> +	if (cur_gfn < ms->base_gfn)
-> +		ofs = 0;
-> +
->  	ofs = find_next_bit(kvm_second_dirty_bitmap(ms), ms->npages, ofs);
->  	while (ofs >= ms->npages && (mnode = rb_next(mnode))) {
->  		ms = container_of(mnode, struct kvm_memory_slot, gfn_node[slots->node_idx]);
+> If a simple pipe is good enough then you can have a kernel module
+> that creates it and interacts with the user space process.
+
+Few points I forgot to mention.
+
+With the UMD approach, the binary blob is embedded in the kernel
+module, which means that no external dependencies are needed for
+integrity verification. The binary is statically compiled, and the
+kernel write-protects it at run-time.
+
+Second, since DIGLIM would check the integrity of any executable,
+including init, the PGP signature verification needs to occur before.
+So, the PGP UMD should be already started by then. That is not going to
+be a problem, since the binary is copied to a private tmpfs mount.
+
+> Out-of-tree bpftiler can do that, so can you.
+
+As far as I can see, the out-of-tree bpfilter works exactly in the same
+way as the in-tree counterpart. The binary blob is embedded in the
+kernel module.
+
+> PGP is not suitable for kernel git repo either as kernel code or as UMD.
+
+Well, the asymmetric key type can be extended with new parsers, so this
+possibility was already taken into account. The objection that the PGP
+parser should not run in kernel space is fair, but I think the UMD
+approach fully addresses that.
+
+Also, I agree with you that we should not just take any code and
+pretend that it is part of the kernel. However, in this particular
+case, the purpose of the PGP UMD would be simply to extract very few
+information from the PGP packets. The asymmetric key type and the
+signature verification infrastructure already take care of the rest.
+
+PGP keys and signatures would act as an additional system trust anchor
+for verifying critical system data (for DIGLIM, which executables are
+allowed to run), similarly to how X.509 certificates are used for
+verifying kernel modules. RPM headers, executables digests are taken
+from, are signed with PGP, so there is no other way than adding this
+functionality.
+
+And unfortunately, especially for features impacting the entire system,
+out-of-tree drivers are not really an option:
+
+https://docs.fedoraproject.org/en-US/quick-docs/kernel/overview/#_out_of_tree_drivers
+
+Thanks
+
+Roberto
 
