@@ -2,80 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48586C5E1D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 05:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DD46C5E1F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 05:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjCWEkh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Mar 2023 00:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
+        id S230174AbjCWEkl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Mar 2023 00:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjCWEkW (ORCPT
+        with ESMTP id S230267AbjCWEkY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Mar 2023 00:40:22 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FB42FCDD;
-        Wed, 22 Mar 2023 21:40:03 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id a5so3718265qto.6;
-        Wed, 22 Mar 2023 21:40:03 -0700 (PDT)
+        Thu, 23 Mar 2023 00:40:24 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9796630B29;
+        Wed, 22 Mar 2023 21:40:06 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id x1so25328035qtr.7;
+        Wed, 22 Mar 2023 21:40:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679546402;
+        d=gmail.com; s=20210112; t=1679546405;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=CGpQAXZVjMhC7kP9GPuObfvBShBYQkr0qGROK59RoVs=;
-        b=jGfdDGr6o66P0ZTe/setYhulypl773heym5C69xfz8sTi/mKBPui6Cy5CZsFlNN3ww
-         yLuGjG8eJuW/EJRJAw/EAuGsl0oYMA/b6cdDAPb83zxPyCeBPWWB7FwCAqQNh+QeNglg
-         tt9EU/WWonKA9zySZAFeLOF8Q7aFl91H7y3BncIXxhGI4I90WrDKeLYN//98sx2encGb
-         B45hYw+y39M2B4K5RYfn+12UMMAgZ7p92jqCcEYgeS0Ssld7ECh685OMlKuh4A5yJOst
-         MOyfKgL/GrmlFkM6p1yJqSjg3FgUWBS0/6r6Kj/urRhC/AojGVrLg9JqBcm1SjqN7RXv
-         57Nw==
+        bh=2eKmVKjQslDGUSFDeB71iLgQhY5mnH9+mfjAkHwLddk=;
+        b=cQdr4XV2Eq7TBZvTX97/MtD3GkBTe7HSo850bFHa4RaMkHLplHqXHJcAIjfTVTiZ1g
+         Le3232ttFxE++p1kpQK32Wzz7Zt6o5q3+OuoH9ieu8zLZwcQea074CxdkMiZq0WgP8Vr
+         1fj396ReY5xeEoQfWYPZG6tA6F7pSUzETAQ7vcCg3FM8pJwj6rGCxvAW4le2UlvwAlJB
+         LS039M+P/Do0luclFqa2yvYcFVrIxQ2pPjJ1/lBE2ZDbEf2meLEUqHU7yzSuzs9DOCE4
+         jVsXu4D2/2iylKddPL1K9YQIu9u2oHXbAQCN0d0WIZYOmVHjawFW3/D25UZe1oO+Kc8h
+         z35w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679546402;
+        d=1e100.net; s=20210112; t=1679546405;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CGpQAXZVjMhC7kP9GPuObfvBShBYQkr0qGROK59RoVs=;
-        b=vbGxK2cdE+P4ZqAvRQgd0QCg0gSRsUtfireq/as8LSmRZcyX/2kKrCMDPphjxZcrSB
-         rlGmCBeOU4HAuZM9KA5ydbOOQSZe/fNFlbEPRHhaZagi6FbBhA/7lT1iQf6AI8Sc1fBI
-         7JBk379VVRrFxNnunCobiAo9sOZ+QZXNf0G2om3Ou+GBt1tgFmepqvI05yaiqNe78DUI
-         Ho4caprrCOZvdatrMG+tOoiZ/EdXAU7j82ILMPQOzoo8kPZOFVtFzAgsCxoi2bDc4H7x
-         44FVTsQTeW3dIlGUapFRB5a9wLVgjxoZ2SERm1C/0z1rbb36Fu5jskK9NTU1miUAjSVw
-         e6Xg==
-X-Gm-Message-State: AO0yUKW19abzCVmk1iQijJYtQYTaSenbHVuFZfZkBZLIkcd0i2CUa7Cp
-        o2CbUZsNKefEYAi9Kfojnqg=
-X-Google-Smtp-Source: AK7set+TEfFRcdSv3QphXR44M1CcWSsupF9rJ0eyjJOFYrCKfAhrMZ9aVnWwjAXbjzpyla01zF5AZg==
-X-Received: by 2002:a05:622a:1a16:b0:3b9:c889:ec24 with SMTP id f22-20020a05622a1a1600b003b9c889ec24mr10400507qtb.12.1679546402682;
-        Wed, 22 Mar 2023 21:40:02 -0700 (PDT)
+        bh=2eKmVKjQslDGUSFDeB71iLgQhY5mnH9+mfjAkHwLddk=;
+        b=1RuOfcYG9EJcpg1bphdNjOPgHSF1ELV1WH7svdRGBuyfRoIA1nIRq6Y2tA7xgRGeIr
+         njLL28uabfwqCUANsY5wmsJo3FZ+R4DOaKGIUDrmeBv6vm4YdAdkYI8LUOhE9Fc6Oq1R
+         N3ci70lAevv2sKxacIEIZl6BJnR8bB3cBlioF4ujGTzTzXfgFeaKVcAW4zv3YKGgouQR
+         T+ZhQt+VWjNTMX4ls0fwAqv+yHuOlmGbDYIweetoAUtVVIZD2dIdQ8UwoZSwg0jUWG6L
+         V1/Naa0IIuth7upv+BVJisN+A4nnH0R0tMcV/Latb8rEyTMx5RQqtMpBYGlit9ZZcDFo
+         B2Qg==
+X-Gm-Message-State: AO0yUKXOPGuONlI+9jbF7WmHrOoqGESGxkYYaejkUStCc2obVry88mgG
+        GOcVWAT7Afl/fIebKCJcuRQ=
+X-Google-Smtp-Source: AK7set+nvPp9HapX8hErMkucpMWsU/jrsPLLDWvqTyPNIdQx1riUEseEqkVxprkJoe+qfhdzbRxv0g==
+X-Received: by 2002:ac8:58cb:0:b0:3e3:824f:45f1 with SMTP id u11-20020ac858cb000000b003e3824f45f1mr6962454qta.27.1679546405211;
+        Wed, 22 Mar 2023 21:40:05 -0700 (PDT)
 Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id w9-20020ac843c9000000b003d8f78b82besm3763003qtn.70.2023.03.22.21.40.01
+        by smtp.gmail.com with ESMTPSA id k3-20020ac84743000000b003e07c09cabcsm7230814qtp.4.2023.03.22.21.40.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 21:40:02 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id C0F4627C0054;
-        Thu, 23 Mar 2023 00:40:01 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 23 Mar 2023 00:40:01 -0400
-X-ME-Sender: <xms:IdgbZKiGmEP_0tgLfJ1ztwETcfvLEQ1krQBaIaXgEIQTjSY283Wqgg>
-    <xme:IdgbZLBhwutYy4gv1fGT7G9F0N_GkynpjPtxQUgAXVIsgPW7KJXfvCVL_4N29PF84
-    3aeNxfE10tnm1yfbg>
-X-ME-Received: <xmr:IdgbZCEQKKsqYvvUY7wfXzphMkQS70rHFN-ddbr_OfG3i5fnvxmqxAhYw8w6z_tgxlxsK02iooBi9hOJFyBG8PkATfqo4LlHsvo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegfedgjedvucetufdoteggodetrfdotf
+        Wed, 22 Mar 2023 21:40:04 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 62E1827C0054;
+        Thu, 23 Mar 2023 00:40:04 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 23 Mar 2023 00:40:04 -0400
+X-ME-Sender: <xms:JNgbZKCjR_xGWjRHCgJz4337wycLOKjbDuDYt1SvcnNaquKJsU3F7g>
+    <xme:JNgbZEiH-KbOLXyi7l_tVnS-Kuq-V1E0Syw10OZsar9422DiCsLeDusZfBhn6OjZW
+    x6K2IgpeKUUeU-ibA>
+X-ME-Received: <xmr:JNgbZNmhHH9bnFklcTUJm42rHarzZRxj4inR-5IXu2Oys8UqYX1-huh4h3iJ8Xg89F6VLN-4Bpi8jiEwr4mIgogQ2agFkM7PYl0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegfedgjeduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhu
     nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
     htthgvrhhnpeegleejiedthedvheeggfejveefjeejkefgveffieeujefhueeigfegueeh
-    geeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    geeggfenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
     gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
     igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:IdgbZDTw259jRn4qnZzc-pRCJiUUwEzOKLEGIq80EfWIqSpAyJQb5Q>
-    <xmx:IdgbZHzCp27vn6M_6F030tbXYi-kCgiYq9U6qg02iDw-0kq2szahkQ>
-    <xmx:IdgbZB7TXylsxL9rgJ_7MM7ASqDOmV5MeSKHLA7X1MhK6c44sOQPeg>
-    <xmx:IdgbZPhDNmTubeGhYMMvX0jCptWYZbK73A6626Vk2TU511S-miwd2w>
+X-ME-Proxy: <xmx:JNgbZIxLiX80v9txKD3clkUyb8tu5heopelIW_nX1jxGpN5GLTJNLA>
+    <xmx:JNgbZPS2qPBf5Tb3aPvUF8dwa1W4xb5HCMpk0fqgqYr94knfJLA4MA>
+    <xmx:JNgbZDa6C840NMlXFqtKqiaVJgjEMfOAiGTdLBXT2I9lkHqeVy2xgw>
+    <xmx:JNgbZLrz3vDH0VklXv6965WyF5nga8K63Q5-EazFjQJMWvxoVy3obg>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Mar 2023 00:40:00 -0400 (EDT)
+ 23 Mar 2023 00:40:03 -0400 (EDT)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     rcu@vger.kernel.org
 Cc:     Davidlohr Bueso <dave@stgolabs.net>,
@@ -90,10 +90,11 @@ Cc:     Davidlohr Bueso <dave@stgolabs.net>,
         Shuah Khan <shuah@kernel.org>,
         Bhaskar Chowdhury <unixbhaskar@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH rcu v2 07/10] torture: Enable clocksource watchdog with "tsc=watchdog"
-Date:   Wed, 22 Mar 2023 21:39:32 -0700
-Message-Id: <20230323043935.1221184-8-boqun.feng@gmail.com>
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Zqiang <qiang1.zhang@intel.com>
+Subject: [PATCH rcu v2 08/10] rcutorture: Create nocb kthreads only when testing rcu in CONFIG_RCU_NOCB_CPU=y kernels
+Date:   Wed, 22 Mar 2023 21:39:33 -0700
+Message-Id: <20230323043935.1221184-9-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230323043935.1221184-1-boqun.feng@gmail.com>
 References: <20230323043935.1221184-1-boqun.feng@gmail.com>
@@ -109,41 +110,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+From: Zqiang <qiang1.zhang@intel.com>
 
-This commit tests the "tsc=watchdog" kernel boot parameter when running
-the clocksourcewd torture tests.
+Given a non-zero rcutorture.nocbs_nthreads module parameter, the specified
+number of nocb kthreads will be created, regardless of whether or not
+the RCU implementation under test is capable of offloading callbacks.
+Please note that even vanilla RCU is incapable of offloading in kernels
+built with CONFIG_RCU_NOCB_CPU=n.  And when the RCU implementation is
+incapable of offloading callbacks, there is no point in creating those
+kthreads.
 
+This commit therefore checks the cur_ops.torture_type module parameter and
+CONFIG_RCU_NOCB_CPU Kconfig option in order to avoid creating unnecessary
+nocb tasks.
+
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+[ boqun: Fix checkpatch warning ]
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- tools/testing/selftests/rcutorture/bin/torture.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/rcu/rcutorture.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
-index 130d0de4c3bb..5a2ae2264403 100755
---- a/tools/testing/selftests/rcutorture/bin/torture.sh
-+++ b/tools/testing/selftests/rcutorture/bin/torture.sh
-@@ -497,16 +497,16 @@ fi
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index c0b2fd687bbb..e046d2c6fe10 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -3525,6 +3525,12 @@ rcu_torture_init(void)
+ 		pr_alert("rcu-torture: ->fqs NULL and non-zero fqs_duration, fqs disabled.\n");
+ 		fqs_duration = 0;
+ 	}
++	if (nocbs_nthreads != 0 && (cur_ops != &rcu_ops ||
++				    !IS_ENABLED(CONFIG_RCU_NOCB_CPU))) {
++		pr_alert("rcu-torture types: %s and CONFIG_RCU_NOCB_CPU=%d, nocb toggle disabled.\n",
++			 cur_ops->name, IS_ENABLED(CONFIG_RCU_NOCB_CPU));
++		nocbs_nthreads = 0;
++	}
+ 	if (cur_ops->init)
+ 		cur_ops->init();
  
- if test "$do_clocksourcewd" = "yes"
- then
--	torture_bootargs="rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000"
-+	torture_bootargs="rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000 tsc=watchdog"
- 	torture_set "clocksourcewd-1" tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 45s --configs TREE03 --kconfig "CONFIG_TEST_CLOCKSOURCE_WATCHDOG=y" --trust-make
- 
--	torture_bootargs="rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000 clocksource.max_cswd_read_retries=1"
-+	torture_bootargs="rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000 clocksource.max_cswd_read_retries=1 tsc=watchdog"
- 	torture_set "clocksourcewd-2" tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 45s --configs TREE03 --kconfig "CONFIG_TEST_CLOCKSOURCE_WATCHDOG=y" --trust-make
- 
- 	# In case our work is already done...
- 	if test "$do_rcutorture" != "yes"
- 	then
--		torture_bootargs="rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000"
-+		torture_bootargs="rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000 tsc=watchdog"
- 		torture_set "clocksourcewd-3" tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 45s --configs TREE03 --trust-make
- 	fi
- fi
 -- 
 2.38.1
 
