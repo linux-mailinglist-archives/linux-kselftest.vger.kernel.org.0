@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C986C5E11
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 05:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A696C5E13
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Mar 2023 05:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCWEj4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Mar 2023 00:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S230150AbjCWEj6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Mar 2023 00:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjCWEjv (ORCPT
+        with ESMTP id S229955AbjCWEjx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Mar 2023 00:39:51 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD7A265A4;
-        Wed, 22 Mar 2023 21:39:50 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id o44so10594521qvo.4;
-        Wed, 22 Mar 2023 21:39:50 -0700 (PDT)
+        Thu, 23 Mar 2023 00:39:53 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA574265AF;
+        Wed, 22 Mar 2023 21:39:52 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id r5so25349553qtp.4;
+        Wed, 22 Mar 2023 21:39:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679546389;
+        d=gmail.com; s=20210112; t=1679546392;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=HZ8d0flphaRlWC4V9l6VSChxJlOrP32J2tV42hg3zmI=;
-        b=WEZffOpSypUyM1PMJ6jeMYw2Uhn+XGytX/ZgSnaeTW3A5HmzMccRO/A8Uhgdi3fde1
-         Rz3EG5vBBEoTpdwa5/kxJfi1QsHGmJ2iX39k/5Pr+3vwTVeXW4BeSuyYx1QuWqCjrlaw
-         +DhyxP+shEjh5Es5QicukvtDlmbv/TowWxBnkahQnHHm4s5NxsZRvE+SHZiCqwzdQEWi
-         yxKbEpQQ9ikhr5zxBetxi4MBCd97s3IuRNjr1A9NJt0ZNoOJoVbnilhulIXRtjSx666e
-         oRVBrZeMiJFHPwDIoh6fzSSYgTjwxBSwXjh/WCZ+wdYDhnH8OSXcBs7al7k6OD/wX/nX
-         CFHA==
+        bh=OHEXryW8drMs0szaO1SbdhWAn9gZ8trTjV5hBTe6O2Q=;
+        b=hkNGZ94znl1tuzWRYVzw1ITnJEklP5Rilyus5lgsEeJYv9pjTKlqj+vx/i1gGr4YAL
+         MYBEZUlx+PNELIljEjB/gNmLqHP4VOEu4+x+/yWAJ2eFCJkEIa+WdMUf8VUsAt6rEq/O
+         mc+98VZY3sNI69GqnTyQxE45b+a0MQzo/sl5BUz6kASCryee90N36/PdeZ5IieXZ/I4s
+         Mnwnju7baUkBW5dlg8lXTEkipKjwjufTcvejsbXjLYGLC8KtRRV3w2GTUyiGVJiUb6Hr
+         OjZpCnsEpPKig7v3tikhwWEo+MHuPynKKhlBX+n5JDwSlQt16VgJHLhJjFe4/1jfKgPm
+         0Uyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679546389;
+        d=1e100.net; s=20210112; t=1679546392;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=HZ8d0flphaRlWC4V9l6VSChxJlOrP32J2tV42hg3zmI=;
-        b=KQiI7Z6T1/XMcD4iUocVGnM9zbTq4t52ZNvFIuQuLAE9EN/AzXpJr+1byRqVQh/aPb
-         E3D5VVjdhJ+JosrOlAmnHcX3sHEOsc0mrr/zcF5JNb/BC/xQ1nzHEuz/ruoSMA9tdjVo
-         M+uxDka5G/ocUSZ2OAr1ivnv64x4xJoqaGB1Ddt7AvOPexIb5xCpoJwCZaXpWCnx033O
-         OWuQ1XPYSOGHP02l16/nrnE82Z7gUCqu0TPRGlByFREbJYsA/0UBsGociC8EvtsL39sL
-         C3NjklbiMxRDiFEdvtpyZzYkd2CRasgvVLA+9CUDqtsEno8XtrGolPg8KaD+O+Ezb6cw
-         /8GA==
-X-Gm-Message-State: AO0yUKUc57QusjtdWH+u3JA0S2uKDBrlUeZa3lKplrt8csyhLd94g3nT
-        Y4UggPDDSl6dVd5ruKqZzTk=
-X-Google-Smtp-Source: AK7set/7u32PADWJOU5K3YLWfr92wgXwit3iahzDgPS6RggqAHZCqwCy/Rr24NqdQd6Jx9HNCKtX2g==
-X-Received: by 2002:a05:6214:c83:b0:5c0:ef32:5656 with SMTP id r3-20020a0562140c8300b005c0ef325656mr9257230qvr.11.1679546389458;
-        Wed, 22 Mar 2023 21:39:49 -0700 (PDT)
+        bh=OHEXryW8drMs0szaO1SbdhWAn9gZ8trTjV5hBTe6O2Q=;
+        b=3Aj4uUNVciaWXxgvLHozL24CyvuBYcDT7pyMQ2eslabV4/qUeDCXjVk7jAJGaO3mkr
+         35b31oEJYBAPPbDChfWrWZeA8BiA681sFkIPvPzz6Wp9by5IEKT2U9jQJhOhadFDLPFG
+         qaIaWSbGd/wIMuowgL+9uR2SaZjcNy+tZYEba6uD10gzpZ5EwkfiFUNuIzpD86c7aBCc
+         wbpx3c4aGOAZHPj1Gr+hZ0k4Ampv5q52j+ZYWqo468g1aJ/5n/984Wb2HNUyW5PsZYPx
+         XyV+TQpUo0vXCGF2eQpWBLHxSZsf8eVJKnXGP2vz+G5pVRCAKpBPlXYxEgXWZRjMGQb9
+         9uqQ==
+X-Gm-Message-State: AO0yUKVaqxAWiM3FkTnDZcghaE+9UAyDSbqdlhLti9aB2GCq7dD6M7/o
+        D/yDDeOM4cdwEO4Sh1xpZDuLnHMUjHk=
+X-Google-Smtp-Source: AK7set9ScnnZsk4iSFw8V04MF1xA4UVeHWBx1+wVrolhhCa3R4olqMjh1MPTLTdqZSsRSg/C3+ZCAQ==
+X-Received: by 2002:ac8:5f4d:0:b0:3e3:87a2:e7f5 with SMTP id y13-20020ac85f4d000000b003e387a2e7f5mr9952384qta.11.1679546391823;
+        Wed, 22 Mar 2023 21:39:51 -0700 (PDT)
 Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05620a057000b00746476405bbsm12538338qkp.122.2023.03.22.21.39.48
+        by smtp.gmail.com with ESMTPSA id f6-20020ac84986000000b003e38f7e4562sm1316017qtq.69.2023.03.22.21.39.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 21:39:48 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 888BD27C0054;
-        Thu, 23 Mar 2023 00:39:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 23 Mar 2023 00:39:48 -0400
-X-ME-Sender: <xms:FNgbZH8gcxXA2zMldNDu8vDqZVHgJTk3AROxQ-Y1fT4YJcR7LUSExw>
-    <xme:FNgbZDsMQfCLzQfAJsSDfznKLB7XweLyZivK0H1LT_1vVdgpaKBE9_8uKxzPnWf0I
-    8NGHNRT2r43KJQg5g>
-X-ME-Received: <xmr:FNgbZFCPcyQ8S0hd8p7L7pJMo4PFUbBI28BGF2MFZxfJLnTRtUXU6_KsGPIga-9hwTd6xeUK2X4vJC4E0rQJ4qZtCDGs7LShxpg>
+        Wed, 22 Mar 2023 21:39:51 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id EC53A27C0054;
+        Thu, 23 Mar 2023 00:39:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 23 Mar 2023 00:39:50 -0400
+X-ME-Sender: <xms:FtgbZIZVa6B962I7zTPebHBEGof2vLtmb_kE6IVI5vHlGuC1rOKqwA>
+    <xme:FtgbZDbqBxC5jkPuVNFzz7p619KpJX6zzkLg68hoxIYO8icwi6gZJTjUAQ7041TSp
+    89A2uYehr3ycIeqPQ>
+X-ME-Received: <xmr:FtgbZC-V86RkxyfA0nQcwsilIhcvkuIKd9ZJyl9E2E4vLe1K0SoYFWZZvxqLq3x3-5Tg8csxeahirNsSuYpiLpl1uyeDb0QU7Vk>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegfedgjeduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -69,13 +69,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegfedgjeduucetufdoteggod
     gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
     gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
     igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:FNgbZDdRmRqBWCt3sEPICXUWI_nOGXlRsln0hOVy4eNwKv_HGo5U8g>
-    <xmx:FNgbZMPCNt9O0hjowmQSBSpPJWeeR9G8sPAkIea0fbjv8685w0aD7A>
-    <xmx:FNgbZFm79mNDOmkaQ3R3CqsxBIDSLUjR4UhEwh3zDrAeSGny7XbSQw>
-    <xmx:FNgbZDl7KWwjB_uQW2goypOdlUwsWq-nyaOkp74tUl0rePyE_sdd3w>
+X-ME-Proxy: <xmx:FtgbZCor9qFVRni5oYiv-73QmFx0EKXEa5UMvq7A4qjpCfV8aTSkEA>
+    <xmx:FtgbZDrhk5NxmV6enZmTx-Lo7Ju2auIvPhr-MawNy3yjaCDzGnvAAg>
+    <xmx:FtgbZASeryAFSYK8Qc4XgSaplDLJhTl2W6ViajUF_LeyA2DIPIu7zg>
+    <xmx:FtgbZM45S3_PQqCwrvAS4wfTdfvttu4tmy34eJ1W1UdtdQIOnmYMqw>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Mar 2023 00:39:47 -0400 (EDT)
+ 23 Mar 2023 00:39:50 -0400 (EDT)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     rcu@vger.kernel.org
 Cc:     Davidlohr Bueso <dave@stgolabs.net>,
@@ -90,11 +90,10 @@ Cc:     Davidlohr Bueso <dave@stgolabs.net>,
         Shuah Khan <shuah@kernel.org>,
         Bhaskar Chowdhury <unixbhaskar@gmail.com>,
         Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Subject: [PATCH rcu v2 02/10] rcutorture: Set CONFIG_BOOTPARAM_HOTPLUG_CPU0 to offline CPU 0
-Date:   Wed, 22 Mar 2023 21:39:27 -0700
-Message-Id: <20230323043935.1221184-3-boqun.feng@gmail.com>
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH rcu v2 03/10] rcutorture: Make scenario TREE04 enable lazy call_rcu()
+Date:   Wed, 22 Mar 2023 21:39:28 -0700
+Message-Id: <20230323043935.1221184-4-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20230323043935.1221184-1-boqun.feng@gmail.com>
 References: <20230323043935.1221184-1-boqun.feng@gmail.com>
@@ -112,26 +111,24 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-There is now a BOOTPARAM_HOTPLUG_CPU0 Kconfig option that allows CPU 0
-to be offlined on x86 systems.  This commit therefore sets this option in
-the TREE01 rcutorture scenario in order to regularly test this capability.
+This commit enables the RCU_LAZY Kconfig option in scenario TREE04 in
+order to provide some ongoing testing of this configuration.
 
-Reported-by: "Zhang, Qiang1" <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- tools/testing/selftests/rcutorture/configs/rcu/TREE01 | 1 +
+ tools/testing/selftests/rcutorture/configs/rcu/TREE04 | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE01 b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
-index 8ae41d5f81a3..04831ef1f9b5 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/TREE01
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE04 b/tools/testing/selftests/rcutorture/configs/rcu/TREE04
+index ae395981b5e5..dc4985064b3a 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TREE04
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE04
 @@ -15,3 +15,4 @@ CONFIG_DEBUG_LOCK_ALLOC=n
- CONFIG_RCU_BOOST=n
  CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
  CONFIG_RCU_EXPERT=y
-+CONFIG_BOOTPARAM_HOTPLUG_CPU0=y
+ CONFIG_RCU_EQS_DEBUG=y
++CONFIG_RCU_LAZY=y
 -- 
 2.38.1
 
