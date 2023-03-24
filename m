@@ -2,109 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C88E6C7ED2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 14:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E996C7EFF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 14:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjCXNcQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 09:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59848 "EHLO
+        id S231272AbjCXNmZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 09:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbjCXNcO (ORCPT
+        with ESMTP id S230011AbjCXNmY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 09:32:14 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3520168BF;
-        Fri, 24 Mar 2023 06:32:13 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OBowWp022248;
-        Fri, 24 Mar 2023 13:32:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : content-transfer-encoding : in-reply-to : references : cc :
- from : to : subject : message-id : date; s=pp1;
- bh=3n1rsXTibXnEfD9qh/gOx5M6CCslQNR9yINjVuayrqM=;
- b=kX8buOadvNZvLmE0rs4EKsKWUXd128kcbE0BzR0J/S1a9RZ6lyDFMnBe4+gJLPzCx7ae
- dqReWpzfb/8zYQ69XvOTejnN+U9ZiDUwnbTrTFoABN6KTRmeCvK083K50GCQK9TrFxcB
- LILBw+DuL6+ieL+LLPQ+Z6IKx7JNxH6S5WMbyVSfeedkgJe9o0/1E4Svz/zIRxoLBM7v
- w3PZJFSe4pQ1x/qAPn9TDcv0yseBw68UpCh34Lb6ewm/Ljrhy3vqiWwgT+OrBT8VzMRx
- KzdsDxHbIl/Nkc75wzSFuzKKDbm7SN0mhyYfb2bsVD9zYkRV6qBRYvs8WO9NbwDwQiyF 4A== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3phbbrafrf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 13:32:09 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NLd6Kn016251;
-        Fri, 24 Mar 2023 13:32:08 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3pgxv8gr0m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 13:32:07 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ODW4sV13632000
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Mar 2023 13:32:04 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3553C20043;
-        Fri, 24 Mar 2023 13:32:04 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0E9D320040;
-        Fri, 24 Mar 2023 13:32:04 +0000 (GMT)
-Received: from t14-nrb (unknown [9.179.14.197])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 24 Mar 2023 13:32:03 +0000 (GMT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 24 Mar 2023 09:42:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D3E19F09;
+        Fri, 24 Mar 2023 06:42:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 846EBB821E5;
+        Fri, 24 Mar 2023 13:42:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A0A2C433EF;
+        Fri, 24 Mar 2023 13:42:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679665340;
+        bh=3auCBNwwTe4do8Z4FC2DAOeRlZUIxijJjRP3hXaDkOY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KqZWe3ytNi2kQdPlmlTYJ8i/BIZeCYPbdWPMYIrbXLhn0BzNIicQiYvjnqIK+THxP
+         MmjRjDgViiJS1aMOZjt/cZf59XaT7Q57e5G4q8DD8ML3MUjL/shKOYcQxqhHwI9qN/
+         hBxOy1xgpAREPuRkh5IrJ2Dix1GlVUsX4/BsKSwI=
+Date:   Fri, 24 Mar 2023 14:42:17 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <ZB2ouZ1qL931uIMr@kroah.com>
+References: <cover.1679474247.git.mazziesaccount@gmail.com>
+ <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
+ <ZBrvhfX/NNrJefgt@kroah.com>
+ <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com>
+ <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com>
+ <20230324123632.rtb52jh6zeopjwht@houat>
+ <ZB2a291P5abeah6s@kroah.com>
+ <20230324130206.di2jatakyjzbtbbz@houat>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230323153803.7ab4038d@p-imbrenda>
-References: <20230208144827.131300-1-nrb@linux.ibm.com> <20230323153803.7ab4038d@p-imbrenda>
-Cc:     borntraeger@linux.ibm.com, frankja@linux.ibm.com, shuah@kernel.org,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-From:   Nico Boehr <nrb@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH v1 0/2] KVM: s390: CMMA migration selftest and small bugfix
-Message-ID: <167966472370.41638.7744836812709181552@t14-nrb>
-User-Agent: alot/0.8.1
-Date:   Fri, 24 Mar 2023 14:32:03 +0100
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NmGJJqg16ZIg9Lx6nCGVwuOc18lmMXj5
-X-Proofpoint-GUID: NmGJJqg16ZIg9Lx6nCGVwuOc18lmMXj5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_08,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- impostorscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
- malwarescore=0 mlxscore=0 bulkscore=0 suspectscore=0 spamscore=0
- mlxlogscore=757 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303240106
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324130206.di2jatakyjzbtbbz@houat>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Claudio Imbrenda (2023-03-23 15:38:03)
-> On Wed,  8 Feb 2023 15:48:25 +0100
-> Nico Boehr <nrb@linux.ibm.com> wrote:
->=20
-> > Add a new selftest for CMMA migration. Also fix a small issue found dur=
-ing
-> > development of the test.
-> >=20
-> > Nico Boehr (2):
-> >   KVM: s390: selftests: add selftest for CMMA migration
-> >   KVM: s390: fix KVM_S390_GET_CMMA_BITS for GFNs in memslot holes
-> >=20
-> >  arch/s390/kvm/kvm-s390.c                      |   4 +
-> >  tools/testing/selftests/kvm/Makefile          |   1 +
-> >  tools/testing/selftests/kvm/s390x/cmma_test.c | 679 ++++++++++++++++++
-> >  3 files changed, 684 insertions(+)
-> >  create mode 100644 tools/testing/selftests/kvm/s390x/cmma_test.c
-> >=20
->=20
-> the series looks good in general, but I would swap the order and have
-> the fix first, and the tests after
+On Fri, Mar 24, 2023 at 02:02:06PM +0100, Maxime Ripard wrote:
+> On Fri, Mar 24, 2023 at 01:43:07PM +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Mar 24, 2023 at 01:36:32PM +0100, Maxime Ripard wrote:
+> > > On Thu, Mar 23, 2023 at 11:21:58AM +0100, Greg Kroah-Hartman wrote:
+> > > > On Thu, Mar 23, 2023 at 11:12:16AM +0100, Maxime Ripard wrote:
+> > > > > On Wed, Mar 22, 2023 at 07:57:10PM +0100, Greg Kroah-Hartman wrote:
+> > > > > > > > > +/**
+> > > > > > > > > + * test_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
+> > > > > > > > > + * @test: The test context object
+> > > > > > > > > + *
+> > > > > > > > > + * This allocates a fake struct &device to create a mock for a KUnit
+> > > > > > > > > + * test. The device will also be bound to a fake driver. It will thus be
+> > > > > > > > > + * able to leverage the usual infrastructure and most notably the
+> > > > > > > > > + * device-managed resources just like a "real" device.
+> > > > > > > > 
+> > > > > > > > What specific "usual infrastructure" are you wanting to access here?
+> > > > > > > > 
+> > > > > > > > And again, if you want a fake device, make a virtual one, by just
+> > > > > > > > calling device_create().
+> > > > > > > > 
+> > > > > > > > Or are you wanting to do "more" with that device pointer than
+> > > > > > > > device_create() can give you?
+> > > > > > > 
+> > > > > > > Personally, I was (am) only interested in devm_ unwinding. I guess the
+> > > > > > > device_create(), device_add(), device_remove()... (didn't study this
+> > > > > > > sequence in details so sorry if there is errors) could've been sufficient
+> > > > > > > for me. I haven't looked how much of the code that there is for 'platform
+> > > > > > > devices' should be duplicated to support that sequence for testability
+> > > > > > > purposes.
+> > > > > > 
+> > > > > > Any device can access devm_ code, there's no need for it to be a
+> > > > > > platform device at all.
+> > > > > 
+> > > > > Sure but the resources are only released if the device is part of a bus,
+> > > > > so it can't be a root_device (or bare device) either
+> > > > 
+> > > > The resources are not cleaned up when the device is freed no matter if
+> > > > it's on a bus or not?  If so, then that's a bug that needs to be fixed,
+> > > > and tested :)
+> > > 
+> > > Please have a look at:
+> > > https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnfwb@houat/
+> > > 
+> > > I couldn't get an answer on whether it was considered a bug or not last
+> > > time, but as you can see there's a clear difference between a root
+> > > device and a platform device that has probed when it comes to resource
+> > > cleanup.
+> > 
+> > Great, testing shows there are bugs!  :)
+> 
+> I mean, it wasn't clear to me that it was indeed a bug or the intent
+> behind devm was that it would only work when probed. Both seemed
+> reasonable.
+> 
+> > That's a great start of a test, how about submitting that in a way that
+> > I can test it and we can go from there?
+> 
+> Ack.
+> 
+> I guess I'd need to arrange them somewhat differently for it to be
+> useful and merge-able.
+> 
+> How would you prefer them to be submitted, in two different files
+> testing both the root devices and platform devices?
 
-Sure can swap the order in v2.
+root devices are rare, but yes, one for each would be good, thanks!
+
+greg k-h
