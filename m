@@ -2,65 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9346C8784
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 22:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7F36C894F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Mar 2023 00:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbjCXVdP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 17:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        id S229753AbjCXXeo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 19:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjCXVdO (ORCPT
+        with ESMTP id S230281AbjCXXen (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:33:14 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF33B1A64B
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 14:33:08 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id j15-20020a17090a318f00b0023fe33f8825so947737pjb.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 14:33:08 -0700 (PDT)
+        Fri, 24 Mar 2023 19:34:43 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0362683
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 16:34:42 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3-20020a250b03000000b00b5f1fab9897so3196072ybl.19
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 16:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679693588;
+        d=google.com; s=20210112; t=1679700881;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IwqIwv/tqLiASfdNBOtwEIEJYiaaWmQZ93Bhvs67JGQ=;
-        b=OIPfQ5hZVDJHUQ1cSW77jctoIXVTpbXLH1is/tZE2O1XfProT+a3dvD8u1FzOEf5ZV
-         JFU9CPp78hu4VYiSgoy029WjYqW36ZtPrMWPxAsT7DixBtPhRdWw4vEZjL9sEEzPdjYb
-         Bu0ZOw44UuqO9JBpIlpZxPKvSvJAodiHrgTWqhM3fPwckbpT1XIwSjR93eegagK2oQqm
-         4ZY1zTnoOATBSmFspDxOhLhOzGTMKg2nzVMkEhGcTZ9E6BSU+SsG7WzyQbkk9TT8G0Df
-         sQCm3IeUWa6dZXbmf9R5WEBCbhw7wQaOKReZnC0x1Q/TSW3eGv6+xLk1+NAQ8hTPSH4c
-         1hJA==
+        bh=NVqt0f/2DRo4XcbI675kTrDo1clxY/Vi3m7vjYnFwOA=;
+        b=aKJeJbAPI2zvDKhOXeemI6Ck070EXJq96VyMniA/gXT6T5xmvuqc94G/eI8xpgXrsr
+         mmnfq0asgxQLRWrQaMqIG8nZNZ+6ye/AaHgrfPLktSTurIeZqLky6i5qY4QAwHsj6gy+
+         80xLwC+0w4a3acbjCwa5TTEI05tYUjiNO7ssXdEJfIa9o+NJ4cd3XEfElQpSKL8ACCQO
+         8mEOPqTIpJsXn7SHM2qEMRw15jlNsQt/4dECNymTtE7bwbTw4kaLdcnb1YkBw1mcOOpv
+         oryjp1sXBhlM/E73C0JmWRC1Vn0X4gg5fu0pyyw0iS6AsgdYu0U9n1muictDpnNYqKdI
+         hfXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679693588;
+        d=1e100.net; s=20210112; t=1679700881;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IwqIwv/tqLiASfdNBOtwEIEJYiaaWmQZ93Bhvs67JGQ=;
-        b=pSpklaP+i0mDKJtyQW2AMK2VjLLUFrX7QwP6Ij8erRF1GiXG23RHe58cEnAtt9+7XY
-         SE6grDbB4GHYmopX0QYtWM7z4DvvWaxAXOiHKvXSqT0w9B5Ht+ZpmqEowLde3fEbKHYU
-         4H38TZ1eId/OxUTQr9kI5Bva3/n1R0beOBjQvxzeuzYNsQ41hEO0mElhZDU9GAfv2wBt
-         pc0TGCUKtwiv6OeDfP06+KAbH5llLnzyPxfJjga5jKVJukXVLK71GerDnZ93lIzHP6nT
-         hggrwEAilnkI160kSRTnJ0s1k4mb+FDkmy7/l5GY+4TuMi29PhOK428lkpMFFhUMe4dj
-         PP5A==
-X-Gm-Message-State: AAQBX9fUnPMAw3GlFpYLSoYqR4QdkNZgQxBOaBtz7t4+ENTQujhHCuoX
-        wFFp1N0vzvZFr7DHutGNYx4w4kGRCqk=
-X-Google-Smtp-Source: AKy350aQM1Ru4OKWaay1ah7w1ErMxIg9e8pk6GVoOvCFEK9Q8i70sf+Y+u16TQBCc2MBGtY74ApaJs2UeT0=
+        bh=NVqt0f/2DRo4XcbI675kTrDo1clxY/Vi3m7vjYnFwOA=;
+        b=gTijBLlQ9xWfa8CtArz/bLAc5pf7/Vy3I+5GDokKZ5ONG86SIMKHoeNVBIgAEAnzbH
+         sUTL3o7alN64GUCoFOdGptwgMf3N2qKTyxNoM8OsmGmTd4CsiDVsigdnlcM3v1e7R36M
+         onE3QqNh+PJFZfLko1UhnYOTyud7ziYlqlaXtihk9SVhZpn2wxn3hTURZFDo5sX/64Kd
+         hXzaauwprsUaTq9SDTl5EvSFSdC3HHaSCW3uZ64id0VhJDM0sL/h74Hhjbhfb7dePF3p
+         l+fMQWYnSzr5SJ4EKTRF4nT3i+wt6RdCdk92IDXeDB30qEiLccdZzfa3opk0qyRbDsKq
+         +D2g==
+X-Gm-Message-State: AAQBX9dUhQ2WIGzmHaAyRXA3U3gw1EQRsw4A5VzogA70jnoCl3FRUaD2
+        5Db0/kGKMrZs/MT4Ph6iFjm7rzJLYTs=
+X-Google-Smtp-Source: AKy350a6CE3UYLppfPzPR79Wj9dtjeq2AmDaaJvl57pOHOK2QDtwYeQk5hmIIjRhWHj9Z2WE449W47oFAKo=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:2385:b0:5aa:310c:e65b with SMTP id
- f5-20020a056a00238500b005aa310ce65bmr2334505pfc.2.1679693588421; Fri, 24 Mar
- 2023 14:33:08 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 14:32:48 -0700
-In-Reply-To: <20230322144528.704077-1-ivan.orlov0322@gmail.com>
+ (user=seanjc job=sendgmr) by 2002:a05:6902:18cd:b0:b74:6c88:7bff with SMTP id
+ ck13-20020a05690218cd00b00b746c887bffmr2120917ybb.0.1679700881510; Fri, 24
+ Mar 2023 16:34:41 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 16:34:40 -0700
+In-Reply-To: <20230227174654.94641-1-ackerleytng@google.com>
 Mime-Version: 1.0
-References: <20230322144528.704077-1-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <167969290615.2764662.14384745948331970319.b4-ty@google.com>
-Subject: Re: [PATCH] selftests: kvm: Add 'malloc' failure check in vcpu_save_state
+References: <20230227174654.94641-1-ackerleytng@google.com>
+Message-ID: <ZB4zkGyW7gVh9qDa@google.com>
+Subject: Re: [PATCH] tools: Copy linux/align.h into tools/
 From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com,
-        shuah@kernel.org, dmatlack@google.com, vannapurve@google.com,
-        Ivan Orlov <ivan.orlov0322@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, himadrispandya@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="utf-8"
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
@@ -71,19 +68,21 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 22 Mar 2023 18:45:28 +0400, Ivan Orlov wrote:
-> There is a 'malloc' call in vcpu_save_state function, which can
-> be unsuccessful. This patch will add the malloc failure checking
-> to avoid possible null dereference and give more information
-> about test fail reasons.
+On Mon, Feb 27, 2023, Ackerley Tng wrote:
+> This provides alignment macros for use in selftests.
 > 
+> Also clean up tools/include/linux/bitmap.h's inline definition of
+> IS_ALIGNED().
 > 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>  tools/include/linux/align.h  | 15 +++++++++++++++
+>  tools/include/linux/bitmap.h |  2 +-
+>  2 files changed, 16 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/include/linux/align.h
 
-Applied to kvm-x86 selftests, thanks!
+Anyone object to pulling in align.h?  I'd be more than happy to take this through
+the KVM tree, which is the motivation/context (we want to use the various macros
+in KVM selftests).
 
-[1/1] selftests: kvm: Add 'malloc' failure check in vcpu_save_state
-      https://github.com/kvm-x86/linux/commit/735b0e0f2d00
-
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+Thanks!
