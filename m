@@ -2,81 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598206C806A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 15:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 385996C80A6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 16:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbjCXOyr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 10:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
+        id S232235AbjCXPCu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 11:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbjCXOyp (ORCPT
+        with ESMTP id S232283AbjCXPCs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:54:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E453C4EED;
-        Fri, 24 Mar 2023 07:54:36 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OEi7SL013668;
-        Fri, 24 Mar 2023 14:54:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=I2te/dwFcHKdxuoBtDNFHmoRtExacucn8GS5FKUiSyo=;
- b=NkYxoiTa5jEZQNE6IA4oFE7x35ao8btarWXlG6CuLcm2u0cQYD7l200BKaCuIisRwnat
- q7f0VH1Sr7sDz37m4UHpIlIoDUIgXnO6m0+Lcfzy2c6AtHPWM8biDBzrRwoRLIa5INy4
- ixVD1ORFW+jOdK8Jz1KIBw6BvwXryVpBmNNzQfCe8bxEqXR0PK/AOb5/9Khl8lgh4c2Z
- tRR/X8yd1on7Egw/1ti7pZDn3TUYVETbnF2ssei0M9vzWc5jsuAOil21gslA7Mi5qTiw
- wPHHPtIhq03U/fBrZcBhzrD5ClEKhc55dRoDXLt+yNB8jx+j0C2VpqRaTFOaRXZWXiZ6 Mg== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3phdvk0823-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 14:54:31 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NLdGav016682;
-        Fri, 24 Mar 2023 14:54:29 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3pgxv8gsy5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 14:54:29 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32OEsPUW48628014
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Mar 2023 14:54:26 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CB6C120043;
-        Fri, 24 Mar 2023 14:54:25 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D8AD2004E;
-        Fri, 24 Mar 2023 14:54:25 +0000 (GMT)
-Received: from t35lp63.lnxne.boe (unknown [9.152.108.100])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 24 Mar 2023 14:54:25 +0000 (GMT)
-From:   Nico Boehr <nrb@linux.ibm.com>
-To:     borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, shuah@kernel.org
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 2/2] KVM: s390: selftests: add selftest for CMMA migration
-Date:   Fri, 24 Mar 2023 15:54:24 +0100
-Message-Id: <20230324145424.293889-3-nrb@linux.ibm.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230324145424.293889-1-nrb@linux.ibm.com>
-References: <20230324145424.293889-1-nrb@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: TGSA-j3duiFeK7ed6sZ77BmbuZvdbYFr
-X-Proofpoint-GUID: TGSA-j3duiFeK7ed6sZ77BmbuZvdbYFr
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 24 Mar 2023 11:02:48 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2072.outbound.protection.outlook.com [40.107.101.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EB01A669;
+        Fri, 24 Mar 2023 08:02:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=epwFUcKaES1lVxW75anRIQ6U055JVCY48S9x6sFmCCodSPjVe7lqy4V1hkxaj4sRl4GsUy2f5tTXOFMu+I5Q2ChrlA11IdaodjJDd5itTQlDp+o9vgK+d1NsVs0kNuwyj/HZwLrMgE+VtRWEo7oOBHenLzFTQqkUTAPBA0QNEeqzIYxKT7+JMKqAWFrKZhhRM376W3ebtTnr6h9GH0HPQgVcM27UUG0hvDeu9t+NBVvNSNn8l/RhVNcLkBP9y3XJPdykiFddjB3AKRHm02IvoWhIb2HWk0G75mPwDcdMU7RoyY3d2pFq2VOBxk41XmECIe/XbcMuNiHERxYGTrLwag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3Hl/4dQaKckbhoFe/+2JxxgSH6/DtUTV7RGVfFCyVzc=;
+ b=dxm7E16cTI1G1VVV+rXhcZOeYvR12wTEqDz8Wx5NWuqw0yf5PxNjj96Ioyxo6XuT51+72o6cbsEIuCAo6zJZ4EufAkIBdyWvnsBxr75sQukoeAaJaOoD9Lvl+E/ranNWlnenM2pxWXnFcmGDVf7qANen8j2tjeNEZnJO4kJRttDjIL0N/3t8BffW47Y5iHlNjxBJb8OiNR3YMwDdKKyp/oJCry1BKNN6QnxiDpIhCTntKnSowleJ35wGmebG4i4DXGjNkFQjybAXcaYIHc+uTHoyl2yg4V4H3kyRqi/ltWDeC21mbEPpJ2nPGzzcIkmdG0RNjIAoZSt0UI2rAjFJ6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3Hl/4dQaKckbhoFe/+2JxxgSH6/DtUTV7RGVfFCyVzc=;
+ b=dCXF3Xd4lU4J9GiwuSQ9l8A9IaWuFY0r7UiyRZ6egqdzW8MmripRp13ZYa+WgITLT51fSFUne3W1iJFQvA25f8IbrwReQPc5Qar9lqpSvlvYnRDIm6zAcOVXahGBHisx+KIqoGVyfJc23FV+hVeNlYa0dFVjb6umnyeoc/hJ3DmBKXkKEMM5eIKs/lvgoIvuEr3WKFOqSNQbZmA2x6EEtG9f37AenP/zQXc9lrSDChfJfwKcLqH2u/XGL00nHY+hYoBjVDg5WjxhPFAp2Z82XNKgC+8za/+JbMyUsQqcIpT2UVVgHVPejHzkfEXhgrWD5MX9Ly6mzf+wRWpl7oocuA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW4PR12MB6873.namprd12.prod.outlook.com (2603:10b6:303:20c::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
+ 2023 15:02:45 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Fri, 24 Mar 2023
+ 15:02:45 +0000
+Date:   Fri, 24 Mar 2023 12:02:41 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: Re: [PATCH v3 03/17] iommufd: Replace the hwpt->devices list with
+ iommufd_group
+Message-ID: <ZB27ke/vQxsCngtC@nvidia.com>
+References: <0-v3-61d41fd9e13e+1f5-iommufd_alloc_jgg@nvidia.com>
+ <3-v3-61d41fd9e13e+1f5-iommufd_alloc_jgg@nvidia.com>
+ <BN9PR11MB5276E42B629C3E5AF019B6748C879@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZBxg9cRIpsozB15G@nvidia.com>
+ <BN9PR11MB52767DA03C240F040929A2398C849@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB52767DA03C240F040929A2398C849@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BYAPR01CA0058.prod.exchangelabs.com (2603:10b6:a03:94::35)
+ To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_08,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 clxscore=1015 suspectscore=0
- phishscore=0 spamscore=0 malwarescore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2303240117
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB6873:EE_
+X-MS-Office365-Filtering-Correlation-Id: 48e92ea2-360f-4b3d-dda2-08db2c78d2dd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k7C3pejkQtljnXrfLF0N6FtLwxi3x9BhLzYi+cKFfmr7HLXqBdEqJ3ejoNSfdaI4SKeK9KuoriptGA+6JqzMwXgG+jE75AHHsJCWd0i3Uod3BYMq8v96LHo2ipFV5VWLpGV7W2ebrQ7b/L0Q+yGDm898N8eY9fYYmwS/ziwl5jM/5LqUICw2q1KXZViNtGj0nKkvMPcjvpujtvc/BHxa9vhhf+a5Uw2nFyCFcm4sEq7Z/We3J1LAKkDrXCu7chlXajqSP5endDpoMt7fq4USVMFGfb/+gy3upKPEkfpyFfePMf7YEEw6b0nRbUwjygN2Z5PT1xnmcKDut3B2VTV0c0S02kcPdkripsePxq0cmuSA8splD+kSof02vO3nCLKGJk8am6+p68AbOjuv4epMonwIb3SWkkXn9LHXRF7gb+j7EqHW0eKHhMTDGLhnH15JYYpuK3ATiHktFGQg7GQHTDoN3A273YgB4jnqsuXYX+Ze0hbzx9PRlxa1E/py1PTpuH7C5GAc79R4/2B0M9eUUTFJmtGJEpGP/mn3+7MFZrX4FwiEO7frWOR7An+hczIK
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199018)(36756003)(66946007)(8676002)(66476007)(4326008)(8936002)(41300700001)(66556008)(6916009)(6486002)(316002)(478600001)(54906003)(5660300002)(2906002)(86362001)(38100700002)(6506007)(83380400001)(6512007)(186003)(26005)(6666004)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aelACDCOgPWtwM3esJIUTSY3hputRmUbj0wt2sOyE08Uwq0WLYcJZTiROtRI?=
+ =?us-ascii?Q?l36M265DmJSbNe98rwtmLUrm0iM09jkSD7wfXoqCcPRVJeS8Vh02ciLOTMhB?=
+ =?us-ascii?Q?ote5yg4faPPVhWf4mIV37eU8gim5Gt7zlhyQ1qCWzelPOg2DRgDIrfsmh/0Y?=
+ =?us-ascii?Q?AuWkmmX0ieFOYt9niP7t+ZGd0OKJqnzjahMdMqn2vCGqD+RJY9FUhdRkh5EC?=
+ =?us-ascii?Q?bXoD+DBo4oYYFx6AkF7EqsRagZHi5jEOPKtNSRR8yeSAC+q3Wch9lnx1ojy0?=
+ =?us-ascii?Q?5kbwRAUkp3SZwxcBW48tmQ6TiRSAFUa04DiXuMQ3KozIjPQiMfJvHcTvuW3O?=
+ =?us-ascii?Q?X6tOJCxHhEvJm7booMxFekn2I2acebarZ5xrgaKpJoOQozxZ5KQilGPKJ40N?=
+ =?us-ascii?Q?yIRtKwrJJunhq3KJlycfdJROs4le1LI2c9wWwzJPyNqUVjK+wqSSNPPqL26U?=
+ =?us-ascii?Q?In84+y706HXgkUAtbKCIUlzngVXZYfdJHy2cFRxqjO01HLwKxPIKa/IpNYnG?=
+ =?us-ascii?Q?1V/kzt8+lzB4OUNTvuB7zEFRHVt+T7PpQBlKNHSVLKvjCgNyRy+pxjsd9OaO?=
+ =?us-ascii?Q?VSQqyB7r6UwDrPEi0ZwgbRIuaWHzkn/XNrN+rfpq47i8dn363BfjjRdFS8nM?=
+ =?us-ascii?Q?7LN47iyYl89EnUFF5UBDXz58Y45KiapaeZKA0sNYthCFSoKg+trQr+6JZnVh?=
+ =?us-ascii?Q?AONdjRW5jaNkKFVuiwhHosN4ZwaBpZ9R4JYr1RCijUc7wbu7N9EahMwVYZ8m?=
+ =?us-ascii?Q?hBQ4XAbbVPviS5tDB6WsIFM/9d65ko81A05+Uh48kD4NfYfkHOfHJJMNRrZO?=
+ =?us-ascii?Q?muQxUljJHR4SsL55oF56MWtsoj7xIKvvseuwqZe2HoxXCGZxvMe02zvm0Xnq?=
+ =?us-ascii?Q?YVhYBKpSoaGwflpxSU8LYV57dg+FKtwD7ZaZDSx7Lcl5t39jg8qz44yRA7vn?=
+ =?us-ascii?Q?ShST6g6FTrGjKMsrjh0iYqOo1t1p70Ndz/+H9dNzyzu5pFF2dc7YG67u+kMv?=
+ =?us-ascii?Q?9A8m4Xkjjg+coleyjaQsRUqZ+nwtlfhkGfSLFpzJh6Cz+4K84JQbdPnjUg/q?=
+ =?us-ascii?Q?4T7bVhAgCUDKB3cOqBA7JJnNrWUdS0a0fwLZ38JJzrNtJIH+hNpE7/ofVw82?=
+ =?us-ascii?Q?Yi3zDtEHRYpyOkxY0VsuezFwL/drUmIP5ZppV1myFErqlMtfm0Q69KbB8UZD?=
+ =?us-ascii?Q?/lW0aDDoVtnf57XxrMNWu2Yl1WY8Isu5VV93hRcPkcSwg1ASV4OJN5j3ArN+?=
+ =?us-ascii?Q?eMaHKgisKP0znVkhXACDSLui9wCd5ZK42nacit50ZZn0ruYPb5cXTf/N5LW2?=
+ =?us-ascii?Q?Nw07XAsm6crIqdxodonssgZllxM8pkfH5lbBizg431GGCr6S5wRjjTE34QQN?=
+ =?us-ascii?Q?QyDJa+v6fUUZ4iSyYaz1XLrKyIvwT1ce7bpyYtpsOFU7BDkThzTB2gZE20Lf?=
+ =?us-ascii?Q?CiD6Tt8fPP+XiF+3hbFuJJ2WaKaoyvXJMUTWZBN9oSYmhKDFgkJCvlqV7XxG?=
+ =?us-ascii?Q?4Wzo6pMdVYhlT3ksGlpzm2CoG+dPsBw9d8j6RkcZUXybTLmmwMmgOqYbuDcY?=
+ =?us-ascii?Q?/BNUfTZdc2KRlB42u10Ly/wrbp4bi0b/sXTZuzGJ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 48e92ea2-360f-4b3d-dda2-08db2c78d2dd
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 15:02:45.0697
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QNEwThg0Sd4k0DV8n2y9jehr2HwKXTKvRMZl15r5xy2tpom+H85JOWe0U8tMuw7V
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6873
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,727 +121,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a selftest for CMMA migration on s390.
+On Fri, Mar 24, 2023 at 01:37:51AM +0000, Tian, Kevin wrote:
 
-The tests cover:
-- interaction of dirty tracking and migration mode, see my recent patch
-  "KVM: s390: disable migration mode when dirty tracking is disabled" [1],
-- several invalid calls of KVM_S390_GET_CMMA_BITS, for example: invalid
-  flags, CMMA support off, with/without peeking
-- ensure KVM_S390_GET_CMMA_BITS initally reports all pages as dirty,
-- ensure KVM_S390_GET_CMMA_BITS properly skips over holes in memslots, but
-  also non-dirty pages
+> If vfio races attach/detach then lots of things are messed.
+> 
+> e.g. iommufd_device_detach() directly calls list_del(&idev->group_item)
+> w/o checking whether the device has been attached.
 
-Note that without the patch at [1] and the small fix in this series, the
-selftests will fail.
+Yeah, you obviously can't race attach/detach or detach/replace
 
-[1] https://lore.kernel.org/all/20230127140532.230651-2-nrb@linux.ibm.com/
+> And with that race UAF could occur if we narrow down the lock scope
+> to iommufd_hw_pagetable_attach():
+> 
+>               cpu0                                cpu1
+> vfio_iommufd_attach()
+>   iommufd_device_attach()
+>     iommufd_device_auto_get_domain()
+>       mutex_lock(&ioas->mutex);
+>       iommufd_hw_pagetable_alloc()
+>         hwpt = iommufd_object_alloc() //hwpt.users=1
+>         hwpt->domain = iommu_domain_alloc(idev->dev->bus);
+>         iommufd_hw_pagetable_attach() //hwpt.users=2
+>                                           vfio_iommufd_detach()
+>                                             iommufd_device_detach()
+>                                               mutex_lock(&idev->igroup->lock);
+>                                               hwpt = iommufd_hw_pagetable_detach()
+>                                               mutex_unlock(&idev->igroup->lock);
+>                                               iommufd_hw_pagetable_put(hwpt)
+>                                                 iommufd_object_destroy_user(hwpt) //hwpt.users=0
+>                                                   iommufd_hw_pagetable_destroy(hwpt)
+>                                                     iommu_domain_free(hwpt->domain);
+>         iopt_table_add_domain(&hwpt->ioas->iopt, hwpt->domain); //UAF
 
-Signed-off-by: Nico Boehr <nrb@linux.ibm.com>
----
- tools/testing/selftests/kvm/Makefile          |   1 +
- tools/testing/selftests/kvm/s390x/cmma_test.c | 680 ++++++++++++++++++
- 2 files changed, 681 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/s390x/cmma_test.c
+You didn't balance the refcounts properly, the cpu1 put will get to
+hwpt.users=1
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 84a627c43795..414d9cc29ecb 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -161,6 +161,7 @@ TEST_GEN_PROGS_s390x = s390x/memop
- TEST_GEN_PROGS_s390x += s390x/resets
- TEST_GEN_PROGS_s390x += s390x/sync_regs_test
- TEST_GEN_PROGS_s390x += s390x/tprot
-+TEST_GEN_PROGS_s390x += s390x/cmma_test
- TEST_GEN_PROGS_s390x += demand_paging_test
- TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-diff --git a/tools/testing/selftests/kvm/s390x/cmma_test.c b/tools/testing/selftests/kvm/s390x/cmma_test.c
-new file mode 100644
-index 000000000000..6d0751ea224b
---- /dev/null
-+++ b/tools/testing/selftests/kvm/s390x/cmma_test.c
-@@ -0,0 +1,680 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Test for s390x CMMA migration
-+ *
-+ * Copyright IBM Corp. 2023
-+ *
-+ * Authors:
-+ *  Nico Boehr <nrb@linux.ibm.com>
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "kselftest.h"
-+
-+#define MAIN_PAGE_COUNT 512
-+
-+#define TEST_DATA_PAGE_COUNT 512
-+#define TEST_DATA_MEMSLOT 1
-+#define TEST_DATA_START_GFN 4096
-+
-+#define TEST_DATA_TWO_PAGE_COUNT 256
-+#define TEST_DATA_TWO_MEMSLOT 2
-+#define TEST_DATA_TWO_START_GFN 8192
-+
-+static char cmma_value_buf[MAIN_PAGE_COUNT + TEST_DATA_PAGE_COUNT];
-+
-+/**
-+ * Dirty CMMA attributes of exactly one page in the TEST_DATA memslot,
-+ * so use_cmma goes on and the CMMA related ioctls do something.
-+ */
-+static void guest_do_one_essa(void)
-+{
-+	asm volatile(
-+		/* load TEST_DATA_START_GFN into r1 */
-+		"	llilf 1,%[start_gfn]\n"
-+		/* calculate the address from the gfn */
-+		"	sllg 1,1,12(0)\n"
-+		/* set the first page in TEST_DATA memslot to STABLE */
-+		"	.insn rrf,0xb9ab0000,2,1,1,0\n"
-+		/* hypercall */
-+		"	diag 0,0,0x501\n"
-+		"0:	j 0b"
-+		:
-+		: [start_gfn] "L"(TEST_DATA_START_GFN)
-+		: "r1", "r2", "memory", "cc"
-+	);
-+}
-+
-+/**
-+ * Touch CMMA attributes of all pages in TEST_DATA memslot. Set them to stable
-+ * state.
-+ */
-+static void guest_dirty_test_data(void)
-+{
-+	asm volatile(
-+		/* r1 = TEST_DATA_START_GFN */
-+		"	xgr 1,1\n"
-+		"	llilf 1,%[start_gfn]\n"
-+		/* r5 = TEST_DATA_PAGE_COUNT */
-+		"	lghi 5,%[page_count]\n"
-+		/* r5 += r1 */
-+		"2:	agfr 5,1\n"
-+		/* r2 = r1 << 12 */
-+		"1:	sllg 2,1,12(0)\n"
-+		/* essa(r4, r2, SET_STABLE) */
-+		"	.insn rrf,0xb9ab0000,4,2,1,0\n"
-+		/* i++ */
-+		"	agfi 1,1\n"
-+		/* if r1 < r5 goto 1 */
-+		"	cgrjl 1,5,1b\n"
-+		/* hypercall */
-+		"	diag 0,0,0x501\n"
-+		"0:	j 0b"
-+		:
-+		: [start_gfn] "L"(TEST_DATA_START_GFN),
-+		  [page_count] "L"(TEST_DATA_PAGE_COUNT)
-+		:
-+			/* the counter in our loop over the pages */
-+			"r1",
-+			/* the calculated page physical address */
-+			"r2",
-+			/* ESSA output register */
-+			"r4",
-+			/* last page */
-+			"r5",
-+			"cc", "memory"
-+	);
-+}
-+
-+static struct kvm_vm *create_vm(void)
-+{
-+	return ____vm_create(VM_MODE_DEFAULT);
-+}
-+
-+static void create_main_memslot(struct kvm_vm *vm)
-+{
-+	int i;
-+
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, MAIN_PAGE_COUNT, 0);
-+	/* set the array of memslots to zero like __vm_create does */
-+	for (i = 0; i < NR_MEM_REGIONS; i++)
-+		vm->memslots[i] = 0;
-+}
-+
-+static void create_test_memslot(struct kvm_vm *vm)
-+{
-+	vm_userspace_mem_region_add(vm,
-+				    VM_MEM_SRC_ANONYMOUS,
-+				    TEST_DATA_START_GFN << vm->page_shift,
-+				    TEST_DATA_MEMSLOT,
-+				    TEST_DATA_PAGE_COUNT,
-+				    0
-+				   );
-+	vm->memslots[MEM_REGION_TEST_DATA] = TEST_DATA_MEMSLOT;
-+}
-+
-+static void create_memslots(struct kvm_vm *vm)
-+{
-+	/*
-+	 * Our VM has the following memory layout:
-+	 * +------+---------------------------+
-+	 * | GFN  | Memslot                   |
-+	 * +------+---------------------------+
-+	 * | 0    |                           |
-+	 * | ...  | MAIN (Code, Stack, ...)   |
-+	 * | 511  |                           |
-+	 * +------+---------------------------+
-+	 * | 4096 |                           |
-+	 * | ...  | TEST_DATA                 |
-+	 * | 4607 |                           |
-+	 * +------+---------------------------+
-+	 */
-+	create_main_memslot(vm);
-+	create_test_memslot(vm);
-+}
-+
-+static void finish_vm_setup(struct kvm_vm *vm)
-+{
-+	struct userspace_mem_region *slot0;
-+
-+	kvm_vm_elf_load(vm, program_invocation_name);
-+
-+	slot0 = memslot2region(vm, 0);
-+	ucall_init(vm, slot0->region.guest_phys_addr + slot0->region.memory_size);
-+
-+	kvm_arch_vm_post_create(vm);
-+}
-+
-+static struct kvm_vm *create_vm_two_memslots(void)
-+{
-+	struct kvm_vm *vm;
-+
-+	vm = create_vm();
-+
-+	create_memslots(vm);
-+
-+	finish_vm_setup(vm);
-+
-+	return vm;
-+}
-+
-+static void enable_cmma(struct kvm_vm *vm)
-+{
-+	int r;
-+
-+	r = __kvm_device_attr_set(vm->fd, KVM_S390_VM_MEM_CTRL, KVM_S390_VM_MEM_ENABLE_CMMA, NULL);
-+	TEST_ASSERT(!r, "enabling cmma failed r=%d errno=%d", r, errno);
-+}
-+
-+static void enable_dirty_tracking(struct kvm_vm *vm)
-+{
-+	vm_mem_region_set_flags(vm, 0, KVM_MEM_LOG_DIRTY_PAGES);
-+	vm_mem_region_set_flags(vm, TEST_DATA_MEMSLOT, KVM_MEM_LOG_DIRTY_PAGES);
-+}
-+
-+static int __enable_migration_mode(struct kvm_vm *vm)
-+{
-+	return __kvm_device_attr_set(vm->fd,
-+				     KVM_S390_VM_MIGRATION,
-+				     KVM_S390_VM_MIGRATION_START,
-+				     NULL
-+				    );
-+}
-+
-+static void enable_migration_mode(struct kvm_vm *vm)
-+{
-+	int r = __enable_migration_mode(vm);
-+
-+	TEST_ASSERT(!r, "enabling migration mode failed r=%d errno=%d", r, errno);
-+}
-+
-+static bool is_migration_mode_on(struct kvm_vm *vm)
-+{
-+	u64 out;
-+	int r;
-+
-+	r = __kvm_device_attr_get(vm->fd,
-+				  KVM_S390_VM_MIGRATION,
-+				  KVM_S390_VM_MIGRATION_STATUS,
-+				  &out
-+				 );
-+	TEST_ASSERT(!r, "getting migration mode status failed r=%d errno=%d", r, errno);
-+	return out;
-+}
-+
-+static int vm_get_cmma_bits(struct kvm_vm *vm, u64 flags, int *errno_out)
-+{
-+	struct kvm_s390_cmma_log args;
-+	int rc;
-+
-+	errno = 0;
-+
-+	args = (struct kvm_s390_cmma_log){
-+		.start_gfn = 0,
-+		.count = sizeof(cmma_value_buf),
-+		.flags = flags,
-+		.values = (__u64)&cmma_value_buf[0]
-+	};
-+	rc = __vm_ioctl(vm, KVM_S390_GET_CMMA_BITS, &args);
-+
-+	*errno_out = errno;
-+	return rc;
-+}
-+
-+static void test_get_cmma_basic(void)
-+{
-+	struct kvm_vm *vm = create_vm_two_memslots();
-+	struct kvm_vcpu *vcpu;
-+	int rc, errno_out;
-+
-+	/* GET_CMMA_BITS without CMMA enabled should fail */
-+	rc = vm_get_cmma_bits(vm, 0, &errno_out);
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_out, ENXIO);
-+
-+	enable_cmma(vm);
-+	vcpu = vm_vcpu_add(vm, 1, guest_do_one_essa);
-+
-+	vcpu_run(vcpu);
-+
-+	/* GET_CMMA_BITS without migration mode and without peeking should fail */
-+	rc = vm_get_cmma_bits(vm, 0, &errno_out);
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_out, EINVAL);
-+
-+	/* GET_CMMA_BITS without migration mode and with peeking should work */
-+	rc = vm_get_cmma_bits(vm, KVM_S390_CMMA_PEEK, &errno_out);
-+	ASSERT_EQ(rc, 0);
-+	ASSERT_EQ(errno_out, 0);
-+
-+	enable_dirty_tracking(vm);
-+	enable_migration_mode(vm);
-+
-+	/* GET_CMMA_BITS with invalid flags */
-+	rc = vm_get_cmma_bits(vm, 0xfeedc0fe, &errno_out);
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno_out, EINVAL);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static void assert_exit_was_hypercall(struct kvm_vcpu *vcpu)
-+{
-+	ASSERT_EQ(vcpu->run->exit_reason, 13);
-+	ASSERT_EQ(vcpu->run->s390_sieic.icptcode, 4);
-+	ASSERT_EQ(vcpu->run->s390_sieic.ipa, 0x8300);
-+	ASSERT_EQ(vcpu->run->s390_sieic.ipb, 0x5010000);
-+}
-+
-+static void test_migration_mode(void)
-+{
-+	struct kvm_vm *vm = create_vm();
-+	struct kvm_vcpu *vcpu;
-+	u64 orig_psw;
-+	int rc;
-+
-+	/* enabling migration mode on a VM without memory should fail */
-+	rc = __enable_migration_mode(vm);
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+	TEST_ASSERT(!is_migration_mode_on(vm), "migration mode should still be off");
-+	errno = 0;
-+
-+	create_memslots(vm);
-+	finish_vm_setup(vm);
-+
-+	enable_cmma(vm);
-+	vcpu = vm_vcpu_add(vm, 1, guest_do_one_essa);
-+	orig_psw = vcpu->run->psw_addr;
-+
-+	/*
-+	 * Execute one essa instruction in the guest. Otherwise the guest will
-+	 * not have use_cmm enabled and GET_CMMA_BITS will return no pages.
-+	 */
-+	vcpu_run(vcpu);
-+	assert_exit_was_hypercall(vcpu);
-+
-+	/* migration mode when memslots have dirty tracking off should fail */
-+	rc = __enable_migration_mode(vm);
-+	ASSERT_EQ(rc, -1);
-+	ASSERT_EQ(errno, EINVAL);
-+	TEST_ASSERT(!is_migration_mode_on(vm), "migration mode should still be off");
-+	errno = 0;
-+
-+	/* enable dirty tracking */
-+	enable_dirty_tracking(vm);
-+
-+	/* enabling migration mode should work now */
-+	rc = __enable_migration_mode(vm);
-+	ASSERT_EQ(rc, 0);
-+	TEST_ASSERT(is_migration_mode_on(vm), "migration mode should be on");
-+	errno = 0;
-+
-+	/* execute another ESSA instruction to see this goes fine */
-+	vcpu->run->psw_addr = orig_psw;
-+	vcpu_run(vcpu);
-+	assert_exit_was_hypercall(vcpu);
-+
-+	/*
-+	 * With migration mode on, create a new memslot with dirty tracking off.
-+	 * This should turn off migration mode.
-+	 */
-+	TEST_ASSERT(is_migration_mode_on(vm), "migration mode should be on");
-+	vm_userspace_mem_region_add(vm,
-+				    VM_MEM_SRC_ANONYMOUS,
-+				    TEST_DATA_TWO_START_GFN << vm->page_shift,
-+				    TEST_DATA_TWO_MEMSLOT,
-+				    TEST_DATA_TWO_PAGE_COUNT,
-+				    0
-+				   );
-+	TEST_ASSERT(!is_migration_mode_on(vm),
-+		    "creating memslot without dirty tracking turns off migration mode"
-+		   );
-+
-+	/* ESSA instructions should still execute fine */
-+	vcpu->run->psw_addr = orig_psw;
-+	vcpu_run(vcpu);
-+	assert_exit_was_hypercall(vcpu);
-+
-+	/*
-+	 * Turn on dirty tracking on the new memslot.
-+	 * It should be possible to turn migration mode back on again.
-+	 */
-+	vm_mem_region_set_flags(vm, TEST_DATA_TWO_MEMSLOT, KVM_MEM_LOG_DIRTY_PAGES);
-+	rc = __enable_migration_mode(vm);
-+	ASSERT_EQ(rc, 0);
-+	TEST_ASSERT(is_migration_mode_on(vm), "migration mode should be on");
-+	errno = 0;
-+
-+	/*
-+	 * Turn off dirty tracking again, this time with just a flag change.
-+	 * Again, migration mode should turn off.
-+	 */
-+	TEST_ASSERT(is_migration_mode_on(vm), "migration mode should be on");
-+	vm_mem_region_set_flags(vm, TEST_DATA_TWO_MEMSLOT, 0);
-+	TEST_ASSERT(!is_migration_mode_on(vm),
-+		    "disabling dirty tracking should turn off migration mode"
-+		   );
-+
-+	/* ESSA instructions should still execute fine */
-+	vcpu->run->psw_addr = orig_psw;
-+	vcpu_run(vcpu);
-+	assert_exit_was_hypercall(vcpu);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+/**
-+ * Given a VM with the MAIN and TEST_DATA memslot, assert that both slots have
-+ * CMMA attributes of all pages in both memslots and nothing more dirty.
-+ * This has the useful side effect of ensuring nothing is CMMA dirty after this
-+ * function.
-+ */
-+static void assert_all_slots_cmma_dirty(struct kvm_vm *vm)
-+{
-+	struct kvm_s390_cmma_log args;
-+
-+	/*
-+	 * First iteration - everything should be dirty.
-+	 * Start at the main memslot...
-+	 */
-+	args = (struct kvm_s390_cmma_log){
-+		.start_gfn = 0,
-+		.count = sizeof(cmma_value_buf),
-+		.flags = 0,
-+		.values = (__u64)&cmma_value_buf[0]
-+	};
-+	memset(cmma_value_buf, 0xff, sizeof(cmma_value_buf));
-+	vm_ioctl(vm, KVM_S390_GET_CMMA_BITS, &args);
-+	ASSERT_EQ(args.count, MAIN_PAGE_COUNT);
-+	ASSERT_EQ(args.remaining, TEST_DATA_PAGE_COUNT);
-+	ASSERT_EQ(args.start_gfn, 0);
-+
-+	/* ...and then - after a hole - the TEST_DATA memslot should follow */
-+	args = (struct kvm_s390_cmma_log){
-+		.start_gfn = MAIN_PAGE_COUNT,
-+		.count = sizeof(cmma_value_buf),
-+		.flags = 0,
-+		.values = (__u64)&cmma_value_buf[0]
-+	};
-+	memset(cmma_value_buf, 0xff, sizeof(cmma_value_buf));
-+	vm_ioctl(vm, KVM_S390_GET_CMMA_BITS, &args);
-+	ASSERT_EQ(args.count, TEST_DATA_PAGE_COUNT);
-+	ASSERT_EQ(args.start_gfn, TEST_DATA_START_GFN);
-+	ASSERT_EQ(args.remaining, 0);
-+
-+	/* ...and nothing else should be there */
-+	args = (struct kvm_s390_cmma_log){
-+		.start_gfn = TEST_DATA_START_GFN + TEST_DATA_PAGE_COUNT,
-+		.count = sizeof(cmma_value_buf),
-+		.flags = 0,
-+		.values = (__u64)&cmma_value_buf[0]
-+	};
-+	memset(cmma_value_buf, 0xff, sizeof(cmma_value_buf));
-+	vm_ioctl(vm, KVM_S390_GET_CMMA_BITS, &args);
-+	ASSERT_EQ(args.count, 0);
-+	ASSERT_EQ(args.start_gfn, 0);
-+	ASSERT_EQ(args.remaining, 0);
-+}
-+
-+/**
-+ * Given a VM, assert no pages are CMMA dirty.
-+ */
-+static void assert_no_pages_cmma_dirty(struct kvm_vm *vm)
-+{
-+	struct kvm_s390_cmma_log args;
-+
-+	/* If we start from GFN 0 again, nothing should be dirty. */
-+	args = (struct kvm_s390_cmma_log){
-+		.start_gfn = 0,
-+		.count = sizeof(cmma_value_buf),
-+		.flags = 0,
-+		.values = (__u64)&cmma_value_buf[0]
-+	};
-+	memset(cmma_value_buf, 0xff, sizeof(cmma_value_buf));
-+	vm_ioctl(vm, KVM_S390_GET_CMMA_BITS, &args);
-+	if (args.count || args.remaining || args.start_gfn)
-+		TEST_FAIL("pages are still dirty start_gfn=0x%llx count=%u remaining=%llu",
-+			  args.start_gfn,
-+			  args.count,
-+			  args.remaining
-+			 );
-+}
-+
-+static void test_get_inital_dirty(void)
-+{
-+	struct kvm_vm *vm = create_vm_two_memslots();
-+	struct kvm_vcpu *vcpu;
-+
-+	enable_cmma(vm);
-+	vcpu = vm_vcpu_add(vm, 1, guest_do_one_essa);
-+
-+	/*
-+	 * Execute one essa instruction in the guest. Otherwise the guest will
-+	 * not have use_cmm enabled and GET_CMMA_BITS will return no pages.
-+	 */
-+	vcpu_run(vcpu);
-+	assert_exit_was_hypercall(vcpu);
-+
-+	enable_dirty_tracking(vm);
-+	enable_migration_mode(vm);
-+
-+	assert_all_slots_cmma_dirty(vm);
-+
-+	/* Start from the beginning again and make sure nothing else is dirty */
-+	assert_no_pages_cmma_dirty(vm);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static void query_cmma_range(struct kvm_vm *vm,
-+			     u64 start_gfn, u64 gfn_count,
-+			     struct kvm_s390_cmma_log *res_out)
-+{
-+	*res_out = (struct kvm_s390_cmma_log){
-+		.start_gfn = start_gfn,
-+		.count = gfn_count,
-+		.flags = 0,
-+		.values = (__u64)&cmma_value_buf[0]
-+	};
-+	memset(cmma_value_buf, 0xff, sizeof(cmma_value_buf));
-+	vm_ioctl(vm, KVM_S390_GET_CMMA_BITS, res_out);
-+}
-+
-+/**
-+ * Assert the given cmma_log struct that was executed by query_cmma_range()
-+ * indicates the first dirty gfn is at first_dirty_gfn and contains exactly
-+ * dirty_gfn_count CMMA values.
-+ */
-+static void assert_cmma_dirty(u64 first_dirty_gfn,
-+			      u64 dirty_gfn_count,
-+			      const struct kvm_s390_cmma_log *res)
-+{
-+	ASSERT_EQ(res->start_gfn, first_dirty_gfn);
-+	ASSERT_EQ(res->count, dirty_gfn_count);
-+	for (size_t i = 0; i < dirty_gfn_count; i++)
-+		ASSERT_EQ(cmma_value_buf[0], 0x0); /* stable state */
-+	ASSERT_EQ(cmma_value_buf[dirty_gfn_count], 0xff); /* not touched */
-+}
-+
-+static void test_get_skip_holes(void)
-+{
-+	size_t gfn_offset;
-+	struct kvm_vm *vm = create_vm_two_memslots();
-+	struct kvm_s390_cmma_log log;
-+	struct kvm_vcpu *vcpu;
-+	u64 orig_psw;
-+
-+	enable_cmma(vm);
-+	vcpu = vm_vcpu_add(vm, 1, guest_dirty_test_data);
-+
-+	orig_psw = vcpu->run->psw_addr;
-+
-+	/*
-+	 * Execute some essa instructions in the guest. Otherwise the guest will
-+	 * not have use_cmm enabled and GET_CMMA_BITS will return no pages.
-+	 */
-+	vcpu_run(vcpu);
-+	assert_exit_was_hypercall(vcpu);
-+
-+	enable_dirty_tracking(vm);
-+	enable_migration_mode(vm);
-+
-+	/* un-dirty all pages */
-+	assert_all_slots_cmma_dirty(vm);
-+
-+	/* Then, dirty just the TEST_DATA memslot */
-+	vcpu->run->psw_addr = orig_psw;
-+	vcpu_run(vcpu);
-+
-+	gfn_offset = TEST_DATA_START_GFN;
-+	/**
-+	 * Query CMMA attributes of one page, starting at page 0. Since the
-+	 * main memslot was not touched by the VM, this should yield the first
-+	 * page of the TEST_DATA memslot.
-+	 * The dirty bitmap should now look like this:
-+	 * 0: not dirty
-+	 * [0x1, 0x200): dirty
-+	 */
-+	query_cmma_range(vm, 0, 1, &log);
-+	assert_cmma_dirty(gfn_offset, 1, &log);
-+	gfn_offset++;
-+
-+	/**
-+	 * Query CMMA attributes of 32 (0x20) pages past the end of the TEST_DATA
-+	 * memslot. This should wrap back to the beginning of the TEST_DATA
-+	 * memslot, page 1.
-+	 * The dirty bitmap should now look like this:
-+	 * [0, 0x21): not dirty
-+	 * [0x21, 0x200): dirty
-+	 */
-+	query_cmma_range(vm, TEST_DATA_START_GFN + TEST_DATA_PAGE_COUNT, 0x20, &log);
-+	assert_cmma_dirty(gfn_offset, 0x20, &log);
-+	gfn_offset += 0x20;
-+
-+	/* Skip 32 pages */
-+	gfn_offset += 0x20;
-+
-+	/**
-+	 * After skipping 32 pages, query the next 32 (0x20) pages.
-+	 * The dirty bitmap should now look like this:
-+	 * [0, 0x21): not dirty
-+	 * [0x21, 0x41): dirty
-+	 * [0x41, 0x61): not dirty
-+	 * [0x61, 0x200): dirty
-+	 */
-+	query_cmma_range(vm, gfn_offset, 0x20, &log);
-+	assert_cmma_dirty(gfn_offset, 0x20, &log);
-+	gfn_offset += 0x20;
-+
-+	/**
-+	 * Query 1 page from the beginning of the TEST_DATA memslot. This should
-+	 * yield page 0x21.
-+	 * The dirty bitmap should now look like this:
-+	 * [0, 0x22): not dirty
-+	 * [0x22, 0x41): dirty
-+	 * [0x41, 0x61): not dirty
-+	 * [0x61, 0x200): dirty
-+	 */
-+	query_cmma_range(vm, TEST_DATA_START_GFN, 1, &log);
-+	assert_cmma_dirty(TEST_DATA_START_GFN + 0x21, 1, &log);
-+	gfn_offset++;
-+
-+	/**
-+	 * Query 15 (0xF) pages from page 0x23 in TEST_DATA memslot.
-+	 * This should yield pages [0x23, 0x33).
-+	 * The dirty bitmap should now look like this:
-+	 * [0, 0x22): not dirty
-+	 * 0x22: dirty
-+	 * [0x23, 0x33): not dirty
-+	 * [0x33, 0x41): dirty
-+	 * [0x41, 0x61): not dirty
-+	 * [0x61, 0x200): dirty
-+	 */
-+	gfn_offset = TEST_DATA_START_GFN + 0x23;
-+	query_cmma_range(vm, gfn_offset, 15, &log);
-+	assert_cmma_dirty(gfn_offset, 15, &log);
-+
-+	/**
-+	 * Query 17 (0x11) pages from page 0x22 in TEST_DATA memslot.
-+	 * This should yield page [0x22, 0x33)
-+	 * The dirty bitmap should now look like this:
-+	 * [0, 0x33): not dirty
-+	 * [0x33, 0x41): dirty
-+	 * [0x41, 0x61): not dirty
-+	 * [0x61, 0x200): dirty
-+	 */
-+	gfn_offset = TEST_DATA_START_GFN + 0x22;
-+	query_cmma_range(vm, gfn_offset, 17, &log);
-+	assert_cmma_dirty(gfn_offset, 17, &log);
-+
-+	/**
-+	 * Query 25 (0x19) pages from page 0x40 in TEST_DATA memslot.
-+	 * This should yield page 0x40 and nothing more, since there are more
-+	 * than 16 non-dirty pages after page 0x40.
-+	 * The dirty bitmap should now look like this:
-+	 * [0, 0x33): not dirty
-+	 * [0x33, 0x40): dirty
-+	 * [0x40, 0x61): not dirty
-+	 * [0x61, 0x200): dirty
-+	 */
-+	gfn_offset = TEST_DATA_START_GFN + 0x40;
-+	query_cmma_range(vm, gfn_offset, 25, &log);
-+	assert_cmma_dirty(gfn_offset, 1, &log);
-+
-+	/**
-+	 * Query pages [0x33, 0x40).
-+	 * The dirty bitmap should now look like this:
-+	 * [0, 0x61): not dirty
-+	 * [0x61, 0x200): dirty
-+	 */
-+	gfn_offset = TEST_DATA_START_GFN + 0x33;
-+	query_cmma_range(vm, gfn_offset, 0x40 - 0x33, &log);
-+	assert_cmma_dirty(gfn_offset, 0x40 - 0x33, &log);
-+
-+	/**
-+	 * Query the remaining pages [0x61, 0x200).
-+	 */
-+	gfn_offset = TEST_DATA_START_GFN;
-+	query_cmma_range(vm, gfn_offset, TEST_DATA_PAGE_COUNT - 0x61, &log);
-+	assert_cmma_dirty(TEST_DATA_START_GFN + 0x61, TEST_DATA_PAGE_COUNT - 0x61, &log);
-+
-+	assert_no_pages_cmma_dirty(vm);
-+}
-+
-+struct testdef {
-+	const char *name;
-+	void (*test)(void);
-+} testlist[] = {
-+	{ "migration mode and dirty tracking", test_migration_mode },
-+	{ "GET_CMMA_BITS: basic calls", test_get_cmma_basic },
-+	{ "GET_CMMA_BITS: all pages are dirty initally", test_get_inital_dirty },
-+	{ "GET_CMMA_BITS: holes are skipped", test_get_skip_holes },
-+};
-+
-+int main(int argc, char *argv[])
-+{
-+	int idx;
-+
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_SYNC_REGS));
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_S390_CMMA_MIGRATION));
-+
-+	ksft_print_header();
-+
-+	ksft_set_plan(ARRAY_SIZE(testlist));
-+
-+	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
-+		testlist[idx].test();
-+		ksft_test_result_pass("%s\n", testlist[idx].name);
-+	}
-+
-+	ksft_finished();	/* Print results and exit() accordingly */
-+}
--- 
-2.39.1
+There is a refcount_inc in iommufd_hw_pagetable_attach(), the
+iommufd_hw_pagetable_alloc() retains its reference and so the domain
+is guarenteed valid
 
+Jason
