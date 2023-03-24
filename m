@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65666C7829
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 07:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A19876C782A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 07:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjCXGud (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 02:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
+        id S230023AbjCXGu7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 02:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjCXGuc (ORCPT
+        with ESMTP id S229661AbjCXGu5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:50:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD5821979
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Mar 2023 23:50:31 -0700 (PDT)
+        Fri, 24 Mar 2023 02:50:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147E021979
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Mar 2023 23:50:57 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 44C6D1FE73;
-        Fri, 24 Mar 2023 06:50:30 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1F061339D0;
+        Fri, 24 Mar 2023 06:50:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679640630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1679640655; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=KAIVbVA0kWjDSsp3eCHgDldfRGBwyOVQfzNSUdfb5Zs=;
-        b=ivgjV34HVOZldlEZdd3m9v67T4dDgvXUTrQ6JQaa5eFoMfMCQNjeE9/DCOIPJ6fhpG6E2k
-        FwsWTHD84eQBXdM02Vu3cxAkx4Z+AikLvzrWW6wOGCDbRQk44MM5RlwPPHFKZwyS0HIzsV
-        ZKjnWXcSdpeCaelzIomrU9noVOC6YWw=
+        bh=NxyX9q1VYVSFzYPMQaaKPjGrb1QDBq295V4jkkU49IY=;
+        b=rCUi29E2/NT6lntN1p6jq6ObXr/jOE+j8IljXyD7/G+eEVOxpRWRT9U8wJOn11jUJWoB5i
+        FoOiMiJtv4Ib8SyxdLHL5g2nxIgWv/33A42zC90OgygYgDy8LW6yEyJzHWjeUyf/27i+7d
+        ZijIAXorRvzH3GiG0ds0ezefJZ3zBXo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679640630;
+        s=susede2_ed25519; t=1679640655;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=KAIVbVA0kWjDSsp3eCHgDldfRGBwyOVQfzNSUdfb5Zs=;
-        b=OwCPvcFoA6iCYKtMF9ktDTgFtxnpxAnrdPGv7rS7xSu0q76nLGzOZotdVcQseGyggip60S
-        Y636lEC6hvs3UcAQ==
+        bh=NxyX9q1VYVSFzYPMQaaKPjGrb1QDBq295V4jkkU49IY=;
+        b=bCxQiSTOMwt/7tpEJF/Dsrch7G8gETK9f2Wx4LHCAx7QSsNxHmWcXhFshqkD3P8gd/PBLz
+        Rz5tGhdkFREy5/BQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 20F0A133E5;
-        Fri, 24 Mar 2023 06:50:30 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EDB5F133E5;
+        Fri, 24 Mar 2023 06:50:54 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id bMhfBzZIHWQRTAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 24 Mar 2023 06:50:30 +0000
-Date:   Fri, 24 Mar 2023 07:50:29 +0100
-Message-ID: <87bkkihccq.wl-tiwai@suse.de>
+        id z9NOOU5IHWQtTAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 24 Mar 2023 06:50:54 +0000
+Date:   Fri, 24 Mar 2023 07:50:54 +0100
+Message-ID: <87a602hcc1.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest/alsa - mixer-test: Log values associated with event issues
-In-Reply-To: <20230322-alsa-mixer-event-values-v1-1-78189fcf6655@kernel.org>
-References: <20230322-alsa-mixer-event-values-v1-1-78189fcf6655@kernel.org>
+Subject: Re: [PATCH] kselftest/alsa - pcm-test: Don't include diagnostic message in test name
+In-Reply-To: <20230323-alsa-pcm-test-names-v1-1-8be67a8885ff@kernel.org>
+References: <20230323-alsa-pcm-test-names-v1-1-8be67a8885ff@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -69,13 +69,16 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 22 Mar 2023 16:18:07 +0100,
+On Thu, 23 Mar 2023 19:48:28 +0100,
 Mark Brown wrote:
 > 
-> While it is common for driver bugs with events to apply to all events there
-> are some issues which only trigger for specific values. Understanding these
-> is easier if we know what we were trying to do when configuring the control
-> so add logging for the specific values involved in the spurious event.
+> When reporting errors or skips we currently include the diagnostic message
+> indicating why we're failing or skipping. This isn't ideal since KTAP
+> defines the entire print as the test name, so if there's an error then test
+> systems won't detect the test as being the same one as a passing test. Move
+> the diagnostic to a separate ksft_print_msg() to avoid this issue, the test
+> name part will always be the same for passes, fails and skips and the
+> diagnostic information is still displayed.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 
