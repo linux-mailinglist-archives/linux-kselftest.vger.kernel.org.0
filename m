@@ -2,107 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642966C84B7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 19:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CC76C856E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 19:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjCXSTl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 14:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S229734AbjCXS6V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 14:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjCXSTk (ORCPT
+        with ESMTP id S229522AbjCXS6U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 14:19:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF08F1F5FD;
-        Fri, 24 Mar 2023 11:19:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7D76133B68;
-        Fri, 24 Mar 2023 18:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1679681978; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GsXEmpX7jt/HfXlKrWUvTT6ogyq2n9SaBj4U2OfhPHc=;
-        b=CBx76FguKcCbaNh++Rix2ar8jnobmAuieXUZZS19lXDeHSnKBM6hwUD7+5a9uveK9ryyEf
-        cEjIxxsPM7+BmtmM34Of1N6aOCJDguL2vO59qwvH6JFhwoXcNxefhwQ3UGdqCSYq5lQvwt
-        IPytjsmPLopWx/Ekf7gZ/Rn4Z/z8its=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3A370133E5;
-        Fri, 24 Mar 2023 18:19:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ek3SDLrpHWSORAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 24 Mar 2023 18:19:38 +0000
-Date:   Fri, 24 Mar 2023 19:19:36 +0100
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 3/5] cgroup/cpuset: Find another usable CPU if none found
- in current cpuset
-Message-ID: <20230324181936.5sf6xjc5a4vacuku@blackpad>
-References: <20230306200849.376804-1-longman@redhat.com>
- <20230306200849.376804-4-longman@redhat.com>
- <20230314181749.5b4k6selbgdhl3up@blackpad>
- <58a1a878-fa0b-285d-3e43-2b5103d3c770@redhat.com>
- <20230317122708.ax3m2d4zijkfdzjq@blackpad>
- <ca664da8-0f47-06b2-a94c-82b2f9a1c3aa@redhat.com>
- <20230324143247.GA27199@willie-the-truck>
+        Fri, 24 Mar 2023 14:58:20 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70A41910D
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 11:58:18 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id b20so11749140edd.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 11:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1679684297;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aM5HxqOV+QtMfuclBgHJH7lTiijH/4O4dxNBYYZxrqc=;
+        b=07sSmpXBzc0QBHuyWMaRsKOFNZH+77XWwt9mjxzInZ4xzv3Coh3Sw4irKDABzDLCFj
+         +mTqvA6iqrQUaci32rukAbuZY1WfmglHxTkHy4fnvXtg4y8laYEyDyFysnjjUdF0t23P
+         xXgDSs+fhVNG6OS5qlNdojtmpMnVHfcIaJ0r7/CK9kvjKcDxeWsy46GgY3tzLUgNLnQg
+         bfjn4Qohul6/HLinfXeEFwpNUu08X6BI1tACKZdjUWnIGzi8cIOCl1JWh+OYSIOxkMro
+         tgWQ8UJlK6H8YrL6982/5lwTA1mgtrFfzWnKYhEGDCkhQcBtNnVC88LfC2mW4sZDdTZ9
+         3svQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679684297;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aM5HxqOV+QtMfuclBgHJH7lTiijH/4O4dxNBYYZxrqc=;
+        b=6F+EFLceSZtTx4j8kcWWmWFMoBn/6TNIRh6M1Z/9eABhGTOPvB7+MNngi1cWkXDmNy
+         0TD7Imb/yszc+amJ33sriaOIo8B4kDymMhV6hgIvzQPStF+lA/7kg7tJnLujYNO0Edys
+         q3axIwgJFzGQVexbwnNdGdS8kOY9DHVC2o2s/oKVn361cuSdwEMo8BZ/zy+L6mZgEuch
+         txd1j1nUohmoa2x/SIWAFq8wG5Oko7U49p4DWAmT2AnXwMUBwJnYxVv0EeiRo5Ze4Tda
+         pQ9bMKOR7dOwNtVgW8HqDLx7bXhiW7tlaCfk5Q7YsfqUzDiZDdbziQCSk/HlgkSL8xpi
+         nWqw==
+X-Gm-Message-State: AAQBX9f0xNhUEEP9JIyzI1nEIuHRQ+JgaiA1EU33uCwCMDjWyp/P07fk
+        iU29+t1m0ERlhZq9yAzA+OcTGQ==
+X-Google-Smtp-Source: AKy350YcZXDla4Hwm6jLoOnN+sfMm9+gny+dpA+m4FqxyhLDp9/Pi5Ax324Y3zTe/o1SX4ktCc/cKg==
+X-Received: by 2002:a17:907:6d24:b0:93e:9362:75fa with SMTP id sa36-20020a1709076d2400b0093e936275famr2165161ejc.47.1679684297136;
+        Fri, 24 Mar 2023 11:58:17 -0700 (PDT)
+Received: from [10.44.2.5] ([81.246.10.41])
+        by smtp.gmail.com with ESMTPSA id z13-20020a1709064e0d00b009351565d1f5sm7092980eju.52.2023.03.24.11.58.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 11:58:16 -0700 (PDT)
+Message-ID: <3100c8b2-4576-03eb-52a5-10d6ddf0fedc@tessares.net>
+Date:   Fri, 24 Mar 2023 19:58:16 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bnv5nqjb4an3p6ze"
-Content-Disposition: inline
-In-Reply-To: <20230324143247.GA27199@willie-the-truck>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH net-next 3/4] mptcp: do not fill info not used by the PM
+ in used
+Content-Language: en-GB
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230324-upstream-net-next-20230324-misc-features-v1-0-5a29154592bd@tessares.net>
+ <20230324-upstream-net-next-20230324-misc-features-v1-3-5a29154592bd@tessares.net>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230324-upstream-net-next-20230324-misc-features-v1-3-5a29154592bd@tessares.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hello,
 
---bnv5nqjb4an3p6ze
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 24/03/2023 18:11, Matthieu Baerts wrote:
+> Only the in-kernel PM uses the number of address and subflow limits
+> allowed per connection.
+> 
+> It then makes more sense not to display such info when other PMs are
+> used not to confuse the userspace by showing limits not being used.
+> 
+> While at it, we can get rid of the "val" variable and add indentations
+> instead.
+> 
+> It would have been good to have done this modification directly in
+> commit 3fd4c2a2d672 ("mptcp: bypass in-kernel PM restrictions for non-kernel PMs")
 
-On Fri, Mar 24, 2023 at 02:32:50PM +0000, Will Deacon <will@kernel.org> wrote:
-> So approaches such as killing tasks or rejecting system calls tend not
-> to work as well, since you inevitably get divergent behaviour leading
-> to functional breakage rather than e.g. performance anomalies.
+I'm sorry, I just noticed I picked the wrong SHA for this commit and my
+scripts only checked the ones mentioned in the "Fixes" tags. We should
+have this instead:
 
-What about temporary performance drop from 100% to 0% aka freezing the
-tasks for the duration of the mismatching affinity config?
+> commit 4d25247d3ae4 ("mptcp: bypass in-kernel PM restrictions for non-kernel PMs")
 
+I can send a v2 later to fix the SHA if there is no other comments.
 
-> Having said that, the behaviour we currently have in mainline seems to
-> be alright, so please don't go out of your way to accomodate these SoCs.
-
-I see. (Just wondering what you think about the fourth option above.)
-
-Thanks,
-Michal
-
---bnv5nqjb4an3p6ze
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZB3ptgAKCRAkDQmsBEOq
-uVhEAQC7JaLVG3zxtIHj/KOXOqyJ40tnjVLvv86k89k+Kuk2HAEAuSkfis+4/XkR
-nNuhu2FzjdRnT33UwUPZMqfuKUBGeQA=
-=Ns6p
------END PGP SIGNATURE-----
-
---bnv5nqjb4an3p6ze--
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
