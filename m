@@ -2,61 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FE86C7BCC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 10:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A9B6C7BCD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 10:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbjCXJpL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 05:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
+        id S230190AbjCXJpw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 05:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbjCXJoq (ORCPT
+        with ESMTP id S230377AbjCXJpa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 05:44:46 -0400
+        Fri, 24 Mar 2023 05:45:30 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7F326C0A
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 02:43:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FA02B2AD
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 02:44:40 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B150033777;
-        Fri, 24 Mar 2023 09:43:39 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A1F5C21A31;
+        Fri, 24 Mar 2023 09:44:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679651019; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1679651070; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=p5gU4YUVCJUKRvg7TRuNnivRS6YS1MoKDOqLZ95pv7A=;
-        b=0g0ELczHnlGOC88a2Y0t/1ExMbIdXossK77nETDjPb/MkjhgzJQ6o4VzNwQ7dF1euKbZtK
-        BN0gDA8dPClY/9SNSs/Qdz7y3wt9etasu1sOqKGmz/Dal5s95SuUs9r/8b39re775H8JS7
-        4DLjgVePw+3Xhb/lIi3EIIFnFQNlHU4=
+        bh=33uKntMu11Vs+rboUdjOFUJmtl0bbLHgVVH4VTx9L3k=;
+        b=nFWvQYBnMNmQdUv88hkxq1drzzuah+misGcyQrlAA0wI8dfaO4tIlV+dDJaiwOqgnduiZ8
+        LsHzdK5uXh31l/FHT5uRBqtThoRzRZcFZxjvb8RbFfaJto93Sdwc2dzCe6mM/DKm/Sy/Im
+        6xGJLzl0L2GiwHBbyQ+X4EgrRQGN/Jk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679651019;
+        s=susede2_ed25519; t=1679651070;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=p5gU4YUVCJUKRvg7TRuNnivRS6YS1MoKDOqLZ95pv7A=;
-        b=3VaINjeq+UXxdQE+bHl75dihBMVHJs8tR1sKJ/DbvBIjoACW89B18sbUD28ROJgKdeSa8Z
-        uwfARJkK1f/qQYAw==
+        bh=33uKntMu11Vs+rboUdjOFUJmtl0bbLHgVVH4VTx9L3k=;
+        b=tYPCC8DMB2vXmka8n+YkLrk7UmKJcH5FPYi0RlU2juuWL6ro4X8SR9YH7F51cduY5L3XQp
+        x35IOwdsna35NFBA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 80049138ED;
-        Fri, 24 Mar 2023 09:43:39 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 77081138ED;
+        Fri, 24 Mar 2023 09:44:30 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id XJUgHstwHWRVKAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 24 Mar 2023 09:43:39 +0000
-Date:   Fri, 24 Mar 2023 10:43:38 +0100
-Message-ID: <87sfdu5vsl.wl-tiwai@suse.de>
+        id 8gZEHP5wHWS2KAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 24 Mar 2023 09:44:30 +0000
+Date:   Fri, 24 Mar 2023 10:44:29 +0100
+Message-ID: <87r0te5vr6.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Alexander Heinrich <hallo@alexanderheinrich.de>
 Cc:     broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
         shuah@kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel-mentees@lists.linuxfoundation.org
 Subject: Re: [PATCH] kselftest/alsa: Fix -Wformat compiler warnings
-In-Reply-To: <20230324092806.363253-1-hallo@alexanderheinrich.de>
+In-Reply-To: <87sfdu5vsl.wl-tiwai@suse.de>
 References: <20230324092806.363253-1-hallo@alexanderheinrich.de>
+        <87sfdu5vsl.wl-tiwai@suse.de>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -69,74 +70,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 24 Mar 2023 10:28:06 +0100,
-Alexander Heinrich wrote:
+On Fri, 24 Mar 2023 10:43:38 +0100,
+Takashi Iwai wrote:
 > 
-> I noticed some -Wformat compiler warnings in pcm-test.c while building
-> kselftest, fix them by using the same types for format specifier and arguments.
+> On Fri, 24 Mar 2023 10:28:06 +0100,
+> Alexander Heinrich wrote:
+> > 
+> > I noticed some -Wformat compiler warnings in pcm-test.c while building
+> > kselftest, fix them by using the same types for format specifier and arguments.
+> > 
+> > Signed-off-by: Alexander Heinrich <hallo@alexanderheinrich.de>
 > 
-> Signed-off-by: Alexander Heinrich <hallo@alexanderheinrich.de>
+> Those variables (rates, channels, etc) should be rather int instead of
+> long, as these are not 64bit parameters on 32bit archs.
+> On top of that, the whole '%l' prefix and cast should be dropped.
+> 
+> The only concern is the string to int conversion, and this should be
+> checked carefully, but other than that, it must be straightforward.
+> 
+> Care to work on that way?
 
-Those variables (rates, channels, etc) should be rather int instead of
-long, as these are not 64bit parameters on 32bit archs.
-On top of that, the whole '%l' prefix and cast should be dropped.
-
-The only concern is the string to int conversion, and this should be
-checked carefully, but other than that, it must be straightforward.
-
-Care to work on that way?
+... and the code has been already changed meanwhile.  Please work on
+for-next branch of my sound.git tree.
 
 
 thanks,
 
 Takashi
-
-> ---
->  tools/testing/selftests/alsa/pcm-test.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
-> index 58b525a4a32c..44fc5f826ab5 100644
-> --- a/tools/testing/selftests/alsa/pcm-test.c
-> +++ b/tools/testing/selftests/alsa/pcm-test.c
-> @@ -371,7 +371,7 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
->  		goto __close;
->  	}
->  	if (rrate != rate) {
-> -		snprintf(msg, sizeof(msg), "rate mismatch %ld != %ld", rate, rrate);
-> +		snprintf(msg, sizeof(msg), "rate mismatch %ld != %d", rate, rrate);
->  		goto __close;
->  	}
->  	rperiod_size = period_size;
-> @@ -437,24 +437,24 @@ static void test_pcm_time(struct pcm_data *data, enum test_class class,
->  			frames = snd_pcm_writei(handle, samples, rate);
->  			if (frames < 0) {
->  				snprintf(msg, sizeof(msg),
-> -					 "Write failed: expected %d, wrote %li", rate, frames);
-> +					 "Write failed: expected %ld, wrote %li", rate, frames);
->  				goto __close;
->  			}
->  			if (frames < rate) {
->  				snprintf(msg, sizeof(msg),
-> -					 "expected %d, wrote %li", rate, frames);
-> +					 "expected %ld, wrote %li", rate, frames);
->  				goto __close;
->  			}
->  		} else {
->  			frames = snd_pcm_readi(handle, samples, rate);
->  			if (frames < 0) {
->  				snprintf(msg, sizeof(msg),
-> -					 "expected %d, wrote %li", rate, frames);
-> +					 "expected %ld, wrote %li", rate, frames);
->  				goto __close;
->  			}
->  			if (frames < rate) {
->  				snprintf(msg, sizeof(msg),
-> -					 "expected %d, wrote %li", rate, frames);
-> +					 "expected %ld, wrote %li", rate, frames);
->  				goto __close;
->  			}
->  		}
-> -- 
-> 2.34.1
-> 
