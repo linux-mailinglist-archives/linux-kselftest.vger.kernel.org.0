@@ -2,159 +2,673 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFBB6C7C5D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 11:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F4A6C7E15
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 13:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCXKRf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 06:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
+        id S231194AbjCXMcN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 08:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjCXKRe (ORCPT
+        with ESMTP id S230399AbjCXMcM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 06:17:34 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A65136EF;
-        Fri, 24 Mar 2023 03:17:33 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id s8so1532913lfr.8;
-        Fri, 24 Mar 2023 03:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679653051;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zKI80BGooykUH8804XqZbqpXI1kCkxjaQ/+9IzL2Xiw=;
-        b=Kxa+q4AEQT1i6IRajV6+FKmGNg92TFnsE6gP+npUIx5KFknE0M5js0opulMYuUKoP1
-         hhojoDbNZfNRJu0Y1brF9qq2z0bXV95RWJf7/Ox0JDxliXiFtYnPBDvXhdVTAwjlHJZV
-         jOA+hIxZTYT+OW1lHthZDFkBRSe26bC4yrs9mAGGVHgI8HV9IMS4f6GBcXSkAnkpcDGU
-         KahndWPQnDiNwQBPLA7erzgzeaxFl7oIk4v9gU4YpiKS/8y8T3jsz6VLM9G3JnQt+mpt
-         ctg1qKo5TeSkVMpSQjuChZp4n7LFAL/FD18RDYugCyn8TtDbSPsU6H5sEcpaf1/Tt0dV
-         8YaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679653051;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKI80BGooykUH8804XqZbqpXI1kCkxjaQ/+9IzL2Xiw=;
-        b=b9xlIIKJ4TEa1Dff++QizEHFumk2FGgbT1u1OLi3/Ad/XG3M57bYS9Z412fJn+FYhP
-         MEzW2zT1kPiN+0USZU6nPh26a3s+YQQi6XwPtj7xukRTD9WrpWbLYpauzw+jZtaqYgxs
-         DI8U/3mqB4E2SAE64lSnVPWviNWmJyztQRoUPCIV0VHlGOaAHejmjBPThFICKOHqgkL0
-         UEslzLRI2P92BUjrYClskAKOfZTXwuq6hSF3Mzzgo6gnJQtjQ+s3qW3+RuEHwIsWvRx9
-         KLcSB7Hm7eT0d40aQ3QHsOjGs0CKZqXgKtI5yf9/zsK8PvEQl/BHg5qwqncxoxI9uQOE
-         fcbA==
-X-Gm-Message-State: AAQBX9dfcdShrkZzdumpnOktF7cuJ12lMjey9eSR85DnuXoVkF1NAU3h
-        TQntyZzJkT5DTxN7nu1uEdo=
-X-Google-Smtp-Source: AKy350Zkz+Y0xK6vR056bzbMJ5c6SO+vEjK6lziTdDbWrWpcG33tOleLGWSLtofdUPrnpRYC4JuzhA==
-X-Received: by 2002:ac2:530d:0:b0:4e9:a9e6:2752 with SMTP id c13-20020ac2530d000000b004e9a9e62752mr630594lfh.22.1679653051591;
-        Fri, 24 Mar 2023 03:17:31 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id d24-20020ac25458000000b004eae6283565sm1669239lfn.299.2023.03.24.03.17.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Mar 2023 03:17:31 -0700 (PDT)
-Message-ID: <a02044e7-3210-a0c2-ceda-8c19fadd237a@gmail.com>
-Date:   Fri, 24 Mar 2023 12:17:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     David Gow <davidgow@google.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fri, 24 Mar 2023 08:32:12 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBE34C04;
+        Fri, 24 Mar 2023 05:32:03 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 640B732009DB;
+        Fri, 24 Mar 2023 08:32:00 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 24 Mar 2023 08:32:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1679661120; x=1679747520; bh=Ka
+        l7h6ja/GucBRhylyeLS0auVfpAQYDhDeEDhY9FtEg=; b=Cqb60qKjGZRU8b82ml
+        mQaK9z2xC54tOkyO/EVRwLQ2lO2RUOMyAXmylkbtF7IbSP3+kiMTV9WZB924mo+z
+        Bfv35R/XQ2gFa7oiZurf2rgVoRvqMF9MlhxWGR311E9swbNDeazKlI1ONXV3tANr
+        ceKDFXrHQYsMQLkkf11MQK/+EkstuR9wZIFcJFNJGzAtmyW8Hdh5zQ/UY9VaK/4N
+        N6wgF7C5lt0WiWLshQw8XUEQT6h06BvFfLtQVD5cIai9rzuOCV17yaAQAtxl7xGn
+        hMDY5FQRRUySGfoKcma/wIDPkCAQGTKrIRyF9UySv2GMx6Q/QJH8BFw39Q5lYEjS
+        Greg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679661120; x=1679747520; bh=Kal7h6ja/GucB
+        RhylyeLS0auVfpAQYDhDeEDhY9FtEg=; b=GTjkL1MJHPNexoGfEDZVItQPV6pzX
+        wxsb1QzGcw/eNFgd2Md8yHS+TUOfEw7EqBXlJjCNzpn7LLl/Q+iQGpPQahYJ3BGb
+        KO+Ck1VbB6SlZpLVSFBeOh7s9v8fY4aBH1CpPEeWSRWJXQFpxFFZoL4gPjatqJ6G
+        zAcPlHuwLQvZWuuBaAYVScC63OBITMVJUEBTXai64/G44KbHXFsLy/G5nqS7NHDC
+        8cAJktX0W5u6Zemr4UyJ6nXJmKQVteEqJRpGhfsZTTDm2PreHGoIplYxTsypIebY
+        8vnv2NVmjeQUJ8iYwIn3q2UuhumEUGE2WRmgcVio4LCYhnE55EpRbDDFQ==
+X-ME-Sender: <xms:P5gdZICuEyYfqNSe5MmH-QOgp2UyANo2YMckfsj7tHKdYA7EG3WHAg>
+    <xme:P5gdZKhoHgsAPul-Zq7JIKa4j7hbf2p9BUcBaOIFbQ_uHRNOoTiGqFctrlfTlnEyU
+    gS7Ny4y2hLwXtfidmo>
+X-ME-Received: <xmr:P5gdZLnXOTBGIOp3u3ARlUNnbxsjbPGJwgcwJSApV3XzkYRMXYO0Nc_jqEwbU3NXSecg8g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegiedggeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:P5gdZOx74BHzquwznp5BPpUgTFoznW9T-v748hXySh_tBLkViiZH7Q>
+    <xmx:P5gdZNSPvm2sjCrMA-ciswjkxnG-9UX0PH7To1a1h8GMikHROUipWw>
+    <xmx:P5gdZJZRst-vOfp7CKCijRrW_fh1x_ULDkwOsj6t6zfwuPcShYrClA>
+    <xmx:QJgdZIlt9jDXqRw-PxpgvbiWMc3zVFJuH1bD3PVu7PERYqFRYDnPkQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 24 Mar 2023 08:31:59 -0400 (EDT)
+Date:   Fri, 24 Mar 2023 13:31:57 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
         Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com> <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com> <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <20230324123157.bbwvfq4gsxnlnfwb@houat>
+References: <ZBrvhfX/NNrJefgt@kroah.com>
+ <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
+ <ZBtPhoelZo4U5jwC@kroah.com>
+ <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com>
+ <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
  <20230323122925.kqdnomr7i46qnyo4@houat>
  <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
  <20230323163639.xtwpid2uunwnzai4@houat>
  <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
- <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
- <97f60824-7067-62cc-2882-d998072886ce@gmail.com>
- <CABVgOSmx3A4Vwos2_8xO-XQrQAw5gvY0nc5zLpLmcJ7FtA-dTQ@mail.gmail.com>
- <f0b4d2ad-9635-9ab8-7cd7-bfadded94714@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-In-Reply-To: <f0b4d2ad-9635-9ab8-7cd7-bfadded94714@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="d2sexxycsppzqwxl"
+Content-Disposition: inline
+In-Reply-To: <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/24/23 12:05, Matti Vaittinen wrote:
-> On 3/24/23 11:52, David Gow wrote:
->> On Fri, 24 Mar 2023 at 14:51, Matti Vaittinen 
->> <mazziesaccount@gmail.com> wrote:
->>>
->>> On 3/24/23 08:34, David Gow wrote:
->>>> On Fri, 24 Mar 2023 at 14:11, Matti Vaittinen 
->>>> <mazziesaccount@gmail.com> wrote:
-> 
->>>> I think that sounds like a good strategy for now, and we can work on a
->>>> set of 'generic helpers' which have an associated bus and struct
->>>> kunit_device in the meantime. If we can continue to use
->>>> root_device_register until those are ready, that'd be very convenient.
->>>
->>> Would it be a tiny bit more acceptable if we did add a very simple:
->>>
->>> #define kunit_root_device_register(name) root_device_register(name)
->>> #define kunit_root_device_unregister(dev) root_device_unregister(dev)
->>>
->>> to include/kunit/device.h (or somesuch)
->>>
->>> This should help us later to at least spot the places where
->>> root_device_[un]register() is abused and (potentially mass-)covert them
->>> to use the proper helpers when they're available.
->>>
->>
->> Great idea.
->>
->> The code I've been playing with has the following in 
->> include/kunit/device.h:
->>
->> /* Register a new device against a KUnit test. */
->> struct device *kunit_device_register(struct kunit *test, const char 
->> *name);
->> /* Unregister a device created by kunit_device_register() early (i.e.,
->> before test cleanup). */
->> void kunit_device_unregister(struct kunit *test, struct device *dev);
->>
->> If we used the same names, and just forwarded them to
->> root_device_register() and root_device_unregister() for now
->> (discarding the struct kunit pointer), then I expect we could just
->> swap out the implementation to gain the extra functionality.
 
-There's one thing though. If the goal is to do a direct replacement and 
-if automatic device deletion upon test completion / test abort is 
-planned - then it should be there also for these initial wrappers.
+--d2sexxycsppzqwxl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If these wrappers don't yet include the automatic device clean-up - then 
-it probably makes more sense to just do the kunit_root_device_* defines 
-because the tests are likely to need removing the explicit device 
-clean-ups when proper APIs are finished.
+On Fri, Mar 24, 2023 at 08:11:52AM +0200, Matti Vaittinen wrote:
+> On 3/23/23 18:36, Maxime Ripard wrote:
+> > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
+> > > On 3/23/23 14:29, Maxime Ripard wrote:
+> > > > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+> > > >=20
+> > > > This is the description of what was happening:
+> > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@h=
+ouat/
+> > >=20
+> > > Thanks Maxime. Do I read this correcty. The devm_ unwinding not being=
+ done
+> > > when root_device_register() is used is not because root_device_unregi=
+ster()
+> > > would not trigger the unwinding - but rather because DRM code on top =
+of this
+> > > device keeps the refcount increased?
+> >=20
+> > There's a difference of behaviour between a root_device and any device
+> > with a bus: the root_device will only release the devm resources when
+> > it's freed (in device_release), but a bus device will also do it in
+> > device_del (through bus_remove_device() -> device_release_driver() ->
+> > device_release_driver_internal() -> __device_release_driver() ->
+> > device_unbind_cleanup(), which are skipped (in multiple places) if
+> > there's no bus and no driver attached to the device).
+> >=20
+> > It does affect DRM, but I'm pretty sure it will affect any framework
+> > that deals with device hotplugging by deferring the framework structure
+> > until the last (userspace) user closes its file descriptor. So I'd
+> > assume that v4l2 and cec at least are also affected, and most likely
+> > others.
+>=20
+> Thanks for the explanation and patience :)
+>=20
+> >=20
+> > > If this is the case, then it sounds like a DRM specific issue to me.
+> >=20
+> > I mean, I guess. One could also argue that it's because IIO doesn't
+> > properly deal with hotplugging.
+>=20
+> I must say I haven't been testing the IIO registration API. I've only tes=
+ted
+> the helper API which is not backed up by any "IIO device". (This is fine =
+for
+> the helper because it must by design be cleaned-up only after the
+> IIO-deregistration).
+>=20
+> After your explanation here, I am not convinced IIO wouldn't see the same
+> issue if I was testing the devm_iio_device_alloc() & co.
 
-Yours,
-	-- Matti
+It depends really. The issue DRM is trying to solve is that, when a
+device is gone, some application might still have an open FD and could
+still poke into the kernel, while all the resources would have been
+free'd if it was using devm.
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+So everything is kept around until the last fd is closed, so you still
+have a reference to the device (even though it's been removed from its
+bus) until that time.
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+It could be possible that IIO just doesn't handle that case at all. I
+guess most of the devices aren't hotpluggable, and there's not much to
+interact with from a userspace PoV iirc, so it might be why.
 
+> > I'm not sure how that helps. Those are
+> > common helpers which should accommodate every framework,
+>=20
+> Ok. Fair enough. Besides, if the root-device was sufficient - then I would
+> actually not see the need for a helper. People could in that case directly
+> use the root_device_register(). So, if helpers are provided they should be
+> backed up by a device with a bus then.
+>=20
+> > and your second
+> > patch breaks the kunit tests for DRM anyway.
+>=20
+> Oh, I must have made an error there. It was supposed to be just a
+> refactoring with no functional changes. Sorry about that. Anyways, that
+> patch can be forgotten as Greg opposes using the platform devices in gene=
+ric
+> helpers.
+>=20
+> > > Whether it is a feature or bug is beyond my knowledge. Still, I would
+> > > not say using the root_device_[un]register() in generic code is not
+> > > feasible - unless all other subsytems have similar refcount handling.
+> > >=20
+> > > Sure thing using root_device_register() root_device_unregister() in D=
+RM does
+> > > not work as such. This, however, does not mean the generic kunit help=
+ers
+> > > should use platform_devices to force unwinding?
+> >=20
+> > platform_devices were a quick way to get a device that would have a bus
+> > and a driver bound to fall into the right patch above. We probably
+> > shouldn't use platform_devices and a kunit_device sounds like the best
+> > idea, but the test linked in the original mail I pointed you to should
+> > work with whatever we come up with. It works with multiple (platform,
+> > PCI, USB, etc) buses, so the mock we create should behave like their
+> > real world equivalents.
+>
+> Thanks for the patience and the explanation. Now I understand a generic t=
+est
+> device needs to sit on a bus.
+>=20
+> As I said, in my very specific IIO related test the test device does not
+> need a bus. Hence I'll drop the 'generic helpers' from this series.
+
+So, I went around and created a bunch of kunit tests that shows the
+problem without DRM being involved at all.
+
+It does three things:
+
+ - It registers a device, attaches a devm action, unregisters the device
+   and then checks that the action has ran.
+
+ - It registers a device, gets a reference to it, attaches a devm
+   action, puts back the reference, unregisters the device and then
+   checks that the action has ran.
+
+ - It registers a device, gets a reference to it, attaches a devm action
+   that will put back the reference, unregisters the device and then
+   checks that the action has ran.
+
+And in three cases: first with a root_device, then platform_device, then
+a platform_device that has been bound to a driver.
+
+Once you've applied that patch, you can run it using:
+
+=2E/tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/base/test/ dev=
+m-inconsistencies
+
+You'll see that only the last case passes all the tests, even though the
+code itself is exactly the same.
+
+Maxime
+
+-- >8 --
+diff --git a/drivers/base/test/.kunitconfig b/drivers/base/test/.kunitconfig
+new file mode 100644
+index 000000000000..473923f0998b
+--- /dev/null
++++ b/drivers/base/test/.kunitconfig
+@@ -0,0 +1,2 @@
++CONFIG_KUNIT=3Dy
++CONFIG_DM_KUNIT_TEST=3Dy
+diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+index 610a1ba7a467..9d42051f8f8e 100644
+--- a/drivers/base/test/Kconfig
++++ b/drivers/base/test/Kconfig
+@@ -9,6 +9,10 @@ config TEST_ASYNC_DRIVER_PROBE
+
+ 	  If unsure say N.
+
++config DM_KUNIT_TEST
++	tristate "KUnit Tests for the device model" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++
+ config DRIVER_PE_KUNIT_TEST
+ 	bool "KUnit Tests for property entry API" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT=3Dy
+diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
+index 7f76fee6f989..31bcaa743e94 100644
+--- a/drivers/base/test/Makefile
++++ b/drivers/base/test/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+=3D test_async_driver_probe.o
+
++obj-$(CONFIG_DM_KUNIT_TEST)	+=3D test-devm-cleanup.o
++
+ obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) +=3D property-entry-test.o
+ CFLAGS_property-entry-test.o +=3D $(DISABLE_STRUCTLEAK_PLUGIN)
+diff --git a/drivers/base/test/test-devm-cleanup.c b/drivers/base/test/test=
+-devm-cleanup.c
+new file mode 100644
+index 000000000000..bad3cb1385b1
+--- /dev/null
++++ b/drivers/base/test/test-devm-cleanup.c
+@@ -0,0 +1,353 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <kunit/resource.h>
++
++#include <linux/device.h>
++#include <linux/platform_device.h>
++
++#define DEVICE_NAME "test"
++
++struct test_priv {
++	bool probe_done;
++	bool release_done;
++	wait_queue_head_t release_wq;
++	struct device *dev;
++};
++
++static void devm_device_action(void *ptr)
++{
++	struct test_priv *priv =3D ptr;
++
++	priv->release_done =3D true;
++	wake_up_interruptible(&priv->release_wq);
++}
++
++static void devm_put_device_action(void *ptr)
++{
++	struct test_priv *priv =3D ptr;
++
++	put_device(priv->dev);
++	priv->release_done =3D true;
++	wake_up_interruptible(&priv->release_wq);
++}
++
++#define RELEASE_TIMEOUT_MS	500
++
++static void root_device_register_unregister_test(struct kunit *test)
++{
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	priv->dev =3D root_device_register(DEVICE_NAME);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	root_device_unregister(priv->dev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void root_device_register_get_put_unregister_test(struct kunit *tes=
+t)
++{
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	priv->dev =3D root_device_register(DEVICE_NAME);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	put_device(priv->dev);
++
++	root_device_unregister(priv->dev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void root_device_register_get_unregister_with_devm_test(struct kuni=
+t *test)
++{
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	priv->dev =3D root_device_register(DEVICE_NAME);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	root_device_unregister(priv->dev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void platform_device_register_unregister_test(struct kunit *test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	priv->dev =3D &pdev->dev;
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void platform_device_register_get_put_unregister_test(struct kunit =
+*test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	priv->dev =3D &pdev->dev;
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	put_device(priv->dev);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static void platform_device_register_get_unregister_with_devm_test(struct =
+kunit *test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	priv->dev =3D &pdev->dev;
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++}
++
++static int fake_probe(struct platform_device *pdev)
++{
++	struct test_priv *priv =3D platform_get_drvdata(pdev);
++
++	priv->probe_done =3D true;
++	wake_up_interruptible(&priv->release_wq);
++
++	return 0;
++}
++
++static struct platform_driver fake_driver =3D {
++	.probe	=3D fake_probe,
++	.driver =3D {
++		.name =3D DEVICE_NAME,
++	},
++};
++
++static void probed_platform_device_register_unregister_test(struct kunit *=
+test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	ret =3D platform_driver_register(&fake_driver);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	priv->dev =3D &pdev->dev;
++	platform_set_drvdata(pdev, priv);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->probe_do=
+ne,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++
++	platform_driver_unregister(&fake_driver);
++}
++
++static void probed_platform_device_register_get_put_unregister_test(struct=
+ kunit *test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	ret =3D platform_driver_register(&fake_driver);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	priv->dev =3D &pdev->dev;
++	platform_set_drvdata(pdev, priv);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->probe_do=
+ne,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	put_device(priv->dev);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++
++	platform_driver_unregister(&fake_driver);
++}
++
++static void probed_platform_device_register_get_unregister_with_devm_test(=
+struct kunit *test)
++{
++	struct platform_device *pdev;
++	struct test_priv *priv;
++	int ret;
++
++	priv =3D kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
++	init_waitqueue_head(&priv->release_wq);
++
++	ret =3D platform_driver_register(&fake_driver);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	pdev =3D platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
++
++	priv->dev =3D &pdev->dev;
++	platform_set_drvdata(pdev, priv);
++
++	ret =3D platform_device_add(pdev);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->probe_do=
+ne,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	get_device(priv->dev);
++
++	ret =3D devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	platform_device_unregister(pdev);
++
++	ret =3D wait_event_interruptible_timeout(priv->release_wq, priv->release_=
+done,
++					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
++	KUNIT_EXPECT_GT(test, ret, 0);
++
++	platform_driver_unregister(&fake_driver);
++}
++
++static struct kunit_case devm_inconsistencies_tests[] =3D {
++	KUNIT_CASE(root_device_register_unregister_test),
++	KUNIT_CASE(root_device_register_get_put_unregister_test),
++	KUNIT_CASE(root_device_register_get_unregister_with_devm_test),
++	KUNIT_CASE(platform_device_register_unregister_test),
++	KUNIT_CASE(platform_device_register_get_put_unregister_test),
++	KUNIT_CASE(platform_device_register_get_unregister_with_devm_test),
++	KUNIT_CASE(probed_platform_device_register_unregister_test),
++	KUNIT_CASE(probed_platform_device_register_get_put_unregister_test),
++	KUNIT_CASE(probed_platform_device_register_get_unregister_with_devm_test),
++	{}
++};
++
++static struct kunit_suite devm_inconsistencies_test_suite =3D {
++	.name =3D "devm-inconsistencies",
++	.test_cases =3D devm_inconsistencies_tests,
++};
++
++kunit_test_suite(devm_inconsistencies_test_suite);
+-- >8 --
+
+--d2sexxycsppzqwxl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZB2YPQAKCRDj7w1vZxhR
+xY2CAP9uiQnzSZz+fCSPOb9shPv+jtpVPDbKEW/s+RjRHWmBmAEAtQXtrJyujBhA
+BR+9PUr5nAEOF+2XdVPca6xc4ugdCw0=
+=KY+G
+-----END PGP SIGNATURE-----
+
+--d2sexxycsppzqwxl--
