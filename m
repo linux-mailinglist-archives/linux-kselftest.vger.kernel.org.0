@@ -2,121 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7E96C801D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 15:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C906C8068
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 15:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbjCXOm5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 10:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S232265AbjCXOyj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 10:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjCXOm4 (ORCPT
+        with ESMTP id S232284AbjCXOyi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:42:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B76A1BF3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 07:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679668933;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=To5ecTC/X7saxKtjRIArD6KqaoPoVn1lZB9f4SzUO/k=;
-        b=bvUAiKlFPl198OVeGOxbw1NSwZIZcZGBc8b+RWOqkx/Wl9NL7y4iDFpiyXiBdxk2QbiRnu
-        su4UXKMCuImh5I9kA5NIDKwbQv7gR0Qodb7LEMNY1M7m3VlGMt5nBVpBz0fMRIiia10Drl
-        66IhQjMlQwF2lXCOJ6AwEDH+FIgzkJg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-XODxuWeWN7ad9yu4e0v4Dw-1; Fri, 24 Mar 2023 10:42:10 -0400
-X-MC-Unique: XODxuWeWN7ad9yu4e0v4Dw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD3CC802314;
-        Fri, 24 Mar 2023 14:42:09 +0000 (UTC)
-Received: from [10.22.33.184] (unknown [10.22.33.184])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 360CD140EBF4;
-        Fri, 24 Mar 2023 14:42:09 +0000 (UTC)
-Message-ID: <c07afcbf-8473-b4e3-704e-c73695db95b6@redhat.com>
-Date:   Fri, 24 Mar 2023 10:42:09 -0400
+        Fri, 24 Mar 2023 10:54:38 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008814EDE;
+        Fri, 24 Mar 2023 07:54:33 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OELsQ1005719;
+        Fri, 24 Mar 2023 14:54:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=z7pokYLoD51PbCRwEi+WaTVuf+LZfBzExfGlrYiJvxg=;
+ b=rbybVeqGS0WSM7EEhp+Ha8186yM7MysUVPKmi4q2XyfM5eq2z8GVo7vdfvEhVboJFpBR
+ 5ydu2sDPbxA4HMwWyKBLB/+aJzwi8CyA0Aqk7IJblVWalmsRylAuAn/nYV9YqewkFOEn
+ K2wv5aGKTfakfTaCedcjWQ66Gzokd7XXCE2lIRI6lFQBv342Bs6pcHDUhbRMTOBkjqN9
+ 4QcXHIGWonmmsOKJpn07+C87UHjJghLqjEngqGKwoTJI0gsn3NAS96yA+K3NietgRRFP
+ 3/KxwJxMmGo9lCpcwJdW9jDcH/fcpuufnaI1duvXJcp5cArWkEsKa7nVfOUQtFuiSYNB Gw== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3phdjegrk9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 14:54:30 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NLcpAo015828;
+        Fri, 24 Mar 2023 14:54:28 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3pgxv8gsy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 14:54:28 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32OEsPcZ18219302
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Mar 2023 14:54:25 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 000F22004E;
+        Fri, 24 Mar 2023 14:54:24 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 997A120040;
+        Fri, 24 Mar 2023 14:54:24 +0000 (GMT)
+Received: from t35lp63.lnxne.boe (unknown [9.152.108.100])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 24 Mar 2023 14:54:24 +0000 (GMT)
+From:   Nico Boehr <nrb@linux.ibm.com>
+To:     borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, shuah@kernel.org
+Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/2] KVM: s390: CMMA migration selftest and small bugfix
+Date:   Fri, 24 Mar 2023 15:54:22 +0100
+Message-Id: <20230324145424.293889-1-nrb@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 3/5] cgroup/cpuset: Find another usable CPU if none found
- in current cpuset
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230306200849.376804-1-longman@redhat.com>
- <20230306200849.376804-4-longman@redhat.com>
- <20230314181749.5b4k6selbgdhl3up@blackpad>
- <58a1a878-fa0b-285d-3e43-2b5103d3c770@redhat.com>
- <20230317122708.ax3m2d4zijkfdzjq@blackpad>
- <ca664da8-0f47-06b2-a94c-82b2f9a1c3aa@redhat.com>
- <20230324143247.GA27199@willie-the-truck>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230324143247.GA27199@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZTg-HLazEU_AG9AHivkdXHbN-n9mhVPx
+X-Proofpoint-ORIG-GUID: ZTg-HLazEU_AG9AHivkdXHbN-n9mhVPx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_08,2023-03-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 clxscore=1015 adultscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=897 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303240117
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/24/23 10:32, Will Deacon wrote:
-> On Fri, Mar 17, 2023 at 10:59:26AM -0400, Waiman Long wrote:
->> On 3/17/23 08:27, Michal Koutný wrote:
->>> On Tue, Mar 14, 2023 at 04:22:06PM -0400, Waiman Long <longman@redhat.com> wrote:
->>>> Some arm64 systems can have asymmetric CPUs where certain tasks are only
->>>> runnable on a selected subset of CPUs.
->>> Ah, I'm catching up.
->>>
->>>> This information is not captured in the cpuset. As a result,
->>>> task_cpu_possible_mask() may return a mask that have no overlap with
->>>> effective_cpus causing new_cpus to become empty.
->>> I can see that historically, there was an approach of terminating
->>> unaccomodable tasks:
->>>      94f9c00f6460 ("arm64: Remove logic to kill 32-bit tasks on 64-bit-only cores")
->>> the removal of killing had been made possible with
->>>      df950811f4a8 ("arm64: Prevent offlining first CPU with 32-bit EL0 on mismatched system").
->>>
->>> That gives two other alternatives to affinity modification:
->>> 2) kill such tasks (not unlike OOM upon memory.max reduction),
->>> 3) reject cpuset reduction (violates cgroup v2 delegation).
->>>
->>> What do you think about 2)?
->> Yes, killing it is one possible solution.
->>
->> (3) doesn't work if the affinity change is due to hot cpu removal. So that
->> leaves this patch or (2) as the only alternative. I would like to hear what
->> Will and Tejun thinks about it.
-> The main constraint from the Android side (the lucky ecosystem where these
-> SoCs tend to show up) is that existing userspace (including 32-bit binaries)
-> continues to function without modification. So approaches such as killing
-> tasks or rejecting system calls tend not to work as well, since you
-> inevitably get divergent behaviour leading to functional breakage rather
-> than e.g. performance anomalies.
->
-> Having said that, the behaviour we currently have in mainline seems to
-> be alright, so please don't go out of your way to accomodate these SoCs.
-> I'm mainly just concerned about introducing any regressions, which is why
-> I ran my tests on this series
+v2:
+---
+* swap order of patches (thanks Claudio)
+* add r-b
+* add comment why memslots are zeroed
 
-I agree that killing it may be too draconian. I am withholding this 
-patch for now.
+Add a new selftest for CMMA migration. Also fix a small issue found during
+development of the test.
 
-Thanks,
-Longman
+Nico Boehr (2):
+  KVM: s390: fix KVM_S390_GET_CMMA_BITS for GFNs in memslot holes
+  KVM: s390: selftests: add selftest for CMMA migration
+
+ arch/s390/kvm/kvm-s390.c                      |   4 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ tools/testing/selftests/kvm/s390x/cmma_test.c | 680 ++++++++++++++++++
+ 3 files changed, 685 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/s390x/cmma_test.c
+
+-- 
+2.39.1
 
