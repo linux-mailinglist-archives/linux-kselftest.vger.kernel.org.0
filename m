@@ -2,90 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F31E6C7837
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 07:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC776C7ABB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 10:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjCXGwC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 02:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S230471AbjCXJE7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 05:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbjCXGwA (ORCPT
+        with ESMTP id S230102AbjCXJE6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 02:52:00 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DCD23110;
-        Thu, 23 Mar 2023 23:51:57 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bi9so907067lfb.12;
-        Thu, 23 Mar 2023 23:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679640716;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hk/ed4+XfFwEchqbdltoxfan+i9Te3TsmlJnxgT6m/Q=;
-        b=ZhWAte9OqCboqs9hPe9W4JbP7vCYvUr3dH1GlAP0EQvX3lv5DXstw+oMS/mMNvRHpB
-         /jvRunjWfuFu8F/ieXrJBBwk3UWR4S9+J3scR8+rzN1VMpsNnoI4PUHMLfpMKttCrE03
-         UJA9wlR4WaZD8F+4MbA7b1xq7yr7KPkPnO7Dd1DxiDoHpXWRAfAM0gTQo8YVBuBlkRRk
-         nkKa/36ItsxlXJl//8H73dOyHsGsFwnqx+u6ixSRMrrlfZovu0BQOFl5ZW+VpUKcOcmS
-         cJSwEpDeWmZsiKgKjyI+ZEssU9OfhLFj/HlHFDKfNYhCQD16hgYOil5Y0srT/dXmKMTi
-         w+7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679640716;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hk/ed4+XfFwEchqbdltoxfan+i9Te3TsmlJnxgT6m/Q=;
-        b=q06QLlujqmkpJProlE75C688xacFk7WXGllsKUzOrqu4YZbsF9YQ22PNTnAw6Y6HdY
-         O1VWSNor+a/eqKQKq45EBVq2NcA5Ti3TDVCVbQh2aGeahXGJ/G2i5NhCYU4NktO5gFtN
-         vUCxZeJYvOQVVEX3WI6sJxnj6zJHvWg46X5VxPGKLMAwssStMDAQZFP143PQ8Yh/AcGc
-         WvVhrbLp+N8A4Hie0s44oGgo65/rrO2JOSDLyI/SUWS+tUVC/arB7ht5xLfLOrMFqLMP
-         jx62iS+fpwgh9CUiv+FT3xnbfFeKnXT6LR4ehUYX4k7Nf02EX6Wwj4n+By5EjrT88ID8
-         cv7Q==
-X-Gm-Message-State: AAQBX9f8Mkz0jFmFLGBAwbGFsarEMaTQeS/mgOKC2KCF9m7VraSWX1ci
-        eIrG77PZ4ZwiC2o7Kw8V9uw=
-X-Google-Smtp-Source: AKy350Z07gd+jV3lRuExt/8tE8Khn0RJCOm7TWFXoITIc3FummmamDEopfiXJOQHBc7jRJO7XApHVQ==
-X-Received: by 2002:ac2:55b8:0:b0:4db:2cdf:4c12 with SMTP id y24-20020ac255b8000000b004db2cdf4c12mr372100lfg.43.1679640715818;
-        Thu, 23 Mar 2023 23:51:55 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id p2-20020a05651211e200b004e83fbba141sm3211668lfs.164.2023.03.23.23.51.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 23:51:55 -0700 (PDT)
-Message-ID: <97f60824-7067-62cc-2882-d998072886ce@gmail.com>
-Date:   Fri, 24 Mar 2023 08:51:53 +0200
+        Fri, 24 Mar 2023 05:04:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1371855A6
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 02:04:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C478811FB;
+        Fri, 24 Mar 2023 02:05:39 -0700 (PDT)
+Received: from [10.57.64.178] (unknown [10.57.64.178])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D61A33F67D;
+        Fri, 24 Mar 2023 02:04:54 -0700 (PDT)
+Message-ID: <7c3377b8-716a-fe95-81b9-0637075475dc@arm.com>
+Date:   Fri, 24 Mar 2023 09:04:53 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     David Gow <davidgow@google.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-References: <cover.1679474247.git.mazziesaccount@gmail.com>
- <bad670ee135391eb902bd34b8bcbe777afabc7fd.1679474247.git.mazziesaccount@gmail.com>
- <ZBrvhfX/NNrJefgt@kroah.com> <25f9758f-0010-0181-742a-b18a344110cf@gmail.com>
- <ZBtPhoelZo4U5jwC@kroah.com> <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com> <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
- <20230323122925.kqdnomr7i46qnyo4@houat>
- <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
- <20230323163639.xtwpid2uunwnzai4@houat>
- <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
- <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-In-Reply-To: <CABVgOSnMeoRzExfqsjC_zAX_=TyqpAFuiGD6NWkus7+2Rdho4A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH v2 0/3] KVM: selftests: Fixes for broken tests
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.linux.dev
+References: <20230308110948.1820163-1-ryan.roberts@arm.com>
+ <4eca298b-411f-e6db-04d2-e8963a0e5d98@arm.com> <ZByOn79zokUpLGSs@linux.dev>
+ <2d3bc930bd3fdc20a7257b6f343313ed@kernel.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <2d3bc930bd3fdc20a7257b6f343313ed@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,73 +48,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/24/23 08:34, David Gow wrote:
-> On Fri, 24 Mar 2023 at 14:11, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On 23/03/2023 18:56, Marc Zyngier wrote:
+> On 2023-03-23 17:38, Oliver Upton wrote:
+>> Hey Ryan,
 >>
->> On 3/23/23 18:36, Maxime Ripard wrote:
->>> On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
->>>> On 3/23/23 14:29, Maxime Ripard wrote:
->>>>> On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
-
->> Ok. Fair enough. Besides, if the root-device was sufficient - then I
->> would actually not see the need for a helper. People could in that case
->> directly use the root_device_register(). So, if helpers are provided
->> they should be backed up by a device with a bus then.
-> 
-> I think there is _some_ value in helpers even without a bus, but it's
-> much more limited:
-> - It's less confusing if KUnit test devices are using kunit labelled
-> structs and functions.
-> - Helpers could use KUnit's resource management API to ensure any
-> device created is properly unregistered and removed when the test
-> exits (particularly if it exits early due to, e.g., an assertion).
-
-Ah. That's true. Being able to abort the test on error w/o being forced 
-to do a clean-up dance for the dummy device would be convenient.
-
-> I've played around implementing those with a proper struct
-> kunit_device and the automatic cleanup on test failure, and thus far
-> it -- like root_device_register -- works for all of the tests except
-> the drm-test-managed one.
-> 
-> So if we really wanted to, we could use KUnit-specific helpers for
-> just those tests which currently work with root_device_register(), but
-> if we're going to try to implement a KUnit bus -- which I think is at
-> least worth investigating -- I'd rather not either hold up otherwise
-> good tests on helper development, or rush a helper out only to have to
-> change it a lot when we see exactly what the bus implementation would
-> look like.
-
-It's easy for me to agree.
-
->> As I said, in my very specific IIO related test the test device does not
->> need a bus. Hence I'll drop the 'generic helpers' from this series.
+>> On Thu, Mar 23, 2023 at 12:56:18PM +0000, Ryan Roberts wrote:
+>>> Hi Oliver,
+>>>
+>>> Just a polite nudge on this: I was originally hoping to get these into 6.3 since
+>>> I thought they were fairly uncontroversial and clearly fixing bugs. What are my
+>>> chances?
 >>
+>> Yes, your changes are indeed uncontroversial :) At least for me, fixes to
+>> selftests take a strictly lower priority than fixes to the kernel outside of
+>> a merge window. AFAICT, only LPA systems are affected by the changes here and
+>> I'm not aware of any of those out in the wild.
+
+The first patch is not related to LPA, it adds a missing kernel config to the
+config fragment so that one of the tests (access_tracking_perf_test) is not
+skipped. This change will mean our CI system starts actually running the test.
+
 > 
-> I think that sounds like a good strategy for now, and we can work on a
-> set of 'generic helpers' which have an associated bus and struct
-> kunit_device in the meantime. If we can continue to use
-> root_device_register until those are ready, that'd be very convenient.
+> Agreed. My usual take on fixing tests is that unless the test has been
+> broken in the current cycle, we can safely delay merging the fix until
+> the following cycle.
 
-Would it be a tiny bit more acceptable if we did add a very simple:
+Thanks for the explanation. I have a slightly different opinion though (please
+bare with me through the rant):
 
-#define kunit_root_device_register(name) root_device_register(name)
-#define kunit_root_device_unregister(dev) root_device_unregister(dev)
+Being fairly new to Linux development, I'd like to be able to run (all) the
+selftests as a matter of course to be able to quickly answer the "did I
+obviously break anything?" question. But there is a lot of friction to even
+being able to compile, let alone run, the things - undocumented dependencies on
+libraries (even more difficult when needing to cross compile), undocumented
+dependencies on kernel configs, test code that is broken and fails to compile,
+tests that silently skip for difficult to determine reasons, tests that fail
+even when run against the unmodified kernel, and results buried in copious
+amounts of logs. These are all paper cuts that make them difficult to use and
+trust. Or perhaps I'm just doing it wrong...
 
-to include/kunit/device.h (or somesuch)
-
-This should help us later to at least spot the places where 
-root_device_[un]register() is abused and (potentially mass-)covert them 
-to use the proper helpers when they're available.
-
-Yours,
-	-- Matti
+I would love to live in a world where I could confidently take a mainline
+release, compile and run tests at close-to-zero effort and see all tests running
+and passing... one day, perhaps. But only if we give more priority to the test
+code ;-)
 
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+> 
+> And yes, LPA-capable HW is essentially vapourware at this stage.
+> 
+>>
+>> So, unless there is a burning issue, I'd like to defer these patches to the
+>> 6.4 merge window. Nonetheless, it all looks good to me:
+>>
+>> Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+Thanks for that.
+
+> 
+> Thanks for that. I'll start queuing 6.4 material once I'm back to my
+> usual time zone, beginning of next week.
+
+Appreciated. Thanks for taking the patches. If you have a rule-of-thumb about
+the best time to post different types of patches (and what it's best to base
+them on), I'll try to follow it in future.
+
+Thanks,
+Ryan
+
+> 
+> Cheers,
+> 
+>         M.
 
