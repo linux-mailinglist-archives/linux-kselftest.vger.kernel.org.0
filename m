@@ -2,61 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA806C82FF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 18:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A88586C8302
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 18:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjCXRMI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 13:12:08 -0400
+        id S232066AbjCXRMK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 13:12:10 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbjCXRMH (ORCPT
+        with ESMTP id S231817AbjCXRMI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 13:12:07 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6142195A
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 10:12:05 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id l37so1561879wms.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 10:12:05 -0700 (PDT)
+        Fri, 24 Mar 2023 13:12:08 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD102212BD
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 10:12:06 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id l37so1561904wms.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 10:12:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1679677924;
+        d=tessares.net; s=google; t=1679677925;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DfQGO7HiqyLcIeH5zAb3xpz7XHJxCFOLCtkr4OjpBrA=;
-        b=kKcSWMFoxwby6OrPI6KELDITY73iVQMqwa0lfgDhsmjI/9A+9FwCjhlhdlOXJMpJnC
-         aMGepOrv+MaYS5YrJ/g6i+kkoNY13J18hVzRUgnoZJkVM5LQLGfwHSalEK5fWveEmfBH
-         tkpxU2ymfum5OzOxXNZ3O/auWacVlFPHHXzgWwBdb+1hzJ9sBdvdNtIpRmBKCSu4XDYU
-         O5dcVkMMCoRKEyDj3T658tQajxqzcp6IXdLsQWgWPjR/QIxjZ2o4HTkOGBh/GMY+QlpB
-         siZzOl8PatNHYscJmNXNjGH1Y393we6Z4jx/agYGWE+UZXD5lnowVUoDkuX4PHClzM44
-         feOw==
+        bh=2IaWlH7abh0r241+EHHXm0ebngTGfgUKffPXQtB3krM=;
+        b=3DHgAd2wuhgjtclX+s1OIw9Yh9iKokUZ/ZAHOwXw1Wb3VWqsHW5eObAlUI8ikdimRv
+         M1byi5NmGB7mlC21cWzoz7L+ut246zxHz1g1itan6UFznrFffkl+K2LtpsIWsusk7R/q
+         kOWMzSMmb5cpmYGkVt9vxemQdrQ6/zY4hSUzOioxsqmqNSV/X+e/u+52QWx9jGqVnMsB
+         WtgpSiuCd4A03eF0Fz7aEBV/2KUryOWt045uqt/uI8rQCO6YPeevdBxXHmIDH5T4mca1
+         56uMWE1oqX6WvtUvKJwhnMGO3MH2kupzY3KuNgaHkKCzKMl0g7Fe2xvUi4NOtivBs52e
+         PKwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679677924;
+        d=1e100.net; s=20210112; t=1679677925;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DfQGO7HiqyLcIeH5zAb3xpz7XHJxCFOLCtkr4OjpBrA=;
-        b=PZZdooBa76fppblMKlZGV2NP895Z3ENZm/FP5tfEkanyloK85eb8qFJJ2rZv4rXF8L
-         SsYEV/kf7ms6Uev2zEew8h4ZWuw+xGH0kROB6muIfm2YUEeFR3xpmnjp6vU0nhBjZU6e
-         n/4dJfiKUbDCbNCQ2EqOreej7TSH0veZN2qeuUTmh29ISjBM/XhyAKnDVbcbUP0edUKR
-         MyQTZ/4cp64s5wGXBWjuUV88zzVpp5N+h1heExyN2DPQWYcayKsAcdqf0fVxR9fl6vfw
-         Q0lpDi74g35XTnfYTv4wliOk1peL1VmfPvekfhIX3BWAJRMWE4oSmhmFwiTXJntjXuRB
-         ER7g==
-X-Gm-Message-State: AO0yUKXx9xMPDJet2SPWEYIzr02axtNylBHKYFTxjpWepkUkQKjVEXBa
-        5u5K8WFYHl0rCu4326tVCbXdUjF68A5aGVgeT5SPEg==
-X-Google-Smtp-Source: AK7set/D1Rxo5g5pMFN+Xc9mWokf4E90DNym99N8IThncqYtr4RGToLXtWzjaxRELroBbAwXQteRGw==
-X-Received: by 2002:a7b:c84e:0:b0:3db:8de:6993 with SMTP id c14-20020a7bc84e000000b003db08de6993mr2608646wml.4.1679677923996;
-        Fri, 24 Mar 2023 10:12:03 -0700 (PDT)
+        bh=2IaWlH7abh0r241+EHHXm0ebngTGfgUKffPXQtB3krM=;
+        b=um/RqvpsJP7w88qIQrpIrvTtKeHXtSofSdcc767ekt0SAgtAZfHPs0xaOL9ZFhp+8D
+         bbrGSHwm8kSEanCyy/sg1gylbX4KH6ODr8TfltqN+a0Do8Mm2I1OdZD6L6WJdzn16Aif
+         qnxqbZjnqaj5uUfS+18vJAzp2zG2rt/R15lbJMqPn31qSsGIdseiQjS4+HBbTKyTxlUF
+         BjXmc9PYdadbMzSLOvXcI3b1+t2SZITZiJcV4nsV5gJ00/1VB+gCN9S1E+aiktQg2cyn
+         gyJLFK5R3NuIB67t8XKv7ypZ+0lKPiwldb0gZEjRQgVDJHo1BF/Txash/M8byIIg5XDd
+         gaVA==
+X-Gm-Message-State: AO0yUKUnKCmbS1RzGA66jKZzIza0uxMV72MabCY0sJ5mlXweu7FDwyFj
+        SLpcszFwwlvElAjLlH6g/Tu6rA==
+X-Google-Smtp-Source: AK7set9BfYvV5O2qNMeqRUICrkkdWt0fhFtMlvs4HEKiSuXoR9OXSSnpBjEmVzugwxsB1FHJMe6pNA==
+X-Received: by 2002:a05:600c:22d2:b0:3ee:392:39e3 with SMTP id 18-20020a05600c22d200b003ee039239e3mr2900091wmg.30.1679677924813;
+        Fri, 24 Mar 2023 10:12:04 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id n17-20020a1c7211000000b003edf2dc7ca3sm5336285wmc.34.2023.03.24.10.12.03
+        by smtp.gmail.com with ESMTPSA id n17-20020a1c7211000000b003edf2dc7ca3sm5336285wmc.34.2023.03.24.10.12.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 10:12:03 -0700 (PDT)
+        Fri, 24 Mar 2023 10:12:04 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Fri, 24 Mar 2023 18:11:31 +0100
-Subject: [PATCH net-next 2/4] mptcp: simplify subflow_syn_recv_sock()
+Date:   Fri, 24 Mar 2023 18:11:32 +0100
+Subject: [PATCH net-next 3/4] mptcp: do not fill info not used by the PM in
+ used
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230324-upstream-net-next-20230324-misc-features-v1-2-5a29154592bd@tessares.net>
+Message-Id: <20230324-upstream-net-next-20230324-misc-features-v1-3-5a29154592bd@tessares.net>
 References: <20230324-upstream-net-next-20230324-misc-features-v1-0-5a29154592bd@tessares.net>
 In-Reply-To: <20230324-upstream-net-next-20230324-misc-features-v1-0-5a29154592bd@tessares.net>
 To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
@@ -67,21 +68,21 @@ Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Matthieu Baerts <matthieu.baerts@tessares.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4024;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2359;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=7uLks6etvBHmX3D/9NEd2CCNOkTvJiV0jtPxB4Im3Xk=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkHdnhEi6SS1AGw2zqAuFABFUg/oBXMs9PA7F9/
- JFx/ONUwrGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZB3Z4QAKCRD2t4JPQmmg
- cxWPEADZvswakigKFQDqyOHzImBZyfmfPeNF72nKbAVFj8xtOMPMWPs9tgzW4go+Ynl3EhZaM5c
- GG9L9s0UhVQGGqop3CtKZEv8I+Q/LSaEvZ5dpKGPDkmOZB2Q+CnV532P26nzdpCjvPmxpjVimkD
- oNOyf2aXQt4/+x47Y3IbiGgnJ0BkfnqrnDJJbIAHyMJpuh72vl+qVAB9HwPzKIdKKlMVgVI+C+j
- J4V2od8jADQb64qjVd15EZPDBCU0qXWk6CvKGd5kwEGI8jNnKIC4cQRaBwp2/oxjbU8u6/3vjJr
- G9hqwSL4lk/npUaNSOwlN1TN1/7Xz7lxI1slzKQzrmdYhRvjRxKFHbhXGimGsUzRPHuB0HT+0ZF
- I1NG0NPOpDFOochYF5tmzcu3PUXx10JPGg/dBVJ8CF7dAKyIS389vslZL2ymSA+L2LuT92xjwJg
- pt20egKoWqc7G/n1Y0bBGYJGCYAP9n4FyWHZoUPuF3jmhe55xFbvinvrDMFEk1it4p46NpBywiA
- vKJe7OPtCERT8UEPltGYf3GrsKSG//JVHRxFxf2/3qFI1floGTpoSOthXA3BOT6Skfr/JozxexJ
- dFoUC9nbrZTfm2j4ycG2ifrQQ4R+I6zqC8vPbktlGMWFOwpG0UNlrIjZGr/9pberY2fH+RgXZVd
- HeGrEZ44Mxu69fQ==
+ bh=tfrD6RVlmEwTdSM2FDq/8Wzw0KDut8T4BXZaYVMDJvg=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkHdnhO0H6C9F7gXGnhIa6irzV9sedrlpMm9M8Q
+ RS7lv71+iSJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZB3Z4QAKCRD2t4JPQmmg
+ c3ddEACCRWs4NatTqqTHhXzvSKo6oGFaqE0aL05ckSdgYCpNmpTv21ghoVC0u6JZLWL0aduCl7C
+ gn7J/0M34+pj0JLEn9mFlltBbnoAyL34voCCnEdSEnt7E/9RyGRbGOfJUBSwXFuXwNYK2U1jKvT
+ zcR1pLSmWDLFvIkSe9cvq+SMK9QPem5/oC+RRrx3gDVumOsYM1LNAcwAdf8wLI4tzM9dVmKpycs
+ Wd4309UmaUv/eLKbeCav3vaRHMh9Jzq32k2sEuTupAyUxa/KC1KVmjEf46fVeqcisaphRlDtp9K
+ 5oWxUIQjg4qKH5usA3ibWNU+4zjpl/S1bJ/Ma+5sSrQf3+N643AsQQsA/KHFQT31C6f4SLx3222
+ jalQQZxSMl+fPDMgmMGOTuzlywrPwpmgKR052FqBjHTI2myNywNZte7WcwH5NcnN/F02kVIrqOx
+ emAR2FvAXUlcWp7RLfBPbjVYQqaeozGYgj3WtCeAsnOTdbvhzS8l4LTxduqF+hmcfw6r6rKC7fp
+ RKSucYRIOSzSiaOai/fjQtV+bvoQZBvcURM8aBOx5cBMGZqv4HlTm63Iup3GhWvKfVRb0qXpw6C
+ I6bAmGZcxCCG7htXAQ+f7dNwIrJa9J3HCcLi6tmjcvyhqCXPo95h1Bjx7/QaD32BDd5Qhw9uGnh
+ q8/kK4ADpg2CrWg==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -93,127 +94,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+Only the in-kernel PM uses the number of address and subflow limits
+allowed per connection.
 
-Postpone the msk cloning to the child process creation
-so that we can avoid a bunch of conditionals.
+It then makes more sense not to display such info when other PMs are
+used not to confuse the userspace by showing limits not being used.
 
-Link: https://github.com/multipath-tcp/mptcp_net-next/issues/61
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+While at it, we can get rid of the "val" variable and add indentations
+instead.
+
+It would have been good to have done this modification directly in
+commit 3fd4c2a2d672 ("mptcp: bypass in-kernel PM restrictions for non-kernel PMs")
+but as we change a bit the behaviour, it is fine not to backport it to
+stable.
+
+Acked-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- net/mptcp/subflow.c | 41 +++++++++++++----------------------------
- 1 file changed, 13 insertions(+), 28 deletions(-)
+ net/mptcp/sockopt.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index a11f4c525e01..33dd27765116 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -696,14 +696,6 @@ static bool subflow_hmac_valid(const struct request_sock *req,
- 	return !crypto_memneq(hmac, mp_opt->hmac, MPTCPOPT_HMAC_LEN);
- }
- 
--static void mptcp_force_close(struct sock *sk)
--{
--	/* the msk is not yet exposed to user-space, and refcount is 2 */
--	inet_sk_state_store(sk, TCP_CLOSE);
--	sk_common_release(sk);
--	sock_put(sk);
--}
--
- static void subflow_ulp_fallback(struct sock *sk,
- 				 struct mptcp_subflow_context *old_ctx)
+diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
+index 5cef4d3d21ac..b655cebda0f3 100644
+--- a/net/mptcp/sockopt.c
++++ b/net/mptcp/sockopt.c
+@@ -885,7 +885,6 @@ static int mptcp_getsockopt_first_sf_only(struct mptcp_sock *msk, int level, int
+ void mptcp_diag_fill_info(struct mptcp_sock *msk, struct mptcp_info *info)
  {
-@@ -755,7 +747,6 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
- 	struct mptcp_subflow_request_sock *subflow_req;
- 	struct mptcp_options_received mp_opt;
- 	bool fallback, fallback_is_fatal;
--	struct sock *new_msk = NULL;
- 	struct mptcp_sock *owner;
- 	struct sock *child;
+ 	u32 flags = 0;
+-	u8 val;
  
-@@ -784,14 +775,9 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
- 		 * options.
- 		 */
- 		mptcp_get_options(skb, &mp_opt);
--		if (!(mp_opt.suboptions & OPTIONS_MPTCP_MPC)) {
-+		if (!(mp_opt.suboptions & OPTIONS_MPTCP_MPC))
- 			fallback = true;
--			goto create_child;
--		}
+ 	memset(info, 0, sizeof(*info));
  
--		new_msk = mptcp_sk_clone(listener->conn, &mp_opt, req);
--		if (!new_msk)
--			fallback = true;
- 	} else if (subflow_req->mp_join) {
- 		mptcp_get_options(skb, &mp_opt);
- 		if (!(mp_opt.suboptions & OPTIONS_MPTCP_MPJ) ||
-@@ -820,21 +806,23 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
- 				subflow_add_reset_reason(skb, MPTCP_RST_EMPTCP);
- 				goto dispose_child;
- 			}
--
--			mptcp_subflow_drop_ctx(child);
--			goto out;
-+			goto fallback;
- 		}
- 
- 		/* ssk inherits options of listener sk */
- 		ctx->setsockopt_seq = listener->setsockopt_seq;
- 
- 		if (ctx->mp_capable) {
--			owner = mptcp_sk(new_msk);
-+			ctx->conn = mptcp_sk_clone(listener->conn, &mp_opt, req);
-+			if (!ctx->conn)
-+				goto fallback;
+@@ -893,12 +892,19 @@ void mptcp_diag_fill_info(struct mptcp_sock *msk, struct mptcp_info *info)
+ 	info->mptcpi_add_addr_signal = READ_ONCE(msk->pm.add_addr_signaled);
+ 	info->mptcpi_add_addr_accepted = READ_ONCE(msk->pm.add_addr_accepted);
+ 	info->mptcpi_local_addr_used = READ_ONCE(msk->pm.local_addr_used);
+-	info->mptcpi_subflows_max = mptcp_pm_get_subflows_max(msk);
+-	val = mptcp_pm_get_add_addr_signal_max(msk);
+-	info->mptcpi_add_addr_signal_max = val;
+-	val = mptcp_pm_get_add_addr_accept_max(msk);
+-	info->mptcpi_add_addr_accepted_max = val;
+-	info->mptcpi_local_addr_max = mptcp_pm_get_local_addr_max(msk);
 +
-+			owner = mptcp_sk(ctx->conn);
- 
- 			/* this can't race with mptcp_close(), as the msk is
- 			 * not yet exposted to user-space
- 			 */
--			inet_sk_state_store((void *)new_msk, TCP_ESTABLISHED);
-+			inet_sk_state_store(ctx->conn, TCP_ESTABLISHED);
- 
- 			/* record the newly created socket as the first msk
- 			 * subflow, but don't link it yet into conn_list
-@@ -844,11 +832,9 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
- 			/* new mpc subflow takes ownership of the newly
- 			 * created mptcp socket
- 			 */
--			mptcp_sk(new_msk)->setsockopt_seq = ctx->setsockopt_seq;
-+			owner->setsockopt_seq = ctx->setsockopt_seq;
- 			mptcp_pm_new_connection(owner, child, 1);
- 			mptcp_token_accept(subflow_req, owner);
--			ctx->conn = new_msk;
--			new_msk = NULL;
- 
- 			/* set msk addresses early to ensure mptcp_pm_get_local_id()
- 			 * uses the correct data
-@@ -898,11 +884,6 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
- 		}
- 	}
- 
--out:
--	/* dispose of the left over mptcp master, if any */
--	if (unlikely(new_msk))
--		mptcp_force_close(new_msk);
--
- 	/* check for expected invariant - should never trigger, just help
- 	 * catching eariler subtle bugs
- 	 */
-@@ -920,6 +901,10 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
- 
- 	/* The last child reference will be released by the caller */
- 	return child;
++	/* The following limits only make sense for the in-kernel PM */
++	if (mptcp_pm_is_kernel(msk)) {
++		info->mptcpi_subflows_max =
++			mptcp_pm_get_subflows_max(msk);
++		info->mptcpi_add_addr_signal_max =
++			mptcp_pm_get_add_addr_signal_max(msk);
++		info->mptcpi_add_addr_accepted_max =
++			mptcp_pm_get_add_addr_accept_max(msk);
++		info->mptcpi_local_addr_max =
++			mptcp_pm_get_local_addr_max(msk);
++	}
 +
-+fallback:
-+	mptcp_subflow_drop_ctx(child);
-+	return child;
- }
- 
- static struct inet_connection_sock_af_ops subflow_specific __ro_after_init;
+ 	if (test_bit(MPTCP_FALLBACK_DONE, &msk->flags))
+ 		flags |= MPTCP_INFO_FLAG_FALLBACK;
+ 	if (READ_ONCE(msk->can_ack))
 
 -- 
 2.39.2
