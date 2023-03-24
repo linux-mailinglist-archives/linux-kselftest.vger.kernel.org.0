@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABFE6C86E6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 21:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1878B6C86F3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Mar 2023 21:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjCXUii (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Mar 2023 16:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S232202AbjCXUjw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Mar 2023 16:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjCXUih (ORCPT
+        with ESMTP id S231889AbjCXUju (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:38:37 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77D31DBA0
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 13:38:34 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id m10-20020a17090a4d8a00b0023fa854ec76so2746922pjh.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 13:38:34 -0700 (PDT)
+        Fri, 24 Mar 2023 16:39:50 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954BB1EBCF
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 13:39:36 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5458201ab8cso29765297b3.23
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 13:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679690314;
+        d=google.com; s=20210112; t=1679690376;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p6DBp/JrYyvOHBJKF2QKt7opD9f0hVHsUAfpSQRL0ro=;
-        b=aJ7omCRr//kKPq+WTtOC47dLXbMuI69w+eTEQnijuNTsLVRXeCeM6uBvwHhC6tidu6
-         IGyrItSnNE90EzWub56I3QRm3l5cO91DaAzPzhB6DmVWRdgW7rZOrmbiuiy4eUzwatY0
-         t8qOy5UjwUMbSOvIqUyU15p6zuc/3zKLPcHsTKEHwziQ+EQBHZkxWXHgB1fEUtLWA/WF
-         n2G+ybhR2cP4nyCiumStsHUQjw4MomyeoR84K0s8Ja90giLCdb7IvKa/y5LQ6v8bbZyp
-         1lmJHePoyO4b3yUTrDqrxbC37+DScRAAqoujNLGK6IgKVtG/PhrJOgmEmA/2jwbTPad0
-         xR2A==
+        bh=fWNApcsVqs6b8iyHjgouP8WjDbrbEDYT6YEA+91Iaa0=;
+        b=Wkk8GoBMBfAaO8icCREFAmzcGXiN4+5z5fgoxnmaFd/mRFjAqra6kFilc9+/P2Qw4I
+         4lEXB8v9R7Dq8iR4IbzrGXtwP0KHP6ErspCQ8wPGgksbkxb3g+Zkqy7VoSMrSeuuZR7u
+         33Zrs+DmbpgyjaZa+lufLbAbv/Nr4P/Nh11ixJRvOmPLcGGVFjYRcieZ0Q+bygPlqCfx
+         O28jcMtLnxqeSaELNfF7gYOupZwHuDvSbzEXLMN8SCosbtO4hxVQ7uvwyKsljVG2GJfu
+         AW+sg+oTbGR9JWn9XoB0BAXxQ2VTXp1RR92nPgmBgOp+gmPSYNDeacU02bOjWr4nP8lL
+         2iGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679690314;
+        d=1e100.net; s=20210112; t=1679690376;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p6DBp/JrYyvOHBJKF2QKt7opD9f0hVHsUAfpSQRL0ro=;
-        b=ZFgTnmdXfmp7vvXx+tG3+NN2MIq6CTdh9vdTLWvXvd/513Od2kYGNQIIZJMTdW3EXV
-         iYoCICdbKm42qNtu+ghZd6g1c09WoGZx+3sVZkk+8SnaOv2x9U69GugEib7Qdi0m8epg
-         KybzafcP93m5p3uTzNHRk+/du2gFqq19lLGyd5SaIU0/G5EVMyNkblpYIuNg+M6E8jYL
-         euQHN1Mn1nQcazdlEbKvSR9WmvdK2aYoBKf6XwNrQW7bJB8JibUUhoaft5VO+dUjaTVc
-         +ucAm+yU6L0Q0rgB+f8DtXuIiDrCSiK7MYvpOgBaKx1R3ueSe/C/MsTiqr+YFRTleb7Q
-         Qrgg==
-X-Gm-Message-State: AAQBX9c2LcgMsnVyvpi/ATvj/0x3hKOTzlQq7g02WLL6gpsyFX0q0+KR
-        ZM90iL8NdlpjJsy4W4zHV3XIGT/qwdM=
-X-Google-Smtp-Source: AKy350a3ol4myuao1NLKbXlId+/hWKhszi9lxiKTdHxWXhiWoj5Zx5v5Jy9qajgNGkbaYxQ8VWL0Wfm4xx0=
+        bh=fWNApcsVqs6b8iyHjgouP8WjDbrbEDYT6YEA+91Iaa0=;
+        b=mvVG26kRsmh5kv11u/do3vEh39S4wZTbvLSkYd0WH3V+zoVG32o5kQGHF+2Hjlmgip
+         3wfCGF54tiQYHqseo+Cpue9RM2DifVXB8bxeMb4jox6oQ8JL6bYm4pF9YaQrKV4qC2iV
+         RVG1ckbNFhI1ApT3BoMfO7ISY7A9m8X0HkDKSkGQy9yZgPmahZqZYn7BNTh85qD7YPxt
+         lMusHeG6VcTBl87AtlupYCCAiBV3JGf5g3VR3lQNafF8oln9ew30LoCjgjjTD7qopA4o
+         xXe4XoViI8zUmmzhcxJbVQpHL1vo2l0IUsdSfFaxtwgiLyDR1ydoozkyHLQIegxmA2Ih
+         97tg==
+X-Gm-Message-State: AAQBX9cb0zNGLxJ8aD3NIXCZg179A+/ebK4Nxo4OEg/DocKiQ0o62A5v
+        48CgLz8PgjWr5u38D/luoRe7j/M0L00=
+X-Google-Smtp-Source: AKy350Y6SEOlHkFCPWC9itRys/kTTth6Cx5cpdUd5JwKTc5t6cutcKsk4wv32TGpACgnm9ef/9QbZ1rGhmI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:1315:b0:1a2:13af:7c77 with SMTP id
- iy21-20020a170903131500b001a213af7c77mr1229400plb.13.1679690314483; Fri, 24
- Mar 2023 13:38:34 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 13:38:33 -0700
-In-Reply-To: <20230221163655.920289-6-mizhang@google.com>
+ (user=seanjc job=sendgmr) by 2002:a05:6902:10c3:b0:b75:9519:dbcd with SMTP id
+ w3-20020a05690210c300b00b759519dbcdmr2229922ybu.12.1679690375846; Fri, 24 Mar
+ 2023 13:39:35 -0700 (PDT)
+Date:   Fri, 24 Mar 2023 13:39:34 -0700
+In-Reply-To: <20230221163655.920289-7-mizhang@google.com>
 Mime-Version: 1.0
-References: <20230221163655.920289-1-mizhang@google.com> <20230221163655.920289-6-mizhang@google.com>
-Message-ID: <ZB4KSZNsWozjvnL5@google.com>
-Subject: Re: [PATCH v3 05/13] KVM: selftests: x86: Add check of CR0.TS in the
- #NM handler in amx_test
+References: <20230221163655.920289-1-mizhang@google.com> <20230221163655.920289-7-mizhang@google.com>
+Message-ID: <ZB4Khv8PLs7aDOks@google.com>
+Subject: Re: [PATCH v3 06/13] KVM: selftests: x86: Add the XFD check to
+ IA32_XFD in #NM handler
 From:   Sean Christopherson <seanjc@google.com>
 To:     Mingwei Zhang <mizhang@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -76,13 +76,24 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Tue, Feb 21, 2023, Mingwei Zhang wrote:
-> Add check of CR0.TS[bit 3] before the check of IA32_XFD_ERR in the #NM
-> handler in amx_test. This is because XFD may not be the only reason of
-> the IA32_XFD MSR and the bitmap corresponding to the state components
-> required by the faulting instruction." (Intel SDM vol 1. Section 13.14)
+> Add an extra check to IA32_XFD to ensure the behavior is consistent with
+> the AMX archtecture. In addition, repeat the checks across context switch
+> to ensure the values of IA32_XFD and IA32_XFD_ERR are well preserved.
 > 
-> Add the missing check of CR0.TS.
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>  tools/testing/selftests/kvm/x86_64/amx_test.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> index ac49b14460b6..296c954dfd6d 100644
+> --- a/tools/testing/selftests/kvm/x86_64/amx_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
+> @@ -218,8 +218,10 @@ void guest_nm_handler(struct ex_regs *regs)
+>  	GUEST_SYNC(7);
+>  	GUEST_ASSERT((get_cr0() & X86_CR0_TS) == 0);
+>  	GUEST_ASSERT(rdmsr(MSR_IA32_XFD_ERR) == XFEATURE_MASK_XTILEDATA);
+> +	GUEST_ASSERT(rdmsr(MSR_IA32_XFD) & XFEATURE_MASK_XTILEDATA);
 
-The check is not missing.  CR0.TS is never set in selftests, i.e. this is pure
-paranoia.  I've no objection to adding the paranoid check, but it should not presented
-as a "flaw" in the existing code.
+These should use ==, not &.  The test explicitly writes MSR_IA32_XFD, i.e. if
+there are extra bits set then something is buggy.
