@@ -2,178 +2,253 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CFE6C906D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Mar 2023 20:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C6C6C90D7
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Mar 2023 21:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjCYTYN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 Mar 2023 15:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S229460AbjCYU7N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 25 Mar 2023 16:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjCYTYN (ORCPT
+        with ESMTP id S229564AbjCYU7M (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Mar 2023 15:24:13 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7AB30C0;
-        Sat, 25 Mar 2023 12:24:11 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id p12-20020a05600c468c00b003ef5e6c39cdso1832336wmo.3;
-        Sat, 25 Mar 2023 12:24:11 -0700 (PDT)
+        Sat, 25 Mar 2023 16:59:12 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD242689;
+        Sat, 25 Mar 2023 13:59:10 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id x3so21044793edb.10;
+        Sat, 25 Mar 2023 13:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679772250;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tcnVA78wkVzbPfXfOJ2LEcC0Y+HKxsbDQcgFdv0NWhs=;
-        b=Pocj9XuByR3+O92iq2mpvWIyQvZt/GKsOhuWboG4VjE1ElKkX0M4H1lkjCsl8CpzN7
-         S+ad7YC4Ka3kz9ZCYnsWJks1NnAiyglsLk+s6xRkdqAIUP00quC16G8Z9x34sQQnbVbh
-         jXBzC2ksIhiCRSVP/MOIxnJmAhqk8Q6+f/7JQGHIzgfUrQe7Yv8LsVLO1lYNvzya9RKz
-         U28nihqEM2vbM0F4Kt/8TRoNk0jFm74V7HhKDqzntjVTk83BhJ3v+NIHGkJYLjZJWVAS
-         mLB6Ocrk+OH0cPdE/HE/QAXFeE7sILEp4687gd04apIH9gcHkTvWB1FuHftWvYlbmvPv
-         vTSQ==
+        d=gmail.com; s=20210112; t=1679777949; x=1682369949;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pOkHB3mU6jZljf9gVbxLDgI3yP0VZBhBZesGbxbybZw=;
+        b=SQGA7KYVH3D2WTBeR8641cnQbpEsmSL/lzoPf0KMRBYaAcJbrWB6Y/Usa7btzUu89e
+         r6tcqtxJ0izxXzc/jWvX4kZgcePeScoLdAMg7aRtKKBQq132h7VXZhkaGzmg9o6cWKTk
+         9jjqyJZQr4tkjzn1kxaSmvm/EnIQmzDGoo9pjJ2/5QKr/GfEFeM6yMh6yZMx67tCX999
+         2PdlVRcD3adR5A8GvIUpgVzb/UQWBx/+Ro5zHWcCULKGSfs3B+cqPegOpSKdYohGg6sQ
+         5gPlRhmDyXfNhmlOvtsHcD2rCsdc9XE+7VjkzGnHCEGB2rGfE9RDOyGUIkemZh2RErqF
+         Nn8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679772250;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tcnVA78wkVzbPfXfOJ2LEcC0Y+HKxsbDQcgFdv0NWhs=;
-        b=4ptpIv0vGn4iEd7EkM/pvlwoWhde+wDX63r2d2+7uPsgJLQqqQw59e6A0sTJYxoJDo
-         2ks1SYRH8M5zwB+Cw1ioxCwEW8JomItxROAywz+x3B3A/J7cbo5yyWHZ3mH2OhDi3hGn
-         I4q2Qetvrn4tH0lTL//xu+BQHbsr0hNAruDhFB1ODv6CvQOs3YDmFp33ibq4o/r46Jeo
-         fPvDlyhU2TP0DY/59H1S6M+25lpMNEaTqOpTeH2GJoSErL6aIDmPKvtgt60yq3HmTpQN
-         lUCvgvFwjBJP4m09g6UGCgHM1VelyE2MFyQ5vO5ios+QoxH/AJ+VRbtP0qmXJSTmHqa0
-         eC9w==
-X-Gm-Message-State: AO0yUKVYFoEweWNetFcuhdmFwNssdjYFAYrOoxM7GUfjcCdcccnlRFJZ
-        /JdU5iWzU+N+7WJkKmtpXoU=
-X-Google-Smtp-Source: AK7set/U2CC6eWEHlcDRZJcCoHMyfxS7P7nSp0cEP3JJ0eMW68/jHSmYtAF9YnCen6KiCRPQ65XWwA==
-X-Received: by 2002:a05:600c:286:b0:3ee:7f0b:387b with SMTP id 6-20020a05600c028600b003ee7f0b387bmr4567366wmk.17.1679772250121;
-        Sat, 25 Mar 2023 12:24:10 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id t9-20020a1c7709000000b003ed1ff06faasm8573061wmi.19.2023.03.25.12.24.08
+        d=1e100.net; s=20210112; t=1679777949; x=1682369949;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pOkHB3mU6jZljf9gVbxLDgI3yP0VZBhBZesGbxbybZw=;
+        b=ONdS15/E7gEdZjm0RYd5gg64Ral3RMUFwv+KDKhq7l4AbieS+vpePfnArn/704gq3T
+         5Hfwy3q5dvO+CJ2QONiDBParO82R4cvJViuITa9UOJZzcsJqcbZ2z7r84NhQgoUA8ZBR
+         zGemJ9Xjv6bA0GsOYCbx0d6oLc6JjQsF1wLNSuxSXbq7XFAHZZBY8R2MeBOdpKFUkhNw
+         ed/wXZ+okCc4Et1tuX93vfWQNKW2xtBU5IdKCww6963iN99YagtU4mezsDx5lhjnbfce
+         0zhtvR7sn0l5Apa/ZsOzQEUnUrepnn6pvJIMD0c4DmV6yP1nuAmXAWaVuWuESX0An42F
+         28Cg==
+X-Gm-Message-State: AAQBX9dYsYsI6gp/Xq80F0LcPgdjgcJVU+vAmMUeOKFeEQjLChhAE055
+        wyQLJDPWZBdY6D8v5QWPhFQ=
+X-Google-Smtp-Source: AKy350Zf2xFKvcZ0tlVEUyhkALBh5Oi4WhTX1RmzmttS5oNlDzIhNHIiTko+UnihFhZxSlPsUTonrg==
+X-Received: by 2002:a05:6402:268e:b0:502:1f7b:f0a6 with SMTP id w14-20020a056402268e00b005021f7bf0a6mr6842871edd.0.1679777948929;
+        Sat, 25 Mar 2023 13:59:08 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.. ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004af62273b66sm12597440edj.18.2023.03.25.13.59.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 12:24:09 -0700 (PDT)
-Date:   Sat, 25 Mar 2023 19:24:08 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        Jay Kamat <jgkamat@fb.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests: cgroup: Fix exception handling in
- test_memcg_oom_group_score_events()
-Message-ID: <fffcd98a-bb73-41cd-8545-0f2c55dd38f9@lucifer.local>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <c383bdca-6f0d-4a75-e788-e1920faa0a62@web.de>
+        Sat, 25 Mar 2023 13:59:08 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     shuah@kernel.org, colin.i.king@gmail.com
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        himadrispandya@gmail.com
+Subject: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_VMA action
+Date:   Sun, 26 Mar 2023 00:59:02 +0400
+Message-Id: <20230325205903.5550-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c383bdca-6f0d-4a75-e788-e1920faa0a62@web.de>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 07:30:21PM +0100, Markus Elfring wrote:
-> Date: Sat, 25 Mar 2023 19:11:13 +0100
->
-> The label “cleanup” was used to jump to another pointer check despite of
-> the detail in the implementation of the function
-> “test_memcg_oom_group_score_events” that it was determined already
-> that a corresponding variable contained a null pointer.
+This patch will add the new test, which covers the prctl call with
+PR_SET_VMA command. The test tries to give a name to the anonymous
+VMA within the process memory map, and then checks the result of
+the operation by parsing 'maps' virtual file.
 
-This is poorly writte and confusing. Something like 'avoid unnecessary null
-check/cg_destroy() invocation' would be far clearer.
+Additionally, the test tries to call the prctl PR_SET_VMA command
+with invalid arguments, and checks the error codes for correctness.
 
->
-> 1. Thus return directly after a call of the function “cg_name” failed.
->
+At the moment anonymous VMA naming through prctl call functionality
+is not covered with any tests, so I think implementing it makes sense.
 
-This feels superfluious.
+In version 2 of this patch I consider the selftest Makefile rule about
+TARGETS entries order - I moved the 'prctl' entry in the Makefile to
+follow the lexicographic order. In version 1 it was placed at the
+end of the list.
 
-> 2. Use an additional label.
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/prctl/.gitignore      |   1 +
+ tools/testing/selftests/prctl/Makefile        |   2 +-
+ tools/testing/selftests/prctl/config          |   1 +
+ .../selftests/prctl/set-anon-vma-name-test.c  | 104 ++++++++++++++++++
+ 5 files changed, 108 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/prctl/config
+ create mode 100644 tools/testing/selftests/prctl/set-anon-vma-name-test.c
 
-This also feels superfluious.
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 13a6837a0c6b..97dcdaa656f6 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -58,6 +58,7 @@ TARGETS += nsfs
+ TARGETS += pidfd
+ TARGETS += pid_namespace
+ TARGETS += powerpc
++TARGETS += prctl
+ TARGETS += proc
+ TARGETS += pstore
+ TARGETS += ptrace
+diff --git a/tools/testing/selftests/prctl/.gitignore b/tools/testing/selftests/prctl/.gitignore
+index 91af2b631bc9..7a657b25f686 100644
+--- a/tools/testing/selftests/prctl/.gitignore
++++ b/tools/testing/selftests/prctl/.gitignore
+@@ -2,3 +2,4 @@
+ disable-tsc-ctxt-sw-stress-test
+ disable-tsc-on-off-stress-test
+ disable-tsc-test
++set-anon-vma-name-test
+diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/selftests/prctl/Makefile
+index c7923b205222..c058b81eeb41 100644
+--- a/tools/testing/selftests/prctl/Makefile
++++ b/tools/testing/selftests/prctl/Makefile
+@@ -5,7 +5,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+ 
+ ifeq ($(ARCH),x86)
+ TEST_PROGS := disable-tsc-ctxt-sw-stress-test disable-tsc-on-off-stress-test \
+-		disable-tsc-test
++		disable-tsc-test set-anon-vma-name-test
+ all: $(TEST_PROGS)
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/prctl/config b/tools/testing/selftests/prctl/config
+new file mode 100644
+index 000000000000..c6ed03c544e5
+--- /dev/null
++++ b/tools/testing/selftests/prctl/config
+@@ -0,0 +1 @@
++CONFIG_ANON_VMA_NAME=y
+diff --git a/tools/testing/selftests/prctl/set-anon-vma-name-test.c b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+new file mode 100644
+index 000000000000..26d853c5a0c1
+--- /dev/null
++++ b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+@@ -0,0 +1,104 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This test covers the anonymous VMA naming functionality through prctl calls
++ */
++
++#include <errno.h>
++#include <sys/prctl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/mman.h>
++#include <string.h>
++
++#include "../kselftest_harness.h"
++
++#define AREA_SIZE 1024
++
++#define GOOD_NAME "goodname"
++#define BAD_NAME "badname\1"
++
++#ifndef PR_SET_VMA
++#define PR_SET_VMA 0x53564d41
++#define PR_SET_VMA_ANON_NAME 0
++#endif
++
++
++int rename_vma(unsigned long addr, unsigned long size, char *name)
++{
++	int res;
++
++	res = prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, addr, size, name);
++	if (res < 0)
++		return -errno;
++	return res;
++}
++
++int was_renaming_successful(char *target_name, unsigned long ptr)
++{
++	FILE *maps_file;
++
++	char line_buf[512], name[128], mode[8];
++	unsigned long start_addr, end_addr, offset;
++	unsigned int major_id, minor_id, node_id;
++
++	char target_buf[128];
++	int res = 0, sscanf_res;
++
++	// The entry name in maps will be in format [anon:<target_name>]
++	sprintf(target_buf, "[anon:%s]", target_name);
++	maps_file = fopen("/proc/self/maps", "r");
++	if (!maps_file) {
++		printf("## /proc/self/maps file opening error\n");
++		return 0;
++	}
++
++	// Parse the maps file to find the entry we renamed
++	while (fgets(line_buf, sizeof(line_buf), maps_file)) {
++		sscanf_res = sscanf(line_buf, "%lx-%lx %7s %lx %u:%u %u %s", &start_addr,
++					&end_addr, mode, &offset, &major_id,
++					&minor_id, &node_id, name);
++		if (sscanf_res == EOF) {
++			res = 0;
++			printf("## EOF while parsing the maps file\n");
++			break;
++		}
++		if (!strcmp(name, target_buf) && start_addr == ptr) {
++			res = 1;
++			break;
++		}
++	}
++	fclose(maps_file);
++	return res;
++}
++
++FIXTURE(vma) {
++	void *ptr_anon, *ptr_not_anon;
++};
++
++FIXTURE_SETUP(vma) {
++	self->ptr_anon = mmap(NULL, AREA_SIZE, PROT_READ | PROT_WRITE,
++					MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
++	ASSERT_NE(self->ptr_anon, NULL);
++	self->ptr_not_anon = mmap(NULL, AREA_SIZE, PROT_READ | PROT_WRITE,
++					MAP_PRIVATE, 0, 0);
++	ASSERT_NE(self->ptr_not_anon, NULL);
++}
++
++FIXTURE_TEARDOWN(vma) {
++	munmap(self->ptr_anon, AREA_SIZE);
++	munmap(self->ptr_not_anon, AREA_SIZE);
++}
++
++TEST_F(vma, renaming) {
++	TH_LOG("Try to rename the VMA with correct parameters");
++	EXPECT_GE(rename_vma((unsigned long)self->ptr_anon, AREA_SIZE, GOOD_NAME), 0);
++	EXPECT_TRUE(was_renaming_successful(GOOD_NAME, (unsigned long)self->ptr_anon));
++
++	TH_LOG("Try to pass invalid name (with non-printable character \\1) to rename the VMA");
++	EXPECT_EQ(rename_vma((unsigned long)self->ptr_anon, AREA_SIZE, BAD_NAME), -EINVAL);
++
++	TH_LOG("Try to rename non-anonynous VMA");
++	EXPECT_EQ(rename_vma((unsigned long) self->ptr_not_anon, AREA_SIZE, GOOD_NAME), -EINVAL);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.34.1
 
->
-> 3. Delete a questionable check.
-
-This seems superfluois and frankly, rude. It's not questionable, it's
-readable, you should try to avoid language like 'questionable' when the
-purpose of the check is obvious.
-
->
->
-> This issue was detected by using the Coccinelle software.
->
-> Fixes: a987785dcd6c8ae2915460582aebd6481c81eb67 ("Add tests for memory.oom.group")
-
-Fixes what in the what now? This is not a bug fix, it's a 'questionable'
-refactoring.
-
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->  tools/testing/selftests/cgroup/test_memcontrol.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index f4f7c0aef702..afcd1752413e 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -1242,12 +1242,11 @@ static int test_memcg_oom_group_score_events(const char *root)
->  	int safe_pid;
->
->  	memcg = cg_name(root, "memcg_test_0");
-> -
->  	if (!memcg)
-> -		goto cleanup;
-> +		return ret;
->
->  	if (cg_create(memcg))
-> -		goto cleanup;
-> +		goto free_cg;
->
->  	if (cg_write(memcg, "memory.max", "50M"))
->  		goto cleanup;
-> @@ -1275,8 +1274,8 @@ static int test_memcg_oom_group_score_events(const char *root)
->  	ret = KSFT_PASS;
->
->  cleanup:
-> -	if (memcg)
-> -		cg_destroy(memcg);
-> +	cg_destroy(memcg);
-> +free_cg:
->  	free(memcg);
->
->  	return ret;
-> --
-> 2.40.0
->
->
-
-I dislike this patch, it adds complexity for no discernible purpose and
-actively makes the code _less_ readable and in a self-test of all places (!)
-
-Not all pedantic Coccinelle results are actionable. Remember that it's
-humans who are reading the code.
-
-Your email client/scripting is still somehow broken, I couldn't get b4 to
-pull it correctly and it seems to have a duplicate message ID. You really
-need to take a look at that (git send-email should do this fine for
-example).
-
-Please try to filter the output of Coccinelle and instead of spamming
-thousands of pointless patches that add no value, try to choose those that
-do add value.
-
-My advice overall would be to just stop.
