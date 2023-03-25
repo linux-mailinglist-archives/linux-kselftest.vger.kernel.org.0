@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717496C8ADD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Mar 2023 05:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07C26C8ADE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Mar 2023 05:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjCYEbj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 Mar 2023 00:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S232019AbjCYEbm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 25 Mar 2023 00:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbjCYEb0 (ORCPT
+        with ESMTP id S232038AbjCYEbh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Mar 2023 00:31:26 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29F21A976
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 21:31:20 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id p12-20020a25420c000000b00b6eb3c67574so3632520yba.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 21:31:20 -0700 (PDT)
+        Sat, 25 Mar 2023 00:31:37 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E715F1ABD7
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 21:31:24 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id nm11-20020a17090b19cb00b0023d0c90d851so1019038pjb.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Mar 2023 21:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679718680;
+        d=google.com; s=20210112; t=1679718684;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qvsBLzafDFRdEeFlhtCKfSPH7Z58gGOcQ/NMYd5XVas=;
-        b=Dkx+4oPW0lddcPp4uMCQo6pmYmmbn0VU/J6ph6FIZMvJHQ04WSJmMD7xcIcZLJ6PdN
-         mzLHDd4+oVvLMi1Zcdmmen6ZKzyf+g1GWgtWOeOuWYuo4GIJOr/0XBgAc273lDPvOxyn
-         x/DczHXGxTwgZwYMHRELVpV4Toxy+2KxrL1CRJni3/TMk9xGSF+B6Ixg0Qh2jk842ljw
-         rlDf4yUosLnhwdKudLfaiffDtlBTk7P4a9n3NnW6nlLUy3fEX7Q/qxKKYau9bO29v/Ww
-         aJhM3eN9NL0dDmMVQAe0W1p9zzom/gVxfE5CItxvv4NN8JpOss79ZwU5ox4G1jGQ9ykB
-         S25A==
+        bh=2GFTGuce/jasIOoxgBhcBDFvlf80kZtNsVdpwus1c0o=;
+        b=jPiK9bzw/LfWhk/EqotDJX72pjO1JKd1BwuwlbjMi9aYrXP1DPcn8Nt4cOwDHXs9jh
+         ij4e2UNXRWtJoZtf2Z94vobgXgG4FvRXLAmxm91yhbdBFPkqrIsk0c2QmZjI9UWAQCSg
+         f4cKmyY38G7Q9bQw598jxVJkV0K3c/r2Vi+GxwcNR241OJLr0VBRpsyYJ15SmiZj4UAF
+         D3Nx5ZoSqHRxu60/MVPookyisHGGOXNKKMYjYZ9kM5A2jAaNIpmlMY1fD7eRgXTi8KSB
+         NEeXv3z1mPoeQVEWMgiyr4eDInIdZECHHG4Dmo/ttWv/PoymoNUwLRgzIq9uGIbcfl+A
+         oK+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679718680;
+        d=1e100.net; s=20210112; t=1679718684;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qvsBLzafDFRdEeFlhtCKfSPH7Z58gGOcQ/NMYd5XVas=;
-        b=zHFdnk+WtFlEC5d3+zv66h3UVAOthJUi/f3XTBLKSKQWvevJthqIm7nnyh4W3jMvb3
-         KB63iFLABT5t1TLbwm5EGkMwHZYpYDkYcaxnu+4ibwNKZtOzgJmBdkijUHmclNu4b87z
-         foZn3gj8eWo8VzPF6kjKnQco3zCVdm++6oFDwvC57StfFfjS22+Z2quaFLmrJKTn05KU
-         F8jHQn8wf/OP68X1wWx8fNbU/R9C7ljn2uoa3agpcXP1r3wvDC408Rom+GJC6UeFgKsc
-         HWo9YXY/d2eZb+T1EC6qO2PfB4rwpUJcnJaUFlA3Xo6rXGq/L6pg3wzuppNErf1yUwPw
-         p+Nw==
-X-Gm-Message-State: AAQBX9dE8uieamv96sOW51cAdFnr8bwhIMs2/PvV1LGla3kn9x/LLjY8
-        nFlLjman91RBbWRFI6o9BoY3Zq2QwsVv/A==
-X-Google-Smtp-Source: AKy350aAmbbgvFfbZgCOgJD0jK2dcqvaJW7t4SFAmuugOJrv8Crpejpj64U5SmpXoebmhM46ApGf7S32uVGC0Q==
+        bh=2GFTGuce/jasIOoxgBhcBDFvlf80kZtNsVdpwus1c0o=;
+        b=7LL/6jvjOor3eHyRagWScYw3+oStY5slzHRWmmk/z6F6GSA8uRcl/Jz9M24mbL5LO7
+         qddvOcppTdZATG3pUF47UZS/c5hbO9ZUnboNdeDtpVS/0zf2RJvb9YWN6iZgjxLra/q2
+         5SPSnqBoMw5R4lBWBnUbGjGhaznaiwh+Sg1rltFzjN38IQNkUDsRPZhLO31bVYQBx9Uy
+         xD/qR6xzy/PKxPmx0XRXUEmlYWTFCFbpN5/AcQrkXnLYIiMsKDNjfseJKkezqPwYCAz4
+         trsZAjZB09hQA7KFD6ZvWlNY0CGwLSjsgd/zn0UTnGFV31MysvksiNa8ArtynSC4TGHN
+         jDlw==
+X-Gm-Message-State: AO0yUKXx1LjSIiZ3wrgCEQo7bLwB20MKMGQT35iDsKNvlyyL0fkymNc8
+        gxs/whE/yHwOxabRrXQDQhbamwqbZWTlQg==
+X-Google-Smtp-Source: AK7set/eA25yEQztgVWNsBWE4ael/iyts9um9spxPVS5KzosXah9xcxZqDHvH6pHUe+DNTg6pSiQEEMUh6sQRg==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:ac64:0:b0:544:b9b2:5c32 with SMTP id
- z36-20020a81ac64000000b00544b9b25c32mr2114854ywj.7.1679718679808; Fri, 24 Mar
- 2023 21:31:19 -0700 (PDT)
-Date:   Sat, 25 Mar 2023 12:31:03 +0800
+ (user=davidgow job=sendgmr) by 2002:a05:6a00:4510:b0:626:1710:9b7d with SMTP
+ id cw16-20020a056a00451000b0062617109b7dmr5135789pfb.0.1679718684393; Fri, 24
+ Mar 2023 21:31:24 -0700 (PDT)
+Date:   Sat, 25 Mar 2023 12:31:04 +0800
 In-Reply-To: <20230325043104.3761770-1-davidgow@google.com>
 Mime-Version: 1.0
 References: <20230325043104.3761770-1-davidgow@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230325043104.3761770-2-davidgow@google.com>
-Subject: [RFC PATCH 1/2] kunit: resource: Add kunit_defer() functionality
+Message-ID: <20230325043104.3761770-3-davidgow@google.com>
+Subject: [RFC PATCH 2/2] kunit: Add APIs for managing devices
 From:   David Gow <davidgow@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -78,241 +78,155 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Many uses of the KUnit resource system are intended to simply defer
-calling a function until the test exits (be it due to success or
-failure). The existing kunit_alloc_resource() function is often used for
-this, but was awkward to use (requiring passing NULL init functions, etc),
-and returned a resource without incrementing its reference count, which
--- while okay for this use-case -- could cause problems in others.
+Tests for drivers often require a struct device to pass to other
+functions. While it's possible to create these with
+root_device_register(), or to use something like a platform device, this
+is both a misuse of those APIs, and can be difficult to clean up after,
+for example, a failed assertion.
 
-Instead, introduce a simple kunit_defer() API: a simple function
-(returning nothing, accepting a single void* argument) can be scheduled
-to be called when the test exits. Deferred functions are called in the
-opposite order to that which they were registered.
+Add two KUnit-specific functions for registering and unregistering a
+struct device:
+- kunit_device_register()
+- kunit_device_unregister()
 
-This is implemented as a resource under the hood, so the ordering
-between resource cleanup and deferred functions is maintained.
+These behave similarly to root_device_register() and
+root_device_unregister() except:
+- They take a struct kunit pointer with a test context.
+- They do not create a root device directory in sysfs.
+- The device will automatically be unregistered when the test exits
+  (unless it has already been unregistered using
+  kunit_device_unregister())
+- The device name is set to <test-name>.<device-name>.
+
+This API can be extended in the future to, for example, add these
+devices to a KUnit bus as tests begin to require that functionality.
 
 Signed-off-by: David Gow <davidgow@google.com>
 ---
- include/kunit/resource.h |  87 +++++++++++++++++++++++++++++++
- lib/kunit/resource.c     | 110 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 197 insertions(+)
+ include/kunit/device.h | 25 ++++++++++++++++
+ lib/kunit/Makefile     |  1 +
+ lib/kunit/device.c     | 68 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 94 insertions(+)
+ create mode 100644 include/kunit/device.h
+ create mode 100644 lib/kunit/device.c
 
-diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-index cf6fb8f2ac1b..6c4728ca9237 100644
---- a/include/kunit/resource.h
-+++ b/include/kunit/resource.h
-@@ -387,4 +387,91 @@ static inline int kunit_destroy_named_resource(struct kunit *test,
-  */
- void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
+diff --git a/include/kunit/device.h b/include/kunit/device.h
+new file mode 100644
+index 000000000000..19a35b5e4e59
+--- /dev/null
++++ b/include/kunit/device.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * KUnit basic device implementation
++ *
++ * Implementation of struct kunit_device helpers.
++ *
++ * Copyright (C) 2023, Google LLC.
++ * Author: David Gow <davidgow@google.com>
++ */
++
++#ifndef _KUNIT_DEVICE_H
++#define _KUNIT_DEVICE_H
++
++#if IS_ENABLED(CONFIG_KUNIT)
++
++#include <kunit/test.h>
++
++struct kunit_device;
++
++struct device *kunit_device_register(struct kunit *test, const char *name);
++void kunit_device_unregister(struct kunit *test, struct device *dev);
++
++#endif
++
++#endif
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index cb417f504996..b9bd059269ed 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -6,6 +6,7 @@ kunit-objs +=				test.o \
+ 					string-stream.o \
+ 					assert.o \
+ 					try-catch.o \
++					device.o \
+ 					executor.o
  
-+typedef void (*kunit_defer_function_t)(void *ctx);
-+
-+/**
-+ * kunit_defer() - Defer a function call until the test ends.
-+ * @test: Test case to associate the deferred function with.
-+ * @func: The function to run on test exit
-+ * @ctx: Data passed into @func
-+ * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
+ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
+diff --git a/lib/kunit/device.c b/lib/kunit/device.c
+new file mode 100644
+index 000000000000..ce87b7c40d9b
+--- /dev/null
++++ b/lib/kunit/device.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit basic device implementation
 + *
-+ * Defer the execution of a function until the test exits, either normally or
-+ * due to a failure.  @ctx is passed as additional context. All functions
-+ * registered with kunit_defer() will execute in the opposite order to that
-+ * they were registered in.
++ * Implementation of struct kunit_device helpers.
 + *
-+ * This is useful for cleaning up allocated memory and resources.
-+ *
-+ * RETURNS:
-+ *   An opaque "cancellation token", or NULL on error. Pass this token to
-+ *   kunit_defer_cancel() in order to cancel the deferred execution of func().
++ * Copyright (C) 2023, Google LLC.
++ * Author: David Gow <davidgow@google.com>
 + */
-+void *kunit_defer(struct kunit *test, kunit_defer_function_t func,
-+		  void *ctx, gfp_t internal_gfp);
 +
-+/**
-+ * kunit_defer_cancel_token() - Cancel a deferred function call.
-+ * @test: Test case the deferred function is associated with.
-+ * @cancel_token: The cancellation token returned by kunit_defer()
-+ *
-+ * Prevent a function deferred using kunit_defer() from executing when the
-+ * test ends.
-+ *
-+ * Prefer using this to kunit_defer_cancel() where possible.
-+ */
-+void kunit_defer_cancel_token(struct kunit *test, void *cancel_token);
++#include <linux/device.h>
 +
-+/**
-+ * kunit_defer_trigger_token() - Run a deferred function call immediately.
-+ * @test: Test case the deferred function is associated with.
-+ * @cancel_token: The cancellation token returned by kunit_defer()
-+ *
-+ * Execute a deferred function call immediately, instead of waiting for the
-+ * test to end.
-+ *
-+ * Prefer using this to kunit_defer_trigger() where possible.
-+ */
-+void kunit_defer_trigger_token(struct kunit *test, void *cancel_token);
++#include <kunit/test.h>
++#include <kunit/resource.h>
 +
-+/**
-+ * kunit_defer_cancel() - Cancel a matching deferred function call.
-+ * @test: Test case the deferred function is associated with.
-+ * @func: The deferred function to cancel.
-+ * @ctx: The context passed to the deferred function to trigger.
-+ *
-+ * Prevent a function deferred via kunit_defer() from executing at shutdown.
-+ * Unlike kunit_defer_cancel_token(), this takes the (func, ctx) pair instead of
-+ * the cancellation token. If that function/context pair was deferred multiple
-+ * times, only the most recent one will be cancelled.
-+ *
-+ * Prefer using kunit_defer_cancel_token() to this where possible.
-+ */
-+void kunit_defer_cancel(struct kunit *test,
-+			kunit_defer_function_t func,
-+			void *ctx);
-+
-+/**
-+ * kunit_defer_trigger() - Run a matching deferred function call immediately.
-+ * @test: Test case the deferred function is associated with.
-+ * @func: The deferred function to trigger.
-+ * @ctx: The context passed to the deferred function to trigger.
-+ *
-+ * Execute a function deferred via kunit_defer() immediately, rather than when
-+ * the test ends.
-+ * Unlike kunit_defer_trigger_token(), this takes the (func, ctx) pair instead of
-+ * the cancellation token. If that function/context pair was deferred multiple
-+ * times, it will only be executed once here. The most recent deferral will
-+ * no longer execute when the test ends.
-+ *
-+ * kunit_defer_trigger(test, func, ctx);
-+ * is equivalent to
-+ * func(ctx);
-+ * kunit_defer_cancel(test, func, ctx);
-+ *
-+ * Prefer using kunit_defer_trigger_token() to this where possible.
-+ */
-+void kunit_defer_trigger(struct kunit *test,
-+			 kunit_defer_function_t func,
-+			 void *ctx);
- #endif /* _KUNIT_RESOURCE_H */
-diff --git a/lib/kunit/resource.c b/lib/kunit/resource.c
-index c414df922f34..0d0c48054d45 100644
---- a/lib/kunit/resource.c
-+++ b/lib/kunit/resource.c
-@@ -77,3 +77,113 @@ int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(kunit_destroy_resource);
-+
-+struct kunit_defer_ctx {
-+	kunit_defer_function_t func;
-+	void *ctx;
++/* A device owned by a KUnit test. */
++struct kunit_device {
++	struct device dev;
++	struct kunit *owner;
 +};
 +
-+static void __kunit_defer_free(struct kunit_resource *res)
++static inline struct kunit_device *to_kunit_device(struct device *d)
 +{
-+	struct kunit_defer_ctx *defer_ctx = (struct kunit_defer_ctx *)res->data;
-+
-+	defer_ctx->func(defer_ctx->ctx);
-+
-+	kfree(res->data);
++	return container_of(d, struct kunit_device, dev);
 +}
 +
-+void *kunit_defer(struct kunit *test, kunit_defer_function_t func,
-+				void *ctx, gfp_t internal_gfp)
++static void kunit_device_release(struct device *d)
 +{
-+	struct kunit_resource *res;
-+	struct kunit_defer_ctx *defer_ctx;
-+
-+	KUNIT_ASSERT_NOT_NULL_MSG(test, func, "Tried to defer a NULL function!");
-+
-+	res = kzalloc(sizeof(*res), internal_gfp);
-+	if (!res)
-+		return NULL;
-+
-+	defer_ctx = kzalloc(sizeof(*defer_ctx), internal_gfp);
-+	if (!defer_ctx)
-+		goto free_res;
-+
-+	defer_ctx->func = func;
-+	defer_ctx->ctx = ctx;
-+
-+	res->should_kfree = true;
-+	__kunit_add_resource(test, NULL, __kunit_defer_free, res, defer_ctx);
-+
-+	return (void *)res;
-+
-+free_res:
-+	kfree(res);
-+	return NULL;
++	kfree(to_kunit_device(d));
 +}
 +
-+void kunit_defer_cancel_token(struct kunit *test, void *cancel_token)
++struct device *kunit_device_register(struct kunit *test, const char *name)
 +{
-+	struct kunit_resource *res = (struct kunit_resource *)cancel_token;
++	struct kunit_device *kunit_dev;
++	int err = -ENOMEM;
 +
-+	/* Remove the free function so we don't run the deferred function. */
-+	res->free = NULL;
++	kunit_dev = kzalloc(sizeof(struct kunit_device), GFP_KERNEL);
++	if (!kunit_dev)
++		return ERR_PTR(err);
 +
-+	kunit_remove_resource(test, res);
-+}
++	kunit_dev->owner = test;
 +
-+void kunit_defer_trigger_token(struct kunit *test, void *cancel_token)
-+{
-+	struct kunit_resource *res = (struct kunit_resource *)cancel_token;
-+
-+	/* Removing the resource should trigger the res->free function. */
-+	kunit_remove_resource(test, res);
-+}
-+
-+static bool __kunit_defer_match(struct kunit *test,
-+				struct kunit_resource *res, void *match_data)
-+{
-+	struct kunit_defer_ctx *match_ctx = (struct kunit_defer_ctx *)match_data;
-+	struct kunit_defer_ctx *res_ctx = (struct kunit_defer_ctx *)res->data;
-+
-+	/* Make sure this is a free function. */
-+	if (res->free != __kunit_defer_free)
-+		return false;
-+
-+	/* Both the function and context data should match. */
-+	return (match_ctx->func == res_ctx->func) && (match_ctx->ctx == res_ctx->ctx);
-+}
-+
-+void kunit_defer_cancel(struct kunit *test,
-+			kunit_defer_function_t func,
-+			void *ctx)
-+{
-+	struct kunit_defer_ctx defer_ctx;
-+	struct kunit_resource *res;
-+
-+	defer_ctx.func = func;
-+	defer_ctx.ctx = ctx;
-+
-+	res = kunit_find_resource(test, __kunit_defer_match, &defer_ctx);
-+	if (res) {
-+		kunit_defer_cancel_token(test, res);
-+		kunit_put_resource(res);
++	err = dev_set_name(&kunit_dev->dev, "%s.%s", test->name, name);
++	if (err) {
++		kfree(kunit_dev);
++		return ERR_PTR(err);
 +	}
-+}
 +
-+void kunit_defer_trigger(struct kunit *test,
-+			 kunit_defer_function_t func,
-+			 void *ctx)
-+{
-+	struct kunit_defer_ctx defer_ctx;
-+	struct kunit_resource *res;
++	kunit_dev->dev.release = kunit_device_release;
 +
-+	defer_ctx.func = func;
-+	defer_ctx.ctx = ctx;
-+
-+	res = kunit_find_resource(test, __kunit_defer_match, &defer_ctx);
-+	if (res) {
-+		kunit_defer_trigger_token(test, res);
-+		/* We have to put() this here, else free won't be called. */
-+		kunit_put_resource(res);
++	err = device_register(&kunit_dev->dev);
++	if (err) {
++		put_device(&kunit_dev->dev);
++		return ERR_PTR(err);
 +	}
++
++	kunit_defer(test, (kunit_defer_function_t)device_unregister, &kunit_dev->dev, GFP_KERNEL);
++
++	return &kunit_dev->dev;
 +}
++EXPORT_SYMBOL_GPL(kunit_device_register);
++
++void kunit_device_unregister(struct kunit *test, struct device *dev)
++{
++	kunit_defer_trigger(test, (kunit_defer_function_t)device_unregister, dev);
++}
++EXPORT_SYMBOL_GPL(kunit_device_unregister);
++
 -- 
 2.40.0.348.gf938b09366-goog
 
