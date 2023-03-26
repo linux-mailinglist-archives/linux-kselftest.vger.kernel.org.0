@@ -2,179 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92636C9787
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Mar 2023 21:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1666C9807
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Mar 2023 23:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjCZTGa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 Mar 2023 15:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
+        id S229971AbjCZVjH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 Mar 2023 17:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjCZTG3 (ORCPT
+        with ESMTP id S229475AbjCZVjG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Mar 2023 15:06:29 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534EC55A9;
-        Sun, 26 Mar 2023 12:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679857588; x=1711393588;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1coLZK2+6QhUoBhOOnCKU1bEC8YpqZMPXDexV6IJzhs=;
-  b=YrudwwPJlYRpYZg7nkOzcKLyPE8CWn+WHBV5rMoH3ypwCyYKClLBL4DY
-   +funzJieyW3Z1H7rDjf7xlgXaHZ0xqMQZ98g82lS/mxJc+SAdesXltyS4
-   jF+tuSkGYnrB3Il4nrAlh5wWmJ5Lo9S9KmrgWIdO+ghZnH5eP24/so5JS
-   PRXh2Hp4vF4CaR8bpOBnE1kMR3MSQFgwUKz7aUlCA+nCl9kp+scjl0Jap
-   /hwKpcp6pmjEdz53on2QPq3XZ6MUHBReoLuCu0gS3hzM4MdLNGfGAtxNG
-   yfwvPHMYMAxqCx+SeOS4AXYEiHe7FB9WQpzuSNjM1YcwM5Kn9diY38wXZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367859501"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="367859501"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 12:06:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="660637147"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="660637147"
-Received: from schilka-mobl2.amr.corp.intel.com (HELO [10.212.162.13]) ([10.212.162.13])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 12:06:27 -0700
-Message-ID: <d09f30f5-23da-4fb6-141e-3dd9483217c7@linux.intel.com>
-Date:   Sun, 26 Mar 2023 12:06:26 -0700
+        Sun, 26 Mar 2023 17:39:06 -0400
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8854C1C;
+        Sun, 26 Mar 2023 14:39:05 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id t13so5610847qvn.2;
+        Sun, 26 Mar 2023 14:39:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679866743;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DIQ9eIlSpAA9+1gG0Uwa5651wmcDfg3GdDljDetIFiQ=;
+        b=iP5DTRifXkna2xG4BWLYOCPilWOenHcKn8F1BZSaU1GS7Te4U3B+bWKuQv+Q87LOoe
+         PYdMvTjfy3+tHC9omeyUbwvp1kLn2IgOhXLUrLduNELj1UqQIsUZBRkkRztl1czE8Hjm
+         W/Yfgapi8XT//anxdFk0WxC+4gMdNLVYLqcOIWomBAm1f9UaX/gXT0GSipU/Loa+IMjr
+         TzUvhWZvx2G6Dszb20A3jqO4RorhmpjLvOMFMnkJDVeBWSQ1gyZU6I5/DOZndJcIod4u
+         1CcALobgmLxOfE3h8pgPD8w2tAFUoDYmf94NMuFIuT/rAu0Rhcp49OQOhpjF4hEUoMsj
+         DeMg==
+X-Gm-Message-State: AAQBX9fxDNZxYrl7JRBhIr6vkEgzwMXG3FgjcRP9YBaB9MymKYkUna84
+        nGv/GxPqSKESfmFn1JGzVvA=
+X-Google-Smtp-Source: AKy350Z7u9qMmrS9h4j5TqP1uMWZa6oiBm2m+vreuWKuQd9iOVloKRpZ6D+Ab5O3wvFzZz+hpT3GsQ==
+X-Received: by 2002:a05:6214:4114:b0:5aa:fd43:1fbe with SMTP id kc20-20020a056214411400b005aafd431fbemr16826372qvb.46.1679866743277;
+        Sun, 26 Mar 2023 14:39:03 -0700 (PDT)
+Received: from maniforge ([24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id 75-20020a370a4e000000b006ff8a122a1asm10659270qkk.78.2023.03.26.14.39.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 14:39:02 -0700 (PDT)
+Date:   Sun, 26 Mar 2023 16:39:00 -0500
+From:   David Vernet <void@manifault.com>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        kernel-janitors@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Jay Kamat <jgkamat@fb.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>, cocci@inria.fr,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests: cgroup: Fix exception handling in
+ test_memcg_oom_group_score_events()
+Message-ID: <20230326213900.GJ363182@maniforge>
+References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
+ <c383bdca-6f0d-4a75-e788-e1920faa0a62@web.de>
+ <fffcd98a-bb73-41cd-8545-0f2c55dd38f9@lucifer.local>
+ <5b7921c9-ee5d-c372-b19b-2701bcf33148@web.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v1 2/3] virt: tdx-guest: Add Quote generation support
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20230326062039.341479-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <ZB/njYsTTwgTtAeA@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <ZB/njYsTTwgTtAeA@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b7921c9-ee5d-c372-b19b-2701bcf33148@web.de>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Greg,
+On Sun, Mar 26, 2023 at 10:15:31AM +0200, Markus Elfring wrote:
 
-Thanks for the review comments.
+[...]
 
-On 3/25/23 11:34 PM, Greg KH wrote:
-> On Sat, Mar 25, 2023 at 11:20:38PM -0700, Kuppuswamy Sathyanarayanan wrote:
->> Since GetQuote support requires usage of DMA APIs, convert TDX guest
->> driver to a platform driver.
+> >>
+> >> Fixes: a987785dcd6c8ae2915460582aebd6481c81eb67 ("Add tests for memory.oom.group")
+> >
+> > Fixes what in the what now?
 > 
-> Sorry, but that's not a valid reason to use a platform device for fake
-> things like this:
+> 1. Check repetition (which can be undesirable)
 > 
->> +static struct platform_device *tdx_dev;
-> 
-> Especially a single static one.
-> 
->> +static int tdx_guest_probe(struct platform_device *pdev)
->> +{
->> +	if (tdx_register_event_irq_cb(attestation_callback_handler, pdev))
->> +		return -EIO;
->> +
->> +	return misc_register(&tdx_misc_dev);
->> +}
->> +
->> +static int tdx_guest_remove(struct platform_device *pdev)
->> +{
->> +	tdx_unregister_event_irq_cb(attestation_callback_handler, pdev);
->> +	misc_deregister(&tdx_misc_dev);
->> +	return 0;
->> +}
->> +
->> +static struct platform_driver tdx_guest_driver = {
->> +	.probe = tdx_guest_probe,
->> +	.remove = tdx_guest_remove,
->> +	.driver.name = KBUILD_MODNAME,
->> +};
->> +
->>  static const struct x86_cpu_id tdx_guest_ids[] = {
->>  	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
->>  	{}
->> @@ -84,16 +310,35 @@ MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
->>  
->>  static int __init tdx_guest_init(void)
->>  {
->> +	int ret;
->> +
->>  	if (!x86_match_cpu(tdx_guest_ids))
->>  		return -ENODEV;
->>  
->> -	return misc_register(&tdx_misc_dev);
->> +	ret = platform_driver_register(&tdx_guest_driver);
->> +	if (ret) {
->> +		pr_err("failed to register driver, err=%d\n", ret);
->> +		return ret;
->> +	}
-> 
-> No, please do not create a fake platform driver.
-> 
->> +	tdx_dev = platform_device_register_simple(KBUILD_MODNAME,
->> +						  PLATFORM_DEVID_NONE,
->> +						  NULL, 0);
-> 
-> And please do not create a fake platform device.
-> 
-> As always, do not create fake platform devices for things that are NOT
-> platform devices.
-> 
-> If this device needs DMA (but why?) then make it a real device and tie
+> 2. Can a cg_destroy() call ever work as expected if a cg_create() call failed?
 
-Since the Quote generation process requires the guest and VMM to share data,
-we need to use shared buffers. But in TDX guest, VMM cannot directly access
-the guest private memory. Any memory that is required for communication with
-the VMM must be shared explicitly. One way is to allocate the memory on
-demand and share it explicitly using set_memory_decrypted() call. Although
-this approach is clean, since it breaks the direct mapping, it is not
-efficient. An alternative way is to reserve a pool of shared buffers during
-boot time and re-use them for guest/VMM communication. Since in TDX, DMA API
-is configured to tap into the SWIOTLB memory framework (which is shared by
-default), we try to use dma_alloc_* APIs to allocate the shared buffers from
-the shared pool without breaking the direct map.
+Perhaps next time you can answer your own question by spending 30
+seconds actually reading the code you're "fixing":
 
-If usage of DMA APIs / platform device is not acceptable for this use case,
-an alternative approach is to allocate a fixed number of shared buffers during
-the TDX guest driver probe and use it for GetQuote requests. Although it would
-limit the amount of memory we can use for GetQuote requests at a time and also
-reserve a chunk of memory during the init() time, I think it is an acceptable
-tradeoff when compared to alternative choices. The AMD SEV guest driver also
-adopts the similar approach. Please let me know if this approach is acceptable.
+int cg_destroy(const char *cgroup)
+{
+        int ret;
 
-> it to the bus it belongs to (that it is obviously doing DMA on.)
+retry:
+        ret = rmdir(cgroup);
+        if (ret && errno == EBUSY) {
+                cg_killall(cgroup);
+                usleep(100);
+                goto retry;
+        }
 
+        if (ret && errno == ENOENT) <<< that case is explicitly handled here
+                ret = 0;
 
-> 
-> thanks,
-> 
-> greg k-h
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+        return ret;
+}
