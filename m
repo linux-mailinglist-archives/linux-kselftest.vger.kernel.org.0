@@ -2,80 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5ABB6C973F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Mar 2023 19:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92636C9787
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Mar 2023 21:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjCZRjX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 Mar 2023 13:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S230180AbjCZTGa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 Mar 2023 15:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCZRjW (ORCPT
+        with ESMTP id S229458AbjCZTG3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Mar 2023 13:39:22 -0400
-X-Greylist: delayed 1339 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Mar 2023 10:39:21 PDT
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6698355AD
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Mar 2023 10:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=TtKgtk9kregiWGn+VAskA/UgDBK371iiirhB/FRAS84=; b=WIjafrfM0VhCtg0Rftxur3EcIi
-        33eOaJfGUoR3z9Zg/YPms7LmoijJJL2LOb0baTMBgzNlAGctC6cWCvZ7s8Bo6WHBWQsNG2wXcsBFw
-        5CtFFszNX7jdn+uzWqvcwIFKZz78bzRt4pF2aLVRHluM3Lh/adQoPYnYv4tPLLwVZ5BU1yE0mFKQI
-        2o7mSlO4i07it4BXSYaGgs4n9am9gitqPd2zC5pNp8rLBpsghjLcJYWupr3QSLCvIKLcbFk1kiA7A
-        IRAjIkMpYy2W8ANK6poc9KRzctnd7DB73pblSQI0iwNMDLWNEceMsEYamRKc0WP9N4VOb+vB2156L
-        WsOEQYrg==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1pgTzH-000NaI-03; Sun, 26 Mar 2023 19:16:59 +0200
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1pgTzG-000Foh-Cf; Sun, 26 Mar 2023 19:16:58 +0200
-Message-ID: <d9d4894e-d386-dba5-3e6a-c48c5d143e45@metafoo.de>
-Date:   Sun, 26 Mar 2023 10:16:54 -0700
+        Sun, 26 Mar 2023 15:06:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534EC55A9;
+        Sun, 26 Mar 2023 12:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679857588; x=1711393588;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1coLZK2+6QhUoBhOOnCKU1bEC8YpqZMPXDexV6IJzhs=;
+  b=YrudwwPJlYRpYZg7nkOzcKLyPE8CWn+WHBV5rMoH3ypwCyYKClLBL4DY
+   +funzJieyW3Z1H7rDjf7xlgXaHZ0xqMQZ98g82lS/mxJc+SAdesXltyS4
+   jF+tuSkGYnrB3Il4nrAlh5wWmJ5Lo9S9KmrgWIdO+ghZnH5eP24/so5JS
+   PRXh2Hp4vF4CaR8bpOBnE1kMR3MSQFgwUKz7aUlCA+nCl9kp+scjl0Jap
+   /hwKpcp6pmjEdz53on2QPq3XZ6MUHBReoLuCu0gS3hzM4MdLNGfGAtxNG
+   yfwvPHMYMAxqCx+SeOS4AXYEiHe7FB9WQpzuSNjM1YcwM5Kn9diY38wXZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367859501"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="367859501"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 12:06:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="660637147"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="660637147"
+Received: from schilka-mobl2.amr.corp.intel.com (HELO [10.212.162.13]) ([10.212.162.13])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 12:06:27 -0700
+Message-ID: <d09f30f5-23da-4fb6-141e-3dd9483217c7@linux.intel.com>
+Date:   Sun, 26 Mar 2023 12:06:26 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH v1 2/3] virt: tdx-guest: Add Quote generation support
 Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        linux-iio@vger.kernel.org
-References: <ZBrvhfX/NNrJefgt@kroah.com>
- <25f9758f-0010-0181-742a-b18a344110cf@gmail.com> <ZBtPhoelZo4U5jwC@kroah.com>
- <20230323101216.w56kz3rudlj23vab@houat> <ZBwoRgc2ICBJX/Lq@kroah.com>
- <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
- <20230323122925.kqdnomr7i46qnyo4@houat>
- <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
- <20230323163639.xtwpid2uunwnzai4@houat>
- <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
- <20230324123157.bbwvfq4gsxnlnfwb@houat>
- <20230325175044.7bee9e7d@jic23-huawei>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <20230325175044.7bee9e7d@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20230326062039.341479-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <ZB/njYsTTwgTtAeA@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <ZB/njYsTTwgTtAeA@kroah.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26855/Sun Mar 26 09:23:02 2023)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,92 +78,103 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/25/23 10:50, Jonathan Cameron wrote:
-> On Fri, 24 Mar 2023 13:31:57 +0100
-> Maxime Ripard <maxime@cerno.tech> wrote:
->
->> On Fri, Mar 24, 2023 at 08:11:52AM +0200, Matti Vaittinen wrote:
->>> On 3/23/23 18:36, Maxime Ripard wrote:
->>>> On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
->>>>> On 3/23/23 14:29, Maxime Ripard wrote:
->>>>>> On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
->>>>>>
->>>>>> This is the description of what was happening:
->>>>>> https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
->>>>> Thanks Maxime. Do I read this correcty. The devm_ unwinding not being done
->>>>> when root_device_register() is used is not because root_device_unregister()
->>>>> would not trigger the unwinding - but rather because DRM code on top of this
->>>>> device keeps the refcount increased?
->>>> There's a difference of behaviour between a root_device and any device
->>>> with a bus: the root_device will only release the devm resources when
->>>> it's freed (in device_release), but a bus device will also do it in
->>>> device_del (through bus_remove_device() -> device_release_driver() ->
->>>> device_release_driver_internal() -> __device_release_driver() ->
->>>> device_unbind_cleanup(), which are skipped (in multiple places) if
->>>> there's no bus and no driver attached to the device).
->>>>
->>>> It does affect DRM, but I'm pretty sure it will affect any framework
->>>> that deals with device hotplugging by deferring the framework structure
->>>> until the last (userspace) user closes its file descriptor. So I'd
->>>> assume that v4l2 and cec at least are also affected, and most likely
->>>> others.
->>> Thanks for the explanation and patience :)
->>>    
->>>>    
->>>>> If this is the case, then it sounds like a DRM specific issue to me.
->>>> I mean, I guess. One could also argue that it's because IIO doesn't
->>>> properly deal with hotplugging.
->>> I must say I haven't been testing the IIO registration API. I've only tested
->>> the helper API which is not backed up by any "IIO device". (This is fine for
->>> the helper because it must by design be cleaned-up only after the
->>> IIO-deregistration).
->>>
->>> After your explanation here, I am not convinced IIO wouldn't see the same
->>> issue if I was testing the devm_iio_device_alloc() & co.
->> It depends really. The issue DRM is trying to solve is that, when a
->> device is gone, some application might still have an open FD and could
->> still poke into the kernel, while all the resources would have been
->> free'd if it was using devm.
->>
->> So everything is kept around until the last fd is closed, so you still
->> have a reference to the device (even though it's been removed from its
->> bus) until that time.
->>
->> It could be possible that IIO just doesn't handle that case at all. I
->> guess most of the devices aren't hotpluggable, and there's not much to
->> interact with from a userspace PoV iirc, so it might be why.
-> Lars-Peter Clausen (IIRC) fixed up the IIO handling of the similar cases a
-> long time ago now. It's simpler that for some other subsystems as we don't
-> have as many interdependencies as occur in DRM etc.
->
-> I 'think' we are fine in general with the IIO approach to this (I think we
-> did have one report of a theoretical race condition in the remove path that
-> was never fully addressed).
->
-> For IIO we also have fds that can be open but all accesses to them are proxied
-> through the IIO core and one of the things iio_device_unregister() or the devm
-> equivalent does is to set indio_dev->info = NULL  (+ wake up anyone waiting on
-> data etc). Alongside removing the callbacks, that is also used as a flag
-> to indicate the device has gone.
->
-> Note that we keep a reference to the struct indio_dev->dev (rather that the
-> underlying device) so that is not freed until the last fd is closed.
-> Thus, although devm unwinding has occurred that doesn't mean all the data
-> that was allocated with devm_xx calls is cleared up immediately.
+Hi Greg,
 
-IIO is fully hot-plug and hot-unplug capable. And it will have the same 
-issue. When using managed device registration that establishes a parent 
-child relationship between the devices and in combination with a device 
-where the managed unwinding does not happen on unbind, but rather on in 
-the release callback you create a cyclic reference dependency. The child 
-device holds a reference to the parent, but the reference is only 
-released in the parents release callback. And since that release 
-callback is not called until the last reference is dropped you end up 
-with a resource leak.
+Thanks for the review comments.
 
-There are even some other places where IIO drivers run into this. E.g. 
-any driver that does `devm_iio_trigger_register(&indio_dev->dev, ...)` 
-creates a resource leak on the trigger and the IIO device. The indio_dev 
-is not a bus device, hence no unbind and the trigger holds a reference 
-so the release callback will never be called either.
+On 3/25/23 11:34 PM, Greg KH wrote:
+> On Sat, Mar 25, 2023 at 11:20:38PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>> Since GetQuote support requires usage of DMA APIs, convert TDX guest
+>> driver to a platform driver.
+> 
+> Sorry, but that's not a valid reason to use a platform device for fake
+> things like this:
+> 
+>> +static struct platform_device *tdx_dev;
+> 
+> Especially a single static one.
+> 
+>> +static int tdx_guest_probe(struct platform_device *pdev)
+>> +{
+>> +	if (tdx_register_event_irq_cb(attestation_callback_handler, pdev))
+>> +		return -EIO;
+>> +
+>> +	return misc_register(&tdx_misc_dev);
+>> +}
+>> +
+>> +static int tdx_guest_remove(struct platform_device *pdev)
+>> +{
+>> +	tdx_unregister_event_irq_cb(attestation_callback_handler, pdev);
+>> +	misc_deregister(&tdx_misc_dev);
+>> +	return 0;
+>> +}
+>> +
+>> +static struct platform_driver tdx_guest_driver = {
+>> +	.probe = tdx_guest_probe,
+>> +	.remove = tdx_guest_remove,
+>> +	.driver.name = KBUILD_MODNAME,
+>> +};
+>> +
+>>  static const struct x86_cpu_id tdx_guest_ids[] = {
+>>  	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
+>>  	{}
+>> @@ -84,16 +310,35 @@ MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+>>  
+>>  static int __init tdx_guest_init(void)
+>>  {
+>> +	int ret;
+>> +
+>>  	if (!x86_match_cpu(tdx_guest_ids))
+>>  		return -ENODEV;
+>>  
+>> -	return misc_register(&tdx_misc_dev);
+>> +	ret = platform_driver_register(&tdx_guest_driver);
+>> +	if (ret) {
+>> +		pr_err("failed to register driver, err=%d\n", ret);
+>> +		return ret;
+>> +	}
+> 
+> No, please do not create a fake platform driver.
+> 
+>> +	tdx_dev = platform_device_register_simple(KBUILD_MODNAME,
+>> +						  PLATFORM_DEVID_NONE,
+>> +						  NULL, 0);
+> 
+> And please do not create a fake platform device.
+> 
+> As always, do not create fake platform devices for things that are NOT
+> platform devices.
+> 
+> If this device needs DMA (but why?) then make it a real device and tie
 
+Since the Quote generation process requires the guest and VMM to share data,
+we need to use shared buffers. But in TDX guest, VMM cannot directly access
+the guest private memory. Any memory that is required for communication with
+the VMM must be shared explicitly. One way is to allocate the memory on
+demand and share it explicitly using set_memory_decrypted() call. Although
+this approach is clean, since it breaks the direct mapping, it is not
+efficient. An alternative way is to reserve a pool of shared buffers during
+boot time and re-use them for guest/VMM communication. Since in TDX, DMA API
+is configured to tap into the SWIOTLB memory framework (which is shared by
+default), we try to use dma_alloc_* APIs to allocate the shared buffers from
+the shared pool without breaking the direct map.
+
+If usage of DMA APIs / platform device is not acceptable for this use case,
+an alternative approach is to allocate a fixed number of shared buffers during
+the TDX guest driver probe and use it for GetQuote requests. Although it would
+limit the amount of memory we can use for GetQuote requests at a time and also
+reserve a chunk of memory during the init() time, I think it is an acceptable
+tradeoff when compared to alternative choices. The AMD SEV guest driver also
+adopts the similar approach. Please let me know if this approach is acceptable.
+
+> it to the bus it belongs to (that it is obviously doing DMA on.)
+
+
+> 
+> thanks,
+> 
+> greg k-h
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
