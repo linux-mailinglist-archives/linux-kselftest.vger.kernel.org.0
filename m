@@ -2,114 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5E06C9F1E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 11:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5536F6CA143
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 12:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233086AbjC0JNf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Mar 2023 05:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S233510AbjC0KYZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Mar 2023 06:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbjC0JNd (ORCPT
+        with ESMTP id S233597AbjC0KYV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 05:13:33 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFBC133;
-        Mon, 27 Mar 2023 02:13:31 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id qh28so6218224qvb.7;
-        Mon, 27 Mar 2023 02:13:31 -0700 (PDT)
+        Mon, 27 Mar 2023 06:24:21 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFBA5264
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 03:24:15 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso6993522wms.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 03:24:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1679912654;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nwOigjhn0/nfkRIj9IqWCI0UBahJ590Lb8WM7IjXdAg=;
+        b=Xc+/9HD7Op2pUmUWyNmJKebsfr0V6V4TKAwRPQHLAeRro7SpW5jx05OjR5FdG8kRjw
+         iIveblhWJ+itaepVyxm8MgQ7RopOA2sUUSFfKYzcyOvb3QMC3xnmmrnYSAguvlREtM/Y
+         KPFRZFYN+stCmAKR4PV4gymb8CWHzwZkoIcWupam/J8tdmxPnJz9S9OquBMELkSutwDd
+         JbI1/E08wCj4FSBDa/9S3a+3dM6ZsJ6DFQCOj3Jl7Wl1aPEUNjLK9FORGkt5+qD4h04N
+         v3GAYm+l8/Y+ELBMKNaaFSwPCG+soviFpRQyrNiMqRlhisJo+H8KxPp/jsatG9kSHw7R
+         zkiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679908411;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1679912654;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Umb9hUbfu4RXL6KlGkF01LiyDptRngvjLvFGabW/70w=;
-        b=y1UaIbGx+4wKJ2wk2Hub37TFJ1cq0ubQFNw7MbfK5zJo7kamFg9kcUFo1bo6vX85GD
-         0NgtVXOjl3gB5GET1x1dEO1BbQ/CH9FmGeccEnci2nA2VVURepTTpTkSsoT8qaM4GJ3q
-         4ilX+X0FYhgvrI9fuHm3YDqUmmAPk+hEP0/bqbJ/2kdD4Wvj75zofWirmTv8jRSHgSF5
-         A3BuMEiadcNudFab+MhENmM2Liv1zZs473N+ffl8rb+t0sMIGsQJCz40ogT55jy66QKw
-         14hAnbjtRLZRQywLCBdnkCWOruVVgUNI6VVzsf0oaGpQ+gGMv1aVcDs1GOvdShvP2+CK
-         zXxg==
-X-Gm-Message-State: AAQBX9empRtKgnBzrEQiW2cufujT9sU1OJzbDNH4fokqny65V0xpg/3C
-        1s4HHHBMj8kT4Q8aU/J5Bi8=
-X-Google-Smtp-Source: AKy350Y06rMs/401uxhflhl8CYmN7DqjbNmD9t0V5jGwKE6OwXPeDLRcEQJJWCwLvw2M9hVJch4zPw==
-X-Received: by 2002:ad4:5dc1:0:b0:5ad:e777:1fc2 with SMTP id m1-20020ad45dc1000000b005ade7771fc2mr14569629qvh.15.1679908410637;
-        Mon, 27 Mar 2023 02:13:30 -0700 (PDT)
-Received: from maniforge ([24.1.27.177])
-        by smtp.gmail.com with ESMTPSA id t2-20020a374602000000b00746ac14e29asm6562753qka.5.2023.03.27.02.13.29
+        bh=nwOigjhn0/nfkRIj9IqWCI0UBahJ590Lb8WM7IjXdAg=;
+        b=7X+tIX+Fk/vpNumwiDc0sVjPu3k6kI70hNm/B65GO+Yno7REqO8E6rqKZpYbRdm5Ml
+         0rp7X/+yMw30sux+8BUmVz3jwAW6USlv2vOsgSoW7R0OwIwoyKCJGH6cWkObnZmsB+dl
+         ali/lyj+y0FLrcm3F7Ksj8BtIef36U0UpfZAwSUhUXtUQr2QbrqDTaLIGUe5MCbtxgZM
+         T0humE9DuK9oWmfIn5c964QhSwtuUJblY28ew14pF1WsUUFrOf7EAbkomogviSo9T7It
+         mxGXl+n0PYTuNB0hXrNwpWRl6AIgMdKBSMgO2hUNbsjKfm+QW5BgB7LLBpnYWqAogklY
+         DbUw==
+X-Gm-Message-State: AO0yUKWXvaF4Hh6qwjBEY4I6voERbk8uI1qmORj0RRrdbiEDv90tDD7f
+        aiv/hp3koqJJdSo05e/dOY9jag==
+X-Google-Smtp-Source: AK7set898rOJQM5FW7BmbcFoKGsUFxXHG4duGjk1byMM9H0yiU52gRKBRI8gPGwbgMlkX2IDnaPsEg==
+X-Received: by 2002:a7b:c39a:0:b0:3ed:9ce3:4a39 with SMTP id s26-20020a7bc39a000000b003ed9ce34a39mr9370389wmj.26.1679912654170;
+        Mon, 27 Mar 2023 03:24:14 -0700 (PDT)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003ef6f87118dsm2220615wmq.42.2023.03.27.03.24.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 02:13:30 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 04:13:27 -0500
-From:   David Vernet <void@manifault.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        Jay Kamat <jgkamat@fb.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, cocci@inria.fr,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests: cgroup: Fix exception handling in
- test_memcg_oom_group_score_events()
-Message-ID: <20230327091327.GK363182@maniforge>
-References: <f9303bdc-b1a7-be5e-56c6-dfa8232b8b55@web.de>
- <c383bdca-6f0d-4a75-e788-e1920faa0a62@web.de>
- <fffcd98a-bb73-41cd-8545-0f2c55dd38f9@lucifer.local>
- <5b7921c9-ee5d-c372-b19b-2701bcf33148@web.de>
- <20230326213900.GJ363182@maniforge>
- <c46dbb48-259b-1de9-2364-9bfaf1061944@web.de>
+        Mon, 27 Mar 2023 03:24:13 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net-next v2 0/4] mptcp: a couple of cleanups and
+ improvements
+Date:   Mon, 27 Mar 2023 12:22:20 +0200
+Message-Id: <20230324-upstream-net-next-20230324-misc-features-v2-0-fca1471efbaa@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c46dbb48-259b-1de9-2364-9bfaf1061944@web.de>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFxuIWQC/5WOMQ6DMAxFr4I81xUJoYVOvUfFkIApGQgoDogKc
+ fcGBpZOHTx8ve+nvwKTt8TwSFbwNFu2g4tBXhKoO+3ehLaJGWQqszSTCqeRgyfdo6MQbwl4ot5
+ yjS3pMHliFPfCSHMThRIKos5oJjReu7rbhT+evTN6au1yzHnBCapIOsth8J9j5ywO/v+kWWCKu
+ ZalyFVeStM8AzHriK7xFapt277421BPEQEAAA==
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Geliang Tang <geliang.tang@suse.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1529;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=YZ7HyQPpwwhOjk8ddV6pgNaqf8NyURsDaIfJoPwcGfY=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkIW7NnZNWfPoVEFzjURT49Y1TSl9DYozAFxYOd
+ vZ+XAOPUeWJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZCFuzQAKCRD2t4JPQmmg
+ c1kxD/4rQHDzB1swzhIlOTM2X1tysCsa0SaRMfBsABnVupqCeRq0kCcPvKrvxHGRCZDOj21yncl
+ RX+x906PnQHRKpbUxhB2oB+5AQyYil+4sODn9F3ZxGEY85QpxSvRiSiK2MgH9itn+y865r7oKio
+ vg/1sC00WnWFXzUkHwe8sQzFUxComYs5B7HHfg9hQmMC23c3Ec4fxjTkNRH1xWE6AXk0ckJ+4Sn
+ te3cm9VddP527c1BAJsrZnT0b21NAGh+4DadZ2T6JVQKO2OLJm7wcH6OJmD2HFphBhbC5HLnih+
+ ygpIun9Y4ZQIqI7A/avvLrUWfXMjskQT83UHqBn9kleJUwqvf0tJqE3fOCTLZY+0GPmoHzrm/tt
+ nEVwUu7zkn+lzBzkEqf0Q9DKcB+oFUT+f8G3ylQIyNG0WXcNp9zA/zWNeaA8hk7HUyV4cvGbL0E
+ Ajiic7nZv6rZ64B7VUz6619B3Emsp5S8bm69NRhMpAuvAyQARKTniyYcdGdvslhnMYiXyV3CCvm
+ /x7QF5dPe5TxNgoDhLxgRupyndmZdzXT4bArLI6HgOHs7eE5ZbCMiZKLtmeaiHrn96zJAfvYVhK
+ tTKiUHrfnLAyAYB7OoVQz6kIye7u6KRff3/REhJBf0za/vkvEp0yZWRWvc4zq2zR6CZ0ieVAJ9i
+ rQuRyn2ccC0nf3Q==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 07:56:03AM +0200, Markus Elfring wrote:
-> >> 2. Can a cg_destroy() call ever work as expected if a cg_create() call failed?
-> >
-> > Perhaps next time you can answer your own question by spending 30
-> > seconds actually reading the code you're "fixing":
-> >
-> > int cg_destroy(const char *cgroup)
-> > {
-> …
-> >         ret = rmdir(cgroup);
-> …
-> >         if (ret && errno == ENOENT) <<< that case is explicitly handled here
-> >                 ret = 0;
-> >
-> >         return ret;
-> > }
-> 
-> Is it interesting somehow that a non-existing directory (which would occasionally
-> not be found) is tolerated so far?
-> https://elixir.bootlin.com/linux/v6.3-rc3/source/tools/testing/selftests/cgroup/cgroup_util.c#L285
-> 
-> Should such a function call be avoided because of a failed cg_create() call?
+Patch 1 removes an unneeded address copy in subflow_syn_recv_sock().
 
-The point is that (a) you were wrong that this is fixing anything, and
-(b) this patch is functionally useless. Sure, we could move some goto's
-around and subjectively improve "something". Why?  What's the point?
-It's highly debatable that what you're doing is even an improvement, and
-I'm not interested in wasting time pontificating about the merits of a
-trivial "fix" for a test cleanup function that isn't even broken.
+Patch 2 simplifies subflow_syn_recv_sock() to postpone some actions and
+to avoid a bunch of conditionals.
 
-Several people have already either advised or directly asked you to stop
-sending these patches. I'm not sure why you're choosing to ignore them,
-but I'll throw my hat in the ring regardless and do the same. Please
-stop sending these fake cleanup patches.
+Patch 3 stops reporting limits that are not taken into account when the
+userspace PM is used.
+
+Patch 4 adds a new test to validate that the 'subflows' field reported
+by the kernel is correct. Such info can be retrieved via Netlink (e.g.
+with ss) or getsockopt(SOL_MPTCP, MPTCP_INFO).
+
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Changes in v2:
+- Patch 3/4's commit message has been updated to use the correct SHA
+- Rebased on latest net-next
+- Link to v1: https://lore.kernel.org/r/20230324-upstream-net-next-20230324-misc-features-v1-0-5a29154592bd@tessares.net
+
+---
+Geliang Tang (1):
+      selftests: mptcp: add mptcp_info tests
+
+Matthieu Baerts (1):
+      mptcp: do not fill info not used by the PM in used
+
+Paolo Abeni (2):
+      mptcp: avoid unneeded address copy
+      mptcp: simplify subflow_syn_recv_sock()
+
+ net/mptcp/sockopt.c                             | 20 +++++++----
+ net/mptcp/subflow.c                             | 43 +++++++---------------
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 47 ++++++++++++++++++++++++-
+ 3 files changed, 72 insertions(+), 38 deletions(-)
+---
+base-commit: e5b42483ccce50d5b957f474fd332afd4ef0c27b
+change-id: 20230324-upstream-net-next-20230324-misc-features-178b2b618414
+
+Best regards,
+-- 
+Matthieu Baerts <matthieu.baerts@tessares.net>
+
