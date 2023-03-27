@@ -2,114 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A206CABE8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 19:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6906CAC08
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 19:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjC0Rgb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Mar 2023 13:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S230107AbjC0Rn7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Mar 2023 13:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbjC0Rga (ORCPT
+        with ESMTP id S229862AbjC0Rn6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 13:36:30 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1411D10DB
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 10:36:30 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id g23so6945730uak.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 10:36:30 -0700 (PDT)
+        Mon, 27 Mar 2023 13:43:58 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E811110EA
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 10:43:57 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5416d3a321eso95151397b3.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 10:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679938589;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iEz3U669eusarpdOhYY7KYApKyeHC+XWqMsT7FRhmXs=;
-        b=X/+I64ySwrBmfuGZEe53ScuVQe0B8Ih9lH+keHrzFe3gwrkz0E83XPgyzDjUMjjiDD
-         g+bTo3+UwEwRHu81T6msOPGw/9FqE1f42194QiqP9/OqZiR1R34PhndLQMcrAMwVLC6N
-         LPfNvhr1c113OCgxM2WojAz+Q+Kez3ZKZPWa/8h/5uSFmVfw0K9GniowrUMt2OAfWXp1
-         bVALLmglOD1zHZPnG/jU7IhCa09JAxCudhOxX/pIpQ8Tq5BfTWK6uQXHczqCIVdXG2yc
-         ebR608LLiKgkkwaarNjccCwreBwrPeSPEdEZIjxeA90eqtFG/BF07eNL1/nEg7n3AuHl
-         ajhQ==
+        d=google.com; s=20210112; t=1679939037;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XlpSa++Ck7W+hH+1OiuQ4wL4Keih2CLgElX+Jr8IDOg=;
+        b=NRewYmivbp7xrd5bl7JWEYaQ9BEiQxehXzYs4JPD27Ag/vs1+EGoigQA/eGrdDVwpI
+         6HrxgSZwown5PltC2Waeqpp6KGdrJb/dSApcJ1OUEukUIu3e0Ezq/NVjnhkAzin2oeIi
+         XSws12m/6pB4Il8LiHkXWqb8AJMCdtVH2B+cO5e4Nti183f4YVeFl+atpkWvaCwSlrLh
+         LmtRmg6bJTE0Nq9XTncpVNfM5/aW7PEvzyPI3l+G5UFhZ8iI/LdGA8oPEpZSPXw4sf/Y
+         oWbVtkgHQtAjTuo6pRD+inMv48nJ8KN5jmFbZAnYg8/yiZPVZ9a4faH4l6132Clgz6B7
+         ZpZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679938589;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iEz3U669eusarpdOhYY7KYApKyeHC+XWqMsT7FRhmXs=;
-        b=QS3Ek0dq/pnuhdmK3EfcYq42ewJ8zTL0Ljj/w1XA8sjqcd04ZYVmIif5rg5KCrzMVH
-         UrTuO/oe7QI0/RFklr7xlsoUdemadfIAhB3yBfilL/U26Zr9uvdSYfzOkhkNcGP2ZFs/
-         CShW/jTqjNJQEjXXh5qHFNy35FFfw0jonoJL6oJrhTmXLlzmFpe8VaxGnJx8AFnm/jbz
-         iT5SO3bAD4RSea3JxjUP+I+cLlxQKno1Jv5jVjGIaA/DU14GW/nm8djweQ7fGJ9coaJU
-         ezSKy3EYSDP0fMUskipo9dahfNtP81znGI3twxUK2zHi3qCREa6gY2pkdjx7iS/RWAVc
-         KVQA==
-X-Gm-Message-State: AAQBX9dgr8vUVvHkwFPr3koiJnV4uHUgiNpDg4+3k7t2PCksMeCDDNjW
-        OgOzhak2tjhT9xHo2pXsTiT6Ap9rnzK8CuCM4F9UKA==
-X-Google-Smtp-Source: AKy350YbDMi2uGWPOd3bHOIwEjCKN7d/pdSlcBAJGKrIOUa6ARnClHJ058kfsjjEkkbOnvGFbJbs4whviQpqhVvD2WU=
-X-Received: by 2002:a1f:2dce:0:b0:436:4a89:bb11 with SMTP id
- t197-20020a1f2dce000000b004364a89bb11mr7016521vkt.0.1679938588828; Mon, 27
- Mar 2023 10:36:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   Erdem Aktas <erdemaktas@google.com>
-Date:   Mon, 27 Mar 2023 10:36:17 -0700
-Message-ID: <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] TDX Guest Quote generation support
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1679939037;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XlpSa++Ck7W+hH+1OiuQ4wL4Keih2CLgElX+Jr8IDOg=;
+        b=5BZ0RaZSmHyA+dOFmfsbiipdO6YBHXTyI/Vp3+rAyKLm/XR9QqquZbVi3GMHIGXeBn
+         ybITrdyr1rjL6aDuEvbIVEq4MFx1VAmqyQNv+Gvjb6UvshU1tZre6GRDptwcdbAO7QtK
+         FONgRwkcoq6p+QCgS2e2kakbiZkyOTyble+dpf14rzCxuDWTkWH9+9qRp869O5DOYaLP
+         Uhjc0Ok7nyG0bpRwE8RL4R32TmZFvMbMl1PBECbLQUFmJv/Gbp8mZ6ekuRvkCw7yOrub
+         JwEWBBIREOoIKh/xuxr5156ZNnVLKHNfl6AMtmIZBljbY2rc47S417SgpQ2GpIKOjBMO
+         cUiQ==
+X-Gm-Message-State: AAQBX9dawM+Up76SzF5fwjj6kNe5h6hyS3ALrM3ZjtDY1HRVPi1znVD2
+        dtFqXbxTECw6QFqMi5Ge/Y+vDLcWA2k=
+X-Google-Smtp-Source: AKy350YnFdRnDAztI/QAWGplLtVR70FJRJ184l6fxPJaxU9DXrlOhocThQPENwgRN3HxnQV8PG1Jwq59fUM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1141:b0:b73:caa7:f06f with SMTP id
+ p1-20020a056902114100b00b73caa7f06fmr7834435ybu.5.1679939037193; Mon, 27 Mar
+ 2023 10:43:57 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 10:43:55 -0700
+In-Reply-To: <CRGX867PJCBF.1MV46YLYXMBYZ@bobo>
+Mime-Version: 1.0
+References: <20230316031732.3591455-1-npiggin@gmail.com> <87ilf0nc95.fsf@mpe.ellerman.id.au>
+ <ZBs9tGkI5OQqtIqs@google.com> <CRGX867PJCBF.1MV46YLYXMBYZ@bobo>
+Message-ID: <ZCHV20oFkFzp/AZs@google.com>
+Subject: Re: [PATCH 0/2] KVM: PPC: support kvm selftests
+From:   Sean Christopherson <seanjc@google.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 11:20=E2=80=AFPM Kuppuswamy Sathyanarayanan
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
-> Hi All,
->
-> In TDX guest, the attestation process is used to verify the TDX guest
-> trustworthiness to other entities before provisioning secrets to the
-> guest.
->
-> The TDX guest attestation process consists of two steps:
->
-> 1. TDREPORT generation
-> 2. Quote generation.
->
-> The First step (TDREPORT generation) involves getting the TDX guest
-> measurement data in the format of TDREPORT which is further used to
-> validate the authenticity of the TDX guest. The second step involves
-> sending the TDREPORT to a Quoting Enclave (QE) server to generate a
-> remotely verifiable Quote. TDREPORT by design can only be verified on
-> the local platform. To support remote verification of the TDREPORT,
-> TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
-> locally and convert it to a remotely verifiable Quote. Although
-> attestation software can use communication methods like TCP/IP or
-> vsock to send the TDREPORT to QE, not all platforms support these
-> communication models. So TDX GHCI specification [1] defines a method
-> for Quote generation via hypercalls. Please check the discussion from
-> Google [2] and Alibaba [3] which clarifies the need for hypercall based
-Thanks Sathyanarayanan for submitting patches again.
+On Mon, Mar 27, 2023, Nicholas Piggin wrote:
+> On Thu Mar 23, 2023 at 3:41 AM AEST, Sean Christopherson wrote:
+> > On Thu, Mar 16, 2023, Michael Ellerman wrote:
+> > > Nicholas Piggin <npiggin@gmail.com> writes:
+> > > > Hi,
+> > > >
+> > > > This series adds initial KVM selftests support for powerpc
+> > > > (64-bit, BookS).
+> > > 
+> > > Awesome.
+> > >  
+> > > > It spans 3 maintainers but it does not really
+> > > > affect arch/powerpc, and it is well contained in selftests
+> > > > code, just touches some makefiles and a tiny bit headers so
+> > > > conflicts should be unlikely and trivial.
+> > > >
+> > > > I guess Paolo is the best point to merge these, if no comments
+> > > > or objections?
+> > > 
+> > > Yeah. If it helps:
+> > > 
+> > > Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> >
+> > What is the long term plan for KVM PPC maintenance?  I was under the impression
+> > that KVM PPC was trending toward "bug fixes only", but the addition of selftests
+> > support suggests otherwise.
+> 
+> We plan to continue maintaining it. New support and features has been a
+> bit low in the past couple of years, hopefully that will pick up a bit
+> though.
 
-I just wanted to reiterate what I said before that having a clean
-TDVMCALL based interface to get TDX Quote without any virtio/vsock
-dependency  is critical for us to support many use cases.
+Partly out of curiosity, but also to get a general feel for what types of changes
+we might see, what are the main use cases for KVM PPC these days?  E.g. is it mainly
+a vehicle for developing and testing, hosting VMs in the cloud, something else?
+
+> > I ask primarily because routing KVM PPC patches through the PPC tree is going to
+> > be problematic if KVM PPC sees signficiant development.  The current situation is
+> > ok because the volume of patches is low and KVM PPC isn't trying to drive anything
+> > substantial into common KVM code, but if that changes... 
+> 
+> Michael has done KVM topic branches to pull from a few times when such
+> conflicts came up (at smaller scale). If we end up with larger changes
+> or regular conflicts we might start up a kvm-ppc tree again I guess.
+
+A wait-and-see approach works for me.  I don't have any complaints with the current
+process, I was just caught off guard.
+
+> > My other concern is that for selftests specifically, us KVM folks are taking on
+> > more maintenance burden by supporting PPC.  AFAIK, none of the people that focus
+> > on KVM selftests in any meaningful capacity have access to PPC hardware, let alone
+> > know enough about the architecture to make intelligent code changes.
+> >
+> > Don't get me wrong, I'm very much in favor of more testing, I just don't want KVM
+> > to get left holding the bag.
+> 
+> Understood. I'll be happy to maintain powerpc part of kvm selftests and
+> do any fixes that are needed for core code changes.If support fell away
+> you could leave it broken (or rm -rf it if you prefer) -- I wouldn't ask
+> anybody to work on archs they don't know or aren't paid to.
+> 
+> Not sure if anything more can be done to help your process or ease your
+> mind. It (KVM and kvm-selftests) can run in QEMU at least.
+
+Updating the KVM/powerpc to include selftests would be very helpful, e.g
+
+  F:	tools/testing/selftests/kvm/*/powerpc/
+  F:	tools/testing/selftests/kvm/powerpc/
+
+and ideally there would be one or more M: (and R:) entries as well.  I'm not
+all that concerned about the selftests support being abandoned, but the lack of
+specific contacts makes it look like KVM PPC is in maintenance-only mode, and it
+sounds like that's not the case.
+
+Thanks!
