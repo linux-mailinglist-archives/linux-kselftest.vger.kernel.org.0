@@ -2,322 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19ED16CAAA4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 18:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A206CABE8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 19:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbjC0Qcs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Mar 2023 12:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S232208AbjC0Rgb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Mar 2023 13:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbjC0Qcl (ORCPT
+        with ESMTP id S231787AbjC0Rga (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:32:41 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70AD35B1
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 09:32:33 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id ja10so8961200plb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 09:32:33 -0700 (PDT)
+        Mon, 27 Mar 2023 13:36:30 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1411D10DB
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 10:36:30 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id g23so6945730uak.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 10:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679934753;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1679938589;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8DJuimmJGryaqmVk2gRhZESX91XeD6Hiy7uW8n6je1Y=;
-        b=3WeYyW7NcHrhkdD4pjOnzXCUfZGee9+dobPfCYR6y93VtuZFjGUmJFNaGV7vthkeLQ
-         4ZfUch7yfAHdjkiJxzvdR8hHsHKUMRfU1aMgH7YiwXkZN6/w7aAMGskkx8//mF/WGmYH
-         n0M+ESg+VKV3zBrY0rNN2/egCn71gqJSiDzHECZ5yi3VQ1qCnnANV4YlzUuDH7iHvaBH
-         rNqc9pXS6/yTCL7urS58K32O0U8+fRlXiQrLGCFCUe92cnSHifWzKqVXxbIlUk34BgDZ
-         JPQA3pGIshX0SuPN9Yh708PHDPRFCsSAdi6ocBLuna9a351rJyw6BT9fYrUocbAzrhsS
-         J2DA==
+        bh=iEz3U669eusarpdOhYY7KYApKyeHC+XWqMsT7FRhmXs=;
+        b=X/+I64ySwrBmfuGZEe53ScuVQe0B8Ih9lH+keHrzFe3gwrkz0E83XPgyzDjUMjjiDD
+         g+bTo3+UwEwRHu81T6msOPGw/9FqE1f42194QiqP9/OqZiR1R34PhndLQMcrAMwVLC6N
+         LPfNvhr1c113OCgxM2WojAz+Q+Kez3ZKZPWa/8h/5uSFmVfw0K9GniowrUMt2OAfWXp1
+         bVALLmglOD1zHZPnG/jU7IhCa09JAxCudhOxX/pIpQ8Tq5BfTWK6uQXHczqCIVdXG2yc
+         ebR608LLiKgkkwaarNjccCwreBwrPeSPEdEZIjxeA90eqtFG/BF07eNL1/nEg7n3AuHl
+         ajhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679934753;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679938589;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8DJuimmJGryaqmVk2gRhZESX91XeD6Hiy7uW8n6je1Y=;
-        b=QosHjZL0o7l66iyaq5zi74jMnYkmccQS1/JsiUyR4eQozZIU8shUDy4pyfMFFwi8Th
-         MDrk+oL+SMbEXJK7tuS/Y9ApyuW+l3rlnkZ+YLqx+TaoZMWhyNhzKFdPsB8n9UjhKD/j
-         LG/u2kMiCatZ42/cKJgYgSX7KfvsERAyjpd1LTEjJ92egfF73HlDiNrTaA7TdasfOrge
-         LN3YIPeCRm1QdSmxCVYsfggpyi7N8PEAfJ7HgXtMWBY//PYK5131YcSme3FThTjKexZp
-         gEmmsfFte/u544RvoKPHTxnAFMDku8EUrQLFukS1L+M/9IFnRFHhxGVYR2OlIbTQw+Lb
-         ZT5Q==
-X-Gm-Message-State: AAQBX9ftc8cDGxVtfgRuHHgzZJrJKARRAxtyS9Et3niMPP1B5KOkZovI
-        HbZCb/zpZ6vMX38GT3gEc1BJ0A==
-X-Google-Smtp-Source: AKy350Zgyvu4q5ze9frvypjtqGTdlLR13RXUBkmzAhNBOJmfeFSQcGZJxMijDyBsBk70sd9HA6AynQ==
-X-Received: by 2002:a17:90b:38cf:b0:23d:3878:781e with SMTP id nn15-20020a17090b38cf00b0023d3878781emr11536608pjb.21.1679934753235;
-        Mon, 27 Mar 2023 09:32:33 -0700 (PDT)
-Received: from evan.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id io20-20020a17090312d400b001a1faeac240sm8963524plb.186.2023.03.27.09.32.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 09:32:32 -0700 (PDT)
-From:   Evan Green <evan@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     slewis@rivosinc.com, vineetg@rivosinc.com, heiko@sntech.de,
-        Conor Dooley <conor@kernel.org>,
-        Evan Green <evan@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v5 5/6] selftests: Test the new RISC-V hwprobe interface
-Date:   Mon, 27 Mar 2023 09:32:02 -0700
-Message-Id: <20230327163203.2918455-6-evan@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230327163203.2918455-1-evan@rivosinc.com>
-References: <20230327163203.2918455-1-evan@rivosinc.com>
+        bh=iEz3U669eusarpdOhYY7KYApKyeHC+XWqMsT7FRhmXs=;
+        b=QS3Ek0dq/pnuhdmK3EfcYq42ewJ8zTL0Ljj/w1XA8sjqcd04ZYVmIif5rg5KCrzMVH
+         UrTuO/oe7QI0/RFklr7xlsoUdemadfIAhB3yBfilL/U26Zr9uvdSYfzOkhkNcGP2ZFs/
+         CShW/jTqjNJQEjXXh5qHFNy35FFfw0jonoJL6oJrhTmXLlzmFpe8VaxGnJx8AFnm/jbz
+         iT5SO3bAD4RSea3JxjUP+I+cLlxQKno1Jv5jVjGIaA/DU14GW/nm8djweQ7fGJ9coaJU
+         ezSKy3EYSDP0fMUskipo9dahfNtP81znGI3twxUK2zHi3qCREa6gY2pkdjx7iS/RWAVc
+         KVQA==
+X-Gm-Message-State: AAQBX9dgr8vUVvHkwFPr3koiJnV4uHUgiNpDg4+3k7t2PCksMeCDDNjW
+        OgOzhak2tjhT9xHo2pXsTiT6Ap9rnzK8CuCM4F9UKA==
+X-Google-Smtp-Source: AKy350YbDMi2uGWPOd3bHOIwEjCKN7d/pdSlcBAJGKrIOUa6ARnClHJ058kfsjjEkkbOnvGFbJbs4whviQpqhVvD2WU=
+X-Received: by 2002:a1f:2dce:0:b0:436:4a89:bb11 with SMTP id
+ t197-20020a1f2dce000000b004364a89bb11mr7016521vkt.0.1679938588828; Mon, 27
+ Mar 2023 10:36:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Erdem Aktas <erdemaktas@google.com>
+Date:   Mon, 27 Mar 2023 10:36:17 -0700
+Message-ID: <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] TDX Guest Quote generation support
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds a test for the recently added RISC-V interface for probing
-hardware capabilities.  It happens to be the first selftest we have for
-RISC-V, so I've added some infrastructure for those as well.
+On Sat, Mar 25, 2023 at 11:20=E2=80=AFPM Kuppuswamy Sathyanarayanan
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>
+> Hi All,
+>
+> In TDX guest, the attestation process is used to verify the TDX guest
+> trustworthiness to other entities before provisioning secrets to the
+> guest.
+>
+> The TDX guest attestation process consists of two steps:
+>
+> 1. TDREPORT generation
+> 2. Quote generation.
+>
+> The First step (TDREPORT generation) involves getting the TDX guest
+> measurement data in the format of TDREPORT which is further used to
+> validate the authenticity of the TDX guest. The second step involves
+> sending the TDREPORT to a Quoting Enclave (QE) server to generate a
+> remotely verifiable Quote. TDREPORT by design can only be verified on
+> the local platform. To support remote verification of the TDREPORT,
+> TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
+> locally and convert it to a remotely verifiable Quote. Although
+> attestation software can use communication methods like TCP/IP or
+> vsock to send the TDREPORT to QE, not all platforms support these
+> communication models. So TDX GHCI specification [1] defines a method
+> for Quote generation via hypercalls. Please check the discussion from
+> Google [2] and Alibaba [3] which clarifies the need for hypercall based
+Thanks Sathyanarayanan for submitting patches again.
 
-Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Evan Green <evan@rivosinc.com>
-
----
-
-(no changes since v4)
-
-Changes in v4:
- - Fixed selftests commit description, no more tiny libc (Mark Brown)
- - Fixed selftest syscall prototype types to match v4.
-
-Changes in v2:
- - Updated the selftests to the new API and added some more.
- - Fixed indentation, comments in .S, and general checkpatch complaints.
-
-
----
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/riscv/Makefile        | 58 ++++++++++++
- .../testing/selftests/riscv/hwprobe/Makefile  | 10 +++
- .../testing/selftests/riscv/hwprobe/hwprobe.c | 90 +++++++++++++++++++
- .../selftests/riscv/hwprobe/sys_hwprobe.S     | 12 +++
- 5 files changed, 171 insertions(+)
- create mode 100644 tools/testing/selftests/riscv/Makefile
- create mode 100644 tools/testing/selftests/riscv/hwprobe/Makefile
- create mode 100644 tools/testing/selftests/riscv/hwprobe/hwprobe.c
- create mode 100644 tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 13a6837a0c6b..4bea26109450 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -63,6 +63,7 @@ TARGETS += pstore
- TARGETS += ptrace
- TARGETS += openat2
- TARGETS += resctrl
-+TARGETS += riscv
- TARGETS += rlimits
- TARGETS += rseq
- TARGETS += rtc
-diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-new file mode 100644
-index 000000000000..32a72902d045
---- /dev/null
-+++ b/tools/testing/selftests/riscv/Makefile
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Originally tools/testing/arm64/Makefile
-+
-+# When ARCH not overridden for crosscompiling, lookup machine
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+
-+ifneq (,$(filter $(ARCH),riscv))
-+RISCV_SUBTARGETS ?= hwprobe
-+else
-+RISCV_SUBTARGETS :=
-+endif
-+
-+CFLAGS := -Wall -O2 -g
-+
-+# A proper top_srcdir is needed by KSFT(lib.mk)
-+top_srcdir = $(realpath ../../../../)
-+
-+# Additional include paths needed by kselftest.h and local headers
-+CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
-+
-+CFLAGS += $(KHDR_INCLUDES)
-+
-+export CFLAGS
-+export top_srcdir
-+
-+all:
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		mkdir -p $$BUILD_TARGET;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+install: all
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+run_tests: all
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+# Avoid any output on non riscv on emit_tests
-+emit_tests: all
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+clean:
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+.PHONY: all clean install run_tests emit_tests
-diff --git a/tools/testing/selftests/riscv/hwprobe/Makefile b/tools/testing/selftests/riscv/hwprobe/Makefile
-new file mode 100644
-index 000000000000..ebdbb3c22e54
---- /dev/null
-+++ b/tools/testing/selftests/riscv/hwprobe/Makefile
-@@ -0,0 +1,10 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2021 ARM Limited
-+# Originally tools/testing/arm64/abi/Makefile
-+
-+TEST_GEN_PROGS := hwprobe
-+
-+include ../../lib.mk
-+
-+$(OUTPUT)/hwprobe: hwprobe.c sys_hwprobe.S
-+	$(CC) -o$@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/hwprobe/hwprobe.c b/tools/testing/selftests/riscv/hwprobe/hwprobe.c
-new file mode 100644
-index 000000000000..09f290a67420
---- /dev/null
-+++ b/tools/testing/selftests/riscv/hwprobe/hwprobe.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <stddef.h>
-+#include <asm/hwprobe.h>
-+
-+/*
-+ * Rather than relying on having a new enough libc to define this, just do it
-+ * ourselves.  This way we don't need to be coupled to a new-enough libc to
-+ * contain the call.
-+ */
-+long riscv_hwprobe(struct riscv_hwprobe *pairs, size_t pair_count,
-+		   size_t cpu_count, unsigned long *cpus, unsigned int flags);
-+
-+int main(int argc, char **argv)
-+{
-+	struct riscv_hwprobe pairs[8];
-+	unsigned long cpus;
-+	long out;
-+
-+	/* Fake the CPU_SET ops. */
-+	cpus = -1;
-+
-+	/*
-+	 * Just run a basic test: pass enough pairs to get up to the base
-+	 * behavior, and then check to make sure it's sane.
-+	 */
-+	for (long i = 0; i < 8; i++)
-+		pairs[i].key = i;
-+	out = riscv_hwprobe(pairs, 8, 1, &cpus, 0);
-+	if (out != 0)
-+		return -1;
-+	for (long i = 0; i < 4; ++i) {
-+		/* Fail if the kernel claims not to recognize a base key. */
-+		if ((i < 4) && (pairs[i].key != i))
-+			return -2;
-+
-+		if (pairs[i].key != RISCV_HWPROBE_KEY_BASE_BEHAVIOR)
-+			continue;
-+
-+		if (pairs[i].value & RISCV_HWPROBE_BASE_BEHAVIOR_IMA)
-+			continue;
-+
-+		return -3;
-+	}
-+
-+	/*
-+	 * This should also work with a NULL CPU set, but should not work
-+	 * with an improperly supplied CPU set.
-+	 */
-+	out = riscv_hwprobe(pairs, 8, 0, 0, 0);
-+	if (out != 0)
-+		return -4;
-+
-+	out = riscv_hwprobe(pairs, 8, 0, &cpus, 0);
-+	if (out == 0)
-+		return -5;
-+
-+	out = riscv_hwprobe(pairs, 8, 1, 0, 0);
-+	if (out == 0)
-+		return -6;
-+
-+	/*
-+	 * Check that keys work by providing one that we know exists, and
-+	 * checking to make sure the resultig pair is what we asked for.
-+	 */
-+	pairs[0].key = RISCV_HWPROBE_KEY_BASE_BEHAVIOR;
-+	out = riscv_hwprobe(pairs, 1, 1, &cpus, 0);
-+	if (out != 0)
-+		return -7;
-+	if (pairs[0].key != RISCV_HWPROBE_KEY_BASE_BEHAVIOR)
-+		return -8;
-+
-+	/*
-+	 * Check that an unknown key gets overwritten with -1,
-+	 * but doesn't block elements after it.
-+	 */
-+	pairs[0].key = 0x5555;
-+	pairs[1].key = 1;
-+	pairs[1].value = 0xAAAA;
-+	out = riscv_hwprobe(pairs, 2, 0, 0, 0);
-+	if (out != 0)
-+		return -9;
-+
-+	if (pairs[0].key != -1)
-+		return -10;
-+
-+	if ((pairs[1].key != 1) || (pairs[1].value == 0xAAAA))
-+		return -11;
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S b/tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
-new file mode 100644
-index 000000000000..ed8d28863b27
---- /dev/null
-+++ b/tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2022 Rivos, Inc */
-+
-+.text
-+.global riscv_hwprobe
-+riscv_hwprobe:
-+	# Put __NR_riscv_hwprobe in the syscall number register, then just shim
-+	# back the kernel's return.  This doesn't do any sort of errno
-+	# handling, the caller can deal with it.
-+	li a7, 258
-+	ecall
-+	ret
--- 
-2.25.1
-
+I just wanted to reiterate what I said before that having a clean
+TDVMCALL based interface to get TDX Quote without any virtio/vsock
+dependency  is critical for us to support many use cases.
