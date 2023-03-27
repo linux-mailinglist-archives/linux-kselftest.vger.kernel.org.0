@@ -2,89 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5536F6CA143
+	by mail.lfdr.de (Postfix) with ESMTP id DBB6F6CA144
 	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 12:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbjC0KYZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Mar 2023 06:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
+        id S233630AbjC0KY1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Mar 2023 06:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233597AbjC0KYV (ORCPT
+        with ESMTP id S233607AbjC0KYW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:24:21 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFBA5264
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 03:24:15 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso6993522wms.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 03:24:15 -0700 (PDT)
+        Mon, 27 Mar 2023 06:24:22 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC85C5FE8
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 03:24:16 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id p34so4723802wms.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 03:24:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1679912654;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nwOigjhn0/nfkRIj9IqWCI0UBahJ590Lb8WM7IjXdAg=;
-        b=Xc+/9HD7Op2pUmUWyNmJKebsfr0V6V4TKAwRPQHLAeRro7SpW5jx05OjR5FdG8kRjw
-         iIveblhWJ+itaepVyxm8MgQ7RopOA2sUUSFfKYzcyOvb3QMC3xnmmrnYSAguvlREtM/Y
-         KPFRZFYN+stCmAKR4PV4gymb8CWHzwZkoIcWupam/J8tdmxPnJz9S9OquBMELkSutwDd
-         JbI1/E08wCj4FSBDa/9S3a+3dM6ZsJ6DFQCOj3Jl7Wl1aPEUNjLK9FORGkt5+qD4h04N
-         v3GAYm+l8/Y+ELBMKNaaFSwPCG+soviFpRQyrNiMqRlhisJo+H8KxPp/jsatG9kSHw7R
-         zkiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679912654;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=tessares.net; s=google; t=1679912655;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nwOigjhn0/nfkRIj9IqWCI0UBahJ590Lb8WM7IjXdAg=;
-        b=7X+tIX+Fk/vpNumwiDc0sVjPu3k6kI70hNm/B65GO+Yno7REqO8E6rqKZpYbRdm5Ml
-         0rp7X/+yMw30sux+8BUmVz3jwAW6USlv2vOsgSoW7R0OwIwoyKCJGH6cWkObnZmsB+dl
-         ali/lyj+y0FLrcm3F7Ksj8BtIef36U0UpfZAwSUhUXtUQr2QbrqDTaLIGUe5MCbtxgZM
-         T0humE9DuK9oWmfIn5c964QhSwtuUJblY28ew14pF1WsUUFrOf7EAbkomogviSo9T7It
-         mxGXl+n0PYTuNB0hXrNwpWRl6AIgMdKBSMgO2hUNbsjKfm+QW5BgB7LLBpnYWqAogklY
-         DbUw==
-X-Gm-Message-State: AO0yUKWXvaF4Hh6qwjBEY4I6voERbk8uI1qmORj0RRrdbiEDv90tDD7f
-        aiv/hp3koqJJdSo05e/dOY9jag==
-X-Google-Smtp-Source: AK7set898rOJQM5FW7BmbcFoKGsUFxXHG4duGjk1byMM9H0yiU52gRKBRI8gPGwbgMlkX2IDnaPsEg==
-X-Received: by 2002:a7b:c39a:0:b0:3ed:9ce3:4a39 with SMTP id s26-20020a7bc39a000000b003ed9ce34a39mr9370389wmj.26.1679912654170;
-        Mon, 27 Mar 2023 03:24:14 -0700 (PDT)
+        bh=SWubI3gP1geg1ucxdfNQCa8sYMENfAIXdm+9lJqXCzI=;
+        b=PNV21uBRDJfTwQH7Vwf0vcXBpBoxXBTJH+0rwfYzLf2DVyhsztwqlQMKUzYCVTPzt0
+         GwrfIyClcqqJu6toj58ZI6DKgtk/jlIwjLkW8Et8J7XSmoIfG6EPsDuirfsuqpXHZRZZ
+         nLUtvroz9DgsidvAji4iULOjN38T8wqZl15SZHCF6tllb3UmfNUsCg9k7AnAuGeH/Dsu
+         ChWVPplrQZhhc0ChJCVn16n9lbRyFhWWJWExC1kN9ranLc+uLhdiEdsIi5Y8UtjBpNMv
+         aSrzUE2IQ7BlqzXf2qntbF7EA4UGScCdAYk0moIv0IEku7J+6PaWKPpeAgLbdcycOox3
+         2/cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679912655;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SWubI3gP1geg1ucxdfNQCa8sYMENfAIXdm+9lJqXCzI=;
+        b=oBNZ1z57PgH6ZJayrXG4JWNgAA0kaAX2AjU3ucNQD19K518yNa2VTkq4dN+qQN/HD0
+         KSbjNrPowffzsbk7NL6g9yXP6HicywAjLxzwX/7JZah3uNfhk4gB3LnbvcxZBembT6dq
+         IXdQ+cVCyP2c5ABUO+UFkLITXk0CyVThbcfAUsq0GMVq4QDEwhC+wtQwOpEtMxaHNpcb
+         Et+gvkEfXL1cNJ1cWCzJt403TxqxAPBL6DH8eDpCjiYDmL6PZW+3HIywyWFEqV6Voyaz
+         IXpR4E1OxhPWwiAKn79NSLORoig04C9zL9ntoaQF0cqNKQZ39uLRmgczSvNoU/ih1U5g
+         Dlug==
+X-Gm-Message-State: AO0yUKW0K7Rku5EM4coHmer8A3XUYGyc1TcGmsACqkBmlfdFnQiHu87N
+        4zwk7CAXJa1CJxOelrzWP5ByPw==
+X-Google-Smtp-Source: AK7set/LHrrHKvycuCGsFkWMFMwMXWVreY0rHRL6wPMEyq3mSsYeibttvymmsg0e1CVsEgnvh8PJ+g==
+X-Received: by 2002:a1c:790b:0:b0:3ed:9ed7:d676 with SMTP id l11-20020a1c790b000000b003ed9ed7d676mr8956528wme.13.1679912655025;
+        Mon, 27 Mar 2023 03:24:15 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003ef6f87118dsm2220615wmq.42.2023.03.27.03.24.13
+        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003ef6f87118dsm2220615wmq.42.2023.03.27.03.24.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 03:24:13 -0700 (PDT)
+        Mon, 27 Mar 2023 03:24:14 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Subject: [PATCH net-next v2 0/4] mptcp: a couple of cleanups and
- improvements
-Date:   Mon, 27 Mar 2023 12:22:20 +0200
-Message-Id: <20230324-upstream-net-next-20230324-misc-features-v2-0-fca1471efbaa@tessares.net>
+Date:   Mon, 27 Mar 2023 12:22:21 +0200
+Subject: [PATCH net-next v2 1/4] mptcp: avoid unneeded address copy
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFxuIWQC/5WOMQ6DMAxFr4I81xUJoYVOvUfFkIApGQgoDogKc
- fcGBpZOHTx8ve+nvwKTt8TwSFbwNFu2g4tBXhKoO+3ehLaJGWQqszSTCqeRgyfdo6MQbwl4ot5
- yjS3pMHliFPfCSHMThRIKos5oJjReu7rbhT+evTN6au1yzHnBCapIOsth8J9j5ywO/v+kWWCKu
- ZalyFVeStM8AzHriK7xFapt277421BPEQEAAA==
+Message-Id: <20230324-upstream-net-next-20230324-misc-features-v2-1-fca1471efbaa@tessares.net>
+References: <20230324-upstream-net-next-20230324-misc-features-v2-0-fca1471efbaa@tessares.net>
+In-Reply-To: <20230324-upstream-net-next-20230324-misc-features-v2-0-fca1471efbaa@tessares.net>
 To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Geliang Tang <geliang.tang@suse.com>
+        Matthieu Baerts <matthieu.baerts@tessares.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1529;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=740;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=YZ7HyQPpwwhOjk8ddV6pgNaqf8NyURsDaIfJoPwcGfY=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkIW7NnZNWfPoVEFzjURT49Y1TSl9DYozAFxYOd
- vZ+XAOPUeWJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZCFuzQAKCRD2t4JPQmmg
- c1kxD/4rQHDzB1swzhIlOTM2X1tysCsa0SaRMfBsABnVupqCeRq0kCcPvKrvxHGRCZDOj21yncl
- RX+x906PnQHRKpbUxhB2oB+5AQyYil+4sODn9F3ZxGEY85QpxSvRiSiK2MgH9itn+y865r7oKio
- vg/1sC00WnWFXzUkHwe8sQzFUxComYs5B7HHfg9hQmMC23c3Ec4fxjTkNRH1xWE6AXk0ckJ+4Sn
- te3cm9VddP527c1BAJsrZnT0b21NAGh+4DadZ2T6JVQKO2OLJm7wcH6OJmD2HFphBhbC5HLnih+
- ygpIun9Y4ZQIqI7A/avvLrUWfXMjskQT83UHqBn9kleJUwqvf0tJqE3fOCTLZY+0GPmoHzrm/tt
- nEVwUu7zkn+lzBzkEqf0Q9DKcB+oFUT+f8G3ylQIyNG0WXcNp9zA/zWNeaA8hk7HUyV4cvGbL0E
- Ajiic7nZv6rZ64B7VUz6619B3Emsp5S8bm69NRhMpAuvAyQARKTniyYcdGdvslhnMYiXyV3CCvm
- /x7QF5dPe5TxNgoDhLxgRupyndmZdzXT4bArLI6HgOHs7eE5ZbCMiZKLtmeaiHrn96zJAfvYVhK
- tTKiUHrfnLAyAYB7OoVQz6kIye7u6KRff3/REhJBf0za/vkvEp0yZWRWvc4zq2zR6CZ0ieVAJ9i
- rQuRyn2ccC0nf3Q==
+ bh=So4mzRtrXIJRD2ZN6IwFIBWGw9rUyByeoDq6UPFlPB8=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkIW7Nftig6dQW8wQPUwWwTL4dEEUFiMDCFXMmM
+ AYxC3OduUOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZCFuzQAKCRD2t4JPQmmg
+ cyYLEACsMh05r743SrrQahmb/dASG/nnePWzNUsHtLK0EDrydcG1E9pyIvThKLhuxmJBFkdfA8o
+ uRgJaFQhLi/mgf9J1kurqnKVo1cT76lY3cQRHufXp3+k9+DY9q0MOn4O2P93f6z/JW4beuRsguf
+ FTWSpUW1iOJdfL21R0zDeMO7Hi7g1bqH5TRyGtrM8/k7bS962G4mcpvxDwLXSxzDITvRagbU41N
+ czNiY+0DpnyQrFOqTnMDoKXmBKar3V9IfCgggGf0BYNMTLSs2qv+lg+EP7FS7w9VoadoZZRlt8l
+ f664x47KJL3kLfoi3QF+V/LaezEht3+crr6CqpBmDiPrrWgFvI2IKf9WPW75kgJvDnoxZ90/a3D
+ 0pkBBkQlcKraE6LG0tmkA+NajAVmNcaUaPM+nPyRdiR3o3WiJeKZrGwnjC1xU83CEYOKPyH+5S+
+ n7Mcnq4QA398Eoo0gBjfn8tn1rErk2kG//CN/U3My/TDHZdk9zUv9lCbtHWSc/nJPpvonQAPhjR
+ xd84HucX3XqHgGcUDCiut0aX1wyzS7TElWQg/Igxh/IsXQtGzEjJjQ8mejCycN3sKJ7yLCE5gc5
+ 24YWYVX0fqkNI0Qiu1gbMC/H98YQw3JDPiH9zz15+oK93+ygI07nhcoyOCCuOJtqzIjdSlXRMR/
+ SUpG0vr0HCja/ZA==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -96,45 +93,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Patch 1 removes an unneeded address copy in subflow_syn_recv_sock().
+From: Paolo Abeni <pabeni@redhat.com>
 
-Patch 2 simplifies subflow_syn_recv_sock() to postpone some actions and
-to avoid a bunch of conditionals.
+In the syn_recv fallback path, the msk is unused. We can skip
+setting the socket address.
 
-Patch 3 stops reporting limits that are not taken into account when the
-userspace PM is used.
-
-Patch 4 adds a new test to validate that the 'subflows' field reported
-by the kernel is correct. Such info can be retrieved via Netlink (e.g.
-with ss) or getsockopt(SOL_MPTCP, MPTCP_INFO).
-
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
-Changes in v2:
-- Patch 3/4's commit message has been updated to use the correct SHA
-- Rebased on latest net-next
-- Link to v1: https://lore.kernel.org/r/20230324-upstream-net-next-20230324-misc-features-v1-0-5a29154592bd@tessares.net
+ net/mptcp/subflow.c | 2 --
+ 1 file changed, 2 deletions(-)
 
----
-Geliang Tang (1):
-      selftests: mptcp: add mptcp_info tests
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index dadaf85db720..a11f4c525e01 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -821,8 +821,6 @@ static struct sock *subflow_syn_recv_sock(const struct sock *sk,
+ 				goto dispose_child;
+ 			}
+ 
+-			if (new_msk)
+-				mptcp_copy_inaddrs(new_msk, child);
+ 			mptcp_subflow_drop_ctx(child);
+ 			goto out;
+ 		}
 
-Matthieu Baerts (1):
-      mptcp: do not fill info not used by the PM in used
-
-Paolo Abeni (2):
-      mptcp: avoid unneeded address copy
-      mptcp: simplify subflow_syn_recv_sock()
-
- net/mptcp/sockopt.c                             | 20 +++++++----
- net/mptcp/subflow.c                             | 43 +++++++---------------
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 47 ++++++++++++++++++++++++-
- 3 files changed, 72 insertions(+), 38 deletions(-)
----
-base-commit: e5b42483ccce50d5b957f474fd332afd4ef0c27b
-change-id: 20230324-upstream-net-next-20230324-misc-features-178b2b618414
-
-Best regards,
 -- 
-Matthieu Baerts <matthieu.baerts@tessares.net>
+2.39.2
 
