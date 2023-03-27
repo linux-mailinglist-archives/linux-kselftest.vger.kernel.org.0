@@ -2,98 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F906CA8BC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 17:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220F96CA918
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 17:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjC0PPX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Mar 2023 11:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S232841AbjC0PeJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Mar 2023 11:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjC0PPW (ORCPT
+        with ESMTP id S230239AbjC0PeI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 11:15:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6B7122;
-        Mon, 27 Mar 2023 08:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ESG8YxL4RYEQX1LFkg3iiiQWrSAkB2oA83asusDbCz4=; b=NWAfI7QUlRz5+ccBJuYiIVOHkK
-        QcMvSDy6LPabwrq5DTM051didsJVlsxaLJpRqwkSJtJxeg4drvCeKgpS0iOXkwr0Mcp8Z4uDaRIgE
-        rL3DwDja41UzXNHqcjp5ES1nZVdAGAejX9PAjNqdX0quYv4jKjdz9VvwFU4GXXSSNYpa/GFmKIWgQ
-        7knDdaHckHpJBZi7ikYjLB6V4cnUq7hSBlAQZx1HPysqEdpoFcys15/XC/INGGyp8O9HPWCwFXbJG
-        tTgpiRFuCJFGAXWM1CjzfdpGG5Ol1IECAXg+C3cR6dyuWTsnYsP390rbFeRYdY4YUONI58dk3rgE3
-        vr8AwB5w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pgoYm-007VJI-Qe; Mon, 27 Mar 2023 15:15:01 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BBBA9300379;
-        Mon, 27 Mar 2023 17:14:58 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8A0F8200D8E1F; Mon, 27 Mar 2023 17:14:58 +0200 (CEST)
-Date:   Mon, 27 Mar 2023 17:14:58 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     rcu@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
+        Mon, 27 Mar 2023 11:34:08 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3B5E5;
+        Mon, 27 Mar 2023 08:34:06 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id EAE071884409;
+        Mon, 27 Mar 2023 15:34:03 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id D5765250394A;
+        Mon, 27 Mar 2023 15:34:03 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id BE7339B403E4; Mon, 27 Mar 2023 15:34:03 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id DEB2891201E3;
+        Mon, 27 Mar 2023 15:34:02 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
         Shuah Khan <shuah@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        seanjc@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH rcu v2 0/7] RCU-related lockdep changes for v6.4
-Message-ID: <20230327151458.GB11425@hirez.programming.kicks-ass.net>
-References: <20230323042614.1191120-1-boqun.feng@gmail.com>
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
+ drivers
+In-Reply-To: <20230327115206.jk5q5l753aoelwus@skbuf>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-3-netdev@kapio-technology.com>
+ <20230327115206.jk5q5l753aoelwus@skbuf>
+Date:   Mon, 27 Mar 2023 17:31:26 +0200
+Message-ID: <87355qb48h.fsf@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323042614.1191120-1-boqun.feng@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 09:26:07PM -0700, Boqun Feng wrote:
-> Boqun Feng (4):
->   locking/lockdep: Introduce lock_sync()
->   rcu: Annotate SRCU's update-side lockdep dependencies
->   locking: Reduce the number of locks in ww_mutex stress tests
->   locking/lockdep: Improve the deadlock scenario print for sync and read
->     lock
-> 
-> Paul E. McKenney (3):
->   rcutorture: Add SRCU deadlock scenarios
->   rcutorture: Add RCU Tasks Trace and SRCU deadlock scenarios
->   rcutorture: Add srcu_lockdep.sh
-> 
->  include/linux/lockdep.h                       |   8 +-
->  include/linux/srcu.h                          |  34 +++-
->  kernel/locking/lockdep.c                      |  64 +++++-
->  kernel/locking/test-ww_mutex.c                |   2 +-
->  kernel/rcu/rcutorture.c                       | 185 ++++++++++++++++++
->  kernel/rcu/srcutiny.c                         |   2 +
->  kernel/rcu/srcutree.c                         |   2 +
->  .../selftests/rcutorture/bin/srcu_lockdep.sh  |  78 ++++++++
->  8 files changed, 364 insertions(+), 11 deletions(-)
->  create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+On Mon, Mar 27, 2023 at 14:52, Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> By the way, there is a behavior change here.
+>
+> Before:
+>
+> $ ip link add br0 type bridge && ip link set br0 up
+> $ ip link set swp0 master br0 && ip link set swp0 up
+> $ bridge fdb add dev swp0 00:01:02:03:04:05 master dynamic
+> [   70.010181] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 0
+> [   70.019105] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 1
+> .... 5 minutes later
+> [  371.686935] mscc_felix 0000:00:00.5: felix_fdb_del: port 0 addr 00:01:02:03:04:05 vid 1
+> [  371.695449] mscc_felix 0000:00:00.5: felix_fdb_del: port 0 addr 00:01:02:03:04:05 vid 0
+> $ bridge fdb | grep 00:01:02:03:04:05
+>
+> After:
+>
+> $ ip link add br0 type bridge && ip link set br0 up
+> $ ip link set swp0 master br0 && ip link set swp0 up
+> $ bridge fdb add dev swp0 00:01:02:03:04:05 master dynamic
+> [  222.071492] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 0 flags 0x1
+> [  222.081154] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 1 flags 0x1
+> .... 5 minutes later
+> $ bridge fdb | grep 00:01:02:03:04:05
+> 00:01:02:03:04:05 dev swp0 vlan 1 offload master br0 stale
+> 00:01:02:03:04:05 dev swp0 offload master br0 stale
+> 00:01:02:03:04:05 dev swp0 vlan 1 self
+> 00:01:02:03:04:05 dev swp0 self
+>
+> As you can see, the behavior is not identical, and it made more sense
+> before.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+I see this is Felix Ocelot and there is no changes in this patchset that
+affects Felix Ocelot. Thus I am quite sure the results will be the same
+without this patchset, ergo it must be because of another patch. All
+that is done here in the DSA layer is to pass on an extra field and add
+an extra check that will always pass in the case of this flag.
