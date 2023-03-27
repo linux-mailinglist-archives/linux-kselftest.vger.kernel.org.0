@@ -2,250 +2,251 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC936CA25C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 13:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AAE6CA27E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 13:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbjC0L2D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Mar 2023 07:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S232389AbjC0LeN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Mar 2023 07:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjC0L2B (ORCPT
+        with ESMTP id S232069AbjC0LeK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:28:01 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3948B8;
-        Mon, 27 Mar 2023 04:27:58 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PlVgX39kFz9xFQR;
-        Mon, 27 Mar 2023 19:18:48 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAn9FqWfSFk7BTRAQ--.62311S2;
-        Mon, 27 Mar 2023 12:27:33 +0100 (CET)
-Message-ID: <bfe6ba6a3953f2f66ed040a8096c4dd5e2724b95.camel@huaweicloud.com>
-Subject: Re: [PATCH 0/5] usermode_driver: Add management library and API
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 27 Mar 2023 13:27:15 +0200
-In-Reply-To: <CAADnVQJv0qWaxRD2_tmXeR9Wf=zdnvk8SwztOAorGaer0dFv3w@mail.gmail.com>
-References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
-         <CAADnVQLKONwKwkJMopRq-dzcV2ZejrjGzyuzW_5QX=0BY=Z4jw@mail.gmail.com>
-         <b5c80613c696818ce89b92dac54e98878ec3ccd0.camel@huaweicloud.com>
-         <CAADnVQJC0h7rtuntt0tqS5BbxWsmyWs3ZSbboZMmUKetMG2VhA@mail.gmail.com>
-         <e0b828d994a8427ad48b7b514f75d751ea791b47.camel@huaweicloud.com>
-         <CAADnVQJv0qWaxRD2_tmXeR9Wf=zdnvk8SwztOAorGaer0dFv3w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 27 Mar 2023 07:34:10 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C273B49D1;
+        Mon, 27 Mar 2023 04:34:08 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bi9so10958555lfb.12;
+        Mon, 27 Mar 2023 04:34:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679916847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aTSQxrRoE8Shcy5mtway4FQV4AF6vH1cCAm1YryA9wE=;
+        b=iYExBj9hAxdPZi1fuhIeAn9Mq1mSWvCXJBPYUJQ32gb/LkUpqkT053vj499yRIRtZx
+         95T+mABLT5Kn6a529wcr00nC8WiUZ6MTP8DXETRDo3l4o13gzUT8MgEOeqgdYC6q5NCb
+         8rw6F/9+tH3BKaiy8/uP/M9uh8cgg/gGthZrdiILn4TEgsegonHycVqujRWzr3xXZUIv
+         52p/Mb3TXPXNC2+fBsKT0c+a+9WMrw66isQmtYiK5k3D4cUT+NyC5+a2JulrbG2aky3U
+         pPgMZlks9iU9ZCIaTQmxVVSLVoZDRRxShI9qENgxGaxYC410QcMb8rGlSMGgtwWe4EYs
+         vcHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679916847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aTSQxrRoE8Shcy5mtway4FQV4AF6vH1cCAm1YryA9wE=;
+        b=JtsEuZPTHeAupBSbJXYUYDvcS/x6epHajhMCJiIpcNgqg8gjPUSaKwG0JCTNBBfITp
+         newmah35r/8kPmR07rHYQUsbEaDoEmtbV85zyzUQqCHC5KxbfuBn+TOuAPvzEErmXatO
+         ISM/9sRHGIx0YqJFxt1L8eiojySsywHrg270iIY7sN7xPTXV5wBZ5fCchI0FTHkJk0hq
+         Ff99aWCv0Q9ndOUFv1i2QMp/mpDU1w9TbTFu92moCYaVocagRsxtU6IRICcdKeN5tlpN
+         qaGsIwSvVtVs2bZRN7zfCSSraj2EZISpV+5btXfdtuLIn3sIpgaeMdL0NJV0q0Kz5ML+
+         NtOg==
+X-Gm-Message-State: AAQBX9cGRhzgqa73k4sztRRflp3QCRALTalxkLZSuFzCItGi3nPQ/0H7
+        f+CfXsvOh7iycjIWbPOE6Xo=
+X-Google-Smtp-Source: AKy350YonYc0d8QJUr+vn6SSI4APqCbjccljhCEBZuYvQG0GJny1lnz9OR43eJJ6QXOHUgqIE91vhw==
+X-Received: by 2002:a05:6512:11c3:b0:4d8:6f37:2611 with SMTP id h3-20020a05651211c300b004d86f372611mr3137200lfr.20.1679916846842;
+        Mon, 27 Mar 2023 04:34:06 -0700 (PDT)
+Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id j7-20020a19f507000000b004db3e2d3efesm4646907lfb.204.2023.03.27.04.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 04:34:06 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 14:34:02 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-iio@vger.kernel.org
+Subject: [PATCH v6 3/7] kunit: Add kunit wrappers for (root) device creation
+Message-ID: <f2c7f7b04f7e4ee7b9cef73ecba672f5fa40eb73.1679915278.git.mazziesaccount@gmail.com>
+References: <cover.1679915278.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwAn9FqWfSFk7BTRAQ--.62311S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3ArWUCryDCw47JrWDXr15twb_yoW3GFW3pF
-        WrGF4jka1DJr13Arn2vw18Ca409397tw45WrnxJryfAwn09F1xKr12kF1a9F1DGr1fKw1Y
-        vr4Uta42g3Z8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4c1XAAAsQ
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="CB8Pv1301zrQNio8"
+Content-Disposition: inline
+In-Reply-To: <cover.1679915278.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2023-03-24 at 19:54 -0700, Alexei Starovoitov wrote:
-> On Thu, Mar 23, 2023 at 6:37 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Wed, 2023-03-22 at 15:27 -0700, Alexei Starovoitov wrote:
-> > > On Wed, Mar 22, 2023 at 5:08 AM Roberto Sassu
-> > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > On Tue, 2023-03-21 at 19:23 -0700, Alexei Starovoitov wrote:
-> > > > > On Fri, Mar 17, 2023 at 7:53 AM Roberto Sassu
-> > > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > 
-> > > > > > A User Mode Driver (UMD) is a specialization of a User Mode Helper (UMH),
-> > > > > > which runs a user space process from a binary blob, and creates a
-> > > > > > bidirectional pipe, so that the kernel can make a request to that process,
-> > > > > > and the latter provides its response. It is currently used by bpfilter,
-> > > > > > although it does not seem to do any useful work.
-> > > > > 
-> > > > > FYI the new home for bpfilter is here:
-> > > > > https://github.com/facebook/bpfilter
-> > > > 
-> > > > Thanks. I just ensured that it worked, by doing:
-> > > > 
-> > > > getsockopt(fd, SOL_IP, IPT_SO_GET_INFO, &info, &optlen);
-> > > > 
-> > > > and accepting IPT_SO_GET_INFO in main.c.
-> > > > 
-> > > > > > The problem is, if other users would like to implement a UMD similar to
-> > > > > > bpfilter, they would have to duplicate the code. Instead, make an UMD
-> > > > > > management library and API from the existing bpfilter and sockopt code,
-> > > > > > and move it to common kernel code.
-> > > > > > 
-> > > > > > Also, define the software architecture and the main components of the
-> > > > > > library: the UMD Manager, running in the kernel, acting as the frontend
-> > > > > > interface to any user or kernel-originated request; the UMD Loader, also
-> > > > > > running in the kernel, responsible to load the UMD Handler; the UMD
-> > > > > > Handler, running in user space, responsible to handle requests from the UMD
-> > > > > > Manager and to send to it the response.
-> > > > > 
-> > > > > That doesn't look like a generic interface for UMD.
-> > > > 
-> > > > What would make it more generic? I made the API message format-
-> > > > independent. It has the capability of starting the user space process
-> > > > as required, when there is a communication.
-> > > > 
-> > > > > It was a quick hack to get bpfilter off the ground, but certainly
-> > > > > not a generic one.
-> > > > 
-> > > > True, it is not generic in the sense that it can accomodate any
-> > > > possible use case. The main goal is to move something that was running
-> > > > in the kernel to user space, with the same isolation guarantees as if
-> > > > the code was executed in the kernel.
-> > > 
-> > > They are not the same guarantees.
-> > > UMD is exactly equivalent to root process running in user space.
-> > > Meaning it can be killed, ptraced, priority inverted, etc
-> > 
-> > That is the starting point.
-> > 
-> > I suppose you can remove any privilege from the UMD process, it just
-> > needs to read/write from/to a pipe (and in my case to use socket() with
-> > AF_ALG to interact with the Crypto API).
-> > 
-> > Also, as I mentioned, you can enforce a very strict seccomp profile,
-> > which forces the UMD process to use a very limited number of system
-> > calls.
-> > 
-> > For the interactions of the rest of the system to the UMD process, you
-> > could deny with an LSM all the operations that you mentioned. The rest
-> > of the system would not be affected, only operations which have the UMD
-> > process as target are denied.
-> > 
-> > > > > > I have two use cases, but for sake of brevity I will propose one.
-> > > > > > 
-> > > > > > I would like to add support for PGP keys and signatures in the kernel, so
-> > > > > > that I can extend secure boot to applications, and allow/deny code
-> > > > > > execution based on the signed file digests included in RPM headers.
-> > > > > > 
-> > > > > > While I proposed a patch set a while ago (based on a previous work of David
-> > > > > > Howells), the main objection was that the PGP packet parser should not run
-> > > > > > in the kernel.
-> > > > > > 
-> > > > > > That makes a perfect example for using a UMD. If the PGP parser is moved to
-> > > > > > user space (UMD Handler), and the kernel (UMD Manager) just instantiates
-> > > > > > the key and verifies the signature on already parsed data, this would
-> > > > > > address the concern.
-> > > > > 
-> > > > > I don't think PGP parser belongs to UMD either.
-> > > > > Please do it as a normal user space process and define a proper
-> > > > > protocol for communication between kernel and user space.
-> > > > 
-> > > > UMD is better in the sense that it establishes a bidirectional pipe
-> > > > between the kernel and the user space process. With that, there is no
-> > > > need to further restrict the access to a sysfs file, for example.
-> > > 
-> > > If a simple pipe is good enough then you can have a kernel module
-> > > that creates it and interacts with the user space process.
-> > 
-> > Few points I forgot to mention.
-> > 
-> > With the UMD approach, the binary blob is embedded in the kernel
-> > module, which means that no external dependencies are needed for
-> > integrity verification. The binary is statically compiled, and the
-> > kernel write-protects it at run-time.
-> > 
-> > Second, since DIGLIM would check the integrity of any executable,
-> > including init, the PGP signature verification needs to occur before.
-> > So, the PGP UMD should be already started by then. That is not going to
-> > be a problem, since the binary is copied to a private tmpfs mount.
-> > 
-> > > Out-of-tree bpftiler can do that, so can you.
-> > 
-> > As far as I can see, the out-of-tree bpfilter works exactly in the same
-> > way as the in-tree counterpart. The binary blob is embedded in the
-> > kernel module.
-> > 
-> > > PGP is not suitable for kernel git repo either as kernel code or as UMD.
-> > 
-> > Well, the asymmetric key type can be extended with new parsers, so this
-> > possibility was already taken into account. The objection that the PGP
-> > parser should not run in kernel space is fair, but I think the UMD
-> > approach fully addresses that.
-> > 
-> > Also, I agree with you that we should not just take any code and
-> > pretend that it is part of the kernel. However, in this particular
-> > case, the purpose of the PGP UMD would be simply to extract very few
-> > information from the PGP packets. The asymmetric key type and the
-> > signature verification infrastructure already take care of the rest.
-> > 
-> > PGP keys and signatures would act as an additional system trust anchor
-> > for verifying critical system data (for DIGLIM, which executables are
-> > allowed to run), similarly to how X.509 certificates are used for
-> > verifying kernel modules. RPM headers, executables digests are taken
-> > from, are signed with PGP, so there is no other way than adding this
-> > functionality.
-> > 
-> > And unfortunately, especially for features impacting the entire system,
-> > out-of-tree drivers are not really an option:
-> 
-> I think you have to start out of tree and prove that the PGP thing
-> is worth considering at all.
-> Only then we can talk about merits of UMD and generalization
-> of pipe interface if it's applicable.
 
-Ok. This is my plan:
+--CB8Pv1301zrQNio8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1) send the kernel part necessary to support PGP keys and signatures
-2) evaluate/discuss if something else can be moved to user space
-3) propose the implementation of the PGP UMD
-4) assess the robustness of the solution, and compare to different
-   designs
+A few tests need to have a valid struct device. One such example is
+tests which want to be testing devm-managed interfaces.
 
-Thanks
+Add kunit wrapper for root_device_[un]register(), which create a root
+device and also add a kunit managed clean-up routine for the device
+destruction upon test exit.
 
-Roberto
+Special note: In some cases the device reference-count does not reach
+zero and devm-unwinding is not done if device is not sitting on a bus.
+The root_device_[un]register() are dealing with such devices and thus
+this interface may not be usable by all in its current form. More
+information can be found from:
+https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
 
-> DIGLIM and everything else you mentioned above doesn't add weight
-> to the decision. PGP work should be acceptable on its own.
-> Out-of-tree is a method to prove that it works and later argue
-> for inclusion as in-tree either as kernel module or UMD.
-> Generalization of current bpfilter is out of scope here.
+The use of root-devices in the kunit helpers is intended to be an
+intermediate solution to allow tests which do not require device to sit
+on a bus avoid directly abusing the root_device_[un]register() while
+proper kunit device solution is being worked on. Related discussion can be
+found from:
+https://lore.kernel.org/lkml/CABVgOSmx3A4Vwos2_8xO-XQrQAw5gvY0nc5zLpLmcJ7Ft=
+A-dTQ@mail.gmail.com/
 
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+---
+Change history:
+v5 =3D> v6:
+- Kunit resource-managed root_device creation wrapper (new patch)
+
+Please note: This patch uses root-devices (as was suggested) until there
+is a proper dummy device creation mechanism added in kunit. The root
+devices are embedded in kunit wrappers to simplify replacing the
+root-devices with proper solution when it is available.
+
+David Gow has sent out an RFC[1] which should implement these helpers
+using not-yet-in-tree deferring API. This RFC aims to support
+kunit_device which should be _the right thing to do_. I added this
+implementation here because it may (or may not) take a while for the David's
+RFC to make it's way in-kernel. So, in order to not delay this series I
+added these helpers which use the existing kunit resource management for
+clean-up while the new deferring kunit API is not yet in place.
+
+[1] https://lore.kernel.org/linux-kselftest/20230325043104.3761770-1-davidg=
+ow@google.com/T/#mf797239a8bce11630875fdf60aab9ed627add1f0
+
+---
+ include/kunit/device.h | 18 ++++++++++++++++++
+ lib/kunit/Makefile     |  3 ++-
+ lib/kunit/device.c     | 36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+), 1 deletion(-)
+ create mode 100644 include/kunit/device.h
+ create mode 100644 lib/kunit/device.c
+
+diff --git a/include/kunit/device.h b/include/kunit/device.h
+new file mode 100644
+index 000000000000..f02740b7583b
+--- /dev/null
++++ b/include/kunit/device.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __KUNIT_DEVICE_H__
++#define __KUNIT_DEVICE_H__
++
++#include <kunit/test.h>
++
++struct device;
++
++/* Register a new device against a KUnit test. */
++struct device *kunit_device_register(struct kunit *test, const char *name);
++/*
++ * Unregister a device created by kunit_device_register() early (i.e.,
++ * before test cleanup).
++ */
++void kunit_device_unregister(struct kunit *test, struct device *dev);
++
++#endif
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index cb417f504996..64449549b990 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -6,7 +6,8 @@ kunit-objs +=3D				test.o \
+ 					string-stream.o \
+ 					assert.o \
+ 					try-catch.o \
+-					executor.o
++					executor.o \
++					device.o
+=20
+ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
+ kunit-objs +=3D				debugfs.o
+diff --git a/lib/kunit/device.c b/lib/kunit/device.c
+new file mode 100644
+index 000000000000..425f6d62ebd7
+--- /dev/null
++++ b/lib/kunit/device.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <kunit/device.h>
++#include <kunit/test.h>
++
++#include <linux/device.h>
++
++static void kunit_device_drop(struct kunit_resource *res)
++{
++	root_device_unregister(res->data);
++}
++
++struct device *kunit_device_register(struct kunit *test, const char *name)
++{
++	struct device *dev;
++
++	dev =3D root_device_register(name);
++	if (IS_ERR_OR_NULL(dev))
++		return dev;
++
++	return kunit_alloc_resource(test, NULL, kunit_device_drop, GFP_KERNEL,
++				    dev);
++}
++EXPORT_SYMBOL_GPL(kunit_device_register);
++
++static bool kunit_device_match(struct kunit *test, struct kunit_resource *=
+res,
++			       void *match_data)
++{
++	return res->data =3D=3D match_data;
++}
++
++void kunit_device_unregister(struct kunit *test, struct device *dev)
++{
++	kunit_destroy_resource(test, kunit_device_match, dev);
++}
++EXPORT_SYMBOL_GPL(kunit_device_unregister);
+--=20
+2.39.2
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--CB8Pv1301zrQNio8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmQhfyoACgkQeFA3/03a
+ocVQXAgAyZVE0QRRpK31+jSoHckNCo70yF/cR2/GHjcY6of7s5j9gRR/jCv/5N/J
+LZj55kvhs/mE2qZe6Xy7gzAHd8i+jvua77DScKT5wNQjNEr5gMZIy0GUJzScssL5
+6NY/IUdvUDuadnSDAHF5MdHDyzSaemPGQGRSwyIEsAGNYcM6eHMer6HBtknHmwfT
+QmZptzmFLBdRUraCclLmdAWGE07QAZ3PqZAgZIYTlKTZoGaRhniJy6wp2Xxrsz5+
+wrXDOyle2+TaQl391BABjDpGBqRt3p/jMMyn4mq5iQUW9ZTSqkiuazeRBzpX+rjD
+pXSP5lbxBIAC3f16tPgyoRrnscweVA==
+=fna1
+-----END PGP SIGNATURE-----
+
+--CB8Pv1301zrQNio8--
