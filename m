@@ -2,171 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E4E6CA2D9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 13:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABF86CA2E0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 13:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbjC0LwN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Mar 2023 07:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
+        id S231921AbjC0Lxn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Mar 2023 07:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjC0LwN (ORCPT
+        with ESMTP id S229804AbjC0Lxm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 07:52:13 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8672D4E;
-        Mon, 27 Mar 2023 04:52:11 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id b20so35074626edd.1;
-        Mon, 27 Mar 2023 04:52:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679917930;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=reW1DVwM1zk8Q9iqp1u3bB31mlwrsAJaRz6RuSIoXIU=;
-        b=M1zZJS7aR62kTdJ1jkufI//A+r0KrxQx24PFXrRWBX2xnMPE6tABYKqI2H4s2xqk3u
-         lx715LjMHeL8JxddEDtGvf2MqmMZJu6/KNdO1igiaFxZyAKXsKvr02xlpfrVKi8TevBp
-         QR9RxKgUwi/MVBJ1Axaj3wUOgXnTbx3ATx3JvSxb7YnmtnYvKvq9MCSEU+5gtUju8znz
-         gjDAS/0UoZyMaEr1mmzJnF0mhrczZe+NnIt+99HuglMce8Q5Zattl2b85mo1jKFyfBOO
-         rkOXXjLLpDbqJTJ0hIeVxNAszfJyAi/5uEwHLIePTh+Q+hEKTm+896smc6GdIy8TqZA2
-         1j3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679917930;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=reW1DVwM1zk8Q9iqp1u3bB31mlwrsAJaRz6RuSIoXIU=;
-        b=D6OM1Zi6k6nPPIxloeJYYYjVWh5RMMAkGgqFNEZDlSAl5D4fv4h8HCh8e1kq46gZUy
-         qvLs9B69xumxt82e71w3yV1V6YEbyu2SLB425nOgIM+KjQEIfHNKa2CB7ChwTGTDbRTc
-         NgUdt2HVWjsyvq5fZEjNrUUoxbEmlNMvXoXcKwugPdIzXhANeTECo99QqWF5j/5hBG0A
-         fSJRZwapD1iWdU+BC6+MUrOikeitKpHZn0+RgtOsyFgICzjeyX1TlHc6oUFUK8iNZ5CB
-         sLCslAX/utQLKjcZckNjYEDfOSBeSQYR+wU78qin3ZKMBANpT9E3Y8JMCsIxDSDytt7b
-         W2YQ==
-X-Gm-Message-State: AAQBX9c+4AkR+WAGQ1izFK+HL1SrIrPkDSPUW9SGrlBe/oMoNoR58XAN
-        Dt9h0CXdIdimv5zCcdk9VSI=
-X-Google-Smtp-Source: AKy350bLfbg96/HAe8yX3pMOfueGxTBs/7BRBWdpqdBgFhAsQdsRhKDSQbhmFu49387GoBMY7YjoZQ==
-X-Received: by 2002:a17:906:7090:b0:885:a62c:5a5c with SMTP id b16-20020a170906709000b00885a62c5a5cmr11379251ejk.46.1679917930144;
-        Mon, 27 Mar 2023 04:52:10 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id y4-20020a17090629c400b0092fdb0b2e5dsm14067388eje.93.2023.03.27.04.52.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 04:52:09 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 14:52:06 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Hans J. Schultz" <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
- drivers
-Message-ID: <20230327115206.jk5q5l753aoelwus@skbuf>
-References: <20230318141010.513424-1-netdev@kapio-technology.com>
- <20230318141010.513424-3-netdev@kapio-technology.com>
+        Mon, 27 Mar 2023 07:53:42 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A328535AB;
+        Mon, 27 Mar 2023 04:53:41 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32RApg2T022235;
+        Mon, 27 Mar 2023 11:53:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=LNNz+zzVdhuLIYvRdlW9EYmwiSQ62Gb/MeXjDKFYvgE=;
+ b=HvdZTPoPCIZapNFVMNP6egOemUkSHEznmQCt1am13Al6jJ7/NNJ/32xIu8RdvRmEKj/f
+ oMkGmi2z8mi19R7FYOnZDb29PEMmdNv2f3psOWLCxhJL6cchzNuNdPRrqU/oV4vgr3df
+ Yl9HQjP6bIVlMQHiSPgL4Y2J/c+KgvcNBZDl+ZzOfpIEPvJ1iGEsK3CT1NWSmMlCuwBD
+ fEqrn4iayoHEFLpaqoHXCf5wY8ofkYlYLOnBHkNsKNRh0rgo12rWzIVmbqksZCr0t/sa
+ VGtfeTWSXJmt8bYpnpHfNSZTH5+z7y0ZUZeKEKKO/gxNmsCg9dbXTxaEJIdHPHwbrsvS Pw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjb42pfjc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:53:37 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32RBVWF5018492;
+        Mon, 27 Mar 2023 11:53:37 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pjb42pfhu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:53:37 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32R2mKX0029184;
+        Mon, 27 Mar 2023 11:53:35 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3phrk6jchf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Mar 2023 11:53:35 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32RBrVC017891954
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Mar 2023 11:53:32 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DC43420043;
+        Mon, 27 Mar 2023 11:53:31 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97A782004B;
+        Mon, 27 Mar 2023 11:53:31 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Mar 2023 11:53:31 +0000 (GMT)
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, Rae Moar <rmoar@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kunit: increase KUNIT_LOG_SIZE to 2048 bytes
+Date:   Mon, 27 Mar 2023 13:53:31 +0200
+Message-Id: <20230327115331.122562-1-hca@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230318141010.513424-3-netdev@kapio-technology.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ZOKfbZRi1_50rmP3MKfg4zltBcI3xlZn
+X-Proofpoint-GUID: zIG9bVyj5sto9BdSBVGuj88hWX1YZZf3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_11,2023-03-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1011 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2303270090
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 03:10:06PM +0100, Hans J. Schultz wrote:
-> diff --git a/net/dsa/dsa.c b/net/dsa/dsa.c
-> index e5f156940c67..c07a2e225ae5 100644
-> --- a/net/dsa/dsa.c
-> +++ b/net/dsa/dsa.c
-> @@ -626,6 +626,12 @@ static int dsa_switch_setup(struct dsa_switch *ds)
->  
->  	ds->configure_vlan_while_not_filtering = true;
->  
-> +	/* Since dynamic FDB entries are legacy, all switch drivers should
-> +	 * support the flag at least by just installing a static entry and
-> +	 * letting the bridge age it.
-> +	 */
-> +	ds->supported_fdb_flags = DSA_FDB_FLAG_DYNAMIC;
+The s390 specific test_unwind kunit test has 39 parameterized tests. The
+results in debugfs are truncated since the full log doesn't fit into 1500
+bytes.
+Therefore increase KUNIT_LOG_SIZE to 2048 bytes in a similar way like it
+was done recently with commit "kunit: fix bug in debugfs logs of
+parameterized tests". With that the whole test result is present.
 
-I believe that switchdev has a structural problem in the fact that FDB
-entries with flags that aren't interpreted by drivers (so they don't
-know if those flags are set or unset) are still passed to the switchdev
-notifier chains by default.
+Reported-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+---
+ include/kunit/test.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't believe that anybody used 'bridge fdb add <mac> <dev> master dynamic"
-while relying on a static FDB entry in the DSA offloaded data path.
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 9721584027d8..57b309c6ca27 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+-#define KUNIT_LOG_SIZE 1500
++#define KUNIT_LOG_SIZE 2048
+ 
+ /* Maximum size of parameter description string. */
+ #define KUNIT_PARAM_DESC_SIZE 128
+-- 
+2.37.2
 
-Just like commit 6ab4c3117aec ("net: bridge: don't notify switchdev for
-local FDB addresses"), we could deny that for stable kernels, and add
-the correct interpretation of the flag in net-next.
-
-Ido, Nikolay, Roopa, Jiri, thoughts?
-
-> +
->  	err = ds->ops->setup(ds);
->  	if (err < 0)
->  		goto unregister_notifier;
-
-By the way, there is a behavior change here.
-
-Before:
-
-$ ip link add br0 type bridge && ip link set br0 up
-$ ip link set swp0 master br0 && ip link set swp0 up
-$ bridge fdb add dev swp0 00:01:02:03:04:05 master dynamic
-[   70.010181] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 0
-[   70.019105] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 1
-.... 5 minutes later
-[  371.686935] mscc_felix 0000:00:00.5: felix_fdb_del: port 0 addr 00:01:02:03:04:05 vid 1
-[  371.695449] mscc_felix 0000:00:00.5: felix_fdb_del: port 0 addr 00:01:02:03:04:05 vid 0
-$ bridge fdb | grep 00:01:02:03:04:05
-
-After:
-
-$ ip link add br0 type bridge && ip link set br0 up
-$ ip link set swp0 master br0 && ip link set swp0 up
-$ bridge fdb add dev swp0 00:01:02:03:04:05 master dynamic
-[  222.071492] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 0 flags 0x1
-[  222.081154] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 1 flags 0x1
-.... 5 minutes later
-$ bridge fdb | grep 00:01:02:03:04:05
-00:01:02:03:04:05 dev swp0 vlan 1 offload master br0 stale
-00:01:02:03:04:05 dev swp0 offload master br0 stale
-00:01:02:03:04:05 dev swp0 vlan 1 self
-00:01:02:03:04:05 dev swp0 self
-
-As you can see, the behavior is not identical, and it made more sense
-before.
