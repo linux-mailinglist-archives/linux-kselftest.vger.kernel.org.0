@@ -2,208 +2,288 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738EA6CA9CC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 18:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2CE6CAA9B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 18:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjC0QAl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Mar 2023 12:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
+        id S232208AbjC0QcQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Mar 2023 12:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbjC0QAg (ORCPT
+        with ESMTP id S230251AbjC0QcP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 12:00:36 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F37746BA;
-        Mon, 27 Mar 2023 09:00:31 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id k2so8857562pll.8;
-        Mon, 27 Mar 2023 09:00:31 -0700 (PDT)
+        Mon, 27 Mar 2023 12:32:15 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4AE2119
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 09:32:12 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id w4so8936091plg.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 09:32:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679932830;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cQM0d8N3ey8wKoxPg/KHHUAGDUaZlSpT4hCWm1bIuNQ=;
-        b=Rggi0Md2110RpNFGa0P3wsEHmxvU81M3yeTIAOtvOXisj4v9LprR0CrMthEZrV32e1
-         M/8YtzepHzMUkLlvOEujXBCmdZXfYBCOVZ2RXFr56231OHDocq7oA52EgJiXboR3OeTk
-         lhzdE1l4PTEHadZb4zI8cnP6W9ZMQkGyrzZTz8dTkXEFepbaicmStgCdrVg/3MPrwtC0
-         VqOuWOZnw5BzNPPJ573D58iV02sa3C/fLYjbV8xcxpG4+0CyhYMKw0OKiCM8hHwlUAjI
-         LeZ9D5994F2qOWawmNDny+Y5xMxI8KvLKTeZDakTHny/iq3YwHZZpo02iSuGWso/whqD
-         HN5A==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679934732;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T/ibFYdC69vwh3wjMmxSSppBubSMnCe0A/BNmyM8WJo=;
+        b=tdDuf8vCsa1FE+tL+mI/XIjaZMDmBPF26iD2hq06oL/mfaeObs+EkJBJl8/OI5xGDL
+         QpKD0qVOcJW2bv1mz39UUFW1ExIVG0NZ5BqHXapjKQ8Xvv1TqZodP1umyNUWg+dHwBTm
+         eWCiLqyy/7u1C9LS14BuhKWbfB5P/FCBk9fCl+TXFPA3o0Wf7CWGGKdR1ik3oDJWJqqk
+         ca18O6dxhSenEvxrqSwCH0np+jX0xjAQ3NZqoQx6HiSAk4PCZyLk8h3o+nw4g5IKcDSt
+         UAyYsPgZ3dLnTuNAHzTKE6GUyYTeazWeZhK8tsuhDD8vFhVNcBPb4p0HtkMyPPRqhgNc
+         yCTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679932830;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cQM0d8N3ey8wKoxPg/KHHUAGDUaZlSpT4hCWm1bIuNQ=;
-        b=rZDSv2AqCMrfkkF2RObhgV41A7iLd8ZJOJiBOsEbqOMtXtkNIU/BxU1SzJZwgtZWdo
-         OavABER7UWcNtNm1hdh35FCdsUCBb/VuuJ3sDhLoZlET0qeJijgLweePd1goRTwWhZr8
-         uc3Zynw4wJPvI7UYrjIwToWI9cVEzxiCWXM94Vzp47XZqFWsRMwVe8PmuyJssrEtX+Vl
-         yrkRSYk8R7X3ab/CJ3MS0KfUfm1d9kS6IjPlVdOxjQvN/KnzdWGIn9PdQlu2eRqpR4Y7
-         SaYhpKKX5TSMQY9W1eLyiKlHapIEQNY2Zje1fhTIS5gje7oFqoGuQQWoJonXayKbQ0Jq
-         nqoQ==
-X-Gm-Message-State: AO0yUKW6De3ZOc2NHmtJvYtxnXHULPPwkOSzG2ho0AnQbZobLSXBre+3
-        WM/VE+yTG+QKq/6gVzqaCSo=
-X-Google-Smtp-Source: AK7set+qSF5b/VIEJkiJCwzshpgszJ/3NObsXzlCnvLlK7UGPX/xAWkGoHJ5HRudXeHxOYXgAmW+Nw==
-X-Received: by 2002:a05:6a20:bca8:b0:da:e44f:5284 with SMTP id fx40-20020a056a20bca800b000dae44f5284mr8801308pzb.30.1679932830335;
-        Mon, 27 Mar 2023 09:00:30 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id e25-20020aa78c59000000b0058837da69edsm19252637pfd.128.2023.03.27.09.00.15
+        d=1e100.net; s=20210112; t=1679934732;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T/ibFYdC69vwh3wjMmxSSppBubSMnCe0A/BNmyM8WJo=;
+        b=rqsvqDBGW9jQVQP3GrldCQnxrQqcK1hfRZ12qlhvRrpqXtkiNWGZdOhcR4QNXcNcHf
+         Rr7CrzqERBIIh6gsJcz+AHHYQeEZZqgRwe05PzrDGwFguYBqTGZtjJv5Yu4O8bgGWQzc
+         AyljS3z2j93xHBXQoAobxQIsqTMfEoZ3MnLWH8hO0cN9V1vE7aV/iAZ7ifiA7YUC6Czz
+         a8fKDx04fRaMNRq+LHUPsc8t9UxaYptVfkq6G0mEIVC2ROfyYABl69m2jLQl9ut4m/up
+         vLEi/yVTWgS3yZuXkHJxq0gLfIED8clOfsKt3ELx/QuKZL8yNF8zWH7zFbK+/trK5V7c
+         DCmQ==
+X-Gm-Message-State: AAQBX9fCOBxXGHV3QBXo+unfjj4KrNtR5OlrCNMfLnwGS32Te9UFt4n3
+        BLBeMyd2uJH6dxWoyPVnD2qm0g==
+X-Google-Smtp-Source: AKy350ZoLUqwI2Gu38GSeNj8EmtocvW2en1v6pQ13CgZqJmkofX1ql2bIW0hKvEbNaycl0IEwZCpMA==
+X-Received: by 2002:a17:90a:18e:b0:237:24eb:99d8 with SMTP id 14-20020a17090a018e00b0023724eb99d8mr13799736pjc.19.1679934732259;
+        Mon, 27 Mar 2023 09:32:12 -0700 (PDT)
+Received: from evan.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id io20-20020a17090312d400b001a1faeac240sm8963524plb.186.2023.03.27.09.32.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 09:00:29 -0700 (PDT)
-Date:   Mon, 27 Mar 2023 19:00:09 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+        Mon, 27 Mar 2023 09:32:11 -0700 (PDT)
+From:   Evan Green <evan@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     slewis@rivosinc.com, vineetg@rivosinc.com, heiko@sntech.de,
+        Conor Dooley <conor@kernel.org>,
+        Evan Green <evan@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Jann Horn <jannh@google.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Xu <peterx@redhat.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Samuel Holland <samuel@sholland.org>,
         Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
- drivers
-Message-ID: <20230327160009.bdswnalizdv2u77z@skbuf>
-References: <20230318141010.513424-1-netdev@kapio-technology.com>
- <20230318141010.513424-3-netdev@kapio-technology.com>
- <20230327115206.jk5q5l753aoelwus@skbuf>
- <87355qb48h.fsf@kapio-technology.com>
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v5 0/6] RISC-V Hardware Probing User Interface
+Date:   Mon, 27 Mar 2023 09:31:57 -0700
+Message-Id: <20230327163203.2918455-1-evan@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87355qb48h.fsf@kapio-technology.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 05:31:26PM +0200, Hans Schultz wrote:
-> On Mon, Mar 27, 2023 at 14:52, Vladimir Oltean <olteanv@gmail.com> wrote:
-> >
-> > By the way, there is a behavior change here.
-> >
-> > Before:
-> >
-> > $ ip link add br0 type bridge && ip link set br0 up
-> > $ ip link set swp0 master br0 && ip link set swp0 up
-> > $ bridge fdb add dev swp0 00:01:02:03:04:05 master dynamic
-> > [   70.010181] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 0
-> > [   70.019105] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 1
-> > .... 5 minutes later
-> > [  371.686935] mscc_felix 0000:00:00.5: felix_fdb_del: port 0 addr 00:01:02:03:04:05 vid 1
-> > [  371.695449] mscc_felix 0000:00:00.5: felix_fdb_del: port 0 addr 00:01:02:03:04:05 vid 0
-> > $ bridge fdb | grep 00:01:02:03:04:05
-> >
-> > After:
-> >
-> > $ ip link add br0 type bridge && ip link set br0 up
-> > $ ip link set swp0 master br0 && ip link set swp0 up
-> > $ bridge fdb add dev swp0 00:01:02:03:04:05 master dynamic
-> > [  222.071492] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 0 flags 0x1
-> > [  222.081154] mscc_felix 0000:00:00.5: felix_fdb_add: port 0 addr 00:01:02:03:04:05 vid 1 flags 0x1
-> > .... 5 minutes later
-> > $ bridge fdb | grep 00:01:02:03:04:05
-> > 00:01:02:03:04:05 dev swp0 vlan 1 offload master br0 stale
-> > 00:01:02:03:04:05 dev swp0 offload master br0 stale
-> > 00:01:02:03:04:05 dev swp0 vlan 1 self
-> > 00:01:02:03:04:05 dev swp0 self
-> >
-> > As you can see, the behavior is not identical, and it made more sense
-> > before.
-> 
-> I see this is Felix Ocelot and there is no changes in this patchset that
-> affects Felix Ocelot. Thus I am quite sure the results will be the same
-> without this patchset, ergo it must be because of another patch. All
-> that is done here in the DSA layer is to pass on an extra field and add
-> an extra check that will always pass in the case of this flag.
 
-If mv88e6xxx is all you have, you can still sanity-check the equivalent
-effect of your patch set to other drivers by simply not acting upon the
-"flags" argument in mv88e6xxx_port_fdb_add()/mv88e6xxx_port_fdb_del(),
-and disabling the logic to treat Age Out interrupts. Then you should be
-able to notice exactly the behavior change I am talking about.
+There's been a bunch of off-list discussions about this, including at
+Plumbers.  The original plan was to do something involving providing an
+ISA string to userspace, but ISA strings just aren't sufficient for a
+stable ABI any more: in order to parse an ISA string users need the
+version of the specifications that the string is written to, the version
+of each extension (sometimes at a finer granularity than the RISC-V
+releases/versions encode), and the expected use case for the ISA string
+(ie, is it a U-mode or M-mode string).  That's a lot of complexity to
+try and keep ABI compatible and it's probably going to continue to grow,
+as even if there's no more complexity in the specifications we'll have
+to deal with the various ISA string parsing oddities that end up all
+over userspace.
 
-In your own commit message, it says:
+Instead this patch set takes a very different approach and provides a set
+of key/value pairs that encode various bits about the system.  The big
+advantage here is that we can clearly define what these mean so we can
+ensure ABI stability, but it also allows us to encode information that's
+unlikely to ever appear in an ISA string (see the misaligned access
+performance, for example).  The resulting interface looks a lot like
+what arm64 and x86 do, and will hopefully fit well into something like
+ACPI in the future.
 
-Author: Hans J. Schultz <netdev@kapio-technology.com>
+The actual user interface is a syscall, with a vDSO function in front of
+it. The vDSO function can answer some queries without a syscall at all,
+and falls back to the syscall for cases it doesn't have answers to.
+Currently we prepopulate it with an array of answers for all keys and
+a CPU set of "all CPUs". This can be adjusted as necessary to provide
+fast answers to the most common queries.
 
-    net: bridge: ensure FDB offloaded flag is handled as needed
+An example series in glibc exposing this syscall and using it in an
+ifunc selector for memcpy can be found at [1]. I'm about to send a v2
+of that series out that incorporates the vDSO function.
 
-    Since user added entries in the bridge FDB will get the BR_FDB_OFFLOADED
-                                                        ~~~~~~~~~~~~~~~~~~~~
-    flag set, we do not want the bridge to age those entries and we want the
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    entries to be deleted in the bridge upon an SWITCHDEV_FDB_DEL_TO_BRIDGE
-                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                        existing drivers do not emit this
-    event.
+I was asked about the performance delta between this and something like
+sysfs. I created a small test program [2] and ran it on a Nezha D1
+Allwinner board. Doing each operation 100000 times and dividing, these
+operations take the following amount of time:
+ - open()+read()+close() of /sys/kernel/cpu_byteorder: 3.8us
+ - access("/sys/kernel/cpu_byteorder", R_OK): 1.3us
+ - riscv_hwprobe() vDSO and syscall: .0094us
+ - riscv_hwprobe() vDSO with no syscall: 0.0091us
 
-    Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+These numbers get farther apart if we query multiple keys, as sysfs will
+scale linearly with the number of keys, where the dedicated syscall
+stays the same. To frame these numbers, I also did a tight
+fork/exec/wait loop, which I measured as 4.8ms. So doing 4
+open/read/close operations is a delta of about 0.3%, versus a single vDSO
+call is a delta of essentially zero.
 
-diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-index e69a872bfc1d..b0c23a72bc76 100644
---- a/net/bridge/br_fdb.c
-+++ b/net/bridge/br_fdb.c
-@@ -537,6 +537,7 @@ void br_fdb_cleanup(struct work_struct *work)
- 		unsigned long this_timer = f->updated + delay;
- 
- 		if (test_bit(BR_FDB_STATIC, &f->flags) ||
-+		    test_bit(BR_FDB_OFFLOADED, &f->flags) ||
- 		    test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &f->flags)) {
- 			if (test_bit(BR_FDB_NOTIFY, &f->flags)) {
- 				if (time_after(this_timer, now))
-@@ -1465,7 +1466,9 @@ int br_fdb_external_learn_del(struct net_bridge *br, struct net_bridge_port *p,
- 	spin_lock_bh(&br->hash_lock);
- 
- 	fdb = br_fdb_find(br, addr, vid);
--	if (fdb && test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &fdb->flags))
-+	if (fdb &&
-+	    (test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &fdb->flags) ||
-+	     test_bit(BR_FDB_OFFLOADED, &fdb->flags)))
- 		fdb_delete(br, fdb, swdev_notify);
- 	else
- 		err = -ENOENT;
+[1] https://public-inbox.org/libc-alpha/20230206194819.1679472-1-evan@rivosinc.com/T/#t
+[2] https://pastebin.com/x84NEKaS
 
+Changes in v5:
+ - Added tags
+ - Fixed misuse of ISA_EXT_c as bitmap, changed to use
+   riscv_isa_extension_available() (Heiko, Conor)
+ - Document the alternatives approach in the commit message (Conor and
+   Heiko).
+ - Fix __init call warnings by making probe_vendor_features() and
+   thead_feature_probe_func() __init_or_module.
+ - Fixed compat vdso compilation failure (lkp).
 
-A reasonable question you could ask yourself is: why do my BR_FDB_OFFLOADED
-entries have this flag in the software bridge in the first place?
-Did I add code for it? Is it because there is some difference between
-mv88e6xxx and ocelot/felix, or is it because dsa_fdb_offload_notify()
-gets called in both cases from generic code just the same?
+Changes in v4:
+ - Used real types in syscall prototypes (Arnd)
+ - Fixed static line break in do_riscv_hwprobe() (Conor)
+ - Added newlines between documentation lists (Conor)
+ - Crispen up size types to size_t, and cpu indices to int (Joe)
+ - Fix copy_from_user() return logic bug (found via kselftests!)
+ - Add __user to SYSCALL_DEFINE() to fix warning
+ - More newlines in BASE_BEHAVIOR_IMA documentation (Conor)
+ - Add newlines to CPUPERF_0 documentation (Conor)
+ - Add UNSUPPORTED value (Conor)
+ - Switched from DT to alternatives-based probing (Rob)
+ - Crispen up cpu index type to always be int (Conor)
+ - Fixed selftests commit description, no more tiny libc (Mark Brown)
+ - Fixed selftest syscall prototype types to match v4.
+ - Added a prototype to fix -Wmissing-prototype warning (lkp@intel.com)
+ - Fixed rv32 build failure (lkp@intel.com)
+ - Make vdso prototype match syscall types update
 
-And if dsa_fdb_offload_notify() gets called in both cases just the same,
-but no other driver except for mv88e6xxx emits the SWITCHDEV_FDB_DEL_TO_BRIDGE
-which you've patched the bridge to expect in this series, then what exactly
-is surprising in the fact that offloaded and dynamic FDB entries now become
-stale, but are not removed from the software bridge as they were before?
+Changes in v3:
+ - Updated copyright date in cpufeature.h
+ - Fixed typo in cpufeature.h comment (Conor)
+ - Refactored functions so that kernel mode can query too, in
+   preparation for the vDSO data population.
+ - Changed the vendor/arch/imp IDs to return a value of -1 on mismatch
+   rather than failing the whole call.
+ - Const cpumask pointer in hwprobe_mid()
+ - Embellished documentation WRT cpu_set and the returned values.
+ - Renamed hwprobe_mid() to hwprobe_arch_id() (Conor)
+ - Fixed machine ID doc warnings, changed elements to c:macro:.
+ - Completed dangling unistd.h comment (Conor)
+ - Fixed line breaks and minor logic optimization (Conor).
+ - Use riscv_cached_mxxxid() (Conor)
+ - Refactored base ISA behavior probe to allow kernel probing as well,
+   in prep for vDSO data initialization.
+ - Fixed doc warnings in IMA text list, use :c:macro:.
+ - Have hwprobe_misaligned return int instead of long.
+ - Constify cpumask pointer in hwprobe_misaligned()
+ - Fix warnings in _PERF_O list documentation, use :c:macro:.
+ - Move include cpufeature.h to misaligned patch.
+ - Fix documentation mismatch for RISCV_HWPROBE_KEY_CPUPERF_0 (Conor)
+ - Use for_each_possible_cpu() instead of NR_CPUS (Conor)
+ - Break early in misaligned access iteration (Conor)
+ - Increase MISALIGNED_MASK from 2 bits to 3 for possible UNSUPPORTED future
+   value (Conor)
+ - Introduced vDSO function
+
+Changes in v2:
+ - Factored the move of struct riscv_cpuinfo to its own header
+ - Changed the interface to look more like poll(). Rather than supplying
+   key_offset and getting back an array of values with numerically
+   contiguous keys, have the user pre-fill the key members of the array,
+   and the kernel will fill in the corresponding values. For any key it
+   doesn't recognize, it will set the key of that element to -1. This
+   allows usermode to quickly ask for exactly the elements it cares
+   about, and not get bogged down in a back and forth about newer keys
+   that older kernels might not recognize. In other words, the kernel
+   can communicate that it doesn't recognize some of the keys while
+   still providing the data for the keys it does know.
+ - Added a shortcut to the cpuset parameters that if a size of 0 and
+   NULL is provided for the CPU set, the kernel will use a cpu mask of
+   all online CPUs. This is convenient because I suspect most callers
+   will only want to act on a feature if it's supported on all CPUs, and
+   it's a headache to dynamically allocate an array of all 1s, not to
+   mention a waste to have the kernel loop over all of the offline bits.
+ - Fixed logic error in if(of_property_read_string...) that caused crash
+ - Include cpufeature.h in cpufeature.h to avoid undeclared variable
+   warning.
+ - Added a _MASK define
+ - Fix random checkpatch complaints
+ - Updated the selftests to the new API and added some more.
+ - Fixed indentation, comments in .S, and general checkpatch complaints.
+
+Evan Green (6):
+  RISC-V: Move struct riscv_cpuinfo to new header
+  RISC-V: Add a syscall for HW probing
+  RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
+  RISC-V: hwprobe: Support probing of misaligned access performance
+  selftests: Test the new RISC-V hwprobe interface
+  RISC-V: Add hwprobe vDSO function and data
+
+ Documentation/riscv/hwprobe.rst               |  86 +++++++
+ Documentation/riscv/index.rst                 |   1 +
+ arch/riscv/Kconfig                            |   1 +
+ arch/riscv/errata/thead/errata.c              |  10 +
+ arch/riscv/include/asm/alternative.h          |   5 +
+ arch/riscv/include/asm/cpufeature.h           |  23 ++
+ arch/riscv/include/asm/hwprobe.h              |  13 +
+ arch/riscv/include/asm/syscall.h              |   4 +
+ arch/riscv/include/asm/vdso/data.h            |  17 ++
+ arch/riscv/include/asm/vdso/gettimeofday.h    |   8 +
+ arch/riscv/include/uapi/asm/hwprobe.h         |  37 +++
+ arch/riscv/include/uapi/asm/unistd.h          |   9 +
+ arch/riscv/kernel/alternative.c               |  19 ++
+ arch/riscv/kernel/compat_vdso/Makefile        |   2 +-
+ arch/riscv/kernel/cpu.c                       |   8 +-
+ arch/riscv/kernel/cpufeature.c                |   3 +
+ arch/riscv/kernel/smpboot.c                   |   1 +
+ arch/riscv/kernel/sys_riscv.c                 | 225 +++++++++++++++++-
+ arch/riscv/kernel/vdso.c                      |   6 -
+ arch/riscv/kernel/vdso/Makefile               |   4 +
+ arch/riscv/kernel/vdso/hwprobe.c              |  52 ++++
+ arch/riscv/kernel/vdso/sys_hwprobe.S          |  15 ++
+ arch/riscv/kernel/vdso/vdso.lds.S             |   3 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/riscv/Makefile        |  58 +++++
+ .../testing/selftests/riscv/hwprobe/Makefile  |  10 +
+ .../testing/selftests/riscv/hwprobe/hwprobe.c |  90 +++++++
+ .../selftests/riscv/hwprobe/sys_hwprobe.S     |  12 +
+ 28 files changed, 709 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/riscv/hwprobe.rst
+ create mode 100644 arch/riscv/include/asm/cpufeature.h
+ create mode 100644 arch/riscv/include/asm/hwprobe.h
+ create mode 100644 arch/riscv/include/asm/vdso/data.h
+ create mode 100644 arch/riscv/include/uapi/asm/hwprobe.h
+ create mode 100644 arch/riscv/kernel/vdso/hwprobe.c
+ create mode 100644 arch/riscv/kernel/vdso/sys_hwprobe.S
+ create mode 100644 tools/testing/selftests/riscv/Makefile
+ create mode 100644 tools/testing/selftests/riscv/hwprobe/Makefile
+ create mode 100644 tools/testing/selftests/riscv/hwprobe/hwprobe.c
+ create mode 100644 tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
+
+-- 
+2.25.1
+
