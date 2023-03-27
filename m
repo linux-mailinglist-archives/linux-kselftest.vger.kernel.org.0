@@ -2,143 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98EA6C9AE1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 07:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE1D6C9B51
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Mar 2023 08:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjC0FhI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Mar 2023 01:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S229950AbjC0GUr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Mar 2023 02:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC0FhH (ORCPT
+        with ESMTP id S229771AbjC0GUr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 01:37:07 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8FE46B2;
-        Sun, 26 Mar 2023 22:37:06 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id l7so6589952pjg.5;
-        Sun, 26 Mar 2023 22:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679895426;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=17Q/a21Os9cWbwFfTki+6MWnuazyiTsoGrnUzugftcM=;
-        b=kqNkyOSYtZsQHUhi1pt/Z4KNbxb3vB9SHFzZfpp5ePq/Ub35SEI8QIxzHLyeT8482v
-         oQLYlEf73bHN6MKar+RzYF19mokBCVxIKD4SEfiSB/IqTZKbXv2HCMnk4KZ0D5G20fce
-         1U/66F+kRH/eQJxEtVtGUcXL7rO6HIJv5jRP4PMn0oBN+OtJAe9hytHoCX2vrZvFJdz9
-         /lC/PX1bit6UQRoFHXdSe3dcG++UyDupmzRPViHbSeEbPp35uDAR9FKp62IwaSf0r+rF
-         OCKnTTD7DY4LiqjqHJIREyXUYkmKNApNXUSNN5A4hasNaCUd+QL1jxyNU7Nyb/eSKMHD
-         4SsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679895426;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=17Q/a21Os9cWbwFfTki+6MWnuazyiTsoGrnUzugftcM=;
-        b=g9OMG0hD3wxT2IyZbVS+9FxsPIEz9XpiYBZ+NESE7zM4sUi62pDoX41F9m6a9Q8Mrb
-         Gi+wZvtIGE9UFPUeS+hcB1py3pfDSlNNJurqrSsixMzpcHOWi4GVl6dFeV6anPAf1Onz
-         +B+Eg9FH2eEY0FTA6D5QP7Rm44FmOaNo16vFkO+vT6XdWyNKbQjihmwgf3J+h0Ss0o4H
-         PHBzf5L8T66POqKVF6dJ2Mij4wo0mZeHSh7vkL/fxNe3YvsjunWHj5pz3jtm6GEoTiYw
-         P4tRHT9CKx6MAp0wtu3DCsrt9nLtO1unf4pRtrMVGIhgbHuqij22KU6gGGvhwm3Eo/FH
-         2Q8Q==
-X-Gm-Message-State: AAQBX9fpa9CvfKy6Fxlc5+HNBeEYg9cDWyBWXLQ9/HWfXGWSWmhm/CIh
-        U6yMublRE+EUjBPdnkrnjLw=
-X-Google-Smtp-Source: AKy350Z6qEGELiKG+AyJP6kIcW+nh20RYN/4nrLns4ecVRm0Rw4pe5XPau2d4P+tCuf3230odCSb9w==
-X-Received: by 2002:a17:902:f389:b0:19d:7a4:4063 with SMTP id f9-20020a170902f38900b0019d07a44063mr8547082ple.46.1679895426138;
-        Sun, 26 Mar 2023 22:37:06 -0700 (PDT)
-Received: from localhost ([203.221.180.225])
-        by smtp.gmail.com with ESMTPSA id jf20-20020a170903269400b0019f1264c7d7sm18220275plb.103.2023.03.26.22.37.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 22:37:05 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 27 Mar 2023 15:37:00 +1000
-Message-Id: <CRGX867PJCBF.1MV46YLYXMBYZ@bobo>
-Cc:     "Paolo Bonzini" <pbonzini@redhat.com>,
-        "Shuah Khan" <shuah@kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 0/2] KVM: PPC: support kvm selftests
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Sean Christopherson" <seanjc@google.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>
-X-Mailer: aerc 0.13.0
-References: <20230316031732.3591455-1-npiggin@gmail.com>
- <87ilf0nc95.fsf@mpe.ellerman.id.au> <ZBs9tGkI5OQqtIqs@google.com>
-In-Reply-To: <ZBs9tGkI5OQqtIqs@google.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 27 Mar 2023 02:20:47 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A72FD;
+        Sun, 26 Mar 2023 23:20:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PlN3Y08tXz4f3tpm;
+        Mon, 27 Mar 2023 14:20:41 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+        by APP4 (Coremail) with SMTP id gCh0CgDHea23NSFkHPWcGA--.44812S2;
+        Mon, 27 Mar 2023 14:20:40 +0800 (CST)
+Message-ID: <a4e44814-3c92-ccab-2a14-7824dfd44488@huaweicloud.com>
+Date:   Mon, 27 Mar 2023 14:20:39 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next] selftests/bpf: Remove two infinite loop bound
+ check cases
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+References: <20230327153538.850440-1-xukuohai@huaweicloud.com>
+ <CAEf4BzZuf=G0sEk5XqB0nAbvr81uRChLa96WDz0jCSG82=kofQ@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <CAEf4BzZuf=G0sEk5XqB0nAbvr81uRChLa96WDz0jCSG82=kofQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgDHea23NSFkHPWcGA--.44812S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWryUJw1fZFyrtF1rJF1rtFb_yoWrJF1fpa
+        4rXFnrJr48Ja1jv3ykKFW2qry2qrW8J3y7Aas2kryxAry7tanxKa4Utw45C3ZIyrn3Gr4S
+        vr15uwn7Ka4UWaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu Mar 23, 2023 at 3:41 AM AEST, Sean Christopherson wrote:
-> On Thu, Mar 16, 2023, Michael Ellerman wrote:
-> > Nicholas Piggin <npiggin@gmail.com> writes:
-> > > Hi,
-> > >
-> > > This series adds initial KVM selftests support for powerpc
-> > > (64-bit, BookS).
-> >=20
-> > Awesome.
-> > =20
-> > > It spans 3 maintainers but it does not really
-> > > affect arch/powerpc, and it is well contained in selftests
-> > > code, just touches some makefiles and a tiny bit headers so
-> > > conflicts should be unlikely and trivial.
-> > >
-> > > I guess Paolo is the best point to merge these, if no comments
-> > > or objections?
-> >=20
-> > Yeah. If it helps:
-> >=20
-> > Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
->
-> What is the long term plan for KVM PPC maintenance?  I was under the impr=
-ession
-> that KVM PPC was trending toward "bug fixes only", but the addition of se=
-lftests
-> support suggests otherwise.
+On 3/27/2023 11:20 AM, Andrii Nakryiko wrote:
+> On Sun, Mar 26, 2023 at 7:45 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+>>
+>> From: Xu Kuohai <xukuohai@huawei.com>
+>>
+>> The two infinite loop bound check cases added by commit
+>> 1a3148fc171f ("selftests/bpf: Check when bounds are not in the 32-bit range")
+>> take a long time to execute but don't add much value.
+>>
+>> Remove them to reduce run time of test_verifier.
+> 
+> Summary: 2042 PASSED, 0 SKIPPED, 1 FAILED
+> 
+> real    0m4.780s
+> user    0m0.458s
+> sys     0m3.871s
+> 
+> 
+> 5 seconds isn't such a long time, especially when we compare it to
+> test_progs (even with parallelization).
+> 
 
-We plan to continue maintaining it. New support and features has been a
-bit low in the past couple of years, hopefully that will pick up a bit
-though.
+Well, I actually don't know if it is "long time".
 
-> I ask primarily because routing KVM PPC patches through the PPC tree is g=
-oing to
-> be problematic if KVM PPC sees signficiant development.  The current situ=
-ation is
-> ok because the volume of patches is low and KVM PPC isn't trying to drive=
- anything
-> substantial into common KVM code, but if that changes...=20
+This patch was sent to address Alexei's concern about the run time
+of test_verifier in mail [1].
 
-Michael has done KVM topic branches to pull from a few times when such
-conflicts came up (at smaller scale). If we end up with larger changes
-or regular conflicts we might start up a kvm-ppc tree again I guess.
+[1] https://lore.kernel.org/bpf/20230322213056.2470-1-daniel@iogearbox.net/T/#mb3d6363a693ccd63d416d9d787db17f8fdcb8442
 
-> My other concern is that for selftests specifically, us KVM folks are tak=
-ing on
-> more maintenance burden by supporting PPC.  AFAIK, none of the people tha=
-t focus
-> on KVM selftests in any meaningful capacity have access to PPC hardware, =
-let alone
-> know enough about the architecture to make intelligent code changes.
->
-> Don't get me wrong, I'm very much in favor of more testing, I just don't =
-want KVM
-> to get left holding the bag.
+>>
+>> Fixes: 1a3148fc171f ("selftests/bpf: Check when bounds are not in the 32-bit range")
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> ---
+>>   tools/testing/selftests/bpf/verifier/bounds.c | 50 -------------------
+>>   1 file changed, 50 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
+>> index 74b1917d4208..515a8222f08f 100644
+>> --- a/tools/testing/selftests/bpf/verifier/bounds.c
+>> +++ b/tools/testing/selftests/bpf/verifier/bounds.c
+>> @@ -777,31 +777,6 @@
+>>          .result = ACCEPT,
+>>          .prog_type = BPF_PROG_TYPE_XDP,
+>>   },
+>> -{
+>> -       "bound check with JMP_JSLT for crossing 64-bit signed boundary",
+>> -       .insns = {
+>> -       BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+>> -       BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
+>> -       BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
+>> -       BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
+>> -       BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
+>> -
+>> -       BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
+>> -       BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
+>> -       BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
+>> -
+>> -       BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
+>> -       BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
+>> -       /* r1 signed range is [S64_MIN, S64_MAX] */
+>> -       BPF_JMP_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
+>> -
+>> -       BPF_MOV64_IMM(BPF_REG_0, 0),
+>> -       BPF_EXIT_INSN(),
+>> -       },
+>> -       .errstr = "BPF program is too large",
+>> -       .result = REJECT,
+>> -       .prog_type = BPF_PROG_TYPE_XDP,
+>> -},
+>>   {
+>>          "bound check for loop upper bound greater than U32_MAX",
+>>          .insns = {
+>> @@ -849,28 +824,3 @@
+>>          .result = ACCEPT,
+>>          .prog_type = BPF_PROG_TYPE_XDP,
+>>   },
+>> -{
+>> -       "bound check with JMP32_JSLT for crossing 32-bit signed boundary",
+>> -       .insns = {
+>> -       BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+>> -       BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
+>> -       BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
+>> -       BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
+>> -       BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 6),
+>> -
+>> -       BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
+>> -       BPF_MOV32_IMM(BPF_REG_0, 0x7fffff10),
+>> -       BPF_ALU32_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
+>> -
+>> -       BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
+>> -       BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
+>> -       /* r1 signed range is [S32_MIN, S32_MAX] */
+>> -       BPF_JMP32_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
+>> -
+>> -       BPF_MOV64_IMM(BPF_REG_0, 0),
+>> -       BPF_EXIT_INSN(),
+>> -       },
+>> -       .errstr = "BPF program is too large",
+>> -       .result = REJECT,
+>> -       .prog_type = BPF_PROG_TYPE_XDP,
+>> -},
+>> --
+>> 2.30.2
+>>
+> .
 
-Understood. I'll be happy to maintain powerpc part of kvm selftests and
-do any fixes that are needed for core code changes.If support fell away
-you could leave it broken (or rm -rf it if you prefer) -- I wouldn't ask
-anybody to work on archs they don't know or aren't paid to.
-
-Not sure if anything more can be done to help your process or ease your
-mind. It (KVM and kvm-selftests) can run in QEMU at least.
-
-Thanks,
-Nick
