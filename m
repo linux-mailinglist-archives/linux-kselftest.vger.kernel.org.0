@@ -2,126 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC54A6CCDB6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 00:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBEF6CCDE2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 01:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjC1Wyq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Mar 2023 18:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S229604AbjC1XJS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Mar 2023 19:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjC1Wym (ORCPT
+        with ESMTP id S229775AbjC1XJR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Mar 2023 18:54:42 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B5F2134
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 15:54:41 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id o20so11291469ljp.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 15:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680044079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qQYGlpoRo1xAwVZPEjjkyX2GN+AkTkrmM4VsIqlC63Q=;
-        b=hEDALw7vFU3va/s2tPcKbQO9CLwqO9q5v5uWuTq2vrfjEek2ZVqY0WYm5we6BTZEIl
-         1agBVKGbeWNEETZHhj05FgIedv7+iusFiVTkHSUHaujrImhB9ViRVSASouqDwy+IsuZR
-         0NPdygmgdleGaozVT4yfMj2G25oqFbxEv8FJohz7LOq8GIwpsYbMHcCiOERaRD3hiRp/
-         VgMUoAqoieYWDxwaU0wzWiWVqNosIqmfgxxZldKhotidSP4I324OqFeByF5viJnKz2ym
-         XGXUmMZoDKzYIwPYqMoNTvgjaoCC5916l5n2N/ZeXdi5S4HSNm+8dnTTfpzhxrSpaOvA
-         7HDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680044079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qQYGlpoRo1xAwVZPEjjkyX2GN+AkTkrmM4VsIqlC63Q=;
-        b=4QZ27KIcJT07TQ6/VB8U1PSp4yWrOrvWH0LI8sXBSXHZn65UBMFYkX52Mg3qVIpGWT
-         FMCEE+R/jpVjd2I+q0uKA5pqFZ291ypq478mTOHFKzi/rdqge5eu64i6kHcQ23UC28wW
-         jGifB09L07wSv8zGMu4bjbzoak4bXAQx6FZHHy3ClIwkiemGr6YjolWnR/SNXsd04HvV
-         pt0iJzbjOvIxiVvnTLQWb/4HwhmjBfMzHG9y+guweVFeDmxBPYRfAq89Ctn8is6ThowP
-         RIcdL3ELxHKjq8RQv0tA1ZcLaNmQG9Eay3c9AMyvrvOd6m/UnwdCHi49xTD4/NbkDwBB
-         J5gg==
-X-Gm-Message-State: AAQBX9f66YVRRUhcd36rrAylGCWg35hxO8r7vErI+j8zXe87cEnnSCgR
-        BM+BSRaBkoCmpFYtqXw3+M+Xrm5vlSnnQdQc2JKRXg==
-X-Google-Smtp-Source: AKy350Y5TFzrIJsXARd1vQbyj0sEWRDRlKxH3oCr7ze3JctueqdMfYeUkP6IeAd3Df0QKFBZ10sfWV0EEU6xl+gW+I4=
-X-Received: by 2002:a2e:6a17:0:b0:298:b375:ace9 with SMTP id
- f23-20020a2e6a17000000b00298b375ace9mr5186560ljc.9.1680044079673; Tue, 28 Mar
- 2023 15:54:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230327163203.2918455-1-evan@rivosinc.com> <d47020f9-e5a8-4ef3-94bc-6aa6f6b2465c@spud>
-In-Reply-To: <d47020f9-e5a8-4ef3-94bc-6aa6f6b2465c@spud>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Tue, 28 Mar 2023 15:54:03 -0700
-Message-ID: <CALs-HsvvKSCKzPZ8e9xst=vKOZHuByDHm5WHaE8mz66_WFMKkQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] RISC-V Hardware Probing User Interface
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, slewis@rivosinc.com,
-        vineetg@rivosinc.com, heiko@sntech.de,
-        Conor Dooley <conor@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jann Horn <jannh@google.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Xu <peterx@redhat.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 28 Mar 2023 19:09:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE1B2109;
+        Tue, 28 Mar 2023 16:09:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A269D619E9;
+        Tue, 28 Mar 2023 23:09:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1244C433D2;
+        Tue, 28 Mar 2023 23:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1680044955;
+        bh=8Wd0H0r4Y5vxHoD+EkGCPkXRzVkuf1s2NZi8Up9rhqA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W/NE0DcX3GATvg/vghQSAyn7dAM5VACRWZBXY7SJi2E5H2n/lfzrGZhS75RTkaCTi
+         FwtIdOOe4c7gDK+ZkY3a21Gt2QbnhV9fIAenplVpRKOdGXkEr/CpwPfrN2foeTgvx9
+         kjUyzFil5Vk1WRrUl4Vh9rJFx6zYSiqtR6GcsbT4=
+Date:   Tue, 28 Mar 2023 16:09:14 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stefan Roesch <shr@devkernel.io>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, hannes@cmpxchg.org
+Subject: Re: [PATCH v4 0/3] mm: process/cgroup ksm support
+Message-Id: <20230328160914.5b6b66e4a5ad39e41fd63710@linux-foundation.org>
+In-Reply-To: <20230310182851.2579138-1-shr@devkernel.io>
+References: <20230310182851.2579138-1-shr@devkernel.io>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 11:34=E2=80=AFPM Conor Dooley
-<conor.dooley@microchip.com> wrote:
->
-> On Mon, Mar 27, 2023 at 09:31:57AM -0700, Evan Green wrote:
->
-> Hey Evan,
->
-> Patchwork has a rake of complaints about the series unfortunately:
-> https://patchwork.kernel.org/project/linux-riscv/list/?series=3D734234
->
-> Some of the checkpatch whinging may be spurious, but there's some
-> definitely valid stuff in there!
->
-> > Evan Green (6):
-> >   RISC-V: Move struct riscv_cpuinfo to new header
-> >   RISC-V: Add a syscall for HW probing
-> >   RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
-> >   RISC-V: hwprobe: Support probing of misaligned access performance
-> >   selftests: Test the new RISC-V hwprobe interface
->
-> >   RISC-V: Add hwprobe vDSO function and data
->
-> And this one breaks the build for !MMU kernels unfortunately.
+On Fri, 10 Mar 2023 10:28:48 -0800 Stefan Roesch <shr@devkernel.io> wrote:
 
-Drat! Ok, thanks for the heads up. I'll go track these down.
--Evan
+> So far KSM can only be enabled by calling madvise for memory regions. To
+> be able to use KSM for more workloads, KSM needs to have the ability to be
+> enabled / disabled at the process / cgroup level.
+
+Review on this series has been a bit thin.  Are we OK with moving this
+into mm-stable for the next merge window?
