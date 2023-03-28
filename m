@@ -2,134 +2,168 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A796CCBEE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Mar 2023 23:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8A76CCDB3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 00:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjC1VI4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Mar 2023 17:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S229517AbjC1Wxu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Mar 2023 18:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjC1VIz (ORCPT
+        with ESMTP id S229586AbjC1Wxl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Mar 2023 17:08:55 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6391FFF
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 14:08:51 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-544787916d9so254487757b3.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 14:08:51 -0700 (PDT)
+        Tue, 28 Mar 2023 18:53:41 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F07C2137
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 15:53:39 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id g19so4692696lfr.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 15:53:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680037730;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680044017;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HjM/ZqYn/T7unhyITZnKsFzK8c16l02nzfEEL176xOU=;
-        b=ocoA87DNTSkmHztT5vnke6BiFUYBXc6/lZxINhcigUkk0S1CcjEXgStw7e9Zp88jv+
-         i89diJ/hJM1JqzrRRVhBca1mfW48YWKNSscl5VxNxl/D8BuvFLHWAN4JwAYSOtJsAnvU
-         /hLRstVR0H2yntq3lWpDGRwmwcMZGwMsqstB4dAb+RrozEc4vmQ5viXaNAHQbq7tKKtp
-         bsDDdWbOfanraXHIIKTb/3e2+ED5o30OM1egoRKfHSontwTNP2Ocq5mm+XuTmXg9cwR+
-         7CfkIF9F9SFfzSbUPIN0ev0xFztzmGXuEfR7BLx+g6u52KVj0QwddYgJTyOOUy8WqtJ7
-         MRlQ==
+        bh=qskuMbf/TQUlVl/XQCSzEK2+S7ntNlCiLvuefA3pamM=;
+        b=25yk2ORrLanITla28soBs7miCE+xev3gOhMYTjHwrGodhppl5zmyb5CRsbvTjr70JU
+         ZjO+zCf+xQiNqZfKuR24kdK5V7BHB3Ozhqly3ZCk5gzoQziG5phV7SNdx2yXqFRmLp5U
+         xSrfT+qhWfUOQmnGNm7lNwu3qPo52oIxL+h+lPjgqhZyuvD3bLjWqqVyTTNwU311KZVs
+         y5KgGCVVgnW7N/CBLQay0BwL8p/ZoN7GMg71rJngVtTq5ha1EC2v+ateu0Kmn7g/m2Zt
+         MUMcWrip+u5PEbh/eXSeRl/+NO0lDCzY732wMzRFlJD4+79AHGQQbWm7jTXeby5erbho
+         Gt7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680037730;
+        d=1e100.net; s=20210112; t=1680044017;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HjM/ZqYn/T7unhyITZnKsFzK8c16l02nzfEEL176xOU=;
-        b=gFm/VNunuWyTmiTnUONrg+DjF8UEgJC4wcuqXiBQSVUA3J+YUK+BjkXJmI78kUsYeG
-         jMuCH5cp4g8USTGVoggg3MW1U6hmf2CTwrC6LMWBQ+uxILW5orhSmj1mUZanO6w+6vvV
-         H9VMBK+gXLgs0Hy0V0pZJAaMQPuq1GUgXMYj7ZnEqEI8rVrRt5YMtElgUM2PmywNK4gy
-         81/62hnmHW1mci3sOWK4N2CPyQVOhaUgHHY2LOUWnf1QOFgLRrEGspIUukwpOhzZ8qcD
-         GI6PPQ8Dnibs53uhbjBNg0YHw4YfogA5dlAnAe+l+gXhgudBqPl5UsGkpvxlTwHuvNTR
-         mKCQ==
-X-Gm-Message-State: AAQBX9dL9hLFrhQ1re+JdnwrdFH7qJETRmovnjdYc2QPLXgdaYqkZlvH
-        r5sFTWzc4ob+KA+O/5AScbmzERvuDkprcDLt5epHxQ==
-X-Google-Smtp-Source: AKy350ZLcUn0YW0dPW8RrTZpH1OlJLUgV7pk23eKHtHIEBdLUfe+SXlC99rlPRcKPdL9i7z5gyFajqvtscRGyxF3v54=
-X-Received: by 2002:a81:a908:0:b0:545:7164:49ac with SMTP id
- g8-20020a81a908000000b00545716449acmr7922856ywh.5.1680037730422; Tue, 28 Mar
- 2023 14:08:50 -0700 (PDT)
+        bh=qskuMbf/TQUlVl/XQCSzEK2+S7ntNlCiLvuefA3pamM=;
+        b=6y3LjfqaszDba4uI8de70gpsbXasWI39P0faekk8tQ54ntUu/H9tmqW9PJXPTACeR2
+         d8RjkNN7fSCHQN/EeH/DJ5sAgKzdeBwYWuq4lr4UINeo89HO6OkTueXDicXGwVHWNTAm
+         CdQrv1diENtdtx1beTtB/k+sHjUxgg/fEARLgkY8LkQ1manK0s31FRZ2ZHwfu35DbAO9
+         FJVH2KxBbgaOZ6bCJs6aucTpv2kKfGvUZnMhrFAMivxckVanh1XXbKzhyDer1NpYvtAM
+         rUNUk4eAagsR+emWRN93kt5Hzl2KkXxfSA85UvBoSi7P+37Lc3fHl7ckV5/LQs3coLhX
+         M8RA==
+X-Gm-Message-State: AAQBX9dVOz6jaKibVfadriXl/Og+Q18wEkAuKbBrzhtv4M0IaVcjc9fz
+        Jk/cuKfoQhzOvJRXbv9UF95/nCseZxHDr7pLimlVig==
+X-Google-Smtp-Source: AKy350Yx95yz3SiP8gB4VeUZ8/yo/xmapgiAWvd2H9O92Pk195cpVNYCvypmY6+6pn/77BmE4p+eUJhYJ8k+JbbEMqM=
+X-Received: by 2002:a19:a401:0:b0:4d8:1c0e:bfc7 with SMTP id
+ q1-20020a19a401000000b004d81c0ebfc7mr4984994lfc.13.1680044017285; Tue, 28 Mar
+ 2023 15:53:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230316225915.494688-1-rmoar@google.com> <CAGS_qxp2u3F4abmYgN+XwCG8CJN37NSqWSC===SWLCjZG8HYBw@mail.gmail.com>
-In-Reply-To: <CAGS_qxp2u3F4abmYgN+XwCG8CJN37NSqWSC===SWLCjZG8HYBw@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 28 Mar 2023 17:08:38 -0400
-Message-ID: <CA+GJov4F+Vjw2gFj=YTYEoZ5wmy774xE5+aDQv55BKQE3VZo1g@mail.gmail.com>
-Subject: Re: [KTAP V2 PATCH] ktap_v2: add recognized test name line
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     frowand.list@gmail.com, davidgow@google.com,
-        skhan@linuxfoundation.org, keescook@chromium.org,
-        Tim.Bird@sony.com, brendanhiggins@google.com, corbet@lwn.net,
-        guillaume.tucker@collabora.com, kernelci@lists.linux.dev,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230327163203.2918455-1-evan@rivosinc.com> <8238271.NyiUUSuA9g@diego>
+In-Reply-To: <8238271.NyiUUSuA9g@diego>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Tue, 28 Mar 2023 15:53:01 -0700
+Message-ID: <CALs-Hsu58iOrxKKKu-rQBszz3F--657G-zipBu5zZCxzPWRPWw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] RISC-V Hardware Probing User Interface
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>, slewis@rivosinc.com,
+        vineetg@rivosinc.com, Conor Dooley <conor@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
+        Jann Horn <jannh@google.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Xu <peterx@redhat.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 3:21=E2=80=AFPM 'Daniel Latypov' via KUnit Developm=
-ent
-<kunit-dev@googlegroups.com> wrote:
+On Tue, Mar 28, 2023 at 1:35=E2=80=AFPM Heiko St=C3=BCbner <heiko@sntech.de=
+> wrote:
 >
-> On Thu, Mar 16, 2023 at 3:59=E2=80=AFPM Rae Moar <rmoar@google.com> wrote=
-:
+> Am Montag, 27. M=C3=A4rz 2023, 18:31:57 CEST schrieb Evan Green:
 > >
-> > Add recognition of the test name line ("# Subtest: <name>") to the KTAP=
- v2
-> > spec.
+> > There's been a bunch of off-list discussions about this, including at
+> > Plumbers.  The original plan was to do something involving providing an
+> > ISA string to userspace, but ISA strings just aren't sufficient for a
+> > stable ABI any more: in order to parse an ISA string users need the
+> > version of the specifications that the string is written to, the versio=
+n
+> > of each extension (sometimes at a finer granularity than the RISC-V
+> > releases/versions encode), and the expected use case for the ISA string
+> > (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
+> > try and keep ABI compatible and it's probably going to continue to grow=
+,
+> > as even if there's no more complexity in the specifications we'll have
+> > to deal with the various ISA string parsing oddities that end up all
+> > over userspace.
 > >
-> > The purpose of this line is to declare the name of a test before its
-> > results. This functionality is especially useful when trying to parse t=
-est
-> > results incrementally and when interpretting results after a crash.
+> > Instead this patch set takes a very different approach and provides a s=
+et
+> > of key/value pairs that encode various bits about the system.  The big
+> > advantage here is that we can clearly define what these mean so we can
+> > ensure ABI stability, but it also allows us to encode information that'=
+s
+> > unlikely to ever appear in an ISA string (see the misaligned access
+> > performance, for example).  The resulting interface looks a lot like
+> > what arm64 and x86 do, and will hopefully fit well into something like
+> > ACPI in the future.
 > >
-> > This line is already compliant with KTAP v1 as it is interpretted as a
+> > The actual user interface is a syscall, with a vDSO function in front o=
+f
+> > it. The vDSO function can answer some queries without a syscall at all,
+> > and falls back to the syscall for cases it doesn't have answers to.
+> > Currently we prepopulate it with an array of answers for all keys and
+> > a CPU set of "all CPUs". This can be adjusted as necessary to provide
+> > fast answers to the most common queries.
+> >
+> > An example series in glibc exposing this syscall and using it in an
+> > ifunc selector for memcpy can be found at [1]. I'm about to send a v2
+> > of that series out that incorporates the vDSO function.
+> >
+> > I was asked about the performance delta between this and something like
+> > sysfs. I created a small test program [2] and ran it on a Nezha D1
+> > Allwinner board. Doing each operation 100000 times and dividing, these
+> > operations take the following amount of time:
+> >  - open()+read()+close() of /sys/kernel/cpu_byteorder: 3.8us
+> >  - access("/sys/kernel/cpu_byteorder", R_OK): 1.3us
+> >  - riscv_hwprobe() vDSO and syscall: .0094us
+> >  - riscv_hwprobe() vDSO with no syscall: 0.0091us
 >
-> minor nit for if there's a v2, s/interprett/interpret (here and above)
+> Looks like this series spawned a thread on one of the riscv-lists [0].
 >
+> As auxvals were mentioned in that thread, I was wondering what's the
+> difference between doing a new syscall vs. putting the keys + values as
+> architecture auxvec elements [1] ?
 
-Oops. Thanks for catching this. I will change this for a v2. Unsure
-why I repeated the typo twice.
+The auxvec approach would also work. The primary difference is that
+auxvec bits are actively copied into every new process, forever. If
+you predict a slow pace of new bits coming in, the auxvec approach
+probably makes more sense. This series was born out of a prediction
+that this set of "stuff" was going to be larger than traditional
+x86/ARM architectures, fiddly (ie bits possibly representing specific
+versions of various extensions), evolving regularly over time, and
+heterogeneous between cores. With that sort of rubber band ball in
+mind, a key/value interface seemed to make more sense.
 
-> Also, I want to elaborate on the previous paragraph a bit more, in
-> case the motivation isn't clear.
-> The problem with TAP and KTAP as-is is that the name of a test case is
-> only known *after* it completes.
->
-> So the scenario being referred to is
->
-> KTAP version 1
-> 1..1
-> <lots of output>
-> <kernel crash, no more output>
->
-> It would be nice if parsers could report "test FOO caused a crash" as
-> opposed to "the first test case caused a crash, good luck figuring out
-> which one that was"
->
-
-Yes, this is exactly what I think is the largest benefit of a line to
-define the test name pre-results. Thanks for expanding. I will likely
-add in some of this explanation into the commit message for v2.
-
-Thanks,
-
-Rae
-
-> Daniel
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/CAGS_qxp2u3F4abmYgN%2BXwCG8CJN37NSqWSC%3D%3D%3DSWLCjZG8HYBw%40m=
-ail.gmail.com.
+-Evan
