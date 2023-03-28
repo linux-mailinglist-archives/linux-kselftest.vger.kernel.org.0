@@ -2,89 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E0E6CBA1B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Mar 2023 11:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1E56CBA63
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Mar 2023 11:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjC1JHn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Mar 2023 05:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S230510AbjC1JXK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Mar 2023 05:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjC1JHn (ORCPT
+        with ESMTP id S230425AbjC1JXK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Mar 2023 05:07:43 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94104ED1;
-        Tue, 28 Mar 2023 02:07:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pm3jd2thwz4wj7;
-        Tue, 28 Mar 2023 20:07:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1679994453;
-        bh=CI6UkVt1iNphqH6yIerjhQUaBQ8iiEe/qQHit4JlIMo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=HyVQaSrNlh7ULd1z7j7TqAGwSq+AIBMp2CM4ASQ7RpsS8yuBSbS4xwXn60fRG3hZH
-         ry6Dgzy72rZ3epcrMLSJ+xxvGMeNkGCYSXrKUIxv2+UrTkX3a9IOy4He8x8QJ5KTkO
-         LxV04GU8KDSOLoDbtxIWwYdinbAVgz3FPmPj039LD+W1Q3p1FfertasEgTNtTGD8sz
-         rw8thPH4tGKiLr36IgisfD+PMsRJ/VUva3Jf1bounNv/NA0ePr647Is1fmOKlWSF8k
-         sC1VCebtZEGyxxWwvC+znGT2JjkipULl8TbCbMjpRojrWXpFYMt3Llqc2dcC/ZOziJ
-         kTp7CuaDe9ZQA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/2] KVM: PPC: support kvm selftests
-In-Reply-To: <CRHTDZZU72CJ.3QAHM67MV5G47@bobo>
-References: <20230316031732.3591455-1-npiggin@gmail.com>
- <87ilf0nc95.fsf@mpe.ellerman.id.au> <ZBs9tGkI5OQqtIqs@google.com>
- <CRGX867PJCBF.1MV46YLYXMBYZ@bobo> <ZCHV20oFkFzp/AZs@google.com>
- <CRHTDZZU72CJ.3QAHM67MV5G47@bobo>
-Date:   Tue, 28 Mar 2023 20:07:29 +1100
-Message-ID: <87tty5ckha.fsf@mpe.ellerman.id.au>
+        Tue, 28 Mar 2023 05:23:10 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3660C3C11;
+        Tue, 28 Mar 2023 02:23:08 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id B1876604FC;
+        Tue, 28 Mar 2023 11:23:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679995385; bh=+4Uv1oeXch0E8QEw2r4NGzYsJRfZ0wnJQWh8JRcI2ZQ=;
+        h=Date:To:From:Subject:Cc:From;
+        b=t4hv8wsK9Ha+Yb4rAI4xaJSbQNNURyJcKgD85vHGwNmKi38vfBniwFhSLuon5B44r
+         qySnV3qwvf5rahwXOBA+Pogw3BmOMEpT7e5yoKTzIV9TjXS7qfmVrhotTMf4KrE8Yp
+         XKkPxyilfC0/TUJlIVRbSbRH+BB+FksXUlyhfPkUygDIkRQbal6NeJQVuitrX283dY
+         cmAC5J05J1VxHQvKz0Sa76RLWr7QeNH+AQISIhUYjj2NMxYGlOMvTSiYN5KYxR5uXV
+         ODxlTtXTeNHhAYRq4j+jHvGBxD8lry+5sUyZPLTUB8IapTuKiSIvwtq+ys0+WAt7Ti
+         /6tSL3GI9yuHg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id gGNKuCLOuQQi; Tue, 28 Mar 2023 11:23:02 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id D5557604F9;
+        Tue, 28 Mar 2023 11:23:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1679995382; bh=+4Uv1oeXch0E8QEw2r4NGzYsJRfZ0wnJQWh8JRcI2ZQ=;
+        h=Date:To:From:Subject:Cc:From;
+        b=O4eC5/D+8E+IZ7vgeH4tmRyjF5+6efj9baJ4vVydspX08tvFRPCHPApRF91xrYlJ0
+         bAAoCtpUBJiCDH0zYw+erL33Eg7+CkiQ2ePEdqMN/HeYYATtrxtADml3ITiQgjjhTN
+         TbWiTVutaaXPsKTgx/jIolHSualWQVImGoX1TZCHKmStOCv8XCIvCn6A80wBtwEiU3
+         uSYhwM5nzEfk5hhld5FLRBsYpM9VrqJTHbgUDrSmGDMhS9m+6S/vGITwhEieDFQudM
+         QtQxWfPqhGzsRTJCjphTCJ8JZiTPTu6WEDGCx1QZM5pTC5AoLkIUtpivKQ1EoYqiTj
+         p0CryaOYS9A/A==
+Message-ID: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
+Date:   Tue, 28 Mar 2023 11:23:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, hr
+To:     linux-kselftest@vger.kernel.org
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: [BUG] selftests/firmware: copious kernel memory leaks in
+ test_fw_run_batch_request()
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-"Nicholas Piggin" <npiggin@gmail.com> writes:
-> On Tue Mar 28, 2023 at 3:43 AM AEST, Sean Christopherson wrote:
->> On Mon, Mar 27, 2023, Nicholas Piggin wrote:
->> > On Thu Mar 23, 2023 at 3:41 AM AEST, Sean Christopherson wrote:
-...
->> > >
->> > > What is the long term plan for KVM PPC maintenance?  I was under the impression
->> > > that KVM PPC was trending toward "bug fixes only", but the addition of selftests
->> > > support suggests otherwise.
-...
->
->> and ideally there would be one or more M: (and R:) entries as well.  I'm not
->> all that concerned about the selftests support being abandoned, but the lack of
->> specific contacts makes it look like KVM PPC is in maintenance-only mode, and it
->> sounds like that's not the case.
->
-> Yeah, I guess the intention was to bring it a bit more under general
-> arch/powerpc maintainership but it does look a bit odd having a top
-> level entry and no contacts. We'll reconsider what to do with that.
+Hi all,
 
-Yeah I agree it ends up looking a bit weird.
+Platform is AlmaLinux 8.7 (CentOS fork), Lenovo desktop
+LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB with the BIOS M22KT49A dated
+11/10/2022.
 
-The intention was just to make it clear that Paul's tree was no longer
-where patches were being handled, and that they'd be handled as regular
-powerpc patches.
+Running Torvalds vanilla kernel 6.3-rc3 commit 6981739a967c with
+CONFIG_DEBUG_KMEMLEAK and CONFIG_DEBUG_{KOBJECT,KOBJECT_RELEASE} enabled.
 
-At the time I hoped we'd relatively quickly be able to add someone as at
-least a KVM "R:"eviewer, but circumstances intervened.
+The leak is cummulative, it can be reproduced with
+tools/testing/selftests/firmware/*.sh scripts.
 
-Hopefully we can fix that soon.
+The leaks are in chunks of 1024 bytes (+ overhead), but so far I could not
+reproduce w/o root privileges, as tests refuse to run as unprivileged user.
+(This is not the proof of non-existence of an unprivileged automated exploit
+that would exhaust the kernel memory at approx. rate 4 MB/hour on our setup.
 
-cheers
+This would mean about 96 MB / day or 3 GB / month (of kernel memory).
+
+TEST RESULTS (showing the number of kmemleaks per test):
+
+root@pc-mtodorov marvin]# grep -c 'comm "test_' linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw*.log
+linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_fallback.sh.log:0
+linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_filesystem.sh.log:60
+linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_lib.sh.log:9
+linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_run_tests.sh.log:196
+linux/kernel_bugs/memleaks-6.3-rc3/kmemleak-fw_upload.sh.log:0
+[root@pc-mtodorov marvin]#
+
+Leaks look like this:
+
+unreferenced object 0xffff943c390f8400 (size 1024):
+   comm "test_firmware-0", pid 449178, jiffies 4381453603 (age 824.844s)
+   hex dump (first 32 bytes):
+     45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
+     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   backtrace:
+     [<ffffffff90aed68c>] slab_post_alloc_hook+0x8c/0x3e0
+     [<ffffffff90af4f69>] __kmem_cache_alloc_node+0x1d9/0x2a0
+     [<ffffffff90a6a6ae>] kmalloc_trace+0x2e/0xc0
+     [<ffffffff90eb2350>] test_fw_run_batch_request+0x90/0x170
+     [<ffffffff907d6dcf>] kthread+0x10f/0x140
+     [<ffffffff90602fa9>] ret_from_fork+0x29/0x50
+unreferenced object 0xffff943a902f6400 (size 1024):
+   comm "test_firmware-1", pid 449179, jiffies 4381453603 (age 824.844s)
+   hex dump (first 32 bytes):
+     45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
+     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   backtrace:
+     [<ffffffff90aed68c>] slab_post_alloc_hook+0x8c/0x3e0
+     [<ffffffff90af4f69>] __kmem_cache_alloc_node+0x1d9/0x2a0
+     [<ffffffff90a6a6ae>] kmalloc_trace+0x2e/0xc0
+     [<ffffffff90eb2350>] test_fw_run_batch_request+0x90/0x170
+     [<ffffffff907d6dcf>] kthread+0x10f/0x140
+     [<ffffffff90602fa9>] ret_from_fork+0x29/0x50
+unreferenced object 0xffff943a902f0400 (size 1024):
+   comm "test_firmware-2", pid 449180, jiffies 4381453603 (age 824.844s)
+   hex dump (first 32 bytes):
+     45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
+     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   backtrace:
+     [<ffffffff90aed68c>] slab_post_alloc_hook+0x8c/0x3e0
+     [<ffffffff90af4f69>] __kmem_cache_alloc_node+0x1d9/0x2a0
+     [<ffffffff90a6a6ae>] kmalloc_trace+0x2e/0xc0
+     [<ffffffff90eb2350>] test_fw_run_batch_request+0x90/0x170
+     [<ffffffff907d6dcf>] kthread+0x10f/0x140
+     [<ffffffff90602fa9>] ret_from_fork+0x29/0x50
+unreferenced object 0xffff943a902f4000 (size 1024):
+   comm "test_firmware-3", pid 449181, jiffies 4381453603 (age 824.844s)
+   hex dump (first 32 bytes):
+     45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
+     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+   backtrace:
+     [<ffffffff90aed68c>] slab_post_alloc_hook+0x8c/0x3e0
+     [<ffffffff90af4f69>] __kmem_cache_alloc_node+0x1d9/0x2a0
+     [<ffffffff90a6a6ae>] kmalloc_trace+0x2e/0xc0
+     [<ffffffff90eb2350>] test_fw_run_batch_request+0x90/0x170
+     [<ffffffff907d6dcf>] kthread+0x10f/0x140
+     [<ffffffff90602fa9>] ret_from_fork+0x29/0x50
+
+Please find the build config, lshw output and the output of
+/sys/kernel/debug/kmemleak in the following directory:
+
+https://domac.alu.hr/~mtodorov/linux/bugreports/kmemleak-firmware/
+
+NOTE: sent to the maintainers listed for selftest/firmware and those
+listed for lib/test_firmware.c .
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
