@@ -2,69 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1556CBF94
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Mar 2023 14:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9386CBF97
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Mar 2023 14:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbjC1MqG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Mar 2023 08:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
+        id S230339AbjC1MrV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Mar 2023 08:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbjC1Mp5 (ORCPT
+        with ESMTP id S229654AbjC1MrV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Mar 2023 08:45:57 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21439AF07
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 05:45:26 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so9339512wmq.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 05:45:26 -0700 (PDT)
+        Tue, 28 Mar 2023 08:47:21 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A4DAF16
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 05:46:49 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id e18so12066243wra.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 05:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680007523;
+        d=google.com; s=20210112; t=1680007606;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9veLpvm3V3yyHvsrsxqRm8mkzvbCp1hw1TFPuWfZDpg=;
-        b=aMkHupxM1P9H6jCEKY2S/WoRzR6FRzOYhFhH/ABAZnV44OlGDPH4RjbkE+O/tnTT6x
-         9TAVgbahV/ZDQQ+g8Y7QJnj1lYBErEAA4Akc6iZ9ArFplxDIh+kNRqnjfGtQQtr8cbgb
-         fdwXmP2NIWwatvap6ltPFRDISd0pTrzAg1cnZCMVf/ZrjegCH0vu/hu3idSM8zx63X1o
-         7q+vNiSayt8aTB5eTunxMNGs9/eH9d80FZ6I+ydZuKvuEV8glzURvvZ//oByC4zRd+S3
-         t9ojLop0W8id/8KvxYy5SnAnSnKyIAAjhIcA2GusL4fqqpAQ3hw+BkckYbwkUvHfHlBV
-         v46w==
+        bh=6/vSxnkKPfRpZpd3/oxHdCUPaO+ve3U0H4l0bFnm5Vw=;
+        b=nTiRCiFE4dQdKH4VO2ecHxog1z7g6eV4B6f21ATgdKkjvRHVKDPyLEGHXsuLdwcWf0
+         eHLDNls+PuLXVSEOHBZdAdZnqdDt0ujNYTbOeQpYIJKg8jwTb4DD1VMRf33GuaywVB1V
+         Mk9C6iKfq8DtoC+MO8CDifzFb/bt+j/T4Qxd8s455QbOU49hHqR/WB96UUhMuhjUnPeR
+         PhKvuE8zk80cUYW7bLZIXLUxd7OLLAPk3G5lJdw54G/mjA6P9m/qbtw3B7ruFpZ3VLGt
+         LKuBRDY20BO7K/eozdo1J6sMSAHF3G6ScnbZ5sy9W+amJcdtzP7SjE+CfDxoHgaNnst/
+         ZaOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680007523;
+        d=1e100.net; s=20210112; t=1680007606;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9veLpvm3V3yyHvsrsxqRm8mkzvbCp1hw1TFPuWfZDpg=;
-        b=zN+IGCjMnIz3fmiwoxg0WWw4tO4qt2JSncs28bWtiLLezo+HbntlFjIac990zqmZGc
-         Xq3OnKKKERiXSeKeGyu7PCIxupeWnHj4qkZ4JFsZOzQeaQjV7dWHJDf5bD6A1tjCkb9p
-         CogcM0G7SPoepkD06nC1/jFMdIG3U8WOZH2BePLQ6yzYnhAitHFXjQa9xEdWQbU6m/7u
-         cnG5lpWsT/ey9aJC6Y/6bM6ZfSVb8B26D6s+ocDshrjBHR96T/t1dU4dIURelQza4m+F
-         JbKceNkd2/EH7YCN27M+9WBSXMDMQI3yzdNrDN+ePecoGyDWBNk0s7qLF1YctU5Om2OY
-         yOWQ==
-X-Gm-Message-State: AO0yUKV/9YbSHQkg3UnGmok7Bk6uIJwJ0kT2g3TOqZLLluprd0wgenI2
-        56hsfzV16S46rodSsNjN2QMQvsb/ao1gB4edZ/zZGA==
-X-Google-Smtp-Source: AK7set+ledd+drpHIpsG7+OgCtMnLKfAZV+VWtOxJbQIKrW8vdv2q4unjuYjgC1QPZaklT3wJNz+qVVhl/wDfND7xZU=
-X-Received: by 2002:a1c:4b07:0:b0:3df:97b0:ba02 with SMTP id
- y7-20020a1c4b07000000b003df97b0ba02mr3490013wma.3.1680007522289; Tue, 28 Mar
- 2023 05:45:22 -0700 (PDT)
+        bh=6/vSxnkKPfRpZpd3/oxHdCUPaO+ve3U0H4l0bFnm5Vw=;
+        b=v90I4h5aDZSZ2VKw1sYIanuCg+sGG25guxkpYiXX8UGU+ITB1dtbTuEOzZ8eFQIgxA
+         z3NhzdBMLel6kfbWzhp1FKT/xErOlNKzuLju/eWgluWL2Y2EI2jIIWXQ/DEtCBKhJrJr
+         /TJZ0ERYSCzO4294EdgZ5QSrLzqnc44aXr7w7fAIvpY/tMxMHIxk2xpKGm95Q8VuX16Q
+         lqG1L/oiurwOmRjqWRVC8lqu67yVcnqpoS8l/nVUK7KI0tG0PKsKRcQvX3XwM1IXP0CY
+         xCSx0QwiItFpOrP8uqWxk22yxl7UjqAQkFvH4r4hYm5TRSXY3axayOrGHiXYu2scp3HS
+         tnzg==
+X-Gm-Message-State: AAQBX9d8HpgvtOOMdXN+AZBQ8QPeyMlCGbZdjPKuZNiYFlWemLoLKSY2
+        ytZ2B/kzmsX30kVbodrEtbm+PSyDvjjwTkFcbtObvQ==
+X-Google-Smtp-Source: AKy350avVt4v1mM5DGuvZHInb9MzJdeS6cuTVWEznQLbCuLIpJ9IBfaEyoKTgigWxsmwQSezNM2I2CpDcvqp/iaGTQM=
+X-Received: by 2002:a5d:4349:0:b0:2df:ebbe:7d46 with SMTP id
+ u9-20020a5d4349000000b002dfebbe7d46mr1388755wrr.2.1680007605785; Tue, 28 Mar
+ 2023 05:46:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1679915278.git.mazziesaccount@gmail.com>
- <f2c7f7b04f7e4ee7b9cef73ecba672f5fa40eb73.1679915278.git.mazziesaccount@gmail.com>
- <ZCGFgypeuJXqNwQt@kroah.com> <e027fc0c-83e0-be6f-d62b-dac00ce9b761@gmail.com> <ZCGONl0mC8oyBj-0@kroah.com>
-In-Reply-To: <ZCGONl0mC8oyBj-0@kroah.com>
+References: <0bfe4ca4863c22208d09d9b437cc563ed50877a1.camel@sipsolutions.net>
+In-Reply-To: <0bfe4ca4863c22208d09d9b437cc563ed50877a1.camel@sipsolutions.net>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 28 Mar 2023 20:45:09 +0800
-Message-ID: <CABVgOSnUCsxPf1mAL03GQzaw_kFtgf5J7aTPodo=j6O+wYZ2iQ@mail.gmail.com>
-Subject: Re: [PATCH v6 3/7] kunit: Add kunit wrappers for (root) device creation
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>
+Date:   Tue, 28 Mar 2023 20:46:34 +0800
+Message-ID: <CABVgOSmtyYDTNO+fREYpsO+BLeGYmajVPjrqqrxq+88HfPFsjQ@mail.gmail.com>
+Subject: Re: new kunit infrastructure
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org,
+        Benjamin Berg <benjamin@sipsolutions.net>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a2f0be05f7f53bc4"
+        boundary="00000000000095a70105f7f54001"
 X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
@@ -76,126 +71,80 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000a2f0be05f7f53bc4
+--00000000000095a70105f7f54001
 Content-Type: text/plain; charset="UTF-8"
 
-Thanks, Gred and Matti.
-
-On Mon, 27 Mar 2023 at 20:38, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, 28 Mar 2023 at 18:35, Johannes Berg <johannes@sipsolutions.net> wrote:
 >
-> On Mon, Mar 27, 2023 at 03:20:06PM +0300, Matti Vaittinen wrote:
-> > On 3/27/23 15:01, Greg Kroah-Hartman wrote:
-> > > On Mon, Mar 27, 2023 at 02:34:02PM +0300, Matti Vaittinen wrote:
-> > > > A few tests need to have a valid struct device. One such example is
-> > > > tests which want to be testing devm-managed interfaces.
-> > > >
-> > > > Add kunit wrapper for root_device_[un]register(), which create a root
-> > > > device and also add a kunit managed clean-up routine for the device
-> > > > destruction upon test exit.
-> > >
-> > > I really do not like this as a "root device" is a horrible hack and
-> > > should only be used if you have to hang other devices off of it and you
-> > > don't have a real device to tie those devices to.
-> > >
-> > > Here you are abusing it and attempting to treat it as a real device,
-> > > which it is not at all, because:
-> > >
-
-There's a tradeoff here in that we want to pull in as little code (and
-complexity) as possible into unit tests, both to make them as easy as
-possible to write, and to make them as targeted as possible. This
-leads to a lot of tests manually filling out structures with the bare
-minimum to get the code being tested to run, and creating "root
-devices" seems to have been a convenient way of doing that while only
-registering _one_ thing in a big global list per test. So having a
-"real device" is not something I'd consider a _necessity_ in designing
-these sorts of helpers: a convincing enough fake is sometimes better.
-
-That being said, now that I've got a bit of a better understanding of
-the device model, I agree that "root devices" are not an ideal
-solution, even if they are a convenient one. I'm still not thrilled by
-the prospect of having to register extra things like drivers to get
-these simple tests to work, but when wrapped behind helpers, it's a
-nice solution in practice.
-
-> > > > Special note: In some cases the device reference-count does not reach
-> > > > zero and devm-unwinding is not done if device is not sitting on a bus.
-> > > > The root_device_[un]register() are dealing with such devices and thus
-> > > > this interface may not be usable by all in its current form. More
-> > > > information can be found from:
-> > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiytl@houat/
-> > >
-> > > See, not a real device, doesn't follow normal "struct device" rules and
-> > > lifetimes, don't try to use it for a test as it will only cause problems
-> > > and you will be forced to work around that in a test.
-
-I think there's still some confusion around exactly what these issues
-are, and if they're indeed bugs or expected behaviour. I think it
-hangs off the question of what uses of a device with no driver
-attached are valid. My initial reading through of the various bits of
-the devres implementation seemed to imply that using it with such an
-unattached device was supported, but I'm less certain now. In any
-case, Maxime's tests in the other thread are a good starting point to
-clarify this behaviour, and if we use the bus-based KUnit helpers, it
-won't matter either way.
-
-> >
-> > Ok. I understood using the root-device has been a work-around in some other
-> > tests. Thus continuing use it for tests where we don't need the bus until we
-> > have a proper alternative was suggested by David.
-> >
-> > > Do the right thing here, create a fake bus and add devices to it.
-> > >
-> > > Heck, I'll even write that code if you want it, what's the requirement,
-> > > something like:
-> > >     struct device *kunit_device_create(struct kunit *test, const char *name);
-> > >     void kunit_device_destroy(struct device *dev);
-> >
-> > Thanks for the offer Greg. This, however, is being already worked on by
-> > David. I don't want to step on his toes by writing the same thing, nor do I
-> > think I should be pushing him to rush on his work.
+> Hi all,
 >
-> Ok, David, my offer stands, if you want me to write this I will be glad
-> to do so.
+> Is there an established process for new kunit infrastructure?
 
-I'm happy to keep working on this, but would definitely appreciate
-your feedback.
+Hi Johannes,
 
-I've put my work-in-progress code here:
-https://kunit.googlesource.com/linux/+/refs/heads/kunit/device-helpers%5E%21/#F0
+"established process" is probably overselling it, but we're more than
+happy to accept improvements and additions to KUnit.
 
-It creates a "kunit" bus, and adds a few helpers to create both
-devices and drivers on that bus, and clean them up when the test
-exits. It seems to work on all of the tests which used
-root_device_register so far (except those -- only
-test_iio_find_closest_gain_low so far -- which create multiple devices
-with the same name, as the driver name won't be unique), and the drm
-tests work fine when ported to it as well.
+>
+> For example, we have this macro that makes KUNIT_ARRAY_PARAM easier by
+> letting you just declare an array of test cases:
+>
+> /* Similar to KUNIT_ARRAY_PARAM, but avoiding an extra function */
+> #define KUNIT_ARRAY_PARAM_DESC(name, array, desc_member)                                        \
+>         static const void *name##_gen_params(const void *prev, char *desc)                      \
+>         {                                                                                       \
+>                 typeof((array)[0]) *__next = prev ? ((typeof(__next)) prev) + 1 : (array);      \
+>                 if (__next - (array) < ARRAY_SIZE((array))) {                                   \
+>                         strscpy(desc, __next->desc_member, KUNIT_PARAM_DESC_SIZE);              \
+>                         return __next;                                                          \
+>                 }                                                                               \
+>                 return NULL;                                                                    \
+>         }
+>
 
-There's still a lot of cleanup to do and questions which need
-answering, including:
-- Working out how best to provide an owning module (it's currently
-just kunit, but probably should be the module which contains the
-actual tests)
-- Improving the API around drivers: probably exposing the helper to
-create a driver, and add a way of cleaning it up early.
-- Properly testing it with modules, not just with kunit.py (including
-looking at what actually appears in sysfs)
-- Experimenting with using probe, etc, callbacks.
-- Cleaning up lots of ugly, still experimental code, documenting, testing, etc.
+Very neat! I'm more than happy to see this added.
 
-The thought of trying to expand the match function to support, e.g.,
-devicetree occurred to me, but I _think_ that devicetree-based tests
-are probably still better off using a platform_device. Regardless, it
-can probably wait to a follow-up
+>
+> Also, since we're working on wifi and thus networking, we want e.g. SKBs
+> to be resource-managed, and added some helper macros/functions for using
+> kunit_alloc_resource() with SKBs, that will be used at least in cfg80211
+> and mac80211 soon, so it would seem appropriate to have
+> include/kunit/skb.h (and a corresponding C file somewhere) with these
+> helpers.
+>
 
-In any case, does this seem like the right way forward?
+We're definitely in favour of adding these sorts of helpers. Thus far,
+these have mostly lived alongside the tests or subsystem being tested,
+but if they're widely useful then they can sit alongside the KUnit
+code.
 
-Cheers,
+My personal feeling is that it's better to have these sorts of
+subsystem-specific helpers be written and maintained as part of the
+subsystems (like the tests themselves), largely because that's where
+the subsystem expertise lies, but we're definitely happy to review any
+such patches to make sure they fit into the KUnit infrastructure well.
+(And, of course, if something spans several subsystems, then lib/kunit
+may be the best place to keep it.)
+
+>
+> Is all of this just a case of "nobody needed it so far", or is there no
+> expectation to add such infrastructure more generally?
+>
+
+Yeah, it's a combination of "no-one has needed it yet", "no-one
+working on KUnit understands it well enough", and "we haven't had the
+time yet". We are a bit hesitant to add these features without having
+tests that use them, too: often things will be coded by hand for one
+or two tests, and only then refactored out into a common helper.
+
+There are a few other similar helpers being worked on at the moment,
+mostly around providing test-managed "struct device"s, so this is
+definitely an active field of development.
+
+Thanks,
 -- David
 
---000000000000a2f0be05f7f53bc4
+--00000000000095a70105f7f54001
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -262,14 +211,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDj
-bIV+34iPu3Z/b1tx5Xxul5zartaNzqTyH8AKeNwY9zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMjgxMjQ1MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAH
+dZlOcWl5n9pxxbju9GLI5Vfw3hXJgsSzhy00kHPXHzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMjgxMjQ2NDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAEhGT4R+dJU302AHNKoqA
-fr29Wl14fRDJQ7NVG7xUwvhTf2U3H7B9l1OJhWUXbKdQMRAVT7n95A5LinRXV00WQZe0mLY39Uc5
-KGknjGYuNxoM80tUumXBqmJwFkpvy+NgX9esbqmKEOoGrc+NoYncPs7na0TRq+tgmSp+FvshzQss
-qnjb3rKMbXjRLC5EW4X60tp/mK4kNtBOU158LvQJGdFGG8T6lsph7fL1QwqQpFJXy1JvKfSwgrkY
-v75yYVWpUXm0lc0c3sHFk3BrPo7CAQ4oJ+SWjeOPxYgkFvGixUU43g0xwAlJbi5FBYoxfEkQcgFP
-JXsVtFc4Mqx8etgWbA==
---000000000000a2f0be05f7f53bc4--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEATh4tN1K2zASnovNTjd4g
+lbcW47biBy3aCeJ0RFt53NlrWnZmIgwRYUOjv08LjFTELZi2lRd6OuqIpIFWXqtblN2JaRYzUsaU
+nHFBFkmkvlipZ5Klu0SMV78upqO4uuCNnqP+1G8SPEOn5jWCYEU6aU1VFdF/JyeE92s6xpfFbDzz
+As2pPEX1SAiChCuRrSPEOIA+c4A4mH/xig9zrlkJ8DnCccS6lQfXKdlFqES3Muw+/3GvNGWLelat
+wmqjdv/VcuKOUTCsBJZWUIQsMfzpRWdJ4oihdTOcXccQzyT5BvGXv3PfXjbvJWslT5V9vs+jp4YK
+n17hYNaHYuCL3I6V+w==
+--00000000000095a70105f7f54001--
