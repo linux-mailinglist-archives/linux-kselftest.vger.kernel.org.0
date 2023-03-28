@@ -2,86 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5000B6CCAEA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Mar 2023 21:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9036CCB23
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Mar 2023 22:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjC1TsH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Mar 2023 15:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S229532AbjC1UAm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Mar 2023 16:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjC1TsG (ORCPT
+        with ESMTP id S229556AbjC1UAl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Mar 2023 15:48:06 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DF2172C;
-        Tue, 28 Mar 2023 12:48:04 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3DEC318839E9;
-        Tue, 28 Mar 2023 19:48:03 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 369182500389;
-        Tue, 28 Mar 2023 19:48:03 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 2E8489B403E2; Tue, 28 Mar 2023 19:48:03 +0000 (UTC)
-X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
-Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 7BA9491201E3;
-        Tue, 28 Mar 2023 19:48:02 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
- drivers
-In-Reply-To: <20230328114943.4mibmn2icutcio4m@skbuf>
-References: <20230318141010.513424-1-netdev@kapio-technology.com>
- <20230318141010.513424-3-netdev@kapio-technology.com>
- <20230327115206.jk5q5l753aoelwus@skbuf>
- <87355qb48h.fsf@kapio-technology.com>
- <20230327160009.bdswnalizdv2u77z@skbuf>
- <87pm8tooe1.fsf@kapio-technology.com>
- <20230327225933.plm5raegywbe7g2a@skbuf>
- <87ileljfwo.fsf@kapio-technology.com>
- <20230328114943.4mibmn2icutcio4m@skbuf>
-Date:   Tue, 28 Mar 2023 21:45:26 +0200
-Message-ID: <87cz4slkx5.fsf@kapio-technology.com>
+        Tue, 28 Mar 2023 16:00:41 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDA140DA
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 13:00:06 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id fb38so8809534pfb.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Mar 2023 13:00:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680033571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0/yvlhEoGf4lYD0w5w4illgGKFOLps9NjXpDI+7ErcQ=;
+        b=Kj4ahUJ17/TklSj8P4aYyhNWSNUggUnfHpq42Yf2/g2G1VGWGWrewPLvp9vsLX/JEg
+         Bo8mZjMkfy7Ctlho2KRKOpKqTbOfwp+ZKHRKs6VdamQXWlk+XXleJft4Oz61Oo6NQ4pw
+         KGYJwhnhB3/D0jfIu8miCDACYf921OreR3HQSswBQW4rpuJCq8+F+dboOuddBBTNRJ7Q
+         VAjey0lem6IOqAD6Q/8oNVUFh4Oe+mz5d1NunBWyGOByo8e7HkQXRnaO9wXGbSxcVuOU
+         k+XH0lQKF/eHBchip2FdOmhmF1eQBFBUO8i0IDxZ9EOdGZNFd8SUBL8dWE5arhzeF1Al
+         3IIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680033571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0/yvlhEoGf4lYD0w5w4illgGKFOLps9NjXpDI+7ErcQ=;
+        b=Js1OHaq1IKQjpagm2T6CpAyVdDRJKmFbZhs9eCUqXINYel/7A404Cr4gAsc6GCgA0R
+         /6Yx2mi0ogA+397t/536snEbneemHXpfLWL/EBwinLaaMlWRqqBQ95vZEniuqvXagY81
+         XFnaPrqc9wQmq1B7rt5J6MGmiEPkuXM5FJZQbq9hRb8arO/HSiKgg9Rgoqy2tQxcM5vg
+         622g9MTlnxUnu/s5b6/G9uZfL8OjlQQcwn9wq4KyBpJR/mAS5QGT4JgCiXAqBz0Kltzg
+         a5BalwpvejIbX/rwUHoNrZ2C6PIZzaAnkmX3Lms8OmO3ohXx2A+3qmwU/Y3r5JNmtAFn
+         DFGQ==
+X-Gm-Message-State: AAQBX9fcQZlWfSsDvre86KAl3JfS9c9A6iSsz+gIEF+jwcaxSz07vf/Q
+        gQEHmmmbUEVNentpG8/ESNuyvILEHvQCVRf5l3nvHw==
+X-Google-Smtp-Source: AKy350a02nhWjZJNaefPpoZ0AZzLMqgU+rjEYIaK5jw3IZfaHRS4Bp2uRB/lOVaXyN/t2Dcrapc37Bok73ZdIIbqPUU=
+X-Received: by 2002:a63:5a47:0:b0:513:2523:1b5f with SMTP id
+ k7-20020a635a47000000b0051325231b5fmr4363099pgm.3.1680033570922; Tue, 28 Mar
+ 2023 12:59:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
+In-Reply-To: <CAAYXXYxC++kRW_Kg0jieaxuwzTC2hu-9SxRjsHH_kqZW_DTE7Q@mail.gmail.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Tue, 28 Mar 2023 12:59:18 -0700
+Message-ID: <CAAH4kHZWW6QsMcLCLYwRo25i6d6Uhg+=rTeoVV7yrGHqUWwFUQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] TDX Guest Quote generation support
+To:     Erdem Aktas <erdemaktas@google.com>, Chong Cai <chongc@google.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,31 +83,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 14:49, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Tue, Mar 28, 2023 at 01:04:23PM +0200, Hans Schultz wrote:
->> On Tue, Mar 28, 2023 at 01:59, Vladimir Oltean <olteanv@gmail.com> wrote:
->> >
->> > which idea is that, again?
->> 
->> So I cannot us the offloaded flag as it is added by DSA in the common
->> case when using 'bridge fdb replace ... dynamic'.
->
-> Why not? I find it reasonable that the software bridge does not age out
-> a dynamic FDB entry that is offloaded to hardware... the hardware should
-> do that ("dynamic" being the key).
++Chong Cai
 
-So the solution would be to not let the DSA layer send the
-SWITCHDEV_FDB_OFFLOADED event in the case when the new dynamic flag is
-set?
-Thus other drivers that don't support the flag yet will install a
-static entry in HW and the bridge will age it out as there is no offloaded
-flag on. For the mv88e6xxx it will set the offloaded flag and HW will
-age it.
+Adding a colleague per his request since he's not subscribed to the list ye=
+t.
 
-> At least, I find it more reasonable
-> than the current behavior, where the bridge notifies dynamic FDB entries
-> to switchdev, but doesn't say they're dynamic, and switchdev treats them
-> as static, so they don't roam from one bridge port to another until
-> software sees a packet with that MAC DA, and they have the potential of
-> blocking traffic because of that.
+On Mon, Mar 27, 2023 at 10:36=E2=80=AFAM Erdem Aktas <erdemaktas@google.com=
+> wrote:
 >
+> On Sat, Mar 25, 2023 at 11:20=E2=80=AFPM Kuppuswamy Sathyanarayanan
+> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+> >
+> > Hi All,
+> >
+> > In TDX guest, the attestation process is used to verify the TDX guest
+> > trustworthiness to other entities before provisioning secrets to the
+> > guest.
+> >
+> > The TDX guest attestation process consists of two steps:
+> >
+> > 1. TDREPORT generation
+> > 2. Quote generation.
+> >
+> > The First step (TDREPORT generation) involves getting the TDX guest
+> > measurement data in the format of TDREPORT which is further used to
+> > validate the authenticity of the TDX guest. The second step involves
+> > sending the TDREPORT to a Quoting Enclave (QE) server to generate a
+> > remotely verifiable Quote. TDREPORT by design can only be verified on
+> > the local platform. To support remote verification of the TDREPORT,
+> > TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
+> > locally and convert it to a remotely verifiable Quote. Although
+> > attestation software can use communication methods like TCP/IP or
+> > vsock to send the TDREPORT to QE, not all platforms support these
+> > communication models. So TDX GHCI specification [1] defines a method
+> > for Quote generation via hypercalls. Please check the discussion from
+> > Google [2] and Alibaba [3] which clarifies the need for hypercall based
+> Thanks Sathyanarayanan for submitting patches again.
+>
+> I just wanted to reiterate what I said before that having a clean
+> TDVMCALL based interface to get TDX Quote without any virtio/vsock
+> dependency  is critical for us to support many use cases.
+
+
+
+--=20
+-Dionna Glaze, PhD (she/her)
