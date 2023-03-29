@@ -2,92 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07E96CF34A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 21:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9BE6CF36C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 21:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjC2Tkt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Mar 2023 15:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
+        id S229750AbjC2Toa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Mar 2023 15:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjC2Tkk (ORCPT
+        with ESMTP id S230335AbjC2ToS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:40:40 -0400
+        Wed, 29 Mar 2023 15:44:18 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDD64EEA;
-        Wed, 29 Mar 2023 12:40:31 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 3EAD43200319;
-        Wed, 29 Mar 2023 15:40:30 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 29 Mar 2023 15:40:30 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C1F55A3;
+        Wed, 29 Mar 2023 12:43:48 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 287C4320082A;
+        Wed, 29 Mar 2023 15:43:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 29 Mar 2023 15:43:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:content-type:date
         :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1680118829; x=1680205229; bh=oCRtzMP0uhnHc8NSGY+rMiPyQyD8My/WGPc
-        wgMYk0ag=; b=Paflhy5zi3TirIwPS2HTxoOiDlOG02CcTSdYq1blKtVgdvYLgo+
-        4/G3wzIli762MPh/EKPzUgd0knSEJMoD1vCg3eqFbfuvwKi1k/7DHaobJ6tvlHao
-        vqE8EE2d89sRs3ywffKbDgMV/8IJ2/mzWK1SvU1pveGPtfRUCoGc/FEgGuU2b4ov
-        eeYx0deL6hLxPaqRHfYLtC/Hve9mW3YSse1PlZRXAuJVvOw7OjLBhqu9DqfDfyyb
-        6TWsZxFEHut5HP4F3YUvegp2Z8cbAW1X+cPSMcDkYz1ZuSsTmf2IEDWZTiqp8x0T
-        cfeZ+he3xZlI4SpejfNm17be6R6YUgs+oww==
+        1680119002; x=1680205402; bh=7fJNXQMgupYfTfzXjUT/VSxxmReLzs9mghv
+        5xKeEkEw=; b=YMrEz4K5HIombsOqi/BTS1U0U4a3C24Tq0rTiALpR3++DDywfut
+        dNjr+s/KXnf+PikPClXtjnLLVzDd9jIK1ZRCBie3TgpEMdqznPRRuDPmlezlBwsK
+        peKslDAwg2DPt1EQRxW/L3N3PhUMnmEj+2pAfK9YriS0NRY1zSnKocqVRv3eddTt
+        xh5upaamzA7PW9MDpV2vB+UHoPtu5u4EfYD9fNC45nu7Lj+YC3u5zny72gAy9/br
+        QcSeZUK7pvHuaW8rpiwP6IF2DwrNkwojY+Zkkqtbh8eUj3I3nMdUEsz2W8kiW27Z
+        hoTyuMFY+d8cZtsW60B+RmaYZwzkLqQALcw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:date:feedback-id:feedback-id
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680118829; x=1680205229; bh=oCRtzMP0uhnHc8NSGY+rMiPyQyD8My/WGPc
-        wgMYk0ag=; b=Zgx40hjLjF76VIwFo91xBQpFe2jCR8dhTe+wGrVnReOj0gTCX1O
-        qZpXb6RAN7ided81NzRE/V2Nrtk525hZHIO+MN9GRzsYMw0UF09mIpTIgvP9IZqK
-        5TG55qQO+YjZdF8adkQpW/XofFmiSsHUMx9wGdFpemvV0jLSJur+0DdI6jW2+L1p
-        p8jDCIzwJt1f8ePFxlaE1qKklXTTz8zGipjACIlvfaFClSogGHF4acTOlzeGVGs0
-        NuBtUGIycLYceU9LCXrD+TwK21tRsYMaCWNIhpqF7K9elYFLPxKxW930y4yVdhu3
-        3mf6wVCVzOuR7RsO58GV0L0ydQ2UUdtRhqw==
-X-ME-Sender: <xms:LZQkZMIfl3pwV5psEEcaiuzjQy82S85kgM32-w5Cx2bVHejDO4C1AA>
-    <xme:LZQkZMLtrsP-iEHlIFoLZGLAFKK227BGb66EkbutUHue5VTU88B8pgu481bXgyex8
-    2DDlG1sH4KIpl4kx-Y>
-X-ME-Received: <xmr:LZQkZMvfT93E-yM1fhqWxt6Uoe_JXeyWpYfzzn13PCLqmGXu8UGx91ftDA>
+        1680119002; x=1680205402; bh=7fJNXQMgupYfTfzXjUT/VSxxmReLzs9mghv
+        5xKeEkEw=; b=JWvn+CUvHHVcyJJTBhbShimHD82B8geTFc9Nk45mijBxErPVsC3
+        NstcM5fy+2prNS3WY8fVkFSw7kkNAhLLq9QF9fDX4qoC+dOzUO98g+BMlHXooL95
+        f7gbLBcmFu0HF9weDBybkEjUbWw4STdgmLoy6bOyo5vOko11mxXQ8O9s69oAWuSx
+        mKfP4842tuxR2IFSteFWQNfVBtmDqOnqGOAm1IwHX35Kv33QRGMn5IjJdqI7L2xW
+        S0hmUbmarn3QfPOK5q+BYu77axj5PI2OWBRVQnh/mOMGQ0dKaG70BN+ePdx45Qmy
+        FGrUzaopbsDVpxgZLTrHnpsq8GJr9u4Qlcg==
+X-ME-Sender: <xms:2pQkZKFKuwUzCpTWzq8-gzR7bK204dAz-vNQ-cfD7Kkp1Yhoopzyag>
+    <xme:2pQkZLWILWj5M8PYD0SBLrg6YFzQFmH2PahnRMUabVGDRUjj-Hr9W7iWWcSYFY9q8
+    k0nsi3GFgelnrL1eKI>
+X-ME-Received: <xmr:2pQkZEIrcjgRZ4BFpYsBj3l9bF4R-LHhI5YTEKBjK2PjQ1X2tez9ROQ0ug>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedgudegvdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepofgr
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgr
     gihimhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtf
-    frrghtthgvrhhnpeevvdelieejgedvkeffheekheeilefhgefgffehteekueelvddtueff
-    heetledtffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:LZQkZJYXGpzcuvDRpauglNzPOJAVtpJmDvPmPlMHGvJ44PSfxkdlOw>
-    <xmx:LZQkZDaT2Padxw1gz_lIc-lAUVMwYJXJQo8q4ITlN6dYF9D7zVmFeA>
-    <xmx:LZQkZFDOJ7nmFgpeaIN0F3g_SRFBx0De-djUdfruNx85NmaE4ajAfg>
-    <xmx:LZQkZIP58x0PRQkE6cle9sbwxkpjlMrM1YEtYTSMH5ZbZd54kASAzw>
+    frrghtthgvrhhnpeeitdeuffevieeufedtuddvffffffegfffgkeeihfelleektdelhfev
+    hfduudfhgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordht
+    vggthh
+X-ME-Proxy: <xmx:2pQkZEEjNf1jhq2iHMQh7Vq0Jy1Q-PU9n2tXfCmZenjPELS4Gjnspg>
+    <xmx:2pQkZAUtfKcVcd36jSNkx610YGENlHZZGiu2NKQlG5Lo9L2wETrhfw>
+    <xmx:2pQkZHNF1Dc3Rv60Ie034K46e1BsI_fjMqvGSCkaM47nkbY_mh_yLg>
+    <xmx:2pQkZBvPwNxcBE0Yni0iyKuKgVClJQe0c_OYi3tW-HXNwy-nslNWtQ>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Mar 2023 15:40:29 -0400 (EDT)
+ 29 Mar 2023 15:43:21 -0400 (EDT)
+Date:   Wed, 29 Mar 2023 21:43:20 +0200
 From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Wed, 29 Mar 2023 20:38:32 +0100
-Subject: [PATCH 2/2] drivers: base: Add basic devm tests for platform
- devices
+To:     David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
+ creation
+Message-ID: <20230329194320.who2gobizgffbzqz@penduick>
+References: <ZBtPhoelZo4U5jwC@kroah.com>
+ <20230323101216.w56kz3rudlj23vab@houat>
+ <ZBwoRgc2ICBJX/Lq@kroah.com>
+ <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
+ <20230323122925.kqdnomr7i46qnyo4@houat>
+ <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
+ <20230323163639.xtwpid2uunwnzai4@houat>
+ <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
+ <20230324123157.bbwvfq4gsxnlnfwb@houat>
+ <CABVgOSn8H=9pQfY7Exc-e37Nm6u299AJLYup6R-_97v5Fb4bpQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-kunit-devm-inconsistencies-test-v1-2-c33127048375@cerno.tech>
-References: <20230329-kunit-devm-inconsistencies-test-v1-0-c33127048375@cerno.tech>
-In-Reply-To: <20230329-kunit-devm-inconsistencies-test-v1-0-c33127048375@cerno.tech>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9290; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=9kHOXiUf2EZjMq29pOLHYOOkBT4xdY/UjBx4g2N5FhM=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCkqk3dFyOuzavx9HVJx8PqvLAueA3/f6y7MaTo3ocEzn
- Sl0zj6ujlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAEykwYaR4dGJxBc3jqk6pXVz
- THpnxZqy4GrT4oLCwBf1VTsa9aoX9jD8M+UUje5nd33FJ/pWaE75XbvdSZPXLDrRXacvdjz5dw8
- jMwA=
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CABVgOSn8H=9pQfY7Exc-e37Nm6u299AJLYup6R-_97v5Fb4bpQ@mail.gmail.com>
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -98,313 +105,225 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Platform devices show some inconsistencies with how devm resources are
-released when the device has been probed and when it hasn't. Let's add a
-few tests to exercise thos paths and odd cases.
+Hi David,
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/base/test/Makefile               |   1 +
- drivers/base/test/platform-device-test.c | 278 +++++++++++++++++++++++++++++++
- 2 files changed, 279 insertions(+)
+On Sat, Mar 25, 2023 at 01:40:01PM +0800, David Gow wrote:
+> On Fri, 24 Mar 2023 at 20:32, Maxime Ripard <maxime@cerno.tech> wrote:
+> >
+> > On Fri, Mar 24, 2023 at 08:11:52AM +0200, Matti Vaittinen wrote:
+> > > On 3/23/23 18:36, Maxime Ripard wrote:
+> > > > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote:
+> > > > > On 3/23/23 14:29, Maxime Ripard wrote:
+> > > > > > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
+> > > > > >
+> > > > > > This is the description of what was happening:
+> > > > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiy=
+tl@houat/
+> > > > >
+> > > > > Thanks Maxime. Do I read this correcty. The devm_ unwinding not b=
+eing done
+> > > > > when root_device_register() is used is not because root_device_un=
+register()
+> > > > > would not trigger the unwinding - but rather because DRM code on =
+top of this
+> > > > > device keeps the refcount increased?
+> > > >
+> > > > There's a difference of behaviour between a root_device and any dev=
+ice
+> > > > with a bus: the root_device will only release the devm resources wh=
+en
+> > > > it's freed (in device_release), but a bus device will also do it in
+> > > > device_del (through bus_remove_device() -> device_release_driver() =
+->
+> > > > device_release_driver_internal() -> __device_release_driver() ->
+> > > > device_unbind_cleanup(), which are skipped (in multiple places) if
+> > > > there's no bus and no driver attached to the device).
+> > > >
+> > > > It does affect DRM, but I'm pretty sure it will affect any framework
+> > > > that deals with device hotplugging by deferring the framework struc=
+ture
+> > > > until the last (userspace) user closes its file descriptor. So I'd
+> > > > assume that v4l2 and cec at least are also affected, and most likely
+> > > > others.
+> > >
+> > > Thanks for the explanation and patience :)
+> > >
+> > > >
+> > > > > If this is the case, then it sounds like a DRM specific issue to =
+me.
+> > > >
+> > > > I mean, I guess. One could also argue that it's because IIO doesn't
+> > > > properly deal with hotplugging.
+> > >
+> > > I must say I haven't been testing the IIO registration API. I've only=
+ tested
+> > > the helper API which is not backed up by any "IIO device". (This is f=
+ine for
+> > > the helper because it must by design be cleaned-up only after the
+> > > IIO-deregistration).
+> > >
+> > > After your explanation here, I am not convinced IIO wouldn't see the =
+same
+> > > issue if I was testing the devm_iio_device_alloc() & co.
+> >
+> > It depends really. The issue DRM is trying to solve is that, when a
+> > device is gone, some application might still have an open FD and could
+> > still poke into the kernel, while all the resources would have been
+> > free'd if it was using devm.
+> >
+> > So everything is kept around until the last fd is closed, so you still
+> > have a reference to the device (even though it's been removed from its
+> > bus) until that time.
+> >
+> > It could be possible that IIO just doesn't handle that case at all. I
+> > guess most of the devices aren't hotpluggable, and there's not much to
+> > interact with from a userspace PoV iirc, so it might be why.
+> >
+> > > > I'm not sure how that helps. Those are
+> > > > common helpers which should accommodate every framework,
+> > >
+> > > Ok. Fair enough. Besides, if the root-device was sufficient - then I =
+would
+> > > actually not see the need for a helper. People could in that case dir=
+ectly
+> > > use the root_device_register(). So, if helpers are provided they shou=
+ld be
+> > > backed up by a device with a bus then.
+> > >
+> > > > and your second
+> > > > patch breaks the kunit tests for DRM anyway.
+> > >
+> > > Oh, I must have made an error there. It was supposed to be just a
+> > > refactoring with no functional changes. Sorry about that. Anyways, th=
+at
+> > > patch can be forgotten as Greg opposes using the platform devices in =
+generic
+> > > helpers.
+> > >
+> > > > > Whether it is a feature or bug is beyond my knowledge. Still, I w=
+ould
+> > > > > not say using the root_device_[un]register() in generic code is n=
+ot
+> > > > > feasible - unless all other subsytems have similar refcount handl=
+ing.
+> > > > >
+> > > > > Sure thing using root_device_register() root_device_unregister() =
+in DRM does
+> > > > > not work as such. This, however, does not mean the generic kunit =
+helpers
+> > > > > should use platform_devices to force unwinding?
+> > > >
+> > > > platform_devices were a quick way to get a device that would have a=
+ bus
+> > > > and a driver bound to fall into the right patch above. We probably
+> > > > shouldn't use platform_devices and a kunit_device sounds like the b=
+est
+> > > > idea, but the test linked in the original mail I pointed you to sho=
+uld
+> > > > work with whatever we come up with. It works with multiple (platfor=
+m,
+> > > > PCI, USB, etc) buses, so the mock we create should behave like their
+> > > > real world equivalents.
+> > >
+> > > Thanks for the patience and the explanation. Now I understand a gener=
+ic test
+> > > device needs to sit on a bus.
+> > >
+> > > As I said, in my very specific IIO related test the test device does =
+not
+> > > need a bus. Hence I'll drop the 'generic helpers' from this series.
+> >
+> > So, I went around and created a bunch of kunit tests that shows the
+> > problem without DRM being involved at all.
+> >
+> > It does three things:
+> >
+> >  - It registers a device, attaches a devm action, unregisters the device
+> >    and then checks that the action has ran.
+> >
+> >  - It registers a device, gets a reference to it, attaches a devm
+> >    action, puts back the reference, unregisters the device and then
+> >    checks that the action has ran.
+> >
+> >  - It registers a device, gets a reference to it, attaches a devm action
+> >    that will put back the reference, unregisters the device and then
+> >    checks that the action has ran.
+> >
+> > And in three cases: first with a root_device, then platform_device, then
+> > a platform_device that has been bound to a driver.
+> >
+> > Once you've applied that patch, you can run it using:
+> >
+> > ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/base/test/ d=
+evm-inconsistencies
+> >
+> > You'll see that only the last case passes all the tests, even though the
+> > code itself is exactly the same.
+> >
+>=20
+> This illustrates the problem very nicely, thanks.
+>=20
+> I played around a bit with this, and I'm definitely leaning towards
+> this being a bug, rather than intentional behaviour. There's actually
+> an explicit call to devres_release_all() in device_release() which
+> seems to suggest that this should work:
+> /*
+> * Some platform devices are driven without driver attached
+> * and managed resources may have been acquired.  Make sure
+> * all resources are released.
+> *
+> * Drivers still can add resources into device after device
+> * is deleted but alive, so release devres here to avoid
+> * possible memory leak.
+> */
+>=20
+> My "solution" is just to call devres_release_all() in device_del() as
+> well, which fixes your tests (and the drm-test-managed one when ported
+> to use root_device_register() or my kunit_device_register() API[1]).
+>=20
+> --8<--
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 6878dfcbf0d6..adfec6185014 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -3778,6 +3778,17 @@ void device_del(struct device *dev)
+>        device_platform_notify_remove(dev);
+>        device_links_purge(dev);
+>=20
+> +       /*
+> +        * If a device does not have a driver attached, we need to clean =
+up any
+> +        * managed resources. We do this in device_release(), but it's ne=
+ver
+> +        * called (and we leak the device) if a managed resource holds a
+> +        * reference to the device. So release all managed resources here,
+> +        * like we do in driver_detach(). We still need to do so again in
+> +        * device_release() in case someone adds a new resource after this
+> +        * point, though.
+> +        */
+> +       devres_release_all(dev);
+> +
+>        bus_notify(dev, BUS_NOTIFY_REMOVED_DEVICE);
+>        kobject_uevent(&dev->kobj, KOBJ_REMOVE);
+>        glue_dir =3D get_glue_dir(dev);
+>=20
+> -->8--
+>=20
+> It doesn't _seem_ to break anything else, and I've managed to convince
+> myself that it's probably the correct fix.
 
-diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
-index d589ca3fa8fc..e321dfc7e922 100644
---- a/drivers/base/test/Makefile
-+++ b/drivers/base/test/Makefile
-@@ -2,6 +2,7 @@
- obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+= test_async_driver_probe.o
- 
- obj-$(CONFIG_DM_KUNIT_TEST)	+= root-device-test.o
-+obj-$(CONFIG_DM_KUNIT_TEST)	+= platform-device-test.o
- 
- obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) += property-entry-test.o
- CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
-diff --git a/drivers/base/test/platform-device-test.c b/drivers/base/test/platform-device-test.c
-new file mode 100644
-index 000000000000..2779c6dfac06
---- /dev/null
-+++ b/drivers/base/test/platform-device-test.c
-@@ -0,0 +1,278 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <kunit/resource.h>
-+
-+#include <linux/device.h>
-+#include <linux/platform_device.h>
-+
-+#define DEVICE_NAME "test"
-+
-+struct test_priv {
-+	bool probe_done;
-+	bool release_done;
-+	wait_queue_head_t release_wq;
-+	struct device *dev;
-+};
-+
-+static void devm_device_action(void *ptr)
-+{
-+	struct test_priv *priv = ptr;
-+
-+	priv->release_done = true;
-+	wake_up_interruptible(&priv->release_wq);
-+}
-+
-+static void devm_put_device_action(void *ptr)
-+{
-+	struct test_priv *priv = ptr;
-+
-+	put_device(priv->dev);
-+	priv->release_done = true;
-+	wake_up_interruptible(&priv->release_wq);
-+}
-+
-+#define RELEASE_TIMEOUT_MS	500
-+
-+static void platform_device_devm_register_unregister_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv;
-+	int ret;
-+
-+	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-+	init_waitqueue_head(&priv->release_wq);
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	priv->dev = &pdev->dev;
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+}
-+
-+static void platform_device_devm_register_get_put_unregister_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv;
-+	int ret;
-+
-+	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-+	init_waitqueue_head(&priv->release_wq);
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	priv->dev = &pdev->dev;
-+
-+	get_device(priv->dev);
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	put_device(priv->dev);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+}
-+
-+static void platform_device_devm_register_get_unregister_with_devm_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv;
-+	int ret;
-+
-+	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-+	init_waitqueue_head(&priv->release_wq);
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	priv->dev = &pdev->dev;
-+
-+	get_device(priv->dev);
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+}
-+
-+static int fake_probe(struct platform_device *pdev)
-+{
-+	struct test_priv *priv = platform_get_drvdata(pdev);
-+
-+	priv->probe_done = true;
-+	wake_up_interruptible(&priv->release_wq);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver fake_driver = {
-+	.probe	= fake_probe,
-+	.driver = {
-+		.name = DEVICE_NAME,
-+	},
-+};
-+
-+static void probed_platform_device_devm_register_unregister_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv;
-+	int ret;
-+
-+	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-+	init_waitqueue_head(&priv->release_wq);
-+
-+	ret = platform_driver_register(&fake_driver);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	priv->dev = &pdev->dev;
-+	platform_set_drvdata(pdev, priv);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->probe_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_ASSERT_GT(test, ret, 0);
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+
-+	platform_driver_unregister(&fake_driver);
-+}
-+
-+static void probed_platform_device_devm_register_get_put_unregister_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv;
-+	int ret;
-+
-+	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-+	init_waitqueue_head(&priv->release_wq);
-+
-+	ret = platform_driver_register(&fake_driver);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	priv->dev = &pdev->dev;
-+	platform_set_drvdata(pdev, priv);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->probe_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_ASSERT_GT(test, ret, 0);
-+
-+	get_device(priv->dev);
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	put_device(priv->dev);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+
-+	platform_driver_unregister(&fake_driver);
-+}
-+
-+static void probed_platform_device_devm_register_get_unregister_with_devm_test(struct kunit *test)
-+{
-+	struct platform_device *pdev;
-+	struct test_priv *priv;
-+	int ret;
-+
-+	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-+	init_waitqueue_head(&priv->release_wq);
-+
-+	ret = platform_driver_register(&fake_driver);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
-+
-+	priv->dev = &pdev->dev;
-+	platform_set_drvdata(pdev, priv);
-+
-+	ret = platform_device_add(pdev);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->probe_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_ASSERT_GT(test, ret, 0);
-+
-+	get_device(priv->dev);
-+
-+	ret = devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	platform_device_unregister(pdev);
-+
-+	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-+					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-+	KUNIT_EXPECT_GT(test, ret, 0);
-+
-+	platform_driver_unregister(&fake_driver);
-+}
-+
-+static struct kunit_case platform_device_devm_tests[] = {
-+	KUNIT_CASE(platform_device_devm_register_unregister_test),
-+	KUNIT_CASE(platform_device_devm_register_get_put_unregister_test),
-+	KUNIT_CASE(platform_device_devm_register_get_unregister_with_devm_test),
-+	KUNIT_CASE(probed_platform_device_devm_register_unregister_test),
-+	KUNIT_CASE(probed_platform_device_devm_register_get_put_unregister_test),
-+	KUNIT_CASE(probed_platform_device_devm_register_get_unregister_with_devm_test),
-+	{}
-+};
-+
-+static struct kunit_suite platform_device_devm_test_suite = {
-+	.name = "platform-device-devm",
-+	.test_cases = platform_device_devm_tests,
-+};
-+
-+kunit_test_suite(platform_device_devm_test_suite);
+Yeah, as an outsider, I came to the same conclusion last time...
 
--- 
-2.40.0
+> (Albeit, as someone with a limited knowledge of this part of the code,
+> who also hasn't had quite enough sleep, so take that with some salt.)
 
+=2E.. but as someone that also have a limited knowledge of that part of
+the code, I certainly wasn't sure it was the proper thing to do :)
+
+> Still, I'd agree with Greg that it'd be great to have versions of your
+> tests upstream before making any such radical changes.
+
+I just submitted them.
+
+Thanks!
+Maxime
