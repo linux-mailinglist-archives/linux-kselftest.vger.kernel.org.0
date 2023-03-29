@@ -2,332 +2,396 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB6D6CF4F8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 23:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC76A6CF516
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 23:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjC2VC5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Mar 2023 17:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
+        id S229794AbjC2VPJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Mar 2023 17:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjC2VC4 (ORCPT
+        with ESMTP id S229553AbjC2VPI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Mar 2023 17:02:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D8244B8
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 14:02:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680123728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p/gAyKsbcYAmql6gQCi7mrnJqGJrh4mY0IHWHb0hHQw=;
-        b=f8XeReDnQSpuWv2khRccnAaKDE267bAwaJZ1OmW8rUpedHdWC5tiThxd6fceVLDQhPztCr
-        ogl1tRJb5aiwbjz9k7zMvrPleH0CiEuoK7bZjIlIodHlyIdvhKeDwnaA8+mMMespGB+F7r
-        7VhkQbsTpQ+6iB1Eggye5TC3opIEUu0=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-483-6pOOy8tVPTO31nvL98w-LQ-1; Wed, 29 Mar 2023 17:02:06 -0400
-X-MC-Unique: 6pOOy8tVPTO31nvL98w-LQ-1
-Received: by mail-ed1-f70.google.com with SMTP id i22-20020a05640242d600b004f5962985f4so24391997edc.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 14:02:06 -0700 (PDT)
+        Wed, 29 Mar 2023 17:15:08 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103502D4D
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 14:15:06 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-545e907790fso201934157b3.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 14:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680124505;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JXC4MTheNGQBhmhUBKx9j9CdlTfCf6zg5go5xfHK3Cc=;
+        b=VTqpyDYoJUREYflZRqr1BUX891DRC0dl4/GIMu4nq9OOd3x2poQV+Xd83sBW9jJAtm
+         ki3cvbM8TERKoUCa7JR2bbMNclQsfCnq4nYLkCOrHQz9M2WnjVlP7y44dxA2wHvEqCuA
+         57EITOquGxYHc2U63RHnj0UX7QlS9cyPzD8O3xD1ZvAX77871lfXkRB0v/I6pMQjOAqn
+         htIXSR0YZoC2xEO4/X15dXE+jIZDD005f3EJU1dlplANozf91k3zrLVofsor2gUg0xdc
+         tZ9woUimhwR0QxzXoNKOQ7yZx450MWhrSt06D1FDPEOz6UNW96Sgc23zfin3Ittcgxif
+         2ebA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680123725;
+        d=1e100.net; s=20210112; t=1680124505;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p/gAyKsbcYAmql6gQCi7mrnJqGJrh4mY0IHWHb0hHQw=;
-        b=frcWW2Baqd+UgtRovnEueZNNI0L2OWQ7c6553qAgpelmyxxz4aUwoyQdBSiregvgFl
-         0hlJSVwC91UiNWwMhrPGiK/GKnEpFc1ZLa/713+eDuCxgkt2hQokV/tqYYdnFUEN0sIK
-         GPmQPLQjnLKo01tAT5/o+vrqP+FKnp6uThVJJ14fta3gkjo9NvQGX7aohsNuvlOeiBr4
-         TyVpX2aEHoHFMlp88tMy5L0hy2E8BsPN20ZcRv5kJAvr+FTiA/qRe3tBE0ef1+6LYOwz
-         Mh/pFF3DfJnQ+5eBHrt6SFnivg9geWGM6gmQ9At13xZbxXxVuI3KvGeLSd+yDHjxvd5Z
-         BU8g==
-X-Gm-Message-State: AAQBX9ci1M05pEqrSR1x+kviefNQgc3K/UCDiMn0Kyy/W/+KAynRdHrT
-        1cMCIs0yrDbPOHDGvKLbi33NRnOiDbI8w2NX6CIPxVZfF/WkLLqFKCXeJ+fOiaWoeR3gHS/xT/u
-        Gg3WoxEuJXjGZ3FhzOTI1JXSBJFvZwoG7P92uEqRoYxUH
-X-Received: by 2002:a17:907:6b8e:b0:8d7:edbc:a7b6 with SMTP id rg14-20020a1709076b8e00b008d7edbca7b6mr2389702ejc.2.1680123725312;
-        Wed, 29 Mar 2023 14:02:05 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bkKECxx31XV8EMnzwJEVU3Yd1nzb4cO0O6UeSIu/Ml4eJoNDyaYddS+3Uog+NjNHQMdwgKioYSQo3s2ImtmpY=
-X-Received: by 2002:a17:907:6b8e:b0:8d7:edbc:a7b6 with SMTP id
- rg14-20020a1709076b8e00b008d7edbca7b6mr2389691ejc.2.1680123725010; Wed, 29
- Mar 2023 14:02:05 -0700 (PDT)
+        bh=JXC4MTheNGQBhmhUBKx9j9CdlTfCf6zg5go5xfHK3Cc=;
+        b=MLkc+69h6Mm5/q3fITYkVD0vx3eflSGloocTlwBgd4HD51KNY6A7aUyUwK5qpxMPTw
+         +UPGtfRtvySysvpiFJNm5+4x2buSJiVd/tF88HHSE6WU0qT9lFQaDMRThFUeafH+61AZ
+         6R5lC2Lc6FHH4vf1Nu7Lh28fRd2qb/SuxnYIK4cnwpRbBzK6Ybuwr7Ixzdhu52X9d4Ut
+         aolSxZoUMUVoIP54cYS7X6rVSUDLj7ifumFU03S7lx3RenkMo72QSbutMIp6XU3MW2LU
+         XXuwsFZ4AAZU63laXKATxR7+zgpIcKk76LWUSDlqib9TYresel7jlomEdvtpjQPon4zU
+         Lbgg==
+X-Gm-Message-State: AAQBX9cHr8A5E+buf2h4edsEuzE25/F9rgiT+Gwxl/H2JtaKW9GzYp93
+        UAE4M0WoH2060gAU6HfOP4IVme8nwpaDZe9YUUsn3w==
+X-Google-Smtp-Source: AKy350aQyn/TP180u2kbRTp3AVC/E8uKO6CULBFPZAkt19UdsNguHggT0HyxUvByt4xMjbPz4Khhad9HHKJLsXjSi8A=
+X-Received: by 2002:a81:ae4f:0:b0:545:ed8e:f4f6 with SMTP id
+ g15-20020a81ae4f000000b00545ed8ef4f6mr6177531ywk.5.1680124504649; Wed, 29 Mar
+ 2023 14:15:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230329092332.2143623-1-javierm@redhat.com>
-In-Reply-To: <20230329092332.2143623-1-javierm@redhat.com>
-From:   Enric Balletbo i Serra <eballetb@redhat.com>
-Date:   Wed, 29 Mar 2023 23:01:54 +0200
-Message-ID: <CALE0LRupieFVeiH7J8DHEko0kyCRdBPavskQkcmZVN0ggATG6A@mail.gmail.com>
-Subject: Re: [PATCH] Input: Add KUnit tests for some of the input core helper functions
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        linux-kselftest@vger.kernel.org, David Gow <davidgow@google.com>,
-        kunit-dev@googlegroups.com,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
+References: <20230316225926.494921-1-rmoar@google.com> <5626cd99-f44a-97db-334e-99f1d62112a1@gmail.com>
+In-Reply-To: <5626cd99-f44a-97db-334e-99f1d62112a1@gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Wed, 29 Mar 2023 17:14:52 -0400
+Message-ID: <CA+GJov5B7Y8fqm7QtDuvx88m7QPEPF6bYqMqbEGf0cp=E=zGCg@mail.gmail.com>
+Subject: Re: [KTAP V2 PATCH] ktap_v2: allow prefix to KTAP lines
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     davidgow@google.com, skhan@linuxfoundation.org,
+        keescook@chromium.org, Tim.Bird@sony.com,
+        brendanhiggins@google.com, corbet@lwn.net,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@lists.linux.dev, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Javier,
-
-Many thanks for the patch and to work on this.
-
-
-On Wed, Mar 29, 2023 at 11:23=E2=80=AFAM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
+On Sun, Mar 26, 2023 at 10:12=E2=80=AFPM Frank Rowand <frowand.list@gmail.c=
+om> wrote:
 >
-> The input subsystem doesn't currently have any unit tests, let's add a
-> CONFIG_INPUT_KUNIT_TEST option that builds a test suite to be executed
-> with the KUnit test infrastructure.
+> On 3/16/23 17:59, Rae Moar wrote:
+> > Change the KTAP v2 spec to allow variable prefixes to KTAP lines,
+> > instead of fixed indentation of two spaces. However, the prefix must be
+> > constant on the same level of testing (besides unknown lines).
+> >
+> > This was proposed by Tim Bird in 2021 and then supported by Frank Rowan=
+d
+> > in 2022 (see link below).
+> >
+> > Link: https://lore.kernel.org/all/bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@=
+gmail.com/
 >
-> For now, only three tests were added for some of the input core helper
-> functions that are trivial to test:
+> Another link to the same thread, but expanded to show all replies in one =
+page is:
 >
->   * input_test_polling: set/get poll interval and set-up a poll handler.
+>   https://lore.kernel.org/all/bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.=
+com/T/#u
 >
->   * input_test_timestamp: set/get input event timestamps.
+> Near the top of that thread I proposed alternative 1 (essentially what Ti=
+m
+> originally suggested, and what Rae proposes here) and alternative 2 (with
+> slight variant 2b).  The overall preference seemed to be alternative 1, b=
+ut
+> if we wanted to provide a method to provide test or system metadata then
+> alternative 2 might provide both a test prefix and metadata.
 >
->   * input_test_match_device_id: match a device by bus, vendor, product
->                                 and events that is capable of handling.
->
-> But having the minimal KUnit support allows to add more tests and suites
-> as follow-up changes. The tests can be run with the following command:
->
->   $ ./tools/testing/kunit/kunit.py run \
->     --kunitconfig=3Ddrivers/input/tests/.kunitconfig
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-
-I'll let other more experienced people comment on the kunit tests. In
-my opinion it's a starting point and after applying your patch and
-giving a try I can confirm that it works as expected, so just wanted
-to give my.
-
-Tested-by: Enric Balletbo i Serra <eballetbo@redhat.com>
-
-Thanks,
-  Enric
-
-> ---
->
->  drivers/input/Kconfig            |  12 +++
->  drivers/input/Makefile           |   1 +
->  drivers/input/tests/Makefile     |   3 +
->  drivers/input/tests/input_test.c | 144 +++++++++++++++++++++++++++++++
->  4 files changed, 160 insertions(+)
->  create mode 100644 drivers/input/tests/Makefile
->  create mode 100644 drivers/input/tests/input_test.c
->
-> diff --git a/drivers/input/Kconfig b/drivers/input/Kconfig
-> index e2752f7364bc..e094e5bbaa0c 100644
-> --- a/drivers/input/Kconfig
-> +++ b/drivers/input/Kconfig
-> @@ -166,6 +166,18 @@ config INPUT_EVBUG
->           To compile this driver as a module, choose M here: the
->           module will be called evbug.
->
-> +config INPUT_KUNIT_TEST
-> +       tristate "KUnit tests for Input" if !KUNIT_ALL_TESTS
-> +       depends on INPUT && KUNIT=3Dy
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         Say Y here if you want to build the KUnit tests for the input
-> +         subsystem. For more information about KUnit and unit tests in
-> +         general, please refer to the KUnit documentation in
-> +         Documentation/dev-tools/kunit/.
-> +
-> +         If in doubt, say "N".
-> +
->  config INPUT_APMPOWER
->         tristate "Input Power Event -> APM Bridge" if EXPERT
->         depends on INPUT && APM_EMULATION
-> diff --git a/drivers/input/Makefile b/drivers/input/Makefile
-> index 2266c7d010ef..c78753274921 100644
-> --- a/drivers/input/Makefile
-> +++ b/drivers/input/Makefile
-> @@ -26,6 +26,7 @@ obj-$(CONFIG_INPUT_JOYSTICK)  +=3D joystick/
->  obj-$(CONFIG_INPUT_TABLET)     +=3D tablet/
->  obj-$(CONFIG_INPUT_TOUCHSCREEN)        +=3D touchscreen/
->  obj-$(CONFIG_INPUT_MISC)       +=3D misc/
-> +obj-$(CONFIG_INPUT_KUNIT_TEST) +=3D tests/
->
->  obj-$(CONFIG_INPUT_APMPOWER)   +=3D apm-power.o
->
-> diff --git a/drivers/input/tests/Makefile b/drivers/input/tests/Makefile
-> new file mode 100644
-> index 000000000000..90cf954181bc
-> --- /dev/null
-> +++ b/drivers/input/tests/Makefile
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +obj-$(CONFIG_INPUT_KUNIT_TEST) +=3D input_test.o
-> diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input=
-_test.c
-> new file mode 100644
-> index 000000000000..25bbf51b5c87
-> --- /dev/null
-> +++ b/drivers/input/tests/input_test.c
-> @@ -0,0 +1,144 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test for the input core.
-> + *
-> + * Copyright (c) 2023 Red Hat Inc
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/input.h>
-> +
-> +#include <kunit/test.h>
-> +
-> +#define POLL_INTERVAL 100
-> +
-> +static int input_test_init(struct kunit *test)
-> +{
-> +       struct input_dev *input_dev;
-> +       int ret;
-> +
-> +       input_dev =3D input_allocate_device();
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, input_dev);
-> +
-> +       input_dev->name =3D "Test input device";
-> +       input_dev->id.bustype =3D BUS_VIRTUAL;
-> +       input_dev->id.vendor =3D 1;
-> +       input_dev->id.product =3D 1;
-> +       input_dev->id.version =3D 1;
-> +       input_set_capability(input_dev, EV_KEY, BTN_LEFT);
-> +       input_set_capability(input_dev, EV_KEY, BTN_RIGHT);
-> +
-> +       ret =3D input_register_device(input_dev);
-> +       KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +       test->priv =3D input_dev;
-> +
-> +       return 0;
-> +}
-> +
-> +static void input_test_exit(struct kunit *test)
-> +{
-> +       struct input_dev *input_dev =3D test->priv;
-> +
-> +       input_unregister_device(input_dev);
-> +}
-> +
-> +static void input_test_poll(struct input_dev *input) { }
-> +
-> +static void input_test_polling(struct kunit *test)
-> +{
-> +       struct input_dev *input_dev =3D test->priv;
-> +       int ret;
-> +
-> +       ret =3D input_get_poll_interval(input_dev);
-> +       KUNIT_ASSERT_EQ(test, ret, -EINVAL);
-> +
-> +       ret =3D input_setup_polling(input_dev, input_test_poll);
-> +       KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +       input_set_poll_interval(input_dev, POLL_INTERVAL);
-> +
-> +       ret =3D input_get_poll_interval(input_dev);
-> +       KUNIT_ASSERT_EQ(test, ret, POLL_INTERVAL);
-> +}
-> +
-> +static void input_test_timestamp(struct kunit *test)
-> +{
-> +       const ktime_t invalid_timestamp =3D ktime_set(0, 0);
-> +       struct input_dev *input_dev =3D test->priv;
-> +       ktime_t *timestamp, time;
-> +       int ret;
-> +
-> +       timestamp =3D input_get_timestamp(input_dev);
-> +       time =3D timestamp[INPUT_CLK_MONO];
-> +
-> +       ret =3D ktime_compare(time, invalid_timestamp);
-> +       KUNIT_ASSERT_EQ(test, ret, 1);
-> +
-> +       time =3D ktime_get();
-> +       input_set_timestamp(input_dev, time);
-> +
-> +       timestamp =3D input_get_timestamp(input_dev);
-> +       KUNIT_ASSERT_EQ(test, ktime_compare(timestamp[INPUT_CLK_MONO],
-> +                                           time), 0);
-> +}
-> +
-> +static void input_test_match_device_id(struct kunit *test)
-> +{
-> +       struct input_dev *input_dev =3D test->priv;
-> +       struct input_device_id id;
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_BUS;
-> +       id.bustype =3D BUS_VIRTUAL;
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.bustype =3D BUS_I2C;
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_VENDOR;
-> +       id.vendor =3D 1;
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.vendor =3D 2;
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_PRODUCT;
-> +       id.product =3D 1;
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.product =3D 2;
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_VERSION;
-> +       id.version =3D 1;
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.version =3D 2;
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +
-> +       id.flags =3D INPUT_DEVICE_ID_MATCH_EVBIT;
-> +       __set_bit(EV_KEY, id.evbit);
-> +       KUNIT_ASSERT_TRUE(test, input_match_device_id(input_dev, &id));
-> +
-> +       __set_bit(EV_ABS, id.evbit);
-> +       KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
-> +}
-> +
-> +static struct kunit_case input_tests[] =3D {
-> +       KUNIT_CASE(input_test_polling),
-> +       KUNIT_CASE(input_test_timestamp),
-> +       KUNIT_CASE(input_test_match_device_id),
-> +       { /* sentinel */ }
-> +};
-> +
-> +static struct kunit_suite input_test_suite =3D {
-> +       .name =3D "input_core",
-> +       .init =3D input_test_init,
-> +       .exit =3D input_test_exit,
-> +       .test_cases =3D input_tests,
-> +};
-> +
-> +kunit_test_suite(input_test_suite);
-> +
-> +MODULE_AUTHOR("Javier Martinez Canillas <javierm@redhat.com>");
-> +MODULE_LICENSE("GPL");
->
-> base-commit: 3a93e40326c8f470e71d20b4c42d36767450f38f
-> --
-> 2.40.0
+> Alternate 1 provides the vast majority of what I need the prefix for, but
+> I think there has been a recent comment that it would be useful to be abl=
+e
+> to report system metadata (sorry, I haven't found a reference for that ye=
+t).
+> In my case, it would be informative to use metadata to report which confi=
+g
+> options that impact the DT unittests are enabled.
 >
 
+Hi Frank,
+
+Thanks for all of your ideas!
+
+Thinking more on this topic, I do think we will want a specified way
+to report test metadata in KTAP. This can be partly covered with this
+idea for a prefix. However, it might not provide the flexibility or
+comprehensiveness we need. For example, reporting the file for input
+or output might be too verbose for a prefix.
+
+I thought your idea on config info lines was compelling. However, I am
+not sure using a result line to communicate the metadata is the best
+solution. This would alter the function of a result line. And for
+parsers that count "ok" and "not ok", this might create problems.
+
+I have an idea that derives from my other KTAP proposal to declare a
+test name with "# Subtest:". The idea is to declare the metadata as
+diagnostic lines in between the version line and the test plan in
+order to separate this information from subtest diagnostic output. We
+could do something similar to below:
+
+KTAP version 2
+1..1
+  KTAP version 2
+  # Name: test_1          // Or as proposed: "# Subtest: test_1"
+  # File: /sys/kernel/...
+  # Config: CONFIG_1=3Dy CONFIG_PARAM=3D2048
+  1..1
+  # subtest_1 passed
+  ok 1 subtest_1
+# test_1 passed
+ok 1 test_1
+
+This is just an idea. I would love to hear other ideas on the best way
+to report metadata. Alternatively, we could create a new line format
+all together specific to report test metadata.
+
+> >
+> > As cited in the original proposal, it is useful in some Fuego tests to
+> > include an identifier in the prefix. This is an example:
+> >
+> >  KTAP version 1
+> >  1..2
+> >  [batch_id 4] KTAP version 1
+> >  [batch_id 4] 1..2
+> >  [batch_id 4] ok 1 cyclictest with 1000 cycles
+> >  [batch_id 4] # problem setting CLOCK_REALTIME
+> >  [batch_id 4] not ok 2 cyclictest with CLOCK_REALTIME
+> >  not ok 1 check realtime
+> >  [batch_id 4] KTAP version 1
+> >  [batch_id 4] 1..1
+> >  [batch_id 4] ok 1 IOZone read/write 4k blocks
+> >  ok 2 check I/O performance
+> >
+> > Here is a link to a version of the KUnit parser that is able to parse
+> > variable length prefixes for KTAP version 2. Note that the prefix must
+> > be constant at the same level of testing.
+> >
+> > Link: https://kunit-review.googlesource.com/c/linux/+/5710
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > ---
+> >
+> > This idea has already been proposed but I wanted to potentially
+> > restart the discussion by demonstrating this change can by
+> > implemented in the KUnit parser. Let me know what you think.
+> >
+> > Note: this patch is based on Frank's ktap_spec_version_2 branch.
+> >
+> >  Documentation/dev-tools/ktap.rst | 21 ++++++++++++++++++---
+> >  1 file changed, 18 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools=
+/ktap.rst
+> > index ff77f4aaa6ef..ac61fdd97096 100644
+> > --- a/Documentation/dev-tools/ktap.rst
+> > +++ b/Documentation/dev-tools/ktap.rst
+>
+> Some additional lines of the Spec to be updated (from my alternate 1 emai=
+l,
+> I haven't checked the current Spec to see if these are the exact changes
+> needed, but at least capture the intent:
+>
+> The "Version lines" format is changed from:
+>
+>    KTAP version 1
+>
+> to:
+>
+>    [<prefix string>] KTAP version 1
+>
+> The "Plan lines" format is changed from:
+>
+>    "1..N"
+>
+> to:
+>
+>    [<prefix string>] "1..N"
+>
+> The "Test case result lines" format is changed from:
+>
+>    <result> <number> [<description>][ # [<directive>] [<diagnostic data>]=
+]
+>
+> to:
+>
+>    [<prefix string>] <result> <number> [<description>][ # [<directive>] [=
+<diagnostic data>]]
+>
+
+These are all great additions to the spec. Will add in version 2. I
+suppose we should add this detail to the diagnostic lines syntax as
+well.
+
+>
+>    <prefix content is a constant string>
+>
+>
+> I wrote (with a bit of imprecision):
+>
+>   Indentation for "Nested tests" follows <prefix string>.  The indentatio=
+n
+>   does NOT precede <prefix string>.
+>
+> which was meant to imply that the two space indentation would follow the
+> <prefix string>.
+>
+> The patch I am replying to instead replaces the two space indentation
+> entirely with the <prefix string>.  I think this patches' version of
+> indentation is superior to what I suggested.
+>
+> > @@ -192,9 +192,11 @@ starting with another KTAP version line and test p=
+lan, and end with the overall
+> >  result. If one of the subtests fail, for example, the parent test shou=
+ld also
+> >  fail.
+> >
+> > -Additionally, all lines in a subtest should be indented. One level of
+> > -indentation is two spaces: "  ". The indentation should begin at the v=
+ersion
+> > -line and should end before the parent test's result line.
+> > +Additionally, all lines in a subtest should be indented. The standard =
+for one
+> > +level of indentation is two spaces: "  ". However, any prefix for inde=
+ntation
+> > +is allowed as long as the prefix is consistent throughout that level o=
+f
+> > +testing. The indentation should begin at the version line and should e=
+nd
+> > +before the parent test's result line.
+> >
+> >  "Unknown lines" are not considered to be lines in a subtest and thus a=
+re
+> >  allowed to be either indented or not indented.
+>
+> I was a little more verbose about "Unknown lines":
+>
+>    "Unknown lines" may optionally be prefixed with the <prefix string>, b=
+ut
+>    are not required to be prefixed with the <prefix string>.  It is allow=
+ed
+>    for some "Unknown lines" to not be prefixed with the <prefix string>, =
+even
+>    if one or more other "Unknown lines" are prefixed with the <prefix str=
+ing>.
+>
+> I think combining the intent ("not considered to be lines in a subtest") =
+with
+> the extra verbosity would be useful.
+>
+
+I agree this seems like a useful addition. Will add for version 2.
+
+> > @@ -229,6 +231,19 @@ An example format with multiple levels of nested t=
+esting:
+> >       not ok 1 example_test_1
+> >       ok 2 example_test_2
+> >
+> > +An example of a test with two nested subtests using prefixes:
+> > +
+> > +::
+> > +
+> > +     KTAP version 2
+> > +     1..1
+> > +     [prefix_1] KTAP version 2
+> > +     [prefix_1] 1..2
+> > +     [prefix_1] ok 1 test_1
+> > +     [prefix_1] ok 2 test_2
+> > +     # example passed
+> > +     ok 1 example
+> > +
+>
+> The "[" and "]" are meant to indicate an optional field, so the
+> example would be:
+>
+> +       KTAP version 2
+> +       1..1
+> +       prefix_1 KTAP version 2
+> +       prefix_1 1..2
+> +       prefix_1 ok 1 test_1
+> +       prefix_1 ok 2 test_2
+> +       # example passed
+> +       ok 1 example
+> +
+>
+
+Thanks, this is better to exclude the square brackets. Will change
+this for version 2.
+
+> Of course, "[" and "]" are valid characters within the prefix string, so
+> that an example of "[prefix_1]" could be mentioned as a valid example.
+>
+> I would suggest some additional more complex examples:
+>
+> +       prefix_0 KTAP version 2
+> +       prefix_0 1..1
+> +       prefix_0 prefix_1 KTAP version 2
+> +       prefix_0 prefix_1 1..2
+> +       prefix_0 prefix_1 ok 1 test_1
+> +       prefix_0 prefix_1 ok 2 test_2
+> +       # example passed
+> +       prefix_0 ok 1 example
+> +
+
+Shouldn't the "# example passed" line include the prefix_0?
+
+>
+> +       KTAP version 2
+> +       1..2
+> +       prefix_1 KTAP version 2
+> +       prefix_1 1..2
+> +       prefix_1 ok 1 test_a_1
+> +       prefix_1 ok 2 test_a_2
+> +       # example passed
+> +       ok 1 example
+> +       prefix_2 KTAP version 2
+> +       prefix_2 1..2
+> +       prefix_2 ok 1 test_b_1
+> +       prefix_2 ok 2 test_b_2
+> +       # example passed
+> +       ok 2 example
+> +
+>
+> +       KTAP version 2
+> +       1..3
+> +       prefix_1 KTAP version 2
+> +       prefix_1 1..2
+> +       prefix_1 ok 1 test_a_1
+> +       prefix_1 ok 2 test_a_2
+> +       # example passed
+> +       ok 1 example
+> +         KTAP version 2
+> +         1..2
+> +         ok 1 test_b_1
+> +         ok 2 test_b_2
+> +       # example passed
+> +       ok 2 example
+> +       prefix_2 KTAP version 2
+> +       prefix_2 1..2
+> +       prefix_2 ok 1 test_c_1
+> +       prefix_2 ok 2 test_c_2
+> +       # example passed
+> +       ok 3 example
+> +
+>
+>
+
+Otherwise, these all look very helpful. I will definitely be adding
+these more complex examples in version 2.
+
+Thanks!
+
+Rae
+
+>
+> >
+> >  Major differences between TAP and KTAP
+> >  --------------------------------------
+> >
+> > base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
+>
