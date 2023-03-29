@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA526CF1BF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 20:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766246CF1CC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 20:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjC2SIJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Mar 2023 14:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        id S230177AbjC2SIV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Mar 2023 14:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjC2SIH (ORCPT
+        with ESMTP id S230096AbjC2SIJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:08:07 -0400
-Received: from mail-ed1-x564.google.com (mail-ed1-x564.google.com [IPv6:2a00:1450:4864:20::564])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5187E1716
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:06 -0700 (PDT)
-Received: by mail-ed1-x564.google.com with SMTP id eg48so66692783edb.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:06 -0700 (PDT)
+        Wed, 29 Mar 2023 14:08:09 -0400
+Received: from mail-ed1-x563.google.com (mail-ed1-x563.google.com [IPv6:2a00:1450:4864:20::563])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326874C0D
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:08 -0700 (PDT)
+Received: by mail-ed1-x563.google.com with SMTP id eh3so66713256edb.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dectris.com; s=google; t=1680113286;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+R9QiPuepS+iN2C03D2RIlNJyKTPRzGWrbYYFW+ChZA=;
-        b=AjLMyHny1FrLIzhpx8Wy8ca8Gsf8r9QZwhUNhP2mJ3dj3pRNXAli+exviq/Y1+fy6K
-         0DeBtE1yZSTfC/uouv0uCDcp0XWFTmU2qFKmczFSpqNp7xjJH3AsRGdRPYoF+O+XXHK4
-         zUje9uyo9T52Tvq967f0DniahDOV2lqY4FLNU=
+        bh=7l3JqaZ/F1Xw0Z8kRSNKL5fbAB/UmHB3O5Uun2MQO78=;
+        b=MAEEH3HGa7M9V3alShG0dh2Xaw5ztphBzVuDATfWiwHZz9OiqSWIhmfByHZRYFH1Gv
+         B6m8yXnt/TzXSc5GPdCovGkuC2K4kXPOFLB/uUWaVJhTHZAjPVrvLRkSK66nbW5KH2PI
+         81PmW3uYvOvbKdc64Wi6FTaA8LqvXQleGboes=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1680113286;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+R9QiPuepS+iN2C03D2RIlNJyKTPRzGWrbYYFW+ChZA=;
-        b=e2OHGW+5OVF1U1ysgvo6FSsbJlKSPzMK281aqaP2PZetgMgQWHtKcerRu1duizq8Nf
-         7NWP2TAyYlDIf1rcKao+4EzgoSie+QaoMbn4ppvO9fdgVYYj1hk4hV9rBvM9kkE7J+q0
-         WzwTIODPUwe4i2t8B2PCitL1SePpEK46ZxReWcjjHRa/fSv67euylWgeppXVdUxj7mwO
-         weOMQEMqNe4ILOIPUZl8ElqKcpOzC7jQPoW9maDmG0qAjx+JS42U9aXv2bJSoX7FRsx9
-         l2iBO4aVEQw+sTp8pbj8+p2d5k2RnplKpqwUy9KmjqLf/ha/iWoQcEDLvK3JG/mWX9Uk
-         J3+Q==
-X-Gm-Message-State: AAQBX9dvbYxXbdVGveePsQXkfWiOWlvLkPiXhtUqvSMujvPxQ7p6OT16
-        QF4slvVPdvJ/cYFC5y34CVr3qVkKubBiKg99B/wbz1MWp/TR
-X-Google-Smtp-Source: AKy350Z8xl29V30bz7kWl/gGI0/sW420P05n1h/ooPNr0SGpSvNFTxzVAm6UCXcBjhThChzQZ/lVXCo9i9an
-X-Received: by 2002:a17:906:a107:b0:932:365a:c1e7 with SMTP id t7-20020a170906a10700b00932365ac1e7mr20591941ejy.67.1680113285822;
-        Wed, 29 Mar 2023 11:08:05 -0700 (PDT)
+        bh=7l3JqaZ/F1Xw0Z8kRSNKL5fbAB/UmHB3O5Uun2MQO78=;
+        b=LmYesoJvuicCmiYXbeksApB4TTUrKh2IOVntc64EESjMlpjqeU6BrufQDaDcFMOVSB
+         bR8RhFRSLdE/HcT31m7ibyOqJ43b/+8bXNaw3wq8VnIgsdpcbtVYgTAMaWSlNEMDRLme
+         EiHfGrMsu+aaJbMlknlDGBh9lup6sPiTr6evB+kGkZGYRC5u3ch09byMeqAOE/du2i2R
+         S0dG/hfmI4e2/beQC/ByiIPlurVCBjYDqXWJ5078F17CBsjixHdviKbRLPwZ3vbXlVgZ
+         GIGbgfUY8zDrNXVnmy+N4AFZUs2PxzZXAeinj9p4nm21x3jwEcRmOTZmsTtUrvlJDNMW
+         yABg==
+X-Gm-Message-State: AAQBX9eKR18kkPl2SMQelRYMArFrI3lnAqFrhF6f1U5otGV+94UJSlHT
+        9cS67j1PjeyDyKeiW6GXjRGkNKgpHD3CTuU5v/+gYg+6BJEk
+X-Google-Smtp-Source: AKy350aQv50ZGqox8uPY+2MEmJO7lJ/IIxyNCBGekrZLoOoqIDUhuBJK1lUho1/76aZAxM3hdDjQ1Y2kqQOp
+X-Received: by 2002:a17:907:c609:b0:93f:9b1b:f303 with SMTP id ud9-20020a170907c60900b0093f9b1bf303mr17483715ejc.75.1680113286692;
+        Wed, 29 Mar 2023 11:08:06 -0700 (PDT)
 Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id m10-20020a1709066d0a00b00920438f59b3sm12072998ejr.154.2023.03.29.11.08.05
+        by smtp-relay.gmail.com with ESMTPS id m10-20020a1709066d0a00b00920438f59b3sm12072998ejr.154.2023.03.29.11.08.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 11:08:05 -0700 (PDT)
+        Wed, 29 Mar 2023 11:08:06 -0700 (PDT)
 X-Relaying-Domain: dectris.com
 From:   Kal Conley <kal.conley@dectris.com>
 To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
@@ -67,9 +67,9 @@ To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 04/10] selftests: xsk: Deflakify STATS_RX_DROPPED test
-Date:   Wed, 29 Mar 2023 20:04:56 +0200
-Message-Id: <20230329180502.1884307-5-kal.conley@dectris.com>
+Subject: [PATCH bpf-next v2 05/10] selftests: xsk: Disable IPv6 on VETH1
+Date:   Wed, 29 Mar 2023 20:04:57 +0200
+Message-Id: <20230329180502.1884307-6-kal.conley@dectris.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230329180502.1884307-1-kal.conley@dectris.com>
 References: <20230329180502.1884307-1-kal.conley@dectris.com>
@@ -84,56 +84,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix flaky STATS_RX_DROPPED test. The receiver calls getsockopt after
-receiving the last (valid) packet which is not the final packet sent in
-the test (valid and invalid packets are sent in alternating fashion with
-the final packet being invalid). Since the last packet may or may not
-have been dropped already, both outcomes must be allowed.
+This change fixes flakiness in the BIDIRECTIONAL test:
 
-This issue could also be fixed by making sure the last packet sent is
-valid. This alternative is left as an exercise to the reader (or the
-benevolent maintainers of this file).
+    # [is_pkt_valid] expected length [60], got length [90]
+    not ok 1 FAIL: SKB BUSY-POLL BIDIRECTIONAL
 
-This problem was quite visible on certain setups. On one machine this
-failure was observed 50% of the time.
+When IPv6 is enabled, the interface will periodically send MLDv1 and
+MLDv2 packets. These packets can cause the BIDIRECTIONAL test to fail
+since it uses VETH0 for RX.
 
-Also, remove a redundant assignment of pkt_stream->nb_pkts. This field
-is already initialized by __pkt_stream_alloc.
+For other tests, this was not a problem since they only receive on VETH1
+and IPv6 was already disabled on VETH0.
 
-Fixes: 27e934bec35b ("selftests: xsk: make stat tests not spin on getsockopt")
 Signed-off-by: Kal Conley <kal.conley@dectris.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_xsk.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 34a1f32fe752..1a4bdd5aa78c 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -633,7 +633,6 @@ static struct pkt_stream *pkt_stream_generate(struct xsk_umem_info *umem, u32 nb
- 	if (!pkt_stream)
- 		exit_with_error(ENOMEM);
- 
--	pkt_stream->nb_pkts = nb_pkts;
- 	for (i = 0; i < nb_pkts; i++) {
- 		pkt_set(umem, &pkt_stream->pkts[i], (i % umem->num_frames) * umem->frame_size,
- 			pkt_len);
-@@ -1141,7 +1140,14 @@ static int validate_rx_dropped(struct ifobject *ifobject)
- 	if (err)
- 		return TEST_FAILURE;
- 
--	if (stats.rx_dropped == ifobject->pkt_stream->nb_pkts / 2)
-+	/* The receiver calls getsockopt after receiving the last (valid)
-+	 * packet which is not the final packet sent in this test (valid and
-+	 * invalid packets are sent in alternating fashion with the final
-+	 * packet being invalid). Since the last packet may or may not have
-+	 * been dropped already, both outcomes must be allowed.
-+	 */
-+	if (stats.rx_dropped == ifobject->pkt_stream->nb_pkts / 2 ||
-+	    stats.rx_dropped == ifobject->pkt_stream->nb_pkts / 2 - 1)
- 		return TEST_PASS;
- 
- 	return TEST_FAILURE;
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index b077cf58f825..377fb157a57c 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -116,6 +116,7 @@ setup_vethPairs() {
+ 	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
+ 	if [ -f /proc/net/if_inet6 ]; then
+ 		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
++		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
+ 	fi
+ 	if [[ $verbose -eq 1 ]]; then
+ 	        echo "setting up ${VETH1}"
 -- 
 2.39.2
 
