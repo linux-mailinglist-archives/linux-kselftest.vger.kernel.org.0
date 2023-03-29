@@ -2,54 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620126CF1BB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 20:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC756CF1BD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 20:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjC2SIH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Mar 2023 14:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
+        id S230037AbjC2SII (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Mar 2023 14:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjC2SIG (ORCPT
+        with ESMTP id S230043AbjC2SIH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:08:06 -0400
-Received: from mail-ed1-x564.google.com (mail-ed1-x564.google.com [IPv6:2a00:1450:4864:20::564])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41AD4229
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:04 -0700 (PDT)
-Received: by mail-ed1-x564.google.com with SMTP id t10so66640702edd.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:04 -0700 (PDT)
+        Wed, 29 Mar 2023 14:08:07 -0400
+Received: from mail-ed1-x561.google.com (mail-ed1-x561.google.com [IPv6:2a00:1450:4864:20::561])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72CC4C0D
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:05 -0700 (PDT)
+Received: by mail-ed1-x561.google.com with SMTP id y4so66864943edo.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680113283;
+        d=dectris.com; s=google; t=1680113284;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uP7fzXbhXSN7Ty9wbiAQl7kbA4rMdsvSYTII18zPk8s=;
-        b=ATX9XU+HBGGxsEECzUbAvUJoaUp7fq2m3zz/b//YJQdB8nYjBPfmBGsBIZy1VWA69C
-         HOtLiGMDFXtrp251BUC8uuI+jqfbkWpuxkWx5tJXdgaKHq+0vY+RTekviWenFhZzOEmT
-         Ue0TkmuDkXwGCwu3JHikcDTFc0InRXv47WCKw=
+        bh=FndVMXQ48NmaMTKqtO1ulaQVEXkhQgQUYelFrcn8/tk=;
+        b=goalJZEkY8oIQ4XWh8u26N0oAhUsnx/OGzWFHwY+BEKeZXv+4ItDLI08lnxtvpjGNl
+         N2DH4gUPUAW5IKHrvUlf1ArArAj1i99oUvGgt6CN6gtqcwmZEsa9eGeZTs59pGAtkWur
+         1ihwsZ28FvzyFXPihAj000bu0Rr93mh4ozkE8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680113283;
+        d=1e100.net; s=20210112; t=1680113284;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uP7fzXbhXSN7Ty9wbiAQl7kbA4rMdsvSYTII18zPk8s=;
-        b=YDZEU1D91ThfR7UsZMIjah1gwRVxZkGnmNyrwz5QaaXI4fIYCAXR4yhMK8d9+wkn2G
-         +qFNk2lMXC/RzCV6NgZ2QWg4ryM0Cz2VveYTVZHZ5OVLYGs28+oC9gRK/df8XMOw0hDp
-         vjzt/bVgBnDOy8KZIQIgv65y1HmytpflOJOBMpWWf2yT3e/T9wH9lyV9E6Yjn7u8OgAa
-         F6UW3NNj4GHBclU1aLnpsI2Y/re6Ava2lsBqFRrBxOw2yjnUR3n90rXrVRKsBDegoFmP
-         mcgGUL/8c/ycnjAy397T4GxmigMidXYBAdtSOItndE1F6vH7497Gb/0EJ5iN43DsZ9zU
-         cG+Q==
-X-Gm-Message-State: AAQBX9dnYS+NpeT7yLo69hSBjjRBxwIcksCVgl8SmS3EuVQZqSdZaAlp
-        8O34P7lpwahZ9t8kT0B7FudJAiEpTfQZBFnc1flIh+tX570l
-X-Google-Smtp-Source: AKy350YvWlz1e2WjuGCn/zBJU22CORmNL2L0daOgmAIK1LGoOSmFs9rLKhk0fTclz8aZ+4FYU54u7vUoR8BQ
-X-Received: by 2002:a17:907:d386:b0:87b:dac0:b23b with SMTP id vh6-20020a170907d38600b0087bdac0b23bmr22156821ejc.55.1680113283167;
-        Wed, 29 Mar 2023 11:08:03 -0700 (PDT)
+        bh=FndVMXQ48NmaMTKqtO1ulaQVEXkhQgQUYelFrcn8/tk=;
+        b=GnPY8BCOVqRE+UbJmgiBIZ9W4p6HaBC8LAqOdvn4ZTODh+NNkK+UYt00yKIV7RAQvn
+         5MGW6xMjtBdTGb9uyUooPSSQf9ZeTCwJlSpCRxFATLuauCquqc02BUWHEHTSj4Z5igLe
+         6C3vMJRVSGTF5Kzl45InXUf5Wyf8qt74K1ZN5XEMPzxsOymnHPvOawKkuj/+xdcHg63L
+         5Bfljz/o8KCtvI+J3wncgplLEH+vACFmXnilCbQdgNUHztEb4NGTmw7IPA5jAKqQlaI4
+         w/COKAvJpX/PprVRszC8pQtcXW4hnu4Mmcahd2VGcr1LO/ndWrQVzUfOHEiRDLE4bjp9
+         EGQQ==
+X-Gm-Message-State: AAQBX9ejZ3P+SWA2UtvRmMJCim5F7DQPrKSMn9knYDCqugxgBzq/ElIm
+        5aMjMEEbid/8Pc4TG7PO8jStRqlbxXFpIkpLtOClRsbPhGX9
+X-Google-Smtp-Source: AKy350Y01hX7iRmc2xxzvWLh+7WjQqMOHm0QkSS4Z8BMosMMKVb1bBzQkoWPUxennOdKe9OP6Lqkmeo4eHfC
+X-Received: by 2002:a17:906:3592:b0:934:8043:ebf8 with SMTP id o18-20020a170906359200b009348043ebf8mr20517198ejb.26.1680113284096;
+        Wed, 29 Mar 2023 11:08:04 -0700 (PDT)
 Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id m10-20020a1709066d0a00b00920438f59b3sm12072998ejr.154.2023.03.29.11.08.02
+        by smtp-relay.gmail.com with ESMTPS id m10-20020a1709066d0a00b00920438f59b3sm12072998ejr.154.2023.03.29.11.08.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 11:08:03 -0700 (PDT)
+        Wed, 29 Mar 2023 11:08:04 -0700 (PDT)
 X-Relaying-Domain: dectris.com
 From:   Kal Conley <kal.conley@dectris.com>
-To:     Andrii Nakryiko <andrii@kernel.org>,
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Mykola Lysenko <mykolal@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -59,16 +63,13 @@ To:     Andrii Nakryiko <andrii@kernel.org>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 01/10] selftests: xsk: Add xskxceiver.h dependency to Makefile
-Date:   Wed, 29 Mar 2023 20:04:53 +0200
-Message-Id: <20230329180502.1884307-2-kal.conley@dectris.com>
+        Shuah Khan <shuah@kernel.org>
+Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 02/10] selftests: xsk: Use correct UMEM size in testapp_invalid_desc
+Date:   Wed, 29 Mar 2023 20:04:54 +0200
+Message-Id: <20230329180502.1884307-3-kal.conley@dectris.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230329180502.1884307-1-kal.conley@dectris.com>
 References: <20230329180502.1884307-1-kal.conley@dectris.com>
@@ -83,26 +84,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-xskxceiver depends on xskxceiver.h so tell make about it.
+Avoid UMEM_SIZE macro in testapp_invalid_desc which is incorrect when
+the frame size is not XSK_UMEM__DEFAULT_FRAME_SIZE. Also remove the
+macro since it's no longer being used.
 
+Fixes: 909f0e28207c ("selftests: xsk: Add tests for 2K frame size")
 Signed-off-by: Kal Conley <kal.conley@dectris.com>
 ---
- tools/testing/selftests/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/xskxceiver.c | 9 +++++----
+ tools/testing/selftests/bpf/xskxceiver.h | 1 -
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 4a8ef118fd9d..223be997f15d 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -612,7 +612,7 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+index b65e0645b0cd..3956f5db84f3 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.c
++++ b/tools/testing/selftests/bpf/xskxceiver.c
+@@ -1652,6 +1652,7 @@ static void testapp_single_pkt(struct test_spec *test)
  
--$(OUTPUT)/xskxceiver: xskxceiver.c $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
-+$(OUTPUT)/xskxceiver: xskxceiver.c xskxceiver.h $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+ static void testapp_invalid_desc(struct test_spec *test)
+ {
++	u64 umem_size = test->ifobj_tx->umem->num_frames * test->ifobj_tx->umem->frame_size;
+ 	struct pkt pkts[] = {
+ 		/* Zero packet address allowed */
+ 		{0, PKT_SIZE, 0, true},
+@@ -1662,9 +1663,9 @@ static void testapp_invalid_desc(struct test_spec *test)
+ 		/* Packet too large */
+ 		{0x2000, XSK_UMEM__INVALID_FRAME_SIZE, 0, false},
+ 		/* After umem ends */
+-		{UMEM_SIZE, PKT_SIZE, 0, false},
++		{umem_size, PKT_SIZE, 0, false},
+ 		/* Straddle the end of umem */
+-		{UMEM_SIZE - PKT_SIZE / 2, PKT_SIZE, 0, false},
++		{umem_size - PKT_SIZE / 2, PKT_SIZE, 0, false},
+ 		/* Straddle a page boundrary */
+ 		{0x3000 - PKT_SIZE / 2, PKT_SIZE, 0, false},
+ 		/* Straddle a 2K boundrary */
+@@ -1682,8 +1683,8 @@ static void testapp_invalid_desc(struct test_spec *test)
+ 	}
  
+ 	if (test->ifobj_tx->shared_umem) {
+-		pkts[4].addr += UMEM_SIZE;
+-		pkts[5].addr += UMEM_SIZE;
++		pkts[4].addr += umem_size;
++		pkts[5].addr += umem_size;
+ 	}
+ 
+ 	pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts));
+diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
+index bdb4efedf3a9..cc24ab72f3ff 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.h
++++ b/tools/testing/selftests/bpf/xskxceiver.h
+@@ -53,7 +53,6 @@
+ #define THREAD_TMOUT 3
+ #define DEFAULT_PKT_CNT (4 * 1024)
+ #define DEFAULT_UMEM_BUFFERS (DEFAULT_PKT_CNT / 4)
+-#define UMEM_SIZE (DEFAULT_UMEM_BUFFERS * XSK_UMEM__DEFAULT_FRAME_SIZE)
+ #define RX_FULL_RXQSIZE 32
+ #define UMEM_HEADROOM_TEST_SIZE 128
+ #define XSK_UMEM__INVALID_FRAME_SIZE (XSK_UMEM__DEFAULT_FRAME_SIZE + 1)
 -- 
 2.39.2
 
