@@ -2,231 +2,475 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260906CF392
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 21:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02AE6CF45D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 22:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjC2Trh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Mar 2023 15:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S229519AbjC2UTo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Mar 2023 16:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbjC2TrV (ORCPT
+        with ESMTP id S229510AbjC2UTn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Mar 2023 15:47:21 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1197ED1;
-        Wed, 29 Mar 2023 12:46:13 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 78BFA32007F1;
-        Wed, 29 Mar 2023 15:46:11 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 29 Mar 2023 15:46:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1680119171; x=1680205571; bh=zo
-        jQa1YLfWakbyG6by6LrH71dsPpXEzFqhE+LyL8iNE=; b=f94NQcHS7VQkFwhd2T
-        lQmPb/+vs32rNGXlq8MK65yIssXnmd7EmKp+o/fL01cI0ueUUZ9vYhypWMA1T0rB
-        jCDrorQRxAG03EWO6IunfBk66GlAxo4S6MeNZwpEVYBjXBy+J0f+G+xau2ojokju
-        ZSSX0vwaqQh1dLcVHFBpcOZlVMpUeab5LYVEAEEGPjV2SrSGY9fVeFvObpnOyd0M
-        vqgNJRgHx3phaHNOIS3hW4/ghEghuyZYhkxqYFKyQ15VSyk1CMbLoXbr3va0iCEt
-        CDZOFluulLlgjhBzjYrX8HGEZ912MpH/WzdOW4qN/6KZ6Ap3B+mIfuG5CxSlWge8
-        7B0g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680119171; x=1680205571; bh=zojQa1YLfWakb
-        yG6by6LrH71dsPpXEzFqhE+LyL8iNE=; b=fu8eitjJyrwP8Dm2aWwPOnMFuesE7
-        IvCqhd9eduPE7dKnPswR8K9JADc/nTiA9hL0aaPZxt2BcXUhU3b15xsCgrvX2PCc
-        yDWM43mhtALwBlI6Y56e2iQ20CjGrgPHV7pPNPAtT/z9qzZCnmZmFyzjub0B8iDN
-        9Lxu+0TfzEOTULOEnu9mIQIA9niIWO9sszInE06a6PGvtTGxbbDF1Bg5Ur+eHcXj
-        T3ZuI0zTfUG0mMakfBv9trI65wO8syiqyLcqHwu/NSVBYF0O67476B/ot2hrPA/6
-        CJjLZCX/9bi1nHv0EySZqdq/VdGPgsgEzelieKImuNJ5AbWok53xftUOQ==
-X-ME-Sender: <xms:gpUkZAQvLCQskVD20nQyHx97BwU8jejN8-2xyh66OY7_I4czTEbSWA>
-    <xme:gpUkZNy4szB7l33j11gvKjWuc77tAfd41f8hYWdm630RZmAcn_rUl3kgOYxAt_PZY
-    ayTewqoQr-lYmxecdM>
-X-ME-Received: <xmr:gpUkZN21y14C_7xnOwqXxBC0Vd0oQpp9sGs7Zwjy3m0KTCxPzd1xsWumGw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehiedgudegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheptdelkeejiedufedvhfeiffetlefhiedvleeigfeiuefghfdvleeiffej
-    ieegteejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:g5UkZEBpwPSEZ_8uEFhbK1MofzLIozz1zdNDcuvuk_srfLeWZ6OzqQ>
-    <xmx:g5UkZJgUwNdYM1HRkmgIZbZlFSBNil6tmi1ffKI2r188jCYr7hhZtA>
-    <xmx:g5UkZArxT7xn2Tmoo5oOug5xquSGRfJTe_7S3Ho2yZ7wvmhxprjRpQ>
-    <xmx:g5UkZMTMqIuUPOQPjOfr1WGA1wHIZ8OMuAbxrPeH4SkG1bjabdOjlg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Mar 2023 15:46:10 -0400 (EDT)
-Date:   Wed, 29 Mar 2023 21:46:09 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v5 1/8] drivers: kunit: Generic helpers for test device
- creation
-Message-ID: <20230329194609.7u2hgidxdk34emsf@penduick>
-References: <ZBtPhoelZo4U5jwC@kroah.com>
- <20230323101216.w56kz3rudlj23vab@houat>
- <ZBwoRgc2ICBJX/Lq@kroah.com>
- <8a03a6fb-39b9-cd17-cc10-ece71111357d@gmail.com>
- <20230323122925.kqdnomr7i46qnyo4@houat>
- <590189b3-42d9-ab12-fccd-37338595cb6f@gmail.com>
- <20230323163639.xtwpid2uunwnzai4@houat>
- <a0e8b1da-3645-4141-6518-e035ad80a23d@gmail.com>
- <20230324123157.bbwvfq4gsxnlnfwb@houat>
- <20230325175044.7bee9e7d@jic23-huawei>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l6s2nrpwzcaaz3jq"
-Content-Disposition: inline
-In-Reply-To: <20230325175044.7bee9e7d@jic23-huawei>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 29 Mar 2023 16:19:43 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5831BE1
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 13:19:40 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5425c04765dso165847207b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 13:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680121179;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XYCjXnCbKN0PKkjf/crQNfbLtlBmvSfxLnNMsYaCJAI=;
+        b=Q4fVUhMJZ2VEoEGBOrMdLrJvCAfH4D4nBijG9a2dGjH0LYJ9xtR6jFOClavT+p3WSF
+         /ieyUJplRJvO5/il4QvETEhFDZkT9nTWYBJUhyuKSKrrI7fhtMiOeJ6jwrz5N0MF0y9C
+         1TLiYnzZTJOOnS/25vbgjaka/Wn2TSTbNEqgusKUZvTx0kpdYvYHub4A/Q05zg6hgGja
+         b6+TZ8NFmx2JljIi2jB8nbg2yJu1/jEwPZNkIrPXdHyj7ObBMC8Uj+MomqmFCZsZZon4
+         9n2Hw8wSlnhpf0zFC42QRDkvQ9w1Faonq1ucsjy/Hld9+bRisFqjXCpEkJPCqRJ4psrQ
+         niFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680121179;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XYCjXnCbKN0PKkjf/crQNfbLtlBmvSfxLnNMsYaCJAI=;
+        b=XokbQUCzr5c8b15Wf09IK+X7JMNMW/PogJAqmgI8jq1gksZCzuPi//rNZ6GDntbtAl
+         QRzvtwzAti7c6cXJMqe0kXqbwyxmNDxHedXDtTs4HyksqanAPeB4CvJS97At9cMd6TiW
+         O0/Xb+MeGOICJq4H3WNWaB8cpRG2VurKAVoWBR0dY4zs15h9agNWcEYLFxq2q3H4E37q
+         CzbtbJiamYHFJkayNdpSg7Sx8/QB88oTIxquAKCya0o676A0I7WvhHrOCy0Uj8WHRyZc
+         eHA+5RpKS/+TH3VeQu3oWipzICkeUTNDcpIuEHMHgnBEM11n990WRGr9b97ngef0Kzmb
+         dZ2A==
+X-Gm-Message-State: AAQBX9cEsd1GB/TdDtnkGqEHEn39bX45UQDDA+30Wg3z+tINfvNRNUsu
+        HIaq8LElYTFEnt1d+EYDdJoq6NbuZ2I=
+X-Google-Smtp-Source: AKy350ZIV/lRzBXoo6utQ0EIvoOZHHC57nvHhNiap20xqkupn9VmloUhByhO84IhMtiJ4j8NKFaasEDxR3Y=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a0d:ec12:0:b0:545:bade:c590 with SMTP id
+ q18-20020a0dec12000000b00545badec590mr8154846ywn.1.1680121179401; Wed, 29 Mar
+ 2023 13:19:39 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 13:19:37 -0700
+In-Reply-To: <20230316031732.3591455-2-npiggin@gmail.com>
+Mime-Version: 1.0
+References: <20230316031732.3591455-1-npiggin@gmail.com> <20230316031732.3591455-2-npiggin@gmail.com>
+Message-ID: <ZCSdWc9te0Noiwo3@google.com>
+Subject: Re: [PATCH 1/2] KVM: PPC: Add kvm selftests support for powerpc
+From:   Sean Christopherson <seanjc@google.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Mar 16, 2023, Nicholas Piggin wrote:
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 3ea24a5f4c43..28ece960a0bb 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -153,6 +153,7 @@ const char *vm_guest_mode_string(uint32_t i)
+>  		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
+>  		[VM_MODE_P47V64_4K]	= "PA-bits:47,  VA-bits:64,  4K pages",
+>  		[VM_MODE_P44V64_4K]	= "PA-bits:44,  VA-bits:64,  4K pages",
+> +		[VM_MODE_P52V52_64K]	= "PA-bits:52,  VA-bits:52, 64K pages",
+>  		[VM_MODE_P36V48_4K]	= "PA-bits:36,  VA-bits:48,  4K pages",
+>  		[VM_MODE_P36V48_16K]	= "PA-bits:36,  VA-bits:48, 16K pages",
+>  		[VM_MODE_P36V48_64K]	= "PA-bits:36,  VA-bits:48, 64K pages",
+> @@ -178,6 +179,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+>  	[VM_MODE_PXXV48_4K]	= {  0,  0,  0x1000, 12 },
+>  	[VM_MODE_P47V64_4K]	= { 47, 64,  0x1000, 12 },
+>  	[VM_MODE_P44V64_4K]	= { 44, 64,  0x1000, 12 },
+> +	[VM_MODE_P52V52_64K]	= { 52, 52, 0x10000, 16 },
+>  	[VM_MODE_P36V48_4K]	= { 36, 48,  0x1000, 12 },
+>  	[VM_MODE_P36V48_16K]	= { 36, 48,  0x4000, 14 },
+>  	[VM_MODE_P36V48_64K]	= { 36, 48, 0x10000, 16 },
+> @@ -279,6 +281,14 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode)
+>  	case VM_MODE_P44V64_4K:
+>  		vm->pgtable_levels = 5;
+>  		break;
+> +	case VM_MODE_P52V52_64K:
+> +#ifdef __powerpc__
+> +		TEST_ASSERT(getpagesize() == 64*1024,
 
---l6s2nrpwzcaaz3jq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This can use SZ_64K (we really need to convert a bunch of open coded stuff...)
 
-On Sat, Mar 25, 2023 at 05:50:44PM +0000, Jonathan Cameron wrote:
-> On Fri, 24 Mar 2023 13:31:57 +0100
-> Maxime Ripard <maxime@cerno.tech> wrote:
->=20
-> > On Fri, Mar 24, 2023 at 08:11:52AM +0200, Matti Vaittinen wrote:
-> > > On 3/23/23 18:36, Maxime Ripard wrote: =20
-> > > > On Thu, Mar 23, 2023 at 03:02:03PM +0200, Matti Vaittinen wrote: =
-=20
-> > > > > On 3/23/23 14:29, Maxime Ripard wrote: =20
-> > > > > > On Thu, Mar 23, 2023 at 02:16:52PM +0200, Matti Vaittinen wrote:
-> > > > > >=20
-> > > > > > This is the description of what was happening:
-> > > > > > https://lore.kernel.org/dri-devel/20221117165311.vovrc7usy4efiy=
-tl@houat/ =20
-> > > > >=20
-> > > > > Thanks Maxime. Do I read this correcty. The devm_ unwinding not b=
-eing done
-> > > > > when root_device_register() is used is not because root_device_un=
-register()
-> > > > > would not trigger the unwinding - but rather because DRM code on =
-top of this
-> > > > > device keeps the refcount increased? =20
-> > > >=20
-> > > > There's a difference of behaviour between a root_device and any dev=
-ice
-> > > > with a bus: the root_device will only release the devm resources wh=
-en
-> > > > it's freed (in device_release), but a bus device will also do it in
-> > > > device_del (through bus_remove_device() -> device_release_driver() =
-->
-> > > > device_release_driver_internal() -> __device_release_driver() ->
-> > > > device_unbind_cleanup(), which are skipped (in multiple places) if
-> > > > there's no bus and no driver attached to the device).
-> > > >=20
-> > > > It does affect DRM, but I'm pretty sure it will affect any framework
-> > > > that deals with device hotplugging by deferring the framework struc=
-ture
-> > > > until the last (userspace) user closes its file descriptor. So I'd
-> > > > assume that v4l2 and cec at least are also affected, and most likely
-> > > > others. =20
-> > >=20
-> > > Thanks for the explanation and patience :)
-> > >  =20
-> > > >  =20
-> > > > > If this is the case, then it sounds like a DRM specific issue to =
-me. =20
-> > > >=20
-> > > > I mean, I guess. One could also argue that it's because IIO doesn't
-> > > > properly deal with hotplugging. =20
-> > >=20
-> > > I must say I haven't been testing the IIO registration API. I've only=
- tested
-> > > the helper API which is not backed up by any "IIO device". (This is f=
-ine for
-> > > the helper because it must by design be cleaned-up only after the
-> > > IIO-deregistration).
-> > >=20
-> > > After your explanation here, I am not convinced IIO wouldn't see the =
-same
-> > > issue if I was testing the devm_iio_device_alloc() & co. =20
-> >=20
-> > It depends really. The issue DRM is trying to solve is that, when a
-> > device is gone, some application might still have an open FD and could
-> > still poke into the kernel, while all the resources would have been
-> > free'd if it was using devm.
-> >=20
-> > So everything is kept around until the last fd is closed, so you still
-> > have a reference to the device (even though it's been removed from its
-> > bus) until that time.
-> >=20
-> > It could be possible that IIO just doesn't handle that case at all. I
-> > guess most of the devices aren't hotpluggable, and there's not much to
-> > interact with from a userspace PoV iirc, so it might be why.
->=20
-> Lars-Peter Clausen (IIRC) fixed up the IIO handling of the similar cases a
-> long time ago now. It's simpler that for some other subsystems as we don't
-> have as many interdependencies as occur in DRM etc.
->=20
-> I 'think' we are fine in general with the IIO approach to this (I think we
-> did have one report of a theoretical race condition in the remove path th=
-at
-> was never fully addressed).
->=20
-> For IIO we also have fds that can be open but all accesses to them are pr=
-oxied
-> through the IIO core and one of the things iio_device_unregister() or the=
- devm
-> equivalent does is to set indio_dev->info =3D NULL  (+ wake up anyone wai=
-ting on
-> data etc). Alongside removing the callbacks, that is also used as a flag
-> to indicate the device has gone.
+> +			    "KVM selftests requires 64K host page size\n");
 
-Sorry if it came as trying to put IIO under a bad light, it certainly
-wasn't my intention. I was trying to come up with possible explanations
-as to why IIO's design was simpler than DRM is :)
+What is the actual requirement?  E.g. is it that the host and guest page sizes
+must match, or is that the selftest setup itself only supports 64KiB pages?  If
+it's the former, would it make sense to assert outside of the switch statement, e.g.
 
-> Note that we keep a reference to the struct indio_dev->dev (rather that t=
-he
-> underlying device) so that is not freed until the last fd is closed.
-> Thus, although devm unwinding has occurred that doesn't mean all the data
-> that was allocated with devm_xx calls is cleared up immediately.
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 298c4372fb1a..920813a71be0 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -291,6 +291,10 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode)
+ #ifdef __aarch64__
+        if (vm->pa_bits != 40)
+                vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
++#endif
++#ifdef __powerpc__
++       TEST_ASSERT(getpagesize() == vm->page_size, "blah blah blah");
++
+ #endif
+ 
+        vm_open(vm);
 
-I'm not sure I get that part though. devm unwinding can happen even if the =
-refcount is > 1
+If it's the latter (selftests limitation), can you add a comment explaining the
+limitation?
 
-Maxime
+> +void virt_arch_pgd_alloc(struct kvm_vm *vm)
+> +{
+> +	struct kvm_ppc_mmuv3_cfg mmu_cfg;
+> +	vm_paddr_t prtb, pgtb;
+> +	uint64_t *proc_table, *page_table;
+> +	size_t pgd_pages;
+> +
+> +	TEST_ASSERT(vm->mode == VM_MODE_P52V52_64K, "Attempt to use "
+> +		"unknown or unsupported guest mode, mode: 0x%x", vm->mode);
 
---l6s2nrpwzcaaz3jq
-Content-Type: application/pgp-signature; name="signature.asc"
+Please don't split quoted lines, especially when it's easily avoided, e.g.
 
------BEGIN PGP SIGNATURE-----
+	TEST_ASSERT(vm->mode == VM_MODE_P52V52_64K,
+		    "PPC doesn't support guest mode '0x%x', vm->mode);
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZCSVgQAKCRDj7w1vZxhR
-xaenAP950SFm/YscP/OZNbX+eEpJynPuAwfDyd1PtJuqNfChOQD+LJmD189z9X+y
-U5CselZugPJllYdyXVUeK0Apq+k7KAE=
-=+cge
------END PGP SIGNATURE-----
+> +
+> +	/* If needed, create page table */
+> +	if (vm->pgd_created)
+> +		return;
 
---l6s2nrpwzcaaz3jq--
+Heh, every arch has this.  Any objection to moving the check to virt_pgd_alloc()
+as a prep patch?
+
+> +
+> +	prtb = vm_phy_page_alloc(vm, KVM_GUEST_PAGE_TABLE_MIN_PADDR,
+> +				 vm->memslots[MEM_REGION_PT]);
+> +	proc_table = addr_gpa2hva(vm, prtb);
+> +	memset(proc_table, 0, vm->page_size);
+> +	vm->prtb = prtb;
+> +
+> +	pgd_pages = 1UL << ((RADIX_PGD_INDEX_SIZE + 3) >> vm->page_shift);
+> +	TEST_ASSERT(pgd_pages == 1, "PGD allocation must be single page");
+> +	pgtb = vm_phy_page_alloc(vm, KVM_GUEST_PAGE_TABLE_MIN_PADDR,
+> +				 vm->memslots[MEM_REGION_PT]);
+> +	page_table = addr_gpa2hva(vm, pgtb);
+> +	memset(page_table, 0, vm->page_size * pgd_pages);
+> +	vm->pgd = pgtb;
+> +
+> +	/* Set the base page directory in the proc table */
+> +	proc_table[0] = cpu_to_be64(pgtb | RTS | RADIX_PGD_INDEX_SIZE);
+> +
+> +	mmu_cfg.process_table = prtb | 0x8000000000000000UL | 0x4; // 64K size
+> +	mmu_cfg.flags = KVM_PPC_MMUV3_RADIX | KVM_PPC_MMUV3_GTSE;
+> +
+> +	vm_ioctl(vm, KVM_PPC_CONFIGURE_V3_MMU, &mmu_cfg);
+> +
+> +	vm->pgd_created = true;
+> +}
+> +
+> +static int pt_shift(struct kvm_vm *vm, int level)
+> +{
+> +	switch (level) {
+> +	case 1:
+> +		return 13;
+> +	case 2:
+> +	case 3:
+> +		return 9;
+> +	case 4:
+> +		return 5;
+> +	default:
+> +		TEST_ASSERT(false, "Invalid page table level %d\n", level);
+> +		return 0;
+> +	}
+> +}
+> +
+> +static uint64_t pt_entry_coverage(struct kvm_vm *vm, int level)
+> +{
+> +	uint64_t size = vm->page_size;
+> +
+> +	if (level == 4)
+> +		return size;
+> +	size <<= pt_shift(vm, 4);
+> +	if (level == 3)
+> +		return size;
+> +	size <<= pt_shift(vm, 3);
+> +	if (level == 2)
+> +		return size;
+> +	size <<= pt_shift(vm, 2);
+> +	return size;
+> +}
+> +
+> +static int pt_idx(struct kvm_vm *vm, uint64_t vaddr, int level, uint64_t *nls)
+> +{
+> +	switch (level) {
+> +	case 1:
+> +		*nls = 0x9;
+> +		return (vaddr >> 39) & 0x1fff;
+> +	case 2:
+> +		*nls = 0x9;
+> +		return (vaddr >> 30) & 0x1ff;
+> +	case 3:
+> +// 4K		*nls = 0x9;
+> +		*nls = 0x5;
+> +		return (vaddr >> 21) & 0x1ff;
+> +	case 4:
+> +// 4K		return (vaddr >> 12) & 0x1ff;
+> +		return (vaddr >> 16) & 0x1f;
+> +	default:
+> +		TEST_ASSERT(false, "Invalid page table level %d\n", level);
+> +		return 0;
+> +	}
+> +}
+> +
+> +static uint64_t *virt_get_pte(struct kvm_vm *vm, vm_paddr_t pt,
+> +			  uint64_t vaddr, int level, uint64_t *nls)
+> +{
+> +	uint64_t *page_table = addr_gpa2hva(vm, pt);
+> +	int idx = pt_idx(vm, vaddr, level, nls);
+> +
+> +	return &page_table[idx];
+> +}
+> +
+> +#define PTE_VALID	0x8000000000000000ull
+> +#define PTE_LEAF	0x4000000000000000ull
+> +#define PTE_REFERENCED	0x0000000000000100ull
+> +#define PTE_CHANGED	0x0000000000000080ull
+> +#define PTE_PRIV	0x0000000000000008ull
+> +#define PTE_READ	0x0000000000000004ull
+> +#define PTE_RW		0x0000000000000002ull
+> +#define PTE_EXEC	0x0000000000000001ull
+> +#define PTE_PAGE_MASK	0x01fffffffffff000ull
+> +
+> +#define PDE_VALID	PTE_VALID
+> +#define PDE_NLS		0x0000000000000011ull
+> +#define PDE_PT_MASK	0x0fffffffffffff00ull
+> +
+> +void virt_arch_pg_map(struct kvm_vm *vm, uint64_t gva, uint64_t gpa)
+> +{
+> +	vm_paddr_t pt = vm->pgd;
+> +	uint64_t *ptep, pte;
+> +	int level;
+> +
+> +	for (level = 1; level <= 3; level++) {
+> +		uint64_t nls;
+> +		uint64_t *pdep = virt_get_pte(vm, pt, gva, level, &nls);
+> +		uint64_t pde = be64_to_cpu(*pdep);
+> +		uint64_t *page_table;
+> +
+> +		if (pde) {
+> +			TEST_ASSERT((pde & PDE_VALID) && !(pde & PTE_LEAF),
+> +				"Invalid PDE at level: %u gva: 0x%lx pde:0x%lx\n",
+> +				level, gva, pde);
+> +			pt = pde & PDE_PT_MASK;
+> +			continue;
+> +		}
+> +
+> +		// XXX: 64K geometry does not require full pages!
+> +		pt = vm_phy_page_alloc(vm,
+> +				       KVM_GUEST_PAGE_TABLE_MIN_PADDR,
+> +				       vm->memslots[MEM_REGION_PT]);
+> +		page_table = addr_gpa2hva(vm, pt);
+> +		memset(page_table, 0, vm->page_size);
+> +		pde = PDE_VALID | nls | pt;
+> +		*pdep = cpu_to_be64(pde);
+> +	}
+> +
+> +	ptep = virt_get_pte(vm, pt, gva, level, NULL);
+> +	pte = be64_to_cpu(*ptep);
+> +
+> +	TEST_ASSERT(!pte,
+> +		"PTE already present at level: %u gva: 0x%lx pte:0x%lx\n",
+> +		level, gva, pte);
+> +
+> +	pte = PTE_VALID | PTE_LEAF | PTE_REFERENCED | PTE_CHANGED | PTE_PRIV | PTE_READ | PTE_RW | PTE_EXEC | (gpa & PTE_PAGE_MASK);
+
+Please wrap at 80 chars when it's convenient.  The general/unofficial style in
+KVM is to honor the old 80 char limit unless there's a good reason not to.  E.g.
+wrapping a line just because the terminating semicolon bumped past 80 is absurd.
+
+> +	*ptep = cpu_to_be64(pte);
+> +}
+> +
+> +vm_paddr_t addr_arch_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
+> +{
+> +	vm_paddr_t pt = vm->pgd;
+> +	uint64_t *ptep, pte;
+> +	int level;
+> +
+> +	for (level = 1; level <= 3; level++) {
+> +		uint64_t nls;
+> +		uint64_t *pdep = virt_get_pte(vm, pt, gva, level, &nls);
+> +		uint64_t pde = be64_to_cpu(*pdep);
+> +
+> +		TEST_ASSERT((pde & PDE_VALID) && !(pde & PTE_LEAF),
+> +			"PDE not present at level: %u gva: 0x%lx pde:0x%lx\n",
+> +			level, gva, pde);
+> +		pt = pde & PDE_PT_MASK;
+> +	}
+> +
+> +	ptep = virt_get_pte(vm, pt, gva, level, NULL);
+> +	pte = be64_to_cpu(*ptep);
+> +
+> +	TEST_ASSERT(pte,
+> +		"PTE not present at level: %u gva: 0x%lx pte:0x%lx\n",
+> +		level, gva, pte);
+> +
+> +	TEST_ASSERT((pte & PTE_VALID) && (pte & PTE_LEAF) && (pte & PTE_READ) && (pte & PTE_RW) && (pte & PTE_EXEC),
+
+Wrap here as well.
+
+> +		"PTE not valid at level: %u gva: 0x%lx pte:0x%lx\n",
+> +		level, gva, pte);
+> +
+> +	return (pte & PTE_PAGE_MASK) + (gva & (vm->page_size - 1));
+> +}
+> +
+> +static void virt_arch_dump_pt(FILE *stream, struct kvm_vm *vm, vm_paddr_t pt, vm_vaddr_t va, int level, uint8_t indent)
+
+And here.  Actually, why bother with the helper?  There's one caller, and that
+callers checks pgd_created, i.e. is already assuming its dumping only page tables.
+Ooh, nevermind, it's recursive.
+
+Can you drop "arch" from the name?  Selftests uses "arch" to tag functions that
+are provided by arch code for use in generic code.
+
+> +{
+> +	uint64_t *page_table;
+> +	int size, idx;
+> +
+> +	page_table = addr_gpa2hva(vm, pt);
+> +	size = 1U << pt_shift(vm, level);
+> +	for (idx = 0; idx < size; idx++) {
+> +		uint64_t pte = be64_to_cpu(page_table[idx]);
+
+Newline after variable declaration.
+
+> +		if (pte & PTE_VALID) {
+> +			if (pte & PTE_LEAF) {
+
+Curly braces aren't necessary.
+
+> +				fprintf(stream, "%*sgVA:0x%016lx -> gRA:0x%016llx\n", indent, "", va, pte & PTE_PAGE_MASK);
+
+Probably worth wrapping here too.
+
+> +			} else {
+> +				virt_arch_dump_pt(stream, vm, pte & PDE_PT_MASK, va, level + 1, indent);
+> +			}
+> +		}
+> +		va += pt_entry_coverage(vm, level);
+
+The shift is constant for vm+level, correct?  In that case, can't this be written
+as
+
+	for (idx = 0; idx < size; idx++, va += va_coverage) {
+
+or even without a snapshot
+
+	for (idx = 0; idx < size; idx++, va += pt_entry_coverage(vm, level)) {
+
+That would allow
+
+		if (!(pte & PTE_VALID)
+			continue
+
+to reduce the indentation of the printing.
+
+> +	}
+> +
+> +}
+> +
+> +void virt_arch_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
+> +{
+> +	vm_paddr_t pt = vm->pgd;
+> +
+> +	if (!vm->pgd_created)
+> +		return;
+> +
+> +	virt_arch_dump_pt(stream, vm, pt, 0, 1, indent);
+> +}
+> +
+> +struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+> +				  void *guest_code)
+> +{
+> +	size_t stack_size =  64*1024;
+
+SZ_64K
+
+> +	uint64_t stack_vaddr;
+> +	struct kvm_regs regs;
+> +	struct kvm_vcpu *vcpu;
+> +	uint64_t lpcr;
+> +
+> +	TEST_ASSERT(vm->page_size == 64*1024, "Unsupported page size: 0x%x",
+
+SZ_64K
+
+> +		    vm->page_size);
+> +
+> +	stack_vaddr = __vm_vaddr_alloc(vm, stack_size,
+> +				       DEFAULT_GUEST_STACK_VADDR_MIN,
+> +				       MEM_REGION_DATA);
+> +
+> +	vcpu = __vm_vcpu_add(vm, vcpu_id);
+> +
+> +	vcpu_enable_cap(vcpu, KVM_CAP_PPC_PAPR, 1);
+> +
+> +	/* Setup guest registers */
+> +	vcpu_regs_get(vcpu, &regs);
+> +	vcpu_get_reg(vcpu, KVM_REG_PPC_LPCR_64, &lpcr);
+> +
+> +	regs.pc = (uintptr_t)guest_code;
+> +	regs.gpr[12] = (uintptr_t)guest_code;
+> +	regs.msr = 0x8000000002103032ull;
+> +	regs.gpr[1] = stack_vaddr + stack_size - 256;
+> +
+> +	if (BYTE_ORDER == LITTLE_ENDIAN) {
+> +		regs.msr |= 0x1; // LE
+> +		lpcr |= 0x0000000002000000; // ILE
+
+Would it be appropriate to add #defines to processor.h instead of open coding the
+magic numbers?
+
+> +	} else {
+> +		lpcr &= ~0x0000000002000000; // !ILE
+> +	}
+> +
+> +	vcpu_regs_set(vcpu, &regs);
+> +	vcpu_set_reg(vcpu, KVM_REG_PPC_LPCR_64, lpcr);
+> +
+> +	return vcpu;
+> +}
+> +
+> +void vcpu_args_set(struct kvm_vcpu *vcpu, unsigned int num, ...)
+> +{
+> +	va_list ap;
+> +	struct kvm_regs regs;
+> +	int i;
+> +
+> +	TEST_ASSERT(num >= 1 && num <= 5, "Unsupported number of args,\n"
+
+Newlines in TEST_ASSERT() usually lead to weird formatting.
+
+> +		    "  num: %u\n",
+
+No quoted line wrap please.  And in this case, not wrapping is better IMO.
+
+	TEST_ASSERT(num >= 1 && num <= 5, "Unsupported number of args: %u", num);
+
+> +		    num);
+> +
+> +	va_start(ap, num);
+> +	vcpu_regs_get(vcpu, &regs);
+> +
+> +	for (i = 0; i < num; i++)
+> +		regs.gpr[i + 3] = va_arg(ap, uint64_t);
+> +
+> +	vcpu_regs_set(vcpu, &regs);
+> +	va_end(ap);
+> +}
