@@ -2,399 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9D06CD830
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 13:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62ED6CD94C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 14:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjC2LIB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Mar 2023 07:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
+        id S229802AbjC2MYT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Mar 2023 08:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjC2LIA (ORCPT
+        with ESMTP id S229623AbjC2MYS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Mar 2023 07:08:00 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A1D1710
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 04:07:59 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5419fb7d6c7so150948267b3.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 04:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680088078;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qLE8CWrmaNXgXCg2eNFOgeW6xHNyRTGjnMFCzItSd5A=;
-        b=Aob7ge9ZtEBOKmu461YXtMVZ/sAukHmCRbKP6dMeCycttYKk3qU6Jad/XnVJcxhkR9
-         u95tIOinC9eOx8dGDdYDKRGl7xopgJSnwxASP2J09IiR8fhmo1ezd8pvi5ZlRfJncZsX
-         7RaLGXYDz9+K8zMUrZ7YrhP89w+OXWG//7XUS5Zgw7/8Vxol9vXx34ek83kawzepgS38
-         VrcLKQYXJKqliJsKaGOmHuZitygaZDCbRHzkC1hwsVlCNrgbkgczRkxfiyzZ7+i9ETIq
-         CI7cqCgbOc2BoLiCRL6pVTcBRtkbQVGZbIVLjDWmkWX9TW6imq5Xfq1fm1SKjacpLZbA
-         7gCg==
+        Wed, 29 Mar 2023 08:24:18 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EDB30FF
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 05:24:17 -0700 (PDT)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 767173F234
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 12:24:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1680092655;
+        bh=swtrxUv/pKI8ab5w6xKcagMA1RvyRPHwLmMe6L8/sdc=;
+        h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type;
+        b=UVOa1mnZ4SejSFsNTylwBPfcNO/HqkCOk42ZvQrLY8cHRetKENEzqJgUOxvwBjCDN
+         jqlkrLJDsaQB1dXifNVBsVGic+0Z6W5iJ/WjoDAhz/rfRFQT6CaA0q2sKbwT9ONG3B
+         NMxrwrAB1ncKnJ2Cz7NAlW2+UMttClMgzaWdU+c22kB+YSOg24Sxg+4l/+bnM05IJM
+         OzqbAlj6Yc2CxUQlpv/uBpbFnN7jBvrJUwUtROdBjMNBcvaw1juWfxB4cuWM7SKZ4O
+         wVxcyYF9u7GMosimD0jS2Ys2b/cwTd6Bq+XpqEta9v7J/5btkU/gJbvCut3mgvyFjf
+         +Z6R87sATwwug==
+Received: by mail-ed1-f69.google.com with SMTP id b1-20020aa7dc01000000b004ad062fee5eso21902970edu.17
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 05:24:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680088078;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qLE8CWrmaNXgXCg2eNFOgeW6xHNyRTGjnMFCzItSd5A=;
-        b=pIsjo2x53EskJ3LpjUwcDxUm8dW3rY93Q3KQHb2LfNePEU5CLcMxlcQhjRTFZT4HTS
-         c/IGFybqLuqU5xSNMfhZ1BPKCVSrJPYePsOYWFLY6C0Wzl5vP9OiRFBwUlNRaUmmsSMM
-         MUb4vVxSluuGttmyrXCAgpEZy4kckKttIppbFeo/kLXxOSrj17zsfYTlVumy2T3p2SDX
-         wOKVFgMP+2p3lf0oZ6mXRfwjq98KxOglxzLCXc2FV7BT/xI4HGEKpjD9rN/vEvbbSTVF
-         fi/DSjwcSW/WeuqK3mHOdoEhJsMgSXXtx2QAkFjyRWb+ahTB6It1IsZfiieT9K2vLLBv
-         wElQ==
-X-Gm-Message-State: AAQBX9dj8BbuOsxzZaCF6UgxXnR/9XFISXyMkpEeZOQpv4YciCmtXISQ
-        ZfxexYpU+WTTf32iR6z/oJDtn3J8r2RnLLa+
-X-Google-Smtp-Source: AKy350ZYgvwaYrYxW4St3GTPmqThmwm4W46Naie1JY6mHAA8lhucU4GKj49jr/vcyUgjmMzqOu/vNKKFu4reiR5R
-X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
- (user=sadiyakazi job=sendgmr) by 2002:a25:d7ce:0:b0:b7d:e643:d3c3 with SMTP
- id o197-20020a25d7ce000000b00b7de643d3c3mr2897717ybg.8.1680088078456; Wed, 29
- Mar 2023 04:07:58 -0700 (PDT)
-Date:   Wed, 29 Mar 2023 11:07:22 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230329110723.3458843-1-sadiyakazi@google.com>
-Subject: [PATCH v1] list: test: Test the klist structure
-From:   Sadiya Kazi <sadiyakazi@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680092655; x=1682684655;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=swtrxUv/pKI8ab5w6xKcagMA1RvyRPHwLmMe6L8/sdc=;
+        b=fsyYNp4EZDow1GSqe13jHeVI79X0CgUWrJ1xhRMeIHrSE772baU0GuRKBD9QXUQWVA
+         sViAoYnC5Lr117gXmLmL5BmrvjDaa1KXn+8xZjFqiJf6lIniFHb1GRFjlBo8SnuXMQFU
+         sYD4ZPiieVonymQNROObZoCStppCXhgxc8Lk+DcKcJA4GH1gD+WE+na29VP7dY89NV5C
+         4YqQ3vg+ILPCXflMo1THuzEmuVmYLtRGMpDyGfdNuoshf5qSy0fQiacilWnCEJBcAEid
+         VRP9CZIKVJsDNri5a9kLYSngWIh5ir77cU6N5eVa58OA2bYSxQ2L/m+QW2T+TDng+o9A
+         1PZA==
+X-Gm-Message-State: AAQBX9cxuk93hu6hTt0KoqofyQaVyqAeQWGKVG8laXhhhx2gIj++at9p
+        teJtRjV3PMND/Jh8DXTJL0sRUDlPlK4zHVgWJNMqBnwr+bbQxLEpWzD/gRVK3nFVILWBuWPV9Vp
+        Yn+aCfzawMajjnOQHnvEcO6o2QNZarsF3WPBaUEVIkqTgzw==
+X-Received: by 2002:a17:906:2cc8:b0:93d:cbf8:ca14 with SMTP id r8-20020a1709062cc800b0093dcbf8ca14mr18122602ejr.75.1680092655166;
+        Wed, 29 Mar 2023 05:24:15 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YMFhvs43gYsdT5jJ81I6Web+lcMSlXRngIx1j14X6MuV8d7bWBDKpvwXcfU4EIuCD0TaLVPg==
+X-Received: by 2002:a17:906:2cc8:b0:93d:cbf8:ca14 with SMTP id r8-20020a1709062cc800b0093dcbf8ca14mr18122585ejr.75.1680092654930;
+        Wed, 29 Mar 2023 05:24:14 -0700 (PDT)
+Received: from localhost (host-79-33-132-140.retail.telecomitalia.it. [79.33.132.140])
+        by smtp.gmail.com with ESMTPSA id d7-20020a1709067f0700b00882f9130eafsm16367613ejr.26.2023.03.29.05.24.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 05:24:14 -0700 (PDT)
+Date:   Wed, 29 Mar 2023 14:24:14 +0200
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Wojciech Drewek <wojciech.drewek@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: selftests: net: l2tp.sh regression starting with 6.1-rc1
+Message-ID: <ZCQt7hmodtUaBlCP@righiandr-XPS-13-7390>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add KUnit tests to the klist linked-list structure.
-These perform testing for different variations of node add
-and node delete in the klist data structure (<linux/klist.h>).
+I noticed that l2tp.sh net selftest is failing in recent kernels with
+the following error:
 
-Limitation: Since we use a static global variable, and if
-multiple instances of this test are run concurrently, the test may fail.
+ RTNETLINK answers: Protocol not supported
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
----
- lib/list-test.c | 298 +++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 297 insertions(+), 1 deletion(-)
+See also: https://bugs.launchpad.net/bugs/2013014
 
-diff --git a/lib/list-test.c b/lib/list-test.c
-index d374cf5d1a57..af651cacb8f4 100644
---- a/lib/list-test.c
-+++ b/lib/list-test.c
-@@ -8,6 +8,7 @@
- #include <kunit/test.h>
- 
- #include <linux/list.h>
-+#include <linux/klist.h>
- 
- struct list_test_struct {
- 	int data;
-@@ -1199,6 +1200,301 @@ static struct kunit_suite hlist_test_module = {
- 	.test_cases = hlist_test_cases,
- };
- 
--kunit_test_suites(&list_test_module, &hlist_test_module);
-+
-+struct klist_test_struct {
-+	int data;
-+	struct klist klist;
-+	struct klist_node klist_node;
-+};
-+
-+/* counts the number of nodes*/
-+static int node_count;
-+static struct klist_node *last_node_count;
-+
-+static void check_node(struct klist_node *node_ptr)
-+{
-+	node_count++;
-+	last_node_count = node_ptr;
-+}
-+
-+static void check_delete_node(struct klist_node *node_ptr)
-+{
-+	node_count--;
-+	last_node_count = node_ptr;
-+}
-+
-+static void klist_test_add_tail(struct kunit *test)
-+{
-+	struct klist_node a, b;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, NULL);
-+
-+	klist_add_tail(&a, &mylist);
-+	KUNIT_EXPECT_EQ(test, node_count, 1);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &a);
-+
-+	klist_add_tail(&b, &mylist);
-+	KUNIT_EXPECT_EQ(test, node_count, 2);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &b);
-+
-+	/* should be [list] -> a -> b */
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_add_head(struct kunit *test)
-+{
-+	struct klist_node a, b;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, NULL);
-+
-+	klist_add_head(&a, &mylist);
-+	KUNIT_EXPECT_EQ(test, node_count, 1);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &a);
-+
-+	klist_add_head(&b, &mylist);
-+	KUNIT_EXPECT_EQ(test, node_count, 2);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &b);
-+
-+	/* should be [list] -> b -> a */
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_add_behind(struct kunit *test)
-+{
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, NULL);
-+
-+	klist_add_head(&a, &mylist);
-+	klist_add_head(&b, &mylist);
-+
-+	klist_add_behind(&c, &a);
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+	klist_add_behind(&d, &b);
-+	KUNIT_EXPECT_EQ(test, node_count, 4);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
-+
-+	klist_iter_init(&mylist, &i);
-+
-+	/* should be [list] -> b -> d -> a -> c*/
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_add_before(struct kunit *test)
-+{
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, NULL);
-+
-+	klist_add_head(&a, &mylist);
-+	klist_add_head(&b, &mylist);
-+	klist_add_before(&c, &a);
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+	klist_add_before(&d, &b);
-+	KUNIT_EXPECT_EQ(test, node_count, 4);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
-+
-+	klist_iter_init(&mylist, &i);
-+
-+	/* should be [list] -> b -> d -> a -> c*/
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+/* Verify that klist_del() delays the deletion of a node until there
-+ * are no other references to it
-+ */
-+static void klist_test_del_refcount_greater_than_zero(struct kunit *test)
-+{
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, &check_delete_node);
-+
-+	/* Add nodes a,b,c,d to the list*/
-+	klist_add_tail(&a, &mylist);
-+	klist_add_tail(&b, &mylist);
-+	klist_add_tail(&c, &mylist);
-+	klist_add_tail(&d, &mylist);
-+
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	/* Advance the iterator to point to node c*/
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-+
-+	/* Try to delete node c while there is a reference to it*/
-+	klist_del(&c);
-+
-+	/*
-+	 * Verify that node c is still attached to the list even after being
-+	 * deleted. Since the iterator still points to c, the reference count is not
-+	 * decreased to 0
-+	 */
-+	KUNIT_EXPECT_TRUE(test, klist_node_attached(&c));
-+
-+	/* Check that node c has not been removed yet*/
-+	KUNIT_EXPECT_EQ(test, node_count, 4);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
-+
-+	klist_iter_exit(&i);
-+
-+	/* Since the iterator is no longer pointing to node c, node c is removed
-+	 * from the list
-+	 */
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+}
-+
-+/* Verify that klist_del() deletes a node immediately when there are no
-+ * other references to it.
-+ */
-+static void klist_test_del_refcount_zero(struct kunit *test)
-+{
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, &check_delete_node);
-+
-+	/* Add nodes a,b,c,d to the list*/
-+	klist_add_tail(&a, &mylist);
-+	klist_add_tail(&b, &mylist);
-+	klist_add_tail(&c, &mylist);
-+	klist_add_tail(&d, &mylist);
-+	/* Delete node c*/
-+	klist_del(&c);
-+
-+	/* Check that node c is deleted from the list*/
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+	/* Should be [list] -> a -> b -> d*/
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_remove(struct kunit *test)
-+{
-+	/* This test doesn't check correctness under concurrent access */
-+	struct klist_node a, b, c, d;
-+	struct klist mylist;
-+	struct klist_iter i;
-+
-+	node_count = 0;
-+	klist_init(&mylist, &check_node, &check_delete_node);
-+
-+	/* Add nodes a,b,c,d to the list*/
-+	klist_add_tail(&a, &mylist);
-+	klist_add_tail(&b, &mylist);
-+	klist_add_tail(&c, &mylist);
-+	klist_add_tail(&d, &mylist);
-+	/* Delete node c*/
-+	klist_remove(&c);
-+
-+	/* Check the nodes in the list*/
-+	KUNIT_EXPECT_EQ(test, node_count, 3);
-+	KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-+
-+	/* should be [list] -> a -> b -> d*/
-+	klist_iter_init(&mylist, &i);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-+	KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-+	KUNIT_EXPECT_NULL(test, klist_next(&i));
-+
-+	klist_iter_exit(&i);
-+
-+}
-+
-+static void klist_test_node_attached(struct kunit *test)
-+{
-+	struct klist_node a = {};
-+	struct klist mylist;
-+
-+	klist_init(&mylist, NULL, NULL);
-+
-+	KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
-+	klist_add_head(&a, &mylist);
-+	KUNIT_EXPECT_TRUE(test, klist_node_attached(&a));
-+	klist_del(&a);
-+	KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
-+
-+}
-+
-+static struct kunit_case klist_test_cases[] = {
-+	KUNIT_CASE(klist_test_add_tail),
-+	KUNIT_CASE(klist_test_add_head),
-+	KUNIT_CASE(klist_test_add_behind),
-+	KUNIT_CASE(klist_test_add_before),
-+	KUNIT_CASE(klist_test_del_refcount_greater_than_zero),
-+	KUNIT_CASE(klist_test_del_refcount_zero),
-+	KUNIT_CASE(klist_test_remove),
-+	KUNIT_CASE(klist_test_node_attached),
-+	{},
-+};
-+
-+static struct kunit_suite klist_test_module = {
-+	.name = "klist",
-+	.test_cases = klist_test_cases,
-+};
-+
-+kunit_test_suites(&list_test_module, &hlist_test_module, &klist_test_module);
- 
- MODULE_LICENSE("GPL v2");
--- 
-2.40.0.348.gf938b09366-goog
+Apprently the module lt2p_ipv6 is not automatically loaded when the test
+is trying to create an l2tp ipv6 tunnel.
 
+I did a bisect and found that the offending commit is this one:
+
+ 65b32f801bfb ("uapi: move IPPROTO_L2TP to in.h")
+
+I've temporarily reverted this commit for now, any suggestion on how to
+fix this properly?
+
+Thanks,
+-Andrea
