@@ -2,109 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587A06CD1F3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 08:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2646CD3DA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Mar 2023 10:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjC2GMV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Mar 2023 02:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S230201AbjC2IAb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Mar 2023 04:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjC2GMU (ORCPT
+        with ESMTP id S230190AbjC2IA3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Mar 2023 02:12:20 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2ACC435A1;
-        Tue, 28 Mar 2023 23:12:05 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 32T6BwOJ009459;
-        Wed, 29 Mar 2023 08:11:58 +0200
-Date:   Wed, 29 Mar 2023 08:11:58 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] tools/nolibc: validate C99 compatibility
-Message-ID: <ZCPWrrrlVRsaVIsl@1wt.eu>
-References: <20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net>
- <ZCPJm/Nb2AGlJqXg@1wt.eu>
- <2be5dd3f-d4ca-499a-9f7e-3113b4f04412@t-8ch.de>
+        Wed, 29 Mar 2023 04:00:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B752103;
+        Wed, 29 Mar 2023 01:00:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32151B820FD;
+        Wed, 29 Mar 2023 08:00:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B4975C433EF;
+        Wed, 29 Mar 2023 08:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680076825;
+        bh=jsONW2bbKso3jFbuEI4vaV+27HAPUxIXLM70AQoX3gg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=lLQxL0maR8V5vSL9YIIslrgcRLvDWgqnNv2IOBSjBhDFTsOV8vSY8CZTrdeCp8z9f
+         Wr99F72Lcsc7xZVnGj8u+FYvPqMPed/O2wDf1xC2sF7dGsLfo2kb6Dd6AOJsQpsEhc
+         3uxJsu2DvaqdR3mHcnQPF7DdWyFzq9fPp6kVplrp6yvsa2fNfEM+2nK2vlqjVohxEg
+         XXgKH0CBXOzZPvzMPyH+ri//deE6fHuYlu3Klk6QxQHsjt93eUgr2TPKW/GvI8Bkf1
+         0ppw8wkZGE8CJmGJl6uNLkgpUFMP6oKenmndodf55K78jSax/AYeJfYzucsAvz/vj/
+         O38DY/C9uuYfw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9079CE4F0DB;
+        Wed, 29 Mar 2023 08:00:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2be5dd3f-d4ca-499a-9f7e-3113b4f04412@t-8ch.de>
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next v4 0/3] Add support for sockmap to vsock.
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168007682558.9659.6900016248016625386.git-patchwork-notify@kernel.org>
+Date:   Wed, 29 Mar 2023 08:00:25 +0000
+References: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
+In-Reply-To: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     stefanha@redhat.com, sgarzare@redhat.com, mst@redhat.com,
+        jasowang@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, andrii@kernel.org,
+        mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 05:35:33AM +0000, Thomas Weißschuh wrote:
-> Hi Willy,
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Mon, 27 Mar 2023 19:11:50 +0000 you wrote:
+> We're testing usage of vsock as a way to redirect guest-local UDS
+> requests to the host and this patch series greatly improves the
+> performance of such a setup.
 > 
-> On 2023-03-29 07:16:11+0200, Willy Tarreau wrote:
-> > On Tue, Mar 28, 2023 at 09:07:35PM +0000, Thomas Weißschuh wrote:
-> > > Most of the code was migrated to C99-conformant __asm__ statements
-> > > before. It seems string.h was missed.
-> > > 
-> > > Fix string.h and also validate during build that nolibc stays within
-> > > C99.
-> > 
-> > I'm all for improving portability, however I have a concern with building
-> > the test case with -std=c99 which is that it might hide some c99-only
-> > stuff that we'd introduce by accident in the nolibc's code, and I'd
-> > rather not do that because it will mean changing build options for some
-> > external programs using it if it happens. However I totally agree with
-> > you that we need to make sure that there's no build issues with c99
-> > compilers. Modern compilers are c99-compatible but generally come with
-> > GNU extensions and I understand why you're interested in switching to
-> > std=c99 in order to drop some of these like "asm". Should we have two
-> > build targets, the default one and a c99 one ? Maybe. The build is so
-> > small and quick that nobody will care, so we could definitely imagine
-> > building the two versions. Maybe you have a better idea ?
+> Compared to copying packets via userspace, this improves throughput by
+> 121% in basic testing.
 > 
-> I'm not sure I understand.
-> Do you want to stay compatible with c89/gnu89?
+> [...]
 
-At least with gnu89, yes, since it's been used by default by a wide
-range of compilers.
+Here is the summary with links:
+  - [net-next,v4,1/3] vsock: support sockmap
+    https://git.kernel.org/netdev/net-next/c/634f1a7110b4
+  - [net-next,v4,2/3] selftests/bpf: add vsock to vmtest.sh
+    https://git.kernel.org/netdev/net-next/c/c7c605c982d6
+  - [net-next,v4,3/3] selftests/bpf: add a test case for vsock sockmap
+    https://git.kernel.org/netdev/net-next/c/d61bd8c1fd02
 
-> If so we could use that baseline standard instead of -std=c99.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-The only thing is that c99 is both more permissive and more restrictive
-than gnu89 since (as you noticed) gnu89 allows for example "asm" instead
-of "__asm__".
 
-> Without specifying a standard we get whatever the compiler uses as
-> default which is probably much newer than c99.
-
-Yes but do we really care ? I think we want at least some gnuXX
-(which gcc does by default) and some c99 for those who don't want to
-depend on gnuXX. Diversity in tests provides faster reports than
-forcing everyone to the same set. By keeping the default build option,
-a backwards-compatibility test is just a matter of setting CC= with the
-relevant compiler to confirm it's still OK, without being fooled by the
-fact that a standard other than the default was used.
-
-> Having two targets seems to be easy to do but I'm not sure what the
-> advantage would be over compiling once against the intended baseline
-> standard.
-
-We're providing a set of includes to be used by userland so there isn't
-a single intended baseline standard. I'm not advocating for supporting
-everything on earth at all, but at least it should work with native
-compilers currently found in distros or on the kernel.org crosstools,
-and with some older toolchains that are used once in a while to rebuild
-a few compact tools. For example I've used this codebase to build a
-recovery kernel+tools in the past, which fits everything in a 1MB
-binary, and that's the type of thing where you know that it's not always
-easy nor relevant to port the code to newer compilers, so if it used to
-work on gcc 4.7 you'll just reuse that one if you still have it. My
-position regarding older tools is: we don't make particular efforts to
-test them, but we at least do not try hard to evince them either as
-long as it's not necessary.
-
-Thanks,
-Willy
