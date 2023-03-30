@@ -2,189 +2,237 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C146CFBCF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 08:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A266CFC7F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 09:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbjC3Gph (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 02:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
+        id S229531AbjC3HPE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 03:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjC3Gpg (ORCPT
+        with ESMTP id S231129AbjC3HPB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:45:36 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B8744B7
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 23:45:19 -0700 (PDT)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E79913F231
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 06:45:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1680158716;
-        bh=eftD3dmnNwFBwTmBDsmqihY2E6nG3qiDoQJcGHY96UE=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=C/f3XQaqwtcV2NcoW7M/gPgpps6kjgjbnYVNsiaPvKu1m3KvQrAT/tEsqj7QO7gzZ
-         IvW3n+Kbxktk/ecGxiAPDr1Iu/hJ6pO665Sz007To7LbgeIiawRYKSJKtpYYzKSyoB
-         2DeKyPES9A8MMcH8aCeItl6RJhKPgfuFjo8Gt9PbwxqYIF8zTKtmHeE3XRztw0SNle
-         dg7NbATmN4FtPrqkEwYV95cvQI8hU1PimE6Bk6PMTLGudl+eti7Fcf4Q7XlnbGDAmZ
-         rO4B75hwrnsXQjua3bdUJvtXsYw3+VHuYMD1DJ2EOUhHk+MRNdL0V+Geqc1dFkB9xU
-         rYOokVgTgWS7w==
-Received: by mail-ed1-f69.google.com with SMTP id p36-20020a056402502400b004bb926a3d54so25482556eda.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 23:45:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680158716; x=1682750716;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eftD3dmnNwFBwTmBDsmqihY2E6nG3qiDoQJcGHY96UE=;
-        b=GezXlnwyRCY0W1JPYvz3bwoDRJaBIiR3iLcGHOPPjaf/GMKsKrR+6zN9DLvTbjvINH
-         wzPjGb/fB8HphQmw8tkM3gZ5ufUXjPDyNTqldECDVbdsDjIDYxrVVjKA1r9B33FOrbqR
-         p99GIlN5WggB9Cc0BUd1kwqe+M3hGsAjb9jeGHj5bK1jTCAMLhS3rguzCm7KFPvcS0VS
-         bEoylB4gIbXQHtd4oTsiME7UKd6i2bPeABLa8WtBxd/ioaCk7SjB6rEvtVVy5z7IVRj1
-         6J+aB1AYIDsJKB1h/yQGwoABfMPZfWeem5mwHTq1t/uYUyPukvz7AXZZfq3n7X+yQIcn
-         1n7Q==
-X-Gm-Message-State: AAQBX9eJ3OX+ekINW5Svxhe0NsBT0KLxkFbqsqvX+DNLJVTRsTeECitf
-        yZgpVnHOPRnQw3p6aSj6bYSrZiuvEfw+8irf+ppqW/fT56Zp0Jy18n4RAN6dAVyWiOgWwvVGtq4
-        bgpynwb3YHe5PvtskthkZkUo/AzhH6Lruzf6HGVYBGQ78Qg==
-X-Received: by 2002:a17:906:ca4a:b0:92b:e330:a79e with SMTP id jx10-20020a170906ca4a00b0092be330a79emr5319829ejb.29.1680158716470;
-        Wed, 29 Mar 2023 23:45:16 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aySfCTmBIObUPn9E4fSuQ33rPMkemNREfZQNbI+2Rs3eXHnxXvUVit1AAXDrhIDeV64cDQ1A==
-X-Received: by 2002:a17:906:ca4a:b0:92b:e330:a79e with SMTP id jx10-20020a170906ca4a00b0092be330a79emr5319810ejb.29.1680158716195;
-        Wed, 29 Mar 2023 23:45:16 -0700 (PDT)
-Received: from localhost (host-79-33-132-140.retail.telecomitalia.it. [79.33.132.140])
-        by smtp.gmail.com with ESMTPSA id xe12-20020a170907318c00b00946c5da4d32sm2693466ejb.40.2023.03.29.23.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 23:45:15 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 08:45:15 +0200
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     "Drewek, Wojciech" <wojciech.drewek@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: selftests: net: l2tp.sh regression starting with 6.1-rc1
-Message-ID: <ZCUv+8tbH3H5tZKe@righiandr-XPS-13-7390>
-References: <ZCQt7hmodtUaBlCP@righiandr-XPS-13-7390>
- <MW4PR11MB57763144FE1BE9756FD3176BFD899@MW4PR11MB5776.namprd11.prod.outlook.com>
- <ZCRYpDehyDxsrnfi@debian>
- <MW4PR11MB5776F1B04976CB59D9FE41BFFD899@MW4PR11MB5776.namprd11.prod.outlook.com>
- <ZCRsxERSZiGf5H5e@debian>
+        Thu, 30 Mar 2023 03:15:01 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD2D6A47
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 00:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=6Kq3aU39W9ryn89FrNrhxHRhiiFCYOxu4oueT4/lEBY=;
+        t=1680160478; x=1681370078; b=tj91VOkmXfboSYvtoNZ4I+1D8NfOFf4nGAbRmp0Swhklt9q
+        I9k1iyGMRWus6EDQxtbJYUFg8gm/YL3NTk+sdQT82Z21WjOOCdh0osnzAxNVPQrWy53F8l+mLOr4A
+        graiOs3JFikRhcxaHMq6CLMPDdCmWKXH3gT59eIzYCqsgf9jzr+GH8ra2K+NiIuZPjCmwmd4H0kIN
+        huAP+Q3rDnDbPMWnBcZeX4E7LO84MxYNniluCGNZtSYnQEtiVwVn6sCvrMx9L3jACdg/JePlf6pN3
+        Z+haXiOLV7YlO9zzF5Vw+GycK+ZeQ7ORDhXw2v1Tt64+v8QsMo235AwMCOTbZq2g==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1phmUS-000uRU-1B;
+        Thu, 30 Mar 2023 09:14:32 +0200
+Message-ID: <1a4aa2f79fd753287e17103f36b2e37670f803dc.camel@sipsolutions.net>
+Subject: Re: [PATCH 2/3] kunit: add ability to register a simple cleanup
+ function
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     David Gow <davidgow@google.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Johannes Berg <johannes@sipsolutions.net>
+Date:   Thu, 30 Mar 2023 09:14:30 +0200
+In-Reply-To: <CABVgOSkcT0f5ex6E_cbepy4R2=qmSdVwgv0XLjaFp=rg=jDzbg@mail.gmail.com>
+References: <20230329172311.71861-1-benjamin@sipsolutions.net>
+         <20230329172311.71861-2-benjamin@sipsolutions.net>
+         <CABVgOSkcT0f5ex6E_cbepy4R2=qmSdVwgv0XLjaFp=rg=jDzbg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCRsxERSZiGf5H5e@debian>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 06:52:20PM +0200, Guillaume Nault wrote:
-> On Wed, Mar 29, 2023 at 03:39:13PM +0000, Drewek, Wojciech wrote:
-> > 
-> > 
-> > > -----Original Message-----
-> > > -MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, IPPROTO_L2TP);
-> > > -MODULE_ALIAS_NET_PF_PROTO(PF_INET6, IPPROTO_L2TP);
-> > > +MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, 115 /* IPPROTO_L2TP */);
-> > > +MODULE_ALIAS_NET_PF_PROTO(PF_INET6, 115 /* IPPROTO_L2TP */);
-> > 
-> > Btw, am I blind or the alias with type was wrong the whole time?
-> > pf goes first, then proto and type at the end according to the definition of MODULE_ALIAS_NET_PF_PROTO_TYPE
-> > and here type (2) is 2nd and proto (115) is 3rd
-> 
-> You're not blind :). The MODULE_ALIAS_NET_PF_PROTO_TYPE(...) is indeed
-> wrong. Auto-loading the l2tp_ip and l2tp_ip6 modules only worked
-> because of the extra MODULE_ALIAS_NET_PF_PROTO() declaration (as
-> inet_create() and inet6_create() fallback to "net-pf-%d-proto-%d" if
-> "net-pf-%d-proto-%d-type-%d" fails).
+On Thu, 2023-03-30 at 14:17 +0800, David Gow wrote:
+> On Thu, 30 Mar 2023 at 01:23, <benjamin@sipsolutions.net> wrote:
+> >=20
+> > From: Benjamin Berg <benjamin.berg@intel.com>
+> >=20
+> > This is useful to e.g. automatically free resources at the end of the
+> > test, without having to deal with kunit resource objects directly.
+> >=20
+> > The whole point of doing this is that the callback is guaranteed to
+> > happen in case the test aborts (due to an assertion). As such, use
+> > assertions internally rather than requiring further error checking by
+> > the API user.
+> >=20
+> > Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
+> > ---
+>=20
+> Thanks!
+>=20
+> I've actually been working on something similar here:
+> https://lore.kernel.org/linux-kselftest/20230325043104.3761770-2-davidgow=
+@google.com/
 
-At this point I think using 115 directly is probably the best solution,
-that is also what we do already with SOCK_DGRAM, but I would just update
-the comment up above, instead of adding the inline comments.
+Oh, neat!
 
-Something like this maybe:
+> Maxime suggested that it might be worth naming this kunit_add_action()
+> for consistency with devm_add_action(). We also need the cancel/remove
+> and trigger/release helpers for some of the other device helpers.
 
----
+With kunit_add_cleanup I simply chose to copy the python unittest
+API[1], which may already be familiar to people and feels quite
+descriptive to me.
 
-From: Andrea Righi <andrea.righi@canonical.com>
-Subject: [PATCH] l2tp: generate correct module alias strings
 
-Commit 65b32f801bfb ("uapi: move IPPROTO_L2TP to in.h") moved the
-definition of IPPROTO_L2TP from a define to an enum, but since
-__stringify doesn't work properly with enums, we ended up breaking the
-modalias strings for the l2tp modules:
+Something to maybe talk about is whether my approach of simply
+asserting instead of returning an error is desirable.=C2=A0In my view, test=
+s
+should be fine with being aborted in most situations and the test
+itself is never going to succeed after an allocation failure. I had a
+quick look at kunit_kzalloc, and doing an assertion right afterwards is
+a very common pattern. But, even if it is similar to e.g. userspace
+GLib's g_malloc, it would be a new behaviour for the kernel.
 
- $ modinfo l2tp_ip l2tp_ip6 | grep alias
- alias:          net-pf-2-proto-IPPROTO_L2TP
- alias:          net-pf-2-proto-2-type-IPPROTO_L2TP
- alias:          net-pf-10-proto-IPPROTO_L2TP
- alias:          net-pf-10-proto-2-type-IPPROTO_L2TP
+Benjamin
 
-Use the resolved number directly in MODULE_ALIAS_*() macros (as we
-already do with SOCK_DGRAM) to fix the alias strings:
+[1] https://docs.python.org/3/library/unittest.html#unittest.TestCase.addCl=
+eanup
 
-$ modinfo l2tp_ip l2tp_ip6 | grep alias
-alias:          net-pf-2-proto-115
-alias:          net-pf-2-proto-115-type-2
-alias:          net-pf-10-proto-115
-alias:          net-pf-10-proto-115-type-2
-
-Moreover, fix the ordering of the parameters passed to
-MODULE_ALIAS_NET_PF_PROTO_TYPE() by switching proto and type.
-
-Fixes: 65b32f801bfb ("uapi: move IPPROTO_L2TP to in.h")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- net/l2tp/l2tp_ip.c  | 8 ++++----
- net/l2tp/l2tp_ip6.c | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/net/l2tp/l2tp_ip.c b/net/l2tp/l2tp_ip.c
-index 4db5a554bdbd..41a74fc84ca1 100644
---- a/net/l2tp/l2tp_ip.c
-+++ b/net/l2tp/l2tp_ip.c
-@@ -677,8 +677,8 @@ MODULE_AUTHOR("James Chapman <jchapman@katalix.com>");
- MODULE_DESCRIPTION("L2TP over IP");
- MODULE_VERSION("1.0");
- 
--/* Use the value of SOCK_DGRAM (2) directory, because __stringify doesn't like
-- * enums
-+/* Use the values of SOCK_DGRAM (2) as type and IPPROTO_L2TP (115) as protocol,
-+ * because __stringify doesn't like enums
-  */
--MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET, 2, IPPROTO_L2TP);
--MODULE_ALIAS_NET_PF_PROTO(PF_INET, IPPROTO_L2TP);
-+MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET, 115, 2);
-+MODULE_ALIAS_NET_PF_PROTO(PF_INET, 115);
-diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
-index 2478aa60145f..5137ea1861ce 100644
---- a/net/l2tp/l2tp_ip6.c
-+++ b/net/l2tp/l2tp_ip6.c
-@@ -806,8 +806,8 @@ MODULE_AUTHOR("Chris Elston <celston@katalix.com>");
- MODULE_DESCRIPTION("L2TP IP encapsulation for IPv6");
- MODULE_VERSION("1.0");
- 
--/* Use the value of SOCK_DGRAM (2) directory, because __stringify doesn't like
-- * enums
-+/* Use the values of SOCK_DGRAM (2) as type and IPPROTO_L2TP (115) as protocol,
-+ * because __stringify doesn't like enums
-  */
--MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 2, IPPROTO_L2TP);
--MODULE_ALIAS_NET_PF_PROTO(PF_INET6, IPPROTO_L2TP);
-+MODULE_ALIAS_NET_PF_PROTO_TYPE(PF_INET6, 115, 2);
-+MODULE_ALIAS_NET_PF_PROTO(PF_INET6, 115);
--- 
-2.39.2
+> Hopefully between these, we can have something which works for everyone.
+>=20
+> Cheers,
+> -- David
+>=20
+>=20
+>=20
+>=20
+> > =C2=A0include/kunit/test.h | 20 ++++++++++++++++++++
+> > =C2=A0lib/kunit/test.c=C2=A0=C2=A0=C2=A0=C2=A0 | 37 +++++++++++++++++++=
+++++++++++++++++++
+> > =C2=A02 files changed, 57 insertions(+)
+> >=20
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 519b90261c72..ab1dacf1c9f4 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -373,6 +373,26 @@ static inline void *kunit_kcalloc(struct kunit
+> > *test, size_t n, size_t size, gfp
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return kunit_kmalloc_array(t=
+est, n, size, gfp |
+> > __GFP_ZERO);
+> > =C2=A0}
+> >=20
+> > +typedef void (*kunit_cleanup_t)(const void *);
+> > +
+> > +/**
+> > + * kunit_add_cleanup() - Add post-test cleanup action.
+> > + * @test: The test case to which the resource belongs.
+> > + * @cleanup_func: function to call at end of test.
+> > + * @data: data to pass to @free_func.
+> > + * @internal_gfp: gfp to use for internal allocations, if unsure,
+> > use GFP_KERNEL
+> > + *
+> > + * This adds a cleanup action to be executed after the test
+> > completes.
+> > + * Internally this is handled using a *test managed resource*.
+> > + *
+> > + * This function will abort the test on failure.
+> > + *
+> > + * Note: KUnit needs to allocate memory for a kunit_resource
+> > object. You must
+> > + * specify an @internal_gfp that is compatible with the current
+> > context.
+> > + */
+> > +void kunit_add_cleanup(struct kunit *test, kunit_cleanup_t
+> > cleanup_func,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const void *data,=
+ gfp_t internal_gfp);
+> > +
+> > =C2=A0void kunit_cleanup(struct kunit *test);
+> >=20
+> > =C2=A0void __printf(2, 3) kunit_log_append(char *log, const char *fmt,
+> > ...);
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index c9e15bb60058..72d956dfc324 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -719,6 +719,43 @@ void *kunit_kmalloc_array(struct kunit *test,
+> > size_t n, size_t size, gfp_t gfp)
+> > =C2=A0}
+> > =C2=A0EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
+> >=20
+> > +struct kunit_auto_cleanup {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct kunit_resource resource;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kunit_cleanup_t cleanup_func;
+> > +};
+> > +
+> > +static void kunit_auto_cleanup_free(struct kunit_resource *res)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct kunit_auto_cleanup *cleanu=
+p;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cleanup =3D container_of(res, str=
+uct kunit_auto_cleanup,
+> > resource);
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cleanup->cleanup_func(cleanup->re=
+source.data);
+> > +}
+> > +
+> > +void kunit_add_cleanup(struct kunit *test, kunit_cleanup_t
+> > cleanup_func,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const void *data,=
+ gfp_t internal_gfp)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct kunit_auto_cleanup *res;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_ASSERT_NOT_NULL_MSG(test, c=
+leanup_func,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Cleanup function must not=
+ be
+> > NULL");
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 res =3D kzalloc(sizeof(*res), int=
+ernal_gfp);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!res) {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 cleanup_func(data);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 KUNIT_ASSERT_FAILURE(test, "Could not allocate
+> > resource for cleanup");
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 res->cleanup_func =3D cleanup_fun=
+c;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 res->resource.should_kfree =3D tr=
+ue;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Cannot fail as init is NULL */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __kunit_add_resource(test, NULL, =
+kunit_auto_cleanup_free,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 &res->resource, (void *)data);
+> > +}
+> > +EXPORT_SYMBOL_GPL(kunit_add_cleanup);
+> > +
+> > =C2=A0static inline bool kunit_kfree_match(struct kunit *test,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 st=
+ruct kunit_resource *res,
+> > void *match_data)
+> > =C2=A0{
+> > --
+> > 2.39.2
+> >=20
 
