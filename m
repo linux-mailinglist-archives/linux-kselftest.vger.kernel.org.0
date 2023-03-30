@@ -2,78 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221746D09C5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 17:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6DD6D0A43
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 17:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbjC3Pfg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 11:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
+        id S233308AbjC3PpY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 11:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbjC3Pfa (ORCPT
+        with ESMTP id S233344AbjC3PpS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:35:30 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E0ECDF9
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 08:35:09 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c18so18413267ple.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 08:35:09 -0700 (PDT)
+        Thu, 30 Mar 2023 11:45:18 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96037E19F;
+        Thu, 30 Mar 2023 08:44:53 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so20059141pjt.5;
+        Thu, 30 Mar 2023 08:44:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680190509;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6J5Dz0I/J07O36CXqE0BRQW45IGKi4sdZ6anPBoj71I=;
-        b=EAl1AhmF75rYCLH5Q2vZtyt7h5YQjV6yPyx8moPuHclV7yeuRCAzkRDD7F2j341P9n
-         YA8/XGuqFn9dKR+A4VEiA1rYPHy24yN3RG4Wm/YJkXMtoUXuyx2jY8s14FpT34Zd1GD8
-         L07QTzxvU/AqKb62ZBKabLzqx3uaUvYHWDcY0HoWZ8x+DNeAFd7yqmqR0Tvku7NIkiU8
-         WG5LOOf8II2uEEZjDVy/AZMLvDzdsGdKAlnduD2YzCH1Wk7T0sAVXkpeyGIpnGXJPVFS
-         VnfsYAHXWqM4GIn8j+O/EUmETfFqRZg7LR81x1yzS49w7C7FH19BTm/O3B7uGa3uh5Dc
-         C1XA==
+        d=gmail.com; s=20210112; t=1680191092;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lU9JCkTye6Fj+qGS5BcJ6TDCunaP0ev1Z3VOnL6O7u8=;
+        b=ARXUEmqMaQiFvA623fC9h/1bTtbZu+9APT25M51Fyzal5QyyBhpNOKenjrxHC9tNvl
+         S5qRlO9XoSCMeMsGUxdNgy5JziINi0lqiObnEMVskhrUlgY/Nx4DIG0QNEQsDohNNwVI
+         ZjpV6n4C/vseZe/Yaal+huKNBxLZRFnxa87dsmJ+XNyIozRshatOv7uSBF+5zoQgGC9u
+         APpkQ7cgiCA7P+a0ITBi0t+ePzbvRC6ZSQ8PNQFlEV5Nkz3BPNiKrW3feDlfatNMu8VV
+         ylQbTLsNnGSA8P3WnQGfjLEZ3+xacpPhY8gzVJGbk7L8KERA9bNGO7XypeGYZuS4b7+c
+         MaZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680190509;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6J5Dz0I/J07O36CXqE0BRQW45IGKi4sdZ6anPBoj71I=;
-        b=bXNmruQJ3jr7Jf/Ocsm+B/qNnUq41O6pL9EUcyMrzk9qOFz44wUZT2I8F4TQCN6fwL
-         GWHDTB3r3+o0Ywrr5lWnytpU//b2aG69oBaKIY9FUvmWQDggCvDv3NZseadGhgVyXRxo
-         TWfAdX0YLCix9dInsQr9Blt8JvAj7el59Nn+ALCMhZ/SfpR29JeLNeDBsDzFfTvI0vT5
-         GE0JpLwAHSOlZ+1Nld8m/7HER+nZukndWnFk2ofwrzR5SQQU3dTdc8riSKVfDlNn9FtU
-         pyP/CsgbGzH3xKMBcFofdZL+C0yGL5xoeNFK7wOO8rkhHGcTsQlsBCjKAfQkX8o93OFE
-         lYgQ==
-X-Gm-Message-State: AAQBX9cDgX/AMNxVQ7oh4N7KFD/7q7aQ8NHF32gKeB9BErkBTFLdtXBS
-        oQ7rA7uIAM4H4PcmodH8+S+DPISRkE9Ue2831lOq1g==
-X-Google-Smtp-Source: AKy350YNQ6FECTA9ROsjSO3DYIpGj7n6B0divEu9JE+0CLFvLjKtYxt1YutcyQDZ0/lroePvmXBB7C0NdX8bl0paJF0=
-X-Received: by 2002:a17:90a:da01:b0:23f:695a:1355 with SMTP id
- e1-20020a17090ada0100b0023f695a1355mr7327830pjv.5.1680190508548; Thu, 30 Mar
- 2023 08:35:08 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680191092;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lU9JCkTye6Fj+qGS5BcJ6TDCunaP0ev1Z3VOnL6O7u8=;
+        b=Gwhpp1CH3ATa+s2l6hpaB3nP5joifaqa6K3nft1d7wcbwEMWA4r+AZi7qphPWyHCs2
+         Nog49W4S7XEBlsjWJ7ivtghFM549D/hExVrN9l77iUxRgb62zZiGmjU3RGe+sfHx5BWH
+         MjeXQBRrRxHDGxGONxkNBYLPSkgGoQoLWliNxu6h+Ow/zg2seXaYhD2MYg+rCyuNsPz1
+         khOqw8dykb2G0SdzWsXcMDO68s9Fj7jQ5ofzEDynphVZYldHcv5Spr3jUIksMhfJwZHs
+         ppWqlUeFfro/WON8v7egFR+rE+vaEHNGw3dmtqBvW4RduHZYgtbGXqdeFV3iK2K+vTce
+         hdyA==
+X-Gm-Message-State: AAQBX9cXZQznOvKBR8LKDUkXTdw0N1D0vB5soaf4NfchGEZcU0Eq7idB
+        TXbsRkRTUsVjDnpsQ1ZMMnk=
+X-Google-Smtp-Source: AKy350an4aqBBaa4AoyKQMK/eGaMNqvVN6MWoVbuOKTA1coVugM8BSX93rzwnm0ye04pw2RvKavoAQ==
+X-Received: by 2002:a17:903:244e:b0:1a1:bbcd:917e with SMTP id l14-20020a170903244e00b001a1bbcd917emr26930417pls.10.1680191091900;
+        Thu, 30 Mar 2023 08:44:51 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id u1-20020a170902bf4100b001a1faeac240sm352484pls.186.2023.03.30.08.44.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 08:44:51 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 18:44:31 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
+ drivers
+Message-ID: <20230330154431.vii5llyqgiymievp@skbuf>
+References: <20230327225933.plm5raegywbe7g2a@skbuf>
+ <87ileljfwo.fsf@kapio-technology.com>
+ <20230328114943.4mibmn2icutcio4m@skbuf>
+ <87cz4slkx5.fsf@kapio-technology.com>
+ <20230330124326.v5mqg7do25tz6izk@skbuf>
+ <87wn2yxunb.fsf@kapio-technology.com>
+ <20230330130936.hxme34qrqwolvpsh@skbuf>
+ <875yaimgro.fsf@kapio-technology.com>
+ <20230330150752.gdquw5kudtrqgzyz@skbuf>
+ <877cuy6ynf.fsf@kapio-technology.com>
 MIME-Version: 1.0
-References: <20230330112743.2331141-1-javierm@redhat.com>
-In-Reply-To: <20230330112743.2331141-1-javierm@redhat.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 30 Mar 2023 08:34:57 -0700
-Message-ID: <CAGS_qxptBcUQByWAd6JHAxWb08czOiGnx0_uSvMKdhzTVwv=6w@mail.gmail.com>
-Subject: Re: [PATCH] .gitignore: Exclude KUnit config dot-files
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>,
-        linux-kselftest@vger.kernel.org, David Gow <davidgow@google.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Enric Balletbo i Serra <eballetbo@redhat.com>,
-        kunit-dev@googlegroups.com,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>, Andrew Davis <afd@ti.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877cuy6ynf.fsf@kapio-technology.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,23 +114,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 4:27=E2=80=AFAM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> There's a rule to ignore all the dot-files (.*) but we want to exclude th=
-e
-> config files used by KUnit (.kunitconfig) since those are usually added t=
-o
-> allow executing test suites without having to enable custom config symbol=
-s.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+On Thu, Mar 30, 2023 at 05:34:44PM +0200, Hans Schultz wrote:
+> On Thu, Mar 30, 2023 at 18:07, Vladimir Oltean <olteanv@gmail.com> wrote:
+> >
+> > Then, make DSA decide whether to handle the "added_by_user && !is_static"
+> > combination or not, based on the presence of the DSA_FDB_FLAG_DYNAMIC
+> > flag, which will be set in ds->supported_fdb_flags only for the mv88e6xxx
+> > driver.
+> 
+> Okay, so this will require a new function in the DSA layer that sets
+> which flags are supported and that the driver will call on
+> initialization.
+> 
+> Where (in the DSA layer) should such a function be placed and what
+> should it be called?
 
-FYI, Andy has a version of this patch from back in Jan here,
-https://lore.kernel.org/linux-kselftest/20230127145708.12915-1-andriy.shevc=
-henko@linux.intel.com/
+Don't overthink it, no new function. It's okay to just set
+ds->supported_fdb_flags = DSA_FDB_FLAG_DYNAMIC in
+mv88e6xxx_register_switch(), near the place where it currently sets
+ds->num_lag_ids. Either before dsa_register_switch(), or within the
+ds->ops->setup(). Both are fine, since the user network interfaces
+haven't been allocated just yet by dsa_slave_create() and so, the
+switchdev code path is inaccessible.
 
-I don't think anyone was adamantly opposed to it, but it's just been
-sitting on the list waiting.
-
-Daniel
+Existing drivers will have ds->supported_fdb_flags = 0 by default, since
+they allocate the struct dsa_switch with kzalloc(), and DSA will have to
+do something sane with that.
