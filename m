@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76A86D07A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 16:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6932A6D07A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 16:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbjC3OHA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 10:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        id S232326AbjC3OHB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 10:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbjC3OGu (ORCPT
+        with ESMTP id S232265AbjC3OGw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:06:50 -0400
+        Thu, 30 Mar 2023 10:06:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEA5A5F0;
-        Thu, 30 Mar 2023 07:06:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E893FA5D8;
+        Thu, 30 Mar 2023 07:06:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FFFEB828DC;
-        Thu, 30 Mar 2023 14:06:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75EA3C433EF;
-        Thu, 30 Mar 2023 14:06:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71F67B828F8;
+        Thu, 30 Mar 2023 14:06:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D12C4339E;
+        Thu, 30 Mar 2023 14:06:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680185206;
-        bh=lJRgG0ijuNTvr7x4m8hdCCZZKuGkL+WKbF28E4wbxuQ=;
+        s=k20201202; t=1680185208;
+        bh=fqIBxGEV91xOPvu61Og1Z9JZnHs1QRFue94bBtjR2mQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Ay3P2CSuw/+fvmO6Rn3XMlJiz90xOzHTFwryntCKPV6sutNjTR2d7z7zJN8LiVgec
-         0yjKdXW170g3K/O7k2sBskhKeZGd1QpliNf68L9HoLjIGu2RzC2qTWNk0HvJx/Xut7
-         3aLWphRVqVaNDMQDZmpwf5jMwzs/snzbZFDFrxqHBVC7erAvSpNVg2LFgZqBZUM7XN
-         lr4UV3OqkaN0Zq4DKvoUbK0E15cbBZL6JeEmqz7T3mVskxniE3GAQrnBaeq1Uk63aJ
-         5962vxalSIkkfuFdVhGsWQpS00yBkROVDwVoH3wvIbbJdWyANps8w4YDr5VLB9esQS
-         WibSxDqb0KrFA==
+        b=d807PYZooqduTqe/YOzSarCxd3ndKWyvxFdrxNOOEAOyd67ZYK3IEkn29wpNEH/Gj
+         g6PquOG3Vq+67d3vizURAHCASCzk3QkTZisjC8hoy+5EF2Y9nBT2wFMoWRqo4ytTUH
+         9YZZaZU38PSP7NH2Om6SNNi9fZEP6wzDTrn3tBSwkAT2lHq9jeLVYAcYNp9k2VNkho
+         omyESp4GHyVX4kPhvSeWE/HdB2+3FgVfExm3ATywdQoqKeb7BIK+26iVGea7VjuwzR
+         S2bmL6PhwmqeK4equdXK0NuVIoa6EC3jJO9jATjTqBFTrP976Ec9mI/xVewnzamLz8
+         Qtj3fewKufObg==
 From:   Mark Brown <broonie@kernel.org>
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
         Mark Brown <broonie@kernel.org>
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230324-regmap-kunit-v1-0-62ef9cfa9b89@kernel.org>
-References: <20230324-regmap-kunit-v1-0-62ef9cfa9b89@kernel.org>
-Subject: Re: [PATCH 0/2] regmap: Initial KUnit coverage
-Message-Id: <168018520412.3348315.6937765619689881822.b4-ty@kernel.org>
-Date:   Thu, 30 Mar 2023 15:06:44 +0100
+In-Reply-To: <20230324-regmap-kunit-v2-0-b208801dc2c8@kernel.org>
+References: <20230324-regmap-kunit-v2-0-b208801dc2c8@kernel.org>
+Subject: Re: [PATCH v2 0/2] regmap: Initial KUnit coverage
+Message-Id: <168018520617.3348315.15604661706285986774.b4-ty@kernel.org>
+Date:   Thu, 30 Mar 2023 15:06:46 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -56,12 +56,15 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 25 Mar 2023 00:27:16 +0000, Mark Brown wrote:
+On Sun, 26 Mar 2023 15:11:11 +0100, Mark Brown wrote:
 > This series provides some initial KUnit coverage for regmap,
 > covering most of the interfaces that operate at the register
 > level using an instrumented RAM backed bus type.
 > 
+> Without the current regmap tree the paging tests will fail as the
+> RAM backed regmap doesn't support the required operations.
 > 
+> [...]
 
 Applied to
 
