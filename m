@@ -2,146 +2,254 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03146D0922
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 17:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A51A6D0937
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 17:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbjC3PJG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 11:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S232792AbjC3PPB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 11:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232768AbjC3PJF (ORCPT
+        with ESMTP id S232758AbjC3PPA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:09:05 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2BBCDE9;
-        Thu, 30 Mar 2023 08:08:13 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id le6so18328458plb.12;
-        Thu, 30 Mar 2023 08:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680188893;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z0Z7V7Ss/AtXBRghpZkg8HPKEk/gIK+rbrkFIOnWykw=;
-        b=hrKdvXgmz+intqH6k/82qhZO+TXJRFUbWkit5YyihN3zsu13/kSZ0hpW0LVa5b7XVy
-         h+KE9JOb8fFAzZYG60AOgY5RNeZjapZ/L4Q/l8g7HQ/PudZPn7BQcfZPJUOnIezdbY4C
-         WSW3uXVaJ72O2Q73JC17f1rYt+NLA0tgOfwHgId0U4xbayGoLw4zd3TjSMl1QDWNgoay
-         yTwQK2Gz1n74v92l4Hst8OFJ8LVY/EVXYX0JhaQjQyWBDAUqOmPaaYMrR+yRmkM0qv9w
-         Gx2josZg2bXesXPWbGOJJSnHTl4S9C2rpx+jZ2yk/jHkgPBwBiMzTH317fUL6yDpgkZ4
-         ScyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680188893;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z0Z7V7Ss/AtXBRghpZkg8HPKEk/gIK+rbrkFIOnWykw=;
-        b=uZgpifKQADUHARRsbAmYQAtEWMv3BBbV4oq92E+XEE/XRFUXVk3rsgByioUc5P9tGf
-         62Qrc0iduTXECZXY53cEfHM3OZCNEdSRQUhH1ytaDJ3b66295cEuKQzooq3BymYG5FtQ
-         U8tIR1WDR1jSjOWCZCOFT7TsWddsDrpqSjcpEZ3jzuRB2xSV5SsusiuhuDyCmu9Lowl/
-         E57xNE3crvjh3FhCJ4DYpTAA4u99MJxQ7zPpBFH1erEP8fexd3LStXpNIyDLedfDRml/
-         oFa4UAzjOdTvVQplWZrmbl+nxWi/kqVfNXwcVJOemInnb5YtxywcV+tTx6pcEDEvqZlv
-         92Qg==
-X-Gm-Message-State: AO0yUKXN7dNK6rWOhA2+pZ3qW9ELXIQFyE5bFJCX4aCbUgDA5jjhVcXM
-        lBLF5ykqAV//SQlHQ7ngd40=
-X-Google-Smtp-Source: AK7set+uK7+GwFdenHrawwnv6t1AUOM2gsI7rgDOiMu7/kWlK6xgT1y03qBrqCUPM+I2yWXxPnmQ2w==
-X-Received: by 2002:a05:6a20:6ca6:b0:db:cfb5:33aa with SMTP id em38-20020a056a206ca600b000dbcfb533aamr20045536pzb.56.1680188893105;
-        Thu, 30 Mar 2023 08:08:13 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id w25-20020aa78599000000b00625037cf695sm24868986pfn.86.2023.03.30.08.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:08:12 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 18:07:52 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
- drivers
-Message-ID: <20230330150752.gdquw5kudtrqgzyz@skbuf>
-References: <20230327160009.bdswnalizdv2u77z@skbuf>
- <87pm8tooe1.fsf@kapio-technology.com>
- <20230327225933.plm5raegywbe7g2a@skbuf>
- <87ileljfwo.fsf@kapio-technology.com>
- <20230328114943.4mibmn2icutcio4m@skbuf>
- <87cz4slkx5.fsf@kapio-technology.com>
- <20230330124326.v5mqg7do25tz6izk@skbuf>
- <87wn2yxunb.fsf@kapio-technology.com>
- <20230330130936.hxme34qrqwolvpsh@skbuf>
- <875yaimgro.fsf@kapio-technology.com>
+        Thu, 30 Mar 2023 11:15:00 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1C3D314;
+        Thu, 30 Mar 2023 08:13:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 8E9D0604F5;
+        Thu, 30 Mar 2023 17:12:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680189138; bh=shGwIupjSJQsuWpYYdpBmXkymR9GYlLQyNnU5Tla32o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mqUJQosuZcgTKuqatETxiao7zsDPoOyBuoiyZIC6CasXw/pYjAsDgRO6BGai0K6Aq
+         X5M12nSwkg7wNRf272SZCbh9S60XZZmP4/Dvkc4BRvoz6Q3H7tchyi2S4XUgkCwp6d
+         00yxReP1IwY5Zjmu7Xl0luqAaeUIaAyn6RdKNOdbCbFOYjpitD/EDZouwAv7B+EpbL
+         TOzHdRVhEMzw2K53KVJ3OgpSEVuNl070vmKi3+/MH7HV1d/0tbRCZQDFbON2aM1A3p
+         EG18Q5V9AoPEa0909W3C1ZOU9+VFYXPPqsyteUfwHDjjX80IKqw8I6gGzdiqy8e4Ds
+         o/FaNvvJyfckw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id rriEOJylei56; Thu, 30 Mar 2023 17:12:15 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 65C0F604F0;
+        Thu, 30 Mar 2023 17:12:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680189135; bh=shGwIupjSJQsuWpYYdpBmXkymR9GYlLQyNnU5Tla32o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bdqj8UGbXsCLfH6WZZjs6e6YqF1erDT1qBburWs2FagBNYmt4+IXMttLVzJr3dia9
+         zepVpyjZgqOGdIcWr23+4GN1ZGe5DxbunM+0uLHQ8Jdjoc2ofFPtL46n5LLuYmuaAV
+         w7UryKGXW+W9KDsI0PHvF6A+/unRSQfEiwK9KwauLLPcM3wYhKX2CAEmA0w8Mx0Vn5
+         kc2082eGaG7zwkwVtSA5TZjyA67IXMKR9RDeeVxXoln6DTssMqJVmrtOV1EzfNgT7/
+         /2PyLRai2R8UAKlRK3kRur+pe+/49PEfA7NEIRn28BTy12ogz5cWRLQCfaYD2M2jll
+         Xo8Qe0MgTz0lQ==
+Message-ID: <dce6ffbe-7580-db1a-dd24-798be27b3a26@alu.unizg.hr>
+Date:   Thu, 30 Mar 2023 17:12:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875yaimgro.fsf@kapio-technology.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [BUG] [PATCH RFC v2] selftests/firmware: copious kernel memory
+ leaks in test_fw_run_batch_request()
+To:     Dan Carpenter <error27@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
+ <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 04:54:19PM +0200, Hans Schultz wrote:
-> I don't know if you have a solution in mind wrt the behaviour of the
-> offloaded flag if it is not to do as it does now and let the bridge age
-> out dynamic entries. That led me to conclude that this patch-set cannot
-> use the offloaded flag, but you seem to suggest otherwise.
+Hi, all,
+
+This is not a formal patch, but please see if you think the way the
+locking and race are solved correctly this time.
+
+(Having two mutexes over the same set of resources is obviously a hazard.)
+
+On 3/28/23 12:06, Dan Carpenter wrote:
+> On Tue, Mar 28, 2023 at 11:23:00AM +0200, Mirsad Todorovac wrote:
+>> The leaks are in chunks of 1024 bytes (+ overhead), but so far I could not
+>> reproduce w/o root privileges, as tests refuse to run as unprivileged user.
+>> (This is not the proof of non-existence of an unprivileged automated exploit
+>> that would exhaust the kernel memory at approx. rate 4 MB/hour on our setup.
+>>
+>> This would mean about 96 MB / day or 3 GB / month (of kernel memory).
 > 
-> If you have a suggestion, feel free.
+> This is firmware testing stuff.  In the real world people aren't going
+> to run their test scripts in a loop for days.
+> 
+> There is no security implications.  This is root only.  Also if the
+> user could load firmware then that would be the headline.  Once someone
+> is can already load firmware then who cares if they leak 100MB per day?
+> 
+> It looks like if you call trigger_batched_requests_store() twice in a
+> row then it will leak memory.  Definitely test_fw_config->reqs is leaked.
+> That's different from what the bug report is complaining about, but the
+> point is that there are some obvious leaks.  It looks like you're
+> supposed to call trigger_batched_requests_store() in between runs?
+> 
+> There are other races like config_num_requests_store() should hold the
+> mutex over the call to test_dev_config_update_u8() instead of dropping
+> and retaking it.
 
-Didn't I explain what I would do from the first reply on this thread?
-https://patchwork.kernel.org/project/netdevbpf/patch/20230318141010.513424-3-netdev@kapio-technology.com/#25270613
+COMMENT: Like in libc putc() family of functions, there is also
+putc_unlocked() The similar approach is applied here.
 
-As a bug fix, stop reporting to switchdev those FDB entries with
-BR_FDB_ADDED_BY_USER && !BR_FDB_STATIC. Then, after "net" is merged into
-"net-next" next Thursday (the ship has sailed for today), add "bool static"
-to the switchdev notifier info, and make all switchdev drivers (everywhere
-where a SWITCHDEV_FDB_ADD_TO_DEVICE handler appears) ignore the
-"added_by_user && !is_static" combination, but by their own choice and
-not by switchdev's choice.
+As the functions are callable from within both locked and non-locked
+environment, we have to either:
 
-Then, make DSA decide whether to handle the "added_by_user && !is_static"
-combination or not, based on the presence of the DSA_FDB_FLAG_DYNAMIC
-flag, which will be set in ds->supported_fdb_flags only for the mv88e6xxx
-driver. When DSA_FDB_FLAG_DYNAMIC is not supported, DSA will not offload
-the FDB entry: neither will it call port_fdb_add(), nor will it emit
-SWITCHDEV_FDB_OFFLOADED. Ideally, it would also inform user space that
-it can't offload this flag by returning an error, but the lack of an
-error propagation mechanism from switchdev to the bridge FDB is a known
-limitation which is hard to overcome, and is outside the scope of your
-patchset I believe. To see whether DSA has acted upon the "master dynamic"
-flag or not, it would be good enough for the user to see something
-adequate in "bridge fdb show | grep offloaded", I believe.
+1. have two or more locks, which is dubious in terms of concurrency
+2. have locked and unlocked version of each function, for we cannot
+    lock the same lock twice.
+
+NOTE: Memory leaks are not solved with this patch, only a couple of
+racing conditions.
+
+---
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 05ed84c2fc4c..d6ed20bd1eb0 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -353,6 +353,19 @@ static ssize_t config_test_show_str(char *dst,
+         return len;
+  }
+
++static inline int test_dev_config_update_bool_unlocked(const char *buf, size_t size,
++                                      bool *cfg)
++{
++       int ret;
++
++       if (kstrtobool(buf, cfg) < 0)
++               ret = -EINVAL;
++       else
++               ret = size;
++
++       return ret;
++}
++
+  static int test_dev_config_update_bool(const char *buf, size_t size,
+                                        bool *cfg)
+  {
+@@ -373,6 +386,24 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
+         return snprintf(buf, PAGE_SIZE, "%d\n", val);
+  }
+
++static int test_dev_config_update_size_t_unlocked(
++                                        const char *buf,
++                                        size_t size,
++                                        size_t *cfg)
++{
++       int ret;
++       long new;
++
++       ret = kstrtol(buf, 10, &new);
++       if (ret)
++               return ret;
++
++       *(size_t *)cfg = new;
++
++       /* Always return full write size even if we didn't consume all */
++       return size;
++}
++
+  static int test_dev_config_update_size_t(const char *buf,
+                                          size_t size,
+                                          size_t *cfg)
+@@ -402,6 +433,21 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
+         return snprintf(buf, PAGE_SIZE, "%d\n", val);
+  }
+
++static int test_dev_config_update_u8_unlocked(const char *buf, size_t size, u8 *cfg)
++{
++       u8 val;
++       int ret;
++
++       ret = kstrtou8(buf, 10, &val);
++       if (ret)
++               return ret;
++
++       *(u8 *)cfg = val;
++
++       /* Always return full write size even if we didn't consume all */
++       return size;
++}
++
+  static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+  {
+         u8 val;
+@@ -471,10 +517,10 @@ static ssize_t config_num_requests_store(struct device *dev,
+                 mutex_unlock(&test_fw_mutex);
+                 goto out;
+         }
+-       mutex_unlock(&test_fw_mutex);
+
+-       rc = test_dev_config_update_u8(buf, count,
+-                                      &test_fw_config->num_requests);
++       rc = test_dev_config_update_u8_unlocked(buf, count,
++                                               &test_fw_config->num_requests);
++       mutex_unlock(&test_fw_mutex);
+
+  out:
+         return rc;
+@@ -518,10 +564,10 @@ static ssize_t config_buf_size_store(struct device *dev,
+                 mutex_unlock(&test_fw_mutex);
+                 goto out;
+         }
+-       mutex_unlock(&test_fw_mutex);
+
+-       rc = test_dev_config_update_size_t(buf, count,
+-                                          &test_fw_config->buf_size);
++       rc = test_dev_config_update_size_t_unlocked(buf, count,
++                                                   &test_fw_config->buf_size);
++       mutex_unlock(&test_fw_mutex);
+
+  out:
+         return rc;
+@@ -548,10 +594,10 @@ static ssize_t config_file_offset_store(struct device *dev,
+                 mutex_unlock(&test_fw_mutex);
+                 goto out;
+         }
+-       mutex_unlock(&test_fw_mutex);
+
+-       rc = test_dev_config_update_size_t(buf, count,
+-                                          &test_fw_config->file_offset);
++       rc = test_dev_config_update_size_t_unlocked(buf, count,
++                                                   &test_fw_config->file_offset);
++       mutex_unlock(&test_fw_mutex);
+
+  out:
+         return rc;
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+
+"What’s this thing suddenly coming towards me very fast? Very very fast.
+... I wonder if it will be friends with me?"
