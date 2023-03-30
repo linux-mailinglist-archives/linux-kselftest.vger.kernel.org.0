@@ -2,130 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564DB6D022D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 12:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971EE6D0265
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 13:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbjC3KyT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 06:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S231454AbjC3LCN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 07:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjC3KyR (ORCPT
+        with ESMTP id S231470AbjC3LCL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:54:17 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B02086A7;
-        Thu, 30 Mar 2023 03:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680173652; x=1711709652;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9MvugIT0Opc7QtqQlkrFBdrhnJIKGkn//xf4X4wAM/k=;
-  b=iODnRw9/KVM6go62F6z04crfDAJWJQfGwFQaYMbdoYIZOJXFg0qZL+Gj
-   v4DiuYoQmpTDwLOZ7tcaWyzFthi7V+JXWBaTLzRCmVZjEhr1cKbH9cCVQ
-   3U6cxKhcp60S3Gx/F2N2X3i1o7qX0wppN5rgENaO9Mcol+G9UfVzU5Bt7
-   1yx4q/ZeNjuMKSi/cTAZKEX6gpMkL/cxvj4rSFRWp7lYgZcm1MX/J/Gta
-   uhvLhqu6NgH2RtQNram8nldox2WSk7mtVwI1so50w4ctQNvNad1rnuUIf
-   FQwjYE+bcq1Ds5mfcKI63xIfdLKMYPEeL/8nRLBRRZg4DrG5JSY5bFpat
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="342745946"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="342745946"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:53:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="808588244"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="808588244"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2023 03:53:50 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1phpuf-000Klm-10;
-        Thu, 30 Mar 2023 10:53:49 +0000
-Date:   Thu, 30 Mar 2023 18:53:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Enric Balletbo i Serra <eballetbo@redhat.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH v2] Input: Add KUnit tests for some of the input core
- helper functions
-Message-ID: <202303301815.kRKFM3NH-lkp@intel.com>
-References: <20230330081831.2291351-1-javierm@redhat.com>
+        Thu, 30 Mar 2023 07:02:11 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BAC9015;
+        Thu, 30 Mar 2023 04:02:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1680174129; x=1711710129;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hoMNmsGYcORYwwc5pC5xJFyZ3P/r29Qsygz770Gm+NY=;
+  b=g1uSogY8AyBcoWNa4yUcQTh5KZk+CygiWcPkQ1fk0kRJjg0BWsSAVVcG
+   aXan0UoZMKGC/k/zKwO1OvpIObUsnDzXWDzNIqDk5eugFAgscbAteLEQ5
+   u5TPu19oOZj5gUSBjQQQ1ASTnm0lgLXYpeIC9BM27qHIhGvGBb+PwqQ/Q
+   s=;
+X-IronPort-AV: E=Sophos;i="5.98,303,1673913600"; 
+   d="scan'208";a="308741436"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d8e96288.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 11:02:07 +0000
+Received: from EX19MTAUWA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-m6i4x-d8e96288.us-east-1.amazon.com (Postfix) with ESMTPS id 811278831F;
+        Thu, 30 Mar 2023 11:02:05 +0000 (UTC)
+Received: from EX19D002UWA002.ant.amazon.com (10.13.138.246) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.22; Thu, 30 Mar 2023 11:01:59 +0000
+Received: from EX19MTAUEA001.ant.amazon.com (10.252.134.203) by
+ EX19D002UWA002.ant.amazon.com (10.13.138.246) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 30 Mar 2023 11:01:59 +0000
+Received: from dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com
+ (10.189.73.169) by mail-relay.amazon.com (10.252.134.102) with Microsoft SMTP
+ Server id 15.2.1118.22 via Frontend Transport; Thu, 30 Mar 2023 11:01:59
+ +0000
+Received: by dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com (Postfix, from userid 22673075)
+        id 0C696223C; Thu, 30 Mar 2023 11:01:58 +0000 (UTC)
+From:   Rishabh Bhatnagar <risbhat@amazon.com>
+To:     <gregkh@linuxfoundation.org>, <shaoyi@amazon.com>
+CC:     <stable@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <shuah@kernel.org>,
+        <davem@davemloft.net>, Rishabh Bhatnagar <risbhat@amazon.com>
+Subject: [PATCH 5.4] selftests: Fix the executable permissions for fib_tests.sh
+Date:   Thu, 30 Mar 2023 11:01:47 +0000
+Message-ID: <20230330110147.32052-1-risbhat@amazon.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330081831.2291351-1-javierm@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-10.0 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Javier,
+Commit 04a331c9dd66 reverted change 2537b637eac0 (ipv4: Fix
+incorrect route flushing when source address is deleted) that
+added the fib_tests.sh file back with wrong permissions.
+Fix that in this commit.
 
-I love your patch! Perhaps something to improve:
+Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
+---
+ tools/testing/selftests/net/fib_tests.sh | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100644 => 100755 tools/testing/selftests/net/fib_tests.sh
 
-[auto build test WARNING on 3a93e40326c8f470e71d20b4c42d36767450f38f]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Martinez-Canillas/Input-Add-KUnit-tests-for-some-of-the-input-core-helper-functions/20230330-162045
-base:   3a93e40326c8f470e71d20b4c42d36767450f38f
-patch link:    https://lore.kernel.org/r/20230330081831.2291351-1-javierm%40redhat.com
-patch subject: [PATCH v2] Input: Add KUnit tests for some of the input core helper functions
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20230330/202303301815.kRKFM3NH-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c0455fa125039a03d011836a8f82a2427591e51c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Javier-Martinez-Canillas/Input-Add-KUnit-tests-for-some-of-the-input-core-helper-functions/20230330-162045
-        git checkout c0455fa125039a03d011836a8f82a2427591e51c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303301815.kRKFM3NH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore files
-   drivers/gpu/drm/tests/.kunitconfig: warning: ignored by one of the .gitignore files
-   drivers/gpu/drm/vc4/tests/.kunitconfig: warning: ignored by one of the .gitignore files
-   drivers/hid/.kunitconfig: warning: ignored by one of the .gitignore files
->> drivers/input/tests/.kunitconfig: warning: ignored by one of the .gitignore files
-   fs/ext4/.kunitconfig: warning: ignored by one of the .gitignore files
-   fs/fat/.kunitconfig: warning: ignored by one of the .gitignore files
-   kernel/kcsan/.kunitconfig: warning: ignored by one of the .gitignore files
-   lib/kunit/.kunitconfig: warning: ignored by one of the .gitignore files
-   mm/kfence/.kunitconfig: warning: ignored by one of the .gitignore files
-   net/sunrpc/.kunitconfig: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
-
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+old mode 100644
+new mode 100755
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
