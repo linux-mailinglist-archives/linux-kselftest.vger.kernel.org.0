@@ -2,53 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29696D139D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 01:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24826D139F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 01:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjC3XsW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 19:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        id S231822AbjC3XsX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 19:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbjC3Xrw (ORCPT
+        with ESMTP id S231768AbjC3Xrx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 19:47:52 -0400
+        Thu, 30 Mar 2023 19:47:53 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451D212858;
-        Thu, 30 Mar 2023 16:47:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720AA12BF4;
+        Thu, 30 Mar 2023 16:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680220038; x=1711756038;
+  t=1680220042; x=1711756042;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=q+JNlSC1uCqvuWCBy2qAYpAlDZtiUcm4wmk9OxwbY/4=;
-  b=IwJYyML8iXPKBMVylEEDOGgx8KayXV1Z0lJZZWbDmwQL+xRCrYrokdve
-   VySUiHg4o/Nqsh7pRd6W0Xhqy7lFOBgXX6quHjkWJ7Cg1RezQe4Bnphc2
-   A61Gfu4TCACSXKEe7E6zGVgHbRB9ejuSvQtfKdcOQSDZOOLAaIj6mJjek
-   zeT/RlLbpNi7TmDrD03/OLoo6FetZ9/gqxODXtvXjXFrUStpH4Y8wE981
-   xAPUkkzmJAS1JTu/gQzMWYNB/0QC2Z8Hp9Gg1tbbCJysGPdLyPPIdeNth
-   uom3FreHj5xkFogXDWGx2jNZRxejJRZ2NBHI8XC8/1//3atiwvn+QaT8Z
+  bh=PXl1dGOSTl3mjfBv99XnPT3QfP3sbVC8+kNUvV4iUz4=;
+  b=YWeOrMdjuvUsAeQlKBK4PxqDsMoposkoi4rhIYI6AGr8Y/nlLEC6ftou
+   jOXfKdaeAx06cC+G6jgtYttjtL0TAMahGdlOlEjUwUv+QyuvvDZngA72a
+   icL1B7i9TNlxRtvMzAGDzLMBeHCZBrF7IePxV90TvyKwZiDn520Q/qCjs
+   HItQuVtUkZsuksOYshCWmheS8DpVI0Mu8gZaDxjs28KekkpmVZnFzF+wK
+   AoLTdkr5XbdWnlOhR8CMR3JA1o8R/Ri2eRMFhxnScLLHBckhTBU9T5QDv
+   o4yFcgbjTESKccKJLUKYvcGgFYS7c3RTK8yLztR1cldQ+KdPyfKsgDFG6
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="427587819"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="427587825"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="427587819"
+   d="scan'208";a="427587825"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 16:47:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="930926046"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="930926049"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="930926046"
+   d="scan'208";a="930926049"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
   by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2023 16:47:16 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     shuah@kernel.org, tglx@linutronix.de, dave.hansen@linux.intel.com,
         bp@alien8.de, chang.seok.bae@intel.com
-Subject: [PATCH v3 0/3] selftests/x86: AMX-related test improvements
-Date:   Thu, 30 Mar 2023 16:35:17 -0700
-Message-Id: <20230330233520.21937-1-chang.seok.bae@intel.com>
+Subject: [PATCH v3 1/3] selftests/x86/sigaltstack: Adjust the test to the kernel's altstack check
+Date:   Thu, 30 Mar 2023 16:35:18 -0700
+Message-Id: <20230330233520.21937-2-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220711170330.27138-1-chang.seok.bae@intel.com>
+In-Reply-To: <20230330233520.21937-1-chang.seok.bae@intel.com>
 References: <20220711170330.27138-1-chang.seok.bae@intel.com>
+ <20230330233520.21937-1-chang.seok.bae@intel.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
@@ -58,51 +59,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dear maintainers,
+The test assumes an insufficient altstack is allowed. Then it raises a
+signal to test the delivery failure due to an altstack overflow.
 
-Let me follow up on the last posting [5] with these two small changes:
-* Clean up unused code in the AMX test.
-* Fix the subsystem name in the patch1 subject.
+The kernel now provides the STRICT_SIGALTSTACK_SIZE option to tweak
+sigaltstack()'s sanity check to prevent an insufficient altstack.
+ENOMEM is returned on the check failure.
 
-Here is a summary of the included test code changes:
+Adjust the code to skip the test when this option is on.
 
-* With the STRICT_SIGALTSTACK_SIZE option [1,2], the kernel's altstack
-  check becomes stringent. The x86 sigaltstack test is ignorant about
-  this. Adjust the test. This check was established [3] to ensure
-  every AMX task's altstack is sufficient (regardless of that option)
-  [4].
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes from v2:
+* Fix the subsystem name in the subject.
 
-* The AMX test wrongly fails on non-AMX machines. Fix the code to skip
-  the test instead.
+Changes from v1:
+* Call out the config name (Shuah Khan).
+* Massage the print message (Shuah Khan).
+---
+ tools/testing/selftests/x86/sigaltstack.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-* It also has some unused code. Remove them where at this.
-
-The series is available in this repository:
-  git://github.com/intel/amx-linux.git selftest
-
-Thanks,
-Chang
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/Kconfig#n2467
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/kernel-parameters.txt#n6038
-[3] 3aac3ebea08f ("x86/signal: Implement sigaltstack size validation")
-[4] 4b7ca609a33d ("x86/signal: Use fpu::__state_user_size for sigalt stack validation")
-[5] https://lore.kernel.org/lkml/20220711170330.27138-1-chang.seok.bae@intel.com/
-
-
-Chang S. Bae (3):
-  selftests/x86/sigaltstack: Adjust the test to the kernel's altstack
-    check
-  selftests/x86/amx: Fix the test to avoid failure when AMX is
-    unavailable
-  selftests/x86/amx: Remove unneeded code
-
- tools/testing/selftests/x86/amx.c         | 51 +++++------------------
- tools/testing/selftests/x86/sigaltstack.c | 12 +++++-
- 2 files changed, 21 insertions(+), 42 deletions(-)
-
-
-base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
+index f689af75e979..22a88b764a8e 100644
+--- a/tools/testing/selftests/x86/sigaltstack.c
++++ b/tools/testing/selftests/x86/sigaltstack.c
+@@ -88,8 +88,18 @@ static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
+ 
+ static void test_sigaltstack(void *altstack, unsigned long size)
+ {
+-	if (setup_altstack(altstack, size))
++	if (setup_altstack(altstack, size)) {
++		/*
++		 * The kernel may return ENOMEM when the altstack size
++		 * is insufficient. Skip the test in this case.
++		 */
++		if (errno == ENOMEM && size < at_minstack_size) {
++			printf("[SKIP]\tThe running kernel disallows an insufficient size.\n");
++			return;
++		}
++
+ 		err(1, "sigaltstack()");
++	}
+ 
+ 	sigalrm_expected = (size > at_minstack_size) ? true : false;
+ 
 -- 
 2.17.1
 
