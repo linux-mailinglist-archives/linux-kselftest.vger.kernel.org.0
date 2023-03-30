@@ -2,37 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749496D0E5E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 21:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D73B6D0EC3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 21:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjC3TKt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 15:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
+        id S230245AbjC3T1h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 15:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjC3TKs (ORCPT
+        with ESMTP id S229902AbjC3T1g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 15:10:48 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C291C174;
-        Thu, 30 Mar 2023 12:10:45 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id B3439188368C;
-        Thu, 30 Mar 2023 19:10:33 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id ABED62500389;
-        Thu, 30 Mar 2023 19:10:33 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id A2E849B403F4; Thu, 30 Mar 2023 19:10:33 +0000 (UTC)
-X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
-Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id EB58791201E3;
-        Thu, 30 Mar 2023 19:10:32 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Thu, 30 Mar 2023 15:27:36 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88C0DBDB;
+        Thu, 30 Mar 2023 12:27:35 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id cm5so7477407pfb.0;
+        Thu, 30 Mar 2023 12:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680204455;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=THXcfT1gL+QhHkNxKHFXSnGLhR291IgK2JOIaE2Z6qo=;
+        b=WmGqWWMzTa4UZZyZupqoOaK6GO0R0gyuPF1w/NqQwOR3PF78xzpkBDkvwwgDoKpLe/
+         TO8kQ7yjlIBI/KZP17rpKiGl91hhAscGFQWH8bwfzCwzF7hgA/t1yf2YQ/fuHiOp/Y4S
+         m7R0idI3KheKtG2pQCctaTWNZDNuq+HWnorSSdiqG/ymH92rpMLkcGFTOyTtxfcqdxFI
+         +HSWS3FP+TZoKgHMkZWokuQpZ/GTLBA5F8DvRGoeZUmx6bxve4cZDoFXog93Ecc/69uL
+         FX3PpBeZ/ZID2bZIVnqkah/3XdryzZGiTLyPvI6m/Fr5UTO00wLm0O169i2aocSTk7oI
+         jxWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680204455;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=THXcfT1gL+QhHkNxKHFXSnGLhR291IgK2JOIaE2Z6qo=;
+        b=iO3DPKMk5JD1rtOkLfPPz1N+EVnZKsVgcdx9Bqd1XbD5eHG5vTq4aCtfH4J195YPnI
+         Go1y4NcoV27TapvxQ8fRuIZiqRUJbCxMjNeuy6NSqXEjsy5TiprbsvPZYb3uwN7Ika7s
+         Okyb2lE5RteGph2m+FgC72/k0ooifTE5NbFjtwYSSSrpTmTxIXh3PShIUX9Ro3O7EGoW
+         LeV7oLmllTsUarskciA5yhAnwJV2yPpQOUenJDidlDZgsgQOCH1RCJLmdpe3cqTfO6ke
+         /mINdt12PlTzJSIyxEY/PNXIJ1b81QflhjgZSgw+3Z+ZBe/MHjFNJ8LKJTUk5qvRuupH
+         OX+Q==
+X-Gm-Message-State: AAQBX9cHYIgmXfs4aZB/xq35fw1eeaW4Q1f4tLcrJT/ItKI7YG/388Ol
+        TBWzYzj53cDEYwgsi16S/XU=
+X-Google-Smtp-Source: AKy350ZPHYj9WRFwCpKfZ1lGfBi7hLQFoLXN09dTmyyi2iU20kDBjCxBeGVka6HE068VChtsu0Cg8g==
+X-Received: by 2002:aa7:96b0:0:b0:626:24b2:cd6c with SMTP id g16-20020aa796b0000000b0062624b2cd6cmr25705666pfk.7.1680204455073;
+        Thu, 30 Mar 2023 12:27:35 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id j6-20020a62b606000000b0062d7fa4b618sm225784pff.175.2023.03.30.12.27.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 12:27:34 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 22:27:14 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Kurt Kanzenbach <kurt@linutronix.de>,
@@ -47,7 +70,7 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         <angelogioacchino.delregno@collabora.com>,
         Claudiu Manoil <claudiu.manoil@nxp.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
         Jiri Pirko <jiri@resnulli.us>,
         Ivan Vecera <ivecera@redhat.com>,
         Roopa Prabhu <roopa@nvidia.com>,
@@ -66,17 +89,20 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         <linux-kselftest@vger.kernel.org>
 Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
  test
-In-Reply-To: <ZCMYbRqd+qZaiHfu@shredder>
+Message-ID: <20230330192714.oqosvifrftirshej@skbuf>
 References: <20230318141010.513424-1-netdev@kapio-technology.com>
  <20230318141010.513424-7-netdev@kapio-technology.com>
- <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder>
+ <87a5zzh65p.fsf@kapio-technology.com>
  <ZCMYbRqd+qZaiHfu@shredder>
-Date:   Thu, 30 Mar 2023 21:07:53 +0200
-Message-ID: <874jq22h2u.fsf@kapio-technology.com>
+ <874jq22h2u.fsf@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874jq22h2u.fsf@kapio-technology.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,64 +110,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 19:40, Ido Schimmel <idosch@nvidia.com> wrote:
-> On Sun, Mar 26, 2023 at 05:41:06PM +0200, Hans Schultz wrote:
->> On Mon, Mar 20, 2023 at 10:44, Ido Schimmel <idosch@nvidia.com> wrote:
->> >> +	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
->> >> +		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
->> >> +	tc_check_packets "dev $swp2 egress" 1 1
->> >> +	check_fail $? "Dynamic FDB entry did not age out"
->> >
->> > Shouldn't this be check_err()? After the FDB entry was aged you want to
->> > make sure that packets received via $swp1 with SMAC being $mac are no
->> > longer forwarded by the bridge.
->> 
->> I was thinking that check_fail() will pass when tc_check_packets() does
->> not see any packets, thus the test passing here when no packets are forwarded?
->
-> What do you mean by "I was *thinking*"? How is it possible that you are
-> submitting a selftest that you didn't bother running?!
->
-> I see you trimmed my earlier question: "Does this actually work?"
->
-> I tried it and it passed:
->
-> # ./bridge_locked_port.sh                         
-> TEST: Locked port ipv4                                              [ OK ]
-> TEST: Locked port ipv6                                              [ OK ]
-> TEST: Locked port vlan                                              [ OK ]            
-> TEST: Locked port MAB                                               [ OK ]            
-> TEST: Locked port MAB roam                                          [ OK ]
-> TEST: Locked port MAB configuration                                 [ OK ]
-> TEST: Locked port MAB FDB flush                                     [ OK ]
->
-> And I couldn't understand how that's even possible. Then I realized that
-> the entire test is dead code because the patch is missing this
-> fundamental hunk:
->
-> ```
-> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> index dbc7017fd45d..5bf6b2aa1098 100755
-> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> @@ -9,6 +9,7 @@ ALL_TESTS="
->         locked_port_mab_roam
->         locked_port_mab_config
->         locked_port_mab_flush
-> +       locked_port_dyn_fdb
->  "
->  
->  NUM_NETIFS=4
-> ```
->
-> Which tells me that you didn't even try running it once.
+On Thu, Mar 30, 2023 at 09:07:53PM +0200, Hans Schultz wrote:
+> Not true, it reveals that I forgot to put it in the patch, that's all. As
+> I cannot run several of these tests because of memory constraints I link
+> the file to a copy in a rw area where I modify the list and just run one
+> of the subtests at a time. If I try to run the whole it always fails
+> after a couple of sub-tests with an error.
+> 
+> It seems to me that these scripts are quite memory consuming as they
+> accumulate memory consuption in relation to what is loaded along the
+> way. A major problem with my system.
 
-Not true, it reveals that I forgot to put it in the patch, that's all. As
-I cannot run several of these tests because of memory constraints I link
-the file to a copy in a rw area where I modify the list and just run one
-of the subtests at a time. If I try to run the whole it always fails
-after a couple of sub-tests with an error.
+I'm sorry for perhaps asking something entirely obvious, but have you tried:
 
-It seems to me that these scripts are quite memory consuming as they
-accumulate memory consuption in relation to what is loaded along the
-way. A major problem with my system.
+kernel-dir $ rsync -avr tools/testing/selftests/ root@$board:selftests/
+board $ cd selftests/drivers/net/dsa/
+board $ ./bridge_locked_port.sh lan0 lan1 lan2 lan3
+
+?
+
+This is how I always run them, and it worked fine with both Debian
+(where it's easy to add missing packages to the rootfs) or with a more
+embedded-oriented Buildroot.
