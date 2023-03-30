@@ -2,163 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340156D01F8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 12:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564DB6D022D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 12:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbjC3Kqz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 06:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S230518AbjC3KyT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 06:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbjC3Kpy (ORCPT
+        with ESMTP id S231154AbjC3KyR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 06:45:54 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425819029
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 03:45:17 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id eh3so74582536edb.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 03:45:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112; t=1680173115;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nJ4kHmOyB5GJCNT97r/CEXr1tfWeNmV/zja7PhdakrM=;
-        b=lGerEYp3RodGDGGbu9v46KqIKVUtY8TeLHCWxCyKo+lIj9VCOEqmYXb5Luv5Icdw83
-         /Q3ohcVMs8/k4KEjqUfKTm0pm1obz2hYyDJZEGwY4xvSV70Uh8/o0fRR62eoC40mv/Bv
-         UEBYsZ9wt18DBWpVrq6PHs0ItsJPyhMLJmMVYdRNaFyf6g5o43qmVx2ExIW9JPB5NAcT
-         SXRLeONaXaaxnx6NDDtdppC3NfBaEjMNaKyBR43dlSVVCegyF8RxQYNMsOAzUTzA2au6
-         2XuJdBK+c0uj4WiQDcWKQjhPoR9V9sl3rqUkq8GEkpgIesqP2468KV0nJR3pSnsRbAgW
-         ihWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680173115;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nJ4kHmOyB5GJCNT97r/CEXr1tfWeNmV/zja7PhdakrM=;
-        b=ZgkanGvmcZokDEtq8ybQgDg6fczoL7wExbIYKCKKp3UdXNvTSV+0rSIF2nOYOWu8ki
-         P026t4MLl7BjmPgjSDLE82cirWU0kgMwbGmq7TTBrlbCXqS8HNN3zPOml5wdrOSS0IIb
-         1VVBTHZJRkeXhiCEHstMsrWjEZmvcmrnZQ/K6i9xBdeub8TcnPLOxXLy04nxNUj5eAaN
-         qLYCFXhdSYhwNAwPDJ5vi9no12z+KXiV+7AeyN6u1yz+o/HksE7tgPchldunP/aafNPd
-         Im/D8HAoLOfjdsIUwzAyjbcVWQNjtkfBKwy4Fo0zzNF2sIEkPUr6S96x+TAUG2wiE0Gj
-         AylA==
-X-Gm-Message-State: AAQBX9fq9n8QQcjmm59Yp4tZEjqpxNtDVX1fX6r29snRkNHnG04EFiwy
-        H0s/YjK5/Vh2B3CmIboC5XkEIw==
-X-Google-Smtp-Source: AKy350ZCwuMbyX3imXZjyklWc/tn6fTJgMv803a+AfMakTywcrCsiPGJxBzQ+0cpDFJ7UWixfjodXw==
-X-Received: by 2002:a17:906:738a:b0:878:58e6:f1eb with SMTP id f10-20020a170906738a00b0087858e6f1ebmr20132191ejl.23.1680173115494;
-        Thu, 30 Mar 2023 03:45:15 -0700 (PDT)
-Received: from [192.168.0.161] (62-73-72-43.ip.btc-net.bg. [62.73.72.43])
-        by smtp.gmail.com with ESMTPSA id p25-20020a50cd99000000b004bf76fdfdb3sm17878396edi.26.2023.03.30.03.45.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 03:45:15 -0700 (PDT)
-Message-ID: <6f0d0f2d-474b-caaf-78a7-289e660c3aa0@blackwall.org>
-Date:   Thu, 30 Mar 2023 13:45:13 +0300
+        Thu, 30 Mar 2023 06:54:17 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B02086A7;
+        Thu, 30 Mar 2023 03:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680173652; x=1711709652;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9MvugIT0Opc7QtqQlkrFBdrhnJIKGkn//xf4X4wAM/k=;
+  b=iODnRw9/KVM6go62F6z04crfDAJWJQfGwFQaYMbdoYIZOJXFg0qZL+Gj
+   v4DiuYoQmpTDwLOZ7tcaWyzFthi7V+JXWBaTLzRCmVZjEhr1cKbH9cCVQ
+   3U6cxKhcp60S3Gx/F2N2X3i1o7qX0wppN5rgENaO9Mcol+G9UfVzU5Bt7
+   1yx4q/ZeNjuMKSi/cTAZKEX6gpMkL/cxvj4rSFRWp7lYgZcm1MX/J/Gta
+   uhvLhqu6NgH2RtQNram8nldox2WSk7mtVwI1so50w4ctQNvNad1rnuUIf
+   FQwjYE+bcq1Ds5mfcKI63xIfdLKMYPEeL/8nRLBRRZg4DrG5JSY5bFpat
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="342745946"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="342745946"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:53:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="808588244"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="808588244"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2023 03:53:50 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phpuf-000Klm-10;
+        Thu, 30 Mar 2023 10:53:49 +0000
+Date:   Thu, 30 Mar 2023 18:53:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v2] Input: Add KUnit tests for some of the input core
+ helper functions
+Message-ID: <202303301815.kRKFM3NH-lkp@intel.com>
+References: <20230330081831.2291351-1-javierm@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
- test
-Content-Language: en-US
-To:     Hans Schultz <netdev@kapio-technology.com>,
-        Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20230318141010.513424-1-netdev@kapio-technology.com>
- <20230318141010.513424-7-netdev@kapio-technology.com>
- <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
- <ZCMYbRqd+qZaiHfu@shredder> <87fs9ollmn.fsf@kapio-technology.com>
- <ZCUuMosWbyq1pK8R@shredder> <87mt3u7csh.fsf@kapio-technology.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <87mt3u7csh.fsf@kapio-technology.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330081831.2291351-1-javierm@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 30/03/2023 13:29, Hans Schultz wrote:
-> On Thu, Mar 30, 2023 at 09:37, Ido Schimmel <idosch@nvidia.com> wrote:
->> On Tue, Mar 28, 2023 at 09:30:08PM +0200, Hans Schultz wrote:
->>>
->>> Sorry, but I have sent you several emails telling you about the problems
->>> I have with running the selftests due to changes in the phy etc. Maybe
->>> you have just not received all those emails?
->>>
->>> Have you checked spamfilters?
->>>
->>> With the kernels now, I cannot even test with the software bridge and
->>> selftests as the compile fails - probably due to changes in uapi headers
->>> compared to what the packages my system uses expects.
->>
->> My spam filters are fine. I saw your emails where you basically said
->> that you are too lazy to setup a VM to test your patches and that your
->> time is more valuable than mine, which is why I should be testing them.
->> Stop making your problems our problems. It's hardly the first time. If
->> you are unable to test your patches, then invest the time in fixing your
->> setup instead of submitting completely broken patches and making it our
->> problem to test and fix them. I refuse to invest time in reviewing /
->> testing / reworking your submissions as long as you insist on doing less
->> than the bare minimum.
->>
->> Good luck
-> 
-> I never said or indicated that my time is more valuable than yours. I
-> have a VM to run these things that some have spent countless hours to
-> develop with the right tools etc installed and set up. Fixing that
-> system will take quite many hours for me, so I am asking for some simple
-> assistance from someone who already has a system running supporting the
-> newest kernel.
-> 
-> Alternatively if there is an open sourced system available that would be
-> great.
-> 
-> As this patch-set is for the community and some companies that would
-> like to use it and not for myself, I am asking for some help from the
-> community with a task that when someone has the system in place should
-> not take more than 15-20 minutes, maybe even less.
+Hi Javier,
 
-I'm sorry but this is absolutely the wrong way to go about this. Your setup's
-problems are yours to figure out and fix, if you are going to send *any* future
-patches make absolutely sure they build, run and work as intended.
-Please do not send any future patches without them being fully tested and, as
-Ido mentioned, cover at least the bare minimum for a submission.
+I love your patch! Perhaps something to improve:
 
-Thanks,
- Nik
+[auto build test WARNING on 3a93e40326c8f470e71d20b4c42d36767450f38f]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Martinez-Canillas/Input-Add-KUnit-tests-for-some-of-the-input-core-helper-functions/20230330-162045
+base:   3a93e40326c8f470e71d20b4c42d36767450f38f
+patch link:    https://lore.kernel.org/r/20230330081831.2291351-1-javierm%40redhat.com
+patch subject: [PATCH v2] Input: Add KUnit tests for some of the input core helper functions
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20230330/202303301815.kRKFM3NH-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c0455fa125039a03d011836a8f82a2427591e51c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Javier-Martinez-Canillas/Input-Add-KUnit-tests-for-some-of-the-input-core-helper-functions/20230330-162045
+        git checkout c0455fa125039a03d011836a8f82a2427591e51c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303301815.kRKFM3NH-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore files
+   drivers/gpu/drm/tests/.kunitconfig: warning: ignored by one of the .gitignore files
+   drivers/gpu/drm/vc4/tests/.kunitconfig: warning: ignored by one of the .gitignore files
+   drivers/hid/.kunitconfig: warning: ignored by one of the .gitignore files
+>> drivers/input/tests/.kunitconfig: warning: ignored by one of the .gitignore files
+   fs/ext4/.kunitconfig: warning: ignored by one of the .gitignore files
+   fs/fat/.kunitconfig: warning: ignored by one of the .gitignore files
+   kernel/kcsan/.kunitconfig: warning: ignored by one of the .gitignore files
+   lib/kunit/.kunitconfig: warning: ignored by one of the .gitignore files
+   mm/kfence/.kunitconfig: warning: ignored by one of the .gitignore files
+   net/sunrpc/.kunitconfig: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
