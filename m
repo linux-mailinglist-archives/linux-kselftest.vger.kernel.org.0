@@ -2,152 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8C96D120D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 00:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29696D139D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 01:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbjC3WVK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 18:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
+        id S231806AbjC3XsW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 19:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjC3WVJ (ORCPT
+        with ESMTP id S231767AbjC3Xrw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 18:21:09 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FFDB74B
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 15:21:04 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so21336032pjt.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 15:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680214864;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ugtukTfVbDV/8BLzVhb0qFtwrdmFXjkERveHQp9G65k=;
-        b=QZW1GJVAmZz3qfIMiei04YZkmBfPBmo9pjKDJ0qIuljXSgJnrQfiMXpSTDlZ3uIfCK
-         cjDiVcujfjVO0lTG8UoYtP3BX8zbOy24sgjzQhp4lxBlv/vjHz2NGjgLsiu3amflo2Wi
-         iU39U0/7TViaKVt3ek+fdn1/FrYJLAGPyPBStfAtvbZuwl6j9tq7rYpkhxbGKvSGuJio
-         DxX2qWP+h93Bw2S7dLJi4JPrX5xg+AitcnTeK6DuJ9B+uDWpBPfDtsOrhEj+vqav3nAQ
-         AD34aKGZzXypuB5br7F2mU7PW1XxsQl0l2wfI84qTJfb18gZO2Auel2N2sEsfv6SeZM/
-         IPuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680214864;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ugtukTfVbDV/8BLzVhb0qFtwrdmFXjkERveHQp9G65k=;
-        b=xB5wQ4VnTfS/Rk6WACE49f5Ck1p2RRq5+0KYH+VwbL0nfa55B4RDi6Aglysyofm/1A
-         nKCBFAra9Gp5Rlw6dxLBCXf1ZHKDunl4c5Cg7VI2gv/CxCaQvB6TzCHv5FFwFP/NovoF
-         Wp7KYZx3Pwf0JjdGwiZzMF63XORbALrDCaG4aKFN1aJ/g9rDvOmLXlO+tCWcPMD/hCPl
-         zgzF/dl2jbOfdUJ+owCmkJrwOUqQdgXfuO1EWD9ERkjAmBf8FTt4/tzX6ei6FO5+JiT/
-         ShuZhQy6AqZRSmW6sMb0Lfr4UotQKB0HMLujfJcL5TAgS6o2RHDvUIzYsvjPvPjDuGPr
-         VkMg==
-X-Gm-Message-State: AAQBX9de+RmzTyJzJbi5n2419KI4j2eDSp4RGEvf5mA5m+I7rixsI1AI
-        ohoP9lREMBS0frXN6Nkj5fBCtfV+B/OajRzzMvkVLJ7B5RR7G+zp8MUHVqHV
-X-Google-Smtp-Source: AKy350a64NmP0+Q1R1KoNiSqZ1E4LGky7ImztC0tAFffBWnHiJgqrB9cVB40cwkL6Jij9puwY4+MFQmWIsrgYuQbaS0=
-X-Received: by 2002:a17:902:ea0c:b0:1a0:527b:9189 with SMTP id
- s12-20020a170902ea0c00b001a0527b9189mr9224011plg.11.1680214863803; Thu, 30
- Mar 2023 15:21:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230330220506.1399796-1-rmoar@google.com>
-In-Reply-To: <20230330220506.1399796-1-rmoar@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 30 Mar 2023 15:20:52 -0700
-Message-ID: <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: add tests for using current KUnit test field
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 30 Mar 2023 19:47:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451D212858;
+        Thu, 30 Mar 2023 16:47:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680220038; x=1711756038;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=q+JNlSC1uCqvuWCBy2qAYpAlDZtiUcm4wmk9OxwbY/4=;
+  b=IwJYyML8iXPKBMVylEEDOGgx8KayXV1Z0lJZZWbDmwQL+xRCrYrokdve
+   VySUiHg4o/Nqsh7pRd6W0Xhqy7lFOBgXX6quHjkWJ7Cg1RezQe4Bnphc2
+   A61Gfu4TCACSXKEe7E6zGVgHbRB9ejuSvQtfKdcOQSDZOOLAaIj6mJjek
+   zeT/RlLbpNi7TmDrD03/OLoo6FetZ9/gqxODXtvXjXFrUStpH4Y8wE981
+   xAPUkkzmJAS1JTu/gQzMWYNB/0QC2Z8Hp9Gg1tbbCJysGPdLyPPIdeNth
+   uom3FreHj5xkFogXDWGx2jNZRxejJRZ2NBHI8XC8/1//3atiwvn+QaT8Z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="427587819"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="427587819"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 16:47:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="930926046"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="930926046"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2023 16:47:16 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shuah@kernel.org, tglx@linutronix.de, dave.hansen@linux.intel.com,
+        bp@alien8.de, chang.seok.bae@intel.com
+Subject: [PATCH v3 0/3] selftests/x86: AMX-related test improvements
+Date:   Thu, 30 Mar 2023 16:35:17 -0700
+Message-Id: <20230330233520.21937-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220711170330.27138-1-chang.seok.bae@intel.com>
+References: <20220711170330.27138-1-chang.seok.bae@intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I've got a few minor comments below, but this otherwise looks good.
-I like the idea of testing knuit_fail_current_test().
+Dear maintainers,
+
+Let me follow up on the last posting [5] with these two small changes:
+* Clean up unused code in the AMX test.
+* Fix the subsystem name in the patch1 subject.
+
+Here is a summary of the included test code changes:
+
+* With the STRICT_SIGALTSTACK_SIZE option [1,2], the kernel's altstack
+  check becomes stringent. The x86 sigaltstack test is ignorant about
+  this. Adjust the test. This check was established [3] to ensure
+  every AMX task's altstack is sufficient (regardless of that option)
+  [4].
+
+* The AMX test wrongly fails on non-AMX machines. Fix the code to skip
+  the test instead.
+
+* It also has some unused code. Remove them where at this.
+
+The series is available in this repository:
+  git://github.com/intel/amx-linux.git selftest
+
+Thanks,
+Chang
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/Kconfig#n2467
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/kernel-parameters.txt#n6038
+[3] 3aac3ebea08f ("x86/signal: Implement sigaltstack size validation")
+[4] 4b7ca609a33d ("x86/signal: Use fpu::__state_user_size for sigalt stack validation")
+[5] https://lore.kernel.org/lkml/20220711170330.27138-1-chang.seok.bae@intel.com/
 
 
-On Thu, Mar 30, 2023 at 3:05=E2=80=AFPM Rae Moar <rmoar@google.com> wrote:
->
-> +static void kunit_current_kunit_test_field(struct kunit *test)
-> +{
-> +       struct kunit *current_test;
-> +
-> +       /* Check to ensure the result of current->kunit_test
-> +        * is equivalent to current test.
-> +        */
-> +       current_test =3D current->kunit_test;
-> +       KUNIT_EXPECT_PTR_EQ(test, test, current_test);
+Chang S. Bae (3):
+  selftests/x86/sigaltstack: Adjust the test to the kernel's altstack
+    check
+  selftests/x86/amx: Fix the test to avoid failure when AMX is
+    unavailable
+  selftests/x86/amx: Remove unneeded code
 
-Perhaps we can combine this and the next test case down to
-static void kunit_current_test(struct kunit *test) {
-  /* There are two different ways of getting the current test */
-  KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
-  KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
-}
-?
+ tools/testing/selftests/x86/amx.c         | 51 +++++------------------
+ tools/testing/selftests/x86/sigaltstack.c | 12 +++++-
+ 2 files changed, 21 insertions(+), 42 deletions(-)
 
-> +}
-> +
-> +static void kunit_current_get_current_test(struct kunit *test)
-> +{
-> +       struct kunit *current_test1, *current_test2;
-> +
-> +       /* Check to ensure the result of kunit_get_current_test()
-> +        * is equivalent to current test.
-> +        */
-> +       current_test1 =3D kunit_get_current_test();
-> +       KUNIT_EXPECT_PTR_EQ(test, test, current_test1);
-> +
-> +       /* Check to ensure the result of kunit_get_current_test()
-> +        * is equivalent to current->kunit_test.
-> +        */
-> +       current_test2 =3D current->kunit_test;
-> +       KUNIT_EXPECT_PTR_EQ(test, current_test1, current_test2);
 
-> +}
-> +
-> +static void kunit_current_fail_current_test(struct kunit *test)
-> +{
-> +       struct kunit fake;
-> +
-> +       /* Initialize fake test and set as current->kunit_test. */
+base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+-- 
+2.17.1
 
-Nit: I think the code is self-explanatory enough that we can drop this comm=
-ent.
-
-> +       kunit_init_test(&fake, "fake test", NULL);
-> +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
-> +       current->kunit_test =3D &fake;
-> +
-> +       /* Fail current test and expect status of fake test to be failed.=
- */
-
-Nit: I think this comment could also be dropped or maybe shortened to
-  kunit_fail_current_test("This should make `fake` fail");
-
-or
-  /* Now kunit_fail_current_test() should modify `fake`, not `test` */
-  kunit_fail_current_test("This should make `fake` fail");
-
-> +       kunit_fail_current_test("This test is supposed to fail.");
-> +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAILU=
-RE);
-> +
-
-Hmm, should we try calling
-  kunit_cleanup(&fake);
-?
-
-Right now this does resource cleanups, but we might have other state
-to cleanup for our `fake` test object in the future.
-
-Daniel
