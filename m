@@ -2,33 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191FC6D08E6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 16:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03146D0922
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 17:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbjC3O5k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 10:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S232776AbjC3PJG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 11:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbjC3O5e (ORCPT
+        with ESMTP id S232768AbjC3PJF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:57:34 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94440CDEB;
-        Thu, 30 Mar 2023 07:57:10 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 539B918843BF;
-        Thu, 30 Mar 2023 14:56:59 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 48FC82500389;
-        Thu, 30 Mar 2023 14:56:59 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 42A529B403E2; Thu, 30 Mar 2023 14:56:59 +0000 (UTC)
-X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
-Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 8F6B191201E3;
-        Thu, 30 Mar 2023 14:56:58 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
+        Thu, 30 Mar 2023 11:09:05 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2BBCDE9;
+        Thu, 30 Mar 2023 08:08:13 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id le6so18328458plb.12;
+        Thu, 30 Mar 2023 08:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680188893;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z0Z7V7Ss/AtXBRghpZkg8HPKEk/gIK+rbrkFIOnWykw=;
+        b=hrKdvXgmz+intqH6k/82qhZO+TXJRFUbWkit5YyihN3zsu13/kSZ0hpW0LVa5b7XVy
+         h+KE9JOb8fFAzZYG60AOgY5RNeZjapZ/L4Q/l8g7HQ/PudZPn7BQcfZPJUOnIezdbY4C
+         WSW3uXVaJ72O2Q73JC17f1rYt+NLA0tgOfwHgId0U4xbayGoLw4zd3TjSMl1QDWNgoay
+         yTwQK2Gz1n74v92l4Hst8OFJ8LVY/EVXYX0JhaQjQyWBDAUqOmPaaYMrR+yRmkM0qv9w
+         Gx2josZg2bXesXPWbGOJJSnHTl4S9C2rpx+jZ2yk/jHkgPBwBiMzTH317fUL6yDpgkZ4
+         ScyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680188893;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z0Z7V7Ss/AtXBRghpZkg8HPKEk/gIK+rbrkFIOnWykw=;
+        b=uZgpifKQADUHARRsbAmYQAtEWMv3BBbV4oq92E+XEE/XRFUXVk3rsgByioUc5P9tGf
+         62Qrc0iduTXECZXY53cEfHM3OZCNEdSRQUhH1ytaDJ3b66295cEuKQzooq3BymYG5FtQ
+         U8tIR1WDR1jSjOWCZCOFT7TsWddsDrpqSjcpEZ3jzuRB2xSV5SsusiuhuDyCmu9Lowl/
+         E57xNE3crvjh3FhCJ4DYpTAA4u99MJxQ7zPpBFH1erEP8fexd3LStXpNIyDLedfDRml/
+         oFa4UAzjOdTvVQplWZrmbl+nxWi/kqVfNXwcVJOemInnb5YtxywcV+tTx6pcEDEvqZlv
+         92Qg==
+X-Gm-Message-State: AO0yUKXN7dNK6rWOhA2+pZ3qW9ELXIQFyE5bFJCX4aCbUgDA5jjhVcXM
+        lBLF5ykqAV//SQlHQ7ngd40=
+X-Google-Smtp-Source: AK7set+uK7+GwFdenHrawwnv6t1AUOM2gsI7rgDOiMu7/kWlK6xgT1y03qBrqCUPM+I2yWXxPnmQ2w==
+X-Received: by 2002:a05:6a20:6ca6:b0:db:cfb5:33aa with SMTP id em38-20020a056a206ca600b000dbcfb533aamr20045536pzb.56.1680188893105;
+        Thu, 30 Mar 2023 08:08:13 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id w25-20020aa78599000000b00625037cf695sm24868986pfn.86.2023.03.30.08.07.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 08:08:12 -0700 (PDT)
+Date:   Thu, 30 Mar 2023 18:07:52 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
 Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -46,7 +69,7 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         <angelogioacchino.delregno@collabora.com>,
         Claudiu Manoil <claudiu.manoil@nxp.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
         Jiri Pirko <jiri@resnulli.us>,
         Ivan Vecera <ivecera@redhat.com>,
         Roopa Prabhu <roopa@nvidia.com>,
@@ -66,10 +89,8 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         <linux-kselftest@vger.kernel.org>
 Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
  drivers
-In-Reply-To: <20230330130936.hxme34qrqwolvpsh@skbuf>
-References: <20230327115206.jk5q5l753aoelwus@skbuf>
- <87355qb48h.fsf@kapio-technology.com>
- <20230327160009.bdswnalizdv2u77z@skbuf>
+Message-ID: <20230330150752.gdquw5kudtrqgzyz@skbuf>
+References: <20230327160009.bdswnalizdv2u77z@skbuf>
  <87pm8tooe1.fsf@kapio-technology.com>
  <20230327225933.plm5raegywbe7g2a@skbuf>
  <87ileljfwo.fsf@kapio-technology.com>
@@ -78,12 +99,14 @@ References: <20230327115206.jk5q5l753aoelwus@skbuf>
  <20230330124326.v5mqg7do25tz6izk@skbuf>
  <87wn2yxunb.fsf@kapio-technology.com>
  <20230330130936.hxme34qrqwolvpsh@skbuf>
-Date:   Thu, 30 Mar 2023 16:54:19 +0200
-Message-ID: <875yaimgro.fsf@kapio-technology.com>
+ <875yaimgro.fsf@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875yaimgro.fsf@kapio-technology.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,28 +114,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 16:09, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Thu, Mar 30, 2023 at 02:59:04PM +0200, Hans Schultz wrote:
->> On Thu, Mar 30, 2023 at 15:43, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > On Tue, Mar 28, 2023 at 09:45:26PM +0200, Hans Schultz wrote:
->> >> So the solution would be to not let the DSA layer send the
->> >> SWITCHDEV_FDB_OFFLOADED event in the case when the new dynamic flag is
->> >> set?
->> >
->> > I have never said that.
->> 
->> No, I was just thinking of a solution based on your previous comment
->> that dynamic fdb entries with the offloaded flag set should not be aged
->> out by the bridge as they are now.
->
-> If you were a user of those other drivers, and you ran the command:
-> "bridge fdb add ... master dynamic"
-> would you be ok with the behavior: "I don't have dynamic FDB entries,
-> but here's a static one for you"?
+On Thu, Mar 30, 2023 at 04:54:19PM +0200, Hans Schultz wrote:
+> I don't know if you have a solution in mind wrt the behaviour of the
+> offloaded flag if it is not to do as it does now and let the bridge age
+> out dynamic entries. That led me to conclude that this patch-set cannot
+> use the offloaded flag, but you seem to suggest otherwise.
+> 
+> If you have a suggestion, feel free.
 
-I don't know if you have a solution in mind wrt the behaviour of the
-offloaded flag if it is not to do as it does now and let the bridge age
-out dynamic entries. That led me to conclude that this patch-set cannot
-use the offloaded flag, but you seem to suggest otherwise.
+Didn't I explain what I would do from the first reply on this thread?
+https://patchwork.kernel.org/project/netdevbpf/patch/20230318141010.513424-3-netdev@kapio-technology.com/#25270613
 
-If you have a suggestion, feel free.
+As a bug fix, stop reporting to switchdev those FDB entries with
+BR_FDB_ADDED_BY_USER && !BR_FDB_STATIC. Then, after "net" is merged into
+"net-next" next Thursday (the ship has sailed for today), add "bool static"
+to the switchdev notifier info, and make all switchdev drivers (everywhere
+where a SWITCHDEV_FDB_ADD_TO_DEVICE handler appears) ignore the
+"added_by_user && !is_static" combination, but by their own choice and
+not by switchdev's choice.
+
+Then, make DSA decide whether to handle the "added_by_user && !is_static"
+combination or not, based on the presence of the DSA_FDB_FLAG_DYNAMIC
+flag, which will be set in ds->supported_fdb_flags only for the mv88e6xxx
+driver. When DSA_FDB_FLAG_DYNAMIC is not supported, DSA will not offload
+the FDB entry: neither will it call port_fdb_add(), nor will it emit
+SWITCHDEV_FDB_OFFLOADED. Ideally, it would also inform user space that
+it can't offload this flag by returning an error, but the lack of an
+error propagation mechanism from switchdev to the bridge FDB is a known
+limitation which is hard to overcome, and is outside the scope of your
+patchset I believe. To see whether DSA has acted upon the "master dynamic"
+flag or not, it would be good enough for the user to see something
+adequate in "bridge fdb show | grep offloaded", I believe.
