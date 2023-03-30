@@ -2,271 +2,194 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7DA6CFB63
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 08:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626CD6CFBB8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 08:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjC3GRe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 02:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S229948AbjC3Ghu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 02:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjC3GRd (ORCPT
+        with ESMTP id S229620AbjC3Ght (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:17:33 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1257140DD
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 23:17:32 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id o24-20020a05600c511800b003ef59905f26so10984075wms.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 23:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680157050;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f9jA5pONXkWYKKh6ImaL4CDIbobIYcz/Kp1zbJpbc+k=;
-        b=nDnHOuwyqaP1Yiw20nMG5SX3/nZNIjVdmhVVfcQMS5fdyf0Wb8geH4VmRTfJZejULm
-         iXTauOUJ1+VQ/4kcxDhF1CSeIcyWTlc2jqWCMbzNG/asi/nHj3t0W643IwzwIzagN6Zc
-         okSrGR3kUG+KUCBzZgKDNge3r+r7am1TeR/BeY1bpHF5/e6e4tkcKA/9HWIMZGE/+U3q
-         9ntdq3+t+gSxBl26OD/PrInw2CY/bVlKwRzlqkh3DQU6612i3vcB/rGX4c1npaSVU09X
-         mZ3hlq3x4WqjN4POUeMR637+aUKEExH/pz51KSgWfWz95eq+/gqx2mU/zWdYAbwcKZvn
-         62gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680157050;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f9jA5pONXkWYKKh6ImaL4CDIbobIYcz/Kp1zbJpbc+k=;
-        b=DCV9x+vmtPp83BwKLisHlxfKx3icxVtbjenXRgPqhEvcMyblnbWZ0qkG2zix/5DUXM
-         g7bu4ZMXfeZY98EV6aqGd/YdUPLZrMoJE/c1SYo/J0GyNemgLHjIiO88z+TcHNFUgc49
-         cNCeFn2OzB9Dln+jfrhTZlAhZ5dV5GKus/ubdSQu4AMj8CgTwkSYP2n5gUHl9XEUChYc
-         dIwW55yh4aTQ51M5jikUjyM32SafXVg5Brb97c0y5HeOpOlbCtc5UGM0ZjNlRq7pSH1Z
-         nH10U7IzfZc4OqR8QRoHr1hhmwQQiI0W27OCP3dVK+tXKYQeaxd5K+XscTbgRo6y7AVK
-         g5zA==
-X-Gm-Message-State: AAQBX9c1oWLeXQwnWFQAwrJLMG/S3gOSiMD/JVT84FW8rhgFjdrHiBVq
-        qqWp86vewVBXQ+UXfxnwOwf+xCsPuHoYMIsbR3YTtA==
-X-Google-Smtp-Source: AKy350YZk0oXtjZWx7hNAQJkxLSUijCrG/dysAFpxA4w10aYo8HAWOf3jLSvuAOGDbcr0aqIPlmKV7OsO0l2djebcSI=
-X-Received: by 2002:a05:600c:1ca2:b0:3ed:dc54:5c18 with SMTP id
- k34-20020a05600c1ca200b003eddc545c18mr1886067wms.3.1680157050395; Wed, 29 Mar
- 2023 23:17:30 -0700 (PDT)
+        Thu, 30 Mar 2023 02:37:49 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2075.outbound.protection.outlook.com [40.107.220.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417E64EFE;
+        Wed, 29 Mar 2023 23:37:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cV4iHn2E5WAUe9ngtAgPKu5PBl1OzW8C6LpwIZV3XdyJ0sIo/XrQIWNaROjqgjr5iJ9Tyu6G4qB3G32FcWhxWJKRBuVxGaV6LlxD5rb60W10MS1V0IiWJScx42f+9NLBgFk+acUkctr0wTJibL0waP2a+RGv+HR/nnPFIOdN1pRZp0btyTl2rHpJTytS027ETgnCBnIejElAs/e4Ei0xnYzBJYnoclz7lEhfvQiwUpCqV1oLZr5J4HRcscIlsoNUjL7OionzudEbRUzgZ1b+nsLfvv23MLBIVhYEa1GCO0tIL7mlCJsAb/4VRIe8IKhhEBjs09wxv8jDijpFSp0MNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f+5Ce3dsplq5E+KC2YuITorNi4q0ZqK+gZ6XyNtH+Gs=;
+ b=QRDfxgFvtADVYERG+QOKCLOzt4qVM1slNnmuEIanW7yg3E0/gSkOLBTNjG8mEICj9jIEr44WIPrerZN1w8WFihW0GKxf1nPlVkwL2OWjT9nEOjvA3kitvq2xg9lm6nMYWfE4WrXfW2bHLK5UMu2m7VlTVAJSQZ8x0asJ+ikPVcEjBh7J902ccTmjg/9l3mY3IstkAYSx3UhwMf437eI3aWZldorN48KcFpa5gwukNUfsYRpfiRgIfcxPlmoqYjdwIFjtC/2YmK8tiLPD9a7LLHro52WiGFkjvxyLG1bVSGkPFgzVUO6rRGBQvAFc8LqB5JwCdOnP3Wspl02lPZAASw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f+5Ce3dsplq5E+KC2YuITorNi4q0ZqK+gZ6XyNtH+Gs=;
+ b=dHAGnbvQIkUnmQRPQSiJyYQiDtuOYPl8GdjgbrAZXTtstAU7KsMd7j6eAU92i3djxs0lAca92Ddb48ztrluW01v/4XIYbZ1kMi2TGqFv/Pdj6U9/Rp6ahsNW8zNuTBD77r37GFPpNSEgtxj49+aI67PdQY1+mFLKg9VTL/c4P9DzsB1pUN4d6Gam1cNgDHSxraw7h6GfPIhwa7kLAJ20EgzbO7ndAY6XEfgRLvtNrtViZT1/u/SYf6lLysrknfSDYEERV4SYmQmg1kzrdGECYCJSFS5JFbdB2AeCxFQHCrTfJKqeblSSgPpN5Jwy2Cg4l0pLgIZjtarHXy6FutMFjg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by CY8PR12MB8242.namprd12.prod.outlook.com (2603:10b6:930:77::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.35; Thu, 30 Mar
+ 2023 06:37:46 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::d228:dfe5:a8a8:28b3]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::d228:dfe5:a8a8:28b3%5]) with mapi id 15.20.6254.022; Thu, 30 Mar 2023
+ 06:37:46 +0000
+Date:   Thu, 30 Mar 2023 09:37:38 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+Message-ID: <ZCUuMosWbyq1pK8R@shredder>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder>
+ <87a5zzh65p.fsf@kapio-technology.com>
+ <ZCMYbRqd+qZaiHfu@shredder>
+ <87fs9ollmn.fsf@kapio-technology.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fs9ollmn.fsf@kapio-technology.com>
+X-ClientProxiedBy: VI1PR06CA0168.eurprd06.prod.outlook.com
+ (2603:10a6:803:c8::25) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-References: <20230329172311.71861-1-benjamin@sipsolutions.net> <20230329172311.71861-2-benjamin@sipsolutions.net>
-In-Reply-To: <20230329172311.71861-2-benjamin@sipsolutions.net>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 30 Mar 2023 14:17:19 +0800
-Message-ID: <CABVgOSkcT0f5ex6E_cbepy4R2=qmSdVwgv0XLjaFp=rg=jDzbg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kunit: add ability to register a simple cleanup function
-To:     benjamin@sipsolutions.net
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Benjamin Berg <benjamin.berg@intel.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002d54e105f8180cf9"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|CY8PR12MB8242:EE_
+X-MS-Office365-Filtering-Correlation-Id: 42bdf03c-4ae0-4df4-df09-08db30e945c9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nypkjg9yPrf+u1khZqsES/mLbBXBhbdErDSjpfxQh3a+oGv3B4q4w1j/zOExzeB85XSkyevQFP5x7YV9AmKbcZ5zWY9ef+I5GQnAoNkp/MbmmAVpw4LwB3FkkxxtBeBICQWgNaBUypIBILMPLNxU2bSuovqn/uJTRPAF3eUSizQeAef52OhpI10+RNz92d9wUaUQqKxnjZ1nk9cgk1aT1Ee51hm0rKw/0WOgXKKLO8XFfEbGYIc6xfrHovwc1A/GH6DJWb4oBZpcMRvUBQ2rOtGdMWvK1VB+BVF8E2AK2QheIybYoiz5T1BWWRA2JqqAAZExZRJDX1HCfcUoGVjjmjdQzUtHKZZHuR73VksuImI7MUU47SK9BOtC2AYjds/uFo1/NIw/ThtJW3lTniyvDA61MUAOoaZ4OgQNLYmnMH1R/qVu/gQ3RLCdCDan3cVD0An6d1qdHtgA0yFMDcd6F1VH34zFA/1f92VS1/U0SC9/nHgi4h5BXRZJZUCyAS2BMrl5Dzsghdu/CMRrjT+oIdGecKGSaZJBO0M4Sti8JPTMRT2azAeORkIQZeLICrVT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(376002)(136003)(366004)(39860400002)(346002)(396003)(451199021)(83380400001)(7416002)(6506007)(53546011)(26005)(6666004)(54906003)(33716001)(316002)(478600001)(8676002)(6512007)(66556008)(7406005)(6916009)(4326008)(66946007)(66476007)(41300700001)(86362001)(9686003)(38100700002)(6486002)(2906002)(5660300002)(8936002)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?n2R/2z7Q8xgZdfEhf8hfHxYRnSkIFbbEbjTWMDjCH7KpCSp07Di+/b/JPpn5?=
+ =?us-ascii?Q?EPAYpIZa738bFljcYS21QOayVg5bzdnH+qhW4N/yZlSFg9Prn3T+Ljc8P5m+?=
+ =?us-ascii?Q?5VT+LIVgAIkpKuLYWIl8g3WfdaDqocl7iMmfqyuY3uEOh2cGFVHjzIJIJ5mR?=
+ =?us-ascii?Q?JPCapid6V3Nq8xQFNdg1y3k7mYxy4bjRbPvOrPjv+DbILNHvi0oT5AmUsnTa?=
+ =?us-ascii?Q?UgUY9z7zxsIsUN1ZwkMqe2HK4KlosTzjy/HdwFEypPL1IPi0BafzdEpInsdr?=
+ =?us-ascii?Q?9gqcQrV5f7E9csmFwwPLcvu2l1Jth7z1iOkGGN7wBI0kOLTqa/DxJXmGDSGW?=
+ =?us-ascii?Q?3tkX4gpBhCfZVTK7XSuwRNG5QdwgbjZxmx2W7R3JNHCrHrfJGMB5yP+18bXN?=
+ =?us-ascii?Q?mGzmzi2wvut5ISomzTg7Jz6BORSBX+wWmSlmvyYo8OoXsUJxy2YXOPd6z64q?=
+ =?us-ascii?Q?TCvN7hciwL+CyM6wKQbjJxS73wscmYD7O+NiPBtjimwyRRenIdRG7bwXpddx?=
+ =?us-ascii?Q?XecD161JhytY8jU8pRT9Ow6+NDU96+NT8hL+kJlcEwLnHOujyRchMzAeO6z1?=
+ =?us-ascii?Q?xKjvzy/wTL4YHRMM4X6HnT9JDlhRLZGs3zsMHgcka6i49rmtGTgde4A8R2er?=
+ =?us-ascii?Q?respFvpUtxuyE02ZHnOEcKfVjkPN26yHkc/AiyrTFm8jQZmQ7OHkNloBGj0E?=
+ =?us-ascii?Q?gZAiPzCSSEDeXYFOeg06nEVY1ao1OcgSUjLSS5FJd/t1u7zuyo77Q8ucgL6D?=
+ =?us-ascii?Q?o3Gu3joD9CBwNF3m/3eADWhveNyv2LfsXBPRyWexyYDLAw8EdSUgGbKKlyk4?=
+ =?us-ascii?Q?/OiOTpq70UXgNpNZKysg2htWnVApcCryZuyeKsQ2pVS7a3Xmt6nRUFYXfBP1?=
+ =?us-ascii?Q?N6R/3aFgOZzLBp9dTac8AOuMWpFl0cB+sEOMRzHf9i0Jj5mharbYSAU5eSY6?=
+ =?us-ascii?Q?8YRjsHseHR7KRpVwUawI++ukpifEJrrM4R5b/WjfziTi3HVAWk6oElWiwEqi?=
+ =?us-ascii?Q?s9d3XyyqftS+d27VXNXbzYDwQeZp/EUC+pAF0CZW8Nu+jaJmg3rMbIRay/sL?=
+ =?us-ascii?Q?IGkl4Whe/6lU2wcGR/mPWV7D1V4Mcxv1DK+X4hC0BUJ/+SjEqd3h4+xeo/4Q?=
+ =?us-ascii?Q?jZpwvT+Ks3RavTmxfLa+B32LcKpSswcKtiLvkJhAtzLSgSnnYxyhGQPMukQk?=
+ =?us-ascii?Q?qIHmcYy0X6YNnDwbE6ZrZlNK4d7fZ0IQDXeB7hIDlR0Kvlr7hm+iqN08QwUP?=
+ =?us-ascii?Q?geiPwYwx01QW6HNU7/Mzxz+i4klepKLZNd7IzUBvPGqGKKo9XWBQaDG8pasb?=
+ =?us-ascii?Q?zL5unPOItHUZCR/YbIWcZe/XSFGh6hcBNk3stSnjJm4Tpj4z/+u9e/begpvh?=
+ =?us-ascii?Q?F2slwU+fsRVDD6HMypp73BLZtYD9e8ck5O72rLiYOSFBqplJpwzjQ+3/Xg2k?=
+ =?us-ascii?Q?rXXnV9W2HtNVh6T06I6xa+6vUIWRY6l/cV9br07QS/9WTO8XAuGwjlox525R?=
+ =?us-ascii?Q?pgvzya2iXL5eZabPhdmtoI12uhC8neDBBsIzoFN+VTUmbQwJSsQ6zTbhEr59?=
+ =?us-ascii?Q?Ii/6mZ1w+A4d3lMEGJFpEWez3wLdJr9Z42cDEkjZ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42bdf03c-4ae0-4df4-df09-08db30e945c9
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 06:37:46.3646
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EQbZj3eb60T8pnYJQH6DesNiWenc6pBFlWnLRYa/JXN88R9j6SEodb9Q0UdREPoyUdMlohYgS4DFbf1HGyCKgQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8242
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000002d54e105f8180cf9
-Content-Type: text/plain; charset="UTF-8"
+On Tue, Mar 28, 2023 at 09:30:08PM +0200, Hans Schultz wrote:
+> On Tue, Mar 28, 2023 at 19:40, Ido Schimmel <idosch@nvidia.com> wrote:
+> > On Sun, Mar 26, 2023 at 05:41:06PM +0200, Hans Schultz wrote:
+> >> On Mon, Mar 20, 2023 at 10:44, Ido Schimmel <idosch@nvidia.com> wrote:
+> >> >> +	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+> >> >> +		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+> >> >> +	tc_check_packets "dev $swp2 egress" 1 1
+> >> >> +	check_fail $? "Dynamic FDB entry did not age out"
+> >> >
+> >> > Shouldn't this be check_err()? After the FDB entry was aged you want to
+> >> > make sure that packets received via $swp1 with SMAC being $mac are no
+> >> > longer forwarded by the bridge.
+> >> 
+> >> I was thinking that check_fail() will pass when tc_check_packets() does
+> >> not see any packets, thus the test passing here when no packets are forwarded?
+> >
+> > What do you mean by "I was *thinking*"? How is it possible that you are
+> > submitting a selftest that you didn't bother running?!
+> >
+> 
+> Sorry, but I have sent you several emails telling you about the problems
+> I have with running the selftests due to changes in the phy etc. Maybe
+> you have just not received all those emails?
+> 
+> Have you checked spamfilters?
+> 
+> With the kernels now, I cannot even test with the software bridge and
+> selftests as the compile fails - probably due to changes in uapi headers
+> compared to what the packages my system uses expects.
 
-On Thu, 30 Mar 2023 at 01:23, <benjamin@sipsolutions.net> wrote:
->
-> From: Benjamin Berg <benjamin.berg@intel.com>
->
-> This is useful to e.g. automatically free resources at the end of the
-> test, without having to deal with kunit resource objects directly.
->
-> The whole point of doing this is that the callback is guaranteed to
-> happen in case the test aborts (due to an assertion). As such, use
-> assertions internally rather than requiring further error checking by
-> the API user.
->
-> Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
-> ---
+My spam filters are fine. I saw your emails where you basically said
+that you are too lazy to setup a VM to test your patches and that your
+time is more valuable than mine, which is why I should be testing them.
+Stop making your problems our problems. It's hardly the first time. If
+you are unable to test your patches, then invest the time in fixing your
+setup instead of submitting completely broken patches and making it our
+problem to test and fix them. I refuse to invest time in reviewing /
+testing / reworking your submissions as long as you insist on doing less
+than the bare minimum.
 
-Thanks!
-
-I've actually been working on something similar here:
-https://lore.kernel.org/linux-kselftest/20230325043104.3761770-2-davidgow@google.com/
-
-Maxime suggested that it might be worth naming this kunit_add_action()
-for consistency with devm_add_action(). We also need the cancel/remove
-and trigger/release helpers for some of the other device helpers.
-
-Hopefully between these, we can have something which works for everyone.
-
-Cheers,
--- David
-
-
-
-
->  include/kunit/test.h | 20 ++++++++++++++++++++
->  lib/kunit/test.c     | 37 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 57 insertions(+)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 519b90261c72..ab1dacf1c9f4 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -373,6 +373,26 @@ static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp
->         return kunit_kmalloc_array(test, n, size, gfp | __GFP_ZERO);
->  }
->
-> +typedef void (*kunit_cleanup_t)(const void *);
-> +
-> +/**
-> + * kunit_add_cleanup() - Add post-test cleanup action.
-> + * @test: The test case to which the resource belongs.
-> + * @cleanup_func: function to call at end of test.
-> + * @data: data to pass to @free_func.
-> + * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
-> + *
-> + * This adds a cleanup action to be executed after the test completes.
-> + * Internally this is handled using a *test managed resource*.
-> + *
-> + * This function will abort the test on failure.
-> + *
-> + * Note: KUnit needs to allocate memory for a kunit_resource object. You must
-> + * specify an @internal_gfp that is compatible with the current context.
-> + */
-> +void kunit_add_cleanup(struct kunit *test, kunit_cleanup_t cleanup_func,
-> +                      const void *data, gfp_t internal_gfp);
-> +
->  void kunit_cleanup(struct kunit *test);
->
->  void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index c9e15bb60058..72d956dfc324 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -719,6 +719,43 @@ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
->  }
->  EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
->
-> +struct kunit_auto_cleanup {
-> +       struct kunit_resource resource;
-> +       kunit_cleanup_t cleanup_func;
-> +};
-> +
-> +static void kunit_auto_cleanup_free(struct kunit_resource *res)
-> +{
-> +       struct kunit_auto_cleanup *cleanup;
-> +
-> +       cleanup = container_of(res, struct kunit_auto_cleanup, resource);
-> +
-> +       cleanup->cleanup_func(cleanup->resource.data);
-> +}
-> +
-> +void kunit_add_cleanup(struct kunit *test, kunit_cleanup_t cleanup_func,
-> +                      const void *data, gfp_t internal_gfp)
-> +{
-> +       struct kunit_auto_cleanup *res;
-> +
-> +       KUNIT_ASSERT_NOT_NULL_MSG(test, cleanup_func,
-> +                                 "Cleanup function must not be NULL");
-> +
-> +       res = kzalloc(sizeof(*res), internal_gfp);
-> +       if (!res) {
-> +               cleanup_func(data);
-> +               KUNIT_ASSERT_FAILURE(test, "Could not allocate resource for cleanup");
-> +       }
-> +
-> +       res->cleanup_func = cleanup_func;
-> +       res->resource.should_kfree = true;
-> +
-> +       /* Cannot fail as init is NULL */
-> +       __kunit_add_resource(test, NULL, kunit_auto_cleanup_free,
-> +                            &res->resource, (void *)data);
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_add_cleanup);
-> +
->  static inline bool kunit_kfree_match(struct kunit *test,
->                                      struct kunit_resource *res, void *match_data)
->  {
-> --
-> 2.39.2
->
-
---0000000000002d54e105f8180cf9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB7
-XoLz5JWZijpPX64+g1+8Xc4g+QiwsCLLcn61l56cfTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMzAwNjE3MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAMaQtS4ExOw0n7fEk2PdD
-Pv7u5hTzd5noM1La+xwFtKvr6V+jojv+g4znxJzHU3CSGniri8+vjUqmKReMNK3F1wJ0ci/cCyck
-yj0xQD0BKHTh48yZTDCw1C1nvExGTwqqYSrSanoEjFVl/Yv1mEovUYbfCt+g1Sy9xXIm4QaKYSUi
-7xHNZh8SW2pX43n8E4BtVeWzHYZymtmAbYVn4pxTFCguR4cxoWXD4lEuT+A3Zu3+m8IoRCT/O6gK
-EcnXHOBaKkBbyJHR+Wrnr9f420lwCQBuo5AT8scukyttrJUvH4gLf+Aj83UETb1nGB9ZJv1FXlP2
-6V4z6cPKYLGMI44+5Q==
---0000000000002d54e105f8180cf9--
+Good luck
