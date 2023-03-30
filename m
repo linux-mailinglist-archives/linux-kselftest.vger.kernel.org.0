@@ -2,88 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0589D6D09D4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 17:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221746D09C5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 17:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbjC3Phs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 11:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        id S233072AbjC3Pfg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 11:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbjC3Phq (ORCPT
+        with ESMTP id S233070AbjC3Pfa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:37:46 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A182976F;
-        Thu, 30 Mar 2023 08:37:26 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id BAD591883842;
-        Thu, 30 Mar 2023 15:37:22 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id AC9BA2500389;
-        Thu, 30 Mar 2023 15:37:22 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id A74189B403E2; Thu, 30 Mar 2023 15:37:22 +0000 (UTC)
-X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
-Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 04E2D91201E3;
-        Thu, 30 Mar 2023 15:37:22 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
- drivers
-In-Reply-To: <20230330150752.gdquw5kudtrqgzyz@skbuf>
-References: <20230327160009.bdswnalizdv2u77z@skbuf>
- <87pm8tooe1.fsf@kapio-technology.com>
- <20230327225933.plm5raegywbe7g2a@skbuf>
- <87ileljfwo.fsf@kapio-technology.com>
- <20230328114943.4mibmn2icutcio4m@skbuf>
- <87cz4slkx5.fsf@kapio-technology.com>
- <20230330124326.v5mqg7do25tz6izk@skbuf>
- <87wn2yxunb.fsf@kapio-technology.com>
- <20230330130936.hxme34qrqwolvpsh@skbuf>
- <875yaimgro.fsf@kapio-technology.com>
- <20230330150752.gdquw5kudtrqgzyz@skbuf>
-Date:   Thu, 30 Mar 2023 17:34:44 +0200
-Message-ID: <877cuy6ynf.fsf@kapio-technology.com>
+        Thu, 30 Mar 2023 11:35:30 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E0ECDF9
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 08:35:09 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c18so18413267ple.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 08:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680190509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6J5Dz0I/J07O36CXqE0BRQW45IGKi4sdZ6anPBoj71I=;
+        b=EAl1AhmF75rYCLH5Q2vZtyt7h5YQjV6yPyx8moPuHclV7yeuRCAzkRDD7F2j341P9n
+         YA8/XGuqFn9dKR+A4VEiA1rYPHy24yN3RG4Wm/YJkXMtoUXuyx2jY8s14FpT34Zd1GD8
+         L07QTzxvU/AqKb62ZBKabLzqx3uaUvYHWDcY0HoWZ8x+DNeAFd7yqmqR0Tvku7NIkiU8
+         WG5LOOf8II2uEEZjDVy/AZMLvDzdsGdKAlnduD2YzCH1Wk7T0sAVXkpeyGIpnGXJPVFS
+         VnfsYAHXWqM4GIn8j+O/EUmETfFqRZg7LR81x1yzS49w7C7FH19BTm/O3B7uGa3uh5Dc
+         C1XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680190509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6J5Dz0I/J07O36CXqE0BRQW45IGKi4sdZ6anPBoj71I=;
+        b=bXNmruQJ3jr7Jf/Ocsm+B/qNnUq41O6pL9EUcyMrzk9qOFz44wUZT2I8F4TQCN6fwL
+         GWHDTB3r3+o0Ywrr5lWnytpU//b2aG69oBaKIY9FUvmWQDggCvDv3NZseadGhgVyXRxo
+         TWfAdX0YLCix9dInsQr9Blt8JvAj7el59Nn+ALCMhZ/SfpR29JeLNeDBsDzFfTvI0vT5
+         GE0JpLwAHSOlZ+1Nld8m/7HER+nZukndWnFk2ofwrzR5SQQU3dTdc8riSKVfDlNn9FtU
+         pyP/CsgbGzH3xKMBcFofdZL+C0yGL5xoeNFK7wOO8rkhHGcTsQlsBCjKAfQkX8o93OFE
+         lYgQ==
+X-Gm-Message-State: AAQBX9cDgX/AMNxVQ7oh4N7KFD/7q7aQ8NHF32gKeB9BErkBTFLdtXBS
+        oQ7rA7uIAM4H4PcmodH8+S+DPISRkE9Ue2831lOq1g==
+X-Google-Smtp-Source: AKy350YNQ6FECTA9ROsjSO3DYIpGj7n6B0divEu9JE+0CLFvLjKtYxt1YutcyQDZ0/lroePvmXBB7C0NdX8bl0paJF0=
+X-Received: by 2002:a17:90a:da01:b0:23f:695a:1355 with SMTP id
+ e1-20020a17090ada0100b0023f695a1355mr7327830pjv.5.1680190508548; Thu, 30 Mar
+ 2023 08:35:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+References: <20230330112743.2331141-1-javierm@redhat.com>
+In-Reply-To: <20230330112743.2331141-1-javierm@redhat.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 30 Mar 2023 08:34:57 -0700
+Message-ID: <CAGS_qxptBcUQByWAd6JHAxWb08czOiGnx0_uSvMKdhzTVwv=6w@mail.gmail.com>
+Subject: Re: [PATCH] .gitignore: Exclude KUnit config dot-files
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>,
+        linux-kselftest@vger.kernel.org, David Gow <davidgow@google.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        kunit-dev@googlegroups.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>, Andrew Davis <afd@ti.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,16 +81,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 18:07, Vladimir Oltean <olteanv@gmail.com> wrote:
+On Thu, Mar 30, 2023 at 4:27=E2=80=AFAM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
 >
-> Then, make DSA decide whether to handle the "added_by_user && !is_static"
-> combination or not, based on the presence of the DSA_FDB_FLAG_DYNAMIC
-> flag, which will be set in ds->supported_fdb_flags only for the mv88e6xxx
-> driver.
+> There's a rule to ignore all the dot-files (.*) but we want to exclude th=
+e
+> config files used by KUnit (.kunitconfig) since those are usually added t=
+o
+> allow executing test suites without having to enable custom config symbol=
+s.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-Okay, so this will require a new function in the DSA layer that sets
-which flags are supported and that the driver will call on
-initialization.
+FYI, Andy has a version of this patch from back in Jan here,
+https://lore.kernel.org/linux-kselftest/20230127145708.12915-1-andriy.shevc=
+henko@linux.intel.com/
 
-Where (in the DSA layer) should such a function be placed and what
-should it be called?
+I don't think anyone was adamantly opposed to it, but it's just been
+sitting on the list waiting.
+
+Daniel
