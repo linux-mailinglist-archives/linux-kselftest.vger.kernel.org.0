@@ -2,358 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF74C6D0E04
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 20:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749496D0E5E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 21:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbjC3SnN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 14:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
+        id S229902AbjC3TKt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 15:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjC3SnE (ORCPT
+        with ESMTP id S229475AbjC3TKs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 14:43:04 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72402FF12;
-        Thu, 30 Mar 2023 11:43:02 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id DC8C0604F5;
-        Thu, 30 Mar 2023 20:42:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680201779; bh=OGjehXW0tLGg+twlguEY6jqdgc6IMiPs6y4SgDUgv38=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pq7VG2APrR+8V5JeNK/lg6mF+fiv+sf5qRk0xTCRJQjxY9kP13eXgn8qE7FktA/py
-         KdKVJK82tHIRxfpzwdxKeEgMZzKFIyMKYbHD2Rz75mPvFAUL/9PqWlSn1YFxXy0S4P
-         bhqRDifIKCUlW06rkBuRvFM3hxzaN2QqR5ABjacJjEkMuG+PeC0cD3amNWuDI7/UaB
-         d0PG91cPSISnceqtqwco1NeQGj6oGzJSkzOSpMNFEpJs47a/X3dNjfSMZDjM0VzORW
-         w481I0HJQtnoM1U91/iCL1vyTZ9JmcEe9A+G1wMNg4FHVj6wqHHkSGkZraTejF/Rab
-         K3+IMw+NvjEHQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xoEdwq1QnuJO; Thu, 30 Mar 2023 20:42:57 +0200 (CEST)
-Received: from [192.168.1.4] (unknown [77.237.101.225])
-        by domac.alu.hr (Postfix) with ESMTPSA id A252F604F0;
-        Thu, 30 Mar 2023 20:42:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680201777; bh=OGjehXW0tLGg+twlguEY6jqdgc6IMiPs6y4SgDUgv38=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qdnwgRkIh6yiHAoADC75ia964sCT+lXtViWtEgFsv+unle25nABnjVs3T8QA20WA4
-         xEV2WrbpsajvHV8XoFUbeOCA1HhaEQw/srwJgUfG2J9KgXBzxLazoHZ4H74StV2Bno
-         ca+PbzDL7mRhvmh5n0RfpISwOeeupZ4fOb/MjmwceeZ8gslOeC2uZ8Gz607W5Ji9eT
-         XkXLRNqB3qdEx3amwGTEMa45Zlt7SCXyVsnHMkdahkiXMBCNxb7VUZwRdkuniWb7tO
-         Em9iMt4gI9teOtHrE3T/Af7VhnT1qybWgcAWKQiLW/TMoNyHZsLZxf88US6nC5vLlC
-         Irf1mICy4GsiQ==
-Message-ID: <5e1d56b9-5cf6-75f4-76ab-7c84679cad6a@alu.unizg.hr>
-Date:   Thu, 30 Mar 2023 20:42:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [BUG] [PATCH RFC v2] selftests/firmware: copious kernel memory
- leaks in test_fw_run_batch_request()
-To:     Takashi Iwai <tiwai@suse.de>, Dan Carpenter <error27@gmail.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
+        Thu, 30 Mar 2023 15:10:48 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C291C174;
+        Thu, 30 Mar 2023 12:10:45 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id B3439188368C;
+        Thu, 30 Mar 2023 19:10:33 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id ABED62500389;
+        Thu, 30 Mar 2023 19:10:33 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id A2E849B403F4; Thu, 30 Mar 2023 19:10:33 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id EB58791201E3;
+        Thu, 30 Mar 2023 19:10:32 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
         Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <97e284be-5018-9d18-feb2-7ec4b08c06fd@alu.unizg.hr>
- <26fd581a-1b9f-4960-8457-61d725511cee@kili.mountain>
- <dce6ffbe-7580-db1a-dd24-798be27b3a26@alu.unizg.hr>
- <5b103196-68d0-4d42-aa66-779af4d78532@kili.mountain>
- <878rfekz2l.wl-tiwai@suse.de>
-Content-Language: en-US, hr
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <878rfekz2l.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+In-Reply-To: <ZCMYbRqd+qZaiHfu@shredder>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
+ <ZCMYbRqd+qZaiHfu@shredder>
+Date:   Thu, 30 Mar 2023 21:07:53 +0200
+Message-ID: <874jq22h2u.fsf@kapio-technology.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 30. 03. 2023. 18:01, Takashi Iwai wrote:
-> On Thu, 30 Mar 2023 17:44:42 +0200,
-> Dan Carpenter wrote:
->>
->> I admire your enthusiam.  :)  What about if we just did this?  Does it
->> help with the leaks?
->>
->> regards,
->> dan carpenter
->>
->> diff --git a/lib/test_firmware.c b/lib/test_firmware.c
->> index 05ed84c2fc4c..626b836895f4 100644
->> --- a/lib/test_firmware.c
->> +++ b/lib/test_firmware.c
->> @@ -895,6 +895,9 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
->>  
->>  	mutex_lock(&test_fw_mutex);
->>  
->> +	if (test_fw_config->reqs)
->> +		return -EBUSY;
->> +
-> 
-> This leaves the mutex locked.
-> It should be the following instead, I suppose?
-> 
-> 	if (test_fw_config->reqs) {
-> 		rc = -EBUSY;
-> 		goto out_unlock;
-> 	}
-> 
-> 
-> Takashi
+On Tue, Mar 28, 2023 at 19:40, Ido Schimmel <idosch@nvidia.com> wrote:
+> On Sun, Mar 26, 2023 at 05:41:06PM +0200, Hans Schultz wrote:
+>> On Mon, Mar 20, 2023 at 10:44, Ido Schimmel <idosch@nvidia.com> wrote:
+>> >> +	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+>> >> +		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+>> >> +	tc_check_packets "dev $swp2 egress" 1 1
+>> >> +	check_fail $? "Dynamic FDB entry did not age out"
+>> >
+>> > Shouldn't this be check_err()? After the FDB entry was aged you want to
+>> > make sure that packets received via $swp1 with SMAC being $mac are no
+>> > longer forwarded by the bridge.
+>> 
+>> I was thinking that check_fail() will pass when tc_check_packets() does
+>> not see any packets, thus the test passing here when no packets are forwarded?
+>
+> What do you mean by "I was *thinking*"? How is it possible that you are
+> submitting a selftest that you didn't bother running?!
+>
+> I see you trimmed my earlier question: "Does this actually work?"
+>
+> I tried it and it passed:
+>
+> # ./bridge_locked_port.sh                         
+> TEST: Locked port ipv4                                              [ OK ]
+> TEST: Locked port ipv6                                              [ OK ]
+> TEST: Locked port vlan                                              [ OK ]            
+> TEST: Locked port MAB                                               [ OK ]            
+> TEST: Locked port MAB roam                                          [ OK ]
+> TEST: Locked port MAB configuration                                 [ OK ]
+> TEST: Locked port MAB FDB flush                                     [ OK ]
+>
+> And I couldn't understand how that's even possible. Then I realized that
+> the entire test is dead code because the patch is missing this
+> fundamental hunk:
+>
+> ```
+> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> index dbc7017fd45d..5bf6b2aa1098 100755
+> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> @@ -9,6 +9,7 @@ ALL_TESTS="
+>         locked_port_mab_roam
+>         locked_port_mab_config
+>         locked_port_mab_flush
+> +       locked_port_dyn_fdb
+>  "
+>  
+>  NUM_NETIFS=4
+> ```
+>
+> Which tells me that you didn't even try running it once.
 
-Hi, Dan, Takashi,
+Not true, it reveals that I forgot to put it in the patch, that's all. As
+I cannot run several of these tests because of memory constraints I link
+the file to a copy in a rw area where I modify the list and just run one
+of the subtests at a time. If I try to run the whole it always fails
+after a couple of sub-tests with an error.
 
-Unfortunately, it did not suffice.
-
-What I was building with was
-commit 8bb95a1662f8:Merge tag 'sound-6.3-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound
-with the following patch for lib/test_firmware.c:
-
-
----
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 05ed84c2fc4c..4daa38bd2cac 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -353,6 +353,19 @@ static ssize_t config_test_show_str(char *dst,
-        return len;
- }
- 
-+static inline int test_dev_config_update_bool_unlocked(const char *buf, size_t size,
-+                                      bool *cfg)
-+{
-+       int ret;
-+
-+       if (kstrtobool(buf, cfg) < 0)
-+               ret = -EINVAL;
-+       else
-+               ret = size;
-+
-+       return ret;
-+}
-+
- static int test_dev_config_update_bool(const char *buf, size_t size,
-                                       bool *cfg)
- {
-@@ -373,6 +386,24 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
-        return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
-+static int test_dev_config_update_size_t_unlocked(
-+                                        const char *buf,
-+                                        size_t size,
-+                                        size_t *cfg)
-+{
-+       int ret;
-+       long new;
-+
-+       ret = kstrtol(buf, 10, &new);
-+       if (ret)
-+               return ret;
-+
-+       *(size_t *)cfg = new;
-+
-+       /* Always return full write size even if we didn't consume all */
-+       return size;
-+}
-+
- static int test_dev_config_update_size_t(const char *buf,
-                                         size_t size,
-                                         size_t *cfg)
-@@ -402,6 +433,21 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
-        return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
-+static int test_dev_config_update_u8_unlocked(const char *buf, size_t size, u8 *cfg)
-+{
-+       u8 val;
-+       int ret;
-+
-+       ret = kstrtou8(buf, 10, &val);
-+       if (ret)
-+               return ret;
-+
-+       *(u8 *)cfg = val;
-+
-+       /* Always return full write size even if we didn't consume all */
-+       return size;
-+}
-+
- static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- {
-        u8 val;
-@@ -471,10 +517,10 @@ static ssize_t config_num_requests_store(struct device *dev,
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
--       mutex_unlock(&test_fw_mutex);
- 
--       rc = test_dev_config_update_u8(buf, count,
--                                      &test_fw_config->num_requests);
-+       rc = test_dev_config_update_u8_unlocked(buf, count,
-+                                               &test_fw_config->num_requests);
-+       mutex_unlock(&test_fw_mutex);
- 
- out:
-        return rc;
-@@ -518,10 +564,10 @@ static ssize_t config_buf_size_store(struct device *dev,
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
--       mutex_unlock(&test_fw_mutex);
- 
--       rc = test_dev_config_update_size_t(buf, count,
--                                          &test_fw_config->buf_size);
-+       rc = test_dev_config_update_size_t_unlocked(buf, count,
-+                                                   &test_fw_config->buf_size);
-+       mutex_unlock(&test_fw_mutex);
- 
- out:
-        return rc;
-@@ -548,10 +594,10 @@ static ssize_t config_file_offset_store(struct device *dev,
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
--       mutex_unlock(&test_fw_mutex);
- 
--       rc = test_dev_config_update_size_t(buf, count,
--                                          &test_fw_config->file_offset);
-+       rc = test_dev_config_update_size_t_unlocked(buf, count,
-+                                                   &test_fw_config->file_offset);
-+       mutex_unlock(&test_fw_mutex);
- 
- out:
-        return rc;
-@@ -895,6 +941,11 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
- 
-        mutex_lock(&test_fw_mutex);
- 
-+       if (test_fw_config->reqs) {
-+               rc = -EBUSY;
-+               goto out_unlock;
-+       }
-+
-        test_fw_config->reqs =
-                vzalloc(array3_size(sizeof(struct test_batched_req),
-                                    test_fw_config->num_requests, 2));
-@@ -993,6 +1044,11 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
- 
-        mutex_lock(&test_fw_mutex);
- 
-+       if (test_fw_config->reqs) {
-+               rc = -EBUSY;
-+               goto out;
-+       }
-+
-        test_fw_config->reqs =
-                vzalloc(array3_size(sizeof(struct test_batched_req),
-                                    test_fw_config->num_requests, 2));
-
-The leaks are the same:
-
-unreferenced object 0xffff96deccc99c00 (size 1024):
-  comm "test_firmware-2", pid 3093, jiffies 4294945062 (age 605.444s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96ded72be400 (size 1024):
-  comm "test_firmware-3", pid 3094, jiffies 4294945062 (age 605.444s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96dec9e32800 (size 1024):
-  comm "test_firmware-0", pid 3101, jiffies 4294945072 (age 605.404s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96df0ab17000 (size 1024):
-  comm "test_firmware-1", pid 3102, jiffies 4294945073 (age 605.432s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96decd6f6400 (size 1024):
-  comm "test_firmware-2", pid 3103, jiffies 4294945073 (age 605.432s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff96df0dc69c00 (size 1024):
-  comm "test_firmware-3", pid 3104, jiffies 4294945073 (age 605.432s)
-  hex dump (first 32 bytes):
-    45 46 47 48 34 35 36 37 0a 00 00 00 00 00 00 00  EFGH4567........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffb58fb26c>] slab_post_alloc_hook+0x8c/0x3e0
-    [<ffffffffb5902b49>] __kmem_cache_alloc_node+0x1d9/0x2a0
-    [<ffffffffb587696e>] kmalloc_trace+0x2e/0xc0
-    [<ffffffffb5cc00c0>] test_fw_run_batch_request+0x90/0x170
-    [<ffffffffb55d6dff>] kthread+0x10f/0x140
-    [<ffffffffb5402fa9>] ret_from_fork+0x29/0x50
-[root@pc-mtodorov linux_torvalds]# uname -rms
-Linux 6.3.0-rc4mt+20230330-00051-g8bb95a1662f8-dirty x86_64
-[root@pc-mtodorov linux_torvalds]# 
-
-My gut feeling tells me that it is not test_fw_config->reqs because
-there are 75 instances leaked.
-
-Regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
-"I see something approaching fast ... Will it be friends with me?"
-
+It seems to me that these scripts are quite memory consuming as they
+accumulate memory consuption in relation to what is loaded along the
+way. A major problem with my system.
