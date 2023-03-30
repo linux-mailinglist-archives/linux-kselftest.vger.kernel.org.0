@@ -2,56 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB246D0516
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 14:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D901B6D05AE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 15:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbjC3Mnd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 08:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
+        id S231674AbjC3NCA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 09:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbjC3Mnc (ORCPT
+        with ESMTP id S229694AbjC3NB7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 08:43:32 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D55191;
-        Thu, 30 Mar 2023 05:43:31 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id h8so75934664ede.8;
-        Thu, 30 Mar 2023 05:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680180209;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n/8td5sRl3oLpjvJWr+SauyjMW5J+/af8DNO0aQQsj4=;
-        b=R6I/30BG5UPA5FkYjKVUOSk8ON+L56EIBLONKVcUcG66As/OewLwhMJOEZ7pH/CLIF
-         lw5Ldo93TyCnbouWW7sn6r3X1q4G9eBsDkqM7EGHS++EvGHXZ1BPDKRnhCkRnHpH3k7W
-         toyOaQ8AdiCXYmHXxTqfMSFBKgw1bzxE4IuGtB3xQgGZ5fyVGYpbDHx/jTc/43Plix+k
-         TfXLtwH042/qHJ2RMlQ5OwK2exvA5LqhC/2Bcjao6WLpg3vfRYD38I+FcWic3HWgUBY4
-         0OuxkiVp/bNVDNwReIudGNhx0j7PVxoWzHj4bgO+e68KZRf4WBgjXUwtpjuoIHRN3Bwa
-         nxMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680180209;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n/8td5sRl3oLpjvJWr+SauyjMW5J+/af8DNO0aQQsj4=;
-        b=HsAYBc8E7hOiKEWqL0JQAimJWb5p0rSsnvOZESP7nFcnFLu4lgd60lTErPp9XGT/ni
-         Tmmip6TMJ/gPtlbLoPWbksUIZ4BWYy5094mk3NoUmH5+FI7fQw+x+KrCTXDj/uJIm5Ei
-         I0eAMstzM0c7H5ZUp3UBjuCKhwaIJ9TaBEsT2UM8+5dUXeN85BSrOcyDGyu0HTqczY4/
-         x6WpA4CrGsLkgVQ7U5qFvS5YDW5KV3LrBLtrLDq56smC8Yde60dIH05UrC8ifbPP7RmD
-         nR5E1+NobuG4R2kcN7Tcf+c7e/3TCrcX98eogNiEnbc4XRaiXmPf6Ug2PVjFV8ySa5uZ
-         JnjA==
-X-Gm-Message-State: AAQBX9dXktRk2c2zrTasGjTmaDh3f5uPa8kxTbrC/lj2HoMLgpBK4orY
-        Q+UDhbNGu+BcLIFxKunUbqo=
-X-Google-Smtp-Source: AKy350YI2msvuHetohhT7eQ5t1xlC1RudA+4E9BCOndXuD6L8J5sWGjktS0WAdrtvGBAhM/oS9ONAg==
-X-Received: by 2002:aa7:cf19:0:b0:501:dc02:1956 with SMTP id a25-20020aa7cf19000000b00501dc021956mr24516457edy.29.1680180209442;
-        Thu, 30 Mar 2023 05:43:29 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id q30-20020a50aa9e000000b004fadc041e13sm18202433edc.42.2023.03.30.05.43.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 05:43:29 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 15:43:26 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <netdev@kapio-technology.com>
+        Thu, 30 Mar 2023 09:01:59 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543FFA24B;
+        Thu, 30 Mar 2023 06:01:47 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id BFEA6188440B;
+        Thu, 30 Mar 2023 13:01:43 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 66E1425005A8;
+        Thu, 30 Mar 2023 13:01:43 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 515C691201E3; Thu, 30 Mar 2023 13:01:43 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 956189B403E2;
+        Thu, 30 Mar 2023 13:01:42 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -69,7 +46,7 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         <angelogioacchino.delregno@collabora.com>,
         Claudiu Manoil <claudiu.manoil@nxp.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
         Jiri Pirko <jiri@resnulli.us>,
         Ivan Vecera <ivecera@redhat.com>,
         Roopa Prabhu <roopa@nvidia.com>,
@@ -89,7 +66,7 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         <linux-kselftest@vger.kernel.org>
 Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
  drivers
-Message-ID: <20230330124326.v5mqg7do25tz6izk@skbuf>
+In-Reply-To: <20230330124326.v5mqg7do25tz6izk@skbuf>
 References: <20230318141010.513424-1-netdev@kapio-technology.com>
  <20230318141010.513424-3-netdev@kapio-technology.com>
  <20230327115206.jk5q5l753aoelwus@skbuf>
@@ -100,13 +77,13 @@ References: <20230318141010.513424-1-netdev@kapio-technology.com>
  <87ileljfwo.fsf@kapio-technology.com>
  <20230328114943.4mibmn2icutcio4m@skbuf>
  <87cz4slkx5.fsf@kapio-technology.com>
+ <20230330124326.v5mqg7do25tz6izk@skbuf>
+Date:   Thu, 30 Mar 2023 14:59:04 +0200
+Message-ID: <87wn2yxunb.fsf@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87cz4slkx5.fsf@kapio-technology.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,9 +91,14 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 09:45:26PM +0200, Hans Schultz wrote:
-> So the solution would be to not let the DSA layer send the
-> SWITCHDEV_FDB_OFFLOADED event in the case when the new dynamic flag is
-> set?
+On Thu, Mar 30, 2023 at 15:43, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Tue, Mar 28, 2023 at 09:45:26PM +0200, Hans Schultz wrote:
+>> So the solution would be to not let the DSA layer send the
+>> SWITCHDEV_FDB_OFFLOADED event in the case when the new dynamic flag is
+>> set?
+>
+> I have never said that.
 
-I have never said that.
+No, I was just thinking of a solution based on your previous comment
+that dynamic fdb entries with the offloaded flag set should not be aged
+out by the bridge as they are now.
