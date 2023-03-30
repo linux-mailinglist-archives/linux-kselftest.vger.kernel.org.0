@@ -2,173 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481526D0BFA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 18:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7456D0BFD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 18:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjC3Qy7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 12:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
+        id S229564AbjC3Q4L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 12:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbjC3Qya (ORCPT
+        with ESMTP id S229943AbjC3Q4K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 12:54:30 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0E3EFAA;
-        Thu, 30 Mar 2023 09:54:21 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id D95503200932;
-        Thu, 30 Mar 2023 12:54:18 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 30 Mar 2023 12:54:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1680195258; x=1680281658; bh=Cu/vpXYO39IAGQphP3eZA6Aln0263bHcHt9
-        rjdw3sxo=; b=jNsXA+9SWjEnSLx736a6bHtVYczYQDPRbz+XnriZY2ZzMlnJaqI
-        9Lv268YJehKkh50ut1DPsJeipRAJl+y6vxZrOcqPWxEWSZK7LospX1uH74syOMz8
-        ZIjbpGIJ/i2KB7F0d4f+zkgLTDxrVflyVfKd9Br5R3zsIO5sdx+Mukjzf1cZgmEQ
-        KVNt4DV4N/KligGQDbdt9NaDHl+pSaRxfS5HuVtYt6PKg+5Ye4y1g9Erf+Qdt1mM
-        sddiFvW2Zg2YaXXpukF0/naCumsOETYVJRGDvvyRvseoatUtj+Lmsz5Q+lC8t+DP
-        mR+G3szT3osSgS9kXhtJ7g3TcedIljA3qsw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680195258; x=1680281658; bh=Cu/vpXYO39IAGQphP3eZA6Aln0263bHcHt9
-        rjdw3sxo=; b=K8u7XBPMuCPvy5DJBUHisPfn4q5YNoA+deMi9v6rWraHMSN44Ho
-        CkIFh8lPbQVM8L8nMgJnHIn7BXF4Xg8ABTb80BK4zGt6NTjQhAGetasPn4pywm+B
-        a7qaPpvqzx8hb5mrGGSck2vAzIm99+1YxGQCZPunAZBhRBvRerG2OvVsYEQCokRt
-        Aa+800WdTHygFDJnLW50YXDi0Ys16ZC32WHGFF5yrLm5BigZtd8knX8OnqEbfyXI
-        6W5ODyAigrXy1SNgAsEVtXqKsm6WzL/1e4rB4nqgTC3aCE+ZvvtrSLK4E/b1OAOT
-        MDS1SB5R1d0gMp4lrET5xIghKu8pfVSjZpQ==
-X-ME-Sender: <xms:ur4lZMbcDG89pR1r19C3br3Pd0bqpVMJjvbp9faRV4SVkgzY5wmWjA>
-    <xme:ur4lZHYAUlm-AbWsdvEJsi5fWO96PzZOz0KV84VnXEh8t1pLlfu4c_Rr65IRUnmEN
-    lglZPUrvzhq4xQiPpM>
-X-ME-Received: <xmr:ur4lZG-OfGy3Z9LLgscvkAeiE1rwne8LSzim8cOJAjQE-SzR6OM6nq50ZW3b>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehledgudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepveetfffftdfggfdtheekhedutedtjeeiuefgffejlefhveekjefffeef
-    heeuleejnecuffhomhgrihhnpehgohhoghhlvghsohhurhgtvgdrtghomhenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggv
-    rhhnohdrthgvtghh
-X-ME-Proxy: <xmx:ur4lZGrLN-6Yw5eZtLB_eTAXQSNu4IiQOwxrbKTjzI8SKjZR_9FCuw>
-    <xmx:ur4lZHqcfjwaS3ALSok0EvmH0kotLBREdymUZGls9OQ4tTnb_cL6Og>
-    <xmx:ur4lZETY3A-UArSObdTlvMhF4umR9UdJw7ko7iOBWlwl2B3OEGD97A>
-    <xmx:ur4lZK2a3vRxOCHwIarH0Yyqy_zua_ZK03044UW5h_pJOE6y9_W_bw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Mar 2023 12:54:13 -0400 (EDT)
-Date:   Thu, 30 Mar 2023 18:53:35 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Gow <davidgow@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v6 3/7] kunit: Add kunit wrappers for (root) device
- creation
-Message-ID: <20230330165335.gwcpoxx7mpwamxx6@penduick>
-References: <cover.1679915278.git.mazziesaccount@gmail.com>
- <f2c7f7b04f7e4ee7b9cef73ecba672f5fa40eb73.1679915278.git.mazziesaccount@gmail.com>
- <ZCGFgypeuJXqNwQt@kroah.com>
- <e027fc0c-83e0-be6f-d62b-dac00ce9b761@gmail.com>
- <ZCGONl0mC8oyBj-0@kroah.com>
- <CABVgOSnUCsxPf1mAL03GQzaw_kFtgf5J7aTPodo=j6O+wYZ2iQ@mail.gmail.com>
+        Thu, 30 Mar 2023 12:56:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D44C14C
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 09:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680195304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tzDUaKlZ7WQPwjdZQNbRvPgMn+panp3snOTIhScDlD8=;
+        b=L1hcuHZln+6dh+uy8Eync7b4xU1V2S0mpygwcZrncFHOh5HcH/U4z1iiwjVjKT1+359EUJ
+        Rbxlv+puztc6tWFkPzZQrdX7H9X4tqHXgw26q4DipY5HHz3VTm+03jRHSMut9NfJrmi+Ia
+        yjuHKWhQGcVmXcvjfZGu3MRbhXs8TAc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-629-u8gXzK1yMcC40Av2I6KH5g-1; Thu, 30 Mar 2023 12:55:02 -0400
+X-MC-Unique: u8gXzK1yMcC40Av2I6KH5g-1
+Received: by mail-wm1-f71.google.com with SMTP id q21-20020a05600c46d500b003ee570749f7so10128308wmo.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 09:55:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680195301;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tzDUaKlZ7WQPwjdZQNbRvPgMn+panp3snOTIhScDlD8=;
+        b=RLIzW1PF3DgDGqr9HKqf4PYnWbgYjxvFnEWo8HiHID5g0e5IHDZMIdURHwo9uAtwsc
+         OIoes1WOsl+FPG9cOjkUn/iuNEw/dYMcPN0z4ABYIQ7lPZdRufgsTDOK4gnpY0MUyZgR
+         vr5m+rdoMBKqv49H6vWA/NGBKdgLJmxZnlQKn4JBpBKBwZDepk0CnVO5xzfY3L6qR04b
+         9Ocl7Y9t79pKqCM8wNl05wqtxBLspdJxMYGcfPvd7C/PhsVgj6O2xugPZCD8t0Hkq0yM
+         EiFMHYtlQsxVT8XNa5hkMfs2ci4Z49EbZhF1GltwulOiN6o5pOYd3nVUXNYW69dejCfh
+         A5ow==
+X-Gm-Message-State: AO0yUKVtIej+Ta3fFvdOchyKlRvyCUWK1lJr3Jv1WS5l0u9UYErXH1bU
+        kJaCr7+2ufSPgnVv9cGjwFxPslwBme/8Jojh7Xt2PtJvcN190/K/WIb5LXXJgmRR/NSF9g2CsQf
+        ROseq1OIFEuDXBoh6+m38ClvX0fNJ
+X-Received: by 2002:a05:600c:c6:b0:3ef:df3:1693 with SMTP id u6-20020a05600c00c600b003ef0df31693mr18547180wmm.32.1680195301672;
+        Thu, 30 Mar 2023 09:55:01 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8k3a1ANSNZU1JWwGMmHT0TPjW+p0jaezeK+am6PpOZ0zh8xcps80GbOxDf7XVIgpME55DQxA==
+X-Received: by 2002:a05:600c:c6:b0:3ef:df3:1693 with SMTP id u6-20020a05600c00c600b003ef0df31693mr18547159wmm.32.1680195301383;
+        Thu, 30 Mar 2023 09:55:01 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id z14-20020a1c4c0e000000b003edf2dc7ca3sm6408235wmf.34.2023.03.30.09.55.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 09:55:01 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?utf-8?Q?Ma=C3=ADra?= Canal <mcanal@igalia.com>,
+        linux-kselftest@vger.kernel.org, David Gow <davidgow@google.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        kunit-dev@googlegroups.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>, Andrew Davis <afd@ti.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] .gitignore: Exclude KUnit config dot-files
+In-Reply-To: <CAGS_qxptBcUQByWAd6JHAxWb08czOiGnx0_uSvMKdhzTVwv=6w@mail.gmail.com>
+References: <20230330112743.2331141-1-javierm@redhat.com>
+ <CAGS_qxptBcUQByWAd6JHAxWb08czOiGnx0_uSvMKdhzTVwv=6w@mail.gmail.com>
+Date:   Thu, 30 Mar 2023 18:55:00 +0200
+Message-ID: <875yaifacb.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CABVgOSnUCsxPf1mAL03GQzaw_kFtgf5J7aTPodo=j6O+wYZ2iQ@mail.gmail.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Daniel Latypov <dlatypov@google.com> writes:
 
-On Tue, Mar 28, 2023 at 08:45:09PM +0800, David Gow wrote:
-> > > Ok. I understood using the root-device has been a work-around in some=
- other
-> > > tests. Thus continuing use it for tests where we don't need the bus u=
-ntil we
-> > > have a proper alternative was suggested by David.
-> > >
-> > > > Do the right thing here, create a fake bus and add devices to it.
-> > > >
-> > > > Heck, I'll even write that code if you want it, what's the requirem=
-ent,
-> > > > something like:
-> > > >     struct device *kunit_device_create(struct kunit *test, const ch=
-ar *name);
-> > > >     void kunit_device_destroy(struct device *dev);
-> > >
-> > > Thanks for the offer Greg. This, however, is being already worked on =
-by
-> > > David. I don't want to step on his toes by writing the same thing, no=
-r do I
-> > > think I should be pushing him to rush on his work.
-> >
-> > Ok, David, my offer stands, if you want me to write this I will be glad
-> > to do so.
->=20
-> I'm happy to keep working on this, but would definitely appreciate
-> your feedback.
->=20
-> I've put my work-in-progress code here:
-> https://kunit.googlesource.com/linux/+/refs/heads/kunit/device-helpers%5E=
-%21/#F0
->=20
-> It creates a "kunit" bus, and adds a few helpers to create both
-> devices and drivers on that bus, and clean them up when the test
-> exits. It seems to work on all of the tests which used
-> root_device_register so far (except those -- only
-> test_iio_find_closest_gain_low so far -- which create multiple devices
-> with the same name, as the driver name won't be unique), and the drm
-> tests work fine when ported to it as well.
->=20
-> There's still a lot of cleanup to do and questions which need
-> answering, including:
-> - Working out how best to provide an owning module (it's currently
-> just kunit, but probably should be the module which contains the
-> actual tests)
-> - Improving the API around drivers: probably exposing the helper to
-> create a driver, and add a way of cleaning it up early.
+Hello Daniel,
 
-I'm not sure we need to give the ability for a test to pass a driver.
-I'd expect there's two main use-cases: either we want to test a function
-that uses a device as an argument, or we want to probe the whole driver
-and test it.
-
-The former is covered by kunit_device_register(), and I'd expect the
-latter to be covered by the work Stephen is doing, where we will load an
-entire overlay, which will in turn probe the driver.
-
-> - Properly testing it with modules, not just with kunit.py (including
-> looking at what actually appears in sysfs)
-> - Experimenting with using probe, etc, callbacks.
-> - Cleaning up lots of ugly, still experimental code, documenting, testing=
-, etc.
+> On Thu, Mar 30, 2023 at 4:27=E2=80=AFAM Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+>>
+>> There's a rule to ignore all the dot-files (.*) but we want to exclude t=
+he
+>> config files used by KUnit (.kunitconfig) since those are usually added =
+to
+>> allow executing test suites without having to enable custom config symbo=
+ls.
+>>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 >
-> The thought of trying to expand the match function to support, e.g.,
-> devicetree occurred to me, but I _think_ that devicetree-based tests
-> are probably still better off using a platform_device. Regardless, it
-> can probably wait to a follow-up
+> FYI, Andy has a version of this patch from back in Jan here,
+> https://lore.kernel.org/linux-kselftest/20230127145708.12915-1-andriy.she=
+vchenko@linux.intel.com/
+>
+> I don't think anyone was adamantly opposed to it, but it's just been
+> sitting on the list waiting.
+>
 
-Yeah, probing the entire driver will require to instantiate the device
-the driver expects, hence why relying on the overlays also makes a lot
-of sense.
+Thanks. I missed that there was a patch posted already by Andy.
 
-Maxime
+Masahiro-san,
+
+Could you please pick that? It would not only facilitate adding new KUnit
+test suites but also avoid existing reports sent by the kernel robot, i.e:
+
+https://lore.kernel.org/linux-input/CAGS_qxot1_+J3YCykkk0H1fZM6Cn6Pv4SFT6iC=
+f9J7td1aH9HQ@mail.gmail.com/T/#mfcce95444b2df1c8242b03b7434e7730a6087663
+
+--=20
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
