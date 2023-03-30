@@ -2,64 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958686CFB5B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 08:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7DA6CFB63
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Mar 2023 08:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjC3GPj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Mar 2023 02:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S229453AbjC3GRe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Mar 2023 02:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjC3GPi (ORCPT
+        with ESMTP id S229452AbjC3GRd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 02:15:38 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A7D40DD
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 23:15:36 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id o24-20020a05600c511800b003ef59905f26so10981810wms.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 23:15:36 -0700 (PDT)
+        Thu, 30 Mar 2023 02:17:33 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1257140DD
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 23:17:32 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id o24-20020a05600c511800b003ef59905f26so10984075wms.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 23:17:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680156935;
+        d=google.com; s=20210112; t=1680157050;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIJDUVO0m8Cv5zLAcz05YzJtBwOHUS69WkPj4QU2/Uc=;
-        b=q8XOrHpgYTzo7j2z6TdpRJNFVXiWCDV0dYJosb6kilBvbwdReh3NOZzOSH2KQLb0Dp
-         6bvxaxYPTIwihvlhrrult/g2XPSmRhbdkAY0TE0l2mpPdr4t2i+5gp+znds30ejRM7j6
-         GnRjkgLmjYR18zwMlU+twMCpAwPMYkbQ2qD57q99NRYV6zqTAvpKGQ+3WHUn02onAiI9
-         UJuCelgrE09tYKwuQkhXXcMdC7S5hdSF3dTzrfyOiNGVwFO+EB5JzmynojfeL2mDEpYO
-         mJjnvF54zrUxRHD2/FtDNQtglNwPg4wbOUSxkZBu0XgQEjRcOERW1Vckk5CTnYInEYxP
-         j5Mg==
+        bh=f9jA5pONXkWYKKh6ImaL4CDIbobIYcz/Kp1zbJpbc+k=;
+        b=nDnHOuwyqaP1Yiw20nMG5SX3/nZNIjVdmhVVfcQMS5fdyf0Wb8geH4VmRTfJZejULm
+         iXTauOUJ1+VQ/4kcxDhF1CSeIcyWTlc2jqWCMbzNG/asi/nHj3t0W643IwzwIzagN6Zc
+         okSrGR3kUG+KUCBzZgKDNge3r+r7am1TeR/BeY1bpHF5/e6e4tkcKA/9HWIMZGE/+U3q
+         9ntdq3+t+gSxBl26OD/PrInw2CY/bVlKwRzlqkh3DQU6612i3vcB/rGX4c1npaSVU09X
+         mZ3hlq3x4WqjN4POUeMR637+aUKEExH/pz51KSgWfWz95eq+/gqx2mU/zWdYAbwcKZvn
+         62gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680156935;
+        d=1e100.net; s=20210112; t=1680157050;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RIJDUVO0m8Cv5zLAcz05YzJtBwOHUS69WkPj4QU2/Uc=;
-        b=2dYBDh4/m70+I8E0LhxR5K0pvsl6WzYKCrKFiKnx7XuIw30yWW1ffXdcMA3uFSW/xL
-         lPnl5ZHUIsPzxPYu/ESjynS7+QUk8A95ynPgXr4e9je4sJcpIB3mHO4AWjSFixX/mBg6
-         GymAXYg0breH5hh1lpOYmn6cDGqJWATnEhkDO3jRpvxINGWRP0VNZFmcBWSizPQc/r+L
-         Dq6lZ9vABremYgdpomE+pB9WvR97cw+o76gNe7Dbl1zYEhdxQxfNmzdtDSjrfuu1udR2
-         Nb6wKxGyyUBv6MTRiW1pEI+GgcR16J05rawr5pObzDFQ9gIT2r1V7RC9bfxkQqXOHJxQ
-         9hmA==
-X-Gm-Message-State: AAQBX9djtFxsWaDe12HHMt6I0194TBTRJ+mcDUdYu9DN49TzWeW7nh3u
-        ShwZpC/LbkKp+oxK8iyjk6QTm/2KsGtndvuLDnWL01F3izqmlnQzLiT6nM3M
-X-Google-Smtp-Source: AKy350atIttQju6EGral441ZvbRBLspnqbHHxW+eNiNG5+EpvxoFjzJbIvPACjNvrC44k4/QWYWkC+o25FF/w7RTfFw=
+        bh=f9jA5pONXkWYKKh6ImaL4CDIbobIYcz/Kp1zbJpbc+k=;
+        b=DCV9x+vmtPp83BwKLisHlxfKx3icxVtbjenXRgPqhEvcMyblnbWZ0qkG2zix/5DUXM
+         g7bu4ZMXfeZY98EV6aqGd/YdUPLZrMoJE/c1SYo/J0GyNemgLHjIiO88z+TcHNFUgc49
+         cNCeFn2OzB9Dln+jfrhTZlAhZ5dV5GKus/ubdSQu4AMj8CgTwkSYP2n5gUHl9XEUChYc
+         dIwW55yh4aTQ51M5jikUjyM32SafXVg5Brb97c0y5HeOpOlbCtc5UGM0ZjNlRq7pSH1Z
+         nH10U7IzfZc4OqR8QRoHr1hhmwQQiI0W27OCP3dVK+tXKYQeaxd5K+XscTbgRo6y7AVK
+         g5zA==
+X-Gm-Message-State: AAQBX9c1oWLeXQwnWFQAwrJLMG/S3gOSiMD/JVT84FW8rhgFjdrHiBVq
+        qqWp86vewVBXQ+UXfxnwOwf+xCsPuHoYMIsbR3YTtA==
+X-Google-Smtp-Source: AKy350YZk0oXtjZWx7hNAQJkxLSUijCrG/dysAFpxA4w10aYo8HAWOf3jLSvuAOGDbcr0aqIPlmKV7OsO0l2djebcSI=
 X-Received: by 2002:a05:600c:1ca2:b0:3ed:dc54:5c18 with SMTP id
- k34-20020a05600c1ca200b003eddc545c18mr1883435wms.3.1680156934861; Wed, 29 Mar
- 2023 23:15:34 -0700 (PDT)
+ k34-20020a05600c1ca200b003eddc545c18mr1886067wms.3.1680157050395; Wed, 29 Mar
+ 2023 23:17:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230329110723.3458843-1-sadiyakazi@google.com>
-In-Reply-To: <20230329110723.3458843-1-sadiyakazi@google.com>
+References: <20230329172311.71861-1-benjamin@sipsolutions.net> <20230329172311.71861-2-benjamin@sipsolutions.net>
+In-Reply-To: <20230329172311.71861-2-benjamin@sipsolutions.net>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 30 Mar 2023 14:15:22 +0800
-Message-ID: <CABVgOS=Vhigp8bHVij9kRyEZDzDzLafz2O6LT471RSLHctRsGg@mail.gmail.com>
-Subject: Re: [PATCH v1] list: test: Test the klist structure
-To:     Sadiya Kazi <sadiyakazi@google.com>
-Cc:     brendanhiggins@google.com, skhan@linuxfoundation.org,
-        corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Thu, 30 Mar 2023 14:17:19 +0800
+Message-ID: <CABVgOSkcT0f5ex6E_cbepy4R2=qmSdVwgv0XLjaFp=rg=jDzbg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kunit: add ability to register a simple cleanup function
+To:     benjamin@sipsolutions.net
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Benjamin Berg <benjamin.berg@intel.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004bd63005f81805ee"
+        boundary="0000000000002d54e105f8180cf9"
 X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
@@ -71,378 +70,129 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000004bd63005f81805ee
+--0000000000002d54e105f8180cf9
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 29 Mar 2023 at 19:07, Sadiya Kazi <sadiyakazi@google.com> wrote:
+On Thu, 30 Mar 2023 at 01:23, <benjamin@sipsolutions.net> wrote:
 >
-> Add KUnit tests to the klist linked-list structure.
-> These perform testing for different variations of node add
-> and node delete in the klist data structure (<linux/klist.h>).
+> From: Benjamin Berg <benjamin.berg@intel.com>
 >
-> Limitation: Since we use a static global variable, and if
-> multiple instances of this test are run concurrently, the test may fail.
+> This is useful to e.g. automatically free resources at the end of the
+> test, without having to deal with kunit resource objects directly.
 >
-> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+> The whole point of doing this is that the callback is guaranteed to
+> happen in case the test aborts (due to an assertion). As such, use
+> assertions internally rather than requiring further error checking by
+> the API user.
+>
+> Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 > ---
 
-Thanks very much! This will be a great addition to the list tests (and
-the device model tests).
+Thanks!
 
-A couple of super-minor suggestions re: comment formatting, otherwise
-good-to-go.
+I've actually been working on something similar here:
+https://lore.kernel.org/linux-kselftest/20230325043104.3761770-2-davidgow@google.com/
 
-Reviewed-by: David Gow <davidgow@google.com>
+Maxime suggested that it might be worth naming this kunit_add_action()
+for consistency with devm_add_action(). We also need the cancel/remove
+and trigger/release helpers for some of the other device helpers.
+
+Hopefully between these, we can have something which works for everyone.
 
 Cheers,
 -- David
 
->  lib/list-test.c | 298 +++++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 297 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> index d374cf5d1a57..af651cacb8f4 100644
-> --- a/lib/list-test.c
-> +++ b/lib/list-test.c
-> @@ -8,6 +8,7 @@
->  #include <kunit/test.h>
->
->  #include <linux/list.h>
-> +#include <linux/klist.h>
->
->  struct list_test_struct {
->         int data;
-> @@ -1199,6 +1200,301 @@ static struct kunit_suite hlist_test_module = {
->         .test_cases = hlist_test_cases,
->  };
->
-> -kunit_test_suites(&list_test_module, &hlist_test_module);
-> +
-> +struct klist_test_struct {
-> +       int data;
-> +       struct klist klist;
-> +       struct klist_node klist_node;
-> +};
-> +
-> +/* counts the number of nodes*/
 
-This comment doesn't really add anything,
 
-> +static int node_count;
-> +static struct klist_node *last_node_count;
 
-This isn't a count... can we rename it?
-
+>  include/kunit/test.h | 20 ++++++++++++++++++++
+>  lib/kunit/test.c     | 37 +++++++++++++++++++++++++++++++++++++
+>  2 files changed, 57 insertions(+)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 519b90261c72..ab1dacf1c9f4 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -373,6 +373,26 @@ static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp
+>         return kunit_kmalloc_array(test, n, size, gfp | __GFP_ZERO);
+>  }
+>
+> +typedef void (*kunit_cleanup_t)(const void *);
 > +
-> +static void check_node(struct klist_node *node_ptr)
-> +{
-> +       node_count++;
-> +       last_node_count = node_ptr;
-> +}
-> +
-> +static void check_delete_node(struct klist_node *node_ptr)
-> +{
-> +       node_count--;
-> +       last_node_count = node_ptr;
-> +}
-> +
-> +static void klist_test_add_tail(struct kunit *test)
-> +{
-> +       struct klist_node a, b;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, NULL);
-> +
-> +       klist_add_tail(&a, &mylist);
-> +       KUNIT_EXPECT_EQ(test, node_count, 1);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &a);
-> +
-> +       klist_add_tail(&b, &mylist);
-> +       KUNIT_EXPECT_EQ(test, node_count, 2);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &b);
-> +
-> +       /* should be [list] -> a -> b */
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_add_head(struct kunit *test)
-> +{
-> +       struct klist_node a, b;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, NULL);
-> +
-> +       klist_add_head(&a, &mylist);
-> +       KUNIT_EXPECT_EQ(test, node_count, 1);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &a);
-> +
-> +       klist_add_head(&b, &mylist);
-> +       KUNIT_EXPECT_EQ(test, node_count, 2);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &b);
-> +
-> +       /* should be [list] -> b -> a */
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_add_behind(struct kunit *test)
-> +{
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, NULL);
-> +
-> +       klist_add_head(&a, &mylist);
-> +       klist_add_head(&b, &mylist);
-> +
-> +       klist_add_behind(&c, &a);
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-> +
-> +       klist_add_behind(&d, &b);
-> +       KUNIT_EXPECT_EQ(test, node_count, 4);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
-> +
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       /* should be [list] -> b -> d -> a -> c*/
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_add_before(struct kunit *test)
-> +{
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, NULL);
-> +
-> +       klist_add_head(&a, &mylist);
-> +       klist_add_head(&b, &mylist);
-> +       klist_add_before(&c, &a);
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-> +
-> +       klist_add_before(&d, &b);
-> +       KUNIT_EXPECT_EQ(test, node_count, 4);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
-> +
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       /* should be [list] -> b -> d -> a -> c*/
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +/* Verify that klist_del() delays the deletion of a node until there
-> + * are no other references to it
+> +/**
+> + * kunit_add_cleanup() - Add post-test cleanup action.
+> + * @test: The test case to which the resource belongs.
+> + * @cleanup_func: function to call at end of test.
+> + * @data: data to pass to @free_func.
+> + * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
+> + *
+> + * This adds a cleanup action to be executed after the test completes.
+> + * Internally this is handled using a *test managed resource*.
+> + *
+> + * This function will abort the test on failure.
+> + *
+> + * Note: KUnit needs to allocate memory for a kunit_resource object. You must
+> + * specify an @internal_gfp that is compatible with the current context.
 > + */
-
-These comments are in the wrong style:
-https://www.kernel.org/doc/html/latest/process/coding-style.html#commenting
-
-They should be of the form:
-/*
- * Text
- * More text
- */
-(with the empty line at the top)
-
-> +static void klist_test_del_refcount_greater_than_zero(struct kunit *test)
-> +{
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
+> +void kunit_add_cleanup(struct kunit *test, kunit_cleanup_t cleanup_func,
+> +                      const void *data, gfp_t internal_gfp);
 > +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, &check_delete_node);
-> +
-> +       /* Add nodes a,b,c,d to the list*/
-> +       klist_add_tail(&a, &mylist);
-> +       klist_add_tail(&b, &mylist);
-> +       klist_add_tail(&c, &mylist);
-> +       klist_add_tail(&d, &mylist);
-> +
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       /* Advance the iterator to point to node c*/
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &c);
-> +
-> +       /* Try to delete node c while there is a reference to it*/
-> +       klist_del(&c);
-> +
-> +       /*
-> +        * Verify that node c is still attached to the list even after being
-> +        * deleted. Since the iterator still points to c, the reference count is not
-> +        * decreased to 0
-> +        */
-> +       KUNIT_EXPECT_TRUE(test, klist_node_attached(&c));
-> +
-> +       /* Check that node c has not been removed yet*/
-> +       KUNIT_EXPECT_EQ(test, node_count, 4);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &d);
-> +
-> +       klist_iter_exit(&i);
-> +
-> +       /* Since the iterator is no longer pointing to node c, node c is removed
-> +        * from the list
-> +        */
-
-Nit: comment formatting. The comment above ("Verify that node c...") looks good.
-
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-> +
-> +}
-> +
-> +/* Verify that klist_del() deletes a node immediately when there are no
-> + * other references to it.
-> + */
-
-As above, comment formatting.
-
-> +static void klist_test_del_refcount_zero(struct kunit *test)
-> +{
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, &check_delete_node);
-> +
-> +       /* Add nodes a,b,c,d to the list*/
-> +       klist_add_tail(&a, &mylist);
-> +       klist_add_tail(&b, &mylist);
-> +       klist_add_tail(&c, &mylist);
-> +       klist_add_tail(&d, &mylist);
-> +       /* Delete node c*/
-> +       klist_del(&c);
-> +
-> +       /* Check that node c is deleted from the list*/
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-> +
-> +       /* Should be [list] -> a -> b -> d*/
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_remove(struct kunit *test)
-> +{
-> +       /* This test doesn't check correctness under concurrent access */
-> +       struct klist_node a, b, c, d;
-> +       struct klist mylist;
-> +       struct klist_iter i;
-> +
-> +       node_count = 0;
-> +       klist_init(&mylist, &check_node, &check_delete_node);
-> +
-> +       /* Add nodes a,b,c,d to the list*/
-> +       klist_add_tail(&a, &mylist);
-> +       klist_add_tail(&b, &mylist);
-> +       klist_add_tail(&c, &mylist);
-> +       klist_add_tail(&d, &mylist);
-> +       /* Delete node c*/
-> +       klist_remove(&c);
-> +
-> +       /* Check the nodes in the list*/
-> +       KUNIT_EXPECT_EQ(test, node_count, 3);
-> +       KUNIT_EXPECT_PTR_EQ(test, last_node_count, &c);
-> +
-> +       /* should be [list] -> a -> b -> d*/
-> +       klist_iter_init(&mylist, &i);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &a);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, klist_next(&i), &d);
-> +       KUNIT_EXPECT_NULL(test, klist_next(&i));
-> +
-> +       klist_iter_exit(&i);
-> +
-> +}
-> +
-> +static void klist_test_node_attached(struct kunit *test)
-> +{
-> +       struct klist_node a = {};
-> +       struct klist mylist;
-> +
-> +       klist_init(&mylist, NULL, NULL);
-> +
-> +       KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
-> +       klist_add_head(&a, &mylist);
-> +       KUNIT_EXPECT_TRUE(test, klist_node_attached(&a));
-> +       klist_del(&a);
-> +       KUNIT_EXPECT_FALSE(test, klist_node_attached(&a));
-> +
-> +}
-> +
-> +static struct kunit_case klist_test_cases[] = {
-> +       KUNIT_CASE(klist_test_add_tail),
-> +       KUNIT_CASE(klist_test_add_head),
-> +       KUNIT_CASE(klist_test_add_behind),
-> +       KUNIT_CASE(klist_test_add_before),
-> +       KUNIT_CASE(klist_test_del_refcount_greater_than_zero),
-> +       KUNIT_CASE(klist_test_del_refcount_zero),
-> +       KUNIT_CASE(klist_test_remove),
-> +       KUNIT_CASE(klist_test_node_attached),
-> +       {},
-> +};
-> +
-> +static struct kunit_suite klist_test_module = {
-> +       .name = "klist",
-> +       .test_cases = klist_test_cases,
-> +};
-> +
-> +kunit_test_suites(&list_test_module, &hlist_test_module, &klist_test_module);
+>  void kunit_cleanup(struct kunit *test);
 >
->  MODULE_LICENSE("GPL v2");
+>  void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index c9e15bb60058..72d956dfc324 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -719,6 +719,43 @@ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
+>
+> +struct kunit_auto_cleanup {
+> +       struct kunit_resource resource;
+> +       kunit_cleanup_t cleanup_func;
+> +};
+> +
+> +static void kunit_auto_cleanup_free(struct kunit_resource *res)
+> +{
+> +       struct kunit_auto_cleanup *cleanup;
+> +
+> +       cleanup = container_of(res, struct kunit_auto_cleanup, resource);
+> +
+> +       cleanup->cleanup_func(cleanup->resource.data);
+> +}
+> +
+> +void kunit_add_cleanup(struct kunit *test, kunit_cleanup_t cleanup_func,
+> +                      const void *data, gfp_t internal_gfp)
+> +{
+> +       struct kunit_auto_cleanup *res;
+> +
+> +       KUNIT_ASSERT_NOT_NULL_MSG(test, cleanup_func,
+> +                                 "Cleanup function must not be NULL");
+> +
+> +       res = kzalloc(sizeof(*res), internal_gfp);
+> +       if (!res) {
+> +               cleanup_func(data);
+> +               KUNIT_ASSERT_FAILURE(test, "Could not allocate resource for cleanup");
+> +       }
+> +
+> +       res->cleanup_func = cleanup_func;
+> +       res->resource.should_kfree = true;
+> +
+> +       /* Cannot fail as init is NULL */
+> +       __kunit_add_resource(test, NULL, kunit_auto_cleanup_free,
+> +                            &res->resource, (void *)data);
+> +}
+> +EXPORT_SYMBOL_GPL(kunit_add_cleanup);
+> +
+>  static inline bool kunit_kfree_match(struct kunit *test,
+>                                      struct kunit_resource *res, void *match_data)
+>  {
 > --
-> 2.40.0.348.gf938b09366-goog
+> 2.39.2
 >
 
---0000000000004bd63005f81805ee
+--0000000000002d54e105f8180cf9
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -509,14 +259,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCZ
-Eg3aLG7p2QcWXYlTFMcwmNtIsVQMZyeF/RsRqjiwejAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMzAwNjE1MzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB7
+XoLz5JWZijpPX64+g1+8Xc4g+QiwsCLLcn61l56cfTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMzAwNjE3MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAHKOqELkVurbBaZXF4xSm
-ZsHHDANXAH6bHr/1lfZBcvjH9FTGFMYl+cibYcK3wLXT3lSZBrdl3Zbc0EIoBQp0ADXxLMoZDsEi
-kT80NjIWpcAR+7fTis5qgGPJS9LaBN3eFfsggdlVwx58ovZM6WowTPCLzUn7wYESqK5feUFh85jw
-4QRvt0aeEArXwMuE0jKYCnJp77HbeDKHTz7TknjtryEQrEmJTN9crul0HlZTCtOqvVe6M54BlwKS
-6DaSRuAXf4bGdyB/LyEryBXPXw1Vs3pC5rJ4fPFctmRQUYnE80Xwu9ByUKt2fXLGYcvqWBQvATJd
-ZwW3VGhptUcLJNguHA==
---0000000000004bd63005f81805ee--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAMaQtS4ExOw0n7fEk2PdD
+Pv7u5hTzd5noM1La+xwFtKvr6V+jojv+g4znxJzHU3CSGniri8+vjUqmKReMNK3F1wJ0ci/cCyck
+yj0xQD0BKHTh48yZTDCw1C1nvExGTwqqYSrSanoEjFVl/Yv1mEovUYbfCt+g1Sy9xXIm4QaKYSUi
+7xHNZh8SW2pX43n8E4BtVeWzHYZymtmAbYVn4pxTFCguR4cxoWXD4lEuT+A3Zu3+m8IoRCT/O6gK
+EcnXHOBaKkBbyJHR+Wrnr9f420lwCQBuo5AT8scukyttrJUvH4gLf+Aj83UETb1nGB9ZJv1FXlP2
+6V4z6cPKYLGMI44+5Q==
+--0000000000002d54e105f8180cf9--
