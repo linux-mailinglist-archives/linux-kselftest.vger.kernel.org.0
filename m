@@ -2,63 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF1D6D198F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 10:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6766D19A6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 10:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjCaIP6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Mar 2023 04:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S231566AbjCaISq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Mar 2023 04:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjCaIP5 (ORCPT
+        with ESMTP id S231570AbjCaISp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:15:57 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6851B10E
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 01:15:56 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id bl9so9411298iob.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 01:15:56 -0700 (PDT)
+        Fri, 31 Mar 2023 04:18:45 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12827B46F
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 01:18:44 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e6so11142965ilu.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 01:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680250556;
+        d=google.com; s=20210112; t=1680250723;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ffRqsNvfkDmV4wJywYbipv4WJ5GK5lgWX/rB+U2+x0k=;
-        b=hl98ooJOqFp/xRstIEq5+LCOVMStYhhaP5jMrmRFaR2SGUOF8a1ZUkWGZgcSW9wJoX
-         hss/NTAV+zPmNANhhGK0AK7z0xG4aPCX573PIwsEbk4VerQ3XflzqR20JqObtnG1e3Ef
-         CSnd1E9BK18VM4KiTUk9JNUHUpEieN3TffNUcwfJ7aPrfQBI3o40WEmPWvniRkXg1j1Z
-         Qie+ZBKrpntX/dbxlGjLzORsbDeGzu8k+NNG7ALwWbeLOGuq7s1QYF8jg8XVQDqqvR3z
-         vd8erzrFAnJ1DkBD+omvP//i4NFgeHvzUputuhg7+qsOJKeYw2vg40eC4bTuY66FM+3O
-         rXRA==
+        bh=lMqePo39GLE5bG9+01I8Zzek3fONxHHOBXy0pFO3g6w=;
+        b=Uk9BZRVdoTKqdohv5/hOv5aqdX3o7+eERu1e5wVnmvCe0MRXqvJpT8myZI3LoIvXYC
+         mlaydgJQA++0ogJEwzK5wiUdrB+13TSdoAa5rbtSVSEKLufvC7u3fsjnHJKq2ptIvlH7
+         lqyCEEgnvSibuf2ciJi0928b6lJ50+qfL3eYoAdQcc2GB8dqOymNb1vnhIN+1bPsCjTn
+         AlfJnqYO37dks5xFMTczpn5yCAf83AKOZOoSKmBZJFWwMnATsbwljmCXAaikqz+x4Iwu
+         GqhjAfMPXdVrtxOORonY42Rhdko2AnudeEOUOT/QTp8BBtfkvXk8dNACxZT7wF9sDtgG
+         Kwbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680250556;
+        d=1e100.net; s=20210112; t=1680250723;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ffRqsNvfkDmV4wJywYbipv4WJ5GK5lgWX/rB+U2+x0k=;
-        b=TEDCRlUaL7ChPEAkvbqnyaG2erloFh/1jOm4SzkWHLerlD/zpl4YAlhNV/I8K6sYoF
-         /srTWe9F/UC5oMcnphK5tLGBMO8EAvKU3IlxmggD9QI2FLonsZLvCRxw5it8K5QMmKw/
-         yBu0UrBFgX3g0Rya265IJhWopfnnzcbZGDNbtPfCkYRCT+5mE7gWxhR9JUMJRrLzGCp4
-         QTagbZ+/uDB3ZvRrET/kjGWFzoil3xeEaFONHRPGTGBIDZA+xNt528vlvI0fN9i/oEm5
-         eOuOukxDO3lIPQpgoX6SOmfz/t4Ywd+8Rsl3KHe1mBPosOIBsP80M8q+jrPDQY0Y7bYj
-         u47g==
-X-Gm-Message-State: AO0yUKXBmTIjL7xdXP7w4NA+Y2xYYBQTNccIwqQnfPRQUbISU6e+gYUT
-        PYvwSx8AB1Mp2YtqhXrsBa2eEK3DtJaL7QMocr/vaw==
-X-Google-Smtp-Source: AK7set8Xj2aM7CPfBxqKMgcJsCcdrj5tNUM56sQrxwn1iKlLHI9ArVggLcbSrIvclow7J3ZFmUN7IZf0VN3OhXOTE40=
-X-Received: by 2002:a5d:980c:0:b0:753:113d:3c66 with SMTP id
- a12-20020a5d980c000000b00753113d3c66mr9240451iol.4.1680250555626; Fri, 31 Mar
- 2023 01:15:55 -0700 (PDT)
+        bh=lMqePo39GLE5bG9+01I8Zzek3fONxHHOBXy0pFO3g6w=;
+        b=311J/TWoJYoBYXSRFTqZJVxgUQpXMjTMbfSX7X3HbTJHn33hB8/UONH6o6Njah6HJF
+         NfZHXwDzRuoLkDeZsO4bVjIUIfamYRvUPvloLLcEeQCt6hPjDY6vV8woomXqQVVfM3BU
+         HnnHHKvHYKVESVfl47MJT1yU2RDrp11pdOlTCyUSRLagWpE/0JS9lkTEe4xgKQaKrM/k
+         FoYN/8WS8MWw3PTdYZj1JfJjh5WEvoomr96m6KUGxrAtos742XVWTbX4rcnQc1luIqj6
+         2L0SZdveENVCGcL6zU9cCRJ/NpEzN1ilLMiUZ4cS3DyjP8EBfjO76EnnLKCBztLQNblI
+         QY6A==
+X-Gm-Message-State: AAQBX9ctL0IQ2+bgjRSGJS67ZcYkROsJol6M3hbAcQBNy/3mDYYWJvAX
+        waNqPG2DM+C7KuwT9uYoN9RKP8CQIBHVCAzz9V/1lg==
+X-Google-Smtp-Source: AKy350YbT7oVABbxXYvy9Xvn1evx7JRUFgGBgRbzBr9KJScDG1NFv6VMsfqmk/n2FbjrqOnkp2tAu8YsPlvphEXaTSA=
+X-Received: by 2002:a92:8e0a:0:b0:324:5b4c:7087 with SMTP id
+ c10-20020a928e0a000000b003245b4c7087mr12579394ild.0.1680250723291; Fri, 31
+ Mar 2023 01:18:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230330220506.1399796-1-rmoar@google.com> <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
-In-Reply-To: <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
+References: <20230127145708.12915-1-andriy.shevchenko@linux.intel.com> <ZAtNGmqKSgmaGBtI@smile.fi.intel.com>
+In-Reply-To: <ZAtNGmqKSgmaGBtI@smile.fi.intel.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 31 Mar 2023 16:15:44 +0800
-Message-ID: <CABVgOSmVq2NGuDoKuLqhdTBA8NzwBAiC9pDhf3PiKS1zLhgZjw@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: add tests for using current KUnit test field
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date:   Fri, 31 Mar 2023 16:18:32 +0800
+Message-ID: <CABVgOSn+GhhLZupV8LX6wr6kyoLB+1QJ0cDuGwBD10W3WgrbtA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] .gitignore: Unignore .kunitconfig
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008653b805f82dd169"
+        boundary="00000000000083caa105f82ddb0f"
 X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
@@ -70,114 +71,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000008653b805f82dd169
+--00000000000083caa105f82ddb0f
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, 31 Mar 2023 at 06:21, 'Daniel Latypov' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Fri, 10 Mar 2023 at 23:31, Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> I've got a few minor comments below, but this otherwise looks good.
-> I like the idea of testing knuit_fail_current_test().
+> On Fri, Jan 27, 2023 at 04:57:08PM +0200, Andy Shevchenko wrote:
+> > There are almost dozen of .kunitconfig files that are ignored but
+> > tracked. Unignore them.
 >
->
-> On Thu, Mar 30, 2023 at 3:05=E2=80=AFPM Rae Moar <rmoar@google.com> wrote=
-:
-> >
-> > +static void kunit_current_kunit_test_field(struct kunit *test)
-> > +{
-> > +       struct kunit *current_test;
-> > +
-> > +       /* Check to ensure the result of current->kunit_test
-> > +        * is equivalent to current test.
-> > +        */
-> > +       current_test =3D current->kunit_test;
-> > +       KUNIT_EXPECT_PTR_EQ(test, test, current_test);
->
-> Perhaps we can combine this and the next test case down to
-> static void kunit_current_test(struct kunit *test) {
->   /* There are two different ways of getting the current test */
->   KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
->   KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
-> }
-> ?
+> It's still an issue, can we apply this patch or can somebody to propose
+> the better sooner than later, please?
 >
 
-Agreed: checking current->kunit_test twice feels a bit odd.
+Agreed.
 
+Masahiro, Shuah: who wants to pick this up? I'm happy either way.
 
-> > +}
-> > +
-> > +static void kunit_current_get_current_test(struct kunit *test)
-> > +{
-> > +       struct kunit *current_test1, *current_test2;
-> > +
-> > +       /* Check to ensure the result of kunit_get_current_test()
-> > +        * is equivalent to current test.
-> > +        */
-> > +       current_test1 =3D kunit_get_current_test();
-> > +       KUNIT_EXPECT_PTR_EQ(test, test, current_test1);
-> > +
-> > +       /* Check to ensure the result of kunit_get_current_test()
-> > +        * is equivalent to current->kunit_test.
-> > +        */
-> > +       current_test2 =3D current->kunit_test;
-> > +       KUNIT_EXPECT_PTR_EQ(test, current_test1, current_test2);
->
-> > +}
-> > +
-> > +static void kunit_current_fail_current_test(struct kunit *test)
-> > +{
-> > +       struct kunit fake;
-> > +
-> > +       /* Initialize fake test and set as current->kunit_test. */
->
-> Nit: I think the code is self-explanatory enough that we can drop this co=
-mment.
->
-> > +       kunit_init_test(&fake, "fake test", NULL);
-> > +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
-> > +       current->kunit_test =3D &fake;
-> > +
-> > +       /* Fail current test and expect status of fake test to be faile=
-d. */
->
-> Nit: I think this comment could also be dropped or maybe shortened to
->   kunit_fail_current_test("This should make `fake` fail");
->
-> or
->   /* Now kunit_fail_current_test() should modify `fake`, not `test` */
->   kunit_fail_current_test("This should make `fake` fail");
->
-> > +       kunit_fail_current_test("This test is supposed to fail.");
-> > +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAI=
-LURE);
-> > +
->
-> Hmm, should we try calling
->   kunit_cleanup(&fake);
-> ?
->
-> Right now this does resource cleanups, but we might have other state
-> to cleanup for our `fake` test object in the future.
+Cheers,
+-- David
 
-I could go either way here. We currently don't do this with the other
-status tests (kunit_status), only with the resource ones.
-But it doesn't hurt to add it...
-
->
-> Daniel
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr%2Bf%2BmOVKT1bGvA%40mail.=
-gmail.com.
-
---0000000000008653b805f82dd169
+--00000000000083caa105f82ddb0f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -244,14 +159,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBe
-G4H2Y11XPwSxMn/CJtv+NfdwtyQzN7W4NqTA5fe+YjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMzEwODE1NTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAJ
+3Za4Bd/YTuv2SKBXuE7f0cbczMjEyLz8bvwizwoQ5TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMzEwODE4NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAK6qv5XIYct6yz+wC7e3Q
-ua3Ovh9wmatPFXdgR0DD8FXeejlT8uji4HSGtQEZeQcv3FYtbEmBy0ZSxh7mYm9tvvpKcqcgY/37
-XX6h8VGxJlFV4jR5vdbdGP5K3o/VFKsE45cSHqQ57IFg/g3C3eZ+49KgdoEpCcJhvvriJZVBmDC9
-NtR85/jcxWcB3rjbLmLnCbF79KEdVbHWcg8Py5VT91MO3O/+SB+QD5UYNhyVwInmty7ZI12XLcob
-5Jwt7if8NkkhBKBefAjzuvMFBHjbHj96IR5WcwCtGcpA27EEURQQWsUEYNTgCU7GqPumvLhTj+pp
-zwLibANCyw4eSLQWcA==
---0000000000008653b805f82dd169--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAi3S5kcNLsbwuvAAspFgv
+vnGGSz0VTkkppaI4Wlzyc0/ZjTcMOOIWlwkV9zCw/qK1z44lemBLYwxQXGYbWR+iMskanTWUDZEf
+PQHz+oOADQ5W+69Yga7PTUSkxG+2j7s+osNtSUQOkq/nlHRk60ouJmUXeVRQ05cEQzVwU2ZRn2HJ
+LzgxsVBUCdixDD+/dvzIEwmdI0zkYOgWXtoQp3ZzkuZvhTxKN8VFKBKqWtFwrsIYPQcNVQx+trQg
+6xWsQX2LQlFbIScV2iNL51VT4EAfrKlvyMoCcrYGXmeBvvDPF/ex5fEmUIW1cI8LdgLLoP8LMTV9
+STDnGImKf3eDbdqyBw==
+--00000000000083caa105f82ddb0f--
