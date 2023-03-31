@@ -2,88 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EFEB6D1A90
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 10:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6700C6D1AFC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 10:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjCaImH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Mar 2023 04:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S230292AbjCaI65 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Mar 2023 04:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjCaIlt (ORCPT
+        with ESMTP id S229646AbjCaI6z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:41:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5191D909;
-        Fri, 31 Mar 2023 01:41:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FA6CB82D3F;
-        Fri, 31 Mar 2023 08:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01E3DC433D2;
-        Fri, 31 Mar 2023 08:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680252019;
-        bh=2awnFRbwlRr0wF/0EtqlcbkmL5UREFWPCl9PiidbMaQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Aj0SZjErK7rbaciHhkIeW+Po5O2r/L4KUs0628aJBB0/T1a23yHlzHe7dZpvNCNKm
-         qxIJ7Tdt7d+YAg8n2svRf0ZjMoHAUR+yHd+bjcl5CAv1ReZ93Mcs60p5OdevjtP4B2
-         fy28p4fbt1T9K4OHCfSSwW/jE3c+0g618cRp2fjVthRrMMrJZqcb18GwXIPvwnB3hz
-         99xZAJ7sFL94zZV/UXHS86mK2NH7yRu1/hg5Z2+YOTSdTyueIN3O6pVZezkpH3HCLq
-         Pg2P2E4tm/GwgtihAhxGrRrrBXYru81xhuB9fO46jikmjef+D1Gbh3/HWTVZMF2PUP
-         OpjbLsEzW+kPQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C77F5C73FE0;
-        Fri, 31 Mar 2023 08:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 31 Mar 2023 04:58:55 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232EC1BF4A;
+        Fri, 31 Mar 2023 01:58:45 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id x3so86820484edb.10;
+        Fri, 31 Mar 2023 01:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680253123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BYgdpbZjRcMBBZb2pcPFoHc8NfA9uoYOg/WF0eXftpw=;
+        b=lVKy9HSAOGeFLg+iy7ujKGiGribkgannSjZw89QjDiPB0ZV6BZm9+DizSMM+gX3jEw
+         8QIkoiOy2MNkxNZZupbYDoc64yJzb7Zakr4oYn+NZsqx23cfATRwfdyLTql0+IM3dC5T
+         9zKB3+Y68Ext8eXLKbm+4W1Mq+WMbsW3LTUkmel8sWJCt88C13fN9xBBvjtKqUosu9Gw
+         ucQZhXb/e9f0vPsnfBcOSdQNwVW3hXH1vRu0z/fas0JuC3+hUy/k1KwL7H5IS5+eme+q
+         lWNM6p5ohWlyVrBT/8KIVW5ZPpOmzUu9j6j2ZOXYo+84gdkfqnAmrpw7d0uQRaY9JwTf
+         NIdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680253123;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BYgdpbZjRcMBBZb2pcPFoHc8NfA9uoYOg/WF0eXftpw=;
+        b=OSkhwpU5xNakr9xCYuIrglwEwN5p4VsDDo8MRymLVUIM7P2RWufwIOxd/VUsRS9kRh
+         CZViN5tdFJ46uzIXacFDgokhaak9VYjX03eQs4alApJf/3rhvtY0Ee4/geSztTH9hq4f
+         yt6kznPOj5cYaQurGyV/4D0wXLvoRijClN6tyOLvIzp3XkHaxuspXI1SNR5DdHGt+z+i
+         eSMBbYBDF9m2W3tXIZPaacx4v/VMaBLepRG+qt1kn7QJTqxZ8uNcRE/vMTsbsuIrFYL+
+         PBHQVAi5IDTsZTAAvpYX1tymc75jSmVCmTKCVJ9adISL1psG0PK9JRPIdZ6H1MCcayBb
+         cVEg==
+X-Gm-Message-State: AAQBX9fiykmWipEs0X8OE4D0N6KKXC4mpCBRegPsWq7NBLyC4644ZA5S
+        PeQIgPyDh6J64iIws/ugmGI=
+X-Google-Smtp-Source: AKy350aDaFJSJOJ7Uru86M1OtrOcJd6vzXZMOua1Cw1Olv1RS4PYAfP4YNznT2gZtEmV3ghHrGPU/g==
+X-Received: by 2002:a17:906:71d7:b0:8a6:5720:9101 with SMTP id i23-20020a17090671d700b008a657209101mr27504694ejk.4.1680253123346;
+        Fri, 31 Mar 2023 01:58:43 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id x2-20020a170906296200b0092421bf4927sm764255ejd.95.2023.03.31.01.58.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 01:58:43 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 11:58:40 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+Message-ID: <20230331085840.5wfxsuj6u7hge2uj@skbuf>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder>
+ <87a5zzh65p.fsf@kapio-technology.com>
+ <ZCMYbRqd+qZaiHfu@shredder>
+ <874jq22h2u.fsf@kapio-technology.com>
+ <20230330192714.oqosvifrftirshej@skbuf>
+ <874jq1mkm1.fsf@kapio-technology.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] l2tp: generate correct module alias strings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168025201881.3875.10346861679226207793.git-patchwork-notify@kernel.org>
-Date:   Fri, 31 Mar 2023 08:40:18 +0000
-References: <20230330095442.363201-1-andrea.righi@canonical.com>
-In-Reply-To: <20230330095442.363201-1-andrea.righi@canonical.com>
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, wojciech.drewek@intel.com,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874jq1mkm1.fsf@kapio-technology.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 30 Mar 2023 11:54:42 +0200 you wrote:
-> Commit 65b32f801bfb ("uapi: move IPPROTO_L2TP to in.h") moved the
-> definition of IPPROTO_L2TP from a define to an enum, but since
-> __stringify doesn't work properly with enums, we ended up breaking the
-> modalias strings for the l2tp modules:
+On Fri, Mar 31, 2023 at 09:43:34AM +0200, Hans Schultz wrote:
+> On Thu, Mar 30, 2023 at 22:27, Vladimir Oltean <olteanv@gmail.com> wrote:
+> > This is how I always run them, and it worked fine with both Debian
+> > (where it's easy to add missing packages to the rootfs) or with a more
+> > embedded-oriented Buildroot.
 > 
->  $ modinfo l2tp_ip l2tp_ip6 | grep alias
->  alias:          net-pf-2-proto-IPPROTO_L2TP
->  alias:          net-pf-2-proto-2-type-IPPROTO_L2TP
->  alias:          net-pf-10-proto-IPPROTO_L2TP
->  alias:          net-pf-10-proto-2-type-IPPROTO_L2TP
-> 
-> [...]
+> I am not entirely clear of your idea. You need somehow to boot into a
+> system with the patched net-next kernel
 
-Here is the summary with links:
-  - l2tp: generate correct module alias strings
-    https://git.kernel.org/netdev/net/c/154e07c16485
+You have to do that anyway for any kind of kernel work, no?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> or you have a virtual machine boot into a virtual OS. I guess it is
+> the last option you refer to using Debian?
 
-
+You could do that too, but you don't have to. Debian, like many other
+Linux distributions, supports a wide variety of CPU architectures; it
+can be run on embedded systems just as well as on desktop PCs or VMs.
+I didn't say you have to use Debian, though, I just said I ran the
+selftests on a Debian-based rootfs and that it was easy to prepare the
+environment there. The Debian rootfs and the selftests were deployed to
+the target board with the DSA switch on it, in case that wasn't clear.
