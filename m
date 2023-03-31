@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6700C6D1AFC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 10:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17026D1C9C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 11:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbjCaI65 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Mar 2023 04:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        id S232329AbjCaJiN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Mar 2023 05:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCaI6z (ORCPT
+        with ESMTP id S232330AbjCaJiA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:58:55 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232EC1BF4A;
-        Fri, 31 Mar 2023 01:58:45 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x3so86820484edb.10;
-        Fri, 31 Mar 2023 01:58:45 -0700 (PDT)
+        Fri, 31 Mar 2023 05:38:00 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50E93C30;
+        Fri, 31 Mar 2023 02:37:37 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id h8so87266080ede.8;
+        Fri, 31 Mar 2023 02:37:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680253123;
+        d=gmail.com; s=20210112; t=1680255456;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BYgdpbZjRcMBBZb2pcPFoHc8NfA9uoYOg/WF0eXftpw=;
-        b=lVKy9HSAOGeFLg+iy7ujKGiGribkgannSjZw89QjDiPB0ZV6BZm9+DizSMM+gX3jEw
-         8QIkoiOy2MNkxNZZupbYDoc64yJzb7Zakr4oYn+NZsqx23cfATRwfdyLTql0+IM3dC5T
-         9zKB3+Y68Ext8eXLKbm+4W1Mq+WMbsW3LTUkmel8sWJCt88C13fN9xBBvjtKqUosu9Gw
-         ucQZhXb/e9f0vPsnfBcOSdQNwVW3hXH1vRu0z/fas0JuC3+hUy/k1KwL7H5IS5+eme+q
-         lWNM6p5ohWlyVrBT/8KIVW5ZPpOmzUu9j6j2ZOXYo+84gdkfqnAmrpw7d0uQRaY9JwTf
-         NIdg==
+        bh=2I7yU40CH1KTIPKs6kPsl2SefiwR2YueS62dP0NZHu0=;
+        b=CULtuAu+grWGSjin+B2q5K4vYLYkcVUEPT39QZYv//yLch8kj4X27vymmyL6jBA+6i
+         ACX6DSEhIpF/wfIzCNgePEz4Vh8s7ay58GscTeT85T1s0GBwPwzwrUMGQt5B18kY6yGt
+         6pnNAfBEPK90KIPsAWjhQtATM+vY7j2qnuCzy28AkPwgdA0wZiMdDFqUAjg5x0HOdywP
+         RCbkrkVCOApLgALXeDU7BFWqM8Jw0onrurgD9v1FxXo9Pjel8PvrWFWJbC8sy/v87HQY
+         6igVRZ6GHH31atrxF93yu5HzZFuCVxemH5qtqiMhRdt4LWTplUbroNn5PAMAJQxsMd+q
+         tVxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680253123;
+        d=1e100.net; s=20210112; t=1680255456;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BYgdpbZjRcMBBZb2pcPFoHc8NfA9uoYOg/WF0eXftpw=;
-        b=OSkhwpU5xNakr9xCYuIrglwEwN5p4VsDDo8MRymLVUIM7P2RWufwIOxd/VUsRS9kRh
-         CZViN5tdFJ46uzIXacFDgokhaak9VYjX03eQs4alApJf/3rhvtY0Ee4/geSztTH9hq4f
-         yt6kznPOj5cYaQurGyV/4D0wXLvoRijClN6tyOLvIzp3XkHaxuspXI1SNR5DdHGt+z+i
-         eSMBbYBDF9m2W3tXIZPaacx4v/VMaBLepRG+qt1kn7QJTqxZ8uNcRE/vMTsbsuIrFYL+
-         PBHQVAi5IDTsZTAAvpYX1tymc75jSmVCmTKCVJ9adISL1psG0PK9JRPIdZ6H1MCcayBb
-         cVEg==
-X-Gm-Message-State: AAQBX9fiykmWipEs0X8OE4D0N6KKXC4mpCBRegPsWq7NBLyC4644ZA5S
-        PeQIgPyDh6J64iIws/ugmGI=
-X-Google-Smtp-Source: AKy350aDaFJSJOJ7Uru86M1OtrOcJd6vzXZMOua1Cw1Olv1RS4PYAfP4YNznT2gZtEmV3ghHrGPU/g==
-X-Received: by 2002:a17:906:71d7:b0:8a6:5720:9101 with SMTP id i23-20020a17090671d700b008a657209101mr27504694ejk.4.1680253123346;
-        Fri, 31 Mar 2023 01:58:43 -0700 (PDT)
+        bh=2I7yU40CH1KTIPKs6kPsl2SefiwR2YueS62dP0NZHu0=;
+        b=ncqVqTyheWW5KV9vupPndE0HRMzZ7snz/4LbcaP9orAZtEbAwpIlbmOGd8bWQ6jIQb
+         7cdDlrJHPSNBF8xeac//0w2/bpFbQHJ5eYr5TH+/5g9nGz5tho7+1hrjV3bjgDtmtauG
+         SMnAzL3a/K+JlQFz+j49xFqMXDfEXdW1pXWg45m63tNnM2vVNgw9AwwSq3zcrxKLIhdw
+         pCdKEhfFn/c+iqqjvVgcKQnIKbjahBoEWzfcTCd/Iq7Pe/VNz36Cr9twyePKjOdBFhYg
+         IcScJWvnwrukQqr/UAZMQmfr9r8M1nNjP4rIpBM8olnmo7bIaKm6xZYWKP7B4sfm9g9r
+         eLrg==
+X-Gm-Message-State: AAQBX9dleib3Bo+VfxfMG8ImV39GZ1L2hUS1UqIF+fJJ6zGhYSPPvCr+
+        EaIP36aR3bxcKudKx+oYWSw=
+X-Google-Smtp-Source: AKy350bof3uST/s/9pKcj0ktKgjrdn5KxhempDvqC74UkFxrzYGgGnwAeOmC2i4gm38HAAfyNcINBg==
+X-Received: by 2002:a17:906:f190:b0:931:a321:7640 with SMTP id gs16-20020a170906f19000b00931a3217640mr29388052ejb.74.1680255455987;
+        Fri, 31 Mar 2023 02:37:35 -0700 (PDT)
 Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id x2-20020a170906296200b0092421bf4927sm764255ejd.95.2023.03.31.01.58.41
+        by smtp.gmail.com with ESMTPSA id gx20-20020a1709068a5400b00931faf03db0sm790309ejc.27.2023.03.31.02.37.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 01:58:43 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 11:58:40 +0300
+        Fri, 31 Mar 2023 02:37:35 -0700 (PDT)
+Date:   Fri, 31 Mar 2023 12:37:32 +0300
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     Hans Schultz <netdev@kapio-technology.com>
 Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
@@ -89,7 +89,7 @@ Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
         <linux-kselftest@vger.kernel.org>
 Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
  test
-Message-ID: <20230331085840.5wfxsuj6u7hge2uj@skbuf>
+Message-ID: <20230331093732.s6loozkdhehewlm4@skbuf>
 References: <20230318141010.513424-1-netdev@kapio-technology.com>
  <20230318141010.513424-7-netdev@kapio-technology.com>
  <ZBgdAo8mxwnl+pEE@shredder>
@@ -97,11 +97,11 @@ References: <20230318141010.513424-1-netdev@kapio-technology.com>
  <ZCMYbRqd+qZaiHfu@shredder>
  <874jq22h2u.fsf@kapio-technology.com>
  <20230330192714.oqosvifrftirshej@skbuf>
- <874jq1mkm1.fsf@kapio-technology.com>
+ <871ql5mjjp.fsf@kapio-technology.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <874jq1mkm1.fsf@kapio-technology.com>
+In-Reply-To: <871ql5mjjp.fsf@kapio-technology.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -112,24 +112,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 09:43:34AM +0200, Hans Schultz wrote:
-> On Thu, Mar 30, 2023 at 22:27, Vladimir Oltean <olteanv@gmail.com> wrote:
-> > This is how I always run them, and it worked fine with both Debian
-> > (where it's easy to add missing packages to the rootfs) or with a more
-> > embedded-oriented Buildroot.
-> 
-> I am not entirely clear of your idea. You need somehow to boot into a
-> system with the patched net-next kernel
+On Fri, Mar 31, 2023 at 10:06:34AM +0200, Hans Schultz wrote:
+> The memory problems are of course on the embedded target. In that case I
+> think it would be a very good idea to do something to design the system
+> better, so that it frees memory between the subtests.
 
-You have to do that anyway for any kind of kernel work, no?
+People like Martin Blumenstingl have managed to deploy and run the
+networking kselftests on OpenWRT, which typically runs on very
+resource-constrained embedded devices.
+https://lore.kernel.org/netdev/CAFBinCDX5XRyMyOd-+c_Zkn6dawtBpQ9DaPkA4FDC5agL-t8CA@mail.gmail.com/
+https://lore.kernel.org/netdev/20220707135532.1783925-1-martin.blumenstingl@googlemail.com/
 
-> or you have a virtual machine boot into a virtual OS. I guess it is
-> the last option you refer to using Debian?
+Considering that, you'll have to come with a much more concrete description
+of why the system should be "designed better" and "free memory between
+subtests" (what memory?!) before you could run it on your target system.
 
-You could do that too, but you don't have to. Debian, like many other
-Linux distributions, supports a wide variety of CPU architectures; it
-can be run on embedded systems just as well as on desktop PCs or VMs.
-I didn't say you have to use Debian, though, I just said I ran the
-selftests on a Debian-based rootfs and that it was easy to prepare the
-environment there. The Debian rootfs and the selftests were deployed to
-the target board with the DSA switch on it, in case that wasn't clear.
+Either that, or at least take into serious consideration the fact that you
+may be hung up on doing something which isn't necessary for the end goal.
+
+I simply have no clue what you're talking about. It's as if we're talking
+about completely different things.
+
+> If all tests are always run on the bridge only, I think they don't make
+> much sense as these patchsets are directed towards switchcores.
+
+Is this supposed to mean something, or is it just a random thought you
+had, that you believed it would be good to share with us?
+
+The tools/testing/selftests/net/forwarding/lib.sh central framework has
+the NETIF_TYPE and NETIF_CREATE variables, which indicate that by default,
+veth interfaces are created. When running a bridge selftest with veth as
+bridge ports, indeed software bridging should take place, and those
+selftests should work fine. In Linux, the software behavior represents a
+model for the offload behavior, since offloads are 100% transparent to
+the user most of the time.
+
+Below in lib.sh, there is a line which sources "$relative_path/forwarding.config",
+a file which can contain customizations of the default variables used by
+the framework. Even though it isn't strictly necessary to put the
+customized bash variables in a forwarding.config file, it is more
+convenient to do this than to specify them as environment variables.
+
+If you "cd tools/testing/selftests/drivers/net/dsa/", you will find
+precisely such a forwarding.config file there, which contains the line
+"NETIF_CREATE=no", which means that when you run the symlinked sub-group
+of forwarding tests relevant to DSA from this folder, the expectation is
+that the bridge ports are not veth interfaces created for the test, but
+rather, physical ports.
+
+So, by running the command I posted in the earlier email, you actually
+run it on the physical DSA user port interfaces, and it should pass
+there too. This is based on the equivalency principle between the
+software and the hardware data paths that I was talking about.
+
+If you're actively and repeatedly making an effort to work with your eyes
+closed, and then build strawmen around the fact that you don't see, then
+you're not going to get very friendly reactions from people, me included,
+who explain things to you that pertain to your due diligence. This is
+because these people know the things that they're explaining to you out
+of their own due diligence, and, as a result, are not easily fooled by
+your childish excuses.
