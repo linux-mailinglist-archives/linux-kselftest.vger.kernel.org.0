@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794826D2413
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 17:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68A96D2412
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Mar 2023 17:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233002AbjCaPc4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Mar 2023 11:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S233218AbjCaPcn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Mar 2023 11:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbjCaPcx (ORCPT
+        with ESMTP id S233237AbjCaPcj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Mar 2023 11:32:53 -0400
+        Fri, 31 Mar 2023 11:32:39 -0400
 Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBDF1DF86
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 08:32:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881DA1EA2D
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 08:32:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S8MfQEFbiBfgOd+SQrWz19tyiUVjIuONBk9miPy8E+wVrNmbs1cMoZlQjEKX4IwYl48WX2E36VN8LPqKD3S9D6W+qse+IYjpFTJzwa2uYs9oESf5dLPFkACEFsHVDfUphUQ7YbrNylBkUBk79mOmDptIxVyk8D57rbjISGXPdDgsajVoNFTEzWmsRbUSQz8PQlLOH7l5AhPyx7VW+H3+fCE+PvTPmq0ZTnxT/xzz12e63GnLuEFLtr2BT4cK5UbZkbwugTXjQbiIvrVpiHrOm5s9us4LoSY55AcOnRCEAOFseAbYcASOfeg8ItfMhYuHLlih9XazFTJypYAammXidQ==
+ b=jPGEeO8nNIPt7wlW0JYWOgeyiodJ1KlPWpgWXNxZpGcDnyblwSbiEvWsoAIttGfZ0NCvw77WBqH3BWHtND+aUCHqWmmtOMdzFKfrFpLP8wRkeYPlWV9RRKVXlrFm/1QEcF2RV4fVGJYZvRF5RpjupuO7AqR2xCcG4ACjo3Ll8cE1z1zZqHHZH49EWQ/JJ4t0bGk+3K7bPs9dZ7EKnKBOC/8e7nUpArhraWiycDqz6RBWSCvym7hSyR17f7DZXGZBKghh8MeyeGKmL+bPieL6ja2JNmeXQ+5jf6Z77BNehXZDUfGcIbRt2xdFPts9QIf645QIy7WnBSRRjwhLPM1WQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NKfjiTCoG73oiv986QSHGtlQoVKfS7VuLo3ijhVE5Ts=;
- b=ZDxnK/aC16ZSMSf/0Iv5uMbiCwt+ffeR+sQp6Ji3J4yrIS7qzWrEHr/ArtHHo/5znJsilBLUitA/5owfdTdX/DCEhOCb1R9HZ/Faj4Xwnx4/0kpfyuVnkAk1B+HGM7yywWQ+imRd6RxNL7XmyX79YhPZkLQo6ksIgw728n/fMxqdRdosQQmNp71L4/9HaPtcTn9LR46ZC6EffNSUuNp5qSdQ17QZ4X4vyOdTlsLAadp6a9YSQK2OMkat8x64fMbfJFKM0foALYB7WYnwFAkYtNFogMXcr1PuL4/zjfTE2yybs6lX/KhtM6sJz+XsYd7uYnmh82ovkYAxoEP60rSyDg==
+ bh=WRsjRPSHJHxMXlisbBXj0goSuYS4q1To/1W8tMzVR8Q=;
+ b=ejy90+qHOjQL4ZLzJXEQXvkuc1a4WWmJ26u3PU8gz/ETdMrPpfGjsFxQYSL2ak1SXRihGN7j4l7VpYL+tTFBxy5NwHTrx8SyChGCpBHvPoMrrzVTwiP5pR/xesC4YlZXz/1pnizaAn7aVF2ahCAGPmGIX2es3gkbwLP6/p7E55o3hyjpeO+58E5pALIoLySzSuMwhS0hCzJ0luFccJdJiygA1BMXWZWRmXAHeLWs36seYrZppZukNwX2DAjSkOlLMhpopO174b9CLJvzdrwsFAUbeVZxFIJuH07/hBbsuOWnjyaNDLfSIQa74pCp8gRDACs30mdFRCwN+bcB+wiZBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NKfjiTCoG73oiv986QSHGtlQoVKfS7VuLo3ijhVE5Ts=;
- b=eUDDUldgrQlBwstJNoy8kUe0iHV92x2YyMpLzmFBl+RxMgKU2p42H9rbiM2xPdnHkdjmKv45lOAhCz+3uQQkDqbptkTpWGIaj7JNJ5w3Zw1n7yLnG6MRhr4oQRxKa/Pyts0NKn1pahlbdOvfEupenKomjEwAW3TprdO9S69cgnHvigHNO167LDaCR7kBAkf4F48xUc93fQUUkc+rA/9slVaApn2qDQzLidjetNtItZJd+WqqITbmdzVzC1rElTPuPAYLwKnm0aHkuU8wsxYfjnH2wgB9B51i6vJ0sKp4ye+pdD0Hqtqk6NhqRpL9BSoe7Ydd8ItdUMeK/V1cg0JdWQ==
+ bh=WRsjRPSHJHxMXlisbBXj0goSuYS4q1To/1W8tMzVR8Q=;
+ b=uALBxpeCUY3wH8dtV7EjTIggMM6n6nAY7g4FQGo7rjC6Rshk53zkRFaZrxyp/8S6OtgJR1M41TCvqJANn0rv0R5kn0S/KkNsvX0nFFZCV5MaCo40yM96yZ0KIRTDHrfqeYH9HEi35LQHwh52lfwOC3CaeTCML3FCRelmpS7Sgid1P6Rl6tS+C4QzuijJhaqJ61V9xHXQcEs3eb3XbCkAis9r4Bqk5s0M7dxuq//OnDgT09m6vNrWjyXusYqJDqQPuv8zuL4HWuD6fKdPZC85hRxRzpfucQ+GBhiYLbIgd55jP/RL2nw0UnPj3ozVPfJrJ1uctcz15nqqipXw80mCvg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
@@ -48,63 +48,63 @@ Cc:     Lixiao Yang <lixiao.yang@intel.com>,
         Matthew Rosato <mjrosato@linux.ibm.com>,
         Nicolin Chen <nicolinc@nvidia.com>,
         Pengfei Xu <pengfei.xu@intel.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: [PATCH 2/4] iommufd: Fix unpinning of pages when an access is present
-Date:   Fri, 31 Mar 2023 12:32:25 -0300
-Message-Id: <2-v1-ceab6a4d7d7a+94-iommufd_syz_jgg@nvidia.com>
+Subject: [PATCH 3/4] iommufd: Do not corrupt the pfn list when doing batch carry
+Date:   Fri, 31 Mar 2023 12:32:26 -0300
+Message-Id: <3-v1-ceab6a4d7d7a+94-iommufd_syz_jgg@nvidia.com>
 In-Reply-To: <0-v1-ceab6a4d7d7a+94-iommufd_syz_jgg@nvidia.com>
 References: 
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0171.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::26) To LV2PR12MB5869.namprd12.prod.outlook.com
+X-ClientProxiedBy: BL1PR13CA0165.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::20) To LV2PR12MB5869.namprd12.prod.outlook.com
  (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5093:EE_
-X-MS-Office365-Filtering-Correlation-Id: 479064be-ed74-4486-4e4d-08db31fd22f2
+X-MS-Office365-Filtering-Correlation-Id: f1fc77ee-2abd-4bec-630d-08db31fd22e6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 39EMAmHcvA8Swmfl2QXx5IRE4e7ie11Qm5uZLTec/CMCVf5fLXjXfvVNGYz3BQHGUjJ2nO4Na8rER6H2QveqwTOIQfcMKBBVGasvHxG1ruPbwan+hMSVi2/ZtJ2v3+CdIUO0DpTOsJ/HeqCyXCjGNEZy+zKo7/IHWTtJVK3PWLqgDVmy5NQhhhJpZzRnBBTckmu/fU6oD+44y5GG1EgJt5mkdzpA2vpKi5j/ynR84YN+p2tyegmhaoXd6YcT+nOjT5M1Iyx0ou+kX2TFvBT6r6AEonG/7sEoaq7NxWtLqzKE+cD4GFgmAnU5W0F0R/O59zpQ8nqa6f1MB7ZLVM2AzgMdIenUkG+AsvY7MJ1MBljZssUKfZcZUFvoObtWGa1CUgSBA+xou1bRbAHeHcOQjGJiPFuiE7tg1xH7QrhNLGH7NvMPTm2hfVqB3mKXfYCW3ZMqQZqmWIq6/2iBJieJoCvLclWGKg/5OpQFtP3lLmeJlx2VsY9SGNR7wA8wQE2dMKBkz9Rv+j/j8HQTf4DJ1/TNla7k5ye6fAyPB0PcBaXSbqAw8GC24Ca4lzi9gU0PRibDSrf6c9dT8Ts7Fzgu/GmLDe3AS0tHXVmWvAFqbU+ZMBhQce0OPwJw2f34xJmZ7pRRm/uFuJpJWOR9AfZmnQ==
+X-Microsoft-Antispam-Message-Info: +7cEbYE3EaggymjHWSnoM4ETcDJCn7xw+sZbpC2q0AFNLQJ7r1TW28amvxO7x/YMw6UUxiX0Q7p9xIbSKvfBIBQ6OWUbk62Vye3H5fpazZksXvSNzTWHiE0KCWHEmIcinVHs6wl0a7JRpv6kW/kTjUFXJcKTRAWinaTh8ZnUKze1Hjbc/gZ5MUau7ijWEGnAl9EElE9+Zm4ttEjeMZxJtVyQw9iw61nxSZsxQ7BGZXq+WcN3w1weoXIfeSpf02WRk1aQe6FknMS4rhdOTgowgRzr282Hm/5F0FW87Qcqu/vdMKoyYNCTGg+Q1mQguWwfVeQeRjI1QVKtuoHk0zjrA9sT/M72vGQ4D646pRfst7YwqyR1j4g6WqKQ88g3Mawgk6K/ZygLgysccoleF3oB1pOqqRY2PvccxD9Pt9ICJYgm5w8e+TQumNe8HV9jrK8OwsTiLCYm8ByB6rPPb4wU0NXBrmusQfErrVEmiDiBIaF8P0WT80nLUwyeXYbwG6tE5JqjTTPvUWHOxUjW08NiT4KjkpSevkWa4xH1Dt2X/PTApF6Q9ETr5wHU3RuPuheF03FSBQAsKPm+g8sSsq75CHhPBSzPkqSAgxFIils1959iDSTNWBc7VdrQCaaJ0HomylBUYi7Y+NMLeXib1Uv3ZQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(366004)(396003)(346002)(451199021)(8676002)(54906003)(316002)(6486002)(966005)(66556008)(66946007)(66476007)(4326008)(36756003)(6512007)(6506007)(6666004)(26005)(38100700002)(2616005)(186003)(83380400001)(5660300002)(41300700001)(8936002)(478600001)(45080400002)(86362001)(2906002)(4216001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xxEEV4FtylAxPY4qLBNxP4swHeJkxNh4JtGwc60QkNR/DbI1bPzmv7irEPDq?=
- =?us-ascii?Q?SLO0mv0ihPj3XEocBoVckkSTZbvhkG0XolDRlpHIwWYJm0+2bNrbR8LqPMm7?=
- =?us-ascii?Q?PKvvNrUcfxAmWD0yniZSYutoY6X2nV5r0ai846pMpVBMLBJor5KKSHY65mEm?=
- =?us-ascii?Q?UpEpFIRjYt0uxk4uhK5HYT8wW1heU5sjB+AuVxP7B76UIBP3HTl3K1dPhgez?=
- =?us-ascii?Q?i3fDjnzo8SeYaPabEvTr+3zcpcjy2TAnpBkF8iLTLEoLkd6GZzZBTPZp7rhW?=
- =?us-ascii?Q?DV3ZG0GkI1JHiaK0QtzYuDYdlFuFk2S08EUdV1GoYBMWM7SevnqEX7LSH09l?=
- =?us-ascii?Q?VMi3TLotdcLzorpb+64YVvhOVx0dfx2Z1AzczG7+190VCIQ21mn0OBZc3TSj?=
- =?us-ascii?Q?Ofc7zi/1Hu/cNI5kz8LB23JzkXlInohCELXjblzHsmHrBkBybWMa67vmKqUT?=
- =?us-ascii?Q?tbsWzp8lS1NdTBKiJpE4hmpnx2L2nv3pMxUlgWPASZfuazr45k/xRW7R0cWM?=
- =?us-ascii?Q?4CpC7gNolCGq5DvA82WsF2QOfD1BU8Q4IFfKVLbE/RVjTtUpZbRxjsJ8Cxc5?=
- =?us-ascii?Q?HUFJYgIMcesXnmlMUI5fkwE4vrRQmdHMMM9otV5S4RDjk2p2oVZBw0JqyMKk?=
- =?us-ascii?Q?w4l1scKBw6ugvSrgKURRW211GoT4vu/4UFYhYF/LxWjdEQo3G8QBivPzSdeQ?=
- =?us-ascii?Q?0e4HVVsXaZgEM07vcNqbkfiAXPqkGF8zG9gW/nOpsuU1HeQPhWKB9+8AsRtD?=
- =?us-ascii?Q?SVdcpeA62x69lJLMSg6h962sxtAHKOGhArx7aT7tznAv9k+E6ZnVi1+UlriL?=
- =?us-ascii?Q?efCZ4qtb4yUqiYr1HR+D/K3nAsgDeZ/ANVTyRS5kCNcNdoAacMoGmmr0mi1Q?=
- =?us-ascii?Q?f/k0uZUSvw/ntdfgAjvYDggLAXE0wWoJxwXCv6spJOP/kYzpis3phew45bwa?=
- =?us-ascii?Q?BeA/3YM32o+2rkfTLAIB7jmlNJtdLerdBAwPzo3p7TxE483W/ieGPLLCOyz2?=
- =?us-ascii?Q?6qUznSjddf7DU/50gmtyGo56ogSJFbHIQR/1yaMPrKG6eIxLdVnVjrlPKhMy?=
- =?us-ascii?Q?eQrw9T2KJ0dX/9jBtB3D3tUHgOGHlOp4OAy5rwg7cn2bajOpLwh2DHjmuIvs?=
- =?us-ascii?Q?zlB/f0ICmMS2euDEYlmieP/wAYlSshm6ughFJAILleCCD6GnxyGn1/Tgh0jf?=
- =?us-ascii?Q?wznB+404a7CXVAn8hz57WAokc9v+MbGUhdhsSw4cvIgZsH9Haag2UOTlW8AT?=
- =?us-ascii?Q?ya7GefCoNNI9/Iv5++yu+2Ux89xzCWajvrxni4NvbK6iOEVu5xwnuvj8gJ+B?=
- =?us-ascii?Q?zdNmlAB1GK+Z5sHGimGIg8EhcHnH6ORdnyg21LKAm44JWQyKM12G9CYdbUkQ?=
- =?us-ascii?Q?co8XHeJFhKHaXAs+6OPoVFfYCsgR5cbh1sE0kyA3oNhfWnUKfCwqqRF+3ucN?=
- =?us-ascii?Q?5BIBCpq96X3jQWSNuFKvn9SZ9Cjvt/L32Uxf/JtfpPENnLCf8XuaTfGJo4uS?=
- =?us-ascii?Q?e93cINFbmeIBuIalXGK56zFilTUYkHXenklsqMYYeYmDp8RVnfiTmy24Z6Sk?=
- =?us-ascii?Q?abxNchRbDTOsKaWyH2uWz5E+Y15me8HPCmqSkFwH?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FJ3Pg86jFSB7JnH4DAcxpX2yS5O798+2db6c6XavdrX5++SAt4qIOXPL6qmy?=
+ =?us-ascii?Q?e4PL2dVNZS6+Zqhb8LuPqq7/GYBY4VNvwkQiUTunBqtQzeZx2PUqdEtBgOLd?=
+ =?us-ascii?Q?WiuWdd8kFspvefp1ELfzXC123zGQJiuFjJzYgo65oxRW5FPMgZCh4WDX6Pou?=
+ =?us-ascii?Q?Uw9tP2wby9t691I8/XpBZ/W8nTn93d1+4HLsjrz/kCPRrf7ucpTe1dTwC91Q?=
+ =?us-ascii?Q?hqOmkPgLkeKEe87zFnLeUe1JQurT8hTPloc50gFUDKLNMtdOyhPN0cora+5x?=
+ =?us-ascii?Q?81xDeCJIFAXDRL9bVbH47kr2azv6CW1oliKNUgG8IVBwZcmXwFSkJyhEGqTL?=
+ =?us-ascii?Q?eyeSnfOq9qNjIhiRcoVA4l06yYkGckM4fVV+G+EmFG94LS9aoyuVtRrTLBff?=
+ =?us-ascii?Q?k8ZLW1kznDmyF9+UEQvAkx0NkpHMQ7mDAgPS9NnG+KeDj7quJE8qzqt4YVuQ?=
+ =?us-ascii?Q?afgipFrRJLQJV7m1y8kI5QuPpFW9gvJKvgZw+364pLYDZDRIdwdhizgxLL87?=
+ =?us-ascii?Q?LDa5IUvL3H4Mkc/s3tWQo8AUX5ZOFCC9Q+5aqwdqsBDYoQh8Hc3ixC0GuhkA?=
+ =?us-ascii?Q?+Q8vh3aYq5SXEF39qGoJns7cze3/KoIhJA8TdKSg4pWFInYEwLnFVhYsmQNY?=
+ =?us-ascii?Q?z/Fvn41oc1HR/2TmWbGjCUy4Xhe3oENhFPhflQV7FW9k2u0E57NabhRlSRR1?=
+ =?us-ascii?Q?LyvwtjichPvPWrd1nh/7b+S1gDcLMdwxpler31XzguFM8YxIAS0I5VhW3Kjy?=
+ =?us-ascii?Q?JI1r8erezRu8IDtB2jUAnw3A5Pa1gvruydQ+eOF0Se/FUYt3bh4AMGU3PLy3?=
+ =?us-ascii?Q?XzuImWtDJSKyL/+qptOOhNT864av7sO/zhK1ru3RokoWF9TI3DGfY3VANqmm?=
+ =?us-ascii?Q?Fcr91DogIasdpNks275FpWXDn6z4N/gN1lr8JXK1pduZsFuz5/lUfgQ3+jSm?=
+ =?us-ascii?Q?y4TvxO60UzSSZir6Enh5j467NnrV9vQ3lhUn0FHwU3IR/0UAzhxxv8xcBrKg?=
+ =?us-ascii?Q?pWztdjxxVORL+nRswGuE9ZLXXpNhDjSF1bWLpqZ87r1elGfoHSPXYCmnBdmU?=
+ =?us-ascii?Q?+DUW/faSRKNb0TNbV+DPG7XB7giMbvgWXMe2WF87ipLvNGC+wtRTdhHNmpTM?=
+ =?us-ascii?Q?CTLk3ywv+6pjbm2l5SDdqY+W9GrTVqfZ95tWQQo6TUmkdcJry4BzNZvZydcp?=
+ =?us-ascii?Q?+GnYDPW9GsCntK7KCwuUXhVucmAvUlv4bTlbQOWe+i82ZnhXIxvuAspY1qaG?=
+ =?us-ascii?Q?DJTMk4HisgoLFpEVKW2pLbP2l5915t0OLjuqTk8GwZqsS0vCUgqno7ysQxKS?=
+ =?us-ascii?Q?WI0OuKqxBeOdOgvEaf/unb89iwKWyXMLYIKowGR22a5imG+zm6Jh95PLsaaf?=
+ =?us-ascii?Q?v0fIg3iZOhk3EiJdVCK4+rHb5vzCS3jQQTAeON/+zCnAo7Z+JpQ09ctXTcFW?=
+ =?us-ascii?Q?ECN74Yaj5R4Gfz86CfUBKchIs0VFF5m4Jy/2pP0JQMYeKQ5fO2m9+DJ5uN+A?=
+ =?us-ascii?Q?7RVEPf9nWBOLKJwn9Y0DQtdAN3XFUGa2Yuro/EhWYa4FZSr2APRGTtgdidKL?=
+ =?us-ascii?Q?OHOIdCZNlqBhVcDGLxeYZE3ghyHCjOFxdkxF0ti1?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 479064be-ed74-4486-4e4d-08db31fd22f2
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1fc77ee-2abd-4bec-630d-08db31fd22e6
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 15:32:28.8036
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 15:32:28.7255
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8P9MLWVac4xbUAlgJIruM2puuch/Ms2euy0VpyJxO8pSDVhF4yREGzuUJpK0E0AK
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6/dIB6U7b6SU6Jv/iJIx/Be5h0RnKyc0P87c/aUeM9ef9N+cJnhNJGAf8hg0LCgx
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5093
 X-Spam-Status: No, score=2.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -117,82 +117,69 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-syzkaller found that the calculation of batch_last_index should use
-'start_index' since at input to this function the batch is either empty or
-it has already been adjusted to cross any accesses so it will start at the
-point we are unmapping from.
+If batch->end is 0 then setting npfns[0] before computing the new value of
+pfns will fail to adjust the pfn and result in various page accounting
+corruptions. It should be ordered after.
 
-Getting this wrong causes the unmap to run over the end of the pages
-which corrupts pages that were never mapped. In most cases this triggers
-the num pinned debugging:
+This seems to result in various kinds of page meta-data corruption related
+failures:
 
-  WARNING: CPU: 0 PID: 557 at drivers/iommu/iommufd/pages.c:294 __iopt_area_unfill_domain+0x152/0x560
+  WARNING: CPU: 1 PID: 527 at mm/gup.c:75 try_grab_folio+0x503/0x740
   Modules linked in:
-  CPU: 0 PID: 557 Comm: repro Not tainted 6.3.0-rc2-eeac8ede1755 #1
+  CPU: 1 PID: 527 Comm: repro Not tainted 6.3.0-rc2-eeac8ede1755+ #1
   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-  RIP: 0010:__iopt_area_unfill_domain+0x152/0x560
-  Code: d2 0f ff 44 8b 64 24 54 48 8b 44 24 48 31 ff 44 89 e6 48 89 44 24 38 e8 fc d3 0f ff 45 85 e4 0f 85 eb 01 00 00 e8 0e d2 0f ff <0f> 0b e8 07 d2 0f ff 48 8b 44 24 38 89 5c 24 58 89 18 8b 44 24 54
-  RSP: 0018:ffffc9000108baf0 EFLAGS: 00010246
-  RAX: 0000000000000000 RBX: 00000000ffffffff RCX: ffffffff821e3f85
-  RDX: 0000000000000000 RSI: ffff88800faf0000 RDI: 0000000000000002
-  RBP: ffffc9000108bd18 R08: 000000000003ca25 R09: 0000000000000014
-  R10: 000000000003ca00 R11: 0000000000000024 R12: 0000000000000004
-  R13: 0000000000000801 R14: 00000000000007ff R15: 0000000000000800
-  FS:  00007f3499ce1740(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+  RIP: 0010:try_grab_folio+0x503/0x740
+  Code: e3 01 48 89 de e8 6d c1 dd ff 48 85 db 0f 84 7c fe ff ff e8 4f bf dd ff 49 8d 47 ff 48 89 45 d0 e9 73 fe ff ff e8 3d bf dd ff <0f> 0b 31 db e9 d0 fc ff ff e8 2f bf dd ff 48 8b 5d c8 31 ff 48 89
+  RSP: 0018:ffffc90000f37908 EFLAGS: 00010046
+  RAX: 0000000000000000 RBX: 00000000fffffc02 RCX: ffffffff81504c26
+  RDX: 0000000000000000 RSI: ffff88800d030000 RDI: 0000000000000002
+  RBP: ffffc90000f37948 R08: 000000000003ca24 R09: 0000000000000008
+  R10: 000000000003ca00 R11: 0000000000000023 R12: ffffea000035d540
+  R13: 0000000000000001 R14: 0000000000000000 R15: ffffea000035d540
+  FS:  00007fecbf659740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: 0000000020000243 CR3: 00000000179c2001 CR4: 0000000000770ef0
+  CR2: 00000000200011c3 CR3: 000000000ef66006 CR4: 0000000000770ee0
   PKRU: 55555554
   Call Trace:
    <TASK>
-   iopt_area_unfill_domain+0x32/0x40
-   iopt_table_remove_domain+0x23f/0x4c0
-   iommufd_device_selftest_detach+0x3a/0x90
-   iommufd_selftest_destroy+0x55/0x70
-   iommufd_object_destroy_user+0xce/0x130
-   iommufd_destroy+0xa2/0xc0
+   internal_get_user_pages_fast+0xd32/0x2200
+   pin_user_pages_fast+0x65/0x90
+   pfn_reader_user_pin+0x376/0x390
+   pfn_reader_next+0x14a/0x7b0
+   pfn_reader_first+0x140/0x1b0
+   iopt_area_fill_domain+0x74/0x210
+   iopt_table_add_domain+0x30e/0x6e0
+   iommufd_device_selftest_attach+0x7f/0x140
+   iommufd_test+0x10ff/0x16f0
    iommufd_fops_ioctl+0x206/0x330
    __x64_sys_ioctl+0x10e/0x160
    do_syscall_64+0x3b/0x90
    entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-Also add some useful WARN_ON sanity checks.
-
 Cc: <stable@vger.kernel.org>
-Fixes: 8d160cd4d506 ("iommufd: Algorithms for PFN storage")
+Fixes: f394576eb11d ("iommufd: PFN handling for iopt_pages")
 Reported-by: Pengfei Xu <pengfei.xu@intel.com>
-Link: https://lore.kernel.org/r/ZBE1k040xAhIuTmq@xpf.sh.intel.com
+Link: https://lore.kernel.org/r/ZBExkEW/On0ue68q@xpf.sh.intel.com
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- drivers/iommu/iommufd/pages.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/iommu/iommufd/pages.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
-index 400ec7c91ed7e7..b11aace836542d 100644
+index b11aace836542d..3c47846cc5efe8 100644
 --- a/drivers/iommu/iommufd/pages.c
 +++ b/drivers/iommu/iommufd/pages.c
-@@ -1207,13 +1207,21 @@ iopt_area_unpin_domain(struct pfn_batch *batch, struct iopt_area *area,
- 			unsigned long start =
- 				max(start_index, *unmapped_end_index);
+@@ -294,9 +294,9 @@ static void batch_clear_carry(struct pfn_batch *batch, unsigned int keep_pfns)
+ 			batch->npfns[batch->end - 1] < keep_pfns);
  
-+			if (IS_ENABLED(CONFIG_IOMMUFD_TEST) &&
-+			    batch->total_pfns)
-+				WARN_ON(*unmapped_end_index -
-+						batch->total_pfns !=
-+					start_index);
- 			batch_from_domain(batch, domain, area, start,
- 					  last_index);
--			batch_last_index = start + batch->total_pfns - 1;
-+			batch_last_index = start_index + batch->total_pfns - 1;
- 		} else {
- 			batch_last_index = last_index;
- 		}
+ 	batch->total_pfns = keep_pfns;
+-	batch->npfns[0] = keep_pfns;
+ 	batch->pfns[0] = batch->pfns[batch->end - 1] +
+ 			 (batch->npfns[batch->end - 1] - keep_pfns);
++	batch->npfns[0] = keep_pfns;
+ 	batch->end = 0;
+ }
  
-+		if (IS_ENABLED(CONFIG_IOMMUFD_TEST))
-+			WARN_ON(batch_last_index > real_last_index);
-+
- 		/*
- 		 * unmaps must always 'cut' at a place where the pfns are not
- 		 * contiguous to pair with the maps that always install
 -- 
 2.40.0
 
