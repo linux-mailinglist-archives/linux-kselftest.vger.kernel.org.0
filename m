@@ -2,259 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26406D2F5C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Apr 2023 11:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82146D2F9D
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Apr 2023 12:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjDAJWQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 1 Apr 2023 05:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+        id S229894AbjDAKDl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 1 Apr 2023 06:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDAJWP (ORCPT
+        with ESMTP id S229839AbjDAKDk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 1 Apr 2023 05:22:15 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C175FAF26;
-        Sat,  1 Apr 2023 02:22:13 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id b20so99002441edd.1;
-        Sat, 01 Apr 2023 02:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680340932; x=1682932932;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2JAXjEh00e4SLFvJwSAfkOz5lCcAQOFO7gXGReDig9g=;
-        b=hM9QVU/gTNXHt0T6rSic4JFPX3dZwj6smNRVN2+KTkGBsqpaZPzKm4yL+ANnu2JyP6
-         hRXf2XQLgeHC0XPhpRDuSCB5AvLvlGNZCBqBUCQoBGE0xcEm2Vg1vAJfqwJGiYcl/6ph
-         eThu1cHNsNkKLdVlx9fbi6j16b2lFluox1vj0UOyH8OUDFpOar3UUdt+FVTfsM3CWgoy
-         ui02UUMxFPCXPP+uXKbue4PkbRt3MoKmH9t/YuNp0qgKfgnUzZM5mIeNsbFPR2Qo3VGJ
-         CcSevXERu+fnqgAYb1kTXM6jsOQgcr6T0HfMiA1+LuxviP184wDZqUeubUzAzuk95/aD
-         YsqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680340932; x=1682932932;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2JAXjEh00e4SLFvJwSAfkOz5lCcAQOFO7gXGReDig9g=;
-        b=qbYr5W8++jk65P0csOMq64atYfK0pI2yX+ai9hLYTFv1h+sWM5pC2p566DxNtef/C6
-         w3nTueTizpsP9IRxC+yhqS4ZOMR2Dhl4lHwaPJmYAEcpwJ6tMCaVsam27cwFeVXM953S
-         tXEr5X1jQxf2WU0H35/jIQ+IMiTdPthpUw+bJYPfI9gWXyp+Omwd5N2NoAlPlCErAMW+
-         FXvGeysR8uMqBZU0pNYEIUpV0swaj8uUXLypZsB6IJukaxtep0jqdWDUFSat0gSYn1Th
-         dmYXEvIS2iE4USZ+/o3PmSQqHYN7jL+O4+DFMMDZ0wIn0gxf3e1cxJjRsgqTm8Mm/+cy
-         5frA==
-X-Gm-Message-State: AAQBX9cxQXHIg7wIT7vVuv/iyb699m9wRb1l/mLhX3DTNcY0TnqSSrDa
-        SLFm/z7o7u2CRZPXPdZ2+fg=
-X-Google-Smtp-Source: AKy350ZC7Jp6bb0KKIDt6HVyCcf/E6RKfx79MtDfHO/qgKIZXf2ZLQRw9+yzj75P/WOHpopxMG1T5Q==
-X-Received: by 2002:a05:6402:524e:b0:502:465:28e0 with SMTP id t14-20020a056402524e00b00502046528e0mr8967686edd.0.1680340931961;
-        Sat, 01 Apr 2023 02:22:11 -0700 (PDT)
-Received: from ivan-HLYL-WXX9.. ([37.252.81.51])
-        by smtp.gmail.com with ESMTPSA id t28-20020a50ab5c000000b005024faae65esm1885147edc.10.2023.04.01.02.22.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Apr 2023 02:22:11 -0700 (PDT)
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-To:     skhan@linuxfoundation.org
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        himadrispandya@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH] selftests: media_tests: Add new subtest to video_device_test
-Date:   Sat,  1 Apr 2023 13:22:07 +0400
-Message-Id: <20230401092207.16667-1-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 1 Apr 2023 06:03:40 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4F67E06D;
+        Sat,  1 Apr 2023 03:03:37 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 331A3UXr014921;
+        Sat, 1 Apr 2023 12:03:30 +0200
+Date:   Sat, 1 Apr 2023 12:03:30 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] tools/nolibc: validate C99 compatibility
+Message-ID: <ZCgBcs3RT07BrNA9@1wt.eu>
+References: <20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net>
+ <ZCPJm/Nb2AGlJqXg@1wt.eu>
+ <2be5dd3f-d4ca-499a-9f7e-3113b4f04412@t-8ch.de>
+ <ZCPWrrrlVRsaVIsl@1wt.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZCPWrrrlVRsaVIsl@1wt.eu>
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add new subtest to video_device_test to cover the VIDIOC_G_PRIORITY
-and VIDIOC_S_PRIORITY ioctl calls. This test tries to set the priority
-associated with the file descriptior via ioctl VIDIOC_S_PRIORITY
-command from V4L2 API. After that, the test tries to get the new
-priority via VIDIOC_G_PRIORITY ioctl command and compares the result
-with the v4l2_priority it set before. At the end, the test restores the
-old priority.
+Hi Thomas,
 
-This test will increase the code coverage for video_device_test, so
-I think it might be useful. Additionally, this patch will refactor the
-video_device_test a little bit, according to the new functionality.
+On Wed, Mar 29, 2023 at 08:11:58AM +0200, Willy Tarreau wrote:
+> On Wed, Mar 29, 2023 at 05:35:33AM +0000, Thomas Weißschuh wrote:
+> > Hi Willy,
+> > 
+> > On 2023-03-29 07:16:11+0200, Willy Tarreau wrote:
+> > > On Tue, Mar 28, 2023 at 09:07:35PM +0000, Thomas Weißschuh wrote:
+> > > > Most of the code was migrated to C99-conformant __asm__ statements
+> > > > before. It seems string.h was missed.
+> > > > 
+> > > > Fix string.h and also validate during build that nolibc stays within
+> > > > C99.
+> > > 
+> > > I'm all for improving portability, however I have a concern with building
+> > > the test case with -std=c99 which is that it might hide some c99-only
+> > > stuff that we'd introduce by accident in the nolibc's code, and I'd
+> > > rather not do that because it will mean changing build options for some
+> > > external programs using it if it happens. However I totally agree with
+> > > you that we need to make sure that there's no build issues with c99
+> > > compilers. Modern compilers are c99-compatible but generally come with
+> > > GNU extensions and I understand why you're interested in switching to
+> > > std=c99 in order to drop some of these like "asm". Should we have two
+> > > build targets, the default one and a c99 one ? Maybe. The build is so
+> > > small and quick that nobody will care, so we could definitely imagine
+> > > building the two versions. Maybe you have a better idea ?
+> > 
+> > I'm not sure I understand.
+> > Do you want to stay compatible with c89/gnu89?
+> 
+> At least with gnu89, yes, since it's been used by default by a wide
+> range of compilers.
+> 
+> > If so we could use that baseline standard instead of -std=c99.
+> 
+> The only thing is that c99 is both more permissive and more restrictive
+> than gnu89 since (as you noticed) gnu89 allows for example "asm" instead
+> of "__asm__".
+> 
+> > Without specifying a standard we get whatever the compiler uses as
+> > default which is probably much newer than c99.
+> 
+> Yes but do we really care ? I think we want at least some gnuXX
+> (which gcc does by default) and some c99 for those who don't want to
+> depend on gnuXX. Diversity in tests provides faster reports than
+> forcing everyone to the same set. By keeping the default build option,
+> a backwards-compatibility test is just a matter of setting CC= with the
+> relevant compiler to confirm it's still OK, without being fooled by the
+> fact that a standard other than the default was used.
+> 
+> > Having two targets seems to be easy to do but I'm not sure what the
+> > advantage would be over compiling once against the intended baseline
+> > standard.
+> 
+> We're providing a set of includes to be used by userland so there isn't
+> a single intended baseline standard. I'm not advocating for supporting
+> everything on earth at all, but at least it should work with native
+> compilers currently found in distros or on the kernel.org crosstools,
+> and with some older toolchains that are used once in a while to rebuild
+> a few compact tools. For example I've used this codebase to build a
+> recovery kernel+tools in the past, which fits everything in a 1MB
+> binary, and that's the type of thing where you know that it's not always
+> easy nor relevant to port the code to newer compilers, so if it used to
+> work on gcc 4.7 you'll just reuse that one if you still have it. My
+> position regarding older tools is: we don't make particular efforts to
+> test them, but we at least do not try hard to evince them either as
+> long as it's not necessary.
 
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- .../selftests/media_tests/video_device_test.c | 131 +++++++++++++-----
- 1 file changed, 93 insertions(+), 38 deletions(-)
+I just ran some tests and there's actually better to achieve what you're
+looking for. Let's just use -fno-asm, it removes the GNU-specific "asm",
+"inline", and "typeof" in favor of the "__" variants. With gcc 11.3 it
+gives me this, which is exactly what we were looking for:
 
-diff --git a/tools/testing/selftests/media_tests/video_device_test.c b/tools/testing/selftests/media_tests/video_device_test.c
-index 0f6aef2e2593..5e6f65ad2ca3 100644
---- a/tools/testing/selftests/media_tests/video_device_test.c
-+++ b/tools/testing/selftests/media_tests/video_device_test.c
-@@ -13,18 +13,9 @@
-  * in the Kselftest run. This test should be run when hardware and driver
-  * that makes use of V4L2 API is present.
-  *
-- * This test opens user specified Video Device and calls video ioctls in a
-- * loop once every 10 seconds.
-- *
-  * Usage:
-  *	sudo ./video_device_test -d /dev/videoX
-- *
-- *	While test is running, remove the device or unbind the driver and
-- *	ensure there are no use after free errors and other Oops in the
-- *	dmesg.
-- *	When possible, enable KaSan kernel config option for use-after-free
-- *	error detection.
--*/
-+ */
- 
- #include <stdio.h>
- #include <unistd.h>
-@@ -37,45 +28,67 @@
- #include <time.h>
- #include <linux/videodev2.h>
- 
--int main(int argc, char **argv)
-+#define PRIORITY_MAX 4
-+
-+int priority_test(int fd)
- {
--	int opt;
--	char video_dev[256];
--	int count;
--	struct v4l2_tuner vtuner;
--	struct v4l2_capability vcap;
-+	/* This test will try to update the priority associated with a file descriptor */
-+
-+	enum v4l2_priority old_priority, new_priority, priority_to_compare;
- 	int ret;
--	int fd;
-+	int result = 0;
- 
--	if (argc < 2) {
--		printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
--		exit(-1);
-+	ret = ioctl(fd, VIDIOC_G_PRIORITY, &old_priority);
-+	if (ret < 0) {
-+		printf("Failed to get priority: %s\n", strerror(errno));
-+		return -1;
-+	}
-+	new_priority = (old_priority + 1) % PRIORITY_MAX;
-+	ret = ioctl(fd, VIDIOC_S_PRIORITY, &new_priority);
-+	if (ret < 0) {
-+		printf("Failed to set priority: %s\n", strerror(errno));
-+		return -1;
-+	}
-+	ret = ioctl(fd, VIDIOC_G_PRIORITY, &priority_to_compare);
-+	if (ret < 0) {
-+		printf("Failed to get new priority: %s\n", strerror(errno));
-+		result = -1;
-+		goto cleanup;
-+	}
-+	if (priority_to_compare != new_priority) {
-+		printf("Priority wasn't set - test failed\n");
-+		result = -1;
- 	}
- 
--	/* Process arguments */
--	while ((opt = getopt(argc, argv, "d:")) != -1) {
--		switch (opt) {
--		case 'd':
--			strncpy(video_dev, optarg, sizeof(video_dev) - 1);
--			video_dev[sizeof(video_dev)-1] = '\0';
--			break;
--		default:
--			printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
--			exit(-1);
--		}
-+cleanup:
-+	ret = ioctl(fd, VIDIOC_S_PRIORITY, &old_priority);
-+	if (ret < 0) {
-+		printf("Failed to restore priority: %s\n", strerror(errno));
-+		return -1;
- 	}
-+	return result;
-+}
-+
-+int loop_test(int fd)
-+{
-+	/*
-+	 * This test opens user specified Video Device and calls video ioctls in a
-+	 * loop once every 10 seconds.
-+	 * While test is running, remove the device or unbind the driver and
-+	 * ensure there are no use after free errors and other Oops in the
-+	 * dmesg.
-+	 * When possible, enable KaSan kernel config option for use-after-free
-+	 * error detection.
-+	 */
-+	int count;
-+	struct v4l2_tuner vtuner;
-+	struct v4l2_capability vcap;
-+	int ret;
- 
- 	/* Generate random number of interations */
- 	srand((unsigned int) time(NULL));
- 	count = rand();
- 
--	/* Open Video device and keep it open */
--	fd = open(video_dev, O_RDWR);
--	if (fd == -1) {
--		printf("Video Device open errno %s\n", strerror(errno));
--		exit(-1);
--	}
--
- 	printf("\nNote:\n"
- 	       "While test is running, remove the device or unbind\n"
- 	       "driver and ensure there are no use after free errors\n"
-@@ -98,4 +111,46 @@ int main(int argc, char **argv)
- 		sleep(10);
- 		count--;
- 	}
-+	return 0;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int opt;
-+	char video_dev[256];
-+	int fd;
-+	int test_result;
-+
-+	if (argc < 2) {
-+		printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
-+		exit(-1);
-+	}
-+
-+	/* Process arguments */
-+	while ((opt = getopt(argc, argv, "d:")) != -1) {
-+		switch (opt) {
-+		case 'd':
-+			strncpy(video_dev, optarg, sizeof(video_dev) - 1);
-+			video_dev[sizeof(video_dev)-1] = '\0';
-+			break;
-+		default:
-+			printf("Usage: %s [-d </dev/videoX>]\n", argv[0]);
-+			exit(-1);
-+		}
-+	}
-+
-+	/* Open Video device and keep it open */
-+	fd = open(video_dev, O_RDWR);
-+	if (fd == -1) {
-+		printf("Video Device open errno %s\n", strerror(errno));
-+		exit(-1);
-+	}
-+
-+	test_result = priority_test(fd);
-+	if (!test_result)
-+		printf("Priority test - PASSED\n");
-+	else
-+		printf("Priority test - FAILED\n");
-+
-+	loop_test(fd);
- }
--- 
-2.34.1
+  gcc -Os -fno-ident -fno-asynchronous-unwind-tables -fno-stack-protector -DNOLIBC_STACKPROTECTOR -mstack-protector-guard=global -fstack-protector-all -fno-asm -s -o nolibc-test \
+    -nostdlib -static -Isysroot/x86/include nolibc-test.c -lgcc
+  In file included from sysroot/x86/include/stdlib.h:14,
+                   from sysroot/x86/include/nolibc.h:103,
+                   from sysroot/x86/include/errno.h:26,
+                   from sysroot/x86/include/stdio.h:14,
+                   from nolibc-test.c:15:
+  sysroot/x86/include/string.h: In function 'memset':
+  sysroot/x86/include/string.h:93:17: error: 'asm' undeclared (first use in this function)
+     93 |                 asm volatile("");
+        |                 ^~~
+  sysroot/x86/include/string.h:93:17: note: each undeclared identifier is reported only once for each function it appears in
+  sysroot/x86/include/string.h:93:20: error: expected ';' before 'volatile'
+     93 |                 asm volatile("");
+        |                    ^~~~~~~~~
+        |                    ;
+  sysroot/x86/include/string.h: In function 'strlen':
+  sysroot/x86/include/string.h:142:17: warning: implicit declaration of function 'asm' [-Wimplicit-function-declaration]
+    142 |                 asm("");
+        |                 ^~~
+  nolibc-test.c: In function 'main':
+  nolibc-test.c:898:25: error: 'asm' undeclared (first use in this function)
+    898 |                         asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
+        |                         ^~~
+  nolibc-test.c:898:28: error: expected ';' before 'volatile'
+    898 |                         asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
+        |                            ^~~~~~~~~
+        |                            ;
+  make: *** [Makefile:128: nolibc-test] Error 1
 
+With this, we don't need to force -std=c99 nor to build two variants,
+a single variant will catch GCCisms even with older compilers while not
+being overly annoying.
+
+Willy
