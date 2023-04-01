@@ -2,132 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6686D2C4B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Apr 2023 03:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F096D2C9C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Apr 2023 03:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbjDABGS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Mar 2023 21:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
+        id S233104AbjDABl6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Mar 2023 21:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbjDABGR (ORCPT
+        with ESMTP id S233495AbjDABly (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Mar 2023 21:06:17 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612711D861;
-        Fri, 31 Mar 2023 18:06:12 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id o11so22981375ple.1;
-        Fri, 31 Mar 2023 18:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680311172;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lptAq23Bhxck5w4z/rG8RS6tmRRir3me5yWghBfZL5w=;
-        b=RciMOpzWuO92XZZ491w3Y2DRYMTk1B/OuOYYEgSqs4w2yJ0FKDEx4PyPOdLPXVASLH
-         HeNugxvV6lVKFtQbAgjusSVnN9Qa3BspUavTeWaWlaIeltduRQTJSlUHWifbYgZmKH3c
-         1ajobv052ByD1ZxgrIGtq1u2IKSDh1m7NdRJVyBf1RS+Ruf1FQ9wFDfES6V9whcJkHrz
-         kZXHZypSh4qPhO6ZOH9F3jdQjxnrIc5h1CQas2SI7zzvi6FwmjJ87DDlt09VxHlmKZXT
-         TQ5TZsq3YlPOqJ01h6OlRLwQ5bduGep0FyhfMuRNKh9+q3jDIOFIZUfrx3mzt2PnP7VJ
-         5Ifg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680311172;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lptAq23Bhxck5w4z/rG8RS6tmRRir3me5yWghBfZL5w=;
-        b=66Kfz8TJk1gS6wOEGBMVeetRDpKMuzMUabbEpy6qUDe9J6OCemfoGi5UKdcXoYhCQ0
-         2mVqd6kLREwAK18QSREAuD9Av+xnbD9O9596PcmEgnnwgigNu5t8jLDmwpEZPbGkkAGL
-         8G4Ch2GGfIoSwTwo+TEO3raLEs0eLXrbttE2oCrUr0+w3LUTFzqsbBoFjQVRxA9kN4gw
-         EEf1LbOjyOPviGTeVj5tseVyTRjAPyNBHE4kLw2Z9+ucLNPVjHigcE3f9d+2X62VrMlC
-         2Jx0pJiNfPlUPtLwDXjcGyhkfyDR4wOuq+y2G8ThXDL1Sp3phmcisWSH2liBM7gUJyUj
-         QKbg==
-X-Gm-Message-State: AAQBX9cZZTPALNrjmdCbeBHjAMrGoIGwzwypOQSjS+Pt/QmRU85k+eXV
-        xQvzK2VfCEy/ieXqwj8OYps=
-X-Google-Smtp-Source: AKy350Z8u3DIY9zOK2GGbRh+IzTtZrAQZu687R480OVrDZT6cATs8RfxE2bQUMA6S8EqfzHYuLBzNA==
-X-Received: by 2002:a17:902:fa04:b0:1a2:85f0:e747 with SMTP id la4-20020a170902fa0400b001a285f0e747mr8814999plb.41.1680311171897;
-        Fri, 31 Mar 2023 18:06:11 -0700 (PDT)
-Received: from localhost ([98.97.116.12])
-        by smtp.gmail.com with ESMTPSA id w16-20020a63c110000000b0050f6add54fcsm2204421pgf.44.2023.03.31.18.06.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 18:06:11 -0700 (PDT)
-Date:   Fri, 31 Mar 2023 18:06:10 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-Message-ID: <6427838247d16_c503a2087e@john.notmuch>
-In-Reply-To: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
-References: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
-Subject: RE: [PATCH net-next v4 0/3] Add support for sockmap to vsock.
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 31 Mar 2023 21:41:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FF320C05;
+        Fri, 31 Mar 2023 18:41:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B73BAB832F5;
+        Sat,  1 Apr 2023 01:41:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F0FC43442;
+        Sat,  1 Apr 2023 01:41:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680313301;
+        bh=JegotNx5fBXykk8QkNgylxdkaBH7T4nUuNR8kI4BsII=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cRZ6z4eKTJf7e8eRthistVDOYIIuhACxg+8s0kfqGFqpRoZyFNX40VSUvWarZYH3Y
+         Cbon/tAQK4hN0fhWCiFq8KDKOnarJxeQYsWUUUpzo6eFChCcXbqond9Jsktc9IlNqu
+         uypiJOzmhLJ6c19FZRFbrjcM8o4fzz1qyx0EEkYI1+16cUV6igsDEQLX1ZzUFnKDpE
+         hFq5mJYZ6u1HkYFl/e6ULwWE5qG3vCyPAxgLRKKUiaHNrjlyRVToSRkuc+t+lVeQ2U
+         v6uCDN2ZyzuOHPK1LPNxyZn43wEP0KWOGLRfWP48aKTTQiDQWn/gbzdEMkaIg/NdFI
+         l/BnwR/rO6aJA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, andrii@kernel.org,
+        daniel@iogearbox.net, shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 07/25] selftests/bpf: Fix progs/find_vma_fail1.c build error.
+Date:   Fri, 31 Mar 2023 21:41:05 -0400
+Message-Id: <20230401014126.3356410-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230401014126.3356410-1-sashal@kernel.org>
+References: <20230401014126.3356410-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Bobby Eshleman wrote:
-> We're testing usage of vsock as a way to redirect guest-local UDS
-> requests to the host and this patch series greatly improves the
-> performance of such a setup.
-> 
-> Compared to copying packets via userspace, this improves throughput by
-> 121% in basic testing.
-> 
-> Tested as follows.
-> 
-> Setup: guest unix dgram sender -> guest vsock redirector -> host vsock
->        server
-> Threads: 1
-> Payload: 64k
-> No sockmap:
-> - 76.3 MB/s
-> - The guest vsock redirector was
->   "socat VSOCK-CONNECT:2:1234 UNIX-RECV:/path/to/sock"
-> Using sockmap (this patch):
-> - 168.8 MB/s (+121%)
-> - The guest redirector was a simple sockmap echo server,
->   redirecting unix ingress to vsock 2:1234 egress.
-> - Same sender and server programs
-> 
-> *Note: these numbers are from RFC v1
-> 
-> Only the virtio transport has been tested. The loopback transport was
-> used in writing bpf/selftests, but not thoroughly tested otherwise.
-> 
-> This series requires the skb patch.
+From: Alexei Starovoitov <ast@kernel.org>
 
-Appears reasonable to me although I didn't review internals of all
-the af_vsock stuff. I see it got merged great.
+[ Upstream commit 32513d40d908b267508d37994753d9bd1600914b ]
 
-One nit, I have a series coming shortly to pull the tests out of
-the sockmap_listen and into a sockmap_vsock because I don't think they
-belong in _listen but that is just a refactor.
+The commit 11e456cae91e ("selftests/bpf: Fix compilation errors: Assign a value to a constant")
+fixed the issue cleanly in bpf-next.
+This is an alternative fix in bpf tree to avoid merge conflict between bpf and bpf-next.
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/bpf/progs/find_vma_fail1.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/find_vma_fail1.c b/tools/testing/selftests/bpf/progs/find_vma_fail1.c
+index b3b326b8e2d1c..6dab9cffda132 100644
+--- a/tools/testing/selftests/bpf/progs/find_vma_fail1.c
++++ b/tools/testing/selftests/bpf/progs/find_vma_fail1.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2021 Facebook */
+ #include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
++#define vm_flags vm_start
+ 
+ char _license[] SEC("license") = "GPL";
+ 
+-- 
+2.39.2
+
