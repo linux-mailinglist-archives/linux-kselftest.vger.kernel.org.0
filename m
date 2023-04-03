@@ -2,55 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEFE6D438D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Apr 2023 13:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA77D6D43BD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Apr 2023 13:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbjDCLfv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Apr 2023 07:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S231958AbjDCLmv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Apr 2023 07:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbjDCLfu (ORCPT
+        with ESMTP id S231248AbjDCLmu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:35:50 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FEAD520
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 04:35:47 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id cn12so116077966edb.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 04:35:47 -0700 (PDT)
+        Mon, 3 Apr 2023 07:42:50 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F48646BD
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 04:42:49 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id eg48so116023323edb.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 04:42:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680521746;
+        d=dectris.com; s=google; t=1680522168;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DtE7tV0BJ1X9kRhDE14KjV/Fb1R+O4UUB9r9GwZWHwo=;
-        b=o3vCAWCphfEADsf6/95NRHzkL1jz+Vky1MmSf5xdgXS9fzGpMmWYi8ZQONoeeS5gJj
-         NGvHL5Zh/1nkvJfx4L8oEb1CsTICL++1jR5kbKxy3AzeDHtnbj1b5k9FyvxHL03anMYX
-         qoOrxjNj5jkQ2B43jxieaG9sl32GhSlueiUK8=
+        bh=kJQgC8vpBuUWGJhcmSIUYP2ioIg7/McJ6PvsYtiX0TE=;
+        b=iDYAFPmDRwMU+VamA8pIZ58oU63tZjtvtsecrSIUt+oBtbA8KN8HVQcvNAAsiFefSf
+         LX5kinSZHaHt3C7yD5JwIdxnrq6ta3wG7lrzniX35KmYnPelrcWZVdIYANXRZdnR9WLr
+         6yiGkovJf0+3739Jh0AcDgGDdvEl+cr9KKyyI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680521746;
+        d=1e100.net; s=20210112; t=1680522168;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DtE7tV0BJ1X9kRhDE14KjV/Fb1R+O4UUB9r9GwZWHwo=;
-        b=HfFtDVczvjdnqWwmvsNSBm+ru29KrZSJ6q9vMcxftb8Zzpj5MEFdtzfG4Ck5C8JzAz
-         w1bovmy8KMGHvI6TJHFk8eUCbFvoQ7JhI5TlPQBXHedwthUhnDmkvs71AXneHiYKmURV
-         3uNcHg+ElFVFEL/vaECLOwup1Mu5+QtxW917gxZj4j+ZJl/3qFdlrQdHkkVsshWkeFXM
-         IR9u5uKnGXmyRKDGTCNH4CVEfomJkMn3Mq8/3yVY9dQHqOR/Ir2N7lBoXugR7DluSn7S
-         fzlT4L7SPR6ySeVgC5mNf7yJ4S0gN+WnwTfl0Dib1bQ9LuEw6Fi9/qNdg69CtiTUK5zJ
-         IP6w==
-X-Gm-Message-State: AAQBX9etNCdysjo14fgNPJ0EsF4uwCUijvbtbG6aCZ9+V5ipneOX6O4d
-        046pQWvEea2AHrkudBzt/haFCtuVlLiLx27ba0aTcQ==
-X-Google-Smtp-Source: AKy350YHk+VumZlyk8Dikia4bU8HuhDFbXRE1v2w6I3NT+rYijEYQ2uNrwg/BoeLVEvlcTh/IngcPwMBYTWYI9etBKg=
-X-Received: by 2002:a50:f692:0:b0:4fc:fc86:5f76 with SMTP id
- d18-20020a50f692000000b004fcfc865f76mr17964995edn.6.1680521746373; Mon, 03
- Apr 2023 04:35:46 -0700 (PDT)
+        bh=kJQgC8vpBuUWGJhcmSIUYP2ioIg7/McJ6PvsYtiX0TE=;
+        b=j87sefG5k26L06XD+uKuEiHRCFzlobhp9966pCZCrK+ke8feix/uL5TG4seCPyJ367
+         JLvEm7g5LJj3IZkKi+QwkPUU7ZBa0mwqNbI7m9RvBtCeSOwb+a/IequnVZZHSqyZ2nZY
+         dktHOqRNhm6pfTmfFPVwpskW2rqIvTRy5z3mWO5aSkPnIR7ko4ncxSBOpTLtMqx3q/SQ
+         tk4Fw4sP3iHtoI9hnkYe63oW34eFfbewJweaNcllDdLq1zbi6B7xCxrTySxul1YQIG6X
+         MoFWqzzVaLKGbLLhcAdm1BR4ygs7oV+fXFJcaqopzgq+fK/iFQfyhsAQQHZUntpbkMax
+         FkZA==
+X-Gm-Message-State: AAQBX9eMCU07zSGG44Qt0WrVUfow7ofXSZue+RiPRETrF2Yn9PSRDeZR
+        vZvIsGGYEzu6Q2nDKWZ62kWSqS8p9Brpoyg30PhK9g==
+X-Google-Smtp-Source: AKy350YiUmrIhgS3KRvmZNctbR+6CUC0vQUYvXEn75Ib+anyPhlAs65KH9rxI+jaGGrCT7L9bwrs9se7qF1/+y3voyw=
+X-Received: by 2002:a50:9e8e:0:b0:4fa:4bc4:ad5b with SMTP id
+ a14-20020a509e8e000000b004fa4bc4ad5bmr18336974edf.6.1680522167955; Mon, 03
+ Apr 2023 04:42:47 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230329180502.1884307-1-kal.conley@dectris.com>
  <20230329180502.1884307-5-kal.conley@dectris.com> <CAJ8uoz1cGV1_3HQQddbkExVnm=wngP3ECJZNS5gOtQtfi=mPnA@mail.gmail.com>
  <CAHApi-kV_c-z1zf9M_XyR_Wa=4xi-Cpk1FZT7BFTYQHgU1Bdqg@mail.gmail.com>
-In-Reply-To: <CAHApi-kV_c-z1zf9M_XyR_Wa=4xi-Cpk1FZT7BFTYQHgU1Bdqg@mail.gmail.com>
+ <CAHApi-mp7ymJ2MP_MFK=Rcv--YCz4aqtKArMwF1roRZHh0to1A@mail.gmail.com> <CAJ8uoz25jnBtaKZQ7SbJ_fdihiQTfN_AAtOuB4v-g85SS7QM5g@mail.gmail.com>
+In-Reply-To: <CAJ8uoz25jnBtaKZQ7SbJ_fdihiQTfN_AAtOuB4v-g85SS7QM5g@mail.gmail.com>
 From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Mon, 3 Apr 2023 13:40:26 +0200
-Message-ID: <CAHApi-mp7ymJ2MP_MFK=Rcv--YCz4aqtKArMwF1roRZHh0to1A@mail.gmail.com>
+Date:   Mon, 3 Apr 2023 13:47:28 +0200
+Message-ID: <CAHApi-kNzh1v7O9thi+2epqitE8pjFOn0tTLD1q8GyRuS9JH8w@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v2 04/10] selftests: xsk: Deflakify
  STATS_RX_DROPPED test
 To:     Magnus Karlsson <magnus.karlsson@gmail.com>
@@ -81,8 +82,9 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+> #2 is also a bug fix in my mind, but not #3 as it just adds a test.
 >
-> Can I send patches 01-05 all together as one patchset?
->
-On second thought, I will just send out 01, 04, and 05 already
-separately since those are all completely independent.
+
+#2 is a bugfix, but if we put this on the "bpf" tree already, then it
+will make a problem for later commits that depend on it which would go
+on bpf-next.
