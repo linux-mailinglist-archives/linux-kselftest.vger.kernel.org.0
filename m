@@ -2,115 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE066D4415
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Apr 2023 14:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672DE6D4319
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Apr 2023 13:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbjDCMFQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Apr 2023 08:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        id S232241AbjDCLNO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Apr 2023 07:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbjDCMFO (ORCPT
+        with ESMTP id S232218AbjDCLNH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:05:14 -0400
-Received: from mail-lj1-x261.google.com (mail-lj1-x261.google.com [IPv6:2a00:1450:4864:20::261])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D5BB44E
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 05:05:00 -0700 (PDT)
-Received: by mail-lj1-x261.google.com with SMTP id e9so14817477ljq.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 05:04:59 -0700 (PDT)
+        Mon, 3 Apr 2023 07:13:07 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC9B12CC5
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 04:12:35 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id j24so28971412wrd.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 04:12:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680523498;
+        d=cloudflare.com; s=google; t=1680520347;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=owWYS1VVibUABjXX7VSbtvRh0XtK1zmGJqqs+aa0pqCH5H4x0JQhsXiwVyNu+HHeyY
-         37mKtGwGmRcsh6ob2/NSrbFsxSqlE2ZztPtJJ869q7Zq07tIFXnzdIv7YbJ2ZKoCHlmw
-         e88iSnpzMFdgVnavEgGXPliO2xm0td647Oo5Q=
+        bh=XDScleNPhVPO54kxOKxQumxr8xmhVAhL3xX9seLkjNI=;
+        b=HgabHVAEwxuQvMaYMbnLI6gcoQaR6MCVEcwO9KWwr+XCrszcTScNEkOgZh53S7rCGL
+         lx0H65pMjpwzz2zOZTxxF+i5WB9RciFYT1s/ORth0tyPdpo60cphbJb08QY15hQC5tnv
+         LJ5cMuSNL6e4s38Qa4zvct2xAA6wj31Zvg8Nc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680523498;
+        d=1e100.net; s=20210112; t=1680520347;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=ykKHvidBwktigSadZzJUjZKCTgqTMelx8VXBAIVqh6y9lFscOwyaJ9CUR/BOx1yVii
-         Ls59JLxXDtTaVGHrF/ufrWEX38rQx2LddNdfXVZdoqjgcfTSQFjl3XfA6B0QcPBkM5xb
-         XDgZdJJ5JGJHtq/btUI6EcPQWCAEVjJ1YuWi7p5xXuHdn+iYJPzLrEprpNttVKU6wmop
-         PFFW1svhtewSWpelSVUzSzN6+SyomqqYrpSRMSsw8YtaM8a0P2YTI+sO2eRDpJMpkRRa
-         92/j1MTtFDHJQXl3M9W7oLab62Tf9FRCWwqPuu5A129cs6CEOPdEadtf7tDQc4qIrsDJ
-         i6zg==
-X-Gm-Message-State: AAQBX9eJ9TYaAsvdQ6ryZLorMOOauv98jXNu2jwzE/dTaB+LrfLf+udz
-        p0LX8OmAEhcqCapWBbRl3UZpZVXjQRlNaRz8Qlqh5XcqgOBS
-X-Google-Smtp-Source: AKy350YerD1mBS1N0DhMKmHhnV36wHp/bArUw8WNCwFwDem7NnjRkJ70Xq8ME/XUvVF7/+TWaOidByobHMw/
-X-Received: by 2002:a2e:8786:0:b0:2a6:389f:d0d0 with SMTP id n6-20020a2e8786000000b002a6389fd0d0mr653005lji.37.1680523498077;
-        Mon, 03 Apr 2023 05:04:58 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id bg27-20020a05651c0b9b00b002905c01ea6dsm2299495ljb.31.2023.04.03.05.04.56
+        bh=XDScleNPhVPO54kxOKxQumxr8xmhVAhL3xX9seLkjNI=;
+        b=GFH68I59cREqw7zfZClkB50pvxSx+EahB3jtVZfYli2TT3CyHHDOwNdidfLmmOIs4O
+         deprZSZax+H8ow+D42oaRFBY/o4U5R8KsEk5aMas4A7k7uV0pVk7TBEJhcbNi1O3aDFn
+         Gxi5KMWJkLIznMU1I5MEvWaA/gNRQnZQJWByrnmgdppa5i3edd1MJppdCDHe3/hm3oir
+         rnkIuzBxLL4p7+Xlb5RflQn2x7VdYGE5SJwv0xOdBQT+lg1N81D6PZLOxhPj3tXt7NTR
+         omu+OY/HuG32mZdHXL2bvt57RqoMVXWgjGSPzvtWNzQyvvZiLY586wiKviDDEFXsXSUB
+         +9rw==
+X-Gm-Message-State: AAQBX9eNr94oEzvt47oRSKooj7+HrhatmV+VaX2s1gVeC678Fzmu+n1y
+        rNlSfacBGC7QM1q6HHzW1EDB4A==
+X-Google-Smtp-Source: AKy350Yqx4cRtTXF3KLY6laEarBP/P2dxp+d9gjJUyfNwHScLSUEItjpvdB0n5IwC7szeH8JhB2hnQ==
+X-Received: by 2002:a5d:67cd:0:b0:2d7:babe:104c with SMTP id n13-20020a5d67cd000000b002d7babe104cmr25864956wrw.15.1680520347373;
+        Mon, 03 Apr 2023 04:12:27 -0700 (PDT)
+Received: from workstation.ehrig.io (tmo-066-125.customers.d1-online.com. [80.187.66.125])
+        by smtp.gmail.com with ESMTPSA id y11-20020adffa4b000000b002c7066a6f77sm9505517wrr.31.2023.04.03.04.12.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 05:04:58 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Mon, 03 Apr 2023 04:12:26 -0700 (PDT)
+From:   Christian Ehrig <cehrig@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     cehrig@cloudflare.com, kernel-team@cloudflare.com,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Weqaar Janjua <weqaar.janjua@gmail.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] selftests: xsk: Disable IPv6 on VETH1
-Date:   Mon,  3 Apr 2023 14:04:51 +0200
-Message-Id: <20230403120451.31041-1-kal.conley@dectris.com>
+        John Fastabend <john.fastabend@gmail.com>,
+        Kaixi Fan <fankaixi.li@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, netdev@vger.kernel.org,
+        Paul Chaignon <paul@isovalent.com>,
+        Shmulik Ladkani <shmulik@metanetworks.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next v2 0/3] Add FOU support for externally controlled ipip devices
+Date:   Mon,  3 Apr 2023 14:12:06 +0200
+Message-Id: <cover.1680520500.git.cehrig@cloudflare.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This change fixes flakiness in the BIDIRECTIONAL test:
+This patch set adds support for using FOU or GUE encapsulation with
+an ipip device operating in collect-metadata mode and a set of kfuncs
+for controlling encap parameters exposed to a BPF tc-hook.
 
-    # [is_pkt_valid] expected length [60], got length [90]
-    not ok 1 FAIL: SKB BUSY-POLL BIDIRECTIONAL
+BPF tc-hooks allow us to read tunnel metadata (like remote IP addresses)
+in the ingress path of an externally controlled tunnel interface via
+the bpf_skb_get_tunnel_{key,opt} bpf-helpers. Packets can then be
+redirected to the same or a different externally controlled tunnel
+interface by overwriting metadata via the bpf_skb_set_tunnel_{key,opt}
+helpers and a call to bpf_redirect. This enables us to redirect packets
+between tunnel interfaces - and potentially change the encapsulation
+type - using only a single BPF program.
 
-When IPv6 is enabled, the interface will periodically send MLDv1 and
-MLDv2 packets. These packets can cause the BIDIRECTIONAL test to fail
-since it uses VETH0 for RX.
+Today this approach works fine for a couple of tunnel combinations.
+For example: redirecting packets between Geneve and GRE interfaces or
+GRE and plain ipip interfaces. However, redirecting using FOU or GUE is
+not supported today. The ip_tunnel module does not allow us to egress
+packets using additional UDP encapsulation from an ipip device in
+collect-metadata mode.
 
-For other tests, this was not a problem since they only receive on VETH1
-and IPv6 was already disabled on VETH0.
+Patch 1 lifts this restriction by adding a struct ip_tunnel_encap to
+the tunnel metadata. It can be filled by a new BPF kfunc introduced
+in Patch 2 and evaluated by the ip_tunnel egress path. This will allow
+us to use FOU and GUE encap with externally controlled ipip devices.
 
-Fixes: a89052572ebb ("selftests/bpf: Xsk selftests framework")
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
+Patch 2 introduces two new BPF kfuncs: bpf_skb_{set,get}_fou_encap.
+These helpers can be used to set and get UDP encap parameters from the
+BPF tc-hook doing the packet redirect.
+
+Patch 3 adds BPF tunnel selftests using the two kfuncs.
+
 ---
- tools/testing/selftests/bpf/test_xsk.sh | 1 +
- 1 file changed, 1 insertion(+)
+v2:
+ - Fixes for checkpatch.pl
+ - Fixes for kernel test robot
 
-diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
-index b077cf58f825..377fb157a57c 100755
---- a/tools/testing/selftests/bpf/test_xsk.sh
-+++ b/tools/testing/selftests/bpf/test_xsk.sh
-@@ -116,6 +116,7 @@ setup_vethPairs() {
- 	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
- 	if [ -f /proc/net/if_inet6 ]; then
- 		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
-+		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
- 	fi
- 	if [[ $verbose -eq 1 ]]; then
- 	        echo "setting up ${VETH1}"
+Christian Ehrig (3):
+  ipip,ip_tunnel,sit: Add FOU support for externally controlled ipip
+    devices
+  bpf,fou: Add bpf_skb_{set,get}_fou_encap kfuncs
+  selftests/bpf: Test FOU kfuncs for externally controlled ipip devices
+
+ include/net/fou.h                             |   2 +
+ include/net/ip_tunnels.h                      |  28 +++--
+ net/ipv4/Makefile                             |   2 +-
+ net/ipv4/fou_bpf.c                            | 119 ++++++++++++++++++
+ net/ipv4/fou_core.c                           |   5 +
+ net/ipv4/ip_tunnel.c                          |  22 +++-
+ net/ipv4/ipip.c                               |   1 +
+ net/ipv6/sit.c                                |   2 +-
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 117 +++++++++++++++++
+ tools/testing/selftests/bpf/test_tunnel.sh    |  81 ++++++++++++
+ 10 files changed, 362 insertions(+), 17 deletions(-)
+ create mode 100644 net/ipv4/fou_bpf.c
+
 -- 
 2.39.2
 
