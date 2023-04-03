@@ -2,179 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174FE6D4EA1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Apr 2023 19:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEAF6D5160
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Apr 2023 21:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjDCRFo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Apr 2023 13:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
+        id S230044AbjDCTbV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Apr 2023 15:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbjDCRFm (ORCPT
+        with ESMTP id S230200AbjDCTbU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:05:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7CD1FF0
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 10:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680541501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fB9l5DmMkkkgnxs6JL3bro+0KNlScQ1w3i/qgZyBoMI=;
-        b=IK0deAic2MBaL61JVANxNnjgcAISHfe9gG9u+bHlt/S44hq1ecUiBCdJTci6loXqFbjK+8
-        lThxV2+ajxFIkVaCeoA02gY4Azspip3fJf4uU5Fqsnz7il4XOSVqudyhqli0yFepU/rW9w
-        UXXqTVZCW0O11lfTZ2QMO9udE5OJ6DA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-433-_PLesTW-OKmFn9C3EvnNZQ-1; Mon, 03 Apr 2023 13:04:59 -0400
-X-MC-Unique: _PLesTW-OKmFn9C3EvnNZQ-1
-Received: by mail-wm1-f69.google.com with SMTP id o37-20020a05600c512500b003edd119ec9eso14872696wms.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 10:04:59 -0700 (PDT)
+        Mon, 3 Apr 2023 15:31:20 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4775E7E
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 12:31:19 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id n125so36108589ybg.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 12:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680550279;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G4Sb4aNB4Tm57pBv/LH7p9W/GH8iszsqK1rV9TrOUZc=;
+        b=nYYDFFKAXmmdC1bVg5DC83TMEBHx4jZsXCuTbeSRd8ZjWy7iLQuvcjEfL7ofTaEL8/
+         YjElsr+7BynO6vwxnqa6LDCIkwnoID+0edRZfbXJ6xQ9PikFF/p9v9zH4SMjPHdSZhHR
+         PteRSNhbrK1xsTF/haX4qChzd9AKqn283LYh2DbsCVlOSt4ToBEgeRUmxAeuiepQd0ON
+         AUvIS8eAhyWe8MfEi9yDqJQgx/5HZPhgk7PRr/wBgGHTRAxgVcm+aRcIKIEv2uRmFXHx
+         dZTrQrRkPbB/gusO/u2KCC3MIytz+zDdRjvmVaq4WjXlQurWo+RcHLvuOVDEvPGTZjq+
+         UYrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680541498;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fB9l5DmMkkkgnxs6JL3bro+0KNlScQ1w3i/qgZyBoMI=;
-        b=7KhyuwYPH+Cn9LGHTzfHEVmtKQXrqn7AIN6p/lcOhLXWriK5O1geyywXwm7LjQMa1C
-         iRoF4MAg/HzSrcRYxRa3a0oAjFhjp8/xILwNLALFftjQAb8A3/CcqymSKDmZ8Mdmlm3f
-         NYN0R87F4XGOq1ZyApD1BsdbNBuAp01nIsM6FLho4IdCj4OKS3nvfHyBF8dC1OCF9PPt
-         kYYfmSXZmm3kARRPcFWbXfUQnCwJrxMfHMjeHBnF+CU7hP7McCE3hbjZlrnua6XI1vty
-         duOYsK59EQFbPE01FvaXfPX8RW+14F6zaL/GPyy5wFekZQYjvK9RLZ8NHjIoX7cHEiSj
-         aaPw==
-X-Gm-Message-State: AAQBX9fvByqhHYlM6f8C4Zmr0SiCq+zqDyZVJ1o6WUJeuHNnjqMTwXKi
-        ifzS+f5LxXebo7Rr7w4HuHCJA71Z9pCQdYE2Dw/iGcLvgvRqsEI6VZl0OXH27bCGVz06kYTnrTU
-        c+dykhERo0vQX600UYhey1JFXtbDi
-X-Received: by 2002:a05:6000:1807:b0:2e5:1da2:2a06 with SMTP id m7-20020a056000180700b002e51da22a06mr9798604wrh.5.1680541498730;
-        Mon, 03 Apr 2023 10:04:58 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YZsdZhtaUQElV+DlNmNek3k6auOGEEWMuMoCKBGhq8HidqpSrroTqCEY45g9u3ktoFhKZe+g==
-X-Received: by 2002:a05:6000:1807:b0:2e5:1da2:2a06 with SMTP id m7-20020a056000180700b002e51da22a06mr9798585wrh.5.1680541498435;
-        Mon, 03 Apr 2023 10:04:58 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
-        by smtp.gmail.com with ESMTPSA id k12-20020adfe8cc000000b002c7b229b1basm10137726wrn.15.2023.04.03.10.04.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 10:04:57 -0700 (PDT)
-Message-ID: <39deb9d5-9f21-9d3d-0847-54e90491b0b1@redhat.com>
-Date:   Mon, 3 Apr 2023 19:04:56 +0200
+        d=1e100.net; s=20210112; t=1680550279;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G4Sb4aNB4Tm57pBv/LH7p9W/GH8iszsqK1rV9TrOUZc=;
+        b=hnnC9rBNf6/wzymTC2nwEpmhnI8+8oUJin9bZaflVLC33epjRrUzqQhD3zVxBaYGdt
+         qCrykAxPjVGt7EzDRS4R9wkDHIlr7zmZw9HGQTXV1Yu3XvY03QU7quB7BYcycIfhsWw0
+         TW5QeTCZHD84wxWRy7W+MAF/PzIQ5kivYDJrkOEn5JyWqzmPPxxH+ifMOEwWcJPwNfY4
+         MsUh0x69/xU8qcOObWUvEHP17WSYUx10cX5ATgUuE2LCcYfD3HunVquf69smUdhIL9lf
+         8Uvdtp48pN+toZNvt0Fvd80I8q9Tqv3zHTufKOHoCTvpfbDQVzO8lpYuXB1xLEtHQgI7
+         xdzw==
+X-Gm-Message-State: AAQBX9ebHQ+BYfDlMHhvduZNTutmOCua2gdSJae9yB7hcT8MGqtSM712
+        sZyocPK9XH+AZriURBhr+6L311PlRwrL4of0ubx8XA==
+X-Google-Smtp-Source: AKy350aq+ygmaZETXBk4Ok7WJ46vMroire3QtHu2bsnyoLx8f3qCdFh0YLqHpPyuKsAO/SZQv2WCV0d7HGlCm9DrY6Q=
+X-Received: by 2002:a25:3141:0:b0:b73:caa7:f06f with SMTP id
+ x62-20020a253141000000b00b73caa7f06fmr224227ybx.5.1680550279039; Mon, 03 Apr
+ 2023 12:31:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 0/3] mm: process/cgroup ksm support
-Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel-team@fb.com,
-        linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>
-References: <20230310182851.2579138-1-shr@devkernel.io>
- <20230328160914.5b6b66e4a5ad39e41fd63710@linux-foundation.org>
- <37dcd52a-2e32-c01d-b805-45d862721fbc@redhat.com>
- <ZCWcJelF5bEdF4N3@cmpxchg.org>
- <ff599dc1-729d-52dc-d605-8a8ac890ad15@redhat.com>
- <qvqwv8ii89x6.fsf@dev0134.prn3.facebook.com>
- <f969cb1f-651f-592f-7540-89f73e175c7d@redhat.com>
- <qvqwlej8vrst.fsf@dev0134.prn3.facebook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <qvqwlej8vrst.fsf@dev0134.prn3.facebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230330220506.1399796-1-rmoar@google.com> <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
+In-Reply-To: <CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr+f+mOVKT1bGvA@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Mon, 3 Apr 2023 15:31:04 -0400
+Message-ID: <CA+GJov5YigvgTf7ThaN9g8nOkoFKzJTiOLYO86cD5yVa2BEieg@mail.gmail.com>
+Subject: Re: [PATCH v1] kunit: add tests for using current KUnit test field
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03.04.23 18:34, Stefan Roesch wrote:
->>
->> In contrast to e.g.:
->>
->> 1) THP resulted in many zeropages we end up deduplicating again. The THP
->>     placement was unfortunate.
->>
->> 2) Unoptimized memory allocators that leave many identical pages mapped
->>     after freeing up memory (e.g., zeroed pages, pages all filled with
->>     poison values) instead of e.g., using MADV_DONTNEED to free up that
->>     memory.
->>
->>
-> 
-> I repeated an experiment with and without KSM. In terms of THP there is
-> no huge difference between the two. On a 64GB main memory machine I see
-> between 100 - 400MB in AnonHugePages.
-> 
->>> /sys/kernel/mm/ksm/pages_shared is over 10000 when we run this on an
->>> Instagram workload. The workload consists of 36 processes plus a few
->>> sidecar processes.
->>
->> Thanks! To which value is /sys/kernel/mm/ksm/max_page_sharing set in that
->> environment?
->>
-> 
-> It's set to the standard value of 256.
-> 
-> In the meantime I have run experiments with different settings for
-> pages_to_scan. With the default value of 100, we only get a relatively
-> small benefit of KSM. If I increase the value to for instance to 2000 or
-> 3000 the savings are substantial. (The workload is memory bound, not
-> CPU bound).
+On Thu, Mar 30, 2023 at 6:21=E2=80=AFPM 'Daniel Latypov' via KUnit Developm=
+ent
+<kunit-dev@googlegroups.com> wrote:
+>
+> I've got a few minor comments below, but this otherwise looks good.
+> I like the idea of testing knuit_fail_current_test().
+>
+>
+> On Thu, Mar 30, 2023 at 3:05=E2=80=AFPM Rae Moar <rmoar@google.com> wrote=
+:
+> >
+> > +static void kunit_current_kunit_test_field(struct kunit *test)
+> > +{
+> > +       struct kunit *current_test;
+> > +
+> > +       /* Check to ensure the result of current->kunit_test
+> > +        * is equivalent to current test.
+> > +        */
+> > +       current_test =3D current->kunit_test;
+> > +       KUNIT_EXPECT_PTR_EQ(test, test, current_test);
+>
+> Perhaps we can combine this and the next test case down to
+> static void kunit_current_test(struct kunit *test) {
+>   /* There are two different ways of getting the current test */
+>   KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
+>   KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
+> }
+> ?
 
-Interesting.
+Hi Daniel!
 
-> 
-> Here are some stats for setting pages_to_scan to 3000:
-> 
-> full_scans: 560
-> general_profit: 20620539008
-> max_page_sharing: 256
-> merge_across_nodes: 1
-> pages_shared: 125446
-> pages_sharing: 5259506
-> pages_to_scan: 3000
-> pages_unshared: 1897537
-> pages_volatile: 12389223
-> run: 1
-> sleep_millisecs: 20
-> stable_node_chains: 176
-> stable_node_chains_prune_millisecs: 2000
-> stable_node_dups: 2604
-> use_zero_pages: 0
-> zero_pages_sharing: 0
-> 
-> 
->> What would be interesting is pages_shared after max_page_sharing was set to a
->> very high number such that pages_shared does not include duplicates. Then
->> pages_shared actually expresses how many different pages we deduplicate. No need
->> to run without THP in that case.
->>
-> 
-> Thats on my list for the next set of experiments.
+Yes, I would be happy to combine these for v2. I might want to alter
+that proposed comment slightly. "Two different ways" seems a bit
+unclear to me. Maybe: Check results of both current->kunit_test and
+kunit_get_current_test() are equivalent to current test. What do you
+think? I might send out a v2 with a proposed comment.
 
-Splendid.
+>
+> > +}
+> > +
+> > +static void kunit_current_get_current_test(struct kunit *test)
+> > +{
+> > +       struct kunit *current_test1, *current_test2;
+> > +
+> > +       /* Check to ensure the result of kunit_get_current_test()
+> > +        * is equivalent to current test.
+> > +        */
+> > +       current_test1 =3D kunit_get_current_test();
+> > +       KUNIT_EXPECT_PTR_EQ(test, test, current_test1);
+> > +
+> > +       /* Check to ensure the result of kunit_get_current_test()
+> > +        * is equivalent to current->kunit_test.
+> > +        */
+> > +       current_test2 =3D current->kunit_test;
+> > +       KUNIT_EXPECT_PTR_EQ(test, current_test1, current_test2);
+>
+> > +}
+> > +
+> > +static void kunit_current_fail_current_test(struct kunit *test)
+> > +{
+> > +       struct kunit fake;
+> > +
+> > +       /* Initialize fake test and set as current->kunit_test. */
+>
+> Nit: I think the code is self-explanatory enough that we can drop this co=
+mment.
+>
 
->> Similarly, enabling "use_zero_pages" could highlight if your workload ends up
->> deduplciating a lot of zeropages. But maxing out max_page_sharing would be
->> sufficient to understand what's happening.
->>
->>
-> 
-> I already run experiments with use_zero_pages, but they didn't make a
-> difference. I'll repeat the experiment with a higher pages_to_scan
-> value.
+I agree the "initialize fake test" comment is self-explanatory. But if
+we keep the comment regarding resetting the current test, I think we
+should mark when we set the test as a fake with a comment as well.
 
-Okay, so it's most certainly not the zeropage. Thanks for that 
-information and running the experiments!
+> > +       kunit_init_test(&fake, "fake test", NULL);
+> > +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
+> > +       current->kunit_test =3D &fake;
+> > +
+> > +       /* Fail current test and expect status of fake test to be faile=
+d. */
+>
+> Nit: I think this comment could also be dropped or maybe shortened to
+>   kunit_fail_current_test("This should make `fake` fail");
+>
 
--- 
-Thanks,
+This first option seems good to me.
 
-David / dhildenb
+> or
+>   /* Now kunit_fail_current_test() should modify `fake`, not `test` */
+>   kunit_fail_current_test("This should make `fake` fail");
+>
+> > +       kunit_fail_current_test("This test is supposed to fail.");
+> > +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAI=
+LURE);
+> > +
+>
+> Hmm, should we try calling
+>   kunit_cleanup(&fake);
+> ?
+>
+> Right now this does resource cleanups, but we might have other state
+> to cleanup for our `fake` test object in the future.
+>
 
+I would be fine to add this here if it is wanted.
+
+Thanks Daniel for the comments!
+
+Rae
+
+> Daniel
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kunit-dev/CAGS_qxqNwVcymkG6-8Kv72oZc9aDqjFjBBmjr%2Bf%2BmOVKT1bGvA%40mail.=
+gmail.com.
