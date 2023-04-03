@@ -2,80 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1265A6D4E9D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Apr 2023 19:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174FE6D4EA1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Apr 2023 19:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbjDCRDh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Apr 2023 13:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S232011AbjDCRFo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Apr 2023 13:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbjDCRDg (ORCPT
+        with ESMTP id S231878AbjDCRFm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 13:03:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D502B2D5E
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 10:02:42 -0700 (PDT)
+        Mon, 3 Apr 2023 13:05:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7CD1FF0
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 10:05:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680541362;
+        s=mimecast20190719; t=1680541501;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kM3dwgQ9HVMfQOAjj/i3eYxZUwtH+i5WmR63AuQM8dg=;
-        b=BYCbDK+EqT7fK/tAJXEg3bbvoTObzS0WJ7/rylsDWad7Na1IWFSS5Xnq6nWsI/BNsz/+vu
-        fpCq5eVgiL8sRQa7aRkb45NfxVa2vVu2A0O1xO8yRpRzz6KBn+ZqNUdkD17LcijWNJATVv
-        UTOCXwEJCTtwUAVxUir9ODpLBEhX55g=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=fB9l5DmMkkkgnxs6JL3bro+0KNlScQ1w3i/qgZyBoMI=;
+        b=IK0deAic2MBaL61JVANxNnjgcAISHfe9gG9u+bHlt/S44hq1ecUiBCdJTci6loXqFbjK+8
+        lThxV2+ajxFIkVaCeoA02gY4Azspip3fJf4uU5Fqsnz7il4XOSVqudyhqli0yFepU/rW9w
+        UXXqTVZCW0O11lfTZ2QMO9udE5OJ6DA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-_ca0_8G_MVGspPB95KB3WQ-1; Mon, 03 Apr 2023 13:02:39 -0400
-X-MC-Unique: _ca0_8G_MVGspPB95KB3WQ-1
-Received: by mail-wm1-f70.google.com with SMTP id q21-20020a05600c46d500b003ee570749f7so15044952wmo.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 10:02:39 -0700 (PDT)
+ us-mta-433-_PLesTW-OKmFn9C3EvnNZQ-1; Mon, 03 Apr 2023 13:04:59 -0400
+X-MC-Unique: _PLesTW-OKmFn9C3EvnNZQ-1
+Received: by mail-wm1-f69.google.com with SMTP id o37-20020a05600c512500b003edd119ec9eso14872696wms.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 10:04:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680541358;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
+        d=1e100.net; s=20210112; t=1680541498;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kM3dwgQ9HVMfQOAjj/i3eYxZUwtH+i5WmR63AuQM8dg=;
-        b=utx29V2bgpvM9g5OCLGOgnZvyXqsyK5SxMc0+8aB2UG1UvVb9k9S+ZOuXRgq3FFh5U
-         BM1lP1Lq/wz5K2rGXywJH1a9qjOLAPBf74b6R2qHiSF7my17/zoey2qBc+bLWuoFX1yZ
-         srpHYaK8FLCKCkdxxFGiD+3qIK+U8WQ9Vy12Mk8ckH2Zb0RF+3w8cMWhXiPXNXQ186Bq
-         bOKQpmj/Yxgfy+gRABYsO9//6KtfE497aZREaNpwbsvtF3kt86AYKqcW2UbjW4a0PWpF
-         NOIO8h23krfp1VMMUm3lQwbFhRhFOJ7PQRjM4qo0S6xvT3EsIh/GuuIV554VV5Nt6A0V
-         Q2AQ==
-X-Gm-Message-State: AAQBX9e+X4yEWCMLcm8wPmNGbOMwCW4jM+ro8vDXDBItHZAzGoRiZiHn
-        N+MXaFM1vKcbSq46QPZCV+BFNwdxqUClvmalOZHllm0W92Nn8j1GjOz5My5WeGKZUTyR0Ol0rPX
-        fWXULYrYYkIBCTon/55Lk99w+M8Wg
-X-Received: by 2002:a5d:440e:0:b0:2e5:6441:2d16 with SMTP id z14-20020a5d440e000000b002e564412d16mr9153088wrq.42.1680541358588;
-        Mon, 03 Apr 2023 10:02:38 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bNyO+IrhEkypzMTwynN0OpO/ura/HmTqPcjZWbU5s0lV7LLf87+mbZZXdKp58mVrklwo0Ylg==
-X-Received: by 2002:a5d:440e:0:b0:2e5:6441:2d16 with SMTP id z14-20020a5d440e000000b002e564412d16mr9153076wrq.42.1680541358251;
-        Mon, 03 Apr 2023 10:02:38 -0700 (PDT)
+        bh=fB9l5DmMkkkgnxs6JL3bro+0KNlScQ1w3i/qgZyBoMI=;
+        b=7KhyuwYPH+Cn9LGHTzfHEVmtKQXrqn7AIN6p/lcOhLXWriK5O1geyywXwm7LjQMa1C
+         iRoF4MAg/HzSrcRYxRa3a0oAjFhjp8/xILwNLALFftjQAb8A3/CcqymSKDmZ8Mdmlm3f
+         NYN0R87F4XGOq1ZyApD1BsdbNBuAp01nIsM6FLho4IdCj4OKS3nvfHyBF8dC1OCF9PPt
+         kYYfmSXZmm3kARRPcFWbXfUQnCwJrxMfHMjeHBnF+CU7hP7McCE3hbjZlrnua6XI1vty
+         duOYsK59EQFbPE01FvaXfPX8RW+14F6zaL/GPyy5wFekZQYjvK9RLZ8NHjIoX7cHEiSj
+         aaPw==
+X-Gm-Message-State: AAQBX9fvByqhHYlM6f8C4Zmr0SiCq+zqDyZVJ1o6WUJeuHNnjqMTwXKi
+        ifzS+f5LxXebo7Rr7w4HuHCJA71Z9pCQdYE2Dw/iGcLvgvRqsEI6VZl0OXH27bCGVz06kYTnrTU
+        c+dykhERo0vQX600UYhey1JFXtbDi
+X-Received: by 2002:a05:6000:1807:b0:2e5:1da2:2a06 with SMTP id m7-20020a056000180700b002e51da22a06mr9798604wrh.5.1680541498730;
+        Mon, 03 Apr 2023 10:04:58 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YZsdZhtaUQElV+DlNmNek3k6auOGEEWMuMoCKBGhq8HidqpSrroTqCEY45g9u3ktoFhKZe+g==
+X-Received: by 2002:a05:6000:1807:b0:2e5:1da2:2a06 with SMTP id m7-20020a056000180700b002e51da22a06mr9798585wrh.5.1680541498435;
+        Mon, 03 Apr 2023 10:04:58 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
-        by smtp.gmail.com with ESMTPSA id g7-20020a5d5407000000b002e6423cb207sm9071350wrv.112.2023.04.03.10.02.36
+        by smtp.gmail.com with ESMTPSA id k12-20020adfe8cc000000b002c7b229b1basm10137726wrn.15.2023.04.03.10.04.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 10:02:37 -0700 (PDT)
-Message-ID: <0235770b-eb37-88e0-9350-a2d9c0cf9c32@redhat.com>
-Date:   Mon, 3 Apr 2023 19:02:36 +0200
+        Mon, 03 Apr 2023 10:04:57 -0700 (PDT)
+Message-ID: <39deb9d5-9f21-9d3d-0847-54e90491b0b1@redhat.com>
+Date:   Mon, 3 Apr 2023 19:04:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
+Subject: Re: [PATCH v4 0/3] mm: process/cgroup ksm support
 Content-Language: en-US
 To:     Stefan Roesch <shr@devkernel.io>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel-team@fb.com,
+        linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>
 References: <20230310182851.2579138-1-shr@devkernel.io>
- <20230310182851.2579138-2-shr@devkernel.io>
- <7ed4308d-b400-d2bb-b539-3fe418862ab8@redhat.com>
- <qvqwpm8ludx2.fsf@dev0134.prn3.facebook.com>
+ <20230328160914.5b6b66e4a5ad39e41fd63710@linux-foundation.org>
+ <37dcd52a-2e32-c01d-b805-45d862721fbc@redhat.com>
+ <ZCWcJelF5bEdF4N3@cmpxchg.org>
+ <ff599dc1-729d-52dc-d605-8a8ac890ad15@redhat.com>
+ <qvqwv8ii89x6.fsf@dev0134.prn3.facebook.com>
+ <f969cb1f-651f-592f-7540-89f73e175c7d@redhat.com>
+ <qvqwlej8vrst.fsf@dev0134.prn3.facebook.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-Subject: Re: [PATCH v4 1/3] mm: add new api to enable ksm per process
-In-Reply-To: <qvqwpm8ludx2.fsf@dev0134.prn3.facebook.com>
+In-Reply-To: <qvqwlej8vrst.fsf@dev0134.prn3.facebook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
@@ -88,133 +93,85 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03.04.23 17:50, Stefan Roesch wrote:
->> I guess the interpreter could enable it (like a memory allocator could enable it
->> for the whole heap). But I get that it's much easier to enable this per-process,
->> and eventually only when a lot of the same processes are running in that
->> particular environment.
+On 03.04.23 18:34, Stefan Roesch wrote:
+>>
+>> In contrast to e.g.:
+>>
+>> 1) THP resulted in many zeropages we end up deduplicating again. The THP
+>>     placement was unfortunate.
+>>
+>> 2) Unoptimized memory allocators that leave many identical pages mapped
+>>     after freeing up memory (e.g., zeroed pages, pages all filled with
+>>     poison values) instead of e.g., using MADV_DONTNEED to free up that
+>>     memory.
+>>
 >>
 > 
-> We don't want it to get enabled for all workloads of that interpreter,
-> instead we want to be able to select for which workloads we enable KSM.
+> I repeated an experiment with and without KSM. In terms of THP there is
+> no huge difference between the two. On a 64GB main memory machine I see
+> between 100 - 400MB in AnonHugePages.
 > 
-
-Right.
-
-> 
->>> 1. New options for prctl system command
->>>      This patch series adds two new options to the prctl system call.
->>>      The first one allows to enable KSM at the process level and the second
->>>      one to query the setting.
->>>      The setting will be inherited by child processes.
->>>      With the above setting, KSM can be enabled for the seed process of a
->>>      cgroup and all processes in the cgroup will inherit the setting.
->>> 2. Changes to KSM processing
->>>      When KSM is enabled at the process level, the KSM code will iterate
->>>      over all the VMA's and enable KSM for the eligible VMA's.
->>>      When forking a process that has KSM enabled, the setting will be
->>>      inherited by the new child process.
->>>      In addition when KSM is disabled for a process, KSM will be disabled
->>>      for the VMA's where KSM has been enabled.
+>>> /sys/kernel/mm/ksm/pages_shared is over 10000 when we run this on an
+>>> Instagram workload. The workload consists of 36 processes plus a few
+>>> sidecar processes.
 >>
->> Do we want to make MADV_MERGEABLE/MADV_UNMERGEABLE fail while the new prctl is
->> enabled for a process?
-> 
-> I decided to allow enabling KSM with prctl even when MADV_MERGEABLE,
-> this allows more flexibility.
-
-MADV_MERGEABLE will be a nop. But IIUC, MADV_UNMERGEABLE will end up 
-calling unmerge_ksm_pages() and clear VM_MERGEABLE. But then, the next 
-KSM scan will merge the pages in there again.
-
-Not sure if that flexibility is worth having.
-
-[...]
-
-
->>> @@ -2661,6 +2662,32 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
->>>    	case PR_SET_VMA:
->>>    		error = prctl_set_vma(arg2, arg3, arg4, arg5);
->>>    		break;
->>> +#ifdef CONFIG_KSM
->>> +	case PR_SET_MEMORY_MERGE:
->>> +		if (!capable(CAP_SYS_RESOURCE))
->>> +			return -EPERM;
->>> +
->>> +		if (arg2) {
->>> +			if (mmap_write_lock_killable(me->mm))
->>> +				return -EINTR;
->>> +
->>> +			if (!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags))
->>> +				error = __ksm_enter(me->mm, MMF_VM_MERGE_ANY);
->>
->> Hm, I think this might be problematic if we alread called __ksm_enter() via
->> madvise(). Maybe we should really consider making MMF_VM_MERGE_ANY set
->> MMF_VM_MERGABLE instead. Like:
->>
->> error = 0;
->> if(test_bit(MMF_VM_MERGEABLE, &me->mm->flags))
->> 	error = __ksm_enter(me->mm);
->> if (!error)
->> 	set_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+>> Thanks! To which value is /sys/kernel/mm/ksm/max_page_sharing set in that
+>> environment?
 >>
 > 
-> If we make that change, we would no longer be able to distinguish
-> if MMF_VM_MERGEABLE or MMF_VM_MERGE_ANY have been set.
+> It's set to the standard value of 256.
+> 
+> In the meantime I have run experiments with different settings for
+> pages_to_scan. With the default value of 100, we only get a relatively
+> small benefit of KSM. If I increase the value to for instance to 2000 or
+> 3000 the savings are substantial. (The workload is memory bound, not
+> CPU bound).
 
-Why would you need that exactly? To cleanup? See below.
+Interesting.
 
 > 
->>> +			mmap_write_unlock(me->mm);
->>> +		} else {
->>> +			__ksm_exit(me->mm, MMF_VM_MERGE_ANY);
->>
->> Hm, I'd prefer if we really only call __ksm_exit() when we really exit the
->> process. Is there a strong requirement to optimize disabling of KSM or would it
->> be sufficient to clear the MMF_VM_MERGE_ANY flag here?
->>
-> Then we still have the mm_slot allocated until the process gets
-> terminated.
-
-Which is the same as using MADV_UNMERGEABLE, no?
-
+> Here are some stats for setting pages_to_scan to 3000:
 > 
->> Also, I wonder what happens if we have another VMA in that process that has it
->> enabled ..
+> full_scans: 560
+> general_profit: 20620539008
+> max_page_sharing: 256
+> merge_across_nodes: 1
+> pages_shared: 125446
+> pages_sharing: 5259506
+> pages_to_scan: 3000
+> pages_unshared: 1897537
+> pages_volatile: 12389223
+> run: 1
+> sleep_millisecs: 20
+> stable_node_chains: 176
+> stable_node_chains_prune_millisecs: 2000
+> stable_node_dups: 2604
+> use_zero_pages: 0
+> zero_pages_sharing: 0
+> 
+> 
+>> What would be interesting is pages_shared after max_page_sharing was set to a
+>> very high number such that pages_shared does not include duplicates. Then
+>> pages_shared actually expresses how many different pages we deduplicate. No need
+>> to run without THP in that case.
 >>
->> Last but not least, wouldn't we want to do the same thing as MADV_UNMERGEABLE
->> and actually unmerge the KSM pages?
+> 
+> Thats on my list for the next set of experiments.
+
+Splendid.
+
+>> Similarly, enabling "use_zero_pages" could highlight if your workload ends up
+>> deduplciating a lot of zeropages. But maxing out max_page_sharing would be
+>> sufficient to understand what's happening.
 >>
-> Do you want to call unmerge for all VMA's?
+>>
+> 
+> I already run experiments with use_zero_pages, but they didn't make a
+> difference. I'll repeat the experiment with a higher pages_to_scan
+> value.
 
-The question is what clearing MMF_VM_MERGE_ANY is supposed to do. If 
-it's supposed to disable KSM (like MADV_UNMERGEABLE) would, then I guess 
-you should go over all VMA's and unmerge.
-
-Also, it depend on how you want to handle VM_MERGABLE with 
-MMF_VM_MERGE_ANY. If MMF_VM_MERGE_ANY would not set VM_MERGABLE, then 
-you'd only unmerge where VM_MERGABLE is not set. Otherwise, you'd 
-unshare everywhere where VM_MERGABLE is set (and clear VM_MERGABLE) 
-while at it.
-
-Unsharing when clearing MMF_VM_MERGE_ANY might be the right thing to do 
-IMHO.
-
-
-I guess the main questions regarding implementation are:
-
-1) Do we want setting MMF_VM_MERGE_ANY to set VM_MERGABLE on all
-    candidate VMA's (go over all VMA's and set VM_MERGABLE). Then,
-    clearing MMF_VM_MERGE_ANY would simply unmerge and clear VM_MERGABLE
-    on all VMA's.
-
-2) Do we want to make MMF_VM_MERGE_ANY imply MMF_VM_MERGABLE. You could
-    still disable KSM (__ksm_exit()) during clearing MMF_VM_MERGE_ANY
-    after going over all VMA's (where you might want to unshare already
-    either way).
-
-I guess the code will end up simpler if you make MMF_VM_MERGE_ANY simply 
-piggy-back on MMF_VM_MERGABLE + VM_MERGABLE. I might be wrong, of course.
+Okay, so it's most certainly not the zeropage. Thanks for that 
+information and running the experiments!
 
 -- 
 Thanks,
