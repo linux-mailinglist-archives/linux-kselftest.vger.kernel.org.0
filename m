@@ -2,250 +2,211 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052C06D5597
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Apr 2023 02:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F516D562B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Apr 2023 03:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232093AbjDDAgg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Apr 2023 20:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
+        id S232543AbjDDBhq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Apr 2023 21:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbjDDAgc (ORCPT
+        with ESMTP id S229687AbjDDBhp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 20:36:32 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E463B26AD
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 17:36:30 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id h15so27040111vsh.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 17:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680568590;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=06sPxBa5nNnVKIZXisNLfmCVXeQw29q2rruq5Y6U/bI=;
-        b=oVvDlRutiLuGJCFacZ47bimWSFzsf0cjzK9sqC2V2lrr/6DuZ3jnXBcjsaKwdUsQ/X
-         DFoasKiWq0ufVVCRfP5vLWX7OA4y9F2wC5p8bs2aCwCWQ1ilB0PCwcW16h8F1tJl0xn7
-         3VlsE2v7CWmwQ7w/Gj73jLwyPxqlb7MY1cOWGlJj+zYpwzTXMKi7/twqjHWla7Istjvs
-         kOvbmkyUTJNM3Y1yfBciYUpnj4Wf8EMurJQqNHnAWIxzu/UAhREfhrXmdUc31T/K2CYy
-         TITSqIP6Nl72NfEuQto15HpytvUSaz8wsXorbosfBQjQx8Psv5fXPJigdLtCxgI1x/k8
-         c+pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680568590;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=06sPxBa5nNnVKIZXisNLfmCVXeQw29q2rruq5Y6U/bI=;
-        b=TFWp7WFY1H3EFHX7XUiT5CRn0HfQpJUurcMH09I0dtsNEwTp3G2jvbzI5SmItfN8tC
-         2dlq/R0JUUWOzm14RRW9pgPSrQewdRl0H9MUVtDKMySeLRMfNXJPyoVGq3Q2ikR5cNFy
-         yrsbEib9Em/BKtvrXGD8XKU8hf6QybptqMcpPXPdJFuInNb+kiPpnNd6A34Eb4W8TOeU
-         7m7MVJoNrfDuhQJeoLv7ChjpyBmUvfVF2OMgCPI8v6oeHuImQURE/XSmq6UBwa9tqaJS
-         GfN7yDJkkWtypmR2YQcxWR0fkbpPzCztRFSBIOQaO3NKE5IdMaDor9feaoiinm2H4lXR
-         6/ug==
-X-Gm-Message-State: AAQBX9cPOocG5+mdTyP4zhvkGgsbZgNfjGeYIO+H71NIDcFUvNQdr3WG
-        u2D6OqnJ/qBXlWOh8Xnr5s4kTUcILGcXosqyukl+hg==
-X-Google-Smtp-Source: AKy350as7KBp25BikdlFmQDfe7ySOC1FAeNUgcQle0FSKFkpQzxD1F7NFpNRluz9nxqx4mbiytS6m/2gxFaKSnmMkYQ=
-X-Received: by 2002:a67:d901:0:b0:422:194a:8566 with SMTP id
- t1-20020a67d901000000b00422194a8566mr992320vsj.5.1680568589910; Mon, 03 Apr
- 2023 17:36:29 -0700 (PDT)
+        Mon, 3 Apr 2023 21:37:45 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44FDB8;
+        Mon,  3 Apr 2023 18:37:43 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4E9E65C01BE;
+        Mon,  3 Apr 2023 21:37:41 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 03 Apr 2023 21:37:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680572261; x=1680658661; bh=GQ
+        rl89O1RAwOi5BoeGN0zQm5w3SNwrUnoP1QapVDans=; b=Z/QqfEdMmmJs0ljPwO
+        u7xPN5DG1HwhElSf3kR9ewWFdEVSNVOMjljR3qZMjlL0zMdTo2meEEeFapiDRS/C
+        Q859oCSFUv77gWgj0BiE2TdfR2ABGh4JL2oSiwpu7Xb8TZdf3AN7ze1VulOIz0cv
+        gEDK9ymmuQXAE094cV6BBnIbANDso9P+LWxMm1YFMXsdSFCzi3RMgACW696EMQtV
+        zpcvJQo2yOw7gI/m4c6+7otm8e0DhZXLKioODJbxpVCiO63ONe1qnQo6DD5Ihs6j
+        bOPrLvrd2kFf6RdEJqQ03X9PJ+OAyHE7BRhtcXZ7KSr+/4L84LDOE6bSMuDOUEOL
+        oUOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680572261; x=1680658661; bh=GQrl89O1RAwOi
+        5BoeGN0zQm5w3SNwrUnoP1QapVDans=; b=DYNxPFQEd2dHK5hFs2GRIQh3VTwnQ
+        2uSxRajzjH+iqoMetCdRxBELRp0lnlKNSRJH7eOrNYHFwtu90aOuSPkDHqEUd6BR
+        CtbyTWGxIX+oEQ1mAQMfXxr50MZ9XK6/EO56pVtMXo2VDqSgh8IZlFpQ+Ht6gL35
+        1yFRWmBdHKndipTVg3nnmIdGF/j8btKudP+pBK6dNsnGHQ2E16lpX8QDkiYNpDh7
+        PrUh92ZaCAsGdWs7EwtK8DPd9xznTi0n+u68CRx2h4bThEmKKFgCeSiCOvu9bHU7
+        4Mle4VpPn3NTe6eC5W5eXBTGJ5rZA8UbNigNT2uXkWdmdW8YOSNK3bbxw==
+X-ME-Sender: <xms:ZH8rZGb91I3MBWSDC8j6mfcsTd75kl5YOa1tDEMkmmJ0HXUL6SfALQ>
+    <xme:ZH8rZJakVxWa7sH0-oHOkOCMndiu7DOOO_Au9V3wUtXxGCMx_68zCr4oHYsiu87Ll
+    9XoT241EtnrArSnJao>
+X-ME-Received: <xmr:ZH8rZA8w2JmA-8WmIGUrCWgxeFyhs9qL67D3QSAAf8zKkzUe-VjNinEhaGO7KlGaVqSBnCZaZYiMjOcKW6V6Rn5UYcOdM1JKq1zy>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeikedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheprfgvthgv
+    rhcujfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvg
+    htqeenucggtffrrghtthgvrhhnpeefgfejvefgudfhfeevudekueegtdeutdejhffhhfdv
+    keejhfehheefgfehteejffenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehpvght
+    vghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnhgvth
+X-ME-Proxy: <xmx:ZH8rZIpc8VAac85-Pk0xYRWvNvEkoizA-2hSyLexTyCn4Me8gWbL6Q>
+    <xmx:ZH8rZBonZIelrhHpvpK528rwxTCEBDHjfNkFPnX5_Syk8GhZwjPxvg>
+    <xmx:ZH8rZGSepLkFeRphgw1fKcc-IyzKQ_J3dP6cTP6I94Kc42hdQCC6tQ>
+    <xmx:ZX8rZC65VOuQkhuJxh1lV6bqplT4Vn9GwTAP4PUMe2RZYkMyMk--ng>
+Feedback-ID: i7ce144cd:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 3 Apr 2023 21:37:35 -0400 (EDT)
+Date:   Tue, 4 Apr 2023 11:37:31 +1000
+From:   Peter Hutterer <peter.hutterer@who-t.net>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Candle Sun <candle.sun@unisoc.com>,
+        Jose Torreguitar <jtguitar@google.com>,
+        Roderick Colenbrander <roderick.colenbrander@sony.com>,
+        Silvan Jegen <s.jegen@gmail.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Jason Gerecke <killertofu@gmail.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>
+Subject: Re: [PATCH 00/11] selftests: hid: import the tests from hid-tools
+Message-ID: <20230404013731.GA38303@quokka>
+References: <20230217-import-hid-tools-tests-v1-0-d1c48590d0ee@redhat.com>
+ <20230403162024.sespaq5iwbjan4xl@mail.corp.redhat.com>
 MIME-Version: 1.0
-References: <20230403201930.2019419-1-rmoar@google.com>
-In-Reply-To: <20230403201930.2019419-1-rmoar@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 4 Apr 2023 08:36:17 +0800
-Message-ID: <CABVgOSkjmsyi3nMtMkEf3M076mLgmSUrLXUVtvWLcESE7NnVRw@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: add tests for using current KUnit test field
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, dlatypov@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d7ff3e05f877dd66"
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230403162024.sespaq5iwbjan4xl@mail.corp.redhat.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000d7ff3e05f877dd66
-Content-Type: text/plain; charset="UTF-8"
+On Mon, Apr 03, 2023 at 06:20:24PM +0200, Benjamin Tissoires wrote:
+> On Feb 17 2023, Benjamin Tissoires wrote:
+> > I have been running hid-tools for a while, but it was in its own
+> > separate repository for multiple reasons. And the past few weeks
+> > I finally managed to make the kernel tests in that repo in a
+> > state where we can merge them in the kernel tree directly:
+> > 
+> > - the tests run in ~2 to 3 minutes
+> > - the tests are way more reliable than previously
+> > - the tests are mostly self-contained now (to the exception
+> >   of the Sony ones)
+> > 
+> > To be able to run the tests we need to use the latest release
+> > of hid-tools, as this project still keeps the HID parsing logic
+> > and is capable of generating the HID events.
+> > 
+> > The series also ensures we can run the tests with vmtest.sh,
+> > allowing for a quick development and test in the tree itself.
+> > 
+> > This should allow us to require tests to be added to a series
+> > when we see fit and keep them alive properly instead of having
+> > to deal with 2 repositories.
+> > 
+> > In Cc are all of the people who participated in the elaboration
+> > of those tests, so please send back a signed-off-by for each
+> > commit you are part of.
+> > 
+> > This series applies on top of the for-6.3/hid-bpf branch, which
+> > is the one that added the tools/testing/selftests/hid directory.
+> > Given that this is unlikely this series will make the cut for
+> > 6.3, we might just consider this series to be based on top of
+> > the future 6.3-rc1.
+> > 
+> > Cheers,
+> > Benjamin
+> > 
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > ---
+> 
+> Jiri, do you mind if I push that code in the hid tree with the following
+> changes:
+> - Peter privately gave me his signed-off-by
 
-On Tue, 4 Apr 2023 at 04:19, Rae Moar <rmoar@google.com> wrote:
->
-> Create test suite called "kunit_current" to add test coverage for the use
-> of current->kunit_test, which returns the current KUnit test.
->
-> Add two test cases:
-> - kunit_current_test to test current->kunit_test and the method
->   kunit_get_current_test(), which utilizes current->kunit_test.
->
-> - kunit_current_fail_test to test the method
->   kunit_fail_current_test(), which utilizes current->kunit_test.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> ---
-
-Looks good to me, thanks!
-
-Reviewed-by: David Gow <davidgow@google.com>
+Apologies, this fell off my list after the initial ack in a meeting with
+Benjamin. This time publicly:
+  Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+for the relevant commits.
 
 Cheers,
--- David
+  Peter
 
->
-> Changes from v1->v2:
-> - Combine two test cases to test both ways of getting current test in
->   kunit_current_test.
-> - Changes to comments.
-> - Add kunit_cleanup to kunit_current_fail_test.
->
->  lib/kunit/kunit-test.c | 42 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 41 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index b63595d3e241..42e44caa1bdd 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -6,6 +6,7 @@
->   * Author: Brendan Higgins <brendanhiggins@google.com>
->   */
->  #include <kunit/test.h>
-> +#include <kunit/test-bug.h>
->
->  #include "try-catch-impl.h"
->
-> @@ -532,7 +533,46 @@ static struct kunit_suite kunit_status_test_suite = {
->         .test_cases = kunit_status_test_cases,
->  };
->
-> +static void kunit_current_test(struct kunit *test)
-> +{
-> +       /* Check results of both current->kunit_test and
-> +        * kunit_get_current_test() are equivalent to current test.
-> +        */
-> +       KUNIT_EXPECT_PTR_EQ(test, test, current->kunit_test);
-> +       KUNIT_EXPECT_PTR_EQ(test, test, kunit_get_current_test());
-> +}
-> +
-> +static void kunit_current_fail_test(struct kunit *test)
-> +{
-> +       struct kunit fake;
-> +
-> +       kunit_init_test(&fake, "fake test", NULL);
-> +       KUNIT_EXPECT_EQ(test, fake.status, KUNIT_SUCCESS);
-> +
-> +       /* Set current->kunit_test to fake test. */
-> +       current->kunit_test = &fake;
-> +
-> +       kunit_fail_current_test("This should make `fake` test fail.");
-> +       KUNIT_EXPECT_EQ(test, fake.status, (enum kunit_status)KUNIT_FAILURE);
-> +       kunit_cleanup(&fake);
-> +
-> +       /* Reset current->kunit_test to current test. */
-> +       current->kunit_test = test;
-> +}
-> +
-> +static struct kunit_case kunit_current_test_cases[] = {
-> +       KUNIT_CASE(kunit_current_test),
-> +       KUNIT_CASE(kunit_current_fail_test),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite kunit_current_test_suite = {
-> +       .name = "kunit_current",
-> +       .test_cases = kunit_current_test_cases,
-> +};
-> +
->  kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
-> -                 &kunit_log_test_suite, &kunit_status_test_suite);
-> +                 &kunit_log_test_suite, &kunit_status_test_suite,
-> +                 &kunit_current_test_suite);
->
->  MODULE_LICENSE("GPL v2");
->
-> base-commit: 7232282dd47cce6a780c9414bd9baccf232c7686
-> --
-> 2.40.0.348.gf938b09366-goog
->
 
---000000000000d7ff3e05f877dd66
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCg
-xcee6FhFj9C3kECcC1at7mMOtrDNDfx5TS6P0iWMUjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA0MDQwMDM2MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAutEOvscrZaHda2EwZv4m
-889lRWvK/u0od+YjFUna7uDQMDiH6sfTiqc9jsPB5C/c9hMEW/s7Kpq2h36d5X2T/pNQlEN0hBG0
-PBDi/fOEZLmmKACsDbIkLLtVE93XqHXKUdVuLOOFOKP7SY0VBJ+H5jFi6yB7F7zgjU+5y2/kq0Aw
-lD5cZiKbG4acdrzzsAVbbE2mtXF+2WUyN/ZvPvhh/PhFGrIvDnYUCvRlvA3w9Mi5xiL2WN2+gAHi
-L96BeI940/yDYzo9+GAHMgqGtooEGpsg1eAll30ry5AAfEUnuaAQRcZOkIFY7FGXKAcfUiXTDK1C
-wLrslNw9/c5Flrv3OQ==
---000000000000d7ff3e05f877dd66--
+> - I included changes from https://gitlab.freedesktop.org/libevdev/hid-tools/-/merge_requests/143
+>   to fix the failing sony tests in v6.3
+> 
+> I am not a big fan of sending a v2 because the ML are not happy with the
+> amount of changes...
+> 
+> Cheers,
+> Benjamin
+> 
+> > Benjamin Tissoires (11):
+> >       selftests: hid: make vmtest rely on make
+> >       selftests: hid: import hid-tools hid-core tests
+> >       selftests: hid: import hid-tools hid-gamepad tests
+> >       selftests: hid: import hid-tools hid-keyboards tests
+> >       selftests: hid: import hid-tools hid-mouse tests
+> >       selftests: hid: import hid-tools hid-multitouch and hid-tablets tests
+> >       selftests: hid: import hid-tools wacom tests
+> >       selftests: hid: import hid-tools hid-apple tests
+> >       selftests: hid: import hid-tools hid-ite tests
+> >       selftests: hid: import hid-tools hid-sony and hid-playstation tests
+> >       selftests: hid: import hid-tools usb-crash tests
+> > 
+> >  tools/testing/selftests/hid/Makefile               |   12 +
+> >  tools/testing/selftests/hid/config                 |   11 +
+> >  tools/testing/selftests/hid/hid-apple.sh           |    7 +
+> >  tools/testing/selftests/hid/hid-core.sh            |    7 +
+> >  tools/testing/selftests/hid/hid-gamepad.sh         |    7 +
+> >  tools/testing/selftests/hid/hid-ite.sh             |    7 +
+> >  tools/testing/selftests/hid/hid-keyboard.sh        |    7 +
+> >  tools/testing/selftests/hid/hid-mouse.sh           |    7 +
+> >  tools/testing/selftests/hid/hid-multitouch.sh      |    7 +
+> >  tools/testing/selftests/hid/hid-sony.sh            |    7 +
+> >  tools/testing/selftests/hid/hid-tablet.sh          |    7 +
+> >  tools/testing/selftests/hid/hid-usb_crash.sh       |    7 +
+> >  tools/testing/selftests/hid/hid-wacom.sh           |    7 +
+> >  tools/testing/selftests/hid/run-hid-tools-tests.sh |   28 +
+> >  tools/testing/selftests/hid/settings               |    3 +
+> >  tools/testing/selftests/hid/tests/__init__.py      |    2 +
+> >  tools/testing/selftests/hid/tests/base.py          |  345 ++++
+> >  tools/testing/selftests/hid/tests/conftest.py      |   81 +
+> >  .../selftests/hid/tests/descriptors_wacom.py       | 1360 +++++++++++++
+> >  .../selftests/hid/tests/test_apple_keyboard.py     |  440 +++++
+> >  tools/testing/selftests/hid/tests/test_gamepad.py  |  209 ++
+> >  tools/testing/selftests/hid/tests/test_hid_core.py |  154 ++
+> >  .../selftests/hid/tests/test_ite_keyboard.py       |  166 ++
+> >  tools/testing/selftests/hid/tests/test_keyboard.py |  485 +++++
+> >  tools/testing/selftests/hid/tests/test_mouse.py    |  977 +++++++++
+> >  .../testing/selftests/hid/tests/test_multitouch.py | 2088 ++++++++++++++++++++
+> >  tools/testing/selftests/hid/tests/test_sony.py     |  282 +++
+> >  tools/testing/selftests/hid/tests/test_tablet.py   |  872 ++++++++
+> >  .../testing/selftests/hid/tests/test_usb_crash.py  |  103 +
+> >  .../selftests/hid/tests/test_wacom_generic.py      |  844 ++++++++
+> >  tools/testing/selftests/hid/vmtest.sh              |   25 +-
+> >  31 files changed, 8554 insertions(+), 10 deletions(-)
+> > ---
+> > base-commit: 2f7f4efb9411770b4ad99eb314d6418e980248b4
+> > change-id: 20230217-import-hid-tools-tests-dc0cd4f3c8a8
+> > 
+> > Best regards,
+> > -- 
+> > Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > 
+> 
