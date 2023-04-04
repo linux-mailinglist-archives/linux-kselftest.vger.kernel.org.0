@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157486D690E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Apr 2023 18:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6856D6920
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Apr 2023 18:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbjDDQji (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Apr 2023 12:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S235348AbjDDQoM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Apr 2023 12:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjDDQjh (ORCPT
+        with ESMTP id S235362AbjDDQoL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Apr 2023 12:39:37 -0400
+        Tue, 4 Apr 2023 12:44:11 -0400
 Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A563840EC;
-        Tue,  4 Apr 2023 09:39:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E7DE6C;
+        Tue,  4 Apr 2023 09:44:10 -0700 (PDT)
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id E6B2F5C0140;
-        Tue,  4 Apr 2023 12:39:06 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 04 Apr 2023 12:39:06 -0400
+        by mailout.nyi.internal (Postfix) with ESMTP id A7CD75C0161;
+        Tue,  4 Apr 2023 12:44:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 04 Apr 2023 12:44:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
         cc:cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1680626346; x=1680712746; bh=xD
-        gnnIfd8SPLyCsNmcqak2aFntaDCdlHN6LMTGXJlDo=; b=UYgSwTBiikwGwSAWMk
-        Cjl4zAa5Rm85E+xkMetwhHA00hqL4UFC2fyJCraTtSuqKaCl+Jas4ruQjRkzT5kg
-        dbz605XpY6sDfHcaaqNTtlEPkv94Jn4Q4bNeWJjLKu25izc9KVE36oSj/DCXvgyn
-        kCkR7jeJzx5tt/rcEV/xcQ9wxpeB0vSf63+wPfel7raUOHc0vHhiQiazZtGZ80gP
-        2xHNjyTPJdJFTfOmQniPh/d3ShORUSvbKOCAFDQk0MSKlJde++67TiSP3qraTAjK
-        f4azYd8rNUohMUMtxL/aL74Ok84aHj/KrjyEbUa96iWk4Vi5MeJxr9WaGAJMadVZ
-        /8TQ==
+        :subject:subject:to:to; s=fm3; t=1680626649; x=1680713049; bh=IK
+        XJaj89zCSXZFUdNfO6r9AvyGexfDFn5WHbwUeaEBM=; b=nogd+x4TNGtfnYDixP
+        mLJ0h9iPq0OR4mUd95f82XEyVDZ91/BA9S4UWApGdKwtr1UUV8U96aqOEsckNGWB
+        babOafjo7hhaZj7EhETl6daEQ8VJRHGgJH1sP1hZ2LUDRxAGbWoLZsBNGeqtnPh1
+        EJlPm6quwzCfgX9JMRzGDnJstGYPA9C/JdVn8nLlgH2pcMeEtd1vWCa3mTxk1Z2V
+        Jw0H6gAf+Y99ovqC+2WPIbExmpAVv0ngtMgFVmQ2/nbbC3s9AaNDkZR3D/0dbyNT
+        2IMzGnIPyf1NGGN1fYGuipbXbY5HcZWLLUjEugdIMECb2RUE9C6FCcz17JnDstlL
+        Fn6A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680626346; x=1680712746; bh=xDgnnIfd8SPLy
-        CsNmcqak2aFntaDCdlHN6LMTGXJlDo=; b=NONQMvP3jdt5vkhdiP7o4o/o98pTR
-        HmVaGyyHtMQz8gupYvoeWZk54ZYygBEg08+6ITVE0QbJFqfyPuOTmVZzOKe395hL
-        yfYZv0jTE7FsVTneExTqGJEqERFSyd1sIA85jshmRP6ViEkF16aHXu/uDy36jpvh
-        x18mNkNB1tTtK3IunNsAUUv87Px4akfBJ8D0vqy8Oc2RfDzf6QO/TjluPE0VWAAA
-        oPKImEAXb2B4XPF6D7fietVHqk7JB4CNYEJc3507UOqGsa9uFj4wUD/+bDK2HSuX
-        N3ECZIodFBMDMx5KkVgnI4HMJvHxbvgqL9ge/gl97Ke6djUgRRKZLo6Pw==
-X-ME-Sender: <xms:qlIsZDfMew339rIHUI_xIG7I7CZwL2v8NwlqCSAZGNNcYHJpa-ihsA>
-    <xme:qlIsZJN52TNbtlCYIyMA7XRep2mveEzwl7jL8eH6OTijOP-0KeLW_SDD-kUmw_kCw
-    ziMZZyDwhWSruo0YeM>
-X-ME-Received: <xmr:qlIsZMgtt_tmSybf1gbG78v9AcfGdNdMDNY4sHlociRYffqxsen5TSZhXt4ntUwFhyngVGnI7wa3od4XIvnuLoYj_XVx3M75azZG36mI0A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledguddtfecutefuodetggdotefrod
+        :x-sasl-enc; s=fm2; t=1680626649; x=1680713049; bh=IKXJaj89zCSXZ
+        FUdNfO6r9AvyGexfDFn5WHbwUeaEBM=; b=bKbu4U2l7TwF0iaxR203gFnj8QQcl
+        ljLNvwUsmqFAxy3nBQzaW0gUPVwbxEuCTF49jNrJ791ZLbg+8rh+x5ITIZEIRtWO
+        X927cSGxx9T74LT6slONX23GitMEtKzbOdt+Z/3UviQWyNBNsTYCoEhgGy06xR+q
+        95jyHTXv+FrKnUabi93+QK0HArHlYxqCR8TqxS7Q1W/SFJJWiSA/GCTa+gd9Glsg
+        Ljj3wz/TU20RZkKxz5Aseft39Hpa0OX1q6KdMDtUpd7Bc6mc14M1bVo20s5JBcHb
+        wgGxVMFO844X+BODKaYUugsUJJ8hgZHV0nMVvNva8YQTdB/lu5L0h9lMg==
+X-ME-Sender: <xms:2VMsZBVEvynioBVinq8cL5tw4v0ZHbGEWO2BBa2la0ZJuIJM0rekXQ>
+    <xme:2VMsZBn37N6f7MNoCWGaGyVBtb8JXSF641IUY24RyLKD3k51fJpZESYAkUeyNL_xM
+    IWvYlXOPDm7kPaTz04>
+X-ME-Received: <xmr:2VMsZNYDUkEXsbHlFwgbAjoQI78gKI7Ub7LH-MBsIdiUnNvfAHHKwvPO3YMDK5CMUmyutBSl7PAzQLTQ-V78y1IQXnQfxnwdwo2fePbW>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledguddthecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledguddtfecutefuodetgg
     htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
     geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hshhhrseguvghvkhgvrhhnvghlrdhioh
-X-ME-Proxy: <xmx:qlIsZE-aY6kJt9TLMQLTzS4AzoYi68b7fCsc1AFJy8Pzi6VbCq6ziw>
-    <xmx:qlIsZPtxI5sr-IkMxxN6cNJU3CPi-txNFu04dOfkNmdDNKvk_M9yZA>
-    <xmx:qlIsZDGmySTVRBiKOrsswRyoqkzhoEywpENnifuk044Bo0uqsxT2TA>
-    <xmx:qlIsZAl5BgHVIpl3x4KhByFQNbcMqz5L5vjI_O9cvYJfjjSxQIbUKg>
+X-ME-Proxy: <xmx:2VMsZEVSieEwr4lFqtUgsN2eSWCCRTT5UgcxknT5WEWEwuP1RqNRWQ>
+    <xmx:2VMsZLnJQVE2p8_cV4CdEQVeWT5SUHL7zCacAnSlZ60dVTW9OkpeRQ>
+    <xmx:2VMsZBe2sZlbnF1N_73rKQxQiRQsv8HpJFZNURJItn9V2KQ9fCVv9g>
+    <xmx:2VMsZEc8gn1gXjzCb0NofGYyLMuWPshY_tXJOwoKOcUpHs54bSavQg>
 Feedback-ID: i84614614:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Apr 2023 12:39:05 -0400 (EDT)
+ 4 Apr 2023 12:44:07 -0400 (EDT)
 References: <20230310182851.2579138-1-shr@devkernel.io>
  <20230310182851.2579138-2-shr@devkernel.io>
  <7ed4308d-b400-d2bb-b539-3fe418862ab8@redhat.com>
@@ -76,9 +76,9 @@ Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
         Janosch Frank <frankja@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>
 Subject: Re: [PATCH v4 1/3] mm: add new api to enable ksm per process
-Date:   Tue, 04 Apr 2023 09:32:31 -0700
+Date:   Tue, 04 Apr 2023 09:43:51 -0700
 In-reply-to: <e888871b-9f48-c01d-ce7f-f32ec3d79ef8@redhat.com>
-Message-ID: <qvqw4jpviov1.fsf@dev0134.prn3.facebook.com>
+Message-ID: <qvqwzg7nha21.fsf@dev0134.prn3.facebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -270,6 +270,7 @@ For the opposite case: gmap_mark_unmergeable() has already been run, we
 would need some kind of flag or other means to be able to detect it.
 Any recommendations?
 
+>
 >
 > Staring at that code, I wonder if the "mm->def_flags &= ~VM_MERGEABLE" is doing
 > what it's supposed to do. I don't think this effectively prevents right now
