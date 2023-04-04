@@ -2,114 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688B86D6FE5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Apr 2023 00:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200A96D7014
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Apr 2023 00:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbjDDWHu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Apr 2023 18:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S236182AbjDDWYe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Apr 2023 18:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjDDWHt (ORCPT
+        with ESMTP id S229973AbjDDWYd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Apr 2023 18:07:49 -0400
+        Tue, 4 Apr 2023 18:24:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E5B4227;
-        Tue,  4 Apr 2023 15:07:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA462708;
+        Tue,  4 Apr 2023 15:24:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47406635A6;
-        Tue,  4 Apr 2023 22:07:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE56C433EF;
-        Tue,  4 Apr 2023 22:07:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680646066;
-        bh=HyUaMz/ZoOz8dUzt6HmBjHdv4xt04lbld0m+gyj7fNw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qFcRgWeWxk7eQpi/P8RsvWaXrl77+MI4I4OBGqBM6aik7mV+XEyGcfczRR61rSKh7
-         NJLMIPJndSbln4WChTvi94CXiASNBz3nB9bUFiTF/ZHPmWOTJe+0kSI0fQ2LzEEyEs
-         bko6hP/MmPn9HSNTM+Z+d6WmZVpi9QRvCy45lghrupnKUnDe06SlRGHchf1p4z3KnK
-         QcyaHipeUdVlrv9hrB9i6cVyhPtHfjEZETDBzLQmVyRUnyA/coPcmjN6dS0Lhw3062
-         e4777/4DtuOhAJiWpRQ4ycuBwSy3NMCffaRWh+iqMiBoN9oDUxb6EHcxXhUiTYLZbV
-         YZm/xJHmxYV9g==
-Date:   Tue, 4 Apr 2023 15:07:44 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5481D63A8E;
+        Tue,  4 Apr 2023 22:24:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E66FC433EF;
+        Tue,  4 Apr 2023 22:24:30 +0000 (UTC)
+Date:   Tue, 4 Apr 2023 18:24:28 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        LKML <linux-kernel@vger.kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-fsdevel@vger.kernel.org,
         Thorsten Leemhuis <regressions@leemhuis.info>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
 Subject: Re: [BUG RESEND] [BISECTED]: selftest: ftracetest: memleak in
  vfs_write()
-Message-ID: <20230404220744.GB1893@sol.localdomain>
+Message-ID: <20230404182428.4ccd3f96@gandalf.local.home>
+In-Reply-To: <20230404220744.GB1893@sol.localdomain>
 References: <ca4dca01-66ce-c1a9-23cd-9d83b0d2c4b0@alu.unizg.hr>
- <76134d9f-a5ba-6a0d-37b3-28310b4a1e91@alu.unizg.hr>
+        <76134d9f-a5ba-6a0d-37b3-28310b4a1e91@alu.unizg.hr>
+        <20230404220744.GB1893@sol.localdomain>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76134d9f-a5ba-6a0d-37b3-28310b4a1e91@alu.unizg.hr>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mirsad,
+On Tue, 4 Apr 2023 15:07:44 -0700
+Eric Biggers <ebiggers@kernel.org> wrote:
 
-On Tue, Apr 04, 2023 at 09:52:10PM +0200, Mirsad Goran Todorovac wrote:
->   backtrace:
->     [<ffffffffb4afb23c>] slab_post_alloc_hook+0x8c/0x3e0
->     [<ffffffffb4b02b19>] __kmem_cache_alloc_node+0x1d9/0x2a0
->     [<ffffffffb4a77785>] __kmalloc+0x55/0x160
->     [<ffffffffb493a913>] tracing_log_err+0x1a3/0x1d0
->     [<ffffffffb4959049>] append_filter_err.isra.13+0x119/0x190
->     [<ffffffffb495a89f>] create_filter+0xbf/0xe0
->     [<ffffffffb495ab10>] create_event_filter+0x10/0x20
->     [<ffffffffb495c040>] set_trigger_filter+0xa0/0x180
->     [<ffffffffb495d745>] event_trigger_parse+0xf5/0x160
->     [<ffffffffb495c889>] trigger_process_regex+0xc9/0x120
->     [<ffffffffb495c976>] event_trigger_write+0x86/0xf0
->     [<ffffffffb4b52dc2>] vfs_write+0xf2/0x520
->     [<ffffffffb4b533d8>] ksys_write+0x68/0xe0
->     [<ffffffffb4b5347e>] __x64_sys_write+0x1e/0x30
->     [<ffffffffb586619c>] do_syscall_64+0x5c/0x90
->     [<ffffffffb5a000ae>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> 
-> Please find the complete debug info at the URL:
-> 
-> https://domac.alu.unizg.hr/~mtodorov/linux/bugreports/ftracetest/
-> 
-> Bisect log is [edited]:
-> 
-> > git bisect good a92ce570c81dc0feaeb12a429b4bc65686d17967
-> > # good: [c6f613e5f35b0e2154d5ca12f0e8e0be0c19be9a] ipmi/watchdog: use strscpy() to instead of strncpy()
-> > git bisect good c6f613e5f35b0e2154d5ca12f0e8e0be0c19be9a
-> > # good: [90b12f423d3c8a89424c7bdde18e1923dfd0941e] Merge tag 'for-linus-6.2-1' of https://github.com/cminyard/linux-ipmi
-> > git bisect good 90b12f423d3c8a89424c7bdde18e1923dfd0941e
-> > # first bad commit: [71946a25f357a51dcce849367501d7fb04c0465b] Merge tag 'mmc-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc
-> > 
-> > The commit was merged on December 13th 2022.
-> 
-> The amount of applied diffs in the culprit commit 71946a25f357a51dcce849367501d7fb04c0465b
-> prevents me from bisecting further - I do not know which changes depend of which, and which
-> can be tested independently.
-> 
-> Hopefully I might come up with a reproducer, but I need some feedback first. Maybe there
-> are ways to narrow down the lines of code that could have caused the leaks, yet I am
-> completely new to the kernel/trace subtree.
-> 
-> Apologies for not Cc:ing Ulf nine weeks ago, but it was an omission, not deliberate act.
-> 
+> This looks like an issue with the tracing subsystem.  I appreciate that you've
+> now added the tracing maintainers to Cc.  I don't think your bisection to commit
+> 71946a25f357 ("Merge tag 'mmc-v6.2' ...") is correct; that looks unrelated.
 
-This looks like an issue with the tracing subsystem.  I appreciate that you've
-now added the tracing maintainers to Cc.  I don't think your bisection to commit
-71946a25f357 ("Merge tag 'mmc-v6.2' ...") is correct; that looks unrelated.
+No that is not the correct commit. I think I see the issue. The error log
+of a tracing instance doesn't seem to be freed if the instance is removed.
 
-- Eric
+I'm guessing this can cause the bug:
+
+ # cd /sys/kernel/tracincg
+ # mkdir instances/foo
+ # echo 'p:nothing no_function_here' > instances/foo/dynamic_events
+ # rmdir instances/foo
+
+I haven't tried the above commands so there may be a syntax error, but I
+bet that would cause the issue. Basically, you need to create an instance,
+cause a syntax error in creating something (which will add to the error log
+list that shows the error), and then delete the instance.
+
+I don't see where it would clean up the error log in that case, and it
+would get leaked.
+
+I'll write up a patch to fix this today (after confirming that does indeed
+cause a leak).
+
+-- Steve
+
