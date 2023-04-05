@@ -2,116 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3594C6D76E2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Apr 2023 10:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0B46D78AC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Apr 2023 11:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237494AbjDEI30 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Apr 2023 04:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
+        id S231455AbjDEJn5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Apr 2023 05:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237435AbjDEI3Z (ORCPT
+        with ESMTP id S237319AbjDEJn5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:29:25 -0400
-Received: from mail-ed1-x562.google.com (mail-ed1-x562.google.com [IPv6:2a00:1450:4864:20::562])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEEB3A9C
-        for <linux-kselftest@vger.kernel.org>; Wed,  5 Apr 2023 01:29:22 -0700 (PDT)
-Received: by mail-ed1-x562.google.com with SMTP id i5so139325581eda.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Apr 2023 01:29:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680683361;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=fap3neKkM4RZlmbaswN8wfO5OfaFYwyq7u3U9SC/yss7GFyBfcLf3QWly2JYJYQYya
-         EwGZTWN5O/gi1o2EIiEB/gn9gXStcw1wG1aHC4S3bYSORuxU85r79O0lSkfUePklYSr0
-         N/VTtD8Mtu4te5BqaDTL9zHEsvM1O2mLPwnSo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680683361;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=DMyEbblruiF9Ex5m1e1MuokJfkBs0rbYidxjKlGB1Z6fOUMxSqCwlKUUs0TjZQVV7s
-         rT7Hnijj4TMnLp3StC04WI/F/dqrSItcmtE0RbmAuOcl92WOZnsFVjeM/fkPNOJaehPE
-         6jQ7czw30mgws9La+c6bsQPFB3Zu8t2LW2ic1xgsJJZqLgOzC+ojQGJXOzamlcDCwLFj
-         oc+6SJfpq/6VzrMzBR6H/+39Zm0k5LaMxPppo70Kd/6xn+g6PfR0n5ol46sFjy1073TL
-         5epEVGux5HBz9Xi/Qv1w2vU2Cj6D4TZAYkNzw6PILIwj2bko+DWzboHjt5ZLn2wlJp/S
-         pO9w==
-X-Gm-Message-State: AAQBX9efAtb5bfm5CsrJec2J7dxno7Fh3YwKO7WhqqcnK9pNWenxUT3t
-        icR3/AYcNPBaOL8vAGumFm/QqNP7ka7TVeZd8I+DfUmCAmVu
-X-Google-Smtp-Source: AKy350Z4cm+MiMZg4tJ4XDYwi4+Uu9E47u1H18ZU8iKT15a3z615sLf7uPFlUQi/STJR3hpPLB6Dq/IGJ4+T
-X-Received: by 2002:a17:906:e204:b0:947:5acb:920c with SMTP id gf4-20020a170906e20400b009475acb920cmr1932253ejb.34.1680683360731;
-        Wed, 05 Apr 2023 01:29:20 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id i25-20020a17090685d900b00944010e0472sm3723264ejy.236.2023.04.05.01.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 01:29:20 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Weqaar Janjua <weqaar.janjua@gmail.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Wed, 5 Apr 2023 05:43:57 -0400
+Received: from sym2.noone.org (sym.noone.org [178.63.92.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E83F171B;
+        Wed,  5 Apr 2023 02:43:52 -0700 (PDT)
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 4Ps07n5hbBzvjfm; Wed,  5 Apr 2023 11:43:49 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 11:43:49 +0200
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] selftests: xsk: Disable IPv6 on VETH1
-Date:   Wed,  5 Apr 2023 10:29:04 +0200
-Message-Id: <20230405082905.6303-1-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
+Subject: Re: [PATCH v2] selftests/clone3: fix number of tests in ksft_set_plan
+Message-ID: <20230405094349.7fkipggxdmrnn2mo@distanz.ch>
+References: <20230314115352.20623-1-tklauser@distanz.ch>
+ <20230314123414.26907-1-tklauser@distanz.ch>
+ <20230314130959.7gfuagxta6k423kf@wittgenstein>
+ <20230403205735.ltb3pmh5yl2pjzhu@distanz.ch>
+ <20230404-wasting-finicky-6f8876022a24@brauner>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404-wasting-finicky-6f8876022a24@brauner>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Spam-Status: No, score=0.3 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This change fixes flakiness in the BIDIRECTIONAL test:
+On 2023-04-05 at 09:46:11 +0200, Christian Brauner <brauner@kernel.org> wrote:
+> On Mon, Apr 03, 2023 at 10:57:37PM +0200, Tobias Klauser wrote:
+> > On 2023-03-14 at 14:09:59 +0100, Christian Brauner <brauner@kernel.org> wrote:
+> > > On Tue, Mar 14, 2023 at 01:34:14PM +0100, Tobias Klauser wrote:
+> > > > Commit 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
+> > > > added an additional test, so the number passed to ksft_set_plan needs to
+> > > > be bumped accordingly.
+> > > > 
+> > > > Also use ksft_finished() to print results and exit. This will catch future
+> > > > mismatches between ksft_set_plan() and the number of tests being run.
+> > > > 
+> > > > Fixes: 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
+> > > > Cc: Christian Brauner <brauner@kernel.org>
+> > > > Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+> > > > ---
+> > > 
+> > > Looks good. Thanks for fixing this,
+> > > Reviewed-by: Christian Brauner <brauner@kernel.org>
+> > > 
+> > > Feel free to take this through the selftests tree, Shuah.
+> > 
+> > It looks like this hasn't made it into Linus' tree yet and I also don't
+> > see it in Shuah's tree. Would it be possible to still submit this for
+> > 6.3-rc6 given the commit it fixes has made it to Linus' tree already?
+> 
+> Is it in linux-next?
 
-    # [is_pkt_valid] expected length [60], got length [90]
-    not ok 1 FAIL: SKB BUSY-POLL BIDIRECTIONAL
-
-When IPv6 is enabled, the interface will periodically send MLDv1 and
-MLDv2 packets. These packets can cause the BIDIRECTIONAL test to fail
-since it uses VETH0 for RX.
-
-For other tests, this was not a problem since they only receive on VETH1
-and IPv6 was already disabled on VETH0.
-
-Fixes: a89052572ebb ("selftests/bpf: Xsk selftests framework")
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/test_xsk.sh | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
-index b077cf58f825..377fb157a57c 100755
---- a/tools/testing/selftests/bpf/test_xsk.sh
-+++ b/tools/testing/selftests/bpf/test_xsk.sh
-@@ -116,6 +116,7 @@ setup_vethPairs() {
- 	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
- 	if [ -f /proc/net/if_inet6 ]; then
- 		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
-+		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
- 	fi
- 	if [[ $verbose -eq 1 ]]; then
- 	        echo "setting up ${VETH1}"
--- 
-2.39.2
-
+No, doesn't look like it (I checked on tags/next-20230405).
