@@ -2,160 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FC06D72D0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Apr 2023 06:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200086D7353
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Apr 2023 06:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjDEEB1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Apr 2023 00:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S236797AbjDEEW0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Apr 2023 00:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjDEEB1 (ORCPT
+        with ESMTP id S236701AbjDEEWZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Apr 2023 00:01:27 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9254E2D4C;
-        Tue,  4 Apr 2023 21:01:25 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A74AE604EF;
-        Wed,  5 Apr 2023 06:01:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680667283; bh=IgJOAynHdpBcJANHd4LhT2DF4QA7Z5iub7IhRy4wabA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eYcPNmjSeNb97qGJWuPzaW/cRW9nzJr1Ld2xlLZPr10ni+AFcRGQWatKGnQPaAslI
-         KUiHvQh20P5XG6eBMuENPeqhjXLiieN4yzqG2+oDk4IuHQutvWBirEJQFM1f2/UvfW
-         T3UVyFZRpwVJUdOW7W2QYJAbbC3l4vpaHoLjhw+sjPsRy/P8rZKBe0azn/BZAyWTtz
-         XTRvtCv3YT+tTRMo2prkkXstqqLGBHRGQDZydWfW6jDao/xSmNDZux6Cs70o/a71+j
-         Xm6gQCd9sn41JnfD8ObSqBUEqzJ4LzcJswJ1S4TvlwXnQGj/VRn+8WAH4/w1mmBu9e
-         nXV97rG2vR5+Q==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5hiR95S7h1fN; Wed,  5 Apr 2023 06:01:21 +0200 (CEST)
-Received: from [192.168.1.4] (unknown [94.250.188.177])
-        by domac.alu.hr (Postfix) with ESMTPSA id E5949604ED;
-        Wed,  5 Apr 2023 06:01:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680667281; bh=IgJOAynHdpBcJANHd4LhT2DF4QA7Z5iub7IhRy4wabA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iSsis4HXkP+AQvhnySz1lbJEIKApmtHqbJIwT9PAbt1s/hAmf7rF9QCl5gEPhSekl
-         QBLSCWf54FJM7qPBruCYoSpSVpeWC52afGsk6gQ8IAqJNsF9O9yM2w8wj+x/Z9zJO6
-         tX5qEXq13Qaux/XzpsRdmijPWrz5leVcotbyu51xuVU6n5u/KjwVxpF2i981ArCsra
-         tQ6BzaRYTo9TKGdHSNeqLs1TfMqLHjEABRFElGyG237pgguco7wO9Ix9bZpOjEohb9
-         6Ft3HWl3zjoeRUL8FKXacFCFbZFv0sW0mX2c33O/HQNeHrhtxyDFlrx/dSnSBDbn8C
-         skT8duR2LaiwA==
-Message-ID: <6e8cf1cf-44bd-9d17-1c9d-d25c02f614fc@alu.unizg.hr>
-Date:   Wed, 5 Apr 2023 06:01:20 +0200
+        Wed, 5 Apr 2023 00:22:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD1CDE79;
+        Tue,  4 Apr 2023 21:22:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF62F1684;
+        Tue,  4 Apr 2023 21:23:07 -0700 (PDT)
+Received: from [10.162.42.140] (a077209.arm.com [10.162.42.140])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E94F3F73F;
+        Tue,  4 Apr 2023 21:22:20 -0700 (PDT)
+Message-ID: <1b2cf3b4-fd11-43db-7f22-76a762ec8aa6@arm.com>
+Date:   Wed, 5 Apr 2023 09:52:17 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [BUG RESEND] [BISECTED]: selftest: ftracetest: memleak in
- vfs_write()
-Content-Language: en-US, hr
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/5] selftests/mm: Implement support for arm64 on va
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-References: <ca4dca01-66ce-c1a9-23cd-9d83b0d2c4b0@alu.unizg.hr>
- <76134d9f-a5ba-6a0d-37b3-28310b4a1e91@alu.unizg.hr>
- <20230404220744.GB1893@sol.localdomain>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <20230404220744.GB1893@sol.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230323105243.2807166-1-chaitanyas.prakash@arm.com>
+Content-Language: en-US
+From:   Chaitanya S Prakash <chaitanyas.prakash@arm.com>
+In-Reply-To: <20230323105243.2807166-1-chaitanyas.prakash@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 05. 04. 2023. 00:07, Eric Biggers wrote:
-> Hi Mirsad,
+
+
+On 3/23/23 16:22, Chaitanya S Prakash wrote:
+> The va_128TBswitch selftest is designed and implemented for PowerPC and
+> x86 architectures which support a 128TB switch, up to 256TB of virtual
+> address space and hugepage sizes of 16MB and 2MB respectively. Arm64
+> platforms on the other hand support a 256Tb switch, up to 4PB of virtual
+> address space and a default hugepage size of 512MB when 64k pagesize is
+> enabled.
 > 
-> On Tue, Apr 04, 2023 at 09:52:10PM +0200, Mirsad Goran Todorovac wrote:
->>   backtrace:
->>     [<ffffffffb4afb23c>] slab_post_alloc_hook+0x8c/0x3e0
->>     [<ffffffffb4b02b19>] __kmem_cache_alloc_node+0x1d9/0x2a0
->>     [<ffffffffb4a77785>] __kmalloc+0x55/0x160
->>     [<ffffffffb493a913>] tracing_log_err+0x1a3/0x1d0
->>     [<ffffffffb4959049>] append_filter_err.isra.13+0x119/0x190
->>     [<ffffffffb495a89f>] create_filter+0xbf/0xe0
->>     [<ffffffffb495ab10>] create_event_filter+0x10/0x20
->>     [<ffffffffb495c040>] set_trigger_filter+0xa0/0x180
->>     [<ffffffffb495d745>] event_trigger_parse+0xf5/0x160
->>     [<ffffffffb495c889>] trigger_process_regex+0xc9/0x120
->>     [<ffffffffb495c976>] event_trigger_write+0x86/0xf0
->>     [<ffffffffb4b52dc2>] vfs_write+0xf2/0x520
->>     [<ffffffffb4b533d8>] ksys_write+0x68/0xe0
->>     [<ffffffffb4b5347e>] __x64_sys_write+0x1e/0x30
->>     [<ffffffffb586619c>] do_syscall_64+0x5c/0x90
->>     [<ffffffffb5a000ae>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>
->> Please find the complete debug info at the URL:
->>
->> https://domac.alu.unizg.hr/~mtodorov/linux/bugreports/ftracetest/
->>
->> Bisect log is [edited]:
->>
->>> git bisect good a92ce570c81dc0feaeb12a429b4bc65686d17967
->>> # good: [c6f613e5f35b0e2154d5ca12f0e8e0be0c19be9a] ipmi/watchdog: use strscpy() to instead of strncpy()
->>> git bisect good c6f613e5f35b0e2154d5ca12f0e8e0be0c19be9a
->>> # good: [90b12f423d3c8a89424c7bdde18e1923dfd0941e] Merge tag 'for-linus-6.2-1' of https://github.com/cminyard/linux-ipmi
->>> git bisect good 90b12f423d3c8a89424c7bdde18e1923dfd0941e
->>> # first bad commit: [71946a25f357a51dcce849367501d7fb04c0465b] Merge tag 'mmc-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc
->>>
->>> The commit was merged on December 13th 2022.
->>
->> The amount of applied diffs in the culprit commit 71946a25f357a51dcce849367501d7fb04c0465b
->> prevents me from bisecting further - I do not know which changes depend of which, and which
->> can be tested independently.
->>
->> Hopefully I might come up with a reproducer, but I need some feedback first. Maybe there
->> are ways to narrow down the lines of code that could have caused the leaks, yet I am
->> completely new to the kernel/trace subtree.
->>
->> Apologies for not Cc:ing Ulf nine weeks ago, but it was an omission, not deliberate act.
->>
+> These architectural differences require introducing support for arm64
+> platforms, after which a more generic naming convention is suggested.
+> The in code comments are amended to provide a more platform independent
+> explanation of the working of the code and nr_hugepages are configured
+> as required. Finally, the file running the testcase is modified in order
+> to prevent skipping of hugetlb testcases of va_high_addr_switch.
 > 
-> This looks like an issue with the tracing subsystem.  I appreciate that you've
-> now added the tracing maintainers to Cc.  I don't think your bisection to commit
-> 71946a25f357 ("Merge tag 'mmc-v6.2' ...") is correct; that looks unrelated.
+> This series has been tested on 6.3.0-rc3 kernel, both on arm64 and x86
+> platforms.
+
+Gentle ping, any updates?
 > 
-> - Eric
-
-Hi, Eric,
-
-In the light of Steven's correct fix, you are obviously right, so I will investigate
-where the bisect went wrong.
-
-I should have added selftest/ftrace/ftracetest developers already on Jan 27th, and it
-would be fixed for 6.2 already :-/
-
-The good news is that I seem to be improving in hunting down the memleaks. Hopefully
-I will hunt down a real security exploit?
-
-All the best.
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
-"I see something approaching fast ... Will it be friends with me?"
-
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> 
+> Chaitanya S Prakash (5):
+>    selftests/mm: Add support for arm64 platform on va switch
+>    selftests/mm: Rename va_128TBswitch to va_high_addr_switch
+>    selftests/mm: Add platform independent in code comments
+>    selftests/mm: Configure nr_hugepages for arm64
+>    selftests/mm: Run hugetlb testcases of va switch
+> 
+>   tools/testing/selftests/mm/Makefile           |  4 +-
+>   tools/testing/selftests/mm/run_vmtests.sh     | 12 +++++-
+>   ...va_128TBswitch.c => va_high_addr_switch.c} | 41 +++++++++++++++----
+>   ..._128TBswitch.sh => va_high_addr_switch.sh} |  6 ++-
+>   4 files changed, 49 insertions(+), 14 deletions(-)
+>   rename tools/testing/selftests/mm/{va_128TBswitch.c => va_high_addr_switch.c} (86%)
+>   rename tools/testing/selftests/mm/{va_128TBswitch.sh => va_high_addr_switch.sh} (89%)
+> 
