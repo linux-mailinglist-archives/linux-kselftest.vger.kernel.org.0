@@ -2,61 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3786C6D75D4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Apr 2023 09:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C726B6D766D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Apr 2023 10:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236933AbjDEHtY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Apr 2023 03:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
+        id S237373AbjDEIKN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Apr 2023 04:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236556AbjDEHtX (ORCPT
+        with ESMTP id S237350AbjDEIKM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Apr 2023 03:49:23 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186BA5242
-        for <linux-kselftest@vger.kernel.org>; Wed,  5 Apr 2023 00:49:12 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id h15so30724799vsh.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Apr 2023 00:49:12 -0700 (PDT)
+        Wed, 5 Apr 2023 04:10:12 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFE7198E
+        for <linux-kselftest@vger.kernel.org>; Wed,  5 Apr 2023 01:09:37 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id dg15so19085759vsb.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Apr 2023 01:09:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680680951;
+        d=google.com; s=20210112; t=1680682158;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fwGoM9p4x9tFNvKhLpS38XLjTVGQP8/v3wwvvVCYuJU=;
-        b=iQecV645DlvgzK+5SMfi0C6WZp7zCA96nhqt8ciFeuwt27iELau7Jnf5lLM22jctwq
-         Fumob1J2Nwo82cDtdS+Phm2tFvAwVvh94PYeQ1+XlQ0+jHE0ndWjUpsdY8spzhzgUwbB
-         li9FFv0SXyl5HD9W5CYc9r3WeyTjcWJ1Ce4hk0V40fcRFJ50PAelin5Ksv/yJxwabps4
-         aBW8ApiTRySPZZAPD0Q/+PbTe0OfeBePi5eWvpE17lG6i0vf9n7hKleF1LBOdyf3TT3G
-         937DQu6UvW2npOrvKhoBLOJ0DFrTyBgD3mSGedr7HcfDOAeEciKgXXXLW7Far29OwEk/
-         wdmQ==
+        bh=jlnLyZGevKrYjHhtZFT69GlcypR+os4O+gg5OGb8db0=;
+        b=ffYkraaJHdOGMlFJsByjRGiR4NR9xEFC04wh8gTEVF5IwQoGmN3O+i3UAmIKrStCiy
+         3YrtimXk1lPS+5dVrtA/MqLhCCJQLKsL3qWm5uSMmuUwlZCqAa0wP1fYo6ZULJcTh5pL
+         y1/0H0svH082FhCKjkOeqSMxQPd+0hgquw2opGrccVySF9A941Jd5FQB0tPS3xkaYJKg
+         SOoZC+GOGw042LTSmuQAjfq8GsjpO14duyChDbo0zC4VZ7nTYCr1jSfOeI3TEkUgyVmj
+         J6dncusUW9/OyAIbpJjJkMtXSXN0K3GxqeDkGgC8gVNZUZ/N5Kcs5r+BxymyZW/qE/KR
+         n1Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680680951;
+        d=1e100.net; s=20210112; t=1680682158;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fwGoM9p4x9tFNvKhLpS38XLjTVGQP8/v3wwvvVCYuJU=;
-        b=w07m6JRl6GNRIE1UYMBdPfh69rsaHocRTekUEaZvqaK0CCUSz9Y9wfCFJ5es+RQEHp
-         y2fEPj7GGEV40eYDJFxkYUBOfnYOPWBFwIM3TroTUOB/i2CTBSrB3nEOemUlvRisawOr
-         nklOb6pGW05Rc5EKb6cQ9EdDtfp7r25Dsv0i/S/2yEGMINPWNMsLwy8m+aKIM8s8z53A
-         Kkg1X1ZICPl5HpTJQv8gabz3pgBs1yUhgTI62n/xIeGPGe9z+5oDQyxPFKprzgBYKz9T
-         cevgw6t3nJHvRBCTm7Dw1BL1bpcrVXDqGZqnyIiQCADmpty9/LHnTITutjMjNd3sY+Kd
-         pcmw==
-X-Gm-Message-State: AAQBX9emTxngexUEKHfGQLvXR0PExXtmQoM2hU57hyHEmPObT8YxIWRd
-        Gp4NIryeDEqHOi38MTnGhYDoWIumsF4DU+kHudcQfQ==
-X-Google-Smtp-Source: AKy350Y3fu50GAY8VhIcqjZjxjMjY7rPK9avRDK5KiWHq2ipoNGHNRqNYSciI8EFDYY5sW3vLA0+Lg2hkjSQTbiHw50=
-X-Received: by 2002:a67:c20a:0:b0:416:f1ea:1001 with SMTP id
- i10-20020a67c20a000000b00416f1ea1001mr4135532vsj.5.1680680950913; Wed, 05 Apr
- 2023 00:49:10 -0700 (PDT)
+        bh=jlnLyZGevKrYjHhtZFT69GlcypR+os4O+gg5OGb8db0=;
+        b=kVn7YXaHoc9Floor3YeC4Xj82kAiIaJr7BOeYm1gd7maMe7pgx2+5m201DVeUPAKVR
+         YbQy930nSRkHjV5XkuIoeN7jpMtqUfpSxLhg9LI1xPS8TXUdvHmHzKXxQudyg1qvGBop
+         UtmcDz08UzqTH+w1RJ54bnApQFa8Xoe5mlwF75KnMxbw+FTKwgcs7Cjj+wOS3IXkQDV+
+         hIsNfW2groUutGdYWBkgatcE4rEWPx/kpnIDifEsE6yFFmlTzjyP4oQgk4p4wFQ4q2/P
+         1oEzKRR1SmGuNJzO156B43111OeRjp0PKC5n398w9fQR5RgKQsqps7m6HJUkBUUSITpS
+         NTcQ==
+X-Gm-Message-State: AAQBX9dWYzcTEjVTzqk8aOds5WvzRzVOdbMjPfZlLlBe2gTsjsk+MATK
+        ACQXBGKpBP1h+FihrrIcFZodPf2lrOBgYgo+DCKDnA==
+X-Google-Smtp-Source: AKy350actSNnT6e93iHgTrx0Vja6yD+v0IpO6wl0Ni78WTU1W219O6AN8+gIvl1SxBUbyF7I8B0MV16oNMLAmDSuSxU=
+X-Received: by 2002:a67:cc15:0:b0:426:3a3d:180b with SMTP id
+ q21-20020a67cc15000000b004263a3d180bmr4239462vsl.5.1680682157955; Wed, 05 Apr
+ 2023 01:09:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230331080411.981038-1-davidgow@google.com> <20230331080411.981038-4-davidgow@google.com>
- <fbfaed01ac773b72a5a79f9a514c646ac21d5583.camel@sipsolutions.net>
-In-Reply-To: <fbfaed01ac773b72a5a79f9a514c646ac21d5583.camel@sipsolutions.net>
+References: <20230331080411.981038-1-davidgow@google.com> <20230331080411.981038-2-davidgow@google.com>
+ <20230404133231.ingzo7xy7lejpqqb@houat> <4d9b16aa28d4eb6c9d5a158e112abfedbfa2cd4b.camel@sipsolutions.net>
+In-Reply-To: <4d9b16aa28d4eb6c9d5a158e112abfedbfa2cd4b.camel@sipsolutions.net>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 5 Apr 2023 15:48:59 +0800
-Message-ID: <CABVgOSm+9t6araJTUDeX88X1e8+kDUTvELQ2mLCBYHBgUx5Q1A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 3/3] kunit: kmalloc_array: Use kunit_add_action()
+Date:   Wed, 5 Apr 2023 16:09:05 +0800
+Message-ID: <CABVgOSmPpN+OsbamVRx4Nfpqy=6D2kVgF_66A7B37_q=qLLB5A@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/3] kunit: Add kunit_add_action() to defer a call
+ until test exit
 To:     Benjamin Berg <benjamin@sipsolutions.net>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
         Stephen Boyd <sboyd@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -69,7 +70,7 @@ Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000144ddb05f89207c4"
+        boundary="000000000000081a8505f8924fc6"
 X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
@@ -81,124 +82,173 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000144ddb05f89207c4
+--000000000000081a8505f8924fc6
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 5 Apr 2023 at 01:59, Benjamin Berg <benjamin@sipsolutions.net> wrote:
+On Wed, 5 Apr 2023 at 01:55, Benjamin Berg <benjamin@sipsolutions.net> wrote:
 >
 > Hi,
 >
-> On Fri, 2023-03-31 at 16:04 +0800, 'David Gow' via KUnit Development wrote:
-> > The kunit_add_action() function is much simpler and cleaner to use that
-> > the full KUnit resource API for simple things like the
-> > kunit_kmalloc_array() functionality.
+> On Tue, 2023-04-04 at 15:32 +0200, Maxime Ripard wrote:
+> > [SNIP]
+> > > +/**
+> > > + * kunit_add_action() - Defer an 'action' (function call) until the test ends.
+> > > + * @test: Test case to associate the action with.
+> > > + * @func: The function to run on test exit
+> > > + * @ctx: Data passed into @func
+> > > + * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
+> > > + *
+> > > + * Defer the execution of a function until the test exits, either normally or
+> > > + * due to a failure.  @ctx is passed as additional context. All functions
+> > > + * registered with kunit_add_action() will execute in the opposite order to that
+> > > + * they were registered in.
+> > > + *
+> > > + * This is useful for cleaning up allocated memory and resources.
+> > > + *
+> > > + * Returns:
+> > > + *   An opaque "cancellation token", or NULL on error. Pass this token to
+> > > + *   kunit_remove_action_token() in order to cancel the deferred execution of
+> > > + *   func().
+> > > + */
+> > > +struct kunit_action_ctx *kunit_add_action(struct kunit *test, kunit_defer_function_t func,
+> > > +                     void *ctx, gfp_t internal_gfp);
 > >
-> > Replacing it allows us to get rid of a number of helper functions, and
-> > leaves us with no uses of kunit_alloc_resource(), which has some
-> > usability problems and is going to have its behaviour modified in an
-> > upcoming patch.
+> > Do we expect any other context than GFP_KERNEL?
 > >
-> > Note that we need to use kunit_defer_trigger_all() to implement
-> > kunit_kfree().
+> > If so, then maybe we can have kunit_add_action() assume GFP_KERNEL and
+> > add a variant for the odd case where we would actually need a different
+> > GFP flag.
 >
-> Just a nitpick: kunit_defer_trigger_all does not exist in the new patch
-> anymore. I guess this should be kunit_release_action.
+> Does anything other than GFP_KERNEL make sense? I would assume these
+> functions should only ever be called from a kunit context, i.e. the
+> passed test is guaranteed to be identical to the value returned by
+> kunit_get_current_test().
+
+That's not strictly-speaking guaranteed. (Indeed, we have some, albeit
+contrived, counterexamples in the test.)
+
+The theoretical use-case here is if the kunit context pointer is
+passed to another thread or workqueue or something.
+
+There aren't any such users, yet (apart from, possibly,
+kunit_kmalloc_array()), though. So we could use GFP_KERNEL by default
+for now, and add a variant if such a use-case appears.
+
 >
-> Benjamin
+> That said, I am happy with merging this in this form. I feel the right
+> thing here is a patch (with corresponding spatch) that changes all of
+> the related APIs to remove the gfp argument.
+>
+> > > +/**
+> > > + * kunit_remove_action_token() - Cancel a deferred action.
+> > > + * @test: Test case the action is associated with.
+> > > + * @cancel_token: The cancellation token returned by kunit_add_action()
+> > > + *
+> > > + * Prevent an action deferred using kunit_add_action() from executing when the
+> > > + * test ends.
+> > > + *
+> > > + * You can also use the (test, function, context) triplet to remove an action
+> > > + * with kunit_remove_action().
+> > > + */
+> > > +void kunit_remove_action_token(struct kunit *test, struct kunit_action_ctx *cancel_token);
+> >
+> > It's not clear to me why we still need the token. If
+> > kunit_remove_action() works fine, why would we need to store the token?
+> >
+> > Can't we just make kunit_add_action() return an int to indicate whether
+> > it failed or not, and that's it?
+> >
+> > > [SNIP]
+> >
+> > One thing worth pointing is that if kunit_add_action() fails, the
+> > cleanup function passed as an argument won't run.
+> >
+> > So, if the kzalloc call ever fails, patch 2 will leak its res->data()
+> > resource for example.
+> >
+> > devm (and drmm) handles this using a variant called
+> > devm_add_action_or_reset, we should either provide the same variant or
+> > just go for that behavior by default.
+>
+> Both version of the function would need a return value. An alternative
+> might be to make assertions part of the API. But as with dropping the
+> gfp argument, that seems like a more intrusive change that needs to
+> happen independently.
+>
+> Anyway, I am fine with action_or_reset as the default and possibly the
+> only behaviour. I expect that every API user will want an assertion
+> that checks for failure here anyway.
 >
 
-Nice catch, thanks! I'll fix it in the next revision.
+I'm tempted to just have both kunit_add_action() and
+kunit_add_action_or_reset(), just to keep things matching the devm_
+API to minimise any confusion.
+
+And if we're not too worried about proliferating variants of these
+(and, personally, I quite like them), we could have a
+kunit_add_action_or_asserrt() version as well.
+
+> Benjamin
+>
+>
+> If kunit_* functions can assert in error conditions, then the example
+>
+> void test_func(struct kunit *test)
+> {
+>   char u8 *buf = kunit_kzalloc(test, 1024, GFP_KERNEL);
+>   struct sk_buff *skb_a;
+>   struct sk_buff *skb_b;
+>   /* Further variables */
+>
+>   KUNIT_ASSERT_NOT_NULL(test, buf);
+>
+>   skb_a = skb_alloc(1024, GFP_KERNEL);
+>   KUNIT_ASSERT_NOT_NULL(test, skb_a);
+>   if (kunit_add_cleanup(test, (kunit_defer_function_t) kfree_skb, skb_a))
+>     KUNIT_ASSERT_FAILURE("Failed to add cleanup");
+>
+>   /* Or, maybe: */
+>   skb_b = skb_alloc(1024, GFP_KERNEL);
+>   KUNIT_ASSERT_NOT_NULL(test, skb_b);
+>   KUNIT_ASSERT_EQ(test, 0,
+>                   kunit_add_cleanup(test,
+>                                     (kunit_defer_function_t) kfree_skb,
+>                                     skb_b));
+>
+>   /* run code that may assert */
+> }
+>
+>
+> could be shortened to (with a trivial kunit_skb_alloc helper)
+>
+> void test_func(struct kunit *test)
+> {
+>   char u8 *buf = kunit_kzalloc(test, 1024, GFP_KERNEL);
+>   struct sk_buff *skb_a = kunit_skb_alloc(1024, GFP_KERNEL);
+>   struct sk_buff *skb_b = kunit_skb_alloc(1024, GFP_KERNEL);
+>   /* Further variables */
+>
+>   /* run code that may assert */
+> }
+>
+> I should just post a patch for the existing API and see what people say
+> then ...
+
+We definitely already have some functions (e.g.
+__kunit_activate_static_stub()) which just assert on failure. In
+general, we've avoided doing so where we think there might be a good
+reason to handle failures separately (or it makes the API diverge a
+lot from a function we're imitating), but I'm open to using them more.
+Specialised handling of allocation failures in a test is likely to be
+rare enough that making those who need it write their own helpers
+wouldn't be a disaster. Or we could have an _or_assert() variant.
+
+In any case, I think your example pretty comfortably speaks for itself.
 
 Cheers,
 -- David
 
-
-
--- David
-
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
-> > ---
-> >  lib/kunit/test.c | 48 ++++++++----------------------------------------
-> >  1 file changed, 8 insertions(+), 40 deletions(-)
-> >
-> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > index e2910b261112..ec45c8863f04 100644
-> > --- a/lib/kunit/test.c
-> > +++ b/lib/kunit/test.c
-> > @@ -712,58 +712,26 @@ static struct notifier_block kunit_mod_nb = {
-> >  };
-> >  #endif
-> >
-> > -struct kunit_kmalloc_array_params {
-> > -       size_t n;
-> > -       size_t size;
-> > -       gfp_t gfp;
-> > -};
-> > -
-> > -static int kunit_kmalloc_array_init(struct kunit_resource *res, void *context)
-> > +void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
-> >  {
-> > -       struct kunit_kmalloc_array_params *params = context;
-> > -
-> > -       res->data = kmalloc_array(params->n, params->size, params->gfp);
-> > -       if (!res->data)
-> > -               return -ENOMEM;
-> > -
-> > -       return 0;
-> > -}
-> > +       void *data;
-> >
-> > -static void kunit_kmalloc_array_free(struct kunit_resource *res)
-> > -{
-> > -       kfree(res->data);
-> > -}
-> > +       data = kmalloc_array(n, size, gfp);
-> >
-> > -void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
-> > -{
-> > -       struct kunit_kmalloc_array_params params = {
-> > -               .size = size,
-> > -               .n = n,
-> > -               .gfp = gfp
-> > -       };
-> > +       if (!data)
-> > +               return NULL;
-> >
-> > -       return kunit_alloc_resource(test,
-> > -                                   kunit_kmalloc_array_init,
-> > -                                   kunit_kmalloc_array_free,
-> > -                                   gfp,
-> > -                                   &params);
-> > +       kunit_add_action(test, (kunit_defer_function_t)kfree, data, gfp);
-> > +       return data;
-> >  }
-> >  EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
-> >
-> > -static inline bool kunit_kfree_match(struct kunit *test,
-> > -                                    struct kunit_resource *res, void *match_data)
-> > -{
-> > -       /* Only match resources allocated with kunit_kmalloc() and friends. */
-> > -       return res->free == kunit_kmalloc_array_free && res->data == match_data;
-> > -}
-> > -
-> >  void kunit_kfree(struct kunit *test, const void *ptr)
-> >  {
-> >         if (!ptr)
-> >                 return;
-> >
-> > -       if (kunit_destroy_resource(test, kunit_kfree_match, (void *)ptr))
-> > -               KUNIT_FAIL(test, "kunit_kfree: %px already freed or not allocated by kunit", ptr);
-> > +       kunit_release_action(test, (kunit_defer_function_t)kfree, (void *)ptr);
-> >  }
-> >  EXPORT_SYMBOL_GPL(kunit_kfree);
-> >
-> > --
-> > 2.40.0.348.gf938b09366-goog
-> >
->
-
---000000000000144ddb05f89207c4
+--000000000000081a8505f8924fc6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -265,14 +315,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAq
-LMr36Lqu+sgs0qDCK/eVgwIIQlMSZbscvqAY5dCQtDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA0MDUwNzQ5MTFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC4
+cUpA9W4j7iP/RefVomm4baE6s0SPnLxrmcv6JOZ+tzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA0MDUwODA5MThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAizqry5m/4WXqxp8SlEzR
-EtjcEc04vPoroMDtFTtKUmu+IByPQdHueFS/FGfiRP8Ri5XlrOqqyFNEjWKMhB5Lvt8wKtL27H1U
-aempqhR3o/Jiwkr8hN8wFoSIUSzqqP6cEWrGBEnC9XvUPcFg8SEVEsW5ukNDm/DMNRB9T4bLJn7a
-Vk3/j99iJxao5QzdxGSWiqAjUz68NwAT3xyfT4NtGsr65Y5T6EMUe1q81OCVtqy8Yk/vYvPeNxN8
-j2mMpkHkd8APTZqnw2ehCVqGUF5WvWzqo/aacPsXkfIPBN1zAN7NnU6vHx44slVtWV+BvLXFLcNH
-Oox1BWkaqaazVh5rTA==
---000000000000144ddb05f89207c4--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAFdn5fMs0gGYQ8ePnSWua
+SNDJlaF5wIQUBLz7wfrJJKt9HDSWD56SmgN4NqpHakdY/mFsoWbUyioZA6lSsEOv62ocf+yToSlu
+9aVhmPqpX6Ekq3W0anKqT6rmtECNseRrRHL5Qvsmt/8SNRnCIuuIeVK2FStBghIs/wN4QG/fEt7t
+6s6+af4Rd4tMfXMBILwh3bMl6vuXDWeqN6N2InD91hM73qQLFBFdMrq+/DzqUV57XnHvQnf7vkmg
+0uZs4uSTF4N3mxRfr5Jk4KVhxes51kFezHaJ9ULpsO8hHUF7CyWWuTs85VK2KYYmxRIqni2M6a3j
+u35RCBCGg1kaKGPESQ==
+--000000000000081a8505f8924fc6--
