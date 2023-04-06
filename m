@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31926D958D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 13:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35476D95E9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 13:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238125AbjDFLe4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 07:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S238591AbjDFLip (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 07:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238118AbjDFLeG (ORCPT
+        with ESMTP id S238480AbjDFLiP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:34:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980F46EB6;
-        Thu,  6 Apr 2023 04:33:05 -0700 (PDT)
+        Thu, 6 Apr 2023 07:38:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB83BBA4;
+        Thu,  6 Apr 2023 04:35:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 699EA64471;
-        Thu,  6 Apr 2023 11:33:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16974C433D2;
-        Thu,  6 Apr 2023 11:33:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D8BA64487;
+        Thu,  6 Apr 2023 11:33:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBF5AC433EF;
+        Thu,  6 Apr 2023 11:33:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680780784;
-        bh=cfJ073jZWuUKyB8yTPziOXBTwqVge2u8UtgBTT4+M2w=;
+        s=k20201202; t=1680780808;
+        bh=3j6+VoxGChxs/a8JSRyVc96gPjF6/uzX1RsGIUklct0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BsxPvr8thUU0HWEXucT3udzv4SttaLkuNjFvLPHm5BzNJ9UsecLGqLQOJV9pAPEPY
-         P2kJSJBrEWS2iOptxoxwbBsD7/17WE8u/IA6oDZ1V7RcBKIai96W6oS6p8R3cMPBBd
-         3z1DwRzwBBBSRngKOQrQq2Ezjfl4+Mvkc4uwOzEmDkJHOXWXOK3OdQzFivqJCYxZI3
-         y6MIxNmusWIDv4z+r1gmxn0ddjymQ+DJQnoA8LeemnyeLYVMQElmHx2rVqMwEniyXA
-         8nQzwjJU2IuLfYkCXQlQmEsA5dmNix9q2eOJjt1qaNIIjA2lftgK/TFY9axRz97A8D
-         je0OPnHIQSsag==
+        b=d2n/c/kNzyRy7VVpBWqBNVUvoVkZu+AyGIMyNGvW14gnSz6kjNZEGcAS4rZm2jn1f
+         8av5yRJFmWU5oMdu3tgMwvSpEM1ubPWq46Fm75kYcD26v066vVOGE33amGUzU+LMjf
+         g8t7DwlSoDOifte+BdSRSPNUWdZZLOsBJb7podVZalG8U9CU+PoU/615+MUQc+v9BH
+         PmuoCBdbcOmwskNx0eOQT7HBdrDZgEWtXg2mzFn12boPFvK/nA/hLPOsDDwMD+5ydK
+         VRmv2Fq13sgeY0McpW6JnWzGmu1Ai2gSOsSMf4vzQ2svFeJzSpp6ps6UvsIn4rEYA5
+         VAeeUVmqTzd2w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Nick Desaulniers <ndesaulniers@google.com>,
@@ -44,18 +44,18 @@ Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         aou@eecs.berkeley.edu, guoren@kernel.org, nathan@kernel.org,
         linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-csky@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 04/11] selftests: sigaltstack: fix -Wuninitialized
-Date:   Thu,  6 Apr 2023 07:32:43 -0400
-Message-Id: <20230406113250.648634-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 3/9] selftests: sigaltstack: fix -Wuninitialized
+Date:   Thu,  6 Apr 2023 07:33:09 -0400
+Message-Id: <20230406113315.648777-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406113250.648634-1-sashal@kernel.org>
-References: <20230406113250.648634-1-sashal@kernel.org>
+In-Reply-To: <20230406113315.648777-1-sashal@kernel.org>
+References: <20230406113315.648777-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,18 +126,18 @@ index 0000000000000..ea9bdf3a90b16
 +#error "implement current_stack_pointer equivalent"
 +#endif
 diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
-index c53b070755b65..98d37cb744fb2 100644
+index 8934a3766d207..41646c22384a2 100644
 --- a/tools/testing/selftests/sigaltstack/sas.c
 +++ b/tools/testing/selftests/sigaltstack/sas.c
-@@ -20,6 +20,7 @@
- #include <sys/auxv.h>
+@@ -19,6 +19,7 @@
+ #include <errno.h>
  
  #include "../kselftest.h"
 +#include "current_stack_pointer.h"
  
  #ifndef SS_AUTODISARM
  #define SS_AUTODISARM  (1U << 31)
-@@ -46,12 +47,6 @@ void my_usr1(int sig, siginfo_t *si, void *u)
+@@ -40,12 +41,6 @@ void my_usr1(int sig, siginfo_t *si, void *u)
  	stack_t stk;
  	struct stk_data *p;
  
@@ -148,7 +148,7 @@ index c53b070755b65..98d37cb744fb2 100644
 -#endif
 -
  	if (sp < (unsigned long)sstack ||
- 			sp >= (unsigned long)sstack + stack_size) {
+ 			sp >= (unsigned long)sstack + SIGSTKSZ) {
  		ksft_exit_fail_msg("SP is not on sigaltstack\n");
 -- 
 2.39.2
