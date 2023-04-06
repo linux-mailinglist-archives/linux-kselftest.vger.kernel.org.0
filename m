@@ -2,105 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9076D9D8C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 18:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FE56D9DFE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 18:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238100AbjDFQ37 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 12:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S239006AbjDFQx7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 12:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236627AbjDFQ36 (ORCPT
+        with ESMTP id S237927AbjDFQx6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:29:58 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE16276AD;
-        Thu,  6 Apr 2023 09:29:55 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 2805518835E0;
-        Thu,  6 Apr 2023 16:29:44 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 178B125002BB;
-        Thu,  6 Apr 2023 16:29:44 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 0DE709B403E2; Thu,  6 Apr 2023 16:29:44 +0000 (UTC)
-X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
-Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 56BB791201E3;
-        Thu,  6 Apr 2023 16:29:43 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
- test
-In-Reply-To: <20230406152443.b3ps4x7e4kz4aes2@skbuf>
-References: <20230318141010.513424-1-netdev@kapio-technology.com>
- <20230318141010.513424-7-netdev@kapio-technology.com>
- <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
- <ZCMYbRqd+qZaiHfu@shredder> <874jq22h2u.fsf@kapio-technology.com>
- <20230330192714.oqosvifrftirshej@skbuf>
- <871ql5mjjp.fsf@kapio-technology.com>
- <20230331093732.s6loozkdhehewlm4@skbuf>
- <87tty1nlb4.fsf@kapio-technology.com>
- <20230406152443.b3ps4x7e4kz4aes2@skbuf>
-Date:   Thu, 06 Apr 2023 18:26:58 +0200
-Message-ID: <87wn2pj7sd.fsf@kapio-technology.com>
+        Thu, 6 Apr 2023 12:53:58 -0400
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0956D2108
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 09:53:56 -0700 (PDT)
+Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
+        id 147F2AC5FA63; Thu,  6 Apr 2023 09:53:44 -0700 (PDT)
+From:   Stefan Roesch <shr@devkernel.io>
+To:     kernel-team@fb.com
+Cc:     shr@devkernel.io, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
+        hannes@cmpxchg.org
+Subject: [PATCH v5 0/3] mm: process/cgroup ksm support
+Date:   Thu,  6 Apr 2023 09:53:36 -0700
+Message-Id: <20230406165339.1017597-1-shr@devkernel.io>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.0 required=5.0 tests=RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_NEUTRAL,TVD_RCVD_IP autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 18:24, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Fri, Mar 31, 2023 at 02:43:11PM +0200, Hans Schultz wrote:
->> I will as long as the system is as it is with these selftests, just run
->> single subtests at a time on target, but if I have new phy problems like
->> the one you have seen I have had before, then testing on target becomes
->> off limits.
->
-> Please open a dedicated communication channel (separate email thread on
-> netdev@vger.kernel.org) with the appropriate maintainers for the PHY
-> code that is failing for you in To:, and you will get the help that you
-> need to resolve that and to be able to test on the target board.
+So far KSM can only be enabled by calling madvise for memory regions. To
+be able to use KSM for more workloads, KSM needs to have the ability to b=
+e
+enabled / disabled at the process / cgroup level.
 
-The errors from the phy I saw in February. Maybe something was fixed in
-the meantime as I did not see the same warning and exception last I
-tried to run the newest kernel on target a little over a week ago.
+Use case 1:
+The madvise call is not available in the programming language. An example=
+ for
+this are programs with forked workloads using a garbage collected languag=
+e without
+pointers. In such a language madvise cannot be made available.
+
+In addition the addresses of objects get moved around as they are garbage
+collected. KSM sharing needs to be enabled "from the outside" for these t=
+ype of
+workloads.
+
+Use case 2:
+The same interpreter can also be used for workloads where KSM brings no
+benefit or even has overhead. We'd like to be able to enable KSM on a wor=
+kload
+by workload basis.
+
+Use case 3:
+With the madvise call sharing opportunities are only enabled for the curr=
+ent
+process: it is a workload-local decision. A considerable number of sharin=
+g
+opportunities may exist across multiple workloads or jobs (if they are pa=
+rt
+of the same security domain). Only a higler level entity like a job sched=
+uler
+or container can know for certain if its running one or more instances of=
+ a
+job. That job scheduler however doesn't have the necessary internal workl=
+oad
+knowledge to make targeted madvise calls.
+
+Security concerns:
+In previous discussions security concerns have been brought up. The probl=
+em is
+that an individual workload does not have the knowledge about what else i=
+s
+running on a machine. Therefore it has to be very conservative in what me=
+mory
+areas can be shared or not. However, if the system is dedicated to runnin=
+g
+multiple jobs within the same security domain, its the job scheduler that=
+ has
+the knowledge that sharing can be safely enabled and is even desirable.
+
+Performance:
+Experiments with using UKSM have shown a capacity increase of around 20%.
+
+
+1. New options for prctl system command
+This patch series adds two new options to the prctl system call. The firs=
+t
+one allows to enable KSM at the process level and the second one to query=
+ the
+setting.
+
+The setting will be inherited by child processes.
+
+With the above setting, KSM can be enabled for the seed process of a cgro=
+up
+and all processes in the cgroup will inherit the setting.
+
+2. Changes to KSM processing
+When KSM is enabled at the process level, the KSM code will iterate over =
+all
+the VMA's and enable KSM for the eligible VMA's.
+
+When forking a process that has KSM enabled, the setting will be inherite=
+d by
+the new child process.
+
+In addition when KSM is disabled for a process, KSM will be disabled for =
+the
+VMA's where KSM has been enabled.
+
+3. Add general_profit metric
+The general_profit metric of KSM is specified in the documentation, but n=
+ot
+calculated. This adds the general profit metric to /sys/kernel/debug/mm/k=
+sm.
+
+4. Add more metrics to ksm_stat
+This adds the process profit and ksm type metric to /proc/<pid>/ksm_stat.
+
+5. Add more tests to ksm_tests
+This adds an option to specify the merge type to the ksm_tests. This allo=
+ws to
+test madvise and prctl KSM. It also adds a new option to query if prctl K=
+SM has
+been enabled. It adds a fork test to verify that the KSM process setting =
+is
+inherited by client processes.
+
+
+Changes:
+- V5:
+  - When the prctl system call is invoked, mark all compatible VMA
+    as mergeable
+  - Instead of checcking during scan if VMA is mergeable, mark the VMA
+    mergeable when the VMA is created (in case the VMA is compatible)
+    - Remove earlier changes, they are no longer necessary
+  - Unset the flag MMF_VM_MERGE_ANY in gmap_mark_unmergeable().
+  - When unsetting the MMF_VM_MERGE_ANY flag with prctl, only unset the
+    flag
+  - Remove pages_volatile function (with the simplar general_profit calcu=
+lation,
+    the function is no longer needed)
+  - Use simpler formula for calculation of general_profit
+
+- V4:
+  - removing check in prctl for MMF_VM_MERGEABLE in PR_SET_MEMORY_MERGE
+    handling
+  - Checking for VM_MERGEABLE AND MMF_VM_MERGE_ANY to avoid chaning vm_fl=
+ags
+    - This requires also checking that the vma is compatible. The
+      compatibility check is provided by a new helper
+    - processes which have set MMF_VM_MERGE_ANY, only need to call the
+      helper and not madvise.
+  - removed unmerge_vmas function, this function is no longer necessary,
+    clearing the MMF_VM_MERGE_ANY bit is sufficient
+
+- V3:
+  - folded patch 1 - 6
+  - folded patch 7 - 14
+  - folded patch 15 - 19
+  - Expanded on the use cases in the cover letter
+  - Added a section on security concerns to the cover letter
+
+- V2:
+  - Added use cases to the cover letter
+  - Removed the tracing patch from the patch series and posted it as an
+    individual patch
+  - Refreshed repo
+
+
+Stefan Roesch (3):
+  mm: add new api to enable ksm per process
+  mm: add new KSM process and sysfs knobs
+  selftests/mm: add new selftests for KSM
+
+ Documentation/ABI/testing/sysfs-kernel-mm-ksm |   8 +
+ Documentation/admin-guide/mm/ksm.rst          |   8 +-
+ arch/s390/mm/gmap.c                           |   1 +
+ fs/proc/base.c                                |   5 +
+ include/linux/ksm.h                           |  36 ++-
+ include/linux/sched/coredump.h                |   1 +
+ include/uapi/linux/prctl.h                    |   2 +
+ kernel/fork.c                                 |   1 +
+ kernel/sys.c                                  |  24 ++
+ mm/ksm.c                                      | 143 ++++++++--
+ mm/mmap.c                                     |   7 +
+ tools/include/uapi/linux/prctl.h              |   2 +
+ tools/testing/selftests/mm/Makefile           |   2 +-
+ tools/testing/selftests/mm/ksm_tests.c        | 254 +++++++++++++++---
+ 14 files changed, 426 insertions(+), 68 deletions(-)
+
+--=20
+2.34.1
+
