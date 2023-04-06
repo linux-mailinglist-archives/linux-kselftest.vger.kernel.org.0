@@ -2,139 +2,352 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00416DA418
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 22:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5496DA456
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 23:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjDFUzi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 16:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
+        id S229674AbjDFVEJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 17:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjDFUzh (ORCPT
+        with ESMTP id S229518AbjDFVEI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:55:37 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1364ED6;
-        Thu,  6 Apr 2023 13:55:36 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id qb20so4337932ejc.6;
-        Thu, 06 Apr 2023 13:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680814535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZH+Py50y9vo4DMUtUbK/cR4JBKneDucbAHS4uMgQV/Q=;
-        b=KRVuosrjlXoDxku6toLdouLKwUM658atx1aVXMcmtkqbiSm752xfpO6UFVT8mxCkWH
-         wrhehxhP0Fw5WOSD5/gFPXvUijBJkpkHZqTNFQdebJUuhsJEhmPhALa4iUAKTyfK3qnJ
-         NL5/EpePbdo6U4N1m1g1nNj6Clqm8O6RjgwEAuqGhGmZGZjZIFZEJI0x0m5V9GpQO65D
-         Xo6FyvT7NV59g7JsJrfAhdqqyFDRBHqxHYE2EDy7MYIY8azcs4gpOPVRdZ1sJMxDgW41
-         XVdsbTZTcBjrT/PgCnd0YuNMhxCJGu/WI2mvzwUIfsINc+V+NWbarY8+JQWjp3OJ4OeA
-         UDoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680814535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZH+Py50y9vo4DMUtUbK/cR4JBKneDucbAHS4uMgQV/Q=;
-        b=ZCOhSookSbSuTeiS+vPMMLyUfyPbCuQIDIFysemkYTh8SYDAgiF0YBP8giwKmDHCAf
-         Bpl2fP7iE6eWzLS+KViohtyDNWsxflt/ec5Xo9cPbIZX5l2UgEHas/E8avuGabFDH7F4
-         JARmyfakyatjF9nICcuXElsi9qR7zKSm8kDBo928vj7pTAk4veO76/TFpPEbvp8r8/GY
-         SQQbV3VF4m0VGzhYt/TnNZCOpiWnJLUP/oeLmUWQjpUG3kRggbYcyJQCwHd12+9hM1Y3
-         X6C6Sybxv5IZtI0eEzPdKZspF88LSbHrS7lcXBt5qNLbATjbTJi53JLAbvEF8pHKtGae
-         3GlA==
-X-Gm-Message-State: AAQBX9c64NE42675bQjsmpS8wcygT5VCZG2Rntwd2wATBWMYAD0ji8Iy
-        lz+yNF8T/te6dMduFS+c9hSlEk2Goy0+QO25rZyT7Ra2
-X-Google-Smtp-Source: AKy350Y3+FEZ1Cg0ihoX86pgJJmcQhD/cHfq/fxhWNZ0zwmWBiZiTjY0deSWjnSKZKcRks3NmRLLHqbsRPfLxe752OU=
-X-Received: by 2002:a17:906:1ec7:b0:949:8e10:31c1 with SMTP id
- m7-20020a1709061ec700b009498e1031c1mr96576ejj.5.1680814534863; Thu, 06 Apr
- 2023 13:55:34 -0700 (PDT)
+        Thu, 6 Apr 2023 17:04:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0675FE1;
+        Thu,  6 Apr 2023 14:04:05 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [119.155.57.40])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C02B66031CB;
+        Thu,  6 Apr 2023 22:03:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680815044;
+        bh=wB6zD51lex7I7n9LEZMIeAEbkO6YUuKChM00tqiWyD0=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=aOUblwfSB5LQghHObMRJ3lYoqiolYUjWxeWI89Cbq4zsdKgOZxD7o9AGS3dkKAThH
+         FRvGtate+50/NsHnedFqHFFi4HvTxdOvvKCZmnUuuyOBOAUZG0yfY4Vw+6SXiOnCNf
+         lojdcWTKJc5eNGjHQZE8ufGG0WtmDx439J+aliaenPhCeTlajns0vgRZA/55suta0X
+         A7PraK5ZDlnj1py3MbY/2ibmtolkQafCTswKNTrIFG4AeYDUJ7XLQVRHZLZtQoFaNT
+         sYDnWusIgiho7tMR/7HnlPB+GChDnas5iZo+WHdEv5hVDgiVINYpAk9/4me44GbH9q
+         9A+Mb1cC6E9mA==
+Message-ID: <8a837998-604f-a871-729e-aa274a621481@collabora.com>
+Date:   Fri, 7 Apr 2023 02:03:53 +0500
 MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-2-drosen@google.com>
-In-Reply-To: <20230406004018.1439952-2-drosen@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 6 Apr 2023 13:55:23 -0700
-Message-ID: <CAEf4BzbyX3i6k5eL6D-5enU+u58nVn_fK28zNBJ4w_Vm-+RiMQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] bpf: verifier: Accept dynptr mem as mem in helpers
-To:     Daniel Rosenberg <drosen@google.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Mike Rapoport <rppt@kernel.org>
+References: <20230406074005.1784728-1-usama.anjum@collabora.com>
+ <20230406074005.1784728-3-usama.anjum@collabora.com>
+ <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
+ <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com>
+ <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 5:40=E2=80=AFPM Daniel Rosenberg <drosen@google.com>=
- wrote:
->
-> This allows using memory retrieved from dynptrs with helper functions
-> that accept ARG_PTR_TO_MEM. For instance, results from bpf_dynptr_data
-> can be passed along to bpf_strncmp.
->
-> Signed-off-by: Daniel Rosenberg <drosen@google.com>
-> ---
+On 4/7/23 1:00 AM, Michał Mirosław wrote:
+> On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>> Hello,
+>>
+>> Thank you so much for the review. Do you have any thoughts on the build
+>> error on arc architecture?
+>> https://lore.kernel.org/all/e3c82373-256a-6297-bcb4-5e1179a2cbe2@collabora.com
+> 
+> Maybe copy HPAGE_* defines from x86 and key on CONFIG_PGTABLE_LEVELS >
+> 2? I don't know much about arc arch, though.
+> 
+>> On 4/6/23 8:52 PM, Michał Mirosław wrote:
+>>> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:>
+> [...]
+>>>> +#define PM_SCAN_BITMAP(wt, file, present, swap)        \
+>>>> +       (wt | file << 1 | present << 2 | swap << 3)
+>>> Please parenthesize macro arguments ("(wt)", "(file)", etc.) to not
+>>> have to worry about operator precedence when passed a complex
+>>> expression.
+>> Like this?
+>> #define PM_SCAN_BITMAP(wt, file, present, swap) \
+>>         ((wt) | (file << 1) | (present << 2) | (swap << 3))
+> 
+> The value would be:
+>  ( (wt) | ((file) << 1) | ... )
+> IOW, each parameter should have parentheses around its name.
+Will do.
 
-I think patches like this should be targeted against bpf-next, so for
-next revision please send them against bpf-next tree.
+> 
+> [...]
+>>>> +               cur->len += n_pages;
+>>>> +               p->found_pages += n_pages;
+>>>> +
+>>>> +               if (p->max_pages && (p->found_pages == p->max_pages))
+>>>> +                       return PM_SCAN_FOUND_MAX_PAGES;
+>>>> +
+>>>> +               return 0;
+>>>> +       }
+>>>> +
+>>>> +       if (!p->vec_index || ((p->vec_index + 1) < p->vec_len)) {
+>>>
+>>> It looks that `if (p->vec_index < p->vec_len)` is enough here - if we
+>>> have vec_len == 0 here, then we'd not fit the entry in the userspace
+>>> buffer anyway. Am I missing something?
+>> No. I'd explained it with diagram last time:
+>> https://lore.kernel.org/all/3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@collabora.com
+>>
+>> I'll add a concise comment here.
+> 
+> So it seems, but I think the code changed a bit and maybe could be
+> simplified now? Since p->vec_len == 0 is currently not valid, the
+> field could count only the entries available in p->vec[] -- IOW: not
+> include p->cur in the count.
+I see. But this'll not work as we need to count p->cur to don't go above
+the maximum count, p->vec_size.
 
->  kernel/bpf/verifier.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 56f569811f70..20beab52812a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7164,12 +7164,16 @@ static int check_reg_type(struct bpf_verifier_env=
- *env, u32 regno,
->          * ARG_PTR_TO_MEM + MAYBE_NULL is compatible with PTR_TO_MEM and =
-PTR_TO_MEM + MAYBE_NULL,
->          * but ARG_PTR_TO_MEM is compatible only with PTR_TO_MEM but NOT =
-with PTR_TO_MEM + MAYBE_NULL
->          *
-> +        * ARG_PTR_TO_MEM is compatible with PTR_TO_MEM that is tagged wi=
-th a dynptr type.
-> +        *
->          * Therefore we fold these flags depending on the arg_type before=
- comparison.
->          */
->         if (arg_type & MEM_RDONLY)
->                 type &=3D ~MEM_RDONLY;
->         if (arg_type & PTR_MAYBE_NULL)
->                 type &=3D ~PTR_MAYBE_NULL;
-> +       if (base_type(arg_type) =3D=3D ARG_PTR_TO_MEM)
-> +               type &=3D ~DYNPTR_TYPE_FLAG_MASK;
+> 
+> BTW, `if (no space) return -ENOSPC` will avoid additional indentation
+> for the non-merging case.
+I'll update.
 
-Something feels off here. Can you paste a bit of verifier log for the
-failure you were getting. And let's have a selftest for this situation
-as well.
+> 
+> [...]
+>>>> +static inline int pagemap_scan_deposit(struct pagemap_scan_private *p,
+>>>> +                                      struct page_region __user *vec,
+>>>> +                                      unsigned long *vec_index)
+>>>
+>>> ..._deposit() is used only in single place - please inline.
+>> It is already inline.
+> 
+> Sorry. I mean: please paste the code in place of the single call.
+I've made it a separate function to make the code look better in the caller
+function and logically easier to understand. This function is ugly.
+do_pagemap_scan() is also already very long function with lots of things
+happening. If you still insist, I'll remove this function.
 
-ARG_PTR_TO_MEM shouldn't be qualified with the DYNPTR_TYPE flag, it's
-just memory, there is no need to know what type of dynptr it was
-derived from. So if that happens, the problem is somewhere else. Let's
-root cause and fix that. Having a selftest that demonstrates the
-problem will help with that.
+> 
+> [...]
+>>>> +               /*
+>>>> +                * Break huge page into small pages if the WP operation need to
+>>>> +                * be performed is on a portion of the huge page or if max_pages
+>>>> +                * pages limit would exceed.
+>>>
+>>> BTW, could the `max_pages` limit be relaxed a bit (in that it would be
+>>> possible to return more pages if they all merge into the last vector
+>>> entry) so that it would not need to split otherwise-matching huge
+>>> page? It would remove the need for this special handling in the kernel
+>>> and splitting the page by this read-only-appearing ioctl?
+>> No, this cannot be done. Otherwise we'll not be able to emulate Windows
+>> syscall GetWriteWatch() which specifies the exact number of pages. Usually
+>> in most of cases, either user will not use THP or not perform the operation
+>> on partial huge page. So this part is only there to keep things correct for
+>> those users who do use THP and partial pagemap_scan operations.
+> 
+> I see that `GetWriteWatch` returns a list of pages not ranges of
+> pages. That makes sense (more or less). (BTW, It could be emulated in
+> userspace by caching the last not-fully-consumed range.)
+First of all, caching is avoided as then state maintained is needed. This
+is probably not accepted in Wine upstream later. Secondly, even if we have
+cache, Get + WP operation would not be accurate when we ask only N pages,
+but it gets N + X pages where X pages will not be consumed by the
+application at this time.
 
+> 
+>>>> +                */
+>>>> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
+>>>> +                   ((end - start < HPAGE_SIZE) ||
+>>>> +                    (p->max_pages &&
+>>>> +                     (p->max_pages - p->found_pages) < n_pages))) {
+>>>> +
+>>>> +                       split_huge_pmd(vma, pmd, start);
+>>>> +                       goto process_smaller_pages;
+>>>> +               }
+>>>> +
+>>>> +               if (p->max_pages &&
+>>>> +                   p->found_pages + n_pages > p->max_pages)
+>>>> +                       n_pages = p->max_pages - p->found_pages;
+>>>> +
+>>>> +               ret = pagemap_scan_output(is_written, is_file, is_present,
+>>>> +                                         is_swap, p, start, n_pages);
+>>>> +               if (ret < 0)
+>>>> +                       return ret;
+> 
+> So let's simplify this:
+> 
+> if (p->max_pages && n_pages > max_pages - found_pages)
+>   n_pages = max_pages - found_pages;
+> 
+> if (is_written && DO_WP && n_pages != HPAGE_SIZE / PAGE_SIZE) {
+>   split_thp();
+>   goto process_smaller_pages;
+> }
+Clever!! This looks very sleek.
 
->
->         if (meta->func_id =3D=3D BPF_FUNC_kptr_xchg && type & MEM_ALLOC)
->                 type &=3D ~MEM_ALLOC;
-> --
-> 2.40.0.577.gac1e443424-goog
->
+> 
+> BTW, THP handling could be extracted to a function that would return
+> -EAGAIN if it has split the page or it wasn't a THP -- and that would
+> mean `goto process_smaller_pages`.
+Other functions in this file handle the THP in this same way. So it feels
+like more intuitive that we follow to same pattern in this file.
+
+> 
+>>> Why not propagate the error from uffd_wp_range()?
+>> uffd_wp_range() returns status in long variable. We cannot return long in
+>> this function. So intead of type casting long to int and then return I've
+>> used -EINVAL. Would following be more suitable?
+>>
+>> long ret2 = uffd_wp_range(vma, start, HPAGE_SIZE, true);
+>> if (ret2 < 0)
+>>         return (int)ret2;
+> 
+> I think it's ok, since negative values are expected to be error codes.
+> And since you can't overflow int with HPAGE_SIZE pages, then I
+> wouldn't use `ret2` but cast the return and add a comment why it's
+> safe.
+I'll update.
+
+> 
+> [...]
+>>>> +       start = (unsigned long)untagged_addr(arg.start);
+>>>> +       vec = (struct page_region *)(unsigned long)untagged_addr(arg.vec);
+>>>
+>>> Is the inner cast needed?
+>> arg.vec remains 64-bit on 32-bit systems. So casting 64bit value directly
+>> to struct page_region pointer errors out. So I've added specific casting to
+>> unsigned long first before casting to pointers.
+> 
+> I see. So to convey the intention, the `arg.start` and `arg.vec`
+> should be casted to unsigned long, not the `untagged_addr()` return
+> values.
+I'll update.
+
+> 
+>>>> +       ret = pagemap_scan_args_valid(&arg, start, vec);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       end = start + arg.len;
+>>>> +       p.max_pages = arg.max_pages;
+>>>> +       p.found_pages = 0;
+>>>> +       p.flags = arg.flags;
+>>>> +       p.required_mask = arg.required_mask;
+>>>> +       p.anyof_mask = arg.anyof_mask;
+>>>> +       p.excluded_mask = arg.excluded_mask;
+>>>> +       p.return_mask = arg.return_mask;
+>>>> +       p.cur.len = 0;
+>>>> +       p.cur.start = 0;
+>>>> +       p.vec = NULL;
+>>>> +       p.vec_len = (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
+>>>
+>>> Nit: parentheses are not needed here, please remove.
+>> Will do.
+>>
+>>>
+>>>> +
+>>>> +       /*
+>>>> +        * Allocate smaller buffer to get output from inside the page walk
+>>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+>>>> +        * we want to return output to user in compact form where no two
+>>>> +        * consecutive regions should be continuous and have the same flags.
+>>>> +        * So store the latest element in p.cur between different walks and
+>>>> +        * store the p.cur at the end of the walk to the user buffer.
+>>>> +        */
+>>>> +       p.vec = kmalloc_array(p.vec_len, sizeof(struct page_region),
+>>>> +                             GFP_KERNEL);
+>>>> +       if (!p.vec)
+>>>> +               return -ENOMEM;
+>>>> +
+>>>> +       walk_start = walk_end = start;
+>>>> +       while (walk_end < end && !ret) {
+>>>
+>>> The loop will stop if a previous iteration returned ENOSPC (and the
+>>> error will be lost) - is it intended?
+>> It is intentional. -ENOSPC means that the user buffer is full even though
+>> there was more memory to walk over. We don't treat this error. So when
+>> buffer gets full, we stop walking over further as user buffer has gotten
+>> full and return as success.
+> 
+> Thanks. What's the difference between -ENOSPC and
+> PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (code
+> flow).
+-ENOSPC --> user buffer has been filled completely
+PM_SCAN_FOUND_MAX_PAGES --> max_pages have been found, user buffer may
+			    still have more space
+
+> 
+> [...]
+>>>> --- a/include/linux/userfaultfd_k.h
+>>>> +++ b/include/linux/userfaultfd_k.h
+>>>> @@ -210,6 +210,14 @@ extern bool userfaultfd_wp_async(struct vm_area_struct *vma);
+>>>>
+>>>>  #else /* CONFIG_USERFAULTFD */
+>>>>
+>>>> +static inline long uffd_wp_range(struct mm_struct *dst_mm,
+>>>> +                                struct vm_area_struct *vma,
+>>>> +                                unsigned long start, unsigned long len,
+>>>> +                                bool enable_wp)
+>>>> +{
+>>>> +       return 0;
+>>>> +}
+> [...]
+>>> Shouldn't this part be in the patch introducing uffd_wp_range()?
+>> We have not added uffd_wp_range() in previous patches. We just need this
+>> stub for this patch for the case when CONFIG_USERFAULTFD isn't enabled.
+>>
+>> I'd this as separate patch before this patch. Mike asked me to merge it
+>> with this patch in order not to break bisectability.
+>> [1] https://lore.kernel.org/all/ZBK+86eMMazwfhdx@kernel.org
+> 
+> I would understand the reply [1] to mean that the uffd_wp_range() stub
+> should go in the same patch where uffd_wp_range() is implemented. But
+> uffd_wp_range() is already in (since f369b07c86140) so I don't see how
+> having the stub in a separate commit sequenced before this one could
+> break bisect?
+Sorry, I mis-interpreted it. I'll make it a separate patch.
+
+> 
+> Best Regards
+> Michał Mirosław
+
+-- 
+BR,
+Muhammad Usama Anjum
