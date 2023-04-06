@@ -2,90 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66E86D8B7F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 02:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843D16D8B98
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 02:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbjDFAMi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Apr 2023 20:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S233903AbjDFATC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Apr 2023 20:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjDFAMh (ORCPT
+        with ESMTP id S230108AbjDFATB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Apr 2023 20:12:37 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7A661AE
-        for <linux-kselftest@vger.kernel.org>; Wed,  5 Apr 2023 17:12:35 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-4fa3ca41383so791530a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Apr 2023 17:12:35 -0700 (PDT)
+        Wed, 5 Apr 2023 20:19:01 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0276598
+        for <linux-kselftest@vger.kernel.org>; Wed,  5 Apr 2023 17:18:59 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5425c04765dso371234447b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Apr 2023 17:18:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680739953;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QWqojSp8qeBF+mnrDb0v8Y1VEeoiQlSQ1yGGpxufYDs=;
-        b=mmtf2AayBWm/z9sUCranjsDtUq8AxYpmX4yPfK4znmF2gMIODJ7tf13ZcvRf7XB84K
-         AgOJLhfcSJpYEPHYwm5X0Fu3pt6ZBax5QjRsO69RzY2rTbyqiLNyDuId8qaErMGe3LMS
-         iWF5PYWGarqFRVHJNktro71deVYVccaeWoaJw=
+        d=google.com; s=20210112; t=1680740339;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cWlTF2KX/SLscX0Kn9NLj6T2D2vSbjVY278n3hbFYjY=;
+        b=Su2D1+qUf7Ph7eETWK8SAUW7jHWbOHfiOGnPWly+EXs6AMreGK9jAxeB1sMb/OMOPY
+         kb81oTWVp7qPJ2XaqWMTwg/It/LOWezEc3rfAp0sKBaL+3W33vnN2uAad8mK04NnX8v1
+         wgAS00fxMs0Eaz+vby2VZhRvD404NTgE/9a45xFXzFfTi/U2c5pggtcuLB/TcYR1JJDC
+         xNKoRnTU0wNG29j38mxAbaJJb0Ufgh/SdVrwZsC3vIzS1COrjLhtGDoK464jKbYW9zC+
+         TYvQ2qipOJbnx1veLjZWyA5PJ0blbodGz5ZfUzySMc7nrWDz1f4UI9YX21mBsZcMeCPm
+         Hr3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680739953;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QWqojSp8qeBF+mnrDb0v8Y1VEeoiQlSQ1yGGpxufYDs=;
-        b=Ldnnys9XhYDxVk5D+naReJYd8Euxy4xG+j6SYj0jLyqvenVPqbCWlIDR+K0k5AhTwU
-         OU7/4n7MQt9N0ykyD30xJyb/+pn8uN4xHCAuISBXo03RShnu4TxH1Ff3DPyjkTFIapr+
-         Dxf7odbKZbWhgvSc5+W7pEhBJmr0xSas1jPmHI2P1we1V+PJjtqrSwUBIsjv/r6x916u
-         LJrB+mT/hFnkuzCgfYh0wfHnnoqA+0ZsAnQDaA+Kx9UnAeq+maPOTlrHMuccSb0qk/S7
-         6JVIe9srhS8uyzDNNYfYsdIDM4UF6tTvMoJwBVLwGcxdxYYk5td/kQOr7LEsMRNKZOT6
-         RXQA==
-X-Gm-Message-State: AAQBX9eeQ/lDTYjQ3oZmqO0+b1lizLK9VwFpasGt6Se9//GClsD+XKW5
-        5Ep6s2pf5I7gfIrBJtY6QWSbhWER/u9ycQ+vrUvb7A==
-X-Google-Smtp-Source: AKy350bSg5cQf76vayF8cuTHt7hGbMj/aBgU/6HTmDSPmn/KXvw21Y1A4RFFgZK1jB9dW9Ud6Cu2kqEjEDgC+YjCXjw=
-X-Received: by 2002:a50:8adc:0:b0:502:3c99:417f with SMTP id
- k28-20020a508adc000000b005023c99417fmr2041304edk.6.1680739953661; Wed, 05 Apr
- 2023 17:12:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230405235920.7305-1-kal.conley@dectris.com> <20230405235920.7305-3-kal.conley@dectris.com>
-In-Reply-To: <20230405235920.7305-3-kal.conley@dectris.com>
-From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Thu, 6 Apr 2023 02:17:13 +0200
-Message-ID: <CAHApi-kRav_7jpkyTf+Ko7LJwx6_UO+1QydoAr-fMqeyBE=OYw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests: xsk: Add test UNALIGNED_INV_DESC_4K1_FRAME_SIZE
-To:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680740339;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cWlTF2KX/SLscX0Kn9NLj6T2D2vSbjVY278n3hbFYjY=;
+        b=iROCzzdZX/1gPsXuTEnDChtauZagaGW4XiGV7L/a5b2e2Culyk9FFwtVymq9Ekv7ZH
+         JFP5O0WLvLMgjnwnKkfOCcWElazzFw8mjyBdGEFBHXY0+WarS2qQHKAJuaPD5ZL11Aop
+         nOLOZNcsBRGTrbq5EqpwIJDQInEC+kJM+vKtDOjTj/H3nuxwDXnQK8l7Aa+6TajpM6zX
+         WEcUIlYAXgG08b4DocurJXU0S0iBqMkFP+TD1lXFmmQ56ERgRZPZg5bkZjxgfSgjYQOO
+         Cul2dyDAluWUftLxHFjwh7YEEN6FITTuwxbiXttkTRoizmKhRIFP/kzRRoZx52RP96fK
+         gnjA==
+X-Gm-Message-State: AAQBX9dDiV1mjSxbzXfhJ1nvzcqFDHjdwmBgS5UOvlQvSslZ9ZrNRkp9
+        w2oGUxnrxwtG4ypC0lJZsNb5kVEjwsI=
+X-Google-Smtp-Source: AKy350bQ3fIfLy6btCgwToPkUIzYS2FCVZiNU6H5A1yDmDhqpOXUJ575ykKtCBiZenPiKTLxHQxC0TT3qII=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:12c7:b0:b26:884:c35e with SMTP id
+ j7-20020a05690212c700b00b260884c35emr835123ybu.4.1680740339147; Wed, 05 Apr
+ 2023 17:18:59 -0700 (PDT)
+Date:   Wed,  5 Apr 2023 17:18:20 -0700
+In-Reply-To: <20230405101350.259000-1-gehao@kylinos.cn>
+Mime-Version: 1.0
+References: <20230405101350.259000-1-gehao@kylinos.cn>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-ID: <168074029572.706923.3161914837229872289.b4-ty@google.com>
+Subject: Re: [RESEND PATCH] kvm/selftests: Close opened file descriptor in stable_tsc_check_supported()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com,
+        shuah@kernel.org, dmatlack@google.com, coltonlewis@google.com,
+        vipinsh@google.com, Hao Ge <gehao@kylinos.cn>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gehao618@163.com
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> Add unaligned descriptor test for frame size of 4001. Using an odd frame
-> size ensures that the end of the UMEM is not near a page boundary. This
-> allows testing descriptors that staddle the end of the UMEM but not a
-> page.
->
-> This test used to fail without the previous commit ("xsk: Add check for
-> unaligned descriptors that overrun UMEM").
+On Wed, 05 Apr 2023 18:13:50 +0800, Hao Ge wrote:
+> Close the "current_clocksource" file descriptor before
+> returning or exiting from stable_tsc_check_supported()
+> in vmx_nested_tsc_scaling_test
+> 
+> 
 
-Sorry I forgot to update the commit message with the new commit label.
-If accepted, please change the second paragraph to :
+Applied to kvm-x86 selftests, thanks!
 
-This test used to fail without the previous commit ("xsk: Fix unaligned
-descriptor validation").
+[1/1] kvm/selftests: Close opened file descriptor in stable_tsc_check_supported()
+      https://github.com/kvm-x86/linux/commit/771214507387
+
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
