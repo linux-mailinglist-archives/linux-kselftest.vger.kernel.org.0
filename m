@@ -2,67 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FE46D9BF3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 17:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9166D9C11
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 17:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236914AbjDFPPx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 11:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
+        id S239215AbjDFPUk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 11:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239454AbjDFPPv (ORCPT
+        with ESMTP id S238699AbjDFPUj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:15:51 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C203249FF
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 08:15:49 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-32676c41887so179605ab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 08:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1680794149; x=1683386149;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=SwJW32HUFSbqacbI3jOYaRioynoa1z7c5AASJQnUm6c=;
-        b=GvmgjgBD4LulrBVpSC5amslG0BBPCGKVBR7FhBqYrndx1/k+0sFZDZZHOdkDD6SlgH
-         KPBfljwfJxJEWvJpv6O8jjgVZ0boFHWffI8E2/MAbvOLwM0JecZth9o7aNF4q2K3E053
-         hUEwGV+R7NVA1tZATFl5I6zvmMjBk3cTSFzaQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680794149; x=1683386149;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SwJW32HUFSbqacbI3jOYaRioynoa1z7c5AASJQnUm6c=;
-        b=HziFP2Dav1deB138Dsc7NxZABXF34DnNARDwJms8lzXBwveCLN2zGvdUu4GtnxTN4b
-         ZeuEqmQW3pu7WWypHUShqFF4NpMMvI0J4AkbIq72FMBmHb/8XCpD0mUUVTnS2mkKC5Bk
-         ogNls0e7BNYbClyJ2khvR6IAVXwu7qiPbNNaOIE3Ulukj442GEuk+42T91Jr+KsG3kWT
-         NOe41GbpQo5vUxJGhQwVkrcXG+lmGGGyH/nGrtibA29eclV7L7hzLeBEB0HHD6IJqZ7y
-         Npvqpg5vMzUUs/hxIZ6rTSOJ9JuNN/+Ngw4q35GrEXNVzMhsggnLNbkn88KisMUfv8Le
-         xk1Q==
-X-Gm-Message-State: AAQBX9fb7BZ6srFY1/axOeWcXBQZaLEY3rsUo29KXGQufBJj1jnKYK+H
-        ORsjRVXDHri3BwdGIoaleMuvN7e4FpQSfe4cRcM=
-X-Google-Smtp-Source: AKy350ZFYtq3itkV7pt++ykJ6TvKH9zWdY2BYB6Oydx8wrWAbdaW3sJoy4u9iqNBqZd9SAgoepzs5w==
-X-Received: by 2002:a05:6e02:bee:b0:319:5431:5d5b with SMTP id d14-20020a056e020bee00b0031954315d5bmr2916208ilu.1.1680794149015;
-        Thu, 06 Apr 2023 08:15:49 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id r18-20020a92c5b2000000b00327392e5504sm380937ilt.68.2023.04.06.08.15.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 08:15:48 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------jCZDOs020xNWwUSNqV6tT9Up"
-Message-ID: <f9f22f65-3151-6361-871b-a4a119fde11d@linuxfoundation.org>
-Date:   Thu, 6 Apr 2023 09:15:47 -0600
+        Thu, 6 Apr 2023 11:20:39 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C319747;
+        Thu,  6 Apr 2023 08:20:35 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 55C7918837A6;
+        Thu,  6 Apr 2023 15:20:32 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 1E16725002FD;
+        Thu,  6 Apr 2023 15:20:32 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id F1F5A9B403F4; Thu,  6 Apr 2023 15:20:31 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 5442891201E3;
+        Thu,  6 Apr 2023 15:20:31 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
+ drivers
+In-Reply-To: <20230330150752.gdquw5kudtrqgzyz@skbuf>
+References: <20230327160009.bdswnalizdv2u77z@skbuf>
+ <87pm8tooe1.fsf@kapio-technology.com>
+ <20230327225933.plm5raegywbe7g2a@skbuf>
+ <87ileljfwo.fsf@kapio-technology.com>
+ <20230328114943.4mibmn2icutcio4m@skbuf>
+ <87cz4slkx5.fsf@kapio-technology.com>
+ <20230330124326.v5mqg7do25tz6izk@skbuf>
+ <87wn2yxunb.fsf@kapio-technology.com>
+ <20230330130936.hxme34qrqwolvpsh@skbuf>
+ <875yaimgro.fsf@kapio-technology.com>
+ <20230330150752.gdquw5kudtrqgzyz@skbuf>
+Date:   Thu, 06 Apr 2023 17:17:46 +0200
+Message-ID: <87o7o1ox9h.fsf@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tuananhlfc@gmail.com
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest fixes update for Linux 6.3-rc6
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,63 +91,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------jCZDOs020xNWwUSNqV6tT9Up
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Thu, Mar 30, 2023 at 18:07, Vladimir Oltean <olteanv@gmail.com> wrote:
+> As a bug fix, stop reporting to switchdev those FDB entries with
+> BR_FDB_ADDED_BY_USER && !BR_FDB_STATIC. Then, after "net" is merged into
+> "net-next" next Thursday (the ship has sailed for today), add "bool static"
 
-Hi Linus,
-
-Please pull the following Kselftest fixes update for Linux 6.3-rc6.
-
-This Kselftest fixes update for Linux 6.3-rc6 consists of one single
-fix to mount_setattr_test build failure.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 05107edc910135d27fe557267dc45be9630bf3dd:
-
-   selftests: sigaltstack: fix -Wuninitialized (2023-03-20 17:28:31 -0600)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.3-rc6
-
-for you to fetch changes up to f1594bc676579133a3cd906d7d27733289edfb86:
-
-   selftests mount: Fix mount_setattr_test builds failed (2023-03-31 09:18:45 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-fixes-6.3-rc6
-
-This Kselftest fixes update for Linux 6.3-rc6 consists of one single
-fix to mount_setattr_test build failure.
-
-----------------------------------------------------------------
-Anh Tuan Phan (1):
-       selftests mount: Fix mount_setattr_test builds failed
-
-  tools/testing/selftests/mount_setattr/mount_setattr_test.c | 1 +
-  1 file changed, 1 insertion(+)
-----------------------------------------------------------------
---------------jCZDOs020xNWwUSNqV6tT9Up
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-fixes-6.3-rc6.diff"
-Content-Disposition: attachment; filename="linux-kselftest-fixes-6.3-rc6.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21vdW50X3NldGF0dHIvbW91
-bnRfc2V0YXR0cl90ZXN0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tb3VudF9zZXRh
-dHRyL21vdW50X3NldGF0dHJfdGVzdC5jCmluZGV4IDU4MjY2OWNhMzhlOS4uYzZhOGM3MzJi
-ODAyIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tb3VudF9zZXRhdHRy
-L21vdW50X3NldGF0dHJfdGVzdC5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21v
-dW50X3NldGF0dHIvbW91bnRfc2V0YXR0cl90ZXN0LmMKQEAgLTE4LDYgKzE4LDcgQEAKICNp
-bmNsdWRlIDxncnAuaD4KICNpbmNsdWRlIDxzdGRib29sLmg+CiAjaW5jbHVkZSA8c3RkYXJn
-Lmg+CisjaW5jbHVkZSA8bGludXgvbW91bnQuaD4KIAogI2luY2x1ZGUgIi4uL2tzZWxmdGVz
-dF9oYXJuZXNzLmgiCiAK
-
---------------jCZDOs020xNWwUSNqV6tT9Up--
+It is probably too late today (now I have a Debian based VM that can do
+the selftests), but with this bug fix I have 1) not submitted bug fixes
+before and 2) it probably needs an appropriate explanation, where I
+don't know the problem well enough for general switchcores to submit
+with a suitable text.
