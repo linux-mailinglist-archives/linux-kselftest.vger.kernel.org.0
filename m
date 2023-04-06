@@ -2,111 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C9F6D9C2C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 17:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B4F6D9CC4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 17:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239313AbjDFPYz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 11:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
+        id S239348AbjDFPxC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 11:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239186AbjDFPYy (ORCPT
+        with ESMTP id S239437AbjDFPw6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:24:54 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E107EDC;
-        Thu,  6 Apr 2023 08:24:48 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-932072d4c00so156405866b.1;
-        Thu, 06 Apr 2023 08:24:48 -0700 (PDT)
+        Thu, 6 Apr 2023 11:52:58 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057934220
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 08:52:53 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id by26so2479538ejb.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 08:52:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680794686;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cOMO4X0KkT1wLKp3ZzLuqJYBOcq707+YpxHq0zavOgw=;
-        b=mOLwUplHv9h7ct3oUi+VgdSBSfJfcHSz4omCFqbZjtcuXZHY1U4ilN33bGUgNEML1d
-         Hjq7TbyKj4CJpjX2aYIhMpGOdWYEmKO/C293HsORhRG+hHjWFl30PxsM/93zkWlpk8lC
-         R93xYEJiKmwfBwiccG8Qtkg09sf55JI7q8wuLs0blN9F/xMZYbUWJXHcGoXFlX6ATnp3
-         2NOgQ3U7nnw2BBVkH+GM4uOAnLsCSM/U2wL9x/JpWe9suZa+OawzhG/gpICCvUkNwGR9
-         3mDNsEgVogbvJdbZt8mKUnYQEY2TV3tWC5PUAfU/wajZEWpW4OikShq4SToCCxH61U6/
-         zqdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680794686;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1680796372;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cOMO4X0KkT1wLKp3ZzLuqJYBOcq707+YpxHq0zavOgw=;
-        b=j5iQMnY13XVKIUzTonCUgh54fjWnKM4Pxf5aegGOE+FnUBYyFQHybJxYjaa8LbCmWw
-         0ehzVJWQDoOhDw5UlL7qBF1y907b3KckM8dMBLvjuqVkOa/Smkg5xYklNfxMhZC1/lOX
-         IKlPAu6GzKU1LuNEEaHAbREZaSHUKfKu5vVOVAyXSCOeknfasktFFpjiUshO+Q196FFG
-         cybQv+TIktI66VjR9kmjx4pDOEhutVO3zAJHvuzufEr3zlc1qGl9bXUWG4ZrsOFbxgos
-         k9SW0FQwwy84xstujxHHNKqFI4cRKRvp3pAV7O+Nz8zdeDCzDV8HEDmNMWmj33xfjIxI
-         NvGg==
-X-Gm-Message-State: AAQBX9fRXwidp0hNeP3bzpwPGZvuKtu5V/2fufaIwELfLS7LDJkDKRl5
-        dTbYYTijnXzzAAJcIaAaMoE=
-X-Google-Smtp-Source: AKy350bMKcJuUrKHxCynmrWlEri+wOd6BUJcWjnjfAUKYwzm18cdb+f7ZMxFTWEmAIFudRqwzqdrSg==
-X-Received: by 2002:aa7:da06:0:b0:502:8f49:2552 with SMTP id r6-20020aa7da06000000b005028f492552mr5597291eds.27.1680794686523;
-        Thu, 06 Apr 2023 08:24:46 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id b15-20020a50cccf000000b004c10b4f9ebesm878829edj.15.2023.04.06.08.24.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 08:24:46 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 18:24:43 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <netdev@kapio-technology.com>
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
- test
-Message-ID: <20230406152443.b3ps4x7e4kz4aes2@skbuf>
-References: <20230318141010.513424-1-netdev@kapio-technology.com>
- <20230318141010.513424-7-netdev@kapio-technology.com>
- <ZBgdAo8mxwnl+pEE@shredder>
- <87a5zzh65p.fsf@kapio-technology.com>
- <ZCMYbRqd+qZaiHfu@shredder>
- <874jq22h2u.fsf@kapio-technology.com>
- <20230330192714.oqosvifrftirshej@skbuf>
- <871ql5mjjp.fsf@kapio-technology.com>
- <20230331093732.s6loozkdhehewlm4@skbuf>
- <87tty1nlb4.fsf@kapio-technology.com>
+        bh=jf9knPLfZUMdqLMMWRJ4j4xLZDnsk3lC5W8sACtH6iI=;
+        b=VabsrehnrJHFSbtYIozH/rISYmd8i0xVFw5rP8YrFwnn85L5dVU2SDqd1QecWhj8CK
+         HNuKB7pzRkjJ4RBPwre79dGIh5JlANWo+CP9zPAdW96hzCJZpD3yYSE+5LX2lYH1Br3b
+         uXVhLqPz/jM58PgtJ1GA4toogmdgXWyjw1qjSc6YelceLxpnZwJBWraRwLDs+7wh2OAa
+         mPjhfbl1PYgxdXEmTrn8OX3HtcEJiZFCRT+fmIanQu1o503bIyyEGvUpYYSqYa6hZCNd
+         j2akewJiMLvTV+rHuVj9w/XAtyJygBvlExPIeHljnMj2nXI19wJ2xdES2ODxrvDQaoza
+         1VFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680796372;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jf9knPLfZUMdqLMMWRJ4j4xLZDnsk3lC5W8sACtH6iI=;
+        b=Sd3jenjdmbqA94QaH1KB4TEhGqGPqYFgg0DH2cQJ8rpGBAsT7g9weWnzCie1ITCErh
+         yfVHVeI1a3qqw9mJE+dNFtNLuJG4xv+o7xdjNn33MzsiyeaNEuiSyyN1+IbkQ2N3Joo5
+         CeHkf0gZBciXXZpHAUmDbRBw52L1vurlR5BFAWZrPoqyCPtRdYMvRx87THJAXxeW8buo
+         SVmJIrDi1KTDsSqOYFXZzS3Yv3NWfrysThclW/6LbrCbs7eLLiXbJuQxwABadsjK2PYh
+         JpfzFSeBZgCU0y+taScn1EVsfOpeJmM2+mygvYZC5U24mcOMADdSbE8ICLfIKxJCdxaB
+         dh0Q==
+X-Gm-Message-State: AAQBX9fmVCtq+SqDSs4VTbX8NJ81cP2UKkzDmSBRHKIaWsFF1WcmbMCD
+        OOlxYBYGcoLP+fGD5E5Db+/dJFj31mFy3GkJqFWRHw==
+X-Google-Smtp-Source: AKy350YlsCqEiq7f7OivFYLQI4Ny+sGRtKzxTRCl4LkQnxGjzG9q3Kue6oox0flE/qLwm9jpmiAp5Wd1eN+SMl9awRQ=
+X-Received: by 2002:a17:907:c80b:b0:8f5:2e0e:6def with SMTP id
+ ub11-20020a170907c80b00b008f52e0e6defmr5093807ejc.0.1680796372098; Thu, 06
+ Apr 2023 08:52:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tty1nlb4.fsf@kapio-technology.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230406074005.1784728-1-usama.anjum@collabora.com> <20230406074005.1784728-3-usama.anjum@collabora.com>
+In-Reply-To: <20230406074005.1784728-3-usama.anjum@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Thu, 6 Apr 2023 17:52:40 +0200
+Message-ID: <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,13 +93,323 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 02:43:11PM +0200, Hans Schultz wrote:
-> I will as long as the system is as it is with these selftests, just run
-> single subtests at a time on target, but if I have new phy problems like
-> the one you have seen I have had before, then testing on target becomes
-> off limits.
+On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:>
+> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+> the info about page table entries. The following operations are supported
+> in this ioctl:
+> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN)=
+,
+>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>   (PAGE_IS_SWAPPED).
+> - Find pages which have been written-to and write protect the pages
+>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+>
+> This IOCTL can be extended to get information about more PTE bits.
+[...]
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+[...]
+> +static inline bool is_pte_uffd_wp(pte_t pte)
+> +{
+> +       return ((pte_present(pte) && pte_uffd_wp(pte)) ||
+> +               pte_swp_uffd_wp_any(pte));
 
-Please open a dedicated communication channel (separate email thread on
-netdev@vger.kernel.org) with the appropriate maintainers for the PHY
-code that is failing for you in To:, and you will get the help that you
-need to resolve that and to be able to test on the target board.
+Nit: outer parentheses are not needed for `return`ed value -- please
+remove. (Same in other places.)
+
+> @@ -1768,11 +1789,416 @@ static int pagemap_release(struct inode *inode, =
+struct file *file)
+>         return 0;
+>  }
+>
+> +#define PM_SCAN_FOUND_MAX_PAGES        (1)
+> +#define PM_SCAN_BITS_ALL       (PAGE_IS_WRITTEN | PAGE_IS_FILE |       \
+> +                                PAGE_IS_PRESENT | PAGE_IS_SWAPPED)
+> +#define PM_SCAN_OPS            (PM_SCAN_OP_GET | PM_SCAN_OP_WP)
+> +#define PM_SCAN_OP_IS_WP(a)    (a->flags & PM_SCAN_OP_WP)
+
+Nit: PM_SCAN_DO_UFFD_WP()? It would shift the hint in the name from
+what op is executed to what behaviour is requested.
+
+> +#define PM_SCAN_BITMAP(wt, file, present, swap)        \
+> +       (wt | file << 1 | present << 2 | swap << 3)
+
+Please parenthesize macro arguments ("(wt)", "(file)", etc.) to not
+have to worry about operator precedence when passed a complex
+expression.
+
+I
+
+[...]
+> +static inline bool pagemap_scan_is_written_set(struct pagemap_scan_priva=
+te *p)
+
+pagemap_scan_checks_page_written? or similar 'scan is written' doesn't
+seem to convey the expected intention.
+The function is used only once in ..._test_walk(), so maybe just
+inline, possibly using a temporary `bool` to make the condition easier
+to read?
+
+[...]
+
+> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+
+Could you try out how the code would look when passing the bitmap
+instead of separate booleans?
+
+> +                              struct pagemap_scan_private *p,
+> +                              unsigned long addr, unsigned int n_pages)
+> +{
+[...]
+> +       if ((cur->start + cur->len * PAGE_SIZE =3D=3D addr) &&
+> +           (cur->bitmap =3D=3D bitmap)) {
+
+Nit: bitmap check is cheaper, so I'd put it first. BTW, inner
+parentheses are not needed here.
+
+> +               cur->len +=3D n_pages;
+> +               p->found_pages +=3D n_pages;
+> +
+> +               if (p->max_pages && (p->found_pages =3D=3D p->max_pages))
+> +                       return PM_SCAN_FOUND_MAX_PAGES;
+> +
+> +               return 0;
+> +       }
+> +
+> +       if (!p->vec_index || ((p->vec_index + 1) < p->vec_len)) {
+
+It looks that `if (p->vec_index < p->vec_len)` is enough here - if we
+have vec_len =3D=3D 0 here, then we'd not fit the entry in the userspace
+buffer anyway. Am I missing something?
+
+> +
+> +               if (cur->len) {
+> +                       memcpy(&p->vec[p->vec_index], cur,
+> +                              sizeof(struct page_region));
+> +                       p->vec_index++;
+> +               }
+> +               cur->start =3D addr;
+> +               cur->len =3D n_pages;
+> +               cur->bitmap =3D bitmap;
+> +               p->found_pages +=3D n_pages;
+> +
+> +               if (p->max_pages && (p->found_pages =3D=3D p->max_pages))
+> +                       return PM_SCAN_FOUND_MAX_PAGES;
+> +
+> +               return 0;
+> +       }
+> +
+> +       return -ENOSPC;
+> +}
+> +
+> +static inline int pagemap_scan_deposit(struct pagemap_scan_private *p,
+> +                                      struct page_region __user *vec,
+> +                                      unsigned long *vec_index)
+
+..._deposit() is used only in single place - please inline.
+
+[...]
+> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> +                                 unsigned long end, struct mm_walk *walk=
+)
+> +{
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       bool is_written, is_file, is_present, is_swap;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +       unsigned long addr =3D end;
+> +       spinlock_t *ptl;
+> +       int ret =3D 0;
+> +       pte_t *pte;
+> +
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> +       ptl =3D pmd_trans_huge_lock(pmd, vma);
+> +       if (ptl) {
+
+Nit: `page_lock` or `pt_lock` to make it easier to guess the purpose?
+
+> +               unsigned long n_pages =3D (end - start)/PAGE_SIZE;
+> +
+> +               is_written =3D !is_pmd_uffd_wp(*pmd);
+> +               is_file =3D vma->vm_file;
+> +               is_present =3D pmd_present(*pmd);
+> +               is_swap =3D is_swap_pmd(*pmd);
+> +
+> +               spin_unlock(ptl);
+> +
+> +               /*
+> +                * Break huge page into small pages if the WP operation n=
+eed to
+> +                * be performed is on a portion of the huge page or if ma=
+x_pages
+> +                * pages limit would exceed.
+
+BTW, could the `max_pages` limit be relaxed a bit (in that it would be
+possible to return more pages if they all merge into the last vector
+entry) so that it would not need to split otherwise-matching huge
+page? It would remove the need for this special handling in the kernel
+and splitting the page by this read-only-appearing ioctl?
+
+> +                */
+> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
+> +                   ((end - start < HPAGE_SIZE) ||
+> +                    (p->max_pages &&
+> +                     (p->max_pages - p->found_pages) < n_pages))) {
+> +
+> +                       split_huge_pmd(vma, pmd, start);
+> +                       goto process_smaller_pages;
+> +               }
+> +
+> +               if (p->max_pages &&
+> +                   p->found_pages + n_pages > p->max_pages)
+> +                       n_pages =3D p->max_pages - p->found_pages;
+> +
+> +               ret =3D pagemap_scan_output(is_written, is_file, is_prese=
+nt,
+> +                                         is_swap, p, start, n_pages);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
+> +                   uffd_wp_range(vma, start, HPAGE_SIZE, true) < 0)
+> +                       ret =3D -EINVAL;
+
+Why not propagate the error from uffd_wp_range()?
+
+[...]
+> +static long do_pagemap_cmd(struct mm_struct *mm,
+> +                          struct pm_scan_arg __user *uarg)
+
+Please rename the function to `do_pagemap_scan` as it implements just
+this single ioctl now.
+
+> +{
+[...]
+> +       start =3D (unsigned long)untagged_addr(arg.start);
+> +       vec =3D (struct page_region *)(unsigned long)untagged_addr(arg.ve=
+c);
+
+Is the inner cast needed?
+
+> +       ret =3D pagemap_scan_args_valid(&arg, start, vec);
+> +       if (ret)
+> +               return ret;
+> +
+> +       end =3D start + arg.len;
+> +       p.max_pages =3D arg.max_pages;
+> +       p.found_pages =3D 0;
+> +       p.flags =3D arg.flags;
+> +       p.required_mask =3D arg.required_mask;
+> +       p.anyof_mask =3D arg.anyof_mask;
+> +       p.excluded_mask =3D arg.excluded_mask;
+> +       p.return_mask =3D arg.return_mask;
+> +       p.cur.len =3D 0;
+> +       p.cur.start =3D 0;
+> +       p.vec =3D NULL;
+> +       p.vec_len =3D (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
+
+Nit: parentheses are not needed here, please remove.
+
+> +
+> +       /*
+> +        * Allocate smaller buffer to get output from inside the page wal=
+k
+> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks=
+. As
+> +        * we want to return output to user in compact form where no two
+> +        * consecutive regions should be continuous and have the same fla=
+gs.
+> +        * So store the latest element in p.cur between different walks a=
+nd
+> +        * store the p.cur at the end of the walk to the user buffer.
+> +        */
+> +       p.vec =3D kmalloc_array(p.vec_len, sizeof(struct page_region),
+> +                             GFP_KERNEL);
+> +       if (!p.vec)
+> +               return -ENOMEM;
+> +
+> +       walk_start =3D walk_end =3D start;
+> +       while (walk_end < end && !ret) {
+
+The loop will stop if a previous iteration returned ENOSPC (and the
+error will be lost) - is it intended?
+
+> +               p.vec_index =3D 0;
+> +
+> +               empty_slots =3D arg.vec_len - vec_index;
+> +               p.vec_len =3D min(p.vec_len, empty_slots);
+> +
+> +               walk_end =3D (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_W=
+ALK_MASK;
+> +               if (walk_end > end)
+> +                       walk_end =3D end;
+> +
+> +               mmap_read_lock(mm);
+> +               ret =3D walk_page_range(mm, walk_start, walk_end,
+> +                                     &pagemap_scan_ops, &p);
+> +               mmap_read_unlock(mm);
+> +
+> +               if (ret && ret !=3D -ENOSPC && ret !=3D PM_SCAN_FOUND_MAX=
+_PAGES)
+> +                       goto free_data;
+> +
+> +               walk_start =3D walk_end;
+> +               if (p.vec_index) {
+> +                       if (copy_to_user(&vec[vec_index], p.vec,
+> +                                        p.vec_index *
+> +                                        sizeof(struct page_region))) {
+
+sizeof(*p.vec) ?
+
+> +                               ret =3D -EFAULT;
+> +                               goto free_data;
+> +                       }
+> +                       vec_index +=3D p.vec_index;
+> +               }
+> +       }
+> +       ret =3D pagemap_scan_deposit(&p, vec, &vec_index);
+> +       if (!ret)
+> +               ret =3D vec_index;
+> +free_data:
+> +       kfree(p.vec);
+> +
+> +       return ret;
+> +}
+> +
+> +static long pagemap_scan_ioctl(struct file *file, unsigned int cmd,
+> +                              unsigned long arg)
+> +{
+> +       struct pm_scan_arg __user *uarg =3D (struct pm_scan_arg __user *)=
+arg;
+
+This is specific to PAGEMAP_SCAN ioctl, so should go into do_pagemap_cmd().
+
+> +       struct mm_struct *mm =3D file->private_data;
+> +
+> +       switch (cmd) {
+> +       case PAGEMAP_SCAN:
+> +               return do_pagemap_cmd(mm, uarg);
+[...]
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -210,6 +210,14 @@ extern bool userfaultfd_wp_async(struct vm_area_stru=
+ct *vma);
+>
+>  #else /* CONFIG_USERFAULTFD */
+>
+> +static inline long uffd_wp_range(struct mm_struct *dst_mm,
+> +                                struct vm_area_struct *vma,
+> +                                unsigned long start, unsigned long len,
+> +                                bool enable_wp)
+> +{
+> +       return 0;
+> +}
+> +
+>  /* mm helpers */
+>  static inline vm_fault_t handle_userfault(struct vm_fault *vmf,
+>                                 unsigned long reason)
+
+Shouldn't this part be in the patch introducing uffd_wp_range()?
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
