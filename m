@@ -2,204 +2,234 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FE56D9DFE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 18:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33576D9E1D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 19:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239006AbjDFQx7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 12:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S229909AbjDFRDW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 13:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237927AbjDFQx6 (ORCPT
+        with ESMTP id S229977AbjDFRDV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:53:58 -0400
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0956D2108
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 09:53:56 -0700 (PDT)
-Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 147F2AC5FA63; Thu,  6 Apr 2023 09:53:44 -0700 (PDT)
+        Thu, 6 Apr 2023 13:03:21 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C80273F;
+        Thu,  6 Apr 2023 10:03:18 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 38225320097A;
+        Thu,  6 Apr 2023 13:03:16 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 06 Apr 2023 13:03:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1680800595; x=1680886995; bh=yg
+        Gy2hfGMUZ/sVKx6qf9fqJmSIWmeg4Snqz38AyDgXs=; b=Rf0A9xNpCsujqRcO+S
+        DI8YVguRlCs1X375klibe/SRPN+UF0IB2rU6CliVHfBfwMhPYzYTFWIzKMEDgpWe
+        sfUYgWpEi2rY/Xn7GNyUFAQCk0UgYUo5QNcvGm/p9lxYic60WDZioVHMegSY5IxC
+        LyOXQ1TgpSoWzvsKKBjE1NkZyjxlPZD24GXB3s0ebvAE5KxmlzLFR9bMUiW/kF1j
+        71CqxPigYZUbhzhD2KkuKQ4hFOViLJyjIZInFjc90UTFAYWy0DjqcAcGLW7xwhNX
+        vQM5NUZ7J0+1VTEz13yq6CwUzrTKzikeNxIPVZlz1v5oW7HG63/xcnl5MhJae0g2
+        O7dw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680800595; x=1680886995; bh=ygGy2hfGMUZ/s
+        VKx6qf9fqJmSIWmeg4Snqz38AyDgXs=; b=ct2aPFIoakvaMYWpsWOaFgXYL7j7s
+        hMLGpcgARKDcHTSbjIjzMAI4NauzikJCe3TW3mdmRMmtCmKeDj7iTcbbBMLcjQ9u
+        udtN7CtVkeYovh64ePnFxf2lwvRDDF+L7yVaXcU4jzMpGLdtkyObTKUNAxJ/NcVW
+        u91yfNgnECrIIyngVuGR80U9ck25GFpmrqLvIBis4WiR7wEHO7zXP9WvhCijodW2
+        afdu3Zr2hjYl8pdb7UG5GgJ+wRY6YqipMFuy/E3lsTFH9IZ30LkvBQ3suu0Aeski
+        J9xzHR+6pBD3/DVvrun1RzudY9tkCiG1PV8nhDymJpmzSv2MuheFFHo9w==
+X-ME-Sender: <xms:UvsuZG090qMfzkx7t74Kmri2tM1HPtmF7sVGtf3I3eJy8nR7cSX4Vg>
+    <xme:UvsuZJExJhJ1Bx8TnGghu9M6zKS_4AjIEl_VidOUWKNTIXcu2QtTAvy52l_g8qHzh
+    w9-oTc44ccH0QqVX9M>
+X-ME-Received: <xmr:UvsuZO6413G8PiH425ruAq9TCHq6eC_uAEzzhOWaPbChkuf4YUn0GBEBw2DCaWR5hcW6Dow022E5kQtMackd4FDY8WkdWBFEQnUJKyqn>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedguddtiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
+    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
+    htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
+    geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hshhhrseguvghvkhgvrhhnvghlrdhioh
+X-ME-Proxy: <xmx:UvsuZH39Sm3gJRdLubRImCQ3Megz58hLEGzMf4ea6S6vkyVZ22EeRw>
+    <xmx:UvsuZJEALDrzJTk-6Z_gShjRGMr6AZ22lhANlkkRVr6AQ2I2C6RrFg>
+    <xmx:UvsuZA8g0RGNCHU6_8aIneTJK7_grLieYdHRPnLz0kRSOYp_zDb62Q>
+    <xmx:U_suZPa4vtrNvwVWrzxQGJiC69Tsm2646Xx1IVf9aBPPnaYxF1DX5A>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Apr 2023 13:03:13 -0400 (EDT)
+References: <20230310182851.2579138-1-shr@devkernel.io>
+ <20230328160914.5b6b66e4a5ad39e41fd63710@linux-foundation.org>
+ <37dcd52a-2e32-c01d-b805-45d862721fbc@redhat.com>
+ <ZCWcJelF5bEdF4N3@cmpxchg.org>
+ <ff599dc1-729d-52dc-d605-8a8ac890ad15@redhat.com>
+ <qvqwv8ii89x6.fsf@dev0134.prn3.facebook.com>
+ <f969cb1f-651f-592f-7540-89f73e175c7d@redhat.com>
+ <qvqwlej8vrst.fsf@dev0134.prn3.facebook.com>
+User-agent: mu4e 1.6.11; emacs 28.2.50
 From:   Stefan Roesch <shr@devkernel.io>
-To:     kernel-team@fb.com
-Cc:     shr@devkernel.io, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org
-Subject: [PATCH v5 0/3] mm: process/cgroup ksm support
-Date:   Thu,  6 Apr 2023 09:53:36 -0700
-Message-Id: <20230406165339.1017597-1-shr@devkernel.io>
-X-Mailer: git-send-email 2.34.1
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel-team@fb.com,
+        linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH v4 0/3] mm: process/cgroup ksm support
+Date:   Thu, 06 Apr 2023 09:59:32 -0700
+In-reply-to: <qvqwlej8vrst.fsf@dev0134.prn3.facebook.com>
+Message-ID: <qvqw4jptc59w.fsf@dev0134.prn3.facebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.0 required=5.0 tests=RDNS_DYNAMIC,SPF_HELO_PASS,
-        SPF_NEUTRAL,TVD_RCVD_IP autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-So far KSM can only be enabled by calling madvise for memory regions. To
-be able to use KSM for more workloads, KSM needs to have the ability to b=
-e
-enabled / disabled at the process / cgroup level.
 
-Use case 1:
-The madvise call is not available in the programming language. An example=
- for
-this are programs with forked workloads using a garbage collected languag=
-e without
-pointers. In such a language madvise cannot be made available.
+Stefan Roesch <shr@devkernel.io> writes:
 
-In addition the addresses of objects get moved around as they are garbage
-collected. KSM sharing needs to be enabled "from the outside" for these t=
-ype of
-workloads.
+> David Hildenbrand <david@redhat.com> writes:
+>
+>>>>> Obviously we could spend months analysing which exact allocations are
+>>>>> identical, and then more months or years reworking the architecture to
+>>>>> deduplicate them by hand and in userspace. But this isn't practical,
+>>>>> and KSM is specifically for cases where this isn't practical.
+>>>>> Based on your request in the previous thread, we investigated whether
+>>>>> the boost was coming from the unintended side effects of KSM splitting
+>>>>> THPs. This wasn't the case.
+>>>>> If you have other theories on how the results could be bogus, we'd be
+>>>>> happy to investigate those as well. But you have to let us know what
+>>>>> you're looking for.
+>>>>>
+>>>>
+>>>> Maybe I'm bad at making such requests but
+>>>>
+>>>> "Stefan, can you do me a favor and investigate which pages we end up
+>>>> deduplicating -- especially if it's mostly only the zeropage and if it's
+>>>> still that significant when disabling THP?"
+>>>>
+>>>> "In any case, it would be nice to get a feeling for how much variety in
+>>>> these 20% of deduplicated pages are. "
+>>>>
+>>>> is pretty clear to me. And shouldn't take months.
+>>>>
+>>
+>> Just to clarify: the details I requested are not meant to decide whether to
+>> reject the patch set (I understand that it can be beneficial to have); I
+>> primarily want to understand if we're really dealing with a workload where KSM
+>> is able to deduplicate pages that are non-trivial, to maybe figure out if there
+>> are other workloads that could similarly benefit -- or if we could optimize KSM
+>> for these specific cases or avoid the memory deduplication altogether.
+>>
+>> In contrast to e.g.:
+>>
+>> 1) THP resulted in many zeropages we end up deduplicating again. The THP
+>>    placement was unfortunate.
+>>
+>> 2) Unoptimized memory allocators that leave many identical pages mapped
+>>    after freeing up memory (e.g., zeroed pages, pages all filled with
+>>    poison values) instead of e.g., using MADV_DONTNEED to free up that
+>>    memory.
+>>
+>>
+>
+> I repeated an experiment with and without KSM. In terms of THP there is
+> no huge difference between the two. On a 64GB main memory machine I see
+> between 100 - 400MB in AnonHugePages.
+>
+>>> /sys/kernel/mm/ksm/pages_shared is over 10000 when we run this on an
+>>> Instagram workload. The workload consists of 36 processes plus a few
+>>> sidecar processes.
+>>
+>> Thanks! To which value is /sys/kernel/mm/ksm/max_page_sharing set in that
+>> environment?
+>>
+>
+> It's set to the standard value of 256.
+>
+> In the meantime I have run experiments with different settings for
+> pages_to_scan. With the default value of 100, we only get a relatively
+> small benefit of KSM. If I increase the value to for instance to 2000 or
+> 3000 the savings are substantial. (The workload is memory bound, not
+> CPU bound).
+>
+> Here are some stats for setting pages_to_scan to 3000:
+>
+> full_scans: 560
+> general_profit: 20620539008
+> max_page_sharing: 256
+> merge_across_nodes: 1
+> pages_shared: 125446
+> pages_sharing: 5259506
+> pages_to_scan: 3000
+> pages_unshared: 1897537
+> pages_volatile: 12389223
+> run: 1
+> sleep_millisecs: 20
+> stable_node_chains: 176
+> stable_node_chains_prune_millisecs: 2000
+> stable_node_dups: 2604
+> use_zero_pages: 0
+> zero_pages_sharing: 0
+>
+>
+>> What would be interesting is pages_shared after max_page_sharing was set to a
+>> very high number such that pages_shared does not include duplicates. Then
+>> pages_shared actually expresses how many different pages we deduplicate. No need
+>> to run without THP in that case.
+>>
+>
+> Thats on my list for the next set of experiments.
+>
 
-Use case 2:
-The same interpreter can also be used for workloads where KSM brings no
-benefit or even has overhead. We'd like to be able to enable KSM on a wor=
-kload
-by workload basis.
+In the new experiment I increased the max_page_sharing value to 16384.
+This reduced the number of stable_node_dups considerably (its around 3%
+of the previous value). However pages_sharing is still very high for
+this workload.
 
-Use case 3:
-With the madvise call sharing opportunities are only enabled for the curr=
-ent
-process: it is a workload-local decision. A considerable number of sharin=
-g
-opportunities may exist across multiple workloads or jobs (if they are pa=
-rt
-of the same security domain). Only a higler level entity like a job sched=
-uler
-or container can know for certain if its running one or more instances of=
- a
-job. That job scheduler however doesn't have the necessary internal workl=
-oad
-knowledge to make targeted madvise calls.
+full_scans: 138
+general_profit: 24442268608
+max_page_sharing: 16384
+merge_across_nodes: 1
+pages_shared: 144590
+pages_sharing: 6230983
+pages_to_scan: 3000
+pages_unshared: 2120307
+pages_volatile: 14590780
+run: 1
+sleep_millisecs: 20
+stable_node_chains: 23
+stable_node_chains_prune_millisecs: 2000
+stable_node_dups: 78
+use_zero_pages: 0
+zero_pages_sharing: 0
 
-Security concerns:
-In previous discussions security concerns have been brought up. The probl=
-em is
-that an individual workload does not have the knowledge about what else i=
-s
-running on a machine. Therefore it has to be very conservative in what me=
-mory
-areas can be shared or not. However, if the system is dedicated to runnin=
-g
-multiple jobs within the same security domain, its the job scheduler that=
- has
-the knowledge that sharing can be safely enabled and is even desirable.
-
-Performance:
-Experiments with using UKSM have shown a capacity increase of around 20%.
-
-
-1. New options for prctl system command
-This patch series adds two new options to the prctl system call. The firs=
-t
-one allows to enable KSM at the process level and the second one to query=
- the
-setting.
-
-The setting will be inherited by child processes.
-
-With the above setting, KSM can be enabled for the seed process of a cgro=
-up
-and all processes in the cgroup will inherit the setting.
-
-2. Changes to KSM processing
-When KSM is enabled at the process level, the KSM code will iterate over =
-all
-the VMA's and enable KSM for the eligible VMA's.
-
-When forking a process that has KSM enabled, the setting will be inherite=
-d by
-the new child process.
-
-In addition when KSM is disabled for a process, KSM will be disabled for =
-the
-VMA's where KSM has been enabled.
-
-3. Add general_profit metric
-The general_profit metric of KSM is specified in the documentation, but n=
-ot
-calculated. This adds the general profit metric to /sys/kernel/debug/mm/k=
-sm.
-
-4. Add more metrics to ksm_stat
-This adds the process profit and ksm type metric to /proc/<pid>/ksm_stat.
-
-5. Add more tests to ksm_tests
-This adds an option to specify the merge type to the ksm_tests. This allo=
-ws to
-test madvise and prctl KSM. It also adds a new option to query if prctl K=
-SM has
-been enabled. It adds a fork test to verify that the KSM process setting =
-is
-inherited by client processes.
-
-
-Changes:
-- V5:
-  - When the prctl system call is invoked, mark all compatible VMA
-    as mergeable
-  - Instead of checcking during scan if VMA is mergeable, mark the VMA
-    mergeable when the VMA is created (in case the VMA is compatible)
-    - Remove earlier changes, they are no longer necessary
-  - Unset the flag MMF_VM_MERGE_ANY in gmap_mark_unmergeable().
-  - When unsetting the MMF_VM_MERGE_ANY flag with prctl, only unset the
-    flag
-  - Remove pages_volatile function (with the simplar general_profit calcu=
-lation,
-    the function is no longer needed)
-  - Use simpler formula for calculation of general_profit
-
-- V4:
-  - removing check in prctl for MMF_VM_MERGEABLE in PR_SET_MEMORY_MERGE
-    handling
-  - Checking for VM_MERGEABLE AND MMF_VM_MERGE_ANY to avoid chaning vm_fl=
-ags
-    - This requires also checking that the vma is compatible. The
-      compatibility check is provided by a new helper
-    - processes which have set MMF_VM_MERGE_ANY, only need to call the
-      helper and not madvise.
-  - removed unmerge_vmas function, this function is no longer necessary,
-    clearing the MMF_VM_MERGE_ANY bit is sufficient
-
-- V3:
-  - folded patch 1 - 6
-  - folded patch 7 - 14
-  - folded patch 15 - 19
-  - Expanded on the use cases in the cover letter
-  - Added a section on security concerns to the cover letter
-
-- V2:
-  - Added use cases to the cover letter
-  - Removed the tracing patch from the patch series and posted it as an
-    individual patch
-  - Refreshed repo
-
-
-Stefan Roesch (3):
-  mm: add new api to enable ksm per process
-  mm: add new KSM process and sysfs knobs
-  selftests/mm: add new selftests for KSM
-
- Documentation/ABI/testing/sysfs-kernel-mm-ksm |   8 +
- Documentation/admin-guide/mm/ksm.rst          |   8 +-
- arch/s390/mm/gmap.c                           |   1 +
- fs/proc/base.c                                |   5 +
- include/linux/ksm.h                           |  36 ++-
- include/linux/sched/coredump.h                |   1 +
- include/uapi/linux/prctl.h                    |   2 +
- kernel/fork.c                                 |   1 +
- kernel/sys.c                                  |  24 ++
- mm/ksm.c                                      | 143 ++++++++--
- mm/mmap.c                                     |   7 +
- tools/include/uapi/linux/prctl.h              |   2 +
- tools/testing/selftests/mm/Makefile           |   2 +-
- tools/testing/selftests/mm/ksm_tests.c        | 254 +++++++++++++++---
- 14 files changed, 426 insertions(+), 68 deletions(-)
-
---=20
-2.34.1
-
+>> Similarly, enabling "use_zero_pages" could highlight if your workload ends up
+>> deduplciating a lot of zeropages. But maxing out max_page_sharing would be
+>> sufficient to understand what's happening.
+>>
+>>
+>
+> I already run experiments with use_zero_pages, but they didn't make a
+> difference. I'll repeat the experiment with a higher pages_to_scan
+> value.
+>
+>>> Each of these individual processes has around 500MB in KSM pages.
+>>>
+>>
+>> That's really a lot, thanks.
+>>
+>>> Also to give some idea for individual VMA's
+>>> 7ef5d5600000-7ef5e5600000 rw-p 00000000 00:00 0 (Size: 262144 KB, KSM:
+>>> 73160 KB)
+>>>
+>>
+>> I'll have a look at the patches today.
