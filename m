@@ -2,70 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310796DA218
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 22:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C28A6DA25F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 22:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbjDFUAr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 16:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
+        id S229738AbjDFUMT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 16:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238656AbjDFUAi (ORCPT
+        with ESMTP id S229674AbjDFUMS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:00:38 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B75A61BF
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 13:00:33 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5027e589e20so1679745a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 13:00:33 -0700 (PDT)
+        Thu, 6 Apr 2023 16:12:18 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAE3B0
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 13:12:17 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id j22so4126141ejv.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 13:12:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680811231;
+        d=google.com; s=20210112; t=1680811935;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nd8CdG3tEyTpIem9NcMLhqsCDudYGnSaMV+QuQk/dn4=;
-        b=X4NUYQQ8tCMLj8AsQ8A5D4O8WA+9or8X/KsR9JSOcXURexcxASRc1DPuMazArWdvdL
-         lUzUodCfxZvgm5B+QFxLSw4orBW/OEc/RN4ERtKalF5HQMavPlwYQo5Q/9DzJZNUpCVM
-         K00Wqe0Ul4ceSlAjKKHwmpP6SdKfH4QI9Z5BJkZaK1io4pl/W48EXr8EmoplS/pe9duQ
-         YQaYhBejj95Vdp/MwjPg+4+aXcOkS8LSYNOJwphruff0KlwSE3bNar6tN5p7UpqB7T2k
-         Dsat8SCV9mzgVh5HaOVfWDb2gvq/bVgDJ7vfIKoqyTd8xTDwGYeFhcgcQkiF11tcLUPe
-         O9pg==
+        bh=hfXQEoCgBqadpu6FRThsZsy1nkY1OVsi1rMIvATBeoI=;
+        b=eLh2M2ox7ujSVvQ6g9xvjw/WemChY3P4HRSOdHrdgai9GlQKCSmP0BGwnq2lSAjYEP
+         Fapb2AbNv5Gfj16ljxDNnlAMyzI5zF8Gopik9TnFJMJrPhvTMNEQSsUPsivu74u7bYBh
+         PVi8jp/K5KOpIq2YvkU+sUAuMuZutnSno/fRPjRnq+3Znlb1v3jpvhteI4OL0vRVE4fX
+         Of4a8TIzoVa5/AykJda6kyFA0VO9w3Wul3dP+No2oOAG+TUCa2d9G+ytndgPJ0y1Qqs6
+         bm09CvYM1UsyGT0YIHH82BvLeQ/dp5BFc+bZLy6J7hbPX/WK/sxIQoDiBcjt9kf3j8cf
+         1ijA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680811231;
+        d=1e100.net; s=20210112; t=1680811935;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nd8CdG3tEyTpIem9NcMLhqsCDudYGnSaMV+QuQk/dn4=;
-        b=SAiAcRgQGWUKVJ4B3Ny8dvgPJncxt0P0tzPOM6ccIUJm+axfUCcbaPeX6cSA3VDn3u
-         L0ry79WL6w0Dvu3pFON4hada2oFOgpaDKgo65Os6h19AiiaXjjk5bIIDxMF3JitIgg8n
-         KoX7ydhbu/3Us7pjBuT8rwmkk4XXXEF8oAv3iRnMdtH1Vt2eaHVD05oi+PdWZjW77A9Q
-         up1hRvQ6CESjRxejWYFU2LwMHSGrpTBCzZimnNw4IKzyfyULTq5NRan72L/IE0G+ffG3
-         kgYv3uhpO72k94fC0+qo+xPSaWkBpntX5bxf4RDhPWLObjZp1UjlN4WrdPUURGCXOFLk
-         JMRg==
-X-Gm-Message-State: AAQBX9fV1iXKCpEsV0SDYKROC49TUL2mDW0223K/f/y3qQ7qVYsmsRQA
-        Peai4dJZnAnwEROlR9ZGzoqhg+WIsvMW7X2ssDcLTg==
-X-Google-Smtp-Source: AKy350YxLmM7o7NofjNZI1FB3oHxtUqQdNjHp/dOLN89IbILs8acbig6vzBtiMi0F7gjm5VWa5NlgYP2dj9nUNUL3so=
-X-Received: by 2002:a50:9987:0:b0:504:7094:2b59 with SMTP id
- m7-20020a509987000000b0050470942b59mr373316edb.7.1680811231205; Thu, 06 Apr
- 2023 13:00:31 -0700 (PDT)
+        bh=hfXQEoCgBqadpu6FRThsZsy1nkY1OVsi1rMIvATBeoI=;
+        b=rXBCrsIxyxjUi2M1ft0mjLef7RLvDSn2NvN6N34xoQEo31ckG4XqDAY+SUaa0hsit+
+         NSCDi0dzxY2xfnFP6QkRbS4GK0E6myDbo8Zdd+OEkl8RiP/kDzhVCREB9iiJuMdJCRxt
+         rJadcgyLdW9GuJlMzocfc2WCQVVogffJUoGLQFd2W1QMJGrAIHSPfuHzx5LW+NP+Fe2P
+         BFzEJUqSPE/1o0qz6hflbVpzU/uiQ6Z9AvitjAa2j8/CfaadFbSdAAjNiDoOZlzBvgjJ
+         eg1ilh05az4bzKCjN7jfFYY+ABJO4iMwfqCk66uVKKXHRH7X/4NOesrEdZWkduxcX4uY
+         ljHQ==
+X-Gm-Message-State: AAQBX9fZkC1lCJj8dYUcEC7DH0pHd8Nk+3W0zamNBwC9g8TN42q9drid
+        tB7tDSeyMmQiKdiGbkKq7+j9xy2kI0M4NPgTs3Dj6Q==
+X-Google-Smtp-Source: AKy350YWTiBKhF69rS3s7/XUdyc2hKHku2MPzilut5tCz5P9UctIFCxaz2a8OpRCWENJH0p1saUwx/M1YK9rBFquknE=
+X-Received: by 2002:a17:906:138c:b0:93e:186f:ea0d with SMTP id
+ f12-20020a170906138c00b0093e186fea0dmr22597ejc.15.1680811935410; Thu, 06 Apr
+ 2023 13:12:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
- <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com>
-In-Reply-To: <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com>
+References: <20230406074005.1784728-1-usama.anjum@collabora.com> <20230406074005.1784728-3-usama.anjum@collabora.com>
+In-Reply-To: <20230406074005.1784728-3-usama.anjum@collabora.com>
 From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Thu, 6 Apr 2023 22:00:19 +0200
-Message-ID: <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
+Date:   Thu, 6 Apr 2023 22:12:03 +0200
+Message-ID: <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
 Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
  optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Mike Rapoport <rppt@kernel.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
 Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andrei Vagin <avagin@gmail.com>,
         Danylo Mocherniuk <mdanylo@google.com>,
         Paul Gofman <pgofman@codeweavers.com>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
-        Nadav Amit <namit@vmware.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
         Christian Brauner <brauner@kernel.org>,
@@ -96,250 +93,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
+On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
 <usama.anjum@collabora.com> wrote:
-> Hello,
->
-> Thank you so much for the review. Do you have any thoughts on the build
-> error on arc architecture?
-> https://lore.kernel.org/all/e3c82373-256a-6297-bcb4-5e1179a2cbe2@collabor=
-a.com
-
-Maybe copy HPAGE_* defines from x86 and key on CONFIG_PGTABLE_LEVELS >
-2? I don't know much about arc arch, though.
-
-> On 4/6/23 8:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:>
 [...]
-> >> +#define PM_SCAN_BITMAP(wt, file, present, swap)        \
-> >> +       (wt | file << 1 | present << 2 | swap << 3)
-> > Please parenthesize macro arguments ("(wt)", "(file)", etc.) to not
-> > have to worry about operator precedence when passed a complex
-> > expression.
-> Like this?
-> #define PM_SCAN_BITMAP(wt, file, present, swap) \
->         ((wt) | (file << 1) | (present << 2) | (swap << 3))
-
-The value would be:
- ( (wt) | ((file) << 1) | ... )
-IOW, each parameter should have parentheses around its name.
-
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
 [...]
-> >> +               cur->len +=3D n_pages;
-> >> +               p->found_pages +=3D n_pages;
-> >> +
-> >> +               if (p->max_pages && (p->found_pages =3D=3D p->max_page=
-s))
-> >> +                       return PM_SCAN_FOUND_MAX_PAGES;
-> >> +
-> >> +               return 0;
-> >> +       }
-> >> +
-> >> +       if (!p->vec_index || ((p->vec_index + 1) < p->vec_len)) {
-> >
-> > It looks that `if (p->vec_index < p->vec_len)` is enough here - if we
-> > have vec_len =3D=3D 0 here, then we'd not fit the entry in the userspac=
-e
-> > buffer anyway. Am I missing something?
-> No. I'd explained it with diagram last time:
-> https://lore.kernel.org/all/3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@collabor=
-a.com
->
-> I'll add a concise comment here.
-
-So it seems, but I think the code changed a bit and maybe could be
-simplified now? Since p->vec_len =3D=3D 0 is currently not valid, the
-field could count only the entries available in p->vec[] -- IOW: not
-include p->cur in the count.
-
-BTW, `if (no space) return -ENOSPC` will avoid additional indentation
-for the non-merging case.
-
+> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> +                                 unsigned long end, struct mm_walk *walk=
+)
+> +{
+> +       struct pagemap_scan_private *p =3D walk->private;
+> +       bool is_written, is_file, is_present, is_swap;
+> +       struct vm_area_struct *vma =3D walk->vma;
+> +       unsigned long addr =3D end;
+> +       spinlock_t *ptl;
+> +       int ret =3D 0;
+> +       pte_t *pte;
+> +
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> +       ptl =3D pmd_trans_huge_lock(pmd, vma);
+> +       if (ptl) {
 [...]
-> >> +static inline int pagemap_scan_deposit(struct pagemap_scan_private *p=
-,
-> >> +                                      struct page_region __user *vec,
-> >> +                                      unsigned long *vec_index)
-> >
-> > ..._deposit() is used only in single place - please inline.
-> It is already inline.
+> +               return ret;
+> +       }
+> +process_smaller_pages:
+> +       if (pmd_trans_unstable(pmd))
+> +               return 0;
 
-Sorry. I mean: please paste the code in place of the single call.
+Why pmd_trans_unstable() is needed here and not only after split_huge_pmd()=
+?
 
-[...]
-> >> +               /*
-> >> +                * Break huge page into small pages if the WP operatio=
-n need to
-> >> +                * be performed is on a portion of the huge page or if=
- max_pages
-> >> +                * pages limit would exceed.
-> >
-> > BTW, could the `max_pages` limit be relaxed a bit (in that it would be
-> > possible to return more pages if they all merge into the last vector
-> > entry) so that it would not need to split otherwise-matching huge
-> > page? It would remove the need for this special handling in the kernel
-> > and splitting the page by this read-only-appearing ioctl?
-> No, this cannot be done. Otherwise we'll not be able to emulate Windows
-> syscall GetWriteWatch() which specifies the exact number of pages. Usuall=
-y
-> in most of cases, either user will not use THP or not perform the operati=
-on
-> on partial huge page. So this part is only there to keep things correct f=
-or
-> those users who do use THP and partial pagemap_scan operations.
-
-I see that `GetWriteWatch` returns a list of pages not ranges of
-pages. That makes sense (more or less). (BTW, It could be emulated in
-userspace by caching the last not-fully-consumed range.)
-
-> >> +                */
-> >> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
-> >> +                   ((end - start < HPAGE_SIZE) ||
-> >> +                    (p->max_pages &&
-> >> +                     (p->max_pages - p->found_pages) < n_pages))) {
-> >> +
-> >> +                       split_huge_pmd(vma, pmd, start);
-> >> +                       goto process_smaller_pages;
-> >> +               }
-> >> +
-> >> +               if (p->max_pages &&
-> >> +                   p->found_pages + n_pages > p->max_pages)
-> >> +                       n_pages =3D p->max_pages - p->found_pages;
-> >> +
-> >> +               ret =3D pagemap_scan_output(is_written, is_file, is_pr=
-esent,
-> >> +                                         is_swap, p, start, n_pages);
-> >> +               if (ret < 0)
-> >> +                       return ret;
-
-So let's simplify this:
-
-if (p->max_pages && n_pages > max_pages - found_pages)
-  n_pages =3D max_pages - found_pages;
-
-if (is_written && DO_WP && n_pages !=3D HPAGE_SIZE / PAGE_SIZE) {
-  split_thp();
-  goto process_smaller_pages;
-}
-
-BTW, THP handling could be extracted to a function that would return
--EAGAIN if it has split the page or it wasn't a THP -- and that would
-mean `goto process_smaller_pages`.
-
-> > Why not propagate the error from uffd_wp_range()?
-> uffd_wp_range() returns status in long variable. We cannot return long in
-> this function. So intead of type casting long to int and then return I've
-> used -EINVAL. Would following be more suitable?
->
-> long ret2 =3D uffd_wp_range(vma, start, HPAGE_SIZE, true);
-> if (ret2 < 0)
->         return (int)ret2;
-
-I think it's ok, since negative values are expected to be error codes.
-And since you can't overflow int with HPAGE_SIZE pages, then I
-wouldn't use `ret2` but cast the return and add a comment why it's
-safe.
-
-[...]
-> >> +       start =3D (unsigned long)untagged_addr(arg.start);
-> >> +       vec =3D (struct page_region *)(unsigned long)untagged_addr(arg=
-.vec);
-> >
-> > Is the inner cast needed?
-> arg.vec remains 64-bit on 32-bit systems. So casting 64bit value directly
-> to struct page_region pointer errors out. So I've added specific casting =
-to
-> unsigned long first before casting to pointers.
-
-I see. So to convey the intention, the `arg.start` and `arg.vec`
-should be casted to unsigned long, not the `untagged_addr()` return
-values.
-
-> >> +       ret =3D pagemap_scan_args_valid(&arg, start, vec);
-> >> +       if (ret)
-> >> +               return ret;
-> >> +
-> >> +       end =3D start + arg.len;
-> >> +       p.max_pages =3D arg.max_pages;
-> >> +       p.found_pages =3D 0;
-> >> +       p.flags =3D arg.flags;
-> >> +       p.required_mask =3D arg.required_mask;
-> >> +       p.anyof_mask =3D arg.anyof_mask;
-> >> +       p.excluded_mask =3D arg.excluded_mask;
-> >> +       p.return_mask =3D arg.return_mask;
-> >> +       p.cur.len =3D 0;
-> >> +       p.cur.start =3D 0;
-> >> +       p.vec =3D NULL;
-> >> +       p.vec_len =3D (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
-> >
-> > Nit: parentheses are not needed here, please remove.
-> Will do.
->
-> >
-> >> +
-> >> +       /*
-> >> +        * Allocate smaller buffer to get output from inside the page =
-walk
-> >> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chu=
-nks. As
-> >> +        * we want to return output to user in compact form where no t=
-wo
-> >> +        * consecutive regions should be continuous and have the same =
-flags.
-> >> +        * So store the latest element in p.cur between different walk=
-s and
-> >> +        * store the p.cur at the end of the walk to the user buffer.
-> >> +        */
-> >> +       p.vec =3D kmalloc_array(p.vec_len, sizeof(struct page_region),
-> >> +                             GFP_KERNEL);
-> >> +       if (!p.vec)
-> >> +               return -ENOMEM;
-> >> +
-> >> +       walk_start =3D walk_end =3D start;
-> >> +       while (walk_end < end && !ret) {
-> >
-> > The loop will stop if a previous iteration returned ENOSPC (and the
-> > error will be lost) - is it intended?
-> It is intentional. -ENOSPC means that the user buffer is full even though
-> there was more memory to walk over. We don't treat this error. So when
-> buffer gets full, we stop walking over further as user buffer has gotten
-> full and return as success.
-
-Thanks. What's the difference between -ENOSPC and
-PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (code
-flow).
-
-[...]
-> >> --- a/include/linux/userfaultfd_k.h
-> >> +++ b/include/linux/userfaultfd_k.h
-> >> @@ -210,6 +210,14 @@ extern bool userfaultfd_wp_async(struct vm_area_s=
-truct *vma);
-> >>
-> >>  #else /* CONFIG_USERFAULTFD */
-> >>
-> >> +static inline long uffd_wp_range(struct mm_struct *dst_mm,
-> >> +                                struct vm_area_struct *vma,
-> >> +                                unsigned long start, unsigned long le=
-n,
-> >> +                                bool enable_wp)
-> >> +{
-> >> +       return 0;
-> >> +}
-[...]
-> > Shouldn't this part be in the patch introducing uffd_wp_range()?
-> We have not added uffd_wp_range() in previous patches. We just need this
-> stub for this patch for the case when CONFIG_USERFAULTFD isn't enabled.
->
-> I'd this as separate patch before this patch. Mike asked me to merge it
-> with this patch in order not to break bisectability.
->[1] https://lore.kernel.org/all/ZBK+86eMMazwfhdx@kernel.org
-
-I would understand the reply [1] to mean that the uffd_wp_range() stub
-should go in the same patch where uffd_wp_range() is implemented. But
-uffd_wp_range() is already in (since f369b07c86140) so I don't see how
-having the stub in a separate commit sequenced before this one could
-break bisect?
-
-Best Regards
+Best regards
 Micha=C5=82 Miros=C5=82aw
