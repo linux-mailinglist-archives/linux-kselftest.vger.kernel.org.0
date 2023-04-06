@@ -2,80 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBC56DA47D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 23:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143866DA4F1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 23:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237284AbjDFVMp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 17:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
+        id S233648AbjDFVy5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 17:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbjDFVMo (ORCPT
+        with ESMTP id S229458AbjDFVy4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:12:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C628A79;
-        Thu,  6 Apr 2023 14:12:43 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [119.155.57.40])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E1DF666031CB;
-        Thu,  6 Apr 2023 22:12:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680815562;
-        bh=jpv185g+czi+1tMEl7JrJg752pEJcPwtivD3XpZ0TXw=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=DrBepuaie+n9o6W1SSg0a0FDPSz0KooP8jIDuIrlC8GOYZwq5SG35XM9e2z8HzpDb
-         Rzkga9U1BnxIDZVnxhWOiiekt2s4E7+JisS1+X2AQoZjtBXcpEXwiX9Rjp7uCfOz4F
-         JR63zOkdQGDf35/NbuYvRx9q0IYvMDelsStedGQc7NbDHDdkvWWxS/STyNtn0RTIeX
-         7Q6KJm8padayOB9G3s2dUYCkAwlSN9OTRhXzGOfEzC8vnDQgP4cClBUGPtXe8OXNYT
-         NDrh+5gNUuM5R54q89+uxsIMK70bC8CE0UxFfOZmeH40c9wSXs7yifEPwR3gc6CsEm
-         qevdtb/oURlaA==
-Message-ID: <b737dceb-a228-7ffe-0758-421505f1a61d@collabora.com>
-Date:   Fri, 7 Apr 2023 02:12:31 +0500
+        Thu, 6 Apr 2023 17:54:56 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1330DA5FF;
+        Thu,  6 Apr 2023 14:54:54 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1680818092;
+        bh=vTkw79wXmjqLnNQjs+gxqaE5Rm4KsNN2M5mSIaE9oJQ=;
+        h=From:Subject:Date:To:Cc:From;
+        b=Mm0s0hRgTzcaYnyrDom104CHBUL+Fjqf1lvCK9FOVsjcwpenNmlo/+HpFDmDRnxah
+         82mKImdlWW7q9TNn15zik+TGvhLcTy8Y7stViTUx4aZ+m5dscpTsOhM8lLMAKBAZxQ
+         6tDXoOFESU81HAtoirFavLl/u6s+zdBBjf3q3uTQ=
+Subject: [PATCH v2 00/11] tools/nolibc: -std=c89 compatibility
+Date:   Thu, 06 Apr 2023 21:54:46 +0000
+Message-Id: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com>
- <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-B4-Tracking: v=1; b=H4sIAKY/L2QC/22NQQ6CMBBFr0JmbQ1tgVBX3sOwaOvUTkKK6QBqC
+ He3snb5XvL/24AxEzJcqg0yrsQ0pQLqVIGPNj1Q0L0wqFrpWqtepGkk54U3RrQmNA3apu10B2X
+ gLKNw2SYfyyQt41jkM2Og91G4DYUj8TzlzxFc5c/+/V6lkML2ulbBSROkub6QmNnHJZ4TzjDs+
+ /4FrdzMCL4AAAA=
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=2524;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=vTkw79wXmjqLnNQjs+gxqaE5Rm4KsNN2M5mSIaE9oJQ=;
+ b=u8ffBBBHpKO4SHr4y2hSWddmtXo0ReO8KKTrSymF304NsOzmHrbKVqYAYkSMTc6v29MXR7vsg
+ YhPYYU897SxBe+QxpBaPoOxMAwc9F7wDlTVpKWqCrNbmrAd3tgdrmBH
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,57 +53,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/7/23 1:12 AM, Michał Mirosław wrote:
-> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
-> [...]
->> --- a/fs/proc/task_mmu.c
->> +++ b/fs/proc/task_mmu.c
-> [...]
->> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
->> +                                 unsigned long end, struct mm_walk *walk)
->> +{
->> +       struct pagemap_scan_private *p = walk->private;
->> +       bool is_written, is_file, is_present, is_swap;
->> +       struct vm_area_struct *vma = walk->vma;
->> +       unsigned long addr = end;
->> +       spinlock_t *ptl;
->> +       int ret = 0;
->> +       pte_t *pte;
->> +
->> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->> +       ptl = pmd_trans_huge_lock(pmd, vma);
->> +       if (ptl) {
-> [...]
->> +               return ret;
->> +       }
->> +process_smaller_pages:
->> +       if (pmd_trans_unstable(pmd))
->> +               return 0;
-> 
-> Why pmd_trans_unstable() is needed here and not only after split_huge_pmd()?
-I'm not entirely sure. But the idea is if THP is unstable, we should
-return. As it doesn't seem like after splitting THP can be unstable, we
-should not check it. Do you agree with the following?
+This series replaces the C99 compatibility patch. (See v1 link below).
+After the discussion about support C99 and/or GNU89 I came to the
+conclusion supporting straight C89 is not very hard.
 
+Instead of validating both C99 and GNU89 in some awkward way only for
+somebody requesting true C89 support let's just do it this way.
 
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1957,11 +1957,11 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
-unsigned long start,
+Feel free to squash all the comment syntax patches together if you
+prefer.
 
- 		return ret;
- 	}
--process_smaller_pages:
-+
- 	if (pmd_trans_unstable(pmd))
- 		return 0;
- #endif
--
-+process_smaller_pages:
- 	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE)
+All changes in this series are cosmetic only.
 
+To: Willy Tarreau <w@1wt.eu>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
+This series is based on the "dev" branch of the RCU tree.
+
+---
+Changes in v2:
+- Target C89 instead of C99
+- Link to v1: https://lore.kernel.org/r/20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net
+
+---
+Thomas Weißschuh (11):
+      tools/nolibc: use standard __asm__ statements
+      tools/nolibc: use __inline__ syntax
+      tools/nolibc: i386: use C89 comment syntax
+      tools/nolibc: x86_64: use C89 comment syntax
+      tools/nolibc: riscv: use C89 comment syntax
+      tools/nolibc: aarch64: use C89 comment syntax
+      tools/nolibc: arm: use C89 comment syntax
+      tools/nolibc: mips: use C89 comment syntax
+      tools/nolibc: loongarch: use C89 comment syntax
+      tools/nolibc: use C89 comment syntax
+      tools/nolibc: validate C89 compatibility
+
+ tools/include/nolibc/arch-aarch64.h          | 32 ++++++++--------
+ tools/include/nolibc/arch-arm.h              | 42 ++++++++++-----------
+ tools/include/nolibc/arch-i386.h             | 40 ++++++++++----------
+ tools/include/nolibc/arch-loongarch.h        | 38 +++++++++----------
+ tools/include/nolibc/arch-mips.h             | 56 ++++++++++++++--------------
+ tools/include/nolibc/arch-riscv.h            | 40 ++++++++++----------
+ tools/include/nolibc/arch-x86_64.h           | 34 ++++++++---------
+ tools/include/nolibc/stackprotector.h        |  4 +-
+ tools/include/nolibc/stdlib.h                | 18 ++++-----
+ tools/include/nolibc/string.h                |  4 +-
+ tools/include/nolibc/sys.h                   |  8 ++--
+ tools/testing/selftests/nolibc/Makefile      |  2 +-
+ tools/testing/selftests/nolibc/nolibc-test.c | 14 +++----
+ 13 files changed, 166 insertions(+), 166 deletions(-)
+---
+base-commit: bd5b341f0f69eb4c958ffd48699213c5b9af8145
+change-id: 20230328-nolibc-c99-59f44ea45636
+
+Best regards,
 -- 
-BR,
-Muhammad Usama Anjum
+Thomas Weißschuh <linux@weissschuh.net>
+
