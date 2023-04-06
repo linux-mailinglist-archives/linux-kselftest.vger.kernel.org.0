@@ -2,41 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2A96D9D6C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 18:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752B16D9D90
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 18:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238183AbjDFQW3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 12:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
+        id S238748AbjDFQaX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 12:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjDFQW2 (ORCPT
+        with ESMTP id S237769AbjDFQaW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:22:28 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 193191708;
-        Thu,  6 Apr 2023 09:22:26 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 336GMFn2004846;
-        Thu, 6 Apr 2023 18:22:15 +0200
-Date:   Thu, 6 Apr 2023 18:22:15 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] kselftest: Support nolibc
-Message-ID: <ZC7xt6rWfc4zdMB1@1wt.eu>
-References: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
- <ZC7VLXGpB8PRdj12@1wt.eu>
- <bdac4e4a-383d-4d60-8ce4-f26c1e265335@sirena.org.uk>
+        Thu, 6 Apr 2023 12:30:22 -0400
+X-Greylist: delayed 375 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Apr 2023 09:30:18 PDT
+Received: from out-22.mta0.migadu.com (out-22.mta0.migadu.com [91.218.175.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B82E76A2
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 09:30:18 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 16:23:56 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1680798240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zWTa+WmjvRizEenNCYTpznSZcah8zt6cqf7cKCxX7a0=;
+        b=YpT2Fq4n3IHoq0NhqGWEGK0xXZgdwSqB4fNw/EmbCwH+l+E/MrrjoaME/5opFFWMdi+c+R
+        ZE4p8Y5lVIJD1YkvcVRijUkT7UmIcs5v809lkhdseoQq1syH+eK2vgk7gXhKeHpyl6Zl0Z
+        QMSkBoDf4Wai6xmXfI6vbezrnWtEGTE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] KVM: selftests: Fix spelling mistake
+ "KVM_HYPERCAL_EXIT_SMC" -> "KVM_HYPERCALL_EXIT_SMC"
+Message-ID: <ZC7yHC+FIJgE4APf@linux.dev>
+References: <20230406080226.122955-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bdac4e4a-383d-4d60-8ce4-f26c1e265335@sirena.org.uk>
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+In-Reply-To: <20230406080226.122955-1-colin.i.king@gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,53 +55,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 03:32:20PM +0100, Mark Brown wrote:
-> On Thu, Apr 06, 2023 at 04:20:29PM +0200, Willy Tarreau wrote:
-> > On Thu, Apr 06, 2023 at 02:56:28PM +0100, Mark Brown wrote:
+On Thu, Apr 06, 2023 at 09:02:26AM +0100, Colin Ian King wrote:
+> There is a spelling mistake in a test assert message. Fix it.
 > 
-> > > At present the kselftest header can't be used with nolibc since it makes
-> > > use of vprintf() which is not available in nolibc and seems like it would
-> > > be inappropriate to implement given the minimal system requirements and
-> > > environment intended for nolibc.
-> 
-> > In fact we already have vfprintf(), and printf() is based on it, so
-> > wouldn't it just be a matter of adding vprintf() that calls vfprintf()
-> > for your case ? Maybe just something like this :
-> 
-> >   static int vprintf(const char *fmt, va_list args)
-> >   {
-> > 	return vfprintf(stdout, fmt, args);
-> >   }
-> 
-> > It's possible I'm missing something, but it's also possible you didn't
-> > find vfprintf() which is why I prefer to raise my hand ;-)
-> 
-> Oh, yes - I just didn't find that.  Can't remember what I searched for
-> but it didn't match.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-No problem. I just remembered it existed because we just received a
-new test for it a few days ago ;-)
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
 
-> > > This has resulted in some open coded
-> > > kselftests which use nolibc to test features that are supposed to be
-> > > controlled via libc and therefore better exercised in an environment with
-> > > no libc.
+> ---
+>  tools/testing/selftests/kvm/aarch64/smccc_filter.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > Yeah that's ugly. In nolibc-test we now have two build targets so that
-> > we can more easily verify the compatibility between the default libc and
-> > nolibc, so my recommendation would be to stick to a common subset of both
-> > libcs, but not to rely on nolibc-specific stuff that could make tests
-> > harder to debug.
+> diff --git a/tools/testing/selftests/kvm/aarch64/smccc_filter.c b/tools/testing/selftests/kvm/aarch64/smccc_filter.c
+> index 0f9db0641847..82650313451a 100644
+> --- a/tools/testing/selftests/kvm/aarch64/smccc_filter.c
+> +++ b/tools/testing/selftests/kvm/aarch64/smccc_filter.c
+> @@ -211,7 +211,7 @@ static void expect_call_fwd_to_user(struct kvm_vcpu *vcpu, uint32_t func_id,
+>  			    "KVM_HYPERCALL_EXIT_SMC is not set");
+>  	else
+>  		TEST_ASSERT(!(run->hypercall.flags & KVM_HYPERCALL_EXIT_SMC),
+> -			    "KVM_HYPERCAL_EXIT_SMC is set");
+> +			    "KVM_HYPERCALL_EXIT_SMC is set");
+>  }
+>  
+>  /* SMCCC calls forwarded to userspace cause KVM_EXIT_HYPERCALL exits */
+> -- 
+> 2.30.2
 > 
-> For these features we simply never want to run with a proper libc since
-> if we use a libc which has support for the features then we can't
-> meaningfully interact with them.  We're trying to test interfaces that
-> libc is supposed to use.
 
-Indeed, this totally makes sense then! But I think you get the idea of
-what I was suggesting which is to try to avoid getting trapped by a
-single implementation in general, by using portable stuff as much as
-possible.
-
-Cheers,
-Willy
+-- 
+Thanks,
+Oliver
