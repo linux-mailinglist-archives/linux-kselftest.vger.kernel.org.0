@@ -2,229 +2,463 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3886D9E3B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 19:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA406D9F5D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 19:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239208AbjDFRMB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 13:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S238247AbjDFR6n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 13:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239417AbjDFRLz (ORCPT
+        with ESMTP id S229458AbjDFR6m (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:11:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD2B83F2
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 10:11:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680801064;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w9BEmWCga9rATnS7k1cV/U68L/kkD9CUtlqpFM/Am+c=;
-        b=ekiveZ47v8KiOMq2aP/0AY6VvV65dQOBxZHBcx1teBQiL/DBt2hOCYo7e0Qdu8eEwYVhXk
-        +fSndhNS/mg7/eexh4FNuoIrNuagBxHICRukONxMDYS/aoqGG3UhBwhPrwNWe3OUyhaOt9
-        w7xgSCkRl3NP0A5Ocb4csxDtJzZ9dJ8=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-470-qr_l4LhfPuKvWxP6VPb1Cw-1; Thu, 06 Apr 2023 13:11:03 -0400
-X-MC-Unique: qr_l4LhfPuKvWxP6VPb1Cw-1
-Received: by mail-wr1-f69.google.com with SMTP id o13-20020adfa10d000000b002d34203df59so5005399wro.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 10:11:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680801062; x=1683393062;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w9BEmWCga9rATnS7k1cV/U68L/kkD9CUtlqpFM/Am+c=;
-        b=x2bmWJNEBrU6O4NxbzIu+twKJaUNH9VL0wpegtqGGef5jTNOeEoNKCY883+OmdvEq9
-         ZuaPgne89FF4sQNBCul8/6dqmYxd05ip0W4Gu+oTPGkBiwXMuwHuw2b3aQn9YqKizFAg
-         C/znIs2UF3aQ3DObH97fqIi2W+fxdg4VJ6yNJGHHfGoPFGcWewrZkfs4Wd9pqtzTgJVa
-         uhbsTu7tJ+9k8HmfEiZDf8r2FZBcbZoYlJY8b9VekZ3rjltDAYuNzH3+M8ZLfi24o7Zk
-         H2NFi35mN2S5xdj2ziqVm0VM9bnreBxJk1k+phSeSUJucV6VU+hePMvtupuDJ1f6rZ12
-         p6hw==
-X-Gm-Message-State: AAQBX9fGmge1ZMhpottqgasT4iS7GAzbkXdNda++xtYP+k5TIfZMaubG
-        CEUraPvs+1T6PRReEF6dn9DsWfQvB85UQriyXhS176ls0xI9SiMNtwbYY0Pmv7adCoOo5QKATvp
-        Hk4EtHnza0YC/SN/9YCyvutqPm26i
-X-Received: by 2002:adf:f201:0:b0:2cf:e74f:2957 with SMTP id p1-20020adff201000000b002cfe74f2957mr7401239wro.33.1680801062100;
-        Thu, 06 Apr 2023 10:11:02 -0700 (PDT)
-X-Google-Smtp-Source: AKy350avrWUB3Clk/HKyyujt4hLYkFiffOizvgUlgZPG1DjbaTTYFi5GJEZjRmoaZaveorZkIYNxLg==
-X-Received: by 2002:adf:f201:0:b0:2cf:e74f:2957 with SMTP id p1-20020adff201000000b002cfe74f2957mr7401219wro.33.1680801061763;
-        Thu, 06 Apr 2023 10:11:01 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:6300:a8be:c1ad:41a1:2bf7? (p200300cbc7056300a8bec1ad41a12bf7.dip0.t-ipconnect.de. [2003:cb:c705:6300:a8be:c1ad:41a1:2bf7])
-        by smtp.gmail.com with ESMTPSA id fj12-20020a05600c0c8c00b003ef67848a21sm5825259wmb.13.2023.04.06.10.11.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 10:11:01 -0700 (PDT)
-Message-ID: <10dd1fd4-4d10-c25d-174b-de37f01bef48@redhat.com>
-Date:   Thu, 6 Apr 2023 19:10:59 +0200
+        Thu, 6 Apr 2023 13:58:42 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164368F;
+        Thu,  6 Apr 2023 10:58:41 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [119.155.57.40])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9F9A966031C3;
+        Thu,  6 Apr 2023 18:58:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680803919;
+        bh=iDHptxLrH6idtLyBiS7LT+XDwnK/m3agYt8Smg6/hz4=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=OxNZsdEWCfq01riJrdhCPz2E5cG2FDqn6AYBagBBpt8BFdwsDbF5X3dyGzepGnEp4
+         O8p8CKjBy12PaSMsDylduEJTG7kmHWJwhD5JQln4uxlglVL2MyV+IB6hRnP7Jxnt71
+         6biVBO/5FVI2QnGLUp/Ce7cD33HwlYLPcNl7Mc5maing9KE3f2XauyyUxb9MmBvR9c
+         fYkczFqQVTS3dXLy4sK+rRjAqgfWp9QPHH4pIsWnqfCoL0BdDkqlVj3AXT5XHj2bQ2
+         7lrFsK/CwHikGFZd94AuN2KnwYV0xPXSlNIcuakcYk3SZgW9Z/uNaVGqEskgvTRsY4
+         rDaAQl21xYlMQ==
+Message-ID: <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com>
+Date:   Thu, 6 Apr 2023 22:58:27 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 0/3] mm: process/cgroup ksm support
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
 Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel-team@fb.com,
-        linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>
-References: <20230310182851.2579138-1-shr@devkernel.io>
- <20230328160914.5b6b66e4a5ad39e41fd63710@linux-foundation.org>
- <37dcd52a-2e32-c01d-b805-45d862721fbc@redhat.com>
- <ZCWcJelF5bEdF4N3@cmpxchg.org>
- <ff599dc1-729d-52dc-d605-8a8ac890ad15@redhat.com>
- <qvqwv8ii89x6.fsf@dev0134.prn3.facebook.com>
- <f969cb1f-651f-592f-7540-89f73e175c7d@redhat.com>
- <qvqwlej8vrst.fsf@dev0134.prn3.facebook.com>
- <qvqw4jptc59w.fsf@dev0134.prn3.facebook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <qvqw4jptc59w.fsf@dev0134.prn3.facebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230406074005.1784728-1-usama.anjum@collabora.com>
+ <20230406074005.1784728-3-usama.anjum@collabora.com>
+ <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 06.04.23 18:59, Stefan Roesch wrote:
-> 
-> Stefan Roesch <shr@devkernel.io> writes:
-> 
->> David Hildenbrand <david@redhat.com> writes:
->>
->>>>>> Obviously we could spend months analysing which exact allocations are
->>>>>> identical, and then more months or years reworking the architecture to
->>>>>> deduplicate them by hand and in userspace. But this isn't practical,
->>>>>> and KSM is specifically for cases where this isn't practical.
->>>>>> Based on your request in the previous thread, we investigated whether
->>>>>> the boost was coming from the unintended side effects of KSM splitting
->>>>>> THPs. This wasn't the case.
->>>>>> If you have other theories on how the results could be bogus, we'd be
->>>>>> happy to investigate those as well. But you have to let us know what
->>>>>> you're looking for.
->>>>>>
->>>>>
->>>>> Maybe I'm bad at making such requests but
->>>>>
->>>>> "Stefan, can you do me a favor and investigate which pages we end up
->>>>> deduplicating -- especially if it's mostly only the zeropage and if it's
->>>>> still that significant when disabling THP?"
->>>>>
->>>>> "In any case, it would be nice to get a feeling for how much variety in
->>>>> these 20% of deduplicated pages are. "
->>>>>
->>>>> is pretty clear to me. And shouldn't take months.
->>>>>
->>>
->>> Just to clarify: the details I requested are not meant to decide whether to
->>> reject the patch set (I understand that it can be beneficial to have); I
->>> primarily want to understand if we're really dealing with a workload where KSM
->>> is able to deduplicate pages that are non-trivial, to maybe figure out if there
->>> are other workloads that could similarly benefit -- or if we could optimize KSM
->>> for these specific cases or avoid the memory deduplication altogether.
->>>
->>> In contrast to e.g.:
->>>
->>> 1) THP resulted in many zeropages we end up deduplicating again. The THP
->>>     placement was unfortunate.
->>>
->>> 2) Unoptimized memory allocators that leave many identical pages mapped
->>>     after freeing up memory (e.g., zeroed pages, pages all filled with
->>>     poison values) instead of e.g., using MADV_DONTNEED to free up that
->>>     memory.
->>>
->>>
->>
->> I repeated an experiment with and without KSM. In terms of THP there is
->> no huge difference between the two. On a 64GB main memory machine I see
->> between 100 - 400MB in AnonHugePages.
->>
->>>> /sys/kernel/mm/ksm/pages_shared is over 10000 when we run this on an
->>>> Instagram workload. The workload consists of 36 processes plus a few
->>>> sidecar processes.
->>>
->>> Thanks! To which value is /sys/kernel/mm/ksm/max_page_sharing set in that
->>> environment?
->>>
->>
->> It's set to the standard value of 256.
->>
->> In the meantime I have run experiments with different settings for
->> pages_to_scan. With the default value of 100, we only get a relatively
->> small benefit of KSM. If I increase the value to for instance to 2000 or
->> 3000 the savings are substantial. (The workload is memory bound, not
->> CPU bound).
->>
->> Here are some stats for setting pages_to_scan to 3000:
->>
->> full_scans: 560
->> general_profit: 20620539008
->> max_page_sharing: 256
->> merge_across_nodes: 1
->> pages_shared: 125446
->> pages_sharing: 5259506
->> pages_to_scan: 3000
->> pages_unshared: 1897537
->> pages_volatile: 12389223
->> run: 1
->> sleep_millisecs: 20
->> stable_node_chains: 176
->> stable_node_chains_prune_millisecs: 2000
->> stable_node_dups: 2604
->> use_zero_pages: 0
->> zero_pages_sharing: 0
->>
->>
->>> What would be interesting is pages_shared after max_page_sharing was set to a
->>> very high number such that pages_shared does not include duplicates. Then
->>> pages_shared actually expresses how many different pages we deduplicate. No need
->>> to run without THP in that case.
->>>
->>
->> Thats on my list for the next set of experiments.
->>
-> 
-> In the new experiment I increased the max_page_sharing value to 16384.
-> This reduced the number of stable_node_dups considerably (its around 3%
-> of the previous value). However pages_sharing is still very high for
-> this workload.
-> 
-> full_scans: 138
-> general_profit: 24442268608
-> max_page_sharing: 16384
-> merge_across_nodes: 1
-> pages_shared: 144590
-> pages_sharing: 6230983
-> pages_to_scan: 3000
-> pages_unshared: 2120307
-> pages_volatile: 14590780
-> run: 1
-> sleep_millisecs: 20
-> stable_node_chains: 23
-> stable_node_chains_prune_millisecs: 2000
-> stable_node_dups: 78
-> use_zero_pages: 0
-> zero_pages_sharing: 0
+Hello,
 
-Interesting, thanks!
+Thank you so much for the review. Do you have any thoughts on the build
+error on arc architecture?
+https://lore.kernel.org/all/e3c82373-256a-6297-bcb4-5e1179a2cbe2@collabora.com
 
-I wonder if it's really many interpreters performing (and caching?) 
-essentially same blobs (for example, for a JIT the IR and/or target 
-executable code). So maybe in general, such multi-instance interpreters 
-are a good candidate for KSM. (I recall there were some processes where 
-a server would perform and cache the translations instead) But just a 
-pure speculation :)
+On 4/6/23 8:52 PM, Michał Mirosław wrote:
+> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:>
+>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+>> the info about page table entries. The following operations are supported
+>> in this ioctl:
+>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>>   (PAGE_IS_SWAPPED).
+>> - Find pages which have been written-to and write protect the pages
+>>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+>>
+>> This IOCTL can be extended to get information about more PTE bits.
+> [...]
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+> [...]
+>> +static inline bool is_pte_uffd_wp(pte_t pte)
+>> +{
+>> +       return ((pte_present(pte) && pte_uffd_wp(pte)) ||
+>> +               pte_swp_uffd_wp_any(pte));
+> 
+> Nit: outer parentheses are not needed for `return`ed value -- please
+> remove. (Same in other places.)
+Will remove.
+
+> 
+>> @@ -1768,11 +1789,416 @@ static int pagemap_release(struct inode *inode, struct file *file)
+>>         return 0;
+>>  }
+>>
+>> +#define PM_SCAN_FOUND_MAX_PAGES        (1)
+>> +#define PM_SCAN_BITS_ALL       (PAGE_IS_WRITTEN | PAGE_IS_FILE |       \
+>> +                                PAGE_IS_PRESENT | PAGE_IS_SWAPPED)
+>> +#define PM_SCAN_OPS            (PM_SCAN_OP_GET | PM_SCAN_OP_WP)
+>> +#define PM_SCAN_OP_IS_WP(a)    (a->flags & PM_SCAN_OP_WP)
+> 
+> Nit: PM_SCAN_DO_UFFD_WP()? It would shift the hint in the name from
+> what op is executed to what behaviour is requested.
+Will do.
+
+> 
+>> +#define PM_SCAN_BITMAP(wt, file, present, swap)        \
+>> +       (wt | file << 1 | present << 2 | swap << 3)
+> 
+> Please parenthesize macro arguments ("(wt)", "(file)", etc.) to not
+> have to worry about operator precedence when passed a complex
+> expression.
+Like this?
+#define PM_SCAN_BITMAP(wt, file, present, swap)	\
+	((wt) | (file << 1) | (present << 2) | (swap << 3))
+
+> 
+> I
+> 
+> [...]
+>> +static inline bool pagemap_scan_is_written_set(struct pagemap_scan_private *p)
+> 
+> pagemap_scan_checks_page_written? or similar 'scan is written' doesn't
+> seem to convey the expected intention.
+> The function is used only once in ..._test_walk(), so maybe just
+> inline, possibly using a temporary `bool` to make the condition easier
+> to read?
+I'll update the name of function. Using bool doesn't help much. Lets keep
+the same implementation.
+
+> 
+> [...]
+> 
+>> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+> 
+> Could you try out how the code would look when passing the bitmap
+> instead of separate booleans?
+It doesn't look better. Right now we have less duplicate code.
+
+> 
+>> +                              struct pagemap_scan_private *p,
+>> +                              unsigned long addr, unsigned int n_pages)
+>> +{
+> [...]
+>> +       if ((cur->start + cur->len * PAGE_SIZE == addr) &&
+>> +           (cur->bitmap == bitmap)) {
+> 
+> Nit: bitmap check is cheaper, so I'd put it first. BTW, inner
+> parentheses are not needed here.
+Will do.
+
+> 
+>> +               cur->len += n_pages;
+>> +               p->found_pages += n_pages;
+>> +
+>> +               if (p->max_pages && (p->found_pages == p->max_pages))
+>> +                       return PM_SCAN_FOUND_MAX_PAGES;
+>> +
+>> +               return 0;
+>> +       }
+>> +
+>> +       if (!p->vec_index || ((p->vec_index + 1) < p->vec_len)) {
+> 
+> It looks that `if (p->vec_index < p->vec_len)` is enough here - if we
+> have vec_len == 0 here, then we'd not fit the entry in the userspace
+> buffer anyway. Am I missing something?
+No. I'd explained it with diagram last time:
+https://lore.kernel.org/all/3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@collabora.com
+
+I'll add a concise comment here.
+
+> 
+>> +
+>> +               if (cur->len) {
+>> +                       memcpy(&p->vec[p->vec_index], cur,
+>> +                              sizeof(struct page_region));
+>> +                       p->vec_index++;
+>> +               }
+>> +               cur->start = addr;
+>> +               cur->len = n_pages;
+>> +               cur->bitmap = bitmap;
+>> +               p->found_pages += n_pages;
+>> +
+>> +               if (p->max_pages && (p->found_pages == p->max_pages))
+>> +                       return PM_SCAN_FOUND_MAX_PAGES;
+>> +
+>> +               return 0;
+>> +       }
+>> +
+>> +       return -ENOSPC;
+>> +}
+>> +
+>> +static inline int pagemap_scan_deposit(struct pagemap_scan_private *p,
+>> +                                      struct page_region __user *vec,
+>> +                                      unsigned long *vec_index)
+> 
+> ..._deposit() is used only in single place - please inline.
+It is already inline.
+
+> 
+> [...]
+>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>> +                                 unsigned long end, struct mm_walk *walk)
+>> +{
+>> +       struct pagemap_scan_private *p = walk->private;
+>> +       bool is_written, is_file, is_present, is_swap;
+>> +       struct vm_area_struct *vma = walk->vma;
+>> +       unsigned long addr = end;
+>> +       spinlock_t *ptl;
+>> +       int ret = 0;
+>> +       pte_t *pte;
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +       ptl = pmd_trans_huge_lock(pmd, vma);
+>> +       if (ptl) {
+> 
+> Nit: `page_lock` or `pt_lock` to make it easier to guess the purpose?
+No, in this file ptl is used religiously for this lock. So I'll keep it ptl
+to keep consistency.
+
+> 
+>> +               unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +
+>> +               is_written = !is_pmd_uffd_wp(*pmd);
+>> +               is_file = vma->vm_file;
+>> +               is_present = pmd_present(*pmd);
+>> +               is_swap = is_swap_pmd(*pmd);
+>> +
+>> +               spin_unlock(ptl);
+>> +
+>> +               /*
+>> +                * Break huge page into small pages if the WP operation need to
+>> +                * be performed is on a portion of the huge page or if max_pages
+>> +                * pages limit would exceed.
+> 
+> BTW, could the `max_pages` limit be relaxed a bit (in that it would be
+> possible to return more pages if they all merge into the last vector
+> entry) so that it would not need to split otherwise-matching huge
+> page? It would remove the need for this special handling in the kernel
+> and splitting the page by this read-only-appearing ioctl?
+No, this cannot be done. Otherwise we'll not be able to emulate Windows
+syscall GetWriteWatch() which specifies the exact number of pages. Usually
+in most of cases, either user will not use THP or not perform the operation
+on partial huge page. So this part is only there to keep things correct for
+those users who do use THP and partial pagemap_scan operations.
+
+> 
+>> +                */
+>> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
+>> +                   ((end - start < HPAGE_SIZE) ||
+>> +                    (p->max_pages &&
+>> +                     (p->max_pages - p->found_pages) < n_pages))) {
+>> +
+>> +                       split_huge_pmd(vma, pmd, start);
+>> +                       goto process_smaller_pages;
+>> +               }
+>> +
+>> +               if (p->max_pages &&
+>> +                   p->found_pages + n_pages > p->max_pages)
+>> +                       n_pages = p->max_pages - p->found_pages;
+>> +
+>> +               ret = pagemap_scan_output(is_written, is_file, is_present,
+>> +                                         is_swap, p, start, n_pages);
+>> +               if (ret < 0)
+>> +                       return ret;
+>> +
+>> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
+>> +                   uffd_wp_range(vma, start, HPAGE_SIZE, true) < 0)
+>> +                       ret = -EINVAL;
+> 
+> Why not propagate the error from uffd_wp_range()?
+uffd_wp_range() returns status in long variable. We cannot return long in
+this function. So intead of type casting long to int and then return I've
+used -EINVAL. Would following be more suitable?
+
+long ret2 = uffd_wp_range(vma, start, HPAGE_SIZE, true);
+if (ret2 < 0)
+	return (int)ret2;
+
+> 
+> [...]
+>> +static long do_pagemap_cmd(struct mm_struct *mm,
+>> +                          struct pm_scan_arg __user *uarg)
+> 
+> Please rename the function to `do_pagemap_scan` as it implements just
+> this single ioctl now.
+Will do.
+
+> 
+>> +{
+> [...]
+>> +       start = (unsigned long)untagged_addr(arg.start);
+>> +       vec = (struct page_region *)(unsigned long)untagged_addr(arg.vec);
+> 
+> Is the inner cast needed?
+arg.vec remains 64-bit on 32-bit systems. So casting 64bit value directly
+to struct page_region pointer errors out. So I've added specific casting to
+unsigned long first before casting to pointers.
+
+> 
+>> +       ret = pagemap_scan_args_valid(&arg, start, vec);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       end = start + arg.len;
+>> +       p.max_pages = arg.max_pages;
+>> +       p.found_pages = 0;
+>> +       p.flags = arg.flags;
+>> +       p.required_mask = arg.required_mask;
+>> +       p.anyof_mask = arg.anyof_mask;
+>> +       p.excluded_mask = arg.excluded_mask;
+>> +       p.return_mask = arg.return_mask;
+>> +       p.cur.len = 0;
+>> +       p.cur.start = 0;
+>> +       p.vec = NULL;
+>> +       p.vec_len = (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
+> 
+> Nit: parentheses are not needed here, please remove.
+Will do.
+
+> 
+>> +
+>> +       /*
+>> +        * Allocate smaller buffer to get output from inside the page walk
+>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+>> +        * we want to return output to user in compact form where no two
+>> +        * consecutive regions should be continuous and have the same flags.
+>> +        * So store the latest element in p.cur between different walks and
+>> +        * store the p.cur at the end of the walk to the user buffer.
+>> +        */
+>> +       p.vec = kmalloc_array(p.vec_len, sizeof(struct page_region),
+>> +                             GFP_KERNEL);
+>> +       if (!p.vec)
+>> +               return -ENOMEM;
+>> +
+>> +       walk_start = walk_end = start;
+>> +       while (walk_end < end && !ret) {
+> 
+> The loop will stop if a previous iteration returned ENOSPC (and the
+> error will be lost) - is it intended?
+It is intentional. -ENOSPC means that the user buffer is full even though
+there was more memory to walk over. We don't treat this error. So when
+buffer gets full, we stop walking over further as user buffer has gotten
+full and return as success.
+
+> 
+>> +               p.vec_index = 0;
+>> +
+>> +               empty_slots = arg.vec_len - vec_index;
+>> +               p.vec_len = min(p.vec_len, empty_slots);
+>> +
+>> +               walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+>> +               if (walk_end > end)
+>> +                       walk_end = end;
+>> +
+>> +               mmap_read_lock(mm);
+>> +               ret = walk_page_range(mm, walk_start, walk_end,
+>> +                                     &pagemap_scan_ops, &p);
+>> +               mmap_read_unlock(mm);
+>> +
+>> +               if (ret && ret != -ENOSPC && ret != PM_SCAN_FOUND_MAX_PAGES)
+>> +                       goto free_data;
+>> +
+>> +               walk_start = walk_end;
+>> +               if (p.vec_index) {
+>> +                       if (copy_to_user(&vec[vec_index], p.vec,
+>> +                                        p.vec_index *
+>> +                                        sizeof(struct page_region))) {
+> 
+> sizeof(*p.vec) ?
+Sure.
+
+> 
+>> +                               ret = -EFAULT;
+>> +                               goto free_data;
+>> +                       }
+>> +                       vec_index += p.vec_index;
+>> +               }
+>> +       }
+>> +       ret = pagemap_scan_deposit(&p, vec, &vec_index);
+>> +       if (!ret)
+>> +               ret = vec_index;
+>> +free_data:
+>> +       kfree(p.vec);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>> +static long pagemap_scan_ioctl(struct file *file, unsigned int cmd,
+>> +                              unsigned long arg)
+>> +{
+>> +       struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)arg;
+> 
+> This is specific to PAGEMAP_SCAN ioctl, so should go into do_pagemap_cmd().
+Sure.
+
+> 
+>> +       struct mm_struct *mm = file->private_data;
+>> +
+>> +       switch (cmd) {
+>> +       case PAGEMAP_SCAN:
+>> +               return do_pagemap_cmd(mm, uarg);
+> [...]
+>> --- a/include/linux/userfaultfd_k.h
+>> +++ b/include/linux/userfaultfd_k.h
+>> @@ -210,6 +210,14 @@ extern bool userfaultfd_wp_async(struct vm_area_struct *vma);
+>>
+>>  #else /* CONFIG_USERFAULTFD */
+>>
+>> +static inline long uffd_wp_range(struct mm_struct *dst_mm,
+>> +                                struct vm_area_struct *vma,
+>> +                                unsigned long start, unsigned long len,
+>> +                                bool enable_wp)
+>> +{
+>> +       return 0;
+>> +}
+>> +
+>>  /* mm helpers */
+>>  static inline vm_fault_t handle_userfault(struct vm_fault *vmf,
+>>                                 unsigned long reason)
+> 
+> Shouldn't this part be in the patch introducing uffd_wp_range()?
+We have not added uffd_wp_range() in previous patches. We just need this
+stub for this patch for the case when CONFIG_USERFAULTFD isn't enabled.
+
+I'd this as separate patch before this patch. Mike asked me to merge it
+with this patch in order not to break bisectability.
+https://lore.kernel.org/all/ZBK+86eMMazwfhdx@kernel.org
+
+
+> 
+> Best Regards
+> Michał Mirosław
 
 -- 
-Thanks,
-
-David / dhildenb
-
+BR,
+Muhammad Usama Anjum
