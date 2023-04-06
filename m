@@ -2,170 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FA46D9817
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 15:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33976D98C6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 15:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237793AbjDFNYb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 09:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S238872AbjDFN5q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 09:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237372AbjDFNYa (ORCPT
+        with ESMTP id S238889AbjDFN5n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:24:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E4AA5EA
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 06:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680787395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e7Hmzr+9HB3Bn94tWpFODla1b+fc9Td8o9IH5wnZAGQ=;
-        b=IJvuZi5AGySZtZ3n1D6T3KlRccHp5Bia6smlFHQRFNXtde/WIFEWtu+hlc1xbxNR8/1AdG
-        /lvZokz/UXcnZ5kmIjvgXtFB+i1CU9q1ni0k7tFTzJ+Mheh83jGJMlMm0EDo4q1jSjnUSg
-        5qNJqCpGiF2X8kR/9lWRUwsHB2lzLfQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-6-OBkiyz1rOiKT2kEp8YRUIA-1; Thu, 06 Apr 2023 09:23:14 -0400
-X-MC-Unique: OBkiyz1rOiKT2kEp8YRUIA-1
-Received: by mail-wm1-f69.google.com with SMTP id o37-20020a05600c512500b003edd119ec9eso18323547wms.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 06:23:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680787393; x=1683379393;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e7Hmzr+9HB3Bn94tWpFODla1b+fc9Td8o9IH5wnZAGQ=;
-        b=m7nsvjrHMuv313YAg6kx+S7tB5XOP0b59S8ZT2K5s0qyAONTOecy8YjilbAZmQP3IU
-         l70bqnQfW2BTXzPySpwMG8WvMVS3lrY7K6aGZaZ0bksRuXbzd/Sh9eWshCWhVb7oHhm8
-         GbrEaaEUban1xbluNKzhuX2dA5rM9LmbcsB0Uo74l0bAFLC1V2RF8rA2gzXHsgxLFjne
-         GRY2S7fCIaTqOgzbiYyj5+wxPdhhG/cYNIAjq/0i9L0Qvj3uU93mcIymfMhNlKzjeSAq
-         7L/udZKnR5205oKZu2x6wBvhCTJxz2MjaEHHf2gkMU7caAdRl3eT+Gn/RyivpMUptrvG
-         89ZQ==
-X-Gm-Message-State: AAQBX9dBvg3znM7p7OE3iCJMDHZbZ6wxcbh/CktvExBVo/VbNU4ABcTs
-        P9OeKjJsCIgMyHASy6sDog8VFkWmWfEEJ4hze8UoFQ5EBOASPugMSbUL7wsGbgZ/HIClSfhEPx0
-        hD+npFMKWhyJgBq60mCHTY0dknBmJVx2Qdp4X
-X-Received: by 2002:a05:600c:2216:b0:3e2:1dac:b071 with SMTP id z22-20020a05600c221600b003e21dacb071mr4319557wml.13.1680787392951;
-        Thu, 06 Apr 2023 06:23:12 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YcbkiaS8MTBR4JZ3ECj8Euw4BG/3vHhNsIZuEhi84AOHoHz8xwwrzQdwYxnoyhI8a3PQ+54g==
-X-Received: by 2002:a05:600c:2216:b0:3e2:1dac:b071 with SMTP id z22-20020a05600c221600b003e21dacb071mr4319547wml.13.1680787392649;
-        Thu, 06 Apr 2023 06:23:12 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id t16-20020a05600c451000b003ef66c89af0sm8750890wmo.0.2023.04.06.06.23.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 06:23:12 -0700 (PDT)
-Message-ID: <e7a930f6-feba-29a4-7c48-ae7d8108c7dc@redhat.com>
-Date:   Thu, 6 Apr 2023 15:23:11 +0200
+        Thu, 6 Apr 2023 09:57:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885F7A5F7;
+        Thu,  6 Apr 2023 06:57:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED6C76456E;
+        Thu,  6 Apr 2023 13:57:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE9A7C4339B;
+        Thu,  6 Apr 2023 13:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680789439;
+        bh=UK5JJfdjiAdN9kwU5At61bUGQenEJhFJVNvEndfAWkg=;
+        h=From:Subject:Date:To:Cc:From;
+        b=IE52y9OSvrDsq/qGBBJkmB2j05+j9lw2T2ob9/QkVqO/PyUngTEWVbSRCieWPi6R8
+         ZtzVpD21IS9CZ9fW/B08b6k4rc5q/5xtHRzUziAB9spTCFC6Wxo1dvmDBLpVJoSx7J
+         6Yic4XcYtoX669XTvda+qWSbBqgQW3fQTkr2B/I4xLrNq4upp/lLaDd0nWKy+fgcE2
+         jkuVjrjGpDG+l2Akpf8NnNJw6sKP9XZcKelGlqBSLaa8NfT/u8Fuep5eQFVJk7ikqv
+         2Go3ooxSSF8dhDzT48HEdoDEk9eBtRalrJfCD42AD3koaxq8WPN2X6fmZjh3/zILuk
+         zXjg4uCaW9r0g==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/2] kselftest: Support nolibc
+Date:   Thu, 06 Apr 2023 14:56:28 +0100
+Message-Id: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 2/3] mm: add new KSM process and sysfs knobs
-Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20230310182851.2579138-1-shr@devkernel.io>
- <20230310182851.2579138-3-shr@devkernel.io>
- <ce494e5a-3540-d6ad-4e9c-0bb49c7e1e1b@redhat.com>
- <qvqw8rf6uicf.fsf@dev0134.prn3.facebook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <qvqw8rf6uicf.fsf@dev0134.prn3.facebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAIzPLmQC/x2N0QrCMAwAf2Xk2UCsVdBfER/aLHPB2UlShjD27
+ 3Y+HsdxK7iYisOtW8FkUde5NDgeOuAxlaeg9o0hUDhRpDO+XKahilcs86SZkXNgoRgvPV2hZTm
+ 5YLZUeNzDd/IqtouPyaDf/+v+2LYfjLvkRXsAAAA=
+To:     Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-00303
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1586; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=UK5JJfdjiAdN9kwU5At61bUGQenEJhFJVNvEndfAWkg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkLs+7k+k7gQDbtDEjL2cEjcLJgulQT9C2jU5yInP9
+ TZZJ4OmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZC7PuwAKCRAk1otyXVSH0I4CB/
+ 9p1/dGEQmbpFozJZoptPdTRtXccp9r7HSg3K8nmCuP/kLeje5ebuMpUPL1EjH6C5FgEL6xd0k2Xm/C
+ BxGBHaHGAcfydZV99U0m6C82xD3XhmXXYj0tpunoJcVfT6s09lywO6AcHzbUcxtt3No6cG4/TfNP4C
+ YKhP0qeRkGZ2ScrmRMPxtUx3BA3eonc9qaHjkPg8OXvt422Q8hXUBK/cF0VTuAw/S5CpPgKH2lmaQO
+ Td/y89LL/cmxWBWjunb7U+g/jF52IO0COXW7gTY1G6LbHd95h/PVAh70cZVlxqTf0mskVQD/3oo/Md
+ iPbuJ2WbdSLRa4KxAipuF75cPI6Z8w
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->>
->> Often, when you have to start making a list of things that a patch does, it
->> might make sense to split some of the items into separate patches such that you
->> can avoid lists and just explain in list-free text how the pieces in the patch
->> fit together.
->>
->> I'd suggest splitting this patch into logical pieces. For example, separating
->> the general profit calculation/exposure from the per-mm profit and the per-mm
->> ksm type indication.
->>
-> 
-> Originally these were individual patches. If I recall correctly Johannes
-> Weiner wanted them as one patch. I can certainly split them again.
+At present the kselftest header can't be used with nolibc since it makes
+use of vprintf() which is not available in nolibc and seems like it would
+be inappropriate to implement given the minimal system requirements and
+environment intended for nolibc. This has resulted in some open coded
+kselftests which use nolibc to test features that are supposed to be
+controlled via libc and therefore better exercised in an environment with
+no libc.
 
-That's why I remember that v1 contained more patches :)
+Rather than continue this let's factor out the I/O routines in kselftest.h
+into a separate header file and provide a nolibc implementation which only
+allows simple strings to be provided rather than full printf() support.
+This is limiting but a great improvement on sharing no code at all.
 
-Again, just my opinion on patches that require a description in form of 
-a list ...
+As an example of using this I've updated the arm64 za-fork test to use
+the standard kselftest.h.
 
-> 
->>> Link: https://lkml.kernel.org/r/20230224044000.3084046-3-shr@devkernel.io
->>> Signed-off-by: Stefan Roesch <shr@devkernel.io>
->>> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
->>> Cc: David Hildenbrand <david@redhat.com>
->>> Cc: Johannes Weiner <hannes@cmpxchg.org>
->>> Cc: Michal Hocko <mhocko@suse.com>
->>> Cc: Rik van Riel <riel@surriel.com>
->>> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
->>> ---
->>
->>
->> [...]
->>
->>>    KSM_ATTR_RO(pages_volatile);
->>>    @@ -3280,6 +3305,21 @@ static ssize_t zero_pages_sharing_show(struct kobject
->>> *kobj,
->>>    }
->>>    KSM_ATTR_RO(zero_pages_sharing);
->>>    +static ssize_t general_profit_show(struct kobject *kobj,
->>> +				   struct kobj_attribute *attr, char *buf)
->>> +{
->>> +	long general_profit;
->>> +	long all_rmap_items;
->>> +
->>> +	all_rmap_items = ksm_max_page_sharing + ksm_pages_shared +
->>> +				ksm_pages_unshared + pages_volatile();
->>
->> Are you sure you want to count a config knob (ksm_max_page_sharing) into that
->> formula? I yet have to digest what this calculation implies, but it does feel
->> odd.
->>
-> 
-> This was a mistake. I wanted ksm_pages_sharing instead of
-> ksm_max_page_sharing.
-> 
->>
->> Further, maybe just avoid pages_volatile(). Expanding the formula (excluding
->> ksm_max_page_sharing for now):
->>
->>
->> all_rmap = ksm_pages_shared + ksm_pages_unshared + pages_volatile();
->>
->> -> expand pages_volatile() (ignoring the < 0 case)
->>
->> all_rmap = ksm_pages_shared + ksm_pages_unshared + ksm_rmap_items -
->> ksm_pages_shared - ksm_pages_sharing - ksm_pages_unshared;
->>
->> -> simplify
->>
->> all_rmap = ksm_rmap_items + ksm_pages_sharing;
->>
-> I'll simplify it.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (2):
+      kselftest: Support nolibc
+      kselftest/arm64: Convert za-fork to use kselftest.h
 
+ tools/testing/selftests/arm64/fp/Makefile  |   2 +-
+ tools/testing/selftests/arm64/fp/za-fork.c |  88 +++--------------
+ tools/testing/selftests/kselftest-nolibc.h |  93 ++++++++++++++++++
+ tools/testing/selftests/kselftest-std.h    | 151 +++++++++++++++++++++++++++++
+ tools/testing/selftests/kselftest.h        | 149 +++-------------------------
+ 5 files changed, 272 insertions(+), 211 deletions(-)
+---
+base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
+change-id: 20230405-kselftest-nolibc-cb2ce0446d09
 
-Cool.
-
+Best regards,
 -- 
-Thanks,
-
-David / dhildenb
+Mark Brown <broonie@kernel.org>
 
