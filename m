@@ -2,159 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821C26D97E2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 15:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FA46D9817
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 15:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237756AbjDFNTt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 09:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
+        id S237793AbjDFNYb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 09:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238092AbjDFNTe (ORCPT
+        with ESMTP id S237372AbjDFNYa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:19:34 -0400
-Received: from mail-ej1-x664.google.com (mail-ej1-x664.google.com [IPv6:2a00:1450:4864:20::664])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4642109
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 06:19:31 -0700 (PDT)
-Received: by mail-ej1-x664.google.com with SMTP id cw23so1334324ejb.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 06:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680787169;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OurEHAluO0z0/iX0xySpGmAc9WM9TpIWEufWnTv6GLE=;
-        b=RtUe4waOH1uRH6GzLLr3ULwobeBTRIvPi9jWYefgAOEk2cjWDQO7BeHHRy0w5lhx0a
-         2pl+RhTSFHdg5AaiAnN5o1gVK7I375ofrRGojqrx3NcU2kUeHf63vJ3GZ2HDbIhR97BX
-         cPW6nkUcReuAiG/c3lSTnPxbNaqoQqUv/tTVQ=
+        Thu, 6 Apr 2023 09:24:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E4AA5EA
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 06:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680787395;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e7Hmzr+9HB3Bn94tWpFODla1b+fc9Td8o9IH5wnZAGQ=;
+        b=IJvuZi5AGySZtZ3n1D6T3KlRccHp5Bia6smlFHQRFNXtde/WIFEWtu+hlc1xbxNR8/1AdG
+        /lvZokz/UXcnZ5kmIjvgXtFB+i1CU9q1ni0k7tFTzJ+Mheh83jGJMlMm0EDo4q1jSjnUSg
+        5qNJqCpGiF2X8kR/9lWRUwsHB2lzLfQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-6-OBkiyz1rOiKT2kEp8YRUIA-1; Thu, 06 Apr 2023 09:23:14 -0400
+X-MC-Unique: OBkiyz1rOiKT2kEp8YRUIA-1
+Received: by mail-wm1-f69.google.com with SMTP id o37-20020a05600c512500b003edd119ec9eso18323547wms.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 06:23:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680787169;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OurEHAluO0z0/iX0xySpGmAc9WM9TpIWEufWnTv6GLE=;
-        b=E45lRThpPanDWYWQc+EqCOPFwtNlXqMw4gJP5KC5a3Y2A9LF4jLE2uCABzC/YpZ9Us
-         /eY2Z1Mi09z++1OY5bhEft1DgLILMmQtNZ/ha0PzJLy5d4apJyQGpm7FOJDVp38mDVAC
-         3APRyC+U4SZdY64rLOK6wpa8vvk8/z0wzySltGAowWgxMP7Ydm5fcICudKMXzgEXQq4e
-         fTrpuJ0bmeAMX8KEy1dwAZ6SoeahNpmPug+75qE5/CjLo1OZnpVw8qhW337iLxDaUe0l
-         Emn6EEhUm3clUNwooI+PwfhT6XjGwhivfwf0VSdNbxRfs9IwXO737sXdckmSKo17o//h
-         AJgw==
-X-Gm-Message-State: AAQBX9dMyIkdFFtdl5MKowKzGSiD7wvhiy5lMJbT2uMBDrtMkXmbzIU/
-        A5ijcpzkTtmGoag5BuP81ZJavRubbEYVkFSlivO90VILadrM
-X-Google-Smtp-Source: AKy350Y3BpqFjLhFsA8Ofyp/tsoaubMqvqG4LLFCCOMAjnpds5X8ALPDuorggWeREk8wrlueBVxKM0qjgzwX
-X-Received: by 2002:a17:906:46c8:b0:932:c1e2:998b with SMTP id k8-20020a17090646c800b00932c1e2998bmr7247124ejs.15.1680787169403;
-        Thu, 06 Apr 2023 06:19:29 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id 7-20020a170906014700b00947de8fa946sm137999ejh.201.2023.04.06.06.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 06:19:29 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 3/3] selftests: xsk: Add tests for 8K and 9K frame sizes
-Date:   Thu,  6 Apr 2023 15:18:06 +0200
-Message-Id: <20230406131806.51332-4-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406131806.51332-1-kal.conley@dectris.com>
-References: <20230406131806.51332-1-kal.conley@dectris.com>
+        d=1e100.net; s=20210112; t=1680787393; x=1683379393;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e7Hmzr+9HB3Bn94tWpFODla1b+fc9Td8o9IH5wnZAGQ=;
+        b=m7nsvjrHMuv313YAg6kx+S7tB5XOP0b59S8ZT2K5s0qyAONTOecy8YjilbAZmQP3IU
+         l70bqnQfW2BTXzPySpwMG8WvMVS3lrY7K6aGZaZ0bksRuXbzd/Sh9eWshCWhVb7oHhm8
+         GbrEaaEUban1xbluNKzhuX2dA5rM9LmbcsB0Uo74l0bAFLC1V2RF8rA2gzXHsgxLFjne
+         GRY2S7fCIaTqOgzbiYyj5+wxPdhhG/cYNIAjq/0i9L0Qvj3uU93mcIymfMhNlKzjeSAq
+         7L/udZKnR5205oKZu2x6wBvhCTJxz2MjaEHHf2gkMU7caAdRl3eT+Gn/RyivpMUptrvG
+         89ZQ==
+X-Gm-Message-State: AAQBX9dBvg3znM7p7OE3iCJMDHZbZ6wxcbh/CktvExBVo/VbNU4ABcTs
+        P9OeKjJsCIgMyHASy6sDog8VFkWmWfEEJ4hze8UoFQ5EBOASPugMSbUL7wsGbgZ/HIClSfhEPx0
+        hD+npFMKWhyJgBq60mCHTY0dknBmJVx2Qdp4X
+X-Received: by 2002:a05:600c:2216:b0:3e2:1dac:b071 with SMTP id z22-20020a05600c221600b003e21dacb071mr4319557wml.13.1680787392951;
+        Thu, 06 Apr 2023 06:23:12 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YcbkiaS8MTBR4JZ3ECj8Euw4BG/3vHhNsIZuEhi84AOHoHz8xwwrzQdwYxnoyhI8a3PQ+54g==
+X-Received: by 2002:a05:600c:2216:b0:3e2:1dac:b071 with SMTP id z22-20020a05600c221600b003e21dacb071mr4319547wml.13.1680787392649;
+        Thu, 06 Apr 2023 06:23:12 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id t16-20020a05600c451000b003ef66c89af0sm8750890wmo.0.2023.04.06.06.23.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 06:23:12 -0700 (PDT)
+Message-ID: <e7a930f6-feba-29a4-7c48-ae7d8108c7dc@redhat.com>
+Date:   Thu, 6 Apr 2023 15:23:11 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v4 2/3] mm: add new KSM process and sysfs knobs
+Content-Language: en-US
+To:     Stefan Roesch <shr@devkernel.io>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, Bagas Sanjaya <bagasdotme@gmail.com>
+References: <20230310182851.2579138-1-shr@devkernel.io>
+ <20230310182851.2579138-3-shr@devkernel.io>
+ <ce494e5a-3540-d6ad-4e9c-0bb49c7e1e1b@redhat.com>
+ <qvqw8rf6uicf.fsf@dev0134.prn3.facebook.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <qvqw8rf6uicf.fsf@dev0134.prn3.facebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests:
-- RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
-- UNALIGNED_9K_FRAME_SIZE: frame_size=9000 (unaligned)
+>>
+>> Often, when you have to start making a list of things that a patch does, it
+>> might make sense to split some of the items into separate patches such that you
+>> can avoid lists and just explain in list-free text how the pieces in the patch
+>> fit together.
+>>
+>> I'd suggest splitting this patch into logical pieces. For example, separating
+>> the general profit calculation/exposure from the per-mm profit and the per-mm
+>> ksm type indication.
+>>
+> 
+> Originally these were individual patches. If I recall correctly Johannes
+> Weiner wanted them as one patch. I can certainly split them again.
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/xskxceiver.c | 25 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.h |  2 ++
- 2 files changed, 27 insertions(+)
+That's why I remember that v1 contained more patches :)
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 7eccf57a0ccc..86797de7fc50 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1841,6 +1841,17 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
- 		testapp_validate_traffic(test);
- 		break;
-+	case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 8192;
-+		test->ifobj_rx->umem->frame_size = 8192;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_RX_POLL:
- 		test->ifobj_rx->use_poll = true;
- 		test_spec_set_name(test, "POLL_RX");
-@@ -1904,6 +1915,20 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		if (!testapp_unaligned(test))
- 			return;
- 		break;
-+	case TEST_TYPE_UNALIGNED_9K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "UNALIGNED_9K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 9000;
-+		test->ifobj_rx->umem->frame_size = 9000;
-+		test->ifobj_tx->umem->unaligned_mode = true;
-+		test->ifobj_rx->umem->unaligned_mode = true;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		test->ifobj_rx->pkt_stream->use_addr_for_fill = true;
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_HEADROOM:
- 		testapp_headroom(test);
- 		break;
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index 919327807a4e..7f52f737f5e9 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -69,12 +69,14 @@ enum test_mode {
- enum test_type {
- 	TEST_TYPE_RUN_TO_COMPLETION,
- 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-+	TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
- 	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
- 	TEST_TYPE_RX_POLL,
- 	TEST_TYPE_TX_POLL,
- 	TEST_TYPE_POLL_RXQ_TMOUT,
- 	TEST_TYPE_POLL_TXQ_TMOUT,
- 	TEST_TYPE_UNALIGNED,
-+	TEST_TYPE_UNALIGNED_9K_FRAME,
- 	TEST_TYPE_ALIGNED_INV_DESC,
- 	TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
- 	TEST_TYPE_UNALIGNED_INV_DESC,
+Again, just my opinion on patches that require a description in form of 
+a list ...
+
+> 
+>>> Link: https://lkml.kernel.org/r/20230224044000.3084046-3-shr@devkernel.io
+>>> Signed-off-by: Stefan Roesch <shr@devkernel.io>
+>>> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>>> Cc: David Hildenbrand <david@redhat.com>
+>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
+>>> Cc: Michal Hocko <mhocko@suse.com>
+>>> Cc: Rik van Riel <riel@surriel.com>
+>>> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+>>> ---
+>>
+>>
+>> [...]
+>>
+>>>    KSM_ATTR_RO(pages_volatile);
+>>>    @@ -3280,6 +3305,21 @@ static ssize_t zero_pages_sharing_show(struct kobject
+>>> *kobj,
+>>>    }
+>>>    KSM_ATTR_RO(zero_pages_sharing);
+>>>    +static ssize_t general_profit_show(struct kobject *kobj,
+>>> +				   struct kobj_attribute *attr, char *buf)
+>>> +{
+>>> +	long general_profit;
+>>> +	long all_rmap_items;
+>>> +
+>>> +	all_rmap_items = ksm_max_page_sharing + ksm_pages_shared +
+>>> +				ksm_pages_unshared + pages_volatile();
+>>
+>> Are you sure you want to count a config knob (ksm_max_page_sharing) into that
+>> formula? I yet have to digest what this calculation implies, but it does feel
+>> odd.
+>>
+> 
+> This was a mistake. I wanted ksm_pages_sharing instead of
+> ksm_max_page_sharing.
+> 
+>>
+>> Further, maybe just avoid pages_volatile(). Expanding the formula (excluding
+>> ksm_max_page_sharing for now):
+>>
+>>
+>> all_rmap = ksm_pages_shared + ksm_pages_unshared + pages_volatile();
+>>
+>> -> expand pages_volatile() (ignoring the < 0 case)
+>>
+>> all_rmap = ksm_pages_shared + ksm_pages_unshared + ksm_rmap_items -
+>> ksm_pages_shared - ksm_pages_sharing - ksm_pages_unshared;
+>>
+>> -> simplify
+>>
+>> all_rmap = ksm_rmap_items + ksm_pages_sharing;
+>>
+> I'll simplify it.
+
+
+Cool.
+
 -- 
-2.39.2
+Thanks,
+
+David / dhildenb
 
