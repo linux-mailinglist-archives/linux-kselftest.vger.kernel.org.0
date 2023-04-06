@@ -2,268 +2,206 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2396D98C8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 15:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D406D9943
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 16:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238860AbjDFN5u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 09:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S230064AbjDFONC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 10:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238843AbjDFN5s (ORCPT
+        with ESMTP id S239089AbjDFOMu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:57:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A61A9775;
-        Thu,  6 Apr 2023 06:57:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50E6264827;
-        Thu,  6 Apr 2023 13:57:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F19AC433A4;
-        Thu,  6 Apr 2023 13:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680789443;
-        bh=ytJn4w5Dy5SWLa0FnByQtdiXEcdwmqHMOCYVqkoHY8M=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=IJcZ4F1xjaQ4Y8Cse4s6lD4Fs/8+l9oFFrg4IWSplJzD5fDpXHw38gkJNZcoYgy2m
-         KxnbKunAaNfykgVwfk7oenBAJ3tVS4CvhZB2G3YJWnSIhD25BjU0AwRpKrDt2cfqzl
-         IpO5EbtT2d2k3k9ndhhPzHVsfHix9nIeXQ3IinQiSmgBqIKftv6JD2FVsVcQU+hXsS
-         NyQs+Nij+CD1V2BNwoE3OUW/QoN5ziH/3SWf+nSo7xEuOFAtw2KvkTPc11WdY/4bMJ
-         S2x49NlI7KdN3KnjBFdzJPGa0nIKpUIByBb+hqeV6J5t6/y82NCV6Bkj7UH4wZhmQ3
-         CdFuQzQ6FGmsg==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Thu, 06 Apr 2023 14:56:30 +0100
-Subject: [PATCH 2/2] kselftest/arm64: Convert za-fork to use kselftest.h
+        Thu, 6 Apr 2023 10:12:50 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52547EEF
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 07:12:41 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id x3so9906931iov.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 07:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680790361;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EK2TuG+WkLupwO9C8GXLQol+GTLoseAFOILf7LMA4Ag=;
+        b=tYw73/FyTv5WaJ2rhzmMHPoBwLZmIl1kP79Cm+DPhR8Bio9CXcigKm2MZdEI9PbSK2
+         yyI4fRp937L9lL1uad95bKspK2fe6c0FhAjKTqCFFAJFUUoVd79F9OGw1SynOtQ/fxKk
+         jRtwJSrIOoskNiC1HuaSBoXRW5VHpPW48JP7mPyh2nqCvP5oCtk40np8S4dVXG9pSamP
+         xREEqvZib8vgIIICvvVBDkBHzaAptHbVxNKdNh9VUuP4G48X7Hjt4vdrjNmtnlQKBY0k
+         GuLKtn0cvgC59502Tp1PUYcnzkJcOHCD38s4NQF5DXC7+mspTwE0JWlhBTpLqQZxdXUm
+         XwoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680790361;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EK2TuG+WkLupwO9C8GXLQol+GTLoseAFOILf7LMA4Ag=;
+        b=aWxwuUcPNd7/GbIBJwQKiP8fDM7ivGb8gTpArqC/VLWPgeoHArjzUgLJ8mSl4qgkAt
+         r6uX6EeowWF3iopUs6TNcFIKE7erOBu5R6rlqSsG6kxFlgtQfGHmDvFCH58df9l6u+jN
+         VU+bKZAcUYz+G/T0TtBy6omX5d9MG7JTgkmtFKeLET40OPQlFKT617EUU6Wpr+tFJDz1
+         G9QiCyX2TkOMVbcpUs6xEaRHmxY43fuOnj6C5brLAfoN/7YkwpeiD53562BwY9hsYgN9
+         VBWj7nC94pJzljxT6kGXTL8BXab9Kc418B+SdhlEUf7wvXGjxeDt/cPchbL2yNCmmWn0
+         TDmw==
+X-Gm-Message-State: AAQBX9dulhnqcVxrotzTOKrLnA+5LHGCdxgYlxE/sse2RfeGAho//SYc
+        vFVNvf3MmCG4SJLg81KV8psqCFUeXiXv6Cl8L9z+fQ==
+X-Google-Smtp-Source: AKy350ZfMeq75xGiCP03gTiGqNqmMx1cPRWF+FsoE17HCPQ7PHCvr67VYtxzWA3ws1glln92pVHB5xOFHTA8Ouz5LAs=
+X-Received: by 2002:a6b:d10a:0:b0:744:b4c2:30fa with SMTP id
+ l10-20020a6bd10a000000b00744b4c230famr6986944iob.18.1680790360988; Thu, 06
+ Apr 2023 07:12:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230405-kselftest-nolibc-v1-2-63fbcd70b202@kernel.org>
-References: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
-In-Reply-To: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-00303
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5178; i=broonie@kernel.org;
- h=from:subject:message-id; bh=ytJn4w5Dy5SWLa0FnByQtdiXEcdwmqHMOCYVqkoHY8M=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkLs+80yzLeyGUhQXPJmaYoxHF1c5gwAnwwLgvREBL
- QLj2zJCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZC7PvAAKCRAk1otyXVSH0MaiB/
- 9GqQ45Q2obhNcd6abvqwjxt292Y9OnTQjQAbChlA/DhCQuwldDpml2LncJHCUVlYC7vkLkP8gYktcy
- 3aLR1l8sZjDhZez0DEMq6coFfwjkyBx04gTI6oT4wmcDdxgsY3lpJH/bm3dPrBw+R0CutOhRM1PMMb
- Jazidq5KMzV84HbR7bfohl6FBOpAzpt6zLlIBFdL1nsgZqKwB7WbaxsN9NIfnf8BbJnbAHCKfMh80a
- s7F3cRhKbgL8p9dihTUApdIsGfvfuXMiZUEG4w6gMN0Gb+LLFDuaP0kb2CLZyHbQtBwm+8CPnU/z9N
- zuCKHjGpoB1nLU5BZwesCzluYSsYfW
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230316123028.2890338-1-elver@google.com>
+In-Reply-To: <20230316123028.2890338-1-elver@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 6 Apr 2023 16:12:04 +0200
+Message-ID: <CANpmjNOwo=4_VpUs1PYajtxb8gvt3hyhgwc-Bk9RN4VgupZCyQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] posix-timers: Prefer delivery of signals to the
+ current thread
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+        Frederic Weisbecker <frederic@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that kselftest.h can be used with nolibc convert the za-fork test to
-use it. We do still have to open code ksft_print_msg() but that's not the
-end of the world. Some of the advantage comes from using printf() which we
-could have been using already.
+On Thu, 16 Mar 2023 at 13:31, Marco Elver <elver@google.com> wrote:
+>
+> From: Dmitry Vyukov <dvyukov@google.com>
+>
+> POSIX timers using the CLOCK_PROCESS_CPUTIME_ID clock prefer the main
+> thread of a thread group for signal delivery.     However, this has a
+> significant downside: it requires waking up a potentially idle thread.
+>
+> Instead, prefer to deliver signals to the current thread (in the same
+> thread group) if SIGEV_THREAD_ID is not set by the user. This does not
+> change guaranteed semantics, since POSIX process CPU time timers have
+> never guaranteed that signal delivery is to a specific thread (without
+> SIGEV_THREAD_ID set).
+>
+> The effect is that we no longer wake up potentially idle threads, and
+> the kernel is no longer biased towards delivering the timer signal to
+> any particular thread (which better distributes the timer signals esp.
+> when multiple timers fire concurrently).
+>
+> Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+> Suggested-by: Oleg Nesterov <oleg@redhat.com>
+> Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+> v6:
+> - Split test from this patch.
+> - Update wording on what this patch aims to improve.
+>
+> v5:
+> - Rebased onto v6.2.
+>
+> v4:
+> - Restructured checks in send_sigqueue() as suggested.
+>
+> v3:
+> - Switched to the completely different implementation (much simpler)
+>   based on the Oleg's idea.
+>
+> RFC v2:
+> - Added additional Cc as Thomas asked.
+> ---
+>  kernel/signal.c | 25 ++++++++++++++++++++++---
+>  1 file changed, 22 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index 8cb28f1df294..605445fa27d4 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -1003,8 +1003,7 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
+>         /*
+>          * Now find a thread we can wake up to take the signal off the queue.
+>          *
+> -        * If the main thread wants the signal, it gets first crack.
+> -        * Probably the least surprising to the average bear.
+> +        * Try the suggested task first (may or may not be the main thread).
+>          */
+>         if (wants_signal(sig, p))
+>                 t = p;
+> @@ -1970,8 +1969,23 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+>
+>         ret = -1;
+>         rcu_read_lock();
+> +       /*
+> +        * This function is used by POSIX timers to deliver a timer signal.
+> +        * Where type is PIDTYPE_PID (such as for timers with SIGEV_THREAD_ID
+> +        * set), the signal must be delivered to the specific thread (queues
+> +        * into t->pending).
+> +        *
+> +        * Where type is not PIDTYPE_PID, signals must just be delivered to the
+> +        * current process. In this case, prefer to deliver to current if it is
+> +        * in the same thread group as the target, as it avoids unnecessarily
+> +        * waking up a potentially idle task.
+> +        */
+>         t = pid_task(pid, type);
+> -       if (!t || !likely(lock_task_sighand(t, &flags)))
+> +       if (!t)
+> +               goto ret;
+> +       if (type != PIDTYPE_PID && same_thread_group(t, current))
+> +               t = current;
+> +       if (!likely(lock_task_sighand(t, &flags)))
+>                 goto ret;
+>
+>         ret = 1; /* the signal is ignored */
+> @@ -1993,6 +2007,11 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+>         q->info.si_overrun = 0;
+>
+>         signalfd_notify(t, sig);
+> +       /*
+> +        * If the type is not PIDTYPE_PID, we just use shared_pending, which
+> +        * won't guarantee that the specified task will receive the signal, but
+> +        * is sufficient if t==current in the common case.
+> +        */
+>         pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+>         list_add_tail(&q->list, &pending->list);
+>         sigaddset(&pending->signal, sig);
+> --
 
-This does change the output when tests are skipped, bringing it in line
-with the standard kselftest output by removing the test name - we move
-from
+One last semi-gentle ping. ;-)
 
-    ok 0 skipped
+1. We're seeing that in some applications that use POSIX timers
+heavily, but where the main thread is mostly idle, the main thread
+receives a disproportional amount of the signals along with being
+woken up constantly. This is bad, because the main thread usually
+waits with the help of a futex or really long sleeps. Now the main
+thread will steal time (to go back to sleep) from another thread that
+could have instead just proceeded with whatever it was doing.
 
-to
+2. Delivering signals to random threads is currently way too
+expensive. We need to resort to this crazy algorithm: 1) receive timer
+signal, 2) check if main thread, 3) if main thread (which is likely),
+pick a random thread and do tgkill. To find a random thread, iterate
+/proc/self/task, but that's just abysmal for various reasons. Other
+alternatives, like inherited task clock perf events are too expensive
+as soon as we need to enable/disable the timers (does IPIs), and
+maintaining O(#threads) timers is just as horrible.
 
-    ok 1 # SKIP fork_test
+This patch solves both the above issues.
 
-The old output was not following KTAP format for skips, and the
-numbering was not standard or consistent with the reported plan.
+We acknowledge the unfortunate situation of attributing this patch to
+one clear subsystem and owner: it straddles into signal delivery and
+POSIX timers territory, and perhaps some scheduling. The patch itself
+only touches kernel/signal.c.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/Makefile  |  2 +-
- tools/testing/selftests/arm64/fp/za-fork.c | 88 ++++++------------------------
- 2 files changed, 17 insertions(+), 73 deletions(-)
+If anyone has serious objections, please shout (soon'ish). Given the
+patch has been reviewed by Oleg, and scrutinized by Dmitry and myself,
+presumably we need to find a tree that currently takes kernel/signal.c
+patches?
 
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index 48f56c86ad45..b413b0af07f9 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -38,7 +38,7 @@ $(OUTPUT)/vec-syscfg: vec-syscfg.c $(OUTPUT)/rdvl.o
- $(OUTPUT)/vlset: vlset.c
- $(OUTPUT)/za-fork: za-fork.c $(OUTPUT)/za-fork-asm.o
- 	$(CC) -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
--		-include ../../../../include/nolibc/nolibc.h \
-+		-include ../../../../include/nolibc/nolibc.h -I../..\
- 		-static -ffreestanding -Wall $^ -o $@
- $(OUTPUT)/za-ptrace: za-ptrace.c
- $(OUTPUT)/za-test: za-test.S $(OUTPUT)/asm-utils.o
-diff --git a/tools/testing/selftests/arm64/fp/za-fork.c b/tools/testing/selftests/arm64/fp/za-fork.c
-index ff475c649e96..3acd5621e468 100644
---- a/tools/testing/selftests/arm64/fp/za-fork.c
-+++ b/tools/testing/selftests/arm64/fp/za-fork.c
-@@ -9,42 +9,9 @@
- #include <linux/sched.h>
- #include <linux/wait.h>
- 
--#define EXPECTED_TESTS 1
--
--static void putstr(const char *str)
--{
--	write(1, str, strlen(str));
--}
--
--static void putnum(unsigned int num)
--{
--	char c;
--
--	if (num / 10)
--		putnum(num / 10);
--
--	c = '0' + (num % 10);
--	write(1, &c, 1);
--}
-+#include "kselftest.h"
- 
--static int tests_run;
--static int tests_passed;
--static int tests_failed;
--static int tests_skipped;
--
--static void print_summary(void)
--{
--	if (tests_passed + tests_failed + tests_skipped != EXPECTED_TESTS)
--		putstr("# UNEXPECTED TEST COUNT: ");
--
--	putstr("# Totals: pass:");
--	putnum(tests_passed);
--	putstr(" fail:");
--	putnum(tests_failed);
--	putstr(" xfail:0 xpass:0 skip:");
--	putnum(tests_skipped);
--	putstr(" error:0\n");
--}
-+#define EXPECTED_TESTS 1
- 
- int fork_test(void);
- int verify_fork(void);
-@@ -63,22 +30,21 @@ int fork_test_c(void)
- 	if (newpid == 0) {
- 		/* In child */
- 		if (!verify_fork()) {
--			putstr("# ZA state invalid in child\n");
-+			ksft_print_msg("ZA state invalid in child\n");
- 			exit(0);
- 		} else {
- 			exit(1);
- 		}
- 	}
- 	if (newpid < 0) {
--		putstr("# fork() failed: -");
--		putnum(-newpid);
--		putstr("\n");
-+		printf("# fork() failed: %d\n", newpid);
-+
- 		return 0;
- 	}
- 
- 	parent_result = verify_fork();
- 	if (!parent_result)
--		putstr("# ZA state invalid in parent\n");
-+		ksft_print_msg("ZA state invalid in parent\n");
- 
- 	for (;;) {
- 		waiting = waitpid(newpid, &child_status, 0);
-@@ -86,18 +52,16 @@ int fork_test_c(void)
- 		if (waiting < 0) {
- 			if (errno == EINTR)
- 				continue;
--			putstr("# waitpid() failed: ");
--			putnum(errno);
--			putstr("\n");
-+			printf("# waitpid() failed: %d\n", errno);
- 			return 0;
- 		}
- 		if (waiting != newpid) {
--			putstr("# waitpid() returned wrong PID\n");
-+			printf("# waitpid() returned wrong PID\n");
- 			return 0;
- 		}
- 
- 		if (!WIFEXITED(child_status)) {
--			putstr("# child did not exit\n");
-+			printf("# child did not exit\n");
- 			return 0;
- 		}
- 
-@@ -105,29 +69,14 @@ int fork_test_c(void)
- 	}
- }
- 
--#define run_test(name)			     \
--	if (name()) {			     \
--		tests_passed++;		     \
--	} else {			     \
--		tests_failed++;		     \
--		putstr("not ");		     \
--	}				     \
--	putstr("ok ");			     \
--	putnum(++tests_run);		     \
--	putstr(" " #name "\n");
--
- int main(int argc, char **argv)
- {
- 	int ret, i;
- 
--	putstr("TAP version 13\n");
--	putstr("1..");
--	putnum(EXPECTED_TESTS);
--	putstr("\n");
-+	ksft_print_header();
-+	ksft_set_plan(EXPECTED_TESTS);
- 
--	putstr("# PID: ");
--	putnum(getpid());
--	putstr("\n");
-+	printf("# PID: %d\n", getpid());
- 
- 	/*
- 	 * This test is run with nolibc which doesn't support hwcap and
-@@ -136,21 +85,16 @@ int main(int argc, char **argv)
- 	 */
- 	ret = open("/proc/sys/abi/sme_default_vector_length", O_RDONLY, 0);
- 	if (ret >= 0) {
--		run_test(fork_test);
-+		ksft_test_result(fork_test(), "fork_test");
- 
- 	} else {
--		putstr("# SME support not present\n");
--
-+		ksft_print_msg("SME not supported\n");
- 		for (i = 0; i < EXPECTED_TESTS; i++) {
--			putstr("ok ");
--			putnum(i);
--			putstr(" skipped\n");
-+			ksft_test_result_skip("fork_test\n");
- 		}
--
--		tests_skipped += EXPECTED_TESTS;
- 	}
- 
--	print_summary();
-+	ksft_finished();
- 
- 	return 0;
- }
+Thanks!
 
--- 
-2.30.2
-
+-- Marco
