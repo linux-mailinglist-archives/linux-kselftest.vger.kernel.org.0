@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC3B6DA505
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 23:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945AF6DA501
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 23:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbjDFVzb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 17:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S239399AbjDFVz3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 17:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237775AbjDFVzA (ORCPT
+        with ESMTP id S237455AbjDFVzA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 6 Apr 2023 17:55:00 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDCFAD1F;
-        Thu,  6 Apr 2023 14:54:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501E0A5C5;
+        Thu,  6 Apr 2023 14:54:58 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1680818094;
-        bh=Qe8nJyPjBlgmIx599eDy96a3x+QpMDsnrKcc0Qv66Ts=;
+        bh=4SCszC2KSDPDlE8IGIH5s/FBuMphlLwMvBNzJo/XgJ8=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=ATnC3jHsaUStckaLysEVMZrrbG0rnq87drAcNeh9DF9hkWl+2+XhjIk81Tgkc0H0O
-         jpuImOwKvA22HpAMPFLYvAPoQiYNLKdVV3ReUc1DSNTIHGVW6L1rmkuHjvHO4bapBu
-         8c4G35FzuM9YqekvgqcN71MVcj9d0AYzzvidyZOs=
-Date:   Thu, 06 Apr 2023 21:54:54 +0000
-Subject: [PATCH v2 08/11] tools/nolibc: mips: use C89 comment syntax
+        b=hXKjheSeo3gegAXDU7i/Ju0XaPy70/OADFdhowIff4dFm4b7PUNQQ1hsI5ppbNmCp
+         XtwRnJ1ONXD9sIIIsVcOLRyq/ujUXjpBi9C+s621YM5zsHXosmcUA4iKeWbVuL1kzd
+         pPhtCXoIjuGAeI2zBKJWBf7ROVYKVwwJhYHq9gRk=
+Date:   Thu, 06 Apr 2023 21:54:55 +0000
+Subject: [PATCH v2 09/11] tools/nolibc: loongarch: use C89 comment syntax
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230328-nolibc-c99-v2-8-c989f2289222@weissschuh.net>
+Message-Id: <20230328-nolibc-c99-v2-9-c989f2289222@weissschuh.net>
 References: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 In-Reply-To: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=4214;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=4001;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Qe8nJyPjBlgmIx599eDy96a3x+QpMDsnrKcc0Qv66Ts=;
- b=idk4i0dx9aQMIIIuqV3T2Pxpyz4qWL8BNHt3AQEwQ6WUS0osDqTsirey4HbMn872g968Y+d9Z
- XUYG17J9e1JD8u+XPccmRLVAM9vp9dj3SWfkh5uBk0g2Kzgq/uOQaUI
+ bh=4SCszC2KSDPDlE8IGIH5s/FBuMphlLwMvBNzJo/XgJ8=;
+ b=9W/LT+KmPcKghegsVGPha9qxNjwMUGJp1YR20WhUV+vkW/BQ2MHn07aThVZ6HEhc4neLtSXO4
+ Zpidt8d08BBCwD943bsqJSBp/WXk5tzXFz87t859ndpKj0SM8wEjHqu
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -55,84 +55,69 @@ Most of nolibc is already using C89 comments.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/arch-mips.h | 56 ++++++++++++++++++++--------------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
+ tools/include/nolibc/arch-loongarch.h | 38 +++++++++++++++++------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index bf83432d23ed..8822f150e72f 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -183,42 +183,42 @@ const unsigned long *_auxv __attribute__((weak));
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __start(void)
+diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
+index 029ee3cd6baf..ec3b46a991a9 100644
+--- a/tools/include/nolibc/arch-loongarch.h
++++ b/tools/include/nolibc/arch-loongarch.h
+@@ -158,7 +158,7 @@ const unsigned long *_auxv __attribute__((weak));
+ #define LONG_ADDI    "addi.w"
+ #define LONG_SLL     "slli.w"
+ #define LONG_BSTRINS "bstrins.w"
+-#else // __loongarch_grlen == 64
++#else /* __loongarch_grlen == 64 */
+ #define LONGLOG      "3"
+ #define SZREG        "8"
+ #define REG_L        "ld.d"
+@@ -173,28 +173,28 @@ const unsigned long *_auxv __attribute__((weak));
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
  {
  	__asm__ volatile (
--		//".set nomips16\n"
-+		/*".set nomips16\n"*/
- 		".set push\n"
- 		".set    noreorder\n"
- 		".option pic0\n"
--		//".ent __start\n"
--		//"__start:\n"
--		"lw $a0,($sp)\n"        // argc was in the stack
--		"addiu  $a1, $sp, 4\n"  // argv = sp + 4
--		"sll $a2, $a0, 2\n"     // a2 = argc * 4
--		"add   $a2, $a2, $a1\n" // envp = argv + 4*argc ...
--		"addiu $a2, $a2, 4\n"   //        ... + 4
--		"lui $a3, %hi(environ)\n"     // load environ into a3 (hi)
--		"addiu $a3, %lo(environ)\n"   // load environ into a3 (lo)
--		"sw $a2,($a3)\n"              // store envp(a2) into environ
--
--		"move $t0, $a2\n"             // iterate t0 over envp, look for NULL
--		"0:"                          // do {
--		"lw $a3, ($t0)\n"             //   a3=*(t0);
--		"bne $a3, $0, 0b\n"           // } while (a3);
--		"addiu $t0, $t0, 4\n"         // delayed slot: t0+=4;
--		"lui $a3, %hi(_auxv)\n"       // load _auxv into a3 (hi)
--		"addiu $a3, %lo(_auxv)\n"     // load _auxv into a3 (lo)
--		"sw $t0, ($a3)\n"             // store t0 into _auxv
-+		/*".ent __start\n"*/
-+		/*"__start:\n"*/
-+		"lw $a0,($sp)\n"        /* argc was in the stack                               */
-+		"addiu  $a1, $sp, 4\n"  /* argv = sp + 4                                       */
-+		"sll $a2, $a0, 2\n"     /* a2 = argc * 4                                       */
-+		"add   $a2, $a2, $a1\n" /* envp = argv + 4*argc ...                            */
-+		"addiu $a2, $a2, 4\n"   /*        ... + 4                                      */
-+		"lui $a3, %hi(environ)\n"     /* load environ into a3 (hi)                     */
-+		"addiu $a3, %lo(environ)\n"   /* load environ into a3 (lo)                     */
-+		"sw $a2,($a3)\n"              /* store envp(a2) into environ                   */
-+
-+		"move $t0, $a2\n"             /* iterate t0 over envp, look for NULL           */
-+		"0:"                          /* do {                                          */
-+		"lw $a3, ($t0)\n"             /*   a3=*(t0);                                   */
-+		"bne $a3, $0, 0b\n"           /* } while (a3);                                 */
-+		"addiu $t0, $t0, 4\n"         /* delayed slot: t0+=4;                          */
-+		"lui $a3, %hi(_auxv)\n"       /* load _auxv into a3 (hi)                       */
-+		"addiu $a3, %lo(_auxv)\n"     /* load _auxv into a3 (lo)                       */
-+		"sw $t0, ($a3)\n"             /* store t0 into _auxv                           */
+-		REG_L        " $a0, $sp, 0\n"         // argc (a0) was in the stack
+-		LONG_ADDI    " $a1, $sp, "SZREG"\n"   // argv (a1) = sp + SZREG
+-		LONG_SLL     " $a2, $a0, "LONGLOG"\n" // envp (a2) = SZREG*argc ...
+-		LONG_ADDI    " $a2, $a2, "SZREG"\n"   //             + SZREG (skip null)
+-		LONG_ADD     " $a2, $a2, $a1\n"       //             + argv
++		REG_L        " $a0, $sp, 0\n"         /* argc (a0) was in the stack                          */
++		LONG_ADDI    " $a1, $sp, "SZREG"\n"   /* argv (a1) = sp + SZREG                              */
++		LONG_SLL     " $a2, $a0, "LONGLOG"\n" /* envp (a2) = SZREG*argc ...                          */
++		LONG_ADDI    " $a2, $a2, "SZREG"\n"   /*             + SZREG (skip null)                     */
++		LONG_ADD     " $a2, $a2, $a1\n"       /*             + argv                                  */
  
- 		"li $t0, -8\n"
--		"and $sp, $sp, $t0\n"   // sp must be 8-byte aligned
--		"addiu $sp,$sp,-16\n"   // the callee expects to save a0..a3 there!
--		"jal main\n"            // main() returns the status code, we'll exit with it.
--		"nop\n"                 // delayed slot
--		"move $a0, $v0\n"       // retrieve 32-bit exit code from v0
--		"li $v0, 4001\n"        // NR_exit == 4001
-+		"and $sp, $sp, $t0\n"   /* sp must be 8-byte aligned                           */
-+		"addiu $sp,$sp,-16\n"   /* the callee expects to save a0..a3 there!            */
-+		"jal main\n"            /* main() returns the status code, we'll exit with it. */
-+		"nop\n"                 /* delayed slot                                        */
-+		"move $a0, $v0\n"       /* retrieve 32-bit exit code from v0                   */
-+		"li $v0, 4001\n"        /* NR_exit == 4001                                     */
- 		"syscall\n"
--		//".end __start\n"
-+		/*".end __start\n"*/
- 		".set pop\n"
+-		"move          $a3, $a2\n"            // iterate a3 over envp to find auxv (after NULL)
+-		"0:\n"                                // do {
+-		REG_L        " $a4, $a3, 0\n"         //   a4 = *a3;
+-		LONG_ADDI    " $a3, $a3, "SZREG"\n"   //   a3 += sizeof(void*);
+-		"bne           $a4, $zero, 0b\n"      // } while (a4);
+-		"la.pcrel      $a4, _auxv\n"          // a4 = &_auxv
+-		LONG_S       " $a3, $a4, 0\n"         // store a3 into _auxv
++		"move          $a3, $a2\n"            /* iterate a3 over envp to find auxv (after NULL)      */
++		"0:\n"                                /* do {                                                */
++		REG_L        " $a4, $a3, 0\n"         /*   a4 = *a3;                                         */
++		LONG_ADDI    " $a3, $a3, "SZREG"\n"   /*   a3 += sizeof(void*);                              */
++		"bne           $a4, $zero, 0b\n"      /* } while (a4);                                       */
++		"la.pcrel      $a4, _auxv\n"          /* a4 = &_auxv                                         */
++		LONG_S       " $a3, $a4, 0\n"         /* store a3 into _auxv                                 */
+ 
+-		"la.pcrel      $a3, environ\n"        // a3 = &environ
+-		LONG_S       " $a2, $a3, 0\n"         // store envp(a2) into environ
+-		LONG_BSTRINS " $sp, $zero, 3, 0\n"    // sp must be 16-byte aligned
+-		"bl            main\n"                // main() returns the status code, we'll exit with it.
+-		"li.w          $a7, 93\n"             // NR_exit == 93
++		"la.pcrel      $a3, environ\n"        /* a3 = &environ                                       */
++		LONG_S       " $a2, $a3, 0\n"         /* store envp(a2) into environ                         */
++		LONG_BSTRINS " $sp, $zero, 3, 0\n"    /* sp must be 16-byte aligned                          */
++		"bl            main\n"                /* main() returns the status code, we'll exit with it. */
++		"li.w          $a7, 93\n"             /* NR_exit == 93                                       */
+ 		"syscall       0\n"
  	);
  	__builtin_unreachable();
  }
  
--#endif // _NOLIBC_ARCH_MIPS_H
-+#endif /* _NOLIBC_ARCH_MIPS_H */
+-#endif // _NOLIBC_ARCH_LOONGARCH_H
++#endif /* _NOLIBC_ARCH_LOONGARCH_H */
 
 -- 
 2.40.0
