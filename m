@@ -2,46 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33976D98C6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 15:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF5E6D98CA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 15:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238872AbjDFN5q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 09:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S238896AbjDFN6K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 09:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238889AbjDFN5n (ORCPT
+        with ESMTP id S238894AbjDFN55 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:57:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885F7A5F7;
-        Thu,  6 Apr 2023 06:57:22 -0700 (PDT)
+        Thu, 6 Apr 2023 09:57:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C31A5C6;
+        Thu,  6 Apr 2023 06:57:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED6C76456E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B44B60DBF;
+        Thu,  6 Apr 2023 13:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20FAC433D2;
         Thu,  6 Apr 2023 13:57:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE9A7C4339B;
-        Thu,  6 Apr 2023 13:57:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680789439;
-        bh=UK5JJfdjiAdN9kwU5At61bUGQenEJhFJVNvEndfAWkg=;
-        h=From:Subject:Date:To:Cc:From;
-        b=IE52y9OSvrDsq/qGBBJkmB2j05+j9lw2T2ob9/QkVqO/PyUngTEWVbSRCieWPi6R8
-         ZtzVpD21IS9CZ9fW/B08b6k4rc5q/5xtHRzUziAB9spTCFC6Wxo1dvmDBLpVJoSx7J
-         6Yic4XcYtoX669XTvda+qWSbBqgQW3fQTkr2B/I4xLrNq4upp/lLaDd0nWKy+fgcE2
-         jkuVjrjGpDG+l2Akpf8NnNJw6sKP9XZcKelGlqBSLaa8NfT/u8Fuep5eQFVJk7ikqv
-         2Go3ooxSSF8dhDzT48HEdoDEk9eBtRalrJfCD42AD3koaxq8WPN2X6fmZjh3/zILuk
-         zXjg4uCaW9r0g==
+        s=k20201202; t=1680789441;
+        bh=a79oajkhQYVRaB6DwXBTM0ag0IUaHV1EBWHADnz2lHk=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=ELrykX2bdSssJi10V3rL9ckMK0huAvl1wMVY8P31xTyyYCK/jwq9s2vMazoCjluFK
+         IMWh/f1AVCNvPC1g0buxk4hdVTGKWE6ASgMh4XxEFfIKetCM47fFDgZnM8U6AHKlWd
+         zls10d3p0kADlG4uRfshgYilSQkUsK9EeC6LYQ7y0dF2ulTUpCBKhegizv0wCNDRrf
+         FMi4PCKjyMShrswQy7K/mi8s3+Y1y+3fsGSeV2HffKRidErv6+TXILq3GY2iN9ZOig
+         SrxuprHt1n+NkJ68+0uxPmpw+b3hHO8Z6vEkV100rqD1f6V386xjjxFoMhW08FbslF
+         Jm2tfBSrz4ZUQ==
 From:   Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/2] kselftest: Support nolibc
-Date:   Thu, 06 Apr 2023 14:56:28 +0100
-Message-Id: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
+Date:   Thu, 06 Apr 2023 14:56:29 +0100
+Subject: [PATCH 1/2] kselftest: Support nolibc
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIzPLmQC/x2N0QrCMAwAf2Xk2UCsVdBfER/aLHPB2UlShjD27
- 3Y+HsdxK7iYisOtW8FkUde5NDgeOuAxlaeg9o0hUDhRpDO+XKahilcs86SZkXNgoRgvPV2hZTm
- 5YLZUeNzDd/IqtouPyaDf/+v+2LYfjLvkRXsAAAA=
+Message-Id: <20230405-kselftest-nolibc-v1-1-63fbcd70b202@kernel.org>
+References: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
+In-Reply-To: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -50,19 +49,19 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-00303
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1586; i=broonie@kernel.org;
- h=from:subject:message-id; bh=UK5JJfdjiAdN9kwU5At61bUGQenEJhFJVNvEndfAWkg=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkLs+7k+k7gQDbtDEjL2cEjcLJgulQT9C2jU5yInP9
- TZZJ4OmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZC7PuwAKCRAk1otyXVSH0I4CB/
- 9p1/dGEQmbpFozJZoptPdTRtXccp9r7HSg3K8nmCuP/kLeje5ebuMpUPL1EjH6C5FgEL6xd0k2Xm/C
- BxGBHaHGAcfydZV99U0m6C82xD3XhmXXYj0tpunoJcVfT6s09lywO6AcHzbUcxtt3No6cG4/TfNP4C
- YKhP0qeRkGZ2ScrmRMPxtUx3BA3eonc9qaHjkPg8OXvt422Q8hXUBK/cF0VTuAw/S5CpPgKH2lmaQO
- Td/y89LL/cmxWBWjunb7U+g/jF52IO0COXW7gTY1G6LbHd95h/PVAh70cZVlxqTf0mskVQD/3oo/Md
- iPbuJ2WbdSLRa4KxAipuF75cPI6Z8w
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11785; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=a79oajkhQYVRaB6DwXBTM0ag0IUaHV1EBWHADnz2lHk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkLs+7erwrk7RnEeNVoFpLU3iXhOt2tuhANaHD45/y
+ QLSxDb6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZC7PuwAKCRAk1otyXVSH0Lq+B/
+ 43w6CkOjngdTrY09nlmgjf6DFUrZkA6qawnyCIqH8OG5gy2LUg0VofMP28j+hXCZzp68Ha4nOzVmwj
+ zq4MbAEIDgG5iTLjXKJKp3LB+P1QUAns4pZz8EYVf+UADOdxzwSbleMOCkkXHClVVTPqc7KxdrzAQF
+ 0eTWs7S3J+yXDXqP+Qqg9av1J0w1Gg4RX+1vvMoUWqEbyOQCzyyObsxLFqVdgt8/jNbuT53LhwNU1f
+ 1AF6o7+wDvJfcwFk5tHD8s/GFZPkIhsEyQoNqT1r6t6ROGcm/9krEFc4nVUybhyAZppWkt9nEOaLQm
+ UNzEfyRrMFOXpQ9Qa88Wwiw+g7ORjB
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,26 +82,461 @@ into a separate header file and provide a nolibc implementation which only
 allows simple strings to be provided rather than full printf() support.
 This is limiting but a great improvement on sharing no code at all.
 
-As an example of using this I've updated the arm64 za-fork test to use
-the standard kselftest.h.
-
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Mark Brown (2):
-      kselftest: Support nolibc
-      kselftest/arm64: Convert za-fork to use kselftest.h
-
- tools/testing/selftests/arm64/fp/Makefile  |   2 +-
- tools/testing/selftests/arm64/fp/za-fork.c |  88 +++--------------
  tools/testing/selftests/kselftest-nolibc.h |  93 ++++++++++++++++++
  tools/testing/selftests/kselftest-std.h    | 151 +++++++++++++++++++++++++++++
  tools/testing/selftests/kselftest.h        | 149 +++-------------------------
- 5 files changed, 272 insertions(+), 211 deletions(-)
----
-base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
-change-id: 20230405-kselftest-nolibc-cb2ce0446d09
+ 3 files changed, 255 insertions(+), 138 deletions(-)
 
-Best regards,
+diff --git a/tools/testing/selftests/kselftest-nolibc.h b/tools/testing/selftests/kselftest-nolibc.h
+new file mode 100644
+index 000000000000..3dea10cc5490
+--- /dev/null
++++ b/tools/testing/selftests/kselftest-nolibc.h
+@@ -0,0 +1,93 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * kselftest-nolibc	Cut down nolibc based kselftest output functions
++ *
++ * Copyright (c) 2014 Shuah Khan <shuahkh@osg.samsung.com>
++ * Copyright (c) 2014 Samsung Electronics Co., Ltd.
++ *
++ */
++
++#ifndef __KSELFTEST_H
++#error This file should never be included directly, always include kselftest.h
++#endif
++
++static inline void ksft_print_msg(const char *msg)
++{
++	printf("# %s", msg);
++}
++
++static inline void ksft_test_result_pass(const char *msg)
++{
++	ksft_cnt.ksft_pass++;
++
++	printf("ok %d %s", ksft_test_num(), msg);
++}
++
++static inline void ksft_test_result_fail(const char *msg)
++{
++	ksft_cnt.ksft_fail++;
++
++	printf("not ok %d %s", ksft_test_num(), msg);
++}
++
++/**
++ * ksft_test_result() - Report test success based on truth of condition
++ *
++ * @condition: if true, report test success, otherwise failure.
++ */
++#define ksft_test_result(condition, fmt) do {	\
++	if (!!(condition))				\
++		ksft_test_result_pass(fmt);\
++	else						\
++		ksft_test_result_fail(fmt);\
++	} while (0)
++
++static inline void ksft_test_result_xfail(const char *msg)
++{
++	ksft_cnt.ksft_xfail++;
++
++	printf("ok %d # XFAIL %s", ksft_test_num(), msg);
++}
++
++static inline void ksft_test_result_skip(const char *msg)
++{
++	ksft_cnt.ksft_xskip++;
++
++	printf("ok %d # SKIP %s", ksft_test_num(), msg);
++}
++
++static inline void ksft_test_result_error(const char *msg)
++{
++	ksft_cnt.ksft_error++;
++
++	printf("not ok %d # error %s", ksft_test_num(), msg);
++}
++
++static inline int ksft_exit_fail_msg(const char *msg)
++{
++	printf("Bail out! %s", msg);
++
++	ksft_print_cnts();
++	exit(KSFT_FAIL);
++}
++
++static inline int ksft_exit_skip(const char *msg)
++{
++	/*
++	 * FIXME: several tests misuse ksft_exit_skip so produce
++	 * something sensible if some tests have already been run
++	 * or a plan has been printed.  Those tests should use
++	 * ksft_test_result_skip or ksft_exit_fail_msg instead.
++	 */
++	if (ksft_plan || ksft_test_num()) {
++		ksft_cnt.ksft_xskip++;
++		printf("ok %d # SKIP ", 1 + ksft_test_num());
++	} else {
++		printf("1..0 # SKIP ");
++	}
++	if (msg)
++		printf("%s", msg);
++	if (ksft_test_num())
++		ksft_print_cnts();
++	exit(KSFT_SKIP);
++}
+diff --git a/tools/testing/selftests/kselftest-std.h b/tools/testing/selftests/kselftest-std.h
+new file mode 100644
+index 000000000000..b57c515f6dda
+--- /dev/null
++++ b/tools/testing/selftests/kselftest-std.h
+@@ -0,0 +1,151 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * kselftest-std.h:	Full stdio based kselftest output functions
++ *
++ * Copyright (c) 2014 Shuah Khan <shuahkh@osg.samsung.com>
++ * Copyright (c) 2014 Samsung Electronics Co., Ltd.
++ *
++ */
++
++#ifndef __KSELFTEST_H
++#error This file should never be included directly, always include kselftest.h
++#endif
++
++static inline void ksft_print_msg(const char *msg, ...)
++{
++	int saved_errno = errno;
++	va_list args;
++
++	va_start(args, msg);
++	printf("# ");
++	errno = saved_errno;
++	vprintf(msg, args);
++	va_end(args);
++}
++
++static inline void ksft_test_result_pass(const char *msg, ...)
++{
++	int saved_errno = errno;
++	va_list args;
++
++	ksft_cnt.ksft_pass++;
++
++	va_start(args, msg);
++	printf("ok %d ", ksft_test_num());
++	errno = saved_errno;
++	vprintf(msg, args);
++	va_end(args);
++}
++
++static inline void ksft_test_result_fail(const char *msg, ...)
++{
++	int saved_errno = errno;
++	va_list args;
++
++	ksft_cnt.ksft_fail++;
++
++	va_start(args, msg);
++	printf("not ok %d ", ksft_test_num());
++	errno = saved_errno;
++	vprintf(msg, args);
++	va_end(args);
++}
++
++/**
++ * ksft_test_result() - Report test success based on truth of condition
++ *
++ * @condition: if true, report test success, otherwise failure.
++ */
++#define ksft_test_result(condition, fmt, ...) do {	\
++	if (!!(condition))				\
++		ksft_test_result_pass(fmt, ##__VA_ARGS__);\
++	else						\
++		ksft_test_result_fail(fmt, ##__VA_ARGS__);\
++	} while (0)
++
++static inline void ksft_test_result_xfail(const char *msg, ...)
++{
++	int saved_errno = errno;
++	va_list args;
++
++	ksft_cnt.ksft_xfail++;
++
++	va_start(args, msg);
++	printf("ok %d # XFAIL ", ksft_test_num());
++	errno = saved_errno;
++	vprintf(msg, args);
++	va_end(args);
++}
++
++static inline void ksft_test_result_skip(const char *msg, ...)
++{
++	int saved_errno = errno;
++	va_list args;
++
++	ksft_cnt.ksft_xskip++;
++
++	va_start(args, msg);
++	printf("ok %d # SKIP ", ksft_test_num());
++	errno = saved_errno;
++	vprintf(msg, args);
++	va_end(args);
++}
++
++/* TODO: how does "error" differ from "fail" or "skip"? */
++static inline void ksft_test_result_error(const char *msg, ...)
++{
++	int saved_errno = errno;
++	va_list args;
++
++	ksft_cnt.ksft_error++;
++
++	va_start(args, msg);
++	printf("not ok %d # error ", ksft_test_num());
++	errno = saved_errno;
++	vprintf(msg, args);
++	va_end(args);
++}
++
++static inline int ksft_exit_fail_msg(const char *msg, ...)
++{
++	int saved_errno = errno;
++	va_list args;
++
++	va_start(args, msg);
++	printf("Bail out! ");
++	errno = saved_errno;
++	vprintf(msg, args);
++	va_end(args);
++
++	ksft_print_cnts();
++	exit(KSFT_FAIL);
++}
++
++static inline int ksft_exit_skip(const char *msg, ...)
++{
++	int saved_errno = errno;
++	va_list args;
++
++	va_start(args, msg);
++
++	/*
++	 * FIXME: several tests misuse ksft_exit_skip so produce
++	 * something sensible if some tests have already been run
++	 * or a plan has been printed.  Those tests should use
++	 * ksft_test_result_skip or ksft_exit_fail_msg instead.
++	 */
++	if (ksft_plan || ksft_test_num()) {
++		ksft_cnt.ksft_xskip++;
++		printf("ok %d # SKIP ", 1 + ksft_test_num());
++	} else {
++		printf("1..0 # SKIP ");
++	}
++	if (msg) {
++		errno = saved_errno;
++		vprintf(msg, args);
++		va_end(args);
++	}
++	if (ksft_test_num())
++		ksft_print_cnts();
++	exit(KSFT_SKIP);
++}
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 33a0dbd26bd3..10fb6f7c4ae2 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -26,6 +26,10 @@
+  *     ksft_test_result_xfail(fmt, ...);
+  *     ksft_test_result_error(fmt, ...);
+  *
++ * If building with nolibc then only a string may be provided, va_args
++ * arre not supported and format characters within the string will not be
++ * interpreted.
++ *
+  * When all tests are finished, clean up and exit the program with one of:
+  *
+  *    ksft_finished();
+@@ -43,11 +47,13 @@
+ #ifndef __KSELFTEST_H
+ #define __KSELFTEST_H
+ 
++#ifndef NOLIBC
+ #include <errno.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <stdarg.h>
+ #include <stdio.h>
++#endif
+ 
+ #ifndef ARRAY_SIZE
+ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+@@ -132,100 +138,11 @@ static inline void ksft_print_cnts(void)
+ 		ksft_cnt.ksft_xskip, ksft_cnt.ksft_error);
+ }
+ 
+-static inline void ksft_print_msg(const char *msg, ...)
+-{
+-	int saved_errno = errno;
+-	va_list args;
+-
+-	va_start(args, msg);
+-	printf("# ");
+-	errno = saved_errno;
+-	vprintf(msg, args);
+-	va_end(args);
+-}
+-
+-static inline void ksft_test_result_pass(const char *msg, ...)
+-{
+-	int saved_errno = errno;
+-	va_list args;
+-
+-	ksft_cnt.ksft_pass++;
+-
+-	va_start(args, msg);
+-	printf("ok %d ", ksft_test_num());
+-	errno = saved_errno;
+-	vprintf(msg, args);
+-	va_end(args);
+-}
+-
+-static inline void ksft_test_result_fail(const char *msg, ...)
+-{
+-	int saved_errno = errno;
+-	va_list args;
+-
+-	ksft_cnt.ksft_fail++;
+-
+-	va_start(args, msg);
+-	printf("not ok %d ", ksft_test_num());
+-	errno = saved_errno;
+-	vprintf(msg, args);
+-	va_end(args);
+-}
+-
+-/**
+- * ksft_test_result() - Report test success based on truth of condition
+- *
+- * @condition: if true, report test success, otherwise failure.
+- */
+-#define ksft_test_result(condition, fmt, ...) do {	\
+-	if (!!(condition))				\
+-		ksft_test_result_pass(fmt, ##__VA_ARGS__);\
+-	else						\
+-		ksft_test_result_fail(fmt, ##__VA_ARGS__);\
+-	} while (0)
+-
+-static inline void ksft_test_result_xfail(const char *msg, ...)
+-{
+-	int saved_errno = errno;
+-	va_list args;
+-
+-	ksft_cnt.ksft_xfail++;
+-
+-	va_start(args, msg);
+-	printf("ok %d # XFAIL ", ksft_test_num());
+-	errno = saved_errno;
+-	vprintf(msg, args);
+-	va_end(args);
+-}
+-
+-static inline void ksft_test_result_skip(const char *msg, ...)
+-{
+-	int saved_errno = errno;
+-	va_list args;
+-
+-	ksft_cnt.ksft_xskip++;
+-
+-	va_start(args, msg);
+-	printf("ok %d # SKIP ", ksft_test_num());
+-	errno = saved_errno;
+-	vprintf(msg, args);
+-	va_end(args);
+-}
+-
+-/* TODO: how does "error" differ from "fail" or "skip"? */
+-static inline void ksft_test_result_error(const char *msg, ...)
+-{
+-	int saved_errno = errno;
+-	va_list args;
+-
+-	ksft_cnt.ksft_error++;
+-
+-	va_start(args, msg);
+-	printf("not ok %d # error ", ksft_test_num());
+-	errno = saved_errno;
+-	vprintf(msg, args);
+-	va_end(args);
+-}
++#ifdef NOLIBC
++#include "kselftest-nolibc.h"
++#else
++#include "kselftest-std.h"
++#endif
+ 
+ static inline int ksft_exit_pass(void)
+ {
+@@ -260,21 +177,6 @@ static inline int ksft_exit_fail(void)
+ 		  ksft_cnt.ksft_xfail +	\
+ 		  ksft_cnt.ksft_xskip)
+ 
+-static inline int ksft_exit_fail_msg(const char *msg, ...)
+-{
+-	int saved_errno = errno;
+-	va_list args;
+-
+-	va_start(args, msg);
+-	printf("Bail out! ");
+-	errno = saved_errno;
+-	vprintf(msg, args);
+-	va_end(args);
+-
+-	ksft_print_cnts();
+-	exit(KSFT_FAIL);
+-}
+-
+ static inline int ksft_exit_xfail(void)
+ {
+ 	ksft_print_cnts();
+@@ -287,33 +189,4 @@ static inline int ksft_exit_xpass(void)
+ 	exit(KSFT_XPASS);
+ }
+ 
+-static inline int ksft_exit_skip(const char *msg, ...)
+-{
+-	int saved_errno = errno;
+-	va_list args;
+-
+-	va_start(args, msg);
+-
+-	/*
+-	 * FIXME: several tests misuse ksft_exit_skip so produce
+-	 * something sensible if some tests have already been run
+-	 * or a plan has been printed.  Those tests should use
+-	 * ksft_test_result_skip or ksft_exit_fail_msg instead.
+-	 */
+-	if (ksft_plan || ksft_test_num()) {
+-		ksft_cnt.ksft_xskip++;
+-		printf("ok %d # SKIP ", 1 + ksft_test_num());
+-	} else {
+-		printf("1..0 # SKIP ");
+-	}
+-	if (msg) {
+-		errno = saved_errno;
+-		vprintf(msg, args);
+-		va_end(args);
+-	}
+-	if (ksft_test_num())
+-		ksft_print_cnts();
+-	exit(KSFT_SKIP);
+-}
+-
+ #endif /* __KSELFTEST_H */
+
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
