@@ -2,352 +2,345 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5496DA456
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 23:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E2D6DA471
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Apr 2023 23:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjDFVEJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Apr 2023 17:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
+        id S238887AbjDFVJb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Apr 2023 17:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjDFVEI (ORCPT
+        with ESMTP id S238304AbjDFVJ3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:04:08 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0675FE1;
-        Thu,  6 Apr 2023 14:04:05 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [119.155.57.40])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C02B66031CB;
-        Thu,  6 Apr 2023 22:03:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680815044;
-        bh=wB6zD51lex7I7n9LEZMIeAEbkO6YUuKChM00tqiWyD0=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=aOUblwfSB5LQghHObMRJ3lYoqiolYUjWxeWI89Cbq4zsdKgOZxD7o9AGS3dkKAThH
-         FRvGtate+50/NsHnedFqHFFi4HvTxdOvvKCZmnUuuyOBOAUZG0yfY4Vw+6SXiOnCNf
-         lojdcWTKJc5eNGjHQZE8ufGG0WtmDx439J+aliaenPhCeTlajns0vgRZA/55suta0X
-         A7PraK5ZDlnj1py3MbY/2ibmtolkQafCTswKNTrIFG4AeYDUJ7XLQVRHZLZtQoFaNT
-         sYDnWusIgiho7tMR/7HnlPB+GChDnas5iZo+WHdEv5hVDgiVINYpAk9/4me44GbH9q
-         9A+Mb1cC6E9mA==
-Message-ID: <8a837998-604f-a871-729e-aa274a621481@collabora.com>
-Date:   Fri, 7 Apr 2023 02:03:53 +0500
+        Thu, 6 Apr 2023 17:09:29 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C67F7ECB;
+        Thu,  6 Apr 2023 14:09:27 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id g18so4399719ejj.5;
+        Thu, 06 Apr 2023 14:09:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680815366;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7IMYxeiTkHkUnkag6hCenfbg4myfMEKIz109nk2UMqI=;
+        b=WXYYDnt7D3I2S52tUDwZehAKPr9B1cxcK+D1iGSFpHuF43/C3/wWQuzObNf+NNnZym
+         0CIjLsCLjgxyMqs12yamE3w9S1qYCX9l60Vo3+brHHJcXXYPHlWyuyNT5Mdtq6PSUqJz
+         vRTUD5oCtzhqXv1Cg72mqJBp6EBqc4aIGf64c/GY3jvRJBI4sXC0ayi8dpQDaj57KkJF
+         xc4ucUs4FtawC4fiSCuela/WdQmOHvOTZ0lXeItf+TXfoJbcv7E3Gu5dx2Bwv/9jHOrg
+         C/tQZqsYPoO368x2pI0VVU2x5dgXPCcI+bzaK1SzUBIjoC1QAql57Tzube1WpXtmGxow
+         cbgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680815366;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7IMYxeiTkHkUnkag6hCenfbg4myfMEKIz109nk2UMqI=;
+        b=KuwFO5nP67z+5z2oPpALKoa2oeUDXzRSTgaFq7eeeWZt5M2bnqs4XGYTMI8oROr3e2
+         aiEGqieK1PwH3fxz/2YxswI2ulDgqDW/4CA8u5n/Lxz7KGoVYnViQ8JlmOWFlpFyOAAk
+         mXdiGwYshi7mKmOWhLPt/wNMn23PQ0b22D+afnz9wwF5dxbiKysxMW88G6PJS4U1T/mS
+         /OoRLkhBGd1ZvbUnrb4MKbcZzBRSw1zpO35JPB2T4OI30rb1d+1thrMURmGQvRYz3/63
+         XGGZKYfBy1pNL8gKC98Ok0+47Ev7mJz10MFBZ3h4khpqBFKmAH+E7gChLdhwXexvd+eI
+         bP1g==
+X-Gm-Message-State: AAQBX9d1c60/5DIJKss1b5Mfuimu8P0rRx3WpE2lNGRVufctsFlwNiP7
+        O3mXA1sZIcZlXUFJtMG4w3ivLch+YKTIkiKMlfk=
+X-Google-Smtp-Source: AKy350bTvCR3TUWc6oqucssQTixUjIphJrw/gv6Lfi7PWl7ORkEXxu9N3J33NB8doGgi6ir7CRr45VkZpLP0ZfqyQ+I=
+X-Received: by 2002:a17:907:1c83:b0:947:9d85:30c9 with SMTP id
+ nb3-20020a1709071c8300b009479d8530c9mr5488338ejc.5.1680815365676; Thu, 06 Apr
+ 2023 14:09:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-3-drosen@google.com>
+In-Reply-To: <20230406004018.1439952-3-drosen@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 6 Apr 2023 14:09:13 -0700
+Message-ID: <CAEf4BzakRfffU9+wLBNfhBi1dKxs03ibopJsMyEF6JAM-QJWjw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
+To:     Daniel Rosenberg <drosen@google.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com>
- <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
- <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com>
- <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/7/23 1:00 AM, Michał Mirosław wrote:
-> On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->> Hello,
->>
->> Thank you so much for the review. Do you have any thoughts on the build
->> error on arc architecture?
->> https://lore.kernel.org/all/e3c82373-256a-6297-bcb4-5e1179a2cbe2@collabora.com
-> 
-> Maybe copy HPAGE_* defines from x86 and key on CONFIG_PGTABLE_LEVELS >
-> 2? I don't know much about arc arch, though.
-> 
->> On 4/6/23 8:52 PM, Michał Mirosław wrote:
->>> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:>
-> [...]
->>>> +#define PM_SCAN_BITMAP(wt, file, present, swap)        \
->>>> +       (wt | file << 1 | present << 2 | swap << 3)
->>> Please parenthesize macro arguments ("(wt)", "(file)", etc.) to not
->>> have to worry about operator precedence when passed a complex
->>> expression.
->> Like this?
->> #define PM_SCAN_BITMAP(wt, file, present, swap) \
->>         ((wt) | (file << 1) | (present << 2) | (swap << 3))
-> 
-> The value would be:
->  ( (wt) | ((file) << 1) | ... )
-> IOW, each parameter should have parentheses around its name.
-Will do.
+On Wed, Apr 5, 2023 at 5:40=E2=80=AFPM Daniel Rosenberg <drosen@google.com>=
+ wrote:
+>
+> bpf_dynptr_slice(_rw) uses a user provided buffer if it can not provide
+> a pointer to a block of contiguous memory. This buffer is unused in the
+> case of local dynptrs, and may be unused in other cases as well. There
+> is no need to require the buffer, as the kfunc can just return NULL if
+> it was needed and not provided.
+>
+> This adds another kfunc annotation, __opt, which combines with __sz and
+> __szk to allow the buffer associated with the size to be NULL. If the
+> buffer is NULL, the verifier does not check that the buffer is of
+> sufficient size.
+>
+> Signed-off-by: Daniel Rosenberg <drosen@google.com>
+> ---
+>  Documentation/bpf/kfuncs.rst | 23 ++++++++++++++++++++++-
+>  kernel/bpf/helpers.c         | 32 ++++++++++++++++++++------------
+>  kernel/bpf/verifier.c        | 17 +++++++++++++++++
+>  3 files changed, 59 insertions(+), 13 deletions(-)
+>
+> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> index d8a16c4bef7f..69573b511233 100644
+> --- a/Documentation/bpf/kfuncs.rst
+> +++ b/Documentation/bpf/kfuncs.rst
+> @@ -100,7 +100,7 @@ Hence, whenever a constant scalar argument is accepte=
+d by a kfunc which is not a
+>  size parameter, and the value of the constant matters for program safety=
+, __k
+>  suffix should be used.
+>
+> -2.2.2 __uninit Annotation
+> +2.2.3 __uninit Annotation
+>  -------------------------
+>
+>  This annotation is used to indicate that the argument will be treated as
+> @@ -117,6 +117,27 @@ Here, the dynptr will be treated as an uninitialized=
+ dynptr. Without this
+>  annotation, the verifier will reject the program if the dynptr passed in=
+ is
+>  not initialized.
+>
+> +2.2.4 __opt Annotation
+> +-------------------------
+> +
+> +This annotation is used to indicate that the buffer associated with an _=
+_sz or __szk
+> +argument may be null. If the function is passed a nullptr in place of th=
+e buffer,
+> +the verifier will not check that length is appropriate for the buffer. T=
+he kfunc is
+> +responsible for checking if this buffer is null before using it.
+> +
+> +An example is given below::
+> +
+> +        __bpf_kfunc void *bpf_dynptr_slice(..., void *buffer__opt, u32 b=
+uffer__szk)
+> +        {
+> +        ...
+> +        }
+> +
+> +Here, the buffer may be null. If buffer is not null, it at least of size=
+ buffer_szk.
+> +Either way, the returned buffer is either NULL, or of size buffer_szk. W=
+ithout this
+> +annotation, the verifier will reject the program if a null pointer is pa=
+ssed in with
+> +a nonzero size.
+> +
+> +
+>  .. _BPF_kfunc_nodef:
+>
+>  2.3 Using an existing kernel function
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 6be16db9f188..f08556fd8b96 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2145,13 +2145,15 @@ __bpf_kfunc struct task_struct *bpf_task_from_pid=
+(s32 pid)
+>   * bpf_dynptr_slice() - Obtain a read-only pointer to the dynptr data.
+>   * @ptr: The dynptr whose data slice to retrieve
+>   * @offset: Offset into the dynptr
+> - * @buffer: User-provided buffer to copy contents into
+> - * @buffer__szk: Size (in bytes) of the buffer. This is the length of th=
+e
+> - *              requested slice. This must be a constant.
+> + * @buffer__opt: User-provided buffer to copy contents into.  May be NUL=
+L
+> + * @buffer__szk: Size (in bytes) of the buffer if present. This is the
+> + *               length of the requested slice. This must be a constant.
+>   *
+>   * For non-skb and non-xdp type dynptrs, there is no difference between
+>   * bpf_dynptr_slice and bpf_dynptr_data.
+>   *
+> + *  If buffer__opt is NULL, the call will fail if buffer_opt was needed.
+> + *
+>   * If the intention is to write to the data slice, please use
+>   * bpf_dynptr_slice_rdwr.
+>   *
+> @@ -2168,7 +2170,7 @@ __bpf_kfunc struct task_struct *bpf_task_from_pid(s=
+32 pid)
+>   * direct pointer)
+>   */
+>  __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr_kern *ptr, u3=
+2 offset,
+> -                                  void *buffer, u32 buffer__szk)
+> +                                  void *buffer__opt, u32 buffer__szk)
+>  {
+>         enum bpf_dynptr_type type;
+>         u32 len =3D buffer__szk;
+> @@ -2188,15 +2190,19 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct b=
+pf_dynptr_kern *ptr, u32 offset
+>         case BPF_DYNPTR_TYPE_RINGBUF:
+>                 return ptr->data + ptr->offset + offset;
+>         case BPF_DYNPTR_TYPE_SKB:
+> -               return skb_header_pointer(ptr->data, ptr->offset + offset=
+, len, buffer);
+> +               if (!buffer__opt)
+> +                       return NULL;
 
-> 
-> [...]
->>>> +               cur->len += n_pages;
->>>> +               p->found_pages += n_pages;
->>>> +
->>>> +               if (p->max_pages && (p->found_pages == p->max_pages))
->>>> +                       return PM_SCAN_FOUND_MAX_PAGES;
->>>> +
->>>> +               return 0;
->>>> +       }
->>>> +
->>>> +       if (!p->vec_index || ((p->vec_index + 1) < p->vec_len)) {
->>>
->>> It looks that `if (p->vec_index < p->vec_len)` is enough here - if we
->>> have vec_len == 0 here, then we'd not fit the entry in the userspace
->>> buffer anyway. Am I missing something?
->> No. I'd explained it with diagram last time:
->> https://lore.kernel.org/all/3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@collabora.com
->>
->> I'll add a concise comment here.
-> 
-> So it seems, but I think the code changed a bit and maybe could be
-> simplified now? Since p->vec_len == 0 is currently not valid, the
-> field could count only the entries available in p->vec[] -- IOW: not
-> include p->cur in the count.
-I see. But this'll not work as we need to count p->cur to don't go above
-the maximum count, p->vec_size.
+should we always reject NULL even for SKB/XDP or only when the buffer
+*would be* required? If the latter, we could use bpf_dynptr_slice()
+with NULL buf to say "only return pointer if no byte copying is
+required". As opposed to bpf_dynptr_data(), where I think we always
+fail for SKB/XDP, because we are not sure whether users are aware of
+this need to copy bytes. Here, users are aware, but chose to prevent
+copying.
 
-> 
-> BTW, `if (no space) return -ENOSPC` will avoid additional indentation
-> for the non-merging case.
-I'll update.
+WDYT?
 
-> 
-> [...]
->>>> +static inline int pagemap_scan_deposit(struct pagemap_scan_private *p,
->>>> +                                      struct page_region __user *vec,
->>>> +                                      unsigned long *vec_index)
->>>
->>> ..._deposit() is used only in single place - please inline.
->> It is already inline.
-> 
-> Sorry. I mean: please paste the code in place of the single call.
-I've made it a separate function to make the code look better in the caller
-function and logically easier to understand. This function is ugly.
-do_pagemap_scan() is also already very long function with lots of things
-happening. If you still insist, I'll remove this function.
+> +               return skb_header_pointer(ptr->data, ptr->offset + offset=
+, len, buffer__opt);
+>         case BPF_DYNPTR_TYPE_XDP:
+>         {
+>                 void *xdp_ptr =3D bpf_xdp_pointer(ptr->data, ptr->offset =
++ offset, len);
+>                 if (xdp_ptr)
+>                         return xdp_ptr;
+>
+> -               bpf_xdp_copy_buf(ptr->data, ptr->offset + offset, buffer,=
+ len, false);
+> -               return buffer;
+> +               if (!buffer__opt)
+> +                       return NULL;
+> +               bpf_xdp_copy_buf(ptr->data, ptr->offset + offset, buffer_=
+_opt, len, false);
+> +               return buffer__opt;
+>         }
+>         default:
+>                 WARN_ONCE(true, "unknown dynptr type %d\n", type);
+> @@ -2208,13 +2214,15 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct b=
+pf_dynptr_kern *ptr, u32 offset
+>   * bpf_dynptr_slice_rdwr() - Obtain a writable pointer to the dynptr dat=
+a.
+>   * @ptr: The dynptr whose data slice to retrieve
+>   * @offset: Offset into the dynptr
+> - * @buffer: User-provided buffer to copy contents into
+> - * @buffer__szk: Size (in bytes) of the buffer. This is the length of th=
+e
+> - *              requested slice. This must be a constant.
+> + * @buffer__opt: User-provided buffer to copy contents into. May be NULL
+> + * @buffer__szk: Size (in bytes) of the buffer if present. This is the
+> + *               length of the requested slice. This must be a constant.
+>   *
+>   * For non-skb and non-xdp type dynptrs, there is no difference between
+>   * bpf_dynptr_slice and bpf_dynptr_data.
+>   *
+> + * If buffer__opt is NULL, the call will fail if buffer_opt was needed.
+> + *
+>   * The returned pointer is writable and may point to either directly the=
+ dynptr
+>   * data at the requested offset or to the buffer if unable to obtain a d=
+irect
+>   * data pointer to (example: the requested slice is to the paged area of=
+ an skb
+> @@ -2245,7 +2253,7 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf=
+_dynptr_kern *ptr, u32 offset
+>   * direct pointer)
+>   */
+>  __bpf_kfunc void *bpf_dynptr_slice_rdwr(const struct bpf_dynptr_kern *pt=
+r, u32 offset,
+> -                                       void *buffer, u32 buffer__szk)
+> +                                       void *buffer__opt, u32 buffer__sz=
+k)
+>  {
+>         if (!ptr->data || bpf_dynptr_is_rdonly(ptr))
+>                 return NULL;
+> @@ -2272,7 +2280,7 @@ __bpf_kfunc void *bpf_dynptr_slice_rdwr(const struc=
+t bpf_dynptr_kern *ptr, u32 o
+>          * will be copied out into the buffer and the user will need to c=
+all
+>          * bpf_dynptr_write() to commit changes.
+>          */
+> -       return bpf_dynptr_slice(ptr, offset, buffer, buffer__szk);
+> +       return bpf_dynptr_slice(ptr, offset, buffer__opt, buffer__szk);
+>  }
+>
+>  __bpf_kfunc void *bpf_cast_to_kern_ctx(void *obj)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 20beab52812a..b82faef389b1 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9428,6 +9428,19 @@ static bool is_kfunc_arg_const_mem_size(const stru=
+ct btf *btf,
+>         return __kfunc_param_match_suffix(btf, arg, "__szk");
+>  }
+>
+> +static bool is_kfunc_arg_optional(const struct btf *btf,
+> +                 const struct btf_param *arg,
+> +                 const struct bpf_reg_state *reg)
+> +{
+> +       const struct btf_type *t;
+> +
+> +       t =3D btf_type_skip_modifiers(btf, arg->type, NULL);
+> +       if (!btf_type_is_ptr(t) || reg->type !=3D SCALAR_VALUE || reg->um=
+ax_value > 0)
+> +               return false;
+> +
+> +       return __kfunc_param_match_suffix(btf, arg, "__opt");
+> +}
+> +
+>  static bool is_kfunc_arg_constant(const struct btf *btf, const struct bt=
+f_param *arg)
+>  {
+>         return __kfunc_param_match_suffix(btf, arg, "__k");
+> @@ -10539,10 +10552,14 @@ static int check_kfunc_args(struct bpf_verifier=
+_env *env, struct bpf_kfunc_call_
+>                         break;
+>                 case KF_ARG_PTR_TO_MEM_SIZE:
+>                 {
+> +                       struct bpf_reg_state *buff_reg =3D &regs[regno];
+> +                       const struct btf_param *buff_arg =3D &args[i];
+>                         struct bpf_reg_state *size_reg =3D &regs[regno + =
+1];
+>                         const struct btf_param *size_arg =3D &args[i + 1]=
+;
+>
+>                         ret =3D check_kfunc_mem_size_reg(env, size_reg, r=
+egno + 1);
+> +                       if (ret < 0 && is_kfunc_arg_optional(meta->btf, b=
+uff_arg, buff_reg))
+> +                               ret =3D 0;
 
-> 
-> [...]
->>>> +               /*
->>>> +                * Break huge page into small pages if the WP operation need to
->>>> +                * be performed is on a portion of the huge page or if max_pages
->>>> +                * pages limit would exceed.
->>>
->>> BTW, could the `max_pages` limit be relaxed a bit (in that it would be
->>> possible to return more pages if they all merge into the last vector
->>> entry) so that it would not need to split otherwise-matching huge
->>> page? It would remove the need for this special handling in the kernel
->>> and splitting the page by this read-only-appearing ioctl?
->> No, this cannot be done. Otherwise we'll not be able to emulate Windows
->> syscall GetWriteWatch() which specifies the exact number of pages. Usually
->> in most of cases, either user will not use THP or not perform the operation
->> on partial huge page. So this part is only there to keep things correct for
->> those users who do use THP and partial pagemap_scan operations.
-> 
-> I see that `GetWriteWatch` returns a list of pages not ranges of
-> pages. That makes sense (more or less). (BTW, It could be emulated in
-> userspace by caching the last not-fully-consumed range.)
-First of all, caching is avoided as then state maintained is needed. This
-is probably not accepted in Wine upstream later. Secondly, even if we have
-cache, Get + WP operation would not be accurate when we ask only N pages,
-but it gets N + X pages where X pages will not be consumed by the
-application at this time.
+would this work correctly if someone passes a non-null buffer with too
+small size? Can you please add a test for this use case.
 
-> 
->>>> +                */
->>>> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
->>>> +                   ((end - start < HPAGE_SIZE) ||
->>>> +                    (p->max_pages &&
->>>> +                     (p->max_pages - p->found_pages) < n_pages))) {
->>>> +
->>>> +                       split_huge_pmd(vma, pmd, start);
->>>> +                       goto process_smaller_pages;
->>>> +               }
->>>> +
->>>> +               if (p->max_pages &&
->>>> +                   p->found_pages + n_pages > p->max_pages)
->>>> +                       n_pages = p->max_pages - p->found_pages;
->>>> +
->>>> +               ret = pagemap_scan_output(is_written, is_file, is_present,
->>>> +                                         is_swap, p, start, n_pages);
->>>> +               if (ret < 0)
->>>> +                       return ret;
-> 
-> So let's simplify this:
-> 
-> if (p->max_pages && n_pages > max_pages - found_pages)
->   n_pages = max_pages - found_pages;
-> 
-> if (is_written && DO_WP && n_pages != HPAGE_SIZE / PAGE_SIZE) {
->   split_thp();
->   goto process_smaller_pages;
-> }
-Clever!! This looks very sleek.
+Also, I feel like for cases where we allow a NULL buffer, we need to
+explicitly check that the register is a *known* NULL (SCALAR=3D0
+basically). And also in that case the size of the buffer probably
+should be enforced to zero, not just be allowed to be any value.
 
-> 
-> BTW, THP handling could be extracted to a function that would return
-> -EAGAIN if it has split the page or it wasn't a THP -- and that would
-> mean `goto process_smaller_pages`.
-Other functions in this file handle the THP in this same way. So it feels
-like more intuitive that we follow to same pattern in this file.
+it's scary to just ignore some error, tbh, the number of error
+conditions can grow overtime and we'll be masking them with this
+is_kfunc_arg_optional() override. Let's be strict and explicit here.
 
-> 
->>> Why not propagate the error from uffd_wp_range()?
->> uffd_wp_range() returns status in long variable. We cannot return long in
->> this function. So intead of type casting long to int and then return I've
->> used -EINVAL. Would following be more suitable?
->>
->> long ret2 = uffd_wp_range(vma, start, HPAGE_SIZE, true);
->> if (ret2 < 0)
->>         return (int)ret2;
-> 
-> I think it's ok, since negative values are expected to be error codes.
-> And since you can't overflow int with HPAGE_SIZE pages, then I
-> wouldn't use `ret2` but cast the return and add a comment why it's
-> safe.
-I'll update.
 
-> 
-> [...]
->>>> +       start = (unsigned long)untagged_addr(arg.start);
->>>> +       vec = (struct page_region *)(unsigned long)untagged_addr(arg.vec);
->>>
->>> Is the inner cast needed?
->> arg.vec remains 64-bit on 32-bit systems. So casting 64bit value directly
->> to struct page_region pointer errors out. So I've added specific casting to
->> unsigned long first before casting to pointers.
-> 
-> I see. So to convey the intention, the `arg.start` and `arg.vec`
-> should be casted to unsigned long, not the `untagged_addr()` return
-> values.
-I'll update.
-
-> 
->>>> +       ret = pagemap_scan_args_valid(&arg, start, vec);
->>>> +       if (ret)
->>>> +               return ret;
->>>> +
->>>> +       end = start + arg.len;
->>>> +       p.max_pages = arg.max_pages;
->>>> +       p.found_pages = 0;
->>>> +       p.flags = arg.flags;
->>>> +       p.required_mask = arg.required_mask;
->>>> +       p.anyof_mask = arg.anyof_mask;
->>>> +       p.excluded_mask = arg.excluded_mask;
->>>> +       p.return_mask = arg.return_mask;
->>>> +       p.cur.len = 0;
->>>> +       p.cur.start = 0;
->>>> +       p.vec = NULL;
->>>> +       p.vec_len = (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
->>>
->>> Nit: parentheses are not needed here, please remove.
->> Will do.
->>
->>>
->>>> +
->>>> +       /*
->>>> +        * Allocate smaller buffer to get output from inside the page walk
->>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
->>>> +        * we want to return output to user in compact form where no two
->>>> +        * consecutive regions should be continuous and have the same flags.
->>>> +        * So store the latest element in p.cur between different walks and
->>>> +        * store the p.cur at the end of the walk to the user buffer.
->>>> +        */
->>>> +       p.vec = kmalloc_array(p.vec_len, sizeof(struct page_region),
->>>> +                             GFP_KERNEL);
->>>> +       if (!p.vec)
->>>> +               return -ENOMEM;
->>>> +
->>>> +       walk_start = walk_end = start;
->>>> +       while (walk_end < end && !ret) {
->>>
->>> The loop will stop if a previous iteration returned ENOSPC (and the
->>> error will be lost) - is it intended?
->> It is intentional. -ENOSPC means that the user buffer is full even though
->> there was more memory to walk over. We don't treat this error. So when
->> buffer gets full, we stop walking over further as user buffer has gotten
->> full and return as success.
-> 
-> Thanks. What's the difference between -ENOSPC and
-> PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (code
-> flow).
--ENOSPC --> user buffer has been filled completely
-PM_SCAN_FOUND_MAX_PAGES --> max_pages have been found, user buffer may
-			    still have more space
-
-> 
-> [...]
->>>> --- a/include/linux/userfaultfd_k.h
->>>> +++ b/include/linux/userfaultfd_k.h
->>>> @@ -210,6 +210,14 @@ extern bool userfaultfd_wp_async(struct vm_area_struct *vma);
->>>>
->>>>  #else /* CONFIG_USERFAULTFD */
->>>>
->>>> +static inline long uffd_wp_range(struct mm_struct *dst_mm,
->>>> +                                struct vm_area_struct *vma,
->>>> +                                unsigned long start, unsigned long len,
->>>> +                                bool enable_wp)
->>>> +{
->>>> +       return 0;
->>>> +}
-> [...]
->>> Shouldn't this part be in the patch introducing uffd_wp_range()?
->> We have not added uffd_wp_range() in previous patches. We just need this
->> stub for this patch for the case when CONFIG_USERFAULTFD isn't enabled.
->>
->> I'd this as separate patch before this patch. Mike asked me to merge it
->> with this patch in order not to break bisectability.
->> [1] https://lore.kernel.org/all/ZBK+86eMMazwfhdx@kernel.org
-> 
-> I would understand the reply [1] to mean that the uffd_wp_range() stub
-> should go in the same patch where uffd_wp_range() is implemented. But
-> uffd_wp_range() is already in (since f369b07c86140) so I don't see how
-> having the stub in a separate commit sequenced before this one could
-> break bisect?
-Sorry, I mis-interpreted it. I'll make it a separate patch.
-
-> 
-> Best Regards
-> Michał Mirosław
-
--- 
-BR,
-Muhammad Usama Anjum
+>                         if (ret < 0) {
+>                                 verbose(env, "arg#%d arg#%d memory, len p=
+air leads to invalid memory access\n", i, i + 1);
+>                                 return ret;
+> --
+> 2.40.0.577.gac1e443424-goog
+>
