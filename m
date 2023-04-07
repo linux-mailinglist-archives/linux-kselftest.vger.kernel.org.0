@@ -2,131 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D9E6DAAEA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Apr 2023 11:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2EA6DAB01
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Apr 2023 11:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjDGJdv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Apr 2023 05:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        id S240668AbjDGJhe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Apr 2023 05:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbjDGJdt (ORCPT
+        with ESMTP id S239715AbjDGJg7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Apr 2023 05:33:49 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0784DA9;
-        Fri,  7 Apr 2023 02:33:48 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id d17so41829991wrb.11;
-        Fri, 07 Apr 2023 02:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680860026; x=1683452026;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OYgztIeWnyctC1xAXIkENttsLePYFO0qvVqXrHUGTFE=;
-        b=Myq5QxowIaJrw1tkaMLL/nI0FbFDeDAb21nb7UhWvyGUx2/X2kEyBIOe04o9H2fW2R
-         wOOWzVOSttAV1C+Qk1hg3FaCQYldAitdI9pEh4JnlmQxIuXxAxLw3zG3F8jtvJK45dZl
-         AwbOb8TmdBWl0sdt/YWl5CRv8+B/anV//+cs4iSSPREllQ2N0mr401FzyshkaTc+SyL6
-         lhQ8ZzNFbkxmMA9XB8uJmAs8tNoJfSWTJhGgmtFEfmHxhNvqTQXGNbdmiNV0pWYdIKC0
-         L288Q7X0UN0n1JS4lJds5cFfNCjxA53ntuT1YAi7gUKd2zzWkGxsPOR4tCcmE7wU0o/9
-         Iduw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680860026; x=1683452026;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OYgztIeWnyctC1xAXIkENttsLePYFO0qvVqXrHUGTFE=;
-        b=mITEd6ZUr8N0JCThAYWRNvMHKLhr/GtkpdOtC+b4pqY2vAdu24x4nY3RaCxR6ULgRu
-         avaWtqfw3vsbt86XvuW0gQlEQoj2VAPEzS4vkyUWNsxz2L9fxk6hcSLCHatIfymVbSpb
-         jwTCmemJBuCqcSdXSj9fClacbSva6D92aTYWihQEJDQGhvOOXHXy3OMD3ykZ9LzywZsH
-         jWIy7OUQAn30rxCfzSrt9o0bJ3t2s00DSYcahXf694UPuIaXlc7e//zfI6MoAxkzXpcI
-         V8P9GaEIXaKaDCis0xCQriPdOPsQKIVRajmlfvO4ONyBYQ+hV++VdeM32UoWRJOdCNSm
-         nTmw==
-X-Gm-Message-State: AAQBX9eGUje78P1cmLFoNeOOO2WOpOGgSWQXpyI1ha5RnuTM5MVX63Vs
-        0NJ1aPY/Bi1HMgA8nA9DkK4=
-X-Google-Smtp-Source: AKy350aFIipI7sQMqgOhqjQg9W6ev4YprQm5udW9oq1kqk3vDY8cnmI0fLS8MR+L6VXejMvIzN33Mw==
-X-Received: by 2002:a5d:40c3:0:b0:2c7:e5f:e0e0 with SMTP id b3-20020a5d40c3000000b002c70e5fe0e0mr1239375wrq.65.1680860026321;
-        Fri, 07 Apr 2023 02:33:46 -0700 (PDT)
-Received: from krava ([82.153.29.117])
-        by smtp.gmail.com with ESMTPSA id f4-20020adff8c4000000b002cff06039d7sm4097349wrq.39.2023.04.07.02.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 02:33:45 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 7 Apr 2023 10:33:43 +0100
-To:     Feng zhou <zhoufeng.zf@bytedance.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com, zhouchengming@bytedance.com
-Subject: Re: [PATCH v2 0/2] Fix failure to access u32* argument of tracked
- function
-Message-ID: <ZC/jd2gN3kJ+tPWF@krava>
-References: <20230407084608.62296-1-zhoufeng.zf@bytedance.com>
+        Fri, 7 Apr 2023 05:36:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F59B445;
+        Fri,  7 Apr 2023 02:35:49 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [119.155.57.40])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C70A6660307D;
+        Fri,  7 Apr 2023 10:35:08 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680860115;
+        bh=/3083EHseFTbWduzHpSR8we1fOLWda4QptVPguIvPMQ=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=lTXYJHaW4LDGTr2dSPTXgdpGZfnSJje9KMzJXCpEK2Wft/xmISvlYuE22PeE1CUSe
+         vpoi/q13b4OLSqO1xWLMafqYo9JCKcc0db7/8gwMIkcnvYkh/dBtJTWVBUHq8LUYQU
+         nVKh8yVoiJq9rpJPTBDXZ6YcUC+nsnIjxNR0N5E5xvXb5brXK50xmFRaVzzfecpM79
+         MItHDR7jGGCB5X7ayHqR8DNGFp7hed+LHcW78TWwVeq4OnRzqT8S7sGt/sVOb0QxKd
+         XeBjPXrkmheYXpqsQDRJH3xleJcwJGvurcN+278jeNrHwd7oekKGQC7oEt0NqPSVpw
+         RrtqJq31STLOA==
+Message-ID: <c535ce4a-d7da-1ce2-9883-7cefb6dd88a2@collabora.com>
+Date:   Fri, 7 Apr 2023 14:35:03 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407084608.62296-1-zhoufeng.zf@bytedance.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230406074005.1784728-1-usama.anjum@collabora.com>
+ <20230406074005.1784728-3-usama.anjum@collabora.com>
+ <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
+ <b737dceb-a228-7ffe-0758-421505f1a61d@collabora.com>
+ <CABb0KFF+sKSv7jdxBbXpt5A2WO83tKb9viq-kKurXN_e1VcFhQ@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFF+sKSv7jdxBbXpt5A2WO83tKb9viq-kKurXN_e1VcFhQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 04:46:06PM +0800, Feng zhou wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On 4/7/23 12:23 PM, Michał Mirosław wrote:
+> On Thu, 6 Apr 2023 at 23:12, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>> On 4/7/23 1:12 AM, Michał Mirosław wrote:
+>>> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>> [...]
+>>>> --- a/fs/proc/task_mmu.c
+>>>> +++ b/fs/proc/task_mmu.c
+>>> [...]
+>>>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>>>> +                                 unsigned long end, struct mm_walk *walk)
+>>>> +{
+> [...]
+>>>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>>>> +       ptl = pmd_trans_huge_lock(pmd, vma);
+>>>> +       if (ptl) {
+>>> [...]
+>>>> +               return ret;
+>>>> +       }
+>>>> +process_smaller_pages:
+>>>> +       if (pmd_trans_unstable(pmd))
+>>>> +               return 0;
+>>>
+>>> Why pmd_trans_unstable() is needed here and not only after split_huge_pmd()?
+>> I'm not entirely sure. But the idea is if THP is unstable, we should
+>> return. As it doesn't seem like after splitting THP can be unstable, we
+>> should not check it. Do you agree with the following?
 > 
-> When access traced function arguments with type is u32*, bpf verifier failed.
-> Because u32 have typedef, needs to skip modifier. Add btf_type_is_modifier in
-> is_int_ptr. Add a selftest to check it.
+> The description of pmd_trans_unstable() [1] seems to indicate that it
+> is needed only after split_huge_pmd().
 > 
-> Feng Zhou (2):
->   bpf/btf: Fix is_int_ptr()
->   selftests/bpf: Add test to access u32 ptr argument in tracing program
+> [1] https://elixir.bootlin.com/linux/v6.3-rc5/source/include/linux/pgtable.h#L1394
+Sorry, yeah pmd_trans_unstable() is need after split. But it is also needed
+in normal case when ptl is NULL to rule out the case if pmd is unstable
+before performing operation on normal pages:
 
-hi,
-it breaks several tests in test_progs suite:
+ptl = pmd_trans_huge_lock(pmd, vma);
+if (ptl) {
+...
+}
+if (pmd_trans_unstable(pmd))
+	return 0;
 
-#11/36   bpf_iter/link-iter:FAIL
-#11      bpf_iter:FAIL
-test_dummy_st_ops_attach:FAIL:dummy_st_ops_load unexpected error: -13
-#63/1    dummy_st_ops/dummy_st_ops_attach:FAIL
-test_dummy_init_ret_value:FAIL:dummy_st_ops_load unexpected error: -13
-#63/2    dummy_st_ops/dummy_init_ret_value:FAIL
-test_dummy_init_ptr_arg:FAIL:dummy_st_ops_load unexpected error: -13
-#63/3    dummy_st_ops/dummy_init_ptr_arg:FAIL
-test_dummy_multiple_args:FAIL:dummy_st_ops_load unexpected error: -13
-#63/4    dummy_st_ops/dummy_multiple_args:FAIL
-test_dummy_sleepable:FAIL:dummy_st_ops_load unexpected error: -13
-#63/5    dummy_st_ops/dummy_sleepable:FAIL
-#63      dummy_st_ops:FAIL
-test_fentry_fexit:FAIL:fentry_skel_load unexpected error: -13
-#69      fentry_fexit:FAIL
-test_fentry_test:FAIL:fentry_skel_load unexpected error: -13
-#70      fentry_test:FAIL
+This file has usage examples of pmd_trans_unstable():
 
-jirka
+https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L634
+https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1195
+https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1543
+https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1887
+
+So we are good with what we have in this patch.
 
 > 
-> Changelog:
-> v1->v2: Addressed comments from Martin KaFai Lau
-> - Add a selftest.
-> - use btf_type_skip_modifiers.
-> Some details in here:
-> https://lore.kernel.org/all/20221012125815.76120-1-zhouchengming@bytedance.com/
-> 
->  kernel/bpf/btf.c                                    |  5 ++---
->  net/bpf/test_run.c                                  |  8 +++++++-
->  .../testing/selftests/bpf/verifier/btf_ctx_access.c | 13 +++++++++++++
->  3 files changed, 22 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.20.1
-> 
+> Best Regards
+> Michał Mirosław
+
+-- 
+BR,
+Muhammad Usama Anjum
