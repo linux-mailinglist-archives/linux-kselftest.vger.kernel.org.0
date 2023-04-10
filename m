@@ -2,66 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83356DCABB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Apr 2023 20:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CFB6DCAC1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Apr 2023 20:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjDJSZQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Apr 2023 14:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S229645AbjDJSaI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Apr 2023 14:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjDJSZQ (ORCPT
+        with ESMTP id S229618AbjDJSaH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Apr 2023 14:25:16 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF38F1FD3
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Apr 2023 11:25:11 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-328990497e7so261755ab.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Apr 2023 11:25:11 -0700 (PDT)
+        Mon, 10 Apr 2023 14:30:07 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0609F1BD8
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Apr 2023 11:30:06 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7606d6a2aa5so2830139f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Apr 2023 11:30:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1681151111;
+        d=linuxfoundation.org; s=google; t=1681151405; x=1683743405;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Sm7LtAbcDUNkpmMGM6egHDD5rNKG1fSqZdlCU05Q4U0=;
-        b=iGlfo6CowedeaCcherjWdXFtfAoSyd7SAZMf9ikA3sxC/uRk54iiVoRJlDgeGLFmjl
-         CIrttou4msMNl5JmYqgtTJx0M0F2fp7ZM+q+cxX8x/od2mVnogdB1yORoBcxMTSGCnB0
-         3Qp92NWWFUMibGaJpBrQqGTKA118H/9/3WnFQ=
+        bh=cYKDJKwn10X7KLBuY10/um2m58nz9p5VC59dotIeEO0=;
+        b=FRdjAn56JBxgc+W8+zwgpjOs3Nr2+xBM+V86kQ+EGBTwrajmGuxhQUI/puxV05pZUX
+         Cvtj62XK1mKeWW2jbxDR6jettZuvK6HGogF8sFXdwKaXnwUJqn1O5IVgIjUDDCXBS3EW
+         UQwPhR4S/Av81m64se7slJLAVXyzIqvzRyUa8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681151111;
+        d=1e100.net; s=20210112; t=1681151405; x=1683743405;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sm7LtAbcDUNkpmMGM6egHDD5rNKG1fSqZdlCU05Q4U0=;
-        b=pgPTB2acdZB6vlnwWNivFTgCMyEAt3KEOFYchixsJyAjdujLvvwLkY+tLroylbWXEI
-         rc4XANTpdXID84wMiKqSDtAxJaEBIiP1knlW1F9sBJv+1ECQB3MalwRNXca/pWWirg3Y
-         aWQQrGECq94xYS/AC4Arkd5nBAdbCksBGhXkk0/IrHwHUVqslsF+yvFmxVc5qmd3rifX
-         1N0Vh77wg/QHM5c/Yg20ZbDTEhr2LpjsDb9n3Ulm31VgiiGEgGAY8dBJqDCQZdY8vtHx
-         vLlD8xDeayokcEmlSa5Q4/EbCw+TdVjv+eGYxxdaBDVSr+tFx3sTGT/cxAtnMZF038Wk
-         q5Yw==
-X-Gm-Message-State: AAQBX9ezuAHdFmAzmH+knoorpuryiU4c+DFLl1R5jJHcZPh9eJxUytG2
-        3wf97raR/DZqxuPllHC2oZ18Ng==
-X-Google-Smtp-Source: AKy350YRN2ZlVP9+61pcJb2GzFMuyGQ6NY8jbSWom/TWvGBgY9ZGRWPKxKMCTKEWdwetspYi7HLV8w==
-X-Received: by 2002:a05:6e02:11a3:b0:325:e065:8bf8 with SMTP id 3-20020a056e0211a300b00325e0658bf8mr3506904ilj.0.1681151111305;
-        Mon, 10 Apr 2023 11:25:11 -0700 (PDT)
+        bh=cYKDJKwn10X7KLBuY10/um2m58nz9p5VC59dotIeEO0=;
+        b=k+Og6cI5u5BYsr6rVL35zrPZgYQyjjSJjCkP0Ec9Xdw2Yh+LpFC99iFjDHGymfi14W
+         r+aBC9v7n1Xe5muPVVo/rUisOf7UcPTawn25qYXayn4RRX+XNUS8e/PGAS1MCbS+4HrI
+         NIZJuw5gBiNvztMUcM7qB/GKCfponhhpysS9kcjdAvNofhDDMaDGITIZZ2iDl1A+3Gmf
+         x+4pSoPAvPDLoij+e82ndP9+sCq8dhRQkSAQIl5RXIm8Z+/zL5P5pcmUmKSgIDFq3yvK
+         Ubx3L0b9bhQ9WoZfvnA87q0BaBmflgcddaPsHVYJhLqjE3WFmeSbZXve0yXRui8z3o6q
+         mWEQ==
+X-Gm-Message-State: AAQBX9caJskqQTvN32pdWqs7ugpSXQv1Uv/5LQurIeJSJIkhJv4tXDFo
+        cpgtDf4Wf94F8kXkZb5Lx3UmyA==
+X-Google-Smtp-Source: AKy350aTt/4xClTAoIKpBxclNxt+cGRKJn1lsW7n0DD5/6/9nxr7cWLFWKFlG0cHJgwC7hfmKNtssQ==
+X-Received: by 2002:a05:6602:13d4:b0:757:f2a2:affa with SMTP id o20-20020a05660213d400b00757f2a2affamr6532981iov.1.1681151405345;
+        Mon, 10 Apr 2023 11:30:05 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m36-20020a056638272400b00408b9c5f9a6sm3408556jav.15.2023.04.10.11.25.10
+        by smtp.gmail.com with ESMTPSA id cx4-20020a056638490400b0040bd4f2fcedsm588700jab.105.2023.04.10.11.30.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Apr 2023 11:25:10 -0700 (PDT)
-Message-ID: <71b769fd-6cde-0ccc-ca41-c94d4737b596@linuxfoundation.org>
-Date:   Mon, 10 Apr 2023 12:25:10 -0600
+        Mon, 10 Apr 2023 11:30:04 -0700 (PDT)
+Message-ID: <fc52d5c1-61db-b8e3-e608-12434b0ee740@linuxfoundation.org>
+Date:   Mon, 10 Apr 2023 12:30:04 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: resctrl selftest patches
+Subject: Re: [PATCH v2 1/3] tools/nolibc/stdio: Implement vprintf()
 Content-Language: en-US
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
+To:     paulmck@kernel.org, Willy Tarreau <w@1wt.eu>
+Cc:     Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <eaf96617-2f3e-b573-8990-6e9e6b0cb6fd@intel.com>
+References: <20230405-kselftest-nolibc-v2-0-2ac2495814b5@kernel.org>
+ <20230405-kselftest-nolibc-v2-1-2ac2495814b5@kernel.org>
+ <ZC8OwUPAC4s413jP@1wt.eu>
+ <cbece9a0-b8d0-4f3e-9a55-9fe87e111392@paulmck-laptop>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <eaf96617-2f3e-b573-8990-6e9e6b0cb6fd@intel.com>
+In-Reply-To: <cbece9a0-b8d0-4f3e-9a55-9fe87e111392@paulmck-laptop>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
@@ -74,24 +79,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/10/23 10:43, Reinette Chatre wrote:
-> Hi Shuah and kselftest team,
+On 4/6/23 12:43, Paul E. McKenney wrote:
+> On Thu, Apr 06, 2023 at 08:26:09PM +0200, Willy Tarreau wrote:
+>> On Thu, Apr 06, 2023 at 05:19:10PM +0100, Mark Brown wrote:
+>>> vprintf() is equivalent to vfprintf() to stdout so implement it as a simple
+>>> wrapper for the existing vfprintf(), allowing us to build kselftest.h.
+>>>
+>>> Suggested-by: Willy Tarreau <w@1wt.eu>
+>>> Signed-off-by: Mark Brown <broonie@kernel.org>
+>>> ---
+>>>   tools/include/nolibc/stdio.h | 6 ++++++
+>>>   1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
+>>> index 96ac8afc5aee..6cbbb52836a0 100644
+>>> --- a/tools/include/nolibc/stdio.h
+>>> +++ b/tools/include/nolibc/stdio.h
+>>> @@ -273,6 +273,12 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
+>>>   	return written;
+>>>   }
+>>>   
+>>> +static __attribute__((unused))
+>>> +int vprintf(const char *fmt, va_list args)
+>>> +{
+>>> +	return vfprintf(stdout, fmt, args);
+>>> +}
+>>> +
+>>>   static __attribute__((unused, format(printf, 2, 3)))
+>>>   int fprintf(FILE *stream, const char *fmt, ...)
+>>>   {
+>>
+>> Perfect, thank you Mark, I'm glad that it simplified the rest of
+>> your series.
+>>
+>> Acked-by: Willy Tarreau <w@1wt.eu>
+>>
+>> Paul, feel free to directly queue this one for 6.5. If you prefer I
+>> can as well queue it on my side and send it later, it's just that I
+>> have exactly zero extra value on top of this one ;-)
 > 
-> There are a couple of resctrl selftest patches that are ready for inclusion. They have been percolating on the list for a while without expecting more feedback. All have "Reviewed-by" tags from at least one reviewer. Could you please consider including them into the kselftest repo? There is one minor merge conflict between two of the series for which the snippet below shows resolution.
+> Alternatively, if it would be more convenient for Mark to send this
+> up via kselftest:
 > 
-> [PATCH v8 0/6] Some improvements of resctrl selftest
-> https://lore.kernel.org/lkml/20230215083230.3155897-1-tan.shaopeng@jp.fujitsu.com/
+> Acked-by: Paul E. McKenney <paulmck@kernel.org>
 > 
-> [PATCH v2 0/9] selftests/resctrl: Fixes to error handling logic and cleanups
-> https://lore.kernel.org/lkml/20230215130605.31583-1-ilpo.jarvinen@linux.intel.com/
+> It currently merges cleanly with the -rcu tree's dev branch, so this
+> should not be a problem.
 > 
+> Either way, please let me know, Mark!
+> 
+> 						
 
-I was waiting for another ack from x86, don't see one.
-I just applied them all.
+I can take these through kselftest or can go through arm64
 
-v9 patches are now in linux-kselftest next for Linux 6.4
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
-
-
