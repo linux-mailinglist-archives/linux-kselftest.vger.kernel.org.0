@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28E86DDD74
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 16:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86026DDD7A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 16:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjDKOQf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Apr 2023 10:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        id S230054AbjDKORQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Apr 2023 10:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjDKOQc (ORCPT
+        with ESMTP id S229490AbjDKORO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:16:32 -0400
+        Tue, 11 Apr 2023 10:17:14 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2963E1FEB
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 07:15:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBD546B4
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 07:15:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681222546;
+        s=mimecast20190719; t=1681222549;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kMuXjs2koZ/Flt7PJQx7eiW1x5ktANLpUol8YMKeKVs=;
-        b=LwgERl6Uo/kGosNuZRDNgXNUQCuUZR4P73NnbdxE08C/offS1YbJDW1WQBK+7pM35Kcc+k
-        PUYIvEnL0amlE1xsmJhmtlI79BwbXx1Z5HhtA+33/IiEX0o+MUqzxt8GhJVFtEgyjVF59D
-        5IcmFCuxvgbpdyTlRKh4kOYfN7xw+ME=
+        bh=qzK4ogixuaREht4MpkiqqhFPvzGg6ALQmBRRBO9bEhw=;
+        b=O5HGANU+qF5d0nfHuGXP1gE7dUSNt4oVGnJE9KFv6eVEqJt20zepVUtn+JGnF+YovExWUt
+        mbBMO8izAy6NGUWXXj0E9CmyRUeySHXPJXfI9gGFLq8FRdCaEjC7zDQwl7/nPoRWI+wtIf
+        31EsKixb0WNGQwNK/AdDLD/BblM9gH8=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-zLozqPi3M5SQg6bnZDFiDQ-1; Tue, 11 Apr 2023 10:15:44 -0400
-X-MC-Unique: zLozqPi3M5SQg6bnZDFiDQ-1
+ us-mta-371-Ckkwz92eO7-IkeIGQlURJg-1; Tue, 11 Apr 2023 10:15:45 -0400
+X-MC-Unique: Ckkwz92eO7-IkeIGQlURJg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4008E1C0A5A5;
-        Tue, 11 Apr 2023 14:15:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 17DDE1C12991;
+        Tue, 11 Apr 2023 14:15:45 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4E630400F287;
-        Tue, 11 Apr 2023 14:15:42 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9240D400F281;
+        Tue, 11 Apr 2023 14:15:43 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         sparclinux@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: [PATCH v1 5/6] mm/huge_memory: revert "Partly revert "mm/thp: carry over dirty bit when thp splits on pmd""
-Date:   Tue, 11 Apr 2023 16:15:28 +0200
-Message-Id: <20230411141529.428991-7-david@redhat.com>
+Subject: [PATCH v1 6/6] mm/huge_memory: conditionally call maybe_mkwrite() and drop pte_wrprotect() in __split_huge_pmd_locked()
+Date:   Tue, 11 Apr 2023 16:15:29 +0200
+Message-Id: <20230411141529.428991-8-david@redhat.com>
 In-Reply-To: <20230411141529.428991-1-david@redhat.com>
 References: <20230411141529.428991-1-david@redhat.com>
 MIME-Version: 1.0
@@ -60,49 +60,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This reverts commit 624a2c94f5b7 ("Partly revert "mm/thp: carry over dirty
-bit when thp splits on pmd"") and the fixup in commit e833bc503405
-("mm/thp: re-apply mkdirty for small pages after split").
+No need to call maybe_mkwrite() to then wrprotect if the source PMD was not
+writable.
 
-Now that sparc64 mkdirty handling is fixed and no longer sets a PTE/PMD
-writable that shouldn't be writable, let's revert the temporary fix and
-remove the stale comment.
+It's worth nothing that this now allows for PTEs to be writable even if
+the source PMD was not writable: if vma->vm_page_prot includes write
+permissions.
 
-The mkdirty mm selftest still passes with this change on sparc64.
+As documented in commit 931298e103c2 ("mm/userfaultfd: rely on
+vma->vm_page_prot in uffd_wp_range()"), any mechanism that intends to
+have pages wrprotected (COW, writenotify, mprotect, uffd-wp, softdirty,
+...) has to properly adjust vma->vm_page_prot upfront, to not include
+write permissions. If vma->vm_page_prot includes write permissions, the
+PTE/PMD can be writable as default.
 
-Note that loongarch handling was fixed in commit bf2f34a506e6 ("LoongArch:
-Set _PAGE_DIRTY only if _PAGE_WRITE is set in {pmd,pte}_mkdirty()")
+This now mimics the handling in mm/migrate.c:remove_migration_pte() and in
+mm/huge_memory.c:remove_migration_pmd(), which has been in place for a
+long time (except that 96a9c287e25d ("mm/migrate: fix wrongly apply write
+bit after mkdirty on sparc64") temporarily changed it).
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/huge_memory.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ mm/huge_memory.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index ec86bf1d4e81..6f3af65435c8 100644
+index 6f3af65435c8..8332e16ac97b 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -2238,18 +2238,13 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 			entry = maybe_mkwrite(entry, vma);
+@@ -2235,11 +2235,10 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 				entry = pte_swp_mkuffd_wp(entry);
+ 		} else {
+ 			entry = mk_pte(page + i, READ_ONCE(vma->vm_page_prot));
+-			entry = maybe_mkwrite(entry, vma);
++			if (write)
++				entry = maybe_mkwrite(entry, vma);
  			if (anon_exclusive)
  				SetPageAnonExclusive(page + i);
-+			if (!write)
-+				entry = pte_wrprotect(entry);
+-			if (!write)
+-				entry = pte_wrprotect(entry);
  			if (!young)
  				entry = pte_mkold(entry);
  			/* NOTE: this may set soft-dirty too on some archs */
- 			if (dirty)
- 				entry = pte_mkdirty(entry);
--			/*
--			 * NOTE: this needs to happen after pte_mkdirty,
--			 * because some archs (sparc64, loongarch) could
--			 * set hw write bit when mkdirty.
--			 */
--			if (!write)
--				entry = pte_wrprotect(entry);
- 			if (soft_dirty)
- 				entry = pte_mksoft_dirty(entry);
- 			if (uffd_wp)
 -- 
 2.39.2
 
