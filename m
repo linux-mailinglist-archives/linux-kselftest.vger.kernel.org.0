@@ -2,80 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F7F6DDD98
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 16:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD1A6DDDBE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 16:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjDKOUU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Apr 2023 10:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
+        id S230120AbjDKO0O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Apr 2023 10:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjDKOUH (ORCPT
+        with ESMTP id S230229AbjDKO0M (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:20:07 -0400
+        Tue, 11 Apr 2023 10:26:12 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFBD527A
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 07:19:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD2A212F
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 07:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681222741;
+        s=mimecast20190719; t=1681223120;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oAltGiW0DBDAeNvmuGpEYB8uc7AKLZpAtOjrnOVCND0=;
-        b=U6W05LNczdE8k6guJnFPSx5Ls1nMTa9oVA/dlHnUWaB6kTdApzMbkANLfwSQN50Jct6H/4
-        kXF0HFx4x58ViJX4awL6eAgT2E7WnL8hHLryCcCp8yiF38FThfLA2BGHiab5UWjf5l1i2n
-        YG6pVel75iSSQTwDQZ8oFktLc4+koIQ=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-304-dbhyllNYMP-OwViOIFaoPQ-1; Tue, 11 Apr 2023 10:19:00 -0400
-X-MC-Unique: dbhyllNYMP-OwViOIFaoPQ-1
-Received: by mail-wr1-f70.google.com with SMTP id i18-20020adfa512000000b002efac436771so1470238wrb.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 07:18:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681222739; x=1683814739;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oAltGiW0DBDAeNvmuGpEYB8uc7AKLZpAtOjrnOVCND0=;
-        b=17qNOC/S9XQD4342G0IYy4mFenYGWkYVh37fmEi0StmFk92u+8Dgl73vWjw/zayUtE
-         oSVCP+P4CT1xBw+J4bAEcPvcxufm1wq25qn51kBwF3hgdBHXwcrUlmDOl0wLSAVNlPe1
-         /1gG96T1wp5rbWgcv57TgqP8F6VtcdSaEie4GFghkCz14YPDDIhmRA+8g9WI5gUsM+gf
-         HbysIMbxJHLFaFiwI4M/rWvCELIqLt8Xb8NxGCCYab1FmhSZutiScRtuVB6tLrcRDtyq
-         3qnDGjZ4mEEkHNd/mL0vHV9LaaBxApTWDlZD4AehrNqXSlL9qxPCgRZt4+ORfvl9ycu6
-         FgPQ==
-X-Gm-Message-State: AAQBX9fovuSOWaiwOBAqiaeUUT7LDvO06QnD85a81nkYFOLrIY9BQZMs
-        VqTnpefjIgr7lieZ0NrtpDA5CIC5MhMJuDkGuCQif3bx5xseq2umEYlNXgTf/E14SGxYcvebALM
-        otLWQ6U6ypowwrBGjug4WwfZnl5jqdslkMKJH
-X-Received: by 2002:a5d:470d:0:b0:2d7:4c98:78fe with SMTP id y13-20020a5d470d000000b002d74c9878femr8621098wrq.34.1681222738937;
-        Tue, 11 Apr 2023 07:18:58 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bY0p0lov10ncoRRjudSkgQbnGcBkbDWJtshXja6yULgw6jQWdjzluLhiX0b55T0sA76SToJg==
-X-Received: by 2002:a5d:470d:0:b0:2d7:4c98:78fe with SMTP id y13-20020a5d470d000000b002d74c9878femr8621084wrq.34.1681222738612;
-        Tue, 11 Apr 2023 07:18:58 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:1300:6f08:1748:eba7:b2a9? (p200300cbc70613006f081748eba7b2a9.dip0.t-ipconnect.de. [2003:cb:c706:1300:6f08:1748:eba7:b2a9])
-        by smtp.gmail.com with ESMTPSA id n4-20020a5d51c4000000b002efb55de21dsm10542399wrv.103.2023.04.11.07.18.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 07:18:58 -0700 (PDT)
-Message-ID: <81a2070a-f7aa-2185-8211-26b57815e968@redhat.com>
-Date:   Tue, 11 Apr 2023 16:18:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] mm/huge_memory: conditionally call maybe_mkwrite() and
- drop pte_wrprotect() in __split_huge_pmd_locked()
-Content-Language: en-US
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1ElJXvy3GrdCHxap+2OiSZHKtp+/midD3ZXDx5TNtDM=;
+        b=TldSL37mQif+k5HTAynacVan+j2GIcJ5D7cWlFywH0I+3HO0c9Td6CNK0Mw5sKKRju7OTq
+        WjEqVoa23eQQ93RhTw5yy17Gt4RarMg6Aout178apEFcuZVarNJ3AkXpsN8FCl9cFW6OiV
+        Bp/ksRwTzeLGKXnnmw2dFk/X1fjd+SQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-480-7XB9EyNpNM6h9LofAub74g-1; Tue, 11 Apr 2023 10:25:17 -0400
+X-MC-Unique: 7XB9EyNpNM6h9LofAub74g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4100A1097B19;
+        Tue, 11 Apr 2023 14:25:16 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.194.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BC58F14171D5;
+        Tue, 11 Apr 2023 14:25:13 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        sparclinux@vger.kernel.org
-References: <20230411141529.428991-1-david@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230411141529.428991-1-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        sparclinux@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Shuah Khan <shuah@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: [PATCH v1 RESEND 0/6] mm: (pte|pmd)_mkdirty() should not unconditionally allow for write access
+Date:   Tue, 11 Apr 2023 16:25:06 +0200
+Message-Id: <20230411142512.438404-1-david@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,34 +63,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11.04.23 16:15, David Hildenbrand wrote:
-> No need to call maybe_mkwrite() to then wrprotect if the source PMD was not
-> writable.
-> 
-> It's worth nothing that this now allows for PTEs to be writable even if
-> the source PMD was not writable: if vma->vm_page_prot includes write
-> permissions.
-> 
-> As documented in commit 931298e103c2 ("mm/userfaultfd: rely on
-> vma->vm_page_prot in uffd_wp_range()"), any mechanism that intends to
-> have pages wrprotected (COW, writenotify, mprotect, uffd-wp, softdirty,
-> ...) has to properly adjust vma->vm_page_prot upfront, to not include
-> write permissions. If vma->vm_page_prot includes write permissions, the
-> PTE/PMD can be writable as default.
-> 
-> This now mimics the handling in mm/migrate.c:remove_migration_pte() and in
-> mm/huge_memory.c:remove_migration_pmd(), which has been in place for a
-> long time (except that 96a9c287e25d ("mm/migrate: fix wrongly apply write
-> bit after mkdirty on sparc64") temporarily changed it).
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
+This is the follow-up on [1], adding selftests (testing for known issues
+we added workarounds for and other issues that haven't been fixed yet),
+fixing sparc64, reverting the workarounds, and perform one cleanup.
 
-Ignore this one, it's a duplicate of 6/6 and I forgot to delete that 
-patch before triggering git send-email ...
+The patch from [1] was modified slightly (updated/extended patch
+description, dropped one unnecessary NOP instruction from the ASM in
+__pte_mkhwwrite()).
+
+Retested on x86_64 and sparc64 (sun4u in QEMU).
+
+I scanned most architectures to make sure their (pte|pmd)_mkdirty()
+handling is correct. To be sure, we can run the selftests and find out if
+other architectures are still affectes (loongarch was fixed recently as
+well).
+
+Based on master for now. I don't expect surprises regarding mm-tress, but
+I can rebase if there are any problems.
+
+[1] https://lkml.kernel.org/r/20221212130213.136267-1-david@redhat.com
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: Yu Zhao <yuzhao@google.com>
+Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+
+David Hildenbrand (6):
+  selftests/mm: reuse read_pmd_pagesize() in COW selftest
+  selftests/mm: mkdirty: test behavior of (pte|pmd)_mkdirty on VMAs
+    without write permissions
+  sparc/mm: don't unconditionally set HW writable bit when setting PTE
+    dirty on 64bit
+  mm/migrate: revert "mm/migrate: fix wrongly apply write bit after
+    mkdirty on sparc64"
+  mm/huge_memory: revert "Partly revert "mm/thp: carry over dirty bit
+    when thp splits on pmd""
+  mm/huge_memory: conditionally call maybe_mkwrite() and drop
+    pte_wrprotect() in __split_huge_pmd_locked()
+
+ arch/sparc/include/asm/pgtable_64.h           | 116 +++---
+ mm/huge_memory.c                              |  16 +-
+ mm/migrate.c                                  |   2 -
+ tools/testing/selftests/mm/Makefile           |   2 +
+ tools/testing/selftests/mm/cow.c              |  33 +-
+ tools/testing/selftests/mm/khugepaged.c       |   4 +
+ tools/testing/selftests/mm/mkdirty.c          | 379 ++++++++++++++++++
+ tools/testing/selftests/mm/soft-dirty.c       |   3 +
+ .../selftests/mm/split_huge_page_test.c       |   4 +
+ tools/testing/selftests/mm/vm_util.c          |   4 +-
+ 10 files changed, 468 insertions(+), 95 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/mkdirty.c
 
 -- 
-Thanks,
-
-David / dhildenb
+2.39.2
 
