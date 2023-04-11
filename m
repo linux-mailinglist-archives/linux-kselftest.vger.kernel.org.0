@@ -2,127 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C626DDFBD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 17:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183946DE04B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 18:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjDKPa3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Apr 2023 11:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
+        id S231285AbjDKQBx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Apr 2023 12:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjDKPaW (ORCPT
+        with ESMTP id S229867AbjDKQBX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 11:30:22 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5DF19F
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 08:30:18 -0700 (PDT)
+        Tue, 11 Apr 2023 12:01:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1281F49F5
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 09:01:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681227018; x=1712763018;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iCU05kOa0hP4lNhLGaO67JgMKC63jRez+AStJP4kUsQ=;
-  b=LZdn6aS/lQTGIcf3GGfJOR9qlcEzP3F72BrQu/0YujfpGQPOGM2Gaqxo
-   UPUHb45wtRTmHuHXOECRCZ2ZL8zM7TTrZDNPbl6BxfLWs+WX/0RAaBduL
-   CnOQnBMmmdo4bha/oryVRXt5rsJFZdtKwA3oFeNztPqeOzgsFIqhtmOYb
-   EW7tsXMEc0psv+1YOW2Me7kh92EmcdulbU7h9/N7XU/wZ6161zY2l+on3
-   SLWWo+xlct2w7EfTOkIeKr3xQJxXr4I/iW2LMxgUUvnAz0qTa6ETW1VvE
-   0wojPnpict2tFnQNWeippJgo0bfd/f6cCkvqL4ibmgIZJi8n+PNuGBHtQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="408788676"
+  t=1681228882; x=1712764882;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VSHjNOJ/FlrIT86OAvkBHS2Spcnc8prxVT13bL+pJVI=;
+  b=ZKq6p0KF4Wt0G/xJlEVrUgjhmKWhyq5kf/6u7imeGXhWNZBWOFxRtUud
+   tH5ZO2ZPmLNJzWSIIhTYrE62tab8D919GqpS8mdCsc97L/d+Nv0AxJOFM
+   d9qxoAnCYNPLmFJmcbYMMeCKKyvGNqJJqpp47v8MhLh8fbZSgHFUrzzsm
+   +mozg3r2NTaUE2pbFVQOQbevHtMO+zikg94PpffaZfuxGYB+ITWSfUDbI
+   R2k+hOEqkyX9ER8wZw01axQ1w3UkgGyrYrIs76/wOkLOoS+cX3g8oN/Tt
+   dx7dxcc/gqs0VB14mu+K1SZWDZz3/i3Cxs0/eoGddioclkiZZU1u676nS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="341149047"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="408788676"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 08:29:48 -0700
+   d="scan'208";a="341149047"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 09:01:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="799959667"
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="777972271"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="799959667"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Apr 2023 08:29:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pmFvm-000WRN-2q;
-        Tue, 11 Apr 2023 15:29:14 +0000
-Date:   Tue, 11 Apr 2023 23:28:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     benjamin@sipsolutions.net, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Benjamin Berg <benjamin.berg@intel.com>
-Subject: Re: [PATCH 2/3] kunit: add ability to register a simple cleanup
- function
-Message-ID: <202304112307.LAyTVYon-lkp@intel.com>
-References: <20230329172311.71861-2-benjamin@sipsolutions.net>
+   d="scan'208";a="777972271"
+Received: from mwajdecz-mobl.ger.corp.intel.com ([10.249.133.24])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 09:01:14 -0700
+From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
+To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc:     Michal Wajdeczko <michal.wajdeczko@intel.com>,
+        David Gow <davidgow@google.com>
+Subject: [PATCH 0/3] kunit: Fix reporting of the skipped parameterized tests
+Date:   Tue, 11 Apr 2023 18:00:53 +0200
+Message-Id: <20230411160056.1586-1-michal.wajdeczko@intel.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329172311.71861-2-benjamin@sipsolutions.net>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Due to the lack of the SKIP directive in the output, if any of the
+parameterized test was skipped, the parser could not recognize that
+correctly and was marking the test as PASSED.
 
-kernel test robot noticed the following build warnings:
+This can easily be seen by running the new subtest from patch 1:
 
-[auto build test WARNING on wireless-next/main]
-[also build test WARNING on wireless/main linus/master v6.3-rc6 next-20230411]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+$ ./tools/testing/kunit/kunit.py run \
+	--kunitconfig ./lib/kunit/.kunitconfig *.example_params*
 
-url:    https://github.com/intel-lab-lkp/linux/commits/benjamin-sipsolutions-net/kunit-add-ability-to-register-a-simple-cleanup-function/20230330-012515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20230329172311.71861-2-benjamin%40sipsolutions.net
-patch subject: [PATCH 2/3] kunit: add ability to register a simple cleanup function
-config: arc-randconfig-m031-20230410 (https://download.01.org/0day-ci/archive/20230411/202304112307.LAyTVYon-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 12.1.0
+  [ ] Starting KUnit Kernel (1/1)...
+  [ ] ============================================================
+  [ ] =================== example (1 subtest) ====================
+  [ ] =================== example_params_test  ===================
+  [ ] [PASSED] example value 2
+  [ ] [PASSED] example value 1
+  [ ] [PASSED] example value 0
+  [ ] =============== [PASSED] example_params_test ===============
+  [ ] ===================== [PASSED] example =====================
+  [ ] ============================================================
+  [ ] Testing complete. Ran 3 tests: passed: 3
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304112307.LAyTVYon-lkp@intel.com/
+$ ./tools/testing/kunit/kunit.py run \
+	--kunitconfig ./lib/kunit/.kunitconfig *.example_params* \
+	--raw_output
 
-New smatch warnings:
-lib/kunit/test.c:750 kunit_add_cleanup() error: potential null dereference 'res'.  (kzalloc returns null)
-lib/kunit/test.c:750 kunit_add_cleanup() error: we previously assumed 'res' could be null (see line 745)
+  [ ] Starting KUnit Kernel (1/1)...
+  KTAP version 1
+  1..1
+      # example: initializing suite
+      KTAP version 1
+      # Subtest: example
+      1..1
+          KTAP version 1
+          # Subtest: example_params_test
+      # example_params_test: initializing
+          ok 1 example value 2
+      # example_params_test: initializing
+          ok 2 example value 1
+      # example_params_test: initializing
+          ok 3 example value 0
+      # example_params_test: pass:2 fail:0 skip:1 total:3
+      ok 1 example_params_test
+  # Totals: pass:2 fail:0 skip:1 total:3
+  ok 1 example
 
-Old smatch warnings:
-lib/kunit/test.c:293 kunit_abort() warn: ignoring unreachable code.
+After adding the SKIP directive, the report looks as expected:
 
-vim +/res +750 lib/kunit/test.c
+  [ ] Starting KUnit Kernel (1/1)...
+  [ ] ============================================================
+  [ ] =================== example (1 subtest) ====================
+  [ ] =================== example_params_test  ===================
+  [ ] [PASSED] example value 2
+  [ ] [PASSED] example value 1
+  [ ] [SKIPPED] example value 0
+  [ ] =============== [PASSED] example_params_test ===============
+  [ ] ===================== [PASSED] example =====================
+  [ ] ============================================================
+  [ ] Testing complete. Ran 3 tests: passed: 2, skipped: 1
 
-   735	
-   736	void kunit_add_cleanup(struct kunit *test, kunit_cleanup_t cleanup_func,
-   737			       const void *data, gfp_t internal_gfp)
-   738	{
-   739		struct kunit_auto_cleanup *res;
-   740	
-   741		KUNIT_ASSERT_NOT_NULL_MSG(test, cleanup_func,
-   742					  "Cleanup function must not be NULL");
-   743	
-   744		res = kzalloc(sizeof(*res), internal_gfp);
- > 745		if (!res) {
-   746			cleanup_func(data);
-   747			KUNIT_ASSERT_FAILURE(test, "Could not allocate resource for cleanup");
-   748		}
-   749	
- > 750		res->cleanup_func = cleanup_func;
-   751		res->resource.should_kfree = true;
-   752	
-   753		/* Cannot fail as init is NULL */
-   754		__kunit_add_resource(test, NULL, kunit_auto_cleanup_free,
-   755				     &res->resource, (void *)data);
-   756	}
-   757	EXPORT_SYMBOL_GPL(kunit_add_cleanup);
-   758	
+  [ ] Starting KUnit Kernel (1/1)...
+  KTAP version 1
+  1..1
+      # example: initializing suite
+      KTAP version 1
+      # Subtest: example
+      1..1
+          KTAP version 1
+          # Subtest: example_params_test
+      # example_params_test: initializing
+          ok 1 example value 2
+      # example_params_test: initializing
+          ok 2 example value 1
+      # example_params_test: initializing
+          ok 3 example value 0 # SKIP unsupported param value
+      # example_params_test: pass:2 fail:0 skip:1 total:3
+      ok 1 example_params_test
+  # Totals: pass:2 fail:0 skip:1 total:3
+  ok 1 example
+
+Cc: David Gow <davidgow@google.com>
+
+Michal Wajdeczko (3):
+  kunit/test: Add example test showing parameterized testing
+  kunit: Fix reporting of the skipped parameterized tests
+  kunit: Update reporting function to support results from subtests
+
+ lib/kunit/kunit-example-test.c | 34 ++++++++++++++++++++++++++++++++++
+ lib/kunit/test.c               | 26 +++++++++++++++++---------
+ 2 files changed, 51 insertions(+), 9 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
