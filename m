@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD1A6DDDBE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 16:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E3B6DDDC1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 16:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjDKO0O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S230298AbjDKO0O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Tue, 11 Apr 2023 10:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjDKO0M (ORCPT
+        with ESMTP id S230253AbjDKO0N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:26:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD2A212F
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 07:25:21 -0700 (PDT)
+        Tue, 11 Apr 2023 10:26:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D40A26B6
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 07:25:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681223120;
+        s=mimecast20190719; t=1681223124;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=1ElJXvy3GrdCHxap+2OiSZHKtp+/midD3ZXDx5TNtDM=;
-        b=TldSL37mQif+k5HTAynacVan+j2GIcJ5D7cWlFywH0I+3HO0c9Td6CNK0Mw5sKKRju7OTq
-        WjEqVoa23eQQ93RhTw5yy17Gt4RarMg6Aout178apEFcuZVarNJ3AkXpsN8FCl9cFW6OiV
-        Bp/ksRwTzeLGKXnnmw2dFk/X1fjd+SQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2z0ZWpIzSXqyEF2KVa3LzGMQGesZiayZZfA3zEW/CRA=;
+        b=LVb6z0kWHS/+qoN7sCbgtYAUQdrQU0JMsR1JlbJbvxHSxEbXY3pNU9i3ynw7Rt4T547qVn
+        nEOvjU1f15O9Sd2auRiX/Lyiwq8SLkroxS8hP5WS8sijDdHHIaET6IFcwvil6HOv65TQZH
+        R0ejbdcRmByh2iNOK/JAoBVdNQvVOdY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-480-7XB9EyNpNM6h9LofAub74g-1; Tue, 11 Apr 2023 10:25:17 -0400
-X-MC-Unique: 7XB9EyNpNM6h9LofAub74g-1
+ us-mta-577-jmHLwFX-O2O_HjNQNHWeyw-1; Tue, 11 Apr 2023 10:25:22 -0400
+X-MC-Unique: jmHLwFX-O2O_HjNQNHWeyw-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4100A1097B19;
-        Tue, 11 Apr 2023 14:25:16 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 94B9B3C0F19B;
+        Tue, 11 Apr 2023 14:25:18 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BC58F14171D5;
-        Tue, 11 Apr 2023 14:25:13 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8217D1417202;
+        Tue, 11 Apr 2023 14:25:16 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
@@ -47,9 +48,11 @@ Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
         Yu Zhao <yuzhao@google.com>,
         Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: [PATCH v1 RESEND 0/6] mm: (pte|pmd)_mkdirty() should not unconditionally allow for write access
-Date:   Tue, 11 Apr 2023 16:25:06 +0200
-Message-Id: <20230411142512.438404-1-david@redhat.com>
+Subject: [PATCH v1 RESEND 1/6] selftests/mm: reuse read_pmd_pagesize() in COW selftest
+Date:   Tue, 11 Apr 2023 16:25:07 +0200
+Message-Id: <20230411142512.438404-2-david@redhat.com>
+In-Reply-To: <20230411142512.438404-1-david@redhat.com>
+References: <20230411142512.438404-1-david@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
@@ -63,61 +66,133 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is the follow-up on [1], adding selftests (testing for known issues
-we added workarounds for and other issues that haven't been fixed yet),
-fixing sparc64, reverting the workarounds, and perform one cleanup.
+The COW selftest can deal with THP not being configured. So move error
+handling of read_pmd_pagesize() into the callers such that we can reuse
+it in the COW selftest.
 
-The patch from [1] was modified slightly (updated/extended patch
-description, dropped one unnecessary NOP instruction from the ASM in
-__pte_mkhwwrite()).
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ tools/testing/selftests/mm/cow.c              | 33 +++----------------
+ tools/testing/selftests/mm/khugepaged.c       |  4 +++
+ tools/testing/selftests/mm/soft-dirty.c       |  3 ++
+ .../selftests/mm/split_huge_page_test.c       |  4 +++
+ tools/testing/selftests/mm/vm_util.c          |  4 +--
+ 5 files changed, 17 insertions(+), 31 deletions(-)
 
-Retested on x86_64 and sparc64 (sun4u in QEMU).
-
-I scanned most architectures to make sure their (pte|pmd)_mkdirty()
-handling is correct. To be sure, we can run the selftests and find out if
-other architectures are still affectes (loongarch was fixed recently as
-well).
-
-Based on master for now. I don't expect surprises regarding mm-tress, but
-I can rebase if there are any problems.
-
-[1] https://lkml.kernel.org/r/20221212130213.136267-1-david@redhat.com
-
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Yu Zhao <yuzhao@google.com>
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-
-David Hildenbrand (6):
-  selftests/mm: reuse read_pmd_pagesize() in COW selftest
-  selftests/mm: mkdirty: test behavior of (pte|pmd)_mkdirty on VMAs
-    without write permissions
-  sparc/mm: don't unconditionally set HW writable bit when setting PTE
-    dirty on 64bit
-  mm/migrate: revert "mm/migrate: fix wrongly apply write bit after
-    mkdirty on sparc64"
-  mm/huge_memory: revert "Partly revert "mm/thp: carry over dirty bit
-    when thp splits on pmd""
-  mm/huge_memory: conditionally call maybe_mkwrite() and drop
-    pte_wrprotect() in __split_huge_pmd_locked()
-
- arch/sparc/include/asm/pgtable_64.h           | 116 +++---
- mm/huge_memory.c                              |  16 +-
- mm/migrate.c                                  |   2 -
- tools/testing/selftests/mm/Makefile           |   2 +
- tools/testing/selftests/mm/cow.c              |  33 +-
- tools/testing/selftests/mm/khugepaged.c       |   4 +
- tools/testing/selftests/mm/mkdirty.c          | 379 ++++++++++++++++++
- tools/testing/selftests/mm/soft-dirty.c       |   3 +
- .../selftests/mm/split_huge_page_test.c       |   4 +
- tools/testing/selftests/mm/vm_util.c          |   4 +-
- 10 files changed, 468 insertions(+), 95 deletions(-)
- create mode 100644 tools/testing/selftests/mm/mkdirty.c
-
+diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+index 0eb2e8180aa5..dc9d6fe86028 100644
+--- a/tools/testing/selftests/mm/cow.c
++++ b/tools/testing/selftests/mm/cow.c
+@@ -45,34 +45,6 @@ static size_t hugetlbsizes[10];
+ static int gup_fd;
+ static bool has_huge_zeropage;
+ 
+-static void detect_thpsize(void)
+-{
+-	int fd = open("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size",
+-		      O_RDONLY);
+-	size_t size = 0;
+-	char buf[15];
+-	int ret;
+-
+-	if (fd < 0)
+-		return;
+-
+-	ret = pread(fd, buf, sizeof(buf), 0);
+-	if (ret > 0 && ret < sizeof(buf)) {
+-		buf[ret] = 0;
+-
+-		size = strtoul(buf, NULL, 10);
+-		if (size < pagesize)
+-			size = 0;
+-		if (size > 0) {
+-			thpsize = size;
+-			ksft_print_msg("[INFO] detected THP size: %zu KiB\n",
+-				       thpsize / 1024);
+-		}
+-	}
+-
+-	close(fd);
+-}
+-
+ static void detect_huge_zeropage(void)
+ {
+ 	int fd = open("/sys/kernel/mm/transparent_hugepage/use_zero_page",
+@@ -1741,7 +1713,10 @@ int main(int argc, char **argv)
+ 	int err;
+ 
+ 	pagesize = getpagesize();
+-	detect_thpsize();
++	thpsize = read_pmd_pagesize();
++	if (thpsize)
++		ksft_print_msg("[INFO] detected THP size: %zu KiB\n",
++			       thpsize / 1024);
+ 	detect_hugetlbsizes();
+ 	detect_huge_zeropage();
+ 
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 64126c8cd561..97adc0f34f9c 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -1476,6 +1476,10 @@ int main(int argc, const char **argv)
+ 
+ 	page_size = getpagesize();
+ 	hpage_pmd_size = read_pmd_pagesize();
++	if (!hpage_pmd_size) {
++		printf("Reading PMD pagesize failed");
++		exit(EXIT_FAILURE);
++	}
+ 	hpage_pmd_nr = hpage_pmd_size / page_size;
+ 
+ 	default_settings.khugepaged.max_ptes_none = hpage_pmd_nr - 1;
+diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
+index 21d8830c5f24..cc5f144430d4 100644
+--- a/tools/testing/selftests/mm/soft-dirty.c
++++ b/tools/testing/selftests/mm/soft-dirty.c
+@@ -80,6 +80,9 @@ static void test_hugepage(int pagemap_fd, int pagesize)
+ 	int i, ret;
+ 	size_t hpage_len = read_pmd_pagesize();
+ 
++	if (!hpage_len)
++		ksft_exit_fail_msg("Reading PMD pagesize failed");
++
+ 	map = memalign(hpage_len, hpage_len);
+ 	if (!map)
+ 		ksft_exit_fail_msg("memalign failed\n");
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 76e1c36dd9e5..1dc5804b8b2b 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -300,6 +300,10 @@ int main(int argc, char **argv)
+ 	pagesize = getpagesize();
+ 	pageshift = ffs(pagesize) - 1;
+ 	pmd_pagesize = read_pmd_pagesize();
++	if (!pmd_pagesize) {
++		printf("Reading PMD pagesize failed\n");
++		exit(EXIT_FAILURE);
++	}
+ 
+ 	split_pmd_thp();
+ 	split_pte_mapped_thp();
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index 40e795624ff3..8dc74dd022c2 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -84,12 +84,12 @@ uint64_t read_pmd_pagesize(void)
+ 
+ 	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
+ 	if (fd == -1)
+-		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
++		return 0;
+ 
+ 	num_read = read(fd, buf, 19);
+ 	if (num_read < 1) {
+ 		close(fd);
+-		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
++		return 0;
+ 	}
+ 	buf[num_read] = '\0';
+ 	close(fd);
 -- 
 2.39.2
 
