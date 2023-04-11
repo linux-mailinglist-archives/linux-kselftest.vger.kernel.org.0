@@ -2,186 +2,254 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29ADA6DE720
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 00:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EFC6DE74C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 00:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjDKWSb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Apr 2023 18:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
+        id S229484AbjDKWbp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Apr 2023 18:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjDKWSa (ORCPT
+        with ESMTP id S229458AbjDKWbo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 18:18:30 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3276340C6
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 15:18:29 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id j8so7867721pjy.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 15:18:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1681251508; x=1683843508;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=45KH6O5cj3RnPv+AOERyco+kop0/CnU8ZDIN7l/NC+M=;
-        b=FFdNzO/L7iElsum/R6mZcDIU8W6SlnWMu8DiZsfNqusK33w68xIqe8+ibOHbfY1Y1o
-         /5OPwKORw4kYwVenXO6Jp8umAQikl+dXAlsVeHulkROKiR12/sjzLZix74hnQ/SM8QA+
-         4A0EE5JhQAmi27xbpLJvVgW0sYMf8PYGCG8a/GEgbhCxpbh21x5V76rHc9fgXwHnlDwu
-         wHrwGU73A12+BgUDOI8aXkcCGwsqy3sbOPwb6Zx5Cd1Ft2BHxgcxxt6lwJ+DHYQfRkI0
-         7Q0UrM5p55WCoO+D4nMJca8usK8mRtQoleHHHHCxnS80RyKFGZn2OfvqLeu7kEu7RpY6
-         JQTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681251508; x=1683843508;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=45KH6O5cj3RnPv+AOERyco+kop0/CnU8ZDIN7l/NC+M=;
-        b=EFwPbfYQ/sjvFsq9+IFXGdgdJUI5R8vzJ525FWqL6wT03TE69TNLzow565yaIStNTA
-         LKjI2q+gbBnOujMEFYuxRdUJQlZYLRMUahfFEdYRJS/YsM7lLtq6BW9erc4LItKE7FtU
-         Holhv2QFpD7+e14kKN8JYtrjxjUYXzpkT2Vl5IXTH1vD2Fk+pIpmbpIoaQJ3JmcOfrT5
-         WIDKRGNPz6KpygKKS5PaI4IZzB0ZQNcJDJprY5f4pur++kCQbccQGUPr73LLBKb62bTj
-         NnuKy9zhhcBdhoGx+nuC2LImLAWWMZCw/rB9NSuxbn9MWV40zHvEUBwq5idWsbYij7j0
-         Cr/A==
-X-Gm-Message-State: AAQBX9f9TYhhPU7aw4ccwisZPH4b4T2p8V2iJ83ka0GUsipBNxuRaznO
-        sO+6YohvVteMCgiYEsSXjQrO1UHOP+AKjXdAx344zw==
-X-Google-Smtp-Source: AKy350amRjVIm/EOeW/TqFPitTpzaMFw53yaOGbpEvytlr5xuOnqzsBoMeXsdZEZVvNjEZ9XJy02mw==
-X-Received: by 2002:a05:6a20:8b25:b0:e8:d3db:f172 with SMTP id l37-20020a056a208b2500b000e8d3dbf172mr14258790pzh.44.1681251508614;
-        Tue, 11 Apr 2023 15:18:28 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id c13-20020aa7880d000000b00637709a2417sm4688446pfo.52.2023.04.11.15.18.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 15:18:28 -0700 (PDT)
-Message-ID: <6435dcb4.a70a0220.625ae.9ee6@mx.google.com>
-Date:   Tue, 11 Apr 2023 15:18:28 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 11 Apr 2023 18:31:44 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D63146B3;
+        Tue, 11 Apr 2023 15:31:42 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 66D295C011D;
+        Tue, 11 Apr 2023 18:31:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 11 Apr 2023 18:31:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1681252298; x=1681338698; bh=/C
+        0dh5AAS6LZy77yzp081bIaCHH24Kxd//814piP+ok=; b=TR7c6bvdxVpQpF2pkY
+        TWbowemVqK9Yo7wlXyYaRtBte8wy1LG8TvnkKFqR/jwMWs62mlOCO8bKPrYfMx9G
+        rX2uLjVUUARIOSjVbkrBk/nrY20ckB/2b+sCGoQ4eddibj5rj7k3AhA8fj5o5Hth
+        W7VHyhNJVrfv2atjaqygNij5+luw4b5HiZ9mwj8oT33Li/8SjbGS72InN0PBcxtu
+        QZ2VI09D/FJI7mazgwn4fTaWaUhwtNKdSSw619h4KsT4mKwOI0JypTwU+/wm4EDp
+        Eqs0K5asWCoojqyltrf2rIHDV5M2R3g6KpG8uRtXIYSsOnhi+Hos84DdWrXofV96
+        FgQw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681252298; x=1681338698; bh=/C0dh5AAS6LZy
+        77yzp081bIaCHH24Kxd//814piP+ok=; b=igb/tx05Wrpw63U/EA2a+j+wNfeCV
+        RTTD+5VMfMzZjlLGQ8o3UxhCx4F+XBhAo7tcjyU4v1Wkdy+AkntABcJEbfV1hEz8
+        Q1b2XGAp84xJEbgQV17dkbe4MYbuj+oMAsU3rHLOZ6kDculAMX99ECjCyrxCKZgS
+        A+B07FLTXl/W2udamdmWR/X/RY/x+t9VQHDCQuZRdEQtuCnjGeN7k726HT+FM45c
+        QizG52Ads9QPSDekNFZQyke6ERhNJgLALv8VlTfG7pNMn2lEKdnwAUjjkXwR432O
+        LxoSOS/rDiI82Lnqj4ey+3CWxlmEis8xVbBptVvWkAYgFv1zRzhHXl6yg==
+X-ME-Sender: <xms:yd81ZEAk8Fw9J87nYQTqG32HxcKyrfP5wBQxN9PArqoqzV3HR46ung>
+    <xme:yd81ZGgLx4Wu0iFonX3iTcDJp9z3vNjFxMmtVMhlKXgmrsMZoNpGEBehDQ1FMe11K
+    CI2dGpDRAc6ISZLD2Y>
+X-ME-Received: <xmr:yd81ZHmjP3Xs4Omsa22QwQts2XWGaYrtR5sh082qsbxNxjOBmJgmPuKM5KFvjGe_XkDjEX-5aaAxKSdzBAyrQ28k6dDPC8Kt-uXcpPb8EA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekhedgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfhgfhffvvefuffgjkfggtgesthdtredttdertdenucfhrhhomhepufhtvghf
+    rghnucftohgvshgthhcuoehshhhrseguvghvkhgvrhhnvghlrdhioheqnecuggftrfgrth
+    htvghrnhepveelgffghfehudeitdehjeevhedthfetvdfhledutedvgeeikeeggefgudeg
+    uedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    hhrhesuggvvhhkvghrnhgvlhdrihho
+X-ME-Proxy: <xmx:yd81ZKy8Zv86lEeMqBvuP8aDUaJ_FvR7YL69tpkEhSFzPUF8-_QZlA>
+    <xmx:yd81ZJShFF-ya1Ji6m22uGJhjycB2qkc0iNvf43A_YG3NLLE3GA3gQ>
+    <xmx:yd81ZFZgStIKMnm6r32t2hibtvexaXqq0i2psBqSMHbOE9o5LeMbZw>
+    <xmx:yt81ZEFc8u62lGQmmecvcfOr9N8iWFcrSXvs5UNu6C-FTjNoDw_POQ>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Apr 2023 18:31:36 -0400 (EDT)
+References: <20230406165339.1017597-1-shr@devkernel.io>
+ <20230406165339.1017597-3-shr@devkernel.io>
+ <ad414e0e-c7be-cc55-6a91-e983b0262503@redhat.com>
+User-agent: mu4e 1.6.11; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH v5 2/3] mm: add new KSM process and sysfs knobs
+Date:   Tue, 11 Apr 2023 15:29:59 -0700
+In-reply-to: <ad414e0e-c7be-cc55-6a91-e983b0262503@redhat.com>
+Message-ID: <qvqwfs962gqj.fsf@dev0134.prn3.facebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.3-rc1-17-g266679ffd867
-X-Kernelci-Report-Type: build
-Subject: kselftest/next build: 8 builds: 0 failed, 8 passed,
- 9 warnings (v6.3-rc1-17-g266679ffd867)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 8 builds: 0 failed, 8 passed, 9 warnings (v6.3-rc1-17=
--g266679ffd867)
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.3-rc1-17-g266679ffd867/
+David Hildenbrand <david@redhat.com> writes:
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.3-rc1-17-g266679ffd867
-Git Commit: 266679ffd867cb247c36717ea4d7998e9304823b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+> On 06.04.23 18:53, Stefan Roesch wrote:
+>> This adds the general_profit KSM sysfs knob and the process profit metric
+>> and process merge type knobs to ksm_stat.
+>> 1) expose general_profit metric
+>>     The documentation mentions a general profit metric, however this
+>>     metric is not calculated.  In addition the formula depends on the size
+>>     of internal structures, which makes it more difficult for an
+>>     administrator to make the calculation.  Adding the metric for a better
+>>     user experience.
+>> 2) document general_profit sysfs knob
+>> 3) calculate ksm process profit metric
+>>     The ksm documentation mentions the process profit metric and how to
+>>     calculate it.  This adds the calculation of the metric.
+>> 4) add ksm_merge_type() function
+>>     This adds the ksm_merge_type function.  The function returns the
+>>     merge type for the process.  For madvise it returns "madvise", for
+>>     prctl it returns "process" and otherwise it returns "none".
+>
+> I'm curious, why exactly is this change required in this context? It might be
+> sufficient to observe if the prctl is set for a process. If not, the ksm stats
+> can reveal whether KSM is still active for that process -> madvise.
+>
+> For your use case, I'd assume it's pretty unnecessary to expose that.
+>
+> If there is no compelling reason, I'd suggest to drop this and limit this patch
+> to exposing the general/per-mm profit, which I can understand why it's desirable
+> when fine-tuning a workload.
+>
+>
+> [...]
+>
 
-Warnings Detected:
+In the next version, the ksm_merge_type function() is removed.
 
-arm64:
-    defconfig+kselftest (clang-16): 3 warnings
-    defconfig+kselftest+arm64-chromebook (clang-16): 3 warnings
+>
+>> Signed-off-by: Stefan Roesch <shr@devkernel.io>
+>> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>> Cc: David Hildenbrand <david@redhat.com>
+>> Cc: Johannes Weiner <hannes@cmpxchg.org>
+>> Cc: Michal Hocko <mhocko@suse.com>
+>> Cc: Rik van Riel <riel@surriel.com>
+>> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+>> ---
+>>   Documentation/ABI/testing/sysfs-kernel-mm-ksm |  8 +++++
+>>   Documentation/admin-guide/mm/ksm.rst          |  8 ++++-
+>>   fs/proc/base.c                                |  5 +++
+>>   include/linux/ksm.h                           |  5 +++
+>>   mm/ksm.c                                      | 32 +++++++++++++++++++
+>>   5 files changed, 57 insertions(+), 1 deletion(-)
+>> diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+>> b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+>> index d244674a9480..7768e90f7a8f 100644
+>> --- a/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+>> +++ b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+>> @@ -51,3 +51,11 @@ Description:	Control merging pages across different NUMA nodes.
+>>     		When it is set to 0 only pages from the same node are merged,
+>>   		otherwise pages from all nodes can be merged together (default).
+>> +
+>> +What:		/sys/kernel/mm/ksm/general_profit
+>> +Date:		January 2023
+>
+> ^ N
+>
+Updated in the next version.
 
-arm:
+>> +KernelVersion:  6.1
+>
+> ^ Outdated
+>
+Updated in the next version.
 
-i386:
+> (kind of weird having to come up with the right numbers before getting it
+> merged)
+>
+> [...]
+>
+>>   diff --git a/fs/proc/base.c b/fs/proc/base.c
+>> index 07463ad4a70a..c74450318e05 100644
+>> --- a/fs/proc/base.c
+>> +++ b/fs/proc/base.c
+>> @@ -96,6 +96,7 @@
+>>   #include <linux/time_namespace.h>
+>>   #include <linux/resctrl.h>
+>>   #include <linux/cn_proc.h>
+>> +#include <linux/ksm.h>
+>>   #include <trace/events/oom.h>
+>>   #include "internal.h"
+>>   #include "fd.h"
+>> @@ -3199,6 +3200,7 @@ static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *
+>>     	return 0;
+>>   }
+>> +
+>
+> ^ unrelated change
+>
 
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 3 warnings
+Fixed in the next version.
 
+>>   static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
+>>   				struct pid *pid, struct task_struct *task)
+>>   {
+>> @@ -3208,6 +3210,9 @@ static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
+>>   	if (mm) {
+>>   		seq_printf(m, "ksm_rmap_items %lu\n", mm->ksm_rmap_items);
+>>   		seq_printf(m, "zero_pages_sharing %lu\n", mm->ksm_zero_pages_sharing);
+>> +		seq_printf(m, "ksm_merging_pages %lu\n", mm->ksm_merging_pages);
+>> +		seq_printf(m, "ksm_merge_type %s\n", ksm_merge_type(mm));
+>> +		seq_printf(m, "ksm_process_profit %ld\n", ksm_process_profit(mm));
+>>   		mmput(mm);
+>>   	}
+>>   diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+>> index c65455bf124c..4c32f9bca723 100644
+>> --- a/include/linux/ksm.h
+>> +++ b/include/linux/ksm.h
+>> @@ -60,6 +60,11 @@ struct page *ksm_might_need_to_copy(struct page *page,
+>>   void rmap_walk_ksm(struct folio *folio, struct rmap_walk_control *rwc);
+>>   void folio_migrate_ksm(struct folio *newfolio, struct folio *folio);
+>>   +#ifdef CONFIG_PROC_FS
+>> +long ksm_process_profit(struct mm_struct *);
+>> +const char *ksm_merge_type(struct mm_struct *mm);
+>> +#endif /* CONFIG_PROC_FS */
+>> +
+>>   #else  /* !CONFIG_KSM */
+>>     static inline int ksm_add_mm(struct mm_struct *mm)
+>> diff --git a/mm/ksm.c b/mm/ksm.c
+>> index ab95ae0f9def..76b10ff840ac 100644
+>> --- a/mm/ksm.c
+>> +++ b/mm/ksm.c
+>> @@ -3042,6 +3042,25 @@ static void wait_while_offlining(void)
+>>   }
+>>   #endif /* CONFIG_MEMORY_HOTREMOVE */
+>>   +#ifdef CONFIG_PROC_FS
+>> +long ksm_process_profit(struct mm_struct *mm)
+>> +{
+>> +	return (long)mm->ksm_merging_pages * PAGE_SIZE -
+>
+> Do we really need the cast to long? mm->ksm_merging_pages is defined as
+> "unsigned long". Just like "ksm_pages_sharing" below.
+>
 
-Warnings summary:
+Removed the cast in the next version.
 
-    2    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is =
-uninitialized when used here [-Wuninitialized]
-    2    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'sy=
-ncpt_irq' to silence this warning
-    2    1 warning generated.
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
- !ENDBR: .text+0x1463d6
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
- !ENDBR: .text+0x14654b
-    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to =
-!ENDBR: native_write_cr4+0x4
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, clang-16) =E2=80=94 PASS, 0 errors, 3 warnings,=
- 0 section mismatches
-
-Warnings:
-    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is unini=
-tialized when used here [-Wuninitialized]
-    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'syncpt_=
-irq' to silence this warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 PASS, 0 er=
-rors, 3 warnings, 0 section mismatches
-
-Warnings:
-    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is unini=
-tialized when used here [-Wuninitialized]
-    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'syncpt_=
-irq' to silence this warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 3 w=
-arnings, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
-BR: .text+0x14654b
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
-BR: .text+0x1463d6
-    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to !ENDB=
-R: native_write_cr4+0x4
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+>> +		mm->ksm_rmap_items * sizeof(struct ksm_rmap_item);
+>> +}
+>> +
+>> +/* Return merge type name as string. */
+>> +const char *ksm_merge_type(struct mm_struct *mm)
+>> +{
+>> +	if (test_bit(MMF_VM_MERGE_ANY, &mm->flags))
+>> +		return "process";
+>> +	else if (test_bit(MMF_VM_MERGEABLE, &mm->flags))
+>> +		return "madvise";
+>> +	else
+>> +		return "none";
+>> +}
+>> +#endif /* CONFIG_PROC_FS */
+>> +
+>
+> Apart from these nits, LGTM (again, I don't see why the merge type should belong
+> into this patch, and why there is a real need to expose it like that).
+>
+> Acked-by: David Hildenbrand <david@redhat.com>
