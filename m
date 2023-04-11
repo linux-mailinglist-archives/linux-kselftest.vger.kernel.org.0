@@ -2,257 +2,203 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B796DD657
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 11:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC276DD6AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 11:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjDKJMI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Apr 2023 05:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
+        id S229688AbjDKJa1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Apr 2023 05:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjDKJLl (ORCPT
+        with ESMTP id S229809AbjDKJaA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 05:11:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187DF2728
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 02:10:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681204224;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4m+6kmRETatL5vM33br0ArKsEnyNrwupCB642F9Beus=;
-        b=FwN8p830x9Y+oHDHjEttJ9zMtP025Cw4uMvcRuKFKHfF+uSafZqCSE8ppQqVSmrvJAVYYT
-        TSd+yfc4ERj++S+2vGJQFUrzBDD8Ekm/nduJnUqHBQ1fKg9hecpMv1SuLz7GEGTqb9Zs+v
-        RYegW/iizj/yJ8Ba5VIjIq0szrb2LRo=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-369-TCf0n08pOCmLdXqBglFm-g-1; Tue, 11 Apr 2023 05:10:21 -0400
-X-MC-Unique: TCf0n08pOCmLdXqBglFm-g-1
-Received: by mail-wm1-f71.google.com with SMTP id g6-20020a05600c310600b003ee69edec16so5088258wmo.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 02:10:20 -0700 (PDT)
+        Tue, 11 Apr 2023 05:30:00 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1973C15
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 02:29:58 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id q23so9212307ejz.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 02:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1681205396;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BJF2YBEivbAPJS4QQn75FqV7euOHKuYSxMpUJHAYYIA=;
+        b=D8673ys/7alW1jYcJSvlooEOVSYGU8uFheQLlNiFLSREDV21ZsPJJr5Ktj3FomPy1E
+         q4UadnXFYbOVxKWzwM1TMkIW2DiaNaPZFbAtk1NR5AW1Mz3rUvyJ62gS8KNTEGEPMIJr
+         66R7URAlRwCf3NLhtBLiJkfBf4KNLQoRMGsIhOQNRbsbNTknittQa03UbKCj2/eIUpSV
+         ZA0McsK4guufSrWQVyGAxkhJXtNLC/M7HRUVoUdTwV5kTxVBpucMQGtRDQJj5MSOweJq
+         OQmAaUK10c1W1OGocYhQNAyA/2YkBs5gPkucrRt4Zv/xI3pHcg5OxmxRQQQrKc/+UWJf
+         Ms1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681204220; x=1683796220;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4m+6kmRETatL5vM33br0ArKsEnyNrwupCB642F9Beus=;
-        b=ebbNeeg+wFavPBUGhwOpIMJEQ7UwEwDTTYzV6lwCDGtGeQXK3ZNwmZlo/d39h8LydT
-         0/w77821xoud45YdokICkXz+K8piQAJw/oTctMKxMqwuSQWvipQpf50KslIaznTcbEwE
-         fFC+BuC+V4kMpdCMHsqi8dCXt1Tm3vydPUUaKPcxW7bb0m4mhBANPTkQpRHUl0J5WdCi
-         WyD5XAp+GS/PUSI/cpuFpRn1w4+D/bVeDoic0t+9vN2KOOCpFcQpcDcYBcjX67kbsWUw
-         OcCcI1djcdH8ejHYY1tIU9su8S2MGl68+BbfDxMTKJ5s5V4nPCZEfsJv2Ns9IAy+SrqW
-         BEtw==
-X-Gm-Message-State: AAQBX9coDkZL7UTM24b3mKBNIeRHmT9mrxEGEuNJenhXhfmTHliLBU1n
-        +aWCLBRXUox894SuaVZ34WCr9PJ7O9OJtT2j9j+wEDfuth7NlEI9k3u4NhZfjqUoXAYFuOwaITc
-        1ni9hN7OsQm2+6R2GDhk8eT5fcUJj
-X-Received: by 2002:a5d:63d2:0:b0:2f1:e954:6876 with SMTP id c18-20020a5d63d2000000b002f1e9546876mr3880512wrw.42.1681204219854;
-        Tue, 11 Apr 2023 02:10:19 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YS9JdXV7tbiL94xQAZP+E8bK9EOJlCxuA9lOrAjMCRprlqq2ZRFLv2nARv1+7mExPVIDLatQ==
-X-Received: by 2002:a5d:63d2:0:b0:2f1:e954:6876 with SMTP id c18-20020a5d63d2000000b002f1e9546876mr3880481wrw.42.1681204219412;
-        Tue, 11 Apr 2023 02:10:19 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:1300:6f08:1748:eba7:b2a9? (p200300cbc70613006f081748eba7b2a9.dip0.t-ipconnect.de. [2003:cb:c706:1300:6f08:1748:eba7:b2a9])
-        by smtp.gmail.com with ESMTPSA id d4-20020a056000114400b002efb3566b0asm10554093wrx.52.2023.04.11.02.10.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 02:10:18 -0700 (PDT)
-Message-ID: <ad414e0e-c7be-cc55-6a91-e983b0262503@redhat.com>
-Date:   Tue, 11 Apr 2023 11:10:17 +0200
+        d=1e100.net; s=20210112; t=1681205396;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BJF2YBEivbAPJS4QQn75FqV7euOHKuYSxMpUJHAYYIA=;
+        b=U4Bw9Ytb1IkisIcYJ0E4eiLJ/n/w9uo4hSrqxgF45P9bF9QaYbX+5QGXsLcKoo9g9Q
+         nH4vbEe5gGOC2gqZEZirBciCTuTffXQrDfO5UksErWr1v62OfhMvCU+ys6M4uhwhqb0K
+         EakGRB5yPayC82ukvvIHS2Tm0Xc4/qyp/Wu12EwByc5PoHOHn+slPNLxPCwj1mBZkL+q
+         CwSnto834FbSeGGIn6kAF2Vr1DDG+mGAzcxH87yWCfVo/OVJub5rAWEZDC0ifibKjQZn
+         +F4MbYpluDqVmVlQVV+sudkdrHA8LQwwb9sopSYRWQWtNH6veGpcRNxV5TYGY4ogCunB
+         7XgA==
+X-Gm-Message-State: AAQBX9fxkj9GkN1W0zQDK/Zyg+4Lo4SkQTIa4smNOOIWmiKR0YhlxAY/
+        AJW+gTBpuYxtOu+soyNM0EZcOWakn0EQTxgWuiJZSA==
+X-Google-Smtp-Source: AKy350YciC056geHubwxcdJsmaoBPi16cp8aurI4qOglRyDHG/cvxK/Ql9YEmFxW0jx+zwWEqAPGI0ZBL6z80oGpEw0=
+X-Received: by 2002:a17:906:11d8:b0:94e:fdd:9319 with SMTP id
+ o24-20020a17090611d800b0094e0fdd9319mr1132630eja.15.1681205396442; Tue, 11
+ Apr 2023 02:29:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>, kernel-team@fb.com
-Cc:     linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        akpm@linux-foundation.org, hannes@cmpxchg.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20230406165339.1017597-1-shr@devkernel.io>
- <20230406165339.1017597-3-shr@devkernel.io>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v5 2/3] mm: add new KSM process and sysfs knobs
-In-Reply-To: <20230406165339.1017597-3-shr@devkernel.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230406074005.1784728-1-usama.anjum@collabora.com>
+ <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
+ <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com> <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
+ <8a837998-604f-a871-729e-aa274a621481@collabora.com> <CABb0KFEBqAMWWpAeBfqzA4JrHo3yLyaT0rqKTUn28O0hE+szBA@mail.gmail.com>
+ <c5b9201d-141c-10ae-0475-4b230d36508b@collabora.com> <CABb0KFH3mj5qt22qDLHRKjh-wB7Jrn6Pz8h-QARaf9oR65U0Qg@mail.gmail.com>
+ <05e14540-7092-5dd2-d503-473b673af716@collabora.com>
+In-Reply-To: <05e14540-7092-5dd2-d503-473b673af716@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 11 Apr 2023 11:29:44 +0200
+Message-ID: <CABb0KFE6Y=a5DQKjy3vKeP9YURwri3JHNKTCnN7PzOPOxr9SKQ@mail.gmail.com>
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 06.04.23 18:53, Stefan Roesch wrote:
-> This adds the general_profit KSM sysfs knob and the process profit metric
-> and process merge type knobs to ksm_stat.
-> 
-> 1) expose general_profit metric
-> 
->     The documentation mentions a general profit metric, however this
->     metric is not calculated.  In addition the formula depends on the size
->     of internal structures, which makes it more difficult for an
->     administrator to make the calculation.  Adding the metric for a better
->     user experience.
-> 
-> 2) document general_profit sysfs knob
-> 
-> 3) calculate ksm process profit metric
-> 
->     The ksm documentation mentions the process profit metric and how to
->     calculate it.  This adds the calculation of the metric.
-> 
-> 4) add ksm_merge_type() function
-> 
->     This adds the ksm_merge_type function.  The function returns the
->     merge type for the process.  For madvise it returns "madvise", for
->     prctl it returns "process" and otherwise it returns "none".
+On Fri, 7 Apr 2023 at 13:11, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 4/7/23 3:14=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Fri, 7 Apr 2023 at 12:04, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >> On 4/7/23 12:34=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> On Thu, 6 Apr 2023 at 23:04, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
+> >>>> On 4/7/23 1:00=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>> On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
+> >>>>> <usama.anjum@collabora.com> wrote:
+> > [...]
+> >>>>>>>> +       /*
+> >>>>>>>> +        * Allocate smaller buffer to get output from inside the=
+ page walk
+> >>>>>>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE si=
+ze chunks. As
+> >>>>>>>> +        * we want to return output to user in compact form wher=
+e no two
+> >>>>>>>> +        * consecutive regions should be continuous and have the=
+ same flags.
+> >>>>>>>> +        * So store the latest element in p.cur between differen=
+t walks and
+> >>>>>>>> +        * store the p.cur at the end of the walk to the user bu=
+ffer.
+> >>>>>>>> +        */
+> >>>>>>>> +       p.vec =3D kmalloc_array(p.vec_len, sizeof(struct page_re=
+gion),
+> >>>>>>>> +                             GFP_KERNEL);
+> >>>>>>>> +       if (!p.vec)
+> >>>>>>>> +               return -ENOMEM;
+> >>>>>>>> +
+> >>>>>>>> +       walk_start =3D walk_end =3D start;
+> >>>>>>>> +       while (walk_end < end && !ret) {
+> >>>>>>>
+> >>>>>>> The loop will stop if a previous iteration returned ENOSPC (and t=
+he
+> >>>>>>> error will be lost) - is it intended?
+> >>>>>> It is intentional. -ENOSPC means that the user buffer is full even=
+ though
+> >>>>>> there was more memory to walk over. We don't treat this error. So =
+when
+> >>>>>> buffer gets full, we stop walking over further as user buffer has =
+gotten
+> >>>>>> full and return as success.
+> >>>>>
+> >>>>> Thanks. What's the difference between -ENOSPC and
+> >>>>> PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (co=
+de
+> >>>>> flow).
+> >>>> -ENOSPC --> user buffer has been filled completely
+> >>>> PM_SCAN_FOUND_MAX_PAGES --> max_pages have been found, user buffer m=
+ay
+> >>>>                             still have more space
+> >>>
+> >>> What is the difference in code behaviour when those two cases are
+> >>> compared? (I'd expect none.)
+> >> There is difference:
+> >> We add data to user buffer. If it succeeds with return code 0, we enga=
+ge
+> >> the WP. If it succeeds with PM_SCAN_FOUND_MAX_PAGES, we still engage t=
+he
+> >> WP. But if we get -ENOSPC, we don't perform engage as the data wasn't =
+added
+> >> to the user buffer.
+> >
+> > Thanks! I see it now. I see a few more corner cases here:
+> > 1. If we did engage WP but fail to copy the vector we return -EFAULT
+> > but the WP is already engaged. I'm not sure this is something worth
+> > guarding against, but documenting that would be helpful I think.
+> Sure.
+>
+> > 2. If uffd_wp_range() fails, but we have already processed pages
+> > earlier, we should treat the error like ENOSPC and back out the failed
+> > range (the earier changes would be lost otherwise).
+> Backing out is easier to do for hugepages. But for normal pages, we'll ha=
+ve
+> to write some code to find where the current data was added (in cur or in
+> vec) and back out from that. I'll have to write some more code to avoid t=
+he
+> side-effects as well.
 
-I'm curious, why exactly is this change required in this context? It 
-might be sufficient to observe if the prctl is set for a process. If 
-not, the ksm stats can reveal whether KSM is still active for that 
-process -> madvise.
+If I read the code correctly, the last page should always be in `cur`
+and on failure only a single page is needed to be backed out. Did I
+miss something?
 
-For your use case, I'd assume it's pretty unnecessary to expose that.
+> But aren't we going over-engineering here? Error occurred and we are tryi=
+ng
+> to keep the previously generated correct data and returning successfully
+> still to the user? I don't think we should do this. An error is error. We
+> should return the error simply even if the memory flags would get lost. W=
+e
+> don't know what caused the error in uffd_wp_range(). Under normal
+> situation, we there shouldn't have had error.
 
-If there is no compelling reason, I'd suggest to drop this and limit 
-this patch to exposing the general/per-mm profit, which I can understand 
-why it's desirable when fine-tuning a workload.
+In this case it means that on (intermittent) allocation error we get
+inconsistent or non-deterministic results. I wouldn't want to be the
+one debugging this later - I'd prefer either the syscall be
+"exception-safe" (give consistent and predictable output) or kill the
+process.
 
-
-[...]
-
-> Signed-off-by: Stefan Roesch <shr@devkernel.io>
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Rik van Riel <riel@surriel.com>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
->   Documentation/ABI/testing/sysfs-kernel-mm-ksm |  8 +++++
->   Documentation/admin-guide/mm/ksm.rst          |  8 ++++-
->   fs/proc/base.c                                |  5 +++
->   include/linux/ksm.h                           |  5 +++
->   mm/ksm.c                                      | 32 +++++++++++++++++++
->   5 files changed, 57 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-ksm b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
-> index d244674a9480..7768e90f7a8f 100644
-> --- a/Documentation/ABI/testing/sysfs-kernel-mm-ksm
-> +++ b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
-> @@ -51,3 +51,11 @@ Description:	Control merging pages across different NUMA nodes.
->   
->   		When it is set to 0 only pages from the same node are merged,
->   		otherwise pages from all nodes can be merged together (default).
-> +
-> +What:		/sys/kernel/mm/ksm/general_profit
-> +Date:		January 2023
-
-^ No
-
-> +KernelVersion:  6.1
-
-^ Outdated
-
-(kind of weird having to come up with the right numbers before getting 
-it merged)
-
-[...]
-
->   
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 07463ad4a70a..c74450318e05 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -96,6 +96,7 @@
->   #include <linux/time_namespace.h>
->   #include <linux/resctrl.h>
->   #include <linux/cn_proc.h>
-> +#include <linux/ksm.h>
->   #include <trace/events/oom.h>
->   #include "internal.h"
->   #include "fd.h"
-> @@ -3199,6 +3200,7 @@ static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *
->   
->   	return 0;
->   }
-> +
-
-^ unrelated change
-
->   static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
->   				struct pid *pid, struct task_struct *task)
->   {
-> @@ -3208,6 +3210,9 @@ static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
->   	if (mm) {
->   		seq_printf(m, "ksm_rmap_items %lu\n", mm->ksm_rmap_items);
->   		seq_printf(m, "zero_pages_sharing %lu\n", mm->ksm_zero_pages_sharing);
-> +		seq_printf(m, "ksm_merging_pages %lu\n", mm->ksm_merging_pages);
-> +		seq_printf(m, "ksm_merge_type %s\n", ksm_merge_type(mm));
-> +		seq_printf(m, "ksm_process_profit %ld\n", ksm_process_profit(mm));
->   		mmput(mm);
->   	}
->   
-> diff --git a/include/linux/ksm.h b/include/linux/ksm.h
-> index c65455bf124c..4c32f9bca723 100644
-> --- a/include/linux/ksm.h
-> +++ b/include/linux/ksm.h
-> @@ -60,6 +60,11 @@ struct page *ksm_might_need_to_copy(struct page *page,
->   void rmap_walk_ksm(struct folio *folio, struct rmap_walk_control *rwc);
->   void folio_migrate_ksm(struct folio *newfolio, struct folio *folio);
->   
-> +#ifdef CONFIG_PROC_FS
-> +long ksm_process_profit(struct mm_struct *);
-> +const char *ksm_merge_type(struct mm_struct *mm);
-> +#endif /* CONFIG_PROC_FS */
-> +
->   #else  /* !CONFIG_KSM */
->   
->   static inline int ksm_add_mm(struct mm_struct *mm)
-> diff --git a/mm/ksm.c b/mm/ksm.c
-> index ab95ae0f9def..76b10ff840ac 100644
-> --- a/mm/ksm.c
-> +++ b/mm/ksm.c
-> @@ -3042,6 +3042,25 @@ static void wait_while_offlining(void)
->   }
->   #endif /* CONFIG_MEMORY_HOTREMOVE */
->   
-> +#ifdef CONFIG_PROC_FS
-> +long ksm_process_profit(struct mm_struct *mm)
-> +{
-> +	return (long)mm->ksm_merging_pages * PAGE_SIZE -
-
-Do we really need the cast to long? mm->ksm_merging_pages is defined as 
-"unsigned long". Just like "ksm_pages_sharing" below.
-
-> +		mm->ksm_rmap_items * sizeof(struct ksm_rmap_item);
-> +}
-> +
-> +/* Return merge type name as string. */
-> +const char *ksm_merge_type(struct mm_struct *mm)
-> +{
-> +	if (test_bit(MMF_VM_MERGE_ANY, &mm->flags))
-> +		return "process";
-> +	else if (test_bit(MMF_VM_MERGEABLE, &mm->flags))
-> +		return "madvise";
-> +	else
-> +		return "none";
-> +}
-> +#endif /* CONFIG_PROC_FS */
-> +
-
-Apart from these nits, LGTM (again, I don't see why the merge type 
-should belong into this patch, and why there is a real need to expose it 
-like that).
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
--- 
-Thanks,
-
-David / dhildenb
-
+Best Regards
+Micha=C5=82 Miros=C5=82aw
