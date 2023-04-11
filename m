@@ -2,149 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB866DE5E6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 22:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850786DE626
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 23:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjDKUmy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Apr 2023 16:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S229525AbjDKVHI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Apr 2023 17:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjDKUmk (ORCPT
+        with ESMTP id S229647AbjDKVHG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 16:42:40 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCF05588
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 13:42:29 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id he11-20020a05600c540b00b003ef6d684102so3128539wmb.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 13:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1681245747;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Qg0UfDgtzM4SSag2U8RERLst0NUUqYRmB2P1uH49t4=;
-        b=IGWcpTfjatCz3Eqo5P30S165MgQ8L4VYNgUdGlU7f47eKTaqEl/N0R2Bxijvo4pFg9
-         uanbjdbEphIkQDQQEZvaB8ooRWJVv+h7h963uEFJa7dXYDHWqUkAkmm6bTqrjLsz277H
-         UfMjUqNzcQZXhCGgsQ+UXxRYJqbcxdztwMq4/Kb7HKNGlv5gphgCTsS1rVR+qx7kEFxk
-         4jo+TQgpaCUpe07hKrVaVHQwTUPQyulQDEQVgAPyCj9SbQ6jucUN9bCwfQby51IPFwAY
-         ZBAqhQ/EKWaGtG/XvskTPwGou2g8oRoiWi9RLipLyDVoSETAxYgTDlezEF5ORVgAIoJ5
-         bLkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681245747;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2Qg0UfDgtzM4SSag2U8RERLst0NUUqYRmB2P1uH49t4=;
-        b=rwV/oPhql5nxOR8Tjfuk7TBxMfvXXgFqZMLIoZmTvuRioXFP/tgKLqhU5LV+rep3qf
-         QG6Bd620mIg2aAfbQ0tiyKpg42B4e8QG4qOATNR5O2++6equeOSFddYs0MY4eSg7xHPU
-         f5RvsBdb2gsaq1pFFttWY5uTSJN8SO4jGFszw9OcGIca7jkJUGvuK2su+HqfGm/vhaTF
-         ycKR1iiLcGzD0KbIgY4l3Vt4hg+CfLvprw6AyRpx88FkUhjDBcllDnxGlinGuYFi2o1D
-         bzAaB6EGuiWkXBWjEFi9dYy3KjRvdxbI7rzmWIoXYSitrFYXdCv49wK/LtCmDB00iJOQ
-         8SIw==
-X-Gm-Message-State: AAQBX9cC4f/+BXDjOwTxmN+jmmFGKzRmgm9AX5xtkCQHmCamKZVZ9fbY
-        KyODSTpdkLGe8C3sCDeULNDlag==
-X-Google-Smtp-Source: AKy350YOhcv/3WdKElepCqK9tqJwEaQ5hRFPchVWdToziQmNHv5rNkdb33WZI77d1usKv9fmjcp+nA==
-X-Received: by 2002:a7b:cb51:0:b0:3eb:38e6:f650 with SMTP id v17-20020a7bcb51000000b003eb38e6f650mr9930062wmj.41.1681245747534;
-        Tue, 11 Apr 2023 13:42:27 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id p23-20020a1c7417000000b003f0824e8c92sm86887wmc.7.2023.04.11.13.42.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 13:42:27 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Tue, 11 Apr 2023 22:42:12 +0200
-Subject: [PATCH net 4/4] selftests: mptcp: userspace pm: uniform verify
- events
+        Tue, 11 Apr 2023 17:07:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46EB5241;
+        Tue, 11 Apr 2023 14:07:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ACF8626BB;
+        Tue, 11 Apr 2023 21:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8839C433EF;
+        Tue, 11 Apr 2023 21:07:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681247222;
+        bh=lBhnQ7dbcV33KZiMsFreuCnXVxEpl5XmOabAfshIlOw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cZWzInoe2B0H2VkubIHbSALz+O5E7G16jgqtIlSJV8dV38acTXy0RLv04XbhA2JJc
+         07dFyjduO9/2rf376uQY/ayaUXFa9cQScy3fogN6JQpNrNeIa+qqL4JvV9p/x4wFrl
+         fqiIYm7O5RqCfFa2fDvpomglLq2WWDhzKbqcR6M1NVNE/5P65k/9EwHn4DBi2gSONS
+         yt0moG42j1c2+yBRbQT3hVrEem4qEI2/aKPHawGnxmX4S4pwIeQTOaYBSUgMjPRrWw
+         rbRIAmhhOeeYN5s4MvSp0gYeDnO9NTo8gCEQkRD+OCumriaTXTesrmfs3dj2NH8Lr0
+         HL/VCY02n74Cw==
+Date:   Tue, 11 Apr 2023 22:06:57 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     paulmck@kernel.org, Mark Brown <broonie@kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] tools/nolibc/stdio: Implement vprintf()
+Message-ID: <20230411210656.GA23890@willie-the-truck>
+References: <20230405-kselftest-nolibc-v2-0-2ac2495814b5@kernel.org>
+ <20230405-kselftest-nolibc-v2-1-2ac2495814b5@kernel.org>
+ <ZC8OwUPAC4s413jP@1wt.eu>
+ <cbece9a0-b8d0-4f3e-9a55-9fe87e111392@paulmck-laptop>
+ <fc52d5c1-61db-b8e3-e608-12434b0ee740@linuxfoundation.org>
+ <9dfb88e8-2a61-47a8-876e-581e4c717217@sirena.org.uk>
+ <20230411150320.GA23045@willie-the-truck>
+ <0144ab97-f34a-4803-8fdb-52340f2d73f2@sirena.org.uk>
+ <6a323775-6274-4d0c-844a-da53146c2abe@paulmck-laptop>
+ <e81d0c3b-f301-e2cf-077d-fe9a934e7590@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230411-upstream-net-20230411-mptcp-fixes-v1-4-ca540f3ef986@tessares.net>
-References: <20230411-upstream-net-20230411-mptcp-fixes-v1-0-ca540f3ef986@tessares.net>
-In-Reply-To: <20230411-upstream-net-20230411-mptcp-fixes-v1-0-ca540f3ef986@tessares.net>
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Dmytro Shytyi <dmytro@shytyi.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Mat Martineau <martineau@kernel.org>,
-        Geliang Tang <geliang.tang@suse.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1921;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=1MrCCJJ5GEMq7hx3eoZhKgDEbgVWmBJ0bqSM6h+3CbQ=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkNcYubzn7jx0MUsvw+rle5p4XlZD7yypcKbS9P
- oImjRChXFKJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZDXGLgAKCRD2t4JPQmmg
- c0o6EAChDN8Dhftr1GID9h82qJ9Na9va86JfYFDLY2V766qElhR28T/K7pa+W3+oDlE92GSkmV5
- aHUjNUjxBY4iXgRL4LSfUXTF7A1J+lGDCevgl32h+RzgO/G49ZehMU8zw7g+yHDKFNd3GtBDtpC
- R+LBTS015DkEdUwdzPvOebCKu8Wd6CUINI8GlN3G3Cf37UzMmRFEAaDsjszwx5cCC946OXjpLOW
- dEsD8yWQUc1g0zTKTYYtc+HGkLoAyYYNpyJWIf6JMubGo4Jwjjx51CNtIH6OXywmy7Pfk8Eheai
- UCYP7amDN0J930qgXB/SgTqj3x0xZPWu/QDgoMFQTck7lAPjwPTxp2979RJ14OopFnrY9HcI1wb
- rxqTrDLiIqk9j96BoFSn7KediHPoJANBsCGIxhGxRbsTi21fCINZVWV0IK5538i4G2yanRSUZmC
- kyOv6gRNIQLz1qvdpbVrUZkwk//osw5vnhQqY304o/hf3qAJcxr2zGWJM++ja6J1LXHNW1dFqU0
- tdqxoTDaBSwQbdYJ2Hh6qakprbN1mA9OJAUB6ohe4Rpc2qpGGuxqj6yzdigrmhhGp9PVk1GRvvK
- MruZNp6pcMVP+TPt00b5CD+VdeE3l3UsoEOS8+FVdUSLIPFdN1BH0X2dJ/WDooyMNqIGBa2XEIa
- H9xLIt5le1z8XlA==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e81d0c3b-f301-e2cf-077d-fe9a934e7590@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Simply adding a "sleep" before checking something is usually not a good
-idea because the time that has been picked can not be enough or too
-much. The best is to wait for events with a timeout.
+On Tue, Apr 11, 2023 at 12:54:29PM -0600, Shuah Khan wrote:
+> On 4/11/23 10:44, Paul E. McKenney wrote:
+> > On Tue, Apr 11, 2023 at 04:13:11PM +0100, Mark Brown wrote:
+> > > On Tue, Apr 11, 2023 at 04:03:21PM +0100, Will Deacon wrote:
+> > > > On Tue, Apr 11, 2023 at 03:31:10PM +0100, Mark Brown wrote:
+> > > 
+> > > > > It seems like more of a kselftest change than anything else so probably
+> > > > > makes sense for it to go that way?  The example user isn't really even
+> > > > > needed.
+> > > 
+> > > > Fine by me, as long as it doesn't conflict with any other arm64 selftest
+> > > > changes you hope to land for 6.4.
+> > > 
+> > > That shouldn't be an issue.
+> > 
+> > Shuah, looks to me like this one is yours in kselftest, then.  ;-)
+> > 
+> > 							Thanx, Paul
+> 
+> I will pick these up for Linux 6.4
 
-In this selftest, 'sleep 0.5' is used more than 40 times. It is always
-used before calling a 'verify_*' function except for this
-verify_listener_events which has been added later.
+Cheers, Shuah!
 
-At the end, using all these 'sleep 0.5' seems to work: the slow CIs
-don't complain so far. Also because it doesn't take too much time, we
-can just add two more 'sleep 0.5' to uniform what is done before calling
-a 'verify_*' function. For the same reasons, we can also delay a bigger
-refactoring to replace all these 'sleep 0.5' by functions waiting for
-events instead of waiting for a fix time and hope for the best.
-
-Fixes: 6c73008aa301 ("selftests: mptcp: listener test for userspace PM")
-Cc: stable@vger.kernel.org
-Suggested-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/userspace_pm.sh | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index 48e52f995a98..b1eb7bce599d 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -913,6 +913,7 @@ test_listener()
- 		$client4_port > /dev/null 2>&1 &
- 	local listener_pid=$!
- 
-+	sleep 0.5
- 	verify_listener_events $client_evts $LISTENER_CREATED $AF_INET 10.0.2.2 $client4_port
- 
- 	# ADD_ADDR from client to server machine reusing the subflow port
-@@ -928,6 +929,7 @@ test_listener()
- 	# Delete the listener from the client ns, if one was created
- 	kill_wait $listener_pid
- 
-+	sleep 0.5
- 	verify_listener_events $client_evts $LISTENER_CLOSED $AF_INET 10.0.2.2 $client4_port
- }
- 
-
--- 
-2.39.2
-
+Will
