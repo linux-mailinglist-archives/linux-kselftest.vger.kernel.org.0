@@ -2,63 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948D86DE508
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 21:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD876DE5D8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Apr 2023 22:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjDKTfz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Apr 2023 15:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S229936AbjDKUm2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Apr 2023 16:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDKTfy (ORCPT
+        with ESMTP id S229919AbjDKUm1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 15:35:54 -0400
-Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FB4170F
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 12:35:52 -0700 (PDT)
+        Tue, 11 Apr 2023 16:42:27 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7E646A5
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 13:42:24 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id v20-20020a05600c471400b003ed8826253aso1480135wmo.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 13:42:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=6R6glNsSpLFyjginUD6NcowqNY9ur8a9ugp/eLkcD5w=;
-        b=NXSgIozXgT72RAvH5CBS8iHcb9fF9jNF9TfKmCxRQft9xe/HII+ZkuZAaNOlUd31IFqSXvziCr4wA
-         /2RVyfYB38mztBu82uRXJRtKI1UAwUybyQQn0gfUnxxpfkuufrGPtQFiDuJrLv/7rQXPLGEWxlAHjh
-         pTt57iy7vvluPgEnnzxXLOtTgFyO2xhA2Y38a0vPA5kaCi7i7ru9Qz8yGRtxmCBn+vlsnEFwH6n7WT
-         /Sc4ACkKASHuR8S3daqRMVRlVsMInxYINy35X8ERxDqaE9kYyviA5I82glJUwreIH4ih1b1IeMKl9o
-         /9Li7ny/x8s0SZYyUqgejG6xEnG/Kzw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=6R6glNsSpLFyjginUD6NcowqNY9ur8a9ugp/eLkcD5w=;
-        b=S8Q7BbEh6oAOXaKST+6JUuVXYmYG+NQKPGlDTJozbNQCqWLjgfQKqJUYXdE3DTtdB/Dm4w8mNa77O
-         0BtXVXKCg==
-X-HalOne-ID: 0f4363a0-d8a0-11ed-9613-99461c6a3fe8
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay1 (Halon) with ESMTPSA
-        id 0f4363a0-d8a0-11ed-9613-99461c6a3fe8;
-        Tue, 11 Apr 2023 19:35:50 +0000 (UTC)
-Date:   Tue, 11 Apr 2023 21:35:48 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [PATCH v1 RESEND 3/6] sparc/mm: don't unconditionally set HW
- writable bit when setting PTE dirty on 64bit
-Message-ID: <20230411193548.GA2094947@ravnborg.org>
-References: <20230411142512.438404-1-david@redhat.com>
- <20230411142512.438404-4-david@redhat.com>
+        d=tessares.net; s=google; t=1681245743;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yLw+Q9jRLjBSRcIOCrWWTPAtbf14hoPj7TuOVMiOlaQ=;
+        b=iwDG2NgSrNS+WGzysNtYXdJWA3DWB5fN9hnDIvSQ7oEhhsJ3RsK9NbJZ0cX220bwv0
+         BvQq2vugPGpeh0O9c7YrZoJ/YWhSmvwF+oAAwt/wM1Sud9nUZXb2y92LzcpI8RuPiSzN
+         7KPENpWrf0c9DT4/Z4CFoNgCWii5AfQRz4/BNwpDwB1Tzv+jhdJ9hk1s2u4db5Njb/Kb
+         hd7uPsIbpx9qyw8xQ0xeyM9m/OoHkooeUuDCafenat9bAhKjc09NJpfRE9CYoQeq8JKG
+         ogONEPJIjDnQvfxXBNiGQF1ms3oDWJ/cWs3UhUmI5xBidabHaaZM0eqC5N0+fvVMZTVY
+         Y6FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681245743;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yLw+Q9jRLjBSRcIOCrWWTPAtbf14hoPj7TuOVMiOlaQ=;
+        b=KMVt6qxs47FJcWf2mr+b2POV/gN4XVPOgj1JTERl451pavPAMTFc2fPQXHENVRBeyL
+         AieYCBvdOpegDJxtNf+KHICgBm9KWmpagjCXss+vGv/VpxzrZbFqu3n7nAVG2wjiBgU0
+         Z3OMO2woptOG8Z99SyyZBOiuPIPgGnfZWiy1iUph7//dhutwaAo2+KOMCPYAQ4xSLB06
+         FF2hXH51Sw8L9vceD0cwJbGQXxEa6T1aYMk9UjHvdnxeBbIjPIMIruAoXK6D3anOSugW
+         yrefs1mSWpMqOkNBrzM8D/dd6qGpTDRZzd+zxJRrvwJ3o9cXNfRfubIwZMUa19JHM3hD
+         1RwQ==
+X-Gm-Message-State: AAQBX9eUuqAhqjIHtw/JwdHbgCDKSRPMEskdnvi1HI1Awtv/KoS4ndHy
+        Vg/wSMefvkKhICzIsj7LDKQCDg==
+X-Google-Smtp-Source: AKy350ZrPZmJoZzqx9ha+ZRrg8c0OK5tUwNwVi2LISl/wtLxuyv+DaURwvKXSo4+X1d2wgHnRrozcg==
+X-Received: by 2002:a05:600c:2158:b0:3eb:3945:d405 with SMTP id v24-20020a05600c215800b003eb3945d405mr2959574wml.38.1681245743301;
+        Tue, 11 Apr 2023 13:42:23 -0700 (PDT)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id p23-20020a1c7417000000b003f0824e8c92sm86887wmc.7.2023.04.11.13.42.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 13:42:22 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net 0/4] mptcp: more fixes for 6.3
+Date:   Tue, 11 Apr 2023 22:42:08 +0200
+Message-Id: <20230411-upstream-net-20230411-mptcp-fixes-v1-0-ca540f3ef986@tessares.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411142512.438404-4-david@redhat.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACDGNWQC/z2MSw7CMAxEr1J5jUUSClRcBbHIx6VeJERxqJCq3
+ p2EBcs3M282ECpMArdhg0IrC79SA30YwC82PQk5NAajzEmNWuM7Sy1kIyaq+E9jrj7jzB8SDG6
+ 8zmflzWWaoP04K4Su2OSX/tS8QGvXj9Fy6otc6Ke2+t57eOz7Fx+OcKCaAAAA
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Dmytro Shytyi <dmytro@shytyi.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Mat Martineau <martineau@kernel.org>,
+        Geliang Tang <geliang.tang@suse.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org, Christoph Paasch <cpaasch@apple.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1437;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=Qu/CYuD3UnLcvbNoUFhk1/XXHx+nZOplbse+R6F1NLM=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkNcYtnYL2zHzJFK+uDtjyJTHmad+2rXZzpVUjM
+ eFGVz9GlRCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZDXGLQAKCRD2t4JPQmmg
+ c5k6EACNWOxesNG8X52d6QRhRwdefUPp7R4Czldp5iiZQ4qb8XfwvNgWAZzHB06N3RC3ZCu4hr7
+ Po94OYc7661HCvz8qt3FqOA7h8sHiXnbQb3EP1M9sBBuFKIPkfsFUhNV57o0NWW1gp9t4xpYkqn
+ xcB3CIucSjNbAn+/kmxsouoplTWO1uH1/AOhUTfaddzh5feu2nceaRv7joBN+qrbtJ391Bwt6Yc
+ QafFlJHyNxHj8+JNOpZYOCkX5X3QEuLxNr+GrrASTsCxFTFdSL/Zfr1MM6WlBkCE3bkq65ICfPA
+ hqlD9Fx6ranlJFlmhUHeaLMe9ydLYKjcsVfVp7ve6c2ArU4WNec7huUq+bRSNj0l85CKI9te8FE
+ F0XuIzCtxkTJVsjfZV0PDcRuP19hb8kTVh1GyRvL1xSkFL+5nws8Ak6Q+y+E9gIRDcCxAWAsxSX
+ MPM4pHPe+3gTknlM9DtqDqqjIK+bCfWAGHmMGIYc2pw8rdlqEBvQCx6jhxADWlpwtfW81bNVQei
+ 8z2S+Nts6HEyiBgbBY4tYK0JBFzk4RAe5sCPX9gD91xIQ7syIvNWg9sp/AQ9ulpAdsuSiIcRoeo
+ mNx2xb1eyMnJ+LgZnGkYVLLgEzP+07LE49fa9knC6AcSo+n9Y8MdFWC7QrdsPwUMoCvxRmwA6tk
+ T9CwhvWbi4zB54g==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLACK autolearn=no autolearn_force=no
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,264 +100,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David.
+Patch 1 avoids scheduling the MPTCP worker on a closed socket on some
+edge cases. It fixes issues that can be visible from v5.11.
 
-On Tue, Apr 11, 2023 at 04:25:09PM +0200, David Hildenbrand wrote:
-> On sparc64, there is no HW modified bit, therefore, SW tracks via a SW
-> bit if the PTE is dirty via pte_mkdirty(). However, pte_mkdirty()
-> currently also unconditionally sets the HW writable bit, which is wrong.
-> 
-> pte_mkdirty() is not supposed to make a PTE actually writable, unless the
-> SW writable bit -- pte_write() -- indicates that the PTE is not
-> write-protected. Fortunately, sparc64 also defines a SW writable bit.
-> 
-> For example, this already turned into a problem in the context of
-> THP splitting as documented in commit 624a2c94f5b7 ("Partly revert "mm/thp:
-> carry over dirty bit when thp splits on pmd""), and for page migration,
-> as documented in commit 96a9c287e25d ("mm/migrate: fix wrongly apply write
-> bit after mkdirty on sparc64").
-> 
-> Also, we might want to use the dirty PTE bit in the context of KSM with
-> shared zeropage [1], whereby setting the page writable would be
-> problematic.
-> 
-> But more general, any code that might end up setting a PTE/PMD dirty
-> inside a VM without write permissions is possibly broken,
-> 
-> Before this commit (sun4u in QEMU):
-> 	root@debian:~/linux/tools/testing/selftests/mm# ./mkdirty
-> 	# [INFO] detected THP size: 8192 KiB
-> 	TAP version 13
-> 	1..6
-> 	# [INFO] PTRACE write access
-> 	not ok 1 SIGSEGV generated, page not modified
-> 	# [INFO] PTRACE write access to THP
-> 	not ok 2 SIGSEGV generated, page not modified
-> 	# [INFO] Page migration
-> 	ok 3 SIGSEGV generated, page not modified
-> 	# [INFO] Page migration of THP
-> 	ok 4 SIGSEGV generated, page not modified
-> 	# [INFO] PTE-mapping a THP
-> 	ok 5 SIGSEGV generated, page not modified
-> 	# [INFO] UFFDIO_COPY
-> 	not ok 6 SIGSEGV generated, page not modified
-> 	Bail out! 3 out of 6 tests failed
-> 	# Totals: pass:3 fail:3 xfail:0 xpass:0 skip:0 error:0
-> 
-> Test #3,#4,#5 pass ever since we added some MM workarounds, the
-> underlying issue remains.
-> 
-> Let's fix the remaining issues and prepare for reverting the workarounds
-> by setting the HW writable bit only if both, the SW dirty bit and the SW
-> writable bit are set.
-> 
-> We have to move pte_dirty() and pte_dirty() up. The code patching
-One of the pte_dirty() should be replaced with pte_write().
+Patch 2 makes sure the MPTCP worker doesn't try to manipulate
+disconnected sockets. This is also a fix for an issue that can be
+visible from v5.11.
 
-It would have been nice to separate moving and changes in two patches,
-but keeping it together works too. 
+Patch 3 fixes a NULL pointer dereference when MPTCP FastOpen is used
+and an early fallback is done. A fix for v6.2.
 
+Patch 4 improves the stability of the userspace PM selftest for a
+subtest added in v6.2.
 
-> mechanism and handling constants > 22bit is a bit special on sparc64.
-> 
-> The ASM logic in pte_mkdirty() and pte_mkwrite() match the logic in
-> pte_mkold() to create the mask depending on the machine type. The ASM
-> logic in __pte_mkhwwrite() matches the logic in pte_present(), just
-> using an "or" instead of an "and" instruction.
-> 
-> With this commit (sun4u in QEMU):
-> 	root@debian:~/linux/tools/testing/selftests/mm# ./mkdirty
-> 	# [INFO] detected THP size: 8192 KiB
-> 	TAP version 13
-> 	1..6
-> 	# [INFO] PTRACE write access
-> 	ok 1 SIGSEGV generated, page not modified
-> 	# [INFO] PTRACE write access to THP
-> 	ok 2 SIGSEGV generated, page not modified
-> 	# [INFO] Page migration
-> 	ok 3 SIGSEGV generated, page not modified
-> 	# [INFO] Page migration of THP
-> 	ok 4 SIGSEGV generated, page not modified
-> 	# [INFO] PTE-mapping a THP
-> 	ok 5 SIGSEGV generated, page not modified
-> 	# [INFO] UFFDIO_COPY
-> 	ok 6 SIGSEGV generated, page not modified
-> 	# Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
-Nice!
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Matthieu Baerts (1):
+      selftests: mptcp: userspace pm: uniform verify events
 
-> 
-> This handling seems to have been in place forever.
-> 
-> [1] https://lkml.kernel.org/r/533a7c3d-3a48-b16b-b421-6e8386e0b142@redhat.com
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+Paolo Abeni (3):
+      mptcp: use mptcp_schedule_work instead of open-coding it
+      mptcp: stricter state check in mptcp_worker
+      mptcp: fix NULL pointer dereference on fastopen early fallback
 
-I tried to follow your changes, but my knowledge of gcc assembler failed
-me. But based on the nice and detailed change log and the code I managed
-to understand:
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+ net/mptcp/fastopen.c                              | 11 +++++++++--
+ net/mptcp/options.c                               |  5 ++---
+ net/mptcp/protocol.c                              |  2 +-
+ net/mptcp/subflow.c                               | 18 ++++++------------
+ tools/testing/selftests/net/mptcp/userspace_pm.sh |  2 ++
+ 5 files changed, 20 insertions(+), 18 deletions(-)
+---
+base-commit: a4506722dc39ca840593f14e3faa4c9ba9408211
+change-id: 20230411-upstream-net-20230411-mptcp-fixes-db47f50c2688
 
-> ---
->  arch/sparc/include/asm/pgtable_64.h | 116 ++++++++++++++++------------
->  1 file changed, 66 insertions(+), 50 deletions(-)
-> 
-> diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
-> index 2dc8d4641734..5563efa1a19f 100644
-> --- a/arch/sparc/include/asm/pgtable_64.h
-> +++ b/arch/sparc/include/asm/pgtable_64.h
-> @@ -357,6 +357,42 @@ static inline pgprot_t pgprot_noncached(pgprot_t prot)
->   */
->  #define pgprot_noncached pgprot_noncached
->  
-> +static inline unsigned long pte_dirty(pte_t pte)
-> +{
-> +	unsigned long mask;
-> +
-> +	__asm__ __volatile__(
-> +	"\n661:	mov		%1, %0\n"
-> +	"	nop\n"
-> +	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-> +	"	.word		661b\n"
-> +	"	sethi		%%uhi(%2), %0\n"
-> +	"	sllx		%0, 32, %0\n"
-> +	"	.previous\n"
-> +	: "=r" (mask)
-> +	: "i" (_PAGE_MODIFIED_4U), "i" (_PAGE_MODIFIED_4V));
-> +
-> +	return (pte_val(pte) & mask);
-> +}
-> +
-> +static inline unsigned long pte_write(pte_t pte)
-> +{
-> +	unsigned long mask;
-> +
-> +	__asm__ __volatile__(
-> +	"\n661:	mov		%1, %0\n"
-> +	"	nop\n"
-> +	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-> +	"	.word		661b\n"
-> +	"	sethi		%%uhi(%2), %0\n"
-> +	"	sllx		%0, 32, %0\n"
-> +	"	.previous\n"
-> +	: "=r" (mask)
-> +	: "i" (_PAGE_WRITE_4U), "i" (_PAGE_WRITE_4V));
-> +
-> +	return (pte_val(pte) & mask);
-> +}
-> +
->  #if defined(CONFIG_HUGETLB_PAGE) || defined(CONFIG_TRANSPARENT_HUGEPAGE)
->  pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags);
->  #define arch_make_huge_pte arch_make_huge_pte
-> @@ -418,28 +454,43 @@ static inline bool is_hugetlb_pte(pte_t pte)
->  }
->  #endif
->  
-> +static inline pte_t __pte_mkhwwrite(pte_t pte)
-> +{
-> +	unsigned long val = pte_val(pte);
-> +
-> +	/*
-> +	 * Note: we only want to set the HW writable bit if the SW writable bit
-> +	 * and the SW dirty bit are set.
-> +	 */
-> +	__asm__ __volatile__(
-> +	"\n661:	or		%0, %2, %0\n"
-> +	"	.section	.sun4v_1insn_patch, \"ax\"\n"
-> +	"	.word		661b\n"
-> +	"	or		%0, %3, %0\n"
-> +	"	.previous\n"
-> +	: "=r" (val)
-> +	: "0" (val), "i" (_PAGE_W_4U), "i" (_PAGE_W_4V));
-> +
-> +	return __pte(val);
-> +}
-> +
->  static inline pte_t pte_mkdirty(pte_t pte)
->  {
-> -	unsigned long val = pte_val(pte), tmp;
-> +	unsigned long val = pte_val(pte), mask;
->  
->  	__asm__ __volatile__(
-> -	"\n661:	or		%0, %3, %0\n"
-> -	"	nop\n"
-> -	"\n662:	nop\n"
-> +	"\n661:	mov		%1, %0\n"
->  	"	nop\n"
->  	"	.section	.sun4v_2insn_patch, \"ax\"\n"
->  	"	.word		661b\n"
-> -	"	sethi		%%uhi(%4), %1\n"
-> -	"	sllx		%1, 32, %1\n"
-> -	"	.word		662b\n"
-> -	"	or		%1, %%lo(%4), %1\n"
-> -	"	or		%0, %1, %0\n"
-> +	"	sethi		%%uhi(%2), %0\n"
-> +	"	sllx		%0, 32, %0\n"
->  	"	.previous\n"
-> -	: "=r" (val), "=r" (tmp)
-> -	: "0" (val), "i" (_PAGE_MODIFIED_4U | _PAGE_W_4U),
-> -	  "i" (_PAGE_MODIFIED_4V | _PAGE_W_4V));
-> +	: "=r" (mask)
-> +	: "i" (_PAGE_MODIFIED_4U), "i" (_PAGE_MODIFIED_4V));
->  
-> -	return __pte(val);
-> +	pte = __pte(val | mask);
-> +	return pte_write(pte) ? __pte_mkhwwrite(pte) : pte;
->  }
->  
->  static inline pte_t pte_mkclean(pte_t pte)
-> @@ -481,7 +532,8 @@ static inline pte_t pte_mkwrite(pte_t pte)
->  	: "=r" (mask)
->  	: "i" (_PAGE_WRITE_4U), "i" (_PAGE_WRITE_4V));
->  
-> -	return __pte(val | mask);
-> +	pte = __pte(val | mask);
-> +	return pte_dirty(pte) ? __pte_mkhwwrite(pte) : pte;
->  }
->  
->  static inline pte_t pte_wrprotect(pte_t pte)
-> @@ -584,42 +636,6 @@ static inline unsigned long pte_young(pte_t pte)
->  	return (pte_val(pte) & mask);
->  }
->  
-> -static inline unsigned long pte_dirty(pte_t pte)
-> -{
-> -	unsigned long mask;
-> -
-> -	__asm__ __volatile__(
-> -	"\n661:	mov		%1, %0\n"
-> -	"	nop\n"
-> -	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-> -	"	.word		661b\n"
-> -	"	sethi		%%uhi(%2), %0\n"
-> -	"	sllx		%0, 32, %0\n"
-> -	"	.previous\n"
-> -	: "=r" (mask)
-> -	: "i" (_PAGE_MODIFIED_4U), "i" (_PAGE_MODIFIED_4V));
-> -
-> -	return (pte_val(pte) & mask);
-> -}
-> -
-> -static inline unsigned long pte_write(pte_t pte)
-> -{
-> -	unsigned long mask;
-> -
-> -	__asm__ __volatile__(
-> -	"\n661:	mov		%1, %0\n"
-> -	"	nop\n"
-> -	"	.section	.sun4v_2insn_patch, \"ax\"\n"
-> -	"	.word		661b\n"
-> -	"	sethi		%%uhi(%2), %0\n"
-> -	"	sllx		%0, 32, %0\n"
-> -	"	.previous\n"
-> -	: "=r" (mask)
-> -	: "i" (_PAGE_WRITE_4U), "i" (_PAGE_WRITE_4V));
-> -
-> -	return (pte_val(pte) & mask);
-> -}
-> -
->  static inline unsigned long pte_exec(pte_t pte)
->  {
->  	unsigned long mask;
-> -- 
-> 2.39.2
+Best regards,
+-- 
+Matthieu Baerts <matthieu.baerts@tessares.net>
+
