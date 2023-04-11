@@ -2,105 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8156DE7C3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 01:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE5B6DE7E2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 01:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjDKXE0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Apr 2023 19:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S229549AbjDKXRU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Apr 2023 19:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjDKXEZ (ORCPT
+        with ESMTP id S229499AbjDKXRT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 19:04:25 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F7C199D;
-        Tue, 11 Apr 2023 16:04:24 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id C9F895C018A;
-        Tue, 11 Apr 2023 19:04:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 11 Apr 2023 19:04:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1681254260; x=1681340660; bh=gs
-        bn2oyKgih4x2C06Ah8fFpl2xaJq27kMcEbABkhWFY=; b=l/tefIBwRsVvQpaogC
-        J7B7EnYcAR08db2luxaD81KGRmZrorH9dEFLyi8DKxAgP02/4PbU+IQnY9jJ4joq
-        v9uO/V7zHURvxFaXGm1m9fIyCKJioumsRoUOi1gRlih5QSCOmz1tH+RD47HQGQwu
-        pTal7H4domS1joO+0DvM3DJp0qzbQBNA7fbhErypCIVPvF5AnZoBqc5OLTma03GN
-        4802BP2nVEnRaDuRFh5jOyGOCnVXg+Vz/vv3KcWwQPNVsWePRzLegOuTbTmUFrL8
-        WMfxgGVqxCL6375N9L1dynhkOJ6lGAx+AzM56kSqwZggHcTv5aUgqpKZIgejjemS
-        Oxcw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681254260; x=1681340660; bh=gsbn2oyKgih4x
-        2C06Ah8fFpl2xaJq27kMcEbABkhWFY=; b=QbH0rvoGb1hFhDc0ra+rQxrOrh1rv
-        KZKjFMrmtl8JEKBghEUqOVY+sSWD67vupdLAU5wi0VFcXZ2AkUrBe9R0d+pjGwyA
-        U9+ZAdcat/iojatXAk7BONaf+N74Kv9H4CUvbHVcIv6YtDN6nbj3JAQJkDP4Kl3D
-        M+VXL8p5Sd58+Leo1uxObdu3U1FZ43Z84bXnSvHKS/+SN1tumg3cEDMHO7g4vqVD
-        lUR6pCUOMYArz46H9Ub9bE4hoX9D0NAE53aUH90lykKxyr7Z9HKdrstihEoxhRxR
-        QuhCZTX9ZNv2Hq17KBFqdSwkhi3jD1PEVb0rBRUKA7E2p6LFalN6+xOEQ==
-X-ME-Sender: <xms:c-c1ZH4Dmp78sWGgQRHeUsluruv8x2LdSkkl6uOnxthOTML_19rcXg>
-    <xme:c-c1ZM7M1KoT94Jdhe_NWkk0yW9LQZ8AR4zpX9Lb19MWoSLhrng59xqBvG9nxYfUX
-    yulAIJLf-lmVjWOQDg>
-X-ME-Received: <xmr:c-c1ZOef5FXs-hqxFM7uhCCqXXX4RdWJjUf13dL83Ip3CyH6jxBnzgPArvluIkF0jB2U46pacq8DhMkOmLcbeVuKnMsByBat0Uc131jmXQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekhedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpehffgfhvfevufffjgfkgggtsehttd
-    ertddtredtnecuhfhrohhmpefuthgvfhgrnhcutfhovghstghhuceoshhhrhesuggvvhhk
-    vghrnhgvlhdrihhoqeenucggtffrrghtthgvrhhnpeevlefggffhheduiedtheejveehtd
-    fhtedvhfeludetvdegieekgeeggfdugeeutdenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehshhhrseguvghvkhgvrhhnvghlrdhioh
-X-ME-Proxy: <xmx:c-c1ZIIL2fmLJ4gKelJRRISmpZeTd__iIwspdhTScTFkw3AlNCklkA>
-    <xmx:c-c1ZLJ23PUhuchjRcRijjU3Y7X6QdmCAy1bVh9m_-WyYqnUh_qb6A>
-    <xmx:c-c1ZBwSgQrZ_XvcEYn3SCnYvg08ENa8qUvqoXqXXJW9YrHbLDfAlQ>
-    <xmx:dOc1ZMUQMDYLyjk_kuZPprkNBEVRnogc3lNMJLp2MjsMP_wB2tUsTA>
-Feedback-ID: i84614614:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Apr 2023 19:04:18 -0400 (EDT)
-References: <20230406165339.1017597-1-shr@devkernel.io>
- <20230406165339.1017597-2-shr@devkernel.io>
- <ZDXgmx0xD8ch/Iu5@casper.infradead.org>
-User-agent: mu4e 1.6.11; emacs 28.2.50
-From:   Stefan Roesch <shr@devkernel.io>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH v5 1/3] mm: add new api to enable ksm per process
-Date:   Tue, 11 Apr 2023 16:03:57 -0700
-In-reply-to: <ZDXgmx0xD8ch/Iu5@casper.infradead.org>
-Message-ID: <qvqw4jpm58cv.fsf@dev0134.prn3.facebook.com>
+        Tue, 11 Apr 2023 19:17:19 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91416171B
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 16:17:18 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id o2so9436269plg.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 16:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1681255038; x=1683847038;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=+wSijTP6vFeFSumSwpq/PaC83R+aeqJLIVWLio1cDgg=;
+        b=T9K4LFjDGTRZqYd4pk3eFB/GBeC7SANzzBTRaG/nfbya1W2Vj46F6i3SMam+eYsPsa
+         Wc+Ej+ZPpePYjhs3LgYfV/SYmiVgFs7uAHfm1w/0BUzuiZajTo6cktQBdZAp9C2Hi2+F
+         gWHRJMDyYECupTakupCDFt27860tcaP0HoUz0soX8krOIbJkdQt9Po6GM682zJNnx9yN
+         UIIzdrb5qLWokxOSmyMW46Dnl+RmW04d+8YVmE3hLnW2ykxhWBLtPG5Vy3F3Zm0cI3PA
+         /JMaV7kh0oN8xU7iyki2bvk3WWK+kMsI0MUZgesvtTQ5sx5fESNYMPgA53Pq9EXPPdcz
+         vgHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681255038; x=1683847038;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+wSijTP6vFeFSumSwpq/PaC83R+aeqJLIVWLio1cDgg=;
+        b=H/xZUlbRCBCmvny+oo8B8N7jLSnRXGGaI08w3/pn7v7ORJ/ISsVSVR0vHE21n0jAPz
+         R6Tp/NhJDy9ajfR6Xon/RH0MJwS9tDs+OwOz5ZTDUfJlYBCAJI68wCtSV1slQ0PFlcmC
+         mjpD+Hk8Fs3GSLEadJEF0OhjRFu0WlU8VbucHZxNqujaRU18zRbAf2gxNFYJlMRzpESo
+         ghNQ2rey6QIAdEykZTjc0n91DYY5mVU8cvFbCU7LVJS1BL8hmqtIIrzStg5kG+1IReOy
+         YlC3ffLNEp3QeJrJ+jrZJd4UzON3TwAN2rlNyTEWMpoiHoO9n70q8fnyVBqQkWEAaS5j
+         +Tzw==
+X-Gm-Message-State: AAQBX9cGUuDhgORUG7tmzwyhUgHYyOx/vCZqHsLgSZvWfP9syDLlJqvd
+        RG/GZyhTuceuOYVtDkwwn08ANh2nW6gR3zF9Xm5JWw==
+X-Google-Smtp-Source: AKy350Y8hJ0LBGA3AZ5rtCNysdv/8MAW+Z0Wv42AVzsY3bGBUEfFa5S2WCTWkeo7tsgCQr0Vpckr+Q==
+X-Received: by 2002:a17:90a:ea0a:b0:246:bb31:e835 with SMTP id w10-20020a17090aea0a00b00246bb31e835mr829294pjy.15.1681255038076;
+        Tue, 11 Apr 2023 16:17:18 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090b069500b0023a9564763bsm123879pjz.29.2023.04.11.16.17.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Apr 2023 16:17:17 -0700 (PDT)
+Message-ID: <6435ea7d.170a0220.91ccc.0744@mx.google.com>
+Date:   Tue, 11 Apr 2023 16:17:17 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.3-rc1-17-g266679ffd867
+X-Kernelci-Report-Type: test
+Subject: kselftest/next kselftest-cpufreq: 8 runs,
+ 1 regressions (v6.3-rc1-17-g266679ffd867)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+kselftest/next kselftest-cpufreq: 8 runs, 1 regressions (v6.3-rc1-17-g26667=
+9ffd867)
 
-Matthew Wilcox <willy@infradead.org> writes:
+Regressions Summary
+-------------------
 
-> On Thu, Apr 06, 2023 at 09:53:37AM -0700, Stefan Roesch wrote:
->> +	case PR_SET_MEMORY_MERGE:
->> +		if (mmap_write_lock_killable(me->mm))
->> +			return -EINTR;
->> +
->> +		if (arg2) {
->> +			int err = ksm_add_mm(me->mm);
->> +			if (err)
->> +				return err;
->
-> You'll return to userspace with the mutex held, no?
->
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
 
-Thanks for catching this, I'll fix it in the next version.
+
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.3=
+-rc1-17-g266679ffd867/plan/kselftest-cpufreq/
+
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.3-rc1-17-g266679ffd867
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      266679ffd867cb247c36717ea4d7998e9304823b =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6435dc4e5050e9421c2e85f1
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.3-rc1-17-g26=
+6679ffd867/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
+kselftest-cpufreq-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.3-rc1-17-g26=
+6679ffd867/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
+kselftest-cpufreq-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20230407.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/6435dc4e5050=
+e9421c2e85f2
+        failing since 175 days (last pass: linux-kselftest-next-6.0-rc2-11-=
+g144eeb2fc761, first fail: v6.1-rc1) =
+
+ =20
