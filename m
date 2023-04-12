@@ -2,98 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081FA6DF4A2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 14:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3652B6DF54B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 14:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjDLMEH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 08:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
+        id S229879AbjDLMcG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 08:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjDLMEH (ORCPT
+        with ESMTP id S229521AbjDLMcF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 08:04:07 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62627EDB;
-        Wed, 12 Apr 2023 05:03:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PxLv23jRZz4xFd;
-        Wed, 12 Apr 2023 22:02:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1681300974;
-        bh=F2asZabOHB6NFbG/61+yCHm7pNGbmMoPx7zSLypENV8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZCoiEQfgaiE/bZtcYlseLoEYcgDNCwRRRkiGiDyYQZsS03TbfFMK2zAhdn0/Dkbp1
-         Jlx5HIoOnLCoNpgz8bKYSvhF/J+Px5h1z9qgUFJcnon++nGadrZ9CkewLugX7MxClR
-         0SW8FjfYbWjQOk5cV+L9Gn5l175bm6lSnrPsJKexIJM3mgtScgB7OEy2YFBmG5u5Hb
-         5g4QfGb8c2mJikMUqLHYtgfX7FaJ2l2FDxxl89Eb1uFr/zPo9gYcZXwAd4aeEsoxvu
-         qRgucGhd93n1LxX8TRpoL3tWEXkCmnNWdyXwVu3xcYoBT4LfgSE3GtyCHpvrbtohBe
-         clSQmaVwolwWg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Deming Wang <wangdeming@inspur.com>, shuah@kernel.org
-Cc:     npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Deming Wang <wangdeming@inspur.com>
-Subject: Re: [PATCH] selftests/powerpc: Replace obsolete memalign() with
- posix_memalign()
-In-Reply-To: <20230412111237.2007-1-wangdeming@inspur.com>
-References: <20230412111237.2007-1-wangdeming@inspur.com>
-Date:   Wed, 12 Apr 2023 22:02:50 +1000
-Message-ID: <87o7nti9zp.fsf@mpe.ellerman.id.au>
+        Wed, 12 Apr 2023 08:32:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0388359C3
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 05:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681302674;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=blrnCpTcS5ZianZmqVUuhTTwLp6B2ozOa080drqpcNk=;
+        b=W78rOBgrmg1YESffAR0l0aZBR8c8VrD4kUvSdq9lrfx/PcKL2CKUACeaA34TmAN+Qj5T8H
+        5+2If+7q2shswmFcBGXtAnvkv/Z04KVxw94j0eTsAgXE757vCdz6UUcaiSnf5Do0YYj5kk
+        clCrWWK86ak9gcTXoIdg38z+64XiAq8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-517-_kZu4DXAPRO5m-wz2Lmmcg-1; Wed, 12 Apr 2023 08:31:07 -0400
+X-MC-Unique: _kZu4DXAPRO5m-wz2Lmmcg-1
+Received: by mail-wr1-f70.google.com with SMTP id l4-20020adfc784000000b002f44a791472so513616wrg.17
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 05:31:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681302660; x=1683894660;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=blrnCpTcS5ZianZmqVUuhTTwLp6B2ozOa080drqpcNk=;
+        b=t4dZOrcO8ZIICZAitZBaAowgdpt5/UHkMstmAjDu4xxft81iiy0Rh9G/+kg2J1jhCV
+         GOXhsyi/EFKEy8DUKPnT7NI8yKpviD0HrBGJRUeGEV4BX6cA5rtJI6mwKgkACLbUek5h
+         meG/R1WJkL2AO9o6ajmpLES6EuzoGDnvgu33aHoX5GDw57T8Nn0HMVfLUbzKtLbP0IOg
+         sAVIupTwMKB6mLatO1yX27Mu22gEKP7loNu0dMDth1OyTz99qn5vMuZHM9cIhQTM5QUa
+         eZzbf5Su3OwLLyZUr+zcVWTQMHDbtSxSW/ub1IOpQw0DYqKCq8VCyuxHh6Ku+VZUhR/V
+         qBtg==
+X-Gm-Message-State: AAQBX9ffQ8Sw8Swa9kBggHZXWgnw0P+SFwcgAj9lLWITm7ydFK71pFEm
+        rVXD7lACd7qc6QIOke/fn0g3GQzKTJ3RFGvkLFg+u3McMl2k5bNE98ZUnLGqjJ/APX3B/d4+HbC
+        Z+YbKZNlmLyCGf1kv8Wg3CBg4H5QePT8+H2JN
+X-Received: by 2002:a7b:c389:0:b0:3ed:3268:5f35 with SMTP id s9-20020a7bc389000000b003ed32685f35mr1999656wmj.18.1681302660619;
+        Wed, 12 Apr 2023 05:31:00 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b4K/3OVCcip+JnxiMy5/dD33dZGeMKTqg1Z1LDfrRMSsp30yfO/Pr8lzVdPaorZJ0aIgTe/w==
+X-Received: by 2002:a7b:c389:0:b0:3ed:3268:5f35 with SMTP id s9-20020a7bc389000000b003ed32685f35mr1999645wmj.18.1681302660313;
+        Wed, 12 Apr 2023 05:31:00 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:4b00:c6fa:b613:dbdc:ab? (p200300cbc7024b00c6fab613dbdc00ab.dip0.t-ipconnect.de. [2003:cb:c702:4b00:c6fa:b613:dbdc:ab])
+        by smtp.gmail.com with ESMTPSA id n20-20020a05600c4f9400b003ed51cdb94csm2313468wmq.26.2023.04.12.05.30.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 05:30:59 -0700 (PDT)
+Message-ID: <b5df5cac-5258-7f5c-d386-6b17391b080e@redhat.com>
+Date:   Wed, 12 Apr 2023 14:30:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] mm: huge_memory: Replace obsolete memalign() with
+ posix_memalign()
+Content-Language: en-US
+To:     Deming Wang <wangdeming@inspur.com>, akpm@linux-foundation.org,
+        shuah@kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230412104502.1836-1-wangdeming@inspur.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230412104502.1836-1-wangdeming@inspur.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Deming Wang <wangdeming@inspur.com> writes:
+On 12.04.23 12:45, Deming Wang wrote:
 > memalign() is obsolete according to its manpage.
->
-> Replace memalign() with posix_memalign() and remove malloc.h include
-> that was there for memalign().
->
-> As a pointer is passed into posix_memalign(), initialize *s to NULL
-> to silence a warning about the function's return value being used as
-> uninitialized (which is not valid anyway because the error is properly
-> checked before p is returned).
+> 
+> Replace memalign() with posix_memalign()
+> 
+> As a pointer is passed into posix_memalign(), initialize *one_page
+> to NULL to silence a warning about the function's return value being
 
-The patch doesn't do that. There is no p?
+Where is the initialization to NULL done below?
 
-I think you've copied the change log for a whole bunch of commits but
-not updated them to be accurate for each change?
+> used as uninitialized (which is not valid anyway because the error
+> is properly checked before p is returned).
 
-cheers
+"p" ?
 
-> diff --git a/tools/testing/selftests/powerpc/stringloops/strlen.c b/tools/testing/selftests/powerpc/stringloops/strlen.c
-> index 9055ebc484d0..f9c1f9cc2d32 100644
-> --- a/tools/testing/selftests/powerpc/stringloops/strlen.c
-> +++ b/tools/testing/selftests/powerpc/stringloops/strlen.c
-> @@ -1,5 +1,4 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -#include <malloc.h>
->  #include <stdlib.h>
->  #include <string.h>
->  #include <time.h>
-> @@ -51,10 +50,11 @@ static void bench_test(char *s)
->  static int testcase(void)
->  {
->  	char *s;
+> 
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> ---
+>   tools/testing/selftests/mm/split_huge_page_test.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index cbb5e6893cbf..94c7dffc4d7d 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -96,10 +96,10 @@ void split_pmd_thp(void)
+>   	char *one_page;
+>   	size_t len = 4 * pmd_pagesize;
+>   	size_t i;
 > +	int ret;
->  	unsigned long i;
->  
-> -	s = memalign(128, SIZE);
-> -	if (!s) {
-> +	ret = posix_memalign((void **)&s, 128, SIZE);
+>   
+> -	one_page = memalign(pmd_pagesize, len);
+> -
+> -	if (!one_page) {
+> +	ret = posix_memalign((void **)&one_page, pmd_pagesize, len);
 > +	if (ret < 0) {
->  		perror("memalign");
->  		exit(1);
->  	}
-> -- 
-> 2.27.0
+>   		printf("Fail to allocate memory\n");
+>   		exit(EXIT_FAILURE);
+>   	}
+
+-- 
+Thanks,
+
+David / dhildenb
+
