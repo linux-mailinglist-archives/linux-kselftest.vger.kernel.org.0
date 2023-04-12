@@ -2,107 +2,185 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAFC6DFFEB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 22:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7206E002F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 22:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbjDLUeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 16:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S229760AbjDLUvy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 16:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjDLUeX (ORCPT
+        with ESMTP id S229571AbjDLUvx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 16:34:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC76449D
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 13:33:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681331614;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KF6ZGxBbkIfjD9DhMutgQoIKoNocc290sfEndcP1qNU=;
-        b=E3Es2yyWVOUrv2rwgb3OPmd58ErFAAchKqSo3fgQrZuC7jMEkGJiE/i/gYKUWAniVYUnu6
-        v94Iyl4VByeoysjj/07nLJByVcpashZmO3k2LpW/jsHtnkFpntBAd45HUjb79edr328sY8
-        l40s2ab4z2wUHP+jMDITwgge/8ca0hQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-9GjZ4rz5PjKDlNsYwPvDyQ-1; Wed, 12 Apr 2023 16:33:31 -0400
-X-MC-Unique: 9GjZ4rz5PjKDlNsYwPvDyQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7DA23813F31;
-        Wed, 12 Apr 2023 20:33:30 +0000 (UTC)
-Received: from [10.22.32.168] (unknown [10.22.32.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0A10FC15BB8;
-        Wed, 12 Apr 2023 20:33:29 +0000 (UTC)
-Message-ID: <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
-Date:   Wed, 12 Apr 2023 16:33:29 -0400
+        Wed, 12 Apr 2023 16:51:53 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D96561A1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 13:51:49 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-54fa9da5e5bso42706057b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 13:51:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681332708;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MCZrhoV+/354OTqly0Uye8DxBZZCQU9aJWnOJaeytLc=;
+        b=bzw42xFyehhC/5Xz33OYpW8EGTb98ZqNfHMpuCe9LWxy0N4PBKrKnZX7z0MCl0i0Ah
+         W926grTsXGXLXw03b10JyrAE4KEZYltAstbh2CcGXW8NecJuW52H0VHYi9kAdZCY7C/n
+         d1+NY4D9INBYy7UmQ1t5o4WKWBjddwpZZC0TKOwpNGMctNlTWYlNmkDASjG2SH4rWdeZ
+         IEjQLbfuaZytd86oD1E43Cr5iC3j6760SeiZBvH1cqo/vfQaUZpxOkdi2Yy3TWI0iGcC
+         DZB/fnE9dZgnyaZD41/cHWSRdqunahWOPPndCM7v2eeAGFIZn1meOhM0kLMRil7dx7Rf
+         iknA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681332708;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MCZrhoV+/354OTqly0Uye8DxBZZCQU9aJWnOJaeytLc=;
+        b=dCnic38XDlk7JaVv8+//B4Loq7SteXzOOar5GWK2tqHGnf5sNMapPMZ8B5/4Ta3Y3I
+         mE3ls6bU2WSnaKFpwiB+3wfNY9sH/yPqGei4bQS+0o7i3kUbYunI4WaRV9qv38L7OCS1
+         JTOfTNiz2SE5kTMRCHkUoZZlB5+UnQo16vhUFA14OgWhHUUPmAPICkgRhYKVSNHKNtBM
+         xumdZBSdakIxbER94qi1OONWev0PqFV026jbjfaQ2CbZHDVMp+DW+y1aNX1Nbsix3TO/
+         spdhKI6sWmQ+yeoLv65xJd0H5dKuD+hRo7CRUFYRrU5OB8JD5U9x/6ecYld6NFWeBu4F
+         GgjA==
+X-Gm-Message-State: AAQBX9fxbAEUYNRL23QFSMd/gAq1nG18veI1ft3+Xx6VV+eRONyyYicu
+        +gkhzrMc2q1f6ZLF5TJtZ2Lffsm4Aqb/ab0lsRGPeu7yY8gHIpRYzOq62g==
+X-Google-Smtp-Source: AKy350YzvnHyNAddeUGzN50vhPRImsX6LCGIjUUTPuR8YsUc1kDS7VCY0XvHMEno8hnCe10m5IgJhJgZnQ2aBdEUOQg=
+X-Received: by 2002:a81:4520:0:b0:545:7143:2940 with SMTP id
+ s32-20020a814520000000b0054571432940mr2791606ywa.0.1681332708140; Wed, 12 Apr
+ 2023 13:51:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-References: <20230412153758.3088111-1-longman@redhat.com>
- <ZDcGVebCpyktxyWh@slm.duckdns.org>
- <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
- <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230411160056.1586-1-michal.wajdeczko@intel.com> <20230411160056.1586-2-michal.wajdeczko@intel.com>
+In-Reply-To: <20230411160056.1586-2-michal.wajdeczko@intel.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Wed, 12 Apr 2023 16:51:36 -0400
+Message-ID: <CA+GJov4g+D=9nwcVUsKsmM_4j41J_eBee5Nmt-OmHqhfuEKqsg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kunit/test: Add example test showing parameterized testing
+To:     Michal Wajdeczko <michal.wajdeczko@intel.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/12/23 16:22, Tejun Heo wrote:
-> Hello, Waiman.
+On Tue, Apr 11, 2023 at 12:01=E2=80=AFPM Michal Wajdeczko
+<michal.wajdeczko@intel.com> wrote:
 >
-> On Wed, Apr 12, 2023 at 03:52:36PM -0400, Waiman Long wrote:
->> There is still a distribution hierarchy as the list of isolation CPUs have
->> to be distributed down to the target cgroup through the hierarchy. For
->> example,
->>
->> cgroup root
->>    +- isolcpus  (cpus 8,9; isolcpus)
->>    +- user.slice (cpus 1-9; ecpus 1-7; member)
->>       +- user-x.slice (cpus 8,9; ecpus 8,9; isolated)
->>       +- user-y.slice (cpus 1,2; ecpus 1,2; member)
->>
->> OTOH, I do agree that this can be somewhat hacky. That is why I post it as a
->> RFC to solicit feedback.
-> Wouldn't it be possible to make it hierarchical by adding another cpumask to
-> cpuset which lists the cpus which are allowed in the hierarchy but not used
-> unless claimed by an isolated domain?
+> Use of parameterized testing is documented [1] but such use case
+> is not present in demo kunit test. Add small subtest for that.
+>
+> [1] https://kernel.org/doc/html/latest/dev-tools/kunit/usage.html#paramet=
+erized-testing
+>
+> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
+> Cc: David Gow <davidgow@google.com>
+> ---
 
-I think we can. You mean having a new "cpuset.cpus.isolated" cgroupfs 
-file. So there will be one in the root cgroup that defines all the 
-isolated CPUs one can have. It is then distributed down the hierarchy 
-and can be claimed only if a cgroup becomes an "isolated" partition. 
-There will be a slight change in the semantics of an "isolated" 
-partition, but I doubt there will be much users out there.
+Hello!
 
-If you are OK with this approach, I can modify my patch series to do that.
+This looks all pretty good to me! I only have one comment. In the KTAP outp=
+ut:
 
-Cheers,
-Longman
+        KTAP version 1
+        # Subtest: example_params_test
+    # example_params_test: initializing
+        ok 1 example value 2
+    # example_params_test: initializing
+        ok 2 example value 1
+    # example_params_test: initializing
+       ok 3 example value 0 # SKIP unsupported param value
+    # example_params_test: pass:2 fail:0 skip:1 total:3
+    ok 6 example_params_test
 
+The init method is causing the "# example_params_test: initializing"
+to print lines for each case. However, since they are not inline with
+the correct indentation and they don't include helpful test data, I
+would consider finding a way to remove these.
+
+We could consider removing these lines from the test suite as a whole.
+However, they are helpful in that they show how to use the init
+function. Maybe check if the test is a param test case in the init
+function itself? Let me know what you think.
+
+Thanks!
+
+Rae
+
+>  lib/kunit/kunit-example-test.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>
+> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-tes=
+t.c
+> index cd8b7e51d02b..775443f77763 100644
+> --- a/lib/kunit/kunit-example-test.c
+> +++ b/lib/kunit/kunit-example-test.c
+> @@ -167,6 +167,39 @@ static void example_static_stub_test(struct kunit *t=
+est)
+>         KUNIT_EXPECT_EQ(test, add_one(1), 2);
+>  }
+>
+> +static const struct example_param {
+> +       int value;
+> +} example_params_array[] =3D {
+> +       { .value =3D 2, },
+> +       { .value =3D 1, },
+> +       { .value =3D 0, },
+> +};
+> +
+> +static void example_param_get_desc(const struct example_param *p, char *=
+desc)
+> +{
+> +       snprintf(desc, KUNIT_PARAM_DESC_SIZE, "example value %d", p->valu=
+e);
+> +}
+> +
+> +KUNIT_ARRAY_PARAM(example, example_params_array, example_param_get_desc)=
+;
+> +
+> +/*
+> + * This test shows the use of params.
+> + */
+> +static void example_params_test(struct kunit *test)
+> +{
+> +       const struct example_param *param =3D test->param_value;
+> +
+> +       /* By design, param pointer will not be NULL */
+> +       KUNIT_ASSERT_NOT_NULL(test, param);
+> +
+> +       /* Test can be skipped on unsupported param values */
+> +       if (!param->value)
+> +               kunit_skip(test, "unsupported param value");
+> +
+> +       /* You can use param values for parameterized testing */
+> +       KUNIT_EXPECT_EQ(test, param->value % param->value, 0);
+> +}
+> +
+>  /*
+>   * Here we make a list of all the test cases we want to add to the test =
+suite
+>   * below.
+> @@ -183,6 +216,7 @@ static struct kunit_case example_test_cases[] =3D {
+>         KUNIT_CASE(example_mark_skipped_test),
+>         KUNIT_CASE(example_all_expect_macros_test),
+>         KUNIT_CASE(example_static_stub_test),
+> +       KUNIT_CASE_PARAM(example_params_test, example_gen_params),
+>         {}
+>  };
+>
+> --
+> 2.25.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kunit-dev/20230411160056.1586-2-michal.wajdeczko%40intel.com.
