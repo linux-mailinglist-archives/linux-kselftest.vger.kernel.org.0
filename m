@@ -2,131 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F81B6DFEB9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 21:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DA66DFEDF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 21:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDLT20 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 15:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S229622AbjDLTnS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 15:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjDLT2Z (ORCPT
+        with ESMTP id S229548AbjDLTnQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 15:28:25 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404AD1709;
-        Wed, 12 Apr 2023 12:28:24 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id y6so11412716plp.2;
-        Wed, 12 Apr 2023 12:28:24 -0700 (PDT)
+        Wed, 12 Apr 2023 15:43:16 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67EFE59
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 12:43:07 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id u13so13170555ybu.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 12:43:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681327704; x=1683919704;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jJVB5ogjuRowz8vHiNaLNk0GIwsg2OONaPDtjebqjws=;
-        b=lAE5KsnpHoUKow1r77yCi76DUHd9pEoglCRTUBFdO6kclN46JOwYWgeFSeLaig/aQv
-         LSqZ7eMHXv7Aaioh2DpTRDexp3oWvfvUKmfBVUTfeRsT7WwhXv/di6nmxlfgzynasx8t
-         ljUY1wChjepyBpaZAd4fRNLfmDnCS4WdWHps+WBgbF0xJfv00s5E1ROS1ENNMQKAakip
-         UidVBcKd7vxusojPtQNG3Zkrr7YLPNRKQFFkzxPWli+aiAf3LCamusK2AUyPtEnfSsmK
-         MI1tm3QwOQWPHQtk4iWARikXSj/hv0tZl8kwKtj0+3Gy/KqX41CVQxIQyDOavkD6JeFd
-         fBJA==
+        d=google.com; s=20221208; t=1681328587;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HRRX+56b4iWtfLGfy2RTgoz2dxHD8CJnu37mSMLRBTo=;
+        b=BFu3nG/THUSeNIXOrkrwgnVWvmiwmTaFTDuUYBkF9Po+ncyoests+La6h0j2n6w7B9
+         +/IyV4sUvoEet5t1Oz5l3SdnsJ1vYTuFmodBiBGGTqtZuN5Bi9SvziQtNV6YoN0nE5Kv
+         ZRgNZiFXMmPVMgWoIm401rW+GafmCiHD2v15YmBKRo8ZsWKjWXfyWR+8Bq0N3rAsrgiA
+         N1wZA1zE2nQF0cKk+3R5wCUnizlC3SefeHzsF5VMSptRUsNFvj8rDxcOSikw04rxMk96
+         8QdY3KwuJos3FgDgr/K9rifJXKUICFzla6vjDbJVdSYgzBg85SCXkvNzR/bUrVAM57j6
+         13bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681327704; x=1683919704;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681328587;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jJVB5ogjuRowz8vHiNaLNk0GIwsg2OONaPDtjebqjws=;
-        b=AZ3StrSx+FsW2P8QLhGnwgk+2zwo93m9egLwduA6O+JSF3+RLr9r0fzJ07me4CLPHl
-         3V0qD95cRTG5YmKXjeL5cXTbSWMnE3U7Bo/i9vhgRbghs/LF+ciyn42Mm1+TlhskkePD
-         QOUkRAhenl3fWXiSgmnhK/T9huXSEc1vuuIuaFdkLvsdXk8GOMKCw2EOUpI8fVW3OMvy
-         STZnMkpW6yVCf0RRsAC+KfHDEZ8nAdyJjTu8DY+Ibne6krbrBora2Ht6Z1flEcgdWeq7
-         yDWeVvdzf3Jae2n92Zx/N286d/tfBjPvJmMOmpi24UHwNjbPUeRc/FgGt/mBAYb8cwiw
-         S4KA==
-X-Gm-Message-State: AAQBX9dWXYnktJzw4l9K1Jf4QxzkwQhdCbh1OG4qWne2diaBKsZ6DXSV
-        kP8wq1PavMLQC0ZMLG/agSg=
-X-Google-Smtp-Source: AKy350YpMjWzZYcfRhGxoyXPWDHxuKFeMsZfObQ4iUXJoCoBLApHm5ApmGrVbBKANHe0pJq2CRqbUg==
-X-Received: by 2002:a17:90a:17e8:b0:247:900:12db with SMTP id q95-20020a17090a17e800b00247090012dbmr2111523pja.24.1681327703448;
-        Wed, 12 Apr 2023 12:28:23 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id c7-20020a170902b68700b001a064282b11sm11956710pls.151.2023.04.12.12.28.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 12:28:23 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Apr 2023 09:28:21 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZDcGVebCpyktxyWh@slm.duckdns.org>
-References: <20230412153758.3088111-1-longman@redhat.com>
+        bh=HRRX+56b4iWtfLGfy2RTgoz2dxHD8CJnu37mSMLRBTo=;
+        b=IIunHIGTDWXebTq2ujSGa43GM+6B+wgmTJAJC2qjQXu5jdCEKDz8LLBNmZbOdMn9hi
+         t4ziOHCHP3FSOQgxc4T4fg71BCIQNZ2yk7e+aM+YtEx5U4mTvxR7XsdKld7pbimO3H8Q
+         1Ocqhniz4YKYOClaFcck3xM6OnmCbHpvuoSxsSwQKmAIAqekVEua9AvHqdyZa37SpG+l
+         o1Kzkensyqj2MPVID71FGIRxr6Ir6JBGNH1UZTlpK9N0uXQGQwabyyGG0vvmpAHkTqkF
+         YVUJdquOsJ50AiodekytdvXre8JTOWsdBjEpZvsQVdJ4LEGf5u1QWwwSK0DbLHhJTwwG
+         KfCg==
+X-Gm-Message-State: AAQBX9chnj1F5VZDxq3rEsYCeDH6LJWStzWgpkJ6VhWxxwVjR7/mVFnL
+        SflzUbR0PSgunuFanMirXg5v3GDdRxRIx0EU+ps/+g==
+X-Google-Smtp-Source: AKy350bi72vr7o0RSCDI1vn5Z6HL2n9dR0FfPBJMKhfTJ5vsP+83MnekjZiezK6ag6ihYj+/Lg40WkZ9iWxyG3DzRW8=
+X-Received: by 2002:a25:744e:0:b0:b8b:f61e:65ff with SMTP id
+ p75-20020a25744e000000b00b8bf61e65ffmr4849481ybc.5.1681328586994; Wed, 12 Apr
+ 2023 12:43:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412153758.3088111-1-longman@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230411160056.1586-1-michal.wajdeczko@intel.com> <20230411160056.1586-3-michal.wajdeczko@intel.com>
+In-Reply-To: <20230411160056.1586-3-michal.wajdeczko@intel.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Wed, 12 Apr 2023 15:42:56 -0400
+Message-ID: <CA+GJov7UfgddRfy4n05YbeLevhAKAW_Rf8GKs49gp1XTw_Bdxg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kunit: Fix reporting of the skipped parameterized tests
+To:     Michal Wajdeczko <michal.wajdeczko@intel.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello, Waiman.
+On Tue, Apr 11, 2023 at 12:01=E2=80=AFPM Michal Wajdeczko
+<michal.wajdeczko@intel.com> wrote:
+>
+> Logs from the parameterized tests that were skipped don't include
+> SKIP directive thus they are displayed as PASSED. Fix that.
 
-On Wed, Apr 12, 2023 at 11:37:53AM -0400, Waiman Long wrote:
-> This patch series introduces a new "isolcpus" partition type to the
-> existing list of {member, root, isolated} types. The primary reason
-> of adding this new "isolcpus" partition is to facilitate the
-> distribution of isolated CPUs down the cgroup v2 hierarchy.
-> 
-> The other non-member partition types have the limitation that their
-> parents have to be valid partitions too. It will be hard to create a
-> partition a few layers down the hierarchy.
-> 
-> It is relatively rare to have applications that require creation of
-> a separate scheduling domain (root). However, it is more common to
-> have applications that require the use of isolated CPUs (isolated),
-> e.g. DPDK. One can use the "isolcpus" or "nohz_full" boot command options
-> to get that statically. Of course, the "isolated" partition is another
-> way to achieve that dynamically.
-> 
-> Modern container orchestration tools like Kubernetes use the cgroup
-> hierarchy to manage different containers. If a container needs to use
-> isolated CPUs, it is hard to get those with existing set of cpuset
-> partition types. With this patch series, a new "isolcpus" partition
-> can be created to hold a set of isolated CPUs that can be pull into
-> other "isolated" partitions.
-> 
-> The "isolcpus" partition is special that there can have at most one
-> instance of this in a system. It serves as a pool for isolated CPUs
-> and cannot hold tasks or sub-cpusets underneath it. It is also not
-> cpu-exclusive so that the isolated CPUs can be distributed down the
-> sibling hierarchies, though those isolated CPUs will not be useable
-> until the partition type becomes "isolated".
-> 
-> Once isolated CPUs are needed in a cgroup, the administrator can write
-> a list of isolated CPUs into its "cpuset.cpus" and change its partition
-> type to "isolated" to pull in those isolated CPUs from the "isolcpus"
-> partition and use them in that cgroup. That will make the distribution
-> of isolated CPUs to cgroups that need them much easier.
+Hi Michal!
 
-I'm not sure about this. It feels really hacky in that it side-steps the
-distribution hierarchy completely. I can imagine a non-isolated cpuset
-wanting to allow isolated cpusets downstream but that should be done
-hierarchically - e.g. by allowing a cgroup to express what isolated cpus are
-allowed in the subtree. Also, can you give more details on the targeted use
-cases?
+This fix looks good to me. Thanks for fixing this!
 
-Thanks.
+The only comment I would have for this patch is if we should consider
+using an altered version of kunit_print_ok_not_ok() here instead.
+However, it seems you address this in the next patch.
 
--- 
-tejun
+Thanks again,
+Rae
+
+Reviewed-by: Rae Moar <rmoar@google.com>
+
+>
+> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
+> Cc: David Gow <davidgow@google.com>
+> ---
+>  lib/kunit/test.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index c9e15bb60058..5679197b5f8a 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -556,9 +556,11 @@ int kunit_run_tests(struct kunit_suite *suite)
+>
+>                                 kunit_log(KERN_INFO, &test,
+>                                           KUNIT_SUBTEST_INDENT KUNIT_SUBT=
+EST_INDENT
+> -                                         "%s %d %s",
+> +                                         "%s %d %s%s%s",
+>                                           kunit_status_to_ok_not_ok(test.=
+status),
+> -                                         test.param_index + 1, param_des=
+c);
+> +                                         test.param_index + 1, param_des=
+c,
+> +                                         test.status =3D=3D KUNIT_SKIPPE=
+D ? " # SKIP " : "",
+> +                                         test.status =3D=3D KUNIT_SKIPPE=
+D ? test.status_comment : "");
+>
+>                                 /* Get next param. */
+>                                 param_desc[0] =3D '\0';
+> --
+> 2.25.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kunit-dev/20230411160056.1586-3-michal.wajdeczko%40intel.com.
