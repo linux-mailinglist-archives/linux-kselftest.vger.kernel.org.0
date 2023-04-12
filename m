@@ -2,86 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659B36DF6DB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 15:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BFC6DF6E6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 15:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjDLNU4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 09:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S229917AbjDLNWI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 09:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjDLNUz (ORCPT
+        with ESMTP id S229484AbjDLNWI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 09:20:55 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABCE49C6;
-        Wed, 12 Apr 2023 06:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bZzC89xBqHZIexKBrKT7HoQWF++KmQXNtlFaFL5/dGo=; b=Bhkm3OkIjTuzwz0FHS4ccrZ729
-        X+9ouvRCNj4+hh725FT0ZbIz83h7MSRBsjviLga0fOC3Gi+/58AqWhmWZ4HLkPfZ+zAgEZ30Lt4bQ
-        5V+tN6aiK87yw+UP4uKd/Xq8wkzGRB0jIPqd5tGcDb4yab66OsS8DDx7Czir6FBfOOWk8S06ajcM5
-        h/z9LKAO8jjk/51kYdA/se3GfD7Yk/PjRWg6haY9qLY18En+I4/m8ayilmZiDJYoX1ByFTi0Xn8RY
-        3yDCAtGg2tzKYmCqiX1lNjTfRKtVviFDpUIKFzx6bS+z6KQUiKzDlq/2qX5BqM66NQfurHTi82G3h
-        +jF0Jqiw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pmaOd-006tdK-Rk; Wed, 12 Apr 2023 13:20:23 +0000
-Date:   Wed, 12 Apr 2023 14:20:23 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH v6 1/3] mm: add new api to enable ksm per process
-Message-ID: <ZDawF5FDjgYuEHSX@casper.infradead.org>
-References: <20230412031648.2206875-1-shr@devkernel.io>
- <20230412031648.2206875-2-shr@devkernel.io>
+        Wed, 12 Apr 2023 09:22:08 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170958A75;
+        Wed, 12 Apr 2023 06:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681305714; x=1712841714;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tq0l1fHeAs4nVKmblmjii4w6uTzZLvcJhUEt4dDgpHY=;
+  b=aA9tIMEHo9MXk1x8VSqQqJKUBn0EeGobQSvl3/yttqfclJ32jUmM/LOw
+   uX8NsdJLGV0HDtgo92T8/4LH2NQ5YTmc9H/pZvqOQZqvSnU9ATZKiIfLH
+   ZCG1KUWWfYbkSowU2dlCeHcK2AmnhgMbVp9GbUvjLM8WdpMV3jGK56kZV
+   CXcHFLq5iMm9jJ0RFQxRVtrYEWX9YQomZyW4cTh4b6BktSgVY57JlmqPq
+   PYPB7NSJEkUYhWqmdl2xXi9zTYjfPvkUwnc0ZFD0FGTq2hHFfk0467PnH
+   Mme/qt0yTlf6dSCEvqPJxdbKk/dwp4yxMiw8i/PO2UgceeHQ3dQP4Hjhy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332589997"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="332589997"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:21:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="639230005"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="639230005"
+Received: from chanse1-mobl2.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.213.80])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:21:31 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 00/22] selftests/resctrl: Fixes, cleanups, and rewritten CAT test
+Date:   Wed, 12 Apr 2023 16:21:00 +0300
+Message-Id: <20230412132122.29452-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412031648.2206875-2-shr@devkernel.io>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 08:16:46PM -0700, Stefan Roesch wrote:
->  	case PR_SET_VMA:
->  		error = prctl_set_vma(arg2, arg3, arg4, arg5);
->  		break;
-> +#ifdef CONFIG_KSM
-> +	case PR_SET_MEMORY_MERGE:
-> +		if (mmap_write_lock_killable(me->mm))
-> +			return -EINTR;
-> +
-> +		if (arg2) {
-> +			int err = ksm_add_mm(me->mm);
-> +
-> +			if (!err)
-> +				ksm_add_vmas(me->mm);
+Here is a series with some fixes and cleanups to resctrl selftests and
+rewrite of CAT test into something that really tests CAT working or not
+condition.
 
-in the last version of this patch, you reported the error.  Now you
-swallow the error.  I have no idea which is correct, but you've
-changed the behaviour without explaining it, so I assume it's wrong.
+I know that this series will conflict with some of patches from
+Shaopeng Tan that so far have not made it into the kselftest tree. Due
+to CAT test rewrite done in this series, some of those patches would no
+longer be relevant anyway but some of them are still very valid (I've
+not tried to reinvent the fixes in Shaopeng's series in this series).
 
-> +		} else {
-> +			clear_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
-> +		}
-> +		mmap_write_unlock(me->mm);
-> +		break;
-> +	case PR_GET_MEMORY_MERGE:
-> +		if (arg2 || arg3 || arg4 || arg5)
-> +			return -EINVAL;
-> +
-> +		error = !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
-> +		break;
+Ilpo Järvinen (22):
+  selftests/resctrl: Add resctrl.h into build deps
+  selftests/resctrl: Check also too low values for CBM bits
+  selftests/resctrl: Make span unsigned long everywhere
+  selftests/resctrl: Express span in bytes
+  selftests/resctrl: Remove duplicated preparation for span arg
+  selftests/resctrl: Don't use variable argument list for ->setup()
+  selftests/resctrl: Remove "malloc_and_init_memory" param from
+    run_fill_buf()
+  selftests/resctrl: Split run_fill_buf() to alloc, work, and dealloc
+    helpers
+  selftests/resctrl: Remove start_buf local variable from buffer alloc
+    func
+  selftests/resctrl: Don't pass test name to fill_buf
+  selftests/resctrl: Add flush_buffer() to fill_buf
+  selftests/resctrl: Remove test type checks from cat_val()
+  selftests/resctrl: Refactor get_cbm_mask()
+  selftests/resctrl: Create cache_alloc_size() helper
+  selftests/resctrl: Replace count_bits with count_consecutive_bits()
+  selftests/resctrl: Exclude shareable bits from schemata in CAT test
+  selftests/resctrl: Pass the real number of tests to show_cache_info()
+  selftests/resctrl: Move CAT/CMT test global vars to func they are used
+  selftests/resctrl: Read in less obvious order to defeat prefetch
+    optimizations
+  selftests/resctrl: Split measure_cache_vals() function
+  selftests/resctrl: Split show_cache_info() to test specific and
+    generic parts
+  selftests/resctrl: Rewrite Cache Allocation Technology (CAT) test
 
-Why do we need a GET?  Just for symmetry, or is there an actual need for
-it?
+ tools/testing/selftests/resctrl/Makefile      |   2 +-
+ tools/testing/selftests/resctrl/cache.c       | 154 ++++++------
+ tools/testing/selftests/resctrl/cat_test.c    | 221 +++++++++---------
+ tools/testing/selftests/resctrl/cmt_test.c    |  60 +++--
+ tools/testing/selftests/resctrl/fill_buf.c    | 107 +++++----
+ tools/testing/selftests/resctrl/mba_test.c    |   8 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  16 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  28 ++-
+ .../testing/selftests/resctrl/resctrl_tests.c |  34 ++-
+ tools/testing/selftests/resctrl/resctrl_val.c |   4 +-
+ tools/testing/selftests/resctrl/resctrlfs.c   | 160 ++++++++++---
+ 11 files changed, 447 insertions(+), 347 deletions(-)
+
+-- 
+2.30.2
 
