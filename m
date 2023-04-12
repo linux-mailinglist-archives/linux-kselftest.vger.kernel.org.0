@@ -2,55 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764BA6DFAA7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 17:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5696DFAEA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 18:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbjDLP6q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 11:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S229983AbjDLQMh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 12:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjDLP6p (ORCPT
+        with ESMTP id S229899AbjDLQMd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:58:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4C93C2A;
-        Wed, 12 Apr 2023 08:58:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEC02632DC;
-        Wed, 12 Apr 2023 15:58:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973B1C433EF;
-        Wed, 12 Apr 2023 15:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681315122;
-        bh=Sz1fajTEnTSRD31WR8VDCczBSAJtygp8Yr5Rf0oACkc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bYNrSxXAnH2t/pEIJxou6eRtCBAE6tSYuNM66nrW22jXhdMPXufnQRX/oHRvrS7DK
-         hZsKN3AZzvkhRLlYncPG7l4vP2L1ANtK8eFXXAFvkm02OHvDuyZXxNy9vlVenKnbXb
-         H+n9f3d3D2x4Wn8GvwTHiQCtWaJ0vrF8h5Mx4tIrmOihcck+PBzmSnn6iZ51EHYaV6
-         finHmGGcEtIsftHJIGVPpRfgkMXA0yaPievdUjVlhmdNOCTL4wuA+TR2aO90Usdtkg
-         NCibMzUm3vEXpQifdd8Sfl+ywzoagNhkKqlczSuBpduZbfCl+g6UkfqQBNy2gTjKCd
-         fy9lzhW5ExSjA==
-Date:   Wed, 12 Apr 2023 16:58:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] tools/nolibc: implement fd-based FILE streams
-Message-ID: <f28e3c85-84a4-4b30-a3f5-c2efad311fe7@sirena.org.uk>
-References: <20230328-nolibc-printf-test-v3-0-ddc79f92efd5@weissschuh.net>
- <20230328-nolibc-printf-test-v3-3-ddc79f92efd5@weissschuh.net>
+        Wed, 12 Apr 2023 12:12:33 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD448A5F;
+        Wed, 12 Apr 2023 09:12:28 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 0360132006F2;
+        Wed, 12 Apr 2023 12:12:24 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 12 Apr 2023 12:12:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1681315944; x=1681402344; bh=ig
+        gGSzv6t6qQPSvLwa1Px6Q2AiO6aDZaux4wvq90NTY=; b=iKpcflRslOThbWi/Am
+        8zvAfFAlarv3e/sa1xLbmEZpnOKZrUsGYJo6KL3dqycsM1XJ2lJtAtsaJ+157anY
+        kA42IMrRwEtW17h9x+4lom1dOXtNaFnM+xHx+ToH4DgaRVhRlihzcfclaVvdPBa+
+        TJ3D6ZyT2/VsAHHbw82FAwpUhLwZZH5w+LtbUqSgeRvTHYVaZn/aFkc3ycSEkIKt
+        FphMD1JMUbb5MRVtlMPgZtbMV7Bhk+eK8zzR010hJwcFemopSHy8ynQQvKGaRYFm
+        EBmn1Fck6qyeezSpaWP0wxLBZdQFsqxMkpMGSAzj1ho5P6NdiEVqJ/40jEu/Q/mN
+        dkGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681315944; x=1681402344; bh=iggGSzv6t6qQP
+        SvLwa1Px6Q2AiO6aDZaux4wvq90NTY=; b=CZtJsZzmFLwcDDvYHzZnrK2nKJqjO
+        CqAgG4uUXntYX2WcxmBF3uWm0mKUqHOntpG448b6sPSCQdPR7Hcm5lPvKq/+Od30
+        Km8Jzt8Kk8eJWpUOuCdcBCl9NdhFETxJhX0k3Lf3pzHspR8jo9OO2F/MFmOOU5lJ
+        lqZkrZEfEJSZ0yyMWGN1zyAJa2eMgirToJ8Rg1+V8Ox51tCxkFXbH6zDZVpAk8pc
+        rf5tAD+XszCd42e7zbNQsEMPqEpCYqxlFwambLD7pm7xD6X7jEGotSXVALMIBTql
+        vsQDI8bqQup446nXWZmBvCXLO9hjSvVEdRmVYxvspvSxHmNHfK5OfdL5g==
+X-ME-Sender: <xms:aNg2ZDFk0V7Mr4U9lsFSmQROAmysGaZBhl41ioiumP-WFBQzXlGY-g>
+    <xme:aNg2ZAXLTaK14Zyu13l74BeXfMDkWtHIdRrzpmL4IHx8wyp5WUk2aOHObmDUKZvW9
+    F_5B6-YbDdmxeRQ8mA>
+X-ME-Received: <xmr:aNg2ZFJHgnXqFjAXTXZ_j84uZwPPkq5WxdBaCGYqclITvLB33Cagk8wdQ_mDtbPuFX9fCIjYggOc7xMhhr-wQdMU0_323cXya01Evnxd1Q6n>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekiedgleelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpehffgfhvfevufffjgfkgggtsehttd
+    ertddtredtnecuhfhrohhmpefuthgvfhgrnhcutfhovghstghhuceoshhhrhesuggvvhhk
+    vghrnhgvlhdrihhoqeenucggtffrrghtthgvrhhnpeevlefggffhheduiedtheejveehtd
+    fhtedvhfeludetvdegieekgeeggfdugeeutdenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpehshhhrseguvghvkhgvrhhnvghlrdhioh
+X-ME-Proxy: <xmx:aNg2ZBF2BzUDVb-h2VHuLfxHyQZ9mUGRwFIB-U23xBs7cV5wT_BzKw>
+    <xmx:aNg2ZJVPMBoRA96hxzDo5DayxTa3IURfhV3yMHW-3-Q3BqsVTTHnmw>
+    <xmx:aNg2ZMNcVKLc9B_UjWtmMXSw0N-eUXv1KvEHCENZLgIlyiDwJbmzAA>
+    <xmx:aNg2ZBQ9moIny6YTVcmHK7RFyWWUzgwdV8MT36Qnl4qaObO6fMxKsw>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Apr 2023 12:12:22 -0400 (EDT)
+References: <20230412031648.2206875-1-shr@devkernel.io>
+ <20230412031648.2206875-2-shr@devkernel.io>
+ <ZDawF5FDjgYuEHSX@casper.infradead.org>
+User-agent: mu4e 1.10.1; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH v6 1/3] mm: add new api to enable ksm per process
+Date:   Wed, 12 Apr 2023 09:08:11 -0700
+In-reply-to: <ZDawF5FDjgYuEHSX@casper.infradead.org>
+Message-ID: <qvqwfs9513mn.fsf@devbig1114.prn1.facebook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3BwlXs+yCitnNnmA"
-Content-Disposition: inline
-In-Reply-To: <20230328-nolibc-printf-test-v3-3-ddc79f92efd5@weissschuh.net>
-X-Cookie: Brain off-line, please wait.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,84 +88,50 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---3BwlXs+yCitnNnmA
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Matthew Wilcox <willy@infradead.org> writes:
 
-On Sun, Apr 02, 2023 at 06:04:36PM +0000, Thomas Wei=DFschuh wrote:
+> On Tue, Apr 11, 2023 at 08:16:46PM -0700, Stefan Roesch wrote:
+>>  	case PR_SET_VMA:
+>>  		error = prctl_set_vma(arg2, arg3, arg4, arg5);
+>>  		break;
+>> +#ifdef CONFIG_KSM
+>> +	case PR_SET_MEMORY_MERGE:
+>> +		if (mmap_write_lock_killable(me->mm))
+>> +			return -EINTR;
+>> +
+>> +		if (arg2) {
+>> +			int err = ksm_add_mm(me->mm);
+>> +
+>> +			if (!err)
+>> +				ksm_add_vmas(me->mm);
+>
+> in the last version of this patch, you reported the error.  Now you
+> swallow the error.  I have no idea which is correct, but you've
+> changed the behaviour without explaining it, so I assume it's wrong.
+>
 
-> This enables the usage of the stream APIs with arbitrary filedescriptors.
->=20
-> It will be used by a future testcase.
+I don't see how the error is swallowed in the arg2 case. If there is
+an error ksm_add_vmas is not executedd and at the end of the function
+the error is returned. Am I missing something?
 
-This breaks the explicit use of standard streams:
+>> +		} else {
+>> +			clear_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+>> +		}
+>> +		mmap_write_unlock(me->mm);
+>> +		break;
+>> +	case PR_GET_MEMORY_MERGE:
+>> +		if (arg2 || arg3 || arg4 || arg5)
+>> +			return -EINVAL;
+>> +
+>> +		error = !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+>> +		break;
+>
+> Why do we need a GET?  Just for symmetry, or is there an actual need for
+> it?
 
-> -static __attribute__((unused)) FILE* const stdin  =3D (FILE*)-3;
-> -static __attribute__((unused)) FILE* const stdout =3D (FILE*)-2;
-> -static __attribute__((unused)) FILE* const stderr =3D (FILE*)-1;
-> +static __attribute__((unused)) FILE* const stdin  =3D (FILE*)(intptr_t)~=
-STDIN_FILENO;
-> +static __attribute__((unused)) FILE* const stdout =3D (FILE*)(intptr_t)~=
-STDOUT_FILENO;
-> +static __attribute__((unused)) FILE* const stderr =3D (FILE*)(intptr_t)~=
-STDERR_FILENO;
-
-Nothing in this change (or anything else in the series AFAICT) causes
-STDx_FILENO to be declared so we get errors like below in -next when a
-kselftest is built with this version of nolibc:
-
-clang --target=3Daarch64-linux-gnu -fintegrated-as -Werror=3Dunknown-warnin=
-g-option -Werror=3Dignored-optimization-argument -Werror=3Doption-ignored -=
-Werror=3Dunused-command-line-argument --target=3Daarch64-linux-gnu -fintegr=
-ated-as -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
-	-include ../../../../include/nolibc/nolibc.h -I../..\
-	-static -ffreestanding -Wall za-fork.c /tmp/kci/linux/build/kselftest/arm6=
-4/fp/za-fork-asm.o -o /tmp/kci/linux/build/kselftest/arm64/fp/za-fork
-In file included from <built-in>:1:
-In file included from ./../../../../include/nolibc/nolibc.h:97:
-In file included from ./../../../../include/nolibc/arch.h:25:
-=2E/../../../../include/nolibc/arch-aarch64.h:176:35: warning: unknown attr=
-ibute 'optimize' ignored [-Wunknown-attributes]
-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(v=
-oid)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from <built-in>:1:
-In file included from ./../../../../include/nolibc/nolibc.h:102:
-=2E/../../../../include/nolibc/stdio.h:33:71: error: use of undeclared iden=
-tifier 'STDIN_FILENO'
-static __attribute__((unused)) FILE* const stdin  =3D (FILE*)(intptr_t)~STD=
-IN_FILENO;
-                                                                      ^
-=2E/../../../../include/nolibc/stdio.h:34:71: error: use of undeclared iden=
-tifier 'STDOUT_FILENO'
-static __attribute__((unused)) FILE* const stdout =3D (FILE*)(intptr_t)~STD=
-OUT_FILENO;
-                                                                      ^
-=2E/../../../../include/nolibc/stdio.h:35:71: error: use of undeclared iden=
-tifier 'STDERR_FILENO'
-static __attribute__((unused)) FILE* const stderr =3D (FILE*)(intptr_t)~STD=
-ERR_FILENO;
-                                                                      ^
-1 warning and 3 errors generated.
-
-The kselftest branch itself is fine, the issues manifest when it is
-merged with the nolibc branch.  I'm not quite sure what the implicit
-include that's been missed here is?
-
---3BwlXs+yCitnNnmA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ21SwACgkQJNaLcl1U
-h9AZBQf8DJal6OJHifjyunW7cVsIhwp8/OXNFwIY1HNl3CXYXE+TRKeeNvmfl7UI
-sVbKzqryTerbl/BMnbN1HuPUCLtuVGv+CQJ0ZWIRwUN98lhKc/yYU9cMJPbgJesC
-S9mnVucGFqXMpvItJaoPZjdWyUZ7rOJVM/DkBbw3Lxv6sisI6sQC4Scg92v62q36
-ZJTW7p7Esc+HKR5L5ny1DCujCRt4UPRz3xExhZj6OmjfjcTCPkK/vIJjoVCadkOb
-r18/bQa4PamCc+To2qbe2qribqwrBLVEiFKaDUSnLC7tGW3E4pFtQFcH33fyikEW
-gp34TTiAVcKwgIqZi65VbYMGIaIXwA==
-=95Ju
------END PGP SIGNATURE-----
-
---3BwlXs+yCitnNnmA--
+There are three reasons:
+- For symmetry
+- The ksm sharing is inherited by child processes. This allows the test
+  programs to verify that this is working.
+- For child processes it might be useful to have the ability to check if
+  ksm sharing has been enabled
