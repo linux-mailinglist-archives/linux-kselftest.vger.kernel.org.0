@@ -2,139 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15356DFDCB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 20:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B195C6DFE46
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 21:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjDLSmU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 14:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S229521AbjDLTCj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 15:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjDLSmT (ORCPT
+        with ESMTP id S230322AbjDLTCf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 14:42:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2E2A2
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 11:41:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681324886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R3VT9Kq9nmC5BmqMQE6Z+3ROnKmsf5SjqX4tT+cT2cg=;
-        b=FbzNaiSlndLw4u7s24ToI5I9VOEWIFqdHdUKA0wPf3NgjzOixPmKC+cBgdRU7qg5w3DSnu
-        EylsyHEAEq/7l3wOKJwimDRdeNZ8bdgvVZYygwYTuvyRpd0YbaR+hgwZ/Hgqw3MmW2jnuX
-        NsmbOxEdIyj5a3qsmjS0vcFzwSVchqU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-434-kZsKYvYmNeWxKR9dNssykg-1; Wed, 12 Apr 2023 14:41:19 -0400
-X-MC-Unique: kZsKYvYmNeWxKR9dNssykg-1
-Received: by mail-wm1-f70.google.com with SMTP id q19-20020a05600c46d300b003ef69894934so4356557wmo.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 11:41:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681324878; x=1683916878;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R3VT9Kq9nmC5BmqMQE6Z+3ROnKmsf5SjqX4tT+cT2cg=;
-        b=igAQ5cjY1pWiVMYfWN8A6BvrXUDxhy6EV2df1CNOu2ZGp61nPbe7H+xfOLBC0908Ht
-         j9Tfo2OKmj1PKvRkAF2SG6zpLmpvtmRi8eM5LF+t+uTDTvOlJtdmvf+91OfoCxDx3A+u
-         2uIZtN17fnYnoIYIypr6tU7xSsxeq5NhQUoHEkAmsQhwtr7XBK6CrPiwXdhJu79x84tS
-         nVuvTSwIXucYz7ndmdPy1pTdvrBDAE0IWjhAMwcIZES4+jqEUroyCNfMLEik+p0Z1Q0B
-         BcLSaZ5oPLpK9+vxegISGwQUF70nTX8JsLZZtKzyvjf9K9JD3Q2z0MsAA3pez4WAmmGp
-         BpTQ==
-X-Gm-Message-State: AAQBX9dKapQCpXn9jsVm8B4q8sQLMtOCyG1sJfDEpcKACwnyhLaJtZl0
-        N0Jq7s2GF773BNMoM1ku9z90+9Ry/atWTtxIamjOhFsqY7/dRudrxLanLmgAanqkAevipJIXHBr
-        Udedp++tKiIyz+oJoUJP2x35bgTU+
-X-Received: by 2002:a5d:6b85:0:b0:2f0:2e3a:cc00 with SMTP id n5-20020a5d6b85000000b002f02e3acc00mr7416013wrx.17.1681324878291;
-        Wed, 12 Apr 2023 11:41:18 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b/QgGGwNJsH1wFuhM7bfB/1noybwNgk32aStiwxtIwKDydODiL5wj6bsintL3P/ESaIIORFg==
-X-Received: by 2002:a5d:6b85:0:b0:2f0:2e3a:cc00 with SMTP id n5-20020a5d6b85000000b002f02e3acc00mr7415997wrx.17.1681324877919;
-        Wed, 12 Apr 2023 11:41:17 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4b00:c6fa:b613:dbdc:ab? (p200300cbc7024b00c6fab613dbdc00ab.dip0.t-ipconnect.de. [2003:cb:c702:4b00:c6fa:b613:dbdc:ab])
-        by smtp.gmail.com with ESMTPSA id k18-20020adff292000000b002f013fb708fsm502627wro.4.2023.04.12.11.41.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Apr 2023 11:41:17 -0700 (PDT)
-Message-ID: <30b948fe-7983-39dd-9565-9f92ffd9101b@redhat.com>
-Date:   Wed, 12 Apr 2023 20:41:16 +0200
+        Wed, 12 Apr 2023 15:02:35 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558DDDB;
+        Wed, 12 Apr 2023 12:02:33 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 3ACF7604FC;
+        Wed, 12 Apr 2023 21:02:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1681326150; bh=MZrLrA0qphSQiqVNIwMPkkaJza5Q/YB9iEUPTytNJwo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=m93S4u+0ur1U5e8B+NMv6Q+cNvJ1RLhTNKyiXPY5DU6T1Uqek9xwPQrzVaewiAuXm
+         XC5PUW6lWKqKuQLfcY+I3kcFTSYA6xqTyuSXPol/NsfC8440b3bXupA7KYobqvJ8NY
+         Aga9XH6KJCYNGUsGae56fwNBFgOrrkTGLMAzjNhcliI7Kk5NL4TfVq4oiy+JdbOxMg
+         sfwSIMvcjW/y2T46I3wL98fNk2/BeIKhgfqCH2MkSK6gKdvB4X25hX0Vk5I7eJ3SdN
+         f3MbYsCYNGkYJiUbMM1D4Nuwp4ut7ss3twW+9xaq8NbINmqxmuBQHqKD7/RwAW6nnz
+         VZYQ2kbK1Dj1A==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id X7cJsdD_NngQ; Wed, 12 Apr 2023 21:02:27 +0200 (CEST)
+Received: from [192.168.1.4] (unknown [94.250.188.177])
+        by domac.alu.hr (Postfix) with ESMTPSA id 24195604FB;
+        Wed, 12 Apr 2023 21:02:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1681326147; bh=MZrLrA0qphSQiqVNIwMPkkaJza5Q/YB9iEUPTytNJwo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BK2E8c8QoF+0uLjs8cD9T8y/HToYn44onk2U12Jt6G3n+P/QlEDsV4/m+ga9yIraA
+         M6A7H8QQu6rdAfmbfpgtqkhFpPSK/otg4RBRaFAMPx/cYiwpis4+C1MhyvH6Afogbp
+         dFSaPTyL+MHrUXMVUgyEwMDOuI8nsSow/i8m9ZrbJAsgxzsAxE2eqPsbZvc00eld06
+         nuQ6eguYPlWmGnm8gtLX/TjiPGUc20vW/+AVxAblXNLsOW0psiJwYE0se2Z2Tp99gs
+         sEQjMyhrMxNi6j5Dn8XPv5EwM+uiyahAWwLZOFbYwASx8iMDxEYoUJanzjiGro2rt8
+         SzwcfUnYZ8/2Q==
+Message-ID: <835f81b3-1810-1d1f-a5b4-a040cd7ec9a9@alu.unizg.hr>
+Date:   Wed, 12 Apr 2023 21:02:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v6 1/3] mm: add new api to enable ksm per process
-Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, willy@infradead.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20230412031648.2206875-1-shr@devkernel.io>
- <20230412031648.2206875-2-shr@devkernel.io>
- <b3bac995-0d87-a4d7-b261-9cbe3aa901af@redhat.com>
- <qvqw1qkpavxn.fsf@devbig1114.prn1.facebook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <qvqw1qkpavxn.fsf@devbig1114.prn1.facebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 1/2] selftests: gpio: gpio-sim: Fix BUG: test FAILED
+ due to recent change
+Content-Language: en-US, hr
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Bamvor Jian Zhang <bamv2005@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+References: <20230411171521.29678-1-andriy.shevchenko@linux.intel.com>
+ <ZDWdRQmKryGjJcFD@smile.fi.intel.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZDWdRQmKryGjJcFD@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[...]
-> That will work.
->> work? IOW, not exporting ksm_add_mm() and not passing a flag to __ksm_enter() --
->> it would simply set MMF_VM_MERGEABLE ?
->>
+On 11. 04. 2023. 19:47, Andy Shevchenko wrote:
+> On Tue, Apr 11, 2023 at 08:15:20PM +0300, Andy Shevchenko wrote:
+>> From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
 > 
-> ksm_add_mm() is also used in prctl (kernel/sys.c). Do you want to make a
-> similar change there?
+> Ah, Mirsad, I need your SoB, if you are okay with the change.
+> Otherwise I have to drop your authorship
+Hi, Andy,
 
-Yes.
+Sorry I needed to vent my beer before doing this test:
 
->>> + *
->>> + * @vma:  Pointer to vma
->>> + */
->>> +void ksm_add_vma(struct vm_area_struct *vma)
->>> +{
->>> +	struct mm_struct *mm = vma->vm_mm;
->>> +
->>> +	if (test_bit(MMF_VM_MERGE_ANY, &mm->flags))
->>> +		__ksm_add_vma(vma);
->>> +}
->>> +
->>> +/**
->>> + * ksm_add_vmas - Mark all vma's of a process as mergeable
->>> + *
->>> + * @mm:  Pointer to mm
->>> + */
->>> +void ksm_add_vmas(struct mm_struct *mm)
->>
->> I'd suggest calling this
->>
-> I guess you forgot your name suggestion?
+[root@pc-mtodorov linux_torvalds]# uname -rms
+Linux 6.2.0-mglru-kmlk-andy-09238-gd2980d8d8265 x86_64
+[root@pc-mtodorov linux_torvalds]# tools/testing/selftests/gpio/gpio-sim.sh
+1. chip_name and dev_name attributes
+1.1. Chip name is communicated to user
+1.2. chip_name returns 'none' if the chip is still pending
+1.3. Device name is communicated to user
+2. Creating and configuring simulated chips
+2.1. Default number of lines is 1
+2.2. Number of lines can be specified
+2.3. Label can be set
+2.4. Label can be left empty
+2.5. Line names can be configured
+2.6. Line config can remain unused if offset is greater than number of lines
+2.7. Line configfs directory names are sanitized
+2.8. Multiple chips can be created
+2.9. Can't modify settings when chip is live
+2.10. Can't create line items when chip is live
+2.11. Probe errors are propagated to user-space
+2.12. Cannot enable a chip without any GPIO banks
+2.13. Duplicate chip labels are not allowed
+2.14. Lines can be hogged
+3. Controlling simulated chips
+3.1. Pull can be set over sysfs
+3.2. Pull can be read from sysfs
+3.3. Incorrect input in sysfs is rejected
+3.4. Can't write to value
+4. Simulated GPIO chips are functional
+4.1. Values can be read from sysfs
+4.2. Bias settings work correctly
+cat: /sys/devices/platform/gpio-sim.0/gpiochip18/sim_gpio0/value: No such file or directory
+tools/testing/selftests/gpio/gpio-sim.sh: line 393: test: =: unary operator expected
+bias setting does not work
+GPIO gpio-sim test FAIL
+[root@pc-mtodorov linux_torvalds]# git apply ../gpio-sim-andy2.patch
+[root@pc-mtodorov linux_torvalds]# tools/testing/selftests/gpio/gpio-sim.sh
+1. chip_name and dev_name attributes
+1.1. Chip name is communicated to user
+1.2. chip_name returns 'none' if the chip is still pending
+1.3. Device name is communicated to user
+2. Creating and configuring simulated chips
+2.1. Default number of lines is 1
+2.2. Number of lines can be specified
+2.3. Label can be set
+2.4. Label can be left empty
+2.5. Line names can be configured
+2.6. Line config can remain unused if offset is greater than number of lines
+2.7. Line configfs directory names are sanitized
+2.8. Multiple chips can be created
+2.9. Can't modify settings when chip is live
+2.10. Can't create line items when chip is live
+2.11. Probe errors are propagated to user-space
+2.12. Cannot enable a chip without any GPIO banks
+2.13. Duplicate chip labels are not allowed
+2.14. Lines can be hogged
+3. Controlling simulated chips
+3.1. Pull can be set over sysfs
+3.2. Pull can be read from sysfs
+3.3. Incorrect input in sysfs is rejected
+3.4. Can't write to value
+4. Simulated GPIO chips are functional
+4.1. Values can be read from sysfs
+4.2. Bias settings work correctly
+GPIO gpio-sim test PASS
+[root@pc-mtodorov linux_torvalds]# 
 
-Yeah, I reconsidered because the first idea I had was not particularly 
-good. Maybe
+So the issue was reproduced again on the above mentioned kernel, and the patch fixes it.
+I will never trust an unexecuted line again, so help me the Lord Above.
 
-ksm_enable_for_all_vmas()
+Yes, you have both:
 
-But not so sure. If you think the "add" terminology is a good fit, keep 
-it like that.
+Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
+Thank you for considering my bug report. It is great to assist your professional team.
 
-Thanks for bearing with me :)
+This issue wasn't triggered by the 6.1.15 mglru kernel, and I am wondering what could
+be the difference? (With the same gpio-sim.sh and patch.)
+
+Best regards,
+Mirsad
 
 -- 
-Thanks,
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
 
-David / dhildenb
+"I see something approaching fast ... Will it be friends with me?"
 
