@@ -2,162 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880786DFB39
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 18:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712116DFB5F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 18:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjDLQWF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 12:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
+        id S229628AbjDLQaB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 12:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjDLQVt (ORCPT
+        with ESMTP id S231157AbjDLQaA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:21:49 -0400
-Received: from mail-lj1-x263.google.com (mail-lj1-x263.google.com [IPv6:2a00:1450:4864:20::263])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385834C32
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 09:21:35 -0700 (PDT)
-Received: by mail-lj1-x263.google.com with SMTP id e9so41756737ljq.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 09:21:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1681316493; x=1683908493;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xsy5P1BFSd01HwRZSprmpkjXfSG/kvuR7yEFBLxIChw=;
-        b=kiKTqQdjnb9Q3KCXeG88cm0N+JW61wRqiSgx2+fgx9iG+BD8yZKIQR54wwTLQRf0d7
-         3ll7YHX+7okVMZWDh0Ubllk7Aq/0axfCzSxJKy3PHfJQp07MNdKzF+KA/oxbCjwdcUbG
-         Bmvl/uTo1R2SCuJsoPTel7CbFLAsQ8KUwkOEU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681316493; x=1683908493;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xsy5P1BFSd01HwRZSprmpkjXfSG/kvuR7yEFBLxIChw=;
-        b=PD6b8HokVRfDbf5nW+hDrgA0akuzJJjjWeYZURkP4I0k8HO+pfdfV86rju2LT/fBzw
-         aXTcCLFa2UUQIf8WiRBCofjw/QFWkDY9xqng6MDtndkYIPQhkFDRLwqwy3hOLcPDmvxu
-         20KoDSb0xpYIOl/55KFX8gBGayyBUcBE84cp9MG/PEsar0WpbfJYbKsKBhK5hJVAQZvO
-         st09nqGA9sddFHpxjTE1xwsvSEn5xCE07ikJgpa158kBXhFCNJQhiTpWuFFoWC7wKJDa
-         FFCuRl/gnRFiIbyvyLmgtbd86tLUtOsfVqWxGPO22JKE4sdA152Ro8ZmwM6An9IEZRJp
-         5p2w==
-X-Gm-Message-State: AAQBX9ej509yWw7XUO0+yhUmUny0Y2zTMopE5c5jDePycPP8rxfObwnE
-        HcXLcU6W4CnCH0Sp1rD1T9fG5A7zDwrjO6D0FTD3/hd4xD/V
-X-Google-Smtp-Source: AKy350aEVWhrzNmJ+fgfBL5/m13X6W0SCZpEkb+Sk3T5iUyme2M85gnGSDWv06uZL745HN8sz+s3nWlgEdCp
-X-Received: by 2002:a2e:b2ce:0:b0:2a7:80ee:fa78 with SMTP id 14-20020a2eb2ce000000b002a780eefa78mr3156000ljz.51.1681316493244;
-        Wed, 12 Apr 2023 09:21:33 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id t19-20020a2e8e73000000b002a77614d960sm2108109ljk.62.2023.04.12.09.21.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 09:21:33 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v6 4/4] selftests: xsk: Add tests for 8K and 9K frame sizes
-Date:   Wed, 12 Apr 2023 18:21:14 +0200
-Message-Id: <20230412162114.19389-5-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230412162114.19389-1-kal.conley@dectris.com>
-References: <20230412162114.19389-1-kal.conley@dectris.com>
+        Wed, 12 Apr 2023 12:30:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F96661B4;
+        Wed, 12 Apr 2023 09:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DMugHngF26X9J73pdOFhX5/uRQoQERWtuaCobuWkV3A=; b=qfbn5Y6zf2s0LCgXwzQnajfSAr
+        Fnl+FDI9vl3UiVdR3QZ6wkIZzEvPb4drappMvcRaU/nXjAbXWqWvPv+Wf3DBeDUFjXi6Y+93ah0vb
+        UWkf6OCrB6qWF0mZdNsyeRDyTM5KF5mv7m9Vlf3HhszriHCSgCC3/n5kF4IkI1USHiIk5WGJHKQxa
+        3BToevWoMZfqZx3rAx8M5M/1LqoXbLZmXfjzddyittAELBTH032QT/9KIqjVRjTIha0NqjF44IOj4
+        f+PnW226rfdWId12RnNp7pTgmo1q0TNnDiV4fN+SIdZThcagkWn4wxAikKExFMIhzRb5m7unNJ/zn
+        BxRdX5gQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pmdLm-0071m1-GL; Wed, 12 Apr 2023 16:29:38 +0000
+Date:   Wed, 12 Apr 2023 17:29:38 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Stefan Roesch <shr@devkernel.io>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH v6 1/3] mm: add new api to enable ksm per process
+Message-ID: <ZDbccpmPVU5RRPws@casper.infradead.org>
+References: <20230412031648.2206875-1-shr@devkernel.io>
+ <20230412031648.2206875-2-shr@devkernel.io>
+ <ZDawF5FDjgYuEHSX@casper.infradead.org>
+ <qvqwfs9513mn.fsf@devbig1114.prn1.facebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <qvqwfs9513mn.fsf@devbig1114.prn1.facebook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests:
-- RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
-- UNALIGNED_9K_FRAME_SIZE: frame_size=9000 (unaligned)
+On Wed, Apr 12, 2023 at 09:08:11AM -0700, Stefan Roesch wrote:
+> 
+> Matthew Wilcox <willy@infradead.org> writes:
+> 
+> > On Tue, Apr 11, 2023 at 08:16:46PM -0700, Stefan Roesch wrote:
+> >>  	case PR_SET_VMA:
+> >>  		error = prctl_set_vma(arg2, arg3, arg4, arg5);
+> >>  		break;
+> >> +#ifdef CONFIG_KSM
+> >> +	case PR_SET_MEMORY_MERGE:
+> >> +		if (mmap_write_lock_killable(me->mm))
+> >> +			return -EINTR;
+> >> +
+> >> +		if (arg2) {
+> >> +			int err = ksm_add_mm(me->mm);
+> >> +
+> >> +			if (!err)
+> >> +				ksm_add_vmas(me->mm);
+> >
+> > in the last version of this patch, you reported the error.  Now you
+> > swallow the error.  I have no idea which is correct, but you've
+> > changed the behaviour without explaining it, so I assume it's wrong.
+> >
+> 
+> I don't see how the error is swallowed in the arg2 case. If there is
+> an error ksm_add_vmas is not executedd and at the end of the function
+> the error is returned. Am I missing something?
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
----
- tools/testing/selftests/bpf/xskxceiver.c | 25 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.h |  2 ++
- 2 files changed, 27 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 7eccf57a0ccc..86797de7fc50 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1841,6 +1841,17 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
- 		testapp_validate_traffic(test);
- 		break;
-+	case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 8192;
-+		test->ifobj_rx->umem->frame_size = 8192;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_RX_POLL:
- 		test->ifobj_rx->use_poll = true;
- 		test_spec_set_name(test, "POLL_RX");
-@@ -1904,6 +1915,20 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		if (!testapp_unaligned(test))
- 			return;
- 		break;
-+	case TEST_TYPE_UNALIGNED_9K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "UNALIGNED_9K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 9000;
-+		test->ifobj_rx->umem->frame_size = 9000;
-+		test->ifobj_tx->umem->unaligned_mode = true;
-+		test->ifobj_rx->umem->unaligned_mode = true;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		test->ifobj_rx->pkt_stream->use_addr_for_fill = true;
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_HEADROOM:
- 		testapp_headroom(test);
- 		break;
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index 919327807a4e..7f52f737f5e9 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -69,12 +69,14 @@ enum test_mode {
- enum test_type {
- 	TEST_TYPE_RUN_TO_COMPLETION,
- 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-+	TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
- 	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
- 	TEST_TYPE_RX_POLL,
- 	TEST_TYPE_TX_POLL,
- 	TEST_TYPE_POLL_RXQ_TMOUT,
- 	TEST_TYPE_POLL_TXQ_TMOUT,
- 	TEST_TYPE_UNALIGNED,
-+	TEST_TYPE_UNALIGNED_9K_FRAME,
- 	TEST_TYPE_ALIGNED_INV_DESC,
- 	TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
- 	TEST_TYPE_UNALIGNED_INV_DESC,
--- 
-2.39.2
-
+You said 'int err' which declares a new variable.  If you want it
+reported, just use 'error = ksm_add_mm(me->mm);'.
