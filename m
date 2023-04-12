@@ -2,84 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5696DFAEA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 18:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08576DFB34
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Apr 2023 18:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjDLQMh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 12:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
+        id S230173AbjDLQWA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 12:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjDLQMd (ORCPT
+        with ESMTP id S229797AbjDLQVr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 12:12:33 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD448A5F;
-        Wed, 12 Apr 2023 09:12:28 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 0360132006F2;
-        Wed, 12 Apr 2023 12:12:24 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 12 Apr 2023 12:12:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1681315944; x=1681402344; bh=ig
-        gGSzv6t6qQPSvLwa1Px6Q2AiO6aDZaux4wvq90NTY=; b=iKpcflRslOThbWi/Am
-        8zvAfFAlarv3e/sa1xLbmEZpnOKZrUsGYJo6KL3dqycsM1XJ2lJtAtsaJ+157anY
-        kA42IMrRwEtW17h9x+4lom1dOXtNaFnM+xHx+ToH4DgaRVhRlihzcfclaVvdPBa+
-        TJ3D6ZyT2/VsAHHbw82FAwpUhLwZZH5w+LtbUqSgeRvTHYVaZn/aFkc3ycSEkIKt
-        FphMD1JMUbb5MRVtlMPgZtbMV7Bhk+eK8zzR010hJwcFemopSHy8ynQQvKGaRYFm
-        EBmn1Fck6qyeezSpaWP0wxLBZdQFsqxMkpMGSAzj1ho5P6NdiEVqJ/40jEu/Q/mN
-        dkGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681315944; x=1681402344; bh=iggGSzv6t6qQP
-        SvLwa1Px6Q2AiO6aDZaux4wvq90NTY=; b=CZtJsZzmFLwcDDvYHzZnrK2nKJqjO
-        CqAgG4uUXntYX2WcxmBF3uWm0mKUqHOntpG448b6sPSCQdPR7Hcm5lPvKq/+Od30
-        Km8Jzt8Kk8eJWpUOuCdcBCl9NdhFETxJhX0k3Lf3pzHspR8jo9OO2F/MFmOOU5lJ
-        lqZkrZEfEJSZ0yyMWGN1zyAJa2eMgirToJ8Rg1+V8Ox51tCxkFXbH6zDZVpAk8pc
-        rf5tAD+XszCd42e7zbNQsEMPqEpCYqxlFwambLD7pm7xD6X7jEGotSXVALMIBTql
-        vsQDI8bqQup446nXWZmBvCXLO9hjSvVEdRmVYxvspvSxHmNHfK5OfdL5g==
-X-ME-Sender: <xms:aNg2ZDFk0V7Mr4U9lsFSmQROAmysGaZBhl41ioiumP-WFBQzXlGY-g>
-    <xme:aNg2ZAXLTaK14Zyu13l74BeXfMDkWtHIdRrzpmL4IHx8wyp5WUk2aOHObmDUKZvW9
-    F_5B6-YbDdmxeRQ8mA>
-X-ME-Received: <xmr:aNg2ZFJHgnXqFjAXTXZ_j84uZwPPkq5WxdBaCGYqclITvLB33Cagk8wdQ_mDtbPuFX9fCIjYggOc7xMhhr-wQdMU0_323cXya01Evnxd1Q6n>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekiedgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpehffgfhvfevufffjgfkgggtsehttd
-    ertddtredtnecuhfhrohhmpefuthgvfhgrnhcutfhovghstghhuceoshhhrhesuggvvhhk
-    vghrnhgvlhdrihhoqeenucggtffrrghtthgvrhhnpeevlefggffhheduiedtheejveehtd
-    fhtedvhfeludetvdegieekgeeggfdugeeutdenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehshhhrseguvghvkhgvrhhnvghlrdhioh
-X-ME-Proxy: <xmx:aNg2ZBF2BzUDVb-h2VHuLfxHyQZ9mUGRwFIB-U23xBs7cV5wT_BzKw>
-    <xmx:aNg2ZJVPMBoRA96hxzDo5DayxTa3IURfhV3yMHW-3-Q3BqsVTTHnmw>
-    <xmx:aNg2ZMNcVKLc9B_UjWtmMXSw0N-eUXv1KvEHCENZLgIlyiDwJbmzAA>
-    <xmx:aNg2ZBQ9moIny6YTVcmHK7RFyWWUzgwdV8MT36Qnl4qaObO6fMxKsw>
-Feedback-ID: i84614614:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Apr 2023 12:12:22 -0400 (EDT)
-References: <20230412031648.2206875-1-shr@devkernel.io>
- <20230412031648.2206875-2-shr@devkernel.io>
- <ZDawF5FDjgYuEHSX@casper.infradead.org>
-User-agent: mu4e 1.10.1; emacs 28.2.50
-From:   Stefan Roesch <shr@devkernel.io>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH v6 1/3] mm: add new api to enable ksm per process
-Date:   Wed, 12 Apr 2023 09:08:11 -0700
-In-reply-to: <ZDawF5FDjgYuEHSX@casper.infradead.org>
-Message-ID: <qvqwfs9513mn.fsf@devbig1114.prn1.facebook.com>
+        Wed, 12 Apr 2023 12:21:47 -0400
+Received: from mail-lj1-x261.google.com (mail-lj1-x261.google.com [IPv6:2a00:1450:4864:20::261])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778A3900B
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 09:21:33 -0700 (PDT)
+Received: by mail-lj1-x261.google.com with SMTP id e3so3729873ljn.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 09:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1681316491; x=1683908491;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CyAv2dean73hIsFLt2c4UWD/sKWcl5Pwsn2aihE0NA4=;
+        b=OEBbkab5p2o9hwNukLgtXQ10pDTQGN6E/NQ6CLxGSLRcOZIcse9gSl42k864+87Lbc
+         Lw3C/jm5yWY69rPJ6ugZycACRrpIjaPN4iJksV7AsV3ke4CZD0FEvmYqivLrV+SdnOI2
+         GOSelxvcS6d+oBM14LB4gLmsYsg8oxUUqyiho=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681316491; x=1683908491;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CyAv2dean73hIsFLt2c4UWD/sKWcl5Pwsn2aihE0NA4=;
+        b=MXHrdxLtK1521VMDVWORWbJy0cVE16tAveGyyHYxhWaHuqkALLLcMQwepheg5K7Gob
+         d78IILFCKk/3lgbXUfncnkWxDxMqXSN9zlapy9Hsx/PZt2y1mYCD/ZmypuC14u7e6mms
+         kCt/y7HKJIOaCL9UOtGiZ0Mz54LND/6+LYX6DeC8ENC2DcxDsaci5iY9piZZOdnL5xXQ
+         1wU85MnCbEUEEltWxJ7fjGiQ5NNzL9EE3lgvSD9AXzuKWWDdcHvZh5KhNdLDcIud1Sv6
+         N7pUzJCALAR4L7giVB42l84+MPXeqYCdCRBxApnd7/p3rFs9J7sVx6yBBOzIGXQCU6gq
+         TqzA==
+X-Gm-Message-State: AAQBX9d/gFrhFFvH2gKyMWb0v6hSi/+7asBSqQJmTh5/ssPciV/O8CpT
+        ohUVL+qqOjgCynjvrywyP4XZXY3f7Rp12hdvWoAWTyoTsVG3
+X-Google-Smtp-Source: AKy350Y62+xWGMlvwfPyJzRmQBZ3FmHXJICDKDqOKLASxBsPsbir+GWE2/0SgcsAlObTzzCN5cfuJfG4MSDT
+X-Received: by 2002:a2e:9ed6:0:b0:2a7:9c57:dcab with SMTP id h22-20020a2e9ed6000000b002a79c57dcabmr827151ljk.6.1681316491516;
+        Wed, 12 Apr 2023 09:21:31 -0700 (PDT)
+Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
+        by smtp-relay.gmail.com with ESMTPS id t19-20020a2e8e73000000b002a77614d960sm2108109ljk.62.2023.04.12.09.21.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 09:21:31 -0700 (PDT)
+X-Relaying-Domain: dectris.com
+From:   Kal Conley <kal.conley@dectris.com>
+To:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v6 3/4] selftests: xsk: Use hugepages when umem->frame_size > PAGE_SIZE
+Date:   Wed, 12 Apr 2023 18:21:13 +0200
+Message-Id: <20230412162114.19389-4-kal.conley@dectris.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230412162114.19389-1-kal.conley@dectris.com>
+References: <20230412162114.19389-1-kal.conley@dectris.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,51 +84,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+HugeTLB UMEMs now support chunk_size > PAGE_SIZE. Set MAP_HUGETLB when
+frame_size > PAGE_SIZE for future tests.
 
-Matthew Wilcox <willy@infradead.org> writes:
+Signed-off-by: Kal Conley <kal.conley@dectris.com>
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+---
+ tools/testing/selftests/bpf/xskxceiver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On Tue, Apr 11, 2023 at 08:16:46PM -0700, Stefan Roesch wrote:
->>  	case PR_SET_VMA:
->>  		error = prctl_set_vma(arg2, arg3, arg4, arg5);
->>  		break;
->> +#ifdef CONFIG_KSM
->> +	case PR_SET_MEMORY_MERGE:
->> +		if (mmap_write_lock_killable(me->mm))
->> +			return -EINTR;
->> +
->> +		if (arg2) {
->> +			int err = ksm_add_mm(me->mm);
->> +
->> +			if (!err)
->> +				ksm_add_vmas(me->mm);
->
-> in the last version of this patch, you reported the error.  Now you
-> swallow the error.  I have no idea which is correct, but you've
-> changed the behaviour without explaining it, so I assume it's wrong.
->
+diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+index 5a9691e942de..7eccf57a0ccc 100644
+--- a/tools/testing/selftests/bpf/xskxceiver.c
++++ b/tools/testing/selftests/bpf/xskxceiver.c
+@@ -1289,7 +1289,7 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ 	void *bufs;
+ 	int ret;
+ 
+-	if (ifobject->umem->unaligned_mode)
++	if (ifobject->umem->frame_size > sysconf(_SC_PAGESIZE) || ifobject->umem->unaligned_mode)
+ 		mmap_flags |= MAP_HUGETLB;
+ 
+ 	if (ifobject->shared_umem)
+-- 
+2.39.2
 
-I don't see how the error is swallowed in the arg2 case. If there is
-an error ksm_add_vmas is not executedd and at the end of the function
-the error is returned. Am I missing something?
-
->> +		} else {
->> +			clear_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
->> +		}
->> +		mmap_write_unlock(me->mm);
->> +		break;
->> +	case PR_GET_MEMORY_MERGE:
->> +		if (arg2 || arg3 || arg4 || arg5)
->> +			return -EINVAL;
->> +
->> +		error = !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
->> +		break;
->
-> Why do we need a GET?  Just for symmetry, or is there an actual need for
-> it?
-
-There are three reasons:
-- For symmetry
-- The ksm sharing is inherited by child processes. This allows the test
-  programs to verify that this is working.
-- For child processes it might be useful to have the ability to check if
-  ksm sharing has been enabled
