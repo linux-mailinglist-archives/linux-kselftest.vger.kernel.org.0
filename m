@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4926E151F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 21:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F386E15BE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 22:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjDMTXi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Apr 2023 15:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S230188AbjDMUW2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Apr 2023 16:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDMTXg (ORCPT
+        with ESMTP id S230182AbjDMUWZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 15:23:36 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D34E40EE
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 12:23:35 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n17so74053pln.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 12:23:35 -0700 (PDT)
+        Thu, 13 Apr 2023 16:22:25 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1606A276
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 13:22:21 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id mq14-20020a17090b380e00b002472a2d9d6aso1805307pjb.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 13:22:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681413814; x=1684005814;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681417341; x=1684009341;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=gPDqaWF3sS+3CVRV6pquq0Ql95vrw0dTc/uLuPqiFhc=;
-        b=y9ddKeHsXBMPGr1+IwPVBJpTzO2me87doej1DHAusGD9PvC1OaVdaigKxRnxmyLdH0
-         CWEwHbPGqarAKg3AXp8XpT+3jj5oEORWfGl/cdXyUDucgYwjdVzv7YOuGhLeKrYBFyDd
-         RbJMzZVPORBUpB96e2nkryuBR9Qv3DvcVI6HMkIFlJ/cWesSa/XHD3em+n67SeM/dlPx
-         Y3Eh4EhtAQ0rL2TndOgjl4nppsHvyxu9hkLSQONUW619oE3BDaJT8sCU5tkNE9bF0lmo
-         rYs4pyNiTWsEuDx4kfhDG99X7yHn8jGDVMCCGTgTK7j4elNs27Rcz7/4KChilQXdvIDV
-         BG6A==
+        bh=VYZUWhFtPMUbZw2n3go5rf+ztcV2MouY2dl67B32WEM=;
+        b=uoKRLVJE+2oxmuOKWc9KGoBn1u98GlBXuyMSMqpjI6PzujH1+GRjl8r7KC2IEBBM/o
+         ymEwihx3CUL8JD7lVg/m7U5qmcsN4fFgNWImr6PAsJFNgYcA8qEaLwLV8x5JveZ4vD9k
+         froc4P2DTghlRHor9E0ZOOgu2O91xy9SGpLdTQ1s5tYhG3+DTGI62mhe/xTJWDkMF4Q6
+         BSBcwEXKhli1KBhpESIpNRZmvGLwUKrlcTZJzVJKMGbn70e7HtcQv9+lEWuTRRcd2wov
+         nuvenZ3LfRqRdfNcQ1uRGPiIQyexEEEUKWi2Spj+LZkYzBnlf7NryB3npnY0dE69ttnp
+         DSgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681413814; x=1684005814;
+        d=1e100.net; s=20221208; t=1681417341; x=1684009341;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gPDqaWF3sS+3CVRV6pquq0Ql95vrw0dTc/uLuPqiFhc=;
-        b=G+df3np6JnrLHT4Vu5oWWfCCGd9njljcC3+2q3Zc51kcMRyoh3h7LKDs90sLfgW2EA
-         QEqVLHdxhcVaLxD4Aaf0ijUsniTqgba5HG2h2XNCw8+FUbX7ReqRNWqbfPezBDj5D8Vr
-         zbGGqBfpPmQb36nJ8qvpjV1YDo0XxEuAKZcNT/lFb7P+AsEz9tfmIiAhyFg0we3K1DPB
-         5E/r42I9NpWznG00yB2yLcN8VGYpcR7RlBrNDSacYQsw+yf3XHOuhqy2CK0BOwYhzw4K
-         b6dYNdtBAqtX7iYX2f3luiFsSwXCvKJXRI0UNQ7pNbIMHNUc6f6J7Ng/S31f4+rr4T+l
-         SH6w==
-X-Gm-Message-State: AAQBX9fklcfGeJv/2HWbQPy1ZNmGSlShOwrKA43l8deYI+XDqqBsoQaC
-        BVADP4nFPQ9ttWu+qD+eHzeuCw==
-X-Google-Smtp-Source: AKy350Y47H19PXucdjs9lTuuMjfixkLUC8pAs66xUygSXE+3GwhR86a4mgowCZd1NTpunC1+KlaUDQ==
-X-Received: by 2002:a17:902:b18c:b0:19f:2ae8:54b9 with SMTP id s12-20020a170902b18c00b0019f2ae854b9mr68514plr.32.1681413814574;
-        Thu, 13 Apr 2023 12:23:34 -0700 (PDT)
+        bh=VYZUWhFtPMUbZw2n3go5rf+ztcV2MouY2dl67B32WEM=;
+        b=TEIAzJvY4RDJFQOn/tcnbqcIAmDFhjVPfCpHMcpEhRtsrtV8Vxnlodk64Ee1+VNZVi
+         hafIeIV7oEBRk3dHFMYXb4KP69YTqCSWcnWFu8+xGoeJsb+OD+HXX4i0torG27bKus+A
+         pBd3rH1XsXsOHW5AhY8bGbJNU8leIx73damrHWp5X2z6DyAwajCgnIoyPxzu5nKuumVS
+         zw8vFvIoBGiaMnnwkb9c3N+jXAZggiH2U5iyOk4Ml52D2tKuWRjUaloh0U5LgoLzaLSY
+         Nd1dMt98RKqNHxltzBOXtA65Y4IfANAQ2hkDbZksJsX/7zeAwmJQiucHk2puQPIYFWRX
+         rdWg==
+X-Gm-Message-State: AAQBX9fs3vIowXlFdLoRZxA7fyQOXh3vCP93OiW3W4zi3+3qx71n3Tri
+        aRh77f9VhCYxJXfph8kzaGyaPQ==
+X-Google-Smtp-Source: AKy350bxR/bGpj/I8vN0ogWXFooUU5WM9F9VXPZxngErV9jD4z1OaCP2Fvy3c4mGt0uq2Zl5M8QuwA==
+X-Received: by 2002:a17:903:120c:b0:1a3:d392:2f29 with SMTP id l12-20020a170903120c00b001a3d3922f29mr324948plh.20.1681417341283;
+        Thu, 13 Apr 2023 13:22:21 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170902c10400b0019a773419a6sm1803796pli.170.2023.04.13.12.23.34
+        by smtp.gmail.com with ESMTPSA id g22-20020a1709029f9600b0019c91989a1csm1835700plq.300.2023.04.13.13.22.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 12:23:34 -0700 (PDT)
-Message-ID: <643856b6.170a0220.39b98.4065@mx.google.com>
-Date:   Thu, 13 Apr 2023 12:23:34 -0700 (PDT)
+        Thu, 13 Apr 2023 13:22:20 -0700 (PDT)
+Message-ID: <6438647c.170a0220.4b52c.471b@mx.google.com>
+Date:   Thu, 13 Apr 2023 13:22:20 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Branch: next
 X-Kernelci-Tree: kselftest
 X-Kernelci-Kernel: v6.3-rc1-24-g91db4fd9019a
-X-Kernelci-Report-Type: build
-Subject: kselftest/next build: 8 builds: 0 failed, 8 passed,
- 9 warnings (v6.3-rc1-24-g91db4fd9019a)
+X-Kernelci-Report-Type: test
+Subject: kselftest/next kselftest-cpufreq: 8 runs,
+ 1 regressions (v6.3-rc1-24-g91db4fd9019a)
 To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
         shuah@kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -72,116 +72,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 8 builds: 0 failed, 8 passed, 9 warnings (v6.3-rc1-24=
--g91db4fd9019a)
+kselftest/next kselftest-cpufreq: 8 runs, 1 regressions (v6.3-rc1-24-g91db4=
+fd9019a)
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.3-rc1-24-g91db4fd9019a/
+Regressions Summary
+-------------------
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.3-rc1-24-g91db4fd9019a
-Git Commit: 91db4fd9019a08251a500157cf0d88de457e1a96
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
-
-Warnings Detected:
-
-arm64:
-    defconfig+kselftest (clang-16): 3 warnings
-    defconfig+kselftest+arm64-chromebook (clang-16): 3 warnings
-
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 3 warnings
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
 
 
-Warnings summary:
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.3=
+-rc1-24-g91db4fd9019a/plan/kselftest-cpufreq/
 
-    2    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is =
-uninitialized when used here [-Wuninitialized]
-    2    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'sy=
-ncpt_irq' to silence this warning
-    2    1 warning generated.
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
- !ENDBR: .text+0x1463d6
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
- !ENDBR: .text+0x14654b
-    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to =
-!ENDBR: native_write_cr4+0x4
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.3-rc1-24-g91db4fd9019a
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      91db4fd9019a08251a500157cf0d88de457e1a96 =
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
 
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
+Test Regressions
+---------------- =
 
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, clang-16) =E2=80=94 PASS, 0 errors, 3 warnings,=
- 0 section mismatches
 
-Warnings:
-    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is unini=
-tialized when used here [-Wuninitialized]
-    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'syncpt_=
-irq' to silence this warning
-    1 warning generated.
 
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
 
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 PASS, 0 er=
-rors, 3 warnings, 0 section mismatches
 
-Warnings:
-    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is unini=
-tialized when used here [-Wuninitialized]
-    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'syncpt_=
-irq' to silence this warning
-    1 warning generated.
+  Details:     https://kernelci.org/test/plan/id/643856f0b80456bf352e8600
 
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.3-rc1-24-g91=
+db4fd9019a/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
+kselftest-cpufreq-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.3-rc1-24-g91=
+db4fd9019a/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
+kselftest-cpufreq-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20230407.0/arm64/initrd.cpio.gz =
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 3 w=
-arnings, 0 section mismatches
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/643856f0b804=
+56bf352e8601
+        failing since 177 days (last pass: linux-kselftest-next-6.0-rc2-11-=
+g144eeb2fc761, first fail: v6.1-rc1) =
 
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
-BR: .text+0x14654b
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
-BR: .text+0x1463d6
-    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to !ENDB=
-R: native_write_cr4+0x4
-
----
-For more info write to <info@kernelci.org>
+ =20
