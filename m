@@ -2,99 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622E06E02DC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 01:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09ADF6E02EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 02:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjDLXv2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 19:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
+        id S229642AbjDMADi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 20:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjDLXvM (ORCPT
+        with ESMTP id S229593AbjDMADh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 19:51:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36878A75;
-        Wed, 12 Apr 2023 16:50:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65FD263A30;
-        Wed, 12 Apr 2023 23:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C5FF9C4339B;
-        Wed, 12 Apr 2023 23:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681343418;
-        bh=angAFoe+U5xzPv6FtCzpncMETyYAO11hbIA8vnTdZOA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IHB3h4vaPOl8b9jSXH/HAj7zOEPnH5Gnov1QPGis+NGLPdC7Xod8E1xGszrwtldw2
-         7ReDWaAgHkQ81m8cJM+c9SaafoWUBoWQefs2rDrj4MT8z/9LO5e/5n/R1iTryBQA0a
-         7R3BCC3PE3xvG8ymIqXmOg0deK8sceZGw++QrzTlhRQ2F8QG7mrQsLKKgD2Fl63TJk
-         eRUowQJwheaqoaB5zo86LOKjtZziNk0dt3IDWGXNrgqlv2RjPZRWyDmtIOJWffIO77
-         R/0N3CkZ2Q2Ttb6CUP1Xomu5P/KW61xKVxQ8bxeJ5zNFvuor9KeZee0/BcrODb2Ees
-         /V11XXnFTW9Yw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD618E52446;
-        Wed, 12 Apr 2023 23:50:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 12 Apr 2023 20:03:37 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3E66A47;
+        Wed, 12 Apr 2023 17:03:36 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id cm18-20020a17090afa1200b0024713adf69dso872648pjb.3;
+        Wed, 12 Apr 2023 17:03:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681344216; x=1683936216;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pyutDkp5jrSZUQ7ZSCUPusZLIPe20FEF4eoH9aQqT9U=;
+        b=UKlpb+cigpV7szwbL/NVXYViJrjWbFojBNTvxQ7mTTikfFSfcMzWzCQ/O4yLyfeYs9
+         WO+FSQoDv/VI5mgMKoG7fwDuIRcyUYxHZFF26GwFjPkzra8QQ2xneaHdJL2UKRZpxLlb
+         9VwlEogRmjOA0vS2VLczf4zOgReqgfjKBg75G0sp3ItfvjEtC/YTb0O4vNOK03UxQobZ
+         v8aLtuXqZMOaMsvMIa6w5TWdigol1d+Z6H8imco42YqyrD5ZFRFygRubmubuegyjtE0B
+         O7tNapemKRqxRL0wgNEJUIPxjiYMC2tJoQnRgCCzywzU7RBEEuJ7YoXOCaWuXqw/WQBL
+         jhdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681344216; x=1683936216;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pyutDkp5jrSZUQ7ZSCUPusZLIPe20FEF4eoH9aQqT9U=;
+        b=Gr3rTPNsTAKpGH6KiuCpEbCToYSzl6ydcw88MDNHJfiNU1fsZ/0ogS/HTYHexTxRxS
+         trzEBM60evVpC0W1YZ292DwUgvfXKdRQbGRU6BQkIUC9AdiaUpslM2XOuCis9OiLFTie
+         p+GgxvYe8LCri06ejuYBnnektMlbmWtN9t4X7aO99s4WUIE3lX0ShtKON1gLh9QNLv2r
+         tISeaGg9Vj/R2P5lU+kdkrmHkmXzRAiGvYY0UejR77kxcBRhs503eGTyWLJ2wae6UKGW
+         o5k0jF0OIqsZ7XuN1lyvWeEkjYIoQCZt21wGAWeOxTU2vdactL5OYntOsgrRNr4qqpuR
+         UfKw==
+X-Gm-Message-State: AAQBX9dz0kaH3tiol3TI4JozZww+1zEn2+zZLQng6sbt+wfMFXOi3gD1
+        qYnpfM4yb+ykroOUYbwpReQ=
+X-Google-Smtp-Source: AKy350b5nRy45dcjnYkFzfHskXOi3Lp7CqvWMDpWUw5H2P+CRntPZh1X0IC4T25gVYwBpplY5m91nA==
+X-Received: by 2002:a17:902:c40f:b0:1a2:56f4:d369 with SMTP id k15-20020a170902c40f00b001a256f4d369mr142618plk.19.1681344215640;
+        Wed, 12 Apr 2023 17:03:35 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id jo10-20020a170903054a00b001a190baea88sm148167plb.97.2023.04.12.17.03.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 17:03:35 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 12 Apr 2023 14:03:32 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Message-ID: <ZDdG1K0kTETZMTCu@slm.duckdns.org>
+References: <20230412153758.3088111-1-longman@redhat.com>
+ <ZDcGVebCpyktxyWh@slm.duckdns.org>
+ <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
+ <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
+ <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/3] Add FOU support for externally controlled
- ipip devices
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168134341870.18395.11210740779039610735.git-patchwork-notify@kernel.org>
-Date:   Wed, 12 Apr 2023 23:50:18 +0000
-References: <cover.1680874078.git.cehrig@cloudflare.com>
-In-Reply-To: <cover.1680874078.git.cehrig@cloudflare.com>
-To:     Christian Ehrig <cehrig@cloudflare.com>
-Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com, ast@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, davemarchevsky@fb.com,
-        void@manifault.com, liuhangbin@gmail.com, haoluo@google.com,
-        jolsa@kernel.org, john.fastabend@gmail.com,
-        fankaixi.li@bytedance.com, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        martin.lau@linux.dev, mykolal@fb.com, netdev@vger.kernel.org,
-        paul@isovalent.com, song@kernel.org, sdf@google.com, yhs@fb.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Hello,
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+On Wed, Apr 12, 2023 at 04:33:29PM -0400, Waiman Long wrote:
+> I think we can. You mean having a new "cpuset.cpus.isolated" cgroupfs file.
+> So there will be one in the root cgroup that defines all the isolated CPUs
+> one can have. It is then distributed down the hierarchy and can be claimed
+> only if a cgroup becomes an "isolated" partition. There will be a slight
 
-On Fri,  7 Apr 2023 15:38:52 +0200 you wrote:
-> This patch set adds support for using FOU or GUE encapsulation with
-> an ipip device operating in collect-metadata mode and a set of kfuncs
-> for controlling encap parameters exposed to a BPF tc-hook.
-> 
-> BPF tc-hooks allow us to read tunnel metadata (like remote IP addresses)
-> in the ingress path of an externally controlled tunnel interface via
-> the bpf_skb_get_tunnel_{key,opt} bpf-helpers. Packets can then be
-> redirected to the same or a different externally controlled tunnel
-> interface by overwriting metadata via the bpf_skb_set_tunnel_{key,opt}
-> helpers and a call to bpf_redirect. This enables us to redirect packets
-> between tunnel interfaces - and potentially change the encapsulation
-> type - using only a single BPF program.
-> 
-> [...]
+Yeah, that seems a lot more congruent with the typical pattern.
 
-Here is the summary with links:
-  - [bpf-next,v3,1/3] ipip,ip_tunnel,sit: Add FOU support for externally controlled ipip devices
-    https://git.kernel.org/bpf/bpf-next/c/ac931d4cdec3
-  - [bpf-next,v3,2/3] bpf,fou: Add bpf_skb_{set,get}_fou_encap kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/c50e96099edb
-  - [bpf-next,v3,3/3] selftests/bpf: Test FOU kfuncs for externally controlled ipip devices
-    https://git.kernel.org/bpf/bpf-next/c/d9688f898c08
+> change in the semantics of an "isolated" partition, but I doubt there will
+> be much users out there.
 
-You are awesome, thank you!
+I haven't thought through it too hard but what prevents staying compatible
+with the current behavior?
+
+> If you are OK with this approach, I can modify my patch series to do that.
+
+Thanks.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+tejun
