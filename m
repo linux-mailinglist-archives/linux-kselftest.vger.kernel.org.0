@@ -2,107 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09ADF6E02EF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 02:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248096E02F5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 02:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjDMADi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 20:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S229685AbjDMAEl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 20:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjDMADh (ORCPT
+        with ESMTP id S229526AbjDMAEk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 20:03:37 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3E66A47;
-        Wed, 12 Apr 2023 17:03:36 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id cm18-20020a17090afa1200b0024713adf69dso872648pjb.3;
-        Wed, 12 Apr 2023 17:03:36 -0700 (PDT)
+        Wed, 12 Apr 2023 20:04:40 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C067E1713
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 17:04:38 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a652700c36so167985ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 17:04:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681344216; x=1683936216;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pyutDkp5jrSZUQ7ZSCUPusZLIPe20FEF4eoH9aQqT9U=;
-        b=UKlpb+cigpV7szwbL/NVXYViJrjWbFojBNTvxQ7mTTikfFSfcMzWzCQ/O4yLyfeYs9
-         WO+FSQoDv/VI5mgMKoG7fwDuIRcyUYxHZFF26GwFjPkzra8QQ2xneaHdJL2UKRZpxLlb
-         9VwlEogRmjOA0vS2VLczf4zOgReqgfjKBg75G0sp3ItfvjEtC/YTb0O4vNOK03UxQobZ
-         v8aLtuXqZMOaMsvMIa6w5TWdigol1d+Z6H8imco42YqyrD5ZFRFygRubmubuegyjtE0B
-         O7tNapemKRqxRL0wgNEJUIPxjiYMC2tJoQnRgCCzywzU7RBEEuJ7YoXOCaWuXqw/WQBL
-         jhdQ==
+        d=google.com; s=20221208; t=1681344278; x=1683936278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6TD8d5lr5MkiN2++oGGCJCsMVGJRbHc45GRZJ35kiN8=;
+        b=tkWR9F20ucPpo1lTciwCS1VaBcp6T1BGCSSSD9KrFtZ1Zwmb9oI1TiAedLL9atVPlD
+         7YjRO1VK2rB3tIouLTrc+g0MYG2nTZpI1vJWYLWbFGe1niObTtSPjfLv5OX+qPRUred0
+         xlUfHGCufknPpcmFybego7lDy/nGNJyBoO2PzGNsMYG1OZsFJ9jIDmd4IlSFBxWgNe35
+         /dGGPPpFksV4mW6ULY2dNeVksXks96kOFkWiyuNVZwZjP0/zbaHcRZ6nkTTYH/CA0wjz
+         BUv3YYo30efcJAv1sd7l6kjVaranKcmS2jxuRoQ3/0DfGcBdytqQ7J+5hXaC3Jlh3ktC
+         V3dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681344216; x=1683936216;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681344278; x=1683936278;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pyutDkp5jrSZUQ7ZSCUPusZLIPe20FEF4eoH9aQqT9U=;
-        b=Gr3rTPNsTAKpGH6KiuCpEbCToYSzl6ydcw88MDNHJfiNU1fsZ/0ogS/HTYHexTxRxS
-         trzEBM60evVpC0W1YZ292DwUgvfXKdRQbGRU6BQkIUC9AdiaUpslM2XOuCis9OiLFTie
-         p+GgxvYe8LCri06ejuYBnnektMlbmWtN9t4X7aO99s4WUIE3lX0ShtKON1gLh9QNLv2r
-         tISeaGg9Vj/R2P5lU+kdkrmHkmXzRAiGvYY0UejR77kxcBRhs503eGTyWLJ2wae6UKGW
-         o5k0jF0OIqsZ7XuN1lyvWeEkjYIoQCZt21wGAWeOxTU2vdactL5OYntOsgrRNr4qqpuR
-         UfKw==
-X-Gm-Message-State: AAQBX9dz0kaH3tiol3TI4JozZww+1zEn2+zZLQng6sbt+wfMFXOi3gD1
-        qYnpfM4yb+ykroOUYbwpReQ=
-X-Google-Smtp-Source: AKy350b5nRy45dcjnYkFzfHskXOi3Lp7CqvWMDpWUw5H2P+CRntPZh1X0IC4T25gVYwBpplY5m91nA==
-X-Received: by 2002:a17:902:c40f:b0:1a2:56f4:d369 with SMTP id k15-20020a170902c40f00b001a256f4d369mr142618plk.19.1681344215640;
-        Wed, 12 Apr 2023 17:03:35 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id jo10-20020a170903054a00b001a190baea88sm148167plb.97.2023.04.12.17.03.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 17:03:35 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 12 Apr 2023 14:03:32 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZDdG1K0kTETZMTCu@slm.duckdns.org>
-References: <20230412153758.3088111-1-longman@redhat.com>
- <ZDcGVebCpyktxyWh@slm.duckdns.org>
- <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
- <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
- <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+        bh=6TD8d5lr5MkiN2++oGGCJCsMVGJRbHc45GRZJ35kiN8=;
+        b=YdDOMDfJlH/oAoPRYr8Zlajq62CQHQzwEqp6S2WeKDqiRAIuis61F6Dt8cM9SiUiNB
+         watqwOneCWBEwMqABZ538OflZ8iAnHSmXEo5ybU4+UbZa+gutKFCLytqpYcWQdmouU/F
+         mwKeCmJVnA6grcxLA+emaQOGp/brDdve4uKPMe6aqTLSY0dM8pgKqwUf7VPPzDMjQk4u
+         X5nONgOGUIbCQQfS6KmSp4IlxvWwRDl7jxucwB+5GHfU5c1tgre8Q68O2wqpB73pFovl
+         HQP2q/O6apiirdFYBTHpqJUsQJS3VTFXnkYQ+Uv3nPaOtgHNHF4mwqKXKl8zNBjH5MJH
+         I/ig==
+X-Gm-Message-State: AAQBX9fULc7HMlTS8NPSg5DXkh0hya94Jf5V01Fuco5Nh5f++dLxk6Kz
+        V72nljO7zvY8bpOUkYSZd8INA9dClYxD1gRu6kaLog==
+X-Google-Smtp-Source: AKy350aFp8aD8fS3GRkg+Ma4y3lVM9sfzyPJ+FDQtWAnxs5derdP3Ayk1ShdJ+4ob5RT0Xr4WW4vBVunwX7+cJuqMpE=
+X-Received: by 2002:a17:902:a515:b0:19f:3c83:e9fe with SMTP id
+ s21-20020a170902a51500b0019f3c83e9femr829013plq.14.1681344278084; Wed, 12 Apr
+ 2023 17:04:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230327222159.3509818-1-sboyd@kernel.org> <20230327222159.3509818-6-sboyd@kernel.org>
+In-Reply-To: <20230327222159.3509818-6-sboyd@kernel.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 12 Apr 2023 17:04:26 -0700
+Message-ID: <CAGS_qxryWVOT9cBtKk28=NupbLP6_AiCj0P3np2GpMVKkyQOLg@mail.gmail.com>
+Subject: Re: [PATCH v3 05/11] of: Add a KUnit test for overlays and test
+ managed APIs
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On Mon, Mar 27, 2023 at 3:22=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wro=
+te:
+>
+> Test the KUnit test managed overlay APIs. Confirm that platform devices
+> are created and destroyed properly. This provides us confidence that the
+> test managed work correctly and can be relied upon to provide tests with
+> fake platform devices and device nodes via overlays compiled into the
+> kernel image.
+>
 
-On Wed, Apr 12, 2023 at 04:33:29PM -0400, Waiman Long wrote:
-> I think we can. You mean having a new "cpuset.cpus.isolated" cgroupfs file.
-> So there will be one in the root cgroup that defines all the isolated CPUs
-> one can have. It is then distributed down the hierarchy and can be claimed
-> only if a cgroup becomes an "isolated" partition. There will be a slight
+The discussion around kunit_cleanup() caught my eye below, so one
+small comment about that.
 
-Yeah, that seems a lot more congruent with the typical pattern.
+<snip>
 
-> change in the semantics of an "isolated" partition, but I doubt there will
-> be much users out there.
+> +/* Test that of_overlay_apply_kunit() cleans up after the test is finish=
+ed */
+> +static void of_overlay_apply_kunit_cleanup(struct kunit *test)
+> +{
+> +       struct device *dev;
+> +       struct device_node *np;
+> +
+> +       KUNIT_ASSERT_EQ(test, 0,
+> +                       of_overlay_apply_kunit(test, kunit_overlay_test))=
+;
+> +
+> +       np =3D of_find_node_by_name(NULL, kunit_node_name);
+> +       of_node_put(np); /* Not derefing 'np' after this */
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+> +
+> +       dev =3D bus_find_device(&platform_bus_type, NULL, np, bus_match_n=
+p);
+> +       put_device(dev); /* Not derefing 'device' after this */
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
+> +
+> +       /* Remove overlay */
+> +       kunit_cleanup(test);
 
-I haven't thought through it too hard but what prevents staying compatible
-with the current behavior?
+Note: this cleans up *all* resources associated with `test`.
+Right now, it's probably fine, but this probably isn't the safest approach.
 
-> If you are OK with this approach, I can modify my patch series to do that.
+Notably, two of the new/upcoming API changes rely on resource,
+kunit/static_stub.h and kunit_add_action() [1].
+Calling kunit_cleanup() undoes all the stubs and immediately triggers
+all the actions.
 
-Thanks.
+Perhaps you can create your own local `struct kunit` like in [2]
+E.g.
 
--- 
-tejun
+struct kunit subtest; // not sure what to call this...
+
+kunit_init_test(&subtest, "fake test", NULL);
+/* use subtest */
+kunit_cleanup(&subtest);
+
+There's also already-submitted code doing similar things in
+lib/kunit/kunit-test.c you can look at, but it's in init/exit funcs.
+See kunit_resource_test_init() and kunit_resource_test_exit().
+
+[1] https://lore.kernel.org/linux-kselftest/20230331080411.981038-2-davidgo=
+w@google.com/
+[2] https://lore.kernel.org/linux-kselftest/20230403201930.2019419-1-rmoar@=
+google.com/
+
+Daniel
