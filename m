@@ -2,67 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA806E0E40
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 15:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562116E0F2C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 15:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjDMNPT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Apr 2023 09:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        id S231292AbjDMNte (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Apr 2023 09:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjDMNPR (ORCPT
+        with ESMTP id S231232AbjDMNtc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 09:15:17 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9B69741
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 06:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681391715; x=1712927715;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=P2XW7i3pukGEaSwWiJhzMZ7EBOe3JkL5xtTTokQHFcM=;
-  b=Yf7agQNGX0dXoaRV53bmIHPseBCMKJ3InLXD0Zzy2wPw+It3lyS53rez
-   A2rC6nWgJDwdZxv20QxeMGfjZbp8uj6GhNCUHHUsZfohq8bPAUyonfiaZ
-   YiWpkCF2RCvlJmUvLS8gSl+Y808pVdUwnZxHFbjoyW2BvY5Zvbfrf8j5D
-   Jha3zHwDWnFuQCnnm2V/QNHaWEqq/e2zBqEKcYVUKcRf9Nn1mHA+n1wAJ
-   I3J8ZKW/KQrWuZgm6M93iLeKKDnMIGw7ZSwajMyAEnoGTf3P9X3S5SpqD
-   GGFU5v+1Rz/frPOIjW+sVYJN6ypm+QJwfpTFRYy9CJuRK1K9Qwqp2sbPP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="344173544"
-X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
-   d="scan'208";a="344173544"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 06:15:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="691953485"
-X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
-   d="scan'208";a="691953485"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Apr 2023 06:15:07 -0700
-Received: from [10.249.156.122] (mwajdecz-MOBL.ger.corp.intel.com [10.249.156.122])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id 61B9138196;
-        Thu, 13 Apr 2023 14:15:06 +0100 (IST)
-Message-ID: <9f6977ec-372e-e2cf-e282-805b444d3ce4@intel.com>
-Date:   Thu, 13 Apr 2023 15:15:05 +0200
+        Thu, 13 Apr 2023 09:49:32 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3ED8A4D
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 06:49:29 -0700 (PDT)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 214BC3F433
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 13:34:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1681392886;
+        bh=9OFnG70DkKWiYI7WkrGxo4LXdZLPfs21Ye1s1GRVjTU=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=Qg811S5ZZQN87WZ3WL8B5eL3/0iJoRUp0Y1Qw1day8PbWRbs5dzdRZiKZZ+1mMzZs
+         l54p8NC1qJtLlXRYvgVnBR8GGJ4LeIZlhXKFyBIhLC2jNj6aO6T7e3TEQSjDF2t/p7
+         59uEkfjCPJq1ZSQnXjDnia2ti5P4i60I3n5z6+M1AwOC1LckjuTEHI58E4HQConwbS
+         hhcZHM3rGuo9R54LvVB5I6e8lzed7BHNl9jpkHJ3wG22vdc+2xpFXK26aV7Q1o0UDy
+         2X7exovuOFsKDIHQpDeij3jw6NrFFnONpcdde0QGwGSoe3XDCGCScxKELWwZFKoQTw
+         GjqkTi2080shQ==
+Received: by mail-ed1-f70.google.com with SMTP id q27-20020a50aa9b000000b00505034ae370so2918035edc.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 06:34:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681392883; x=1683984883;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9OFnG70DkKWiYI7WkrGxo4LXdZLPfs21Ye1s1GRVjTU=;
+        b=inO4YpFJPDuWQpRSIG+ZDiOhm+LDKoAQze7zJ56ZK1ObOlK4zqb3kNls7sVD1etDPM
+         b3SzCdvxzzQ3CA5lvQOC/5EY860V1e7HpU5VN9Uq4r2Vj6r298e8wYLO1WOGJU5eAjO3
+         B0sJFk0M1tymZvklEDzOkhQYBXJ9X46hfYAC46ppnvHIJvsbH2V6RyCeAPn4tb8CvC/l
+         xDLp5EeE+8dQVewuFcL0Cy6cF5NTjg0sXSxI0RZyvjfexorCu04yYtoA2jrR6cU/l57t
+         kgsL0PDbHv+mNnZjKnOfvYsbSvX50ZwlYb2GauiuhnIJUVgnzUAH4t8nC8vl+Q3TY+kl
+         PVbQ==
+X-Gm-Message-State: AAQBX9fxdaBrMccIuKER3gwXQ1RENrrWlC2oyxoyt/dEdlbKfrKMSBGv
+        sJnQ/S1b3vyUnA4cS5amdShrvGDPwWXJ1pk+WNeTRAfYI4UfUKVQjWGxKxI/N9+dx6lQ7VTvOt5
+        uS5/JKjUBXsyyZJMUEvVkM/6QJ7MoK2QBb3wy50ki8eY11Q==
+X-Received: by 2002:a17:906:ae8a:b0:882:cdd4:14d9 with SMTP id md10-20020a170906ae8a00b00882cdd414d9mr2639511ejb.46.1681392883230;
+        Thu, 13 Apr 2023 06:34:43 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y8Ak1AMedhDxrX0Hch7Jn9DeuDHTYqN/ZQLJbSNTNoYaDS8nhCmAWBIfXbaLlh1gAdP/aUGA==
+X-Received: by 2002:a17:906:ae8a:b0:882:cdd4:14d9 with SMTP id md10-20020a170906ae8a00b00882cdd414d9mr2639484ejb.46.1681392883023;
+        Thu, 13 Apr 2023 06:34:43 -0700 (PDT)
+Received: from amikhalitsyn.. ([95.91.208.118])
+        by smtp.gmail.com with ESMTPSA id et22-20020a170907295600b0094a966330fdsm976806ejc.211.2023.04.13.06.34.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 06:34:42 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     davem@davemloft.net
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        daniel@iogearbox.net,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v4 4/4] selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
+Date:   Thu, 13 Apr 2023 15:33:55 +0200
+Message-Id: <20230413133355.350571-5-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
+References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.1
-Subject: Re: [PATCH 3/3] kunit: Update reporting function to support results
- from subtests
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20230411160056.1586-1-michal.wajdeczko@intel.com>
- <20230411160056.1586-4-michal.wajdeczko@intel.com>
- <CA+GJov53J4WhXXUSrGDPZ-hqogL0eYOzaf_RgGQ1paj=_EtLUA@mail.gmail.com>
- <CABVgOSnyvEhgNyxqvJtu6ttXSdAB6t1SaN6-4SCmHYW25AKZoA@mail.gmail.com>
-From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
-In-Reply-To: <CABVgOSnyvEhgNyxqvJtu6ttXSdAB6t1SaN6-4SCmHYW25AKZoA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,199 +91,493 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Basic test to check consistency between:
+- SCM_CREDENTIALS and SCM_PIDFD
+- SO_PEERCRED and SO_PEERPIDFD
 
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+---
+v3:
+	- started using kselftest lib (thanks to Kuniyuki Iwashima for suggestion/review)
+	- now test covers abstract sockets too and SOCK_DGRAM sockets
+---
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/af_unix/Makefile  |   2 +-
+ .../testing/selftests/net/af_unix/scm_pidfd.c | 430 ++++++++++++++++++
+ 3 files changed, 432 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/af_unix/scm_pidfd.c
 
-On 13.04.2023 08:31, David Gow wrote:
-> On Thu, 13 Apr 2023 at 04:28, Rae Moar <rmoar@google.com> wrote:
->>
->> On Tue, Apr 11, 2023 at 12:01 PM Michal Wajdeczko
->> <michal.wajdeczko@intel.com> wrote:
->>>
->>> There is function to report status of either suite or test, but it
->>> doesn't support parameterized subtests that have to log report on
->>> its own. Extend it to also accept subtest level results to avoid
->>> code duplication.
->>>
->>> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
->>> Cc: David Gow <davidgow@google.com>
->>> ---
->>>  lib/kunit/test.c | 28 +++++++++++++++++-----------
->>>  1 file changed, 17 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
->>> index 5679197b5f8a..692fce258c5b 100644
->>> --- a/lib/kunit/test.c
->>> +++ b/lib/kunit/test.c
->>> @@ -154,8 +154,14 @@ static void kunit_print_suite_start(struct kunit_suite *suite)
->>>                   kunit_suite_num_test_cases(suite));
->>>  }
->>>
->>> +enum kunit_test_or_suite {
->>> +       KUNIT_SUITE = 0,
->>> +       KUNIT_TEST,
->>> +       KUNIT_SUBTEST,
->>> +};
->>> +
->>
->> Hi Michal!
->>
->> Since KUnit's goal is to progress toward supporting arbitrary levels
->> of testing, I like the idea of starting to adjust these helper
->> functions to allow for greater levels of testing.
->>
->> However, I'm not sure about this kunit_test_or_suite enum. If our goal
->> is to support an arbitrary number of levels of tests then this enum
->> still limits us to a finite number of levels. However, if we only want
->> to focus on supporting parameterized tests (which is our direct goal),
->> this could be the right solution.
->>
->> Maybe instead we could use an integer denoting the test level instead?
->> This would remove the limit but would also remove the nice names of
->> the levels.
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 80f06aa62034..83fd1ebd34ec 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -26,6 +26,7 @@ reuseport_bpf_cpu
+ reuseport_bpf_numa
+ reuseport_dualstack
+ rxtimestamp
++scm_pidfd
+ sk_bind_sendto_listen
+ sk_connect_zero_addr
+ socket
+diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing/selftests/net/af_unix/Makefile
+index 1e4b397cece6..f5ca9da8c4d5 100644
+--- a/tools/testing/selftests/net/af_unix/Makefile
++++ b/tools/testing/selftests/net/af_unix/Makefile
+@@ -1,3 +1,3 @@
+-TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect
++TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect scm_pidfd
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/af_unix/scm_pidfd.c b/tools/testing/selftests/net/af_unix/scm_pidfd.c
+new file mode 100644
+index 000000000000..a86222143d79
+--- /dev/null
++++ b/tools/testing/selftests/net/af_unix/scm_pidfd.c
+@@ -0,0 +1,430 @@
++// SPDX-License-Identifier: GPL-2.0 OR MIT
++#define _GNU_SOURCE
++#include <error.h>
++#include <limits.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/socket.h>
++#include <linux/socket.h>
++#include <unistd.h>
++#include <string.h>
++#include <errno.h>
++#include <sys/un.h>
++#include <sys/signal.h>
++#include <sys/types.h>
++#include <sys/wait.h>
++
++#include "../../kselftest_harness.h"
++
++#define clean_errno() (errno == 0 ? "None" : strerror(errno))
++#define log_err(MSG, ...)                                                   \
++	fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", __FILE__, __LINE__, \
++		clean_errno(), ##__VA_ARGS__)
++
++#ifndef SCM_PIDFD
++#define SCM_PIDFD 0x04
++#endif
++
++static void child_die()
++{
++	exit(1);
++}
++
++static int safe_int(const char *numstr, int *converted)
++{
++	char *err = NULL;
++	long sli;
++
++	errno = 0;
++	sli = strtol(numstr, &err, 0);
++	if (errno == ERANGE && (sli == LONG_MAX || sli == LONG_MIN))
++		return -ERANGE;
++
++	if (errno != 0 && sli == 0)
++		return -EINVAL;
++
++	if (err == numstr || *err != '\0')
++		return -EINVAL;
++
++	if (sli > INT_MAX || sli < INT_MIN)
++		return -ERANGE;
++
++	*converted = (int)sli;
++	return 0;
++}
++
++static int char_left_gc(const char *buffer, size_t len)
++{
++	size_t i;
++
++	for (i = 0; i < len; i++) {
++		if (buffer[i] == ' ' || buffer[i] == '\t')
++			continue;
++
++		return i;
++	}
++
++	return 0;
++}
++
++static int char_right_gc(const char *buffer, size_t len)
++{
++	int i;
++
++	for (i = len - 1; i >= 0; i--) {
++		if (buffer[i] == ' ' || buffer[i] == '\t' ||
++		    buffer[i] == '\n' || buffer[i] == '\0')
++			continue;
++
++		return i + 1;
++	}
++
++	return 0;
++}
++
++static char *trim_whitespace_in_place(char *buffer)
++{
++	buffer += char_left_gc(buffer, strlen(buffer));
++	buffer[char_right_gc(buffer, strlen(buffer))] = '\0';
++	return buffer;
++}
++
++/* borrowed (with all helpers) from pidfd/pidfd_open_test.c */
++static pid_t get_pid_from_fdinfo_file(int pidfd, const char *key, size_t keylen)
++{
++	int ret;
++	char path[512];
++	FILE *f;
++	size_t n = 0;
++	pid_t result = -1;
++	char *line = NULL;
++
++	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", pidfd);
++
++	f = fopen(path, "re");
++	if (!f)
++		return -1;
++
++	while (getline(&line, &n, f) != -1) {
++		char *numstr;
++
++		if (strncmp(line, key, keylen))
++			continue;
++
++		numstr = trim_whitespace_in_place(line + 4);
++		ret = safe_int(numstr, &result);
++		if (ret < 0)
++			goto out;
++
++		break;
++	}
++
++out:
++	free(line);
++	fclose(f);
++	return result;
++}
++
++static int cmsg_check(int fd)
++{
++	struct msghdr msg = { 0 };
++	struct cmsghdr *cmsg;
++	struct iovec iov;
++	struct ucred *ucred = NULL;
++	int data = 0;
++	char control[CMSG_SPACE(sizeof(struct ucred)) +
++		     CMSG_SPACE(sizeof(int))] = { 0 };
++	int *pidfd = NULL;
++	pid_t parent_pid;
++	int err;
++
++	iov.iov_base = &data;
++	iov.iov_len = sizeof(data);
++
++	msg.msg_iov = &iov;
++	msg.msg_iovlen = 1;
++	msg.msg_control = control;
++	msg.msg_controllen = sizeof(control);
++
++	err = recvmsg(fd, &msg, 0);
++	if (err < 0) {
++		log_err("recvmsg");
++		return 1;
++	}
++
++	if (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC)) {
++		log_err("recvmsg: truncated");
++		return 1;
++	}
++
++	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL;
++	     cmsg = CMSG_NXTHDR(&msg, cmsg)) {
++		if (cmsg->cmsg_level == SOL_SOCKET &&
++		    cmsg->cmsg_type == SCM_PIDFD) {
++			if (cmsg->cmsg_len < sizeof(*pidfd)) {
++				log_err("CMSG parse: SCM_PIDFD wrong len");
++				return 1;
++			}
++
++			pidfd = (void *)CMSG_DATA(cmsg);
++		}
++
++		if (cmsg->cmsg_level == SOL_SOCKET &&
++		    cmsg->cmsg_type == SCM_CREDENTIALS) {
++			if (cmsg->cmsg_len < sizeof(*ucred)) {
++				log_err("CMSG parse: SCM_CREDENTIALS wrong len");
++				return 1;
++			}
++
++			ucred = (void *)CMSG_DATA(cmsg);
++		}
++	}
++
++	/* send(pfd, "x", sizeof(char), 0) */
++	if (data != 'x') {
++		log_err("recvmsg: data corruption");
++		return 1;
++	}
++
++	if (!pidfd) {
++		log_err("CMSG parse: SCM_PIDFD not found");
++		return 1;
++	}
++
++	if (!ucred) {
++		log_err("CMSG parse: SCM_CREDENTIALS not found");
++		return 1;
++	}
++
++	/* pidfd from SCM_PIDFD should point to the parent process PID */
++	parent_pid =
++		get_pid_from_fdinfo_file(*pidfd, "Pid:", sizeof("Pid:") - 1);
++	if (parent_pid != getppid()) {
++		log_err("wrong SCM_PIDFD %d != %d", parent_pid, getppid());
++		return 1;
++	}
++
++	return 0;
++}
++
++struct sock_addr {
++	char sock_name[32];
++	struct sockaddr_un listen_addr;
++	socklen_t addrlen;
++};
++
++FIXTURE(scm_pidfd)
++{
++	int server;
++	pid_t client_pid;
++	int startup_pipe[2];
++	struct sock_addr server_addr;
++	struct sock_addr *client_addr;
++};
++
++FIXTURE_VARIANT(scm_pidfd)
++{
++	int type;
++	bool abstract;
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, stream_pathname)
++{
++	.type = SOCK_STREAM,
++	.abstract = 0,
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, stream_abstract)
++{
++	.type = SOCK_STREAM,
++	.abstract = 1,
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, dgram_pathname)
++{
++	.type = SOCK_DGRAM,
++	.abstract = 0,
++};
++
++FIXTURE_VARIANT_ADD(scm_pidfd, dgram_abstract)
++{
++	.type = SOCK_DGRAM,
++	.abstract = 1,
++};
++
++FIXTURE_SETUP(scm_pidfd)
++{
++	self->client_addr = mmap(NULL, sizeof(*self->client_addr), PROT_READ | PROT_WRITE,
++				 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	ASSERT_NE(MAP_FAILED, self->client_addr);
++}
++
++FIXTURE_TEARDOWN(scm_pidfd)
++{
++	close(self->server);
++
++	kill(self->client_pid, SIGKILL);
++	waitpid(self->client_pid, NULL, 0);
++
++	if (!variant->abstract) {
++		unlink(self->server_addr.sock_name);
++		unlink(self->client_addr->sock_name);
++	}
++}
++
++static void fill_sockaddr(struct sock_addr *addr, bool abstract)
++{
++	char *sun_path_buf = (char *)&addr->listen_addr.sun_path;
++
++	addr->listen_addr.sun_family = AF_UNIX;
++	addr->addrlen = offsetof(struct sockaddr_un, sun_path);
++	snprintf(addr->sock_name, sizeof(addr->sock_name), "scm_pidfd_%d", getpid());
++	addr->addrlen += strlen(addr->sock_name);
++	if (abstract) {
++		*sun_path_buf = '\0';
++		addr->addrlen++;
++		sun_path_buf++;
++	} else {
++		unlink(addr->sock_name);
++	}
++	memcpy(sun_path_buf, addr->sock_name, strlen(addr->sock_name));
++}
++
++static void client(FIXTURE_DATA(scm_pidfd) *self,
++		   const FIXTURE_VARIANT(scm_pidfd) *variant)
++{
++	int err;
++	int cfd;
++	socklen_t len;
++	struct ucred peer_cred;
++	int peer_pidfd;
++	pid_t peer_pid;
++	int on = 0;
++
++	cfd = socket(AF_UNIX, variant->type, 0);
++	if (cfd < 0) {
++		log_err("socket");
++		child_die();
++	}
++
++	if (variant->type == SOCK_DGRAM) {
++		fill_sockaddr(self->client_addr, variant->abstract);
++
++		if (bind(cfd, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen)) {
++			log_err("bind");
++			child_die();
++		}
++	}
++
++	if (connect(cfd, (struct sockaddr *)&self->server_addr.listen_addr,
++		    self->server_addr.addrlen) != 0) {
++		log_err("connect");
++		child_die();
++	}
++
++	on = 1;
++	if (setsockopt(cfd, SOL_SOCKET, SO_PASSCRED, &on, sizeof(on))) {
++		log_err("Failed to set SO_PASSCRED");
++		child_die();
++	}
++
++	if (setsockopt(cfd, SOL_SOCKET, SO_PASSPIDFD, &on, sizeof(on))) {
++		log_err("Failed to set SO_PASSPIDFD");
++		child_die();
++	}
++
++	close(self->startup_pipe[1]);
++
++	if (cmsg_check(cfd)) {
++		log_err("cmsg_check failed");
++		child_die();
++	}
++
++	/* skip further for SOCK_DGRAM as it's not applicable */
++	if (variant->type == SOCK_DGRAM)
++		return;
++
++	len = sizeof(peer_cred);
++	if (getsockopt(cfd, SOL_SOCKET, SO_PEERCRED, &peer_cred, &len)) {
++		log_err("Failed to get SO_PEERCRED");
++		child_die();
++	}
++
++	len = sizeof(peer_pidfd);
++	if (getsockopt(cfd, SOL_SOCKET, SO_PEERPIDFD, &peer_pidfd, &len)) {
++		log_err("Failed to get SO_PEERPIDFD");
++		child_die();
++	}
++
++	/* pid from SO_PEERCRED should point to the parent process PID */
++	if (peer_cred.pid != getppid()) {
++		log_err("peer_cred.pid != getppid(): %d != %d", peer_cred.pid, getppid());
++		child_die();
++	}
++
++	peer_pid = get_pid_from_fdinfo_file(peer_pidfd,
++					    "Pid:", sizeof("Pid:") - 1);
++	if (peer_pid != peer_cred.pid) {
++		log_err("peer_pid != peer_cred.pid: %d != %d", peer_pid, peer_cred.pid);
++		child_die();
++	}
++}
++
++TEST_F(scm_pidfd, test)
++{
++	int err;
++	int pfd;
++	int child_status = 0;
++
++	self->server = socket(AF_UNIX, variant->type, 0);
++	ASSERT_NE(-1, self->server);
++
++	fill_sockaddr(&self->server_addr, variant->abstract);
++
++	err = bind(self->server, (struct sockaddr *)&self->server_addr.listen_addr, self->server_addr.addrlen);
++	ASSERT_EQ(0, err);
++
++	if (variant->type == SOCK_STREAM) {
++		err = listen(self->server, 1);
++		ASSERT_EQ(0, err);
++	}
++
++	err = pipe(self->startup_pipe);
++	ASSERT_NE(-1, err);
++
++	self->client_pid = fork();
++	ASSERT_NE(-1, self->client_pid);
++	if (self->client_pid == 0) {
++		close(self->server);
++		close(self->startup_pipe[0]);
++		client(self, variant);
++		exit(0);
++	}
++	close(self->startup_pipe[1]);
++
++	if (variant->type == SOCK_STREAM) {
++		pfd = accept(self->server, NULL, NULL);
++		ASSERT_NE(-1, pfd);
++	} else {
++		pfd = self->server;
++	}
++
++	/* wait until the child arrives at checkpoint */
++	read(self->startup_pipe[0], &err, sizeof(int));
++	close(self->startup_pipe[0]);
++
++	if (variant->type == SOCK_DGRAM) {
++		err = sendto(pfd, "x", sizeof(char), 0, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen);
++		ASSERT_NE(-1, err);
++	} else {
++		err = send(pfd, "x", sizeof(char), 0);
++		ASSERT_NE(-1, err);
++	}
++
++	close(pfd);
++	waitpid(self->client_pid, &child_status, 0);
++	ASSERT_EQ(0, WIFEXITED(child_status) ? WEXITSTATUS(child_status) : 1);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.34.1
 
-we can use integer as param but at the same time we can also have define
-or anonymous enum as nice aliases to currently known/used levels:
-
-/* Currently supported test levels */
-enum {
-	KUNIT_LEVEL_SUITE = 0,
-	KUNIT_LEVEL_TEST,
-	KUNIT_LEVEL_PARAMTEST,
-};
-
-/* Future levels are TBD */
-#define KUNIT_LEVEL_SUBTEST(n)	(KUNIT_LEVEL_TEST + (n))
-
->>
->> I'm curious what others opinions are on these ideas?
->>
->> A bit of a nit: if we do use this enum I wonder if we could clarify
->> the name to be kunit_test_level as the current name of
->> kunit_test_or_suite seems to indicate to me a binary of two options
->> rather than three.
->>
->>>  static void kunit_print_ok_not_ok(void *test_or_suite,
->>> -                                 bool is_test,
->>> +                                 enum kunit_test_or_suite is_test,
->>
->> Similar to above, I think the name of is_test could be clarified. It
->> is currently a bit confusing to me as they are all tests. Maybe
->> test_level?
-
-ok
-
-> 
-> I agree with Rae that this is not the ideal long-term solution.
-> 
-> We're basically encoding two things here:
-> - Are we dealing with a 'struct kunit_suite' or a 'struct kunit'?
-> - How nested the test is.
-> 
-> Given KUnit originally only had a 2-level nesting (suite->test), and
-> now has 3-level nesting (always suite->test[->param]), this works, but
-> the KTAP format permits arbitrary nesting of tests, and we'll want to
-> have something like that in KUnit going forward. We don't have a
-> design for that yet, but it could conceivably allow nested suites,
-> thus breaking the rule that nesting level 0 is always a suite, and the
-> rest are all tests.
-
-I guess "We don't have a design for that yet" is a key here
-
-> 
-> So there's definitely a part of me that would prefer to pass those two
-> pieces of information in separate arguments, rather than relying on an
-> enum like this.
-> 
-> That being said, this is all very fuzzy future plans, rather than
-> anything concrete, and this will all likely need reworking if we do
-> anything drastic anyway, so I'm not worried if we go with this for
-> now, and change it when we need to. I do think it's an improvement
-> over what we're doing currently.
-> (For example, another possible implementation for nested tests could
-> be to get rid of the distinction between tests and suites completely:
-> or at least have them share 'struct kunit', so this wouldn't need
-> passing in separately.)
-
-maybe the problem will go away once we just replace this untyped param:
-
-	kunit_print_ok_not_ok(void *test_or_suite, ...
-
-with proper type:
-
-	kunit_print_ok_not_ok(struct kunit *test, ...
-
-and treat NULL as indication that we just want to print raw results (as
-it looks function is not using any suite attributes directly, all input
-is passed explicitly and kunit_log() expects test only)
-
-Thanks,
-Michal
-
-> 
-> Cheers,
-> -- David
-> 
-> 
->>
->>>                                   enum kunit_status status,
->>>                                   size_t test_number,
->>>                                   const char *description,
->>> @@ -180,7 +186,9 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
->>>                         (status == KUNIT_SKIPPED) ? directive : "");
->>>         else
->>>                 kunit_log(KERN_INFO, test,
->>> -                         KUNIT_SUBTEST_INDENT "%s %zd %s%s%s",
->>> +                         "%.*s%s %zd %s%s%s",
->>> +                         (int) strlen(KUNIT_SUBTEST_INDENT) * is_test,
->>
->> I would consider saving the length of KUNIT_SUBTEST_INDENT as a macro.
->> Maybe KUNIT_INDENT_LEN?
->>
->>> +                         KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT,
->>>                           kunit_status_to_ok_not_ok(status),
->>>                           test_number, description, directive_header,
->>>                           (status == KUNIT_SKIPPED) ? directive : "");
->>> @@ -209,7 +217,7 @@ static size_t kunit_suite_counter = 1;
->>>
->>>  static void kunit_print_suite_end(struct kunit_suite *suite)
->>>  {
->>> -       kunit_print_ok_not_ok((void *)suite, false,
->>> +       kunit_print_ok_not_ok((void *)suite, KUNIT_SUITE,
->>>                               kunit_suite_has_succeeded(suite),
->>>                               kunit_suite_counter++,
->>>                               suite->name,
->>> @@ -554,13 +562,11 @@ int kunit_run_tests(struct kunit_suite *suite)
->>>                                                  "param-%d", test.param_index);
->>>                                 }
->>>
->>> -                               kunit_log(KERN_INFO, &test,
->>> -                                         KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
->>> -                                         "%s %d %s%s%s",
->>> -                                         kunit_status_to_ok_not_ok(test.status),
->>> -                                         test.param_index + 1, param_desc,
->>> -                                         test.status == KUNIT_SKIPPED ? " # SKIP " : "",
->>> -                                         test.status == KUNIT_SKIPPED ? test.status_comment : "");
->>> +                               kunit_print_ok_not_ok(&test, KUNIT_SUBTEST,
->>> +                                                     test.status,
->>> +                                                     test.param_index + 1,
->>> +                                                     param_desc,
->>> +                                                     test.status_comment);
->>>
->>>                                 /* Get next param. */
->>>                                 param_desc[0] = '\0';
->>> @@ -574,7 +580,7 @@ int kunit_run_tests(struct kunit_suite *suite)
->>>
->>>                 kunit_print_test_stats(&test, param_stats);
->>>
->>> -               kunit_print_ok_not_ok(&test, true, test_case->status,
->>> +               kunit_print_ok_not_ok(&test, KUNIT_TEST, test_case->status,
->>>                                       kunit_test_case_num(suite, test_case),
->>>                                       test_case->name,
->>>                                       test.status_comment);
->>> --
->>> 2.25.1
->>>
->>> --
->>> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
->>> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
->>> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230411160056.1586-4-michal.wajdeczko%40intel.com.
