@@ -2,55 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D866E1333
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 19:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF2A6E1395
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 19:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjDMRKY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Apr 2023 13:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S229479AbjDMRd6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Apr 2023 13:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbjDMRKV (ORCPT
+        with ESMTP id S229939AbjDMRd5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 13:10:21 -0400
+        Thu, 13 Apr 2023 13:33:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7195F7D85;
-        Thu, 13 Apr 2023 10:10:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59A186BD;
+        Thu, 13 Apr 2023 10:33:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B9BC64031;
-        Thu, 13 Apr 2023 17:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DF8C8C433D2;
-        Thu, 13 Apr 2023 17:10:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2452463FE9;
+        Thu, 13 Apr 2023 17:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55962C433D2;
+        Thu, 13 Apr 2023 17:33:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681405818;
-        bh=TTMPY+VYyqCQUJ6Kf3OMi0XvWsEMpitS3xIlaYntt/o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rNALsve5zDHrmp3o0aYNfmHMpYblt/hhzFFUmRj+5rvF9o6cdFXAq2IVoqHfBTqDd
-         AvXiIvPSABYQr1o47YBnhfI062hxDaVpltx+azxLFd2CMwLPggXGX3P4PN8UCtbW5c
-         vgSn0luMIByakBX8BAvgCB+Uqgw47gKiwMUynVVFny0RDJPFasFEnDJzQr89cZvOh4
-         gsJbT5JtR13DiX3Gt+FdyXHEpTtHXXqPZvjIQcaTJU/mlTya6SdfpPukNItplp2Cfs
-         oQu+mrd3iGpizzS+OOfAMsEUhds4wRDe6UDCoBW/gm9YHZdppH8cpbHPHavki6RUH+
-         agQD6/C5gfniA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF7B1E21ED9;
-        Thu, 13 Apr 2023 17:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1681407235;
+        bh=71WwyMIBy/Sh3GkQNe/Y3Tzlac75kWmJdT/ujgMPth0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=TK6Io+YeLpLPM97i7IDMfaHYl9sDi1jB+6ITtwfuUd/QjlDF9yrz1uTYCRoq4w5nV
+         qrSNfMDG7ILZVYVy+lLAF7DpXV1DClpSmPqxZjgE/LKOGl0c1oVKkjx1EQdmbsMoXS
+         NGHT25HneRJIo4UwNNW/eEkO1OqDVMRUYORiFAuDMeYP4RmXY9wVlsWd3vZ+Lx2UP/
+         GpLC3wP5KMV/JoNwNhia8+3uSzI+vPNEKzjxQv2e9Ud+V1K/I+idJ5Gy2wykj361Gw
+         /UTfRk9cxRDf3VRE/+5Z5fF23tbiNbbjGQf9/RqS0JVyZ8zZFFxSGgjtqeaPWZESgL
+         np+QF5RLD/jZQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id D7B8A15404B3; Thu, 13 Apr 2023 10:33:54 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 10:33:54 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] tools/nolibc: Fix build of stdio.h due to header ordering
+Message-ID: <c8021d03-4da0-4956-8744-4a3a1f8dd533@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230413-nolibc-stdio-fix-v1-1-fa05fc3ba1fe@kernel.org>
+ <ZDg3K2nI+5l6as/L@1wt.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/4] mptcp: more fixes for 6.3
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168140581877.3344.4926518348735216178.git-patchwork-notify@kernel.org>
-Date:   Thu, 13 Apr 2023 17:10:18 +0000
-References: <20230411-upstream-net-20230411-mptcp-fixes-v1-0-ca540f3ef986@tessares.net>
-In-Reply-To: <20230411-upstream-net-20230411-mptcp-fixes-v1-0-ca540f3ef986@tessares.net>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     mptcp@lists.linux.dev, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, dcaratti@redhat.com,
-        dmytro@shytyi.net, shuah@kernel.org, martineau@kernel.org,
-        geliang.tang@suse.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org, cpaasch@apple.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZDg3K2nI+5l6as/L@1wt.eu>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,34 +59,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 11 Apr 2023 22:42:08 +0200 you wrote:
-> Patch 1 avoids scheduling the MPTCP worker on a closed socket on some
-> edge cases. It fixes issues that can be visible from v5.11.
+On Thu, Apr 13, 2023 at 07:08:59PM +0200, Willy Tarreau wrote:
+> Hi Mark,
 > 
-> Patch 2 makes sure the MPTCP worker doesn't try to manipulate
-> disconnected sockets. This is also a fix for an issue that can be
-> visible from v5.11.
+> Sorry for this issue, I don't know why it didn't trigger in our tests,
+> maybe due to the includes being explicit in the test program.
 > 
-> [...]
+> On Thu, Apr 13, 2023 at 05:26:32PM +0100, Mark Brown wrote:
+> > When we added fd based file streams we created references to STx_FILENO in
+> > stdio.h but these constants are declared in unistd.h which is the last file
+> > included by the top level nolibc.h meaning those constants are not defined
+> > when we try to build stdio.h. This causes programs using nolibc.h to fail
+> > to build.
+> > 
+> > Reorder the headers to avoid this issue.
+> > 
+> > Fixes: d449546c957f ("tools/nolibc: implement fd-based FILE streams")
+> > Signed-off-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Willy Tarreau <w@1wt.eu>
+> 
+> Paul, the commit above is in your rcu/next branch but fortunately not
+> in the series you've prepared for 6.4, so it will be sufficient to pick
+> it on top of next and you can take it directly if you want.
 
-Here is the summary with links:
-  - [net,1/4] mptcp: use mptcp_schedule_work instead of open-coding it
-    https://git.kernel.org/netdev/net/c/a5cb752b1257
-  - [net,2/4] mptcp: stricter state check in mptcp_worker
-    https://git.kernel.org/netdev/net/c/d6a044373343
-  - [net,3/4] mptcp: fix NULL pointer dereference on fastopen early fallback
-    https://git.kernel.org/netdev/net/c/c0ff6f6da66a
-  - [net,4/4] selftests: mptcp: userspace pm: uniform verify events
-    https://git.kernel.org/netdev/net/c/711ae788cbbb
+Queued and pushed, thank you both!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+With respect to -next, travel plans next week are causing me to instead
+update my rcu/next branch to the merge point of all of this coming
+merge window's pull requests.  Though it only makes a difference of a
+few days, as I would normally pull rcu/next back the Monday before the
+merge window opens.
 
+There is some possibility that I will be off the grid for extended periods
+next week, which shouldn't make any difference for nolibc, aside from my
+possibly being unresponsive during that time.  The odds of an emergency
+fix to last merge window's changes are quite low this late in cycle,
+and I will be back before the next merge window opens.
 
+Just let me know what I need to pull in, and I will do that early the
+week after this coming one.  Or you can buffer it up and send me one
+big series upon my return, your choice.  Either way works for me.  ;-)
+
+							Thanx, Paul
