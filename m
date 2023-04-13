@@ -2,82 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903C06E03A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 03:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401856E03E3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 03:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjDMB17 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 21:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S229818AbjDMB4h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 21:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDMB17 (ORCPT
+        with ESMTP id S229724AbjDMB4h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 21:27:59 -0400
-Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225E6CF;
-        Wed, 12 Apr 2023 18:27:56 -0700 (PDT)
-Received: from unicom146.biz-email.net
-        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id IVO00050;
-        Thu, 13 Apr 2023 09:27:50 +0800
-Received: from localhost.localdomain.com (10.200.104.82) by
- jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server id
- 15.1.2507.21; Thu, 13 Apr 2023 09:27:53 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <akpm@linux-foundation.org>, <shuah@kernel.org>
-CC:     <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] selftests/mm: Replace obsolete memalign() with posix_memalign()
-Date:   Wed, 12 Apr 2023 21:27:51 -0400
-Message-ID: <20230413012751.4445-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 12 Apr 2023 21:56:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C0E61A1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 18:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681350953;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QUAJoa4WsPFgOaywimIxgJmb0m1Gj0LU/rbMc/oiFgM=;
+        b=DQln5leQkin0vOWp4eR/gYPBbs87nsQoIGmXEma3KPYR/lLrM1fGpqM3cyfI303cGCS2Rv
+        x8JJiJuhrpoQ2+wRuc0Ptu+WSdfkNyw8YoH/ihJMA06iSPvFrHUaX5BfEXF+KGhbdX20Pg
+        0mQ44QEec+1nKsI+tr8DloYvRRkf9uw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-189-SMq2uPKiO0excjeVA5Pqsw-1; Wed, 12 Apr 2023 21:55:47 -0400
+X-MC-Unique: SMq2uPKiO0excjeVA5Pqsw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3C9473810B1C;
+        Thu, 13 Apr 2023 01:55:47 +0000 (UTC)
+Received: from [10.22.32.168] (unknown [10.22.32.168])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 668CDC15BB8;
+        Thu, 13 Apr 2023 01:55:46 +0000 (UTC)
+Message-ID: <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+Date:   Wed, 12 Apr 2023 21:55:46 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   2023413092750fa4388fe447b5709db712d77b7ea7373
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <20230412153758.3088111-1-longman@redhat.com>
+ <ZDcGVebCpyktxyWh@slm.duckdns.org>
+ <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
+ <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
+ <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+ <ZDdG1K0kTETZMTCu@slm.duckdns.org>
+ <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
+ <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
+ <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
+ <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-memalign() is obsolete according to its manpage.
+On 4/12/23 21:17, Tejun Heo wrote:
+> Hello, Waiman.
+>
+> On Wed, Apr 12, 2023 at 08:55:55PM -0400, Waiman Long wrote:
+>>> Sounds a bit contrived. Does it need to be something defined in the root
+>>> cgroup?
+>> Yes, because we need to take away the isolated CPUs from the effective cpus
+>> of the root cgroup. So it needs to start from the root. That is also why we
+>> have the partition rule that the parent of a partition has to be a partition
+>> root itself. With the new scheme, we don't need a special cgroup to hold the
+> I'm following. The root is already a partition root and the cgroupfs control
+> knobs are owned by the parent, so the root cgroup would own the first level
+> cgroups' cpuset.cpus.reserve knobs. If the root cgroup wants to assign some
+> CPUs exclusively to a first level cgroup, it can then set that cgroup's
+> reserve knob accordingly (or maybe the better name is
+> cpuset.cpus.exclusive), which will take those CPUs out of the root cgroup's
+> partition and give them to the first level cgroup. The first level cgroup
+> then is free to do whatever with those CPUs that now belong exclusively to
+> the cgroup subtree.
 
-Replace memalign() with posix_memalign().
+I am OK with the cpuset.cpus.reserve name, but not that much with the 
+cpuset.cpus.exclusive name as it can get confused with cgroup v1's 
+cpuset.cpu_exclusive. Of course, I prefer the cpuset.cpus.isolated name 
+a bit more. Once an isolated CPU gets used in an isolated partition, it 
+is exclusive and it can't be used in another isolated partition.
 
-As a pointer is passed into posix_memalign(),initialize *map to
-NULL,to silence a warning about the function's return value being
-used as uninitialized (which is not valid anyway because the
-error is properly checked before map is returned).
+Since we will allow users to set cpuset.cpus.reserve to whatever value 
+they want. The distribution of isolated CPUs is only valid if the cpus 
+are present in its parent's cpuset.cpus.reserve and all the way up to 
+the root. It is a bit expensive, but it should be a relatively rare 
+operation.
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- tools/testing/selftests/mm/soft-dirty.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+>
+>> isolated CPUs. The new root cgroup file will be enough to inform the system
+>> what CPUs will have to be isolated.
+>>
+>> My current thinking is that the root's "cpuset.cpus.isolated" will start
+>> with whatever have been set in the "isolcpus" or "nohz_full" boot command
+>> line and can be extended from there but not shrank below that as there can
+>> be additional isolation attributes with those isolated CPUs.
+> I'm not sure we wanna tie with those automatically. I think it'd be
+> confusing than helpful.
 
-diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
-index 21d8830c5f24..c99350e110ec 100644
---- a/tools/testing/selftests/mm/soft-dirty.c
-+++ b/tools/testing/selftests/mm/soft-dirty.c
-@@ -80,9 +80,9 @@ static void test_hugepage(int pagemap_fd, int pagesize)
- 	int i, ret;
- 	size_t hpage_len = read_pmd_pagesize();
- 
--	map = memalign(hpage_len, hpage_len);
--	if (!map)
--		ksft_exit_fail_msg("memalign failed\n");
-+	ret = posix_memalign((void **)(&map), hpage_len, hpage_len);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("posix_memalign failed\n");
- 
- 	ret = madvise(map, hpage_len, MADV_HUGEPAGE);
- 	if (ret)
--- 
-2.27.0
+Yes, I am fine with taking this off for now.
+
+Cheers,
+Longman
 
