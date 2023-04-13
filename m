@@ -2,43 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D966E07A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 09:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E276E07A3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 09:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjDMHYS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Apr 2023 03:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S229853AbjDMHXK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Apr 2023 03:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjDMHYR (ORCPT
+        with ESMTP id S229847AbjDMHXH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 03:24:17 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Apr 2023 00:24:08 PDT
-Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A478681;
-        Thu, 13 Apr 2023 00:24:08 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="92663591"
+        Thu, 13 Apr 2023 03:23:07 -0400
+Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8262A4C3C;
+        Thu, 13 Apr 2023 00:23:06 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="91996438"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673881200"; 
-   d="scan'208";a="92663591"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 16:23:03 +0900
-Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
-        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 81625DF1BD;
-        Thu, 13 Apr 2023 16:23:00 +0900 (JST)
+   d="scan'208";a="91996438"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 16:23:03 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 7DCBCD66A1;
+        Thu, 13 Apr 2023 16:23:01 +0900 (JST)
 Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
-        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id C2C22D9497;
-        Thu, 13 Apr 2023 16:22:59 +0900 (JST)
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id C6F9FD35F7;
+        Thu, 13 Apr 2023 16:23:00 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om3.fujitsu.com (Postfix) with ESMTP id 6E65C400C0319;
-        Thu, 13 Apr 2023 16:22:59 +0900 (JST)
+        by yto-om3.fujitsu.com (Postfix) with ESMTP id 8BBF840007204;
+        Thu, 13 Apr 2023 16:23:00 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tan.shaopeng@jp.fujitsu.com, Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v9 2/6] selftests/resctrl: Return MBA check result and make it to output message
-Date:   Thu, 13 Apr 2023 16:22:55 +0900
-Message-Id: <20230413072259.2089348-3-tan.shaopeng@jp.fujitsu.com>
+Subject: [PATCH v9 3/6] selftests/resctrl: Flush stdout file buffer before executing fork()
+Date:   Thu, 13 Apr 2023 16:22:56 +0900
+Message-Id: <20230413072259.2089348-4-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20230413072259.2089348-1-tan.shaopeng@jp.fujitsu.com>
 References: <20230413072259.2089348-1-tan.shaopeng@jp.fujitsu.com>
@@ -53,66 +52,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since MBA check result is not returned, the MBA test result message
-is always output as "ok" regardless of whether the MBA check result is
-true or false.
+When a process has buffered output, a child process created by fork()
+will also copy buffered output. When using kselftest framework,
+the output (resctrl test result message) will be printed multiple times.
 
-Make output message to be "not ok" if MBA check result is failed.
+Add fflush() to flush out the buffered output before executing fork().
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 ---
- tools/testing/selftests/resctrl/mba_test.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c    | 1 +
+ tools/testing/selftests/resctrl/resctrl_val.c | 1 +
+ tools/testing/selftests/resctrl/resctrlfs.c   | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 7defb32ad0de..2a5d43f3c142 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -56,10 +56,10 @@ static int mba_setup(int num, ...)
- 	return 0;
- }
- 
--static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
-+static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- {
- 	int allocation, runs;
--	bool failed = false;
-+	bool ret = false;
- 
- 	ksft_print_msg("Results are displayed in (MB)\n");
- 	/* Memory bandwidth from 100% down to 10% */
-@@ -95,13 +95,15 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 		ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
- 		ksft_print_msg("avg_bw_resc: %lu\n", avg_bw_resc);
- 		if (avg_diff_per > MAX_DIFF_PERCENT)
--			failed = true;
-+			ret = true;
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 08070d4fa735..38c10a8c1814 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -167,6 +167,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 		return errno;
  	}
  
- 	ksft_print_msg("%s Check schemata change using MBA\n",
--		       failed ? "Fail:" : "Pass:");
--	if (failed)
-+		       ret ? "Fail:" : "Pass:");
-+	if (ret)
- 		ksft_print_msg("At least one test failed\n");
-+
-+	return ret;
- }
++	fflush(stdout);
+ 	bm_pid = fork();
  
- static int check_results(void)
-@@ -137,9 +139,7 @@ static int check_results(void)
- 
- 	fclose(fp);
- 
--	show_mba_info(bw_imc, bw_resc);
--
--	return 0;
-+	return show_mba_info(bw_imc, bw_resc);
- }
- 
- void mba_test_cleanup(void)
+ 	/* Set param values for child thread which will be allocated bitmask
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 00864242d76c..e632657995c7 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -629,6 +629,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+ 	 * Fork to start benchmark, save child's pid so that it can be killed
+ 	 * when needed
+ 	 */
++	fflush(stdout);
+ 	bm_pid = fork();
+ 	if (bm_pid == -1) {
+ 		perror("# Unable to fork");
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index b31b1d9e41d1..fb00245dee92 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -678,6 +678,7 @@ int filter_dmesg(void)
+ 		perror("pipe");
+ 		return ret;
+ 	}
++	fflush(stdout);
+ 	pid = fork();
+ 	if (pid == 0) {
+ 		close(pipefds[0]);
 -- 
 2.27.0
 
