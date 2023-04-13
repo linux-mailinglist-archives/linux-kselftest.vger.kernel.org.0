@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579A06E06EE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 08:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436926E06EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 08:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjDMG1l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Apr 2023 02:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
+        id S229498AbjDMG1z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Apr 2023 02:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDMG1k (ORCPT
+        with ESMTP id S229441AbjDMG1y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 02:27:40 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BD961A1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 23:27:39 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id x12so2625027ual.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 23:27:39 -0700 (PDT)
+        Thu, 13 Apr 2023 02:27:54 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954F861A1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 23:27:53 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id v10so12550015vsf.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 23:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681367258; x=1683959258;
+        d=google.com; s=20221208; t=1681367272; x=1683959272;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zE796MRCHY0Yh6PcQhQzvHLq6b0xRHQGrviVKkFDmFE=;
-        b=Ecp9Qt6nkW9MxB6auL9Um0xq+oIwW3n5Qc5zauFNCYe4DsSx0Tw6q1ej8O8QxLMBWZ
-         lfuMgQTjmAwSikcqBpk8EUBS3O7lC8T4CTQlyWpP+lojBPctjBQKBRIkxefpX43OBoLW
-         Wc2HwdUZjoEdbAviUgKvyQFBL5LWlm62S7ksOxQ1aIBbbaI5gpb2gQtLtMP4gpo6wb5I
-         Vh49yHUAvywyCbMMTp2Ydg4xapGB8ia5i8Xa44px3HJxrJ41vB0ccsVU39fMuVnAWqP/
-         yNYYi1CjSgqXrzWyP59yJk4eY/G67u1CXkAC+E87lBYdEiusCbKF8fjuAlCfnxQQWJpU
-         S/GA==
+        bh=+0vM8IUbOYqYWNt8QyGUgBXxgHnqz52nuPB17bYTEEs=;
+        b=EVRy17sMHyFhyD6CcVF2919fhUJZENVThSbg3cuf/7HO3d22F71bTyXsjZXCO+MTGe
+         aj2mptOuGZ4AG0UuS+IgWKwpu3c8TUINhYAJANF/0PhxxI6BuXphLRVy5vTz90O+WaYF
+         uRfcH9/8csQDGdVfAdWYTo8A6vxa34+8tRT6dxo1HV4hPOXUCf6OqhnEcQRSHnVFyvfT
+         8ynjHxBa8O1KOL3zYy9yo3SSlxIT0EQ5cRQxBSs+DpxkUNSv6x/qAjU2lRiBasZtqj40
+         72/fhPuO5iT4DcgSJmOYjvkl0tuvyGWji1pi6tLfZOQW1I1f+DcN0nqygJKwyfTWXZKn
+         yWPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681367258; x=1683959258;
+        d=1e100.net; s=20221208; t=1681367272; x=1683959272;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zE796MRCHY0Yh6PcQhQzvHLq6b0xRHQGrviVKkFDmFE=;
-        b=ZljsYsSAx0Yfmn7TPqrxkeAnS8u+lfla8Jq8nzuxCiQK2BURVzMIabjb1Ewl1XOwB2
-         VHxJO+X1neCL16FNSgezbuy0wfH6O/Yb7HevG44HRKNOX3G/i6tiKza0wLvn+BCs03qS
-         oewSQ9jObfkPL1p78LTabmX9rOvOmgoRioLi1nGvTwtM6SDCh1TWligbY33ECTsDHoGn
-         x/4BUIHbNqCoqzwSb69PPilABp4hRAdmdsd0lJ60IFpA1GZtz3hwca0chSrke9jMhpbz
-         wkm+BwiAgR3BPfpONLQI4n3lyQ4xyXlp5FvOEM9bQFp5VLHNMAHYlW2JiTW0AdLamTk/
-         oBMg==
-X-Gm-Message-State: AAQBX9fCaSz2U/+a8+Fa0tHhPjQcb2u7Va0yrnkK8XpPCYqPDI0nz7zx
-        U2/VULLVy292eeogSPh/u5rWaaH/5bNyynof89747zFH7UBOfF8w9so=
-X-Google-Smtp-Source: AKy350aiKKZUNPrvVv2vZmUORjFte43RQyTkOday2oDhGTwXANC2sZ+dgQ0ZKJdnUKiLNZkkehHaJS0s+VMOBQo3uj8=
-X-Received: by 2002:a1f:2004:0:b0:40e:fee9:667a with SMTP id
- g4-20020a1f2004000000b0040efee9667amr375352vkg.3.1681367258446; Wed, 12 Apr
- 2023 23:27:38 -0700 (PDT)
+        bh=+0vM8IUbOYqYWNt8QyGUgBXxgHnqz52nuPB17bYTEEs=;
+        b=c0ri0aTSmIPcqvA4dT8mns0G3sTFyTXEmUXrYZJH64/GoLBlr/cPz3s688ZnwfzME8
+         XrO4HfEdZ/YcX5DxWiVwVIhi0x+75xeKQhP3LWNLEJd2xxumvj84DVzZRWS9mW7Qg8ip
+         WskX3Wmj4JW69kW/7XZye5IcLFGR7va+RlUrUL6TH9CqXNhjPP5IDluyAsvsKogn3vHK
+         j/xETEd+Z9ojgrSSXZ62hVFzlPQtlghZwMbXQ05F7ur3zz/KrF/4hDO0eLt/mwhFD7nK
+         /62lI5YWMcIBPRx8aZfrV+UnSFeXQK6074ntq/+flQYkIAPVcIjO5Sm+Yyx0zYKA7ywl
+         dnsg==
+X-Gm-Message-State: AAQBX9ec1rTDXzAWxn8GO4i5nn4FRr8fcmCYg1ZXCkELKyoqsaj/u3i5
+        ZTYxiMRNtIarEZE6Wa9Ww5Yfl4TkjRYqNdDCvJBFkq9m/N8x9h9/Bkk=
+X-Google-Smtp-Source: AKy350a1+ErqDSX2xte8Hc+fkd65CRBcqzicyM0C+VXyWTBuzZiHNERQ2WfLyR2jOoMqg0PJ38sid7LuGM9batySh50=
+X-Received: by 2002:a67:d584:0:b0:42c:5816:416a with SMTP id
+ m4-20020a67d584000000b0042c5816416amr627962vsj.5.1681367272611; Wed, 12 Apr
+ 2023 23:27:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230411160056.1586-1-michal.wajdeczko@intel.com> <20230411160056.1586-3-michal.wajdeczko@intel.com>
-In-Reply-To: <20230411160056.1586-3-michal.wajdeczko@intel.com>
+References: <20230411160056.1586-1-michal.wajdeczko@intel.com> <20230411160056.1586-2-michal.wajdeczko@intel.com>
+In-Reply-To: <20230411160056.1586-2-michal.wajdeczko@intel.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 13 Apr 2023 14:27:26 +0800
-Message-ID: <CABVgOSkYiFqonK9BH96FAooqqvkXXZ6mLjwQrLbtgkPkQWSPfA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kunit: Fix reporting of the skipped parameterized tests
+Date:   Thu, 13 Apr 2023 14:27:40 +0800
+Message-ID: <CABVgOS=1duwo4kr045U9dNOidn6G-hCjrhVWW+i6ADz8cX1s5w@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kunit/test: Add example test showing parameterized testing
 To:     Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000032f20705f931d22a"
+        boundary="0000000000000a163305f931d36c"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -68,56 +68,93 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000032f20705f931d22a
+--0000000000000a163305f931d36c
 Content-Type: text/plain; charset="UTF-8"
 
 On Wed, 12 Apr 2023 at 00:01, Michal Wajdeczko
 <michal.wajdeczko@intel.com> wrote:
 >
-> Logs from the parameterized tests that were skipped don't include
-> SKIP directive thus they are displayed as PASSED. Fix that.
+> Use of parameterized testing is documented [1] but such use case
+> is not present in demo kunit test. Add small subtest for that.
+>
+> [1] https://kernel.org/doc/html/latest/dev-tools/kunit/usage.html#parameterized-testing
 >
 > Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 > Cc: David Gow <davidgow@google.com>
 > ---
 
-Nice catch, thanks!
+Thanks: this is a long-overdue addition to the KUnit examples.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  lib/kunit/test.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+
+>  lib/kunit/kunit-example-test.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
 >
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index c9e15bb60058..5679197b5f8a 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -556,9 +556,11 @@ int kunit_run_tests(struct kunit_suite *suite)
+> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+> index cd8b7e51d02b..775443f77763 100644
+> --- a/lib/kunit/kunit-example-test.c
+> +++ b/lib/kunit/kunit-example-test.c
+> @@ -167,6 +167,39 @@ static void example_static_stub_test(struct kunit *test)
+>         KUNIT_EXPECT_EQ(test, add_one(1), 2);
+>  }
 >
->                                 kunit_log(KERN_INFO, &test,
->                                           KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-> -                                         "%s %d %s",
-> +                                         "%s %d %s%s%s",
->                                           kunit_status_to_ok_not_ok(test.status),
-> -                                         test.param_index + 1, param_desc);
-> +                                         test.param_index + 1, param_desc,
-> +                                         test.status == KUNIT_SKIPPED ? " # SKIP " : "",
-> +                                         test.status == KUNIT_SKIPPED ? test.status_comment : "");
+> +static const struct example_param {
+> +       int value;
+> +} example_params_array[] = {
+> +       { .value = 2, },
+> +       { .value = 1, },
+> +       { .value = 0, },
+> +};
+> +
+> +static void example_param_get_desc(const struct example_param *p, char *desc)
+> +{
+> +       snprintf(desc, KUNIT_PARAM_DESC_SIZE, "example value %d", p->value);
+> +}
+> +
+> +KUNIT_ARRAY_PARAM(example, example_params_array, example_param_get_desc);
+> +
+> +/*
+> + * This test shows the use of params.
+> + */
+> +static void example_params_test(struct kunit *test)
+> +{
+> +       const struct example_param *param = test->param_value;
+> +
+> +       /* By design, param pointer will not be NULL */
+> +       KUNIT_ASSERT_NOT_NULL(test, param);
+> +
+> +       /* Test can be skipped on unsupported param values */
+> +       if (!param->value)
+> +               kunit_skip(test, "unsupported param value");
+> +
+> +       /* You can use param values for parameterized testing */
+> +       KUNIT_EXPECT_EQ(test, param->value % param->value, 0);
+> +}
+> +
+>  /*
+>   * Here we make a list of all the test cases we want to add to the test suite
+>   * below.
+> @@ -183,6 +216,7 @@ static struct kunit_case example_test_cases[] = {
+>         KUNIT_CASE(example_mark_skipped_test),
+>         KUNIT_CASE(example_all_expect_macros_test),
+>         KUNIT_CASE(example_static_stub_test),
+> +       KUNIT_CASE_PARAM(example_params_test, example_gen_params),
+>         {}
+>  };
 >
->                                 /* Get next param. */
->                                 param_desc[0] = '\0';
 > --
 > 2.25.1
 >
 > --
 > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230411160056.1586-3-michal.wajdeczko%40intel.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230411160056.1586-2-michal.wajdeczko%40intel.com.
 
---00000000000032f20705f931d22a
+--0000000000000a163305f931d36c
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -184,14 +221,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDh
-9khezh0jr5aqajbpMySPpb2MSya0PYPoncsTAO1GDTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA0MTMwNjI3MzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD2
+KktaOeARaGZJaX5pup72iz9QJDLW+yRtGsaS09DUGzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA0MTMwNjI3NTJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEABWt0DujalGjvX6SC1O5c
-egzcCMPF/3tCEke44D6UXnyFC6nkBFM8CdwURL/WJUjyBNly0BCFi3/QErNctULxfOVxwAlt38Xl
-BS87SIA8QLoxb4XOd/m9fpo1Q1vlGOU77tbVicXn+9h/cls5ActTBMbtb7mrNdURY+h0d2J5hPpi
-rpPZXseqyir7eqLfGc30LoMMG9iwndXBmhpQqgE4A/9H7WaGHCtA9DFIA5WfGShVGfic5TiNq3GY
-kUA0bCrpd3Hs6qYqp28pcy9pRRmNVz1Ql4jNQtcdiKcpwIqA7j+UgHSvwOMEsiWaVHazosUukHLc
-5BVZhax2sV6tkfVx/w==
---00000000000032f20705f931d22a--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAeSXThbf0PRaS750UZBxw
+122tIsyuEBgl36flMHt7I4jyYqc3v64e9XWFOhXxJ+7C1Nx/K7fHouskBp4OHhx3dAH2KnYWaG1W
+1KP6n94fp0O7iXoXBpkMpYz4/ddGzNiT1pmtG8bwcUMmwAu9Gf4h3lc8zdg4oPFwTuVMzQnopxw0
+gJyGXSXPu73/qSVEJPVGPyAPP1gsilGHCjbH/FKf1+ZqeDg7hHwKeQglKbJrVIcsOXypDfmbZQyi
+m/TTcxqlVSflg/yJ1eYC56GKcGD82p9T+QW4cuVRLnX8GmE2DfY2UFv2CsTzSSbPxlaSHYrreb60
+bQAAKZw6H8GbMUF8Gw==
+--0000000000000a163305f931d36c--
