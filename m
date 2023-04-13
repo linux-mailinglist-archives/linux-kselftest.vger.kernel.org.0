@@ -2,64 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEAB46E0700
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 08:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE856E070A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 08:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjDMGcH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Apr 2023 02:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S229526AbjDMGie (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Apr 2023 02:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDMGcG (ORCPT
+        with ESMTP id S229482AbjDMGid (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 02:32:06 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1F95FD4
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 23:32:05 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id y21so328107ual.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 23:32:05 -0700 (PDT)
+        Thu, 13 Apr 2023 02:38:33 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4FF6EA0
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 23:38:32 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id k20so9688198ual.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 23:38:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681367524; x=1683959524;
+        d=google.com; s=20221208; t=1681367911; x=1683959911;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zBVRwCd0XyvMtiQMNMvH2nrvOyt912yUgZm7nUopVO0=;
-        b=IrQcO27XJyLCx0ACyQPDk5+x9cDxuEiv6OZ3Rdw3M0n4RQDK2RYxZd4E1/7E7Jkxcv
-         /nptbo3l3Q7NIfUNDjRCB92rKmLvChW2Fd6eSsy7j1fUJ2VnI5Ce/AI0SiRPlM8ya8kP
-         oIXQmx0BHLT4ztSHYDTp7+6R9DHAW9qytmbGckvb2oiwpPckRSZlBRf9//GfoQ3KJp4q
-         q5j6+GGFDGh6c1WLZZhclXDIOfJRfNEbud6VoaXSAjJ6pN634Lb5Eom14d+XmtEG9OCF
-         ZJD0kf1QK1IQWmFsk2cOf9Nh/nS6lSQcExP2yp1duo5duRNzWa7KEVGi+0efExweU1yu
-         8ddw==
+        bh=ZfwwmZ797c9xLIMORVneRiyMQiXRFQ2cMiC+cfc48n8=;
+        b=60NmV70EIZMeQvFllKeJCQS7pvb6AMoLi95FvMfOhZp2tCpcWRAM+GjODvswclnW1d
+         f/yWk6aRJ2+L3yVbbZ0F/wLCzGeEM1QGwVHT/M7uwV/mFQhGwJLu1oCRHX2clvumEh+N
+         O/fvIdGplSy28XUtLJky6wFf+hDtr1sQT0AK2qNd1YNelLWB5NVEz0AEDXSI+EJ3lCIl
+         /xf5Khb4tMDfygT0U/JU7sZJL+6YtFI8WeNqv4fluIzpFTiYS/4Gydy08e34XDfiJ9Di
+         cgb/jxSJdsffx8pOPgyuOWfOKHTLjgW6GceSUDtYGg1nSVB4Gh5PuGHtadTrM5gq2BCm
+         KVAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681367524; x=1683959524;
+        d=1e100.net; s=20221208; t=1681367911; x=1683959911;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zBVRwCd0XyvMtiQMNMvH2nrvOyt912yUgZm7nUopVO0=;
-        b=aVbVN65cmUhdJAL6sIXKHSkDMkjLJhZ21tWn1Gp5XmrOvy2Ksf2O6maIx9EMSLHkvp
-         0BJ1qCK+sLn0Uu+Qh13C9N3kG5Fyf1i4d6Ski2d5V0XqYgJDQF9qWNYhvCHG/4iReDwp
-         JlI6KYQ8XW6CIOc2QOJfkHo3mEati3ZPi9Ofeamrps+M95iUs6w1D52pWJwfg7cGr5ih
-         +3dHhst02REtV7ke8f0X7a6XiKYAcCfhaKRGTKyYE3vcWMXe+9aBIQcamUw0r0Y1995N
-         W8r/IJudC0iQyb+eNMFTOlFDy+EqSh314Sy8+BrwJ3ekDsUcTA4nm654bfqOuFMQqRB/
-         BXzw==
-X-Gm-Message-State: AAQBX9fQiT921W1zGlI+81A7rypps5n8eEBzEQv3PZEwuJ0NCpoGF0eu
-        PfVCGWFvaqFp5QwiGLJ/sKGN3p05oy0b0AH+ylRW6g==
-X-Google-Smtp-Source: AKy350bW3LuuJN0uBVj3Y6a9pjzZvVXaMKrWTuxkSCFH+clCAcZCGNXNp54JNuVvqsC7DQFR6kQ8t2H/jb/vyUnsNSs=
-X-Received: by 2002:a1f:2081:0:b0:43c:2acb:9a60 with SMTP id
- g123-20020a1f2081000000b0043c2acb9a60mr398213vkg.3.1681367524073; Wed, 12 Apr
- 2023 23:32:04 -0700 (PDT)
+        bh=ZfwwmZ797c9xLIMORVneRiyMQiXRFQ2cMiC+cfc48n8=;
+        b=cF+X96RS4p6n8C2vPymEyFwZKzhJbbZZWoxRAY+vBuYD6pHX4uf6VV8c4m9QDn63Dz
+         3X8Xvpom9mgVnIHoyowpPQg0W2sbMoyzVIyQB8DzfcLoF1+MeHaoTHyrIn3bMtgTM4HC
+         xCKJlou68Gfh/WQWJte5VEWbmy8LpnWe3CjMrm05PUyeEMmKNjhMIsE4jE+vfHtcHrBV
+         sVjth+oEN50mNYXr2zAODwFB6PJ5W4+jmRnHuqMOGf4OY6vqIrdLH7+52ASx1a6CqBI+
+         XdAhcJmJNVCa6AR/No5vwLmVV3DaQY/L11bd7YynLivYzEmU507zilgK2vSPD6tSoGOx
+         +BYw==
+X-Gm-Message-State: AAQBX9cLy+els1TOZ9SHEwzYMbU40oCQUC8HK4LWo7T8ENQTiqdhvLNw
+        1UrD6hsN8byV3QDQIJHuS9ZrY6keKqEyH04GTtKTokmTUXnj0wFSVck=
+X-Google-Smtp-Source: AKy350buR+IMsN3gQ/Qm9xmbi16+NqI2Zw1leTzTUGRGgjpHf7YdF1274W7FOyU42ipsFQ+B3FnO3a0fBXengwwkx+w=
+X-Received: by 2002:a1f:2004:0:b0:40e:fee9:667a with SMTP id
+ g4-20020a1f2004000000b0040efee9667amr386431vkg.3.1681367911148; Wed, 12 Apr
+ 2023 23:38:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230411160056.1586-1-michal.wajdeczko@intel.com>
- <20230411160056.1586-4-michal.wajdeczko@intel.com> <CA+GJov53J4WhXXUSrGDPZ-hqogL0eYOzaf_RgGQ1paj=_EtLUA@mail.gmail.com>
-In-Reply-To: <CA+GJov53J4WhXXUSrGDPZ-hqogL0eYOzaf_RgGQ1paj=_EtLUA@mail.gmail.com>
+References: <20230411160056.1586-1-michal.wajdeczko@intel.com> <20230411160056.1586-4-michal.wajdeczko@intel.com>
+In-Reply-To: <20230411160056.1586-4-michal.wajdeczko@intel.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 13 Apr 2023 14:31:52 +0800
-Message-ID: <CABVgOSnyvEhgNyxqvJtu6ttXSdAB6t1SaN6-4SCmHYW25AKZoA@mail.gmail.com>
+Date:   Thu, 13 Apr 2023 14:38:19 +0800
+Message-ID: <CABVgOSk3K08W8E5gdycVFJRqo4NdxQvHpxS2OwMEZ48GZVrTUA@mail.gmail.com>
 Subject: Re: [PATCH 3/3] kunit: Update reporting function to support results
  from subtests
-To:     Rae Moar <rmoar@google.com>
-Cc:     Michal Wajdeczko <michal.wajdeczko@intel.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+To:     Michal Wajdeczko <michal.wajdeczko@intel.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000000838a005f931e24e"
+        boundary="0000000000001aa9d105f931f91b"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,187 +69,138 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000000838a005f931e24e
+--0000000000001aa9d105f931f91b
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, 13 Apr 2023 at 04:28, Rae Moar <rmoar@google.com> wrote:
+On Wed, 12 Apr 2023 at 00:01, Michal Wajdeczko
+<michal.wajdeczko@intel.com> wrote:
 >
-> On Tue, Apr 11, 2023 at 12:01=E2=80=AFPM Michal Wajdeczko
-> <michal.wajdeczko@intel.com> wrote:
-> >
-> > There is function to report status of either suite or test, but it
-> > doesn't support parameterized subtests that have to log report on
-> > its own. Extend it to also accept subtest level results to avoid
-> > code duplication.
-> >
-> > Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
-> > Cc: David Gow <davidgow@google.com>
-> > ---
-> >  lib/kunit/test.c | 28 +++++++++++++++++-----------
-> >  1 file changed, 17 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > index 5679197b5f8a..692fce258c5b 100644
-> > --- a/lib/kunit/test.c
-> > +++ b/lib/kunit/test.c
-> > @@ -154,8 +154,14 @@ static void kunit_print_suite_start(struct kunit_s=
-uite *suite)
-> >                   kunit_suite_num_test_cases(suite));
-> >  }
-> >
-> > +enum kunit_test_or_suite {
-> > +       KUNIT_SUITE =3D 0,
-> > +       KUNIT_TEST,
-> > +       KUNIT_SUBTEST,
-> > +};
-> > +
+> There is function to report status of either suite or test, but it
+> doesn't support parameterized subtests that have to log report on
+> its own. Extend it to also accept subtest level results to avoid
+> code duplication.
 >
-> Hi Michal!
->
-> Since KUnit's goal is to progress toward supporting arbitrary levels
-> of testing, I like the idea of starting to adjust these helper
-> functions to allow for greater levels of testing.
->
-> However, I'm not sure about this kunit_test_or_suite enum. If our goal
-> is to support an arbitrary number of levels of tests then this enum
-> still limits us to a finite number of levels. However, if we only want
-> to focus on supporting parameterized tests (which is our direct goal),
-> this could be the right solution.
->
-> Maybe instead we could use an integer denoting the test level instead?
-> This would remove the limit but would also remove the nice names of
-> the levels.
->
-> I'm curious what others opinions are on these ideas?
->
-> A bit of a nit: if we do use this enum I wonder if we could clarify
-> the name to be kunit_test_level as the current name of
-> kunit_test_or_suite seems to indicate to me a binary of two options
-> rather than three.
->
-> >  static void kunit_print_ok_not_ok(void *test_or_suite,
-> > -                                 bool is_test,
-> > +                                 enum kunit_test_or_suite is_test,
->
-> Similar to above, I think the name of is_test could be clarified. It
-> is currently a bit confusing to me as they are all tests. Maybe
-> test_level?
+> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
+> Cc: David Gow <davidgow@google.com>
+> ---
 
-I agree with Rae that this is not the ideal long-term solution.
+Thanks: this is definitely an improvement on how we handle this.
 
-We're basically encoding two things here:
-- Are we dealing with a 'struct kunit_suite' or a 'struct kunit'?
-- How nested the test is.
+There's definitely more we can do, particularly looking forward to
+supporting more complex test hierarchies in the future, but getting
+everything under kunit_print_ok_not_ok is an improvement regardless of
+when happens down the line.
 
-Given KUnit originally only had a 2-level nesting (suite->test), and
-now has 3-level nesting (always suite->test[->param]), this works, but
-the KTAP format permits arbitrary nesting of tests, and we'll want to
-have something like that in KUnit going forward. We don't have a
-design for that yet, but it could conceivably allow nested suites,
-thus breaking the rule that nesting level 0 is always a suite, and the
-rest are all tests.
+My only real concern is that the way the indent is printed is a bit
+subtle and difficult to understand fully on first glance. I've added
+some notes below.
 
-So there's definitely a part of me that would prefer to pass those two
-pieces of information in separate arguments, rather than relying on an
-enum like this.
+>  lib/kunit/test.c | 28 +++++++++++++++++-----------
+>  1 file changed, 17 insertions(+), 11 deletions(-)
+>
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 5679197b5f8a..692fce258c5b 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -154,8 +154,14 @@ static void kunit_print_suite_start(struct kunit_suite *suite)
+>                   kunit_suite_num_test_cases(suite));
+>  }
+>
+> +enum kunit_test_or_suite {
+> +       KUNIT_SUITE = 0,
+> +       KUNIT_TEST,
+> +       KUNIT_SUBTEST,
+> +};
+> +
 
-That being said, this is all very fuzzy future plans, rather than
-anything concrete, and this will all likely need reworking if we do
-anything drastic anyway, so I'm not worried if we go with this for
-now, and change it when we need to. I do think it's an improvement
-over what we're doing currently.
-(For example, another possible implementation for nested tests could
-be to get rid of the distinction between tests and suites completely:
-or at least have them share 'struct kunit', so this wouldn't need
-passing in separately.)
+As Rae notes, this probably won't be how this code eventually evolves.
+I don't think it's a problem to have it now, though.
+
+>  static void kunit_print_ok_not_ok(void *test_or_suite,
+> -                                 bool is_test,
+> +                                 enum kunit_test_or_suite is_test,
+>                                   enum kunit_status status,
+>                                   size_t test_number,
+>                                   const char *description,
+> @@ -180,7 +186,9 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
+>                         (status == KUNIT_SKIPPED) ? directive : "");
+>         else
+>                 kunit_log(KERN_INFO, test,
+> -                         KUNIT_SUBTEST_INDENT "%s %zd %s%s%s",
+> +                         "%.*s%s %zd %s%s%s",
+> +                         (int) strlen(KUNIT_SUBTEST_INDENT) * is_test,
+> +                         KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT,
+
+This feels a little bit _too_ clever here: I feel it at the very least
+needs a comment, and maybe it'd make more sense to either:
+- Make is_test explicitly a "nesting depth" integer, and calculate the
+indent based on that.
+- Have is_test as an enum, and then just explicitly handle each value
+separately. (Like we do with suite vs test).
+
+I think that the former is probably the right long-term solution (it's
+much more extensible to more levels of nesting), but the latter is
+definitely easier given the differences between suites and tests at
+the moment.
+
+If we do continue to share a codepath between tests and subtests, I'd
+prefer it if we either didn't use strlen(), or went to some greater
+effort to document how that works (hopefully we can guarantee that the
+compiler will treat this as a constant). Equally, a comment or
+something noting that this will read invalid memory if is_test > 2,
+due to the hardcoded two KUNIT_SUBTEST_INDENT, would be nice.
+
+
+>                           kunit_status_to_ok_not_ok(status),
+>                           test_number, description, directive_header,
+>                           (status == KUNIT_SKIPPED) ? directive : "");
+> @@ -209,7 +217,7 @@ static size_t kunit_suite_counter = 1;
+>
+>  static void kunit_print_suite_end(struct kunit_suite *suite)
+>  {
+> -       kunit_print_ok_not_ok((void *)suite, false,
+> +       kunit_print_ok_not_ok((void *)suite, KUNIT_SUITE,
+>                               kunit_suite_has_succeeded(suite),
+>                               kunit_suite_counter++,
+>                               suite->name,
+> @@ -554,13 +562,11 @@ int kunit_run_tests(struct kunit_suite *suite)
+>                                                  "param-%d", test.param_index);
+>                                 }
+>
+> -                               kunit_log(KERN_INFO, &test,
+> -                                         KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
+> -                                         "%s %d %s%s%s",
+> -                                         kunit_status_to_ok_not_ok(test.status),
+> -                                         test.param_index + 1, param_desc,
+> -                                         test.status == KUNIT_SKIPPED ? " # SKIP " : "",
+> -                                         test.status == KUNIT_SKIPPED ? test.status_comment : "");
+> +                               kunit_print_ok_not_ok(&test, KUNIT_SUBTEST,
+> +                                                     test.status,
+> +                                                     test.param_index + 1,
+> +                                                     param_desc,
+> +                                                     test.status_comment);
+>
+>                                 /* Get next param. */
+>                                 param_desc[0] = '\0';
+> @@ -574,7 +580,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+>
+>                 kunit_print_test_stats(&test, param_stats);
+>
+> -               kunit_print_ok_not_ok(&test, true, test_case->status,
+> +               kunit_print_ok_not_ok(&test, KUNIT_TEST, test_case->status,
+>                                       kunit_test_case_num(suite, test_case),
+>                                       test_case->name,
+>                                       test.status_comment);
+> --
+> 2.25.1
+>
+
+Otherwise, this all looks good to me. Thanks very much!
 
 Cheers,
 -- David
 
-
->
-> >                                   enum kunit_status status,
-> >                                   size_t test_number,
-> >                                   const char *description,
-> > @@ -180,7 +186,9 @@ static void kunit_print_ok_not_ok(void *test_or_sui=
-te,
-> >                         (status =3D=3D KUNIT_SKIPPED) ? directive : "")=
-;
-> >         else
-> >                 kunit_log(KERN_INFO, test,
-> > -                         KUNIT_SUBTEST_INDENT "%s %zd %s%s%s",
-> > +                         "%.*s%s %zd %s%s%s",
-> > +                         (int) strlen(KUNIT_SUBTEST_INDENT) * is_test,
->
-> I would consider saving the length of KUNIT_SUBTEST_INDENT as a macro.
-> Maybe KUNIT_INDENT_LEN?
->
-> > +                         KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT,
-> >                           kunit_status_to_ok_not_ok(status),
-> >                           test_number, description, directive_header,
-> >                           (status =3D=3D KUNIT_SKIPPED) ? directive : "=
-");
-> > @@ -209,7 +217,7 @@ static size_t kunit_suite_counter =3D 1;
-> >
-> >  static void kunit_print_suite_end(struct kunit_suite *suite)
-> >  {
-> > -       kunit_print_ok_not_ok((void *)suite, false,
-> > +       kunit_print_ok_not_ok((void *)suite, KUNIT_SUITE,
-> >                               kunit_suite_has_succeeded(suite),
-> >                               kunit_suite_counter++,
-> >                               suite->name,
-> > @@ -554,13 +562,11 @@ int kunit_run_tests(struct kunit_suite *suite)
-> >                                                  "param-%d", test.param=
-_index);
-> >                                 }
-> >
-> > -                               kunit_log(KERN_INFO, &test,
-> > -                                         KUNIT_SUBTEST_INDENT KUNIT_SU=
-BTEST_INDENT
-> > -                                         "%s %d %s%s%s",
-> > -                                         kunit_status_to_ok_not_ok(tes=
-t.status),
-> > -                                         test.param_index + 1, param_d=
-esc,
-> > -                                         test.status =3D=3D KUNIT_SKIP=
-PED ? " # SKIP " : "",
-> > -                                         test.status =3D=3D KUNIT_SKIP=
-PED ? test.status_comment : "");
-> > +                               kunit_print_ok_not_ok(&test, KUNIT_SUBT=
-EST,
-> > +                                                     test.status,
-> > +                                                     test.param_index =
-+ 1,
-> > +                                                     param_desc,
-> > +                                                     test.status_comme=
-nt);
-> >
-> >                                 /* Get next param. */
-> >                                 param_desc[0] =3D '\0';
-> > @@ -574,7 +580,7 @@ int kunit_run_tests(struct kunit_suite *suite)
-> >
-> >                 kunit_print_test_stats(&test, param_stats);
-> >
-> > -               kunit_print_ok_not_ok(&test, true, test_case->status,
-> > +               kunit_print_ok_not_ok(&test, KUNIT_TEST, test_case->sta=
-tus,
-> >                                       kunit_test_case_num(suite, test_c=
-ase),
-> >                                       test_case->name,
-> >                                       test.status_comment);
-> > --
-> > 2.25.1
-> >
-> > --
-> > You received this message because you are subscribed to the Google Grou=
-ps "KUnit Development" group.
-> > To unsubscribe from this group and stop receiving emails from it, send =
-an email to kunit-dev+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/ms=
-gid/kunit-dev/20230411160056.1586-4-michal.wajdeczko%40intel.com.
-
---0000000000000838a005f931e24e
+--0000000000001aa9d105f931f91b
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -318,14 +267,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCH
-t+NBk9qYQZ+zYdk+4/0bxVvdzjZpVaJcU4CgG4yjjjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA0MTMwNjMyMDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAD
+xFpxh2ZoJz5ItoNPZ0GbCor9HHaKAd/OYu3z4oL6GzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA0MTMwNjM4MzFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAULSum0CNGSc+m7MrAaM5
-77/7mtBeLNDfRAp28EeRM+1HXwqx/lfFMkft/kcU5evm5yHiau+JehvOqWh+sEg2KQOXTuj9M62R
-fFafxJRClMEn7uk0NhIZEm5SaayzYyhKnaF9h7MYQf2C4fbCXFKuSJL8mYwY1Dt7xcXQG0Eik892
-kZg4ox7fFTKg9fc1AhCLuNTy1f6lPE+ynwjFxXBZ6u0il6fFXfs8AF+RxRNpaAZ4BEDg9UujtNrX
-5qNMJoA9Yq/3xgiMK83GTQT6PreK1RlJZuvTyanRnmr0NfwdkFsMFtTEaoc9p8ImQ2dk82Hkgr1j
-HtZ/A3yrMytrPzy9/g==
---0000000000000838a005f931e24e--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAdRN/ck+0kDGXoPb/YGem
+jZsz36XX8vyyJZlOgJI9uEOuhre7uqkRe0VZJkIZOlLsfp2cyETYh12XjkRoKnqwJVzNRslhpDZe
+R38a5Q/AR8io7rYE8tfpAmt+vZ7/mSA1oFCqf//LXrzxvrbfPBGRe7BOBcGh6g951awjM1rJbCsR
+rkeUvOcOW2kyhJS2exljWcjXJbKq0goFymJ0Y0yxTUuFBGDYNVNFP0PlmjOOxN0ewmTuuZyyr8s8
+tKDKZVAy2lfqqH7qGKzvCCezOxKh7rMPrCmgDZoYQqgAqnoddaFC270c9OGXIU1dOSyi3I8TGSSI
+5tuLGU9NLKA29woXhg==
+--0000000000001aa9d105f931f91b--
