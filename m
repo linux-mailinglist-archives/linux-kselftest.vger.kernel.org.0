@@ -2,129 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401856E03E3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 03:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C8C6E044F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Apr 2023 04:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjDMB4h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Apr 2023 21:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
+        id S230155AbjDMCh6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Apr 2023 22:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjDMB4h (ORCPT
+        with ESMTP id S230160AbjDMChS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 21:56:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C0E61A1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 18:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681350953;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QUAJoa4WsPFgOaywimIxgJmb0m1Gj0LU/rbMc/oiFgM=;
-        b=DQln5leQkin0vOWp4eR/gYPBbs87nsQoIGmXEma3KPYR/lLrM1fGpqM3cyfI303cGCS2Rv
-        x8JJiJuhrpoQ2+wRuc0Ptu+WSdfkNyw8YoH/ihJMA06iSPvFrHUaX5BfEXF+KGhbdX20Pg
-        0mQ44QEec+1nKsI+tr8DloYvRRkf9uw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-189-SMq2uPKiO0excjeVA5Pqsw-1; Wed, 12 Apr 2023 21:55:47 -0400
-X-MC-Unique: SMq2uPKiO0excjeVA5Pqsw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 12 Apr 2023 22:37:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B94D8A6F;
+        Wed, 12 Apr 2023 19:36:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3C9473810B1C;
-        Thu, 13 Apr 2023 01:55:47 +0000 (UTC)
-Received: from [10.22.32.168] (unknown [10.22.32.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 668CDC15BB8;
-        Thu, 13 Apr 2023 01:55:46 +0000 (UTC)
-Message-ID: <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
-Date:   Wed, 12 Apr 2023 21:55:46 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0AD163A9D;
+        Thu, 13 Apr 2023 02:36:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD80C433A4;
+        Thu, 13 Apr 2023 02:36:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681353392;
+        bh=3mEJP8tmz/XW5HcFioTquKyOJJLG48D3oWkCAML/yZA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Cu/bK0aPlKahfZ6qcCZU3MjQoTLvd9+pVpnbbeE4C8qqAivutoubpeNTL8XQ0myPz
+         1679faqGPiWEFdomFeb03gr1J3MfdcySni42H1IrX9wcrw3wI99eUGw62NuzFp46iT
+         J3wNieGe7a0RvBOT4MXBL6jUkUR1J7Zy9AibhoTogzkX/NW267wpLioa0Bs1RZ9/TH
+         5gBtF+/s3Pv4fvIvraPWgfbNo3aFWm0yR9COvEz/BCOiwLIpxqFoAf+ukTnX3GAXeQ
+         cIt6ACryFhbilXPYqRughCguR3LiwHV4J8mMSdCnlnq71wtPUXorYvqPkG9neWtGtz
+         Tlj/oFHpl4KTw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Anh Tuan Phan <tuananhlfc@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, sforshee@kernel.org,
+        shuah@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 12/20] selftests mount: Fix mount_setattr_test builds failed
+Date:   Wed, 12 Apr 2023 22:35:50 -0400
+Message-Id: <20230413023601.74410-12-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230413023601.74410-1-sashal@kernel.org>
+References: <20230413023601.74410-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-References: <20230412153758.3088111-1-longman@redhat.com>
- <ZDcGVebCpyktxyWh@slm.duckdns.org>
- <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
- <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
- <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
- <ZDdG1K0kTETZMTCu@slm.duckdns.org>
- <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
- <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
- <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
- <ZDdYOI9LB87ra2t_@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZDdYOI9LB87ra2t_@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/12/23 21:17, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Wed, Apr 12, 2023 at 08:55:55PM -0400, Waiman Long wrote:
->>> Sounds a bit contrived. Does it need to be something defined in the root
->>> cgroup?
->> Yes, because we need to take away the isolated CPUs from the effective cpus
->> of the root cgroup. So it needs to start from the root. That is also why we
->> have the partition rule that the parent of a partition has to be a partition
->> root itself. With the new scheme, we don't need a special cgroup to hold the
-> I'm following. The root is already a partition root and the cgroupfs control
-> knobs are owned by the parent, so the root cgroup would own the first level
-> cgroups' cpuset.cpus.reserve knobs. If the root cgroup wants to assign some
-> CPUs exclusively to a first level cgroup, it can then set that cgroup's
-> reserve knob accordingly (or maybe the better name is
-> cpuset.cpus.exclusive), which will take those CPUs out of the root cgroup's
-> partition and give them to the first level cgroup. The first level cgroup
-> then is free to do whatever with those CPUs that now belong exclusively to
-> the cgroup subtree.
+From: Anh Tuan Phan <tuananhlfc@gmail.com>
 
-I am OK with the cpuset.cpus.reserve name, but not that much with the 
-cpuset.cpus.exclusive name as it can get confused with cgroup v1's 
-cpuset.cpu_exclusive. Of course, I prefer the cpuset.cpus.isolated name 
-a bit more. Once an isolated CPU gets used in an isolated partition, it 
-is exclusive and it can't be used in another isolated partition.
+[ Upstream commit f1594bc676579133a3cd906d7d27733289edfb86 ]
 
-Since we will allow users to set cpuset.cpus.reserve to whatever value 
-they want. The distribution of isolated CPUs is only valid if the cpus 
-are present in its parent's cpuset.cpus.reserve and all the way up to 
-the root. It is a bit expensive, but it should be a relatively rare 
-operation.
+When compiling selftests with target mount_setattr I encountered some errors with the below messages:
+mount_setattr_test.c: In function ‘mount_setattr_thread’:
+mount_setattr_test.c:343:16: error: variable ‘attr’ has initializer but incomplete type
+  343 |         struct mount_attr attr = {
+      |                ^~~~~~~~~~
 
->
->> isolated CPUs. The new root cgroup file will be enough to inform the system
->> what CPUs will have to be isolated.
->>
->> My current thinking is that the root's "cpuset.cpus.isolated" will start
->> with whatever have been set in the "isolcpus" or "nohz_full" boot command
->> line and can be extended from there but not shrank below that as there can
->> be additional isolation attributes with those isolated CPUs.
-> I'm not sure we wanna tie with those automatically. I think it'd be
-> confusing than helpful.
+These errors might be because of linux/mount.h is not included. This patch resolves that issue.
 
-Yes, I am fine with taking this off for now.
+Signed-off-by: Anh Tuan Phan <tuananhlfc@gmail.com>
+Acked-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/mount_setattr/mount_setattr_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Cheers,
-Longman
+diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+index 8c5fea68ae677..969647228817b 100644
+--- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
++++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+@@ -18,6 +18,7 @@
+ #include <grp.h>
+ #include <stdbool.h>
+ #include <stdarg.h>
++#include <linux/mount.h>
+ 
+ #include "../kselftest_harness.h"
+ 
+-- 
+2.39.2
 
