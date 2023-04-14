@@ -2,441 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967286E1753
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 00:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B14F6E1995
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 03:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjDMW2u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Apr 2023 18:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        id S229567AbjDNBXQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Apr 2023 21:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjDMW2s (ORCPT
+        with ESMTP id S229749AbjDNBXP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 18:28:48 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A111586AA
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 15:28:45 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id q11-20020a17090ad38b00b0023fbe01dc06so7533841pju.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 15:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681424925; x=1684016925;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fUGG18wo5+CyMOYxhXbNuySc8Euq/oCIPQwUhRKEq8M=;
-        b=OF7pAz5appreyNnzZ5NOs02kK1hF8myrUAbW/nztRTe0+cinmjfy17RhFHoI2aI2Hh
-         kjJP/KlPbb6AyHbxqI5AM74xMy6B5MSNCS5NuJo1Z8BCjNyiParWD2RxQ2XegHierh79
-         +tvkf2hKIPuU29O+1Y3bivq7Wv56n0GreGQJwQ3CIxD5fpjJpvdFF8G9mWUObOM+qZgA
-         mMp8ADgXUuzSS35mNfP8V68PN1tEPilOW0drYgn3Vk184QibbBfhmtXrdm7UhA/CkzG2
-         HgNUW8Nv5NP3FRtij/OgR4c0VzUpv2+2YOSc0mxm8/FNqazZ1sx9f2TVEd7binW+rV+y
-         ei0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681424925; x=1684016925;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fUGG18wo5+CyMOYxhXbNuySc8Euq/oCIPQwUhRKEq8M=;
-        b=GXPPhcOnj2zuqOIXpnxC0CI8LfCZ1txcnrojUnM2PrH5kz4Px9OLjeP4NgveG8vrIS
-         8Ei+yByIunl+99AY2DCtNR9olYhgw4Sh4kZmH7ORnoMO2oH07T5u2OV2GKoPBFdFld9V
-         Veqfy+aoAkTS//KbKjN3R89bQPoLKXoL4IuoDOIY/B5r8vrlfRQIDQ5K8v/vDVOcCYyh
-         BzBguOIgRMsRUzpfUwcMITlBniITpeV82tDBcQU2Toz/f6/2gM3oc4fUhWS/No9i53z4
-         UnQZWeKe2m87H+sT5WDF9ZbAwii9L+rCQSPYOFavDDhzF6xNX/iuQsEeG+Hz8Xc9RMJy
-         vbBg==
-X-Gm-Message-State: AAQBX9dXDTA4sPQYjq9UnSKMH9tZ2AD9tzyPEH8raJhtJG2WPYdQfoPU
-        QTRZDGqkfgareSw/xsjfuqpo1aNQdpA=
-X-Google-Smtp-Source: AKy350akQiiRa+vjFfnw9KfRYVGLBtsoJs0gXVP8L8WmBTSpdkdpTYlsAwVFOJpke4F9z+dOk7WCzEv8WMQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:5f81:0:b0:518:547f:8883 with SMTP id
- t123-20020a635f81000000b00518547f8883mr196078pgb.0.1681424925055; Thu, 13 Apr
- 2023 15:28:45 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 15:28:43 -0700
-In-Reply-To: <20230413-anlegen-ergibt-cbefffe0b3de@brauner>
-Mime-Version: 1.0
-References: <20220818132421.6xmjqduempmxnnu2@box> <diqzlej60z57.fsf@ackerleytng-cloudtop.c.googlers.com>
- <20221202061347.1070246-2-chao.p.peng@linux.intel.com> <20230413-anlegen-ergibt-cbefffe0b3de@brauner>
-Message-ID: <ZDiCG/7OgDI0SwMR@google.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-From:   Sean Christopherson <seanjc@google.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Hugh Dickins <hughd@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        Thu, 13 Apr 2023 21:23:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853E730FE
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 18:22:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681435346;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zhMvhm7mcviP5pv7MPTwxWQbVy7/SnaH+sAFoMwChHM=;
+        b=hOg2DoeniQerEjSHDo+CgNiN7SN18MpCgM6D8BQ2VGWYxD6tGhPnRsSnEUjjypq0W3AWFu
+        aDlmkjLhM4yU3sZW21djeoXUVa9mC820e76oiOdAx77iTYw2GIj+VhrxfLOo0qvF0FkLsx
+        MIBdb70LuIKgt1qWui+EIkNQegO6UcE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-427-EdtV2y9BN7CoAou49pTNkg-1; Thu, 13 Apr 2023 21:22:21 -0400
+X-MC-Unique: EdtV2y9BN7CoAou49pTNkg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19503101A531;
+        Fri, 14 Apr 2023 01:22:21 +0000 (UTC)
+Received: from [10.22.32.61] (unknown [10.22.32.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C943140C6E70;
+        Fri, 14 Apr 2023 01:22:19 +0000 (UTC)
+Message-ID: <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
+Date:   Thu, 13 Apr 2023 21:22:19 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Pankaj Gupta <pankaj.gupta@amd.com>,
-        linux-arch@vger.kernel.org, arnd@arndb.de, linmiaohe@huawei.com,
-        naoya.horiguchi@nec.com, tabba@google.com, wei.w.wang@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <20230412153758.3088111-1-longman@redhat.com>
+ <ZDcGVebCpyktxyWh@slm.duckdns.org>
+ <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
+ <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
+ <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+ <ZDdG1K0kTETZMTCu@slm.duckdns.org>
+ <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
+ <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
+ <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
+ <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+ <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+In-Reply-To: <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 13, 2023, Christian Brauner wrote:
-> On Thu, Aug 18, 2022 at 04:24:21PM +0300, Kirill A . Shutemov wrote:
-> > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> > > Here's what I would prefer, and imagine much easier for you to maintain;
-> > > but I'm no system designer, and may be misunderstanding throughout.
-> > > 
-> > > QEMU gets fd from opening /dev/kvm_something, uses ioctls (or perhaps
-> > > the fallocate syscall interface itself) to allocate and free the memory,
-> > > ioctl for initializing some of it too.  KVM in control of whether that
-> > > fd can be read or written or mmap'ed or whatever, no need to prevent it
-> > > in shmem.c, no need for flags, seals, notifications to and fro because
-> > > KVM is already in control and knows the history.  If shmem actually has
-> > > value, call into it underneath - somewhat like SysV SHM, and /dev/zero
-> > > mmap, and i915/gem make use of it underneath.  If shmem has nothing to
-> > > add, just allocate and free kernel memory directly, recorded in your
-> > > own xarray.
-> > 
-> > I guess shim layer on top of shmem *can* work. I don't see immediately why
-> > it would not. But I'm not sure it is right direction. We risk creating yet
-> > another parallel VM with own rules/locking/accounting that opaque to
-> > core-mm.
-> 
-> Sorry for necrobumping this thread but I've been reviewing the
 
-No worries, I'm just stoked someone who actually knows what they're doing is
-chiming in :-)
-
-> memfd_restricted() extension that Ackerley is currently working on. I
-> was pointed to this thread as this is what the extension is building
-> on but I'll reply to both threads here.
-> 
-> From a glance at v10, memfd_restricted() is currently implemented as an
-> in-kernel stacking filesystem. A call to memfd_restricted() creates a
-> new restricted memfd file and a new unlinked tmpfs file and stashes the
-> tmpfs file into the memfd file's private data member. It then uses the
-> tmpfs file's f_ops and i_ops to perform the relevant file and inode
-> operations. So it has the same callstack as a general stacking
-> filesystem like overlayfs in some cases:
-> 
->         memfd_restricted->getattr()
->         -> tmpfs->getattr()
-
-...
-
-> Since you're effectively acting like a stacking filesystem you should
-> really use the device number of your memfd restricted filesystem. IOW,
-> sm like:
-> 
->         stat->dev = memfd_restricted_dentry->d_sb->s_dev;
-> 
-> But then you run into trouble if you want to go forward with Ackerley's
-> extension that allows to explicitly pass in tmpfs fds to
-> memfd_restricted(). Afaict, two tmpfs instances might allocate the same
-> inode number. So now the inode and device number pair isn't unique
-> anymore.
-> 
-> So you might best be served by allocating and reporting your own inode
-> numbers as well.
-> 
-> But if you want to preserve the inode number and device number of the
-> relevant tmpfs instance but still report memfd restricted as your
-> filesystem type
-
-Unless I missed something along the way, reporting memfd_restricted as a distinct
-filesystem is very much a non-goal.  AFAIK it's purely a side effect of the
-proposed implementation.
-
-> then I think it's reasonable to ask whether a stacking implementation really
-> makes sense here.
-> 
-> If you extend memfd_restricted() or even consider extending it in the
-> future to take tmpfs file descriptors as arguments to identify the tmpfs
-> instance in which to allocate the underlying tmpfs file for the new
-> restricted memfd file you should really consider a tmpfs based
-> implementation.
-> 
-> Because at that point it just feels like a pointless wrapper to get
-> custom f_ops and i_ops. Plus it's wasteful because you allocate dentries
-> and inodes that you don't really care about at all.
-> 
-> Just off the top of my hat you might be better served:
-> * by a new ioctl() on tmpfs instances that
->   yield regular tmpfs file descriptors with restricted f_ops and i_ops.
->   That's not that different from btrfs subvolumes which effectively are
->   directories but are created through an ioctl().
-
-I think this is more or less what we want to do, except via a dedicated syscall
-instead of an ioctl() so that the primary interface isn't strictly tied to tmpfs,
-e.g. so that it can be extended to other backing types in the future.
-
-> * by a mount option to tmpfs that makes it act
->   in this restricted manner then you don't need an ioctl() and can get
->   away with regular open calls. Such a tmpfs instance would only create
->   regular, restricted memfds.
-
-I'd prefer to not go this route, becuase IIUC, it would require relatively invasive
-changes to shmem code, and IIUC would require similar changes to other support
-backings in the future, e.g. hugetlbfs?  And as above, I don't think any of the
-potential use cases need restrictedmem to be a uniquely identifiable mount.
-
-One of the goals (hopefully not a pipe dream) is to design restrictmem in such a
-way that extending it to support other backing types isn't terribly difficult.
-In case it's not obvious, most of us working on this stuff aren't filesystems
-experts, and many of us aren't mm experts either.  The more we (KVM folks for the
-most part) can leverage existing code to do the heavy lifting, the better.
-
-After giving myself a bit of a crash course in file systems, would something like
-the below have any chance of (a) working, (b) getting merged, and (c) being
-maintainable?
-
-The idea is similar to a stacking filesystem, but instead of stacking, restrictedmem
-hijacks a f_ops and a_ops to create a lightweight shim around tmpfs.  There are
-undoubtedly issues and edge cases, I'm just looking for a quick "yes, this might
-be doable" or a "no, that's absolutely bonkers, don't try it".
-
-Thanks!
-
-
-struct restrictedmem {
-	struct rw_semaphore lock;
-	struct file *file;
-	const struct file_operations *backing_f_ops;
-	const struct address_space_operations *backing_a_ops;
-	struct xarray bindings;
-	bool exclusive;
-};
-
-static int restrictedmem_release(struct inode *inode, struct file *file)
-{
-	struct restrictedmem *rm = inode->i_mapping->private_data;
-
-	xa_destroy(&rm->bindings);
-	kfree(rm);
-
-	WARN_ON_ONCE(rm->backing_f_ops->release);
-	return 0;
-}
-
-static long restrictedmem_punch_hole(struct restrictedmem *rm, int mode,
-				     loff_t offset, loff_t len)
-{
-	struct restrictedmem_notifier *notifier;
-	unsigned long index;
-	pgoff_t start, end;
-	int ret;
-
-	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
-		return -EINVAL;
-
-	start = offset >> PAGE_SHIFT;
-	end = (offset + len) >> PAGE_SHIFT;
-
-	/*
-	 * Bindings must be stable across invalidation to ensure the start+end
-	 * are balanced.
-	 */
-	down_read(&rm->lock);
-
-	xa_for_each_range(&rm->bindings, index, notifier, start, end - 1)
-		notifier->ops->invalidate_start(notifier, start, end);
-
-	ret = rm->backing_f_ops->fallocate(rm->file, mode, offset, len);
-
-	xa_for_each_range(&rm->bindings, index, notifier, start, end - 1)
-		notifier->ops->invalidate_end(notifier, start, end);
-
-	up_read(&rm->lock);
-
-	return ret;
-}
-
-static long restrictedmem_fallocate(struct file *file, int mode,
-				    loff_t offset, loff_t len)
-{
-	struct restrictedmem *rm = file->f_mapping->private_data;
-
-	if (mode & FALLOC_FL_PUNCH_HOLE)
-		return restrictedmem_punch_hole(rm, mode, offset, len);
-
-	return rm->backing_f_ops->fallocate(file, mode, offset, len);
-}
-
-static int restrictedmem_migrate_folio(struct address_space *mapping,
-				       struct folio *dst, struct folio *src,
-				       enum migrate_mode)
-{
-	WARN_ON_ONCE(1);
-	return -EINVAL;
-}
-
-static int restrictedmem_error_page(struct address_space *mapping,
-				    struct page *page)
-{
-	struct restrictedmem *rm = mapping->private_data;
-	struct restrictedmem_notifier *notifier;
-	unsigned long index;
-	pgoff_t start, end;
-
-	start = page->index;
-	end = start + thp_nr_pages(page);
-
-	down_read(&rm->lock);
-
-	xa_for_each_range(&rm->bindings, index, notifier, start, end - 1)
-		notifier->ops->error(notifier, start, end);
-
-	up_read(&rm->lock);
-
-	return rm->backing_a_ops->error_remove_page(mapping, page);
-}
-
-static const struct file_operations restrictedmem_fops = {
-	.release = restrictedmem_release,
-	.fallocate = restrictedmem_fallocate,
-};
-
-static const struct address_space_operations restrictedmem_aops = {
-	.dirty_folio = noop_dirty_folio,
-#ifdef CONFIG_MIGRATION
-	.migrate_folio	= restrictedmem_migrate_folio,
-#endif
-	.error_remove_page = restrictedmem_error_page,
-};
-
-static int restrictedmem_file_create(struct file *file)
-{
-	struct address_space *mapping = file->f_mapping;
-	struct restrictedmem *rm;
-
-	rm = kzalloc(sizeof(*rm), GFP_KERNEL);
-	if (!rm)
-		return -ENOMEM;
-
-	rm->backing_f_ops = file->f_op;
-	rm->backing_a_ops = mapping->a_ops;
-	rm->file = file;
-	init_rwsem(&rm->lock);
-	xa_init(&rm->bindings);
-
-	file->f_flags |= O_LARGEFILE;
-
-	file->f_op = &restrictedmem_fops;
-	mapping->a_ops = &restrictedmem_aops;
-
-	mapping_set_unevictable(mapping);
-	mapping_set_unmovable(mapping);
-	mapping_set_gfp_mask(mapping,
-			     mapping_gfp_mask(mapping) & ~__GFP_MOVABLE);
-	return 0;
-}
-
-
-static int restrictedmem_create(struct vfsmount *mount)
-{
-	struct file *file;
-	int fd, err;
-
-	fd = get_unused_fd_flags(0);
-	if (fd < 0)
-		return fd;
-
-	file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0, VM_NORESERVE);
-	if (IS_ERR(file)) {
-		err = PTR_ERR(file);
-		goto err_fd;
-	}
-	if (WARN_ON_ONCE(file->private_data)) {
-		err = -EEXIST;
-		goto err_fd;
-	}
-
-	file->f_mode |= FMODE_LSEEK | FMODE_PREAD | FMODE_PWRITE;
-	file->f_flags |= O_LARGEFILE;
-
-	err = restrictedmem_file_create(file);
-	if (err) {
-		fput(file);
-		goto err_fd;
-	}
-
-	fd_install(fd, file);
-	return fd;
-err_fd:
-	put_unused_fd(fd);
-	return err;
-}
-
-SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
-{
-	struct vfsmount *mnt;
-	struct path *path;
-	struct fd f;
-	int ret;
-
-	if (flags)
-		return -EINVAL;
-
-	f = fdget_raw(mount_fd);
-	if (!f.file)
-		return -EBADF;
-
-	ret = -EINVAL;
-
-	path = &f.file->f_path;
-	if (path->dentry != path->mnt->mnt_root)
-		goto out;
-
-
-	/* Disallow bind-mounts that aren't bind-mounts of the whole filesystem. */
-	mnt = path->mnt;
-	if (mnt->mnt_root != mnt->mnt_sb->s_root)
-		goto out;
-
-	/*
-	 * The filesystem must be mounted no-execute, executing from guest
-	 * private memory in the host is nonsensical and unsafe.
-	 */
-	if (!(mnt->mnt_sb->s_iflags & SB_I_NOEXEC))
-		goto out;
-
-	/* Currently only TMPFS is supported as underlying storage. */
-	if (mnt->mnt_sb->s_magic != TMPFS_MAGIC)
-		goto out;
-
-	ret = mnt_want_write(mnt);
-	if (ret)
-		goto out;
-
-	ret = restrictedmem_create(mnt);
-
-	if (mnt)
-		mnt_drop_write(mnt);
-out:
-	if (f.file)
-		fdput(f);
-
-	return ret;
-}
+On 4/12/23 21:55, Waiman Long wrote:
+> On 4/12/23 21:17, Tejun Heo wrote:
+>> Hello, Waiman.
+>>
+>> On Wed, Apr 12, 2023 at 08:55:55PM -0400, Waiman Long wrote:
+>>>> Sounds a bit contrived. Does it need to be something defined in the 
+>>>> root
+>>>> cgroup?
+>>> Yes, because we need to take away the isolated CPUs from the 
+>>> effective cpus
+>>> of the root cgroup. So it needs to start from the root. That is also 
+>>> why we
+>>> have the partition rule that the parent of a partition has to be a 
+>>> partition
+>>> root itself. With the new scheme, we don't need a special cgroup to 
+>>> hold the
+>> I'm following. The root is already a partition root and the cgroupfs 
+>> control
+>> knobs are owned by the parent, so the root cgroup would own the first 
+>> level
+>> cgroups' cpuset.cpus.reserve knobs. If the root cgroup wants to 
+>> assign some
+>> CPUs exclusively to a first level cgroup, it can then set that cgroup's
+>> reserve knob accordingly (or maybe the better name is
+>> cpuset.cpus.exclusive), which will take those CPUs out of the root 
+>> cgroup's
+>> partition and give them to the first level cgroup. The first level 
+>> cgroup
+>> then is free to do whatever with those CPUs that now belong 
+>> exclusively to
+>> the cgroup subtree.
+>
+> I am OK with the cpuset.cpus.reserve name, but not that much with the 
+> cpuset.cpus.exclusive name as it can get confused with cgroup v1's 
+> cpuset.cpu_exclusive. Of course, I prefer the cpuset.cpus.isolated 
+> name a bit more. Once an isolated CPU gets used in an isolated 
+> partition, it is exclusive and it can't be used in another isolated 
+> partition.
+>
+> Since we will allow users to set cpuset.cpus.reserve to whatever value 
+> they want. The distribution of isolated CPUs is only valid if the cpus 
+> are present in its parent's cpuset.cpus.reserve and all the way up to 
+> the root. It is a bit expensive, but it should be a relatively rare 
+> operation.
+
+I now have a slightly different idea of how to do that. We already have 
+an internal cpumask for partitioning - subparts_cpus. I am thinking 
+about exposing it as cpuset.cpus.reserve. The current way of creating 
+subpartitions will be called automatic reservation and require a direct 
+parent/child partition relationship. But as soon as a user write 
+anything to it, it will break automatic reservation and require manual 
+reservation going forward.
+
+In that way, we can keep the old behavior, but also support new use 
+cases. I am going to work on that.
+
+Cheers,
+Longman
 
