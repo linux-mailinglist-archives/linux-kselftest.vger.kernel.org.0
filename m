@@ -2,50 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18556E2AB1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 21:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07E46E2B51
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 22:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjDNTiy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Apr 2023 15:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S229713AbjDNUyk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Apr 2023 16:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDNTiw (ORCPT
+        with ESMTP id S229586AbjDNUyj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Apr 2023 15:38:52 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBEE49EA;
-        Fri, 14 Apr 2023 12:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=CbWN6qJHp6Pc/X56x9EHRwm7uGLwhKUh3lgTwYDnlFA=; b=SCHVqNXhLeGLbbKmp0dlZceMfA
-        qRvQjXsE6Ldl5/v8TDiRoTKvpKOJY5xc5dLRs0ThddMp7Km8v1L0X3ipoFmsbXB6UYSzqQiM6U3oG
-        dgIjh/zmGsTkwxbPaybtp8/dBU8eZLciRwqnGLw4uNirHDuTm4i12t1a6SqCtN+LOFHykTiH3PwtL
-        qX0gLZMeTcPJ//h9Z01G3UnXvdt2czbnK0HRWLXhEjPlc5UNIfQhMJJubv5wm+40EUH5fU5uZGUFO
-        w8nuchHTqmL1v3Jh5TVoyIKJQspv0fy++z1S4Ea0I63CN3tn2uwntxb0ru7w+0d7yUc9z2XJdxtIj
-        ZCO6RXIA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pnPFu-00ASpr-0k;
-        Fri, 14 Apr 2023 19:38:46 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, keescook@chromium.org,
-        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        vincenzopalazzodev@gmail.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH] selftests: allow runners to override the timeout
-Date:   Fri, 14 Apr 2023 12:38:45 -0700
-Message-Id: <20230414193845.2494120-1-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Fri, 14 Apr 2023 16:54:39 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA70B3C33;
+        Fri, 14 Apr 2023 13:54:37 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id B653732009AF;
+        Fri, 14 Apr 2023 16:54:34 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 14 Apr 2023 16:54:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1681505674; x=1681592074; bh=rl
+        FheFZweK49BGNnFZwEc5L1U+sCs9kJT/iFa/MIfcY=; b=u1KA8P2Tn9lh3rLH8/
+        IKeBdjNTCA2wxQNFIbuPaY07Py0Y0ltUhQ5goajpEAUVtiAwucxonhvnyocX3xux
+        r56rJRVSFg+D6i+luKjatEQy+zj7s6s5kp0ebHYGPL1gdQE6sT9W5xe8loLNgDBi
+        Okg7PEwo3ZS5VRbdFXExWzY/PKj8gAwMn05eBeZg2dTcPBfelIirqURrStGOGMIy
+        n64Wugriv0ITNyunTinny1460VZb++52aAxFNEG+ziAECVtpIZ38pKGYnV+gCxm6
+        JaRaXfQcVuPDA/xmysVjeToN9qZVzsAmoTE07cuCUszwsn3W3+5yPaLUbX9LpuZo
+        Jj6Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1681505674; x=1681592074; bh=rlFheFZweK49B
+        GNnFZwEc5L1U+sCs9kJT/iFa/MIfcY=; b=JWAQb6wJO0ZMS2m0H5Z1TIrf0S9I9
+        2pFUgxntkJmVV7z6EzbmF14L47kj4w4w8cdNK7SXSCHuNALtL47LC2OUQrPNFV2G
+        jufOL8wePIOJQBUhgUxXz8ac8IIrG3YZwP6gzvdEuJ1hcRw4Fej95mcnVpQodorV
+        7o4kApOZCmJmIdX0+LoQYqwlhB5aM1pdCwBQ3v+0qTnnl2B9I1wOc1lCpshYX/0m
+        09esXPm4ImkltPrclx1Cvv2HQ5JTzhno98B4mi15ShIWlNCE/X1V7LW8CmB3+Eci
+        H43Fv6HfGyeR3/sGO89BmaRzHDx5IowhLcWYgSxPgEgdzyDVOkXVZG7Rg==
+X-ME-Sender: <xms:ib05ZPQYm8GkfVOjZfyTZRHAtNo1swXQbdimbehpTw8ppy2t0dn5EA>
+    <xme:ib05ZAz0Wqgr-5AxgfE8BYHoccDeSMAmMxcHCqyX4-LWnc4gC6zI5nRnTfordAZ3x
+    tUcv-yI1rmksu9lEmY>
+X-ME-Received: <xmr:ib05ZE0JbcA8U9qC4SVcsuRHzMHeFUmTHSRa6LsBF1EeFP7A8HXu5Rzc1NbY--is7Piq89vpcy9oyyF8NkRloSFm90-xGHjSMjPX55qbdpHC>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeltddgudehhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
+    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
+    htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
+    geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hshhhrseguvghvkhgvrhhnvghlrdhioh
+X-ME-Proxy: <xmx:ib05ZPCPp4LuPEHYpE4j7pZiIO1ylhg5Bo6uqLuDU1h08wQ0aylQ5g>
+    <xmx:ib05ZIitLTp-DSRqR_kAxRsb9rtxguOMRes6XU9qBmkzx5azF3XNeQ>
+    <xmx:ib05ZDqvoTkqjpqvD3F-ad68jCFl5tEpRIm1TVuQwmAAAJs3H_Gf2g>
+    <xmx:ir05ZLOMgNEP3U30CDYNavf5UO0urWeu_CibcYbb9bHtjLL0GSGZTQ>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Apr 2023 16:54:32 -0400 (EDT)
+References: <20230413233115.1878303-1-shr@devkernel.io>
+ <20230413233115.1878303-2-shr@devkernel.io>
+ <d2df2d42-66bd-3b7a-99a1-370cc91906e4@redhat.com>
+User-agent: mu4e 1.10.1; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, willy@infradead.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH v7 1/3] mm: add new api to enable ksm per process
+Date:   Fri, 14 Apr 2023 13:53:15 -0700
+In-reply-to: <d2df2d42-66bd-3b7a-99a1-370cc91906e4@redhat.com>
+Message-ID: <qvqwcz46gp6j.fsf@devbig1114.prn1.facebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,120 +89,98 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The default timeout for selftests tests is 45 seconds. Although
-we already have 13 settings for tests of about 96 sefltests which
-use a timeout greater than this, we want to try to avoid encouraging
-more tests to forcing a higher test timeout as selftests strives to
-run all tests quickly. Selftests also uses the timeout as a non-fatal
-error. Only tests runners which have control over a system would know
-if to treat a timeout as fatal or not.
 
-To help with all this:
+David Hildenbrand <david@redhat.com> writes:
 
-  o Enhance documentation to avoid future increases of insane timeouts
-  o Add the option to allow overriding the default timeout with test
-    runners with a command line option
+> Thanks!
+>
+> In general,
+>
+> Acked-by: David Hildenbrand <david@redhat.com>
+>
+> Two nits below, after staring at some other prctl implementations.
+>
+>> +#define PR_SET_MEMORY_MERGE		67
+>> +#define PR_GET_MEMORY_MERGE		68
+>>   #endif /* _LINUX_PRCTL_H */
+>> diff --git a/kernel/sys.c b/kernel/sys.c
+>> index 495cd87d9bf4..8c2e50edeb18 100644
+>> --- a/kernel/sys.c
+>> +++ b/kernel/sys.c
+>> @@ -15,6 +15,7 @@
+>>   #include <linux/highuid.h>
+>>   #include <linux/fs.h>
+>>   #include <linux/kmod.h>
+>> +#include <linux/ksm.h>
+>>   #include <linux/perf_event.h>
+>>   #include <linux/resource.h>
+>>   #include <linux/kernel.h>
+>> @@ -2661,6 +2662,30 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+>>   	case PR_SET_VMA:
+>>   		error = prctl_set_vma(arg2, arg3, arg4, arg5);
+>>   		break;
+>> +#ifdef CONFIG_KSM
+>> +	case PR_SET_MEMORY_MERGE:
+>
+> Looking at some other code (PR_SET_NO_NEW_PRIVS/ PR_SET_THP_DISABLE) I wonder if
+> we also want
+>
+> if (arg3 || arg4 || arg5)
+> 	return -EINVAL;
+>
+I added the above check. It requires that we always specify all
+parameters in the test programs. I also changed them accordingly.
 
-Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- Documentation/dev-tools/kselftest.rst       | 22 +++++++++++++++++++++
- tools/testing/selftests/kselftest/runner.sh | 11 ++++++++++-
- tools/testing/selftests/run_kselftest.sh    |  5 +++++
- 3 files changed, 37 insertions(+), 1 deletion(-)
+> For PR_GET_MEMORY_MERGE it looks good already.
+>
+>> +		if (mmap_write_lock_killable(me->mm))
+>> +			return -EINTR;
+>> +
+>> +		if (arg2) {
+>> +			error = ksm_enable_merge_any(me->mm);
+>> +		} else {
+>> +			/*
+>> +			 * TODO: we might want disable KSM on all VMAs and
+>> +			 * trigger unsharing to completely disable KSM.
+>> +			 */
+>> +			clear_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+>> +			error = 0;
+>> +		}
+>> +		mmap_write_unlock(me->mm);
+>> +		break;
+>> +	case PR_GET_MEMORY_MERGE:
+>> +		if (arg2 || arg3 || arg4 || arg5)
+>> +			return -EINVAL;
+>> +
+>> +		error = !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+>> +		break;
+>> +#endif
+>>   	default:
+>>   		error = -EINVAL;
+>>   		break;
+>
+> [...]
+>
+>> +/**
+>> + * ksm_enable_merge_any - Add mm to mm ksm list and enable merging on all
+>> + *                        compatible VMA's
+>> + *
+>> + * @mm:  Pointer to mm
+>> + *
+>> + * Returns 0 on success, otherwise error code
+>> + */
+>> +int ksm_enable_merge_any(struct mm_struct *mm)
+>> +{
+>> +	int err;
+>> +
+>> +	if (test_bit(MMF_VM_MERGE_ANY, &mm->flags))
+>> +		return -EINVAL;
+>
+>
+> I'm curious, why is enabling the prctl() supposed to fail if already enabled?
+> (it would not fail if disabling and already disabled)
+>
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index 12b575b76b20..dd214af7b7ff 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -168,6 +168,28 @@ the `-t` option for specific single tests. Either can be used multiple times::
- 
- For other features see the script usage output, seen with the `-h` option.
- 
-+Timeout for selftests
-+=====================
-+
-+Selftests are designed to be quick and so a default timeout is used of 45
-+seconds for each test. Tests can override the default timeout by adding
-+a settings file in their directory and set a timeout variable there to the
-+configured a desired upper timeout for the test. Only a few tests override
-+the timeout with a value higher than 45 seconds, selftests strives to keep
-+it that way. Timeouts in selftests are not considered fatal because the
-+system under which a test runs may change and this can also modify the
-+expected time it takes to run a test. If you have control over the systems
-+which will run the tests you can configure a test runner on those systems to
-+use a greater or lower timeout on the command line as with the `-o` or
-+the `--override-timeout` argument. For example to use 165 seconds instead
-+one would use:
-+
-+   $ ./run_kselftest.sh --override-timeout 165
-+
-+You can look at the TAP output to see if you ran into the timeout. Test
-+runners which know a test must run under a specific time can then optionally
-+treat these timeouts then as fatal.
-+
- Packaging selftests
- ===================
- 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 294619ade49f..1c952d1401d4 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -8,7 +8,8 @@ export logfile=/dev/stdout
- export per_test_logging=
- 
- # Defaults for "settings" file fields:
--# "timeout" how many seconds to let each test run before failing.
-+# "timeout" how many seconds to let each test run before running
-+# over our soft timeout limit.
- export kselftest_default_timeout=45
- 
- # There isn't a shell-agnostic way to find the path of a sourced file,
-@@ -90,6 +91,14 @@ run_one()
- 		done < "$settings"
- 	fi
- 
-+	# Command line timeout overrides the settings file
-+	if [ -n "$kselftest_override_timeout" ]; then
-+		kselftest_timeout="$kselftest_override_timeout"
-+		echo "# overriding timeout to $kselftest_timeout" >> "$logfile"
-+	else
-+		echo "# timeout set to $kselftest_timeout" >> "$logfile"
-+	fi
-+
- 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
- 	echo "# $TEST_HDR_MSG"
- 	if [ ! -e "$TEST" ]; then
-diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-index 97165a83df63..9a981b36bd7f 100755
---- a/tools/testing/selftests/run_kselftest.sh
-+++ b/tools/testing/selftests/run_kselftest.sh
-@@ -26,6 +26,7 @@ Usage: $0 [OPTIONS]
-   -l | --list			List the available collection:test entries
-   -d | --dry-run		Don't actually run any tests
-   -h | --help			Show this usage info
-+  -o | --override-timeout	Number of seconds after which we timeout
- EOF
- 	exit $1
- }
-@@ -33,6 +34,7 @@ EOF
- COLLECTIONS=""
- TESTS=""
- dryrun=""
-+kselftest_override_timeout=""
- while true; do
- 	case "$1" in
- 		-s | --summary)
-@@ -51,6 +53,9 @@ while true; do
- 		-d | --dry-run)
- 			dryrun="echo"
- 			shift ;;
-+		-o | --override-timeout)
-+			kselftest_override_timeout="$2"
-+			shift 2 ;;
- 		-h | --help)
- 			usage 0 ;;
- 		"")
--- 
-2.39.2
-
+I changed that to not return an error in that case.
+>
+> For example, PR_SET_THP_DISABLE/PR_SET_NO_NEW_PRIVS doesn't fail if already set.
