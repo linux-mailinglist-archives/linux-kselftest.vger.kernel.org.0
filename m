@@ -2,244 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DA56E2021
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 12:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3802C6E20AF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 12:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbjDNKCM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Apr 2023 06:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S229471AbjDNK0H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Apr 2023 06:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjDNKCG (ORCPT
+        with ESMTP id S230088AbjDNK0G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Apr 2023 06:02:06 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEECB76B4;
-        Fri, 14 Apr 2023 03:02:04 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 717652B06EFE;
-        Fri, 14 Apr 2023 06:02:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 14 Apr 2023 06:02:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681466522; x=1681473722; bh=AX
-        mBOrau9y62Ep9jBep7xcrWEaTvywvjZLIPJDZWzw8=; b=CE5N4hsCc7Ea/viRSL
-        F+lnjOkQlk0k83MsdAcZxkswiLmj+ON4CTfy8rNKto8zkw6FOyCVNt7YaP4qohYO
-        t1GD6QXChlJ5TlWE7S8kBm1x8TDX6DWmQnADAYhF9WXNzlt5N0WtjXXsbKE65maH
-        tiRY8Qvy5NbOgLUbPjA9lmRumA0VlEhlySMC7HD5N9Nx8ZcEnjCbVpbS+bwkr/e2
-        tbhcPcHcL3pF0/UDYA73HoQot8sd4w9tiRspivnSl961Ic8CU46fpYWuAwSanPKL
-        x2OR9Y/Ud+XHPZcsM2/y16iu6MC0RsGkUDlX9BS7X2eeUPfenpgD3ikx1t9O62JK
-        GNUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681466522; x=1681473722; bh=AXmBOrau9y62E
-        p9jBep7xcrWEaTvywvjZLIPJDZWzw8=; b=Ul5rPHERFuTt+CzCsMPKn39Z8amcc
-        1H5mS8DL09X92kH7U+j2yFTEl8gSzgi6dp528zsuZkyXY7OLYbnbfVyiTttg7Vym
-        t9oRDetMlPIdSPZD+dhJzJiHY6sN7T51UMZ+T39xkB5lZaIaUoQQraiyC9UdXLC8
-        BzNm7lmcklwI7nDa/ZsTjh3Lq6XYntum+UqXySB5V9612zV+jntCB/1lnRXSH73b
-        YIawuuUmh960/JXAsaqUDjwWmc4nxp6YjuLOG0kIfm0x64n68p2BoDte9egwN/Im
-        L5D2Diz5PkQ0F0avFjFfxc+iPuDY8U2DArYcMFR2c0KQ9VFV1Fw+J0kmw==
-X-ME-Sender: <xms:mSQ5ZJ9sGfbDvuVzBblC2zzsPHP5MjKOrhr6mqjdXZVurL7Qt_y6Dg>
-    <xme:mSQ5ZNs19OxX2hlzXhDsAUmUfakZawtbcCmWUsIHNifDKaeW2lmVlGYZwQab6A38Z
-    Q0TrR7AxDsejqwPm7k>
-X-ME-Received: <xmr:mSQ5ZHAIotOx71Aw9jYCyv1359f8opuD8Jn8ZL7PKITU3TOY_vChRRRxBaz8zgf_duwgXg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeltddgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepmhgrgihi
-    mhgvsegtvghrnhhordhtvggthhenucggtffrrghtthgvrhhnpeegfeeuffdtuefffeegvd
-    evhedvtdekkeeftdefjedufffguefgudffhfduffehteenucffohhmrghinhepkhgvrhhn
-    vghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:mSQ5ZNejtdtl0F7Sxmo-hFqWXhultPBqvVc9tc6IM5WyXIxEgfb6BQ>
-    <xmx:mSQ5ZOOwAXZ7YZKeEuj3IYaQBM-iqWl9Kv3PQEWtMQoZLbXjxd68fg>
-    <xmx:mSQ5ZPnezi-Ry3315dLzcCygIWUrpMbhbDB21E2PDJRwSHgtKBqc3Q>
-    <xmx:miQ5ZDZCwRFz0rRZCRNxGj318CIgoVJcUJ5QxtdisCSu9bGYhxHjm3IAeqw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Apr 2023 06:02:00 -0400 (EDT)
-From:   maxime@cerno.tech
-Date:   Fri, 14 Apr 2023 12:01:59 +0200
-To:     David Gow <davidgow@google.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>,
-        Benjamin Berg <benjamin@sipsolutions.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [RFC PATCH v2 1/3] kunit: Add kunit_add_action() to defer a call
- until test exit
-Message-ID: <56w47e5mff74b4jrpgl4odhjxzayoptb6u2e2u6haaf7tuvl4f@xwlmne7p6kli>
-11;rgb: fafa/f4f4/ededFrom: Maxime Ripard <maxime@cerno.tech>
-References: <20230331080411.981038-1-davidgow@google.com>
- <20230331080411.981038-2-davidgow@google.com>
+        Fri, 14 Apr 2023 06:26:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BD24EF3
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 03:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681467904;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QcY9UQN+sgDIeuyeA2i6LuRS8ISnfWHgkBht0s/19qA=;
+        b=BHLCDZx8gCJweJzPMMZsMXXu4/ilnZLXDjuyBwzZMNXuPggmWbVihuerV4dgjE/Oy/FFnv
+        yTxLZRQE8Vx6RvBB03PCF4lRyafAKuN0QTxkMA/v7HkX8tGfp9j4emUy5Ck1QuRLFha9Dy
+        yte78GMaFa7tvZCpT1m6imHMjkmDnbI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-294-VsK5JGIfPzalnQxfQLaOiw-1; Fri, 14 Apr 2023 06:25:03 -0400
+X-MC-Unique: VsK5JGIfPzalnQxfQLaOiw-1
+Received: by mail-wm1-f71.google.com with SMTP id bh6-20020a05600c3d0600b003f0a1353fe2so3256303wmb.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 03:25:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681467902; x=1684059902;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QcY9UQN+sgDIeuyeA2i6LuRS8ISnfWHgkBht0s/19qA=;
+        b=l8IbVjPkTukbRLidm24ynrD+jP6reCkpCxwxePecvoyrGEHwvR2tfWWK2eSag2QUdZ
+         5xaNLZa+3NHmYuVfALQ2i74C615hnmcP3yc1cRHcrZoaXJwAm/9+Lwp4g0EZlCBzDCsX
+         s067WNsZcJjy/g2ah6T4kBKJbXhe/hgw8ZN1J/qzHrCvW+GI+cekDpaKo5C62keDDUNo
+         Fq+l0NWwgKQodupty3HsRRdSoDYSnLP1Q8K7CmdJH+lAd8cxhNYsYwEgw5oxoidZP6jb
+         nYEEYdzhs0LAKC4agMmOgF6K+IIbJp0pmo9gEcL/dvr/G+9OQ7ShbjIwKN3p3YrtSxNk
+         HHew==
+X-Gm-Message-State: AAQBX9fNqMCybOoqcl8PXyTohZhGT2QmLLyH5tcAZWurhDxNC5vLLjJP
+        9BoAclcFnQI+SPkJjnXkHub8s/jxs2IN82p20zn1bc39rhhxXAIlGXlS1m1+CKlnzJPTPt4+ZBr
+        azEJ89pIo6ow5Z9bfhzUq17kDH9m9
+X-Received: by 2002:a1c:f60a:0:b0:3ed:9ce3:4a39 with SMTP id w10-20020a1cf60a000000b003ed9ce34a39mr4168147wmc.26.1681467901817;
+        Fri, 14 Apr 2023 03:25:01 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aE0fJ16pyJLzb3fBgzbhX9M+NiOEOq9BBo6MIjOgyR17TW6oYD8CgWOQk9CaCcb1Vv4AXb3A==
+X-Received: by 2002:a1c:f60a:0:b0:3ed:9ce3:4a39 with SMTP id w10-20020a1cf60a000000b003ed9ce34a39mr4168127wmc.26.1681467901399;
+        Fri, 14 Apr 2023 03:25:01 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:5700:cb5b:f73a:c650:1d9? (p200300cbc7025700cb5bf73ac65001d9.dip0.t-ipconnect.de. [2003:cb:c702:5700:cb5b:f73a:c650:1d9])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003ee74c25f12sm7605573wms.35.2023.04.14.03.25.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 03:25:00 -0700 (PDT)
+Message-ID: <d2df2d42-66bd-3b7a-99a1-370cc91906e4@redhat.com>
+Date:   Fri, 14 Apr 2023 12:24:59 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fceqsyq7p6l42qjy"
-Content-Disposition: inline
-In-Reply-To: <20230331080411.981038-2-davidgow@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Stefan Roesch <shr@devkernel.io>, kernel-team@fb.com
+Cc:     linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+References: <20230413233115.1878303-1-shr@devkernel.io>
+ <20230413233115.1878303-2-shr@devkernel.io>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v7 1/3] mm: add new api to enable ksm per process
+In-Reply-To: <20230413233115.1878303-2-shr@devkernel.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Thanks!
 
---fceqsyq7p6l42qjy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In general,
 
-Hi David,
+Acked-by: David Hildenbrand <david@redhat.com>
 
-On Fri, Mar 31, 2023 at 04:04:09PM +0800, David Gow wrote:
-> Many uses of the KUnit resource system are intended to simply defer
-> calling a function until the test exits (be it due to success or
-> failure). The existing kunit_alloc_resource() function is often used for
-> this, but was awkward to use (requiring passing NULL init functions, etc),
-> and returned a resource without incrementing its reference count, which
-> -- while okay for this use-case -- could cause problems in others.
->=20
-> Instead, introduce a simple kunit_add_action() API: a simple function
-> (returning nothing, accepting a single void* argument) can be scheduled
-> to be called when the test exits. Deferred actions are called in the
-> opposite order to that which they were registered.
->=20
-> This mimics the devres API, devm_add_action(), and also provides
-> kunit_remove_action(), to cancel a deferred action, and
-> kunit_release_action() to trigger one early.
->=20
-> This is implemented as a resource under the hood, so the ordering
-> between resource cleanup and deferred functions is maintained.
->=20
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->=20
-> Changes since RFC v1:
-> https://lore.kernel.org/linux-kselftest/20230325043104.3761770-2-davidgow=
-@google.com/
-> - Rename functions to better match the devm_* APIs. (Thanks Maxime)
-> - Embed the kunit_resource in struct kunit_action_ctx to avoid an extra
->   allocation (Thanks Benjamin)
-> - Use 'struct kunit_action_ctx' as the type for cancellation tokens
->   (Thanks Benjamin)
-> - Add tests.
->=20
-> ---
->  include/kunit/resource.h |  89 ++++++++++++++++++++++++++++
->  lib/kunit/kunit-test.c   | 123 ++++++++++++++++++++++++++++++++++++++-
->  lib/kunit/resource.c     |  99 +++++++++++++++++++++++++++++++
->  3 files changed, 310 insertions(+), 1 deletion(-)
->=20
-> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-> index c0d88b318e90..15efd8924666 100644
-> --- a/include/kunit/resource.h
-> +++ b/include/kunit/resource.h
-> @@ -387,4 +387,93 @@ static inline int kunit_destroy_named_resource(struc=
-t kunit *test,
->   */
->  void kunit_remove_resource(struct kunit *test, struct kunit_resource *re=
-s);
-> =20
-> +typedef void (*kunit_defer_function_t)(void *ctx);
+Two nits below, after staring at some other prctl implementations.
+
+> +#define PR_SET_MEMORY_MERGE		67
+> +#define PR_GET_MEMORY_MERGE		68
+>   #endif /* _LINUX_PRCTL_H */
+> diff --git a/kernel/sys.c b/kernel/sys.c
+> index 495cd87d9bf4..8c2e50edeb18 100644
+> --- a/kernel/sys.c
+> +++ b/kernel/sys.c
+> @@ -15,6 +15,7 @@
+>   #include <linux/highuid.h>
+>   #include <linux/fs.h>
+>   #include <linux/kmod.h>
+> +#include <linux/ksm.h>
+>   #include <linux/perf_event.h>
+>   #include <linux/resource.h>
+>   #include <linux/kernel.h>
+> @@ -2661,6 +2662,30 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+>   	case PR_SET_VMA:
+>   		error = prctl_set_vma(arg2, arg3, arg4, arg5);
+>   		break;
+> +#ifdef CONFIG_KSM
+> +	case PR_SET_MEMORY_MERGE:
+
+Looking at some other code (PR_SET_NO_NEW_PRIVS/ PR_SET_THP_DISABLE) I 
+wonder if we also want
+
+if (arg3 || arg4 || arg5)
+	return -EINVAL;
+
+For PR_GET_MEMORY_MERGE it looks good already.
+
+> +		if (mmap_write_lock_killable(me->mm))
+> +			return -EINTR;
 > +
-> +/* An opaque token to a deferred action. */
-> +struct kunit_action_ctx;
+> +		if (arg2) {
+> +			error = ksm_enable_merge_any(me->mm);
+> +		} else {
+> +			/*
+> +			 * TODO: we might want disable KSM on all VMAs and
+> +			 * trigger unsharing to completely disable KSM.
+> +			 */
+> +			clear_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+> +			error = 0;
+> +		}
+> +		mmap_write_unlock(me->mm);
+> +		break;
+> +	case PR_GET_MEMORY_MERGE:
+> +		if (arg2 || arg3 || arg4 || arg5)
+> +			return -EINVAL;
 > +
+> +		error = !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+> +		break;
+> +#endif
+>   	default:
+>   		error = -EINVAL;
+>   		break;
+
+[...]
+
 > +/**
-> + * kunit_add_action() - Defer an 'action' (function call) until the test=
- ends.
-> + * @test: Test case to associate the action with.
-> + * @func: The function to run on test exit
-> + * @ctx: Data passed into @func
-> + * @internal_gfp: gfp to use for internal allocations, if unsure, use GF=
-P_KERNEL
+> + * ksm_enable_merge_any - Add mm to mm ksm list and enable merging on all
+> + *                        compatible VMA's
 > + *
-> + * Defer the execution of a function until the test exits, either normal=
-ly or
-> + * due to a failure.  @ctx is passed as additional context. All functions
-> + * registered with kunit_add_action() will execute in the opposite order=
- to that
-> + * they were registered in.
+> + * @mm:  Pointer to mm
 > + *
-> + * This is useful for cleaning up allocated memory and resources.
-> + *
-> + * Returns:
-> + *   An opaque "cancellation token", or NULL on error. Pass this token to
-> + *   kunit_remove_action_token() in order to cancel the deferred executi=
-on of
-> + *   func().
+> + * Returns 0 on success, otherwise error code
 > + */
-> +struct kunit_action_ctx *kunit_add_action(struct kunit *test, kunit_defe=
-r_function_t func,
-> +		      void *ctx, gfp_t internal_gfp);
+> +int ksm_enable_merge_any(struct mm_struct *mm)
+> +{
+> +	int err;
+> +
+> +	if (test_bit(MMF_VM_MERGE_ANY, &mm->flags))
+> +		return -EINVAL;
 
-I've tried to leverage kunit_add_action() today, and I'm wondering if
-passing the struct kunit pointer to the deferred function would help.
 
-The code I'm struggling with is something like:
+I'm curious, why is enabling the prctl() supposed to fail if already 
+enabled? (it would not fail if disabling and already disabled)
 
-> static int test_init(struct kunit *test)
-> {
-> 	priv =3D kunit_kzalloc(sizeof(*priv), GFP_KERNEL);
->	KUNIT_ASSERT_NOT_NULL(test, priv);
->	test->priv =3D priv;
->
-> 	priv->dev =3D alloc_device();
->
->	return 0;
-> }
+For example, PR_SET_THP_DISABLE/PR_SET_NO_NEW_PRIVS doesn't fail if 
+already set.
 
-and then in the test itself:
+-- 
+Thanks,
 
-> static void actual_test(struct kunit *test)
-> {
-> 	struct test_priv *priv =3D test->priv;
->
->	id =3D allocate_buffer(priv->dev);
->
-> 	KUNIT_EXPECT_EQ(test, id, 42);
->
-> 	free_buffer(priv->dev, id);
-> }
+David / dhildenb
 
-I'd like to turn free_buffer an action registered right after allocate
-buffer. However, since it takes several arguments and kunit_add_action
-expects a single pointer, we would need to create a structure for it,
-allocate it, fill it, and then free it when the action has ran.
-
-It creates a lot of boilerplate, while if we were passing the pointer to
-struct kunit we could access the context of the test as well, and things
-would be much simpler.
-
-Does that make sense?
-
-Maxime
-
---fceqsyq7p6l42qjy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZDkklwAKCRDj7w1vZxhR
-xeNoAP9VMmSPcl8ZzIFWaozvx8UFXU/3lzCtRY36TKzGyxPxxAD+NLmzkbxArqsc
-XrsZQswdB53bCVwGmp6eiVyTgG8Dnw4=
-=ONZA
------END PGP SIGNATURE-----
-
---fceqsyq7p6l42qjy--
