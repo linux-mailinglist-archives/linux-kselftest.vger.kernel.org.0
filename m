@@ -2,167 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE646E274E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 17:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B0C6E282A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 18:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjDNPrm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Apr 2023 11:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S229722AbjDNQQR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Apr 2023 12:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjDNPr1 (ORCPT
+        with ESMTP id S229446AbjDNQQQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Apr 2023 11:47:27 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22959975E
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 08:47:26 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id j12so1719194wrd.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 08:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1681487244; x=1684079244;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qzxt4XcM4tuKu37taRV5Ugjl1Cb3GZa6ByEPKZjvm68=;
-        b=insrqgRzM5WggRlz8B5pv0UziSsf4Bk9QYU+AO+KzFAuqcBNEQfCS26+Tj+MjVpCPL
-         uP4cMmOfcMIkznI9FbQi2i0ZqSSx1UFKdWnalX1Ug6m5PBIPJDQIFphg7yUxhEV2ivcD
-         M9ofn6TCMlSEDu2NlD9l6W0zpNmlqjPG48oC5E9h6qNkuvq8EgkhkTf0ug4ZxZs7KyJ9
-         meB7e6gdS6S30/zAYV20930f0NRg/RqDN2wYo0qD2BrPx75U4pcQEcZUotJ2Zm55CSXX
-         IO6Jt3pvubJmtlv0lwzX8KuSBplshzeXLXRhQOuoEs50g6VBfAqoL9gGomBhW4PAPCn3
-         seLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681487244; x=1684079244;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qzxt4XcM4tuKu37taRV5Ugjl1Cb3GZa6ByEPKZjvm68=;
-        b=CPV9HWjFNTydbQVKmPcXltrHsQUvQD3jPqw/1ow5CQ8hm0mKHeTx/Wd+RvI0Zwo+k1
-         LMZpmuwtGS4cAJoGw2SBU3ng9q/G2u/tTEdMUXNxAIm0qnDtkJudz1fHfyUNDwLHSRHE
-         jFIFVrYb0EHdjkZObVTp4RZxWBQvOeZ+Xp/9g+m0N1nKNfazcp4BSzEx0M0n6UsXFFdH
-         H+EPr0TvPt5xcOxgYly/WQ+UUlWRaza1cZ3rOq6KxjklXSypzVC7FrSuMbhe2Pmwvxdq
-         VmG4KRJNDW7bg8+N14t6mjaczsy4dRLdW5znm7Z1SPSN5vOKsozbf9bwB4gX4PdvW6Bl
-         rEgw==
-X-Gm-Message-State: AAQBX9cqYPnPYVPKMQndWARJorOZ1Tvs9/P0pL/ypoD0FYkptlhUu+jN
-        g1gur/tEItutDXLZ8pHehiwBlw==
-X-Google-Smtp-Source: AKy350anVWsEzpcDQkwD4VfavS5OSXHWMTLonpGNhq7ef7wjmNN7vxgvbaWECHBpitBCNgJ0zo4sNQ==
-X-Received: by 2002:adf:f709:0:b0:2f4:e8e3:ef62 with SMTP id r9-20020adff709000000b002f4e8e3ef62mr4561531wrp.65.1681487244500;
-        Fri, 14 Apr 2023 08:47:24 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id x2-20020a05600c21c200b003f149715cb6sm1034298wmj.10.2023.04.14.08.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 08:47:24 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Fri, 14 Apr 2023 17:47:10 +0200
-Subject: [PATCH net-next 5/5] selftests: mptcp: join: fix ShellCheck
- warnings
+        Fri, 14 Apr 2023 12:16:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104D3903A;
+        Fri, 14 Apr 2023 09:16:14 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EFDGa9000385;
+        Fri, 14 Apr 2023 16:15:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=RpAjtv77c3dRhMWtwrys0GqqNyVgx8vpDE89fectelk=;
+ b=HJHZQclP6Z3x2k4AE6TMpOc3p3WyV+QmZvnv1rR68o4I5xxlT2cZ/+CdHTW5SCrxwzu5
+ o4f5Va/KhvAAsirsIKFqt41Av6XUl5gx4DEyIDL4Sbj62BEkfsPysdR3LbYYiS7tPN3g
+ Ez20moBGhPVQiKVWtLqkdmP4HKhuQnQ7PANuszxmKnF4HzNJT2H8Kt24PPc4p3Cw5DWY
+ t5qw4LsHgdOgxDRsxtkfOx6gqrSzDK4JQ0s7sctTfDNipxz7RNzDusr80xh4ZsNJJk1w
+ ys2R9uVz4uKzkzLHYhPjhzZSCQ1g+IJne6H4kFc6FkOVXRFdFKuopyd3Tmi/rhEKEZGw Cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3py999tfkh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 16:15:47 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33EFEWAB009783;
+        Fri, 14 Apr 2023 16:15:46 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3py999tfj7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 16:15:46 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33E3dPhX018750;
+        Fri, 14 Apr 2023 16:15:43 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m1btbw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 16:15:43 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33EGFfnU30998922
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Apr 2023 16:15:41 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1D94820043;
+        Fri, 14 Apr 2023 16:15:41 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3949E20040;
+        Fri, 14 Apr 2023 16:15:40 +0000 (GMT)
+Received: from heavy (unknown [9.171.89.218])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 14 Apr 2023 16:15:40 +0000 (GMT)
+Date:   Fri, 14 Apr 2023 18:15:38 +0200
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Andrea Righi <andrea.righi@canonical.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
+Message-ID: <q5rj72tmwlpzx6qgkromem5t7q6xmen52aavfr65olnuv52f3z@wzs4p3xz3635>
+References: <20230412095912.188453-1-andrea.righi@canonical.com>
+ <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
+ <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-5-5aa4a2e05cf2@tessares.net>
-References: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-0-5aa4a2e05cf2@tessares.net>
-In-Reply-To: <20230414-upstream-net-next-20230414-mptcp-small-cleanups-v1-0-5aa4a2e05cf2@tessares.net>
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2487;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=5FlU9MokKUitrXSC9YGwxuWrLrcBCHiaj46QcbM+33c=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkOXWGyZxITuXwckR3HbIuXnkVm7W+wSc67dzLx
- OqLJqwqrtuJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZDl1hgAKCRD2t4JPQmmg
- c/XiEAC9N9r9lk1IJXEOk06iElSNPd4XvWvMdxKFRC8a5fiRwKfffWvBq83xIqjvPN6lDECghch
- CfAefrERTjAFWIxCED0YwWTaJVZPL7CTRv3gVQsmtwCmaJtkS9GgsHxdL3r0RrUfjRqH8ut/Qny
- K/3m2zTdH1tg/2vBHB/Dr2ojGfwPAQnyLoxtLKk58CFZkTgSGshZx66pjSYvoCM8HsHwx7fRi7r
- DueOR1eS1vGOO4aupDJApFqpDG/ezuNyrOhWfwpoQZX4eTYzky/g2ZHB1m+tjgvgbZc5898o6D6
- j+Sw+5c/8/1EM5aZNcI3uQcIFgKFXQTFddSfuZn79KzBAdeo8qgOAUVzlLmz5fnJnqTaZiiJprD
- bjAQ01Yf0ADWyNM90DBOXG3GoVRYZdixwj5d6zGUmA81erWLFSChK34SDfulHISMbOvWjT5GXeX
- MRlzifdNAhXKtTbfm7r9zSg7lxBNdnqToMZnN07LX+DivSlR+tv2pjmK9k8P1fg+NSVRQrRo4IG
- YaMd4dgNsCCOdwzdic3nkmOvjfx5o6wyO3dLBBE8eFcwW3dLXQt0DRe3rRMN/ocQdWG3DUV4Pcs
- WRDOlOMJ4rBMfbcKDo4UkHyKa2pWSLiAdqztAQCLdUVev7wt3mfFKi8o6SGxzNvMjIDVEhwA/pa
- TCyicSCBV6Qm39Q==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UqRBtxknN6WEuZnVDVXRbt06hx3mQ1k9
+X-Proofpoint-GUID: CeKvyijkGrCWLD_t0crn5f_K5gZ88OdP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_08,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 clxscore=1011 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140141
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Most of the code had an issue according to ShellCheck.
+On Fri, Apr 14, 2023 at 08:15:03AM +0200, Andrea Righi wrote:
+> On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
+> > On Wed, Apr 12, 2023 at 2:59 AM Andrea Righi <andrea.righi@canonical.com> wrote:
+> > >
+> > > Building bpf selftests with clang can trigger errors like the following:
+> > >
+> > >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
+> > > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-pointer-types]
+> > >         s = &nlk->sk;
+> > >           ^ ~~~~~~~~
+> > > 1 error generated.
+> > 
+> > I cannot reproduce this and BPF CI doesn't complain about it either.
+> > What kind of clang do you use?
+> > Some special version and build flags?
+> 
+> I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special build
+> flag (unless Ubuntu enables some different default flags, but it
+> shouldn't be the case... I'll double check).
+> 
+> -Andrea
 
-That's mainly due to the fact it incorrectly believes most of the code
-was unreachable because it's invoked by variable name, see how the
-"tests" array is used.
+Hi,
 
-Once SC2317 has been ignored, three small warnings were still visible:
+FWIW, I see similar errors when I don't use recent pahole.
 
- - SC2155: Declare and assign separately to avoid masking return values.
-
- - SC2046: Quote this to prevent word splitting: can be ignored because
-   "ip netns pids" can display more than one pid.
-
- - SC2166: Prefer [ p ] || [ q ] as [ p -o q ] is not well defined.
-
-This probably didn't fix any actual issues but it might help spotting
-new interesting warnings reported by ShellCheck as just before,
-ShellCheck was reporting issues for most lines making it a bit useless.
-
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index fafd19ec7e1f..26310c17b4c6 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -6,6 +6,10 @@
- # address all other issues detected by shellcheck.
- #shellcheck disable=SC2086
- 
-+# ShellCheck incorrectly believes that most of the code here is unreachable
-+# because it's invoked by variable name, see how the "tests" array is used
-+#shellcheck disable=SC2317
-+
- ret=0
- sin=""
- sinfail=""
-@@ -371,8 +375,9 @@ check_transfer()
- 
- 	local line
- 	if [ -n "$bytes" ]; then
-+		local out_size
- 		# when truncating we must check the size explicitly
--		local out_size=$(wc -c $out | awk '{print $1}')
-+		out_size=$(wc -c $out | awk '{print $1}')
- 		if [ $out_size -ne $bytes ]; then
- 			echo "[ FAIL ] $what output file has wrong size ($out_size, $bytes)"
- 			fail_test
-@@ -500,6 +505,7 @@ kill_events_pids()
- 
- kill_tests_wait()
- {
-+	#shellcheck disable=SC2046
- 	kill -SIGUSR1 $(ip netns pids $ns2) $(ip netns pids $ns1)
- 	wait
- }
-@@ -1703,7 +1709,7 @@ chk_subflow_nr()
- 
- 	cnt1=$(ss -N $ns1 -tOni | grep -c token)
- 	cnt2=$(ss -N $ns2 -tOni | grep -c token)
--	if [ "$cnt1" != "$subflow_nr" -o "$cnt2" != "$subflow_nr" ]; then
-+	if [ "$cnt1" != "$subflow_nr" ] || [ "$cnt2" != "$subflow_nr" ]; then
- 		echo "[fail] got $cnt1:$cnt2 subflows expected $subflow_nr"
- 		fail_test
- 		dump_stats=1
-
--- 
-2.39.2
-
+Best regards,
+Ilya
