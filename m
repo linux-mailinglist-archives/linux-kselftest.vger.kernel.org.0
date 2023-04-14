@@ -2,210 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F6A6E2A97
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 21:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18556E2AB1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 21:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjDNTSd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Apr 2023 15:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
+        id S229766AbjDNTiy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Apr 2023 15:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjDNTSb (ORCPT
+        with ESMTP id S229468AbjDNTiw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Apr 2023 15:18:31 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90A440E1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 12:18:30 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id x8-20020a17090a6b4800b002474c5d3367so1554111pjl.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 12:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681499910; x=1684091910;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ogLr7uIHIMvPCGlXjertNBvmiSroqdLIBVs49zoY6k=;
-        b=IhrIOznEVHfe5xmu34/edL1xf7tw0ypa9JVT7l93R8h0RXGmJTRJ4uHc776kXAx7iy
-         4kWQFyC1NVjwHlce6RrEnYj90Bk6pK8IriruzrGmTkMWVF0WON0V4knhJtdX0Uu6yZ0K
-         Fgz9fnc/PDiq5HhAOoWAhvnHfDyUnwE7my5B5+G7sEDiSrGcm253w5bG0GE/0qo5983X
-         qRc4B48Y4K9Fz4FNXlek2daYpTsQxyHSZYdSAOi8Anv58xSRh0eJ5Jk7RDSyKtpf7jbC
-         CrlCsnM6dtym72T62RrmM3U+qKA1RoBOipVAU+b4AgHRoEFZMlsxmD6PgVLXzTZUVjhY
-         OsSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681499910; x=1684091910;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5ogLr7uIHIMvPCGlXjertNBvmiSroqdLIBVs49zoY6k=;
-        b=hFsIGS9FU54JQaFeHIVlO/xgdaJKnnzwgSk5VHCXVojtUNEj8ym11lp41r33Xhy1Zr
-         qNxFGAAELBAiGc2kRXOnJZo5cF9yO+aydiKxLgKEOz3Av5paPwt6N5ArLqTTfBa/THso
-         LZoUSjn+RJC5jNyULf/h3dJrq6M+F4202wKIPT00aimANVs7fhhfOaiHiikAC4+3xH2I
-         2OUOw2U2mLG7f1axCtF6QwZ/jAYNBy8VS2IoGY0nnHV/IUk5JtgEnCFEwtQfwCjnVZun
-         t2sk7KC5WqZMQ2EsvJWcCsSeeQxLSkbty5roHe4UldCJwhuNOk+PyUsYKYnW2gD2NxtI
-         K9gg==
-X-Gm-Message-State: AAQBX9eNrpiIUdbUwd4nrRJDGmS5Fll60qo9Ys1TEkJaQglqFT9PcQCd
-        2QTovwHT3RAO4BcL1xfvLPdR9uiLEhvhp//4+yCVjqhN
-X-Google-Smtp-Source: AKy350YoVsnVT5ij5p5s/UGcVPWV9E2uVWw1efrNg8k6/e0AyAwrALtMIVFCf8qM1FkfmpXmtHVhRg==
-X-Received: by 2002:a17:90a:7564:b0:247:2ff9:1cff with SMTP id q91-20020a17090a756400b002472ff91cffmr4092362pjk.25.1681499910167;
-        Fri, 14 Apr 2023 12:18:30 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s1-20020a17090a440100b00246f73c3acesm4960946pjg.33.2023.04.14.12.18.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 12:18:29 -0700 (PDT)
-Message-ID: <6439a705.170a0220.627bd.c293@mx.google.com>
-Date:   Fri, 14 Apr 2023 12:18:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 14 Apr 2023 15:38:52 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBEE49EA;
+        Fri, 14 Apr 2023 12:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=CbWN6qJHp6Pc/X56x9EHRwm7uGLwhKUh3lgTwYDnlFA=; b=SCHVqNXhLeGLbbKmp0dlZceMfA
+        qRvQjXsE6Ldl5/v8TDiRoTKvpKOJY5xc5dLRs0ThddMp7Km8v1L0X3ipoFmsbXB6UYSzqQiM6U3oG
+        dgIjh/zmGsTkwxbPaybtp8/dBU8eZLciRwqnGLw4uNirHDuTm4i12t1a6SqCtN+LOFHykTiH3PwtL
+        qX0gLZMeTcPJ//h9Z01G3UnXvdt2czbnK0HRWLXhEjPlc5UNIfQhMJJubv5wm+40EUH5fU5uZGUFO
+        w8nuchHTqmL1v3Jh5TVoyIKJQspv0fy++z1S4Ea0I63CN3tn2uwntxb0ru7w+0d7yUc9z2XJdxtIj
+        ZCO6RXIA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pnPFu-00ASpr-0k;
+        Fri, 14 Apr 2023 19:38:46 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, keescook@chromium.org,
+        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        vincenzopalazzodev@gmail.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH] selftests: allow runners to override the timeout
+Date:   Fri, 14 Apr 2023 12:38:45 -0700
+Message-Id: <20230414193845.2494120-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.3-rc1-25-g50ad2fb7ec2b
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-seccomp: 4 runs,
- 3 regressions (v6.3-rc1-25-g50ad2fb7ec2b)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 4 runs, 3 regressions (v6.3-rc1-25-g50ad2=
-fb7ec2b)
+The default timeout for selftests tests is 45 seconds. Although
+we already have 13 settings for tests of about 96 sefltests which
+use a timeout greater than this, we want to try to avoid encouraging
+more tests to forcing a higher test timeout as selftests strives to
+run all tests quickly. Selftests also uses the timeout as a non-fatal
+error. Only tests runners which have control over a system would know
+if to treat a timeout as fatal or not.
 
-Regressions Summary
--------------------
+To help with all this:
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-imx6q-sabrelite              | arm   | lab-collabora | gcc-10   | multi_v7_=
-defconfig+kselftest | 1          =
+  o Enhance documentation to avoid future increases of insane timeouts
+  o Add the option to allow overriding the default timeout with test
+    runners with a command line option
 
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ Documentation/dev-tools/kselftest.rst       | 22 +++++++++++++++++++++
+ tools/testing/selftests/kselftest/runner.sh | 11 ++++++++++-
+ tools/testing/selftests/run_kselftest.sh    |  5 +++++
+ 3 files changed, 37 insertions(+), 1 deletion(-)
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index 12b575b76b20..dd214af7b7ff 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -168,6 +168,28 @@ the `-t` option for specific single tests. Either can be used multiple times::
+ 
+ For other features see the script usage output, seen with the `-h` option.
+ 
++Timeout for selftests
++=====================
++
++Selftests are designed to be quick and so a default timeout is used of 45
++seconds for each test. Tests can override the default timeout by adding
++a settings file in their directory and set a timeout variable there to the
++configured a desired upper timeout for the test. Only a few tests override
++the timeout with a value higher than 45 seconds, selftests strives to keep
++it that way. Timeouts in selftests are not considered fatal because the
++system under which a test runs may change and this can also modify the
++expected time it takes to run a test. If you have control over the systems
++which will run the tests you can configure a test runner on those systems to
++use a greater or lower timeout on the command line as with the `-o` or
++the `--override-timeout` argument. For example to use 165 seconds instead
++one would use:
++
++   $ ./run_kselftest.sh --override-timeout 165
++
++You can look at the TAP output to see if you ran into the timeout. Test
++runners which know a test must run under a specific time can then optionally
++treat these timeouts then as fatal.
++
+ Packaging selftests
+ ===================
+ 
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 294619ade49f..1c952d1401d4 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -8,7 +8,8 @@ export logfile=/dev/stdout
+ export per_test_logging=
+ 
+ # Defaults for "settings" file fields:
+-# "timeout" how many seconds to let each test run before failing.
++# "timeout" how many seconds to let each test run before running
++# over our soft timeout limit.
+ export kselftest_default_timeout=45
+ 
+ # There isn't a shell-agnostic way to find the path of a sourced file,
+@@ -90,6 +91,14 @@ run_one()
+ 		done < "$settings"
+ 	fi
+ 
++	# Command line timeout overrides the settings file
++	if [ -n "$kselftest_override_timeout" ]; then
++		kselftest_timeout="$kselftest_override_timeout"
++		echo "# overriding timeout to $kselftest_timeout" >> "$logfile"
++	else
++		echo "# timeout set to $kselftest_timeout" >> "$logfile"
++	fi
++
+ 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
+ 	echo "# $TEST_HDR_MSG"
+ 	if [ ! -e "$TEST" ]; then
+diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+index 97165a83df63..9a981b36bd7f 100755
+--- a/tools/testing/selftests/run_kselftest.sh
++++ b/tools/testing/selftests/run_kselftest.sh
+@@ -26,6 +26,7 @@ Usage: $0 [OPTIONS]
+   -l | --list			List the available collection:test entries
+   -d | --dry-run		Don't actually run any tests
+   -h | --help			Show this usage info
++  -o | --override-timeout	Number of seconds after which we timeout
+ EOF
+ 	exit $1
+ }
+@@ -33,6 +34,7 @@ EOF
+ COLLECTIONS=""
+ TESTS=""
+ dryrun=""
++kselftest_override_timeout=""
+ while true; do
+ 	case "$1" in
+ 		-s | --summary)
+@@ -51,6 +53,9 @@ while true; do
+ 		-d | --dry-run)
+ 			dryrun="echo"
+ 			shift ;;
++		-o | --override-timeout)
++			kselftest_override_timeout="$2"
++			shift 2 ;;
+ 		-h | --help)
+ 			usage 0 ;;
+ 		"")
+-- 
+2.39.2
 
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.3=
--rc1-25-g50ad2fb7ec2b/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.3-rc1-25-g50ad2fb7ec2b
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      50ad2fb7ec2b18186b8a4fa1c0e00f78b3de5119 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-imx6q-sabrelite              | arm   | lab-collabora | gcc-10   | multi_v7_=
-defconfig+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/643994cb30404d2fe82e8611
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.3-rc1-25-g50=
-ad2fb7ec2b/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-=
-seccomp-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.3-rc1-25-g50=
-ad2fb7ec2b/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-=
-seccomp-imx6q-sabrelite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230407.0/armhf/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/643994cb3040=
-4d2fe82e8612
-        failing since 108 days (last pass: v6.1-rc1-24-gd5ba85d6d8be, first=
- fail: v6.2-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64399a59e475fb328d2e85fe
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.3-rc1-25-g50=
-ad2fb7ec2b/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.3-rc1-25-g50=
-ad2fb7ec2b/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230407.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/64399a59e475=
-fb328d2e85ff
-        failing since 178 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64399aa90d2dadc3262e8627
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.3-rc1-25-g50=
-ad2fb7ec2b/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.3-rc1-25-g50=
-ad2fb7ec2b/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230407.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/64399aa90d2d=
-adc3262e8628
-        failing since 178 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1) =
-
- =20
