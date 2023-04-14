@@ -2,142 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B14F6E1995
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 03:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EABB36E1A53
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 04:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjDNBXQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Apr 2023 21:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
+        id S229853AbjDNC2P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Apr 2023 22:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjDNBXP (ORCPT
+        with ESMTP id S229805AbjDNC2P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 21:23:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853E730FE
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 18:22:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681435346;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zhMvhm7mcviP5pv7MPTwxWQbVy7/SnaH+sAFoMwChHM=;
-        b=hOg2DoeniQerEjSHDo+CgNiN7SN18MpCgM6D8BQ2VGWYxD6tGhPnRsSnEUjjypq0W3AWFu
-        aDlmkjLhM4yU3sZW21djeoXUVa9mC820e76oiOdAx77iTYw2GIj+VhrxfLOo0qvF0FkLsx
-        MIBdb70LuIKgt1qWui+EIkNQegO6UcE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-427-EdtV2y9BN7CoAou49pTNkg-1; Thu, 13 Apr 2023 21:22:21 -0400
-X-MC-Unique: EdtV2y9BN7CoAou49pTNkg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19503101A531;
-        Fri, 14 Apr 2023 01:22:21 +0000 (UTC)
-Received: from [10.22.32.61] (unknown [10.22.32.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C943140C6E70;
-        Fri, 14 Apr 2023 01:22:19 +0000 (UTC)
-Message-ID: <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
-Date:   Thu, 13 Apr 2023 21:22:19 -0400
+        Thu, 13 Apr 2023 22:28:15 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED384EF3
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 19:28:05 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id f2so8587286pjs.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 19:28:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1681439285; x=1684031285;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wV0ORfeXv57jdNTZ94hzyydSs04V0lY4z8KcxEzlrGU=;
+        b=LNh11wT4EHIzhimZwEgXV9BDMf7nHy+oBl6lf8qtqMoNiEz6OoQG9N1T2bGlwiCoe7
+         izBspUiGU1sLSEskgQCVo7NLelLl2Ec5Fsqg+nqpkAkfvZRlAPfALKIxZsDh5hB5bByW
+         Jd+YhfV2XTBYasK3IDCGRuYOotcdq44GCS8nw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681439285; x=1684031285;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wV0ORfeXv57jdNTZ94hzyydSs04V0lY4z8KcxEzlrGU=;
+        b=bDdbMH8NnYL42hUkM3kRxpHl/Xx5Y8E0kAjMzO2bb9nVebNiYchT63fBi2S84BfOV2
+         posN+BPDL9F7uXdlwYR8j6Q+xln2kTvaBFtyJX1wkjT0vttLHgKVbWu0pvvVAzvd6Fot
+         OzHhqDIwNpLhMrkNJZgMx1KlqvgSubi1cgyWN7Zl60Rtb3L4TTXQDugxXQwcQULHH1yc
+         xqLrxn1StGmyNuF+tfhxg0icD1M3xEdyDu2Onc3DsgvpKDtvQ5x84m46xqykru9Iu2J0
+         Hb660Tve/wZ2Ozzwvq52YesoNR02gqEBgs+Tf74gFAUUorf6NekGJPOQMK0QplG3udt7
+         ndLw==
+X-Gm-Message-State: AAQBX9dQAN7KCsZQ+2smOakfsHaQSvEYODAcWPZ6gnhuZJd5Z7gEuRQQ
+        5J7UsPRNwUg/tGHhzTnw0tcXLQ==
+X-Google-Smtp-Source: AKy350YAYoawfrxXQq9o1RU60KWyzyS6aXgZpnvHFLuSmoSnnEGsr+nci58MA60iAQlgbFwQQ9A5RA==
+X-Received: by 2002:a17:90a:7c0f:b0:23f:83de:7e4a with SMTP id v15-20020a17090a7c0f00b0023f83de7e4amr4082251pjf.7.1681439284753;
+        Thu, 13 Apr 2023 19:28:04 -0700 (PDT)
+Received: from localhost (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
+        by smtp.gmail.com with UTF8SMTPSA id m2-20020a17090aab0200b0024677263e36sm1972982pjq.43.2023.04.13.19.28.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 19:28:04 -0700 (PDT)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        kernel test robot <yujie.liu@intel.com>
+Subject: [PATCH] selftests/memfd: fix test_sysctl
+Date:   Fri, 14 Apr 2023 02:28:01 +0000
+Message-ID: <20230414022801.2545257-1-jeffxu@google.com>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-References: <20230412153758.3088111-1-longman@redhat.com>
- <ZDcGVebCpyktxyWh@slm.duckdns.org>
- <1ce6a073-e573-0c32-c3d8-f67f3d389a28@redhat.com>
- <ZDcS_yVCgh6g1LoM@slm.duckdns.org>
- <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
- <ZDdG1K0kTETZMTCu@slm.duckdns.org>
- <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
- <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
- <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
- <ZDdYOI9LB87ra2t_@slm.duckdns.org>
- <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
-In-Reply-To: <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Jeff Xu <jeffxu@google.com>
 
-On 4/12/23 21:55, Waiman Long wrote:
-> On 4/12/23 21:17, Tejun Heo wrote:
->> Hello, Waiman.
->>
->> On Wed, Apr 12, 2023 at 08:55:55PM -0400, Waiman Long wrote:
->>>> Sounds a bit contrived. Does it need to be something defined in the 
->>>> root
->>>> cgroup?
->>> Yes, because we need to take away the isolated CPUs from the 
->>> effective cpus
->>> of the root cgroup. So it needs to start from the root. That is also 
->>> why we
->>> have the partition rule that the parent of a partition has to be a 
->>> partition
->>> root itself. With the new scheme, we don't need a special cgroup to 
->>> hold the
->> I'm following. The root is already a partition root and the cgroupfs 
->> control
->> knobs are owned by the parent, so the root cgroup would own the first 
->> level
->> cgroups' cpuset.cpus.reserve knobs. If the root cgroup wants to 
->> assign some
->> CPUs exclusively to a first level cgroup, it can then set that cgroup's
->> reserve knob accordingly (or maybe the better name is
->> cpuset.cpus.exclusive), which will take those CPUs out of the root 
->> cgroup's
->> partition and give them to the first level cgroup. The first level 
->> cgroup
->> then is free to do whatever with those CPUs that now belong 
->> exclusively to
->> the cgroup subtree.
->
-> I am OK with the cpuset.cpus.reserve name, but not that much with the 
-> cpuset.cpus.exclusive name as it can get confused with cgroup v1's 
-> cpuset.cpu_exclusive. Of course, I prefer the cpuset.cpus.isolated 
-> name a bit more. Once an isolated CPU gets used in an isolated 
-> partition, it is exclusive and it can't be used in another isolated 
-> partition.
->
-> Since we will allow users to set cpuset.cpus.reserve to whatever value 
-> they want. The distribution of isolated CPUs is only valid if the cpus 
-> are present in its parent's cpuset.cpus.reserve and all the way up to 
-> the root. It is a bit expensive, but it should be a relatively rare 
-> operation.
+sysctl memfd_noexec is pid-namespaced, non-reservable,
+and inherent to the child process.
+Moving the inherence test from init ns to child ns, so
+init ns can keep the default value.
 
-I now have a slightly different idea of how to do that. We already have 
-an internal cpumask for partitioning - subparts_cpus. I am thinking 
-about exposing it as cpuset.cpus.reserve. The current way of creating 
-subpartitions will be called automatic reservation and require a direct 
-parent/child partition relationship. But as soon as a user write 
-anything to it, it will break automatic reservation and require manual 
-reservation going forward.
+Signed-off-by: Jeff Xu <jeffxu@google.com>
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Link: https://lore.kernel.org/oe-lkp/202303312259.441e35db-yujie.liu@intel.com
+---
+ tools/testing/selftests/memfd/memfd_test.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-In that way, we can keep the old behavior, but also support new use 
-cases. I am going to work on that.
-
-Cheers,
-Longman
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+index ae71f15f790d..dba0e8ba002f 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -43,6 +43,9 @@
+  */
+ static size_t mfd_def_size = MFD_DEF_SIZE;
+ static const char *memfd_str = MEMFD_STR;
++static pid_t spawn_newpid_thread(unsigned int flags, int (*fn)(void *));
++static int newpid_thread_fn2(void *arg);
++static void join_newpid_thread(pid_t pid);
+ 
+ static ssize_t fd2name(int fd, char *buf, size_t bufsize)
+ {
+@@ -1111,6 +1114,7 @@ static void test_noexec_seal(void)
+ static void test_sysctl_child(void)
+ {
+ 	int fd;
++	int pid;
+ 
+ 	printf("%s sysctl 0\n", memfd_str);
+ 	sysctl_assert_write("0");
+@@ -1129,6 +1133,10 @@ static void test_sysctl_child(void)
+ 			    mfd_def_size,
+ 			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
+ 
++	printf("%s child ns\n", memfd_str);
++	pid = spawn_newpid_thread(CLONE_NEWPID, newpid_thread_fn2);
++	join_newpid_thread(pid);
++
+ 	mfd_assert_mode(fd, 0666);
+ 	mfd_assert_has_seals(fd, F_SEAL_EXEC);
+ 	mfd_fail_chmod(fd, 0777);
+@@ -1206,12 +1214,6 @@ static void test_sysctl(void)
+ 	int pid = spawn_newpid_thread(CLONE_NEWPID, newpid_thread_fn);
+ 
+ 	join_newpid_thread(pid);
+-
+-	printf("%s child ns\n", memfd_str);
+-	sysctl_assert_write("1");
+-
+-	pid = spawn_newpid_thread(CLONE_NEWPID, newpid_thread_fn2);
+-	join_newpid_thread(pid);
+ }
+ 
+ /*
+-- 
+2.40.0.577.gac1e443424-goog
 
