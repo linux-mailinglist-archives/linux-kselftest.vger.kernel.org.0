@@ -2,153 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334D06E29F7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 20:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3BF6E2A6D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 21:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjDNSTo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Apr 2023 14:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
+        id S229820AbjDNTHV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Apr 2023 15:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDNSTn (ORCPT
+        with ESMTP id S229804AbjDNTHV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Apr 2023 14:19:43 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADB39EDC
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 11:19:42 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id b2-20020a17090a6e0200b002470b249e59so8473921pjk.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 11:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681496382; x=1684088382;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=IltbqCyc+brF5TCXqm5VL32y+u1vZ4imqhUhb3g0734=;
-        b=l8nvbx6E9tD7x2sRiQp9N3wviOhpuxVdTs7vYGJ0yny+H+shmatmB6s5IOai0KoChE
-         GW+OHnP5ZmVDxT72PKwNnO1JFtN+WBRC6ZKkqJDGWxzsq/8jBRx+QLLQBNvfe20K3Hov
-         1r9m3VCGCx8BUEIajr7xWMBOXykmFHYmlwxBXs0/J3rWksslWKtEfO2imJVgM6mJLcM9
-         DCf/PL0NciHw98Lcujt3N+z72GBV6n+oPWhgst9YwKqDP7pvLDuvMAf1lPlTGkaU8CUk
-         AEa1gRJnwnJS1ZZagXpvPdGtCEUMuZYqtJOLs0Iti+xTQ3YZHjFHYEBo6jAYLDaDK0le
-         97dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681496382; x=1684088382;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IltbqCyc+brF5TCXqm5VL32y+u1vZ4imqhUhb3g0734=;
-        b=YE2DUezFPuEGxjoi6HLfCC8kzDxTcWEa1+GxdmY/7NC/cJPylf5xkE9UwTB8Y/22G3
-         spHXlsNMUnRcYimQ7OJsBr7k3XVrmz0/Cszeo7QW6nfwXhZgRmcFD58zdErqMyaBxutz
-         I65uL7jNh+NWuxIs10GWD/HnsIsdpLIJUJP1U/dC895qnNMIqXm1noSYiEWKs0zejR/U
-         05DT/1bhYHvT4dpVVazxaXmvcuuj2uC1KwpVUbjrOd83VnFR1XY9H85zzK7XbPE+m630
-         Z1IGwzaJFqtvPk3ojzTsJqKqV4QjYIXtUiZte5/M7+xVPVAFI76DhO7WeFwrUhhZdQ+8
-         osKQ==
-X-Gm-Message-State: AAQBX9fPeozTeN4niBri+Iw3Ks2yfCQE6GYGwO3r8MkdN0VXHdKWjebN
-        phC8G1Yx+bUJa0S/q9OiocHyqMjwoNzrU8VKgPSN5iU8
-X-Google-Smtp-Source: AKy350YwOggn4CmMI3YazDmJtgpDUDPDj2pnuFP9J/82luHTtu4qKVSRoKiliJE07MCM+YKoHBsLNw==
-X-Received: by 2002:a17:902:ec8d:b0:1a2:8866:e8a4 with SMTP id x13-20020a170902ec8d00b001a28866e8a4mr4498451plg.1.1681496382244;
-        Fri, 14 Apr 2023 11:19:42 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c24600b001a51402dea1sm1527697plg.20.2023.04.14.11.19.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Apr 2023 11:19:41 -0700 (PDT)
-Message-ID: <6439993d.170a0220.4c4e3.4111@mx.google.com>
-Date:   Fri, 14 Apr 2023 11:19:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 14 Apr 2023 15:07:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26408172D
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 12:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681499193;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dkAMl7zGu0d47GwL2c/7Q7hgpJNswSuiV5ht7dE8kSA=;
+        b=ep+n/TAMUgxv/3a8iVKz8w8x/FAPORXwZss5uLQd5eMkkqCgHS2rXxKrBPoYI0kk5t2ePA
+        0iGtz+guXDLW7hSOcKB7WCxSNBcJwthOGAOtRrSV6Sp0RThQLMI01D5g78MmfeePBoohFV
+        tJAPDBROi95D9/C13v+PtjupKR9DIyo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-OTxuLRa6M7eOHyW_t1s0_Q-1; Fri, 14 Apr 2023 15:06:28 -0400
+X-MC-Unique: OTxuLRa6M7eOHyW_t1s0_Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 181AD384708A;
+        Fri, 14 Apr 2023 19:06:28 +0000 (UTC)
+Received: from [10.22.18.140] (unknown [10.22.18.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7110A2027043;
+        Fri, 14 Apr 2023 19:06:27 +0000 (UTC)
+Message-ID: <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
+Date:   Fri, 14 Apr 2023 15:06:27 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.3-rc1-25-g50ad2fb7ec2b
-X-Kernelci-Report-Type: build
-Subject: kselftest/next build: 6 builds: 0 failed, 6 passed,
- 3 warnings (v6.3-rc1-25-g50ad2fb7ec2b)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <e38f72aa-9705-cf0c-a565-fb790f16c53e@redhat.com>
+ <ZDdG1K0kTETZMTCu@slm.duckdns.org>
+ <cd4c3f92-4a01-e636-7390-8c6a3d0cfe6c@redhat.com>
+ <ZDdNy2NAfj2_1CbW@slm.duckdns.org>
+ <1b8d9128-d076-7d37-767d-11d6af314662@redhat.com>
+ <ZDdYOI9LB87ra2t_@slm.duckdns.org>
+ <9862da55-5f41-24c3-f3bb-4045ccf24b2e@redhat.com>
+ <226cb2da-e800-6531-4e57-cbf991022477@redhat.com>
+ <ZDmFLfII8EUX_ocY@slm.duckdns.org>
+ <c61ca9d0-c514-fb07-c2f2-3629e8898984@redhat.com>
+ <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
+ <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
+In-Reply-To: <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 6 builds: 0 failed, 6 passed, 3 warnings (v6.3-rc1-25=
--g50ad2fb7ec2b)
+On 4/14/23 13:38, Waiman Long wrote:
+> On 4/14/23 13:34, Tejun Heo wrote:
+>> On Fri, Apr 14, 2023 at 01:29:25PM -0400, Waiman Long wrote:
+>>> On 4/14/23 12:54, Tejun Heo wrote:
+>>>> On Thu, Apr 13, 2023 at 09:22:19PM -0400, Waiman Long wrote:
+>>>>> I now have a slightly different idea of how to do that. We already 
+>>>>> have an
+>>>>> internal cpumask for partitioning - subparts_cpus. I am thinking 
+>>>>> about
+>>>>> exposing it as cpuset.cpus.reserve. The current way of creating
+>>>>> subpartitions will be called automatic reservation and require a 
+>>>>> direct
+>>>>> parent/child partition relationship. But as soon as a user write 
+>>>>> anything to
+>>>>> it, it will break automatic reservation and require manual 
+>>>>> reservation going
+>>>>> forward.
+>>>>>
+>>>>> In that way, we can keep the old behavior, but also support new 
+>>>>> use cases. I
+>>>>> am going to work on that.
+>>>> I'm not sure I fully understand the proposed behavior but it does 
+>>>> sound more
+>>>> quirky.
+>>> The idea is to use the existing subparts_cpus for cpu reservation 
+>>> instead of
+>>> adding a new cpumask for that purpose. The current way of partition 
+>>> creation
+>>> does cpus reservation (setting subparts_cpus) automatically with the
+>>> constraint that the parent of a partition must be a partition root 
+>>> itself.
+>>> One way to relax this constraint is to allow a new manual 
+>>> reservation mode
+>>> where users can set reserve cpus manually and distribute them down the
+>>> hierarchy before activating a partition to use those cpus.
+>>>
+>>> Now the question is how to enable this new manual reservation mode. 
+>>> One way
+>>> to do it is to enable it whenever the new cpuset.cpus.reserve file is
+>>> modified. Alternatively, we may enable it by a cgroupfs mount option 
+>>> or a
+>>> boot command line option.
+>> It'd probably be best if we can keep the behavior within cgroupfs if
+>> possible. Would you mind writing up the documentation section 
+>> describing the
+>> behavior beforehand? I think things would be clearer if we look at it 
+>> from
+>> the interface documentation side.
+>
+> Sure, will do that. I need some time and so it will be early next week.
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.3-rc1-25-g50ad2fb7ec2b/
+Just kidding :-)
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.3-rc1-25-g50ad2fb7ec2b
-Git Commit: 50ad2fb7ec2b18186b8a4fa1c0e00f78b3de5119
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+Below is a draft of the new cpuset.cpus.reserve cgroupfs file:
 
-Warnings Detected:
+   cpuset.cpus.reserve
+         A read-write multiple values file which exists on all
+         cpuset-enabled cgroups.
 
-arm64:
-    defconfig+kselftest (clang-16): 3 warnings
+         It lists the reserved CPUs to be used for the creation of
+         child partitions.  See the section on "cpuset.cpus.partition"
+         below for more information on cpuset partition.  These reserved
+         CPUs should be a subset of "cpuset.cpus" and will be mutually
+         exclusive of "cpuset.cpus.effective" when used since these
+         reserved CPUs cannot be used by tasks in the current cgroup.
 
-arm:
+         There are two modes for partition CPUs reservation -
+         auto or manual.  The system starts up in auto mode where
+         "cpuset.cpus.reserve" will be set automatically when valid
+         child partitions are created and users don't need to touch the
+         file at all.  This mode has the limitation that the parent of a
+         partition must be a partition root itself.  So child partition
+         has to be created one-by-one from the cgroup root down.
 
-i386:
+         To enable the creation of a partition down in the hierarchy
+         without the intermediate cgroups to be partition roots, one
+         has to turn on the manual reservation mode by writing directly
+         to "cpuset.cpus.reserve" with a value different from its
+         current value.  By distributing the reserve CPUs down the cgroup
+         hierarchy to the parent of the target cgroup, this target cgroup
+         can be switched to become a partition root if its "cpuset.cpus"
+         is a subset of the set of valid reserve CPUs in its parent. The
+         set of valid reserve CPUs is the set that are present in all
+         its ancestors' "cpuset.cpus.reserve" up to cgroup root and
+         which have not been allocated to another valid partition yet.
 
-x86_64:
+         Once manual reservation mode is enabled, a cgroup administrator
+         must always set up "cpuset.cpus.reserve" files properly before
+         a valid partition can be created. So this mode has more
+         administrative overhead but with greater flexibility.
 
+Cheers,
+Longman
 
-Warnings summary:
-
-    1    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is =
-uninitialized when used here [-Wuninitialized]
-    1    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'sy=
-ncpt_irq' to silence this warning
-    1    1 warning generated.
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, clang-16) =E2=80=94 PASS, 0 errors, 3 warnings,=
- 0 section mismatches
-
-Warnings:
-    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is unini=
-tialized when used here [-Wuninitialized]
-    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'syncpt_=
-irq' to silence this warning
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
