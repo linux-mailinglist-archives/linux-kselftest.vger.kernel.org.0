@@ -2,59 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5ABB6E1B4C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 06:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D786E1C3F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Apr 2023 08:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjDNE4o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Apr 2023 00:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
+        id S229476AbjDNGPP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Apr 2023 02:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjDNE4a (ORCPT
+        with ESMTP id S230062AbjDNGPN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Apr 2023 00:56:30 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB826A70;
-        Thu, 13 Apr 2023 21:56:13 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id xi5so42685036ejb.13;
-        Thu, 13 Apr 2023 21:56:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681448172; x=1684040172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VOahN4QlawcFehI7bLkgrg/iclvzg8ErEBM3r/6qSpk=;
-        b=CrORqfpgEv8CcZlXgF/ZZDgOnffuc+L7LYhC7/5nNBokxAsYwWGd2SiMnIDh06t/yn
-         G0ISeD9fIQso5ekz4J1JfFRORTNa6aEcTAl2cgvewdhKtfiONANh7mAFaNXOFwi8mZCM
-         Mjz4Rz/lbBn3jW1jecVUvMmuvet8mZChBaqe8tfA8p9geD0b2y61pVpH5dXgoVggy3q7
-         ecqW2ZO20JUowb8SaK5Et45JXOFKvaHBy760qPV7syOJzTiYT4T6SWFy6XRiThAV0vmD
-         XyUy2cc1Z/uaKnivvTjK6cl5plFMrhqrGsoJXhZjOjIewP5xIjppd50z0w2IlgCIqiv0
-         8N6g==
+        Fri, 14 Apr 2023 02:15:13 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B8859C5
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 23:15:10 -0700 (PDT)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 853B43F467
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Apr 2023 06:15:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1681452905;
+        bh=4x1ielA7OU/wWOjnJ79+3XpTDh/ue6rRtFlaiIdzFqA=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=GXCNLZHMvI4+SJ5ycKDbBtnVAIkb8a78oKEusYu/i7DM7qSj1EOWx++hFP/ewWUtc
+         8DTh7esZDz9NBFQGMWD/RqbKD+Dn77WBdbS4Xrjszb7xJnKBcJYaInX029nuO3DA4B
+         FAuxxD/bhrtRJMwcyaNBmIvKVDghUos+cDmoK64OWAK9wqi/Nvb0WkfND5bWOADu2k
+         d6GAvY8dbGHys0gYLwgOXGD5CjkPXmGz1bGyri3Uft0TlSXbTGHtls/kOmVlIrt3As
+         VPu7RYYbVHfX5+nlD9YVGniCdHXLW3zDKApCgZR9mUGqcITf6PLMMJpsDFR8UdDz8D
+         avqD+TAfA70rg==
+Received: by mail-wm1-f72.google.com with SMTP id j15-20020a05600c1c0f00b003f0a83bf082so2086946wms.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Apr 2023 23:15:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681448172; x=1684040172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VOahN4QlawcFehI7bLkgrg/iclvzg8ErEBM3r/6qSpk=;
-        b=k6S6OCjOJVCWHM0RBVGjvvH5syelOZmPQ9DlyY3ONgOyKeoZ1eRrfJzCb7TSabTNyM
-         ALNTTu/4ryTgOxEXxDzz4xhg16CH9iTxZpPqhGYPNYyKogoscTS50Kd3EcAx9Rynke31
-         ANYIfsNG9mtwkwsSMHZpyt7tiP3NDJ5t6V+Ke86tBUM2ykCEEZ6J83XUEqhfHFWQ+UVv
-         fq9E4fM0LK6+BJj5AwY1Quuyc11+dHv0Nr6XpA93nHOlMz7Xy/mv/5lQ7dg+BOrAB7s0
-         ZrQriojRjSLImZcOhPH4lULTViTqgNtgwB07wmwhj8pLII8DGUrDAn0H9dSmO/ejp6Wy
-         E1zQ==
-X-Gm-Message-State: AAQBX9dSpH8TQ0oN5GDC0jOQ/azL2EjFZUE8xtr9rEgESVcjKEFC/KnZ
-        gkUrJuBQsv+1MBbmHsvocpQHxJdoUMpSdZs12m8=
-X-Google-Smtp-Source: AKy350YveSCh9e1itePQiC1fiBDMPTPosSx9uzFJv5U8GqasjFL8eDOOPHlNN4hQfkj2UU2eQ6eYskxDGzTh/tVAEsU=
-X-Received: by 2002:a17:907:968c:b0:94a:87d6:d39a with SMTP id
- hd12-20020a170907968c00b0094a87d6d39amr2519987ejc.3.1681448171913; Thu, 13
- Apr 2023 21:56:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230412095912.188453-1-andrea.righi@canonical.com>
-In-Reply-To: <20230412095912.188453-1-andrea.righi@canonical.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 13 Apr 2023 21:56:00 -0700
-Message-ID: <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
-To:     Andrea Righi <andrea.righi@canonical.com>
+        d=1e100.net; s=20221208; t=1681452905; x=1684044905;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4x1ielA7OU/wWOjnJ79+3XpTDh/ue6rRtFlaiIdzFqA=;
+        b=FPfqVHl71mqCfMxQACLN9CRdr48glrHrVWwUd+2FlOFydsVlo/8VPYx+5qUYH1sXn0
+         Tdc/zl4nni6fWpcCLHW4xZd2W3TD3sCWA3/Ea5rBQCrWHKxJ55MEyFwMdaJ9XIXzLqUR
+         9hLPhs/Ewn9Vn0+J/DHtCuwk8lMq+szHrA6KkDSVoPFvPErZCc6cPfJemRZtV8FqsgcU
+         7HcntL9xeeulnXc4YOeuMuXb909GG82gv7mR0aW2CCqniPDnYi4v5h66oZtozcdk/2MA
+         UfOCYnUDad8wFAVDNzdPwwOtiKz1gY0PatMctJFCFjfspjoJsQG3klX21Ki4N70lsxJj
+         Xt7w==
+X-Gm-Message-State: AAQBX9eyWU2W/ZyLUWydfPhFv/7x7CE7nb5SBoSNPpV5obwmEsJqLDDw
+        RbhSe1dRuh4cAJUYbVjw4A6RK5PTqRv6yXRws9WALUB7zn06bCi8qg3Sb5a55XAJxAQUJNmwBoM
+        nQaIY50eG9BN75UIYxGsBxG3SBc4sdsGf5aQKW6OrtPPWGQ==
+X-Received: by 2002:a5d:4949:0:b0:2ef:b977:ee3a with SMTP id r9-20020a5d4949000000b002efb977ee3amr3214591wrs.34.1681452904876;
+        Thu, 13 Apr 2023 23:15:04 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZMWU0obXURDtM8C4VH2fQ+FRH6qv3QJQSMmxiEYCANgKRxwrF1qmRXzaL3awQ3sa15QW1Pzg==
+X-Received: by 2002:a5d:4949:0:b0:2ef:b977:ee3a with SMTP id r9-20020a5d4949000000b002efb977ee3amr3214570wrs.34.1681452904560;
+        Thu, 13 Apr 2023 23:15:04 -0700 (PDT)
+Received: from localhost (uk.sesame.canonical.com. [185.125.190.60])
+        by smtp.gmail.com with ESMTPSA id x17-20020a5d4911000000b002e55cc69169sm2794289wrq.38.2023.04.13.23.15.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 23:15:04 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 08:15:03 +0200
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -73,31 +79,41 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         <linux-kselftest@vger.kernel.org>,
         clang-built-linux <llvm@lists.linux.dev>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
+Message-ID: <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
+References: <20230412095912.188453-1-andrea.righi@canonical.com>
+ <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 2:59=E2=80=AFAM Andrea Righi <andrea.righi@canonica=
-l.com> wrote:
->
-> Building bpf selftests with clang can trigger errors like the following:
->
->   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
-> progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assignin=
-g to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-poin=
-ter-types]
->         s =3D &nlk->sk;
->           ^ ~~~~~~~~
-> 1 error generated.
+On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
+> On Wed, Apr 12, 2023 at 2:59 AM Andrea Righi <andrea.righi@canonical.com> wrote:
+> >
+> > Building bpf selftests with clang can trigger errors like the following:
+> >
+> >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
+> > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-pointer-types]
+> >         s = &nlk->sk;
+> >           ^ ~~~~~~~~
+> > 1 error generated.
+> 
+> I cannot reproduce this and BPF CI doesn't complain about it either.
+> What kind of clang do you use?
+> Some special version and build flags?
 
-I cannot reproduce this and BPF CI doesn't complain about it either.
-What kind of clang do you use?
-Some special version and build flags?
+I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special build
+flag (unless Ubuntu enables some different default flags, but it
+shouldn't be the case... I'll double check).
+
+-Andrea
