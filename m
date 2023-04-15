@@ -2,67 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9300B6E2FC1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Apr 2023 10:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E464E6E2FC5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Apr 2023 10:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjDOImq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 15 Apr 2023 04:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S229623AbjDOItI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 15 Apr 2023 04:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjDOImp (ORCPT
+        with ESMTP id S229459AbjDOItH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 15 Apr 2023 04:42:45 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE363ABC
-        for <linux-kselftest@vger.kernel.org>; Sat, 15 Apr 2023 01:42:43 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-2f87c5b4635so179924f8f.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 15 Apr 2023 01:42:43 -0700 (PDT)
+        Sat, 15 Apr 2023 04:49:07 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CC240E1
+        for <linux-kselftest@vger.kernel.org>; Sat, 15 Apr 2023 01:49:05 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id he13so16446135wmb.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 15 Apr 2023 01:49:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681548161; x=1684140161;
+        d=google.com; s=20221208; t=1681548544; x=1684140544;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Z3orGvWdAKTA5wVlyp7VEpZy/w/ykSNEurOkbyRcMA=;
-        b=g8wVRv/t0kklv76Q4U6r9/qicaLQ2ISKQRCBeaLQAd9Fc6dOWBNYWYSORzc/wslbXq
-         PIgrZ3boNXH00AvtCQArs6ujgmsWwYci23m4s223Pmz6BCKA68CNDqd2ffO6HaehA0Dr
-         ZZDL830iVnU7TPHK8Jm3cLzn8w1xEiEjq3J1TcqHWIzM/PN4J7B58UZlSceMAeL5B0Ew
-         XjtjjQsNhaC0F4gDyu2ZCk08PhK5y15gtDBJse7zb7CSTvl6+UEkQnhu2bODLJwGf8sQ
-         uDkYKtK08mJ+aSdulz0jZ5uWOhVhG/2TI1g/rTmiVJOKjdqWM4FWV08DbqQ0omqQqpjT
-         xTUA==
+        bh=ieNokU2/c55I4Cta/WQIN3RG/XNcqeYcDJaj36JOeNA=;
+        b=zgP+Gcx+sRLz5FPeS8GKbi2tSs/7VyPY/RF8XmtrRdh4ZMmj/gAV+z7s4lvgImx7qa
+         k5xNOoOt2UFDT3q3Dp2jVALEFKSwbqhFpLAFdDOkPhmlDsA1+jKBbzvDLEG3vE6GIvQn
+         MMT6GC0W80/J8G4h7insTV82jIimNQP9jSkdgQYAbqQwG9KvN6Rmf73UNdcJD/DZLZFv
+         0UKgO1E0SvhfW9Ea40OmGv8q0piH/H168GiwMf/WeZ4j9ZpyWyT6xgEDvUpwmEuthCuD
+         aeccawZ/gKmn9weNM4KQvAxscOtL3J0Dx9IHcSXnq8Ew2eoKiNizSXgy+z5S8fiLgiwk
+         QxdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681548161; x=1684140161;
+        d=1e100.net; s=20221208; t=1681548544; x=1684140544;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+Z3orGvWdAKTA5wVlyp7VEpZy/w/ykSNEurOkbyRcMA=;
-        b=Srlbl+PPpnUAHB8xOuOl23Iq4D2MfMNb77A0uVru7Jn0l+TLm7+vLPfRdPPzHLV5aU
-         XlrqGEyh1Yfk60bO1A6D0nPG5qU7J5tg7CNQOPgQgRCrH6yHv84JykUxsfnUTKOqtJtl
-         fLTu6lBT2sipk0G+vOuaO4YSZLkn0XQv2Sn+HOAW5OemQ0aig31Tt+A+UZh4EcPresFl
-         UGiq6HZCeMDaPdBjf+Qm2Z4drw/rglhgIiiY4zqRTo5Wu/hqfJuzFoBCiUQ0M3UQkDNq
-         J1YiWiiLkFKbF7Rmvy/E128smskoZoOEpnUCmwd5N/hq2szpww6moxDxf5NdygVBvqxs
-         c1xA==
-X-Gm-Message-State: AAQBX9dZk1rnck0i1j1SFRCupuU6iRW3lLZXoTZ/6dZBCmNhdKyBDzeb
-        vsQ8/XXuBSOeN3MMDhioCX1FWhRoFnyU7B6e6ttVzQ==
-X-Google-Smtp-Source: AKy350beHIEW7z8Hj9YyTcgh27L0mCnt7AxJpOn/DnBDPwsaQfyJi6SHy1Vo2up1MS0Jf++6kQ35QYa0OcHek+Spw9U=
-X-Received: by 2002:a5d:6a8d:0:b0:2f4:2188:7dad with SMTP id
- s13-20020a5d6a8d000000b002f421887dadmr280175wru.2.1681548161430; Sat, 15 Apr
- 2023 01:42:41 -0700 (PDT)
+        bh=ieNokU2/c55I4Cta/WQIN3RG/XNcqeYcDJaj36JOeNA=;
+        b=jpdaGjjJVgS55LMrMOEGM7nVaMsmGjp3qhNpRDK/2nqBT8C0xKnAMifIeJ1SayuWsV
+         awEa/F6ZVBW4WFQm79UGTk98le04Vqz8Nt/jIgAGjZhT+1OlK1OrV07j2KgLtngMKRo9
+         RC+d8hlV4Mhj4BYdrK5S/seoWJ7szOTe/xQf0WA9CWrZj40hkevFSFRFaFyM+syXuO3H
+         IYswAWoKLgORalin9Xndu4x8SJy36+CI1FYnPcLw47GYWPLW7cNdb9oHKVP9gDvvNDC8
+         QE6IRXKBTHxn0woZwAdLrF/yuGGrMsjdB96p1NnIP9az0J+Q/ymdx8A1EeHJVMtGLDNG
+         ZfWw==
+X-Gm-Message-State: AAQBX9fzhINhUPI9EYJBbzrKzUctxR/jyC8fhyqtEiUotFQo7U4PU4NR
+        yJ/e9EU7F8g+W3EAH3Z5rQzvcZMuy2yFy4wIsa6JWw==
+X-Google-Smtp-Source: AKy350Ys6zojeKI4qMGhiGjZsUmwHEYhqt3cMiJ6DKvWX2ZR2M/0OBwWt+Y2H+Ozrg87pDLocQmdyZ7vHbKbk4dBuRk=
+X-Received: by 2002:a1c:7910:0:b0:3df:97cf:4590 with SMTP id
+ l16-20020a1c7910000000b003df97cf4590mr1945091wme.3.1681548544162; Sat, 15 Apr
+ 2023 01:49:04 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230331080411.981038-1-davidgow@google.com> <20230331080411.981038-2-davidgow@google.com>
- <56w47e5mff74b4jrpgl4odhjxzayoptb6u2e2u6haaf7tuvl4f@xwlmne7p6kli>
-In-Reply-To: <56w47e5mff74b4jrpgl4odhjxzayoptb6u2e2u6haaf7tuvl4f@xwlmne7p6kli>
+ <56w47e5mff74b4jrpgl4odhjxzayoptb6u2e2u6haaf7tuvl4f@xwlmne7p6kli> <f51a15fbc49b9119a9e5db8240facd6ab51a0d46.camel@sipsolutions.net>
+In-Reply-To: <f51a15fbc49b9119a9e5db8240facd6ab51a0d46.camel@sipsolutions.net>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 15 Apr 2023 16:42:27 +0800
-Message-ID: <CABVgOSmjs0wLUa4=ErkB9tH8p6A1P6N33befv63whF+hECRExQ@mail.gmail.com>
+Date:   Sat, 15 Apr 2023 16:48:51 +0800
+Message-ID: <CABVgOSkOh_Hyme9nuAPVf87XR8JcwRtB_Y6qc9GWwgooubAaZQ@mail.gmail.com>
 Subject: Re: [RFC PATCH v2 1/3] kunit: Add kunit_add_action() to defer a call
  until test exit
-To:     maxime@cerno.tech
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+To:     Benjamin Berg <benjamin@sipsolutions.net>
+Cc:     maxime@cerno.tech, Matti Vaittinen <mazziesaccount@gmail.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
         Stephen Boyd <sboyd@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Daniel Latypov <dlatypov@google.com>,
         Rae Moar <rmoar@google.com>,
-        Benjamin Berg <benjamin@sipsolutions.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -70,202 +69,178 @@ Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000dc2b8705f95bf0a9"
+        boundary="000000000000abc4e805f95c0750"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000dc2b8705f95bf0a9
+--000000000000abc4e805f95c0750
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 14 Apr 2023 at 18:02, <maxime@cerno.tech> wrote:
+On Fri, 14 Apr 2023 at 19:00, Benjamin Berg <benjamin@sipsolutions.net> wrote:
 >
-> Hi David,
+> Hi,
 >
-> On Fri, Mar 31, 2023 at 04:04:09PM +0800, David Gow wrote:
-> > Many uses of the KUnit resource system are intended to simply defer
-> > calling a function until the test exits (be it due to success or
-> > failure). The existing kunit_alloc_resource() function is often used for
-> > this, but was awkward to use (requiring passing NULL init functions, etc),
-> > and returned a resource without incrementing its reference count, which
-> > -- while okay for this use-case -- could cause problems in others.
+> On Fri, 2023-04-14 at 12:01 +0200, maxime@cerno.tech wrote:
+> > Hi David,
 > >
-> > Instead, introduce a simple kunit_add_action() API: a simple function
-> > (returning nothing, accepting a single void* argument) can be scheduled
-> > to be called when the test exits. Deferred actions are called in the
-> > opposite order to that which they were registered.
+> > On Fri, Mar 31, 2023 at 04:04:09PM +0800, David Gow wrote:
+> > > Many uses of the KUnit resource system are intended to simply defer
+> > > calling a function until the test exits (be it due to success or
+> > > failure). The existing kunit_alloc_resource() function is often used for
+> > > this, but was awkward to use (requiring passing NULL init functions, etc),
+> > > and returned a resource without incrementing its reference count, which
+> > > -- while okay for this use-case -- could cause problems in others.
+> > >
+> > > Instead, introduce a simple kunit_add_action() API: a simple function
+> > > (returning nothing, accepting a single void* argument) can be scheduled
+> > > to be called when the test exits. Deferred actions are called in the
+> > > opposite order to that which they were registered.
+> > >
+> > > This mimics the devres API, devm_add_action(), and also provides
+> > > kunit_remove_action(), to cancel a deferred action, and
+> > > kunit_release_action() to trigger one early.
+> > >
+> > > This is implemented as a resource under the hood, so the ordering
+> > > between resource cleanup and deferred functions is maintained.
+> > >
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> > > ---
+> > >
+> > > Changes since RFC v1:
+> > > https://lore.kernel.org/linux-kselftest/20230325043104.3761770-2-davidgow@google.com/
+> > > - Rename functions to better match the devm_* APIs. (Thanks Maxime)
+> > > - Embed the kunit_resource in struct kunit_action_ctx to avoid an extra
+> > >   allocation (Thanks Benjamin)
+> > > - Use 'struct kunit_action_ctx' as the type for cancellation tokens
+> > >   (Thanks Benjamin)
+> > > - Add tests.
+> > >
+> > > ---
+> > >  include/kunit/resource.h |  89 ++++++++++++++++++++++++++++
+> > >  lib/kunit/kunit-test.c   | 123 ++++++++++++++++++++++++++++++++++++++-
+> > >  lib/kunit/resource.c     |  99 +++++++++++++++++++++++++++++++
+> > >  3 files changed, 310 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> > > index c0d88b318e90..15efd8924666 100644
+> > > --- a/include/kunit/resource.h
+> > > +++ b/include/kunit/resource.h
+> > > @@ -387,4 +387,93 @@ static inline int kunit_destroy_named_resource(struct kunit *test,
+> > >   */
+> > >  void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
+> > >
+> > > +typedef void (*kunit_defer_function_t)(void *ctx);
+> > > +
+> > > +/* An opaque token to a deferred action. */
+> > > +struct kunit_action_ctx;
+> > > +
+> > > +/**
+> > > + * kunit_add_action() - Defer an 'action' (function call) until the test ends.
+> > > + * @test: Test case to associate the action with.
+> > > + * @func: The function to run on test exit
+> > > + * @ctx: Data passed into @func
+> > > + * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
+> > > + *
+> > > + * Defer the execution of a function until the test exits, either normally or
+> > > + * due to a failure.  @ctx is passed as additional context. All functions
+> > > + * registered with kunit_add_action() will execute in the opposite order to that
+> > > + * they were registered in.
+> > > + *
+> > > + * This is useful for cleaning up allocated memory and resources.
+> > > + *
+> > > + * Returns:
+> > > + *   An opaque "cancellation token", or NULL on error. Pass this token to
+> > > + *   kunit_remove_action_token() in order to cancel the deferred execution of
+> > > + *   func().
+> > > + */
+> > > +struct kunit_action_ctx *kunit_add_action(struct kunit *test, kunit_defer_function_t func,
+> > > +                     void *ctx, gfp_t internal_gfp);
 > >
-> > This mimics the devres API, devm_add_action(), and also provides
-> > kunit_remove_action(), to cancel a deferred action, and
-> > kunit_release_action() to trigger one early.
+> > I've tried to leverage kunit_add_action() today, and I'm wondering if
+> > passing the struct kunit pointer to the deferred function would help.
 > >
-> > This is implemented as a resource under the hood, so the ordering
-> > between resource cleanup and deferred functions is maintained.
+> > The code I'm struggling with is something like:
 > >
-> > Signed-off-by: David Gow <davidgow@google.com>
-> > ---
+> > > static int test_init(struct kunit *test)
+> > > {
+> > >         priv = kunit_kzalloc(sizeof(*priv), GFP_KERNEL);
+> > >         KUNIT_ASSERT_NOT_NULL(test, priv);
+> > >         test->priv = priv;
+> > >
+> > >         priv->dev = alloc_device();
+> > >
+> > >         return 0;
+> > > }
 > >
-> > Changes since RFC v1:
-> > https://lore.kernel.org/linux-kselftest/20230325043104.3761770-2-davidgow@google.com/
-> > - Rename functions to better match the devm_* APIs. (Thanks Maxime)
-> > - Embed the kunit_resource in struct kunit_action_ctx to avoid an extra
-> >   allocation (Thanks Benjamin)
-> > - Use 'struct kunit_action_ctx' as the type for cancellation tokens
-> >   (Thanks Benjamin)
-> > - Add tests.
+> > and then in the test itself:
 > >
-> > ---
-> >  include/kunit/resource.h |  89 ++++++++++++++++++++++++++++
-> >  lib/kunit/kunit-test.c   | 123 ++++++++++++++++++++++++++++++++++++++-
-> >  lib/kunit/resource.c     |  99 +++++++++++++++++++++++++++++++
-> >  3 files changed, 310 insertions(+), 1 deletion(-)
+> > > static void actual_test(struct kunit *test)
+> > > {
+> > >         struct test_priv *priv = test->priv;
+> > >
+> > >         id = allocate_buffer(priv->dev);
+> > >
+> > >         KUNIT_EXPECT_EQ(test, id, 42);
+> > >
+> > >         free_buffer(priv->dev, id);
+> > > }
 > >
-> > diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-> > index c0d88b318e90..15efd8924666 100644
-> > --- a/include/kunit/resource.h
-> > +++ b/include/kunit/resource.h
-> > @@ -387,4 +387,93 @@ static inline int kunit_destroy_named_resource(struct kunit *test,
-> >   */
-> >  void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
+> > I'd like to turn free_buffer an action registered right after allocate
+> > buffer. However, since it takes several arguments and kunit_add_action
+> > expects a single pointer, we would need to create a structure for it,
+> > allocate it, fill it, and then free it when the action has ran.
 > >
-> > +typedef void (*kunit_defer_function_t)(void *ctx);
-> > +
-> > +/* An opaque token to a deferred action. */
-> > +struct kunit_action_ctx;
-> > +
-> > +/**
-> > + * kunit_add_action() - Defer an 'action' (function call) until the test ends.
-> > + * @test: Test case to associate the action with.
-> > + * @func: The function to run on test exit
-> > + * @ctx: Data passed into @func
-> > + * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
-> > + *
-> > + * Defer the execution of a function until the test exits, either normally or
-> > + * due to a failure.  @ctx is passed as additional context. All functions
-> > + * registered with kunit_add_action() will execute in the opposite order to that
-> > + * they were registered in.
-> > + *
-> > + * This is useful for cleaning up allocated memory and resources.
-> > + *
-> > + * Returns:
-> > + *   An opaque "cancellation token", or NULL on error. Pass this token to
-> > + *   kunit_remove_action_token() in order to cancel the deferred execution of
-> > + *   func().
-> > + */
-> > +struct kunit_action_ctx *kunit_add_action(struct kunit *test, kunit_defer_function_t func,
-> > +                   void *ctx, gfp_t internal_gfp);
+> > It creates a lot of boilerplate, while if we were passing the pointer to
+> > struct kunit we could access the context of the test as well, and things
+> > would be much simpler.
 >
-> I've tried to leverage kunit_add_action() today, and I'm wondering if
-> passing the struct kunit pointer to the deferred function would help.
+> The question seems to be what about the typical use-case. I was always
+> imagining calling functions like kfree/kfree_skb which often only
+> require a single argument.
+
+Yeah, my thought was that having just the one argument would be
+easiest for re-using existing functions. That being said, implementing
+a simple wrapper which just discards the 'test' argument is probably
+more ergonomic than having to write all the struct manipulation stuff,
+so it depends a bit on what proves the more common case.
+
+> For arbitrary arguments, a struct and custom free function will be
+> needed. At that point, maybe it is fair to assume that API users will
+> use the resource API directly, doing the same trick as kunit_add_action
+> and storing the arguments together with struct kunit_resource.
+>
+At this point, I'd still probably use the kunit_add_action() API, just
+because the resource one adds yet more complication with the 'init'
+function and the reference counting. I have some vague plans to
+simplify it a bit, but still definitely wouldn't rule out using the
+action API here, even if it involves managing structs.
+
+
+> That said, maybe one could add it as a second argument? It is a little
+> bit weird API wise, but it would allow simply casting single-argument
+> functions in order to ignore "struct kunit *" argument.
 >
 
-I'm tempted, but it does make the case where we just want to cast,
-e.g., kfree() directly to an action pointer more difficult. Not that
-that's a deal-blocker, but it was convenient...
-
-> The code I'm struggling with is something like:
->
-> > static int test_init(struct kunit *test)
-> > {
-> >       priv = kunit_kzalloc(sizeof(*priv), GFP_KERNEL);
-> >       KUNIT_ASSERT_NOT_NULL(test, priv);
-> >       test->priv = priv;
-> >
-> >       priv->dev = alloc_device();
-> >
-> >       return 0;
-> > }
->
-> and then in the test itself:
->
-> > static void actual_test(struct kunit *test)
-> > {
-> >       struct test_priv *priv = test->priv;
-> >
-> >       id = allocate_buffer(priv->dev);
-> >
-> >       KUNIT_EXPECT_EQ(test, id, 42);
-> >
-> >       free_buffer(priv->dev, id);
-> > }
->
-> I'd like to turn free_buffer an action registered right after allocate
-> buffer. However, since it takes several arguments and kunit_add_action
-> expects a single pointer, we would need to create a structure for it,
-> allocate it, fill it, and then free it when the action has ran.
-
-The general case of wanting multiple arguments to an action is a bit
-complicated. My plan was to initially support just the one argument,
-and deal with more complicated cases later. Ideas included:
-- using a struct like you suggest, possibly with some macro magic to
-make it easier,
-- having a bunch of very similar implementations of
-kunit_add_action{2,3,4,..}(), which accept 2,3,4,... arguments,
-- something horrible and architecture-specific with manually writing
-out arguments to the stack (or registers)
-
-None of those sounded particularly pleasant, though. My suspicion is
-that the "right" way of doing this is to maybe have one or two helpers
-for common cases (e.g., 2 arguments), and just suggest people create a
-structure for anything more complicated, but I'd love a nicer
-solution.
-
->
-> It creates a lot of boilerplate, while if we were passing the pointer to
-> struct kunit we could access the context of the test as well, and things
-> would be much simpler.
-
-For the test context specifically, can you just use kunit_get_current_test()?
-
-There might be an issue with using it during the cleanup process after
-a failed assertion (as if the test is aborted early, the cleanup runs
-in a different thread), but if so, this should fix it:
----
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index e2910b261112..2d7cad249863 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -392,10 +392,21 @@ static void kunit_case_internal_cleanup(struct
-kunit *test)
-static void kunit_run_case_cleanup(struct kunit *test,
-                                  struct kunit_suite *suite)
-{
-+       /*
-+        * If we're no-longer running from within the test kthread()
-because it failed
-+        * or timed out, we still need the context to be okay when
-running exit and
-+        * cleanup functions.
-+        */
-+       struct kunit *old_current = current->kunit_test;
-+
-+       current->kunit_test = test;
-       if (suite->exit)
-               suite->exit(test);
-
-       kunit_case_internal_cleanup(test);
-+
-+       /* Restore the thread's previous test context (probably NULL
-or test). */
-+       current->kunit_test = old_current;
-}
-
-struct kunit_try_catch_context {
----
-
-I'll look into tidying that up and sending it through next week, anyway.
+Ooh... that's evil in a particularly fun way. :-) It'd definitely be
+convenient in both cases (we usually need to cast kfree() anyway for
+const reasons), so I'm a bit tempted. Do we know that this would work
+with the calling convention on all architectures? I'm not aware of the
+kernel using anything like stdcall where the callee pops the stack on
+return, but there definitely could be some architecture which does...
 
 Cheers,
+
 -- David
 
---000000000000dc2b8705f95bf0a9
+--000000000000abc4e805f95c0750
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -332,14 +307,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDh
-Ot0VpVqRvDkwUoHhmxl4J4oKLjZ/A5na6uO0omZQ8jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA0MTUwODQyNDFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCv
+8uFoxmPlcFKZ4Bn2e5JtfnmU3fVPD2tT+qvN2+mzWzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA0MTUwODQ5MDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEABK0JuuYVUzwCrZFIK3Qh
-VMLcEkn05rwO9N1tlx8/pWShA9btOdfoT6M8Fr0Z86pLOQ9dxyjJ1ZmyKG6Jd/ByldDHCaZUCPoz
-Nvp+ys792jaKeYExX9QsQ4FEq7szev+SbupM+TxrfU0xayBtlYJTE49qwilq2sBCEDQX4cRxvukp
-UsMAkJ4y+0aVRp7ISg7nHnnC2ZB8twr2DGZxj2/P5ogI3YVOx7MWK0iilofTT1tmO16QGyI2HXB1
-sgQZ1W8gIo3mMfWSuVrcRwxfVBWpL98yIrUrpD+kdApakgSItOxAURc6LMmv1I4p/v+PQPdFngYg
-YELeXN3aXf5CZGbnqw==
---000000000000dc2b8705f95bf0a9--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAg4Yr8/cJzvU0roTUe+nH
+wezGj1X43K2phrWCm9zAei4kQlH6UcZF4txKaEKonJDcUJr20djEeO1KJ2cuHXuSD12wzD07TPS8
+IzMKjgN3BPGZUav8dNuZicg0Liycysa5MyqhHKz6lkKeb8xMduqSTz8B0XGJt4WgvsI5psq5n6n9
+sR34BzBCPZcdchA+Dbwa3uM6/YHMN7eGAo01CZiYQroIlgj10QUc9XNurAgptTFnWgclXWIHRizy
+U1benCtft+PTM7/V7cHmPvIpE8oZADkRIutli3t5zBOc2lczyMVEAK+5GN875/aopR1gOuyLBN/q
+qE3QbDBgpGUSUYjnag==
+--000000000000abc4e805f95c0750--
