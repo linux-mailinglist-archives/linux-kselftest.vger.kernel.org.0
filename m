@@ -2,86 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822C16E32C4
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Apr 2023 19:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB2F6E33D9
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Apr 2023 23:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDORMQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 15 Apr 2023 13:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S230030AbjDOV2x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 15 Apr 2023 17:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjDORMP (ORCPT
+        with ESMTP id S229803AbjDOV2w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 15 Apr 2023 13:12:15 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61F7C186;
-        Sat, 15 Apr 2023 10:12:14 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 33FHC7wj020436;
-        Sat, 15 Apr 2023 19:12:07 +0200
-Date:   Sat, 15 Apr 2023 19:12:07 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 00/11] tools/nolibc: -std=c89 compatibility
-Message-ID: <ZDra55UlsZdQYf70@1wt.eu>
-References: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
- <ZDKFTvhzgVGBjr0M@1wt.eu>
- <ZDq455RD5yJ8Nwk0@1wt.eu>
- <e93c1260-ae29-4fa4-9097-a81784ac7ef8@t-8ch.de>
+        Sat, 15 Apr 2023 17:28:52 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7762430D8;
+        Sat, 15 Apr 2023 14:28:50 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1681594128;
+        bh=ffuzWbsBT4I0Dzm1ac4bREAFCsDITc0shbz2IoN6G7s=;
+        h=From:Subject:Date:To:Cc:From;
+        b=JQ91D5LOfZi7AADvHsorsBSrap9gQCs8WEn0nMe8bBwPKEMCzeBDCX6OKzrKIRpwt
+         xUynC+oE2TFmFmP9/5/2YCcvi7szYJv52lxYwCqzHrYvd+pP8OeOD/lpBii3kO/uaj
+         agOxYkduxAOiU+wS4nrfXQDiMUcwL8KNBxewqJq0=
+Subject: [PATCH 0/2] tools/nolibc: fork: fix on s390 and add test
+Date:   Sat, 15 Apr 2023 23:28:46 +0200
+Message-Id: <20230415-nolibc-fork-v1-0-9747c73651c5@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e93c1260-ae29-4fa4-9097-a81784ac7ef8@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAA4XO2QC/x2NSQrDMAwAvxJ0rsDOTr5SerBdpRExcpBpKYT8v
+ aLHGRjmhErKVGFpTlD6cOUiBv7WQNqCvAj5aQytazvX+wGlZI4J16I7xsnNU+j6wY8jWBFDJYw
+ aJG3WyDtnk4fSyt//4v64rh8WSOKecgAAAA==
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681594127; l=927;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=ffuzWbsBT4I0Dzm1ac4bREAFCsDITc0shbz2IoN6G7s=;
+ b=NT6hmRBQG7jQ+hw3g97sTAG6HwkeHoAj7Vr246YpEyxNiOXxpnKGk8rbLG7vK6UPH9v6ByOiZ
+ R9vZTgycSdFAY3WiAD5lubtvCE2s1Z96Pu93wFWFKPmTPxnBg1I37Ok
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 05:15:27PM +0200, Thomas Weiﬂschuh wrote:
-> On 2023-04-15 16:47:03+0200, Willy Tarreau wrote:
-> > On Sun, Apr 09, 2023 at 11:28:46AM +0200, Willy Tarreau wrote:
-> > > On Thu, Apr 06, 2023 at 09:54:46PM +0000, Thomas Weiﬂschuh wrote:
-> > > > This series replaces the C99 compatibility patch. (See v1 link below).
-> > > > After the discussion about support C99 and/or GNU89 I came to the
-> > > > conclusion supporting straight C89 is not very hard.
-> > > > 
-> > > > Instead of validating both C99 and GNU89 in some awkward way only for
-> > > > somebody requesting true C89 support let's just do it this way.
-> > > > 
-> > > > Feel free to squash all the comment syntax patches together if you
-> > > > prefer.
-> > > 
-> > > I gave it some thought, at first considering that going lower than GNU89
-> > > was possibly not very useful, but given that the changes are very small
-> > > in the end (mostly comments formating), I think that you're right. The
-> > > cost of reaching this level of portability is basically zero once the
-> > > patch is applied so I think it's worth doing it now. However I think I
-> > > will indeed squash all the comments patch together as you suggest.
-> > 
-> > I've now squashed the ones about comments together, fixed the declaration
-> > inside the for statement in nolibc-test and tested with gcc 4.7 & 4.8 and
-> > confirmed it works as expected. I've queued it there for now:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20230415-nolibc-updates-4a
-> 
-> Thanks!
-> 
-> I noticed today that I did not adapt the comments in arch-s390.h;
-> because the start() comments were already correct.
-> 
-> But the last line of arch-s390.h still contains a C99 comment.
+The generic fork() implementation in nolibc falls back to the clone()
+syscall. On s390 the first two arguments to clone() are swapped compared
+to other architectures, breaking the implementation in nolibc.
 
-ah, I must have missed it because I checked using git grep //.
+Add a custom implementation of fork() to s390 that works.
 
-> Do you want me to send a patch or could you just push one?
-> (Or fold it into my patch)
+While at it also add a testcase for fork().
 
-I'll do it and force-push. Thanks for checking and notifying me!
+Signed-off-by: Thomas Wei√üschuh <linux@weissschuh.net>
+---
+Thomas Wei√üschuh (2):
+      tools/nolibc: s390: provide custom implementation for sys_fork
+      tools/nolibc: add testcase for fork()/waitpid()
 
-Cheers,
-Willy
+ tools/include/nolibc/arch-s390.h             |  8 ++++++++
+ tools/include/nolibc/sys.h                   |  2 ++
+ tools/testing/selftests/nolibc/nolibc-test.c | 20 ++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+---
+base-commit: c1c4f33b6be9b3412d9e0ba01b367f4ffe47c379
+change-id: 20230415-nolibc-fork-b7087a345166
+
+Best regards,
+-- 
+Thomas Wei√üschuh <linux@weissschuh.net>
+
