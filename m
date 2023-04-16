@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AE86E3B83
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Apr 2023 21:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4616E3B98
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Apr 2023 21:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjDPTZp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 16 Apr 2023 15:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S229446AbjDPTpA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 16 Apr 2023 15:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjDPTZo (ORCPT
+        with ESMTP id S229771AbjDPTo7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 16 Apr 2023 15:25:44 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA04E2703
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Apr 2023 12:25:40 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-54fe82d8bf5so84607607b3.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Apr 2023 12:25:40 -0700 (PDT)
+        Sun, 16 Apr 2023 15:44:59 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A126A1
+        for <linux-kselftest@vger.kernel.org>; Sun, 16 Apr 2023 12:44:58 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-54fb615ac3dso185690647b3.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 16 Apr 2023 12:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681673140; x=1684265140;
+        d=google.com; s=20221208; t=1681674296; x=1684266296;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MaaXUmWYMUrm34mHy8xc1MH5y2IuXmSQmwypNMLJjoU=;
-        b=1vkT+hAAWPKcBqQRjg5UlEuk7b/6YGv9MDW7ocM6tyOydCQ8m188DAXZgYCjKYgskz
-         l2WmKzdeIvIpplhACjFYmHbx53zO0q+HQwzxe5p5dKYP/zmwWfGPKSW0Q6ocK17IlorQ
-         1REaf9+uusXPEJOfHMzNR92oZiPCgN9+CpKgjJiggkmT1hrE0wOb4HuizMvt/FoHbDu4
-         Fh2t5T36T1jcZkgepypMcH846gV0XmKgrwg7pWOvbDi70FzRnFDqg+rD/t6DVFm4hbEO
-         s4xbCAgP8S4lH5NxtnThScJmZrax+zspeTnS9Sdsb2y0uWGlWTFSmrYV93/N2wFbgS+V
-         0+NQ==
+        bh=fE9QU8ssRHfrkp+Qs6Jt2adPN0B10qQBjFxitvUur5w=;
+        b=pTFh9YoYONT2cKveKNA6jETiwf92HtqU0CX8Fb+eU6YKNATL4+NSIe9LuB571YVQQ2
+         FvSwcvWgTww19tc9Rn0y+4sCK5LZLj6N0yzT1FA5tlasgFfufKUaYPfhYO9DEP9ZDcYL
+         HchzUVzvPelw0Q4huckH+4NhHZRPQrzs+FZc7TS9g0u1uCXZ7Gh7Rx0t1vw6xeO3fjB1
+         ias0ybZKgaEzEMgV3MEOgwIBoeyu5n0/3eqYzjsLLft3tmdEYqDpNZ5I986azDXD11KD
+         q/h6ljYEwHQnadmPQUM7nqloQwRDf9UjRpTnWnfKFqeIYHT89pXApVgoyTjabBqFP5wG
+         a3Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681673140; x=1684265140;
+        d=1e100.net; s=20221208; t=1681674296; x=1684266296;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MaaXUmWYMUrm34mHy8xc1MH5y2IuXmSQmwypNMLJjoU=;
-        b=ESQ3chJgc32R3NhHBLAAXzT749dNpGPNmPUgyYx5UB+FjV2dCT0UAtNrbILCXSBJiN
-         8QAl8dsXjBHHFfHOXMunMMypVwm6h3HOohTDU3P00PN565H35L6xD4zsxx5mR6sO9g9y
-         2AXEmYknyj7UzQxXwMmUHdBdEi9Cca+uFc+fPDOL8ZZ+ZBpPwrg3fcr8C4CZEjWNVeRo
-         6lCoaHFdXwbFQOcStY+a0pJ+iN2ONBqu3wQmxemrukWIwSBQiBSkZh3bgAzxqZQoMzQ7
-         cX/z/Awy4PQZjvKVbmzxwYuN9hp32ONFNv1gEz+fAC1zSCsULHVa1mh6Uyw+LCvIJAnZ
-         odig==
-X-Gm-Message-State: AAQBX9d5OeMnt8WevqdXjSWmMpprFgRUzP2mFae43eovzJf0Ttaj+IYq
-        J79B2oi4vQ6cugGfoCofNPv+/w==
-X-Google-Smtp-Source: AKy350ZQaC5PHvOTs/Ci+GGGlU987ym/CM5N0qzNMVlGoxzf3xpQizKJqUG6Xt6FbOcsrYeS4JwNDA==
-X-Received: by 2002:a81:4644:0:b0:54e:dcf2:705b with SMTP id t65-20020a814644000000b0054edcf2705bmr12031663ywa.47.1681673139695;
-        Sun, 16 Apr 2023 12:25:39 -0700 (PDT)
+        bh=fE9QU8ssRHfrkp+Qs6Jt2adPN0B10qQBjFxitvUur5w=;
+        b=eEdd6PC4yFArolzlce1wgIy0SqiDAdfGovb4pueN1E9pWJ+QvkCkJgmj4R4DGn9Chl
+         8zQ5exDj59dl/93VBIOe2r+hSEkJegbtX5w09VgRKGNnhukcIXXCBLQxv7JtIqxVC5VP
+         4vrtinxhSUHTx9ejyzorlTrKI8XIkxKo2ourU3GBpVRlGh2lFj78UM1RT+wKAdERcE2A
+         sYJx0xQZ6LPAURJFOPEKaJVC49gq6HGpOCfbeGOCXFL5JvRzH2hiTkNg6OQgDM9JTvHp
+         aqz9QS1XnTvHcXx+YRuf4758ZgVU/wClW5CyyPAAP5lqQOFiuxvt3VtwWpI4zZ9iWvTX
+         im7g==
+X-Gm-Message-State: AAQBX9etFEPxIi3pY3y4bSyx9qCybuD92n0dYfbu1Ai8vPDJ43RfX+gE
+        W/9pJCzsNdJyGqQ2LQ+8F1KEkw==
+X-Google-Smtp-Source: AKy350YDG3M9wmj9++Fuic4VEWPyfPHGcxyaI9iRZK4qaFSHnn38pvTPQQqEXoMJ3JmakygaSbceaA==
+X-Received: by 2002:a81:7782:0:b0:543:b06a:19de with SMTP id s124-20020a817782000000b00543b06a19demr12158258ywc.3.1681674295681;
+        Sun, 16 Apr 2023 12:44:55 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id b186-20020a811bc3000000b0054eff15530asm2641407ywb.90.2023.04.16.12.25.38
+        by smtp.gmail.com with ESMTPSA id b186-20020a811bc3000000b0054eff15530asm2650453ywb.90.2023.04.16.12.44.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Apr 2023 12:25:39 -0700 (PDT)
-Date:   Sun, 16 Apr 2023 12:25:37 -0700 (PDT)
+        Sun, 16 Apr 2023 12:44:55 -0700 (PDT)
+Date:   Sun, 16 Apr 2023 12:44:53 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Zi Yan <ziy@nvidia.com>
@@ -63,11 +63,11 @@ cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] mm: thp: split huge page to any lower order
- pages.
-In-Reply-To: <20230403201839.4097845-6-zi.yan@sent.com>
-Message-ID: <26723f25-609a-fe9c-a41a-e692634d892@google.com>
-References: <20230403201839.4097845-1-zi.yan@sent.com> <20230403201839.4097845-6-zi.yan@sent.com>
+Subject: Re: [PATCH v3 6/7] mm: truncate: split huge page cache page to a
+ non-zero order if possible.
+In-Reply-To: <20230403201839.4097845-7-zi.yan@sent.com>
+Message-ID: <9dd96da-efa2-5123-20d4-4992136ef3ad@google.com>
+References: <20230403201839.4097845-1-zi.yan@sent.com> <20230403201839.4097845-7-zi.yan@sent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -85,114 +85,98 @@ On Mon, 3 Apr 2023, Zi Yan wrote:
 
 > From: Zi Yan <ziy@nvidia.com>
 > 
-> To split a THP to any lower order pages, we need to reform THPs on
-> subpages at given order and add page refcount based on the new page
-> order. Also we need to reinitialize page_deferred_list after removing
-> the page from the split_queue, otherwise a subsequent split will see
-> list corruption when checking the page_deferred_list again.
-> 
-> It has many uses, like minimizing the number of pages after
-> truncating a huge pagecache page. For anonymous THPs, we can only split
-> them to order-0 like before until we add support for any size anonymous
-> THPs.
+> To minimize the number of pages after a huge page truncation, we do not
+> need to split it all the way down to order-0. The huge page has at most
+> three parts, the part before offset, the part to be truncated, the part
+> remaining at the end. Find the greatest common divisor of them to
+> calculate the new page order from it, so we can split the huge
+> page to this order and keep the remaining pages as large and as few as
+> possible.
 > 
 > Signed-off-by: Zi Yan <ziy@nvidia.com>
 > ---
-...
-> @@ -2754,14 +2798,18 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
->  			if (folio_test_swapbacked(folio)) {
->  				__lruvec_stat_mod_folio(folio, NR_SHMEM_THPS,
->  							-nr);
-> -			} else {
-> +			} else if (!new_order) {
-> +				/*
-> +				 * Decrease THP stats only if split to normal
-> +				 * pages
-> +				 */
->  				__lruvec_stat_mod_folio(folio, NR_FILE_THPS,
->  							-nr);
->  				filemap_nr_thps_dec(mapping);
->  			}
->  		}
+>  mm/truncate.c | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/truncate.c b/mm/truncate.c
+> index 86de31ed4d32..817efd5e94b4 100644
+> --- a/mm/truncate.c
+> +++ b/mm/truncate.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/buffer_head.h>	/* grr. try_to_release_page */
+>  #include <linux/shmem_fs.h>
+>  #include <linux/rmap.h>
+> +#include <linux/gcd.h>
 
-This part is wrong.  The problem I've had is /proc/sys/vm/stat_refresh 
-warning of negative nr_shmem_hugepages (which then gets shown as 0 in
-vmstat or meminfo, even though there actually are shmem hugepages).
+Really?
 
-At first I thought that the fix needed (which I'm running with) is:
+>  #include "internal.h"
+>  
+>  /*
+> @@ -211,7 +212,8 @@ int truncate_inode_folio(struct address_space *mapping, struct folio *folio)
+>  bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
+>  {
+>  	loff_t pos = folio_pos(folio);
+> -	unsigned int offset, length;
+> +	unsigned int offset, length, remaining;
+> +	unsigned int new_order = folio_order(folio);
+>  
+>  	if (pos < start)
+>  		offset = start - pos;
+> @@ -222,6 +224,7 @@ bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
+>  		length = length - offset;
+>  	else
+>  		length = end + 1 - pos - offset;
+> +	remaining = folio_size(folio) - offset - length;
+>  
+>  	folio_wait_writeback(folio);
+>  	if (length == folio_size(folio)) {
+> @@ -236,11 +239,25 @@ bool truncate_inode_partial_folio(struct folio *folio, loff_t start, loff_t end)
+>  	 */
+>  	folio_zero_range(folio, offset, length);
+>  
+> +	/*
+> +	 * Use the greatest common divisor of offset, length, and remaining
+> +	 * as the smallest page size and compute the new order from it. So we
+> +	 * can truncate a subpage as large as possible. Round up gcd to
+> +	 * PAGE_SIZE, otherwise ilog2 can give -1 when gcd/PAGE_SIZE is 0.
+> +	 */
+> +	new_order = ilog2(round_up(gcd(gcd(offset, length), remaining),
+> +				   PAGE_SIZE) / PAGE_SIZE);
 
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2797,17 +2797,16 @@ int split_huge_page_to_list_to_order(str
- 			int nr = folio_nr_pages(folio);
- 
- 			xas_split(&xas, folio, folio_order(folio));
--			if (folio_test_swapbacked(folio)) {
--				__lruvec_stat_mod_folio(folio, NR_SHMEM_THPS,
--							-nr);
--			} else if (!new_order) {
--				/*
--				 * Decrease THP stats only if split to normal
--				 * pages
--				 */
--				__lruvec_stat_mod_folio(folio, NR_FILE_THPS,
--							-nr);
--				filemap_nr_thps_dec(mapping);
-+			if (folio_test_pmd_mappable(folio) &&
-+			    new_order < HPAGE_PMD_ORDER) {
-+				if (folio_test_swapbacked(folio)) {
-+					__lruvec_stat_mod_folio(folio,
-+							NR_SHMEM_THPS, -nr);
-+				} else {
-+					__lruvec_stat_mod_folio(folio,
-+							NR_FILE_THPS, -nr);
-+					filemap_nr_thps_dec(mapping);
-+				}
- 			}
- 		}
- 
-because elsewhere the maintenance of NR_SHMEM_THPS or NR_FILE_THPS
-is rightly careful to be dependent on folio_test_pmd_mappable() (and,
-so far as I know, we shall not be seeing folios of order higher than
-HPAGE_PMD_ORDER yet in mm/huge_memory.c - those would need more thought).
+Gosh.  In mm/readahead.c I can see "order = __ffs(index)",
+and I think something along those lines would be more appropriate here.
 
-But it may be more complicated than that, given that patch 7/7 appears
-(I haven't tried) to allow splitting to other orders on a file opened
-for reading - that might be a bug.
+But, if there's any value at all to choosing intermediate orders here in
+truncation, I don't think choosing a single order is the right approach -
+more easily implemented, yes, but is it worth doing?
 
-The complication here is that we now have four kinds of large folio
-in mm/huge_memory.c, and the rules are a bit different for each.
+What you'd actually want (if anything) is to choose the largest orders
+possible, with smaller and smaller orders filling in the rest (I expect
+there's a technical name for this, but I don't remember - bin packing
+is something else, I think).
 
-Anonymous THPs: okay, I think I've seen you exclude those with -EINVAL
-at a higher level (and they wouldn't be getting into this "if (mapping) {"
-block anyway).
-
-Shmem (swapbacked) THPs: we are only allocating shmem in 0-order or
-HPAGE_PMD_ORDER at present.  I can imagine that in a few months or a
-year-or-so's time, we shall want to follow Matthew's folio readahead,
-and generalize to other orders in shmem; but right now I'd really
-prefer not to have truncation or debugfs introducing the surprise
-of other orders there.  Maybe there's little that needs to be fixed,
-only the THP_SWPOUT and THP_SWPOUT_FALLBACK statistics have come to
-mind so far (would need to be limited to folio_test_pmd_mappable());
-though I've no idea how well intermediate orders will work with or
-against THP swapout.
-
-CONFIG_READ_ONLY_THP_FOR_FS=y file THPs: those need special care,
-and their filemap_nr_thps_dec(mapping) above may not be good enough.
-So long as it's working as intended, it does exclude the possibility
-of truncation splitting here; but if you allow splitting via debugfs
-to reach them, then the accounting needs to be changed - for them,
-any order higher than 0 has to be counted in nr_thps - so splitting
-one HPAGE_PMD_ORDER THP into multiple large folios will need to add
-to that count, not decrement it.  Otherwise, a filesystem unprepared
-for large folios or compound pages is in danger of meeting them by
-surprise.  Better just disable that possibility, along with shmem.
-
-mapping_large_folio_support() file THPs: this category is the one
-you're really trying to address with this series, they can already
-come in various orders, and it's fair for truncation to make a
-different choice of orders - but is what it's doing worth doing?
-I'll say more on 6/7.
+As this code stands, truncate a 2M huge page at 1M and you get two 1M
+pieces (one then discarded) - nice; but truncate it at 1M+1 and you get
+lots of order 2 (forced up from 1) pieces.  Seems weird, and not worth
+the effort.
 
 Hugh
+
+> +
+> +	/* order-1 THP not supported, downgrade to order-0 */
+> +	if (new_order == 1)
+> +		new_order = 0;
+> +
+> +
+>  	if (folio_has_private(folio))
+>  		folio_invalidate(folio, offset, length);
+>  	if (!folio_test_large(folio))
+>  		return true;
+> -	if (split_folio(folio) == 0)
+> +	if (split_huge_page_to_list_to_order(&folio->page, NULL, new_order) == 0)
+>  		return true;
+>  	if (folio_test_dirty(folio))
+>  		return false;
+> -- 
+> 2.39.2
