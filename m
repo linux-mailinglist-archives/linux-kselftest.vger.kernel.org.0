@@ -2,121 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075256E510D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Apr 2023 21:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BF46E511E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Apr 2023 21:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjDQTfN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Apr 2023 15:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
+        id S230093AbjDQTm4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Apr 2023 15:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbjDQTfM (ORCPT
+        with ESMTP id S230026AbjDQTmz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Apr 2023 15:35:12 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1F1FF
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 12:35:09 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id sj1-20020a17090b2d8100b00247bd1a66d4so1373488pjb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 12:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1681760109; x=1684352109;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UXrDQCneSb8jgaB5WOV1RqaoODncwrujP+Iw89BILhs=;
-        b=O5dg6sOfwLf72QhLfcA5JPZKGpC9v3EPOX2y0AYcP7Il8gcym2sV8o5lhXHrPSGiGW
-         DPGhkhxCJAOGPQHDgIJQWDZgMpZ18zws9m2PU3filA4f04zZ/ATq8zPp2oc0CvIEZOx4
-         aS6Dmvqfg1ZBUBAHKCZGkO1qU4Za622yPoSyVVfHHKSW/NNIp8JEewzQlEvRUxd26zgx
-         c3D57alEVgMwcn82DCHEwvxiO+Gj6jb3vWycOEc2eSWxLW3VrVDVPARr/jOUFRnCXL2R
-         HCsjeToQ1OnDlO+wynHZo/8xZeVoZoCrR1W37oblagNvZ1Qy78o/cJdejEHoycqWtbfQ
-         venQ==
+        Mon, 17 Apr 2023 15:42:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC47128
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 12:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681760529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ys6bHj0kEYQG5dBpJYBFUjQoxCIC6tHrlD1Aj5lZyJw=;
+        b=Kjs+gutowKsBOsVCMyf+X8BSM4s+IoyHdnZum9xJZsssfnG/n7r1tTC9imyhNmh0cMQQvu
+        K/5rC2uhwBwDzSgXQgSZYVqeSMyiHxmUud9EsmH5hanGhavlbA1ghz1a+VhrKTbzx5FkbW
+        pewqLkGWt6jwtRjLpQh5MEsEqF3z8WQ=
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
+ [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-662-1NKj98OSMAeuhZhaVeXKYg-1; Mon, 17 Apr 2023 15:42:06 -0400
+X-MC-Unique: 1NKj98OSMAeuhZhaVeXKYg-1
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-54fc7fcb81dso4736147b3.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 12:42:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681760109; x=1684352109;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1681760526; x=1684352526;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UXrDQCneSb8jgaB5WOV1RqaoODncwrujP+Iw89BILhs=;
-        b=YXg5pcWmQM6zAK5tAiPcKX3pLjMJCbLFePQQ/5BBCQTZ2wb3XIay9hb1SUfpcHufAd
-         cQlJxF5ouscrG5ta2PKV9Ygd7tLbyatDHn/P/U8vxPWZONLomqwjNK8TdIfsZyFmgpp5
-         W3O0vxuaNCIlziX5ZLvNbiR2ZLZ4nDp2/5YRcEKHHy98b8kJyV2X6+SBa+Xaml676fxq
-         qKZwL2iw5/72WoF2eMkwpkMgQuu9TJJ2srYiCw17lH7Z7TlFqrZSUDhf7VI+Pv7bcjef
-         XSbOS20AvOePRLn9cAQZqy7t+9Kfd5+EDmo1HOzexGph8zn19ghCcfYajSzyTyhaTEq2
-         dZtA==
-X-Gm-Message-State: AAQBX9c973hBnJ0gsovxZQ7DhtFLlX1LTV12vyF3fFlB62h2k+WaF1Xd
-        LTWVcaE5N2lGprfL0UELoa/fHQ==
-X-Google-Smtp-Source: AKy350ZgkvMBwxuvsB2Nzf72S0ZpG/7AYjuh89fy8y1Y+VJOMWc5KS3m/VSnzQO/xLsTnbpfVXYkiA==
-X-Received: by 2002:a17:90a:2a41:b0:247:c0bd:b99a with SMTP id d1-20020a17090a2a4100b00247c0bdb99amr597549pjg.31.1681760109163;
-        Mon, 17 Apr 2023 12:35:09 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id b10-20020a17090a800a00b002479c36b10esm1828978pjn.23.2023.04.17.12.35.08
+        bh=ys6bHj0kEYQG5dBpJYBFUjQoxCIC6tHrlD1Aj5lZyJw=;
+        b=jQtls59qbQKEbMtUBdyuOl+QGSP2E/Q1Kl6RY7Ibc0YDemogoFTJoSFvT4cQMYIQ6r
+         7LRivB/ZF/Ed9kzaTouR/rwYjeFPodJ9Jx5jHA6JvBtL+jChE3odyiTk9lz1ds2DWbXn
+         6RM+AyWUQZ9NOmm/TvLF04gbv+Wel3HdDbdkz2PqLiIu+ILkgdyD2n0XUnBsrmi3W0Qf
+         1U1TtwnFIgVeW+nQ3/VyHfbQCXBLKnw/oO39bE1dBwBSAfoHDcnoqaQIsiMofN1Ld06q
+         XMYUMVAbKM7xU/0uF5704pU+LkAc3jb36VsbROD92aeRtoV1NixP9sJOVRwAzrWjhy3B
+         2L7A==
+X-Gm-Message-State: AAQBX9c1g7JK0NYcfSERkdHRu+7gs/gEtnY6cqv7enrJmsKuJ3TaVp+I
+        DqLYNbMv72fjWVumimEOseKTJHAvyioqjZTD3z+GaUMG5ZkfkIRRq49w76PLcmu9cYvywJmVX6w
+        RK0UW5sYswpeVNxI3jacNvkyxrSOM
+X-Received: by 2002:a25:f812:0:b0:b92:2ec4:468 with SMTP id u18-20020a25f812000000b00b922ec40468mr8387666ybd.2.1681760525805;
+        Mon, 17 Apr 2023 12:42:05 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aD9Z53Fp0pWibrCkct8vOfri8wqcOppIT0+JRo2FSozSVhj1pOMlZkHbkZQMla/ukf75rU0w==
+X-Received: by 2002:a25:f812:0:b0:b92:2ec4:468 with SMTP id u18-20020a25f812000000b00b922ec40468mr8387624ybd.2.1681760525481;
+        Mon, 17 Apr 2023 12:42:05 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id a67-20020a254d46000000b00b8bfb4c4f1esm3139594ybb.62.2023.04.17.12.42.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 12:35:08 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 12:35:08 -0700 (PDT)
-X-Google-Original-Date: Mon, 17 Apr 2023 12:34:57 PDT (-0700)
-Subject:     Re: [PATCH 2/6] tools/nolibc: riscv: add stackprotector support
-In-Reply-To: <20230408-nolibc-stackprotector-archs-v1-2-271f5c859c71@weissschuh.net>
-CC:     w@1wt.eu, shuah@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux@weissschuh.net
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     linux@weissschuh.net
-Message-ID: <mhng-1ec176a9-ec5d-470b-a278-a4e9cec728a8@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 17 Apr 2023 12:42:04 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 15:42:02 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v13 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZD2hCoTqSMtpjmaX@x1n>
+References: <20230417125630.1146906-1-usama.anjum@collabora.com>
+ <20230417125630.1146906-3-usama.anjum@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230417125630.1146906-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 17 Apr 2023 09:01:32 PDT (-0700), linux@weissschuh.net wrote:
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  tools/include/nolibc/arch-riscv.h       | 7 ++++++-
->  tools/testing/selftests/nolibc/Makefile | 1 +
->  2 files changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-> index 0d5f15fdedc4..b2ccffcc079f 100644
-> --- a/tools/include/nolibc/arch-riscv.h
-> +++ b/tools/include/nolibc/arch-riscv.h
-> @@ -173,14 +173,19 @@ struct sys_stat_struct {
->  char **environ __attribute__((weak));
->  const unsigned long *_auxv __attribute__((weak));
->
-> +#define __ARCH_SUPPORTS_STACK_PROTECTOR
-> +
->  /* startup code */
-> -void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
-> +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
->  {
->  	__asm__ volatile (
->  		".option push\n"
->  		".option norelax\n"
->  		"lla   gp, __global_pointer$\n"
->  		".option pop\n"
-> +#ifdef NOLIBC_STACKPROTECTOR
-> +		"call __stack_chk_init\n"    /* initialize stack protector                          */
-> +#endif
->  		"lw    a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
->  		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
->  		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
-> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index 3c8e3a6f8985..0a83ad388a16 100644
-> --- a/tools/testing/selftests/nolibc/Makefile
-> +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -82,6 +82,7 @@ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
->  CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
->  CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
->  CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
-> +CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
->  CFLAGS_s390 = -m64
->  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
->  		$(call cc-option,-fno-stack-protector) \
+Muhammad,
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On Mon, Apr 17, 2023 at 05:56:27PM +0500, Muhammad Usama Anjum wrote:
+> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> +				  unsigned long end, struct mm_walk *walk)
+> +{
+> +	struct pagemap_scan_private *p = walk->private;
+> +	struct vm_area_struct *vma = walk->vma;
+> +	unsigned long addr = end;
+> +	pte_t *pte, *orig_pte;
+> +	spinlock_t *ptl;
+> +	bool is_written;
+> +	int ret = 0;
+> +
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> +	ptl = pmd_trans_huge_lock(pmd, vma);
+> +	if (ptl) {
+> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
+> +
+> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+> +			n_pages = p->max_pages - p->found_pages;
+> +
+> +		is_written = !is_pmd_uffd_wp(*pmd);
+> +
+> +		/*
+> +		 * Break huge page into small pages if the WP operation need to
+> +		 * be performed is on a portion of the huge page.
+> +		 */
+> +		if (is_written && PM_SCAN_DO_UFFD_WP(p) &&
+> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> +			spin_unlock(ptl);
+> +			split_huge_pmd(vma, pmd, start);
+> +			goto process_smaller_pages;
+> +		}
+> +
+> +		ret = pagemap_scan_output(is_written, vma->vm_file,
+> +					  pmd_present(*pmd), is_swap_pmd(*pmd),
+> +					  p, start, n_pages);
+> +
+> +		if (ret >= 0 && is_written && PM_SCAN_DO_UFFD_WP(p))
+> +			make_uffd_wp_pmd(vma, addr, pmd);
+> +
+> +		spin_unlock(ptl);
+> +		return ret;
+> +	}
+> +process_smaller_pages:
+> +	if (pmd_trans_unstable(pmd))
+> +		return 0;
+> +#endif
+> +
+> +	pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
+> +		is_written = !is_pte_uffd_wp(*pte);
+> +
+> +		ret = pagemap_scan_output(is_written, vma->vm_file,
+> +					  pte_present(*pte), is_swap_pte(*pte),
+> +					  p, addr, 1);
+> +
+> +		if (ret >= 0 && is_written && PM_SCAN_DO_UFFD_WP(p))
+> +			make_uffd_wp_pte(vma, addr, pte);
+> +	}
+> +	pte_unmap_unlock(orig_pte, ptl);
+
+IIUC tlb flushes, mmu notifications are still missing here, am I right?
+
+Thanks,
+
+> +
+> +	cond_resched();
+> +	return ret;
+> +}
+
+-- 
+Peter Xu
+
