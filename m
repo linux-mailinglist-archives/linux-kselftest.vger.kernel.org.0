@@ -2,81 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5096E4204
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Apr 2023 10:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9566E4220
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Apr 2023 10:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjDQIFK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Apr 2023 04:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
+        id S229958AbjDQIIa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Apr 2023 04:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjDQIFC (ORCPT
+        with ESMTP id S230397AbjDQII2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:05:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58F726AE
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 01:04:14 -0700 (PDT)
+        Mon, 17 Apr 2023 04:08:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D093AA8
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 01:07:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681718654;
+        s=mimecast20190719; t=1681718865;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HQ9zPP2ip4epjGkJ+lxtvvPvIDCjUTCQlgGLaDEyfd4=;
-        b=B1Lxt7X6s+2qRHS3BRWY36cQ+iGRVtV4FQJ+C3y8dtvEMH2jlyzMwQ6EKRbldg/hTbIAAx
-        i718t7hBBNshawaHogImXF5rjaE9K6PO9cmQk60uPe7LnhmhBCaBNJYuJbD7yVEf1qLGu+
-        93C8NY+xRpnsX9HySUNxOKW6zqDEUd0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4XDJUkJSvTcFW4wLRJcoZAIOzG/umFn3ICclB/IgMrw=;
+        b=ejXkr79h5dSm5r8vX3RejGD8WEYyMDlmb2aiT8Lf4pJDSrttp4LS2/k0/xqtKiQ59BqCtB
+        ewB3QTcPS6cE+79tyFYdOAFoj1fX5Ov1BkoX6tBSSimQS1wdsXLqqPQFri6vYpLPHmdlti
+        ANXizXXz0ANxBjIO7Du8WstdZVkkAFA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-269-qg5i2I-vMFyBE3Fd7PCsqw-1; Mon, 17 Apr 2023 04:04:13 -0400
-X-MC-Unique: qg5i2I-vMFyBE3Fd7PCsqw-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f0b0c85c4fso19828515e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 01:04:12 -0700 (PDT)
+ us-mta-140-Gd49fsnKPfO_MfdLF9iM2w-1; Mon, 17 Apr 2023 04:07:44 -0400
+X-MC-Unique: Gd49fsnKPfO_MfdLF9iM2w-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-2f6cd27b991so338896f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 01:07:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681718652; x=1684310652;
+        d=1e100.net; s=20221208; t=1681718863; x=1684310863;
         h=content-transfer-encoding:in-reply-to:organization:from:references
          :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HQ9zPP2ip4epjGkJ+lxtvvPvIDCjUTCQlgGLaDEyfd4=;
-        b=DbxeFdgDyoFjcKd5kNvLgnhxhNRchnUsWgs3KgrT1Zfg4+Bqp+i6HrmtlShjHjpCQK
-         EueANLAmJsCxYZ+5q28RDjAQzdvjgw/EK2gILGmtH+S9DgM3YvetRMRzjns9EJNMFX3Q
-         1B5aXcpeOe01xn/pXxDBEDMOhbt59TQViZv21bqLyPCyjygzEmEnoEWa8hWi32a52xbg
-         HM6eqi0uyhPqkr4KQB/T++R0YrANKwIaYFH2EjjxwKFCvHMjmT5cd1ahCQDq0ov8Y1Mx
-         ayJhO9pe2uhD4rKms/tdNIt8dJD+8U6eFUAg/cYKg11WymlnM3w/6RIZf2F8zAUxetkw
-         l1IQ==
-X-Gm-Message-State: AAQBX9dlXT2I4G5zJPGiPqvWh9kqhAvLqQcql79bHJtNmt3bXdfV8xmt
-        eQEeVFC5bWLDYaMZyuE5fWM8WoQmTPeamuUTO0nbAzJVGSRWXvkIOq1c2qoY9yL3vmde07bCeIF
-        usYV6znjR9MsttOjDE/FFVsvs5Yl3
-X-Received: by 2002:adf:dd82:0:b0:2ee:687c:5252 with SMTP id x2-20020adfdd82000000b002ee687c5252mr4647516wrl.24.1681718651717;
-        Mon, 17 Apr 2023 01:04:11 -0700 (PDT)
-X-Google-Smtp-Source: AKy350a+sWHNJ0uAEkLYFXyFh5ON7iFfCf3hO4QWXYa+ZjNC0dSeFzjTN8FLYHLiEz20+iPZSmUKLw==
-X-Received: by 2002:adf:dd82:0:b0:2ee:687c:5252 with SMTP id x2-20020adfdd82000000b002ee687c5252mr4647501wrl.24.1681718651381;
-        Mon, 17 Apr 2023 01:04:11 -0700 (PDT)
+        bh=4XDJUkJSvTcFW4wLRJcoZAIOzG/umFn3ICclB/IgMrw=;
+        b=dFKGcV2iNOLWk4Rsne1NT+K2oapsgLmjtsZcj/oaPilhBymCNCKUQh+cfW57iVqrXu
+         QQx8GcxSQ3FO0pebMLkLtqNUfWg4Ab/GSgxy0VxaKPAz4e8njjL0n5pKKFEtHQ6tW6zp
+         lFGWK/wT5nqZoC5xoOLpnEFPpDgTvopgR5qAMqRQWI2XFlc0qZlKoAx9U2AtqpRgSNI7
+         0V5uhzX8i97spoZeDwsOHR//3/HddlG885+A8SzqvPPQnEf1IaFdSMVwq3DHkdYTP9Uh
+         4D6hszla5tCZeDYdlLsuY8RFBmLtJeLnDRDn0oEO+rkjkeooEPjqT+B52hzZd8Q0H9Ry
+         BwGA==
+X-Gm-Message-State: AAQBX9dHNYF1sd6l31XlBb1UjWABizXkg5bDtch8Ly845JqfDO307TKR
+        XZRXOc4bRTynuL0qh0HE3qc+8QOdgKJooMBzLhKAPj9erZ7GgUgtJVQMWwbAmz1YvorfDtVWISe
+        AsokipudD9X7At8ZPMljZzVSTc/Bw
+X-Received: by 2002:adf:f4cb:0:b0:2f1:d97f:5711 with SMTP id h11-20020adff4cb000000b002f1d97f5711mr4953833wrp.30.1681718862987;
+        Mon, 17 Apr 2023 01:07:42 -0700 (PDT)
+X-Google-Smtp-Source: AKy350a9rGmIWSRvojrm++FPjUBfEQgeOHMw1tsfV3SCV6FaW83hBR0mvAH+OMV0MV+atsmj58sfCg==
+X-Received: by 2002:adf:f4cb:0:b0:2f1:d97f:5711 with SMTP id h11-20020adff4cb000000b002f1d97f5711mr4953816wrp.30.1681718862608;
+        Mon, 17 Apr 2023 01:07:42 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c700:fc00:db07:68a9:6af5:ecdf? (p200300cbc700fc00db0768a96af5ecdf.dip0.t-ipconnect.de. [2003:cb:c700:fc00:db07:68a9:6af5:ecdf])
-        by smtp.gmail.com with ESMTPSA id d14-20020a5d538e000000b002f81b4227cesm5953920wrv.19.2023.04.17.01.04.10
+        by smtp.gmail.com with ESMTPSA id h12-20020adffa8c000000b002d322b9a7f5sm9905360wrr.88.2023.04.17.01.07.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 01:04:11 -0700 (PDT)
-Message-ID: <12011875-f4f4-2aad-4720-326d872bd3e8@redhat.com>
-Date:   Mon, 17 Apr 2023 10:04:10 +0200
+        Mon, 17 Apr 2023 01:07:42 -0700 (PDT)
+Message-ID: <5b040572-18cd-f1f1-d24e-5d02494cc3ad@redhat.com>
+Date:   Mon, 17 Apr 2023 10:07:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH v7 3/3] selftests/mm: add new selftests for KSM
+Subject: Re: [PATCH v8 3/3] selftests/mm: add new selftests for KSM
 Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, willy@infradead.org,
+To:     Stefan Roesch <shr@devkernel.io>, kernel-team@fb.com
+Cc:     linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
         Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20230413233115.1878303-1-shr@devkernel.io>
- <20230413233115.1878303-4-shr@devkernel.io>
- <da0ded70-bb4d-2dab-233f-326ae7bfa626@redhat.com>
- <qvqw8reugp1s.fsf@devbig1114.prn1.facebook.com>
+References: <20230415225913.3206647-1-shr@devkernel.io>
+ <20230415225913.3206647-4-shr@devkernel.io>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <qvqw8reugp1s.fsf@devbig1114.prn1.facebook.com>
+In-Reply-To: <20230415225913.3206647-4-shr@devkernel.io>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -89,27 +86,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 14.04.23 22:54, Stefan Roesch wrote:
+On 16.04.23 00:59, Stefan Roesch wrote:
+> This adds three new tests to the selftests for KSM.  These tests use the
+> new prctl API's to enable and disable KSM.
 > 
-> David Hildenbrand <david@redhat.com> writes:
+> 1) add new prctl flags to prctl header file in tools dir
 > 
->> Thanks for moving the functional tests. Some more feedback forksm_functional_tests change. Writing tests in the
->> ksft testing framework can be a bit "special".
->>
->>
->> I'm seeing some weird test failures due to
->>
->> prctl(PR_GET_MEMORY_MERGE, 0)
->>
->> Apparently, these go away when using
->>
->> prctl(PR_GET_MEMORY_MERGE, 0, 0, 0, 0)
->>
+>     This adds the new prctl flags to the include file prct.h in the
+>     tools directory.  This makes sure they are available for testing.
 > 
-> I changed the test programs to always specify all the 5 parameters.
+> 2) add KSM prctl merge test to ksm_tests
 > 
+>     This adds the -t option to the ksm_tests program.  The -t flag
+>     allows to specify if it should use madvise or prctl ksm merging.
+> 
+> 3) add two functions for debugging merge outcome for ksm_tests
+> 
+>     This adds two functions to report the metrics in /proc/self/ksm_stat
+>     and /sys/kernel/debug/mm/ksm. The debug output is enabled with the
+>     -d option.
+> 
+> 4) add KSM prctl test to ksm_functional_tests
+> 
+>     This adds a test to the ksm_functional_test that verifies that the
+>     prctl system call to enable / disable KSM works.
+> 
+> 5) add KSM fork test to ksm_functional_test
+> 
+>     Add fork test to verify that the MMF_VM_MERGE_ANY flag is inherited
+>     by the child process.
+> 
+> Signed-off-by: Stefan Roesch <shr@devkernel.io>
+> Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Rik van Riel <riel@surriel.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
 
 Thanks!
+
+Acked-by: David Hildenbrand <david@redhat.com>
 
 -- 
 Thanks,
