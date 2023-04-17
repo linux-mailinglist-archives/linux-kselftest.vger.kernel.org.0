@@ -2,84 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1BD6E4E11
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Apr 2023 18:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B316E4E5B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Apr 2023 18:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjDQQMi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Apr 2023 12:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S229548AbjDQQhf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Apr 2023 12:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjDQQMg (ORCPT
+        with ESMTP id S229515AbjDQQhe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:12:36 -0400
+        Mon, 17 Apr 2023 12:37:34 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94346E9D;
-        Mon, 17 Apr 2023 09:12:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F65D6A7C;
+        Mon, 17 Apr 2023 09:37:33 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 28FA45C0076;
-        Mon, 17 Apr 2023 12:12:29 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id C9F1C5C01C0;
+        Mon, 17 Apr 2023 12:37:32 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 17 Apr 2023 12:12:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
+  by compute5.internal (MEProxy); Mon, 17 Apr 2023 12:37:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1681747949; x=1681834349; bh=+7
-        9bp16JJKfLxn8Ztbq4ez9hshDVirLYX87ZqF+q2aE=; b=H9a6OZJKAEEau0VeJP
-        FnXq3p+dMGmKiAcUUumwNvzJz/XHqS3vRRIOsGm8qATtSGC1NTWVc4M3vZu2gwb2
-        ciJ9rl0cDVNl78EEAbdWmzYiNM3Qb6wc/6B2hLqfDC3q/7YkL6aNdejt49iuCPme
-        TrArpaEm2Y3cNmNVRyw4po07doJYEl/nBiG/FWu3DNPmWP7GISD7gfDUn8i+tR/D
-        U6gq1g5CCsKCNHegWkYwXFK0Tt+S+lvR1Fps+PHXE038XY7oGS8xLG8xTVgZNGqv
-        lbTjkv4KSwj4h6oKjITQUOtpD0XupGNC6IwrP1jLUDjPUojuEPPxCOJ5uitXOGaR
-        L2DQ==
+        :subject:subject:to:to; s=fm1; t=1681749452; x=1681835852; bh=v1
+        qN0g4dtsVGZPafBKFaoMbrRN/kATZVzGtNJlDrMfg=; b=FJPeon0owpc1wVZTT5
+        Uddxuj7DlNy0Xmm0JzR0rN5sTubjR33v5M8C/00sxwcQ2+ozIHvV6vDXWj+irx1o
+        +mPqUq3wblpJCU39382uT41/VpK2QVSaypiYNZRHG9j0AxIA8OMgJROqx6j2jAop
+        ivbUYG8zUyNNKM0k5oo5PxjzAxCiGrde4MbI9hJ+mMIFPBLRjxkXPIKP/+OI7A7D
+        q3npHLte+yhmFpAoS1t4kk9Q2PfA9cN14Lp3MBmT5M9+eqij++XxrvfzUVRjxCwk
+        09HQaOBQo8DsKCRUp+u91gdNoKAtBKURcphjqP0X2mFZF1FQ5efnm6wxt08xA3MG
+        Hg5Q==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681747949; x=1681834349; bh=+79bp16JJKfLx
-        n8Ztbq4ez9hshDVirLYX87ZqF+q2aE=; b=caFSz5aYUSpbLaHFF9XOKboBznDlW
-        7iR2IgFWM+ADsKvHfcwfn+UPHEHuezJdv3gfyrBsqMJRN0ZmTUHvDatyvbNlRcgC
-        thcz1TqOShe2g/fkGFF5o9n0cf9J0R52CG0TpiP7IW0T+9ZAA3++cVlBF1C+zVYu
-        OxYABtxru1clcrCoaZlaRyuvruXgBtkG76In/x3o/ERX4+0VVrlxT3xjgGB8bibg
-        HqyODkYgSMOE9Y3Kd8CIcdmyxKm4ZpHV3NUpLt3UZIPN+bFOCkYkeiCNe5ZItElf
-        1V4/J5FJpH5oLfl0YgpVLgCWr9FFcf7P8Ld15D/AGWWL9HlqjfvgEOEIw==
-X-ME-Sender: <xms:7G89ZOLpGN4-uLchc5y1PVO10fnW1qCAa4oACZYVYz0DW4ONi9M_oQ>
-    <xme:7G89ZGK9CtMtejG3b43JqnPE1uZr54pf0inJXKB6NGNnmlUGqsZGwtbX8heYto6bJ
-    CvW_d4aJSTicaQ0UVw>
-X-ME-Received: <xmr:7G89ZOsGcQu7UWQOP22v5tdx2FuPEvm1D_rBeke4xA4m4UCukm5g5HedbSn-n4ufLmhaAu6onDVRZDaiejRKM98Q3SG37IA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtgfdukeeigeeuhfelheeftdfhgfegfefgudeuiefhueeuleekveetvdei
-    tddvieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:7G89ZDaA3to_jqmR8Awm5kj-mHQCXOSp1oCqbg3Hu9uOCxC9Ww8Dqg>
-    <xmx:7G89ZFbf-Fkyv3Z8pYnDwqCzH2dNp6Tmn2o_V6tun_otL88wLcbujQ>
-    <xmx:7G89ZPD3zN94xsnakyqtAYgovbB9n33sPfO2lC24HnyqD8KhW4r1QQ>
-    <xmx:7W89ZJTcvrjSg8svEY8Tevcn3Xf0SXszUOAUYujDGCK5QTVQdgAnBw>
-Feedback-ID: i8771445c:Fastmail
+        :x-sasl-enc; s=fm3; t=1681749452; x=1681835852; bh=v1qN0g4dtsVGZ
+        PafBKFaoMbrRN/kATZVzGtNJlDrMfg=; b=Wt7BDW2hAaSJcxIAKkiWwC195nljq
+        e3m8PxuhjGikDlIKvOXA2SlIcEAb90DkuomYCCP93lAvxvebbyzakOuM0KseNLSE
+        Ca8ltlzbNQw6ZPrVDRaGlSSVoNcDOCNeqvwXvZysQP2vyopGtTkTmlg0VI3fUY0L
+        uDNHxlCgPprGald32urVBpGvGfTs9QcWsScJ6FJFIDLX6SN2G8EqRGABe+GFLp1J
+        NeaYbnPQmIoPIpQBnoSHq8E75ieLs9I/SlSw7cmt7o+zPYrkDd9APSiF9GNkbYVw
+        xINhQGgn1DS/6n2X9nrbFEP4h1S59eIXPa2fL2To6wYHCq9FK/Ba/gVyA==
+X-ME-Sender: <xms:y3U9ZBN2rt1QunQbx5gMh828WUsTbdPTbWapLkhxz8PcQ4IrG6BG8A>
+    <xme:y3U9ZD9017z1OT8cr_QcGLm9lWqFWz6URYAgoMW1SeuHx6Vt23WWUGMNyF8tw106S
+    TxlR-ZArQyTLx0s0Zg>
+X-ME-Received: <xmr:y3U9ZARxob3A73TT69esO8Sn0UWFo4BELenPaCldEvpx-k7WAU5czyJb7S6_5AQGANb20B8A5hWdCKWWIqPm30TBNTGJyTSu8wLdMs2IYPob>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedguddtvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
+    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
+    htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
+    geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hshhhrseguvghvkhgvrhhnvghlrdhioh
+X-ME-Proxy: <xmx:zHU9ZNsi2rWPzjd744cRooDsNB5_5in3TtevpaJN6Mn09-2AlUCQfA>
+    <xmx:zHU9ZJddWbG2k1qgEvCyOY-1lLmEruS_DFrNurSHH95vTs1W8NxFpA>
+    <xmx:zHU9ZJ0fPYejG6WuTLgEioCdMxlJcHWIfmKyXb6b-BalvMNLYoLbBw>
+    <xmx:zHU9ZF6w-eg7YAKlaUnmVMpocd-lR5eJ1buXvzJwTRc20BcsqEuxAw>
+Feedback-ID: i84614614:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 17 Apr 2023 12:12:27 -0400 (EDT)
-Date:   Mon, 17 Apr 2023 18:12:26 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] drivers: base: Add tests showing devm handling
- inconsistencies
-Message-ID: <wiej2vps6uhozcpxeye3xfgpnlvxcbaek73px36f4jsef3e77p@ewcsmzrxzhsi>
-References: <20230329-kunit-devm-inconsistencies-test-v1-0-c33127048375@cerno.tech>
+ 17 Apr 2023 12:37:30 -0400 (EDT)
+References: <20230415225913.3206647-1-shr@devkernel.io>
+ <20230415225913.3206647-2-shr@devkernel.io>
+ <b9f1fd7f-e362-8f6c-21db-e84dd82fdd00@redhat.com>
+User-agent: mu4e 1.10.1; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, willy@infradead.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH v8 1/3] mm: add new api to enable ksm per process
+Date:   Mon, 17 Apr 2023 09:36:58 -0700
+In-reply-to: <b9f1fd7f-e362-8f6c-21db-e84dd82fdd00@redhat.com>
+Message-ID: <qvqwa5z6bh2x.fsf@devbig1114.prn1.facebook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e3vntytzvfzhuvix"
-Content-Disposition: inline
-In-Reply-To: <20230329-kunit-devm-inconsistencies-test-v1-0-c33127048375@cerno.tech>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -91,52 +90,52 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---e3vntytzvfzhuvix
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+David Hildenbrand <david@redhat.com> writes:
 
-Hi,
+>> +static void __ksm_add_vma(struct vm_area_struct *vma)
+>> +{
+>> +	unsigned long vm_flags = vma->vm_flags;
+>> +
+>> +	if (vm_flags & VM_MERGEABLE)
+>> +		return;
+>> +
+>> +	if (vma_ksm_compatible(vma)) {
+>> +		vm_flags |= VM_MERGEABLE;
+>> +		vm_flags_reset(vma, vm_flags);
+>> +	}
+>> +}
+>
+> We can do the following simplification on top:
+>
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 905c8edce5cf..26e7f585d65d 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -2511,15 +2511,11 @@ static int ksm_scan_thread(void *nothing)
+>
+>  static void __ksm_add_vma(struct vm_area_struct *vma)
+>  {
+> -	unsigned long vm_flags = vma->vm_flags;
+> -
+> -	if (vm_flags & VM_MERGEABLE)
+> +	if (vma->vm_flags & VM_MERGEABLE)
+>  		return;
+>
+> -	if (vma_ksm_compatible(vma)) {
+> -		vm_flags |= VM_MERGEABLE;
+> -		vm_flags_reset(vma, vm_flags);
+> -	}
+> +	if (vma_ksm_compatible(vma))
+> +		vm_flags_set(vma, VM_MERGEABLE);
+>  }
+>
+>  /**
+> --
+> 2.39.2
+>
+>
 
-On Wed, Mar 29, 2023 at 08:38:30PM +0100, Maxime Ripard wrote:
-> Hi,
->=20
-> This follows the discussion here:
-> https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnfwb@h=
-ouat/
->=20
-> This shows a couple of inconsistencies with regard to how device-managed
-> resources are cleaned up. Basically, devm resources will only be cleaned =
-up
-> if the device is attached to a bus and bound to a driver. Failing any of
-> these cases, a call to device_unregister will not end up in the devm
-> resources being released.
->=20
-> We had to work around it in DRM to provide helpers to create a device for
-> kunit tests, but the current discussion around creating similar, generic,
-> helpers for kunit resumed interest in fixing this.
->=20
-> This can be tested using the command:
-> ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/base/test/
->=20
-> Let me know what you think,
-> Maxime
->=20
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+The next version has the above change.
 
-Is there any news on this?
-
-Maxime
-
---e3vntytzvfzhuvix
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZD1v6gAKCRDj7w1vZxhR
-xZR0AP45BGKIrcwUspyxe29C35X5W65gax24OfzIDvVIa6a9VAD/WkKJw+EuINNY
-hnhOJyDbR/XU8EYHCa6Im7j0MVwazwI=
-=WfbU
------END PGP SIGNATURE-----
-
---e3vntytzvfzhuvix--
+> I have some patches based on your patch set (handling/testing unmerging whens
+> setting PR_SET_MEMORY_MERGE=0. Will send out once you changes are queued.
