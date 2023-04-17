@@ -2,135 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9566E4220
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Apr 2023 10:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FA16E421F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Apr 2023 10:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjDQIIa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Apr 2023 04:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S229991AbjDQII3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Apr 2023 04:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjDQII2 (ORCPT
+        with ESMTP id S229958AbjDQII1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Apr 2023 04:08:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D093AA8
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 01:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681718865;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4XDJUkJSvTcFW4wLRJcoZAIOzG/umFn3ICclB/IgMrw=;
-        b=ejXkr79h5dSm5r8vX3RejGD8WEYyMDlmb2aiT8Lf4pJDSrttp4LS2/k0/xqtKiQ59BqCtB
-        ewB3QTcPS6cE+79tyFYdOAFoj1fX5Ov1BkoX6tBSSimQS1wdsXLqqPQFri6vYpLPHmdlti
-        ANXizXXz0ANxBjIO7Du8WstdZVkkAFA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-140-Gd49fsnKPfO_MfdLF9iM2w-1; Mon, 17 Apr 2023 04:07:44 -0400
-X-MC-Unique: Gd49fsnKPfO_MfdLF9iM2w-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-2f6cd27b991so338896f8f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 01:07:43 -0700 (PDT)
+        Mon, 17 Apr 2023 04:08:27 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE99246AC
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 01:08:01 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id lh8so11789739plb.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 01:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1681718881; x=1684310881;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Swqe8hdnyr90lKGZ34p9/SCrV2uM7jygoSbLirhNYaU=;
+        b=RzueqtYWKHquKbh1r91xnBOR9MFUOwTtEL7JuxAvbQGOmalRQOVk1il2sClha6cktk
+         s5S7cML/Wwg1GRJxaXsrEaCZN/OiX9UnhHG1VTPCe56uCsDOVj88DLWTvKtoFEdGowdK
+         PAXU293prILUVEDi6LZXzQpTFWYDfQT4XC0FOjfOgQ+EERaWxfzeTwj8DKGN6mo6uctv
+         LgzqgPSfu/eoCaiCcEWkSMMeKHCj8EBpaUGmnfZ9BYuIjvu8awDUj6BzfeunPMQ66ufO
+         OdR/gnDrVLXe+KP+ObUuYs5tcysmfvWdJTDWsGF8FoZh/cRnk3gtvxAd+d+pUEHvi6td
+         2haQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681718863; x=1684310863;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1681718881; x=1684310881;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4XDJUkJSvTcFW4wLRJcoZAIOzG/umFn3ICclB/IgMrw=;
-        b=dFKGcV2iNOLWk4Rsne1NT+K2oapsgLmjtsZcj/oaPilhBymCNCKUQh+cfW57iVqrXu
-         QQx8GcxSQ3FO0pebMLkLtqNUfWg4Ab/GSgxy0VxaKPAz4e8njjL0n5pKKFEtHQ6tW6zp
-         lFGWK/wT5nqZoC5xoOLpnEFPpDgTvopgR5qAMqRQWI2XFlc0qZlKoAx9U2AtqpRgSNI7
-         0V5uhzX8i97spoZeDwsOHR//3/HddlG885+A8SzqvPPQnEf1IaFdSMVwq3DHkdYTP9Uh
-         4D6hszla5tCZeDYdlLsuY8RFBmLtJeLnDRDn0oEO+rkjkeooEPjqT+B52hzZd8Q0H9Ry
-         BwGA==
-X-Gm-Message-State: AAQBX9dHNYF1sd6l31XlBb1UjWABizXkg5bDtch8Ly845JqfDO307TKR
-        XZRXOc4bRTynuL0qh0HE3qc+8QOdgKJooMBzLhKAPj9erZ7GgUgtJVQMWwbAmz1YvorfDtVWISe
-        AsokipudD9X7At8ZPMljZzVSTc/Bw
-X-Received: by 2002:adf:f4cb:0:b0:2f1:d97f:5711 with SMTP id h11-20020adff4cb000000b002f1d97f5711mr4953833wrp.30.1681718862987;
-        Mon, 17 Apr 2023 01:07:42 -0700 (PDT)
-X-Google-Smtp-Source: AKy350a9rGmIWSRvojrm++FPjUBfEQgeOHMw1tsfV3SCV6FaW83hBR0mvAH+OMV0MV+atsmj58sfCg==
-X-Received: by 2002:adf:f4cb:0:b0:2f1:d97f:5711 with SMTP id h11-20020adff4cb000000b002f1d97f5711mr4953816wrp.30.1681718862608;
-        Mon, 17 Apr 2023 01:07:42 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c700:fc00:db07:68a9:6af5:ecdf? (p200300cbc700fc00db0768a96af5ecdf.dip0.t-ipconnect.de. [2003:cb:c700:fc00:db07:68a9:6af5:ecdf])
-        by smtp.gmail.com with ESMTPSA id h12-20020adffa8c000000b002d322b9a7f5sm9905360wrr.88.2023.04.17.01.07.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 01:07:42 -0700 (PDT)
-Message-ID: <5b040572-18cd-f1f1-d24e-5d02494cc3ad@redhat.com>
-Date:   Mon, 17 Apr 2023 10:07:41 +0200
+        bh=Swqe8hdnyr90lKGZ34p9/SCrV2uM7jygoSbLirhNYaU=;
+        b=gDi9OZ2L4roLXXJB5EjMfynZoEUsDmFQDT3UcDwLXhPAFFP6vPCnZkNybe8doPjTFk
+         VIWGlXzOsGM6wze7RPAk7Dx69b6CJnjlS7klrla651VMkMHzrGtOur/XU6A6W8c1Ahnn
+         FMaLp16E8SPcTkpxmB7jY6mxCw6e6XwT/Ahp94alJ/JpN1h150rqU7BZdMtpCnw9PZ0W
+         aTpDEQ8523VtwhRVWFbsYH37/mPZ52w73jzGLF9v6o9hCFgpLEzkv4SXyB4NzGH5hlIP
+         zFmEpwbtzb5Wj1ea2/E8MWWi+rnzApTvL413QFFNP+5yzxdgY/ySRmkqbZOJ/icfc1ke
+         +CJg==
+X-Gm-Message-State: AAQBX9dTs9CDvGaXo0lmpCk33RWUiuTdGDMy6zNv+IkLDraROTWATa1G
+        ZRP1O40LQnl183njfYdGIkPfXQ==
+X-Google-Smtp-Source: AKy350YRelaL8B0w4O3NnCLX/PVG+4BiJ3Ah+M51OrPw3Y8gE6kkvDrzEvhk+MJ95rnyIbRwnbV+xA==
+X-Received: by 2002:a17:902:db06:b0:1a1:bff4:49e9 with SMTP id m6-20020a170902db0600b001a1bff449e9mr14009898plx.23.1681718881342;
+        Mon, 17 Apr 2023 01:08:01 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id jc3-20020a17090325c300b0019a97a4324dsm7114135plb.5.2023.04.17.01.07.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 01:08:00 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
+Subject: [PATCH 0/2] Access variable length array relaxed for integer type
+Date:   Mon, 17 Apr 2023 16:07:47 +0800
+Message-Id: <20230417080749.39074-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v8 3/3] selftests/mm: add new selftests for KSM
-Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>, kernel-team@fb.com
-Cc:     linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20230415225913.3206647-1-shr@devkernel.io>
- <20230415225913.3206647-4-shr@devkernel.io>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230415225913.3206647-4-shr@devkernel.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 16.04.23 00:59, Stefan Roesch wrote:
-> This adds three new tests to the selftests for KSM.  These tests use the
-> new prctl API's to enable and disable KSM.
-> 
-> 1) add new prctl flags to prctl header file in tools dir
-> 
->     This adds the new prctl flags to the include file prct.h in the
->     tools directory.  This makes sure they are available for testing.
-> 
-> 2) add KSM prctl merge test to ksm_tests
-> 
->     This adds the -t option to the ksm_tests program.  The -t flag
->     allows to specify if it should use madvise or prctl ksm merging.
-> 
-> 3) add two functions for debugging merge outcome for ksm_tests
-> 
->     This adds two functions to report the metrics in /proc/self/ksm_stat
->     and /sys/kernel/debug/mm/ksm. The debug output is enabled with the
->     -d option.
-> 
-> 4) add KSM prctl test to ksm_functional_tests
-> 
->     This adds a test to the ksm_functional_test that verifies that the
->     prctl system call to enable / disable KSM works.
-> 
-> 5) add KSM fork test to ksm_functional_test
-> 
->     Add fork test to verify that the MMF_VM_MERGE_ANY flag is inherited
->     by the child process.
-> 
-> Signed-off-by: Stefan Roesch <shr@devkernel.io>
-> Cc: Bagas Sanjaya <bagasdotme@gmail.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Rik van Riel <riel@surriel.com>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Thanks!
+Add support for integer type of accessing variable length array.
+Add a selftest to check it.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Feng Zhou (2):
+  bpf: support access variable length array of integer type
+  selftests/bpf: Add test to access integer type of variable array
+
+ kernel/bpf/btf.c                              |  8 +++++---
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 20 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/tracing_struct.c |  2 ++
+ .../selftests/bpf/progs/tracing_struct.c      | 13 ++++++++++++
+ 4 files changed, 40 insertions(+), 3 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.20.1
 
