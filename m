@@ -2,78 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9876E6702
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 16:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243716E681C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 17:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjDROVH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Apr 2023 10:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S231741AbjDRPai (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Apr 2023 11:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbjDROVF (ORCPT
+        with ESMTP id S232284AbjDRPaf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:21:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF754234
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 07:20:19 -0700 (PDT)
+        Tue, 18 Apr 2023 11:30:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66702E71
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 08:29:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681827619;
+        s=mimecast20190719; t=1681831742;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wTEgz5FFB3FlmpBtdJxi9kvXmr1g0kCkiAoUmPe0HM4=;
-        b=SZrZcsttPIe9+OHScVXS3ICPqhNLY1okPYEvqHEnuPT3/SDVyev2KuhX4um3Lj+N0u6VV0
-        R9bLA9TNXED32b0DBDDrcTZt9QyqZ38buj2DpUCmNrTlL/H+QqxrXjg6WIQVS/2OJmLtGk
-        YwfgXMRFRGWyFKkkIqoDo3d3IdYcVFc=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-500-GxYwqqPgP82qC6L9-Y8M-w-1; Tue, 18 Apr 2023 10:20:17 -0400
-X-MC-Unique: GxYwqqPgP82qC6L9-Y8M-w-1
-Received: by mail-qt1-f197.google.com with SMTP id l20-20020a05622a051400b003e6d92a606bso15727093qtx.14
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 07:20:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681827617; x=1684419617;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wTEgz5FFB3FlmpBtdJxi9kvXmr1g0kCkiAoUmPe0HM4=;
-        b=doAGOpxWYxlQSswYkckxgl0trhc2IS32lpe1MIrs4oVPv3KtYgjjPYIPC9uxR1nAD0
-         eeuzsoZKaoS6RscgRz6SAg+6jz33HLyg9JL8xSOkEKx+OtDvdBJHd3rKIQfC51FsQsUl
-         /e7hkh1FV8xZUNpHIz7IoAGpadsiOjQX9FYX7lubkzsEfeMk3CoquZYGeQFH8FrV0f5X
-         N0AM60LRr/1eq6KKq648soyvBHo4gC5Uii58IYB8ETuzPRjvpqtExHgJNXz1U7dfYRnd
-         vN3E1hqLXEsVbyF0mfN8OrMwZOPufh4SkjmrWZ3m9fA/P6cxAh8lHkJ9w90l4VzMOe8d
-         eVDQ==
-X-Gm-Message-State: AAQBX9cB/Wk3vRyex26H4ylRwmXn3WdS1UN/ErtzSOSYILyJPNj94/eH
-        T5Qx2eEwDWFWwDrU+Sf9QPr7YG5RBo/xK5LRqjontLf0Qn6NMQykYPa5+/qpVhfpffxrb+kTtpd
-        HlKjXxKVQee7HOUggwJOFkLBvM88O
-X-Received: by 2002:a05:622a:295:b0:3eb:1082:ec93 with SMTP id z21-20020a05622a029500b003eb1082ec93mr21708229qtw.41.1681827617181;
-        Tue, 18 Apr 2023 07:20:17 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bNyfIphFgQOXdbQ7b0I8+fgR55aExZiLfyClg34Zc0Jl2xZiTSAbBlkl2Gs52kSSuYH+mTfQ==
-X-Received: by 2002:a05:622a:295:b0:3eb:1082:ec93 with SMTP id z21-20020a05622a029500b003eb1082ec93mr21708196qtw.41.1681827616954;
-        Tue, 18 Apr 2023 07:20:16 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-229-200.dyn.eolo.it. [146.241.229.200])
-        by smtp.gmail.com with ESMTPSA id w5-20020ac84d05000000b003ef28a76a11sm1704159qtv.68.2023.04.18.07.20.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 07:20:16 -0700 (PDT)
-Message-ID: <ef0371ebc094e2c0778badca69ea0043b98589aa.camel@redhat.com>
-Subject: Re: [PATCH linux-next 1/3] selftests: net: udpgso_bench_rx: Fix
- verifty exceptions
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Yang Yang <yang.yang29@zte.com.cn>, davem@davemloft.net,
-        edumazet@google.com, willemdebruijn.kernel@gmail.com
-Cc:     kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        shuah@kernel.org, zhang.yunkai@zte.com.cn, xu.xin16@zte.com.cn,
-        Xuexin Jiang <jiang.xuexin@zte.com.cn>
-Date:   Tue, 18 Apr 2023 16:20:12 +0200
-In-Reply-To: <20230417122423.193237-1-yang.yang29@zte.com.cn>
-References: <202304172017351308785@zte.com.cn>
-         <20230417122423.193237-1-yang.yang29@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        bh=Xy2baqViLPQFaV+ePofs2RF21rT4D1RwTBQ+hV2mFL0=;
+        b=USrxZzoio94HayaYP5cNGQ/7gKvog+lIgI25NjUiJwNb37EeJDAOMINxjocwcsoq+TPvDg
+        zWI5t+PDwK+vfTMO2aiWNg1FOZaLIYd9ejhK0CL+gKyMhiNKrKVSXqy9JjYtfYkHZg+YrG
+        hp4CUIWKtec+sG/OVYFzyqOJSVcM5mk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-1Y5Vri3MOPCaoatnNYVwXg-1; Tue, 18 Apr 2023 11:28:56 -0400
+X-MC-Unique: 1Y5Vri3MOPCaoatnNYVwXg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12B78889059;
+        Tue, 18 Apr 2023 15:28:54 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.194.149])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C7EB914152F6;
+        Tue, 18 Apr 2023 15:28:50 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Roesch <shr@devkernel.io>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v1 0/3] mm/ksm: improve PR_SET_MEMORY_MERGE=0 handling and cleanup disabling KSM
+Date:   Tue, 18 Apr 2023 17:28:46 +0200
+Message-Id: <20230418152849.505124-1-david@redhat.com>
+In-Reply-To: <20230418051342.1919757-1-shr@devkernel.io>
+References: <20230418051342.1919757-1-shr@devkernel.io>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -84,40 +73,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2023-04-17 at 20:24 +0800, Yang Yang wrote:
-> From: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
->=20
-> The verification function of this test case is likely to encounter the
-> following error, which may confuse users.
->=20
-> Executing the following command fails:
-> bash# udpgso_bench_tx -l 4 -4 -D "$DST"
-> bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
-> bash# udpgso_bench_rx -4 -G -S 1472 -v
-> udpgso_bench_rx: data[1472]: len 2944, a(97) !=3D q(113)
+This is a follow-up to [1]:
+	[PATCH v9 0/3] mm: process/cgroup ksm support
 
+which is not in mm-unstable yet (but soon? :) ). I'll be on vacation for
+~2 weeks, so sending it out now as reply to [1].
 
-As noted by Willem, both the commit message and the above command
-sequence is quite confusing. Please reorder the commands in the exact
-sequence you run them, presumably:
+(1) Make PR_SET_MEMORY_MERGE=0 unmerge pages like setting MADV_UNMERGEABLE
+does, (2) add a selftest for it and (3) factor out disabling of KSM from
+s390/gmap code.
 
-udpgso_bench_rx -4 -G -S 1472 -v &
-udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Stefan Roesch <shr@devkernel.io>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Janosch Frank <frankja@linux.ibm.com>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
 
+[1] https://lkml.kernel.org/r/20230418051342.1919757-1-shr@devkernel.io
 
-> This is because the sending buffers are not aligned by 26 bytes, and the
-> GRO is not merged sequentially, and the receiver does not judge this
-> situation. We do the validation after the data is split at the receiving
-> end, just as the application actually uses this feature.
+David Hildenbrand (3):
+  mm/ksm: unmerge and clear VM_MERGEABLE when setting
+    PR_SET_MEMORY_MERGE=0
+  selftests/ksm: ksm_functional_tests: add prctl unmerge test
+  mm/ksm: move disabling KSM from s390/gmap code to KSM code
 
-The wording from Willem response is much more clear. If applicable,
-please use such text.
+ arch/s390/mm/gmap.c                           | 20 +------
+ include/linux/ksm.h                           |  7 +++
+ kernel/sys.c                                  |  7 +--
+ mm/ksm.c                                      | 58 +++++++++++++++++++
+ .../selftests/mm/ksm_functional_tests.c       | 46 +++++++++++++--
+ 5 files changed, 107 insertions(+), 31 deletions(-)
 
-BTW I could not reproduce the issue with any permutation of the
-suggested commands I could think of, so possibly that section need some
-extra clarification.
-
-Thanks,
-
-Paolo
+-- 
+2.39.2
 
