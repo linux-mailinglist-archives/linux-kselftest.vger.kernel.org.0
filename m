@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCDE76E6045
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 13:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD3F6E6046
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 13:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjDRLrP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Apr 2023 07:47:15 -0400
+        id S231480AbjDRLrR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Apr 2023 07:47:17 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbjDRLrN (ORCPT
+        with ESMTP id S229838AbjDRLrP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:47:13 -0400
+        Tue, 18 Apr 2023 07:47:15 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30129023;
-        Tue, 18 Apr 2023 04:46:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B18E7ED1;
+        Tue, 18 Apr 2023 04:46:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681818400; x=1713354400;
+  t=1681818406; x=1713354406;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=R9lx3mKsxWCICNzKODU56YjOQHjE2EbrIY9NXu/7ouA=;
-  b=licig3845S1bzRzEzqCsqYnz2iu+UkIYKxS6nuQhgdGIdfsmN1sJto5G
-   I8CzAQtLo1TgPytGMcmk6p9Nous6AOyTi/3ileVkDzoV1HXS3NUVRV2h0
-   4eKBAH3h8HARGhd/t9OME38mFr3p34zArEa8QjiEyDVTQkZwrH5q/SxZI
-   s5l5YpGPBmPDNYc4JjadLvS/lREyH0Giu/JuyMs/kPQLzqrP4KLVsSfpC
-   97qLDw2hC45TXMvuM2cbmBmDVUZKxxm/acivgWM7CjyrvQIoHLyXXNc6v
-   NqsAvB70qyjQ+KrJ/gBNgziFH1aeG2OgshzqGUplvVQBetg9QDHNoMeM2
+  bh=fToQ+8SOAxiSfN3ZiH5XH4bjEW4BAV3bTtI/uobe8NE=;
+  b=j6LDF3/lxwCsDZDJMVM5xBj3gKcschUKrdQ+/p78Wr8uSYwyEqbbQn3M
+   4o8ex6VCEI7LYbGiST5hvsiiJcdZsccCiFCB/wzkmks/Z3/G5l4psXDUy
+   2WUZsfC18ZIha4s/8Ut9oXaRtOAfOry4WuPFr8KtHO4wMjgx3DLW8neMs
+   uA1TfhDq9HZ2/KGr8zwDr8QnNKRh0BLJ2Uh76XiTEF4ThnZ+py2WXtkZQ
+   kcW4BzOjc9KEVcIWH1S1+XM6HecYYBjmu7scORdnaHLVbEnxghKAEcKlm
+   Fsr0KN02WVkCE92I9clHv1ZrM6dOyeDggXd6xKRsHKjS1u3MXL3Q6kLNa
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="346994387"
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="346994396"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="346994387"
+   d="scan'208";a="346994396"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:07 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="723601705"
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="723601712"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="723601705"
+   d="scan'208";a="723601712"
 Received: from yvolokit-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.213.103])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:04 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:07 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -46,9 +46,9 @@ To:     linux-kselftest@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 13/24] selftests/resctrl: Add flush_buffer() to fill_buf
-Date:   Tue, 18 Apr 2023 14:44:55 +0300
-Message-Id: <20230418114506.46788-14-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 14/24] selftests/resctrl: Remove test type checks from cat_val()
+Date:   Tue, 18 Apr 2023 14:44:56 +0300
+Message-Id: <20230418114506.46788-15-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
 References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
@@ -66,46 +66,76 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, flushing is only done after allocating and filling the
-buffer and cannot be controlled by the test cases.
+cat_val() is only used during CAT test but it checks for test type.
 
-The new CAT test will want to control flushing within a test so
-introduce flush_buffer() for that purpose.
+Remove test type checks and the unused else branch from cat_val().
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/fill_buf.c | 5 +++++
- tools/testing/selftests/resctrl/resctrl.h  | 1 +
- 2 files changed, 6 insertions(+)
+ tools/testing/selftests/resctrl/cache.c | 45 +++++++++++--------------
+ 1 file changed, 20 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index 677e1a113629..7e0d3a1ea555 100644
---- a/tools/testing/selftests/resctrl/fill_buf.c
-+++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -58,6 +58,11 @@ static void mem_flush(void *p, size_t s)
- 	sb();
- }
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index a15f1f2715cd..6bc912de38be 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -232,36 +232,31 @@ int cat_val(struct resctrl_val_param *param)
+ 	if (ret)
+ 		return ret;
  
-+void flush_buffer(unsigned long long span)
-+{
-+	mem_flush(startptr, span);
-+}
+-	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)))
+-		initialize_llc_perf();
++	initialize_llc_perf();
+ 
+ 	/* Test runs until the callback setup() tells the test to stop. */
+ 	while (1) {
+-		if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR))) {
+-			ret = param->setup(param);
+-			if (ret == END_OF_TESTS) {
+-				ret = 0;
+-				break;
+-			}
+-			if (ret < 0)
+-				break;
+-			ret = reset_enable_llc_perf(bm_pid, param->cpu_no);
+-			if (ret)
+-				break;
+-
+-			if (run_fill_buf(param->span, memflush, operation, true)) {
+-				fprintf(stderr, "Error-running fill buffer\n");
+-				ret = -1;
+-				break;
+-			}
+-
+-			sleep(1);
+-			ret = measure_cache_vals(param, bm_pid);
+-			if (ret)
+-				break;
+-		} else {
++		ret = param->setup(param);
++		if (ret == END_OF_TESTS) {
++			ret = 0;
+ 			break;
+ 		}
++		if (ret < 0)
++			break;
++		ret = reset_enable_llc_perf(bm_pid, param->cpu_no);
++		if (ret)
++			break;
 +
- static void *malloc_and_init_memory(size_t s)
- {
- 	void *p = NULL;
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 8748121345f3..ba36eb5fdf0d 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -97,6 +97,7 @@ int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
- 		    int group_fd, unsigned long flags);
- void free_buffer(void);
- int alloc_buffer(unsigned long long buf_size, int memflush);
-+void flush_buffer(unsigned long long span);
- int use_buffer(unsigned long long buf_size, int op, bool once);
- int run_fill_buf(unsigned long span, int memflush, int op, bool once);
- int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param);
++		if (run_fill_buf(param->span, memflush, operation, true)) {
++			fprintf(stderr, "Error-running fill buffer\n");
++			ret = -1;
++			break;
++		}
++
++		sleep(1);
++		ret = measure_cache_vals(param, bm_pid);
++		if (ret)
++			break;
+ 	}
+ 
+ 	return ret;
 -- 
 2.30.2
 
