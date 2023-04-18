@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642B16E6050
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 13:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DFC6E6052
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 13:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjDRLsI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Apr 2023 07:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
+        id S231168AbjDRLsO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Apr 2023 07:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbjDRLsF (ORCPT
+        with ESMTP id S230202AbjDRLsL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:48:05 -0400
+        Tue, 18 Apr 2023 07:48:11 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE88D86AD;
-        Tue, 18 Apr 2023 04:47:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7A230E4;
+        Tue, 18 Apr 2023 04:47:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681818450; x=1713354450;
+  t=1681818458; x=1713354458;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Wk7rUmbwOKLeLGgJ6ksj1ofr3mRBg8GwCrF45mjaYLI=;
-  b=QfiCP5AsnvodJu7pEEbDG6lBfWO5J46463v2X3yaAg7UxOA3GeOgH3s2
-   BteBO56U782ubDjjEXyeStTO18kIL8pWx8f8TA6B+7zNbHPvqx6a900f/
-   WtilkvcorGjuTMt/ypU3BNm6+mQI3VvpA2OQ1vM9X9S3Y0RjPC3jTaXYw
-   Dz5mPGVACe/LWPd3F/kAgRYegjnNGCXNnq6O51cgHZLhDFoJTd0bTHetA
-   NdzNgG1Nsi6CXSaERUWB8Xl9QfH2zjclN8DchEHzqaN0YORn5rKsAUSjY
-   LcfWHVwXnrS3zHehRPTI/zSNhe65Htg8OsRrva3DNOrkzBSHEhMdXI35S
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="346994456"
+  bh=CvYgU7P/mUo+lerWgOGHrYSwnUvkU/Rq7wcifjwteuM=;
+  b=aIuzDXFKUWLtyhtuY/BTiPJpb/R+Yobv4YnWkdOtTjgK3QwAGtQ6VYUE
+   P4VMPM7BpXqUFm0dfyZHiLKgfzc90L/tbz8ICdGboxw5+pGwWWmgWJbvD
+   ifqrwmVBtNIbrc3IqWiYIQUnm85QCvh/m1RU7PbyGLdL5A9AGf0Yjh3xq
+   bVsbtQyXAvM6QsLFuASv2eNa2sCgHwOKpRwzCdcQjZQfauLl9lerQ4Glu
+   ebUeM8FgSeGE4YmVgou5GmVh8VcGSGyI8fZKi80fOVl6euyD6gs6d3ahQ
+   lIjsvjQ/73xdLR6L5ueEdn4whpYQYzyUiEIlp3oIeunMvFiIRAWFZSBUD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="346994469"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="346994456"
+   d="scan'208";a="346994469"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:22 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="723601817"
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="723601834"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="723601817"
+   d="scan'208";a="723601834"
 Received: from yvolokit-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.213.103])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:19 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:22 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -46,9 +46,9 @@ To:     linux-kselftest@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 18/24] selftests/resctrl: Exclude shareable bits from schemata in CAT test
-Date:   Tue, 18 Apr 2023 14:45:00 +0300
-Message-Id: <20230418114506.46788-19-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 19/24] selftests/resctrl: Pass the real number of tests to show_cache_info()
+Date:   Tue, 18 Apr 2023 14:45:01 +0300
+Message-Id: <20230418114506.46788-20-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
 References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
@@ -66,122 +66,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CAT test doesn't take shareable bits into account, i.e., the test might
-be sharing cache with some devices (e.g., graphics).
+Some results include warm-up tests which are discarded before passing
+the sum to show_cache_info(). Currently, show_cache_info() handles this
+by subtracting one from the number of tests in divisor. It is a trappy
+construct to have sum and number of tests parameters to disagree like
+this.
 
-Introduce get_mask_no_shareable() and use it to provision an
-environment for CAT test where the allocated LLC is isolated better.
+A more logical place for subtracting the skipped tests is where the sum
+is calculated so move it there. Pass the correct number of tests to
+show_cache_info() soit can use directly as the divisor for calculating
+the average.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c  |  2 +-
- tools/testing/selftests/resctrl/resctrl.h   |  3 ++
- tools/testing/selftests/resctrl/resctrlfs.c | 56 +++++++++++++++++++++
- 3 files changed, 60 insertions(+), 1 deletion(-)
+ tools/testing/selftests/resctrl/cache.c    | 2 +-
+ tools/testing/selftests/resctrl/cat_test.c | 2 +-
+ tools/testing/selftests/resctrl/cmt_test.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index b983af394e33..c93f5d2bc66e 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -312,7 +312,7 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
+ 	long avg_diff = 0;
+ 	int ret;
+ 
+-	avg_llc_val = sum_llc_val / (num_of_runs - 1);
++	avg_llc_val = sum_llc_val / num_of_runs;
+ 	avg_diff = (long)abs(cache_span - avg_llc_val);
+ 	diff_percent = ((float)cache_span - avg_llc_val) / cache_span * 100;
+ 
 diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index a1834dd5ad9a..e2d10124cdb1 100644
+index e2d10124cdb1..ae21e656cf6e 100644
 --- a/tools/testing/selftests/resctrl/cat_test.c
 +++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -100,7 +100,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 	cache_size = 0;
+@@ -81,7 +81,7 @@ static int check_results(struct resctrl_val_param *param)
+ 	no_of_bits = count_consecutive_bits(param->mask, NULL);
  
- 	/* Get default cbm mask for L3/L2 cache */
--	ret = get_cbm_mask(cache_type, &long_mask);
-+	ret = get_mask_no_shareable(cache_type, &long_mask);
- 	if (ret)
- 		return ret;
- 	count_of_bits = count_consecutive_bits(long_mask, NULL);
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index aa5dc8b95a06..be5a61e7fbcc 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -106,8 +106,11 @@ void tests_cleanup(void);
- void mbm_test_cleanup(void);
- int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd);
- void mba_test_cleanup(void);
-+unsigned long create_bit_mask(unsigned int start, unsigned int len);
- unsigned int count_consecutive_bits(unsigned long val, unsigned int *start);
- int get_cbm_mask(char *cache_type, unsigned long *mask);
-+int get_shareable_mask(char *cache_type, unsigned long *shareable_mask);
-+int get_mask_no_shareable(char *cache_type, unsigned long *mask);
- int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size);
- int cache_alloc_size(int cpu_no, char *cache_type, unsigned long alloc_mask,
- 		     unsigned long *alloc_size);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 4efaf69c8152..94b99b06bc89 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -220,6 +220,16 @@ static int get_bit_mask(char *filename, unsigned long *mask)
- 	return 0;
+ 	return show_cache_info(sum_llc_perf_miss, no_of_bits, param->span / 64,
+-			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
++			       MAX_DIFF, MAX_DIFF_PERCENT, runs - 1,
+ 			       get_vendor() == ARCH_INTEL, false);
  }
  
-+/*
-+ * create_bit_mask- Create bit mask from start,len pair
-+ * @start:	LSB of the mask
-+ * @len		Number of bits in the mask
-+ */
-+unsigned long create_bit_mask(unsigned int start, unsigned int len)
-+{
-+	return ((1UL << len) - 1UL) << start;
-+}
-+
- /*
-  * count_consecutive_bits - Returns the longest train of bits in a bit mask
-  * @val		A bit mask
-@@ -273,6 +283,52 @@ int get_cbm_mask(char *cache_type, unsigned long *mask)
- 	return 0;
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index 98e7d3accd73..087378a775ee 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -63,7 +63,7 @@ static int check_results(struct resctrl_val_param *param, int no_of_bits)
+ 	fclose(fp);
+ 
+ 	return show_cache_info(sum_llc_occu_resc, no_of_bits, param->span,
+-			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
++			       MAX_DIFF, MAX_DIFF_PERCENT, runs - 1,
+ 			       true, true);
  }
  
-+/*
-+ * get_shareable_mask - Get shareable mask from shareable_bits for given cache
-+ * @cache_type:		Cache level L2/L3
-+ * @shareable_mask:	shareable mask returned as unsigned long
-+ *
-+ * Return: = 0 on success, < 0 on failure.
-+ */
-+int get_shareable_mask(char *cache_type, unsigned long *shareable_mask)
-+{
-+	char mask_path[1024];
-+
-+	if (!cache_type)
-+		return -1;
-+
-+	snprintf(mask_path, sizeof(mask_path), "%s/%s/shareable_bits",
-+		 INFO_PATH, cache_type);
-+
-+	return get_bit_mask(mask_path, shareable_mask);
-+}
-+
-+/*
-+ * get_mask_no_shareable - Get CBM mask without shareable_bits for given cache
-+ * @cache_type:		Cache level L2/L3
-+ * @mask:		mask returned as unsigned long
-+ *
-+ * Return: = 0 on success, < 0 on failure.
-+ */
-+int get_mask_no_shareable(char *cache_type, unsigned long *mask)
-+{
-+	unsigned long full_mask, shareable_mask;
-+	unsigned int start, len;
-+
-+	if (get_cbm_mask(cache_type, &full_mask) < 0)
-+		return -1;
-+	if (get_shareable_mask(cache_type, &shareable_mask) < 0)
-+		return -1;
-+
-+	len = count_consecutive_bits(full_mask & ~shareable_mask, &start);
-+	if (!len)
-+		return -1;
-+
-+	*mask = create_bit_mask(start, len);
-+
-+	return 0;
-+}
-+
- /*
-  * get_core_sibling - Get sibling core id from the same socket for given CPU
-  * @cpu_no:	CPU number
 -- 
 2.30.2
 
