@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC49B6E604C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 13:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFFC6E604E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 13:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjDRLrm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Apr 2023 07:47:42 -0400
+        id S229838AbjDRLro (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Apr 2023 07:47:44 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjDRLrk (ORCPT
+        with ESMTP id S231593AbjDRLrm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Apr 2023 07:47:40 -0400
+        Tue, 18 Apr 2023 07:47:42 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA65F1BC0;
-        Tue, 18 Apr 2023 04:47:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2633265BF;
+        Tue, 18 Apr 2023 04:47:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681818430; x=1713354430;
+  t=1681818434; x=1713354434;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FadlcAYLzZZPP+wLU1eQDR/Sf3rZoeCx35VWKn+SAM4=;
-  b=YYABdEFakR3339ALEyPEXxbTcdTTqMxiJVeiq/30OD13j9TAqUOWF0YG
-   H0sLgYqJGNk5cXx9T5xEAhPMpqadnEXtzWAHrQUWo/7ODKcAAdRlTSmwB
-   1sTdav5jbU9NXw7W34OmSXxCt6Bxs8ELpm8w6bllV39QVTLnfU5l+KPSD
-   bt38jBWqAfDnM6u26gVL6J2eRXIwu8lbyJBB9+5IIM7l5YeBKrnYxy/v3
-   4bpRwNDkOQWG+vBK+5UYs5VEdxBJBIFor5agONSFnmgIdmY3CSE1PzD9z
-   YWjn3Ayvp3/Vaw/psI0/QsXAOdgqn0qrm8NE/FwMYkZK0vreQdJFKRsqu
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="346994418"
+  bh=dr2l2TxlFFiREWwatq8+29/dJHLAULNZVHaY9hHY5v4=;
+  b=aVIIw4IA6Nwgvvw4j8dLZmZrP2G301kXP+dPzr5r1suQzeEDD/oFB6zz
+   VAGFYfNarM5GgRDqzAuMdVHql9W2jco7ZYjY78qI/f62AslUbex2jLryr
+   cifHvaCGgsCmvmY+YgsBBvgPePAJubN40ISTf5keaG5yJo+NLpDa4EhYk
+   3wzpb3Mchy6S4cVRdXn3SO98qYap46G2sWTMDIKhb6hrAb5pPGD4qaHVa
+   N8ZhnueX1S83fZCpodWxzMV6vCwhdtc5OjOBmp/RYn0NaPL1eu/0S1AhW
+   jgDEstRHUbitJ4uFmsiPtcQ3ov8ZlaJ0KdvhUUFOeRDDcBfCod3u11Dj7
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="346994436"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="346994418"
+   d="scan'208";a="346994436"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:16 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="723601753"
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="723601795"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="723601753"
+   d="scan'208";a="723601795"
 Received: from yvolokit-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.213.103])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:13 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 04:46:16 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -46,9 +46,9 @@ To:     linux-kselftest@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 16/24] selftests/resctrl: Create cache_alloc_size() helper
-Date:   Tue, 18 Apr 2023 14:44:58 +0300
-Message-Id: <20230418114506.46788-17-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 17/24] selftests/resctrl: Replace count_bits with count_consecutive_bits()
+Date:   Tue, 18 Apr 2023 14:44:59 +0300
+Message-Id: <20230418114506.46788-18-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
 References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
@@ -66,115 +66,130 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CAT and CMT tests calculate the span size from the n-bits cache
-allocation on their own.
+CAT and CMT tests depends on masks being continuous.
 
-Add cache_alloc_size() helper which calculates size of the cache
-allocation for the given number of bits to avoid duplicating code.
+Replace count_bits with more appropriate variant that counts
+consecutive bits.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/cache.c    | 27 ++++++++++++++++++++++
- tools/testing/selftests/resctrl/cat_test.c |  8 +++++--
- tools/testing/selftests/resctrl/cmt_test.c |  4 +++-
- tools/testing/selftests/resctrl/resctrl.h  |  2 ++
- 4 files changed, 38 insertions(+), 3 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c  |  6 ++---
+ tools/testing/selftests/resctrl/cmt_test.c  |  3 +--
+ tools/testing/selftests/resctrl/resctrl.h   |  1 +
+ tools/testing/selftests/resctrl/resctrlfs.c | 30 +++++++++++++++++++++
+ 4 files changed, 34 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index 6bc912de38be..b983af394e33 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -15,6 +15,33 @@ static struct read_format rf_cqm;
- static int fd_lm;
- char llc_occup_path[1024];
- 
-+/*
-+ * cache_alloc_size - Calculate alloc size for given cache alloc mask
-+ * @cpu_no:		CPU number
-+ * @cache_type:		Cache level L2/L3
-+ * @alloc_mask:		Cache alloc mask
-+ * @alloc_size:		Alloc size returned on success
-+ *
-+ * Returns: 0 on success with @alloc_size filled, non-zero on error.
-+ */
-+int cache_alloc_size(int cpu_no, char *cache_type, unsigned long alloc_mask,
-+		     unsigned long *alloc_size)
-+{
-+	unsigned long cache_size, full_mask;
-+	int ret;
-+
-+	ret = get_cbm_mask(cache_type, &full_mask);
-+	if (ret)
-+		return ret;
-+
-+	ret = get_cache_size(cpu_no, cache_type, &cache_size);
-+	if (ret)
-+		return ret;
-+
-+	*alloc_size = cache_size * count_bits(alloc_mask) / count_bits(full_mask);
-+	return 0;
-+}
-+
- static void initialize_perf_event_attr(void)
- {
- 	pea_llc_miss.type = PERF_TYPE_HARDWARE;
 diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 9bf5d05d9e74..d3fbd4de9f8a 100644
+index d3fbd4de9f8a..a1834dd5ad9a 100644
 --- a/tools/testing/selftests/resctrl/cat_test.c
 +++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -140,7 +140,9 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 	/* Set param values for parent thread which will be allocated bitmask
- 	 * with (max_bits - n) bits
- 	 */
--	param.span = cache_size * (count_of_bits - n) / count_of_bits;
-+	ret = cache_alloc_size(cpu_no, cache_type, l_mask, &param.span);
-+	if (ret)
-+		return ret;
- 	strcpy(param.ctrlgrp, "c2");
- 	strcpy(param.mongrp, "m2");
- 	strcpy(param.filename, RESULT_FILE_NAME2);
-@@ -162,7 +164,9 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 		param.mask = l_mask_1;
- 		strcpy(param.ctrlgrp, "c1");
- 		strcpy(param.mongrp, "m1");
--		param.span = cache_size * n / count_of_bits;
-+		ret = cache_alloc_size(cpu_no, cache_type, l_mask_1, &param.span);
-+		if (ret)
-+			exit(-1);
- 		strcpy(param.filename, RESULT_FILE_NAME1);
- 		param.num_of_runs = 0;
- 		param.cpu_no = sibling_cpu_no;
+@@ -78,7 +78,7 @@ static int check_results(struct resctrl_val_param *param)
+ 	}
+ 
+ 	fclose(fp);
+-	no_of_bits = count_bits(param->mask);
++	no_of_bits = count_consecutive_bits(param->mask, NULL);
+ 
+ 	return show_cache_info(sum_llc_perf_miss, no_of_bits, param->span / 64,
+ 			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
+@@ -103,6 +103,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 	ret = get_cbm_mask(cache_type, &long_mask);
+ 	if (ret)
+ 		return ret;
++	count_of_bits = count_consecutive_bits(long_mask, NULL);
+ 
+ 	/* Get L3/L2 cache size */
+ 	ret = get_cache_size(cpu_no, cache_type, &cache_size);
+@@ -110,9 +111,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 		return ret;
+ 	ksft_print_msg("Cache size :%lu\n", cache_size);
+ 
+-	/* Get max number of bits from default-cabm mask */
+-	count_of_bits = count_bits(long_mask);
+-
+ 	if (!n)
+ 		n = count_of_bits / 2;
+ 
 diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index ae54bbabbd91..efe77e0f1d4c 100644
+index efe77e0f1d4c..98e7d3accd73 100644
 --- a/tools/testing/selftests/resctrl/cmt_test.c
 +++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -105,10 +105,12 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
- 		.cpu_no		= cpu_no,
- 		.filename	= RESULT_FILE_NAME,
- 		.mask		= ~(long_mask << n) & long_mask,
--		.span		= cache_size * n / count_of_bits,
- 		.num_of_runs	= 0,
- 		.setup		= cmt_setup,
- 	};
-+	ret = cache_alloc_size(cpu_no, "L3", param.mask, &param.span);
-+	if (ret)
-+		return ret;
+@@ -84,14 +84,13 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+ 	ret = get_cbm_mask("L3", &long_mask);
+ 	if (ret)
+ 		return ret;
++	count_of_bits = count_consecutive_bits(long_mask, NULL);
  
- 	if (strcmp(benchmark_cmd[0], "fill_buf") == 0)
- 		sprintf(benchmark_cmd[1], "%lu", param.span);
+ 	ret = get_cache_size(cpu_no, "L3", &cache_size);
+ 	if (ret)
+ 		return ret;
+ 	ksft_print_msg("Cache size :%lu\n", cache_size);
+ 
+-	count_of_bits = count_bits(long_mask);
+-
+ 	if (n < 1 || n > count_of_bits) {
+ 		ksft_print_msg("Invalid input value for numbr_of_bits n!\n");
+ 		ksft_print_msg("Please enter value in range 1 to %d\n", count_of_bits);
 diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index bcc95faa5b4e..65425d92684e 100644
+index 65425d92684e..aa5dc8b95a06 100644
 --- a/tools/testing/selftests/resctrl/resctrl.h
 +++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -108,6 +108,8 @@ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd);
+@@ -106,6 +106,7 @@ void tests_cleanup(void);
+ void mbm_test_cleanup(void);
+ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd);
  void mba_test_cleanup(void);
++unsigned int count_consecutive_bits(unsigned long val, unsigned int *start);
  int get_cbm_mask(char *cache_type, unsigned long *mask);
  int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size);
-+int cache_alloc_size(int cpu_no, char *cache_type, unsigned long alloc_mask,
-+		     unsigned long *alloc_size);
- void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
- int signal_handler_register(void);
- void signal_handler_unregister(void);
+ int cache_alloc_size(int cpu_no, char *cache_type, unsigned long alloc_mask,
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index f01ecfa64063..4efaf69c8152 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -10,6 +10,8 @@
+  */
+ #include "resctrl.h"
+ 
++#include <strings.h>
++
+ static int find_resctrl_mount(char *buffer)
+ {
+ 	FILE *mounts;
+@@ -218,6 +220,34 @@ static int get_bit_mask(char *filename, unsigned long *mask)
+ 	return 0;
+ }
+ 
++/*
++ * count_consecutive_bits - Returns the longest train of bits in a bit mask
++ * @val		A bit mask
++ * @start	The location of the least-significant bit of the longest train
++ *
++ * Return:	The length of the consecutive bits in the longest train of bits
++ */
++unsigned int count_consecutive_bits(unsigned long val, unsigned int *start)
++{
++	unsigned long last_val;
++	int count = 0;
++
++	while (val) {
++		last_val = val;
++		val &= (val >> 1);
++		count++;
++	}
++
++	if (start) {
++		if (count)
++			*start = ffsl(last_val) - 1;
++		else
++			*start = 0;
++	}
++
++	return count;
++}
++
+ /*
+  * get_cbm_bits - Get number of bits in cbm mask
+  * @cache_type:		Cache level L2/L3
 -- 
 2.30.2
 
