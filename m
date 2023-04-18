@@ -2,180 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394516E6D3C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 22:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13756E6FAA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Apr 2023 00:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjDRUFQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Apr 2023 16:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S230036AbjDRWw3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Apr 2023 18:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjDRUFP (ORCPT
+        with ESMTP id S230143AbjDRWw1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:05:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16E51FD7;
-        Tue, 18 Apr 2023 13:05:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681848314; x=1713384314;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MESHOGE+6HB9L0+Pxz2Yf8K9mFxsBzR+eoMqR4IqWFE=;
-  b=DOEvAulM6XMvBVa2yWRE0tnzDL72XwND8mFCqIubQ4OPsiOfvuMf+DZ6
-   8dWTIrAF8dZYIkfLTOWFxQZVdT3yoP68oei4UZZrUVIxaocgF7v2IaeXU
-   QB11emoP2s/VjhD52cIOR+UqufWFwPPRK2ZjM0dVDzMZJryq3CqcWWfoQ
-   IVNSEcrBTDFD3yqXHoGi8DwsNAURKm3QMac0fOnVYhvXpgic/uDwSG2qO
-   YcG2uUcz4ABuDMkpUJebAXgZVuoZtRBvgL+0isfgDEDTJE8oYVDAGRDuf
-   cE6gItV1knfLXnMmRXmowxm48oiHBnPLY5wiP6fGhvva0jhPYdydfsEa2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="344024377"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="344024377"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 13:05:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780609861"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="780609861"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2023 13:05:06 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1porZZ-000dzb-10;
-        Tue, 18 Apr 2023 20:05:05 +0000
-Date:   Wed, 19 Apr 2023 04:04:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
-Subject: Re: [PATCH v14 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <202304190331.VR44lj9J-lkp@intel.com>
-References: <20230418062008.1434826-3-usama.anjum@collabora.com>
+        Tue, 18 Apr 2023 18:52:27 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66449EF6
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 15:52:24 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id eo4-20020a05600c82c400b003f05a99a841so573117wmb.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 15:52:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681858343; x=1684450343;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z8IjfnjlzkkcjCjwE3xnorDxZEMV+tOR364aex1ezRI=;
+        b=hncsnpL07C05Q0IBxUOpJ0RlKilWGofgqT5w+p7AQ9biNZTL695hQLgPU9eCs6QLGx
+         vC9R/zB9Rjl0VhZvZQd9o97D71Hioiu/egtjPScjzUPfPcI9mBAodikZpLzd8/ma3ZcY
+         C/ISU3tH0AmEbz87ZKUGaRCkqnpZcGSr+tdz5ohw2099hJGQ+1AQIcXwgOC95GRDF96+
+         lpoKW+UE9ynY61zsZaTH2cdDeOsi4gl4T+6A7DI2w7bHs/LuiYuAfbL1zebcyRyXrEQk
+         yoH7aQ/QOuhavrSYVjhYcBPfhyI96/Lw0iPhBfbUulaTOIZvqF6JWRBX6CMYUkwBDGtP
+         hXow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681858343; x=1684450343;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z8IjfnjlzkkcjCjwE3xnorDxZEMV+tOR364aex1ezRI=;
+        b=Z8L/RGJPiQOjGJOKxS3V/8V1qbrlMzSSONFkx976QstNOz6KUbkUPjwpd2JKdSqrmw
+         sP/PjiciLPkAAm/d4dGOG6gsnAqnyUzm51CFlYwHfsw/+9WE5jj0cOYdY9s6lM415haw
+         2/5ZxXNT/Vt0DSR+iLS/7O36L2bJ6p6YQpo/4TB5EpmZ8YcfHH6nweRK6oOJczK2fkjj
+         p83bGv3TjvmfRRjaUDjA/5qpoQ3hNcOX8c+eXeBEk8VUc8jjQTOgDKrg/JD6V+KZjkxa
+         NHXuD/r67QT7+iXUdjCp0i1/mobMsadwqxteFxppEODo5IaJ3hKKpilbFZKiGkLhaQOo
+         thjw==
+X-Gm-Message-State: AAQBX9fPrMtEjCN297+XO8Wr1eWnQLF/epHjrPznWL9IQlmIOWonT6Yy
+        kK1Nf0cY2bgj3NtwjkpyQwpKYKbqbA5TlEOTvYI=
+X-Google-Smtp-Source: AKy350bTUKoZP3KFh0D0Z/+qJ7HikTvCAHigywbL1p4fq+UPq2aneawP0f5rfoLvXu4BI8TUwMbnkFOmdLV0aAaMtDo=
+X-Received: by 2002:a05:600c:218c:b0:3f1:6980:2cff with SMTP id
+ e12-20020a05600c218c00b003f169802cffmr8566511wme.14.1681858343155; Tue, 18
+ Apr 2023 15:52:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418062008.1434826-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a5d:594f:0:b0:2f9:ae41:5b0c with HTTP; Tue, 18 Apr 2023
+ 15:52:22 -0700 (PDT)
+Reply-To: thajxoa@gmail.com
+From:   Thaj Xoa <rw38128@gmail.com>
+Date:   Tue, 18 Apr 2023 15:52:22 -0700
+Message-ID: <CANBbbzH0ZH2byD8RWZ07qMpLD2o3y48W5tXXoP7KxHM1DGDTMg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:344 listed in]
+        [list.dnswl.org]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [rw38128[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [rw38128[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  3.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Muhammad,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on next-20230417]
-[cannot apply to linus/master v6.3-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230418-142225
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230418062008.1434826-3-usama.anjum%40collabora.com
-patch subject: [PATCH v14 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20230419/202304190331.VR44lj9J-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4fe2396ba406868e01de910812e7e3c719ba11be
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230418-142225
-        git checkout 4fe2396ba406868e01de910812e7e3c719ba11be
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/proc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304190331.VR44lj9J-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   fs/proc/task_mmu.c: In function 'do_pagemap_scan':
-   fs/proc/task_mmu.c:2205:17: error: implicit declaration of function 'flush_tlb_mm_range'; did you mean 'flush_tlb_range'? [-Werror=implicit-function-declaration]
-    2205 |                 flush_tlb_mm_range(mm, start, end, PAGE_SHIFT, false);
-         |                 ^~~~~~~~~~~~~~~~~~
-         |                 flush_tlb_range
-   In file included from include/linux/highmem.h:14,
-                    from include/linux/bvec.h:10,
-                    from include/linux/blk_types.h:10,
-                    from include/linux/writeback.h:13,
-                    from include/linux/memcontrol.h:22,
-                    from include/linux/swap.h:9,
-                    from include/linux/mm_inline.h:7,
-                    from fs/proc/task_mmu.c:3:
-   include/linux/highmem-internal.h: In function 'pagemap_scan_pmd_entry':
->> include/linux/highmem-internal.h:271:9: warning: 'orig_pte' is used uninitialized [-Wuninitialized]
-     271 |         __kunmap_atomic(__addr);                                \
-         |         ^~~~~~~~~~~~~~~
-   fs/proc/task_mmu.c:1934:22: note: 'orig_pte' was declared here
-    1934 |         pte_t *pte, *orig_pte;
-         |                      ^~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/orig_pte +271 include/linux/highmem-internal.h
-
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  251  
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  252  /**
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  253   * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic() - deprecated!
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  254   * @__addr:       Virtual address to be unmapped
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  255   *
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  256   * Unmaps an address previously mapped by kmap_atomic() and re-enables
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  257   * pagefaults. Depending on PREEMP_RT configuration, re-enables also
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  258   * migration and preemption. Users should not count on these side effects.
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  259   *
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  260   * Mappings should be unmapped in the reverse order that they were mapped.
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  261   * See kmap_local_page() for details on nesting.
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  262   *
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  263   * @__addr can be any address within the mapped page, so there is no need
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  264   * to subtract any offset that has been added. In contrast to kunmap(),
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  265   * this function takes the address returned from kmap_atomic(), not the
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  266   * page passed to it. The compiler will warn you if you pass the page.
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  267   */
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  268  #define kunmap_atomic(__addr)					\
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  269  do {								\
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  270  	BUILD_BUG_ON(__same_type((__addr), struct page *));	\
-13f876ba77ebd5 Thomas Gleixner       2020-11-03 @271  	__kunmap_atomic(__addr);				\
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  272  } while (0)
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  273  
-
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Dear Friend,
+
+
+I am Mr Thaj Xoa From Vietnam and I have an important message for you
+just get back for further details.
+
+
+Regards
+Mr Thaj Xoa
