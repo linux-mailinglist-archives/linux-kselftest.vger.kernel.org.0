@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8C56E6818
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 17:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2C66E681A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Apr 2023 17:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjDRPaf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Apr 2023 11:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S232290AbjDRPah (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Apr 2023 11:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbjDRPad (ORCPT
+        with ESMTP id S232282AbjDRPaf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Apr 2023 11:30:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CB319A2
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 08:29:04 -0700 (PDT)
+        Tue, 18 Apr 2023 11:30:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6C6CC36
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 08:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681831744;
+        s=mimecast20190719; t=1681831747;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=O7hwLzEYfyCC+1HV0+CQuKr6XrxBkPdmXIv3+pwAsAU=;
-        b=bmfoqXYvEjJIxh9L2VOAgzyxW6hxU1TVQEii7fKesGNn04IKohG0D51mitHh4XoyMpvVNG
-        dMloIUPNiWlTzyb14lzh6OjvhpEUE8rU8n71TdfgDBBUJnwhBKh3DHUChk1ii7zUu9aCZT
-        4RiNPu6hRGq9t3fzWT+/LpOAcH23SAw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=d+AIWczdbQmYcywSh4w8GvqvVINNbh2DvrncyfYADn8=;
+        b=Tebp7ToXI5Y+FHze1qnRFu6atex+UfTwWLBWVAaqKcT0HKlJOCTnm0YdDn4M+YaJtmc3jE
+        z+9Xqico39bS7QednKc0HtwOIMiExiRjQNIxwhcvPpLdPXacFcSWj3Ic3LSZVHHCHqxOVg
+        /LSPNWWjvQF8FQR6rd4WWfEDqdosoFs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-283-tx5a0GuAONunj9TrLi1nxQ-1; Tue, 18 Apr 2023 11:29:01 -0400
-X-MC-Unique: tx5a0GuAONunj9TrLi1nxQ-1
+ us-mta-42-Je6gkD7QPgStNU4pQnR1yQ-1; Tue, 18 Apr 2023 11:29:03 -0400
+X-MC-Unique: Je6gkD7QPgStNU4pQnR1yQ-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 048921C0A58F;
-        Tue, 18 Apr 2023 15:29:00 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D3CDF8996F7;
+        Tue, 18 Apr 2023 15:29:02 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.149])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B148314152F6;
-        Tue, 18 Apr 2023 15:28:57 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3F63F14171B8;
+        Tue, 18 Apr 2023 15:29:00 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
         Vasily Gorbik <gor@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v1 2/3] selftests/ksm: ksm_functional_tests: add prctl unmerge test
-Date:   Tue, 18 Apr 2023 17:28:48 +0200
-Message-Id: <20230418152849.505124-3-david@redhat.com>
+Subject: [PATCH v1 3/3] mm/ksm: move disabling KSM from s390/gmap code to KSM code
+Date:   Tue, 18 Apr 2023 17:28:49 +0200
+Message-Id: <20230418152849.505124-4-david@redhat.com>
 In-Reply-To: <20230418152849.505124-1-david@redhat.com>
 References: <20230418051342.1919757-1-shr@devkernel.io>
  <20230418152849.505124-1-david@redhat.com>
@@ -74,118 +74,103 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Let's test whether setting PR_SET_MEMORY_MERGE to 0 after setting it to
-1 will unmerge pages, similar to how setting MADV_UNMERGEABLE after setting
-MADV_MERGEABLE would.
+Let's factor out actual disabling of KSM. The existing
+"mm->def_flags &= ~VM_MERGEABLE;" was essentially a NOP and can be dropped,
+because def_flags should never include VM_MERGEABLE. Note that we don't
+currently prevent re-enabling KSM.
+
+This should now be faster in case KSM was never enabled, because we only
+conditionally iterate all VMAs. Further, it certainly looks cleaner.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- .../selftests/mm/ksm_functional_tests.c       | 46 ++++++++++++++++---
- 1 file changed, 40 insertions(+), 6 deletions(-)
+ arch/s390/mm/gmap.c | 20 +-------------------
+ include/linux/ksm.h |  6 ++++++
+ mm/ksm.c            | 11 +++++++++++
+ 3 files changed, 18 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index 7bc9fc17c9f0..26853badae70 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -91,9 +91,10 @@ static int ksm_merge(void)
+diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+index 0949811761e6..dfe905c7bd8e 100644
+--- a/arch/s390/mm/gmap.c
++++ b/arch/s390/mm/gmap.c
+@@ -2585,30 +2585,12 @@ EXPORT_SYMBOL_GPL(s390_enable_sie);
+ 
+ int gmap_mark_unmergeable(void)
+ {
+-	struct mm_struct *mm = current->mm;
+-	struct vm_area_struct *vma;
+-	unsigned long vm_flags;
+-	int ret;
+-	VMA_ITERATOR(vmi, mm, 0);
+-
+ 	/*
+ 	 * Make sure to disable KSM (if enabled for the whole process or
+ 	 * individual VMAs). Note that nothing currently hinders user space
+ 	 * from re-enabling it.
+ 	 */
+-	clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
+-
+-	for_each_vma(vmi, vma) {
+-		/* Copy vm_flags to avoid partial modifications in ksm_madvise */
+-		vm_flags = vma->vm_flags;
+-		ret = ksm_madvise(vma, vma->vm_start, vma->vm_end,
+-				  MADV_UNMERGEABLE, &vm_flags);
+-		if (ret)
+-			return ret;
+-		vm_flags_reset(vma, vm_flags);
+-	}
+-	mm->def_flags &= ~VM_MERGEABLE;
+-	return 0;
++	return ksm_disable(current->mm);
+ }
+ EXPORT_SYMBOL_GPL(gmap_mark_unmergeable);
+ 
+diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+index 7108bc65dc2a..b3d8b7849e18 100644
+--- a/include/linux/ksm.h
++++ b/include/linux/ksm.h
+@@ -22,6 +22,7 @@ int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
+ void ksm_add_vma(struct vm_area_struct *vma);
+ int ksm_enable_merge_any(struct mm_struct *mm);
+ int ksm_disable_merge_any(struct mm_struct *mm);
++int ksm_disable(struct mm_struct *mm);
+ 
+ int __ksm_enter(struct mm_struct *mm);
+ void __ksm_exit(struct mm_struct *mm);
+@@ -75,6 +76,11 @@ static inline void ksm_add_vma(struct vm_area_struct *vma)
+ {
+ }
+ 
++static inline int ksm_disable(struct mm_struct *mm)
++{
++	return 0;
++}
++
+ static inline int ksm_fork(struct mm_struct *mm, struct mm_struct *oldmm)
+ {
+ 	return 0;
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 813f7fbc1832..208311cbb019 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -2616,6 +2616,17 @@ int ksm_disable_merge_any(struct mm_struct *mm)
  	return 0;
  }
  
--static char *mmap_and_merge_range(char val, unsigned long size)
-+static char *mmap_and_merge_range(char val, unsigned long size, bool use_prctl)
- {
- 	char *map;
-+	int ret;
- 
- 	map = mmap(NULL, size, PROT_READ|PROT_WRITE,
- 		   MAP_PRIVATE|MAP_ANON, -1, 0);
-@@ -110,7 +111,17 @@ static char *mmap_and_merge_range(char val, unsigned long size)
- 
- 	/* Make sure each page contains the same values to merge them. */
- 	memset(map, val, size);
--	if (madvise(map, size, MADV_MERGEABLE)) {
-+
-+	if (use_prctl) {
-+		ret = prctl(PR_SET_MEMORY_MERGE, 1, 0, 0, 0);
-+		if (ret < 0 && errno == EINVAL) {
-+			ksft_test_result_skip("PR_SET_MEMORY_MERGE not supported\n");
-+			goto unmap;
-+		} else if (ret) {
-+			ksft_test_result_fail("PR_SET_MEMORY_MERGE=1 failed\n");
-+			goto unmap;
-+		}
-+	} else if (madvise(map, size, MADV_MERGEABLE)) {
- 		ksft_test_result_fail("MADV_MERGEABLE failed\n");
- 		goto unmap;
- 	}
-@@ -133,7 +144,7 @@ static void test_unmerge(void)
- 
- 	ksft_print_msg("[RUN] %s\n", __func__);
- 
--	map = mmap_and_merge_range(0xcf, size);
-+	map = mmap_and_merge_range(0xcf, size, false);
- 	if (map == MAP_FAILED)
- 		return;
- 
-@@ -155,7 +166,7 @@ static void test_unmerge_discarded(void)
- 
- 	ksft_print_msg("[RUN] %s\n", __func__);
- 
--	map = mmap_and_merge_range(0xcf, size);
-+	map = mmap_and_merge_range(0xcf, size, false);
- 	if (map == MAP_FAILED)
- 		return;
- 
-@@ -187,7 +198,7 @@ static void test_unmerge_uffd_wp(void)
- 
- 	ksft_print_msg("[RUN] %s\n", __func__);
- 
--	map = mmap_and_merge_range(0xcf, size);
-+	map = mmap_and_merge_range(0xcf, size, false);
- 	if (map == MAP_FAILED)
- 		return;
- 
-@@ -323,9 +334,31 @@ static void test_prctl_fork(void)
- 	ksft_test_result_pass("PR_SET_MEMORY_MERGE value is inherited\n");
- }
- 
-+static void test_prctl_unmerge(void)
++int ksm_disable(struct mm_struct *mm)
 +{
-+	const unsigned int size = 2 * MiB;
-+	char *map;
++	mmap_assert_write_locked(mm);
 +
-+	ksft_print_msg("[RUN] %s\n", __func__);
-+
-+	map = mmap_and_merge_range(0xcf, size, true);
-+	if (map == MAP_FAILED)
-+		return;
-+
-+	if (prctl(PR_SET_MEMORY_MERGE, 0, 0, 0, 0)) {
-+		ksft_test_result_fail("PR_SET_MEMORY_MERGE=0 failed\n");
-+		goto unmap;
-+	}
-+
-+	ksft_test_result(!range_maps_duplicates(map, size),
-+			 "Pages were unmerged\n");
-+unmap:
-+	munmap(map, size);
++	if (!test_bit(MMF_VM_MERGEABLE, &mm->flags))
++		return 0;
++	if (test_bit(MMF_VM_MERGE_ANY, &mm->flags))
++		return ksm_disable_merge_any(mm);
++	return ksm_del_vmas(mm);
 +}
 +
- int main(int argc, char **argv)
+ int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
+ 		unsigned long end, int advice, unsigned long *vm_flags)
  {
--	unsigned int tests = 4;
-+	unsigned int tests = 5;
- 	int err;
- 
- #ifdef __NR_userfaultfd
-@@ -355,6 +388,7 @@ int main(int argc, char **argv)
- 
- 	test_prctl();
- 	test_prctl_fork();
-+	test_prctl_unmerge();
- 
- 	err = ksft_get_fail_cnt();
- 	if (err)
 -- 
 2.39.2
 
