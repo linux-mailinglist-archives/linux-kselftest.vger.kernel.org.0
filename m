@@ -2,259 +2,245 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB3F6E7B89
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Apr 2023 16:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8166E7D95
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Apr 2023 17:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbjDSOJc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Apr 2023 10:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S232001AbjDSPCi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Apr 2023 11:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjDSOJb (ORCPT
+        with ESMTP id S232614AbjDSPCg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Apr 2023 10:09:31 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F249C2D67;
-        Wed, 19 Apr 2023 07:09:29 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id h14so21339988qvr.7;
-        Wed, 19 Apr 2023 07:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681913369; x=1684505369;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pq/iy5VlVZ9QaLGnxXbLDd4vyHCaBmYeauBriKU8wYw=;
-        b=J82sh9meFcVDeVOv1MfqAAsnN1HEU6DHKlU8iq8Z+kOkJQC45vPdA9Uh6m0VHH9MKy
-         1TpRupieTGjmbboGVWBkxfLgw4PxozAYGkWTUEE4p06kdZKtU+ms2Pr8d736M9i8+y9T
-         xyDTPsJLvUYIU/g2gNGTZUH0ZmMoJ/cbltp8GorshG6VokpR3Ac8elyG1ZYfq1Nen7rb
-         CADY9a1XXOz0qNU08QXO7obT2ubmdFJgKdv6OcU3r7kzRL/QEzapbH3XNzwclePCxhUy
-         ifhPcFSGp3J5cpKLblO/09eB+7AIMnGLfDLlKzOKEGR7BTq/ETChs97IOfrbWaDaHpU4
-         sBfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681913369; x=1684505369;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pq/iy5VlVZ9QaLGnxXbLDd4vyHCaBmYeauBriKU8wYw=;
-        b=R+dEQjQFgaecuv9Al1KSONeobAKhWdhK90pvFR1D5PXPzI26+BEjiC5pAIlolwopOj
-         OKuFot3PnLN7a/2QzRa25mtrDMYH8S1lz1b52VEI8qZ38XeqA2aK4Fu+s5HOdJhA/tDs
-         ZPRmzqv72DABWrVjWeJEO7iyq89J9b/DgJnte+i4vgJDflltmCxTjNr/rHi+NgjWC/wG
-         AOgkpTlz7ru14UAy1Jno76IgvXi90HnBxfer0U0T97iJ88HPmo1d2g7UQKZopKhFlBJu
-         6JSSe7LGRe8beQ9ut0ybHNSSKp6Zv7f7JGxx9ziQCJ1YDcnpuLcBdchSxTxNdN3BQMaU
-         nfpQ==
-X-Gm-Message-State: AAQBX9cR0IFjhe6vry2+l2objxQ/D/Gs3bJakYY9avxYjISeLCoC1sJN
-        DGVZkBF0jgAHRi3xV1Yj5zA=
-X-Google-Smtp-Source: AKy350YKOAOK1f3805S0hbdrd15toly9WWcPU1vRrpGVUv7vwhO+KubUlMTcENzp/o25JGt3ee0QzA==
-X-Received: by 2002:ad4:5b8d:0:b0:579:5dbc:ab6e with SMTP id 13-20020ad45b8d000000b005795dbcab6emr28870100qvp.3.1681913368983;
-        Wed, 19 Apr 2023 07:09:28 -0700 (PDT)
-Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id f13-20020ac8068d000000b003e3918f350dsm4824793qth.25.2023.04.19.07.09.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 07:09:28 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 10:09:28 -0400
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     yang.yang29@zte.com.cn, davem@davemloft.net,
-        willemdebruijn.kernel@gmail.com, edumazet@google.com
-Cc:     kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, willemdebruijn.kernel@gmail.com,
-        zhang.yunkai@zte.com.cn, yang.yang29@zte.com.cn,
-        xu.xin16@zte.com.cn
-Message-ID: <643ff6186235b_383475294ea@willemb.c.googlers.com.notmuch>
-In-Reply-To: <202304191659543403931@zte.com.cn>
-References: <202304191659543403931@zte.com.cn>
-Subject: RE: [PATCH linux-next v2] selftests: net: udpgso_bench_rx: Fix
- verifty exceptions
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Apr 2023 11:02:36 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52102D70;
+        Wed, 19 Apr 2023 08:02:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681916554; x=1713452554;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CxhNswNe27Bu1wFIy8adyR69jvAG2hd0hxx1n7+ZJKA=;
+  b=eyJDYaKRbOT+ahUfvFOpKJ2tL3cH9/LaV0dC/K1w/iIahVSB7H1n7VMl
+   rg89kQSwNF248cbdd8rGCoPPKFcyZtjMJiswfT+Fdg3IR+Pz1fVqgqAa/
+   2aYR+UBk89a3zjX5lbO+iwd+6T8scQtrLMgcWawu91CB76ee9xFPqbU0Z
+   imQkXBj4Sew++eRYvNPMDyy5jMWsCKABO9jvQPWUO0Jc0gOwPdSIZl1ch
+   mjXOIsHnveSqszEHK8q0Lmwi3fCLVIRu3meO9GnLodyqOqiO4LotwvQCr
+   OoI4jAw5iYNhOeelu3FA2JpU1SZv42TvkJNbWrMSB3kHbXp3N/j2i7GZc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334281308"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="334281308"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 08:02:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="724079847"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="724079847"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 19 Apr 2023 08:01:53 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pp9Jg-000ewB-0Z;
+        Wed, 19 Apr 2023 15:01:52 +0000
+Date:   Wed, 19 Apr 2023 23:01:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH v15 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <202304192224.WAXXv4Fk-lkp@intel.com>
+References: <20230419110716.4113627-3-usama.anjum@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419110716.4113627-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-yang.yang29@ wrote:
-> From: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
-> 
-> The verification function of this test case is likely to encounter the
-> following error, which may confuse users. The problem is easily
-> reproducible in the latest kernel.
-> 
-> Environment A, the sender:
-> bash# udpgso_bench_tx -l 4 -4 -D "$IP_B"
-> udpgso_bench_tx: write: Connection refused
-> 
-> Environment B, the receiver:
-> bash# udpgso_bench_rx -4 -G -S 1472 -v
-> udpgso_bench_rx: data[1472]: len 17664, a(97) != q(113)
-> 
-> If the packet is captured, you will see:
-> Environment A, the sender:
-> bash# tcpdump -i eth0 host "$IP_B" &
-> IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
-> IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
-> IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
-> 
-> Environment B, the receiver:
-> bash# tcpdump -i eth0 host "$IP_B" &
-> IP $IP_A.41025 > $IP_B.8000: UDP, length 7360
-> IP $IP_A.41025 > $IP_B.8000: UDP, length 14720
-> IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
-> 
-> In one test, the verification data is printed as follows:
-> abcd...xyz           | 1...
-> ..                  |
-> abcd...xyz           |
-> abcd...opabcd...xyz  | ...1472... Not xyzabcd, messages are merged
-> ..                  |
-> 
-> This is because the sending buffer is buf[64K], and its content is a
-> loop of A-Z. But maybe only 1472 bytes per send, or more if UDP GSO is
-> used. The message content does not necessarily end with XYZ, but GRO
-> will merge these packets, and the -v parameter directly verifies the
-> entire GRO receive buffer. So we do the validation after the data is split
-> at the receiving end, just as the application actually uses this feature.
+Hi Muhammad,
 
-The explanation can be much more brief. The issue is that the test on
-receive for expected payload pattern {AB..Z}+ fail for GRO packets if
-segment payload does not end on a Z.
- 
-> If the sender does not use GSO, each individual segment starts at A,
-> end at somewhere. Using GSO also has the same problem, and. The data
-> between each segment during transmission is continuous, but GRO is merged
-> in the order received, which is not necessarily the order of transmission.
+kernel test robot noticed the following build errors:
 
-The issue as I understand it is due to the above, not due to reordering.
-Am I misunderstanding the problem?
+[auto build test ERROR on next-20230418]
+[cannot apply to akpm-mm/mm-everything linus/master v6.3-rc7 v6.3-rc6 v6.3-rc5 v6.3-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Execution in the same environment does not cause problems, because the
-> lo device is not NAPI, and does not perform GRO processing. Perhaps it
-> could be worth supporting to reduce system calls.
-> bash# tcpdump -i lo host "$IP_self" &
-> bash# echo udp_gro_receive > /sys/kernel/debug/tracing/set_ftrace_filter
-> bash# echo function > /sys/kernel/debug/tracing/current_tracer
-> bash# udpgso_bench_rx -4 -G -S 1472 -v &
-> bash# udpgso_bench_tx -l 4 -4 -D "$IP_self"
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230419-190920
+patch link:    https://lore.kernel.org/r/20230419110716.4113627-3-usama.anjum%40collabora.com
+patch subject: [PATCH v15 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
+config: i386-randconfig-a014-20230417 (https://download.01.org/0day-ci/archive/20230419/202304192224.WAXXv4Fk-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b4a176ae0c875b07b49d2e3539699065438be9b1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230419-190920
+        git checkout b4a176ae0c875b07b49d2e3539699065438be9b1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
 
-This is not relevant.
- 
-> The issue still exists when using the GRO with -G, but not using the -S
-> to obtain gsosize. Therefore, a print has been added to remind users.
-> 
-> After this issue is resolved, another issue will be encountered and will
-> be resolved in the next patch.
-> Environment A, the sender:
-> bash# udpgso_bench_tx -l 4 -4 -D "$DST"
-> udpgso_bench_tx: write: Connection refused
-> 
-> Environment B, the receiver:
-> bash# udpgso_bench_rx -4 -G -S 1472
-> udp rx:     15 MB/s      256 calls/s
-> udp rx:     30 MB/s      512 calls/s
-> udpgso_bench_rx: recv: bad gso size, got -1, expected 1472
-> (-1 == no gso cmsg))
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304192224.WAXXv4Fk-lkp@intel.com/
 
-This is not relevant to *this patch*
+All errors (new ones prefixed by >>):
 
-> v2:
-> - Fix confusing descriptions
-> 
-> Signed-off-by: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
-> Reviewed-by: Xu Xin (CGEL ZTE) <xu.xin16@zte.com.cn>
-> Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
-> Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
-> ---
->  tools/testing/selftests/net/udpgso_bench_rx.c | 40 +++++++++++++++++++++------
->  1 file changed, 31 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
-> index f35a924d4a30..6a2026494cdb 100644
-> --- a/tools/testing/selftests/net/udpgso_bench_rx.c
-> +++ b/tools/testing/selftests/net/udpgso_bench_rx.c
-> @@ -189,26 +189,44 @@ static char sanitized_char(char val)
->  	return (val >= 'a' && val <= 'z') ? val : '.';
->  }
-> 
-> -static void do_verify_udp(const char *data, int len)
-> +static void do_verify_udp(const char *data, int start, int len)
->  {
-> -	char cur = data[0];
-> +	char cur = data[start];
->  	int i;
-> 
->  	/* verify contents */
->  	if (cur < 'a' || cur > 'z')
->  		error(1, 0, "data initial byte out of range");
-> 
-> -	for (i = 1; i < len; i++) {
-> +	for (i = start + 1; i < start + len; i++) {
->  		if (cur == 'z')
->  			cur = 'a';
->  		else
->  			cur++;
-> 
-> -		if (data[i] != cur)
-> +		if (data[i] != cur) {
-> +			if (cfg_gro_segment && !cfg_expected_gso_size)
-> +				error(0, 0, "Use -S to obtain gsosize, to %s"
-> +					, "help guide split and verification.");
-> +
->  			error(1, 0, "data[%d]: len %d, %c(%hhu) != %c(%hhu)\n",
->  			      i, len,
->  			      sanitized_char(data[i]), data[i],
->  			      sanitized_char(cur), cur);
-> +		}
-> +	}
-> +}
-> +
-> +static void do_verify_udp_gro(const char *data, int len, int gso_size)
-> +{
-> +	int start = 0;
-> +
-> +	while (len - start > 0) {
-> +		if (len - start > gso_size)
-> +			do_verify_udp(data, start, gso_size);
-> +		else
-> +			do_verify_udp(data, start, len - start);
-> +		start += gso_size;
->  	}
->  }
-> 
-> @@ -264,16 +282,20 @@ static void do_flush_udp(int fd)
->  		if (cfg_expected_pkt_len && ret != cfg_expected_pkt_len)
->  			error(1, 0, "recv: bad packet len, got %d,"
->  			      " expected %d\n", ret, cfg_expected_pkt_len);
-> +		if (cfg_expected_gso_size && cfg_expected_gso_size != gso_size)
-> +			error(1, 0, "recv: bad gso size, got %d, expected %d %s",
-> +				gso_size, cfg_expected_gso_size, "(-1 == no gso cmsg))\n");
-
-why move this block? and don't pass part of the fmt as an extra %s.
-
->  		if (len && cfg_verify) {
->  			if (ret == 0)
->  				error(1, errno, "recv: 0 byte datagram\n");
-> 
-> -			do_verify_udp(rbuf, ret);
-> +			if (!cfg_gro_segment)
-> +				do_verify_udp(rbuf, 0, ret);
-> +			else if (gso_size > 0)
-> +				do_verify_udp_gro(rbuf, ret, gso_size);
-> +			else
-> +				do_verify_udp_gro(rbuf, ret, ret);
->  		}
-> -		if (cfg_expected_gso_size && cfg_expected_gso_size != gso_size)
-> -			error(1, 0, "recv: bad gso size, got %d, expected %d "
-> -			      "(-1 == no gso cmsg))\n", gso_size,
-> -			      cfg_expected_gso_size);
-> 
->  		packets++;
->  		bytes += ret;
-> -- 
-> 2.15.2
+>> fs/proc/task_mmu.c:2177:6: error: use of undeclared identifier 'vma'
+                                           vma->vm_mm, start, end);
+                                           ^
+   1 error generated.
 
 
+vim +/vma +2177 fs/proc/task_mmu.c
+
+  2128	
+  2129	static long do_pagemap_scan(struct mm_struct *mm,
+  2130				   struct pm_scan_arg __user *uarg)
+  2131	{
+  2132		unsigned long start, end, walk_start, walk_end;
+  2133		unsigned long empty_slots, vec_index = 0;
+  2134		struct mmu_notifier_range range;
+  2135		struct page_region __user *vec;
+  2136		struct pagemap_scan_private p;
+  2137		struct pm_scan_arg arg;
+  2138		int ret = 0;
+  2139	
+  2140		if (copy_from_user(&arg, uarg, sizeof(arg)))
+  2141			return -EFAULT;
+  2142	
+  2143		start = untagged_addr((unsigned long)arg.start);
+  2144		vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
+  2145	
+  2146		ret = pagemap_scan_args_valid(&arg, start, vec);
+  2147		if (ret)
+  2148			return ret;
+  2149	
+  2150		end = start + arg.len;
+  2151		p.max_pages = arg.max_pages;
+  2152		p.found_pages = 0;
+  2153		p.flags = arg.flags;
+  2154		p.required_mask = arg.required_mask;
+  2155		p.anyof_mask = arg.anyof_mask;
+  2156		p.excluded_mask = arg.excluded_mask;
+  2157		p.return_mask = arg.return_mask;
+  2158		p.cur.len = 0;
+  2159		p.cur.start = 0;
+  2160		p.vec = NULL;
+  2161		p.vec_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+  2162	
+  2163		/*
+  2164		 * Allocate smaller buffer to get output from inside the page walk
+  2165		 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+  2166		 * we want to return output to user in compact form where no two
+  2167		 * consecutive regions should be continuous and have the same flags.
+  2168		 * So store the latest element in p.cur between different walks and
+  2169		 * store the p.cur at the end of the walk to the user buffer.
+  2170		 */
+  2171		p.vec = kmalloc_array(p.vec_len, sizeof(*p.vec), GFP_KERNEL);
+  2172		if (!p.vec)
+  2173			return -ENOMEM;
+  2174	
+  2175		if (p.flags & PM_SCAN_OP_WP) {
+  2176			mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+> 2177						vma->vm_mm, start, end);
+  2178			mmu_notifier_invalidate_range_start(&range);
+  2179		}
+  2180	
+  2181		walk_start = walk_end = start;
+  2182		while (walk_end < end && !ret) {
+  2183			p.vec_index = 0;
+  2184	
+  2185			empty_slots = arg.vec_len - vec_index;
+  2186			p.vec_len = min(p.vec_len, empty_slots);
+  2187	
+  2188			walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+  2189			if (walk_end > end)
+  2190				walk_end = end;
+  2191	
+  2192			ret = mmap_read_lock_killable(mm);
+  2193			if (ret)
+  2194				goto free_data;
+  2195			ret = walk_page_range(mm, walk_start, walk_end,
+  2196					      &pagemap_scan_ops, &p);
+  2197			mmap_read_unlock(mm);
+  2198	
+  2199			if (ret && ret != -ENOSPC && ret != PM_SCAN_FOUND_MAX_PAGES)
+  2200				goto free_data;
+  2201	
+  2202			walk_start = walk_end;
+  2203			if (p.vec_index) {
+  2204				if (copy_to_user(&vec[vec_index], p.vec,
+  2205						 p.vec_index * sizeof(*p.vec))) {
+  2206					/*
+  2207					 * Return error even though the OP succeeded
+  2208					 */
+  2209					ret = -EFAULT;
+  2210					goto free_data;
+  2211				}
+  2212				vec_index += p.vec_index;
+  2213			}
+  2214		}
+  2215	
+  2216		if (p.flags & PM_SCAN_OP_WP)
+  2217			mmu_notifier_invalidate_range_end(&range);
+  2218	
+  2219		if (p.cur.len) {
+  2220			if (copy_to_user(&vec[vec_index], &p.cur, sizeof(*p.vec))) {
+  2221				ret = -EFAULT;
+  2222				goto free_data;
+  2223			}
+  2224			vec_index++;
+  2225		}
+  2226	
+  2227		ret = vec_index;
+  2228	
+  2229	free_data:
+  2230		kfree(p.vec);
+  2231		return ret;
+  2232	}
+  2233	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
