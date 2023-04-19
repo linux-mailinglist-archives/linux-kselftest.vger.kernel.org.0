@@ -2,72 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891516E75B8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Apr 2023 10:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0503A6E75E1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Apr 2023 11:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbjDSIyq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Apr 2023 04:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S232808AbjDSJAI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Apr 2023 05:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbjDSIyo (ORCPT
+        with ESMTP id S231966AbjDSJAH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Apr 2023 04:54:44 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D9D975A
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Apr 2023 01:54:41 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id u188-20020a2560c5000000b00b8f15f2111dso22886297ybb.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Apr 2023 01:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681894481; x=1684486481;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vsadv1gG3CDyEQYTrAe8ESn/fsRH88WCdjO7AUKZ6mI=;
-        b=GC9NXcZveJJfKa28bmp/brjsU9DlnA7il8SpiO2vjXq165ktn7pY8f3a9gKPbQsYFh
-         rDnG8lbt0KQq43V+J4LPoag8yycHse5JYdFnD8weeosCSO4NgPn8AqYkCyaOjQo43if4
-         jZKizq59s9pbd1YWcDuWl5ZDDxRXhnFugR8FX10BLK3Lp2MpdcR1AGFboL5FCERPVq9M
-         4I02vg7QmzhsO4hg289OEjfU06p+Nj4iWFx6N78jRj04NpkyeVaNsiI/kCmBfnaSWUq1
-         IyfTouUETKPnwJoLbNav6OfMwg0kGE0RWlia9a98mVGQAT3+y+EHbsxUjhU31y3JxkVQ
-         rueA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681894481; x=1684486481;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vsadv1gG3CDyEQYTrAe8ESn/fsRH88WCdjO7AUKZ6mI=;
-        b=BhUdpi7YbUDjOOvFYoCIzPpYHZtf9UqDFpOxwLDnX5ePAHw7I+CR5rW7yEno6OkoM+
-         PsqymM21XxSDHbxxBq5wrRY/b/ZV1dfwc5ZCwBqk33bwfoVOKcdpN0YKUETcoIhCsfhK
-         snIiU/6TNmmnnVWBo4ODta8DsJctsTXTuJGt9jjctRdnar5Ipekb4eGUWV1UYcrdWVEL
-         VVrT70NVi7hDEy0XtM5TspcYXi8uTZ5VnDGk0FLUhMjJ9JJpekW2n/ZNCP1tOwba5WeX
-         UHm0y4Yt0eF2o90I25A0GORGXysNwu+p3VCJK2FMQVWK3kQdEPPFy3eVpXYSZxDW7nGq
-         yfyQ==
-X-Gm-Message-State: AAQBX9eCqbWyEnViDFmQtTkga4qTzIOXuM38wDOthyeXLo476sSubytv
-        hayobcr9XUeLkMZFlnzLJ+rxHaSlgeyuEg==
-X-Google-Smtp-Source: AKy350Zl269OSH2BlaSwkyOfBXt7dTNFIcXx9j9QAC6LHOPv8qed2YPjjSQLXFLl+hSKzsH/ymalqQc95dwvyA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:9f01:0:b0:545:1d7f:acbf with SMTP id
- s1-20020a819f01000000b005451d7facbfmr1501533ywn.10.1681894481486; Wed, 19 Apr
- 2023 01:54:41 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 16:54:26 +0800
-In-Reply-To: <20230419085426.1671703-1-davidgow@google.com>
+        Wed, 19 Apr 2023 05:00:07 -0400
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0C1113;
+        Wed, 19 Apr 2023 02:00:02 -0700 (PDT)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Q1ZVm2gSBz8RTWb;
+        Wed, 19 Apr 2023 17:00:00 +0800 (CST)
+Received: from szxlzmapp02.zte.com.cn ([10.5.231.79])
+        by mse-fl2.zte.com.cn with SMTP id 33J8xpBp035307;
+        Wed, 19 Apr 2023 16:59:51 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Wed, 19 Apr 2023 16:59:54 +0800 (CST)
+Date:   Wed, 19 Apr 2023 16:59:54 +0800 (CST)
+X-Zmail-TransId: 2b03643fad8affffffffe42-6b32d
+X-Mailer: Zmail v1.0
+Message-ID: <202304191659543403931@zte.com.cn>
 Mime-Version: 1.0
-References: <20230419085426.1671703-1-davidgow@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230419085426.1671703-3-davidgow@google.com>
-Subject: [PATCH v2 3/3] Documentation: kunit: Warn that exit functions run
- even if init fails
-From:   David Gow <davidgow@google.com>
-To:     Benjamin Berg <benjamin@sipsolutions.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>, maxime@cerno.tech,
-        Stephen Boyd <sboyd@kernel.org>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sadiya Kazi <sadiyakazi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+From:   <yang.yang29@zte.com.cn>
+To:     <davem@davemloft.net>, <willemdebruijn.kernel@gmail.com>,
+        <edumazet@google.com>
+Cc:     <kuba@kernel.org>, <pabeni@redhat.com>, <shuah@kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <willemdebruijn.kernel@gmail.com>,
+        <zhang.yunkai@zte.com.cn>, <yang.yang29@zte.com.cn>,
+        <xu.xin16@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIHNlbGZ0ZXN0czogbmV0OiB1ZHBnc29fYmVuY2hfcng6IEZpeCB2ZXJpZnR5IGV4Y2VwdGlvbnM=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 33J8xpBp035307
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 643FAD90.000/4Q1ZVm2gSBz8RTWb
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,69 +56,166 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KUnit's exit functions will run even if the corresponding init function
-fails. It's easy, when writing an exit function, to assume the init
-function succeeded, and (for example) access uninitialised memory or
-dereference NULL pointers.
+From: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
 
-Note that this case exists and should be handled in the documentation.
+The verification function of this test case is likely to encounter the
+following error, which may confuse users. The problem is easily
+reproducible in the latest kernel.
 
-Suggested-by: Benjamin Berg <benjamin@sipsolutions.net>
-Link: https://lore.kernel.org/linux-kselftest/a39af0400abedb2e9b31d84c37551cecc3eed0e1.camel@sipsolutions.net/
-Signed-off-by: David Gow <davidgow@google.com>
+Environment A, the sender:
+bash# udpgso_bench_tx -l 4 -4 -D "$IP_B"
+udpgso_bench_tx: write: Connection refused
+
+Environment B, the receiver:
+bash# udpgso_bench_rx -4 -G -S 1472 -v
+udpgso_bench_rx: data[1472]: len 17664, a(97) != q(113)
+
+If the packet is captured, you will see:
+Environment A, the sender:
+bash# tcpdump -i eth0 host "$IP_B" &
+IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
+IP $IP_A.41025 > $IP_B.8000: UDP, length 1472
+IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
+
+Environment B, the receiver:
+bash# tcpdump -i eth0 host "$IP_B" &
+IP $IP_A.41025 > $IP_B.8000: UDP, length 7360
+IP $IP_A.41025 > $IP_B.8000: UDP, length 14720
+IP $IP_B > $IP_A: ICMP $IP_B udp port 8000 unreachable, length 556
+
+In one test, the verification data is printed as follows:
+abcd...xyz           | 1...
+..                  |
+abcd...xyz           |
+abcd...opabcd...xyz  | ...1472... Not xyzabcd, messages are merged
+..                  |
+
+This is because the sending buffer is buf[64K], and its content is a
+loop of A-Z. But maybe only 1472 bytes per send, or more if UDP GSO is
+used. The message content does not necessarily end with XYZ, but GRO
+will merge these packets, and the -v parameter directly verifies the
+entire GRO receive buffer. So we do the validation after the data is split
+at the receiving end, just as the application actually uses this feature.
+
+If the sender does not use GSO, each individual segment starts at A,
+end at somewhere. Using GSO also has the same problem, and. The data
+between each segment during transmission is continuous, but GRO is merged
+in the order received, which is not necessarily the order of transmission.
+
+Execution in the same environment does not cause problems, because the
+lo device is not NAPI, and does not perform GRO processing. Perhaps it
+could be worth supporting to reduce system calls.
+bash# tcpdump -i lo host "$IP_self" &
+bash# echo udp_gro_receive > /sys/kernel/debug/tracing/set_ftrace_filter
+bash# echo function > /sys/kernel/debug/tracing/current_tracer
+bash# udpgso_bench_rx -4 -G -S 1472 -v &
+bash# udpgso_bench_tx -l 4 -4 -D "$IP_self"
+
+The issue still exists when using the GRO with -G, but not using the -S
+to obtain gsosize. Therefore, a print has been added to remind users.
+
+After this issue is resolved, another issue will be encountered and will
+be resolved in the next patch.
+Environment A, the sender:
+bash# udpgso_bench_tx -l 4 -4 -D "$DST"
+udpgso_bench_tx: write: Connection refused
+
+Environment B, the receiver:
+bash# udpgso_bench_rx -4 -G -S 1472
+udp rx:     15 MB/s      256 calls/s
+udp rx:     30 MB/s      512 calls/s
+udpgso_bench_rx: recv: bad gso size, got -1, expected 1472
+(-1 == no gso cmsg))
+
+v2:
+- Fix confusing descriptions
+
+Signed-off-by: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+Reviewed-by: Xu Xin (CGEL ZTE) <xu.xin16@zte.com.cn>
+Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
+Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
 ---
+ tools/testing/selftests/net/udpgso_bench_rx.c | 40 +++++++++++++++++++++------
+ 1 file changed, 31 insertions(+), 9 deletions(-)
 
-This patch is new in v2.
+diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
+index f35a924d4a30..6a2026494cdb 100644
+--- a/tools/testing/selftests/net/udpgso_bench_rx.c
++++ b/tools/testing/selftests/net/udpgso_bench_rx.c
+@@ -189,26 +189,44 @@ static char sanitized_char(char val)
+ 	return (val >= 'a' && val <= 'z') ? val : '.';
+ }
 
----
- Documentation/dev-tools/kunit/usage.rst | 12 ++++++++++--
- include/kunit/test.h                    |  3 +++
- 2 files changed, 13 insertions(+), 2 deletions(-)
+-static void do_verify_udp(const char *data, int len)
++static void do_verify_udp(const char *data, int start, int len)
+ {
+-	char cur = data[0];
++	char cur = data[start];
+ 	int i;
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 9f720f1317d3..f6d6c9a9ff54 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -166,7 +166,12 @@ many similar tests. In order to reduce duplication in these closely related
- tests, most unit testing frameworks (including KUnit) provide the concept of a
- *test suite*. A test suite is a collection of test cases for a unit of code
- with optional setup and teardown functions that run before/after the whole
--suite and/or every test case. For example:
-+suite and/or every test case.
+ 	/* verify contents */
+ 	if (cur < 'a' || cur > 'z')
+ 		error(1, 0, "data initial byte out of range");
+
+-	for (i = 1; i < len; i++) {
++	for (i = start + 1; i < start + len; i++) {
+ 		if (cur == 'z')
+ 			cur = 'a';
+ 		else
+ 			cur++;
+
+-		if (data[i] != cur)
++		if (data[i] != cur) {
++			if (cfg_gro_segment && !cfg_expected_gso_size)
++				error(0, 0, "Use -S to obtain gsosize, to %s"
++					, "help guide split and verification.");
 +
-+.. note::
-+   A test case will only run if it is associated with a test suite.
+ 			error(1, 0, "data[%d]: len %d, %c(%hhu) != %c(%hhu)\n",
+ 			      i, len,
+ 			      sanitized_char(data[i]), data[i],
+ 			      sanitized_char(cur), cur);
++		}
++	}
++}
 +
-+For example:
- 
- .. code-block:: c
- 
-@@ -196,7 +201,10 @@ after everything else. ``kunit_test_suite(example_test_suite)`` registers the
- test suite with the KUnit test framework.
- 
- .. note::
--   A test case will only run if it is associated with a test suite.
-+   The ``exit`` and ``suite_exit`` functions will run even if ``init`` or
-+   ``suite_init`` fail. Make sure that they can handle any inconsistent
-+   state which may result from ``init`` or ``suite_init`` encoutering errors
-+   or exiting early.
- 
- ``kunit_test_suite(...)`` is a macro which tells the linker to put the
- specified test suite in a special linker section so that it can be run by KUnit
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 57b309c6ca27..3028a1a3fcad 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -168,6 +168,9 @@ static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
-  * test case, similar to the notion of a *test fixture* or a *test class*
-  * in other unit testing frameworks like JUnit or Googletest.
-  *
-+ * Note that @exit and @suite_exit will run even if @init or @suite_init
-+ * fail: make sure they can handle any inconsistent state which may result.
-+ *
-  * Every &struct kunit_case must be associated with a kunit_suite for KUnit
-  * to run it.
-  */
++static void do_verify_udp_gro(const char *data, int len, int gso_size)
++{
++	int start = 0;
++
++	while (len - start > 0) {
++		if (len - start > gso_size)
++			do_verify_udp(data, start, gso_size);
++		else
++			do_verify_udp(data, start, len - start);
++		start += gso_size;
+ 	}
+ }
+
+@@ -264,16 +282,20 @@ static void do_flush_udp(int fd)
+ 		if (cfg_expected_pkt_len && ret != cfg_expected_pkt_len)
+ 			error(1, 0, "recv: bad packet len, got %d,"
+ 			      " expected %d\n", ret, cfg_expected_pkt_len);
++		if (cfg_expected_gso_size && cfg_expected_gso_size != gso_size)
++			error(1, 0, "recv: bad gso size, got %d, expected %d %s",
++				gso_size, cfg_expected_gso_size, "(-1 == no gso cmsg))\n");
+ 		if (len && cfg_verify) {
+ 			if (ret == 0)
+ 				error(1, errno, "recv: 0 byte datagram\n");
+
+-			do_verify_udp(rbuf, ret);
++			if (!cfg_gro_segment)
++				do_verify_udp(rbuf, 0, ret);
++			else if (gso_size > 0)
++				do_verify_udp_gro(rbuf, ret, gso_size);
++			else
++				do_verify_udp_gro(rbuf, ret, ret);
+ 		}
+-		if (cfg_expected_gso_size && cfg_expected_gso_size != gso_size)
+-			error(1, 0, "recv: bad gso size, got %d, expected %d "
+-			      "(-1 == no gso cmsg))\n", gso_size,
+-			      cfg_expected_gso_size);
+
+ 		packets++;
+ 		bytes += ret;
 -- 
-2.40.0.634.g4ca3ef3211-goog
-
+2.15.2
