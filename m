@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8166E7D95
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Apr 2023 17:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4B86E7E34
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Apr 2023 17:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbjDSPCi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Apr 2023 11:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
+        id S232643AbjDSPZU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Apr 2023 11:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbjDSPCg (ORCPT
+        with ESMTP id S233362AbjDSPZQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:02:36 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52102D70;
-        Wed, 19 Apr 2023 08:02:34 -0700 (PDT)
+        Wed, 19 Apr 2023 11:25:16 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C42A275;
+        Wed, 19 Apr 2023 08:24:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681916554; x=1713452554;
+  t=1681917868; x=1713453868;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CxhNswNe27Bu1wFIy8adyR69jvAG2hd0hxx1n7+ZJKA=;
-  b=eyJDYaKRbOT+ahUfvFOpKJ2tL3cH9/LaV0dC/K1w/iIahVSB7H1n7VMl
-   rg89kQSwNF248cbdd8rGCoPPKFcyZtjMJiswfT+Fdg3IR+Pz1fVqgqAa/
-   2aYR+UBk89a3zjX5lbO+iwd+6T8scQtrLMgcWawu91CB76ee9xFPqbU0Z
-   imQkXBj4Sew++eRYvNPMDyy5jMWsCKABO9jvQPWUO0Jc0gOwPdSIZl1ch
-   mjXOIsHnveSqszEHK8q0Lmwi3fCLVIRu3meO9GnLodyqOqiO4LotwvQCr
-   OoI4jAw5iYNhOeelu3FA2JpU1SZv42TvkJNbWrMSB3kHbXp3N/j2i7GZc
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334281308"
+  bh=FyoNEuewRSZF8EIv9CVEenpq/Tgf8iahWbqzpdIszVs=;
+  b=LvzGqd3fxxptJUfr7uNAEQhWltjBoKTeclVWQDFKGhoMP5XyOUdNqbW4
+   ZxZrQZQkiWNKXj2nRbesKEtRbXTnWXA2v35GFLjFIp5LcasZGdoaGTee6
+   3Zw55We8ajRqUpPYt4qBRyH4DoGGZt97dMxCDZDaEid6I2zl4IBBP7kOm
+   rPrEKM1PRCTMvOJt7qPCrS0rsCP2VFPF201zZwK0vr6JSn8ZMtmHbCxba
+   5f1IHE963iITvRpiazaZJIUJVmJzzwTSf4CZyzS8aytDrp4OQBPoUAOnH
+   up9MSijg6zFpB95IVIjA1KagyT57FXXLejW+IF5/cecbfnyseQ0dWtaRh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="329652262"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="334281308"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 08:02:02 -0700
+   d="scan'208";a="329652262"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 08:23:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="724079847"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="641814765"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="724079847"
+   d="scan'208";a="641814765"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 19 Apr 2023 08:01:53 -0700
+  by orsmga003.jf.intel.com with ESMTP; 19 Apr 2023 08:22:54 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pp9Jg-000ewB-0Z;
-        Wed, 19 Apr 2023 15:01:52 +0000
-Date:   Wed, 19 Apr 2023 23:01:26 +0800
+        id 1pp9e0-000ewp-2j;
+        Wed, 19 Apr 2023 15:22:52 +0000
+Date:   Wed, 19 Apr 2023 23:21:55 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Peter Xu <peterx@redhat.com>,
@@ -55,7 +55,7 @@ To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Paul Gofman <pgofman@codeweavers.com>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+Cc:     oe-kbuild-all@lists.linux.dev,
         Linux Memory Management List <linux-mm@kvack.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -76,17 +76,16 @@ Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
 Subject: Re: [PATCH v15 2/5] fs/proc/task_mmu: Implement IOCTL to get and
  optionally clear info about PTEs
-Message-ID: <202304192224.WAXXv4Fk-lkp@intel.com>
+Message-ID: <202304192347.QsBHpCUb-lkp@intel.com>
 References: <20230419110716.4113627-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230419110716.4113627-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -106,8 +105,8 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230419-190920
 patch link:    https://lore.kernel.org/r/20230419110716.4113627-3-usama.anjum%40collabora.com
 patch subject: [PATCH v15 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
-config: i386-randconfig-a014-20230417 (https://download.01.org/0day-ci/archive/20230419/202304192224.WAXXv4Fk-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+config: s390-randconfig-r044-20230416 (https://download.01.org/0day-ci/archive/20230419/202304192347.QsBHpCUb-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -117,19 +116,20 @@ reproduce (this is a W=1 build):
         git checkout b4a176ae0c875b07b49d2e3539699065438be9b1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304192224.WAXXv4Fk-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304192347.QsBHpCUb-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/proc/task_mmu.c:2177:6: error: use of undeclared identifier 'vma'
-                                           vma->vm_mm, start, end);
-                                           ^
-   1 error generated.
+   fs/proc/task_mmu.c: In function 'do_pagemap_scan':
+>> fs/proc/task_mmu.c:2177:41: error: 'vma' undeclared (first use in this function)
+    2177 |                                         vma->vm_mm, start, end);
+         |                                         ^~~
+   fs/proc/task_mmu.c:2177:41: note: each undeclared identifier is reported only once for each function it appears in
 
 
 vim +/vma +2177 fs/proc/task_mmu.c
