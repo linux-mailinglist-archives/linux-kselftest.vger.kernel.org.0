@@ -2,518 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FBA6E946D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Apr 2023 14:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFF16E95E8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Apr 2023 15:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbjDTMcz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Apr 2023 08:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S231315AbjDTNeZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Apr 2023 09:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234321AbjDTMcw (ORCPT
+        with ESMTP id S231311AbjDTNeY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Apr 2023 08:32:52 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCA65FEA;
-        Thu, 20 Apr 2023 05:32:41 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-2fa47de5b04so548151f8f.1;
-        Thu, 20 Apr 2023 05:32:41 -0700 (PDT)
+        Thu, 20 Apr 2023 09:34:24 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B4946B2;
+        Thu, 20 Apr 2023 06:34:22 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33K80Q25024590;
+        Thu, 20 Apr 2023 13:34:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=/2pU+Mjx/eBHFI+Ocgv5dApy4c7xbvi83CIcgbZ+0ug=;
+ b=Enebl3pIUrCu8b3W8hhboMpTS4eo+8VdeMea3XA3rlVIofjaq78z8A2LDthlkwSPjV32
+ hOjJSPrg0kmkB+M8NYC/7Q+59eLU5Z7qyY0VRpaTJdcLg6ov+zzh2TWTAINpEeEbJNi7
+ 63lArTbRB5QW3I+xtoib1YU0LqyeLn4nkCld14xi6VE6OVcjHhs8dCwWoUnINaMOyC3K
+ CbTgXQRPL0EtePFeW91Ftjs4Q50nPJ1Ch0ujIFrDecCSuUs1eSH3xO7zN0ey3JCiAdly
+ A4BbWJLM+Y6yVkYGTNWjeCGUgNbJZxOjDvF8zEA34Wi/JxTKcJ8SVNjrS1cBbmzGx1x7 GQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pyktatspr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Apr 2023 13:34:13 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33KCkm8D037046;
+        Thu, 20 Apr 2023 13:34:11 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pyjcea8vv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Apr 2023 13:34:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qhf36ch6rFPCK5ofNQR35wMC5HW7YY67v5COGXzAZGY7OkIg3MLK8ZMQfuNoIEmx1r1hB4JIJn6WeulByjLKR59iNModFrBdOxIRDBmkJuyeQJUGvVHEI2xgysmv2L3+5aD8qk/IekUV/wy+BrlVaa6ENHkQXEKn6X5pZHl1RadEmXyWOx2adnG4hl6pW3b4dyneanGVxYg6MRQ63LuqhLs81XCOp5QxesfLRTppDrm9VxYL4c9FRcvmR9hKGEhyx5abKDGXTDlG2lA9HJvzw1uBHfQzIlm7ofoKtyNDXBQZQotutza1TldrNO+c9a2+wSCk9Nr+unAuQSS7b86dUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/2pU+Mjx/eBHFI+Ocgv5dApy4c7xbvi83CIcgbZ+0ug=;
+ b=c+E6Y7kAiDW8GNoY1uT3ojhQDZKjn8ub32HaHJcaXmCpzoYzpfw/3F+IOhpHCI2TwuA31iQqsSneWy/iuzTgzCT/W76Had1iBXLHsKX2A90CC3ZUeevEpaq6fH1eWMmvK0jWcnafP5BQnGuqyvvSoX3nEYf2EMs1S08ZcLF54O3jFoEJbXafXVuRCo/TS9xGu9ENjMzWYcyW4DR8qQFsw2ChOiZBYTv8RMjaTLGIFjwKY008aW2CkMuSHi7WEDcH52ddx+HayB6b7EirRfdOGkV3uUSh6xEieUkC8zruAxlCcsJXEntFepmwqvxykdBFQvkpayUBc/hhYgEsSx+JEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681993960; x=1684585960;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ll7sVqXM0dY8LZJVLuNcEqs+AeYLqx/WbaG5ztvPIFA=;
-        b=JiDKDYpNS+KDcLGSUhnknnE5y2Ahtr3w7jD0AiLB4iM5zVEhsd2MXPJbzYD/EH0cuV
-         QYfHP8U39mJOF+B+5/uLLDReBX12ciG7pCt/LiANRMPPJwWxxssA8z2ZMOgYwu4vdhtW
-         88DSPUP/RcC/PZ8viCqAy9rFuFkRxh05fCG4fg8VaC0/dOiNqjkQJylprbN4n1JbX+TD
-         72wwYeL7AFyXbUyEaEYz77nOJymyIswlJ59+PCvi1NRrvAmQq8HMQjcrHEULyJw50+LI
-         5kkvW8Ji3i8UkSKy7y4Mj8rDqTQr6VSyUICaF86g+fjpJ6KkjMe+cjFkoFFdIXfretcc
-         6dtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681993960; x=1684585960;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ll7sVqXM0dY8LZJVLuNcEqs+AeYLqx/WbaG5ztvPIFA=;
-        b=iESy6RvzF5qHfG874Bv8Lw+y0gze7r3gVQJtVmJmghs3AaZhCaaf6D9JbofubZVH45
-         LWIaCF00WAWjz08nLaK0TDk6uLS5orptDJ9zV1AxJ9+Wpyitj+bCkXIp/JSpSErC0IvN
-         sk3eohdmpTrKVoWaipct4ped6zuT+OCFKD6vadVJxAhisaVsSbLc60+p1C3my6+zmfQV
-         5iIZWUyxi2qnUe+NBnayI22WnTz0LHHR1eDtv/h8EJZZq19I5vhbZTqigWdnuexGqy3i
-         s3Y6wQM8bKzyNQwzCo8ssQzP3Xqq5kjR5k+qG7s5izwuGh+J9+zYJlMjj39Wi6nXAaqs
-         ZFxA==
-X-Gm-Message-State: AAQBX9fxU1JBBrW1h3iAWSa6Mh6cz/Xrx1m3nil/ys/uOA7Oc09HHMjS
-        rfXRF0OSxFOfqhjYKzpM0/I=
-X-Google-Smtp-Source: AKy350bAinhP1S8iQ1YafufBWOPZl924panL1LRqiTHQfOg5cw80Ccc3BsN5MBsQAap0NICvF7AbbQ==
-X-Received: by 2002:a5d:44c9:0:b0:2d7:998c:5ad9 with SMTP id z9-20020a5d44c9000000b002d7998c5ad9mr1256146wrr.8.1681993959900;
-        Thu, 20 Apr 2023 05:32:39 -0700 (PDT)
-Received: from gsever-Latitude-7400.corp.proofpoint.com ([46.120.112.185])
-        by smtp.gmail.com with ESMTPSA id z16-20020a5d4410000000b002f79ea6746asm1835081wrq.94.2023.04.20.05.32.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 05:32:39 -0700 (PDT)
-From:   Gilad Sever <gilad9366@gmail.com>
-To:     dsahern@kernel.org, martin.lau@linux.dev, daniel@iogearbox.net,
-        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org, hawk@kernel.org, joe@wand.net.nz
-Cc:     eyal.birger@gmail.com, shmulik.ladkani@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Gilad Sever <gilad9366@gmail.com>
-Subject: [PATCH bpf 4/4] selftests/bpf: Add tc_socket_lookup tests
-Date:   Thu, 20 Apr 2023 15:31:55 +0300
-Message-Id: <20230420123155.497634-5-gilad9366@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230420123155.497634-1-gilad9366@gmail.com>
-References: <20230420123155.497634-1-gilad9366@gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/2pU+Mjx/eBHFI+Ocgv5dApy4c7xbvi83CIcgbZ+0ug=;
+ b=i6Jb09P+KkNimt+aUT2SV12iFIQceMwAW8PgJIfsMUWs0pdXHqSAB6Q7nRqXPblvm/fWZH1ZpwBVTNqD4805Pfg1aW2feKaGKbppviz5LT2269wT10AfxYAG+spO9g/0fdlm/GEtwxgPQUi7XjtIh8s6j1ITwxm149q3r3sbEvY=
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
+ by SJ2PR10MB7557.namprd10.prod.outlook.com (2603:10b6:a03:538::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
+ 2023 13:34:09 +0000
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::ecbd:fc46:2528:36db]) by BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::ecbd:fc46:2528:36db%6]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
+ 13:34:09 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     David Gow <davidgow@google.com>, Jakub Kicinski <kuba@kernel.org>
+CC:     Chuck Lever <cel@kernel.org>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH RESEND] .gitignore: Do not ignore .kunitconfig files
+Thread-Topic: [PATCH RESEND] .gitignore: Do not ignore .kunitconfig files
+Thread-Index: AQHZcsgLgDo41T00xkCS6kRmtJgMq68zzOuAgABnC4A=
+Date:   Thu, 20 Apr 2023 13:34:09 +0000
+Message-ID: <A921F514-1167-4C67-A52C-D49EDCE6F6B8@oracle.com>
+References: <168191307928.6696.11689169705819224951.stgit@91.116.238.104.host.secureserver.net>
+ <CABVgOSmH=SgtJy1U5tfLwYjWW32WheuzB1F+XJRzD9qtR+bseg@mail.gmail.com>
+In-Reply-To: <CABVgOSmH=SgtJy1U5tfLwYjWW32WheuzB1F+XJRzD9qtR+bseg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.500.231)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|SJ2PR10MB7557:EE_
+x-ms-office365-filtering-correlation-id: 0afdd4fd-1608-4939-53e1-08db41a3ebe9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xKII7RtU5Zb5jIdVsEIvnvx16n4v8FQ4m1eUTj5xZ/q6IG8VeAt157HrSSOoT+SWlO8Y85iudvyFbFD5miJtAWfQ1wXsxX3D8w3bYuYsvrAUOgXKzNEGAtkbcXLnOKx/IrUC6SSjjxyt+qkozqMowl5AUn+qZuaFjaGzmy4YyBq6kW5Jl/B7aPw5aq+FDjxisXSFAXtQPrLbfCBHn1Ta7NFxAORITjUvUEi2XBZrP3t06k59HBfTOGxaPrRKb4PBV0CD9j7dN+tm2Ovp6NjDgcSuVQnMRH1crYckmRhXAML6q5fLzpWbjB8mDLumU8dz9GpuaYV88M9vzmyf4bMZgl5XlDDZfKhd1Zu086cbwziLhdnac0RDiJZ1zaUuzD6KnHVh2oXVCjA/H/EQVHW2D13XPv8DrMYlJ+8ZSCeRXhuCka0YEqwH89E34BEHAC7P8xTzMi2L57Ig8N2CzoRd0MwWdkzvJfxfzUGSoXzsxYAzmbnRs6SBrzjXjdMWp/NEtz5soX5TxOlzYFDhXbQo12tdehUvcy9V+PFq573KZpnPJDEOlyy4+9V1LLvCx25xQAn1R5eO6KUYLyBXFnZuvg7GXm4mDfMbBZ7mYlwpE7srXKgClWDpEH0o4AvXSraUptCiXsTHfrvLfZSuaRBE3jpTQKm+rkUWl92hOi5WI9nQDrakMmkOF9BDF5BJIYG3DL37lFnYjmruEkJxuYgcCw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199021)(83380400001)(110136005)(86362001)(33656002)(2616005)(53546011)(6506007)(26005)(6512007)(36756003)(966005)(478600001)(6486002)(54906003)(71200400001)(4326008)(66556008)(66476007)(66946007)(41300700001)(38070700005)(316002)(76116006)(8936002)(122000001)(38100700002)(66446008)(64756008)(8676002)(91956017)(186003)(2906002)(4744005)(5660300002)(142923001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wK3IxPq9X0fvWM9Z+dBlSEt/hGWwdtFYtmdps3yRJfDZBMI780cC4uF3Jhvl?=
+ =?us-ascii?Q?WNerh9QhFbQWVyco69wDzL3nu0jA+q9fRxjiK03aNXMFxp7DH8PyWxdSCSjm?=
+ =?us-ascii?Q?hxxLIRLKy0jIp10NJS/PwwrqbyOpA9U53UpqRAWEMdcsbSUpRzapTCjEJ1c5?=
+ =?us-ascii?Q?SmYXdPAL+9F0iVzz9HiHd3B3sJ8/M2hJnmrp2j0HGywT+W70L6YiLkfupxVs?=
+ =?us-ascii?Q?TkTlgRqw/VgbZJPxtYOurzdHnqPGSevoBK2dAhA12hbcMypzEGHiZln7oWli?=
+ =?us-ascii?Q?UGNZvtxxE5KT9jalsXxlxg+ZEp//WJbm4zWJz9bNhLyuEfbRVJfV9aFjwj94?=
+ =?us-ascii?Q?/qUsMvTKbpYv25w7o8S7lnBcAdoWZWlVlW04RHJ7i31IqQPOrnIRZo19TwxL?=
+ =?us-ascii?Q?bwLaiyETSLmOrsMb/KZ2IsHi+1rco1NO7in+D0pH7MNfKFMWxujbNg9ZDTYK?=
+ =?us-ascii?Q?7SubVZv20EV0yJ66zYUmSF18kJxEeGnfpnQglsk6eaWe8JZIby8L1jE6DQyw?=
+ =?us-ascii?Q?Sp0LQPCrN8GzzcGMpel9AOQ3m1CLPqEJtVTdlR0K+fXqMEaPiTooEQPrXD5g?=
+ =?us-ascii?Q?uTToFyZ1m5PZspLOnV0ILfBQcAG4YYGn5+GZMQQwt/JK/xP4dazaocHaoHNq?=
+ =?us-ascii?Q?jvbZ79s046qh/BQ+5sg3cH0l/GC4pqIWfW7OBcxs4y6K3AL60EqOOWggx242?=
+ =?us-ascii?Q?PHIzD8K6duGa73kFh1l/DPnmUVp73b2ZNkC++UJcFj9ZCEXHeLQetCWEQo7J?=
+ =?us-ascii?Q?lCIBqdeo2NVsQU6ZJQAO8lBYTok1TxlmDsO9e28t4cCPz2soL1bPzshIJspr?=
+ =?us-ascii?Q?2DrRoozvvK2mq4t7YXuANr3rA695CDIyKACDd7w7bu03vem28WOQhDSGRE2r?=
+ =?us-ascii?Q?uqKaD+H0HAjgXHWWjmningxThETMRfdZF28xSN1YEZmTspWVbA4bJ7plyvlw?=
+ =?us-ascii?Q?RCCdgrSs3QmdTiwZqblD4i1szDQyX90x3Q3x00OFuuFWFR315Cb/n1LHxsxA?=
+ =?us-ascii?Q?pT9OJaQ+qnT2AmHr2drEPe8qXZVMvboVK+C60t5HcgR6/NW1TjK/tWasLb7k?=
+ =?us-ascii?Q?jQGF41hSq0J6Vb+F9bAbt0gFg0h0g44Hkn7MLD5aSOzO0N93owZlY4RajIE6?=
+ =?us-ascii?Q?7MK8NkTePeGw0xqWtwMZ4D3iXxgJsEG9QT86n6FrBohB+gCfHm+bW8hiUeKe?=
+ =?us-ascii?Q?EWGIT2Nsq9SWfJGLfhPWWbvzZqTyhBfnwFF7YS439arrYjgw3CnMpHF1+nw8?=
+ =?us-ascii?Q?B2RCVmuvx69r1whBScnQWJwQGK2nluz4QuwjzWAJiJSnXdlFFU9kCkBII1ov?=
+ =?us-ascii?Q?YTgI3ps1nhi97uAfYZkRF19eMowAjSBiSAeK0s+ukxW5OtsfE5Ypgy7bKAIL?=
+ =?us-ascii?Q?4gPU00XecaAf2/xD6YgCYm1FIpJf+ghAWCLEM/McdSIdAt5qOlyYyBlA/CA0?=
+ =?us-ascii?Q?cqgTswEM+TKSWUjd12B7iBNe856hOL5t5FF4czlsZV0iEEHMaGZUVagpc3Gr?=
+ =?us-ascii?Q?JQCOpTPX/YABcrVWyucvAq3clDznrmjtyFW1msx9PXoIfD/Lgi/uwQg5C3EM?=
+ =?us-ascii?Q?GUXbmrDj2cC0ryS7P8snhufSM0jsPgS0VC3xBkDphR7SMinlLbhuISH3sqmL?=
+ =?us-ascii?Q?ig=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C7A90D2A90EAF04696C9420DF5199B7A@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: tLihX/d6AuOWHa5Zyf/suKg/xm260e/ORS9wboi5bu22GBMN2wlLlnXtwzxw04+cPAOf6DU4SUT8paTkweaMM5DcvfTpMevKQ7hTWze/1ceZDhFHh8NPhOLrcsijvUhJo/FHCctThNY2RKg/dkThYunUVRb3k/DT3fVEcySYneRpsSfYX5stDbrhBxq3TVr4MnFGPPnWsD2joEMf6Xijg1sQfzq/5kzGP6+d20KrdsN+1y93P/IkCGIQPPkt/9n0ndJ89KxSaIZbm2aI8SaGX6PINaoSWqRsMWmaC4aetAHj2Sz1Ty6nyO/cUAo+R8WUZtANFVlgBTCwgz8HxopE3tQI4XosJyz41jNQcy6p9dgd0DKvk3UBlvNSC2mgaqCFiEwN4QdI08N9iMA+GSjeOBmTccLCQWGIZy7lpIShimto+1hDZBL+FQ37E4I5MOiNCSeZwpKNH41908cPL5lXQwwspiG92O/Gby2QE9B7sNullwgQGjUh1sU9bZ4CvqJ1Dnr0YplpZLzy15vajO83IWAY7k+RkCcZYNC/rLzTXiXFyIUBv3raFNJB6JCLsxtVJl3s0LZtfwAOPLUrv2j4GdGpavUhxCmpsLFvOjrfXe20vYZvSwFGQXYyW+GpC3jwozBjmGOoBKmiGD12Cd4CglmDL1hzZ+56LbiQY8f4lF+bWjpfRNuv1IBq810HZOTWyI3Z+eM1t8RoRcinKqDOZH96fDLWDSbbtCk8GvHgzJeoF0oC1/OxhMuqmvX/lOJIpv4rcsFCKilqSun3951btSsvdV+/PwkdxGH+zIBH8Zr8KljytIZy3jFKJf7+W9aX
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0afdd4fd-1608-4939-53e1-08db41a3ebe9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2023 13:34:09.5913
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6XEA8OrweY9KDjfdGsFNoXdtTYOWQqkIk65bHDNEgbeMuCEdHXns9eXM4Tb83p8ahlHuSYUYGM3Ljz2TjQ9prA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7557
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-20_08,2023-04-20_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 bulkscore=0
+ mlxscore=0 mlxlogscore=799 adultscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304200111
+X-Proofpoint-ORIG-GUID: HE5Ba1b0Epr6--b1RSYG82fYVLJ8UpAk
+X-Proofpoint-GUID: HE5Ba1b0Epr6--b1RSYG82fYVLJ8UpAk
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Verify that socket lookup via TC with all BPF APIs is VRF aware.
 
-Signed-off-by: Gilad Sever <gilad9366@gmail.com>
----
- .../bpf/prog_tests/tc_socket_lookup.c         | 341 ++++++++++++++++++
- .../selftests/bpf/progs/tc_socket_lookup.c    |  73 ++++
- 2 files changed, 414 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
- create mode 100644 tools/testing/selftests/bpf/progs/tc_socket_lookup.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c b/tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
-new file mode 100644
-index 000000000000..1ddd70cf4a61
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
-@@ -0,0 +1,341 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+/*
-+ * Topology:
-+ * ---------
-+ *     NS1 namespace         |   NS2 namespace
-+ *			     |
-+ *     +--------------+      |   +--------------+
-+ *     |    veth01    |----------|    veth10    |
-+ *     | 172.16.1.100 |      |   | 172.16.1.200 |
-+ *     |     bpf      |      |   +--------------+
-+ *     +--------------+      |
-+ *      server(UDP/TCP)      |
-+ *  +-------------------+    |
-+ *  |        vrf1       |    |
-+ *  |  +--------------+ |    |   +--------------+
-+ *  |  |    veth02    |----------|    veth20    |
-+ *  |  | 172.16.2.100 | |    |   | 172.16.2.200 |
-+ *  |  |     bpf      | |    |   +--------------+
-+ *  |  +--------------+ |    |
-+ *  |   server(UDP/TCP) |    |
-+ *  +-------------------+    |
-+ *
-+ * Test flow
-+ * -----------
-+ *  The tests verifies that socket lookup via TC is VRF aware:
-+ *  1) Creates two veth pairs between NS1 and NS2:
-+ *     a) veth01 <-> veth10 outside the VRF
-+ *     b) veth02 <-> veth20 in the VRF
-+ *  2) Attaches to veth01 and veth02 a program that calls:
-+ *     a) bpf_skc_lookup_tcp() with TCP and tcp_skc is true
-+ *     b) bpf_sk_lookup_tcp() with TCP and tcp_skc is false
-+ *     c) bpf_sk_lookup_udp() with UDP
-+ *     The program stores the lookup result in bss->lookup_status.
-+ *  3) Creates a socket TCP/UDP server in/outside the VRF.
-+ *  4) The test expects lookup_status to be:
-+ *     a) 0 from device in VRF to server outside VRF
-+ *     b) 0 from device outside VRF to server in VRF
-+ *     c) 1 from device in VRF to server in VRF
-+ *     d) 1 from device outside VRF to server outside VRF
-+ */
-+
-+#include <net/if.h>
-+
-+#include "test_progs.h"
-+#include "network_helpers.h"
-+#include "tc_socket_lookup.skel.h"
-+
-+#define NS1 "tc_socket_lookup_1"
-+#define NS2 "tc_socket_lookup_2"
-+
-+#define IP4_ADDR_VETH01 "172.16.1.100"
-+#define IP4_ADDR_VETH10 "172.16.1.200"
-+#define IP4_ADDR_VETH02 "172.16.2.100"
-+#define IP4_ADDR_VETH20 "172.16.2.200"
-+
-+#define NON_VRF_PORT 5000
-+#define IN_VRF_PORT 5001
-+
-+#define IO_TIMEOUT_SEC	3
-+
-+#define SYS(fmt, ...)						\
-+	({							\
-+		char cmd[1024];					\
-+		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-+		if (!ASSERT_OK(system(cmd), cmd))		\
-+			goto fail;				\
-+	})
-+
-+#define SYS_NOFAIL(fmt, ...)					\
-+	({							\
-+		char cmd[1024];					\
-+		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-+		system(cmd);					\
-+	})
-+
-+static int make_socket(int sotype, const char *ip, int port,
-+		       struct sockaddr_storage *addr)
-+{
-+	struct timeval timeo = { .tv_sec = IO_TIMEOUT_SEC };
-+	int err, fd;
-+
-+	err = make_sockaddr(AF_INET, ip, port, addr, NULL);
-+	if (!ASSERT_OK(err, "make_address"))
-+		return -1;
-+
-+	fd = socket(AF_INET, sotype, 0);
-+	if (!ASSERT_OK(fd < 0, "socket"))
-+		return -1;
-+
-+	err = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
-+	if (!ASSERT_OK(err, "setsockopt(SO_SNDTIMEO)"))
-+		goto fail;
-+
-+	err = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo));
-+	if (!ASSERT_OK(err, "setsockopt(SO_RCVTIMEO)"))
-+		goto fail;
-+
-+	return fd;
-+fail:
-+	close(fd);
-+	return -1;
-+}
-+
-+static int make_server(int sotype, const char *ip, int port, const char *ifname)
-+{
-+	struct sockaddr_storage addr = {};
-+	const int one = 1;
-+	int err, fd = -1;
-+
-+	fd = make_socket(sotype, ip, port, &addr);
-+	if (fd < 0)
-+		return -1;
-+
-+	if (sotype == SOCK_STREAM) {
-+		err = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one,
-+				 sizeof(one));
-+		if (!ASSERT_OK(err, "setsockopt(SO_REUSEADDR)"))
-+			goto fail;
-+	}
-+
-+	if (ifname) {
-+		err = setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE,
-+				 ifname, strlen(ifname) + 1);
-+		if (!ASSERT_OK(err, "setsockopt(SO_BINDTODEVICE)"))
-+			goto fail;
-+	}
-+
-+	err = bind(fd, (void *)&addr, sizeof(struct sockaddr_in));
-+	if (!ASSERT_OK(err, "bind"))
-+		goto fail;
-+
-+	if (sotype == SOCK_STREAM) {
-+		err = listen(fd, SOMAXCONN);
-+		if (!ASSERT_OK(err, "listen"))
-+			goto fail;
-+	}
-+
-+	return fd;
-+fail:
-+	close(fd);
-+	return -1;
-+}
-+
-+static int attach_tc_prog(struct bpf_tc_hook *hook, int prog_fd)
-+{
-+	LIBBPF_OPTS(bpf_tc_opts, opts1, .handle = 1, .priority = 1,
-+		    .prog_fd = prog_fd);
-+	int ret;
-+
-+	ret = bpf_tc_hook_create(hook);
-+	if (!ASSERT_OK(ret, "create tc hook"))
-+		return ret;
-+
-+	if (prog_fd >= 0) {
-+		hook->attach_point = BPF_TC_INGRESS;
-+		ret = bpf_tc_attach(hook, &opts1);
-+		if (!ASSERT_OK(ret, "bpf_tc_attach")) {
-+			bpf_tc_hook_destroy(hook);
-+			return ret;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static void cleanup(void)
-+{
-+	SYS_NOFAIL("test -f /var/run/netns/" NS1 " && ip netns delete "
-+		   NS1);
-+	SYS_NOFAIL("test -f /var/run/netns/" NS2 " && ip netns delete "
-+		   NS2);
-+}
-+
-+static int setup(struct tc_socket_lookup *skel)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
-+	struct nstoken *nstoken = NULL;
-+	int ifindex, prog_fd, ret = 0;
-+
-+	SYS("ip netns add " NS1);
-+	SYS("ip netns add " NS2);
-+
-+	/* NS1 <-> NS2 [veth01 <-> veth10] */
-+	SYS("ip link add veth01 netns " NS1 " type veth peer name veth10 netns "
-+	    NS2);
-+	SYS("ip -net " NS1 " addr add " IP4_ADDR_VETH01 "/24 dev veth01");
-+	SYS("ip -net " NS1 " link set dev veth01 up");
-+	SYS("ip -net " NS2 " addr add " IP4_ADDR_VETH10 "/24 dev veth10");
-+	SYS("ip -net " NS2 " link set dev veth10 up");
-+
-+	/* NS1 <-> NS2 [veth02 <-> veth20] */
-+	SYS("ip link add veth02 netns " NS1 " type veth peer name veth20 netns "
-+	    NS2);
-+	SYS("ip -net " NS1 " addr add " IP4_ADDR_VETH02 "/24 dev veth02");
-+	SYS("ip -net " NS1 " link set dev veth02 up");
-+	SYS("ip -net " NS2 " addr add " IP4_ADDR_VETH20 "/24 dev veth20");
-+	SYS("ip -net " NS2 " link set dev veth20 up");
-+
-+	/* veth02 -> vrf1  */
-+	SYS("ip -net " NS1 " link add vrf1 type vrf table 11");
-+	SYS("ip -net " NS1 " route add vrf vrf1 unreachable default metric "
-+	    "4278198272");
-+	SYS("ip -net " NS1 " link set vrf1 alias vrf");
-+	SYS("ip -net " NS1 " link set vrf1 up");
-+	SYS("ip -net " NS1 " link set veth02 master vrf1");
-+
-+	/* Attach prog to veth devices in NS1 */
-+	nstoken = open_netns(NS1);
-+	if (!ASSERT_OK_PTR(nstoken, "setns " NS1))
-+		goto fail;
-+	prog_fd = bpf_program__fd(skel->progs.test_socket_lookup);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
-+		goto fail;
-+
-+	ifindex = if_nametoindex("veth01");
-+	if (!ASSERT_NEQ(ifindex, 0, "veth01 ifindex"))
-+		goto fail;
-+	tc_hook.ifindex = ifindex;
-+	if (attach_tc_prog(&tc_hook, prog_fd))
-+		goto fail;
-+
-+	ifindex = if_nametoindex("veth02");
-+	if (!ASSERT_NEQ(ifindex, 0, "veth02 ifindex"))
-+		goto fail;
-+	tc_hook.ifindex = ifindex;
-+	if (attach_tc_prog(&tc_hook, prog_fd))
-+		goto fail;
-+	goto close;
-+fail:
-+	ret = -1;
-+close:
-+	if (nstoken)
-+		close_netns(nstoken);
-+	return ret;
-+}
-+
-+static int test_lookup(struct tc_socket_lookup *skel, int sotype,
-+		       const char *ip, int port, bool tcp_skc,
-+		       int lookup_status_exp)
-+{
-+	static const char msg[] = "Hello Server";
-+	struct sockaddr_storage addr = {};
-+	int fd, ret = 0;
-+
-+	fd = make_socket(sotype, ip, port, &addr);
-+	if (fd < 0)
-+		return -1;
-+
-+	skel->bss->tcp_skc = tcp_skc;
-+	skel->bss->lookup_status = -1;
-+
-+	if (sotype == SOCK_STREAM)
-+		connect(fd, (void *)&addr, sizeof(struct sockaddr_in));
-+	else
-+		sendto(fd, msg, sizeof(msg), 0, (void *)&addr,
-+		       sizeof(struct sockaddr_in));
-+
-+	if (!ASSERT_EQ(skel->bss->lookup_status, lookup_status_exp,
-+		       "lookup_status"))
-+		goto fail;
-+
-+	goto close;
-+
-+fail:
-+	ret = -1;
-+close:
-+	close(fd);
-+	return ret;
-+}
-+
-+static void _test_tc_socket_lookup(struct tc_socket_lookup *skel, int sotype,
-+				   bool tcp_skc)
-+{
-+	int in_vrf_server, non_vrf_server;
-+	struct nstoken *nstoken = NULL;
-+
-+	nstoken = open_netns(NS1);
-+	if (!ASSERT_OK_PTR(nstoken, "setns " NS1))
-+		goto done;
-+
-+	/* Open sockets in and outside VRF */
-+	non_vrf_server = make_server(sotype, "0.0.0.0", NON_VRF_PORT, NULL);
-+	if (!ASSERT_GE(non_vrf_server, 0, "make_server__outside_vrf_fd"))
-+		goto done;
-+
-+	in_vrf_server = make_server(sotype, "0.0.0.0", IN_VRF_PORT, "veth02");
-+	if (!ASSERT_GE(in_vrf_server, 0, "make_server__in_vrf_fd"))
-+		goto done;
-+
-+	/* Perform test from NS2 */
-+	close_netns(nstoken);
-+	nstoken = open_netns(NS2);
-+	if (!ASSERT_OK_PTR(nstoken, "setns " NS2))
-+		goto done;
-+
-+	if (!ASSERT_OK(test_lookup(skel, sotype, IP4_ADDR_VETH02, NON_VRF_PORT,
-+				   tcp_skc, 0), "in_to_out"))
-+		goto done;
-+	if (!ASSERT_OK(test_lookup(skel, sotype, IP4_ADDR_VETH02, IN_VRF_PORT,
-+				   tcp_skc, 1), "in_to_in"))
-+		goto done;
-+	if (!ASSERT_OK(test_lookup(skel, sotype, IP4_ADDR_VETH01, NON_VRF_PORT,
-+				   tcp_skc, 1), "out_to_out"))
-+		goto done;
-+	if (!ASSERT_OK(test_lookup(skel, sotype, IP4_ADDR_VETH01, IN_VRF_PORT,
-+				   tcp_skc, 0), "out_to_in"))
-+		goto done;
-+
-+done:
-+	if (non_vrf_server)
-+		close(non_vrf_server);
-+	if (in_vrf_server)
-+		close(in_vrf_server);
-+	if (nstoken)
-+		close_netns(nstoken);
-+}
-+
-+void test_tc_socket_lookup(void)
-+{
-+	struct tc_socket_lookup *skel;
-+
-+	cleanup();
-+
-+	skel = tc_socket_lookup__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tc_socket_lookup__open_and_load"))
-+		return;
-+
-+	if (!ASSERT_OK(setup(skel), "setup"))
-+		goto done;
-+
-+	if (test__start_subtest("tc_socket_lookup_tcp"))
-+		_test_tc_socket_lookup(skel, SOCK_STREAM, false);
-+	if (test__start_subtest("tc_socket_lookup_tcp_skc"))
-+		_test_tc_socket_lookup(skel, SOCK_STREAM, true);
-+	if (test__start_subtest("tc_socket_lookup_udp"))
-+		_test_tc_socket_lookup(skel, SOCK_DGRAM, false);
-+
-+done:
-+	tc_socket_lookup__destroy(skel);
-+	cleanup();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/tc_socket_lookup.c b/tools/testing/selftests/bpf/progs/tc_socket_lookup.c
-new file mode 100644
-index 000000000000..06601eb17807
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tc_socket_lookup.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <linux/ip.h>
-+#include <linux/in.h>
-+#include <linux/if_ether.h>
-+#include <linux/pkt_cls.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+#include <stdbool.h>
-+
-+int lookup_status;
-+bool tcp_skc;
-+
-+#define CUR_NS BPF_F_CURRENT_NETNS
-+
-+SEC("tc")
-+int test_socket_lookup(struct __sk_buff *skb)
-+{
-+	struct bpf_sock_tuple *tp;
-+	void *data_end, *data;
-+	struct bpf_sock *sk;
-+	struct ethhdr *eth;
-+	struct iphdr *iph;
-+	int tplen;
-+
-+	if (skb->protocol != bpf_htons(ETH_P_IP))
-+		return TC_ACT_UNSPEC;
-+
-+	tplen = sizeof(tp->ipv4);
-+
-+	if (bpf_skb_pull_data(skb, sizeof(*eth) + sizeof(*iph) + tplen))
-+		return TC_ACT_SHOT;
-+
-+	data_end = (void *)(long)skb->data_end;
-+	data = (void *)(long)skb->data;
-+
-+	eth = data;
-+	if (eth + 1 > data_end)
-+		return TC_ACT_SHOT;
-+
-+	iph = (struct iphdr *)(eth + 1);
-+	if (iph + 1 > data_end)
-+		return TC_ACT_SHOT;
-+
-+	tp = (struct bpf_sock_tuple *)&iph->saddr;
-+	if ((void *)tp + tplen > data_end)
-+		return TC_ACT_SHOT;
-+
-+	switch (iph->protocol) {
-+	case IPPROTO_TCP:
-+		if (tcp_skc)
-+			sk = bpf_skc_lookup_tcp(skb, tp, tplen, CUR_NS, 0);
-+		else
-+			sk = bpf_sk_lookup_tcp(skb, tp, tplen, CUR_NS, 0);
-+		break;
-+	case IPPROTO_UDP:
-+		sk = bpf_sk_lookup_udp(skb, tp, tplen, CUR_NS, 0);
-+		break;
-+	default:
-+		return TC_ACT_SHOT;
-+	}
-+
-+	lookup_status = 0;
-+
-+	if (sk) {
-+		bpf_sk_release(sk);
-+		lookup_status = 1;
-+	}
-+
-+	return TC_ACT_UNSPEC;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.34.1
+> On Apr 20, 2023, at 3:25 AM, David Gow <davidgow@google.com> wrote:
+>=20
+> On Wed, 19 Apr 2023 at 22:05, Chuck Lever <cel@kernel.org> wrote:
+>>=20
+>> From: Chuck Lever <chuck.lever@oracle.com>
+>>=20
+>> Circumvent the .gitignore wildcard to avoid warnings about ignored
+>> .kunitconfig files. As far as I can tell, the warnings are harmless
+>> and these files are not actually ignored.
+>>=20
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Link: https://lore.kernel.org/oe-kbuild-all/202304142337.jc4oUrov-lkp@in=
+tel.com/
+>> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+>> ---
+>=20
+> Thanks very much.
+>=20
+> We have an equivalent patch already staged in the kselftest/kunit for 6.3=
+:
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git=
+/commit/?h=3Dkunit&id=3Dcb8865fd865f5b2f656d0d91f3b0146ef1acb10d
+
+Most excellent.
+
+Yesterday, Jakub accepted my patch in net-next as part of
+a series that also adds additional Kunit tests. My patch
+can be dropped or reverted to avoid a merge conflict.
+
+
+--
+Chuck Lever
+
 
