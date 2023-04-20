@@ -2,245 +2,210 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4B86E7E34
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Apr 2023 17:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672EA6E86F8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Apr 2023 02:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbjDSPZU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Apr 2023 11:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S233208AbjDTAvB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Apr 2023 20:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbjDSPZQ (ORCPT
+        with ESMTP id S232748AbjDTAud (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Apr 2023 11:25:16 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C42A275;
-        Wed, 19 Apr 2023 08:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681917868; x=1713453868;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FyoNEuewRSZF8EIv9CVEenpq/Tgf8iahWbqzpdIszVs=;
-  b=LvzGqd3fxxptJUfr7uNAEQhWltjBoKTeclVWQDFKGhoMP5XyOUdNqbW4
-   ZxZrQZQkiWNKXj2nRbesKEtRbXTnWXA2v35GFLjFIp5LcasZGdoaGTee6
-   3Zw55We8ajRqUpPYt4qBRyH4DoGGZt97dMxCDZDaEid6I2zl4IBBP7kOm
-   rPrEKM1PRCTMvOJt7qPCrS0rsCP2VFPF201zZwK0vr6JSn8ZMtmHbCxba
-   5f1IHE963iITvRpiazaZJIUJVmJzzwTSf4CZyzS8aytDrp4OQBPoUAOnH
-   up9MSijg6zFpB95IVIjA1KagyT57FXXLejW+IF5/cecbfnyseQ0dWtaRh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="329652262"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="329652262"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 08:23:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="641814765"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="641814765"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 19 Apr 2023 08:22:54 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pp9e0-000ewp-2j;
-        Wed, 19 Apr 2023 15:22:52 +0000
-Date:   Wed, 19 Apr 2023 23:21:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
+        Wed, 19 Apr 2023 20:50:33 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD757A9F
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Apr 2023 17:50:08 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54ee12aa4b5so11847577b3.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Apr 2023 17:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681951797; x=1684543797;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WElRL1S1A/l6yYWkPjKb60TbLP43vB7Va3vAhnMHy4o=;
+        b=0KQvDXHLR89BVxU2oI9O1ZusFid2YKHOcipULiVP6+PSDHwriZYqd2A06zVvzb+5zg
+         +1pAM1zXlSNPZvINL7u8jaguPJCIxfMpOP+rF/bo3e7YipW5A5h9Z1uQ5Ne2aQDNcW6c
+         EcQXFII0XVCoUfr19ADWbM/w1kzMojqRNFL4dpL0bA9tYUhTVMdjBXnH0ldjTdoS4rfS
+         B4qULmS58/9Ub/zlvy0EPJx+IEG/RXiTWy5ry2WStJSaH5TR16lXIzvnkE2V+5Qqr+ic
+         KCotEARF8eci5Ax95+I+ZNzK3NrfAcOPUHTnTLXEbEOQev6PRHk+rxhdkpcXFMAn0sKn
+         YqLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681951797; x=1684543797;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WElRL1S1A/l6yYWkPjKb60TbLP43vB7Va3vAhnMHy4o=;
+        b=V7shAZHHV8lmQalaWOZLz67lz1MQUdsafWwNLG1ndRUcKgbICd0pvP26anhXXW1Xgr
+         uC7ca+4QWe0G/CuSWngVo9DYn3DEL1GgVYCU2Siph1JwQTYq6+l/yrYhsvdVNlmFnbxq
+         +VaDokU5uKqraPw7KLvD6jphlJKKgKii1QioiERIxKBNewViFZl9CwWuot9zaTlPn+0k
+         OqyoRffToAJkT4poErxgb5+a35TkUXWv2MVz6/AhaV9VOpqYpsy4uwf8llbaIiszvrMr
+         o5QPXv2J0gyrCn1DmvgZ3eWZSex/74CsM/dcCu/ja0TmH5nvhBtjQ3ixlk2cK9wS1m3m
+         4INg==
+X-Gm-Message-State: AAQBX9fkoc5HQaHH7Sea5xH6y4dLKSswqCwSQe9+SFZExCJ88UwtQOyK
+        Gyb3r48rhLKr0x5X3Ey4V4Yvdzr89WE=
+X-Google-Smtp-Source: AKy350ZW3QSDcu1b4uay718+0UKdCoR5698g0B4gA8e9kbzHBPJ0H7w91zco9M9KgDo6hSqXOcwRuk93omk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:d24c:0:b0:b95:460c:1776 with SMTP id
+ j73-20020a25d24c000000b00b95460c1776mr766347ybg.13.1681951797267; Wed, 19 Apr
+ 2023 17:49:57 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 17:49:55 -0700
+In-Reply-To: <20230418-anfallen-irdisch-6993a61be10b@brauner>
+Mime-Version: 1.0
+References: <20220818132421.6xmjqduempmxnnu2@box> <diqzlej60z57.fsf@ackerleytng-cloudtop.c.googlers.com>
+ <20221202061347.1070246-2-chao.p.peng@linux.intel.com> <20230413-anlegen-ergibt-cbefffe0b3de@brauner>
+ <ZDiCG/7OgDI0SwMR@google.com> <20230418-anfallen-irdisch-6993a61be10b@brauner>
+Message-ID: <ZECMM9bjgGRdyXRy@google.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+From:   Sean Christopherson <seanjc@google.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
-Subject: Re: [PATCH v15 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <202304192347.QsBHpCUb-lkp@intel.com>
-References: <20230419110716.4113627-3-usama.anjum@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419110716.4113627-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>,
+        linux-arch@vger.kernel.org, arnd@arndb.de, linmiaohe@huawei.com,
+        naoya.horiguchi@nec.com, tabba@google.com, wei.w.wang@intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Muhammad,
+On Wed, Apr 19, 2023, Christian Brauner wrote:
+> On Thu, Apr 13, 2023 at 03:28:43PM -0700, Sean Christopherson wrote:
+> > > But if you want to preserve the inode number and device number of the
+> > > relevant tmpfs instance but still report memfd restricted as your
+> > > filesystem type
+> > 
+> > Unless I missed something along the way, reporting memfd_restricted as a distinct
+> > filesystem is very much a non-goal.  AFAIK it's purely a side effect of the
+> > proposed implementation.
+> 
+> In the current implementation you would have to put in effort to fake
+> this. For example, you would need to also implement ->statfs
+> super_operation where you'd need to fill in the details of the tmpfs
+> instance. At that point all that memfd_restricted fs code that you've
+> written is nothing but deadweight, I would reckon.
 
-kernel test robot noticed the following build errors:
+After digging a bit, I suspect the main reason Kirill implemented an overlay to
+inode_operations was to prevent modifying the file size via ->setattr().  Relying
+on shmem_setattr() to unmap entries in KVM's MMU wouldn't work because, by design,
+the memory can't be mmap()'d into host userspace. 
 
-[auto build test ERROR on next-20230418]
-[cannot apply to akpm-mm/mm-everything linus/master v6.3-rc7 v6.3-rc6 v6.3-rc5 v6.3-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+	if (attr->ia_valid & ATTR_SIZE) {
+		if (memfd->f_inode->i_size)
+			return -EPERM;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230419-190920
-patch link:    https://lore.kernel.org/r/20230419110716.4113627-3-usama.anjum%40collabora.com
-patch subject: [PATCH v15 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
-config: s390-randconfig-r044-20230416 (https://download.01.org/0day-ci/archive/20230419/202304192347.QsBHpCUb-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b4a176ae0c875b07b49d2e3539699065438be9b1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230419-190920
-        git checkout b4a176ae0c875b07b49d2e3539699065438be9b1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/
+		if (!PAGE_ALIGNED(attr->ia_size))
+			return -EINVAL;	
+	}
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304192347.QsBHpCUb-lkp@intel.com/
+But I think we can solve this particular problem by using F_SEAL_{GROW,SHRINK} or
+SHMEM_LONGPIN.  For a variety of reasons, I'm leaning more and more toward making
+this a KVM ioctl() instead of a dedicated syscall, at which point we can be both
+more flexible and more draconian, e.g. let userspace provide the file size at the
+time of creation, but make the size immutable, at least by default.
 
-All errors (new ones prefixed by >>):
+> > After giving myself a bit of a crash course in file systems, would something like
+> > the below have any chance of (a) working, (b) getting merged, and (c) being
+> > maintainable?
+> > 
+> > The idea is similar to a stacking filesystem, but instead of stacking, restrictedmem
+> > hijacks a f_ops and a_ops to create a lightweight shim around tmpfs.  There are
+> > undoubtedly issues and edge cases, I'm just looking for a quick "yes, this might
+> > be doable" or a "no, that's absolutely bonkers, don't try it".
+> 
+> Maybe, but I think it's weird.
 
-   fs/proc/task_mmu.c: In function 'do_pagemap_scan':
->> fs/proc/task_mmu.c:2177:41: error: 'vma' undeclared (first use in this function)
-    2177 |                                         vma->vm_mm, start, end);
-         |                                         ^~~
-   fs/proc/task_mmu.c:2177:41: note: each undeclared identifier is reported only once for each function it appears in
+Yeah, agreed.
 
+> _Replacing_ f_ops isn't something that's unprecedented. It happens everytime
+> a character device is opened (see fs/char_dev.c:chrdev_open()). And debugfs
+> does a similar (much more involved) thing where it replaces it's proxy f_ops
+> with the relevant subsystem's f_ops. The difference is that in both cases the
+> replace happens at ->open() time; and the replace is done once. Afterwards
+> only the newly added f_ops are relevant.
+> 
+> In your case you'd be keeping two sets of {f,a}_ops; one usable by
+> userspace and another only usable by in-kernel consumers. And there are
+> some concerns (non-exhaustive list), I think:
+> 
+> * {f,a}_ops weren't designed for this. IOW, one set of {f,a}_ops is
+>   authoritative per @file and it is left to the individual subsystems to
+>   maintain driver specific ops (see the sunrpc stuff or sockets).
+> * lifetime management for the two sets of {f,a}_ops: If the ops belong
+>   to a module then you need to make sure that the module can't get
+>   unloaded while you're using the fops. Might not be a concern in this
+>   case.
 
-vim +/vma +2177 fs/proc/task_mmu.c
+Ah, whereas I assume the owner of inode_operations is pinned by ??? (dentry?)
+holding a reference to the inode?
 
-  2128	
-  2129	static long do_pagemap_scan(struct mm_struct *mm,
-  2130				   struct pm_scan_arg __user *uarg)
-  2131	{
-  2132		unsigned long start, end, walk_start, walk_end;
-  2133		unsigned long empty_slots, vec_index = 0;
-  2134		struct mmu_notifier_range range;
-  2135		struct page_region __user *vec;
-  2136		struct pagemap_scan_private p;
-  2137		struct pm_scan_arg arg;
-  2138		int ret = 0;
-  2139	
-  2140		if (copy_from_user(&arg, uarg, sizeof(arg)))
-  2141			return -EFAULT;
-  2142	
-  2143		start = untagged_addr((unsigned long)arg.start);
-  2144		vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
-  2145	
-  2146		ret = pagemap_scan_args_valid(&arg, start, vec);
-  2147		if (ret)
-  2148			return ret;
-  2149	
-  2150		end = start + arg.len;
-  2151		p.max_pages = arg.max_pages;
-  2152		p.found_pages = 0;
-  2153		p.flags = arg.flags;
-  2154		p.required_mask = arg.required_mask;
-  2155		p.anyof_mask = arg.anyof_mask;
-  2156		p.excluded_mask = arg.excluded_mask;
-  2157		p.return_mask = arg.return_mask;
-  2158		p.cur.len = 0;
-  2159		p.cur.start = 0;
-  2160		p.vec = NULL;
-  2161		p.vec_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
-  2162	
-  2163		/*
-  2164		 * Allocate smaller buffer to get output from inside the page walk
-  2165		 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
-  2166		 * we want to return output to user in compact form where no two
-  2167		 * consecutive regions should be continuous and have the same flags.
-  2168		 * So store the latest element in p.cur between different walks and
-  2169		 * store the p.cur at the end of the walk to the user buffer.
-  2170		 */
-  2171		p.vec = kmalloc_array(p.vec_len, sizeof(*p.vec), GFP_KERNEL);
-  2172		if (!p.vec)
-  2173			return -ENOMEM;
-  2174	
-  2175		if (p.flags & PM_SCAN_OP_WP) {
-  2176			mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
-> 2177						vma->vm_mm, start, end);
-  2178			mmu_notifier_invalidate_range_start(&range);
-  2179		}
-  2180	
-  2181		walk_start = walk_end = start;
-  2182		while (walk_end < end && !ret) {
-  2183			p.vec_index = 0;
-  2184	
-  2185			empty_slots = arg.vec_len - vec_index;
-  2186			p.vec_len = min(p.vec_len, empty_slots);
-  2187	
-  2188			walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
-  2189			if (walk_end > end)
-  2190				walk_end = end;
-  2191	
-  2192			ret = mmap_read_lock_killable(mm);
-  2193			if (ret)
-  2194				goto free_data;
-  2195			ret = walk_page_range(mm, walk_start, walk_end,
-  2196					      &pagemap_scan_ops, &p);
-  2197			mmap_read_unlock(mm);
-  2198	
-  2199			if (ret && ret != -ENOSPC && ret != PM_SCAN_FOUND_MAX_PAGES)
-  2200				goto free_data;
-  2201	
-  2202			walk_start = walk_end;
-  2203			if (p.vec_index) {
-  2204				if (copy_to_user(&vec[vec_index], p.vec,
-  2205						 p.vec_index * sizeof(*p.vec))) {
-  2206					/*
-  2207					 * Return error even though the OP succeeded
-  2208					 */
-  2209					ret = -EFAULT;
-  2210					goto free_data;
-  2211				}
-  2212				vec_index += p.vec_index;
-  2213			}
-  2214		}
-  2215	
-  2216		if (p.flags & PM_SCAN_OP_WP)
-  2217			mmu_notifier_invalidate_range_end(&range);
-  2218	
-  2219		if (p.cur.len) {
-  2220			if (copy_to_user(&vec[vec_index], &p.cur, sizeof(*p.vec))) {
-  2221				ret = -EFAULT;
-  2222				goto free_data;
-  2223			}
-  2224			vec_index++;
-  2225		}
-  2226	
-  2227		ret = vec_index;
-  2228	
-  2229	free_data:
-  2230		kfree(p.vec);
-  2231		return ret;
-  2232	}
-  2233	
+> * brittleness: Not all f_ops for example deal with userspace
+>   functionality some deal with cleanup when the file is closed like
+>   ->release(). So it's delicate to override that functionality with
+>   custom f_ops. Restricted memfds could easily forget to cleanup
+>   resources.
+> * Potential for confusion why there's two sets of {f,a}_ops.
+> * f_ops specifically are generic across a vast amount of consumers and
+>   are subject to change. If memfd_restricted() has specific requirements
+>   because of this weird double-use they won't be taken into account.
+> 
+> I find this hard to navigate tbh and it feels like taking a shortcut to
+> avoid building a proper api.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Agreed.  At the very least, it would be better to take an explicit dependency on
+whatever APIs are being used instead of somewhat blindly bouncing through ->fallocate().
+I think that gives us a clearer path to getting something merged too, as we'll
+need Acks on making specific functions visible, i.e. will give MM maintainers
+something concrete to react too.
+
+> If you only care about a specific set of operations specific to memfd
+> restricte that needs to be available to in-kernel consumers, I wonder if you
+> shouldn't just go one step further then your proposal below and build a
+> dedicated minimal ops api.
+
+This is actually very doable for shmem.  Unless I'm missing something, because
+our use case doesn't allow mmap(), swap, or migration, a good chunk of
+shmem_fallocate() is simply irrelevant.  The result is only ~100 lines of code,
+and quite straightforward.
+
+My biggest concern, outside of missing a detail in shmem, is adding support for
+HugeTLBFS, which is likely going to be requested/needed sooner than later.  At a
+glance, hugetlbfs_fallocate() is quite a bit more complex, i.e. not something I'm
+keen to duplicate.  But that's also a future problem to some extent, as it's
+purely kernel internals; the uAPI side of things doesn't seem like it'll be messy
+at all.
+
+Thanks again!
