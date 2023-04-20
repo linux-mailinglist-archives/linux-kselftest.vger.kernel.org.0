@@ -2,196 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273506E99A3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Apr 2023 18:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4FC6E99C1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Apr 2023 18:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234791AbjDTQf6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Apr 2023 12:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S231961AbjDTQmb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Apr 2023 12:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234758AbjDTQfz (ORCPT
+        with ESMTP id S230200AbjDTQma (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:35:55 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on060a.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0e::60a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DF33A96;
-        Thu, 20 Apr 2023 09:35:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jDxcdAO3qErJR2OSSuK+JYMCUeZRs/QzZmTG8fiLmHthraTvHQBjOf45ry1WyAJRP5o5ipslpdRGf/OifF6XtLDEJa4s9K6c7FuK9SSHYr+5sg5k0iZxqrBEOETUxpur00eC7jcD4lV0bwcPPnmt7sApQkaw/soMvBYX19E1Qx4FRU0guu2SYspX0j7huPJlx6rDtf42pSeT7kvhSIL92RBczEt32aJ0NUE1pJQW6YFmeGGN068koMBWd5/8CT19N4pvotblQJ7jmwPowFtmSfny4E/g7mX9fXd6aErlvXubSJWYJkNMIM1eNQ7jedQ/qMAEJnsQeJibgdeUI9eGEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pxq1bS5G7wtLEfYRkor+7MNDvVUvHqzlAFOZZ5bToeA=;
- b=AcGIXPj1g5Fn9Wh5Z/t26hs9CCLIK/mtIVJh84PivOr8plxa9dbVRUb/CnU26mBYViltqBW34a3n6F+1l4EJKpaZdxv1QstcXuCYJAVCoT04RWLNDniW14V+0wOiH8XS0J8o9SfiOhHPX8u6qW5HLu5pQ24sTb5ziTEcitgXOmKAWuxYbkMKMcMe3keCn1c/lxXmQRaxhgiIZ5POI3V+ulygWZ4Cft3cUiqT43dG7P8uMkIxdjAHhO2o/MmA7kqB1O4I6ej+t8+ddraHidu57kToIGHlmrGyEtFarrnygRIfnMbbp6FC2I3ZBepMAcMcgcl3tmUC9GkhKZnOz/S2Dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pxq1bS5G7wtLEfYRkor+7MNDvVUvHqzlAFOZZ5bToeA=;
- b=AJyChnm0PfhdGcHiiji5c6WYDYaqfInCIksven3PR75t7f6m3eeupcuZpIkT06XjqFPCNsN2DpeGuDZes9LBm33mUiRor6VZ4Ai4KJrN+517A6LKMavrZ8raHpYnHXXCAEhR2fjix4CCVHF2lF9veplZ3qp+AKp8NkDWcDmZeaQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by DU2PR04MB8695.eurprd04.prod.outlook.com (2603:10a6:10:2de::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
- 2023 16:34:58 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::245a:9272:b30a:a21c]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::245a:9272:b30a:a21c%3]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
- 16:34:58 +0000
-Date:   Thu, 20 Apr 2023 19:34:53 +0300
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Danielle Ratson <danieller@nvidia.com>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Aaron Conole <aconole@redhat.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 3/9] net: enetc: only commit preemptible TCs
- to hardware when MM TX is active
-Message-ID: <20230420163453.4moc7ie327g5rgfn@skbuf>
-References: <20230418111459.811553-1-vladimir.oltean@nxp.com>
- <20230418111459.811553-4-vladimir.oltean@nxp.com>
- <ZEFPbNCNDWy0c8eK@corigine.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEFPbNCNDWy0c8eK@corigine.com>
-X-ClientProxiedBy: AS4PR09CA0010.eurprd09.prod.outlook.com
- (2603:10a6:20b:5e0::14) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|DU2PR04MB8695:EE_
-X-MS-Office365-Filtering-Correlation-Id: 752114ba-04f7-4c50-495c-08db41bd2e55
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HTmwaMOpJUoFCjonQ4x+V1r1y/8W2WExkAxSH299Kt9gdLy2IUfS8kmNIndwkrzb0VSN22X3rXgpisVL/dPTJkZ0FKf+83/Wqy5lDxYtN6fJlBS2GeVKOVEKFsXIJemjVguIdtpGZ61OlR7d0owrQWTxKZ16bffbK2RSpfPz7wpCiSfV74FN3iGd8C2mg1HpVIgWcyd2HoUOzYPSMB+5yb1+UBLg/6xUeQW92UeALyIiWsuUJPG2zNuu1teXgwDu7ME3nNL9aUaHrFKzka6Ud/YgnSwhjl9ygHAM+He8g/mFazwyRxdDECM9CMY65o86bnfVquhkhdEHBPBJ5aeY2Kip9u4lzPfXbgyoZ78vt6h6Ij1XW50A9ZTk+hsfCvoRac1Jp1IEYwA60Mzz+CRMIfv7iQ6Whc6ikS9W0sI5o+oIGqHHnW27RwvXCn3NY0PP5HP9cwFvXP+dn+fLhv8HWSCijlHwSr/F3+f1LKTh5YGF0dJQb+igdj9HcWBgP7orT1uU/HAFFTjiu08yRBaSsEHsjGhdudaRf0pX/W7pPvJ1623ZRtZU11NUSnVPruGH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(396003)(376002)(366004)(346002)(136003)(39860400002)(451199021)(2906002)(41300700001)(5660300002)(7416002)(8676002)(6916009)(66946007)(66556008)(66476007)(4326008)(6486002)(316002)(8936002)(44832011)(54906003)(478600001)(6512007)(6666004)(26005)(1076003)(6506007)(9686003)(83380400001)(33716001)(38100700002)(186003)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zHKP/lCj9TvPWUqECB4MeBU3vZy4mZNRBbb3xA6dUUk4ekwWr7vGHuXu59lk?=
- =?us-ascii?Q?HFBSO6ZEzRqGwfxUqQFaJBxcU0K/XqgGhI2iChioagapHPI+G1u70dMGF5xp?=
- =?us-ascii?Q?frxjS1ArcGCdP6/5PIrt3+ecJXiDD8hFXV8yR5KxDIXM3VQvAKBuh3skhFAI?=
- =?us-ascii?Q?VmoQNSzDVMBs6sGjZK7mz51Dqrb0iBdrTzeJyn+gnrfQmT1Ffe3WMwVT3ENi?=
- =?us-ascii?Q?JuoedACW9NyPj+pys5nVfK75LVS3o5nQgg314H7sh4upaO/lFIudXF5RrxIN?=
- =?us-ascii?Q?IWgkCfZFIC9FhW4CoWDLp6PLhLQKmyWE1GXrrJodzzYHcX4XFubsTO9R88q5?=
- =?us-ascii?Q?a1dLl2lqWD9Jw20jutvAiJTX5T03thKTcKYfIBzlOk/iuhT/oQTW02i9oOv/?=
- =?us-ascii?Q?r1oQL7/qFiuuA33vl0HSWodukS5MhabrzTNgxlEkRejPUqYERkWivSxbOZgK?=
- =?us-ascii?Q?0GOGfZrUpknUmwgj/7qqbmjTRVeU0cKrDgmJ148t/DNCNPA6QlD+NGcZZKjs?=
- =?us-ascii?Q?8ewzRs5FD+Sbb4Fcs9VhLBJJp/ujkOfS03KcK1bx0k+9xiA/x+vnFIu/uTFv?=
- =?us-ascii?Q?C1sRz2kNpAriL7cdmEPeO0NNobbkgOGj+1gDGKMo0QIABcPUTli5UDfD3ivF?=
- =?us-ascii?Q?OG7z40O+NFZKtgxPZxwmmIgm2v7DsaGB+XdjnFwNudNPbnoVs8pv/WxfAA6n?=
- =?us-ascii?Q?IyApagv+AowMa7DKAubHx0gIRhUOzVTG25KFFjCbcrEsjzWf3DeTyd1N6Ye+?=
- =?us-ascii?Q?Eojzav+xOmmSehrUAUd2dj2KonWJiw+3eU7zhZsAuSu/2LHuNq4dYXEmZdTM?=
- =?us-ascii?Q?/MXfM1u8fzh/qurn38hlZjUtfGn4rSrZda6/y3pqulx5p0wOHrfomxY4KaiV?=
- =?us-ascii?Q?axDCx91biwILjS7e6qa9Ph2TExrC8O7csa0BA3UKJ6dShf993ANqyi3s9u8+?=
- =?us-ascii?Q?mx+8i1jivovdVolSm/OkzZiB5JUequ/aqcOtdVKvQX6tMXIByHUPKYPia6bE?=
- =?us-ascii?Q?L8TCQqJmO+uMrUknDxcLEOZE+FYLkGabJJ2qLYNjZrVWwp9WRccFLL8YUix8?=
- =?us-ascii?Q?O6B/QRqEPDz5FwmR1gM9QSS/aMtM3fN3fBc65u8kimI1TGY7rVYhbUw309tM?=
- =?us-ascii?Q?S+iRDbfDnMKla1EVBEwrc9L2IIFQ6BJLUNp95VJk+moT6BprlCDgcXGLwFW7?=
- =?us-ascii?Q?3eAid2jjbFcAlwewVJnnZJMngWS72rfgMdTipEiS9I2eO/W1SGbJvwWQsMMq?=
- =?us-ascii?Q?bR506peY0/J9pZqmDWd8oNJ805M9PM78NcJGzQ1iXVuRxEUdK3WCipYynOZ8?=
- =?us-ascii?Q?aG+JYF5urNz+rKHthMnyWbhZ+ifcM88lmxUDqw9CRBdGJrF306DNf1Yi49ER?=
- =?us-ascii?Q?JZJGNFP4/ISlIMuJmd3GTvcOYI9CBGRpmSpLoKVYrdL0CyjIhGP1+ivlz9HG?=
- =?us-ascii?Q?3f4RMaYX8K45DmfSSwLkxZuwocQSR8SsarF7WwwTkPrrk7YAeWOwDtZNqdSk?=
- =?us-ascii?Q?eb+BGx/z4SBwyAm8LyAivxIgHQEqhy1Q1U9Jg1lWTf1DI5hJTUH2IUU/XTZR?=
- =?us-ascii?Q?QQMj2WED9H8rtSRnnrJjOLF+ClRZJsaK2S2RFQmlGGoZRRqmsiLz5OQ6mIhZ?=
- =?us-ascii?Q?VA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 752114ba-04f7-4c50-495c-08db41bd2e55
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 16:34:58.6999
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SvoYZr0CEZIOvfP99zhyo8t7Pc1zLkgz4G9X6tkCXGJ+FSw5c2a4ie9eCYttcbA+cW2oOMAfDSHJqEnxXunnmw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8695
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 20 Apr 2023 12:42:30 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983E12D56
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 09:42:29 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-552d922f0faso26217137b3.14
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 09:42:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682008949; x=1684600949;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=T1mmlYQK0Ax84SlhH64ck5bBrkjS+ny32bkCi7XQTZQ=;
+        b=5VtY8k60e5g1tJwzNKEMWu02mAc0iZcoJ60a9EpQjikosZde7KPmrao0fgjSBp74n/
+         EugDFzl2b4y1ruxsaSoE3Rg0rt2f0cauXiIJPhaI9Ez6axZLTH52xVYTyUpfZkWuI5yk
+         fD0GKtdB4TYGYw7Fk+aDHyKvc7cnqGTtKtVHoJGdQ13FvEzI9KFXUd3OXoZZe75zoXli
+         idM3GVswA+9gfPRLDXVw5zzVI+o8deBIOs9XUluU0ArdTRe8dxy5oUr3hEyC9FTCRhzo
+         5zxZQI7ZLVGNVa7GIYMhzlVpyprBy9dbpqv9F3Ood9nO9WdcalWrwTTDeapsc+PU9cMW
+         GdWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682008949; x=1684600949;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T1mmlYQK0Ax84SlhH64ck5bBrkjS+ny32bkCi7XQTZQ=;
+        b=OR7jYgzzi4wZ1hJxJ97u1ZOz0xjXQVhP7xPcg8sdrXzhkhAmVg2BKF++PsaILg8iTs
+         sxEvG0ZJHZpElfB3ytm+NoJbscscMseQc85ehB3bOPx+jduT0Zy93qdds6weoTplIW4z
+         oRd7ycFuFxXq7dt/PKEc3HsLU1qMrKk5KlCL2664x573OqXmQ+zKxJ5ji+5eb9tHpcef
+         ISx/EQtcvk8KMpfs25rzbMeHGBQdSLdDCf2x1aqm0SEsv0ovGSXdMP2rjMhADoURf0/T
+         cxHxwm4/VMr3hbWLY/SFwIb19LiOUjfAfqAvnHwR+zMVUiydWSCJ3QfNetitU9lLyqRa
+         qluQ==
+X-Gm-Message-State: AAQBX9cx+oi/UBCvzJzj+3jC/2HjJTF5NBud5YdQ6MiFsN6J2tF46g7b
+        LT7vycTxUalu2mHmyRShA15pFCo=
+X-Google-Smtp-Source: AKy350YaSf/EF1hYCH6Qty7yMntO448QhciDS+jiloiJxtMJBinKQuK91dMGqLj50RpYgaccxq0TUbw=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a25:d04c:0:b0:b96:106d:5198 with SMTP id
+ h73-20020a25d04c000000b00b96106d5198mr1325874ybg.7.1682008948829; Thu, 20 Apr
+ 2023 09:42:28 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 09:42:26 -0700
+In-Reply-To: <20230420145041.508434-1-gilad9366@gmail.com>
+Mime-Version: 1.0
+References: <20230420145041.508434-1-gilad9366@gmail.com>
+Message-ID: <ZEFrcoG+QS/PRbew@google.com>
+Subject: Re: [PATCH bpf,v2 0/4] Socket lookup BPF API from tc/xdp ingress does
+ not respect VRF bindings.
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Gilad Sever <gilad9366@gmail.com>
+Cc:     dsahern@kernel.org, martin.lau@linux.dev, daniel@iogearbox.net,
+        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
+        shuah@kernel.org, hawk@kernel.org, joe@wand.net.nz,
+        eyal.birger@gmail.com, shmulik.ladkani@gmail.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 04:42:52PM +0200, Simon Horman wrote:
-> > +	/* This will time out after the standard value of 3 verification
-> > +	 * attempts. To not sleep forever, it relies on a non-zero verify_time,
-> > +	 * guarantee which is provided by the ethtool nlattr policy.
-> > +	 */
-> > +	return read_poll_timeout(enetc_port_rd, val,
-> > +				 ENETC_MMCSR_GET_VSTS(val) == 3,
+On 04/20, Gilad Sever wrote:
+> When calling socket lookup from L2 (tc, xdp), VRF boundaries aren't
+> respected. This patchset fixes this by regarding the incoming device's
+> VRF attachment when performing the socket lookups from tc/xdp.
 > 
-> nit: 3 is doing a lot of work here.
->      As a follow-up, perhaps it could become part of an enum?
+> The first two patches are coding changes which facilitate this fix by
+> factoring out the tc helper's logic which was shared with cg/sk_skb
+> (which operate correctly).
 
-IMHO it's easy to abuse enums, when numbers could do just fine. I think
-that in context (seeing the entire enetc_ethtool.c), this is not as bad
-as just this patch makes it to be, because the other occurrence of
-ENETC_MMCSR_GET_VSTS() is:
+Why is not relevant for cgroup/egress? Is it already running with
+the correct device?
 
-	switch (ENETC_MMCSR_GET_VSTS(val)) {
-	case 0:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_DISABLED;
-		break;
-	case 2:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_VERIFYING;
-		break;
-	case 3:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_SUCCEEDED;
-		break;
-	case 4:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_FAILED;
-		break;
-	case 5:
-	default:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_UNKNOWN;
-		break;
-	}
+Also, do we really need all this refactoring and separate paths?
+Can we just add that bpf_l2_sdif part to the existing code?
+It will trigger for tc, but I'm assuming it will be a no-op for cgroup
+path?
 
-so it's immediately clear what the 3 represents (in vim I just press '*'
-to see the other occurrences of ENETC_MMCSR_GET_VSTS).
+And regarding bpf_l2_sdif: seems like it's really generic and should
+probably be called something like dev_sdif?
 
-I considered it, but I don't feel an urgent necessity to add an enum here.
-Doing that would essentially transform the code into:
-
-	return read_poll_timeout(enetc_port_rd, val,
-				 ENETC_MMCSR_GET_VSTS(val) == ENETC_MM_VSTS_SUCCEEDED,
-
-	switch (ENETC_MMCSR_GET_VSTS(val)) {
-	case ENETC_MMCSR_VSTS_DISABLED:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_DISABLED;
-		break;
-	case ENETC_MMCSR_VSTS_VERIFYING:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_VERIFYING;
-		break;
-	case ENETC_MMCSR_VSTS_SUCCEEDED:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_SUCCEEDED;
-		break;
-	case ENETC_MMCSR_VSTS_FAILED:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_FAILED;
-		break;
-	case ENETC_MMCSR_VSTS_UNKNOWN:
-	default:
-		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_UNKNOWN;
-		break;
-	}
-
-which to my eye is more bloated.
+> The third patch contains the actual bugfix.
+> 
+> The fourth patch adds bpf tests for these lookup functions.
+> ---
+> v2: Fixed uninitialized var in test patch (4).
+> 
+> Gilad Sever (4):
+>   bpf: factor out socket lookup functions for the TC hookpoint.
+>   bpf: Call __bpf_sk_lookup()/__bpf_skc_lookup() directly via TC
+>     hookpoint
+>   bpf: fix bpf socket lookup from tc/xdp to respect socket VRF bindings
+>   selftests/bpf: Add tc_socket_lookup tests
+> 
+>  net/core/filter.c                             | 132 +++++--
+>  .../bpf/prog_tests/tc_socket_lookup.c         | 341 ++++++++++++++++++
+>  .../selftests/bpf/progs/tc_socket_lookup.c    |  73 ++++
+>  3 files changed, 525 insertions(+), 21 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/tc_socket_lookup.c
+> 
+> -- 
+> 2.34.1
+> 
