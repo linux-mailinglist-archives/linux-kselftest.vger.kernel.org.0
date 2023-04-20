@@ -2,520 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3D36E97A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Apr 2023 16:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0716E985B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Apr 2023 17:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbjDTOv0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Apr 2023 10:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
+        id S231563AbjDTPe3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Apr 2023 11:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbjDTOvV (ORCPT
+        with ESMTP id S230089AbjDTPe2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Apr 2023 10:51:21 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4F77282;
-        Thu, 20 Apr 2023 07:51:13 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id o29-20020a05600c511d00b003f1739de43cso1256655wms.4;
-        Thu, 20 Apr 2023 07:51:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682002273; x=1684594273;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KnyPHhlG14bz6EDEVcoWERsXlhJzJCPorj/CGFgJlCg=;
-        b=b/SYIujKmEBBS7uc5khOPASaikHn90tU41wjBccD6/9T4KIzYeRk97obV+deMvIuod
-         CGsgYUL9x/Zlihr/+56afeCZzIqZ0e0G5VoHKzeBQnrCFzGv/+v7c80Ga4Pu++f5ozAD
-         c1yx8Y7pCKJwOS8RSBFGfLinNB0Si94LqFMilOIMvZ21h0RSOW/t+ZZwpUo/9+znUNki
-         78uNazdHh0kSjciewk7vaf4nJEjo8NZen35uxNuQ/KIYRRIbxHU2XDM8o10NTrdmHEnU
-         czwhfaw+sR3a6uqposj/VAIH28wAitsTK8wEOe5ZLc2otrQxpNm/MWKgqjw+OuqataZN
-         Umzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682002273; x=1684594273;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KnyPHhlG14bz6EDEVcoWERsXlhJzJCPorj/CGFgJlCg=;
-        b=YuPKGtQo+H3ZQ6EasHNhXP+8x1v2cgNLzOFzcQwwi3W4BLnZELXRoFSTzu03LQVicQ
-         C6PNcAh9fD2NRVwZvR3vJj53Q9ZgG9Bq5hO5UNiL2cX/pc4xQZo6/IHmsZHZp+SyQ8+y
-         jejF6vTsupY13CbhTlIYC3TW6CYk5lNXrjCQlpjZwMXsKIFnIK4y0Z7lx9RaBDEPFYr2
-         r/GM6GpfHLee+vxY2JoLtmS45vqUKOoF8Jo6BapIbDCGnnvpaiwU+CzhnH4voqrbNjQF
-         cpZt5tUJG0HBZPrkGXoRE8TsX+YciwraLJH0NErRXI8jQ/sDFgxyEJH0bog8lTrKviGe
-         ME7w==
-X-Gm-Message-State: AAQBX9dgQei3qH6xlvWDa7QGVByv99v/uI2jft043jnRrQOdb/yzW7hj
-        uam6jky4OMCZkUnhEBMQBCE=
-X-Google-Smtp-Source: AKy350Z8tDn2o/xfiXysAFd7WB5i0oHirLEtfCSvAyCvA/jFKHyu0XI2/okQhh9Dwqi08skAkbYbWA==
-X-Received: by 2002:a7b:ce04:0:b0:3f1:6757:6243 with SMTP id m4-20020a7bce04000000b003f167576243mr1369685wmc.35.1682002272513;
-        Thu, 20 Apr 2023 07:51:12 -0700 (PDT)
-Received: from gsever-Latitude-7400.corp.proofpoint.com ([46.120.112.185])
-        by smtp.gmail.com with ESMTPSA id n20-20020a7bc5d4000000b003f17b96793dsm5534619wmk.37.2023.04.20.07.51.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Apr 2023 07:51:12 -0700 (PDT)
-From:   Gilad Sever <gilad9366@gmail.com>
-To:     dsahern@kernel.org, martin.lau@linux.dev, daniel@iogearbox.net,
-        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org, hawk@kernel.org, joe@wand.net.nz
-Cc:     eyal.birger@gmail.com, shmulik.ladkani@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Gilad Sever <gilad9366@gmail.com>
-Subject: [PATCH bpf,v2 4/4] selftests/bpf: Add tc_socket_lookup tests
-Date:   Thu, 20 Apr 2023 17:50:41 +0300
-Message-Id: <20230420145041.508434-5-gilad9366@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230420145041.508434-1-gilad9366@gmail.com>
-References: <20230420145041.508434-1-gilad9366@gmail.com>
+        Thu, 20 Apr 2023 11:34:28 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2042.outbound.protection.outlook.com [40.107.92.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143141988;
+        Thu, 20 Apr 2023 08:34:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ma417743dtsDmg2+T0tlDXCr9Lo8Oj1McB+SwxdaUe1yPAQL9yv08lsCveQcE/E32MZfqKyjKz/IymhU5ArOvEoEPxTgGRCrqvIo3jmd//M/ML3zzvlBP4tI5X/Bx30gBduaRTxxQHSOnSIIRaLRgwD1Lqs41CLM2LMYiW60ZJgOW1bEggH0PYOQ1ASRM2uhqF5vEOgHB4QDDQNEZfugzR+VISOqL58hgY6vr9DzIE+dYSW8ui+cT46Grk233fm8+2mq443iKpuQU1C7CPWGyjiQTile8pWuHLtiKWz7jeMNVEzhWzAVHohR39V6Oec2d7m5lJnOjg2JD2LQXzaWGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B7NY9YplT3wWg4WzfOkXA5Ow2s0RE5Vz6nxAbXENYPI=;
+ b=XKPJR8JWn/mGBdupxlSnhgMhQZTYLgPKwVm5szU13DD7KH2beBYjdeczRZil/sTJ9lJI+mX4Dn9yU4WjF4aywFXZDDkhaH9xa4ZmZCWVi/4snhkm4tVg5yn62lKw32+LAAeBZruxtsmWa5k2TmiJHRh9P7DRCNIZZSC5L0tx/bdKFkCGAF1FcAKunJCq6WIvfyLuqpUhvBK2x8T4ZeF2tDR88sl4D2NG3dp6g0wQJG9Esehai9AKQaN5rqEQaFXE8er1AYW+mOwgL704LVyV0P6h0DVJlromSSLqXcE4uJkwtwQC/lHXI7IuqJgowoNJwKG39aTkNg5PolQRiF0BvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B7NY9YplT3wWg4WzfOkXA5Ow2s0RE5Vz6nxAbXENYPI=;
+ b=nDzNY87MaLMudAl+qw9ZCo5NznN0vc7Ozune44qfAy2lljSDinEjc2WN58VKuEaieHygS/IvhFdRcMAoJE3vrbKhHZtAdoAthHrcOt49PhDR/ET0noBdfUJuRzppHMjFJRCJyy3Nk8dGDm3/cMdGzTlLzfmDEWPFeXFc9pXGCFP8YsCyw5lIbCgT4eOXKD1leW5YgpuNY1G4+K6xvsBK2qcB+pNOqgmJUK4Z9CMvaZyX6Ip1sl96IuiN8JNSUFj5cSgH/2cTeaIZVT19Vkxp1QjEyTeqwi5JU6G+pJJGvRCaOlw9sane4bbgHLquyWy1TfiF8Cffzg0YWJ6pkI0DAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SJ2PR12MB8010.namprd12.prod.outlook.com (2603:10b6:a03:4c7::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Thu, 20 Apr
+ 2023 15:34:23 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6319.020; Thu, 20 Apr 2023
+ 15:34:23 +0000
+Date:   Thu, 20 Apr 2023 12:34:21 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: Re: [PATCH v3 03/17] iommufd: Replace the hwpt->devices list with
+ iommufd_group
+Message-ID: <ZEFbfY/88a4PZ2Ny@nvidia.com>
+References: <0-v3-61d41fd9e13e+1f5-iommufd_alloc_jgg@nvidia.com>
+ <3-v3-61d41fd9e13e+1f5-iommufd_alloc_jgg@nvidia.com>
+ <BN9PR11MB5276E42B629C3E5AF019B6748C879@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZDVvLbSN2TR1Er1c@nvidia.com>
+ <BN9PR11MB527661A29A11AE1E7FC655018C9B9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZDaTY6OX8oR5w0uV@nvidia.com>
+ <BN9PR11MB52762841AAA04A24F76A743C8C989@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZDlVtcwhV2G8ZKao@nvidia.com>
+ <BN9PR11MB5276DA68C8318CC3433252CA8C639@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276DA68C8318CC3433252CA8C639@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BL0PR02CA0015.namprd02.prod.outlook.com
+ (2603:10b6:207:3c::28) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ2PR12MB8010:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0d20ff24-035e-4172-73a4-08db41b4b6e2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: un9Q0bLkNsp9qlFbF+BAX7NAoTjBbUEuHolXUi7NdgJ9lCp37fBiz6stPuMV/mx8AIwbqFtp1oVCS7Jb1yF74CZ82zDqvTXqBMZNbDIH9TXE7gHh2yZcXHIdq4Z/oIksIwja/k8jdmyGYu+lCigyRHLSSZIJGRcmJb4ilRRr0u/6ARM0YhAuTO6qujVnp8/MQuo8MLi54osnVcwZgsLRrXgVQlHyOhGadjeC6xsbRGKPgnJpNJRHS35xIPFGH29AmxAxQzrPXKqOC5WVGZLF5lQxZ/hwqc4DHgGqDVWPyYBVmEFy/pIeCSzShQxXWQ1P1LBYnhe3mSgQJMzot28ouT9UCZi76PY/keVbwSETA9yV+oz8ODhipAlAtD799teNxaHovJXgOKV6o/CnerpBrcEMb30FAAbif8fNO274XHE8RsgSBFgSpnlfBl3xHSUO37S2lY6YVFUvboQouOXLs0m+qL2Z38UaXlj+jUI1cdjloMIZn7eO5/ob/TfQIhlpcMaCFqsWlP9yHejtuE9d/LvAx3j4e46/w1vh6+FM8MLj+FNJqV5XcUhVvjrqMD4B
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(136003)(39860400002)(396003)(451199021)(26005)(6506007)(6512007)(316002)(186003)(41300700001)(478600001)(6486002)(36756003)(54906003)(86362001)(66556008)(66946007)(66476007)(6916009)(4326008)(2616005)(38100700002)(5660300002)(8936002)(8676002)(2906002)(4744005)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eGWw2/f75U8trl3OqhciCt2r1vnOLn45YB7/o8MiDOyiZXT0OqbFift6PMUe?=
+ =?us-ascii?Q?GOTdv/8sOAtLrYtupCT4Jf+ri1l3CPszXyVxaTnINdw3JhPBXffm/C21Qdua?=
+ =?us-ascii?Q?/uArocAXDhnINhqFSO6q6OIC1dNEZnwXfSzo2okm02T4BG1HpSdc6bkqzObL?=
+ =?us-ascii?Q?Eoc2ocw9H9M2srii5BKhmx/o7+GNOAdYU0X6jtMA2TT3mRbXgdQ4YqIdDSSL?=
+ =?us-ascii?Q?ozM+yAsq8myzK7lYEU54KV8eV/yY3ofLBizy4PVWFLibZ4SBxrNNjwPSx52r?=
+ =?us-ascii?Q?XkVPV/IA0ntg3HeUVLuzJG+TmhQBbefJBBisxHBf0gKWtysbhmV6bpvGS3GA?=
+ =?us-ascii?Q?fJlwnONryag+VNwdRMC03ZUotjLqaXYj9Uydc1rf9jAplVOSEWby7myqYDxv?=
+ =?us-ascii?Q?/ZJaWukKLSGq3KV7GJrSz2jeVvIpL5d+IizM4x4fEo86mBkEoLgTm8sYJnkr?=
+ =?us-ascii?Q?zRdwx7xgjMLth/0L+ZLYuMnkDJQ2TOpLYWfQ5/owDUPqM786O1AT8PeBUq/x?=
+ =?us-ascii?Q?JjRwMObwswo8uJmIiF57z7GPNaS2/DDQgH4sKl8ME4K75AiH/J7Z8khAPuX5?=
+ =?us-ascii?Q?WrUR5vh2F+xjHDHsr4AnrY2mxOK7Rpg+xaHIWtI7ba9hDytzd3jUfotbrnK1?=
+ =?us-ascii?Q?uJpM16TVkqTgJD5cx0XmG2XNSCrfHH5xv/fTjo49NuacS27YHCUrS56Nh575?=
+ =?us-ascii?Q?qI5z62hvswgq5i97/wFlZnO3U0xHWjoIjOJqlaJHp1Ci6Co3M8hJgk2K0oR6?=
+ =?us-ascii?Q?lZURwqwF3S0C53e3MKctDpFlfQCusIg4eobOPtrhfPqzWUcriaFpEXfx2AAO?=
+ =?us-ascii?Q?PMusbn6BGKqyuK4IIR0Xgx5WX3VrTLCT1IYjrIu4ga4+52OhxzYE5zrj5Xkd?=
+ =?us-ascii?Q?XUM+cK+EHHYq9T18Lol6zsGS3enJxmfW1gWReTfPMnnP9x7xn3RDqN64maoz?=
+ =?us-ascii?Q?1XZL/kYzLo0oLb89ltS+TqiHXToy1j3gGWcbVnx2gA9Huscqbg3nxN/3oPEY?=
+ =?us-ascii?Q?iVIU44YADB34rn8dpONBkrKT++JAwmoOnzJqU9lgqgGvlyskAZW+jRcDYYcW?=
+ =?us-ascii?Q?Ba1Id1/tk6ngLLZDVNhttGiIYqENZD8ZEEZkaQXCaT3hXl2+IEjr8/P1FKuS?=
+ =?us-ascii?Q?RUdx3ll6BNr4YOKV3FCy73WpKuivsXbmE8fndaE3Sf1buTorFTQoIL50OrUh?=
+ =?us-ascii?Q?/jZlPExtvHdtos+VYVtrPUwwH+5na7GW99BBDAtiXkPnrslLqKQj9z46xp65?=
+ =?us-ascii?Q?yM94YxPUHYctK0991dYNgexiIJogYEE5i88B3DDTtjq6T14BkVrfHzXaPe/9?=
+ =?us-ascii?Q?rXlsshbu7iOHuXzDaFiqF5Zei9+LlEzEsvq2Qwxxn1WnrxLDO4yWHuIBL+hL?=
+ =?us-ascii?Q?fMRTQ79mqWNwUl4zmVwtv/xdocfcPGK5yzBFwuLfPBpc5Zs/az3C76KwlqqA?=
+ =?us-ascii?Q?yMnrcWY5v0zrRYbBiD/MethJTN8eGRbKW2SF3G6lHIciujFZoXt57FDaoer/?=
+ =?us-ascii?Q?9QSM1DtpzbRB0LCBzVkZWMIgKfJ7kTKcZcWd8PjYvQN5JHCoQfNdXLpC9dXG?=
+ =?us-ascii?Q?lSUDjObbwzD6LEu7+vUiAwsADaGtEwz9q+9ZGFBi?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d20ff24-035e-4172-73a4-08db41b4b6e2
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 15:34:23.1170
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0DvFEWkCXElkIwZA77i0I3dnmtqC9QXEwP8Mr/ihb45fUy8+41HgmaN13jWc/8ub
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8010
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Verify that socket lookup via TC with all BPF APIs is VRF aware.
+On Thu, Apr 20, 2023 at 06:15:16AM +0000, Tian, Kevin wrote:
+> > > which internal list? group has a list for attached devices but regarding
+> > > to hwpt it's stored in a single field igroup->hwpt.
+> > 
+> > It is added to
+> > 
+> > 	list_add_tail(&hwpt->hwpt_item, &hwpt->ioas->hwpt_list);
+> 
+> this is called under ioas->mutex.
 
-Signed-off-by: Gilad Sever <gilad9366@gmail.com>
----
-v2: Fix build by initializing vars with -1
----
- .../bpf/prog_tests/tc_socket_lookup.c         | 341 ++++++++++++++++++
- .../selftests/bpf/progs/tc_socket_lookup.c    |  73 ++++
- 2 files changed, 414 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
- create mode 100644 tools/testing/selftests/bpf/progs/tc_socket_lookup.c
+Yes.. But.. that is troubled too, we are calling destroy under the
+same mutex, there is a missing a fault point to catch it in the test,
+and hwpt_alloc doesn't have the lock wide enough :\
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c b/tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
-new file mode 100644
-index 000000000000..5dcaf0ea3f8c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
-@@ -0,0 +1,341 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+/*
-+ * Topology:
-+ * ---------
-+ *     NS1 namespace         |   NS2 namespace
-+ *			     |
-+ *     +--------------+      |   +--------------+
-+ *     |    veth01    |----------|    veth10    |
-+ *     | 172.16.1.100 |      |   | 172.16.1.200 |
-+ *     |     bpf      |      |   +--------------+
-+ *     +--------------+      |
-+ *      server(UDP/TCP)      |
-+ *  +-------------------+    |
-+ *  |        vrf1       |    |
-+ *  |  +--------------+ |    |   +--------------+
-+ *  |  |    veth02    |----------|    veth20    |
-+ *  |  | 172.16.2.100 | |    |   | 172.16.2.200 |
-+ *  |  |     bpf      | |    |   +--------------+
-+ *  |  +--------------+ |    |
-+ *  |   server(UDP/TCP) |    |
-+ *  +-------------------+    |
-+ *
-+ * Test flow
-+ * -----------
-+ *  The tests verifies that socket lookup via TC is VRF aware:
-+ *  1) Creates two veth pairs between NS1 and NS2:
-+ *     a) veth01 <-> veth10 outside the VRF
-+ *     b) veth02 <-> veth20 in the VRF
-+ *  2) Attaches to veth01 and veth02 a program that calls:
-+ *     a) bpf_skc_lookup_tcp() with TCP and tcp_skc is true
-+ *     b) bpf_sk_lookup_tcp() with TCP and tcp_skc is false
-+ *     c) bpf_sk_lookup_udp() with UDP
-+ *     The program stores the lookup result in bss->lookup_status.
-+ *  3) Creates a socket TCP/UDP server in/outside the VRF.
-+ *  4) The test expects lookup_status to be:
-+ *     a) 0 from device in VRF to server outside VRF
-+ *     b) 0 from device outside VRF to server in VRF
-+ *     c) 1 from device in VRF to server in VRF
-+ *     d) 1 from device outside VRF to server outside VRF
-+ */
-+
-+#include <net/if.h>
-+
-+#include "test_progs.h"
-+#include "network_helpers.h"
-+#include "tc_socket_lookup.skel.h"
-+
-+#define NS1 "tc_socket_lookup_1"
-+#define NS2 "tc_socket_lookup_2"
-+
-+#define IP4_ADDR_VETH01 "172.16.1.100"
-+#define IP4_ADDR_VETH10 "172.16.1.200"
-+#define IP4_ADDR_VETH02 "172.16.2.100"
-+#define IP4_ADDR_VETH20 "172.16.2.200"
-+
-+#define NON_VRF_PORT 5000
-+#define IN_VRF_PORT 5001
-+
-+#define IO_TIMEOUT_SEC	3
-+
-+#define SYS(fmt, ...)						\
-+	({							\
-+		char cmd[1024];					\
-+		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-+		if (!ASSERT_OK(system(cmd), cmd))		\
-+			goto fail;				\
-+	})
-+
-+#define SYS_NOFAIL(fmt, ...)					\
-+	({							\
-+		char cmd[1024];					\
-+		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-+		system(cmd);					\
-+	})
-+
-+static int make_socket(int sotype, const char *ip, int port,
-+		       struct sockaddr_storage *addr)
-+{
-+	struct timeval timeo = { .tv_sec = IO_TIMEOUT_SEC };
-+	int err, fd;
-+
-+	err = make_sockaddr(AF_INET, ip, port, addr, NULL);
-+	if (!ASSERT_OK(err, "make_address"))
-+		return -1;
-+
-+	fd = socket(AF_INET, sotype, 0);
-+	if (!ASSERT_OK(fd < 0, "socket"))
-+		return -1;
-+
-+	err = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
-+	if (!ASSERT_OK(err, "setsockopt(SO_SNDTIMEO)"))
-+		goto fail;
-+
-+	err = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo));
-+	if (!ASSERT_OK(err, "setsockopt(SO_RCVTIMEO)"))
-+		goto fail;
-+
-+	return fd;
-+fail:
-+	close(fd);
-+	return -1;
-+}
-+
-+static int make_server(int sotype, const char *ip, int port, const char *ifname)
-+{
-+	struct sockaddr_storage addr = {};
-+	const int one = 1;
-+	int err, fd = -1;
-+
-+	fd = make_socket(sotype, ip, port, &addr);
-+	if (fd < 0)
-+		return -1;
-+
-+	if (sotype == SOCK_STREAM) {
-+		err = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one,
-+				 sizeof(one));
-+		if (!ASSERT_OK(err, "setsockopt(SO_REUSEADDR)"))
-+			goto fail;
-+	}
-+
-+	if (ifname) {
-+		err = setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE,
-+				 ifname, strlen(ifname) + 1);
-+		if (!ASSERT_OK(err, "setsockopt(SO_BINDTODEVICE)"))
-+			goto fail;
-+	}
-+
-+	err = bind(fd, (void *)&addr, sizeof(struct sockaddr_in));
-+	if (!ASSERT_OK(err, "bind"))
-+		goto fail;
-+
-+	if (sotype == SOCK_STREAM) {
-+		err = listen(fd, SOMAXCONN);
-+		if (!ASSERT_OK(err, "listen"))
-+			goto fail;
-+	}
-+
-+	return fd;
-+fail:
-+	close(fd);
-+	return -1;
-+}
-+
-+static int attach_tc_prog(struct bpf_tc_hook *hook, int prog_fd)
-+{
-+	LIBBPF_OPTS(bpf_tc_opts, opts1, .handle = 1, .priority = 1,
-+		    .prog_fd = prog_fd);
-+	int ret;
-+
-+	ret = bpf_tc_hook_create(hook);
-+	if (!ASSERT_OK(ret, "create tc hook"))
-+		return ret;
-+
-+	if (prog_fd >= 0) {
-+		hook->attach_point = BPF_TC_INGRESS;
-+		ret = bpf_tc_attach(hook, &opts1);
-+		if (!ASSERT_OK(ret, "bpf_tc_attach")) {
-+			bpf_tc_hook_destroy(hook);
-+			return ret;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static void cleanup(void)
-+{
-+	SYS_NOFAIL("test -f /var/run/netns/" NS1 " && ip netns delete "
-+		   NS1);
-+	SYS_NOFAIL("test -f /var/run/netns/" NS2 " && ip netns delete "
-+		   NS2);
-+}
-+
-+static int setup(struct tc_socket_lookup *skel)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
-+	struct nstoken *nstoken = NULL;
-+	int ifindex, prog_fd, ret = 0;
-+
-+	SYS("ip netns add " NS1);
-+	SYS("ip netns add " NS2);
-+
-+	/* NS1 <-> NS2 [veth01 <-> veth10] */
-+	SYS("ip link add veth01 netns " NS1 " type veth peer name veth10 netns "
-+	    NS2);
-+	SYS("ip -net " NS1 " addr add " IP4_ADDR_VETH01 "/24 dev veth01");
-+	SYS("ip -net " NS1 " link set dev veth01 up");
-+	SYS("ip -net " NS2 " addr add " IP4_ADDR_VETH10 "/24 dev veth10");
-+	SYS("ip -net " NS2 " link set dev veth10 up");
-+
-+	/* NS1 <-> NS2 [veth02 <-> veth20] */
-+	SYS("ip link add veth02 netns " NS1 " type veth peer name veth20 netns "
-+	    NS2);
-+	SYS("ip -net " NS1 " addr add " IP4_ADDR_VETH02 "/24 dev veth02");
-+	SYS("ip -net " NS1 " link set dev veth02 up");
-+	SYS("ip -net " NS2 " addr add " IP4_ADDR_VETH20 "/24 dev veth20");
-+	SYS("ip -net " NS2 " link set dev veth20 up");
-+
-+	/* veth02 -> vrf1  */
-+	SYS("ip -net " NS1 " link add vrf1 type vrf table 11");
-+	SYS("ip -net " NS1 " route add vrf vrf1 unreachable default metric "
-+	    "4278198272");
-+	SYS("ip -net " NS1 " link set vrf1 alias vrf");
-+	SYS("ip -net " NS1 " link set vrf1 up");
-+	SYS("ip -net " NS1 " link set veth02 master vrf1");
-+
-+	/* Attach prog to veth devices in NS1 */
-+	nstoken = open_netns(NS1);
-+	if (!ASSERT_OK_PTR(nstoken, "setns " NS1))
-+		goto fail;
-+	prog_fd = bpf_program__fd(skel->progs.test_socket_lookup);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
-+		goto fail;
-+
-+	ifindex = if_nametoindex("veth01");
-+	if (!ASSERT_NEQ(ifindex, 0, "veth01 ifindex"))
-+		goto fail;
-+	tc_hook.ifindex = ifindex;
-+	if (attach_tc_prog(&tc_hook, prog_fd))
-+		goto fail;
-+
-+	ifindex = if_nametoindex("veth02");
-+	if (!ASSERT_NEQ(ifindex, 0, "veth02 ifindex"))
-+		goto fail;
-+	tc_hook.ifindex = ifindex;
-+	if (attach_tc_prog(&tc_hook, prog_fd))
-+		goto fail;
-+	goto close;
-+fail:
-+	ret = -1;
-+close:
-+	if (nstoken)
-+		close_netns(nstoken);
-+	return ret;
-+}
-+
-+static int test_lookup(struct tc_socket_lookup *skel, int sotype,
-+		       const char *ip, int port, bool tcp_skc,
-+		       int lookup_status_exp)
-+{
-+	static const char msg[] = "Hello Server";
-+	struct sockaddr_storage addr = {};
-+	int fd, ret = 0;
-+
-+	fd = make_socket(sotype, ip, port, &addr);
-+	if (fd < 0)
-+		return -1;
-+
-+	skel->bss->tcp_skc = tcp_skc;
-+	skel->bss->lookup_status = -1;
-+
-+	if (sotype == SOCK_STREAM)
-+		connect(fd, (void *)&addr, sizeof(struct sockaddr_in));
-+	else
-+		sendto(fd, msg, sizeof(msg), 0, (void *)&addr,
-+		       sizeof(struct sockaddr_in));
-+
-+	if (!ASSERT_EQ(skel->bss->lookup_status, lookup_status_exp,
-+		       "lookup_status"))
-+		goto fail;
-+
-+	goto close;
-+
-+fail:
-+	ret = -1;
-+close:
-+	close(fd);
-+	return ret;
-+}
-+
-+static void _test_tc_socket_lookup(struct tc_socket_lookup *skel, int sotype,
-+				   bool tcp_skc)
-+{
-+	int in_vrf_server = -1, non_vrf_server = -1;
-+	struct nstoken *nstoken = NULL;
-+
-+	nstoken = open_netns(NS1);
-+	if (!ASSERT_OK_PTR(nstoken, "setns " NS1))
-+		goto done;
-+
-+	/* Open sockets in and outside VRF */
-+	non_vrf_server = make_server(sotype, "0.0.0.0", NON_VRF_PORT, NULL);
-+	if (!ASSERT_GE(non_vrf_server, 0, "make_server__outside_vrf_fd"))
-+		goto done;
-+
-+	in_vrf_server = make_server(sotype, "0.0.0.0", IN_VRF_PORT, "veth02");
-+	if (!ASSERT_GE(in_vrf_server, 0, "make_server__in_vrf_fd"))
-+		goto done;
-+
-+	/* Perform test from NS2 */
-+	close_netns(nstoken);
-+	nstoken = open_netns(NS2);
-+	if (!ASSERT_OK_PTR(nstoken, "setns " NS2))
-+		goto done;
-+
-+	if (!ASSERT_OK(test_lookup(skel, sotype, IP4_ADDR_VETH02, NON_VRF_PORT,
-+				   tcp_skc, 0), "in_to_out"))
-+		goto done;
-+	if (!ASSERT_OK(test_lookup(skel, sotype, IP4_ADDR_VETH02, IN_VRF_PORT,
-+				   tcp_skc, 1), "in_to_in"))
-+		goto done;
-+	if (!ASSERT_OK(test_lookup(skel, sotype, IP4_ADDR_VETH01, NON_VRF_PORT,
-+				   tcp_skc, 1), "out_to_out"))
-+		goto done;
-+	if (!ASSERT_OK(test_lookup(skel, sotype, IP4_ADDR_VETH01, IN_VRF_PORT,
-+				   tcp_skc, 0), "out_to_in"))
-+		goto done;
-+
-+done:
-+	if (non_vrf_server >= 0)
-+		close(non_vrf_server);
-+	if (in_vrf_server >= 0)
-+		close(in_vrf_server);
-+	if (nstoken)
-+		close_netns(nstoken);
-+}
-+
-+void test_tc_socket_lookup(void)
-+{
-+	struct tc_socket_lookup *skel;
-+
-+	cleanup();
-+
-+	skel = tc_socket_lookup__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tc_socket_lookup__open_and_load"))
-+		return;
-+
-+	if (!ASSERT_OK(setup(skel), "setup"))
-+		goto done;
-+
-+	if (test__start_subtest("tc_socket_lookup_tcp"))
-+		_test_tc_socket_lookup(skel, SOCK_STREAM, false);
-+	if (test__start_subtest("tc_socket_lookup_tcp_skc"))
-+		_test_tc_socket_lookup(skel, SOCK_STREAM, true);
-+	if (test__start_subtest("tc_socket_lookup_udp"))
-+		_test_tc_socket_lookup(skel, SOCK_DGRAM, false);
-+
-+done:
-+	tc_socket_lookup__destroy(skel);
-+	cleanup();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/tc_socket_lookup.c b/tools/testing/selftests/bpf/progs/tc_socket_lookup.c
-new file mode 100644
-index 000000000000..06601eb17807
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tc_socket_lookup.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <linux/ip.h>
-+#include <linux/in.h>
-+#include <linux/if_ether.h>
-+#include <linux/pkt_cls.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+#include <stdbool.h>
-+
-+int lookup_status;
-+bool tcp_skc;
-+
-+#define CUR_NS BPF_F_CURRENT_NETNS
-+
-+SEC("tc")
-+int test_socket_lookup(struct __sk_buff *skb)
-+{
-+	struct bpf_sock_tuple *tp;
-+	void *data_end, *data;
-+	struct bpf_sock *sk;
-+	struct ethhdr *eth;
-+	struct iphdr *iph;
-+	int tplen;
-+
-+	if (skb->protocol != bpf_htons(ETH_P_IP))
-+		return TC_ACT_UNSPEC;
-+
-+	tplen = sizeof(tp->ipv4);
-+
-+	if (bpf_skb_pull_data(skb, sizeof(*eth) + sizeof(*iph) + tplen))
-+		return TC_ACT_SHOT;
-+
-+	data_end = (void *)(long)skb->data_end;
-+	data = (void *)(long)skb->data;
-+
-+	eth = data;
-+	if (eth + 1 > data_end)
-+		return TC_ACT_SHOT;
-+
-+	iph = (struct iphdr *)(eth + 1);
-+	if (iph + 1 > data_end)
-+		return TC_ACT_SHOT;
-+
-+	tp = (struct bpf_sock_tuple *)&iph->saddr;
-+	if ((void *)tp + tplen > data_end)
-+		return TC_ACT_SHOT;
-+
-+	switch (iph->protocol) {
-+	case IPPROTO_TCP:
-+		if (tcp_skc)
-+			sk = bpf_skc_lookup_tcp(skb, tp, tplen, CUR_NS, 0);
-+		else
-+			sk = bpf_sk_lookup_tcp(skb, tp, tplen, CUR_NS, 0);
-+		break;
-+	case IPPROTO_UDP:
-+		sk = bpf_sk_lookup_udp(skb, tp, tplen, CUR_NS, 0);
-+		break;
-+	default:
-+		return TC_ACT_SHOT;
-+	}
-+
-+	lookup_status = 0;
-+
-+	if (sk) {
-+		bpf_sk_release(sk);
-+		lookup_status = 1;
-+	}
-+
-+	return TC_ACT_UNSPEC;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.34.1
+So you want to argue that it is safe to do this:
 
+   mutex_lock(&ioas->mutex);
+   alloc
+   attach
+   detach
+   abort
+   mutex_unlock(&ioas->mutex);
+
+Even if attach/detach lock/unlock the group mutex during their cycle?
+
+It seems OK..
+
+I don't see any places that Though I don't much like the locking
+pattern where we succeed attach, drop all the locks and the fail and
+then relock and do error unwind.. Sketchy..
+
+Jason
