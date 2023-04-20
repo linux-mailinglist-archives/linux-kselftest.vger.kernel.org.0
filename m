@@ -2,241 +2,210 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BD46E99CB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Apr 2023 18:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F066E99E1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Apr 2023 18:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbjDTQoJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Apr 2023 12:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        id S229633AbjDTQtj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Apr 2023 12:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjDTQoI (ORCPT
+        with ESMTP id S229447AbjDTQti (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Apr 2023 12:44:08 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84722D63
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 09:44:06 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id d14-20020a25e60e000000b00b8f65697946so2613631ybh.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 09:44:06 -0700 (PDT)
+        Thu, 20 Apr 2023 12:49:38 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2134.outbound.protection.outlook.com [40.107.101.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BED2710;
+        Thu, 20 Apr 2023 09:49:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NbtzSP8k4xZskqWqUzA1zAUJkWHkvbdqUwcau7gRJNnZMpqCNM/QnmsuI0tQGEEFLggFE1oV2DEQGFO4/fMvSor2fZZK1l5IvYiLHfOzmzDhnsveF62cM29za+0DWGpnExTEFYh1b0zaG7wtriZZWX0rfibMmW9AsH/pq4VAVVndSA3D3xM4l//SMPXwmw1ZFNKfmoTjCG75nZw/1D//wpqlYOVVmwwf9AbifnKLpHZSMPIsruzQt1c55CaPmxf1TytrOAnY//MmqmGH9DsSHLA1aqBXT1NL93GDih5DAThCgpTIDew7zRuAAsszDQsREsdTrITkfkRL+SvJGa8oNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yRUGAsTglCAyPaD2qqPp307hRSbH7SQ58At8/WHpiuU=;
+ b=HLCJkMVn8vN+vlXhkpxTi3uT5M/L/Wqlewur5pSMNxtUixcfDgnTHKjHRK0nFjcOJ4ZTcfg1ihiOJtSwRhBbi9PFswqqubuM02HE7TP/7AvcWCk98j6h/MA740RS2Z0b2RdTKm7r4EZjuBcXzmOl3DRc1Y2aStrQbfiVsGElTU2hYyfH2YxiakJemJVWnCuFgRDWoadiqZk7GbTrljQKGJkFPfMbqmGpr7IlJrkyjKNw+StVrS1hQxl3eolWiYXFH4JA6hPwycRkaae4TW3tkubOPhWBza19KZCOtCfOX7Xb+BA2MDWC4F9VYTPGmgsI4jsBjn/tLl4eoRlS3r78HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682009046; x=1684601046;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+aN5kIYCwJL2CZYy1S3bvKBdFTHMoNN9xXJdxBEhpVo=;
-        b=CfP5RCyb2FxQzHtIbNy5nMATQFrgEZ2D0GYosBsJfiQxsczvbbHt4N9BBwxB/XlSuJ
-         E4rNfqVpKFaUpYQAtkm5yxA5Ro0dCqncKvKhvcAOR+OuzLx/sHULzBIRqJM9c79P8nAm
-         fYEzlf2Oq23/HjVMVSkDfF0bawrv9N4neGPTo7U16UvkCYoVokPIEDg0HC6osFPwm9eA
-         Kt4rUfdUVrGtdAvmOnRi3xo95l1D5Cro+EQM/MCpOMJl0eQPKAwkGEz0mT6SE/SfTNz6
-         rUbrs7o+wLl8Rb7xA4owDiMHH7aez8SyYhpdCFhMJgXEz/Dy9vKU4RT6+9G0Ayvd7UlU
-         GQSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682009046; x=1684601046;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+aN5kIYCwJL2CZYy1S3bvKBdFTHMoNN9xXJdxBEhpVo=;
-        b=QWJ9XdLT38wmPKddH5EfO/Dldi/8Q/9rhevPxIzaLaWV5+dJ+PtX/3huST7zdX4HUN
-         2gcDuVB+KQxeGzNXBYlkPXcJ+rfrs/ynvKPMVtrrcpokZJRj5UaFd3qRXxkuunlfipLx
-         pgghX7Rblxe5ppRAMuOynVWAy2EL4EYr/7pK31sw/eIqQHTHcQn35djMb8b7TXz+ijl1
-         moMQr4QwOGlif12STDJuv4ZPMbRWyi9UC1JNuxD2YoJXnw8cYAJ6/qRnJFRpwopn1kpC
-         cQHrLMG2uGWkI4x5xptbUVd9fLk/j/HbGINgIuX8WnJnljG2A7BSdY3OogPmGyRndzh9
-         jAig==
-X-Gm-Message-State: AAQBX9dfHnoH4IImfNebjpOK9Kq4HJwyWw5B62f7+zer6CoH+JXoC3L8
-        Jk9F952CinhHWYnhc9g1Px4aKO4=
-X-Google-Smtp-Source: AKy350Z4+sbJBTS394mP9+eI9w9dLdM9HEAp7q/dA3mEFHFGbr2liHryKU/PGVQt4P2wx3LCcI7lTkc=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a0d:ec08:0:b0:54f:a60c:12eb with SMTP id
- q8-20020a0dec08000000b0054fa60c12ebmr991348ywn.1.1682009045991; Thu, 20 Apr
- 2023 09:44:05 -0700 (PDT)
-Date:   Thu, 20 Apr 2023 09:44:04 -0700
-In-Reply-To: <20230420145041.508434-5-gilad9366@gmail.com>
-Mime-Version: 1.0
-References: <20230420145041.508434-1-gilad9366@gmail.com> <20230420145041.508434-5-gilad9366@gmail.com>
-Message-ID: <ZEFr1M0PDziB2c9g@google.com>
-Subject: Re: [PATCH bpf,v2 4/4] selftests/bpf: Add tc_socket_lookup tests
-From:   Stanislav Fomichev <sdf@google.com>
-To:     Gilad Sever <gilad9366@gmail.com>
-Cc:     dsahern@kernel.org, martin.lau@linux.dev, daniel@iogearbox.net,
-        john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org, hawk@kernel.org, joe@wand.net.nz,
-        eyal.birger@gmail.com, shmulik.ladkani@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yRUGAsTglCAyPaD2qqPp307hRSbH7SQ58At8/WHpiuU=;
+ b=YeTxmB0YUW+Iu5W7bfr4wJtU8g75uZMnnJ4bv2F3am0UGfASnUJUI+CzBFhLtSRerMpTKl9iWBDNhEWmCY5GO3JVws0RjD8ZVyQsessdd/WAQgiLrYPsZRrflMD+jEyPakbYSsIF1WPWjBFcrZwwYpx1caENEeeyui9wCPyjA3g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MN2PR13MB3646.namprd13.prod.outlook.com (2603:10b6:208:1e3::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20; Thu, 20 Apr
+ 2023 16:49:33 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%4]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
+ 16:49:32 +0000
+Date:   Thu, 20 Apr 2023 18:49:25 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Danielle Ratson <danieller@nvidia.com>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Aaron Conole <aconole@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 3/9] net: enetc: only commit preemptible TCs
+ to hardware when MM TX is active
+Message-ID: <ZEFtFX9LXxcc+Umn@corigine.com>
+References: <20230418111459.811553-1-vladimir.oltean@nxp.com>
+ <20230418111459.811553-4-vladimir.oltean@nxp.com>
+ <ZEFPbNCNDWy0c8eK@corigine.com>
+ <20230420163453.4moc7ie327g5rgfn@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420163453.4moc7ie327g5rgfn@skbuf>
+X-ClientProxiedBy: AM8P189CA0025.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:218::30) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MN2PR13MB3646:EE_
+X-MS-Office365-Filtering-Correlation-Id: e594725a-ee89-44b1-77a5-08db41bf3749
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JiAzeqESuBZB7xhNctqAaN48lMpH9LBWGJq2tm8yae3wbRR083luN+AxiSb3kOO7QIFgDzTODjeKrS0tf7kZIYoOQ9+KBIYhYxX8+ilMU/SVaKTFakOMgl0JnSD2DOBV7nQptDRqe3pXDgXjJH5z3Um4mULSYHI0IMszgJeesG+1PnuguPHO2Y1FF9EWZv9jDYh37UIPUy2SNRtRvz78Qo+mN1zPpjsGoEuiGrSgq3phpFik/VKzlUgXNcCdmNsEVvgAnx56ZBs1QtnSbBLN4ui0edwtNz7FifF1CvkGRuGPax4Ga27lkGBGmYIH5dy8d9OlE9lpIZz+2/kj4swZqYpBzz49OBxR0oDbLPHK3jN/voJ0vGExXUJgTbbnbsQrOr4pocGXdbfmgSwiFCl/Dyv3dO5+RGyDmqnCW4BW92biKzFHW7Z3emAkdViASw3EdWjFwIPM9WdYsgo3/RsBYA8IbxPiJ9TSRQjRgOD2pzbyNVO3tdZ3s6oCECxqEXorqe0ydTBxtCKJnTAhQTDarQ0Q2wXdknULCCRjpZOhDsvc2Gl1/3MEVyBTDS7CrD1RTimXuVvXaycjTt7+PpTEMnewx07j2KDKZ7UiDKpz4DQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(396003)(376002)(346002)(366004)(136003)(451199021)(36756003)(478600001)(54906003)(6486002)(6666004)(41300700001)(8936002)(8676002)(38100700002)(66476007)(66556008)(66946007)(316002)(4326008)(6916009)(2616005)(83380400001)(186003)(6512007)(6506007)(86362001)(44832011)(2906002)(5660300002)(7416002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9/T2YwL4heUItZzfgb7stNoKZbME3ASMxXU6ZfTKR92+TtPP/gZ99SaiUue7?=
+ =?us-ascii?Q?EensX2PCPmrdETaXXmGun2bTeKl8lTpOLuvY9v1jHlVJCSAHj4qOqrLtIAbr?=
+ =?us-ascii?Q?DJS1scNVpdIAI+G1M48nWL1cXxpd4Xc4O6I2hJqEPa9T+A12mEcgdMvEQ6W9?=
+ =?us-ascii?Q?MSAmV/z/90fTtcRCFJcBT+jSxOfI0zom+1omYg8eBhwnnTUU4ieDJ8GfmJqZ?=
+ =?us-ascii?Q?xeQrW6BSC26VR2xC2QtnQ0oAIEM+CAoJe1MDA0bFyq5Y1DIry1yc8FNVNQ1o?=
+ =?us-ascii?Q?okRfswdXophCebtrsbc3qXaO8c+2+k7b0AiVpcfdJ3e2XTVYMm2nDrcZ+nts?=
+ =?us-ascii?Q?eOGtxHaexRgUe12rMfQrRoS+f6t6ZMVAxYy9aQpYmcpFmK17q87cGeF4KFpX?=
+ =?us-ascii?Q?x4hp38vf8YzhPxNYEsTuGENII5IjQgWJ6cPopywlMyn39VBlCHyNhTczdWrJ?=
+ =?us-ascii?Q?yfqMrkcA4JQ86MkTp1u0CekKYTS2vtDMc+1DquEmt0SKA8Oj3EUz/U110EQo?=
+ =?us-ascii?Q?4S0Lh7tW6NEA0hRa+SYE3fcush42+UeTQvtvh8IyWDO1l2TRLEQA0X5U7bbs?=
+ =?us-ascii?Q?1NX4skve1ZS9w/PIRsDz0RmTpzJcJFObALptQsZQbAC/jbj6KYbiFGj/MpG7?=
+ =?us-ascii?Q?ZMRMvBbay9Us0zQIUd30MycYZGpLh/DjBjVGYN9lTcBwgxSvi1/2dJ4w9FXe?=
+ =?us-ascii?Q?6thKGns1tqo/urVQUtprJgEjeYpYNfl2UYAK1X2lNr8emNpcrUJrQ2y9iYtN?=
+ =?us-ascii?Q?HRiBz56uWla9zLmbbz9wR+L2sKGJYpsmYheWn899HlWENVkpf0fP5Ua63HN4?=
+ =?us-ascii?Q?T4StbTrKcA1vuIgRc5QA4nQ8LOuQVmWR5qps9SO53wxy0cFqg74RogbGfqxj?=
+ =?us-ascii?Q?sWfWC+O9nRRtFbRkYXnANfLtHXzB/veEmUiW+uJFXlVq0mO/Ffvu2ZRPjDGn?=
+ =?us-ascii?Q?Li+kZYlm422bNON5wZO2p6CQ62w3Bxh5aIvDzja94ViAWSrr/4GAeZJ2ZQKs?=
+ =?us-ascii?Q?JXUpImpVTTZ9ISN7YWQEYfBDtIS0sn2cGnAVq1uOuSamkIaa9y6IYYP0gAcv?=
+ =?us-ascii?Q?nzdPFiOUp82Va9OMi5IUiXDtXklHPSbcjREYDqAZdga0vbP3413yQ6o8q7E9?=
+ =?us-ascii?Q?T/HMT/KJ3Z7AHpDNyvtBfqAN7tj/4M2CdgXPCejQg8gHAOG1B4joLh6eURg4?=
+ =?us-ascii?Q?iw1PEorExDkX4pEgk4UTPiNOO8UTkJoAydTbOWSO3OPs13onat8ynlard1x4?=
+ =?us-ascii?Q?IlEXOf9gnvVEZv7sPVLoT04QkK5ank6J5/QKADPUXdVdmN8bv3nyFcScCi6g?=
+ =?us-ascii?Q?hLk7JgZQxKCu2+Ww8qSslh7XnQCtfufNyhxCK6a0lCXoh1Zbt1rADql/Ppea?=
+ =?us-ascii?Q?Z+8iU7bdvkqCfKfUf9h7KT0k6ZhYdlZiFNzUORoQ6nXOC2KVxGXFnj164H1Z?=
+ =?us-ascii?Q?XH4G09muens9vHtV/mbbpT/1+eQ9zqgP6JeCK84SBBrwNj2tziBvo2KOLxCN?=
+ =?us-ascii?Q?LI1zff0l+ndLimuGyo45YMF3hge6jx8WlKvzFCJktQtSnZExHJ3YZLW/jsUA?=
+ =?us-ascii?Q?MAxi/ZQFLCshj+DI+qvyrlZgFj55YIJYg8w8kRU8TCvs4vvF6rGX0+g8ojNG?=
+ =?us-ascii?Q?c564zbUk4/0srk1Rxe1HLLeoRx8gEJ1MXYx8Z+lEnzq7OTb69CXzsUD4RCpI?=
+ =?us-ascii?Q?Lf1m9g=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e594725a-ee89-44b1-77a5-08db41bf3749
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 16:49:32.7199
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ea6mWctRDosiPqVshePMQl4+3ABj58JczrLyOxfO4iH2AhDAuIx9GSpFyIFA9dayQMXl35Le6gpFvXS8EzGU2vvEO42+WU8Etxxc5tDH2AM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR13MB3646
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 04/20, Gilad Sever wrote:
-> Verify that socket lookup via TC with all BPF APIs is VRF aware.
+On Thu, Apr 20, 2023 at 07:34:53PM +0300, Vladimir Oltean wrote:
+> On Thu, Apr 20, 2023 at 04:42:52PM +0200, Simon Horman wrote:
+> > > +	/* This will time out after the standard value of 3 verification
+> > > +	 * attempts. To not sleep forever, it relies on a non-zero verify_time,
+> > > +	 * guarantee which is provided by the ethtool nlattr policy.
+> > > +	 */
+> > > +	return read_poll_timeout(enetc_port_rd, val,
+> > > +				 ENETC_MMCSR_GET_VSTS(val) == 3,
+> > 
+> > nit: 3 is doing a lot of work here.
+> >      As a follow-up, perhaps it could become part of an enum?
 > 
-> Signed-off-by: Gilad Sever <gilad9366@gmail.com>
-> ---
-> v2: Fix build by initializing vars with -1
-> ---
->  .../bpf/prog_tests/tc_socket_lookup.c         | 341 ++++++++++++++++++
->  .../selftests/bpf/progs/tc_socket_lookup.c    |  73 ++++
->  2 files changed, 414 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
->  create mode 100644 tools/testing/selftests/bpf/progs/tc_socket_lookup.c
+> IMHO it's easy to abuse enums, when numbers could do just fine. I think
+> that in context (seeing the entire enetc_ethtool.c), this is not as bad
+> as just this patch makes it to be, because the other occurrence of
+> ENETC_MMCSR_GET_VSTS() is:
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c b/tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
-> new file mode 100644
-> index 000000000000..5dcaf0ea3f8c
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/tc_socket_lookup.c
-> @@ -0,0 +1,341 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> +
-> +/*
-> + * Topology:
-> + * ---------
-> + *     NS1 namespace         |   NS2 namespace
-> + *			     |
-> + *     +--------------+      |   +--------------+
-> + *     |    veth01    |----------|    veth10    |
-> + *     | 172.16.1.100 |      |   | 172.16.1.200 |
-> + *     |     bpf      |      |   +--------------+
-> + *     +--------------+      |
-> + *      server(UDP/TCP)      |
-> + *  +-------------------+    |
-> + *  |        vrf1       |    |
-> + *  |  +--------------+ |    |   +--------------+
-> + *  |  |    veth02    |----------|    veth20    |
-> + *  |  | 172.16.2.100 | |    |   | 172.16.2.200 |
-> + *  |  |     bpf      | |    |   +--------------+
-> + *  |  +--------------+ |    |
-> + *  |   server(UDP/TCP) |    |
-> + *  +-------------------+    |
-> + *
-> + * Test flow
-> + * -----------
-> + *  The tests verifies that socket lookup via TC is VRF aware:
-> + *  1) Creates two veth pairs between NS1 and NS2:
-> + *     a) veth01 <-> veth10 outside the VRF
-> + *     b) veth02 <-> veth20 in the VRF
-> + *  2) Attaches to veth01 and veth02 a program that calls:
-> + *     a) bpf_skc_lookup_tcp() with TCP and tcp_skc is true
-> + *     b) bpf_sk_lookup_tcp() with TCP and tcp_skc is false
-> + *     c) bpf_sk_lookup_udp() with UDP
-> + *     The program stores the lookup result in bss->lookup_status.
-> + *  3) Creates a socket TCP/UDP server in/outside the VRF.
-> + *  4) The test expects lookup_status to be:
-> + *     a) 0 from device in VRF to server outside VRF
-> + *     b) 0 from device outside VRF to server in VRF
-> + *     c) 1 from device in VRF to server in VRF
-> + *     d) 1 from device outside VRF to server outside VRF
-> + */
-> +
-> +#include <net/if.h>
-> +
-> +#include "test_progs.h"
-> +#include "network_helpers.h"
-> +#include "tc_socket_lookup.skel.h"
-> +
-> +#define NS1 "tc_socket_lookup_1"
-> +#define NS2 "tc_socket_lookup_2"
-> +
-> +#define IP4_ADDR_VETH01 "172.16.1.100"
-> +#define IP4_ADDR_VETH10 "172.16.1.200"
-> +#define IP4_ADDR_VETH02 "172.16.2.100"
-> +#define IP4_ADDR_VETH20 "172.16.2.200"
-> +
-> +#define NON_VRF_PORT 5000
-> +#define IN_VRF_PORT 5001
-> +
-> +#define IO_TIMEOUT_SEC	3
-> +
-> +#define SYS(fmt, ...)						\
-> +	({							\
-> +		char cmd[1024];					\
-> +		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-> +		if (!ASSERT_OK(system(cmd), cmd))		\
-> +			goto fail;				\
-> +	})
-> +
-> +#define SYS_NOFAIL(fmt, ...)					\
-> +	({							\
-> +		char cmd[1024];					\
-> +		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-> +		system(cmd);					\
-> +	})
+> 	switch (ENETC_MMCSR_GET_VSTS(val)) {
+> 	case 0:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_DISABLED;
+> 		break;
+> 	case 2:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_VERIFYING;
+> 		break;
+> 	case 3:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_SUCCEEDED;
+> 		break;
+> 	case 4:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_FAILED;
+> 		break;
+> 	case 5:
+> 	default:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_UNKNOWN;
+> 		break;
+> 	}
+> 
+> so it's immediately clear what the 3 represents (in vim I just press '*'
+> to see the other occurrences of ENETC_MMCSR_GET_VSTS).
 
-[..]
+Thanks.
 
-> +static int make_socket(int sotype, const char *ip, int port,
-> +		       struct sockaddr_storage *addr)
-> +{
-> +	struct timeval timeo = { .tv_sec = IO_TIMEOUT_SEC };
-> +	int err, fd;
-> +
-> +	err = make_sockaddr(AF_INET, ip, port, addr, NULL);
-> +	if (!ASSERT_OK(err, "make_address"))
-> +		return -1;
-> +
-> +	fd = socket(AF_INET, sotype, 0);
-> +	if (!ASSERT_OK(fd < 0, "socket"))
-> +		return -1;
-> +
-> +	err = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
-> +	if (!ASSERT_OK(err, "setsockopt(SO_SNDTIMEO)"))
-> +		goto fail;
-> +
-> +	err = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo));
-> +	if (!ASSERT_OK(err, "setsockopt(SO_RCVTIMEO)"))
-> +		goto fail;
-> +
-> +	return fd;
-> +fail:
-> +	close(fd);
-> +	return -1;
-> +}
-> +
-> +static int make_server(int sotype, const char *ip, int port, const char *ifname)
-> +{
-> +	struct sockaddr_storage addr = {};
-> +	const int one = 1;
-> +	int err, fd = -1;
-> +
-> +	fd = make_socket(sotype, ip, port, &addr);
-> +	if (fd < 0)
-> +		return -1;
-> +
-> +	if (sotype == SOCK_STREAM) {
-> +		err = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one,
-> +				 sizeof(one));
-> +		if (!ASSERT_OK(err, "setsockopt(SO_REUSEADDR)"))
-> +			goto fail;
-> +	}
-> +
-> +	if (ifname) {
-> +		err = setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE,
-> +				 ifname, strlen(ifname) + 1);
-> +		if (!ASSERT_OK(err, "setsockopt(SO_BINDTODEVICE)"))
-> +			goto fail;
-> +	}
-> +
-> +	err = bind(fd, (void *)&addr, sizeof(struct sockaddr_in));
-> +	if (!ASSERT_OK(err, "bind"))
-> +		goto fail;
-> +
-> +	if (sotype == SOCK_STREAM) {
-> +		err = listen(fd, SOMAXCONN);
-> +		if (!ASSERT_OK(err, "listen"))
-> +			goto fail;
-> +	}
-> +
-> +	return fd;
-> +fail:
-> +	close(fd);
-> +	return -1;
-> +}
+I did see the code above, and I do agree it is informational
+wrt the meaning of the values.
 
-Any reason you're not using start_server from network_helpers.h?
+> I considered it, but I don't feel an urgent necessity to add an enum here.
+> Doing that would essentially transform the code into:
+> 
+> 	return read_poll_timeout(enetc_port_rd, val,
+> 				 ENETC_MMCSR_GET_VSTS(val) == ENETC_MM_VSTS_SUCCEEDED,
+> 
+> 	switch (ENETC_MMCSR_GET_VSTS(val)) {
+> 	case ENETC_MMCSR_VSTS_DISABLED:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_DISABLED;
+> 		break;
+> 	case ENETC_MMCSR_VSTS_VERIFYING:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_VERIFYING;
+> 		break;
+> 	case ENETC_MMCSR_VSTS_SUCCEEDED:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_SUCCEEDED;
+> 		break;
+> 	case ENETC_MMCSR_VSTS_FAILED:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_FAILED;
+> 		break;
+> 	case ENETC_MMCSR_VSTS_UNKNOWN:
+> 	default:
+> 		state->verify_status = ETHTOOL_MM_VERIFY_STATUS_UNKNOWN;
+> 		break;
+> 	}
+> 
+> which to my eye is more bloated.
+
+I guess it's subjective.
+I certainly don't feel strongly about this.
+And I appreciate you taking the time to respond to my idea.
+
+I have no objections to leaving this patch as is (with '3').
