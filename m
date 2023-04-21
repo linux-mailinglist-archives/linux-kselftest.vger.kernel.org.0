@@ -2,55 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B566EA285
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 06:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5796EA287
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 06:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbjDUEC2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 00:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
+        id S233753AbjDUECi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Apr 2023 00:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjDUEC0 (ORCPT
+        with ESMTP id S229660AbjDUECa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 00:02:26 -0400
+        Fri, 21 Apr 2023 00:02:30 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9005840C7
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 21:02:24 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54fc35ab48fso4405127b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 21:02:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1165D40C7
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 21:02:29 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f8a3f6b03so18096637b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 21:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682049744; x=1684641744;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=o9d5prSVTa/w/iAx/0mRPU+MJNkirOzNMYWiYZtwtOw=;
-        b=5qqiOD9JYyFpBBk6u/jB7iUcDv4aCe4LpP2tTwyJvFdy/RRC2Ydet8dhwQA02BIe6+
-         xQFkxKU3Cb7FJKJPCKd7M/r72X3ddDsIyOeEQXjdVoHY5VbFoGq4pGTE8yTpsbgceLov
-         Pb0YepRKcbUXq+QEl8ChusLCfRnbrHad+x0ennLc3phDdhOfazZhUZSWgwWap8OHNEXh
-         Bm6pOZxhhSi3Jsrinee2ZSrkfrQeqz10Kg02iwIXt6Rdi0hF/nS0IDYJJxsPEGpzoTPS
-         kcb4z+5nPSD7NiQCNTXfFB8h0bi6JB4Q2cLFuJZLRXSYedGs54zZVNNBo85EkTMh61vZ
-         70CA==
+        d=google.com; s=20221208; t=1682049748; x=1684641748;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6axHHeceCfT18Iy9/ahE+yGfyWAXleNOBhmrrlTMIXA=;
+        b=Zd0eS4RY8TdnluDs8kHriFgx0zcAaGgzda+ecPw1Et8sMbW84233s0kcsmUCTayTKt
+         39DD/0vEMLFYIbCGcHuT4jt4ze798iBDxMd2S3fLLChUbSRIgy+mpyNwRghxERfG4P99
+         IjWMCqHQNiVOWq/PD+UCZrXGEggqdXohmrqDWxe4Ieih3oRBRMUdqqxqmnoUtrLx+n/1
+         BouKZBgAliqQHTUnk3uYUrDnuaNLcr8tePVKUT+ioVQet42AlbT/j5rgQs08w9IN0enO
+         Er1Lb6UWBKGses/tebvlTvtE3HimYo+gq6GNVxhgXro6kYyHyDbh6t6FbT/jNJslfK/a
+         ICfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682049744; x=1684641744;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o9d5prSVTa/w/iAx/0mRPU+MJNkirOzNMYWiYZtwtOw=;
-        b=G/GOfFumQeLZpqy/J8Impe0ELK3qvNKukqvFmqp96J2PwY25Y5zSqXopjluJZRi8p5
-         o/mhcJk/KHYO75UT7uq7GnI8EoqY6uYWhVaEKS5jePssawT+3g06KB5/9aeCVEZN4PlI
-         mO1Vnv5vD3F0XnG7MrukmCaUFTzrxcVQ6G76VjSAKjdlJG3ZUAvgjMTQzeLq9KuRsglW
-         zIynXsTn0SOFIqpLzz3e913ySRYPrGY24x4ox8BUXjSdZQ/dM6hFXb7W+thIhuGvmkVh
-         NWEsnPTJ4wiZ2It/ObwF9iLh/ahqp53du5r0IOzrNdn73r/BfnTIBYYvKxN9EkWO+oip
-         kpGA==
-X-Gm-Message-State: AAQBX9czSRxa9GoKNBgE1I+kJf4O+AiqRtPBIYsGJHyyVfc4I7tZ8L3B
-        WXVfIbCmH8JlbeqUtadw9aXqQyGOAqBgOQ==
-X-Google-Smtp-Source: AKy350auvqRIr2cxFc6OvBQ6nlmzF6QWoEWHmkIgQLzzTfkffTVCH4iJjocmiVjzpmkXW9Wc0DKBTyzP7KbROQ==
+        d=1e100.net; s=20221208; t=1682049748; x=1684641748;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6axHHeceCfT18Iy9/ahE+yGfyWAXleNOBhmrrlTMIXA=;
+        b=BaPmZMd5fs7PwHmUBWM3MAM8iZ9KoSWBrQfngX0qd1j6NclF/SgcHAtAtqZlVCo1Zt
+         qHFGKpHFSswboqZ7dMO80lgBS9/AkvGFzh8t30gEejne0RAPDvR5qMNoDaGZoUQP6AWH
+         ckTx1YPVhm8DboI1DqF2Mqmlz/r3qfwIzrrd6yoPsPk6kPhPASdUhHaM9hOYq2ptfUm1
+         XyxbHH7jR0TDjB17OlZXvd2N64h6d1iQsMiLwZga20j0/LxsDMneBVNtKy3JKpwoB5Sl
+         9jOeCspkXWg+doGV1dT0JI6JIuDJAJLcg7zad0UFmoSWPeBLza+IN2C4WzY2Odc33pVQ
+         t0YA==
+X-Gm-Message-State: AAQBX9cq6GDpJ/eNipDv5BV5uOREHNubkTKS1tvr/R0U9e1e40bT2TxC
+        vdsZ/PNhVVGxjlmusjkFp+9DCosmaUFXpg==
+X-Google-Smtp-Source: AKy350ajLMrF+3r3keuCLx0Vo4kxs32IK/Or+s0nVILEcr/GOQ1BqLQokRn267/2EXkLouihy9RC8iKSvytUiQ==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:450c:0:b0:545:883a:544d with SMTP id
- s12-20020a81450c000000b00545883a544dmr578383ywa.9.1682049743866; Thu, 20 Apr
- 2023 21:02:23 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 12:02:15 +0800
+ (user=davidgow job=sendgmr) by 2002:a81:b61e:0:b0:54f:17b6:f30a with SMTP id
+ u30-20020a81b61e000000b0054f17b6f30amr593605ywh.4.1682049748345; Thu, 20 Apr
+ 2023 21:02:28 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 12:02:16 +0800
+In-Reply-To: <20230421040218.2156548-1-davidgow@google.com>
 Mime-Version: 1.0
+References: <20230421040218.2156548-1-davidgow@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421040218.2156548-1-davidgow@google.com>
-Subject: [PATCH v3 1/4] kunit: Always run cleanup from a test kthread
+Message-ID: <20230421040218.2156548-2-davidgow@google.com>
+Subject: [PATCH v3 2/4] Documentation: kunit: Note that assertions should not
+ be used in cleanup
 From:   David Gow <davidgow@google.com>
 To:     Benjamin Berg <benjamin@sipsolutions.net>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -72,133 +75,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KUnit tests run in a kthread, with the current->kunit_test pointer set
-to the test's context. This allows the kunit_get_current_test() and
-kunit_fail_current_test() macros to work. Normally, this pointer is
-still valid during test shutdown (i.e., the suite->exit function, and
-any resource cleanup). However, if the test has exited early (e.g., due
-to a failed assertion), the cleanup is done in the parent KUnit thread,
-which does not have an active context.
-
-Instead, in the event test terminates early, run the test exit and
-cleanup from a new 'cleanup' kthread, which sets current->kunit_test,
-and better isolates the rest of KUnit from issues which arise in test
-cleanup.
-
-If a test cleanup function itself aborts (e.g., due to an assertion
-failing), there will be no further attempts to clean up: an error will
-be logged and the test failed. For example:
-	 # example_simple_test: test aborted during cleanup. continuing without cleaning up
-
-This should also make it easier to get access to the KUnit context,
-particularly from within resource cleanup functions, which may, for
-example, need access to data in test->priv.
+As assertions abort the test cleanup process, they should be avoided
+from within a suite's exit function, or from within resource 'free'
+functions. Unlike with initialisation or main test execution, no further
+cleanup will be performed after a failed assertion, potentially causing
+a leak of resources.
 
 Signed-off-by: David Gow <davidgow@google.com>
 ---
 
-This is an updated version of / replacement of "kunit: Set the current
-KUnit context when cleaning up", which instead creates a new kthread
-for cleanup tasks if the original test kthread is aborted. This protects
-us from failed assertions during cleanup, if the test exited early.
+No changes since v2:
+https://lore.kernel.org/linux-kselftest/20230419085426.1671703-2-davidgow@google.com/
 
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20230419085426.1671703-1-davidgow@google.com/
-- Always run cleanup in its own kthread
-  - Therefore, never attempt to re-run it if it exits
-  - Thanks, Benjamin.
-Changes since v1:
-https://lore.kernel.org/linux-kselftest/20230415091401.681395-1-davidgow@google.com/
-- Move cleanup execution to another kthread
-  - (Thanks, Benjamin, for pointing out the assertion issues)
+This patch was introduced in v2.
 
 ---
- lib/kunit/test.c | 55 ++++++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 48 insertions(+), 7 deletions(-)
+ Documentation/dev-tools/kunit/usage.rst | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index e2910b261112..2025e51941e6 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -419,10 +419,50 @@ static void kunit_try_run_case(void *data)
- 	 * thread will resume control and handle any necessary clean up.
- 	 */
- 	kunit_run_case_internal(test, suite, test_case);
--	/* This line may never be reached. */
-+}
-+
-+static void kunit_try_run_case_cleanup(void *data)
-+{
-+	struct kunit_try_catch_context *ctx = data;
-+	struct kunit *test = ctx->test;
-+	struct kunit_suite *suite = ctx->suite;
-+
-+	current->kunit_test = test;
-+
- 	kunit_run_case_cleanup(test, suite);
- }
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 9faf2b4153fc..9f720f1317d3 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -121,6 +121,12 @@ there's an allocation error.
+    ``return`` so they only work from the test function. In KUnit, we stop the
+    current kthread on failure, so you can call them from anywhere.
  
-+static void kunit_catch_run_case_cleanup(void *data)
-+{
-+	struct kunit_try_catch_context *ctx = data;
-+	struct kunit *test = ctx->test;
-+	int try_exit_code = kunit_try_catch_get_result(&test->try_catch);
++.. note::
++   Warning: There is an exception to the above rule. You shouldn't use assertions
++   in the suite's exit() function, or in the free function for a resource. These
++   run when a test is shutting down, and an assertion here prevents further
++   cleanup code from running, potentially leading to a memory leak.
 +
-+	/* It is always a failure if cleanup aborts. */
-+	kunit_set_failure(test);
-+
-+	if (try_exit_code) {
-+		/*
-+		 * Test case could not finish, we have no idea what state it is
-+		 * in, so don't do clean up.
-+		 */
-+		if (try_exit_code == -ETIMEDOUT) {
-+			kunit_err(test, "test case cleanup timed out\n");
-+		/*
-+		 * Unknown internal error occurred preventing test case from
-+		 * running, so there is nothing to clean up.
-+		 */
-+		} else {
-+			kunit_err(test, "internal error occurred during test case cleanup: %d\n",
-+				  try_exit_code);
-+		}
-+		return;
-+	}
-+
-+	kunit_err(test, "test aborted during cleanup. continuing without cleaning up\n");
-+}
-+
-+
- static void kunit_catch_run_case(void *data)
- {
- 	struct kunit_try_catch_context *ctx = data;
-@@ -448,12 +488,6 @@ static void kunit_catch_run_case(void *data)
- 		}
- 		return;
- 	}
--
--	/*
--	 * Test case was run, but aborted. It is the test case's business as to
--	 * whether it failed or not, we just need to clean up.
--	 */
--	kunit_run_case_cleanup(test, suite);
- }
+ Customizing error messages
+ --------------------------
  
- /*
-@@ -478,6 +512,13 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
- 	context.test_case = test_case;
- 	kunit_try_catch_run(try_catch, &context);
- 
-+	/* Now run the cleanup */
-+	kunit_try_catch_init(try_catch,
-+			     test,
-+			     kunit_try_run_case_cleanup,
-+			     kunit_catch_run_case_cleanup);
-+	kunit_try_catch_run(try_catch, &context);
-+
- 	/* Propagate the parameter result to the test case. */
- 	if (test->status == KUNIT_FAILURE)
- 		test_case->status = KUNIT_FAILURE;
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
