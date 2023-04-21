@@ -2,225 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883F56EB18C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 20:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199A96EB19D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 20:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjDUSYZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 14:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
+        id S232997AbjDUS2D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Apr 2023 14:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjDUSYY (ORCPT
+        with ESMTP id S232989AbjDUS2C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 14:24:24 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA6519A;
-        Fri, 21 Apr 2023 11:24:23 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b5c4c76aaso1901274b3a.2;
-        Fri, 21 Apr 2023 11:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682101462; x=1684693462;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OypLJRTEB5SbxLBh9tKcIDiFO23AVAYc9LxzvH6yqzM=;
-        b=WHuV4wkb9Ov9Uf5JAU4CitMPxP7KBxUhJPjwwGriFuvOl6r9AZaphtmjXhvPh0y/yf
-         07OzEem47p4XybvBedFkd8MuzzDwI8WPr8cM7GX2HVSQzNZKKNSEsJmeRrXw8vpwL4ee
-         ZGQQmsRNaix8T88vJcnlEvbL/5B3iXFg2yILvL/ljkao/Liy8fEu2BuGxK90gDY3jLBa
-         VwF6NB7+4YKLrR3K7dvS03tpoSdWTdirOWA5W3hFPwJdKlS3D3HsDHdmHsXl5nE7YnpZ
-         VrNgUkdf7HN19kfNTwcxn3o4EFzRdP2SNT0Ob+RIp9i9atj8bVc1zNlc81/2UYPSJWK0
-         HTjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682101462; x=1684693462;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OypLJRTEB5SbxLBh9tKcIDiFO23AVAYc9LxzvH6yqzM=;
-        b=MIwOjMG42z8C2PXmZ09VrcFZA4HJikwBrx+GLrdNeDgZoEhHBFNXbXMbofivkYn/RE
-         Vdn0hS1BV2ZPHgdw+vMCacEz2UzmxpBOdQg+ovM3Q+g0gMLGfY7Rj7XXdf235drHdy1a
-         Ur9ViQjU/pwnnHjRtEDQhlGjoq+2lIsyBrfAZ1ogr0Q5F8Qx+LO5kt0C6lh1Q20va8Es
-         l35V3D4AvgP03B4ObyBX4ULi0KVTInWop56E6D3jYMA0gw7S/p/TXWtXK0MDOzCrPmCt
-         IhdcxasF7T+UTif+flOw9AUhv9yS9KC6GR16BXYJQ4eQd2lFWze44mKrmQLUNtLcA4cT
-         +/9g==
-X-Gm-Message-State: AAQBX9erfo9geSVB2lh7DTwlFStdH5C+1ScbKrtnAieJpZdZwxGG+YEr
-        c2J1/RMnEVpFJc+Ytyb7p7CjBRX0nTE=
-X-Google-Smtp-Source: AKy350bdqKhKObaXCm3kR3cZk3swBANng8Vxrne2H7FBqk2E7adQc211wBjk6FVGRCZsd+fI+AvV3g==
-X-Received: by 2002:a05:6a00:814:b0:63c:1be4:5086 with SMTP id m20-20020a056a00081400b0063c1be45086mr8028880pfk.6.1682101462459;
-        Fri, 21 Apr 2023 11:24:22 -0700 (PDT)
-Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:ef5e])
-        by smtp.gmail.com with ESMTPSA id c192-20020a621cc9000000b0063d44634d8csm3275518pfc.71.2023.04.21.11.24.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 11:24:21 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 11:24:18 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Feng zhou <zhoufeng.zf@bytedance.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add testcase for
- bpf_task_under_cgroup
-Message-ID: <20230421182418.5nvj4mp2vfumtmab@dhcp-172-26-102-232.dhcp.thefacebook.com>
-References: <20230421090403.15515-1-zhoufeng.zf@bytedance.com>
- <20230421090403.15515-3-zhoufeng.zf@bytedance.com>
+        Fri, 21 Apr 2023 14:28:02 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0C519A1;
+        Fri, 21 Apr 2023 11:28:00 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id A18465C00CA;
+        Fri, 21 Apr 2023 14:27:56 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 21 Apr 2023 14:27:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1682101676; x=1682188076; bh=1x
+        lLdlOEPewjSa9H68FV8Q5PO9B90Oygi7b4UAbYuQc=; b=P0wYN+pJ1GfvlJDlIK
+        3HaP8g8yxh54ko7FtDNoDaJ2UbAHZEH6f/Q++W6+apsYdWGtFEWE+VFQXClEsVG0
+        cNC/sNVd7/oMjY/xFtIAWOJvmZ7uXQ3mbJVWBHrrjEx3NEiwyXlrYfFrx4cv6pDx
+        VHBa48YtKHzwfxpnI4JwohAAQtDQDSVVXx3QUmBAY7B+68+wZhG/dLvNn0OnsREa
+        qjko2RCCZp7nO9MKyb0UCfHlnuT0PwJTFQfwhCSCs45y7Jxi3w6bnMbx8tbwVJ+3
+        //HYMjrxXN9VmmIBgsf8diCnZkCyjN3KiEiba50EMyFCX6mLalVggfzcTxbFQiYz
+        Lytw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682101676; x=1682188076; bh=1xlLdlOEPewjS
+        a9H68FV8Q5PO9B90Oygi7b4UAbYuQc=; b=YTbnAZJ3qUMiRj76RGU6xiJMr7F8Z
+        AkF4d4qdl55apNKQF1ibg7v+FTxNs6LEJ9T/CbhXqMm/CMr0JUPsGdGAWF/cq1n4
+        hdoa6M0lt7boS8FLRptsOOIxImYCjFW8X9zq0pzlUlPuvbO8jWhlu7IAumUoDL66
+        qPBnyF2O0qu3+eKvQDofPbKIcJxXx7Vd0ivDUBvs9vBJAhlWOK1cWnup0gDjoYZS
+        h8IXrSxl6vOW0PEIz+/bZERGinxio39/2lX8YmfR8N9mQat+4+V3G24GUH/f4JCM
+        ZhJu46SbqRu3jmGtCF3l1bDmHnLHOFm9RUaS0AiHZtwdl0+ofXuNUEK5A==
+X-ME-Sender: <xms:q9VCZCFDX2nqX67ccz6mq1jOzR_AMacb5lcdq5NNHqkuLc3FbSfYSw>
+    <xme:q9VCZDVXQTxIZCG0loGHeTRP5Q4y_FCfIYkj1kRq-oMsIjPR5cLqZLWopyE52ma_Y
+    RAwezAEAyhyTkOKUxo>
+X-ME-Received: <xmr:q9VCZMIXaK428S5JbttqSvA3CLOiVtzsGyu9Uq5cGBDezl-8UN-jCAiqdY1pNdbsbZ8Qw0SvXWigkQe0O6tdGCfnSg9YPtHNSQ61RVgkTrQ0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
+    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
+    htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
+    geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hshhhrseguvghvkhgvrhhnvghlrdhioh
+X-ME-Proxy: <xmx:rNVCZMHVZS-4pncHd9-02mz0hAwf0CGUjbWL3hNW6AshGaj9kybLCg>
+    <xmx:rNVCZIUtl1QWh3zeGrKmIctWOfETI1j93FF58B4EwRfQ2D1V_xxXcA>
+    <xmx:rNVCZPN7xqRHXuvJcK01DNR4CQUHk5_viNRdAndV--AkHsVzceDCkw>
+    <xmx:rNVCZJuMXQ7scwPUwjssuOK1J9USlnK-U41WGOH4io698Rs2VCTkrQ>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 21 Apr 2023 14:27:54 -0400 (EDT)
+References: <20230418051342.1919757-1-shr@devkernel.io>
+ <20230418152849.505124-1-david@redhat.com>
+ <20230418152849.505124-4-david@redhat.com>
+ <qvqwildqi62z.fsf@devbig1114.prn1.facebook.com>
+ <14d89518-0c11-7bfb-0c72-329a834ba1a1@redhat.com>
+User-agent: mu4e 1.10.1; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v1 3/3] mm/ksm: move disabling KSM from s390/gmap code
+ to KSM code
+Date:   Fri, 21 Apr 2023 11:27:23 -0700
+In-reply-to: <14d89518-0c11-7bfb-0c72-329a834ba1a1@redhat.com>
+Message-ID: <qvqw1qkdt7iw.fsf@devbig1114.prn1.facebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421090403.15515-3-zhoufeng.zf@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 05:04:03PM +0800, Feng zhou wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
-> 
-> test_progs:
-> Tests new kfunc bpf_task_under_cgroup().
-> 
-> The bpf program saves the pid which call the getuid syscall within a
-> given cgroup to the remote_pid, which is convenient for the user-mode
-> program to verify the test correctness.
-> 
-> The user-mode program creates its own mount namespace, and mounts the
-> cgroupsv2 hierarchy in there, call the getuid syscall, then check if
-> remote_pid and local_pid are equal.
-> 
-> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-> ---
->  .../bpf/prog_tests/task_under_cgroup.c        | 46 +++++++++++++++++++
->  .../selftests/bpf/progs/cgrp_kfunc_common.h   |  1 +
->  .../bpf/progs/test_task_under_cgroup.c        | 40 ++++++++++++++++
->  3 files changed, 87 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-> new file mode 100644
-> index 000000000000..bd3deb469938
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-> @@ -0,0 +1,46 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Bytedance */
-> +
-> +#include <test_progs.h>
-> +#include <cgroup_helpers.h>
-> +#include "test_task_under_cgroup.skel.h"
-> +
-> +#define FOO	"/foo"
-> +
-> +void test_task_under_cgroup(void)
-> +{
-> +	struct test_task_under_cgroup *skel;
-> +	int ret, foo = -1;
-> +
-> +	foo = test__join_cgroup(FOO);
-> +	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-> +		return;
-> +
-> +	skel = test_task_under_cgroup__open();
-> +	if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
-> +		goto cleanup;
-> +
-> +	skel->rodata->local_pid = getpid();
-> +	skel->rodata->cgid = get_cgroup_id(FOO);
-> +
-> +	ret = test_task_under_cgroup__load(skel);
-> +	if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
-> +		goto cleanup;
-> +
-> +	ret = test_task_under_cgroup__attach(skel);
-> +	if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
-> +		goto cleanup;
-> +
-> +	syscall(__NR_getuid);
-> +
-> +	test_task_under_cgroup__detach(skel);
-> +
-> +	ASSERT_EQ(skel->bss->remote_pid, skel->rodata->local_pid,
-> +		  "test task_under_cgroup");
-> +
-> +cleanup:
-> +	if (foo)
-> +		close(foo);
 
-Looks wrong. should be if (foo >= 0) ?
+David Hildenbrand <david@redhat.com> writes:
 
-> +
-> +	test_task_under_cgroup__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-> index 22914a70db54..41b3ea231698 100644
-> --- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-> +++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-> @@ -26,6 +26,7 @@ struct cgroup *bpf_cgroup_ancestor(struct cgroup *cgrp, int level) __ksym;
->  struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
->  void bpf_rcu_read_lock(void) __ksym;
->  void bpf_rcu_read_unlock(void) __ksym;
-> +int bpf_task_under_cgroup(struct cgroup *cgrp, struct task_struct *task) __ksym;
->  
->  static inline struct __cgrps_kfunc_map_value *cgrps_kfunc_map_value_lookup(struct cgroup *cgrp)
->  {
-> diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-> new file mode 100644
-> index 000000000000..e2740f9b029d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-> @@ -0,0 +1,40 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2023 Bytedance */
-> +
-> +#include <vmlinux.h>
-> +#include <asm/unistd.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +#include "cgrp_kfunc_common.h"
-> +
-> +const volatile int local_pid;
-> +const volatile long cgid;
-> +int remote_pid;
-> +
-> +SEC("tp_btf/sys_enter")
+> [...]
+>
+>>> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+>>> index 0949811761e6..dfe905c7bd8e 100644
+>>> --- a/arch/s390/mm/gmap.c
+>>> +++ b/arch/s390/mm/gmap.c
+>>> @@ -2585,30 +2585,12 @@ EXPORT_SYMBOL_GPL(s390_enable_sie);
+>>>
+>>>   int gmap_mark_unmergeable(void)
+>>>   {
+>>> -	struct mm_struct *mm = current->mm;
+>>> -	struct vm_area_struct *vma;
+>>> -	unsigned long vm_flags;
+>>> -	int ret;
+>>> -	VMA_ITERATOR(vmi, mm, 0);
+>>> -
+>>>   	/*
+>>>   	 * Make sure to disable KSM (if enabled for the whole process or
+>>>   	 * individual VMAs). Note that nothing currently hinders user space
+>>>   	 * from re-enabling it.
+>>>   	 */
+>>> -	clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
+>>> -
+>>> -	for_each_vma(vmi, vma) {
+>>> -		/* Copy vm_flags to avoid partial modifications in ksm_madvise */
+>>> -		vm_flags = vma->vm_flags;
+>>> -		ret = ksm_madvise(vma, vma->vm_start, vma->vm_end,
+>>> -				  MADV_UNMERGEABLE, &vm_flags);
+>>> -		if (ret)
+>>> -			return ret;
+>>> -		vm_flags_reset(vma, vm_flags);
+>>> -	}
+>>> -	mm->def_flags &= ~VM_MERGEABLE;
+>>>
+>>
+>
+> Hi Stefan,
+>
+>> This clears the def_flags struct member, however, in ksm_disable() we
+>> clear the __flags struct member. Is this a problem?
+>
+> The patch description contains a comment regarding def_flags: "The existing
+> "mm->def_flags &= ~VM_MERGEABLE;" was essentially a NOP and can be dropped,
+> because def_flags should never include VM_MERGEABLE."
+>
+> We keep clearing the MADV_UNMERGEABLE flag from MADV_UNMERGEABLE. In the old
+> code, ksm_madvise() would have cleared it from local vm_flags and
+> vm_flags_reset() would have modified vma->vm_flags. Now we clear it directly via
+> vm_flags_clear(vma, VM_MERGEABLE);
+>
+>
+> Long story short, the mm->def_flags code as wrong and most probably copied from
+> thp_split_mm() where we do:
+> 	mm->def_flags |= VM_NOHUGEPAGE;
+> Which makes more sense.
+>
+> Thanks!
 
-pls narrow down to specific syscall. Like you use in user space part: getuid
+Thanks for the explanation.
 
-Also add this test to denylist.s390. See BPF CI failure.
-
-> +int BPF_PROG(sysenter, struct pt_regs *regs, long id)
-> +{
-> +	struct cgroup *cgrp;
-> +
-> +	if (id != __NR_getuid)
-> +		return 0;
-> +
-> +	if (local_pid != (bpf_get_current_pid_tgid() >> 32))
-> +		return 0;
-> +
-> +	cgrp = bpf_cgroup_from_id(cgid);
-> +	if (!cgrp)
-> +		return 0;
-> +
-> +	if (!bpf_task_under_cgroup(cgrp, bpf_get_current_task_btf()))
-> +		goto out;
-> +
-> +	remote_pid = local_pid;
-> +
-> +out:
-> +	bpf_cgroup_release(cgrp);
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-> -- 
-> 2.20.1
-> 
+Acked-by: Stefan Roesch <shr@devkernel.io>
