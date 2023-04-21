@@ -2,210 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506406EA61D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 10:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241196EA641
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 10:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbjDUInI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 04:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S230089AbjDUIwZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Apr 2023 04:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbjDUImz (ORCPT
+        with ESMTP id S231128AbjDUIwP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 04:42:55 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81E59757
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 01:42:48 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b8ed0d99a7fso832725276.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 01:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682066568; x=1684658568;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MEEb4C1MXHRprmR5HHPu3CotKdbDXVaTHLjb5P98lHM=;
-        b=yzRovhVJ66P12HUPvsEjD48dab5ICCTEQbiTUmWPwkPZveJ7/5bYyKdfQWuNxasm0k
-         974M6Y84tvzdkeXl91gtaNdMevz2gswJETxqftQm74ua7wsJF4El/xUmm5r/VP1mjeN4
-         X0kNDkyQGm9iPFrg7TicqN/Bel5ywQDtqbGEJJeSGwAH1/zuvNIu4YuP/WBYZ2e1Yeja
-         jDwUJ7IZVhRQqVG5Zg5GsJMUbN8h/UjqNqZayme/AjtggXUXAgTm4N1TGyPN46KLXjip
-         8LqeO+2Fi9yZB7KydrGRZnbfLA4cChWN1KKeRyl2doM0e4uJjGh75iixJ/kOsYGR5EQR
-         Jpkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682066568; x=1684658568;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MEEb4C1MXHRprmR5HHPu3CotKdbDXVaTHLjb5P98lHM=;
-        b=ReXxOE1j7V5vpSBl4e1cMxDNs+ARwI7c3v+GS3PiyWKUL1SztLGU97OtPh247gtG6V
-         cix7pmZJxtNMKdyJ2XO4uFn2SrN+86uLBL9o/lHHoxEzPosNLvdZDOjj18lqfUFmJIcs
-         DWtmPqdFFK2K1wp/mamR0LB4cvzgpYvuqxyfmP4OflHrgyY9YE0E/Lghus0aoh+zZjYc
-         9ReiPuenS8ftNybvq/1NUjBcv0qWf/0jWAx5N37KtMXqMHsnjPdhFFH3YcuatfNzWNgN
-         V2iOGM2EeRr17J7e7gHhjPJQ7DwHIyAcEP3w7eAkoxB/Yc05gPN8yU8LTRSSr6X8v40Z
-         YrfQ==
-X-Gm-Message-State: AAQBX9c4Mb5FkGMPvBMY8B93btk6M648KxWxXCaSyugkwj9KhRlQQfFX
-        Y1B3zyBLMEpUc3Ic9yfAMaZPEkgSH38wHQ==
-X-Google-Smtp-Source: AKy350aXCY521YxQpLSky5f+7Krq4YeBVK66lmw9NALxj4KPTruWIrf9Mv+7P5X5dRe2C7exCPaiWGO5pAZFQQ==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:6e46:0:b0:b8f:610b:e6b8 with SMTP id
- j67-20020a256e46000000b00b8f610be6b8mr1259447ybc.9.1682066567913; Fri, 21 Apr
- 2023 01:42:47 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 16:42:26 +0800
-In-Reply-To: <20230421084226.2278282-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20230421084226.2278282-1-davidgow@google.com>
-X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421084226.2278282-4-davidgow@google.com>
-Subject: [PATCH v1 3/3] kunit: kmalloc_array: Use kunit_add_action()
-From:   David Gow <davidgow@google.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        Fri, 21 Apr 2023 04:52:15 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FED49C2;
+        Fri, 21 Apr 2023 01:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=tOxdMweqEhzzQd6U0UFjOD8V2exqXtME9rvBuP7V5XA=;
+        t=1682067134; x=1683276734; b=vSW3Swd5fU4OhP+pubbeSgZnF6NB1Sm/0pHXb01/1jjjekR
+        T6axdU1n0WDw1v0CNyac3Fh+l73PWajuPLESk0kfjhctGaSiimzjlghtisbtOa8au1y3ORxjrkQZ0
+        9xWpjGdT9z9MgxLZPD3hc1NjYRmb7zMLYVm7/m7tEt9TmuIPPfnju2vqUdDJZbO60rcBZlLyTqlCW
+        S6GT9p51yqAQyDuqISr+wDZeryrcA/6uBFUYlgM3Usg+IhWZddDIS3rrpma1/+XRmfyzhfd3rBjZu
+        lbga9crMALWZv4W5Vro9CcDPGD7LY9PAi/z898mS3/iiugyvGXQaT47wQyb1NCXg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1ppmUx-004MaO-2n;
+        Fri, 21 Apr 2023 10:52:08 +0200
+Message-ID: <6478bd117b17e004df371bd84342c2e378adf566.camel@sipsolutions.net>
+Subject: Re: [PATCH v3 1/4] kunit: Always run cleanup from a test kthread
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
         Rae Moar <rmoar@google.com>,
-        Benjamin Berg <benjamin@sipsolutions.net>
-Cc:     David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
+        Daniel Latypov <dlatypov@google.com>
+Cc:     maxime@cerno.tech, Stephen Boyd <sboyd@kernel.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sadiya Kazi <sadiyakazi@google.com>
+Date:   Fri, 21 Apr 2023 10:52:06 +0200
+In-Reply-To: <20230421040218.2156548-1-davidgow@google.com>
+References: <20230421040218.2156548-1-davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kunit_add_action() function is much simpler and cleaner to use that
-the full KUnit resource API for simple things like the
-kunit_kmalloc_array() functionality.
-
-Replacing it allows us to get rid of a number of helper functions, and
-leaves us with no uses of kunit_alloc_resource(), which has some
-usability problems and is going to have its behaviour modified in an
-upcoming patch.
-
-Note that we need to use kunit_release_action() to implement kunit_kfree().
-
-Signed-off-by: David Gow <davidgow@google.com>
----
-
-Changes since RFCv2:
-https://lore.kernel.org/linux-kselftest/20230331080411.981038-4-davidgow@google.com/
-- Update to match changes in the the action API.
-- Always allocate the action context with GFP_KERNEL.
-- Update documentation to note that this will cause GFP_KERNEL
-  allocations, regardless of the gfp argument passed in.
-
----
- include/kunit/test.h | 10 +++++++--
- lib/kunit/test.c     | 48 +++++++++-----------------------------------
- 2 files changed, 17 insertions(+), 41 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 57b309c6ca27..3e8e98d0d8b1 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -321,8 +321,11 @@ enum kunit_status kunit_suite_has_succeeded(struct kunit_suite *suite);
-  * @gfp: flags passed to underlying kmalloc().
-  *
-  * Just like `kmalloc_array(...)`, except the allocation is managed by the test case
-- * and is automatically cleaned up after the test case concludes. See &struct
-- * kunit_resource for more information.
-+ * and is automatically cleaned up after the test case concludes. See kunit_add_action()
-+ * for more information.
-+ *
-+ * Note that some internal context data is also allocated with GFP_KERNEL,
-+ * regardless of the gfp passed in.
-  */
- void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp);
- 
-@@ -333,6 +336,9 @@ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp);
-  * @gfp: flags passed to underlying kmalloc().
-  *
-  * See kmalloc() and kunit_kmalloc_array() for more information.
-+ *
-+ * Note that some internal context data is also allocated with GFP_KERNEL,
-+ * regardless of the gfp passed in.
-  */
- static inline void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
- {
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index e2910b261112..6aafe2138766 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -712,58 +712,28 @@ static struct notifier_block kunit_mod_nb = {
- };
- #endif
- 
--struct kunit_kmalloc_array_params {
--	size_t n;
--	size_t size;
--	gfp_t gfp;
--};
--
--static int kunit_kmalloc_array_init(struct kunit_resource *res, void *context)
-+void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
- {
--	struct kunit_kmalloc_array_params *params = context;
-+	void *data;
- 
--	res->data = kmalloc_array(params->n, params->size, params->gfp);
--	if (!res->data)
--		return -ENOMEM;
-+	data = kmalloc_array(n, size, gfp);
- 
--	return 0;
--}
-+	if (!data)
-+		return NULL;
- 
--static void kunit_kmalloc_array_free(struct kunit_resource *res)
--{
--	kfree(res->data);
--}
-+	if (kunit_add_action_or_reset(test, (void (*)(void *))kfree, data) != 0)
-+		return NULL;
- 
--void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
--{
--	struct kunit_kmalloc_array_params params = {
--		.size = size,
--		.n = n,
--		.gfp = gfp
--	};
--
--	return kunit_alloc_resource(test,
--				    kunit_kmalloc_array_init,
--				    kunit_kmalloc_array_free,
--				    gfp,
--				    &params);
-+	return data;
- }
- EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
- 
--static inline bool kunit_kfree_match(struct kunit *test,
--				     struct kunit_resource *res, void *match_data)
--{
--	/* Only match resources allocated with kunit_kmalloc() and friends. */
--	return res->free == kunit_kmalloc_array_free && res->data == match_data;
--}
--
- void kunit_kfree(struct kunit *test, const void *ptr)
- {
- 	if (!ptr)
- 		return;
- 
--	if (kunit_destroy_resource(test, kunit_kfree_match, (void *)ptr))
--		KUNIT_FAIL(test, "kunit_kfree: %px already freed or not allocated by kunit", ptr);
-+	kunit_release_action(test, (void (*)(void *))kfree, (void *)ptr);
- }
- EXPORT_SYMBOL_GPL(kunit_kfree);
- 
--- 
-2.40.0.634.g4ca3ef3211-goog
+SGksCgpPbiBGcmksIDIwMjMtMDQtMjEgYXQgMTI6MDIgKzA4MDAsIERhdmlkIEdvdyB3cm90ZToK
+PiBLVW5pdCB0ZXN0cyBydW4gaW4gYSBrdGhyZWFkLCB3aXRoIHRoZSBjdXJyZW50LT5rdW5pdF90
+ZXN0IHBvaW50ZXIgc2V0Cj4gdG8gdGhlIHRlc3QncyBjb250ZXh0LiBUaGlzIGFsbG93cyB0aGUg
+a3VuaXRfZ2V0X2N1cnJlbnRfdGVzdCgpIGFuZAo+IGt1bml0X2ZhaWxfY3VycmVudF90ZXN0KCkg
+bWFjcm9zIHRvIHdvcmsuIE5vcm1hbGx5LCB0aGlzIHBvaW50ZXIgaXMKPiBzdGlsbCB2YWxpZCBk
+dXJpbmcgdGVzdCBzaHV0ZG93biAoaS5lLiwgdGhlIHN1aXRlLT5leGl0IGZ1bmN0aW9uLCBhbmQK
+PiBhbnkgcmVzb3VyY2UgY2xlYW51cCkuIEhvd2V2ZXIsIGlmIHRoZSB0ZXN0IGhhcyBleGl0ZWQg
+ZWFybHkgKGUuZy4sIGR1ZQo+IHRvIGEgZmFpbGVkIGFzc2VydGlvbiksIHRoZSBjbGVhbnVwIGlz
+IGRvbmUgaW4gdGhlIHBhcmVudCBLVW5pdCB0aHJlYWQsCj4gd2hpY2ggZG9lcyBub3QgaGF2ZSBh
+biBhY3RpdmUgY29udGV4dC4KPiAKPiBJbnN0ZWFkLCBpbiB0aGUgZXZlbnQgdGVzdCB0ZXJtaW5h
+dGVzIGVhcmx5LCBydW4gdGhlIHRlc3QgZXhpdCBhbmQKPiBjbGVhbnVwIGZyb20gYSBuZXcgJ2Ns
+ZWFudXAnIGt0aHJlYWQsIHdoaWNoIHNldHMgY3VycmVudC0+a3VuaXRfdGVzdCwKPiBhbmQgYmV0
+dGVyIGlzb2xhdGVzIHRoZSByZXN0IG9mIEtVbml0IGZyb20gaXNzdWVzIHdoaWNoIGFyaXNlIGlu
+IHRlc3QKPiBjbGVhbnVwLgo+IAo+IElmIGEgdGVzdCBjbGVhbnVwIGZ1bmN0aW9uIGl0c2VsZiBh
+Ym9ydHMgKGUuZy4sIGR1ZSB0byBhbiBhc3NlcnRpb24KPiBmYWlsaW5nKSwgdGhlcmUgd2lsbCBi
+ZSBubyBmdXJ0aGVyIGF0dGVtcHRzIHRvIGNsZWFuIHVwOiBhbiBlcnJvciB3aWxsCj4gYmUgbG9n
+Z2VkIGFuZCB0aGUgdGVzdCBmYWlsZWQuIEZvciBleGFtcGxlOgo+IMKgwqDCoMKgwqDCoMKgwqAg
+IyBleGFtcGxlX3NpbXBsZV90ZXN0OiB0ZXN0IGFib3J0ZWQgZHVyaW5nIGNsZWFudXAuIGNvbnRp
+bnVpbmcgd2l0aG91dCBjbGVhbmluZyB1cAo+IAo+IFRoaXMgc2hvdWxkIGFsc28gbWFrZSBpdCBl
+YXNpZXIgdG8gZ2V0IGFjY2VzcyB0byB0aGUgS1VuaXQgY29udGV4dCwKPiBwYXJ0aWN1bGFybHkg
+ZnJvbSB3aXRoaW4gcmVzb3VyY2UgY2xlYW51cCBmdW5jdGlvbnMsIHdoaWNoIG1heSwgZm9yCj4g
+ZXhhbXBsZSwgbmVlZCBhY2Nlc3MgdG8gZGF0YSBpbiB0ZXN0LT5wcml2Lgo+IAo+IFNpZ25lZC1v
+ZmYtYnk6IERhdmlkIEdvdyA8ZGF2aWRnb3dAZ29vZ2xlLmNvbT4KCkdyZWF0ISBMb29rcyBnb29k
+IHRvIG1lLgoKUmV2aWV3ZWQtYnk6IEJlbmphbWluIEJlcmcgPGJlbmphbWluLmJlcmdAaW50ZWwu
+Y29tPgoKPiAtLS0KPiAKPiBUaGlzIGlzIGFuIHVwZGF0ZWQgdmVyc2lvbiBvZiAvIHJlcGxhY2Vt
+ZW50IG9mICJrdW5pdDogU2V0IHRoZSBjdXJyZW50Cj4gS1VuaXQgY29udGV4dCB3aGVuIGNsZWFu
+aW5nIHVwIiwgd2hpY2ggaW5zdGVhZCBjcmVhdGVzIGEgbmV3IGt0aHJlYWQKPiBmb3IgY2xlYW51
+cCB0YXNrcyBpZiB0aGUgb3JpZ2luYWwgdGVzdCBrdGhyZWFkIGlzIGFib3J0ZWQuIFRoaXMgcHJv
+dGVjdHMKPiB1cyBmcm9tIGZhaWxlZCBhc3NlcnRpb25zIGR1cmluZyBjbGVhbnVwLCBpZiB0aGUg
+dGVzdCBleGl0ZWQgZWFybHkuCj4gCj4gQ2hhbmdlcyBzaW5jZSB2MjoKPiBodHRwczovL2xvcmUu
+a2VybmVsLm9yZy9saW51eC1rc2VsZnRlc3QvMjAyMzA0MTkwODU0MjYuMTY3MTcwMy0xLWRhdmlk
+Z293QGdvb2dsZS5jb20vCj4gLSBBbHdheXMgcnVuIGNsZWFudXAgaW4gaXRzIG93biBrdGhyZWFk
+Cj4gwqAgLSBUaGVyZWZvcmUsIG5ldmVyIGF0dGVtcHQgdG8gcmUtcnVuIGl0IGlmIGl0IGV4aXRz
+Cj4gwqAgLSBUaGFua3MsIEJlbmphbWluLgo+IENoYW5nZXMgc2luY2UgdjE6Cj4gaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvbGludXgta3NlbGZ0ZXN0LzIwMjMwNDE1MDkxNDAxLjY4MTM5NS0xLWRh
+dmlkZ293QGdvb2dsZS5jb20vCj4gLSBNb3ZlIGNsZWFudXAgZXhlY3V0aW9uIHRvIGFub3RoZXIg
+a3RocmVhZAo+IMKgIC0gKFRoYW5rcywgQmVuamFtaW4sIGZvciBwb2ludGluZyBvdXQgdGhlIGFz
+c2VydGlvbiBpc3N1ZXMpCj4gCj4gLS0tCj4gwqBsaWIva3VuaXQvdGVzdC5jIHwgNTUgKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tCj4gwqAxIGZpbGUgY2hh
+bmdlZCwgNDggaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEv
+bGliL2t1bml0L3Rlc3QuYyBiL2xpYi9rdW5pdC90ZXN0LmMKPiBpbmRleCBlMjkxMGIyNjExMTIu
+LjIwMjVlNTE5NDFlNiAxMDA2NDQKPiAtLS0gYS9saWIva3VuaXQvdGVzdC5jCj4gKysrIGIvbGli
+L2t1bml0L3Rlc3QuYwo+IEBAIC00MTksMTAgKzQxOSw1MCBAQCBzdGF0aWMgdm9pZCBrdW5pdF90
+cnlfcnVuX2Nhc2Uodm9pZCAqZGF0YSkKPiDCoMKgwqDCoMKgwqDCoMKgICogdGhyZWFkIHdpbGwg
+cmVzdW1lIGNvbnRyb2wgYW5kIGhhbmRsZSBhbnkgbmVjZXNzYXJ5IGNsZWFuIHVwLgo+IMKgwqDC
+oMKgwqDCoMKgwqAgKi8KPiDCoMKgwqDCoMKgwqDCoMKga3VuaXRfcnVuX2Nhc2VfaW50ZXJuYWwo
+dGVzdCwgc3VpdGUsIHRlc3RfY2FzZSk7Cj4gLcKgwqDCoMKgwqDCoMKgLyogVGhpcyBsaW5lIG1h
+eSBuZXZlciBiZSByZWFjaGVkLiAqLwo+ICt9Cj4gKwo+ICtzdGF0aWMgdm9pZCBrdW5pdF90cnlf
+cnVuX2Nhc2VfY2xlYW51cCh2b2lkICpkYXRhKQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgc3RydWN0
+IGt1bml0X3RyeV9jYXRjaF9jb250ZXh0ICpjdHggPSBkYXRhOwo+ICvCoMKgwqDCoMKgwqDCoHN0
+cnVjdCBrdW5pdCAqdGVzdCA9IGN0eC0+dGVzdDsKPiArwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga3Vu
+aXRfc3VpdGUgKnN1aXRlID0gY3R4LT5zdWl0ZTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgY3VycmVu
+dC0+a3VuaXRfdGVzdCA9IHRlc3Q7Cj4gKwo+IMKgwqDCoMKgwqDCoMKgwqBrdW5pdF9ydW5fY2Fz
+ZV9jbGVhbnVwKHRlc3QsIHN1aXRlKTsKPiDCoH0KPiDCoAo+ICtzdGF0aWMgdm9pZCBrdW5pdF9j
+YXRjaF9ydW5fY2FzZV9jbGVhbnVwKHZvaWQgKmRhdGEpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqBz
+dHJ1Y3Qga3VuaXRfdHJ5X2NhdGNoX2NvbnRleHQgKmN0eCA9IGRhdGE7Cj4gK8KgwqDCoMKgwqDC
+oMKgc3RydWN0IGt1bml0ICp0ZXN0ID0gY3R4LT50ZXN0Owo+ICvCoMKgwqDCoMKgwqDCoGludCB0
+cnlfZXhpdF9jb2RlID0ga3VuaXRfdHJ5X2NhdGNoX2dldF9yZXN1bHQoJnRlc3QtPnRyeV9jYXRj
+aCk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoC8qIEl0IGlzIGFsd2F5cyBhIGZhaWx1cmUgaWYgY2xl
+YW51cCBhYm9ydHMuICovCj4gK8KgwqDCoMKgwqDCoMKga3VuaXRfc2V0X2ZhaWx1cmUodGVzdCk7
+Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGlmICh0cnlfZXhpdF9jb2RlKSB7Cj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoC8qCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
+IFRlc3QgY2FzZSBjb3VsZCBub3QgZmluaXNoLCB3ZSBoYXZlIG5vIGlkZWEgd2hhdCBzdGF0ZSBp
+dCBpcwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBpbiwgc28gZG9uJ3QgZG8g
+Y2xlYW4gdXAuCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAodHJ5X2V4aXRfY29kZSA9PSAtRVRJTUVET1VUKSB7
+Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBrdW5pdF9l
+cnIodGVzdCwgInRlc3QgY2FzZSBjbGVhbnVwIHRpbWVkIG91dFxuIik7Cj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoC8qCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
+IFVua25vd24gaW50ZXJuYWwgZXJyb3Igb2NjdXJyZWQgcHJldmVudGluZyB0ZXN0IGNhc2UgZnJv
+bQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBydW5uaW5nLCBzbyB0aGVyZSBp
+cyBub3RoaW5nIHRvIGNsZWFuIHVwLgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+Ki8KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfSBlbHNlIHsKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGt1bml0X2Vycih0ZXN0LCAiaW50
+ZXJuYWwgZXJyb3Igb2NjdXJyZWQgZHVyaW5nIHRlc3QgY2FzZSBjbGVhbnVwOiAlZFxuIiwKPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCB0cnlfZXhpdF9jb2RlKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+fQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm47Cj4gK8KgwqDCoMKgwqDC
+oMKgfQo+ICsKPiArwqDCoMKgwqDCoMKgwqBrdW5pdF9lcnIodGVzdCwgInRlc3QgYWJvcnRlZCBk
+dXJpbmcgY2xlYW51cC4gY29udGludWluZyB3aXRob3V0IGNsZWFuaW5nIHVwXG4iKTsKPiArfQo+
+ICsKPiArCj4gwqBzdGF0aWMgdm9pZCBrdW5pdF9jYXRjaF9ydW5fY2FzZSh2b2lkICpkYXRhKQo+
+IMKgewo+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qga3VuaXRfdHJ5X2NhdGNoX2NvbnRleHQgKmN0
+eCA9IGRhdGE7Cj4gQEAgLTQ0OCwxMiArNDg4LDYgQEAgc3RhdGljIHZvaWQga3VuaXRfY2F0Y2hf
+cnVuX2Nhc2Uodm9pZCAqZGF0YSkKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0K
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybjsKPiDCoMKgwqDCoMKgwqDC
+oMKgfQo+IC0KPiAtwqDCoMKgwqDCoMKgwqAvKgo+IC3CoMKgwqDCoMKgwqDCoCAqIFRlc3QgY2Fz
+ZSB3YXMgcnVuLCBidXQgYWJvcnRlZC4gSXQgaXMgdGhlIHRlc3QgY2FzZSdzIGJ1c2luZXNzIGFz
+IHRvCj4gLcKgwqDCoMKgwqDCoMKgICogd2hldGhlciBpdCBmYWlsZWQgb3Igbm90LCB3ZSBqdXN0
+IG5lZWQgdG8gY2xlYW4gdXAuCj4gLcKgwqDCoMKgwqDCoMKgICovCj4gLcKgwqDCoMKgwqDCoMKg
+a3VuaXRfcnVuX2Nhc2VfY2xlYW51cCh0ZXN0LCBzdWl0ZSk7Cj4gwqB9Cj4gwqAKPiDCoC8qCj4g
+QEAgLTQ3OCw2ICs1MTIsMTMgQEAgc3RhdGljIHZvaWQga3VuaXRfcnVuX2Nhc2VfY2F0Y2hfZXJy
+b3JzKHN0cnVjdCBrdW5pdF9zdWl0ZSAqc3VpdGUsCj4gwqDCoMKgwqDCoMKgwqDCoGNvbnRleHQu
+dGVzdF9jYXNlID0gdGVzdF9jYXNlOwo+IMKgwqDCoMKgwqDCoMKgwqBrdW5pdF90cnlfY2F0Y2hf
+cnVuKHRyeV9jYXRjaCwgJmNvbnRleHQpOwo+IMKgCj4gK8KgwqDCoMKgwqDCoMKgLyogTm93IHJ1
+biB0aGUgY2xlYW51cCAqLwo+ICvCoMKgwqDCoMKgwqDCoGt1bml0X3RyeV9jYXRjaF9pbml0KHRy
+eV9jYXRjaCwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIHRlc3QsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBrdW5pdF90cnlfcnVuX2Nhc2VfY2xlYW51cCwKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGt1bml0X2NhdGNo
+X3J1bl9jYXNlX2NsZWFudXApOwo+ICvCoMKgwqDCoMKgwqDCoGt1bml0X3RyeV9jYXRjaF9ydW4o
+dHJ5X2NhdGNoLCAmY29udGV4dCk7Cj4gKwo+IMKgwqDCoMKgwqDCoMKgwqAvKiBQcm9wYWdhdGUg
+dGhlIHBhcmFtZXRlciByZXN1bHQgdG8gdGhlIHRlc3QgY2FzZS4gKi8KPiDCoMKgwqDCoMKgwqDC
+oMKgaWYgKHRlc3QtPnN0YXR1cyA9PSBLVU5JVF9GQUlMVVJFKQo+IMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgdGVzdF9jYXNlLT5zdGF0dXMgPSBLVU5JVF9GQUlMVVJFOwoK
 
