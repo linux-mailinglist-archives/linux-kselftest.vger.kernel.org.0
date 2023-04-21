@@ -2,55 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA186EAC9D
+	by mail.lfdr.de (Postfix) with ESMTP id 61A096EAC9C
 	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 16:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjDUOSB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 10:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S229575AbjDUOR6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Apr 2023 10:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbjDUORq (ORCPT
+        with ESMTP id S232383AbjDUORs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:17:46 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139BE1258F
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:44 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b8f566ea5e6so6392595276.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:44 -0700 (PDT)
+        Fri, 21 Apr 2023 10:17:48 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8363CE50
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:47 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54c2999fdc7so27601737b3.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682086663; x=1684678663;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ObvMQpDO4VdOnjufZAdgVMFaduqKSCa+HnPbId1089s=;
-        b=ns5H+QuUh8mZPsqMyCzdWVAI4JV7KSMOsX/PkKfi+KNM578zeMJZglKgjpr9UxuRnA
-         wi25x9VT/iovSYgHd+ve7v7cd+FGEBPpntXYK5n0ggGm32KLQWoAmoG1zm5YzGbgtbrq
-         RgTiawh3lkrVdmd0R3kDNubrRwYA0ZgP70oIVMckT5bHQVK56Xdft2ji0Wnav1ky6YhF
-         nniaUNEowlFAQLCk2RUV86VHg09+JUS0zqM05SVxhgO6+lK/se36eKCwGMRdVYXqX4nx
-         8uLc5IBLZvH0koSjHV6sUtsZWbHv1v1y0x+sKRLknFsVO04HECC7IZBwaOVCeLtP7eYM
-         qOAw==
+        d=google.com; s=20221208; t=1682086666; x=1684678666;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K9ehmzwOW4Qc9gQvpwM/ZZofEU4OqXe1UUgzo44mFis=;
+        b=jQ/EfbElWOoD7Q5RcZ9PEMa2xeB33n91soMxfAboXtG9IdbuenydvfqGJRJs173o0i
+         vupY0UegJS39vUDZPWg//Oym1AxFL0seSvyqJuJ2iCaBeWL8/gw7JMqp4PQ7JqaqcVXN
+         iNIK16Y8y4rXoL54RmLqFH1ccS7vUP4c6UAmjsYbFOzVDuRQ9s7pTGXMPN+J00WMZlh/
+         dkBxnZoW2ygD8DRNK6Rn+6P0ltnrb6sIgfoNbyE0Ov4dTaBIn6WtKU0bQDqeRL8gbvhA
+         /vwQxur+PunJsSaBWZDh+8oiYEaDyLaOgE7fzoSNYbg7eGhEH2OnC/ShEbI1U1+eZhx8
+         QppA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682086663; x=1684678663;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ObvMQpDO4VdOnjufZAdgVMFaduqKSCa+HnPbId1089s=;
-        b=aClKZN0KGWfj1WnhId1QyKx7liqNAMT/HrvSpnUsoVqW0P28ShG0OzzCDcNEMHuwB3
-         5xlIZwMe0/wusmwP885FSyp9m3xn7aAx9kdDRpYEc7bNqO03rtNxDi/YygOCeBUsiOlQ
-         8eA/eGSvVaB0BtqQY5plL7pswsCULIYcP+Fs9QsGCW4v24mTreHtcY5hgbHEB97XdCN1
-         AnigiTeDOmPxFIS3RZQFOc93fAQ4yF0C8tZDbOe3Qwjsw9kr4cX4tl3dWmPqMtKtvgrd
-         Bjo2v3+8QhlRt0n8HOW6gQh6Nu2cGm9nK2wa9CppGbLY9IpiiyteNNNdnVFkz6DgKiNx
-         AOXA==
-X-Gm-Message-State: AAQBX9egtb2r5vmDcpy8d/d4oboHCNmrcPNkac4pfQztLXg7T2mluiCl
-        OA5GDne3EZLJTYBp+QcZoMYS8vtl2sJ1YlCnHg==
-X-Google-Smtp-Source: AKy350ZG7u2gePkwhYPhvuDsxGloMw0UJdMM4BeAyPegJQdDxY8uNtCzr8KodyMKn0yqhT8McYTYsD6j34k8q2wqkQ==
+        d=1e100.net; s=20221208; t=1682086666; x=1684678666;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K9ehmzwOW4Qc9gQvpwM/ZZofEU4OqXe1UUgzo44mFis=;
+        b=IOd+xSdat9DTyWW5c1gHDhTen9rJoqqAjC81gDzxLFAsnYQO+OI8Bk4CqwmV5dfYj5
+         3vEp7yHTvp7dTauZYZ2Qwp4hYjIVyEvcC+Li+U2VzgcHW4Va+s0CAGKDibGcHaF3YOD0
+         KmmmVgIjobEGXLGoeMdPuSeeSyyrv2etB0vLhY2r9t2EcAw/OF1V1ezJpI8U6EuJvpHN
+         QGpHwIhXu+82DEl252uQV98iXvYSIV6Ty+OvSWSQQ1xAu/l6vbL2aUXAbvdwUX5o4fkj
+         GdRNTq5JHEw4g5Djef4X5pASIIImMkVdblt5uKg49w4pox/dt6/IEGC4MyK7kqcEU87/
+         XOyA==
+X-Gm-Message-State: AAQBX9fa85tHpSqBRcavvdkcB4xJWcLTRvh1bVwJ5b56l/D9nDwT0NPR
+        41F4j2FWtSNMGsUzsZT1XGBroEDHWERuOyJoZw==
+X-Google-Smtp-Source: AKy350bGSojqd0RF8hFVJ3f1aMQaH6BbLkjOI4vRi/ZfKEmx8aOtAggSlmMc650/M/hrY1VHYKP2C4yWp1Cj3Omwyg==
 X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:c801:daa2:428c:d3fc])
- (user=peternewman job=sendgmr) by 2002:a05:690c:2b88:b0:54c:15ad:11e4 with
- SMTP id en8-20020a05690c2b8800b0054c15ad11e4mr1865952ywb.0.1682086663349;
- Fri, 21 Apr 2023 07:17:43 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 16:17:14 +0200
+ (user=peternewman job=sendgmr) by 2002:a81:b725:0:b0:555:f33e:e346 with SMTP
+ id v37-20020a81b725000000b00555f33ee346mr1484199ywh.6.1682086666823; Fri, 21
+ Apr 2023 07:17:46 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 16:17:15 +0200
+In-Reply-To: <20230421141723.2405942-1-peternewman@google.com>
 Mime-Version: 1.0
+References: <20230421141723.2405942-1-peternewman@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421141723.2405942-1-peternewman@google.com>
-Subject: [PATCH v1 0/9] x86/resctrl: Use soft RMIDs for reliable MBM on AMD
+Message-ID: <20230421141723.2405942-2-peternewman@google.com>
+Subject: [PATCH v1 1/9] selftests/resctrl: Verify all RMIDs count together
 From:   Peter Newman <peternewman@google.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>
@@ -66,138 +68,123 @@ Cc:     Babu Moger <babu.moger@amd.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Reinette, Fenghua,
+AMD CPUs in particular implement fewer monitors than RMIDs, so add a
+test case to see if a large number of monitoring groups can be measured
+together.
 
-This series introduces a new mount option enabling an alternate mode for
-MBM to work around an issue on present AMD implementations and any other
-resctrl implementation where there are more RMIDs (or equivalent) than
-hardware counters.
-
-The L3 External Bandwidth Monitoring feature of the AMD PQoS
-extension[1] only guarantees that RMIDs currently assigned to a
-processor will be tracked by hardware. The counters of any other RMIDs
-which are no longer being tracked will be reset to zero. The MBM event
-counters return "Unavailable" to indicate when this has happened.
-
-An interval for effectively measuring memory bandwidth typically needs
-to be multiple seconds long. In Google's workloads, it is not feasible
-to bound the number of jobs with different RMIDs which will run in a
-cache domain over any period of time.  Consequently, on a
-fully-committed system where all RMIDs are allocated, few groups'
-counters return non-zero values.
-
-To demonstrate the underlying issue, the first patch provides a test
-case in tools/testing/selftests/resctrl/test_rmids.sh.
-
-On an AMD EPYC 7B12 64-Core Processor with the default behavior:
-
- # ./test_rmids.sh
- Created 255 monitoring groups.
- g1: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g2: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g3: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
-[..]
- g238: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g239: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g240: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g241: mbm_total_bytes: Unavailable -> 660497472
- g242: mbm_total_bytes: Unavailable -> 660793344
- g243: mbm_total_bytes: Unavailable -> 660477312
- g244: mbm_total_bytes: Unavailable -> 660495360
- g245: mbm_total_bytes: Unavailable -> 660775360
- g246: mbm_total_bytes: Unavailable -> 660645504
- g247: mbm_total_bytes: Unavailable -> 660696128
- g248: mbm_total_bytes: Unavailable -> 660605248
- g249: mbm_total_bytes: Unavailable -> 660681280
- g250: mbm_total_bytes: Unavailable -> 660834240
- g251: mbm_total_bytes: Unavailable -> 660440064
- g252: mbm_total_bytes: Unavailable -> 660501504
- g253: mbm_total_bytes: Unavailable -> 660590720
- g254: mbm_total_bytes: Unavailable -> 660548352
- g255: mbm_total_bytes: Unavailable -> 660607296
- 255 groups, 0 returned counts in first pass, 15 in second
- successfully measured bandwidth from 15/255 groups
-
-To compare, here is the output from an Intel(R) Xeon(R) Platinum 8173M
-CPU:
-
- # ./test_rmids.sh
- Created 223 monitoring groups.
- g1: mbm_total_bytes: 0 -> 606126080
- g2: mbm_total_bytes: 0 -> 613236736
- g3: mbm_total_bytes: 0 -> 610254848
-[..]
- g221: mbm_total_bytes: 0 -> 584679424
- g222: mbm_total_bytes: 0 -> 588808192
- g223: mbm_total_bytes: 0 -> 587317248
- 223 groups, 223 returned counts in first pass, 223 in second
- successfully measured bandwidth from 223/223 groups
-
-To make better use of the hardware in such a use case, this patchset
-introduces a "soft" RMID implementation, where each CPU is permanently
-assigned a "hard" RMID. On context switches which change the current
-soft RMID, the difference between each CPU's current event counts and
-most recent counts is added to the totals for the current or outgoing
-soft RMID.
-
-This technique does not work for cache occupancy counters, so this patch
-series disables cache occupancy events when soft RMIDs are enabled.
-
-This series adds the "mbm_soft_rmid" mount option to allow users to
-opt-in to the functionaltiy when they deem it helpful.
-
-When the same system from the earlier AMD example enables the
-mbm_soft_rmid mount option:
-
- # ./test_rmids.sh
- Created 255 monitoring groups.
- g1: mbm_total_bytes: 0 -> 686560576
- g2: mbm_total_bytes: 0 -> 668204416
-[..]
- g252: mbm_total_bytes: 0 -> 672651200
- g253: mbm_total_bytes: 0 -> 666956800
- g254: mbm_total_bytes: 0 -> 665917056
- g255: mbm_total_bytes: 0 -> 671049600
- 255 groups, 255 returned counts in first pass, 255 in second
- successfully measured bandwidth from 255/255 groups
-
-(patches are based on tip/master)
-
-[1] https://www.amd.com/system/files/TechDocs/56375_1.03_PUB.pdf
-
-Peter Newman (8):
-  selftests/resctrl: Verify all RMIDs count together
-  x86/resctrl: Add resctrl_mbm_flush_cpu() to collect CPUs' MBM events
-  x86/resctrl: Flush MBM event counts on soft RMID change
-  x86/resctrl: Call mon_event_count() directly for soft RMIDs
-  x86/resctrl: Create soft RMID version of __mon_event_count()
-  x86/resctrl: Assign HW RMIDs to CPUs for soft RMID
-  x86/resctrl: Use mbm_update() to push soft RMID counts
-  x86/resctrl: Add mount option to enable soft RMID
-
-Stephane Eranian (1):
-  x86/resctrl: Hold a spinlock in __rmid_read() on AMD
-
- arch/x86/include/asm/resctrl.h                |  29 +++-
- arch/x86/kernel/cpu/resctrl/core.c            |  80 ++++++++-
- arch/x86/kernel/cpu/resctrl/ctrlmondata.c     |   9 +-
- arch/x86/kernel/cpu/resctrl/internal.h        |  19 ++-
- arch/x86/kernel/cpu/resctrl/monitor.c         | 158 +++++++++++++++++-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c        |  52 ++++++
- tools/testing/selftests/resctrl/test_rmids.sh |  93 +++++++++++
- 7 files changed, 425 insertions(+), 15 deletions(-)
+Signed-off-by: Peter Newman <peternewman@google.com>
+---
+ tools/testing/selftests/resctrl/test_rmids.sh | 93 +++++++++++++++++++
+ 1 file changed, 93 insertions(+)
  create mode 100755 tools/testing/selftests/resctrl/test_rmids.sh
 
-
-base-commit: dd806e2f030e57dd5bac973372aa252b6c175b73
+diff --git a/tools/testing/selftests/resctrl/test_rmids.sh b/tools/testing/selftests/resctrl/test_rmids.sh
+new file mode 100755
+index 000000000000..475e69c0217e
+--- /dev/null
++++ b/tools/testing/selftests/resctrl/test_rmids.sh
+@@ -0,0 +1,93 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++cd /sys/fs/resctrl
++
++grep -q mbm_total_bytes info/L3_MON/mon_features || {
++	echo "MBM required"
++	exit 4
++}
++
++which perf > /dev/null || {
++	echo "perf tool required"
++	exit 4
++}
++
++num_rmids=$(cat info/L3_MON/num_rmids)
++
++count=0
++
++result=0
++
++# use as many RMIDs as possible, up to the number of RMIDs
++for i in `seq $num_rmids`; do
++	mkdir mon_groups/_test_m$((count+1)) 2> /dev/null || break
++	if [[ -d mon_groups/_test_m$((count+1))/mon_data ]]; then
++		count=$((count+1))
++	else
++		break;
++	fi
++done
++
++echo "Created $count monitoring groups."
++
++if [[ $count -eq 0 ]]; then
++	echo "need monitoring groups to continue."
++	exit 4
++fi
++
++declare -a bytes_array
++
++unavailable=0
++unavailable0=0
++
++for i in `seq $count`; do
++	bytes_array[$i]=$(cat mon_groups/_test_m${i}/mon_data/mon_L3_00/mbm_total_bytes)
++
++	if [[ "${bytes_array[$i]}" = "Unavailable" ]]; then
++		unavailable0=$((unavailable0 + 1))
++	fi
++done
++
++for i in `seq $count`; do
++	echo $$ > mon_groups/_test_m${i}/tasks
++	taskset 0x1 perf bench mem memcpy -s 100MB -f default > /dev/null
++done
++echo $$ > tasks
++
++# zero non-integer values
++declare -i bytes bytes0
++
++success_count=0
++
++for i in `seq $count`; do
++	raw_bytes=$(cat mon_groups/_test_m${i}/mon_data/mon_L3_00/mbm_total_bytes)
++	raw_bytes0=${bytes_array[$i]}
++
++	# coerce the value to an integer for math
++	bytes=$raw_bytes
++	bytes0=$raw_bytes0
++
++	echo -n "g${i}: mbm_total_bytes: $raw_bytes0 -> $raw_bytes"
++
++	if [[ "$raw_bytes" = "Unavailable" ]]; then
++		unavailable=$((unavailable + 1))
++	fi
++
++	if [[ $bytes -gt $bytes0 ]]; then
++		success_count=$((success_count+1))
++		echo ""
++	else
++		echo " (FAIL)"
++		result=1
++	fi
++done
++
++first=$((count-unavailable0))
++second=$((count-unavailable))
++echo "$count groups, $first returned counts in first pass, $second in second"
++echo "successfully measured bandwidth from ${success_count}/${count} groups"
++
++rmdir mon_groups/_test_m*
++
++exit $result
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
