@@ -2,57 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABEC6EAC99
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 16:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042D26EAC9E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 16:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjDUOR7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 10:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
+        id S231628AbjDUOSA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Apr 2023 10:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbjDUORv (ORCPT
+        with ESMTP id S232455AbjDUORz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:17:51 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93949030
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:49 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b92309d84c1so6368143276.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:49 -0700 (PDT)
+        Fri, 21 Apr 2023 10:17:55 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989FFE50
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:53 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54fc35ab48fso9379957b3.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682086669; x=1684678669;
+        d=google.com; s=20221208; t=1682086673; x=1684678673;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ZdT0+yxI631GXfw7STY7XxcZTuaYlRecO3uXqz7sRs=;
-        b=Y2+bxGSHDI0cOeuV61GwDsFnnX9uAq9WV4Qgojc5LTOAuEP7C/2lbNBzZCmr9EdXh7
-         T9jJFsDqzueATZPhTVjNwdJ4MFL89AyXFBgYcElt1FG2xsfcm9t/jgq2PV+yLwMb7P37
-         sBDmeAm7DfdmrMZ0bI/85s0NTFkKfCr8eZPBFv7mbUVMz/4yNLvDgNiI8lS/+WydrCT9
-         0xlrKDptRLKB0mb733akzzr1zKgHEJXS5NUA2IWaMU05W6pdg6KhkQHmIygs+G8eC3bI
-         FtBXepDYkaHIXGahLzv8DVUcjVfhwk/8CZCRLk9Ay5NK+v9x3qPgWv2q/rUiCbhfuZUt
-         3gxg==
+        bh=BuRpJ8asAkuXVj/aByE26xnYMHbcW3VWyH6v7oH/F3A=;
+        b=YF6mH/8C6d2LEICnoqqT4IlypJNJI7h7vMGL3vmU8nm89xmj7nFwuuIi0Wugm9WY7S
+         LZT7Lgv38D5hvS66vh1juZA/85ZJAPR2JWb6rtiB3SRpL/EO75XCQVejewfggFNY6tFf
+         RzHFp1/kP+25z9AnutEzY4IoniQvEzo16VK7X+sycwpCy3UwwvKbnqksNfF1U7vt2PHV
+         bSJAcLXepaAKacebZQY18LDeX7Zs7xw1hB+gldk/e7vBIaWUaSVtYUz6W4roqTjhSZJG
+         HMyd3SE7sDxYTWk7s5ZqTodFH5yuHwd0x1uf+1epjoOsNQcwdzTFPBgd9pwdMOellgcs
+         H4CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682086669; x=1684678669;
+        d=1e100.net; s=20221208; t=1682086673; x=1684678673;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ZdT0+yxI631GXfw7STY7XxcZTuaYlRecO3uXqz7sRs=;
-        b=lppX1DE5Fw4HwSqqsYdkyJilI+1aHUrocbrWU9IqkR9Mztl0Pf8/2Mx6vcDhjQLKWL
-         nWlM4eMwL4dFZNBxGChwUzr4fAqrbfRPz1/90qtvzEqKx+adwIFx4C/KzQpeqixWNcT+
-         kcwLSkCj+3KYHr3jcVSgTCrz5wLeOdSrDMRN33ZgrISnmHX8a1XURiVtBDEjlna/WINM
-         BDhLp0WNbUvapQhKgeRxXQsyqb1A0lMMQtwZxpKGq51kAbtPVotw/3MwdVnsgAVY/xXN
-         Mt5bNyBDz+xmdocXRiUQBitUoLVazgvR2IegE5FPH2dL9PlgZ0smdU4Qae+mQfNHax9o
-         Y1Wg==
-X-Gm-Message-State: AAQBX9f0c1cnJUWDy/Sfby2FxOXdZXMWWV83Hm4Ezi+gB5FIDHzOf0XV
-        uJwoQYztb1Ty6nNL8KuWBvam70Jr0964fFat5A==
-X-Google-Smtp-Source: AKy350bw3Zi5wPB0lMm8zUks5VeLUBbeduMsul45B2dWHkdZeBUg6vpt39ys1PXVjq9XFMDP/4rsZCKkUKoSq7Meng==
+        bh=BuRpJ8asAkuXVj/aByE26xnYMHbcW3VWyH6v7oH/F3A=;
+        b=KLtvrBCz40Z3gYkAQ8yHTjtSWPLK2FLQ27mEeEjfaMaA2rrcW3O0FpQhIj0YjKLco/
+         TRjMTtgaij8dELB+BuYzVOg8MEPwxVPJwdpQNEg67iArDBp3XmGZsCx8PtZRcs9VduJ9
+         upaHsuSzjp9x7+xMqjSlEaoLR3gg2kFfZlxQKNev3cyCvhwvmImwRlQGnZabz6XbM+Zv
+         eTPUtEQPJMRNLphV+YhPSnLUw+ppxWUXrW0BiymZpj8QIYlVy0rtzaAYjuRE3fgpYAAO
+         ZzSXq7vOeEH9dmXDNnOozVImweau6B5AgRcmfYmZvaG7F3V+G+zdzxQaZFH1EZXGYcRu
+         VwjQ==
+X-Gm-Message-State: AAQBX9e+3RdKJ2ZKrbt/9aHdVrrSJY/uc4KdWQIg2yEWWCa7AIo9bFl4
+        QhgbC+40yoJwTOy5rcpw++8PQsQAHUxtE822IQ==
+X-Google-Smtp-Source: AKy350bSfP1gP4DD2HHVEqwXmh0xWlWT1hVdE3FbvnbuPnVQDeyMt9ZPm07M+aCRtKM49nBWk/ZKtfMv2uVqwFggNA==
 X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:c801:daa2:428c:d3fc])
- (user=peternewman job=sendgmr) by 2002:a05:690c:c8c:b0:54f:e2ca:3085 with
- SMTP id cm12-20020a05690c0c8c00b0054fe2ca3085mr1849543ywb.1.1682086669711;
- Fri, 21 Apr 2023 07:17:49 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 16:17:16 +0200
+ (user=peternewman job=sendgmr) by 2002:a0d:ec49:0:b0:552:b607:634b with SMTP
+ id r9-20020a0dec49000000b00552b607634bmr1395087ywn.4.1682086672863; Fri, 21
+ Apr 2023 07:17:52 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 16:17:17 +0200
 In-Reply-To: <20230421141723.2405942-1-peternewman@google.com>
 Mime-Version: 1.0
 References: <20230421141723.2405942-1-peternewman@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421141723.2405942-3-peternewman@google.com>
-Subject: [PATCH v1 2/9] x86/resctrl: Hold a spinlock in __rmid_read() on AMD
+Message-ID: <20230421141723.2405942-4-peternewman@google.com>
+Subject: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to collect
+ CPUs' MBM events
 From:   Peter Newman <peternewman@google.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>
@@ -76,174 +77,174 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Stephane Eranian <eranian@google.com>
+AMD implementations so far are only guaranteed to provide MBM event
+counts for RMIDs which are currently assigned in CPUs' PQR_ASSOC MSRs.
+Hardware can reallocate the counter resources for all other RMIDs' which
+are not currently assigned to those which are, zeroing the event counts
+of the unassigned RMIDs.
 
-In AMD PQoS Versions 1.0 and 2.0, IA32_QM_EVTSEL MSR is shared by all
-processors in a QOS domain.  So there's a chance it can read a different
-event when two processors are reading the counter concurrently.  Add a
-spinlock to prevent this race.
+In practice, this makes it impossible to simultaneously calculate the
+memory bandwidth speed of all RMIDs on a busy system where all RMIDs are
+in use. Over a multiple-second measurement window, the RMID would need
+to remain assigned in all of the L3 cache domains where it has been
+assigned for the duration of the measurement, otherwise portions of the
+final count will be zero. In general, it is not possible to bound the
+number of RMIDs which will be assigned in an L3 domain over any interval
+of time.
 
-Co-developed-by: Peter Newman <peternewman@google.com>
-Signed-off-by: Peter Newman <peternewman@google.com>
+To provide reliable MBM counts on such systems, introduce "soft" RMIDs:
+when enabled, each CPU is permanently assigned a hardware RMID whose
+event counts are flushed to the current soft RMID during context
+switches which result in a change in soft RMID as well as whenever
+userspace requests the current event count for a domain.
+
+Implement resctrl_mbm_flush_cpu(), which collects a domain's current MBM
+event counts into its current software RMID. The delta for each CPU is
+determined by tracking the previous event counts in per-CPU data.  The
+software byte counts reside in the arch-independent mbm_state
+structures.
+
+Co-developed-by: Stephane Eranian <eranian@google.com>
 Signed-off-by: Stephane Eranian <eranian@google.com>
+Signed-off-by: Peter Newman <peternewman@google.com>
 ---
- arch/x86/kernel/cpu/resctrl/core.c     | 41 ++++++++++++++++++++++++++
- arch/x86/kernel/cpu/resctrl/internal.h |  5 ++++
- arch/x86/kernel/cpu/resctrl/monitor.c  | 14 +++++++--
- 3 files changed, 57 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/resctrl.h         |  2 +
+ arch/x86/kernel/cpu/resctrl/internal.h | 10 ++--
+ arch/x86/kernel/cpu/resctrl/monitor.c  | 78 ++++++++++++++++++++++++++
+ 3 files changed, 86 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-index 030d3b409768..47b1c37a81f8 100644
---- a/arch/x86/kernel/cpu/resctrl/core.c
-+++ b/arch/x86/kernel/cpu/resctrl/core.c
-@@ -25,6 +25,8 @@
- #include <asm/resctrl.h>
- #include "internal.h"
- 
-+DEFINE_STATIC_KEY_FALSE(rmid_read_locked);
-+
- /* Mutex to protect rdtgroup access. */
- DEFINE_MUTEX(rdtgroup_mutex);
- 
-@@ -529,6 +531,8 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
- 	d->id = id;
- 	cpumask_set_cpu(cpu, &d->cpu_mask);
- 
-+	raw_spin_lock_init(&hw_dom->evtsel_lock);
-+
- 	rdt_domain_reconfigure_cdp(r);
- 
- 	if (r->alloc_capable && domain_setup_ctrlval(r, d)) {
-@@ -829,6 +833,41 @@ static __init bool get_rdt_mon_resources(void)
- 	return !rdt_get_mon_l3_config(r);
- }
- 
-+static __init bool amd_shared_qm_evtsel(void)
-+{
-+	/*
-+	 * From AMD64 Technology Platform Quality of Service Extensions,
-+	 * Revision 1.03:
-+	 *
-+	 * "For PQoS Version 1.0 and 2.0, as identified by Family/Model, the
-+	 * QM_EVTSEL register is shared by all the processors in a QOS domain."
-+	 *
-+	 * Check the inclusive Family/Model ranges for PQoS Extension versions
-+	 * 1.0 and 2.0 from the PQoS Extension Versions table.
-+	 */
-+	if (boot_cpu_data.x86 == 0x17)
-+		/* V1.0 */
-+		return boot_cpu_data.x86_model >= 0x30 &&
-+			boot_cpu_data.x86_model <= 0x9f;
-+
-+	if (boot_cpu_data.x86 == 0x19)
-+		/* V2.0 */
-+		return (boot_cpu_data.x86_model <= 0xf) ||
-+			((boot_cpu_data.x86_model >= 0x20) &&
-+			 (boot_cpu_data.x86_model <= 0x5f));
-+
-+	return false;
-+}
-+
-+static __init void __check_quirks_amd(void)
-+{
-+	if (rdt_cpu_has(X86_FEATURE_CQM_MBM_TOTAL) ||
-+	    rdt_cpu_has(X86_FEATURE_CQM_MBM_LOCAL)) {
-+		if (amd_shared_qm_evtsel())
-+			static_branch_enable(&rmid_read_locked);
-+	}
-+}
-+
- static __init void __check_quirks_intel(void)
- {
- 	switch (boot_cpu_data.x86_model) {
-@@ -852,6 +891,8 @@ static __init void check_quirks(void)
- {
- 	if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
- 		__check_quirks_intel();
-+	else if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
-+		__check_quirks_amd();
- }
- 
- static __init bool get_rdt_resources(void)
-diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 85ceaf9a31ac..02a062558c67 100644
---- a/arch/x86/kernel/cpu/resctrl/internal.h
-+++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -325,6 +325,7 @@ struct arch_mbm_state {
-  * @ctrl_val:	array of cache or mem ctrl values (indexed by CLOSID)
-  * @arch_mbm_total:	arch private state for MBM total bandwidth
-  * @arch_mbm_local:	arch private state for MBM local bandwidth
-+ * @lock:	serializes counter reads when QM_EVTSEL MSR is shared per-domain
+diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.h
+index 255a78d9d906..e7acf118d770 100644
+--- a/arch/x86/include/asm/resctrl.h
++++ b/arch/x86/include/asm/resctrl.h
+@@ -13,6 +13,7 @@
+  * @cur_closid:	The cached Class Of Service ID
+  * @default_rmid:	The user assigned Resource Monitoring ID
+  * @default_closid:	The user assigned cached Class Of Service ID
++ * @hw_rmid:	The permanently-assigned RMID when soft RMIDs are in use
   *
-  * Members of this structure are accessed via helpers that provide abstraction.
-  */
-@@ -333,6 +334,7 @@ struct rdt_hw_domain {
- 	u32				*ctrl_val;
- 	struct arch_mbm_state		*arch_mbm_total;
- 	struct arch_mbm_state		*arch_mbm_local;
-+	raw_spinlock_t			evtsel_lock;
+  * The upper 32 bits of MSR_IA32_PQR_ASSOC contain closid and the
+  * lower 10 bits rmid. The update to MSR_IA32_PQR_ASSOC always
+@@ -27,6 +28,7 @@ struct resctrl_pqr_state {
+ 	u32			cur_closid;
+ 	u32			default_rmid;
+ 	u32			default_closid;
++	u32			hw_rmid;
  };
  
- static inline struct rdt_hw_domain *resctrl_to_arch_dom(struct rdt_domain *r)
-@@ -428,6 +430,9 @@ extern struct rdt_hw_resource rdt_resources_all[];
- extern struct rdtgroup rdtgroup_default;
- DECLARE_STATIC_KEY_FALSE(rdt_alloc_enable_key);
+ DECLARE_PER_CPU(struct resctrl_pqr_state, pqr_state);
+diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+index 02a062558c67..256eee05d447 100644
+--- a/arch/x86/kernel/cpu/resctrl/internal.h
++++ b/arch/x86/kernel/cpu/resctrl/internal.h
+@@ -298,12 +298,14 @@ struct rftype {
+  * @prev_bw:	The most recent bandwidth in MBps
+  * @delta_bw:	Difference between the current and previous bandwidth
+  * @delta_comp:	Indicates whether to compute the delta_bw
++ * @soft_rmid_bytes: Recent bandwidth count in bytes when using soft RMIDs
+  */
+ struct mbm_state {
+-	u64	prev_bw_bytes;
+-	u32	prev_bw;
+-	u32	delta_bw;
+-	bool	delta_comp;
++	u64		prev_bw_bytes;
++	u32		prev_bw;
++	u32		delta_bw;
++	bool		delta_comp;
++	atomic64_t	soft_rmid_bytes;
+ };
  
-+/* Serialization required in resctrl_arch_rmid_read(). */
-+DECLARE_STATIC_KEY_FALSE(rmid_read_locked);
-+
- extern struct dentry *debugfs_resctrl;
- 
- enum resctrl_res_level {
+ /**
 diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 20952419be75..2de8397f91cd 100644
+index 2de8397f91cd..3671100d3cc7 100644
 --- a/arch/x86/kernel/cpu/resctrl/monitor.c
 +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -146,10 +146,15 @@ static inline struct rmid_entry *__rmid_entry(u32 rmid)
- 	return entry;
- }
- 
--static int __rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *val)
-+static int __rmid_read(struct rdt_hw_domain *hw_dom, u32 rmid,
-+		       enum resctrl_event_id eventid, u64 *val)
- {
-+	unsigned long flags;
- 	u64 msr_val;
- 
-+	if (static_branch_likely(&rmid_read_locked))
-+		raw_spin_lock_irqsave(&hw_dom->evtsel_lock, flags);
-+
- 	/*
- 	 * As per the SDM, when IA32_QM_EVTSEL.EvtID (bits 7:0) is configured
- 	 * with a valid event code for supported resource type and the bits
-@@ -161,6 +166,9 @@ static int __rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *val)
- 	wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
- 	rdmsrl(MSR_IA32_QM_CTR, msr_val);
- 
-+	if (static_branch_likely(&rmid_read_locked))
-+		raw_spin_unlock_irqrestore(&hw_dom->evtsel_lock, flags);
-+
- 	if (msr_val & RMID_VAL_ERROR)
- 		return -EIO;
- 	if (msr_val & RMID_VAL_UNAVAIL)
-@@ -200,7 +208,7 @@ void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
- 		memset(am, 0, sizeof(*am));
- 
- 		/* Record any initial, non-zero count value. */
--		__rmid_read(rmid, eventid, &am->prev_msr);
-+		__rmid_read(hw_dom, rmid, eventid, &am->prev_msr);
+@@ -404,6 +404,84 @@ static struct mbm_state *get_mbm_state(struct rdt_domain *d, u32 rmid,
  	}
  }
  
-@@ -241,7 +249,7 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
- 	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
- 		return -EINVAL;
- 
--	ret = __rmid_read(rmid, eventid, &msr_val);
-+	ret = __rmid_read(hw_dom, rmid, eventid, &msr_val);
- 	if (ret)
- 		return ret;
- 
++struct mbm_soft_counter {
++	u64	prev_bytes;
++	bool	initialized;
++};
++
++struct mbm_flush_state {
++	struct mbm_soft_counter local;
++	struct mbm_soft_counter total;
++};
++
++DEFINE_PER_CPU(struct mbm_flush_state, flush_state);
++
++/*
++ * flushes the value of the cpu_rmid to the current soft rmid
++ */
++static void __mbm_flush(int evtid, struct rdt_resource *r, struct rdt_domain *d)
++{
++	struct mbm_flush_state *state = this_cpu_ptr(&flush_state);
++	u32 soft_rmid = this_cpu_ptr(&pqr_state)->cur_rmid;
++	u32 hw_rmid = this_cpu_ptr(&pqr_state)->hw_rmid;
++	struct mbm_soft_counter *counter;
++	struct mbm_state *m;
++	u64 val;
++
++	/* cache occupancy events are disabled in this mode */
++	WARN_ON(!is_mbm_event(evtid));
++
++	if (evtid == QOS_L3_MBM_LOCAL_EVENT_ID) {
++		counter = &state->local;
++	} else {
++		WARN_ON(evtid != QOS_L3_MBM_TOTAL_EVENT_ID);
++		counter = &state->total;
++	}
++
++	/*
++	 * Propagate the value read from the hw_rmid assigned to the current CPU
++	 * into the "soft" rmid associated with the current task or CPU.
++	 */
++	m = get_mbm_state(d, soft_rmid, evtid);
++	if (!m)
++		return;
++
++	if (resctrl_arch_rmid_read(r, d, hw_rmid, evtid, &val))
++		return;
++
++	/* Count bandwidth after the first successful counter read. */
++	if (counter->initialized) {
++		/* Assume that mbm_update() will prevent double-overflows. */
++		if (val != counter->prev_bytes)
++			atomic64_add(val - counter->prev_bytes,
++				     &m->soft_rmid_bytes);
++	} else {
++		counter->initialized = true;
++	}
++
++	counter->prev_bytes = val;
++}
++
++/*
++ * Called from context switch code __resctrl_sched_in() when the current soft
++ * RMID is changing or before reporting event counts to user space.
++ */
++void resctrl_mbm_flush_cpu(void)
++{
++	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
++	int cpu = smp_processor_id();
++	struct rdt_domain *d;
++
++	d = get_domain_from_cpu(cpu, r);
++	if (!d)
++		return;
++
++	if (is_mbm_local_enabled())
++		__mbm_flush(QOS_L3_MBM_LOCAL_EVENT_ID, r, d);
++	if (is_mbm_total_enabled())
++		__mbm_flush(QOS_L3_MBM_TOTAL_EVENT_ID, r, d);
++}
++
+ static int __mon_event_count(u32 rmid, struct rmid_read *rr)
+ {
+ 	struct mbm_state *m;
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
