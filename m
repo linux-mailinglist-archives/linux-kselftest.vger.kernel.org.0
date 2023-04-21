@@ -2,196 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56C06EA1A9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 04:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A88E6EA228
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 05:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233541AbjDUCcg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Apr 2023 22:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S232883AbjDUDKZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Apr 2023 23:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233322AbjDUCcf (ORCPT
+        with ESMTP id S231448AbjDUDKY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Apr 2023 22:32:35 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348314C1B
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 19:32:08 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b4dfead1bso1576725b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 19:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682044325; x=1684636325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Os9mukvCSPKKdw4nMw1R9O8vMlREwTtiShtLG9IPKE=;
-        b=HCUz5FFzKFUHDPDgsikCdeCMO1zCq/dlZrN9CoWrMcHhOk5eW5mGuvAW0p45w19CZ9
-         6DhK5F2Gk1GWEBSlELCPFSghDIlDSe1DGcJsa3XDYcDtdAEhjPD95OxhadNqFqLjy31a
-         AEwqXTmEZj/G96t5M0pUJFRsj3q4EZINhn5IxkcSe8fP6t4MfV3qgawZfZCEP/9uKbME
-         XEmL0ckKkFWmjHQeQG7hPRTo7o4ucGkjtRfjE1LcDP8ADmrc3OOqwoNwl3GOCVz2MgqQ
-         qWNVGhGaMk/y7AJaDYlyWUfw2DAWzlQCWRH/UzMHCoGdZelgd211UAMLzH4/cQqVS8G9
-         RY2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682044325; x=1684636325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+Os9mukvCSPKKdw4nMw1R9O8vMlREwTtiShtLG9IPKE=;
-        b=S87H1eABPKPigASAk42g78/RW0YiInohMZG+yz5qN6rHaYSpTuaR6HDqz9hA8q7ztS
-         4KFuzcnwEXrqmwdcuABNUI739lMR4u5/i1rD8Uu1BMXR8fwUdGEvaH7mSPlwN8t+BEg8
-         6RoUf/tzb/FjmIdYV1mR1bjqU6Mcn+8f0IcBJ3NvzjEKlwqH1YvXN/EyNRqSJBjGUBxS
-         44jQsZJ3WprszMfrLRqvkqj/FffC6zuJN0gEECR1esrgbL1i4q751kd4CKR36sDsq9um
-         +Y9SP7PldQDssMRkHXH83AI42cSHtbSAx1kflEb1W0tQStJP4zNkfHdufW60jEPLeboO
-         xqQg==
-X-Gm-Message-State: AAQBX9fkzGYi9vXkampEqhrzG3Q+F5H3wh/vPbzaqbMbpTcsIxOQVjdm
-        R+9P71jjPH6ZKrYe0h8sOp3caA==
-X-Google-Smtp-Source: AKy350an2piqFQ6UOXrk8jJ6gIyDjZgCDQB+P/aZgG82pfL/0ZNRMdlbfqgcUvlglP49ovd9ARWPuw==
-X-Received: by 2002:a05:6a00:1acd:b0:63d:2aac:7b88 with SMTP id f13-20020a056a001acd00b0063d2aac7b88mr4799316pfv.25.1682044325691;
-        Thu, 20 Apr 2023 19:32:05 -0700 (PDT)
-Received: from [10.71.57.173] ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id o8-20020a62f908000000b006260526cf0csm1847551pfh.116.2023.04.20.19.31.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 19:32:05 -0700 (PDT)
-Message-ID: <184a2930-99ee-4cbe-9d9e-2f7d7fa8a2e2@bytedance.com>
-Date:   Fri, 21 Apr 2023 10:31:55 +0800
+        Thu, 20 Apr 2023 23:10:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62651FE7;
+        Thu, 20 Apr 2023 20:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68ABD618BB;
+        Fri, 21 Apr 2023 03:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE1B9C4339B;
+        Fri, 21 Apr 2023 03:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682046621;
+        bh=PxQlMZHt462rH3/YZlPvcpmM5U9K+lz98YiwnqZtSPg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=dtFF76yShNdpUXsm+W3vX7ouHUNLx0j+JtjvlhUZsQbN/Vx1vGXl+o3yHvZFYdfCw
+         mMWVF5s6/0fTLH81zn7scMZRnOCpFX0y3KVuus6CGdm+5DcTSu0d8f/Fyl2aC5CLme
+         TQ01LWGx8V6tKWt/Mt+ob6QRleGJxdSulcm8lb1GCE1UOIwiIWMDnLkyPPm4siTLJK
+         hyzcSNMXMrceYfx2VsKrqeGsCrj9uc8HbLj16o5JUy2J0xS+gNmD+5pfjI/UcMLN3v
+         E1avwNz7fwS61L+3EGn6QLMp05bkILMHkl7ixyftGqpZM70j2hDLsH7y4iZIMb8mgC
+         IlYaR3/Vl4O7g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99791E270E1;
+        Fri, 21 Apr 2023 03:10:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [External] Re: [PATCH bpf-next 1/2] bpf: Add
- bpf_task_under_cgroup helper
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, yangzhenze@bytedance.com,
-        Dongdong Wang <wangdongdong.6@bytedance.com>
-References: <20230420072657.80324-1-zhoufeng.zf@bytedance.com>
- <20230420072657.80324-2-zhoufeng.zf@bytedance.com>
- <CAADnVQ+ffmrJCMa2R48AtJL3nT93jtKEdRv3RFeJ3Vo2L6ukQA@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAADnVQ+ffmrJCMa2R48AtJL3nT93jtKEdRv3RFeJ3Vo2L6ukQA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 net-next 0/9] ethtool mm API consolidation
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168204662162.31034.16190929689278834562.git-patchwork-notify@kernel.org>
+Date:   Fri, 21 Apr 2023 03:10:21 +0000
+References: <20230418111459.811553-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20230418111459.811553-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, mkubecek@suse.cz,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        claudiu.manoil@nxp.com, xiaoliang.yang_1@nxp.com, petrm@nvidia.com,
+        danieller@nvidia.com, pranavi.somisetty@amd.com,
+        harini.katakam@amd.com, vinicius.gomes@intel.com,
+        kurt@linutronix.de, gerhard@engleder-embedded.com,
+        ferenc.fejes@ericsson.com, aconole@redhat.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-在 2023/4/21 02:22, Alexei Starovoitov 写道:
-> On Thu, Apr 20, 2023 at 12:27 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>
->> This adds a bpf helper that's similar to the
->> bpf_current_task_under_cgroup. The difference is that it is a
->> designated task.
->>
->> When hook sched related functions, sometimes it is necessary to
->> specify a task instead of the current task.
->>
->> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->> ---
->>   include/uapi/linux/bpf.h       | 13 +++++++++++++
->>   kernel/bpf/verifier.c          |  4 +++-
->>   kernel/trace/bpf_trace.c       | 31 +++++++++++++++++++++++++++++++
->>   tools/include/uapi/linux/bpf.h | 13 +++++++++++++
->>   4 files changed, 60 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> index 4b20a7269bee..3d31ddb39e10 100644
->> --- a/include/uapi/linux/bpf.h
->> +++ b/include/uapi/linux/bpf.h
->> @@ -5550,6 +5550,18 @@ union bpf_attr {
->>    *             0 on success.
->>    *
->>    *             **-ENOENT** if the bpf_local_storage cannot be found.
->> + *
->> + * long bpf_task_under_cgroup(struct bpf_map *map, struct task_struct *task, u32 index)
->> + *     Description
->> + *             Check whether the probe is being run is the context of a given
->> + *             subset of the cgroup2 hierarchy. The cgroup2 to test is held by
->> + *             *map* of type **BPF_MAP_TYPE_CGROUP_ARRAY**, at *index*.
->> + *     Return
->> + *             The return value depends on the result of the test, and can be:
->> + *
->> + *             * 1, if assigned task belongs to the cgroup2.
->> + *             * 0, if assigned task does not belong to the cgroup2.
->> + *             * A negative error code, if an error occurred.
->>    */
->>   #define ___BPF_FUNC_MAPPER(FN, ctx...)                 \
->>          FN(unspec, 0, ##ctx)                            \
->> @@ -5764,6 +5776,7 @@ union bpf_attr {
->>          FN(user_ringbuf_drain, 209, ##ctx)              \
->>          FN(cgrp_storage_get, 210, ##ctx)                \
->>          FN(cgrp_storage_delete, 211, ##ctx)             \
->> +       FN(task_under_cgroup, 212, ##ctx)               \
->>          /* */
->>
->>   /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 1e05355facdc..1e2c3c3e8d5f 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -7771,7 +7771,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
->>                  break;
->>          case BPF_MAP_TYPE_CGROUP_ARRAY:
->>                  if (func_id != BPF_FUNC_skb_under_cgroup &&
->> -                   func_id != BPF_FUNC_current_task_under_cgroup)
->> +                   func_id != BPF_FUNC_current_task_under_cgroup &&
->> +                   func_id != BPF_FUNC_task_under_cgroup)
->>                          goto error;
->>                  break;
->>          case BPF_MAP_TYPE_CGROUP_STORAGE:
->> @@ -7902,6 +7903,7 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
->>                          goto error;
->>                  break;
->>          case BPF_FUNC_current_task_under_cgroup:
->> +       case BPF_FUNC_task_under_cgroup:
->>          case BPF_FUNC_skb_under_cgroup:
->>                  if (map->map_type != BPF_MAP_TYPE_CGROUP_ARRAY)
->>                          goto error;
->> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->> index bcf91bc7bf71..b02a04768824 100644
->> --- a/kernel/trace/bpf_trace.c
->> +++ b/kernel/trace/bpf_trace.c
->> @@ -814,6 +814,35 @@ static const struct bpf_func_proto bpf_current_task_under_cgroup_proto = {
->>          .arg2_type      = ARG_ANYTHING,
->>   };
->>
->> +BPF_CALL_3(bpf_task_under_cgroup, struct bpf_map *, map, struct task_struct *,
->> +          task, u32, idx)
->> +{
->> +       struct bpf_array *array = container_of(map, struct bpf_array, map);
->> +       struct cgroup *cgrp;
->> +
->> +       if (unlikely(!task))
->> +               return -ENOENT;
->> +
->> +       if (unlikely(idx >= array->map.max_entries))
->> +               return -E2BIG;
->> +
->> +       cgrp = READ_ONCE(array->ptrs[idx]);
->> +       if (unlikely(!cgrp))
->> +               return -EAGAIN;
->> +
->> +       return task_under_cgroup_hierarchy(task, cgrp);
-> We don't add helpers anymore.
-> Please wrap task_under_cgroup_hierarchy() as a kfunc
-> that takes two TRUSTED pointers task and cgroup.
-Will do, thanks.
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 18 Apr 2023 14:14:50 +0300 you wrote:
+> This series consolidates the behavior of the 2 drivers that implement
+> the ethtool MAC Merge layer by making NXP ENETC commit its preemptible
+> traffic classes to hardware only when MM TX is active (same as Ocelot).
+> 
+> Then, after resolving an issue with the ENETC driver, it restricts user
+> space from entering 2 states which don't make sense:
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,net-next,1/9] net: enetc: fix MAC Merge layer remaining enabled until a link down event
+    https://git.kernel.org/netdev/net-next/c/59be75db5966
+  - [v2,net-next,2/9] net: enetc: report mm tx-active based on tx-enabled and verify-status
+    https://git.kernel.org/netdev/net-next/c/153b5b1d030d
+  - [v2,net-next,3/9] net: enetc: only commit preemptible TCs to hardware when MM TX is active
+    https://git.kernel.org/netdev/net-next/c/827145392a4a
+  - [v2,net-next,4/9] net: enetc: include MAC Merge / FP registers in register dump
+    https://git.kernel.org/netdev/net-next/c/16a2c7634442
+  - [v2,net-next,5/9] net: ethtool: mm: sanitize some UAPI configurations
+    https://git.kernel.org/netdev/net-next/c/35b288d6e3d4
+  - [v2,net-next,6/9] selftests: forwarding: sch_tbf_*: Add a pre-run hook
+    https://git.kernel.org/netdev/net-next/c/54e906f1639e
+  - [v2,net-next,7/9] selftests: forwarding: generalize bail_on_lldpad from mlxsw
+    https://git.kernel.org/netdev/net-next/c/8fcac79270ca
+  - [v2,net-next,8/9] selftests: forwarding: introduce helper for standard ethtool counters
+    https://git.kernel.org/netdev/net-next/c/b5bf7126a6a0
+  - [v2,net-next,9/9] selftests: forwarding: add a test for MAC Merge layer
+    https://git.kernel.org/netdev/net-next/c/e6991384ace5
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
