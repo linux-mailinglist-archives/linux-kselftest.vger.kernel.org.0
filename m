@@ -2,163 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491D16EB033
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 19:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851C36EAFEC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Apr 2023 18:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232933AbjDURID (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Apr 2023 13:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S233452AbjDUQ71 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Apr 2023 12:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjDURH7 (ORCPT
+        with ESMTP id S233397AbjDUQ7W (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 13:07:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD313590
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 10:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682096821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g7lG6rnmj15jmZA/ctqiBLvmqWQqJhRL1h9zNRtPjNc=;
-        b=gFzh9RAc/MQGsmqu5leBq8PrETrWyL/I7ZTEiViN0IgeUxFZBoXPt6iabMz3fOxI+rbyJy
-        Bc2eKFME+yD/JMM4Ah47YVqSMrCqgml35dzCI7+GrzUZFC6E2Ne9MnvIMhI3PeigtZEmRz
-        q5J9cNvKmBx14jmL9ERb1QKHBNyZuic=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-61-Z90uT2yaMF-6Ws8-VSt6eQ-1; Fri, 21 Apr 2023 12:52:17 -0400
-X-MC-Unique: Z90uT2yaMF-6Ws8-VSt6eQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f187a7a626so6943185e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:52:17 -0700 (PDT)
+        Fri, 21 Apr 2023 12:59:22 -0400
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8CC15A35
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:58:53 -0700 (PDT)
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-63d3b5c334eso1742303b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682095989; x=1684687989;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Bpz9GCI4OFqr9DlnIkg8fh50O4zOZAPmw/GqyWI1sUY=;
+        b=DGn7gCykqxE1wl2tXEHxtzFbscSQI+JYs1BOyBXnwpOUa0v37O5EWPBn/ZgODYtQlN
+         ucm2bl+oRpYs66hkDH2OsTMMwYnJjHqmfL1Gfoz55eaPsC+KkP0XkEqAwZ6rs8pd6Rpz
+         FUqoTwNDb4fdpZO/bATUsOleiUawwODIJsv2oBaDLHov514nHeOp01TeHl5biXsvmD+B
+         drB6ioShN8gZ615eSTgzwj90uRL3MtckEF9+PdrDWulnCx0CuSxldhcUkAHan3z7jBnk
+         tHJsR2+7JQcAF/jPDdgXfTyng+EIcBFq/MixhtIbZMOElAUZCqnEM9rZEPv1BqgcbQ1G
+         Ek/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682095936; x=1684687936;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g7lG6rnmj15jmZA/ctqiBLvmqWQqJhRL1h9zNRtPjNc=;
-        b=BPbHWwu/rfFnKh1eAwGFr9elc5FEVX+nE7lAZ29CspI4hnhZPdrKfDVRNZ3saoCoOU
-         2cYJ7Z0SVUAU0Fbqs0E8LLws2IV+hnyKEtu3J/AzZFuQLuofoSMuNzErnFfTdkuHXAY/
-         9yrj4BWehr/MLKf7I+9j4Wtb3/FxdpUvCfFNxC+nNLcmWLbHvMXDD+voa0a4qdpTPFex
-         uY2lKqsaGQVIEp22nqOGcE4bN6cLjc1beqxnrd3oQicYnft7Re4Me+vDDECHIpza54YY
-         uNzmY9jdm6dD1ebBZowqZh1DMaAtnO7D2sjg0+DuRuH2BW4LnKISr5z2M2qvTGeaFdrI
-         0yBQ==
-X-Gm-Message-State: AAQBX9frbLmYIC5CG0RjP2kUUhOMxAInrgSugerMA4YfyA+dh4C6edz+
-        J+RT2Lqud0slRdoyGITmpAf195bfVoAZmIlfUENBvGvBNaKmQnR3XgLRi8nj83NKY1ZUtsNNlYN
-        wZ/qxdjHB82XvfyDyGaErTNQjCt1z
-X-Received: by 2002:a1c:7c12:0:b0:3ed:b048:73f4 with SMTP id x18-20020a1c7c12000000b003edb04873f4mr2736908wmc.5.1682095936531;
-        Fri, 21 Apr 2023 09:52:16 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bSHPKE6vIxCUj+TpuUuTs1BivJ3Z9mU324hkuK5BcAE6z0tQXv0+PyZQ0F1Y1047SGWTZwnw==
-X-Received: by 2002:a1c:7c12:0:b0:3ed:b048:73f4 with SMTP id x18-20020a1c7c12000000b003edb04873f4mr2736885wmc.5.1682095936116;
-        Fri, 21 Apr 2023 09:52:16 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c717:6a00:e38f:c852:dc11:9146? (p200300cbc7176a00e38fc852dc119146.dip0.t-ipconnect.de. [2003:cb:c717:6a00:e38f:c852:dc11:9146])
-        by smtp.gmail.com with ESMTPSA id w9-20020a05600c474900b003f17e37ce60sm8676540wmo.47.2023.04.21.09.52.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 09:52:15 -0700 (PDT)
-Message-ID: <14d89518-0c11-7bfb-0c72-329a834ba1a1@redhat.com>
-Date:   Fri, 21 Apr 2023 18:52:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rik van Riel <riel@surriel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20230418051342.1919757-1-shr@devkernel.io>
- <20230418152849.505124-1-david@redhat.com>
- <20230418152849.505124-4-david@redhat.com>
- <qvqwildqi62z.fsf@devbig1114.prn1.facebook.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 3/3] mm/ksm: move disabling KSM from s390/gmap code to
- KSM code
-In-Reply-To: <qvqwildqi62z.fsf@devbig1114.prn1.facebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1682095989; x=1684687989;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Bpz9GCI4OFqr9DlnIkg8fh50O4zOZAPmw/GqyWI1sUY=;
+        b=QIaSS+euEh1u6vrPPZArCL+ZpNqhipE1h8rRRdePxkaIge5+ooP9kFe4Fr4RDJuwPr
+         Lr9n+G3dDEyLMe867ymkAx5eeuhBlYa40Z3sOl2bbgEWMMHvW5/fjpZsSzSH8Ai18gqJ
+         jiNNJQa1j7R1KpRnUEmTS40nbIS/ziJM5LCI3Y+b/EiRmK9aaQlw536MD7JNn8T+jos9
+         cYg92T0l/jEydLImEuwYZfk09yo+qV+TNSYMHygHOvETkyRWDY9nf/0gTCA4Zit+bDby
+         GOxILXkcRC3XOOxpcfESyL+DU2rM8NpKVXmayIIYPuF8nrm0MNJnzeOG5LnuG8BuS8a2
+         Fntg==
+X-Gm-Message-State: AAQBX9cSAcPMcw3oyMzv+F1OWJgHDVVQts5lP9+datw4vSIlh149bajd
+        IPd6sHYGFvt0BdPSo4UiFvYcSPj4epTZ
+X-Google-Smtp-Source: AKy350ZhH26lR6IB3CnQ8CLF2JwssN6KagmxAVm6T/W0c2gS8Zvsk3hHnJOD9Yv5ucUQ9FKvawPIRN1PXzlu
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a05:6a00:b94:b0:63d:397a:8fdd with SMTP id
+ g20-20020a056a000b9400b0063d397a8fddmr2339440pfj.0.1682095989138; Fri, 21 Apr
+ 2023 09:53:09 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 09:52:56 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230421165305.804301-1-vipinsh@google.com>
+Subject: [PATCH 0/9] KVM: arm64: Use MMU read lock for clearing dirty logs
+From:   Vipin Sharma <vipinsh@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
+        dmatlack@google.com, ricarkol@google.com
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[...]
+This patch series improves guest vCPUs performances on Arm during clearing
+dirty log operations by taking MMU read lock instead of MMU write lock.
 
->> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
->> index 0949811761e6..dfe905c7bd8e 100644
->> --- a/arch/s390/mm/gmap.c
->> +++ b/arch/s390/mm/gmap.c
->> @@ -2585,30 +2585,12 @@ EXPORT_SYMBOL_GPL(s390_enable_sie);
->>
->>   int gmap_mark_unmergeable(void)
->>   {
->> -	struct mm_struct *mm = current->mm;
->> -	struct vm_area_struct *vma;
->> -	unsigned long vm_flags;
->> -	int ret;
->> -	VMA_ITERATOR(vmi, mm, 0);
->> -
->>   	/*
->>   	 * Make sure to disable KSM (if enabled for the whole process or
->>   	 * individual VMAs). Note that nothing currently hinders user space
->>   	 * from re-enabling it.
->>   	 */
->> -	clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
->> -
->> -	for_each_vma(vmi, vma) {
->> -		/* Copy vm_flags to avoid partial modifications in ksm_madvise */
->> -		vm_flags = vma->vm_flags;
->> -		ret = ksm_madvise(vma, vma->vm_start, vma->vm_end,
->> -				  MADV_UNMERGEABLE, &vm_flags);
->> -		if (ret)
->> -			return ret;
->> -		vm_flags_reset(vma, vm_flags);
->> -	}
->> -	mm->def_flags &= ~VM_MERGEABLE;
->>
-> 
+vCPUs write protection faults are fixed in Arm using MMU read locks.
+However, when userspace is clearing dirty logs via KVM_CLEAR_DIRTY_LOG
+ioctl, then kernel code takes MMU write lock. This will block vCPUs
+write protection faults and degrade guest performance.  This
+degradation gets worse as guest VM size increases in terms of memory and
+vCPU count.
 
-Hi Stefan,
+In this series, MMU read lock adoption is made possible by using
+KVM_PGTABLE_WALK_SHARED flag in page walker.
 
-> This clears the def_flags struct member, however, in ksm_disable() we
-> clear the __flags struct member. Is this a problem?
+Patches 1 to 5:
+These patches are modifying dirty_log_perf_test. Intent is to mimic
+production scenarios where guest keeps on executing while userspace
+threads collect and clear dirty logs independently.
 
-The patch description contains a comment regarding def_flags: "The 
-existing "mm->def_flags &= ~VM_MERGEABLE;" was essentially a NOP and can 
-be dropped, because def_flags should never include VM_MERGEABLE."
+Three new command line options are added:
+1. j: Allows to run guest vCPUs and main thread collecting dirty logs
+      independently of each other after initialization is complete.
+2. k: Allows to clear dirty logs in smaller chunks compared to existing
+      whole memslot clear in one call.
+3. l: Allows to add customizable wait time between consecutive clear
+      dirty log calls to mimic sending dirty memory to destination.
 
-We keep clearing the MADV_UNMERGEABLE flag from MADV_UNMERGEABLE. In the 
-old code, ksm_madvise() would have cleared it from local vm_flags and 
-vm_flags_reset() would have modified vma->vm_flags. Now we clear it 
-directly via vm_flags_clear(vma, VM_MERGEABLE);
+Patch 7-8:
+These patches refactor code to move MMU lock operations to arch specific
+code, refactor Arm's page table walker APIs, and change MMU write lock
+for clearing dirty logs to read lock. Patch 8 has results showing
+improvements based on dirty_log_perf_test.
+
+Vipin Sharma (9):
+  KVM: selftests: Allow dirty_log_perf_test to clear dirty memory in
+    chunks
+  KVM: selftests: Add optional delay between consecutive Clear-Dirty-Log
+    calls
+  KVM: selftests: Pass count of read and write accesses from guest to
+    host
+  KVM: selftests: Print read and write accesses of pages by vCPUs in
+    dirty_log_perf_test
+  KVM: selftests: Allow independent execution of vCPUs in
+    dirty_log_perf_test
+  KVM: arm64: Correct the kvm_pgtable_stage2_flush() documentation
+  KVM: mmu: Move mmu lock/unlock to arch code for clear dirty log
+  KMV: arm64: Allow stage2_apply_range_sched() to pass page table walker
+    flags
+  KVM: arm64: Run clear-dirty-log under MMU read lock
+
+ arch/arm64/include/asm/kvm_pgtable.h          |  17 ++-
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c         |   4 +-
+ arch/arm64/kvm/hyp/pgtable.c                  |  16 ++-
+ arch/arm64/kvm/mmu.c                          |  36 ++++--
+ arch/mips/kvm/mmu.c                           |   2 +
+ arch/riscv/kvm/mmu.c                          |   2 +
+ arch/x86/kvm/mmu/mmu.c                        |   3 +
+ .../selftests/kvm/dirty_log_perf_test.c       | 108 ++++++++++++++----
+ .../testing/selftests/kvm/include/memstress.h |  13 ++-
+ tools/testing/selftests/kvm/lib/memstress.c   |  43 +++++--
+ virt/kvm/dirty_ring.c                         |   2 -
+ virt/kvm/kvm_main.c                           |   4 -
+ 12 files changed, 185 insertions(+), 65 deletions(-)
 
 
-Long story short, the mm->def_flags code as wrong and most probably 
-copied from thp_split_mm() where we do:
-	mm->def_flags |= VM_NOHUGEPAGE;
-Which makes more sense.
-
-Thanks!
-
+base-commit: 95b9779c1758f03cf494e8550d6249a40089ed1c
 -- 
-Thanks,
-
-David / dhildenb
+2.40.0.634.g4ca3ef3211-goog
 
